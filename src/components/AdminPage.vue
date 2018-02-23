@@ -11,7 +11,6 @@
                         <div class="row">
                             <input type="text" v-model="newResearchGroup.description" class="form-control col-6 mb-1" placeholder="Description">
                             <input type="text" v-model="newResearchGroup.permlink" class="form-control col-6 mb-1" placeholder="Permlink">
-                            <input type="number" v-model="newResearchGroup.funds" class="form-control col-4 mb-1" min="0" placeholder="Funds">
                             <input type="number" v-model="newResearchGroup.quorumPercent" class="form-control col-4 mb-1" min="0" placeholder="Quorum percent">
                             <input type="number" v-model="newResearchGroup.tokensAmount" class="form-control col-4 mb-1" min="0" placeholder="Tokens amount">
                             <button type="button" class="btn btn-info" v-on:click="addResearchGroup()" v-bind:disabled="isAddingGroupDisabled">Add</button>
@@ -69,6 +68,7 @@
 
 <script>
     import 'e:/deip/deip-connector/deip-rpc/dist/deip.min';
+    // import '/Users/yahortsaryk/work/ethereum/deip/deip-rpc/dist/deip.min'
 
     export default {
         name: "AdminPage",
@@ -122,7 +122,6 @@
                     this.user.name,
                     this.newResearchGroup.permlink,
                     this.newResearchGroup.description,
-                    parseInt(this.newResearchGroup.funds),
                     parseInt(this.newResearchGroup.quorumPercent),
                     parseInt(this.newResearchGroup.tokensAmount)
                 ).then(() => {
@@ -131,10 +130,13 @@
                 });
             },
             addProposal() {
-                // 1 - `{"research_group_id": ${res.id},"name": "researchProposal","abstract": "this is abstract","permlink": "${permlink}","review_share_in_percent": 30}`, 
+                // 1 - `{"research_group_id": ${res.id},"name": "researchProposal","abstract": "this is abstract","permlink": "${permlink}","review_share_in_percent": 30}`,
+                // 1 - `{"research_group_id": ${res.id},"name": "quantum break", "abstract":"research for quantum break", "permlink":"quantumbreak108", "review_share_in_percent": 10, "dropout_compensation_in_percent": 5, "disciplines": [2]}` 
                 // 8 - `{"quorum_percent": 80,"research_group_id": ${res.id}}`, 
                 // 4 - `{"research_group_id": ${res.id},"account_name": "bob","funds": 20}`,
                 // 2 - `{"name": "alice","research_group_id": 1,"research_group_token_amount": 50}`
+                // 12 - `{"research_id": 1,"research_content_type": 2,"content": "My milestone for quantum break", "authors": ["initdelegate"], "research_references": [], "research_external_references": []}`
+
                 deipRpc.broadcast.createProposalAsync(
 					this.user.postingWif,
 					this.user.name, 
@@ -163,7 +165,7 @@
         computed: {
             isAddingGroupDisabled() {
                 return !this.newResearchGroup.description || !this.newResearchGroup.permlink
-                    || !parseInt(this.newResearchGroup.funds) > 0 || !parseInt(this.newResearchGroup.quorumPercent) > 0 
+                    || !parseInt(this.newResearchGroup.quorumPercent) > 0 
                     || !parseInt(this.newResearchGroup.tokensAmount) > 0
             },
             isAddingProposalDisabled() {
@@ -172,6 +174,7 @@
         },
         created() {
             deipRpc.api.setOptions({ url: 'ws://146.185.140.12:11011/' });
+            // deipRpc.api.setOptions({ url: 'ws://127.0.0.1:11011/' });
             deipRpc.config.set('chain_id', '4891abe5a98f993d984c9233bd667c37ec1b4c0bf9d9bce51c359af16f87ebc3');
 
             this.loadResearchGroups();
