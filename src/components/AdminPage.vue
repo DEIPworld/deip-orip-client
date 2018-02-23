@@ -130,12 +130,11 @@
                 });
             },
             addProposal() {
-                // 1 - `{"research_group_id": ${res.id},"name": "researchProposal","abstract": "this is abstract","permlink": "${permlink}","review_share_in_percent": 30}`,
-                // 1 - `{"research_group_id": ${res.id},"name": "quantum break", "abstract":"research for quantum break", "permlink":"quantumbreak108", "review_share_in_percent": 10, "dropout_compensation_in_percent": 5, "disciplines": [2]}` 
+                // 1 - `{"research_group_id": 1,"name": "quantum break", "abstract":"research for quantum break", "permlink":"quantumbreak108", "review_share_in_percent": 10, "dropout_compensation_in_percent": 5, "disciplines": [2]}` 
                 // 8 - `{"quorum_percent": 80,"research_group_id": ${res.id}}`, 
                 // 4 - `{"research_group_id": ${res.id},"account_name": "bob","funds": 20}`,
-                // 2 - `{"name": "alice","research_group_id": 1,"research_group_token_amount": 50}`
-                // 12 - `{"research_id": 1,"research_content_type": 2,"content": "My milestone for quantum break", "authors": ["initdelegate"], "research_references": [], "research_external_references": []}`
+                // 2 - `{"name": "alice","research_group_id": ${res.id},"research_group_token_amount": 50}`
+                // 12 - `{"research_id": ${res.id},"type": 2,"content": "My milestone for quantum break", "authors": ["initdelegate"], "research_references": [], "research_external_references": []}`
 
                 deipRpc.broadcast.createProposalAsync(
 					this.user.postingWif,
