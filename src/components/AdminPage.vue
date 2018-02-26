@@ -3,6 +3,7 @@
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
 
         <div class="fluid-container">
+
             <div class="row">
                 <div class="col-4 py-1">
                     <div class="bg-dark text-white p-1">Researh Groups</div>
@@ -20,17 +21,15 @@
                     <div class="items-list">
                         <div v-for="group in groups" class="p-1 text-secondary"
                             v-bind:class="{ 'active-item': activeGroup === group }"
-                            v-on:click="clickGroup(group)"
-                        >
+                            v-on:click="clickGroup(group)">
                             ID: {{ group.id }}, amount({{ group.amount }})
                         </div>
                     </div>
                     
                 </div>
 
-                <div class="col-4 py-1" v-if="proposals">
-                    <div class="bg-dark text-white p-1">Proposals</div>
-
+                <div  v-if="activeGroup" class="col-4 py-1">
+                    <div class="bg-dark text-white p-1">Proposals for "{{activeGroup.id}}" group</div>
                     <div class="py-4 container">
                         <div class="row">
                             <select v-model="newProposal.actionId" class="form-control col-8 mb-1">
@@ -44,9 +43,9 @@
                     <div class="items-list">
                         <div v-for="proposal in proposals" class="p-1 text-secondary justify-content-between form-inline"
                             v-bind:class="{ 'active-item': activeProposal === proposal }"
-                            v-on:click="activeProposal = proposal"
-                        >
-                            <div>ID: {{ proposal.id }}, action - {{ proposal.action }}</div>
+                            v-on:click="activeProposal = proposal">
+
+                            ID: {{ proposal.id }}, action - {{ proposal.action }}
                             <button type="button" class="btn-sm btn-outline-secondary" @click="voteProposal(proposal, $event)">Vote</button>
                         </div>
                     </div>
@@ -62,7 +61,43 @@
                     <div>{{ activeProposal.data }}</div>
                 </div>
             </div>
+
+            <div class="row">
+                <div class="col-4 py-1" v-if="researches.length">
+                    <div class="bg-dark text-white p-1">Group {{activeGroup.id}} Researches</div>
+                        <div class="items-list">
+                            <div v-for="research in researches"  
+                                v-bind:class="{ 'active-item': activeResearch === research }"
+                                v-on:click="clickResearch(research)" class="p-1 text-secondary">
+                                <div><b>Title:</b> {{ research.name }}</div>
+                                <div><b>Abstract:</b> {{ research.abstract }}</div>
+                            </div>
+                    </div>
+                </div>
+                <div class="col-4 py-1" v-if="activeResearch && activeResearch.content.length">
+                    <div class="bg-dark text-white p-1">Content for {{activeResearch.id}} research</div>
+                        <div class="items-list">
+                            <div v-for="content in activeResearch.content" v-on:click="clickResearchContent(content)" class="p-1 text-secondary">
+                                <div><b>Type:</b> {{ content.content_type }}</div>
+                                <div><b>Content:</b> {{ content.content }}</div>
+                                <div><b>Authors:</b> {{ content.authors.join(", ") }}</div>
+                                <div v-if="activeResearchContent === content"
+                                     v-bind:class="{ 'active-item': activeResearchContent === content }"
+                                     class="p-1 text-secondary">
+
+                                    <label>Discipline:</label>
+                                    <input type="number" v-model="votingDiscipline"></input>
+                                    <br/>
+                                    <label>Weight:</label>
+                                    <input type="number" v-model="votingWeight"></input>
+                                    <div><button type="button" class="btn-sm btn-outline-secondary" @click="voteResearchContent(content, $event)">Vote</button></div>
+                                </div>
+                            </div>
+                    </div>
+                </div>
+            </div>
         </div>
+
     </div>
 </template>
 
@@ -78,9 +113,12 @@
                 newProposal: {},
                 user: { name: 'initdelegate', postingWif: '5JidFW79ttL9YP3W2Joc5Zer49opYU3fKNeBx9B6cpEH1GiDm5p' },
                 groups: [],
+                proposals: [],
+                researches: [],
                 activeGroup: undefined,
-                proposals: undefined,
                 activeProposal: undefined,
+                activeResearch: undefined,
+                activeResearchContent: undefined,
                 opetationsMap: {
                     start_research: 1,
                     invite_member: 2,
@@ -94,27 +132,40 @@
                     offer_research_tokens: 10,
                     accept_research_tokens_offer: 11,
                     create_research_material: 12
-                }
+                },
+                votingWeight: 1,
+                votingDiscipline: 1
             };
         },
         methods: {
             loadResearchGroups() {
                 // there is no method which will be able to load normal group collection
-                deipRpc.api.getResearchGroupTokensByAccountAsync(this.user.name).then((data) => {
-                    this.groups = data;
-                    this.proposals = undefined;
-                });
+                deipRpc.api.getResearchGroupTokensByAccountAsync(this.user.name)
+                    .then((data) => {
+                        this.groups = data;
+                        this.proposals = [];
+                    });
             },
             loadGroupProposals(groupId) {
                 this.activeProposal = undefined;
                 deipRpc.api.getProposalsByResearchGroupIdAsync(groupId).then((data) => {
                     this.proposals = data;
-                    // console.log(data);
                 });
             },
             clickGroup(group) {
                 this.activeGroup = group;
+                this.activeResearch = undefined;
+                this.activeResearchContent = undefined;
                 this.loadGroupProposals(group.id);
+                this.loadGroupResearches(group.id);
+            },
+            clickResearch(research){
+                this.activeResearch = research;
+                this.activeResearchContent = undefined;
+                this.loadResearchContent(research.id);
+            },
+            clickResearchContent(content){
+                this.activeResearchContent = content;
             },
             addResearchGroup() {
                 deipRpc.broadcast.createResearchGroupAsync(
@@ -134,7 +185,7 @@
                 // 8 - `{"quorum_percent": 80,"research_group_id": ${res.id}}`, 
                 // 4 - `{"research_group_id": ${res.id},"account_name": "bob","funds": 20}`,
                 // 2 - `{"name": "alice","research_group_id": ${res.id},"research_group_token_amount": 50}`
-                // 12 - `{"research_id": ${res.id},"type": 2,"content": "My milestone for quantum break", "authors": ["initdelegate"], "research_references": [], "research_external_references": []}`
+                // 12 - `{"research_id": 1,"type": 2,"content": "My milestone for quantum break", "authors": ["initdelegate"], "research_references": [], "research_external_references": []}`
 
                 deipRpc.broadcast.createProposalAsync(
 					this.user.postingWif,
@@ -148,17 +199,51 @@
                     this.loadGroupProposals(this.activeGroup.id);
                 });
             },
+
+            loadGroupResearches(groupId) {
+                deipRpc.api.getResearchesByResearchGroupIdAsync(groupId)
+                    .then((data) => {
+                        for (var i = 0; i < data.length; i++) {
+                            var research = data[i];
+                            research.content = [];
+                        }
+                        this.researches = data;
+                    })
+            },
+            loadResearchContent(researchId){
+                deipRpc.api.getAllResearchContentAsync(researchId)
+                    .then((data) => {
+                        var research = this.researches.find(function(research) {
+                            return research.id == researchId;
+                        });
+                        research.content = data;
+                    })
+            },
             voteProposal(proposal, $event) {
                 $event.stopPropagation();
-
                 deipRpc.broadcast.voteProposalAsync(
                     this.user.postingWif,
                     this.user.name,
                     proposal.id,
                     this.activeGroup.id
                 ).then(() => {
-                    this.loadGroupProposals(this.activeGroup.id);
+                    this.clickGroup(this.activeGroup);
                 });
+            },
+            voteResearchContent(content, $event) {
+                $event.stopPropagation();
+                if(this.votingDiscipline && this.votingWeight){
+                    deipRpc.broadcast.voteAsync(
+                        this.user.postingWif,
+                        this.user.name,
+                        parseInt(this.votingDiscipline),
+                        parseInt(this.votingWeight),
+                        this.activeResearch.id,
+                        content.id
+                    ).then(() => {
+                        console.log("voted!");
+                    });
+                }
             }
         },
         computed: {
@@ -192,5 +277,11 @@
     .fluid-container {
         width: 1500px;
         margin: 0 auto;
+    }
+    .text-center {
+        text-align: center;
+    }
+    .pull-left {
+        float: right;
     }
 </style>
