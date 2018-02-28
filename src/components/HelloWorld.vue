@@ -6,7 +6,10 @@
         <h2>Custom Pages</h2>
         <ul>
             <li>
-                <a class="red-bg" href="/#/adminpage">Admin Page</a>
+                <router-link to="/adminpage">Admin Page</router-link>
+            </li>
+            <li>
+                <router-link to="/researchItem">Research Item Layout</router-link>
             </li>
         </ul>
     </div>
