@@ -3,7 +3,6 @@
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
 
         <div class="fluid-container">
-
             <div class="row">
                 <div class="col-4 py-1">
                     <div class="bg-dark text-white p-1">Researh Groups</div>
@@ -102,8 +101,8 @@
 </template>
 
 <script>
-    import 'e:/deip/deip-connector/deip-rpc/dist/deip.min';
-    // import '/Users/yahortsaryk/work/ethereum/deip/deip-rpc/dist/deip.min'
+    // import 'e:/deip/deip-connector/deip-rpc/dist/deip.min';
+    import '/Users/yahortsaryk/work/ethereum/deip/deip-rpc/dist/deip.min'
 
     export default {
         name: "AdminPage",
@@ -112,6 +111,8 @@
                 newResearchGroup: {},
                 newProposal: {},
                 user: { name: 'initdelegate', postingWif: '5JidFW79ttL9YP3W2Joc5Zer49opYU3fKNeBx9B6cpEH1GiDm5p' },
+                // user: { name: 'alice', postingWif: '5JGoCjh27sfuCzp7kQme5yMipaQtgdVLPiZPr9zaCwJVrSrbGYx' },
+                // user: { name: 'bob', postingWif: '5JgsnUtjj3gpgpFMMpbXFJFVfLAsiq1tJQ7ZdBBuyaU1RFVevU2' },
                 groups: [],
                 proposals: [],
                 researches: [],
@@ -257,10 +258,9 @@
             }
         },
         created() {
-            deipRpc.api.setOptions({ url: 'ws://146.185.140.12:11011/' });
-            // deipRpc.api.setOptions({ url: 'ws://127.0.0.1:11011/' });
-            deipRpc.config.set('chain_id', '4891abe5a98f993d984c9233bd667c37ec1b4c0bf9d9bce51c359af16f87ebc3');
-
+            // deipRpc.api.setOptions({ url: 'ws://146.185.140.12:11011/' });
+            deipRpc.api.setOptions({ url: 'ws://127.0.0.1:11011/' });
+            deipRpc.config.set('chain_id', 'b387f20ec96eeb24646462128b076ff210b8d15a7e763b47741912bb7c431cf9');
             this.loadResearchGroups();
         }
     };
