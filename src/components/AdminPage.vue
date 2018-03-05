@@ -1,141 +1,228 @@
 <template>
-    <div class="p-4">
-        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+    <div style="padding: 20px">
 
-        <div class="fluid-container">
-            <div class="row">
-                <div class="col-4 py-1">
-                    <div class="bg-dark text-white p-1">Researh Groups</div>
-
-                    <div class="py-4 container">
-                        <div class="row">
-                            <input type="text" v-model="newResearchGroup.description" class="form-control col-6 mb-1" placeholder="Description">
-                            <input type="text" v-model="newResearchGroup.permlink" class="form-control col-6 mb-1" placeholder="Permlink">
-                            <input type="number" v-model="newResearchGroup.quorumPercent" class="form-control col-4 mb-1" min="0" placeholder="Quorum percent">
-                            <input type="number" v-model="newResearchGroup.tokensAmount" class="form-control col-4 mb-1" min="0" placeholder="Tokens amount">
-                            <button type="button" class="btn btn-info" v-on:click="addResearchGroup()" v-bind:disabled="isAddingGroupDisabled">Add</button>
-                        </div>
-                    </div>
-
-                    <div class="items-list">
-                        <div v-for="group in groups" class="p-1 text-secondary"
-                            v-bind:class="{ 'active-item': activeGroup === group }"
-                            v-on:click="clickGroup(group)">
-                            ID: {{ group.id }}, amount({{ group.amount }})
-                        </div>
-                    </div>
-                    
+        <div class="row at-row flex-top flex-end">
+            <div class="col-md-24">
+                <div class="users-panel">
+                    <at-button type="primary" hollow v-on:click="switchUser(users[0])" v-bind:disabled="user.name == 'initdelegate'">initdelegate</at-button>
+                    <at-button type="primary" hollow v-on:click="switchUser(users[1])" v-bind:disabled="user.name == 'alice'">alice</at-button>
+                    <at-button type="primary" hollow v-on:click="switchUser(users[2])" v-bind:disabled="user.name === 'bob'">bob</at-button>
                 </div>
+            </div>
+        </div>
 
-                <div  v-if="activeGroup" class="col-4 py-1">
-                    <div class="bg-dark text-white p-1">Proposals for "{{activeGroup.id}}" group</div>
-                    <div class="py-4 container">
-                        <div class="row">
-                            <select v-model="newProposal.actionId" class="form-control col-8 mb-1">
-                                <option v-bind:value="value" v-for="(value, key) in opetationsMap">{{ value }} - {{ key }}</option>
-                            </select>
-                            <textarea v-model="newProposal.data" class="form-control col-12 mb-1" placeholder="Data JSON"></textarea>
-                            <button type="button" class="btn btn-info" v-on:click="addProposal()" v-bind:disabled="isAddingProposalDisabled">Add</button>
-                        </div>
+        <div class="row at-row flex-center flex-top">
+            <div class="col-md-8">
+                <p>Research Groups</p>
+                <div>
+                    <at-input type="text" v-model="newResearchGroup.permlink" placeholder="Permlink"></at-input>
+                    <at-textarea type="text" v-model="newResearchGroup.description" placeholder="Description"></at-textarea>
+                    <div class="row at-row flex-center">
+                        <at-input type="number" v-model="newResearchGroup.quorumPercent" placeholder="Quorum percent"></at-input>
+                        <at-input type="number" v-model="newResearchGroup.tokensAmount" placeholder="Tokens amount"></at-input>
+                    </div>
+                    <at-button type="primary" v-on:click="addResearchGroup()" v-bind:disabled="isAddingGroupDisabled">Create Group</at-button>
+                </div>
+                <div class="items-list">
+                    <div v-for="group in groups" class="p-1 text-secondary"
+                        v-bind:class="{ 'active-item': activeGroup === group }"
+                        v-on:click="clickGroup(group)">
+                            <div class="row flex-middle"> 
+                                <span class="col-md-24 flex-start">
+                                    <span> <b>ID:</b> {{ group.research_group_id }}, amount({{ group.amount }})</span>
+                                </span>
+                            </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-8">
+                <div v-if="activeGroup">
+                    <p class="bg-dark text-white">Proposals for <b>"{{activeGroup.research_group_id}}"</b> Group</p>
+                    <div>
+                        <at-select v-model="newProposal.actionId" size="large">
+                            <at-option v-bind:value="key" v-for="(value, key) in proposalsMap">{{ key }} - {{ value }}</at-option>
+                        </at-select>
+                        <at-textarea type="text" v-model="newProposal.data" placeholder="JSON" min-rows="4"></at-textarea>
+                        <at-button type="primary" v-on:click="addProposal()" v-bind:disabled="isAddingProposalDisabled">Create Proposal</at-button>
                     </div>
 
                     <div class="items-list">
                         <div v-for="proposal in proposals" class="p-1 text-secondary justify-content-between form-inline"
                             v-bind:class="{ 'active-item': activeProposal === proposal }"
                             v-on:click="activeProposal = proposal">
+                                <div class="row flex-middle"> 
+                                    <span class="col-md-12 flex-center">
+                                        <span><b>ID:</b> {{ proposal.id }}, action - {{ proposal.action }}</span>
+                                    </span>
+                                    <span class="col-md-12 flex-end">
+                                        <at-button @click="voteProposal(proposal, $event)">Vote</at-button>
+                                    </span>
+                                </div>
+                        </div>
+                    </div>
 
-                            ID: {{ proposal.id }}, action - {{ proposal.action }}
-                            <button type="button" class="btn-sm btn-outline-secondary" @click="voteProposal(proposal, $event)">Vote</button>
+                    <div v-if="proposals.length == 0">
+                        <div class="row flex-bottom flex-center">
+                            <div class="col-md-24 flex-bottom">
+                                <p>There are no proposals for <b>"{{activeGroup.research_group_id}}"</b> group</p>
+                            </div>
                         </div>
                     </div>
                 </div>
-
-                <div class="col-4 py-1" v-if="activeProposal">
-                    <hr>
-                    <div>creator - <b>{{ activeProposal.creator }}</b></div>
-                    <div>current_votes_amount - <b>{{ activeProposal.current_votes_amount }}</b></div>
-                    <div>quorum_percent - <b>{{ activeProposal.quorum_percent }}</b></div>
-                    <div>voted_accounts - <b>{{ activeProposal.voted_accounts }}</b></div>
-                    <hr>
-                    <div>{{ activeProposal.data }}</div>
-                </div>
             </div>
-
-            <div class="row">
-                <div class="col-4 py-1" v-if="researches.length">
-                    <div class="bg-dark text-white p-1">Group {{activeGroup.id}} Researches</div>
-                        <div class="items-list">
-                            <div v-for="research in researches"  
-                                v-bind:class="{ 'active-item': activeResearch === research }"
-                                v-on:click="clickResearch(research)" class="p-1 text-secondary">
-                                <div><b>Title:</b> {{ research.name }}</div>
-                                <div><b>Abstract:</b> {{ research.abstract }}</div>
-                            </div>
-                    </div>
-                </div>
-                <div class="col-4 py-1" v-if="activeResearch && activeResearch.content.length">
-                    <div class="bg-dark text-white p-1">Content for {{activeResearch.id}} research</div>
-                        <div class="items-list">
-                            <div v-for="content in activeResearch.content" v-on:click="clickResearchContent(content)" class="p-1 text-secondary">
-                                <div><b>Type:</b> {{ content.content_type }}</div>
-                                <div><b>Content:</b> {{ content.content }}</div>
-                                <div><b>Authors:</b> {{ content.authors.join(", ") }}</div>
-                                <div v-if="activeResearchContent === content"
-                                     v-bind:class="{ 'active-item': activeResearchContent === content }"
-                                     class="p-1 text-secondary">
-
-                                    <label>Discipline:</label>
-                                    <input type="number" v-model="votingDiscipline"></input>
-                                    <br/>
-                                    <label>Weight:</label>
-                                    <input type="number" v-model="votingWeight"></input>
-                                    <div><button type="button" class="btn-sm btn-outline-secondary" @click="voteResearchContent(content, $event)">Vote</button></div>
-                                </div>
-                            </div>
-                    </div>
+            <div class="col-md-8">
+                <div v-if="activeProposal">
+                    <p>Proposal <b>"{{activeProposal.id}}"</b> Details</p>
+                    <at-card class="propoal-details">
+                        <h3 slot="title">{{proposalsMap[activeProposal.action]}}</h3>
+                        <div>
+                            <div>Creator: <b>{{ activeProposal.creator }}</b></div>
+                            <div>Current votes amount: <b>{{ activeProposal.current_votes_amount }}</b></div>
+                            <div>Quorum percent: <b>{{ activeProposal.quorum_percent }}</b></div>
+                            <div>Voted accounts: <b>{{ activeProposal.voted_accounts }}</b></div>
+                            <hr/>
+                            <div class="proposal-json">{{ activeProposal.data }}</div>
+                        </div>
+                    </at-card>
                 </div>
             </div>
         </div>
 
+        <div class="row at-row flex-center flex-top">
+            <div class="col-md-10">
+                <div v-if="researches.length">
+                    <p>Group <b>"{{activeGroup.research_group_id}}"</b> Researches</p>
+                        <div class="items-list">
+                            <div v-for="research in researches"  
+                                v-bind:class="{ 'active-item': activeResearch === research }"
+                                v-on:click="clickResearch(research)">
+
+                                <div class="row flex-middle">
+                                    <span class="col-md-24 flex-start">
+                                        <span><b>ID: </b>{{ research.id }}</span>
+                                    </span>
+                                    <span class="col-md-24 flex-start">
+                                        <span><b>Title: </b>{{ research.name }}</span>
+                                    </span>
+                                    <span class="col-md-24 flex-start">
+                                        <span><b>Abstract: </b>{{ research.abstract }}</span>
+                                    </span>
+                                </div>
+
+                            </div>
+                        </div>
+                </div>
+            </div>
+            <div class="col-md-14">
+                <div v-if="activeResearch && activeResearch.content.length != 0">
+                    <p>Content for <b>"{{activeResearch.id}}"</b> Research</p>
+                        <div class="items-list">
+                            <div v-for="content in activeResearch.content" v-on:click="clickResearchContent(content)">
+
+                                <div class="row flex-middle" v-bind:class="{ 'active-item': activeResearchContent === content }"> 
+                                    <div class="col-md-10 flex-start">
+                                        <div><b>Type: </b>{{ content.content_type }}</div>
+                                        <div><b>Content: </b>{{ content.content }}</div>
+                                        <div><b>Authors: </b>{{ content.authors.join(", ") }}</div>
+                                    </div>
+                                    <div class="col-md-4 flex-center">
+                                        <span v-if="activeResearchContent === content" >
+                                            <at-input type="number" v-model="newVote.votingDiscipline" placeholder="Discipline"></at-input>
+                                        </span>
+                                    </div>
+                                    <div class="col-md-4 flex-center">
+                                        <span v-if="activeResearchContent === content" >
+                                            <at-input type="number" v-model="newVote.votingWeight" placeholder="Weight"></at-input>
+                                        </span>
+                                    </div>
+                                    <div class="col-md-6 flex-center">
+                                        <span v-if="activeResearchContent === content">
+                                            <at-button type="button" @click="voteResearchContent(content, $event)">Vote</at-button>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                    </div>
+                </div>
+                <div v-if="activeResearch && activeResearch.content.length == 0">
+                    <div class="row flex-bottom flex-center">
+                        <div class="col-md-24 flex-bottom">
+                            <p class="empty-content-list">There is no content for <b>"{{activeResearch.id}}"</b> research</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row at-row flex-middle flex-center">
+            <div class="col-md-8">
+                <p>Invites for <b>"{{user.name}}"</b></p>
+                <!-- TODO: replace with api call for invites fot the current user" -->
+                <div class="row flex-middle"> 
+                    <span class="col-md-12 flex-end">
+                        <at-input type="number" v-model="inviteId" placeholder="Invite ID"></at-input>
+                    </span>
+                    <span class="col-md-12 flex-middle flex-start">
+                    <at-button type="success" hollow v-on:click="approveInvite()">Approve</at-button>
+                    <at-button type="error" hollow v-on:click="rejectInvite()">Reject</at-button>                    </span>
+                </div>
+            </div>
+            <div class="col-md-8"></div>
+            <div class="col-md-8"></div>
+        </div>
     </div>
 </template>
 
 <script>
     // import 'e:/deip/deip-connector/deip-rpc/dist/deip.min';
     import '/Users/yahortsaryk/work/ethereum/deip/deip-rpc/dist/deip.min'
-
+    
     export default {
         name: "AdminPage",
         data() {
+            var users = [
+                    { name: 'initdelegate', postingWif: '5JidFW79ttL9YP3W2Joc5Zer49opYU3fKNeBx9B6cpEH1GiDm5p' },
+                    { name: 'alice', postingWif: '5JGoCjh27sfuCzp7kQme5yMipaQtgdVLPiZPr9zaCwJVrSrbGYx' },
+                    { name: 'bob', postingWif: '5JgsnUtjj3gpgpFMMpbXFJFVfLAsiq1tJQ7ZdBBuyaU1RFVevU2' }
+                ];
             return {
-                newResearchGroup: {},
-                newProposal: {},
-                user: { name: 'initdelegate', postingWif: '5JidFW79ttL9YP3W2Joc5Zer49opYU3fKNeBx9B6cpEH1GiDm5p' },
-                // user: { name: 'alice', postingWif: '5JGoCjh27sfuCzp7kQme5yMipaQtgdVLPiZPr9zaCwJVrSrbGYx' },
-                // user: { name: 'bob', postingWif: '5JgsnUtjj3gpgpFMMpbXFJFVfLAsiq1tJQ7ZdBBuyaU1RFVevU2' },
+                user: users[0],
+                users: users,
                 groups: [],
+                newResearchGroup: {
+                    permlink: "",
+                    description: "",
+                    quorumPercent: null,
+                    tokensAmount: null
+                },
                 proposals: [],
+                newProposal: {
+                    actionId: 0,
+                    data: ""
+                },
                 researches: [],
                 activeGroup: undefined,
                 activeProposal: undefined,
                 activeResearch: undefined,
                 activeResearchContent: undefined,
-                opetationsMap: {
-                    start_research: 1,
-                    invite_member: 2,
-                    dropout_member: 3,
-                    send_funds: 4,
-                    transfer_research_tokens: 5,
-                    start_research_token_sale: 6,
-                    rebalance_research_group_tokens: 7,
-                    change_quorum: 8,
-                    change_research_review_share_percent: 9,
-                    offer_research_tokens: 10,
-                    accept_research_tokens_offer: 11,
-                    create_research_material: 12
+                proposalsMap: {
+                    1: "Start research",
+                    2: "Invite member",
+                    3: "Dropout member",
+                    4: "Send funds",
+                    5: "Transfer research tokens",
+                    6: "Start research token sale",
+                    7: "Rebalance research group tokens",
+                    8: "Change quorum",
+                    9: "Change research review share percent",
+                    10: "Offer research tokens",
+                    11: "Accept research tokens offer",
+                    12: "Create research material"
                 },
-                votingWeight: 1,
-                votingDiscipline: 1
+                newVote: {
+                    votingDiscipline: 1,
+                    votingWeight: 1
+                },
+                inviteId: null
             };
         },
         methods: {
@@ -143,6 +230,7 @@
                 // there is no method which will be able to load normal group collection
                 deipRpc.api.getResearchGroupTokensByAccountAsync(this.user.name)
                     .then((data) => {
+                        debugger;
                         this.groups = data;
                         this.proposals = [];
                     });
@@ -157,8 +245,8 @@
                 this.activeGroup = group;
                 this.activeResearch = undefined;
                 this.activeResearchContent = undefined;
-                this.loadGroupProposals(group.id);
-                this.loadGroupResearches(group.id);
+                this.loadGroupProposals(group.research_group_id);
+                this.loadGroupResearches(group.research_group_id);
             },
             clickResearch(research){
                 this.activeResearch = research;
@@ -182,22 +270,25 @@
                 });
             },
             addProposal() {
-                // 1 - `{"research_group_id": 1,"name": "quantum break", "abstract":"research for quantum break", "permlink":"quantumbreak108", "review_share_in_percent": 10, "dropout_compensation_in_percent": 5, "disciplines": [2]}` 
-                // 8 - `{"quorum_percent": 80,"research_group_id": ${res.id}}`, 
-                // 4 - `{"research_group_id": ${res.id},"account_name": "bob","funds": 20}`,
-                // 2 - `{"name": "alice","research_group_id": ${res.id},"research_group_token_amount": 50}`
-                // 12 - `{"research_id": 1,"type": 2,"content": "My milestone for quantum break", "authors": ["initdelegate"], "research_references": [], "research_external_references": []}`
+                // 1 - `{"research_group_id": 0, "name": "quantum break", "abstract":"research for quantum break", "permlink":"quantumbreak108", "review_share_in_percent": 10, "dropout_compensation_in_percent": 5, "disciplines": [2]}`
+                // 2 - `{"research_group_id": 0, "name": "alice", "research_group_token_amount": 50}`
+                // 8 - `{"research_group_id": 0, "quorum_percent": 80}`, 
+                // 4 - `{"research_group_id": 0, "account_name": "bob", "funds": 20}`,
+                // 12 - `{"research_id": 0, "type": 2, "content": "My milestone for quantum break", "authors": ["initdelegate"], "research_references": [], "research_external_references": []}`
 
                 deipRpc.broadcast.createProposalAsync(
 					this.user.postingWif,
 					this.user.name, 
-					this.activeGroup.id, 
+					this.activeGroup.research_group_id, 
 					this.newProposal.data,
                     parseInt(this.newProposal.actionId),
 					new Date( new Date().getTime() + 2 * 24 * 60 * 60 * 1000 )
 				).then(() => {
-                    this.newProposal = {};
-                    this.loadGroupProposals(this.activeGroup.id);
+                    this.newProposal = {
+                        actionId: 0,
+                        data: ""
+                    };
+                    this.loadGroupProposals(this.activeGroup.research_group_id);
                 });
             },
 
@@ -226,25 +317,76 @@
                     this.user.postingWif,
                     this.user.name,
                     proposal.id,
-                    this.activeGroup.id
+                    this.activeGroup.research_group_id
                 ).then(() => {
                     this.clickGroup(this.activeGroup);
+                    alert(this.user.name + " has successfully voted for proposal " + proposal.id + " !");
+                }, (err) => {
+                    alert(err.message);
                 });
             },
             voteResearchContent(content, $event) {
                 $event.stopPropagation();
-                if(this.votingDiscipline && this.votingWeight){
+                if(this.newVote.votingDiscipline && this.newVote.votingWeight){
                     deipRpc.broadcast.voteAsync(
                         this.user.postingWif,
                         this.user.name,
-                        parseInt(this.votingDiscipline),
-                        parseInt(this.votingWeight),
+                        parseInt(this.newVote.votingDiscipline),
+                        parseInt(this.newVote.votingWeight),
                         this.activeResearch.id,
                         content.id
                     ).then(() => {
-                        console.log("voted!");
+                        alert(this.user.name + " has successfully voted for content " + content.id + " !");
+                    }, (err) => {
+                        alert(err.message);
                     });
                 }
+            },
+            approveInvite() {
+                if(this.inviteId) {
+                    deipRpc.broadcast.approveResearchGroupInviteAsync(
+                        this.user.postingWif,
+                        this.inviteId,
+                        this.user.name
+                    )
+                }
+            },
+            rejectInvite(){
+                if(this.inviteId) {
+                    deipRpc.broadcast.rejectResearchGroupInviteAsync(
+                        this.user.postingWif,
+                        this.inviteId,
+                        this.user.name
+                    )
+                }
+            },
+            switchUser(user) {
+                this.user = user;
+                this.clear();
+                this.loadResearchGroups();
+            },
+            clear() {
+                this.groups = [];
+                this.newResearchGroup = {
+                    permlink: "",
+                    description: "",
+                    quorumPercent: null,
+                    tokensAmount: null
+                };
+                this.proposals = [];
+                this.newProposal = {
+                    actionId: 0,
+                    data: ""
+                };
+                this.researches = [];
+                this.activeGroup = undefined;
+                this.activeProposal = undefined;
+                this.activeResearch = undefined;
+                this.activeResearchContent = undefined;
+                this.newVote = {
+                    votingDiscipline: 1,
+                    votingWeight: 1
+                };
             }
         },
         computed: {
@@ -262,26 +404,77 @@
             deipRpc.api.setOptions({ url: 'ws://127.0.0.1:11011/' });
             deipRpc.config.set('chain_id', 'b387f20ec96eeb24646462128b076ff210b8d15a7e763b47741912bb7c431cf9');
             this.loadResearchGroups();
+        },
+        components: {
+            "at-input": Input,
+            "at-button": Button,
+            "at-textarea": Textarea,
+            "at-select": Select,
+            "at-option": Option,
+            "at-option-group": OptionGroup,
+            "at-card": Card
         }
     };
+
+    import 'at-ui-style';
+    import { Button, ButtonGroup, Tag, Radio, RadioGroup, RadioButton, Checkbox, CheckboxGroup, Input, InputNumber, Textarea,
+            Badge, Switch, Slider, Tooltip, Popover, Alert, Progress, LoadingBar, Modal, Select, Option, OptionGroup, Dropdown, 
+            DropdownMenu, DropdownItem, Breadcrumb, BreadcrumbItem, Pagination, Menu, MenuItem, MenuItemGroup, Submenu, Table, Card, 
+            Collapse, CollapseItem, Steps, Step, Rate, Tabs, TabPane, Timeline, TimelineItem } from 'at-ui';
+
 </script>
 
+
 <style>
+    .at-input  {
+        padding: 5px
+    }
+
+    .at-textarea {
+        padding: 5px
+    }
+
+    .at-select {
+        padding: 5px
+    }
+
+    .propoal-details {
+        margin-top: 5px
+    }
+
+    .proposal-json {
+        background: #fdfded
+    }
+
+    .items-list {
+        padding-top: 15px;
+        padding-bottom: 15px;
+    }
+
+    .items-list > div {
+        text-align: left;
+        padding: 5px;
+    }
+
     .items-list > div:hover {
+        text-align: left;
+        padding: 5px;
         background: #dddddd;
         cursor: pointer;
     }
+
     .active-item {
         background: #dddddd;
     }
-    .fluid-container {
-        width: 1500px;
-        margin: 0 auto;
+
+    .users-panel {
+        margin-top: 5px;
+        margin-bottom: 20px;
     }
-    .text-center {
-        text-align: center;
+
+    .empty-content-list {
+        margin-top: 50px;
     }
-    .pull-left {
-        float: right;
-    }
+
+
 </style>
