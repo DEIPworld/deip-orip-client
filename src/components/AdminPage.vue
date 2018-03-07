@@ -47,7 +47,7 @@
                     </div>
 
                     <div class="items-list">
-                        <div v-for="proposal in proposals" class="p-1 text-secondary justify-content-between form-inline"
+                        <div v-for="proposal in proposals"
                             v-bind:class="{ 'active-item': activeProposal === proposal }"
                             v-on:click="activeProposal = proposal">
                                 <div class="row flex-middle"> 
@@ -154,20 +154,22 @@
             </div>
         </div>
         <div class="row at-row flex-middle flex-center">
-            <div class="col-md-8">
-                <p>Invites for <b>"{{user.name}}"</b></p>
-                <!-- TODO: replace with api call for invites fot the current user" -->
-                <div class="row flex-middle"> 
-                    <span class="col-md-12 flex-end">
-                        <at-input type="number" v-model="inviteId" placeholder="Invite ID"></at-input>
-                    </span>
-                    <span class="col-md-12 flex-middle flex-start">
-                    <at-button type="success" hollow v-on:click="approveInvite()">Approve</at-button>
-                    <at-button type="error" hollow v-on:click="rejectInvite()">Reject</at-button>                    </span>
+            <div class="col-md-9">
+                <div v-if="invites && invites.length" class="invites-list">
+                    <p>Invites for <b>"{{user.name}}"</b></p>
+                    <div class="row flex-middle" v-for="invite in invites"> 
+                        <span class="col-md-12 flex-end">
+                            <span>Group ID: <b>"{{invite.research_group_id}}"</b>, RG tokens: <b>"{{invite.research_group_token_amount}}"</b></span>
+                        </span> 
+                        <span class="col-md-12 flex-middle flex-end">
+                            <at-button type="success" hollow v-on:click="approveInvite(invite.id)">Approve</at-button>
+                            <at-button type="error" hollow v-on:click="rejectInvite(invite.id)">Reject</at-button> 
+                        </span>
+                    </div>
                 </div>
             </div>
             <div class="col-md-8"></div>
-            <div class="col-md-8"></div>
+            <div class="col-md-7"></div>
         </div>
     </div>
 </template>
@@ -196,7 +198,7 @@
                 },
                 proposals: [],
                 newProposal: {
-                    actionId: 0,
+                    actionId: 1,
                     data: ""
                 },
                 researches: [],
@@ -219,10 +221,11 @@
                     12: "Create research material"
                 },
                 newVote: {
-                    votingDiscipline: 1,
-                    votingWeight: 1
+                    votingDiscipline: null,
+                    votingWeight: null
                 },
-                inviteId: null
+                inviteId: null,
+                invites: []
             };
         },
         methods: {
@@ -230,7 +233,6 @@
                 // there is no method which will be able to load normal group collection
                 deipRpc.api.getResearchGroupTokensByAccountAsync(this.user.name)
                     .then((data) => {
-                        debugger;
                         this.groups = data;
                         this.proposals = [];
                     });
@@ -285,7 +287,7 @@
 					new Date( new Date().getTime() + 2 * 24 * 60 * 60 * 1000 )
 				).then(() => {
                     this.newProposal = {
-                        actionId: 0,
+                        actionId: 1,
                         data: ""
                     };
                     this.loadGroupProposals(this.activeGroup.research_group_id);
@@ -342,28 +344,35 @@
                     });
                 }
             },
-            approveInvite() {
-                if(this.inviteId) {
-                    deipRpc.broadcast.approveResearchGroupInviteAsync(
-                        this.user.postingWif,
-                        this.inviteId,
-                        this.user.name
-                    )
-                }
+            loadUserInvites() {
+                deipRpc.api.getResearchGroupInvitesByAccountNameAsync(this.user.name)
+                    .then((data) => {
+                        this.invites = data;
+                    })
             },
-            rejectInvite(){
-                if(this.inviteId) {
-                    deipRpc.broadcast.rejectResearchGroupInviteAsync(
-                        this.user.postingWif,
-                        this.inviteId,
-                        this.user.name
-                    )
-                }
+            approveInvite(inviteId) {
+                deipRpc.broadcast.approveResearchGroupInviteAsync(
+                    this.user.postingWif,
+                    inviteId,
+                    this.user.name
+                ).then(() => {
+                   this.switchUser(this.user); // reload context
+                });
+            },
+            rejectInvite(inviteId){
+                deipRpc.broadcast.rejectResearchGroupInviteAsync(
+                    this.user.postingWif,
+                    inviteId,
+                    this.user.name
+                ).then(() => {
+                   this.switchUser(this.user); // reload context
+                });
             },
             switchUser(user) {
                 this.user = user;
                 this.clear();
                 this.loadResearchGroups();
+                this.loadUserInvites();
             },
             clear() {
                 this.groups = [];
@@ -375,7 +384,7 @@
                 };
                 this.proposals = [];
                 this.newProposal = {
-                    actionId: 0,
+                    actionId: 1,
                     data: ""
                 };
                 this.researches = [];
@@ -384,9 +393,10 @@
                 this.activeResearch = undefined;
                 this.activeResearchContent = undefined;
                 this.newVote = {
-                    votingDiscipline: 1,
-                    votingWeight: 1
+                    votingDiscipline: null,
+                    votingWeight: null
                 };
+                this.invites = [];
             }
         },
         computed: {
@@ -404,6 +414,7 @@
             deipRpc.api.setOptions({ url: 'ws://127.0.0.1:11011/' });
             deipRpc.config.set('chain_id', 'b387f20ec96eeb24646462128b076ff210b8d15a7e763b47741912bb7c431cf9');
             this.loadResearchGroups();
+            this.loadUserInvites();
         },
         components: {
             "at-input": Input,
@@ -461,6 +472,11 @@
         padding: 5px;
         background: #dddddd;
         cursor: pointer;
+    }
+
+    .invites-list > div {
+        text-align: left;
+        padding: 5px;
     }
 
     .active-item {
