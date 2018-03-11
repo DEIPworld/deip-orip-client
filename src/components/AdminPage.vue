@@ -21,7 +21,7 @@
                         <at-input type="number" v-model="newResearchGroup.quorumPercent" placeholder="Quorum percent"></at-input>
                         <at-input type="number" v-model="newResearchGroup.tokensAmount" placeholder="Tokens amount"></at-input>
                     </div>
-                    <at-button type="primary" v-on:click="addResearchGroup()" v-bind:disabled="isAddingGroupDisabled">Create Group</at-button>
+                    <at-button type="primary" v-on:click="createResearchGroup()" v-bind:disabled="isAddingGroupDisabled">Create Group</at-button>
                 </div>
                 <div class="items-list">
                     <div v-for="group in groups" class="p-1 text-secondary"
@@ -43,7 +43,7 @@
                             <at-option v-bind:value="key" v-for="(value, key) in proposalsMap">{{ key }} - {{ value }}</at-option>
                         </at-select>
                         <at-textarea type="text" v-model="newProposal.data" placeholder="JSON" min-rows="4"></at-textarea>
-                        <at-button type="primary" v-on:click="addProposal()" v-bind:disabled="isAddingProposalDisabled">Create Proposal</at-button>
+                        <at-button type="primary" v-on:click="createProposal()" v-bind:disabled="isAddingProposalDisabled">Create Proposal</at-button>
                     </div>
 
                     <div class="items-list">
@@ -154,22 +154,25 @@
             </div>
         </div>
         <div class="row at-row flex-middle flex-center">
-            <div class="col-md-9">
+            <div class="col-md-3"></div>
+            <div class="col-md-18">
                 <div v-if="invites && invites.length" class="invites-list">
                     <p>Invites for <b>"{{user.name}}"</b></p>
                     <div class="row flex-middle" v-for="invite in invites"> 
-                        <span class="col-md-12 flex-end">
+                        <span class="col-md-10 flex-start">
                             <span>Group ID: <b>"{{invite.research_group_id}}"</b>, RG tokens: <b>"{{invite.research_group_token_amount}}"</b></span>
+                        </span>
+                        <span class="col-md-4 flex-center">
+                            <at-input type="number" v-model="invite.rt_conversion_percent" placeholder="RT conversion percent"></at-input>
                         </span> 
-                        <span class="col-md-12 flex-middle flex-end">
-                            <at-button type="success" hollow v-on:click="approveInvite(invite.id)">Approve</at-button>
-                            <at-button type="error" hollow v-on:click="rejectInvite(invite.id)">Reject</at-button> 
+                        <span class="col-md-10 flex-middle flex-end">
+                            <at-button type="success" hollow v-on:click="approveInvite(invite)">Approve</at-button>
+                            <at-button type="error" hollow v-on:click="rejectInvite(invite)">Reject</at-button> 
                         </span>
                     </div>
                 </div>
             </div>
-            <div class="col-md-8"></div>
-            <div class="col-md-7"></div>
+            <div class="col-md-3"></div>
         </div>
     </div>
 </template>
@@ -198,7 +201,7 @@
                 },
                 proposals: [],
                 newProposal: {
-                    actionId: 1,
+                    actionId: 0,
                     data: ""
                 },
                 researches: [],
@@ -258,7 +261,7 @@
             clickResearchContent(content){
                 this.activeResearchContent = content;
             },
-            addResearchGroup() {
+            createResearchGroup() {
                 deipRpc.broadcast.createResearchGroupAsync(
                     this.user.postingWif,
                     this.user.name,
@@ -269,9 +272,11 @@
                 ).then(() => {
                     this.newResearchGroup = {};
                     this.loadResearchGroups();
+                }, (err) => {
+                    alert(err.message);
                 });
             },
-            addProposal() {
+            createProposal() {
                 // 1 - `{"research_group_id": 0, "name": "quantum break", "abstract":"research for quantum break", "permlink":"quantumbreak108", "review_share_in_percent": 10, "dropout_compensation_in_percent": 5, "disciplines": [2]}`
                 // 2 - `{"research_group_id": 0, "name": "alice", "research_group_token_amount": 50}`
                 // 8 - `{"research_group_id": 0, "quorum_percent": 80}`, 
@@ -286,11 +291,10 @@
                     parseInt(this.newProposal.actionId),
 					new Date( new Date().getTime() + 2 * 24 * 60 * 60 * 1000 )
 				).then(() => {
-                    this.newProposal = {
-                        actionId: 1,
-                        data: ""
-                    };
+                    this.newProposal = {};
                     this.loadGroupProposals(this.activeGroup.research_group_id);
+                }, (err) => {
+                    alert(err.message);
                 });
             },
 
@@ -350,20 +354,24 @@
                         this.invites = data;
                     })
             },
-            approveInvite(inviteId) {
+            approveInvite(invite) {
+                var rt_conversion_percent = invite.rt_conversion_percent ? parseInt(invite.rt_conversion_percent) : 0;
                 deipRpc.broadcast.approveResearchGroupInviteAsync(
                     this.user.postingWif,
-                    inviteId,
-                    this.user.name
+                    invite.id,
+                    this.user.name,
+                    parseInt(rt_conversion_percent)
                 ).then(() => {
                    this.switchUser(this.user); // reload context
                 });
             },
-            rejectInvite(inviteId){
+            rejectInvite(invite){
+                var rt_conversion_percent = invite.rt_conversion_percent ? parseInt(invite.rt_conversion_percent) : 0;
                 deipRpc.broadcast.rejectResearchGroupInviteAsync(
                     this.user.postingWif,
-                    inviteId,
-                    this.user.name
+                    invite.id,
+                    this.user.name,
+                    parseInt(rt_conversion_percent)
                 ).then(() => {
                    this.switchUser(this.user); // reload context
                 });
@@ -376,17 +384,9 @@
             },
             clear() {
                 this.groups = [];
-                this.newResearchGroup = {
-                    permlink: "",
-                    description: "",
-                    quorumPercent: null,
-                    tokensAmount: null
-                };
+                this.newResearchGroup = {};
                 this.proposals = [];
-                this.newProposal = {
-                    actionId: 1,
-                    data: ""
-                };
+                this.newProposal = {};
                 this.researches = [];
                 this.activeGroup = undefined;
                 this.activeProposal = undefined;
