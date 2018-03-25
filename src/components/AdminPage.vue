@@ -15,7 +15,8 @@
             <div class="col-md-8">
                 <p>Research Groups</p>
                 <div>
-                    <at-input type="text" v-model="newResearchGroup.permlink" placeholder="Permlink"></at-input>
+                    <at-input type="text" v-model="newResearchGroup.name" placeholder="Name"></at-input>
+                    <!-- <at-input type="text" v-model="newResearchGroup.permlink" placeholder="Permlink"></at-input> -->
                     <at-textarea type="text" v-model="newResearchGroup.description" placeholder="Description"></at-textarea>
                     <div class="row at-row flex-center">
                         <at-input type="number" v-model="newResearchGroup.quorumPercent" placeholder="Quorum percent"></at-input>
@@ -102,7 +103,7 @@
                                         <span><b>ID: </b>{{ research.id }}</span>
                                     </span>
                                     <span class="col-md-24 flex-start">
-                                        <span><b>Title: </b>{{ research.name }}</span>
+                                        <span><b>Title: </b>{{ research.title }}</span>
                                     </span>
                                     <span class="col-md-24 flex-start">
                                         <span><b>Abstract: </b>{{ research.abstract }}</span>
@@ -117,13 +118,17 @@
                 <div v-if="activeResearch && activeResearch.content.length != 0">
                     <p>Content for <b>"{{activeResearch.id}}"</b> Research</p>
                         <div class="items-list">
-                            <div v-for="content in activeResearch.content" v-on:click="clickResearchContent(content)">
+                            <div v-for="(content, index) in activeResearch.content" v-on:click="clickResearchContent(content)">
 
                                 <div class="row flex-middle" v-bind:class="{ 'active-item': activeResearchContent === content }"> 
                                     <div class="col-md-10 flex-start">
+                                        <div># {{ index + 1}}</div>
                                         <div><b>Type: </b>{{ content.content_type }}</div>
+                                        <div><b>Title: </b>{{ content.title }}</div>
                                         <div><b>Content: </b>{{ content.content }}</div>
                                         <div><b>Authors: </b>{{ content.authors.join(", ") }}</div>
+                                        <div><b>References: </b>{{ content.references.join(", ") }}</div>
+                                        <div><b>External References: </b>{{ content.external_references.join(", ") }}</div>
                                     </div>
                                     <div class="col-md-4 flex-center">
                                         <span v-if="activeResearchContent === content" >
@@ -194,6 +199,7 @@
                 users: users,
                 groups: [],
                 newResearchGroup: {
+                    name: "",
                     permlink: "",
                     description: "",
                     quorumPercent: null,
@@ -262,10 +268,12 @@
                 this.activeResearchContent = content;
             },
             createResearchGroup() {
+                var permlink = this.newResearchGroup.name.replace(/\s+/g, '-').toLowerCase();
                 deipRpc.broadcast.createResearchGroupAsync(
                     this.user.postingWif,
                     this.user.name,
-                    this.newResearchGroup.permlink,
+                    this.newResearchGroup.name,
+                    permlink,
                     this.newResearchGroup.description,
                     parseInt(this.newResearchGroup.quorumPercent),
                     parseInt(this.newResearchGroup.tokensAmount)
@@ -277,11 +285,11 @@
                 });
             },
             createProposal() {
-                // 1 - `{"research_group_id": 0, "name": "quantum break", "abstract":"research for quantum break", "permlink":"quantumbreak108", "review_share_in_percent": 10, "dropout_compensation_in_percent": 5, "disciplines": [2]}`
+                // 1 - `{"research_group_id": 0, "title": "quantum break", "abstract":"research for quantum break", "permlink":"quantumbreak108", "review_share_in_percent": 10, "dropout_compensation_in_percent": 5, "disciplines": [2]}`
                 // 2 - `{"research_group_id": 0, "name": "alice", "research_group_token_amount": 50}`
                 // 8 - `{"research_group_id": 0, "quorum_percent": 80}`, 
                 // 4 - `{"research_group_id": 0, "account_name": "bob", "funds": 20}`,
-                // 12 - `{"research_id": 0, "type": 2, "content": "My milestone for quantum break", "authors": ["initdelegate"], "research_references": [], "research_external_references": []}`
+                // 12 - `{"research_id": 0, "type": 2, "title": "My title for the milestone", "content": "My milestone for quantum break", "authors": ["initdelegate"], "references": [], "external_references": []}`
 
                 deipRpc.broadcast.createProposalAsync(
 					this.user.postingWif,
@@ -401,7 +409,7 @@
         },
         computed: {
             isAddingGroupDisabled() {
-                return !this.newResearchGroup.description || !this.newResearchGroup.permlink
+                return !this.newResearchGroup.description || !this.newResearchGroup.name
                     || !parseInt(this.newResearchGroup.quorumPercent) > 0 
                     || !parseInt(this.newResearchGroup.tokensAmount) > 0
             },
@@ -410,7 +418,7 @@
             }
         },
         created() {
-            // deipRpc.api.setOptions({ url: 'ws://146.185.140.12:11011/' });
+            //deipRpc.api.setOptions({ url: 'ws://146.185.140.12:11011/' });
             deipRpc.api.setOptions({ url: 'ws://127.0.0.1:11011/' });
             deipRpc.config.set('chain_id', 'b387f20ec96eeb24646462128b076ff210b8d15a7e763b47741912bb7c431cf9');
             this.loadResearchGroups();
