@@ -434,8 +434,9 @@
             "at-card": Card
         }
     };
-
-    import 'at-ui-style';
+    // temporary commented bc it conflicts strongly with material ui css styles 
+    // todo: find way how to solve conflict between css libs 
+    // import 'at-ui-style';
     import { Button, ButtonGroup, Tag, Radio, RadioGroup, RadioButton, Checkbox, CheckboxGroup, Input, InputNumber, Textarea,
             Badge, Switch, Slider, Tooltip, Popover, Alert, Progress, LoadingBar, Modal, Select, Option, OptionGroup, Dropdown, 
             DropdownMenu, DropdownItem, Breadcrumb, BreadcrumbItem, Pagination, Menu, MenuItem, MenuItemGroup, Submenu, Table, Card, 
