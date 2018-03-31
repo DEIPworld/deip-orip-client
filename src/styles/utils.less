@@ -1,11 +1,14 @@
-.d-block {
+.display-block {
     display: block;
 }
-.d-inline-block {
+.display-inline-block {
     display: inline-block;
 }
-.d-inline-flex {
+.display-inline-flex {
     display: inline-flex;
+}
+.display-flex {
+    display: flex;
 }
 .pos-relative {
     position: relative;
@@ -36,6 +39,28 @@
 .text-align-center {
     text-align: center;
 }
+.uppercase {
+    text-transform: uppercase;
+}
+.bold {
+    font-weight: bold;
+}
+.underlined {
+    text-decoration: underline;
+}
+.decoration-none {
+    text-decoration: none;
+}
+
+.create-font-sizes(@max, @i: 10) when (@i =< @max) {
+    .font-@{i}px {
+        font-size: @i * 1px;
+    }
+
+    .create-font-sizes(@max, (@i + 1));
+}
+
+.create-font-sizes(30);
 
 .overflow-ellipsis {
     white-space: nowrap;
@@ -46,9 +71,19 @@
     white-space: nowrap;
 }
 
-.width-100-percent {
+.overflow-y-auto {
+    overflow-y: auto;
+}
+.overflow-x-auto {
+    overflow-x: auto;
+}
+.overflow-auto {
+    overflow: auto;
+}
+
+.full-width {
     width: 100%;
 }
-.height-100-percent {
+.full-height {
     height: 100%;
 }

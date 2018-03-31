@@ -11,6 +11,9 @@
             <li>
                 <router-link to="/researchItem">Research Item Layout</router-link>
             </li>
+            <li>
+                <router-link to="/researchFeed">Research Feed</router-link>
+            </li>
         </ul>
     </div>
 </template>

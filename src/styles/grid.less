@@ -64,11 +64,11 @@
     .create-order-classes(@n, (@i + 1));
 }
 .create-classes-for-view-port(@view-port, @cols-count) {
-    .col@{view-port} {
+    .col-grow@{view-port} {
         flex: 1 1 0;
         max-width: 100%;
     }
-    .col-auto@{view-port} {
+    .col-shrink@{view-port} {
         flex: 0 0 auto;
         max-width: none;
     }
@@ -117,6 +117,9 @@
 
 .create-classes-for-view-port(~"", @num-of-cols);
 
+@media @small {
+    .create-classes-for-view-port(~"-sm", @num-of-cols);
+}
 @media @medium {
     .create-classes-for-view-port(~"-md", @num-of-cols);
 }

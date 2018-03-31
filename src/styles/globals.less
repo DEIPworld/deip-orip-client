@@ -1,14 +1,17 @@
 
 // view-ports
 
-@sm-view-port: 44em;
-@small: ~"only screen and (max-width : @{sm-view-port})";
+@xs-view-port: 600px;
+@extrasmall: ~"only screen and (max-width : @{xs-view-port})";
+@small: ~"only screen and (min-width : @{xs-view-port})";
+
+@sm-view-port: 960px;
 @medium: ~"only screen and (min-width : @{sm-view-port})";
 
-@md-view-port: 60em;
+@md-view-port: 1264px;
 @large: ~"only screen and (min-width : @{md-view-port})";
 
-@lg-view-port: 75em;
+@lg-view-port: 1904px;
 @extralarge: ~"only screen and (min-width : @{lg-view-port})";
 
 // global variables

@@ -1,54 +1,54 @@
-@spacer: .25rem;
+@spacer: 4px;
 
 .create-margins(@view-port, @n, @i: 1) when (@i =< @n) {
-    .m@{view-port}-@{i} {
+    .c-m@{view-port}-@{i} {
         margin: @spacer * @i;
     }
-    .mv@{view-port}-@{i} {
+    .c-mv@{view-port}-@{i} {
         margin-top: @spacer * @i;
         margin-bottom: @spacer * @i;
     }
-    .mh@{view-port}-@{i} {
+    .c-mh@{view-port}-@{i} {
         margin-left: @spacer * @i;
         margin-right: @spacer * @i;
     }
-    .mt@{view-port}-@{i} {
+    .c-mt@{view-port}-@{i} {
         margin-top: @spacer * @i;
     }
-    .mb@{view-port}-@{i} {
+    .c-mb@{view-port}-@{i} {
         margin-bottom: @spacer * @i;
     }
-    .ml@{view-port}-@{i} {
+    .c-ml@{view-port}-@{i} {
         margin-left: @spacer * @i;
     }
-    .mr@{view-port}-@{i} {
+    .c-mr@{view-port}-@{i} {
         margin-right: @spacer * @i;
     }
 
     .create-margins(@view-port, @n, (@i + 1));
 }
 .create-paddings(@view-port, @n, @i: 1) when (@i =< @n) {
-    .p@{view-port}-@{i} {
+    .c-p@{view-port}-@{i} {
         padding: @spacer * @i;
     }
-    .pv@{view-port}-@{i} {
+    .c-pv@{view-port}-@{i} {
         padding-top: @spacer * @i;
         padding-bottom: @spacer * @i;
     }
-    .ph@{view-port}-@{i} {
+    .c-ph@{view-port}-@{i} {
         padding-left: @spacer * @i;
         padding-right: @spacer * @i;
     }
-    .pt@{view-port}-@{i} {
+    .c-pt@{view-port}-@{i} {
         padding-top: @spacer * @i;
     }
-    .pb@{view-port}-@{i} {
+    .c-pb@{view-port}-@{i} {
         padding-bottom: @spacer * @i;
     }
-    .pl@{view-port}-@{i} {
+    .c-pl@{view-port}-@{i} {
         padding-left: @spacer * @i;
     }
-    .pr@{view-port}-@{i} {
+    .c-pr@{view-port}-@{i} {
         padding-right: @spacer * @i;
     }
 
@@ -56,41 +56,41 @@
 }
 .create-widths(@view-port, @n, @i: 1) when (@i =< @n) {
     .width@{view-port}-@{i} {
-        width: 1rem * @i;
+        width: 4 * @spacer * @i;
     }
 
     .create-widths(@view-port, @n, (@i + 1));
 }
 .create-heights(@view-port, @n, @i: 1) when (@i =< @n) {
     .height@{view-port}-@{i} {
-        height: 1rem * @i;
+        height: 4 * @spacer * @i;
     }
 
     .create-heights(@view-port, @n, (@i + 1));
 }
 
 .create-spacings-for-view-port(@view-port, @n) {
-    .m-auto@{view-port} {
+    .c-m-auto@{view-port} {
         margin: auto;
     }
-    .mv-auto@{view-port} {
+    .c-mv-auto@{view-port} {
         margin-top: auto;
         margin-bottom: auto;
     }
-    .mh-auto@{view-port} {
+    .c-mh-auto@{view-port} {
         margin-left: auto;
         margin-right: auto;
     }
-    .mt-auto@{view-port} {
+    .c-mt-auto@{view-port} {
         margin-top: auto;
     }
-    .mb-auto@{view-port} {
+    .c-mb-auto@{view-port} {
         margin-bottom: auto;
     }
-    .mr-auto@{view-port} {
+    .c-mr-auto@{view-port} {
         margin-right: auto;
     }
-    .ml-auto@{view-port} {
+    .c-ml-auto@{view-port} {
         margin-left: auto;
     }
 

@@ -1,4 +1,5 @@
 <template>
+    <div>
     <div class="row p-6 bg-gray">
         <div class="col-9 col-offset-3">
 
@@ -68,21 +69,96 @@
             </div>
 
         </div>
+        <div class="col-12">
+            
+        </div>
+    </div>
+
+    <div>
+        <v-btn color="success">Success</v-btn>
+        <v-btn color="primary" dark>Accept
+            <v-icon dark right>close</v-icon>
+        </v-btn>
+
+        <div id="texture_editor" v-bind:class="{ 'read-only': isReadOnly }" style="height: 550px; width: 100%; border-bottom: 1px solid #E0E4E4;"></div>
+        <!-- <div id="texture_editor"></div> -->
+    </div>
     </div>
 </template>
 
 <script>
+    // import * as fromTexture from 'substance-texture/dist/texture.js';
+    // import * as fromSubstance from 'substance/dist/substance.js';
+    // import * as vfs from './vfs.js';
+
+    // import * as fromSubstance from 'E:/deip/texture/texture/dist/substance/dist/substance.js';
+    // import * as fromTexture from 'E:/deip/texture/texture/dist/texture.js';
+    // import MyTextureEditor from './MyTextureEditor.js';
+
     export default {
         name: "ResearchItemLayout",
         data() {
-            return {};
+            return {
+                isReadOnly: false
+            };
         },
-        methods: {}
+        methods: {},
+        mounted() {
+            // "substance-texture": "^1.0.0-alpha.3"
+
+            let substance = fromSubstance;
+            let substanceTexture = fromTexture;
+
+            /*
+            window.addEventListener('load', () => {
+                window.textureApp = substanceTexture.Texture.mount({
+                        documentId: 'kitchen-sink/manuscript2.xml',
+                        readXML: function(documentId, cb) {
+                            console.log('vfs', window.vfs);
+                            let xmlStr = window.vfs.readFileSync(documentId);
+                            cb(null, xmlStr);
+                            // fetch an XML string to be read by the editor
+                        },
+                        writeXML: function(documentId, xml, cb) {
+                            // write the XML string to a store
+                            console.log('writeXML needs to be implemented for saving.')
+                            console.log('XML', xml)
+                            cb(null)
+                        }
+                    }, 
+                    document.getElementById('texture_editor')
+                );
+            });
+            //*/
+
+            
+
+            // (function (global, factory) {
+            //     factory(substance, substanceTexture);
+            // }(window, (function (substance,substanceTexture) { 'use strict';
+
+                /*
+                window.addEventListener('load', () => {
+                    substance.substanceGlobals.DEBUG_RENDERING = substance.platform.devtools;
+                    MyTextureEditor.mount({}, document.getElementById('texture_editor'));
+                });
+                */
+
+            // })));
+            //# sourceMappingURL=./editor.js.map
+
+
+
+
+        }
     };
 </script>
 
-<style lang="less" scoped>
-    @import '../styles/common.less';
+<style lang="less"> // make scoped
+
+    .sc-app {
+        height: 100%;
+    }
 
     .bg-gray {
         background-color: #bbbbbb;
