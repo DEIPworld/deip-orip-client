@@ -220,14 +220,13 @@
                     2: "Invite member",
                     3: "Dropout member",
                     4: "Send funds",
-                    5: "Transfer research tokens",
-                    6: "Start research token sale",
-                    7: "Rebalance research group tokens",
-                    8: "Change quorum",
-                    9: "Change research review share percent",
-                    10: "Offer research tokens",
-                    11: "Accept research tokens offer",
-                    12: "Create research material"
+                    5: "Start research token sale",
+                    6: "Rebalance research group tokens",
+                    7: "Change quorum",
+                    8: "Change research review share percent",
+                    // 9: "Offer research tokens",
+                    // 10: "Accept research tokens offer",
+                    11: "Create research material"
                 },
                 newVote: {
                     votingDiscipline: null,
@@ -287,9 +286,15 @@
             createProposal() {
                 // 1 - `{"research_group_id": 0, "title": "quantum break", "abstract":"research for quantum break", "permlink":"quantumbreak108", "review_share_in_percent": 10, "dropout_compensation_in_percent": 5, "disciplines": [2]}`
                 // 2 - `{"research_group_id": 0, "name": "alice", "research_group_token_amount": 50}`
-                // 8 - `{"research_group_id": 0, "quorum_percent": 80}`, 
-                // 4 - `{"research_group_id": 0, "account_name": "bob", "funds": 20}`,
-                // 12 - `{"research_id": 0, "type": 2, "title": "My title for the milestone", "content": "My milestone for quantum break", "authors": ["initdelegate"], "references": [], "external_references": []}`
+                // 3 - `{"research_group_id": 0, "name": "alice"}`
+                // 4 - `{"research_group_id": 0, "recipient": "alice", "funds": 1000}`
+                // 5 - `{"research_id": 0, "start_time": "2018-04-03T15:15:04" , "end_time": "2018-04-03T16:22:43", "amount_for_sale": 5000, "soft_cap": 1000, "hard_cap": 1500}`
+                // 6 - `{"research_group_id": 0, "accounts": [{"account_name": "initdelegate", "amount": 50},{"account_name": "alice", "amount": 60} ]}`
+                // 7 - `{"research_group_id": 0, "quorum_percent": 80}`
+                // 8 - `{"research_id": 0, "review_share_in_percent": 49}`
+                    // 9: "Offer research tokens",
+                    // 10: "Accept research tokens offer",
+                // 11 - `{"research_id": 0, "type": 2, "title": "My title for the milestone", "content": "My milestone for quantum break", "authors": ["initdelegate"], "references": [], "external_references": []}`
 
                 deipRpc.broadcast.createProposalAsync(
 					this.user.postingWif,
