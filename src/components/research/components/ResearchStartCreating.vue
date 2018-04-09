@@ -7,7 +7,7 @@
                     <v-btn large color="primary" dark class="ma-0" to="/createResearch">Create new</v-btn>
                 </div>
                 <div class="text-align-center pt-4">
-                    <span class="import-of-existing">Import exising standalone publication</span>
+                    <span class="a">Import exising standalone publication</span>
                 </div>
             </div>
         </v-layout>
@@ -24,14 +24,4 @@
 </script>
 
 <style lang="less" scoped>
-    .import-of-existing {
-        color: #2F80ED;
-        text-decoration: underline;
-        font-size: 16px;
-        cursor: pointer;
-
-        &:hover {
-            text-decoration: none;
-        }
-    }
 </style>

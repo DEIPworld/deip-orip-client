@@ -8,6 +8,8 @@ import ResearchFeed from '@/components/research/components/ResearchFeed'
 import ResearchDetails from '@/components/research/components/ResearchDetails'
 import ResearchStartCreating from '@/components/research/components/ResearchStartCreating'
 import ResearchCreating from '@/components/research/components/ResearchCreating'
+import ResearchGroupDetails from '@/components/research/components/ResearchGroupDetails'
+import UserDetails from '@/components/user/components/UserDetails'
 
 Vue.use(Router)
 
@@ -43,11 +45,19 @@ export default new Router({
         component: ResearchDetails
     }, {
         path: '/startCreateResearch',
-        name: 'startCreateResearch',
+        name: 'StartCreateResearch',
         component: ResearchStartCreating
     }, {
         path: '/createResearch',
-        name: 'createResearch',
+        name: 'CreateResearch',
         component: ResearchCreating
+    }, {
+        path: '/userDetails',
+        name: 'UserDetails',
+        component: UserDetails
+    }, {
+        path: '/researchGroupDetails',
+        name: 'ResearchGroupDetails',
+        component: ResearchGroupDetails
     }]
 })

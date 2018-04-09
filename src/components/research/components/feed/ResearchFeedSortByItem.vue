@@ -1,5 +1,5 @@
 <template>
-    <div class="clickable-label font-16px" 
+    <div class="clickable-label subheading" 
         :class="[{'selected underlined': label === selected }]"
         @click.stop="activateLabel()"
     >{{ label.title }}</div>

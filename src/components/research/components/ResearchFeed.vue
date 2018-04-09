@@ -1,58 +1,51 @@
 <template>
-    <v-container fluid fill-height class="pa-0">
-        <v-layout shrink class="d-block">
-            <v-card width="300px" height="100%" class="px-4 pb-3">
-                <research-feed-filter></research-feed-filter>
-            </v-card>
-        </v-layout>
+    <v-container fluid fill-height class="pa-0" style="align-items: stretch;">
+        <v-card width="300px" class="c-ph-6 c-pb-10 c-pt-6">
+            <research-feed-filter></research-feed-filter>
+        </v-card>
 
-        <v-layout class="d-block pa-4">
-            <v-flex>
-                <v-layout row>
-                    <v-flex shrink class="py-1">
-                        <div class="filter-title">My Choise</div>
-                    </v-flex>
-                    <v-layout row wrap>
-                        
-                        <v-layout class="pr-3 py-1" align-center shrink>
-                            <span>Quantum Physics</span>
-                            <span class="small-remove-btn ml-1">
-                                <v-icon>close</v-icon>
-                            </span>
-                        </v-layout>
-                        <v-layout class="pr-3 py-1" align-center shrink>
-                            <span>2018</span>
-                            <span class="small-remove-btn ml-1">
-                                <v-icon>close</v-icon>
-                            </span>
-                        </v-layout>
-                    </v-layout>
-                </v-layout>
-            </v-flex>
+        <div class="c-p-10 col-grow">
+            <div class="row-nowrap">
+                <div class="filter-title">My Choise</div>
+                <div class="row col-grow align-center">
+                    <div class="c-pr-4 display-flex">
+                        <span>Quantum Physics</span>
+                        <span class="small-remove-btn ml-1">
+                            <v-icon>close</v-icon>
+                        </span>
+                    </div>
+                    <div class="c-pr-4 display-flex">
+                        <span>2018</span>
+                        <span class="small-remove-btn ml-1">
+                            <v-icon>close</v-icon>
+                        </span>
+                    </div>
+                </div>
+            </div>
             
-            <v-flex class="pt-3">
+            <v-flex class="c-pt-6">
                 <research-feed-sort-by></research-feed-sort-by>
             </v-flex>
 
-            <v-flex class="pt-5">
-                <v-layout row justify-space-between align-end>
-                    <v-flex shrink>
-                        <div class="font-18px bold deip-blue-color">Search Results: 108</div>
-                    </v-flex>
-                    <v-flex shrink>
-                        <div class="list-state-label" @click.stop="isCollapsed = !isCollapsed">
-                            <span v-show="!isCollapsed">Collapse all</span>
-                            <span v-show="isCollapsed">Expand all</span>
-                        </div>
-                    </v-flex>
-                </v-layout>
-            </v-flex>
+            <div class="row justify-between align-end c-pt-10">
+                <div class="sm-title bold deip-blue-color">Search Results: 108</div>
+                <div class="list-state-label" @click.stop="isCollapsed = !isCollapsed">
+                    <span v-show="!isCollapsed">Collapse all</span>
+                    <span v-show="isCollapsed">Expand all</span>
+                </div>
+            </div>
 
-            <v-flex class="pt-3">
-                <research-list :is-collapsed="isCollapsed"></research-list>
-            </v-flex>
+            <div class="c-pt-6">
+                <v-card>
+                    <research-list-item :is-collapsed="isCollapsed"></research-list-item>
+                    <v-divider></v-divider>
+                    <research-list-item :is-collapsed="isCollapsed"></research-list-item>
+                    <v-divider></v-divider>
+                    <research-list-item :is-collapsed="isCollapsed"></research-list-item>
+                </v-card>
+            </div>
 
-        </v-layout>
+        </div>
     </v-container>   
 </template>
 

@@ -1,19 +1,15 @@
 <template>
-    <v-layout row>
-        <v-flex shrink class="py-1">
-            <div class="filter-title">Sort by</div>
-        </v-flex>
-        <v-flex shrink>
-            <v-layout row wrap>
-                <div class="pr-4 py-1 sort-label" v-for="(label, index) in labels" :key="index">
-                    <research-feed-sort-by-item 
-                        :selected="activeLabel" 
-                        :label="label" @update="onActivate"
-                    ></research-feed-sort-by-item>
-                </div>
-            </v-layout>
-        </v-flex>
-    </v-layout>
+    <div class="row-nowrap">
+        <div class="filter-title">Sort by</div>
+        <div class="row">
+            <div class="pr-4 sort-label" v-for="(label, index) in labels" :key="index">
+                <research-feed-sort-by-item 
+                    :selected="activeLabel" 
+                    :label="label" @update="onActivate"
+                ></research-feed-sort-by-item>
+            </div>
+        </div>
+    </div>
 </template>
 
 <script>

@@ -10,6 +10,7 @@ import './styles/common.less'
 
 import './components/core/index';
 import './components/research/index';
+import './components/user/index';
 
 Vue.use(Vuetify, {
     theme: {

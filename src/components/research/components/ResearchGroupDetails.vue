@@ -2,23 +2,23 @@
     <v-container fluid fill-height class="pa-0">
 
         <v-layout class="d-block c-p-10">
-            <research-details-body></research-details-body>
+            <research-group-details-body></research-group-details-body>
         </v-layout>
 
         <v-layout shrink class="d-block">
             <v-card width="300px" height="100%" class="c-pt-10 c-ph-6">
-                <research-details-sidebar></research-details-sidebar>
+                <research-group-details-sidebar></research-group-details-sidebar>
             </v-card>
         </v-layout>
+
     </v-container>   
 </template>
 
 <script>
     export default {
-        name: "ResearchDetails",
+        name: "ResearchGroupDetails",
         data() { 
-            return {
-            } 
+            return {} 
         }
     };
 </script>

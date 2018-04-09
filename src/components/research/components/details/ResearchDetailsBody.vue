@@ -1,17 +1,18 @@
 <template>
-    <v-flex>
-        <v-layout justify-space-between align-center>
-            <v-flex shrink>
-                <v-icon size="18px">date_range</v-icon> <span>Created 20 Jan 2018</span>
-            </v-flex>
-            <v-flex shrink>
-                <v-btn small color="primary" dark class="ma-0">Vote</v-btn>
-            </v-flex>
-        </v-layout>
-        <div class="pt-4 deip-blue-color font-18px bold">
+    <div>
+        <div class="row justify-between align-center">
+            <div>
+                <v-icon size="18px">date_range</v-icon> 
+                <span>Created 20 Jan 2018</span>
+            </div>
+            <v-btn small color="primary" class="ma-0">Vote</v-btn>
+        </div>
+
+        <div class="display-1 half-bold c-mt-10">
             Energistically maximize market-driven quality vectors before progressive functionalities. 
         </div>
-        <div class="pt-4">
+
+        <div class="c-pt-8">
             Intrinsicly seize resource-leveling infrastructures via prospective human capital. Efficiently aggregate 
             quality users and revolutionary paradigms. Rapidiously aggregate reliable services through functional outsourcing. 
             Completely reinvent B2B convergence before market-driven web-readiness. Uniquely seize principle-centered portals 
@@ -28,71 +29,67 @@
             customize vertical action items for client-centric services.
         </div>
 
-        <div class="pt-3 deip-blue-color font-16px bold">Research</div>
+        <div class="c-pt-8 title">Research</div>
 
-        <div class="pt-3">
+        <div class="c-pt-6">
             <v-expansion-panel>
                 <v-expansion-panel-content v-for="i in 5" :key="i">
                     <div slot="header">
                         <span class="bold">Chapter {{i}}</span>
-                        <span class="deip-blue-color bold pl-1">Problem market-driven quality vectors before progressive functionalities.</span>
+                        <span class="deip-blue-color bold c-pl-4">Problem market-driven quality vectors before progressive functionalities.</span>
                     </div>
                     <v-card>
                         <v-card-text class="pt-0">
-                            <v-flex class="research-item-authors">Alex Shkor  ·  Artyom Ruseckiy  ·  Egor Tsaryk</v-flex>
-                            <v-flex class="research-item-caption">
-                                Dramatically underwhelm extensive mindshare whereas cross-platform potentialities. Interactively recaptiualize viral relationships before competitive functionalities. 
-                                Synergistically strategize intermandated services with premier vortals.
-                            </v-flex>
-                            <v-flex class="research-item-meta-info">
-                                <v-layout>
-                                    <v-flex shrink class="pr-5">
-                                        <div>Quantum optics</div>
-                                    </v-flex>
-                                    <v-flex shrink class="pr-5">
-                                        <div>900 tokens</div>
-                                    </v-flex>
-                                    <v-flex shrink class="pr-5">
-                                        <div>
+                            <div class="c-ph-2">
+                                <div class="caption grey--text c-pt-2">Alex Shkor  ·  Artyom Ruseckiy  ·  Egor Tsaryk</div>
+                                <div class="c-pt-4 half-bold">
+                                    Dramatically underwhelm extensive mindshare whereas cross-platform potentialities. Interactively recaptiualize viral relationships before competitive functionalities. 
+                                    Synergistically strategize intermandated services with premier vortals.
+                                </div>
+                                <div class="c-pt-6">
+                                    <div class="row-nowrap">
+                                        <div class="c-pr-10">
+                                            <div class="bold green--text text--darken-2">Quantum optics</div>
+                                        </div>
+                                        <div class="c-pr-10">
+                                            <div>900 tokens</div>
+                                        </div>
+                                        <div class="c-pr-10">
                                             <v-icon size="18px">visibility</v-icon> <span>1999</span>
                                         </div>
-                                    </v-flex>
-                                    <v-flex shrink class="pr-5">
-                                        <div>
+                                        <div class="c-pr-10">
                                             <v-icon size="18px">chat_bubble</v-icon> <span>23</span>
                                         </div>
-                                    </v-flex>
-                                    <v-flex shrink>
                                         <div>
                                             <v-icon size="18px">date_range</v-icon> <span>Upd 13 Mar 2018</span>
                                         </div>
-                                    </v-flex>
-                                </v-layout>
-                            </v-flex>
+                                    </div>
+                                </div>
+                            </div>
                         </v-card-text>
                     </v-card>
                 </v-expansion-panel-content>
             </v-expansion-panel>
         </div>
 
-        <div class="pt-3 deip-blue-color font-16px bold">Reviews: 2</div>
+        <div class="c-pt-8 title">Reviews: 2</div>
 
-        <div class="pt-3">
+        <div class="c-pt-8">
             <v-card>
-                <v-layout class="pa-3">
-                    <v-flex class="review-left-block text-align-center">
+                <div class="row-nowrap c-p-6">
+                    <div class="review-left-block text-align-center">
                         <v-avatar size="90px">
                             <img src="http://deip.world/static/ashkor.7ff44c16.png" alt="User">
                         </v-avatar>
-                        <div class="bold pt-1">Serge Dzeranov</div>
-                        <v-btn class="ma-0 mt-1" block color="primary" dark>Vote</v-btn>
-                    </v-flex>
-                    <v-flex class="ml-3">
+                        <div class="bold c-pt-2">Serge Dzeranov</div>
+                        <v-btn class="ma-0 mt-2" block color="primary">Vote</v-btn>
+                    </div>
+                    <div class="c-ml-6">
                         <div>
-                            <span style="color: #ccc;">20 Jan 2018</span>
-                            <span class="pl-2 green--text text--darken-3">Positive</span>
+                            <span class="grey--text">20 Jan 2018</span>
+                            <span class="c-pl-2 green--text text--darken-3">Positive</span>
                         </div>
-                        <div class="pt-2">
+                        <div class="c-pt-4">
                             Collaboratively brand bricks-and-clicks services for clicks-and-mortar bandwidth. Intrinsicly 
                             underwhelm state of the art infrastructures via premier methods of empowerment. Holisticly 
                             procrastinate exceptional metrics for market positioning human capital. Monotonectally 
@@ -101,28 +98,28 @@
                             users through dynamic core competencies. Quickly drive error-free data with premium benefits. 
                             Credibly simplify B2C content rather than magnetic catalysts for change.
                         </div>
-                        <div class="pt-2" style="color: #ccc;">
+                        <div class="c-pt-4 grey--text">
                             Quantum Optics 21 |  Physics  8787    
                         </div>
-                    </v-flex>
-                </v-layout>
+                    </div>
+                </div>
 
                 <v-divider></v-divider>
-                
-                <v-layout class="pa-3">
-                    <v-flex class="review-left-block text-align-center">
+
+                <div class="row-nowrap c-p-6">
+                    <div class="review-left-block text-align-center">
                         <v-avatar size="90px">
                             <img src="http://deip.world/static/aermolaev.bf4059ea.png" alt="User">
                         </v-avatar>
-                        <div class="bold pt-1">Serge Dzeranov</div>
-                        <v-btn class="ma-0 mt-1" block color="primary" dark>Vote</v-btn>
-                    </v-flex>
-                    <v-flex class="ml-3">
+                        <div class="bold c-pt-2">Serge Dzeranov</div>
+                        <v-btn class="ma-0 mt-2" block color="primary">Vote</v-btn>
+                    </div>
+                    <div class="c-ml-6">
                         <div>
-                            <span style="color: #ccc;">20 Jan 2018</span>
-                            <span class="pl-2 green--text text--darken-3">Positive</span>
+                            <span class="grey--text">20 Jan 2018</span>
+                            <span class="c-pl-2 green--text text--darken-3">Positive</span>
                         </div>
-                        <div class="pt-2">
+                        <div class="c-pt-4">
                             Collaboratively brand bricks-and-clicks services for clicks-and-mortar bandwidth. Intrinsicly 
                             underwhelm state of the art infrastructures via premier methods of empowerment. Holisticly 
                             procrastinate exceptional metrics for market positioning human capital. Monotonectally 
@@ -131,53 +128,55 @@
                             users through dynamic core competencies. Quickly drive error-free data with premium benefits. 
                             Credibly simplify B2C content rather than magnetic catalysts for change.
                         </div>
-                        <div class="pt-2" style="color: #ccc;">
+                        <div class="c-pt-4 grey--text">
                             Quantum Optics 21 |  Physics  8787    
                         </div>
-                    </v-flex>
-                </v-layout>
+                    </div>
+                </div>
             </v-card>
         </div>
 
-        <v-layout justify-end class="pt-3">
-            <v-btn class="ma-0 mt-1" color="primary" dark>
-                <v-icon dark size="20px" class="">add</v-icon> Add a review
+        <div class="row c-pt-8 justify-end">
+            <v-btn class="ma-0" color="primary">
+                <v-icon>add</v-icon> Add a review
             </v-btn>
-        </v-layout>
+        </div>
 
-        <div class="pt-3 deip-blue-color font-16px bold">Grants: 4</div>
+        <div class="c-pt-8 title">Grants: 4</div>
 
-        <div class="pt-3">
-            <v-card class="pa-3">
-                <v-layout>
-                    <v-flex xs3 class="grants-table-header">Organization</v-flex>
-                    <v-flex xs5 class="grants-table-header">Project</v-flex>
-                    <v-flex xs2 class="grants-table-header">Date</v-flex>
-                    <v-flex xs2 class="grants-table-header text-align-right">Amount</v-flex>
-                </v-layout>
-                <v-layout class="pt-3" v-for="i in 5" :key="i">
-                    <v-flex xs3 class="">JJHK</v-flex>
-                    <v-flex xs5 class="">General Support</v-flex>
-                    <v-flex xs2 class="">20 Jan 2018</v-flex>
-                    <v-flex xs2 class="text-align-right">$50 000</v-flex>
-                </v-layout>
+        <div class="c-pt-8">
+            <v-card>
+                <div class="info-card-list">
+                    <div class="list-line">
+                        <div class="list-header-cell col-3">Organization</div>
+                        <div class="list-header-cell col-5">Project</div>
+                        <div class="list-header-cell col-2 text-align-center">Date</div>
+                        <div class="list-header-cell col-2 text-align-right">Amount</div>
+                    </div>
+                    <div class="list-line" v-for="i in 5" :key="i">
+                        <div class="col-3 list-body-cell a">JJHK</div>
+                        <div class="col-5 list-body-cell">General Support</div>
+                        <div class="col-2 list-body-cell text-align-center">20 Jan 2018</div>
+                        <div class="col-2 list-body-cell text-align-right">$50 000</div>
+                    </div>
+                </div>
             </v-card>
         </div>
         
-        <div class="pt-3 deip-blue-color font-16px bold">Grants: 4</div>
+        <div class="c-pt-8 title">References: 4</div>
 
-        <div class="pt-2">
-            <div class="pt-1">
+        <div class="c-pt-8">
+            <div>
                 1. Crawford, Lynn. (2007). Global body of project management knowledge and standards. 
                 In Jeffrey K. Pinto & Peter W.G. Morris (Eds.): The Wiley Guide to Managing Projects (1st ed., pp. 206-252). 
                 Hoboken, N.J.: Wiley & Sons, Inc.
             </div>
-            <div class="pt-1">
+            <div class="c-pt-2">
                 2. Kwak, Young Hoon, and Frank T. Anbari. (2009). Analysing project management research: Perspectives 
                 from top management journals. International Journal of Project Management, 27(5), 435-446.
             </div>
         </div>
-    </v-flex>
+    </div>
 </template>
 
 <script>
@@ -190,24 +189,8 @@
 </script>
 
 <style lang="less" scoped>
-    .research-item-authors {
-        font-size: 12px;
-        color: #888888;
-    }
-    .research-item-caption {
-        padding-top: 12px;
-    }
-    .research-item-meta-info {
-        padding-top: 12px;
-    }
-
     .review-left-block {
         width: 160px;
         min-width: 160px;
-    }
-
-    .grants-table-header {
-        color: #ccc;
-        text-transform: uppercase;
     }
 </style>
