@@ -19,7 +19,7 @@
                             %
                         </div>
                     </div>
-                    <div class="c-pt-8 hint">
+                    <div class="c-pt-8 caption grey--text">
                         5% of  potential research reward will be shared between all the  reviewers according to their  votes  
                     </div>
                 </div>
@@ -53,8 +53,4 @@
 </script>
 
 <style lang="less">
-    .hint {
-        font-size: 12px;
-        color: #ccc;
-    }
 </style>

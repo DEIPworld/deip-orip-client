@@ -1,11 +1,11 @@
 <template>
-    <div class="c-ph-6 c-pt-6 c-pb-4">
+    <div class="c-p-6 pos-relative">
         <router-link to="/researchDetails" class="a subheading">
             Antagonistically maximize market-driven quality vectors before progressive functionalities.
         </router-link>
         <div class="caption grey--text c-pt-2">Alex Shkor  ·  Artyom Ruseckiy  ·  Egor Tsaryk</div>
         
-        <div v-show="!isCollapsed">
+        <div v-show="isCollapsed === undefined || !isCollapsed.value">
             <div class="c-pt-4 half-bold">
                 Dramatically underwhelm extensive mindshare whereas cross-platform potentialities. Interactively recaptiualize viral relationships before competitive functionalities. 
                 Synergistically strategize intermandated services with premier vortals.
@@ -30,6 +30,13 @@
                 </div>
             </div>
         </div>
+
+        <div class="pos-absolute expand-btn" v-if="isCollapsed !== undefined">
+            <v-btn flat small icon color="grey" class="ma-0" @click="changeMode()">
+                <v-icon v-show="isCollapsed.value">keyboard_arrow_down</v-icon>
+                <v-icon v-show="!isCollapsed.value">keyboard_arrow_up</v-icon>
+            </v-btn>
+        </div>
     </div>
 </template>
 
@@ -37,13 +44,22 @@
     export default {
         name: "ResearchListItem",
         props: {
-            isCollapsed: { type: Boolean, required: false }
+            isCollapsed: { required: false, default: undefined }
         },
         data() {
             return {};
+        },
+        methods: {
+            changeMode() {
+                this.isCollapsed.value = !this.isCollapsed.value;
+            }
         }
     };
 </script>
 
 <style lang="less" scoped>
+    .expand-btn {
+        right: 24px;
+        bottom: 12px;
+    }
 </style>

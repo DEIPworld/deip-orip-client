@@ -1,15 +1,15 @@
 <template>
-    <v-container fluid fill-height class="pa-0">
+    <v-container fluid fill-height class="pa-0 two-column-page">
 
-        <v-layout class="d-block c-p-10">
-            <research-group-details-body></research-group-details-body>
-        </v-layout>
+        <div class="content-column">
+            <div class="filling">
+                <research-group-details-body></research-group-details-body>
+            </div>
+        </div>
 
-        <v-layout shrink class="d-block">
-            <v-card width="300px" height="100%" class="c-pt-10 c-ph-6">
-                <research-group-details-sidebar></research-group-details-sidebar>
-            </v-card>
-        </v-layout>
+        <v-card height="100%" class="sidebar">
+            <research-group-details-sidebar></research-group-details-sidebar>
+        </v-card>
 
     </v-container>   
 </template>

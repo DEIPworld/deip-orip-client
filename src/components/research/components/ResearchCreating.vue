@@ -108,7 +108,6 @@
     }
 
     .step-title {
-        color: #2F80ED;
         font-size: 24px;
         font-weight: bold;
         text-align: center;

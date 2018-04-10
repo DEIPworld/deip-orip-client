@@ -20,7 +20,9 @@
                         Nikolay Ignatiev
                     </div>
                 </div>
-                <div class="row-nowrap c-p-3 bold clickable-label deip-blue-color">+ Add new group</div>
+                <div class="c-pt-6 c-pl-4">
+                    <span class="deip-label">+ Add new group</span>
+                </div>
             </div>
 
         </div>

@@ -9,7 +9,7 @@
                     <div class="col-6">
                         <v-text-field name="title" label="Title" solo textarea hide-details></v-text-field>
                     </div>
-                    <div class="col-3 field-description c-pl-4">Title guidelines text</div>
+                    <div class="col-3 grey--text text--lighten-1 c-pl-4">Title guidelines text</div>
                 </div>
 
                 <div class="row c-pt-4">
@@ -17,7 +17,7 @@
                     <div class="col-6">
                         <v-text-field name="Description" label="Description" solo textarea hide-details></v-text-field>
                     </div>
-                    <div class="col-3 field-description c-pl-4">Description/summary guidlines text Goals etc...?</div>
+                    <div class="col-3 grey--text text--lighten-1 c-pl-4">Description/summary guidlines text Goals etc...?</div>
                 </div>
                 
                 <div class="row c-pt-4">
@@ -25,7 +25,6 @@
                     <div class="col-6">
                         <v-text-field name="goals" label="Goals" solo textarea hide-details></v-text-field>
                     </div>
-                    <div class="col-3 field-description c-pl-4"></div>
                 </div>
             </div>
 
@@ -57,7 +56,4 @@
 </script>
 
 <style lang="less">
-    .field-description {
-        color: #ccc;
-    }
 </style>

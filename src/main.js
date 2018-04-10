@@ -14,7 +14,6 @@ import './components/user/index';
 
 Vue.use(Vuetify, {
     theme: {
-        'deip-blue': '#2F80ED',
         'primary': '#2F80ED'
     }
 })

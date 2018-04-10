@@ -22,7 +22,7 @@
             <div class="grey--text">15%</div>
         </div>
         <div class="c-mv-6">
-            <span class="clickable-label">3 JOIN REQUESTS</span>
+            <span class="deip-label">3 JOIN REQUESTS</span>
         </div>
 
         <div style="margin: 0 -24px">
@@ -42,10 +42,22 @@
         <div class="sm-title bold c-pt-6">Group Info</div>
 
         <div class="c-pt-4 c-pb-6">
-            <div>DEIP tokens 12345</div>
-            <div>Physcis 23432</div>
-            <div>Quantum physics 333</div>
-            <div>Quantum optics 5234</div>
+            <div>
+                <span class="half-bold">DEIP tokens</span>
+                <span class="right">12345</span>
+            </div>
+            <div>
+                <span class="half-bold">Physcis</span>
+                <span class="right">23432</span>
+            </div>
+            <div>
+                <span class="half-bold">Quantum physics</span>
+                <span class="right">333</span>
+            </div>
+            <div>
+                <span class="half-bold">Quantum optics</span>
+                <span class="right">5234</span>
+            </div>
         </div>
 
         <div style="margin: 0 -24px">
@@ -55,9 +67,18 @@
         <div class="sm-title bold c-pt-6">Research Token Holders</div>
 
         <div class="c-pt-4 c-pb-6">
-            <div>Research group <span class="deip-blue-color">80%</span></div>
-            <div>Investor1 <span class="deip-blue-color">15%</span></div>
-            <div>Investor2 <span class="deip-blue-color">5%</span></div>
+            <div>
+                <span class="half-bold">Research group</span>
+                <span class="deip-blue-color right">80%</span>
+            </div>
+            <div>
+                <span class="half-bold">Investor1</span>
+                <span class="deip-blue-color right">15%</span>
+            </div>
+            <div>
+                <span class="half-bold">Investor2</span>
+                <span class="deip-blue-color right">5%</span>
+            </div>
         </div>
 
         <div style="margin: 0 -24px">

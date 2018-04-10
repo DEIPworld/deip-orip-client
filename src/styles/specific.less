@@ -1,20 +1,46 @@
-.clickable-label {
+.two-column-page {
+    height: 100%;
+
+    .sidebar {
+        width: 300px;
+        padding: 40px 24px;
+    }
+    .content-column {
+        height: 100%;
+        flex: 1 1 0;
+        
+        .filling {
+            padding: 40px;
+            height: 100%;
+            max-width: 1280px;
+            margin: 0 auto;
+        }
+    }
+}
+
+.clickable {
     user-select: none;
     cursor: pointer;
+}
 
-    // new styles
+.clickable-label {
+    .clickable;
+    font-weight: 500;
     text-transform: uppercase;
-    color: #2962ff;
+    color: @blue-accent-4;
+}
+
+.deip-label {
+    .clickable-label;
+    padding: 2px;
 
     &:hover, &.selected {
-        // color: #2F80ED;
-        text-decoration: underline;
-        // background-color: rgb(187, 222, 251, 0.5); // BBDEFB
+        background-color: rgb(187, 222, 251, 0.5); // @blue-lighten-4
     }
 }
 
 .a {
-    color: #2962ff;
+    color: @blue-accent-4;
     font-weight: 500;
     text-decoration: none;
     cursor: pointer;
@@ -24,18 +50,17 @@
 }
 
 .deip-blue-color {
-    color: #2962ff;
+    color: @blue-accent-4;
 }
 
 .small-remove-btn {
-    background-color: #E0E0E0;
+    .clickable;
+    background-color: @grey-lighten-2;
     border-radius: 50%;
     display: inline-flex;
-    cursor: pointer;
     align-items: center;
     width: 20px;
     height: 20px;
-    user-select: none;
 
     & > .icon {
         font-size: 20px;
@@ -56,7 +81,7 @@
     }
     .list-header-cell {
         padding-right: 24px;
-        color: #9e9e9e;
+        color: @grey;
     }
     .list-body-cell {
         padding-right: 24px;

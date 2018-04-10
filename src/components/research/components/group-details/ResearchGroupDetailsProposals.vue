@@ -46,7 +46,7 @@
                             </div>
                             <div class="proposal-type">
                                 <v-icon small color="primary">person_add</v-icon>
-                                <router-link to="/userDetails" class="a">A. Kastsiushkina</router-link>
+                                <router-link to="/userDetails" class="a c-ml-2">A. Kastsiushkina</router-link>
                             </div>
                             <div class="date">
                                 <div class="caption">27 Mar, 2018</div>
@@ -87,7 +87,7 @@
                             </div>
                             <div class="proposal-type">
                                 <v-icon small color="primary">note_add</v-icon>
-                                <span class="a">Blockchain innovate  best way maintainable Blockchain innovate  best way maintainable</span>
+                                <div class="a c-ml-2">Blockchain innovate  best way maintainable Blockchain innovate  best way maintainable</div>
                             </div>
                             <div class="date">
                                 <div class="caption">27 Mar, 2018</div>
@@ -99,7 +99,7 @@
                                 <router-link to="/userDetails" class="a overflow-ellipsis">N. Ignatiev</router-link>
                             </div>
                             <div class="voted">
-                                <div>40 of 70%</div>
+                                <div>100 of 100%</div>
                             </div>
                             <div class="action-col">
                                 <v-btn flat small color="primary" class="ma-0" disabled>Approved</v-btn>
@@ -136,30 +136,33 @@
 </script>
 
 <style lang="less" scoped>
-.id-col {
-    width: 60px;
-}
-.proposal-type {
-    flex: 1 0 0;
-}
-.date {
-    width: 90px;
-    text-align: center;
-    flex-shrink: 0;
-}
-.created-by {
-    padding-left: 20px;
-    width: 200px;
-    flex-shrink: 0;
-}
-.voted {
-    width: 90px;
-    text-align: center;
-    flex-shrink: 0;
-}
-.action-col {
-    width: 100px;
-    display: flex;
-    justify-content: center;
-}
+    .id-col {
+        width: 60px;
+    }
+    .proposal-type {
+        display: flex;
+        align-items: flex-start;
+        flex: 1 0 0;
+    }
+    .date {
+        width: 90px;
+        text-align: center;
+        flex-shrink: 0;
+    }
+    .created-by {
+        padding-left: 20px;
+        width: 200px;
+        flex-shrink: 0;
+    }
+    .voted {
+        width: 90px;
+        text-align: center;
+        flex-shrink: 0;
+    }
+    .action-col {
+        width: 100px;
+        display: flex;
+        justify-content: center;
+    }
+
 </style>

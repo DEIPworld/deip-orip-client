@@ -1,10 +1,10 @@
 <template>
     <div :class="[!discipline.isTop ? 'pt-1 pl-3' : '']">
-        <div class="clickable-label bold" 
+        <span class="deip-label" 
             v-if="!discipline.isTop" 
             @click="select(discipline.path)"
             :class="[{'selected': isSelected}]"
-        >{{ discipline.label }}</div>
+        >{{ discipline.label }}</span>
         
         <div v-if="discipline.children" v-show="isExpanded">
             <div v-for="(val, key) in discipline.children" :key="key">

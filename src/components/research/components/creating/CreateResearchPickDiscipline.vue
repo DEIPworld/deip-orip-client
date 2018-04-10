@@ -7,20 +7,20 @@
                 <div class="row discipline-picker c-mh-auto full-height overflow-y-auto">
                     <div class="col-3 c-p-4 overflow-y-auto">
                         <div class="bold uppercase c-pb-4">Recently used</div>
-                        <div class="bold clickable-label">Religion</div>
-                        <div class="bold clickable-label">Chemistry</div>
-                        <div class="bold clickable-label">Biology</div>
-                        <div class="bold clickable-label">Physics</div>
-                        <div class="bold clickable-label">Belarusian</div>
+                        <div><span class="deip-label">Religion</span></div>
+                        <div><span class="deip-label">Chemistry</span></div>
+                        <div><span class="deip-label">Biology</span></div>
+                        <div><span class="deip-label">Physics</span></div>
+                        <div><span class="deip-label">Belarusian</span></div>
                     </div>
 
                     <div class="col-3 c-p-4 overflow-y-auto">
                         <div class="bold uppercase c-pb-4">Popular</div>
-                        <div class="bold clickable-label">Religion</div>
-                        <div class="bold clickable-label">Chemistry</div>
-                        <div class="bold clickable-label">Biology</div>
-                        <div class="bold clickable-label">Physics</div>
-                        <div class="bold clickable-label">Belarusian</div>
+                        <div><span class="deip-label">Religion</span></div>
+                        <div><span class="deip-label">Chemistry</span></div>
+                        <div><span class="deip-label">Biology</span></div>
+                        <div><span class="deip-label">Physics</span></div>
+                        <div><span class="deip-label">Belarusian</span></div>
                     </div>
 
                     <div class="col-6 c-p-4 full-height overflow-y-auto">

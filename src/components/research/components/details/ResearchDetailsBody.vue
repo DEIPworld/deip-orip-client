@@ -74,7 +74,7 @@
 
         <div class="c-pt-8 title">Reviews: 2</div>
 
-        <div class="c-pt-8">
+        <div class="c-pt-6">
             <v-card>
                 <div class="row-nowrap c-p-6">
                     <div class="review-left-block text-align-center">
@@ -136,15 +136,15 @@
             </v-card>
         </div>
 
-        <div class="row c-pt-8 justify-end">
+        <div class="row c-pt-4 justify-end">
             <v-btn class="ma-0" color="primary">
                 <v-icon>add</v-icon> Add a review
             </v-btn>
         </div>
 
-        <div class="c-pt-8 title">Grants: 4</div>
+        <div class="c-pt-4 title">Grants: 4</div>
 
-        <div class="c-pt-8">
+        <div class="c-pt-6">
             <v-card>
                 <div class="info-card-list">
                     <div class="list-line">
@@ -165,7 +165,7 @@
         
         <div class="c-pt-8 title">References: 4</div>
 
-        <div class="c-pt-8">
+        <div class="c-pt-6">
             <div>
                 1. Crawford, Lynn. (2007). Global body of project management knowledge and standards. 
                 In Jeffrey K. Pinto & Peter W.G. Morris (Eds.): The Wiley Guide to Managing Projects (1st ed., pp. 206-252). 

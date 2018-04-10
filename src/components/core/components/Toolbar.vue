@@ -36,7 +36,7 @@
             </v-menu>
 
             <div class="mx-3" style="width: 180px">
-                <v-btn dark round color="deip-blue" class="full-width ma-0" to="/startCreateResearch">
+                <v-btn dark round color="primary" class="full-width ma-0" to="/startCreateResearch">
                     <div class="col-grow">Add Research</div>
                     <v-icon dark small class="ml-2">add</v-icon>
                 </v-btn>
@@ -65,7 +65,7 @@
     .app-title {
         user-select: none;
         cursor: pointer;
-        color: #fff;
+        color: #ffffff;
         text-decoration: none;
     }
 </style>

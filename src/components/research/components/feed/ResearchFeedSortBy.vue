@@ -1,6 +1,6 @@
 <template>
     <div class="row-nowrap">
-        <div class="filter-title">Sort by</div>
+        <div class="filter-title subheading grey--text">Sort by</div>
         <div class="row">
             <div class="pr-4 sort-label" v-for="(label, index) in labels" :key="index">
                 <research-feed-sort-by-item 
@@ -42,9 +42,7 @@
 
 <style lang="less" scoped>
     .filter-title {
-        font-size: 16px;
         text-transform: uppercase;
         width: 120px;
-        color: #BDBDBD;
     }
 </style>

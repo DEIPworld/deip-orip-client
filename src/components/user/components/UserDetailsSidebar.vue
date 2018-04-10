@@ -4,7 +4,7 @@
             Profile settings
         </v-btn>
 
-        <div class="sm-title bold c-pt-6">Expertise</div>
+        <div class="sm-title bold c-pt-8">Expertise</div>
 
         <div class="c-pt-4 c-pb-6">
             <div class="row justify-between">
@@ -53,8 +53,14 @@
         <div class="sm-title bold c-pt-6">Personal Info</div>
 
         <div class="c-pt-4 c-pb-6">
-            <div>Birthday: 9 Jan, 1990</div>
-            <div class="c-pt-1">Registered: 19 Feb, 2020</div>
+            <div>
+                <span class="half-bold">Birthday</span>
+                <span class="right">9 Jan, 1990</span>
+            </div>
+            <div>
+                <span class="half-bold">Registered</span>
+                <span class="right">19 Feb, 2020</span>
+            </div>
         </div>
         
         <div style="margin: 0 -24px">

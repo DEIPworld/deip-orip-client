@@ -21,7 +21,7 @@
             <div class="grey--text">15%</div>
         </div>
         <div class="c-pt-4 c-pb-6">
-            <v-btn outline icon color="deip-blue" class="ma-0">
+            <v-btn outline icon color="primary" class="ma-0">
                 <v-icon small>add</v-icon>
             </v-btn>
             <span class="deip-blue-color c-pl-3">Join research group</span>
@@ -65,7 +65,7 @@
         <div class="sm-title bold c-pt-6">Reviews: 2</div>
 
         <div class="c-pt-4 c-pb-6">
-            <v-btn dark round outline color="deip-blue" class="full-width ma-0">
+            <v-btn dark round outline color="primary" class="full-width ma-0">
                 <v-icon small>add</v-icon>
                 <div class="col-grow add-review-label">
                     Add a review
@@ -88,13 +88,13 @@
         <div class="sm-title bold c-pt-6">Research Info</div>
         
         <div class="c-pt-4 c-pb-6">
-            <div class="bold">
-                <span>Review reward</span>
-                <span class="deip-blue-color">15%</span>
+            <div>
+                <span class="half-bold">Review reward</span>
+                <span class="deip-blue-color right">15%</span>
             </div>
-            <div class="bold">
-                <span>Total views</span>
-                <span class="deip-blue-color">222</span>
+            <div>
+                <span class="half-bold">Total views</span>
+                <span class="deip-blue-color right">222</span>
             </div>
         </div>
 
@@ -105,17 +105,21 @@
         <div class="sm-title bold c-pt-6">Total Earned</div>
         
         <div class="c-pt-4 c-pb-6">
-            <div class="bold">
-                <span>DEIP Tokens</span>
-                <span class="deip-blue-color">12345</span>
+            <div>
+                <span class="half-bold">DEIP tokens</span>
+                <span class="right">12345</span>
             </div>
-            <div class="bold">
-                <span>Physics</span>
-                <span class="deip-blue-color">2212</span>
+            <div>
+                <span class="half-bold">Physcis</span>
+                <span class="right">23432</span>
             </div>
-            <div class="bold">
-                <span>Quantum physics</span>
-                <span class="deip-blue-color">666</span>
+            <div>
+                <span class="half-bold">Quantum physics</span>
+                <span class="right">333</span>
+            </div>
+            <div>
+                <span class="half-bold">Quantum optics</span>
+                <span class="right">5234</span>
             </div>
         </div>
 
@@ -126,17 +130,17 @@
         <div class="sm-title bold c-pt-6">Research token holders</div>
         
         <div class="c-pt-4 c-pb-6">
-            <div class="bold">
-                <span>Research group</span>
-                <span class="deip-blue-color">80%</span>
+            <div>
+                <span class="half-bold">Research group</span>
+                <span class="deip-blue-color right">80%</span>
             </div>
-            <div class="bold">
-                <span>Inverstor1</span>
-                <span class="deip-blue-color">15%</span>
+            <div>
+                <span class="half-bold">Investor1</span>
+                <span class="deip-blue-color right">15%</span>
             </div>
-            <div class="bold">
-                <span>Investor2</span>
-                <span class="deip-blue-color">5%</span>
+            <div>
+                <span class="half-bold">Investor2</span>
+                <span class="deip-blue-color right">5%</span>
             </div>
         </div>
     </div>

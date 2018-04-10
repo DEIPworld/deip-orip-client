@@ -1,6 +1,6 @@
 <template>
-    <div class="clickable-label subheading" 
-        :class="[{'selected underlined': label === selected }]"
+    <div class="subheading clickable" 
+        :class="[{'deip-blue-color underlined': label === selected }]"
         @click.stop="activateLabel()"
     >{{ label.title }}</div>
 </template>
