@@ -15,8 +15,10 @@ Vue.component('create-research-roadmap', CreateResearchRoadmap);
 // components/details
 import ResearchDetailsSidebar from './components/details/ResearchDetailsSidebar';
 import ResearchDetailsBody from './components/details/ResearchDetailsBody';
+import ResearchTimeline from './components/details/ResearchTimeline';
 Vue.component('research-details-sidebar', ResearchDetailsSidebar);
 Vue.component('research-details-body', ResearchDetailsBody);
+Vue.component('research-timeline', ResearchTimeline);
 
 // components/feed
 import ResearchFeedFilter from './components/feed/ResearchFeedFilter';
