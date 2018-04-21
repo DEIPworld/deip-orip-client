@@ -2,7 +2,13 @@
     <div>
         <div class="row">
             <div>
-                <div class="start-point deip-blue-bg white--text">Start</div>
+                <v-tooltip bottom color="white">
+                    <div class="start-point deip-blue-bg white--text" slot="activator">Start</div>
+                    <div>
+                        <div class="black--text half-bold">START, Globaly pum purum purum</div>
+                        <div class="grey--text">28 Jun, Noname Pum</div>
+                    </div>
+                </v-tooltip>
             </div>
             <div class="col-grow pos-relative row-nowrap align-center">
 
@@ -65,6 +71,12 @@
         padding: 0 12px;
         line-height: 32px;
         border-radius: 20px;
+
+        &:hover {
+            box-shadow: 0px 6px 6px -3px rgba(0,0,0,0.2), 
+                        0px 10px 14px 1px rgba(0,0,0,0.14), 
+                        0px 4px 18px 3px rgba(0,0,0,0.12);
+        }
     }
 
     .chapter-line {
@@ -74,5 +86,11 @@
         width: 22px;
         height: 22px;
         border-radius: 50%;
+
+        &:hover {
+            box-shadow: 0px 6px 6px -3px rgba(0,0,0,0.2), 
+                        0px 10px 14px 1px rgba(0,0,0,0.14), 
+                        0px 4px 18px 3px rgba(0,0,0,0.12);
+        }
     }
 </style>

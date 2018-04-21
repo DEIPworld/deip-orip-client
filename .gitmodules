@@ -1,0 +1,3 @@
+[submodule "deip-rpc"]
+	path = deip-rpc
+	url = https://gitlab.com/DEIP/deip-rpc
