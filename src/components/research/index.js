@@ -28,6 +28,16 @@ Vue.component('research-feed-filter', ResearchFeedFilter);
 Vue.component('research-feed-sort-by', ResearchFeedSortBy);
 Vue.component('research-feed-sort-by-item', ResearchFeedSortByItem);
 
+// components/group-creating
+import CreateResearchGroupTitle from './components/group-creating/CreateResearchGroupTitle';
+import CreateResearchGroupDescription from './components/group-creating/CreateResearchGroupDescription';
+import CreateResearchGroupMembers from './components/group-creating/CreateResearchGroupMembers';
+import CreateResearchGroupShare from './components/group-creating/CreateResearchGroupShare';
+Vue.component('create-research-group-title', CreateResearchGroupTitle);
+Vue.component('create-research-group-description', CreateResearchGroupDescription);
+Vue.component('create-research-group-members', CreateResearchGroupMembers);
+Vue.component('create-research-group-share', CreateResearchGroupShare);
+
 // components/group-details
 import ResearchGroupDetailsBody from './components/group-details/ResearchGroupDetailsBody';
 import ResearchGroupDetailsSidebar from './components/group-details/ResearchGroupDetailsSidebar';

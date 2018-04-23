@@ -183,8 +183,7 @@
 </template>
 
 <script>
-    // import 'e:/deip/deip-connector/deip-rpc/dist/deip.min';
-    import '/Users/yahortsaryk/work/ethereum/deip/deip-rpc/dist/deip.min'
+    import '../../deip-rpc/dist/deip.min';
     
     export default {
         name: "AdminPage",
@@ -292,8 +291,8 @@
                 // 6 - `{"research_group_id": 0, "accounts": [{"account_name": "initdelegate", "amount": 50},{"account_name": "alice", "amount": 60} ]}`
                 // 7 - `{"research_group_id": 0, "quorum_percent": 80}`
                 // 8 - `{"research_id": 0, "review_share_in_percent": 49}`
-                    // 9: "Offer research tokens",
-                    // 10: "Accept research tokens offer",
+                // 9 - "Offer research tokens",
+                // 10: "Accept research tokens offer",
                 // 11 - `{"research_id": 0, "type": 2, "title": "My title for the milestone", "content": "My milestone for quantum break", "authors": ["initdelegate"], "references": [], "external_references": []}`
 
                 deipRpc.broadcast.createProposalAsync(

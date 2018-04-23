@@ -8,6 +8,7 @@ import ResearchFeed from '@/components/research/components/ResearchFeed'
 import ResearchDetails from '@/components/research/components/ResearchDetails'
 import ResearchStartCreating from '@/components/research/components/ResearchStartCreating'
 import ResearchCreating from '@/components/research/components/ResearchCreating'
+import ResearchGroupCreating from '@/components/research/components/ResearchGroupCreating'
 import ResearchGroupDetails from '@/components/research/components/ResearchGroupDetails'
 import ResearchContentDetails from '@/components/research/components/ResearchContentDetails'
 
@@ -65,5 +66,9 @@ export default new Router({
         path: '/researchGroupDetails',
         name: 'ResearchGroupDetails',
         component: ResearchGroupDetails
+    }, {
+        path: '/researchGroupCreating',
+        name: 'ResearchGroupCreating',
+        component: ResearchGroupCreating
     }]
 })
