@@ -5,68 +5,55 @@
             <v-stepper v-model="currentStep" alt-labels class="column full-width full-height">
                 <v-stepper-header>
                     <v-stepper-step step="1" :complete="currentStep > 1">
-                        <div class="uppercase">Discipline</div>
-                    </v-stepper-step>
-                    <v-divider></v-divider>
-
-                    <v-stepper-step step="2" :complete="currentStep > 2">
-                        <div class="uppercase">Research group</div>
-                    </v-stepper-step>
-                    <v-divider></v-divider>
-
-                    <v-stepper-step step="3" :complete="currentStep > 3">
                         <div class="uppercase">Title</div>
                     </v-stepper-step>
                     <v-divider></v-divider>
 
-                    <v-stepper-step step="4" :complete="currentStep > 4">
-                        <div class="uppercase">Roadmap</div>
+                    <v-stepper-step step="2" :complete="currentStep > 2">
+                        <div class="uppercase">Description</div>
                     </v-stepper-step>
                     <v-divider></v-divider>
 
-                    <v-stepper-step step="5">
-                        <div class="uppercase">Review share</div>
+                    <v-stepper-step step="3" :complete="currentStep > 3">
+                        <div class="uppercase">Members</div>
+                    </v-stepper-step>
+                    <v-divider></v-divider>
+
+                    <v-stepper-step step="4" :complete="currentStep > 4">
+                        <div class="uppercase">Tokens</div>
                     </v-stepper-step>
                 </v-stepper-header>
 
                 <v-stepper-items class="col-grow">
                     <v-stepper-content step="1">
-                        <div class="row-nowrap justify-center full-height">
-                            <create-research-pick-discipline
+                        <div class="full-height">
+                            <create-research-group-title
                                 @incStep="incStep"
-                            ></create-research-pick-discipline>
+                            ></create-research-group-title>
                         </div>
                     </v-stepper-content>
 
                     <v-stepper-content step="2">
-                        <div class="row-nowrap justify-center full-height">
-                            <create-research-pick-group
+                        <div class="full-height">
+                            <create-research-group-description
                                 @incStep="incStep" @decStep="decStep"
-                            ></create-research-pick-group>
+                            ></create-research-group-description>
                         </div>
                     </v-stepper-content>
 
                     <v-stepper-content step="3">
-                        <div class="row-nowrap justify-center full-height">
-                            <create-research-meta
+                        <div class="full-height">
+                            <create-research-group-members
                                 @incStep="incStep" @decStep="decStep"
-                            ></create-research-meta>
+                            ></create-research-group-members>
                         </div>
                     </v-stepper-content>
 
                     <v-stepper-content step="4">
-                        <div class="row-nowrap justify-center full-height">
-                            <create-research-roadmap
+                        <div class="full-height">
+                            <create-research-group-share
                                 @incStep="incStep" @decStep="decStep"
-                            ></create-research-roadmap>
-                        </div>
-                    </v-stepper-content>
-
-                    <v-stepper-content step="5">
-                        <div class="row-nowrap justify-center full-height">
-                            <create-research-share
-                                @incStep="incStep" @decStep="decStep"
-                            ></create-research-share>
+                            ></create-research-group-share>
                         </div>
                     </v-stepper-content>
                 </v-stepper-items>
@@ -78,7 +65,7 @@
 
 <script>
     export default {
-        name: "ResearchCreating",
+        name: "ResearchGroupCreating",
         data() { 
             return {
                 currentStep: 0
@@ -86,7 +73,7 @@
         },
         methods: {
             incStep() {
-                if (this.currentStep < 5) {
+                if (this.currentStep < 4) {
                     this.currentStep++;
                 } else {
                     this.currentStep = 1;

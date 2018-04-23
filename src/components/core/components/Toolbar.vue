@@ -23,8 +23,11 @@
                     </v-avatar>
                 </v-btn>
                 <v-list dark dense>
-                    <v-list-tile @click="goToUserProfile()">
+                    <v-list-tile @click="goToState('UserDetails')">
                         <v-list-tile-title>My Page</v-list-tile-title>
+                    </v-list-tile>
+                    <v-list-tile @click="goToState('ResearchGroupCreating')">
+                        <v-list-tile-title>Research Group Creating</v-list-tile-title>
                     </v-list-tile>
                     <v-list-tile @click="">
                         <v-list-tile-title>Settings</v-list-tile-title>
@@ -54,8 +57,8 @@
             updateDrawer(value) {
                 this.$emit('update', value);
             },
-            goToUserProfile() {
-                this.$router.push({ name: 'UserDetails' });
+            goToState(state) {
+                this.$router.push({ name: state });
             }
         }
     }

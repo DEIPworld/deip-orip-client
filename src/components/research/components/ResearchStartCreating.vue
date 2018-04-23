@@ -16,7 +16,7 @@
 
 <script>
     export default {
-        name: "ResearchStartCreatingPage",
+        name: "ResearchStartCreating",
         data() { 
             return {} 
         }
