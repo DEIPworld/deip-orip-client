@@ -423,9 +423,8 @@
             }
         },
         created() {
-            //deipRpc.api.setOptions({ url: 'ws://146.185.140.12:11011/' });
-            deipRpc.api.setOptions({ url: 'ws://127.0.0.1:11011/' });
-            deipRpc.config.set('chain_id', 'b387f20ec96eeb24646462128b076ff210b8d15a7e763b47741912bb7c431cf9');
+            deipRpc.api.setOptions({ url: 'ws://206.189.175.10:11011/' });
+            deipRpc.config.set('chain_id', '27c7139e3d2b2867f94cd4b53a4894900683aa7581445f3b16ab285dae64bb85');
             this.loadResearchGroups();
             this.loadUserInvites();
         },

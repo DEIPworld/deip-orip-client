@@ -37,12 +37,9 @@
                 </div>
 
                 <div class="c-pt-6">
-                    <v-card>
-                        <research-list-item :is-collapsed="isCollapsed[0]"></research-list-item>
+                    <v-card v-for="item in researchList">
+                        <research-list-item :is-collapsed="isCollapsed[0]" :research="item"></research-list-item>
                         <v-divider></v-divider>
-                        <research-list-item :is-collapsed="isCollapsed[1]"></research-list-item>
-                        <v-divider></v-divider>
-                        <research-list-item :is-collapsed="isCollapsed[2]"></research-list-item>
                     </v-card>
                 </div>
             </div>
@@ -51,14 +48,26 @@
 </template>
 
 <script>
+    import '/Users/yahortsaryk/work/ethereum/deip/deip-rpc/dist/deip.min';
+    
     export default {
         name: "ResearchFeed",
         data() { 
             return {
+                researchList: [],
                 isCollapsed: [{ value: true }, { value: true }, { value: true }]
             } 
         },
         methods: {
+            getResearchListing (){
+                deipRpc.api.getResearchListingAsync(0, 100)
+                    .then((data) => {
+                        for (var i = 0; i < data.length; i++) {
+                            var research = data[i];
+                            this.researchList.push(research);
+                        }
+                })
+            },
             changeViewMode() {
                 let value = !this.areAllCollapsed;
                 this.isCollapsed.forEach(item => { item.value = value });
@@ -68,6 +77,11 @@
             areAllCollapsed() {
                 return this.isCollapsed.reduce((acc, item) => acc && item.value, true);
             }
+        },
+        created() {
+            deipRpc.api.setOptions({ url: 'ws://206.189.175.10:11011/' });
+            deipRpc.config.set('chain_id', '27c7139e3d2b2867f94cd4b53a4894900683aa7581445f3b16ab285dae64bb85');
+            this.getResearchListing();
         }
     };
 </script>

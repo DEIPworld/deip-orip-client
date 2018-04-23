@@ -1,14 +1,13 @@
 <template>
     <div class="c-p-6 pos-relative">
-        <router-link to="/researchDetails" class="a subheading">
-            Antagonistically maximize market-driven quality vectors before progressive functionalities.
+        <router-link :to="/researchDetails/ + research.research_id" class="a subheading">
+            {{research.title}}
         </router-link>
-        <div class="caption grey--text c-pt-2">Alex Shkor  ·  Artyom Ruseckiy  ·  Egor Tsaryk</div>
+        <div class="caption grey--text c-pt-2">{{research.authors.join("  ·  ")}}</div>
         
         <div v-show="isCollapsed === undefined || !isCollapsed.value">
             <div class="c-pt-4 half-bold">
-                Dramatically underwhelm extensive mindshare whereas cross-platform potentialities. Interactively recaptiualize viral relationships before competitive functionalities. 
-                Synergistically strategize intermandated services with premier vortals.
+                {{research.abstract}}
             </div>
             <div class="c-pt-6">
                 <div class="row-nowrap">
@@ -44,6 +43,7 @@
     export default {
         name: "ResearchListItem",
         props: {
+            research: { required: true, default: undefined },
             isCollapsed: { required: false, default: undefined }
         },
         data() {

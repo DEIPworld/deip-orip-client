@@ -9,24 +9,11 @@
         </div>
 
         <div class="display-1 half-bold c-mt-10">
-            Energistically maximize market-driven quality vectors before progressive functionalities. 
+            {{research.title}}
         </div>
 
         <div class="c-pt-8">
-            Intrinsicly seize resource-leveling infrastructures via prospective human capital. Efficiently aggregate 
-            quality users and revolutionary paradigms. Rapidiously aggregate reliable services through functional outsourcing. 
-            Completely reinvent B2B convergence before market-driven web-readiness. Uniquely seize principle-centered portals 
-            before visionary human capital.
-            <br><br>
-            Holisticly productivate economically sound best practices rather than 2.0 benefits. Monotonectally innovate 
-            bleeding-edge functionalities whereas strategic paradigms. Dramatically utilize open-source manufactured 
-            products before go forward technology. Quickly develop maintainable methods of empowerment vis-a-vis cross 
-            functional supply chains. Competently monetize process-centric solutions with synergistic initiatives.
-            <br><br>
-            Continually brand bricks-and-clicks expertise before principle-centered core competencies. Dramatically 
-            fashion 2.0 potentialities vis-a-vis low-risk high-yield technology. Competently redefine backend models 
-            without team building niches. Professionally visualize business e-markets with visionary networks. Continually 
-            customize vertical action items for client-centric services.
+            {{research.abstract}}
         </div>
 
         <div class="c-pt-8 title">Timeline</div>
@@ -39,18 +26,19 @@
 
         <div class="c-pt-6">
             <v-expansion-panel>
-                <v-expansion-panel-content v-for="i in 5" :key="i">
+                <v-expansion-panel-content v-for="(content, i) in contentList" :key="i">
                     <div slot="header">
-                        <span class="bold">Chapter {{i}}</span>
-                        <span class="deip-blue-color bold c-pl-4">Problem market-driven quality vectors before progressive functionalities.</span>
+                        <span class="bold">Chapter {{i + 1}}</span>
+                        <span class="deip-blue-color bold c-pl-4">{{content.title}}</span>
                     </div>
                     <v-card>
                         <v-card-text class="pt-0">
                             <div class="c-ph-2">
-                                <div class="caption grey--text c-pt-2">Alex Shkor  ·  Artyom Ruseckiy  ·  Egor Tsaryk</div>
+                                <div class="caption grey--text c-pt-2"> {{content.authors.join("  ·  ")}}</div>
+                                <div>
+                                    <router-link :to="/researchContentDetails/ + content.id" class="a grey--text">View Details</router-link>
+                                </div> 
                                 <div class="c-pt-4 half-bold">
-                                    Dramatically underwhelm extensive mindshare whereas cross-platform potentialities. Interactively recaptiualize viral relationships before competitive functionalities. 
-                                    Synergistically strategize intermandated services with premier vortals.
                                 </div>
                                 <div class="c-pt-6">
                                     <div class="row-nowrap">
@@ -188,8 +176,14 @@
 <script>
     export default {
         name: "ResearchDetailsBody", 
-        data() { 
-            return {} 
+        props: {
+            research: { required: true, default: undefined },
+            contentList: { required: true, default: [] }
+        },
+        data() {  
+            return {
+
+            }
         }
     };
 </script>
