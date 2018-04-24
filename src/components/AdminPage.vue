@@ -182,9 +182,7 @@
     </div>
 </template>
 
-<script>
-    import '../../deip-rpc/dist/deip.min';
-    
+<script>    
     export default {
         name: "AdminPage",
         data() {
@@ -422,8 +420,6 @@
             }
         },
         created() {
-            deipRpc.api.setOptions({ url: 'ws://206.189.175.10:11011/' });
-            deipRpc.config.set('chain_id', '27c7139e3d2b2867f94cd4b53a4894900683aa7581445f3b16ab285dae64bb85');
             this.loadResearchGroups();
             this.loadUserInvites();
         },

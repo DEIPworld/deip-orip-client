@@ -12,12 +12,17 @@ import './components/core/index';
 import './components/research/index';
 import './components/user/index';
 
+import '../deip-rpc/dist/deip.min';
+
 Vue.use(Vuetify, {
     theme: {
         'primary': '#2F80ED'
     }
 })
 Vue.config.productionTip = false
+
+deipRpc.api.setOptions({ url: 'ws://206.189.175.10:11011/' });
+deipRpc.config.set('chain_id', '27c7139e3d2b2867f94cd4b53a4894900683aa7581445f3b16ab285dae64bb85');
 
 /* eslint-disable no-new */
 new Vue({
