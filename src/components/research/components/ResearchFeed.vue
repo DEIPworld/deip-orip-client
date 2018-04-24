@@ -37,9 +37,11 @@
                 </div>
 
                 <div class="c-pt-6">
-                    <v-card v-for="item in researchList">
-                        <research-list-item :is-collapsed="isCollapsed[0]" :research="item"></research-list-item>
-                        <v-divider></v-divider>
+                    <v-card class="hidden-last-child">
+                        <template v-for="item in researchList">
+                            <research-list-item :is-collapsable="true" :research="item"></research-list-item>
+                            <v-divider></v-divider>
+                        </template>
                     </v-card>
                 </div>
             </div>
@@ -52,28 +54,26 @@
         name: "ResearchFeed",
         data() { 
             return {
-                researchList: [],
-                isCollapsed: [{ value: true }, { value: true }, { value: true }]
+                researchList: []
             } 
         },
         methods: {
             getResearchListing (){
                 deipRpc.api.getResearchListingAsync(0, 100)
                     .then((data) => {
-                        for (var i = 0; i < data.length; i++) {
-                            var research = data[i];
-                            this.researchList.push(research);
-                        }
-                })
+                        data.forEach(item => { item.isCollapsed = true; });
+                        this.researchList = data;
+                    }
+                );
             },
             changeViewMode() {
                 let value = !this.areAllCollapsed;
-                this.isCollapsed.forEach(item => { item.value = value });
+                this.researchList.forEach(item => { item.isCollapsed = value });
             }
         },
         computed: {
             areAllCollapsed() {
-                return this.isCollapsed.reduce((acc, item) => acc && item.value, true);
+                return this.researchList.reduce((acc, item) => acc && item.isCollapsed, true);
             }
         },
         created() {

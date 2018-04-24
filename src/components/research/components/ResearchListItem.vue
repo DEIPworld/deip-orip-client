@@ -5,7 +5,7 @@
         </router-link>
         <div class="caption grey--text c-pt-2">{{research.authors.join("  ·  ")}}</div>
         
-        <div v-show="isCollapsed === undefined || !isCollapsed.value">
+        <div v-show="isCollapsable === undefined || !research.isCollapsed">
             <div class="c-pt-4 half-bold">
                 {{research.abstract}}
             </div>
@@ -30,10 +30,10 @@
             </div>
         </div>
 
-        <div class="pos-absolute expand-btn" v-if="isCollapsed !== undefined">
+        <div class="pos-absolute expand-btn" v-if="isCollapsable !== undefined">
             <v-btn flat small icon color="grey" class="ma-0" @click="changeMode()">
-                <v-icon v-show="isCollapsed.value">keyboard_arrow_down</v-icon>
-                <v-icon v-show="!isCollapsed.value">keyboard_arrow_up</v-icon>
+                <v-icon v-show="research.isCollapsed">keyboard_arrow_down</v-icon>
+                <v-icon v-show="!research.isCollapsed">keyboard_arrow_up</v-icon>
             </v-btn>
         </div>
     </div>
@@ -44,14 +44,14 @@
         name: "ResearchListItem",
         props: {
             research: { required: true, default: undefined },
-            isCollapsed: { required: false, default: undefined }
+            isCollapsable: { required: false, default: undefined }
         },
         data() {
             return {};
         },
         methods: {
             changeMode() {
-                this.isCollapsed.value = !this.isCollapsed.value;
+                this.research.isCollapsed = !this.research.isCollapsed;
             }
         }
     };
