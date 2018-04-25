@@ -13,7 +13,15 @@ function resolve (dir) {
 module.exports = {
   context: path.resolve(__dirname, '../'),
   entry: {
-    app: './src/main.js'
+    app: './src/main.js',
+    styles: [
+      'substance-texture/dist/texture.css',
+      'substance-texture/dist/texture-reset.css',
+      'substance-texture/dist/substance/dist/substance.css',
+      'substance-texture/dist/texture-pagestyle.css',
+      'substance-texture/dist/font-awesome/css/font-awesome.css'    
+    ]
+  
   },
   output: {
     path: config.build.assetsRoot,
@@ -36,11 +44,11 @@ module.exports = {
         loader: 'vue-loader',
         options: vueLoaderConfig
       },
-      {
-        test: /\.js$/,
-        loader: 'babel-loader',
-        include: [resolve('src'), resolve('test'), resolve('node_modules/webpack-dev-server/client')]
-      },
+      // {
+      //   test: /\.js$/,
+      //   loader: 'babel-loader',
+      //   include: [resolve('src'), resolve('test'), resolve('node_modules/webpack-dev-server/client')]
+      // },
       {
         test: /\.(png|jpe?g|gif|svg)(\?.*)?$/,
         loader: 'url-loader',

@@ -13,6 +13,7 @@ import ResearchGroupDetails from '@/components/research/components/ResearchGroup
 import ResearchContentDetails from '@/components/research/components/ResearchContentDetails'
 
 import UserDetails from '@/components/user/components/UserDetails'
+import TokenSale from '@/components/user/components/TokenSale'
 
 Vue.use(Router)
 
@@ -62,6 +63,10 @@ export default new Router({
         path: '/userDetails',
         name: 'UserDetails',
         component: UserDetails
+    }, {
+        path: '/tokenSale',
+        name: 'TokenSale',
+        component: TokenSale
     }, {
         path: '/researchGroupDetails',
         name: 'ResearchGroupDetails',
