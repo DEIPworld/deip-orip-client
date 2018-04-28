@@ -6,37 +6,89 @@
 
                 <div class="row c-mh-auto group-title-max-width">
                     <div class="col-12">
-                        <div class="">
-                            <v-text-field label="Title" hint="Disclaimer"></v-text-field>
-                        </div>
-                        <div class="">
-                            <v-text-field class="permlink-input" 
-                                prefix="deip.world/"
-                                label="Permlink"
-                                hint="Disclaimer"
-                            ></v-text-field>
-                        </div>
+                        <v-form v-model="isFormValid" ref="form">
+                            <div class="">
+                                <v-text-field 
+                                    v-model="groupInfo.title" 
+                                    name="title"
+                                    label="Title" 
+                                    hint="Name of your group" 
+                                    :rules="titleRules"
+                                ></v-text-field>
+                            </div>
+                            <div class="">
+                                <v-text-field class="permlink-input" 
+                                    prefix="deip.world/"
+                                    name="permlink"
+                                    label="Permlink"
+                                    hint="People can find your group by this url"
+                                    v-model="groupInfo.permlink"
+                                    @input="permlinkChanged"
+                                    :loading="isPermlinkChecking"
+                                    :rules="permlinkRules"
+                                ></v-text-field>
+                            </div>
+                        </v-form>
                     </div>
                 </div>
 
             </div>
         </div>
         <div class="row justify-center align-center">
-            <v-btn color="primary" @click.native="nextStep()">Next</v-btn>
+            <v-btn color="primary" 
+                @click.native="nextStep()" 
+                :disabled="!isFormValid || isPermlinkVerifyed !== true"
+            >Next</v-btn>
         </div>
     </div>
 </template>
 
 <script>
+    import _ from 'lodash';
+
     export default {
         name: "CreateResearchGroupTitle",
+        props: {
+            groupInfo: { required: true }
+        },
         data() { 
-            return {} 
+            return {
+                isFormValid: true,
+                isPermlinkChecking: false,
+                isPermlinkVerifyed: undefined,
+
+                titleRules: [ v => !!v || 'Name is required' ],
+                permlinkRules: [
+                    v => !!v || 'Permlink is required',
+                    v => {
+                        return !!v && this.isPermlinkVerifyed !== false || 'Permlink should be unique in system'
+                    }
+                ]
+            } 
         },
         methods: {
             nextStep() {
                 this.$emit('incStep');
-            }
+            },
+            permlinkChanged: _.debounce(
+                function() {
+                    this.isPermlinkVerifyed = undefined;
+
+                    if (this.groupInfo.permlink !== '') {
+                        this.isPermlinkChecking = true;
+
+                        deipRpc.api.checkResearchGroupExistenceByPermlinkAsync(this.groupInfo.permlink)
+                            .then(res => { this.isPermlinkVerifyed = !res; })
+                            .catch(error => { this.isPermlinkVerifyed = false; })
+                            .finally(() => {
+                                this.isPermlinkChecking = false;
+                                let permlinkInput = _.find(this.$refs.form.inputs, input => input.$attrs.name === 'permlink');
+                                permlinkInput.validate();
+                            });
+                    }
+                }, 
+                600
+            )
         }
     };
 </script>

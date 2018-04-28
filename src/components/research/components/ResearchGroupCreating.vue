@@ -29,6 +29,7 @@
                         <div class="full-height">
                             <create-research-group-title
                                 @incStep="incStep"
+                                :group-info="groupInfo"
                             ></create-research-group-title>
                         </div>
                     </v-stepper-content>
@@ -37,6 +38,7 @@
                         <div class="full-height">
                             <create-research-group-description
                                 @incStep="incStep" @decStep="decStep"
+                                :group-info="groupInfo"
                             ></create-research-group-description>
                         </div>
                     </v-stepper-content>
@@ -45,6 +47,7 @@
                         <div class="full-height">
                             <create-research-group-members
                                 @incStep="incStep" @decStep="decStep"
+                                :group-info="groupInfo"
                             ></create-research-group-members>
                         </div>
                     </v-stepper-content>
@@ -52,7 +55,8 @@
                     <v-stepper-content step="4">
                         <div class="full-height">
                             <create-research-group-share
-                                @incStep="incStep" @decStep="decStep"
+                                @finish="finish" @decStep="decStep"
+                                :group-info="groupInfo"
                             ></create-research-group-share>
                         </div>
                     </v-stepper-content>
@@ -68,19 +72,21 @@
         name: "ResearchGroupCreating",
         data() { 
             return {
-                currentStep: 0
+                currentStep: 0,
+                groupInfo: {
+                    title: '',
+                    permlink: '',
+                    description: '',
+                    members: []
+                }
             } 
         },
         methods: {
-            incStep() {
-                if (this.currentStep < 4) {
-                    this.currentStep++;
-                } else {
-                    this.currentStep = 1;
-                }
-            },
-            decStep() {
-                this.currentStep--;
+            incStep() { this.currentStep++; },
+            decStep() { this.currentStep--; },
+            finish() {
+                console.log('FINISHED!');
+                // here should be BE calling to save all data
             }
         }
     };

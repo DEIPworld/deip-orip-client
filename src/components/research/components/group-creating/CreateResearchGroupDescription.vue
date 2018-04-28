@@ -9,7 +9,9 @@
                         <v-text-field name="Description"
                             label="Description" 
                             textarea auto-grow
+                            v-model="groupInfo.description"
                             hint="Description/summary guidlines text. You can change this text any time"
+                            :rules="descriptionRules"
                         ></v-text-field>
                     </div>
                 </div>
@@ -20,7 +22,7 @@
             <v-btn flat small @click.native="prevStep()">
                 <v-icon dark class="pr-1">keyboard_arrow_left</v-icon> Back
             </v-btn>
-            <v-btn color="primary" @click.native="nextStep()">Next</v-btn>
+            <v-btn color="primary" @click.native="nextStep()" :disabled="groupInfo.description === ''">Next</v-btn>
         </div>
     </div>
 </template>
@@ -28,8 +30,13 @@
 <script>
     export default {
         name: "CreateResearchGroupDescription",
+        props: {
+            groupInfo: { required: true }
+        },
         data() { 
-            return {} 
+            return {
+                descriptionRules: [ v => !!v || 'Description is required' ],
+            } 
         },
         methods: {
             nextStep() {

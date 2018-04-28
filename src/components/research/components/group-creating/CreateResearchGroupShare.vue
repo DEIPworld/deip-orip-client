@@ -8,15 +8,28 @@
                     <div class="col-12">
                         <div class="subheading c-pv-4">Distribute shares of this group which will...</div>
 
-                        <div class="row-nowrap justify-between align-center c-pt-4" v-for="i in 3" :key="i">
+                        <div class="row-nowrap justify-between align-center c-pt-4" 
+                            v-for="(member, i) in groupInfo.members" :key="i"
+                        >
                             <div>
                                 <v-avatar size="40px">
                                     <img src="http://deip.world/static/ybokach.acb12e7e.png" alt="User">
                                 </v-avatar>
-                                <router-link to="/userDetails" class="a c-pl-3">Yura Bokach</router-link>
+                                <router-link to="/userDetails" class="a c-pl-3">{{ member.name }}</router-link>
                             </div>
                             <div>
-                                <v-text-field class="width-4 pa-0 rtl" value="33" suffix="%" hide-details></v-text-field>
+                                <v-text-field class="width-4 pa-0 rtl"
+                                    suffix="%" 
+                                    hide-details
+                                    v-model="member.stake"
+                                    mask="###"
+                                ></v-text-field>
+                            </div>
+                        </div>
+                        <div class="text-align-right c-pt-4">
+                            <div class="caption grey--text">
+                                <div>Total:</div>
+                                <div>{{sum}} %</div>
                             </div>
                         </div>
                     </div>
@@ -28,7 +41,9 @@
             <v-btn flat small @click.native="prevStep()">
                 <v-icon dark class="pr-1">keyboard_arrow_left</v-icon> Back
             </v-btn>
-            <v-btn color="primary" @click.native="nextStep()">Next</v-btn>
+            <v-btn color="primary" @click.native="finish()" :disabled="sum !== 100">
+                Create group
+            </v-btn>
         </div>
     </div>
 </template>
@@ -36,15 +51,26 @@
 <script>
     export default {
         name: "CreateResearchGroupShare",
+        props: {
+            groupInfo: { required: true }
+        },
         data() { 
             return {} 
         },
         methods: {
-            nextStep() {
-                this.$emit('incStep');
+            finish() {
+                this.$emit('finish');
             },
             prevStep() {
                 this.$emit('decStep');
+            }
+        },
+        computed: {
+            sum() {
+                return this.groupInfo.members.reduce(
+                    (accum, curr) => accum + parseInt(curr.stake || 0),
+                    0
+                );
             }
         }
     };
