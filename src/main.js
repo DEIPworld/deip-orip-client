@@ -12,7 +12,7 @@ import './components/core/index';
 import './components/research/index';
 import './components/user/index';
 
-import '../deip-rpc/dist/deip.min';
+import './../deip-rpc/dist/deip.min';
 
 Vue.use(Vuetify, {
     theme: {

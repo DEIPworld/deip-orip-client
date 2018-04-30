@@ -193,7 +193,7 @@
 
 <script>    
 
-    import '/Users/yahortsaryk/work/ethereum/deip/deip-rpc/dist/deip.min';
+    import './../../deip-rpc/dist/deip.min';
     import axios from 'axios'
 
     export default {
