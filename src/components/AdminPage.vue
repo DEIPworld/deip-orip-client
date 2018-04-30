@@ -1,6 +1,5 @@
 <template>
     <div style="padding: 20px">
-
         <div class="row at-row flex-top flex-end">
             <div class="col-md-24">
                 <div class="users-panel">
@@ -61,7 +60,6 @@
                                 </div>
                         </div>
                     </div>
-
                     <div v-if="proposals.length == 0">
                         <div class="row flex-bottom flex-center">
                             <div class="col-md-24 flex-bottom">
@@ -108,8 +106,19 @@
                                     <span class="col-md-24 flex-start">
                                         <span><b>Abstract: </b>{{ research.abstract }}</span>
                                     </span>
+                                    <span class="col-md-24 flex-start">
+                                        <div class="row flex-middle"> 
+                                            <span class="col-md-20 flex-center">
+                                                <hr/>
+                                                <p>Pre-upload content for <b>"{{research.title}}"</b> research</p>
+                                                <input id="research-content" type="file" name="research-content" />
+                                            </span>
+                                            <span class="col-md-4 flex-center">
+                                                <at-button @click="uploadContent(research.id)">Upload</at-button>
+                                            </span>
+                                        </div>
+                                    </span>
                                 </div>
-
                             </div>
                         </div>
                 </div>
@@ -183,6 +192,10 @@
 </template>
 
 <script>    
+
+    import '/Users/yahortsaryk/work/ethereum/deip/deip-rpc/dist/deip.min';
+    import axios from 'axios'
+
     export default {
         name: "AdminPage",
         data() {
@@ -234,6 +247,25 @@
             };
         },
         methods: {
+            uploadContent(researchId) {
+                const researchContent = document.querySelector('#research-content').files[0];
+                const formData = new FormData();
+                formData.append("research-content", researchContent);
+                // axios.post("http://localhost:8181/upload-content", formData, {
+                axios.post("http://146.185.140.12:8181/upload-content", formData, {
+
+                    headers: {
+                        'research-id': researchId
+                    }
+                })
+                .then(function (result) {
+                    console.log(result);
+                    alert(result.data.hash)
+                }, function (error) {
+                    console.log(error);
+                    alert(error)
+                });
+            },
             loadResearchGroups() {
                 // there is no method which will be able to load normal group collection
                 deipRpc.api.getResearchGroupTokensByAccountAsync(this.user.name)

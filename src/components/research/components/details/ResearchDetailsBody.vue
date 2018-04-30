@@ -29,15 +29,12 @@
                 <v-expansion-panel-content v-for="(content, i) in contentList" :key="i">
                     <div slot="header">
                         <span class="bold">Chapter {{i + 1}}</span>
-                        <span class="deip-blue-color bold c-pl-4">{{content.title}}</span>
+                        <span class="deip-blue-color bold c-pl-4"><a :href="`http://146.185.140.12:8181/${content.research_id}/${content.content}`" target="_blank">{{content.title}} </a></span>
                     </div>
                     <v-card>
                         <v-card-text class="pt-0">
                             <div class="c-ph-2">
                                 <div class="caption grey--text c-pt-2"> {{content.authors.join("  ·  ")}}</div>
-                                <div>
-                                    <router-link :to="/researchContentDetails/ + content.id" class="a grey--text">View Details</router-link>
-                                </div> 
                                 <div class="c-pt-4 half-bold">
                                 </div>
                                 <div class="c-pt-6">
