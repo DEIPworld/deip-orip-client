@@ -3,9 +3,7 @@
         <div class="row at-row flex-top flex-end">
             <div class="col-md-24">
                 <div class="users-panel">
-                    <at-button type="primary" hollow v-on:click="switchUser(users[0])" v-bind:disabled="user.name == 'initdelegate'">initdelegate</at-button>
-                    <at-button type="primary" hollow v-on:click="switchUser(users[1])" v-bind:disabled="user.name == 'alice'">alice</at-button>
-                    <at-button type="primary" hollow v-on:click="switchUser(users[2])" v-bind:disabled="user.name === 'bob'">bob</at-button>
+                    <at-button v-for="u in users" type="primary" hollow v-on:click="switchUser(u)" v-bind:disabled="u.name == user.name" style="margin-right: 5px">{{u.name}}</at-button>
                 </div>
             </div>
         </div>
@@ -193,7 +191,6 @@
 
 <script>    
 
-    import './../../deip-rpc/dist/deip.min';
     import axios from 'axios'
 
     export default {
@@ -202,7 +199,10 @@
             var users = [
                     { name: 'initdelegate', postingWif: '5JidFW79ttL9YP3W2Joc5Zer49opYU3fKNeBx9B6cpEH1GiDm5p' },
                     { name: 'alice', postingWif: '5JGoCjh27sfuCzp7kQme5yMipaQtgdVLPiZPr9zaCwJVrSrbGYx' },
-                    { name: 'bob', postingWif: '5JgsnUtjj3gpgpFMMpbXFJFVfLAsiq1tJQ7ZdBBuyaU1RFVevU2' }
+                    { name: 'bob', postingWif: '5JgsnUtjj3gpgpFMMpbXFJFVfLAsiq1tJQ7ZdBBuyaU1RFVevU2' },
+                    { name: 'F.L.Lightsom', postingWif: '5JQ7Sn7xKDJCRA28GGVkjXBHFe4YAaQXzUywvr32DnVMfYHkKh4'},
+                    { name: 'G.Cicchetti', postingWif: '5J3cGm2w8QF1hM3wKBdhUKKcYKZrwYmaPvhgvYAK7wBJz1vwmfz'},
+                    { name: 'C.M.Wahle', postingWif: '5KPn54wfb42mCkUoamzU2FUW98FQ8kt1soY59L7L99AXUrXWVRV'}
                 ];
             return {
                 user: users[0],

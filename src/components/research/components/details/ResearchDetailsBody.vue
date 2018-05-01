@@ -19,7 +19,7 @@
         <div class="c-pt-8 title">Timeline</div>
 
         <div class="c-pt-6">
-            <research-timeline></research-timeline>
+            <research-timeline :contentList="contentList" :research="research"></research-timeline>
         </div>
 
         <div class="c-pt-8 title">Research</div>
