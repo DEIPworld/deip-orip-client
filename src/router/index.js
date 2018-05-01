@@ -14,6 +14,10 @@ import ResearchContentDetails from '@/components/research/components/ResearchCon
 
 import UserDetails from '@/components/user/components/UserDetails'
 import TokenSale from '@/components/user/components/TokenSale'
+import UserAuthorization from '@/components/user/components/auth/UserAuthorization'
+import EmailSendingRegesitration from '@/components/user/components/auth/EmailSendingRegesitration'
+import DataFillingRegesitration from '@/components/user/components/auth/DataFillingRegesitration'
+import ClaimExpertiseRegesitration from '@/components/user/components/auth/ClaimExpertiseRegesitration'
 
 Vue.use(Router)
 
@@ -67,6 +71,22 @@ export default new Router({
         path: '/tokenSale',
         name: 'TokenSale',
         component: TokenSale
+    }, {
+        path: '/userAuthorization',
+        name: 'UserAuthorization',
+        component: UserAuthorization
+    }, {
+        path: '/emailSendingRegesitration',
+        name: 'EmailSendingRegesitration',
+        component: EmailSendingRegesitration
+    }, {
+        path: '/dataFillingRegesitration',
+        name: 'DataFillingRegesitration',
+        component: DataFillingRegesitration
+    }, {
+        path: '/claimExpertiseRegesitration',
+        name: 'ClaimExpertiseRegesitration',
+        component: ClaimExpertiseRegesitration
     }, {
         path: '/researchGroupDetails',
         name: 'ResearchGroupDetails',

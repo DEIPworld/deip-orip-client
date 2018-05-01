@@ -4,7 +4,7 @@
         <div class="row">
             <div class="pr-4 sort-label" v-for="(label, index) in labels" :key="index">
                 <research-feed-sort-by-item 
-                    :selected="activeLabel" 
+                    :selected-key="filter.sortBy" 
                     :label="label" @update="onActivate"
                 ></research-feed-sort-by-item>
             </div>
@@ -15,27 +15,26 @@
 <script>
     export default {
         name: "ResearchFeedSortBy",
+        props: {
+            filter: { type: Object, required: true }
+        },
         data() { 
             return {
-                activeLabel: undefined,
                 labels: [
-                    { key: 'date', title: 'Date'},
-                    { key: 'titleDesc', title: 'A-Z Title'},
-                    { key: 'authorDesc', title: 'A-Z Author'},
-                    { key: 'reviews', title: 'Reviews'},
+                    // { key: 'date', title: 'Date'},
+                    { key: 'titleAsc', title: 'A-Z Title'},
+                    { key: 'authorAsc', title: 'A-Z Author'},
+                    // { key: 'reviews', title: 'Reviews'},
                     { key: 'votes', title: 'Votes'},
-                    { key: 'citations', title: 'Citations'},
-                    { key: 'reviews2', title: 'Reviews'}
+                    // { key: 'citations', title: 'Citations'}
                 ]
             } 
         },
         methods: {
-            onActivate(value) {
-                this.activeLabel = value;
+            onActivate(item) {
+                this.filter.sortBy = item.key;
+                this.$emit('update');
             }
-        },
-        created() {
-            this.activeLabel = this.labels[0];
         }
     };
 </script>

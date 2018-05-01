@@ -12,7 +12,7 @@
             <div class="c-pt-6">
                 <div class="row-nowrap">
                     <div class="c-pr-10">
-                        <div class="bold green--text text--darken-2">Quantum optics</div>
+                        <div class="bold green--text text--darken-2">{{ research.disciplines[0].name }}</div>
                     </div>
                     <div class="c-pr-10">
                         <div>900 tokens</div>

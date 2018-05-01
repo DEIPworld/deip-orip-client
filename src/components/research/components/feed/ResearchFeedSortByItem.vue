@@ -1,6 +1,6 @@
 <template>
     <div class="subheading clickable" 
-        :class="[{'deip-blue-color underlined': label === selected }]"
+        :class="[{'deip-blue-color underlined': label.key === selectedKey }]"
         @click.stop="activateLabel()"
     >{{ label.title }}</div>
 </template>
@@ -10,7 +10,7 @@
         name: "ResearchFeedSortByItem",
         props: {
             label: Object,
-            selected: Object
+            selectedKey: String
         },
         methods: {
             activateLabel() {
