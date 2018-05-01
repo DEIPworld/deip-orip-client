@@ -43,7 +43,7 @@
 
 <script>
     export default {
-        name: 'EmailSendingRegesitration',
+        name: 'ClaimExpertiseRegesitration',
         data() {
             return {
                 popular: [
