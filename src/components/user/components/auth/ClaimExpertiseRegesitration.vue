@@ -8,8 +8,8 @@
             <div class="row discipline-picker c-mt-8">
 
                 <div class="col-4 c-p-4 overflow-y-auto">
-                    <div class="half-bold uppercase c-pb-4">Popular</div>
-                    <div v-for="(item, i) in popular" :key="i">
+                    <div class="half-bold uppercase c-pb-3">Popular</div>
+                    <div class="c-pt-1" v-for="(item, i) in popular" :key="i">
                         <span class="deip-label"
                             @click="selectDiscipline(item)"
                             :class="[{'selected': selectedDiscipline && item.id === selectedDiscipline.id}]"
