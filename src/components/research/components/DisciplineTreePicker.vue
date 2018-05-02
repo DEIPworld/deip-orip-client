@@ -9,75 +9,41 @@
 </template>
 
 <script>
+    import { disciplineTree, getNodeById } from '../services/DisciplineTreeService.js';
+
     export default {
         name: "DisciplineTreePicker",
+        props: {
+            selected: Object
+        },
         methods: {
-            chooseSelectedDiscipline(value) {
-                this.selectedPath = value;
+            chooseSelectedDiscipline(discipline) {
+                this.$emit('select', { 
+                    id: discipline.id, 
+                    label: discipline.label 
+                });
+
+                this.currentId = discipline.id;
+                this.selectedPath = discipline.path;
+            }
+        },
+        watch: {
+            selected: function(discipline) {
+                if (!discipline) {
+                    this.currentId = undefined;
+                    this.selectedPath = '';
+                } else if (discipline.id !== this.currentId) {
+                    const newSelectedNode = getNodeById(this.disciplineTree, discipline.id);
+                    this.currentId = discipline.id;
+                    this.selectedPath = newSelectedNode.path;
+                }
             }
         },
         data() {
             return {
+                currentId: undefined,
                 selectedPath: '',
-                disciplineTree: {
-                    isTop: true,
-                    children: {
-                        'humanities': {
-                            path: 'humanities',
-                            label: 'Humanities',
-                            children: {
-                                'language': {
-                                    path: 'humanities.language',
-                                    label: 'Language',
-                                    children: {
-                                        russian: {
-                                            path: 'humanities.language.russian',
-                                            label: 'Russian'
-                                        },
-                                        belarusian: {
-                                            path: 'humanities.language.belarusian',
-                                            label: 'Belarusian'
-                                        }
-                                    }
-                                }
-                            }
-                        },
-                        'natrielSciences': {
-                            path: 'natrielSciences',
-                            label: 'Natiral Sciences',
-                            children: {
-                                'biology': {
-                                    path: 'natrielSciences.biology',
-                                    label: 'Biology',
-                                    children: {
-                                        microbiology: {
-                                            path: 'natrielSciences.biology.microbiology',
-                                            label: 'Microbiology'
-                                        },
-                                        zoology: {
-                                            path: 'natrielSciences.biology.zoology',
-                                            label: 'Zoology'
-                                        }
-                                    }
-                                },
-                                'physics': {
-                                    path: 'natrielSciences.physics',
-                                    label: 'Physics',
-                                    children: {
-                                        mechanics: {
-                                            path: 'natrielSciences.physics.mechanics',
-                                            label: 'Mechanics'
-                                        },
-                                        pptics: {
-                                            path: 'natrielSciences.physics.optics',
-                                            label: 'Optics'
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
+                disciplineTree: disciplineTree
             };
         }
     };

@@ -2,7 +2,7 @@
     <div :class="[!discipline.isTop ? 'pt-1 pl-3' : '']">
         <span class="deip-label" 
             v-if="!discipline.isTop" 
-            @click="select(discipline.path)"
+            @click="select(discipline)"
             :class="[{'selected': isSelected}]"
         >{{ discipline.label }}</span>
         
@@ -28,8 +28,8 @@
             selectedPath: String
         },
         methods: {
-            select(value) {
-                this.$emit('update', value);
+            select(discipline) {
+                this.$emit('update', discipline);
             }
         },
         computed: {

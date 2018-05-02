@@ -26,14 +26,26 @@
                     <v-list-tile @click="goToState('UserDetails')">
                         <v-list-tile-title>My Page</v-list-tile-title>
                     </v-list-tile>
+                    <v-list-tile @click="goToState('ResearchGroupDetails')">
+                        <v-list-tile-title>Research Group Details</v-list-tile-title>
+                    </v-list-tile>
                     <v-list-tile @click="goToState('ResearchGroupCreating')">
                         <v-list-tile-title>Research Group Creating</v-list-tile-title>
                     </v-list-tile>
-                    <v-list-tile @click="">
-                        <v-list-tile-title>Settings</v-list-tile-title>
+                    <v-list-tile @click="goToState('TokenSale')">
+                        <v-list-tile-title>Token Sale</v-list-tile-title>
                     </v-list-tile>
-                    <v-list-tile @click="">
-                        <v-list-tile-title>Sign out</v-list-tile-title>
+
+                    <v-divider></v-divider>
+                    
+                    <v-list-tile @click="goToState('UserAuthorization')">
+                        <v-list-tile-title>User Authorization</v-list-tile-title>
+                    </v-list-tile>
+                    <v-list-tile @click="goToState('EmailSendingRegesitration')">
+                        <v-list-tile-title>Email Sending Regesitration</v-list-tile-title>
+                    </v-list-tile>
+                    <v-list-tile @click="goToState('DataFillingRegesitration')">
+                        <v-list-tile-title>Data Filling Regesitration</v-list-tile-title>
                     </v-list-tile>
                 </v-list>
             </v-menu>

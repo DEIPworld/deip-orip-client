@@ -15,11 +15,11 @@ module.exports = {
   entry: {
     app: './src/main.js',
     styles: [
-      'substance-texture/dist/texture.css',
-      'substance-texture/dist/texture-reset.css',
-      'substance-texture/dist/substance/dist/substance.css',
-      'substance-texture/dist/texture-pagestyle.css',
-      'substance-texture/dist/font-awesome/css/font-awesome.css'    
+      // 'substance-texture/dist/texture.css',
+      // 'substance-texture/dist/texture-reset.css',
+      // 'substance-texture/dist/substance/dist/substance.css',
+      // 'substance-texture/dist/texture-pagestyle.css',
+      // 'substance-texture/dist/font-awesome/css/font-awesome.css'    
     ]
   
   },

@@ -85,6 +85,7 @@
             incStep() { this.currentStep++; },
             decStep() { this.currentStep--; },
             finish() {
+                this.groupInfo; // object which has all necessary info
                 console.log('FINISHED!');
                 // here should be BE calling to save all data
             }
