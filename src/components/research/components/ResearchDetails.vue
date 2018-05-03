@@ -3,7 +3,10 @@
 
         <div class="content-column">
             <div class="filling">
-                <research-details-body :contentList="contentList" :research="research"></research-details-body>
+                <research-details-body :contentList="contentList" 
+                                       :research="research" 
+                                       :membersList="membersList">
+                </research-details-body>
             </div>
         </div>
 
@@ -19,29 +22,36 @@
         data() { 
             return {
                 research: {},
-                contentList: []
+                contentList: [],
+                membersList: []
             } 
         },
         methods: {
-            getResearchContent (){
-                deipRpc.api.getAllResearchContentAsync(this.$route.params.research_id)
-                    .then((data) => {
-                        for (var i = 0; i < data.length; i++) {
-                            var contnet = data[i];
-                            this.contentList.push(contnet);
-                        }
-                })
-            },
-            getResearch (){
-                deipRpc.api.getResearchByIdAsync(this.$route.params.research_id)
-                    .then((data) => {
-                        this.research = data;
-                })
-            }
+
         },
         created() {
-            this.getResearch();
-            this.getResearchContent();
+
+            const researchId = this.$route.params.research_id;
+
+            deipRpc.api.getAllResearchContentAsync(researchId)
+                .then((data) => {
+                    for (var i = 0; i < data.length; i++) {
+                        var contnet = data[i];
+                        this.contentList.push(contnet);
+                    }
+                });
+
+            deipRpc.api.getResearchByIdAsync(researchId)
+                .then((data) => {
+                    this.research = data;
+                    return deipRpc.api.getResearchGroupTokensByResearchGroupAsync(this.research.research_group_id)
+                })
+                .then((data) => {
+                    for (var i = 0; i < data.length; i++) {
+                        var rgt = data[i];
+                        this.membersList.push(rgt);
+                    }
+                });
         }
         
     };
