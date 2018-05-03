@@ -50,7 +50,19 @@ const disciplineTree = {
                     id: 42
                 }
             }
-        }
+        },
+        'earthsciences': {
+            path: 'earthsciences',
+            label: 'Earth sciences',
+            id: 6,
+            children: {
+                'anatomy': {
+                    path: 'earthsciences.oceanography',
+                    label: 'Oceanography',
+                    id: 113
+                }
+            }
+        },
 
     }
 };

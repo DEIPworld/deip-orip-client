@@ -200,9 +200,9 @@
                     { name: 'initdelegate', postingWif: '5JidFW79ttL9YP3W2Joc5Zer49opYU3fKNeBx9B6cpEH1GiDm5p' },
                     { name: 'alice', postingWif: '5JGoCjh27sfuCzp7kQme5yMipaQtgdVLPiZPr9zaCwJVrSrbGYx' },
                     { name: 'bob', postingWif: '5JgsnUtjj3gpgpFMMpbXFJFVfLAsiq1tJQ7ZdBBuyaU1RFVevU2' },
-                    { name: 'F.L.Lightsom', postingWif: '5JQ7Sn7xKDJCRA28GGVkjXBHFe4YAaQXzUywvr32DnVMfYHkKh4'},
-                    { name: 'G.Cicchetti', postingWif: '5J3cGm2w8QF1hM3wKBdhUKKcYKZrwYmaPvhgvYAK7wBJz1vwmfz'},
-                    { name: 'C.M.Wahle', postingWif: '5KPn54wfb42mCkUoamzU2FUW98FQ8kt1soY59L7L99AXUrXWVRV'}
+                    { name: 'lightsom', postingWif: '5JCnS7e48t3p6wK9wJDhbctQ69CUbi1N9BUsLFAzY9ANLF6EVGP'},
+                    { name: 'cicchetti', postingWif: '5Jzb8quFdo3mXaZEWsTq16j2HLpG65jGUdvWqdcsGHX8FS1k4iT'},
+                    { name: 'wahle', postingWif: '5K7ftAZ6eJCGCP3mNr1wh56RpyZKfgt2AyivHn9pWVJFxmG8kmX'}
                 ];
             return {
                 user: users[0],
@@ -251,7 +251,6 @@
                 const researchContent = document.querySelector('#research-content').files[0];
                 const formData = new FormData();
                 formData.append("research-content", researchContent);
-                // axios.post("http://localhost:8181/upload-content", formData, {
                 axios.post("http://146.185.140.12:8181/upload-content", formData, {
 
                     headers: {

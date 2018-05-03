@@ -5,7 +5,7 @@
                 <v-icon size="18px">date_range</v-icon> 
                 <span>Created 20 Jan 2018</span>
             </div>
-            <v-btn small color="primary" class="ma-0">Vote</v-btn>
+            <v-btn @click="afterComplete" small color="primary" class="ma-0">Vote</v-btn>
         </div>
 
         <div class="display-1 half-bold c-mt-10">
@@ -61,6 +61,30 @@
                     </v-card>
                 </v-expansion-panel-content>
             </v-expansion-panel>
+            <vue-dropzone ref="newContent" id="content-dropzone" :options="dropzoneOptions" 
+            @vdropzone-file-added="fileAdded"
+            @vdropzone-complete="afterComplete"></vue-dropzone>
+
+            <v-dialog v-model="newContentDialogIsOpen" persistent max-width="500px">
+                <v-card>
+                    <v-card-title>
+                        <span class="text-align-center"><span class="bold">"{{research.title}}"</span>&nbsp; new content proposal </span>
+                    </v-card-title>
+          
+                    <v-card-text class="new-content-dialog-body">
+                        <v-text-field label="Title" v-model="newContentProposal.title"></v-text-field>
+                        <v-select v-model="newContentProposal.type" :items="contentTypes" label="Content Type" item-value="id"></v-select>
+                        <v-select v-model="newContentProposal.authors" :items="authors" label="Authors" item-value="text" multiple
+                         max-height="100" hint="Pick authors of this content" persistent-hint></v-select>
+                    </v-card-text>
+
+                    <v-card-actions>
+                        <v-btn color="primary" flat :disabled="!newContentBtnIsEnabled" @click.stop="proposeNewContent()">Propose</v-btn>
+                        <v-btn color="primary" flat @click.stop="cancelNewContent()">Cancel</v-btn>
+                    </v-card-actions>
+                </v-card>
+            </v-dialog>
+
         </div>
 
         <div class="c-pt-8 title">Reviews: 2</div>
@@ -171,21 +195,116 @@
 </template>
 
 <script>
+
+    import vueDropzone from "vue2-dropzone";
     export default {
-        name: "ResearchDetailsBody", 
-        props: {
-            research: { required: true, default: undefined },
-            contentList: { required: true, default: [] }
+        name: "ResearchDetailsBody",
+        components: {
+            vueDropzone
         },
-        data() {  
+        props: {
+            research: { required: true, type: Object, default: null },
+            contentList: { required: true, type: Array, default: [] },
+            membersList: { required: true, type: Array, default: [] }
+        },
+        data() {
             return {
 
+                dropzoneOptions: {
+                    url: 'http://146.185.140.12:8181/upload-content',
+                    paramName : "research-content",
+                    headers: { "research-id": this.$route.params.research_id },
+                    maxFiles: 1,
+                    thumbnailWidth: 150,
+                    autoProcessQueue: false,
+                    acceptedFiles: ['application/pdf', 'image/png', 'image/jpeg'].join(',')
+                },
+
+                newContentDialogIsOpen: false,
+
+                newContentProposal: {
+                    title: "",
+                    type: null,
+                    authors: []
+                },
+
+                contentTypes: [
+                    { text: 'Announcement', id: 1 },
+                    { text: 'Milestone', id: 2 },
+                    { text: 'Final Result', id: 3 }
+                ],
+
+                user: { name: 'initdelegate', postingWif: '5JidFW79ttL9YP3W2Joc5Zer49opYU3fKNeBx9B6cpEH1GiDm5p' }
             }
+        },
+
+        computed: {
+            authors: function(){
+                return this.membersList.map(m => {return { text: m.owner, id: m.id }});
+            },
+
+            newContentBtnIsEnabled: function(){
+                return  this.newContentProposal.title && 
+                        this.newContentProposal.type && 
+                        this.newContentProposal.authors.length
+            }
+        },
+        methods: {
+            fileAdded(file) {
+                this.newContentDialogIsOpen = true;
+            },
+            proposeNewContent: function () {
+                this.$refs.newContent.processQueue();
+            },
+            cancelNewContent: function() {
+                this.$refs.newContent.removeAllFiles();
+                this.newContentDialogIsOpen = false;
+            },
+            afterComplete(file) {
+                const hash = JSON.parse(file.xhr.response).hash;
+                const proposeNewContentAction = 11;
+
+				const proposal = `{"research_id": ${this.research.id}, 
+                        "type": ${this.newContentProposal.type}, 
+                        "title": "${this.newContentProposal.title}", 
+                        "content": "${hash}", 
+                        "authors": [${'"' + this.newContentProposal.authors.join('","') + '"'}], 
+                        "references": [], 
+                        "external_references": []}`;
+
+                deipRpc.broadcast.createProposalAsync(
+					this.user.postingWif,
+					this.user.name, 
+					this.research.research_group_id, 
+					proposal,
+                    proposeNewContentAction,
+					new Date( new Date().getTime() + 2 * 24 * 60 * 60 * 1000 )
+				).then(() => {
+                    this.$refs.newContent.removeAllFiles();
+                    this.newContentDialogIsOpen = false;
+                }, (err) => {
+                    alert(err.message);
+                });
+
+            }
+        },
+        mounted() {
         }
+
     };
 </script>
 
 <style lang="less" scoped>
+
+    #content-dropzone {
+        margin-left: -1px;
+        margin-right: -1px;
+    }
+
+    .new-content-dialog-body{
+        min-height: 300px !important;
+    }
+
     .review-left-block {
         width: 160px;
         min-width: 160px;

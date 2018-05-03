@@ -34,12 +34,12 @@
     export default {
         name: "ResearchTimeline",
         props: {
-            research: { required: true, type: Object, default: undefined },
-            contentList: { required: true, type: Array, default: undefined }
+            research: { required: true, type: Object, default: null },
+            contentList: { required: true, type: Array, default: null }
         },
         computed: {
             offsets: function () {     
-                if (this.research !== undefined && this.contentList !== undefined 
+                if (this.research !== null && this.contentList !== null 
                         && this.contentList.length !== 0) {
 
                     const startTimestamp = Date.parse(this.research.created_at);
