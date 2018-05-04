@@ -18,6 +18,7 @@ import UserAuthorization from '@/components/user/components/auth/UserAuthorizati
 import EmailSendingRegesitration from '@/components/user/components/auth/EmailSendingRegesitration'
 import DataFillingRegesitration from '@/components/user/components/auth/DataFillingRegesitration'
 import ClaimExpertiseRegesitration from '@/components/user/components/auth/ClaimExpertiseRegesitration'
+import PreliminaryRegistration from '@/components/user/components/auth/PreliminaryRegistration'
 
 Vue.use(Router)
 
@@ -83,6 +84,10 @@ export default new Router({
         path: '/dataFillingRegesitration',
         name: 'DataFillingRegesitration',
         component: DataFillingRegesitration
+    }, {
+        path: '/preliminaryRegistration',
+        name: 'PreliminaryRegistration',
+        component: PreliminaryRegistration
     }, {
         path: '/claimExpertiseRegesitration',
         name: 'ClaimExpertiseRegesitration',
