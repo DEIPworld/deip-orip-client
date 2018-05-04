@@ -29,7 +29,7 @@
                     <div style="margin: 0px 2px 3px;">
                         <v-card class="hidden-last-child">
                             <template v-for="item in fullResearchList">
-                                <research-list-item :is-collapsable="true" :research="item"></research-list-item>
+                                <research-list-item :research="item"></research-list-item>
                                 <v-divider></v-divider>
                             </template>
                         </v-card>
