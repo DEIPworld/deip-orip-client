@@ -4,9 +4,9 @@ import Vue from 'vue'
 import App from './App'
 import router from './router'
 import Vuetify from 'vuetify'
-
 import 'vuetify/dist/vuetify.css'
 import './styles/common.less'
+import 'vue2-dropzone/dist/vue2Dropzone.css'
 
 import './components/core/index';
 import './components/research/index';
@@ -20,7 +20,6 @@ Vue.use(Vuetify, {
     }
 })
 Vue.config.productionTip = false
-
 deipRpc.api.setOptions({ url: 'ws://206.189.175.10:11011/' });
 deipRpc.config.set('chain_id', 'd39f9b0d2ed1fd88747e87cab0ac2e6a6708782e70f3e9333f5c782c2d0a5d3d');
 
