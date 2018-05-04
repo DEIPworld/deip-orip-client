@@ -24,6 +24,7 @@
                         <div class="full-height">
                             <token-sale-amount
                                 @incStep="incStep"
+                                :token-sale-info="tokenSaleInfo"
                             ></token-sale-amount>
                         </div>
                     </v-stepper-content>
@@ -32,6 +33,7 @@
                         <div class="full-height">
                             <token-sale-period
                                 @incStep="incStep" @decStep="decStep"
+                                :token-sale-info="tokenSaleInfo"
                             ></token-sale-period>
                         </div>
                     </v-stepper-content>
@@ -39,7 +41,8 @@
                     <v-stepper-content step="3">
                         <div class="full-height">
                             <token-sale-caps
-                                @incStep="incStep" @decStep="decStep"
+                                @finish="finish" @decStep="decStep"
+                                :token-sale-info="tokenSaleInfo"
                             ></token-sale-caps>
                         </div>
                     </v-stepper-content>
@@ -55,7 +58,14 @@
         name: "TokenSale",
         data() { 
             return {
-                currentStep: 0
+                currentStep: 0,
+                tokenSaleInfo: {
+                    amountToSell: 0,
+                    startDate: undefined,
+                    endDate: undefined,
+                    softCap: '',
+                    hardCap: ''
+                }
             } 
         },
         methods: {
@@ -68,6 +78,11 @@
             },
             decStep() {
                 this.currentStep--;
+            },
+            finish() {
+                this.tokenSaleInfo; // object which has all necessary info
+                console.log('FINISHED!', this.tokenSaleInfo);
+                // here should be BE calling to save all data
             }
         }
     };
