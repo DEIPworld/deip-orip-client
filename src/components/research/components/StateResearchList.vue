@@ -27,12 +27,11 @@
             <v-tabs-items v-model="tab" style="margin: 0px -2px -3px;">
                 <v-tab-item v-for="item in ['Acitive research:', 'Finished research:']" :key="item">
                     <div style="margin: 0px 2px 3px;">
-                        <v-card>
-                            <research-list-item></research-list-item>
-                            <v-divider></v-divider>
-                            <research-list-item></research-list-item>
-                            <v-divider></v-divider>
-                            <research-list-item></research-list-item>
+                        <v-card class="hidden-last-child">
+                            <template v-for="item in fullResearchList">
+                                <research-list-item :is-collapsable="true" :research="item"></research-list-item>
+                                <v-divider></v-divider>
+                            </template>
                         </v-card>
                     </div>
                 </v-tab-item>
@@ -46,8 +45,15 @@
         name: 'StateResearchList',
         data() {
             return {
-                tab: null
+                tab: null,
+                fullResearchList: []
             }
+        },
+        created() {
+            deipRpc.api.getAllResearchesListingAsync(0, 0)
+                .then(data => {
+                    this.fullResearchList = data;
+                });
         }
     }
 </script>
