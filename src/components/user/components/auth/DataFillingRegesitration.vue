@@ -21,20 +21,25 @@
                 <v-text-field 
                     label="First name"
                     v-model="formData.firstname" 
-                    :rules="[rules.required]"
+                    :rules="[rules.required, rules.nameChars]"
                     @input="resetKey"
                 ></v-text-field>
                 <v-text-field 
                     label="Last name"
                     v-model="formData.lastname" 
-                    :rules="[rules.required]"
+                    :rules="[rules.required, rules.nameChars]"
                     @input="resetKey"
                 ></v-text-field>
                 <v-text-field 
                     name="username"
                     label="Username"
                     v-model="formData.username" 
-                    :rules="[rules.required, rules.unique]"
+                    :rules="[
+                        rules.required, 
+                        rules.unique, 
+                        rules.usernameLength,
+                        rules.usernameChars
+                    ]"
                     @input="usernameChanged"
                     :loading="isUsernameChecking"
                 ></v-text-field>
@@ -91,7 +96,14 @@
 
                 rules: {
                     required: value => !!value || 'This field is required',
-                    unique: value => !!value && this.isUsernameVerifyed !== false || 'Username should be unique in system'
+                    unique: value => !!value && this.isUsernameVerifyed !== false || 'Username should be unique in system',
+                    nameChars: value => 
+                        value.match(/^[a-z][a-z ,.'-]*$/i) !== null 
+                        || "Incorrect value",
+                    usernameLength: value => value.length >= 3 && value.length <= 16 || 'Length should be between 3 and 16 characters',
+                    usernameChars: value => 
+                        value.match(/^[a-z][a-z0-9\-]+[a-z0-9]$/) !== null 
+                        || "First character must be a-z (lower case), the last character can be a-z or 0-9 (lower case letter or number) and second and up to second last can be a-z (lower case), 0-9 and '-'",
                 }
             }
         },
@@ -108,15 +120,14 @@
                  this.$router.push({ name: 'ClaimExpertiseRegesitration' });
             },
             generatePrivateKey() {
-                // to do: to sort out how to handle this keys by roles and how many of them we want
                 let keys = deipRpc.auth.getPrivateKeys(
                     this.formData.username,
                     (new Date()).getTime().toString(),
-                    ['active']
+                    ['owner']
                 );
 
-                this.formData.privKey = keys.active;
-                this.formData.pubKey = keys.activePubkey;
+                this.formData.privKey = keys.owner;
+                this.formData.pubKey = keys.ownerPubkey;
 
                 this.formData.isPrivKeySaved = false;
             },

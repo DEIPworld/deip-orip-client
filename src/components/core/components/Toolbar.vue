@@ -47,6 +47,9 @@
                     <v-list-tile @click="goToState('DataFillingRegesitration')">
                         <v-list-tile-title>Data Filling Regesitration</v-list-tile-title>
                     </v-list-tile>
+                    <v-list-tile @click="goToState('PreliminaryRegistration')">
+                        <v-list-tile-title>Preliminary Registration</v-list-tile-title>
+                    </v-list-tile>
                 </v-list>
             </v-menu>
 

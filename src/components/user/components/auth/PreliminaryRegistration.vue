@@ -11,8 +11,6 @@
 
             <v-form v-model="isFormValid" ref="form" class="c-mt-10" v-show="!isServerValidated">
                 <div class="c-pb-6 text-align-center">
-                    Thank you for your interest in DEIP!
-                    <br>
                     Please fill the fields for preliminary registration
                 </div>
 
@@ -80,10 +78,10 @@
             </v-form>
 
             <div class="c-mt-10" v-show="isServerValidated">
-                <div class="text-align-center">
+                <div class="text-align-center half-bold">
                     Thank you for your interest in DEIP!
                     <br>
-                    The inviting letter will be send to your email after approving
+                    The inviting letter will be sent to your email after approving
                 </div>
             </div>
 
@@ -125,11 +123,11 @@
                     required: value => !!value || 'This field is required',
                     unique: value => !!value && this.isUsernameVerifyed !== false || 'Username should be unique in system',
                     nameChars: value => 
-                        value.match(/^[a-z][a-z ,.'-]+$/i) !== null 
+                        value.match(/^[a-z][a-z ,.'-]*$/i) !== null 
                         || "Incorrect value",
                     usernameLength: value => value.length >= 3 && value.length <= 16 || 'Length should be between 3 and 16 characters',
                     usernameChars: value => 
-                        value.match(/^[A-Za-z][a-z0-9\-]+[a-z0-9]*$/) !== null 
+                        value.match(/^[a-z][a-z0-9\-]+[a-z0-9]$/) !== null 
                         || "First character must be a-z (lower case), the last character can be a-z or 0-9 (lower case letter or number) and second and up to second last can be a-z (lower case), 0-9 and '-'",
                     email: (value) => {
                         const pattern = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
