@@ -5,13 +5,19 @@
             <div class="filling">
                 <research-details-body :contentList="contentList" 
                                        :research="research" 
-                                       :membersList="membersList">
+                                       :membersList="membersList"
+                                       :disciplinesList="disciplinesList"
+                                       :totalVotesList="totalVotesList">
                 </research-details-body>
             </div>
         </div>
 
         <v-card height="100%" class="sidebar">
-            <research-details-sidebar></research-details-sidebar>
+            <research-details-sidebar :research="research" 
+                                      :membersList="membersList"
+                                      :disciplinesList="disciplinesList"
+                                      :totalVotesList="totalVotesList">
+            </research-details-sidebar>
         </v-card>
     </v-container>   
 </template>
@@ -23,8 +29,10 @@
             return {
                 research: {},
                 contentList: [],
-                membersList: []
-            } 
+                membersList: [],
+                disciplinesList: [],
+                totalVotesList: []
+            }
         },
         methods: {
 
@@ -51,6 +59,21 @@
                         var rgt = data[i];
                         this.membersList.push(rgt);
                     }
+                });
+
+            deipRpc.api.getDisciplinesByResearchAsync(researchId)
+                .then((data) => {
+                    var promises = [];
+                    for (var i = 0; i < data.length; i++) {
+                        var discipline = data[i];
+                        this.disciplinesList.push(discipline);
+                        promises.push(deipRpc.api.getTotalVotesByResearchAndDisciplineAsync(researchId, discipline.id))
+                    }
+                    return Promise.all(promises);
+                })
+                .then((data) => {
+                    this.totalVotesList = data;
+                    console.log(data);
                 });
         }
         

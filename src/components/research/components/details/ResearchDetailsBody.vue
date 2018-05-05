@@ -2,10 +2,10 @@
     <div>
         <div class="row justify-between align-center">
             <div>
-                <v-icon size="18px">date_range</v-icon> 
-                <span>Created 20 Jan 2018</span>
+                <v-icon size="18px">date_range</v-icon>
+                <span v-if="research">Created on {{new Date(research.created_at).toDateString()}}</span>
             </div>
-            <v-btn @click="afterComplete" small color="primary" class="ma-0">Vote</v-btn>
+           <!-- <v-btn @click="afterComplete" small color="primary" class="ma-0">Vote</v-btn> -->
         </div>
 
         <div class="display-1 half-bold c-mt-10">
@@ -26,10 +26,15 @@
 
         <div class="c-pt-6">
             <v-expansion-panel>
-                <v-expansion-panel-content v-for="(content, i) in contentList" :key="i">
+                <v-expansion-panel-content v-for="(content, index) in contentList">
                     <div slot="header">
-                        <span class="bold">Chapter {{i + 1}}</span>
-                        <span class="deip-blue-color bold c-pl-4"><a :href="`http://146.185.140.12:8181/${content.research_id}/${content.content}`" target="_blank">{{content.title}} </a></span>
+                        <span class="bold">Chapter {{index + 1}}</span>
+                        <span class="deip-blue-color bold c-pl-4"> 
+                            <router-link  :to="`/researchDetails/${research.id}/${content.id}`" 
+                                          
+                                          style="text-decoration: none">{{content.title}}
+                            </router-link>
+                        </span>
                     </div>
                     <v-card>
                         <v-card-text class="pt-0">
@@ -37,14 +42,20 @@
                                 <div class="caption grey--text c-pt-2"> {{content.authors.join("  ·  ")}}</div>
                                 <div class="c-pt-4 half-bold">
                                 </div>
-                                <div class="c-pt-6">
+                                <div class="c-pt-2">
                                     <div class="row-nowrap">
-                                        <div class="c-pr-10">
-                                            <div class="bold green--text text--darken-2">Quantum optics</div>
+                                        <div v-for="(discipline, index) in disciplinesList">
+                                            <span v-if="contentWeightByDiscipline[content.id] && contentWeightByDiscipline[content.id][discipline.id]">
+                                                <span class="c-pr-1">
+                                                    <span class="bold green--text text--darken-2">{{discipline.name}}</span>
+                                                </span>
+                                                <span class="c-pr-4">
+                                                    <span>{{contentWeightByDiscipline[content.id][discipline.id] }}</span>
+                                                </span>
+                                            </span>
                                         </div>
-                                        <div class="c-pr-10">
-                                            <div>900 tokens</div>
-                                        </div>
+                                    </div>
+                                    <div class="row-nowrap c-mt-3">
                                         <div class="c-pr-10">
                                             <v-icon size="18px">visibility</v-icon> <span>1999</span>
                                         </div>
@@ -52,7 +63,7 @@
                                             <v-icon size="18px">chat_bubble</v-icon> <span>23</span>
                                         </div>
                                         <div>
-                                            <v-icon size="18px">date_range</v-icon> <span>Upd 13 Mar 2018</span>
+                                            <v-icon size="18px">date_range</v-icon> <span>{{new Date(content.created_at).toDateString()}}</span>
                                         </div>
                                     </div>
                                 </div>
@@ -61,33 +72,38 @@
                     </v-card>
                 </v-expansion-panel-content>
             </v-expansion-panel>
-            <vue-dropzone ref="newContent" id="content-dropzone" :options="dropzoneOptions" 
-            @vdropzone-file-added="fileAdded"
-            @vdropzone-complete="afterComplete"></vue-dropzone>
+            <vue-dropzone v-if="!research.is_finished" ref="newContent" id="content-dropzone" :options="dropzoneOptions" 
+                @vdropzone-file-added="fileAdded"
+                @vdropzone-complete="afterComplete">
+            </vue-dropzone>
 
-            <v-dialog v-model="newContentDialogIsOpen" persistent max-width="500px">
+            <v-dialog v-model="newContentProposal.isOpen" persistent max-width="500px">
                 <v-card>
                     <v-card-title>
-                        <span class="text-align-center"><span class="bold">"{{research.title}}"</span>&nbsp; new content proposal </span>
+                        <span class="text-align-center">Propose new content for &nbsp;<span class="bold">"{{research.title}}"</span>&nbsp;research</span>
                     </v-card-title>
           
                     <v-card-text class="new-content-dialog-body">
-                        <v-text-field label="Title" v-model="newContentProposal.title"></v-text-field>
-                        <v-select v-model="newContentProposal.type" :items="contentTypes" label="Content Type" item-value="id"></v-select>
-                        <v-select v-model="newContentProposal.authors" :items="authors" label="Authors" item-value="text" multiple
-                         max-height="100" hint="Pick authors of this content" persistent-hint></v-select>
+                        <div v-if="!newContentProposal.isInProgress">
+                            <v-text-field label="Title" v-model="newContentProposal.title"></v-text-field>
+                            <v-select v-model="newContentProposal.type" :items="contentTypes" label="Content Type" item-value="id"></v-select>
+                            <v-select v-model="newContentProposal.authors" :items="authors" label="Authors" item-value="text" multiple
+                                        max-height="100" hint="Pick authors of this content" persistent-hint></v-select>
+                        </div>
+                        <div class="loader" v-if="newContentProposal.isInProgress">
+                            <v-progress-circular indeterminate color="primary"></v-progress-circular>
+                        </div>
                     </v-card-text>
 
                     <v-card-actions>
-                        <v-btn color="primary" flat :disabled="!newContentBtnIsEnabled" @click.stop="proposeNewContent()">Propose</v-btn>
                         <v-btn color="primary" flat @click.stop="cancelNewContent()">Cancel</v-btn>
+                        <v-btn color="primary" flat :disabled="!newContentBtnIsEnabled" @click.stop="proposeNewContent()">Propose</v-btn>
                     </v-card-actions>
                 </v-card>
             </v-dialog>
-
         </div>
 
-        <div class="c-pt-8 title">Reviews: 2</div>
+      <!--  <div class="c-pt-8 title">Reviews: 2</div>
 
         <div class="c-pt-6">
             <v-card>
@@ -176,8 +192,8 @@
                     </div>
                 </div>
             </v-card>
-        </div>
-        
+        </div>-->
+
         <div class="c-pt-8 title">References: 4</div>
 
         <div class="c-pt-6">
@@ -190,13 +206,14 @@
                 2. Kwak, Young Hoon, and Frank T. Anbari. (2009). Analysing project management research: Perspectives 
                 from top management journals. International Journal of Project Management, 27(5), 435-446.
             </div>
-        </div>
+        </div> 
     </div>
 </template>
 
 <script>
 
     import vueDropzone from "vue2-dropzone";
+
     export default {
         name: "ResearchDetailsBody",
         components: {
@@ -205,7 +222,9 @@
         props: {
             research: { required: true, type: Object, default: null },
             contentList: { required: true, type: Array, default: [] },
-            membersList: { required: true, type: Array, default: [] }
+            membersList: { required: true, type: Array, default: [] },
+            disciplinesList: { required: true, type: Array, default: [] },
+            totalVotesList: { required: true, type: Array, default: [] }
         },
         data() {
             return {
@@ -220,12 +239,12 @@
                     acceptedFiles: ['application/pdf', 'image/png', 'image/jpeg'].join(',')
                 },
 
-                newContentDialogIsOpen: false,
-
                 newContentProposal: {
                     title: "",
                     type: null,
-                    authors: []
+                    authors: [],
+                    isInProgress: false,
+                    isOpen: false
                 },
 
                 contentTypes: [
@@ -242,23 +261,44 @@
             authors: function(){
                 return this.membersList.map(m => {return { text: m.owner, id: m.id }});
             },
-
             newContentBtnIsEnabled: function(){
                 return  this.newContentProposal.title && 
                         this.newContentProposal.type && 
                         this.newContentProposal.authors.length
+            },
+
+            contentWeightByDiscipline: function() {
+                const map = {};
+                const flattened = this.totalVotesList.reduce(
+                        function(accumulator, currentValue) {
+                            return accumulator.concat(currentValue);
+                        }, []);
+
+                for (var i = 0; i < flattened.length; i++) {
+                    const tvo = flattened[i];
+                    const discipline_id = tvo.discipline_id.toString();
+                    const research_content_id = tvo.research_content_id.toString();
+                    const total_research_reward_weight = tvo.total_research_reward_weight;
+
+                    if(map[research_content_id] === undefined) 
+                        map[research_content_id] = {};
+
+                    map[research_content_id][discipline_id] = total_research_reward_weight;
+                }
+                return map;
             }
         },
         methods: {
             fileAdded(file) {
-                this.newContentDialogIsOpen = true;
+                this.newContentProposal.isOpen = true;
             },
             proposeNewContent: function () {
+                this.newContentProposal.isInProgress = true;
                 this.$refs.newContent.processQueue();
             },
             cancelNewContent: function() {
                 this.$refs.newContent.removeAllFiles();
-                this.newContentDialogIsOpen = false;
+                this.newContentProposal.isOpen = false;
             },
             afterComplete(file) {
                 const hash = JSON.parse(file.xhr.response).hash;
@@ -281,8 +321,12 @@
 					new Date( new Date().getTime() + 2 * 24 * 60 * 60 * 1000 )
 				).then(() => {
                     this.$refs.newContent.removeAllFiles();
-                    this.newContentDialogIsOpen = false;
+                    this.newContentProposal.isInProgress = false;
+                    this.newContentProposal.isOpen = false;
+
                 }, (err) => {
+                    this.newContentProposal.isInProgress = false;
+                    this.newContentProposal.isOpen = false;
                     alert(err.message);
                 });
 
@@ -308,5 +352,11 @@
     .review-left-block {
         width: 160px;
         min-width: 160px;
+    }
+    
+    .loader {
+        position: absolute;
+        right: 45%;
+        top: 45%;
     }
 </style>

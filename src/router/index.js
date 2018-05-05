@@ -52,7 +52,7 @@ export default new Router({
         name: 'ResearchDetails',
         component: ResearchDetails
     }, {
-        path: '/researchContentDetails/:content_id',
+        path: '/researchDetails/:research_id/:content_id',
         name: 'ResearchContentDetails',
         component: ResearchContentDetails
     }, {

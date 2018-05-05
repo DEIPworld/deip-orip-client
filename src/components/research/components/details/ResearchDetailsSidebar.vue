@@ -1,27 +1,18 @@
 <template>
     <div>
         <div class="sm-title bold">Research Group</div>
+            <div v-if="" class="row-nowrap justify-between align-center c-pt-4" v-for="(member, index) in membersList">
+            <div>
+                <v-avatar size="40px">
+                    <v-gravatar :email="member.owner + '@deip.world'" />
+                </v-avatar> 
+                <router-link to="/userDetails" class="a c-pl-3">{{member.owner}}</router-link>
+            </div>
+            <div class="grey--text"> {{convertToPercent(member.amount)}}%</div>
+        </div>
 
-        <div class="row-nowrap justify-between align-center c-pt-4">
-            <div>
-                <v-avatar size="40px">
-                    <img src="http://deip.world/static/akulik.39060d33.png" alt="User">
-                </v-avatar>
-                <router-link to="/userDetails" class="a c-pl-3">Alex Shkor</router-link>
-            </div>
-            <div class="grey--text">15%</div>
-        </div>
-        <div class="row-nowrap justify-between align-center c-pt-4">
-            <div>
-                <v-avatar size="40px">
-                    <img src="http://deip.world/static/ashkor.7ff44c16.png" alt="User">
-                </v-avatar>
-                <router-link to="/userDetails" class="a c-pl-3">Alex Shkor</router-link>
-            </div>
-            <div class="grey--text">15%</div>
-        </div>
-        <div class="c-pt-4 c-pb-6">
-            <v-btn outline icon color="primary" class="ma-0">
+        <div v-if="canJoinResearchGroup"  class="c-pt-4 c-pb-6">
+            <v-btn @click="joinResearchGroup()" outline icon color="primary" class="ma-0">
                 <v-icon small>add</v-icon>
             </v-btn>
             <span class="deip-blue-color c-pl-3">Join research group</span>
@@ -44,17 +35,9 @@
         <div class="sm-title bold c-pt-6">Votes: 1034</div>
 
         <div class="c-pb-6 c-pt-4">
-            <div class="row align-center justify-between vote-btn-area">
-                <v-btn small color="primary" dark class="ma-0">Vote</v-btn>
-                <div class="deip-blue-color pr-2">Phys. 11223</div>
-            </div>
-            <div class="row align-center justify-between vote-btn-area c-mt-1">
-                <v-btn small color="primary" dark class="ma-0">Vote</v-btn>
-                <div class="deip-blue-color pr-2">Phys. 11223</div>
-            </div>
-            <div class="row align-center justify-between vote-btn-area c-mt-1">
-                <v-btn small color="primary" dark class="ma-0">Vote</v-btn>
-                <div class="deip-blue-color pr-2">Phys. 11223</div>
+            <div v-for="(discipline, index) in disciplinesList" class="row align-center justify-between vote-btn-area" :class="index == 0 ? '':'c-mt-1'">
+           <!--     <v-btn small color="primary" dark class="ma-0">Vote</v-btn> -->
+                <div class="deip-blue-color c-p-2">{{discipline.name}}:  {{researchWeightByDiscipline[discipline.id] != null ? researchWeightByDiscipline[discipline.id] : 0}}</div>
             </div>
         </div>
 
@@ -69,7 +52,7 @@
                 <v-icon small>add</v-icon>
                 <div class="col-grow add-review-label">
                     Add a review
-                    <span class="caption grey--text">reward 15%</span>
+                    <span class="caption grey--text">reward {{convertToPercent(research.review_share_in_percent)}}%</span>
                 </div>
             </v-btn>
         </div>
@@ -90,7 +73,7 @@
         <div class="c-pt-4 c-pb-6">
             <div>
                 <span class="half-bold">Review reward</span>
-                <span class="deip-blue-color right">15%</span>
+                <span class="deip-blue-color right">{{convertToPercent(research.review_share_in_percent)}}%</span>
             </div>
             <div>
                 <span class="half-bold">Total views</span>
@@ -102,7 +85,7 @@
             <v-divider></v-divider>
         </div>
 
-        <div class="sm-title bold c-pt-6">Total Earned</div>
+   <!--  <div class="sm-title bold c-pt-6">Total Earned</div>
         
         <div class="c-pt-4 c-pb-6">
             <div>
@@ -121,7 +104,7 @@
                 <span class="half-bold">Quantum optics</span>
                 <span class="right">5234</span>
             </div>
-        </div>
+        </div> -->
 
         <div style="margin: 0 -24px">
             <v-divider></v-divider>
@@ -149,8 +132,52 @@
 <script>
     export default {
         name: "ResearchDetailsSidebar",
+        props: {
+            research: { required: true, type: Object, default: null },
+            membersList: { required: true, type: Array, default: [] },
+            disciplinesList: { required: true, type: Array, default: [] },
+            totalVotesList: { required: true, type: Array, default: [] }
+        },
         data() {
-            return {};
+            return {
+                user: { name: 'alice', postingWif: '5JGoCjh27sfuCzp7kQme5yMipaQtgdVLPiZPr9zaCwJVrSrbGYx' },
+                canJoinResearchGroup: true
+            };
+        },
+        computed: {
+            researchWeightByDiscipline: function() {
+                var map = {};
+                for (var i = 0; i < this.totalVotesList.length; i++) {
+                    const tvoByContent = this.totalVotesList[i];
+                    for (var j = 0; j < tvoByContent.length; j++) {
+                        const tvo = tvoByContent[j];
+                        const discipline_id = tvo.discipline_id.toString();
+                        const total_research_reward_weight = tvo.total_research_reward_weight;
+
+                        if(map[discipline_id] === undefined)
+                            map[discipline_id] = total_research_reward_weight;
+                        else
+                            map[discipline_id] += total_research_reward_weight;
+                    }
+                }
+                return map;
+            }
+        },
+        methods: {
+            joinResearchGroup : function(){
+                // deipRpc.broadcast.createResearchGroupJoinRequestAsync(
+				// 	this.user.postingWif,
+				// 	this.user.name,
+				// 	this.research.research_group_id, 
+				// 	"I wanna trulala",
+				// 	new Date( new Date().getTime() + 2 * 24 * 60 * 60 * 1000 )
+				// ).then((data) => {
+                //     debugger;
+                //     alert(data);
+                // }, (err) => {
+                //     alert(err.message);
+                // });            
+            },
         }
     };
 </script>
