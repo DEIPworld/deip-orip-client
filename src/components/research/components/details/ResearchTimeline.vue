@@ -6,7 +6,7 @@
                     <div class="start-point deip-blue-bg white--text" slot="activator">Start</div>
                     <div>
                         <div class="black--text half-bold">{{research.title}}</div>
-                        <div class="grey--text">{{new Date(research.created_at).toString()}}</div>
+                        <div class="grey--text">{{new Date(research.created_at).toDateString()}}</div>
                     </div>
                 </v-tooltip>
             </div>
@@ -21,7 +21,7 @@
                         <div class="chapter-point deip-blue-bg" slot="activator"></div>
                         <div>
                             <div class="black--text half-bold">Chapter {{ i + 1 }}, {{contentList[i].title}}</div>
-                            <div class="grey--text">{{new Date(contentList[i].created_at).toString()}}</div>
+                            <div class="grey--text text-align-center">{{new Date(contentList[i].created_at).toDateString()}}</div>
                         </div>
                     </v-tooltip>
                 </div>

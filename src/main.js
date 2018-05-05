@@ -4,6 +4,7 @@ import Vue from 'vue'
 import App from './App'
 import router from './router'
 import Vuetify from 'vuetify'
+import Gravatar from 'vue-gravatar';
 import 'vuetify/dist/vuetify.css'
 import './styles/common.less'
 import 'vue2-dropzone/dist/vue2Dropzone.css'
@@ -19,9 +20,16 @@ Vue.use(Vuetify, {
         'primary': '#2F80ED'
     }
 })
+Vue.component('v-gravatar', Gravatar);
+
 Vue.config.productionTip = false
 deipRpc.api.setOptions({ url: 'ws://206.189.175.10:11011/' });
-deipRpc.config.set('chain_id', 'd39f9b0d2ed1fd88747e87cab0ac2e6a6708782e70f3e9333f5c782c2d0a5d3d');
+deipRpc.config.set('chain_id', 'fb29358afb5afc7a7307f0307a4965e65f1c7123087c259b3084a6e39ea584dd');
+
+Vue.prototype.DEIP_100_PERCENT = 10000;
+Vue.prototype.DEIP_1_PERCENT = 10000 / 100;
+Vue.prototype.convertToPercent = function(amount) { return amount * 100 / 10000 };
+
 
 /* eslint-disable no-new */
 new Vue({
