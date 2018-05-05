@@ -5,31 +5,40 @@
         <div class="row-nowrap justify-between align-center c-pt-4">
             <div>
                 <v-avatar size="40px">
-                    <img src="http://deip.world/static/akulik.39060d33.png" alt="User">
+                    <img src="http://deip.world/static/ashkor.7ff44c16.png" alt="User">
                 </v-avatar>
                 
                 <router-link to="/userDetails" class="a c-pl-3">Alex Shkor</router-link>
             </div>
-            <div class="grey--text">15%</div>
+            <div class="grey--text">35%</div>
         </div>
         <div class="row-nowrap justify-between align-center c-pt-4">
             <div>
                 <v-avatar size="40px">
-                    <img src="http://deip.world/static/ashkor.7ff44c16.png" alt="User">
+                    <img src="http://deip.world/static/akulik.39060d33.png" alt="User">
                 </v-avatar>
-                <router-link to="/userDetails" class="a c-pl-3">Alex Shkor</router-link>
+                <router-link to="/userDetails" class="a c-pl-3">Alex Kulik</router-link>
+            </div>
+            <div class="grey--text">50%</div>
+        </div>
+        <div class="row-nowrap justify-between align-center c-pt-4">
+            <div>
+                <v-avatar size="40px">
+                    <img src="http://deip.world/static/aermolaev.bf4059ea.png" alt="User">
+                </v-avatar>
+                <router-link to="/userDetails" class="a c-pl-3">Artur Yermalayeu</router-link>
             </div>
             <div class="grey--text">15%</div>
         </div>
         <div class="c-mv-6">
-            <span class="deip-label">3 JOIN REQUESTS</span>
+            <span class="deip-label">2 JOIN REQUESTS</span>
         </div>
 
         <div style="margin: 0 -24px">
             <v-divider></v-divider>
             <div class="row-nowrap">
                 <div class="col-6 c-pv-6 display-flex" v-ripple>
-                    <div class="clickable-label text-align-center c-m-auto">123<br>Folowers</div>
+                    <div class="clickable-label text-align-center c-m-auto">15<br>Folowers</div>
                 </div>
                 <div class="vertical-devider"></div>
                 <!-- <div class="col-6 c-pv-6 display-flex" v-ripple>
@@ -44,19 +53,19 @@
         <div class="c-pt-4 c-pb-6">
             <div>
                 <span class="half-bold">DEIP tokens</span>
-                <span class="right">12345</span>
+                <span class="right">2 345</span>
             </div>
             <div>
                 <span class="half-bold">Physcis</span>
-                <span class="right">23432</span>
+                <span class="right">432</span>
             </div>
             <div>
                 <span class="half-bold">Quantum physics</span>
-                <span class="right">333</span>
+                <span class="right">1 333</span>
             </div>
             <div>
                 <span class="half-bold">Quantum optics</span>
-                <span class="right">5234</span>
+                <span class="right">4 234</span>
             </div>
         </div>
 

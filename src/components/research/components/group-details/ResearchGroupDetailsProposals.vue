@@ -38,11 +38,11 @@
                     </div>
                 </v-expansion-panel-content>
 
-                <v-expansion-panel-content v-for="i in 3" :key="i">
+                <v-expansion-panel-content>
                     <div slot="header">
                         <div class="row-nowrap align-center" v-on:click.stop>
                             <div class="id-col">
-                                <div class="a">1234</div>
+                                <div class="a">83</div>
                             </div>
                             <div class="proposal-type">
                                 <v-icon small color="primary">person_add</v-icon>
@@ -52,7 +52,7 @@
                                 <div class="caption">27 Mar, 2018</div>
                             </div>
                             <div class="date">
-                                <div class="caption">27 Mar, 2018</div>
+                                <div class="caption">27 May, 2018</div>
                             </div>
                             <div class="created-by">
                                 <router-link to="/userDetails" class="a overflow-ellipsis">A. Kastsiushkina</router-link>
@@ -79,21 +79,62 @@
                     </v-card>
                 </v-expansion-panel-content>
 
-                <v-expansion-panel-content v-for="i in 2" :key="i">
+                <v-expansion-panel-content>
                     <div slot="header">
                         <div class="row-nowrap align-center" v-on:click.stop>
                             <div class="id-col">
-                                <div class="a">777</div>
+                                <div class="a">89</div>
+                            </div>
+                            <div class="proposal-type">
+                                <v-icon small color="primary">person_add</v-icon>
+                                <router-link to="/userDetails" class="a c-ml-2">E. Marushko</router-link>
+                            </div>
+                            <div class="date">
+                                <div class="caption">22 Apr, 2018</div>
+                            </div>
+                            <div class="date">
+                                <div class="caption">9 May, 2018</div>
+                            </div>
+                            <div class="created-by">
+                                <router-link to="/userDetails" class="a overflow-ellipsis">E. Marushko</router-link>
+                            </div>
+                            <div class="voted">
+                                <div>0 of 52%</div>
+                            </div>
+                            <div class="action-col">
+                                <v-btn flat small color="primary" class="ma-0">Approve</v-btn>
+                            </div>
+                        </div>
+                    </div>
+                    <v-card>
+                        <v-card-text class="pt-0">
+                            <div class="c-ph-2">
+                                <div class="caption">
+                                    Seamlessly leverage existing empowered relationships whereas high-payoff potentialities. 
+                                    Dynamically maximize accurate networks whereas revolutionary innovation. Compellingly 
+                                    repurpose 24/365 deliverables rather than holistic intellectual capital. Authoritatively 
+                                    evolve prospective paradigms without vertical services. Compellingly.
+                                </div>
+                            </div>
+                        </v-card-text>
+                    </v-card>
+                </v-expansion-panel-content>
+
+                <v-expansion-panel-content>
+                    <div slot="header">
+                        <div class="row-nowrap align-center" v-on:click.stop>
+                            <div class="id-col">
+                                <div class="a">101</div>
                             </div>
                             <div class="proposal-type">
                                 <v-icon small color="primary">note_add</v-icon>
                                 <div class="a c-ml-2">Blockchain innovate  best way maintainable Blockchain innovate  best way maintainable</div>
                             </div>
                             <div class="date">
-                                <div class="caption">27 Mar, 2018</div>
+                                <div class="caption">30 Mar, 2018</div>
                             </div>
                             <div class="date">
-                                <div class="caption">27 Mar, 2018</div>
+                                <div class="caption">10 Jun, 2018</div>
                             </div>
                             <div class="created-by">
                                 <router-link to="/userDetails" class="a overflow-ellipsis">N. Ignatiev</router-link>
