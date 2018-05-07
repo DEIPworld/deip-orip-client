@@ -5,7 +5,7 @@
             frameborder="0" 
             height="100%" 
             width="100%" 
-            :src="`http://146.185.140.12:8181/${content.research_id}/${content.content}`">
+            :src="`${fileStorageBaseUrl}/public/files/${content.research_id}/${content.content}`">
         </iframe>
 
         <div id="bars">
@@ -52,10 +52,14 @@
 <script>
     //import MyTextureEditor from './MyTextureEditor';
 
+    import config from './../../../../src/config'
+
     export default {
         name: "ResearchContentDetails",
         data() { 
             return {
+                fileStorageBaseUrl: config['deip-server-url'],
+
                 content: {},
                 disciplinesList: [],
                 totalVotesList: [],

@@ -1,6 +1,5 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import HelloWorld from '@/components/HelloWorld'
 import AdminPage from '@/components/AdminPage'
 import ResearchItemLayout from '@/components/ResearchItemLayout'
 
@@ -20,23 +19,25 @@ import DataFillingRegesitration from '@/components/user/components/auth/DataFill
 import ClaimExpertiseRegesitration from '@/components/user/components/auth/ClaimExpertiseRegesitration'
 import PreliminaryRegistration from '@/components/user/components/auth/PreliminaryRegistration'
 
+import { isLoggedIn } from './../utils/auth';
+
 Vue.use(Router)
 
-export default new Router({
+const router = new Router({
+    mode: 'history',
     routes: [{
-        path: '/',
-        name: 'HelloWorld',
-        component: HelloWorld,
-        meta: {
-            withoutHeader: true
-        }
-    }, {
         path: '/adminpage',
         name: 'AdminPage',
         component: AdminPage,
         meta: {
             withoutHeader: true
         }
+    }, {
+        path: '/sign-in',
+        component: UserAuthorization
+    }, {
+        path: '/sign-up',
+        component: PreliminaryRegistration
     }, {
         path: '/researchItem',
         name: 'ResearchItemLayout',
@@ -100,5 +101,28 @@ export default new Router({
         path: '/researchGroupCreating',
         name: 'ResearchGroupCreating',
         component: ResearchGroupCreating
+    }, {
+        path: '*',
+        redirect: '/researchFeed'
     }]
 })
+
+
+router.beforeEach((to, from, next) => {
+    if (to.path == '/sign-in' || to.path == '/sign-up') {
+        if (isLoggedIn()) {
+            next('/') // if token is already presented redirect user to home page
+        } else {
+            next(); // otherwise redirect to sign-in page
+        }
+    } else {
+        if (isLoggedIn()) {
+            next() // if there is a token allow to visit requested route
+        } else {
+            next('/sign-in') // otherwise redirect to sign-in page
+        }
+    }
+})
+
+
+export default router;

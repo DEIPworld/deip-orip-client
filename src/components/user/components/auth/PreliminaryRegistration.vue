@@ -22,13 +22,13 @@
                 ></v-text-field>
                 <v-text-field 
                     label="First name"
-                    v-model="formData.firstname" 
+                    v-model="formData.firstName" 
                     :rules="[rules.required, rules.nameChars]"
                     @input="resetKey"
                 ></v-text-field>
                 <v-text-field 
                     label="Last name"
-                    v-model="formData.lastname" 
+                    v-model="formData.lastName" 
                     :rules="[rules.required, rules.nameChars]"
                     @input="resetKey"
                 ></v-text-field>
@@ -86,7 +86,7 @@
             </div>
 
             <v-snackbar :timeout="4000" color="error" v-model="isServerError">
-                Server error
+                {{serverError}}
                 <v-btn dark flat @click.native="isServerError = false">Close</v-btn>
             </v-snackbar>
         </div>
@@ -96,6 +96,7 @@
 
 <script>
     import _ from 'lodash';
+    import authService from './../../../../services/auth'
 
     export default {
         name: 'PreliminaryRegistration',
@@ -109,10 +110,12 @@
                 isServerValidated: false, // true only when server accepts all information
                 isServerError: false,
 
+                serverError: null,
+
                 formData: {
                     email: '',
-                    firstname: '',
-                    lastname: '',
+                    firstName: '',
+                    lastName: '',
                     username: '',
                     privKey: undefined,
                     pubKey: undefined,
@@ -144,20 +147,17 @@
             },
             finishRegistration() {
                 console.log(this.formData);
-                this.formData; // object which has all necessary info
-
                 this.isSaving = true;
 
-                setTimeout(() => {
-                    this.isSaving = false;
-                    
-                    // condition is just for testing
-                    if (this.formData.username === 'error') {
-                        this.isServerError = true;
-                    } else {
+                authService.signUp(this.formData)
+                    .then(() => {
+                        this.isSaving = false;
                         this.isServerValidated = true;
-                    }
-                }, 1500);
+                    }, (err) => {
+                        this.isSaving = false;
+                        this.isServerError = true;
+                        this.serverError = err.response.data.errors[0];
+                    });
             },
             generatePrivateKey() {
                 let keys = deipRpc.auth.getPrivateKeys(

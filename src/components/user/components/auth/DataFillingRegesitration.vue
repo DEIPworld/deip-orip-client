@@ -20,13 +20,13 @@
 
                 <v-text-field 
                     label="First name"
-                    v-model="formData.firstname" 
+                    v-model="formData.firstName" 
                     :rules="[rules.required, rules.nameChars]"
                     @input="resetKey"
                 ></v-text-field>
                 <v-text-field 
                     label="Last name"
-                    v-model="formData.lastname" 
+                    v-model="formData.lastName" 
                     :rules="[rules.required, rules.nameChars]"
                     @input="resetKey"
                 ></v-text-field>
@@ -86,8 +86,8 @@
                 isUsernameChecking: false,
 
                 formData: {
-                    firstname: '',
-                    lastname: '',
+                    firstName: '',
+                    lastName: '',
                     username: '',
                     privKey: undefined,
                     pubKey: undefined,

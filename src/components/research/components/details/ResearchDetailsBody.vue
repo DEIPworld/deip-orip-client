@@ -212,7 +212,9 @@
 
 <script>
 
-    import vueDropzone from "vue2-dropzone";
+    import vueDropzone from 'vue2-dropzone';
+    import {getAccessToken} from './../../../../utils/auth'
+    import config from './../../../../../src/config'
 
     export default {
         name: "ResearchDetailsBody",
@@ -230,9 +232,13 @@
             return {
 
                 dropzoneOptions: {
-                    url: 'http://146.185.140.12:8181/upload-content',
+                    url: `${config['deip-server-url']}/api/files/upload-content`,
+
                     paramName : "research-content",
-                    headers: { "research-id": this.$route.params.research_id },
+                    headers: { 
+                        "Research-Id": this.$route.params.research_id,
+                        "Authorization": 'Bearer ' + getAccessToken()
+                    },
                     maxFiles: 1,
                     thumbnailWidth: 150,
                     autoProcessQueue: false,
@@ -329,7 +335,6 @@
                     this.newContentProposal.isOpen = false;
                     alert(err.message);
                 });
-
             }
         },
         mounted() {
