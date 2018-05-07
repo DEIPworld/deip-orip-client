@@ -17,7 +17,6 @@
                     <at-textarea type="text" v-model="newResearchGroup.description" placeholder="Description"></at-textarea>
                     <div class="row at-row flex-center">
                         <at-input type="number" v-model="newResearchGroup.quorumPercent" placeholder="Quorum percent"></at-input>
-                        <at-input type="number" v-model="newResearchGroup.tokensAmount" placeholder="Tokens amount"></at-input>
                     </div>
                     <at-button type="primary" v-on:click="createResearchGroup()" v-bind:disabled="isAddingGroupDisabled">Create Group</at-button>
                 </div>
@@ -212,8 +211,7 @@
                     name: "",
                     permlink: "",
                     description: "",
-                    quorumPercent: null,
-                    tokensAmount: null
+                    quorumPercent: null
                 },
                 proposals: [],
                 newProposal: {
@@ -302,8 +300,7 @@
                     this.newResearchGroup.name,
                     permlink,
                     this.newResearchGroup.description,
-                    parseInt(this.newResearchGroup.quorumPercent),
-                    parseInt(this.newResearchGroup.tokensAmount)
+                    parseInt(this.newResearchGroup.quorumPercent)
                 ).then(() => {
                     this.newResearchGroup = {};
                     this.loadResearchGroups();
@@ -444,7 +441,6 @@
             isAddingGroupDisabled() {
                 return !this.newResearchGroup.description || !this.newResearchGroup.name
                     || !parseInt(this.newResearchGroup.quorumPercent) > 0 
-                    || !parseInt(this.newResearchGroup.tokensAmount) > 0
             },
             isAddingProposalDisabled() {
                 return !this.newProposal.data || !parseInt(this.newProposal.actionId) > 0;
@@ -474,7 +470,7 @@
 
 
 <style>
-    /*@import 'at-ui-style'; */
+   /* @import 'at-ui-style';   */
     
     .at-input  {
         padding: 5px

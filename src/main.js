@@ -15,6 +15,8 @@ import './components/user/index';
 
 import './../deip-rpc/dist/deip.min';
 
+import config from './config'
+
 Vue.use(Vuetify, {
     theme: {
         'primary': '#2F80ED'
@@ -23,8 +25,8 @@ Vue.use(Vuetify, {
 Vue.component('v-gravatar', Gravatar);
 
 Vue.config.productionTip = false
-deipRpc.api.setOptions({ url: 'ws://206.189.175.10:11011/' });
-deipRpc.config.set('chain_id', 'fb29358afb5afc7a7307f0307a4965e65f1c7123087c259b3084a6e39ea584dd');
+deipRpc.api.setOptions({ url: config['deip-full-node-url'] });
+deipRpc.config.set('chain_id', config['chain_id']);
 
 Vue.prototype.DEIP_100_PERCENT = 10000;
 Vue.prototype.DEIP_1_PERCENT = 10000 / 100;
