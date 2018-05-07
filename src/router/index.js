@@ -34,9 +34,11 @@ const router = new Router({
         }
     }, {
         path: '/sign-in',
+        name: 'SignIn',
         component: UserAuthorization
     }, {
         path: '/sign-up',
+        name: 'SignUp',
         component: PreliminaryRegistration
     }, {
         path: '/researchItem',

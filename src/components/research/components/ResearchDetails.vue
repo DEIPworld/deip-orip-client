@@ -1,5 +1,5 @@
 <template>
-    <v-container fluid fill-height class="pa-0 two-column-page">
+    <v-container fluid fill-height class="pa-0 column-page">
 
         <div class="content-column">
             <div class="filling">

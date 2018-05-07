@@ -49,10 +49,10 @@
                     <v-icon dark small class="ml-2">add</v-icon>
                 </v-btn>
             </div>
-            <v-toolbar-title v-if="!isLoggedIn()">
-                <router-link v-if="!isLoggedIn()" class="sign-in" to="/sign-in">Sign In</router-link>
-                <router-link v-if="!isLoggedIn()" class="sign-up" to="/sign-up">Sign Up</router-link>
-            </v-toolbar-title>
+            <v-toolbar-items v-if="!isLoggedIn()">
+                <v-btn flat to="/sign-in">Sign In</v-btn>
+                <v-btn flat to="/sign-up">Sign Up</v-btn>
+            </v-toolbar-items>
         </v-toolbar>
 </template>
 

@@ -1,5 +1,5 @@
 <template>
-    <v-container fluid fill-height class="pa-0 two-column-page">
+    <v-container fluid fill-height class="pa-0 column-page">
         <v-card height="100%" class="sidebar">
             <research-feed-filter :filter="filter" @update="updateSelection"></research-feed-filter>
         </v-card>
