@@ -80,6 +80,9 @@
                                         <div class="deip-blue-color subheading">
                                             Antagonistically maximize market-driven quality.
                                         </div>
+                                        <div class="caption grey--text c-pt-2">
+                                            Alex Shkor  ·  Artyom Ruseckiy  ·  Egor Tsaryk
+                                        </div>
                                     </div>
                                     <div class="width-4 list-body-cell text-align-center half-bold">12</div>
                                     <div class="width-8 list-body-cell text-align-center">
@@ -91,6 +94,9 @@
                                     <div class="col-grow list-body-cell">
                                         <div class="deip-blue-color subheading">
                                             Antagonistically maximize market-driven quality.
+                                        </div>
+                                        <div class="caption grey--text c-pt-2">
+                                            Alex Shkor  ·  Artyom Ruseckiy  ·  Egor Tsaryk
                                         </div>
                                     </div>
                                     <div class="width-4 list-body-cell text-align-center half-bold">12</div>

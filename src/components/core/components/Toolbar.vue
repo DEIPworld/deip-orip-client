@@ -88,20 +88,4 @@
         color: #ffffff;
         text-decoration: none;
     }
-    .sign-in {
-        user-select: none;
-        cursor: pointer;
-        color: #ffffff;
-        margin-left: 5px;
-        margin-right: 5px;
-        text-decoration: none;
-    }
-    .sign-up {
-        user-select: none;
-        cursor: pointer;
-        color: #ffffff;
-        margin-left: 5px;
-        margin-right: 5px;
-        text-decoration: none;
-    }
 </style>
