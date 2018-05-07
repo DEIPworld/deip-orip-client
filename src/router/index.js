@@ -18,6 +18,7 @@ import EmailSendingRegesitration from '@/components/user/components/auth/EmailSe
 import DataFillingRegesitration from '@/components/user/components/auth/DataFillingRegesitration'
 import ClaimExpertiseRegesitration from '@/components/user/components/auth/ClaimExpertiseRegesitration'
 import PreliminaryRegistration from '@/components/user/components/auth/PreliminaryRegistration'
+import UserWallet from '@/components/user/components/UserWallet'
 
 import { isLoggedIn } from './../utils/auth';
 
@@ -103,6 +104,10 @@ const router = new Router({
         path: '/researchGroupCreating',
         name: 'ResearchGroupCreating',
         component: ResearchGroupCreating
+    }, {
+        path: '/userWallet',
+        name: 'UserWallet',
+        component: UserWallet
     }, {
         path: '*',
         redirect: '/researchFeed'
