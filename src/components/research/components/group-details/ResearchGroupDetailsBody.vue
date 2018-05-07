@@ -4,19 +4,21 @@
             <v-icon small>date_range</v-icon>
             <span>Created 20 Jan 2018</span>
         </div>
-        <div class="display-1 half-bold c-mt-10">Research Group 1</div>
+        <div class="display-1 half-bold c-mt-10">DEIP Blockchain Research Team</div>
 
         <div class="c-pt-8">
-            Short description here.  Short description here.  Short description here. Or maybe some announcement: 
-            looking for high level math jedi. Excited to announce our new member... Maybe some group news feed (optional)?
-            Holisticly productivate economically sound best practices rather than 2.0 benefits. Monotonectally 
-            innovate bleeding-edge functionalities whereas strategic paradigms. Dramatically utilize open-source 
-            manufactured products before go forward technology. Quickly develop maintainable methods of empowerment 
-            vis-a-vis cross functional supply chains. Competently monetize process-centric solutions with synergistic 
-            initiatives.
+            We believe that science will be open and anyone will be able to use results of scientific findings. 
+            This should reveal huge human capital and boost knowledge creation. New science will work on global 
+            scale and let everyone from any place in the world to participate in scientific research. Review and 
+            assessment of academic papers will be transparent and controlled by decentralized protocol, which 
+            increases collaboration and incentivizes contribution to global science.
+            <br>
+            DEIP provides decentralized publishing platform headed by scientists and researchers.
+            Various mechanisms to fund a research. Getting financing by automated reward distribution or receive a direct grant of investment.
+            Economic model that incentivizes fair and qualitative feedback to provide collaborative environment for researches.
         </div>
         
-        <div class="c-pt-8 title">Grants: 4</div>
+        <div class="c-pt-8 title">Grants: 2</div>
 
         <div class="c-pt-6">
             <v-card>
@@ -34,7 +36,7 @@
                     <div class="list-line">
                         <div class="row-nowrap col-4 list-body-cell">
                             <v-avatar size="40px">
-                                <img src="http://deip.world/static/ashkor.7ff44c16.png" alt="User">
+                                <img src="http://deip.world/static/nignatiev.5ab584fd.png" alt="User">
                             </v-avatar>
                             <div class="col-grow c-pl-4">
                                 <router-link to="/userDetails" class="a subheading">Nikolay Ignatiev</router-link>
@@ -43,13 +45,13 @@
                         </div>
                         <div class="col-2 list-body-cell">
                             <div>
-                                <span class="uppercase bold">Phys:</span> 32234
+                                <span class="uppercase bold">Phys:</span> 234
                             </div>
                             <div>
-                                <span class="uppercase bold">Quant. Phys:</span> 32234
+                                <span class="uppercase bold">Quant. Phys:</span> 322
                             </div>
                             <div>
-                                <span class="uppercase bold">Quant. Opt:</span> 32234
+                                <span class="uppercase bold">Quant. Opt:</span> 3 223
                             </div>
                         </div>
                         <div class="col-2 text-align-center list-body-cell">60%</div>
@@ -71,17 +73,17 @@
                         </div>
                         <div class="col-2 list-body-cell">
                             <div>
-                                <span class="uppercase bold">Phys:</span> 32234
+                                <span class="uppercase bold">Phys:</span> 32
                             </div>
                             <div>
-                                <span class="uppercase bold">Quant. Phys:</span> 32234
+                                <span class="uppercase bold">Quant. Phys:</span> 934
                             </div>
                             <div>
-                                <span class="uppercase bold">Quant. Opt:</span> 32234
+                                <span class="uppercase bold">Quant. Opt:</span> 223
                             </div>
                         </div>
-                        <div class="col-2 text-align-center list-body-cell">146%</div>
-                        <div class="col-2 text-align-center list-body-cell">21 Jan 2018</div>
+                        <div class="col-2 text-align-center list-body-cell">23%</div>
+                        <div class="col-2 text-align-center list-body-cell">3 Feb 2018</div>
                         <div class="col-2 text-align-center list-body-cell">Russia</div>
                     </div>
 

@@ -8,16 +8,16 @@
 
         <div class="c-pt-4 c-pb-6">
             <div class="row justify-between">
-                <div class="half-bold">Physics</div>
-                <div>12 345</div>
+                <div class="half-bold">Anatomy</div>
+                <div>1 345</div>
             </div>
             <div class="row justify-between">
-                <div class="half-bold">Chemistry</div>
-                <div>145</div>
-            </div>
-            <div class="row justify-between">
-                <div class="half-bold">Science</div>
+                <div class="half-bold">Biochemistry</div>
                 <div>666</div>
+            </div>
+            <div class="row justify-between">
+                <div class="half-bold">Biology</div>
+                <div>145</div>
             </div>
         </div>
 
@@ -25,23 +25,28 @@
             <v-divider></v-divider>
             <div class="row-nowrap">
                 <div class="col-6 c-pv-6 display-flex" v-ripple>
-                    <div class="clickable-label text-align-center c-m-auto">123<br>Folowers</div>
+                    <div class="clickable-label text-align-center c-m-auto">23<br>Folowers</div>
                 </div>
                 <div class="vertical-devider"></div>
                 <div class="col-6 c-pv-6 display-flex" v-ripple>
-                    <div class="clickable-label text-align-center c-m-auto">43<br>Following</div>
+                    <div class="clickable-label text-align-center c-m-auto">4<br>Following</div>
                 </div>
             </div>
             <v-divider></v-divider>
         </div>
 
         <div class="c-pt-6 c-pb-6 pos-relative">
-            <div class="">linkedin.com/in/NikolayIgnatiev</div>
-            <div class="c-pt-1">
+            <div v-show="false" class="c-pt-1">
                 <!-- <v-icon>fas fa-lock</v-icon> --> NikolayIgnatiev
             </div>
-            <div class="c-pt-1">NikolayIgnatiev</div>
-            <div class="c-pt-1">NikolayIgnatiev@mail.ru</div>
+            <div class="c-pt-1">
+                <v-icon size="18" class="c-mr-2">mail</v-icon>
+                alex_skhor@mail.ru
+            </div>
+            <div class="c-pt-1">
+                <v-icon size="18" class="c-mr-2">phone</v-icon>
+                +375 25 90 05 003
+            </div>
             
             <v-icon small color="grey lighten-1" class="corner-edit">mode_edit</v-icon>
         </div>
@@ -59,7 +64,7 @@
             </div>
             <div>
                 <span class="half-bold">Registered</span>
-                <span class="right">19 Feb, 2020</span>
+                <span class="right">19 Feb, 2018</span>
             </div>
         </div>
         
