@@ -1,11 +1,12 @@
 <template>
     <v-container fluid fill-height class="pa-0" style="text-align: center;">
     
-        <iframe id="iframe" name="iframe1" 
+        <iframe v-if="content && content.research_id !== undefined && content.content !== undefined" id="iframe" name="iframe1" 
             frameborder="0" 
             height="100%" 
             width="100%" 
-            :src="`${fileStorageBaseUrl}/public/files/${content.research_id}/${content.content}`">
+            :src="`${fileStorageBaseUrl}/public/files/${content.research_id}/${content.content}`"
+             >
         </iframe>
 
         <div id="bars">
