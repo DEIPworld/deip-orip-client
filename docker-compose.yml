@@ -1,0 +1,8 @@
+version: '2'
+services:
+    deip-client:
+        build: .
+        container_name: "deip-client"
+        restart: always
+        ports:
+            - "80:80" # containers should not be exposed outside! (see ufw + docker security issue)

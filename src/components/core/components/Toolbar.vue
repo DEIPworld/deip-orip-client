@@ -6,17 +6,17 @@
             </v-toolbar-title>
             <v-spacer></v-spacer>
 
-            <v-btn icon large class="ma-0">
+            <v-btn v-if="isLoggedIn()" icon large class="ma-0">
                 <v-icon size="32px" color="grey lighten-1">search</v-icon>
             </v-btn>
-            <v-btn icon large class="ma-0">
+            <v-btn v-if="isLoggedIn()" icon large class="ma-0">
                 <v-badge color="amber darken-3" right overlap>
                     <v-icon size="32px" color="grey lighten-1">chat_bubble</v-icon>
                     <span slot="badge">5</span>
                 </v-badge>
             </v-btn>
 
-            <v-menu bottom left offset-y>
+            <v-menu v-if="isLoggedIn()" bottom left offset-y>
                 <v-btn fab flat icon class="ma-0" slot="activator">
                     <v-avatar size="32px">
                         <img src="http://deip.world/static/ashkor.7ff44c16.png" alt="User">
@@ -37,38 +37,40 @@
                     </v-list-tile>
 
                     <v-divider></v-divider>
-                    
-                    <v-list-tile @click="goToState('UserAuthorization')">
-                        <v-list-tile-title>User Authorization</v-list-tile-title>
-                    </v-list-tile>
-                    <v-list-tile @click="goToState('EmailSendingRegesitration')">
-                        <v-list-tile-title>Email Sending Regesitration</v-list-tile-title>
-                    </v-list-tile>
-                    <v-list-tile @click="goToState('DataFillingRegesitration')">
-                        <v-list-tile-title>Data Filling Regesitration</v-list-tile-title>
-                    </v-list-tile>
-                    <v-list-tile @click="goToState('PreliminaryRegistration')">
-                        <v-list-tile-title>Preliminary Registration</v-list-tile-title>
+                    <v-list-tile @click="signOut()">
+                        <v-list-tile-title>Sign Out</v-list-tile-title>
                     </v-list-tile>
                 </v-list>
             </v-menu>
 
-            <div class="mx-3" style="width: 180px">
+            <div v-if="isLoggedIn()" class="mx-3" style="width: 180px">
                 <v-btn dark round color="primary" class="full-width ma-0" to="/startCreateResearch">
                     <div class="col-grow">Add Research</div>
                     <v-icon dark small class="ml-2">add</v-icon>
                 </v-btn>
             </div>
+            <v-toolbar-title v-if="!isLoggedIn()">
+                <router-link v-if="!isLoggedIn()" class="sign-in" to="/sign-in">Sign In</router-link>
+                <router-link v-if="!isLoggedIn()" class="sign-up" to="/sign-up">Sign Up</router-link>
+            </v-toolbar-title>
         </v-toolbar>
 </template>
 
 <script>
+
+    import { isLoggedIn, clearAccessToken } from './../../../utils/auth'
+
     export default {
         name: 'Toolbar',
         props: {
             drawer: Boolean
         },
         methods: {
+            isLoggedIn: isLoggedIn,
+            signOut: function() {
+                clearAccessToken()
+                this.$router.go('/sign-in')
+            },
             updateDrawer(value) {
                 this.$emit('update', value);
             },
@@ -84,6 +86,22 @@
         user-select: none;
         cursor: pointer;
         color: #ffffff;
+        text-decoration: none;
+    }
+    .sign-in {
+        user-select: none;
+        cursor: pointer;
+        color: #ffffff;
+        margin-left: 5px;
+        margin-right: 5px;
+        text-decoration: none;
+    }
+    .sign-up {
+        user-select: none;
+        cursor: pointer;
+        color: #ffffff;
+        margin-left: 5px;
+        margin-right: 5px;
         text-decoration: none;
     }
 </style>

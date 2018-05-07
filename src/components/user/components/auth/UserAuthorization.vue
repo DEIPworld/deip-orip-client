@@ -33,9 +33,9 @@
                 </div>
             </v-form>
 
-            <v-snackbar :timeout="4000" color="error" v-model="isWrongCreds">
-                Wrong credentials
-                <v-btn dark flat @click.native="isWrongCreds = false">Close</v-btn>
+            <v-snackbar :timeout="4000" color="error" v-model="isServerError">
+                {{serverError}}
+                <v-btn dark flat @click.native="isServerError = false">Close</v-btn>
             </v-snackbar>
         </div>
 
@@ -43,6 +43,10 @@
 </template>
 
 <script>
+
+    import authService from './../../../../services/auth'
+    import {decodedToken, clearAccessToken, setAccessToken} from './../../../../utils/auth'
+
     export default {
         name: 'UserAuthorization',
         data() {
@@ -52,7 +56,8 @@
                 privKey: '',
                 isHiddenPassword: true,
                 isChecking: false,
-                isWrongCreds: false,
+                isServerError: false,
+                serverError: null,
 
                 rules: {
                     required: (value) => !!value || 'This field is required'
@@ -63,12 +68,53 @@
             login() {
                 if (this.$refs.form.validate()) {
                     this.isChecking = true;
+                    //yahorkatsaryk
+                    //5JH1vT7oxXSJEZagyU7K5fRJdZ8Ek7NEg3h9nkoiXxK7gQuBo1Z
+                    
+                    authService.signIn({username: this.username})
+                        .then((response) => {
 
-                    // imitation of data sending
-                    setTimeout(() => {
-                        this.isChecking = false;
-                        this.isWrongCreds = true;
-                    }, 1500);
+                            if (response.success) {
+                                const decoded = decodedToken(response.token);
+                                const pubKey = decoded.pubKey;
+
+                                var isValid;
+                                try {
+                                    isValid = deipRpc.auth.wifIsValid(this.privKey, pubKey);
+                                } catch (err) {
+                                    isValid = false;
+                                }
+                                
+                                if (isValid) {
+                                    // The jwt is being used by Vue router and File uploader api
+                                    // to verify that user has logged successfully and entered his private key.
+                                    // TODO: We should make decision on how to store private keys at UI. 
+                                    // For now we can use local storage but it's not secure enough due to XSS attacks
+                                    // and compromised thirdparties sources.
+                                    setAccessToken(response.token, this.privKey)
+                                    this.isChecking = false;
+                                    this.isServerError = false;
+                                    this.isServerValidated = true;
+                                    this.$router.go('/');
+                                } else {
+                                    clearAccessToken();
+                                    this.isChecking = false;
+                                    this.isServerError = true;
+                                    this.serverError = `Invalid private key for "${this.username}"`
+                                }
+
+                            } else {
+                                clearAccessToken();
+                                this.isChecking = false;
+                                this.isServerError = true;
+                                this.serverError = response.info;
+                            } 
+                        }, (err) => {
+                            clearAccessToken();
+                            this.isChecking = false;
+                            this.isServerError = true;
+                            this.serverError = err.message
+                        });
                 }
             }
         }
