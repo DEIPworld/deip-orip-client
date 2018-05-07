@@ -37,7 +37,10 @@
         <div class="c-pb-6 c-pt-4">
             <div v-for="(discipline, index) in disciplinesList" class="row align-center justify-between vote-btn-area" :class="index == 0 ? '':'c-mt-1'">
            <!--     <v-btn small color="primary" dark class="ma-0">Vote</v-btn> -->
-                <div class="deip-blue-color c-p-2">{{discipline.name}}:  {{researchWeightByDiscipline[discipline.id] != null ? researchWeightByDiscipline[discipline.id] : 0}}</div>
+                <div class="deip-blue-color c-p-2">
+                    {{discipline.name}}:  
+                    {{researchWeightByDiscipline[discipline.id] != null ? researchWeightByDiscipline[discipline.id] : 0}}
+                </div>
             </div>
         </div>
 
@@ -45,14 +48,16 @@
             <v-divider></v-divider>
         </div>
 
-        <div class="sm-title bold c-pt-6">Reviews: 2</div>
+        <div class="sm-title bold c-pt-6">Reviews</div>
 
         <div class="c-pt-4 c-pb-6">
-            <v-btn dark round outline color="primary" class="full-width ma-0">
+            <v-btn dark round outline color="primary" class="full-width ma-0" @click.native="$emit('showReviewDialog');">
                 <v-icon small>add</v-icon>
                 <div class="col-grow add-review-label">
                     Add a review
-                    <span class="caption grey--text">reward {{convertToPercent(research.review_share_in_percent)}}%</span>
+                    <span class="caption grey--text">
+                        reward {{convertToPercent(research.review_share_in_percent)}}%
+                    </span>
                 </div>
             </v-btn>
         </div>

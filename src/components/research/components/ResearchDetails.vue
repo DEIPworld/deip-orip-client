@@ -3,22 +3,30 @@
 
         <div class="content-column">
             <div class="filling">
-                <research-details-body :contentList="contentList" 
-                                       :research="research" 
-                                       :membersList="membersList"
-                                       :disciplinesList="disciplinesList"
-                                       :totalVotesList="totalVotesList">
-                </research-details-body>
+                <research-details-body 
+                    :content-list="contentList" 
+                    :research="research" 
+                    :members-list="membersList"
+                    :disciplines-list="disciplinesList"
+                    :total-votes-list="totalVotesList"
+                ></research-details-body>
             </div>
         </div>
 
         <v-card height="100%" class="sidebar">
-            <research-details-sidebar :research="research" 
-                                      :membersList="membersList"
-                                      :disciplinesList="disciplinesList"
-                                      :totalVotesList="totalVotesList">
-            </research-details-sidebar>
+            <research-details-sidebar 
+                :research="research" 
+                :members-list="membersList"
+                :disciplines-list="disciplinesList"
+                :total-votes-list="totalVotesList"
+                @showReviewDialog="showReviewDialog"
+            ></research-details-sidebar>
         </v-card>
+
+        <adding-research-review-dialog 
+            :is-shown="isReviewDialogShown"
+            :research="research"
+        ></adding-research-review-dialog>
     </v-container>   
 </template>
 
@@ -31,11 +39,15 @@
                 contentList: [],
                 membersList: [],
                 disciplinesList: [],
-                totalVotesList: []
+                totalVotesList: [],
+
+                isReviewDialogShown: { value: false }
             }
         },
         methods: {
-
+            showReviewDialog() {
+                this.isReviewDialogShown.value = true;
+            }
         },
         created() {
 
