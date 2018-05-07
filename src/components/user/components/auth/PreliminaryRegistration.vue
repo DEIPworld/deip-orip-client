@@ -149,6 +149,8 @@
                 console.log(this.formData);
                 this.isSaving = true;
 
+                delete this.formData.privKey;
+
                 authService.signUp(this.formData)
                     .then(() => {
                         this.isSaving = false;
