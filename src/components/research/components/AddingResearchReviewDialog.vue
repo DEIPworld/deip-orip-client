@@ -19,8 +19,12 @@
                     <div class="row c-pt-8">
                         <div class="col-8 c-pr-6">
                             <v-card class="c-p-6">
-                                <div class="deip-blue-color half-bold subheading">DEIP scientific team</div>
-                                <div class="caption grey--text c-pt-2">Alex Shkor  ·  Artyom Ruseckiy  ·  Egor Tsaryk</div>
+                                <div class="deip-blue-color half-bold subheading">
+                                    {{ research.title }}
+                                </div>
+                                <div class="caption grey--text c-pt-2">
+                                    {{ authorsStr }}
+                                </div>
                             </v-card>
 
                             <div class="c-pt-6">
@@ -83,11 +87,14 @@
 </template>
 
 <script>
+    import _ from 'lodash';
+
     export default {
         name: "AddingResearchReviewDialog",
         props: {
             isShown: { type: Object, required: true },
-            research: Object
+            research: Object,
+            membersList: Object
         },
         data() { 
             return {
@@ -99,6 +106,11 @@
             }
         },
         methods: {},
+        computed: {
+            authorsStr() {
+                return _(this.membersList).map('owner').join(' · ');
+            }
+        },
         watch: {
             'isShown.value': function(value) {
                 if (value === true) {

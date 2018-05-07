@@ -26,6 +26,7 @@
         <adding-research-review-dialog 
             :is-shown="isReviewDialogShown"
             :research="research"
+            :members-list="membersList"
         ></adding-research-review-dialog>
     </v-container>   
 </template>

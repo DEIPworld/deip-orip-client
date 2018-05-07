@@ -3,17 +3,17 @@
         <div class="row justify-between align-center">
             <div>
                 <v-icon size="18px">date_range</v-icon>
-                <span v-if="research">Created on {{new Date(research.created_at).toDateString()}}</span>
+                <span v-if="research">Created on {{ new Date(research.created_at).toDateString() }}</span>
             </div>
            <!-- <v-btn @click="afterComplete" small color="primary" class="ma-0">Vote</v-btn> -->
         </div>
 
         <div class="display-1 half-bold c-mt-10">
-            {{research.title}}
+            {{ research.title }}
         </div>
 
         <div class="c-pt-8">
-            {{research.abstract}}
+            {{ research.abstract }}
         </div>
 
         <div class="c-pt-8 title">Timeline</div>
