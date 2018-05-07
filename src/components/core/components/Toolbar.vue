@@ -37,19 +37,6 @@
                     </v-list-tile>
 
                     <v-divider></v-divider>
-                    
-                    <v-list-tile @click="goToState('UserAuthorization')">
-                        <v-list-tile-title>User Authorization</v-list-tile-title>
-                    </v-list-tile>
-                    <v-list-tile @click="goToState('EmailSendingRegesitration')">
-                        <v-list-tile-title>Email Sending Regesitration</v-list-tile-title>
-                    </v-list-tile>
-                    <v-list-tile @click="goToState('DataFillingRegesitration')">
-                        <v-list-tile-title>Data Filling Regesitration</v-list-tile-title>
-                    </v-list-tile>
-                    <v-list-tile @click="goToState('PreliminaryRegistration')">
-                        <v-list-tile-title>Preliminary Registration</v-list-tile-title>
-                    </v-list-tile>
                     <v-list-tile @click="signOut()">
                         <v-list-tile-title>Sign Out</v-list-tile-title>
                     </v-list-tile>
