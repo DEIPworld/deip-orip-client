@@ -35,6 +35,9 @@
                     <v-list-tile @click="goToState('TokenSale')">
                         <v-list-tile-title>Token Sale</v-list-tile-title>
                     </v-list-tile>
+                    <v-list-tile @click="goToState('SignUp')">
+                        <v-list-tile-title>Registration</v-list-tile-title>
+                    </v-list-tile>
 
                     <v-divider></v-divider>
                     <v-list-tile @click="signOut()">
@@ -66,7 +69,10 @@
             drawer: Boolean
         },
         methods: {
-            isLoggedIn: isLoggedIn,
+            isLoggedIn() {
+                console.log(this.$route);
+                return !(this.$route.fullPath === '/sign-in' || this.$route.fullPath === '/sign-up');
+            },
             signOut: function() {
                 clearAccessToken()
                 this.$router.go('/sign-in')

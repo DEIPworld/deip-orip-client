@@ -115,21 +115,21 @@ const router = new Router({
 })
 
 
-router.beforeEach((to, from, next) => {
-    if (to.path == '/sign-in' || to.path == '/sign-up') {
-        if (isLoggedIn()) {
-            next('/') // if token is already presented redirect user to home page
-        } else {
-            next(); // otherwise redirect to sign-in page
-        }
-    } else {
-        if (isLoggedIn()) {
-            next() // if there is a token allow to visit requested route
-        } else {
-            next('/sign-in') // otherwise redirect to sign-in page
-        }
-    }
-})
+// router.beforeEach((to, from, next) => {
+//     if (to.path == '/sign-in' || to.path == '/sign-up') {
+//         if (isLoggedIn()) {
+//             next('/') // if token is already presented redirect user to home page
+//         } else {
+//             next(); // otherwise redirect to sign-in page
+//         }
+//     } else {
+//         if (isLoggedIn()) {
+//             next() // if there is a token allow to visit requested route
+//         } else {
+//             next('/sign-in') // otherwise redirect to sign-in page
+//         }
+//     }
+// })
 
 
 export default router;
