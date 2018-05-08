@@ -9,6 +9,7 @@
                     :members-list="membersList"
                     :disciplines-list="disciplinesList"
                     :total-votes-list="totalVotesList"
+                    :reviews="reviews"
                 ></research-details-body>
             </div>
         </div>
@@ -25,8 +26,10 @@
 
         <adding-research-review-dialog 
             :is-shown="isReviewDialogShown"
+            :content-list="contentList" 
             :research="research"
             :members-list="membersList"
+            @onReviewAdded="loadReviews"
         ></adding-research-review-dialog>
     </v-container>   
 </template>
@@ -41,6 +44,7 @@
                 membersList: [],
                 disciplinesList: [],
                 totalVotesList: [],
+                reviews: [],
 
                 isReviewDialogShown: { value: false }
             }
@@ -48,6 +52,11 @@
         methods: {
             showReviewDialog() {
                 this.isReviewDialogShown.value = true;
+            },
+            loadReviews() {
+                const researchId = this.$route.params.research_id;
+                deipRpc.api.getReviewsByResearchAsync(researchId)
+                    .then(data => { this.reviews = data; });
             }
         },
         created() {
@@ -61,6 +70,8 @@
                         this.contentList.push(contnet);
                     }
                 });
+
+            this.loadReviews();
 
             deipRpc.api.getResearchByIdAsync(researchId)
                 .then((data) => {

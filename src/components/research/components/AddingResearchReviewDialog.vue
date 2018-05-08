@@ -7,9 +7,9 @@
                 </v-btn>
                 <v-toolbar-title>Add a review</v-toolbar-title>
                 <v-spacer></v-spacer>
-                <v-toolbar-items>
+                <!-- <v-toolbar-items>
                     <v-btn dark flat @click.native="isShown.value = false">Save</v-btn>
-                </v-toolbar-items>
+                </v-toolbar-items> -->
             </v-toolbar>
 
             <div class="column-page">
@@ -28,23 +28,36 @@
                                     </div>
                                 </v-card>
 
-                                <div class="c-pt-6">
-                                    <span class="c-pr-2">
-                                        <v-btn class="ma-0" 
-                                            :dark="reviewQuality === REVIEW_POSITIVE" 
-                                            :color="reviewQuality === REVIEW_POSITIVE ? 'green darken-2' : undefined" 
-                                            small depressed
-                                            @click="reviewQuality = REVIEW_POSITIVE"
-                                        >Positive</v-btn>
-                                    </span>
-                                    <span>
-                                        <v-btn class="ma-0" 
-                                            :dark="reviewQuality === REVIEW_NEGATIVE" 
-                                            :color="reviewQuality === REVIEW_NEGATIVE ? 'red darken-2' : undefined" 
-                                            small depressed
-                                            @click="reviewQuality = REVIEW_NEGATIVE"
-                                        >Negative</v-btn>
-                                    </span>
+                                <div class="row justify-between align-end c-pt-6">
+                                    <div>
+                                        <span class="c-pr-2">
+                                            <v-btn class="ma-0" 
+                                                :dark="reviewQuality === REVIEW_POSITIVE" 
+                                                :color="reviewQuality === REVIEW_POSITIVE ? 'green darken-2' : undefined" 
+                                                small depressed
+                                                @click="reviewQuality = REVIEW_POSITIVE"
+                                            >Positive</v-btn>
+                                        </span>
+                                        <span>
+                                            <v-btn class="ma-0" 
+                                                :dark="reviewQuality === REVIEW_NEGATIVE" 
+                                                :color="reviewQuality === REVIEW_NEGATIVE ? 'red darken-2' : undefined" 
+                                                small depressed
+                                                @click="reviewQuality = REVIEW_NEGATIVE"
+                                            >Negative</v-btn>
+                                        </span>
+                                    </div>
+
+                                    <div class="col-grow c-pl-10">
+                                        <v-select
+                                            :items="contentList"
+                                            v-model="contentId"
+                                            label="Content"
+                                            item-text="title"
+                                            item-value="id"
+                                            hide-details
+                                        ></v-select>
+                                    </div>
                                 </div>
 
                                 <div class="c-pt-6">
@@ -57,9 +70,11 @@
                                 </div>
                                 <div class="row justify-end">
                                     <div>
-                                        <v-btn flat color="primary">Preview</v-btn>
+                                        <!-- <v-btn flat color="primary" @click="log()">Preview</v-btn> -->
                                         <v-btn color="primary" class="width-9"
-                                            :disabled="reviewQuality === undefined || review === ''"
+                                            :disabled="reviewQuality === undefined || review === '' || isLoading"
+                                            @click="publishReview()"
+                                            :loading="isLoading"
                                         >Publish</v-btn>
                                     </div>
                                 </div>
@@ -68,17 +83,17 @@
                                 <v-card class="c-p-8">
                                     <div class="bold subheading c-pb-2">Your Expertise</div>
                                     <div class="c-pt-4">
-                                        <span>Physics</span>
-                                        <span class="right half-bold">2 250</span>
+                                        <span>Economics</span>
+                                        <span class="right half-bold">1 250</span>
                                     </div>
                                     <div class="c-pt-4">
-                                        <span>Math</span>
-                                        <span class="right half-bold">1 020</span>
+                                        <span>Psychology</span>
+                                        <span class="right half-bold">320</span>
                                     </div>
                                 </v-card>
                                 <div class="red--text c-pt-4 text-align-center">
                                     <v-icon color="red">warning</v-icon>
-                                    250 Tokens will be blocked for 24 hours after the review
+                                    100% of your expert tokens will be blocked for 24 hours after the review
                                 </div>
                             </div>
                         </div>
@@ -87,18 +102,29 @@
             </div>
 
         </v-card>
+
+        <v-snackbar :timeout="4000" color="error" v-model="isError">
+            Error
+            <v-btn dark flat @click.native="isError = false">Close</v-btn>
+        </v-snackbar>
+        <v-snackbar :timeout="4000" color="success" v-model="isSuccess">
+            Success
+            <v-btn dark flat @click.native="isSuccess = false">Close</v-btn>
+        </v-snackbar>
     </v-dialog>
 </template>
 
 <script>
     import _ from 'lodash';
+    import { getDecodedToken, getOwnerWif } from './../../../utils/auth';
 
     export default {
         name: "AddingResearchReviewDialog",
         props: {
             isShown: { type: Object, required: true },
             research: Object,
-            membersList: Array
+            membersList: Array,
+            contentList: Array
         },
         data() { 
             return {
@@ -106,10 +132,49 @@
                 REVIEW_NEGATIVE: 'negative',
 
                 reviewQuality: undefined,
-                review: ''
+                review: '',
+                isLoading: false,
+                contentId: undefined,
+
+                isError: false,
+                isSuccess: false,
+                user: { name: 'initdelegate', postingWif: '5JidFW79ttL9YP3W2Joc5Zer49opYU3fKNeBx9B6cpEH1GiDm5p' }
             }
         },
-        methods: {},
+        methods: {
+            publishReview() {
+                this.isLoading = true;
+                const token = getDecodedToken();
+
+                deipRpc.broadcast.makeReviewAsync(
+                    // getOwnerWif(),
+                    // token.username,
+                    this.user.postingWif,
+                    this.user.name,
+                    this.contentId,
+                    this.review,
+                    this.reviewQuality === this.REVIEW_POSITIVE,
+                    [1],
+                    ['www.google.com']
+                ).then((data) => {
+                    this.$emit('onReviewAdded');
+                    this.isSuccess = true;
+                })
+                .catch((error) => {
+                    this.isError = true;
+                })
+                .finally(() => {
+                    this.isLoading = false
+                });
+            },
+            // log() {
+            //     console.log('contentId', this.contentId);
+            //     console.log('review', this.review);
+            //     console.log('isPositive', this.reviewQuality === this.REVIEW_POSITIVE);
+
+            //     deipRpc.api.getAccountsAsync(['alice']).then((data) => { console.log(data); })
+            // }
+        },
         computed: {
             authorsStr() {
                 return _(this.membersList).map('owner').join(' · ');
@@ -123,7 +188,8 @@
                 }
             }
         },
-        created() {}
+        created() {
+        }
     };
 </script>
 

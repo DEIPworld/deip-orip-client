@@ -103,77 +103,48 @@
             </v-dialog>
         </div>
 
-      <!--  <div class="c-pt-8 title">Reviews: 2</div>
+       <div class="c-pt-8 title" v-if="reviews.length">Reviews: {{ reviews.length }}</div>
 
-        <div class="c-pt-6">
-            <v-card>
-                <div class="row-nowrap c-p-6">
-                    <div class="review-left-block text-align-center">
-                        <v-avatar size="90px">
-                            <img src="http://deip.world/static/ashkor.7ff44c16.png" alt="User">
-                        </v-avatar>
-                        <div class="bold c-pt-2">Serge Dzeranov</div>
-                        <v-btn class="ma-0 mt-2" block color="primary">Vote</v-btn>
+        <div class="c-pt-6" v-if="reviews.length">
+            <v-card class="hidden-last-child">
+                <template v-for="(review, i) in reviews">
+                    <div class="row-nowrap c-p-6">
+                        <div class="review-left-block text-align-center">
+                            <v-avatar size="90px">
+                                <v-gravatar :email="review.author + '@deip.world'" />
+                            </v-avatar>
+                            <div class="bold c-pt-2">{{ review.author }}</div>
+                            <v-btn class="ma-0 mt-2" block color="primary">Vote</v-btn>
+                        </div>
+                        <div class="column c-ml-6">
+                            <div>
+                                <span class="grey--text">{{ new Date(review.created_at).toDateString() }}</span>
+                                <span class="half-bold c-pl-2">
+                                    <span class="green--text text--darken-2" v-if="review.is_positive">Positive</span>
+                                    <span class="red--text text--darken-2" v-if="!review.is_positive">Negative</span>
+                                </span>
+                            </div>
+                            <div class="c-pt-4 col-grow">
+                                {{ review.content }}
+                            </div>
+                            <div class="c-pt-4 grey--text">
+                                Economics 1 250 |  Psychology  320    
+                            </div>
+                        </div>
                     </div>
-                    <div class="c-ml-6">
-                        <div>
-                            <span class="grey--text">20 Jan 2018</span>
-                            <span class="c-pl-2 green--text text--darken-3">Positive</span>
-                        </div>
-                        <div class="c-pt-4">
-                            Collaboratively brand bricks-and-clicks services for clicks-and-mortar bandwidth. Intrinsicly 
-                            underwhelm state of the art infrastructures via premier methods of empowerment. Holisticly 
-                            procrastinate exceptional metrics for market positioning human capital. Monotonectally 
-                            syndicate turnkey total linkage and cost effective portals. Competently e-enable professional 
-                            markets and premier testing procedures. seamless ROI. Authoritatively monetize leading-edge 
-                            users through dynamic core competencies. Quickly drive error-free data with premium benefits. 
-                            Credibly simplify B2C content rather than magnetic catalysts for change.
-                        </div>
-                        <div class="c-pt-4 grey--text">
-                            Quantum Optics 21 |  Physics  8787    
-                        </div>
-                    </div>
-                </div>
 
-                <v-divider></v-divider>
-
-                <div class="row-nowrap c-p-6">
-                    <div class="review-left-block text-align-center">
-                        <v-avatar size="90px">
-                            <img src="http://deip.world/static/aermolaev.bf4059ea.png" alt="User">
-                        </v-avatar>
-                        <div class="bold c-pt-2">Serge Dzeranov</div>
-                        <v-btn class="ma-0 mt-2" block color="primary">Vote</v-btn>
-                    </div>
-                    <div class="c-ml-6">
-                        <div>
-                            <span class="grey--text">20 Jan 2018</span>
-                            <span class="c-pl-2 green--text text--darken-3">Positive</span>
-                        </div>
-                        <div class="c-pt-4">
-                            Collaboratively brand bricks-and-clicks services for clicks-and-mortar bandwidth. Intrinsicly 
-                            underwhelm state of the art infrastructures via premier methods of empowerment. Holisticly 
-                            procrastinate exceptional metrics for market positioning human capital. Monotonectally 
-                            syndicate turnkey total linkage and cost effective portals. Competently e-enable professional 
-                            markets and premier testing procedures. seamless ROI. Authoritatively monetize leading-edge 
-                            users through dynamic core competencies. Quickly drive error-free data with premium benefits. 
-                            Credibly simplify B2C content rather than magnetic catalysts for change.
-                        </div>
-                        <div class="c-pt-4 grey--text">
-                            Quantum Optics 21 |  Physics  8787    
-                        </div>
-                    </div>
-                </div>
+                    <v-divider></v-divider>
+                </template>
             </v-card>
         </div>
 
-        <div class="row c-pt-4 justify-end">
+        <!-- <div class="row c-pt-4 justify-end">
             <v-btn class="ma-0" color="primary">
                 <v-icon>add</v-icon> Add a review
             </v-btn>
-        </div>
+        </div> -->
 
-        <div class="c-pt-4 title">Grants: 4</div>
+        <!-- <div class="c-pt-4 title">Grants: 4</div>
 
         <div class="c-pt-6">
             <v-card>
@@ -226,7 +197,8 @@
             contentList: { required: true, type: Array, default: [] },
             membersList: { required: true, type: Array, default: [] },
             disciplinesList: { required: true, type: Array, default: [] },
-            totalVotesList: { required: true, type: Array, default: [] }
+            totalVotesList: { required: true, type: Array, default: [] },
+            reviews: { required: true, type: Array, default: [] }
         },
         data() {
             return {
