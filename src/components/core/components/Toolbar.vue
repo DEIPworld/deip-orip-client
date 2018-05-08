@@ -71,8 +71,9 @@
                 return !(this.$route.fullPath === '/sign-in' || this.$route.fullPath === '/sign-up');
             },
             signOut: function() {
-                clearAccessToken()
-                this.$router.go('/sign-in')
+                // clearAccessToken()
+                // this.$router.go('/sign-in')
+                window.location = '/';
             },
             updateDrawer(value) {
                 this.$emit('update', value);
