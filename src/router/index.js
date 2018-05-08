@@ -110,7 +110,7 @@ const router = new Router({
         component: UserWallet
     }, {
         path: '*',
-        redirect: '/researchFeed'
+        redirect: '/sign-up'
     }]
 })
 

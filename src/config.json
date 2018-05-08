@@ -1,6 +1,6 @@
 {
     "deip-foundation-url": "http://146.185.140.12",
     "deip-server-url": "http://146.185.140.12:8282",
-    "deip-full-node-url": "ws://206.189.175.10:11011/",
+    "deip-full-node-url": "ws://206.189.175.10",
     "chain_id": "b49d215ad6bbf15da499e68c5669e6fa5ff424c954e1dff5488cb114801f32c0"
 }
