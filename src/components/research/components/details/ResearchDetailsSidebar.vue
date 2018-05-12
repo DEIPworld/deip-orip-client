@@ -86,11 +86,11 @@
             </div>
         </div>
 
-        <div style="margin: 0 -24px">
+        <!-- <div style="margin: 0 -24px">
             <v-divider></v-divider>
         </div>
 
-   <!--  <div class="sm-title bold c-pt-6">Total Earned</div>
+        <div class="sm-title bold c-pt-6">Total Earned</div>
         
         <div class="c-pt-4 c-pb-6">
             <div>
@@ -130,6 +130,10 @@
                 <span class="half-bold">Investor2</span>
                 <span class="deip-blue-color right">5%</span>
             </div>
+        </div>
+
+        <div style="margin: 0 -24px">
+            <v-divider></v-divider>
         </div>
     </div>
 </template>
