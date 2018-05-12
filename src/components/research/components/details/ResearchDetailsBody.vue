@@ -165,7 +165,7 @@
             </v-card>
         </div>-->
 
-        <div class="c-pt-8 title">References: 4</div>
+        <div class="c-pt-8 title">References: 2</div>
 
         <div class="c-pt-6">
             <div>

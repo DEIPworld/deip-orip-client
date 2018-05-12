@@ -194,7 +194,4 @@
 </script>
 
 <style lang="less" scoped>
-    .review-form {
-        max-width: 1280px;
-    }
 </style>
