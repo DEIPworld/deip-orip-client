@@ -30,7 +30,8 @@ deipRpc.config.set('chain_id', config['chain_id']);
 
 Vue.prototype.DEIP_100_PERCENT = 10000;
 Vue.prototype.DEIP_1_PERCENT = 10000 / 100;
-Vue.prototype.convertToPercent = function(amount) { return amount * 100 / 10000 };
+Vue.prototype.convertToPercent = amount => amount * 100 / 10000;
+Vue.prototype.toDeipPercent = amount => amount * 100;
 
 
 /* eslint-disable no-new */
