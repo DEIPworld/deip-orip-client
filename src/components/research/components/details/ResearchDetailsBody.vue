@@ -26,7 +26,7 @@
 
         <div class="c-pt-6">
             <v-expansion-panel>
-                <v-expansion-panel-content v-for="(content, index) in contentList">
+                <v-expansion-panel-content v-for="(content, index) in contentList" :key="index">
                     <div slot="header">
                         <span class="bold">Chapter {{index + 1}}</span>
                         <span class="deip-blue-color bold c-pl-4"> 
