@@ -1,3 +1,5 @@
+import _ from 'lodash';
+
 const types = {
     startResearch: 1,
     inviteMember: 2,
@@ -14,7 +16,7 @@ const types = {
 
 // maybe will be OK to add param validations or type conversion
 // in every function to be sure every time about right data
-const dataCreationMapper = {
+const proposalDataStringify = {
     5: (researchId, startTime, endTime, amount, softCap, hardCap) => {
         // `{"research_id": 0, "start_time": "2018-04-03T15:15:04" , "end_time": "2018-04-03T16:22:43", "amount_for_sale": 5000, "soft_cap": 1000, "hard_cap": 1500}`
         return {
@@ -40,17 +42,38 @@ const dataCreationMapper = {
     }
 };
 
-const getProposalDataForCreation = (type, params) => {
-    if (dataCreationMapper[type] === undefined) {
+const proposalDataParser = {
+    5: dataStr =>
+        JSON.parse(dataStr, (key, value) => {
+            return key === "start_time" || key === "end_time"
+                ? new Date(value)
+                : value;
+        }),
+    11: dataStr => JSON.parse(dataStr)
+};
+
+const getStringifiedProposalData = (type, params) => {
+    if (proposalDataStringify[type] === undefined) {
         throw 'Wrong proposal type';
     }
 
     return JSON.stringify(
-        dataCreationMapper[type](...params)
+        proposalDataStringify[type](...params)
     );
+};
+
+const getParsedProposal = proposal => {
+    let cloned = _.cloneDeep(proposal);
+
+    cloned.creation_time = new Date(cloned.creation_time);
+    cloned.expiration_time = new Date(cloned.expiration_time);
+    cloned.data = proposalDataParser[cloned.action](cloned.data);
+
+    return cloned;
 };
 
 export {
     types,
-    getProposalDataForCreation
+    getStringifiedProposalData,
+    getParsedProposal
 };

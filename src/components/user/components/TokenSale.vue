@@ -83,10 +83,10 @@
                 this.currentStep--;
             },
             finish() {
-                let data = proposalService.getProposalDataForCreation(proposalService.types.startResearchTokenSale, [
+                let data = proposalService.getStringifiedProposalData(proposalService.types.startResearchTokenSale, [
                     0, // research id
-                    this.tokenSaleInfo.startDate,
-                    this.tokenSaleInfo.endDate,
+                    this.tokenSaleInfo.startDate.toISOString().split('.')[0],
+                    this.tokenSaleInfo.endDate.toISOString().split('.')[0],
                     this.toDeipPercent(
                         parseInt(this.tokenSaleInfo.amountToSell)
                     ),

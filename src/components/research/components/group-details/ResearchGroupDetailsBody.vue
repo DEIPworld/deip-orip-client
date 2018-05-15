@@ -104,7 +104,9 @@
         </div>
 
         <div class="c-pt-8">
-            <research-group-details-proposals></research-group-details-proposals>
+            <research-group-details-proposals
+                :proposals="proposals"
+            ></research-group-details-proposals>
         </div>
     </div>   
 </template>
@@ -112,6 +114,9 @@
 <script>
     export default {
         name: "ResearchGroupDetailsBody",
+        props: {
+            proposals: { required: true, type: Array, default: [] }
+        },
         data() { 
             return {} 
         }

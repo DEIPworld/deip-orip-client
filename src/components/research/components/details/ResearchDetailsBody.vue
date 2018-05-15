@@ -282,7 +282,7 @@
             afterComplete(file) {
                 const hash = JSON.parse(file.xhr.response).hash;
 
-                const proposal = proposalService.getProposalDataForCreation(proposalService.types.createResearchMaterial, [
+                const proposal = proposalService.getStringifiedProposalData(proposalService.types.createResearchMaterial, [
                     this.research.id,
                     this.newContentProposal.type,
                     this.newContentProposal.title,
