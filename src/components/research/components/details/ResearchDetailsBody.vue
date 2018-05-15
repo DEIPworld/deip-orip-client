@@ -186,6 +186,7 @@
     import vueDropzone from 'vue2-dropzone';
     import {getAccessToken} from './../../../../utils/auth'
     import config from './../../../../../src/config'
+    import * as proposalService from "../../services/ProposalService";  
 
     export default {
         name: "ResearchDetailsBody",
@@ -280,28 +281,28 @@
             },
             afterComplete(file) {
                 const hash = JSON.parse(file.xhr.response).hash;
-                const proposeNewContentAction = 11;
 
-				const proposal = `{"research_id": ${this.research.id}, 
-                        "type": ${this.newContentProposal.type}, 
-                        "title": "${this.newContentProposal.title}", 
-                        "content": "${hash}", 
-                        "authors": [${'"' + this.newContentProposal.authors.join('","') + '"'}], 
-                        "references": [], 
-                        "external_references": []}`;
+                const proposal = proposalService.getProposalDataForCreation(proposalService.types.createResearchMaterial, [
+                    this.research.id,
+                    this.newContentProposal.type,
+                    this.newContentProposal.title,
+                    hash,
+                    this.newContentProposal.authors,
+                    [],
+                    []
+                ]);
 
                 deipRpc.broadcast.createProposalAsync(
 					this.user.postingWif,
 					this.user.name, 
 					this.research.research_group_id, 
 					proposal,
-                    proposeNewContentAction,
+                    proposalService.types.createResearchMaterial,
 					new Date( new Date().getTime() + 2 * 24 * 60 * 60 * 1000 )
 				).then(() => {
                     this.$refs.newContent.removeAllFiles();
                     this.newContentProposal.isInProgress = false;
                     this.newContentProposal.isOpen = false;
-
                 }, (err) => {
                     this.newContentProposal.isInProgress = false;
                     this.newContentProposal.isOpen = false;
