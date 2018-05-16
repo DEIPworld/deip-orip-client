@@ -59,6 +59,7 @@
 </template>
 
 <script>
+    import deipRpc from '@deip/deip-rpc';
     import _ from 'lodash';
 
     const SELECTABLE_USERS_COUNT = 5;

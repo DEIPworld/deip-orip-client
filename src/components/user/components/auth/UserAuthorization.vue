@@ -44,6 +44,7 @@
 
 <script>
 
+    import deipRpc from '@deip/deip-rpc';
     import authService from './../../../../services/auth'
     import {decodedToken, clearAccessToken, setAccessToken} from './../../../../utils/auth'
 

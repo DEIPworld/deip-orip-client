@@ -41,6 +41,8 @@
 </template>
 
 <script>
+    import deipRpc from '@deip/deip-rpc';
+    
     export default {
         name: 'StateResearchList',
         data() {

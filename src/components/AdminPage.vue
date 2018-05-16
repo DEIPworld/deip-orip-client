@@ -191,6 +191,7 @@
 <script>    
 
     import axios from 'axios'
+    import deipRpc from '@deip/deip-rpc';
 
     export default {
         name: "AdminPage",

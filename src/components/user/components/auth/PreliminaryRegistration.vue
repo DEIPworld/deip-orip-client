@@ -95,6 +95,7 @@
 </template>
 
 <script>
+    import deipRpc from '@deip/deip-rpc';
     import _ from 'lodash';
     import authService from './../../../../services/auth'
 

@@ -182,10 +182,11 @@
 </template>
 
 <script>
-
+    import deipRpc from '@deip/deip-rpc';
     import vueDropzone from 'vue2-dropzone';
     import {getAccessToken} from './../../../../utils/auth'
     import config from './../../../../../src/config'
+    
 
     export default {
         name: "ResearchDetailsBody",

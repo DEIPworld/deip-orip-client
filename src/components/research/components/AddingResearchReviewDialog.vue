@@ -116,6 +116,7 @@
 
 <script>
     import _ from 'lodash';
+    import deipRpc from '@deip/deip-rpc';
     import { getDecodedToken, getOwnerWif } from './../../../utils/auth';
 
     export default {

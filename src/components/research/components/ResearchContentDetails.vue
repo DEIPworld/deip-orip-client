@@ -52,7 +52,7 @@
 
 <script>
     //import MyTextureEditor from './MyTextureEditor';
-
+    import deipRpc from '@deip/deip-rpc';
     import config from './../../../../src/config'
 
     export default {

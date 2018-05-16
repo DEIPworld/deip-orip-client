@@ -13,9 +13,8 @@ import './components/core/index';
 import './components/research/index';
 import './components/user/index';
 
-import './../deip-rpc/dist/deip.min';
-
 import config from './config'
+import deipRpc from '@deip/deip-rpc';
 
 Vue.use(Vuetify, {
     theme: {
