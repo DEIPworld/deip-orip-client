@@ -2,20 +2,9 @@
 
 > A DEIP client project
 
-## Build Setup
+Before working with the repo you must be a memeber of @deip npm organization. Ask Yahor Tsaryk for permissions
 
-``` bash
-# cloning of project
-git clone --recursive https://gitlab.com/DEIP/deip-client.git
-# or
-git clone https://gitlab.com/DEIP/deip-client.git
-cd deip-client
-git submodule init
-git submodule update
-
-# build submodule (from deip-rpc dir)
-npm install
-npm run build-dev / npm run build-prod
+```
 
 # install dependencies (from root)
 npm install
