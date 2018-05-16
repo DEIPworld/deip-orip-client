@@ -3,7 +3,13 @@
         <div class="row at-row flex-top flex-end">
             <div class="col-md-24">
                 <div class="users-panel">
-                    <at-button v-for="u in users" type="primary" hollow v-on:click="switchUser(u)" v-bind:disabled="u.name == user.name" style="margin-right: 5px">{{u.name}}</at-button>
+                    <at-button v-for="(u, i) in users" :key="i"
+                        type="primary" 
+                        hollow 
+                        v-on:click="switchUser(u)" 
+                        v-bind:disabled="u.name == user.name" 
+                        style="margin-right: 5px"
+                    >{{u.name}}</at-button>
                 </div>
             </div>
         </div>
@@ -37,7 +43,9 @@
                     <p class="bg-dark text-white">Proposals for <b>"{{activeGroup.research_group_id}}"</b> Group</p>
                     <div>
                         <at-select v-model="newProposal.actionId" size="large">
-                            <at-option v-bind:value="key" v-for="(value, key) in proposalsMap">{{ key }} - {{ value }}</at-option>
+                            <at-option v-bind:value="key" 
+                                v-for="(value, key) in proposalsMap" :key="key"
+                            >{{ key }} - {{ value }}</at-option>
                         </at-select>
                         <at-textarea type="text" v-model="newProposal.data" placeholder="JSON" min-rows="4"></at-textarea>
                         <at-button type="primary" v-on:click="createProposal()" v-bind:disabled="isAddingProposalDisabled">Create Proposal</at-button>

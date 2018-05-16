@@ -97,18 +97,17 @@
                 this.$emit('decStep');
             },
             setDate(dateField, value) {
-                // on BE dates will be stored in second timestamp
-                this.tokenSaleInfo[dateField] = Date.parse(value) / 1000;
+                this.tokenSaleInfo[dateField] = new Date(value);
             },
             allowedStartDates(val) {
                 const date = Date.parse(val);
 
                 return this.tokenSaleInfo.endDate 
-                    ? date > Date.now() && date < this.tokenSaleInfo.endDate * 1000 
+                    ? date > Date.now() && date < this.tokenSaleInfo.endDate.getTime()
                     : date > Date.now();
             },
             allowedEndDates(val) {
-                return Date.parse(val) > this.tokenSaleInfo.startDate * 1000;
+                return Date.parse(val) > this.tokenSaleInfo.startDate.getTime()
             }
         }
     };

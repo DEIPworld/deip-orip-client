@@ -168,10 +168,18 @@
 <script>
     export default {
         name: "ResearchGroupDetailsProposals",
+        props: {
+            proposals: { required: true, type: Array, default: [] }
+        },
         data() { 
             return {
                 areShownPastProposals: false
             } 
+        },
+        watch: {
+            'proposals': function(newProposals) {
+                console.log('PROPOSALS', newProposals);
+            }
         }
     };
 </script>

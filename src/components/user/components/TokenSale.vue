@@ -54,6 +54,9 @@
 </template>
 
 <script>
+    import deipRpc from '@deip/deip-rpc';
+    import * as proposalService from "../../research/services/ProposalService"; 
+
     export default {
         name: "TokenSale",
         data() { 
@@ -65,7 +68,8 @@
                     endDate: undefined,
                     softCap: '',
                     hardCap: ''
-                }
+                },
+                user: { name: 'initdelegate', postingWif: '5JidFW79ttL9YP3W2Joc5Zer49opYU3fKNeBx9B6cpEH1GiDm5p' }
             } 
         },
         methods: {
@@ -80,9 +84,30 @@
                 this.currentStep--;
             },
             finish() {
-                this.tokenSaleInfo; // object which has all necessary info
-                console.log('FINISHED!', this.tokenSaleInfo);
-                // here should be BE calling to save all data
+                let data = proposalService.getStringifiedProposalData(proposalService.types.startResearchTokenSale, [
+                    0, // research id
+                    this.tokenSaleInfo.startDate.toISOString().split('.')[0],
+                    this.tokenSaleInfo.endDate.toISOString().split('.')[0],
+                    this.toDeipPercent(
+                        parseInt(this.tokenSaleInfo.amountToSell)
+                    ),
+                    parseInt(this.tokenSaleInfo.softCap),
+                    parseInt(this.tokenSaleInfo.hardCap)
+                ]);
+
+                deipRpc.broadcast.createProposalAsync(
+					this.user.postingWif,
+					this.user.name, 
+					0, // group id
+					data,
+                    proposalService.types.startResearchTokenSale,
+					new Date( new Date().getTime() + 2 * 24 * 60 * 60 * 1000 )
+				).then(() => {
+                    // go to another route state
+                    console.log('hooray!!!');
+                }).catch(err => {
+                    alert(err.message);
+                });
             }
         }
     };

@@ -67,7 +67,7 @@
         },
         methods: {
             isLoggedIn() {
-                console.log(this.$route);
+                // console.log(this.$route);
                 return !(this.$route.fullPath === '/sign-in' || this.$route.fullPath === '/sign-up');
             },
             signOut: function() {

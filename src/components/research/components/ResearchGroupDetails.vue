@@ -3,7 +3,9 @@
 
         <div class="content-column">
             <div class="filling">
-                <research-group-details-body></research-group-details-body>
+                <research-group-details-body
+                    :proposals="proposals"
+                ></research-group-details-body>
             </div>
         </div>
 
@@ -15,10 +17,23 @@
 </template>
 
 <script>
+
+    import deipRpc from '@deip/deip-rpc';
+    import _ from 'lodash';
+    import * as proposalService from "../services/ProposalService"; 
+
     export default {
         name: "ResearchGroupDetails",
         data() { 
-            return {} 
+            return {
+                proposals: []
+            } 
+        },
+        created() {
+            deipRpc.api.getProposalsByResearchGroupIdAsync(0)
+                .then(data => {
+                    this.proposals = _.map(data, proposal => proposalService.getParsedProposal(proposal));
+                });
         }
     };
 </script>
