@@ -5,9 +5,8 @@
             frameborder="0" 
             height="100%" 
             width="100%" 
-            src="https://pubs.usgs.gov/of/2015/1046/pdf/ofr2015-1046.pdf">
+            :src="`${fileStorageBaseUrl}/public/files/${content.research_id}/${content.content}`">
         </iframe>
-        <!-- :src="`${fileStorageBaseUrl}/public/files/${content.research_id}/${content.content}`" -->
         
         <div id="bars">
             <div id="sidebar">

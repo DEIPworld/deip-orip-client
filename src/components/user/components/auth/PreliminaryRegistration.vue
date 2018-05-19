@@ -39,8 +39,7 @@
                     :rules="[
                         rules.required, 
                         rules.unique, 
-                        rules.usernameLength,
-                        rules.usernameChars
+                        rules.usernameFormat
                     ]"
                     @input="usernameChanged"
                     :loading="isUsernameChecking"
@@ -129,10 +128,10 @@
                     nameChars: value => 
                         value.match(/^[a-z][a-z ,.'-]*$/i) !== null 
                         || "Incorrect value",
-                    usernameLength: value => value.length >= 3 && value.length <= 16 || 'Length should be between 3 and 16 characters',
-                    usernameChars: value => 
-                        value.match(/^[a-z][a-z0-9\-]+[a-z0-9]$/) !== null 
-                        || "First character must be a-z (lower case), the last character can be a-z or 0-9 (lower case letter or number) and second and up to second last can be a-z (lower case), 0-9 and '-'",
+                    usernameFormat: value => {
+                        var result = deipRpc.utils.validateAccountName(value);
+                        return result === null || result;
+                    },
                     email: (value) => {
                         const pattern = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
                         return pattern.test(value) || 'Invalid E-mail'

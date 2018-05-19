@@ -1,7 +1,7 @@
 {
     "deip-foundation-url": "http://146.185.140.12",
-    "deip-server-url": "http://146.185.140.12:8282",
+    "deip-server-url": "http://146.185.131.175",
     "deip-full-node-url": "ws://206.189.175.10",
     "sig-seed": "quickbrownfoxjumpsoverthelazydog",
-    "chain_id": "b49d215ad6bbf15da499e68c5669e6fa5ff424c954e1dff5488cb114801f32c0"
+    "chain-id": "b49d215ad6bbf15da499e68c5669e6fa5ff424c954e1dff5488cb114801f32c0"
 }
