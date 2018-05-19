@@ -50,7 +50,7 @@
                 </v-btn>
             </div>
             <v-toolbar-items v-if="!isLoggedIn()">
-            <!--  <v-btn flat to="/sign-in">Sign In</v-btn> -->
+                <v-btn flat to="/sign-in">Sign In</v-btn>
                 <v-btn flat to="/sign-up">Sign Up</v-btn>
             </v-toolbar-items>
         </v-toolbar>
@@ -66,14 +66,10 @@
             drawer: Boolean
         },
         methods: {
-            isLoggedIn() {
-                // console.log(this.$route);
-                return !(this.$route.fullPath === '/sign-in' || this.$route.fullPath === '/sign-up');
-            },
+            isLoggedIn: isLoggedIn,
             signOut: function() {
-                // clearAccessToken()
-                // this.$router.go('/sign-in')
-                window.location = '/';
+                clearAccessToken()
+                this.$router.go('/sign-in')
             },
             updateDrawer(value) {
                 this.$emit('update', value);

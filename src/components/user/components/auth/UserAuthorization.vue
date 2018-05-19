@@ -44,9 +44,11 @@
 
 <script>
 
-    import deipRpc from '@deip/deip-rpc';
+    import deipRpc from '@deip/deip-rpc'
+    import crypto from '@deip/libcrypto'
     import authService from './../../../../services/auth'
     import {decodedToken, clearAccessToken, setAccessToken} from './../../../../utils/auth'
+    import config from './../../../../config'
 
     export default {
         name: 'UserAuthorization',
@@ -59,7 +61,6 @@
                 isChecking: false,
                 isServerError: false,
                 serverError: null,
-
                 rules: {
                     required: (value) => !!value || 'This field is required'
                 }
@@ -67,18 +68,33 @@
         },
         methods: {
             login() {
+
                 if (this.$refs.form.validate()) {
                     this.isChecking = true;
-                    //yahorkatsaryk
-                    //5JH1vT7oxXSJEZagyU7K5fRJdZ8Ek7NEg3h9nkoiXxK7gQuBo1Z
+                    const privKey = this.privKey;
+                    var secretKey;
+                    try {
+                        secretKey = crypto.PrivateKey.from(privKey);
+                    } catch(err) {
+                        clearAccessToken();
+                        this.isChecking = false;
+                        this.isServerError = true;
+                        this.serverError = `Invalid private key format`; 
+                        return;
+                    }
+
+                    // sig-seed should be uint8 array with length = 32
+                    const secretSig = secretKey.sign(encodeUint8Arr(config["sig-seed"]).buffer);
+                    const secretSigHex = crypto.hexify(secretSig);
                     
-                    authService.signIn({username: this.username})
+                    authService.signIn({username: this.username, secretSigHex: secretSigHex})
                         .then((response) => {
 
                             if (response.success) {
-                                const decoded = decodedToken(response.token);
+                                const decoded = decodedToken(response.jwtToken);
                                 const pubKey = decoded.pubKey;
-
+                                
+                                // this validation is just paranoia as we validate private key at the server using signature
                                 var isValid;
                                 try {
                                     isValid = deipRpc.auth.wifIsValid(this.privKey, pubKey);
@@ -91,8 +107,8 @@
                                     // to verify that user has logged successfully and entered his private key.
                                     // TODO: We should make decision on how to store private keys at UI. 
                                     // For now we can use local storage but it's not secure enough due to XSS attacks
-                                    // and compromised thirdparties sources.
-                                    setAccessToken(response.token, this.privKey)
+                                    // and compromised thirdparty sources.
+                                    setAccessToken(response.jwtToken, this.privKey)
                                     this.isChecking = false;
                                     this.isServerError = false;
                                     this.isServerValidated = true;
@@ -101,21 +117,26 @@
                                     clearAccessToken();
                                     this.isChecking = false;
                                     this.isServerError = true;
-                                    this.serverError = `Invalid private key for "${this.username}"`
+                                    this.serverError = `Invalid private key for "${this.username}"`; 
                                 }
 
                             } else {
                                 clearAccessToken();
                                 this.isChecking = false;
                                 this.isServerError = true;
-                                this.serverError = response.info;
-                            } 
+                                this.serverError = response.error;
+                            }
+
                         }, (err) => {
                             clearAccessToken();
                             this.isChecking = false;
                             this.isServerError = true;
-                            this.serverError = err.message
+                            this.serverError = err.message; 
                         });
+                }
+
+                function encodeUint8Arr(myString) {
+                    return new TextEncoder("utf-8").encode(myString);
                 }
             }
         }
