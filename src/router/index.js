@@ -1,7 +1,6 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 import AdminPage from '@/components/AdminPage'
-import ResearchItemLayout from '@/components/ResearchItemLayout'
 
 import ResearchFeed from '@/components/research-feed/ResearchFeed'
 import ResearchDetails from '@/components/research/components/ResearchDetails'
@@ -13,11 +12,11 @@ import ResearchContentDetails from '@/components/research/components/ResearchCon
 
 import UserDetails from '@/components/user/components/UserDetails'
 import TokenSale from '@/components/user/components/TokenSale'
-import UserAuthorization from '@/components/user/components/auth/UserAuthorization'
-import EmailSendingRegesitration from '@/components/user/components/auth/EmailSendingRegesitration'
-import DataFillingRegesitration from '@/components/user/components/auth/DataFillingRegesitration'
-import ClaimExpertiseRegesitration from '@/components/user/components/auth/ClaimExpertiseRegesitration'
-import PreliminaryRegistration from '@/components/user/components/auth/PreliminaryRegistration'
+import SignIn from '@/components/auth/SignIn'
+import SignUp from '@/components/auth/SignUp'
+import EmailSendingRegistration from '@/components/auth/EmailSendingRegistration'
+import DataFillingRegistration from '@/components/auth/DataFillingRegistration'
+import ClaimExpertiseRegistration from '@/components/auth/ClaimExpertiseRegistration'
 import UserWallet from '@/components/user/components/UserWallet'
 
 import { isLoggedIn } from './../utils/auth';
@@ -36,18 +35,11 @@ const router = new Router({
     }, {
         path: '/sign-in',
         name: 'SignIn',
-        component: UserAuthorization
+        component: SignIn
     }, {
         path: '/sign-up',
         name: 'SignUp',
-        component: PreliminaryRegistration
-    }, {
-        path: '/researchItem',
-        name: 'ResearchItemLayout',
-        component: ResearchItemLayout,
-        meta: {
-            withoutHeader: true
-        }
+        component: SignUp
     }, {
         path: '/researchFeed',
         name: 'ResearchFeed',
@@ -77,25 +69,17 @@ const router = new Router({
         name: 'TokenSale',
         component: TokenSale
     }, {
-        path: '/userAuthorization',
-        name: 'UserAuthorization',
-        component: UserAuthorization
-    }, {
         path: '/emailSendingRegesitration',
         name: 'EmailSendingRegesitration',
-        component: EmailSendingRegesitration
+        component: EmailSendingRegistration
     }, {
         path: '/dataFillingRegesitration',
         name: 'DataFillingRegesitration',
-        component: DataFillingRegesitration
-    }, {
-        path: '/preliminaryRegistration',
-        name: 'PreliminaryRegistration',
-        component: PreliminaryRegistration
+        component: DataFillingRegistration
     }, {
         path: '/claimExpertiseRegesitration',
         name: 'ClaimExpertiseRegesitration',
-        component: ClaimExpertiseRegesitration
+        component: ClaimExpertiseRegistration
     }, {
         path: '/researchGroupDetails',
         name: 'ResearchGroupDetails',

@@ -96,10 +96,10 @@
 <script>
     import deipRpc from '@deip/deip-rpc';
     import _ from 'lodash';
-    import authService from './../../../../services/auth'
+    import authService from './../../services/auth'
 
     export default {
-        name: 'PreliminaryRegistration',
+        name: 'SignUp',
         data() {
             return {
                 isFormValid: false,

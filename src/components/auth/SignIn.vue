@@ -46,12 +46,12 @@
 
     import deipRpc from '@deip/deip-rpc'
     import crypto from '@deip/libcrypto'
-    import authService from './../../../../services/auth'
-    import {decodedToken, clearAccessToken, setAccessToken} from './../../../../utils/auth'
-    import config from './../../../../config'
+    import authService from './../../services/auth'
+    import {decodedToken, clearAccessToken, setAccessToken} from './../../utils/auth'
+    import config from './../../config'
 
     export default {
-        name: 'UserAuthorization',
+        name: 'SignIn',
         data() {
             return {
                 isFormValid: false,

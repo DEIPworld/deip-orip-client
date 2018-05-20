@@ -50,7 +50,7 @@
 </template>
 
 <script>
-    //import MyTextureEditor from './MyTextureEditor';
+    import { mapGetters } from 'vuex'
     import deipRpc from '@deip/deip-rpc';
     import config from './../../../../src/config'
 
@@ -68,12 +68,14 @@
                     weight: 50,
                     isInProgress: false,
                     isOpen: false
-                },
-                user: { name: 'initdelegate', postingWif: '5JidFW79ttL9YP3W2Joc5Zer49opYU3fKNeBx9B6cpEH1GiDm5p' },
+                }
             } 
         },
 
         computed:{
+            ...mapGetters({
+                user: 'user'
+            }),
             contentWeightByDiscipline: function() {
                 const map = {};
                 const flattened = this.totalVotesList.reduce(
@@ -108,8 +110,8 @@
             voteContent: function() {
                 this.vote.isInProgress = true;
                 deipRpc.broadcast.voteAsync(
-                    this.user.postingWif,
-                    this.user.name,
+                    this.user.privKey,
+                    this.user.username,
                     this.vote.discipline.id,
                     this.vote.weight * this.DEIP_1_PERCENT,
                     this.content.research_id,

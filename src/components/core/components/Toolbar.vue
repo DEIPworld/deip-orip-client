@@ -19,7 +19,7 @@
             <v-menu v-if="isLoggedIn()" bottom left offset-y>
                 <v-btn fab flat icon class="ma-0" slot="activator">
                     <v-avatar size="32px">
-                        <img src="http://deip.world/static/ashkor.7ff44c16.png" alt="User">
+                        <v-gravatar :email="user.username + '@deip.world'" />
                     </v-avatar>
                 </v-btn>
                 <v-list dark dense>
@@ -59,11 +59,17 @@
 <script>
 
     import { isLoggedIn, clearAccessToken } from './../../../utils/auth'
+    import { mapGetters } from 'vuex'
 
     export default {
         name: 'Toolbar',
         props: {
             drawer: Boolean
+        },
+        computed: {
+            ...mapGetters({
+                user: 'user'
+            })
         },
         methods: {
             isLoggedIn: isLoggedIn,
