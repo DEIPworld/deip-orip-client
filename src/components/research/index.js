@@ -20,14 +20,6 @@ Vue.component('research-details-sidebar', ResearchDetailsSidebar);
 Vue.component('research-details-body', ResearchDetailsBody);
 Vue.component('research-timeline', ResearchTimeline);
 
-// components/feed
-import ResearchFeedFilter from './components/feed/ResearchFeedFilter';
-import ResearchFeedOrderBy from './components/feed/ResearchFeedOrderBy';
-import ResearchFeedOrderByItem from './components/feed/ResearchFeedOrderByItem';
-Vue.component('research-feed-filter', ResearchFeedFilter);
-Vue.component('research-feed-order-by', ResearchFeedOrderBy);
-Vue.component('research-feed-order-by-item', ResearchFeedOrderByItem);
-
 // components/group-creating
 import CreateResearchGroupTitle from './components/group-creating/CreateResearchGroupTitle';
 import CreateResearchGroupDescription from './components/group-creating/CreateResearchGroupDescription';
@@ -47,22 +39,18 @@ Vue.component('research-group-details-sidebar', ResearchGroupDetailsSidebar);
 Vue.component('research-group-details-proposals', ResearchGroupDetailsProposals);
 
 // components
-import ResearchListItem from './components/ResearchListItem';
 import DisciplineTreePicker from './components/DisciplineTreePicker';
 import DisciplineTreeItem from './components/DisciplineTreeItem';
 import ResearchCreating from './components/ResearchCreating';
 import ResearchDetails from './components/ResearchDetails';
-import ResearchFeed from './components/ResearchFeed';
 import ResearchStartCreating from './components/ResearchStartCreating';
 import StateResearchList from './components/StateResearchList';
 import ResearchGroupDetails from './components/ResearchGroupDetails';
 import AddingResearchReviewDialog from './components/AddingResearchReviewDialog';
-Vue.component('research-list-item', ResearchListItem);
 Vue.component('discipline-tree-picker', DisciplineTreePicker);
 Vue.component('discipline-tree-item', DisciplineTreeItem);
 Vue.component('research-creating', ResearchCreating);
 Vue.component('research-details', ResearchDetails);
-Vue.component('research-feed', ResearchFeed);
 Vue.component('research-start-creating', ResearchStartCreating);
 Vue.component('state-research-list', StateResearchList);
 Vue.component('research-group-details', ResearchGroupDetails);

@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
-import researchFeed from './modules/research-feed'
+import researchFeed from './../components/research-feed/store/index'
 import createLogger from 'vuex/dist/logger'
 
 

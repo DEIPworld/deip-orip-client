@@ -13,6 +13,7 @@ import 'vue2-dropzone/dist/vue2Dropzone.css'
 import './components/core/index';
 import './components/research/index';
 import './components/user/index';
+import './components/research-feed/index'
 
 import config from './config'
 import deipRpc from '@deip/deip-rpc';

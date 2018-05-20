@@ -3,7 +3,7 @@ import Router from 'vue-router'
 import AdminPage from '@/components/AdminPage'
 import ResearchItemLayout from '@/components/ResearchItemLayout'
 
-import ResearchFeed from '@/components/research/components/ResearchFeed'
+import ResearchFeed from '@/components/research-feed/ResearchFeed'
 import ResearchDetails from '@/components/research/components/ResearchDetails'
 import ResearchStartCreating from '@/components/research/components/ResearchStartCreating'
 import ResearchCreating from '@/components/research/components/ResearchCreating'
