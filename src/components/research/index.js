@@ -22,11 +22,11 @@ Vue.component('research-timeline', ResearchTimeline);
 
 // components/feed
 import ResearchFeedFilter from './components/feed/ResearchFeedFilter';
-import ResearchFeedSortBy from './components/feed/ResearchFeedSortBy';
-import ResearchFeedSortByItem from './components/feed/ResearchFeedSortByItem';
+import ResearchFeedOrderBy from './components/feed/ResearchFeedOrderBy';
+import ResearchFeedOrderByItem from './components/feed/ResearchFeedOrderByItem';
 Vue.component('research-feed-filter', ResearchFeedFilter);
-Vue.component('research-feed-sort-by', ResearchFeedSortBy);
-Vue.component('research-feed-sort-by-item', ResearchFeedSortByItem);
+Vue.component('research-feed-order-by', ResearchFeedOrderBy);
+Vue.component('research-feed-order-by-item', ResearchFeedOrderByItem);
 
 // components/group-creating
 import CreateResearchGroupTitle from './components/group-creating/CreateResearchGroupTitle';

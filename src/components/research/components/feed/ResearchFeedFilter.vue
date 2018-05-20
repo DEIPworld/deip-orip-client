@@ -15,7 +15,7 @@
             <discipline-tree-picker :selected="filter.discipline" @select="selectDiscipline"></discipline-tree-picker>
         </div>
 
-        <div v-if="false">
+        <!-- <div>
             <v-divider></v-divider>
 
             <div class="c-pt-6 half-bold">Author</div>
@@ -77,41 +77,34 @@
             <div class="c-pt-4 row align-center">
                 <div class="half-bold">Finished</div>
                 <div class="c-ml-2">
-                    <v-checkbox v-model="checkbox" hide-details color="green darken-3"></v-checkbox>
+                    <v-checkbox v-model="isFinished" hide-details color="green darken-3"></v-checkbox>
                 </div>
             </div>
             <div class="c-pt-4 half-bold">Content Type</div>
-        </div>
+        </div> -->
     </div>
 </template>
 
 <script>
+
     import _ from 'lodash';
+    import { mapGetters } from 'vuex'
 
     export default {
         name: "ResearchFeedFilter",
-        props: {
-            filter: { type: Object, required: true }
-        },
-        data() {
-            return {
-                dateFrom: null,
-                menuFrom: false,
-                dateTo: null,
-                menuTo: false,
-                checkbox: false
-            };
+        computed: {
+            ...mapGetters({
+                filter: 'filter'
+            })
         },
         methods: {
             selectDiscipline(discipline) {
-                this.filter.discipline = discipline;
-                this.$emit('update');
+                this.$store.dispatch('updateFilter', {key: 'discipline', value: discipline})
             },
-            querySearch: _.debounce(function(value) {
-                this.filter.q = value
-                this.$emit('update');
-            }, 600)
-        },
+            querySearch(value) {
+                this.$store.dispatch('updateFilter', {key: 'q', value: value})
+            }
+        }
     };
 </script>
 
