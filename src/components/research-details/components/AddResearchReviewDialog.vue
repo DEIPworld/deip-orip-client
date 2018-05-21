@@ -12,7 +12,7 @@
                 </v-toolbar-items> -->
             </v-toolbar>
 
-            <div class="column-page">
+            <div v-if="research" class="column-page">
                 <div class="content-column">
                     <div class="filling">
                         <div class="sm-title bold">You're giving a review to</div>
@@ -82,13 +82,9 @@
                             <div class="col-4">
                                 <v-card class="c-p-8">
                                     <div class="bold subheading c-pb-2">Your Expertise</div>
-                                    <div class="c-pt-4">
-                                        <span>Economics</span>
-                                        <span class="right half-bold">1 250</span>
-                                    </div>
-                                    <div class="c-pt-4">
-                                        <span>Psychology</span>
-                                        <span class="right half-bold">320</span>
+                                    <div class="c-pt-4" v-for="(exp, index) in userExperise" :key="index">
+                                        <span>{{exp.discipline_name}}</span>
+                                        <span class="right half-bold">{{exp.amount}}</span>
                                     </div>
                                 </v-card>
                                 <div class="red--text c-pt-4 text-align-center">
@@ -117,15 +113,24 @@
 <script>
     import _ from 'lodash';
     import deipRpc from '@deip/deip-rpc';
-    import { getDecodedToken, getOwnerWif } from './../../../utils/auth';
+    import { mapGetters } from 'vuex'
 
     export default {
-        name: "AddingResearchReviewDialog",
+        name: "AddResearchReviewDialog",
         props: {
-            isShown: { type: Object, required: true },
-            research: Object,
-            membersList: Array,
-            contentList: Array
+            isShown: { type: Object, required: true }
+        },
+        computed: {
+            ...mapGetters({
+                user: 'user',
+                userExperise: 'userExperise',
+                research: 'rd/research',
+                membersList: 'rd/membersList',
+                contentList: 'rd/contentList'
+            }),
+            authorsStr() {
+                return _(this.membersList).map('owner').join(' · ');
+            }
         },
         data() { 
             return {
@@ -138,20 +143,15 @@
                 contentId: undefined,
 
                 isError: false,
-                isSuccess: false,
-                user: { name: 'initdelegate', postingWif: '5JidFW79ttL9YP3W2Joc5Zer49opYU3fKNeBx9B6cpEH1GiDm5p' }
+                isSuccess: false
             }
         },
         methods: {
             publishReview() {
                 this.isLoading = true;
-                const token = getDecodedToken();
-
                 deipRpc.broadcast.makeReviewAsync(
-                    // getOwnerWif(),
-                    // token.username,
-                    this.user.postingWif,
-                    this.user.name,
+                    this.user.privKey,
+                    this.user.username,
                     this.contentId,
                     this.review,
                     this.reviewQuality === this.REVIEW_POSITIVE,
@@ -168,18 +168,7 @@
                     this.isLoading = false
                 });
             },
-            // log() {
-            //     console.log('contentId', this.contentId);
-            //     console.log('review', this.review);
-            //     console.log('isPositive', this.reviewQuality === this.REVIEW_POSITIVE);
 
-            //     deipRpc.api.getAccountsAsync(['alice']).then((data) => { console.log(data); })
-            // }
-        },
-        computed: {
-            authorsStr() {
-                return _(this.membersList).map('owner').join(' · ');
-            }
         },
         watch: {
             'isShown.value': function(value) {
@@ -188,8 +177,6 @@
                     this.reviewQuality = undefined;
                 }
             }
-        },
-        created() {
         }
     };
 </script>

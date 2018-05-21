@@ -94,15 +94,15 @@
         name: "ResearchFeedFilter",
         computed: {
             ...mapGetters({
-                filter: 'filter'
+                filter: 'feed/filter'
             })
         },
         methods: {
             selectDiscipline(discipline) {
-                this.$store.dispatch('updateFilter', {key: 'discipline', value: discipline})
+                this.$store.dispatch('feed/updateFilter', {key: 'discipline', value: discipline})
             },
             querySearch(value) {
-                this.$store.dispatch('updateFilter', {key: 'q', value: value})
+                this.$store.dispatch('feed/updateFilter', {key: 'q', value: value})
             }
         }
     };

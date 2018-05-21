@@ -59,21 +59,21 @@
         name: "ResearchFeed",
         computed: {
             ...mapGetters({
-                researchFeed: 'researchFeed',
-                filter: 'filter',
-                allCollapsed: 'allCollapsed'
+                researchFeed: 'feed/researchFeed',
+                filter: 'feed/filter',
+                allCollapsed: 'feed/allCollapsed'
             })
         },
         methods: {
             toggleFeed(products) {
-                this.$store.dispatch('toggleFeed')
+                this.$store.dispatch('feed/toggleFeed')
             },
             updateFilter(condition) {
-                this.$store.dispatch('updateFilter', condition)
+                this.$store.dispatch('feed/updateFilter', condition)
             }
         },
         created() {
-            this.$store.dispatch('loadAllResearches')
+            this.$store.dispatch('feed/loadAllResearches')
         }
     };
 </script>

@@ -51,7 +51,7 @@
         },
         methods: {
             toggleItem() {
-                this.$store.dispatch('toggleFeedItem', this.research.research_id)
+                this.$store.dispatch('feed/toggleFeedItem', this.research.research_id)
             }
         }
     };

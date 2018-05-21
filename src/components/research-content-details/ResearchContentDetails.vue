@@ -7,7 +7,7 @@
             width="100%" 
             :src="`${fileStorageBaseUrl}/public/files/${content.research_id}/${content.content}`">
         </iframe>
-        
+
         <div id="bars">
             <div id="sidebar">
                 <div class="c-pb-6 c-pt-4">
@@ -25,7 +25,7 @@
             </div>
         </div>
 
-        <v-dialog v-model="vote.isOpen" persistent max-width="500px" class="text-align-center">
+        <v-dialog v-if="content" v-model="vote.isOpen" persistent max-width="500px" class="text-align-center">
                 <v-card>
                     <v-card-title>
                         <span class="text-align-center">Vote for&nbsp;
@@ -52,17 +52,13 @@
 <script>
     import { mapGetters } from 'vuex'
     import deipRpc from '@deip/deip-rpc';
-    import config from './../../../../src/config'
+    import config from './../../config'
 
     export default {
         name: "ResearchContentDetails",
         data() { 
             return {
                 fileStorageBaseUrl: config['deip-server-url'],
-
-                content: {},
-                disciplinesList: [],
-                totalVotesList: [],
                 vote: {
                     discipline: {},
                     weight: 50,
@@ -74,29 +70,12 @@
 
         computed:{
             ...mapGetters({
-                user: 'user'
-            }),
-            contentWeightByDiscipline: function() {
-                const map = {};
-                const flattened = this.totalVotesList.reduce(
-                    function(accumulator, currentValue) {
-                        return accumulator.concat(currentValue);
-                    }, []);
-
-                for (var i = 0; i < flattened.length; i++) {
-                    const tvo = flattened[i];
-                    const discipline_id = tvo.discipline_id.toString();
-                    const research_content_id = tvo.research_content_id.toString();
-                    const total_research_reward_weight = tvo.total_research_reward_weight;
-
-                    if(map[research_content_id] === undefined) 
-                        map[research_content_id] = {};
-
-                    map[research_content_id][discipline_id] = total_research_reward_weight;
-                }
-
-                return map;
-            }
+                user: 'user',
+                content: 'rcd/content',
+                disciplinesList: 'rcd/disciplinesList',
+                totalVotesList: 'rcd/totalVotesList',
+                contentWeightByDiscipline: 'rcd/contentWeightByDiscipline'
+            })
         },
         
         methods: {
@@ -127,39 +106,11 @@
             }
         },
         created() {
-            var researchId = this.$route.params.research_id;
-            var contentId = this.$route.params.content_id;
+            const researchId = this.$route.params.research_id;
+            const contentId = this.$route.params.content_id;
 
-            deipRpc.api.getResearchContentByIdAsync(contentId)
-                    .then((data) => {
-                        this.content = data;
-                });
-
-            deipRpc.api.getDisciplinesByResearchAsync(researchId)
-                .then((data) => {
-                    var promises = [];
-                    for (var i = 0; i < data.length; i++) {
-                        var discipline = data[i];
-                        this.disciplinesList.push(discipline);
-                        promises.push(deipRpc.api.getTotalVotesByResearchAndDisciplineAsync(researchId, discipline.id))
-                    }
-                    return Promise.all(promises);
-                })
-                .then((data) => {
-                    this.totalVotesList = data;
-                });
-
-        },
-        mounted() {
-            // window.addEventListener('load', () => {
-            // substance.substanceGlobals.DEBUG_RENDERING = substance.platform.devtools;
-            // let textureEditor = MyTextureEditor.mount(
-            //     {},
-            //     document.getElementById('substance-texture')
-            // );
-
-            // console.log('textureEditor', textureEditor);
-            // });
+            this.$store.dispatch('rcd/loadResearchContentDetails', contentId);
+            this.$store.dispatch('rcd/loadResearchContentVotes', researchId);
         }
     };
 </script>

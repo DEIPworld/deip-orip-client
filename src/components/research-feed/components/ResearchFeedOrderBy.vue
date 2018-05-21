@@ -43,7 +43,7 @@
         methods: {
             updateFilter({orderAscOrDesc, position}) {
                 this.currentOrderIdx = position;
-                this.$store.dispatch('updateFilter', {key: 'orderBy', value: orderAscOrDesc})
+                this.$store.dispatch('feed/updateFilter', {key: 'orderBy', value: orderAscOrDesc})
             }
         }
     };

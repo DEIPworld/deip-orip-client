@@ -83,6 +83,9 @@
             goToState(state) {
                 this.$router.push({ name: state });
             }
+        },
+        created() {
+            this.$store.dispatch('loadExpertTokens')
         }
     }
 </script>
