@@ -1,18 +1,18 @@
 <template>
     <div>
-        <div class="row justify-between align-center">
+        <div v-if="research" class="row justify-between align-center">
             <div>
                 <v-icon size="18px">date_range</v-icon>
-                <span v-if="research">Created on {{ new Date(research.created_at).toDateString() }}</span>
+                <span>Created on {{ new Date(research.created_at).toDateString() }}</span>
             </div>
            <!-- <v-btn @click="afterComplete" small color="primary" class="ma-0">Vote</v-btn> -->
         </div>
 
-        <div class="display-1 half-bold c-mt-10">
+        <div v-if="research" class="display-1 half-bold c-mt-10">
             {{ research.title }}
         </div>
 
-        <div class="c-pt-8">
+        <div v-if="research" class="c-pt-8">
             {{ research.abstract }}
         </div>
 
@@ -72,12 +72,12 @@
                     </v-card>
                 </v-expansion-panel-content>
             </v-expansion-panel>
-            <vue-dropzone v-if="!research.is_finished" ref="newContent" id="content-dropzone" :options="dropzoneOptions" 
+            <vue-dropzone v-if="research && !research.is_finished" ref="newContent" id="content-dropzone" :options="dropzoneOptions" 
                 @vdropzone-file-added="fileAdded"
                 @vdropzone-complete="afterComplete">
             </vue-dropzone>
 
-            <v-dialog v-model="newContentProposal.isOpen" persistent max-width="500px">
+            <v-dialog v-if="research" v-model="newContentProposal.isOpen" persistent max-width="500px">
                 <v-card>
                     <v-card-title>
                         <span class="text-align-center">Propose new content for &nbsp;<span class="bold">"{{research.title}}"</span>&nbsp;research</span>
@@ -103,11 +103,11 @@
             </v-dialog>
         </div>
 
-       <div class="c-pt-8 title" v-if="reviews.length">Reviews: {{ reviews.length }}</div>
+       <div class="c-pt-8 title" v-if="reviewsList.length">Reviews: {{ reviewsList.length }}</div>
 
-        <div class="c-pt-6" v-if="reviews.length">
+        <div class="c-pt-6" v-if="reviewsList.length">
             <v-card class="hidden-last-child">
-                <template v-for="(review, i) in reviews">
+                <template v-for="(review, i) in reviewsList">
                     <div class="row-nowrap c-p-6">
                         <div class="review-left-block text-align-center">
                             <v-avatar size="90px">
@@ -128,6 +128,7 @@
                                 {{ review.content }}
                             </div>
                             <div class="c-pt-4 grey--text">
+                                <!-- TODO: render votes for review -->
                                 Economics 1 250 |  Psychology  320    
                             </div>
                         </div>
@@ -184,29 +185,21 @@
 <script>
     import deipRpc from '@deip/deip-rpc';
     import vueDropzone from 'vue2-dropzone';
-    import {getAccessToken} from './../../../../utils/auth'
-    import config from './../../../../../src/config'
-    import * as proposalService from "../../services/ProposalService";  
+    import {getAccessToken} from './../../../utils/auth'
+    import config from './../../../config'
+    import * as proposalService from "./../../research/services/ProposalService";
+    import { mapGetters } from 'vuex'
 
     export default {
         name: "ResearchDetailsBody",
         components: {
             vueDropzone
         },
-        props: {
-            research: { required: true, type: Object, default: null },
-            contentList: { required: true, type: Array, default: [] },
-            membersList: { required: true, type: Array, default: [] },
-            disciplinesList: { required: true, type: Array, default: [] },
-            totalVotesList: { required: true, type: Array, default: [] },
-            reviews: { required: true, type: Array, default: [] }
-        },
         data() {
             return {
 
                 dropzoneOptions: {
                     url: `${config['deip-server-url']}/api/files/upload-content`,
-
                     paramName : "research-content",
                     headers: { 
                         "Research-Id": this.$route.params.research_id,
@@ -230,41 +223,28 @@
                     { text: 'Announcement', id: 1 },
                     { text: 'Milestone', id: 2 },
                     { text: 'Final Result', id: 3 }
-                ],
-
-                user: { name: 'initdelegate', postingWif: '5JidFW79ttL9YP3W2Joc5Zer49opYU3fKNeBx9B6cpEH1GiDm5p' }
+                ]
             }
         },
 
         computed: {
-            authors: function(){
-                return this.membersList.map(m => {return { text: m.owner, id: m.id }});
+            ...mapGetters({
+                user: 'user',
+                research: 'rd/research',
+                membersList: 'rd/membersList',
+                contentList: 'rd/contentList',
+                reviewsList: 'rd/reviewsList',
+                disciplinesList: 'rd/disciplinesList',
+                totalVotesList: 'rd/totalVotesList',
+                contentWeightByDiscipline: 'rd/contentWeightByDiscipline'
+            }),
+            authors: (state, getters) => {
+                return state.membersList.map(m => { return { text: m.owner, id: m.id } });
             },
             newContentBtnIsEnabled: function(){
                 return  this.newContentProposal.title && 
                         this.newContentProposal.type && 
                         this.newContentProposal.authors.length
-            },
-
-            contentWeightByDiscipline: function() {
-                const map = {};
-                const flattened = this.totalVotesList.reduce(
-                        function(accumulator, currentValue) {
-                            return accumulator.concat(currentValue);
-                        }, []);
-
-                for (var i = 0; i < flattened.length; i++) {
-                    const tvo = flattened[i];
-                    const discipline_id = tvo.discipline_id.toString();
-                    const research_content_id = tvo.research_content_id.toString();
-                    const total_research_reward_weight = tvo.total_research_reward_weight;
-
-                    if(map[research_content_id] === undefined) 
-                        map[research_content_id] = {};
-
-                    map[research_content_id][discipline_id] = total_research_reward_weight;
-                }
-                return map;
             }
         },
         methods: {
@@ -292,6 +272,7 @@
                     []
                 ]);
 
+                // todo: add this proposal to appropriate Vuex state
                 deipRpc.broadcast.createProposalAsync(
 					this.user.postingWif,
 					this.user.name, 
@@ -309,10 +290,7 @@
                     alert(err.message);
                 });
             }
-        },
-        mounted() {
         }
-
     };
 </script>
 

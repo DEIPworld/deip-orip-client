@@ -31,7 +31,7 @@
         </div>
 
         <div class="pos-absolute expand-btn" v-if="isCollapsable !== undefined">
-            <v-btn flat small icon color="grey" class="ma-0" @click="changeMode()">
+            <v-btn flat small icon color="grey" class="ma-0" @click="toggleItem()">
                 <v-icon v-show="research.isCollapsed">keyboard_arrow_down</v-icon>
                 <v-icon v-show="!research.isCollapsed">keyboard_arrow_up</v-icon>
             </v-btn>
@@ -50,8 +50,8 @@
             return {};
         },
         methods: {
-            changeMode() {
-                this.research.isCollapsed = !this.research.isCollapsed;
+            toggleItem() {
+                this.$store.dispatch('feed/toggleFeedItem', this.research.research_id)
             }
         }
     };

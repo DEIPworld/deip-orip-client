@@ -67,7 +67,7 @@
 </script>
 
 <style lang="less" scoped>
-    @import '../../../../styles/colors.less';
+    @import './../../styles/colors.less';
 
     .page-container {
         width: 700px;

@@ -1,7 +1,7 @@
 <template>
     <div>
         <div class="sm-title bold">Research Group</div>
-            <div v-if="" class="row-nowrap justify-between align-center c-pt-4" v-for="(member, index) in membersList">
+            <div class="row-nowrap justify-between align-center c-pt-4" v-for="(member, index) in membersList">
             <div>
                 <v-avatar size="40px">
                     <v-gravatar :email="member.owner + '@deip.world'" />
@@ -50,7 +50,7 @@
 
         <div class="sm-title bold c-pt-6">Reviews</div>
 
-        <div class="c-pt-4 c-pb-6">
+        <div v-if="research" class="c-pt-4 c-pb-6">
             <v-btn dark round outline color="primary" class="full-width ma-0" @click.native="$emit('showReviewDialog');">
                 <v-icon small>add</v-icon>
                 <div class="col-grow add-review-label">
@@ -75,7 +75,7 @@
 
         <div class="sm-title bold c-pt-6">Research Info</div>
         
-        <div class="c-pt-4 c-pb-6">
+        <div v-if="research" class="c-pt-4 c-pb-6">
             <div>
                 <span class="half-bold">Review reward</span>
                 <span class="deip-blue-color right">{{convertToPercent(research.review_share_in_percent)}}%</span>
@@ -140,55 +140,37 @@
 
 <script>
     import deipRpc from '@deip/deip-rpc';
+    import { mapGetters } from 'vuex'
 
     export default {
         name: "ResearchDetailsSidebar",
-        props: {
-            research: { required: true, type: Object, default: null },
-            membersList: { required: true, type: Array, default: [] },
-            disciplinesList: { required: true, type: Array, default: [] },
-            totalVotesList: { required: true, type: Array, default: [] }
-        },
-        data() {
-            return {
-                user: { name: 'alice', postingWif: '5JGoCjh27sfuCzp7kQme5yMipaQtgdVLPiZPr9zaCwJVrSrbGYx' },
-                canJoinResearchGroup: true
-            };
-        },
         computed: {
-            researchWeightByDiscipline: function() {
-                var map = {};
-                for (var i = 0; i < this.totalVotesList.length; i++) {
-                    const tvoByContent = this.totalVotesList[i];
-                    for (var j = 0; j < tvoByContent.length; j++) {
-                        const tvo = tvoByContent[j];
-                        const discipline_id = tvo.discipline_id.toString();
-                        const total_research_reward_weight = tvo.total_research_reward_weight;
-
-                        if(map[discipline_id] === undefined)
-                            map[discipline_id] = total_research_reward_weight;
-                        else
-                            map[discipline_id] += total_research_reward_weight;
-                    }
-                }
-                return map;
+            ...mapGetters({
+                user: 'user',
+                research: 'rd/research',
+                membersList: 'rd/membersList',
+                disciplinesList: 'rd/disciplinesList',
+                totalVotesList: 'rd/totalVotesList',
+                researchWeightByDiscipline: 'rd/researchWeightByDiscipline'
+            }),
+            canJoinResearchGroup : function(){
+                return this.membersList.find(m => { return m.owner == this.user.username}) === undefined;
             }
         },
         methods: {
             joinResearchGroup : function(){
-                // deipRpc.broadcast.createResearchGroupJoinRequestAsync(
-				// 	this.user.postingWif,
-				// 	this.user.name,
-				// 	this.research.research_group_id, 
-				// 	"I wanna trulala",
-				// 	new Date( new Date().getTime() + 2 * 24 * 60 * 60 * 1000 )
-				// ).then((data) => {
-                //     debugger;
-                //     alert(data);
-                // }, (err) => {
-                //     alert(err.message);
-                // });            
-            },
+                deipRpc.broadcast.createResearchGroupJoinRequestAsync(
+					this.user.privKey,
+					this.user.username,
+					this.research.research_group_id, 
+					"I wanna trulala",
+					new Date( new Date().getTime() + 2 * 24 * 60 * 60 * 1000 )
+				).then((data) => {
+                    alert(data);
+                }, (err) => {
+                    alert(err.message);
+                });
+            }
         }
     };
 </script>

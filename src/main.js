@@ -2,6 +2,7 @@
 // (runtime-only or standalone) has been set in webpack.base.conf with an alias.
 import Vue from 'vue'
 import App from './App'
+import store from './store'
 import router from './router'
 import Vuetify from 'vuetify'
 import Gravatar from 'vue-gravatar';
@@ -12,6 +13,9 @@ import 'vue2-dropzone/dist/vue2Dropzone.css'
 import './components/core/index';
 import './components/research/index';
 import './components/user/index';
+import './components/research-feed/index'
+import './components/research-details/index';
+import './components/research-content-details/index';
 
 import config from './config'
 import deipRpc from '@deip/deip-rpc';
@@ -26,7 +30,7 @@ Vue.component('v-gravatar', Gravatar);
 
 Vue.config.productionTip = false
 deipRpc.api.setOptions({ url: config['deip-full-node-url'] });
-deipRpc.config.set('chain_id', config['chain_id']);
+deipRpc.config.set('chain_id', config['chain-id']);
 
 Vue.prototype.DEIP_100_PERCENT = 10000;
 Vue.prototype.DEIP_1_PERCENT = 10000 / 100;
@@ -41,6 +45,7 @@ Vue.filter('dateFormat', (value, format) => {
 /* eslint-disable no-new */
 new Vue({
     el: '#app',
+    store,
     router,
     components: { App },
     template: '<App/>'

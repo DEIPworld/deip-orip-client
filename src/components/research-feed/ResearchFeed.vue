@@ -1,0 +1,94 @@
+<template>
+    <v-container fluid fill-height class="pa-0 column-page">
+        <v-card height="100%" class="sidebar">
+            <research-feed-filter></research-feed-filter>
+        </v-card>
+
+        <div class="content-column">
+            <div class="filling">
+                <div class="row-nowrap">
+                    <div v-if="filter.discipline" class="filter-title subheading grey--text">Discipline</div>
+                    <div class="row col-grow align-center">
+                        <div class="c-pr-4 display-flex" v-if="filter.q !== ''">
+                            <span>{{ filter.q }}</span>
+                            <span class="small-remove-btn ml-1" @click="updateFilter({ key: 'q', value: '' })">
+                                <v-icon>close</v-icon>
+                            </span>
+                        </div>
+                        <div class="c-pr-4 display-flex" v-if="filter.discipline">
+                            <span>{{ filter.discipline.label }}</span>
+                            <span class="small-remove-btn ml-1" @click="updateFilter({ key: 'discipline', value: undefined })">
+                                <v-icon>close</v-icon>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                
+                <v-flex class="c-pt-6">
+                    <research-feed-order-by></research-feed-order-by>
+                </v-flex>
+
+                <div class="row justify-between align-end c-pt-10">
+                    <div class="title">Search Results: {{ researchFeed.length }}</div>
+                    <div class="list-state-label half-bold" @click.stop="toggleFeed()">
+                        <span v-show="!allCollapsed">Collapse all</span>
+                        <span v-show="allCollapsed">Expand all</span>
+                    </div>
+                </div>
+
+                <div class="c-pt-6">
+                    <v-card class="hidden-last-child">
+                        <template v-for="item in researchFeed">
+                            <research-list-item :is-collapsable="true" :research="item"></research-list-item>
+                            <v-divider></v-divider>
+                        </template>
+                    </v-card>
+                </div>
+            </div>
+        </div>
+    </v-container>   
+</template>
+
+<script>
+
+    import { mapGetters } from 'vuex'
+    import deipRpc from '@deip/deip-rpc';
+    import _ from 'lodash';
+
+    export default {
+        name: "ResearchFeed",
+        computed: {
+            ...mapGetters({
+                researchFeed: 'feed/researchFeed',
+                filter: 'feed/filter',
+                allCollapsed: 'feed/allCollapsed'
+            })
+        },
+        methods: {
+            toggleFeed(products) {
+                this.$store.dispatch('feed/toggleFeed')
+            },
+            updateFilter(condition) {
+                this.$store.dispatch('feed/updateFilter', condition)
+            }
+        },
+        created() {
+            this.$store.dispatch('feed/loadAllResearches')
+        }
+    };
+</script>
+
+<style lang="less" scoped>
+    .filter-title {
+        text-transform: uppercase;
+        width: 120px;
+    }
+    .list-state-label {
+        cursor: pointer;
+        opacity: 0.5;
+        user-select: none;
+        &:hover {
+            opacity: 1;
+        }
+    }
+</style>
