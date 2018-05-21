@@ -63,13 +63,8 @@ const getStringifiedProposalData = (type, params) => {
 };
 
 const getParsedProposal = proposal => {
-    let cloned = _.cloneDeep(proposal);
-
-    cloned.creation_time = new Date(cloned.creation_time);
-    cloned.expiration_time = new Date(cloned.expiration_time);
-    cloned.data = proposalDataParser[cloned.action](cloned.data);
-
-    return cloned;
+    proposal.data = JSON.parse(proposal.data);
+    return proposal;
 };
 
 export {
