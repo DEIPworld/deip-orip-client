@@ -42,15 +42,15 @@ const proposalDataStringify = {
     }
 };
 
-const proposalDataParser = {
-    5: dataStr =>
-        JSON.parse(dataStr, (key, value) => {
-            return key === "start_time" || key === "end_time"
-                ? new Date(value)
-                : value;
-        }),
-    11: dataStr => JSON.parse(dataStr)
-};
+// const proposalDataParser = {
+//     5: dataStr =>
+//         JSON.parse(dataStr, (key, value) => {
+//             return key === "start_time" || key === "end_time"
+//                 ? new Date(value)
+//                 : value;
+//         }),
+//     11: dataStr => JSON.parse(dataStr)
+// };
 
 const getStringifiedProposalData = (type, params) => {
     if (proposalDataStringify[type] === undefined) {

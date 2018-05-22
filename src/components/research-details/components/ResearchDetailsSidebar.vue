@@ -1,7 +1,10 @@
 <template>
     <div>
         <div class="sm-title bold">Research Group</div>
-            <div class="row-nowrap justify-between align-center c-pt-4" v-for="(member, index) in membersList">
+        
+        <div class="row-nowrap justify-between align-center c-pt-4" 
+            v-for="(member, index) in membersList" :key="index"
+        >
             <div>
                 <v-avatar size="40px">
                     <v-gravatar :email="member.owner + '@deip.world'" />

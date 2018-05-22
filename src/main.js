@@ -16,6 +16,7 @@ import './components/user/index';
 import './components/research-feed/index'
 import './components/research-details/index';
 import './components/research-content-details/index';
+import './components/research-group/index';
 
 import config from './config'
 import deipRpc from '@deip/deip-rpc';

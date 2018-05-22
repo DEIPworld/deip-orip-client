@@ -26,60 +26,24 @@
             <v-expansion-panel>
                 <v-expansion-panel-content hide-actions>
                     <div slot="header">
-                        <div class="row-nowrap align-center c-pr-6">
-                            <div class="id-col grey--text">ID</div>
-                            <div class="proposal-type grey--text">Proposal</div>
-                            <div class="date grey--text">Date</div>
-                            <div class="date grey--text">Exp. date</div>
-                            <div class="created-by grey--text">Created by</div>
-                            <div class="voted grey--text">Voted</div>
-                            <div class="action-col grey--text">Action</div>
+                        <div class="row-nowrap align-center c-pr-6 grey--text">
+                            <div class="id-col">ID</div>
+                            <div class="proposal-type">Proposal</div>
+                            <div class="date">Date</div>
+                            <div class="date">Exp. date</div>
+                            <div class="created-by">Created by</div>
+                            <div class="voted">Voted</div>
+                            <div class="action-col">Action</div>
                         </div>
                     </div>
                 </v-expansion-panel-content>
 
-                <v-expansion-panel-content v-for="(proposal, i) in proposals" :key="i">
-                    <div slot="header">
-                        <div class="row-nowrap align-center" v-on:click.stop>
-                            <div class="id-col">
-                                <div class="a">{{ proposal.id }}</div>
-                            </div>
-                            <div class="proposal-type">
-                                <v-icon small color="primary">person_add</v-icon>
-                                <span to="/userDetails" class="a c-ml-2">A. Kastsiushkina</span>
-                            </div>
-                            <div class="date">
-                                <div class="caption">{{ proposal.creation_time | dateFormat("D MMM, YYYY") }}</div>
-                            </div>
-                            <div class="date">
-                                <div class="caption">{{ proposal.expiration_time | dateFormat("D MMM, YYYY") }}</div>
-                            </div>
-                            <div class="created-by">
-                                <router-link to="/userDetails" class="a overflow-ellipsis">{{ proposal.creator }}</router-link>
-                            </div>
-                            <div class="voted">
-                                <div>40 of 70%</div>
-                            </div>
-                            <div class="action-col">
-                                <v-btn flat small color="primary" class="ma-0">Approve</v-btn>
-                            </div>
-                        </div>
-                    </div>
-                    <v-card>
-                        <v-card-text class="pt-0">
-                            <div class="c-ph-2">
-                                <div class="caption">
-                                    Seamlessly leverage existing empowered relationships whereas high-payoff potentialities. 
-                                    Dynamically maximize accurate networks whereas revolutionary innovation. Compellingly 
-                                    repurpose 24/365 deliverables rather than holistic intellectual capital. Authoritatively 
-                                    evolve prospective paradigms without vertical services. Compellingly.
-                                </div>
-                            </div>
-                        </v-card-text>
-                    </v-card>
-                </v-expansion-panel-content>
+                <research-group-details-proposals-item
+                    v-for="(proposal, i) in proposals" :key="i"
+                    :proposal="proposal"
+                ></research-group-details-proposals-item>
 
-                <v-expansion-panel-content>
+                <!-- <v-expansion-panel-content>
                     <div slot="header">
                         <div class="row-nowrap align-center" v-on:click.stop>
                             <div class="id-col">
@@ -118,27 +82,28 @@
                             </div>
                         </v-card-text>
                     </v-card>
-                </v-expansion-panel-content>
+                </v-expansion-panel-content> -->
             </v-expansion-panel>
         </div>
     </div>   
 </template>
 
 <script>
+    import { mapGetters } from 'vuex';
+
     export default {
         name: "ResearchGroupDetailsProposals",
         props: {
-            proposals: { required: true, type: Array, default: [] }
         },
         data() { 
             return {
                 areShownPastProposals: false
             } 
         },
-        watch: {
-            'proposals': function(newProposals) {
-                console.log('PROPOSALS', newProposals);
-            }
+        computed: {
+            ...mapGetters({
+                proposals: 'researchGroup/proposals'
+            })
         }
     };
 </script>
@@ -148,8 +113,6 @@
         width: 60px;
     }
     .proposal-type {
-        display: flex;
-        align-items: flex-start;
         flex: 1 0 0;
     }
     .date {

@@ -55,7 +55,7 @@
 
 <script>
     import deipRpc from '@deip/deip-rpc';
-    import * as proposalService from "../../research/services/ProposalService"; 
+    import * as proposalService from "./../../research-group/services/ProposalService"; 
 
     export default {
         name: "TokenSale",
