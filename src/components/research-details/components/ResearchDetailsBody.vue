@@ -274,8 +274,8 @@
 
                 // todo: add this proposal to appropriate Vuex state
                 deipRpc.broadcast.createProposalAsync(
-					this.user.postingWif,
-					this.user.name, 
+					this.user.privKey,
+					this.user.username, 
 					this.research.research_group_id, 
 					proposal,
                     proposalService.types.createResearchMaterial,
