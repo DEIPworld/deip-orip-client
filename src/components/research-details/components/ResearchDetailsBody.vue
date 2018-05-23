@@ -187,7 +187,7 @@
     import vueDropzone from 'vue2-dropzone';
     import {getAccessToken} from './../../../utils/auth'
     import config from './../../../config'
-    import * as proposalService from "./../../research/services/ProposalService";
+    import * as proposalService from "./../../research-group/services/ProposalService";
     import { mapGetters } from 'vuex'
 
     export default {

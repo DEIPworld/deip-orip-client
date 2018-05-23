@@ -4,19 +4,9 @@
             <v-icon small>date_range</v-icon>
             <span>Created 20 Jan 2018</span>
         </div>
-        <div class="display-1 half-bold c-mt-10">DEIP Blockchain Research Team</div>
+        <div class="display-1 half-bold c-mt-10">{{ group ? group.name : '' }}</div>
 
-        <div class="c-pt-8">
-            We believe that science will be open and anyone will be able to use results of scientific findings. 
-            This should reveal huge human capital and boost knowledge creation. New science will work on global 
-            scale and let everyone from any place in the world to participate in scientific research. Review and 
-            assessment of academic papers will be transparent and controlled by decentralized protocol, which 
-            increases collaboration and incentivizes contribution to global science.
-            <br>
-            DEIP provides decentralized publishing platform headed by scientists and researchers.
-            Various mechanisms to fund a research. Getting financing by automated reward distribution or receive a direct grant of investment.
-            Economic model that incentivizes fair and qualitative feedback to provide collaborative environment for researches.
-        </div>
+        <div class="c-pt-8">{{ group ? group.description : '' }}</div>
         
         <div class="c-pt-8 title">Grants: 2</div>
 
@@ -104,21 +94,25 @@
         </div>
 
         <div class="c-pt-8">
-            <research-group-details-proposals
-                :proposals="proposals"
-            ></research-group-details-proposals>
+            <research-group-details-proposals></research-group-details-proposals>
         </div>
     </div>   
 </template>
 
 <script>
+    import { mapGetters } from 'vuex';
+
     export default {
         name: "ResearchGroupDetailsBody",
         props: {
-            proposals: { required: true, type: Array, default: [] }
         },
         data() { 
             return {} 
+        },
+        computed: {
+            ...mapGetters({
+                group: 'researchGroup/group'
+            })
         }
     };
 </script>

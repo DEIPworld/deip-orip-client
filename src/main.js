@@ -16,9 +16,11 @@ import './components/user/index';
 import './components/research-feed/index'
 import './components/research-details/index';
 import './components/research-content-details/index';
+import './components/research-group/index';
 
 import config from './config'
 import deipRpc from '@deip/deip-rpc';
+import moment from 'moment';
 
 Vue.use(Vuetify, {
     theme: {
@@ -35,6 +37,10 @@ Vue.prototype.DEIP_100_PERCENT = 10000;
 Vue.prototype.DEIP_1_PERCENT = 10000 / 100;
 Vue.prototype.convertToPercent = amount => amount * 100 / 10000;
 Vue.prototype.toDeipPercent = amount => amount * 100;
+
+Vue.filter('dateFormat', (value, format) => {
+    return moment(value).format(format);
+});
 
 
 /* eslint-disable no-new */

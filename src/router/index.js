@@ -7,16 +7,18 @@ import ResearchDetails from '@/components/research-details/ResearchDetails'
 import ResearchContentDetails from '@/components/research-content-details/ResearchContentDetails'
 import ResearchStartCreating from '@/components/research/components/ResearchStartCreating'
 import ResearchCreating from '@/components/research/components/ResearchCreating'
-import ResearchGroupCreating from '@/components/research/components/ResearchGroupCreating'
-import ResearchGroupDetails from '@/components/research/components/ResearchGroupDetails'
 
-import UserDetails from '@/components/user/components/UserDetails'
-import TokenSale from '@/components/user/components/TokenSale'
+import ResearchGroupCreating from '@/components/research-group/components/ResearchGroupCreating'
+import ResearchGroupDetails from '@/components/research-group/components/ResearchGroupDetails'
+
 import SignIn from '@/components/auth/SignIn'
 import SignUp from '@/components/auth/SignUp'
 import EmailSendingRegistration from '@/components/auth/EmailSendingRegistration'
 import DataFillingRegistration from '@/components/auth/DataFillingRegistration'
 import ClaimExpertiseRegistration from '@/components/auth/ClaimExpertiseRegistration'
+
+import UserDetails from '@/components/user/components/UserDetails'
+import TokenSale from '@/components/user/components/TokenSale'
 import UserWallet from '@/components/user/components/UserWallet'
 
 import { isLoggedIn } from './../utils/auth';

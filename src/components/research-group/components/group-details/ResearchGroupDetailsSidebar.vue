@@ -1,34 +1,17 @@
 <template>
     <div>
-        <div class="sm-title bold">Group Members: 3</div>
+        <div class="sm-title bold">Group Members: {{ groupShares.length }}</div>
 
-        <div class="row-nowrap justify-between align-center c-pt-4">
+        <div class="row-nowrap justify-between align-center c-pt-4"
+            v-for="(member, index) in groupShares" :key="index"
+        >
             <div>
                 <v-avatar size="40px">
-                    <img src="http://deip.world/static/ashkor.7ff44c16.png" alt="User">
+                    <v-gravatar :email="member.owner + '@deip.world'" />
                 </v-avatar>
-                
-                <router-link to="/userDetails" class="a c-pl-3">Alex Shkor</router-link>
+                <router-link to="/userDetails" class="a c-pl-3">{{ member.owner }}</router-link>
             </div>
-            <div class="grey--text">35%</div>
-        </div>
-        <div class="row-nowrap justify-between align-center c-pt-4">
-            <div>
-                <v-avatar size="40px">
-                    <img src="http://deip.world/static/akulik.39060d33.png" alt="User">
-                </v-avatar>
-                <router-link to="/userDetails" class="a c-pl-3">Alex Kulik</router-link>
-            </div>
-            <div class="grey--text">50%</div>
-        </div>
-        <div class="row-nowrap justify-between align-center c-pt-4">
-            <div>
-                <v-avatar size="40px">
-                    <img src="http://deip.world/static/aermolaev.bf4059ea.png" alt="User">
-                </v-avatar>
-                <router-link to="/userDetails" class="a c-pl-3">Artur Yermalayeu</router-link>
-            </div>
-            <div class="grey--text">15%</div>
+            <div class="grey--text">{{ convertToPercent(member.amount) }}%</div>
         </div>
         <div class="c-mv-6">
             <span class="deip-label">2 JOIN REQUESTS</span>
@@ -97,10 +80,17 @@
 </template>
 
 <script>
+    import { mapGetters } from 'vuex';
+    
     export default {
         name: "ResearchGroupDetailsSidebar",
         data() {
             return {};
+        },
+        computed: {
+            ...mapGetters({
+                groupShares: 'researchGroup/groupShares'
+            })
         }
     };
 </script>
