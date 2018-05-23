@@ -2,7 +2,8 @@
         <v-toolbar app fixed clipped-left dark color="black">
             <!-- <v-toolbar-side-icon @click.stop="updateDrawer(!drawer)"></v-toolbar-side-icon> -->
             <v-toolbar-title>
-                <router-link class="app-title" to="/researchFeed">DEIP</router-link>
+                <router-link class="app-title" to="/researchFeed" tag="img" src="./static/logo.svg">
+                </router-link>
             </v-toolbar-title>
             <v-spacer></v-spacer>
 
@@ -51,7 +52,7 @@
             </div>
             <v-toolbar-items v-if="!isLoggedIn()">
                 <!-- <v-btn flat to="/sign-in">Sign In</v-btn> -->
-                <v-btn flat to="/sign-up">DEIP | Beta Registration</v-btn>
+                <v-btn flat to="/sign-up">Beta Registration</v-btn>
             </v-toolbar-items>
         </v-toolbar>
 </template>
