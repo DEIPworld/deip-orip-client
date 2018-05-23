@@ -50,8 +50,8 @@
                 </v-btn>
             </div>
             <v-toolbar-items v-if="!isLoggedIn()">
-                <v-btn flat to="/sign-in">Sign In</v-btn>
-                <v-btn flat to="/sign-up">Sign Up</v-btn>
+                <!-- <v-btn flat to="/sign-in">Sign In</v-btn> -->
+                <v-btn flat to="/sign-up">DEIP | Beta Registration</v-btn>
             </v-toolbar-items>
         </v-toolbar>
 </template>
