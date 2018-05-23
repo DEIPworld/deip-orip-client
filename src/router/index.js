@@ -111,7 +111,7 @@ router.beforeEach((to, from, next) => {
         if (isLoggedIn()) {
             next() // if there is a token allow to visit requested route
         } else {
-            next('/sign-in') // otherwise redirect to sign-in page
+            next('/sign-up') // otherwise redirect to sign-in page
         }
     }
 })
