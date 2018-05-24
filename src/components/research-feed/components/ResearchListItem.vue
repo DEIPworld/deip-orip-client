@@ -11,11 +11,13 @@
             </div>
             <div class="c-pt-6">
                 <div class="row-nowrap">
-                    <div class="c-pr-10">
-                        <div class="bold green--text text--darken-2">{{ research.disciplines[0].name }}</div>
-                    </div>
-                    <div class="c-pr-10">
-                        <div>900 tokens</div>
+                    <div v-for="discipline in disciplines">
+                        <div class="c-pr-10">
+                            <div class="bold green--text text--darken-2">{{ discipline.name }}</div>
+                        </div>
+                        <div class="c-pr-10">
+                            <div>{{discipline.votes}}</div>
+                        </div>
                     </div>
                     <div class="c-pr-10">
                         <v-icon size="18px">visibility</v-icon> <span>1999</span>
@@ -40,11 +42,37 @@
 </template>
 
 <script>
+    import { mapGetters } from 'vuex'
+
     export default {
         name: "ResearchListItem",
         props: {
             research: { required: true, default: undefined },
             isCollapsable: { required: false, default: undefined }
+        },
+
+        computed: {
+            disciplines () {
+                const out = [];
+                const research = this.research;
+                if(research) {
+                    const item = this.$store.getters['feed/researchItem'](research.research_id);
+                    if(item.totalVotes) {
+                        item.disciplines.forEach(discipline => {
+                        const value = {
+                            name: discipline.name,
+                            votes: item.totalVotes.reduce( (accumulator, value) => {
+                                    if(value.discipline_id === discipline.id)
+                                        return accumulator + value.total_research_reward_weight
+                                    return accumulator + 0
+                                }, 0)
+                            }
+                            out.push(value);
+                        });
+                    }
+                }
+                return out;
+            }
         },
         data() {
             return {};
@@ -52,7 +80,7 @@
         methods: {
             toggleItem() {
                 this.$store.dispatch('feed/toggleFeedItem', this.research.research_id)
-            }
+            },
         }
     };
 </script>

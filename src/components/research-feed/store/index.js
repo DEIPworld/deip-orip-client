@@ -43,6 +43,12 @@ const getters = {
 
     allCollapsed: (state, getters) => {
         return state.fullResearchList.reduce((acc, item) => acc && item.isCollapsed, true);
+    },
+
+    researchItem(state) {
+        return id => state.fullResearchList.find(item => {
+            return item.research_id === id
+        });
     }
 }
 
@@ -50,11 +56,25 @@ const getters = {
 const actions = {
 
     loadAllResearches({ state, commit }) {
+        // const fullResearchList = [];
         const disciplineId = _.get(state.filter, 'discipline.id') || 0;
         deipRpc.api.getAllResearchesListingAsync(0, disciplineId)
-            .then(data => {
-                const list = _.each(data, (item, i) => { item.isCollapsed = true; })
-                commit('SET_FULL_RESEARCH_LIST', list)
+            .then(list => {
+                const promises = [];
+                const fullResearchList = _.each(list, (item, i) => {
+                    promises.push(deipRpc.api.getTotalVotesByResearchAsync(item.research_id))
+                    item.isCollapsed = true;
+                })
+                commit('SET_FULL_RESEARCH_LIST', fullResearchList)
+                return Promise.all(promises);
+            })
+            .then(list => {
+                const flattened = list.reduce(
+                    function(accumulator, currentValue) {
+                        return accumulator.concat(currentValue);
+                    }, []);
+                const totalVotes = _.groupBy(flattened, function(tvo) { return tvo.research_id })
+                commit('SET_FEED_ITEMS_TOTAL_VOTES_LIST', totalVotes)
             });
     },
 
@@ -86,6 +106,13 @@ const mutations = {
 
     ['SET_FEED_ITEMS_COLLAPSE_STATE'](state, collapsed) {
         state.fullResearchList.forEach(item => { item.isCollapsed = collapsed });
+    },
+
+    ['SET_FEED_ITEMS_TOTAL_VOTES_LIST'](state, tvoMap) {
+        state.fullResearchList.forEach(item => {
+            if (tvoMap[item.research_id])
+                Vue.set(item, 'totalVotes', tvoMap[item.research_id])
+        });
     },
 
     ['UPDATE_FILTER'](state, { key, value }) {
