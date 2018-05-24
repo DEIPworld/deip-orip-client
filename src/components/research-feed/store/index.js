@@ -56,7 +56,6 @@ const getters = {
 const actions = {
 
     loadAllResearches({ state, commit }) {
-        // const fullResearchList = [];
         const disciplineId = _.get(state.filter, 'discipline.id') || 0;
         deipRpc.api.getAllResearchesListingAsync(0, disciplineId)
             .then(list => {
