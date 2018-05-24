@@ -20,7 +20,7 @@
             <v-menu v-if="isLoggedIn()" bottom left offset-y>
                 <v-btn fab flat icon class="ma-0" slot="activator">
                     <v-avatar size="32px">
-                        <v-gravatar :email="user.username + '@deip.world'" />
+                        <v-gravatar :title="user.username" :email="user.username + '@deip.world'" />
                     </v-avatar>
                 </v-btn>
                 <v-list dark dense>

@@ -111,7 +111,7 @@
                     <div class="row-nowrap c-p-6">
                         <div class="review-left-block text-align-center">
                             <v-avatar size="90px">
-                                <v-gravatar :email="review.author + '@deip.world'" />
+                                <v-gravatar :title="review.author" :email="review.author + '@deip.world'" />
                             </v-avatar>
                             <div class="bold c-pt-2">{{ review.author }}</div>
                             <v-btn class="ma-0 mt-2" block color="primary">Vote</v-btn>
