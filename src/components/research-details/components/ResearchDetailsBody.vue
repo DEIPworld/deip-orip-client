@@ -30,7 +30,7 @@
                     <div slot="header">
                         <span class="bold">Chapter {{index + 1}}</span>
                         <span class="deip-blue-color bold c-pl-4"> 
-                            <router-link  :to="`/${research.group_permlink}/${research.permlink}/${content.permlink}`" 
+                            <router-link  :to="`/${research.group_permlink}/research/${research.permlink}/${content.permlink}`" 
                                           style="text-decoration: none">{{content.title}}
                             </router-link>
                         </span>

@@ -1,6 +1,6 @@
 <template>
     <div class="c-p-6 pos-relative">
-        <router-link :to="`/${research.group_permlink}/${research.permlink}`" class="a subheading">
+        <router-link :to="`/${research.group_permlink}/research/${research.permlink}`" class="a subheading">
             {{research.title}}
         </router-link>
         <div class="caption grey--text c-pt-2">{{research.authors.join("  ·  ")}}</div>

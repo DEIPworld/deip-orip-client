@@ -127,8 +127,8 @@ const actions = {
             });
     },
 
-    loadResearchDetails({ state, commit, dispatch }, { group_permlink, permlink }) {
-        deipRpc.api.getResearchByAbsolutePermlinkAsync(group_permlink, permlink)
+    loadResearchDetails({ state, commit, dispatch }, { group_permlink, research_permlink }) {
+        deipRpc.api.getResearchByAbsolutePermlinkAsync(group_permlink, research_permlink)
             .then((research) => {
                 research.group_permlink = group_permlink;
                 commit('SET_RESEARCH_DETAILS', research)

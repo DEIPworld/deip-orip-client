@@ -49,8 +49,8 @@ const getters = {
 // actions
 const actions = {
 
-    loadResearchContentDetails({ state, commit, dispatch }, { group_permlink, research_permlink, permlink }) {
-        deipRpc.api.getResearchContentByAbsolutePermlinkAsync(group_permlink, research_permlink, permlink)
+    loadResearchContentDetails({ state, commit, dispatch }, { group_permlink, research_permlink, content_permlink }) {
+        deipRpc.api.getResearchContentByAbsolutePermlinkAsync(group_permlink, research_permlink, content_permlink)
             .then((content) => {
                 commit('SET_RESEARCH_CONTENT_DETAILS', content)
                 dispatch('loadResearchContentVotes', content.research_id)

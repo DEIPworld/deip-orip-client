@@ -109,7 +109,7 @@
             const permlinks = {
                 group_permlink: this.$route.params.research_group_permlink,
                 research_permlink: this.$route.params.research_permlink,
-                permlink: this.$route.params.content_permlink
+                content_permlink: this.$route.params.content_permlink
             }
 
             this.$store.dispatch('rcd/loadResearchContentDetails', permlinks);

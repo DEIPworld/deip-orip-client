@@ -154,9 +154,7 @@
                     this.user.username,
                     this.contentId,
                     this.review,
-                    this.reviewQuality === this.REVIEW_POSITIVE,
-                    [1],
-                    ['www.google.com']
+                    this.reviewQuality === this.REVIEW_POSITIVE
                 ).then((data) => {
                     this.$emit('onReviewAdded');
                     this.isSuccess = true;

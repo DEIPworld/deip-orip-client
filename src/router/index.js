@@ -46,11 +46,11 @@ const router = new Router({
         name: 'ResearchFeed',
         component: ResearchFeed
     }, {
-        path: '/:research_group_permlink/:research_permlink',
+        path: '/:research_group_permlink/research/:research_permlink',
         name: 'research-details',
         component: ResearchDetails
     }, {
-        path: '/:research_group_permlink/:research_permlink/:content_permlink',
+        path: '/:research_group_permlink/research/:research_permlink/:content_permlink',
         name: 'ResearchContentDetails',
         component: ResearchContentDetails
     }, {

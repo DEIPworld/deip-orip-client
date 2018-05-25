@@ -51,7 +51,7 @@
         },
         created() {
             const permlinks = {
-                permlink: this.$route.params.research_permlink, 
+                research_permlink: this.$route.params.research_permlink, 
                 group_permlink: this.$route.params.research_group_permlink
             }
             
