@@ -1,6 +1,8 @@
 import _ from 'lodash';
 import deipRpc from '@deip/deip-rpc';
 import Vue from 'vue'
+import config from './../../../config'
+import { getAccessToken } from './../../../utils/auth'
 
 const state = {
     research: null,
@@ -118,32 +120,36 @@ const getters = {
 // actions
 const actions = {
 
-    loadAllResearchContent({ state, commit }, researchId) {
+    loadResearchContent({ state, commit }, researchId) {
         deipRpc.api.getAllResearchContentAsync(researchId)
             .then((list) => {
                 commit('SET_RESEARCH_CONTENT_LIST', list)
             });
     },
 
-    loadResearchDetails({ state, commit }, researchId) {
-        deipRpc.api.getResearchByIdAsync(researchId)
+    loadResearchDetails({ state, commit, dispatch }, { group_permlink, permlink }) {
+        deipRpc.api.getResearchByAbsolutePermlinkAsync(group_permlink, permlink)
             .then((research) => {
+                research.group_permlink = group_permlink;
                 commit('SET_RESEARCH_DETAILS', research)
-                return deipRpc.api.getResearchGroupTokensByResearchGroupAsync(research.research_group_id)
+                return deipRpc.api.getResearchGroupTokensByResearchGroupAsync(state.research.research_group_id);
             })
-            .then((list) => {
-                commit('SET_RESEARCH_MEMBERS_LIST', list)
-            });
+            .then((members) => {
+                commit('SET_RESEARCH_MEMBERS_LIST', members)
+                dispatch('loadResearchContent', state.research.id)
+                dispatch('loadResearchReviews', state.research.id)
+                dispatch('loadResearchDisciplines', state.research.id)
+            })
     },
 
     loadResearchReviews({ state, commit }, researchId) {
         deipRpc.api.getReviewsByResearchAsync(researchId)
-            .then(reviewsList => {
-                commit('SET_RESEARCH_REVIEWS_LIST', reviewsList)
+            .then(reviews => {
+                commit('SET_RESEARCH_REVIEWS_LIST', reviews)
             });
     },
 
-    loadResearchDisciplinesList({ state, commit }, researchId) {
+    loadResearchDisciplines({ state, commit }, researchId) {
         const disciplinesList = [];
         deipRpc.api.getDisciplinesByResearchAsync(researchId)
             .then((data) => {
@@ -160,6 +166,7 @@ const actions = {
                 commit('SET_RESEARCH_TOTAL_VOTES_LIST', tvoList)
             });
     }
+
 }
 
 // mutations

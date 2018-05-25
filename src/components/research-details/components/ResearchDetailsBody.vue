@@ -30,8 +30,7 @@
                     <div slot="header">
                         <span class="bold">Chapter {{index + 1}}</span>
                         <span class="deip-blue-color bold c-pl-4"> 
-                            <router-link  :to="`/researchDetails/${research.id}/${content.id}`" 
-                                          
+                            <router-link  :to="`/${research.group_permlink}/${research.permlink}/${content.permlink}`" 
                                           style="text-decoration: none">{{content.title}}
                             </router-link>
                         </span>
@@ -72,10 +71,13 @@
                     </v-card>
                 </v-expansion-panel-content>
             </v-expansion-panel>
-            <vue-dropzone v-if="research && !research.is_finished" ref="newContent" id="content-dropzone" :options="dropzoneOptions" 
-                @vdropzone-file-added="fileAdded"
-                @vdropzone-complete="afterComplete">
-            </vue-dropzone>
+            <div v-if="research && dropzoneOptions && !research.is_finished">
+                <vue-dropzone ref="newContent" id="content-dropzone" 
+                    :options="dropzoneOptions" 
+                    @vdropzone-file-added="fileAdded"
+                    @vdropzone-complete="afterComplete">
+                </vue-dropzone>
+            </div>
 
             <v-dialog v-if="research" v-model="newContentProposal.isOpen" persistent max-width="500px">
                 <v-card>
@@ -198,21 +200,9 @@
         data() {
             return {
 
-                dropzoneOptions: {
-                    url: `${config['deip-server-url']}/api/files/upload-content`,
-                    paramName : "research-content",
-                    headers: { 
-                        "Research-Id": this.$route.params.research_id,
-                        "Authorization": 'Bearer ' + getAccessToken()
-                    },
-                    maxFiles: 1,
-                    thumbnailWidth: 150,
-                    autoProcessQueue: false,
-                    acceptedFiles: ['application/pdf', 'image/png', 'image/jpeg'].join(',')
-                },
-
                 newContentProposal: {
                     title: "",
+                    permlink: "",
                     type: null,
                     authors: [],
                     isInProgress: false,
@@ -238,13 +228,34 @@
                 totalVotesList: 'rd/totalVotesList',
                 contentWeightByDiscipline: 'rd/contentWeightByDiscipline'
             }),
+            
             authors: (state, getters) => {
                 return state.membersList.map(m => { return { text: m.owner, id: m.id } });
             },
-            newContentBtnIsEnabled: function(){
+
+            newContentBtnIsEnabled() {
                 return  this.newContentProposal.title && 
                         this.newContentProposal.type && 
                         this.newContentProposal.authors.length
+            },
+
+            dropzoneOptions() {
+                var options = null;
+                if(this.research) {
+                    options = {
+                        url: `${config['deip-server-url']}/api/files/upload-content`,
+                        paramName: "research-content",
+                        headers: {
+                            "Research-Id": this.research.id.toString(),
+                            "Authorization": 'Bearer ' + getAccessToken()
+                        },
+                         maxFiles: 1,
+                        thumbnailWidth: 150,
+                        autoProcessQueue: false,
+                        acceptedFiles: ['application/pdf', 'image/png', 'image/jpeg'].join(',')
+                    }
+                } 
+                return options
             }
         },
         methods: {
@@ -266,6 +277,7 @@
                     this.research.id,
                     this.newContentProposal.type,
                     this.newContentProposal.title,
+                    this.newContentProposal.title.replace(/[^a-zA-Z0-9-_]+/ig,''),
                     hash,
                     this.newContentProposal.authors,
                     [],

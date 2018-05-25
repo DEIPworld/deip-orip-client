@@ -106,11 +106,13 @@
             }
         },
         created() {
-            const researchId = this.$route.params.research_id;
-            const contentId = this.$route.params.content_id;
+            const permlinks = {
+                group_permlink: this.$route.params.research_group_permlink,
+                research_permlink: this.$route.params.research_permlink,
+                permlink: this.$route.params.content_permlink
+            }
 
-            this.$store.dispatch('rcd/loadResearchContentDetails', contentId);
-            this.$store.dispatch('rcd/loadResearchContentVotes', researchId);
+            this.$store.dispatch('rcd/loadResearchContentDetails', permlinks);
         }
     };
 </script>

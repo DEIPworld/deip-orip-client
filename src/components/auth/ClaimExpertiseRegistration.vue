@@ -34,7 +34,7 @@
                 </v-btn>
             </div>
             <div class="row justify-center c-pt-2">
-                <router-link to="/researchFeed" class="a">Skip</router-link>
+                <router-link to="/research-feed" class="a">Skip</router-link>
             </div>
         </div>
 

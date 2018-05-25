@@ -46,16 +46,16 @@
                 this.isReviewDialogShown.value = true;
             },
             reloadReviews() {
-                const researchId = this.$route.params.research_id;
-                this.$store.dispatch('rd/loadResearchReviews', researchId);
+                this.$store.dispatch('rd/loadResearchReviews', this.research.id);
             }
         },
         created() {
-            const researchId = this.$route.params.research_id;
-            this.$store.dispatch('rd/loadResearchDetails', researchId);
-            this.$store.dispatch('rd/loadAllResearchContent', researchId);
-            this.$store.dispatch('rd/loadResearchReviews', researchId);
-            this.$store.dispatch('rd/loadResearchDisciplinesList', researchId);
+            const permlinks = {
+                permlink: this.$route.params.research_permlink, 
+                group_permlink: this.$route.params.research_group_permlink
+            }
+            
+            this.$store.dispatch('rd/loadResearchDetails', permlinks);
         }
     };
 </script>

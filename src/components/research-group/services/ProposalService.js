@@ -28,17 +28,18 @@ const proposalDataStringify = {
             "hard_cap": hardCap
         };
     },
-    11: (researchId, type, title, content, authors, references, externalReferences) => {
+    11: (researchId, type, title, permlink, content, authors, references, externalReferences) => {
         // `{"research_id": 0, "type": 2, "title": "My milestone", "content": "My quantum break", "authors": ["initdelegate"], "references": [], "external_references": []}`
         return {
             "research_id": researchId,
             "type": type,
             "title": title,
+            "permlink": permlink,
             "content": content,
             "authors": authors,
             "references": references,
             "external_references": externalReferences
-        }  
+        }
     }
 };
 

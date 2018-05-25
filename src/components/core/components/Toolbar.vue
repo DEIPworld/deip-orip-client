@@ -2,7 +2,7 @@
         <v-toolbar app fixed clipped-left dark color="black">
             <!-- <v-toolbar-side-icon @click.stop="updateDrawer(!drawer)"></v-toolbar-side-icon> -->
             <v-toolbar-title>
-                <router-link class="app-title" to="/researchFeed" tag="img" src="./static/logo.svg">
+                <router-link class="app-title" to="/research-feed" tag="img" src="./static/logo.svg">
                 </router-link>
             </v-toolbar-title>
             <v-spacer></v-spacer>

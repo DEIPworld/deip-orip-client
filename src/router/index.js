@@ -42,15 +42,15 @@ const router = new Router({
         name: 'SignUp',
         component: SignUp
     }, {
-        path: '/researchFeed',
+        path: '/research-feed',
         name: 'ResearchFeed',
         component: ResearchFeed
     }, {
-        path: '/researchDetails/:research_id',
-        name: 'ResearchDetails',
+        path: '/:research_group_permlink/:research_permlink',
+        name: 'research-details',
         component: ResearchDetails
     }, {
-        path: '/researchDetails/:research_id/:content_id',
+        path: '/:research_group_permlink/:research_permlink/:content_permlink',
         name: 'ResearchContentDetails',
         component: ResearchContentDetails
     }, {
@@ -95,7 +95,7 @@ const router = new Router({
         component: UserWallet
     }, {
         path: '*',
-        redirect: '/researchFeed'
+        redirect: '/research-feed'
     }]
 })
 
