@@ -38,7 +38,10 @@
         <div class="sm-title bold c-pt-6">Votes: 1034</div>
 
         <div class="c-pb-6 c-pt-4">
-            <div v-for="(discipline, index) in disciplinesList" class="row align-center justify-between vote-btn-area" :class="index == 0 ? '':'c-mt-1'">
+            <div v-for="(discipline, index) in disciplinesList" :key="index"
+                class="row align-center justify-between vote-btn-area" 
+                :class="index == 0 ? '':'c-mt-1'"
+            >
            <!--     <v-btn small color="primary" dark class="ma-0">Vote</v-btn> -->
                 <div class="deip-blue-color c-p-2">
                     {{discipline.name}}:  

@@ -5,17 +5,33 @@
         <div class="row c-pt-2 justify-between align-center">
             <div class="row align-center">
                 <span class="uppercase half-bold">Show past proposals</span>
-                <v-switch class="c-ml-4" color="primary" hide-details v-model="areShownPastProposals"></v-switch>
+
+                <v-switch class="c-ml-4" 
+                    color="primary" 
+                    hide-details 
+                    v-model="filter.areShownPastProposals"
+                    @click="updateProposalFilter(
+                        { key: 'areShownPastProposals', value: !filter.areShownPastProposals }
+                    )"
+                ></v-switch>
             </div>
+
             <v-menu offset-y>
                 <v-btn slot="activator" class="ma-0">
-                    <div class="deip-blue-color">Newest First <v-icon class="c-pl-4" small>keyboard_arrow_down</v-icon></div>
+                    <div class="deip-blue-color">
+                        <span v-if="filter.order === 'asc'">Newest First</span>
+                        <span v-if="filter.order === 'desc'">Oldest First</span>
+
+                        <v-icon class="c-pl-4" small>keyboard_arrow_down</v-icon>
+                    </div>
                 </v-btn>
+
                 <v-list>
-                    <v-list-tile @click="">
+                    <v-list-tile @click="updateProposalFilter({ key: 'order', value: 'asc' })">
                         <v-list-tile-title>Newest First</v-list-tile-title>
                     </v-list-tile>
-                    <v-list-tile @click="">
+
+                    <v-list-tile @click="updateProposalFilter({ key: 'order', value: 'desc' })">
                         <v-list-tile-title>Oldest First</v-list-tile-title>
                     </v-list-tile>
                 </v-list>
@@ -38,30 +54,48 @@
                     </div>
                 </v-expansion-panel-content>
 
-                <research-group-details-proposals-item
-                    v-for="(proposal, i) in proposals" :key="i"
-                    :proposal="proposal"
-                ></research-group-details-proposals-item>
+                <template v-if="proposals.length">
+                    <research-group-details-proposals-item
+                        v-for="(proposal, i) in proposals" :key="i"
+                        :proposal="proposal"
+                    ></research-group-details-proposals-item>
+                </template>
+
+                <v-expansion-panel-content hide-actions v-if="!proposals.length">
+                    <div slot="header" class="grey--text display-flex height-4">
+                        <div class="c-m-auto">Proposal list is empty</div>
+                    </div>
+                </v-expansion-panel-content>
             </v-expansion-panel>
         </div>
     </div>   
 </template>
 
 <script>
-    import { mapGetters } from 'vuex';
+    import { mapGetters, mapActions } from 'vuex';
 
     export default {
         name: "ResearchGroupDetailsProposals",
         props: {
         },
         data() { 
-            return {
-                areShownPastProposals: false
-            } 
+            return {} 
         },
         computed: {
             ...mapGetters({
-                proposals: 'researchGroup/proposals'
+                allProposals: 'researchGroup/proposals',
+                filter: 'researchGroup/proposalListFilter'
+            }),
+            proposals() {
+                return _(this.allProposals)
+                    .filter(proposal => proposal.is_completed === this.filter.areShownPastProposals)
+                    .orderBy([this.filter.sortBy], [this.filter.order])
+                    .value();
+            }
+        },
+        methods: {
+            ...mapActions({
+                updateProposalFilter: 'researchGroup/updateProposalFilter'
             })
         }
     };

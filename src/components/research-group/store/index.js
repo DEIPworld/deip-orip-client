@@ -6,7 +6,13 @@ import * as proposalService from "./../services/ProposalService";
 const state = {
     proposals: [],
     group: undefined,
-    groupShares: []
+    groupShares: [],
+
+    proposalListFilter: {
+        areShownPastProposals: false,
+        sortBy: 'creation_time',
+        order: 'asc'
+    }
 }
 
 
@@ -14,7 +20,8 @@ const state = {
 const getters = {
     proposals: state => state.proposals,
     group: state => state.group,
-    groupShares: state => state.groupShares
+    groupShares: state => state.groupShares,
+    proposalListFilter: state => state.proposalListFilter
 }
 
 // actions
@@ -39,6 +46,9 @@ const actions = {
 
     changeProposal({ commit }, payload) {
         commit('CHANGE_PROPOSAL', payload);
+    },
+    updateProposalFilter({ commit }, payload) {
+        commit('UPDATE_PROPOSAL_FILTER', payload);
     }
 }
 
@@ -59,6 +69,9 @@ const mutations = {
         if (index !== -1) {
             state.proposals.splice(index, 1, payload.new);
         }
+    },
+    ['UPDATE_PROPOSAL_FILTER'](state, { key, value }) {
+        Vue.set(state.proposalListFilter, key, value);
     },
 }
 

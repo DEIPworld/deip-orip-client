@@ -43,6 +43,7 @@
                 </div>
                 <div class="action-col">
                     <v-btn flat small 
+                        v-if="!proposal.is_completed"
                         color="primary" 
                         class="ma-0"
                         :disabled="isApprovingLoading || isApproved"
