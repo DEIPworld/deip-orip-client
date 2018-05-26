@@ -22,11 +22,11 @@
         data() { 
             return {} 
         },
-        computed: {},
         created() {
             this.$store.dispatch('researchGroup/loadProposalsByGroupId', 0);
             this.$store.dispatch('researchGroup/loadResearchGroupById', 0);
             this.$store.dispatch('researchGroup/loadSharesByGroupId', 0);
+            this.$store.dispatch('researchGroup/loadResearchList', 0);
         }
     };
 </script>

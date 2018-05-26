@@ -7,6 +7,7 @@ const state = {
     proposals: [],
     group: undefined,
     groupShares: [],
+    researchList: [],
 
     proposalListFilter: {
         areShownPastProposals: false,
@@ -21,7 +22,8 @@ const getters = {
     proposals: state => state.proposals,
     group: state => state.group,
     groupShares: state => state.groupShares,
-    proposalListFilter: state => state.proposalListFilter
+    proposalListFilter: state => state.proposalListFilter,
+    researchList: state => state.researchList
 }
 
 // actions
@@ -43,6 +45,35 @@ const actions = {
             commit('SET_GROUP_SHARES', data);
         });
     },
+    loadResearchList({ commit }, id) {
+        let researchResult = [];
+
+        return deipRpc.api.getResearchesByResearchGroupIdAsync(id)
+            .then(data => {
+                commit('SET_GROUP_RESEARCH_LIST', data);
+                // researchResult = data;
+                // return Promise.all(
+                //     data.map(item => deipRpc.api.getTotalVotesByResearchAsync(item.research_id))
+                // );
+            })
+            // .then(list => {
+            //     let tvoMap = _.chain(list)
+            //         .reduce((accumulator, currentValue) => accumulator.concat(currentValue), [])
+            //         .groupBy('research_id')
+            //         .value();
+
+            //     researchResult.forEach(research => {
+            //         research.totalVotes = tvoMap[research.research_id] ? tvoMap[research.research_id] : [];
+            //     });
+
+            //     return researchResult;
+            // })
+            // .then(data => {
+            //     commit('SET_GROUP_RESEARCH_LIST', data);
+            // }).catch(() => {
+            //     commit('SET_GROUP_RESEARCH_LIST', researchResult);
+            // });
+    },
 
     changeProposal({ commit }, payload) {
         commit('CHANGE_PROPOSAL', payload);
@@ -62,6 +93,9 @@ const mutations = {
     },
     ['SET_GROUP_SHARES'](state, shares) {
         Vue.set(state, 'groupShares', shares);
+    },
+    ['SET_GROUP_RESEARCH_LIST'](state, researchList) {
+        Vue.set(state, 'researchList', researchList);
     },
     ['CHANGE_PROPOSAL'](state, payload) {
         let index = state.proposals.indexOf(payload.old);

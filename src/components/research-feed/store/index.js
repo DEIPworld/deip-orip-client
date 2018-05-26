@@ -43,12 +43,6 @@ const getters = {
 
     allCollapsed: (state, getters) => {
         return state.fullResearchList.reduce((acc, item) => acc && item.isCollapsed, true);
-    },
-
-    researchItem(state) {
-        return id => state.fullResearchList.find(item => {
-            return item.research_id === id
-        });
     }
 }
 
@@ -57,23 +51,36 @@ const actions = {
 
     loadAllResearches({ state, commit }) {
         const disciplineId = _.get(state.filter, 'discipline.id') || 0;
+        let researchResult = [];
+
         deipRpc.api.getAllResearchesListingAsync(0, disciplineId)
             .then(list => {
                 const promises = [];
+
                 const fullResearchList = _.each(list, (item, i) => {
                     promises.push(deipRpc.api.getTotalVotesByResearchAsync(item.research_id))
                     item.isCollapsed = true;
                 })
-                commit('SET_FULL_RESEARCH_LIST', fullResearchList)
+
+                researchResult = fullResearchList;
                 return Promise.all(promises);
             })
             .then(list => {
-                const flattened = list.reduce(
-                    function(accumulator, currentValue) {
-                        return accumulator.concat(currentValue);
-                    }, []);
-                const totalVotes = _.groupBy(flattened, function(tvo) { return tvo.research_id })
-                commit('SET_FEED_ITEMS_TOTAL_VOTES_LIST', totalVotes)
+                let tvoMap = _.chain(list)
+                    .reduce((accumulator, currentValue) => accumulator.concat(currentValue), [])
+                    .groupBy('research_id')
+                    .value();
+
+                researchResult.forEach(research => {
+                    research.totalVotes = tvoMap[research.research_id] ? tvoMap[research.research_id] : [];
+                });
+
+                return researchResult;
+            })
+            .then(data => {
+                commit('SET_FULL_RESEARCH_LIST', data);
+            }).catch(() => {
+                commit('SET_FULL_RESEARCH_LIST', researchResult);
             });
     },
 
@@ -105,13 +112,6 @@ const mutations = {
 
     ['SET_FEED_ITEMS_COLLAPSE_STATE'](state, collapsed) {
         state.fullResearchList.forEach(item => { item.isCollapsed = collapsed });
-    },
-
-    ['SET_FEED_ITEMS_TOTAL_VOTES_LIST'](state, tvoMap) {
-        state.fullResearchList.forEach(item => {
-            if (tvoMap[item.research_id])
-                Vue.set(item, 'totalVotes', tvoMap[item.research_id])
-        });
     },
 
     ['UPDATE_FILTER'](state, { key, value }) {

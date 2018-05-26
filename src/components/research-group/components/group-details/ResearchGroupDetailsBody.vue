@@ -90,7 +90,9 @@
         </div>
 
         <div class="c-pt-7">
-            <state-research-list></state-research-list>
+            <state-research-list
+                :research-list="researchList"
+            ></state-research-list>
         </div>
 
         <div class="c-pt-8">
@@ -111,7 +113,8 @@
         },
         computed: {
             ...mapGetters({
-                group: 'researchGroup/group'
+                group: 'researchGroup/group',
+                researchList: 'researchGroup/researchList'
             })
         }
     };
