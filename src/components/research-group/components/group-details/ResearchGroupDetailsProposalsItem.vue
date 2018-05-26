@@ -42,7 +42,15 @@
                     </div>
                 </div>
                 <div class="action-col">
-                    <v-btn flat small color="primary" class="ma-0">Approve</v-btn>
+                    <v-btn flat small 
+                        color="primary" 
+                        class="ma-0"
+                        :disabled="isApprovingLoading || isApproved"
+                        :loading="isApprovingLoading"
+                        @click="approve()"
+                    >
+                        {{ !isApproved ? 'Approve' : 'Approved' }}
+                    </v-btn>
                 </div>
             </div>
         </div>
@@ -62,9 +70,10 @@
 </template>
 
 <script>
-    import { mapGetters } from 'vuex';
+    import { mapGetters, mapActions } from 'vuex';
     import * as proposalService from "./../../services/ProposalService";
     import _ from 'lodash';
+    import deipRpc from '@deip/deip-rpc';
 
     export default {
         name: "ResearchGroupDetailsProposalsItem",
@@ -73,14 +82,42 @@
         },
         data() { 
             return {
-                proposalTypes: proposalService.types
+                proposalTypes: proposalService.types,
+                isApprovingLoading: false
             } 
+        },
+        methods: {
+            ...mapActions({
+                changeProposal: 'researchGroup/changeProposal'
+            }),
+            approve() {
+                this.isApprovingLoading = true;
+
+                deipRpc.broadcast.voteProposalAsync(
+                    this.currentUser.privKey,
+                    this.currentUser.username, 
+                    this.proposal.id, 
+                    this.group.id
+                ).then(() => {
+                    this.isApprovingLoading = false;
+
+                    let copy = _.cloneDeep(this.proposal);
+                    copy.voted_accounts.push(this.currentUser.username);
+                    this.changeProposal({ old: this.proposal, new: copy });
+                }).catch(err => {
+                    alert(err.message);
+                });
+            }
         },
         computed: {
             ...mapGetters({
+                group: 'researchGroup/group',
                 groupShares: 'researchGroup/groupShares',
                 currentUser: 'user'
-            })
+            }),
+            isApproved() {
+                return _.includes(this.proposal.voted_accounts, this.currentUser.username);
+            }
         }
     };
 </script>

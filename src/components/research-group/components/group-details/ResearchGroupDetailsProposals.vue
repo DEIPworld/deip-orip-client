@@ -42,47 +42,6 @@
                     v-for="(proposal, i) in proposals" :key="i"
                     :proposal="proposal"
                 ></research-group-details-proposals-item>
-
-                <!-- <v-expansion-panel-content>
-                    <div slot="header">
-                        <div class="row-nowrap align-center" v-on:click.stop>
-                            <div class="id-col">
-                                <div class="a">101</div>
-                            </div>
-                            <div class="proposal-type">
-                                <v-icon small color="primary">note_add</v-icon>
-                                <div class="a c-ml-2">Blockchain innovate  best way maintainable Blockchain innovate  best way maintainable</div>
-                            </div>
-                            <div class="date">
-                                <div class="caption">30 Mar, 2018</div>
-                            </div>
-                            <div class="date">
-                                <div class="caption">10 Jun, 2018</div>
-                            </div>
-                            <div class="created-by">
-                                <router-link to="/userDetails" class="a overflow-ellipsis">N. Ignatiev</router-link>
-                            </div>
-                            <div class="voted">
-                                <div>100 of 100%</div>
-                            </div>
-                            <div class="action-col">
-                                <v-btn flat small color="primary" class="ma-0" disabled>Approved</v-btn>
-                            </div>
-                        </div>
-                    </div>
-                    <v-card>
-                        <v-card-text class="pt-0">
-                            <div class="c-ph-2">
-                                <div class="caption">
-                                    Seamlessly leverage existing empowered relationships whereas high-payoff potentialities. 
-                                    Dynamically maximize accurate networks whereas revolutionary innovation. Compellingly 
-                                    repurpose 24/365 deliverables rather than holistic intellectual capital. Authoritatively 
-                                    evolve prospective paradigms without vertical services. Compellingly.
-                                </div>
-                            </div>
-                        </v-card-text>
-                    </v-card>
-                </v-expansion-panel-content> -->
             </v-expansion-panel>
         </div>
     </div>   

@@ -35,6 +35,10 @@ const actions = {
         return deipRpc.api.getResearchGroupTokensByResearchGroupAsync(id).then(data => {
             commit('SET_GROUP_SHARES', data);
         });
+    },
+
+    changeProposal({ commit }, payload) {
+        commit('CHANGE_PROPOSAL', payload);
     }
 }
 
@@ -48,6 +52,13 @@ const mutations = {
     },
     ['SET_GROUP_SHARES'](state, shares) {
         Vue.set(state, 'groupShares', shares);
+    },
+    ['CHANGE_PROPOSAL'](state, payload) {
+        let index = state.proposals.indexOf(payload.old);
+
+        if (index !== -1) {
+            state.proposals.splice(index, 1, payload.new);
+        }
     },
 }
 
