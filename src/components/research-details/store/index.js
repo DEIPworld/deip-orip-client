@@ -10,7 +10,8 @@ const state = {
     membersList: [],
     reviewsList: [],
     disciplinesList: [],
-    totalVotesList: []
+    totalVotesList: [],
+    isReviewDialogOpen : false
 }
 
 // getters
@@ -38,6 +39,10 @@ const getters = {
 
     totalVotesList: (state, getters) => {
         return state.totalVotesList;
+    },
+
+    isReviewDialogOpen: (state, getters) => {
+        return state.isReviewDialogOpen;
     },
 
     contentWeightByDiscipline: (state, getters) => {
@@ -165,8 +170,15 @@ const actions = {
                 commit('SET_RESEARCH_DISCIPLINES_LIST', disciplinesList)
                 commit('SET_RESEARCH_TOTAL_VOTES_LIST', tvoList)
             });
-    }
+    },
 
+    openReviewDialog({ state, commit }) {
+        commit('TOGGLE_REVIEW_DIALOG', true)
+    },
+
+    closeReviewDialog({ state, commit }) {
+        commit('TOGGLE_REVIEW_DIALOG', false)
+    }
 }
 
 // mutations
@@ -194,6 +206,10 @@ const mutations = {
 
     ['SET_RESEARCH_TOTAL_VOTES_LIST'](state, list) {
         Vue.set(state, 'totalVotesList', list)
+    },
+
+    ['TOGGLE_REVIEW_DIALOG'](state, isOpen) {
+        state.isReviewDialogOpen = isOpen;
     }
 }
 

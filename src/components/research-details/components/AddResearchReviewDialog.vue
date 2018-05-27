@@ -1,15 +1,12 @@
 <template>
-    <v-dialog v-model="isShown.value" fullscreen persistent transition="scale-transition">
+    <v-dialog v-model="isOpen" fullscreen persistent transition="scale-transition">
         <v-card class="">
             <v-toolbar dark color="primary">
-                <v-btn icon dark @click.native="isShown.value = false">
+                <v-btn icon dark @click="close()">
                     <v-icon>close</v-icon>
                 </v-btn>
                 <v-toolbar-title>Add a review</v-toolbar-title>
                 <v-spacer></v-spacer>
-                <!-- <v-toolbar-items>
-                    <v-btn dark flat @click.native="isShown.value = false">Save</v-btn>
-                </v-toolbar-items> -->
             </v-toolbar>
 
             <div v-if="research" class="column-page">
@@ -117,16 +114,14 @@
 
     export default {
         name: "AddResearchReviewDialog",
-        props: {
-            isShown: { type: Object, required: true }
-        },
         computed: {
             ...mapGetters({
                 user: 'user',
                 userExperise: 'userExperise',
                 research: 'rd/research',
                 membersList: 'rd/membersList',
-                contentList: 'rd/contentList'
+                contentList: 'rd/contentList',
+                isOpen: 'rd/isReviewDialogOpen'
             }),
             authorsStr() {
                 return _(this.membersList).map('owner').join(' · ');
@@ -147,6 +142,11 @@
             }
         },
         methods: {
+
+            close(){
+                this.$store.dispatch('rd/closeReviewDialog');
+            },
+
             publishReview() {
                 this.isLoading = true;
                 deipRpc.broadcast.makeReviewAsync(
@@ -156,8 +156,9 @@
                     this.review,
                     this.reviewQuality === this.REVIEW_POSITIVE
                 ).then((data) => {
-                    this.$emit('onReviewAdded');
                     this.isSuccess = true;
+                    this.$store.dispatch('rd/loadResearchReviews', this.research.id);
+                    this.$store.dispatch('rd/closeReviewDialog');
                 })
                 .catch((error) => {
                     this.isError = true;
@@ -167,14 +168,6 @@
                 });
             },
 
-        },
-        watch: {
-            'isShown.value': function(value) {
-                if (value === true) {
-                    this.review = '';
-                    this.reviewQuality = undefined;
-                }
-            }
         }
     };
 </script>

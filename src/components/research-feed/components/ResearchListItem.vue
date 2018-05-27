@@ -50,7 +50,6 @@
             research: { required: true, default: undefined },
             isCollapsable: { required: false, default: undefined }
         },
-
         computed: {
             disciplines () {
                 const out = [];

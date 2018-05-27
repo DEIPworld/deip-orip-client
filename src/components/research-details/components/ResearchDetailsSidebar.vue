@@ -54,7 +54,7 @@
         <div class="sm-title bold c-pt-6">Reviews</div>
 
         <div v-if="research" class="c-pt-4 c-pb-6">
-            <v-btn dark round outline color="primary" class="full-width ma-0" @click.native="$emit('showReviewDialog');">
+            <v-btn @click="openReviewDialog" dark round outline color="primary" class="full-width ma-0">
                 <v-icon small>add</v-icon>
                 <div class="col-grow add-review-label">
                     Add a review
@@ -161,6 +161,9 @@
             }
         },
         methods: {
+            openReviewDialog() {
+                this.$store.dispatch('rd/openReviewDialog');
+            },
             joinResearchGroup : function(){
                 deipRpc.broadcast.createResearchGroupJoinRequestAsync(
 					this.user.privKey,

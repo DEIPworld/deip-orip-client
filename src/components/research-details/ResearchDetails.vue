@@ -8,13 +8,11 @@
         </div>
 
         <v-card height="100%" class="sidebar">
-            <research-details-sidebar @showReviewDialog="showReviewDialog">
+            <research-details-sidebar @openReviewDialog="openReviewDialog">
             </research-details-sidebar>
         </v-card>
 
-        <add-research-review-dialog 
-            :is-shown="isReviewDialogShown"
-            @onReviewAdded="reloadReviews">
+        <add-research-review-dialog>
         </add-research-review-dialog>
     </v-container>   
 </template>
@@ -42,12 +40,9 @@
             })
         },
         methods: {
-            showReviewDialog() {
-                this.isReviewDialogShown.value = true;
+            openReviewDialog() {
+                this.$store.dispatch('rd/openReviewDialog');
             },
-            reloadReviews() {
-                this.$store.dispatch('rd/loadResearchReviews', this.research.id);
-            }
         },
         created() {
             const permlinks = {

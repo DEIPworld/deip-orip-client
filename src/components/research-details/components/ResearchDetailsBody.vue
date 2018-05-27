@@ -105,47 +105,11 @@
             </v-dialog>
         </div>
 
-       <div class="c-pt-8 title" v-if="reviewsList.length">Reviews: {{ reviewsList.length }}</div>
+        <div class="c-pt-8 title" v-if="reviewsList.length">Reviews: {{ reviewsList.length }}</div>
 
         <div class="c-pt-6" v-if="reviewsList.length">
-            <v-card class="hidden-last-child">
-                <template v-for="(review, i) in reviewsList">
-                    <div class="row-nowrap c-p-6">
-                        <div class="review-left-block text-align-center">
-                            <v-avatar size="90px">
-                                <v-gravatar :title="review.author" :email="review.author + '@deip.world'" />
-                            </v-avatar>
-                            <div class="bold c-pt-2">{{ review.author }}</div>
-                            <v-btn class="ma-0 mt-2" block color="primary">Vote</v-btn>
-                        </div>
-                        <div class="column c-ml-6">
-                            <div>
-                                <span class="grey--text">{{ new Date(review.created_at).toDateString() }}</span>
-                                <span class="half-bold c-pl-2">
-                                    <span class="green--text text--darken-2" v-if="review.is_positive">Positive</span>
-                                    <span class="red--text text--darken-2" v-if="!review.is_positive">Negative</span>
-                                </span>
-                            </div>
-                            <div class="c-pt-4 col-grow">
-                                {{ review.content }}
-                            </div>
-                            <div class="c-pt-4 grey--text">
-                                <!-- TODO: render votes for review -->
-                                Economics 1 250 |  Psychology  320    
-                            </div>
-                        </div>
-                    </div>
-
-                    <v-divider></v-divider>
-                </template>
-            </v-card>
+            <review-list-item v-for="(review, i) in reviewsList" :review="review"></review-list-item>
         </div>
-
-        <!-- <div class="row c-pt-4 justify-end">
-            <v-btn class="ma-0" color="primary">
-                <v-icon>add</v-icon> Add a review
-            </v-btn>
-        </div> -->
 
         <!-- <div class="c-pt-4 title">Grants: 4</div>
 
@@ -220,6 +184,7 @@
         computed: {
             ...mapGetters({
                 user: 'user',
+                userExperise: 'userExperise',
                 research: 'rd/research',
                 membersList: 'rd/membersList',
                 contentList: 'rd/contentList',
