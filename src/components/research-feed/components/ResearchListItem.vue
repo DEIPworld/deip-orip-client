@@ -15,13 +15,14 @@
 
             <div class="c-pt-6">
                 <div class="row-nowrap">
-                    <div v-for="(discipline, index) in disciplines" :key="index">
-                        <div class="c-pr-10">
-                            <div class="bold green--text text--darken-2">{{ discipline.name }}</div>
-                        </div>
-
-                        <div class="c-pr-10">
-                            <div>{{discipline.votes}}</div>
+                    <div class="row-nowrap">
+                        <div v-for="tvo in disciplines">
+                            <span class="c-pr-1">
+                                <span class="bold green--text text--darken-2">{{ tvo.disciplineName }}</span>
+                            </span>
+                            <span class="c-pr-4">
+                                <span>{{tvo.totalWeight}}</span>
+                            </span>
                         </div>
                     </div>
 
@@ -63,8 +64,8 @@
                 return this.research.disciplines 
                     ? this.research.disciplines.map(discipline => {
                         return {
-                            name: discipline.name,
-                            votes: this.research.totalVotes.reduce(
+                            disciplineName: discipline.name,
+                            totalWeight: this.research.totalVotes.reduce(
                                 (accumulator, value) => value.discipline_id === discipline.id 
                                     ? accumulator + value.total_research_reward_weight 
                                     : accumulator,

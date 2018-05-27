@@ -12,7 +12,7 @@
             <div id="sidebar">
                 <div class="c-pb-6 c-pt-4">
                     <div v-for="(discipline, index) in disciplinesList" class="row align-center justify-between vote-btn-area" :class="index == 0 ? '':'c-mt-1'">
-                        <v-btn small color="primary" dark class="ma-0" @click="openVote(discipline)">Vote</v-btn>
+                        <v-btn @click="openVote(discipline)" small color="primary" dark class="ma-0" >Vote</v-btn>
                         <div class="deip-blue-color c-p-2">
                             {{discipline.name}}:  
                 
@@ -144,6 +144,7 @@ div#sidebar {
     border: 1px solid #2F80ED;
     border-radius: 3px;
     padding-left: 3px;
+    font-size: 13px;
 }
 
 .vote-dialog-body{
