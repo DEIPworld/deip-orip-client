@@ -2,14 +2,17 @@
     <div>
         <div class="row justify-between align-center">
             <div class="title">Research</div>
+            
             <v-menu offset-y>
                 <v-btn slot="activator" class="ma-0">
                     <div class="deip-blue-color">Newest First <v-icon class="c-pl-4" small>keyboard_arrow_down</v-icon></div>
                 </v-btn>
+
                 <v-list>
                     <v-list-tile @click="">
                         <v-list-tile-title>Newest First</v-list-tile-title>
                     </v-list-tile>
+
                     <v-list-tile @click="">
                         <v-list-tile-title>Oldest First</v-list-tile-title>
                     </v-list-tile>
@@ -18,17 +21,34 @@
         </div>
 
         <div class="c-pt-5">
-            <v-tabs color="primary" slot="extension"  v-model="tab" grow dark>
+            <v-tabs color="primary" slot="extension" v-model="tab" grow dark>
                 <v-tabs-slider color="black"></v-tabs-slider>
-                <v-tab v-for="item in ['Acitive research:', 'Finished research:']" :key="item">
-                    {{ item }} 2
+
+                <v-tab key="active" :disabled="activeResearchList.length === 0">
+                    Acitive research: {{ activeResearchList.length }}
+                </v-tab>
+
+                <v-tab key="finished" :disabled="finishedResearchList.length === 0">
+                    Finished research: {{ finishedResearchList.length }}
                 </v-tab>
             </v-tabs>
+
             <v-tabs-items v-model="tab" style="margin: 0px -2px -3px;">
-                <v-tab-item v-for="item in ['Acitive research:', 'Finished research:']" :key="item">
+                <v-tab-item key="active">
                     <div style="margin: 0px 2px 3px;">
                         <v-card class="hidden-last-child">
-                            <template v-for="item in fullResearchList">
+                            <template v-for="item in activeResearchList">
+                                <research-list-item :research="item"></research-list-item>
+                                <v-divider></v-divider>
+                            </template>
+                        </v-card>
+                    </div>
+                </v-tab-item>
+
+                <v-tab-item key="finished">
+                    <div style="margin: 0px 2px 3px;">
+                        <v-card class="hidden-last-child">
+                            <template v-for="item in finishedResearchList">
                                 <research-list-item :research="item"></research-list-item>
                                 <v-divider></v-divider>
                             </template>
@@ -45,17 +65,23 @@
     
     export default {
         name: 'StateResearchList',
+        props: {
+            researchList: { required: true, type: Array }
+        },
         data() {
             return {
-                tab: null,
-                fullResearchList: []
+                tab: null
+            }
+        },
+        computed: {
+            finishedResearchList() {
+                return this.researchList.filter(research => research.is_finished);
+            },
+            activeResearchList() {
+                return this.researchList.filter(research => !research.is_finished);
             }
         },
         created() {
-            deipRpc.api.getAllResearchesListingAsync(0, 0)
-                .then(data => {
-                    this.fullResearchList = data;
-                });
         }
     }
 </script>

@@ -6,7 +6,14 @@ import * as proposalService from "./../services/ProposalService";
 const state = {
     proposals: [],
     group: undefined,
-    groupShares: []
+    groupShares: [],
+    researchList: [],
+
+    proposalListFilter: {
+        areShownPastProposals: false,
+        sortBy: 'creation_time',
+        order: 'asc'
+    }
 }
 
 
@@ -14,7 +21,9 @@ const state = {
 const getters = {
     proposals: state => state.proposals,
     group: state => state.group,
-    groupShares: state => state.groupShares
+    groupShares: state => state.groupShares,
+    proposalListFilter: state => state.proposalListFilter,
+    researchList: state => state.researchList
 }
 
 // actions
@@ -35,6 +44,42 @@ const actions = {
         return deipRpc.api.getResearchGroupTokensByResearchGroupAsync(id).then(data => {
             commit('SET_GROUP_SHARES', data);
         });
+    },
+    loadResearchList({ commit }, id) {
+        let researchResult = [];
+
+        return deipRpc.api.getResearchesByResearchGroupIdAsync(id)
+            .then(data => {
+                commit('SET_GROUP_RESEARCH_LIST', data);
+                // researchResult = data;
+                // return Promise.all(
+                //     data.map(item => deipRpc.api.getTotalVotesByResearchAsync(item.research_id))
+                // );
+            })
+            // .then(list => {
+            //     let tvoMap = _.chain(list)
+            //         .reduce((accumulator, currentValue) => accumulator.concat(currentValue), [])
+            //         .groupBy('research_id')
+            //         .value();
+
+            //     researchResult.forEach(research => {
+            //         research.totalVotes = tvoMap[research.research_id] ? tvoMap[research.research_id] : [];
+            //     });
+
+            //     return researchResult;
+            // })
+            // .then(data => {
+            //     commit('SET_GROUP_RESEARCH_LIST', data);
+            // }).catch(() => {
+            //     commit('SET_GROUP_RESEARCH_LIST', researchResult);
+            // });
+    },
+
+    changeProposal({ commit }, payload) {
+        commit('CHANGE_PROPOSAL', payload);
+    },
+    updateProposalFilter({ commit }, payload) {
+        commit('UPDATE_PROPOSAL_FILTER', payload);
     }
 }
 
@@ -48,6 +93,19 @@ const mutations = {
     },
     ['SET_GROUP_SHARES'](state, shares) {
         Vue.set(state, 'groupShares', shares);
+    },
+    ['SET_GROUP_RESEARCH_LIST'](state, researchList) {
+        Vue.set(state, 'researchList', researchList);
+    },
+    ['CHANGE_PROPOSAL'](state, payload) {
+        let index = state.proposals.indexOf(payload.old);
+
+        if (index !== -1) {
+            state.proposals.splice(index, 1, payload.new);
+        }
+    },
+    ['UPDATE_PROPOSAL_FILTER'](state, { key, value }) {
+        Vue.set(state.proposalListFilter, key, value);
     },
 }
 
