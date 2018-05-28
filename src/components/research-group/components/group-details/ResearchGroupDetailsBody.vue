@@ -8,7 +8,7 @@
 
         <div class="c-pt-8">{{ group ? group.description : '' }}</div>
         
-        <div class="c-pt-8 title">Grants: 2</div>
+        <div class="c-pt-8 title">Group Members: {{ members.length }}</div>
 
         <div class="c-pt-6">
             <v-card>
@@ -23,61 +23,38 @@
 
                     <v-divider></v-divider>
 
-                    <div class="list-line">
-                        <div class="row-nowrap col-4 list-body-cell">
-                            <v-avatar size="40px">
-                                <v-gravatar :email="'initdelegate' + '@deip.world'" />
-                            </v-avatar>
-                            <div class="col-grow c-pl-4">
-                                <router-link to="/userDetails" class="a subheading">initdelegate</router-link>
-                                <div class="caption c-pt-1">Belarusian State University of Informatics and Radioelectronics</div>
-                            </div>
-                        </div>
-                        <div class="col-2 list-body-cell">
-                            <div>
-                                <span class="uppercase bold">Phys:</span> 234
-                            </div>
-                            <div>
-                                <span class="uppercase bold">Quant. Phys:</span> 322
-                            </div>
-                            <div>
-                                <span class="uppercase bold">Quant. Opt:</span> 3 223
-                            </div>
-                        </div>
-                        <div class="col-2 text-align-center list-body-cell">60%</div>
-                        <div class="col-2 text-align-center list-body-cell">20 Jan 2018</div>
-                        <div class="col-2 text-align-center list-body-cell">Belarus</div>
-                    </div>
+                    <template v-for="(member, i) in members">
+                        <div class="list-line">
+                            <div class="row-nowrap col-4 list-body-cell">
+                                <v-avatar size="40px" class="c-pt-3">
+                                    <v-gravatar :email="member.name + '@deip.world'" />
+                                </v-avatar>
 
-                    <v-divider></v-divider>
+                                <div class="col-grow c-pl-4">
+                                    <router-link to="/userDetails" class="a subheading">{{ member.name }}</router-link>
+                                    <div class="caption c-pt-1">Belarusian State University of Informatics and Radioelectronics</div>
+                                </div>
+                            </div>
 
-                    <div class="list-line">
-                        <div class="row-nowrap col-4 list-body-cell">
-                            <v-avatar size="40px">
-                                <v-gravatar :email="'alice' + '@deip.world'" />
-                            </v-avatar>
-                            <div class="col-grow c-pl-4">
-                                <router-link to="/userDetails" class="a subheading">alice</router-link>
-                                <div class="caption c-pt-1">Belarusian State University</div>
+                            <div class="col-2 list-body-cell">
+                                <div v-for="(item, i) in member.expertise" :key="i">
+                                    <span class="uppercase bold">{{ item.discipline_id }}:</span> {{ item.amount }}
+                                </div>
                             </div>
-                        </div>
-                        <div class="col-2 list-body-cell">
-                            <div>
-                                <span class="uppercase bold">Phys:</span> 32
-                            </div>
-                            <div>
-                                <span class="uppercase bold">Quant. Phys:</span> 934
-                            </div>
-                            <div>
-                                <span class="uppercase bold">Quant. Opt:</span> 223
-                            </div>
-                        </div>
-                        <div class="col-2 text-align-center list-body-cell">23%</div>
-                        <div class="col-2 text-align-center list-body-cell">3 Feb 2018</div>
-                        <div class="col-2 text-align-center list-body-cell">Russia</div>
-                    </div>
 
-                    <v-divider></v-divider>
+                            <div class="col-2 text-align-center list-body-cell">
+                                {{ convertToPercent(member.groupShares.amount) }}
+                            </div>
+
+                            <div class="col-2 text-align-center list-body-cell">
+                                {{ member.created | dateFormat("D MMM YYYY") }}
+                            </div>
+
+                            <div class="col-2 text-align-center list-body-cell">Belarus</div>
+                        </div>
+
+                        <v-divider></v-divider>
+                    </template>
                 </div>
 
                 <div class="c-pv-4 c-ph-6">
@@ -114,7 +91,8 @@
         computed: {
             ...mapGetters({
                 group: 'researchGroup/group',
-                researchList: 'researchGroup/researchList'
+                researchList: 'researchGroup/researchList',
+                members: 'researchGroup/members'
             })
         }
     };

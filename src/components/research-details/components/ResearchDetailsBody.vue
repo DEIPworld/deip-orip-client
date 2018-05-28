@@ -108,7 +108,7 @@
         <div class="c-pt-8 title" v-if="reviewsList.length">Reviews: {{ reviewsList.length }}</div>
 
         <div class="c-pt-6" v-if="reviewsList.length">
-            <review-list-item v-for="(review, i) in reviewsList" :review="review"></review-list-item>
+            <review-list-item v-for="(review, i) in reviewsList" :review="review" :key="i"></review-list-item>
         </div>
 
         <!-- <div class="c-pt-4 title">Grants: 4</div>

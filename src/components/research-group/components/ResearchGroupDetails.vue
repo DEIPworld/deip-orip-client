@@ -29,8 +29,8 @@
             return {} 
         },
         created() {
-            const group_permlink = this.$route.params.research_group_permlink;
-            this.$store.dispatch('researchGroup/loadResearchGroup', group_permlink);
+            const groupPermlink = this.$route.params.research_group_permlink;
+            this.$store.dispatch('researchGroup/loadResearchGroup', groupPermlink);
         }
     };
 </script>

@@ -8,6 +8,7 @@ const state = {
     group: undefined,
     groupShares: [],
     researchList: [],
+    members: [],
 
     proposalListFilter: {
         areShownPastProposals: false,
@@ -22,6 +23,7 @@ const getters = {
     proposals: state => state.proposals,
     group: state => state.group,
     groupShares: state => state.groupShares,
+    members: state => state.members,
     proposalListFilter: state => state.proposalListFilter,
     researchList: state => state.researchList
 }
@@ -38,14 +40,21 @@ const actions = {
     loadResearchGroup({ commit, dispatch, state }, permlink) {
         deipRpc.api.getResearchGroupByPermlinkAsync(permlink).then(data => {
             commit('SET_RESEARCH_GROUP', data);
+
             dispatch('loadResearchGroupProposals', state.group.id);
             dispatch('loadResearchGroupShares', state.group.id);
             dispatch('loadResearchList', state.group.id);
+
+            dispatch('loadResearchGroupShares', state.group.id)
+                .then(data => {
+                    dispatch('loadResearchGroupAccounts', data.map(item => item.owner));
+                });
         });
     },
-    loadResearchGroupShares({ commit }, id) {
+    loadResearchGroupShares({ commit, state }, id) {
         return deipRpc.api.getResearchGroupTokensByResearchGroupAsync(id).then(data => {
             commit('SET_GROUP_SHARES', data);
+            return data;
         });
     },
     loadResearchList({ commit }, id) {
@@ -77,6 +86,32 @@ const actions = {
             //     commit('SET_GROUP_RESEARCH_LIST', researchResult);
             // });
     },
+    loadResearchGroupAccounts({ commit, state }, accountNames) {
+        let accounts = [];
+
+        return deipRpc.api.getAccountsAsync(accountNames)
+            .then(data => {
+                accounts = _.each(data, (item, i) => { 
+                    item.expertise = [];
+                    item.groupShares = state.groupShares[i];
+                });
+
+                return Promise.all(
+                    data.map(account => 
+                        deipRpc.api.getExpertTokensByAccountNameAsync(account.name)
+                    )
+                );
+            })
+            .then(expertTokens => {
+                accounts.forEach((account, i) => { 
+                    account.expertise = expertTokens[i];
+                });
+                
+                commit('SET_GROUP_MEMBERS', accounts);
+            }).catch(() => {
+                commit('SET_GROUP_MEMBERS', accounts);
+            });
+    },
 
     changeProposal({ commit }, payload) {
         commit('CHANGE_PROPOSAL', payload);
@@ -96,6 +131,9 @@ const mutations = {
     },
     ['SET_GROUP_SHARES'](state, shares) {
         Vue.set(state, 'groupShares', shares);
+    },
+    ['SET_GROUP_MEMBERS'](state, members) {
+        Vue.set(state, 'members', members);
     },
     ['SET_GROUP_RESEARCH_LIST'](state, researchList) {
         Vue.set(state, 'researchList', researchList);
