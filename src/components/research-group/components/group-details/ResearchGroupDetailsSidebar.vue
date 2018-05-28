@@ -34,21 +34,9 @@
         <div class="sm-title bold c-pt-6">Group Info</div>
 
         <div class="c-pt-4 c-pb-6">
-            <div>
-                <span class="half-bold">DEIP tokens</span>
-                <span class="right">2 345</span>
-            </div>
-            <div>
-                <span class="half-bold">Physcis</span>
-                <span class="right">432</span>
-            </div>
-            <div>
-                <span class="half-bold">Quantum physics</span>
-                <span class="right">1 333</span>
-            </div>
-            <div>
-                <span class="half-bold">Quantum optics</span>
-                <span class="right">4 234</span>
+            <div v-for="(item, i) in groupExpertise" :key="i">
+                <span class="half-bold">{{ item.disciplineName }}</span>
+                <span class="right">{{ item.value }}</span>
             </div>
         </div>
 
@@ -81,6 +69,7 @@
 
 <script>
     import { mapGetters } from 'vuex';
+    import _ from 'lodash';
     
     export default {
         name: "ResearchGroupDetailsSidebar",
@@ -89,8 +78,23 @@
         },
         computed: {
             ...mapGetters({
-                groupShares: 'researchGroup/groupShares'
-            })
+                groupShares: 'researchGroup/groupShares',
+                members: 'researchGroup/members'
+            }),
+            groupExpertise() {
+                return _.chain(this.members)
+                    .map('expertise')
+                    .flatten()
+                    .groupBy('discipline_id')
+                    .mapValues(item => {
+                        return { 
+                            value: item.reduce((acc, val) => acc + val.amount, 0),
+                            disciplineName: item[0].discipline_id
+                        }
+                    })
+                    .values()
+                    .value();
+            }
         }
     };
 </script>
