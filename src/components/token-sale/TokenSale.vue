@@ -64,7 +64,6 @@
         },
         methods: {
             contributeToTokenSale() {
-                debugger;
                 deipRpc.broadcast.contributeToTokenSaleAsync(
 					this.user.privKey,
                     this.tokenSale.id,

@@ -29,11 +29,8 @@
             return {} 
         },
         created() {
-            var groupId =1;
-            this.$store.dispatch('researchGroup/loadProposalsByGroupId', groupId);
-            this.$store.dispatch('researchGroup/loadResearchGroupById', groupId);
-            this.$store.dispatch('researchGroup/loadSharesByGroupId', groupId);
-            this.$store.dispatch('researchGroup/loadResearchList', groupId);
+            const group_permlink = this.$route.params.research_group_permlink;
+            this.$store.dispatch('researchGroup/loadResearchGroup', group_permlink);
         }
     };
 </script>

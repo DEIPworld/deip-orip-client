@@ -82,7 +82,7 @@ const router = new Router({
         name: 'ClaimExpertiseRegesitration',
         component: ClaimExpertiseRegistration
     }, {
-        path: '/researchGroupDetails',
+        path: '/:research_group_permlink/group-details',
         name: 'ResearchGroupDetails',
         component: ResearchGroupDetails
     }, {

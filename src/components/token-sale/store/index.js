@@ -34,7 +34,6 @@ const actions = {
                 return deipRpc.api.checkResearchTokenSaleExistenceByResearchIdAsync(research.id)
             })
             .then((exists) => {
-                debugger;
                 if (exists) {
                     deipRpc.api.getResearchTokenSaleByResearchIdAsync(state.research.id)
                       .then((tokenSale) => {

@@ -1,10 +1,12 @@
 <template>
     <div>
-        <div class="sm-title bold">Research Group</div>
+
+        <router-link :to="`/${groupLink}/group-details`" style="text-decoration: none; color: black">
+            <div class="sm-title bold">Research Group <span class="caption grey--text">(view)</span></div>
+        </router-link>
         
         <div class="row-nowrap justify-between align-center c-pt-4" 
-            v-for="(member, index) in membersList" :key="index"
-        >
+            v-for="(member, index) in membersList" :key="index">
             <div>
                 <v-avatar size="40px">
                     <v-gravatar :title="member.owner" :email="member.owner + '@deip.world'" />
@@ -160,6 +162,11 @@
 
     export default {
         name: "ResearchDetailsSidebar",
+        data(){
+           return {
+                groupLink: this.$route.params.research_group_permlink
+           }
+        },
         computed: {
             ...mapGetters({
                 user: 'user',

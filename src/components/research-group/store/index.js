@@ -28,19 +28,22 @@ const getters = {
 
 // actions
 const actions = {
-    loadProposalsByGroupId({ commit }, id) {
-        return deipRpc.api.getProposalsByResearchGroupIdAsync(id).then(data => {
+    loadResearchGroupProposals({ commit }, id) {
+        deipRpc.api.getProposalsByResearchGroupIdAsync(id).then(data => {
             commit('SET_PROPOSALS', 
                 _.map(data, proposal => proposalService.getParsedProposal(proposal))
             );
         });
     },
-    loadResearchGroupById({ commit }, id) {
-        return deipRpc.api.getResearchGroupByIdAsync(id).then(data => {
+    loadResearchGroup({ commit, dispatch, state }, permlink) {
+        deipRpc.api.getResearchGroupByPermlinkAsync(permlink).then(data => {
             commit('SET_RESEARCH_GROUP', data);
+            dispatch('loadResearchGroupProposals', state.group.id);
+            dispatch('loadResearchGroupShares', state.group.id);
+            dispatch('loadResearchList', state.group.id);
         });
     },
-    loadSharesByGroupId({ commit }, id) {
+    loadResearchGroupShares({ commit }, id) {
         return deipRpc.api.getResearchGroupTokensByResearchGroupAsync(id).then(data => {
             commit('SET_GROUP_SHARES', data);
         });
@@ -48,7 +51,7 @@ const actions = {
     loadResearchList({ commit }, id) {
         let researchResult = [];
 
-        return deipRpc.api.getResearchesByResearchGroupIdAsync(id)
+        deipRpc.api.getResearchesByResearchGroupIdAsync(id)
             .then(data => {
                 commit('SET_GROUP_RESEARCH_LIST', data);
                 // researchResult = data;

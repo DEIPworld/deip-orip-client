@@ -27,9 +27,6 @@
                     <v-list-tile @click="goToState('UserDetails')">
                         <v-list-tile-title>My Page</v-list-tile-title>
                     </v-list-tile>
-                    <v-list-tile @click="goToState('ResearchGroupDetails')">
-                        <v-list-tile-title>Research Group Details</v-list-tile-title>
-                    </v-list-tile>
                     <v-list-tile @click="goToState('ResearchGroupCreating')">
                         <v-list-tile-title>Research Group Creating</v-list-tile-title>
                     </v-list-tile>
