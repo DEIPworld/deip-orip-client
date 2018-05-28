@@ -35,11 +35,16 @@
                     <router-link to="/userDetails" class="a overflow-ellipsis">{{ proposal.creator }}</router-link>
                 </div>
                 <div class="voted">
-                    <div>
-                        {{ (proposal.voted_accounts.length / groupShares.length * 100).toFixed() }}
-                        of
-                        {{ convertToPercent(proposal.quorum_percent) }}%
-                    </div>
+                    <v-tooltip right>
+                        <div slot="activator">
+                            {{ approvedPercent }} of {{ convertToPercent(proposal.quorum_percent) }}%
+                        </div>
+
+                        <span>
+                            Approved by<br> 
+                            <b>{{ proposal.voted_accounts.join(', ') }}</b>
+                        </span>
+                    </v-tooltip>
                 </div>
                 <div class="action-col">
                     <v-btn flat small 
@@ -118,6 +123,14 @@
             }),
             isApproved() {
                 return _.includes(this.proposal.voted_accounts, this.currentUser.username);
+            },
+            approvedPercent() {
+                return this.convertToPercent(
+                    this.proposal.voted_accounts.reduce((acc, accountName) => {
+                        let shares = _.find(this.groupShares, { 'owner': accountName });
+                        return shares ? acc + shares.amount : acc;
+                    }, 0)
+                );
             }
         }
     };

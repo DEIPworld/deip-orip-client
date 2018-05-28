@@ -43,7 +43,7 @@
                             </div>
 
                             <div class="col-2 text-align-center list-body-cell">
-                                {{ convertToPercent(member.groupShares.amount) }}
+                                {{ convertToPercent(member.groupShares.amount) }} %
                             </div>
 
                             <div class="col-2 text-align-center list-body-cell">
