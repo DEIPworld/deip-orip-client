@@ -124,18 +124,28 @@
         <div class="sm-title bold c-pt-6">Research token holders</div>
         
         <div class="c-pt-4 c-pb-6">
+
             <div>
                 <span class="half-bold">Research group</span>
                 <span class="deip-blue-color right">80%</span>
             </div>
-            <div>
+
+            <router-link v-if="research" :to="`/${research.group_permlink}/token-sale/${research.permlink}`" style="text-decoration: none">
+                <v-btn dark round outline color="primary" class="full-width c-mt-3 c-mb-3">
+                    <div class="col-grow add-review-label">
+                        {{tokenSale == null ? 'Propose Token Sale' : 'View Token Sale'}}
+                    </div>
+                </v-btn>
+            </router-link>
+
+        <!--    <div>
                 <span class="half-bold">Investor1</span>
                 <span class="deip-blue-color right">15%</span>
             </div>
             <div>
                 <span class="half-bold">Investor2</span>
                 <span class="deip-blue-color right">5%</span>
-            </div>
+            </div> -->
         </div>
 
         <div style="margin: 0 -24px">
@@ -157,7 +167,8 @@
                 membersList: 'rd/membersList',
                 disciplinesList: 'rd/disciplinesList',
                 totalVotesList: 'rd/totalVotesList',
-                researchWeightByDiscipline: 'rd/researchWeightByDiscipline'
+                researchWeightByDiscipline: 'rd/researchWeightByDiscipline',
+                tokenSale: 'rd/tokenSale'
             }),
             canJoinResearchGroup : function(){
                 return this.membersList.find(m => { return m.owner == this.user.username}) === undefined;

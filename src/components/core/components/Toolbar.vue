@@ -87,6 +87,7 @@
         },
         created() {
             this.$store.dispatch('loadExpertTokens')
+            this.$store.dispatch('loadGroups')
         }
     }
 </script>

@@ -6,6 +6,7 @@ import feed from './../components/research-feed/store/index'
 import researchGroup from './../components/research-group/store/index'
 import rd from './../components/research-details/store/index'
 import rcd from './../components/research-content-details/store/index'
+import ts from './../components/token-sale/store/index'
 
 
 Vue.use(Vuex)
@@ -18,7 +19,8 @@ export default new Vuex.Store({
         feed,
         researchGroup,
         rd,
-        rcd
+        rcd,
+        ts
     },
     strict: debug,
     plugins: debug ? [createLogger()] : []

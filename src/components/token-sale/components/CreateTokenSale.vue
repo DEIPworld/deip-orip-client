@@ -1,7 +1,5 @@
 <template>
-    <v-container fluid fill-height class="pa-0">
-        <v-layout>
-
+        <v-layout fluid fill-height class="pa-0">
             <v-stepper v-model="currentStep" alt-labels class="column full-width full-height">
                 <v-stepper-header>
                     <v-stepper-step step="1" :complete="currentStep > 1">
@@ -48,17 +46,24 @@
                     </v-stepper-content>
                 </v-stepper-items>
             </v-stepper>
-
         </v-layout>
-    </v-container>   
 </template>
 
 <script>
+    import { mapGetters } from 'vuex';
     import deipRpc from '@deip/deip-rpc';
     import * as proposalService from "./../../research-group/services/ProposalService"; 
 
     export default {
-        name: "TokenSale",
+        name: "CreateTokenSale",
+        computed: {
+            ...mapGetters({
+                user: 'user',
+                userGroups: 'userGroups',
+                research: 'ts/research',
+                tokenSale: 'ts/tokenSale'
+            })
+        },
         data() { 
             return {
                 currentStep: 0,
@@ -68,8 +73,7 @@
                     endDate: undefined,
                     softCap: '',
                     hardCap: ''
-                },
-                user: { name: 'initdelegate', postingWif: '5JidFW79ttL9YP3W2Joc5Zer49opYU3fKNeBx9B6cpEH1GiDm5p' }
+                }
             } 
         },
         methods: {
@@ -84,27 +88,25 @@
                 this.currentStep--;
             },
             finish() {
-                let data = proposalService.getStringifiedProposalData(proposalService.types.startResearchTokenSale, [
-                    0, // research id
+                let proposal = proposalService.getStringifiedProposalData(proposalService.types.startResearchTokenSale, [
+                    this.research.id,
                     this.tokenSaleInfo.startDate.toISOString().split('.')[0],
                     this.tokenSaleInfo.endDate.toISOString().split('.')[0],
-                    this.toDeipPercent(
-                        parseInt(this.tokenSaleInfo.amountToSell)
-                    ),
+                    this.toDeipPercent(parseInt(this.tokenSaleInfo.amountToSell)),
                     parseInt(this.tokenSaleInfo.softCap),
                     parseInt(this.tokenSaleInfo.hardCap)
                 ]);
 
                 deipRpc.broadcast.createProposalAsync(
-					this.user.postingWif,
-					this.user.name, 
-					0, // group id
-					data,
+					this.user.privKey,
+					this.user.username, 
+					this.research.research_group_id,
+					proposal,
                     proposalService.types.startResearchTokenSale,
 					new Date( new Date().getTime() + 2 * 24 * 60 * 60 * 1000 )
 				).then(() => {
-                    // go to another route state
-                    console.log('hooray!!!');
+                    // todo: go to another route state
+                    alert("Research token sale proposal has been created successfully!");
                 }).catch(err => {
                     alert(err.message);
                 });

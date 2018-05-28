@@ -10,7 +10,9 @@ const state = {
         pubKey: isLoggedIn() ? getDecodedToken().pubKey : null,
         privKey: isLoggedIn() ? getOwnerWif() : null,
         expertTokens: [],
-        disciplines: []
+        groupTokens: [],
+        disciplines: [],
+        groups: []
     }
 }
 
@@ -28,6 +30,22 @@ const getters = {
             experise.push(exp);
         }
         return experise;
+    },
+    userGroups: (state, getters) => {
+        const groups = [];
+        for (let i = 0; i < state.user.groupTokens.length; i++) {
+            const rgt = state.user.groupTokens[i];
+            const group = state.user.groups.find(g => g.id === rgt.research_group_id)
+            groups.push({
+                id: group.id,
+                permlink: group.permlink,
+                name: group.name,
+                quorum_percent: group.quorum_percent,
+                weight: rgt.amount,
+                rgtId: rgt.id
+            })
+        }
+        return groups;
     }
 }
 
@@ -40,18 +58,40 @@ const actions = {
 
         if (user.username) {
             deipRpc.api.getExpertTokensByAccountNameAsync(user.username)
-                .then((data) => {
+                .then((tokensList) => {
                     const promises = [];
-                    for (var i = 0; i < data.length; i++) {
-                        var exp = data[i];
+                    for (var i = 0; i < tokensList.length; i++) {
+                        var exp = tokensList[i];
                         expertTokens.push(exp);
                         promises.push(deipRpc.api.getDisciplineAsync(exp.discipline_id))
                     }
                     return Promise.all(promises);
                 })
-                .then((list) => {
-                    commit('SET_USER_DISCIPLINES_LIST', list)
+                .then((disciplines) => {
+                    commit('SET_USER_DISCIPLINES_LIST', disciplines)
                     commit('SET_USER_EXPERT_TOKENS_LIST', expertTokens)
+                });
+        }
+    },
+
+    loadGroups({ state, commit, getters }) {
+        const user = getters.user;
+        const groupTokens = [];
+
+        if (user.username) {
+            deipRpc.api.getResearchGroupTokensByAccountAsync(user.username)
+                .then((tokensList) => {
+                    const promises = [];
+                    for (var i = 0; i < tokensList.length; i++) {
+                        const rgt = tokensList[i];
+                        groupTokens.push(rgt);
+                        promises.push(deipRpc.api.getResearchGroupByIdAsync(rgt.research_group_id))
+                    }
+                    return Promise.all(promises);
+                })
+                .then((groups) => {
+                    commit('SET_USER_GROUPS_LIST', groups)
+                    commit('SET_USER_RESEARCH_GROUP_TOKENS_LIST', groupTokens)
                 });
         }
     }
@@ -59,12 +99,21 @@ const actions = {
 
 // mutations
 const mutations = {
+
     ['SET_USER_EXPERT_TOKENS_LIST'](state, list) {
         Vue.set(state.user, 'expertTokens', list)
     },
 
     ['SET_USER_DISCIPLINES_LIST'](state, list) {
         Vue.set(state.user, 'disciplines', list)
+    },
+
+    ['SET_USER_GROUPS_LIST'](state, list) {
+        Vue.set(state.user, 'groups', list)
+    },
+
+    ['SET_USER_RESEARCH_GROUP_TOKENS_LIST'](state, list) {
+        Vue.set(state.user, 'groupTokens', list)
     }
 }
 

@@ -26,10 +26,10 @@
                     <div class="list-line">
                         <div class="row-nowrap col-4 list-body-cell">
                             <v-avatar size="40px">
-                                <img src="http://deip.world/static/nignatiev.5ab584fd.png" alt="User">
+                                <v-gravatar :email="'initdelegate' + '@deip.world'" />
                             </v-avatar>
                             <div class="col-grow c-pl-4">
-                                <router-link to="/userDetails" class="a subheading">Nikolay Ignatiev</router-link>
+                                <router-link to="/userDetails" class="a subheading">initdelegate</router-link>
                                 <div class="caption c-pt-1">Belarusian State University of Informatics and Radioelectronics</div>
                             </div>
                         </div>
@@ -54,10 +54,10 @@
                     <div class="list-line">
                         <div class="row-nowrap col-4 list-body-cell">
                             <v-avatar size="40px">
-                                <img src="http://deip.world/static/akastsiushkina.ce4ec45f.png" alt="User">
+                                <v-gravatar :email="'alice' + '@deip.world'" />
                             </v-avatar>
                             <div class="col-grow c-pl-4">
-                                <router-link to="/userDetails" class="a subheading">Anastasiya Kastsiushkina</router-link>
+                                <router-link to="/userDetails" class="a subheading">alice</router-link>
                                 <div class="caption c-pt-1">Belarusian State University</div>
                             </div>
                         </div>

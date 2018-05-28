@@ -19,14 +19,21 @@
 
     export default {
         name: "ResearchGroupDetails",
+        computed: {
+            ...mapGetters({
+                user: 'user',
+                userGroups: 'userGroups'
+            })
+        },
         data() { 
             return {} 
         },
         created() {
-            this.$store.dispatch('researchGroup/loadProposalsByGroupId', 0);
-            this.$store.dispatch('researchGroup/loadResearchGroupById', 0);
-            this.$store.dispatch('researchGroup/loadSharesByGroupId', 0);
-            this.$store.dispatch('researchGroup/loadResearchList', 0);
+            var groupId =1;
+            this.$store.dispatch('researchGroup/loadProposalsByGroupId', groupId);
+            this.$store.dispatch('researchGroup/loadResearchGroupById', groupId);
+            this.$store.dispatch('researchGroup/loadSharesByGroupId', groupId);
+            this.$store.dispatch('researchGroup/loadResearchList', groupId);
         }
     };
 </script>

@@ -1,7 +1,6 @@
 <template>
     <v-container fluid fill-height class="pa-0">
         <v-layout>
-
             <v-stepper v-model="currentStep" alt-labels class="column full-width full-height">
                 <v-stepper-header>
                     <v-stepper-step step="1" :complete="currentStep > 1">
@@ -62,7 +61,6 @@
                     </v-stepper-content>
                 </v-stepper-items>
             </v-stepper>
-
         </v-layout>
     </v-container>   
 </template>

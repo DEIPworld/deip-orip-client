@@ -11,7 +11,8 @@ const state = {
     reviewsList: [],
     disciplinesList: [],
     totalVotesList: [],
-    isReviewDialogOpen : false
+    isReviewDialogOpen : false,
+    tokenSale: null
 }
 
 // getters
@@ -43,6 +44,10 @@ const getters = {
 
     isReviewDialogOpen: (state, getters) => {
         return state.isReviewDialogOpen;
+    },
+
+    tokenSale: (state, getters) => {
+        return state.tokenSale;
     },
 
     contentWeightByDiscipline: (state, getters) => {
@@ -144,6 +149,7 @@ const actions = {
                 dispatch('loadResearchContent', state.research.id)
                 dispatch('loadResearchReviews', state.research.id)
                 dispatch('loadResearchDisciplines', state.research.id)
+                dispatch('loadResearchTokenSale', state.research.id)
             })
     },
 
@@ -172,6 +178,18 @@ const actions = {
             });
     },
 
+    loadResearchTokenSale({ state, commit }, researchId) {
+        deipRpc.api.checkResearchTokenSaleExistenceByResearchIdAsync(researchId)
+            .then((exists) => {
+                if (exists){
+                  deipRpc.api.getResearchTokenSaleByResearchIdAsync(researchId)
+                    .then((tokenSale) => {
+                        commit('SET_RESEARCH_TOKEN_SALE', tokenSale)
+                    });
+                }
+            })
+    },
+    
     openReviewDialog({ state, commit }) {
         commit('TOGGLE_REVIEW_DIALOG', true)
     },
@@ -210,6 +228,10 @@ const mutations = {
 
     ['TOGGLE_REVIEW_DIALOG'](state, isOpen) {
         state.isReviewDialogOpen = isOpen;
+    },
+
+    ['SET_RESEARCH_TOKEN_SALE'](state, tokenSale) {
+        Vue.set(state, 'tokenSale', tokenSale)
     }
 }
 
