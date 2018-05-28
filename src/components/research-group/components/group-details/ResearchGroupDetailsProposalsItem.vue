@@ -12,7 +12,7 @@
                     >
                         <v-icon small color="primary" class="c-mr-2">attach_money</v-icon>
                         <div class="a">
-                            Sale: {{ proposal.data.amount_for_sale }}
+                            Token sale: {{ convertToPercent(proposal.data.amount_for_sale) }}%
                             (SC {{ proposal.data.soft_cap }} - HC {{ proposal.data.hard_cap }})
                         </div>
                     </div>
