@@ -1,5 +1,6 @@
 <template>
     <div>
+        <!--
         <div class="sm-title bold">Group Members: {{ groupShares.length }}</div>
 
         <div class="row-nowrap justify-between align-center c-pt-4"
@@ -16,6 +17,9 @@
         <div class="c-mv-6">
             <span class="deip-label">2 JOIN REQUESTS</span>
         </div>
+        -->
+
+        <!-- TODO: insert join requests here -->
 
         <div style="margin: 0 -24px">
             <v-divider></v-divider>
@@ -37,27 +41,6 @@
             <div v-for="(item, i) in groupExpertise" :key="i">
                 <span class="half-bold">{{ item.disciplineName }}</span>
                 <span class="right">{{ item.value }}</span>
-            </div>
-        </div>
-
-        <div style="margin: 0 -24px">
-            <v-divider></v-divider>
-        </div>
-        
-        <div class="sm-title bold c-pt-6">Research Token Holders</div>
-
-        <div class="c-pt-4 c-pb-6">
-            <div>
-                <span class="half-bold">Research group</span>
-                <span class="deip-blue-color right">80%</span>
-            </div>
-            <div>
-                <span class="half-bold">Investor1</span>
-                <span class="deip-blue-color right">15%</span>
-            </div>
-            <div>
-                <span class="half-bold">Investor2</span>
-                <span class="deip-blue-color right">5%</span>
             </div>
         </div>
 
@@ -89,7 +72,7 @@
                     .mapValues(item => {
                         return { 
                             value: item.reduce((acc, val) => acc + val.amount, 0),
-                            disciplineName: item[0].discipline_id
+                            disciplineName: item[0].discipline_name
                         }
                     })
                     .values()

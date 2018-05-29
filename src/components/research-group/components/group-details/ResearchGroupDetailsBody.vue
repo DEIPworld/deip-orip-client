@@ -13,10 +13,10 @@
         <div class="c-pt-6">
             <v-card>
                 <div class="info-card-list">
-                    <div class="list-line">
+                    <div class="list-line align-center">
                         <div class="list-header-cell col-4">Researcher</div>
-                        <div class="list-header-cell col-2">Expertise</div>
-                        <div class="list-header-cell col-2 text-align-center">Group weight</div>
+                        <div class="list-header-cell col-3">Expertise</div>
+                        <div class="list-header-cell col-1 text-align-center">Group weight</div>
                         <div class="list-header-cell col-2 text-align-center">Member since</div>
                         <div class="list-header-cell col-2 text-align-center">Location</div>
                     </div>
@@ -36,14 +36,14 @@
                                 </div>
                             </div>
 
-                            <div class="col-2 list-body-cell">
+                            <div class="col-3 list-body-cell">
                                 <div v-for="(item, i) in member.expertise" :key="i">
-                                    <span class="uppercase bold">{{ item.discipline_id }}:</span> {{ item.amount }}
+                                    <span class="uppercase bold">{{ item.discipline_name }}:</span> {{ item.amount }}
                                 </div>
                             </div>
 
-                            <div class="col-2 text-align-center list-body-cell">
-                                {{ convertToPercent(member.groupShares.amount) }} %
+                            <div class="col-1 text-align-center list-body-cell">
+                                {{ convertToPercent(member.groupShares.amount) }}%
                             </div>
 
                             <div class="col-2 text-align-center list-body-cell">
