@@ -8,7 +8,7 @@
         </div>
 
         <v-card height="100%" class="sidebar">
-            <research-details-sidebar @openReviewDialog="openReviewDialog">
+            <research-details-sidebar>
             </research-details-sidebar>
         </v-card>
 
@@ -38,11 +38,6 @@
                 disciplinesList: 'rd/disciplinesList',
                 totalVotesList: 'rd/totalVotesList'
             })
-        },
-        methods: {
-            openReviewDialog() {
-                this.$store.dispatch('rd/openReviewDialog');
-            },
         },
         created() {
             const permlinks = {

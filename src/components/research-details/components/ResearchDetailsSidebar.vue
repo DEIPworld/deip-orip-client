@@ -129,10 +129,15 @@
 
             <div>
                 <span class="half-bold">Research group</span>
-                <span class="deip-blue-color right">80%</span>
+                <span class="deip-blue-color right">
+                    {{convertToPercent(
+                        DEIP_100_PERCENT - tokenHoldersList.reduce((share, holder) => {
+                            return share + holder.amount;}, 0))}}%
+                </span>
             </div>
 
-            <router-link v-if="research" :to="`/${research.group_permlink}/token-sale/${research.permlink}`" style="text-decoration: none">
+            <router-link v-if="research && isResearchGroupMember && tokenHoldersList.length == 0" 
+                         :to="`/${research.group_permlink}/token-sale/${research.permlink}`" style="text-decoration: none">
                 <v-btn dark round outline color="primary" class="full-width c-mt-3 c-mb-3">
                     <div class="col-grow add-review-label">
                         {{tokenSale == null ? 'Propose Token Sale' : 'View Token Sale'}}
@@ -140,14 +145,19 @@
                 </v-btn>
             </router-link>
 
-        <!--    <div>
-                <span class="half-bold">Investor1</span>
-                <span class="deip-blue-color right">15%</span>
+            <router-link v-if="research && !isResearchGroupMember && tokenSale && tokenSale.hard_cap != tokenSale.total_amount" 
+                         :to="`/${research.group_permlink}/token-sale/${research.permlink}`" style="text-decoration: none">
+                <v-btn dark round outline color="primary" class="full-width c-mt-3 c-mb-3">
+                    <div class="col-grow add-review-label">
+                        Contribute Token Sale
+                    </div>
+                </v-btn>
+            </router-link>
+
+            <div v-for="holder in tokenHoldersList">
+                <span class="half-bold">{{holder.account_name}}</span>
+                <span class="deip-blue-color right">{{convertToPercent(holder.amount)}}%</span>
             </div>
-            <div>
-                <span class="half-bold">Investor2</span>
-                <span class="deip-blue-color right">5%</span>
-            </div> -->
         </div>
 
         <div style="margin: 0 -24px">
@@ -170,13 +180,21 @@
         computed: {
             ...mapGetters({
                 user: 'user',
+                userGroups: 'userGroups',
                 research: 'rd/research',
                 membersList: 'rd/membersList',
                 disciplinesList: 'rd/disciplinesList',
                 totalVotesList: 'rd/totalVotesList',
                 researchWeightByDiscipline: 'rd/researchWeightByDiscipline',
-                tokenSale: 'rd/tokenSale'
+                tokenSale: 'rd/tokenSale',
+                tokenHoldersList: 'rd/tokenHoldersList'
             }),
+            isResearchGroupMember(){
+                if(this.research){
+                    return this.userGroups.find(g => g.id === this.research.research_group_id) !== undefined;
+                }
+                return false;
+            },
             canJoinResearchGroup : function(){
                 return this.membersList.find(m => { return m.owner == this.user.username}) === undefined;
             }

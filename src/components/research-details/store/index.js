@@ -12,7 +12,8 @@ const state = {
     disciplinesList: [],
     totalVotesList: [],
     isReviewDialogOpen : false,
-    tokenSale: null
+    tokenSale: null,
+    tokenHoldersList: []
 }
 
 // getters
@@ -48,6 +49,10 @@ const getters = {
 
     tokenSale: (state, getters) => {
         return state.tokenSale;
+    },
+
+    tokenHoldersList: (state, getters) => {
+        return state.tokenHoldersList;
     },
 
     contentWeightByDiscipline: (state, getters) => {
@@ -181,11 +186,23 @@ const actions = {
     loadResearchTokenSale({ state, commit }, researchId) {
         deipRpc.api.checkResearchTokenSaleExistenceByResearchIdAsync(researchId)
             .then((exists) => {
-                if (exists){
+                if (exists) {
                   deipRpc.api.getResearchTokenSaleByResearchIdAsync(researchId)
                     .then((tokenSale) => {
                         commit('SET_RESEARCH_TOKEN_SALE', tokenSale)
+                        if (state.tokenSale.hard_cap === state.tokenSale.total_amount){ // finished token sale
+                            // todo: replace this condition with status of research token sale once it's available
+                            deipRpc.api.getResearchTokensByResearchIdAsync(researchId)
+                                .then((tokenHolders) => {
+                                    commit('SET_RESEARCH_TOKEN_HOLDERS_LIST', tokenHolders)
+                                })
+                        } else {
+                            commit('SET_RESEARCH_TOKEN_HOLDERS_LIST', [])
+                        }
                     });
+                } else {
+                    commit('SET_RESEARCH_TOKEN_SALE', null)
+                    commit('SET_RESEARCH_TOKEN_HOLDERS_LIST', [])
                 }
             })
     },
@@ -232,6 +249,10 @@ const mutations = {
 
     ['SET_RESEARCH_TOKEN_SALE'](state, tokenSale) {
         Vue.set(state, 'tokenSale', tokenSale)
+    },
+
+    ['SET_RESEARCH_TOKEN_HOLDERS_LIST'](state, tokenHolders) {
+        Vue.set(state, 'tokenHoldersList', tokenHolders)
     }
 }
 

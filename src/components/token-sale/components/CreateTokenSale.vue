@@ -105,8 +105,12 @@
                     proposalService.types.startResearchTokenSale,
 					new Date( new Date().getTime() + 2 * 24 * 60 * 60 * 1000 )
 				).then(() => {
-                    // todo: go to another route state
-                    alert("Research token sale proposal has been created successfully!");
+                    alert("Token Sale proposal created !");
+                    // redirect to proposal
+                    this.$router.push({ 
+                        name: 'ResearchGroupDetails', 
+                        params: { research_group_permlink: this.$route.params.research_group_permlink }
+                    }); 
                 }).catch(err => {
                     alert(err.message);
                 });
