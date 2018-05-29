@@ -58,12 +58,25 @@
                 </div>
 
                 <div class="c-pv-4 c-ph-6">
-                    <v-btn outline icon color="primary" class="ma-0">
+                    <v-btn outline icon color="primary" class="ma-0"
+                        @click="$store.dispatch('researchGroup/changeOptions', { key: 'isAddMemberDialogOpen', value: true })"
+                    >
                         <v-icon small>add</v-icon>
                     </v-btn>
+                    
                     <span class="c-pl-2 deip-blue-color">Invite researchers</span>
                 </div>
             </v-card>
+
+            <add-member-to-group-dialog v-if="group"
+                :is-open="options.isAddMemberDialogOpen"
+                :group-id="group.id"
+                :group-members="members"
+                @onClose="
+                    $store.dispatch('researchGroup/changeOptions', { key: 'isAddMemberDialogOpen', value: false })
+                "
+                @onSuccess="$store.dispatch('researchGroup/loadResearchGroupProposals', group.id)"
+            ></add-member-to-group-dialog>
         </div>
 
         <div class="c-pt-7">
@@ -92,6 +105,7 @@
             ...mapGetters({
                 group: 'researchGroup/group',
                 researchList: 'researchGroup/researchList',
+                options: 'researchGroup/options',
                 members: 'researchGroup/members'
             })
         }

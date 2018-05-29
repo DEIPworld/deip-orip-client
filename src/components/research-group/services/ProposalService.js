@@ -17,6 +17,14 @@ const types = {
 // maybe will be OK to add param validations or type conversion
 // in every function to be sure every time about right data
 const proposalDataStringify = {
+    2: (researchGroupId, name, researchGroupTokenAmount) => {
+        // `{"research_group_id": 0, "name": "alice", "research_group_token_amount": 50}`
+        return {
+            "research_group_id": researchGroupId,
+            "name": name,
+            "research_group_token_amount": researchGroupTokenAmount
+        };
+    },
     5: (researchId, startTime, endTime, amount, softCap, hardCap) => {
         // `{"research_id": 0, "start_time": "2018-04-03T15:15:04" , "end_time": "2018-04-03T16:22:43", "amount_for_sale": 5000, "soft_cap": 1000, "hard_cap": 1500}`
         return {

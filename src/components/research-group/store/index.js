@@ -10,6 +10,10 @@ const state = {
     researchList: [],
     members: [],
 
+    options: {
+        isAddMemberDialogOpen: false,
+    },
+
     proposalListFilter: {
         areShownPastProposals: false,
         sortBy: 'creation_time',
@@ -25,7 +29,8 @@ const getters = {
     groupShares: state => state.groupShares,
     members: state => state.members,
     proposalListFilter: state => state.proposalListFilter,
-    researchList: state => state.researchList
+    researchList: state => state.researchList,
+    options: state => state.options
 }
 
 // actions
@@ -118,6 +123,9 @@ const actions = {
     },
     updateProposalFilter({ commit }, payload) {
         commit('UPDATE_PROPOSAL_FILTER', payload);
+    },
+    changeOptions({ commit }, payload) {
+        commit('UPDATE_OPTIONS', payload);
     }
 }
 
@@ -147,6 +155,9 @@ const mutations = {
     },
     ['UPDATE_PROPOSAL_FILTER'](state, { key, value }) {
         Vue.set(state.proposalListFilter, key, value);
+    },
+    ['UPDATE_OPTIONS'](state, { key, value }) {
+        Vue.set(state.options, key, value);
     },
 }
 
