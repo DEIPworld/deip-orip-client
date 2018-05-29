@@ -14,28 +14,39 @@
             </div>
 
             <div class="c-pt-6">
-                <div class="row-nowrap">
-                    <div class="row-nowrap">
-                        <div v-for="tvo in disciplines">
-                            <span class="c-pr-1">
-                                <span class="bold green--text text--darken-2">{{ tvo.disciplineName }}</span>
-                            </span>
-                            <span class="c-pr-4">
-                                <span>{{tvo.totalWeight}}</span>
-                            </span>
-                        </div>
+                <div class="row">
+                    <div v-for="tvo in disciplines">
+                        <span class="c-pr-1">
+                            <span class="bold green--text text--darken-2">{{ tvo.disciplineName }}</span>
+                        </span>
+                        <span class="c-pr-4">
+                            <span>{{tvo.totalWeight}}</span>
+                        </span>
+                    </div>
+                </div>
+
+                <div class="row-nowrap c-pt-2">
+                    <div class="c-pr-8" v-if="research.created_at">
+                        <v-icon size="18px">event</v-icon> Created
+                        <span class="half-bold">{{ research.created_at | dateFormat('D MMM, YYYY') }}</span>
                     </div>
 
-                    <div class="c-pr-10">
+                    <div class="c-pr-8" v-if="research.owned_tokens">
+                        <v-icon size="18px">timelapse</v-icon> Owned tokens
+                        <span class="half-bold">{{ convertToPercent(research.owned_tokens) }}%</span>
+                    </div>
+
+                    <div class="c-pr-8" v-if="research.review_share_in_percent">
+                        <v-icon size="18px">pie_chart</v-icon> Review award
+                        <span class="half-bold">{{ convertToPercent(research.review_share_in_percent) }}%</span>
+                    </div>
+
+                    <div class="c-pr-8">
                         <v-icon size="18px">visibility</v-icon> <span>1999</span>
                     </div>
 
-                    <div class="c-pr-10">
+                    <div class="c-pr-8">
                         <v-icon size="18px">chat_bubble</v-icon> <span>23</span>
-                    </div>
-
-                    <div>
-                        <v-icon size="18px">date_range</v-icon> <span>Upd 13 Mar 2018</span>
                     </div>
                 </div>
             </div>

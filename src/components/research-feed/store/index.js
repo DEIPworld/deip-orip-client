@@ -67,7 +67,7 @@ const actions = {
             })
             .then(list => {
                 let tvoMap = _.chain(list)
-                    .reduce((accumulator, currentValue) => accumulator.concat(currentValue), [])
+                    .flatten()
                     .groupBy('research_id')
                     .value();
 

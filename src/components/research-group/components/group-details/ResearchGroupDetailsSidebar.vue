@@ -1,25 +1,13 @@
 <template>
     <div>
-        <!--
-        <div class="sm-title bold">Group Members: {{ groupShares.length }}</div>
+        <div class="sm-title bold">Group Info</div>
 
-        <div class="row-nowrap justify-between align-center c-pt-4"
-            v-for="(member, index) in groupShares" :key="index"
-        >
-            <div>
-                <v-avatar size="40px">
-                    <v-gravatar :title="member.owner" :email="member.owner + '@deip.world'" />
-                </v-avatar>
-                <router-link to="/userDetails" class="a c-pl-3">{{ member.owner }}</router-link>
+        <div class="c-pt-4 c-pb-6">
+            <div v-for="(item, i) in groupExpertise" :key="i">
+                <span class="half-bold">{{ item.disciplineName }}</span>
+                <span class="right">{{ item.value }}</span>
             </div>
-            <div class="grey--text">{{ convertToPercent(member.amount) }}%</div>
         </div>
-        <div class="c-mv-6">
-            <span class="deip-label">2 JOIN REQUESTS</span>
-        </div>
-        -->
-
-        <!-- TODO: insert join requests here -->
 
         <div style="margin: 0 -24px">
             <v-divider></v-divider>
@@ -35,12 +23,30 @@
             <v-divider></v-divider>
         </div>
 
-        <div class="sm-title bold c-pt-6">Group Info</div>
+        <div class="sm-title bold c-pt-6">Join requests: 2</div>
 
-        <div class="c-pt-4 c-pb-6">
-            <div v-for="(item, i) in groupExpertise" :key="i">
-                <span class="half-bold">{{ item.disciplineName }}</span>
-                <span class="right">{{ item.value }}</span>
+        <div class="c-pb-6">
+            <div class="row-nowrap justify-between align-center c-pt-4">
+                <div>
+                    <v-avatar size="40px">
+                        <v-gravatar title="shkor" :email="'shkor' + '@deip.world'" />
+                    </v-avatar>
+                    <router-link to="/userDetails" class="a c-pl-3">Shkor</router-link>
+                </div>
+                <v-btn flat icon small color="primary" class="ma-0">
+                    <v-icon>check</v-icon>
+                </v-btn>
+            </div>
+            <div class="row-nowrap justify-between align-center c-pt-4">
+                <div>
+                    <v-avatar size="40px">
+                        <v-gravatar title="kulik" :email="'kulik' + '@deip.world'" />
+                    </v-avatar>
+                    <router-link to="/userDetails" class="a c-pl-3">Kulik</router-link>
+                </div>
+                <v-btn flat icon small color="primary" class="ma-0">
+                    <v-icon>check</v-icon>
+                </v-btn>
             </div>
         </div>
 

@@ -62,29 +62,29 @@ const actions = {
 
         deipRpc.api.getResearchesByResearchGroupIdAsync(id)
             .then(data => {
-                commit('SET_GROUP_RESEARCH_LIST', data);
-                // researchResult = data;
-                // return Promise.all(
-                //     data.map(item => deipRpc.api.getTotalVotesByResearchAsync(item.research_id))
-                // );
+                // commit('SET_GROUP_RESEARCH_LIST', data);
+                researchResult = data;
+                return Promise.all(
+                    data.map(item => deipRpc.api.getTotalVotesByResearchAsync(item.research_id))
+                );
             })
-            // .then(list => {
-            //     let tvoMap = _.chain(list)
-            //         .reduce((accumulator, currentValue) => accumulator.concat(currentValue), [])
-            //         .groupBy('research_id')
-            //         .value();
+            .then(list => {
+                let tvoMap = _.chain(list)
+                    .flatten()
+                    .groupBy('research_id')
+                    .value();
 
-            //     researchResult.forEach(research => {
-            //         research.totalVotes = tvoMap[research.research_id] ? tvoMap[research.research_id] : [];
-            //     });
+                researchResult.forEach(research => {
+                    research.totalVotes = tvoMap[research.id] ? tvoMap[research.id] : [];
+                });
 
-            //     return researchResult;
-            // })
-            // .then(data => {
-            //     commit('SET_GROUP_RESEARCH_LIST', data);
-            // }).catch(() => {
-            //     commit('SET_GROUP_RESEARCH_LIST', researchResult);
-            // });
+                return researchResult;
+            })
+            .then(data => {
+                commit('SET_GROUP_RESEARCH_LIST', data);
+            }).catch(() => {
+                commit('SET_GROUP_RESEARCH_LIST', researchResult);
+            });
     },
     loadResearchGroupAccounts({ commit, state }, accountNames) {
         let accounts = [];
