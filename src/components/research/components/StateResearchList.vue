@@ -43,6 +43,9 @@
                             </template>
                         </v-card>
                     </div>
+                    <v-card flat v-if="!activeResearchList.length">
+                        <v-card-text>No active research in this group yet</v-card-text>
+                    </v-card>
                 </v-tab-item>
 
                 <v-tab-item key="finished">
@@ -54,6 +57,9 @@
                             </template>
                         </v-card>
                     </div>
+                    <v-card flat v-if="!finishedResearchList.length">
+                        <v-card-text>No finished research in this group yet</v-card-text>
+                    </v-card>
                 </v-tab-item>
             </v-tabs-items>
         </div>

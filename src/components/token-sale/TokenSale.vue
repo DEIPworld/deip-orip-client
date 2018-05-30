@@ -45,10 +45,9 @@
                 contributionsList: 'ts/contributionsList'
             }),
             isResearchGroupMember(){
-                if(this.research){
-                    return this.userGroups.find(g => g.id === this.research.research_group_id) !== undefined;
-                }
-                return false;
+                return this.research != null 
+                    ? this.$store.getters.userIsResearchGroupMember(this.research.research_group_id) 
+                    : false
             },
             isTokenSaleProposal() {
                 if(this.research) {

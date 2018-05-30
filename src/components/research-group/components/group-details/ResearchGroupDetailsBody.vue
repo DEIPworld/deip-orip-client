@@ -57,7 +57,7 @@
                     </template>
                 </div>
 
-                <div class="c-pv-4 c-ph-6">
+                <div v-if="isResearchGroupMember" class="c-pv-4 c-ph-6">
                     <v-btn outline icon color="primary" class="ma-0"
                         @click="$store.dispatch('researchGroup/changeOptions', { key: 'isAddMemberDialogOpen', value: true })"
                     >
@@ -85,7 +85,7 @@
             ></state-research-list>
         </div>
 
-        <div class="c-pt-8">
+        <div v-if="isResearchGroupMember" class="c-pt-8">
             <research-group-details-proposals></research-group-details-proposals>
         </div>
     </div>   
@@ -103,11 +103,18 @@
         },
         computed: {
             ...mapGetters({
+                user: 'user',
+                userGroups: 'userGroups',
                 group: 'researchGroup/group',
                 researchList: 'researchGroup/researchList',
                 options: 'researchGroup/options',
                 members: 'researchGroup/members'
-            })
+            }),
+            isResearchGroupMember() {
+                return this.group != null 
+                    ? this.$store.getters.userIsResearchGroupMember(this.group.id) 
+                    : false
+            }
         }
     };
 </script>

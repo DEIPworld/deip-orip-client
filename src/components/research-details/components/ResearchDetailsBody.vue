@@ -71,7 +71,7 @@
                     </v-card>
                 </v-expansion-panel-content>
             </v-expansion-panel>
-            <div v-if="research && dropzoneOptions && !research.is_finished">
+            <div v-if="isResearchGroupMember && dropzoneOptions && !research.is_finished">
                 <vue-dropzone ref="newContent" id="content-dropzone" 
                     :options="dropzoneOptions" 
                     @vdropzone-file-added="fileAdded"
@@ -193,6 +193,12 @@
                 totalVotesList: 'rd/totalVotesList',
                 contentWeightByDiscipline: 'rd/contentWeightByDiscipline'
             }),
+
+            isResearchGroupMember() {
+                return this.research != null 
+                    ? this.$store.getters.userIsResearchGroupMember(this.research.research_group_id) 
+                    : false
+            },
             
             authors: (state, getters) => {
                 return state.membersList.map(m => { return { text: m.owner, id: m.id } });

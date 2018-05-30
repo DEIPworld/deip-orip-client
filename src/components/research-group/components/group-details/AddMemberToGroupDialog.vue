@@ -120,7 +120,7 @@
                     proposalService.types.inviteMember, [
                         this.groupId,
                         this.selectedUser,
-                        parseInt(this.tokensAmount)
+                        parseInt(this.tokensAmount) * this.DEIP_1_PERCENT
                     ]
                 );
 

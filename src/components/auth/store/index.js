@@ -21,6 +21,7 @@ const getters = {
     user: (state, getters) => {
         return state.user
     },
+
     userExperise: (state, getters) => {
         const experise = [];
         for (let i = 0; i < state.user.expertTokens.length; i++) {
@@ -31,6 +32,7 @@ const getters = {
         }
         return experise;
     },
+
     userGroups: (state, getters) => {
         const groups = [];
         for (let i = 0; i < state.user.groupTokens.length; i++) {
@@ -46,6 +48,11 @@ const getters = {
             })
         }
         return groups;
+    },
+
+    userIsResearchGroupMember: (state, getters) => {
+        return groupId => getters.userGroups.find(group => {
+            return groupId === group.id}) !== undefined;
     }
 }
 

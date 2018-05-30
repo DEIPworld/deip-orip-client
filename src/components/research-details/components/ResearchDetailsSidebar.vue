@@ -52,24 +52,26 @@
             </div>
         </div>
 
-        <div style="margin: 0 -24px">
-            <v-divider></v-divider>
+        <div v-if="!isResearchGroupMember">
+            <div style="margin: 0 -24px">
+                <v-divider></v-divider>
+            </div>
+
+            <div class="sm-title bold c-pt-6">Reviews</div>
+
+            <div v-if="research" class="c-pt-4 c-pb-6">
+                <v-btn @click="openReviewDialog" dark round outline color="primary" class="full-width ma-0">
+                    <v-icon small>add</v-icon>
+                    <div class="col-grow add-review-label">
+                        Add a review
+                        <span class="caption grey--text">
+                            reward {{convertToPercent(research.review_share_in_percent)}}%
+                        </span>
+                    </div>
+                </v-btn>
+            </div>
         </div>
-
-        <div class="sm-title bold c-pt-6">Reviews</div>
-
-        <div v-if="research" class="c-pt-4 c-pb-6">
-            <v-btn @click="openReviewDialog" dark round outline color="primary" class="full-width ma-0">
-                <v-icon small>add</v-icon>
-                <div class="col-grow add-review-label">
-                    Add a review
-                    <span class="caption grey--text">
-                        reward {{convertToPercent(research.review_share_in_percent)}}%
-                    </span>
-                </div>
-            </v-btn>
-        </div>
-
+        
         <div style="margin: 0 -24px">
             <v-divider></v-divider>
         </div>
@@ -190,10 +192,9 @@
                 tokenHoldersList: 'rd/tokenHoldersList'
             }),
             isResearchGroupMember(){
-                if(this.research){
-                    return this.userGroups.find(g => g.id === this.research.research_group_id) !== undefined;
-                }
-                return false;
+                return this.research != null 
+                    ? this.$store.getters.userIsResearchGroupMember(this.research.research_group_id) 
+                    : false
             },
             canJoinResearchGroup : function(){
                 return this.membersList.find(m => { return m.owner == this.user.username}) === undefined;

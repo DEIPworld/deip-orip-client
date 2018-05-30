@@ -22,7 +22,7 @@ const proposalDataStringify = {
         return {
             "research_group_id": researchGroupId,
             "name": name,
-            "research_group_token_amount": researchGroupTokenAmount
+            "research_group_token_amount_in_percent": researchGroupTokenAmount
         };
     },
     5: (researchId, startTime, endTime, amount, softCap, hardCap) => {
