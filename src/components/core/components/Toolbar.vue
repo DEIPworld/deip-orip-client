@@ -30,10 +30,6 @@
                     <v-list-tile @click="goToState('ResearchGroupCreating')">
                         <v-list-tile-title>Research Group Creating</v-list-tile-title>
                     </v-list-tile>
-                    <v-list-tile @click="goToState('TokenSale')">
-                        <v-list-tile-title>Token Sale</v-list-tile-title>
-                    </v-list-tile>
-
                     <v-divider></v-divider>
                     <v-list-tile @click="signOut()">
                         <v-list-tile-title>Sign Out</v-list-tile-title>
