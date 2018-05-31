@@ -86,7 +86,7 @@ const router = new Router({
         name: 'ResearchGroupDetails',
         component: ResearchGroupDetails
     }, {
-        path: '/researchGroupCreating',
+        path: '/:account_name/create-research-group',
         name: 'ResearchGroupCreating',
         component: ResearchGroupCreating
     }, {

@@ -27,8 +27,8 @@
                     <v-list-tile @click="goToState('UserDetails')">
                         <v-list-tile-title>My Page</v-list-tile-title>
                     </v-list-tile>
-                    <v-list-tile @click="goToState('ResearchGroupCreating')">
-                        <v-list-tile-title>Research Group Creating</v-list-tile-title>
+                    <v-list-tile v-if="user" @click="goToState('ResearchGroupCreating', {account_name: user.username})">
+                        <v-list-tile-title>Create Research Group</v-list-tile-title>
                     </v-list-tile>
                     <v-divider></v-divider>
                     <v-list-tile @click="signOut()">
@@ -74,8 +74,8 @@
             updateDrawer(value) {
                 this.$emit('update', value);
             },
-            goToState(state) {
-                this.$router.push({ name: state });
+            goToState(state, params) {
+                this.$router.push({ name: state, params: params });
             }
         },
         created() {

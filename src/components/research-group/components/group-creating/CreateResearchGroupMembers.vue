@@ -19,12 +19,12 @@
                                 v-for="(user, i) in groupInfo.members" :key="i + '-picked'"
                             >
                                 <div>
-                                    <v-avatar size="40px">
-                                        <img src="http://deip.world/static/ybokach.acb12e7e.png" alt="User">
+                                    <v-avatar size="30px">
+                                        <v-gravatar :email="user.name + '@deip.world'" />
                                     </v-avatar>
                                     <router-link to="#" class="a c-pl-3">{{ user.name }}</router-link>
                                 </div>
-                                <v-btn flat color="grey" class="ma-0" @click="cancelMember(i)">Cancel</v-btn>
+                                <v-btn v-if="user.name != creatorUsername" flat color="grey" class="ma-0" @click="cancelMember(i)">Cancel</v-btn>
                             </div>
 
                         </div>
@@ -35,8 +35,8 @@
                                 v-for="(user, i) in selectableUsers" :key="i + '-selectable'"
                             >
                                 <div>
-                                    <v-avatar size="40px">
-                                        <img src="http://deip.world/static/ybokach.acb12e7e.png" alt="User">
+                                    <v-avatar size="30px">
+                                        <v-gravatar :email="user.name + '@deip.world'" />
                                     </v-avatar>
                                     <router-link to="#" class="a c-pl-3">{{ user.name }}</router-link>
                                 </div>
@@ -60,8 +60,7 @@
 
 <script>
     import deipRpc from '@deip/deip-rpc';
-    import _ from 'lodash';
-
+    import _ from 'lodash';    
     const SELECTABLE_USERS_COUNT = 5;
 
     const prepareSelectableUsers = (allUsers, pickedUsers, q) => {
@@ -77,6 +76,20 @@
             .value();
     }
 
+    function recalculateDefaultStakes(creatorUsername, members) {
+        const creator = members.find(m => m.name == creatorUsername);
+        var totalSum = 0;
+
+        members.forEach(m => {
+            m.stake = Math.floor(100 / members.length);
+            totalSum += m.stake;
+        })
+
+        if (totalSum < 100){
+            creator.stake += (100 - totalSum);
+        }
+    }
+
     export default {
         name: "CreateResearchGroupMembers",
         props: {
@@ -84,6 +97,7 @@
         },
         data() { 
             return {
+                creatorUsername: this.$route.params.account_name,
                 allUsers: [],
                 selectableUsers: [],
                 q: ''
@@ -101,20 +115,23 @@
                 600
             ),
             inviteMember(member) {
-                member.stake = 0;
                 this.groupInfo.members.push(member);
+                recalculateDefaultStakes(this.creatorUsername, this.groupInfo.members)
                 this.selectableUsers = prepareSelectableUsers(this.allUsers, this.groupInfo.members, this.q);
             },
             cancelMember(index) {
                 this.groupInfo.members.splice(index, 1);
+                recalculateDefaultStakes(this.creatorUsername, this.groupInfo.members)
                 this.selectableUsers = prepareSelectableUsers(this.allUsers, this.groupInfo.members, this.q);
             }
         },
         mounted() {
             deipRpc.api.getAllAccountsAsync().then(data => { 
-                this.allUsers = _.map(data, item => {
-                    return { name: item.name, stake: 0 };
-                });
+                this.allUsers = data
+                        .filter(item => {return item.name.toLowerCase() != this.creatorUsername.toLowerCase()})
+                        .map(item => {
+                            return { name: item.name, stake: 0 };
+                        });
 
                 // for testing when array is too small
                 // for (let i = 0; i < 10; i++) {

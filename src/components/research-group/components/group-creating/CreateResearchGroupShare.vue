@@ -12,8 +12,8 @@
                             v-for="(member, i) in groupInfo.members" :key="i"
                         >
                             <div>
-                                <v-avatar size="40px">
-                                    <img src="http://deip.world/static/ybokach.acb12e7e.png" alt="User">
+                                <v-avatar size="30px">
+                                    <v-gravatar :email="member.name+ '@deip.world'" />
                                 </v-avatar>
                                 <router-link to="/userDetails" class="a c-pl-3">{{ member.name }}</router-link>
                             </div>

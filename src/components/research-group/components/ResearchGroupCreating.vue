@@ -75,7 +75,7 @@
                     title: '',
                     permlink: '',
                     description: '',
-                    members: []
+                    members: [{ name: this.$route.params.account_name, stake: 100 }]
                 }
             } 
         },

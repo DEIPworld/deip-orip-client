@@ -6,7 +6,10 @@
                     <v-gravatar :title="review.author" :email="review.author + '@deip.world'" />
                 </v-avatar>
                 <div class="bold c-pt-2">{{ review.author }}</div>
-                    <v-btn class="ma-0 mt-2" block color="primary" @click="voteReview(review)">Vote</v-btn>
+                    <v-btn v-if="review.author != user.username" class="ma-0 mt-2" block color="primary" 
+                            :loading="isReviewVoting" 
+                            :disabled="isReviewVoting"
+                            @click="voteReview(review)">Vote</v-btn>
                 </div>
                 <div class="column c-ml-6">
                     <div>
@@ -68,12 +71,16 @@
             }
         },
         data() {
-            return {};
+            return {
+                isReviewVoting: false
+            };
         },
 
         methods: {
 
             voteReview(review) {
+                const self = this;
+                this.isReviewVoting = true;
                 // vote for all disciplines for now
                 // todo: add a control to select specific discipline
                 const disciplinesIds = this.userExperise
@@ -89,11 +96,18 @@
                         this.DEIP_100_PERCENT,
 					    new Date( new Date().getTime() + 2 * 24 * 60 * 60 * 1000 )
 				    ).then(() => {
-                        alert("ok")
+                        // this.isReviewVoting = false;
                     }, (err) => {
+                        // this.isReviewVoting = false;
                         alert(err.message);
                     });
                 })
+
+                // todo: fix this closure
+                setTimeout(() => {
+                    self.isReviewVoting = false;
+                }, 3000)
+                
             }
         }
     };
