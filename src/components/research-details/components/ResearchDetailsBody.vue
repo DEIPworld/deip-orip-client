@@ -71,38 +71,10 @@
                     </v-card>
                 </v-expansion-panel-content>
             </v-expansion-panel>
-            <div v-if="isResearchGroupMember && dropzoneOptions && !research.is_finished">
-                <vue-dropzone ref="newContent" id="content-dropzone" 
-                    :options="dropzoneOptions" 
-                    @vdropzone-file-added="fileAdded"
-                    @vdropzone-complete="afterComplete">
-                </vue-dropzone>
-            </div>
 
-            <v-dialog v-if="research" v-model="newContentProposal.isOpen" persistent max-width="500px">
-                <v-card>
-                    <v-card-title>
-                        <span class="text-align-center">Propose new content for &nbsp;<span class="bold">"{{research.title}}"</span>&nbsp;research</span>
-                    </v-card-title>
-          
-                    <v-card-text class="new-content-dialog-body">
-                        <div v-if="!newContentProposal.isInProgress">
-                            <v-text-field label="Title" v-model="newContentProposal.title"></v-text-field>
-                            <v-select v-model="newContentProposal.type" :items="contentTypes" label="Content Type" item-value="id"></v-select>
-                            <v-select v-model="newContentProposal.authors" :items="authors" label="Authors" item-value="text" multiple
-                                        max-height="100" hint="Pick authors of this content" persistent-hint></v-select>
-                        </div>
-                        <div class="loader" v-if="newContentProposal.isInProgress">
-                            <v-progress-circular indeterminate color="primary"></v-progress-circular>
-                        </div>
-                    </v-card-text>
-
-                    <v-card-actions>
-                        <v-btn color="primary" flat @click.stop="cancelNewContent()">Cancel</v-btn>
-                        <v-btn color="primary" flat :disabled="!newContentBtnIsEnabled" @click.stop="proposeNewContent()">Propose</v-btn>
-                    </v-card-actions>
-                </v-card>
-            </v-dialog>
+            <add-research-contnet-dialog 
+                v-if="isResearchGroupMember && !research.is_finished">
+            </add-research-contnet-dialog>
         </div>
 
         <div class="c-pt-8 title" v-if="reviewsList.length">Reviews: {{ reviewsList.length }}</div>
@@ -149,37 +121,11 @@
 </template>
 
 <script>
-    import deipRpc from '@deip/deip-rpc';
-    import vueDropzone from 'vue2-dropzone';
-    import {getAccessToken} from './../../../utils/auth'
-    import config from './../../../config'
-    import * as proposalService from "./../../research-group/services/ProposalService";
+
     import { mapGetters } from 'vuex'
 
     export default {
         name: "ResearchDetailsBody",
-        components: {
-            vueDropzone
-        },
-        data() {
-            return {
-
-                newContentProposal: {
-                    title: "",
-                    permlink: "",
-                    type: null,
-                    authors: [],
-                    isInProgress: false,
-                    isOpen: false
-                },
-
-                contentTypes: [
-                    { text: 'Announcement', id: 1 },
-                    { text: 'Milestone', id: 2 },
-                    { text: 'Final Result', id: 3 }
-                ]
-            }
-        },
 
         computed: {
             ...mapGetters({
@@ -198,104 +144,10 @@
                 return this.research != null 
                     ? this.$store.getters.userIsResearchGroupMember(this.research.research_group_id) 
                     : false
-            },
-            
-            authors: (state, getters) => {
-                return state.membersList.map(m => { return { text: m.owner, id: m.id } });
-            },
-
-            newContentBtnIsEnabled() {
-                return  this.newContentProposal.title && 
-                        this.newContentProposal.type && 
-                        this.newContentProposal.authors.length
-            },
-
-            dropzoneOptions() {
-                var options = null;
-                if(this.research) {
-                    options = {
-                        url: `${config['deip-server-url']}/api/files/upload-content`,
-                        paramName: "research-content",
-                        headers: {
-                            "Research-Id": this.research.id.toString(),
-                            "Authorization": 'Bearer ' + getAccessToken()
-                        },
-                         maxFiles: 1,
-                        thumbnailWidth: 150,
-                        autoProcessQueue: false,
-                        acceptedFiles: ['application/pdf', 'image/png', 'image/jpeg'].join(',')
-                    }
-                } 
-                return options
             }
         },
         methods: {
-            fileAdded(file) {
-                this.newContentProposal.isOpen = true;
-            },
-            proposeNewContent: function () {
-                this.newContentProposal.isInProgress = true;
-                this.$refs.newContent.processQueue();
-            },
-            cancelNewContent: function() {
-                this.$refs.newContent.removeAllFiles();
-                this.newContentProposal.isOpen = false;
-            },
-            afterComplete(file) {
-                const hash = JSON.parse(file.xhr.response).hash;
 
-                const proposal = proposalService.getStringifiedProposalData(proposalService.types.createResearchMaterial, [
-                    this.research.id,
-                    this.newContentProposal.type,
-                    this.newContentProposal.title,
-                    this.newContentProposal.title.replace(/[^a-zA-Z0-9-_]+/ig,''),
-                    hash,
-                    this.newContentProposal.authors,
-                    [],
-                    []
-                ]);
-
-                // todo: add this proposal to appropriate Vuex state
-                deipRpc.broadcast.createProposalAsync(
-					this.user.privKey,
-					this.user.username, 
-					this.research.research_group_id, 
-					proposal,
-                    proposalService.types.createResearchMaterial,
-					new Date( new Date().getTime() + 2 * 24 * 60 * 60 * 1000 )
-				).then(() => {
-                    this.$refs.newContent.removeAllFiles();
-                    this.newContentProposal.isInProgress = false;
-                    this.newContentProposal.isOpen = false;
-                }, (err) => {
-                    this.newContentProposal.isInProgress = false;
-                    this.newContentProposal.isOpen = false;
-                    alert(err.message);
-                });
-            }
         }
     };
 </script>
-
-<style lang="less" scoped>
-
-    #content-dropzone {
-        margin-left: -1px;
-        margin-right: -1px;
-    }
-
-    .new-content-dialog-body{
-        min-height: 300px !important;
-    }
-
-    .review-left-block {
-        width: 160px;
-        min-width: 160px;
-    }
-    
-    .loader {
-        position: absolute;
-        right: 45%;
-        top: 45%;
-    }
-</style>

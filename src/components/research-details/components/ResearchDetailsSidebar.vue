@@ -23,7 +23,7 @@
             <span class="deip-blue-color c-pl-3">Join research group</span>
         </div>
 
-        <div style="margin: 0 -24px">
+        <div style="margin: 5px -24px">
             <v-divider></v-divider>
             <div class="row-nowrap">
                 <div class="col-6 c-pv-6 display-flex" v-ripple>
@@ -71,7 +71,7 @@
                 </v-btn>
             </div>
         </div>
-        
+
         <div style="margin: 0 -24px">
             <v-divider></v-divider>
         </div>

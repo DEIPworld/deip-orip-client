@@ -41,6 +41,7 @@
                             <token-sale-caps
                                 @finish="finish" @decStep="decStep"
                                 :token-sale-info="tokenSaleInfo"
+                                :isLoading="isLoading"
                             ></token-sale-caps>
                         </div>
                     </v-stepper-content>
@@ -66,6 +67,7 @@
         },
         data() { 
             return {
+                isLoading: false,
                 currentStep: 0,
                 tokenSaleInfo: {
                     amountToSell: 0,
@@ -88,6 +90,8 @@
                 this.currentStep--;
             },
             finish() {
+
+                this.isLoading = true;
                 let proposal = proposalService.getStringifiedProposalData(proposalService.types.startResearchTokenSale, [
                     this.research.id,
                     this.tokenSaleInfo.startDate.toISOString().split('.')[0],
@@ -105,7 +109,8 @@
                     proposalService.types.startResearchTokenSale,
 					new Date( new Date().getTime() + 2 * 24 * 60 * 60 * 1000 )
 				).then(() => {
-                    alert("Token Sale proposal created !");
+                    this.isLoading = false;
+                    alert("Token Sale Proposal created successfully! Approve it to start the Token Sale!");
                     // redirect to proposal
                     this.$router.push({ 
                         name: 'ResearchGroupDetails', 
@@ -113,7 +118,8 @@
                     }); 
                 }).catch(err => {
                     alert(err.message);
-                });
+                    this.isLoading = false;
+                })
             }
         }
     };
