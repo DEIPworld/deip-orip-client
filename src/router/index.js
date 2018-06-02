@@ -5,8 +5,8 @@ import AdminPage from '@/components/AdminPage'
 import ResearchFeed from '@/components/research-feed/ResearchFeed'
 import ResearchDetails from '@/components/research-details/ResearchDetails'
 import ResearchContentDetails from '@/components/research-content-details/ResearchContentDetails'
-import ResearchStartCreating from '@/components/research/components/ResearchStartCreating'
-import ResearchCreating from '@/components/research/components/ResearchCreating'
+import ResearchStartCreating from '@/components/research-create/ResearchStartCreating'
+import ResearchCreating from '@/components/research-create/ResearchCreating'
 import TokenSale from '@/components/token-sale/TokenSale'
 
 import ResearchGroupCreating from '@/components/research-group/components/ResearchGroupCreating'
@@ -54,11 +54,11 @@ const router = new Router({
         name: 'ResearchContentDetails',
         component: ResearchContentDetails
     }, {
-        path: '/startCreateResearch',
+        path: '/create-research',
         name: 'StartCreateResearch',
         component: ResearchStartCreating
     }, {
-        path: '/createResearch',
+        path: '/create-new-research',
         name: 'CreateResearch',
         component: ResearchCreating
     }, {

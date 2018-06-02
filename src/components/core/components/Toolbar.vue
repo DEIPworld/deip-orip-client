@@ -38,7 +38,7 @@
             </v-menu>
 
             <div v-if="isLoggedIn()" class="mx-3" style="width: 180px">
-                <v-btn dark round color="primary" class="full-width ma-0" to="/startCreateResearch">
+                <v-btn dark round color="primary" class="full-width ma-0" to="/create-research">
                     <div class="col-grow">Add Research</div>
                     <v-icon dark small class="ml-2">add</v-icon>
                 </v-btn>

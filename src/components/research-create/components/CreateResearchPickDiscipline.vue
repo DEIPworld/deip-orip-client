@@ -25,7 +25,7 @@
 
                     <div class="col-6 c-p-4 full-height overflow-y-auto">
                         <div class="bold uppercase c-pb-4">All</div>
-                        <discipline-tree-picker></discipline-tree-picker>
+                        <discipline-tree-picker @select="selectDiscipline"></discipline-tree-picker>
                     </div>
                 </div>
             </div>
@@ -44,6 +44,9 @@
             return {} 
         },
         methods: {
+            selectDiscipline(val){
+
+            },
             nextStep() {
                 this.$emit('incStep');
             }
