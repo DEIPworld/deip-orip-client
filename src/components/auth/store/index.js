@@ -12,7 +12,8 @@ const state = {
         expertTokens: [],
         groupTokens: [],
         disciplines: [],
-        groups: []
+        groups: [],
+        coworkers: []
     }
 }
 
@@ -44,7 +45,8 @@ const getters = {
                 name: group.name,
                 quorum_percent: group.quorum_percent,
                 weight: rgt.amount,
-                rgtId: rgt.id
+                rgtId: rgt.id,
+                is_personal: group.is_personal
             })
         }
         return groups;
@@ -53,6 +55,10 @@ const getters = {
     userIsResearchGroupMember: (state, getters) => {
         return groupId => getters.userGroups.find(group => {
             return groupId === group.id}) !== undefined;
+    },
+
+    userCoworkers: (state, getters) => {
+        return state.user.coworkers;
     }
 }
 
@@ -81,7 +87,7 @@ const actions = {
         }
     },
 
-    loadGroups({ state, commit, getters }) {
+    loadGroups({ state, dispatch, commit, getters }) {
         const user = getters.user;
         const groupTokens = [];
 
@@ -99,6 +105,43 @@ const actions = {
                 .then((groups) => {
                     commit('SET_USER_GROUPS_LIST', groups)
                     commit('SET_USER_RESEARCH_GROUP_TOKENS_LIST', groupTokens)
+                    
+                    // todo: move it to specific scope
+                    dispatch('loadCoworkers')
+                });
+        }
+    },
+
+    loadCoworkers({ state, commit, getters }, groupId) {
+        const groups = getters.userGroups;
+        const coworkers = [];
+
+        if (groups.length) {
+
+            var promises = [];
+            for (var i = 0; i < groups.length; i++) {
+                const group = groups[i];
+                promises.push(deipRpc.api.getResearchGroupTokensByResearchGroupAsync(group.id))
+            }
+
+            Promise.all(promises)
+                .then((tokensList) => {
+
+                    const flattened = tokensList.reduce(
+                        function(accumulator, currentValue) {
+                            return accumulator.concat(currentValue);
+                        }, []);
+
+                        for (var i = 0; i < flattened.length; i++) {
+                            const rgt = flattened[i]
+                            if(rgt.owner != state.user.username 
+                                && coworkers.find(c => {return c.owner == rgt.owner}) == undefined){
+
+                                coworkers.push(rgt);
+                            }
+                        }
+                        
+                        commit('SET_USER_COWORKERS_LIST', coworkers)
                 });
         }
     }
@@ -121,6 +164,10 @@ const mutations = {
 
     ['SET_USER_RESEARCH_GROUP_TOKENS_LIST'](state, list) {
         Vue.set(state.user, 'groupTokens', list)
+    },
+
+    ['SET_USER_COWORKERS_LIST'](state, list) {
+        Vue.set(state.user, 'coworkers', list)
     }
 }
 

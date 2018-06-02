@@ -32,20 +32,31 @@
 
         </div>
         <div class="row justify-center align-center">
-            <v-btn color="primary" @click.native="nextStep()">Next</v-btn>
+            <v-btn color="primary" :disabled="nextDisabled" @click.native="nextStep()">Next</v-btn>
         </div>
     </div>
 </template>
 
 <script>
+
+    import { mapGetters } from 'vuex';
+    
     export default {
         name: "CreateResearchPickDiscipline",
         data() { 
-            return {} 
+            return {
+                selectedDiscepline: undefined
+            } 
+        },
+        computed: {
+            nextDisabled(){
+                return !this.selectedDiscepline;
+            }
         },
         methods: {
-            selectDiscipline(val){
-
+            selectDiscipline(discipline){
+                this.selectedDiscepline = discipline;
+                this.$emit('selectDiscipline', discipline);
             },
             nextStep() {
                 this.$emit('incStep');

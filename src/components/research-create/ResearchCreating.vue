@@ -34,6 +34,7 @@
                         <div class="row-nowrap justify-center full-height">
                             <create-research-pick-discipline
                                 @incStep="incStep"
+                                @selectDiscipline="setDiscipline"
                             ></create-research-pick-discipline>
                         </div>
                     </v-stepper-content>
@@ -42,6 +43,7 @@
                         <div class="row-nowrap justify-center full-height">
                             <create-research-pick-group
                                 @incStep="incStep" @decStep="decStep"
+                                @selectGroup="setGroup"
                             ></create-research-pick-group>
                         </div>
                     </v-stepper-content>
@@ -50,6 +52,7 @@
                         <div class="row-nowrap justify-center full-height">
                             <create-research-meta
                                 @incStep="incStep" @decStep="decStep"
+                                @selectMeta="setMeta"
                             ></create-research-meta>
                         </div>
                     </v-stepper-content>
@@ -64,8 +67,10 @@
 
                     <v-stepper-content step="5">
                         <div class="row-nowrap justify-center full-height">
-                            <create-research-share
-                                @incStep="incStep" @decStep="decStep"
+                            <create-research-share 
+                                :isLoading="isLoading"
+                                @finish="finish" @decStep="decStep"
+                                @selectReviewShare="setReviewShare"
                             ></create-research-share>
                         </div>
                     </v-stepper-content>
@@ -77,12 +82,31 @@
 </template>
 
 <script>
+    import deipRpc from '@deip/deip-rpc';
+    import { mapGetters } from 'vuex';
+
     export default {
         name: "ResearchCreating",
         data() { 
             return {
-                currentStep: 0
+                currentStep: 0,
+                newResearch: {
+                    discipline: undefined,
+                    group: undefined,
+                    title: '',
+                    description: '',
+                    review_share_in_percent: 5,
+                },
+
+                isLoading: false
             } 
+        },
+        computed: {
+            ...mapGetters({
+                user: 'user',
+                userGroups: 'userGroups',
+                userCoworkers: 'userCoworkers'
+            })
         },
         methods: {
             incStep() {
@@ -94,6 +118,53 @@
             },
             decStep() {
                 this.currentStep--;
+            },
+
+            setDiscipline(discipline){
+                this.newResearch.discipline = discipline;
+            },
+
+            setGroup(group){
+                this.newResearch.group = group;
+            },
+
+            setMeta(meta){
+                this.newResearch.title = meta.title;
+                this.newResearch.description = meta.description;
+            },
+
+            setReviewShare(share){
+                this.newResearch.review_share_in_percent = share;
+            },
+
+            finish(){
+
+                this.isLoading = true;
+
+                var proposal = `{"research_group_id": ${this.newResearch.group.id}, 
+                    "title": "${this.newResearch.title}", 
+                    "abstract":"${this.newResearch.description}", 
+                    "permlink":"${this.newResearch.title.replace(/[^a-zA-Z0-9-_]+/ig,'')}", 
+                    "review_share_in_percent": ${this.newResearch.review_share_in_percent}, 
+                    "dropout_compensation_in_percent": 5, 
+                    "disciplines": [${this.newResearch.discipline.id}]}`;
+
+                deipRpc.broadcast.createProposalAsync(
+					this.user.privKey,
+					this.user.username, 
+					this.newResearch.group.id,
+                    proposal,
+                    1,
+					new Date( new Date().getTime() + 2 * 24 * 60 * 60 * 1000 )
+				).then(() => {
+                    this.isLoading = false;
+                    alert("success")
+                    this.$router.push(`/${this.newResearch.group.permlink}/group-details`)
+
+                }, (err) => {
+                    this.isLoading = false;
+                    alert(err.message);
+                });
             }
         }
     };

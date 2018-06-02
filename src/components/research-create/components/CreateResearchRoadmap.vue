@@ -47,8 +47,15 @@
 </template>
 
 <script>
+
+    import { mapGetters } from 'vuex';
+    
     export default {
         name: "CreateResearchRoadmap",
+
+        props: {
+            newResearch : {type: Object}
+        },
         data() { 
             return {} 
         },
