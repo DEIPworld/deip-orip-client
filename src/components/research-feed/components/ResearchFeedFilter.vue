@@ -12,7 +12,7 @@
         <div class="sm-title bold c-pt-6">Filters Setup</div>
         <div class="c-pv-4">
             <div class="subheading c-pb-4">Discipline</div>
-            <discipline-tree-picker @select="selectDiscipline"></discipline-tree-picker>
+            <discipline-tree-picker :preselected="filter.disciplines" @select="filterDisciplines"></discipline-tree-picker>
         </div>
 
         <!-- <div>
@@ -98,8 +98,8 @@
             })
         },
         methods: {
-            selectDiscipline(selectedDisciplines) {
-                this.$store.dispatch('feed/updateFilter', {key: 'disciplines', value: selectedDisciplines})
+            filterDisciplines(disciplines) {
+                this.$store.dispatch('feed/updateFilter', {key: 'disciplines', value: disciplines})
             },
             querySearch(value) {
                 this.$store.dispatch('feed/updateFilter', {key: 'q', value: value})

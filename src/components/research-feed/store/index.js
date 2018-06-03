@@ -49,6 +49,13 @@ const getters = {
 
     allCollapsed: (state, getters) => {
         return state.fullResearchList.reduce((acc, item) => acc && item.isCollapsed, true);
+    },
+
+    hasSelectedChildDiscipline: (state, getters) => {
+        return discipline => state.filter.disciplines.find(d => {
+            const parts = d.path.split('.')
+            return d.id != discipline.id && parts.some(p => p == discipline.path);
+        }) !== undefined;
     }
 }
 

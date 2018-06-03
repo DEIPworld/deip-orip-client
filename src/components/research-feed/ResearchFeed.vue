@@ -17,7 +17,7 @@
                         </div>
                         <div v-for="discipline in filter.disciplines" class="c-pr-4 display-flex">
                             <span>{{ discipline.label }}</span>
-                            <span class="small-remove-btn ml-1" 
+                            <span v-if="!hasSelectedChildDiscipline(discipline)" class="small-remove-btn ml-1" 
                                     @click="updateFilter({
                                         key: 'disciplines', 
                                         value: filter.disciplines.filter(d => { return d.id != discipline.id })
@@ -73,6 +73,9 @@
             },
             updateFilter(condition) {
                 this.$store.dispatch('feed/updateFilter', condition)
+            },
+            hasSelectedChildDiscipline(node){
+                return this.$store.getters['feed/hasSelectedChildDiscipline'](node)
             }
         },
         created() {
