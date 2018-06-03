@@ -7,17 +7,9 @@
         <div class="sm-title bold c-pt-8">Expertise</div>
 
         <div class="c-pt-4 c-pb-6">
-            <div class="row justify-between">
-                <div class="half-bold">Anatomy</div>
-                <div>1 345</div>
-            </div>
-            <div class="row justify-between">
-                <div class="half-bold">Biochemistry</div>
-                <div>666</div>
-            </div>
-            <div class="row justify-between">
-                <div class="half-bold">Biology</div>
-                <div>145</div>
+            <div class="row justify-between" v-for="(item, i) in expertise" :key="i">
+                <div class="half-bold">{{ item.discipline_name }}</div>
+                <div>{{ item.amount }}</div>
             </div>
         </div>
 
@@ -75,11 +67,18 @@
 </template>
 
 <script>
+    import { mapGetters } from 'vuex';
+
     export default {
         name: "UserDetailsSidebar",
         data() {
             return {};
-        }
+        },
+        computed: {
+            ...mapGetters({
+                expertise: 'userDetails/expertise',
+            })
+        },
     };
 </script>
 

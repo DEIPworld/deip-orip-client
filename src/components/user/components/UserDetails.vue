@@ -26,12 +26,14 @@
 </template>
 
 <script>
+    
     export default {
         name: 'UserDetails',
         data() {
             return {
                 isEditEducationShown: { value: false },
-                isEditEmploymentShown: { value: false }
+                isEditEmploymentShown: { value: false },
+                accountName: 'alice'
             }
         },
         methods: {
@@ -41,6 +43,9 @@
             showEditEmploymentDialog() {
                 this.isEditEmploymentShown.value = true;
             },
+        },
+        created() {
+            this.$store.dispatch('userDetails/loadUser', this.accountName);
         }
     }
 </script>

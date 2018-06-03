@@ -1,11 +1,13 @@
 <template>
     <div>
-        <div class="row">
+        <div class="row" v-if="userInfo">
             <v-avatar size="120px">
-                <img src="http://deip.world/static/ashkor.7ff44c16.png" alt="User">
+                <v-gravatar :title="userInfo.name" :email="userInfo.name + '@deip.world'" />
             </v-avatar>
+
             <div class="col-grow c-pl-12">
-                <div class="display-1 half-bold c-pt-4">Alex Shkor</div>
+                <div class="display-1 half-bold c-pt-4">{{ userInfo.name }}</div>
+
                 <div class="c-pt-4">
                     <v-icon small>location_on</v-icon>
                     <span class="half-bold"> Minsk, Belarus</span>
@@ -16,9 +18,11 @@
                         <v-icon small>mode_edit</v-icon>
                     </v-btn> -->
                 </div>
+
                 <div class="c-pt-2">Belarusian State University of Informatics and Radioelectronics</div>
             </div>
         </div>
+
         <div class="c-pt-8">
             Founder of DEIP – decentralized research platform which fairly rewards scientists corresponding to 
             their contribution to global science.
@@ -28,29 +32,30 @@
             technology and introducing strong economic models, that will maintain protocol of new society.
         </div>
 
-        <div class="c-pt-7">
+        <div class="c-pt-7" v-if="false">
             <state-research-list></state-research-list>
         </div>
 
         <div class="c-pt-8">
-            <div class="title">Research Groups: 3</div>
+            <div class="title">Research Groups: {{ groups.length }}</div>
         </div>
 
-        <v-card class="c-mt-6">
-            <div class="c-p-6">
-                <router-link to="/researchGroupDetails" class="research-group-title">DEIP scientific team</router-link>
-                <div class="research-group-authors c-pt-2">Alex Shkor  ·  Artyom Ruseckiy  ·  Egor Tsaryk</div>
-            </div>
-            <v-divider></v-divider>
-            <div class="c-p-6">
-                <router-link to="/researchGroupDetails" class="research-group-title">Energistically maximize Blockchain quality vectors before progressive functionalities</router-link>
-                <div class="research-group-authors c-pt-2">Alex Shkor  ·  Artyom Ruseckiy  ·  Egor Tsaryk · Serge Dzeranov · Egor Marushko</div>
-            </div>
-            <v-divider></v-divider>
-            <div class="c-p-6">
-                <router-link to="/researchGroupDetails" class="research-group-title">Digital watermarking of multimedia</router-link>
-                <div class="research-group-authors c-pt-2">Alex Shkor  ·  Nikolay Ignatiev</div>
-            </div>
+        <v-card class="c-mt-6 hidden-last-child">
+            <template v-for="group in groups">
+                <div class="c-p-6">
+                    <router-link to="/researchGroupDetails" class="research-group-title">{{ group.name }}</router-link>
+                    <span v-if="group.is_personal" class="grey--text caption">(personal group)</span>
+                        
+                    <div class="caption grey--text c-pt-2 hidden-last-child" v-if="!group.is_personal">
+                        <template v-for="share in group.shares">
+                            <span>{{ share.owner }}</span>
+                            <span> · </span>
+                        </template>
+                    </div>
+                </div>
+
+                <v-divider></v-divider>
+            </template>
         </v-card>
 
         <div class="c-pt-8">
@@ -64,7 +69,9 @@
                     Doctor of Philosophy (Ph.D.), Differential Equations, Dynamical Systems & Optimal Control 2014 – 2018
                 </div>
             </div>
+
             <v-divider></v-divider>
+
             <div class="c-p-6">
                 <div class="subheading half-bold">Belarusian State University</div>
                 <div class="">
@@ -81,11 +88,19 @@
 </template>
 
 <script>
+    import { mapGetters } from 'vuex';
+
     export default {
         name: 'UserDetailsBody',
         data() {
             return {}
-        }
+        },
+        computed: {
+            ...mapGetters({
+                userInfo: 'userDetails/userInfo',
+                groups: 'userDetails/groups',
+            })
+        },
     }
 </script>
 
@@ -94,11 +109,6 @@
         font-size: 16px;
         color: #2F80ED;
         font-weight: 500;
-
         text-decoration: none;
-    }
-    .research-group-authors {
-        font-size: 12px;
-        color: #888888;
     }
 </style>
