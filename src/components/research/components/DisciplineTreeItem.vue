@@ -10,7 +10,7 @@
             <div v-for="(val, key) in discipline.children" :key="key">
                 <discipline-tree-item
                     :discipline="val"
-                    :selectedPath="selectedPath"
+                    :selected="selected"
                     @update="select"
                 ></discipline-tree-item>
             </div>
@@ -24,8 +24,8 @@
     export default {
         name: "DisciplineTreeItem",
         props: {
-            discipline: Object,
-            selectedPath: String
+            discipline:  {type: Object, required: true},
+            selected: {type: Array, required: true}
         },
         methods: {
             select(discipline) {
@@ -34,10 +34,19 @@
         },
         computed: {
             isSelected() {
-                return this.selectedPath === this.discipline.path;
+                if(!this.discipline.children)
+                    return this.selected.some(d => d.id == this.discipline.id);
+
+                // if child is selected its parent should be selected as well
+                const hasSelectedChild = this.selected.find(d => {
+                    const parts =  d.path.split('.')
+                    return parts.some(p => p == this.discipline.path);;
+                }) !== undefined;
+
+                return hasSelectedChild;
             },
             isExpanded() {
-                return _.startsWith(this.selectedPath, this.discipline.path) || this.discipline.isTop;
+                return this.selected.some(d => d.id == this.discipline.id) || this.discipline.isTop;
             }
         }
     };

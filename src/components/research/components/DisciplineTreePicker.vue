@@ -1,8 +1,8 @@
 <template>
     <div>
         <discipline-tree-item
-            :discipline="disciplineTree"
-            :selectedPath="selectedPath"
+            :discipline="tree"
+            :selected="selected"
             @update="chooseSelectedDiscipline"
         ></discipline-tree-item>
     </div>
@@ -14,36 +14,35 @@
     export default {
         name: "DisciplineTreePicker",
         props: {
-            selected: Object
+            preselected: { type: Array, required: false, default: () => [] }
         },
         methods: {
             chooseSelectedDiscipline(discipline) {
-                this.$emit('select', { 
-                    id: discipline.id, 
-                    label: discipline.label 
-                });
-
-                this.currentId = discipline.id;
-                this.selectedPath = discipline.path;
+                
+                if (this.selected.some(d => d.id == discipline.id)){
+                    this.selected = this.selected.filter(d => d.id != discipline.id)
+                } else {
+                    this.selected.push(discipline)
+                }
+                
+                this.$emit('select', this.selected.map(d => {
+                    return { id: discipline.id, label: discipline.label, path: this.discipline.path }
+                }));
             }
         },
         watch: {
-            selected: function(discipline) {
-                if (!discipline) {
-                    this.currentId = undefined;
-                    this.selectedPath = '';
-                } else if (discipline.id !== this.currentId) {
-                    const newSelectedNode = getNodeById(this.disciplineTree, discipline.id);
-                    this.currentId = discipline.id;
-                    this.selectedPath = newSelectedNode.path;
-                }
+            preselected: function(preselected) {
+                this.selected = preselected.map(d => {
+                    return { id: discipline.id, label: discipline.label, path: this.discipline.path }
+                });
             }
         },
         data() {
             return {
-                currentId: undefined,
-                selectedPath: '',
-                disciplineTree: disciplineTree
+                tree: disciplineTree,
+                selected: this.preselected.length ? this.preselected.map(d => {
+                    return { id: discipline.id, label: discipline.label, path: this.discipline.path }
+                }) : []
             };
         }
     };
