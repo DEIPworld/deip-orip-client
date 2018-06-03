@@ -91,7 +91,7 @@
             return {
                 currentStep: 0,
                 newResearch: {
-                    discipline: undefined,
+                    disciplines: [],
                     group: undefined,
                     title: '',
                     description: '',
@@ -120,8 +120,8 @@
                 this.currentStep--;
             },
 
-            setDiscipline(discipline){
-                this.newResearch.discipline = discipline;
+            setDiscipline(disciplines){
+                this.newResearch.disciplines = disciplines;
             },
 
             setGroup(group){
@@ -147,8 +147,8 @@
                     "permlink":"${this.newResearch.title.replace(/[^a-zA-Z0-9-_]+/ig,'')}", 
                     "review_share_in_percent": ${this.newResearch.review_share_in_percent}, 
                     "dropout_compensation_in_percent": 5, 
-                    "disciplines": [${this.newResearch.discipline.id}]}`;
-
+                    "disciplines": [${this.newResearch.disciplines.map(d => d.id).join(', ')}]}`;
+                    
                 deipRpc.broadcast.createProposalAsync(
 					this.user.privKey,
 					this.user.username, 

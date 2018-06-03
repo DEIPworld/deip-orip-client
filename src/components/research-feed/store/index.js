@@ -33,12 +33,8 @@ const getters = {
         }
 
         if (state.filter.disciplines.length) {
-            debugger;
-
             handler = handler.filter(research => {
                 return research.disciplines.some(discipline => {
-                    debugger;
-
                     return state.filter.disciplines.some(d => {return d.id == discipline.id});
                 });
             });
@@ -128,7 +124,6 @@ const mutations = {
     },
 
     ['UPDATE_FILTER'](state, { key, value }) {
-        debugger;
         Vue.set(state.filter, key, value)
     }
 }

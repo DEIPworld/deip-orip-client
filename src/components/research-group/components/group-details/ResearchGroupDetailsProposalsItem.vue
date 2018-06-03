@@ -31,6 +31,10 @@
                         <div class="a">{{ proposal.data.title }}</div>
                     </div>
 
+                    <div class="display-flex" v-else>
+                        <div class="a">{{ proposal.data.title }}</div>
+                    </div>
+
                 </div>
                 <div class="date">
                     <div class="caption">{{ proposal.creation_time | dateFormat("D MMM, YYYY") }}</div>
