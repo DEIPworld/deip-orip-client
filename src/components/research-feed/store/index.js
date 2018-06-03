@@ -5,7 +5,7 @@ import Vue from 'vue'
 const state = {
     fullResearchList: [],
     filter: {
-        discipline: undefined,
+        disciplines: [],
         q: '',
         orderBy: {
             iteratee: ['title'],
@@ -32,10 +32,16 @@ const getters = {
             );
         }
 
-        if (state.filter.discipline) {
-            handler = handler.filter(research =>
-                _.find(research.disciplines, { id: state.filter.discipline.id }) !== undefined
-            );
+        if (state.filter.disciplines.length) {
+            debugger;
+
+            handler = handler.filter(research => {
+                return research.disciplines.some(discipline => {
+                    debugger;
+
+                    return state.filter.disciplines.some(d => {return d.id == discipline.id});
+                });
+            });
         }
 
         return handler.orderBy(state.filter.orderBy.iteratee, state.filter.orderBy.order).value();
@@ -115,6 +121,7 @@ const mutations = {
     },
 
     ['UPDATE_FILTER'](state, { key, value }) {
+        debugger;
         Vue.set(state.filter, key, value)
     }
 }

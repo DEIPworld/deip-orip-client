@@ -7,7 +7,7 @@
         <div class="content-column">
             <div class="filling">
                 <div class="row-nowrap">
-                    <div v-if="filter.discipline" class="filter-title subheading grey--text">Discipline</div>
+                    <div v-if="filter.disciplines.length" class="filter-title subheading grey--text">Discipline</div>
                     <div class="row col-grow align-center">
                         <div class="c-pr-4 display-flex" v-if="filter.q !== ''">
                             <span>{{ filter.q }}</span>
@@ -15,9 +15,13 @@
                                 <v-icon>close</v-icon>
                             </span>
                         </div>
-                        <div class="c-pr-4 display-flex" v-if="filter.discipline">
-                            <span>{{ filter.discipline.label }}</span>
-                            <span class="small-remove-btn ml-1" @click="updateFilter({ key: 'discipline', value: undefined })">
+                        <div v-for="discipline in filter.disciplines" class="c-pr-4 display-flex">
+                            <span>{{ discipline.label }}</span>
+                            <span class="small-remove-btn ml-1" 
+                                    @click="updateFilter({
+                                        key: 'disciplines', 
+                                        value: filter.disciplines.filter(d => { return d.id != discipline.id })
+                                    })">
                                 <v-icon>close</v-icon>
                             </span>
                         </div>
@@ -64,7 +68,7 @@
             })
         },
         methods: {
-            toggleFeed(products) {
+            toggleFeed() {
                 this.$store.dispatch('feed/toggleFeed')
             },
             updateFilter(condition) {

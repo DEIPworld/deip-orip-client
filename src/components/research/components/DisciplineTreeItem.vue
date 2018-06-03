@@ -24,7 +24,7 @@
     export default {
         name: "DisciplineTreeItem",
         props: {
-            discipline:  {type: Object, required: true},
+            discipline: {type: Object, required: true},
             selected: {type: Array, required: true}
         },
         methods: {
@@ -34,16 +34,7 @@
         },
         computed: {
             isSelected() {
-                if(!this.discipline.children)
-                    return this.selected.some(d => d.id == this.discipline.id);
-
-                // if child is selected its parent should be selected as well
-                const hasSelectedChild = this.selected.find(d => {
-                    const parts =  d.path.split('.')
-                    return parts.some(p => p == this.discipline.path);;
-                }) !== undefined;
-
-                return hasSelectedChild;
+                return this.selected.some(d => d.id == this.discipline.id);
             },
             isExpanded() {
                 return this.selected.some(d => d.id == this.discipline.id) || this.discipline.isTop;

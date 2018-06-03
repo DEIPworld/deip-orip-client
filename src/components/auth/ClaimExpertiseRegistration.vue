@@ -19,7 +19,7 @@
 
                 <div class="col-8 c-p-4 overflow-y-auto">
                     <div class="half-bold uppercase c-pb-4">All</div>
-                    <discipline-tree-picker :selected="selectedDiscipline" @select="selectDiscipline"></discipline-tree-picker>
+                    <discipline-tree-picker :preselected="[]" @select="selectDiscipline"></discipline-tree-picker>
                 </div>
 
             </div>
