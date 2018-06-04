@@ -72,7 +72,7 @@
         },
         computed: {
             disciplines() {
-                return this.research.disciplines 
+                return this.research.disciplines && this.research.totalVotes
                     ? this.research.disciplines.map(discipline => {
                         return {
                             disciplineName: discipline.name,

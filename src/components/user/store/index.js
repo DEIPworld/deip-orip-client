@@ -4,7 +4,7 @@ import Vue from 'vue';
 
 const state = {
     userInfo: undefined,
-    researchTokens: [], // ?, clear out what kind of research we should show
+    researchList: [],
     groups: [],
     expertise: []
 }
@@ -12,7 +12,7 @@ const state = {
 // getters
 const getters = {
     userInfo: state => state.userInfo,
-    researchTokens: state => state.researchTokens,
+    researchList: state => state.researchList,
     groups: state => state.groups,
     expertise: state => state.expertise
 }
@@ -22,18 +22,60 @@ const actions = {
     loadUser({ dispatch }, accountName) {
         dispatch('loadUserInfo', accountName);
         dispatch('loadExpertise', accountName);
-        dispatch('loadResearchTokens', accountName);
-        dispatch('loadGroups', accountName);
+
+        dispatch('loadGroups', accountName).then(() => 
+            dispatch('loadResearchList', accountName)
+        );
     },
     loadUserInfo({ commit }, accountName) {
         return deipRpc.api.getAccountsAsync([accountName]).then(data => {
             commit('SET_USER_INFO', data[0]);
         });
     },
-    loadResearchTokens({ commit }, accountName) {
-        return deipRpc.api.getResearchTokensByAccountNameAsync(accountName).then(data => {
-            commit('SET_RESEARCH_TOKENS', data);
+    loadResearchList({ commit, state }, accountName) {
+        // researhes where user took participation 
+        let researchList = [];
+
+        // OMG pzdc, so many queries, very optimized blockchains...
+
+        return Promise.all(
+            state.groups.map(group => deipRpc.api.getAllResearchContentAsync(group.id))
+        )
+        .then(data => {
+            let researchPromises = _(data)
+                .flatten()
+                .filter(item => _.includes(item.authors, accountName))
+                .map('research_id')
+                .uniq()
+                .map(researchId => deipRpc.api.getResearchByIdAsync(researchId))
+                .value();
+
+            return Promise.all(researchPromises);
         })
+        .then(researches => {
+            researchList = researches;
+
+            return Promise.all(
+                researchList.map(item => deipRpc.api.getTotalVotesByResearchAsync(item.research_id))
+            );
+        })
+        .then(list => {
+            let tvoMap = _.chain(list)
+                .flatten()
+                .groupBy('research_id')
+                .value();
+
+            researchList.forEach(research => {
+                research.totalVotes = tvoMap[research.id] ? tvoMap[research.id] : [];
+            });
+
+            return researchList;
+        })
+        .then(data => {
+            commit('SET_RESEARCH_LIST', data);
+        }).catch(() => {
+            commit('SET_RESEARCH_LIST', researchList);
+        });;
     },
     loadGroups({ commit }, accountName) {
         return deipRpc.api.getResearchGroupTokensByAccountAsync(accountName).then(data => {
@@ -54,7 +96,7 @@ const actions = {
     loadExpertise({ commit }, accountName) {
         return deipRpc.api.getExpertTokensByAccountNameAsync(accountName).then(data => {
             commit('SET_EXPERTISE', data);
-        })
+        });
     }
 }
 
@@ -63,8 +105,8 @@ const mutations = {
     ['SET_USER_INFO'](state, userInfo) {
         Vue.set(state, 'userInfo', userInfo);
     },
-    ['SET_RESEARCH_TOKENS'](state, researchTokens) {
-        Vue.set(state, 'researchTokens', researchTokens);
+    ['SET_RESEARCH_LIST'](state, researchList) {
+        Vue.set(state, 'researchList', researchList);
     },
     ['SET_RESEARCH_GROUPS'](state, groups) {
         Vue.set(state, 'groups', groups);
