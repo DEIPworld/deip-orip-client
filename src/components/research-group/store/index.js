@@ -47,7 +47,6 @@ const actions = {
             commit('SET_RESEARCH_GROUP', data);
 
             dispatch('loadResearchGroupProposals', state.group.id);
-            dispatch('loadResearchGroupShares', state.group.id);
             dispatch('loadResearchList', state.group.id);
 
             dispatch('loadResearchGroupShares', state.group.id)
