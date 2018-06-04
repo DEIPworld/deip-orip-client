@@ -13,7 +13,7 @@
                 <div class="column align-center">
                     <div>
                         <div class="display-inline-block width-12">
-                            <v-text-field v-model="reviewShare" solo mask="##" label="min 5%"></v-text-field>
+                            <v-text-field v-model="reviewShare" v-on:keyup="setReviewShare" solo mask="##" label="min 5%"></v-text-field>
                         </div>
                         <div class="display-inline-block font-18px bold deip-blue-color c-pl-2">
                             %
@@ -42,16 +42,17 @@
     export default {
         name: "CreateResearchShare",
         props: {
-            isLoading: {type: Boolean, required: true}
+            research : { type: Object, required: true },
+            isLoading: { type: Boolean, required: true }
         },
-        data() { 
+        data(){
             return {
-                reviewShare: 0
-            } 
+                reviewShare: this.research.review_share_in_percent // default
+            }
         },
         computed: {
             nextDisabled(){
-                return !this.reviewShare;
+                return !this.research.review_share_in_percent;
             }
         },
         methods: {
@@ -61,11 +62,10 @@
             prevStep() {
                 this.$emit('decStep');
             },
-            selectReviewShare(share){
-                this.$emit('selectReviewShare', share);
+            setReviewShare(){
+                this.$emit('setReviewShare', this.reviewShare);
             },
             finish(){
-                this.selectReviewShare(parseInt(this.reviewShare) * this.DEIP_1_PERCENT )
                 this.$emit('finish');
             }
         }

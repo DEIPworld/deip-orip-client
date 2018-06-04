@@ -19,12 +19,12 @@
                     </v-stepper-step>
                     <v-divider></v-divider>
 
-                    <v-stepper-step step="4" :complete="currentStep > 4">
+            <!--    <v-stepper-step step="4" :complete="currentStep > 4">
                         <div class="uppercase">Roadmap</div>
                     </v-stepper-step>
-                    <v-divider></v-divider>
+                    <v-divider></v-divider> -->
 
-                    <v-stepper-step step="5">
+                    <v-stepper-step step="4">
                         <div class="uppercase">Review share</div>
                     </v-stepper-step>
                 </v-stepper-header>
@@ -34,7 +34,8 @@
                         <div class="row-nowrap justify-center full-height">
                             <create-research-pick-discipline
                                 @incStep="incStep"
-                                @selectDiscipline="setDiscipline"
+                                @setDisciplines="setDisciplines"
+                                :research="research"
                             ></create-research-pick-discipline>
                         </div>
                     </v-stepper-content>
@@ -43,7 +44,8 @@
                         <div class="row-nowrap justify-center full-height">
                             <create-research-pick-group
                                 @incStep="incStep" @decStep="decStep"
-                                @selectGroup="setGroup"
+                                @setGroup="setGroup"
+                                :research="research"
                             ></create-research-pick-group>
                         </div>
                     </v-stepper-content>
@@ -52,25 +54,28 @@
                         <div class="row-nowrap justify-center full-height">
                             <create-research-meta
                                 @incStep="incStep" @decStep="decStep"
-                                @selectMeta="setMeta"
+                                @setTitle="setTitle"
+                                @setDescription="setDescription"
+                                :research="research"
                             ></create-research-meta>
                         </div>
                     </v-stepper-content>
 
-                    <v-stepper-content step="4">
+            <!--    <v-stepper-content step="4">
                         <div class="row-nowrap justify-center full-height">
                             <create-research-roadmap
                                 @incStep="incStep" @decStep="decStep"
                             ></create-research-roadmap>
                         </div>
-                    </v-stepper-content>
+                    </v-stepper-content> -->
 
-                    <v-stepper-content step="5">
+                    <v-stepper-content step="4">
                         <div class="row-nowrap justify-center full-height">
                             <create-research-share 
-                                :isLoading="isLoading"
                                 @finish="finish" @decStep="decStep"
-                                @selectReviewShare="setReviewShare"
+                                @setReviewShare="setReviewShare"
+                                :research="research"
+                                :isLoading="isLoading"
                             ></create-research-share>
                         </div>
                     </v-stepper-content>
@@ -83,21 +88,21 @@
 
 <script>
     import deipRpc from '@deip/deip-rpc';
+    import * as proposalService from "./../research-group/services/ProposalService"; 
     import { mapGetters } from 'vuex';
 
     export default {
-        name: "ResearchCreating",
+        name: "CreateNewResearch",
         data() { 
             return {
                 currentStep: 0,
-                newResearch: {
+                research: {
                     disciplines: [],
                     group: undefined,
                     title: '',
                     description: '',
                     review_share_in_percent: 5,
                 },
-
                 isLoading: false
             } 
         },
@@ -110,7 +115,7 @@
         },
         methods: {
             incStep() {
-                if (this.currentStep < 5) {
+                if (this.currentStep < 4) {
                     this.currentStep++;
                 } else {
                     this.currentStep = 1;
@@ -120,46 +125,49 @@
                 this.currentStep--;
             },
 
-            setDiscipline(disciplines){
-                this.newResearch.disciplines = disciplines;
+            setDisciplines(disciplines){
+                this.research.disciplines = disciplines;
             },
 
             setGroup(group){
-                this.newResearch.group = group;
+                this.research.group = group;
             },
 
-            setMeta(meta){
-                this.newResearch.title = meta.title;
-                this.newResearch.description = meta.description;
+            setTitle(title) {
+                 this.research.title = title;
+            },
+
+            setDescription(description) {
+                 this.research.description = description;
             },
 
             setReviewShare(share){
-                this.newResearch.review_share_in_percent = share;
+                this.research.review_share_in_percent = share * this.DEIP_1_PERCENT;
             },
 
             finish(){
 
                 this.isLoading = true;
 
-                var proposal = `{"research_group_id": ${this.newResearch.group.id}, 
-                    "title": "${this.newResearch.title}", 
-                    "abstract":"${this.newResearch.description}", 
-                    "permlink":"${this.newResearch.title.replace(/[^a-zA-Z0-9-_]+/ig,'')}", 
-                    "review_share_in_percent": ${this.newResearch.review_share_in_percent}, 
+                var proposal = `{"research_group_id": ${this.research.group.id}, 
+                    "title": "${this.research.title}", 
+                    "abstract":"${this.research.description}", 
+                    "permlink":"${this.research.title.replace(/[^a-zA-Z0-9-_]+/ig,'')}", 
+                    "review_share_in_percent": ${this.research.review_share_in_percent}, 
                     "dropout_compensation_in_percent": 5, 
-                    "disciplines": [${this.newResearch.disciplines.map(d => d.id).join(', ')}]}`;
-                    
+                    "disciplines": [${this.research.disciplines.map(d => d.id).join(', ')}]}`;
+
                 deipRpc.broadcast.createProposalAsync(
 					this.user.privKey,
 					this.user.username, 
-					this.newResearch.group.id,
+					this.research.group.id,
                     proposal,
                     1,
 					new Date( new Date().getTime() + 2 * 24 * 60 * 60 * 1000 )
 				).then(() => {
                     this.isLoading = false;
                     alert("success")
-                    this.$router.push(`/${this.newResearch.group.permlink}/group-details`)
+                    this.$router.push(`/${this.research.group.permlink}/group-details`)
 
                 }, (err) => {
                     this.isLoading = false;

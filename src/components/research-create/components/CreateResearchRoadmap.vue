@@ -52,9 +52,8 @@
     
     export default {
         name: "CreateResearchRoadmap",
-
         props: {
-            newResearch : {type: Object}
+            research : { type: Object, required: true }
         },
         data() { 
             return {} 

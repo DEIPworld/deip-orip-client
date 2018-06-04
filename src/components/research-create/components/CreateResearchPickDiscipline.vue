@@ -25,7 +25,7 @@
 
                     <div class="col-6 c-p-4 full-height overflow-y-auto">
                         <div class="bold uppercase c-pb-4">All</div>
-                        <discipline-tree-picker @select="selectDiscipline"></discipline-tree-picker>
+                        <discipline-tree-picker @select="setDisciplines"></discipline-tree-picker>
                     </div>
                 </div>
             </div>
@@ -43,20 +43,17 @@
     
     export default {
         name: "CreateResearchPickDiscipline",
-        data() { 
-            return {
-                selectedDiscepline: undefined
-            } 
+        props: {
+            research: { type: Object, required: true } 
         },
         computed: {
             nextDisabled(){
-                return !this.selectedDiscepline;
+                return !this.research.disciplines.length;
             }
         },
         methods: {
-            selectDiscipline(discipline){
-                this.selectedDiscepline = discipline;
-                this.$emit('selectDiscipline', discipline);
+            setDisciplines(disciplines){
+                this.$emit('setDisciplines', disciplines);
             },
             nextStep() {
                 this.$emit('incStep');
