@@ -52,8 +52,8 @@
 
 <script>
 
-    import { isLoggedIn, clearAccessToken } from './../../../utils/auth'
-    import { mapGetters } from 'vuex'
+    import { isLoggedIn, clearAccessToken } from './../../../utils/auth';
+    import { mapGetters } from 'vuex';
 
     export default {
         name: 'Toolbar',
@@ -79,8 +79,8 @@
             }
         },
         created() {
-            this.$store.dispatch('loadExpertTokens')
-            this.$store.dispatch('loadGroups')
+            this.$store.dispatch('loadExpertTokens');
+            this.$store.dispatch('loadGroups');
         }
     }
 </script>

@@ -31,7 +31,7 @@
                     <v-avatar size="40px">
                         <v-gravatar title="shkor" :email="'shkor' + '@deip.world'" />
                     </v-avatar>
-                    <div class="a c-pl-3">Shkor</div>
+                    <span class="a c-pl-3">Shkor</span>
                 </div>
                 <v-btn flat icon small color="primary" class="ma-0">
                     <v-icon>check</v-icon>
@@ -42,7 +42,7 @@
                     <v-avatar size="40px">
                         <v-gravatar title="kulik" :email="'kulik' + '@deip.world'" />
                     </v-avatar>
-                    <div class="a c-pl-3">Kulik</div>
+                    <span class="a c-pl-3">Kulik</span>
                 </div>
                 <v-btn flat icon small color="primary" class="ma-0">
                     <v-icon>check</v-icon>
