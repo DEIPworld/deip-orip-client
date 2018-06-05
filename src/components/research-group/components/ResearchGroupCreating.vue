@@ -56,6 +56,7 @@
                             <create-research-group-share
                                 @finish="finish" @decStep="decStep"
                                 :group-info="groupInfo"
+                                :isLoading="isLoading"
                             ></create-research-group-share>
                         </div>
                     </v-stepper-content>
@@ -66,6 +67,9 @@
 </template>
 
 <script>
+    import { mapGetters } from 'vuex'
+    import deipRpc from '@deip/deip-rpc';
+
     export default {
         name: "ResearchGroupCreating",
         data() { 
@@ -76,16 +80,46 @@
                     permlink: '',
                     description: '',
                     members: [{ name: this.$route.params.account_name, stake: 100 }]
-                }
+                },
+                isLoading: false
             } 
+        },
+        computed: {
+            ...mapGetters({
+                user: 'user'
+            })
         },
         methods: {
             incStep() { this.currentStep++; },
             decStep() { this.currentStep--; },
             finish() {
-                this.groupInfo; // object which has all necessary info
-                console.log('FINISHED!');
-                // here should be BE calling to save all data
+
+                this.isLoading = true;
+                const permlink = this.groupInfo.title.replace(/\s+/g, '-').toLowerCase();
+                const invitees = this.groupInfo.members.filter(m => m.name != this.user.username)
+                    .map(m => {
+                        return { account: m.name, research_group_tokens_in_percent: m.stake * this.DEIP_1_PERCENT }
+                    })
+
+                deipRpc.broadcast.createResearchGroupAsync(
+                    this.user.privKey,
+                    this.user.username,
+                    this.groupInfo.title,
+                    permlink,
+                    this.groupInfo.description,
+                    600,
+                    false,
+                    invitees
+                ).then(() => {
+                    this.isLoading = false;
+                    this.$router.push({ 
+                        name: 'ResearchGroupDetails', 
+                        params: { research_group_permlink: permlink }
+                    }); 
+                }, (err) => {
+                    this.isLoading = false;
+                    alert(err.message);
+                });
             }
         }
     };

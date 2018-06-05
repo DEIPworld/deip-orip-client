@@ -309,7 +309,9 @@
                     this.newResearchGroup.name,
                     permlink,
                     this.newResearchGroup.description,
-                    parseInt(this.newResearchGroup.quorumPercent)
+                    6000,
+                    false,
+                    [{account: "lightsom", research_group_tokens_in_percent: 5000}]
                 ).then(() => {
                     this.newResearchGroup = {};
                     this.loadResearchGroups();

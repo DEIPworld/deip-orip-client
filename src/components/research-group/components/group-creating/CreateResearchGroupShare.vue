@@ -41,7 +41,7 @@
             <v-btn flat small @click.native="prevStep()">
                 <v-icon dark class="pr-1">keyboard_arrow_left</v-icon> Back
             </v-btn>
-            <v-btn color="primary" @click.native="finish()" :disabled="sum !== 100">
+            <v-btn color="primary" :loading="isLoading" @click.native="finish()" :disabled="sum !== 100">
                 Create group
             </v-btn>
         </div>
@@ -52,7 +52,8 @@
     export default {
         name: "CreateResearchGroupShare",
         props: {
-            groupInfo: { required: true }
+            groupInfo: { required: true },
+            isLoading:  { type: Boolean, required: true },
         },
         data() { 
             return {} 
