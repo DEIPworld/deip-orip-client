@@ -12,7 +12,7 @@
             <div id="sidebar">
                 <div class="c-pb-6 c-pt-4">
                     <div v-for="(discipline, index) in disciplinesList" class="row align-center justify-between vote-btn-area" :class="index == 0 ? '':'c-mt-1'">
-                        <v-btn @click="openVote(discipline)" small color="primary" dark class="ma-0" >Vote</v-btn>
+                        <v-btn v-if="!isResearchGroupMember" @click="openVote(discipline)" small color="primary" dark class="ma-0" >Vote</v-btn>
                         <div class="deip-blue-color c-p-2">
                             {{discipline.name}}:  
                 
@@ -25,33 +25,43 @@
             </div>
         </div>
 
-        <v-dialog v-if="content" v-model="vote.isOpen" persistent max-width="500px" class="text-align-center">
-                <v-card>
-                    <v-card-title>
-                        <span class="text-align-center">Vote for&nbsp;
-                        <span class="bold">"{{content.title}}"</span>&nbsp;using&nbsp;
-                        <span class="bold">{{vote.weight}}% weight of&nbsp;"{{vote.discipline.name}}"</span>&nbsp;tokens</span>
-                    </v-card-title>
-          
-                    <v-card-text class="vote-dialog-body">
-                            <v-slider v-model="vote.weight" thumb-label step="5" ticks v-if="!vote.isInProgress" ></v-slider>
-                            <div class="loader" v-if="vote.isInProgress">
-                                <v-progress-circular indeterminate color="primary"></v-progress-circular>
-                            </div>
-                    </v-card-text>
+    <v-dialog v-if="content" v-model="vote.isOpen" persistent transition="scale-transition" max-width="500px">
+        <v-card class="">
+            <v-toolbar dark color="primary">
+                <v-btn icon dark @click="cancelVote()">
+                    <v-icon>close</v-icon>
+                </v-btn>
+                <v-toolbar-title>Vote using {{vote.weight}}% weight of "{{vote.discipline.name}} tokens"</v-toolbar-title>
+                <v-spacer></v-spacer>
+            </v-toolbar>
+            
+            <div class="column-page">
+                <div class="content-column">
+                    <div class="filling">
+                        <div>
+                            <v-slider v-model="vote.weight" :disabled="vote.isLoading" thumb-label step="5" ticks></v-slider>
 
-                    <v-card-actions class="text-xs-center">
-                        <v-btn color="primary" flat @click.stop="cancelVote()">Cancel</v-btn>
-                        <v-btn color="primary" flat :disabled="vote.weight == 0" @click.stop="voteContent()">Vote</v-btn>
-                    </v-card-actions>
-                </v-card>
-            </v-dialog>
+                            <div class="display-flex c-pt-8">
+                                <v-btn color="primary" 
+                                    class="c-m-auto"
+                                    :disabled="vote.weight == 0"
+                                    :loading="vote.isLoading"
+                                    @click="voteContent()"
+                                >Vote</v-btn>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </v-card>
+    </v-dialog>
     </v-container>
 </template>
 
 <script>
     import { mapGetters } from 'vuex'
-    import deipRpc from '@deip/deip-rpc';
+    import deipRpc from '@deip/deip-rpc'
     import config from './../../config'
 
     export default {
@@ -62,7 +72,7 @@
                 vote: {
                     discipline: {},
                     weight: 50,
-                    isInProgress: false,
+                    isLoading: false,
                     isOpen: false
                 }
             } 
@@ -72,10 +82,16 @@
             ...mapGetters({
                 user: 'user',
                 content: 'rcd/content',
+                research: 'rcd/research',
                 disciplinesList: 'rcd/disciplinesList',
                 totalVotesList: 'rcd/totalVotesList',
                 contentWeightByDiscipline: 'rcd/contentWeightByDiscipline'
-            })
+            }),
+            isResearchGroupMember(){
+                return this.research != null 
+                    ? this.$store.getters.userIsResearchGroupMember(this.research.research_group_id) 
+                    : false
+            }
         },
         
         methods: {
@@ -87,7 +103,7 @@
                 this.vote.isOpen = false;
             },
             voteContent: function() {
-                this.vote.isInProgress = true;
+                this.vote.isLoading = true;
                 deipRpc.broadcast.voteAsync(
                     this.user.privKey,
                     this.user.username,
@@ -96,10 +112,10 @@
                     this.content.research_id,
                     this.content.id
                 ).then(() => {
-                    this.vote.isInProgress = false;
+                    this.vote.isLoading = false;
                     this.vote.isOpen = false;
                 }, (err) => {
-                    this.vote.isInProgress = false;
+                    this.vote.isLoading = false;
                     this.vote.isOpen = false;
                     alert(err.message);
                 });
@@ -113,6 +129,7 @@
             }
 
             this.$store.dispatch('rcd/loadResearchContentDetails', permlinks);
+            this.$store.dispatch('rcd/loadResearchDetails', permlinks);
         }
     };
 </script>

@@ -73,7 +73,7 @@
                                     :disabled="isDisabled || isLoading"
                                     :loading="isLoading"
                                     @click="proposeContent()"
-                                >Send proposal</v-btn>
+                                >Create proposal</v-btn>
                             </div>
                         </div>
 
@@ -153,7 +153,6 @@
                             "Authorization": 'Bearer ' + getAccessToken()
                         },
                         maxFiles: 1,
-                        maxFilesize: 1, // MB  todo: fix the size at server
                         thumbnailWidth: 150,
                         autoProcessQueue: false,
                         acceptedFiles: ['application/pdf', 'image/png', 'image/jpeg'].join(',')
