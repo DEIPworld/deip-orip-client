@@ -24,7 +24,10 @@
 
         <div class="c-pt-8 title">Research</div>
 
-        <div v-if="!contentList.length" class="c-pt-8">There is no content posted in the research yet. Please use the form below to upload your pdf files and images</div>
+        <div v-if="!contentList.length" class="c-pt-8">
+            There is no content posted in the research yet. 
+            <span v-if="isResearchGroupMember">Please use the form below to upload your pdf files and images</span>
+        </div>
         <div class="c-pt-6">
             <v-expansion-panel>
                 <v-expansion-panel-content v-for="(content, index) in contentList" :key="index">

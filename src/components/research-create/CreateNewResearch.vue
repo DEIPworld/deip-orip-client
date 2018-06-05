@@ -166,7 +166,6 @@
 					new Date( new Date().getTime() + 2 * 24 * 60 * 60 * 1000 )
 				).then(() => {
                     this.isLoading = false;
-                    alert("success")
                     this.$router.push(`/${this.research.group.permlink}/group-details`)
 
                 }, (err) => {

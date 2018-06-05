@@ -1,14 +1,15 @@
 <template>
     <div class="column full-height">
         <div class="c-mb-4 col-grow column">
-            <div class="step-title">Add description</div>
+            <div class="step-title">Group Description</div>
             <div class="col-grow overflow-y-auto">
 
                 <div class="row c-mh-auto group-description-max-width">
                     <div class="col-12">
                         <v-text-field name="Description"
-                            label="Description" 
-                            textarea auto-grow
+                            label="Description"
+                            solo multi-line
+                            auto-grow
                             v-model="groupInfo.description"
                             hint="Description/summary guidlines text. You can change this text any time"
                             :rules="descriptionRules"

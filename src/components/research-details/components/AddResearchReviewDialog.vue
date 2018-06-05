@@ -5,7 +5,7 @@
                 <v-btn icon dark @click="close()">
                     <v-icon>close</v-icon>
                 </v-btn>
-                <v-toolbar-title>Add a review</v-toolbar-title>
+                <v-toolbar-title>Post review</v-toolbar-title>
                 <v-spacer></v-spacer>
             </v-toolbar>
 
@@ -59,7 +59,7 @@
 
                                 <div class="c-pt-6">
                                     <v-text-field
-                                        label="Type your review below" 
+                                        label="Leave your review below" 
                                         multi-line auto-grow
                                         rows="2"
                                         v-model="review"
@@ -97,7 +97,7 @@
         </v-card>
 
         <v-snackbar :timeout="4000" color="error" v-model="isError">
-            Error
+            {{errorMessage}}
             <v-btn dark flat @click.native="isError = false">Close</v-btn>
         </v-snackbar>
         <v-snackbar :timeout="4000" color="success" v-model="isSuccess">
@@ -138,7 +138,8 @@
                 contentId: undefined,
 
                 isError: false,
-                isSuccess: false
+                isSuccess: false,
+                errorMessage: ''
             }
         },
         methods: {
@@ -160,7 +161,8 @@
                     this.$store.dispatch('rd/loadResearchReviews', this.research.id);
                     this.$store.dispatch('rd/closeReviewDialog');
                 })
-                .catch((error) => {
+                .catch((err) => {
+                    this.errorMessage = "You have no enough expertise to add a review";
                     this.isError = true;
                 })
                 .finally(() => {

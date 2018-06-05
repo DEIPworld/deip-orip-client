@@ -4,6 +4,7 @@ import Vue from 'vue'
 
 const state = {
     content: null,
+    research: null,
     disciplinesList: [],
     totalVotesList: []
 }
@@ -13,6 +14,11 @@ const getters = {
 
     content: (state, getters) => {
         return state.content;
+    },
+
+    research: (state, getters) => {
+        debugger;
+        return state.research;
     },
 
     disciplinesList: (state, getters) => {
@@ -73,6 +79,13 @@ const actions = {
                 commit('SET_RESEARCH_CONTENT_DISCIPLINES_LIST', disciplinesList)
                 commit('SET_RESEARCH_CONTENT_TOTAL_VOTES_LIST', tvoList)
             });
+    },
+
+    loadResearchDetails({ state, commit, dispatch }, { group_permlink, research_permlink }) {
+        deipRpc.api.getResearchByAbsolutePermlinkAsync(group_permlink, research_permlink)
+            .then((research) => {
+                commit('SET_RESEARCH_DETAILS', research)
+            })
     }
 }
 
@@ -89,6 +102,10 @@ const mutations = {
 
     ['SET_RESEARCH_CONTENT_TOTAL_VOTES_LIST'](state, list) {
         Vue.set(state, 'totalVotesList', list)
+    },
+
+    ['SET_RESEARCH_DETAILS'](state, research) {
+        Vue.set(state, 'research', research)
     }
 }
 

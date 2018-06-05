@@ -54,7 +54,7 @@
                                     :disabled="isDisabled || isLoading"
                                     :loading="isLoading"
                                     @click="sendProposal()"
-                                >Send proposal</v-btn>
+                                >Create proposal</v-btn>
                             </div>
                         </div>
 
