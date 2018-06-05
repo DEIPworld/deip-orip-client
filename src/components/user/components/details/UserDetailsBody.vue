@@ -32,8 +32,11 @@
             technology and introducing strong economic models, that will maintain protocol of new society.
         </div>
 
-        <div class="c-pt-7" v-if="false">
-            <state-research-list></state-research-list>
+        <div class="c-pt-7">
+            <state-research-list
+                :research-list="researchList"
+                :header-text="'Participation in research'"
+            ></state-research-list>
         </div>
 
         <div class="c-pt-8">
@@ -99,6 +102,7 @@
             ...mapGetters({
                 userInfo: 'userDetails/userInfo',
                 groups: 'userDetails/groups',
+                researchList: 'userDetails/researchList',
             })
         },
     }

@@ -68,6 +68,7 @@ const actions = {
             .then(data => {
                 // commit('SET_GROUP_RESEARCH_LIST', data);
                 researchResult = data;
+                
                 return Promise.all(
                     data.map(item => deipRpc.api.getTotalVotesByResearchAsync(item.research_id))
                 );

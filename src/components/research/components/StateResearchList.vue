@@ -1,7 +1,7 @@
 <template>
     <div>
         <div class="row justify-between align-center">
-            <div class="title">Research</div>
+            <div class="title">{{ !headerText ? 'Research' : headerText }}</div>
             
             <v-menu offset-y>
                 <v-btn slot="activator" class="ma-0">
@@ -43,8 +43,9 @@
                             </template>
                         </v-card>
                     </div>
+
                     <v-card flat v-if="!activeResearchList.length">
-                        <v-card-text>No active research in this group at the moment</v-card-text>
+                        <v-card-text>Active research list is empty at the moment</v-card-text>
                     </v-card>
                 </v-tab-item>
 
@@ -57,8 +58,9 @@
                             </template>
                         </v-card>
                     </div>
+
                     <v-card flat v-if="!finishedResearchList.length">
-                        <v-card-text>No finished research in this group at the moment</v-card-text>
+                        <v-card-text>Finished research list is empty at the moment</v-card-text>
                     </v-card>
                 </v-tab-item>
             </v-tabs-items>
@@ -72,7 +74,8 @@
     export default {
         name: 'StateResearchList',
         props: {
-            researchList: { required: true, type: Array }
+            researchList: { required: true, type: Array },
+            headerText: { required: false, type: String },
         },
         data() {
             return {
