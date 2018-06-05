@@ -8,7 +8,14 @@
                 <div class="proposal-type">
 
                     <div class="display-flex" 
-                        v-if="proposal.action === proposalTypes.inviteMember"
+                        v-if="proposal.action === proposalTypes.startResearch"
+                    >
+                        <v-icon small color="primary" class="c-mr-2">add</v-icon>
+                        <div class="a">{{ proposal.data.title }}</div>
+                    </div>
+
+                    <div class="display-flex" 
+                        v-else-if="proposal.action === proposalTypes.inviteMember"
                     >
                         <v-icon small color="primary" class="c-mr-2">person_add</v-icon>
                         <div class="a">{{ proposal.data.name }}</div>
@@ -28,10 +35,6 @@
                         v-else-if="proposal.action === proposalTypes.createResearchMaterial"
                     >
                         <v-icon small color="primary" class="c-mr-2">note_add</v-icon>
-                        <div class="a">{{ proposal.data.title }}</div>
-                    </div>
-
-                    <div class="display-flex" v-else>
                         <div class="a">{{ proposal.data.title }}</div>
                     </div>
 

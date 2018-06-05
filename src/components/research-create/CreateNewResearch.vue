@@ -145,29 +145,29 @@
                 this.research.review_share_in_percent = share * this.DEIP_1_PERCENT;
             },
 
-            finish(){
-
+            finish() {
                 this.isLoading = true;
 
-                var proposal = `{"research_group_id": ${this.research.group.id}, 
-                    "title": "${this.research.title}", 
-                    "abstract":"${this.research.description}", 
-                    "permlink":"${this.research.title.replace(/[^a-zA-Z0-9-_]+/ig,'')}", 
-                    "review_share_in_percent": ${this.research.review_share_in_percent}, 
-                    "dropout_compensation_in_percent": 5, 
-                    "disciplines": [${this.research.disciplines.map(d => d.id).join(', ')}]}`;
+                let proposal = proposalService.getStringifiedProposalData(proposalService.types.startResearch, [
+                    this.research.group.id,
+                    this.research.title,
+                    this.research.description,
+                    this.research.title.replace(/[^a-zA-Z0-9-_]+/ig, ''),
+                    this.research.review_share_in_percent,
+                    5,
+                    this.research.disciplines.map(d => d.id)
+                ]);
 
                 deipRpc.broadcast.createProposalAsync(
 					this.user.privKey,
 					this.user.username, 
 					this.research.group.id,
                     proposal,
-                    1,
+                    proposalService.types.startResearch,
 					new Date( new Date().getTime() + 2 * 24 * 60 * 60 * 1000 )
 				).then(() => {
                     this.isLoading = false;
                     this.$router.push(`/${this.research.group.permlink}/group-details`)
-
                 }, (err) => {
                     this.isLoading = false;
                     alert(err.message);
