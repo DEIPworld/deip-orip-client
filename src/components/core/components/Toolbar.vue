@@ -24,7 +24,7 @@
                     </v-avatar>
                 </v-btn>
                 <v-list dark dense>
-                    <v-list-tile @click="goToState('UserDetails')">
+                    <v-list-tile @click="goToState('UserDetails', {account_name: user.username})">
                         <v-list-tile-title>My Page</v-list-tile-title>
                     </v-list-tile>
                     <v-list-tile v-if="user" @click="goToState('ResearchGroupCreating', {account_name: user.username})">

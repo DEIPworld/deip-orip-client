@@ -31,7 +31,7 @@
                                 </v-avatar>
 
                                 <div class="col-grow c-pl-4">
-                                    <router-link to="/userDetails" class="a subheading">{{ member.name }}</router-link>
+                                    <router-link :to="'/user-details/' + member.name" class="a subheading">{{ member.name }}</router-link>
                                     <div class="caption c-pt-1">Belarusian State University of Informatics and Radioelectronics</div>
                                 </div>
                             </div>

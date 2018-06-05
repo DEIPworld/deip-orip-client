@@ -33,7 +33,7 @@
             return {
                 isEditEducationShown: { value: false },
                 isEditEmploymentShown: { value: false },
-                accountName: 'alice'
+                accountName: this.$route.params.account_name
             }
         },
         methods: {

@@ -43,7 +43,7 @@
                     <div class="caption">{{ proposal.expiration_time | dateFormat("D MMM, YYYY") }}</div>
                 </div>
                 <div class="created-by">
-                    <router-link to="/userDetails" class="a overflow-ellipsis">{{ proposal.creator }}</router-link>
+                    <router-link :to="'/user-details/' + proposal.creator" class="a overflow-ellipsis">{{ proposal.creator }}</router-link>
                 </div>
                 <div class="voted">
                     <v-tooltip right>

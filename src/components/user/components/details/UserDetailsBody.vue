@@ -46,7 +46,7 @@
         <v-card class="c-mt-6 hidden-last-child">
             <template v-for="group in groups">
                 <div class="c-p-6">
-                    <router-link to="/researchGroupDetails" class="research-group-title">{{ group.name }}</router-link>
+                    <router-link :to="'/' + group.permlink + '/group-details'" class="research-group-title">{{ group.name }}</router-link>
                     <span v-if="group.is_personal" class="grey--text caption">(personal group)</span>
                         
                     <div class="caption grey--text c-pt-2 hidden-last-child" v-if="!group.is_personal">
