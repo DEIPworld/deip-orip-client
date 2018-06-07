@@ -62,7 +62,7 @@ const router = new Router({
         name: 'CreateResearch',
         component: CreateNewResearch
     }, {
-        path: '/userDetails',
+        path: '/user-details/:account_name',
         name: 'UserDetails',
         component: UserDetails
     }, {

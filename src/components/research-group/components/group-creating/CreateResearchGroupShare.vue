@@ -15,7 +15,7 @@
                                 <v-avatar size="30px">
                                     <v-gravatar :email="member.name+ '@deip.world'" />
                                 </v-avatar>
-                                <router-link to="/userDetails" class="a c-pl-3">{{ member.name }}</router-link>
+                                <router-link :to="'/user-details' + member.name" class="a c-pl-3">{{ member.name }}</router-link>
                             </div>
                             <div>
                                 <v-text-field class="width-4 pa-0 rtl"

@@ -11,7 +11,7 @@
                 <v-avatar size="40px">
                     <v-gravatar :title="member.owner" :email="member.owner + '@deip.world'" />
                 </v-avatar> 
-                <router-link to="/userDetails" class="a c-pl-3">{{member.owner}}</router-link>
+                <router-link :to="'/user-details/' + member.owner" class="a c-pl-3">{{member.owner}}</router-link>
             </div>
             <div class="grey--text"> {{convertToPercent(member.amount)}}%</div>
         </div>

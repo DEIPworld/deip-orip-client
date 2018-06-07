@@ -8,7 +8,14 @@
                 <div class="proposal-type">
 
                     <div class="display-flex" 
-                        v-if="proposal.action === proposalTypes.inviteMember"
+                        v-if="proposal.action === proposalTypes.startResearch"
+                    >
+                        <v-icon small color="primary" class="c-mr-2">add</v-icon>
+                        <div class="a">{{ proposal.data.title }}</div>
+                    </div>
+
+                    <div class="display-flex" 
+                        v-else-if="proposal.action === proposalTypes.inviteMember"
                     >
                         <v-icon small color="primary" class="c-mr-2">person_add</v-icon>
                         <div class="a">{{ proposal.data.name }}</div>
@@ -31,10 +38,6 @@
                         <div class="a">{{ proposal.data.title }}</div>
                     </div>
 
-                    <div class="display-flex" v-else>
-                        <div class="a">{{ proposal.data.title }}</div>
-                    </div>
-
                 </div>
                 <div class="date">
                     <div class="caption">{{ proposal.creation_time | dateFormat("D MMM, YYYY") }}</div>
@@ -43,7 +46,7 @@
                     <div class="caption">{{ proposal.expiration_time | dateFormat("D MMM, YYYY") }}</div>
                 </div>
                 <div class="created-by">
-                    <router-link to="/userDetails" class="a overflow-ellipsis">{{ proposal.creator }}</router-link>
+                    <router-link :to="'/user-details/' + proposal.creator" class="a overflow-ellipsis">{{ proposal.creator }}</router-link>
                 </div>
                 <div class="voted">
                     <v-tooltip right>
