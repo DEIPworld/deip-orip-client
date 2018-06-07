@@ -75,7 +75,7 @@
     import deipRpc from '@deip/deip-rpc';
 
     export default {
-        name: "ResearchGroupCreating",
+        name: "CreateResearchGroup",
         data() { 
             return {
                 currentStep: 0,

@@ -18,6 +18,7 @@ import './components/research-create/index';
 import './components/research-details/index';
 import './components/research-content-details/index';
 import './components/research-group/index';
+import './components/research-group-create/index';
 import './components/token-sale/index';
 
 import config from './config'

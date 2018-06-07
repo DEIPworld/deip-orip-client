@@ -9,7 +9,7 @@ import ResearchStartCreating from '@/components/research-create/ResearchStartCre
 import CreateNewResearch from '@/components/research-create/CreateNewResearch'
 import TokenSale from '@/components/token-sale/TokenSale'
 
-import ResearchGroupCreating from '@/components/research-group/components/ResearchGroupCreating'
+import CreateResearchGroup from '@/components/research-group-create/CreateResearchGroup'
 import ResearchGroupDetails from '@/components/research-group/components/ResearchGroupDetails'
 
 import SignIn from '@/components/auth/SignIn'
@@ -87,8 +87,8 @@ const router = new Router({
         component: ResearchGroupDetails
     }, {
         path: '/:account_name/create-research-group',
-        name: 'ResearchGroupCreating',
-        component: ResearchGroupCreating
+        name: 'CreateResearchGroup',
+        component: CreateResearchGroup
     }, {
         path: '/userWallet',
         name: 'UserWallet',

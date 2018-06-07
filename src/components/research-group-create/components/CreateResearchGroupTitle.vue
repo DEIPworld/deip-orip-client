@@ -115,7 +115,7 @@
 </script>
 
 <style lang="less">
-    @import '../../../../styles/colors.less';
+    @import './../../../styles/colors.less';
 
     .group-title-max-width {
         max-width: 700px;
