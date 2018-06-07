@@ -12,7 +12,6 @@
             <div id="sidebar">
                 <div class="c-pb-6 c-pt-4">
                     <div v-for="(discipline, index) in disciplinesList" class="row align-center justify-between vote-btn-area" :class="index == 0 ? '':'c-mt-1'">
-                        <v-btn v-if="!isResearchGroupMember" @click="openVote(discipline)" small color="primary" dark class="ma-0" >Vote</v-btn>
                         <div class="deip-blue-color c-p-2">
                             {{discipline.name}}:  
                 
@@ -20,6 +19,7 @@
                             contentWeightByDiscipline[content.id][discipline.id] !== undefined ?
                             contentWeightByDiscipline[content.id][discipline.id] : 0}}
                         </div>
+                        <v-btn v-if="!isResearchGroupMember && userHasExpertise(discipline)" @click="openVote(discipline)" small color="primary" dark class="ma-0" >Vote</v-btn>
                     </div>
                 </div>
             </div>
@@ -31,7 +31,7 @@
                 <v-btn icon dark @click="cancelVote()">
                     <v-icon>close</v-icon>
                 </v-btn>
-                <v-toolbar-title>Vote using {{vote.weight}}% weight of "{{vote.discipline.name}} tokens"</v-toolbar-title>
+                <v-toolbar-title>{{vote.weight}}% weight of "{{vote.discipline.name}}" expertise</v-toolbar-title>
                 <v-spacer></v-spacer>
             </v-toolbar>
             
@@ -81,6 +81,7 @@
         computed:{
             ...mapGetters({
                 user: 'user',
+                userExperise: 'userExperise',
                 content: 'rcd/content',
                 research: 'rcd/research',
                 disciplinesList: 'rcd/disciplinesList',
@@ -95,6 +96,11 @@
         },
         
         methods: {
+            userHasExpertise(discipline) {
+                return this.userExperise != null && this.research != null
+                    ? this.userExperise.some(exp => exp.discipline_id == discipline.id)
+                    : false
+            },
             openVote: function(discipline){
                 this.vote.discipline = discipline;
                 this.vote.isOpen = true;

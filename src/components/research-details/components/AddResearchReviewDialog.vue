@@ -79,7 +79,7 @@
                             <div class="col-4">
                                 <v-card class="c-p-8">
                                     <div class="bold subheading c-pb-2">Your Expertise</div>
-                                    <div class="c-pt-4" v-for="(exp, index) in userExperise" :key="index">
+                                    <div class="c-pt-4" v-for="(exp, index) in relatedExpertise" :key="index">
                                         <span>{{exp.discipline_name}}</span>
                                         <span class="right half-bold">{{exp.amount}}</span>
                                     </div>
@@ -125,6 +125,12 @@
             }),
             authorsStr() {
                 return _(this.membersList).map('owner').join(' · ');
+            },
+            relatedExpertise() {
+                return this.userExperise != null && this.research != null
+                    ?  this.userExperise.filter(exp => 
+                            this.research.disciplines.find(d => d.id == exp.discipline_id))
+                    : false
             }
         },
         data() { 
@@ -162,7 +168,7 @@
                     this.$store.dispatch('rd/closeReviewDialog');
                 })
                 .catch((err) => {
-                    this.errorMessage = "You have no enough expertise to add a review";
+                    this.errorMessage = err.message;
                     this.isError = true;
                 })
                 .finally(() => {

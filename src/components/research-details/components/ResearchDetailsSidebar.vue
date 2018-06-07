@@ -52,7 +52,7 @@
             </div>
         </div>
 
-        <div v-if="!isResearchGroupMember">
+        <div v-if="!isResearchGroupMember && userHasExpertise">
             <div style="margin: 0 -24px">
                 <v-divider></v-divider>
             </div>
@@ -183,6 +183,7 @@
             ...mapGetters({
                 user: 'user',
                 userGroups: 'userGroups',
+                userExperise: 'userExperise',
                 research: 'rd/research',
                 membersList: 'rd/membersList',
                 disciplinesList: 'rd/disciplinesList',
@@ -194,6 +195,12 @@
             isResearchGroupMember(){
                 return this.research != null 
                     ? this.$store.getters.userIsResearchGroupMember(this.research.research_group_id) 
+                    : false
+            },
+            userHasExpertise() {
+                return this.userExperise != null && this.research != null
+                    ?  this.userExperise.some(exp => 
+                            this.research.disciplines.some(d => d.id == exp.discipline_id))
                     : false
             },
             canJoinResearchGroup : function(){
