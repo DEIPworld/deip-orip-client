@@ -6,28 +6,28 @@
 
                 <div class="row c-mh-auto group-title-max-width">
                     <div class="col-12">
-                        <v-form v-model="isFormValid" ref="form">
+                        <v-form ref="form">
                             <div class="">
                                 <v-text-field 
-                                    v-model="groupInfo.title" 
+                                    v-model="name" 
                                     name="title"
                                     label="Title" 
                                     hint="Name of your group" 
                                     :rules="titleRules"
                                 ></v-text-field>
                             </div>
-                        <!-- <div class="">
+                            <div class="">
                                 <v-text-field class="permlink-input" 
                                     prefix="deip.world/"
                                     name="permlink"
                                     label="Permlink"
                                     hint="People can find your group by this url"
-                                    v-model="groupInfo.permlink"
-                                    @input="permlinkChanged"
+                                    v-model="permlink"
+                                    @keyup="setCustomPermlink"
                                     :loading="isPermlinkChecking"
                                     :rules="permlinkRules"
                                 ></v-text-field>
-                            </div> -->
+                            </div>
                         </v-form>
                     </div>
                 </div>
@@ -35,11 +35,6 @@
             </div>
         </div>
         <div class="row justify-center align-center">
-        <!--    <v-btn color="primary" 
-                @click.native="nextStep()" 
-                :disabled="!isFormValid || isPermlinkVerifyed !== true"
-            >Next</v-btn> -->
-
             <v-btn color="primary" 
                 @click.native="nextStep()" 
                 :disabled="nextDisabled"
@@ -55,51 +50,66 @@
     export default {
         name: "CreateResearchGroupTitle",
         props: {
-            groupInfo: { required: true }
+            group: { type: Object, required: true }
         },
         data() { 
             return {
-                isFormValid: true,
-                // isPermlinkChecking: false,
-                // isPermlinkVerifyed: undefined,
+                name: '',
+                permlink: '',
 
-                titleRules: [ v => !!v || 'Name is required' ],
-                // permlinkRules: [
-                //     v => !!v || 'Permlink is required',
-                //     v => {
-                //         return !!v && this.isPermlinkVerifyed !== false || 'Permlink should be unique in system'
-                //     }
-                // ]
-            } 
+                isPermlinkChecking: false,
+                isPermlinkVerifyed: undefined,
+                isDefaultPermlink: true,
+
+                titleRules: [ v => !!v || 'Group name is required' ],
+                permlinkRules: [
+                    v => !!v || 'Permanent link is required',
+                    v => {
+                        return !!v && this.isPermlinkVerifyed !== false || 'This permanent link is already taken, please use another one'
+                    }
+                ]
+            }
         },
         computed: {
             nextDisabled(){
-                return !this.groupInfo.title;
+                return !this.group.name || !this.group.permlink || this.isPermlinkVerifyed === false;
             }
         },
         methods: {
-            nextStep() {
-                this.$emit('incStep');
+            setCustomPermlink(){
+                this.isDefaultPermlink = false;
             },
-            // permlinkChanged: _.debounce(
-            //     function() {
-            //         this.isPermlinkVerifyed = undefined;
+            nextStep() {
+                this.isPermlinkVerifyed = undefined;
+                this.isPermlinkChecking = true;
 
-            //         if (this.groupInfo.permlink !== '') {
-            //             this.isPermlinkChecking = true;
+                deipRpc.api.checkResearchGroupExistenceByPermlinkAsync(this.group.permlink)
+                    .then(res => { this.isPermlinkVerifyed = !res; })
+                    .catch(error => { this.isPermlinkVerifyed = false; })
+                    .finally(() => {
+                        this.isPermlinkChecking = false;
+                        let permlinkInput = _.find(this.$refs.form.inputs, input => input.$attrs.name === 'permlink');
+                        permlinkInput.validate();
 
-            //             deipRpc.api.checkResearchGroupExistenceByPermlinkAsync(this.groupInfo.permlink)
-            //                 .then(res => { this.isPermlinkVerifyed = !res; })
-            //                 .catch(error => { this.isPermlinkVerifyed = false; })
-            //                 .finally(() => {
-            //                     this.isPermlinkChecking = false;
-            //                     let permlinkInput = _.find(this.$refs.form.inputs, input => input.$attrs.name === 'permlink');
-            //                     permlinkInput.validate();
-            //                 });
-            //         }
-            //     }, 
-            //     600
-            // )
+                        if (this.isPermlinkVerifyed){
+                            this.$emit('incStep');
+                        }
+                    });
+            },
+        },
+        watch: {
+            name: function (newVal, oldVal) {
+                if (this.isDefaultPermlink){
+                    this.isPermlinkVerifyed = undefined;
+                    this.permlink = this.name.replace(/ /g, "-").replace(/_/g, "-").toLowerCase();
+                }
+                this.$emit('setName', this.name);
+            },
+
+            permlink: function (newVal, oldVal) {
+                this.isPermlinkVerifyed = undefined;
+                this.$emit('setPermlink', this.permlink.replace(/ /g, "-").replace(/_/g, "-").toLowerCase());
+            }
         }
     };
 </script>

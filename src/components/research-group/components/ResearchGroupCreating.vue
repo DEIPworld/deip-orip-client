@@ -28,7 +28,9 @@
                         <div class="full-height">
                             <create-research-group-title
                                 @incStep="incStep"
-                                :group-info="groupInfo"
+                                :group="group"
+                                @setName="setName"
+                                @setPermlink="setPermlink"
                             ></create-research-group-title>
                         </div>
                     </v-stepper-content>
@@ -37,7 +39,8 @@
                         <div class="full-height">
                             <create-research-group-description
                                 @incStep="incStep" @decStep="decStep"
-                                :group-info="groupInfo"
+                                @setDescription="setDescription"
+                                :group="group"
                             ></create-research-group-description>
                         </div>
                     </v-stepper-content>
@@ -46,7 +49,8 @@
                         <div class="full-height">
                             <create-research-group-members
                                 @incStep="incStep" @decStep="decStep"
-                                :group-info="groupInfo"
+                                @setGroupMembers="setGroupMembers"
+                                :group="group"
                             ></create-research-group-members>
                         </div>
                     </v-stepper-content>
@@ -55,7 +59,7 @@
                         <div class="full-height">
                             <create-research-group-share
                                 @finish="finish" @decStep="decStep"
-                                :group-info="groupInfo"
+                                :group="group"
                                 :isLoading="isLoading"
                             ></create-research-group-share>
                         </div>
@@ -75,8 +79,8 @@
         data() { 
             return {
                 currentStep: 0,
-                groupInfo: {
-                    title: '',
+                group: {
+                    name: '',
                     permlink: '',
                     description: '',
                     members: [{ name: this.$route.params.account_name, stake: 100 }]
@@ -92,11 +96,24 @@
         methods: {
             incStep() { this.currentStep++; },
             decStep() { this.currentStep--; },
+
+            setName(name){
+                this.group.name = name;
+            },
+            setPermlink(permlink){
+                this.group.permlink = permlink;
+            },
+            setDescription(description){
+                this.group.description = description;
+            },
+            setGroupMembers(members){
+                this.group.members = members;
+            },
+
             finish() {
 
                 this.isLoading = true;
-                const permlink = this.groupInfo.title.replace(/\s+/g, '-').toLowerCase();
-                const invitees = this.groupInfo.members.filter(m => m.name != this.user.username)
+                const invitees = this.group.members.filter(m => m.name != this.user.username)
                     .map(m => {
                         return { account: m.name, research_group_tokens_in_percent: m.stake * this.DEIP_1_PERCENT }
                     })
@@ -104,17 +121,17 @@
                 deipRpc.broadcast.createResearchGroupAsync(
                     this.user.privKey,
                     this.user.username,
-                    this.groupInfo.title,
-                    permlink,
-                    this.groupInfo.description,
+                    this.group.name,
+                    this.group.permlink,
+                    this.group.description,
                     600,
                     false,
                     invitees
                 ).then(() => {
                     this.isLoading = false;
                     this.$router.push({ 
-                        name: 'ResearchGroupDetails', 
-                        params: { research_group_permlink: permlink }
+                        name: 'ResearchGroupDetails',
+                        params: { research_group_permlink: this.group.permlink }
                     }); 
                 }, (err) => {
                     this.isLoading = false;

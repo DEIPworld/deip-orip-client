@@ -10,7 +10,7 @@
                             label="Description"
                             solo multi-line
                             auto-grow
-                            v-model="groupInfo.description"
+                            v-model="description"
                             hint="Description/summary guidlines text. You can change this text any time"
                             :rules="descriptionRules"
                         ></v-text-field>
@@ -23,7 +23,7 @@
             <v-btn flat small @click.native="prevStep()">
                 <v-icon dark class="pr-1">keyboard_arrow_left</v-icon> Back
             </v-btn>
-            <v-btn color="primary" @click.native="nextStep()" :disabled="groupInfo.description === ''">Next</v-btn>
+            <v-btn color="primary" @click.native="nextStep()" :disabled="nextDisabled">Next</v-btn>
         </div>
     </div>
 </template>
@@ -32,12 +32,18 @@
     export default {
         name: "CreateResearchGroupDescription",
         props: {
-            groupInfo: { required: true }
+            group: {type: Object, required: true }
         },
         data() { 
             return {
-                descriptionRules: [ v => !!v || 'Description is required' ],
+                description: "",
+                descriptionRules: [ v => !!v || 'Group description is required' ],
             } 
+        },
+        computed: {
+            nextDisabled(){
+                return !this.group.description;
+            }
         },
         methods: {
             nextStep() {
@@ -45,6 +51,11 @@
             },
             prevStep() {
                 this.$emit('decStep');
+            }
+        },
+        watch: {
+            description() {
+                this.$emit('setDescription', this.description);
             }
         }
     };

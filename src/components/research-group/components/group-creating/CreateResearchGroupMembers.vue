@@ -16,7 +16,7 @@
                         <div>
 
                             <div class="row-nowrap justify-between align-center c-pt-4"
-                                v-for="(user, i) in groupInfo.members" :key="i + '-picked'"
+                                v-for="(user, i) in group.members" :key="i + '-picked'"
                             >
                                 <div>
                                     <v-avatar size="30px">
@@ -28,7 +28,7 @@
                             </div>
 
                         </div>
-                        <v-divider class="c-mt-4" v-show="groupInfo.members.length > 0"></v-divider>
+                        <v-divider class="c-mt-4" v-show="group.members.length > 0"></v-divider>
                         <div>
 
                             <div class="row-nowrap justify-between align-center c-pt-4" 
@@ -53,7 +53,7 @@
             <v-btn flat small @click.native="prevStep()">
                 <v-icon dark class="pr-1">keyboard_arrow_left</v-icon> Back
             </v-btn>
-            <v-btn color="primary" @click.native="nextStep()" :disabled="groupInfo.members.length === 0">Next</v-btn>
+            <v-btn color="primary" @click.native="nextStep()" :disabled="group.members.length === 0">Next</v-btn>
         </div>
     </div>
 </template>
@@ -93,14 +93,15 @@
     export default {
         name: "CreateResearchGroupMembers",
         props: {
-            groupInfo: { required: true }
+            group: {type: Object, required: true }
         },
         data() { 
             return {
                 creatorUsername: this.$route.params.account_name,
                 allUsers: [],
                 selectableUsers: [],
-                q: ''
+                q: '',
+                selectedUsers: this.group.members
             } 
         },
         methods: {
@@ -110,19 +111,23 @@
             prevStep() {
                 this.$emit('decStep');
             },
-            debounceSearchUsers:  _.debounce(
-                function() { this.selectableUsers = prepareSelectableUsers(this.allUsers, this.groupInfo.members, this.q) },
-                600
-            ),
+            debounceSearchUsers: _.debounce(
+                () => { this.selectableUsers = prepareSelectableUsers(this.allUsers, this.selectedUsers, this.q) }, 600),
+            
             inviteMember(member) {
-                this.groupInfo.members.push(member);
-                recalculateDefaultStakes(this.creatorUsername, this.groupInfo.members)
-                this.selectableUsers = prepareSelectableUsers(this.allUsers, this.groupInfo.members, this.q);
+                this.selectedUsers.push(member);
+                recalculateDefaultStakes(this.creatorUsername, this.selectedUsers)
+                this.selectableUsers = prepareSelectableUsers(this.allUsers, this.selectedUsers, this.q);
             },
             cancelMember(index) {
-                this.groupInfo.members.splice(index, 1);
-                recalculateDefaultStakes(this.creatorUsername, this.groupInfo.members)
-                this.selectableUsers = prepareSelectableUsers(this.allUsers, this.groupInfo.members, this.q);
+                this.selectedUsers.splice(index, 1);
+                recalculateDefaultStakes(this.creatorUsername, this.selectedUsers)
+                this.selectableUsers = prepareSelectableUsers(this.allUsers, this.selectedUsers, this.q);
+            }
+        },
+        watch: {
+            selectedUsers() {
+                this.$emit('setGroupMembers', this.selectedUsers);
             }
         },
         mounted() {
@@ -142,7 +147,7 @@
                 //     this.allUsers = _.concat(this.allUsers, newData);
                 // }
 
-                this.selectableUsers = prepareSelectableUsers(this.allUsers, this.groupInfo.members, this.q);
+                this.selectableUsers = prepareSelectableUsers(this.allUsers, this.selectedUsers, this.q);
             });
         }
     };

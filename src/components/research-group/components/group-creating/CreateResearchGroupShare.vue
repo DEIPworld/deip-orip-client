@@ -9,7 +9,7 @@
                         <div class="subheading c-pv-4">Distribute shares of this group which will...</div>
 
                         <div class="row-nowrap justify-between align-center c-pt-4" 
-                            v-for="(member, i) in groupInfo.members" :key="i"
+                            v-for="(member, i) in group.members" :key="i"
                         >
                             <div>
                                 <v-avatar size="30px">
@@ -52,11 +52,12 @@
     export default {
         name: "CreateResearchGroupShare",
         props: {
-            groupInfo: { required: true },
+            group: { type: Object, required: true },
             isLoading:  { type: Boolean, required: true },
         },
         data() { 
-            return {} 
+            return {
+            } 
         },
         methods: {
             finish() {
@@ -68,7 +69,7 @@
         },
         computed: {
             sum() {
-                return this.groupInfo.members.reduce(
+                return this.group.members.reduce(
                     (accum, curr) => accum + parseInt(curr.stake || 0),
                     0
                 );
