@@ -152,6 +152,7 @@
                             "Research-Id": this.research.id.toString(),
                             "Authorization": 'Bearer ' + getAccessToken()
                         },
+                        timeout: 0,
                         maxFiles: 1,
                         thumbnailWidth: 150,
                         autoProcessQueue: false,
