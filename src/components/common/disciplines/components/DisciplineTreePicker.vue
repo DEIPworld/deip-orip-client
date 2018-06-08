@@ -9,7 +9,7 @@
 </template>
 
 <script>
-    import { disciplineTree, getNodeById } from '../services/DisciplineTreeService.js';
+    import { disciplineTree, getNodeById } from './../DisciplineTreeService';
 
     export default {
         name: "DisciplineTreePicker",

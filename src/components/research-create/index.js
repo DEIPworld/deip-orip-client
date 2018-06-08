@@ -11,8 +11,8 @@ Vue.component('create-research-meta', CreateResearchMeta);
 Vue.component('create-research-share', CreateResearchShare);
 Vue.component('create-research-roadmap', CreateResearchRoadmap);
 
-import DisciplineTreePicker from './../research/components/DisciplineTreePicker';
-import DisciplineTreeItem from './../research/components/DisciplineTreeItem';
+import DisciplineTreePicker from './../common/disciplines/components/DisciplineTreePicker';
+import DisciplineTreeItem from './../common/disciplines/components/DisciplineTreeItem';
 import CreateNewResearch from './CreateNewResearch';
 import ResearchStartCreating from './ResearchStartCreating';
 Vue.component('discipline-tree-picker', DisciplineTreePicker);
