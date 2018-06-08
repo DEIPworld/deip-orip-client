@@ -152,7 +152,7 @@
                     this.research.group.id,
                     this.research.title,
                     this.research.description,
-                    this.research.title.replace(/[^a-zA-Z0-9-_]+/ig, ''),
+                    this.research.title.replace(/ /g, "-").replace(/_/g, "-").toLowerCase(),
                     this.research.review_share_in_percent,
                     5,
                     this.research.disciplines.map(d => d.id)

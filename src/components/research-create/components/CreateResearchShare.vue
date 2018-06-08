@@ -5,9 +5,9 @@
             <div class="step-title">Review share</div>
             <div class="col-grow">
                 <div class="font-18px bold text-align-center c-pv-12">
-                    How much reward you would like to share with the reviewer? 
-                    The bigger the present the better chance of getting reviews and increase research popularity 
-                    You can choose 5-50%
+                    How much reward would you like to share with reviewers? 
+                    The bigger the percent the better chance of getting reviews and increasing research popularity. 
+                    You can choose between 5-50%
                 </div>
 
                 <div class="column align-center">
@@ -19,8 +19,8 @@
                             %
                         </div>
                     </div>
-                    <div class="c-pt-8 caption grey--text">
-                        5% of  potential research reward will be shared between all the  reviewers according to their  votes  
+                    <div class="c-pt-8 caption grey--text" v-if="reviewShare">
+                        {{reviewShare}}% of  potential research reward will be shared between all the reviewers according to their votes  
                     </div>
                 </div>
             </div>
@@ -51,8 +51,11 @@
             }
         },
         computed: {
-            nextDisabled(){
-                return !this.research.review_share_in_percent;
+            nextDisabled() {
+                debugger;
+                return !this.research.review_share_in_percent || 
+                       !(this.research.review_share_in_percent > 0 * this.DEIP_1_PERCENT && 
+                       this.research.review_share_in_percent <= 50 * this.DEIP_1_PERCENT);
             }
         },
         methods: {

@@ -190,7 +190,7 @@
                     this.research.id,
                     this.type,
                     this.title,
-                    this.title.replace(/[^a-zA-Z0-9-_]+/ig,''),
+                    this.title.replace(/ /g, "-").replace(/_/g, "-").toLowerCase(),
                     hash,
                     this.authors.map(a => {return a.owner}),
                     [],
