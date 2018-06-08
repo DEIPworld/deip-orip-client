@@ -143,6 +143,7 @@
                 ).then(() => {
                     this.isLoading = false;
                     this.isSuccess = true;
+                    this.$store.dispatch('loadGroups'); //reload user groups
 
                     setTimeout(() => {
                         self.$router.push({ 
