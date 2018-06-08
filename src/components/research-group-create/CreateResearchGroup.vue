@@ -67,6 +67,15 @@
                 </v-stepper-items>
             </v-stepper>
         </v-layout>
+
+        <v-snackbar :timeout="5000" color="error" v-model="isError">
+            {{errorMessage ? errorMessage : "An error occurred while creating the group, please try again later"}}
+        <v-btn dark flat @click.native="isError = false; errorMessage = '';">Close</v-btn>
+        </v-snackbar>
+        <v-snackbar :timeout="5000" color="success" v-model="isSuccess">
+            "{{group.name}}" group is created !
+            <v-btn dark flat @click.native="isSuccess = false;">Close</v-btn>
+        </v-snackbar>
     </v-container>   
 </template>
 
@@ -80,12 +89,15 @@
             return {
                 currentStep: 0,
                 group: {
-                    name: '',
-                    permlink: '',
-                    description: '',
+                    name: "",
+                    permlink: "",
+                    description: "",
                     members: [{ name: this.$route.params.account_name, stake: 100 }]
                 },
-                isLoading: false
+                isLoading: false,
+                isSuccess: false,
+                isError: false,
+                errorMessage: ""
             } 
         },
         computed: {
@@ -111,6 +123,7 @@
             },
 
             finish() {
+                const self = this;
 
                 this.isLoading = true;
                 const invitees = this.group.members.filter(m => m.name != this.user.username)
@@ -129,13 +142,19 @@
                     invitees
                 ).then(() => {
                     this.isLoading = false;
-                    this.$router.push({ 
-                        name: 'ResearchGroupDetails',
-                        params: { research_group_permlink: this.group.permlink }
-                    }); 
+                    this.isSuccess = true;
+
+                    setTimeout(() => {
+                        self.$router.push({ 
+                            name: 'ResearchGroupDetails',
+                            params: { research_group_permlink: this.group.permlink }
+                        }); 
+                    }, 1500)
+
                 }, (err) => {
                     this.isLoading = false;
-                    alert(err.message);
+                    this.isError = true;
+                    this.errorMessage = err.message;
                 });
             }
         }

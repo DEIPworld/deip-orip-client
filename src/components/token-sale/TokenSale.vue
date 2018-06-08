@@ -1,9 +1,6 @@
 <template>
     <v-container fluid fill-height class="pa-0 column-page">
-
-        <create-token-sale v-if="isTokenSaleProposal"></create-token-sale>
-
-        <div v-if="!isTokenSaleProposal" class="contributions-container"> 
+        <div class="contributions-container"> 
             <div v-if="!isResearchGroupMember">
                 <v-text-field 
                     suffix="DEIP" 
@@ -25,9 +22,8 @@
                     No contributions for this token sale found
                 </div>
             </div>
-        </div> 
-
-    </v-container>   
+        </div>
+    </v-container>
 </template>
 
 <script>
@@ -48,12 +44,6 @@
                 return this.research != null 
                     ? this.$store.getters.userIsResearchGroupMember(this.research.research_group_id) 
                     : false
-            },
-            isTokenSaleProposal() {
-                if(this.research) {
-                    return this.isResearchGroupMember && this.tokenSale == null;
-                }
-                return false;
             }
         },
         data() { 

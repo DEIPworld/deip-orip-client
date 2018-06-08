@@ -20,6 +20,7 @@ import './components/research-content-details/index';
 import './components/research-group/index';
 import './components/research-group-create/index';
 import './components/token-sale/index';
+import './components/token-sale-create/index';
 
 import config from './config'
 import deipRpc from '@deip/deip-rpc';

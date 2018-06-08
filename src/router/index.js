@@ -8,6 +8,7 @@ import ResearchContentDetails from '@/components/research-content-details/Resear
 import ResearchStartCreating from '@/components/research-create/ResearchStartCreating'
 import CreateNewResearch from '@/components/research-create/CreateNewResearch'
 import TokenSale from '@/components/token-sale/TokenSale'
+import CreateTokenSale from '@/components/token-sale-create/CreateTokenSale'
 
 import CreateResearchGroup from '@/components/research-group-create/CreateResearchGroup'
 import ResearchGroupDetails from '@/components/research-group/components/ResearchGroupDetails'
@@ -69,6 +70,10 @@ const router = new Router({
         path: '/:research_group_permlink/token-sale/:research_permlink',
         name: 'TokenSale',
         component: TokenSale
+    }, {
+        path: '/:research_group_permlink/create-token-sale/:research_permlink',
+        name: 'TokenSale',
+        component: CreateTokenSale
     }, {
         path: '/emailSendingRegesitration',
         name: 'EmailSendingRegesitration',

@@ -1,5 +1,6 @@
 <template>
-        <v-layout fluid fill-height class="pa-0">
+    <v-container fluid fill-height class="pa-0">
+        <v-layout>
             <v-stepper v-model="currentStep" alt-labels class="column full-width full-height">
                 <v-stepper-header>
                     <v-stepper-step step="1" :complete="currentStep > 1">
@@ -48,26 +49,34 @@
                 </v-stepper-items>
             </v-stepper>
         </v-layout>
+
+        <v-snackbar :timeout="5000" color="error" v-model="isError">
+            {{errorMessage ? errorMessage : "An error occurred while creating Token Sale proposal, please try again later"}}
+        <v-btn dark flat @click.native="isError = false; errorMessage = '';">Close</v-btn>
+        </v-snackbar>
+        <v-snackbar :timeout="5000" color="success" v-model="isSuccess">
+            Token Sale Proposal created successfully! Approve it to start the Token Sale !
+            <v-btn dark flat @click.native="isSuccess = false;">Close</v-btn>
+        </v-snackbar>
+    </v-container>
 </template>
+
 
 <script>
     import { mapGetters } from 'vuex';
     import deipRpc from '@deip/deip-rpc';
-    import * as proposalService from "./../../research-group/services/ProposalService"; 
+    import * as proposalService from './../research-group/services/ProposalService'; 
 
     export default {
         name: "CreateTokenSale",
         computed: {
             ...mapGetters({
-                user: 'user',
-                userGroups: 'userGroups',
-                research: 'ts/research',
-                tokenSale: 'ts/tokenSale'
+                user: 'user'
             })
         },
         data() { 
             return {
-                isLoading: false,
+                research: null,
                 currentStep: 0,
                 tokenSaleInfo: {
                     amountToSell: 0,
@@ -75,8 +84,13 @@
                     endDate: undefined,
                     softCap: '',
                     hardCap: ''
-                }
-            } 
+                },
+
+                isLoading: false,
+                isSuccess: false,
+                isError: false,
+                errorMessage: ""
+            }
         },
         methods: {
             incStep() {
@@ -90,6 +104,7 @@
                 this.currentStep--;
             },
             finish() {
+                const self = this;
 
                 this.isLoading = true;
                 let proposal = proposalService.getStringifiedProposalData(proposalService.types.startResearchTokenSale, [
@@ -110,17 +125,31 @@
 					new Date( new Date().getTime() + 2 * 24 * 60 * 60 * 1000 )
 				).then(() => {
                     this.isLoading = false;
-                    alert("Token Sale Proposal created successfully! Approve it to start the Token Sale!");
-                    // redirect to proposal
-                    this.$router.push({ 
-                        name: 'ResearchGroupDetails', 
-                        params: { research_group_permlink: this.$route.params.research_group_permlink }
-                    }); 
+                    this.isSuccess = true;
+
+                    setTimeout(() => {
+                        self.$router.push({ 
+                            name: 'ResearchGroupDetails',
+                            params: { research_group_permlink: self.$route.params.research_group_permlink  }
+                        }); 
+                    }, 1500)
+
                 }).catch(err => {
-                    alert(err.message);
                     this.isLoading = false;
+                    this.isError = true;
+                    this.errorMessage = err.message;
                 })
             }
+        },
+
+        created(){
+            deipRpc.api.getResearchByAbsolutePermlinkAsync(
+                    this.$route.params.research_group_permlink,
+                    this.$route.params.research_permlink
+                )
+                .then((research) => {
+                   this.research = research;
+                })
         }
     };
 </script>

@@ -138,8 +138,8 @@
                 </span>
             </div>
 
-            <router-link v-if="research && isResearchGroupMember && tokenHoldersList.length == 0" 
-                         :to="`/${research.group_permlink}/token-sale/${research.permlink}`" style="text-decoration: none">
+            <router-link v-if="research && isResearchGroupMember && !tokenSale" 
+                         :to="`/${research.group_permlink}/create-token-sale/${research.permlink}`" style="text-decoration: none">
                 <v-btn dark round outline color="primary" class="full-width c-mt-3 c-mb-3">
                     <div class="col-grow add-review-label">
                         {{tokenSale == null ? 'Propose Token Sale' : 'View Token Sale'}}
@@ -147,11 +147,11 @@
                 </v-btn>
             </router-link>
 
-            <router-link v-if="research && !isResearchGroupMember && tokenSale && tokenSale.hard_cap != tokenSale.total_amount" 
+            <router-link v-if="research && tokenSale && tokenSale.hard_cap != tokenSale.total_amount" 
                          :to="`/${research.group_permlink}/token-sale/${research.permlink}`" style="text-decoration: none">
                 <v-btn dark round outline color="primary" class="full-width c-mt-3 c-mb-3">
                     <div class="col-grow add-review-label">
-                        Contribute Token Sale
+                        {{isResearchGroupMember ? 'View Token Sale' : 'Contribute Token Sale'}} 
                     </div>
                 </v-btn>
             </router-link>

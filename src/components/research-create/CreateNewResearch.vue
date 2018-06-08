@@ -81,8 +81,16 @@
                     </v-stepper-content>
                 </v-stepper-items>
             </v-stepper>
-
         </v-layout>
+
+        <v-snackbar :timeout="5000" color="error" v-model="isError">
+            {{errorMessage ? errorMessage : "An error occurred while creating Research proposal, please try again later"}}
+        <v-btn dark flat @click.native="isError = false; errorMessage = '';">Close</v-btn>
+        </v-snackbar>
+        <v-snackbar :timeout="5000" color="success" v-model="isSuccess">
+            Proposal for "{{research.title}}" research is created !
+            <v-btn dark flat @click.native="isSuccess = false;">Close</v-btn>
+        </v-snackbar>
     </v-container>   
 </template>
 
@@ -103,7 +111,10 @@
                     description: '',
                     review_share_in_percent: 5,
                 },
-                isLoading: false
+                isLoading: false,
+                isSuccess: false,
+                isError: false,
+                errorMessage: ""
             } 
         },
         computed: {
@@ -146,6 +157,7 @@
             },
 
             finish() {
+                const self = this;
                 this.isLoading = true;
 
                 let proposal = proposalService.getStringifiedProposalData(proposalService.types.startResearch, [
@@ -167,10 +179,16 @@
 					new Date( new Date().getTime() + 2 * 24 * 60 * 60 * 1000 )
 				).then(() => {
                     this.isLoading = false;
-                    this.$router.push(`/${this.research.group.permlink}/group-details`)
+                    this.isSuccess = true;
+
+                    setTimeout(() => {
+                        self.$router.push(`/${self.research.group.permlink}/group-details`)
+                    }, 1500)
+                    
                 }, (err) => {
                     this.isLoading = false;
-                    alert(err.message);
+                    this.isError = true;
+                    this.errorMessage = err.message;
                 });
             }
         }
