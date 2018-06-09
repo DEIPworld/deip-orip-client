@@ -195,13 +195,12 @@ const actions = {
                   deipRpc.api.getResearchTokenSaleByResearchIdAsync(researchId)
                     .then((tokenSale) => {
                         commit('SET_RESEARCH_TOKEN_SALE', tokenSale)
-                        if (state.tokenSale.hard_cap === state.tokenSale.total_amount){ // finished token sale
-                            // todo: replace this condition with status of research token sale once it's available
+                        if (tokenSale.status == 2) { // finished token sale
                             dispatch('loadResearchTokenHolders', researchId)
                         } else {
                             commit('SET_RESEARCH_TOKEN_HOLDERS_LIST', [])
+                            dispatch('loadTokenSaleContributors');
                         }
-                        dispatch('loadTokenSaleContributors');
                     });
 
                 } else {

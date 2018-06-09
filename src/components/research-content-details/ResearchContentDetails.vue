@@ -120,6 +120,7 @@
                 ).then(() => {
                     this.vote.isLoading = false;
                     this.vote.isOpen = false;
+                    this.$store.dispatch('rcd/loadResearchContentVotes', this.content.research_id);
                 }, (err) => {
                     this.vote.isLoading = false;
                     this.vote.isOpen = false;
