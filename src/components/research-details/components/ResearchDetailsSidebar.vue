@@ -37,7 +37,7 @@
             <v-divider></v-divider>
         </div>
 
-        <div class="sm-title bold c-pt-6">Votes: 1034</div>
+        <div class="sm-title bold c-pt-6">Votes:</div>
 
         <div class="c-pb-6 c-pt-4">
             <div v-for="(discipline, index) in disciplinesList" :key="index"

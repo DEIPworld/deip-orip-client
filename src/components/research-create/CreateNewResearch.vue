@@ -153,7 +153,7 @@
             },
 
             setReviewShare(share){
-                this.research.review_share_in_percent = share * this.DEIP_1_PERCENT;
+                this.research.review_share_in_percent = share;
             },
 
             finish() {
@@ -165,7 +165,7 @@
                     this.research.title,
                     this.research.description,
                     this.research.title.replace(/ /g, "-").replace(/_/g, "-").toLowerCase(),
-                    this.research.review_share_in_percent,
+                    this.research.review_share_in_percent * this.DEIP_1_PERCENT,
                     5,
                     this.research.disciplines.map(d => d.id)
                 ]);
