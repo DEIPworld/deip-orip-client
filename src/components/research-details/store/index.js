@@ -12,8 +12,9 @@ const state = {
     disciplinesList: [],
     totalVotesList: [],
     isReviewDialogOpen : false,
-    tokenSale: null,
-    tokenHoldersList: []
+    tokenSale: undefined,
+    tokenHoldersList: [],
+    contributionsList: []
 }
 
 // getters
@@ -53,6 +54,10 @@ const getters = {
 
     tokenHoldersList: (state, getters) => {
         return state.tokenHoldersList;
+    },
+
+    contributionsList: (state, getters) => {
+        return state.contributionsList;
     },
 
     contentWeightByDiscipline: (state, getters) => {
@@ -183,7 +188,7 @@ const actions = {
             });
     },
 
-    loadResearchTokenSale({ state, commit }, researchId) {
+    loadResearchTokenSale({ state, dispatch, commit }, researchId) {
         deipRpc.api.checkResearchTokenSaleExistenceByResearchIdAsync(researchId)
             .then((exists) => {
                 if (exists) {
@@ -192,18 +197,31 @@ const actions = {
                         commit('SET_RESEARCH_TOKEN_SALE', tokenSale)
                         if (state.tokenSale.hard_cap === state.tokenSale.total_amount){ // finished token sale
                             // todo: replace this condition with status of research token sale once it's available
-                            deipRpc.api.getResearchTokensByResearchIdAsync(researchId)
-                                .then((tokenHolders) => {
-                                    commit('SET_RESEARCH_TOKEN_HOLDERS_LIST', tokenHolders)
-                                })
+                            dispatch('loadResearchTokenHolders', researchId)
                         } else {
                             commit('SET_RESEARCH_TOKEN_HOLDERS_LIST', [])
                         }
+                        dispatch('loadTokenSaleContributors');
                     });
+
                 } else {
                     commit('SET_RESEARCH_TOKEN_SALE', null)
                     commit('SET_RESEARCH_TOKEN_HOLDERS_LIST', [])
                 }
+            })
+    },
+
+    loadTokenSaleContributors({ state, commit }) {
+        deipRpc.api.getResearchTokenSaleContributionsByResearchTokenSaleIdAsync(state.tokenSale.id)
+            .then((contributions) => {
+                commit('SET_RESEARCH_TOKEN_SALE_CONTRIBUTIONS_LIST', contributions)
+            })
+    },
+
+    loadResearchTokenHolders({ state, commit }, researchId) {
+        deipRpc.api.getResearchTokensByResearchIdAsync(researchId)
+            .then((tokenHolders) => {
+                commit('SET_RESEARCH_TOKEN_HOLDERS_LIST', tokenHolders)
             })
     },
     
@@ -253,6 +271,10 @@ const mutations = {
 
     ['SET_RESEARCH_TOKEN_HOLDERS_LIST'](state, tokenHolders) {
         Vue.set(state, 'tokenHoldersList', tokenHolders)
+    },
+
+    ['SET_RESEARCH_TOKEN_SALE_CONTRIBUTIONS_LIST'](state, contributions) {
+        Vue.set(state, 'contributionsList', contributions)
     }
 }
 

@@ -77,7 +77,7 @@
         </div>
 
         <div class="sm-title bold c-pt-6">Citations: 10</div>
-        <div class="sm-title bold c-pb-6">References: 2</div>
+        <div class="sm-title bold c-pb-6 c-mt-2">References: 2</div>
 
         <div style="margin: 0 -24px">
             <v-divider></v-divider>
@@ -125,46 +125,102 @@
             <v-divider></v-divider>
         </div>
 
-        <div class="sm-title bold c-pt-6">Research token holders</div>
-        
-        <div class="c-pt-4 c-pb-6">
+        <div class="sm-title bold c-pt-6">Research Token Holders</div>
 
-            <div>
+        <div class="c-pt-4 c-pb-6">
+            <div v-if="isFinishedTokenSale">
                 <span class="half-bold">Research group</span>
                 <span class="deip-blue-color right">
-                    {{convertToPercent(
-                        DEIP_100_PERCENT - tokenHoldersList.reduce((share, holder) => {
-                            return share + holder.amount;}, 0))}}%
+                    {{convertToPercent(DEIP_100_PERCENT - tokenHoldersList.reduce((share, holder) => {
+                        return share + holder.amount;}, 0))}}%
                 </span>
+                <div v-for="holder in tokenHoldersList">
+                    <span class="half-bold">{{holder.account_name}}</span>
+                    <span class="deip-blue-color right">{{convertToPercent(holder.amount)}}%</span>
+                </div>
             </div>
-
-            <router-link v-if="research && isResearchGroupMember && !tokenSale" 
-                         :to="`/${research.group_permlink}/create-token-sale/${research.permlink}`" style="text-decoration: none">
-                <v-btn dark round outline color="primary" class="full-width c-mt-3 c-mb-3">
-                    <div class="col-grow add-review-label">
-                        {{tokenSale == null ? 'Propose Token Sale' : 'View Token Sale'}}
-                    </div>
-                </v-btn>
-            </router-link>
-
-            <router-link v-if="research && tokenSale && tokenSale.hard_cap != tokenSale.total_amount" 
-                         :to="`/${research.group_permlink}/token-sale/${research.permlink}`" style="text-decoration: none">
-                <v-btn dark round outline color="primary" class="full-width c-mt-3 c-mb-3">
-                    <div class="col-grow add-review-label">
-                        {{isResearchGroupMember ? 'View Token Sale' : 'Contribute Token Sale'}} 
-                    </div>
-                </v-btn>
-            </router-link>
-
-            <div v-for="holder in tokenHoldersList">
-                <span class="half-bold">{{holder.account_name}}</span>
-                <span class="deip-blue-color right">{{convertToPercent(holder.amount)}}%</span>
+            <div v-if="!isFinishedTokenSale">
+                <div>
+                    <span class="half-bold">Research group</span>
+                    <span class="deip-blue-color right">100%</span>
+                </div>
             </div>
         </div>
 
         <div style="margin: 0 -24px">
             <v-divider></v-divider>
         </div>
+
+        <div v-if="!tokenHoldersList.length">
+
+        <div v-if="(tokenSale === null && isResearchGroupMember) || isActiveTokenSale" class="sm-title bold c-pt-6">Research Token Sale</div>
+
+        <div v-if="tokenSale === null && isResearchGroupMember" class="c-pt-4 c-pb-6">
+            <router-link v-if="research && isResearchGroupMember" :to="`/${research.group_permlink}/create-token-sale/${research.permlink}`"  style="text-decoration: none">
+                <v-btn dark round outline color="primary" class="full-width c-mt-3 c-mb-3">
+                    <div class="col-grow add-review-label">Propose Token Sale</div>
+                </v-btn>
+            </router-link>
+        </div>
+
+        <div v-if="isActiveTokenSale" class="c-pt-4 c-pb-6">
+            <div>
+                <span class="half-bold">On Sale</span>
+                <span class="deip-blue-color right">{{convertToPercent(tokenSale.balance_tokens)}}%</span>
+            </div>
+            <div>
+                <span class="half-bold">Deadline</span>
+                <span class="deip-blue-color right">{{new Date(tokenSale.end_time).toDateString()}}</span>
+            </div>
+            <div>
+                <span class="half-bold">Soft Cap</span>
+                <span class="deip-blue-color right">{{tokenSale.soft_cap}}</span>
+            </div>
+            <div>
+                <span class="half-bold">Hard Cap</span>
+                <span class="deip-blue-color right">{{tokenSale.hard_cap}}</span>
+            </div>
+            <div class="c-mt-8">
+                <div class="row">
+                    <div><span class="left grey--text c-mr-2 cap-value">0</span></div>
+                    <div class="col-grow pos-relative row-nowrap align-center">
+                    <div class="chapter-line black" :style="{ width: currentCapPercent + '%' }"></div>
+                    <div class="chapter-line grey lighten-1 col-grow"></div>
+
+                    <div class="pos-absolute" :style="{ left: currentCapPercent + '%' }">
+                        <v-tooltip bottom color="white">
+                            <div class="chapter-point deip-blue-bg" slot="activator"></div>
+                            <div>
+                                <div class="grey--text cap-value text-align-center">{{currentCap}}</div>
+                            </div>
+                        </v-tooltip>
+                    </div>
+
+                    <div><span class="right grey--text c-ml-2 cap-value">{{tokenSale.hard_cap}}</span></div>
+                </div>
+            </div>
+            <div v-if="!isResearchGroupMember" class="c-mt-5 text-align-center">
+                <v-text-field 
+                    suffix="DEIP" 
+                    mask="########################" 
+                    v-model="amountToContribute">
+                </v-text-field>
+                <v-btn :disabled="!amountToContribute" :loading="isTokensBuying" color="primary" @click="contributeToTokenSale()">BUY RESEARCH TOKENS</v-btn>
+            </div>
+        </div>
+
+        </div>
+    </div>
+
+    <v-snackbar :timeout="5000" color="error" v-model="isError">
+        {{errorMessage}}
+        <v-btn dark flat @click.native="isError = false; errorMessage = '';">Close</v-btn>
+    </v-snackbar>
+    <v-snackbar :timeout="5000" color="success" v-model="isSuccess">
+        {{successMessage}}
+        <v-btn dark flat @click.native="isSuccess = false;">Close</v-btn>
+    </v-snackbar>
+
     </div>
 </template>
 
@@ -176,7 +232,13 @@
         name: "ResearchDetailsSidebar",
         data(){
            return {
-                groupLink: this.$route.params.research_group_permlink
+                amountToContribute: undefined,
+                groupLink: this.$route.params.research_group_permlink,
+                isError: false,
+                isSuccess: false,
+                isTokensBuying: false,
+                successMessage: "",
+                errorMessage: ""
            }
         },
         computed: {
@@ -190,7 +252,8 @@
                 totalVotesList: 'rd/totalVotesList',
                 researchWeightByDiscipline: 'rd/researchWeightByDiscipline',
                 tokenSale: 'rd/tokenSale',
-                tokenHoldersList: 'rd/tokenHoldersList'
+                tokenHoldersList: 'rd/tokenHoldersList',
+                contributionsList: 'rd/contributionsList'
             }),
             isResearchGroupMember(){
                 return this.research != null 
@@ -203,6 +266,18 @@
                             this.research.disciplines.some(d => d.id == exp.discipline_id))
                     : false
             },
+            isActiveTokenSale() {
+                return this.research && this.tokenSale && this.tokenSale.hard_cap != this.tokenSale.total_amount && this.tokenHoldersList.length == 0;
+            },
+            isFinishedTokenSale() {
+                return this.research && this.tokenSale && this.tokenSale.hard_cap == this.tokenSale.total_amount && this.tokenHoldersList.length != 0;
+            },
+            currentCap() {
+                return this.contributionsList.map(c => c.amount).reduce((acc, val) => {return acc + val}, 0);
+            },
+            currentCapPercent() {
+                return this.tokenSale ? this.currentCap * 100 / this.tokenSale.hard_cap : 0;
+            },
             canJoinResearchGroup : function(){
                 return this.membersList.find(m => { return m.owner == this.user.username}) === undefined;
             }
@@ -211,6 +286,27 @@
             openReviewDialog() {
                 this.$store.dispatch('rd/openReviewDialog');
             },
+            contributeToTokenSale() {
+                this.isTokensBuying = true;
+                deipRpc.broadcast.contributeToTokenSaleAsync(
+				    this.user.privKey,
+                    this.tokenSale.id,
+                    this.user.username,
+                    parseInt(this.amountToContribute)
+                ).then((data) => {
+                    this.$store.dispatch('rd/loadTokenSaleContributors');
+                    this.$store.dispatch('rd/loadResearchTokenHolders', this.research.id);
+                    this.isTokensBuying = false;
+                    this.isSuccess = true;
+                    this.successMessage = "Contribution made!"
+                    this.amountToContribute = undefined;
+                }, (err) => {
+                    this.isTokensBuying = false;
+                    this.isError = true;
+                    this.errorMessage = err.message;
+                })
+            },
+
             joinResearchGroup : function(){
                 deipRpc.broadcast.createResearchGroupJoinRequestAsync(
 					this.user.privKey,
@@ -240,5 +336,26 @@
     }
     .add-review-label {
         text-transform: none;
+    }
+    .start-point {
+        text-transform: uppercase;
+    }
+    .chapter-line {
+        height: 2px;
+    }
+    .chapter-point {
+        width: 16px;
+        height: 16px;
+        border-radius: 50%;
+
+        &:hover {
+            box-shadow: 0px 6px 6px -3px rgba(0,0,0,0.2), 
+                        0px 10px 14px 1px rgba(0,0,0,0.14), 
+                        0px 4px 18px 3px rgba(0,0,0,0.12);
+        }
+    }
+
+    .cap-value {
+        font-size: 16px;
     }
 </style>
