@@ -204,6 +204,6 @@
         font-size: 24px;
         font-weight: bold;
         text-align: center;
-        padding-bottom: 16px;
+        padding-bottom: 10px;
     }
 </style>

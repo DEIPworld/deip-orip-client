@@ -2,7 +2,9 @@
     <div class="column full-height col-grow" style="max-width: 1000px;">
         <div class="c-mb-4 col-grow column">
 
-            <div class="step-title">Select only disciplines your research is related to</div>
+            <div class="step-title">Select disciplines your research is related</div>
+            <div class="subheading text-align-center c-mb-2 selected-disciplines">{{research.disciplines.map(d => d.label).join("  ·  ")}}</div>
+
             <div class="col-grow overflow-y-auto">
                 <div class="row discipline-picker c-mh-auto full-height overflow-y-auto">
                     <div class="col-3 c-p-4 overflow-y-auto">
@@ -68,5 +70,8 @@
         & > :not(:last-child) {
             border-right: 1px solid #E0E0E0;
         }
+    }
+    .selected-disciplines {
+        min-height: 25px
     }
 </style>
