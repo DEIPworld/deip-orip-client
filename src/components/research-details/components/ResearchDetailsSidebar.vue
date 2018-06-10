@@ -52,7 +52,7 @@
             </div>
         </div>
 
-        <div v-if="!isResearchGroupMember && userHasExpertise">
+        <div v-if="!isResearchGroupMember && userHasExpertise && contentList.length">
             <div style="margin: 0 -24px">
                 <v-divider></v-divider>
             </div>
@@ -240,6 +240,7 @@
                 userGroups: 'userGroups',
                 userExperise: 'userExperise',
                 research: 'rd/research',
+                contentList: 'rd/contentList',
                 membersList: 'rd/membersList',
                 disciplinesList: 'rd/disciplinesList',
                 totalVotesList: 'rd/totalVotesList',

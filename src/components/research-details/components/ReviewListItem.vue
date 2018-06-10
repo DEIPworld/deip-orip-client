@@ -6,7 +6,7 @@
                     <v-gravatar :title="review.author" :email="review.author + '@deip.world'" />
                 </v-avatar>
                 <div class="bold c-pt-2">{{ review.author }}</div>
-                    <v-btn v-if="review.author != user.username" class="ma-0 mt-2" block color="primary" 
+                    <v-btn v-if="review.author != user.username && userHasExpertise" class="ma-0 mt-2" block color="primary" 
                             :loading="isReviewVoting" 
                             :disabled="isReviewVoting"
                             @click="voteReview(review)">Vote</v-btn>
@@ -51,7 +51,8 @@
         computed: {
             ...mapGetters({
                 user: 'user',
-                userExperise: 'userExperise'
+                userExperise: 'userExperise',
+                research: 'rd/research'
             }),
             disciplines() {
                 const out = [];
@@ -68,6 +69,12 @@
                     out.push(tvo)
                 }
                 return out;
+            },
+            userHasExpertise() {
+                return this.userExperise != null && this.research != null
+                    ?  this.userExperise.some(exp => 
+                            this.research.disciplines.some(d => d.id == exp.discipline_id))
+                    : false
             }
         },
         data() {
@@ -87,23 +94,36 @@
                     .map(exp => exp.discipline_id)
                     .filter(id => review.disciplines.find(d => d.id === id));
 
-                disciplinesIds.forEach(disciplineId => {
-                    deipRpc.broadcast.voteForReviewAsync(
-					    this.user.privKey,
-					    this.user.username, 
-					    review.id,
-                        disciplineId,
-                        this.DEIP_100_PERCENT,
-					    new Date( new Date().getTime() + 2 * 24 * 60 * 60 * 1000 )
-				    ).then(() => {
-                        // this.isReviewVoting = false;
-                    }, (err) => {
-                        // this.isReviewVoting = false;
-                        alert(err.message);
-                    });
-                })
+                const promises = [];       
 
-                // todo: fix this closure
+                disciplinesIds.forEach(disciplineId => {
+                    debugger;
+                    promises.push(
+                        deipRpc.broadcast.voteForReviewAsync(
+					        self.user.privKey,
+					        self.user.username, 
+					        review.id,
+                            disciplineId,
+                            self.DEIP_100_PERCENT,
+					        new Date( new Date().getTime() + 2 * 24 * 60 * 60 * 1000 ))
+                    );
+                });
+
+                // I have no idea what happens here, 
+                // the promise just never get resolved although op is send and applied in the blockchain
+                Promise.all(promises)
+                    .then(() => {
+                         self.isReviewVoting = false;
+                    }, (err) => {
+                         self.isReviewVoting = false;
+                    }).catch(() => {
+                         self.isReviewVoting = false;
+                    })
+                    .finally(() => {
+                         self.isReviewVoting = false;
+                    })
+
+                //todo: fix this closure
                 setTimeout(() => {
                     self.isReviewVoting = false;
                 }, 3000)
