@@ -76,8 +76,9 @@
                 this.errorSnack.message = newVal.message;
             }
         },
-        mounted() {
-            console.log(this.$route);
+        created() {
+            this.$store.dispatch('auth/loadExpertTokens');
+            this.$store.dispatch('auth/loadGroups');
         }
     }
 </script>

@@ -77,10 +77,6 @@
             goToState(state, params) {
                 this.$router.push({ name: state, params: params });
             }
-        },
-        created() {
-            this.$store.dispatch('auth/loadExpertTokens');
-            this.$store.dispatch('auth/loadGroups');
         }
     }
 </script>
