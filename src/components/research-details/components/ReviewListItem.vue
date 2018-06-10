@@ -50,8 +50,8 @@
         },
         computed: {
             ...mapGetters({
-                user: 'user',
-                userExperise: 'userExperise',
+                user: 'auth/user',
+                userExperise: 'auth/userExperise',
                 research: 'rd/research'
             }),
             disciplines() {

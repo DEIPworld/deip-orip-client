@@ -107,9 +107,9 @@
         },
         computed: {
             ...mapGetters({
-                user: 'user',
-                userGroups: 'userGroups',
-                userCoworkers: 'userCoworkers'
+                user: 'auth/user',
+                userGroups: 'auth/userGroups',
+                userCoworkers: 'auth/userCoworkers'
             })
         },
         methods: {

@@ -122,7 +122,7 @@
         },
         computed: {
             ...mapGetters({
-                user: 'user',
+                user: 'auth/user',
                 membersList: 'rd/membersList',
                 research: 'rd/research',
             }),

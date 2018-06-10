@@ -62,7 +62,7 @@
         },
         computed: {
             ...mapGetters({
-                user: 'user'
+                user: 'auth/user'
             })
         },
         methods: {
@@ -79,8 +79,8 @@
             }
         },
         created() {
-            this.$store.dispatch('loadExpertTokens');
-            this.$store.dispatch('loadGroups');
+            this.$store.dispatch('auth/loadExpertTokens');
+            this.$store.dispatch('auth/loadGroups');
         }
     }
 </script>

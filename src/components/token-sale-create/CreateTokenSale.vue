@@ -62,7 +62,7 @@
         name: "CreateTokenSale",
         computed: {
             ...mapGetters({
-                user: 'user'
+                user: 'auth/user'
             })
         },
         data() { 

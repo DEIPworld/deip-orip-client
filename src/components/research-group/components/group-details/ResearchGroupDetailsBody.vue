@@ -103,8 +103,8 @@
         },
         computed: {
             ...mapGetters({
-                user: 'user',
-                userGroups: 'userGroups',
+                user: 'auth/user',
+                userGroups: 'auth/userGroups',
                 group: 'researchGroup/group',
                 researchList: 'researchGroup/researchList',
                 options: 'researchGroup/options',
@@ -112,7 +112,7 @@
             }),
             isResearchGroupMember() {
                 return this.group != null 
-                    ? this.$store.getters.userIsResearchGroupMember(this.group.id) 
+                    ? this.$store.getters['auth/userIsResearchGroupMember'](this.group.id) 
                     : false
             }
         }

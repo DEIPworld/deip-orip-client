@@ -88,7 +88,7 @@
                     || !_.isNumber( parseInt(this.tokensAmount) );
             },
             ...mapGetters({
-                user: 'user'
+                user: 'auth/user'
             })
         },
         data() { 

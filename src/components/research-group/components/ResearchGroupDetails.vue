@@ -21,8 +21,8 @@
         name: "ResearchGroupDetails",
         computed: {
             ...mapGetters({
-                user: 'user',
-                userGroups: 'userGroups'
+                user: 'auth/user',
+                userGroups: 'auth/userGroups'
             })
         },
         data() { 

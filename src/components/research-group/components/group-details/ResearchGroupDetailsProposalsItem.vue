@@ -133,7 +133,7 @@
             ...mapGetters({
                 group: 'researchGroup/group',
                 groupShares: 'researchGroup/groupShares',
-                currentUser: 'user'
+                currentUser: 'auth/user'
             }),
             isApproved() {
                 return _.includes(this.proposal.voted_accounts, this.currentUser.username);

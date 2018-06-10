@@ -90,7 +90,7 @@
         },
         computed: {
             ...mapGetters({
-                user: 'user'
+                user: 'auth/user'
             })
         },
         methods: {
@@ -130,7 +130,7 @@
                     invitees
                 ).then(() => {
                     this.isLoading = false;
-                    this.$store.dispatch('loadGroups'); // reload user groups
+                    this.$store.dispatch('auth/loadGroups'); // reload user groups
                     this.$store.dispatch('layout/setSuccess', {
                         isVisible: true, 
                         message: `"${this.group.name}" research group has been created successfully !`

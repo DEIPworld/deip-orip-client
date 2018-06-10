@@ -222,9 +222,9 @@
         },
         computed: {
             ...mapGetters({
-                user: 'user',
-                userGroups: 'userGroups',
-                userExperise: 'userExperise',
+                user: 'auth/user',
+                userGroups: 'auth/userGroups',
+                userExperise: 'auth/userExperise',
                 research: 'rd/research',
                 contentList: 'rd/contentList',
                 membersList: 'rd/membersList',
@@ -237,7 +237,7 @@
             }),
             isResearchGroupMember(){
                 return this.research != null 
-                    ? this.$store.getters.userIsResearchGroupMember(this.research.research_group_id) 
+                    ? this.$store.getters['auth/userIsResearchGroupMember'](this.research.research_group_id) 
                     : false
             },
             userHasExpertise() {
