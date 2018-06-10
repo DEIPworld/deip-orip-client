@@ -41,7 +41,7 @@
                             </v-select>
 
                             <v-text-field
-                                label="Group tokens amount"
+                                label="Group tokens share"
                                 v-model="tokensAmount"
                                 suffix="%"
                                 mask="###"
@@ -64,12 +64,6 @@
                     </div>
                 </div>
             </div>
-
-            <v-snackbar :timeout="4000" color="error" v-model="isError">
-                Error
-                <v-btn dark flat @click.native="isError = false">Close</v-btn>
-            </v-snackbar>
-
         </v-card>
     </v-dialog>
 </template>
@@ -104,8 +98,7 @@
                 selectedUser: undefined,
                 tokensAmount: undefined,
 
-                isLoading: false,
-                isError: false
+                isLoading: false
             }
         },
         methods: {
@@ -132,12 +125,20 @@
                     proposalService.types.inviteMember,
 					new Date( new Date().getTime() + 2 * 24 * 60 * 60 * 1000 )
 				).then(() => {
+                    this.$store.dispatch('layout/setSuccess', {
+                        isVisible: true, 
+                        message: "Invitation Proposal has been created successfully!"
+                    });
                     this.$emit('onSuccess');
-                    this.close();
                 }).catch(err => {
-                    this.isError = true;
+                    this.$store.dispatch('layout/setError', {
+                        isVisible: true, 
+                        message: "An error occurred while creating proposal, please try again later"
+                    });
+                    console.log(err)
                 }).finally(() => {
                     this.isLoading = false;
+                    this.close();
                 });
             }
         },

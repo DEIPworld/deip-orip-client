@@ -93,41 +93,54 @@
                 const disciplinesIds = this.userExperise
                     .map(exp => exp.discipline_id)
                     .filter(id => review.disciplines.find(d => d.id === id));
+            
+                // I have no idea why, but "deipRpc.broadcast.voteForReviewAsync" doesn't work here, 
+                // the promise just never gets resolved or rejected although operation is sent and applied in the blockchain.
+                // Possibly there is a bug in 'deipRpc', needs to be reviewed later.
+                deipRpc.api.getDynamicGlobalProperties(function(err, result) {
+                    if (!err) {
+                        const BlockNum = (result.last_irreversible_block_num - 1) & 0xFFFF;
+                        deipRpc.api.getBlockHeader(result.last_irreversible_block_num, function(e, res) {
+                            const BlockPrefix = new Buffer(res.previous, 'hex').readUInt32LE(4);
+                            const now = new Date().getTime() + 3e6;
+                            const expire = new Date(now).toISOString().split('.')[0];
+                    
+                            const operations = disciplinesIds.map(disciplinesId => {
+                                return ["vote_for_review", {
+                                    voter: self.user.username,
+                                    review_id: review.id,
+                                    discipline_id: disciplinesId,
+                                    weight: self.DEIP_100_PERCENT
+                                }]
+                            });
+                            const unsignedTX = {
+                                'expiration': expire,
+                                'extensions': [],
+                                'operations': operations,
+                                'ref_block_num': BlockNum,
+                                'ref_block_prefix': BlockPrefix
+                            }
+                            try {
+                                const signedTX = deipRpc.auth.signTransaction(unsignedTX, {
+                                    "owner":  self.user.privKey
+                                })
 
-                const promises = [];       
-
-                disciplinesIds.forEach(disciplineId => {
-                    debugger;
-                    promises.push(
-                        deipRpc.broadcast.voteForReviewAsync(
-					        self.user.privKey,
-					        self.user.username, 
-					        review.id,
-                            disciplineId,
-                            self.DEIP_100_PERCENT,
-					        new Date( new Date().getTime() + 2 * 24 * 60 * 60 * 1000 ))
-                    );
+                                deipRpc.api.broadcastTransactionSynchronous(signedTX, function(err, result) {
+                                    self.isReviewVoting  = false;
+                                    if(err){
+                                        self.$store.dispatch('layout/setError', { isVisible: true, message: "An error occurred while voting for review, please try again later"});
+                                        console.log(err);
+                                    } else {
+                                        self.$store.dispatch('layout/setSuccess', { isVisible: true, message: "You've voted for review successfully!"});
+                                    }
+                                });
+                            } catch (err) {
+                                self.$store.dispatch('layout/setError', { isVisible: true, message: "An error occurred while voting for review, please try again later"});
+                                console.log(err);
+                            }
+                        });
+                    }
                 });
-
-                // I have no idea what happens here, 
-                // the promise just never get resolved although op is send and applied in the blockchain
-                Promise.all(promises)
-                    .then(() => {
-                         self.isReviewVoting = false;
-                    }, (err) => {
-                         self.isReviewVoting = false;
-                    }).catch(() => {
-                         self.isReviewVoting = false;
-                    })
-                    .finally(() => {
-                         self.isReviewVoting = false;
-                    })
-
-                //todo: fix this closure
-                setTimeout(() => {
-                    self.isReviewVoting = false;
-                }, 3000)
-                
             }
         }
     };

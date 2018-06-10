@@ -50,7 +50,7 @@
                     :disabled="!isFormValid || isUsernameVerifyed !== true || isSaving"
                 >{{ !formData.privKey ? 'Generate' : 'Re-generate' }} private key</v-btn>
 
-                <div v-show="formData.privKey">
+                <div v-show="formData.privKey !== null">
                     <v-text-field class="c-mt-4"
                         label="Your key"
                         disabled
@@ -65,14 +65,14 @@
                     ></v-checkbox>
 
                     <v-btn block color="primary" 
-                        v-show="!isSaving"
+                        :loading="isSaving"
                         @click="finishRegistration()"
-                        :disabled="!formData.isPrivKeySaved"
+                        :disabled="!formData.isPrivKeySaved || isSaving"
                     >Finish registration</v-btn>
 
-                    <div class="row justify-center c-pt-3" v-show="isSaving">
+                <!-- <div class="row justify-center c-pt-3" v-show="isSaving">
                         <v-progress-circular indeterminate color="primary"></v-progress-circular>
-                    </div>
+                    </div> -->
                 </div>
             </v-form>
 
@@ -83,13 +83,7 @@
                     The inviting letter will be sent to your email after approving
                 </div>
             </div>
-
-            <v-snackbar :timeout="4000" color="error" v-model="isServerError">
-                {{serverError}}
-                <v-btn dark flat @click.native="isServerError = false">Close</v-btn>
-            </v-snackbar>
         </div>
-
     </v-container>   
 </template>
 
@@ -105,20 +99,16 @@
                 isFormValid: false,
                 isUsernameVerifyed: undefined,
                 isUsernameChecking: false,
-                
                 isSaving: false,
                 isServerValidated: false, // true only when server accepts all information
-                isServerError: false,
-
-                serverError: null,
 
                 formData: {
                     email: '',
                     firstName: '',
                     lastName: '',
                     username: '',
-                    privKey: undefined,
-                    pubKey: undefined,
+                    privKey: null,
+                    pubKey: null,
                     isPrivKeySaved: false
                 },
 
@@ -142,10 +132,11 @@
         methods: {
             resetKey() {
                 if (this.formData.privKey) {
-                    this.formData.privKey = undefined;
+                    this.formData.privKey = null;
                 }
             },
             finishRegistration() {
+                const self = this;
                 console.log(this.formData);
                 this.isSaving = true;
 
@@ -157,8 +148,16 @@
                         this.isServerValidated = true;
                     }, (err) => {
                         this.isSaving = false;
-                        this.isServerError = true;
-                        this.serverError = err.response.data.errors[0];
+
+                        const message = err.response && err.response.data && err.response.data.errors[0] 
+                            ? err.response.data.errors[0] 
+                            : "Sorry, the service is temporarily unavailable, please try again later";
+
+                        self.$store.dispatch('layout/setError', {
+                            isVisible: true, 
+                            message: message
+                        });
+                        console.log(err);
                     });
             },
             generatePrivateKey() {

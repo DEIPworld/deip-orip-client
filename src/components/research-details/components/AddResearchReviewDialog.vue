@@ -93,17 +93,7 @@
                     </div>
                 </div>
             </div>
-
         </v-card>
-
-        <v-snackbar :timeout="4000" color="error" v-model="isError">
-            {{errorMessage}}
-            <v-btn dark flat @click.native="isError = false">Close</v-btn>
-        </v-snackbar>
-        <v-snackbar :timeout="4000" color="success" v-model="isSuccess">
-            Success
-            <v-btn dark flat @click.native="isSuccess = false">Close</v-btn>
-        </v-snackbar>
     </v-dialog>
 </template>
 
@@ -142,10 +132,6 @@
                 review: '',
                 isLoading: false,
                 contentId: undefined,
-
-                isError: false,
-                isSuccess: false,
-                errorMessage: ''
             }
         },
         methods: {
@@ -163,13 +149,19 @@
                     this.review,
                     this.reviewQuality === this.REVIEW_POSITIVE
                 ).then((data) => {
-                    this.isSuccess = true;
                     this.$store.dispatch('rd/loadResearchReviews', this.research.id);
                     this.$store.dispatch('rd/closeReviewDialog');
+                    this.$store.dispatch('layout/setSuccess', {
+                        isVisible: true, 
+                        message: "Your review has been posted successfully !"
+                    });
                 })
                 .catch((err) => {
-                    this.errorMessage = err.message;
-                    this.isError = true;
+                    this.$store.dispatch('layout/setError', {
+                        isVisible: true, 
+                        message: "An error occurred while adding review, please try again later"
+                    });
+                    console.log(err)
                 })
                 .finally(() => {
                     this.isLoading = false

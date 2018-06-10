@@ -1,0 +1,56 @@
+import _ from 'lodash';
+import deipRpc from '@deip/deip-rpc';
+import Vue from 'vue'
+import config from './../../../config'
+import { getAccessToken } from './../../../utils/auth'
+
+const state = {
+    success: {isVisible: false, message: ""},
+    error: {isVisible: false, message: ""}
+}
+
+// getters
+const getters = {
+
+    success: (state, getters) => {
+        return state.success;
+    },
+    
+    error: (state, getters) => {
+        return state.error;
+    }
+}
+
+// actions
+const actions = {
+
+    setError({ state, commit }, error) {
+        commit('SET_ERROR_SNACK', error)
+    },
+
+    setSuccess({ state, commit }, success) {
+        commit('SET_SUCCESS_SNACK', success)
+    }
+}
+
+// mutations
+const mutations = {
+
+    ['SET_SUCCESS_SNACK'](state, success) {
+        Vue.set(state, 'success', success)
+    },
+
+    ['SET_ERROR_SNACK'](state, error) {
+        Vue.set(state, 'error', error)
+    }
+}
+
+const namespaced = true;
+
+export default {
+    namespaced,
+    state,
+    getters,
+    actions,
+    mutations
+}

@@ -67,15 +67,6 @@
                 </v-stepper-items>
             </v-stepper>
         </v-layout>
-
-        <v-snackbar :timeout="5000" color="error" v-model="isError">
-            {{errorMessage ? errorMessage : "An error occurred while creating the group, please try again later"}}
-        <v-btn dark flat @click.native="isError = false; errorMessage = '';">Close</v-btn>
-        </v-snackbar>
-        <v-snackbar :timeout="5000" color="success" v-model="isSuccess">
-            "{{group.name}}" group is created !
-            <v-btn dark flat @click.native="isSuccess = false;">Close</v-btn>
-        </v-snackbar>
     </v-container>   
 </template>
 
@@ -94,10 +85,7 @@
                     description: "",
                     members: [{ name: this.$route.params.account_name, stake: 100 }]
                 },
-                isLoading: false,
-                isSuccess: false,
-                isError: false,
-                errorMessage: ""
+                isLoading: false
             } 
         },
         computed: {
@@ -142,8 +130,11 @@
                     invitees
                 ).then(() => {
                     this.isLoading = false;
-                    this.isSuccess = true;
-                    this.$store.dispatch('loadGroups'); //reload user groups
+                    this.$store.dispatch('loadGroups'); // reload user groups
+                    this.$store.dispatch('layout/setSuccess', {
+                        isVisible: true, 
+                        message: `"${this.group.name}" research group has been created successfully !`
+                    });
 
                     setTimeout(() => {
                         self.$router.push({ 
@@ -154,8 +145,11 @@
 
                 }, (err) => {
                     this.isLoading = false;
-                    this.isError = true;
-                    this.errorMessage = err.message;
+                    this.$store.dispatch('layout/setError', {
+                        isVisible: true, 
+                        message: "An error occurred while creating Research Group, please try again later"
+                    });
+                    console.log(err)
                 });
             }
         }

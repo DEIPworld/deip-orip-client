@@ -194,7 +194,7 @@
                     </div>
                 </div>
                 <div v-if="!isResearchGroupMember" class="c-mt-5 text-align-center">
-                    <v-text-field v-model="amountToContribute" suffix="DEIP" mask="########################"></v-text-field>
+                    <v-text-field v-model="amountToContribute" placeholder="amount" suffix="DEIP" mask="########################"></v-text-field>
                     <v-btn :disabled="!amountToContribute" :loading="isTokensBuying" color="primary" @click="contributeToTokenSale()">BUY RESEARCH TOKENS</v-btn>
                 </div>
             </div>
@@ -204,16 +204,6 @@
             <v-divider></v-divider>
         </div>
     </div>
-
-    <v-snackbar :timeout="5000" color="error" v-model="isError">
-        {{errorMessage}}
-        <v-btn dark flat @click.native="isError = false; errorMessage = '';">Close</v-btn>
-    </v-snackbar>
-    <v-snackbar :timeout="5000" color="success" v-model="isSuccess">
-        {{successMessage}}
-        <v-btn dark flat @click.native="isSuccess = false;">Close</v-btn>
-    </v-snackbar>
-
     </div>
 </template>
 
@@ -227,11 +217,7 @@
            return {
                 amountToContribute: undefined,
                 groupLink: this.$route.params.research_group_permlink,
-                isError: false,
-                isSuccess: false,
-                isTokensBuying: false,
-                successMessage: "",
-                errorMessage: ""
+                isTokensBuying: false
            }
         },
         computed: {
@@ -293,28 +279,33 @@
                 ).then((data) => {
                     this.$store.dispatch('rd/loadResearchTokenSale', this.research.id)
                     this.isTokensBuying = false;
-                    this.isSuccess = true;
-                    this.successMessage = "Contribution made!"
                     this.amountToContribute = undefined;
+                    this.$store.dispatch('layout/setSuccess', {
+                        isVisible: true, 
+                        message: `You've contributed to "${this.research.title}" token sale successfully !`
+                    });
                 }, (err) => {
                     this.isTokensBuying = false;
-                    this.isError = true;
-                    this.errorMessage = err.message;
+                    this.$store.dispatch('layout/setError', {
+                        isVisible: true, 
+                        message: "An error occurred while contributing to Token Sale, please try again later"
+                    });
+                    console.log(err)
                 })
             },
 
             joinResearchGroup : function(){
-                deipRpc.broadcast.createResearchGroupJoinRequestAsync(
-					this.user.privKey,
-					this.user.username,
-					this.research.research_group_id, 
-					"I wanna trulala",
-					new Date( new Date().getTime() + 2 * 24 * 60 * 60 * 1000 )
-				).then((data) => {
-                    alert(data);
-                }, (err) => {
-                    alert(err.message);
-                });
+                // deipRpc.broadcast.createResearchGroupJoinRequestAsync(
+				// 	this.user.privKey,
+				// 	this.user.username,
+				// 	this.research.research_group_id, 
+				// 	"I wanna trulala",
+				// 	new Date( new Date().getTime() + 2 * 24 * 60 * 60 * 1000 )
+				// ).then((data) => {
+                //     alert(data);
+                // }, (err) => {
+                //     alert(err.message);
+                // });
             }
         }
     };

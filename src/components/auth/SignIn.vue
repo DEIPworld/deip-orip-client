@@ -27,16 +27,11 @@
                     @keyup.enter="login"
                 ></v-text-field>
 
-                <v-btn block color="primary" @click="login()" v-show="!isChecking">Login</v-btn>
-                <div class="row justify-center c-pt-3" v-show="isChecking">
+                <v-btn block color="primary" :loading="isChecking" :disabled="isChecking" @click="login()" >Login</v-btn>
+                <!-- <div class="row justify-center c-pt-3" v-show="isChecking">
                     <v-progress-circular indeterminate color="primary"></v-progress-circular>
-                </div>
+                </div> -->
             </v-form>
-
-            <v-snackbar :timeout="4000" color="error" v-model="isServerError">
-                {{serverError}}
-                <v-btn dark flat @click.native="isServerError = false">Close</v-btn>
-            </v-snackbar>
         </div>
 
     </v-container>   
@@ -59,8 +54,6 @@
                 privKey: '',
                 isHiddenPassword: true,
                 isChecking: false,
-                isServerError: false,
-                serverError: null,
                 rules: {
                     required: (value) => !!value || 'This field is required'
                 }
@@ -68,6 +61,7 @@
         },
         methods: {
             login() {
+                const self = this;
 
                 if (this.$refs.form.validate()) {
                     this.isChecking = true;
@@ -78,8 +72,7 @@
                     } catch(err) {
                         clearAccessToken();
                         this.isChecking = false;
-                        this.isServerError = true;
-                        this.serverError = `Invalid private key format`; 
+                        self.$store.dispatch('layout/setError', {isVisible: true, message: "Invalid private key format"});
                         return;
                     }
 
@@ -110,28 +103,24 @@
                                     // and compromised thirdparty sources.
                                     setAccessToken(response.jwtToken, this.privKey)
                                     this.isChecking = false;
-                                    this.isServerError = false;
                                     this.isServerValidated = true;
                                     this.$router.go('/');
                                 } else {
                                     clearAccessToken();
                                     this.isChecking = false;
-                                    this.isServerError = true;
-                                    this.serverError = `Invalid private key for "${this.username}"`; 
+                                    self.$store.dispatch('layout/setError', {isVisible: true, message: `Invalid private key for "${self.username}"`});
                                 }
 
                             } else {
                                 clearAccessToken();
                                 this.isChecking = false;
-                                this.isServerError = true;
-                                this.serverError = response.error;
+                                self.$store.dispatch('layout/setError', {isVisible: true, message: response.error});
                             }
 
                         }, (err) => {
                             clearAccessToken();
                             this.isChecking = false;
-                            this.isServerError = true;
-                            this.serverError = err.message; 
+                            self.$store.dispatch('layout/setError', {isVisible: true, message: err.message});
                         });
                 }
 
