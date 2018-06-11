@@ -5,7 +5,7 @@
         </div>
 
         <div class="c-p-4">
-            <v-form ref="form" v-model="isFormValid">
+            <v-form ref="form" v-model="isFormValid" @submit.prevent>
                 <v-text-field label="To" 
                     ref="toUsername"
                     v-model="form.to"
