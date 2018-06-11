@@ -179,7 +179,7 @@
         computed: {
             ...mapGetters({
                 account: 'userWallet/account',
-                user: 'user'
+                user: 'auth/user'
             }),
             deipTokenBalance() {
                 return this.account ? this.fromAssetsToFloat(this.account.balance) : '';
