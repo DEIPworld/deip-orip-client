@@ -72,7 +72,7 @@
                     } catch(err) {
                         clearAccessToken();
                         this.isChecking = false;
-                        self.$store.dispatch('layout/setError', {isVisible: true, message: "Invalid private key format"});
+                        self.$store.dispatch('layout/setError', { message: "Invalid private key format"});
                         return;
                     }
 
@@ -108,19 +108,19 @@
                                 } else {
                                     clearAccessToken();
                                     this.isChecking = false;
-                                    self.$store.dispatch('layout/setError', {isVisible: true, message: `Invalid private key for "${self.username}"`});
+                                    self.$store.dispatch('layout/setError', { message: `Invalid private key for "${self.username}"`});
                                 }
 
                             } else {
                                 clearAccessToken();
                                 this.isChecking = false;
-                                self.$store.dispatch('layout/setError', {isVisible: true, message: response.error});
+                                self.$store.dispatch('layout/setError', { message: response.error});
                             }
 
                         }, (err) => {
                             clearAccessToken();
                             this.isChecking = false;
-                            self.$store.dispatch('layout/setError', {isVisible: true, message: err.message});
+                            self.$store.dispatch('layout/setError', { message: err.message});
                         });
                 }
 

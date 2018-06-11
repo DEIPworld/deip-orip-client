@@ -128,14 +128,14 @@
                                 deipRpc.api.broadcastTransactionSynchronous(signedTX, function(err, result) {
                                     self.isReviewVoting  = false;
                                     if(err){
-                                        self.$store.dispatch('layout/setError', { isVisible: true, message: "An error occurred while voting for review, please try again later"});
+                                        self.$store.dispatch('layout/setError', { message: "An error occurred while voting for review, please try again later"});
                                         console.log(err);
                                     } else {
-                                        self.$store.dispatch('layout/setSuccess', { isVisible: true, message: "You've voted for review successfully!"});
+                                        self.$store.dispatch('layout/setSuccess', { message: "You've voted for review successfully!"});
                                     }
                                 });
                             } catch (err) {
-                                self.$store.dispatch('layout/setError', { isVisible: true, message: "An error occurred while voting for review, please try again later"});
+                                self.$store.dispatch('layout/setError', { message: "An error occurred while voting for review, please try again later"});
                                 console.log(err);
                             }
                         });

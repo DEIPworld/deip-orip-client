@@ -281,13 +281,11 @@
                     this.isTokensBuying = false;
                     this.amountToContribute = undefined;
                     this.$store.dispatch('layout/setSuccess', {
-                        isVisible: true, 
                         message: `You've contributed to "${this.research.title}" token sale successfully !`
                     });
                 }, (err) => {
                     this.isTokensBuying = false;
                     this.$store.dispatch('layout/setError', {
-                        isVisible: true, 
                         message: "An error occurred while contributing to Token Sale, please try again later"
                     });
                     console.log(err)

@@ -115,7 +115,6 @@
 
                     this.isLoading = false;
                     this.$store.dispatch('layout/setSuccess', {
-                        isVisible: true, 
                         message: "Token Sale Proposal has been created successfully! Approve it to start the Token Sale !"
                     });
                     setTimeout(() => {
@@ -128,7 +127,6 @@
                 }).catch(err => {
                     this.isLoading = false;
                     this.$store.dispatch('layout/setError', {
-                        isVisible: true, 
                         message: "An error occurred while creating proposal, please try again later"
                     });
                     console.log(err)

@@ -122,14 +122,12 @@
                     this.vote.isOpen = false;
                     this.$store.dispatch('rcd/loadResearchContentVotes', this.content.research_id);
                     this.$store.dispatch('layout/setSuccess', {
-                        isVisible: true, 
                         message: `You've voted for "${this.content.title}" successfully !`
                     });
                 }, (err) => {
                     this.vote.isLoading = false;
                     this.vote.isOpen = false;
                     this.$store.dispatch('layout/setError', {
-                        isVisible: true, 
                         message: `An error occurred while voting for research content, please try again later`
                     });
                     console.log(err)

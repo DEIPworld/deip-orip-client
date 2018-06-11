@@ -169,7 +169,6 @@
                     this.isLoading = false;
 
                     this.$store.dispatch('layout/setSuccess', {
-                        isVisible: true, 
                         message: `Proposal for "${this.research.title}" research is created !`
                     });
                     
@@ -180,7 +179,6 @@
                 }, (err) => {
                     this.isLoading = false;
                     this.$store.dispatch('layout/setError', {
-                        isVisible: true, 
                         message: "An error occurred while creating proposal, please try again later"
                     });
                     console.log(err)

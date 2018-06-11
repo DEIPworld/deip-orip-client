@@ -163,7 +163,6 @@
             },
             vdropzoneError(file, message, xhr) {
                 this.$store.dispatch('layout/setError', {
-                    isVisible: true, 
                     message: "Sorry, the file storage server is temporarily unavailable, please try again later"
                 });
                 console.log(message);
@@ -196,13 +195,11 @@
 					new Date( new Date().getTime() + 2 * 24 * 60 * 60 * 1000 )
 				).then(() => {
                     this.$store.dispatch('layout/setSuccess', {
-                        isVisible: true, 
                         message: "New Content Proposal has been created successfuly!"
                     });
                     this.close();
                 }, (err) => {
                     this.$store.dispatch('layout/setError', {
-                        isVisible: true, 
                         message: "An error occurred while creating proposal, please try again later"
                     });
                     console.log(err)

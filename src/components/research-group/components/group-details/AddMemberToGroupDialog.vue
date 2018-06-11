@@ -126,13 +126,11 @@
 					new Date( new Date().getTime() + 2 * 24 * 60 * 60 * 1000 )
 				).then(() => {
                     this.$store.dispatch('layout/setSuccess', {
-                        isVisible: true, 
                         message: "Invitation Proposal has been created successfully!"
                     });
                     this.$emit('onSuccess');
                 }).catch(err => {
                     this.$store.dispatch('layout/setError', {
-                        isVisible: true, 
                         message: "An error occurred while creating proposal, please try again later"
                     });
                     console.log(err)
