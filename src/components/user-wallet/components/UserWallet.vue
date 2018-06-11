@@ -95,10 +95,10 @@
                             <div class="info-card-list">
                                 <div class="reserarch-table-header c-ph-3">
                                     <div class="list-header-cell col-grow">Title</div>
-                                    <div class="list-header-cell width-7 text-align-center">
+                                    <!-- <div class="list-header-cell width-7 text-align-center">
                                         Market price<br>
                                         (DEIP Tokens)
-                                    </div>
+                                    </div> -->
                                     <div class="list-header-cell width-5 text-align-center">Amount</div>
                                     <div class="list-header-cell width-8 text-align-center">Actions</div>
                                 </div>
@@ -111,7 +111,7 @@
                                         <div class="caption grey--text c-pt-2">Alex Shkor  ·  Artyom Ruseckiy  ·  Egor Tsaryk</div>
                                     </div>
 
-                                    <div class="width-7 list-body-cell text-align-center half-bold">10</div>
+                                    <!-- <div class="width-7 list-body-cell text-align-center half-bold">10</div> -->
                                     <div class="width-5 list-body-cell text-align-center half-bold">12%</div>
 
                                     <div class="width-8 list-body-cell text-align-center">
@@ -127,7 +127,7 @@
                                         <div class="caption grey--text c-pt-2">Alex Shkor  ·  Artyom Ruseckiy  ·  Egor Tsaryk</div>
                                     </div>
 
-                                    <div class="width-7 list-body-cell text-align-center half-bold">100</div>
+                                    <!-- <div class="width-7 list-body-cell text-align-center half-bold">100</div> -->
                                     <div class="width-5 list-body-cell text-align-center half-bold">12%</div>
 
                                     <div class="width-8 list-body-cell text-align-center">

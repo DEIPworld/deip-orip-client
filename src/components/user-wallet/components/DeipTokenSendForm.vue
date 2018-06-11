@@ -1,6 +1,6 @@
 <template>
     <v-card>
-        <div class="blue lighten-4 c-p-4" @click="clearForm()">
+        <div class="blue lighten-4 c-p-4">
             <div class="uppercase text-align-center half-bold">Send deip tokens</div>
         </div>
 
