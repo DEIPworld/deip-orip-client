@@ -153,10 +153,7 @@
                             ? err.response.data.errors[0] 
                             : "Sorry, the service is temporarily unavailable, please try again later";
 
-                        self.$store.dispatch('layout/setError', {
-                            isVisible: true, 
-                            message: message
-                        });
+                        self.$store.dispatch('layout/setError', { message: message });
                         console.log(err);
                     });
             },

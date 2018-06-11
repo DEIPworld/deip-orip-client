@@ -25,10 +25,14 @@ const getters = {
 const actions = {
 
     setError({ state, commit }, error) {
+        if (error.isVisible === undefined)
+            error.isVisible = true;
         commit('SET_ERROR_SNACK', error)
     },
 
     setSuccess({ state, commit }, success) {
+        if (success.isVisible === undefined)
+            success.isVisible = true;
         commit('SET_SUCCESS_SNACK', success)
     }
 }

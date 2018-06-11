@@ -132,7 +132,6 @@
                     this.isLoading = false;
                     this.$store.dispatch('auth/loadGroups'); // reload user groups
                     this.$store.dispatch('layout/setSuccess', {
-                        isVisible: true, 
                         message: `"${this.group.name}" research group has been created successfully !`
                     });
 
@@ -146,7 +145,6 @@
                 }, (err) => {
                     this.isLoading = false;
                     this.$store.dispatch('layout/setError', {
-                        isVisible: true, 
                         message: "An error occurred while creating Research Group, please try again later"
                     });
                     console.log(err)

@@ -152,13 +152,11 @@
                     this.$store.dispatch('rd/loadResearchReviews', this.research.id);
                     this.$store.dispatch('rd/closeReviewDialog');
                     this.$store.dispatch('layout/setSuccess', {
-                        isVisible: true, 
                         message: "Your review has been posted successfully !"
                     });
                 })
                 .catch((err) => {
                     this.$store.dispatch('layout/setError', {
-                        isVisible: true, 
                         message: "An error occurred while adding review, please try again later"
                     });
                     console.log(err)
