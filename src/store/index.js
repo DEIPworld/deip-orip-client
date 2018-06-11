@@ -7,6 +7,7 @@ import researchGroup from './../components/research-group/store/index'
 import rd from './../components/research-details/store/index'
 import rcd from './../components/research-content-details/store/index'
 import userDetails from './../components/user/store/index.js'
+import userWallet from './../components/user-wallet/store/index.js'
 
 
 Vue.use(Vuex)
@@ -20,7 +21,8 @@ export default new Vuex.Store({
         researchGroup,
         rd,
         rcd,
-        userDetails
+        userDetails,
+        userWallet
     },
     strict: debug,
     plugins: debug ? [createLogger()] : []

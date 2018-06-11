@@ -20,18 +20,21 @@
                     :rules="[rules.required, rules.email]"
                     @input="resetKey"
                 ></v-text-field>
+
                 <v-text-field 
                     label="First name"
                     v-model="formData.firstName" 
                     :rules="[rules.required, rules.nameChars]"
                     @input="resetKey"
                 ></v-text-field>
+
                 <v-text-field 
                     label="Last name"
                     v-model="formData.lastName" 
                     :rules="[rules.required, rules.nameChars]"
                     @input="resetKey"
                 ></v-text-field>
+                
                 <v-text-field 
                     name="username"
                     label="Username"

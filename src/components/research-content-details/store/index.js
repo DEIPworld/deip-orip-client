@@ -17,7 +17,6 @@ const getters = {
     },
 
     research: (state, getters) => {
-        debugger;
         return state.research;
     },
 
