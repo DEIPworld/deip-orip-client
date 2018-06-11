@@ -38,7 +38,7 @@
         name: "ResearchTimeline",
         computed: {
             ...mapGetters({
-                user: 'user',
+                user: 'auth/user',
                 research: 'rd/research',
                 contentList: 'rd/contentList',
                 timelineOffsets: 'rd/timelineOffsets'

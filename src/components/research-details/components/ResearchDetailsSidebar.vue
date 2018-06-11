@@ -37,7 +37,7 @@
             <v-divider></v-divider>
         </div>
 
-        <div class="sm-title bold c-pt-6">Votes: 1034</div>
+        <div class="sm-title bold c-pt-6">Votes:</div>
 
         <div class="c-pb-6 c-pt-4">
             <div v-for="(discipline, index) in disciplinesList" :key="index"
@@ -52,7 +52,7 @@
             </div>
         </div>
 
-        <div v-if="!isResearchGroupMember && userHasExpertise">
+        <div v-if="!isResearchGroupMember && userHasExpertise && contentList.length">
             <div style="margin: 0 -24px">
                 <v-divider></v-divider>
             </div>
@@ -128,7 +128,7 @@
         <div class="sm-title bold c-pt-6">Research Token Holders</div>
 
         <div class="c-pt-4 c-pb-6">
-            <div v-if="isFinishedTokenSale">
+            <div>
                 <span class="half-bold">Research group</span>
                 <span class="deip-blue-color right">
                     {{convertToPercent(DEIP_100_PERCENT - tokenHoldersList.reduce((share, holder) => {
@@ -139,10 +139,63 @@
                     <span class="deip-blue-color right">{{convertToPercent(holder.amount)}}%</span>
                 </div>
             </div>
-            <div v-if="!isFinishedTokenSale">
+        </div>
+
+        <div style="margin: 0 -24px">
+            <v-divider></v-divider>
+        </div>
+
+        <div v-if="(isMissingTokenSale && isResearchGroupMember) || isActiveTokenSale">
+
+            <div class="sm-title bold c-pt-6">Research Token Sale</div>
+
+            <div v-if="(isMissingTokenSale && isResearchGroupMember)" class="c-pt-4 c-pb-6">
+                <router-link v-if="research" :to="`/${research.group_permlink}/create-token-sale/${research.permlink}`"  style="text-decoration: none">
+                    <v-btn dark round outline color="primary" class="full-width c-mt-3 c-mb-3">
+                        <div class="col-grow add-review-label">Propose Token Sale</div>
+                    </v-btn>
+                </router-link>
+            </div>
+
+            <div v-if="isActiveTokenSale" class="c-pt-4 c-pb-6">
                 <div>
-                    <span class="half-bold">Research group</span>
-                    <span class="deip-blue-color right">100%</span>
+                    <span class="half-bold">On Sale</span>
+                    <span class="deip-blue-color right">{{convertToPercent(tokenSale.balance_tokens)}}%</span>
+                </div>
+                <div>
+                    <span class="half-bold">Deadline</span>
+                    <span class="deip-blue-color right">{{new Date(tokenSale.end_time).toDateString()}}</span>
+                </div>
+                <div>
+                    <span class="half-bold">Soft Cap</span>
+                    <span class="deip-blue-color right">{{tokenSale.soft_cap}}</span>
+                </div>
+                <div>
+                    <span class="half-bold">Hard Cap</span>
+                    <span class="deip-blue-color right">{{tokenSale.hard_cap}}</span>
+                </div>
+                <div class="c-mt-8">
+                    <div class="row">
+                        <div><span class="left grey--text c-mr-2 cap-value">0</span></div>
+                        <div class="col-grow pos-relative row-nowrap align-center">
+                        <div class="chapter-line black" :style="{ width: currentCapPercent + '%' }"></div>
+                        <div class="chapter-line grey lighten-1 col-grow"></div>
+
+                        <div class="pos-absolute" :style="{ left: currentCapPercent + '%' }">
+                            <v-tooltip bottom color="white">
+                                <div class="chapter-point deip-blue-bg" slot="activator"></div>
+                                <div>
+                                    <div class="grey--text cap-value text-align-center">{{currentCap}}</div>
+                                </div>
+                            </v-tooltip>
+                        </div>
+
+                        <div><span class="right grey--text c-ml-2 cap-value">{{tokenSale.hard_cap}}</span></div>
+                    </div>
+                </div>
+                <div v-if="!isResearchGroupMember" class="c-mt-5 text-align-center">
+                    <v-text-field v-model="amountToContribute" placeholder="amount" suffix="DEIP" mask="########################"></v-text-field>
+                    <v-btn :disabled="!amountToContribute" :loading="isTokensBuying" color="primary" @click="contributeToTokenSale()">BUY RESEARCH TOKENS</v-btn>
                 </div>
             </div>
         </div>
@@ -150,77 +203,7 @@
         <div style="margin: 0 -24px">
             <v-divider></v-divider>
         </div>
-
-        <div v-if="!tokenHoldersList.length">
-
-        <div v-if="(tokenSale === null && isResearchGroupMember) || isActiveTokenSale" class="sm-title bold c-pt-6">Research Token Sale</div>
-
-        <div v-if="tokenSale === null && isResearchGroupMember" class="c-pt-4 c-pb-6">
-            <router-link v-if="research && isResearchGroupMember" :to="`/${research.group_permlink}/create-token-sale/${research.permlink}`"  style="text-decoration: none">
-                <v-btn dark round outline color="primary" class="full-width c-mt-3 c-mb-3">
-                    <div class="col-grow add-review-label">Propose Token Sale</div>
-                </v-btn>
-            </router-link>
-        </div>
-
-        <div v-if="isActiveTokenSale" class="c-pt-4 c-pb-6">
-            <div>
-                <span class="half-bold">On Sale</span>
-                <span class="deip-blue-color right">{{convertToPercent(tokenSale.balance_tokens)}}%</span>
-            </div>
-            <div>
-                <span class="half-bold">Deadline</span>
-                <span class="deip-blue-color right">{{new Date(tokenSale.end_time).toDateString()}}</span>
-            </div>
-            <div>
-                <span class="half-bold">Soft Cap</span>
-                <span class="deip-blue-color right">{{tokenSale.soft_cap}}</span>
-            </div>
-            <div>
-                <span class="half-bold">Hard Cap</span>
-                <span class="deip-blue-color right">{{tokenSale.hard_cap}}</span>
-            </div>
-            <div class="c-mt-8">
-                <div class="row">
-                    <div><span class="left grey--text c-mr-2 cap-value">0</span></div>
-                    <div class="col-grow pos-relative row-nowrap align-center">
-                    <div class="chapter-line black" :style="{ width: currentCapPercent + '%' }"></div>
-                    <div class="chapter-line grey lighten-1 col-grow"></div>
-
-                    <div class="pos-absolute" :style="{ left: currentCapPercent + '%' }">
-                        <v-tooltip bottom color="white">
-                            <div class="chapter-point deip-blue-bg" slot="activator"></div>
-                            <div>
-                                <div class="grey--text cap-value text-align-center">{{currentCap}}</div>
-                            </div>
-                        </v-tooltip>
-                    </div>
-
-                    <div><span class="right grey--text c-ml-2 cap-value">{{tokenSale.hard_cap}}</span></div>
-                </div>
-            </div>
-            <div v-if="!isResearchGroupMember" class="c-mt-5 text-align-center">
-                <v-text-field 
-                    suffix="DEIP" 
-                    mask="########################" 
-                    v-model="amountToContribute">
-                </v-text-field>
-                <v-btn :disabled="!amountToContribute" :loading="isTokensBuying" color="primary" @click="contributeToTokenSale()">BUY RESEARCH TOKENS</v-btn>
-            </div>
-        </div>
-
-        </div>
     </div>
-
-    <v-snackbar :timeout="5000" color="error" v-model="isError">
-        {{errorMessage}}
-        <v-btn dark flat @click.native="isError = false; errorMessage = '';">Close</v-btn>
-    </v-snackbar>
-    <v-snackbar :timeout="5000" color="success" v-model="isSuccess">
-        {{successMessage}}
-        <v-btn dark flat @click.native="isSuccess = false;">Close</v-btn>
-    </v-snackbar>
-
     </div>
 </template>
 
@@ -234,19 +217,16 @@
            return {
                 amountToContribute: undefined,
                 groupLink: this.$route.params.research_group_permlink,
-                isError: false,
-                isSuccess: false,
-                isTokensBuying: false,
-                successMessage: "",
-                errorMessage: ""
+                isTokensBuying: false
            }
         },
         computed: {
             ...mapGetters({
-                user: 'user',
-                userGroups: 'userGroups',
-                userExperise: 'userExperise',
+                user: 'auth/user',
+                userGroups: 'auth/userGroups',
+                userExperise: 'auth/userExperise',
                 research: 'rd/research',
+                contentList: 'rd/contentList',
                 membersList: 'rd/membersList',
                 disciplinesList: 'rd/disciplinesList',
                 totalVotesList: 'rd/totalVotesList',
@@ -257,7 +237,7 @@
             }),
             isResearchGroupMember(){
                 return this.research != null 
-                    ? this.$store.getters.userIsResearchGroupMember(this.research.research_group_id) 
+                    ? this.$store.getters['auth/userIsResearchGroupMember'](this.research.research_group_id) 
                     : false
             },
             userHasExpertise() {
@@ -266,11 +246,14 @@
                             this.research.disciplines.some(d => d.id == exp.discipline_id))
                     : false
             },
+            isMissingTokenSale(){
+                return this.tokenSale === null;
+            },
             isActiveTokenSale() {
-                return this.research && this.tokenSale && this.tokenSale.hard_cap != this.tokenSale.total_amount && this.tokenHoldersList.length == 0;
+                return this.tokenSale && this.tokenSale.status == 1;
             },
             isFinishedTokenSale() {
-                return this.research && this.tokenSale && this.tokenSale.hard_cap == this.tokenSale.total_amount && this.tokenHoldersList.length != 0;
+                return this.tokenSale && this.tokenSale.status == 2;
             },
             currentCap() {
                 return this.contributionsList.map(c => c.amount).reduce((acc, val) => {return acc + val}, 0);
@@ -294,31 +277,35 @@
                     this.user.username,
                     parseInt(this.amountToContribute)
                 ).then((data) => {
-                    this.$store.dispatch('rd/loadTokenSaleContributors');
-                    this.$store.dispatch('rd/loadResearchTokenHolders', this.research.id);
+                    this.$store.dispatch('rd/loadResearchTokenSale', this.research.id)
                     this.isTokensBuying = false;
-                    this.isSuccess = true;
-                    this.successMessage = "Contribution made!"
                     this.amountToContribute = undefined;
+                    this.$store.dispatch('layout/setSuccess', {
+                        isVisible: true, 
+                        message: `You've contributed to "${this.research.title}" token sale successfully !`
+                    });
                 }, (err) => {
                     this.isTokensBuying = false;
-                    this.isError = true;
-                    this.errorMessage = err.message;
+                    this.$store.dispatch('layout/setError', {
+                        isVisible: true, 
+                        message: "An error occurred while contributing to Token Sale, please try again later"
+                    });
+                    console.log(err)
                 })
             },
 
             joinResearchGroup : function(){
-                deipRpc.broadcast.createResearchGroupJoinRequestAsync(
-					this.user.privKey,
-					this.user.username,
-					this.research.research_group_id, 
-					"I wanna trulala",
-					new Date( new Date().getTime() + 2 * 24 * 60 * 60 * 1000 )
-				).then((data) => {
-                    alert(data);
-                }, (err) => {
-                    alert(err.message);
-                });
+                // deipRpc.broadcast.createResearchGroupJoinRequestAsync(
+				// 	this.user.privKey,
+				// 	this.user.username,
+				// 	this.research.research_group_id, 
+				// 	"I wanna trulala",
+				// 	new Date( new Date().getTime() + 2 * 24 * 60 * 60 * 1000 )
+				// ).then((data) => {
+                //     alert(data);
+                // }, (err) => {
+                //     alert(err.message);
+                // });
             }
         }
     };
@@ -344,8 +331,8 @@
         height: 2px;
     }
     .chapter-point {
-        width: 16px;
-        height: 16px;
+        width: 14px;
+        height: 14px;
         border-radius: 50%;
 
         &:hover {

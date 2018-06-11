@@ -85,16 +85,6 @@
             </div>
         </v-card>
     </v-dialog>
-
-    <v-snackbar :timeout="5000" color="error" v-model="isError">
-        {{errorMessage ? errorMessage : "An error occurred while uploading the file, please try again later"}}
-        <v-btn dark flat @click.native="isError = false; errorMessage = '';">Close</v-btn>
-    </v-snackbar>
-    <v-snackbar :timeout="5000" color="success" v-model="isSuccess">
-            New Content Proposal has been created successfuly!
-        <v-btn dark flat @click.native="isSuccess = false;">Close</v-btn>
-    </v-snackbar>
-
     </div>
 </template>
 
@@ -127,15 +117,12 @@
                 ],
 
                 isOpen: false,
-                isLoading: false,
-                isSuccess: false,
-                isError: false,
-                errorMessage: ""
+                isLoading: false
             }
         },
         computed: {
             ...mapGetters({
-                user: 'user',
+                user: 'auth/user',
                 membersList: 'rd/membersList',
                 research: 'rd/research',
             }),
@@ -175,8 +162,11 @@
                 this.$refs.newContent.processQueue();
             },
             vdropzoneError(file, message, xhr) {
-                this.errorMessage = "Sorry, the server is temporarily unavailable"
-                this.isError = true;
+                this.$store.dispatch('layout/setError', {
+                    isVisible: true, 
+                    message: "Sorry, the file storage server is temporarily unavailable, please try again later"
+                });
+                console.log(message);
                 this.close();
             },
             vdropzoneFileAdded(file) {
@@ -205,10 +195,17 @@
                     proposalService.types.createResearchMaterial,
 					new Date( new Date().getTime() + 2 * 24 * 60 * 60 * 1000 )
 				).then(() => {
-                    this.isSuccess = true;
+                    this.$store.dispatch('layout/setSuccess', {
+                        isVisible: true, 
+                        message: "New Content Proposal has been created successfuly!"
+                    });
                     this.close();
                 }, (err) => {
-                    this.isError = true;
+                    this.$store.dispatch('layout/setError', {
+                        isVisible: true, 
+                        message: "An error occurred while creating proposal, please try again later"
+                    });
+                    console.log(err)
                     this.close();
                 });
             }
@@ -220,7 +217,6 @@
                     this.title = '';
                     this.type = null;
                     this.authors = [];
-                    this.isSuccess = false;
                 } 
             }
         }

@@ -82,15 +82,6 @@
                 </v-stepper-items>
             </v-stepper>
         </v-layout>
-
-        <v-snackbar :timeout="5000" color="error" v-model="isError">
-            {{errorMessage ? errorMessage : "An error occurred while creating Research proposal, please try again later"}}
-        <v-btn dark flat @click.native="isError = false; errorMessage = '';">Close</v-btn>
-        </v-snackbar>
-        <v-snackbar :timeout="5000" color="success" v-model="isSuccess">
-            Proposal for "{{research.title}}" research is created !
-            <v-btn dark flat @click.native="isSuccess = false;">Close</v-btn>
-        </v-snackbar>
     </v-container>   
 </template>
 
@@ -111,17 +102,14 @@
                     description: '',
                     review_share_in_percent: 5,
                 },
-                isLoading: false,
-                isSuccess: false,
-                isError: false,
-                errorMessage: ""
+                isLoading: false
             } 
         },
         computed: {
             ...mapGetters({
-                user: 'user',
-                userGroups: 'userGroups',
-                userCoworkers: 'userCoworkers'
+                user: 'auth/user',
+                userGroups: 'auth/userGroups',
+                userCoworkers: 'auth/userCoworkers'
             })
         },
         methods: {
@@ -153,7 +141,7 @@
             },
 
             setReviewShare(share){
-                this.research.review_share_in_percent = share * this.DEIP_1_PERCENT;
+                this.research.review_share_in_percent = share;
             },
 
             finish() {
@@ -165,7 +153,7 @@
                     this.research.title,
                     this.research.description,
                     this.research.title.replace(/ /g, "-").replace(/_/g, "-").toLowerCase(),
-                    this.research.review_share_in_percent,
+                    this.research.review_share_in_percent * this.DEIP_1_PERCENT,
                     5,
                     this.research.disciplines.map(d => d.id)
                 ]);
@@ -179,16 +167,23 @@
 					new Date( new Date().getTime() + 2 * 24 * 60 * 60 * 1000 )
 				).then(() => {
                     this.isLoading = false;
-                    this.isSuccess = true;
 
+                    this.$store.dispatch('layout/setSuccess', {
+                        isVisible: true, 
+                        message: `Proposal for "${this.research.title}" research is created !`
+                    });
+                    
                     setTimeout(() => {
                         self.$router.push(`/${self.research.group.permlink}/group-details`)
                     }, 1500)
-                    
+
                 }, (err) => {
                     this.isLoading = false;
-                    this.isError = true;
-                    this.errorMessage = err.message;
+                    this.$store.dispatch('layout/setError', {
+                        isVisible: true, 
+                        message: "An error occurred while creating proposal, please try again later"
+                    });
+                    console.log(err)
                 });
             }
         }
@@ -209,6 +204,6 @@
         font-size: 24px;
         font-weight: bold;
         text-align: center;
-        padding-bottom: 16px;
+        padding-bottom: 10px;
     }
 </style>

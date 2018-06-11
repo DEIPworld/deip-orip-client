@@ -62,7 +62,7 @@
         },
         computed: {
             ...mapGetters({
-                user: 'user'
+                user: 'auth/user'
             })
         },
         methods: {
@@ -77,10 +77,6 @@
             goToState(state, params) {
                 this.$router.push({ name: state, params: params });
             }
-        },
-        created() {
-            this.$store.dispatch('loadExpertTokens');
-            this.$store.dispatch('loadGroups');
         }
     }
 </script>

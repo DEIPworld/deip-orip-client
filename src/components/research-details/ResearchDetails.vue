@@ -26,7 +26,6 @@
         name: "ResearchDetails",
         data() { 
             return {
-                isReviewDialogShown: { value: false }
             }
         },
         computed: {

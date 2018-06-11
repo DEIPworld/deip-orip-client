@@ -80,8 +80,8 @@
 
         computed:{
             ...mapGetters({
-                user: 'user',
-                userExperise: 'userExperise',
+                user: 'auth/user',
+                userExperise: 'auth/userExperise',
                 content: 'rcd/content',
                 research: 'rcd/research',
                 disciplinesList: 'rcd/disciplinesList',
@@ -90,7 +90,7 @@
             }),
             isResearchGroupMember(){
                 return this.research != null 
-                    ? this.$store.getters.userIsResearchGroupMember(this.research.research_group_id) 
+                    ? this.$store.getters['auth/userIsResearchGroupMember'](this.research.research_group_id) 
                     : false
             }
         },
@@ -120,10 +120,19 @@
                 ).then(() => {
                     this.vote.isLoading = false;
                     this.vote.isOpen = false;
+                    this.$store.dispatch('rcd/loadResearchContentVotes', this.content.research_id);
+                    this.$store.dispatch('layout/setSuccess', {
+                        isVisible: true, 
+                        message: `You've voted for "${this.content.title}" successfully !`
+                    });
                 }, (err) => {
                     this.vote.isLoading = false;
                     this.vote.isOpen = false;
-                    alert(err.message);
+                    this.$store.dispatch('layout/setError', {
+                        isVisible: true, 
+                        message: `An error occurred while voting for research content, please try again later`
+                    });
+                    console.log(err)
                 });
             }
         },

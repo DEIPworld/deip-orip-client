@@ -49,15 +49,6 @@
                 </v-stepper-items>
             </v-stepper>
         </v-layout>
-
-        <v-snackbar :timeout="5000" color="error" v-model="isError">
-            {{errorMessage ? errorMessage : "An error occurred while creating Token Sale proposal, please try again later"}}
-        <v-btn dark flat @click.native="isError = false; errorMessage = '';">Close</v-btn>
-        </v-snackbar>
-        <v-snackbar :timeout="5000" color="success" v-model="isSuccess">
-            Token Sale Proposal created successfully! Approve it to start the Token Sale !
-            <v-btn dark flat @click.native="isSuccess = false;">Close</v-btn>
-        </v-snackbar>
     </v-container>
 </template>
 
@@ -71,7 +62,7 @@
         name: "CreateTokenSale",
         computed: {
             ...mapGetters({
-                user: 'user'
+                user: 'auth/user'
             })
         },
         data() { 
@@ -86,10 +77,7 @@
                     hardCap: ''
                 },
 
-                isLoading: false,
-                isSuccess: false,
-                isError: false,
-                errorMessage: ""
+                isLoading: false
             }
         },
         methods: {
@@ -124,9 +112,12 @@
                     proposalService.types.startResearchTokenSale,
 					new Date( new Date().getTime() + 2 * 24 * 60 * 60 * 1000 )
 				).then(() => {
-                    this.isLoading = false;
-                    this.isSuccess = true;
 
+                    this.isLoading = false;
+                    this.$store.dispatch('layout/setSuccess', {
+                        isVisible: true, 
+                        message: "Token Sale Proposal has been created successfully! Approve it to start the Token Sale !"
+                    });
                     setTimeout(() => {
                         self.$router.push({ 
                             name: 'ResearchGroupDetails',
@@ -136,8 +127,11 @@
 
                 }).catch(err => {
                     this.isLoading = false;
-                    this.isError = true;
-                    this.errorMessage = err.message;
+                    this.$store.dispatch('layout/setError', {
+                        isVisible: true, 
+                        message: "An error occurred while creating proposal, please try again later"
+                    });
+                    console.log(err)
                 })
             }
         },

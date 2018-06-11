@@ -6,7 +6,7 @@
                     <v-gravatar :title="review.author" :email="review.author + '@deip.world'" />
                 </v-avatar>
                 <div class="bold c-pt-2">{{ review.author }}</div>
-                    <v-btn v-if="review.author != user.username" class="ma-0 mt-2" block color="primary" 
+                    <v-btn v-if="review.author != user.username && userHasExpertise" class="ma-0 mt-2" block color="primary" 
                             :loading="isReviewVoting" 
                             :disabled="isReviewVoting"
                             @click="voteReview(review)">Vote</v-btn>
@@ -50,8 +50,9 @@
         },
         computed: {
             ...mapGetters({
-                user: 'user',
-                userExperise: 'userExperise'
+                user: 'auth/user',
+                userExperise: 'auth/userExperise',
+                research: 'rd/research'
             }),
             disciplines() {
                 const out = [];
@@ -68,6 +69,12 @@
                     out.push(tvo)
                 }
                 return out;
+            },
+            userHasExpertise() {
+                return this.userExperise != null && this.research != null
+                    ?  this.userExperise.some(exp => 
+                            this.research.disciplines.some(d => d.id == exp.discipline_id))
+                    : false
             }
         },
         data() {
@@ -86,28 +93,54 @@
                 const disciplinesIds = this.userExperise
                     .map(exp => exp.discipline_id)
                     .filter(id => review.disciplines.find(d => d.id === id));
+            
+                // I have no idea why, but "deipRpc.broadcast.voteForReviewAsync" doesn't work here, 
+                // the promise just never gets resolved or rejected although operation is sent and applied in the blockchain.
+                // Possibly there is a bug in 'deipRpc', needs to be reviewed later.
+                deipRpc.api.getDynamicGlobalProperties(function(err, result) {
+                    if (!err) {
+                        const BlockNum = (result.last_irreversible_block_num - 1) & 0xFFFF;
+                        deipRpc.api.getBlockHeader(result.last_irreversible_block_num, function(e, res) {
+                            const BlockPrefix = new Buffer(res.previous, 'hex').readUInt32LE(4);
+                            const now = new Date().getTime() + 3e6;
+                            const expire = new Date(now).toISOString().split('.')[0];
+                    
+                            const operations = disciplinesIds.map(disciplinesId => {
+                                return ["vote_for_review", {
+                                    voter: self.user.username,
+                                    review_id: review.id,
+                                    discipline_id: disciplinesId,
+                                    weight: self.DEIP_100_PERCENT
+                                }]
+                            });
+                            const unsignedTX = {
+                                'expiration': expire,
+                                'extensions': [],
+                                'operations': operations,
+                                'ref_block_num': BlockNum,
+                                'ref_block_prefix': BlockPrefix
+                            }
+                            try {
+                                const signedTX = deipRpc.auth.signTransaction(unsignedTX, {
+                                    "owner":  self.user.privKey
+                                })
 
-                disciplinesIds.forEach(disciplineId => {
-                    deipRpc.broadcast.voteForReviewAsync(
-					    this.user.privKey,
-					    this.user.username, 
-					    review.id,
-                        disciplineId,
-                        this.DEIP_100_PERCENT,
-					    new Date( new Date().getTime() + 2 * 24 * 60 * 60 * 1000 )
-				    ).then(() => {
-                        // this.isReviewVoting = false;
-                    }, (err) => {
-                        // this.isReviewVoting = false;
-                        alert(err.message);
-                    });
-                })
-
-                // todo: fix this closure
-                setTimeout(() => {
-                    self.isReviewVoting = false;
-                }, 3000)
-                
+                                deipRpc.api.broadcastTransactionSynchronous(signedTX, function(err, result) {
+                                    self.isReviewVoting  = false;
+                                    if(err){
+                                        self.$store.dispatch('layout/setError', { isVisible: true, message: "An error occurred while voting for review, please try again later"});
+                                        console.log(err);
+                                    } else {
+                                        self.$store.dispatch('layout/setSuccess', { isVisible: true, message: "You've voted for review successfully!"});
+                                    }
+                                });
+                            } catch (err) {
+                                self.$store.dispatch('layout/setError', { isVisible: true, message: "An error occurred while voting for review, please try again later"});
+                                console.log(err);
+                            }
+                        });
+                    }
+                });
             }
         }
     };
