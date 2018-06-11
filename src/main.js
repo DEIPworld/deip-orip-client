@@ -20,6 +20,7 @@ import './components/research-content-details/index';
 import './components/research-group/index';
 import './components/research-group-create/index';
 import './components/token-sale-create/index';
+import './components/user-wallet/index';
 
 import config from './config'
 import deipRpc from '@deip/deip-rpc';
@@ -38,8 +39,15 @@ deipRpc.config.set('chain_id', config['chain-id']);
 
 Vue.prototype.DEIP_100_PERCENT = 10000;
 Vue.prototype.DEIP_1_PERCENT = 10000 / 100;
+Vue.prototype.assetQuantityRegex = /^(?:0|(?:[1-9]\d*))(?:\.\d{1,3})?$/;
 Vue.prototype.convertToPercent = amount => amount * 100 / 10000;
 Vue.prototype.toDeipPercent = amount => amount * 100;
+
+Vue.prototype.toAssetUnits = amount => {
+    let value = parseFloat(amount).toFixed(3);
+    return `${value} ${config['asset-unit']}`;
+};
+Vue.prototype.fromAssetsToFloat = assets => parseFloat(assets.split(' ')[0]);
 
 Vue.filter('dateFormat', (value, format) => {
     return moment(value).format(format);

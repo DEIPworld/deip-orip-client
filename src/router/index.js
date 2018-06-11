@@ -19,7 +19,7 @@ import DataFillingRegistration from '@/components/auth/DataFillingRegistration'
 import ClaimExpertiseRegistration from '@/components/auth/ClaimExpertiseRegistration'
 
 import UserDetails from '@/components/user/components/UserDetails'
-import UserWallet from '@/components/user/components/UserWallet'
+import UserWallet from '@/components/user-wallet/components/UserWallet'
 
 import { isLoggedIn } from './../utils/auth';
 
