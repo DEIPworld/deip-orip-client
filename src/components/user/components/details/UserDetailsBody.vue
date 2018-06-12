@@ -40,11 +40,11 @@
         </div>
 
         <div class="c-pt-8">
-            <div class="title">Research Groups: {{ groups.filter(g => !g.is_personal).length}}</div>
+            <div class="title">Research Groups: {{ commonGroups.length }}</div>
         </div>
 
         <v-card class="c-mt-6 hidden-last-child">
-            <template v-for="group in groups.filter(g => !g.is_personal)">
+            <template v-for="group in commonGroups">
                 <div class="c-p-6">
                     <router-link :to="'/' + group.permlink + '/group-details'" class="research-group-title">{{ group.name }}</router-link>
                     <span v-if="group.is_personal" class="grey--text caption">(personal group)</span>
@@ -103,7 +103,10 @@
                 userInfo: 'userDetails/userInfo',
                 groups: 'userDetails/groups',
                 researchList: 'userDetails/researchList',
-            })
+            }),
+            commonGroups() {
+                return this.groups.filter(g => !g.is_personal);
+            }
         },
     }
 </script>

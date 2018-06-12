@@ -27,10 +27,17 @@
                     <v-list-tile @click="goToState('UserDetails', {account_name: user.username})">
                         <v-list-tile-title>My Page</v-list-tile-title>
                     </v-list-tile>
+
+                    <v-list-tile v-if="user" @click="goToState('UserWallet')">
+                        <v-list-tile-title>My Wallet</v-list-tile-title>
+                    </v-list-tile>
+
                     <v-list-tile v-if="user" @click="goToState('CreateResearchGroup', {account_name: user.username})">
                         <v-list-tile-title>Create Research Group</v-list-tile-title>
                     </v-list-tile>
+
                     <v-divider></v-divider>
+
                     <v-list-tile @click="signOut()">
                         <v-list-tile-title>Sign Out</v-list-tile-title>
                     </v-list-tile>
