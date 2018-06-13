@@ -1,21 +1,20 @@
 import http from './base/http'
+import config from './../../src/config'
+const apiUrl = config['deip-server-url'];
 
 
 const service = {
-    getUser: function(id) {
-        return http.get('/users/' + id);
+    getUserProfile: function(username) {
+        return http.get(`/user/profile/${username}`, { baseURL: `${apiUrl}/api/` });
     },
-    setActiveMembership: function(membershipId) {
-        return http.post('/users/active-membership', { activeMembershipId: membershipId });
+    createUserProfile: function(username, data) {
+        return http.post(`/user/profile/${username}`, data, { baseURL: `${apiUrl}/api/` });
     },
-    setAccount: function(account) {
-        return http.post('/profile/set-account', account);
+    updateUserProfile: function(username, update) {
+        return http.put(`/user/profile/${username}`, update, { baseURL: `${apiUrl}/api/` });
     },
     searchUsersByName: function(name) {
         return http.get('/users/search/' + name);
-    },
-    getUserProfile: function(id) {
-        return http.get('/users/' + id + '/profile');
     }
 }
 

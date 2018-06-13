@@ -1,8 +1,8 @@
 <template>
-    <v-dialog v-model="isShown.value" persistent transition="scale-transition">
+    <v-dialog v-model="meta.isShown" persistent transition="scale-transition">
         <v-card class="">
             <v-toolbar dark color="primary">
-                <v-btn icon dark @click.native="isShown.value = false">
+                <v-btn icon dark @click.native="meta.isShown = false">
                     <v-icon>close</v-icon>
                 </v-btn>
                 <v-toolbar-title>Add education</v-toolbar-title>
@@ -18,6 +18,7 @@
                             <div class="col-12">
                                 <v-text-field
                                     placeholder="School"
+                                    v-model="school"
                                 ></v-text-field>
                             </div>
                         </div>
@@ -59,6 +60,7 @@
                             <div class="col-12">
                                 <v-text-field
                                     placeholder="Degree"
+                                    v-model="degree"
                                 ></v-text-field>
                             </div>
                         </div>
@@ -68,6 +70,7 @@
                             <div class="col-12">
                                 <v-text-field
                                     placeholder="Area of study"
+                                    v-model="area"
                                 ></v-text-field>
                             </div>
                         </div>
@@ -77,14 +80,15 @@
                             <div class="col-12">
                                 <v-text-field
                                     placeholder="Description"
+                                    v-model="description"
                                 ></v-text-field>
                             </div>
                         </div>
                         
                         <div>
-                            <v-btn class="ma-0 width-10" color="primary" @click="">Save</v-btn>
+                            <v-btn class="ma-0 width-10" color="primary" @click="save()">Save</v-btn>
                             <span class="c-pr-4"></span>
-                            <v-btn class="ma-0" color="primary" flat @click="">Cancel</v-btn>
+                            <v-btn class="ma-0" color="primary" flat @click.native="meta.isShown = false">Cancel</v-btn>
                         </div>
 
                     </div>
@@ -97,22 +101,61 @@
 
 <script>
     import _ from 'lodash';
+    import moment from 'moment';
 
     export default {
         name: "UserEditEducationDialog",
         props: {
-            isShown: { type: Object, required: true }
+            meta: { type: Object, required: true }
         },
         data() { 
             return {
+                school: undefined,
                 dateFrom: undefined,
                 dateFromMenu: false,
                 dateTo: undefined,
-                dateToMenu: false
+                dateToMenu: false,
+                degree: undefined,
+                area: undefined,
+                description: undefined
+            }
+        },
+        methods: {
+            save() {
+                this.$emit('saveEducation', { 
+                    item: {
+                        school: this.school,
+                        period: {
+                            from: this.dateFrom,
+                            to: this.dateTo
+                        },
+                        degree: this.degree,
+                        area: this.area,
+                        description: this.description
+                    }, 
+                    index: this.meta.index
+                })
+
+                this.school = undefined;
+                this.dateFrom = undefined;
+                this.dateFromMenu = false;
+                this.dateTo = undefined;
+                this.dateToMenu = false;
+                this.degree = undefined;
+                this.area = undefined;
+                this.description = undefined;
             }
         },
         watch: {
-            'isShown.value': function(value) {
+            'meta.education': function(education) {
+                this.school = education != null ? education.school : undefined;
+                this.dateFrom = education != null ? moment(education.period.from).format('YYYY-MM') : undefined;
+                this.dateFromMenu = false;
+                this.dateTo = education != null ? moment(education.period.to).format('YYYY-MM') : undefined;
+                this.dateToMenu = false;
+                this.degree = education != null ? education.degree : undefined;
+                this.area = education != null ? education.area : undefined;
+                this.description = education != null ? education.description : undefined;
             }
         }
     };

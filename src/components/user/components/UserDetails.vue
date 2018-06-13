@@ -4,7 +4,6 @@
         <div class="content-column">
             <div class="filling">
                 <user-details-body
-                    @showEditEducation="showEditEducationDialog"
                     @showEditEmployment="showEditEmploymentDialog"
                 ></user-details-body>
             </div>
@@ -14,10 +13,6 @@
             <user-details-sidebar></user-details-sidebar>
         </v-card>
 
-        <user-edit-education-dialog
-            :is-shown="isEditEducationShown"
-        ></user-edit-education-dialog>
-
         <user-edit-employment-dialog
             :is-shown="isEditEmploymentShown"
         ></user-edit-employment-dialog>
@@ -26,20 +21,17 @@
 </template>
 
 <script>
-    
+    import usersService from './../../../services/users'
+
     export default {
         name: 'UserDetails',
         data() {
             return {
-                isEditEducationShown: { value: false },
                 isEditEmploymentShown: { value: false },
                 accountName: this.$route.params.account_name
             }
         },
         methods: {
-            showEditEducationDialog() {
-                this.isEditEducationShown.value = true;
-            },
             showEditEmploymentDialog() {
                 this.isEditEmploymentShown.value = true;
             },

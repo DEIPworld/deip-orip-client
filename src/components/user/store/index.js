@@ -1,9 +1,11 @@
 import _ from 'lodash';
 import deipRpc from '@deip/deip-rpc';
 import Vue from 'vue';
+import usersService from './../../../services/users'
 
 const state = {
-    userInfo: undefined,
+    account: undefined,
+    profile: undefined,
     researchList: [],
     groups: [],
     expertise: []
@@ -11,7 +13,9 @@ const state = {
 
 // getters
 const getters = {
-    userInfo: state => state.userInfo,
+    userInfo: (state, getters) => {
+        return { account: state.account, profile: state.profile }
+    },
     researchList: state => state.researchList,
     groups: state => state.groups,
     expertise: state => state.expertise
@@ -20,16 +24,17 @@ const getters = {
 // actions
 const actions = {
     loadUser({ dispatch }, accountName) {
-        dispatch('loadUserInfo', accountName);
+        dispatch('loadUserAccount', accountName);
         dispatch('loadExpertise', accountName);
 
         dispatch('loadGroups', accountName).then(() => 
             dispatch('loadResearchList', accountName)
         );
+        dispatch('loadUserProfile', accountName);
     },
-    loadUserInfo({ commit }, accountName) {
-        return deipRpc.api.getAccountsAsync([accountName]).then(data => {
-            commit('SET_USER_INFO', data[0]);
+    loadUserAccount({ commit }, accountName) {
+        deipRpc.api.getAccountsAsync([accountName]).then(data => {
+            commit('SET_USER_ACCOUNT', data[0]);
         });
     },
     loadResearchList({ commit, state }, accountName) {
@@ -97,13 +102,21 @@ const actions = {
         return deipRpc.api.getExpertTokensByAccountNameAsync(accountName).then(data => {
             commit('SET_EXPERTISE', data);
         });
+    },
+    loadUserProfile({ commit }, username) {
+        usersService.getUserProfile(username)
+            .then((profile) => { 
+                commit('SET_USER_PROFILE', profile != "" ? profile : null);
+            }, (err) => {
+                console.log(err)
+            })
     }
 }
 
 // mutations
 const mutations = {
-    ['SET_USER_INFO'](state, userInfo) {
-        Vue.set(state, 'userInfo', userInfo);
+    ['SET_USER_ACCOUNT'](state, account) {
+        Vue.set(state, 'account', account);
     },
     ['SET_RESEARCH_LIST'](state, researchList) {
         Vue.set(state, 'researchList', researchList);
@@ -114,6 +127,9 @@ const mutations = {
     ['SET_EXPERTISE'](state, expertise) {
         Vue.set(state, 'expertise', expertise);
     },
+    ['SET_USER_PROFILE'](state, profile) {
+        Vue.set(state, 'profile', profile);
+    }
 }
 
 const namespaced = true;
