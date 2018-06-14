@@ -86,7 +86,7 @@
                         </div>
                         
                         <div>
-                            <v-btn class="ma-0 width-10" color="primary" @click="save()">Save</v-btn>
+                            <v-btn class="ma-0 width-10" color="primary" @click="save()" :disabled="disabled">Save</v-btn>
                             <span class="c-pr-4"></span>
                             <v-btn class="ma-0" color="primary" flat @click.native="meta.isShown = false">Cancel</v-btn>
                         </div>
@@ -118,6 +118,11 @@
                 degree: undefined,
                 area: undefined,
                 description: undefined
+            }
+        },
+        computed: {
+            disabled() {
+                return !this.school || !this.dateFrom || !this.dateTo || !this.degree || !this.area;
             }
         },
         methods: {

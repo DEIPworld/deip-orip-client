@@ -92,7 +92,7 @@
                         </div>
 
                         <div>
-                            <v-btn class="ma-0 width-10" color="primary" @click="save">Save</v-btn>
+                            <v-btn class="ma-0 width-10" color="primary" @click="save" :disabled="disabled">Save</v-btn>
                             <span class="c-pr-4"></span>
                             <v-btn class="ma-0" color="primary" flat @click.native="meta.isShown = false">Cancel</v-btn>
                         </div>
@@ -155,6 +155,12 @@
                 this.dateToMenu = false;
                 this.position = undefined;
                 this.description = undefined;
+            }
+        },
+
+        computed: {
+            disabled() {
+                return !this.company || !this.country || !this.city || !this.dateFrom || !this.dateTo || !this.position;
             }
         },
         watch: {
