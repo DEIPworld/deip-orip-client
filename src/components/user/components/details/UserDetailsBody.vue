@@ -162,11 +162,11 @@
         name: 'UserDetailsBody',
         data() {
             return {
-                saveEducationMeta: { isShown: false, education: null, index: null },
-                deleteEducationMeta: { isShown: false, education: null, index: null },
+                saveEducationMeta: { isShown: false, item: null, index: null },
+                deleteEducationMeta: { isShown: false, item: null, index: null },
 
-                saveEmploymentMeta: { isShown: false, employment: null, index: null },
-                deleteEmploymentMeta: { isShown: false, employment: null, index: null },
+                saveEmploymentMeta: { isShown: false, item: null, index: null },
+                deleteEmploymentMeta: { isShown: false, item: null, index: null },
 
                 accountName: this.$route.params.account_name
             }
@@ -184,12 +184,12 @@
         },
         methods: {
             showSaveEducationDialog(item, index) {
-                this.saveEducationMeta.education = item;
+                this.saveEducationMeta.item = item;
                 this.saveEducationMeta.index = index;
                 this.saveEducationMeta.isShown = true;
             },
             showDeleteEducationDialog(item, index) {
-                this.deleteEducationMeta.education = item;
+                this.deleteEducationMeta.item = item;
                 this.deleteEducationMeta.index = index;
                 this.deleteEducationMeta.isShown = true;
             },
@@ -218,13 +218,8 @@
                         });
                         console.log(err);
                     })
-                    // .finally(()=> {
-                    //     this.saveEducationMeta.isShown = false
-                    // })
             },
-            deleteEducation({education, index}) {
-                const item = education;
-                debugger;
+            deleteEducation({item, index}) {
                 const educationList = this.userInfo.profile.education.reduce(
                     (accum, current, i) => {
                         if (i == index) return accum;
@@ -236,12 +231,10 @@
                 usersService.updateUserProfile(this.currentUser.username, update)
                     .then((res) => {
                         this.$store.dispatch('userDetails/loadUserProfile', this.currentUser.username);
-                        // this.saveEducationMeta.isShown = false;
                         this.$store.dispatch('layout/setSuccess', {
                             message: `"${item.school}" Institute has been deleted successfully!"`
                         });
                     }, (err) => {
-                        // this.saveEducationMeta.isShown = false;
                         this.$store.dispatch('layout/setError', {
                             message: `An error occurred while deleting "${item.school}" details, please try again later`
                         });
@@ -250,12 +243,12 @@
             },
 
             showSaveEmploymentDialog(item, index) {
-                this.saveEmploymentMeta.employment = item;
+                this.saveEmploymentMeta.item = item;
                 this.saveEmploymentMeta.index = index;
                 this.saveEmploymentMeta.isShown = true;
             },
             showDeleteEmploymentDialog(item, index) {
-                this.deleteEmploymentMeta.employment = item;
+                this.deleteEmploymentMeta.item = item;
                 this.deleteEmploymentMeta.index = index;
                 this.deleteEmploymentMeta.isShown = true;
             },
@@ -287,9 +280,7 @@
                     })
             },
 
-            deleteEmployment({employment, index}) {
-                const item = employment;
-                debugger;
+            deleteEmployment({item, index}) {
                 const employmentList = this.userInfo.profile.employment.reduce(
                     (accum, current, i) => {
                         if (i == index) return accum;

@@ -147,7 +147,7 @@
             }
         },
         watch: {
-            'meta.education': function(education) {
+            'meta.item': function(education) {
                 this.school = education != null ? education.school : undefined;
                 this.dateFrom = education != null ? moment(education.period.from).format('YYYY-MM') : undefined;
                 this.dateFromMenu = false;

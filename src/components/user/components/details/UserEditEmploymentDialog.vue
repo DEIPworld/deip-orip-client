@@ -158,7 +158,7 @@
             }
         },
         watch: {
-            'meta.employment': function(employment) {
+            'meta.item': function(employment) {
                 this.company = employment != null ? employment.company : undefined;
                 this.city = employment != null && employment.location ? employment.location.city : undefined;
                 this.country = employment != null && employment.location ? employment.location.country : undefined;
