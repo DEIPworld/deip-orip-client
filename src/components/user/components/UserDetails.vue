@@ -3,19 +3,13 @@
 
         <div class="content-column">
             <div class="filling">
-                <user-details-body
-                    @showEditEmployment="showEditEmploymentDialog"
-                ></user-details-body>
+                <user-details-body></user-details-body>
             </div>
         </div>
 
         <v-card height="100%" class="sidebar">
             <user-details-sidebar></user-details-sidebar>
         </v-card>
-
-        <user-edit-employment-dialog
-            :is-shown="isEditEmploymentShown"
-        ></user-edit-employment-dialog>
 
     </v-container>   
 </template>
@@ -27,14 +21,11 @@
         name: 'UserDetails',
         data() {
             return {
-                isEditEmploymentShown: { value: false },
                 accountName: this.$route.params.account_name
             }
         },
         methods: {
-            showEditEmploymentDialog() {
-                this.isEditEmploymentShown.value = true;
-            },
+
         },
         created() {
             this.$store.dispatch('userDetails/loadUser', this.accountName);

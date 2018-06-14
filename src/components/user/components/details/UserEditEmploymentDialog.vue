@@ -1,8 +1,8 @@
 <template>
-    <v-dialog v-model="isShown.value" persistent transition="scale-transition">
+    <v-dialog v-model="meta.isShown" persistent transition="scale-transition">
         <v-card class="">
             <v-toolbar dark color="primary">
-                <v-btn icon dark @click.native="isShown.value = false">
+                <v-btn icon dark @click.native="meta.isShown = false">
                     <v-icon>close</v-icon>
                 </v-btn>
                 <v-toolbar-title>Add Employment</v-toolbar-title>
@@ -18,6 +18,7 @@
                             <div class="col-12">
                                 <v-text-field
                                     placeholder="Company"
+                                    v-model="company"
                                 ></v-text-field>
                             </div>
                         </div>
@@ -27,11 +28,13 @@
                             <div class="col-6 c-pr-3">
                                 <v-text-field
                                     label="City"
+                                    v-model="city"
                                 ></v-text-field>
                             </div>
                             <div class="col-6 c-pl-3">
                                 <v-text-field
                                     label="Country"
+                                    v-model="country"
                                 ></v-text-field>
                             </div>
                         </div>
@@ -68,11 +71,12 @@
                             </div>
                         </div>
 
-                        <div class="subheading bold">Role</div>
+                        <div class="subheading bold">Position</div>
                         <div class="row">
                             <div class="col-12">
                                 <v-text-field
-                                    placeholder="Role"
+                                    placeholder="Position"
+                                    v-model="position"
                                 ></v-text-field>
                             </div>
                         </div>
@@ -82,14 +86,15 @@
                             <div class="col-12">
                                 <v-text-field
                                     placeholder="Description"
+                                    v-model="description"
                                 ></v-text-field>
                             </div>
                         </div>
 
                         <div>
-                            <v-btn class="ma-0 width-10" color="primary" @click="">Save</v-btn>
+                            <v-btn class="ma-0 width-10" color="primary" @click="save">Save</v-btn>
                             <span class="c-pr-4"></span>
-                            <v-btn class="ma-0" color="primary" flat @click="">Cancel</v-btn>
+                            <v-btn class="ma-0" color="primary" flat @click.native="meta.isShown = false">Cancel</v-btn>
                         </div>
 
                     </div>
@@ -102,22 +107,67 @@
 
 <script>
     import _ from 'lodash';
+    import moment from 'moment';
 
     export default {
         name: "UserEditEmploymentDialog",
         props: {
-            isShown: { type: Object, required: true }
+            meta: { type: Object, required: true }
         },
         data() { 
             return {
+                company: undefined,
+                city: undefined,
+                country: undefined,
                 dateFrom: undefined,
                 dateFromMenu: false,
                 dateTo: undefined,
-                dateToMenu: false
+                dateToMenu: false,
+                position: undefined,
+                description: undefined
+            }
+        },
+        methods: {
+            save() {
+                this.$emit('saveEmployment', { 
+                    item: {
+                        company: this.company,
+                        location: {
+                            city: this.city,
+                            country: this.country
+                        },
+                        period: {
+                            from: this.dateFrom,
+                            to: this.dateTo
+                        },
+                        position: this.position,
+                        description: this.description
+                    }, 
+                    index: this.meta.index
+                })
+
+                this.company = undefined;
+                this.city = undefined;
+                this.country = undefined;
+                this.dateFrom = undefined;
+                this.dateFromMenu = false;
+                this.dateTo = undefined;
+                this.dateToMenu = false;
+                this.position = undefined;
+                this.description = undefined;
             }
         },
         watch: {
-            'isShown.value': function(value) {
+            'meta.employment': function(employment) {
+                this.company = employment != null ? employment.company : undefined;
+                this.city = employment != null && employment.location ? employment.location.city : undefined;
+                this.country = employment != null && employment.location ? employment.location.country : undefined;
+                this.dateFrom = employment != null ? moment(employment.period.from).format('YYYY-MM') : undefined;
+                this.dateFromMenu = false;
+                this.dateTo = employment != null ? moment(employment.period.to).format('YYYY-MM') : undefined;
+                this.dateToMenu = false;
+                this.position = employment != null ? employment.position : undefined;
+                this.description = employment != null ? employment.description : undefined;
             }
         }
     };
