@@ -9,27 +9,60 @@
                 <div class="display-1 half-bold c-pt-4">{{ userInfo.account.name }}</div>
 
                 <div class="c-pt-4">
-                    <v-icon small>location_on</v-icon>
-                    <span class="half-bold"> Minsk, Belarus</span>
-                    <span> - 11:43 am local time</span>
-                    <v-icon small>mode_edit</v-icon>
-
-                    <!-- <v-btn flat small icon color="grey" class="ma-0">
-                        <v-icon small>mode_edit</v-icon>
-                    </v-btn> -->
+                    <div v-if="userInfo.profile" class="row">
+                        <span v-if="!isEditingLocation && userInfo.profile" class="half-bold col-3 c-mt-1">
+                            <v-icon v-if="isOwner || isLocationSpecified" small>location_on</v-icon>
+                            <span v-if="isOwner && !isLocationSpecified" class="owner-hint">
+                                Add location info
+                            </span>
+                            <span v-else>
+                                {{locationString}}
+                            </span>
+                        </span>
+                        <v-text-field v-if="isOwner && isEditingLocation" class="col-3 c-pr-3" v-model="editedCity" label="City"></v-text-field>
+                        <v-text-field v-if="isOwner && isEditingLocation" class="col-3 c-pr-3" v-model="editedCountry" label="Country"></v-text-field>
+                        <span v-if="isOwner" class="col-3">
+                            <v-btn v-if="isEditingLocation" @click="saveLocation" flat icon color="grey" class="c-mt-5">
+                                <v-icon>check_circle_outline</v-icon>
+                            </v-btn>
+                            <v-btn v-if="isEditingLocation" @click="isEditingLocation = false" flat icon color="grey" class="c-mt-5">
+                                <v-icon>close</v-icon>
+                            </v-btn>
+                            <v-btn v-if="!isEditingLocation" @click="editLocation" flat small icon color="grey" class="mt-0 c-mt-0">
+                                <v-icon small>mode_edit</v-icon>
+                            </v-btn>
+                        </span>
+                    </div>
                 </div>
 
-                <div class="c-pt-2">Belarusian State University of Informatics and Radioelectronics</div>
+                <!-- display either the current employment or education, todo: add isActive flag to employment/education -->
+                <div v-if="userInfo.profile && (userInfo.profile.employment.length || userInfo.profile.education.length)" class="c-pt-2">
+                    {{userInfo.profile.employment.length ? userInfo.profile.employment[0].company : userInfo.profile.education[0].school}}
+                </div>
             </div>
         </div>
 
         <div class="c-pt-8">
-            Founder of DEIP – decentralized research platform which fairly rewards scientists corresponding to 
-            their contribution to global science.
-            Alex is blockchain architect and an expert in scalable distributed systems. He had been working as a 
-            Chief Technical Officer and a member of the board of directors at Paralect company for 4 years, but decided 
-            to leave to focus on most challenging academic problems and try to solve them by applying Blockchain 
-            technology and introducing strong economic models, that will maintain protocol of new society.
+            <div v-if="!isEditingBio && userInfo.profile">
+                <span v-if="isOwner && !userInfo.profile.bio" class="half-bold owner-hint">
+                    Add short bio here
+                </span>
+                <span v-else>{{userInfo.profile.bio}}</span>
+            </div>
+            <div v-if="isEditingBio && userInfo.profile && isOwner">
+                <v-text-field v-model="editedBio" label="Short Bio here" multi-line></v-text-field>
+            </div>
+            <div v-if="isOwner" style="text-align: right">
+                <v-btn v-if="isEditingBio" @click="saveBio" flat icon color="grey" class="ma-0 mr-3">
+                   <v-icon >check_circle_outline</v-icon>
+                </v-btn>
+                <v-btn v-if="isEditingBio" @click="isEditingBio = false" flat  icon color="grey" class="ma-0 mr-3">
+                    <v-icon >close</v-icon>
+                </v-btn>
+                <v-btn v-if="!isEditingBio" @click="editBio" flat small icon color="grey" class="ma-0">
+                    <v-icon small>mode_edit</v-icon>
+                </v-btn>
+            </div>
         </div>
 
         <div class="c-pt-7">
@@ -168,6 +201,13 @@
                 saveEmploymentMeta: { isShown: false, item: null, index: null },
                 deleteEmploymentMeta: { isShown: false, item: null, index: null },
 
+                editedBio: "",
+                isEditingBio: false,
+
+                editedCity: "",
+                editedCountry: "",
+                isEditingLocation: false,
+
                 accountName: this.$route.params.account_name
             }
         },
@@ -180,6 +220,20 @@
             }),
             isOwner() {
                 return this.currentUser && this.currentUser.username === this.$route.params.account_name
+            },
+            isLocationSpecified() {
+                return this.userInfo && this.userInfo.profile && 
+                        this.userInfo.profile.location && (this.userInfo.profile.location.city || this.userInfo.profile.location.country)
+            },
+            locationString() {
+                const profile = this.userInfo ? this.userInfo.profile : null;
+                let location = "";
+                if (profile){
+                    location += profile.location.city ? profile.location.city : '';
+                    location += profile.location.city && profile.location.country ? ', ' : '';
+                    location += profile.location.country ? profile.location.country : '';
+                }
+                return location;
             }
         },
         methods: {
@@ -303,6 +357,52 @@
                     })
             },
 
+            editBio() {
+                this.editedBio = this.userInfo.profile.bio; 
+                this.isEditingBio = !this.isEditingBio;
+            },
+
+            saveBio() {
+                const update = Object.assign({}, this.userInfo.profile, { bio: this.editedBio });
+                usersService.updateUserProfile(this.currentUser.username, update)
+                    .then((res) => {
+                        this.$store.dispatch('userDetails/loadUserProfile', this.currentUser.username);
+                        this.$store.dispatch('layout/setSuccess', {
+                            message: `"Short bio has been saved successfully!"`
+                        });
+                    }, (err) => {
+                        this.$store.dispatch('layout/setError', {
+                            message: `An error occurred while saving short bio, please try again later`
+                        });
+                        console.log(err);
+                    }).finally(() => {
+                        this.isEditingBio = false;
+                    })
+            },
+
+            editLocation() {
+                this.editedCity = this.userInfo.profile && this.userInfo.profile.location ? this.userInfo.profile.location.city : undefined;
+                this.editedCountry = this.userInfo.profile && this.userInfo.profile.location ? this.userInfo.profile.location.country : undefined;
+                this.isEditingLocation = !this.isEditingLocation;
+            },
+
+            saveLocation(){
+                const update = Object.assign({}, this.userInfo.profile, { location: {city: this.editedCity, country: this.editedCountry} });
+                usersService.updateUserProfile(this.currentUser.username, update)
+                    .then((res) => {
+                        this.$store.dispatch('userDetails/loadUserProfile', this.currentUser.username);
+                        this.$store.dispatch('layout/setSuccess', {
+                            message: `"Location info has been saved successfully!"`
+                        });
+                    }, (err) => {
+                        this.$store.dispatch('layout/setError', {
+                            message: `An error occurred while saving location info, please try again later`
+                        });
+                        console.log(err);
+                    }).finally(() => {
+                        this.isEditingLocation = false;
+                    })
+            },
 
             createProfile() {
                  usersService.createUserProfile(this.currentUser.username, {'email': 'vasiliy@vasa.com'})
@@ -357,5 +457,9 @@
         color: #2F80ED;
         font-weight: 500;
         text-decoration: none;
+    }
+
+    .owner-hint {
+        font-style: italic;
     }
 </style>

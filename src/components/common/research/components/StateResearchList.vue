@@ -45,7 +45,7 @@
                     </div>
 
                     <v-card flat v-if="!activeResearchList.length">
-                        <v-card-text>Active research list is empty at the moment</v-card-text>
+                        <v-card-text>There is no active research at the moment</v-card-text>
                     </v-card>
                 </v-tab-item>
 
