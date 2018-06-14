@@ -9,29 +9,41 @@
                 <div class="display-1 half-bold c-pt-4">{{ userInfo.account.name }}</div>
 
                 <div class="c-pt-4">
-                    <div v-if="userInfo.profile" class="row">
-                        <span v-if="!isEditingLocation && userInfo.profile" class="half-bold col-3 c-mt-1">
-                            <v-icon v-if="isOwner || isLocationSpecified" small>location_on</v-icon>
-                            <span v-if="isOwner && !isLocationSpecified" class="owner-hint">
+                    <div v-if="userInfo.profile">
+                        <div v-if="!isEditingLocation && userInfo.profile" class="row half-bold">
+                            <span v-if="isOwner && !isLocationSpecified" class="owner-hint c-mt-1">
+                                <v-icon small>location_on</v-icon>
                                 Add location info
                             </span>
-                            <span v-else>
+                            <span v-else class="c-mt-1">
+                                <v-icon v-if="isLocationSpecified" small>location_on</v-icon>
                                 {{locationString}}
                             </span>
-                        </span>
-                        <v-text-field v-if="isOwner && isEditingLocation" class="col-3 c-pr-3" v-model="editedCity" label="City"></v-text-field>
-                        <v-text-field v-if="isOwner && isEditingLocation" class="col-3 c-pr-3" v-model="editedCountry" label="Country"></v-text-field>
-                        <span v-if="isOwner" class="col-3">
-                            <v-btn v-if="isEditingLocation" @click="saveLocation" flat icon color="grey" class="c-mt-5">
-                                <v-icon>check_circle_outline</v-icon>
-                            </v-btn>
-                            <v-btn v-if="isEditingLocation" @click="isEditingLocation = false" flat icon color="grey" class="c-mt-5">
-                                <v-icon>close</v-icon>
-                            </v-btn>
-                            <v-btn v-if="!isEditingLocation" @click="editLocation" flat small icon color="grey" class="mt-0 c-mt-0">
-                                <v-icon small>mode_edit</v-icon>
-                            </v-btn>
-                        </span>
+                            <v-tooltip v-if="isOwner && !isEditingLocation" bottom>
+                                <v-btn slot="activator" @click="editLocation" flat small icon color="grey" class="mt-0">
+                                    <v-icon small>mode_edit</v-icon>
+                                </v-btn>
+                                <span>Edit Location</span>
+                            </v-tooltip>
+                        </div>
+                        <div class="row" v-if="isOwner && isEditingLocation">
+                            <v-text-field class="col-3 c-pr-3" v-model="editedCity" label="City"></v-text-field>
+                            <v-text-field class="col-3 c-pr-3" v-model="editedCountry" label="Country"></v-text-field>
+                            <span class="col-3">
+                                <v-tooltip bottom>
+                                    <v-btn slot="activator" @click="saveLocation" flat icon color="grey" class="c-mt-5">
+                                        <v-icon>done</v-icon>
+                                    </v-btn>
+                                    <span>Save</span>
+                                </v-tooltip>
+                                <v-tooltip bottom>
+                                    <v-btn slot="activator" @click="isEditingLocation = false" flat icon color="grey" class="c-mt-5">
+                                        <v-icon>close</v-icon>
+                                    </v-btn>
+                                    <span>Cancel</span>
+                                </v-tooltip>
+                            </span>
+                        </div>
                     </div>
                 </div>
 
@@ -43,25 +55,36 @@
         </div>
 
         <div class="c-pt-8">
-            <div v-if="!isEditingBio && userInfo.profile">
-                <span v-if="isOwner && !userInfo.profile.bio" class="half-bold owner-hint">
+            <div v-if="!isEditingBio && userInfo.profile" class="row">
+                <span v-if="isOwner && !userInfo.profile.bio" class="half-bold owner-hint col-12">
+                    <v-icon small>subject</v-icon>
                     Add short bio here
                 </span>
-                <span v-else>{{userInfo.profile.bio}}</span>
+                <span v-else class="col-12">{{userInfo.profile.bio}}</span>
+                <v-tooltip v-if="isOwner && !isEditingBio" bottom class="col-12 right">
+                    <v-btn slot="activator" @click="editBio" flat small icon color="grey" class="ma-0 right">
+                        <v-icon small>mode_edit</v-icon>
+                    </v-btn>
+                    <span>Edit Bio</span>
+                </v-tooltip>
             </div>
-            <div v-if="isEditingBio && userInfo.profile && isOwner">
-                <v-text-field v-model="editedBio" label="Short Bio here" multi-line></v-text-field>
-            </div>
-            <div v-if="isOwner" style="text-align: right">
-                <v-btn v-if="isEditingBio" @click="saveBio" flat icon color="grey" class="ma-0 mr-3">
-                   <v-icon >check_circle_outline</v-icon>
-                </v-btn>
-                <v-btn v-if="isEditingBio" @click="isEditingBio = false" flat  icon color="grey" class="ma-0 mr-3">
-                    <v-icon >close</v-icon>
-                </v-btn>
-                <v-btn v-if="!isEditingBio" @click="editBio" flat small icon color="grey" class="ma-0">
-                    <v-icon small>mode_edit</v-icon>
-                </v-btn>
+    
+            <div v-if="isOwner && isEditingBio" class="row">
+                <v-text-field class="col-12" v-model="editedBio" label="Short Bio here" multi-line></v-text-field>
+                <span class="col-12">
+                    <v-tooltip bottom>
+                        <v-btn slot="activator" @click="isEditingBio = false" flat icon color="grey" class="ma-0 mr-3 right">
+                            <v-icon>close</v-icon>
+                        </v-btn>
+                        <span>Cancel</span>
+                     </v-tooltip>
+                    <v-tooltip bottom>
+                        <v-btn slot="activator" @click="saveBio" flat icon color="grey" class="ma-0 mr-3 right">
+                            <v-icon>done</v-icon>
+                        </v-btn>
+                        <span>Save</span>
+                    </v-tooltip>
+                </span>
             </div>
         </div>
 
