@@ -10,7 +10,7 @@
 
                 <div class="c-pt-4">
                     <div v-if="userInfo.profile">
-                        <div v-if="!isEditingLocation && userInfo.profile" class="row half-bold">
+                        <div v-if="!isEditingLocation" class="row half-bold">
                             <span v-if="isOwner && !isLocationSpecified" class="owner-hint c-mt-1">
                                 <v-icon small>location_on</v-icon>
                                 Add location info
