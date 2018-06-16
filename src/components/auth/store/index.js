@@ -3,12 +3,14 @@ import deipRpc from '@deip/deip-rpc';
 import Vue from 'vue'
 
 import { isLoggedIn, getDecodedToken, getOwnerWif } from './../../../utils/auth'
+import usersService from './../../../services/users'
 
 const state = {
     user: {
         username: isLoggedIn() ? getDecodedToken().username : null,
         pubKey: isLoggedIn() ? getDecodedToken().pubKey : null,
         privKey: isLoggedIn() ? getOwnerWif() : null,
+        profile: null,
         expertTokens: [],
         groupTokens: [],
         disciplines: [],
@@ -23,6 +25,10 @@ const getters = {
         return state.user
     },
 
+    profile: (state, getters) => {
+        return state.profile
+    },
+    
     userExperise: (state, getters) => {
         const experise = [];
         for (let i = 0; i < state.user.expertTokens.length; i++) {
@@ -84,6 +90,28 @@ const actions = {
                     commit('SET_USER_DISCIPLINES_LIST', disciplines)
                     commit('SET_USER_EXPERT_TOKENS_LIST', expertTokens)
                 });
+        }
+    },
+
+    loadProfile({ state, commit, getters }) {
+        const user = getters.user;
+
+        if (user.username) {
+            usersService.getUserProfile(user.username)
+            .then((profile) => {
+                if (profile === "") { // revise this once we've got 'approve' operation working
+                    usersService.createUserProfile(user.username, {})
+                        .then((newProfile) => {
+                            commit('SET_USER_PROFILE', newProfile)
+                        }, (err) => {
+                            console.log(err);
+                        })
+                } else {
+                    commit('SET_USER_PROFILE', profile)
+                }
+            }, (err) => {
+                console.log(err);
+            })
         }
     },
 
@@ -168,6 +196,10 @@ const mutations = {
 
     ['SET_USER_COWORKERS_LIST'](state, list) {
         Vue.set(state.user, 'coworkers', list)
+    },
+
+    ['SET_USER_PROFILE'](state, profile) {
+        Vue.set(state.user, 'profile', profile)
     }
 }
 

@@ -79,6 +79,7 @@
         created() {
             this.$store.dispatch('auth/loadExpertTokens');
             this.$store.dispatch('auth/loadGroups');
+            this.$store.dispatch('auth/loadProfile');
         }
     }
 </script>

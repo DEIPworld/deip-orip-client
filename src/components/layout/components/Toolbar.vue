@@ -75,6 +75,9 @@
                 this.$emit('update', value);
             },
             goToState(state, params) {
+                if (this.$route.name === 'UserDetails')
+                    this.$store.dispatch('userDetails/loadUser', params.account_name);
+
                 this.$router.push({ name: state, params: params });
             }
         }

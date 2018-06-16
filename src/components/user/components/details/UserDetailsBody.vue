@@ -6,7 +6,7 @@
             </v-avatar>
 
             <div class="col-grow c-pl-12">
-                <div class="display-1 half-bold c-pt-4">{{ userInfo.account.name }}</div>
+                <div class="display-1 half-bold c-pt-4">{{fullNameString != "" ? fullNameString : userInfo.account.name}}</div>
 
                 <div class="c-pt-4">
                     <div v-if="userInfo.profile">
@@ -49,7 +49,7 @@
 
                 <!-- display either the current employment or education, todo: add isActive flag to employment/education -->
                 <div v-if="userInfo.profile && (userInfo.profile.employment.length || userInfo.profile.education.length)" class="c-pt-2">
-                    {{userInfo.profile.employment.length ? userInfo.profile.employment[0].company : userInfo.profile.education[0].school}}
+                    {{userInfo.profile.employment.length ? userInfo.profile.employment[0].company : userInfo.profile.education[0].educationalInstitution}}
                 </div>
             </div>
         </div>
@@ -134,7 +134,7 @@
                     </v-btn>
                 </div>
                 <div class="c-p-6">
-                    <div class="subheading half-bold">{{item.school}}</div>
+                    <div class="subheading half-bold">{{item.educationalInstitution}}</div>
                     <div class="">{{item.degree}}</div>
                 </div>
                 <v-divider></v-divider>
@@ -201,12 +201,6 @@
                 </confirm-action-dialog>
             </div>
         </v-card>
-
-        <div class="c-pt-12">
-            <v-btn @click="getProfile()">GET</v-btn>
-            <v-btn @click="createProfile()">CREATE</v-btn>
-            <v-btn @click="updateProfile()">UPDATE</v-btn>
-        </div>
     </div>
 </template>
 
@@ -257,6 +251,18 @@
                     location += profile.location.country ? profile.location.country : '';
                 }
                 return location;
+            },
+            fullNameString() {
+                const profile = this.userInfo ? this.userInfo.profile : null;
+                let fullName = "";
+                if (profile){
+                    fullName += profile.firstName ? profile.firstName : '';
+                    if (fullName) {
+                        fullName += ' ';
+                    }
+                    fullName += profile.lastName ? profile.lastName : '';
+                }
+                return fullName;
             }
         },
         methods: {
@@ -287,11 +293,11 @@
                     .then((res) => {
                         this.$store.dispatch('userDetails/loadUserProfile', this.currentUser.username);
                         this.$store.dispatch('layout/setSuccess', {
-                            message: `"${item.school}" Institute has been saved successfully!"`
+                            message: `"${item.educationalInstitution}" Institute has been saved successfully!"`
                         });
                     }, (err) => {
                         this.$store.dispatch('layout/setError', {
-                            message: `An error occurred while saving "${item.school}" details, please try again later`
+                            message: `An error occurred while saving "${item.educationalInstitution}" details, please try again later`
                         });
                         console.log(err);
                     })
@@ -309,11 +315,11 @@
                     .then((res) => {
                         this.$store.dispatch('userDetails/loadUserProfile', this.currentUser.username);
                         this.$store.dispatch('layout/setSuccess', {
-                            message: `"${item.school}" Institute has been deleted successfully!"`
+                            message: `"${item.educationalInstitution}" Institute has been deleted successfully!"`
                         });
                     }, (err) => {
                         this.$store.dispatch('layout/setError', {
-                            message: `An error occurred while deleting "${item.school}" details, please try again later`
+                            message: `An error occurred while deleting "${item.educationalInstitution}" details, please try again later`
                         });
                         console.log(err);
                     })
@@ -424,50 +430,6 @@
                         console.log(err);
                     }).finally(() => {
                         this.isEditingLocation = false;
-                    })
-            },
-
-            createProfile() {
-                 usersService.createUserProfile(this.currentUser.username, {'email': 'vasiliy@vasa.com'})
-                    .then((res) => {
-                        console.log(res);
-                    }, (err) => {
-                        console.log(err);
-                    })
-            },
-
-            getProfile(){
-                debugger;
-                usersService.getUserProfile(this.currentUser.username)
-                    .then((res) => {
-                        debugger;
-                        console.log(res);
-                    }, (err) => {
-                        debugger;
-                        console.log(err);
-                    })
-            },
-
-            updateProfile() {
-                debugger;
-                var educ1 = {
-                    "school": "10-я школа",
-                    "period": {
-                        from: new Date('2002-09-01'),
-                        to: new Date('2006-06-01')
-                    },
-                    "degree": "djlboeb",
-                    "area": "mathematics",
-                    "description": "very funny time"
-                }
-
-                usersService.updateUserProfile(this.currentUser.username, {firstName: "I AM VASYA!", bio: "S DZ9REUNI", education: [educ1]})
-                    .then((res) => {
-                        debugger;
-                        console.log(res);
-                    }, (err) => {
-                        debugger;
-                        console.log(err);
                     })
             }
         }

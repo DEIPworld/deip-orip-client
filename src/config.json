@@ -1,7 +1,7 @@
 {
     "deip-foundation-url": "https://foundation.deip.world",
-    "deip-server-url": "http://127.0.0.1:8282",
-    "deip-full-node-url": "ws://127.0.0.1:11011",
+    "deip-server-url": "http://146.185.131.175",
+    "deip-full-node-url": "ws://206.189.175.10",
     "sig-seed": "quickbrownfoxjumpsoverthelazydog",
     "chain-id": "0ee0d9c3c3a9d5b0fde4bb70b6cb55c71bdabc9d19f0a27634f0547600af7f0f",
     "asset-unit": "TESTS"

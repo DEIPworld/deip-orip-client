@@ -13,12 +13,12 @@
                 <div class="content-column">
                     <div class="filling">
 
-                        <div class="subheading bold">School</div>
+                        <div class="subheading bold">Educational Institution</div>
                         <div class="row">
                             <div class="col-12">
                                 <v-text-field
-                                    placeholder="School"
-                                    v-model="school"
+                                    placeholder="Educational Institution"
+                                    v-model="educationalInstitution"
                                 ></v-text-field>
                             </div>
                         </div>
@@ -110,7 +110,7 @@
         },
         data() { 
             return {
-                school: undefined,
+                educationalInstitution: undefined,
                 dateFrom: undefined,
                 dateFromMenu: false,
                 dateTo: undefined,
@@ -122,14 +122,14 @@
         },
         computed: {
             disabled() {
-                return !this.school || !this.dateFrom || !this.dateTo || !this.degree || !this.area;
+                return !this.educationalInstitution || !this.dateFrom || !this.dateTo || !this.degree || !this.area;
             }
         },
         methods: {
             save() {
                 this.$emit('saveEducation', { 
                     item: {
-                        school: this.school,
+                        educationalInstitution: this.educationalInstitution,
                         period: {
                             from: this.dateFrom,
                             to: this.dateTo
@@ -141,7 +141,7 @@
                     index: this.meta.index
                 })
 
-                this.school = undefined;
+                this.educationalInstitution = undefined;
                 this.dateFrom = undefined;
                 this.dateFromMenu = false;
                 this.dateTo = undefined;
@@ -153,7 +153,7 @@
         },
         watch: {
             'meta.item': function(education) {
-                this.school = education != null ? education.school : undefined;
+                this.educationalInstitution = education != null ? education.educationalInstitution : undefined;
                 this.dateFrom = education != null ? moment(education.period.from).format('YYYY-MM') : undefined;
                 this.dateFromMenu = false;
                 this.dateTo = education != null ? moment(education.period.to).format('YYYY-MM') : undefined;

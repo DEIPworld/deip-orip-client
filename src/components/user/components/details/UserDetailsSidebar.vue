@@ -1,10 +1,10 @@
 <template>
     <div>
-        <v-btn color="primary" block class="ma-0">
+    <!--<v-btn color="primary" block class="ma-0">
             Profile settings
-        </v-btn>
+        </v-btn> -->
 
-        <div class="sm-title bold c-pt-8">Expertise</div>
+        <div class="sm-title bold">Expertise</div>
 
         <div class="c-pt-4 c-pb-6">
             <div class="row justify-between" v-for="(item, i) in expertise" :key="i">
@@ -27,7 +27,8 @@
             <v-divider></v-divider>
         </div>
 
-        <div class="sm-title bold c-pt-4">
+        <!-- Contacts Info -->
+        <div class="sm-title bold c-pt-4" v-if="isContactsInfoSpecified || isOwner">
             <span class="row">
                 <span class="col-11 mt-1">Contacts Info</span>
                 <v-tooltip v-if="isOwner && !isEditingContacts" bottom class="col-1">
@@ -38,7 +39,7 @@
                 </v-tooltip>
             </span>
         </div>
-        <div class="c-pt-2 c-pb-6 pos-relative">
+        <div class="c-pt-2 c-pb-6 pos-relative" v-if="isContactsInfoSpecified || isOwner">
             <div v-if="userInfo.profile">
                 <div v-if="!isEditingContacts">
                     <span v-if="isOwner && !userInfo.profile.email" class="owner-hint">
@@ -75,23 +76,25 @@
             </div>
         </div>
 
-        <div style="margin: 0 -24px">
+        <div style="margin: 0 -24px" v-if="isContactsInfoSpecified || isOwner">
             <v-divider></v-divider>
         </div>
 
-        <div class="sm-title bold c-pt-6">
+
+        <!-- Personal Info -->
+        <div class="sm-title bold c-pt-6" v-if="isPersonalInfoSpecified || isOwner">
             <span class="row">
-            <span class="col-11 mt-1">Personal Info</span>
-            <v-tooltip v-if="isOwner && !isEditingPersonalInfo" bottom class="col-1">
-                <v-btn slot="activator" @click="editPersonalInfo" flat small icon color="grey" class="mt-0">
-                    <v-icon small>mode_edit</v-icon>
-                </v-btn>
-                <span>Edit Personal Info</span>
-            </v-tooltip>
+                <span class="col-11 mt-1">Personal Info</span>
+                <v-tooltip v-if="isOwner && !isEditingPersonalInfo" bottom class="col-1">
+                    <v-btn slot="activator" @click="editPersonalInfo" flat small icon color="grey" class="mt-0">
+                        <v-icon small>mode_edit</v-icon>
+                    </v-btn>
+                    <span>Edit Personal Info</span>
+                </v-tooltip>
             </span>
         </div>
 
-        <div class="c-pt-4 c-pb-6">
+        <div class="c-pt-4 c-pb-6" v-if="isPersonalInfoSpecified || isOwner">
             <div v-if="userInfo.profile">
                 <div v-if="!isEditingPersonalInfo">
                     <div v-if="isOwner && !userInfo.profile.firstName" class="row">
@@ -118,7 +121,7 @@
                     </div>
                     <div v-else class="row">
                         <span class="col-4 half-bold">Birthday</span>
-                        <span class="col-8 text-align-right">{{new Date(userInfo.profile.birthday).toDateString() || '-'}}</span>
+                        <span class="col-8 text-align-right">{{ userInfo.profile.birthday ? new Date(userInfo.profile.birthday).toDateString() : '-'}}</span>
                     </div>
 
                     <div v-if="userInfo.profile.created" class="row mt-3">
@@ -152,7 +155,7 @@
             </div>
         </div>
         
-        <div style="margin: 0 -24px">
+        <div style="margin: 0 -24px" v-if="isPersonalInfoSpecified || isOwner">
             <v-divider></v-divider>
         </div>
     </div>
@@ -186,6 +189,13 @@
             }),
             isOwner() {
                 return this.currentUser && this.currentUser.username === this.$route.params.account_name
+            },
+            isContactsInfoSpecified() {
+                return this.userInfo && this.userInfo.profile && this.userInfo.profile.email;
+            },
+            isPersonalInfoSpecified() {
+                return this.userInfo && this.userInfo.profile && 
+                    (this.userInfo.profile.firstName || this.userInfo.profile.lastName || this.userInfo.profile.birthday);
             }
         },
         methods: {
