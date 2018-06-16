@@ -235,7 +235,7 @@
                 groups: 'userDetails/groups',
                 researchList: 'userDetails/researchList',
             }),
-            
+
             isOwner() {
                 return this.currentUser && this.currentUser.username === this.$route.params.account_name
             },
@@ -256,12 +256,14 @@
             fullNameString() {
                 const profile = this.userInfo ? this.userInfo.profile : null;
                 let fullName = "";
-                if (profile){
+                if (profile) {
                     fullName += profile.firstName ? profile.firstName : '';
                     if (fullName) {
                         fullName += ' ';
                     }
                     fullName += profile.lastName ? profile.lastName : '';
+                }
+                return fullName;
             },
 
             commonGroups() {
