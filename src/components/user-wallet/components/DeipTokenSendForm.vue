@@ -1,11 +1,11 @@
 <template>
     <v-card>
-        <div class="blue lighten-4 c-p-4" @click="clearForm()">
+        <div class="blue lighten-4 c-p-4">
             <div class="uppercase text-align-center half-bold">Send deip tokens</div>
         </div>
 
         <div class="c-p-4">
-            <v-form ref="form" v-model="isFormValid">
+            <v-form ref="form" v-model="isFormValid" @submit.prevent>
                 <v-text-field label="To" 
                     ref="toUsername"
                     v-model="form.to"

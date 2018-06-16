@@ -72,7 +72,7 @@
                                     </div>
 
                                     <div class="width-10 list-body-cell text-align-center">
-                                        <div class="half-bold headline">10 000</div>
+                                        <div class="half-bold headline">{{ commonTokensBalance }}</div>
                                     </div>
 
                                     <div class="list-body-cell token-actions">
@@ -95,44 +95,44 @@
                             <div class="info-card-list">
                                 <div class="reserarch-table-header c-ph-3">
                                     <div class="list-header-cell col-grow">Title</div>
-                                    <div class="list-header-cell width-7 text-align-center">
+                                    <!-- <div class="list-header-cell width-7 text-align-center">
                                         Market price<br>
                                         (DEIP Tokens)
-                                    </div>
+                                    </div> -->
                                     <div class="list-header-cell width-5 text-align-center">Amount</div>
                                     <div class="list-header-cell width-8 text-align-center">Actions</div>
                                 </div>
 
                                 <v-divider></v-divider>
 
-                                <div class="list-line">
-                                    <div class="col-grow list-body-cell">
-                                        <div class="deip-blue-color subheading">Antagonistically maximize market-driven quality.</div>
-                                        <div class="caption grey--text c-pt-2">Alex Shkor  ·  Artyom Ruseckiy  ·  Egor Tsaryk</div>
-                                    </div>
+                                <div class="hidden-last-child" v-if="researches && researches.length">
+                                    <template v-for="research in researches">
+                                        <div class="list-line">
+                                            <div class="col-grow list-body-cell">
+                                                <div class="deip-blue-color subheading">{{ research.title }}</div>
 
-                                    <div class="width-7 list-body-cell text-align-center half-bold">10</div>
-                                    <div class="width-5 list-body-cell text-align-center half-bold">12%</div>
+                                                <div class="caption grey--text c-pt-2">
+                                                    {{ research.groupTokens.map(item => item.owner).join(' · ') }}
+                                                </div>
+                                            </div>
 
-                                    <div class="width-8 list-body-cell text-align-center">
-                                        <v-btn class="ma-0" flat color="primary">Send</v-btn>
-                                    </div>
+                                            <!-- <div class="width-7 list-body-cell text-align-center half-bold">10</div> -->
+
+                                            <div class="width-5 list-body-cell text-align-center half-bold">
+                                                {{ convertToPercent(research.researchToken.amount) }}%
+                                            </div>
+
+                                            <div class="width-8 list-body-cell text-align-center">
+                                                <v-btn class="ma-0" flat color="primary">Send</v-btn>
+                                            </div>
+                                        </div>
+
+                                        <v-divider></v-divider>
+                                    </template>
                                 </div>
 
-                                <v-divider></v-divider>
-
-                                <div class="list-line">
-                                    <div class="col-grow list-body-cell">
-                                        <div class="deip-blue-color subheading">Antagonistically maximize market-driven quality.</div>
-                                        <div class="caption grey--text c-pt-2">Alex Shkor  ·  Artyom Ruseckiy  ·  Egor Tsaryk</div>
-                                    </div>
-
-                                    <div class="width-7 list-body-cell text-align-center half-bold">100</div>
-                                    <div class="width-5 list-body-cell text-align-center half-bold">12%</div>
-
-                                    <div class="width-8 list-body-cell text-align-center">
-                                        <v-btn class="ma-0" flat color="primary">Send</v-btn>
-                                    </div>
+                                <div class="list-line height-7" v-else>
+                                    <div class="c-m-auto grey--text">Research token list is empty</div>
                                 </div>
                             </div>
                         </v-card>
@@ -179,6 +179,8 @@
         computed: {
             ...mapGetters({
                 account: 'userWallet/account',
+                researches: 'userWallet/researches',
+                commonTokensBalance: 'userWallet/commonTokensBalance',
                 user: 'auth/user'
             }),
             deipTokenBalance() {
@@ -187,7 +189,10 @@
         },
         created() {
             this.username = this.user.username;
+
             this.loadUserAccount();
+            this.$store.dispatch('userWallet/loadResearchTokens', this.username);
+            this.$store.dispatch('userWallet/loadCommonTokens', this.username);
         }
     };
 </script>

@@ -90,7 +90,7 @@ const router = new Router({
         name: 'CreateResearchGroup',
         component: CreateResearchGroup
     }, {
-        path: '/userWallet',
+        path: '/user-wallet',
         name: 'UserWallet',
         component: UserWallet
     }, {

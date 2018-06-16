@@ -10,24 +10,29 @@
                 </div>
             </div>
 
-            <v-form v-model="isFormValid" ref="form" class="c-mt-10">
+            <v-form v-model="isFormValid" ref="form" class="c-mt-10" @submit.prevent>
                 <v-text-field 
                     label="Username"
                     v-model="username" 
                     :rules="[rules.required]"
-                    @keyup.enter="login"
                 ></v-text-field>
+
                 <v-text-field 
                     label="Private key"
                     v-model="privKey" 
                     :rules="[rules.required]"
                     :append-icon="isHiddenPassword ? 'visibility' : 'visibility_off'"
-                    :append-icon-cb="() => (isHiddenPassword = !isHiddenPassword)"
+                    :append-icon-cb="() => { isHiddenPassword = !isHiddenPassword }"
                     :type="isHiddenPassword ? 'password' : 'text'"
-                    @keyup.enter="login"
                 ></v-text-field>
 
-                <v-btn block color="primary" :loading="isChecking" :disabled="isChecking" @click="login()" >Login</v-btn>
+                <v-btn type="submit"
+                    block 
+                    color="primary" 
+                    :loading="isChecking" 
+                    :disabled="isChecking" 
+                    @click="login()"
+                >Login</v-btn>
                 <!-- <div class="row justify-center c-pt-3" v-show="isChecking">
                     <v-progress-circular indeterminate color="primary"></v-progress-circular>
                 </div> -->
