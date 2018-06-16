@@ -141,18 +141,20 @@
                     </div>
 
                     <div class="tokens-send-panel">
-                        <deip-token-send-form
-                            v-if="account && sendingType === sendingTypes.deipToken"
-                            :deip-token-balance="deipTokenBalance"
-                            @deipTokensTransfered="loadUserAccount"
-                        ></deip-token-send-form>
+                        <transition mode="out-in">
+                            <deip-token-send-form
+                                v-if="account && sendingType === sendingTypes.deipToken"
+                                :deip-token-balance="deipTokenBalance"
+                                @deipTokensTransfered="loadUserAccount"
+                            ></deip-token-send-form>
 
-                        <common-token-convert-form
-                            v-if="account && sendingType === sendingTypes.deipCommon"
-                            :deip-token-balance="deipTokenBalance"
-                            :common-tokens-balance="commonTokensBalance"
-                            @convertingTransactionWasApplied="loadUserAccount"
-                        ></common-token-convert-form>
+                            <common-token-convert-form
+                                v-if="account && sendingType === sendingTypes.deipCommon"
+                                :deip-token-balance="deipTokenBalance"
+                                :common-tokens-balance="commonTokensBalance"
+                                @convertingTransactionWasApplied="loadUserAccount"
+                            ></common-token-convert-form>
+                        </transition>
                     </div>
 
                 </div>
@@ -216,5 +218,13 @@
         display: flex;
         align-items: center;
         height: 70px;
+    }
+
+    // experimental :)
+    .v-enter-active, .v-leave-active {
+        transition: opacity .1s;
+    }
+    .v-enter, .v-leave-to {
+        opacity: 0;
     }
 </style>
