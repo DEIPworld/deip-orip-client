@@ -76,8 +76,10 @@
                                     </div>
 
                                     <div class="list-body-cell token-actions">
-                                        <v-btn class="ma-0" flat color="primary">Convert</v-btn>
-                                        <v-btn class="ma-0" flat color="primary">Withdraw</v-btn>
+                                        <v-btn class="ma-0" flat 
+                                            color="primary"
+                                            @click="sendingType = sendingTypes.deipCommon"
+                                        >Convert</v-btn>
                                     </div>
                                 </div>
                             </div>
@@ -144,6 +146,13 @@
                             :deip-token-balance="deipTokenBalance"
                             @deipTokensTransfered="loadUserAccount"
                         ></deip-token-send-form>
+
+                        <common-token-convert-form
+                            v-if="account && sendingType === sendingTypes.deipCommon"
+                            :deip-token-balance="deipTokenBalance"
+                            :common-tokens-balance="commonTokensBalance"
+                            @convertingTransactionWasApplied="loadUserAccount"
+                        ></common-token-convert-form>
                     </div>
 
                 </div>
@@ -174,6 +183,7 @@
         methods: {
             loadUserAccount() {
                 this.$store.dispatch('userWallet/loadUser', this.username);
+                this.$store.dispatch('userWallet/loadCommonTokens', this.username);
             }
         },
         computed: {
@@ -189,10 +199,7 @@
         },
         created() {
             this.username = this.user.username;
-
-            this.loadUserAccount();
-            this.$store.dispatch('userWallet/loadResearchTokens', this.username);
-            this.$store.dispatch('userWallet/loadCommonTokens', this.username);
+            this.$store.dispatch('userWallet/loadWallet', this.username);
         }
     };
 </script>

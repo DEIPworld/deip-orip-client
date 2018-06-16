@@ -6,17 +6,22 @@ const state = {
     account: undefined,
     researches: [],
     commonTokensBalance: undefined
-}
+};
 
 // getters
 const getters = {
     account: state => state.account,
     researches: state => state.researches,
     commonTokensBalance: state => state.commonTokensBalance
-}
+};
 
 // actions
 const actions = {
+    loadWallet({ dispatch }, accountName) {
+        dispatch('loadUser', accountName);
+        dispatch('loadResearchTokens', accountName);
+        dispatch('loadCommonTokens', accountName);
+    },
     loadUser({ commit }, accountName) {
         return deipRpc.api.getAccountsAsync([accountName])
             .then(data => {
@@ -62,7 +67,7 @@ const actions = {
                 commit('SET_COMMON_TOKEN_BALANCE', result ? result.amount : 0);
             });
     }
-}
+};
 
 // mutations
 const mutations = {
@@ -75,7 +80,7 @@ const mutations = {
     ['SET_COMMON_TOKEN_BALANCE'](state, commonTokensBalance) {
         Vue.set(state, 'commonTokensBalance', commonTokensBalance);
     }
-}
+};
 
 const namespaced = true;
 
@@ -85,4 +90,4 @@ export default {
     getters,
     actions,
     mutations
-}
+};
