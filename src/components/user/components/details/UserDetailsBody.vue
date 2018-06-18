@@ -1,8 +1,16 @@
 <template>
     <div>
         <div class="row" v-if="userInfo.account">
-            <v-avatar size="120px">
-                <v-gravatar :title="userInfo.account.name" :email="userInfo.account.name + '@deip.world'" />
+
+            <v-avatar size="160px" class="user-avatar" 
+                    v-on:mouseover="onAvatarMouseOver"
+                    v-on:mouseout="onAvatarMouseOut">
+                <img v-if="avatarSrc" v-bind:src="avatarSrc" />
+                <vue-dropzone v-if="dropzoneOptions" v-show="avatarUploadIsShown" ref="avatar-upload" id="avatar-dropzone" 
+                    :options="dropzoneOptions"
+                    @vdropzone-success="avatarUploadSuccess"
+                    @vdropzone-error="avatarUploadError">
+                </vue-dropzone>
             </v-avatar>
 
             <div class="col-grow c-pl-12">
@@ -95,7 +103,7 @@
             ></state-research-list>
         </div>
 
-        <div class="c-pt-8">
+        <div class="c-pt-8" v-if="commonGroups.length">
             <div class="title">Research Groups: {{ commonGroups.length }}</div>
         </div>
 
@@ -117,7 +125,7 @@
             </template>
         </v-card>
 
-        <div v-if="userInfo && userInfo.profile && userInfo.profile.education.length" class="c-pt-8">
+        <div v-if="isEducationSpecified || isOwner" class="c-pt-8">
             <div class="title">Education</div>
         </div>
 
@@ -160,7 +168,7 @@
         </v-card>
 
 
-        <div v-if="userInfo && userInfo.profile && userInfo.profile.employment.length" class="c-pt-8">
+        <div v-if="isEmploymentSpecified || isOwner"  class="c-pt-8">
             <div class="title">Employment</div>
         </div>
 
@@ -207,9 +215,15 @@
 <script>
     import { mapGetters } from 'vuex';
     import usersService from './../../../../services/users'
+    import vueDropzone from 'vue2-dropzone';
+    import config from './../../../../config'
+    import {getAccessToken} from './../../../../utils/auth'
 
     export default {
         name: 'UserDetailsBody',
+        components: {
+            vueDropzone
+        },
         data() {
             return {
                 saveEducationMeta: { isShown: false, item: null, index: null },
@@ -225,7 +239,10 @@
                 editedCountry: "",
                 isEditingLocation: false,
 
-                accountName: this.$route.params.account_name
+                avatarUploadIsShown: false,
+
+                accountName: this.$route.params.account_name,
+                fileStorageBaseUrl: config['deip-server-url']
             }
         },
         computed: {
@@ -253,6 +270,12 @@
                 }
                 return location;
             },
+            isEducationSpecified() {
+                return this.userInfo && this.userInfo.profile && this.userInfo.profile.education.length;
+            },
+            isEmploymentSpecified() {
+                return this.userInfo && this.userInfo.profile && this.userInfo.profile.employment.length;
+            },
             fullNameString() {
                 const profile = this.userInfo ? this.userInfo.profile : null;
                 let fullName = "";
@@ -265,9 +288,30 @@
                 }
                 return fullName;
             },
-
             commonGroups() {
                 return this.groups.filter(g => !g.is_personal);
+            },
+            dropzoneOptions() {
+                return this.currentUser != null ? {
+                        url: `${config['deip-server-url']}/api/files/upload-avatar`,
+                        paramName: "user-avatar",
+                        headers: {
+                            "username": this.currentUser.username.toString(),
+                            "Authorization": 'Bearer ' + getAccessToken()
+                        },
+                        timeout: 0,
+                        uploadMultiple: false,
+                        createImageThumbnails: false,
+                        previewsContainer: false,
+                        dictDefaultMessage: "",
+                        acceptedFiles: ['image/png', 'image/jpeg'].join(',')
+                    } : null;
+            },
+            avatarSrc() {
+                return  this.userInfo && this.userInfo.profile 
+                        && this.userInfo.profile.avatar 
+                        ? `${this.fileStorageBaseUrl}/public/files/avatars/${this.userInfo.profile.avatar}?width=160&height=160&noCache=true` 
+                        : null;
             }
         },
         methods: {
@@ -436,12 +480,65 @@
                     }).finally(() => {
                         this.isEditingLocation = false;
                     })
+            },
+
+            onAvatarMouseOver() {
+                if (this.currentUser.username == this.userInfo.account.name){
+                    this.avatarUploadIsShown = true
+                }
+            },
+            onAvatarMouseOut() {
+                this.avatarUploadIsShown = false;
+            },
+
+            avatarUploadSuccess(file, response) {
+                this.$store.dispatch('userDetails/loadUserProfile', this.currentUser.username)
+                this.$store.dispatch('layout/setSuccess', {
+                    message: "Avatar has been changed successfully !"
+                });
+
+            },
+
+            avatarUploadError(file, message, xhr) {
+                this.$store.dispatch('layout/setError', {
+                    message: "Sorry, an error occurred while uploading avatar, please try again later"
+                });
+                console.log(message);
             }
         }
     }
 </script>
 
 <style lang="less" scoped>
+
+    .user-avatar {
+        position: relative
+    }
+
+    #avatar-dropzone {
+        background: #9e978e;
+        background-color: rgba(29,32,34,.7);
+        display: inline-block;
+        margin: 0 1em 1em 0;
+        position: absolute;
+        height: 80px;
+        width: 160px;
+        border-bottom-left-radius: 90px;
+        border-bottom-right-radius: 90px;
+        border: 0.5px solid rgba(29, 32, 34, 0.7);
+        bottom: -15px;
+        min-height: 0 !important;
+    }
+
+    #avatar-dropzone:before {
+        content: "⇪";
+        font-size: 30px;
+        position: absolute;
+        top: 15px;
+        right: 62px;
+    }
+
+
     .research-group-title {
         font-size: 16px;
         color: #2F80ED;

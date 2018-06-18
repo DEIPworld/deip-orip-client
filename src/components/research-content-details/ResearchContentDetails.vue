@@ -5,7 +5,7 @@
             frameborder="0" 
             height="100%" 
             width="100%" 
-            :src="`${fileStorageBaseUrl}/public/files/${content.research_id}/${content.content}`">
+            :src="`${fileStorageBaseUrl}/public/files/research/${content.research_id}/${content.content}`">
         </iframe>
 
         <div id="bars">
