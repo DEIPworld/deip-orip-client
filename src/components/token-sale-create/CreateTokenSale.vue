@@ -70,7 +70,7 @@
                 research: null,
                 currentStep: 0,
                 tokenSaleInfo: {
-                    amountToSell: 0,
+                    amountToSell: 10,
                     startDate: undefined,
                     endDate: undefined,
                     softCap: '',
@@ -95,9 +95,13 @@
                 const self = this;
 
                 this.isLoading = true;
+                // there is no way to pick time in date picker currently, 
+                // but Token Sale status is set to inactive initially until its start_time
+                const nowPlusMinute = new Date(Date.now() + (1 * 60 * 1000)); 
                 let proposal = proposalService.getStringifiedProposalData(proposalService.types.startResearchTokenSale, [
                     this.research.id,
-                    this.tokenSaleInfo.startDate.toISOString().split('.')[0],
+                    // this.tokenSaleInfo.startDate.toISOString().split('.')[0],
+                    nowPlusMinute.toISOString().split('.')[0],
                     this.tokenSaleInfo.endDate.toISOString().split('.')[0],
                     this.toDeipPercent(parseInt(this.tokenSaleInfo.amountToSell)),
                     parseInt(this.tokenSaleInfo.softCap),

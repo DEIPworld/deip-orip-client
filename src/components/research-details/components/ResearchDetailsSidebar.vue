@@ -145,7 +145,7 @@
             <v-divider></v-divider>
         </div>
 
-        <div v-if="(isMissingTokenSale && isResearchGroupMember) || isActiveTokenSale">
+        <div v-if="(isMissingTokenSale && isResearchGroupMember && !isFinishedResearch) || isActiveTokenSale || isInActiveTokenSale">
 
             <div class="sm-title bold c-pt-6">Research Token Sale</div>
 
@@ -178,32 +178,35 @@
                     <div class="row">
                         <div><span class="left grey--text c-mr-2 cap-value">0</span></div>
                         <div class="col-grow pos-relative row-nowrap align-center">
-                        <div class="chapter-line black" :style="{ width: currentCapPercent + '%' }"></div>
-                        <div class="chapter-line grey lighten-1 col-grow"></div>
+                            <div class="chapter-line black" :style="{ width: currentCapPercent + '%' }"></div>
+                            <div class="chapter-line grey lighten-1 col-grow"></div>
 
-                        <div class="pos-absolute" :style="{ left: currentCapPercent + '%' }">
-                            <v-tooltip bottom color="white">
-                                <div class="chapter-point deip-blue-bg" slot="activator"></div>
-                                <div>
-                                    <div class="grey--text cap-value text-align-center">{{currentCap}}</div>
-                                </div>
-                            </v-tooltip>
+                            <div class="pos-absolute" :style="{ left: currentCapPercent + '%' }">
+                                <v-tooltip bottom color="white">
+                                    <div class="chapter-point deip-blue-bg" slot="activator"></div>
+                                    <div>
+                                        <div class="grey--text cap-value text-align-center">{{currentCap}}</div>
+                                    </div>
+                                </v-tooltip>
+                            </div>
+
+                            <div><span class="right grey--text c-ml-2 cap-value">{{tokenSale.hard_cap}}</span></div>
                         </div>
-
-                        <div><span class="right grey--text c-ml-2 cap-value">{{tokenSale.hard_cap}}</span></div>
+                    </div>
+                    <div v-if="!isResearchGroupMember" class="c-mt-5 text-align-center">
+                        <v-text-field v-model="amountToContribute" placeholder="amount" suffix="DEIP" mask="########################"></v-text-field>
+                        <v-btn :disabled="!amountToContribute" :loading="isTokensBuying" color="primary" @click="contributeToTokenSale()">BUY RESEARCH TOKENS</v-btn>
                     </div>
                 </div>
-                <div v-if="!isResearchGroupMember" class="c-mt-5 text-align-center">
-                    <v-text-field v-model="amountToContribute" placeholder="amount" suffix="DEIP" mask="########################"></v-text-field>
-                    <v-btn :disabled="!amountToContribute" :loading="isTokensBuying" color="primary" @click="contributeToTokenSale()">BUY RESEARCH TOKENS</v-btn>
-                </div>
+            </div>
+            <div v-if="isInActiveTokenSale" class="c-pt-4 c-pb-6">
+                <div class="text-align-center">Token Sale will start on {{new Date(tokenSale.start_time).toString()}}</div>
+            </div>
+
+            <div style="margin: 0 -24px">
+                <v-divider></v-divider>
             </div>
         </div>
-
-        <div style="margin: 0 -24px">
-            <v-divider></v-divider>
-        </div>
-    </div>
     </div>
 </template>
 
@@ -254,6 +257,12 @@
             },
             isFinishedTokenSale() {
                 return this.tokenSale && this.tokenSale.status == 2;
+            },
+            isInActiveTokenSale() {
+                return this.tokenSale && this.tokenSale.status == 4;
+            },
+            isFinishedResearch() {
+                return this.research && this.research.is_finished;
             },
             currentCap() {
                 return this.contributionsList.map(c => c.amount).reduce((acc, val) => {return acc + val}, 0);
