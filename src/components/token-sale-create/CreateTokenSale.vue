@@ -97,12 +97,12 @@
                 this.isLoading = true;
                 // there is no way to pick time in date picker currently, 
                 // but Token Sale status is set to inactive initially until its start_time
-                const nowPlus2Minutes = new Date(Date.now() + (2 * 60 * 1000)); 
-                debugger;
+                // const nowPlus2Minutes = new Date(Date.now() + (2 * 60 * 1000)); 
+                
                 let proposal = proposalService.getStringifiedProposalData(proposalService.types.startResearchTokenSale, [
                     this.research.id,
-                    // this.tokenSaleInfo.startDate.toISOString().split('.')[0],
-                    nowPlus2Minutes.toISOString().split('.')[0],
+                    this.tokenSaleInfo.startDate.toISOString().split('.')[0],
+                    // nowPlus2Minutes.toISOString().split('.')[0],
                     this.tokenSaleInfo.endDate.toISOString().split('.')[0],
                     this.toDeipPercent(parseInt(this.tokenSaleInfo.amountToSell)),
                     parseInt(this.tokenSaleInfo.softCap),
@@ -117,17 +117,18 @@
                     proposalService.types.startResearchTokenSale,
 					new Date( new Date().getTime() + 2 * 24 * 60 * 60 * 1000 )
 				).then(() => {
-
                     this.isLoading = false;
+
                     this.$store.dispatch('layout/setSuccess', {
                         message: "Token Sale Proposal has been created successfully! Approve it to start the Token Sale !"
                     });
+
                     setTimeout(() => {
                         self.$router.push({ 
                             name: 'ResearchGroupDetails',
                             params: { research_group_permlink: self.$route.params.research_group_permlink  }
                         }); 
-                    }, 1500)
+                    }, 1500);
 
                 }).catch(err => {
                     this.isLoading = false;
