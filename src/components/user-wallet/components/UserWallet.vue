@@ -20,7 +20,9 @@
 
                                 <v-divider></v-divider>
 
-                                <div class="list-line">
+                                <div class="list-line"
+                                    :class="{ 'blue lighten-5': account && sendingType === sendingTypes.deipToken }"
+                                >
                                     <div class="col-grow list-body-cell display-flex align-center">
                                         <!-- TODO: make service component which can manage our all SVG items -->
                                         <div style="height: 40px; width: 40px;">
@@ -53,7 +55,9 @@
 
                                 <v-divider></v-divider>
 
-                                <div class="list-line">
+                                <div class="list-line"
+                                    :class="{ 'blue lighten-5': account && sendingType === sendingTypes.deipCommon }"
+                                >
                                     <div class="col-grow list-body-cell display-flex align-center">
                                         <!-- TODO: make service component which can manage our all SVG items -->
                                         <div style="height: 40px; width: 40px;">
@@ -109,7 +113,9 @@
 
                                 <div class="hidden-last-child" v-if="researches && researches.length">
                                     <template v-for="research in researches">
-                                        <div class="list-line">
+                                        <div class="list-line"
+                                            :class="{ 'blue lighten-5': account && sendingType === sendingTypes.researchToken && selectedResearchId === research.id }"
+                                        >
                                             <div class="col-grow list-body-cell">
                                                 <div class="deip-blue-color subheading">{{ research.title }}</div>
 
@@ -125,7 +131,7 @@
                                             </div>
 
                                             <div class="width-8 list-body-cell text-align-center">
-                                                <v-btn class="ma-0" flat color="primary">Send</v-btn>
+                                                <v-btn class="ma-0" flat color="primary" @click="selectResearch(research)">Send</v-btn>
                                             </div>
                                         </div>
 
@@ -154,6 +160,12 @@
                                 :common-tokens-balance="commonTokensBalance"
                                 @convertingTransactionWasApplied="loadUserAccount"
                             ></common-token-convert-form>
+                            
+                            <research-token-send-form
+                                :research-token-balance="15"
+                                @researchTokensTransfered="loadUserAccount"
+                            ></research-token-send-form>
+                                <!-- v-if="account && sendingType === sendingTypes.researchToken" -->
                         </transition>
                     </div>
 
@@ -175,6 +187,8 @@
                 username: undefined,
                 sendingType: undefined,
 
+                selectedResearchId: undefined,
+
                 sendingTypes: {
                     deipToken: 'deipToken',
                     deipCommon: 'deipCommon',
@@ -186,6 +200,14 @@
             loadUserAccount() {
                 this.$store.dispatch('userWallet/loadUser', this.username);
                 this.$store.dispatch('userWallet/loadCommonTokens', this.username);
+            },
+            selectResearch(research) {
+                this.selectedResearchId = research.id;
+                this.sendingType = this.sendingTypes.researchToken;
+            },
+            loadResearches() {
+                this.$store.dispatch('userWallet/loadResearchTokens', this.username);
+                // todo: pick current research
             }
         },
         computed: {
