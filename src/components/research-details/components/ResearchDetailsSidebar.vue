@@ -200,7 +200,7 @@
                 </div>
             </div>
             <div v-if="isInActiveTokenSale" class="c-pt-4 c-pb-6">
-                <div class="text-align-center">Token Sale will start on {{new Date(tokenSale.start_time).toString()}}</div>
+                <div class="text-align-center">Token Sale will start on {{tokenSale.start_time}}</div>
             </div>
 
             <div style="margin: 0 -24px">
