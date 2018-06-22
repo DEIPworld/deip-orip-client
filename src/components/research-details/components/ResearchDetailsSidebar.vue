@@ -15,12 +15,46 @@
             </div>
             <div class="grey--text"> {{convertToPercent(member.amount)}}%</div>
         </div>
+        
+        <div v-if="canJoinResearchGroup || isActiveJoinRequest" class="c-pt-4 c-pb-6">
+            <div v-if="canJoinResearchGroup">
+                <v-btn @click="openJoinGroupDialog()" outline icon color="primary" class="ma-0">
+                    <v-icon small>add</v-icon>
+                </v-btn>
+                <span class="deip-blue-color c-pl-3">Join research group</span>
+            </div>
+            <div v-if="isActiveJoinRequest" class="text-align-center italic pt-2">You have sent join request on {{new Date(currentJoinRequest.created).toDateString()}}, please wait for approval</div>
 
-        <div v-if="canJoinResearchGroup"  class="c-pt-4 c-pb-6">
-            <v-btn @click="joinResearchGroup()" outline icon color="primary" class="ma-0">
-                <v-icon small>add</v-icon>
-            </v-btn>
-            <span class="deip-blue-color c-pl-3">Join research group</span>
+            <v-dialog v-if="research" v-model="isJoinGroupDialogOpen" persistent transition="scale-transition" max-width="800px">
+                <v-card class="">
+                    <v-toolbar dark color="primary">
+                        <v-btn icon dark @click="isJoinGroupDialogOpen = false">
+                            <v-icon>close</v-icon>
+                        </v-btn>
+                        <v-toolbar-title>Please, provide a Cover Letter to your join request</v-toolbar-title>
+                        <v-spacer></v-spacer>
+                    </v-toolbar>
+            
+                    <div class="column-page">
+                        <div class="content-column">
+                            <div class="filling">
+                                <div>
+                                    <v-text-field v-model="coverLetter" name="Cover letter" label="Cover Letter" multi-line></v-text-field>
+                                    <div class="display-flex c-pt-8">
+                                        <v-btn color="primary" 
+                                            class="c-m-auto"
+                                            :disabled="!coverLetter || isSendingJoinGroupRequest"
+                                            :loading="isSendingJoinGroupRequest"
+                                            @click="sendJoinGroupRequest()">
+                                            Send
+                                        </v-btn>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </v-card>
+            </v-dialog>
         </div>
 
         <div style="margin: 5px -24px">
@@ -42,8 +76,7 @@
         <div class="c-pb-6 c-pt-4">
             <div v-for="(discipline, index) in disciplinesList" :key="index"
                 class="row align-center justify-between vote-btn-area" 
-                :class="index == 0 ? '':'c-mt-1'"
-            >
+                :class="index == 0 ? '':'c-mt-1'">
            <!--     <v-btn small color="primary" dark class="ma-0">Vote</v-btn> -->
                 <div class="deip-blue-color c-p-2">
                     {{discipline.name}}:  
@@ -200,7 +233,7 @@
                 </div>
             </div>
             <div v-if="isInActiveTokenSale" class="c-pt-4 c-pb-6">
-                <div class="text-align-center">Token Sale will start on {{tokenSale.start_time}}</div>
+                <div class="text-align-center">Token Sale will start on {{new Date(tokenSale.start_time).toString()}}</div>
             </div>
 
             <div style="margin: 0 -24px">
@@ -213,6 +246,7 @@
 <script>
     import deipRpc from '@deip/deip-rpc';
     import { mapGetters } from 'vuex'
+    import joinRequestsService from './../../../services/joinRequests'
 
     export default {
         name: "ResearchDetailsSidebar",
@@ -220,7 +254,11 @@
            return {
                 amountToContribute: undefined,
                 groupLink: this.$route.params.research_group_permlink,
-                isTokensBuying: false
+                isTokensBuying: false,
+
+                isJoinGroupDialogOpen: false,
+                coverLetter: "",
+                isSendingJoinGroupRequest: false
            }
         },
         computed: {
@@ -228,6 +266,7 @@
                 user: 'auth/user',
                 userGroups: 'auth/userGroups',
                 userExperise: 'auth/userExperise',
+                userJoinRequests: 'auth/userJoinRequests',
                 research: 'rd/research',
                 contentList: 'rd/contentList',
                 membersList: 'rd/membersList',
@@ -270,9 +309,24 @@
             currentCapPercent() {
                 return this.tokenSale ? this.currentCap * 100 / this.tokenSale.hard_cap : 0;
             },
-            canJoinResearchGroup : function(){
-                return this.membersList.find(m => { return m.owner == this.user.username}) === undefined;
-            }
+            canJoinResearchGroup() {
+                if (this.research) {
+                    if (this.membersList.some(m => m.owner == this.user.username))
+                        return false;
+                    if (this.userJoinRequests.some(r => r.groupId == this.research.research_group_id))
+                        return false;
+
+                    return true;
+                }
+                return false;
+            },
+            currentJoinRequest() {
+                return this.research ? this.userJoinRequests.find(r => r.groupId == this.research.research_group_id) : undefined;
+            },
+
+            isActiveJoinRequest() {
+                return this.currentJoinRequest && (this.currentJoinRequest.status == 'Approved' || this.currentJoinRequest.status == 'Pending')
+            }        
         },
         methods: {
             openReviewDialog() {
@@ -301,18 +355,26 @@
                 })
             },
 
-            joinResearchGroup : function(){
-                // deipRpc.broadcast.createResearchGroupJoinRequestAsync(
-				// 	this.user.privKey,
-				// 	this.user.username,
-				// 	this.research.research_group_id, 
-				// 	"I wanna trulala",
-				// 	new Date( new Date().getTime() + 2 * 24 * 60 * 60 * 1000 )
-				// ).then((data) => {
-                //     alert(data);
-                // }, (err) => {
-                //     alert(err.message);
-                // });
+            openJoinGroupDialog() {
+                this.isJoinGroupDialogOpen = true;
+                this.coverLetter = "";
+            },
+            sendJoinGroupRequest() {
+                this.isSendingJoinGroupRequest = true;
+                joinRequestsService.createJoinRequest({
+                    username: this.user.username,
+                    groupId: this.research.research_group_id,
+                    coverLetter: this.coverLetter
+                }).then(() => {
+                    this.$store.dispatch('auth/loadJoinRequests');
+                    this.$store.dispatch('layout/setSuccess', { message: "Join request has been sent successfully !"});
+                }, (err) => {
+                    this.$store.dispatch('layout/setError', { message: "An error occurred while sending join request, please try again later!"});
+                    console.log(err)
+                }).finally(() => {
+                    this.isSendingJoinGroupRequest = false;
+                    this.isJoinGroupDialogOpen = false;
+                })
             }
         }
     };

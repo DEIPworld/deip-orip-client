@@ -2,6 +2,7 @@ import _ from 'lodash';
 import deipRpc from '@deip/deip-rpc';
 import Vue from 'vue';
 import * as proposalService from "./../services/ProposalService"; 
+import joinRequestsService from './../../../services/joinRequests'
 
 const state = {
     proposals: [],
@@ -9,6 +10,7 @@ const state = {
     groupShares: [],
     researchList: [],
     members: [],
+    joinRequests: [],
 
     options: {
         isAddMemberDialogOpen: false,
@@ -30,7 +32,11 @@ const getters = {
     members: state => state.members,
     proposalListFilter: state => state.proposalListFilter,
     researchList: state => state.researchList,
-    options: state => state.options
+    options: state => state.options,
+    joinRequests: state => state.joinRequests,
+    pendingJoinRequests: state => {
+        return state.joinRequests.filter(r => r.status == 'Pending');
+    }
 }
 
 // actions
@@ -53,10 +59,12 @@ const actions = {
                 .then(data => {
                     dispatch('loadResearchGroupAccounts', data.map(item => item.owner));
                 });
+
+            dispatch('loadJoinRequests', state.group.id)
         });
     },
     loadResearchGroupShares({ commit, state }, id) {
-        return deipRpc.api.getResearchGroupTokensByResearchGroupAsync(id).then(data => {
+       return deipRpc.api.getResearchGroupTokensByResearchGroupAsync(id).then(data => {
             commit('SET_GROUP_SHARES', data);
             return data;
         });
@@ -94,7 +102,7 @@ const actions = {
     loadResearchGroupAccounts({ commit, state }, accountNames) {
         let accounts = [];
 
-        return deipRpc.api.getAccountsAsync(accountNames)
+        deipRpc.api.getAccountsAsync(accountNames)
             .then(data => {
                 accounts = _.each(data, (item, i) => { 
                     item.expertise = [];
@@ -126,6 +134,15 @@ const actions = {
     },
     changeOptions({ commit }, payload) {
         commit('UPDATE_OPTIONS', payload);
+    },
+
+    loadJoinRequests({ commit, state }, id) {
+        joinRequestsService.getJoinRequestsByGroup(id)
+            .then((requests) => {
+                commit('SET_JOIN_REQUESTS', requests);
+            }, (err) => {
+                console.log(err);
+            })
     }
 }
 
@@ -159,6 +176,9 @@ const mutations = {
     ['UPDATE_OPTIONS'](state, { key, value }) {
         Vue.set(state.options, key, value);
     },
+    ['SET_JOIN_REQUESTS'](state, joinRequests) {
+        Vue.set(state, 'joinRequests', joinRequests);
+    }
 }
 
 const namespaced = true;

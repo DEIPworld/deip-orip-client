@@ -4,6 +4,7 @@ import Vue from 'vue'
 
 import { isLoggedIn, getDecodedToken, getOwnerWif } from './../../../utils/auth'
 import usersService from './../../../services/users'
+import joinRequestsService from './../../../services/joinRequests'
 
 const state = {
     user: {
@@ -15,7 +16,8 @@ const state = {
         groupTokens: [],
         disciplines: [],
         groups: [],
-        coworkers: []
+        coworkers: [],
+        joinRequests: []
     }
 }
 
@@ -65,11 +67,22 @@ const getters = {
 
     userCoworkers: (state, getters) => {
         return state.user.coworkers;
+    },
+
+    userJoinRequests: (state, getters) => {
+        return state.user.joinRequests;
     }
 }
 
 // actions
 const actions = {
+
+    loadUser({state, dispatch}){
+        dispatch('loadExpertTokens');
+        dispatch('loadGroups');
+        dispatch('loadProfile');
+        dispatch('loadJoinRequests');
+    },
 
     loadExpertTokens({ state, commit, getters }) {
         const user = getters.user;
@@ -172,6 +185,18 @@ const actions = {
                         commit('SET_USER_COWORKERS_LIST', coworkers)
                 });
         }
+    },
+
+    loadJoinRequests({ state, commit, getters }) {
+        const user = getters.user;
+        if (user.username) {
+            joinRequestsService.getJoinRequestsByUser(user.username)
+                .then((requests) => {
+                    commit('SET_USER_JOIN_REQUESTS', requests)
+                }, (err) => {
+                    console.log(err)
+                })
+        }
     }
 }
 
@@ -200,6 +225,10 @@ const mutations = {
 
     ['SET_USER_PROFILE'](state, profile) {
         Vue.set(state.user, 'profile', profile)
+    },
+
+    ['SET_USER_JOIN_REQUESTS'](state, requests) {
+        Vue.set(state.user, 'joinRequests', requests)
     }
 }
 

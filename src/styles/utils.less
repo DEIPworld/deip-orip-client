@@ -55,6 +55,10 @@
     text-decoration: none;
 }
 
+.italic {
+    font-style: italic;
+}
+
 .create-font-sizes(@max, @i: 10) when (@i =< @max) {
     .font-@{i}px {
         font-size: @i * 1px;

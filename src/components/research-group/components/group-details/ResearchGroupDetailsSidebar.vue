@@ -22,34 +22,45 @@
             </div>
             <v-divider></v-divider>
         </div>
-
-        <div class="sm-title bold c-pt-6">Join requests: 2</div>
-
-        <div class="c-pb-6">
-            <div class="row-nowrap justify-between align-center c-pt-4">
-                <div>
-                    <v-avatar size="40px">
-                        <v-gravatar title="shkor" :email="'shkor' + '@deip.world'" />
-                    </v-avatar>
-                    <span class="a c-pl-3">Shkor</span>
+        <div v-if="hasPendingJoinRequests && isResearchGroupMember">
+            <div class="sm-title bold c-pt-6">Join requests: {{pendingJoinRequests.length}}</div>
+            <div class="c-pb-6">
+                <div v-for="(join, index) in pendingJoinRequests" class="row-nowrap justify-between align-center c-pt-4">
+                    <div>
+                        <v-avatar size="40px">
+                            <v-gravatar :title="join.username" :email="join.username + '@deip.world'" />
+                        </v-avatar>
+                        <span class="a c-pl-3">{{join.username}}</span>
+                    </div>
+                    <v-btn @click="openJoinRequestDetails(join, index)" flat icon color="grey" class="ma-0">
+                        <v-icon>mail_outline</v-icon>
+                    </v-btn>
                 </div>
-                <v-btn flat icon small color="primary" class="ma-0">
-                    <v-icon>check</v-icon>
-                </v-btn>
             </div>
-            <div class="row-nowrap justify-between align-center c-pt-4">
-                <div>
-                    <v-avatar size="40px">
-                        <v-gravatar title="kulik" :email="'kulik' + '@deip.world'" />
-                    </v-avatar>
-                    <span class="a c-pl-3">Kulik</span>
-                </div>
-                <v-btn flat icon small color="primary" class="ma-0">
-                    <v-icon>check</v-icon>
-                </v-btn>
-            </div>
+
+            <v-dialog v-model="selectedJoinRequestMeta.isShown" persistent max-width="800">
+                <v-card v-if="selectedJoinRequestMeta.item">
+                    <v-card-title>
+                        <span class="headline">{{selectedJoinRequestMeta.item.username}}</span>
+                        <span class="join-request-title-info"> wants to join your group </span>
+                    </v-card-title>
+                    <v-card-text class="text-align-center">{{selectedJoinRequestMeta.item.coverLetter}}</v-card-text>
+                    <v-card-actions class="text-align-center">
+                        <v-spacer></v-spacer>
+                        <v-btn color="green lighten-1" flat 
+                            :disabled="isApprovingJoinRequest" :loading="isApprovingJoinRequest" 
+                            @click.native="approveJoinRequest(selectedJoinRequestMeta)">
+                            Approve
+                        </v-btn>
+                        <v-btn color="red lighten-1" flat :disabled="isDenyingJoinRequest" :loading="isDenyingJoinRequest" 
+                            @click.native="denyJoinRequest(selectedJoinRequestMeta)">
+                            Deny
+                        </v-btn>
+                        <v-btn flat @click.native="closeJoinRequestDetails()">Cancel</v-btn>
+                    </v-card-actions>
+                </v-card>
+            </v-dialog>
         </div>
-
         <div style="margin: 0 -24px">
             <v-divider></v-divider>
         </div>
@@ -59,16 +70,26 @@
 <script>
     import { mapGetters } from 'vuex';
     import _ from 'lodash';
-    
+    import joinRequestsService from './../../../../services/joinRequests'
+    import * as proposalService from './../../services/ProposalService';
+    import deipRpc from '@deip/deip-rpc';
+
     export default {
         name: "ResearchGroupDetailsSidebar",
         data() {
-            return {};
+            return {
+                selectedJoinRequestMeta: { isShown: false, item: null, index: null },
+                isApprovingJoinRequest: false,
+                isDenyingJoinRequest: false
+            };
         },
         computed: {
             ...mapGetters({
+                user: 'auth/user',
+                group: 'researchGroup/group',
                 groupShares: 'researchGroup/groupShares',
-                members: 'researchGroup/members'
+                members: 'researchGroup/members',
+                pendingJoinRequests: 'researchGroup/pendingJoinRequests'
             }),
             groupExpertise() {
                 return _.chain(this.members)
@@ -83,6 +104,119 @@
                     })
                     .values()
                     .value();
+            },
+            isResearchGroupMember() {
+                return this.group != null 
+                    ? this.$store.getters['auth/userIsResearchGroupMember'](this.group.id) 
+                    : false
+            },
+            hasPendingJoinRequests() {
+                return this.pendingJoinRequests && this.pendingJoinRequests.length;
+            }           
+        },
+
+        methods: {
+            openJoinRequestDetails(item, index) {
+                this.selectedJoinRequestMeta.isShown = true;
+                this.selectedJoinRequestMeta.item = item;
+                this.selectedJoinRequestMeta.index = index;
+            },
+            closeJoinRequestDetails() {
+                this.selectedJoinRequestMeta.isShown = false;
+                this.selectedJoinRequestMeta.item = null;
+                this.selectedJoinRequestMeta.index = null;
+            },
+            approveJoinRequest({item, index}) {
+                const self = this;
+                const update = Object.assign({}, item, { status: 'Approved' });
+                self.isApprovingJoinRequest = true;
+
+                deipRpc.api.getDynamicGlobalProperties(function(err, result) {
+                    if (!err) {
+                        const BlockNum = (result.last_irreversible_block_num - 1) & 0xFFFF;
+                        deipRpc.api.getBlockHeader(result.last_irreversible_block_num, function(e, res) {
+                            const BlockPrefix = new Buffer(res.previous, 'hex').readUInt32LE(4);
+                            const now = new Date().getTime() + 3e6;
+                            const expire = new Date(now).toISOString().split('.')[0];
+
+                            let proposal = proposalService.getStringifiedProposalData(
+                                proposalService.types.inviteMember, [
+                                self.group.id,
+                                item.username,
+                                5 * self.DEIP_1_PERCENT
+                            ]);
+
+                            const operation = ["create_proposal", {
+                                    creator: self.user.username,
+                                    research_group_id: self.group.id,
+                                    data: proposal,
+                                    action: proposalService.types.inviteMember,
+                                    expiration_time: new Date( new Date().getTime() + 2 * 24 * 60 * 60 * 1000 )
+                            }]
+
+                            const unsignedTX = {
+                                'expiration': expire,
+                                'extensions': [],
+                                'operations': [operation],
+                                'ref_block_num': BlockNum,
+                                'ref_block_prefix': BlockPrefix
+                            }
+                            try {
+                                const signedTX = deipRpc.auth.signTransaction(unsignedTX, {
+                                    "owner":  self.user.privKey
+                                })
+
+                                joinRequestsService.updateJoinRequest({request: update, tx: signedTX})
+                                    .then((updatedRequest) => {
+                                            self.$store.dispatch('researchGroup/loadJoinRequests', self.group.id);
+                                            self.$store.dispatch('researchGroup/loadResearchGroupProposals', self.group.id);
+                                            self.$store.dispatch('layout/setSuccess', { message: `Invite proposal for "${item.username}" has been created successfully !`});
+                                        },
+                                        (err) => {
+                                            self.$store.dispatch('layout/setError', { message: "An error occurred while approving join request, please try again later" });
+                                            console.log(err)
+                                        }
+                                    )
+                                    .finally(() => {
+                                        self.selectedJoinRequestMeta.isShown = false;
+                                        self.selectedJoinRequestMeta.item = null;
+                                        self.selectedJoinRequestMeta.index = null;
+                                        self.isApprovingJoinRequest = false;
+                                    })
+
+                            } catch (err) {
+                                self.selectedJoinRequestMeta.isShown = false;
+                                self.selectedJoinRequestMeta.item = null;
+                                self.selectedJoinRequestMeta.index = null;
+                                self.isApprovingJoinRequest = false;
+                                self.$store.dispatch('layout/setError', { message: "An error occurred while approving join request, please try again later"});
+                                console.log(err);
+                            }
+                        });
+                    }
+                });
+            },
+
+            denyJoinRequest({item, index}) {
+                const self = this;
+                const update = Object.assign({}, item, { status: 'Denied' });
+                self.isDenyingJoinRequest = true;
+
+                joinRequestsService.updateJoinRequest({request: update})
+                    .then((updatedRequest) => {
+                        self.$store.dispatch('researchGroup/loadJoinRequests', self.group.id);
+                        self.$store.dispatch('layout/setSuccess', { message: `You have denied join request from  "${item.username}" successfully !`});
+                    },
+                    (err) => {
+                        self.$store.dispatch('layout/setError', { message: "An error occurred while denying join request, please try again later" });
+                        console.log(err)
+                    })
+                    .finally(() => {
+                        self.selectedJoinRequestMeta.isShown = false;
+                        self.selectedJoinRequestMeta.item = null;
+                        self.selectedJoinRequestMeta.index = null;
+                        self.isDenyingJoinRequest = false;
+                    })
             }
         }
     };
@@ -93,5 +227,10 @@
         background-color: rgba(0,0,0,0.12);
         width: 1px;
         margin: 12px 0;
+    }
+
+    .join-request-title-info {
+        padding-left: 10px;
+        padding-top: 3px;
     }
 </style>
