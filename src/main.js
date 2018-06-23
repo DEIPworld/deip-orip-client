@@ -11,7 +11,6 @@ import './styles/common.less'
 import 'vue2-dropzone/dist/vue2Dropzone.css'
 
 import './components/layout/index';
-import './components/core/index';
 import './components/common/index';
 import './components/user-details/index';
 import './components/research-feed/index'
@@ -25,7 +24,6 @@ import './components/user-wallet/index';
 
 import config from './config'
 import deipRpc from '@deip/deip-rpc';
-import moment from 'moment';
 
 Vue.use(Vuetify, {
     theme: {
@@ -53,10 +51,6 @@ Vue.prototype.toAssetUnits = amount => {
     return `${value} ${config['asset-unit']}`;
 };
 Vue.prototype.fromAssetsToFloat = assets => parseFloat(assets.split(' ')[0]);
-
-Vue.filter('dateFormat', (value, format) => {
-    return moment(value).format(format);
-});
 
 
 /* eslint-disable no-new */
