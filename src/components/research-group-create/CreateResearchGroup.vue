@@ -83,7 +83,7 @@
                     name: "",
                     permlink: "",
                     description: "",
-                    members: [{ name: this.$route.params.account_name, stake: 100 }]
+                    members: []
                 },
                 isLoading: false
             } 
@@ -114,9 +114,9 @@
                 const self = this;
 
                 this.isLoading = true;
-                const invitees = this.group.members.filter(m => m.name != this.user.username)
+                const invitees = this.group.members.filter(m => m.account.name != this.user.username)
                     .map(m => {
-                        return { account: m.name, research_group_tokens_in_percent: m.stake * this.DEIP_1_PERCENT }
+                        return { account: m.account.name, research_group_tokens_in_percent: m.stake * this.DEIP_1_PERCENT }
                     })
 
                 deipRpc.broadcast.createResearchGroupAsync(
