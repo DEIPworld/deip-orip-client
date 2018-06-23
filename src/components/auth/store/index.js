@@ -12,6 +12,7 @@ const state = {
         pubKey: isLoggedIn() ? getDecodedToken().pubKey : null,
         privKey: isLoggedIn() ? getOwnerWif() : null,
         profile: null,
+        account: null,
         expertTokens: [],
         groupTokens: [],
         disciplines: [],
@@ -27,10 +28,6 @@ const getters = {
         return state.user
     },
 
-    profile: (state, getters) => {
-        return state.profile
-    },
-    
     userExperise: (state, getters) => {
         const experise = [];
         for (let i = 0; i < state.user.expertTokens.length; i++) {
@@ -197,6 +194,18 @@ const actions = {
                     console.log(err)
                 })
         }
+    },
+
+    loadAccount({ state, commit, getters }) {
+        const user = getters.user;
+        if (user.username) {
+            deipRpc.api.getAccountsAsync([user.username])
+                .then((account) => {
+                    commit('SET_USER_ACCOUNT', account)
+                }, (err) => {
+                    console.log(err)
+                })
+        }
     }
 }
 
@@ -229,6 +238,10 @@ const mutations = {
 
     ['SET_USER_JOIN_REQUESTS'](state, requests) {
         Vue.set(state.user, 'joinRequests', requests)
+    },
+
+    ['SET_USER_ACCOUNT'](state, account) {
+        Vue.set(state.user, 'account', account)
     }
 }
 

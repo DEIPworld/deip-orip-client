@@ -9,13 +9,13 @@
                         <div class="subheading c-pv-4">Distribute shares of this group which will...</div>
 
                         <div class="row-nowrap justify-between align-center c-pt-4" 
-                            v-for="(member, i) in group.members" :key="i"
-                        >
+                            v-for="(member, i) in group.members" :key="i">
                             <div>
                                 <v-avatar size="30px">
-                                    <v-gravatar :email="member.name+ '@deip.world'" />
+                                    <img v-if="member.profile" v-bind:src="member.profile.avatar | avatarSrc(30, 30, false)" />
+                                    <v-gravatar v-else :email="member.account.name + '@deip.world'" />
                                 </v-avatar>
-                                <router-link :to="'/user-details' + member.name" class="a c-pl-3">{{ member.name }}</router-link>
+                                <router-link :to="'/user-details' + member.account.name" class="a c-pl-3">{{ member | fullname }}</router-link>
                             </div>
                             <div>
                                 <v-text-field class="width-4 pa-0 rtl"

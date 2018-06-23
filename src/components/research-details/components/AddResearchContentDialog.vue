@@ -47,9 +47,10 @@
                                 <template slot="selection" slot-scope="data">
                                     <div class="row-nowrap align-center c-pl-4">
                                         <v-avatar size="30px">
-                                            <v-gravatar :email="data.item.owner + '@deip.world'" />
+                                            <img v-if="data.item.profile" v-bind:src="data.item.profile.avatar | avatarSrc(30, 30, false)" />
+                                            <v-gravatar v-else :email="data.item.account.name + '@deip.world'" />
                                         </v-avatar>
-                                        <span class="deip-blue-color c-pl-3">{{ data.item.owner }}</span>
+                                        <span class="deip-blue-color c-pl-3">{{ data.item | fullname }}</span>
                                     </div>
                                 </template>
                                 
@@ -58,9 +59,10 @@
                                         <div class="row-nowrap align-center author-item" 
                                             :class="{ 'selected-author-item': isAuthorSelected(data.item) }">
                                             <v-avatar size="30px">
-                                                <v-gravatar :email="data.item.owner + '@deip.world'" />
+                                                <img v-if="data.item.profile" v-bind:src="data.item.profile.avatar | avatarSrc(30, 30, false)" />
+                                                <v-gravatar v-else :email="data.item.account.name + '@deip.world'" />
                                             </v-avatar>
-                                            <span class="deip-blue-color c-pl-3">{{ data.item.owner }}</span>
+                                            <span class="deip-blue-color c-pl-3">{{ data.item | fullname  }}</span>
                                         </div>
                                     </template>
                                 </template>
@@ -150,7 +152,7 @@
 
         methods: {
             isAuthorSelected(item){
-                return this.authors.find(author => { return author.owner == item.owner }) !== undefined;
+                return this.authors.find(author => { return author.account.name == item.account.name }) !== undefined;
             },
             close() {
                 this.isLoading = false;
@@ -181,7 +183,7 @@
                     this.title,
                     this.title.replace(/ /g, "-").replace(/_/g, "-").toLowerCase(),
                     hash,
-                    this.authors.map(a => {return a.owner}),
+                    this.authors.map(a => {return a.account.name}),
                     [],
                     []
                 ]);

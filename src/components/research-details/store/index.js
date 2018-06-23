@@ -3,6 +3,7 @@ import deipRpc from '@deip/deip-rpc';
 import Vue from 'vue'
 import config from './../../../config'
 import { getAccessToken } from './../../../utils/auth'
+import { getEnrichedProfiles } from './../../../utils/user'
 
 const state = {
     research: null,
@@ -153,6 +154,7 @@ const actions = {
     },
 
     loadResearchDetails({ state, commit, dispatch }, { group_permlink, research_permlink }) {
+        var rgtList = [];
         deipRpc.api.getResearchByAbsolutePermlinkAsync(group_permlink, research_permlink)
             .then((research) => {
                 research.group_permlink = group_permlink;
@@ -160,12 +162,20 @@ const actions = {
                 return deipRpc.api.getResearchGroupTokensByResearchGroupAsync(state.research.research_group_id);
             })
             .then((members) => {
-                commit('SET_RESEARCH_MEMBERS_LIST', members)
+                rgtList = members;
                 dispatch('loadResearchContent', state.research.id)
                 dispatch('loadResearchReviews', state.research.id)
                 dispatch('loadResearchDisciplines', state.research.id)
                 dispatch('loadResearchTokenSale', state.research.id)
                 dispatch('loadResearchGroupInvites', state.research.research_group_id)
+                return getEnrichedProfiles(members.map(m => m.owner))
+            })
+            .then((users) => {
+                for (let i = 0; i < users.length; i++) {
+                    const user = users[i];
+                    user.rgt = rgtList.find(rgt => rgt.owner == user.account.name);
+                }
+                commit('SET_RESEARCH_MEMBERS_LIST', users)
             })
     },
 

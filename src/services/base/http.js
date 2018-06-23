@@ -123,7 +123,7 @@ var http = { // todo: add file upload
                 var k = prefix ? prefix + "[" + p + "]" : p,
                     v = obj[p];
 
-                if (angular.isObject(v)) {
+                if ( v != null && typeof v === 'object') {
                     str.push(http.buildQueryString(v, k).substr(1));
                 } else {
                     str.push(v || v === 0 || v === false ? (k) + "=" + encodeURIComponent(v) : (k) + "=");

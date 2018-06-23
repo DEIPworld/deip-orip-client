@@ -27,11 +27,12 @@
                         <div class="list-line">
                             <div class="row-nowrap col-4 list-body-cell">
                                 <v-avatar size="40px" class="c-pt-3">
-                                    <v-gravatar :email="member.name + '@deip.world'" />
+                                    <img v-if="member.profile" v-bind:src="member.profile.avatar | avatarSrc(40, 40, false)" />
+                                    <v-gravatar v-else :email="member.account.name + '@deip.world'" />
                                 </v-avatar>
 
                                 <div class="col-grow c-pl-4">
-                                    <router-link :to="'/user-details/' + member.name" class="a subheading">{{ member.name }}</router-link>
+                                    <router-link :to="'/user-details/' + member.account.name" class="a subheading">{{ member | fullname }}</router-link>
                                     <div class="caption c-pt-1">Belarusian State University of Informatics and Radioelectronics</div>
                                 </div>
                             </div>
@@ -43,7 +44,7 @@
                             </div>
 
                             <div class="col-1 text-align-center list-body-cell">
-                                {{ convertToPercent(member.groupShares.amount) }}%
+                                {{ convertToPercent(member.rgt.amount) }}%
                             </div>
 
                             <div class="col-2 text-align-center list-body-cell">

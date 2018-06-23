@@ -42,7 +42,7 @@
                     <v-card>
                         <v-card-text class="pt-0">
                             <div class="c-ph-2">
-                                <div class="caption grey--text c-pt-2"> {{content.authors.join("  ·  ")}}</div>
+                                <div class="caption grey--text c-pt-2"> {{contentAuthorsStr(content.authors)}}</div>
                                 <div class="c-pt-4 half-bold">
                                 </div>
                                 <div class="c-pt-2">
@@ -136,14 +136,13 @@
                 user: 'auth/user',
                 userExperise: 'auth/userExperise',
                 research: 'rd/research',
-                membersList: 'rd/membersList',
                 contentList: 'rd/contentList',
                 reviewsList: 'rd/reviewsList',
                 disciplinesList: 'rd/disciplinesList',
                 totalVotesList: 'rd/totalVotesList',
-                contentWeightByDiscipline: 'rd/contentWeightByDiscipline'
+                contentWeightByDiscipline: 'rd/contentWeightByDiscipline',
+                membersList: 'rd/membersList'
             }),
-
             isResearchGroupMember() {
                 return this.research != null 
                     ? this.$store.getters['auth/userIsResearchGroupMember'](this.research.research_group_id) 
@@ -151,7 +150,12 @@
             }
         },
         methods: {
-
+            contentAuthorsStr(authors) {
+                return this.membersList
+                    .filter(m => authors.some(a => a == m.account.name))
+                    .map(m => this.$options.filters.fullname(m))
+                    .join("  ·  ");
+            }
         }
     };
 </script>

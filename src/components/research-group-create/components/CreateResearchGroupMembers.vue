@@ -11,20 +11,20 @@
                             single-line
                             append-icon="search"
                             v-model="q"
-                            @input="debounceSearchUsers()"
-                        ></v-text-field>
+                            @input="debounceSearchUsers()">
+                        </v-text-field>
                         <div>
 
                             <div class="row-nowrap justify-between align-center c-pt-4"
-                                v-for="(user, i) in group.members" :key="i + '-picked'"
-                            >
+                                v-for="(user, i) in group.members" :key="i + '-picked'">
                                 <div>
                                     <v-avatar size="30px">
-                                        <v-gravatar :email="user.name + '@deip.world'" />
+                                        <img v-if="user.profile" v-bind:src="user.profile.avatar | avatarSrc(30, 30, false)" />
+                                        <v-gravatar v-else :email="user.account.name + '@deip.world'" />
                                     </v-avatar>
-                                    <router-link to="#" class="a c-pl-3">{{ user.name }}</router-link>
+                                    <router-link to="#" class="a c-pl-3">{{ user | fullname }}</router-link>
                                 </div>
-                                <v-btn v-if="user.name != creatorUsername" flat color="grey" class="ma-0" @click="cancelMember(i)">Cancel</v-btn>
+                                <v-btn v-if="user.account.name != creatorUsername" flat color="grey" class="ma-0" @click="cancelMember(i)">Cancel</v-btn>
                             </div>
 
                         </div>
@@ -32,13 +32,13 @@
                         <div>
 
                             <div class="row-nowrap justify-between align-center c-pt-4" 
-                                v-for="(user, i) in selectableUsers" :key="i + '-selectable'"
-                            >
+                                v-for="(user, i) in selectableUsers" :key="i + '-selectable'">
                                 <div>
                                     <v-avatar size="30px">
-                                        <v-gravatar :email="user.name + '@deip.world'" />
+                                        <img v-if="user.profile" v-bind:src="user.profile.avatar | avatarSrc(30, 30, false)" />
+                                        <v-gravatar v-else :email="user.account.name + '@deip.world'" />
                                     </v-avatar>
-                                    <router-link to="#" class="a c-pl-3">{{ user.name }}</router-link>
+                                    <router-link to="#" class="a c-pl-3">{{ user | fullname }}</router-link>
                                 </div>
                                 <v-btn flat color="primary" class="ma-0" @click="inviteMember(user)">+ Invite</v-btn>
                             </div>
@@ -60,24 +60,26 @@
 
 <script>
     import deipRpc from '@deip/deip-rpc';
-    import _ from 'lodash';    
+    import _ from 'lodash';
+    import { getEnrichedProfiles } from './../../../utils/user'
+
     const SELECTABLE_USERS_COUNT = 5;
 
     const prepareSelectableUsers = (allUsers, pickedUsers, q) => {
         let handler =  _(allUsers);
 
         if (q !== '') {
-            handler = handler.filter(user => _.startsWith(user.name.toLowerCase(), q.toLowerCase()));
+            handler = handler.filter(user => _.startsWith(user.account.name.toLowerCase(), q.toLowerCase()));
         }
             
         return handler.take(SELECTABLE_USERS_COUNT + pickedUsers.length)
-            .differenceBy(pickedUsers, item => item.name)
+            .differenceBy(pickedUsers, item => item.account.name)
             .take(SELECTABLE_USERS_COUNT)
             .value();
     }
 
     function recalculateDefaultStakes(creatorUsername, members) {
-        const creator = members.find(m => m.name == creatorUsername);
+        const creator = members.find(m => m.account.name == creatorUsername);
         var totalSum = 0;
 
         members.forEach(m => {
@@ -131,23 +133,21 @@
             }
         },
         mounted() {
-            deipRpc.api.getAllAccountsAsync().then(data => { 
-                this.allUsers = data
-                        .filter(item => {return item.name.toLowerCase() != this.creatorUsername.toLowerCase()})
-                        .map(item => {
-                            return { name: item.name, stake: 0 };
-                        });
-
-                // for testing when array is too small
-                // for (let i = 0; i < 10; i++) {
-                //     let newData = _.cloneDeep(data);
-                //     newData.forEach(element => {
-                //         element.name = element.name + ' ' + i;
-                //     });
-                //     this.allUsers = _.concat(this.allUsers, newData);
-                // }
-
-                this.selectableUsers = prepareSelectableUsers(this.allUsers, this.selectedUsers, this.q);
+            deipRpc.api.getAllAccountsAsync()
+                .then(data => {
+                    deipRpc.api.getAllAccountsAsync()
+                        .then(accounts => {
+                            const usernames = [];
+                            usernames.push(this.creatorUsername)
+                            usernames.push(...accounts.filter(a => a.name != this.creatorUsername).map(a => a.name))
+                            return getEnrichedProfiles(usernames)
+                        })
+                        .then((users) => {
+                            users.forEach(u => { u.stake = 0 })
+                            this.selectedUsers.push(users[0]) // creator
+                            this.allUsers = users.slice(1)
+                            this.selectableUsers = prepareSelectableUsers(this.allUsers, this.selectedUsers, this.q);
+                        })
             });
         }
     };
