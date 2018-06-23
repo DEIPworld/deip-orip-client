@@ -28,7 +28,7 @@
         </div>
 
         <!-- Contacts Info -->
-        <div v-if="isContactsInfoSpecified || isOwner">
+        <div v-if="isProfileAvailable && (isContactsInfoSpecified || isOwner)">
             <div class="sm-title bold c-pt-4">
                 <span class="row">
                     <span class="col-11 mt-1">Contacts Info</span>
@@ -85,7 +85,7 @@
 
 
         <!-- Personal Info -->
-        <div v-if="isPersonalInfoSpecified || isOwner">
+        <div v-if="isProfileAvailable && (isPersonalInfoSpecified || isOwner)">
             <div class="sm-title bold c-pt-6">
                 <span class="row">
                 <span class="col-11 mt-1">Personal Info</span>
@@ -166,7 +166,7 @@
 
 
         <!-- Invites Info -->
-        <div v-if="hasInvites">
+        <div v-if="isOwner && hasInvites">
             <div class="sm-title bold c-pt-6">Invites: {{invites.length}}</div>
                 <div class="c-pb-6">
                     <div v-for="(invite, index) in invites" class="row-nowrap justify-between align-center c-pt-4">
@@ -249,6 +249,9 @@
             isPersonalInfoSpecified() {
                 return this.userInfo && this.userInfo.profile && 
                     (this.userInfo.profile.firstName || this.userInfo.profile.lastName || this.userInfo.profile.birthday);
+            },
+            isProfileAvailable() {
+                return this.userInfo.profile != null;
             },
             hasInvites() {
                 return this.invites.length;

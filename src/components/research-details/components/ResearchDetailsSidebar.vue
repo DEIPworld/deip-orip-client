@@ -9,7 +9,7 @@
             <div>
                 <v-avatar size="40px">
                     <img v-if="member.profile" v-bind:src="member.profile.avatar | avatarSrc(40, 40, false)" />
-                    <v-gravatar v-else :title="member.owner" :email="member.owner + '@deip.world'" />
+                    <v-gravatar v-else :title="member.account.name" :email="member.account.name + '@deip.world'" />
                 </v-avatar>
                 <router-link :to="'/user-details/' + member.account.name" class="a c-pl-3">
                     {{member | fullname}}
@@ -18,7 +18,7 @@
             <div class="grey--text"> {{convertToPercent(member.rgt.amount)}}%</div>
         </div>
         
-        <div v-if="canJoinResearchGroup || isActiveJoinRequest || isActiveInvite" class="c-pt-4 c-pb-6">
+        <div v-if="isProfileAvailable && (canJoinResearchGroup || isActiveJoinRequest || isActiveInvite)" class="c-pt-4 c-pb-6">
             <div v-if="canJoinResearchGroup">
                 <v-btn @click="openJoinGroupDialog()" outline icon color="primary" class="ma-0">
                     <v-icon small>add</v-icon>
@@ -335,6 +335,9 @@
             },
             isActiveInvite() {
                 return this.groupInvitesList.some(invite => invite.account_name == this.user.username)
+            },
+            isProfileAvailable() {
+                return this.user.profile != null;
             }
         },
         methods: {

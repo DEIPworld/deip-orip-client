@@ -5,12 +5,18 @@ export function getEnrichedProfiles(usernames) {
     const profilesPromise = usersService.getUsersProfiles(usernames)
         .then((profiles) => {
             return profiles;
-        }, (err) => {console.log(err)})
+        }, (err) => {
+            console.log(err)
+            return [];
+        })
 
     const accountsPromise = deipRpc.api.getAccountsAsync(usernames)
         .then((accounts) => {
             return accounts;
-        }, (err) => {console.log(err)})
+        }, (err) => {
+            console.log(err)
+            return [];
+        })
 
     return Promise.all([profilesPromise, accountsPromise])
         .then((response) => {

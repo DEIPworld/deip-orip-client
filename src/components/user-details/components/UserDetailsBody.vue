@@ -6,7 +6,7 @@
                     v-on:mouseover="onAvatarMouseOver"
                     v-on:mouseout="onAvatarMouseOut">
                 <img v-if="userInfo.profile" v-bind:src="userInfo.profile.avatar | avatarSrc(160, 160, false)" />
-                <!-- <v-gravatar v-else :email="userInfo.account.name + '@deip.world'" /> -->
+                <v-gravatar v-else :email="userInfo.account.name + '@deip.world'" />
                 <vue-dropzone v-if="dropzoneOptions" v-show="avatarUploadIsShown" ref="avatar-upload" id="avatar-dropzone" 
                     :options="dropzoneOptions"
                     @vdropzone-success="avatarUploadSuccess"
@@ -126,90 +126,90 @@
             </template>
         </v-card>
 
-        <div v-if="isEducationSpecified || isOwner" class="c-pt-8">
+        <div v-if="isProfileAvailable && (isEducationSpecified || isOwner)" class="c-pt-8">
             <div class="title">Education</div>
+            <v-card class="c-mt-6" v-if="userInfo && userInfo.profile">
+                <div v-for="(item, index) in userInfo.profile.education">
+                    <div v-if="isOwner" class="right c-mt-7 c-mr-5">
+                        <v-btn class="c-mr-2 c-ml-2" @click="showSaveEducationDialog(item, index)" 
+                                outline small depressed color="primary lighten-1">
+                                Edit
+                        </v-btn>
+                        <v-btn class="c-mr-2 c-ml-2" @click="showDeleteEducationDialog(item, index)" 
+                                outline small depressed color="red lighten-1">
+                                Delete
+                        </v-btn>
+                    </div>
+                    <div class="c-p-6">
+                        <div class="subheading half-bold">{{item.educationalInstitution}}</div>
+                        <div class="">{{item.degree}}</div>
+                    </div>
+                    <v-divider></v-divider>
+                </div>
+                <div v-if="isOwner" class="c-pv-4 c-ph-6">
+                    <v-btn class="ma-0" @click="showSaveEducationDialog(null, -1)" outline icon color="primary">
+                        <v-icon small>add</v-icon>
+                    </v-btn>
+                    <span class="c-pl-2 deip-blue-color">Add Education Institutions</span>
+                </div>
+                <div v-if="isOwner">
+                    <user-edit-education-dialog 
+                        :meta="saveEducationMeta"
+                        @saveEducation="saveEducation($event); saveEducationMeta.isShown = false">
+                    </user-edit-education-dialog>
+                    <confirm-action-dialog
+                        :meta="deleteEducationMeta"
+                        :title="``" :text="`Are you sure you want to delete this entry ?`"
+                        @confirmed="deleteEducation($event); deleteEducationMeta.isShown = false" 
+                        @canceled="deleteEducationMeta.isShown = false">
+                    </confirm-action-dialog>
+                </div>
+            </v-card>
         </div>
 
-        <v-card class="c-mt-6" v-if="userInfo && userInfo.profile">
-            <div v-for="(item, index) in userInfo.profile.education">
-                <div v-if="isOwner" class="right c-mt-7 c-mr-5">
-                    <v-btn class="c-mr-2 c-ml-2" @click="showSaveEducationDialog(item, index)" 
+        <div v-if="isProfileAvailable && (isEmploymentSpecified || isOwner)">
+            <div class="c-pt-8">
+                <div class="title">Employment</div>
+            </div>
+
+            <v-card class="c-mt-6" v-if="userInfo && userInfo.profile">
+                <div v-for="(item, index) in userInfo.profile.employment">
+                    <div v-if="isOwner" class="right c-mt-7 c-mr-5">
+                        <v-btn class="c-mr-2 c-ml-2" @click="showSaveEmploymentDialog(item, index)" 
                             outline small depressed color="primary lighten-1">
                             Edit
-                    </v-btn>
-                    <v-btn class="c-mr-2 c-ml-2" @click="showDeleteEducationDialog(item, index)" 
+                        </v-btn>
+                        <v-btn class="c-mr-2 c-ml-2" @click="showDeleteEmploymentDialog(item, index)" 
                             outline small depressed color="red lighten-1">
                             Delete
+                        </v-btn>
+                    </div>
+                    <div class="c-p-6">
+                        <div class="subheading half-bold">{{item.company}}</div>
+                        <div class="">{{item.position}}</div>
+                    </div>
+                    <v-divider></v-divider>
+                </div>
+                <div v-if="isOwner" class="c-pv-4 c-ph-6">
+                    <v-btn class="ma-0" @click="showSaveEmploymentDialog(null, -1)" outline icon color="primary">
+                        <v-icon small>add</v-icon>
                     </v-btn>
+                    <span class="c-pl-2 deip-blue-color">Add Employment</span>
                 </div>
-                <div class="c-p-6">
-                    <div class="subheading half-bold">{{item.educationalInstitution}}</div>
-                    <div class="">{{item.degree}}</div>
+                <div v-if="isOwner">
+                    <user-edit-employment-dialog 
+                        :meta="saveEmploymentMeta"
+                        @saveEmployment="saveEmployment($event); saveEmploymentMeta.isShown = false">
+                    </user-edit-employment-dialog>
+                    <confirm-action-dialog
+                        :meta="deleteEmploymentMeta"
+                        :title="``" :text="`Are you sure you want to delete this entry ?`"
+                        @confirmed="deleteEmployment($event); deleteEmploymentMeta.isShown = false" 
+                        @canceled="deleteEmploymentMeta.isShown = false">
+                    </confirm-action-dialog>
                 </div>
-                <v-divider></v-divider>
-            </div>
-            <div v-if="isOwner" class="c-pv-4 c-ph-6">
-                <v-btn class="ma-0" @click="showSaveEducationDialog(null, -1)" outline icon color="primary">
-                    <v-icon small>add</v-icon>
-                </v-btn>
-                <span class="c-pl-2 deip-blue-color">Add Education Institutions</span>
-            </div>
-            <div v-if="isOwner">
-                <user-edit-education-dialog 
-                    :meta="saveEducationMeta"
-                    @saveEducation="saveEducation($event); saveEducationMeta.isShown = false">
-                </user-edit-education-dialog>
-                <confirm-action-dialog
-                    :meta="deleteEducationMeta"
-                    :title="``" :text="`Are you sure you want to delete this entry ?`"
-                    @confirmed="deleteEducation($event); deleteEducationMeta.isShown = false" 
-                    @canceled="deleteEducationMeta.isShown = false">
-                </confirm-action-dialog>
-            </div>
-        </v-card>
-
-
-        <div v-if="isEmploymentSpecified || isOwner"  class="c-pt-8">
-            <div class="title">Employment</div>
+            </v-card>
         </div>
-
-        <v-card class="c-mt-6" v-if="userInfo && userInfo.profile">
-            <div v-for="(item, index) in userInfo.profile.employment">
-                <div v-if="isOwner" class="right c-mt-7 c-mr-5">
-                    <v-btn class="c-mr-2 c-ml-2" @click="showSaveEmploymentDialog(item, index)" 
-                            outline small depressed color="primary lighten-1">
-                            Edit
-                    </v-btn>
-                    <v-btn class="c-mr-2 c-ml-2" @click="showDeleteEmploymentDialog(item, index)" 
-                            outline small depressed color="red lighten-1">
-                            Delete
-                    </v-btn>
-                </div>
-                <div class="c-p-6">
-                    <div class="subheading half-bold">{{item.company}}</div>
-                    <div class="">{{item.position}}</div>
-                </div>
-                <v-divider></v-divider>
-            </div>
-            <div v-if="isOwner" class="c-pv-4 c-ph-6">
-                <v-btn class="ma-0" @click="showSaveEmploymentDialog(null, -1)" outline icon color="primary">
-                    <v-icon small>add</v-icon>
-                </v-btn>
-                <span class="c-pl-2 deip-blue-color">Add Employment</span>
-            </div>
-            <div v-if="isOwner">
-                <user-edit-employment-dialog 
-                    :meta="saveEmploymentMeta"
-                    @saveEmployment="saveEmployment($event); saveEmploymentMeta.isShown = false">
-                </user-edit-employment-dialog>
-                <confirm-action-dialog
-                    :meta="deleteEmploymentMeta"
-                    :title="``" :text="`Are you sure you want to delete this entry ?`"
-                    @confirmed="deleteEmployment($event); deleteEmploymentMeta.isShown = false" 
-                    @canceled="deleteEmploymentMeta.isShown = false">
-                </confirm-action-dialog>
-            </div>
-        </v-card>
     </div>
 </template>
 
@@ -295,6 +295,10 @@
                         dictDefaultMessage: "",
                         acceptedFiles: ['image/png', 'image/jpeg'].join(',')
                     } : null;
+            },
+
+            isProfileAvailable() {
+                return this.userInfo.profile != null;
             }
         },
         methods: {
