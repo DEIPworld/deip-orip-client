@@ -79,6 +79,7 @@ const actions = {
         dispatch('loadExpertTokens');
         dispatch('loadGroups');
         dispatch('loadProfile');
+        dispatch('loadAccount');
         dispatch('loadJoinRequests');
     },
 
@@ -181,7 +182,7 @@ const actions = {
                     }
 
                     return getEnrichedProfiles(coworkers.map(c => c.rgt.owner))
-                    
+
                 }).then((users) => {
 
                     coworkers.forEach((coworker, idx) => {

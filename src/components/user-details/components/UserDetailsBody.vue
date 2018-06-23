@@ -6,7 +6,7 @@
                     v-on:mouseover="onAvatarMouseOver"
                     v-on:mouseout="onAvatarMouseOut">
                 <img v-if="userInfo.profile" v-bind:src="userInfo.profile.avatar | avatarSrc(160, 160, false)" />
-                <v-gravatar v-else :email="userInfo.account.name + '@deip.world'" />
+                <v-gravatar v-if="!userInfo.profile && userInfo.account" :email="userInfo.account.name + '@deip.world'" />
                 <vue-dropzone v-if="dropzoneOptions" v-show="avatarUploadIsShown" ref="avatar-upload" id="avatar-dropzone" 
                     :options="dropzoneOptions"
                     @vdropzone-success="avatarUploadSuccess"
