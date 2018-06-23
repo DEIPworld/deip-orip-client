@@ -10,7 +10,7 @@ import CreateNewResearch from '@/components/research-create/CreateNewResearch'
 import CreateTokenSale from '@/components/token-sale-create/CreateTokenSale'
 
 import CreateResearchGroup from '@/components/research-group-create/CreateResearchGroup'
-import ResearchGroupDetails from '@/components/research-group/components/ResearchGroupDetails'
+import ResearchGroupDetails from '@/components/research-group-details/ResearchGroupDetails'
 
 import SignIn from '@/components/auth/SignIn'
 import SignUp from '@/components/auth/SignUp'

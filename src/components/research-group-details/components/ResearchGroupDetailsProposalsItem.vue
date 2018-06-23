@@ -91,7 +91,7 @@
 
 <script>
     import { mapGetters, mapActions } from 'vuex';
-    import * as proposalService from "./../../services/ProposalService";
+    import * as proposalService from "./../../../services/ProposalService";
     import _ from 'lodash';
     import deipRpc from '@deip/deip-rpc';
 

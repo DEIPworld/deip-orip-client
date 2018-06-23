@@ -72,7 +72,7 @@
     import _ from 'lodash';
     import deipRpc from '@deip/deip-rpc';
     import { mapGetters } from 'vuex';
-    import * as proposalService from '../../services/ProposalService';
+    import * as proposalService from './../../../services/ProposalService';
 
     export default {
         name: "AddResearchReviewDialog",

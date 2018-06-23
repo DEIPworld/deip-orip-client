@@ -70,8 +70,8 @@
 <script>
     import { mapGetters } from 'vuex';
     import _ from 'lodash';
-    import joinRequestsService from './../../../../services/joinRequests'
-    import * as proposalService from './../../services/ProposalService';
+    import joinRequestsService from './../../../services/joinRequests'
+    import * as proposalService from './../../../services/ProposalService';
     import deipRpc from '@deip/deip-rpc';
 
     export default {

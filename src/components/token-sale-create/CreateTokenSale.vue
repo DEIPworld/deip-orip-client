@@ -56,7 +56,7 @@
 <script>
     import { mapGetters } from 'vuex';
     import deipRpc from '@deip/deip-rpc';
-    import * as proposalService from './../research-group/services/ProposalService'; 
+    import * as proposalService from './../../services/ProposalService'; 
 
     export default {
         name: "CreateTokenSale",

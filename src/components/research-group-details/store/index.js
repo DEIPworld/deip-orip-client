@@ -1,7 +1,7 @@
 import _ from 'lodash';
 import deipRpc from '@deip/deip-rpc';
 import Vue from 'vue';
-import * as proposalService from "./../services/ProposalService"; 
+import * as proposalService from "./../../../services/ProposalService"; 
 import joinRequestsService from './../../../services/joinRequests'
 
 const state = {

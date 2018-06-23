@@ -95,7 +95,7 @@
     import config from './../../../config'
     import {getAccessToken} from './../../../utils/auth'
     import { mapGetters } from 'vuex';
-    import * as proposalService from "./../../research-group/services/ProposalService";
+    import * as proposalService from "./../../../services/ProposalService";
     import vueDropzone from 'vue2-dropzone';
 
     export default {
