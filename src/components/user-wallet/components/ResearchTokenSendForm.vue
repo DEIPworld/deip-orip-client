@@ -75,7 +75,7 @@
                             : 'You can\'t send tokens to this user';
                     },
                     amount: value => {
-                        if (value.match(this.percentQuantityRegex) === null) {
+                        if (value.match(this.PERCENT_QUANTITY_REGEX) === null) {
                             return "Incorrect format";
                         }
 

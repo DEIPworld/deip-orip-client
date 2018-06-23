@@ -86,7 +86,7 @@
                 rules: {
                     required: value => !!value || 'This field is required',
                     deipTokenAmount: value => {
-                        if (value.match(this.assetQuantityRegex) === null) {
+                        if (value.match(this.ASSET_QUANTITY_REGEX) === null) {
                             return "Incorrect format";
                         }
 

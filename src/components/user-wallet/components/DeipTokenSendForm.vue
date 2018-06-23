@@ -77,7 +77,7 @@
                     },
                     memo: value => !value || !!value && value.length <= 2000 || 'String should be shorter',
                     amount: value => {
-                        if (value.match(this.assetQuantityRegex) === null) {
+                        if (value.match(this.ASSET_QUANTITY_REGEX) === null) {
                             return "Incorrect format";
                         }
 
