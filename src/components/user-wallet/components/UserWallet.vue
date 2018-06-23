@@ -118,7 +118,7 @@
                                                 'blue lighten-5': account 
                                                     && sendingType === sendingTypes.researchToken 
                                                     && selectedResearch 
-                                                    && selectedResearchId === research.id 
+                                                    && selectedResearch.id === research.id 
                                             }"
                                         >
                                             <div class="col-grow list-body-cell">
@@ -168,7 +168,7 @@
                             
                             <research-token-send-form
                                 v-else-if="account && sendingType === sendingTypes.researchToken && selectedResearch"
-                                :research-id="selectedResearchId"
+                                :research-id="selectedResearch.id"
                                 :research-token="selectedResearch.researchToken"
                                 :researches="researches"
                                 @researchTokensTransfered="loadResearches"

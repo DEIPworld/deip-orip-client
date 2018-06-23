@@ -81,9 +81,6 @@
 
                         let number = parseFloat(value);
 
-                        console.log(number);
-                        console.log(this.researchToken.amount, this.convertToPercent(this.researchToken.amount))
-
                         if (number === 0) {
                             return 'Amount should be greater than zero';
                         } else if (number > this.convertToPercent(this.researchToken.amount)) {
