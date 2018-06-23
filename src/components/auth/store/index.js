@@ -27,10 +27,6 @@ const getters = {
         return state.user
     },
 
-    profile: (state, getters) => {
-        return state.profile
-    },
-    
     userExperise: (state, getters) => {
         const experise = [];
         for (let i = 0; i < state.user.expertTokens.length; i++) {

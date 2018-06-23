@@ -28,9 +28,10 @@
                 <div v-for="(join, index) in pendingJoinRequests" class="row-nowrap justify-between align-center c-pt-4">
                     <div>
                         <v-avatar size="40px">
-                            <v-gravatar :title="join.username" :email="join.username + '@deip.world'" />
+                            <img v-if="join.user.profile" v-bind:src="join.user.profile.avatar | avatarSrc(40, 40, false)" />
+                            <v-gravatar v-else :title="join.user.account.name" :email="join.user.account.name + '@deip.world'" />
                         </v-avatar>
-                        <span class="a c-pl-3">{{join.username}}</span>
+                        <span class="a c-pl-3">{{join.user | fullname}}</span>
                     </div>
                     <v-btn @click="openJoinRequestDetails(join, index)" flat icon color="grey" class="ma-0">
                         <v-icon>mail_outline</v-icon>
@@ -87,7 +88,6 @@
             ...mapGetters({
                 user: 'auth/user',
                 group: 'researchGroup/group',
-                groupShares: 'researchGroup/groupShares',
                 members: 'researchGroup/members',
                 pendingJoinRequests: 'researchGroup/pendingJoinRequests'
             }),

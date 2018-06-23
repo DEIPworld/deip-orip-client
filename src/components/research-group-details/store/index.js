@@ -3,6 +3,8 @@ import deipRpc from '@deip/deip-rpc';
 import Vue from 'vue';
 import * as proposalService from "./../../../services/ProposalService"; 
 import joinRequestsService from './../../../services/joinRequests'
+import { getEnrichedProfiles } from './../../../utils/user'
+import { constants } from 'os';
 
 const state = {
     proposals: [],
@@ -54,21 +56,11 @@ const actions = {
 
             dispatch('loadResearchGroupProposals', state.group.id);
             dispatch('loadResearchList', state.group.id);
-
-            dispatch('loadResearchGroupShares', state.group.id)
-                .then(data => {
-                    dispatch('loadResearchGroupAccounts', data.map(item => item.owner));
-                });
-
+            dispatch('loadResearchGroupAccounts', state.group.id);
             dispatch('loadJoinRequests', state.group.id)
         });
     },
-    loadResearchGroupShares({ commit, state }, id) {
-       return deipRpc.api.getResearchGroupTokensByResearchGroupAsync(id).then(data => {
-            commit('SET_GROUP_SHARES', data);
-            return data;
-        });
-    },
+
     loadResearchList({ commit }, id) {
         let researchResult = [];
 
@@ -99,31 +91,33 @@ const actions = {
                 commit('SET_GROUP_RESEARCH_LIST', researchResult);
             });
     },
-    loadResearchGroupAccounts({ commit, state }, accountNames) {
-        let accounts = [];
 
-        deipRpc.api.getAccountsAsync(accountNames)
-            .then(data => {
-                accounts = _.each(data, (item, i) => { 
-                    item.expertise = [];
-                    item.groupShares = state.groupShares[i];
-                });
-
-                return Promise.all(
-                    data.map(account => 
-                        deipRpc.api.getExpertTokensByAccountNameAsync(account.name)
-                    )
-                );
+    loadResearchGroupAccounts({ commit, state }, groupId) {
+        const members = [];
+    
+        deipRpc.api.getResearchGroupTokensByResearchGroupAsync(groupId)
+            .then(rgtList => {
+                commit('SET_GROUP_SHARES', rgtList);
+                rgtList.forEach(rgt => {members.push({rgt: rgt})})
+                return getEnrichedProfiles(members.map(member => member.rgt.owner))
             })
-            .then(expertTokens => {
-                accounts.forEach((account, i) => { 
-                    account.expertise = expertTokens[i];
-                });
-                
-                commit('SET_GROUP_MEMBERS', accounts);
-            }).catch(() => {
-                commit('SET_GROUP_MEMBERS', accounts);
-            });
+            .then((users) => {
+                const promises = []
+                members.forEach(member => {
+                    const user = users.find(user => user.account.name == member.rgt.owner);
+                    member.account = user.account;
+                    member.profile = user.profile;
+                    promises.push(deipRpc.api.getExpertTokensByAccountNameAsync(member.account.name))
+                })
+                return Promise.all(promises);
+            })
+            .then((expList) => {
+                members.forEach((member, idx) => {
+                    const exp = expList[idx];
+                    member.expertise = exp;
+                })
+                commit('SET_GROUP_MEMBERS', members);
+            })
     },
 
     changeProposal({ commit }, payload) {
@@ -137,11 +131,19 @@ const actions = {
     },
 
     loadJoinRequests({ commit, state }, id) {
+        const joinRequests = [];
         joinRequestsService.getJoinRequestsByGroup(id)
             .then((requests) => {
-                commit('SET_JOIN_REQUESTS', requests);
+                joinRequests.push(...requests);
+                return getEnrichedProfiles(joinRequests.map(request => request.username))
             }, (err) => {
                 console.log(err);
+            }).then((users) => {
+                joinRequests.forEach((request, idx) => {
+                    const user = users[idx];
+                    request.user = user;
+                })
+                commit('SET_JOIN_REQUESTS', joinRequests);
             })
     }
 }

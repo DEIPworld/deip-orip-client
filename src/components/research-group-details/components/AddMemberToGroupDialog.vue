@@ -22,9 +22,10 @@
                                 <template slot="selection" slot-scope="data">
                                     <div class="row-nowrap align-center c-pl-4">
                                         <v-avatar size="30px">
-                                            <v-gravatar :email="data.item + '@deip.world'" />
+                                            <img v-if="data.item.profile" v-bind:src="data.item.profile.avatar | avatarSrc(30, 30, false)" />
+                                            <v-gravatar v-else :email="data.item.account.name + '@deip.world'" />
                                         </v-avatar>
-                                        <span class="deip-blue-color c-pl-3">{{ data.item }}</span>
+                                        <span class="deip-blue-color c-pl-3">{{ data.item | fullname }}</span>
                                     </div>
                                 </template>
                                 
@@ -32,9 +33,10 @@
                                     <template>
                                         <div class="row-nowrap align-center">
                                             <v-avatar size="30px">
-                                                <v-gravatar :email="data.item + '@deip.world'" />
+                                                <img v-if="data.item.profile" v-bind:src="data.item.profile.avatar | avatarSrc(30, 30, false)" />
+                                                <v-gravatar v-else :email="data.item.account.name + '@deip.world'" />
                                             </v-avatar>
-                                            <span class="deip-blue-color c-pl-3">{{ data.item }}</span>
+                                            <span class="deip-blue-color c-pl-3">{{ data.item | fullname }}</span>
                                         </div>
                                     </template>
                                 </template>
@@ -73,9 +75,10 @@
     import deipRpc from '@deip/deip-rpc';
     import { mapGetters } from 'vuex';
     import * as proposalService from './../../../services/ProposalService';
+    import { getEnrichedProfiles } from './../../../utils/user'
 
     export default {
-        name: "AddResearchReviewDialog",
+        name: "AddMemberToGroupDialog",
         props: {
             isOpen: { required: true, type: Boolean },
             groupId: { required: true, type: Number },
@@ -112,7 +115,7 @@
                 let proposal = proposalService.getStringifiedProposalData(
                     proposalService.types.inviteMember, [
                         this.groupId,
-                        this.selectedUser,
+                        this.selectedUser.account.name,
                         parseInt(this.tokensAmount) * this.DEIP_1_PERCENT
                     ]
                 );
@@ -146,9 +149,14 @@
                     this.selectedUser = undefined;
                     this.tokensAmount = undefined;
 
-                    deipRpc.api.getAllAccountsAsync().then(data => {
-                        this.allUsers = _.map(data, "name").filter(name => !_.find(this.groupMembers, { 'name': name }))
-                    });
+                    deipRpc.api.getAllAccountsAsync()
+                        .then(accounts => {
+                            const invitees = accounts.filter(a => !this.groupMembers.some(m => m.account.name == a.name )).map(a => a.name);
+                            return getEnrichedProfiles(invitees)
+                        })
+                        .then((users) => {
+                             this.allUsers = users;
+                        })
                 } else {
                     this.allUsers = undefined;
                 }
