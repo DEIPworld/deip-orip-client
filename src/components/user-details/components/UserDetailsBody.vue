@@ -5,7 +5,8 @@
             <v-avatar size="160px" class="user-avatar" 
                     v-on:mouseover="onAvatarMouseOver"
                     v-on:mouseout="onAvatarMouseOut">
-                <img v-if="avatarSrc" v-bind:src="avatarSrc" />
+                <img v-if="userInfo.profile" v-bind:src="userInfo.profile.avatar | avatarSrc(160, 160, false)" />
+                <!-- <v-gravatar v-else :email="userInfo.account.name + '@deip.world'" /> -->
                 <vue-dropzone v-if="dropzoneOptions" v-show="avatarUploadIsShown" ref="avatar-upload" id="avatar-dropzone" 
                     :options="dropzoneOptions"
                     @vdropzone-success="avatarUploadSuccess"
@@ -14,7 +15,7 @@
             </v-avatar>
 
             <div class="col-grow c-pl-12">
-                <div class="display-1 half-bold c-pt-4">{{fullNameString != "" ? fullNameString : userInfo.account.name}}</div>
+                <div class="display-1 half-bold c-pt-4">{{userInfo | fullname}} <span v-if="(userInfo.profile && userInfo.profile.firstName)" class="caption username-caption grey--text">({{userInfo.account.name}})</span></div>
 
                 <div class="c-pt-4">
                     <div v-if="userInfo.profile">
@@ -276,18 +277,6 @@
             isEmploymentSpecified() {
                 return this.userInfo && this.userInfo.profile && this.userInfo.profile.employment.length;
             },
-            fullNameString() {
-                const profile = this.userInfo ? this.userInfo.profile : null;
-                let fullName = "";
-                if (profile) {
-                    fullName += profile.firstName ? profile.firstName : '';
-                    if (fullName) {
-                        fullName += ' ';
-                    }
-                    fullName += profile.lastName ? profile.lastName : '';
-                }
-                return fullName;
-            },
             commonGroups() {
                 return this.groups.filter(g => !g.is_personal);
             },
@@ -306,12 +295,6 @@
                         dictDefaultMessage: "",
                         acceptedFiles: ['image/png', 'image/jpeg'].join(',')
                     } : null;
-            },
-            avatarSrc() {
-                return  this.userInfo && this.userInfo.profile 
-                        && this.userInfo.profile.avatar 
-                        ? `${this.fileStorageBaseUrl}/public/files/avatars/${this.userInfo.profile.avatar}?width=160&height=160&noCache=true` 
-                        : null;
             }
         },
         methods: {
@@ -549,4 +532,9 @@
     .owner-hint {
         font-style: italic;
     }
+
+    .username-caption {
+        font-size: 14px !important;
+    }
+
 </style>

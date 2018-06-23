@@ -5,6 +5,7 @@ import Vue from 'vue'
 import { isLoggedIn, getDecodedToken, getOwnerWif } from './../../../utils/auth'
 import usersService from './../../../services/users'
 import joinRequestsService from './../../../services/joinRequests'
+import { getEnrichedProfiles } from './../../../utils/user'
 
 const state = {
     user: {
@@ -170,17 +171,27 @@ const actions = {
                             return accumulator.concat(currentValue);
                         }, []);
 
-                        for (var i = 0; i < flattened.length; i++) {
-                            const rgt = flattened[i]
-                            if(rgt.owner != state.user.username 
-                                && coworkers.find(c => {return c.owner == rgt.owner}) == undefined){
+                    for (var i = 0; i < flattened.length; i++) {
+                        const rgt = flattened[i]
+                        if(rgt.owner != state.user.username 
+                            && coworkers.find(c => c.owner == rgt.owner) == undefined) {
 
-                                coworkers.push(rgt);
-                            }
+                            coworkers.push({rgt: rgt});
                         }
-                        
-                        commit('SET_USER_COWORKERS_LIST', coworkers)
-                });
+                    }
+
+                    return getEnrichedProfiles(coworkers.map(c => c.rgt.owner))
+                    
+                }).then((users) => {
+
+                    coworkers.forEach((coworker, idx) => {
+                        const user = users.find(u => u.account.name == coworker.rgt.owner);
+                        coworker.account = user.account;
+                        coworker.profile = user.profile;
+                    })
+
+                    commit('SET_USER_COWORKERS_LIST', coworkers)
+                })
         }
     },
 

@@ -60,9 +60,10 @@
             setGroup(group) {
                 this.$emit('setGroup', group);
             },
-            getGroupCoworkers(group){
-                return this.userCoworkers.filter(c => {
-                    return c.research_group_id == group.id}).map(c => c.owner);
+            getGroupCoworkers(group) {
+                return this.userCoworkers
+                        .filter(c => c.rgt.research_group_id == group.id)
+                        .map(c => this.$options.filters.fullname(c));
             }
         }
     };

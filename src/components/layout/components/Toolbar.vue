@@ -21,7 +21,7 @@
                 <v-btn fab flat icon class="ma-0" slot="activator">
                     <v-avatar size="32px">
                         <img v-if="user.profile" v-bind:src="user.profile.avatar | avatarSrc(32, 32, false)" />
-                        <v-gravatar v-else :title="user.username" :email="user.username + '@deip.world'" />
+                        <!-- <v-gravatar v-else :title="user.username" :email="user.username + '@deip.world'" /> -->
                     </v-avatar>
                 </v-btn>
                 <v-list dark dense>
