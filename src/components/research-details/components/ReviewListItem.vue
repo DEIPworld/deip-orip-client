@@ -3,10 +3,11 @@
         <div class="row-nowrap c-p-6">
             <div class="review-left-block text-align-center">
                 <v-avatar size="90px">
-                    <v-gravatar :title="review.author" :email="review.author + '@deip.world'" />
+                    <img v-if="review.author.profile" v-bind:src="review.author.profile.avatar | avatarSrc(90, 90, false)" />
+                    <v-gravatar v-else :title="review.author.account.name" :email="review.author.account.name + '@deip.world'" />
                 </v-avatar>
-                <div class="bold c-pt-2">{{ review.author }}</div>
-                    <v-btn v-if="review.author != user.username && userHasExpertise" class="ma-0 mt-2" block color="primary" 
+                <div class="bold c-pt-2">{{ review.author | fullname }}</div>
+                    <v-btn v-if="review.author.account.name != user.username && userHasExpertise" class="ma-0 mt-2" block color="primary" 
                             :loading="isReviewVoting" 
                             :disabled="isReviewVoting"
                             @click="voteReview(review)">Vote</v-btn>

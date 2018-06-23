@@ -180,10 +180,19 @@ const actions = {
     },
 
     loadResearchReviews({ state, commit }, researchId) {
+        const reviews = [];
         deipRpc.api.getReviewsByResearchAsync(researchId)
-            .then(reviews => {
+            .then(items => {
+                reviews.push(...items)
+                return getEnrichedProfiles(reviews.map(r => r.author))
+            })
+            .then((users) => {
+                reviews.forEach((review, idx) => {
+                    const author = users.find(u => u.account.name == review.author);
+                    review.author = author;
+                })
                 commit('SET_RESEARCH_REVIEWS_LIST', reviews)
-            });
+            })
     },
 
     loadResearchDisciplines({ state, commit }, researchId) {
