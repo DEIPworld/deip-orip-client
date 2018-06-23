@@ -31,7 +31,6 @@
         computed: {
             ...mapGetters({
                 research: 'rd/research',
-                membersList: 'rd/membersList',
                 contentList: 'rd/contentList',
                 reviewsList: 'rd/reviewsList',
                 disciplinesList: 'rd/disciplinesList',

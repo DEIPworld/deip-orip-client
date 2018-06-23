@@ -114,7 +114,7 @@
                 isOpen: 'rd/isReviewDialogOpen'
             }),
             authorsStr() {
-                return _(this.membersList).map('owner').join(' · ');
+                return this.membersList.map(m => this.$options.filters.fullname(m)).join(' · ');
             },
             relatedExpertise() {
                 return this.userExperise != null && this.research != null

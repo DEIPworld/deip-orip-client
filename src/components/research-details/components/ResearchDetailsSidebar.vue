@@ -8,11 +8,14 @@
         <div class="row-nowrap justify-between align-center c-pt-4 c-pb-2" v-for="(member, index) in membersList" :key="index">
             <div>
                 <v-avatar size="40px">
-                    <v-gravatar :title="member.owner" :email="member.owner + '@deip.world'" />
-                </v-avatar> 
-                <router-link :to="'/user-details/' + member.owner" class="a c-pl-3">{{member.owner}}</router-link>
+                    <img v-if="member.profile" v-bind:src="member.profile.avatar | avatarSrc(40, 40, false)" />
+                    <v-gravatar v-else :title="member.owner" :email="member.owner + '@deip.world'" />
+                </v-avatar>
+                <router-link :to="'/user-details/' + member.account.name" class="a c-pl-3">
+                    {{member | fullname}}
+                </router-link>
             </div>
-            <div class="grey--text"> {{convertToPercent(member.amount)}}%</div>
+            <div class="grey--text"> {{convertToPercent(member.rgt.amount)}}%</div>
         </div>
         
         <div v-if="canJoinResearchGroup || isActiveJoinRequest || isActiveInvite" class="c-pt-4 c-pb-6">
@@ -249,6 +252,7 @@
     import deipRpc from '@deip/deip-rpc';
     import { mapGetters } from 'vuex'
     import joinRequestsService from './../../../services/joinRequests'
+    import { extractName } from './../../../utils/user'
 
     export default {
         name: "ResearchDetailsSidebar",
@@ -314,7 +318,7 @@
             },
             canJoinResearchGroup() {
                 if (this.research) {
-                    if (this.membersList.some(m => m.owner == this.user.username))
+                    if (this.membersList.some(m => m.account.name == this.user.username))
                         return false;
                     if (this.userJoinRequests.some(r => r.groupId == this.research.research_group_id))
                         return false;
