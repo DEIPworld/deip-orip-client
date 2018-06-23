@@ -8,7 +8,8 @@ const state = {
     profile: undefined,
     researchList: [],
     groups: [],
-    expertise: []
+    expertise: [],
+    invites:[]
 }
 
 // getters
@@ -18,7 +19,8 @@ const getters = {
     },
     researchList: state => state.researchList,
     groups: state => state.groups,
-    expertise: state => state.expertise
+    expertise: state => state.expertise,
+    invites: state => state.invites
 }
 
 // actions
@@ -31,6 +33,7 @@ const actions = {
             dispatch('loadResearchList', accountName)
         );
         dispatch('loadUserProfile', accountName);
+        dispatch('loadUserInvites', accountName);
     },
     loadUserAccount({ commit }, accountName) {
         deipRpc.api.getAccountsAsync([accountName]).then(data => {
@@ -110,26 +113,58 @@ const actions = {
             }, (err) => {
                 console.log(err)
             })
+    },
+
+    loadUserInvites({ commit }, username) {
+        const invites = [];
+        deipRpc.api.getResearchGroupInvitesByAccountNameAsync(username)
+            .then((list) => {
+                const promises = [];
+                for (let i = 0; i < list.length; i++) {
+                    const invite = list[i];
+                    invites.push(invite);
+                    promises.push(deipRpc.api.getResearchGroupByIdAsync(invite.research_group_id))
+                }
+                return Promise.all(promises);
+            }, (err) => {
+                console.log(err)
+            })
+            .then((groups) => {
+                for (let i = 0; i < invites.length; i++) {
+                    const invite = invites[i];
+                    invite.group = groups.find(g => g.id == invite.research_group_id)
+                }
+                commit('SET_USER_INVITES', invites);
+            })
     }
 }
 
 // mutations
 const mutations = {
+    
     ['SET_USER_ACCOUNT'](state, account) {
         Vue.set(state, 'account', account);
     },
+
     ['SET_RESEARCH_LIST'](state, researchList) {
         Vue.set(state, 'researchList', researchList);
     },
+
     ['SET_RESEARCH_GROUPS'](state, groups) {
         Vue.set(state, 'groups', groups);
     },
+
     ['SET_EXPERTISE'](state, expertise) {
         Vue.set(state, 'expertise', expertise);
     },
+
     ['SET_USER_PROFILE'](state, profile) {
         Vue.set(state, 'profile', profile);
-    }
+    },
+    
+    ['SET_USER_INVITES'](state, invites) {
+        Vue.set(state, 'invites', invites);
+    }    
 }
 
 const namespaced = true;

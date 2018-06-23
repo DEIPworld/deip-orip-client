@@ -42,10 +42,10 @@
                 <v-card v-if="selectedJoinRequestMeta.item">
                     <v-card-title>
                         <span class="headline">{{selectedJoinRequestMeta.item.username}}</span>
-                        <span class="join-request-title-info"> wants to join your group </span>
+                        <span class="join-request-title-info"></span>
                     </v-card-title>
                     <v-card-text class="text-align-center">{{selectedJoinRequestMeta.item.coverLetter}}</v-card-text>
-                    <v-card-actions class="text-align-center">
+                    <v-card-actions class="text-align-center mt-5">
                         <v-spacer></v-spacer>
                         <v-btn color="green lighten-1" flat 
                             :disabled="isApprovingJoinRequest" :loading="isApprovingJoinRequest" 

@@ -14,7 +14,8 @@ const state = {
     isReviewDialogOpen : false,
     tokenSale: undefined,
     tokenHoldersList: [],
-    contributionsList: []
+    contributionsList: [],
+    groupInvitesList: []
 }
 
 // getters
@@ -58,6 +59,10 @@ const getters = {
 
     contributionsList: (state, getters) => {
         return state.contributionsList;
+    },
+
+    groupInvitesList: (state, getters) => {
+        return state.groupInvitesList;
     },
 
     contentWeightByDiscipline: (state, getters) => {
@@ -160,6 +165,7 @@ const actions = {
                 dispatch('loadResearchReviews', state.research.id)
                 dispatch('loadResearchDisciplines', state.research.id)
                 dispatch('loadResearchTokenSale', state.research.id)
+                dispatch('loadResearchGroupInvites', state.research.research_group_id)
             })
     },
 
@@ -223,6 +229,15 @@ const actions = {
                 commit('SET_RESEARCH_TOKEN_HOLDERS_LIST', tokenHolders)
             })
     },
+
+    loadResearchGroupInvites({ commit }, groupId) {
+        deipRpc.api.getResearchGroupInvitesByResearchGroupIdAsync(groupId)
+            .then((invites) => {
+                commit('SET_RESEARCH_GROUP_INVITES', invites);
+            }, (err) => {
+                console.log(err)
+            })
+    },
     
     openReviewDialog({ state, commit }) {
         commit('TOGGLE_REVIEW_DIALOG', true)
@@ -274,6 +289,10 @@ const mutations = {
 
     ['SET_RESEARCH_TOKEN_SALE_CONTRIBUTIONS_LIST'](state, contributions) {
         Vue.set(state, 'contributionsList', contributions)
+    },
+
+    ['SET_RESEARCH_GROUP_INVITES'](state, invites) {
+        Vue.set(state, 'groupInvitesList', invites)
     }
 }
 

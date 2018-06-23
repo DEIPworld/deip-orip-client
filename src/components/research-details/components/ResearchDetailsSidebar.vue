@@ -5,8 +5,7 @@
             <div class="sm-title bold">Research Group <span class="caption grey--text">(view)</span></div>
         </router-link>
         
-        <div class="row-nowrap justify-between align-center c-pt-4" 
-            v-for="(member, index) in membersList" :key="index">
+        <div class="row-nowrap justify-between align-center c-pt-4 c-pb-2" v-for="(member, index) in membersList" :key="index">
             <div>
                 <v-avatar size="40px">
                     <v-gravatar :title="member.owner" :email="member.owner + '@deip.world'" />
@@ -16,7 +15,7 @@
             <div class="grey--text"> {{convertToPercent(member.amount)}}%</div>
         </div>
         
-        <div v-if="canJoinResearchGroup || isActiveJoinRequest" class="c-pt-4 c-pb-6">
+        <div v-if="canJoinResearchGroup || isActiveJoinRequest || isActiveInvite" class="c-pt-4 c-pb-6">
             <div v-if="canJoinResearchGroup">
                 <v-btn @click="openJoinGroupDialog()" outline icon color="primary" class="ma-0">
                     <v-icon small>add</v-icon>
@@ -24,7 +23,10 @@
                 <span class="deip-blue-color c-pl-3">Join research group</span>
             </div>
             <div v-if="isActiveJoinRequest" class="text-align-center italic pt-2">You have sent join request on {{new Date(currentJoinRequest.created).toDateString()}}, please wait for approval</div>
-
+            <div v-if="isActiveInvite" class="text-align-center italic pt-2">
+                Your join request has been approved ! Please, accept invite on
+                <router-link :to="`/user-details/${user.username}`" style="text-decoration: none">your profile page</router-link>
+            </div>
             <v-dialog v-if="research" v-model="isJoinGroupDialogOpen" persistent transition="scale-transition" max-width="800px">
                 <v-card class="">
                     <v-toolbar dark color="primary">
@@ -275,7 +277,8 @@
                 researchWeightByDiscipline: 'rd/researchWeightByDiscipline',
                 tokenSale: 'rd/tokenSale',
                 tokenHoldersList: 'rd/tokenHoldersList',
-                contributionsList: 'rd/contributionsList'
+                contributionsList: 'rd/contributionsList',
+                groupInvitesList: 'rd/groupInvitesList'
             }),
             isResearchGroupMember(){
                 return this.research != null 
@@ -323,10 +326,12 @@
             currentJoinRequest() {
                 return this.research ? this.userJoinRequests.find(r => r.groupId == this.research.research_group_id) : undefined;
             },
-
             isActiveJoinRequest() {
-                return this.currentJoinRequest && (this.currentJoinRequest.status == 'Approved' || this.currentJoinRequest.status == 'Pending')
-            }        
+                return this.currentJoinRequest && this.currentJoinRequest.status == 'Pending';
+            },
+            isActiveInvite() {
+                return this.groupInvitesList.some(invite => invite.account_name == this.user.username)
+            }
         },
         methods: {
             openReviewDialog() {
