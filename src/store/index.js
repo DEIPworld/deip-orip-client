@@ -6,7 +6,7 @@ import feed from './../components/research-feed/store/index'
 import researchGroup from './../components/research-group-details/store/index'
 import rd from './../components/research-details/store/index'
 import rcd from './../components/research-content-details/store/index'
-import userDetails from './../components/user/store/index.js'
+import userDetails from './../components/user-details/store/index.js'
 import userWallet from './../components/user-wallet/store/index.js'
 import layout from './../components/layout/store/index.js'
 

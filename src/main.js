@@ -13,7 +13,7 @@ import 'vue2-dropzone/dist/vue2Dropzone.css'
 import './components/layout/index';
 import './components/core/index';
 import './components/common/index';
-import './components/user/index';
+import './components/user-details/index';
 import './components/research-feed/index'
 import './components/research-create/index';
 import './components/research-details/index';

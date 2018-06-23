@@ -210,7 +210,7 @@
 
 <script>
     import { mapGetters } from 'vuex';
-    import usersService from './../../../../services/users'
+    import usersService from './../../../services/users'
     import moment from 'moment';
     import deipRpc from '@deip/deip-rpc';
 

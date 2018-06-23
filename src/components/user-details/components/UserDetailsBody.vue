@@ -214,10 +214,10 @@
 
 <script>
     import { mapGetters } from 'vuex';
-    import usersService from './../../../../services/users'
+    import usersService from './../../../services/users'
     import vueDropzone from 'vue2-dropzone';
-    import config from './../../../../config'
-    import {getAccessToken} from './../../../../utils/auth'
+    import config from './../../../config'
+    import {getAccessToken} from './../../../utils/auth'
 
     export default {
         name: 'UserDetailsBody',
