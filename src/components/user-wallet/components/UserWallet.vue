@@ -114,7 +114,12 @@
                                 <div class="hidden-last-child" v-if="researches && researches.length">
                                     <template v-for="research in researches">
                                         <div class="list-line"
-                                            :class="{ 'blue lighten-5': account && sendingType === sendingTypes.researchToken && selectedResearchId === research.id }"
+                                            :class="{ 
+                                                'blue lighten-5': account 
+                                                    && sendingType === sendingTypes.researchToken 
+                                                    && selectedResearch 
+                                                    && selectedResearch.id === research.id 
+                                            }"
                                         >
                                             <div class="col-grow list-body-cell">
                                                 <div class="deip-blue-color subheading">{{ research.title }}</div>
@@ -155,17 +160,20 @@
                             ></deip-token-send-form>
 
                             <common-token-convert-form
-                                v-if="account && sendingType === sendingTypes.deipCommon"
+                                v-else-if="account && sendingType === sendingTypes.deipCommon"
                                 :deip-token-balance="deipTokenBalance"
                                 :common-tokens-balance="commonTokensBalance"
                                 @convertingTransactionWasApplied="loadUserAccount"
                             ></common-token-convert-form>
                             
                             <research-token-send-form
-                                :research-token-balance="15"
-                                @researchTokensTransfered="loadUserAccount"
+                                v-else-if="account && sendingType === sendingTypes.researchToken && selectedResearch"
+                                :research-id="selectedResearch.id"
+                                :research-token="selectedResearch.researchToken"
+                                :researches="researches"
+                                @researchTokensTransfered="loadResearches"
+                                @researchChanged="researchChanged"
                             ></research-token-send-form>
-                                <!-- v-if="account && sendingType === sendingTypes.researchToken" -->
                         </transition>
                     </div>
 
@@ -196,6 +204,20 @@
                 }
             }
         },
+        computed: {
+            ...mapGetters({
+                account: 'userWallet/account',
+                researches: 'userWallet/researches',
+                commonTokensBalance: 'userWallet/commonTokensBalance',
+                user: 'auth/user'
+            }),
+            deipTokenBalance() {
+                return this.account ? this.fromAssetsToFloat(this.account.balance) : '';
+            },
+            selectedResearch() {
+                return _.find(this.researches, { id: this.selectedResearchId })
+            }
+        },
         methods: {
             loadUserAccount() {
                 this.$store.dispatch('userWallet/loadUser', this.username);
@@ -207,18 +229,9 @@
             },
             loadResearches() {
                 this.$store.dispatch('userWallet/loadResearchTokens', this.username);
-                // todo: pick current research
-            }
-        },
-        computed: {
-            ...mapGetters({
-                account: 'userWallet/account',
-                researches: 'userWallet/researches',
-                commonTokensBalance: 'userWallet/commonTokensBalance',
-                user: 'auth/user'
-            }),
-            deipTokenBalance() {
-                return this.account ? this.fromAssetsToFloat(this.account.balance) : '';
+            },
+            researchChanged(id) {
+                this.selectedResearchId = id;
             }
         },
         created() {

@@ -43,9 +43,9 @@ Vue.prototype.percentQuantityRegex = /^(?:0|(?:[1-9]\d*))(?:\.\d{1,2})?$/;
 Vue.prototype.DEIP_100_PERCENT = 10000;
 Vue.prototype.DEIP_1_PERCENT = 10000 / 100;
 Vue.prototype.convertToPercent = amount => parseInt(amount) * 100 / 10000;
-Vue.prototype.toDeipPercent = amount => parseInt(amount) * 100;
-Vue.prototype.fileStorageBaseUrl = config['deip-server-url']
+Vue.prototype.toDeipPercent = amount => parseFloat(amount) * 100;
 
+Vue.prototype.fileStorageBaseUrl = config['deip-server-url']
 
 Vue.prototype.assetQuantityRegex = /^(?:0|(?:[1-9]\d*))(?:\.\d{1,3})?$/;
 Vue.prototype.toAssetUnits = amount => {

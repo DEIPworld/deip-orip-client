@@ -6,7 +6,14 @@
 
         <div class="c-p-4">
             <v-form ref="form" v-model="isFormValid" @submit.prevent>
-                <!-- TODO: add dropdown with full list of researches -->
+                <v-select
+                    :items="researches"
+                    :value="researchId"
+                    item-text="title"
+                    item-value="id"
+                    label="Research"
+                    @input="changeResearch"
+                ></v-select>
 
                 <v-text-field label="To" 
                     ref="toUsername"
@@ -47,7 +54,9 @@
     export default {
         name: "ResearchTokenSendForm",
         props: {
-            researchTokenBalance: { required: true, type: Number }
+            researches: { required: true, type: Array },
+            researchId: { required: true, type: Number},
+            researchToken: { required: true, type: Object }
         },
         data() { 
             return {
@@ -74,7 +83,7 @@
 
                         if (number === 0) {
                             return 'Amount should be greater than zero';
-                        } else if (number > this.researchTokenBalance) {
+                        } else if (number > this.convertToPercent(this.researchToken.amount)) {
                             return 'Amount is greater than research token balance';
                         } else {
                             return true;
@@ -88,6 +97,11 @@
             }
         },
         methods: {
+            changeResearch(id) {
+                if (_.isNumber(id)) {
+                    this.$emit('researchChanged', id);
+                }
+            },
             usernameChanged: _.debounce(
                 function() {
                     this.isUsernameExist = undefined;
@@ -118,8 +132,8 @@
 
                     deipRpc.broadcast.transferResearchTokensAsync(
                         this.user.privKey,
-                        // research_token_id
-                        // research_id
+                        this.researchToken.id,
+                        this.researchId,
                         this.user.username,
                         this.form.to,
                         this.toDeipPercent( this.form.amount )
