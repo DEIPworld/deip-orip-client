@@ -143,7 +143,7 @@
                             return getEnrichedProfiles(usernames)
                         })
                         .then((users) => {
-                            users.forEach(u => { u.stake = 0 })
+                            users.forEach(u => { u.stake = u.account.name == this.creatorUsername ? 100 : 0 })
                             this.selectedUsers.push(users[0]) // creator
                             this.allUsers = users.slice(1)
                             this.selectableUsers = prepareSelectableUsers(this.allUsers, this.selectedUsers, this.q);

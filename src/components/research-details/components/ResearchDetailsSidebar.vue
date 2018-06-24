@@ -1,21 +1,23 @@
 <template>
     <div>
-
         <router-link :to="`/${groupLink}/group-details`" style="text-decoration: none; color: black">
             <div class="sm-title bold">Research Group <span class="caption grey--text">(view)</span></div>
         </router-link>
         
-        <div class="row-nowrap justify-between align-center c-pt-4 c-pb-2" v-for="(member, index) in membersList" :key="index">
-            <div>
-                <v-avatar size="40px">
-                    <img v-if="member.profile" v-bind:src="member.profile.avatar | avatarSrc(40, 40, false)" />
-                    <v-gravatar v-else :title="member.account.name" :email="member.account.name + '@deip.world'" />
-                </v-avatar>
-                <router-link :to="'/user-details/' + member.account.name" class="a c-pl-3">
-                    {{member | fullname}}
-                </router-link>
+        <div class="research-members-container spinner-container">
+            <v-progress-circular v-if="isLoadingResearchMembers" indeterminate color="primary"></v-progress-circular>
+            <div v-if="!isLoadingResearchMembers" class="row-nowrap justify-between align-center c-pt-4 c-pb-2" v-for="(member, index) in membersList" :key="index">
+                <div>
+                    <v-avatar size="40px">
+                        <img v-if="member.profile" v-bind:src="member.profile.avatar | avatarSrc(40, 40, false)" />
+                        <v-gravatar v-else :title="member.account.name" :email="member.account.name + '@deip.world'" />
+                    </v-avatar>
+                    <router-link :to="'/user-details/' + member.account.name" class="a c-pl-3">
+                        {{member | fullname}}
+                    </router-link>
+                </div>
+                <div class="grey--text"> {{convertToPercent(member.rgt.amount)}}%</div>
             </div>
-            <div class="grey--text"> {{convertToPercent(member.rgt.amount)}}%</div>
         </div>
         
         <div v-if="isProfileAvailable && (canJoinResearchGroup || isActiveJoinRequest || isActiveInvite)" class="c-pt-4 c-pb-6">
@@ -76,27 +78,28 @@
             <v-divider></v-divider>
         </div>
 
-        <div class="sm-title bold c-pt-6">Votes:</div>
-
-        <div class="c-pb-6 c-pt-4">
-            <div v-for="(discipline, index) in disciplinesList" :key="index"
-                class="row align-center justify-between vote-btn-area" 
-                :class="index == 0 ? '':'c-mt-1'">
-           <!--     <v-btn small color="primary" dark class="ma-0">Vote</v-btn> -->
-                <div class="deip-blue-color c-p-2">
-                    {{discipline.name}}:  
-                    {{researchWeightByDiscipline[discipline.id] != null ? researchWeightByDiscipline[discipline.id] : 0}}
+        <div class="research-dicsciplines-container spinner-container">
+            <v-progress-circular v-if="isLoadingResearchDisciplines" indeterminate color="primary"></v-progress-circular>
+            <div v-if="!isLoadingResearchDisciplines">
+                <div class="c-pb-6">
+                    <div class="sm-title bold c-pb-4 c-pt-4">Votes:</div>
+                    <div v-for="(discipline, index) in disciplinesList" :key="index"
+                        class="row align-center justify-between vote-btn-area" :class="index == 0 ? '':'c-mt-1'">
+                        <!--     <v-btn small color="primary" dark class="ma-0">Vote</v-btn> -->
+                        <div class="deip-blue-color c-p-2">
+                            {{discipline.name}}:  
+                            {{researchWeightByDiscipline[discipline.id] != null ? researchWeightByDiscipline[discipline.id] : 0}}
+                        </div>
+                    </div>
+                </div>
+                <div style="margin: 0 -24px">
+                    <v-divider></v-divider>
                 </div>
             </div>
         </div>
 
         <div v-if="!isResearchGroupMember && userHasExpertise && contentList.length">
-            <div style="margin: 0 -24px">
-                <v-divider></v-divider>
-            </div>
-
             <div class="sm-title bold c-pt-6">Reviews</div>
-
             <div v-if="research" class="c-pt-4 c-pb-6">
                 <v-btn @click="openReviewDialog" dark round outline color="primary" class="full-width ma-0">
                     <v-icon small>add</v-icon>
@@ -108,18 +111,17 @@
                     </div>
                 </v-btn>
             </div>
+            <div style="margin: 0 -24px">
+                <v-divider></v-divider>
+            </div>
         </div>
 
-        <div style="margin: 0 -24px">
-            <v-divider></v-divider>
-        </div>
-
-        <div class="sm-title bold c-pt-6">Citations: 10</div>
+    <!--<div class="sm-title bold c-pt-6">Citations: 10</div>
         <div class="sm-title bold c-pb-6 c-mt-2">References: 2</div>
 
         <div style="margin: 0 -24px">
             <v-divider></v-divider>
-        </div>
+        </div> -->
 
         <div class="sm-title bold c-pt-6">Research Info</div>
         
@@ -163,86 +165,89 @@
             <v-divider></v-divider>
         </div>
 
-        <div class="sm-title bold c-pt-6">Research Token Holders</div>
-
-        <div class="c-pt-4 c-pb-6">
-            <div>
-                <span class="half-bold">Research group</span>
-                <span class="deip-blue-color right">
-                    {{convertToPercent(DEIP_100_PERCENT - tokenHoldersList.reduce((share, holder) => {
+        <div class="research-token-holders-container spinner-container">
+            <v-progress-circular v-if="isLoadingResearchTokenHolders" indeterminate color="primary"></v-progress-circular>
+            <div v-if="!isLoadingResearchTokenHolders">
+                <div class="sm-title bold c-pt-6">Research Token Holders</div>
+                <div class="c-pt-4 c-pb-6">
+                    <span class="half-bold">Research group</span>
+                    <span class="deip-blue-color right">
+                        {{convertToPercent(DEIP_100_PERCENT - tokenHoldersList.reduce((share, holder) => {
                         return share + holder.amount;}, 0))}}%
-                </span>
-                <div v-for="holder in tokenHoldersList">
-                    <span class="half-bold">{{holder.account_name}}</span>
-                    <span class="deip-blue-color right">{{convertToPercent(holder.amount)}}%</span>
+                    </span>
+                    <div v-for="holder in tokenHoldersList">
+                        <span class="half-bold">{{holder.account_name}}</span>
+                        <span class="deip-blue-color right">{{convertToPercent(holder.amount)}}%</span>
+                    </div>
+                </div>
+                <div style="margin: 0 -24px">
+                    <v-divider></v-divider>
                 </div>
             </div>
-        </div>
-
-        <div style="margin: 0 -24px">
-            <v-divider></v-divider>
         </div>
 
         <div v-if="(isMissingTokenSale && isResearchGroupMember && !isFinishedResearch) || isActiveTokenSale || isInActiveTokenSale">
+            <div class="research-token-sale-container spinner-container">
+                <v-progress-circular v-if="isLoadingResearchTokenSale" indeterminate color="primary"></v-progress-circular>
+                <div v-if="!isLoadingResearchTokenSale">
+                    <div class="sm-title bold c-pt-6">Research Token Sale</div>
+                    <div v-if="(isMissingTokenSale && isResearchGroupMember)" class="c-pt-4 c-pb-6">
+                        <router-link v-if="research" :to="`/${research.group_permlink}/create-token-sale/${research.permlink}`"  style="text-decoration: none">
+                            <v-btn dark round outline color="primary" class="full-width c-mt-3 c-mb-3">
+                                <div class="col-grow add-review-label">Propose Token Sale</div>
+                            </v-btn>
+                        </router-link>
+                    </div>
 
-            <div class="sm-title bold c-pt-6">Research Token Sale</div>
+                    <div v-if="isActiveTokenSale" class="c-pt-4 c-pb-6">
+                        <div>
+                            <span class="half-bold">On Sale</span>
+                            <span class="deip-blue-color right">{{convertToPercent(tokenSale.balance_tokens)}}%</span>
+                        </div>
+                        <div>
+                            <span class="half-bold">Deadline</span>
+                            <span class="deip-blue-color right">{{new Date(tokenSale.end_time).toDateString()}}</span>
+                        </div>
+                        <div>
+                            <span class="half-bold">Soft Cap</span>
+                            <span class="deip-blue-color right">{{tokenSale.soft_cap}}</span>
+                        </div>
+                        <div>
+                            <span class="half-bold">Hard Cap</span>
+                            <span class="deip-blue-color right">{{tokenSale.hard_cap}}</span>
+                        </div>
+                        <div class="c-mt-8">
+                            <div class="row">
+                                <div><span class="left grey--text c-mr-2 cap-value">0</span></div>
+                                <div class="col-grow pos-relative row-nowrap align-center">
+                                    <div class="chapter-line black" :style="{ width: currentCapPercent + '%' }"></div>
+                                    <div class="chapter-line grey lighten-1 col-grow"></div>
 
-            <div v-if="(isMissingTokenSale && isResearchGroupMember)" class="c-pt-4 c-pb-6">
-                <router-link v-if="research" :to="`/${research.group_permlink}/create-token-sale/${research.permlink}`"  style="text-decoration: none">
-                    <v-btn dark round outline color="primary" class="full-width c-mt-3 c-mb-3">
-                        <div class="col-grow add-review-label">Propose Token Sale</div>
-                    </v-btn>
-                </router-link>
-            </div>
-
-            <div v-if="isActiveTokenSale" class="c-pt-4 c-pb-6">
-                <div>
-                    <span class="half-bold">On Sale</span>
-                    <span class="deip-blue-color right">{{convertToPercent(tokenSale.balance_tokens)}}%</span>
-                </div>
-                <div>
-                    <span class="half-bold">Deadline</span>
-                    <span class="deip-blue-color right">{{new Date(tokenSale.end_time).toDateString()}}</span>
-                </div>
-                <div>
-                    <span class="half-bold">Soft Cap</span>
-                    <span class="deip-blue-color right">{{tokenSale.soft_cap}}</span>
-                </div>
-                <div>
-                    <span class="half-bold">Hard Cap</span>
-                    <span class="deip-blue-color right">{{tokenSale.hard_cap}}</span>
-                </div>
-                <div class="c-mt-8">
-                    <div class="row">
-                        <div><span class="left grey--text c-mr-2 cap-value">0</span></div>
-                        <div class="col-grow pos-relative row-nowrap align-center">
-                            <div class="chapter-line black" :style="{ width: currentCapPercent + '%' }"></div>
-                            <div class="chapter-line grey lighten-1 col-grow"></div>
-
-                            <div class="pos-absolute" :style="{ left: currentCapPercent + '%' }">
-                                <v-tooltip bottom color="white">
-                                    <div class="chapter-point deip-blue-bg" slot="activator"></div>
-                                    <div>
-                                        <div class="grey--text cap-value text-align-center">{{currentCap}}</div>
+                                    <div class="pos-absolute" :style="{ left: currentCapPercent + '%' }">
+                                        <v-tooltip bottom color="white">
+                                            <div class="chapter-point deip-blue-bg" slot="activator"></div>
+                                            <div>
+                                                <div class="grey--text cap-value text-align-center">{{currentCap}}</div>
+                                            </div>
+                                        </v-tooltip>
                                     </div>
-                                </v-tooltip>
-                            </div>
 
-                            <div><span class="right grey--text c-ml-2 cap-value">{{tokenSale.hard_cap}}</span></div>
+                                    <div><span class="right grey--text c-ml-2 cap-value">{{tokenSale.hard_cap}}</span></div>
+                                </div>
+                            </div>
+                            <div v-if="!isResearchGroupMember" class="c-mt-5 text-align-center">
+                                <v-text-field v-model="amountToContribute" placeholder="amount" suffix="DEIP" mask="########################"></v-text-field>
+                                <v-btn :disabled="!amountToContribute" :loading="isTokensBuying" color="primary" @click="contributeToTokenSale()">BUY RESEARCH TOKENS</v-btn>
+                            </div>
                         </div>
                     </div>
-                    <div v-if="!isResearchGroupMember" class="c-mt-5 text-align-center">
-                        <v-text-field v-model="amountToContribute" placeholder="amount" suffix="DEIP" mask="########################"></v-text-field>
-                        <v-btn :disabled="!amountToContribute" :loading="isTokensBuying" color="primary" @click="contributeToTokenSale()">BUY RESEARCH TOKENS</v-btn>
+                    <div v-if="isInActiveTokenSale" class="c-pt-4 c-pb-6">
+                        <div class="text-align-center">Token Sale will start on {{new Date(tokenSale.start_time).toString()}}</div>
                     </div>
                 </div>
-            </div>
-            <div v-if="isInActiveTokenSale" class="c-pt-4 c-pb-6">
-                <div class="text-align-center">Token Sale will start on {{new Date(tokenSale.start_time).toString()}}</div>
-            </div>
-
-            <div style="margin: 0 -24px">
-                <v-divider></v-divider>
+                <div style="margin: 0 -24px">
+                    <v-divider></v-divider>
+                </div>
             </div>
         </div>
     </div>
@@ -282,7 +287,11 @@
                 tokenSale: 'rd/tokenSale',
                 tokenHoldersList: 'rd/tokenHoldersList',
                 contributionsList: 'rd/contributionsList',
-                groupInvitesList: 'rd/groupInvitesList'
+                groupInvitesList: 'rd/groupInvitesList',
+                isLoadingResearchMembers: 'rd/isLoadingResearchMembers',
+                isLoadingResearchDisciplines: 'rd/isLoadingResearchDisciplines',
+                isLoadingResearchTokenHolders: 'rd/isLoadingResearchTokenHolders',
+                isLoadingResearchTokenSale: 'rd/isLoadingResearchTokenSale'
             }),
             isResearchGroupMember(){
                 return this.research != null 
@@ -426,4 +435,21 @@
     .cap-value {
         font-size: 16px;
     }
+
+    .research-members-container {
+        min-height: 50px
+    }
+
+    .research-dicsciplines-container {
+        min-height: 50px
+    }
+
+    .research-token-holders-container {
+        min-height: 50px
+    }
+
+    .research-token-sale-container {
+        min-height: 50px
+    }
+
 </style>

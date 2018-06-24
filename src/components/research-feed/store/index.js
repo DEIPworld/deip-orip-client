@@ -13,7 +13,8 @@ const state = {
         },
         dateFrom: null,
         dateTo: null
-    }
+    },
+    isLoadingResearchFeed: undefined
 }
 
 
@@ -52,13 +53,18 @@ const getters = {
             const parts = d.path.split('.')
             return d.id != discipline.id && parts.some(p => p == discipline.path);
         }) !== undefined;
+    },
+
+    isLoadingResearchFeed: (state, getters) => {
+        return state.isLoadingResearchFeed;
     }
 }
 
 // actions
 const actions = {
 
-    loadAllResearches({ state, commit }) {
+    loadAllResearches({ state, dispatch, commit }) {
+        commit('SET_RESEARCH_FEED_LOADING_STATE', false)
         const disciplineId = _.get(state.filter, 'discipline.id') || 0;
         let researchResult = [];
 
@@ -90,6 +96,9 @@ const actions = {
                 commit('SET_FULL_RESEARCH_LIST', data);
             }).catch(() => {
                 commit('SET_FULL_RESEARCH_LIST', researchResult);
+            })
+            .finally(() => {
+                commit('SET_RESEARCH_FEED_LOADING_STATE', false)
             });
     },
 
@@ -125,6 +134,10 @@ const mutations = {
 
     ['UPDATE_FILTER'](state, { key, value }) {
         Vue.set(state.filter, key, value)
+    },
+
+    ['SET_RESEARCH_FEED_LOADING_STATE'](state, value) {
+        state.isLoadingResearchFeed = value
     }
 }
 

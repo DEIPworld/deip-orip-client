@@ -40,12 +40,13 @@
                     </div>
                 </div>
 
-                <div class="c-pt-6">
-                    <v-card class="hidden-last-child">
+                <div class="c-pt-6 feed-items-container spinner-container">
+                    <v-progress-circular v-if="isLoadingResearchFeed" indeterminate color="primary"></v-progress-circular>
+                    <v-card v-if="!isLoadingResearchFeed" class="hidden-last-child">
                         <template v-for="item in researchFeed">
                             <research-list-item :is-collapsable="true" :research="item"></research-list-item>
                             <v-divider></v-divider>
-                        </template>
+                        </template> 
                     </v-card>
                 </div>
             </div>
@@ -64,7 +65,8 @@
             ...mapGetters({
                 researchFeed: 'feed/researchFeed',
                 filter: 'feed/filter',
-                allCollapsed: 'feed/allCollapsed'
+                allCollapsed: 'feed/allCollapsed',
+                isLoadingResearchFeed: 'feed/isLoadingResearchFeed'
             })
         },
         methods: {
@@ -96,5 +98,8 @@
         &:hover {
             opacity: 1;
         }
+    }
+    .feed-items-container {
+        min-height:400px
     }
 </style>

@@ -16,7 +16,15 @@ const state = {
     tokenSale: undefined,
     tokenHoldersList: [],
     contributionsList: [],
-    groupInvitesList: []
+    groupInvitesList: [],
+    isLoadingResearchDetails: undefined,
+    isLoadingResearchContent: undefined,
+    isLoadingResearchMembers: undefined,
+    isLoadingResearchReviews: undefined,
+    isLoadingResearchDisciplines: undefined,
+    isLoadingResearchTokenHolders: undefined,
+    isLoadingResearchTokenSale: undefined
+
 }
 
 // getters
@@ -64,6 +72,34 @@ const getters = {
 
     groupInvitesList: (state, getters) => {
         return state.groupInvitesList;
+    },
+
+    isLoadingResearchContent: (state, getters) => {
+        return state.isLoadingResearchContent;
+    },
+
+    isLoadingResearchMembers: (state, getters) => {
+        return state.isLoadingResearchMembers;
+    },
+
+    isLoadingResearchDetails: (state, getters) => {
+        return state.isLoadingResearchDetails;
+    },
+
+    isLoadingResearchReviews: (state, getters) => {
+        return state.isLoadingResearchReviews;
+    },
+
+    isLoadingResearchDisciplines: (state, getters) => {
+        return state.isLoadingResearchDisciplines;
+    },
+
+    isLoadingResearchTokenHolders: (state, getters) => {
+        return state.isLoadingResearchTokenHolders;
+    },
+
+    isLoadingResearchTokenSale: (state, getters) => {
+        return state.isLoadingResearchTokenSale;
     },
 
     contentWeightByDiscipline: (state, getters) => {
@@ -146,57 +182,85 @@ const getters = {
 // actions
 const actions = {
 
-    loadResearchContent({ state, commit }, researchId) {
+    loadResearchContent({ state, dispatch, commit }, researchId) {
+        commit('SET_RESEARCH_CONTENT_LOADING_STATE', true)
         deipRpc.api.getAllResearchContentAsync(researchId)
             .then((list) => {
                 commit('SET_RESEARCH_CONTENT_LIST', list)
-            });
+
+            }, (err) => { console.log(err) })
+            .finally(() => {
+                commit('SET_RESEARCH_CONTENT_LOADING_STATE', false)
+            })
     },
 
     loadResearchDetails({ state, commit, dispatch }, { group_permlink, research_permlink }) {
-        var rgtList = [];
+        commit('SET_RESEARCH_DETAILS_LOADING_STATE', true)
         deipRpc.api.getResearchByAbsolutePermlinkAsync(group_permlink, research_permlink)
             .then((research) => {
                 research.group_permlink = group_permlink;
                 commit('SET_RESEARCH_DETAILS', research)
-                return deipRpc.api.getResearchGroupTokensByResearchGroupAsync(state.research.research_group_id);
-            })
-            .then((members) => {
-                rgtList = members;
+
                 dispatch('loadResearchContent', state.research.id)
+                dispatch('loadResearchMembers', state.research.id)
                 dispatch('loadResearchReviews', state.research.id)
                 dispatch('loadResearchDisciplines', state.research.id)
                 dispatch('loadResearchTokenSale', state.research.id)
                 dispatch('loadResearchGroupInvites', state.research.research_group_id)
-                return getEnrichedProfiles(members.map(m => m.owner))
+
+            }, (err => {console.log(err)}))
+            .finally(() => {
+                commit('SET_RESEARCH_DETAILS_LOADING_STATE', false)
             })
+    },
+
+    loadResearchMembers({ state, commit, dispatch }, researchId) {
+        const rgtList = [];
+        commit('SET_RESEARCH_MEMBERS_LOADING_STATE', true)
+        deipRpc.api.getResearchGroupTokensByResearchGroupAsync(researchId)
+            .then((members) => {
+                rgtList.push(...members)
+                return getEnrichedProfiles(members.map(m => m.owner))
+
+            }, (err) => {console.log(err)}) 
             .then((users) => {
                 for (let i = 0; i < users.length; i++) {
                     const user = users[i];
                     user.rgt = rgtList.find(rgt => rgt.owner == user.account.name);
                 }
                 commit('SET_RESEARCH_MEMBERS_LIST', users)
+                
+            }, (err) => {console.log(err)})
+            .finally(() => {
+                commit('SET_RESEARCH_MEMBERS_LOADING_STATE', false)
             })
     },
 
-    loadResearchReviews({ state, commit }, researchId) {
+    loadResearchReviews({ state, dispatch, commit }, researchId) {
         const reviews = [];
+        commit('SET_RESEARCH_REVIEWS_LOADING_STATE', true)
         deipRpc.api.getReviewsByResearchAsync(researchId)
             .then(items => {
                 reviews.push(...items)
                 return getEnrichedProfiles(reviews.map(r => r.author))
-            })
+
+            }, (err) => {console.log(err)})
             .then((users) => {
                 reviews.forEach((review, idx) => {
                     const author = users.find(u => u.account.name == review.author);
                     review.author = author;
                 })
                 commit('SET_RESEARCH_REVIEWS_LIST', reviews)
+
+            }, (err) => {console.log(err)})
+            .finally(() => {
+                commit('SET_RESEARCH_REVIEWS_LOADING_STATE', false)
             })
     },
 
-    loadResearchDisciplines({ state, commit }, researchId) {
+    loadResearchDisciplines({ state, dispatch,commit }, researchId) {
         const disciplinesList = [];
+        commit('SET_RESEARCH_DISCIPLINES_LOADING_STATE', true)
         deipRpc.api.getDisciplinesByResearchAsync(researchId)
             .then((data) => {
                 const promises = [];
@@ -206,18 +270,34 @@ const actions = {
                     promises.push(deipRpc.api.getTotalVotesByResearchAndDisciplineAsync(researchId, discipline.id))
                 }
                 return Promise.all(promises);
-            })
+
+            }, (err) => {console.log(err)})
             .then((tvoList) => {
                 commit('SET_RESEARCH_DISCIPLINES_LIST', disciplinesList)
                 commit('SET_RESEARCH_TOTAL_VOTES_LIST', tvoList)
-            });
+            }, (err) => {console.log(err)})
+            .finally(() => {
+                commit('SET_RESEARCH_DISCIPLINES_LOADING_STATE', false)
+            })
+    },
+
+    loadResearchTokenHolders({ state, dispatch, commit }, researchId) {
+        commit('SET_RESEARCH_TOKEN_HOLDERS_LOADING_STATE', true)
+        deipRpc.api.getResearchTokensByResearchIdAsync(researchId)
+            .then((tokenHolders) => {
+                commit('SET_RESEARCH_TOKEN_HOLDERS_LIST', tokenHolders)
+            }, (err) => {console.log(err)})
+            .finally(() => {
+                commit('SET_RESEARCH_TOKEN_HOLDERS_LOADING_STATE', false)
+            }) 
     },
 
     loadResearchTokenSale({ state, dispatch, commit }, researchId) {
+        commit('SET_RESEARCH_TOKEN_SALE_LOADING_STATE', true)
         deipRpc.api.checkResearchTokenSaleExistenceByResearchIdAsync(researchId)
             .then((exists) => {
                 if (exists) {
-                  deipRpc.api.getResearchTokenSaleByResearchIdAsync(researchId)
+                  return deipRpc.api.getResearchTokenSaleByResearchIdAsync(researchId)
                     .then((tokenSale) => {
                         commit('SET_RESEARCH_TOKEN_SALE', tokenSale)
                         if (tokenSale.status == 2) { // finished token sale
@@ -227,12 +307,14 @@ const actions = {
                             dispatch('loadTokenSaleContributors');
                         }
                     });
-
                 } else {
                     commit('SET_RESEARCH_TOKEN_SALE', null)
                     commit('SET_RESEARCH_TOKEN_HOLDERS_LIST', [])
                 }
-            })
+            }, (err) => {console.log(err)})
+        .finally(() => {
+            commit('SET_RESEARCH_TOKEN_SALE_LOADING_STATE', false)
+        })
     },
 
     loadTokenSaleContributors({ state, commit }) {
@@ -242,12 +324,6 @@ const actions = {
             })
     },
 
-    loadResearchTokenHolders({ state, commit }, researchId) {
-        deipRpc.api.getResearchTokensByResearchIdAsync(researchId)
-            .then((tokenHolders) => {
-                commit('SET_RESEARCH_TOKEN_HOLDERS_LIST', tokenHolders)
-            })
-    },
 
     loadResearchGroupInvites({ commit }, groupId) {
         deipRpc.api.getResearchGroupInvitesByResearchGroupIdAsync(groupId)
@@ -312,6 +388,38 @@ const mutations = {
 
     ['SET_RESEARCH_GROUP_INVITES'](state, invites) {
         Vue.set(state, 'groupInvitesList', invites)
+    },
+
+    ['SET_RESEARCH_DETAILS_LOADING_STATE'](state, value) {
+        state.isLoadingResearchDetails = value
+    },
+
+    ['SET_RESEARCH_MEMBERS_LOADING_STATE'](state, value) {
+        state.isLoadingResearchMembers = value
+    },
+
+    ['SET_RESEARCH_CONTENT_LOADING_STATE'](state, value) {
+        state.isLoadingResearchContent = value
+    },
+
+    ['SET_RESEARCH_MEMBERS_LOADING_STATE'](state, value) {
+        state.isLoadingResearchMembers = value
+    },
+
+    ['SET_RESEARCH_REVIEWS_LOADING_STATE'](state, value) {
+        state.isLoadingResearchReviews = value
+    },
+
+    ['SET_RESEARCH_DISCIPLINES_LOADING_STATE'](state, value) {
+        state.isLoadingResearchDisciplines = value
+    },
+
+    ['SET_RESEARCH_TOKEN_HOLDERS_LOADING_STATE'](state, value) {
+        state.isLoadingResearchTokenHolders = value
+    },
+    
+    ['SET_RESEARCH_TOKEN_SALE_LOADING_STATE'](state, value) {
+        state.isLoadingResearchTokenSale = value
     }
 }
 

@@ -1,35 +1,42 @@
 <template>
     <div>
-        <div v-if="research" class="row justify-between align-center">
-            <div>
-                <v-icon size="18px">date_range</v-icon>
-                <span>Created on {{ new Date(research.created_at).toDateString() }}</span>
+        <div class="c-pt-6 research-details-container spinner-container">
+            <v-progress-circular v-if="isLoadingResearchDetails" indeterminate color="primary"></v-progress-circular>
+            <div v-if="!isLoadingResearchDetails && research">
+                <div class="row justify-between align-center">
+                    <div>
+                        <v-icon size="18px">date_range</v-icon>
+                        <span>Created on {{ new Date(research.created_at).toDateString() }}</span>
+                    </div>
+                <!-- <v-btn @click="afterComplete" small color="primary" class="ma-0">Vote</v-btn> -->
+                </div>
+
+                <div class="display-1 half-bold c-mt-10">
+                    {{ research.title }}
+                </div>
+
+                <div class="c-pt-8">
+                    {{ research.abstract }}
+                </div>
             </div>
-           <!-- <v-btn @click="afterComplete" small color="primary" class="ma-0">Vote</v-btn> -->
         </div>
 
-        <div v-if="research" class="display-1 half-bold c-mt-10">
-            {{ research.title }}
+        <div v-if="contentList.length">
+            <div class="c-pt-8 title">Timeline</div>
+            <div class="c-pt-6">
+                <research-timeline :contentList="contentList" :research="research"></research-timeline>
+            </div>
         </div>
 
-        <div v-if="research" class="c-pt-8">
-            {{ research.abstract }}
-        </div>
+        <div v-if="research" class="c-pt-8 title">Research</div>
 
-        <div v-if="contentList.length" class="c-pt-8 title">Timeline</div>
-
-        <div v-if="contentList.length" class="c-pt-6">
-            <research-timeline :contentList="contentList" :research="research"></research-timeline>
-        </div>
-
-        <div class="c-pt-8 title">Research</div>
-
-        <div v-if="!contentList.length" class="c-pt-8">
+        <div v-if="!contentList.length && isLoadingResearchContent === false" class="c-pt-8">
             There is no content posted in the research yet. 
             <span v-if="isResearchGroupMember">Please use the form below to upload your pdf files and images</span>
         </div>
-        <div class="c-pt-6">
-            <v-expansion-panel>
+        <div class="c-pt-6 research-content-container spinner-container">
+            <v-progress-circular v-if="isLoadingResearchContent" indeterminate color="primary"></v-progress-circular>
+            <v-expansion-panel v-if="!isLoadingResearchContent">
                 <v-expansion-panel-content v-for="(content, index) in contentList" :key="index">
                     <div slot="header">
                         <span class="bold">Chapter {{index + 1}}</span>
@@ -76,17 +83,18 @@
                 </v-expansion-panel-content>
             </v-expansion-panel>
 
-            <add-research-contnet-dialog 
-                v-if="isResearchGroupMember && !research.is_finished">
-            </add-research-contnet-dialog>
+            <add-research-contnet-dialog v-if="isResearchGroupMember && !research.is_finished"></add-research-contnet-dialog>
         </div>
 
-        <div class="c-pt-8 title" v-if="reviewsList.length">Reviews: {{ reviewsList.length }}</div>
-
-        <div class="c-pt-6" v-if="reviewsList.length">
-            <review-list-item v-for="(review, i) in reviewsList" :review="review" :key="i"></review-list-item>
+        <div class="research-reviews-container spinner-container">
+            <v-progress-circular v-if="isLoadingResearchReviews" indeterminate color="primary"></v-progress-circular>
+            <div v-if="!isLoadingResearchReviews && reviewsList.length">
+                <div class="c-pt-8 title">Reviews: {{ reviewsList.length }}</div>
+                <div class="c-pt-6">
+                    <review-list-item v-for="(review, i) in reviewsList" :review="review" :key="i"></review-list-item>
+                </div>
+            </div>
         </div>
-
         <!-- <div class="c-pt-4 title">Grants: 4</div>
 
         <div class="c-pt-6">
@@ -108,7 +116,7 @@
             </v-card>
         </div>-->
 
-        <div class="c-pt-8 title">References: 2</div>
+    <!--    <div class="c-pt-8 title">References: 2</div>
 
         <div class="c-pt-6">
             <div>
@@ -120,7 +128,7 @@
                 2. Kwak, Young Hoon, and Frank T. Anbari. (2009). Analysing project management research: Perspectives 
                 from top management journals. International Journal of Project Management, 27(5), 435-446.
             </div>
-        </div> 
+        </div>  -->
     </div>
 </template>
 
@@ -141,7 +149,11 @@
                 disciplinesList: 'rd/disciplinesList',
                 totalVotesList: 'rd/totalVotesList',
                 contentWeightByDiscipline: 'rd/contentWeightByDiscipline',
-                membersList: 'rd/membersList'
+                membersList: 'rd/membersList',
+                isLoadingResearchContent: 'rd/isLoadingResearchContent',
+                isLoadingResearchDetails: 'rd/isLoadingResearchDetails',
+                isLoadingResearchReviews: 'rd/isLoadingResearchReviews',
+                isLoadingResearchReviews: 'rd/isLoadingResearchReviews'
             }),
             isResearchGroupMember() {
                 return this.research != null 
@@ -159,3 +171,17 @@
         }
     };
 </script>
+
+<style lang="less" scoped>
+
+    .research-content-container {
+        min-height: 50px;
+    }
+    .research-details-container {
+        min-height: 50px;
+    }
+    .research-reviews-container {
+        min-height: 50px;
+    }
+
+</style>
