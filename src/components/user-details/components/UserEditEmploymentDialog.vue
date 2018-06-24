@@ -91,12 +91,24 @@
                             </div>
                         </div>
 
-                        <div>
+                     <!--   <div>
                             <v-btn class="ma-0 width-10" color="primary" @click="save" :disabled="disabled">Save</v-btn>
                             <span class="c-pr-4"></span>
                             <v-btn class="ma-0" color="primary" flat @click.native="meta.isShown = false">Cancel</v-btn>
-                        </div>
+                        </div> -->
 
+                        <div>
+                            <div class="row">
+                                <div class="col-1">
+                                    <v-checkbox label="Is active" v-model="isActive"></v-checkbox>
+                                </div>
+                                <div class="col-11">
+                                    <v-btn class="ml-5 ma-0 width-10" color="primary" @click="save()" :disabled="disabled">Save</v-btn>
+                                    <span class="c-pr-4"></span>
+                                    <v-btn class="ma-0 width-10" color="primary" flat @click.native="meta.isShown = false">Cancel</v-btn>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -124,7 +136,8 @@
                 dateTo: undefined,
                 dateToMenu: false,
                 position: undefined,
-                description: undefined
+                description: undefined,
+                isActive: false
             }
         },
         methods: {
@@ -141,7 +154,8 @@
                             to: this.dateTo
                         },
                         position: this.position,
-                        description: this.description
+                        description: this.description,
+                        isActive: this.isActive
                     }, 
                     index: this.meta.index
                 })
@@ -155,6 +169,7 @@
                 this.dateToMenu = false;
                 this.position = undefined;
                 this.description = undefined;
+                this.isActive = false;
             }
         },
 
@@ -174,6 +189,7 @@
                 this.dateToMenu = false;
                 this.position = employment != null ? employment.position : undefined;
                 this.description = employment != null ? employment.description : undefined;
+                this.isActive = employment != null ? employment.isActive : false;
             }
         }
     };

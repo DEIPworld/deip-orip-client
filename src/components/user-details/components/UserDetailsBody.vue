@@ -57,8 +57,8 @@
                 </div>
 
                 <!-- display either the current employment or education, todo: add isActive flag to employment/education -->
-                <div v-if="userInfo.profile && (userInfo.profile.employment.length || userInfo.profile.education.length)" class="c-pt-2">
-                    {{userInfo.profile.employment.length ? userInfo.profile.employment[0].company : userInfo.profile.education[0].educationalInstitution}}
+                <div v-if="isProfileAvailable" class="c-pt-2">
+                    {{ userInfo | employmentOrEducation}}
                 </div>
             </div>
         </div>
@@ -300,6 +300,7 @@
             isProfileAvailable() {
                 return this.userInfo.profile != null;
             }
+
         },
         methods: {
             showSaveEducationDialog(item, index) {

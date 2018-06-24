@@ -33,7 +33,7 @@
 
                                 <div class="col-grow c-pl-4">
                                     <router-link :to="'/user-details/' + member.account.name" class="a subheading">{{ member | fullname }}</router-link>
-                                    <div class="caption c-pt-1">Belarusian State University of Informatics and Radioelectronics</div>
+                                    <div class="caption c-pt-1">{{member | employmentOrEducation}}</div>
                                 </div>
                             </div>
 

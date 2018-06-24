@@ -5,7 +5,7 @@
                 <v-btn icon dark @click.native="meta.isShown = false">
                     <v-icon>close</v-icon>
                 </v-btn>
-                <v-toolbar-title>Add education</v-toolbar-title>
+                <v-toolbar-title>Education</v-toolbar-title>
                 <v-spacer></v-spacer>
             </v-toolbar>
 
@@ -86,11 +86,17 @@
                         </div>
                         
                         <div>
-                            <v-btn class="ma-0 width-10" color="primary" @click="save()" :disabled="disabled">Save</v-btn>
-                            <span class="c-pr-4"></span>
-                            <v-btn class="ma-0" color="primary" flat @click.native="meta.isShown = false">Cancel</v-btn>
+                            <div class="row">
+                                <div class="col-1">
+                                    <v-checkbox label="Is active" v-model="isActive"></v-checkbox>
+                                </div>
+                                <div class="col-11">
+                                    <v-btn class="ml-5 ma-0 width-10" color="primary" @click="save()" :disabled="disabled">Save</v-btn>
+                                    <span class="c-pr-4"></span>
+                                    <v-btn class="ma-0 width-10" color="primary" flat @click.native="meta.isShown = false">Cancel</v-btn>
+                                </div>
+                            </div>
                         </div>
-
                     </div>
                 </div>
             </div>
@@ -117,7 +123,8 @@
                 dateToMenu: false,
                 degree: undefined,
                 area: undefined,
-                description: undefined
+                description: undefined,
+                isActive: false
             }
         },
         computed: {
@@ -136,7 +143,8 @@
                         },
                         degree: this.degree,
                         area: this.area,
-                        description: this.description
+                        description: this.description,
+                        isActive: this.isActive
                     }, 
                     index: this.meta.index
                 })
@@ -149,6 +157,7 @@
                 this.degree = undefined;
                 this.area = undefined;
                 this.description = undefined;
+                this.isActive = false;
             }
         },
         watch: {
@@ -161,10 +170,12 @@
                 this.degree = education != null ? education.degree : undefined;
                 this.area = education != null ? education.area : undefined;
                 this.description = education != null ? education.description : undefined;
+                this.isActive = education != null ? education.isActive : false;
             }
         }
     };
 </script>
 
 <style lang="less" scoped>
+    
 </style>
