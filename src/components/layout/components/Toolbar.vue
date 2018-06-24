@@ -82,8 +82,9 @@
                 this.$emit('update', value);
             },
             goToState(state, params) {
-                if (this.$route.name === 'UserDetails')
+                if (this.$route.name === 'UserDetails' && params && params.account_name) {
                     this.$store.dispatch('userDetails/loadUser', params.account_name);
+                }
 
                 this.$router.push({ name: state, params: params });
             }
