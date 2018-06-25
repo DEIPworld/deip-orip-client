@@ -2,7 +2,7 @@
     <div>
         <div class="c-pt-6 research-details-container spinner-container">
             <v-progress-circular v-if="isLoadingResearchDetails" indeterminate color="primary"></v-progress-circular>
-            <div v-if="!isLoadingResearchDetails && research">
+            <div v-if="isLoadingResearchDetails === false">
                 <div class="row justify-between align-center">
                     <div>
                         <v-icon size="18px">date_range</v-icon>
@@ -36,7 +36,7 @@
         </div>
         <div class="c-pt-6 research-content-container spinner-container">
             <v-progress-circular v-if="isLoadingResearchContent" indeterminate color="primary"></v-progress-circular>
-            <v-expansion-panel v-if="!isLoadingResearchContent">
+            <v-expansion-panel v-if="isLoadingResearchContent === false">
                 <v-expansion-panel-content v-for="(content, index) in contentList" :key="index">
                     <div slot="header">
                         <span class="bold">Chapter {{index + 1}}</span>
@@ -88,7 +88,7 @@
 
         <div class="research-reviews-container spinner-container">
             <v-progress-circular v-if="isLoadingResearchReviews" indeterminate color="primary"></v-progress-circular>
-            <div v-if="!isLoadingResearchReviews && reviewsList.length">
+            <div v-if="isLoadingResearchReviews === false && reviewsList.length">
                 <div class="c-pt-8 title">Reviews: {{ reviewsList.length }}</div>
                 <div class="c-pt-6">
                     <review-list-item v-for="(review, i) in reviewsList" :review="review" :key="i"></review-list-item>
@@ -173,15 +173,16 @@
 </script>
 
 <style lang="less" scoped>
+    .research-details-container {
+        min-height: 200px;
+    }
 
     .research-content-container {
-        min-height: 50px;
+        min-height: 150px;
     }
-    .research-details-container {
-        min-height: 50px;
-    }
+
     .research-reviews-container {
-        min-height: 50px;
+        min-height: 150px;
     }
 
 </style>

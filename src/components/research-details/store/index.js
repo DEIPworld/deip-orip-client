@@ -17,6 +17,7 @@ const state = {
     tokenHoldersList: [],
     contributionsList: [],
     groupInvitesList: [],
+
     isLoadingResearchDetails: undefined,
     isLoadingResearchContent: undefined,
     isLoadingResearchMembers: undefined,
@@ -24,7 +25,6 @@ const state = {
     isLoadingResearchDisciplines: undefined,
     isLoadingResearchTokenHolders: undefined,
     isLoadingResearchTokenSale: undefined
-
 }
 
 // getters
@@ -182,18 +182,6 @@ const getters = {
 // actions
 const actions = {
 
-    loadResearchContent({ state, dispatch, commit }, researchId) {
-        commit('SET_RESEARCH_CONTENT_LOADING_STATE', true)
-        deipRpc.api.getAllResearchContentAsync(researchId)
-            .then((list) => {
-                commit('SET_RESEARCH_CONTENT_LIST', list)
-
-            }, (err) => { console.log(err) })
-            .finally(() => {
-                commit('SET_RESEARCH_CONTENT_LOADING_STATE', false)
-            })
-    },
-
     loadResearchDetails({ state, commit, dispatch }, { group_permlink, research_permlink }) {
         commit('SET_RESEARCH_DETAILS_LOADING_STATE', true)
         deipRpc.api.getResearchByAbsolutePermlinkAsync(group_permlink, research_permlink)
@@ -205,12 +193,25 @@ const actions = {
                 dispatch('loadResearchMembers', state.research.id)
                 dispatch('loadResearchReviews', state.research.id)
                 dispatch('loadResearchDisciplines', state.research.id)
+                dispatch('loadResearchTokenHolders', state.research.id)
                 dispatch('loadResearchTokenSale', state.research.id)
                 dispatch('loadResearchGroupInvites', state.research.research_group_id)
 
             }, (err => {console.log(err)}))
             .finally(() => {
                 commit('SET_RESEARCH_DETAILS_LOADING_STATE', false)
+            })
+    },
+
+    loadResearchContent({ state, dispatch, commit }, researchId) {
+        commit('SET_RESEARCH_CONTENT_LOADING_STATE', true)
+        deipRpc.api.getAllResearchContentAsync(researchId)
+            .then((list) => {
+                commit('SET_RESEARCH_CONTENT_LIST', list)
+
+            }, (err) => { console.log(err) })
+            .finally(() => {
+                commit('SET_RESEARCH_CONTENT_LOADING_STATE', false)
             })
     },
 
@@ -300,16 +301,10 @@ const actions = {
                   return deipRpc.api.getResearchTokenSaleByResearchIdAsync(researchId)
                     .then((tokenSale) => {
                         commit('SET_RESEARCH_TOKEN_SALE', tokenSale)
-                        if (tokenSale.status == 2) { // finished token sale
-                            dispatch('loadResearchTokenHolders', researchId)
-                        } else {
-                            commit('SET_RESEARCH_TOKEN_HOLDERS_LIST', [])
-                            dispatch('loadTokenSaleContributors');
-                        }
+                        dispatch('loadTokenSaleContributors');
                     });
                 } else {
                     commit('SET_RESEARCH_TOKEN_SALE', null)
-                    commit('SET_RESEARCH_TOKEN_HOLDERS_LIST', [])
                 }
             }, (err) => {console.log(err)})
         .finally(() => {

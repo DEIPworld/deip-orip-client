@@ -1,12 +1,14 @@
 <template>
     <div>
+
         <router-link :to="`/${groupLink}/group-details`" style="text-decoration: none; color: black">
             <div class="sm-title bold">Research Group <span class="caption grey--text">(view)</span></div>
         </router-link>
         
+        <!-- ### START Research Members Section ### -->
         <div class="research-members-container spinner-container">
             <v-progress-circular v-if="isLoadingResearchMembers" indeterminate color="primary"></v-progress-circular>
-            <div v-if="!isLoadingResearchMembers" class="row-nowrap justify-between align-center c-pt-4 c-pb-2" v-for="(member, index) in membersList" :key="index">
+            <div v-if="isLoadingResearchMembers === false" class="row-nowrap justify-between align-center c-pt-4 c-pb-2" v-for="(member, index) in membersList" :key="index">
                 <div>
                     <v-avatar size="40px">
                         <img v-if="member.profile" v-bind:src="member.profile.avatar | avatarSrc(40, 40, false)" />
@@ -20,7 +22,7 @@
             </div>
         </div>
         
-        <div v-if="isProfileAvailable && (canJoinResearchGroup || isActiveJoinRequest || isActiveInvite)" class="c-pt-4 c-pb-6">
+        <div v-if="isLoadingResearchMembers === false && isJoinRequestSectionAvailable" class="c-pt-4 c-pb-6">
             <div v-if="canJoinResearchGroup">
                 <v-btn @click="openJoinGroupDialog()" outline icon color="primary" class="ma-0">
                     <v-icon small>add</v-icon>
@@ -63,9 +65,14 @@
                 </v-card>
             </v-dialog>
         </div>
+        <!-- ### END Research Members Section ### -->
 
-        <div style="margin: 5px -24px">
+        <div class="section-divider">
             <v-divider></v-divider>
+        </div>
+
+        <!-- ### START Folowers Section ### -->
+        <div style="margin: 5px">
             <div class="row-nowrap">
                 <div class="col-6 c-pv-6 display-flex" v-ripple>
                     <div class="clickable-label text-align-center c-m-auto">123<br>Folowers</div>
@@ -75,12 +82,17 @@
                     <div class="clickable-label text-align-center c-m-auto">Follow</div>
                 </div>
             </div>
+        </div>
+        <!-- ### END Folowers Section ### -->
+
+        <div class="section-divider">
             <v-divider></v-divider>
         </div>
 
+        <!-- ### START Research Disciplines Section ### -->
         <div class="research-dicsciplines-container spinner-container">
             <v-progress-circular v-if="isLoadingResearchDisciplines" indeterminate color="primary"></v-progress-circular>
-            <div v-if="!isLoadingResearchDisciplines">
+            <div v-if="isLoadingResearchDisciplines === false">
                 <div class="c-pb-6">
                     <div class="sm-title bold c-pb-4 c-pt-4">Votes:</div>
                     <div v-for="(discipline, index) in disciplinesList" :key="index"
@@ -92,13 +104,16 @@
                         </div>
                     </div>
                 </div>
-                <div style="margin: 0 -24px">
-                    <v-divider></v-divider>
-                </div>
             </div>
         </div>
+        <!-- ### END Research Disciplines Section ### -->
 
-        <div v-if="!isResearchGroupMember && userHasExpertise && contentList.length">
+        <div class="section-divider">
+            <v-divider></v-divider>
+        </div>
+
+        <!-- ### START Research Review Section ### -->
+        <div v-if="isReviewSectionAvailable">
             <div class="sm-title bold c-pt-6">Reviews</div>
             <div v-if="research" class="c-pt-4 c-pb-6">
                 <v-btn @click="openReviewDialog" dark round outline color="primary" class="full-width ma-0">
@@ -111,36 +126,41 @@
                     </div>
                 </v-btn>
             </div>
-            <div style="margin: 0 -24px">
-                <v-divider></v-divider>
-            </div>
         </div>
+        <!-- ### END Research Review Section ### -->
 
-    <!--<div class="sm-title bold c-pt-6">Citations: 10</div>
-        <div class="sm-title bold c-pb-6 c-mt-2">References: 2</div>
-
-        <div style="margin: 0 -24px">
-            <v-divider></v-divider>
-        </div> -->
-
-        <div class="sm-title bold c-pt-6">Research Info</div>
-        
-        <div v-if="research" class="c-pt-4 c-pb-6">
-            <div>
-                <span class="half-bold">Review reward</span>
-                <span class="deip-blue-color right">{{convertToPercent(research.review_share_in_percent)}}%</span>
-            </div>
-            <div>
-                <span class="half-bold">Total views</span>
-                <span class="deip-blue-color right">222</span>
-            </div>
-        </div>
-
-        <!-- <div style="margin: 0 -24px">
+    <!-- <div class="sm-title bold c-pt-6">Citations: 10</div>
+        <div class="sm-title bold c-pb-6 c-mt-2">References: 2</div> -->
+ 
+        <div v-if="isReviewSectionAvailable" class="section-divider">
             <v-divider></v-divider>
         </div>
 
-        <div class="sm-title bold c-pt-6">Total Earned</div>
+        <!-- ### START Research Info Section ### -->
+        <div class="research-info-container spinner-container">
+            <v-progress-circular v-if="isLoadingResearchDetails" indeterminate color="primary"></v-progress-circular>
+            <div v-if="isLoadingResearchDetails === false">
+                <div class="sm-title bold c-pt-6">Research Info</div>
+                <div class="c-pt-4 c-pb-6">
+                    <div>
+                        <span class="half-bold">Review reward</span>
+                        <span class="deip-blue-color right">{{convertToPercent(research.review_share_in_percent)}}%</span>
+                    </div>
+                    <div>
+                        <span class="half-bold">Total views</span>
+                        <span class="deip-blue-color right">222</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- ### END Research Info Section ### -->
+
+        <div class="section-divider">
+            <v-divider></v-divider>
+        </div>
+
+       
+        <!--  <div class="sm-title bold c-pt-6">Total Earned</div>
         
         <div class="c-pt-4 c-pb-6">
             <div>
@@ -161,13 +181,11 @@
             </div>
         </div> -->
 
-        <div style="margin: 0 -24px">
-            <v-divider></v-divider>
-        </div>
 
+        <!-- ### START Research Token Holders Section ### -->
         <div class="research-token-holders-container spinner-container">
             <v-progress-circular v-if="isLoadingResearchTokenHolders" indeterminate color="primary"></v-progress-circular>
-            <div v-if="!isLoadingResearchTokenHolders">
+            <div v-if="isLoadingResearchTokenHolders === false">
                 <div class="sm-title bold c-pt-6">Research Token Holders</div>
                 <div class="c-pt-4 c-pb-6">
                     <span class="half-bold">Research group</span>
@@ -180,16 +198,19 @@
                         <span class="deip-blue-color right">{{convertToPercent(holder.amount)}}%</span>
                     </div>
                 </div>
-                <div style="margin: 0 -24px">
-                    <v-divider></v-divider>
-                </div>
             </div>
         </div>
+        <!-- ### END Research Token Holders Section ### -->
 
-        <div v-if="(isMissingTokenSale && isResearchGroupMember && !isFinishedResearch) || isActiveTokenSale || isInActiveTokenSale">
+        <div class="section-divider">
+            <v-divider></v-divider>
+        </div>
+
+        <!-- ### START Research Token Sale Section ### -->
+        <div v-if="isTokenSaleSectionAvailable">
             <div class="research-token-sale-container spinner-container">
                 <v-progress-circular v-if="isLoadingResearchTokenSale" indeterminate color="primary"></v-progress-circular>
-                <div v-if="!isLoadingResearchTokenSale">
+                <div v-if="isLoadingResearchTokenSale === false">
                     <div class="sm-title bold c-pt-6">Research Token Sale</div>
                     <div v-if="(isMissingTokenSale && isResearchGroupMember)" class="c-pt-4 c-pb-6">
                         <router-link v-if="research" :to="`/${research.group_permlink}/create-token-sale/${research.permlink}`"  style="text-decoration: none">
@@ -245,11 +266,14 @@
                         <div class="text-align-center">Token Sale will start on {{new Date(tokenSale.start_time).toString()}}</div>
                     </div>
                 </div>
-                <div style="margin: 0 -24px">
-                    <v-divider></v-divider>
-                </div>
             </div>
         </div>
+        <!-- ### END Research Token Sale Section ### -->
+
+        <div v-if="isTokenSaleSectionAvailable" class="section-divider">
+            <v-divider></v-divider>
+        </div>
+
     </div>
 </template>
 
@@ -291,7 +315,8 @@
                 isLoadingResearchMembers: 'rd/isLoadingResearchMembers',
                 isLoadingResearchDisciplines: 'rd/isLoadingResearchDisciplines',
                 isLoadingResearchTokenHolders: 'rd/isLoadingResearchTokenHolders',
-                isLoadingResearchTokenSale: 'rd/isLoadingResearchTokenSale'
+                isLoadingResearchTokenSale: 'rd/isLoadingResearchTokenSale',
+                isLoadingResearchDetails: 'rd/isLoadingResearchDetails'
             }),
             isResearchGroupMember(){
                 return this.research != null 
@@ -347,6 +372,15 @@
             },
             isProfileAvailable() {
                 return this.user.profile != null;
+            },
+            isReviewSectionAvailable() {
+                return !this.isResearchGroupMember && this.userHasExpertise && this.contentList.length;
+            },
+            isTokenSaleSectionAvailable() {
+                return (this.isMissingTokenSale && this.isResearchGroupMember && !this.isFinishedResearch) || this.isActiveTokenSale || this.isInActiveTokenSale;
+            },
+            isJoinRequestSectionAvailable() {
+                return this.isProfileAvailable && (this.canJoinResearchGroup || this.isActiveJoinRequest || this.isActiveInvite)
             }
         },
         methods: {
@@ -362,6 +396,7 @@
                     parseInt(this.amountToContribute)
                 ).then((data) => {
                     this.$store.dispatch('rd/loadResearchTokenSale', this.research.id)
+                    this.$store.dispatch('rd/loadResearchTokenHolders', this.research.id)
                     this.isTokensBuying = false;
                     this.amountToContribute = undefined;
                     this.$store.dispatch('layout/setSuccess', {
@@ -436,20 +471,28 @@
         font-size: 16px;
     }
 
+    .section-divider {
+        margin: 0 -24px;
+    }
+    
     .research-members-container {
-        min-height: 50px
+        min-height: 150px
     }
 
     .research-dicsciplines-container {
-        min-height: 50px
+        min-height: 150px
+    }
+
+    .research-info-container {
+        min-height: 150px
     }
 
     .research-token-holders-container {
-        min-height: 50px
+        min-height: 150px
     }
 
     .research-token-sale-container {
-        min-height: 50px
+        min-height: 150px
     }
 
 </style>

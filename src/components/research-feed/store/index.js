@@ -64,7 +64,7 @@ const getters = {
 const actions = {
 
     loadAllResearches({ state, dispatch, commit }) {
-        commit('SET_RESEARCH_FEED_LOADING_STATE', false)
+        commit('SET_RESEARCH_FEED_LOADING_STATE', true)
         const disciplineId = _.get(state.filter, 'discipline.id') || 0;
         let researchResult = [];
 
