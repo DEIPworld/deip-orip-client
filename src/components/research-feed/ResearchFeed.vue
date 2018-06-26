@@ -41,7 +41,7 @@
                 </div>
 
                 <div class="c-pt-6 feed-items-container spinner-container">
-                    <v-progress-circular v-if="isLoadingResearchFeed" indeterminate color="primary"></v-progress-circular>
+                    <v-progress-circular v-if="isLoadingResearchFeed" :size="100" indeterminate color="primary"></v-progress-circular>
                     <v-card v-if="isLoadingResearchFeed === false" class="hidden-last-child">
                         <template v-for="item in researchFeed">
                             <research-list-item :is-collapsable="true" :research="item"></research-list-item>
