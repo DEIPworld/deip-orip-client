@@ -24,6 +24,8 @@ const state = {
         order: 'asc'
     },
 
+    isLoadingResearchGroupPage: undefined,
+
     isLoadingResearchGroupDetails: undefined,
     isLoadingResearchGroupMembers: undefined,
     isLoadingResearchGroupResearchList: undefined,
@@ -43,46 +45,65 @@ const getters = {
     options: state => state.options,
     joinRequests: state => state.joinRequests,
     pendingJoinRequests: state => state.joinRequests.filter(r => r.status == 'Pending'),
+
+    isLoadingResearchGroupPage: state => state.isLoadingResearchGroupPage,
+
     isLoadingResearchGroupDetails: state => state.isLoadingResearchGroupDetails,
     isLoadingResearchGroupMembers: state => state.isLoadingResearchGroupMembers,
     isLoadingResearchGroupResearchList: state => state.isLoadingResearchGroupResearchList,
     isLoadingResearchGroupProposals: state => state.isLoadingResearchGroupProposals,
-    isLoadingResearchGroupJoinRequests: state => state.isLoadingResearchGroupJoinRequests
+    isLoadingResearchGroupJoinRequests: state => state.isLoadingResearchGroupJoinRequests,
 }
 
 // actions
 const actions = {
-    loadResearchGroupProposals({ commit }, id) {
+
+    loadResearchGroup({ commit, dispatch, state }, permlink) {
+        commit('SET_RESEARCH_GROUP_PAGE_LOADING_STATE', true)
+        
+        commit('SET_GROUP_DETAILS_LOADING_STATE', true)
+        deipRpc.api.getResearchGroupByPermlinkAsync(permlink).then(data => {
+            commit('SET_RESEARCH_GROUP', data);
+
+            const proposalsLoad = new Promise((resolve, reject) => {
+                dispatch('loadResearchGroupProposals', { groupId: state.group.id, notify: resolve });
+            });
+            const researchLoad = new Promise((resolve, reject) => {
+                dispatch('loadResearchList', { groupId: state.group.id, notify: resolve });
+            });
+            const membersLoad = new Promise((resolve, reject) => {
+                dispatch('loadResearchGroupMembers', { groupId: state.group.id, notify: resolve });
+            });
+            const joinRequestsLoad = new Promise((resolve, reject) => {
+                dispatch('loadJoinRequests', { groupId: state.group.id, notify: resolve });
+            });
+
+            return Promise.all([proposalsLoad, researchLoad, membersLoad, joinRequestsLoad])
+        })
+        .finally(() => {
+            commit('SET_GROUP_DETAILS_LOADING_STATE', false)
+            commit('SET_RESEARCH_GROUP_PAGE_LOADING_STATE', false)
+        });
+    },
+
+    loadResearchGroupProposals({ commit }, {groupId, notify}) {
         commit('SET_GROUP_PROPOSALS_LOADING_STATE', true)
-        deipRpc.api.getProposalsByResearchGroupIdAsync(id).then(data => {
+        deipRpc.api.getProposalsByResearchGroupIdAsync(groupId).then(data => {
             commit('SET_PROPOSALS', 
                 _.map(data, proposal => proposalService.getParsedProposal(proposal))
             );
         })
         .finally(() => {
             commit('SET_GROUP_PROPOSALS_LOADING_STATE', false)
+            if (notify) notify()
         })
     },
-    loadResearchGroup({ commit, dispatch, state }, permlink) {
-        commit('SET_GROUP_DETAILS_LOADING_STATE', true)
-        deipRpc.api.getResearchGroupByPermlinkAsync(permlink).then(data => {
-            commit('SET_RESEARCH_GROUP', data);
 
-            dispatch('loadResearchGroupProposals', state.group.id);
-            dispatch('loadResearchList', state.group.id);
-            dispatch('loadResearchGroupMembers', state.group.id);
-            dispatch('loadJoinRequests', state.group.id)
-        })
-        .finally(() => {
-            commit('SET_GROUP_DETAILS_LOADING_STATE', false)
-        });
-    },
-
-    loadResearchList({ commit }, id) {
+    loadResearchList({ commit }, {groupId, notify}) {
         const researchResult = [];
         commit('SET_GROUP_RESEARCH_LIST_LOADING_STATE', true)
 
-        deipRpc.api.getResearchesByResearchGroupIdAsync(id)
+        deipRpc.api.getResearchesByResearchGroupIdAsync(groupId)
             .then(list => {
                 researchResult.push(...list)
                 
@@ -107,10 +128,11 @@ const actions = {
             })
             .finally(() => {
                 commit('SET_GROUP_RESEARCH_LIST_LOADING_STATE', false)
+                if (notify) notify()
             })
     },
 
-    loadResearchGroupMembers({ commit, state }, groupId) {
+    loadResearchGroupMembers({ commit, state }, { groupId, notify }) {
         const members = [];
         commit('SET_GROUP_MEMBERS_LOADING_STATE', true)
         deipRpc.api.getResearchGroupTokensByResearchGroupAsync(groupId)
@@ -138,6 +160,7 @@ const actions = {
             })
             .finally(() => {
                 commit('SET_GROUP_MEMBERS_LOADING_STATE', false)
+                if (notify) notify()
             })
     },
 
@@ -151,10 +174,10 @@ const actions = {
         commit('UPDATE_OPTIONS', payload);
     },
 
-    loadJoinRequests({ commit, state }, id) {
+    loadJoinRequests({ commit, state }, { groupId, notify }) {
         const joinRequests = [];
         commit('SET_GROUP_JOIN_REQUESTS_LOADING_STATE', true)
-        joinRequestsService.getJoinRequestsByGroup(id)
+        joinRequestsService.getJoinRequestsByGroup(groupId)
             .then((requests) => {
                 joinRequests.push(...requests);
                 return getEnrichedProfiles(joinRequests.map(request => request.username))
@@ -169,6 +192,7 @@ const actions = {
             })
             .finally(() => {
                 commit('SET_GROUP_JOIN_REQUESTS_LOADING_STATE', false);
+                if (notify) notify()
             })
     }
 }
@@ -233,7 +257,11 @@ const mutations = {
 
     ['SET_GROUP_JOIN_REQUESTS_LOADING_STATE'](state, value) {
         state.isLoadingResearchGroupJoinRequests = value;
-    }
+    },
+
+    ['SET_RESEARCH_GROUP_PAGE_LOADING_STATE'](state, value) {
+        state.isLoadingResearchGroupPage = value;
+    }    
 }
 
 const namespaced = true;

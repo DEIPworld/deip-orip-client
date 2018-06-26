@@ -1,5 +1,9 @@
 <template>
-    <div>
+
+<div class="research-group-body-container spinner-container">
+    <v-progress-circular v-if="isLoadingResearchGroupPage" :size="100" indeterminate color="primary"></v-progress-circular>
+    <div v-if="isLoadingResearchGroupPage === false">
+
         <!-- ### START Research Group Details Section ### -->
         <div class="research-group-details-container spinner-container">
             <v-progress-circular v-if="isLoadingResearchGroupDetails" indeterminate color="primary"></v-progress-circular>
@@ -107,6 +111,8 @@
         </div>
         <!-- ### END Research Group Proposals Section ### -->
     </div>
+</div>
+
 </template>
 
 <script>
@@ -131,6 +137,7 @@
                 isLoadingResearchGroupMembers: 'researchGroup/isLoadingResearchGroupMembers',
                 isLoadingResearchGroupResearchList: 'researchGroup/isLoadingResearchGroupResearchList',
                 isLoadingResearchGroupProposals: 'researchGroup/isLoadingResearchGroupProposals',
+                isLoadingResearchGroupPage: 'researchGroup/isLoadingResearchGroupPage'
             }),
             isResearchGroupMember() {
                 return this.group != null 
@@ -143,6 +150,10 @@
 
 <style lang="less" scoped>
 
+    .research-group-body-container {
+        position: relative; 
+        min-height: 500px;
+    }
     .research-group-details-container {
         min-height: 200px
     }
