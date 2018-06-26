@@ -1,5 +1,6 @@
 <template>
     <div>
+        <!-- ### START Research Details Section ### -->
         <div class="c-pt-6 research-details-container spinner-container">
             <v-progress-circular v-if="isLoadingResearchDetails" indeterminate color="primary"></v-progress-circular>
             <div v-if="isLoadingResearchDetails === false">
@@ -20,7 +21,9 @@
                 </div>
             </div>
         </div>
+        <!-- ### END Research Details Section ### -->
 
+        <!-- ### START Research Content Section ### -->
         <div v-if="contentList.length">
             <div class="c-pt-8 title">Timeline</div>
             <div class="c-pt-6">
@@ -85,7 +88,9 @@
 
             <add-research-contnet-dialog v-if="isResearchGroupMember && !research.is_finished"></add-research-contnet-dialog>
         </div>
+        <!-- ### END Research Content Section ### -->
 
+        <!-- ### START Research Review Section ### -->
         <div class="research-reviews-container spinner-container">
             <v-progress-circular v-if="isLoadingResearchReviews" indeterminate color="primary"></v-progress-circular>
             <div v-if="isLoadingResearchReviews === false && reviewsList.length">
@@ -95,6 +100,8 @@
                 </div>
             </div>
         </div>
+        <!-- ### END Research Review Section ### -->
+
         <!-- <div class="c-pt-4 title">Grants: 4</div>
 
         <div class="c-pt-6">

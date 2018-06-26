@@ -1,16 +1,26 @@
 <template>
     <div>
-        <div class="sm-title bold">Group Info</div>
-
-        <div class="c-pt-4 c-pb-6">
-            <div v-for="(item, i) in groupExpertise" :key="i">
-                <span class="half-bold">{{ item.disciplineName }}</span>
-                <span class="right">{{ item.value }}</span>
+        <!-- ### START Research Group Details Section ### -->
+        <div class="research-group-info-container spinner-container">
+            <v-progress-circular v-if="isLoadingResearchGroupDetails" indeterminate color="primary"></v-progress-circular>
+            <div v-if="isLoadingResearchGroupDetails === false">
+                <div class="sm-title bold">Group Info</div>
+                <div class="c-pt-4 c-pb-6">
+                    <div v-for="(item, i) in groupExpertise" :key="i">
+                        <span class="half-bold">{{ item.disciplineName }}</span>
+                        <span class="right">{{ item.value }}</span>
+                    </div>
+                </div>
             </div>
         </div>
-
-        <div style="margin: 0 -24px">
+        <!-- ### END Research Group Details Section ### -->
+        
+        <div class="section-divider">
             <v-divider></v-divider>
+        </div>
+
+        <!-- ### START Research Group Followers Section ### -->
+        <div style="margin: 0 -24px">
             <div class="row-nowrap">
                 <div class="col-6 c-pv-6 display-flex" v-ripple>
                     <div class="clickable-label text-align-center c-m-auto">15<br>Folowers</div>
@@ -20,49 +30,60 @@
                     <div class="clickable-label text-align-center c-m-auto">Follow</div>
                 </div> -->
             </div>
+        </div>
+        <!-- ### END Research Group Followers Section ### -->
+
+        <div class="section-divider">
             <v-divider></v-divider>
         </div>
-        <div v-if="hasPendingJoinRequests && isResearchGroupMember">
-            <div class="sm-title bold c-pt-6">Join requests: {{pendingJoinRequests.length}}</div>
-            <div class="c-pb-6">
-                <div v-for="(join, index) in pendingJoinRequests" class="row-nowrap justify-between align-center c-pt-4">
-                    <div>
-                        <v-avatar size="40px">
-                            <img v-if="join.user.profile" v-bind:src="join.user.profile.avatar | avatarSrc(40, 40, false)" />
-                            <v-gravatar v-else :title="join.user.account.name" :email="join.user.account.name + '@deip.world'" />
-                        </v-avatar>
-                        <span class="a c-pl-3">{{join.user | fullname}}</span>
-                    </div>
-                    <v-btn @click="openJoinRequestDetails(join, index)" flat icon color="grey" class="ma-0">
-                        <v-icon>mail_outline</v-icon>
-                    </v-btn>
-                </div>
-            </div>
 
-            <v-dialog v-model="selectedJoinRequestMeta.isShown" persistent max-width="800">
-                <v-card v-if="selectedJoinRequestMeta.item">
-                    <v-card-title>
-                        <span class="headline">{{selectedJoinRequestMeta.item.username}}</span>
-                        <span class="join-request-title-info"></span>
-                    </v-card-title>
-                    <v-card-text class="text-align-center">{{selectedJoinRequestMeta.item.coverLetter}}</v-card-text>
-                    <v-card-actions class="text-align-center mt-5">
-                        <v-spacer></v-spacer>
-                        <v-btn color="green lighten-1" flat 
-                            :disabled="isApprovingJoinRequest" :loading="isApprovingJoinRequest" 
-                            @click.native="approveJoinRequest(selectedJoinRequestMeta)">
-                            Approve
+        <!-- ### START Research Group Join Requests Section ### -->
+        <div v-if="isJoinRequestsSectionAvailable || isLoadingResearchGroupJoinRequests !== false" class="research-group-join-requests-container spinner-container">
+            <v-progress-circular v-if="isLoadingResearchGroupJoinRequests" indeterminate color="primary"></v-progress-circular>
+            <div v-if="isLoadingResearchGroupJoinRequests === false">
+                <div class="sm-title bold c-pt-6">Join requests: {{pendingJoinRequests.length}}</div>
+                <div class="c-pb-6">
+                    <div v-for="(join, index) in pendingJoinRequests" class="row-nowrap justify-between align-center c-pt-4">
+                        <div>
+                            <v-avatar size="40px">
+                                <img v-if="join.user.profile" v-bind:src="join.user.profile.avatar | avatarSrc(40, 40, false)" />
+                                <v-gravatar v-else :title="join.user.account.name" :email="join.user.account.name + '@deip.world'" />
+                            </v-avatar>
+                            <span class="a c-pl-3">{{join.user | fullname}}</span>
+                        </div>
+                        <v-btn @click="openJoinRequestDetails(join, index)" flat icon color="grey" class="ma-0">
+                            <v-icon>mail_outline</v-icon>
                         </v-btn>
-                        <v-btn color="red lighten-1" flat :disabled="isDenyingJoinRequest" :loading="isDenyingJoinRequest" 
-                            @click.native="denyJoinRequest(selectedJoinRequestMeta)">
-                            Deny
-                        </v-btn>
-                        <v-btn flat @click.native="closeJoinRequestDetails()">Cancel</v-btn>
-                    </v-card-actions>
-                </v-card>
-            </v-dialog>
+                    </div>
+                </div>
+
+                <v-dialog v-model="selectedJoinRequestMeta.isShown" persistent max-width="800">
+                    <v-card v-if="selectedJoinRequestMeta.item">
+                        <v-card-title>
+                            <span class="headline">{{selectedJoinRequestMeta.item.username}}</span>
+                            <span class="join-request-title-info"></span>
+                        </v-card-title>
+                        <v-card-text class="text-align-center">{{selectedJoinRequestMeta.item.coverLetter}}</v-card-text>
+                        <v-card-actions class="text-align-center mt-5">
+                            <v-spacer></v-spacer>
+                            <v-btn color="green lighten-1" flat 
+                                :disabled="isApprovingJoinRequest" :loading="isApprovingJoinRequest" 
+                                @click.native="approveJoinRequest(selectedJoinRequestMeta)">
+                                Approve
+                            </v-btn>
+                            <v-btn color="red lighten-1" flat :disabled="isDenyingJoinRequest" :loading="isDenyingJoinRequest" 
+                                @click.native="denyJoinRequest(selectedJoinRequestMeta)">
+                                Deny
+                            </v-btn>
+                            <v-btn flat @click.native="closeJoinRequestDetails()">Cancel</v-btn>
+                        </v-card-actions>
+                    </v-card>
+                </v-dialog>
+            </div>
         </div>
-        <div style="margin: 0 -24px">
+        <!-- ### END Research Group Join Requests Section ### -->
+
+        <div v-if="isJoinRequestsSectionAvailable" class="section-divider">
             <v-divider></v-divider>
         </div>
     </div>
@@ -89,7 +110,9 @@
                 user: 'auth/user',
                 group: 'researchGroup/group',
                 members: 'researchGroup/members',
-                pendingJoinRequests: 'researchGroup/pendingJoinRequests'
+                pendingJoinRequests: 'researchGroup/pendingJoinRequests',
+                isLoadingResearchGroupDetails: 'researchGroup/isLoadingResearchGroupDetails',
+                isLoadingResearchGroupJoinRequests: 'researchGroup/isLoadingResearchGroupJoinRequests'
             }),
             groupExpertise() {
                 return _.chain(this.members)
@@ -112,7 +135,11 @@
             },
             hasPendingJoinRequests() {
                 return this.pendingJoinRequests && this.pendingJoinRequests.length;
-            }           
+            },
+
+            isJoinRequestsSectionAvailable() {
+                return this.hasPendingJoinRequests && this.isResearchGroupMember
+            }
         },
 
         methods: {
@@ -229,8 +256,21 @@
         margin: 12px 0;
     }
 
+    .section-divider {
+        margin: 0 -24px;
+    }
+
     .join-request-title-info {
         padding-left: 10px;
         padding-top: 3px;
     }
+
+    .research-group-info-container {
+        min-height: 200px;
+    }
+
+    .research-group-join-requests-container {
+        min-height: 200px;
+    }
+
 </style>
