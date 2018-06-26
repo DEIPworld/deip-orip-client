@@ -1,5 +1,7 @@
 <template>
-    <div>
+<div class="research-body-container spinner-container">
+    <v-progress-circular v-if="isLoadingResearchPage" :size="100" indeterminate color="primary"></v-progress-circular>
+    <div v-if="isLoadingResearchPage === false">
         <!-- ### START Research Details Section ### -->
         <div class="c-pt-6 research-details-container spinner-container">
             <v-progress-circular v-if="isLoadingResearchDetails" indeterminate color="primary"></v-progress-circular>
@@ -137,6 +139,8 @@
             </div>
         </div>  -->
     </div>
+</div>
+
 </template>
 
 <script>
@@ -160,7 +164,8 @@
                 isLoadingResearchContent: 'rd/isLoadingResearchContent',
                 isLoadingResearchDetails: 'rd/isLoadingResearchDetails',
                 isLoadingResearchReviews: 'rd/isLoadingResearchReviews',
-                isLoadingResearchReviews: 'rd/isLoadingResearchReviews'
+                isLoadingResearchReviews: 'rd/isLoadingResearchReviews',
+                isLoadingResearchPage: 'rd/isLoadingResearchPage'
             }),
             isResearchGroupMember() {
                 return this.research != null 
@@ -180,6 +185,10 @@
 </script>
 
 <style lang="less" scoped>
+    .research-body-container {
+        min-height: 500px;
+    }
+
     .research-details-container {
         min-height: 200px;
     }

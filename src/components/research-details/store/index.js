@@ -18,6 +18,8 @@ const state = {
     contributionsList: [],
     groupInvitesList: [],
 
+    isLoadingResearchPage: undefined,
+
     isLoadingResearchDetails: undefined,
     isLoadingResearchContent: undefined,
     isLoadingResearchMembers: undefined,
@@ -73,6 +75,8 @@ const getters = {
     groupInvitesList: (state, getters) => {
         return state.groupInvitesList;
     },
+
+    isLoadingResearchPage: state => state.isLoadingResearchPage,
 
     isLoadingResearchContent: (state, getters) => {
         return state.isLoadingResearchContent;
@@ -183,27 +187,47 @@ const getters = {
 const actions = {
 
     loadResearchDetails({ state, commit, dispatch }, { group_permlink, research_permlink }) {
+        commit('SET_RESEARCH_PAGE_LOADING_STATE', true)
+
         commit('SET_RESEARCH_DETAILS_LOADING_STATE', true)
         deipRpc.api.getResearchByAbsolutePermlinkAsync(group_permlink, research_permlink)
             .then((research) => {
                 research.group_permlink = group_permlink;
                 commit('SET_RESEARCH_DETAILS', research)
 
-                dispatch('loadResearchContent', state.research.id)
-                dispatch('loadResearchMembers', state.research.id)
-                dispatch('loadResearchReviews', state.research.id)
-                dispatch('loadResearchDisciplines', state.research.id)
-                dispatch('loadResearchTokenHolders', state.research.id)
-                dispatch('loadResearchTokenSale', state.research.id)
-                dispatch('loadResearchGroupInvites', state.research.research_group_id)
+                const contentLoad = new Promise((resolve, reject) => {
+                    dispatch('loadResearchContent', { researchId: state.research.id, notify: resolve })
+                });
+                const membersLoad = new Promise((resolve, reject) => {
+                    dispatch('loadResearchMembers', { researchId: state.research.id, notify: resolve })
+                });
+                const reviewsLoad = new Promise((resolve, reject) => {
+                    dispatch('loadResearchReviews', { researchId: state.research.id, notify: resolve })
+                });
+                const disciplinesLoad = new Promise((resolve, reject) => {
+                    dispatch('loadResearchDisciplines', { researchId: state.research.id, notify: resolve })
+                });
+                const tokenHoldersLoad = new Promise((resolve, reject) => {
+                    dispatch('loadResearchTokenHolders', { researchId: state.research.id, notify: resolve })
+                });
+                const tokenSaleLoad = new Promise((resolve, reject) => {
+                    dispatch('loadResearchTokenSale', { researchId: state.research.id, notify: resolve })
+                });
+                const invitesLoad = new Promise((resolve, reject) => {
+                    dispatch('loadResearchGroupInvites', { researchGroupId: state.research.research_group_id, notify: resolve })
+                });
+
+                return Promise.all([contentLoad, membersLoad, reviewsLoad, disciplinesLoad, 
+                    tokenHoldersLoad, tokenSaleLoad, invitesLoad])
 
             }, (err => {console.log(err)}))
             .finally(() => {
                 commit('SET_RESEARCH_DETAILS_LOADING_STATE', false)
+                commit('SET_RESEARCH_PAGE_LOADING_STATE', false)
             })
     },
 
-    loadResearchContent({ state, dispatch, commit }, researchId) {
+    loadResearchContent({ state, dispatch, commit }, { researchId, notify }) {
         commit('SET_RESEARCH_CONTENT_LOADING_STATE', true)
         deipRpc.api.getAllResearchContentAsync(researchId)
             .then((list) => {
@@ -212,10 +236,11 @@ const actions = {
             }, (err) => { console.log(err) })
             .finally(() => {
                 commit('SET_RESEARCH_CONTENT_LOADING_STATE', false)
+                if (notify) notify();
             })
     },
 
-    loadResearchMembers({ state, commit, dispatch }, researchId) {
+    loadResearchMembers({ state, commit, dispatch }, { researchId, notify }) {
         const rgtList = [];
         commit('SET_RESEARCH_MEMBERS_LOADING_STATE', true)
         deipRpc.api.getResearchGroupTokensByResearchGroupAsync(researchId)
@@ -234,10 +259,11 @@ const actions = {
             }, (err) => {console.log(err)})
             .finally(() => {
                 commit('SET_RESEARCH_MEMBERS_LOADING_STATE', false)
+                if (notify) notify();
             })
     },
 
-    loadResearchReviews({ state, dispatch, commit }, researchId) {
+    loadResearchReviews({ state, dispatch, commit }, { researchId, notify }) {
         const reviews = [];
         commit('SET_RESEARCH_REVIEWS_LOADING_STATE', true)
         deipRpc.api.getReviewsByResearchAsync(researchId)
@@ -256,10 +282,11 @@ const actions = {
             }, (err) => {console.log(err)})
             .finally(() => {
                 commit('SET_RESEARCH_REVIEWS_LOADING_STATE', false)
+                if (notify) notify();
             })
     },
 
-    loadResearchDisciplines({ state, dispatch,commit }, researchId) {
+    loadResearchDisciplines({ state, dispatch,commit }, { researchId, notify }) {
         const disciplinesList = [];
         commit('SET_RESEARCH_DISCIPLINES_LOADING_STATE', true)
         deipRpc.api.getDisciplinesByResearchAsync(researchId)
@@ -279,10 +306,11 @@ const actions = {
             }, (err) => {console.log(err)})
             .finally(() => {
                 commit('SET_RESEARCH_DISCIPLINES_LOADING_STATE', false)
+                if (notify) notify();
             })
     },
 
-    loadResearchTokenHolders({ state, dispatch, commit }, researchId) {
+    loadResearchTokenHolders({ state, dispatch, commit }, { researchId, notify }) {
         commit('SET_RESEARCH_TOKEN_HOLDERS_LOADING_STATE', true)
         deipRpc.api.getResearchTokensByResearchIdAsync(researchId)
             .then((tokenHolders) => {
@@ -290,10 +318,11 @@ const actions = {
             }, (err) => {console.log(err)})
             .finally(() => {
                 commit('SET_RESEARCH_TOKEN_HOLDERS_LOADING_STATE', false)
+                if (notify) notify();
             }) 
     },
 
-    loadResearchTokenSale({ state, dispatch, commit }, researchId) {
+    loadResearchTokenSale({ state, dispatch, commit }, { researchId, notify }) {
         commit('SET_RESEARCH_TOKEN_SALE_LOADING_STATE', true)
         deipRpc.api.checkResearchTokenSaleExistenceByResearchIdAsync(researchId)
             .then((exists) => {
@@ -309,6 +338,7 @@ const actions = {
             }, (err) => {console.log(err)})
         .finally(() => {
             commit('SET_RESEARCH_TOKEN_SALE_LOADING_STATE', false)
+            if (notify) notify();
         })
     },
 
@@ -320,12 +350,14 @@ const actions = {
     },
 
 
-    loadResearchGroupInvites({ commit }, groupId) {
-        deipRpc.api.getResearchGroupInvitesByResearchGroupIdAsync(groupId)
+    loadResearchGroupInvites({ commit }, { researchGroupId, notify }) {
+        deipRpc.api.getResearchGroupInvitesByResearchGroupIdAsync(researchGroupId)
             .then((invites) => {
                 commit('SET_RESEARCH_GROUP_INVITES', invites);
             }, (err) => {
                 console.log(err)
+            }).finally(() => {
+                if (notify) notify();
             })
     },
     
@@ -415,6 +447,10 @@ const mutations = {
     
     ['SET_RESEARCH_TOKEN_SALE_LOADING_STATE'](state, value) {
         state.isLoadingResearchTokenSale = value
+    },
+
+    ['SET_RESEARCH_PAGE_LOADING_STATE'](state, value) {
+        state.isLoadingResearchPage = value
     }
 }
 
