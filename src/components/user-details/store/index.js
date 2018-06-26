@@ -9,7 +9,16 @@ const state = {
     researchList: [],
     groups: [],
     expertise: [],
-    invites:[]
+    invites:[],
+
+    isLoadingUserProfilePage: undefined,
+
+    isLoadingUserAccount: undefined,
+    isLoadingUserProfile: undefined,
+    isLoadingUserGroups: undefined,
+    isLoadingUserResearch: undefined,
+    isLoadingUserExpertise: undefined,
+    isLoadingUserInvites: undefined
 }
 
 // getters
@@ -20,7 +29,17 @@ const getters = {
     researchList: state => state.researchList,
     groups: state => state.groups,
     expertise: state => state.expertise,
-    invites: state => state.invites
+    invites: state => state.invites,
+
+    
+    isLoadingUserProfilePage: state => state.isLoadingUserProfilePage,
+
+    isLoadingUserAccount: state => state.isLoadingUserAccount,
+    isLoadingUserProfile: state => state.isLoadingUserProfile,
+    isLoadingUserGroups: state => state.isLoadingUserGroups,
+    isLoadingUserResearch: state => state.isLoadingUserResearch,
+    isLoadingUserExpertise: state => state.isLoadingUserExpertise,
+    isLoadingUserInvites: state => state.isLoadingUserInvites
 }
 
 // actions
@@ -29,43 +48,70 @@ const actions = {
     loadUser({ dispatch, commit }, username) {
         commit('SET_USER_PROFILE_PAGE_LOADING_STATE', true)
 
-        const contentLoad = new Promise((resolve, reject) => {
+        const accountLoad = new Promise((resolve, reject) => {
             dispatch('loadUserAccount', {username: username, notify: resolve });
         });
-        const expertiseLoad = new Promise((resolve, reject) => {
-            dispatch('loadExpertise', {username: username, notify: resolve });
+        const profileLoad = new Promise((resolve, reject) => {
+            dispatch('loadUserProfile', {username: username, notify: resolve });
         });
         const researchLoad = new Promise((resolve, reject) => {
             dispatch('loadGroups', {username: username })
                 .then(() => dispatch('loadResearchList', {username: username, notify: resolve }));
         });
-        const profileLoad = new Promise((resolve, reject) => {
-            dispatch('loadUserProfile', {username: username, notify: resolve });
+        const expertiseLoad = new Promise((resolve, reject) => {
+            dispatch('loadExpertise', {username: username, notify: resolve });
         });
         const invitesLoad = new Promise((resolve, reject) => {
             dispatch('loadUserInvites', {username: username, notify: resolve });
         });
-        Promise.all([contentLoad, expertiseLoad, researchLoad, profileLoad, invitesLoad])
+        Promise.all([accountLoad, profileLoad, researchLoad, expertiseLoad, invitesLoad])
             .then(() => {
                 commit('SET_USER_PROFILE_PAGE_LOADING_STATE', false)
             })
     },
 
     loadUserAccount({ commit }, { username, notify }) {
+        commit('SET_USER_ACCOUNT_LOADING_STATE', true)
+
         deipRpc.api.getAccountsAsync([username])
             .then(data => {
                 commit('SET_USER_ACCOUNT', data[0]);
             })
             .finally(() => {
+                commit('SET_USER_ACCOUNT_LOADING_STATE', false)
                 if (notify) notify();
             });
     },
 
+    loadGroups({ commit }, { username, notify }) {
+        commit('SET_USER_GROUPS_LOADING_STATE', true)
+        
+        return deipRpc.api.getResearchGroupTokensByAccountAsync(username).then(data => {
+            let groupsInfo = Promise.all(
+                data.map(groupToken => deipRpc.api.getResearchGroupByIdAsync(groupToken.research_group_id))
+            );
+
+            let groupsShares = Promise.all(
+                data.map(groupToken => deipRpc.api.getResearchGroupTokensByResearchGroupAsync(groupToken.research_group_id))
+            );
+
+            return Promise.all([groupsInfo, groupsShares]);
+        })
+        .then(([groupsInfo, groupsShares]) => {
+            let groups = _.each(groupsInfo, (item, i) => { item.shares = groupsShares[i] });
+            commit('SET_RESEARCH_GROUPS', groups);
+        })
+        .finally(() => {
+            commit('SET_USER_GROUPS_LOADING_STATE', false)
+            if (notify) notify();
+        });
+    },
+
     loadResearchList({ commit, state }, { username, notify }) {
+        commit('SET_USER_RESEARCH_LOADING_STATE', true)
+
         // researhes where user took participation 
         let researchList = [];
-
-        // OMG pzdc, so many queries, very optimized blockchains...
 
         return Promise.all(
             state.groups.map(group => deipRpc.api.getAllResearchContentAsync(group.id))
@@ -104,53 +150,40 @@ const actions = {
             commit('SET_RESEARCH_LIST', data);
         })
         .finally(() => {
-
-            if (notify) notify();
-        });
-    },
-
-    loadGroups({ commit }, { username, notify }) {
-        return deipRpc.api.getResearchGroupTokensByAccountAsync(username).then(data => {
-            let groupsInfo = Promise.all(
-                data.map(groupToken => deipRpc.api.getResearchGroupByIdAsync(groupToken.research_group_id))
-            );
-
-            let groupsShares = Promise.all(
-                data.map(groupToken => deipRpc.api.getResearchGroupTokensByResearchGroupAsync(groupToken.research_group_id))
-            );
-
-            return Promise.all([groupsInfo, groupsShares]);
-        })
-        .then(([groupsInfo, groupsShares]) => {
-            let groups = _.each(groupsInfo, (item, i) => { item.shares = groupsShares[i] });
-            commit('SET_RESEARCH_GROUPS', groups);
-        })
-        .finally(() => {
+            commit('SET_USER_RESEARCH_LOADING_STATE', false)
             if (notify) notify();
         });
     },
 
     loadExpertise({ commit }, { username, notify }) {
-        return deipRpc.api.getExpertTokensByAccountNameAsync(username)
+        commit('SET_USER_EXPERTISE_LOADING_STATE', true)
+
+        deipRpc.api.getExpertTokensByAccountNameAsync(username)
             .then(data => {
                 commit('SET_EXPERTISE', data);
             }).finally(() => {
+                commit('SET_USER_EXPERTISE_LOADING_STATE', false)
                 if (notify) notify();
             });
     },
 
     loadUserProfile({ commit },  { username, notify }) {
+        commit('SET_USER_PROFILE_LOADING_STATE', true)
+
         usersService.getUserProfile(username)
             .then((profile) => { 
                 commit('SET_USER_PROFILE', profile != "" ? profile : null);
             }, (err) => {
                 console.log(err)
             }).finally(() => {
+                commit('SET_USER_PROFILE_LOADING_STATE', false)
                 if (notify) notify();
             });
     },
 
     loadUserInvites({ commit }, { username, notify }) {
+        commit('SET_USER_INVITES_LOADING_STATE', true)
+
         const invites = [];
         deipRpc.api.getResearchGroupInvitesByAccountNameAsync(username)
             .then((list) => {
@@ -171,7 +204,7 @@ const actions = {
                 }
                 commit('SET_USER_INVITES', invites);
             }).finally(() => {
-
+                commit('SET_USER_INVITES_LOADING_STATE', false)
                 if (notify) notify();
             });
     }
@@ -206,6 +239,30 @@ const mutations = {
 
     ['SET_USER_PROFILE_PAGE_LOADING_STATE'](state, value) {
         state.isLoadingUserProfilePage = value;
+    },
+
+    ['SET_USER_ACCOUNT_LOADING_STATE'](state, value) {
+        state.isLoadingUserAccount = value;
+    },
+
+    ['SET_USER_PROFILE_LOADING_STATE'](state, value) {
+        state.isLoadingUserProfile = value;
+    },
+
+    ['SET_USER_GROUPS_LOADING_STATE'](state, value) {
+        state.isLoadingUserGroups = value;
+    },
+
+    ['SET_USER_RESEARCH_LOADING_STATE'](state, value) {
+        state.isLoadingUserResearch = value;
+    },
+
+    ['SET_USER_EXPERTISE_LOADING_STATE'](state, value) {
+        state.isLoadingUserExpertise = value;
+    },
+    
+    ['SET_USER_INVITES_LOADING_STATE'](state, value) {
+        state.isLoadingUserInvites = value;
     }
 }
 
