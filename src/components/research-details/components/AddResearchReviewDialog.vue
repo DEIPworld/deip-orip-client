@@ -149,7 +149,7 @@
                     this.review,
                     this.reviewQuality === this.REVIEW_POSITIVE
                 ).then((data) => {
-                    this.$store.dispatch('rd/loadResearchReviews', this.research.id);
+                    this.$store.dispatch('rd/loadResearchReviews', {researchId: this.research.id});
                     this.$store.dispatch('rd/closeReviewDialog');
                     this.$store.dispatch('layout/setSuccess', {
                         message: "Your review has been posted successfully !"

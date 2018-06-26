@@ -25,22 +25,43 @@ const getters = {
 
 // actions
 const actions = {
-    loadUser({ dispatch }, accountName) {
-        dispatch('loadUserAccount', accountName);
-        dispatch('loadExpertise', accountName);
+    
+    loadUser({ dispatch, commit }, username) {
+        commit('SET_USER_PROFILE_PAGE_LOADING_STATE', true)
 
-        dispatch('loadGroups', accountName).then(() => 
-            dispatch('loadResearchList', accountName)
-        );
-        dispatch('loadUserProfile', accountName);
-        dispatch('loadUserInvites', accountName);
-    },
-    loadUserAccount({ commit }, accountName) {
-        deipRpc.api.getAccountsAsync([accountName]).then(data => {
-            commit('SET_USER_ACCOUNT', data[0]);
+        const contentLoad = new Promise((resolve, reject) => {
+            dispatch('loadUserAccount', {username: username, notify: resolve });
         });
+        const expertiseLoad = new Promise((resolve, reject) => {
+            dispatch('loadExpertise', {username: username, notify: resolve });
+        });
+        const researchLoad = new Promise((resolve, reject) => {
+            dispatch('loadGroups', {username: username })
+                .then(() => dispatch('loadResearchList', {username: username, notify: resolve }));
+        });
+        const profileLoad = new Promise((resolve, reject) => {
+            dispatch('loadUserProfile', {username: username, notify: resolve });
+        });
+        const invitesLoad = new Promise((resolve, reject) => {
+            dispatch('loadUserInvites', {username: username, notify: resolve });
+        });
+        Promise.all([contentLoad, expertiseLoad, researchLoad, profileLoad, invitesLoad])
+            .then(() => {
+                commit('SET_USER_PROFILE_PAGE_LOADING_STATE', false)
+            })
     },
-    loadResearchList({ commit, state }, accountName) {
+
+    loadUserAccount({ commit }, { username, notify }) {
+        deipRpc.api.getAccountsAsync([username])
+            .then(data => {
+                commit('SET_USER_ACCOUNT', data[0]);
+            })
+            .finally(() => {
+                if (notify) notify();
+            });
+    },
+
+    loadResearchList({ commit, state }, { username, notify }) {
         // researhes where user took participation 
         let researchList = [];
 
@@ -52,7 +73,7 @@ const actions = {
         .then(data => {
             let researchPromises = _(data)
                 .flatten()
-                .filter(item => _.includes(item.authors, accountName))
+                .filter(item => _.includes(item.authors, username))
                 .map('research_id')
                 .uniq()
                 .map(researchId => deipRpc.api.getResearchByIdAsync(researchId))
@@ -81,12 +102,15 @@ const actions = {
         })
         .then(data => {
             commit('SET_RESEARCH_LIST', data);
-        }).catch(() => {
-            commit('SET_RESEARCH_LIST', researchList);
-        });;
+        })
+        .finally(() => {
+
+            if (notify) notify();
+        });
     },
-    loadGroups({ commit }, accountName) {
-        return deipRpc.api.getResearchGroupTokensByAccountAsync(accountName).then(data => {
+
+    loadGroups({ commit }, { username, notify }) {
+        return deipRpc.api.getResearchGroupTokensByAccountAsync(username).then(data => {
             let groupsInfo = Promise.all(
                 data.map(groupToken => deipRpc.api.getResearchGroupByIdAsync(groupToken.research_group_id))
             );
@@ -96,26 +120,37 @@ const actions = {
             );
 
             return Promise.all([groupsInfo, groupsShares]);
-        }).then(([groupsInfo, groupsShares]) => {
+        })
+        .then(([groupsInfo, groupsShares]) => {
             let groups = _.each(groupsInfo, (item, i) => { item.shares = groupsShares[i] });
             commit('SET_RESEARCH_GROUPS', groups);
         })
-    },
-    loadExpertise({ commit }, accountName) {
-        return deipRpc.api.getExpertTokensByAccountNameAsync(accountName).then(data => {
-            commit('SET_EXPERTISE', data);
+        .finally(() => {
+            if (notify) notify();
         });
     },
-    loadUserProfile({ commit }, username) {
+
+    loadExpertise({ commit }, { username, notify }) {
+        return deipRpc.api.getExpertTokensByAccountNameAsync(username)
+            .then(data => {
+                commit('SET_EXPERTISE', data);
+            }).finally(() => {
+                if (notify) notify();
+            });
+    },
+
+    loadUserProfile({ commit },  { username, notify }) {
         usersService.getUserProfile(username)
             .then((profile) => { 
                 commit('SET_USER_PROFILE', profile != "" ? profile : null);
             }, (err) => {
                 console.log(err)
-            })
+            }).finally(() => {
+                if (notify) notify();
+            });
     },
 
-    loadUserInvites({ commit }, username) {
+    loadUserInvites({ commit }, { username, notify }) {
         const invites = [];
         deipRpc.api.getResearchGroupInvitesByAccountNameAsync(username)
             .then((list) => {
@@ -135,7 +170,10 @@ const actions = {
                     invite.group = groups.find(g => g.id == invite.research_group_id)
                 }
                 commit('SET_USER_INVITES', invites);
-            })
+            }).finally(() => {
+
+                if (notify) notify();
+            });
     }
 }
 
@@ -164,7 +202,11 @@ const mutations = {
     
     ['SET_USER_INVITES'](state, invites) {
         Vue.set(state, 'invites', invites);
-    }    
+    },
+
+    ['SET_USER_PROFILE_PAGE_LOADING_STATE'](state, value) {
+        state.isLoadingUserProfilePage = value;
+    }
 }
 
 const namespaced = true;

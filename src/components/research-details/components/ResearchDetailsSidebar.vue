@@ -395,8 +395,8 @@
                     this.user.username,
                     parseInt(this.amountToContribute)
                 ).then((data) => {
-                    this.$store.dispatch('rd/loadResearchTokenSale', this.research.id)
-                    this.$store.dispatch('rd/loadResearchTokenHolders', this.research.id)
+                    this.$store.dispatch('rd/loadResearchTokenSale', {researchId: this.research.id})
+                    this.$store.dispatch('rd/loadResearchTokenHolders', {researchId: this.research.id})
                     this.isTokensBuying = false;
                     this.amountToContribute = undefined;
                     this.$store.dispatch('layout/setSuccess', {

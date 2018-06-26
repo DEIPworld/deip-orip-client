@@ -195,8 +195,8 @@
 
                                 joinRequestsService.updateJoinRequest({request: update, tx: signedTX})
                                     .then((updatedRequest) => {
-                                            self.$store.dispatch('researchGroup/loadJoinRequests', self.group.id);
-                                            self.$store.dispatch('researchGroup/loadResearchGroupProposals', self.group.id);
+                                            self.$store.dispatch('researchGroup/loadJoinRequests', { groupId: self.group.id });
+                                            self.$store.dispatch('researchGroup/loadResearchGroupProposals', { groupId: self.group.id });
                                             self.$store.dispatch('layout/setSuccess', { message: `Invite proposal for "${item.username}" has been created successfully !`});
                                         },
                                         (err) => {
@@ -231,7 +231,7 @@
 
                 joinRequestsService.updateJoinRequest({request: update})
                     .then((updatedRequest) => {
-                        self.$store.dispatch('researchGroup/loadJoinRequests', self.group.id);
+                        self.$store.dispatch('researchGroup/loadJoinRequests', {groupId: self.group.id});
                         self.$store.dispatch('layout/setSuccess', { message: `You have denied join request from  "${item.username}" successfully !`});
                     },
                     (err) => {

@@ -86,7 +86,7 @@
                         :group-id="group.id"
                         :group-members="members"
                         @onClose="$store.dispatch('researchGroup/changeOptions', { key: 'isAddMemberDialogOpen', value: false })"
-                        @onSuccess="$store.dispatch('researchGroup/loadResearchGroupProposals', group.id)">
+                        @onSuccess="$store.dispatch('researchGroup/loadResearchGroupProposals', { groupId: group.id })">
                     </add-member-to-group-dialog>
                 </div>
             </div>
