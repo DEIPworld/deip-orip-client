@@ -52,7 +52,7 @@ const actions = {
             dispatch('loadUserAccount', {username: username, notify: resolve });
         });
         const profileLoad = new Promise((resolve, reject) => {
-            dispatch('loadUserProfile', {username: username, notify: resolve });
+            dispatch('loadUserProfile', {username: username, loading: true, notify: resolve });
         });
         const researchLoad = new Promise((resolve, reject) => {
             dispatch('loadGroups', {username: username })
@@ -167,8 +167,8 @@ const actions = {
             });
     },
 
-    loadUserProfile({ commit },  { username, notify }) {
-        commit('SET_USER_PROFILE_LOADING_STATE', true)
+    loadUserProfile({ commit },  { username, loading, notify }) {
+        if (loading) commit('SET_USER_PROFILE_LOADING_STATE', true)
 
         usersService.getUserProfile(username)
             .then((profile) => { 
@@ -176,7 +176,7 @@ const actions = {
             }, (err) => {
                 console.log(err)
             }).finally(() => {
-                commit('SET_USER_PROFILE_LOADING_STATE', false)
+                if (loading) commit('SET_USER_PROFILE_LOADING_STATE', false)
                 if (notify) notify();
             });
     },

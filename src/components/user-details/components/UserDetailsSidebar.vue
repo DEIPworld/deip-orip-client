@@ -14,6 +14,7 @@
                         <div class="half-bold">{{ item.discipline_name }}</div>
                         <div>{{ item.amount }}</div>
                     </div>
+                    <div v-if="!expertise.length" class="italic">No expertise tokens</div>
                 </div>
             </div>
         </div>
