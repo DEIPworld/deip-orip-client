@@ -1,5 +1,7 @@
 <template>
-    <div>
+    <div class="research-details-sidebar-container">
+      <sidebar-loader v-if="isLoadingResearchPage"></sidebar-loader>
+      <div v-if="isLoadingResearchPage === false">
 
         <router-link :to="`/${groupLink}/group-details`" style="text-decoration: none; color: black">
             <div class="sm-title bold">Research Group <span class="caption grey--text">(view)</span></div>
@@ -273,7 +275,7 @@
         <div v-if="isTokenSaleSectionAvailable" class="section-divider">
             <v-divider></v-divider>
         </div>
-
+      </div>
     </div>
 </template>
 
@@ -312,6 +314,7 @@
                 tokenHoldersList: 'rd/tokenHoldersList',
                 contributionsList: 'rd/contributionsList',
                 groupInvitesList: 'rd/groupInvitesList',
+                isLoadingResearchPage: 'rd/isLoadingResearchPage',
                 isLoadingResearchMembers: 'rd/isLoadingResearchMembers',
                 isLoadingResearchDisciplines: 'rd/isLoadingResearchDisciplines',
                 isLoadingResearchTokenHolders: 'rd/isLoadingResearchTokenHolders',
@@ -474,9 +477,13 @@
     .section-divider {
         margin: 0 -24px;
     }
+
+    .research-details-sidebar-container {
+        
+    }
     
     .research-members-container {
-        min-height: 150px
+        // min-height: 150px
     }
 
     .research-dicsciplines-container {
@@ -492,7 +499,7 @@
     }
 
     .research-token-sale-container {
-        min-height: 150px
+        // min-height: 150px
     }
 
 </style>

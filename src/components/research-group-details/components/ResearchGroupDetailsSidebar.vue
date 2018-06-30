@@ -1,5 +1,8 @@
 <template>
-    <div>
+    <div class="research-group-details-sidebar-container">
+      <sidebar-loader v-if="isLoadingResearchGroupPage"></sidebar-loader>
+      <div v-if="isLoadingResearchGroupPage === false">
+
         <!-- ### START Research Group Details Section ### -->
         <div class="research-group-info-container spinner-container">
             <v-progress-circular v-if="isLoadingResearchGroupDetails" indeterminate color="primary"></v-progress-circular>
@@ -86,6 +89,7 @@
         <div v-if="isJoinRequestsSectionAvailable" class="section-divider">
             <v-divider></v-divider>
         </div>
+      </div>
     </div>
 </template>
 
@@ -110,6 +114,7 @@
                 user: 'auth/user',
                 group: 'researchGroup/group',
                 members: 'researchGroup/members',
+                isLoadingResearchGroupPage: 'researchGroup/isLoadingResearchGroupPage',
                 pendingJoinRequests: 'researchGroup/pendingJoinRequests',
                 isLoadingResearchGroupDetails: 'researchGroup/isLoadingResearchGroupDetails',
                 isLoadingResearchGroupJoinRequests: 'researchGroup/isLoadingResearchGroupJoinRequests'
@@ -265,12 +270,16 @@
         padding-top: 3px;
     }
 
+    .research-group-details-sidebar-container {
+        
+    }
+
     .research-group-info-container {
         min-height: 200px;
     }
 
     .research-group-join-requests-container {
-        min-height: 200px;
+        // min-height: 200px;
     }
 
 </style>
