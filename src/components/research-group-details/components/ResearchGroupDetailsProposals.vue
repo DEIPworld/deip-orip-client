@@ -44,7 +44,7 @@
                     <div slot="header">
                         <div class="row-nowrap align-center c-pr-6 grey--text">
                             <div class="id-col">ID</div>
-                            <div class="proposal-type">Proposal</div>
+                            <div class="proposal-activity">Proposal</div>
                             <div class="date">Date</div>
                             <div class="date">Exp. date</div>
                             <div class="created-by">Created by</div>
@@ -105,7 +105,7 @@
     .id-col {
         width: 60px;
     }
-    .proposal-type {
+    .proposal-activity {
         flex: 1 0 0;
     }
     .date {
