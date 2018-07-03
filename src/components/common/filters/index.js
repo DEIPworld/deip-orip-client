@@ -3,17 +3,17 @@ import config from './../../../config'
 import moment from 'moment';
 
 Vue.filter('fullname', function (enrichedProfile) {
-    return enrichedProfile.profile && enrichedProfile.profile.firstName 
+    return enrichedProfile && enrichedProfile.profile && enrichedProfile.profile.firstName 
         ? `${enrichedProfile.profile.firstName} ${enrichedProfile.profile.lastName || ''}` 
         : enrichedProfile.account.name;
 });
 
 Vue.filter('employmentOrEducation', function (enrichedProfile) {
-    const activeEmployment = enrichedProfile.profile.employment && enrichedProfile.profile.employment.some(e => e.isActive) 
+    const activeEmployment = enrichedProfile && enrichedProfile.profile && enrichedProfile.profile.employment && enrichedProfile.profile.employment.some(e => e.isActive) 
         ? enrichedProfile.profile.employment.find(e => e.isActive)
         : null;
 
-    const activeEducation = enrichedProfile.profile.education && enrichedProfile.profile.education.some(e => e.isActive) 
+    const activeEducation = enrichedProfile && enrichedProfile.profile && enrichedProfile.profile.education && enrichedProfile.profile.education.some(e => e.isActive) 
         ? enrichedProfile.profile.education.find(e => e.isActive)
         : null;
 

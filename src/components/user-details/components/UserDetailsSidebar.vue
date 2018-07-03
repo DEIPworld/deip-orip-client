@@ -1,8 +1,8 @@
 <template>
-    <div>
-    <!--<v-btn color="primary" block class="ma-0">
-            Profile settings
-        </v-btn> -->
+    <div class="user-profile-sidebar-container">
+      <sidebar-loader v-if="isLoadingUserProfilePage"></sidebar-loader>
+      <div v-if="isLoadingUserProfilePage === false">
+      <!-- <v-btn color="primary" block class="ma-0">Profile settings</v-btn> -->
 
         <!-- ### START User Profile Expertise Section ### -->
         <div class="user-expertise-container spinner-container">
@@ -14,6 +14,7 @@
                         <div class="half-bold">{{ item.discipline_name }}</div>
                         <div>{{ item.amount }}</div>
                     </div>
+                    <div v-if="!expertise.length" class="italic">No expertise tokens</div>
                 </div>
             </div>
         </div>
@@ -235,6 +236,7 @@
         <div v-if="isOwner && hasInvites" class="section-divider">
             <v-divider></v-divider>
         </div>
+      </div>
     </div>
 </template>
 
@@ -269,6 +271,7 @@
                 userInfo: 'userDetails/userInfo',
                 expertise: 'userDetails/expertise',
                 invites: 'userDetails/invites',
+                isLoadingUserProfilePage:'userDetails/isLoadingUserProfilePage',
                 isLoadingUserExpertise: 'userDetails/isLoadingUserExpertise',
                 isLoadingUserAccount: 'userDetails/isLoadingUserAccount',
                 isLoadingUserProfile: 'userDetails/isLoadingUserProfile',
@@ -422,16 +425,20 @@
         min-height: 150px
     }
 
+    .user-profile-sidebar-container {
+        
+    }
+
     .user-contacts-container {
-        min-height: 100px
+        // min-height: 100px
     }
 
     .user-info-container {
-         min-height: 150px
+        //  min-height: 150px
     }
 
     .user-invites-container {
-        min-height: 100px
+        // min-height: 100px
     }
 
 </style>
