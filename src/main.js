@@ -17,7 +17,7 @@ import './globals/index';
 
 Vue.use(Vuetify, {
     theme: {
-        'primary': '#2F80ED'
+        'primary': '#2962FF'
     }
 });
 
