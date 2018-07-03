@@ -1,17 +1,17 @@
 import _ from 'lodash';
 
 const types = {
-    startResearch: 1,
-    inviteMember: 2,
-    dropoutMember: 3,
-    sendFunds: 4,
-    startResearchTokenSale: 5,
-    rebalanceResearchGroupTokens: 6,
-    changeQuorum: 7,
-    changeResearchReviewSharePercent: 8,
-    offerResearchTokens: 9,
-    acceptResearchTokensOffer: 10,
-    createResearchMaterial: 11
+    START_RESEARCH: 1,
+    INVITE_MEMBER: 2,
+    DROPOUT_MEMBER: 3,
+    SEND_FUNDS: 4,
+    START_RESEARCH_TOKEN_SALE: 5,
+    REBALANCE_RESEARCH_GROUP_TOKENS: 6,
+    CHANGE_QUORUM: 7,
+    CHANGE_RESEARCH_REVIEW_SHARE_PERCENT: 8,
+    OFFER_RESEARCH_TOKENS: 9,
+    ACCEPT_RESEARCH_TOKEN_OFFER: 10,
+    CREATE_RESEARCH_MATERIAL: 11
 };
 
 // maybe will be OK to add param validations or type conversion

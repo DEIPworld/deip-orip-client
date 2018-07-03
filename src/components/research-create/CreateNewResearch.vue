@@ -148,7 +148,7 @@
                 const self = this;
                 this.isLoading = true;
 
-                let proposal = proposalService.getStringifiedProposalData(proposalService.types.startResearch, [
+                let proposal = proposalService.getStringifiedProposalData(proposalService.types.START_RESEARCH, [
                     this.research.group.id,
                     this.research.title,
                     this.research.description,
@@ -163,7 +163,7 @@
 					this.user.username, 
 					this.research.group.id,
                     proposal,
-                    proposalService.types.startResearch,
+                    proposalService.types.START_RESEARCH,
 					new Date( new Date().getTime() + 2 * 24 * 60 * 60 * 1000 )
 				).then(() => {
                     this.isLoading = false;

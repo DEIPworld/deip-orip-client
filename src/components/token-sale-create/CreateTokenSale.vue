@@ -99,7 +99,7 @@
                 // but Token Sale status is set to inactive initially until its start_time
                 // const nowPlus2Minutes = new Date(Date.now() + (2 * 60 * 1000)); 
                 
-                let proposal = proposalService.getStringifiedProposalData(proposalService.types.startResearchTokenSale, [
+                let proposal = proposalService.getStringifiedProposalData(proposalService.types.START_RESEARCH_TOKEN_SALE, [
                     this.research.id,
                     this.tokenSaleInfo.startDate.toISOString().split('.')[0],
                     // nowPlus2Minutes.toISOString().split('.')[0],
@@ -114,7 +114,7 @@
 					this.user.username, 
 					this.research.research_group_id,
 					proposal,
-                    proposalService.types.startResearchTokenSale,
+                    proposalService.types.START_RESEARCH_TOKEN_SALE,
 					new Date( new Date().getTime() + 2 * 24 * 60 * 60 * 1000 )
 				).then(() => {
                     this.isLoading = false;
