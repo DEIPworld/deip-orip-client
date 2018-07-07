@@ -5,7 +5,7 @@
                 <discipline-tree-picker @select="setDisciplines"></discipline-tree-picker>
             </div>
 
-            <div class="col-3">
+            <div class="col-3 text-align-center">
                 <div class="step-title">Disciplines</div>
                 <div v-for="discipline in selectedDisciplines" class="subheading c-mt-2">
                     <div>
@@ -22,11 +22,11 @@
                 </div>
             </div>
 
-            <div class="col-3">
+            <div class="col-3 text-align-center">
                 <div class="step-title">User</div>
                 <div v-if="selectedUser" class="subheading c-mt-2 bold">{{selectedUser | fullname}}</div>
 
-                <div v-if="selectedUser && selectedUser.expertise" class="user-expertise-container spinner-container c-mr-4">
+                <div v-if="selectedUser && selectedUser.expertise" class="selected-user-expertise-container spinner-container c-mr-4">
                     <v-progress-circular v-if="isLoadingUserExpertise" indeterminate color="primary"></v-progress-circular>
                     <div v-if="isLoadingUserExpertise === false">
                         <div class="c-pt-4 c-pb-6">
@@ -40,7 +40,7 @@
                 </div>
             </div>
 
-            <div class="col-3">
+            <div class="col-3 text-align-center">
                 <div class="users-container spinner-container">
                     <v-progress-circular v-if="isLoadingUsers" indeterminate color="primary"></v-progress-circular>
                     <div v-if="isLoadingUsers === false">
@@ -157,15 +157,15 @@
 </script>
 
 
-<style>
+<style lang="less" scoped>
     .users-container {
         min-height: 500px;
         max-height: 800px;
         overflow: scroll;
     }
 
-    .user-expertise-container {
-        min-height: 500px;
+    .selected-user-expertise-container {
+        min-height: 50px;
     }
 
     .user-item {
