@@ -18,7 +18,7 @@
         "jwt-decode": "^2.2.0",
         "moment": "^2.22.1",
         "substance": "^1.0.0-preview.63",
-        "substance-texture": "1.0.0-preview.1.6",
+        "substance-texture": "1.0.0-preview.3-preview.2",
         "vue": "^2.5.2",
         "vue-gravatar": "^1.2.1",
         "vue-router": "^3.0.1",
