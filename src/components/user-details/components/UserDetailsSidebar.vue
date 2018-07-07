@@ -422,7 +422,7 @@
     }
 
     .user-expertise-container {
-        min-height: 150px
+        // min-height: 150px
     }
 
     .user-profile-sidebar-container {

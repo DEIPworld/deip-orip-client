@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import AdminPage from '@/components/AdminPage'
+import AddExpertisePage from '@/components/AddExpertisePage'
 
 import ResearchFeed from '@/components/research-feed/ResearchFeed'
 import ResearchDetails from '@/components/research-details/ResearchDetails'
@@ -27,12 +27,12 @@ Vue.use(Router)
 
 const router = new Router({
     routes: [{
-        path: '/adminpage',
-        name: 'AdminPage',
-        component: AdminPage,
-        meta: {
-            withoutHeader: true
-        }
+        path: '/add-expertise',
+        name: 'AddExpertisePage',
+        component: AddExpertisePage,
+        // meta: {
+        //     withoutHeader: true
+        // }
     }, {
         path: '/sign-in',
         name: 'SignIn',
