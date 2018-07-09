@@ -1,7 +1,7 @@
 <template>
     <div class="column full-height">
         <div class="c-mb-4 col-grow column">
-            <div class="step-title">Please Select Start and end day of the token sale</div>
+            <div class="step-title">Please select start and end day of the token sale</div>
 
             <div class="col-grow overflow-y-auto">
 
