@@ -47,10 +47,7 @@
         data() { 
             return {
                 startDate: undefined,
-                endDate: undefined,
-
-                startDateMenu: false,
-                endDateMenu: false
+                endDate: undefined
             } 
         },
         methods: {
