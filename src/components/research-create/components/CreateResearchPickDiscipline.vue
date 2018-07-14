@@ -1,12 +1,13 @@
 <template>
-    <div class="column full-height col-grow" style="max-width: 1000px;">
+    <div class="column full-height">
         <div class="c-mb-4 col-grow column">
 
             <div class="step-title">Select disciplines your research is related</div>
-            <div class="subheading text-align-center c-mb-2 selected-disciplines">{{research.disciplines.map(d => d.label).join("  ·  ")}}</div>
+            <div class="subheading c-mb-4 text-align-center selected-disciplines">{{research.disciplines.map(d => d.label).join("  ·  ")}}</div>
 
             <div class="col-grow overflow-y-auto">
-                <div class="row discipline-picker c-mh-auto full-height overflow-y-auto">
+
+                <div class="row discipline-picker c-mh-auto full-height overflow-y-auto" style="max-width: 1000px;">
                     <div class="col-3 c-p-4 overflow-y-auto">
                         <div class="bold uppercase c-pb-4">Recently used</div>
                         <div><span class="deip-label">Religion</span></div>
@@ -30,9 +31,10 @@
                         <discipline-tree-picker @select="setDisciplines"></discipline-tree-picker>
                     </div>
                 </div>
-            </div>
 
+            </div>
         </div>
+        
         <div class="row justify-center align-center">
             <v-btn color="primary" :disabled="nextDisabled" @click.native="nextStep()">Next</v-btn>
         </div>
@@ -40,8 +42,6 @@
 </template>
 
 <script>
-
-    import { mapGetters } from 'vuex';
     
     export default {
         name: "CreateResearchPickDiscipline",

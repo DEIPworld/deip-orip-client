@@ -1,7 +1,7 @@
 <template>
     <div>
         <div class="row">
-            <v-menu class="col-6"
+            <v-menu class="width-6"
                 lazy
                 :close-on-content-click="false"
                 v-model="dateMenu"
@@ -26,7 +26,7 @@
                 ></v-date-picker>
             </v-menu>
 
-            <v-menu class="col-6" bottom left offset-y :nudge-top="20">
+            <v-menu class="col-grow" bottom left offset-y :nudge-top="20">
                 <v-text-field
                     slot="activator"
                     placeholder="Time"

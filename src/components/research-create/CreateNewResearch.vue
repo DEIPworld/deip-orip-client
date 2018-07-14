@@ -31,7 +31,7 @@
 
                 <v-stepper-items class="col-grow">
                     <v-stepper-content step="1">
-                        <div class="row-nowrap justify-center full-height">
+                        <div class="full-height">
                             <create-research-pick-discipline
                                 @incStep="incStep"
                                 @setDisciplines="setDisciplines"
@@ -41,7 +41,7 @@
                     </v-stepper-content>
 
                     <v-stepper-content step="2">
-                        <div class="row-nowrap justify-center full-height">
+                        <div class="full-height">
                             <create-research-pick-group
                                 @incStep="incStep" @decStep="decStep"
                                 @setGroup="setGroup"
@@ -51,7 +51,7 @@
                     </v-stepper-content>
 
                     <v-stepper-content step="3">
-                        <div class="row-nowrap justify-center full-height">
+                        <div class="full-height">
                             <create-research-meta
                                 @incStep="incStep" @decStep="decStep"
                                 @setTitle="setTitle"
@@ -62,7 +62,7 @@
                     </v-stepper-content>
 
             <!--    <v-stepper-content step="4">
-                        <div class="row-nowrap justify-center full-height">
+                        <div class="full-height">
                             <create-research-roadmap
                                 @incStep="incStep" @decStep="decStep"
                             ></create-research-roadmap>
@@ -70,7 +70,7 @@
                     </v-stepper-content> -->
 
                     <v-stepper-content step="4">
-                        <div class="row-nowrap justify-center full-height">
+                        <div class="full-height">
                             <create-research-share 
                                 @finish="finish" @decStep="decStep"
                                 @setReviewShare="setReviewShare"
