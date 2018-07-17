@@ -6,11 +6,13 @@
                     <v-stepper-step step="1" :complete="currentStep > 1">
                         <div class="uppercase">Amount</div>
                     </v-stepper-step>
+
                     <v-divider></v-divider>
 
                     <v-stepper-step step="2" :complete="currentStep > 2">
                         <div class="uppercase white-space-nowrap">Start/End Date</div>
                     </v-stepper-step>
+                    
                     <v-divider></v-divider>
 
                     <v-stepper-step step="3" :complete="currentStep > 3">

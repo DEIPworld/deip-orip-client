@@ -21,6 +21,8 @@ import ClaimExpertiseRegistration from '@/components/auth/ClaimExpertiseRegistra
 import UserDetails from '@/components/user-details/UserDetails'
 import UserWallet from '@/components/user-wallet/components/UserWallet'
 
+import CreateDisciplineGrant from '@/components/grand-create/CreateDisciplineGrant'
+
 import { isLoggedIn } from './../utils/auth';
 
 Vue.use(Router)
@@ -93,6 +95,10 @@ const router = new Router({
         path: '/user-wallet',
         name: 'UserWallet',
         component: UserWallet
+    }, {
+        path: '/create-discipline-grant',
+        name: 'CreateDisciplineGrant',
+        component: CreateDisciplineGrant
     }, {
         path: '*',
         redirect: '/research-feed'

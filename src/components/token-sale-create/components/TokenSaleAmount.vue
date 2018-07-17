@@ -2,6 +2,7 @@
     <div class="column full-height">
         <div class="c-mb-4 col-grow column">
             <div class="step-title">Please type token Amount (%) you’re going to sell</div>
+
             <div class="col-grow overflow-y-auto">
 
                 <div class="row c-mh-auto amount-max-width">
@@ -20,6 +21,7 @@
 
             </div>
         </div>
+        
         <div class="row justify-center align-center">
             <v-btn color="primary" @click.native="nextStep()" :disabled="!verifyAmountRange(tokenSaleInfo.amountToSell)">Next</v-btn>
         </div>

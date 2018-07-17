@@ -1,0 +1,120 @@
+<template>
+    <v-container fluid fill-height class="pa-0">
+        <v-layout>
+            <v-stepper v-model="currentStep" alt-labels class="column full-width full-height">
+                <v-stepper-header>
+                    <v-stepper-step step="1" :complete="currentStep > 1">
+                        <div class="uppercase">Discipline</div>
+                    </v-stepper-step>
+
+                    <v-divider></v-divider>
+
+                    <v-stepper-step step="2" :complete="currentStep > 2">
+                        <div class="uppercase">Amount</div>
+                    </v-stepper-step>
+                    
+                    <v-divider></v-divider>
+
+                    <v-stepper-step step="3" :complete="currentStep > 3">
+                        <div class="uppercase white-space-nowrap">Special conditions</div>
+                    </v-stepper-step>
+                </v-stepper-header>
+
+                <v-stepper-items class="col-grow">
+                    <v-stepper-content step="1">
+                        <div class="full-height">
+                            <discipline-grant-pick-discipline
+                                @incStep="incStep"
+                                :grant-info="grantInfo"
+                            ></discipline-grant-pick-discipline>
+                        </div>
+                    </v-stepper-content>
+
+                    <v-stepper-content step="2">
+                        <div class="full-height">
+                            <discipline-grant-amount
+                                @incStep="incStep" @decStep="decStep"
+                                :grant-info="grantInfo"
+                                :deip-token-balance="
+                                    user.account ? this.fromAssetsToFloat(user.account[0].balance) : 0
+                                "
+                            ></discipline-grant-amount>
+                        </div>
+                    </v-stepper-content>
+
+                    <v-stepper-content step="3">
+                        <div class="full-height">
+                            <discipline-grant-conditions
+                                @decStep="decStep"
+                                @finish="finish"
+                                :grant-info="grantInfo"
+                            ></discipline-grant-conditions>
+                        </div>
+                    </v-stepper-content>
+                </v-stepper-items>
+            </v-stepper>
+        </v-layout>
+    </v-container>
+</template>
+
+
+<script>
+    import { mapGetters } from 'vuex';
+
+    export default {
+        name: "CreateDisciplineGrant",
+
+        computed: {
+            ...mapGetters({
+                user: 'auth/user'
+            })
+        },
+
+        data() { 
+            return {
+                currentStep: 0,
+
+                grantInfo: {
+                    disciplines: [],
+                    amount: '',
+                    startBlock: undefined,
+                    endBlock: undefined,
+                    description: ''
+                }
+            }
+        },
+
+        methods: {
+            incStep() {
+                this.currentStep++;
+            },
+            decStep() {
+                this.currentStep--;
+            },
+            finish() {
+                console.log(this.grantInfo);
+            }
+        },
+
+        created(){
+        }
+    };
+</script>
+
+<style lang="less">    
+    .stepper__content {
+        height: 100%;
+        padding-right: 0px;
+        padding-left: 0px;
+        .stepper__wrapper {
+            height: 100%;
+        }
+    }
+
+    .step-title {
+        font-size: 24px;
+        font-weight: bold;
+        text-align: center;
+        padding-bottom: 16px;
+    }
+</style>

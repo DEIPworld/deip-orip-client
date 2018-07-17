@@ -7,21 +7,25 @@
                     <v-stepper-step step="1" :complete="currentStep > 1">
                         <div class="uppercase">Discipline</div>
                     </v-stepper-step>
+
                     <v-divider></v-divider>
 
                     <v-stepper-step step="2" :complete="currentStep > 2">
                         <div class="uppercase">Research group</div>
                     </v-stepper-step>
+
                     <v-divider></v-divider>
 
                     <v-stepper-step step="3" :complete="currentStep > 3">
                         <div class="uppercase">Title</div>
                     </v-stepper-step>
+
                     <v-divider></v-divider>
 
             <!--    <v-stepper-step step="4" :complete="currentStep > 4">
                         <div class="uppercase">Roadmap</div>
                     </v-stepper-step>
+                    
                     <v-divider></v-divider> -->
 
                     <v-stepper-step step="4">
@@ -114,11 +118,7 @@
         },
         methods: {
             incStep() {
-                if (this.currentStep < 4) {
-                    this.currentStep++;
-                } else {
-                    this.currentStep = 1;
-                }
+                this.currentStep++;
             },
             decStep() {
                 this.currentStep--;
