@@ -93,7 +93,7 @@
 
 <script>
     import _ from 'lodash';
-    import deipRpc from '@deip/deip-rpc';
+    import deipRpc from '@deip/deip-rpc-client';
     import config from './../../../config'
     import {getAccessToken} from './../../../utils/auth'
     import { mapGetters } from 'vuex';
@@ -177,7 +177,7 @@
 
                 const hash = JSON.parse(file.xhr.response).hash;
 
-                const proposal = proposalService.getStringifiedProposalData(proposalService.types.createResearchMaterial, [
+                const proposal = proposalService.getStringifiedProposalData(proposalService.types.CREATE_RESEARCH_MATERIAL, [
                     this.research.id,
                     this.type,
                     this.title,
@@ -193,7 +193,7 @@
 					this.user.username, 
 					this.research.research_group_id, 
 					proposal,
-                    proposalService.types.createResearchMaterial,
+                    proposalService.types.CREATE_RESEARCH_MATERIAL,
 					new Date( new Date().getTime() + 2 * 24 * 60 * 60 * 1000 )
 				).then(() => {
                     this.$store.dispatch('layout/setSuccess', {

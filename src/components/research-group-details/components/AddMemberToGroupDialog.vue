@@ -72,7 +72,7 @@
 
 <script>
     import _ from 'lodash';
-    import deipRpc from '@deip/deip-rpc';
+    import deipRpc from '@deip/deip-rpc-client';
     import { mapGetters } from 'vuex';
     import * as proposalService from './../../../services/ProposalService';
     import { getEnrichedProfiles } from './../../../utils/user'
@@ -113,7 +113,7 @@
                 this.isLoading = true;
 
                 let proposal = proposalService.getStringifiedProposalData(
-                    proposalService.types.inviteMember, [
+                    proposalService.types.INVITE_MEMBER, [
                         this.groupId,
                         this.selectedUser.account.name,
                         parseInt(this.tokensAmount) * this.DEIP_1_PERCENT
@@ -125,7 +125,7 @@
 					this.user.username, 
 					this.groupId,
 					proposal,
-                    proposalService.types.inviteMember,
+                    proposalService.types.INVITE_MEMBER,
 					new Date( new Date().getTime() + 2 * 24 * 60 * 60 * 1000 )
 				).then(() => {
                     this.$store.dispatch('layout/setSuccess', {

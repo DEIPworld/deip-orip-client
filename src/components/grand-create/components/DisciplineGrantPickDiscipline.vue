@@ -2,9 +2,10 @@
     <div class="column full-height">
         <div class="c-mb-4 col-grow column">
             <div class="step-title">Select disciplines your research is related</div>
+            <div class="sm-title bold c-mb-4 text-align-center">Please select discipline</div>
 
             <div class="subheading c-mb-4 text-align-center c-mh-auto selected-disciplines discipline-picker">
-                {{research.disciplines.map(d => d.label).join("  ·  ")}}
+                {{ grantInfo.disciplines.map(d => d.label).join("  ·  ") }}
             </div>
 
             <div class="col-grow overflow-y-auto">
@@ -17,7 +18,7 @@
 
             </div>
         </div>
-        
+
         <div class="row justify-center align-center">
             <v-btn color="primary" :disabled="nextDisabled" @click.native="nextStep()">Next</v-btn>
         </div>
@@ -25,23 +26,22 @@
 </template>
 
 <script>
-    
     export default {
-        name: "CreateResearchPickDiscipline",
+        name: "DisciplineGrantPickDiscipline",
 
         props: {
-            research: { type: Object, required: true } 
+            grantInfo: { type: Object, required: true }
         },
 
         computed: {
-            nextDisabled(){
-                return !this.research.disciplines.length;
+            nextDisabled() {
+                return !this.grantInfo.disciplines.length;
             }
         },
-        
+
         methods: {
-            setDisciplines(disciplines){
-                this.$emit('setDisciplines', disciplines);
+            setDisciplines(disciplines) {
+                this.grantInfo.disciplines = disciplines;
             },
             nextStep() {
                 this.$emit('incStep');

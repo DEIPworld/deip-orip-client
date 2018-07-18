@@ -244,7 +244,7 @@
     import { mapGetters } from 'vuex';
     import usersService from './../../../services/users'
     import moment from 'moment';
-    import deipRpc from '@deip/deip-rpc';
+    import deipRpc from '@deip/deip-rpc-client';
 
     export default {
         name: "UserDetailsSidebar",
@@ -422,7 +422,7 @@
     }
 
     .user-expertise-container {
-        min-height: 150px
+        // min-height: 150px
     }
 
     .user-profile-sidebar-container {

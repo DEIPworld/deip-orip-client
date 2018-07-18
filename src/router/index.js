@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import AdminPage from '@/components/AdminPage'
+import AddExpertisePage from '@/components/AddExpertisePage'
+import TextureTests from '@/components/TextureTests'
 
 import ResearchFeed from '@/components/research-feed/ResearchFeed'
 import ResearchDetails from '@/components/research-details/ResearchDetails'
@@ -21,15 +22,24 @@ import ClaimExpertiseRegistration from '@/components/auth/ClaimExpertiseRegistra
 import UserDetails from '@/components/user-details/UserDetails'
 import UserWallet from '@/components/user-wallet/components/UserWallet'
 
+import CreateDisciplineGrant from '@/components/grand-create/CreateDisciplineGrant'
+
 import { isLoggedIn } from './../utils/auth';
 
 Vue.use(Router)
 
 const router = new Router({
     routes: [{
-        path: '/adminpage',
-        name: 'AdminPage',
-        component: AdminPage,
+        path: '/add-expertise',
+        name: 'AddExpertisePage',
+        component: AddExpertisePage,
+        // meta: {
+        //     withoutHeader: true
+        // }
+    }, {
+        path: '/texture',
+        name: 'TextureTests',
+        component: TextureTests,
         meta: {
             withoutHeader: true
         }
@@ -93,6 +103,10 @@ const router = new Router({
         path: '/user-wallet',
         name: 'UserWallet',
         component: UserWallet
+    }, {
+        path: '/create-discipline-grant',
+        name: 'CreateDisciplineGrant',
+        component: CreateDisciplineGrant
     }, {
         path: '*',
         redirect: '/research-feed'

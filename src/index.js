@@ -13,6 +13,7 @@ import './components/research-group-details/index';
 import './components/research-group-create/index';
 import './components/token-sale-create/index';
 import './components/user-wallet/index';
+import './components/grand-create/index';
 
 import Gravatar from 'vue-gravatar';
 Vue.component('v-gravatar', Gravatar);

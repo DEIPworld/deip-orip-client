@@ -7,21 +7,25 @@
                     <v-stepper-step step="1" :complete="currentStep > 1">
                         <div class="uppercase">Discipline</div>
                     </v-stepper-step>
+
                     <v-divider></v-divider>
 
                     <v-stepper-step step="2" :complete="currentStep > 2">
                         <div class="uppercase">Research group</div>
                     </v-stepper-step>
+
                     <v-divider></v-divider>
 
                     <v-stepper-step step="3" :complete="currentStep > 3">
                         <div class="uppercase">Title</div>
                     </v-stepper-step>
+
                     <v-divider></v-divider>
 
             <!--    <v-stepper-step step="4" :complete="currentStep > 4">
                         <div class="uppercase">Roadmap</div>
                     </v-stepper-step>
+                    
                     <v-divider></v-divider> -->
 
                     <v-stepper-step step="4">
@@ -31,7 +35,7 @@
 
                 <v-stepper-items class="col-grow">
                     <v-stepper-content step="1">
-                        <div class="row-nowrap justify-center full-height">
+                        <div class="full-height">
                             <create-research-pick-discipline
                                 @incStep="incStep"
                                 @setDisciplines="setDisciplines"
@@ -41,7 +45,7 @@
                     </v-stepper-content>
 
                     <v-stepper-content step="2">
-                        <div class="row-nowrap justify-center full-height">
+                        <div class="full-height">
                             <create-research-pick-group
                                 @incStep="incStep" @decStep="decStep"
                                 @setGroup="setGroup"
@@ -51,7 +55,7 @@
                     </v-stepper-content>
 
                     <v-stepper-content step="3">
-                        <div class="row-nowrap justify-center full-height">
+                        <div class="full-height">
                             <create-research-meta
                                 @incStep="incStep" @decStep="decStep"
                                 @setTitle="setTitle"
@@ -62,7 +66,7 @@
                     </v-stepper-content>
 
             <!--    <v-stepper-content step="4">
-                        <div class="row-nowrap justify-center full-height">
+                        <div class="full-height">
                             <create-research-roadmap
                                 @incStep="incStep" @decStep="decStep"
                             ></create-research-roadmap>
@@ -70,7 +74,7 @@
                     </v-stepper-content> -->
 
                     <v-stepper-content step="4">
-                        <div class="row-nowrap justify-center full-height">
+                        <div class="full-height">
                             <create-research-share 
                                 @finish="finish" @decStep="decStep"
                                 @setReviewShare="setReviewShare"
@@ -86,7 +90,7 @@
 </template>
 
 <script>
-    import deipRpc from '@deip/deip-rpc';
+    import deipRpc from '@deip/deip-rpc-client';
     import * as proposalService from "./../../services/ProposalService"; 
     import { mapGetters } from 'vuex';
 
@@ -114,11 +118,7 @@
         },
         methods: {
             incStep() {
-                if (this.currentStep < 4) {
-                    this.currentStep++;
-                } else {
-                    this.currentStep = 1;
-                }
+                this.currentStep++;
             },
             decStep() {
                 this.currentStep--;
@@ -148,7 +148,7 @@
                 const self = this;
                 this.isLoading = true;
 
-                let proposal = proposalService.getStringifiedProposalData(proposalService.types.startResearch, [
+                let proposal = proposalService.getStringifiedProposalData(proposalService.types.START_RESEARCH, [
                     this.research.group.id,
                     this.research.title,
                     this.research.description,
@@ -163,7 +163,7 @@
 					this.user.username, 
 					this.research.group.id,
                     proposal,
-                    proposalService.types.startResearch,
+                    proposalService.types.START_RESEARCH,
 					new Date( new Date().getTime() + 2 * 24 * 60 * 60 * 1000 )
 				).then(() => {
                     this.isLoading = false;

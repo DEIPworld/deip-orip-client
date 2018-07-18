@@ -98,7 +98,7 @@
     import _ from 'lodash';
     import joinRequestsService from './../../../services/joinRequests'
     import * as proposalService from './../../../services/ProposalService';
-    import deipRpc from '@deip/deip-rpc';
+    import deipRpc from '@deip/deip-rpc-client';
 
     export default {
         name: "ResearchGroupDetailsSidebar",
@@ -172,7 +172,7 @@
                             const expire = new Date(now).toISOString().split('.')[0];
 
                             let proposal = proposalService.getStringifiedProposalData(
-                                proposalService.types.inviteMember, [
+                                proposalService.types.INVITE_MEMBER, [
                                 self.group.id,
                                 item.username,
                                 5 * self.DEIP_1_PERCENT
@@ -182,7 +182,7 @@
                                     creator: self.user.username,
                                     research_group_id: self.group.id,
                                     data: proposal,
-                                    action: proposalService.types.inviteMember,
+                                    action: proposalService.types.INVITE_MEMBER,
                                     expiration_time: new Date( new Date().getTime() + 2 * 24 * 60 * 60 * 1000 )
                             }]
 

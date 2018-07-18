@@ -1,5 +1,5 @@
 import _ from 'lodash';
-import deipRpc from '@deip/deip-rpc';
+import deipRpc from '@deip/deip-rpc-client';
 import Vue from 'vue'
 import config from './../../../config'
 import { getAccessToken } from './../../../utils/auth'

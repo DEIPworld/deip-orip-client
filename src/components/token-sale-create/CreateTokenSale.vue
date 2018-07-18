@@ -6,11 +6,13 @@
                     <v-stepper-step step="1" :complete="currentStep > 1">
                         <div class="uppercase">Amount</div>
                     </v-stepper-step>
+
                     <v-divider></v-divider>
 
                     <v-stepper-step step="2" :complete="currentStep > 2">
                         <div class="uppercase white-space-nowrap">Start/End Date</div>
                     </v-stepper-step>
+                    
                     <v-divider></v-divider>
 
                     <v-stepper-step step="3" :complete="currentStep > 3">
@@ -55,7 +57,7 @@
 
 <script>
     import { mapGetters } from 'vuex';
-    import deipRpc from '@deip/deip-rpc';
+    import deipRpc from '@deip/deip-rpc-client';
     import * as proposalService from './../../services/ProposalService'; 
 
     export default {
@@ -99,7 +101,7 @@
                 // but Token Sale status is set to inactive initially until its start_time
                 // const nowPlus2Minutes = new Date(Date.now() + (2 * 60 * 1000)); 
                 
-                let proposal = proposalService.getStringifiedProposalData(proposalService.types.startResearchTokenSale, [
+                let proposal = proposalService.getStringifiedProposalData(proposalService.types.START_RESEARCH_TOKEN_SALE, [
                     this.research.id,
                     this.tokenSaleInfo.startDate.toISOString().split('.')[0],
                     // nowPlus2Minutes.toISOString().split('.')[0],
@@ -114,7 +116,7 @@
 					this.user.username, 
 					this.research.research_group_id,
 					proposal,
-                    proposalService.types.startResearchTokenSale,
+                    proposalService.types.START_RESEARCH_TOKEN_SALE,
 					new Date( new Date().getTime() + 2 * 24 * 60 * 60 * 1000 )
 				).then(() => {
                     this.isLoading = false;

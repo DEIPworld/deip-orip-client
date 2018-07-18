@@ -265,7 +265,7 @@
                         </div>
                     </div>
                     <div v-if="isInActiveTokenSale" class="c-pt-4 c-pb-6">
-                        <div class="text-align-center">Token Sale will start on {{new Date(tokenSale.start_time).toString()}}</div>
+                        <div class="text-align-center">Token Sale will start on {{tokenSale.start_time}} UTC</div>
                     </div>
                 </div>
             </div>
@@ -280,7 +280,7 @@
 </template>
 
 <script>
-    import deipRpc from '@deip/deip-rpc';
+    import deipRpc from '@deip/deip-rpc-client';
     import { mapGetters } from 'vuex'
     import joinRequestsService from './../../../services/joinRequests'
     import { extractName } from './../../../utils/user'

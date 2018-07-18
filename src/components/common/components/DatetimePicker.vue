@@ -1,58 +1,52 @@
 <template>
-    <v-menu
-        ref="menu"
-        lazy
-        :close-on-content-click="false"
-        v-model="menu"
-        transition="scale-transition"
-        offset-y
-        full-width
-        :nudge-right="40"
-        min-width="0px"
-    >
-        <v-text-field
-            slot="activator"
-            :label="label"
-            v-model="actualDatetime"
-            prepend-icon="event"
-            readonly
-        ></v-text-field>
+    <div>
+        <div class="row">
+            <v-menu class="width-6"
+                lazy
+                :close-on-content-click="false"
+                v-model="dateMenu"
+                transition="scale-transition"
+                offset-y
+                full-width
+                :nudge-top="20"
+                min-width="0px"
+            >
+                <v-text-field
+                    slot="activator"
+                    :label="label"
+                    placeholder="Date"
+                    v-model="date"
+                    readonly
+                ></v-text-field>
 
-        <div class="column" style="height: 477px;">
-            <v-tabs color="primary" slot="extension" v-model="tab" grow dark>
-                <!-- <v-tabs-slider color="black"></v-tabs-slider> -->
+                <v-date-picker
+                    no-title
+                    v-model="date" 
+                    @input="dateMenu = false; apply();"
+                ></v-date-picker>
+            </v-menu>
 
-                <v-tab key="dateTab" disabled>
-                    <v-icon>event</v-icon>
-                </v-tab>
+            <v-menu class="col-grow" bottom left offset-y :nudge-top="20">
+                <v-text-field
+                    slot="activator"
+                    placeholder="Time"
+                    v-model="time"
+                    append-icon="event"
+                    readonly
+                ></v-text-field>
 
-                <v-tab key="timeTab" disabled>
-                    <v-icon>access_time</v-icon>
-                </v-tab>
-            </v-tabs>
-
-            <v-tabs-items v-model="tab" class="">
-                <v-tab-item key="dateTab">
-                    <v-date-picker class="datetime-date-picker" 
-                        v-model="date" 
-                        @input="tab = '1'"
-                    ></v-date-picker>
-                </v-tab-item>
-
-                <v-tab-item key="timeTab">
-                    <v-time-picker class="datetime-time-picker"
-                        ref="timePicker"
-                        v-model="time"
-                        scrollable
-                        format="24hr"
-                        actions
-                    ></v-time-picker>
-                </v-tab-item>
-            </v-tabs-items>
-
-            <v-btn class="ma-0" color="primary" @click="apply()">Ok</v-btn>
+                <div class="time-points-list">
+                    <v-list>
+                        <v-list-tile @click="time = timePoint; apply();"
+                            v-for="(timePoint, i) in timePoints" :key="i"
+                        >
+                            <v-list-tile-title>{{ timePoint }}</v-list-tile-title>
+                        </v-list-tile>
+                    </v-list>
+                </div>
+            </v-menu>
         </div>
-    </v-menu>
+    </div>
 </template>
 
 <script>
@@ -71,32 +65,28 @@
             return {
                 date: undefined,
                 time: undefined,
-                menu: false,
-                tab: undefined
-            }
-        },
-        watch: {
-            menu(val) {
-                if (val) {
-                    if (this.$refs.timePicker) {
-                        this.$refs.timePicker.selectingHour = true;
-                    }
+                dateMenu: false,
 
-                    this.tab="0";
-                    this.setValues();
-                }
-            }
-        },
-        computed: {
-            actualDatetime() {
-                return this.datetime ? this.datetime : '';
+                timePoints: [
+                    '00:00', '00:15', '00:30', '00:45', '01:00', '01:15', '01:30', '01:45',
+                    '02:00', '02:15', '02:30', '02:45', '03:00', '03:15', '03:30', '03:45',
+                    '04:00', '04:15', '04:30', '04:45', '05:00', '05:15', '05:30', '05:45',
+                    '06:00', '06:15', '06:30', '06:45', '07:00', '07:15', '07:30', '07:45',
+                    '08:00', '08:15', '08:30', '08:45', '09:00', '09:15', '09:30', '09:45',
+                    '10:00', '10:15', '10:30', '10:45', '11:00', '11:15', '11:30', '11:45',
+                    '12:00', '12:15', '12:30', '12:45', '13:00', '13:15', '13:30', '13:45',
+                    '14:00', '14:15', '14:30', '14:45', '15:00', '15:15', '15:30', '15:45',
+                    '16:00', '16:15', '16:30', '16:45', '17:00', '17:15', '17:30', '17:45',
+                    '18:00', '18:15', '18:30', '18:45', '19:00', '19:15', '19:30', '19:45',
+                    '20:00', '20:15', '20:30', '20:45', '21:00', '21:15', '21:30', '21:45',
+                    '22:00', '22:15', '22:30', '22:45', '23:00', '23:15', '23:30', '23:45',
+                ]
             }
         },
         methods: {
             apply() {
                 if (this.date && this.time) {
                     this.$emit('input', `${this.date} ${this.time}`);
-                    this.$refs.menu.save();
                 }
             },
             setValues() {
@@ -115,17 +105,8 @@
     }
 </script>
 
-<style lang="less">
-    .datetime-date-picker .picker__title {
-        height: 102px;
-    }
-
-    .datetime-date-picker .picker__body {
-        height: 290px;
-    }
-
-    .picker.datetime-date-picker,
-    .picker.datetime-time-picker {
-        border-radius: 0px 0px 2px 2px;
+<style lang="less" scoped>
+    .time-points-list {
+        max-height: 250px;
     }
 </style>
