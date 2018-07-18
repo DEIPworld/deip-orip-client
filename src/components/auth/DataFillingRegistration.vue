@@ -74,7 +74,7 @@
 </template>
 
 <script>
-    import deipRpc from '@deip/deip-rpc';
+    import deipRpc from '@deip/deip-rpc-client';
     import _ from 'lodash';
 
     export default {

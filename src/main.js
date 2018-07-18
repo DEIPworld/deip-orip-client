@@ -11,7 +11,7 @@ import './styles/common.less';
 import 'vue2-dropzone/dist/vue2Dropzone.css';
 
 import config from './config';
-import deipRpc from '@deip/deip-rpc';
+import deipRpc from '@deip/deip-rpc-client';
 import './index';
 import './globals/index';
 

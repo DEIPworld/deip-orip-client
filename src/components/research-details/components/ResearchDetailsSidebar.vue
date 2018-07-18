@@ -280,7 +280,7 @@
 </template>
 
 <script>
-    import deipRpc from '@deip/deip-rpc';
+    import deipRpc from '@deip/deip-rpc-client';
     import { mapGetters } from 'vuex'
     import joinRequestsService from './../../../services/joinRequests'
     import { extractName } from './../../../utils/user'

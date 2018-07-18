@@ -1,5 +1,5 @@
 import usersService from './../services/users'
-import deipRpc from '@deip/deip-rpc';
+import deipRpc from '@deip/deip-rpc-client';
 
 export function getEnrichedProfiles(usernames) {
     const profilesPromise = usersService.getUsersProfiles(usernames)

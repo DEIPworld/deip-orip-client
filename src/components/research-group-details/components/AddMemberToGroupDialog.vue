@@ -72,7 +72,7 @@
 
 <script>
     import _ from 'lodash';
-    import deipRpc from '@deip/deip-rpc';
+    import deipRpc from '@deip/deip-rpc-client';
     import { mapGetters } from 'vuex';
     import * as proposalService from './../../../services/ProposalService';
     import { getEnrichedProfiles } from './../../../utils/user'

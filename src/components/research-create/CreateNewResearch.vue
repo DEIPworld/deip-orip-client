@@ -90,7 +90,7 @@
 </template>
 
 <script>
-    import deipRpc from '@deip/deip-rpc';
+    import deipRpc from '@deip/deip-rpc-client';
     import * as proposalService from "./../../services/ProposalService"; 
     import { mapGetters } from 'vuex';
 

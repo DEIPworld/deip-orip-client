@@ -68,7 +68,7 @@
 <script>    
 
     import axios from 'axios'
-    import deipRpc from '@deip/deip-rpc';
+    import deipRpc from '@deip/deip-rpc-client';
     import { getEnrichedProfiles } from './../utils/user'
     import { mapGetters } from 'vuex';
 
