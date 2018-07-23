@@ -5,13 +5,14 @@
             <div class="sm-title bold c-mb-4 text-align-center">Please select discipline</div>
 
             <div class="subheading c-mb-4 text-align-center c-mh-auto selected-disciplines discipline-picker">
-                {{ grantInfo.disciplines.map(d => d.label).join("  ·  ") }}
+                {{ grantInfo.discipline && grantInfo.discipline.label }}
             </div>
 
             <div class="col-grow overflow-y-auto">
 
                 <div class="c-mh-auto full-height overflow-y-auto discipline-picker">
                     <advanced-discipline-picker
+                        :is-multiple-select="false"
                         @select="setDisciplines"
                     ></advanced-discipline-picker>
                 </div>
@@ -35,13 +36,13 @@
 
         computed: {
             nextDisabled() {
-                return !this.grantInfo.disciplines.length;
+                return !this.grantInfo.discipline;
             }
         },
 
         methods: {
-            setDisciplines(disciplines) {
-                this.grantInfo.disciplines = disciplines;
+            setDisciplines(discipline) {
+                this.grantInfo.discipline = discipline;
             },
             nextStep() {
                 this.$emit('incStep');

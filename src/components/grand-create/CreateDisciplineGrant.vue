@@ -48,6 +48,7 @@
                                 @decStep="decStep"
                                 @finish="finish"
                                 :grant-info="grantInfo"
+                                :isLoading="isLoading"
                             ></discipline-grant-conditions>
                         </div>
                     </v-stepper-content>
@@ -60,6 +61,8 @@
 
 <script>
     import { mapGetters } from 'vuex';
+    import moment from 'moment';
+    import deipRpc from '@deip/deip-rpc';
 
     export default {
         name: "CreateDisciplineGrant",
@@ -70,15 +73,16 @@
             })
         },
 
-        data() { 
+        data() {
             return {
                 currentStep: 0,
+                isLoading: false,
 
                 grantInfo: {
-                    disciplines: [],
+                    discipline: undefined,
                     amount: '',
-                    startBlock: undefined,
-                    endBlock: undefined,
+                    startDate: undefined,
+                    endDate: undefined,
                     description: ''
                 }
             }
@@ -92,7 +96,47 @@
                 this.currentStep--;
             },
             finish() {
-                console.log(this.grantInfo);
+                this.isLoading = true;
+
+                deipRpc.api.getDynamicGlobalPropertiesAsync()
+                    .then(data => {
+                        // counting approximate start block and end block for blockchain
+                        const BLOCK_CREATE_INTERVAL = 3; // 3 seconds
+
+                        let nowDateUnix = moment().unix();
+                        let startDateUnix = moment(this.grantInfo.startDate).unix();
+                        let endDateUnix = moment(this.grantInfo.endDate).unix();
+
+                        let startBlock = Math.floor((startDateUnix - nowDateUnix) / BLOCK_CREATE_INTERVAL) + data.last_irreversible_block_num;
+                        let endBlock = Math.floor((endDateUnix - nowDateUnix) / BLOCK_CREATE_INTERVAL) + data.last_irreversible_block_num;
+
+                        deipRpc.broadcast.createGrantAsync(
+                            this.user.privKey,
+                            this.user.username,
+                            this.toAssetUnits( this.grantInfo.amount ),
+                            this.grantInfo.discipline.label,
+                            startBlock,
+                            endBlock
+                        ).then(() => {
+                            this.isLoading = false;
+                            
+                            this.$store.dispatch('layout/setSuccess', {
+                                message: "Grant has been created successfully!"
+                            });
+
+                            setTimeout(() => {
+                                self.$router.push({ 
+                                    name: 'ResearchFeed'
+                                }); 
+                            }, 1500);
+                        }).catch(err => {
+                            this.isLoading = false;
+
+                            this.$store.dispatch('layout/setError', {
+                                message: "An error occurred while creating grant, please try again later"
+                            });
+                        });
+                    });
             }
         },
 

@@ -11,6 +11,7 @@
                 <discipline-tree-item
                     :discipline="val"
                     :selected="selected"
+                    :is-multiple-select="isMultipleSelect"
                     @update="select"
                 ></discipline-tree-item>
             </div>
@@ -21,11 +22,18 @@
 <script>
     import _ from 'lodash';
 
+    // todo: make single and multiselect handled by arrays bc it will be easier and more readable
     export default {
         name: "DisciplineTreeItem",
         props: {
-            discipline: {type: Object, required: true},
-            selected: {type: Array, required: true}
+            discipline: { type: Object, required: true },
+            selected: { 
+                validator(value) {
+                    return value === undefined || typeof value === 'array' || typeof value === 'object';
+                }, 
+                required: true 
+            },
+            isMultipleSelect: { type: Boolean, required: false, default: true }
         },
         methods: {
             select(discipline) {
@@ -34,10 +42,14 @@
         },
         computed: {
             isSelected() {
-                return this.selected.some(d => d.id == this.discipline.id);
+                return this.isMultipleSelect 
+                    ? this.selected.some(d => d.id == this.discipline.id) 
+                    : this.selected && this.selected.id === this.discipline.id;
             },
             isExpanded() {
-                return this.selected.some(d => d.id == this.discipline.id) || this.discipline.isTop;
+                return this.isSelected 
+                    || this.discipline.isTop 
+                    || !this.isMultipleSelect && this.selected && _.startsWith(this.selected.path, this.discipline.path);
             }
         }
     };

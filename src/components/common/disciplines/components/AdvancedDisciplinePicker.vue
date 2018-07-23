@@ -20,7 +20,11 @@
 
         <div class="col-6 c-p-4 full-height overflow-y-auto">
             <div class="bold uppercase c-pb-4">All</div>
-            <discipline-tree-picker @select="select"></discipline-tree-picker>
+
+            <discipline-tree-picker
+                :is-multiple-select="isMultipleSelect"
+                @select="select"
+            ></discipline-tree-picker>
         </div>
     </div>
 </template>
@@ -29,10 +33,12 @@
     
     export default {
         name: "AdvancedDisciplinePicker",
-        props: {},
+        props: {
+            isMultipleSelect: { type: Boolean, required: false, default: true }
+        },
         methods: {
-            select(disciplines){
-                this.$emit('select', disciplines);
+            select(selected){
+                this.$emit('select', selected);
             }
         }
     };
