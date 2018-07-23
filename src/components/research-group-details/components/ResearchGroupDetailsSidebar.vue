@@ -98,7 +98,7 @@
     import _ from 'lodash';
     import joinRequestsService from './../../../services/joinRequests'
     import * as proposalService from './../../../services/ProposalService';
-    import deipRpc from '@deip/deip-rpc';
+    import deipRpc from '@deip/deip-rpc-client';
 
     export default {
         name: "ResearchGroupDetailsSidebar",

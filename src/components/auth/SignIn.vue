@@ -44,8 +44,8 @@
 
 <script>
 
-    import deipRpc from '@deip/deip-rpc'
-    import crypto from '@deip/libcrypto'
+    import deipRpc from '@deip/deip-rpc-client'
+    import crypto from '@deip/lib-crypto'
     import authService from './../../services/auth'
     import {decodedToken, clearAccessToken, setAccessToken} from './../../utils/auth'
     import config from './../../config'
