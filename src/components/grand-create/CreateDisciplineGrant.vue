@@ -62,7 +62,7 @@
 <script>
     import { mapGetters } from 'vuex';
     import moment from 'moment';
-    import deipRpc from '@deip/deip-rpc';
+    import deipRpc from '@deip/deip-rpc-client';
 
     export default {
         name: "CreateDisciplineGrant",
@@ -118,8 +118,6 @@
                             startBlock,
                             endBlock
                         ).then(() => {
-                            this.isLoading = false;
-                            
                             this.$store.dispatch('layout/setSuccess', {
                                 message: "Grant has been created successfully!"
                             });
@@ -130,12 +128,12 @@
                                 }); 
                             }, 1500);
                         }).catch(err => {
-                            this.isLoading = false;
-
                             this.$store.dispatch('layout/setError', {
                                 message: "An error occurred while creating grant, please try again later"
                             });
-                        });
+                        }).finally(() => {
+                            this.isLoading = false;
+                        })
                     });
             }
         },
