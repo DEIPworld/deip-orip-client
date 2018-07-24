@@ -1,20 +1,47 @@
 <template>
         <v-toolbar app fixed clipped-left dark color="black">
             <v-toolbar-title>
-                <router-link class="app-title" to="/research-feed" tag="img" src="./static/logo.svg">
-                </router-link>
+                <router-link class="app-title" to="/research-feed" tag="img" src="./static/logo.svg"></router-link>
             </v-toolbar-title>
+
             <v-spacer></v-spacer>
 
             <v-btn v-if="isLoggedIn()" icon large class="ma-0">
                 <v-icon size="32px" color="grey lighten-1">search</v-icon>
             </v-btn>
-            <v-btn v-if="isLoggedIn()" icon large class="ma-0">
-                <v-badge color="amber darken-3" right overlap>
-                    <v-icon size="32px" color="grey lighten-1">chat_bubble</v-icon>
-                    <span slot="badge">5</span>
-                </v-badge>
-            </v-btn>
+
+            <v-menu v-if="isLoggedIn()" bottom left offset-y :close-on-content-click="false">
+                <v-btn icon large class="ma-0" slot="activator">
+                    <v-badge color="amber darken-3" right overlap>
+                        <v-icon size="32px" color="grey lighten-1">chat_bubble</v-icon>
+                        <span slot="badge">{{ user.notifications.proposals.length }}</span>
+                    </v-badge>
+                </v-btn>
+
+                <v-list class="hidden-last-child" v-show="user.notifications.proposals.length">
+                    <template v-for="(proposal, i) in user.notifications.proposals">
+                        <div class="c-pv-2 c-ph-4">
+                            <div>
+                                <router-link class="a"
+                                    :to="{ name: 'UserDetails', params: { account_name: proposal.creator }}"
+                                >{{ proposal.creator }}</router-link>
+                                created a proposal in
+                                <router-link class="a" :to="{
+                                        name: 'ResearchGroupDetails', 
+                                        params: { research_group_permlink: proposal.group.permlink }
+                                    }"
+                                >{{ proposal.group.name }}</router-link>
+                            </div>
+
+                            <div class="grey--text caption c-mt-1">
+                                <v-icon size="16" color="grey">event</v-icon> {{ proposal.creation_time }}
+                            </div>
+                        </div>
+                        
+                        <v-divider></v-divider>
+                    </template>
+                </v-list>
+            </v-menu>
 
             <v-menu v-if="isLoggedIn()" bottom left offset-y>
                 <v-btn fab flat icon class="ma-0" slot="activator">
@@ -23,6 +50,7 @@
                         <v-gravatar v-if="!user.profile && user.account" :title="user.username" :email="user.username + '@deip.world'" />
                     </v-avatar>
                 </v-btn>
+
                 <v-list dark dense>
                     <v-list-tile @click="goToState('UserDetails', {account_name: user.username})">
                         <v-list-tile-title>My Page</v-list-tile-title>
@@ -68,14 +96,17 @@
 
     export default {
         name: 'Toolbar',
+
         props: {
             drawer: Boolean
         },
+
         computed: {
             ...mapGetters({
                 user: 'auth/user'
             })
         },
+
         methods: {
             isLoggedIn: isLoggedIn,
             signOut: function() {
@@ -91,6 +122,13 @@
                 }
 
                 this.$router.push({ name: state, params: params });
+            }
+        },
+
+        watch: {
+            '$route' (to, from) {
+                // loading notifications on every state change
+                this.$store.dispatch('auth/loadNotifications');
             }
         }
     }
