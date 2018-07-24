@@ -35,6 +35,10 @@
                     <v-list-tile v-if="user" @click="goToState('CreateResearchGroup', {account_name: user.username})">
                         <v-list-tile-title>Create Research Group</v-list-tile-title>
                     </v-list-tile>
+                    
+                    <v-list-tile v-if="user" @click="goToState('CreateDisciplineGrant')">
+                        <v-list-tile-title>Create Discipline Grant</v-list-tile-title>
+                    </v-list-tile>
 
                     <v-divider></v-divider>
 
