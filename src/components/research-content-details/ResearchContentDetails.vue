@@ -37,6 +37,17 @@
 
                         <v-btn v-if="!isResearchGroupMember && userHasExpertise(discipline)" @click="openVote(discipline)" small color="primary" dark class="ma-0" >Vote</v-btn>
                     </div>
+
+                    <div class="c-mt-6">
+                        <router-link class="a sm-title" :to="{ 
+                            name: 'ResearchContentMetadata', 
+                            params: { 
+                                research_group_permlink: research.group_permlink,
+                                research_permlink: research.permlink,
+                                content_permlink: content.permlink
+                            }
+                        }">Metadata</router-link>
+                    </div>
                 </div>
             </div>
         </div>
