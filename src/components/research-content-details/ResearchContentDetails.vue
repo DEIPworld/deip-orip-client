@@ -1,17 +1,32 @@
 <template>
-    <v-container fluid fill-height class="pa-0" style="text-align: center;">
-    
-        <iframe v-if="content && content.research_id !== undefined && content.content !== undefined" id="iframe" name="iframe1" 
-            frameborder="0" 
-            height="100%" 
-            width="100%" 
-            :src="`${fileStorageBaseUrl}/public/files/research/${content.research_id}/${content.content}`">
-        </iframe>
+    <v-container fluid fill-height class="pa-0">
+        <div class="full-height full-width pos-relative">
+            <div class="caption grey--text content-authors display-flex">
+                <div v-if="content" class="c-mv-auto c-mh-4">
+                    <v-icon size="18">event</v-icon>
+                    Created {{ content.created_at }}
+                    by <span class="bold">{{ content.authors.join(', ') }}</span>
+                </div>
+            </div>
 
-        <div id="bars">
+            <iframe v-if="content && content.research_id !== undefined && content.content !== undefined" id="iframe" name="iframe1" 
+                frameborder="0" 
+                :src="`${fileStorageBaseUrl}/public/files/research/${content.research_id}/${content.content}`">
+            </iframe>
+
             <div id="sidebar">
                 <div class="c-pb-6 c-pt-4">
-                    <div v-for="(discipline, index) in disciplinesList" class="row align-center justify-between vote-btn-area" :class="index == 0 ? '':'c-mt-1'">
+                    <div class="c-mb-4" v-if="research">
+                        <router-link class="a sm-title" :to="{ 
+                            name: 'research-details', 
+                            params: { 
+                                research_group_permlink: research.group_permlink,
+                                research_permlink: research.permlink
+                            }
+                        }">{{ research.title }}</router-link>
+                    </div>
+
+                    <div v-for="(discipline, index) in disciplinesList" class="row align-center justify-between vote-btn-area c-mt-1">
                         <div class="deip-blue-color c-p-2">
                             {{discipline.name}}:  
                 
@@ -19,6 +34,7 @@
                             contentWeightByDiscipline[content.id][discipline.id] !== undefined ?
                             contentWeightByDiscipline[content.id][discipline.id] : 0}}
                         </div>
+
                         <v-btn v-if="!isResearchGroupMember && userHasExpertise(discipline)" @click="openVote(discipline)" small color="primary" dark class="ma-0" >Vote</v-btn>
                     </div>
                 </div>
@@ -147,44 +163,46 @@
     };
 </script>
 
-<style lang="less">
-
-  /*  .sc-app {
-        height: 100%;
-    } */
+<style lang="less" scoped>
+    .content-authors {
+        height: 40px;
+        width: 78%;
+    }
    
-iframe#iframe {
-    width: 78%;
-    height: 100%;
-    overflow: hidden;
-}
+    iframe#iframe {
+        width: 78%;
+        height: calc(100% - 40px);
+        overflow: hidden;
+        position: absolute;
+        top: 40px;
+    }
 
-div#sidebar {
-    top: 0;
-    right: 0;
-    margin-top: 5%;
-    padding-left: 10px;
-    padding-right: 10px;
-    position: fixed !important;
-    width: 22%;
-    height: 100%;
-}
+    div#sidebar {
+        top: 0;
+        right: 0;
+        padding-top: 75px;
+        padding-left: 10px;
+        padding-right: 10px;
+        position: fixed !important;
+        width: 22%;
+        height: 100%;
+    }
 
-.vote-btn-area {
-    border: 1px solid #2F80ED;
-    border-radius: 3px;
-    padding-left: 3px;
-    font-size: 13px;
-}
+    .vote-btn-area {
+        border: 1px solid #2F80ED;
+        border-radius: 3px;
+        padding-left: 3px;
+        font-size: 13px;
+    }
 
-.vote-dialog-body{
-    min-height: 100px !important;
-}
+    .vote-dialog-body{
+        min-height: 100px !important;
+    }
 
-.loader {
-    position: absolute;
-    right: 45%;
-    top: 45%;
-}
+    .loader {
+        position: absolute;
+        right: 45%;
+        top: 45%;
+    }
 
 </style>
