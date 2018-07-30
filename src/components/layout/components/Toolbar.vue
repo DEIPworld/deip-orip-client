@@ -1,5 +1,5 @@
 <template>
-        <v-toolbar app fixed clipped-left dark color="black">
+        <v-toolbar app fixed clipped-left dark color="black" class="deip-toolbar">
             <v-toolbar-title>
                 <router-link class="app-title" to="/research-feed" tag="img" src="./static/logo.svg">
                 </router-link>
@@ -98,5 +98,9 @@
         cursor: pointer;
         color: #ffffff;
         text-decoration: none;
+    }
+
+    .deip-toolbar {
+        z-index: 1001;
     }
 </style>

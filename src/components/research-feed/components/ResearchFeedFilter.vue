@@ -108,7 +108,7 @@
     };
 </script>
 
-<style lang="less">
+<style lang="less" scoped>
     .input-group.input-group--text-field.textfield-low {
         min-height: initial;
 

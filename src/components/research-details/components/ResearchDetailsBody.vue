@@ -46,8 +46,8 @@
                     <div slot="header">
                         <span class="bold">Chapter {{index + 1}}</span>
                         <span class="deip-blue-color bold c-pl-4"> 
-                            <router-link  :to="`/${research.group_permlink}/research/${research.permlink}/${content.permlink}`" 
-                                          style="text-decoration: none">{{content.title}}
+                            <router-link :to="`/${research.group_permlink}/research/${research.permlink}/${content.permlink}`" 
+                                         style="text-decoration: none">{{content.title}}
                             </router-link>
                         </span>
                     </div>
@@ -87,10 +87,60 @@
                     </v-card>
                 </v-expansion-panel-content>
             </v-expansion-panel>
-
-            <add-research-contnet-dialog v-if="isResearchGroupMember && !research.is_finished"></add-research-contnet-dialog>
         </div>
         <!-- ### END Research Content Section ### -->
+
+
+        <div v-if="isResearchGroupMember" class="c-pt-8 title">Work In Progress</div>
+
+      <!--  <div v-if="isResearchGroupMember" class="c-pt-6 research-drafts-container"> -->
+        <div class="c-pt-6 research-drafts-container" >
+            <v-expansion-panel v-if="isLoadingResearchDrafts === false">
+                <v-expansion-panel-content v-for="(draft, index) in draftsList.filter(draft => !draftIsPosted(draft))" :key="index">
+                    <div slot="header">
+                        <span class="bold">Draft {{index + 1}}</span>
+                        <span class="deip-blue-color bold c-pl-4"> 
+                            <router-link :to="`/${research.group_permlink}/research/${research.permlink}/!draft?darRef=${draft._id}`" 
+                                         style="text-decoration: none">{{draft.title || draft._id}}
+                            </router-link>
+                        </span>
+                    </div>
+                    <v-card>
+                        <v-card-text class="pt-0">
+                            <div class="c-ph-2">
+                                <div class="row">
+                                    <div class="col-8">
+                                        <div class="c-pt-2">
+                                            <v-icon size="18px">date_range</v-icon> 
+                                            <span>{{`${new Date(draft.updated_at).toDateString()} ${new Date(draft.updated_at).toTimeString()}`}}</span>
+                                        </div>
+                                    </div>
+                                    <div class="col-4">
+                                        <div class="row-nowrap">
+                                            <div>
+                                                <v-btn @click="goToDraft(draft)" outline small depressed color="primary lighten-1">
+                                                    View
+                                                </v-btn>
+                                            </div>
+                                            <div>
+                                                <v-btn @click="deleteDraft(draft)" :loading="isDeletingDraft" :disabled="isDeletingDraft" 
+                                                        outline small depressed color="red lighten-1">
+                                                    Delete
+                                                </v-btn>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </v-card-text>
+                    </v-card>
+                </v-expansion-panel-content>
+            </v-expansion-panel>
+            <div v-if="isResearchGroupMember && !research.is_finished">
+                <upload-research-contnet-file-dialog></upload-research-contnet-file-dialog>
+                <v-btn @click="createDarDraft()" :loading="isCreatingDraft" :disabled="isCreatingDraft" block outline color="primary" dark>Texture Editor</v-btn>
+            </div>
+        </div>
 
         <!-- ### START Research Review Section ### -->
         <div class="research-reviews-container spinner-container">
@@ -146,10 +196,16 @@
 <script>
 
     import { mapGetters } from 'vuex'
+    import darService from './../../../services/dar'
 
     export default {
         name: "ResearchDetailsBody",
-
+        data() {
+            return {
+                isCreatingDraft: false,
+                isDeletingDraft: false
+            }
+        },
         computed: {
             ...mapGetters({
                 user: 'auth/user',
@@ -157,28 +213,76 @@
                 research: 'rd/research',
                 contentList: 'rd/contentList',
                 reviewsList: 'rd/reviewsList',
+                draftsList: 'rd/draftsList',
                 disciplinesList: 'rd/disciplinesList',
                 totalVotesList: 'rd/totalVotesList',
                 contentWeightByDiscipline: 'rd/contentWeightByDiscipline',
                 membersList: 'rd/membersList',
+                isLoadingResearchPage: 'rd/isLoadingResearchPage',
                 isLoadingResearchContent: 'rd/isLoadingResearchContent',
                 isLoadingResearchDetails: 'rd/isLoadingResearchDetails',
                 isLoadingResearchReviews: 'rd/isLoadingResearchReviews',
                 isLoadingResearchReviews: 'rd/isLoadingResearchReviews',
-                isLoadingResearchPage: 'rd/isLoadingResearchPage'
+                isLoadingResearchDrafts: 'rd/isLoadingResearchDrafts'
             }),
             isResearchGroupMember() {
                 return this.research != null 
                     ? this.$store.getters['auth/userIsResearchGroupMember'](this.research.research_group_id) 
                     : false
+            },
+
+            darContents() {
+                return this.contentList.filter(c => c.content.indexOf('dar:' != -1));
             }
         },
         methods: {
+            goToDraft(draft) {
+                const params = {
+                    group_permlink: this.$route.params.research_group_permlink,
+                    research_permlink: this.$route.params.research_permlink,
+                    content_permlink: `!draft`
+                };
+                const query = { 'darRef': draft._id };
+                this.$router.push({ name: 'ResearchContentDetails', params, query });
+            },
+            createDarDraft() {
+                this.isCreatingDraft = true;
+                darService.createDraft(this.research.id)
+                    .then((res) => {
+                        const params = {
+                            group_permlink: this.$route.params.research_group_permlink,
+                            research_permlink: this.$route.params.research_permlink,
+                            content_permlink: `!draft`
+                        };
+                        const query = { 'darRef': res.draft._id };
+
+                        this.$router.push({ name: 'ResearchContentDetails', params, query });
+
+                    }, (err) => {console.log(err)})
+                    .finally(()=> {
+                        this.isCreatingDraft = false;
+                    })
+            },
+            deleteDraft(draft) {
+                this.isDeletingDraft = true;
+                darService.deleteDrafts(draft._id)
+                    .then(() => {
+                        this.$store.dispatch('rd/loadResearchDrafts', { researchId: draft.research });
+                    })
+                    .finally(() => {
+                        this.isDeletingDraft = false;
+                    })
+            },
             contentAuthorsStr(authors) {
                 return this.membersList
                     .filter(m => authors.some(a => a == m.account.name))
                     .map(m => this.$options.filters.fullname(m))
                     .join("  ·  ");
+            },
+
+            draftIsPosted(draft) {
+                // improve this
+                return this.darContents.some(c => c.content.indexOf(draft.hash) == 4);
             }
         }
     };
@@ -194,7 +298,11 @@
     }
 
     .research-content-container {
-        min-height: 150px;
+        min-height: 70px;
+    }
+
+    .research-drafts-container {
+
     }
 
     .research-reviews-container {

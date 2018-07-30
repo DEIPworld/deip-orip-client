@@ -1,9 +1,10 @@
 import _ from 'lodash';
-import deipRpc from '@deip/deip-rpc-client';
+import deipRpc from '@deip/deip-rpc-client'
 import Vue from 'vue'
 import config from './../../../config'
 import { getAccessToken } from './../../../utils/auth'
 import { getEnrichedProfiles } from './../../../utils/user'
+import darService from './../../../services/dar'
 
 const state = {
     research: null,
@@ -17,6 +18,7 @@ const state = {
     tokenHoldersList: [],
     contributionsList: [],
     groupInvitesList: [],
+    draftsList: [],
 
     isLoadingResearchPage: undefined,
 
@@ -26,7 +28,8 @@ const state = {
     isLoadingResearchReviews: undefined,
     isLoadingResearchDisciplines: undefined,
     isLoadingResearchTokenHolders: undefined,
-    isLoadingResearchTokenSale: undefined
+    isLoadingResearchTokenSale: undefined,
+    isLoadingResearchDrafts: undefined
 }
 
 // getters
@@ -38,6 +41,9 @@ const getters = {
 
     contentList: (state, getters) => {
         return state.contentList;
+    },
+    draftsList: (state, getters) => {
+        return state.draftsList;
     },
 
     membersList: (state, getters) => {
@@ -104,6 +110,10 @@ const getters = {
 
     isLoadingResearchTokenSale: (state, getters) => {
         return state.isLoadingResearchTokenSale;
+    },
+
+    isLoadingResearchDrafts: (state, getters) => {
+        return state.isLoadingResearchDrafts;
     },
 
     contentWeightByDiscipline: (state, getters) => {
@@ -198,6 +208,9 @@ const actions = {
                 const contentLoad = new Promise((resolve, reject) => {
                     dispatch('loadResearchContent', { researchId: state.research.id, notify: resolve })
                 });
+                const draftsLoad = new Promise((resolve, reject) => {
+                    dispatch('loadResearchDrafts', { researchId: state.research.id, notify: resolve })
+                });
                 const membersLoad = new Promise((resolve, reject) => {
                     dispatch('loadResearchMembers', { researchId: state.research.id, notify: resolve })
                 });
@@ -218,7 +231,7 @@ const actions = {
                 });
 
                 return Promise.all([contentLoad, membersLoad, reviewsLoad, disciplinesLoad, 
-                    tokenHoldersLoad, tokenSaleLoad, invitesLoad])
+                    tokenHoldersLoad, tokenSaleLoad, invitesLoad, draftsLoad])
 
             }, (err => {console.log(err)}))
             .finally(() => {
@@ -342,6 +355,18 @@ const actions = {
         })
     },
 
+    loadResearchDrafts({ state, dispatch, commit }, { researchId, notify }) {
+        commit('SET_RESEARCH_DRAFTS_LOADING_STATE', true)
+        darService.getDrafts(researchId)
+            .then((drafts) => {
+                commit('SET_RESEARCH_DRAFTS', drafts)
+            }, (err) => {console.log(err)})
+            .finally(() => {
+                commit('SET_RESEARCH_DRAFTS_LOADING_STATE', false)
+                if (notify) notify();
+            })
+    },
+
     loadTokenSaleContributors({ state, commit }) {
         deipRpc.api.getResearchTokenSaleContributionsByResearchTokenSaleIdAsync(state.tokenSale.id)
             .then((contributions) => {
@@ -417,6 +442,10 @@ const mutations = {
         Vue.set(state, 'groupInvitesList', invites)
     },
 
+    ['SET_RESEARCH_DRAFTS'](state, drafts) {
+        Vue.set(state, 'draftsList', drafts)
+    },
+
     ['SET_RESEARCH_DETAILS_LOADING_STATE'](state, value) {
         state.isLoadingResearchDetails = value
     },
@@ -449,9 +478,14 @@ const mutations = {
         state.isLoadingResearchTokenSale = value
     },
 
+    ['SET_RESEARCH_DRAFTS_LOADING_STATE'](state, value) {
+        state.isLoadingResearchDrafts = value
+    },
+
     ['SET_RESEARCH_PAGE_LOADING_STATE'](state, value) {
         state.isLoadingResearchPage = value
     }
+
 }
 
 const namespaced = true;

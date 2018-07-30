@@ -1,9 +1,8 @@
-import { TextureWebApp, EditorPackage } from '@deip/substance-texture'
-import { parseKeyEvent } from 'substance'
+import { TextureWebApp, TextureReader, ReaderPackage } from '@deip/substance-texture'
 import TextureArticleAPI from '@deip/substance-texture/src/article/TextureArticleAPI'
-import HttpStorageClient from '@deip/substance-texture/src/dar/HttpStorageClient.js'
+import { parseKeyEvent } from 'substance'
 
-export default class DeipTextureEditorApp extends TextureWebApp {
+export default class DeipTextureReaderApp extends TextureWebApp {
 
   constructor(...args) {
     super(...args);
@@ -17,17 +16,18 @@ export default class DeipTextureEditorApp extends TextureWebApp {
       const pubMetaDbSession = self.state.archive.getEditorSession('pub-meta');
       const configurator = manuscriptSession.getConfigurator();
       self.api = new TextureArticleAPI(manuscriptSession, pubMetaDbSession, configurator, self.state.archive);
+      self.archive = self.state.archive;
       self.initPromise.resolve(self);
     }, 1000)
     window.scrollTo(0, 0);
   }
 
-  _getStorage() {
-    return new HttpStorageClient(this.props.storageUrl, this.props.headers)
+  _getAppClass() {
+    return TextureReader;
   }
 
   _getArticleConfig() {
-    return EditorPackage;
+    return ReaderPackage;
   }
 
   _handleKeyDown(event) {
@@ -38,9 +38,5 @@ export default class DeipTextureEditorApp extends TextureWebApp {
       event.preventDefault()
     }
   }
-
-  save() {
-    this._save();
-  }
-
+  
 }

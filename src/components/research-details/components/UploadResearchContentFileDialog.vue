@@ -1,12 +1,15 @@
 <template>
 <div>
-   <div v-if="dropzoneOptions">
-        <vue-dropzone ref="newContent" id="content-dropzone" 
-            :options="dropzoneOptions" 
-            @vdropzone-file-added="vdropzoneFileAdded"
-            @vdropzone-success="vdropzoneSuccess"
-            @vdropzone-error="vdropzoneError">
-        </vue-dropzone>
+
+    <div>
+        <div v-if="dropzoneOptions">
+            <vue-dropzone ref="newContent" id="content-dropzone" 
+                :options="dropzoneOptions" 
+                @vdropzone-file-added="vdropzoneFileAdded"
+                @vdropzone-success="vdropzoneSuccess"
+                @vdropzone-error="vdropzoneError">
+            </vue-dropzone>
+        </div>
     </div>
 
     <v-dialog v-if="research" v-model="isOpen" persistent transition="scale-transition" max-width="500px">
@@ -97,14 +100,15 @@
     import config from './../../../config'
     import {getAccessToken} from './../../../utils/auth'
     import { mapGetters } from 'vuex';
-    import * as proposalService from "./../../../services/ProposalService";
+    import * as proposalService from './../../../services/ProposalService';
+    import darService from './../../../services/dar';
     import vueDropzone from 'vue2-dropzone';
 
     export default {
         components: {
             vueDropzone
         },
-        name: "AddResearchContentDialog",
+        name: "UploadResearchContentFileDialog",
         data() { 
             return {
                 title: "",
@@ -151,7 +155,7 @@
         },
 
         methods: {
-            isAuthorSelected(item){
+            isAuthorSelected(item) {
                 return this.authors.find(author => { return author.account.name == item.account.name }) !== undefined;
             },
             close() {
@@ -182,7 +186,7 @@
                     this.type,
                     this.title,
                     this.title.replace(/ /g, "-").replace(/_/g, "-").toLowerCase(),
-                    hash,
+                    `file:${hash}`,
                     this.authors.map(a => {return a.account.name}),
                     [],
                     []

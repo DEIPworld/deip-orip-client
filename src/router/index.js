@@ -1,7 +1,6 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 import AddExpertisePage from '@/components/AddExpertisePage'
-import TextureTests from '@/components/TextureTests'
 
 import ResearchFeed from '@/components/research-feed/ResearchFeed'
 import ResearchDetails from '@/components/research-details/ResearchDetails'
@@ -36,13 +35,6 @@ const router = new Router({
         // meta: {
         //     withoutHeader: true
         // }
-    }, {
-        path: '/texture',
-        name: 'TextureTests',
-        component: TextureTests,
-        meta: {
-            withoutHeader: true
-        }
     }, {
         path: '/sign-in',
         name: 'SignIn',

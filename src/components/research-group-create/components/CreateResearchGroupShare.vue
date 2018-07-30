@@ -78,7 +78,7 @@
     };
 </script>
 
-<style lang="less">
+<style lang="less" scoped>
     .group-share-max-width {
         max-width: 600px;
     }

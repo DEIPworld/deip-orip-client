@@ -74,7 +74,7 @@
     };
 </script>
 
-<style lang="less">
+<style lang="less" scoped>
     .group-line {
         border: 1px solid #E0E0E0;
         border-radius: 2px;

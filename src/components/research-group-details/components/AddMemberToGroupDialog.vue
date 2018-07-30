@@ -165,7 +165,7 @@
     };
 </script>
 
-<style lang="less">
+<style lang="less" scoped>
     .dialog.dialog--active {
         overflow: visible;
     }

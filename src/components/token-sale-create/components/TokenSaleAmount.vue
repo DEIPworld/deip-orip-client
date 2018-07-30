@@ -57,7 +57,7 @@
     };
 </script>
 
-<style lang="less">
+<style lang="less" scoped>
     .amount-max-width {
         max-width: 300px;
     }
