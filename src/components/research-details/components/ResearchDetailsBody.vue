@@ -91,10 +91,9 @@
         <!-- ### END Research Content Section ### -->
 
 
-        <div v-if="isResearchGroupMember" class="c-pt-8 title">Work In Progress</div>
+        <div v-if="isResearchGroupMember && !research.is_finished" class="c-pt-8 title">Work In Progress</div>
 
-      <!--  <div v-if="isResearchGroupMember" class="c-pt-6 research-drafts-container"> -->
-        <div class="c-pt-6 research-drafts-container" >
+        <div class="c-pt-6 research-drafts-container" v-if="isResearchGroupMember && !research.is_finished">
             <v-expansion-panel v-if="isLoadingResearchDrafts === false">
                 <v-expansion-panel-content v-for="(draft, index) in draftsList.filter(draft => !draftIsPosted(draft))" :key="index">
                     <div slot="header">
