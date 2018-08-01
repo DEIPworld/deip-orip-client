@@ -9,7 +9,6 @@
             :value="filter.q"
         ></v-text-field>
 
-        <div class="sm-title bold c-pt-6">Filters Setup</div>
         <div class="c-pv-4">
             <div class="subheading c-pb-4">Discipline</div>
             <discipline-tree-picker :preselected="filter.disciplines" @select="filterDisciplines"></discipline-tree-picker>
