@@ -98,6 +98,7 @@
     import {getAccessToken} from './../../../utils/auth'
     import { mapGetters } from 'vuex';
     import * as proposalService from "./../../../services/ProposalService";
+    import * as researchService from "./../../../services/ResearchService";
     import vueDropzone from 'vue2-dropzone';
 
     export default {
@@ -112,11 +113,7 @@
                 type: null,
                 authors: [],
                 
-                contentTypes: [
-                    { text: 'Announcement', id: 1 },
-                    { text: 'Milestone', id: 2 },
-                    { text: 'Final Result', id: 3 }
-                ],
+                contentTypes: _.cloneDeep( researchService.contentTypes ),
 
                 isOpen: false,
                 isLoading: false
