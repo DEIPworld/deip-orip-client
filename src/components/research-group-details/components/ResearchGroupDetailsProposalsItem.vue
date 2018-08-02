@@ -3,7 +3,7 @@
         <div slot="header">
             <div class="row-nowrap align-center" v-on:click.stop>
                 <div class="id-col">
-                    <div class="a">{{ proposal.id }}</div>
+                    <div class="deip-blue-color half-bold">{{ proposal.id }}</div>
                 </div>
 
                 <div class="proposal-activity">
@@ -128,7 +128,8 @@
                     <div class="row" v-else-if="proposal.action === proposalTypes.CREATE_RESEARCH_MATERIAL">
                         <div class="col-6">
                             <div class="grey--text">{{ proposal.data.authors.join(' · ') }}</div>
-                            <div class="a">{{ proposal.data.title }}</div>
+                            <span class="bold">{{ getContentTypeStrById(proposal.data.type) }}:</span>
+                            <span class="a">{{ proposal.data.title }}</span>
                         </div>
                         <div class="col-6"></div>
                     </div>
@@ -143,6 +144,7 @@
 <script>
     import { mapGetters, mapActions } from 'vuex';
     import * as proposalService from "./../../../services/ProposalService";
+    import * as researchService from "./../../../services/ResearchService";
     import _ from 'lodash';
     import deipRpc from '@deip/deip-rpc-client';
 
@@ -178,6 +180,10 @@
                 }).catch(err => {
                     alert(err.message);
                 });
+            },
+            getContentTypeStrById(id) {
+                let contentType = _.find(researchService.contentTypes, item => item.id === id);
+                return contentType.text;
             }
         },
         computed: {

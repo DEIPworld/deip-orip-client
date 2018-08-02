@@ -6,6 +6,7 @@ import { isLoggedIn, getDecodedToken, getOwnerWif } from './../../../utils/auth'
 import usersService from './../../../services/users'
 import joinRequestsService from './../../../services/joinRequests'
 import { getEnrichedProfiles } from './../../../utils/user'
+import * as proposalService from "./../../../services/ProposalService"; 
 
 const state = {
     user: {
@@ -19,7 +20,11 @@ const state = {
         disciplines: [],
         groups: [],
         coworkers: [],
-        joinRequests: []
+        joinRequests: [],
+
+        notifications: {
+            proposals: []
+        }
     }
 }
 
@@ -81,6 +86,40 @@ const actions = {
         dispatch('loadProfile');
         dispatch('loadAccount');
         dispatch('loadJoinRequests');
+    },
+
+    loadNotifications({ state, commit, getters }) {
+        const user = getters.user;
+        let tokens = undefined;
+
+        deipRpc.api.getResearchGroupTokensByAccountAsync(user.username)
+            .then(groupTokens => {
+                tokens = groupTokens;
+
+                return Promise.all(
+                    groupTokens.map(token => deipRpc.api.getProposalsByResearchGroupIdAsync(token.research_group_id))
+                )
+            })
+            .then(proposalsList => {
+                _.each(tokens, (token, i) => {
+                    _.each(proposalsList[i], proposal => proposal.groupId = token.research_group_id);
+                });
+
+                let proposals = _(proposalsList).flatten()
+                    .filter(proposal => 
+                        proposal.creator !== user.username
+                        && !proposal.voted_accounts.some(el => el === user.username)
+                        && !proposal.is_completed
+                    )
+                    .each(proposal => {
+                        proposalService.getParsedProposal(proposal);
+
+                        proposal.group = _.find(user.groups, group => group.id === proposal.groupId);
+                        delete proposal.groupId;
+                    });
+
+                commit('SET_USER_NOTIFICATION_PROPOSALS', proposals);
+            });
     },
 
     loadExpertTokens({ state, commit, getters }) {
@@ -147,7 +186,8 @@ const actions = {
                     commit('SET_USER_RESEARCH_GROUP_TOKENS_LIST', groupTokens)
                     
                     // todo: move it to specific scope
-                    dispatch('loadCoworkers')
+                    dispatch('loadCoworkers');
+                    dispatch('loadNotifications');
                 });
         }
     },
@@ -238,6 +278,10 @@ const mutations = {
 
     ['SET_USER_RESEARCH_GROUP_TOKENS_LIST'](state, list) {
         Vue.set(state.user, 'groupTokens', list)
+    },
+
+    ['SET_USER_NOTIFICATION_PROPOSALS'](state, list) {
+        Vue.set(state.user.notifications, 'proposals', list)
     },
 
     ['SET_USER_COWORKERS_LIST'](state, list) {

@@ -6,19 +6,28 @@
                     <v-stepper-step step="1" :complete="currentStep > 1">
                         <div class="uppercase">Title</div>
                     </v-stepper-step>
+
                     <v-divider></v-divider>
 
                     <v-stepper-step step="2" :complete="currentStep > 2">
                         <div class="uppercase">Description</div>
                     </v-stepper-step>
+
                     <v-divider></v-divider>
 
                     <v-stepper-step step="3" :complete="currentStep > 3">
                         <div class="uppercase">Members</div>
                     </v-stepper-step>
+                    
                     <v-divider></v-divider>
 
-                    <v-stepper-step step="4" :complete="currentStep > 4">
+                    <v-stepper-step step="4" :complete="currentStep > 3">
+                        <div class="uppercase">Quorum</div>
+                    </v-stepper-step>
+                    
+                    <v-divider></v-divider>
+
+                    <v-stepper-step step="5" :complete="currentStep > 4">
                         <div class="uppercase">Tokens</div>
                     </v-stepper-step>
                 </v-stepper-header>
@@ -56,6 +65,15 @@
                     </v-stepper-content>
 
                     <v-stepper-content step="4">
+                        <div class="full-height">
+                            <create-research-group-quorum
+                                @incStep="incStep" @decStep="decStep"
+                                :group="group"
+                            ></create-research-group-quorum>
+                        </div>
+                    </v-stepper-content>
+
+                    <v-stepper-content step="5">
                         <div class="full-height">
                             <create-research-group-share
                                 @finish="finish" @decStep="decStep"

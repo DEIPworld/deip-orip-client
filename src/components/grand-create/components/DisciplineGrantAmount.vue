@@ -1,7 +1,10 @@
 <template>
     <div class="column full-height">
         <div class="c-mb-4 col-grow column">
-            <div class="step-title">Select disciplines your research is related</div>
+            <div class="step-title">
+                {{ this.grantInfo.discipline && this.grantInfo.discipline.label }} supply grant
+            </div>
+            
             <div class="sm-title bold c-mb-4 text-align-center">Please type amount</div>
 
             <div class="col-grow overflow-y-auto">

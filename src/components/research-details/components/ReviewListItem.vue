@@ -45,7 +45,7 @@
     import deipRpc from '@deip/deip-rpc-client';
 
     export default {
-        name: "ResearchListItem",
+        name: "ReviewListItem",
         props: {
             review: { required: true},
         },

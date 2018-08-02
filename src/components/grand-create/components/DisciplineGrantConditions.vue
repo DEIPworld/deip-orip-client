@@ -13,7 +13,7 @@
                         <div class="col-6 c-pr-3">
                             <datetime-picker
                                 label="From"
-                                :datetime="dateFrom"
+                                :datetime="grantInfo.startDate"
                                 @input="setDateFrom"
                             ></datetime-picker>
                         </div>
@@ -21,7 +21,7 @@
                         <div class="col-6 c-pl-3">
                             <datetime-picker
                                 label="To"
-                                :datetime="dateTo"
+                                :datetime="grantInfo.endDate"
                                 @input="setDateTo"
                             ></datetime-picker>
                         </div>
@@ -42,7 +42,8 @@
             
             <v-btn color="primary" 
                 @click.native="finish()" 
-                :disabled="!dateFrom || !dateTo"
+                :disabled="!grantInfo.startDate || !grantInfo.endDate || isLoading"
+                :loading="isLoading"
             >Give grant</v-btn>
         </div>
     </div>
@@ -53,7 +54,8 @@
         name: "DisciplineGrantConditions",
 
         props: {
-            grantInfo: { type: Object, required: true }
+            grantInfo: { type: Object, required: true },
+            isLoading: { type: Boolean, required: true }
         },
 
         methods: {
@@ -64,18 +66,15 @@
                 this.$emit('decStep');
             },
             setDateFrom(date) {
-                this.dateFrom = date;
+                this.grantInfo.startDate = date;
             },
             setDateTo(date) {
-                this.dateTo = date;
+                this.grantInfo.endDate = date;
             }
         },
 
         data() {
             return {
-                dateFrom: undefined,
-                dateTo: undefined,
-
                 rules: {
                     required: value => !!value || 'This field is required'
                 },
