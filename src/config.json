@@ -3,6 +3,6 @@
     "deip-server-url": "http://146.185.131.175",
     "deip-full-node-url": "ws://206.189.175.10",
     "sig-seed": "quickbrownfoxjumpsoverthelazydog",
-    "chain-id": "9d3418f0456d9c96df885443da3c359b0211b12951a34d1bbb6027d21aa2cb8b",
+    "chain-id": "7ff5fafc5211eeabe3ab20a3053336fb6df9c0d4df994ebd6b8dc6b2fa1f1caf",
     "asset-unit": "TESTS"
 }
