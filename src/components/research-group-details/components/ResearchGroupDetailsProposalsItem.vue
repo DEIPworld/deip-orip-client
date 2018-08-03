@@ -36,7 +36,14 @@
                         v-else-if="proposal.action === proposalTypes.CREATE_RESEARCH_MATERIAL"
                     >
                         <v-icon small color="primary" class="c-mr-2">note_add</v-icon>
-                        <div class="a">Research title</div>
+                        <router-link class="a" :to="{
+                                name: 'research-details', 
+                                params: {
+                                    research_group_permlink: proposal.extension.research.group_permlink,
+                                    research_permlink: proposal.extension.research.permlink
+                                }
+                            }"
+                        >{{ proposal.extension.research.title }}</router-link>
                     </div>
                     <!-- proposal title depending on type -->
 
@@ -90,7 +97,7 @@
                     <div class="display-flex" 
                         v-if="proposal.action === proposalTypes.START_RESEARCH"
                     >
-                        START_RESEARCH
+                        START_RESEARCH (to be done, no mockups)
                     </div>
 
                     <div class="row" v-else-if="proposal.action === proposalTypes.INVITE_MEMBER">
@@ -129,7 +136,9 @@
                         <div class="col-6">
                             <div class="grey--text">{{ proposal.data.authors.join(' · ') }}</div>
                             <span class="bold">{{ getContentTypeStrById(proposal.data.type) }}:</span>
-                            <span class="a">{{ proposal.data.title }}</span>
+
+                            <span v-if="!getContentUrl(proposal)">{{ proposal.data.title }}</span>
+                            <a v-else :href="getContentUrl(proposal)" class="a" target="_blank">{{ proposal.data.title }}</a>
                         </div>
                         <div class="col-6"></div>
                     </div>
@@ -147,6 +156,7 @@
     import * as researchService from "./../../../services/ResearchService";
     import _ from 'lodash';
     import deipRpc from '@deip/deip-rpc-client';
+    import config from './../../../config.json';
 
     export default {
         name: "ResearchGroupDetailsProposalsItem",
@@ -181,9 +191,18 @@
                     alert(err.message);
                 });
             },
+
+            // for CREATE_RESEARCH_MATERIAL
             getContentTypeStrById(id) {
                 let contentType = _.find(researchService.contentTypes, item => item.id === id);
                 return contentType.text;
+            },
+            getContentUrl(proposal) {
+                let parts = proposal.data.content.split(':');
+
+                return parts[0] === 'file'
+                    ? `${config['deip-server-url']}/public/files/research/${proposal.data.research_id}/${parts[1]}`
+                    : undefined;
             }
         },
         computed: {
