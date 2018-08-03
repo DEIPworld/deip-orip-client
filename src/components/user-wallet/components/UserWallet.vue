@@ -76,7 +76,7 @@
                                     </div>
 
                                     <div class="width-10 list-body-cell text-align-center">
-                                        <div class="half-bold headline">{{ commonTokensBalance }}</div>
+                                        <div class="half-bold headline">{{ account ? account.common_tokens_balance : 0 }}</div>
                                     </div>
 
                                     <div class="list-body-cell token-actions">
@@ -162,7 +162,7 @@
                             <common-token-convert-form
                                 v-else-if="account && sendingType === sendingTypes.deipCommon"
                                 :deip-token-balance="deipTokenBalance"
-                                :common-tokens-balance="commonTokensBalance"
+                                :common-tokens-balance="account.common_tokens_balance"
                                 @convertingTransactionWasApplied="loadUserAccount"
                             ></common-token-convert-form>
                             
@@ -208,7 +208,6 @@
             ...mapGetters({
                 account: 'userWallet/account',
                 researches: 'userWallet/researches',
-                commonTokensBalance: 'userWallet/commonTokensBalance',
                 user: 'auth/user'
             }),
             deipTokenBalance() {
@@ -221,7 +220,6 @@
         methods: {
             loadUserAccount() {
                 this.$store.dispatch('userWallet/loadUser', this.username);
-                this.$store.dispatch('userWallet/loadCommonTokens', this.username);
             },
             selectResearch(research) {
                 this.selectedResearchId = research.id;
