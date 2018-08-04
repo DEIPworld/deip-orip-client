@@ -1,4 +1,5 @@
 import _ from 'lodash';
+import deipRpc from '@deip/deip-rpc-client';
 
 const types = {
     START_RESEARCH: 1,
@@ -78,8 +79,40 @@ const getParsedProposal = proposal => {
     return proposal;
 };
 
+const proposalExtenderMap = {
+    1: undefined,
+    2: undefined,
+    5: undefined,
+    11: {
+        research: proposal => deipRpc.api.getResearchByIdAsync(proposal.data.research_id)
+    }
+};
+
+const extendProposalByRelatedInfo = proposal => {
+    const extensionFuncs = proposalExtenderMap[proposal.action];
+    proposal.extension = {};
+
+    if (!extensionFuncs) {
+        return Promise.resolve(proposal);
+    }
+
+    const keys = _.keys(extensionFuncs);
+    
+    // todo: a lot of the same queries go to server, so it should be optimized
+    // by grouping the same queries in one and then populating necessery items
+    return Promise.all( _.map(extensionFuncs, func => func(proposal)) )
+        .then(data => {
+            keys.forEach((key, i) =>
+                proposal.extension[key] = data[i]
+            );
+
+            return proposal;
+        });
+};
+
 export {
     types,
     getStringifiedProposalData,
-    getParsedProposal
+    getParsedProposal,
+    extendProposalByRelatedInfo
 };

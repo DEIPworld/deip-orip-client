@@ -4,15 +4,13 @@ import Vue from 'vue';
 
 const state = {
     account: undefined,
-    researches: [],
-    commonTokensBalance: undefined
+    researches: []
 };
 
 // getters
 const getters = {
     account: state => state.account,
-    researches: state => state.researches,
-    commonTokensBalance: state => state.commonTokensBalance
+    researches: state => state.researches
 };
 
 // actions
@@ -20,7 +18,6 @@ const actions = {
     loadWallet({ dispatch }, accountName) {
         dispatch('loadUser', accountName);
         dispatch('loadResearchTokens', accountName);
-        dispatch('loadCommonTokens', accountName);
     },
     loadUser({ commit }, accountName) {
         return deipRpc.api.getAccountsAsync([accountName])
@@ -59,13 +56,6 @@ const actions = {
             }).finally(() => {
                 commit('SET_RESEARCHES', userResearches);
             });
-    },
-    loadCommonTokens({ commit }, accountName) {
-        deipRpc.api.getExpertTokensByDisciplineIdAsync(0)
-            .then(commonTokens => {
-                let result = commonTokens.find(item => item.account_name === accountName);
-                commit('SET_COMMON_TOKEN_BALANCE', result ? result.amount : 0);
-            });
     }
 };
 
@@ -76,9 +66,6 @@ const mutations = {
     },
     ['SET_RESEARCHES'](state, researches) {
         Vue.set(state, 'researches', researches);
-    },
-    ['SET_COMMON_TOKEN_BALANCE'](state, commonTokensBalance) {
-        Vue.set(state, 'commonTokensBalance', commonTokensBalance);
     }
 };
 

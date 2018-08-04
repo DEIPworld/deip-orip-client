@@ -87,16 +87,23 @@ const actions = {
     },
 
     loadResearchGroupProposals({ commit }, {groupId, notify}) {
-        commit('SET_GROUP_PROPOSALS_LOADING_STATE', true)
-        deipRpc.api.getProposalsByResearchGroupIdAsync(groupId).then(data => {
-            commit('SET_PROPOSALS', 
-                _.map(data, proposal => proposalService.getParsedProposal(proposal))
-            );
-        })
-        .finally(() => {
-            commit('SET_GROUP_PROPOSALS_LOADING_STATE', false)
-            if (notify) notify()
-        })
+        commit('SET_GROUP_PROPOSALS_LOADING_STATE', true);
+
+        deipRpc.api.getProposalsByResearchGroupIdAsync(groupId)
+            .then(data => {
+                return Promise.all(
+                    data.map(item => proposalService.extendProposalByRelatedInfo(item))
+                );
+            })
+            .then(data => {
+                commit('SET_PROPOSALS', 
+                    _.map(data, proposal => proposalService.getParsedProposal(proposal))
+                );
+            })
+            .finally(() => {
+                commit('SET_GROUP_PROPOSALS_LOADING_STATE', false)
+                if (notify) notify()
+            });
     },
 
     loadResearchList({ commit }, {groupId, notify}) {
