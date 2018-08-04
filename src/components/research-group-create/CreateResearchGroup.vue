@@ -130,13 +130,15 @@
 
             finish() {
                 const self = this;
-
                 this.isLoading = true;
                 const invitees = this.group.members.filter(m => m.account.name != this.user.username)
                     .map(m => {
-                        return { account: m.account.name, research_group_tokens_in_percent: m.stake * this.DEIP_1_PERCENT }
+                        return { 
+                            account: m.account.name, 
+                            research_group_tokens_in_percent: m.stake * this.DEIP_1_PERCENT, 
+                            cover_letter: "" 
+                        }
                     })
-
                 deipRpc.broadcast.createResearchGroupAsync(
                     this.user.privKey,
                     this.user.username,
