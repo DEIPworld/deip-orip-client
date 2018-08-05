@@ -265,7 +265,7 @@
                         </div>
                     </div>
                     <div v-if="isInActiveTokenSale" class="c-pt-4 c-pb-6">
-                        <div class="text-align-center">Token Sale will start on {{tokenSale.start_time}} UTC</div>
+                        <div class="text-align-center">Token Sale will start on {{toLocalDate(tokenSale.start_time)}}</div>
                     </div>
                 </div>
             </div>
@@ -284,6 +284,7 @@
     import { mapGetters } from 'vuex'
     import joinRequestsService from './../../../services/joinRequests'
     import { extractName } from './../../../utils/user'
+    import moment from 'moment';
 
     export default {
         name: "ResearchDetailsSidebar",
@@ -434,6 +435,10 @@
                     this.isSendingJoinGroupRequest = false;
                     this.isJoinGroupDialogOpen = false;
                 })
+            },
+            toLocalDate(utc) {
+                const localTime = moment.utc(utc).local().format();
+                return localTime;
             }
         }
     };

@@ -1,5 +1,5 @@
 <template>
-    <v-dialog v-model="isOpen" fullscreen persistent transition="scale-transition">
+    <v-dialog v-model="isOpen"  persistent transition="scale-transition">
         <v-card class="">
             <v-toolbar dark color="primary">
                 <v-btn icon dark @click="close()">
@@ -147,7 +147,8 @@
                     this.user.username,
                     this.contentId,
                     this.review,
-                    this.reviewQuality === this.REVIEW_POSITIVE
+                    this.reviewQuality === this.REVIEW_POSITIVE,
+                    5000
                 ).then((data) => {
                     this.$store.dispatch('rd/loadResearchReviews', {researchId: this.research.id});
                     this.$store.dispatch('rd/closeReviewDialog');
