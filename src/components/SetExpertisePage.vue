@@ -17,7 +17,7 @@
                 </div>
                 <div class="c-mt-4">
                     <v-btn color="primary" @click="addExpertises()" :disabled="!selectedDisciplines.length || !selectedUser">
-                        Add expertise
+                        Set expertise
                     </v-btn>
                 </div>
             </div>
@@ -73,7 +73,7 @@
     import { mapGetters } from 'vuex';
 
     export default {
-        name: "AddExpertisePage",
+        name: "SetExpertisePage",
         data() {
             return {
                 users: [],
@@ -131,17 +131,21 @@
 
             addExpertises() {
                 if(!this.selectedDisciplines.length || !this.selectedUser) return;
-
+debugger;
                 const disciplines = this.selectedDisciplines.map(d => { return {discipline_id: d.id, amount: d.amount}});
-                deipRpc.broadcast.addExpertiseTokensAsync(
+                deipRpc.broadcast.setExpertiseTokensAsync(
                     this.currentUser.privKey,
                     this.currentUser.username,
                     this.selectedUser.account.name,
                     disciplines
                 ).then((data) => {
+                    debugger;
+
                     this.selectUser(this.selectedUser)
                     alert("success !")
                 },(err) => {
+                    debugger;
+
                     alert(err)
                 })
             }

@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import AddExpertisePage from '@/components/AddExpertisePage'
+import SetExpertisePage from '@/components/SetExpertisePage'
 
 import ResearchFeed from '@/components/research-feed/ResearchFeed'
 import ResearchDetails from '@/components/research-details/ResearchDetails'
@@ -30,9 +30,9 @@ Vue.use(Router)
 
 const router = new Router({
     routes: [{
-        path: '/add-expertise',
-        name: 'AddExpertisePage',
-        component: AddExpertisePage,
+        path: '/set-expertise',
+        name: 'SetExpertisePage',
+        component: SetExpertisePage,
         // meta: {
         //     withoutHeader: true
         // }
