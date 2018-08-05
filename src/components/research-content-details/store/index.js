@@ -164,7 +164,7 @@ const actions = {
         deipRpc.api.getResearchByAbsolutePermlinkAsync(group_permlink, research_permlink)
             .then((research) => {
                 commit('SET_RESEARCH_DETAILS', research)
-                return deipRpc.api.getResearchGroupTokensByResearchGroupAsync(research.id)
+                return deipRpc.api.getResearchGroupTokensByResearchGroupAsync(research.research_group_id)
             }).then((members) => {
                 rgtList.push(...members)
                 return getEnrichedProfiles(members.map(m => m.owner))

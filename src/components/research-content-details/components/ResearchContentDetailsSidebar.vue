@@ -18,7 +18,7 @@
                         </div>
                         
                         <!-- TODO: add voting for review -->
-                        <v-btn v-if="!isResearchGroupMember && userHasExpertise(discipline)" @click="openVote(discipline)" small color="primary" dark class="ma-0" >Vote</v-btn>
+                        <!-- <v-btn v-if="!isResearchGroupMember && userHasExpertise(discipline)" @click="openVote(discipline)" small color="primary" dark class="ma-0" >Vote</v-btn> -->
                     </div>
                 </div>
             </div>

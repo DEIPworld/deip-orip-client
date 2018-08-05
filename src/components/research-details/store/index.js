@@ -212,7 +212,7 @@ const actions = {
                     dispatch('loadResearchDrafts', { researchId: state.research.id, notify: resolve })
                 });
                 const membersLoad = new Promise((resolve, reject) => {
-                    dispatch('loadResearchMembers', { researchId: state.research.id, notify: resolve })
+                    dispatch('loadResearchMembers', { groupId: state.research.research_group_id, notify: resolve })
                 });
                 const reviewsLoad = new Promise((resolve, reject) => {
                     dispatch('loadResearchReviews', { researchId: state.research.id, notify: resolve })
@@ -253,10 +253,10 @@ const actions = {
             })
     },
 
-    loadResearchMembers({ state, commit, dispatch }, { researchId, notify }) {
+    loadResearchMembers({ state, commit, dispatch }, { groupId, notify }) {
         const rgtList = [];
         commit('SET_RESEARCH_MEMBERS_LOADING_STATE', true)
-        deipRpc.api.getResearchGroupTokensByResearchGroupAsync(researchId)
+        deipRpc.api.getResearchGroupTokensByResearchGroupAsync(groupId)
             .then((members) => {
                 rgtList.push(...members)
                 return getEnrichedProfiles(members.map(m => m.owner))
