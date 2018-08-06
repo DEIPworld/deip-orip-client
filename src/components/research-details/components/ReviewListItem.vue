@@ -6,20 +6,27 @@
                     <img v-if="review.author.profile" v-bind:src="review.author.profile.avatar | avatarSrc(90, 90, false)" />
                     <v-gravatar v-else :title="review.author.account.name" :email="review.author.account.name + '@deip.world'" />
                 </v-avatar>
+
                 <div class="bold c-pt-2">{{ review.author | fullname }}</div>
-                    <v-btn v-if="review.author.account.name != user.username && userHasExpertise" class="ma-0 mt-2" block color="primary" 
-                            :loading="isReviewVoting" 
-                            :disabled="isReviewVoting"
-                            @click="voteReview(review)">Vote</v-btn>
+                    <v-btn block color="primary"
+                        v-if="review.author.account.name !== user.username && userHasExpertise" 
+                        class="ma-0 mt-2" 
+                        :loading="isReviewVoting" 
+                        :disabled="isReviewVoting || userHasVoted"
+                        @click="voteReview(review)"
+                    >Vote</v-btn>
                 </div>
+
                 <div class="column c-ml-6">
                     <div>
                         <span class="grey--text">{{ new Date(review.created_at).toDateString() }}</span>
+
                         <span class="half-bold c-pl-2">
                             <span class="green--text text--darken-2" v-if="review.is_positive">Positive</span>
                             <span class="red--text text--darken-2" v-if="!review.is_positive">Negative</span>
                         </span>
                     </div>
+
                     <div class="c-pt-4 col-grow">
                         {{ review.content }}
                     </div>
@@ -29,6 +36,7 @@
                             <span class="c-pr-1">
                                 <span class="bold green--text text--darken-2">{{ tvo.disciplineName }}</span>
                             </span>
+
                             <span class="c-pr-4">
                                 <span>{{tvo.totalWeight}}</span>
                             </span>
@@ -76,16 +84,16 @@
                     ?  this.userExperise.some(exp => 
                             this.research.disciplines.some(d => d.id == exp.discipline_id))
                     : false
-            }
+            },
         },
         data() {
             return {
-                isReviewVoting: false
+                isReviewVoting: false,
+                userHasVoted: false // flag for keeping vote state without reloading the whole list
             };
         },
 
         methods: {
-
             voteReview(review) {
                 const self = this;
                 this.isReviewVoting = true;
@@ -132,6 +140,7 @@
                                         self.$store.dispatch('layout/setError', { message: "An error occurred while voting for review, please try again later"});
                                         console.log(err);
                                     } else {
+                                        self.userHasVoted = true;
                                         self.$store.dispatch('layout/setSuccess', { message: "You've voted for review successfully!"});
                                     }
                                 });
@@ -143,6 +152,10 @@
                     }
                 });
             }
+        },
+
+        created() {
+            this.userHasVoted = this.review.votes.find(vote =>vote.voter === this.user.account[0].name) !== undefined;
         }
     };
 </script>

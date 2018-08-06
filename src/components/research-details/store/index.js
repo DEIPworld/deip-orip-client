@@ -278,20 +278,26 @@ const actions = {
 
     loadResearchReviews({ state, dispatch, commit }, { researchId, notify }) {
         const reviews = [];
-        commit('SET_RESEARCH_REVIEWS_LOADING_STATE', true)
+        commit('SET_RESEARCH_REVIEWS_LOADING_STATE', true);
+
         deipRpc.api.getReviewsByResearchAsync(researchId)
             .then(items => {
-                reviews.push(...items)
-                return getEnrichedProfiles(reviews.map(r => r.author))
+                reviews.push(...items);
 
+                return Promise.all([
+                    Promise.all(
+                        reviews.map(item => deipRpc.api.getReviewVotesByReviewIdAsync(item.id))
+                    ),
+                    getEnrichedProfiles(reviews.map(r => r.author))
+                ]);
             }, (err) => {console.log(err)})
-            .then((users) => {
-                reviews.forEach((review, idx) => {
-                    const author = users.find(u => u.account.name == review.author);
-                    review.author = author;
-                })
-                commit('SET_RESEARCH_REVIEWS_LIST', reviews)
+            .then(([reviewVotes, users]) => {
+                reviews.forEach((review, i) => {
+                    review.author = users.find(u => u.account.name == review.author);
+                    review.votes = reviewVotes[i];
+                });
 
+                commit('SET_RESEARCH_REVIEWS_LIST', reviews);
             }, (err) => {console.log(err)})
             .finally(() => {
                 commit('SET_RESEARCH_REVIEWS_LOADING_STATE', false)
