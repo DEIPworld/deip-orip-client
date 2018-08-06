@@ -21,7 +21,7 @@
         </div>
 
         <div class="c-pt-5">
-            <v-tabs color="primary" slot="extension" v-model="tab" grow dark>
+            <v-tabs slot="extension" v-model="tab" grow color="blue lighten-4">
                 <v-tabs-slider color="black"></v-tabs-slider>
 
                 <v-tab key="active" :disabled="activeResearchList.length === 0">

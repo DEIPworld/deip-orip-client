@@ -1,5 +1,5 @@
 <template>
-    <div id="app">
+    <div id="deip-app">
         <div v-if="$route.meta.withoutHeader">
             <router-view/>
         </div>
@@ -83,7 +83,7 @@
 </script>
 
 <style>
-    #app {
+    #deip-app {
         font-family: 'Roboto', 'Avenir', Helvetica, Arial, sans-serif;
         -webkit-font-smoothing: antialiased;
         -moz-osx-font-smoothing: grayscale;
