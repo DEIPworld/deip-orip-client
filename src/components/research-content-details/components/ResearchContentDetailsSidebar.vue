@@ -6,9 +6,23 @@
         <!-- ### START Research Content Details Section ### -->
         <div class="research-content-info-container">
             <div v-if="isLoadingResearchContentPage === false && content">
+                <div class="c-mb-2" v-if="research">
+                    <router-link class="a sm-title" :to="{ 
+                        name: 'research-details', 
+                        params: { 
+                            research_group_permlink: research.group_permlink,
+                            research_permlink: research.permlink
+                        }
+                    }">{{ research.title }}</router-link>
+                </div>
+
                 <div class="sm-title bold">Content Info</div>
+
                 <div class="c-pb-6 c-pt-4">
-                    <div v-for="(discipline, index) in disciplinesList" class="row align-center justify-between vote-btn-area" :class="index == 0 ? '':'c-mt-1'">
+                    <div v-for="(discipline, index) in disciplinesList" :key="index"
+                        class="row align-center justify-between vote-btn-area" 
+                        :class="index === 0 ? '' : 'c-mt-1'"
+                    >
                         <div class="deip-blue-color c-p-2">
                             {{discipline.name}}:  
                 
@@ -19,6 +33,17 @@
                         
                         <!-- TODO: add voting for review -->
                         <!-- <v-btn v-if="!isResearchGroupMember && userHasExpertise(discipline)" @click="openVote(discipline)" small color="primary" dark class="ma-0" >Vote</v-btn> -->
+                    </div>
+
+                    <div class="c-mt-6">
+                        <router-link class="a sm-title" :to="{ 
+                            name: 'ResearchContentMetadata', 
+                            params: { 
+                                research_group_permlink: research.group_permlink,
+                                research_permlink: research.permlink,
+                                content_permlink: content.permlink
+                            }
+                        }">Metadata</router-link>
                     </div>
                 </div>
             </div>
