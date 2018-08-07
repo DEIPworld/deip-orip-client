@@ -27,9 +27,10 @@ const getters = {
 
     researchFeed: (state, getters) => {
         let handler = _(state.fullResearchList);
+
         if (state.filter.q !== '') {
             handler = handler.filter(research =>
-                _.startsWith(research.title.toLowerCase(), state.filter.q.toLowerCase())
+                _.includes(research.title.toLowerCase(), state.filter.q.toLowerCase())
             );
         }
 
