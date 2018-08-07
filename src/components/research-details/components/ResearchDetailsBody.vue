@@ -1,10 +1,19 @@
 <template>
 <div class="research-body-container spinner-container">
-    <v-progress-circular v-if="isLoadingResearchPage" :size="100" indeterminate color="primary"></v-progress-circular>
+    <v-progress-circular class="section-spinner"
+        v-if="isLoadingResearchPage"
+        :size="100" indeterminate
+        color="primary"
+    ></v-progress-circular>
+
     <div v-if="isLoadingResearchPage === false">
         <!-- ### START Research Details Section ### -->
         <div class="c-pt-6 research-details-container spinner-container">
-            <v-progress-circular v-if="isLoadingResearchDetails" indeterminate color="primary"></v-progress-circular>
+            <v-progress-circular class="section-spinner"
+                v-if="isLoadingResearchDetails"
+                indeterminate color="primary"
+            ></v-progress-circular>
+
             <div v-if="isLoadingResearchDetails === false">
                 <div class="row justify-between align-center">
                     <div>
@@ -40,7 +49,11 @@
             <span v-if="isResearchGroupMember">Please use the form below to upload your pdf files and images</span>
         </div>
         <div class="c-pt-6 research-content-container spinner-container">
-            <v-progress-circular v-if="isLoadingResearchContent" indeterminate color="primary"></v-progress-circular>
+            <v-progress-circular class="section-spinner"
+                v-if="isLoadingResearchContent"
+                indeterminate color="primary"
+            ></v-progress-circular>
+
             <v-expansion-panel v-if="isLoadingResearchContent === false">
                 <v-expansion-panel-content v-for="(content, index) in contentList" :key="index">
                     <div slot="header">
@@ -135,6 +148,7 @@
                     </v-card>
                 </v-expansion-panel-content>
             </v-expansion-panel>
+            
             <div v-if="isResearchGroupMember && !research.is_finished">
                 <upload-research-contnet-file-dialog></upload-research-contnet-file-dialog>
                 <v-btn @click="createDarDraft()" :loading="isCreatingDraft" :disabled="isCreatingDraft" block outline color="primary" dark>Texture Editor</v-btn>
@@ -143,7 +157,11 @@
 
         <!-- ### START Research Review Section ### -->
         <div class="research-reviews-container spinner-container">
-            <v-progress-circular v-if="isLoadingResearchReviews" indeterminate color="primary"></v-progress-circular>
+            <v-progress-circular class="section-spinner"
+                v-if="isLoadingResearchReviews"
+                indeterminate color="primary"
+            ></v-progress-circular>
+
             <div v-if="isLoadingResearchReviews === false && reviewsList.length">
                 <div class="c-pt-8 title">Reviews: {{ reviewsList.length }}</div>
                 <div class="c-pt-6">

@@ -27,7 +27,11 @@
                 <div v-if="selectedUser" class="subheading c-mt-2 bold">{{selectedUser | fullname}}</div>
 
                 <div v-if="selectedUser && selectedUser.expertise" class="selected-user-expertise-container spinner-container c-mr-4">
-                    <v-progress-circular v-if="isLoadingUserExpertise" indeterminate color="primary"></v-progress-circular>
+                    <v-progress-circular class="section-spinner"
+                        v-if="isLoadingUserExpertise"
+                        indeterminate color="primary"
+                    ></v-progress-circular>
+
                     <div v-if="isLoadingUserExpertise === false">
                         <div class="c-pt-4 c-pb-6">
                             <div class="row justify-between" v-for="(item, i) in selectedUser.expertise" :key="i">
@@ -42,7 +46,11 @@
 
             <div class="col-3 text-align-center">
                 <div class="users-container spinner-container">
-                    <v-progress-circular v-if="isLoadingUsers" indeterminate color="primary"></v-progress-circular>
+                    <v-progress-circular class="section-spinner"
+                        v-if="isLoadingUsers"
+                        indeterminate color="primary"
+                    ></v-progress-circular>
+                    
                     <div v-if="isLoadingUsers === false">
                         <div v-for="(user, index) in users" :key="index" class="row-nowrap user-item justify-between align-center c-pt-2 c-pb-2" 
                             v-bind:class="{'selected-user': user === selectedUser }"

@@ -1,12 +1,20 @@
 <template>
 
 <div class="research-group-body-container spinner-container">
-    <v-progress-circular v-if="isLoadingResearchGroupPage" :size="100" indeterminate color="primary"></v-progress-circular>
+    <v-progress-circular class="section-spinner"
+        v-if="isLoadingResearchGroupPage"
+        :size="100" indeterminate color="primary"
+    ></v-progress-circular>
+
     <div v-if="isLoadingResearchGroupPage === false">
 
         <!-- ### START Research Group Details Section ### -->
         <div class="research-group-details-container spinner-container">
-            <v-progress-circular v-if="isLoadingResearchGroupDetails" indeterminate color="primary"></v-progress-circular>
+            <v-progress-circular class="section-spinner"
+                v-if="isLoadingResearchGroupDetails"
+                indeterminate color="primary"
+            ></v-progress-circular>
+
             <div v-if="isLoadingResearchGroupDetails === false">
                 <div>
                     <v-icon small>date_range</v-icon>
@@ -21,7 +29,11 @@
 
         <!-- ### START Research Group Members Section ### -->
         <div class="research-group-members-container spinner-container">
-            <v-progress-circular v-if="isLoadingResearchGroupDetails" indeterminate color="primary"></v-progress-circular>
+            <v-progress-circular class="section-spinner"
+                v-if="isLoadingResearchGroupDetails"
+                indeterminate color="primary"
+            ></v-progress-circular>
+
             <div v-if="isLoadingResearchGroupMembers === false">
                 <div class="c-pt-8 title">Group Members: {{ members.length }}</div>
                 <div class="c-pt-6">
@@ -95,7 +107,11 @@
 
         <!-- ### START Research Group Research List Section ### -->
         <div class="research-list-container spinner-container c-pt-7">
-            <v-progress-circular v-if="isLoadingResearchGroupResearchList" indeterminate color="primary"></v-progress-circular>
+            <v-progress-circular class="section-spinner"
+                v-if="isLoadingResearchGroupResearchList"
+                indeterminate color="primary"
+            ></v-progress-circular>
+
             <div v-if="isLoadingResearchGroupResearchList === false">
                 <state-research-list :research-list="researchList"></state-research-list>
             </div>
@@ -104,7 +120,11 @@
 
         <!-- ### START Research Group Proposals Section ### -->
         <div v-if="isResearchGroupMember" class="research-group-proposals-container spinner-container c-pt-8">
-            <v-progress-circular v-if="isLoadingResearchGroupProposals" indeterminate color="primary"></v-progress-circular>
+            <v-progress-circular class="section-spinner"
+                v-if="isLoadingResearchGroupProposals"
+                indeterminate color="primary"
+            ></v-progress-circular>
+            
             <div v-if="isLoadingResearchGroupProposals === false">
                 <research-group-details-proposals></research-group-details-proposals>
             </div>

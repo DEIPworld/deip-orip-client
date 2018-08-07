@@ -9,7 +9,11 @@
         
         <!-- ### START Research Members Section ### -->
         <div class="research-members-container spinner-container">
-            <v-progress-circular v-if="isLoadingResearchMembers" indeterminate color="primary"></v-progress-circular>
+            <v-progress-circular class="section-spinner"
+                v-if="isLoadingResearchMembers"
+                indeterminate color="primary"
+            ></v-progress-circular>
+
             <div v-if="isLoadingResearchMembers === false" class="row-nowrap justify-between align-center c-pt-4 c-pb-2" v-for="(member, index) in membersList" :key="index">
                 <div>
                     <v-avatar size="40px">
@@ -93,7 +97,11 @@
 
         <!-- ### START Research Disciplines Section ### -->
         <div class="research-dicsciplines-container spinner-container">
-            <v-progress-circular v-if="isLoadingResearchDisciplines" indeterminate color="primary"></v-progress-circular>
+            <v-progress-circular class="section-spinner"
+                v-if="isLoadingResearchDisciplines"
+                indeterminate color="primary"
+            ></v-progress-circular>
+
             <div v-if="isLoadingResearchDisciplines === false">
                 <div class="c-pb-6">
                     <div class="sm-title bold c-pb-4 c-pt-4">Votes:</div>
@@ -140,7 +148,11 @@
 
         <!-- ### START Research Info Section ### -->
         <div class="research-info-container spinner-container">
-            <v-progress-circular v-if="isLoadingResearchDetails" indeterminate color="primary"></v-progress-circular>
+            <v-progress-circular class="section-spinner"
+                v-if="isLoadingResearchDetails"
+                indeterminate color="primary"
+            ></v-progress-circular>
+
             <div v-if="isLoadingResearchDetails === false">
                 <div class="sm-title bold c-pt-6">Research Info</div>
                 <div class="c-pt-4 c-pb-6">
@@ -186,7 +198,11 @@
 
         <!-- ### START Research Token Holders Section ### -->
         <div class="research-token-holders-container spinner-container">
-            <v-progress-circular v-if="isLoadingResearchTokenHolders" indeterminate color="primary"></v-progress-circular>
+            <v-progress-circular class="section-spinner"
+                v-if="isLoadingResearchTokenHolders"
+                indeterminate color="primary"
+            ></v-progress-circular>
+
             <div v-if="isLoadingResearchTokenHolders === false">
                 <div class="sm-title bold c-pt-6">Research Token Holders</div>
                 <div class="c-pt-4 c-pb-6">
@@ -211,7 +227,11 @@
         <!-- ### START Research Token Sale Section ### -->
         <div v-if="isTokenSaleSectionAvailable">
             <div class="research-token-sale-container spinner-container">
-                <v-progress-circular v-if="isLoadingResearchTokenSale" indeterminate color="primary"></v-progress-circular>
+                <v-progress-circular class="section-spinner"
+                    v-if="isLoadingResearchTokenSale"
+                    indeterminate color="primary"
+                ></v-progress-circular>
+                
                 <div v-if="isLoadingResearchTokenSale === false">
                     <div class="sm-title bold c-pt-6">Research Token Sale</div>
                     <div v-if="(isMissingTokenSale && isResearchGroupMember)" class="c-pt-4 c-pb-6">

@@ -5,7 +5,11 @@
 
         <!-- ### START Research Group Details Section ### -->
         <div class="research-group-info-container spinner-container">
-            <v-progress-circular v-if="isLoadingResearchGroupDetails" indeterminate color="primary"></v-progress-circular>
+            <v-progress-circular class="section-spinner"
+                v-if="isLoadingResearchGroupDetails"
+                indeterminate color="primary"
+            ></v-progress-circular>
+
             <div v-if="isLoadingResearchGroupDetails === false">
                 <div class="sm-title bold">Group Info</div>
                 <div class="c-pt-4 c-pb-6">
@@ -42,9 +46,14 @@
 
         <!-- ### START Research Group Join Requests Section ### -->
         <div v-if="isJoinRequestsSectionAvailable || isLoadingResearchGroupJoinRequests !== false" class="research-group-join-requests-container spinner-container">
-            <v-progress-circular v-if="isLoadingResearchGroupJoinRequests" indeterminate color="primary"></v-progress-circular>
+            <v-progress-circular class="section-spinner"
+                v-if="isLoadingResearchGroupJoinRequests"
+                indeterminate color="primary"
+            ></v-progress-circular>
+
             <div v-if="isLoadingResearchGroupJoinRequests === false">
                 <div class="sm-title bold c-pt-6">Join requests: {{pendingJoinRequests.length}}</div>
+
                 <div class="c-pb-6">
                     <div v-for="(join, index) in pendingJoinRequests" class="row-nowrap justify-between align-center c-pt-4">
                         <div>
@@ -66,7 +75,9 @@
                             <span class="headline">{{selectedJoinRequestMeta.item.username}}</span>
                             <span class="join-request-title-info"></span>
                         </v-card-title>
+
                         <v-card-text class="text-align-center">{{selectedJoinRequestMeta.item.coverLetter}}</v-card-text>
+                        
                         <v-card-actions class="text-align-center mt-5">
                             <v-spacer></v-spacer>
                             <v-btn color="green lighten-1" flat 

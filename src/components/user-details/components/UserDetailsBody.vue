@@ -1,16 +1,27 @@
 <template>
     <div class="user-profile-body-container spinner-container">
-        <v-progress-circular v-if="isLoadingUserProfilePage" :size="100" indeterminate color="primary"></v-progress-circular>
+        <v-progress-circular class="section-spinner"
+            v-if="isLoadingUserProfilePage"
+            :size="100"
+            indeterminate color="primary"
+        ></v-progress-circular>
+
         <div v-if="isLoadingUserProfilePage === false">
         <!-- ### START User Profile Details Section ### -->
             <div class="user-profile-info-container spinner-container">
-                <v-progress-circular v-if="isLoadingUserAccount || isLoadingUserProfile" indeterminate color="primary"></v-progress-circular>
+                <v-progress-circular class="section-spinner"
+                    v-if="isLoadingUserAccount || isLoadingUserProfile"
+                    indeterminate color="primary"
+                ></v-progress-circular>
+
                 <div v-if="isLoadingUserAccount === false && isLoadingUserProfile === false" class="row">
                     <v-avatar size="160px" class="user-avatar" 
                             v-on:mouseover="onAvatarMouseOver"
                             v-on:mouseout="onAvatarMouseOut">
                         <img v-if="userInfo.profile" v-bind:src="userInfo.profile.avatar | avatarSrc(160, 160, false)" />
+                        
                         <v-gravatar v-if="!userInfo.profile && userInfo.account" :email="userInfo.account.name + '@deip.world'" />
+                        
                         <vue-dropzone v-if="dropzoneOptions" v-show="avatarUploadIsShown" ref="avatar-upload" id="avatar-dropzone" 
                             :options="dropzoneOptions"
                             @vdropzone-success="avatarUploadSuccess"
@@ -105,7 +116,11 @@
 
             <!-- ### START User Profile Research Section ### -->
             <div class="user-research-groups-container spinner-container">
-                <v-progress-circular v-if="isLoadingUserGroups || isLoadingUserResearch" indeterminate color="primary"></v-progress-circular>
+                <v-progress-circular class="section-spinner"
+                    v-if="isLoadingUserGroups || isLoadingUserResearch"
+                    indeterminate color="primary"
+                ></v-progress-circular>
+
                 <div v-if="isLoadingUserGroups === false && isLoadingUserResearch === false">
 
                     <div class="c-pt-7">
@@ -141,7 +156,11 @@
 
             <!-- ### START User Profile Education\Employment Section ### -->
             <div class="user-education-employment-container spinner-container">
-                <v-progress-circular v-if="isLoadingUserAccount || isLoadingUserProfile" indeterminate color="primary"></v-progress-circular>
+                <v-progress-circular class="section-spinner"
+                    v-if="isLoadingUserAccount || isLoadingUserProfile"
+                    indeterminate color="primary"
+                ></v-progress-circular>
+                
                 <div v-if="isLoadingUserAccount === false && isLoadingUserProfile === false">
                     <div v-if="isProfileAvailable && (isEducationSpecified || isOwner)" class="c-pt-8">
                         <div class="title">Education</div>

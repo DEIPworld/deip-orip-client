@@ -6,7 +6,11 @@
 
         <!-- ### START User Profile Expertise Section ### -->
         <div class="user-expertise-container spinner-container">
-            <v-progress-circular v-if="isLoadingUserExpertise" indeterminate color="primary"></v-progress-circular>
+            <v-progress-circular class="section-spinner"
+                v-if="isLoadingUserExpertise"
+                indeterminate color="primary"
+            ></v-progress-circular>
+
             <div v-if="isLoadingUserExpertise === false">
                 <div class="sm-title bold">Expertise</div>
                 <div class="c-pt-4 c-pb-6">
@@ -44,7 +48,11 @@
 
         <!-- ### START User Profile Contacts Section ### -->
         <div class="user-contacts-container spinner-container">
-            <v-progress-circular v-if="isLoadingUserAccount || isLoadingUserProfile" indeterminate color="primary"></v-progress-circular>
+            <v-progress-circular class="section-spinner"
+                v-if="isLoadingUserAccount || isLoadingUserProfile"
+                indeterminate color="primary"
+            ></v-progress-circular>
+
             <div v-if="isLoadingUserAccount === false && isLoadingUserProfile === false">
                 <div v-if="isProfileAvailable && (isContactsInfoSpecified || isOwner)">
                     <div class="sm-title bold c-pt-4">
@@ -105,7 +113,11 @@
 
         <!-- ### START User Profile Info Section ### -->
         <div class="user-info-container spinner-container">
-            <v-progress-circular v-if="isLoadingUserAccount || isLoadingUserProfile" indeterminate color="primary"></v-progress-circular>
+            <v-progress-circular class="section-spinner"
+                v-if="isLoadingUserAccount || isLoadingUserProfile"
+                indeterminate color="primary"
+            ></v-progress-circular>
+
             <div v-if="isLoadingUserAccount === false && isLoadingUserProfile === false">
                 <div v-if="isProfileAvailable && (isPersonalInfoSpecified || isOwner)">
                     <div class="sm-title bold c-pt-6">
@@ -192,7 +204,11 @@
 
         <!-- ### START User Profile Invites Section ### -->
         <div class="user-invites-container spinner-container">
-            <v-progress-circular v-if="isLoadingUserInvites" indeterminate color="primary"></v-progress-circular>
+            <v-progress-circular class="section-spinner"
+                v-if="isLoadingUserInvites"
+                indeterminate color="primary"
+            ></v-progress-circular>
+            
             <div v-if="isLoadingUserInvites === false">
                 <div v-if="isOwner && hasInvites">
                     <div class="sm-title bold c-pt-6">Invites: {{invites.length}}</div>
