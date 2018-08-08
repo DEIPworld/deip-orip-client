@@ -35,6 +35,7 @@
                                                 @click="reviewQuality = REVIEW_POSITIVE"
                                             >Approve</v-btn>
                                         </span>
+                                        
                                         <span>
                                             <v-btn class="ma-0" 
                                                 :dark="reviewQuality === REVIEW_NEGATIVE" 
@@ -65,6 +66,7 @@
                                         v-model="review"
                                     ></v-text-field>
                                 </div>
+
                                 <div class="row justify-end">
                                     <div>
                                         <!-- <v-btn flat color="primary" @click="log()">Preview</v-btn> -->
@@ -79,11 +81,13 @@
                             <div class="col-4">
                                 <v-card class="c-p-8">
                                     <div class="bold subheading c-pb-2">You assign you expert tokens:</div>
+
                                     <div class="c-pt-4" v-for="(exp, index) in relatedExpertise" :key="index">
                                         <span>{{exp.discipline_name}}</span>
                                         <span class="right half-bold">{{exp.amount}}</span>
                                     </div>
                                 </v-card>
+
                                 <div class="red--text c-pt-4 text-align-center">
                                     <v-icon color="red">warning</v-icon>
                                     100% of your expert tokens will be blocked for 24 hours after the review

@@ -6,9 +6,11 @@ import ResearchGroupDetailsSidebar from './components/ResearchGroupDetailsSideba
 import ResearchGroupDetailsProposals from './components/ResearchGroupDetailsProposals';
 import ResearchGroupDetailsProposalsItem from './components/ResearchGroupDetailsProposalsItem';
 import AddMemberToGroupDialog from './components/AddMemberToGroupDialog';
+import HandleJoinRequestDialog from './components/HandleJoinRequestDialog';
 
 Vue.component('research-group-details-body', ResearchGroupDetailsBody);
 Vue.component('research-group-details-sidebar', ResearchGroupDetailsSidebar);
 Vue.component('research-group-details-proposals', ResearchGroupDetailsProposals);
 Vue.component('research-group-details-proposals-item', ResearchGroupDetailsProposalsItem);
 Vue.component('add-member-to-group-dialog', AddMemberToGroupDialog);
+Vue.component('handle-join-request-dialog', HandleJoinRequestDialog);

@@ -1,5 +1,5 @@
 <template>
-    <v-dialog v-model="isOpen" persistent transition="scale-transition" max-width="500px">
+    <v-dialog v-model="isOpen" persistent transition="scale-transition" max-width="700px">
         <v-card class="">
             <v-toolbar dark color="primary">
                 <v-btn icon dark @click="close()">
@@ -47,7 +47,12 @@
                                 v-model="tokensAmount"
                                 suffix="%"
                                 mask="###"
-                                hide-details
+                            ></v-text-field>
+
+                            <v-text-field
+                                label="Cover letter" 
+                                multi-line auto-grow
+                                rows="3"
                             ></v-text-field>
 
                             <div class="display-flex c-pt-8">

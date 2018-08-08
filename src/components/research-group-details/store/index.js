@@ -16,6 +16,7 @@ const state = {
 
     options: {
         isAddMemberDialogOpen: false,
+        isHandleRequestDialogOpen: false
     },
 
     proposalListFilter: {
