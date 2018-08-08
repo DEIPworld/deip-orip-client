@@ -33,7 +33,7 @@
                                                 :color="reviewQuality === REVIEW_POSITIVE ? 'green darken-2' : undefined" 
                                                 small depressed
                                                 @click="reviewQuality = REVIEW_POSITIVE"
-                                            >Positive</v-btn>
+                                            >Approve</v-btn>
                                         </span>
                                         <span>
                                             <v-btn class="ma-0" 
@@ -41,7 +41,7 @@
                                                 :color="reviewQuality === REVIEW_NEGATIVE ? 'red darken-2' : undefined" 
                                                 small depressed
                                                 @click="reviewQuality = REVIEW_NEGATIVE"
-                                            >Negative</v-btn>
+                                            >Reject</v-btn>
                                         </span>
                                     </div>
 
@@ -78,7 +78,7 @@
                             </div>
                             <div class="col-4">
                                 <v-card class="c-p-8">
-                                    <div class="bold subheading c-pb-2">Your Expertise</div>
+                                    <div class="bold subheading c-pb-2">You assign you expert tokens:</div>
                                     <div class="c-pt-4" v-for="(exp, index) in relatedExpertise" :key="index">
                                         <span>{{exp.discipline_name}}</span>
                                         <span class="right half-bold">{{exp.amount}}</span>
@@ -128,7 +128,7 @@
                 REVIEW_POSITIVE: 'positive',
                 REVIEW_NEGATIVE: 'negative',
 
-                reviewQuality: undefined,
+                reviewQuality: 'positive',
                 review: '',
                 isLoading: false,
                 contentId: undefined,
