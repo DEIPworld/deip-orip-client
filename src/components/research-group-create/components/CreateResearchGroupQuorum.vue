@@ -9,88 +9,151 @@
                         <div>
                             Quorum shows how many votes it takes to approve a proposal (such as change in the reseach
                             content, add researc group members, research token sale, etc.) You can setup Quorum for each 
-                            proposal using <span class="deip-blue-color">Advanced</span> options
+                            proposal using
+                            <span class="deip-blue-color half-bold clickable" @click="changeMode()">Advanced</span>
+                            options
                         </div>
 
-                        <v-text-field suffix="%" mask="###" hide-details></v-text-field>
+                        <v-text-field v-model="totalQuorum"
+                            :disabled="isAdvanced"
+                            suffix="%"
+                            mask="###"
+                            hide-details
+                            @keyup="onChangeTotalQuorum()"
+                        ></v-text-field>
 
-                        <div class="row">
+                        <div class="row" v-show="isAdvanced">
                             <div class="col-offset-2">
                                 <div class="c-pv-4 deip-blue-color bold">Advanced quorum setup</div>
 
                                 <div class="row align-items-end">
                                     <div>
-                                        <v-text-field class="width-6 minus-top-margin" suffix="%" mask="###" hide-details></v-text-field>
+                                        <v-text-field class="width-6 minus-top-margin"
+                                            v-model="group.quorum.startResearch"
+                                            suffix="%"
+                                            mask="###"
+                                            hide-details
+                                        ></v-text-field>
                                     </div>
                                     <div class="col-grow c-ml-8">Start research</div>
                                 </div>
 
                                 <div class="row align-items-end">
                                     <div>
-                                        <v-text-field class="width-6 minus-top-margin" suffix="%" mask="###" hide-details></v-text-field>
+                                        <v-text-field class="width-6 minus-top-margin"
+                                            v-model="group.quorum.createMaterial"
+                                            suffix="%"
+                                            mask="###"
+                                            hide-details
+                                        ></v-text-field>
                                     </div>
                                     <div class="col-grow c-ml-8">Create research material</div>
                                 </div>
 
                                 <div class="row align-items-end">
                                     <div>
-                                        <v-text-field class="width-6 minus-top-margin" suffix="%" mask="###" hide-details></v-text-field>
+                                        <v-text-field class="width-6 minus-top-margin"
+                                            v-model="group.quorum.changeQuorum"
+                                            suffix="%"
+                                            mask="###"
+                                            hide-details
+                                        ></v-text-field>
                                     </div>
                                     <div class="col-grow c-ml-8">Change quorum</div>
                                 </div>
 
                                 <div class="row align-items-end">
                                     <div>
-                                        <v-text-field class="width-6" suffix="%" mask="###" hide-details></v-text-field>
+                                        <v-text-field class="width-6"
+                                            v-model="group.quorum.inviteMembers"
+                                            suffix="%"
+                                            mask="###"
+                                            hide-details
+                                        ></v-text-field>
                                     </div>
                                     <div class="col-grow c-ml-8">Invite members</div>
                                 </div>
 
                                 <div class="row align-items-end minus-top-margin">
                                     <div>
-                                        <v-text-field class="width-6" suffix="%" mask="###" hide-details></v-text-field>
+                                        <v-text-field class="width-6"
+                                            v-model="group.quorum.dropoutMembers"
+                                            suffix="%"
+                                            mask="###"
+                                            hide-details
+                                        ></v-text-field>
                                     </div>
                                     <div class="col-grow c-ml-8">Dropout member</div>
                                 </div>
 
                                 <div class="row align-items-end">
                                     <div>
-                                        <v-text-field class="width-6" suffix="%" mask="###" hide-details></v-text-field>
+                                        <v-text-field class="width-6"
+                                            v-model="group.quorum.startResearchTokenSale"
+                                            suffix="%"
+                                            mask="###"
+                                            hide-details
+                                        ></v-text-field>
                                     </div>
                                     <div class="col-grow c-ml-8">Start research token sale</div>
                                 </div>
 
                                 <div class="row align-items-end">
                                     <div>
-                                        <v-text-field class="width-6 minus-top-margin" suffix="%" mask="###" hide-details></v-text-field>
+                                        <v-text-field class="width-6 minus-top-margin"
+                                            v-model="group.quorum.acceptResearchTokenOffer"
+                                            suffix="%"
+                                            mask="###"
+                                            hide-details
+                                        ></v-text-field>
                                     </div>
                                     <div class="col-grow c-ml-8">Accept research token offer</div>
                                 </div>
 
                                 <div class="row align-items-end">
                                     <div>
-                                        <v-text-field class="width-6 minus-top-margin" suffix="%" mask="###" hide-details></v-text-field>
+                                        <v-text-field class="width-6 minus-top-margin"
+                                            v-model="group.quorum.offerResearchTokens"
+                                            suffix="%"
+                                            mask="###"
+                                            hide-details
+                                        ></v-text-field>
                                     </div>
                                     <div class="col-grow c-ml-8">Offer research tokens</div>
                                 </div>
 
                                 <div class="row align-items-end">
                                     <div>
-                                        <v-text-field class="width-6 minus-top-margin" suffix="%" mask="###" hide-details></v-text-field>
+                                        <v-text-field class="width-6 minus-top-margin"
+                                            v-model="group.quorum.sendFunds"
+                                            suffix="%"
+                                            mask="###"
+                                            hide-details
+                                        ></v-text-field>
                                     </div>
                                     <div class="col-grow c-ml-8">Send funds</div>
                                 </div>
 
                                 <div class="row align-items-end">
                                     <div>
-                                        <v-text-field class="width-6" suffix="%" mask="###" hide-details></v-text-field>
+                                        <v-text-field class="width-6"
+                                            v-model="group.quorum.changeReviewSharePercent"
+                                            suffix="%"
+                                            mask="###"
+                                            hide-details
+                                        ></v-text-field>
                                     </div>
                                     <div class="col-grow c-ml-8">Change research review share percent</div>
                                 </div>
 
                                 <div class="row align-items-end">
                                     <div>
-                                        <v-text-field class="width-6 minus-top-margin" suffix="%" mask="###" hide-details></v-text-field>
+                                        <v-text-field class="width-6 minus-top-margin"
+                                            v-model="group.quorum.rebalanceGroupTokens"
+                                            suffix="%"
+                                            mask="###"
+                                            hide-details
+                                        ></v-text-field>
                                     </div>
                                     <div class="col-grow c-ml-8">Rebalance research group tokens</div>
                                 </div>
@@ -114,6 +177,8 @@
 </template>
 
 <script>
+    import _ from "lodash";
+
     export default {
         name: "CreateResearchGroupQuorum",
         props: {
@@ -121,11 +186,18 @@
         },
         data() { 
             return {
+                isAdvanced: false,
+                totalQuorum: 50
             } 
         },
         computed: {
-            nextDisabled(){
-                return false;
+            nextDisabled() {
+                return _.some(this.group.quorum, el => {
+                    let value = parseInt(el);
+                    let isNumber = _.isFinite(value);
+
+                    return !isNumber || isNumber && (value > 100 || value < 5);
+                });
             }
         },
         methods: {
@@ -134,7 +206,22 @@
             },
             prevStep() {
                 this.$emit('decStep');
+            },
+
+            changeMode() {
+                this.isAdvanced = !this.isAdvanced;
+                this.onChangeTotalQuorum();
+            },
+            onChangeTotalQuorum() {
+                if (!this.isAdvanced) {
+                    _.keys(this.group.quorum).forEach(key => {
+                        this.group.quorum[key] = this.totalQuorum;
+                    });
+                }
             }
+        },
+        created() {
+            this.onChangeTotalQuorum();
         }
     };
 </script>

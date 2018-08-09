@@ -101,7 +101,21 @@
                     name: "",
                     permlink: "",
                     description: "",
-                    members: []
+                    members: [],
+                    
+                    quorum: {
+                        startResearch: 0,
+                        inviteMembers: 0,
+                        dropoutMembers: 0,
+                        sendFunds: 0,
+                        startResearchTokenSale: 0,
+                        rebalanceGroupTokens: 0,
+                        changeQuorum: 0,
+                        changeReviewSharePercent: 0,
+                        offerResearchTokens: 0,
+                        acceptResearchTokenOffer: 0,
+                        createMaterial: 0
+                    }
                 },
                 isLoading: false
             } 
@@ -131,21 +145,34 @@
             finish() {
                 const self = this;
                 this.isLoading = true;
-                const invitees = this.group.members.filter(m => m.account.name != this.user.username)
+
+                const invitees = this.group.members
+                    .filter(m => m.account.name != this.user.username)
                     .map(m => {
                         return { 
                             account: m.account.name, 
                             research_group_tokens_in_percent: m.stake * this.DEIP_1_PERCENT, 
                             cover_letter: "" 
                         }
-                    })
+                    });
+
+                const maxProposalPercent = _(this.group.quorum).values().maxBy(item => parseInt(item));
+                const proposalQuorums = _.keys(this.group.quorum).map((item, i) => {
+                    // as a result we should get array of arrays [proposalType, percents], `i` almost matches proposalType
+                    return [
+                        i + 1,
+                        parseInt(this.group.quorum[item]) * this.DEIP_1_PERCENT
+                    ]
+                });
+
                 deipRpc.broadcast.createResearchGroupAsync(
                     this.user.privKey,
                     this.user.username,
                     this.group.name,
                     this.group.permlink,
                     this.group.description,
-                    600,
+                    parseInt( maxProposalPercent ) * this.DEIP_1_PERCENT,
+                    proposalQuorums,
                     false,
                     invitees
                 ).then(() => {
@@ -160,8 +187,7 @@
                             name: 'ResearchGroupDetails',
                             params: { research_group_permlink: this.group.permlink }
                         }); 
-                    }, 1500)
-
+                    }, 1500);
                 }, (err) => {
                     this.isLoading = false;
                     this.$store.dispatch('layout/setError', {
