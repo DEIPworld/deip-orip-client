@@ -17,6 +17,14 @@
                     :loading="isUsernameChecking"
                 ></v-text-field>
 
+                <v-text-field label="Amount, DEIP Tokens" 
+                    v-model="form.amount"
+                    :rules="[
+                        rules.required,
+                        rules.amount
+                    ]"
+                ></v-text-field>
+
                 <v-text-field
                     label="Memo - optional" 
                     multi-line
@@ -26,14 +34,6 @@
                     v-model="form.memo"
                     :rules="[
                         rules.memo
-                    ]"
-                ></v-text-field>
-
-                <v-text-field label="Amount, DEIP Tokens" 
-                    v-model="form.amount"
-                    :rules="[
-                        rules.required,
-                        rules.amount
                     ]"
                 ></v-text-field>
 
