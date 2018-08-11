@@ -79,7 +79,7 @@
             </div>
         </div>
 
-        <handle-join-request-dialog
+        <handle-join-request-dialog v-if="group"
             :is-open="options.isHandleRequestDialogOpen"
             :join-request="selectedJoinRequest"
             :group-id="group.id"

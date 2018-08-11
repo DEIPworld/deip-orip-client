@@ -41,7 +41,7 @@
                                     :disabled="isApprovingDisabled || isApprovingLoading"
                                     :loading="isApprovingLoading"
                                     @click="sendProposal()"
-                                >Approver and create proposal</v-btn>
+                                >Approve and create proposal</v-btn>
 
                                 <v-btn color="error" flat
                                     @click="denyJoinRequest()"
@@ -62,6 +62,7 @@
     import deipRpc from '@deip/deip-rpc-client';
     import { mapGetters } from 'vuex';
     import * as proposalService from './../../../services/ProposalService';
+    import { signOperation } from './../../../utils/blockchain';
     import joinRequestsService from './../../../services/joinRequests'
     import { getEnrichedProfiles } from './../../../utils/user';
 
@@ -100,72 +101,43 @@
             },
 
             sendProposal() {
-                const self = this;
-                const update = Object.assign({}, self.joinRequest, { status: 'Approved' });
+                const update = Object.assign({}, this.joinRequest, { status: 'Approved' });
                 const amount = parseInt(this.tokensAmount) * this.DEIP_1_PERCENT
+
+                const proposal = proposalService.getStringifiedProposalData(
+                    proposalService.types.INVITE_MEMBER, [
+                    this.groupId,
+                    this.joinRequest.username,
+                    amount
+                ]);
+
+                const operation = ["create_proposal", {
+                    creator: this.user.username,
+                    research_group_id: this.groupId,
+                    data: proposal,
+                    action: proposalService.types.INVITE_MEMBER,
+                    expiration_time: new Date( new Date().getTime() + 2 * 24 * 60 * 60 * 1000 )
+                }];
+
                 this.isApprovingLoading = true;
-
-                deipRpc.api.getDynamicGlobalProperties(function(err, result) {
-                    if (!err) {
-                        const BlockNum = (result.last_irreversible_block_num - 1) & 0xFFFF;
-                        deipRpc.api.getBlockHeader(result.last_irreversible_block_num, function(e, res) {
-                            const BlockPrefix = new Buffer(res.previous, 'hex').readUInt32LE(4);
-                            const now = new Date().getTime() + 3e6;
-                            const expire = new Date(now).toISOString().split('.')[0];
-
-                            let proposal = proposalService.getStringifiedProposalData(
-                                proposalService.types.INVITE_MEMBER, [
-                                self.groupId,
-                                self.joinRequest.username,
-                                amount
-                            ]);
-
-                            const operation = ["create_proposal", {
-                                creator: self.user.username,
-                                research_group_id: self.groupId,
-                                data: proposal,
-                                action: proposalService.types.INVITE_MEMBER,
-                                expiration_time: new Date( new Date().getTime() + 2 * 24 * 60 * 60 * 1000 )
-                            }];
-
-                            const unsignedTX = {
-                                'expiration': expire,
-                                'extensions': [],
-                                'operations': [operation],
-                                'ref_block_num': BlockNum,
-                                'ref_block_prefix': BlockPrefix
-                            };
-
-                            try {
-                                const signedTX = deipRpc.auth.signTransaction(unsignedTX, {
-                                    "owner":  self.user.privKey
-                                })
-
-                                joinRequestsService.updateJoinRequest({request: update, tx: signedTX})
-                                    .then((updatedRequest) => {
-                                            self.$store.dispatch('researchGroup/loadJoinRequests', { groupId: self.groupId });
-                                            self.$store.dispatch('researchGroup/loadResearchGroupProposals', { groupId: self.groupId });
-                                            self.$store.dispatch('layout/setSuccess', { message: `Invite proposal for "${self.joinRequest.username}" has been created successfully !`});
-
-                                            setTimeout(() => self.close(), 500);
-                                        },
-                                        (err) => {
-                                            self.$store.dispatch('layout/setError', { message: "An error occurred while approving join request, please try again later" });
-                                            console.log(err)
-                                        }
-                                    )
-                                    .finally(() => {
-                                        self.isApprovingLoading = false;
-                                    })
-
-                            } catch (err) {
-                                self.isApprovingLoading = false;
-                                self.$store.dispatch('layout/setError', { message: "An error occurred while approving join request, please try again later"});
-                                console.log(err);
-                            }
-                        });
-                    }
-                });
+                signOperation(operation, this.user.privKey)
+                    .then((signedTX) => {
+                        joinRequestsService.updateJoinRequest({request: update, tx: signedTX})
+                            .then((updatedRequest) => {
+                                debugger;
+                                this.$store.dispatch('researchGroup/loadJoinRequests', { groupId: this.groupId });
+                                this.$store.dispatch('researchGroup/loadResearchGroupProposals', { groupId: this.groupId });
+                                this.$store.dispatch('layout/setSuccess', { message: `Invite proposal for "${this.joinRequest.username}" has been created successfully !`});
+                                
+                            }, (err) => {
+                                this.$store.dispatch('layout/setError', { message: "An error occurred while approving join request, please try again later" });
+                                console.log(err)
+                            })
+                            .finally(() => {
+                                this.isApprovingLoading = false;
+                                this.close();
+                            })
+                    })
             },
 
             denyJoinRequest() {
