@@ -97,7 +97,6 @@
 <script>
     import _ from 'lodash';
     import deipRpc from '@deip/deip-rpc-client';
-    import config from './../../../config'
     import {getAccessToken} from './../../../utils/auth'
     import { mapGetters } from 'vuex';
     import * as proposalService from './../../../services/ProposalService';
@@ -139,7 +138,7 @@
             },
             dropzoneOptions() {
                 return this.research != null ? {
-                        url: `${config['deip-server-url']}/api/files/upload-content`,
+                        url: `${process.env.DEIP_SERVER_URL}/api/files/upload-content`,
                         paramName: "research-content",
                         headers: {
                             "Research-Id": this.research.id.toString(),

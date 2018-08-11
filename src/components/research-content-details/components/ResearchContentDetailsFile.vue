@@ -12,7 +12,6 @@
 <script>
     import { mapGetters } from 'vuex';
     import axios from 'axios'
-    import config from './../../../config'
 
     export default {
         name: "ResearchContentDetailsFile",
@@ -22,7 +21,7 @@
             return {
                 isLoadingResearchContentPage: false,
                 isLoadingResearchContentDetails: false,
-                fileStorageBaseUrl: config['deip-server-url'],
+                fileStorageBaseUrl: process.env.DEIP_SERVER_URL,
             }
         },
         computed: {

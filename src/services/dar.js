@@ -1,6 +1,5 @@
 import http from './base/http'
-import config from './../../src/config'
-const apiUrl = config['deip-server-url'];
+const apiUrl = process.env.DEIP_SERVER_URL;
 
 
 const service = {

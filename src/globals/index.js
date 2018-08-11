@@ -1,7 +1,6 @@
 // global funcs and constants
 
 import Vue from 'vue'
-import config from './../config'
 
 // regarding with DEIP PERCENTS
 Vue.prototype.PERCENT_QUANTITY_REGEX = /^(?:0|(?:[1-9]\d*))(?:\.\d{1,2})?$/;
@@ -14,9 +13,9 @@ Vue.prototype.toDeipPercent = amount => parseFloat(amount) * 100;
 Vue.prototype.ASSET_QUANTITY_REGEX = /^(?:0|(?:[1-9]\d*))(?:\.\d{1,3})?$/;
 Vue.prototype.toAssetUnits = amount => {
     let value = parseFloat(amount).toFixed(3);
-    return `${value} ${config['asset-unit']}`;
+    return `${value} ${process.env.ASSET_UNIT}`;
 };
 Vue.prototype.fromAssetsToFloat = assets => parseFloat(assets.split(' ')[0]);
 
 // from config
-Vue.prototype.fileStorageBaseUrl = config['deip-server-url'];
+Vue.prototype.fileStorageBaseUrl = process.env.DEIP_SERVER_URL;

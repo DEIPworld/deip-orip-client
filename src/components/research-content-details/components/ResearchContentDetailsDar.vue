@@ -24,7 +24,6 @@
     import DeipTextureEditorApp from './../../../texture/DeipTextureEditorApp'
     import { getQueryStringParam, substanceGlobals, platform } from 'substance'
     import TextureArticleAPI from '@deip/substance-texture/src/article/TextureArticleAPI'
-    import config from './../../../config'
 
     import { getAccessToken, getDecodedToken } from './../../../utils/auth'
     import deipRpc from '@deip/deip-rpc-client'
@@ -37,7 +36,7 @@
         },
         data() { 
             return {
-                fileStorageBaseUrl: config['deip-server-url'],
+                fileStorageBaseUrl: process.env.DEIP_SERVER_URL,
                 isDarContent: false
             } 
         },

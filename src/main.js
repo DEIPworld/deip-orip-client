@@ -10,7 +10,6 @@ import 'vuetify/dist/vuetify.css';
 import './styles/common.less';
 import 'vue2-dropzone/dist/vue2Dropzone.css';
 
-import config from './config';
 import deipRpc from '@deip/deip-rpc-client';
 import './index';
 import './globals/index';
@@ -23,8 +22,8 @@ Vue.use(Vuetify, {
 
 Vue.config.productionTip = false;
 
-deipRpc.api.setOptions({ url: config['deip-full-node-url'] });
-deipRpc.config.set('chain_id', config['chain-id']);
+deipRpc.api.setOptions({ url: process.env.DEIP_FULL_NODE_URL });
+deipRpc.config.set('chain_id', process.env.CHAIN_ID);
 
 /* eslint-disable no-new */
 new Vue({

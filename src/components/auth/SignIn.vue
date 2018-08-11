@@ -48,7 +48,6 @@
     import crypto from '@deip/lib-crypto'
     import authService from './../../services/auth'
     import {decodedToken, clearAccessToken, setAccessToken} from './../../utils/auth'
-    import config from './../../config'
 
     export default {
         name: 'SignIn',
@@ -82,7 +81,7 @@
                     }
 
                     // sig-seed should be uint8 array with length = 32
-                    const secretSig = secretKey.sign(encodeUint8Arr(config["sig-seed"]).buffer);
+                    const secretSig = secretKey.sign(encodeUint8Arr(process.env.SIG_SEED).buffer);
                     const secretSigHex = crypto.hexify(secretSig);
                     
                     authService.signIn({username: this.username, secretSigHex: secretSigHex})

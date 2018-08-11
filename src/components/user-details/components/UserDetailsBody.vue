@@ -256,7 +256,6 @@
     import { mapGetters } from 'vuex';
     import usersService from './../../../services/users'
     import vueDropzone from 'vue2-dropzone';
-    import config from './../../../config'
     import {getAccessToken} from './../../../utils/auth'
 
     export default {
@@ -282,7 +281,7 @@
                 avatarUploadIsShown: false,
 
                 accountName: this.$route.params.account_name,
-                fileStorageBaseUrl: config['deip-server-url']
+                fileStorageBaseUrl: process.env.DEIP_SERVER_URL
             }
         },
         computed: {
@@ -327,7 +326,7 @@
             },
             dropzoneOptions() {
                 return this.currentUser != null ? {
-                        url: `${config['deip-server-url']}/api/files/upload-avatar`,
+                        url: `${process.env.DEIP_SERVER_URL}/api/files/upload-avatar`,
                         paramName: "user-avatar",
                         headers: {
                             "username": this.currentUser.username.toString(),

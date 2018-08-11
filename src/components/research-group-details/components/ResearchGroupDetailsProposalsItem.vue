@@ -156,7 +156,6 @@
     import * as researchService from "./../../../services/ResearchService";
     import _ from 'lodash';
     import deipRpc from '@deip/deip-rpc-client';
-    import config from './../../../config.json';
 
     export default {
         name: "ResearchGroupDetailsProposalsItem",
@@ -201,7 +200,7 @@
                 let parts = proposal.data.content.split(':');
 
                 return parts[0] === 'file'
-                    ? `${config['deip-server-url']}/public/files/research/${proposal.data.research_id}/${parts[1]}`
+                    ? `${process.env.DEIP_SERVER_URL}/public/files/research/${proposal.data.research_id}/${parts[1]}`
                     : undefined;
             }
         },

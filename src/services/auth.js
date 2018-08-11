@@ -1,9 +1,6 @@
 import http from './base/http'
-import config from './../../src/config'
-
-const registrationCommitteeUrl = config['deip-foundation-url'];
-const authorizationUrl = config['deip-server-url'];
-
+const registrationCommitteeUrl = process.env.DEIP_FOUNDATION_URL;
+const authorizationUrl = process.env.DEIP_SERVER_URL;
 
 const service = {
 
@@ -11,6 +8,7 @@ const service = {
         return http.post('/sign-in/', model, { baseURL: `${authorizationUrl}/auth/` });
     },
     signUp: function(model) {
+        console.log(process.env.NODE_ENV);
         return http.post('/preliminary-registration', model, { baseURL: `${registrationCommitteeUrl}/api` });
     }
 }

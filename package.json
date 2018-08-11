@@ -16,6 +16,7 @@
         "@vue/web-component-wrapper": "^1.2.0",
         "@xkeshi/vue-qrcode": "^1.0.0",
         "axios": "^0.18.0",
+        "dotenv-webpack": "^1.5.7",
         "jwt-decode": "^2.2.0",
         "moment": "^2.22.1",
         "substance": "^1.0.0-preview.66",

@@ -1,5 +1,4 @@
 import Vue from 'vue'
-import config from './../../../config'
 import moment from 'moment';
 
 Vue.filter('fullname', function (enrichedProfile) {
@@ -21,7 +20,7 @@ Vue.filter('employmentOrEducation', function (enrichedProfile) {
 });
 
 Vue.filter('avatarSrc', function (avatar, width, height, noCache ) {
-    return `${config['deip-server-url']}/public/files/avatars/${avatar}?width=${width}&height=${height}&noCache=${noCache}`
+    return `${process.env.DEIP_SERVER_URL}/public/files/avatars/${avatar}?width=${width}&height=${height}&noCache=${noCache}`
 });
 
 Vue.filter('dateFormat', (value, format) => {

@@ -25,7 +25,6 @@
 <script>
     import { mapGetters } from 'vuex'
     import deipRpc from '@deip/deip-rpc-client'
-    import config from './../../config'
 
     export default {
         name: "ResearchContentDetails",
