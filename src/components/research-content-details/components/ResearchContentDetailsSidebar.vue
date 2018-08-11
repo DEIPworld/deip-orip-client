@@ -205,62 +205,57 @@
         methods: {
             saveDraft() {
                 const texture = this.$store.getters['rcd/texture'];
-                texture.save();
-                this.$store.dispatch('layout/setSuccess', {
-                    message: "Draft Saved !"
-                });
+                texture.save()
+                    .then(() => {
+                        this.$store.dispatch('layout/setSuccess', {
+                            message: "Draft Saved !"
+                        });
+                    });
             },
 
             sendContentProposal() {
-                const self = this;
                 const texture = this.$store.getters['rcd/texture'];
-                texture.save();
+                this.proposeContent.isLoading = true;
+                texture.save()
+                    .then(() => {
+                        return darService.getDraftMeta(this.$route.query.darRef)
+                    })
+                    .then((res) => {
+                        console.log(res);
+                        const hash = res.hash;
+                        const title = res.title;
+                        const permlink = title.replace(/ /g, "-").replace(/_/g, "-").toLowerCase();
+                        const content = `dar:${hash}`
+                        const type = this.proposeContent.type;
+                        const authors = this.proposeContent.authors.map(a => a.account.name);
 
-                self.proposeContent.isLoading = true;
-                setTimeout(() => {
-                    // wait for saving
-                    darService.getDraftMeta(self.$route.query.darRef)
-                        .then((res) => {
-                            console.log(res);
-                            const hash = res.hash;
-                            const title = res.title;
-                            const permlink = title.replace(/ /g, "-").replace(/_/g, "-").toLowerCase();
-                            const content = `dar:${hash}`
-                            const type = this.proposeContent.type;
-                            const authors = this.proposeContent.authors.map(a => a.account.name);
+                        const proposal = proposalService.getStringifiedProposalData(
+                                proposalService.types.CREATE_RESEARCH_MATERIAL, [
+                                this.research.id, type, title, permlink, 
+                                content, authors, [], []
+                            ]);
 
-                            const proposal = 
-                                proposalService.getStringifiedProposalData(
-                                    proposalService.types.CREATE_RESEARCH_MATERIAL, [
-                                    self.research.id, type, title, permlink, 
-                                    content, authors, [], []
-                                ]);
-
-                            return deipRpc.broadcast.createProposalAsync(self.user.privKey, self.user.username,  self.research.research_group_id, 
+                        return deipRpc.broadcast.createProposalAsync(this.user.privKey, this.user.username,  this.research.research_group_id, 
 					            proposal, proposalService.types.CREATE_RESEARCH_MATERIAL, new Date(new Date().getTime() + 2 * 24 * 60 * 60 * 1000 ))
                         })
                         .then(() => {
-                                self.$store.dispatch('layout/setSuccess', {
-                                    message: "New Content Proposal has been created successfuly!"
-                                });
-                                setTimeout(() => {
-                                    self.$router.push({ 
-                                        name: 'ResearchGroupDetails',
-                                        params: { research_group_permlink: self.$route.params.research_group_permlink  }
-                                    }); 
-                                }, 1500);
-
-                            }, (err) => {
-                                self.$store.dispatch('layout/setError', {
-                                    message: "An error occurred while creating proposal, please try again later"
+                            this.$store.dispatch('layout/setSuccess', {
+                                message: "New Content Proposal has been created successfuly!"
+                            });
+                            this.$router.push({ 
+                                name: 'ResearchGroupDetails',
+                                params: { research_group_permlink: this.$route.params.research_group_permlink  }
+                            });
+                        }, (err) => {
+                            this.$store.dispatch('layout/setError', {
+                                message: "An error occurred while creating proposal, please try again later"
                             });
                             console.log(err) 
-                         })
+                        })
                         .finally(() => {
-                            self.proposeContent.isOpen = false;
-                            self.proposeContent.isLoading = false;
+                            this.proposeContent.isOpen = false;
+                            this.proposeContent.isLoading = false;
                         });
-                }, 5000)
             },
 
             userHasExpertise(discipline) {
@@ -285,10 +280,8 @@
                 } catch(err) {
                     title = "";
                 }
-
                 this.proposeContent.title = title;
                 this.proposeContent.isOpen = true;
-
             },
 
             closeContentProposalDialog() {

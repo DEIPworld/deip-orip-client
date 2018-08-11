@@ -40,7 +40,7 @@ export default class DeipTextureEditorApp extends TextureWebApp {
   }
 
   save() {
-    this._save();
+    return this._save();
   }
 
 }
