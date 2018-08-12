@@ -1,9 +1,7 @@
 import deipRpc from '@deip/deip-rpc-client';
 
-
-
 export function signOperation(operation, ownerKey) {
-    
+
     return new Promise((resolve, reject) => {
         deipRpc.api.getDynamicGlobalProperties(function(err, result) {
             if (!err) {

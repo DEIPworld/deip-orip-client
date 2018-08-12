@@ -95,15 +95,16 @@ const actions = {
             commit('SET_RESEARCH_CONTENT_DAR_REF', darRef)
             deipRpc.api.getResearchByAbsolutePermlinkAsync(group_permlink, research_permlink)
                 .then((research) => {
-                    // const contentVotesLoad = new Promise((resolve, reject) => {
-                    //     dispatch('loadResearchContentVotes', { researchId: research.id, notify: resolve })
-                    // });
+
+                    const darRefLoad = darRef ? new Promise((resolve, reject) => {
+                        dispatch('loadResearchContentDarRef', { hashOrId: darRef, notify: resolve })
+                    }) : Promise.resolve();
 
                     const researchDetailsLoad = new Promise((resolve, reject) => {
                         dispatch('loadResearchDetails', { group_permlink, research_permlink, notify: resolve })
                     });
 
-                    return Promise.all([researchDetailsLoad])
+                    return Promise.all([researchDetailsLoad, darRefLoad])
                 })
                 .finally(() => {
                     commit('SET_RESEARCH_CONTENT_PAGE_LOADING_STATE', false)
@@ -116,7 +117,7 @@ const actions = {
                     commit('SET_RESEARCH_CONTENT_DETAILS', content)
 
                     const darRefLoad = content.content.slice(0, 4) === 'dar:' ? new Promise((resolve, reject) => {
-                        dispatch('loadResearchContentDarRef', {hashOrId: content.content.slice(4), notify: resolve })
+                        dispatch('loadResearchContentDarRef', { hashOrId: content.content.slice(4), notify: resolve })
                     }) : Promise.resolve();
 
                     const researchDetailsLoad = new Promise((resolve, reject) => {
@@ -185,11 +186,9 @@ const actions = {
     },
 
     loadResearchContentDarRef({ state, commit, dispatch }, { hashOrId, notify }) {
-        debugger;
         darService.getDraftMeta(hashOrId)
             .then((res) => {
-                debugger;
-                commit('SET_RESEARCH_CONTENT_DAR_REF', res._id)
+                commit('SET_RESEARCH_CONTENT_DAR_REF', res)
             }, (err) => {console.log(err)})
             .finally(() => {
                 commit('SET_RESEARCH_DETAILS_LOADING_STATE', false)

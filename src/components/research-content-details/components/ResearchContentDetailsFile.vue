@@ -32,7 +32,6 @@
                 research: 'rcd/research'
             }),
             isResearchGroupMember() {
-                debugger;
                 return this.research != null 
                     ? this.$store.getters['auth/userIsResearchGroupMember'](this.research.research_group_id) 
                     : false

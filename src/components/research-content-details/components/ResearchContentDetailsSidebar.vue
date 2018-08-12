@@ -52,7 +52,9 @@
 
         <!-- ### START Draft Actions Section ### -->
         <div v-if="isLoadingResearchContentPage === false 
-                    && !content && isResearchGroupMember" class="research-content-info-container">
+                    && !content 
+                    && isResearchGroupMember 
+                    && isInProgress" class="research-content-info-container">
             <div>
                 <div class="c-pb-6 text-align-center">
                     <v-btn @click="openContentProposalDialog()" color="primary" class="ma-0" block outline>Propose Content</v-btn>
@@ -60,6 +62,14 @@
                 <div class="c-pb-6 text-align-center">
                     <v-btn @click="saveDraft()" color="secondary" class="ma-0" block outline>Save Draft</v-btn>
                 </div>
+            </div>
+        </div>
+        <div v-if="isLoadingResearchContentPage === false 
+                    && !content 
+                    && isResearchGroupMember 
+                    && !isInProgress" class="research-content-info-container">
+            <div>
+                <p>Draft is proposed for content and locked for editing</p>
             </div>
         </div>
         <!-- ### END Draft Actions Section ### -->
@@ -155,6 +165,7 @@
     import deipRpc from '@deip/deip-rpc-client';
     import darService from './../../../services/dar'
     import * as proposalService from "./../../../services/ProposalService";
+    import { signOperation } from './../../../utils/blockchain';
 
     export default {
         name: "ResearchContentDetailsSidebar",
@@ -193,12 +204,16 @@
                 disciplinesList: 'rcd/disciplinesList',
                 totalVotesList: 'rcd/totalVotesList',
                 contentWeightByDiscipline: 'rcd/contentWeightByDiscipline',
-                isLoadingResearchContentPage: 'rcd/isLoadingResearchContentPage'
+                isLoadingResearchContentPage: 'rcd/isLoadingResearchContentPage',
+                darRef: 'rcd/darRef'
             }),
             isResearchGroupMember() {
                 return this.research != null 
                     ? this.$store.getters['auth/userIsResearchGroupMember'](this.research.research_group_id) 
                     : false
+            },
+            isInProgress() {
+                return this.darRef && this.darRef.status == 'in-progress';
             }
         },
 
@@ -235,27 +250,38 @@
                                 content, authors, [], []
                             ]);
 
-                        return deipRpc.broadcast.createProposalAsync(this.user.privKey, this.user.username,  this.research.research_group_id, 
-					            proposal, proposalService.types.CREATE_RESEARCH_MATERIAL, new Date(new Date().getTime() + 2 * 24 * 60 * 60 * 1000 ))
+                        const operation = ["create_proposal", {
+                                creator: this.user.username,
+                                research_group_id: this.research.research_group_id,
+                                data: proposal,
+                                action: proposalService.types.CREATE_RESEARCH_MATERIAL,
+                                expiration_time: new Date( new Date().getTime() + 2 * 24 * 60 * 60 * 1000 )
+                            }];
+
+                        return signOperation(operation, this.user.privKey)
+                            .then((signedTX) => {
+                                return darService.createDarContentProposal(res._id, signedTX)
+                            })
+                            .then((updatedRequest) => {
+                                this.$store.dispatch('layout/setSuccess', {
+                                    message: "New Content Proposal has been created successfuly!"
+                                });
+                                this.$router.push({ 
+                                    name: 'ResearchGroupDetails',
+                                    params: { research_group_permlink: this.$route.params.research_group_permlink  }
+                                });
+                            }, (err) => {
+                                console.log(err) 
+                                this.$store.dispatch('layout/setError', {
+                                    message: "An error occurred while creating proposal, please try again later"
+                                });
+                            })
+                            .finally(() => {
+                                this.proposeContent.isOpen = false;
+                                this.proposeContent.isLoading = false;
+                            })
                         })
-                        .then(() => {
-                            this.$store.dispatch('layout/setSuccess', {
-                                message: "New Content Proposal has been created successfuly!"
-                            });
-                            this.$router.push({ 
-                                name: 'ResearchGroupDetails',
-                                params: { research_group_permlink: this.$route.params.research_group_permlink  }
-                            });
-                        }, (err) => {
-                            this.$store.dispatch('layout/setError', {
-                                message: "An error occurred while creating proposal, please try again later"
-                            });
-                            console.log(err) 
-                        })
-                        .finally(() => {
-                            this.proposeContent.isOpen = false;
-                            this.proposeContent.isLoading = false;
-                        });
+
             },
 
             userHasExpertise(discipline) {

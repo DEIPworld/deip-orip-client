@@ -8,8 +8,7 @@
                 </research-content-details-file>
 
                 <research-content-details-dar 
-                    v-if="isLoadingResearchContentPage === false && darRef"
-                        :darRef="darRef" :isReadOnly="content != null">
+                    v-if="isLoadingResearchContentPage === false && darRef" :darRef="darRef">
                 </research-content-details-dar>
 
             </div>
@@ -65,7 +64,6 @@
                 content_permlink: this.$route.params.content_permlink,
                 darRef: this.$route.query.darRef
             }
-
             this.$store.dispatch('rcd/loadResearchContentDetails', permlinks);
         }
     };

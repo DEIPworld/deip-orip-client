@@ -31,8 +31,7 @@
     export default {
         name: "ResearchContentDetailsDar",
         props: {
-            darRef: { type: String },
-            isReadOnly: { type: Boolean }
+            darRef: { type: Object }
         },
         data() { 
             return {
@@ -72,9 +71,10 @@
                 .then((groups) => {
                     substanceGlobals.DEBUG_RENDERING = platform.devtools;
 
-                    // const isReadOnly = getQueryStringParam('readOnly') === 'true' || false;
-                    const isReadOnly = !groups.some(id => id == research.research_group_id);
-                    const archiveId = self.darRef
+                    const isReadOnly = 
+                        getQueryStringParam('isReadOnly') === 'true' || !groups.some(id => id == research.research_group_id);
+
+                    const archiveId = self.darRef._id;
                     const storageType = 'fs';
                     const storageUrl = `${self.fileStorageBaseUrl}/dar`;
 
@@ -82,11 +82,11 @@
                     const promise = new Promise((resolve, reject) => {
                     const headers = {
                         'Authorization': 'Bearer ' + getAccessToken(),
-                        'DarRef': getQueryStringParam('darRef')
+                        'DarRef': archiveId
                     };
                     const initPromise = { resolve, reject };
                     const params = { archiveId, storageType, storageUrl, initPromise, headers };
-                    const texture = self.isReadOnly
+                    const texture = isReadOnly
                         ? DeipTextureReaderApp.mount(params, container) 
                         : DeipTextureEditorApp.mount(params, container);
                     })

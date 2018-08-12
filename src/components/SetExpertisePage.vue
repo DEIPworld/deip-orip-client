@@ -139,7 +139,7 @@
 
             addExpertises() {
                 if(!this.selectedDisciplines.length || !this.selectedUser) return;
-debugger;
+
                 const disciplines = this.selectedDisciplines.map(d => { return {discipline_id: d.id, amount: d.amount}});
                 deipRpc.broadcast.setExpertiseTokensAsync(
                     this.currentUser.privKey,
@@ -147,13 +147,9 @@ debugger;
                     this.selectedUser.account.name,
                     disciplines
                 ).then((data) => {
-                    debugger;
-
                     this.selectUser(this.selectedUser)
                     alert("success !")
                 },(err) => {
-                    debugger;
-
                     alert(err)
                 })
             }

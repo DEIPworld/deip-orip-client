@@ -17,6 +17,9 @@ const service = {
     },
     getDraftMeta(draftId) {
         return http.get(`/drafts/meta/${draftId}`, { baseURL: `${apiUrl}/dar/` });
+    },
+    createDarContentProposal(draftId, data) {
+        return http.post(`/propose/${draftId}`, data, { baseURL: `${apiUrl}/dar/` });
     }
 }
 
