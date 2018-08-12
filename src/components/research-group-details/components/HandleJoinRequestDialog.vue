@@ -122,19 +122,19 @@
                 this.isApprovingLoading = true;
                 signOperation(operation, this.user.privKey)
                     .then((signedTX) => {
-                        joinRequestsService.updateJoinRequest({request: update, tx: signedTX})
-                            .then((updatedRequest) => {
-                                this.$store.dispatch('researchGroup/loadJoinRequests', { groupId: this.groupId });
-                                this.$store.dispatch('researchGroup/loadResearchGroupProposals', { groupId: this.groupId });
-                                this.$store.dispatch('layout/setSuccess', { message: `Invite proposal for "${this.joinRequest.username}" has been created successfully !`});
-                            }, (err) => {
-                                this.$store.dispatch('layout/setError', { message: "An error occurred while approving join request, please try again later" });
-                                console.log(err)
-                            })
-                            .finally(() => {
-                                this.isApprovingLoading = false;
-                                this.close();
-                            })
+                        return joinRequestsService.updateJoinRequest({request: update, tx: signedTX})
+                    })
+                    .then((updatedRequest) => {
+                        this.$store.dispatch('researchGroup/loadJoinRequests', { groupId: this.groupId });
+                        this.$store.dispatch('researchGroup/loadResearchGroupProposals', { groupId: this.groupId });
+                        this.$store.dispatch('layout/setSuccess', { message: `Invite proposal for "${this.joinRequest.username}" has been created successfully !`});
+                    }, (err) => {
+                        this.$store.dispatch('layout/setError', { message: "An error occurred while approving join request, please try again later" });
+                        console.log(err)
+                    })
+                    .finally(() => {
+                        this.isApprovingLoading = false;
+                        this.close();
                     })
             },
 
