@@ -60,7 +60,10 @@
                     <v-btn @click="openContentProposalDialog()" color="primary" class="ma-0" block outline>Propose Content</v-btn>
                 </div>
                 <div class="c-pb-6 text-align-center">
-                    <v-btn @click="saveDraft()" color="secondary" class="ma-0" block outline>Save Draft</v-btn>
+                    <v-btn @click="saveDraft()" :loading="isSavingDraft" :disabled="isSavingDraft" 
+                        color="secondary" class="ma-0" block outline>
+                        Save Draft
+                    </v-btn>
                 </div>
             </div>
         </div>
@@ -142,7 +145,7 @@
                             <div class="display-flex c-pt-8">
                                 <v-btn color="primary" 
                                     class="c-m-auto"
-                                    :disabled="proposeContent.isDisabled || proposeContent.isLoading"
+                                    :disabled="proposeContent.isLoading"
                                     :loading="proposeContent.isLoading"
                                     @click="sendContentProposal()"
                                 >Create proposal</v-btn>
@@ -191,7 +194,9 @@
 
                     isOpen: false,
                     isLoading: false
-                }
+                },
+
+                isSavingDraft: false
             };
         },
         computed: {
@@ -219,12 +224,25 @@
 
         methods: {
             saveDraft() {
+                this.isSavingDraft = true;
                 const texture = this.$store.getters['rcd/texture'];
-                texture.save()
-                    .then(() => {
-                        this.$store.dispatch('layout/setSuccess', {
-                            message: "Draft Saved !"
-                        });
+
+                darService.getDraftMeta(this.$route.query.darRef)
+                    .then((draft) => {
+                        return draft.status == 'in-progress' ? 
+                            texture.save()
+                                .then(() => {
+                                    this.$store.dispatch('layout/setSuccess', {
+                                        message: "Draft Saved !"
+                                    });
+                                }) : Promise.resolve().then(() => {
+                                    this.$store.dispatch('layout/setError', {
+                                        message: "Draft is locked for editing !"
+                                    });
+                                })
+                    })
+                    .finally(() => {
+                        this.isSavingDraft = false;
                     });
             },
 
@@ -238,7 +256,7 @@
                     .then((res) => {
                         console.log(res);
                         const hash = res.hash;
-                        const title = res.title;
+                        const title = res.title || this.proposeContent.title;
                         const permlink = title.replace(/ /g, "-").replace(/_/g, "-").toLowerCase();
                         const content = `dar:${hash}`
                         const type = this.proposeContent.type;

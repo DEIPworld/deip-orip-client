@@ -113,7 +113,7 @@
                         <span class="bold">Draft {{index + 1}}</span>
                         <span class="deip-blue-color bold c-pl-4"> 
                             <router-link 
-                                :to="`/${research.group_permlink}/research/${research.permlink}/!draft?darRef=${draft._id}&isReadOnly=${draft.status != 'in-progress'}`" 
+                                :to="`/${research.group_permlink}/research/${research.permlink}/!draft?darRef=${draft._id}`" 
                                 style="text-decoration: none">{{draft.title || draft._id}}
                             </router-link>
                         </span>

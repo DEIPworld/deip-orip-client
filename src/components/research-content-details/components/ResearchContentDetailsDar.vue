@@ -72,8 +72,10 @@
                     substanceGlobals.DEBUG_RENDERING = platform.devtools;
 
                     const isReadOnly = 
-                        getQueryStringParam('isReadOnly') === 'true' || !groups.some(id => id == research.research_group_id);
-
+                        getQueryStringParam('isReadOnly') === 'true'
+                        || this.darRef.status != "in-progress"
+                        || !groups.some(id => id == research.research_group_id);
+                    
                     const archiveId = self.darRef._id;
                     const storageType = 'fs';
                     const storageUrl = `${self.fileStorageBaseUrl}/dar`;
