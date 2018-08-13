@@ -65,7 +65,7 @@
                                 <div class="row grey-border-stripe c-mt-4">
                                     <div class="pill width-7">
                                         <div class="white--text">SHA256</div>
-                                        <div class="grey--text">Signanure</div>
+                                        <div class="grey--text text--darken-3">Signanure</div>
                                     </div>
                                     <div class="col-grow pill-value">
                                         <div>01769bec491405adc5132be6a48caebd71c46553</div>
@@ -97,7 +97,7 @@
                                 <div class="row grey-border-stripe c-mt-4">
                                     <div class="pill width-7">
                                         <div class="white--text">SHA256</div>
-                                        <div class="grey--text">Signanure</div>
+                                        <div class="grey--text text--darken-3">Signanure</div>
                                     </div>
                                     <div class="col-grow pill-value">
                                         <div>01769bec491405adc5132be6a48caebd71c46553</div>
@@ -121,7 +121,7 @@
                                 <div class="row grey-border-stripe c-mt-4">
                                     <div class="pill width-7">
                                         <div class="white--text">SHA256</div>
-                                        <div class="grey--text">Signanure</div>
+                                        <div class="grey--text text--darken-3">Signanure</div>
                                     </div>
                                     <div class="col-grow pill-value">
                                         <div>01769bec491405adc5132be6a48caebd71c46553</div>
@@ -189,11 +189,11 @@
     @import '../../styles/colors.less';
 
     .grey-border-stripe {
-        border: 1px solid @grey-lighten-2;
+        border: 1px solid @grey-lighten-1;
         border-radius: 2px;
 
         .pill {
-            background-color: @grey-lighten-2;
+            background-color: @grey-lighten-1;
             padding: 4px 8px;
             text-align: center;
         }
