@@ -14,12 +14,33 @@
                 <v-btn icon large class="ma-0" slot="activator">
                     <v-badge color="amber darken-3" right overlap>
                         <v-icon size="32px" color="grey lighten-1">chat_bubble</v-icon>
-                        <span slot="badge">{{ user.notifications.proposals.length }}</span>
+                        <span slot="badge">{{ user.notifications.proposals.length + groupsInvites.length }}</span>
                     </v-badge>
                 </v-btn>
 
+                <!-- temporary solution for notifications. will be done well -->
                 <v-list class="hidden-last-child" v-show="user.notifications.proposals.length">
-                    <template v-for="(proposal, i) in user.notifications.proposals">
+                    <template v-for="invite in groupsInvites">
+                        <div class="c-pv-2 c-ph-4">
+                            <div>
+                                Group
+                                <router-link class="a" :to="{
+                                        name: 'ResearchGroupDetails', 
+                                        params: { research_group_permlink: invite.group.permlink }
+                                    }"
+                                >{{ invite.group.name }}</router-link>
+                                invites you to work in it<br>
+                                Please
+                                <router-link class="a" :to="{ name: 'UserDetails', params: { account_name: user.username }}">handle</router-link>
+                                the request
+                            </div>
+                            <!-- by design here should be info about time, but we have no data about it -->
+                        </div>
+
+                        <v-divider></v-divider>
+                    </template>
+
+                    <template v-for="proposal in user.notifications.proposals">
                         <div class="c-pv-2 c-ph-4">
                             <div>
                                 <router-link class="a"
@@ -83,7 +104,7 @@
                 </v-btn>
             </div>
             <v-toolbar-items v-if="!isLoggedIn()">
-                <!-- <v-btn flat to="/sign-in">Sign In</v-btn> -->
+                <v-btn flat to="/sign-in">Sign In</v-btn>
                 <v-btn flat to="/sign-up">Beta Registration</v-btn>
             </v-toolbar-items>
         </v-toolbar>
@@ -103,7 +124,8 @@
 
         computed: {
             ...mapGetters({
-                user: 'auth/user'
+                user: 'auth/user',
+                groupsInvites: 'userDetails/invites'
             })
         },
 
@@ -129,6 +151,7 @@
             '$route' (to, from) {
                 // loading notifications on every state change
                 this.$store.dispatch('auth/loadNotifications');
+                this.$store.dispatch('userDetails/loadUserInvites');
             }
         }
     }
