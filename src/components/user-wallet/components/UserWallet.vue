@@ -76,7 +76,9 @@
                                     </div>
 
                                     <div class="width-10 list-body-cell text-align-center">
-                                        <div class="half-bold headline">{{ account ? account.common_tokens_balance : 0 }}</div>
+                                        <div class="half-bold headline">
+                                            {{ commonTokenBalance }}
+                                        </div>
                                     </div>
 
                                     <div class="list-body-cell token-actions">
@@ -162,7 +164,7 @@
                             <common-token-convert-form
                                 v-else-if="account && sendingType === sendingTypes.deipCommon"
                                 :deip-token-balance="deipTokenBalance"
-                                :common-tokens-balance="account.common_tokens_balance"
+                                :common-tokens-balance="commonTokenBalance"
                                 @convertingTransactionWasApplied="loadUserAccount"
                             ></common-token-convert-form>
                             
@@ -211,7 +213,10 @@
                 user: 'auth/user'
             }),
             deipTokenBalance() {
-                return this.account ? this.fromAssetsToFloat(this.account.balance) : '';
+                return this.account ? this.fromAssetsToFloat(this.account.balance) : 0;
+            },
+            commonTokenBalance() {
+                return this.account ? this.toCommonTokens(this.account.common_tokens_balance) : 0;
             },
             selectedResearch() {
                 return _.find(this.researches, { id: this.selectedResearchId })

@@ -4,10 +4,10 @@
         <div class="row">
             <div class="pr-4 sort-label" v-for="(order, index) in orders" :key="index">
                 <research-feed-order-by-item
-                        :position="index"
-                        :order="order"
-                        :isSelected="currentOrderIdx === index" 
-                        @onSelect="updateFilter">
+                    :position="index"
+                    :order="order"
+                    :isSelected="currentOrderIdx === index" 
+                    @onSelect="updateFilter">
                 </research-feed-order-by-item>
             </div>
         </div>
@@ -20,19 +20,17 @@
         name: "ResearchFeedOrderBy",
         data() { 
             return {
-                currentOrderIdx : undefined,
+                currentOrderIdx : 0,
                 orders: [
                     {
                         default: 'asc',
-                        asc: { title: 'A-Z Title',  iteratee: ['title'], order: ['asc']},
-                        desc: { title: 'Z-A Title', iteratee: ['title'], order: ['desc']}
-                    },
-                    {
+                        asc: { title: 'Z-A Title',  iteratee: ['title'], order: ['asc']},
+                        desc: { title: 'A-Z Title', iteratee: ['title'], order: ['desc']}
+                    }, {
                         default: 'desc',
-                        asc: { title: 'A-Z Author', iteratee: (r) => r.authors.join().toLowerCase(), order: ['asc']},
-                        desc: { title: 'Z-A Author', iteratee: (r) => r.authors.join().toLowerCase(), order: ['desc']}
-                    },
-                    {
+                        asc: { title: 'Z-A Author', iteratee: (r) => r.authors.join().toLowerCase(), order: ['asc']},
+                        desc: { title: 'A-Z Author', iteratee: (r) => r.authors.join().toLowerCase(), order: ['desc']}
+                    }, {
                         default: 'desc',
                         asc: { title: 'Votes <', iteratee: ['total_votes'], order: ['asc']},
                         desc: { title: 'Votes >', iteratee: ['total_votes'], order: ['desc']},
@@ -45,6 +43,8 @@
                 this.currentOrderIdx = position;
                 this.$store.dispatch('feed/updateFilter', {key: 'orderBy', value: orderAscOrDesc})
             }
+        },
+        computed: {
         }
     };
 </script>

@@ -7,7 +7,8 @@
         <div class="content-column">
             <div class="filling">
                 <div class="row-nowrap">
-                    <div v-if="filter.disciplines.length" class="filter-title subheading grey--text">Discipline</div>
+                    <div :class="{ 'invisible': !filter.disciplines.length }" class="filter-title subheading grey--text">My choise</div>
+
                     <div class="row col-grow align-center">
                         <div class="c-pr-4 display-flex" v-if="filter.q !== ''">
                             <span>{{ filter.q }}</span>
@@ -15,6 +16,7 @@
                                 <v-icon>close</v-icon>
                             </span>
                         </div>
+
                         <div v-for="discipline in filter.disciplines" class="c-pr-4 display-flex">
                             <span>{{ discipline.label }}</span>
                             <span v-if="!hasSelectedChildDiscipline(discipline)" class="small-remove-btn ml-1" 

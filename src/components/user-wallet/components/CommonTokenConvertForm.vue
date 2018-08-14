@@ -7,18 +7,19 @@
         <div class="c-p-4">
             <v-form ref="form" @submit.prevent>
                 <div class="c-pb-4">
-                    <div v-if="isDeipToCommonMode">1 DEIP Token = 1000 DEIP Commons</div>
-                    <div v-else>1 DEIP Common = 0.001 DEIP Tokens</div>
+                    <div v-if="isDeipToCommonMode">1 DEIP Token = 1 DEIP Commons</div>
+                    <div v-else>1 DEIP Common = 1 DEIP Tokens</div>
                 </div>
 
                 <v-text-field ref="amount"
-                    :label="isDeipToCommonMode ? 'Amount, DEIP Token' : 'Amount, DEIP Common'" 
+                    label="Amount" 
                     v-model="amount"
                     :rules="[
                         rules.required,
                         isDeipToCommonMode ? rules.deipTokenAmount : rules.deipCommonAmount
                     ]"
                     :hint="amountInputHint"
+                    :suffix="isDeipToCommonMode ? 'DEIP' : 'COMMON'"
                     persistent-hint
                 ></v-text-field>
 
@@ -101,11 +102,11 @@
                         }
                     },
                     deipCommonAmount: value => {
-                        if (value.match(/^\d+$/) === null) {
+                        if (value.match(this.COMMON_TOKEN_QUANTITY_REGEX) === null) {
                             return "Incorrect format";
                         }
 
-                        let number = parseInt(value);
+                        let number = parseFloat(value);
 
                         if (number === 0) {
                             return 'Amount should be greater than zero';
@@ -137,7 +138,9 @@
                         promise = deipRpc.broadcast.withdrawCommonTokensAsync(
                             this.user.privKey,
                             this.user.username,
-                            parseInt(this.amount)
+                            this.fromCommonTokensToAmount(
+                                parseFloat(this.amount)
+                            )
                         );
                     }
 
@@ -176,17 +179,9 @@
                 this.amount; // hack to trigger recounting of computed property when variable is wrapped by 'if'
 
                 if (!_.isEmpty(this.$refs) && this.$refs.amount.valid) {
-                    if (this.isDeipToCommonMode) {
-                        let deipTokens = parseFloat(this.amount);
-                        let commonTokens = deipTokens * 1000;
-
-                        res = `${deipTokens} Deip Tokens = ${commonTokens} Deip Commons`;
-                    } else {
-                        let commonTokens = parseInt(this.amount);
-                        let deipTokens = this.amount / 1000;
-
-                        res = `${commonTokens} Deip Commons = ${deipTokens} Deip Tokens`;
-                    }
+                    res = this.isDeipToCommonMode 
+                        ? `${this.amount} Deip Tokens = ${this.amount} Deip Commons`
+                        : `${this.amount} Deip Commons = ${this.amount} Deip Tokens`;
                 }
 
                 return res;

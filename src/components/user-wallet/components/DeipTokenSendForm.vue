@@ -17,12 +17,13 @@
                     :loading="isUsernameChecking"
                 ></v-text-field>
 
-                <v-text-field label="Amount, DEIP Tokens" 
+                <v-text-field label="Amount" 
                     v-model="form.amount"
                     :rules="[
                         rules.required,
                         rules.amount
                     ]"
+                    :suffix="'DEIP'"
                 ></v-text-field>
 
                 <v-text-field

@@ -17,5 +17,10 @@ Vue.prototype.toAssetUnits = amount => {
 };
 Vue.prototype.fromAssetsToFloat = assets => parseFloat(assets.split(' ')[0]);
 
+// regarding with DEIP Common
+Vue.prototype.COMMON_TOKEN_QUANTITY_REGEX = /^(?:0|(?:[1-9]\d*))(?:\.\d{1,3})?$/;
+Vue.prototype.toCommonTokens = amount => parseFloat(amount / 1000);
+Vue.prototype.fromCommonTokensToAmount = common => common * 1000;
+
 // from config
 Vue.prototype.fileStorageBaseUrl = process.env.DEIP_SERVER_URL;
