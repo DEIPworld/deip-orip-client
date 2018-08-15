@@ -9,7 +9,8 @@
                         <div class="subheading c-pv-4">Distribute shares of this group which will...</div>
 
                         <div class="row-nowrap justify-between align-center c-pt-4" 
-                            v-for="(member, i) in group.members" :key="i">
+                            v-for="(member, i) in group.members" :key="i"
+                        >
                             <div>
                                 <v-avatar size="30px">
                                     <img v-if="member.profile" v-bind:src="member.profile.avatar | avatarSrc(30, 30, false)" />
@@ -17,6 +18,7 @@
                                 </v-avatar>
                                 <router-link :to="'/user-details' + member.account.name" class="a c-pl-3">{{ member | fullname }}</router-link>
                             </div>
+
                             <div>
                                 <v-text-field class="width-4 pa-0 rtl"
                                     suffix="%" 
@@ -26,6 +28,7 @@
                                 ></v-text-field>
                             </div>
                         </div>
+
                         <div class="text-align-right c-pt-4">
                             <div class="caption grey--text">
                                 <div>Total:</div>
@@ -41,7 +44,8 @@
             <v-btn flat small @click.native="prevStep()">
                 <v-icon dark class="pr-1">keyboard_arrow_left</v-icon> Back
             </v-btn>
-            <v-btn color="primary" :loading="isLoading" @click.native="finish()" :disabled="sum !== 100">
+
+            <v-btn color="primary" :loading="isLoading" @click.native="finish()" :disabled="sum !== 100 || isLoading">
                 Create group
             </v-btn>
         </div>

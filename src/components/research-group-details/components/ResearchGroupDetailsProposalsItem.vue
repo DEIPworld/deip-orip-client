@@ -50,11 +50,11 @@
                 </div>
 
                 <div class="date">
-                    <div class="caption">{{ proposal.creation_time | dateFormat("D MMM, YYYY") }}</div>
+                    <div class="caption">{{ proposal.creation_time | dateFormat("D MMM YYYY", true) }}</div>
                 </div>
 
                 <div class="date">
-                    <div class="caption">{{ proposal.expiration_time | dateFormat("D MMM, YYYY") }}</div>
+                    <div class="caption">{{ proposal.expiration_time | dateFormat("D MMM YYYY", true) }}</div>
                 </div>
 
                 <div class="created-by">
@@ -122,11 +122,11 @@
                             <div class="width-11 c-mr-10">
                                 <div>
                                     Start Date:
-                                    <span class="bold right">{{ proposal.data.start_time | dateFormat("HH:mm DD MMM, YYYY") }}</span>
+                                    <span class="bold right">{{ proposal.data.start_time | dateFormat("HH:mm DD MMM YYYY", true) }}</span>
                                 </div>
                                 <div>
                                     End Date: 
-                                    <span class="bold right">{{ proposal.data.end_time | dateFormat("HH:mm DD MMM, YYYY") }}</span>
+                                    <span class="bold right">{{ proposal.data.end_time | dateFormat("HH:mm DD MMM YYYY", true) }}</span>
                                 </div>
                             </div>
                         </div>

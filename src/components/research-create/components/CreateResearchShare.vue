@@ -55,8 +55,9 @@
         },
         computed: {
             nextDisabled() {
-                return !this.research.review_share_in_percent || 
-                       !(this.research.review_share_in_percent > 0 && this.research.review_share_in_percent <= 50);
+                return !this.research.review_share_in_percent
+                    || !(this.research.review_share_in_percent > 0 && this.research.review_share_in_percent <= 50)
+                    || this.isLoading;
             }
         },
         methods: {

@@ -23,6 +23,8 @@ Vue.filter('avatarSrc', function (avatar, width, height, noCache ) {
     return `${process.env.DEIP_SERVER_URL}/public/files/avatars/${avatar}?width=${width}&height=${height}&noCache=${noCache}`
 });
 
-Vue.filter('dateFormat', (value, format) => {
-    return moment(value).format(format);
+Vue.filter('dateFormat', (value, format, fromUtcToLocal = false) => {
+    return !fromUtcToLocal 
+        ? moment(value).format(format)
+        : moment.utc(value).local().format(format);
 });
