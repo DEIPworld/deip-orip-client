@@ -151,7 +151,7 @@
             '$route' (to, from) {
                 // loading notifications on every state change
                 this.$store.dispatch('auth/loadNotifications');
-                this.$store.dispatch('userDetails/loadUserInvites');
+                this.$store.dispatch('userDetails/loadUserInvites', { username: this.user.username });
             }
         }
     }
