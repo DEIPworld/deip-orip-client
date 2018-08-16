@@ -48,6 +48,17 @@
                     :loading="isUsernameChecking"
                 ></v-text-field>
 
+                <div class="c-pv-4 text-align-justify">
+                    Decentralized research platform “DEIP” will use the information you provide on this form to add you to 
+                    the list of private beta participants. As soon as you finish the registration (add all the required 
+                    information, generate and save the private key, and press the “Finish Registration” Button that appears 
+                    after you generate and save the key), you will be added to the list and the manager from the side of 
+                    DEIP either accept or decline your request. The procedure can take about a week. After the request 
+                    is accepted you can use the generated key to access the private beta.<br><br>
+                    Until you press the button “Finish Registration” no data is stored. Press the “Generate Private Key” to 
+                    receive the private key.
+                </div>
+
                 <v-btn block color="primary" 
                     @click="generatePrivateKey()"
                     :disabled="!isFormValid || isUsernameVerifyed !== true || isSaving"
@@ -61,28 +72,42 @@
                         v-model="formData.privKey"
                     ></v-text-field>
 
+                    <div class="text-align-justify">
+                        <div class="sm-title half-bold c-pb-4">Permission to use the data</div>
+
+                        Please, confirm you have saved the generated key and want to be added to the list of private beta
+                        participants with the information specified above:
+                    </div>
+
                     <v-checkbox
-                        label="I have saved the key"
+                        class="c-mv-4"
+                        label="I have saved the key and want to be added to the list"
                         v-model="formData.isPrivKeySaved"
                         :disabled="isSaving"
+                        hide-details
                     ></v-checkbox>
+
+                    <div class="c-pb-4 text-align-justify">
+                        All the data (except your private key) will be stored in the DEIP cloud server.
+                        You can change your mind at any time by clicking the unsubscribe link in the footer of any email
+                        you receive from us, or by contacting us at
+                        <a class="a" href="mailto:info@deip.world">info@deip.world</a>.
+                        We will treat your information with respect. For more information about our privacy terms please read our
+                        <a class="a">Privacy Policy</a>.
+                        By clicking below, you agree that we may process your information in accordance with these terms.
+                    </div>
 
                     <v-btn block color="primary" 
                         :loading="isSaving"
                         @click="finishRegistration()"
                         :disabled="!formData.isPrivKeySaved || isSaving"
                     >Finish registration</v-btn>
-
-                <!-- <div class="row justify-center c-pt-3" v-show="isSaving">
-                        <v-progress-circular indeterminate color="primary"></v-progress-circular>
-                    </div> -->
                 </div>
             </v-form>
 
             <div class="c-mt-10" v-show="isServerValidated">
                 <div class="text-align-center half-bold">
-                    Thank you for your interest in DEIP!
-                    <br>
+                    Thank you for your interest in DEIP!<br>
                     The inviting letter will be sent to your email after approving
                 </div>
             </div>
