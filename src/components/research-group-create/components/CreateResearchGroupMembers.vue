@@ -114,7 +114,11 @@
                 this.$emit('decStep');
             },
             debounceSearchUsers: _.debounce(
-                () => { this.selectableUsers = prepareSelectableUsers(this.allUsers, this.selectedUsers, this.q) }, 600),
+                function() {
+                    this.selectableUsers = prepareSelectableUsers(this.allUsers, this.selectedUsers, this.q);
+                },
+                600
+            ),
             
             inviteMember(member) {
                 this.selectedUsers.push(member);
