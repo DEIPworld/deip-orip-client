@@ -19,7 +19,7 @@
 
                 <div class="column c-ml-6">
                     <div>
-                        <span class="grey--text">{{ new Date(review.created_at).toDateString() }}</span>
+                        <span class="grey--text">{{ review.created_at | dateFormat('D MMM YYYY', true) }}</span>
 
                         <span class="half-bold c-pl-2">
                             <span class="green--text text--darken-2" v-if="review.is_positive">Positive</span>

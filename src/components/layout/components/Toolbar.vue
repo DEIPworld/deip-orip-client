@@ -19,7 +19,7 @@
                 </v-btn>
 
                 <!-- temporary solution for notifications. will be done well -->
-                <v-list class="hidden-last-child" v-show="user.notifications.proposals.length">
+                <v-list class="hidden-last-child" v-show="user.notifications.proposals.length || groupsInvites.length">
                     <template v-for="invite in groupsInvites">
                         <div class="c-pv-2 c-ph-4">
                             <div>

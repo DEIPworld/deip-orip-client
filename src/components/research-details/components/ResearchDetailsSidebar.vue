@@ -245,23 +245,26 @@
                     <div v-if="isActiveTokenSale" class="c-pt-4 c-pb-6">
                         <div>
                             <span class="half-bold">On Sale</span>
-                            <span class="deip-blue-color right">{{convertToPercent(tokenSale.balance_tokens)}}%</span>
+                            <span class="deip-blue-color right">{{ convertToPercent(tokenSale.balance_tokens) }}%</span>
                         </div>
                         <div>
                             <span class="half-bold">Deadline</span>
-                            <span class="deip-blue-color right">{{new Date(tokenSale.end_time).toDateString()}}</span>
+                            <span class="deip-blue-color right">{{ tokenSale.end_time | dateFormat('HH:mm D MMM YYYY', true) }}</span>
                         </div>
                         <div>
                             <span class="half-bold">Soft Cap</span>
-                            <span class="deip-blue-color right">{{tokenSale.soft_cap}}</span>
+                            <span class="deip-blue-color right">{{ tokenSale.soft_cap }}</span>
                         </div>
                         <div>
                             <span class="half-bold">Hard Cap</span>
-                            <span class="deip-blue-color right">{{tokenSale.hard_cap}}</span>
+                            <span class="deip-blue-color right">{{ tokenSale.hard_cap }}</span>
                         </div>
                         <div class="c-mt-8">
                             <div class="row">
-                                <div><span class="left grey--text c-mr-2 cap-value">0</span></div>
+                                <div>
+                                    <span class="left grey--text c-mr-2 cap-value">0</span>
+                                </div>
+
                                 <div class="col-grow pos-relative row-nowrap align-center">
                                     <div class="chapter-line black" :style="{ width: currentCapPercent + '%' }"></div>
                                     <div class="chapter-line grey lighten-1 col-grow"></div>
@@ -270,22 +273,27 @@
                                         <v-tooltip bottom color="white">
                                             <div class="chapter-point deip-blue-bg" slot="activator"></div>
                                             <div>
-                                                <div class="grey--text cap-value text-align-center">{{currentCap}}</div>
+                                                <div class="grey--text cap-value text-align-center">{{ currentCap }}</div>
                                             </div>
                                         </v-tooltip>
                                     </div>
 
-                                    <div><span class="right grey--text c-ml-2 cap-value">{{tokenSale.hard_cap}}</span></div>
+                                    <div><span class="right grey--text c-ml-2 cap-value">{{ tokenSale.hard_cap }}</span></div>
                                 </div>
                             </div>
+
                             <div v-if="!isResearchGroupMember" class="c-mt-5 text-align-center">
                                 <v-text-field v-model="amountToContribute" placeholder="amount" suffix="DEIP" mask="########################"></v-text-field>
                                 <v-btn :disabled="!amountToContribute" :loading="isTokensBuying" color="primary" @click="contributeToTokenSale()">BUY RESEARCH TOKENS</v-btn>
                             </div>
                         </div>
                     </div>
+
                     <div v-if="isInActiveTokenSale" class="c-pt-4 c-pb-6">
-                        <div class="text-align-center">Token Sale will start on {{toLocalDate(tokenSale.start_time)}}</div>
+                        <div class="text-align-center">
+                            Token Sale will start on<br>
+                            {{ tokenSale.start_time | dateFormat('HH:mm D MMM YYYY', true) }}
+                        </div>
                     </div>
                 </div>
             </div>
@@ -441,6 +449,7 @@
             },
             sendJoinGroupRequest() {
                 this.isSendingJoinGroupRequest = true;
+
                 joinRequestsService.createJoinRequest({
                     username: this.user.username,
                     groupId: this.research.research_group_id,
@@ -455,10 +464,6 @@
                     this.isSendingJoinGroupRequest = false;
                     this.isJoinGroupDialogOpen = false;
                 })
-            },
-            toLocalDate(utc) {
-                const localTime = moment.utc(utc).local().format();
-                return localTime;
             }
         }
     };

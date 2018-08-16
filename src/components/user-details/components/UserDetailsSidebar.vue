@@ -364,6 +364,7 @@
 
             approveInvite(invite) {
                 this.isApprovingInvite = true;
+                
                 deipRpc.broadcast.approveResearchGroupInviteAsync(
                     this.currentUser.privKey,
                     invite.id,
@@ -373,7 +374,7 @@
                     this.$store.dispatch('layout/setSuccess', {
                         message: `"Invite has been approved successfully !"`
                     });
-                    this.dispatch('auth/loadGroups');
+                    this.$store.dispatch('auth/loadGroups');
                     
                 }, (err) => {
                     this.$store.dispatch('layout/setError', {
