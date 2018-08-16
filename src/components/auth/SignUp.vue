@@ -48,15 +48,14 @@
                     :loading="isUsernameChecking"
                 ></v-text-field>
 
-                <div class="c-pv-4 text-align-justify">
-                    Decentralized research platform “DEIP” will use the information you provide on this form to add you to 
-                    the list of private beta participants. As soon as you finish the registration (add all the required 
-                    information, generate and save the private key, and press the “Finish Registration” Button that appears 
-                    after you generate and save the key), you will be added to the list and the manager from the side of 
-                    DEIP either accept or decline your request. The procedure can take about a week. After the request 
-                    is accepted you can use the generated key to access the private beta.<br><br>
-                    Until you press the button “Finish Registration” no data is stored. Press the “Generate Private Key” to 
-                    receive the private key.
+                <div class="c-pv-4 text-align-justify caption">
+                    DEIP decentralized research platform will use the information you provide on this form to add you to the
+                    list of private beta participants. As soon as you finish the registration (add all the required information,
+                    generate and save the private key, and press the “Finish Registration” button that appears after you generate
+                    and save the key), you will be added to the list and a DEIP representative will either accept or decline your
+                    request. The procedure can take about a week. After the request is accepted you can use the generated key to
+                    access the private beta. No data is stored until you press the “Finish Registration” button.<br><br>
+                    To receive a private key, press the “Generate Private Key” button.
                 </div>
 
                 <v-btn block color="primary" 
@@ -72,9 +71,9 @@
                         v-model="formData.privKey"
                     ></v-text-field>
 
-                    <div class="text-align-justify">
-                        <div class="sm-title half-bold c-pb-4">Permission to use the data</div>
+                    <div class="sm-title half-bold c-pb-4">Permission to use the data</div>
 
+                    <div class="text-align-justify caption">
                         Please, confirm you have saved the generated key and want to be added to the list of private beta
                         participants with the information specified above:
                     </div>
@@ -87,10 +86,10 @@
                         hide-details
                     ></v-checkbox>
 
-                    <div class="c-pb-4 text-align-justify">
-                        All the data (except your private key) will be stored in the DEIP cloud server.
+                    <div class="c-pb-4 text-align-justify caption">
+                        All the data (except your private key) will be stored in the DEIP cloud server. 
                         You can change your mind at any time by clicking the unsubscribe link in the footer of any email
-                        you receive from us, or by contacting us at
+                        you receive from us, or by contacting us at 
                         <a class="a" href="mailto:info@deip.world">info@deip.world</a>.
                         We will treat your information with respect. For more information about our privacy terms please read our
                         <a class="a">Privacy Policy</a>.
