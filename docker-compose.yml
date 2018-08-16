@@ -4,5 +4,8 @@ services:
         build: .
         container_name: "deip-client"
         restart: always
+        volumes:
+            - '/etc/letsencrypt:/ssl:ro'
         ports:
             - "80:80"
+            - "443:443"
