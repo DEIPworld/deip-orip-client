@@ -19,19 +19,19 @@
             <v-menu offset-y>
                 <v-btn slot="activator" class="ma-0">
                     <div class="deip-blue-color">
-                        <span v-if="filter.order === 'asc'">Newest First</span>
-                        <span v-if="filter.order === 'desc'">Oldest First</span>
+                        <span v-if="filter.order === 'desc'">Newest First</span>
+                        <span v-if="filter.order === 'asc'">Oldest First</span>
 
                         <v-icon class="c-pl-4" small>keyboard_arrow_down</v-icon>
                     </div>
                 </v-btn>
 
                 <v-list>
-                    <v-list-tile @click="updateProposalFilter({ key: 'order', value: 'asc' })">
+                    <v-list-tile @click="updateProposalFilter({ key: 'order', value: 'desc' })">
                         <v-list-tile-title>Newest First</v-list-tile-title>
                     </v-list-tile>
 
-                    <v-list-tile @click="updateProposalFilter({ key: 'order', value: 'desc' })">
+                    <v-list-tile @click="updateProposalFilter({ key: 'order', value: 'asc' })">
                         <v-list-tile-title>Oldest First</v-list-tile-title>
                     </v-list-tile>
                 </v-list>
