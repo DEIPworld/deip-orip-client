@@ -15,6 +15,20 @@ const types = {
     CREATE_RESEARCH_MATERIAL: 11
 };
 
+const labels = {
+    1: 'Start research',
+    2: 'Invite member',
+    3: 'Dropout member',
+    4: 'Send funds',
+    5: 'Start research token sale',
+    6: 'Rebalance research group tokens',
+    7: 'Change quorum',
+    8: 'Change research review share percent',
+    9: 'Offer research tokens',
+    10: 'Accept research token offer',
+    11: 'Create  research material'
+};
+
 // maybe will be OK to add param validations or type conversion
 // in every function to be sure every time about right data
 const proposalDataStringify = {
@@ -100,6 +114,7 @@ const extendProposalByRelatedInfo = proposal => {
     
     // todo: a lot of the same queries go to server, so it should be optimized
     // by grouping the same queries in one and then populating necessery items
+    // todo: use agregation services!!!
     return Promise.all( _.map(extensionFuncs, func => func(proposal)) )
         .then(data => {
             keys.forEach((key, i) =>
@@ -112,6 +127,7 @@ const extendProposalByRelatedInfo = proposal => {
 
 export {
     types,
+    labels,
     getStringifiedProposalData,
     getParsedProposal,
     extendProposalByRelatedInfo

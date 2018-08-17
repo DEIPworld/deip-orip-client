@@ -45,8 +45,66 @@
                 <v-divider></v-divider>
             </div>
 
+            <div v-if="group">
+                <div class="sm-title bold c-pt-6">Quorum Setup</div>
+
+                <div class="c-pt-4 c-pb-6">
+                    <!-- no v-for bc order and padding are important -->
+                    <div class="row-nowrap justify-between">
+                        <div class="half-bold">{{ proposalLabels[ group.proposal_quorums[0][0] ] }}</div>
+                        <div class="">{{ convertToPercent( group.proposal_quorums[0][1] ) }}%</div>
+                    </div>
+                    <div class="row-nowrap justify-between">
+                        <div class="half-bold">{{ proposalLabels[ group.proposal_quorums[10][0] ] }}</div>
+                        <div class="">{{ convertToPercent( group.proposal_quorums[10][1] ) }}%</div>
+                    </div>
+                    <div class="row-nowrap justify-between">
+                        <div class="half-bold">{{ proposalLabels[ group.proposal_quorums[7][0] ] }}</div>
+                        <div class="">{{ convertToPercent( group.proposal_quorums[7][1] ) }}%</div>
+                    </div>
+                    <div class="row-nowrap justify-between c-pt-2">
+                        <div class="half-bold">{{ proposalLabels[ group.proposal_quorums[1][0] ] }}</div>
+                        <div class="">{{ convertToPercent( group.proposal_quorums[1][1] ) }}%</div>
+                    </div>
+                    <div class="row-nowrap justify-between">
+                        <div class="half-bold">{{ proposalLabels[ group.proposal_quorums[2][0] ] }}</div>
+                        <div class="">{{ convertToPercent( group.proposal_quorums[2][1] ) }}%</div>
+                    </div>
+                    <div class="row-nowrap justify-between c-pt-2">
+                        <div class="half-bold">{{ proposalLabels[ group.proposal_quorums[4][0] ] }}</div>
+                        <div class="">{{ convertToPercent( group.proposal_quorums[4][1] ) }}%</div>
+                    </div>
+                    <div class="row-nowrap justify-between">
+                        <div class="half-bold">{{ proposalLabels[ group.proposal_quorums[9][0] ] }}</div>
+                        <div class="">{{ convertToPercent( group.proposal_quorums[9][1] ) }}%</div>
+                    </div>
+                    <div class="row-nowrap justify-between">
+                        <div class="half-bold">{{ proposalLabels[ group.proposal_quorums[8][0] ] }}</div>
+                        <div class="">{{ convertToPercent( group.proposal_quorums[8][1] ) }}%</div>
+                    </div>
+                    <div class="row-nowrap justify-between">
+                        <div class="half-bold">{{ proposalLabels[ group.proposal_quorums[3][0] ] }}</div>
+                        <div class="">{{ convertToPercent( group.proposal_quorums[3][1] ) }}%</div>
+                    </div>
+                    <div class="row-nowrap justify-between c-pt-2">
+                        <div class="half-bold">{{ proposalLabels[ group.proposal_quorums[6][0] ] }}</div>
+                        <div class="">{{ convertToPercent( group.proposal_quorums[6][1] ) }}%</div>
+                    </div>
+                    <div class="row-nowrap justify-between">
+                        <div class="half-bold">{{ proposalLabels[ group.proposal_quorums[5][0] ] }}</div>
+                        <div class="">{{ convertToPercent( group.proposal_quorums[5][1] ) }}%</div>
+                    </div>
+                </div>
+
+                <div class="section-divider">
+                    <v-divider></v-divider>
+                </div>
+            </div>
+
             <!-- ### START Research Group Join Requests Section ### -->
-            <div v-if="isJoinRequestsSectionAvailable || isLoadingResearchGroupJoinRequests !== false" class="research-group-join-requests-container spinner-container">
+            <div v-if="isJoinRequestsSectionAvailable || isLoadingResearchGroupJoinRequests !== false"
+                class="research-group-join-requests-container spinner-container"
+            >
                 <v-progress-circular class="section-spinner"
                     v-if="isLoadingResearchGroupJoinRequests"
                     indeterminate color="primary"
@@ -103,7 +161,9 @@
                 isDenyingJoinRequest: false,
 
                 selectedJoinRequest: undefined,
-                isHandleRequestDialogOpen: true
+                isHandleRequestDialogOpen: true,
+
+                proposalLabels: _.cloneDeep(proposalService.labels)
             };
         },
         computed: {
