@@ -48,8 +48,8 @@
                     :loading="isUsernameChecking"
                 ></v-text-field>
 
-                <div class="c-pv-4 text-align-justify caption">
-                    DEIP decentralized research platform will use the information you provide on this form to add you to the
+                <div class="c-pv-4 text-align-justify caption grey--text">
+                    DEIPworld OÜ will use the information you provide on this form to add you to the
                     list of private beta participants. As soon as you finish the registration (add all the required information,
                     generate and save the private key, and press the “Finish Registration” button that appears after you generate
                     and save the key), you will be added to the list and a DEIP representative will either accept or decline your
@@ -71,9 +71,9 @@
                         v-model="formData.privKey"
                     ></v-text-field>
 
-                    <div class="sm-title half-bold c-pb-4">Permission to use the data</div>
+                    <div class="sm-title half-bold c-pb-4 grey--text">Permission to use the data</div>
 
-                    <div class="text-align-justify caption">
+                    <div class="text-align-justify caption grey--text">
                         Please confirm you have saved the generated key and want to be added to the list of private beta
                         participants with the information specified above:
                     </div>
@@ -86,7 +86,7 @@
                         hide-details
                     ></v-checkbox>
 
-                    <div class="c-pb-4 text-align-justify caption">
+                    <div class="c-pb-4 text-align-justify caption grey--text">
                         All the data (except your private key) will be stored in the DEIP cloud server.<br><br>
                         You can change your mind at any time by clicking the <span class="half-bold">unsubscribe link</span>
                         in the footer of any email you receive from us, or by contacting us at 
