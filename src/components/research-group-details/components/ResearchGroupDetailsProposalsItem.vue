@@ -113,10 +113,10 @@
                         <div class="col-6 row justify-between">
                             <div class="width-8">
                                 <div>
-                                    Soft Cap: <span class="bold right">{{ proposal.data.soft_cap }}</span>
+                                    Soft Cap: <span class="bold right">{{ fromAssetsToFloat(proposal.data.soft_cap) }}</span>
                                 </div>
                                 <div>
-                                    Hard Cap: <span class="bold right">{{ proposal.data.hard_cap }}</span>
+                                    Hard Cap: <span class="bold right">{{ fromAssetsToFloat(proposal.data.hard_cap) }}</span>
                                 </div>
                             </div>
                             <div class="width-11 c-mr-10">

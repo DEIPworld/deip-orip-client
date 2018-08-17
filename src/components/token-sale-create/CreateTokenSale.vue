@@ -107,8 +107,8 @@
                     // nowPlus2Minutes.toISOString().split('.')[0],
                     this.tokenSaleInfo.endDate.toISOString().split('.')[0],
                     this.toDeipPercent(parseInt(this.tokenSaleInfo.amountToSell)),
-                    parseInt(this.tokenSaleInfo.softCap),
-                    parseInt(this.tokenSaleInfo.hardCap)
+                    this.toAssetUnits(this.tokenSaleInfo.softCap),
+                    this.toAssetUnits(this.tokenSaleInfo.hardCap)
                 ]);
 
                 deipRpc.broadcast.createProposalAsync(

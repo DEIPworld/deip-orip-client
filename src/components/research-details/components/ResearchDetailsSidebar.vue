@@ -235,7 +235,7 @@
                 <div v-if="isLoadingResearchTokenSale === false">
                     <div class="sm-title bold c-pt-6">Research Token Sale</div>
                     <div v-if="(isMissingTokenSale && isResearchGroupMember)" class="c-pt-4 c-pb-6">
-                        <router-link v-if="research" :to="`/${research.group_permlink}/create-token-sale/${research.permlink}`"  style="text-decoration: none">
+                        <router-link v-if="research" :to="`/${research.group_permlink}/create-token-sale/${research.permlink}`" style="text-decoration: none">
                             <v-btn dark round outline color="primary" class="full-width c-mt-3 c-mb-3">
                                 <div class="col-grow add-review-label">Propose Token Sale</div>
                             </v-btn>
@@ -253,12 +253,13 @@
                         </div>
                         <div>
                             <span class="half-bold">Soft Cap</span>
-                            <span class="deip-blue-color right">{{ tokenSale.soft_cap }}</span>
+                            <span class="deip-blue-color right">{{ fromAssetsToFloat(tokenSale.soft_cap) }}</span>
                         </div>
                         <div>
                             <span class="half-bold">Hard Cap</span>
-                            <span class="deip-blue-color right">{{ tokenSale.hard_cap }}</span>
+                            <span class="deip-blue-color right">{{ fromAssetsToFloat(tokenSale.hard_cap) }}</span>
                         </div>
+
                         <div class="c-mt-8">
                             <div class="row">
                                 <div>
@@ -278,13 +279,24 @@
                                         </v-tooltip>
                                     </div>
 
-                                    <div><span class="right grey--text c-ml-2 cap-value">{{ tokenSale.hard_cap }}</span></div>
+                                    <div><span class="right grey--text c-ml-2 cap-value">{{ fromAssetsToFloat(tokenSale.hard_cap) }}</span></div>
                                 </div>
                             </div>
 
                             <div v-if="!isResearchGroupMember" class="c-mt-5 text-align-center">
-                                <v-text-field v-model="amountToContribute" placeholder="amount" suffix="DEIP" mask="########################"></v-text-field>
-                                <v-btn :disabled="!amountToContribute" :loading="isTokensBuying" color="primary" @click="contributeToTokenSale()">BUY RESEARCH TOKENS</v-btn>
+                                <v-text-field
+                                    ref="amountToContribute"
+                                    v-model="amountToContribute"
+                                    placeholder="Amount" suffix="DEIP"
+                                    :rules="[deipTokenValidator]"
+                                ></v-text-field>
+
+                                <v-btn :disabled="!$refs.amountToContribute.valid || isTokensBuying"
+                                    v-if="$refs.amountToContribute"
+                                    :loading="isTokensBuying"
+                                    color="primary"
+                                    @click="contributeToTokenSale()"
+                                >BUY RESEARCH TOKENS</v-btn>
                             </div>
                         </div>
                     </div>
@@ -318,7 +330,7 @@
         name: "ResearchDetailsSidebar",
         data(){
            return {
-                amountToContribute: undefined,
+                amountToContribute: '',
                 groupLink: this.$route.params.research_group_permlink,
                 isTokensBuying: false,
 
@@ -377,10 +389,14 @@
                 return this.research && this.research.is_finished;
             },
             currentCap() {
-                return this.contributionsList.map(c => c.amount).reduce((acc, val) => {return acc + val}, 0);
+                return this.contributionsList
+                    .map(c => this.fromAssetsToFloat(c.amount))
+                    .reduce((acc, val) => acc + val, 0);
             },
             currentCapPercent() {
-                return this.tokenSale ? this.currentCap * 100 / this.tokenSale.hard_cap : 0;
+                return this.tokenSale
+                    ? this.currentCap * 100 / this.fromAssetsToFloat(this.tokenSale.hard_cap)
+                    : 0;
             },
             canJoinResearchGroup() {
                 if (this.research) {
@@ -421,16 +437,17 @@
             },
             contributeToTokenSale() {
                 this.isTokensBuying = true;
+
                 deipRpc.broadcast.contributeToTokenSaleAsync(
 				    this.user.privKey,
                     this.tokenSale.id,
                     this.user.username,
-                    parseInt(this.amountToContribute)
+                    this.toAssetUnits(this.amountToContribute)
                 ).then((data) => {
                     this.$store.dispatch('rd/loadResearchTokenSale', {researchId: this.research.id})
                     this.$store.dispatch('rd/loadResearchTokenHolders', {researchId: this.research.id})
                     this.isTokensBuying = false;
-                    this.amountToContribute = undefined;
+                    this.amountToContribute = '';
                     this.$store.dispatch('layout/setSuccess', {
                         message: `You've contributed to "${this.research.title}" token sale successfully !`
                     });

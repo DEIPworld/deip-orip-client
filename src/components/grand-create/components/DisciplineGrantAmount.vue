@@ -62,19 +62,15 @@
                 rules: {
                     required: value => !!value || 'This field is required',
                     amount: value => {
-                        if (value.match(this.ASSET_QUANTITY_REGEX) === null) {
-                            return "Incorrect format";
-                        }
+                        let formatValidationResult = this.deipTokenValidator(value);
 
-                        let number = parseFloat(value);
-
-                        if (number === 0) {
-                            return 'Amount should be greater than zero';
-                        } else if (number > this.deipTokenBalance) {
+                        if (formatValidationResult !== true) {
+                            return formatValidationResult;
+                        } else if (parseFloat(value) > this.deipTokenBalance) {
                             return 'Amount is greater than your DEIP token balance';
-                        } else {
-                            return true;
                         }
+                        
+                        return true;
                     },
                 },
             }

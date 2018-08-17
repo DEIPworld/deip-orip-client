@@ -16,6 +16,19 @@ Vue.prototype.toAssetUnits = amount => {
     return `${value} ${process.env.ASSET_UNIT}`;
 };
 Vue.prototype.fromAssetsToFloat = assets => parseFloat(assets.split(' ')[0]);
+Vue.prototype.deipTokenValidator = value => {
+    if (value.match(Vue.prototype.ASSET_QUANTITY_REGEX) === null) {
+        return "Incorrect format";
+    }
+
+    let number = parseFloat(value);
+
+    if (number === 0) {
+        return 'Amount should be greater than zero';
+    } else {
+        return true;
+    }
+};
 
 // regarding with DEIP Common
 Vue.prototype.COMMON_TOKEN_QUANTITY_REGEX = /^(?:0|(?:[1-9]\d*))(?:\.\d{1,3})?$/;
