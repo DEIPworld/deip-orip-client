@@ -28,7 +28,7 @@
 
                                 <div class="row align-items-end">
                                     <div>
-                                        <v-text-field class="width-6 minus-top-margin"
+                                        <v-text-field class="width-6 pa-0"
                                             v-model="group.quorum.startResearch"
                                             suffix="%"
                                             mask="###"
@@ -40,7 +40,7 @@
 
                                 <div class="row align-items-end">
                                     <div>
-                                        <v-text-field class="width-6 minus-top-margin"
+                                        <v-text-field class="width-6 pa-0"
                                             v-model="group.quorum.createMaterial"
                                             suffix="%"
                                             mask="###"
@@ -52,14 +52,14 @@
 
                                 <div class="row align-items-end">
                                     <div>
-                                        <v-text-field class="width-6 minus-top-margin"
-                                            v-model="group.quorum.changeQuorum"
+                                        <v-text-field class="width-6 pa-0"
+                                            v-model="group.quorum.changeReviewSharePercent"
                                             suffix="%"
                                             mask="###"
                                             hide-details
                                         ></v-text-field>
                                     </div>
-                                    <div class="col-grow c-ml-8">Change quorum</div>
+                                    <div class="col-grow c-ml-8">Change research review share percent</div>
                                 </div>
 
                                 <div class="row align-items-end">
@@ -74,9 +74,9 @@
                                     <div class="col-grow c-ml-8">Invite members</div>
                                 </div>
 
-                                <div class="row align-items-end minus-top-margin">
+                                <div class="row align-items-end">
                                     <div>
-                                        <v-text-field class="width-6"
+                                        <v-text-field class="width-6 pa-0"
                                             v-model="group.quorum.dropoutMembers"
                                             suffix="%"
                                             mask="###"
@@ -100,7 +100,7 @@
 
                                 <div class="row align-items-end">
                                     <div>
-                                        <v-text-field class="width-6 minus-top-margin"
+                                        <v-text-field class="width-6 pa-0"
                                             v-model="group.quorum.acceptResearchTokenOffer"
                                             suffix="%"
                                             mask="###"
@@ -112,7 +112,7 @@
 
                                 <div class="row align-items-end">
                                     <div>
-                                        <v-text-field class="width-6 minus-top-margin"
+                                        <v-text-field class="width-6 pa-0"
                                             v-model="group.quorum.offerResearchTokens"
                                             suffix="%"
                                             mask="###"
@@ -124,7 +124,7 @@
 
                                 <div class="row align-items-end">
                                     <div>
-                                        <v-text-field class="width-6 minus-top-margin"
+                                        <v-text-field class="width-6 pa-0"
                                             v-model="group.quorum.sendFunds"
                                             suffix="%"
                                             mask="###"
@@ -137,18 +137,18 @@
                                 <div class="row align-items-end">
                                     <div>
                                         <v-text-field class="width-6"
-                                            v-model="group.quorum.changeReviewSharePercent"
+                                            v-model="group.quorum.changeQuorum"
                                             suffix="%"
                                             mask="###"
                                             hide-details
                                         ></v-text-field>
                                     </div>
-                                    <div class="col-grow c-ml-8">Change research review share percent</div>
+                                    <div class="col-grow c-ml-8">Change quorum</div>
                                 </div>
 
                                 <div class="row align-items-end">
                                     <div>
-                                        <v-text-field class="width-6 minus-top-margin"
+                                        <v-text-field class="width-6 pa-0"
                                             v-model="group.quorum.rebalanceGroupTokens"
                                             suffix="%"
                                             mask="###"
@@ -229,8 +229,5 @@
 <style lang="less" scoped>
     .group-quorum-max-width {
         max-width: 500px;
-    }
-    .minus-top-margin {
-        margin-top: -17px;
     }
 </style>
