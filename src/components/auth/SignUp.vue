@@ -74,7 +74,7 @@
                     <div class="sm-title half-bold c-pb-4">Permission to use the data</div>
 
                     <div class="text-align-justify caption">
-                        Please, confirm you have saved the generated key and want to be added to the list of private beta
+                        Please confirm you have saved the generated key and want to be added to the list of private beta
                         participants with the information specified above:
                     </div>
 
@@ -87,9 +87,9 @@
                     ></v-checkbox>
 
                     <div class="c-pb-4 text-align-justify caption">
-                        All the data (except your private key) will be stored in the DEIP cloud server. 
-                        You can change your mind at any time by clicking the unsubscribe link in the footer of any email
-                        you receive from us, or by contacting us at 
+                        All the data (except your private key) will be stored in the DEIP cloud server.<br><br>
+                        You can change your mind at any time by clicking the <span class="half-bold">unsubscribe link</span>
+                        in the footer of any email you receive from us, or by contacting us at 
                         <a class="a" href="mailto:info@deip.world">info@deip.world</a>.
                         We will treat your information with respect. For more information about our privacy terms please read our
                         <a class="a">Privacy Policy</a>.
