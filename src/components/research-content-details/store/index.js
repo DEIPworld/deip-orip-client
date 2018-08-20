@@ -237,7 +237,7 @@ const actions = {
                 if (!isGenesisContent) {
                     const proposals = await deipRpc.api.getProposalsByResearchGroupIdAsync(research.research_group_id)
 
-                    const contentProposal = proposals.filter(p => p.action == 11).find(p => {
+                    const contentProposal = proposals.filter(p => p.action == 11 && p.is_completed).find(p => {
                         const data = JSON.parse(p.data)
                         return data.content == content.content && data.permlink == content.permlink;
                     });
