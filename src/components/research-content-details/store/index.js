@@ -249,7 +249,7 @@ const actions = {
 
                     // to get the block with content tx details we need to run scanning
                     const startTime = contentProposal.creation_time;
-                    const endTime = contentProposal.votes.reduce((prev, current) => (prev.voting_time < current.voting_time) ? prev : current).voting_time;
+                    const endTime = contentProposal.expiration_time;
                     const bounds = await findBlocksByRange(startTime, endTime);
 
                     var block;
