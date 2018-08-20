@@ -3,7 +3,10 @@ import deipRpc from '@deip/deip-rpc-client'
 import Vue from 'vue'
 import { getEnrichedProfiles } from './../../../utils/user'
 import darService from './../../../services/dar'
-
+import { 
+    findBlocksByRange, getDynamicGlobalProperties, getConfig, 
+    getBlock, getTransaction, getTransactionHex } from './../../../utils/blockchain';
+    
 var texture = undefined;
 
 const state = {
@@ -20,6 +23,9 @@ const state = {
     isLoadingResearchContentVotes: undefined,
     isLoadingResearchDetails: undefined,
     isLoadingResearchContentDetails: undefined,
+
+    contentMetadata: null,
+    isLoadingResearchContentMetadataPage: undefined
 }
 
 // getters
@@ -55,6 +61,14 @@ const getters = {
 
     isLoadingResearchContentPage: (state, getters) => {
         return state.isLoadingResearchContentPage;
+    },
+
+    contentMetadata: (state, getters) => {
+        return state.contentMetadata;
+    },
+
+    isLoadingResearchContentMetadataPage: (state, getters) => {
+        return state.isLoadingResearchContentMetadataPage;
     },
 
     contentWeightByDiscipline: function() {
@@ -112,7 +126,7 @@ const actions = {
 
         } else {
             commit('SET_RESEARCH_CONTENT_DETAILS_LOADING_STATE', true)
-             deipRpc.api.getResearchContentByAbsolutePermlinkAsync(group_permlink, research_permlink, content_permlink)
+            deipRpc.api.getResearchContentByAbsolutePermlinkAsync(group_permlink, research_permlink, content_permlink)
                 .then((content) => {
                     commit('SET_RESEARCH_CONTENT_DETAILS', content)
 
@@ -201,8 +215,162 @@ const actions = {
         // temporal hack to avoid blocking while converting texture nested props to reactive ones, 
         // do not do this in regular code without 'commit' call!
         texture = instance.texture;
+    },
+
+
+    async loadResearchContentMetadata({ state, commit, dispatch }, 
+        { group_permlink, research_permlink, content_permlink,  notify }) {
+
+            commit('RESET_METADATA_STATE');
+            commit('SET_RESEARCH_CONTENT_METADATA_PAGE_LOADING_STATE', true)
+
+            try {
+                const dgp = await getDynamicGlobalProperties();
+                const conf = await getConfig();
+                const content = await deipRpc.api.getResearchContentByAbsolutePermlinkAsync(group_permlink, research_permlink, content_permlink);
+                const millisSinceGenesis = (dgp.current_aslot * conf.DEIP_BLOCK_INTERVAL) * 1000;
+                const currentMillis = new Date(`${dgp.time}Z`).getTime();
+                const genesisMillis = currentMillis - millisSinceGenesis;
+                const isGenesisContent = new Date(`${content.created_at}Z`).getTime() === new Date(genesisMillis).getTime();
+                const research = await deipRpc.api.getResearchByAbsolutePermlinkAsync(group_permlink, research_permlink)
+
+                if (!isGenesisContent) {
+                    const proposals = await deipRpc.api.getProposalsByResearchGroupIdAsync(research.research_group_id)
+
+                    const contentProposal = proposals.filter(p => p.action == 11).find(p => {
+                        const data = JSON.parse(p.data)
+                        return data.content = content.content;
+                    });
+
+                    if (!contentProposal) {
+                        // should never happen
+                        throw new Error("Fatal: content proposal is not found")
+                    }
+
+                    // to get the block with content tx details we need to run scanning
+                    const startTime = contentProposal.creation_time;
+                    const endTime = contentProposal.votes.reduce((prev, current) => (prev.voting_time < current.voting_time) ? prev : current).voting_time;
+                    const bounds = await findBlocksByRange(startTime, endTime);
+
+                    var block;
+                    var txIdx;
+                    var blockNum;
+                    for (let i = bounds.first.num; i <= bounds.last.num; i++) {
+                        block = await getBlock(i);
+                        
+                        const isFound = block.transactions.some((tx, idx) => {
+                            const createProposalOps = tx.operations.filter(o => o[0] === 'create_proposal');
+                            const contentProposals = createProposalOps.filter(o => o[1].action == 11);
+                            const wanted = contentProposals.find(p => {
+                                const data = JSON.parse(p[1].data);
+                                return data.content == content.content;
+                            });
+
+                            txIdx = idx;
+
+                            return wanted != undefined;
+                        })
+
+
+                        if (isFound) {
+                            blockNum = i;
+                            break;
+                        }
+                    }
+
+                    const tx = await getTransaction(block.transaction_ids[txIdx])
+                    const txHex = await getTransactionHex(tx)
+                    // const witness = await getWitnessByAccount(block.witness)
+                    const witnessUser = await getEnrichedProfiles([block.witness])
+                    const votersMeta = await getProposalVotesMeta(contentProposal)
+
+                    const contentMetadata = {
+                        blockId: block.block_id,
+                        blockNum: blockNum,
+                        research: research,
+                        content: content,
+                        timestamp: `${block.timestamp}Z`,
+                        witness: {
+                            user: witnessUser[0],
+                            signingKey: block.signing_key,
+                            signature: block.witness_signature
+                        },
+                        voters: votersMeta,
+                        chainId: process.env.CHAIN_ID,
+                        transaction: {
+                            id: tx.transaction_id,
+                            hex: txHex
+                        }
+                    };
+                    
+                    commit('SET_RESEARCH_CONTENT_METADATA', contentMetadata)
+
+                    async function getProposalVotesMeta(proposal) {
+                        const votersMeta = [];
+                        for (let i = 0; i < proposal.votes.length; i++) {
+                            const vote = proposal.votes[i];
+                            const bounds = await findBlocksByRange(vote.voting_time, proposal.expiration_time);
+        
+                            for (let j = bounds.first.num; j <= bounds.last.num; j++) {
+                                var block = await getBlock(j);
+                                const proposalVoteOps = block.transactions.reduce(
+                                    function(accumulator, tx) {
+                                        const voteProposalOp = tx.operations.find(o => o[0] === 'vote_proposal' && o[1].proposal_id == proposal.id);
+                                        if (voteProposalOp) {
+                                            const payload = voteProposalOp[1];
+                                            payload.signature = tx.signatures[0];
+                                            accumulator.push(payload)
+                                        }
+                                        return accumulator;
+                                    }, []);
+        
+                                for (let k = 0; k < proposalVoteOps.length; k++) {
+                                    const metadata = proposalVoteOps[k];
+                                    if (!votersMeta.some(v => v.voter == metadata.voter)) {
+                                        const enrichedProfiles = await getEnrichedProfiles([metadata.voter]);
+                                        metadata.user = enrichedProfiles[0];
+                                        votersMeta.push(metadata);
+                                    }
+                                }
+                            }
+                        }
+                        return votersMeta;
+                    }
+                    
+                } else {
+                    const genesisBlock = await getBlock(1);
+                    const witnessUser = await getEnrichedProfiles([genesisBlock.witness])
+
+                    const contentMetadata = {
+                        blockId: genesisBlock.block_id,
+                        blockNum: 1,
+                        research: research,
+                        content: content,
+                        timestamp: `${genesisBlock.timestamp}Z`,
+                        witness: {
+                            user: witnessUser[0],
+                            signingKey: genesisBlock.signing_key,
+                            signature: genesisBlock.witness_signature
+                        },
+                        voters: [],
+                        chainId: process.env.CHAIN_ID,
+                        transaction: null
+                    };
+
+                    commit('SET_RESEARCH_CONTENT_METADATA', contentMetadata)
+                }
+
+                commit('SET_RESEARCH_CONTENT_METADATA_PAGE_LOADING_STATE', false)
+
+            } catch (err) {
+                console.error(err)
+            }
+
     }
+
 }
+
+
 
 // mutations
 const mutations = {
@@ -247,6 +415,15 @@ const mutations = {
         Vue.set(state, 'membersList', list)
     },
 
+
+    ['SET_RESEARCH_CONTENT_METADATA_PAGE_LOADING_STATE'](state, value) {
+        Vue.set(state, 'isLoadingResearchContentMetadataPage', value)
+    },
+
+    ['SET_RESEARCH_CONTENT_METADATA'](state, value) {
+        Vue.set(state, 'contentMetadata', value)
+    },
+
     ['RESET_STATE'](state) {
         Vue.set(state, 'membersList', [])
         Vue.set(state, 'disciplinesList', [])
@@ -255,6 +432,10 @@ const mutations = {
         Vue.set(state, 'research', null)
         Vue.set(state, 'darRef', null)
         Vue.set(state, 'textureApiRef', null)
+    },
+
+    ['RESET_METADATA_STATE'](state) {
+        Vue.set(state, 'contentMetadata', null)
     }    
 }
 

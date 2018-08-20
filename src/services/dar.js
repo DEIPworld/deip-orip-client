@@ -20,6 +20,9 @@ const service = {
     },
     createDarContentProposal(draftId, data) {
         return http.post(`/propose/${draftId}`, data, { baseURL: `${apiUrl}/dar/` });
+    },
+    unlockDraft(draftId, data) {
+        return http.put(`/drafts/unlock/${draftId}`, {}, { baseURL: `${apiUrl}/dar/` });
     }
 }
 

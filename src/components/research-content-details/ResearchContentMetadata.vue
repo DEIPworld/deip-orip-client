@@ -1,47 +1,69 @@
 <template>
     <v-container fluid fill-height class="pa-0 column-page">
-        <div class="content-column">
-            <div class="filling" style="width: 900px">
+    
+        <div class="content-column spinner-container">
+            <v-progress-circular class="section-spinner"
+                v-if="isLoadingResearchContentMetadataPage"
+                :size="100" indeterminate
+                color="primary"
+            ></v-progress-circular>
+
+            <div v-if="isLoadingResearchContentMetadataPage === false" class="filling" style="width: 900px">
 
                 <div class="row justify-between align-items-end">
-                    <div class="display-1 bold">Block #3588132</div>
+                    <div class="display-1 bold">
+                        Block #{{contentMetadata.blockNum}}
+                        <span v-if="isGenesisBlock" class="caption grey--text">GENESIS</span>
+                    </div>
+
                     <qrcode value="Hello, World!" :options="{ size: 120 }"></qrcode>
                 </div>
 
                 <div class="c-mt-4">
                     <div class="bold">Block ID</div>
                     <div class="row grey-border-stripe">
-                        <div class="pill width-7 white--text">SHA256</div>
-                        <div class="col-grow pill-value">01769bec491405adc5132be6a48caebd71c46553</div>
+                        <div class="pill width-7 white--text">RIPEMD-160</div>
+                        <div class="col-grow pill-value">{{contentMetadata.blockId}}</div>
                     </div>
                 </div>
 
-                <div class="c-mt-4">
+            <!--    <div class="c-mt-4">
                     <div class="row">
                         <div class="bold width-7">Research</div>
-                        <div class="bold deip-blue-color c-pl-4">Feasibility of strong consistency in horizontally scalable distributed systems</div>
+                        <div class="bold deip-blue-color c-pl-4">
+                            <router-link class="a" :to="{ name: 'research-details', params: { 
+                                research_group_permlink: $route.params.research_group_permlink,
+                                research_permlink: $route.params.research_permlink}}">
+                                {{ contentMetadata.research.title }}
+                            </router-link>
+                        </div>
                     </div>
                     <div class="row grey-border-stripe">
-                        <div class="pill width-7 white--text">SHA256</div>
-                        <div class="col-grow pill-value">b9995768a5c23f697fe4588de49dfd9c2a142574bcd7e5dd55777e1805df83e2</div>
+                        <div class="pill width-7 white--text">Public ID</div>
+                        <div class="col-grow pill-value">{{contentMetadata.research.id}}</div>
                     </div>
-                </div>
+                </div> -->
 
                 <div class="c-mt-4">
                     <div class="row">
                         <div class="bold width-7">Content</div>
-                        <div class="bold deip-blue-color c-pl-4">Sharding capabilities of append-only storage (event store)</div>
+                        <div class="bold deip-blue-color c-pl-4">
+                            <router-link class="a" 
+                                :to="`/${$route.params.research_group_permlink}/research/${$route.params.research_permlink}/${$route.params.content_permlink}`">
+                                    {{ contentMetadata.content.title }}
+                            </router-link>
+                        </div>
                     </div>
                     <div class="row grey-border-stripe">
-                        <div class="pill width-7 white--text">SHA256</div>
-                        <div class="col-grow pill-value">01769bec491405adc5132be6a48caebd71c46553</div>
+                        <div class="pill width-7 white--text">MD5</div>
+                        <div class="col-grow pill-value">{{getContentHash(contentMetadata.content.content)}}</div>
                     </div>
                 </div>
                 
                 <div class="c-mt-4">
                     <div class="row">
-                        <div class="bold width-7">Date & Time</div>
-                        <div class="c-pl-4">Fri Jul 27 2018 12:11:32  UTC</div>
+                        <div class="bold width-10">Timestamp (ISO 8601)</div>
+                        <div class="c-pl-4">{{new Date(contentMetadata.timestamp).toISOString()}}</div>
                     </div>
                 </div>
 
@@ -51,25 +73,27 @@
 
                         <div class="c-pl-4 col-grow">
                             <div>
-                                <div class="row">
+                                <div class="row c-mt-4">
                                     <v-avatar size="40px">
-                                        <v-gravatar :email="'abc' + '@deip.world'" />
+                                        <img v-if="contentMetadata.witness.user.profile" v-bind:src="contentMetadata.witness.user.profile.avatar | avatarSrc(40, 40, false)" />
+                                        <v-gravatar v-else :email="contentMetadata.witness.user.account.name + '@deip.world'" />
                                     </v-avatar>
-
                                     <div class="c-ml-4">
-                                        <div class="a">Artyom Ruseckiy</div>
-                                        <div class="caption grey--text">ArtRus</div>
+                                        <router-link class="a" :to="'/user-details/' + contentMetadata.witness.user.account.name">
+                                            {{contentMetadata.witness.user | fullname}}
+                                        </router-link>
+                                        <div class="caption grey--text">{{contentMetadata.witness.user.account.name}}</div>
                                     </div>
                                 </div>
 
                                 <div class="row grey-border-stripe c-mt-4">
-                                    <div class="pill width-7">
+                                    <div class="col-2 pill width-7">
                                         <div class="white--text">SHA256</div>
-                                        <div class="grey--text text--darken-3">Signanure</div>
+                                        <div class="grey--text text--darken-3 c-pt-1">Signature</div>
                                     </div>
-                                    <div class="col-grow pill-value">
-                                        <div>01769bec491405adc5132be6a48caebd71c46553</div>
-                                        <div>b9995768a5c23f697fe4588de49dfd9c2a142574bcd7e5dd55777e1805df83e2</div>
+                                    <div class="col-10 col-grow pill-value">
+                                        <div>{{contentMetadata.witness.signingKey}}</div>
+                                        <div class="c-pt-1">{{contentMetadata.witness.signature}}</div>
                                     </div>
                                 </div>
                             </div>
@@ -77,59 +101,54 @@
                     </div>
                 </div>
 
-                <div class="c-mt-6">
+                <div class="c-mt-6" v-if="!isGenesisBlock">
                     <div class="row">
                         <div class="bold width-7">Approved by</div>
 
-                        <div class="c-pl-4 col-grow">
-                            <div>
-                                <div class="row">
-                                    <v-avatar size="40px">
-                                        <v-gravatar :email="'abc' + '@deip.world'" />
-                                    </v-avatar>
+                         <div class="c-pl-4 col-grow" style="width: 500px">
 
+                            <div v-for="voter in contentMetadata.voters">
+                                <div class="row c-mt-8">
+                                    <v-avatar size="40px">
+                                        <img v-if="voter.user.profile" v-bind:src="voter.user.profile.avatar | avatarSrc(40, 40, false)" />
+                                        <v-gravatar v-else :email="voter.user.account.name + '@deip.world'" />
+                                    </v-avatar>
                                     <div class="c-ml-4">
-                                        <div class="a">Artyom Ruseckiy</div>
-                                        <div class="caption grey--text">ArtRus</div>
+                                        <router-link class="a" :to="'/user-details/' + voter.user.account.name">
+                                            {{voter.user | fullname}}
+                                        </router-link>
+                                        <div class="caption grey--text">{{voter.user.account.name}}</div>
                                     </div>
                                 </div>
 
                                 <div class="row grey-border-stripe c-mt-4">
-                                    <div class="pill width-7">
+                                    <div class="col-2 pill width-7">
                                         <div class="white--text">SHA256</div>
-                                        <div class="grey--text text--darken-3">Signanure</div>
+                                        <div class="grey--text text--darken-3 c-pt-1">Signature</div>
                                     </div>
-                                    <div class="col-grow pill-value">
-                                        <div>01769bec491405adc5132be6a48caebd71c46553</div>
-                                        <div>b9995768a5c23f697fe4588de49dfd9c2a142574bcd7e5dd55777e1805df83e2</div>
+                                    <div class="col-10 col-grow pill-value">
+                                        <div>{{voter.user.account.owner.key_auths[0][0]}}</div>
+                                        <div class="c-pt-1">{{voter.signature}}</div>
                                     </div>
                                 </div>
                             </div>
+                        </div> 
+                    </div>
+                </div>
 
-                            <div class="c-mt-6">
-                                <div class="row">
-                                    <v-avatar size="40px">
-                                        <v-gravatar :email="'abc' + '@deip.world'" />
-                                    </v-avatar>
-
-                                    <div class="c-ml-4">
-                                        <div class="a">Artyom Ruseckiy</div>
-                                        <div class="caption grey--text">ArtRus</div>
-                                    </div>
-                                </div>
-
-                                <div class="row grey-border-stripe c-mt-4">
-                                    <div class="pill width-7">
-                                        <div class="white--text">SHA256</div>
-                                        <div class="grey--text text--darken-3">Signanure</div>
-                                    </div>
-                                    <div class="col-grow pill-value">
-                                        <div>01769bec491405adc5132be6a48caebd71c46553</div>
-                                        <div>b9995768a5c23f697fe4588de49dfd9c2a142574bcd7e5dd55777e1805df83e2</div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                <div class="c-mt-4" v-if="!isGenesisBlock">
+                    <div class="bold">Transaction ID</div>
+                    <div class="row grey-border-stripe">
+                        <div class="pill width-7 white--text">RIPEMD-160</div>
+                        <div class="col-grow pill-value">{{contentMetadata.transaction.id}}</div>
+                    </div>
+                </div>
+                
+                <div class="c-mt-4" v-if="!isGenesisBlock">
+                    <div class="bold">Transaction HEX</div>
+                    <div class="row grey-border-stripe">
+                        <div class="pill width-7 white--text">HEX</div>
+                        <div class="col-grow pill-value">{{contentMetadata.transaction.hex}}</div>
                     </div>
                 </div>
 
@@ -137,23 +156,7 @@
                     <div class="bold">Chain ID</div>
                     <div class="row grey-border-stripe">
                         <div class="pill width-7 white--text">SHA256</div>
-                        <div class="col-grow pill-value">01769bec491405adc5132be6a48caebd71c46553</div>
-                    </div>
-                </div>
-
-                <div class="c-mt-4">
-                    <div class="bold">Public ID</div>
-                    <div class="row grey-border-stripe">
-                        <div class="pill width-7 white--text">SHA256</div>
-                        <div class="col-grow pill-value">01769bec491405adc5132be6a48caebd71c46553</div>
-                    </div>
-                </div>
-                
-                <div class="c-mt-4">
-                    <div class="bold">Transaction ID</div>
-                    <div class="row grey-border-stripe">
-                        <div class="pill width-7 white--text">SHA256</div>
-                        <div class="col-grow pill-value">01769bec491405adc5132be6a48caebd71c46553</div>
+                        <div class="col-grow pill-value">{{contentMetadata.chainId}}</div>
                     </div>
                 </div>
 
@@ -165,6 +168,8 @@
 <script>
     import { mapGetters } from 'vuex'
     import deipRpc from '@deip/deip-rpc-client'
+    import { findBlocksByRange } from './../../utils/blockchain'
+
 
     export default {
         name: "ResearchContentMetadata",
@@ -175,12 +180,30 @@
         },
 
         computed:{
+            ...mapGetters({
+                isLoadingResearchContentMetadataPage: 'rcd/isLoadingResearchContentMetadataPage',
+                contentMetadata: 'rcd/contentMetadata'
+            }),
+
+            isGenesisBlock(){
+                return this.contentMetadata.blockNum == 1;
+            }
         },
         
         methods: {
+            getContentHash(content) {
+                return content.indexOf('file:') == 0 ? content.slice(5) : content.indexOf('dar:') == 0 ? content.slice(4) : content;
+            }
         },
 
         created() {
+            const permlinks = {
+                group_permlink: this.$route.params.research_group_permlink,
+                research_permlink: this.$route.params.research_permlink,
+                content_permlink: this.$route.params.content_permlink,
+                darRef: this.$route.query.darRef
+            }
+            this.$store.dispatch('rcd/loadResearchContentMetadata', permlinks);
         }
     };
 </script>
@@ -200,6 +223,7 @@
 
         .pill-value {
             padding: 4px 16px;
+            word-wrap: break-word;
         }
     }
 </style>
