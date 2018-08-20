@@ -249,7 +249,14 @@ const actions = {
 
                     // to get the block with content tx details we need to run scanning
                     const startTime = contentProposal.creation_time;
-                    const endTime = contentProposal.expiration_time;
+                    
+                    /* todo: replace approximate estimated endTime with actual values 
+                       once we have moved this to aggreagtion server */
+                    // const endTime = contentProposal.expiration_time;
+
+                    var contentCreatedTimePlus10Minutes = new Date(new Date(`${content.created_at}Z`).getTime() + 1 * 60000);
+                    const endTimeIso = contentCreatedTimePlus10Minutes.toISOString();
+                    const endTime = endTimeIso.slice(0, endTimeIso.indexOf('.'));
                     const bounds = await findBlocksByRange(startTime, endTime);
 
                     var block;
@@ -257,19 +264,24 @@ const actions = {
                     var blockNum;
                     for (let i = bounds.first.num; i <= bounds.last.num; i++) {
                         block = await getBlock(i);
-                        
-                        const isFound = block.transactions.some((tx, idx) => {
+
+                        var isFound = false;
+
+                        for (let k = 0; k < block.transactions.length; k++) {
+                            const tx = block.transactions[k];
                             const createProposalOps = tx.operations.filter(o => o[0] === 'create_proposal');
                             const contentProposals = createProposalOps.filter(o => o[1].action == 11);
                             const wanted = contentProposals.find(p => {
                                 const data = JSON.parse(p[1].data);
-                                return data.content == content.content;
+                                return data.content == content.content && data.permlink == content.permlink;
                             });
-                            txIdx = idx;
 
-                            return wanted != undefined;
-                        })
-
+                            if (wanted) {
+                                isFound = true;
+                                txIdx = k;
+                                break;
+                            }
+                        }
 
                         if (isFound) {
                             blockNum = i;
@@ -280,7 +292,7 @@ const actions = {
                     const txHex = await getTransactionHex(tx)
                     // const witness = await getWitnessByAccount(block.witness)
                     const witnessUser = await getEnrichedProfiles([block.witness])
-                    const votersMeta = await getProposalVotesMeta(contentProposal)
+                    const votersMeta = await getProposalVotesMeta(contentProposal, endTime)
 
                     const contentMetadata = {
                         blockId: block.block_id,
@@ -302,33 +314,47 @@ const actions = {
                     };
                     commit('SET_RESEARCH_CONTENT_METADATA', contentMetadata)
 
-                    async function getProposalVotesMeta(proposal) {
+                    async function getProposalVotesMeta(proposal, endTime) {
                         const votersMeta = [];
-                        for (let i = 0; i < proposal.votes.length; i++) {
-                            const vote = proposal.votes[i];
-                            const bounds = await findBlocksByRange(vote.voting_time, proposal.expiration_time);
+                        const sortedVotes = proposal.votes.sort((a,b) => {return (a.voting_time > b.voting_time) ? 1 : ((b.voting_time > a.voting_time) ? -1 : 0);}); 
+                        const firstVote = sortedVotes[0];
+                        const bounds = await findBlocksByRange(firstVote.voting_time, endTime /* proposal.expiration_time */);
+
+                        const blocks = {};
+
+                        for (let i = 0; i < sortedVotes.length; i++) {
+                            const vote = sortedVotes[i];
+                                                            
                             for (let j = bounds.first.num; j <= bounds.last.num; j++) {
-                                const block = await getBlock(j);
-                                const proposalVoteOp = block.transactions.reduce(
-                                    function(accumulator, tx) {
-                                        const voteProposalOp = tx.operations.find(o => 
-                                            o[0] === 'vote_proposal' && 
-                                            o[1].proposal_id == proposal.id && 
-                                            o[1].voter === vote.voter);
+                                const block = blocks[j] ? blocks[j] : await getBlock(j);
+                                if (!blocks[j]) {
+                                    blocks[j] = block;
+                                }
+                                if (block.timestamp < vote.voting_time) {
+                                    continue;
+                                }
 
-                                        if (voteProposalOp) {
-                                            const payload = voteProposalOp[1];
-                                            payload.signature = tx.signatures[0];
-                                            accumulator.push(payload)
-                                        }
-                                        return accumulator;
-                                    }, []);
+                                var isFound = false;
 
-                                if (proposalVoteOp[0]) {
-                                    const metadata = proposalVoteOp[0]
-                                    const enrichedProfiles = await getEnrichedProfiles([metadata.voter]);
-                                    metadata.user = enrichedProfiles[0];
-                                    votersMeta.push(metadata);
+                                for (let k = 0; k < block.transactions.length; k++) {
+                                    const tx = block.transactions[k];
+                                    const voteProposalOp = tx.operations.find(o => 
+                                        o[0] === 'vote_proposal' && 
+                                        o[1].proposal_id == proposal.id && 
+                                        o[1].voter === vote.voter);
+
+                                    if (voteProposalOp) {
+                                        const metadata = voteProposalOp[1];
+                                        metadata.signature = tx.signatures[0];
+                                        const enrichedProfiles = await getEnrichedProfiles([metadata.voter]);
+                                        metadata.user = enrichedProfiles[0];
+                                        votersMeta.push(metadata);
+                                        isFound = true;
+                                        break;
+                                    }
+                                }
+
+                                if (isFound) {
                                     break;
                                 }
                             }
