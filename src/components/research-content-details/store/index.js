@@ -239,7 +239,7 @@ const actions = {
 
                     const contentProposal = proposals.filter(p => p.action == 11).find(p => {
                         const data = JSON.parse(p.data)
-                        return data.content == content.content;
+                        return data.content == content.content && data.permlink == content.permlink;
                     });
 
                     if (!contentProposal) {
