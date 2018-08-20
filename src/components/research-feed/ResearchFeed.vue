@@ -7,7 +7,9 @@
         <div class="content-column">
             <div class="filling">
                 <div class="row-nowrap">
-                    <div :class="{ 'invisible': !filter.disciplines.length }" class="filter-title subheading grey--text">My choise</div>
+                    <div :class="{ 'invisible': !filter.disciplines.length && filter.q === '' }"
+                        class="filter-title subheading grey--text"
+                    >My choise</div>
 
                     <div class="row col-grow align-center">
                         <div class="c-pr-4 display-flex" v-if="filter.q !== ''">
