@@ -110,14 +110,15 @@ const extendProposalByRelatedInfo = proposal => {
         return Promise.resolve(proposal);
     }
 
-    const keys = _.keys(extensionFuncs);
+    const fieldKeys = _.keys(extensionFuncs);
     
     // todo: a lot of the same queries go to server, so it should be optimized
     // by grouping the same queries in one and then populating necessery items
     // todo: use agregation services!!!
-    return Promise.all( _.map(extensionFuncs, func => func(proposal)) )
-        .then(data => {
-            keys.forEach((key, i) =>
+    return Promise.all( 
+            _.map(extensionFuncs, func => func(proposal) )
+        ).then(data => {
+            fieldKeys.forEach((key, i) =>
                 proposal.extension[key] = data[i]
             );
 

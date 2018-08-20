@@ -93,13 +93,15 @@ const actions = {
         deipRpc.api.getProposalsByResearchGroupIdAsync(groupId)
             .then(data => {
                 return Promise.all(
-                    data.map(item => proposalService.extendProposalByRelatedInfo(item))
+                    data.map(item =>
+                        proposalService.extendProposalByRelatedInfo(
+                            proposalService.getParsedProposal(item)
+                        )
+                    )
                 );
             })
             .then(data => {
-                commit('SET_PROPOSALS', 
-                    _.map(data, proposal => proposalService.getParsedProposal(proposal))
-                );
+                commit('SET_PROPOSALS', data);
             })
             .finally(() => {
                 commit('SET_GROUP_PROPOSALS_LOADING_STATE', false)
