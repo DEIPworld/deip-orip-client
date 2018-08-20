@@ -265,7 +265,6 @@ const actions = {
                                 const data = JSON.parse(p[1].data);
                                 return data.content == content.content;
                             });
-
                             txIdx = idx;
 
                             return wanted != undefined;
@@ -277,7 +276,6 @@ const actions = {
                             break;
                         }
                     }
-
                     const tx = await getTransaction(block.transaction_ids[txIdx])
                     const txHex = await getTransactionHex(tx)
                     // const witness = await getWitnessByAccount(block.witness)
@@ -302,7 +300,6 @@ const actions = {
                             hex: txHex
                         }
                     };
-                    
                     commit('SET_RESEARCH_CONTENT_METADATA', contentMetadata)
 
                     async function getProposalVotesMeta(proposal) {
@@ -310,12 +307,15 @@ const actions = {
                         for (let i = 0; i < proposal.votes.length; i++) {
                             const vote = proposal.votes[i];
                             const bounds = await findBlocksByRange(vote.voting_time, proposal.expiration_time);
-        
                             for (let j = bounds.first.num; j <= bounds.last.num; j++) {
-                                var block = await getBlock(j);
-                                const proposalVoteOps = block.transactions.reduce(
+                                const block = await getBlock(j);
+                                const proposalVoteOp = block.transactions.reduce(
                                     function(accumulator, tx) {
-                                        const voteProposalOp = tx.operations.find(o => o[0] === 'vote_proposal' && o[1].proposal_id == proposal.id);
+                                        const voteProposalOp = tx.operations.find(o => 
+                                            o[0] === 'vote_proposal' && 
+                                            o[1].proposal_id == proposal.id && 
+                                            o[1].voter === vote.voter);
+
                                         if (voteProposalOp) {
                                             const payload = voteProposalOp[1];
                                             payload.signature = tx.signatures[0];
@@ -323,14 +323,13 @@ const actions = {
                                         }
                                         return accumulator;
                                     }, []);
-        
-                                for (let k = 0; k < proposalVoteOps.length; k++) {
-                                    const metadata = proposalVoteOps[k];
-                                    if (!votersMeta.some(v => v.voter == metadata.voter)) {
-                                        const enrichedProfiles = await getEnrichedProfiles([metadata.voter]);
-                                        metadata.user = enrichedProfiles[0];
-                                        votersMeta.push(metadata);
-                                    }
+
+                                if (proposalVoteOp[0]) {
+                                    const metadata = proposalVoteOp[0]
+                                    const enrichedProfiles = await getEnrichedProfiles([metadata.voter]);
+                                    metadata.user = enrichedProfiles[0];
+                                    votersMeta.push(metadata);
+                                    break;
                                 }
                             }
                         }
