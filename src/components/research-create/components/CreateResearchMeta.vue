@@ -15,7 +15,7 @@
                                             solo multi-line></v-text-field>
                         </div>
 
-                        <div class="col-3 grey--text text--lighten-1 c-pl-4">Title guidelines text</div>
+                        <div class="col-3 grey--text text--lighten-1 c-pl-4">Research title</div>
                     </div>
 
                     <div class="row c-pt-4">
@@ -27,7 +27,7 @@
                                             solo multi-line></v-text-field>
                         </div>
 
-                        <div class="col-3 grey--text text--lighten-1 c-pl-4">Description/summary guidlines text Goals etc...?</div>
+                        <div class="col-3 grey--text text--lighten-1 c-pl-4">Description, summary, goals etc.</div>
                     </div>
 
                 <!--    <div class="row c-pt-4">
