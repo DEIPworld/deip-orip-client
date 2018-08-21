@@ -62,8 +62,8 @@
                 
                 <div class="c-mt-4">
                     <div class="row">
-                        <div class="bold width-10">Timestamp (ISO 8601)</div>
-                        <div class="c-pl-4">{{new Date(contentMetadata.timestamp).toISOString()}}</div>
+                        <div class="bold width-7">Timestamp<br>(ISO 8601)</div>
+                        <div class="c-pl-4 c-pt-3">{{new Date(contentMetadata.timestamp).toISOString()}}</div>
                     </div>
                 </div>
 
