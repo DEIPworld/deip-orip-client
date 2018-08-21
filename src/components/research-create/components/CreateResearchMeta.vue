@@ -1,7 +1,7 @@
 <template>
     <div class="column full-height">
         <div class="c-mb-4 col-grow column">
-            <div class="step-title">Add title, description and goals</div>
+            <div class="step-title">Add title and description</div>
 
             <div class="col-grow overflow-y-auto">
 

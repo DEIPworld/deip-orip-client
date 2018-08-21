@@ -1,7 +1,7 @@
 <template>
     <div class="column full-height">
         <div class="c-mb-4 col-grow column">
-            <div class="step-title">Select Research Group</div>
+            <div class="step-title">Select research group</div>
 
             <div class="col-grow overflow-y-auto">
                 

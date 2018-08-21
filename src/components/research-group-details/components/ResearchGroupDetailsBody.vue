@@ -18,7 +18,7 @@
             <div v-if="isLoadingResearchGroupDetails === false">
                 <div>
                     <v-icon small>date_range</v-icon>
-                    <span>Created 20 Jan 2018</span>
+                    <span>Created on 22 Aug 2018</span>
                 </div>
                 <div class="display-1 half-bold c-mt-10">{{ group ? group.name : '' }}</div>
                 <div class="c-pt-8">{{ group ? group.description : '' }}</div>

@@ -18,7 +18,7 @@
                 <div class="row justify-between align-center">
                     <div>
                         <v-icon size="18px">date_range</v-icon>
-                        <span>Created on {{ new Date(research.created_at).toDateString() }}</span>
+                        <span>Created on {{ research.created_at | dateFormat('D MMM YYYY', true) }}</span>
                     </div>
                 <!-- <v-btn @click="afterComplete" small color="primary" class="ma-0">Vote</v-btn> -->
                 </div>

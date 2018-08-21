@@ -1,7 +1,7 @@
 <template>
     <div class="column full-height">
         <div class="c-mb-4 col-grow column">
-            <div class="step-title">Invite Members</div>
+            <div class="step-title">Invite members</div>
             <div class="col-grow overflow-y-auto">
 
                 <div class="row c-mh-auto group-members-max-width">

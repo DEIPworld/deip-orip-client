@@ -29,7 +29,7 @@
                     <v-divider></v-divider> -->
 
                     <v-stepper-step step="4">
-                        <div class="uppercase">Review share</div>
+                        <div class="uppercase">Reward shares</div>
                     </v-stepper-step>
                 </v-stepper-header>
 

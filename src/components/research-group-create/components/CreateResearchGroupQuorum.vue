@@ -8,10 +8,10 @@
                     <div class="col-12">
                         <div>
                             Quorum shows how many votes it takes to approve a proposal (such as change in the reseach
-                            content, add research group members, research token sale, etc.) You can setup Quorum for each 
-                            proposal using
+                            content, adding research group members, research token sale, etc.) You can setup Quorum for each 
+                            proposal individually using
                             <span class="deip-blue-color half-bold clickable" @click="changeMode()">Advanced</span>
-                            options
+                            options.
                         </div>
 
                         <v-text-field v-model="totalQuorum"
@@ -228,6 +228,6 @@
 
 <style lang="less" scoped>
     .group-quorum-max-width {
-        max-width: 500px;
+        max-width: 510px;
     }
 </style>
