@@ -67,13 +67,13 @@
                     </div>
                 </div>
 
-                <div class="c-mt-6">
+                <div class="c-mt-8">
                     <div class="row">
                         <div class="bold width-7">Signee</div>
 
-                        <div class="c-pl-4 col-grow">
+                        <div class="col-grow">
                             <div>
-                                <div class="row c-mt-4">
+                                <div class="row">
                                     <v-avatar size="40px">
                                         <img v-if="contentMetadata.witness.user.profile" v-bind:src="contentMetadata.witness.user.profile.avatar | avatarSrc(40, 40, false)" />
                                         <v-gravatar v-else :email="contentMetadata.witness.user.account.name + '@deip.world'" />
@@ -86,14 +86,23 @@
                                     </div>
                                 </div>
 
-                                <div class="row grey-border-stripe c-mt-4">
-                                    <div class="col-2 pill width-7">
-                                        <div class="white--text">SHA256</div>
-                                        <div class="grey--text text--darken-3 c-pt-1">Signature</div>
+                                <div class="grey-border-stripe c-mt-4">
+                                    <div class="row-nowrap">
+                                        <div class="pill width-7">
+                                            <div class="white--text">SHA256</div>
+                                        </div>
+                                        <div class="col-grow pill-value">
+                                            <div>{{ contentMetadata.witness.signingKey }}</div>
+                                        </div>
                                     </div>
-                                    <div class="col-10 col-grow pill-value">
-                                        <div>{{contentMetadata.witness.signingKey}}</div>
-                                        <div class="c-pt-1">{{contentMetadata.witness.signature}}</div>
+                                    
+                                    <div class="row-nowrap">
+                                        <div class="pill width-7 display-flex">
+                                            <div class="grey--text text--darken-3 c-m-auto">Signature</div>
+                                        </div>
+                                        <div class="col-grow pill-value">
+                                            <div class="">{{ contentMetadata.witness.signature }}</div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -101,14 +110,14 @@
                     </div>
                 </div>
 
-                <div class="c-mt-6" v-if="!isGenesisBlock">
+                <div class="c-mt-8" v-if="!isGenesisBlock">
                     <div class="row">
                         <div class="bold width-7">Approved by</div>
 
-                         <div class="c-pl-4 col-grow" style="width: 500px">
+                         <div class="col-grow">
 
-                            <div v-for="voter in contentMetadata.voters">
-                                <div class="row c-mt-8">
+                            <div class="c-mb-4" v-for="voter in contentMetadata.voters">
+                                <div class="row">
                                     <v-avatar size="40px">
                                         <img v-if="voter.user.profile" v-bind:src="voter.user.profile.avatar | avatarSrc(40, 40, false)" />
                                         <v-gravatar v-else :email="voter.user.account.name + '@deip.world'" />
@@ -121,14 +130,23 @@
                                     </div>
                                 </div>
 
-                                <div class="row grey-border-stripe c-mt-4">
-                                    <div class="col-2 pill width-7">
-                                        <div class="white--text">SHA256</div>
-                                        <div class="grey--text text--darken-3 c-pt-1">Signature</div>
+                                <div class="grey-border-stripe c-mt-4">
+                                    <div class="row-nowrap">
+                                        <div class="pill width-7">
+                                            <div class="white--text">SHA256</div>
+                                        </div>
+                                        <div class="col-grow pill-value">
+                                            <div>{{ voter.user.account.owner.key_auths[0][0] }}</div>
+                                        </div>
                                     </div>
-                                    <div class="col-10 col-grow pill-value">
-                                        <div>{{voter.user.account.owner.key_auths[0][0]}}</div>
-                                        <div class="c-pt-1">{{voter.signature}}</div>
+                                    
+                                    <div class="row-nowrap">
+                                        <div class="pill width-7 display-flex">
+                                            <div class="grey--text text--darken-3 c-m-auto">Signature</div>
+                                        </div>
+                                        <div class="col-grow pill-value">
+                                            <div class="">{{ voter.signature }}</div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -146,8 +164,10 @@
                 
                 <div class="c-mt-4" v-if="!isGenesisBlock">
                     <div class="bold">Transaction HEX</div>
-                    <div class="row grey-border-stripe">
-                        <div class="pill width-7 white--text">HEX</div>
+                    <div class="row-nowrap grey-border-stripe">
+                        <div class="pill width-7 white--text display-flex">
+                            <div class="c-m-auto">HEX</div>
+                        </div>
                         <div class="col-grow pill-value">{{contentMetadata.transaction.hex}}</div>
                     </div>
                 </div>
@@ -214,16 +234,19 @@
     .grey-border-stripe {
         border: 1px solid @grey-lighten-1;
         border-radius: 2px;
+        position: relative;
 
         .pill {
+            flex: 0 0 auto;
             background-color: @grey-lighten-1;
             padding: 4px 8px;
             text-align: center;
+            vertical-align: middle;
         }
 
         .pill-value {
             padding: 4px 16px;
-            word-wrap: break-word;
+            word-break: break-word;
         }
     }
 </style>
