@@ -10,7 +10,7 @@
         "build": "node build/build.js"
     },
     "dependencies": {
-        "@deip/deip-rpc-client": "^1.0.8",
+        "@deip/deip-rpc-client": "^1.0.9",
         "@deip/lib-crypto": "^1.0.2",
         "@deip/substance-texture": "1.0.0-preview.3-preview.2.c021504afb0a34352d8bfb7592fff13763b25f45.patch-2",
         "@vue/web-component-wrapper": "^1.2.0",
