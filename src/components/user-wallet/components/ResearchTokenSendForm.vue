@@ -132,7 +132,6 @@
 
                     deipRpc.broadcast.transferResearchTokensAsync(
                         this.user.privKey,
-                        this.researchToken.id,
                         this.researchId,
                         this.user.username,
                         this.form.to,
@@ -150,6 +149,7 @@
                         this.$store.dispatch('layout/setError', {
                             message: "Transaction was failed"
                         });
+                        console.error(error);
                     }).finally(() => {
                         this.isSending = false;
                     });
