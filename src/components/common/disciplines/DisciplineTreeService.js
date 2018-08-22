@@ -1,10 +1,11 @@
 import _ from 'lodash';
 import disciplineTree from './DisciplineTree';
 
-const getNodeById = (node, id) => {
+const getNodeByIdRecursive = (node, id) => {
     if (node.id === id) {
         return node;
     }
+    
     if (!node.children) {
         return;
     }
@@ -12,7 +13,7 @@ const getNodeById = (node, id) => {
     const children = _.values(node.children);
 
     for (let i = 0; i < children.length; i++) {
-        let res = getNodeById(children[i], id);
+        let res = getNodeByIdRecursive(children[i], id);
 
         if (res) {
             return res;
@@ -20,7 +21,22 @@ const getNodeById = (node, id) => {
     }
 }
 
+const getNodeById = id => {
+    let node = getNodeByIdRecursive(disciplineTree, id);
+
+    return {
+        id: node.id,
+        label: node.label,
+        path: node.path
+    }
+};
+
+const getNodesByIdList = idList => {
+    return idList.map(id => getNodeById(id));
+};
+
 export {
     disciplineTree,
-    getNodeById
+    getNodeById,
+    getNodesByIdList
 }

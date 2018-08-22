@@ -10,7 +10,7 @@
 </template>
 
 <script>
-    import { disciplineTree, getNodeById } from './../DisciplineTreeService';
+    import { disciplineTree } from './../DisciplineTreeService';
     import _ from 'lodash';
 
     const mapExternalDisciplines = (selected, isMultipleSelect) => 

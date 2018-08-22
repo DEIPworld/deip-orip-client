@@ -97,7 +97,16 @@
                     <div class="display-flex" 
                         v-if="proposal.action === proposalTypes.START_RESEARCH"
                     >
-                        START_RESEARCH (to be done, no mockups)
+                        <div class="col-6">
+                            <div class="grey--text">{{ proposal.creator }}</div>
+                            <div class="c-pt-2">
+                                Reviewers' reward:
+                                <span class="bold">{{ convertToPercent(proposal.data.review_share_in_percent) }}%</span>
+                            </div>
+                        </div>
+                        <div class="col-6 grey--text column flex-wrap" style="max-height: 70px">
+                            <div v-for="(label, i) in getDisciplineNames()" :key="i">{{ label }}</div>
+                        </div>
                     </div>
 
                     <div class="row" v-else-if="proposal.action === proposalTypes.INVITE_MEMBER">
@@ -155,6 +164,7 @@
     import { mapGetters, mapActions } from 'vuex';
     import * as proposalService from "./../../../services/ProposalService";
     import * as researchService from "./../../../services/ResearchService";
+    import * as disciplineTreeService from "./../../common/disciplines/DisciplineTreeService";
     import _ from 'lodash';
     import deipRpc from '@deip/deip-rpc-client';
 
@@ -190,6 +200,12 @@
                 }).catch(err => {
                     alert(err.message);
                 });
+            },
+
+            // for START_RESEARCH
+            getDisciplineNames() {
+                let nodes = disciplineTreeService.getNodesByIdList(this.proposal.data.disciplines);
+                return nodes.map(node => node.label)
             },
 
             // for CREATE_RESEARCH_MATERIAL
