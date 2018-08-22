@@ -107,6 +107,7 @@
                                 {{ convertToPercent(proposal.data.research_group_token_amount_in_percent) }}%
                             </span>
                         </div>
+                        <div class="col-6 grey--text break-word white-space-pre-line">{{ proposal.data.cover_letter }}</div>
                     </div>
 
                     <div class="row" v-else-if="proposal.action === proposalTypes.START_RESEARCH_TOKEN_SALE">

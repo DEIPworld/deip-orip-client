@@ -108,7 +108,8 @@
                     proposalService.types.INVITE_MEMBER, [
                     this.groupId,
                     this.joinRequest.username,
-                    amount
+                    amount,
+                    this.coverLetter
                 ]);
 
                 const operation = ["create_proposal", {
@@ -164,7 +165,7 @@
             isOpen(newVal, oldVal) {
                 if (newVal) {
                     this.tokensAmount = undefined;
-                    this.coverLetter = `${this.joinRequest.coverLetter}`;
+                    this.coverLetter = this.joinRequest.coverLetter;
                 }
             }
         }

@@ -30,15 +30,13 @@
                                 </template>
                                 
                                 <template slot="item" slot-scope="data">
-                                    <template>
-                                        <div class="row-nowrap align-center">
-                                            <v-avatar size="30px">
-                                                <img v-if="data.item.profile" v-bind:src="data.item.profile.avatar | avatarSrc(30, 30, false)" />
-                                                <v-gravatar v-else :email="data.item.account.name + '@deip.world'" />
-                                            </v-avatar>
-                                            <span class="deip-blue-color c-pl-3">{{ data.item | fullname }}</span>
-                                        </div>
-                                    </template>
+                                    <div class="row-nowrap align-center">
+                                        <v-avatar size="30px">
+                                            <img v-if="data.item.profile" v-bind:src="data.item.profile.avatar | avatarSrc(30, 30, false)" />
+                                            <v-gravatar v-else :email="data.item.account.name + '@deip.world'" />
+                                        </v-avatar>
+                                        <span class="deip-blue-color c-pl-3">{{ data.item | fullname }}</span>
+                                    </div>
                                 </template>
                             </v-select>
 
@@ -53,6 +51,7 @@
                                 label="Cover letter" 
                                 multi-line auto-grow
                                 rows="3"
+                                v-model="coverLetter"
                             ></v-text-field>
 
                             <div class="display-flex c-pt-8">
@@ -104,7 +103,8 @@
                 allUsers: undefined,
 
                 selectedUser: undefined,
-                tokensAmount: undefined,
+                tokensAmount: '',
+                coverLetter: '',
 
                 isLoading: false
             }
@@ -121,13 +121,14 @@
                     proposalService.types.INVITE_MEMBER, [
                         this.groupId,
                         this.selectedUser.account.name,
-                        parseInt(this.tokensAmount) * this.DEIP_1_PERCENT
+                        parseInt(this.tokensAmount) * this.DEIP_1_PERCENT,
+                        this.coverLetter
                     ]
                 );
 
                 deipRpc.broadcast.createProposalAsync(
 					this.user.privKey,
-					this.user.username, 
+					this.user.username,
 					this.groupId,
 					proposal,
                     proposalService.types.INVITE_MEMBER,
@@ -152,7 +153,8 @@
             isOpen(newVal, oldVal) {
                 if (newVal) {
                     this.selectedUser = undefined;
-                    this.tokensAmount = undefined;
+                    this.tokensAmount = '';
+                    this.coverLetter = '';
 
                     deipRpc.api.getAllAccountsAsync()
                         .then(accounts => {

@@ -33,7 +33,6 @@ const labels = {
 // in every function to be sure every time about right data
 const proposalDataStringify = {
     1: (researchGroupId, title, abstract, permlink, reviewShareInPercent, dropoutCompensationInPercent, disciplines) => {
-        // `{"research_group_id": 0, "title": "quantum break", "abstract":"research for quantum break", "permlink":"quantumbreak108", "review_share_in_percent": 10, "dropout_compensation_in_percent": 5, "disciplines": [2]}`
         return {
             "research_group_id": researchGroupId, 
             "title": title, 
@@ -44,16 +43,15 @@ const proposalDataStringify = {
             "disciplines": disciplines
         };
     },
-    2: (researchGroupId, name, researchGroupTokenAmount) => {
-        // `{"research_group_id": 0, "name": "alice", "research_group_token_amount": 50}`
+    2: (researchGroupId, name, researchGroupTokenAmount, coverLetter) => {
         return {
             "research_group_id": researchGroupId,
             "name": name,
-            "research_group_token_amount_in_percent": researchGroupTokenAmount
+            "research_group_token_amount_in_percent": researchGroupTokenAmount,
+            "cover_letter": coverLetter
         };
     },
     5: (researchId, startTime, endTime, amount, softCap, hardCap) => {
-        // `{"research_id": 0, "start_time": "2018-04-03T15:15:04" , "end_time": "2018-04-03T16:22:43", "amount_for_sale": 5000, "soft_cap": 1000, "hard_cap": 1500}`
         return {
             "research_id": researchId,
             "start_time": startTime,
@@ -64,7 +62,6 @@ const proposalDataStringify = {
         };
     },
     11: (researchId, type, title, permlink, content, authors, references, externalReferences) => {
-        // `{"research_id": 0, "type": 2, "title": "My milestone", "content": "My quantum break", "authors": ["initdelegate"], "references": [], "external_references": []}`
         return {
             "research_id": researchId,
             "type": type,
