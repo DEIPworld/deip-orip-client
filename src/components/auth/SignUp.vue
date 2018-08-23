@@ -92,7 +92,7 @@
                         in the footer of any email you receive from us, or by contacting us at 
                         <a class="a" href="mailto:info@deip.world">info@deip.world</a>.
                         We will treat your information with respect. For more information about our privacy terms please read our
-                        <a class="a">Privacy Policy</a>.
+                        <a class="a" target="_blank" href="https://deip.world/DEIP%20PRIVACY%20POLICY.pdf">Privacy Policy</a>.
                         By clicking below, you agree that we may process your information in accordance with these terms.
                     </div>
 
