@@ -8,10 +8,8 @@
             {{ research.authors.join("  ·  ") }}
         </div>
         
-        <div>
-            <div class="c-pt-4 half-bold">
-                {{ research.abstract }}
-            </div>
+        <div v-show="!research.isCollapsed">
+            <div class="c-pt-4 half-bold">{{ research.abstract }}</div>
 
             <div class="c-pt-6">
                 <div class="row">
@@ -51,6 +49,13 @@
                 </div>
             </div>
         </div>
+
+        <div class="pos-absolute expand-btn">
+            <v-btn flat small icon color="grey" class="ma-0" @click="toggleItem()">
+                <v-icon v-show="research.isCollapsed">keyboard_arrow_down</v-icon>
+                <v-icon v-show="!research.isCollapsed">keyboard_arrow_up</v-icon>
+            </v-btn>
+        </div>
     </div>
 </template>
 
@@ -58,7 +63,7 @@
     import { mapGetters } from 'vuex'
 
     export default {
-        name: "ResearchListItem",
+        name: "ResearchFeedListItem",
         props: {
             research: { required: true, default: undefined }
         },
@@ -81,9 +86,18 @@
         },
         data() {
             return {};
+        },
+        methods: {
+            toggleItem() {
+                this.$store.dispatch('feed/toggleFeedItem', this.research.research_id)
+            },
         }
     };
 </script>
 
 <style lang="less" scoped>
+    .expand-btn {
+        right: 24px;
+        bottom: 12px;
+    }
 </style>

@@ -53,7 +53,7 @@
                     
                     <v-card v-if="isLoadingResearchFeed === false" class="hidden-last-child">
                         <template v-for="item in researchFeed">
-                            <research-list-item :is-collapsable="true" :research="item"></research-list-item>
+                            <research-feed-list-item :research="item"></research-feed-list-item>
                             <v-divider></v-divider>
                         </template> 
                     </v-card>
