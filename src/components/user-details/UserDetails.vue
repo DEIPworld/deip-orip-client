@@ -15,7 +15,7 @@
 </template>
 
 <script>
-    import usersService from './../../services/users'
+    import usersService from './../../services/http/users'
 
     export default {
         name: 'UserDetails',

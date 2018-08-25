@@ -1,9 +1,9 @@
 <template>
     <div fluid fill-height class="pa-0">
         <div class="file-content-container">
-            <iframe v-if="content && content.research_id !== undefined && content.content !== undefined" 
+            <iframe v-if="contentRef" 
                 id="file-iframe" frameborder="0" height="100%" width="100%" 
-                :src="`${fileStorageBaseUrl}/public/files/research/${content.research_id}/${content.content.slice(5)}`">
+                :src="`${fileStorageBaseUrl}/content/files/${contentRef.researchId}/${contentRef.hash}`">
             </iframe>
         </div>
     </div>
@@ -29,7 +29,8 @@
                 user: 'auth/user',
                 userGroups: 'auth/userGroups',
                 content: 'rcd/content',
-                research: 'rcd/research'
+                research: 'rcd/research',
+                contentRef: 'rcd/contentRef'
             }),
             isResearchGroupMember() {
                 return this.research != null 

@@ -1,4 +1,4 @@
-import http from './base/http'
+import http from './http'
 const registrationCommitteeUrl = process.env.DEIP_FOUNDATION_URL;
 const authorizationUrl = process.env.DEIP_SERVER_URL;
 

@@ -99,8 +99,8 @@
     import deipRpc from '@deip/deip-rpc-client';
     import {getAccessToken} from './../../../utils/auth'
     import { mapGetters } from 'vuex';
-    import * as proposalService from './../../../services/ProposalService';
-    import darService from './../../../services/dar';
+    import { signOperation } from './../../../utils/blockchain'
+    import { createContentProposal } from './../../../services/ResearchService'
     import vueDropzone from 'vue2-dropzone';
 
     export default {
@@ -138,7 +138,7 @@
             },
             dropzoneOptions() {
                 return this.research != null ? {
-                        url: `${process.env.DEIP_SERVER_URL}/api/files/upload-content`,
+                        url: `${process.env.DEIP_SERVER_URL}/content/upload-file`,
                         paramName: "research-content",
                         headers: {
                             "Research-Id": this.research.id.toString(),
@@ -170,48 +170,38 @@
                 this.$store.dispatch('layout/setError', {
                     message: "Sorry, the file storage server is temporarily unavailable, please try again later"
                 });
-                console.log(message);
                 this.close();
             },
             vdropzoneFileAdded(file) {
                 this.isOpen = true;
             },
-            vdropzoneSuccess(file, response) {
+            vdropzoneSuccess(file, res) {
+                const contentRef = res;
+                if (!contentRef.hash) {
+                    throw new Error("File upload has failed")
+                }
+                contentRef.title = this.title;
 
-                const hash = JSON.parse(file.xhr.response).hash;
-
-                const proposal = proposalService.getStringifiedProposalData(proposalService.types.CREATE_RESEARCH_MATERIAL, [
-                    this.research.id,
-                    this.type,
-                    this.title,
-                    this.title.replace(/ /g, "-").replace(/_/g, "-").toLowerCase(),
-                    `file:${hash}`,
-                    this.authors.map(a => {return a.account.name}),
-                    [],
-                    []
-                ]);
-
-                deipRpc.broadcast.createProposalAsync(
-					this.user.privKey,
-					this.user.username, 
-					this.research.research_group_id, 
-					proposal,
-                    proposalService.types.CREATE_RESEARCH_MATERIAL,
-					new Date( new Date().getTime() + 2 * 24 * 60 * 60 * 1000 )
-				).then(() => {
-                    this.$store.dispatch('layout/setSuccess', {
-                        message: "New Content Proposal has been created successfuly!"
-                    });
-                    this.close();
-                }, (err) => {
-                    this.$store.dispatch('layout/setError', {
-                        message: "An error occurred while creating proposal, please try again later"
-                    });
-                    console.log(err)
-                    this.close();
-                });
-            }
-
+                createContentProposal(contentRef, this.type, this.authors.map(a => a.account.name))
+                    .then((updatedRequest) => {
+                        this.$store.dispatch('layout/setSuccess', {
+                            message: "New Content Proposal has been created successfuly!"
+                        });
+                        this.$router.push({
+                            name: 'ResearchGroupDetails',
+                            params: { research_group_permlink: this.$route.params.research_group_permlink  }
+                        });
+                    }, (err) => {
+                        console.log(err) 
+                        this.$store.dispatch('layout/setError', {
+                            message: "An error occurred while creating proposal, please try again later"
+                        });
+                    })
+                    .finally(() => {
+                        this.proposeContent.isOpen = false;
+                        this.proposeContent.isLoading = false;
+                    })
+                }
         },
         watch: {
             isOpen(newVal, oldVal) {

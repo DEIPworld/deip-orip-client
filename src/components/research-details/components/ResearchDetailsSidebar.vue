@@ -322,7 +322,7 @@
 <script>
     import deipRpc from '@deip/deip-rpc-client';
     import { mapGetters } from 'vuex'
-    import joinRequestsService from './../../../services/joinRequests'
+    import joinRequestsService from './../../../services/http/joinRequests'
     import { extractName } from './../../../utils/user'
     import moment from 'moment';
 

@@ -2,15 +2,9 @@
     <v-container fluid fill-height class="pa-0 column-page">
     
         <div class="content-column">
-            <div>
-                <research-content-details-file
-                    v-if="isLoadingResearchContentPage === false && !darRef">
-                </research-content-details-file>
-
-                <research-content-details-dar 
-                    v-if="isLoadingResearchContentPage === false && darRef" :darRef="darRef">
-                </research-content-details-dar>
-
+            <div v-if="isLoadingResearchContentPage === false">
+                <research-content-details-file v-if="isFileContent"></research-content-details-file>
+                <research-content-details-dar v-if="isDarContent" :contentRef="contentRef"></research-content-details-dar>
             </div>
         </div>
 
@@ -41,12 +35,18 @@
                 totalVotesList: 'rcd/totalVotesList',
                 contentWeightByDiscipline: 'rcd/contentWeightByDiscipline',
                 isLoadingResearchContentPage: 'rcd/isLoadingResearchContentPage',
-                darRef: 'rcd/darRef'
+                contentRef: 'rcd/contentRef'
             }),
-            isResearchGroupMember(){
+            isResearchGroupMember() {
                 return this.research != null 
                     ? this.$store.getters['auth/userIsResearchGroupMember'](this.research.research_group_id) 
                     : false
+            },
+            isFileContent() {
+                return this.contentRef && this.contentRef.type === 'file';
+            },
+            isDarContent() {
+                return this.contentRef && this.contentRef.type === 'dar';
             }
         },
         
@@ -62,7 +62,7 @@
                 group_permlink: this.$route.params.research_group_permlink,
                 research_permlink: this.$route.params.research_permlink,
                 content_permlink: this.$route.params.content_permlink,
-                darRef: this.$route.query.darRef
+                ref: this.$route.query.ref
             }
             this.$store.dispatch('rcd/loadResearchContentDetails', permlinks);
         }

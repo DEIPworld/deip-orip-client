@@ -217,7 +217,7 @@
                 let parts = proposal.data.content.split(':');
 
                 return parts[0] === 'file'
-                    ? `${process.env.DEIP_SERVER_URL}/public/files/research/${proposal.data.research_id}/${parts[1]}`
+                    ? `${process.env.DEIP_SERVER_URL}/content/files/${proposal.data.research_id}/${parts[1]}`
                     : undefined;
             }
         },

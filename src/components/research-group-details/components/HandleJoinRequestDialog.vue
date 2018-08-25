@@ -63,7 +63,7 @@
     import { mapGetters } from 'vuex';
     import * as proposalService from './../../../services/ProposalService';
     import { signOperation } from './../../../utils/blockchain';
-    import joinRequestsService from './../../../services/joinRequests'
+    import joinRequestsService from './../../../services/http/joinRequests'
     import { getEnrichedProfiles } from './../../../utils/user';
 
     export default {

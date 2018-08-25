@@ -1,4 +1,4 @@
-import http from './base/http'
+import http from './http'
 const apiUrl = process.env.DEIP_SERVER_URL;
 
 const service = {

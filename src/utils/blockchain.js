@@ -9,7 +9,7 @@ export function signOperation(operation, ownerKey) {
                     const BlockPrefix = new Buffer(res.previous, 'hex').readUInt32LE(4);
                     const now = new Date().getTime() + 3e6;
                     const expire = new Date(now).toISOString().split('.')[0];
-    
+
                     const unsignedTX = {
                         'expiration': expire,
                         'extensions': [],
@@ -22,7 +22,7 @@ export function signOperation(operation, ownerKey) {
                         const signedTX = deipRpc.auth.signTransaction(unsignedTX, { "owner":  ownerKey });          
                         resolve(signedTX);
                     } catch (err) {
-                        reject();
+                        reject(err);
                     }
                 });
             }

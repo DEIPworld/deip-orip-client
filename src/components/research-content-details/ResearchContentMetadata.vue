@@ -221,7 +221,7 @@
                 group_permlink: this.$route.params.research_group_permlink,
                 research_permlink: this.$route.params.research_permlink,
                 content_permlink: this.$route.params.content_permlink,
-                darRef: this.$route.query.darRef
+                ref: this.$route.query.ref
             }
             this.$store.dispatch('rcd/loadResearchContentMetadata', permlinks);
         }

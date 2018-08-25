@@ -2,7 +2,7 @@ import _ from 'lodash';
 import deipRpc from '@deip/deip-rpc-client';
 import Vue from 'vue';
 import * as proposalService from "./../../../services/ProposalService"; 
-import joinRequestsService from './../../../services/joinRequests'
+import joinRequestsService from './../../../services/http/joinRequests'
 import { getEnrichedProfiles } from './../../../utils/user'
 import { constants } from 'os';
 

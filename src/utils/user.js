@@ -1,4 +1,4 @@
-import usersService from './../services/users'
+import usersService from './../services/http/users'
 import deipRpc from '@deip/deip-rpc-client';
 
 export function getEnrichedProfiles(usernames) {

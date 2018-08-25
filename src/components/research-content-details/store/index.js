@@ -2,7 +2,7 @@ import _ from 'lodash';
 import deipRpc from '@deip/deip-rpc-client'
 import Vue from 'vue'
 import { getEnrichedProfiles } from './../../../utils/user'
-import darService from './../../../services/dar'
+import contentHttpService from './../../../services/http/content'
 import { 
     findBlocksByRange, getDynamicGlobalProperties, getConfig, 
     getBlock, getTransaction, getTransactionHex } from './../../../utils/blockchain';
@@ -15,8 +15,9 @@ const state = {
     disciplinesList: [],
     totalVotesList: [],
     membersList: [],
+    contentProposal: undefined,
 
-    darRef: null,
+    contentRef: null,
     textureApiRef: null,
 
     isLoadingResearchContentPage: undefined,
@@ -39,6 +40,10 @@ const getters = {
         return state.research;
     },
 
+    contentProposal: (state) => {
+        return state.contentProposal;
+    },
+
     disciplinesList: (state, getters) => {
         return state.disciplinesList;
     },
@@ -47,8 +52,8 @@ const getters = {
         return state.totalVotesList;
     },
 
-    darRef: (state, getters) => {
-        return state.darRef;
+    contentRef: (state, getters) => {
+        return state.contentRef;
     },
 
     texture: (state, getters) => {
@@ -89,7 +94,6 @@ const getters = {
 
             map[research_content_id][discipline_id] = total_research_reward_weight;
         }
-
         return map;
     }
 }
@@ -98,50 +102,39 @@ const getters = {
 const actions = {
 
     loadResearchContentDetails({ state, commit, dispatch },
-            { group_permlink, research_permlink, content_permlink, darRef }) {
+            { group_permlink, research_permlink, content_permlink, ref }) {
 
         commit('RESET_STATE');
-
         commit('SET_RESEARCH_CONTENT_PAGE_LOADING_STATE', true)
 
-        if (!content_permlink || content_permlink == '!draft') {
-            // this is dar draft
-            commit('SET_RESEARCH_CONTENT_DAR_REF', darRef)
-            deipRpc.api.getResearchByAbsolutePermlinkAsync(group_permlink, research_permlink)
-                .then((research) => {
-
-                    const darRefLoad = darRef ? new Promise((resolve, reject) => {
-                        dispatch('loadResearchContentDarRef', { hashOrId: darRef, notify: resolve })
-                    }) : Promise.resolve();
-
-                    const researchDetailsLoad = new Promise((resolve, reject) => {
-                        dispatch('loadResearchDetails', { group_permlink, research_permlink, notify: resolve })
-                    });
-
-                    return Promise.all([researchDetailsLoad, darRefLoad])
-                })
+        if (!content_permlink || content_permlink === '!draft') {
+            // this is draft
+            const darRefLoad = new Promise((resolve, reject) => {
+                dispatch('loadResearchContentDarRef', { hashOrId: ref, notify: resolve })
+            });
+            const researchDetailsLoad = new Promise((resolve, reject) => {
+                dispatch('loadResearchDetails', { group_permlink, research_permlink, notify: resolve })
+            });
+            Promise.all([darRefLoad, researchDetailsLoad])
                 .finally(() => {
                     commit('SET_RESEARCH_CONTENT_PAGE_LOADING_STATE', false)
                 });
-
         } else {
             commit('SET_RESEARCH_CONTENT_DETAILS_LOADING_STATE', true)
             deipRpc.api.getResearchContentByAbsolutePermlinkAsync(group_permlink, research_permlink, content_permlink)
-                .then((content) => {
-                    commit('SET_RESEARCH_CONTENT_DETAILS', content)
+                .then((contentObj) => {
+                    commit('SET_RESEARCH_CONTENT_DETAILS', contentObj)
+                    const content = contentObj.content;
+                    const ref = content.indexOf('file:') == 0 ? content.slice(5) : content.indexOf('dar:') == 0 ? content.slice(4) : content;
 
-                    const darRefLoad = content.content.slice(0, 4) === 'dar:' ? new Promise((resolve, reject) => {
-                        dispatch('loadResearchContentDarRef', { hashOrId: content.content.slice(4), notify: resolve })
-                    }) : Promise.resolve();
-
+                    const darRefLoad = new Promise((resolve, reject) => {
+                        dispatch('loadResearchContentDarRef', { hashOrId: ref, notify: resolve })
+                    });
                     const researchDetailsLoad = new Promise((resolve, reject) => {
                         dispatch('loadResearchDetails', { group_permlink, research_permlink, notify: resolve })
                     });
-                    const contentVotesLoad = new Promise((resolve, reject) => {
-                        dispatch('loadResearchContentVotes', { researchId: content.research_id, notify: resolve })
-                    });
 
-                    return Promise.all([darRefLoad, researchDetailsLoad, contentVotesLoad])
+                    return Promise.all([darRefLoad, researchDetailsLoad])
                 }, (err) => {console.log(err)})
                 .finally(() => {
                     commit('SET_RESEARCH_CONTENT_DETAILS_LOADING_STATE', false)
@@ -191,7 +184,7 @@ const actions = {
                     user.rgt = rgtList.find(rgt => rgt.owner == user.account.name);
                 }
                 commit('SET_RESEARCH_MEMBERS_LIST', users)
-                
+                return deipRpc.api.getProposalsByResearchGroupIdAsync(state.research.research_group_id);
             }, (err) => {console.log(err)})
             .finally(() => {
                 commit('SET_RESEARCH_DETAILS_LOADING_STATE', false)
@@ -200,16 +193,25 @@ const actions = {
     },
 
     loadResearchContentDarRef({ state, commit, dispatch }, { hashOrId, notify }) {
-        darService.getDraftMeta(hashOrId)
-            .then((res) => {
-                commit('SET_RESEARCH_CONTENT_DAR_REF', res)
+        return contentHttpService.getContentRef(hashOrId)
+            .then((contentRef) => {
+                commit('SET_RESEARCH_CONTENT_REF', contentRef);
+                return deipRpc.api.getProposalsByResearchGroupIdAsync(contentRef.researchGroupId) 
             }, (err) => {console.log(err)})
+            .then((proposals) => {
+                const contentRef = state.contentRef;
+                const contentProposal = proposals.filter(p => p.action == 11).find(p => {
+                    const data = JSON.parse(p.data);
+                    const proposalContent = data.content;
+                    return proposalContent === `${contentRef.type}:${contentRef.hash}`;
+                });                
+                commit('SET_CONTENT_PROPOSAL', contentProposal || null)
+            })
             .finally(() => {
                 commit('SET_RESEARCH_DETAILS_LOADING_STATE', false)
                 if (notify) notify();
             });
     },
-
 
     setTexture({ state, commit, dispatch }, instance) {
         // temporal hack to avoid blocking while converting texture nested props to reactive ones, 
@@ -390,9 +392,7 @@ const actions = {
             } catch (err) {
                 console.error(err)
             }
-
     }
-
 }
 
 
@@ -416,8 +416,12 @@ const mutations = {
         Vue.set(state, 'research', research)
     },
 
-    ['SET_RESEARCH_CONTENT_DAR_REF'](state, darRef) {
-        state.darRef = darRef
+    ['SET_CONTENT_PROPOSAL'](state, contentProposal) {
+        Vue.set(state, 'contentProposal', contentProposal)
+    },
+
+    ['SET_RESEARCH_CONTENT_REF'](state, contentRef) {
+        state.contentRef = contentRef
     },
 
     ['SET_RESEARCH_CONTENT_PAGE_LOADING_STATE'](state, value) {
@@ -450,12 +454,14 @@ const mutations = {
     },
 
     ['RESET_STATE'](state) {
+        texture = undefined;
         Vue.set(state, 'membersList', [])
         Vue.set(state, 'disciplinesList', [])
         Vue.set(state, 'totalVotesList', [])
         Vue.set(state, 'content', null)
+        Vue.set(state, 'contentProposal', undefined)
         Vue.set(state, 'research', null)
-        Vue.set(state, 'darRef', null)
+        Vue.set(state, 'contentRef', null)
         Vue.set(state, 'textureApiRef', null)
     },
 

@@ -1,7 +1,7 @@
 import _ from 'lodash';
 import deipRpc from '@deip/deip-rpc-client';
 import Vue from 'vue';
-import usersService from './../../../services/users'
+import usersService from './../../../services/http/users'
 
 const state = {
     account: undefined,
