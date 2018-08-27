@@ -1,4 +1,5 @@
 import _ from 'lodash';
+import researchContentSvc from './http/content.js';
 import deipRpc from '@deip/deip-rpc-client';
 
 export const START_RESEARCH = 1;
@@ -107,7 +108,13 @@ const proposalExtenderMap = {
     2: undefined,
     5: undefined,
     11: {
-        research: proposal => deipRpc.api.getResearchByIdAsync(proposal.data.research_id)
+        research: proposal => deipRpc.api.getResearchByIdAsync(proposal.data.research_id),
+        draftContent: proposal =>
+            researchContentSvc.getContentRefs({ researchId: proposal.data.research_id })
+                .then(contents => {
+                    const contentHash = proposal.data.content.split(':')[1];
+                    return _.find(contents, content => content.hash === contentHash);
+                })
     }
 };
 
