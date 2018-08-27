@@ -100,7 +100,7 @@
     import {getAccessToken} from './../../../utils/auth'
     import { mapGetters } from 'vuex';
     import { signOperation } from './../../../utils/blockchain'
-    import { createContentProposal } from './../../../services/ResearchService'
+    import { createContentProposal, contentTypes } from './../../../services/ResearchService'
     import vueDropzone from 'vue2-dropzone';
 
     export default {
@@ -111,15 +111,9 @@
         data() { 
             return {
                 title: "",
-                permlink: "",
                 type: null,
                 authors: [],
-                
-                contentTypes: [
-                    { text: 'Announcement', id: 1 },
-                    { text: 'Milestone', id: 2 },
-                    { text: 'Final Result', id: 3 }
-                ],
+                contentTypes: contentTypes,
 
                 isOpen: false,
                 isLoading: false
