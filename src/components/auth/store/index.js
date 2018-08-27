@@ -3,8 +3,8 @@ import deipRpc from '@deip/deip-rpc-client';
 import Vue from 'vue'
 
 import { isLoggedIn, getDecodedToken, getOwnerWif } from './../../../utils/auth'
-import usersService from './../../../services/users'
-import joinRequestsService from './../../../services/joinRequests'
+import usersService from './../../../services/http/users'
+import joinRequestsService from './../../../services/http/joinRequests'
 import { getEnrichedProfiles } from './../../../utils/user'
 import * as proposalService from "./../../../services/ProposalService"; 
 

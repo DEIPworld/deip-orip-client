@@ -31,12 +31,11 @@
     export default {
         name: "ResearchContentDetailsDar",
         props: {
-            darRef: { type: Object }
+            contentRef: { type: Object }
         },
         data() { 
             return {
-                fileStorageBaseUrl: process.env.DEIP_SERVER_URL,
-                isDarContent: false
+                fileStorageBaseUrl: process.env.DEIP_SERVER_URL
             } 
         },
         computed: {
@@ -70,15 +69,14 @@
                 })
                 .then((groups) => {
                     substanceGlobals.DEBUG_RENDERING = platform.devtools;
-
                     const isReadOnly = 
                         getQueryStringParam('isReadOnly') === 'true'
-                        || this.darRef.status != "in-progress"
+                        || this.contentRef.status != "in-progress"
                         || !groups.some(id => id == research.research_group_id);
                     
-                    const archiveId = self.darRef._id;
+                    const archiveId = self.contentRef._id;
                     const storageType = 'fs';
-                    const storageUrl = `${self.fileStorageBaseUrl}/dar`;
+                    const storageUrl = `${self.fileStorageBaseUrl}/content`;
 
                     const container = this.$refs['deip-texture-container'];
                     const promise = new Promise((resolve, reject) => {

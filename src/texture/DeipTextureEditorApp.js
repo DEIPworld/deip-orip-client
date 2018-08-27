@@ -1,5 +1,5 @@
 import { TextureWebApp, EditorPackage } from '@deip/substance-texture'
-import { parseKeyEvent } from 'substance'
+import { parseKeyEvent, InMemoryDarBuffer } from 'substance'
 import TextureArticleAPI from '@deip/substance-texture/src/article/TextureArticleAPI'
 import HttpStorageClient from '@deip/substance-texture/src/dar/HttpStorageClient.js'
 

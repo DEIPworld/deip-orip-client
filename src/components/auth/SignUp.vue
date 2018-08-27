@@ -117,7 +117,7 @@
 <script>
     import deipRpc from '@deip/deip-rpc-client';
     import _ from 'lodash';
-    import authService from './../../services/auth'
+    import authService from './../../services/http/auth'
 
     export default {
         name: 'SignUp',

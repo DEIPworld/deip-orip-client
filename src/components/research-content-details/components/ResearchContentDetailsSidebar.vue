@@ -5,24 +5,20 @@
 
         <!-- ### START Research Content Details Section ### -->
         <div class="research-content-info-container">
-            <div v-if="isLoadingResearchContentPage === false && content">
-                <div class="c-mb-2" v-if="research">
-                    <router-link class="a sm-title" :to="{ 
-                        name: 'research-details', 
-                        params: { 
+            <div class="c-mb-4" v-if="research">
+                <router-link class="a sm-title" :to="{ name: 'research-details', params: { 
                             research_group_permlink: research.group_permlink,
                             research_permlink: research.permlink
                         }
                     }">{{ research.title }}</router-link>
-                </div>
-
-                <div class="sm-title bold">Content Info</div>
-
-                <div class="c-pb-6 c-pt-4">
+            </div>
+            <div v-if="content">
+                <div v-if="disciplinesList.length" class="sm-title bold">Content Info</div>
+                <div class="c-pb-6 c-pt-6">
                     <div v-for="(discipline, index) in disciplinesList" :key="index"
                         class="row align-center justify-between vote-btn-area" 
-                        :class="index === 0 ? '' : 'c-mt-1'"
-                    >
+                        :class="index === 0 ? '' : 'c-mt-1'">
+
                         <div class="deip-blue-color c-p-2">
                             {{discipline.name}}:  
                 
@@ -42,8 +38,7 @@
                                 research_group_permlink: research.group_permlink,
                                 research_permlink: research.permlink,
                                 content_permlink: content.permlink
-                            }
-                        }">Metadata</router-link>
+                            }}">Metadata</router-link>
                     </div>
                 </div>
             </div>
@@ -51,28 +46,29 @@
         <!-- ### END Research Content Details Section ### -->
 
         <!-- ### START Draft Actions Section ### -->
-        <div v-if="isLoadingResearchContentPage === false 
-                    && !content 
-                    && isResearchGroupMember 
-                    && isInProgress" class="research-content-info-container">
-            <div>
-                <div class="c-pb-6 text-align-center">
+        <div v-if="!content && isResearchGroupMember">
+            <div v-if="isInProgress" class="c-pb-6">
+                <div class="text-align-center">
                     <v-btn @click="openContentProposalDialog()" color="primary" class="ma-0" block outline>Propose Content</v-btn>
                 </div>
-                <div class="c-pb-6 text-align-center">
+            </div>
+            <div v-if="isSavingActionAvailable" class="c-pb-6">
+                <div class="text-align-center">
                     <v-btn @click="saveDraft()" :loading="isSavingDraft" :disabled="isSavingDraft" 
                         color="secondary" class="ma-0" block outline>
                         Save Draft
                     </v-btn>
                 </div>
             </div>
-        </div>
-        <div v-if="isLoadingResearchContentPage === false 
-                    && !content 
-                    && isResearchGroupMember 
-                    && !isInProgress" class="research-content-info-container">
-            <div>
-                <p>Draft is proposed for content and locked for editing</p>
+            <div v-if="isProposed" class="c-pb-6">
+                <div class="text-align-center">
+                    Draft is proposed as research content and locked for editing
+                </div>
+            </div>
+            <div v-if="isUnlockActionAvailable" class="research-content-info-container">
+                <div class="text-align-center">
+                    <v-btn @click="unlockDraft()">Unlock Draft</v-btn>
+                </div>
             </div>
         </div>
         <!-- ### END Draft Actions Section ### -->
@@ -166,9 +162,10 @@
 <script>
     import { mapGetters } from 'vuex';
     import deipRpc from '@deip/deip-rpc-client';
-    import darService from './../../../services/dar'
+    import contentHttpService from './../../../services/http/content'
     import * as proposalService from "./../../../services/ProposalService";
     import { signOperation } from './../../../utils/blockchain';
+    import { createContentProposal } from './../../../services/ResearchService'
 
     export default {
         name: "ResearchContentDetailsSidebar",
@@ -209,8 +206,9 @@
                 disciplinesList: 'rcd/disciplinesList',
                 totalVotesList: 'rcd/totalVotesList',
                 contentWeightByDiscipline: 'rcd/contentWeightByDiscipline',
+                contentProposal: 'rcd/contentProposal',
                 isLoadingResearchContentPage: 'rcd/isLoadingResearchContentPage',
-                darRef: 'rcd/darRef'
+                contentRef: 'rcd/contentRef'
             }),
             isResearchGroupMember() {
                 return this.research != null 
@@ -218,7 +216,25 @@
                     : false
             },
             isInProgress() {
-                return this.darRef && this.darRef.status == 'in-progress';
+                return this.contentRef && this.contentRef.status === 'in-progress';
+            },
+            isProposed() {
+                return this.contentRef && this.contentRef.status === 'proposed';
+            },
+            isUnlockActionAvailable() {
+                return this.isResearchGroupMember && this.hasNoActiveProposal && this.isProposed;
+            },
+            isSavingActionAvailable() {
+                return this.isResearchGroupMember && this.contentRef.type === 'dar' && this.isInProgress;
+            },
+            hasNoActiveProposal() {
+                const proposal = this.contentProposal;
+                if (proposal) {
+                    const isExpired = !(proposal.is_completed || 
+                        (new Date(`${proposal.expiration_time}Z`).getTime() > new Date().getTime()));
+                    return isExpired;
+                }
+                return true;
             }
         },
 
@@ -227,7 +243,7 @@
                 this.isSavingDraft = true;
                 const texture = this.$store.getters['rcd/texture'];
 
-                darService.getDraftMeta(this.$route.query.darRef)
+                contentHttpService.getContentRef(this.contentRef._id)
                     .then((draft) => {
                         return draft.status == 'in-progress' ? 
                             texture.save()
@@ -247,44 +263,31 @@
             },
 
             sendContentProposal() {
-                const texture = this.$store.getters['rcd/texture'];
+                var promise;
                 this.proposeContent.isLoading = true;
-                texture.save()
-                    .then(() => {
-                        return darService.getDraftMeta(this.$route.query.darRef)
-                    })
-                    .then((res) => {
-                        console.log(res);
-                        const hash = res.hash;
-                        const title = res.title || this.proposeContent.title;
-                        const permlink = title.replace(/ /g, "-").replace(/_/g, "-").toLowerCase();
-                        const content = `dar:${hash}`
-                        const type = this.proposeContent.type;
-                        const authors = this.proposeContent.authors.map(a => a.account.name);
+                if (this.contentRef.type === 'dar') {
+                    const texture = this.$store.getters['rcd/texture'];
+                    promise = texture.save()
+                        .then(() => {
+                            return contentHttpService.getContentRef(this.contentRef._id)
+                        })
+                        .then((contentRef) => {
+                            contentRef.title = contentRef.title || this.proposeContent.title;
+                            return contentRef;
+                        });
+                } else {
+                    this.contentRef.title = this.proposeContent.title;
+                    promise = Promise.resolve(this.contentRef)
+                }
 
-                        const proposal = proposalService.getStringifiedProposalData(
-                                proposalService.types.CREATE_RESEARCH_MATERIAL, [
-                                this.research.id, type, title, permlink, 
-                                content, authors, [], []
-                            ]);
-
-                        const operation = ["create_proposal", {
-                                creator: this.user.username,
-                                research_group_id: this.research.research_group_id,
-                                data: proposal,
-                                action: proposalService.types.CREATE_RESEARCH_MATERIAL,
-                                expiration_time: new Date( new Date().getTime() + 2 * 24 * 60 * 60 * 1000 )
-                            }];
-
-                        return signOperation(operation, this.user.privKey)
-                            .then((signedTX) => {
-                                return darService.createDarContentProposal(res._id, signedTX)
-                            })
-                            .then((updatedRequest) => {
+                promise
+                    .then((contentRef) => {
+                        createContentProposal(contentRef, this.proposeContent.type, this.proposeContent.authors.map(a => a.account.name))
+                            .then(() => {
                                 this.$store.dispatch('layout/setSuccess', {
                                     message: "New Content Proposal has been created successfuly!"
                                 });
-                                this.$router.push({ 
+                                this.$router.push({
                                     name: 'ResearchGroupDetails',
                                     params: { research_group_permlink: this.$route.params.research_group_permlink  }
                                 });
@@ -299,7 +302,6 @@
                                 this.proposeContent.isLoading = false;
                             })
                         })
-
             },
 
             userHasExpertise(discipline) {
@@ -316,16 +318,21 @@
             },
 
             openContentProposalDialog() {
-                const texture = this.$store.getters['rcd/texture'];
-                const articleTitle = texture.api.getArticleTitle();
-                var title;
-                try {
-                    title = articleTitle['_node']['content']
-                } catch(err) {
-                    title = "";
+                if (this.contentRef.type === 'dar') {
+                    const texture = this.$store.getters['rcd/texture'];
+                    const articleTitle = texture.api.getArticleTitle();
+                    var title;
+                    try {
+                        title = articleTitle['_node']['content']
+                    } catch(err) {
+                        title = "";
+                    }
+                    this.proposeContent.title = title;
+                    this.proposeContent.isOpen = true;
+
+                } else if (this.contentRef.type === 'file') {
+                    this.proposeContent.isOpen = true;
                 }
-                this.proposeContent.title = title;
-                this.proposeContent.isOpen = true;
             },
 
             closeContentProposalDialog() {
@@ -334,6 +341,15 @@
 
             isAuthorSelected(item) {
                 return this.proposeContent.authors.find(author => { return author.account.name == item.account.name }) !== undefined;
+            },
+
+            unlockDraft() {
+                contentHttpService.unlockContentDraft(this.contentRef._id)
+                    .then(() => {
+                        location.reload()
+                    }, (err) => {
+                        console.log(err)
+                    })
             }
         }
     };

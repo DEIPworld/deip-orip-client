@@ -3,7 +3,7 @@ import deipRpc from '@deip/deip-rpc-client'
 import Vue from 'vue'
 import { getAccessToken } from './../../../utils/auth'
 import { getEnrichedProfiles } from './../../../utils/user'
-import darService from './../../../services/dar'
+import contentHttpService from './../../../services/http/content'
 
 const state = {
     research: null,
@@ -17,7 +17,7 @@ const state = {
     tokenHoldersList: [],
     contributionsList: [],
     groupInvitesList: [],
-    draftsList: [],
+    contentRefsList: [],
 
     isLoadingResearchPage: undefined,
 
@@ -28,7 +28,7 @@ const state = {
     isLoadingResearchDisciplines: undefined,
     isLoadingResearchTokenHolders: undefined,
     isLoadingResearchTokenSale: undefined,
-    isLoadingResearchDrafts: undefined
+    isLoadingResearchContentRefs: undefined
 }
 
 // getters
@@ -41,8 +41,8 @@ const getters = {
     contentList: (state, getters) => {
         return state.contentList;
     },
-    draftsList: (state, getters) => {
-        return state.draftsList;
+    contentRefsList: (state, getters) => {
+        return state.contentRefsList;
     },
 
     membersList: (state, getters) => {
@@ -111,8 +111,8 @@ const getters = {
         return state.isLoadingResearchTokenSale;
     },
 
-    isLoadingResearchDrafts: (state, getters) => {
-        return state.isLoadingResearchDrafts;
+    isLoadingResearchContentRefs: (state, getters) => {
+        return state.isLoadingResearchContentRefs;
     },
 
     contentWeightByDiscipline: (state, getters) => {
@@ -207,8 +207,8 @@ const actions = {
                 const contentLoad = new Promise((resolve, reject) => {
                     dispatch('loadResearchContent', { researchId: state.research.id, notify: resolve })
                 });
-                const draftsLoad = new Promise((resolve, reject) => {
-                    dispatch('loadResearchDrafts', { researchId: state.research.id, notify: resolve })
+                const contentRefsLoad = new Promise((resolve, reject) => {
+                    dispatch('loadResearchContentRefs', { researchId: state.research.id, notify: resolve })
                 });
                 const membersLoad = new Promise((resolve, reject) => {
                     dispatch('loadResearchMembers', { groupId: state.research.research_group_id, notify: resolve })
@@ -230,7 +230,7 @@ const actions = {
                 });
 
                 return Promise.all([contentLoad, membersLoad, reviewsLoad, disciplinesLoad, 
-                    tokenHoldersLoad, tokenSaleLoad, invitesLoad, draftsLoad])
+                    tokenHoldersLoad, tokenSaleLoad, invitesLoad, contentRefsLoad])
 
             }, (err => {console.log(err)}))
             .finally(() => {
@@ -259,7 +259,6 @@ const actions = {
             .then((members) => {
                 rgtList.push(...members)
                 return getEnrichedProfiles(members.map(m => m.owner))
-
             }, (err) => {console.log(err)}) 
             .then((users) => {
                 for (let i = 0; i < users.length; i++) {
@@ -267,7 +266,6 @@ const actions = {
                     user.rgt = rgtList.find(rgt => rgt.owner == user.account.name);
                 }
                 commit('SET_RESEARCH_MEMBERS_LIST', users)
-                
             }, (err) => {console.log(err)})
             .finally(() => {
                 commit('SET_RESEARCH_MEMBERS_LOADING_STATE', false)
@@ -282,7 +280,6 @@ const actions = {
         deipRpc.api.getReviewsByResearchAsync(researchId)
             .then(items => {
                 reviews.push(...items);
-
                 return Promise.all([
                     Promise.all(
                         reviews.map(item => deipRpc.api.getReviewVotesByReviewIdAsync(item.id))
@@ -360,14 +357,14 @@ const actions = {
         })
     },
 
-    loadResearchDrafts({ state, dispatch, commit }, { researchId, notify }) {
-        commit('SET_RESEARCH_DRAFTS_LOADING_STATE', true)
-        darService.getDrafts(researchId)
-            .then((drafts) => {
-                commit('SET_RESEARCH_DRAFTS', drafts)
-            }, (err) => {console.log(err)})
+    loadResearchContentRefs({ state, dispatch, commit }, { researchId, notify }) {
+        commit('SET_RESEARCH_CONTENT_REFS_LOADING_STATE', true)
+        contentHttpService.getContentRefs({researchId})
+            .then((refs) => {
+                commit('SET_RESEARCH_CONTENT_REFS', refs)
+            }, (err) => { console.log(err)})
             .finally(() => {
-                commit('SET_RESEARCH_DRAFTS_LOADING_STATE', false)
+                commit('SET_RESEARCH_CONTENT_REFS_LOADING_STATE', false)
                 if (notify) notify();
             })
     },
@@ -447,8 +444,8 @@ const mutations = {
         Vue.set(state, 'groupInvitesList', invites)
     },
 
-    ['SET_RESEARCH_DRAFTS'](state, drafts) {
-        Vue.set(state, 'draftsList', drafts)
+    ['SET_RESEARCH_CONTENT_REFS'](state, refs) {
+        Vue.set(state, 'contentRefsList', refs)
     },
 
     ['SET_RESEARCH_DETAILS_LOADING_STATE'](state, value) {
@@ -483,8 +480,8 @@ const mutations = {
         state.isLoadingResearchTokenSale = value
     },
 
-    ['SET_RESEARCH_DRAFTS_LOADING_STATE'](state, value) {
-        state.isLoadingResearchDrafts = value
+    ['SET_RESEARCH_CONTENT_REFS_LOADING_STATE'](state, value) {
+        state.isLoadingResearchContentRefs = value
     },
 
     ['SET_RESEARCH_PAGE_LOADING_STATE'](state, value) {

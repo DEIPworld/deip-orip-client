@@ -254,7 +254,7 @@
 
 <script>
     import { mapGetters } from 'vuex';
-    import usersService from './../../../services/users'
+    import usersService from './../../../services/http/users'
     import vueDropzone from 'vue2-dropzone';
     import {getAccessToken} from './../../../utils/auth'
 
