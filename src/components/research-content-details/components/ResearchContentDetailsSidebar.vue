@@ -141,7 +141,7 @@
                             <div class="display-flex c-pt-8">
                                 <v-btn color="primary" 
                                     class="c-m-auto"
-                                    :disabled="proposeContent.isLoading"
+                                    :disabled="proposeContent.isLoading || !isCreatingProposalAvailable"
                                     :loading="proposeContent.isLoading"
                                     @click="sendContentProposal()"
                                 >Create proposal</v-btn>
@@ -165,7 +165,7 @@
     import contentHttpService from './../../../services/http/content'
     import * as proposalService from "./../../../services/ProposalService";
     import { signOperation } from './../../../utils/blockchain';
-    import { createContentProposal } from './../../../services/ResearchService'
+    import { createContentProposal, contentTypes } from './../../../services/ResearchService'
 
     export default {
         name: "ResearchContentDetailsSidebar",
@@ -179,15 +179,9 @@
                 },
                 proposeContent: {
                     title: "",
-                    permlink: "",
                     type: null,
                     authors: [],
-                
-                    contentTypes: [
-                        { text: 'Announcement', id: 1 },
-                        { text: 'Milestone', id: 2 },
-                        { text: 'Final Result', id: 3 }
-                    ],
+                    contentTypes: contentTypes,
 
                     isOpen: false,
                     isLoading: false
@@ -235,6 +229,9 @@
                     return isExpired;
                 }
                 return true;
+            },
+            isCreatingProposalAvailable() {
+                return this.proposeContent.title && this.proposeContent.type && this.proposeContent.authors.length;
             }
         },
 

@@ -196,7 +196,7 @@
                     let value = parseInt(el);
                     let isNumber = _.isFinite(value);
 
-                    return !isNumber || isNumber && (value > 100 || value < 5);
+                    return !isNumber || isNumber && (value > 100 || value < 6);
                 });
             }
         },
