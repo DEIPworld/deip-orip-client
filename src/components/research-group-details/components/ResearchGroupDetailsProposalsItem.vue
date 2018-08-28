@@ -146,9 +146,7 @@
                         <div class="col-6">
                             <div class="grey--text">{{ proposal.data.authors.join(' · ') }}</div>
                             <span class="bold">{{ getContentTypeStrById(proposal.data.type) }}:</span>
-
-                            <span v-if="!getContentUrl(proposal)">{{ proposal.data.title }}</span>
-                            <a v-else :href="getContentUrl(proposal)" class="a" target="_blank">{{ proposal.data.title }}</a>
+                            <a :href="getContentUrl(proposal)" class="a" target="_blank">{{ proposal.data.title }}</a>
                         </div>
                         <div class="col-6"></div>
                     </div>
@@ -214,11 +212,7 @@
                 return contentType.text;
             },
             getContentUrl(proposal) {
-                let parts = proposal.data.content.split(':');
-
-                return parts[0] === 'file'
-                    ? `${process.env.DEIP_SERVER_URL}/content/files/${proposal.data.research_id}/${parts[1]}`
-                    : `/#/${proposal.extension.research.group_permlink}/research/${proposal.extension.research.permlink}/!draft?ref=${proposal.extension.draftContent._id}`;
+                return `/#/${proposal.extension.research.group_permlink}/research/${proposal.extension.research.permlink}/!draft?ref=${proposal.extension.draftContent._id}`;
             }
         },
         computed: {
