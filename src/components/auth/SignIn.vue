@@ -138,7 +138,7 @@
 
 <style lang="less" scoped>
     .page-container {
-        width: 500px;
+        width: 550px;
         height: 400px;
     }
 </style>

@@ -67,7 +67,6 @@
                     <v-text-field class="c-mt-4"
                         label="Your key"
                         disabled
-                        multi-line no-resize rows="2"
                         v-model="formData.privKey"
                     ></v-text-field>
 
@@ -222,7 +221,7 @@
 
 <style lang="less" scoped>
     .page-container {
-        width: 500px;
+        width: 550px;
         min-height: 100%;
         padding: 40px 0;
     }
