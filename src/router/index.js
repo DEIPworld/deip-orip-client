@@ -18,6 +18,7 @@ import SignUp from '@/components/auth/SignUp'
 import EmailSendingRegistration from '@/components/auth/EmailSendingRegistration'
 import DataFillingRegistration from '@/components/auth/DataFillingRegistration'
 import ClaimExpertiseRegistration from '@/components/auth/ClaimExpertiseRegistration'
+import CreateAccountTestNet from '@/components/auth/CreateAccountTestNet'
 
 import UserDetails from '@/components/user-details/UserDetails'
 import UserWallet from '@/components/user-wallet/components/UserWallet'
@@ -44,6 +45,11 @@ const router = new Router({
         path: '/sign-up',
         name: 'SignUp',
         component: SignUp
+    }, {
+        // page for test net only
+        path: '/create-test-net-account',
+        name: 'create-test-net-account',
+        component: CreateAccountTestNet
     }, {
         path: '/research-feed',
         name: 'ResearchFeed',
@@ -112,7 +118,7 @@ const router = new Router({
 
 
 router.beforeEach((to, from, next) => {
-    if (to.path == '/sign-in' || to.path == '/sign-up') {
+    if (to.path === '/sign-in' || to.path === '/sign-up' || to.path === '/create-test-net-account') {
         if (isLoggedIn()) {
             next('/') // if token is already presented redirect user to home page
         } else {
