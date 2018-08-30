@@ -100,7 +100,6 @@
 <script>
     import deipRpc from '@deip/deip-rpc-client';
     import _ from 'lodash';
-    import authService from './../../services/http/auth'
 
     export default {
         name: 'CreateAccountTestNet',
@@ -161,7 +160,7 @@
                     this.isServerValidated = true;
                 }).catch(err => {
                     this.isSaving = false;
-                    self.$store.dispatch('layout/setError', 'An error occured');
+                    this.$store.dispatch('layout/setError', { message: 'An error occured' });
                     console.log(err);
                 });
             },

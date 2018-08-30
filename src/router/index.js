@@ -47,8 +47,8 @@ const router = new Router({
         component: SignUp
     }, {
         // page for test net only
-        path: '/create-test-net-account',
-        name: 'create-test-net-account',
+        path: '/create-testnet-account',
+        name: 'create-testnet-account',
         component: CreateAccountTestNet
     }, {
         path: '/research-feed',
