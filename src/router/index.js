@@ -19,6 +19,7 @@ import EmailSendingRegistration from '@/components/auth/EmailSendingRegistration
 import DataFillingRegistration from '@/components/auth/DataFillingRegistration'
 import ClaimExpertiseRegistration from '@/components/auth/ClaimExpertiseRegistration'
 import CreateAccountTestNet from '@/components/auth/CreateAccountTestNet'
+import VotingForBlockProducers from '@/components/voting-for-block-producers/VotingForBlockProducers'
 
 import UserDetails from '@/components/user-details/UserDetails'
 import UserWallet from '@/components/user-wallet/components/UserWallet'
@@ -50,6 +51,10 @@ const router = new Router({
         path: '/create-testnet-account',
         name: 'create-testnet-account',
         component: CreateAccountTestNet
+    }, {
+        path: '/voting-for-block-producers',
+        name: 'voting-for-block-producers',
+        component: VotingForBlockProducers
     }, {
         path: '/research-feed',
         name: 'ResearchFeed',

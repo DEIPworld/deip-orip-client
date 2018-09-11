@@ -6,7 +6,7 @@ import { isLoggedIn, getDecodedToken, getOwnerWif } from './../../../utils/auth'
 import usersService from './../../../services/http/users'
 import joinRequestsService from './../../../services/http/joinRequests'
 import { getEnrichedProfiles } from './../../../utils/user'
-import * as proposalService from "./../../../services/ProposalService"; 
+import * as proposalService from "./../../../services/ProposalService";
 
 const state = {
     user: {
@@ -250,13 +250,16 @@ const actions = {
 
     loadAccount({ state, commit, getters }) {
         const user = getters.user;
+
         if (user.username) {
-            deipRpc.api.getAccountsAsync([user.username])
+            return deipRpc.api.getAccountsAsync([user.username])
                 .then((account) => {
                     commit('SET_USER_ACCOUNT', account)
                 }, (err) => {
                     console.log(err)
                 })
+        } else {
+            return Promise.resolve();
         }
     }
 }
