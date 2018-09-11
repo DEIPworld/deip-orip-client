@@ -9,6 +9,7 @@ import Vuetify from 'vuetify';
 import 'vuetify/dist/vuetify.css';
 import './styles/common.less';
 import 'vue2-dropzone/dist/vue2Dropzone.css';
+import '@mdi/font/css/materialdesignicons.css';
 
 import deipRpc from '@deip/deip-rpc-client';
 import './index';
