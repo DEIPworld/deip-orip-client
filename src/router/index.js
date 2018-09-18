@@ -24,7 +24,9 @@ import VotingForBlockProducers from '@/components/voting-for-block-producers/Vot
 import UserDetails from '@/components/user-details/UserDetails'
 import UserWallet from '@/components/user-wallet/components/UserWallet'
 
+import GrantStartCreating from '@/components/grand-create/GrantStartCreating'
 import CreateDisciplineGrant from '@/components/grand-create/CreateDisciplineGrant'
+import CreateDirectGrant from '@/components/grand-create/CreateDirectGrant'
 
 import { isLoggedIn } from './../utils/auth';
 
@@ -112,9 +114,17 @@ const router = new Router({
         name: 'UserWallet',
         component: UserWallet
     }, {
+        path: '/create-grant',
+        name: 'CreateGrant',
+        component: GrantStartCreating
+    }, {
         path: '/create-discipline-grant',
         name: 'CreateDisciplineGrant',
         component: CreateDisciplineGrant
+    }, {
+        path: '/create-direct-grant',
+        name: 'CreateDirectGrant',
+        component: CreateDirectGrant
     }, {
         path: '*',
         redirect: '/research-feed'
