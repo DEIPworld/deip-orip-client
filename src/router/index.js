@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 import SetExpertisePage from '@/components/SetExpertisePage'
+import NoAccessPage from '@/components/NoAccessPage'
 
 import ResearchFeed from '@/components/research-feed/ResearchFeed'
 import ResearchDetails from '@/components/research-details/ResearchDetails'
@@ -40,6 +41,13 @@ const router = new Router({
         // meta: {
         //     withoutHeader: true
         // }
+    }, {
+        path: '/no-access-page',
+        name: 'no-access-page',
+        component: NoAccessPage,
+        meta: {
+            withoutHeader: true
+        }
     }, {
         path: '/sign-in',
         name: 'SignIn',
