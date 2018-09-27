@@ -30,6 +30,12 @@
                         <div class="col-3 grey--text text--lighten-1 c-pl-4">Description, summary, goals etc.</div>
                     </div>
 
+                    <div class="row c-pt-4">
+                        <div class="col-offset-3 col-6">
+                            <v-checkbox v-model="tmpIsPrivate" label="Choose if group should be private"></v-checkbox>
+                        </div>
+                    </div>
+
                 <!--    <div class="row c-pt-4">
                         <div class="col-3 font-18px bold c-pr-4">Main goals of your research</div>
                         <div class="col-6">
@@ -63,7 +69,8 @@
         data() { 
             return {
                 title: "",
-                description: ""
+                description: "",
+                tmpIsPrivate: false
             }
         },
         computed: {

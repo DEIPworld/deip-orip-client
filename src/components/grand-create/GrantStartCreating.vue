@@ -23,7 +23,7 @@
                     <div class="vertical-devider"></div>
 
                     <div class="col-grow c-pl-8">
-                        <v-btn block color="primary" class="ma-0" :to="{ name: 'CreateDirectGrant' }">Direct</v-btn>
+                        <v-btn block color="primary" class="ma-0" :to="{ name: 'CreateDirectGrant' }">Direct grant</v-btn>
 
                         <div class="c-pt-8 text-align-left">
                             <div class="bold">Direct Grant is</div>
