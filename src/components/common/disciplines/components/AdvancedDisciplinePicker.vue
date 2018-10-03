@@ -1,6 +1,6 @@
 <template>
     <div class="row discipline-picker full-height overflow-y-auto">
-        <div class="col-3 c-p-4 overflow-y-auto">
+        <div class="col-3 c-p-4 overflow-y-auto" v-if="withRecentlyUsed">
             <div class="bold uppercase c-pb-4">Recently used</div>
             <div><span class="deip-label">Religion</span></div>
             <div><span class="deip-label">Chemistry</span></div>
@@ -9,7 +9,7 @@
             <div><span class="deip-label">Belarusian</span></div>
         </div>
 
-        <div class="col-3 c-p-4 overflow-y-auto">
+        <div class="c-p-4 overflow-y-auto" :class="withRecentlyUsed ? 'col-3' : 'col-4'">
             <div class="bold uppercase c-pb-4">Popular</div>
             <div><span class="deip-label">Religion</span></div>
             <div><span class="deip-label">Chemistry</span></div>
@@ -18,7 +18,7 @@
             <div><span class="deip-label">Belarusian</span></div>
         </div>
 
-        <div class="col-6 c-p-4 full-height overflow-y-auto">
+        <div class="c-p-4 full-height overflow-y-auto" :class="withRecentlyUsed ? 'col-6' : 'col-8'">
             <div class="bold uppercase c-pb-4">All</div>
 
             <discipline-tree-picker
@@ -34,7 +34,8 @@
     export default {
         name: "AdvancedDisciplinePicker",
         props: {
-            isMultipleSelect: { type: Boolean, required: false, default: true }
+            isMultipleSelect: { type: Boolean, required: false, default: true },
+            withRecentlyUsed: { type: Boolean, required: false, default: true }
         },
         methods: {
             select(selected){

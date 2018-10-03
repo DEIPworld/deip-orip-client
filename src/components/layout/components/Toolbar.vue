@@ -166,6 +166,6 @@
     }
 
     .deip-toolbar {
-        z-index: 1001;
+        z-index: 200;
     }
 </style>

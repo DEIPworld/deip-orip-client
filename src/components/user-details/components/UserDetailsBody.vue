@@ -247,8 +247,15 @@
                     </div>
                 </div>
             </div>
+
+            <v-btn class="c-mt-12" @click="isClaimExpertiseShown = true">Show user-claim-expertise-dialog</v-btn>
         </div>
         <!-- ### END User Profile Education\Employment Section ### -->
+
+        <user-claim-expertise-dialog
+            :is-shown="isClaimExpertiseShown"
+            @close="isClaimExpertiseShown = false"
+        ></user-claim-expertise-dialog>
     </div>
 </template>
 
@@ -281,7 +288,9 @@
                 avatarUploadIsShown: false,
 
                 accountName: this.$route.params.account_name,
-                fileStorageBaseUrl: process.env.DEIP_SERVER_URL
+                fileStorageBaseUrl: process.env.DEIP_SERVER_URL,
+
+                isClaimExpertiseShown: false
             }
         },
         computed: {
