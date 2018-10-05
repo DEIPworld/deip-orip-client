@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import Router from 'vue-router'
+
 import SetExpertisePage from '@/components/SetExpertisePage'
 import NoAccessPage from '@/components/NoAccessPage'
 
@@ -28,6 +29,8 @@ import UserWallet from '@/components/user-wallet/components/UserWallet'
 import GrantStartCreating from '@/components/grand-create/GrantStartCreating'
 import CreateDisciplineGrant from '@/components/grand-create/CreateDisciplineGrant'
 import CreateDirectGrant from '@/components/grand-create/CreateDirectGrant'
+
+import ClaimUserExpertisePage from '@/components/claim-expertise/ClaimUserExpertisePage'
 
 import { isLoggedIn } from './../utils/auth';
 
@@ -133,6 +136,10 @@ const router = new Router({
         path: '/create-direct-grant',
         name: 'CreateDirectGrant',
         component: CreateDirectGrant
+    }, {
+        path: '/claim-user-experience',
+        name: 'claim-user-expertise-page',
+        component: ClaimUserExpertisePage
     }, {
         path: '*',
         redirect: '/research-feed'
