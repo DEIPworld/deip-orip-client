@@ -2,7 +2,7 @@
     <div class="column full-height">
         <div class="c-mb-4 col-grow column">
             <div class="step-title">Direct grants distribution</div>
-            <div class="sm-title bold c-mb-2 text-align-center">Please type special conditions (optional)</div>
+            <div class="sm-title bold c-mb-2 text-align-center">Please type special conditions</div>
 
             <div class="caption c-mb-4 text-align-center grey--text">
                 You can grant your expertise tokens that match researcher's disciplines
@@ -11,12 +11,36 @@
             <div class="col-grow overflow-y-auto">
 
                 <div class="c-mh-auto full-height discipline-conditions">
-                    <div class="c-pt-12">
-                        <v-text-field v-model="grantInfo.description"
-                            multi-line
-                            rows="3" auto-grow
-                            label="You can mention some important features"
-                        ></v-text-field>
+                    <div class="c-pt-6">
+                        <div class="row">
+                            <div class="col-6 c-pr-3">
+                                <datetime-picker
+                                    label="From"
+                                    :datetime="grantInfo.startDate"
+                                    @input="setDateFrom"
+                                ></datetime-picker>
+                            </div>
+                            
+                            <div class="col-6 c-pl-3">
+                                <datetime-picker
+                                    label="To"
+                                    :datetime="grantInfo.endDate"
+                                    @input="setDateTo"
+                                ></datetime-picker>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="c-pt-4 subheading bold">Description (optional)</div>
+
+                                <v-text-field v-model="grantInfo.description"
+                                    multi-line
+                                    rows="3" auto-grow
+                                    label="You can mention some important features"
+                                ></v-text-field>
+                            </div>
+                        </div>
                     </div>
                 </div>
 
@@ -30,7 +54,7 @@
             
             <v-btn color="primary" 
                 @click.native="finish()" 
-                :disabled="isLoading"
+                :disabled="!grantInfo.startDate || !grantInfo.endDate || isLoading"
                 :loading="isLoading"
             >Give grant</v-btn>
         </div>
@@ -52,6 +76,12 @@
             },
             prevStep() {
                 this.$emit('decStep');
+            },
+            setDateFrom(date) {
+                this.grantInfo.startDate = date;
+            },
+            setDateTo(date) {
+                this.grantInfo.endDate = date;
             }
         },
 
