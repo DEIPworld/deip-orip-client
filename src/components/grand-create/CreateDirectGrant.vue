@@ -81,6 +81,8 @@
                 grantInfo: {
                     research: undefined,
                     amount: '',
+                    startDate: undefined,
+                    endDate: undefined,
                     description: ''
                 }
             }
