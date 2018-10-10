@@ -19,12 +19,14 @@
         name: 'ClaimUserExpertisePage',
         data() {
             return {
+                claimerUsername: 'bob'
             }
         },
         methods: {
 
         },
         created() {
+            this.$store.dispatch('claimExpertise/loadClaimer', this.claimerUsername);
         }
     }
 </script>
