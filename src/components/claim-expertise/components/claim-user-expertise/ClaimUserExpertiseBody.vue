@@ -2,27 +2,26 @@
     <div class="">
         <div class="row">
             <v-avatar size="160px" class="">
-                <!-- <img v-bind:src="userInfo.profile.avatar | avatarSrc(160, 160, false)" /> -->
-                <v-gravatar :email="'helloworld' + '@deip.world'" />
+                <img v-if="claimerInfo.profile" v-bind:src="claimerInfo.profile.avatar | avatarSrc(160, 160, false)" />
+                <v-gravatar v-if="!claimerInfo.profile && claimerInfo.account" :email="claimerInfo.account.name + '@deip.world'" />
             </v-avatar>
 
             <div class="col-grow c-pl-12">
                 <div class="display-1 half-bold c-pt-4">
-                    <span class="a">William Watkins</span>
+                    <router-link class="a" :to="{ name: 'UserDetails', params: { account_name: claimerInfo.account.name }}">
+                        {{ claimerInfo | fullname }}
+                    </router-link>
                 </div>
 
                 <div class="c-pt-4">
                     <div class="row half-bold">
                         <span class="c-mt-1">
-                            <v-icon small>location_on</v-icon>
-                            San Diego, CA
+                            <v-icon small>location_on</v-icon> {{ locationString }}
                         </span>
                     </div>
                 </div>
 
-                <div class="c-pt-2">
-                    Belarusian state university
-                </div>
+                <div v-if="claimerInfo.profile" class="c-pt-2">{{ claimerInfo | employmentOrEducation}}</div>
             </div>
         </div>
 
@@ -64,6 +63,8 @@
 </template>
 
 <script>
+    import { mapGetters } from 'vuex';
+
     export default {
         name: 'ClaimUserExpertiseBody',
         data() {
@@ -72,8 +73,25 @@
             }
         },
         computed: {
+            ...mapGetters({
+                claimerInfo: 'claimExpertise/claimerInfo'
+            }),
+            locationString() {
+                const profile = this.claimerInfo ? this.claimerInfo.profile : null;
+                let location = "";
+
+                if (profile) {
+                    location += profile.location.city ? profile.location.city : '';
+                    location += profile.location.city && profile.location.country ? ', ' : '';
+                    location += profile.location.country ? profile.location.country : '';
+                }
+
+                return location;
+            }
         },
         methods: {
+        },
+        created() {
         }
     }
 </script>
