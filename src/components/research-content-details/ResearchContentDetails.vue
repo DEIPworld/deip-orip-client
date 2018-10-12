@@ -1,18 +1,18 @@
 <template>
-    <v-container fluid fill-height class="pa-0 column-page">
+    <page-container>
     
-        <div class="content-column">
+        <div class="col-grow full-height">
             <div v-if="isLoadingResearchContentPage === false">
                 <research-content-details-file v-if="isFileContent"></research-content-details-file>
                 <research-content-details-dar v-if="isDarContent" :contentRef="contentRef"></research-content-details-dar>
             </div>
         </div>
 
-        <v-card height="100%" class="sidebar">
+        <sidebar>
             <research-content-details-sidebar></research-content-details-sidebar>
-        </v-card>
+        </sidebar>
 
-    </v-container>   
+    </page-container>  
 </template>
 
 <script>

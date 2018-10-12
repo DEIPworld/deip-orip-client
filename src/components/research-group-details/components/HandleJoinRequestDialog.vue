@@ -9,50 +9,48 @@
                 <v-spacer></v-spacer>
             </v-toolbar>
             
-            <div class="column-page">
-                <div class="content-column">
-                    <div class="filling">
-                        <div class="c-pb-4" v-if="joinRequest">
-                            <v-avatar size="40px">
-                                <img v-if="joinRequest.user.profile" v-bind:src="joinRequest.user.profile.avatar | avatarSrc(40, 40, false)" />
-                                <v-gravatar v-else :title="joinRequest.user.account.name" :email="joinRequest.user.account.name + '@deip.world'" />
-                            </v-avatar>
+            <page-container>
+                <contentbar>
+                    <div class="c-pb-4" v-if="joinRequest">
+                        <v-avatar size="40px">
+                            <img v-if="joinRequest.user.profile" v-bind:src="joinRequest.user.profile.avatar | avatarSrc(40, 40, false)" />
+                            <v-gravatar v-else :title="joinRequest.user.account.name" :email="joinRequest.user.account.name + '@deip.world'" />
+                        </v-avatar>
 
-                            <span class="half-bold c-pl-3">{{ joinRequest.user | fullname }}</span>
-                        </div>
+                        <span class="half-bold c-pl-3">{{ joinRequest.user | fullname }}</span>
+                    </div>
 
-                        <v-text-field
-                            label="Group tokens share"
-                            v-model="tokensAmount"
-                            suffix="%"
-                            mask="###"
-                        ></v-text-field>
+                    <v-text-field
+                        label="Group tokens share"
+                        v-model="tokensAmount"
+                        suffix="%"
+                        mask="###"
+                    ></v-text-field>
 
-                        <v-text-field
-                            label="Cover letter" 
-                            multi-line auto-grow
-                            rows="3"
-                            v-model="coverLetter"
-                        ></v-text-field>
+                    <v-text-field
+                        label="Cover letter" 
+                        multi-line auto-grow
+                        rows="3"
+                        v-model="coverLetter"
+                    ></v-text-field>
 
-                        <div class="display-flex c-pt-8">
-                            <div class="c-m-auto">
-                                <v-btn color="primary"
-                                    :disabled="isApprovingDisabled || isApprovingLoading"
-                                    :loading="isApprovingLoading"
-                                    @click="sendProposal()"
-                                >Approve and create proposal</v-btn>
+                    <div class="display-flex c-pt-8">
+                        <div class="c-m-auto">
+                            <v-btn color="primary"
+                                :disabled="isApprovingDisabled || isApprovingLoading"
+                                :loading="isApprovingLoading"
+                                @click="sendProposal()"
+                            >Approve and create proposal</v-btn>
 
-                                <v-btn color="error" flat
-                                    @click="denyJoinRequest()"
-                                    :loading="isDenyingLoading"
-                                    :disabled="isDenyingLoading"
-                                >Deny</v-btn>
-                            </div>
+                            <v-btn color="error" flat
+                                @click="denyJoinRequest()"
+                                :loading="isDenyingLoading"
+                                :disabled="isDenyingLoading"
+                            >Deny</v-btn>
                         </div>
                     </div>
-                </div>
-            </div>
+                </contentbar>
+            </page-container>
         </v-card>
     </v-dialog>
 </template>

@@ -1,17 +1,13 @@
 <template>
-    <v-container fluid fill-height class="pa-0 column-page">
+    <page-container>
+        <contentbar>
+            <user-details-body></user-details-body>
+        </contentbar>
 
-        <div class="content-column">
-            <div class="filling">
-                <user-details-body></user-details-body>
-            </div>
-        </div>
-
-        <v-card height="100%" class="sidebar">
+        <sidebar>
             <user-details-sidebar></user-details-sidebar>
-        </v-card>
-
-    </v-container>   
+        </sidebar>
+    </page-container>
 </template>
 
 <script>

@@ -9,40 +9,38 @@
                 <v-spacer></v-spacer>
             </v-toolbar>
 
-            <div class="column-page">
-                <div class="content-column">
-                    <div class="filling">
+            <page-container>
+                <contentbar>
 
-                        <div class="headline text-align-center half-bold">
-                            You're suggesting to supply <span class="a">William Watkins</span> with expert tokens in 
-                        </div>
-
-                        <div class="discipline-picker c-mt-8">
-                            <v-text-field
-                                label="Amount of expert tokens"
-                            ></v-text-field>
-                        </div>
-
-                        <div class="red--text c-pt-2 text-align-center">
-                            <v-icon color="red">warning</v-icon>
-                            Please be accurate, you’ll need community assistance to change the disciplines
-                        </div>
-
-                        <div class="c-pt-6">
-                            <v-text-field
-                                label="Competently initiate quality experiences through mission-critical vortals" 
-                                multi-line auto-grow
-                                rows="2"
-                            ></v-text-field>
-                        </div>
-                        
-                        <div class="row justify-center c-p-6">
-                            <v-btn color="primary">Create a proposal</v-btn>
-                        </div>
-
+                    <div class="headline text-align-center half-bold">
+                        You're suggesting to supply <span class="a">William Watkins</span> with expert tokens in 
                     </div>
-                </div>
-            </div>
+
+                    <div class="discipline-picker c-mt-8">
+                        <v-text-field
+                            label="Amount of expert tokens"
+                        ></v-text-field>
+                    </div>
+
+                    <div class="red--text c-pt-2 text-align-center">
+                        <v-icon color="red">warning</v-icon>
+                        Please be accurate, you’ll need community assistance to change the disciplines
+                    </div>
+
+                    <div class="c-pt-6">
+                        <v-text-field
+                            label="Competently initiate quality experiences through mission-critical vortals" 
+                            multi-line auto-grow
+                            rows="2"
+                        ></v-text-field>
+                    </div>
+                    
+                    <div class="row justify-center c-p-6">
+                        <v-btn color="primary">Create a proposal</v-btn>
+                    </div>
+
+                </contentbar>
+            </page-container>
 
         </v-card>
     </v-dialog>

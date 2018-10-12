@@ -9,67 +9,67 @@
                 <v-spacer></v-spacer>
             </v-toolbar>
             
-            <div class="column-page">
-                <div class="content-column">
-                    <div class="filling">
-                        <div v-if="allUsers">
-                            <v-select
-                                :items="allUsers"
-                                v-model="selectedUser"
-                                placeholder="Researcher"
-                                autocomplete
-                            >
-                                <template slot="selection" slot-scope="data">
-                                    <div class="row-nowrap align-center c-pl-4">
-                                        <v-avatar size="30px">
-                                            <img v-if="data.item.profile" v-bind:src="data.item.profile.avatar | avatarSrc(30, 30, false)" />
-                                            <v-gravatar v-else :email="data.item.account.name + '@deip.world'" />
-                                        </v-avatar>
-                                        <span class="deip-blue-color c-pl-3">{{ data.item | fullname }}</span>
-                                    </div>
-                                </template>
-                                
-                                <template slot="item" slot-scope="data">
-                                    <div class="row-nowrap align-center">
-                                        <v-avatar size="30px">
-                                            <img v-if="data.item.profile" v-bind:src="data.item.profile.avatar | avatarSrc(30, 30, false)" />
-                                            <v-gravatar v-else :email="data.item.account.name + '@deip.world'" />
-                                        </v-avatar>
-                                        <span class="deip-blue-color c-pl-3">{{ data.item | fullname }}</span>
-                                    </div>
-                                </template>
-                            </v-select>
+            <page-container>
+                <contentbar>
 
-                            <v-text-field
-                                label="Group tokens share"
-                                v-model="tokensAmount"
-                                suffix="%"
-                                mask="###"
-                            ></v-text-field>
+                    <div v-if="allUsers">
+                        <v-select
+                            :items="allUsers"
+                            v-model="selectedUser"
+                            placeholder="Researcher"
+                            autocomplete
+                        >
+                            <template slot="selection" slot-scope="data">
+                                <div class="row-nowrap align-center c-pl-4">
+                                    <v-avatar size="30px">
+                                        <img v-if="data.item.profile" v-bind:src="data.item.profile.avatar | avatarSrc(30, 30, false)" />
+                                        <v-gravatar v-else :email="data.item.account.name + '@deip.world'" />
+                                    </v-avatar>
+                                    <span class="deip-blue-color c-pl-3">{{ data.item | fullname }}</span>
+                                </div>
+                            </template>
+                            
+                            <template slot="item" slot-scope="data">
+                                <div class="row-nowrap align-center">
+                                    <v-avatar size="30px">
+                                        <img v-if="data.item.profile" v-bind:src="data.item.profile.avatar | avatarSrc(30, 30, false)" />
+                                        <v-gravatar v-else :email="data.item.account.name + '@deip.world'" />
+                                    </v-avatar>
+                                    <span class="deip-blue-color c-pl-3">{{ data.item | fullname }}</span>
+                                </div>
+                            </template>
+                        </v-select>
 
-                            <v-text-field
-                                label="Cover letter" 
-                                multi-line auto-grow
-                                rows="3"
-                                v-model="coverLetter"
-                            ></v-text-field>
+                        <v-text-field
+                            label="Group tokens share"
+                            v-model="tokensAmount"
+                            suffix="%"
+                            mask="###"
+                        ></v-text-field>
 
-                            <div class="display-flex c-pt-8">
-                                <v-btn color="primary" 
-                                    class="c-m-auto"
-                                    :disabled="isDisabled || isLoading"
-                                    :loading="isLoading"
-                                    @click="sendProposal()"
-                                >Create proposal</v-btn>
-                            </div>
-                        </div>
+                        <v-text-field
+                            label="Cover letter" 
+                            multi-line auto-grow
+                            rows="3"
+                            v-model="coverLetter"
+                        ></v-text-field>
 
-                        <div class="display-flex" v-else>
-                            <v-progress-circular class="c-m-auto" indeterminate color="primary"></v-progress-circular>
+                        <div class="display-flex c-pt-8">
+                            <v-btn color="primary" 
+                                class="c-m-auto"
+                                :disabled="isDisabled || isLoading"
+                                :loading="isLoading"
+                                @click="sendProposal()"
+                            >Create proposal</v-btn>
                         </div>
                     </div>
-                </div>
-            </div>
+
+                    <div class="display-flex" v-else>
+                        <v-progress-circular class="c-m-auto" indeterminate color="primary"></v-progress-circular>
+                    </div>
+                
+                </contentbar>
+            </page-container>
         </v-card>
     </v-dialog>
 </template>

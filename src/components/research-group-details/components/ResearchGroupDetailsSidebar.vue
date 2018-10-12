@@ -23,27 +23,11 @@
             </div>
             <!-- ### END Research Group Details Section ### -->
             
-            <div class="section-divider">
-                <v-divider></v-divider>
-            </div>
-
-            <!-- ### START Research Group Followers Section ### -->
-            <div style="margin: 0 -24px">
-                <div class="row-nowrap">
-                    <div class="col-6 c-pv-6 display-flex" v-ripple>
-                        <div class="clickable-label text-align-center c-m-auto">15<br>Folowers</div>
-                    </div>
-                    <div class="vertical-devider"></div>
-                    <!-- <div class="col-6 c-pv-6 display-flex" v-ripple>
-                        <div class="clickable-label text-align-center c-m-auto">Follow</div>
-                    </div> -->
+            <sidebar-splitted-btn :right-ripple="false">
+                <div slot="left" class="default-half-splitted">
+                    <span class="c-m-auto clickable-label">23<br>Followers</span>
                 </div>
-            </div>
-            <!-- ### END Research Group Followers Section ### -->
-
-            <div class="section-divider">
-                <v-divider></v-divider>
-            </div>
+            </sidebar-splitted-btn>
 
             <div v-if="group">
                 <div class="sm-title bold c-pt-6">Quorum Setup</div>
@@ -96,7 +80,7 @@
                     </div>
                 </div>
 
-                <div class="section-divider">
+                <div class="sidebar-fullwidth">
                     <v-divider></v-divider>
                 </div>
             </div>
@@ -132,7 +116,7 @@
             </div>
             <!-- ### END Research Group Join Requests Section ### -->
 
-            <div v-if="isJoinRequestsSectionAvailable" class="section-divider">
+            <div v-if="isJoinRequestsSectionAvailable" class="sidebar-fullwidth">
                 <v-divider></v-divider>
             </div>
         </div>
@@ -219,16 +203,6 @@
 </script>
 
 <style lang="less" scoped>
-    .vertical-devider {
-        background-color: rgba(0,0,0,0.12);
-        width: 1px;
-        margin: 12px 0;
-    }
-
-    .section-divider {
-        margin: 0 -24px;
-    }
-
     .join-request-title-info {
         padding-left: 10px;
         padding-top: 3px;
