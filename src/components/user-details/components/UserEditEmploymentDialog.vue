@@ -9,109 +9,106 @@
                 <v-spacer></v-spacer>
             </v-toolbar>
 
-            <div class="column-page">
-                <div class="content-column">
-                    <div class="filling">
-
-                        <div class="subheading bold">Company</div>
-                        <div class="row">
-                            <div class="col-12">
-                                <v-text-field
-                                    placeholder="Company"
-                                    v-model="company"
-                                ></v-text-field>
-                            </div>
+            <page-container>
+                <contentbar>
+                    <div class="subheading bold">Company</div>
+                    <div class="row">
+                        <div class="col-12">
+                            <v-text-field
+                                placeholder="Company"
+                                v-model="company"
+                            ></v-text-field>
                         </div>
+                    </div>
 
-                        <div class="subheading bold">Location</div>
-                        <div class="row">
-                            <div class="col-6 c-pr-3">
-                                <v-text-field
-                                    label="City"
-                                    v-model="city"
-                                ></v-text-field>
-                            </div>
-                            <div class="col-6 c-pl-3">
-                                <v-text-field
-                                    label="Country"
-                                    v-model="country"
-                                ></v-text-field>
-                            </div>
+                    <div class="subheading bold">Location</div>
+                    <div class="row">
+                        <div class="col-6 c-pr-3">
+                            <v-text-field
+                                label="City"
+                                v-model="city"
+                            ></v-text-field>
                         </div>
-
-                        <div class="subheading bold">Period</div>
-                        <div class="row">
-                            <div class="col-6 c-pr-3">
-                                <v-menu
-                                    lazy
-                                    :close-on-content-click="false"
-                                    v-model="dateFromMenu"
-                                    transition="scale-transition"
-                                    offset-y
-                                    full-width
-                                    min-width="290px"
-                                >
-                                    <v-text-field slot="activator" label="From" v-model="dateFrom" append-icon="event" readonly></v-text-field>
-                                    <v-date-picker v-model="dateFrom" @input="dateFromMenu = false" type="month"></v-date-picker>
-                                </v-menu>
-                            </div>
-                            <div class="col-6 c-pl-3">
-                                <v-menu
-                                    lazy
-                                    :close-on-content-click="false"
-                                    v-model="dateToMenu"
-                                    transition="scale-transition"
-                                    offset-y
-                                    full-width
-                                    min-width="290px"
-                                >
-                                    <v-text-field slot="activator" label="To" v-model="dateTo" append-icon="event" readonly></v-text-field>
-                                    <v-date-picker v-model="dateTo" @input="dateToMenu = false" type="month"></v-date-picker>
-                                </v-menu>
-                            </div>
+                        <div class="col-6 c-pl-3">
+                            <v-text-field
+                                label="Country"
+                                v-model="country"
+                            ></v-text-field>
                         </div>
+                    </div>
 
-                        <div class="subheading bold">Position</div>
-                        <div class="row">
-                            <div class="col-12">
-                                <v-text-field
-                                    placeholder="Position"
-                                    v-model="position"
-                                ></v-text-field>
-                            </div>
+                    <div class="subheading bold">Period</div>
+                    <div class="row">
+                        <div class="col-6 c-pr-3">
+                            <v-menu
+                                lazy
+                                :close-on-content-click="false"
+                                v-model="dateFromMenu"
+                                transition="scale-transition"
+                                offset-y
+                                full-width
+                                min-width="290px"
+                            >
+                                <v-text-field slot="activator" label="From" v-model="dateFrom" append-icon="event" readonly></v-text-field>
+                                <v-date-picker v-model="dateFrom" @input="dateFromMenu = false" type="month"></v-date-picker>
+                            </v-menu>
                         </div>
-
-                        <div class="subheading bold">Description (optional)</div>
-                        <div class="row">
-                            <div class="col-12">
-                                <v-text-field
-                                    placeholder="Description"
-                                    v-model="description"
-                                ></v-text-field>
-                            </div>
+                        <div class="col-6 c-pl-3">
+                            <v-menu
+                                lazy
+                                :close-on-content-click="false"
+                                v-model="dateToMenu"
+                                transition="scale-transition"
+                                offset-y
+                                full-width
+                                min-width="290px"
+                            >
+                                <v-text-field slot="activator" label="To" v-model="dateTo" append-icon="event" readonly></v-text-field>
+                                <v-date-picker v-model="dateTo" @input="dateToMenu = false" type="month"></v-date-picker>
+                            </v-menu>
                         </div>
+                    </div>
 
-                     <!--   <div>
-                            <v-btn class="ma-0 width-10" color="primary" @click="save" :disabled="disabled">Save</v-btn>
-                            <span class="c-pr-4"></span>
-                            <v-btn class="ma-0" color="primary" flat @click.native="meta.isShown = false">Cancel</v-btn>
-                        </div> -->
+                    <div class="subheading bold">Position</div>
+                    <div class="row">
+                        <div class="col-12">
+                            <v-text-field
+                                placeholder="Position"
+                                v-model="position"
+                            ></v-text-field>
+                        </div>
+                    </div>
 
-                        <div>
-                            <div class="row">
-                                <div class="col-1">
-                                    <v-checkbox label="Is active" v-model="isActive"></v-checkbox>
-                                </div>
-                                <div class="col-11">
-                                    <v-btn class="ml-5 ma-0 width-10" color="primary" @click="save()" :disabled="disabled">Save</v-btn>
-                                    <span class="c-pr-4"></span>
-                                    <v-btn class="ma-0 width-10" color="primary" flat @click.native="meta.isShown = false">Cancel</v-btn>
-                                </div>
+                    <div class="subheading bold">Description (optional)</div>
+                    <div class="row">
+                        <div class="col-12">
+                            <v-text-field
+                                placeholder="Description"
+                                v-model="description"
+                            ></v-text-field>
+                        </div>
+                    </div>
+
+                    <!--   <div>
+                        <v-btn class="ma-0 width-10" color="primary" @click="save" :disabled="disabled">Save</v-btn>
+                        <span class="c-pr-4"></span>
+                        <v-btn class="ma-0" color="primary" flat @click.native="meta.isShown = false">Cancel</v-btn>
+                    </div> -->
+
+                    <div>
+                        <div class="row">
+                            <div class="col-1">
+                                <v-checkbox label="Is active" v-model="isActive"></v-checkbox>
+                            </div>
+                            <div class="col-11">
+                                <v-btn class="ml-5 ma-0 width-10" color="primary" @click="save()" :disabled="disabled">Save</v-btn>
+                                <span class="c-pr-4"></span>
+                                <v-btn class="ma-0 width-10" color="primary" flat @click.native="meta.isShown = false">Cancel</v-btn>
                             </div>
                         </div>
                     </div>
-                </div>
-            </div>
+                </contentbar>
+            </page-container>
 
         </v-card>
     </v-dialog>

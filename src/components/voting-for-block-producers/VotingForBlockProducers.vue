@@ -1,5 +1,5 @@
 <template>
-    <v-container fluid fill-height class="pa-0 column-page">
+    <page-container>
     
         <div class="content-column spinner-container">
             <v-progress-circular class="section-spinner"
@@ -72,7 +72,7 @@
                 </div>
             </div>
         </div>
-    </v-container>
+    </page-container>
 </template>
 
 <script>

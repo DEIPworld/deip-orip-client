@@ -1,17 +1,15 @@
 <template>
-    <v-container fluid fill-height class="pa-0 column-page">
+    <page-container>
 
-        <div class="content-column">
-            <div class="filling">
-                <claim-user-expertise-body></claim-user-expertise-body>
-            </div>
-        </div>
+        <contentbar>
+            <claim-user-expertise-body></claim-user-expertise-body>
+        </contentbar>
 
-        <v-card height="100%" class="sidebar">
+        <sidebar>
             <claim-user-expertise-sidebar></claim-user-expertise-sidebar>
-        </v-card>
+        </sidebar>
 
-    </v-container>   
+    </page-container>
 </template>
 
 <script>

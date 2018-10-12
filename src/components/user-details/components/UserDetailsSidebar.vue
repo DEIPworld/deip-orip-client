@@ -24,27 +24,15 @@
         </div>
         <!-- ### END User Profile Expertise Section ### -->
 
-        <div class="section-divider">
-            <v-divider></v-divider>
-        </div>
-
-        <!-- ### START User Profile Followers Section ### -->
-        <div style="margin: 0 -24px">
-            <div class="row-nowrap">
-                <div class="col-6 c-pv-6 display-flex" v-ripple>
-                    <div class="clickable-label text-align-center c-m-auto">23<br>Folowers</div>
-                </div>
-                <div class="vertical-devider"></div>
-                <div class="col-6 c-pv-6 display-flex" v-ripple>
-                    <div class="clickable-label text-align-center c-m-auto">4<br>Following</div>
-                </div>
+        <sidebar-splitted-btn>
+            <div slot="left" class="default-half-splitted">
+                <span class="c-m-auto clickable-label">23<br>Followers</span>
             </div>
-        </div>
-        <!-- ### END User Profile Followers Section ### -->
 
-        <div class="section-divider">
-            <v-divider></v-divider>
-        </div>
+            <div slot="right" class="default-half-splitted">
+                <span class="c-m-auto clickable-label">4<br>Following</span>
+            </div>
+        </sidebar-splitted-btn>
 
         <!-- ### START User Profile Contacts Section ### -->
         <div class="user-contacts-container spinner-container">
@@ -107,7 +95,7 @@
         </div>
         <!-- ### END User Profile Contacts Section ### -->
 
-        <div class="section-divider">
+        <div class="sidebar-fullwidth">
             <v-divider></v-divider>
         </div>
 
@@ -197,7 +185,7 @@
         </div>
         <!-- ### END User Profile Info Section ### -->
 
-        <div class="section-divider">
+        <div class="sidebar-fullwidth">
             <v-divider></v-divider>
         </div>
 
@@ -249,7 +237,7 @@
         </div>
         <!-- ### END User Profile Invites Section ### -->
 
-        <div v-if="isOwner && hasInvites" class="section-divider">
+        <div v-if="isOwner && hasInvites" class="sidebar-fullwidth">
             <v-divider></v-divider>
         </div>
       </div>
@@ -425,17 +413,8 @@
         top: 18px;
         right: 10px;
     }
-    .vertical-devider {
-        background-color: rgba(0,0,0,0.12);
-        width: 1px;
-        margin: 12px 0;
-    }
     .owner-hint {
         font-style: italic;
-    }
-
-    .section-divider {
-        margin: 0 -24px;
     }
 
     .user-expertise-container {

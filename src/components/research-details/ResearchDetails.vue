@@ -1,20 +1,16 @@
 <template>
-    <v-container fluid fill-height class="pa-0 column-page">
+    <page-container>
+        <contentbar>
+            <research-details-body></research-details-body>
+        </contentbar>
 
-        <div class="content-column">
-            <div class="filling">
-                <research-details-body></research-details-body>
-            </div>
-        </div>
-
-        <v-card height="100%" class="sidebar">
+        <sidebar>
             <research-details-sidebar>
             </research-details-sidebar>
-        </v-card>
+        </sidebar>
 
-        <add-research-review-dialog>
-        </add-research-review-dialog>
-    </v-container>   
+        <add-research-review-dialog></add-research-review-dialog>
+    </page-container>
 </template>
 
 <script>

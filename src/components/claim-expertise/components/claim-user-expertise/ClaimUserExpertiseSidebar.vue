@@ -1,24 +1,14 @@
 <template>
     <div class="">
-        <div class="section-divider">
-            <v-divider></v-divider>
-        </div>
-
-        <div style="margin: 0 -24px">
-            <div class="row-nowrap">
-                <div class="col-6 c-pv-6 display-flex" v-ripple>
-                    <div class="clickable-label text-align-center c-m-auto">23<br>Folowers</div>
-                </div>
-                <div class="vertical-devider"></div>
-                <div class="col-6 c-pv-6 display-flex" v-ripple>
-                    <div class="clickable-label text-align-center c-m-auto">4<br>Following</div>
-                </div>
+        <sidebar-splitted-btn>
+            <div slot="left" class="default-half-splitted">
+                <span class="c-m-auto clickable-label">23<br>Followers</span>
             </div>
-        </div>
 
-        <div class="section-divider" v-if="claimerInfo.profile.email">
-            <v-divider></v-divider>
-        </div>
+            <div slot="right" class="default-half-splitted">
+                <span class="c-m-auto clickable-label">4<br>Following</span>
+            </div>
+        </sidebar-splitted-btn>
 
         <div class="c-pt-6 c-pb-6" v-if="claimerInfo.profile.email">
             <span>
@@ -26,7 +16,7 @@
             </span>
         </div>
 
-        <div class="section-divider">
+        <div class="sidebar-fullwidth" v-if="claimerInfo.profile.email">
             <v-divider></v-divider>
         </div>
 
@@ -48,7 +38,7 @@
             </div>
         </div>
 
-        <div class="section-divider">
+        <div class="sidebar-fullwidth">
             <v-divider></v-divider>
         </div>
 
@@ -75,13 +65,4 @@
 </script>
 
 <style lang="less" scoped>
-    .vertical-devider {
-        background-color: rgba(0,0,0,0.12);
-        width: 1px;
-        margin: 12px 0;
-    }
-
-    .section-divider {
-        margin: 0 -24px;
-    }
 </style>

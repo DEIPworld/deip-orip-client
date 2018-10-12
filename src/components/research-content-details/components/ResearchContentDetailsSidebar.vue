@@ -73,7 +73,7 @@
         </div>
         <!-- ### END Draft Actions Section ### -->
 
-    <!--<div class="section-divider">
+    <!--<div class="sidebar-fullwidth">
             <v-divider></v-divider>
         </div> -->
       </div>
@@ -88,72 +88,70 @@
                 <v-spacer></v-spacer>
             </v-toolbar>
             
-            <div class="column-page">
-                <div class="content-column">
-                    <div class="filling">
-                        <div v-if="membersList.length">
+            <page-container>
+                <contentbar>
+                    <div v-if="membersList.length">
 
-                            <v-text-field
-                                label="Title"
-                                v-model="proposeContent.title"
-                                hide-details>
-                            </v-text-field>
+                        <v-text-field
+                            label="Title"
+                            v-model="proposeContent.title"
+                            hide-details>
+                        </v-text-field>
 
-                            <v-select v-model="proposeContent.type" 
-                                :items="proposeContent.contentTypes" 
-                                label="Content Type" 
-                                class="c-mt-6"
-                                item-value="id">
-                            </v-select>
+                        <v-select v-model="proposeContent.type" 
+                            :items="proposeContent.contentTypes" 
+                            label="Content Type" 
+                            class="c-mt-6"
+                            item-value="id">
+                        </v-select>
 
-                            <v-select
-                                :items="membersList"
-                                v-model="proposeContent.authors"
-                                placeholder="Authors"
-                                autocomplete
-                                multiple>
-                                
-                                <template slot="selection" slot-scope="data">
-                                    <div class="row-nowrap align-center c-pl-4">
+                        <v-select
+                            :items="membersList"
+                            v-model="proposeContent.authors"
+                            placeholder="Authors"
+                            autocomplete
+                            multiple>
+                            
+                            <template slot="selection" slot-scope="data">
+                                <div class="row-nowrap align-center c-pl-4">
+                                    <v-avatar size="30px">
+                                        <img v-if="data.item.profile" v-bind:src="data.item.profile.avatar | avatarSrc(30, 30, false)" />
+                                        <v-gravatar v-else :email="data.item.account.name + '@deip.world'" />
+                                    </v-avatar>
+                                    <span class="deip-blue-color c-pl-3">{{ data.item | fullname }}</span>
+                                </div>
+                            </template>
+                            
+                            <template slot="item" slot-scope="data">
+                                <template>
+                                    <div class="row-nowrap align-center author-item" 
+                                        :class="{ 'selected-author-item': isAuthorSelected(data.item) }">
                                         <v-avatar size="30px">
                                             <img v-if="data.item.profile" v-bind:src="data.item.profile.avatar | avatarSrc(30, 30, false)" />
                                             <v-gravatar v-else :email="data.item.account.name + '@deip.world'" />
                                         </v-avatar>
-                                        <span class="deip-blue-color c-pl-3">{{ data.item | fullname }}</span>
+                                        <span class="deip-blue-color c-pl-3">{{ data.item | fullname  }}</span>
                                     </div>
                                 </template>
-                                
-                                <template slot="item" slot-scope="data">
-                                    <template>
-                                        <div class="row-nowrap align-center author-item" 
-                                            :class="{ 'selected-author-item': isAuthorSelected(data.item) }">
-                                            <v-avatar size="30px">
-                                                <img v-if="data.item.profile" v-bind:src="data.item.profile.avatar | avatarSrc(30, 30, false)" />
-                                                <v-gravatar v-else :email="data.item.account.name + '@deip.world'" />
-                                            </v-avatar>
-                                            <span class="deip-blue-color c-pl-3">{{ data.item | fullname  }}</span>
-                                        </div>
-                                    </template>
-                                </template>
-                            </v-select>
+                            </template>
+                        </v-select>
 
 
-                            <div class="display-flex c-pt-8">
-                                <v-btn color="primary" 
-                                    class="c-m-auto"
-                                    :disabled="proposeContent.isLoading || !isCreatingProposalAvailable"
-                                    :loading="proposeContent.isLoading"
-                                    @click="sendContentProposal()"
-                                >Create proposal</v-btn>
-                            </div>
-                        </div>
-
-                        <div class="display-flex" v-else>
-                            <v-progress-circular class="c-m-auto" indeterminate color="primary"></v-progress-circular>
+                        <div class="display-flex c-pt-8">
+                            <v-btn color="primary" 
+                                class="c-m-auto"
+                                :disabled="proposeContent.isLoading || !isCreatingProposalAvailable"
+                                :loading="proposeContent.isLoading"
+                                @click="sendContentProposal()"
+                            >Create proposal</v-btn>
                         </div>
                     </div>
-                </div>
-            </div>
+
+                    <div class="display-flex" v-else>
+                        <v-progress-circular class="c-m-auto" indeterminate color="primary"></v-progress-circular>
+                    </div>
+                </contentbar>
+            </page-container>
         </v-card>
       </v-dialog>
     </div>
@@ -357,15 +355,4 @@
         border: 1px solid #2F80ED;
         border-radius: 3px;
     }
-
-    .vertical-devider {
-        background-color: rgba(0,0,0,0.12);
-        width: 1px;
-        margin: 12px 0;
-    }
-
-    .section-divider {
-        margin: 0 -24px;
-    }
-
 </style>

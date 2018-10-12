@@ -9,94 +9,92 @@
                 <v-spacer></v-spacer>
             </v-toolbar>
 
-            <div v-if="research" class="column-page">
-                <div class="content-column">
-                    <div class="filling">
-                        <div class="sm-title bold">You're giving a review to</div>
+            <page-container v-if="research">
+                <contentbar>
+                    <div class="sm-title bold">You're giving a review to</div>
 
-                        <div class="row c-pt-8">
-                            <div class="col-8 c-pr-6">
-                                <v-card class="c-p-6">
-                                    <div class="deip-blue-color half-bold subheading">
-                                        {{ research.title }}
-                                    </div>
-                                    <div class="caption grey--text c-pt-2">
-                                        {{ authorsStr }}
-                                    </div>
-                                </v-card>
+                    <div class="row c-pt-8">
+                        <div class="col-8 c-pr-6">
+                            <v-card class="c-p-6">
+                                <div class="deip-blue-color half-bold subheading">
+                                    {{ research.title }}
+                                </div>
+                                <div class="caption grey--text c-pt-2">
+                                    {{ authorsStr }}
+                                </div>
+                            </v-card>
 
-                                <div class="row justify-between align-end c-pt-6">
-                                    <div>
-                                        <span class="c-pr-2">
-                                            <v-btn class="ma-0" 
-                                                :dark="reviewQuality === REVIEW_POSITIVE" 
-                                                :color="reviewQuality === REVIEW_POSITIVE ? 'green darken-2' : undefined" 
-                                                small depressed
-                                                @click="reviewQuality = REVIEW_POSITIVE"
-                                            >Approve</v-btn>
-                                        </span>
-                                        
-                                        <span>
-                                            <v-btn class="ma-0" 
-                                                :dark="reviewQuality === REVIEW_NEGATIVE" 
-                                                :color="reviewQuality === REVIEW_NEGATIVE ? 'red darken-2' : undefined" 
-                                                small depressed
-                                                @click="reviewQuality = REVIEW_NEGATIVE"
-                                            >Reject</v-btn>
-                                        </span>
-                                    </div>
-
-                                    <div class="col-grow c-pl-10">
-                                        <v-select
-                                            :items="contentList"
-                                            v-model="contentId"
-                                            label="Content"
-                                            item-text="title"
-                                            item-value="id"
-                                            hide-details
-                                        ></v-select>
-                                    </div>
+                            <div class="row justify-between align-end c-pt-6">
+                                <div>
+                                    <span class="c-pr-2">
+                                        <v-btn class="ma-0" 
+                                            :dark="reviewQuality === REVIEW_POSITIVE" 
+                                            :color="reviewQuality === REVIEW_POSITIVE ? 'green darken-2' : undefined" 
+                                            small depressed
+                                            @click="reviewQuality = REVIEW_POSITIVE"
+                                        >Approve</v-btn>
+                                    </span>
+                                    
+                                    <span>
+                                        <v-btn class="ma-0" 
+                                            :dark="reviewQuality === REVIEW_NEGATIVE" 
+                                            :color="reviewQuality === REVIEW_NEGATIVE ? 'red darken-2' : undefined" 
+                                            small depressed
+                                            @click="reviewQuality = REVIEW_NEGATIVE"
+                                        >Reject</v-btn>
+                                    </span>
                                 </div>
 
-                                <div class="c-pt-6">
-                                    <v-text-field
-                                        label="Leave your review below" 
-                                        multi-line auto-grow
-                                        rows="2"
-                                        v-model="review"
-                                    ></v-text-field>
-                                </div>
-
-                                <div class="row justify-end">
-                                    <div>
-                                        <!-- <v-btn flat color="primary" @click="log()">Preview</v-btn> -->
-                                        <v-btn color="primary" class="width-9"
-                                            :disabled="reviewQuality === undefined || review === '' || isLoading"
-                                            @click="publishReview()"
-                                            :loading="isLoading"
-                                        >Publish</v-btn>
-                                    </div>
+                                <div class="col-grow c-pl-10">
+                                    <v-select
+                                        :items="contentList"
+                                        v-model="contentId"
+                                        label="Content"
+                                        item-text="title"
+                                        item-value="id"
+                                        hide-details
+                                    ></v-select>
                                 </div>
                             </div>
-                            <div class="col-4">
-                                <v-card class="c-p-8">
-                                    <div class="bold subheading c-pb-2">You assign you expert tokens:</div>
 
-                                    <div class="c-pt-4" v-for="(exp, index) in relatedExpertise" :key="index">
-                                        <span>{{exp.discipline_name}}</span>
-                                        <span class="right half-bold">{{exp.amount}}</span>
-                                    </div>
-                                </v-card>
+                            <div class="c-pt-6">
+                                <v-text-field
+                                    label="Leave your review below" 
+                                    multi-line auto-grow
+                                    rows="2"
+                                    v-model="review"
+                                ></v-text-field>
+                            </div>
 
-                                <div class="red--text c-pt-4 text-align-center">
-                                    <v-icon color="red">warning</v-icon>
-                                    100% of your expert tokens will be blocked for 24 hours after the review
+                            <div class="row justify-end">
+                                <div>
+                                    <!-- <v-btn flat color="primary" @click="log()">Preview</v-btn> -->
+                                    <v-btn color="primary" class="width-9"
+                                        :disabled="reviewQuality === undefined || review === '' || isLoading"
+                                        @click="publishReview()"
+                                        :loading="isLoading"
+                                    >Publish</v-btn>
                                 </div>
                             </div>
                         </div>
+                        <div class="col-4">
+                            <v-card class="c-p-8">
+                                <div class="bold subheading c-pb-2">You assign you expert tokens:</div>
+
+                                <div class="c-pt-4" v-for="(exp, index) in relatedExpertise" :key="index">
+                                    <span>{{exp.discipline_name}}</span>
+                                    <span class="right half-bold">{{exp.amount}}</span>
+                                </div>
+                            </v-card>
+
+                            <div class="red--text c-pt-4 text-align-center">
+                                <v-icon color="red">warning</v-icon>
+                                100% of your expert tokens will be blocked for 24 hours after the review
+                            </div>
+                        </div>
                     </div>
-                </div>
-            </div>
+                </contentbar>
+            </page-container>
         </v-card>
     </v-dialog>
 </template>
