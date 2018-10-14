@@ -1,30 +1,30 @@
 <template>
     <page-container>
+
         <contentbar>
-            <user-details-body></user-details-body>
+            <claim-user-expertise-body></claim-user-expertise-body>
         </contentbar>
 
         <sidebar>
-            <user-details-sidebar></user-details-sidebar>
+            <claim-user-expertise-sidebar></claim-user-expertise-sidebar>
         </sidebar>
+
     </page-container>
 </template>
 
 <script>
-    import usersService from './../../services/http/users'
-
     export default {
-        name: 'UserDetails',
+        name: 'ClaimUserExpertisePage',
         data() {
             return {
-                accountName: this.$route.params.account_name
+                claimerUsername: 'bob'
             }
         },
         methods: {
 
         },
         created() {
-            this.$store.dispatch('userDetails/loadUser', this.accountName);
+            this.$store.dispatch('claimExpertise/loadClaimer', this.claimerUsername);
         }
     }
 </script>

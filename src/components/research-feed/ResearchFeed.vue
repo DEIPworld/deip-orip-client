@@ -1,66 +1,64 @@
 <template>
-    <v-container fluid fill-height class="pa-0 column-page">
-        <v-card height="100%" class="sidebar">
+    <page-container>
+        <sidebar>
             <research-feed-filter></research-feed-filter>
-        </v-card>
+        </sidebar>
 
-        <div class="content-column">
-            <div class="filling">
-                <div class="row-nowrap">
-                    <div :class="{ 'invisible': !filter.disciplines.length && filter.q === '' }"
-                        class="filter-title subheading grey--text"
-                    >My choise</div>
+        <contentbar>
+            <div class="row-nowrap">
+                <div :class="{ 'invisible': !filter.disciplines.length && filter.q === '' }"
+                    class="filter-title subheading grey--text"
+                >My choise</div>
 
-                    <div class="row col-grow align-center">
-                        <div class="c-pr-4 display-flex" v-if="filter.q !== ''">
-                            <span>{{ filter.q }}</span>
-                            <span class="small-remove-btn ml-1" @click="updateFilter({ key: 'q', value: '' })">
-                                <v-icon>close</v-icon>
-                            </span>
-                        </div>
-
-                        <div v-for="discipline in filter.disciplines" class="c-pr-4 display-flex">
-                            <span>{{ discipline.label }}</span>
-                            <span v-if="!hasSelectedChildDiscipline(discipline)" class="small-remove-btn ml-1" 
-                                    @click="updateFilter({
-                                        key: 'disciplines', 
-                                        value: filter.disciplines.filter(d => { return d.id != discipline.id })
-                                    })">
-                                <v-icon>close</v-icon>
-                            </span>
-                        </div>
+                <div class="row col-grow align-center">
+                    <div class="c-pr-4 display-flex" v-if="filter.q !== ''">
+                        <span>{{ filter.q }}</span>
+                        <span class="small-remove-btn ml-1" @click="updateFilter({ key: 'q', value: '' })">
+                            <v-icon>close</v-icon>
+                        </span>
                     </div>
-                </div>
-                
-                <v-flex class="c-pt-6">
-                    <research-feed-order-by></research-feed-order-by>
-                </v-flex>
 
-                <div class="row justify-between align-end c-pt-10">
-                    <div class="title">Search Results: {{ researchFeed.length }}</div>
-                    <div class="list-state-label half-bold" @click.stop="toggleFeed()">
-                        <span v-show="!allCollapsed">Collapse all</span>
-                        <span v-show="allCollapsed">Expand all</span>
+                    <div v-for="discipline in filter.disciplines" class="c-pr-4 display-flex">
+                        <span>{{ discipline.label }}</span>
+                        <span v-if="!hasSelectedChildDiscipline(discipline)" class="small-remove-btn ml-1" 
+                                @click="updateFilter({
+                                    key: 'disciplines', 
+                                    value: filter.disciplines.filter(d => { return d.id != discipline.id })
+                                })">
+                            <v-icon>close</v-icon>
+                        </span>
                     </div>
-                </div>
-
-                <div class="c-pt-6 feed-items-container spinner-container">
-                    <v-progress-circular class="section-spinner"
-                        v-if="isLoadingResearchFeed"
-                        :size="100" indeterminate
-                        color="primary"
-                    ></v-progress-circular>
-                    
-                    <v-card v-if="isLoadingResearchFeed === false" class="hidden-last-child">
-                        <template v-for="item in researchFeed">
-                            <research-feed-list-item :research="item"></research-feed-list-item>
-                            <v-divider></v-divider>
-                        </template> 
-                    </v-card>
                 </div>
             </div>
-        </div>
-    </v-container>   
+            
+            <v-flex class="c-pt-6">
+                <research-feed-order-by></research-feed-order-by>
+            </v-flex>
+
+            <div class="row justify-between align-end c-pt-10">
+                <div class="title">Search Results: {{ researchFeed.length }}</div>
+                <div class="list-state-label half-bold" @click.stop="toggleFeed()">
+                    <span v-show="!allCollapsed">Collapse all</span>
+                    <span v-show="allCollapsed">Expand all</span>
+                </div>
+            </div>
+
+            <div class="c-pt-6 feed-items-container spinner-container">
+                <v-progress-circular class="section-spinner"
+                    v-if="isLoadingResearchFeed"
+                    :size="100" indeterminate
+                    color="primary"
+                ></v-progress-circular>
+                
+                <v-card v-if="isLoadingResearchFeed === false" class="hidden-last-child">
+                    <template v-for="item in researchFeed">
+                        <research-feed-list-item :research="item"></research-feed-list-item>
+                        <v-divider></v-divider>
+                    </template> 
+                </v-card>
+            </div>
+        </contentbar>
+    </page-container>
 </template>
 
 <script>
