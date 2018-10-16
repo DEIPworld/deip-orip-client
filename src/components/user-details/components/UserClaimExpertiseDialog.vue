@@ -19,6 +19,7 @@
                         <advanced-discipline-picker
                             :is-multiple-select="false"
                             :with-recently-used="false"
+                            :preselected="discipline"
                             @select="setDiscipline"
                         ></advanced-discipline-picker>
                     </div>
@@ -28,36 +29,57 @@
                         Please be accurate, you’ll need community assistance to change the disciplines
                     </div>
 
-                    <div class="c-pt-6">
-                        <v-text-field
-                            label="Competently initiate quality experiences through mission-critical vortals" 
-                            multi-line auto-grow
-                            rows="2"
-                        ></v-text-field>
-                    </div>
-
-                    <div class="sm-title bold c-pt-6">Add links to your relevant publication in this discipline</div>
-
-                    <v-card class="c-mt-6">
-                        <div class="c-p-6">
-                            <v-icon color="primary" class="c-mr-3">note_add</v-icon>
-                            <span class="primary--text half-bold">Collaboratively envisioneer prospective testing procedures through cross functional processes</span>
+                    <v-form ref="form">
+                        <div class="c-pt-6">
+                            <v-text-field
+                                label="Competently initiate quality experiences through mission-critical vortals" 
+                                multi-line auto-grow
+                                rows="2"
+                                v-model="coverLetter"
+                                :rules="[required]"
+                            ></v-text-field>
                         </div>
 
-                        <v-divider></v-divider>
+                        <div class="sm-title bold c-pt-6">Add links to your relevant publication in this discipline</div>
 
-                        <div class="c-p-6">
-                            <v-btn outline icon color="primary" class="ma-0">
-                                <v-icon small>add</v-icon>
-                            </v-btn>
+                        <v-card class="c-mt-6">
+                            <template v-for="(publication, index) in publications">
+                                <div class="row c-p-6">
+                                    <div class="col-grow">
+                                        <v-text-field
+                                            label="Link to publication"
+                                            v-model="publication.value"
+                                            :rules="[required, urlRule]"
+                                        ></v-text-field>
+                                    </div>
 
-                            <span class="deip-blue-color c-pl-3">Add a link to a publication</span>
+                                    <div class="c-pt-5 c-pl-4">
+                                        <v-btn class="ma-0" icon @click="removeLink(index)">
+                                            <v-icon color="grey">close</v-icon>
+                                        </v-btn>
+                                    </div>
+                                </div>
+
+                                <v-divider></v-divider>
+                            </template>
+
+                            <div class="c-p-6">
+                                <v-btn outline icon color="primary" class="ma-0" @click="addLinkInput">
+                                    <v-icon small>add</v-icon>
+                                </v-btn>
+
+                                <span class="deip-blue-color c-pl-3">Add a link to a publication</span>
+                            </div>
+                        </v-card>
+                        
+                        <div class="row justify-center c-p-6">
+                            <v-btn color="primary"
+                                :disabled="isClaimBtnDisabled || isLoading"
+                                :loading="isLoading"
+                                @click="claimExpertise"
+                            >Claim expertise</v-btn>
                         </div>
-                    </v-card>
-                    
-                    <div class="row justify-center c-p-6">
-                        <v-btn color="primary">Claim expertise</v-btn>
-                    </div>
+                    </v-form>
 
                 </contentbar>
             </page-container>
@@ -68,6 +90,8 @@
 
 <script>
     import _ from 'lodash';
+    import expertiseClaimsService from '../../../services/http/expertiseClaims.js';
+    import { mapGetters } from 'vuex';
 
     export default {
         name: "UserClaimExpertiseDialog",
@@ -76,14 +100,72 @@
         },
         data() {
             return {
+                URL_REGEX: /^(https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-]*)*\/?$/,
+
+                required: value => !!value || 'This field is required',
+                urlRule: value => {
+                    return value.match(this.URL_REGEX) === null ? 'Incorrect url format' : true
+                },
+
+                discipline: undefined,
+                coverLetter: '',
+                publications: [{ value: '' }],
+
+                isLoading: false
+            }
+        },
+        computed: {
+            ...mapGetters({
+                user: 'auth/user'
+            }),
+            isClaimBtnDisabled() {
+                const isLinkArrayValid = !_.isEmpty(this.publications) 
+                    && this.publications.reduce((acc, curr) => acc && curr.value.match(this.URL_REGEX) !== null, true);
+                
+                return !this.discipline || !this.coverLetter || !isLinkArrayValid;
             }
         },
         methods: {
             setDiscipline(discipline) {
-                console.log(discipline);
+                this.discipline = discipline;
+            },
+            addLinkInput() {
+                this.publications.push({ value: '' });
+            },
+            removeLink(index) {
+                this.publications.splice(index, 1);
+            },
+            claimExpertise() {
+                this.isLoading = true;
+
+                expertiseClaimsService.createExpertiseClaim(
+                    this.user.account[0].name,
+                    this.discipline.id,
+                    this.coverLetter,
+                    this.publications.map(item => item.value)
+                ).then(data => {
+                    this.$store.dispatch('layout/setSuccess', {
+                        message: "Success"
+                    });
+
+                    setTimeout(() => this.$emit('close'), 1000);
+                }).catch(err => 
+                    console.log(err)
+                ).finally(() => {
+                    this.isLoading = false;
+                });
             }
         },
         watch: {
+            'isShown': function(newValue) {
+                if (newValue) {
+                    this.discipline = undefined;
+                    this.coverLetter = '';
+                    this.publications = [{ value: '' }];
+
+                    this.$refs.form.reset();
+                }
+            }
         }
     };
 </script>

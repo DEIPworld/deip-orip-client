@@ -13,12 +13,15 @@
     import { disciplineTree } from './../DisciplineTreeService';
     import _ from 'lodash';
 
-    const mapExternalDisciplines = (selected, isMultipleSelect) => 
-        isMultipleSelect
-            ? selected.map(d => {
-                    return { id: d.id, label: d.label, path: d.path };
-                })
-            : { id: selected.id, label: selected.label, path: selected.path };
+    const mapExternalDisciplines = (selected, isMultipleSelect) => {
+        if (isMultipleSelect) {
+            return selected.map(d => {
+                return { id: d.id, label: d.label, path: d.path };
+            });
+        } else {
+            return selected ? { id: selected.id, label: selected.label, path: selected.path } : undefined;
+        }
+    }
 
     // todo: make single and multiselect handled by arrays bc it will be easier and more readable
     export default {
