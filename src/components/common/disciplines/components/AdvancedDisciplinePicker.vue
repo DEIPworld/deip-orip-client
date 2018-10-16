@@ -23,6 +23,7 @@
 
             <discipline-tree-picker
                 :is-multiple-select="isMultipleSelect"
+                :preselected="preselected"
                 @select="select"
             ></discipline-tree-picker>
         </div>
@@ -35,7 +36,13 @@
         name: "AdvancedDisciplinePicker",
         props: {
             isMultipleSelect: { type: Boolean, required: false, default: true },
-            withRecentlyUsed: { type: Boolean, required: false, default: true }
+            withRecentlyUsed: { type: Boolean, required: false, default: true },
+            preselected: { 
+                validator(value) {
+                    return value === undefined || typeof value === 'array' || typeof value === 'object';
+                },
+                required: false
+            },
         },
         methods: {
             select(selected){
