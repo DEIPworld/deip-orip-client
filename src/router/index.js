@@ -137,7 +137,7 @@ const router = new Router({
         name: 'CreateDirectGrant',
         component: CreateDirectGrant
     }, {
-        path: '/claim-user-experience',
+        path: '/:account_name/claim-user-experience/:claim_id',
         name: 'claim-user-expertise-page',
         component: ClaimUserExpertisePage
     }, {
