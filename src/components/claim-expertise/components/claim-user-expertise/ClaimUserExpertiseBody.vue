@@ -25,30 +25,22 @@
             </div>
         </div>
 
-        <div class="bold title c-pt-8">Discipline: Biochemistry</div>
+        <div class="bold title c-pt-8">Discipline: {{ claim.discipline.label }}</div>
         <div class="bold title c-pt-8">Motivation letter</div>
 
-        <div class="c-pt-4">
-            Dramatically supply 24/7 content whereas cross functional metrics. Distinctively mesh emerging web services
-            after viral human capital. Conveniently foster multimedia based web services for orthogonal initiatives.
-            Holisticly enhance alternative systems vis-a-vis equity invested niche markets. Credibly architect frictionless
-            products and resource-leveling supply chains.
-        </div>
+        <div class="c-pt-4">{{ claim.coverLetter }}</div>
         
         <div class="bold title c-pt-8">Publications</div>
 
-        <v-card class="c-mt-6">
-            <div class="c-p-6">
-                <v-icon color="primary" class="c-mr-3">mdi-note-text</v-icon>
-                <span class="primary--text half-bold">Collaboratively envisioneer prospective testing procedures through cross functional processes</span>
-            </div>
+        <v-card class="c-mt-6 hidden-last-child">
+            <template v-for="publicationUrl in claim.publications">
+                <div class="c-p-6">
+                    <v-icon color="primary" class="c-mr-3">mdi-note-text</v-icon>
+                    <a class="a" :href="publicationUrl" target="_blank">{{ publicationUrl }}</a>
+                </div>
 
-            <v-divider></v-divider>
-
-            <div class="c-p-6">
-                <v-icon color="primary" class="c-mr-3">mdi-note-text</v-icon>
-                <span class="primary--text half-bold">Collaboratively envisioneer prospective testing procedures through cross functional processes</span>
-            </div>
+                <v-divider></v-divider>
+            </template>
         </v-card>
 
         <div class="c-mt-8">
@@ -74,7 +66,8 @@
         },
         computed: {
             ...mapGetters({
-                claimerInfo: 'claimExpertise/claimerInfo'
+                claimerInfo: 'claimExpertise/claimerInfo',
+                claim: 'claimExpertise/claim'
             }),
             locationString() {
                 const profile = this.claimerInfo ? this.claimerInfo.profile : null;

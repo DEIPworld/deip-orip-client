@@ -13,18 +13,23 @@
 </template>
 
 <script>
+
     export default {
         name: 'ClaimUserExpertisePage',
         data() {
             return {
-                claimerUsername: 'bob'
+                claimerUsername: 'alice',
+                claimId: '5bc4b207557aa7001c4afe56'
             }
         },
         methods: {
 
         },
         created() {
-            this.$store.dispatch('claimExpertise/loadClaimer', this.claimerUsername);
+            this.$store.dispatch('claimExpertise/loadClaimer', {
+                username: this.claimerUsername,
+                claimId: this.claimId
+            });
         }
     }
 </script>
