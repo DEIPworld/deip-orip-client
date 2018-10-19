@@ -96,6 +96,7 @@
                 this.currentStep--;
             },
             finish() {
+                const self = this;
                 this.isLoading = true;
 
                 deipRpc.api.getDynamicGlobalPropertiesAsync()
@@ -110,13 +111,18 @@
                         let startBlock = Math.floor((startDateUnix - nowDateUnix) / BLOCK_CREATE_INTERVAL) + data.last_irreversible_block_num;
                         let endBlock = Math.floor((endDateUnix - nowDateUnix) / BLOCK_CREATE_INTERVAL) + data.last_irreversible_block_num;
 
+                        let isExtendable = true;
+                        let contentHash = this.grantInfo.description;
+
                         deipRpc.broadcast.createGrantAsync(
                             this.user.privKey,
                             this.user.username,
                             this.toAssetUnits( this.grantInfo.amount ),
                             this.grantInfo.discipline.label,
                             startBlock,
-                            endBlock
+                            endBlock,
+                            isExtendable,
+                            contentHash
                         ).then(() => {
                             this.$store.dispatch('layout/setSuccess', {
                                 message: "Grant has been created successfully!"
