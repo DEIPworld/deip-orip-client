@@ -42,7 +42,7 @@
             
             <v-btn color="primary" 
                 @click.native="finish()" 
-                :disabled="!grantInfo.startDate || !grantInfo.endDate || isLoading"
+                :disabled="!grantInfo.startDate || !grantInfo.endDate || !grantInfo.description || isLoading"
                 :loading="isLoading"
             >Give grant</v-btn>
         </div>
