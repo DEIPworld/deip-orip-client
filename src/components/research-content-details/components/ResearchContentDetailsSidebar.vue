@@ -316,15 +316,9 @@
                 if (this.contentRef.type === 'dar') {
                     const texture = this.$store.getters['rcd/texture'];
                     const articleTitle = texture.api.getArticleTitle();
-                    var title;
-                    try {
-                        title = articleTitle['_node']['content']
-                    } catch(err) {
-                        title = "";
-                    }
+                    const title =  articleTitle._value || "";
                     this.proposeContent.title = title;
                     this.proposeContent.isOpen = true;
-
                 } else if (this.contentRef.type === 'file') {
                     this.proposeContent.isOpen = true;
                 }

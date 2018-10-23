@@ -1,6 +1,5 @@
-import { TextureWebApp, EditorPackage } from '@deip/substance-texture'
-import { parseKeyEvent, InMemoryDarBuffer } from 'substance'
-import TextureArticleAPI from '@deip/substance-texture/src/article/TextureArticleAPI'
+import { TextureWebApp, TextureConfigurator, ArticleEditorSession , ArticleAPI, ArticlePackage } from '@deip/substance-texture'
+import { parseKeyEvent } from 'substance'
 import HttpStorageClient from '@deip/substance-texture/src/dar/HttpStorageClient.js'
 
 export default class DeipTextureEditorApp extends TextureWebApp {
@@ -12,11 +11,15 @@ export default class DeipTextureEditorApp extends TextureWebApp {
 
   _afterInit() {
     const self = this;
-    setTimeout(() => { // we have to add this wrapper as '_afterInit' executes before the state is set
-      const manuscriptSession = self.state.archive.getEditorSession('manuscript');
-      const pubMetaDbSession = self.state.archive.getEditorSession('pub-meta');
-      const configurator = manuscriptSession.getConfigurator();
-      self.api = new TextureArticleAPI(manuscriptSession, pubMetaDbSession, configurator, self.state.archive);
+    setTimeout(() => { // temporal solution: we have to add this wrapper as '_afterInit' executes before the state is set
+      const archive = self.state.archive;
+      const configurator = new TextureConfigurator()
+      configurator.import(ArticlePackage)
+      const config = configurator.getConfiguration('article').getConfiguration('manuscript')
+      const documentSession = archive.getEditorSession('manuscript')
+      const contextProvider = {}
+      const editorSession = new ArticleEditorSession(documentSession, config, contextProvider)
+      self.api = new ArticleAPI(editorSession, config, archive);
       self.initPromise.resolve(self);
     }, 1000)
     window.scrollTo(0, 0);
@@ -24,10 +27,6 @@ export default class DeipTextureEditorApp extends TextureWebApp {
 
   _getStorage() {
     return new HttpStorageClient(this.props.storageUrl, this.props.headers)
-  }
-
-  _getArticleConfig() {
-    return EditorPackage;
   }
 
   _handleKeyDown(event) {
@@ -40,7 +39,17 @@ export default class DeipTextureEditorApp extends TextureWebApp {
   }
 
   save() {
-    return this._save();
+    const self = this;
+    const promise = new Promise((resolve, reject) => {
+      self._save((err) => {
+        if (err) {
+          reject(err);
+        } else {
+          resolve();
+        }
+      });
+    })
+    return promise;
   }
 
 }
