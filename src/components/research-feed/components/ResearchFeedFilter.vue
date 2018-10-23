@@ -98,10 +98,10 @@
         },
         methods: {
             filterDisciplines(disciplines) {
-                this.$store.dispatch('feed/updateFilter', {key: 'disciplines', value: disciplines})
+                this.$store.dispatch('feed/updateFilter', { key: 'disciplines', value: disciplines });
             },
             querySearch(value) {
-                this.$store.dispatch('feed/updateFilter', {key: 'q', value: value})
+                this.$store.dispatch('feed/updateFilter', {key: 'q', value: value});
             }
         }
     };

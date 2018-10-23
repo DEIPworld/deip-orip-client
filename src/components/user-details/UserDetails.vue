@@ -12,7 +12,6 @@
 
 <script>
     import usersService from './../../services/http/users'
-    import expertiseClaimsService from '../../services/http/expertiseClaims.js';
 
     export default {
         name: 'UserDetails',
@@ -26,11 +25,6 @@
         },
         created() {
             this.$store.dispatch('userDetails/loadUser', this.accountName);
-
-            expertiseClaimsService.getExpertiseClaimsByUser(this.$route.params.account_name)
-                .then(data => {
-                    console.log(data);
-                });
         }
     }
 </script>

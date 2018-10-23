@@ -15,9 +15,7 @@
 
     const mapExternalDisciplines = (selected, isMultipleSelect) => {
         if (isMultipleSelect) {
-            return selected.map(d => {
-                return { id: d.id, label: d.label, path: d.path };
-            });
+            return selected.map(d => ({ id: d.id, label: d.label, path: d.path }));
         } else {
             return selected ? { id: selected.id, label: selected.label, path: selected.path } : undefined;
         }

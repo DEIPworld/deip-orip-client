@@ -134,7 +134,7 @@
                         <div class="title">Research Groups: {{ commonGroups.length }}</div>
                     </div>
 
-                    <v-card class="c-mt-6 hidden-last-child">
+                    <v-card class="c-mt-6">
                         <template v-for="group in commonGroups">
                             <div class="c-p-6">
                                 <router-link :to="'/' + group.permlink + '/group-details'" class="research-group-title">{{ group.name }}</router-link>
@@ -149,6 +149,14 @@
                             </div>
                             <v-divider></v-divider>
                         </template>
+
+                        <div v-if="isOwner" class="c-pv-4 c-ph-6">
+                            <v-btn class="ma-0" outline icon color="primary" :to="{ name: 'CreateResearchGroup' }">
+                                <v-icon small>add</v-icon>
+                            </v-btn>
+
+                            <span class="c-pl-2 deip-blue-color">Add group</span>
+                        </div>
                     </v-card>
                 </div>
             </div>
@@ -252,10 +260,21 @@
         </div>
         <!-- ### END User Profile Education\Employment Section ### -->
 
-        <user-claim-expertise-dialog
-            :is-shown="isClaimExpertiseShown"
-            @close="isClaimExpertiseShown = false"
-        ></user-claim-expertise-dialog>
+        <div v-if="isLoadingUserProfilePage === false">
+            <user-claim-expertise-dialog
+                :is-shown="isClaimExpertiseShown"
+                @close="isClaimExpertiseShown = false"
+            ></user-claim-expertise-dialog>
+
+            <div v-for="(item, i) in tmpClaimObjects" :key="i">
+                <router-link :to="{
+                        name: 'claim-user-expertise-page', 
+                        params: { account_name: item.username, claim_id: item._id }
+                    }"
+                    class="a subheading"
+                >{{ item._id }}</router-link>
+            </div>
+        </div>
     </div>
 </template>
 
@@ -263,7 +282,8 @@
     import { mapGetters } from 'vuex';
     import usersService from './../../../services/http/users'
     import vueDropzone from 'vue2-dropzone';
-    import {getAccessToken} from './../../../utils/auth'
+    import {getAccessToken} from './../../../utils/auth';
+    import expertiseClaimsService from '../../../services/http/expertiseClaims.js';
 
     export default {
         name: 'UserDetailsBody',
@@ -290,7 +310,9 @@
                 accountName: this.$route.params.account_name,
                 fileStorageBaseUrl: process.env.DEIP_SERVER_URL,
 
-                isClaimExpertiseShown: false
+                isClaimExpertiseShown: false,
+
+                tmpClaimObjects: []
             }
         },
         computed: {
@@ -546,6 +568,13 @@
                 });
                 console.log(message);
             }
+        },
+
+        created() {
+            expertiseClaimsService.getExpertiseClaimsByUser(this.$route.params.account_name)
+                .then(data => {
+                    this.tmpClaimObjects = data;
+                });
         }
     }
 </script>

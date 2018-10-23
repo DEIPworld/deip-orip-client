@@ -104,7 +104,7 @@
         },
         data() {
             return {
-                URL_REGEX: /^(https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-]*)*\/?$/,
+                URL_REGEX: /^(https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/#\w \.-]*)*\/?$/,
 
                 required: value => !!value || 'This field is required',
                 urlRule: value => {
@@ -147,7 +147,7 @@
                     this.discipline.id,
                     this.coverLetter,
                     this.publications.map(item => item.value)
-                ).then(data => {
+                ).then(() => {
                     this.$store.dispatch('layout/setSuccess', {
                         message: "Success"
                     });
@@ -163,11 +163,11 @@
         watch: {
             'isShown': function(newValue) {
                 if (newValue) {
+                    this.$refs.form.reset();
+
                     this.discipline = undefined;
                     this.coverLetter = '';
                     this.publications = [{ value: '' }];
-
-                    this.$refs.form.reset();
                 }
             }
         }

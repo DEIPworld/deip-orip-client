@@ -80,10 +80,6 @@
                     <v-list-tile v-if="user" @click="goToState('UserWallet')">
                         <v-list-tile-title>My Wallet</v-list-tile-title>
                     </v-list-tile>
-
-                    <v-list-tile v-if="user" @click="goToState('CreateResearchGroup', {account_name: user.username})">
-                        <v-list-tile-title>Create Research Group</v-list-tile-title>
-                    </v-list-tile>
                     
                     <v-list-tile v-if="user" @click="goToState('CreateGrant')">
                         <v-list-tile-title>Create Grant</v-list-tile-title>

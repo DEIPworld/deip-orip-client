@@ -2,24 +2,35 @@
     <page-container>
 
         <contentbar>
-            <claim-user-expertise-body></claim-user-expertise-body>
+            <div class="spinner-container">
+                <v-progress-circular class="section-spinner"
+                    v-if="isDataLoading"
+                    :size="100" indeterminate color="primary"
+                ></v-progress-circular>
+
+                <claim-user-expertise-body v-else></claim-user-expertise-body>
+            </div>
         </contentbar>
 
         <sidebar>
-            <claim-user-expertise-sidebar></claim-user-expertise-sidebar>
+            <sidebar-loader v-if="isDataLoading"></sidebar-loader>
+            <claim-user-expertise-sidebar v-else></claim-user-expertise-sidebar>
         </sidebar>
 
     </page-container>
 </template>
 
 <script>
+    import deipRpc from '@deip/deip-rpc-client';
 
     export default {
         name: 'ClaimUserExpertisePage',
         data() {
             return {
-                claimerUsername: 'alice',
-                claimId: '5bc4b207557aa7001c4afe56'
+                claimerUsername: this.$route.params.account_name,
+                claimId: this.$route.params.claim_id,
+
+                isDataLoading: true
             }
         },
         methods: {
@@ -29,6 +40,8 @@
             this.$store.dispatch('claimExpertise/loadClaimer', {
                 username: this.claimerUsername,
                 claimId: this.claimId
+            }).then(() => {
+                this.isDataLoading = false;
             });
         }
     }
