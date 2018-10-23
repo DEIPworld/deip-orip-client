@@ -8,7 +8,7 @@
         <div style="margin-bottom: 50px">
             <v-progress-circular v-if="isLoadingResearchContentPage" indeterminate color="primary"></v-progress-circular>
             <div v-if="isLoadingResearchContentPage === false">
-                <div id="deip-texture" ref='deip-texture-container' class="deip-texture"></div>
+                <div ref='deip-texture-container' class="deip-texture" :class="[{'read-only': isReadOnly}]"></div>
             </div> 
         </div>
         <!-- ### END Research Content Details Section ### -->
@@ -23,8 +23,6 @@
     import DeipTextureReaderApp from './../../../texture/DeipTextureReaderApp'
     import DeipTextureEditorApp from './../../../texture/DeipTextureEditorApp'
     import { getQueryStringParam, substanceGlobals, platform } from 'substance'
-    import TextureArticleAPI from '@deip/substance-texture/src/article/TextureArticleAPI'
-
     import { getAccessToken, getDecodedToken } from './../../../utils/auth'
     import deipRpc from '@deip/deip-rpc-client'
 
@@ -35,7 +33,8 @@
         },
         data() { 
             return {
-                fileStorageBaseUrl: process.env.DEIP_SERVER_URL
+                fileStorageBaseUrl: process.env.DEIP_SERVER_URL,
+                isReadOnly: undefined
             } 
         },
         computed: {
@@ -73,7 +72,7 @@
                         getQueryStringParam('isReadOnly') === 'true'
                         || this.contentRef.status != "in-progress"
                         || !groups.some(id => id == research.research_group_id);
-                    
+
                     const archiveId = self.contentRef._id;
                     const storageType = 'fs';
                     const storageUrl = `${self.fileStorageBaseUrl}/content`;
@@ -85,12 +84,14 @@
                         'DarRef': archiveId
                     };
                     const initPromise = { resolve, reject };
-                    const params = { archiveId, storageType, storageUrl, initPromise, headers };
+                    const viewName = isReadOnly ? 'reader' : 'manuscript';
+                    const params = { archiveId, storageType, storageUrl, initPromise, headers, viewName };
                     const texture = isReadOnly
                         ? DeipTextureReaderApp.mount(params, container) 
                         : DeipTextureEditorApp.mount(params, container);
                     })
 
+                    self.isReadOnly = isReadOnly;
                     return promise;
                 })
                 .then((texture) => {
@@ -102,24 +103,5 @@
 </script>
 
 <style lang="less">
-
-    @import (less) '~substance/_variables.css';
-   /* @import (less) '~@deip/substance-texture/dist/substance/dist/substance.next.css'; */
-
-    #deip-texture.deip-texture {
-
-        .sc-app {
-            height: 100%;
-        }
-
-        @import (less) '~@deip/substance-texture/dist/texture.css';
-        @import (less) '~@deip/substance-texture/dist/texture-reset.css';
-        @import (less) '~@deip/substance-texture/dist/texture-pagestyle.css';
-        @import (less) '~@deip/substance-texture/dist/katex/katex.min.css';
-        @import (less) '~@deip/substance-texture/dist/font-awesome/css/font-awesome.css';
-        @import (less) '~substance/dist/substance.css';
-        
-        height: 800px;
-    }
-
+    @import './../../../styles/texture';
 </style>

@@ -1,0 +1,134 @@
+:root {
+    /* Font families */
+    /* ----------------------------------------------------------------------*/
+ 
+    /* Used for interface elements */
+    --t-interface-font: 'Inter UI', system-ui, sans-serif;
+    /* Used for flowing text, such as paragraphs */ 
+    --t-text-font: 'Inter UI', system-ui, sans-serif;
+ 
+    /* Font sizes */
+    /* ----------------------------------------------------------------------*/
+    
+    /* Used for main text */
+    --t-text-font-size: 17px; 
+    /* Used for authors list */
+    --t-large-font-size: 19px; 
+    /* Table of contents */
+    --t-small-font-size: 14px;
+    /* Used in toolbars and dropdown menus and section labels */
+    --t-tiny-font-size: 12px;
+    /* E.g. article title */
+    --t-title-font-size: 36px;
+    /* Heading level 1 */
+    --t-h1-font-size: 23px;
+    /* Heading level 2 */
+    --t-h2-font-size: 21px;
+    /* Heading level 3 */
+    --t-h3-font-size: 19px;
+    /* Heading level 4 */
+    --t-h4-font-size: 17px;
+ 
+    /* Font weights */
+    /* ----------------------------------------------------------------------*/
+ 
+    --t-normal-font-weight: 400; /* Normal text weight */
+    --t-bold-font-weight: 500; /* Strong emphasis */
+ 
+    /* Line heights */
+    /* ----------------------------------------------------------------------*/
+ 
+    /* Used in main text */
+    --t-default-line-height: 1.5;
+ 
+    /* Colors */
+    /* ----------------------------------------------------------------------*/
+ 
+   /* Default background color, used when we need to cover content, e.g. in overlays */
+   --t-background-color: #fff;
+   /* Light (greyish) background color */
+   --t-light-background-color: #2E72EA0a;
+   /* Main text color, used in the article */
+   --t-text-color: #111;
+   /* Inverted text color, to put on dark elements */
+   --t-inverted-text-color: #fff;
+   /* Used for section labels, card labels etc. */
+   --t-light-text-color: #888;
+   /* Used for focus border, e.g. selected card, or text input */
+   --t-focus-color: rgb(145, 189, 240);
+   /* E.g. citations of references, figures, etc. */
+   --t-action-color: #2e72ea;
+   /* Used to display warning icons */
+   --t-warning-color: #ffaf46;
+   /* Default light border color */
+   --t-border-color: #ddd;
+ 
+    /* Paddings */
+    /* ----------------------------------------------------------------------*/
+   --t-half-spacing: 10px; /* Half of the default spacing */
+   --t-default-spacing: 20px; /* Default padding to create some whitespace, e.g. in figure */
+   --t-text-spacing: 15px; /* Used as the margin between content elements */
+   --t-double-spacing: 40px; /* Double of the default spacing */
+   --t-input-padding: 4px; /* Padding used input boxes */
+ 
+    /* Margins */
+    /* ----------------------------------------------------------------------*/
+ 
+   --t-flowing-content-margin: 20px 0; /* Space between content elements, e.g. between two paragraphs */
+ 
+    /* Borders */
+    /* ----------------------------------------------------------------------*/
+ 
+   --t-input-default-border: 2px solid transparent;
+   --t-input-outline-border: 2px solid var(--t-border-color);
+   --t-input-focus-border: 2px solid rgb(145, 189, 240);
+   --t-negative-input-padding: -6px; /* This must be the negative of input padding + default border width */
+   --t-border-radius: 5px; /* Default border radius for rounded corners */
+   --t-default-border: 1px solid var(--t-border-color);
+ 
+    /* Box shadows */
+    /* ----------------------------------------------------------------------*/
+ 
+   --t-default-box-shadow: 0 0 0 0.75pt #d1d1d1, 0 0 3pt 0.75pt #ccc;
+ 
+    /* Substance Styles */
+    /* ----------------------------------------------------------------------*/
+   --t-small-layout-width: 300px;
+   --t-medium-layout-width: 620px;
+   --t-large-layout-width: 960px;
+ 
+   --t-light-bg-color: #F7F7F9;
+   --t-separator-color: rgba(0,0,0,0.05);
+ }
+
+.deip-texture {
+    
+    @import (less) '~@deip/substance-texture/dist/texture.css';
+    @import (less) '~@deip/substance-texture/dist/texture-reset.css';
+    @import (less) '~@deip/substance-texture/dist/katex/katex.min.css';
+    @import (less) '~@deip/substance-texture/dist/font-awesome/css/font-awesome.min.css';
+
+    .sc-app {
+        height: 100%;
+    }
+
+    .sc-list {
+        padding-left: 40px;
+    }
+
+    .sc-list ul, ol {
+        padding-left: 40px;
+    }
+
+    .sc-manuscript-view .se-toolbar-wrapper {
+        z-index: 199;
+    }
+
+    height: 800px;
+}
+
+.deip-texture.read-only {
+    .se-toolbar-wrapper {
+        display: none !important;
+    }
+}
