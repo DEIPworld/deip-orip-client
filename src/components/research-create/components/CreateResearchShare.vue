@@ -9,13 +9,13 @@
                     <div class="sm-title bold text-align-center c-pv-12">
                         How much reward would you like to share with reviewers?<br>
                         The bigger the percent is, the better chance of getting reviews and increasing research popularity you have.<br>
-                        You can choose between 5-50%
+                        You can choose between 0-50%
                     </div>
 
                     <div class="column align-center">
                         <div>
                             <div class="display-inline-block width-12">
-                                <v-text-field v-model="reviewShare" v-on:keyup="setReviewShare" solo mask="##" label="min 5%"></v-text-field>
+                                <v-text-field v-model="reviewShare" v-on:keyup="setReviewShare" solo mask="##" label="min 0%"></v-text-field>
                             </div>
 
                             <div class="display-inline-block sm-title bold deip-blue-color c-pl-2">%</div>
@@ -57,7 +57,7 @@
         computed: {
             nextDisabled() {
                 return !this.research.review_share_in_percent
-                    || !(this.research.review_share_in_percent >= 5 && this.research.review_share_in_percent <= 50)
+                    || !(this.research.review_share_in_percent >= 0 && this.research.review_share_in_percent <= 50)
                     || this.isLoading;
             }
         },

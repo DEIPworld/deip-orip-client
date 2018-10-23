@@ -58,7 +58,13 @@
                                         </v-avatar>
 
                                         <div class="col-grow c-pl-4">
-                                            <router-link :to="'/user-details/' + member.account.name" class="a subheading">{{ member | fullname }}</router-link>
+                                            <router-link :to="{
+                                                    name: 'UserDetails', 
+                                                    params: { account_name: member.account.name }
+                                                }" 
+                                                class="a subheading"
+                                            >{{ member | fullname }}</router-link>
+
                                             <div class="caption c-pt-1">{{member | employmentOrEducation}}</div>
                                         </div>
                                     </div>
@@ -73,7 +79,7 @@
                                         {{ convertToPercent(member.rgt.amount) }}%
                                     </div>
 
-                                     <div class="col-2 text-align-center list-body-cell">
+                                    <div class="col-2 text-align-center list-body-cell">
                                         {{ member.created | dateFormat("D MMM YYYY") }}
                                     </div>
 
