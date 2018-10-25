@@ -109,6 +109,8 @@
                         message: "Proposal was successfully created"
                     });
 
+                    this.$emit('onCreate');
+
                     setTimeout(() => this.$emit('close'), 1000);
                 }).catch(e => {
                     this.$store.dispatch('layout/setError', {

@@ -9,9 +9,9 @@ import * as disciplineTreeService from '../../common/disciplines/DisciplineTreeS
 const state = {
     claimerAccount: undefined,
     claimerProfile: undefined,
-    claimerExpertise: undefined,
+    claimerExpertise: [],
     claim: undefined,
-    proposals: undefined
+    proposals: []
 }
 
 // getters
@@ -99,17 +99,25 @@ const actions = {
                     resProposals.map(item => deipRpc.api.getExpertTokensByAccountNameAsync(item.initiator))
                 );
 
+                const proposalVotesPromise = Promise.all(
+                    resProposals.map(item => 
+                        deipRpc.api.getExpertiseAllocationProposalVotesByExpertiseAllocationProposalIdAsync(item.id)
+                    )
+                );
+
                 return Promise.all([
                     disciplinesPromise,
                     profilesPromise,
-                    expertTokensPromise
+                    expertTokensPromise,
+                    proposalVotesPromise
                 ]);
             })
-            .then(([disciplines, profiles, expertTokens]) => {
+            .then(([disciplines, profiles, expertTokens, proposalVotes]) => {
                 resProposals.forEach((proposal, index) => {
                     proposal.discipline = disciplines[index];
                     proposal.initiatorInfo = profiles[index];
                     proposal.initiatorExpertise = expertTokens[index];
+                    proposal.votes = proposalVotes;
                 });
 
                 commit('SET_PROPOSALS', resProposals);

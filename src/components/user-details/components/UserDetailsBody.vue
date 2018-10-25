@@ -255,16 +255,14 @@
                     </div>
                 </div>
             </div>
-
-            <v-btn class="c-mt-12" @click="isClaimExpertiseShown = true">Show user-claim-expertise-dialog</v-btn>
         </div>
         <!-- ### END User Profile Education\Employment Section ### -->
 
         <div v-if="isLoadingUserProfilePage === false">
-            <user-claim-expertise-dialog
-                :is-shown="isClaimExpertiseShown"
-                @close="isClaimExpertiseShown = false"
-            ></user-claim-expertise-dialog>
+            <div class="c-pt-12"></div>
+            <v-btn class="ma-0" @click="isClaimExpertiseShown = true">Show user-claim-expertise-dialog</v-btn>
+
+            <div class="c-pv-4" v-if="tmpClaimObjects.length">User claims:</div>
 
             <div v-for="(item, i) in tmpClaimObjects" :key="i">
                 <router-link :to="{
@@ -275,6 +273,11 @@
                 >{{ item._id }}</router-link>
             </div>
         </div>
+            
+        <user-claim-expertise-dialog
+            :is-shown="isClaimExpertiseShown"
+            @close="isClaimExpertiseShown = false"
+        ></user-claim-expertise-dialog>
     </div>
 </template>
 
