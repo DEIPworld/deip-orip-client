@@ -180,12 +180,17 @@
                     type: null,
                     authors: [],
                     contentTypes: contentTypes,
+                    deipRefs: [],
 
                     isOpen: false,
                     isLoading: false
                 },
 
-                isSavingDraft: false
+                isSavingDraft: false,
+
+                researchGroupPermlink: this.$route.params.research_group_permlink,
+                researchPermlink: this.$route.params.research_permlink,
+                researchContentPermlink: this.$route.params.content_permlink
             };
         },
         computed: {
@@ -243,13 +248,15 @@
                         return draft.status == 'in-progress' ? 
                             texture.save()
                                 .then(() => {
-                                    this.$store.dispatch('layout/setSuccess', {
-                                        message: "Draft Saved !"
-                                    });
+                                    this.$store.dispatch('layout/setSuccess', 
+                                        { message: "Draft is saved !" });
+                                }, (err) => {
+                                    console.error(err);
+                                    this.$store.dispatch('layout/setError', 
+                                        { message: "Please, make sure you have specified all required fields for metadata" });
                                 }) : Promise.resolve().then(() => {
-                                    this.$store.dispatch('layout/setError', {
-                                        message: "Draft is locked for editing !"
-                                    });
+                                    this.$store.dispatch('layout/setError', 
+                                        { message: "Draft is locked for editing !" });
                                 })
                     })
                     .finally(() => {
@@ -265,19 +272,20 @@
                     promise = texture.save()
                         .then(() => {
                             return contentHttpService.getContentRef(this.contentRef._id)
-                        })
-                        .then((contentRef) => {
-                            contentRef.title = contentRef.title || this.proposeContent.title;
-                            return contentRef;
                         });
                 } else {
-                    this.contentRef.title = this.proposeContent.title;
+                    contentRef.title = this.proposeContent.title;
                     promise = Promise.resolve(this.contentRef)
                 }
 
                 promise
                     .then((contentRef) => {
-                        createContentProposal(contentRef, this.proposeContent.type, this.proposeContent.authors.map(a => a.account.name))
+
+                        contentRef.title = contentRef.title || this.proposeContent.title;
+                        contentRef.authors = this.proposeContent.authors.map(a => a.account.name);
+                        contentRef.references = this.proposeContent.deipRefs.map(r => r.id);
+
+                        createContentProposal(contentRef, this.proposeContent.type)
                             .then(() => {
                                 this.$store.dispatch('layout/setSuccess', {
                                     message: "New Content Proposal has been created successfuly!"
@@ -296,7 +304,7 @@
                                 this.proposeContent.isOpen = false;
                                 this.proposeContent.isLoading = false;
                             })
-                        })
+                    })
             },
 
             userHasExpertise(discipline) {
@@ -315,10 +323,21 @@
             openContentProposalDialog() {
                 if (this.contentRef.type === 'dar') {
                     const texture = this.$store.getters['rcd/texture'];
-                    const articleTitle = texture.api.getArticleTitle();
-                    const title =  articleTitle._value || "";
-                    this.proposeContent.title = title;
-                    this.proposeContent.isOpen = true;
+                    const { articleTitle, authorsAliases, deipRefs } = texture.retrieveDeipEntities();
+                    const authors = this.membersList.filter(m => authorsAliases.some(a => a === m.account.name));
+                    const refsPromises = deipRefs.filter(ref => 
+                        ref.researchGroupPermlink != this.researchGroupPermlink &&
+                        ref.researchPermlink != this.researchPermlink
+                    ).map(ref => 
+                        deipRpc.api.getResearchContentByAbsolutePermlinkAsync(ref.researchGroupPermlink, ref.researchPermlink, ref.researchContentPermlink)
+                    );
+                    Promise.all(refsPromises)
+                        .then((contents) => {
+                            this.proposeContent.deipRefs = contents;
+                            this.proposeContent.authors = authors;
+                            this.proposeContent.title = articleTitle || "";
+                            this.proposeContent.isOpen = true;
+                        });
                 } else if (this.contentRef.type === 'file') {
                     this.proposeContent.isOpen = true;
                 }

@@ -1,4 +1,4 @@
-import { TextureWebApp, TextureConfigurator, ArticleEditorSession , ArticleAPI, ArticlePackage } from '@deip/substance-texture'
+import { TextureWebApp, TextureConfigurator, ArticleEditorSession, ArticleAPI, ArticlePackage } from '@deip/substance-texture'
 import { parseKeyEvent } from 'substance'
 import HttpStorageClient from '@deip/substance-texture/src/dar/HttpStorageClient.js'
 
@@ -45,11 +45,36 @@ export default class DeipTextureEditorApp extends TextureWebApp {
         if (err) {
           reject(err);
         } else {
-          resolve();
+          resolve(self.retrieveDeipEntities());
         }
       });
     })
     return promise;
   }
 
+  retrieveDeipEntities() {
+    const refs = this.api.getReferenceManager().getBibliography();
+    const webpageRefs = refs.filter(r => r.type === 'webpage-ref');
+    const deipRefs = webpageRefs.map(wr => {
+      const source = wr.uri || wr.containerTitle;
+      try {
+        const url = new URL(source);
+        if (url.host === process.env.HOST) {
+          const segments = url.hash.split('/');
+          const researchGroupPermlink = segments[1];
+          const researchPermlink = segments[3];
+          const researchContentPermlink = segments[4];
+          return { researchGroupPermlink, researchPermlink, researchContentPermlink }
+        }
+      } catch(err){}
+        return null;
+      }).filter(r => r != null);
+
+      const authors = this.api.getAuthorsModel()['_node'].children;
+      const authorsAliases = authors.map(a => a.alias).filter(a => a != null);
+
+      const articleTitle = this.api.getArticleTitle()['_value'];
+
+      return { deipRefs, authorsAliases, articleTitle };
+  }
 }

@@ -179,8 +179,10 @@
                     throw new Error("File upload has failed")
                 }
                 contentRef.title = this.title;
+                contentRef.authors = this.authors.map(a => a.account.name);
+                contentRef.references = [];
 
-                createContentProposal(contentRef, this.type, this.authors.map(a => a.account.name))
+                createContentProposal(contentRef, this.type)
                     .then((updatedRequest) => {
                         this.$store.dispatch('layout/setSuccess', {
                             message: "New Content Proposal has been created successfuly!"
