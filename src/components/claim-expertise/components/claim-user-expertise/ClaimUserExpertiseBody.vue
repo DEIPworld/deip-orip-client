@@ -44,7 +44,11 @@
         </v-card>
 
         <div class="c-mt-8">
-            <v-btn color="primary" class="ma-0" @click="isAllocationDialogShown = true">Create a proposal</v-btn>
+            <v-btn color="primary" class="ma-0"
+                v-if="claim.username !== user.username"
+                :disabled="isCreateProposalBtnDisabled"
+                @click="isAllocationDialogShown = true"
+            >Create a proposal</v-btn>
         </div>
         
         <div class="" v-if="proposals.length">
@@ -53,7 +57,7 @@
             <v-card class="c-mt-6 hidden-last-child">
                 <template v-for="proposal in proposals">
                     <div class="row-nowrap align-items-center">
-                        <div class="row-nowrap col-grow c-pv-6 c-ph-8">
+                        <div class="row-nowrap col-grow c-pv-4 c-ph-8">
                             <v-avatar size="40px" class="">
                                 <img v-if="proposal.initiatorInfo.profile" v-bind:src="proposal.initiatorInfo.profile.avatar | avatarSrc(40, 40, false)" />
                                 <v-gravatar v-if="!proposal.initiatorInfo.profile && proposal.initiatorInfo.account" :email="proposal.initiatorInfo.account.name + '@deip.world'" />
@@ -73,23 +77,23 @@
 
                         <div class="proposal-cell-devider"></div>
 
-                        <div class="c-pv-6 c-ph-8">
-                            <div v-for="(proposal, i) in proposal.initiatorExpertise" :key="i">    
-                                <span class="grey--text">{{ proposal.discipline_name }} {{ proposal.amount }}</span>
+                        <div class="c-pv-4 c-ph-6">
+                            <div v-for="(token, i) in proposal.initiatorExpertise" :key="i">    
+                                <span class="grey--text">{{ token.discipline_name }} {{ token.amount }}</span>
                             </div>
                         </div>
 
                         <div class="proposal-cell-devider"></div>
 
-                        <div class="c-pv-6 c-ph-8 text-align-center">
+                        <div class="c-pv-4 c-ph-6 text-align-center width-8">
                             <div class="title bold">{{ proposal.amount }}</div>
                             <div class="sm-title bold">expertise</div>
                         </div>
 
                         <div class="proposal-cell-devider"></div>
 
-                        <div class="c-pv-6 c-ph-8">
-                            voted: {{ (proposal.total_voted_expertise / proposal.discipline.total_expertise_amount).toFixed(2) }}%
+                        <div class="c-pv-4 c-ph-6 text-align-center width-7">
+                            voted:<br>{{ (proposal.total_voted_expertise / proposal.discipline.total_expertise_amount).toFixed(2) }}%
                         </div>
 
                         <div class="proposal-cell-devider"></div>
@@ -114,6 +118,7 @@
             :claimer="claimerInfo"
             :discipline-id="claim.disciplineId"
             @close="isAllocationDialogShown = false"
+            @onCreate="onProposalCreate()"
         ></claim-user-expertise-allocation-dialog>
     </div>
 </template>
@@ -148,6 +153,12 @@
                 }
 
                 return location;
+            },
+            isCreateProposalBtnDisabled() {
+                const hasExpertise = !!this.user.expertTokens.find(token => token.discipline_id === this.claim.disciplineId);
+                const hasVoted = !!this.proposals.find(proposal => proposal.initiator === this.user.username);
+
+                return !hasExpertise || hasVoted;
             }
         },
         methods: {
@@ -197,22 +208,16 @@
                     if (idIndex > -1) {
                         this.loadingProposalIds.splice(idIndex, 1);
                     }
-                })
-
-
-                // setTimeout(() => {
-                //     const idIndex = _.findIndex(this.loadingProposalIds, id => id === proposal.id);
-
-                //     if (idIndex > -1) {
-                //         this.loadingProposalIds.splice(idIndex, 1);
-                //     }
-
-                //     this.$store.dispatch('layout/setSuccess', {
-                //         message: "Proposal was successfully created"
-                //     });
-                // }, 2000);
+                });
+            },
+            onProposalCreate() {
+                this.$store.dispatch('claimExpertise/loadClaimProposals', {
+                    username: this.claim.username,
+                    disciplineId: this.claim.disciplineId
+                });
             }
         },
+        
         created() {
         }
     }
