@@ -79,16 +79,18 @@
 
                     const container = this.$refs['deip-texture-container'];
                     const promise = new Promise((resolve, reject) => {
-                    const headers = {
-                        'Authorization': 'Bearer ' + getAccessToken(),
-                        'DarRef': archiveId
-                    };
-                    const initPromise = { resolve, reject };
-                    const viewName = isReadOnly ? 'reader' : 'manuscript';
-                    const params = { archiveId, storageType, storageUrl, initPromise, headers, viewName };
-                    const texture = isReadOnly
-                        ? DeipTextureReaderApp.mount(params, container) 
-                        : DeipTextureEditorApp.mount(params, container);
+                        const headers = {
+                            'Authorization': 'Bearer ' + getAccessToken(),
+                            'DarRef': archiveId
+                        };
+
+                        const viewName = isReadOnly ? 'reader' : 'manuscript';
+                        const params = { archiveId, storageType, storageUrl, headers, viewName };
+                        const texture = isReadOnly
+                            ? DeipTextureReaderApp.mount(params, container) 
+                            : DeipTextureEditorApp.mount(params, container);
+                        
+                        texture.on('archive:ready', () => { resolve(texture) })
                     })
 
                     self.isReadOnly = isReadOnly;

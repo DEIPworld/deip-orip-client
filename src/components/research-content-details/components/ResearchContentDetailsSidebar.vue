@@ -323,18 +323,21 @@
             openContentProposalDialog() {
                 if (this.contentRef.type === 'dar') {
                     const texture = this.$store.getters['rcd/texture'];
-                    const { articleTitle, authorsAliases, deipRefs } = texture.retrieveDeipEntities();
-                    const authors = this.membersList.filter(m => authorsAliases.some(a => a === m.account.name));
-                    const refsPromises = deipRefs.filter(ref => 
-                        ref.researchGroupPermlink != this.researchGroupPermlink &&
-                        ref.researchPermlink != this.researchPermlink
-                    ).map(ref => 
-                        deipRpc.api.getResearchContentByAbsolutePermlinkAsync(ref.researchGroupPermlink, ref.researchPermlink, ref.researchContentPermlink)
-                    );
-                    Promise.all(refsPromises)
+                    
+                    const articleTitle = texture.api.getArticleTitle();
+                    const deipRefs = texture.api.getDeipReferences();
+                    const authors = texture.api.getAuthors();
+                    
+                    const deipAuthors = this.membersList.filter(m => authors.some(a => a.alias === m.account.name));
+                    const deipRefsPromises = deipRefs.filter(ref => ref.researchGroupPermlink != this.researchGroupPermlink && ref.researchPermlink != this.researchPermlink)
+                        .map(ref => 
+                            deipRpc.api.getResearchContentByAbsolutePermlinkAsync(ref.researchGroupPermlink, ref.researchPermlink, ref.researchContentPermlink)
+                        );
+
+                    Promise.all(deipRefsPromises)
                         .then((contents) => {
                             this.proposeContent.deipRefs = contents;
-                            this.proposeContent.authors = authors;
+                            this.proposeContent.authors = deipAuthors;
                             this.proposeContent.title = articleTitle || "";
                             this.proposeContent.isOpen = true;
                         });

@@ -6,22 +6,9 @@ export default class DeipTextureEditorApp extends TextureWebApp {
 
   constructor(...args) {
     super(...args);
-    this.initPromise = args[1].initPromise;
   }
 
   _afterInit() {
-    const self = this;
-    setTimeout(() => { // temporal solution: we have to add this wrapper as '_afterInit' executes before the state is set
-      const archive = self.state.archive;
-      const configurator = new TextureConfigurator()
-      configurator.import(ArticlePackage)
-      const config = configurator.getConfiguration('article').getConfiguration('manuscript')
-      const documentSession = archive.getEditorSession('manuscript')
-      const contextProvider = {}
-      const editorSession = new ArticleEditorSession(documentSession, config, contextProvider)
-      self.api = new ArticleAPI(editorSession, config, archive);
-      self.initPromise.resolve(self);
-    }, 1000)
     window.scrollTo(0, 0);
   }
 
@@ -45,36 +32,67 @@ export default class DeipTextureEditorApp extends TextureWebApp {
         if (err) {
           reject(err);
         } else {
-          resolve(self.retrieveDeipEntities());
+          resolve();
         }
       });
     })
     return promise;
   }
 
-  retrieveDeipEntities() {
-    const refs = this.api.getReferenceManager().getBibliography();
-    const webpageRefs = refs.filter(r => r.type === 'webpage-ref');
-    const deipRefs = webpageRefs.map(wr => {
-      const source = wr.uri || wr.containerTitle;
-      try {
-        const url = new URL(source);
-        if (url.host === process.env.HOST) {
-          const segments = url.hash.split('/');
-          const researchGroupPermlink = segments[1];
-          const researchPermlink = segments[3];
-          const researchContentPermlink = segments[4];
-          return { researchGroupPermlink, researchPermlink, researchContentPermlink }
-        }
-      } catch(err){}
-        return null;
-      }).filter(r => r != null);
+  api = (() => {
+    return {
 
-      const authors = this.api.getAuthorsModel()['_node'].children;
-      const authorsAliases = authors.map(a => a.alias).filter(a => a != null);
+      getArticleTitle: () => {
+        const archive = this.state.archive;
+        if (!archive) return null;
+        const articleSession = archive.getEditorSession('manuscript');
+        const articleDocument = articleSession.getDocument();
+        const titleNode = articleDocument.get('title')
+        if (!titleNode || !titleNode.textContent) return null;
+        return titleNode.textContent;
+      },
+    
+      getReferences: () => {
+        const archive = this.state.archive;
+        if (!archive) return [];
+        const articleSession = archive.getEditorSession('manuscript');
+        const refs = articleSession.getReferenceManager().getBibliography();
+        return refs;
+      },
+  
+      getAuthors: () => {
+        const archive = this.state.archive;
+        if (!archive) return [];
+        const articleSession = archive.getEditorSession('manuscript');
+        const articleDocument = articleSession.getDocument();
+        const authorsNode = articleDocument.get("authors");
+        if (!authorsNode || !authorsNode.children) return [];
+        return authorsNode.children;
+      },
 
-      const articleTitle = this.api.getArticleTitle()['_value'];
+      getDeipReferences: () => {
+        const refs = this.api.getReferences();
+        const webpageRefs = refs.filter(r => r.type === 'webpage-ref');
+        const deipRefs = webpageRefs
+          .map(wr => {
+            const source = wr.uri || wr.containerTitle;
+            try {
+              const url = new URL(source);
+              if (url.host === process.env.HOST) {
+                const segments = url.hash.split('/');
+                const researchGroupPermlink = segments[1];
+                const researchPermlink = segments[3];
+                const researchContentPermlink = segments[4];
+                return { researchGroupPermlink, researchPermlink, researchContentPermlink }
+              }
+            } catch(err){}
+              return null;
+            })
+          .filter(r => r != null);
+          return deipRefs;
+      }
+    }
+  })();
 
-      return { deipRefs, authorsAliases, articleTitle };
-  }
+
 }
