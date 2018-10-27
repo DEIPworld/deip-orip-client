@@ -39,7 +39,7 @@ export default class DeipTextureEditorApp extends TextureWebApp {
     return promise;
   }
 
-  api = (() => {
+  api = ((self) => {
     return {
 
       getArticleTitle: () => {
@@ -90,9 +90,38 @@ export default class DeipTextureEditorApp extends TextureWebApp {
             })
           .filter(r => r != null);
           return deipRefs;
+      },
+
+      addAuthor: (alias, surname, givenNames) => {
+        if (!this.refs.texture) return;
+        const collectionId = "authors";
+        const person = { type: "person", alias, surname, givenNames };
+        const editorSession = this.refs.texture.refs.resource.refs.content.editorSession;
+        editorSession.transaction(tx => {
+          const bio = tx.create({type: 'bio'}).append(
+            tx.create({type: 'p'})
+          )
+          person.bio = bio.id
+          const node = tx.create(person)
+          tx.get(collectionId).appendChild(node)
+        })
+        // refresh view
+        this.refs.texture.refs.resource.send('updateViewName', 'manuscript')
+      },
+
+      removeAuthor: (person) => {
+        if (!this.refs.texture) return;
+        const collectionId = "authors";
+        const editorSession = this.refs.texture.refs.resource.refs.content.editorSession;
+        editorSession.transaction(tx => {
+          tx.get(collectionId).removeChild(tx.get(person.id))
+          tx.delete(person.id)
+        })
+        // refresh view
+        this.refs.texture.refs.resource.send('updateViewName', 'manuscript')
       }
     }
-  })();
+  })(this);
 
 
 }

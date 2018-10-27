@@ -109,6 +109,7 @@
                             :items="membersList"
                             v-model="proposeContent.authors"
                             placeholder="Authors"
+                            v-on:change="changeAuthors"
                             autocomplete
                             multiple>
                             
@@ -323,7 +324,6 @@
             openContentProposalDialog() {
                 if (this.contentRef.type === 'dar') {
                     const texture = this.$store.getters['rcd/texture'];
-                    
                     const articleTitle = texture.api.getArticleTitle();
                     const deipRefs = texture.api.getDeipReferences();
                     const authors = texture.api.getAuthors();
@@ -350,8 +350,8 @@
                 this.proposeContent.isOpen = false;
             },
 
-            isAuthorSelected(item) {
-                return this.proposeContent.authors.find(author => { return author.account.name == item.account.name }) !== undefined;
+            isAuthorSelected(member) {
+                return this.proposeContent.authors.some(a => a.account.name === member.account.name)
             },
 
             unlockDraft() {
@@ -361,6 +361,28 @@
                     }, (err) => {
                         console.log(err)
                     })
+            },
+
+            changeAuthors(authors) {
+                const texture = this.$store.getters['rcd/texture']; 
+                const persons = texture.api.getAuthors();
+                const deletedAuthors = persons
+                    .filter(p => !authors.some(a => a.account.name == p.alias))
+                    // filter out authors without DEIP account
+                    .filter(p => this.membersList.some(m => m.account.name === p.alias));
+                const addedAuthors = authors.filter(a => !persons.some(p => a.account.name == p.alias)); 
+                for (let i = 0; i < deletedAuthors.length; i++) { 
+                    let person = deletedAuthors[i];
+                    texture.api.removeAuthor(person);
+                } 
+
+                for (let i = 0; i < addedAuthors.length; i++) { 
+                    let author = addedAuthors[i];
+                    let alias = author.account.name;
+                    let surname = author.profile && author.profile.lastName ? author.profile.lastName : "";
+                    let givenName = author.profile && author.profile.firstName ? author.profile.firstName : alias;
+                    texture.api.addAuthor(alias, surname, givenName);
+                } 
             }
         }
     };
@@ -370,5 +392,10 @@
     .vote-btn-area {
         border: 1px solid #2F80ED;
         border-radius: 3px;
+    }
+    .selected-author-item {
+        background-color: #e0e0e0;
+        width: 100%;
+        height: 100%;
     }
 </style>
