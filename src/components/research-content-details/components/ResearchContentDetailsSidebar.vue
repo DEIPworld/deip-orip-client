@@ -26,9 +26,6 @@
                             contentWeightByDiscipline[content.id][discipline.id] !== undefined ?
                             contentWeightByDiscipline[content.id][discipline.id] : 0}}
                         </div>
-                        
-                        <!-- TODO: add voting for review -->
-                        <!-- <v-btn v-if="!isResearchGroupMember && userHasExpertise(discipline)" @click="openVote(discipline)" small color="primary" dark class="ma-0" >Vote</v-btn> -->
                     </div>
 
                     <div class="c-mt-6">
@@ -38,7 +35,7 @@
                                 research_group_permlink: research.group_permlink,
                                 research_permlink: research.permlink,
                                 content_permlink: content.permlink
-                            }}">Metadata</router-link>
+                            }}">Blockchain Metadata</router-link>
                     </div>
                 </div>
             </div>
@@ -73,9 +70,26 @@
         </div>
         <!-- ### END Draft Actions Section ### -->
 
-    <!--<div class="sidebar-fullwidth">
+        <div v-if="isReviewSectionAvailable" class="sidebar-fullwidth">
             <v-divider></v-divider>
-        </div> -->
+        </div>
+
+        <!-- ### START Research Review Section ### -->
+        <div v-if="isReviewSectionAvailable">
+            <div class="sm-title bold c-pt-6">Reviews</div>
+            <div v-if="research" class="c-pt-4 c-pb-6">
+                <v-btn @click="goAddReview()" dark round outline color="primary" class="full-width ma-0">
+                    <v-icon small>add</v-icon>
+                    <div class="col-grow add-review-label">
+                        Add a review
+                        <span class="caption grey--text">
+                            reward {{convertToPercent(research.review_share_in_percent)}}%
+                        </span>
+                    </div>
+                </v-btn>
+            </div>
+        </div>
+        <!-- ### END Research Review Section ### -->
       </div>
 
       <v-dialog v-if="research" v-model="proposeContent.isOpen" persistent transition="scale-transition" max-width="500px">
@@ -109,6 +123,7 @@
                             :items="membersList"
                             v-model="proposeContent.authors"
                             placeholder="Authors"
+                            v-on:change="changeAuthors"
                             autocomplete
                             multiple>
                             
@@ -180,12 +195,17 @@
                     type: null,
                     authors: [],
                     contentTypes: contentTypes,
+                    deipRefs: [],
 
                     isOpen: false,
                     isLoading: false
                 },
 
-                isSavingDraft: false
+                isSavingDraft: false,
+
+                researchGroupPermlink: this.$route.params.research_group_permlink,
+                researchPermlink: this.$route.params.research_permlink,
+                researchContentPermlink: this.$route.params.content_permlink
             };
         },
         computed: {
@@ -197,6 +217,7 @@
                 membersList: 'rcd/membersList',
                 disciplinesList: 'rcd/disciplinesList',
                 totalVotesList: 'rcd/totalVotesList',
+                contentReviewsList: 'rcd/contentReviewsList',
                 contentWeightByDiscipline: 'rcd/contentWeightByDiscipline',
                 contentProposal: 'rcd/contentProposal',
                 isLoadingResearchContentPage: 'rcd/isLoadingResearchContentPage',
@@ -230,6 +251,16 @@
             },
             isCreatingProposalAvailable() {
                 return this.proposeContent.title && this.proposeContent.type && this.proposeContent.authors.length;
+            },
+
+            userHasExpertise() {
+                return this.userExperise != null && this.research != null
+                    ?  this.userExperise.some(exp => this.research.disciplines.some(d => d.id == exp.discipline_id))
+                    : false
+            },
+            isReviewSectionAvailable() {
+                const userHasReview = this.contentReviewsList.some(r => r.author.account.name === this.user.username)
+                return !this.isResearchGroupMember && !userHasReview && this.userHasExpertise && this.isProposed
             }
         },
 
@@ -243,13 +274,15 @@
                         return draft.status == 'in-progress' ? 
                             texture.save()
                                 .then(() => {
-                                    this.$store.dispatch('layout/setSuccess', {
-                                        message: "Draft Saved !"
-                                    });
+                                    this.$store.dispatch('layout/setSuccess', 
+                                        { message: "Draft is saved !" });
+                                }, (err) => {
+                                    console.error(err);
+                                    this.$store.dispatch('layout/setError', 
+                                        { message: "Please, make sure you have specified all required fields for metadata" });
                                 }) : Promise.resolve().then(() => {
-                                    this.$store.dispatch('layout/setError', {
-                                        message: "Draft is locked for editing !"
-                                    });
+                                    this.$store.dispatch('layout/setError', 
+                                        { message: "Draft is locked for editing !" });
                                 })
                     })
                     .finally(() => {
@@ -265,19 +298,20 @@
                     promise = texture.save()
                         .then(() => {
                             return contentHttpService.getContentRef(this.contentRef._id)
-                        })
-                        .then((contentRef) => {
-                            contentRef.title = contentRef.title || this.proposeContent.title;
-                            return contentRef;
                         });
                 } else {
-                    this.contentRef.title = this.proposeContent.title;
+                    contentRef.title = this.proposeContent.title;
                     promise = Promise.resolve(this.contentRef)
                 }
 
                 promise
                     .then((contentRef) => {
-                        createContentProposal(contentRef, this.proposeContent.type, this.proposeContent.authors.map(a => a.account.name))
+
+                        contentRef.title = contentRef.title || this.proposeContent.title;
+                        contentRef.authors = this.proposeContent.authors.map(a => a.account.name);
+                        contentRef.references = this.proposeContent.deipRefs.map(r => r.id);
+
+                        createContentProposal(contentRef, this.proposeContent.type)
                             .then(() => {
                                 this.$store.dispatch('layout/setSuccess', {
                                     message: "New Content Proposal has been created successfuly!"
@@ -296,29 +330,36 @@
                                 this.proposeContent.isOpen = false;
                                 this.proposeContent.isLoading = false;
                             })
-                        })
+                    })
             },
-
-            userHasExpertise(discipline) {
+            
+            userHasExpertiseInDiscipline(discipline) {
                 return this.userExperise != null && this.research != null
                     ? this.userExperise.some(exp => exp.discipline_id == discipline.id)
                     : false
             },
-            openVote(discipline) {
-                this.vote.discipline = discipline;
-                this.vote.isOpen = true;
-            },
-            cancelVote() {
-                this.vote.isOpen = false;
-            },
+
 
             openContentProposalDialog() {
                 if (this.contentRef.type === 'dar') {
                     const texture = this.$store.getters['rcd/texture'];
                     const articleTitle = texture.api.getArticleTitle();
-                    const title =  articleTitle._value || "";
-                    this.proposeContent.title = title;
-                    this.proposeContent.isOpen = true;
+                    const deipRefs = texture.api.getDeipReferences();
+                    const authors = texture.api.getAuthors();
+                    
+                    const deipAuthors = this.membersList.filter(m => authors.some(a => a.alias === m.account.name));
+                    const deipRefsPromises = deipRefs.filter(ref => ref.researchGroupPermlink != this.researchGroupPermlink && ref.researchPermlink != this.researchPermlink)
+                        .map(ref => 
+                            deipRpc.api.getResearchContentByAbsolutePermlinkAsync(ref.researchGroupPermlink, ref.researchPermlink, ref.researchContentPermlink)
+                        );
+
+                    Promise.all(deipRefsPromises)
+                        .then((contents) => {
+                            this.proposeContent.deipRefs = contents;
+                            this.proposeContent.authors = deipAuthors;
+                            this.proposeContent.title = articleTitle || "";
+                            this.proposeContent.isOpen = true;
+                        });
                 } else if (this.contentRef.type === 'file') {
                     this.proposeContent.isOpen = true;
                 }
@@ -328,8 +369,8 @@
                 this.proposeContent.isOpen = false;
             },
 
-            isAuthorSelected(item) {
-                return this.proposeContent.authors.find(author => { return author.account.name == item.account.name }) !== undefined;
+            isAuthorSelected(member) {
+                return this.proposeContent.authors.some(a => a.account.name === member.account.name)
             },
 
             unlockDraft() {
@@ -339,6 +380,31 @@
                     }, (err) => {
                         console.log(err)
                     })
+            },
+
+            changeAuthors(authors) {
+                const texture = this.$store.getters['rcd/texture']; 
+                const persons = texture.api.getAuthors();
+                const deletedAuthors = persons
+                    .filter(p => !authors.some(a => a.account.name == p.alias))
+                    // filter out authors without DEIP account
+                    .filter(p => this.membersList.some(m => m.account.name === p.alias));
+                const addedAuthors = authors.filter(a => !persons.some(p => a.account.name == p.alias)); 
+                for (let i = 0; i < deletedAuthors.length; i++) { 
+                    let person = deletedAuthors[i];
+                    texture.api.removeAuthor(person);
+                } 
+
+                for (let i = 0; i < addedAuthors.length; i++) { 
+                    let author = addedAuthors[i];
+                    let alias = author.account.name;
+                    let surname = author.profile && author.profile.lastName ? author.profile.lastName : "";
+                    let givenName = author.profile && author.profile.firstName ? author.profile.firstName : alias;
+                    texture.api.addAuthor(alias, surname, givenName);
+                } 
+            },
+            goAddReview() {
+                this.$router.push({ name: 'ResearchContentAddReview', params: this.$route.params });
             }
         }
     };
@@ -348,5 +414,10 @@
     .vote-btn-area {
         border: 1px solid #2F80ED;
         border-radius: 3px;
+    }
+    .selected-author-item {
+        background-color: #e0e0e0;
+        width: 100%;
+        height: 100%;
     }
 </style>

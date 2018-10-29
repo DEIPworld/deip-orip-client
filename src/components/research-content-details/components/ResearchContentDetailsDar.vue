@@ -20,9 +20,8 @@
 <script>
     import { mapGetters } from 'vuex';
     import axios from 'axios'
-    import DeipTextureReaderApp from './../../../texture/DeipTextureReaderApp'
-    import DeipTextureEditorApp from './../../../texture/DeipTextureEditorApp'
-    import { getQueryStringParam, substanceGlobals, platform } from 'substance'
+    import DeipTextureReaderApp from './../../../editors/DeipTextureReaderApp'
+    import DeipTextureEditorApp from './../../../editors/DeipTextureEditorApp'
     import { getAccessToken, getDecodedToken } from './../../../utils/auth'
     import deipRpc from '@deip/deip-rpc-client'
 
@@ -67,9 +66,8 @@
                     return promise;
                 })
                 .then((groups) => {
-                    substanceGlobals.DEBUG_RENDERING = platform.devtools;
                     const isReadOnly = 
-                        getQueryStringParam('isReadOnly') === 'true'
+                        this.$route.query.isReadOnly === 'true'
                         || this.contentRef.status != "in-progress"
                         || !groups.some(id => id == research.research_group_id);
 
@@ -79,16 +77,18 @@
 
                     const container = this.$refs['deip-texture-container'];
                     const promise = new Promise((resolve, reject) => {
-                    const headers = {
-                        'Authorization': 'Bearer ' + getAccessToken(),
-                        'DarRef': archiveId
-                    };
-                    const initPromise = { resolve, reject };
-                    const viewName = isReadOnly ? 'reader' : 'manuscript';
-                    const params = { archiveId, storageType, storageUrl, initPromise, headers, viewName };
-                    const texture = isReadOnly
-                        ? DeipTextureReaderApp.mount(params, container) 
-                        : DeipTextureEditorApp.mount(params, container);
+                        const headers = {
+                            'Authorization': 'Bearer ' + getAccessToken(),
+                            'DarRef': archiveId
+                        };
+
+                        const viewName = isReadOnly ? 'reader' : 'manuscript';
+                        const params = { archiveId, storageType, storageUrl, headers, viewName };
+                        const texture = isReadOnly
+                            ? DeipTextureReaderApp.mount(params, container) 
+                            : DeipTextureEditorApp.mount(params, container);
+                        
+                        texture.on('archive:ready', () => { resolve(texture) })
                     })
 
                     self.isReadOnly = isReadOnly;
@@ -96,7 +96,6 @@
                 })
                 .then((texture) => {
                     self.$store.dispatch('rcd/setTexture', { texture });
-                    console.log(texture)
                 })
         }
     };

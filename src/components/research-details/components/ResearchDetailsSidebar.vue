@@ -108,30 +108,9 @@
             <v-divider></v-divider>
         </div>
 
-        <!-- ### START Research Review Section ### -->
-        <div v-if="isReviewSectionAvailable">
-            <div class="sm-title bold c-pt-6">Reviews</div>
-            <div v-if="research" class="c-pt-4 c-pb-6">
-                <v-btn @click="openReviewDialog" dark round outline color="primary" class="full-width ma-0">
-                    <v-icon small>add</v-icon>
-                    <div class="col-grow add-review-label">
-                        Add a review
-                        <span class="caption grey--text">
-                            reward {{convertToPercent(research.review_share_in_percent)}}%
-                        </span>
-                    </div>
-                </v-btn>
-            </div>
-        </div>
-        <!-- ### END Research Review Section ### -->
-
     <!-- <div class="sm-title bold c-pt-6">Citations: 10</div>
         <div class="sm-title bold c-pb-6 c-mt-2">References: 2</div> -->
  
-        <div v-if="isReviewSectionAvailable" class="sidebar-fullwidth">
-            <v-divider></v-divider>
-        </div>
-
         <!-- ### START Research Info Section ### -->
         <div class="research-info-container spinner-container">
             <v-progress-circular class="section-spinner"
@@ -353,12 +332,6 @@
                     ? this.$store.getters['auth/userIsResearchGroupMember'](this.research.research_group_id) 
                     : false
             },
-            userHasExpertise() {
-                return this.userExperise != null && this.research != null
-                    ?  this.userExperise.some(exp => 
-                            this.research.disciplines.some(d => d.id == exp.discipline_id))
-                    : false
-            },
             isMissingTokenSale(){
                 return this.tokenSale === null;
             },
@@ -407,8 +380,10 @@
             isProfileAvailable() {
                 return this.user.profile != null;
             },
-            isReviewSectionAvailable() {
-                return !this.isResearchGroupMember && this.userHasExpertise && this.contentList.length;
+            userHasExpertise() {
+                return this.userExperise != null && this.research != null
+                    ?  this.userExperise.some(exp => this.research.disciplines.some(d => d.id == exp.discipline_id))
+                    : false
             },
             isTokenSaleSectionAvailable() {
                 return (this.isMissingTokenSale && this.isResearchGroupMember && !this.isFinishedResearch) || this.isActiveTokenSale || this.isInActiveTokenSale;

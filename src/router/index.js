@@ -8,6 +8,7 @@ import ResearchFeed from '@/components/research-feed/ResearchFeed'
 import ResearchDetails from '@/components/research-details/ResearchDetails'
 import ResearchContentDetails from '@/components/research-content-details/ResearchContentDetails'
 import ResearchContentMetadata from '@/components/research-content-details/ResearchContentMetadata'
+import ResearchContentAddReview from '@/components/research-content-details/ResearchContentAddReview'
 import ResearchStartCreating from '@/components/research-create/ResearchStartCreating'
 import CreateNewResearch from '@/components/research-create/CreateNewResearch'
 import CreateTokenSale from '@/components/token-sale-create/CreateTokenSale'
@@ -84,6 +85,10 @@ const router = new Router({
         path: '/:research_group_permlink/research/:research_permlink/:content_permlink/metadata',
         name: 'ResearchContentMetadata',
         component: ResearchContentMetadata
+    }, {
+        path: '/:research_group_permlink/research/:research_permlink/:content_permlink/add-review',
+        name: 'ResearchContentAddReview',
+        component: ResearchContentAddReview
     }, {
         path: '/create-research',
         name: 'StartCreateResearch',

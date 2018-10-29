@@ -10,12 +10,11 @@ const contentTypes = [
     { id: 3, text: 'Final Result' }
 ];
 
-const createContentProposal = function(contentRef, contentType, authors) {
-
-    const proposal = getStringifiedProposalData( CREATE_RESEARCH_MATERIAL, [ 
+const createContentProposal = function(contentRef, contentType) {
+    const proposal = getStringifiedProposalData(CREATE_RESEARCH_MATERIAL, [
             contentRef.researchId, contentType, contentRef.title, 
             contentRef.title.replace(/ /g, "-").replace(/_/g, "-").toLowerCase(),
-            `${contentRef.type}:${contentRef.hash}`, authors, [], []
+            `${contentRef.type}:${contentRef.hash}`, contentRef.authors, contentRef.references, []
         ]);
 
     const operation = ["create_proposal", {

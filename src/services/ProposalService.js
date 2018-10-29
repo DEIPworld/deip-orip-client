@@ -28,74 +28,70 @@ const types = {
     CREATE_RESEARCH_MATERIAL
 };
 
-const labels = {
-    1: 'Start research',
-    2: 'Invite member',
-    3: 'Dropout member',
-    4: 'Send funds',
-    5: 'Start research token sale',
-    6: 'Rebalance research group tokens',
-    7: 'Change quorum',
-    8: 'Change research review share percent',
-    9: 'Offer research tokens',
-    10: 'Accept research token offer',
-    11: 'Create  research material'
-};
+const labels = {};
+labels[START_RESEARCH] = 'Start research';
+labels[INVITE_MEMBER] = 'Invite member';
+labels[DROPOUT_MEMBER] = 'Dropout member';
+labels[SEND_FUNDS] = 'Send funds';
+labels[START_RESEARCH_TOKEN_SALE] = 'Start research token sale';
+labels[REBALANCE_RESEARCH_GROUP_TOKENS] = 'Rebalance research group tokens';
+labels[CHANGE_QUORUM] = 'Change quorum';
+labels[CHANGE_RESEARCH_REVIEW_SHARE_PERCENT] = 'Change research review share percent';
+labels[OFFER_RESEARCH_TOKENS] = 'Offer research tokens';
+labels[ACCEPT_RESEARCH_TOKEN_OFFER] = 'Accept research token offer';
+labels[CREATE_RESEARCH_MATERIAL] = 'Create  research material';
 
 // maybe will be OK to add param validations or type conversion
 // in every function to be sure every time about right data
-const proposalDataStringify = {
-    1: (researchGroupId, title, abstract, permlink, reviewShareInPercent, dropoutCompensationInPercent, disciplines) => {
-        return {
-            "research_group_id": researchGroupId, 
-            "title": title, 
-            "abstract": abstract, 
-            "permlink": permlink, 
-            "review_share_in_percent": reviewShareInPercent, 
-            "dropout_compensation_in_percent": dropoutCompensationInPercent, 
-            "disciplines": disciplines
-        };
-    },
-    2: (researchGroupId, name, researchGroupTokenAmount, coverLetter) => {
-        return {
-            "research_group_id": researchGroupId,
-            "name": name,
-            "research_group_token_amount_in_percent": researchGroupTokenAmount,
-            "cover_letter": coverLetter
-        };
-    },
-    5: (researchId, startTime, endTime, amount, softCap, hardCap) => {
-        return {
-            "research_id": researchId,
-            "start_time": startTime,
-            "end_time": endTime,
-            "amount_for_sale": amount,
-            "soft_cap": softCap,
-            "hard_cap": hardCap
-        };
-    },
-    11: (researchId, type, title, permlink, content, authors, references, externalReferences) => {
-        return {
-            "research_id": researchId,
-            "type": type,
-            "title": title,
-            "permlink": permlink,
-            "content": content,
-            "authors": authors,
-            "references": references,
-            "external_references": externalReferences
-        }
-    }
-};
+const schemasMap = {};
+schemasMap[START_RESEARCH] = (researchGroupId, title, abstract, permlink, reviewShareInPercent, dropoutCompensationInPercent, disciplines) => {
+    return {
+        "research_group_id": researchGroupId, 
+        "title": title, 
+        "abstract": abstract, 
+        "permlink": permlink, 
+        "review_share_in_percent": reviewShareInPercent, 
+        "dropout_compensation_in_percent": dropoutCompensationInPercent, 
+        "disciplines": disciplines
+    };
+}
+schemasMap[INVITE_MEMBER] = (researchGroupId, name, researchGroupTokenAmount, coverLetter) => {
+    return {
+        "research_group_id": researchGroupId,
+        "name": name,
+        "research_group_token_amount_in_percent": researchGroupTokenAmount,
+        "cover_letter": coverLetter
+    };
+}
+schemasMap[START_RESEARCH_TOKEN_SALE] = (researchId, startTime, endTime, amount, softCap, hardCap) => {
+    return {
+        "research_id": researchId,
+        "start_time": startTime,
+        "end_time": endTime,
+        "amount_for_sale": amount,
+        "soft_cap": softCap,
+        "hard_cap": hardCap
+    };
+}
+schemasMap[CREATE_RESEARCH_MATERIAL] = (researchId, type, title, permlink, content, authors, references, externalReferences) => {
+    return {
+        "research_id": researchId,
+        "type": type,
+        "title": title,
+        "permlink": permlink,
+        "content": content,
+        "authors": authors,
+        "references": references,
+        "external_references": externalReferences
+    };
+}
+
 
 const getStringifiedProposalData = (type, params) => {
-    if (proposalDataStringify[type] === undefined) {
-        throw 'Wrong proposal type';
+    if (schemasMap[type] === undefined) {
+        throw 'Unknown proposal type';
     }
-
-    return JSON.stringify(
-        proposalDataStringify[type](...params)
-    );
+    return JSON.stringify(schemasMap[type](...params));
 };
 
 const getParsedProposal = proposal => {
@@ -103,23 +99,22 @@ const getParsedProposal = proposal => {
     return proposal;
 };
 
-const proposalExtenderMap = {
-    1: undefined,
-    2: undefined,
-    5: undefined,
-    11: {
-        research: proposal => deipRpc.api.getResearchByIdAsync(proposal.data.research_id),
-        draftContent: proposal =>
-            researchContentSvc.getContentRefs({ researchId: proposal.data.research_id })
-                .then(contents => {
-                    const contentHash = proposal.data.content.split(':')[1];
-                    return _.find(contents, content => content.hash === contentHash);
-                })
-    }
+const extenderMap = {}
+extenderMap[START_RESEARCH] = undefined;
+extenderMap[INVITE_MEMBER] = undefined;
+extenderMap[START_RESEARCH_TOKEN_SALE] = undefined;
+extenderMap[CREATE_RESEARCH_MATERIAL] = {
+    research: proposal => deipRpc.api.getResearchByIdAsync(proposal.data.research_id),
+    draftContent: proposal =>
+        researchContentSvc.getContentRefs({ researchId: proposal.data.research_id })
+            .then(contents => {
+                const contentHash = proposal.data.content.split(':')[1];
+                return _.find(contents, content => content.hash === contentHash);
+            })
 };
 
 const extendProposalByRelatedInfo = proposal => {
-    const extensionFuncs = proposalExtenderMap[proposal.action];
+    const extensionFuncs = extenderMap[proposal.action];
     proposal.extension = {};
 
     if (!extensionFuncs) {
