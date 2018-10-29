@@ -1,5 +1,5 @@
 <template>
-    <v-dialog v-model="meta.isShown" persistent transition="scale-transition">
+    <v-dialog v-model="meta.isShown" fullscreen persistent transition="scale-transition">
         <v-card class="">
             <v-toolbar dark color="primary">
                 <v-btn icon dark @click.native="meta.isShown = false">
