@@ -13,7 +13,7 @@
                     </router-link>
                 </div>
 
-                <div class="c-pt-4">
+                <div class="c-pt-4" v-if="locationString !== ''">
                     <div class="row half-bold">
                         <span class="c-mt-1">
                             <v-icon small>location_on</v-icon> {{ locationString }}
@@ -25,11 +25,9 @@
             </div>
         </div>
 
-        <div class="bold title c-pt-8">Discipline: {{ claim.discipline.label }}</div>
+        <div class="bold title c-pt-8">Discipline: {{ claim.discipline.name }}</div>
         <div class="bold title c-pt-8">Motivation letter</div>
-
         <div class="c-pt-4">{{ claim.coverLetter }}</div>
-        
         <div class="bold title c-pt-8">Publications</div>
 
         <v-card class="c-mt-6 hidden-last-child">
@@ -45,10 +43,15 @@
 
         <div class="c-mt-8">
             <v-btn color="primary" class="ma-0"
-                v-if="claim.username !== user.username"
+                v-if="claim.username !== user.username && !isClaimAccepted"
                 :disabled="isCreateProposalBtnDisabled"
                 @click="isAllocationDialogShown = true"
             >Create a proposal</v-btn>
+
+            <div class="row align-items-center justify-end" v-if="isClaimAccepted">
+                <span class="headline green--text text--darken-1 c-pr-3">Claimed</span>
+                <v-icon size="35" color="green darken-1">mdi-check</v-icon>
+            </div>
         </div>
         
         <div class="" v-if="proposals.length">
@@ -93,18 +96,29 @@
                         <div class="proposal-cell-devider"></div>
 
                         <div class="c-pv-4 c-ph-6 text-align-center width-7">
-                            voted:<br>{{ (proposal.total_voted_expertise / proposal.discipline.total_expertise_amount).toFixed(2) }}%
+                            voted:<br>
+                            {{
+                                (proposal.total_voted_expertise / proposal.discipline.total_expertise_amount * 100).toFixed(2)
+                            }}%
                         </div>
 
                         <div class="proposal-cell-devider"></div>
 
                         <div class="align-self-stretch">
-                            <v-btn class="ma-0 approve-proposal-btn"
+                            <v-btn class="ma-0 approve-proposal-btn-container"
+                                v-if="!isClaimAccepted"
                                 flat color="primary"
                                 :disabled="isApproveBtnDisabled(proposal)"
                                 :loading="isApproveBtnLoading(proposal)"
                                 @click="approveProposal(proposal)"
-                            >Approve</v-btn>
+                            >{{ isApproveBtnVoted(proposal) ? 'Approved' : 'Approve' }}</v-btn>
+                            
+                            <div class="approve-proposal-btn-container display-flex" v-else>
+                                <v-icon v-if="proposal.status === PROPOSAL_STATUS.ACCEPTED"
+                                    size="35" color="green darken-1"
+                                    class="c-m-auto"
+                                >mdi-check</v-icon>
+                            </div>
                         </div>
                     </div>
 
@@ -118,7 +132,7 @@
             :claimer="claimerInfo"
             :discipline-id="claim.disciplineId"
             @close="isAllocationDialogShown = false"
-            @onCreate="onProposalCreate()"
+            @onCreate="reloadProposals()"
         ></claim-user-expertise-allocation-dialog>
     </div>
 </template>
@@ -132,7 +146,14 @@
         data() {
             return {
                 isAllocationDialogShown: false,
-                loadingProposalIds: []
+                loadingProposalIds: [],
+                approvedProposalIds: [],
+
+                PROPOSAL_STATUS: {
+                    ACTIVE: 'eap_active',
+                    ACCEPTED: 'eap_accepted',
+                    REJECTED: 'eap_rejected'
+                }
             }
         },
         computed: {
@@ -142,6 +163,7 @@
                 proposals: 'claimExpertise/proposals',
                 user: 'auth/user',
             }),
+
             locationString() {
                 const profile = this.claimerInfo ? this.claimerInfo.profile : null;
                 let location = "";
@@ -154,34 +176,41 @@
 
                 return location;
             },
+
             isCreateProposalBtnDisabled() {
                 const hasExpertise = !!this.user.expertTokens.find(token => token.discipline_id === this.claim.disciplineId);
                 const hasVoted = !!this.proposals.find(proposal => proposal.initiator === this.user.username);
 
                 return !hasExpertise || hasVoted;
+            },
+
+            isClaimAccepted() {
+                return _.some(this.proposals, proposal => proposal.status === this.PROPOSAL_STATUS.ACCEPTED);
             }
         },
         methods: {
+            isApproveBtnVoted(proposal) {
+                const isVoted = !!_.find(proposal.votes, vote => vote.voter === this.user.username);
+
+                return isVoted || this.approvedProposalIds.includes(proposal.id);
+            },
+
             isApproveBtnDisabled(proposal) {
                 if (proposal.claimer === this.user.username) {
                     return true;
                 }
 
-                const hasExpertise = _.find(this.user.expertTokens, { discipline_id: proposal.discipline_id });
+                const hasExpertise = !!_.find(this.user.expertTokens, { discipline_id: proposal.discipline_id });
+                const wasVoted = this.isApproveBtnVoted(proposal);
+                const isLoading = this.loadingProposalIds.includes(proposal.id);
 
-                if (!hasExpertise) {
-                    return true;
-                }
-
-                if (this.loadingProposalIds.includes(proposal.id)) {
-                    return true;
-                }
-
-                return false;
+                return !hasExpertise || wasVoted || isLoading;
             },
+
             isApproveBtnLoading(proposal) {
                 return this.loadingProposalIds.includes(proposal.id);
             },
+
             approveProposal(proposal) {
                 this.loadingProposalIds.push(proposal.id);                
 
@@ -196,6 +225,9 @@
                     this.$store.dispatch('layout/setSuccess', {
                         message: "Proposal was successfully created"
                     });
+
+                    this.approvedProposalIds.push(proposal.id);
+                    this.reloadProposals();
                 }).catch(e => {
                     this.$store.dispatch('layout/setError', {
                         message: "Error occured"
@@ -210,7 +242,8 @@
                     }
                 });
             },
-            onProposalCreate() {
+            
+            reloadProposals() {
                 this.$store.dispatch('claimExpertise/loadClaimProposals', {
                     username: this.claim.username,
                     disciplineId: this.claim.disciplineId
@@ -231,7 +264,7 @@
         margin: 12px 0;
     }
 
-    .approve-proposal-btn {
+    .approve-proposal-btn-container {
         min-height: 100%;
         height: 0px;
         min-width: 110px;
