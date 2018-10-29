@@ -72,10 +72,15 @@ const actions = {
                 const claim = _.find(claims, { _id: claimId });
 
                 if (claim) {
-                    claim.discipline = disciplineTreeService.getNodeById(claim.disciplineId);
+                    return deipRpc.api.getDisciplineAsync(claim.disciplineId)
+                        .then(discipline => {
+                            claim.discipline = discipline;
+                            commit('SET_CLAIM', claim);
+                        });
+                } else {
+                    commit('SET_CLAIM', claim);
                 }
 
-                commit('SET_CLAIM', claim);
             })
             .catch(err => console.log(err));
     },
@@ -117,7 +122,7 @@ const actions = {
                     proposal.discipline = disciplines[index];
                     proposal.initiatorInfo = profiles[index];
                     proposal.initiatorExpertise = expertTokens[index];
-                    proposal.votes = proposalVotes;
+                    proposal.votes = proposalVotes[index];
                 });
 
                 commit('SET_PROPOSALS', resProposals);
