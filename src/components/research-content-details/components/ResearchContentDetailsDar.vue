@@ -96,7 +96,6 @@
                 })
                 .then((texture) => {
                     self.$store.dispatch('rcd/setTexture', { texture });
-                    console.log(texture)
                 })
         }
     };

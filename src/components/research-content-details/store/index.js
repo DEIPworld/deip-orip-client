@@ -8,6 +8,7 @@ import {
     getBlock, getTransaction, getTransactionHex } from './../../../utils/blockchain';
     
 var texture = undefined;
+var reviewEditor = undefined;
 
 const state = {
     content: null,
@@ -15,15 +16,16 @@ const state = {
     disciplinesList: [],
     totalVotesList: [],
     membersList: [],
+    contentReviewsList: [],
     contentProposal: undefined,
 
     contentRef: null,
-    textureApiRef: null,
 
     isLoadingResearchContentPage: undefined,
     isLoadingResearchContentVotes: undefined,
     isLoadingResearchDetails: undefined,
     isLoadingResearchContentDetails: undefined,
+    isLoadingResearchContentReviews: undefined,
 
     contentMetadata: null,
     isLoadingResearchContentMetadataPage: undefined
@@ -52,6 +54,10 @@ const getters = {
         return state.totalVotesList;
     },
 
+    contentReviewsList: (state, getters) => {
+        return state.contentReviewsList;
+    },
+
     contentRef: (state, getters) => {
         return state.contentRef;
     },
@@ -60,6 +66,10 @@ const getters = {
         return texture;
     },
 
+    reviewEditor: (state, getters) => {
+        return reviewEditor;
+    },
+    
     membersList: (state, getters) => {
         return state.membersList;
     },
@@ -109,13 +119,13 @@ const actions = {
 
         if (!content_permlink || content_permlink === '!draft') {
             // this is draft
-            const darRefLoad = new Promise((resolve, reject) => {
-                dispatch('loadResearchContentDarRef', { hashOrId: ref, notify: resolve })
+            const contentRefLoad = new Promise((resolve, reject) => {
+                dispatch('loadResearchContentRef', { hashOrId: ref, notify: resolve })
             });
             const researchDetailsLoad = new Promise((resolve, reject) => {
                 dispatch('loadResearchDetails', { group_permlink, research_permlink, notify: resolve })
             });
-            Promise.all([darRefLoad, researchDetailsLoad])
+            Promise.all([contentRefLoad, researchDetailsLoad])
                 .finally(() => {
                     commit('SET_RESEARCH_CONTENT_PAGE_LOADING_STATE', false)
                 });
@@ -127,14 +137,17 @@ const actions = {
                     const content = contentObj.content;
                     const ref = content.indexOf('file:') == 0 ? content.slice(5) : content.indexOf('dar:') == 0 ? content.slice(4) : content;
 
-                    const darRefLoad = new Promise((resolve, reject) => {
-                        dispatch('loadResearchContentDarRef', { hashOrId: ref, notify: resolve })
+                    const contentRefLoad = new Promise((resolve, reject) => {
+                        dispatch('loadResearchContentRef', { hashOrId: ref, notify: resolve })
                     });
                     const researchDetailsLoad = new Promise((resolve, reject) => {
                         dispatch('loadResearchDetails', { group_permlink, research_permlink, notify: resolve })
                     });
+                    const contentReviewsLoad = new Promise((resolve, reject) => {
+                        dispatch('loadContentReviews', { researchContentId: contentObj.id, notify: resolve })
+                    });
 
-                    return Promise.all([darRefLoad, researchDetailsLoad])
+                    return Promise.all([contentRefLoad, researchDetailsLoad, contentReviewsLoad])
                 }, (err) => {console.log(err)})
                 .finally(() => {
                     commit('SET_RESEARCH_CONTENT_DETAILS_LOADING_STATE', false)
@@ -143,27 +156,27 @@ const actions = {
         }
     },
 
-    loadResearchContentVotes({ state, commit }, { researchId, notify }) {
-        commit('SET_RESEARCH_CONTENT_VOTES_LOADING_STATE', true)
-        const disciplinesList = []
-        deipRpc.api.getDisciplinesByResearchAsync(researchId)
-            .then((data) => {
-                const promises = [];
-                for (var i = 0; i < data.length; i++) {
-                    var discipline = data[i];
-                    disciplinesList.push(discipline);
-                    promises.push(deipRpc.api.getTotalVotesByResearchAndDisciplineAsync(researchId, discipline.id))
-                }
-                return Promise.all(promises);
-            }, (err) => {console.log(err)})
-            .then((tvoList) => {
-                commit('SET_RESEARCH_CONTENT_DISCIPLINES_LIST', disciplinesList)
-                commit('SET_RESEARCH_CONTENT_TOTAL_VOTES_LIST', tvoList)
-            }).finally(() => {
-                commit('SET_RESEARCH_CONTENT_VOTES_LOADING_STATE', false)
-                if (notify) notify();
-            });
-    },
+    // loadResearchContentVotes({ state, commit }, { researchId, notify }) {
+    //     commit('SET_RESEARCH_CONTENT_VOTES_LOADING_STATE', true)
+    //     const disciplinesList = []
+    //     deipRpc.api.getDisciplinesByResearchAsync(researchId)
+    //         .then((data) => {
+    //             const promises = [];
+    //             for (var i = 0; i < data.length; i++) {
+    //                 var discipline = data[i];
+    //                 disciplinesList.push(discipline);
+    //                 promises.push(deipRpc.api.getTotalVotesByResearchAndDisciplineAsync(researchId, discipline.id))
+    //             }
+    //             return Promise.all(promises);
+    //         }, (err) => {console.log(err)})
+    //         .then((tvoList) => {
+    //             commit('SET_RESEARCH_CONTENT_DISCIPLINES_LIST', disciplinesList)
+    //             commit('SET_RESEARCH_CONTENT_TOTAL_VOTES_LIST', tvoList)
+    //         }).finally(() => {
+    //             commit('SET_RESEARCH_CONTENT_VOTES_LOADING_STATE', false)
+    //             if (notify) notify();
+    //         });
+    // },
 
     loadResearchDetails({ state, commit, dispatch }, { group_permlink, research_permlink, notify }) {
         commit('SET_RESEARCH_DETAILS_LOADING_STATE', true)
@@ -192,7 +205,7 @@ const actions = {
             });
     },
 
-    loadResearchContentDarRef({ state, commit, dispatch }, { hashOrId, notify }) {
+    loadResearchContentRef({ state, commit, dispatch }, { hashOrId, notify }) {
         return contentHttpService.getContentRef(hashOrId)
             .then((contentRef) => {
                 commit('SET_RESEARCH_CONTENT_REF', contentRef);
@@ -213,13 +226,46 @@ const actions = {
             });
     },
 
+    loadContentReviews({ state, dispatch, commit }, { researchContentId, notify }) {
+        const reviews = [];
+        commit('SET_RESEARCH_CONTENT_REVIEWS_LOADING_STATE', true);
+
+        deipRpc.api.getReviewsByContentAsync(researchContentId)
+            .then(items => {
+                reviews.push(...items);
+                return Promise.all([
+                    Promise.all(
+                        reviews.map(item => deipRpc.api.getReviewVotesByReviewIdAsync(item.id))
+                    ),
+                    getEnrichedProfiles(reviews.map(r => r.author))
+                ]);
+            }, (err) => {console.log(err)})
+            .then(([reviewVotes, users]) => {
+                reviews.forEach((review, i) => {
+                    review.author = users.find(u => u.account.name == review.author);
+                    review.votes = reviewVotes[i];
+                });
+
+                commit('SET_RESEARCH_CONTENT_REVIEWS_LIST', reviews);
+            }, (err) => {console.log(err)})
+            .finally(() => {
+                commit('SET_RESEARCH_CONTENT_REVIEWS_LOADING_STATE', false)
+                if (notify) notify();
+            })
+    },
+
     setTexture({ state, commit, dispatch }, instance) {
         // temporal hack to avoid blocking while converting texture nested props to reactive ones, 
         // do not do this in regular code without 'commit' call!
         texture = instance.texture;
     },
 
-
+    setReviewEditor({ state, commit, dispatch }, instance) {
+        // temporal hack to avoid blocking while converting substance nested props to reactive ones, 
+        // do not do this in regular code without 'commit' call!
+        reviewEditor = instance.reviewEditor;
+    },
+    
     async loadResearchContentMetadata({ state, commit, dispatch }, 
         { group_permlink, research_permlink, content_permlink,  notify }) {
 
@@ -412,6 +458,10 @@ const mutations = {
         Vue.set(state, 'totalVotesList', list)
     },
 
+    ['SET_RESEARCH_CONTENT_REVIEWS_LIST'](state, list) {
+        Vue.set(state, 'contentReviewsList', list)
+    },
+
     ['SET_RESEARCH_DETAILS'](state, research) {
         Vue.set(state, 'research', research)
     },
@@ -440,6 +490,10 @@ const mutations = {
         state.isLoadingResearchContentVotes = value
     },
 
+    ['SET_RESEARCH_CONTENT_REVIEWS_LOADING_STATE'](state, value) {
+        state.isLoadingResearchContentReviews = value
+    },
+    
     ['SET_RESEARCH_MEMBERS_LIST'](state, list) {
         Vue.set(state, 'membersList', list)
     },
@@ -455,14 +509,15 @@ const mutations = {
 
     ['RESET_STATE'](state) {
         texture = undefined;
+        reviewEditor = undefined;
         Vue.set(state, 'membersList', [])
         Vue.set(state, 'disciplinesList', [])
         Vue.set(state, 'totalVotesList', [])
+        Vue.set(state, 'contentReviewsList', [])
         Vue.set(state, 'content', null)
         Vue.set(state, 'contentProposal', undefined)
         Vue.set(state, 'research', null)
         Vue.set(state, 'contentRef', null)
-        Vue.set(state, 'textureApiRef', null)
     },
 
     ['RESET_METADATA_STATE'](state) {

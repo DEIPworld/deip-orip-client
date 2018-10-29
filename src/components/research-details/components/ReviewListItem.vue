@@ -28,7 +28,7 @@
                     </div>
 
                     <div class="c-pt-4 col-grow">
-                        {{ review.content }}
+                        <span v-html="review.content"></span>
                     </div>
 
                     <div class="row-nowrap">

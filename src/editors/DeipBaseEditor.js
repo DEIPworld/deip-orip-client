@@ -1,7 +1,7 @@
 
 import { ProseEditor, ProseEditorConfigurator, 
     EditorSession, ProseEditorPackage, ImagePackage, PersistencePackage, HTMLImporter, HTMLExporter } from 'substance'
-import Mock from './Mock'
+import ReviewStarterFixture from './ReviewStarterFixture'
 import BodyPackage from './components/body/BodyPackage'
 
 export default class DeipBaseEditor {
@@ -18,15 +18,29 @@ export default class DeipBaseEditor {
         cfg.addImporter('html', BaseHTMLImporter)
         cfg.addExporter('html', BaseHTMLExporter)
 
-        let importer = cfg.createImporter('html')
-        let doc = importer.importDocument(Mock)
+        const importer = cfg.createImporter('html')
+        const doc = importer.importDocument(ReviewStarterFixture)
+        this.doc = doc;
 
         const editorSession = new EditorSession(doc, {
             configurator: cfg
         })
+        this.editorSession = editorSession;
+
         ProseEditor.mount({
             editorSession: editorSession
         }, containerEl)
+    }
+
+    save() {
+        const saveParams = {
+            editorSession: this.editorSession,
+            fileManager: this.editorSession.fileManager
+        };
+        return this.editorSession.saveHandler.saveDocument(saveParams)
+            .then((html) => {
+                return html;
+            })
     }
 }
 
@@ -48,6 +62,7 @@ class SaveHandler {
                 // Here you would run a converter (HTML/XML) usually
                 // and send the result to a REST endpoint.
                 console.info(html)
+                return html;
             });
     }
 }

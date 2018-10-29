@@ -8,8 +8,6 @@
             <research-details-sidebar>
             </research-details-sidebar>
         </sidebar>
-
-        <add-research-review-dialog></add-research-review-dialog>
     </page-container>
 </template>
 

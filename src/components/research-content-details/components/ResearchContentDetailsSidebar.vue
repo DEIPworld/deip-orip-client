@@ -26,9 +26,6 @@
                             contentWeightByDiscipline[content.id][discipline.id] !== undefined ?
                             contentWeightByDiscipline[content.id][discipline.id] : 0}}
                         </div>
-                        
-                        <!-- TODO: add voting for review -->
-                        <!-- <v-btn v-if="!isResearchGroupMember && userHasExpertise(discipline)" @click="openVote(discipline)" small color="primary" dark class="ma-0" >Vote</v-btn> -->
                     </div>
 
                     <div class="c-mt-6">
@@ -38,7 +35,7 @@
                                 research_group_permlink: research.group_permlink,
                                 research_permlink: research.permlink,
                                 content_permlink: content.permlink
-                            }}">Metadata</router-link>
+                            }}">Blockchain Metadata</router-link>
                     </div>
                 </div>
             </div>
@@ -73,9 +70,26 @@
         </div>
         <!-- ### END Draft Actions Section ### -->
 
-    <!--<div class="sidebar-fullwidth">
+        <div v-if="isReviewSectionAvailable" class="sidebar-fullwidth">
             <v-divider></v-divider>
-        </div> -->
+        </div>
+
+        <!-- ### START Research Review Section ### -->
+        <div v-if="isReviewSectionAvailable">
+            <div class="sm-title bold c-pt-6">Reviews</div>
+            <div v-if="research" class="c-pt-4 c-pb-6">
+                <v-btn @click="goAddReview()" dark round outline color="primary" class="full-width ma-0">
+                    <v-icon small>add</v-icon>
+                    <div class="col-grow add-review-label">
+                        Add a review
+                        <span class="caption grey--text">
+                            reward {{convertToPercent(research.review_share_in_percent)}}%
+                        </span>
+                    </div>
+                </v-btn>
+            </div>
+        </div>
+        <!-- ### END Research Review Section ### -->
       </div>
 
       <v-dialog v-if="research" v-model="proposeContent.isOpen" persistent transition="scale-transition" max-width="500px">
@@ -203,6 +217,7 @@
                 membersList: 'rcd/membersList',
                 disciplinesList: 'rcd/disciplinesList',
                 totalVotesList: 'rcd/totalVotesList',
+                contentReviewsList: 'rcd/contentReviewsList',
                 contentWeightByDiscipline: 'rcd/contentWeightByDiscipline',
                 contentProposal: 'rcd/contentProposal',
                 isLoadingResearchContentPage: 'rcd/isLoadingResearchContentPage',
@@ -236,6 +251,16 @@
             },
             isCreatingProposalAvailable() {
                 return this.proposeContent.title && this.proposeContent.type && this.proposeContent.authors.length;
+            },
+
+            userHasExpertise() {
+                return this.userExperise != null && this.research != null
+                    ?  this.userExperise.some(exp => this.research.disciplines.some(d => d.id == exp.discipline_id))
+                    : false
+            },
+            isReviewSectionAvailable() {
+                const userHasReview = this.contentReviewsList.some(r => r.author.account.name === this.user.username)
+                return !this.isResearchGroupMember && !userHasReview && this.userHasExpertise && this.isProposed
             }
         },
 
@@ -307,19 +332,13 @@
                             })
                     })
             },
-
-            userHasExpertise(discipline) {
+            
+            userHasExpertiseInDiscipline(discipline) {
                 return this.userExperise != null && this.research != null
                     ? this.userExperise.some(exp => exp.discipline_id == discipline.id)
                     : false
             },
-            openVote(discipline) {
-                this.vote.discipline = discipline;
-                this.vote.isOpen = true;
-            },
-            cancelVote() {
-                this.vote.isOpen = false;
-            },
+
 
             openContentProposalDialog() {
                 if (this.contentRef.type === 'dar') {
@@ -383,6 +402,9 @@
                     let givenName = author.profile && author.profile.firstName ? author.profile.firstName : alias;
                     texture.api.addAuthor(alias, surname, givenName);
                 } 
+            },
+            goAddReview() {
+                this.$router.push({ name: 'ResearchContentAddReview', params: this.$route.params });
             }
         }
     };

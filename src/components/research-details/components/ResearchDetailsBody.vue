@@ -5,8 +5,6 @@
         :size="100" indeterminate
         color="primary"
     ></v-progress-circular>
-    
-    <div id="substance-editor" class="substance-editor" ref="substance-editor"></div>
 
     <div v-if="isLoadingResearchPage === false">
         <!-- ### START Research Details Section ### -->
@@ -61,8 +59,9 @@
                     <div slot="header">
                         <span class="bold">Chapter {{index + 1}}</span>
                         <span class="deip-blue-color bold c-pl-4"> 
-                            <router-link :to="`/${research.group_permlink}/research/${research.permlink}/${content.permlink}`" 
-                                         style="text-decoration: none">{{content.title}}
+                            <router-link style="text-decoration: none" 
+                                :to="{ name: 'ResearchContentDetails', params: { research_group_permlink: research.group_permlink, research_permlink: research.permlink, content_permlink: content.permlink } }">
+                                {{content.title}}
                             </router-link>
                         </span>
                     </div>
@@ -160,7 +159,7 @@
             
             <div v-if="isResearchGroupMember && !research.is_finished">
                 <upload-research-contnet-file-dialog></upload-research-contnet-file-dialog>
-                <v-btn @click="createDarDraft()" :loading="isCreatingDraft" :disabled="isCreatingDraft" block outline color="primary" dark>Texture Editor</v-btn>
+                <v-btn @click="createDarDraft()" :loading="isCreatingDraft" :disabled="isCreatingDraft" block outline color="primary" dark>Editor</v-btn>
             </div>
         </div>
 
@@ -223,8 +222,6 @@
 
     import { mapGetters } from 'vuex'
     import contentHttpService from './../../../services/http/content'
-    import { ProseEditor, ProseEditorConfigurator, EditorSession, ProseEditorPackage, ImagePackage, PersistencePackage } from 'substance'
-    import DeipBaseEditor from './../../../editors/DeipBaseEditor'
 
     export default {
         name: "ResearchDetailsBody",
@@ -314,19 +311,11 @@
                     .map(m => this.$options.filters.fullname(m))
                     .join("  ·  ");
             }
-        },
-        mounted() {
-            const container = this.$refs['substance-editor'];
-            const editor = new DeipBaseEditor(container)
         }
     };
 </script>
 
 <style lang="less">
-  
-    @import './../../../styles/substance-editor';
-
-
     .research-body-container {
         min-height: 500px;
     }
