@@ -270,7 +270,8 @@
                         params: { account_name: item.username, claim_id: item._id }
                     }"
                     class="a subheading"
-                >{{ item._id }}</router-link>
+                >{{ item.discipline.name }}</router-link>
+                <span>{{ item._id }}</span>
             </div>
         </div>
             
@@ -287,6 +288,7 @@
     import vueDropzone from 'vue2-dropzone';
     import {getAccessToken} from './../../../utils/auth';
     import expertiseClaimsService from '../../../services/http/expertiseClaims.js';
+    import deipRpc from '@deip/deip-rpc-client';
 
     export default {
         name: 'UserDetailsBody',
@@ -574,9 +576,22 @@
         },
 
         created() {
+            let resData;
+
             expertiseClaimsService.getExpertiseClaimsByUser(this.$route.params.account_name)
                 .then(data => {
-                    this.tmpClaimObjects = data;
+                    resData = data;
+
+                    return Promise.all(
+                        data.map(item => deipRpc.api.getDisciplineAsync(item.disciplineId))
+                    );
+                })
+                .then(disciplines => {
+                    resData.forEach((item, index) => {
+                        item.discipline = disciplines[index];
+                    });
+
+                    this.tmpClaimObjects = resData;
                 });
         }
     }
