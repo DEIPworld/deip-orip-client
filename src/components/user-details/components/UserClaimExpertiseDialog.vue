@@ -1,5 +1,5 @@
 <template>
-    <v-dialog v-model="isShown" persistent transition="scale-transition">
+    <v-dialog v-model="isShown" fullscreen persistent transition="scale-transition">
         <v-card class="">
             <v-toolbar dark color="primary">
                 <v-btn icon dark @click="$emit('close')">
