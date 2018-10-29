@@ -163,22 +163,6 @@
             </div>
         </div>
 
-        <!-- ### START Research Review Section ### -->
-        <div class="research-reviews-container spinner-container">
-            <v-progress-circular class="section-spinner"
-                v-if="isLoadingResearchReviews"
-                indeterminate color="primary"
-            ></v-progress-circular>
-
-            <div v-if="isLoadingResearchReviews === false && reviewsList.length">
-                <div class="c-pt-8 title">Reviews: {{ reviewsList.length }}</div>
-                <div class="c-pt-6">
-                    <review-list-item v-for="(review, i) in reviewsList" :review="review" :key="i"></review-list-item>
-                </div>
-            </div>
-        </div>
-        <!-- ### END Research Review Section ### -->
-
         <!-- <div class="c-pt-4 title">Grants: 4</div>
 
         <div class="c-pt-6">

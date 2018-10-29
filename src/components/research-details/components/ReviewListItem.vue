@@ -8,13 +8,13 @@
                 </v-avatar>
 
                 <div class="bold c-pt-2">{{ review.author | fullname }}</div>
-                    <v-btn block color="primary"
+                <!-- <v-btn block color="primary"
                         v-if="review.author.account.name !== user.username && userHasExpertise" 
                         class="ma-0 mt-2" 
                         :loading="isReviewVoting" 
                         :disabled="isReviewVoting || userHasVoted"
                         @click="voteReview(review)"
-                    >Vote</v-btn>
+                    >Vote</v-btn> -->
                 </div>
 
                 <div class="column c-ml-6">
@@ -28,7 +28,7 @@
                     </div>
 
                     <div class="c-pt-4 col-grow">
-                        <span v-html="review.content"></span>
+                        <span v-html="extractPreview(review)"></span>
                     </div>
 
                     <div class="row-nowrap">
@@ -84,7 +84,7 @@
                     ?  this.userExperise.some(exp => 
                             this.research.disciplines.some(d => d.id == exp.discipline_id))
                     : false
-            },
+            }
         },
         data() {
             return {
@@ -94,6 +94,32 @@
         },
 
         methods: {
+            extractPreview(review) {
+                let temp = document.createElement('span');
+                temp.innerHTML = review.content;
+                if (temp.children.length) {
+                    let headers = [...temp.children].filter((child) => isHeader(child) && child.innerText);
+                    let headerText = headers[0]
+                        ? headers[0].innerText 
+                        : `Reviewed by ${this.$options.filters.fullname(review.author)}`;
+                    
+                    let paragraphs = [...temp.children].filter((child) => isParagraph(child) && child.innerText);
+                    let paragraphText = paragraphs[0] 
+                        ? paragraphs[0].innerText
+                        : ``;
+
+                    let titleText = headerText.length > 100 ? headerText.substring(0, 100) : headerText;
+                    let bodyText = paragraphText.length > 300 ? paragraphText.substring(0, 300) : paragraphText;
+                    return `<div><h3>${titleText}</h3><p>${bodyText}</p></div>`
+                }
+
+                function isHeader(el) {
+                    return ['H1', 'H2', 'H3', 'H4', 'H5', 'H6'].some(h => h === el.nodeName);
+                }
+                function isParagraph(el) {
+                     return el.nodeName === 'P';
+                }
+            },
             voteReview(review) {
                 const self = this;
                 this.isReviewVoting = true;

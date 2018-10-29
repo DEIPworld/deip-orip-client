@@ -98,9 +98,8 @@
                             this.content.id,
                             reviewHtmlContent,
                             this.isPositive,
-                            10000)
+                            5000)
                     }).then((data) => {
-                        // this.$store.dispatch('rd/loadResearchReviews', { researchId: this.research.id });
                         this.$store.dispatch('layout/setSuccess', {
                             message: "Your review has been published successfully !"
                         });

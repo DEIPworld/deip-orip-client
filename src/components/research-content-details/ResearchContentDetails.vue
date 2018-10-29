@@ -5,6 +5,12 @@
             <div v-if="isLoadingResearchContentPage === false">
                 <research-content-details-file v-if="isFileContent"></research-content-details-file>
                 <research-content-details-dar v-if="isDarContent" :contentRef="contentRef"></research-content-details-dar>
+                <div class="research-reviews-container" v-if="contentReviewsList.length">
+                    <div class="c-pt-8 title">Reviews: {{ contentReviewsList.length }}</div>
+                    <div class="c-pt-6">
+                        <review-list-item v-for="(review, i) in contentReviewsList" :review="review" :key="i"></review-list-item>
+                    </div>
+                </div>
             </div>
         </div>
 
@@ -33,6 +39,7 @@
                 research: 'rcd/research',
                 disciplinesList: 'rcd/disciplinesList',
                 totalVotesList: 'rcd/totalVotesList',
+                contentReviewsList: 'rcd/contentReviewsList',
                 contentWeightByDiscipline: 'rcd/contentWeightByDiscipline',
                 isLoadingResearchContentPage: 'rcd/isLoadingResearchContentPage',
                 contentRef: 'rcd/contentRef'
@@ -70,5 +77,9 @@
 </script>
 
 <style lang="less" scoped>
+
+.research-reviews-container {
+    margin: 5%;
+}
 
 </style>
