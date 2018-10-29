@@ -5,6 +5,8 @@
         :size="100" indeterminate
         color="primary"
     ></v-progress-circular>
+    
+    <div id="substance-editor" class="substance-editor" ref="substance-editor"></div>
 
     <div v-if="isLoadingResearchPage === false">
         <!-- ### START Research Details Section ### -->
@@ -221,6 +223,8 @@
 
     import { mapGetters } from 'vuex'
     import contentHttpService from './../../../services/http/content'
+    import { ProseEditor, ProseEditorConfigurator, EditorSession, ProseEditorPackage, ImagePackage, PersistencePackage } from 'substance'
+    import DeipBaseEditor from './../../../editors/DeipBaseEditor'
 
     export default {
         name: "ResearchDetailsBody",
@@ -310,11 +314,19 @@
                     .map(m => this.$options.filters.fullname(m))
                     .join("  ·  ");
             }
+        },
+        mounted() {
+            const container = this.$refs['substance-editor'];
+            const editor = new DeipBaseEditor(container)
         }
     };
 </script>
 
-<style lang="less" scoped>
+<style lang="less">
+  
+    @import './../../../styles/substance-editor';
+
+
     .research-body-container {
         min-height: 500px;
     }

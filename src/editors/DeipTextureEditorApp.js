@@ -1,5 +1,5 @@
-import { TextureWebApp, TextureConfigurator, ArticleEditorSession, ArticleAPI, ArticlePackage } from '@deip/substance-texture'
-import { parseKeyEvent } from 'substance'
+import { TextureWebApp } from '@deip/substance-texture'
+import { parseKeyEvent } from '@deip/substance-texture/node_modules/substance'
 import HttpStorageClient from '@deip/substance-texture/src/dar/HttpStorageClient.js'
 
 export default class DeipTextureEditorApp extends TextureWebApp {

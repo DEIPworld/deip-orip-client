@@ -20,9 +20,8 @@
 <script>
     import { mapGetters } from 'vuex';
     import axios from 'axios'
-    import DeipTextureReaderApp from './../../../texture/DeipTextureReaderApp'
-    import DeipTextureEditorApp from './../../../texture/DeipTextureEditorApp'
-    import { getQueryStringParam, substanceGlobals, platform } from 'substance'
+    import DeipTextureReaderApp from './../../../editors/DeipTextureReaderApp'
+    import DeipTextureEditorApp from './../../../editors/DeipTextureEditorApp'
     import { getAccessToken, getDecodedToken } from './../../../utils/auth'
     import deipRpc from '@deip/deip-rpc-client'
 
@@ -67,9 +66,8 @@
                     return promise;
                 })
                 .then((groups) => {
-                    substanceGlobals.DEBUG_RENDERING = platform.devtools;
                     const isReadOnly = 
-                        getQueryStringParam('isReadOnly') === 'true'
+                        this.$route.query.isReadOnly === 'true'
                         || this.contentRef.status != "in-progress"
                         || !groups.some(id => id == research.research_group_id);
 
