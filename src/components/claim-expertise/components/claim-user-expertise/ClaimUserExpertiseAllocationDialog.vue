@@ -1,5 +1,5 @@
 <template>
-    <v-dialog v-model="isShown" persistent transition="scale-transition">
+    <v-dialog fullscreen v-model="isShown" persistent transition="scale-transition">
         <v-card class="">
             <v-toolbar dark color="primary">
                 <v-btn icon dark @click="$emit('close')">
@@ -52,7 +52,7 @@
                             :disabled="!isFormValid || isLoading"
                             :loading="isLoading"
                             @click="createProposal()"
-                        >Create a proposal</v-btn>
+                        >Create proposal</v-btn>
                     </div>
 
                 </contentbar>

@@ -46,7 +46,7 @@
                 v-if="claim.username !== user.username && !isClaimAccepted"
                 :disabled="isCreateProposalBtnDisabled"
                 @click="isAllocationDialogShown = true"
-            >Create a proposal</v-btn>
+            >Create proposal</v-btn>
 
             <div class="row align-items-center justify-end" v-if="isClaimAccepted">
                 <span class="headline green--text text--darken-1 c-pr-3">Claimed</span>
