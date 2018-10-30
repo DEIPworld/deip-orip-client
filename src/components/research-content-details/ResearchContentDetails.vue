@@ -23,7 +23,6 @@
 
 <script>
     import { mapGetters } from 'vuex'
-    import deipRpc from '@deip/deip-rpc-client'
 
     export default {
         name: "ResearchContentDetails",
@@ -37,10 +36,7 @@
                 userExperise: 'auth/userExperise',
                 content: 'rcd/content',
                 research: 'rcd/research',
-                disciplinesList: 'rcd/disciplinesList',
-                totalVotesList: 'rcd/totalVotesList',
                 contentReviewsList: 'rcd/contentReviewsList',
-                contentWeightByDiscipline: 'rcd/contentWeightByDiscipline',
                 isLoadingResearchContentPage: 'rcd/isLoadingResearchContentPage',
                 contentRef: 'rcd/contentRef'
             }),

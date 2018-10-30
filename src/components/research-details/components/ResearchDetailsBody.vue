@@ -159,7 +159,7 @@
             
             <div v-if="isResearchGroupMember && !research.is_finished">
                 <upload-research-contnet-file-dialog></upload-research-contnet-file-dialog>
-                <v-btn @click="createDarDraft()" :loading="isCreatingDraft" :disabled="isCreatingDraft" block outline color="primary" dark>Editor</v-btn>
+                <v-btn @click="createDarDraft()" :loading="isCreatingDraft" :disabled="isCreatingDraft" block outline color="primary" dark>Use Editor</v-btn>
             </div>
         </div>
 

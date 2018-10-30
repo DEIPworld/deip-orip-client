@@ -27,7 +27,7 @@
     import { getAccessToken, getDecodedToken } from './../../../utils/auth'
     import deipRpc from '@deip/deip-rpc-client'
 
-    const DEFAULT_CONTENT_HEIGHT = 520;
+    const DEFAULT_READ_CONTENT_HEIGHT = 540;
 
     export default {
         name: "ResearchContentDetailsDar",
@@ -40,7 +40,7 @@
                 isReadOnly: undefined,
                 isContentExpansionAvailable: undefined,
                 isContentExpanded: false,
-                contentHeight: DEFAULT_CONTENT_HEIGHT
+                contentHeight: DEFAULT_READ_CONTENT_HEIGHT
             }
         },
         computed: {
@@ -62,9 +62,9 @@
                 this.isContentExpanded = !this.isContentExpanded;
                 if (this.isContentExpanded) {
                     let contentHeight = this.getContentHeight();
-                    this.contentHeight = contentHeight > DEFAULT_CONTENT_HEIGHT ? contentHeight : DEFAULT_CONTENT_HEIGHT;
+                    this.contentHeight = contentHeight > DEFAULT_READ_CONTENT_HEIGHT ? contentHeight : DEFAULT_READ_CONTENT_HEIGHT;
                 } else {
-                    this.contentHeight = DEFAULT_CONTENT_HEIGHT;
+                    this.contentHeight = DEFAULT_READ_CONTENT_HEIGHT;
                 }
             },
             getContentHeight() {
@@ -117,8 +117,8 @@
                     return promise;
                 })
                 .then((texture) => {
-                    self.isContentExpansionAvailable = 
-                        self.getContentHeight() > window.screen.height && self.isReadOnly;
+                    self.isContentExpansionAvailable = self.getContentHeight() > window.screen.height && self.isReadOnly;
+                    self.contentHeight = self.isReadOnly ? DEFAULT_READ_CONTENT_HEIGHT : (2 * window.screen.height);
                     self.$store.dispatch('rcd/setTexture', { texture });
                 })
         }

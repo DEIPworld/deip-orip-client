@@ -92,17 +92,16 @@ const getters = {
             function(accumulator, currentValue) {
                 return accumulator.concat(currentValue);
             }, []);
-
         for (var i = 0; i < flattened.length; i++) {
             const tvo = flattened[i];
             const discipline_id = tvo.discipline_id.toString();
             const research_content_id = tvo.research_content_id.toString();
-            const total_research_reward_weight = tvo.total_research_reward_weight;
+            const total_weight = tvo.total_weight;
 
             if (map[research_content_id] === undefined)
                 map[research_content_id] = {};
 
-            map[research_content_id][discipline_id] = total_research_reward_weight;
+            map[research_content_id][discipline_id] = total_weight;
         }
         return map;
     }
@@ -146,8 +145,11 @@ const actions = {
                     const contentReviewsLoad = new Promise((resolve, reject) => {
                         dispatch('loadContentReviews', { researchContentId: contentObj.id, notify: resolve })
                     });
+                    const contentVotesLoad = new Promise((resolve, reject) => {
+                        dispatch('loadResearchContentVotes', { researchId: contentObj.research_id, notify: resolve })
+                    });
 
-                    return Promise.all([contentRefLoad, researchDetailsLoad, contentReviewsLoad])
+                    return Promise.all([contentRefLoad, researchDetailsLoad, contentReviewsLoad, contentVotesLoad])
                 }, (err) => {console.log(err)})
                 .finally(() => {
                     commit('SET_RESEARCH_CONTENT_DETAILS_LOADING_STATE', false)
@@ -156,27 +158,27 @@ const actions = {
         }
     },
 
-    // loadResearchContentVotes({ state, commit }, { researchId, notify }) {
-    //     commit('SET_RESEARCH_CONTENT_VOTES_LOADING_STATE', true)
-    //     const disciplinesList = []
-    //     deipRpc.api.getDisciplinesByResearchAsync(researchId)
-    //         .then((data) => {
-    //             const promises = [];
-    //             for (var i = 0; i < data.length; i++) {
-    //                 var discipline = data[i];
-    //                 disciplinesList.push(discipline);
-    //                 promises.push(deipRpc.api.getTotalVotesByResearchAndDisciplineAsync(researchId, discipline.id))
-    //             }
-    //             return Promise.all(promises);
-    //         }, (err) => {console.log(err)})
-    //         .then((tvoList) => {
-    //             commit('SET_RESEARCH_CONTENT_DISCIPLINES_LIST', disciplinesList)
-    //             commit('SET_RESEARCH_CONTENT_TOTAL_VOTES_LIST', tvoList)
-    //         }).finally(() => {
-    //             commit('SET_RESEARCH_CONTENT_VOTES_LOADING_STATE', false)
-    //             if (notify) notify();
-    //         });
-    // },
+    loadResearchContentVotes({ state, commit }, { researchId, notify }) {
+        commit('SET_RESEARCH_CONTENT_VOTES_LOADING_STATE', true)
+        const disciplinesList = []
+        deipRpc.api.getDisciplinesByResearchAsync(researchId)
+            .then((data) => {
+                const promises = [];
+                for (var i = 0; i < data.length; i++) {
+                    var discipline = data[i];
+                    disciplinesList.push(discipline);
+                    promises.push(deipRpc.api.getTotalVotesByResearchAndDisciplineAsync(researchId, discipline.id))
+                }
+                return Promise.all(promises);
+            }, (err) => {console.log(err)})
+            .then((tvoList) => {
+                commit('SET_RESEARCH_CONTENT_DISCIPLINES_LIST', disciplinesList)
+                commit('SET_RESEARCH_CONTENT_TOTAL_VOTES_LIST', tvoList)
+            }).finally(() => {
+                commit('SET_RESEARCH_CONTENT_VOTES_LOADING_STATE', false)
+                if (notify) notify();
+            });
+    },
 
     loadResearchDetails({ state, commit, dispatch }, { group_permlink, research_permlink, notify }) {
         commit('SET_RESEARCH_DETAILS_LOADING_STATE', true)

@@ -125,10 +125,6 @@
                         <span class="half-bold">Review reward</span>
                         <span class="deip-blue-color right">{{convertToPercent(research.review_share_in_percent)}}%</span>
                     </div>
-                    <div>
-                        <span class="half-bold">Total views</span>
-                        <span class="deip-blue-color right">222</span>
-                    </div>
                 </div>
             </div>
         </div>

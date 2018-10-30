@@ -1,23 +1,24 @@
 <template>
     <page-container>
         <contentbar>
-            <research-content-add-review-body></research-content-add-review-body>
+            <research-content-review-body></research-content-review-body>
         </contentbar>
         <sidebar>
-            <research-content-add-review-sidebar></research-content-add-review-sidebar>
+            <research-content-review-sidebar></research-content-review-sidebar>
         </sidebar>
-    </page-container>  
+    </page-container>
 </template>
 
 <script>
     import { mapGetters } from 'vuex'
+    import deipRpc from '@deip/deip-rpc-client'
 
     export default {
-        name: "ResearchContentAddReview",
+        name: "ResearchContentReview",
         data() { 
             return {} 
         },
-        computed:{
+        computed: {
 
         },
         methods: {
