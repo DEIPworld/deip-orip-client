@@ -97,6 +97,9 @@
         data() { 
             return {
                 currentStep: 0,
+                isLoading: false,
+                backRouterToken: undefined,
+
                 group: {
                     name: "",
                     permlink: "",
@@ -116,8 +119,7 @@
                         acceptResearchTokenOffer: 0,
                         createMaterial: 0
                     }
-                },
-                isLoading: false
+                }
             } 
         },
         computed: {
@@ -143,7 +145,6 @@
             },
 
             finish() {
-                const self = this;
                 this.isLoading = true;
 
                 const invitees = this.group.members
@@ -183,10 +184,14 @@
                     });
 
                     setTimeout(() => {
-                        self.$router.push({ 
-                            name: 'ResearchGroupDetails',
-                            params: { research_group_permlink: this.group.permlink }
-                        }); 
+                        if (!this.backRouterToken) {
+                            this.$router.push({ 
+                                name: 'ResearchGroupDetails',
+                                params: { research_group_permlink: this.group.permlink }
+                            });
+                        } else {
+                            this.$router.push(this.backRouterToken);
+                        }
                     }, 1500);
                 }, (err) => {
                     this.isLoading = false;
@@ -195,6 +200,16 @@
                     });
                     console.log(err)
                 });
+            }
+        },
+
+        created() {
+            if (this.$route.query['back-token']) {
+                try {
+                    this.backRouterToken = JSON.parse(this.$route.query['back-token']);
+                } catch (e) {
+                    console.error('Invalid back router token');
+                }
             }
         }
     };

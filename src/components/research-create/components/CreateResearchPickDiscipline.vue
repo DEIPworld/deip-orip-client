@@ -11,6 +11,7 @@
 
                 <div class="c-mh-auto full-height overflow-y-auto discipline-picker">
                     <advanced-discipline-picker
+                        :preselected="research.disciplines"
                         @select="setDisciplines"
                     ></advanced-discipline-picker>
                 </div>

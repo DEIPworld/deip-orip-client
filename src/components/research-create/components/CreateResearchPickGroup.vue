@@ -16,7 +16,12 @@
                     </div>
 
                     <div class="c-pt-6 c-pl-4">
-                        <router-link class="app-title" :to="`${user.username}/create-research-group`">
+                        <router-link class="app-title"
+                            :to="{ name: 'CreateResearchGroup',
+                                params: { 'account_name': user.username },
+                                query: { 'back-token': getReturningToken }
+                            }"
+                        >
                             <span  class="deip-label">+ Add new group</span>
                         </router-link>
                     </div>
@@ -53,6 +58,15 @@
 
             nextDisabled(){
                 return !this.research.group;
+            },
+
+            getReturningToken() {
+                const token = {
+                    name: 'CreateResearch',
+                    query: { disciplineIds: this.research.disciplines.map(item => item.id) }
+                };
+
+                return JSON.stringify(token);
             }
         },
         methods: {
