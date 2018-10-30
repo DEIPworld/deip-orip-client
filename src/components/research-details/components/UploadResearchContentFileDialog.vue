@@ -70,10 +70,10 @@
                             </template>
                         </v-select>
 
-                        <v-checkbox class="c-mt-6"
+                    <!--    <v-checkbox class="c-mt-6"
                             v-model="tmpIsPrivate"
                             label="Choose if content should be private"
-                        ></v-checkbox>
+                        ></v-checkbox> -->
 
                         <div class="display-flex c-pt-8">
                             <v-btn color="primary" 

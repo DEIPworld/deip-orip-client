@@ -10,7 +10,7 @@ export default class DeipBaseEditor {
         const cfg = new ProseEditorConfigurator()
         cfg.import(ProseEditorPackage)
         cfg.import(ImagePackage)
-        cfg.import(PersistencePackage)
+        // cfg.import(PersistencePackage)
         // Custom packages
         cfg.import(BodyPackage)
 

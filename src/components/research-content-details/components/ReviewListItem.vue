@@ -88,8 +88,8 @@
                         ? paragraphs[0].innerText
                         : ``;
 
-                    let titleText = headerText.length > 100 ? headerText.substring(0, 100) : headerText;
-                    let bodyText = paragraphText.length > 300 ? paragraphText.substring(0, 300) : paragraphText;
+                    let titleText = headerText.length > 100 ? `${headerText.substring(0, 100)}...` : headerText;
+                    let bodyText = paragraphText.length > 300 ? `${paragraphText.substring(0, 300)}...` : paragraphText;
                     return `<div><h3>${titleText}</h3><p>${bodyText}</p></div>`
                 }
 
