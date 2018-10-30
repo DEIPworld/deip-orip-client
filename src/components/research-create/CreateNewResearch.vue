@@ -92,6 +92,7 @@
 <script>
     import deipRpc from '@deip/deip-rpc-client';
     import * as proposalService from "./../../services/ProposalService"; 
+    import * as disciplineTreeService from "./../common/disciplines/DisciplineTreeService"; 
     import { mapGetters } from 'vuex';
 
     export default {
@@ -99,14 +100,15 @@
         data() { 
             return {
                 currentStep: 0,
+                isLoading: false,
+
                 research: {
                     disciplines: [],
                     group: undefined,
                     title: '',
                     description: '',
                     review_share_in_percent: 5,
-                },
-                isLoading: false
+                }
             } 
         },
         computed: {
@@ -183,6 +185,20 @@
                     });
                     console.log(err)
                 });
+            }
+        },
+
+        created() {
+            if (this.$route.query['disciplineIds'] && _.isArray(this.$route.query['disciplineIds'])) {
+                try {
+                    this.research.disciplines = disciplineTreeService.getNodesByIdList(
+                        this.$route.query['disciplineIds'].map(disciplineId => parseInt(disciplineId))
+                    );
+
+                    this.currentStep = 2;
+                } catch (e) {
+                    console.error('Invalid url params');
+                }
             }
         }
     };
