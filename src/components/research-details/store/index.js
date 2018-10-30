@@ -126,12 +126,12 @@ const getters = {
             const tvo = flattened[i];
             const discipline_id = tvo.discipline_id.toString();
             const research_content_id = tvo.research_content_id.toString();
-            const total_research_reward_weight = tvo.total_research_reward_weight;
+            const total_weight = tvo.total_weight;
 
             if (map[research_content_id] === undefined)
                 map[research_content_id] = {};
 
-            map[research_content_id][discipline_id] = total_research_reward_weight;
+            map[research_content_id][discipline_id] = total_weight;
         }
         return map;
     },
@@ -143,12 +143,12 @@ const getters = {
             for (var j = 0; j < tvoByContent.length; j++) {
                 const tvo = tvoByContent[j];
                 const discipline_id = tvo.discipline_id.toString();
-                const total_research_reward_weight = tvo.total_research_reward_weight;
+                const total_weight = tvo.total_weight;
 
                 if (map[discipline_id] === undefined)
-                    map[discipline_id] = total_research_reward_weight;
+                    map[discipline_id] = total_weight;
                 else
-                    map[discipline_id] += total_research_reward_weight;
+                    map[discipline_id] += total_weight;
             }
         }
         return map;

@@ -6,15 +6,17 @@
         <!-- ### START Research Content Details Section ### -->
         <div class="research-content-info-container">
             <div class="c-mb-4" v-if="research">
-                <router-link class="a sm-title" :to="{ name: 'research-details', params: { 
+                <router-link class="a sm-title" 
+                    :to="{ name: 'research-details', params: { 
                             research_group_permlink: research.group_permlink,
-                            research_permlink: research.permlink
-                        }
-                    }">{{ research.title }}</router-link>
+                            research_permlink: research.permlink }
+                        }">
+                    {{ research.title }}
+                </router-link>
             </div>
-            <div v-if="content">
-                <div v-if="disciplinesList.length" class="sm-title bold">Content Info</div>
-                <div class="c-pb-6 c-pt-6">
+            <div v-if="content" class="c-mb-6 c-mt-6">
+                <div v-if="disciplinesList.length" class="sm-title">Content Info</div>
+                <div class="c-mt-4">
                     <div v-for="(discipline, index) in disciplinesList" :key="index"
                         class="row align-center justify-between vote-btn-area" 
                         :class="index === 0 ? '' : 'c-mt-1'">
@@ -27,16 +29,18 @@
                             contentWeightByDiscipline[content.id][discipline.id] : 0}}
                         </div>
                     </div>
+                </div>
 
-                    <div class="c-mt-6">
-                        <router-link class="a sm-title" :to="{ 
-                            name: 'ResearchContentMetadata', 
-                            params: { 
-                                research_group_permlink: research.group_permlink,
-                                research_permlink: research.permlink,
-                                content_permlink: content.permlink
-                            }}">Blockchain Metadata</router-link>
-                    </div>
+                <div class="c-mt-6">
+                    <router-link class="a sm-title" :to="{ 
+                        name: 'ResearchContentMetadata', 
+                        params: { 
+                            research_group_permlink: research.group_permlink,
+                            research_permlink: research.permlink,
+                            content_permlink: content.permlink
+                        }}">
+                        Blockchain Metadata
+                    </router-link>
                 </div>
             </div>
         </div>
@@ -216,7 +220,6 @@
                 research: 'rcd/research',
                 membersList: 'rcd/membersList',
                 disciplinesList: 'rcd/disciplinesList',
-                totalVotesList: 'rcd/totalVotesList',
                 contentReviewsList: 'rcd/contentReviewsList',
                 contentWeightByDiscipline: 'rcd/contentWeightByDiscipline',
                 contentProposal: 'rcd/contentProposal',

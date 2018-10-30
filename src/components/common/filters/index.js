@@ -7,6 +7,13 @@ Vue.filter('fullname', function (enrichedProfile) {
         : enrichedProfile.account.name;
 });
 
+Vue.filter('userLocation', function (enrichedProfile) {
+    debugger;
+    return enrichedProfile && enrichedProfile.profile && enrichedProfile.profile.location 
+        ? `${enrichedProfile.profile.location.city || ''} ${enrichedProfile.profile.location.country || ''}` 
+        : '';
+});
+
 Vue.filter('employmentOrEducation', function (enrichedProfile) {
     const activeEmployment = enrichedProfile && enrichedProfile.profile && enrichedProfile.profile.employment && enrichedProfile.profile.employment.some(e => e.isActive) 
         ? enrichedProfile.profile.employment.find(e => e.isActive)

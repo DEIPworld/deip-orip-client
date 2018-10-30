@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div v-if="isLoadingResearchContentPage === false">
         <div class="c-mb-8" v-if="research">
             <router-link class="a sm-title" 
                 :to="{ name: 'ResearchContentDetails', params: { research_group_permlink: research.group_permlink, research_permlink: research.permlink, content_permlink: content.permlink } }"
@@ -70,13 +70,7 @@
                 userExperise: 'auth/userExperise',
                 content: 'rcd/content',
                 research: 'rcd/research',
-                membersList: 'rcd/membersList',
-                disciplinesList: 'rcd/disciplinesList',
-                totalVotesList: 'rcd/totalVotesList',
-                contentWeightByDiscipline: 'rcd/contentWeightByDiscipline',
-                contentProposal: 'rcd/contentProposal',
-                isLoadingResearchContentPage: 'rcd/isLoadingResearchContentPage',
-                contentRef: 'rcd/contentRef'
+                isLoadingResearchContentPage: 'rcd/isLoadingResearchContentPage'
             }),
             relatedExpertise() {
                 return this.userExperise != null && this.research != null
@@ -100,7 +94,6 @@
                             this.isPositive,
                             10000)
                     }).then((data) => {
-                        // this.$store.dispatch('rd/loadResearchReviews', { researchId: this.research.id });
                         this.$store.dispatch('layout/setSuccess', {
                             message: "Your review has been published successfully !"
                         });

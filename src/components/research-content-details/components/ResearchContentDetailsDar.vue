@@ -3,15 +3,17 @@
 <div>
     <v-progress-circular v-if="isLoadingResearchContentPage" :size="100" indeterminate color="primary"></v-progress-circular>
     <div v-if="isLoadingResearchContentPage === false">
-
-        <!-- ### START Research Content Details Section ### -->
         <div style="margin-bottom: 50px">
-            <v-progress-circular v-if="isLoadingResearchContentPage" indeterminate color="primary"></v-progress-circular>
             <div v-if="isLoadingResearchContentPage === false">
-                <div ref='deip-texture-container' class="deip-texture" :class="[{'read-only': isReadOnly}]"></div>
-            </div> 
+                <div ref='deip-texture-container' class="deip-texture" 
+                    :class="[{'read-only-texture': isReadOnly}]"
+                    :style="{ height: contentHeight + 'px' }">
+                </div>
+            </div>
+            <div v-if="isContentExpansionAvailable" class="c-m-10 right">
+                <a @click="expandContent()">{{ isContentExpanded ? 'Collapse chapter' : 'Expand chapter'}}</a>
+            </div>
         </div>
-        <!-- ### END Research Content Details Section ### -->
     </div>
 </div>
 
@@ -25,6 +27,8 @@
     import { getAccessToken, getDecodedToken } from './../../../utils/auth'
     import deipRpc from '@deip/deip-rpc-client'
 
+    const DEFAULT_READ_CONTENT_HEIGHT = 540;
+
     export default {
         name: "ResearchContentDetailsDar",
         props: {
@@ -33,8 +37,11 @@
         data() { 
             return {
                 fileStorageBaseUrl: process.env.DEIP_SERVER_URL,
-                isReadOnly: undefined
-            } 
+                isReadOnly: undefined,
+                isContentExpansionAvailable: undefined,
+                isContentExpanded: false,
+                contentHeight: DEFAULT_READ_CONTENT_HEIGHT
+            }
         },
         computed: {
             ...mapGetters({
@@ -48,6 +55,21 @@
                 return this.research != null 
                     ? this.$store.getters['auth/userIsResearchGroupMember'](this.research.research_group_id) 
                     : false
+            }
+        },
+        methods: {
+            expandContent() {
+                this.isContentExpanded = !this.isContentExpanded;
+                if (this.isContentExpanded) {
+                    let contentHeight = this.getContentHeight();
+                    this.contentHeight = contentHeight > DEFAULT_READ_CONTENT_HEIGHT ? contentHeight : DEFAULT_READ_CONTENT_HEIGHT;
+                } else {
+                    this.contentHeight = DEFAULT_READ_CONTENT_HEIGHT;
+                }
+            },
+            getContentHeight() {
+                const contentEl = document.querySelector('.se-content');
+                return contentEl && contentEl.offsetHeight ? contentEl.offsetHeight : 0;
             }
         },
         mounted () {
@@ -95,6 +117,8 @@
                     return promise;
                 })
                 .then((texture) => {
+                    self.isContentExpansionAvailable = self.getContentHeight() > window.screen.height && self.isReadOnly;
+                    self.contentHeight = self.isReadOnly ? DEFAULT_READ_CONTENT_HEIGHT : (2 * window.screen.height);
                     self.$store.dispatch('rcd/setTexture', { texture });
                 })
         }

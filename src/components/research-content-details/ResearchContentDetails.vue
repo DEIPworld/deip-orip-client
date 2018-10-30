@@ -5,6 +5,12 @@
             <div v-if="isLoadingResearchContentPage === false">
                 <research-content-details-file v-if="isFileContent"></research-content-details-file>
                 <research-content-details-dar v-if="isDarContent" :contentRef="contentRef"></research-content-details-dar>
+                <div class="research-reviews-container" v-if="contentReviewsList.length">
+                    <div class="c-pt-8 title">Reviews: {{ contentReviewsList.length }}</div>
+                    <div class="c-pt-6">
+                        <review-list-item v-for="(review, i) in contentReviewsList" :review="review" :key="i"></review-list-item>
+                    </div>
+                </div>
             </div>
         </div>
 
@@ -17,7 +23,6 @@
 
 <script>
     import { mapGetters } from 'vuex'
-    import deipRpc from '@deip/deip-rpc-client'
 
     export default {
         name: "ResearchContentDetails",
@@ -31,9 +36,7 @@
                 userExperise: 'auth/userExperise',
                 content: 'rcd/content',
                 research: 'rcd/research',
-                disciplinesList: 'rcd/disciplinesList',
-                totalVotesList: 'rcd/totalVotesList',
-                contentWeightByDiscipline: 'rcd/contentWeightByDiscipline',
+                contentReviewsList: 'rcd/contentReviewsList',
                 isLoadingResearchContentPage: 'rcd/isLoadingResearchContentPage',
                 contentRef: 'rcd/contentRef'
             }),
@@ -70,5 +73,9 @@
 </script>
 
 <style lang="less" scoped>
+
+.research-reviews-container {
+    margin: 5%;
+}
 
 </style>

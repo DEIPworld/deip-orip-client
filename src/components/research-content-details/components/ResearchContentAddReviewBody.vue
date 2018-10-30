@@ -17,19 +17,7 @@
             };
         },
         computed: {
-            ...mapGetters({
-                user: 'auth/user',
-                userExperise: 'auth/userExperise',
-                content: 'rcd/content',
-                research: 'rcd/research',
-                membersList: 'rcd/membersList',
-                disciplinesList: 'rcd/disciplinesList',
-                totalVotesList: 'rcd/totalVotesList',
-                contentWeightByDiscipline: 'rcd/contentWeightByDiscipline',
-                contentProposal: 'rcd/contentProposal',
-                isLoadingResearchContentPage: 'rcd/isLoadingResearchContentPage',
-                contentRef: 'rcd/contentRef'
-            })
+
         },
 
         methods: {
