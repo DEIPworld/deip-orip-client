@@ -259,11 +259,10 @@
         <!-- ### END User Profile Education\Employment Section ### -->
 
         <div v-if="isLoadingUserProfilePage === false">
-            <div class="c-pt-12"></div>
-            <v-btn class="ma-0" @click="isClaimExpertiseShown = true">Show user-claim-expertise-dialog</v-btn>
+            <div class="c-pt-12 c-pb-2"></div>
+            <v-btn class="ma-0" @click="isClaimExpertiseShown = true">Claim Expertise</v-btn>
 
-            <div class="c-pv-4" v-if="tmpClaimObjects.length">User claims:</div>
-
+            <div class="c-mt-6 c-mb-2" v-if="tmpClaimObjects.length">Active claims:</div>
             <div v-for="(item, i) in tmpClaimObjects" :key="i">
                 <router-link :to="{
                         name: 'claim-user-expertise-page', 

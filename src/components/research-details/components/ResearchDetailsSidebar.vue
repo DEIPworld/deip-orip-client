@@ -90,7 +90,7 @@
 
             <div v-if="isLoadingResearchDisciplines === false">
                 <div class="c-pb-6">
-                    <div class="sm-title bold c-pb-4 c-pt-4">Votes:</div>
+                    <div class="sm-title bold c-pb-4 c-pt-4">Weight:</div>
                     <div v-for="(discipline, index) in disciplinesList" :key="index"
                         class="row align-center justify-between vote-btn-area" :class="index == 0 ? '':'c-mt-1'">
                         <!--     <v-btn small color="primary" dark class="ma-0">Vote</v-btn> -->
