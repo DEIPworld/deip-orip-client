@@ -18,7 +18,6 @@
                     <div class="discipline-picker c-mt-8">
                         <advanced-discipline-picker
                             :is-multiple-select="false"
-                            :with-recently-used="false"
                             :preselected="discipline"
                             @select="setDiscipline"
                         ></advanced-discipline-picker>
