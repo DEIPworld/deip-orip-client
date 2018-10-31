@@ -86,7 +86,6 @@ const actions = {
                     .flatten()
                     .groupBy('research_id')
                     .value();
-
                 researchResult.forEach(research => {
                     research.totalVotes = tvoMap[research.research_id] ? tvoMap[research.research_id] : [];
                 });

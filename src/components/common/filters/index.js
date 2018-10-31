@@ -8,7 +8,6 @@ Vue.filter('fullname', function (enrichedProfile) {
 });
 
 Vue.filter('userLocation', function (enrichedProfile) {
-    debugger;
     return enrichedProfile && enrichedProfile.profile && enrichedProfile.profile.location 
         ? `${enrichedProfile.profile.location.city || ''} ${enrichedProfile.profile.location.country || ''}` 
         : '';

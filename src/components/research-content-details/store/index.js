@@ -13,6 +13,7 @@ var reviewEditor = undefined;
 const state = {
     content: null,
     research: null,
+    group: null,
     disciplinesList: [],
     totalVotesList: [],
     membersList: [],
@@ -27,6 +28,7 @@ const state = {
     isLoadingResearchDetails: undefined,
     isLoadingResearchContentDetails: undefined,
     isLoadingResearchContentReviews: undefined,
+    isLoadingResearchGroupDetails: undefined,
 
     contentMetadata: null,
     isLoadingResearchContentMetadataPage: undefined
@@ -43,6 +45,10 @@ const getters = {
         return state.research;
     },
 
+    group: (state, getters) => {
+        return state.group;
+    },
+    
     contentProposal: (state) => {
         return state.contentProposal;
     },
@@ -129,7 +135,10 @@ const actions = {
             const researchDetailsLoad = new Promise((resolve, reject) => {
                 dispatch('loadResearchDetails', { group_permlink, research_permlink, notify: resolve })
             });
-            Promise.all([contentRefLoad, researchDetailsLoad])
+            const researchGroupDetailsLoad = new Promise((resolve, reject) => {
+                dispatch('loadResearchGroupDetails', { group_permlink, notify: resolve })
+            });
+            Promise.all([contentRefLoad, researchDetailsLoad, researchGroupDetailsLoad])
                 .finally(() => {
                     commit('SET_RESEARCH_CONTENT_PAGE_LOADING_STATE', false)
                 });
@@ -217,6 +226,18 @@ const actions = {
             });
     },
 
+    loadResearchGroupDetails({ state, commit, dispatch }, { group_permlink, notify }) {
+        commit('SET_RESEARCH_GROUP_DETAILS_LOADING_STATE', true)
+        deipRpc.api.getResearchGroupByPermlinkAsync(group_permlink)
+            .then((group) => {
+                commit('SET_RESEARCH_GROUP_DETAILS', group)
+            }, (err) => {console.log(err)})
+            .finally(() => {
+                commit('SET_RESEARCH_GROUP_DETAILS_LOADING_STATE', false)
+                if (notify) notify();
+            });
+    },
+
     loadResearchContentRef({ state, commit, dispatch }, { hashOrId, notify }) {
         return contentHttpService.getContentRef(hashOrId)
             .then((contentRef) => {
@@ -277,6 +298,10 @@ const actions = {
         // do not do this in regular code without 'commit' call!
         reviewEditor = instance.reviewEditor;
     },
+
+    setDraftAuthors({ state, commit, dispatch }, authors) {
+        commit('SET_DRAFT_AUTHORS_LIST', authors);
+    },
     
     async loadResearchContentMetadata({ state, commit, dispatch }, 
         { group_permlink, research_permlink, content_permlink,  notify }) {
@@ -312,11 +337,11 @@ const actions = {
                     
                     /* todo: replace approximate estimated endTime with actual values 
                        once we have moved this to aggreagtion server */
-                    // const endTime = contentProposal.expiration_time;
+                    const endTime = contentProposal.expiration_time;
 
-                    var contentCreatedTimePlus10Minutes = new Date(new Date(`${content.created_at}Z`).getTime() + 1 * 60000);
-                    const endTimeIso = contentCreatedTimePlus10Minutes.toISOString();
-                    const endTime = endTimeIso.slice(0, endTimeIso.indexOf('.'));
+                    // var contentCreatedTimePlus10Minutes = new Date(new Date(`${content.created_at}Z`).getTime() + 1 * 60000);
+                    // const endTimeIso = contentCreatedTimePlus10Minutes.toISOString();
+                    // const endTime = endTimeIso.slice(0, endTimeIso.indexOf('.'));
                     const bounds = await findBlocksByRange(startTime, endTime);
 
                     var block;
@@ -510,17 +535,28 @@ const mutations = {
         state.isLoadingResearchContentReviews = value
     },
     
+    ['SET_RESEARCH_GROUP_DETAILS_LOADING_STATE'](state, value) {
+        state.isLoadingResearchGroupDetails = value
+    },
+
     ['SET_RESEARCH_MEMBERS_LIST'](state, list) {
         Vue.set(state, 'membersList', list)
     },
 
-
+    ['SET_DRAFT_AUTHORS_LIST'](state, list) {
+        Vue.set(state.contentRef, 'authors', list)
+    },
+    
     ['SET_RESEARCH_CONTENT_METADATA_PAGE_LOADING_STATE'](state, value) {
         Vue.set(state, 'isLoadingResearchContentMetadataPage', value)
     },
 
     ['SET_RESEARCH_CONTENT_METADATA'](state, value) {
         Vue.set(state, 'contentMetadata', value)
+    },
+
+    ['SET_RESEARCH_GROUP_DETAILS'](state, value) {
+        Vue.set(state, 'group', value)
     },
 
     ['RESET_STATE'](state) {

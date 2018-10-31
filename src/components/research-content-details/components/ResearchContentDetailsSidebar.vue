@@ -89,10 +89,10 @@
         <!-- ### END Research Content ECI Section ### -->
 
         <!-- ### START Research Content Authors Section ### -->
-        <div v-if="isPublished" class="c-mt-4">
+        <div class="c-mt-4">
             <div class="sidebar-fullwidth"><v-divider></v-divider></div>
             <div class="subheading bold c-mt-4">Authors</div>
-            <div class="row-nowrap justify-between align-center c-pt-4 c-pb-2" v-for="(author, index) in contentAuthorsList" :key="index">
+            <div v-if="isPublished" class="row-nowrap justify-between align-center c-pt-2 c-pb-2" v-for="(author, index) in contentAuthorsList" :key="index">
                 <div>
                     <v-avatar size="40px">
                         <img v-if="author.profile" v-bind:src="author.profile.avatar | avatarSrc(40, 40, false)" />
@@ -101,6 +101,25 @@
                     <router-link :to="'/user-details/' + author.account.name" class="a c-pl-3">
                         {{author | fullname}}
                     </router-link>
+                </div>
+            </div>
+            <div v-if="isInProgress" class="row-nowrap justify-between align-center c-pt-2 c-pb-2" v-for="(member, index) in membersList" :key="index">
+                <div class="col-10">
+                    <v-avatar size="40px">
+                        <img v-if="member.profile" v-bind:src="member.profile.avatar | avatarSrc(40, 40, false)" />
+                        <v-gravatar v-else :title="member.account.name" :email="member.account.name + '@deip.world'" />
+                    </v-avatar>
+                    <router-link :to="'/user-details/' + member.account.name" class="a c-pl-3">
+                        {{member | fullname}}
+                    </router-link>
+                </div>
+                <div class="col-2">
+                    <div class="author-checkbox">
+                        <!-- v-checkbox depends on v-model binding which doesn't play well with Vuex.
+                            TODO: create a custom checkbox with the same styles as v-checkbox has -->
+                        <input id="checkbox" type="checkbox" :checked="isDraftAuthor(member)" 
+                            v-on:input="setDraftAuthor($event, member)"/>
+                    </div>
                 </div>
             </div>
         </div>
@@ -150,6 +169,32 @@
             </div>
         </div>
         <!-- ### END Research Content Blockchain Data Section ### -->
+
+        <!-- ### START Quorum Info Section ### -->
+        <div v-if="!isPublished" class="c-mt-6">
+            <div class="sidebar-fullwidth"><v-divider></v-divider></div>
+            <div class="subheading bold c-mt-4">Quorum</div>
+            <div class="body-2 c-mt-2">
+                <div class="row-nowrap align-center body-2 c-pt-1 c-pb-1">
+                    <div class="col-10">{{createContentGroupQuorumValue.text}}:</div>
+                    <div class="col-2">{{convertToPercent(createContentGroupQuorumValue.value)}}%</div>
+                </div> 
+            </div>
+        </div>
+        <!-- ### END Quorum Info Section ### -->
+
+        <!-- ### START Reward Info Section ### -->
+        <div v-if="!isPublished" class="c-mt-6">
+            <div class="sidebar-fullwidth"><v-divider></v-divider></div>
+            <div class="subheading bold c-mt-4">Reviews</div>
+            <div class="body-2 c-mt-2">
+                <div class="row-nowrap align-center body-2 c-pt-1 c-pb-1">
+                    <div class="col-10"><v-icon small class="c-pr-2">rate_review</v-icon> Reward for review:</div>
+                    <div class="col-2">{{convertToPercent(research.review_share_in_percent)}}%</div>
+                </div> 
+            </div>
+        </div>
+        <!-- ### END Reward Info Section ### -->
       </div>
 
       <v-dialog v-if="research" v-model="proposeContent.isOpen" persistent transition="scale-transition" max-width="500px">
@@ -183,7 +228,7 @@
                             :items="membersList"
                             v-model="proposeContent.authors"
                             placeholder="Authors"
-                            v-on:change="changeAuthors"
+                            v-on:change="setDraftAuthors"
                             autocomplete
                             multiple>
                             
@@ -238,7 +283,8 @@
     import contentHttpService from './../../../services/http/content'
     import * as proposalService from "./../../../services/ProposalService";
     import { signOperation } from './../../../utils/blockchain';
-    import { createContentProposal, contentTypes } from './../../../services/ResearchService'
+    import { createContentProposal, contentTypes } from './../../../services/ResearchService';
+    import { CREATE_RESEARCH_MATERIAL, labels } from './../../../services/ProposalService';
 
     export default {
         name: "ResearchContentDetailsSidebar",
@@ -274,6 +320,7 @@
                 userExperise: 'auth/userExperise',
                 content: 'rcd/content',
                 research: 'rcd/research',
+                group: 'rcd/group',
                 membersList: 'rcd/membersList',
                 disciplinesList: 'rcd/disciplinesList',
                 contentList: 'rcd/contentList',
@@ -295,7 +342,7 @@
                 return this.contentRef && this.contentRef.status === 'proposed';
             },
             isPublished() {
-                return this.content;
+                return this.content != null;
             },
             isUnlockActionAvailable() {
                 return this.isResearchGroupMember && this.hasNoActiveProposal && this.isProposed;
@@ -343,6 +390,9 @@
             contentAuthorsList() {
                 return this.content ? this.membersList.filter(m => this.content.authors.some(a => a === m.account.name)) : [];
             },
+            draftAuthorsList() {
+                return this.contentRef ? this.contentRef.authors : [];
+            },
             researchTableOfContent() {
                 return this.contentList.map(content => {
                     let typeObj = contentTypes.find(c => c.type === content.content_type);
@@ -352,6 +402,12 @@
                         permlink: content.permlink
                     }
                 })
+            },
+            createContentGroupQuorumValue() {
+                return this.group ? {
+                    text: labels[CREATE_RESEARCH_MATERIAL],
+                    value: this.group.proposal_quorums[CREATE_RESEARCH_MATERIAL - 1][1]
+                } : undefined;
             }
         },
 
@@ -472,8 +528,21 @@
                         console.log(err)
                     })
             },
-
-            changeAuthors(authors) {
+            isDraftAuthor(member, i) {
+                return this.contentRef ? this.contentRef.authors.some(a => a === member.account.name) : false;
+            },
+            setDraftAuthor(event, member) {
+                // used by checkbox
+                event.preventDefault();
+                event.stopPropagation();
+                const checked = event.target.checked;
+                const authors = checked
+                    ? [...this.contentRef.authors, member.account.name] 
+                    : this.contentRef.authors.filter(a => a !== member.account.name);
+                this.setDraftAuthors(this.membersList.filter(m => authors.some(a => a === m.account.name)));
+            },
+            setDraftAuthors(authors) {
+                // used by selectlist
                 const texture = this.$store.getters['rcd/texture']; 
                 const persons = texture.api.getAuthors();
                 const deletedAuthors = persons
@@ -492,7 +561,8 @@
                     let surname = author.profile && author.profile.lastName ? author.profile.lastName : "";
                     let givenName = author.profile && author.profile.firstName ? author.profile.firstName : alias;
                     texture.api.addAuthor(alias, surname, givenName);
-                } 
+                }
+                this.$store.dispatch('rcd/setDraftAuthors', authors.map(a => a.account.name));
             },
             goAddReview() {
                 this.$router.push({ name: 'ResearchContentAddReview', params: this.$route.params });
@@ -516,5 +586,8 @@
     }
     .add-review-label {
         text-transform: none;
+    }
+    .author-checkbox {
+        max-height: 30px !important;
     }
 </style>
