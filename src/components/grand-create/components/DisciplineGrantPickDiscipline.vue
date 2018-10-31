@@ -11,6 +11,7 @@
             <div class="col-grow overflow-y-auto">
                 <div class="c-mh-auto full-height overflow-y-auto discipline-picker">
                     <advanced-discipline-picker
+                        :preselected="grantInfo.discipline"
                         :is-multiple-select="false"
                         @select="setDisciplines"
                     ></advanced-discipline-picker>

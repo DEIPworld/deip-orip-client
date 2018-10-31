@@ -1,24 +1,21 @@
 <template>
     <div class="row discipline-picker full-height overflow-y-auto">
-        <div class="col-3 c-p-4 overflow-y-auto" v-if="withRecentlyUsed">
-            <div class="bold uppercase c-pb-4">Recently used</div>
-            <div><span class="deip-label">Religion</span></div>
-            <div><span class="deip-label">Chemistry</span></div>
-            <div><span class="deip-label">Biology</span></div>
-            <div><span class="deip-label">Physics</span></div>
-            <div><span class="deip-label">Belarusian</span></div>
+        <div class="col-4 c-p-4 overflow-y-auto">
+            <div class="bold uppercase c-pb-4">Your disciplines</div>
+
+            <div v-if="userDisciplines.length">
+                <div v-for="(discipline, i) in userDisciplines" :key="i">
+                    <span class="deip-label"
+                        :class="{'selected': isUserLabelSelected(discipline) }"
+                        @click="handleUserDiscipline(discipline)"
+                    >{{ discipline.label }}</span>
+                </div>
+            </div>
+
+            <div v-else class="grey--text">You have no expertise</div>
         </div>
 
-        <div class="c-p-4 overflow-y-auto" :class="withRecentlyUsed ? 'col-3' : 'col-4'">
-            <div class="bold uppercase c-pb-4">Popular</div>
-            <div><span class="deip-label">Religion</span></div>
-            <div><span class="deip-label">Chemistry</span></div>
-            <div><span class="deip-label">Biology</span></div>
-            <div><span class="deip-label">Physics</span></div>
-            <div><span class="deip-label">Belarusian</span></div>
-        </div>
-
-        <div class="c-p-4 full-height overflow-y-auto" :class="withRecentlyUsed ? 'col-6' : 'col-8'">
+        <div class="col-8 c-p-4 full-height overflow-y-auto">
             <div class="bold uppercase c-pb-4">All</div>
 
             <discipline-tree-picker
@@ -31,22 +28,61 @@
 </template>
 
 <script>
-    
+    import { mapGetters } from 'vuex';
+    import * as disciplineTreeService from "./../DisciplineTreeService"; 
+
     export default {
         name: "AdvancedDisciplinePicker",
+
         props: {
             isMultipleSelect: { type: Boolean, required: false, default: true },
-            withRecentlyUsed: { type: Boolean, required: false, default: true },
-            preselected: { 
+            preselected: {
                 validator(value) {
                     return value === undefined || typeof value === 'array' || typeof value === 'object';
                 },
-                required: false
+                required: true
             },
         },
+
+        computed: {
+            ...mapGetters({
+                user: 'auth/user'
+            }),
+
+            userDisciplines() {
+                return disciplineTreeService.getNodesByIdList(
+                    this.user.expertTokens.map(token => token.discipline_id)
+                );
+            }
+        },
+
         methods: {
             select(selected){
                 this.$emit('select', selected);
+            },
+
+            handleUserDiscipline(discipline) {
+                if (!this.isMultipleSelect) {
+                    this.$emit('select', discipline);
+                } else {
+                    let preselectedCopy = _.cloneDeep(this.preselected);
+
+                    if (!_.find(preselectedCopy, item => item.id === discipline.id)) {
+                        preselectedCopy.push(discipline);
+                    } else {
+                        _.remove(preselectedCopy, item => item.id === discipline.id);
+                    }
+
+                    this.$emit('select', preselectedCopy);
+                }
+            },
+
+            isUserLabelSelected(discipline) {
+                if (!this.isMultipleSelect) {
+                    return !!this.preselected && this.preselected.id === discipline.id;
+                } else {
+                    return !!_.find(this.preselected, item => item.id === discipline.id);
+                }
             }
         }
     };
