@@ -11,102 +11,125 @@
 
             <page-container>
                 <contentbar>
-                    <div class="subheading bold">Company</div>
-                    <div class="row">
-                        <div class="col-12">
-                            <v-text-field
-                                placeholder="Company"
-                                v-model="company"
-                            ></v-text-field>
-                        </div>
-                    </div>
-
-                    <div class="subheading bold">Location</div>
-                    <div class="row">
-                        <div class="col-6 c-pr-3">
-                            <v-text-field
-                                label="City"
-                                v-model="city"
-                            ></v-text-field>
-                        </div>
-                        <div class="col-6 c-pl-3">
-                            <v-text-field
-                                label="Country"
-                                v-model="country"
-                            ></v-text-field>
-                        </div>
-                    </div>
-
-                    <div class="subheading bold">Period</div>
-                    <div class="row">
-                        <div class="col-6 c-pr-3">
-                            <v-menu
-                                lazy
-                                :close-on-content-click="false"
-                                v-model="dateFromMenu"
-                                transition="scale-transition"
-                                offset-y
-                                full-width
-                                min-width="290px"
-                            >
-                                <v-text-field slot="activator" label="From" v-model="dateFrom" append-icon="event" readonly></v-text-field>
-                                <v-date-picker v-model="dateFrom" @input="dateFromMenu = false" type="month"></v-date-picker>
-                            </v-menu>
-                        </div>
-                        <div class="col-6 c-pl-3">
-                            <v-menu
-                                lazy
-                                :close-on-content-click="false"
-                                v-model="dateToMenu"
-                                transition="scale-transition"
-                                offset-y
-                                full-width
-                                min-width="290px"
-                            >
-                                <v-text-field slot="activator" label="To" v-model="dateTo" append-icon="event" readonly></v-text-field>
-                                <v-date-picker v-model="dateTo" @input="dateToMenu = false" type="month"></v-date-picker>
-                            </v-menu>
-                        </div>
-                    </div>
-
-                    <div class="subheading bold">Position</div>
-                    <div class="row">
-                        <div class="col-12">
-                            <v-text-field
-                                placeholder="Position"
-                                v-model="position"
-                            ></v-text-field>
-                        </div>
-                    </div>
-
-                    <div class="subheading bold">Description (optional)</div>
-                    <div class="row">
-                        <div class="col-12">
-                            <v-text-field
-                                placeholder="Description"
-                                v-model="description"
-                            ></v-text-field>
-                        </div>
-                    </div>
-
-                    <!--   <div>
-                        <v-btn class="ma-0 width-10" color="primary" @click="save" :disabled="disabled">Save</v-btn>
-                        <span class="c-pr-4"></span>
-                        <v-btn class="ma-0" color="primary" flat @click.native="meta.isShown = false">Cancel</v-btn>
-                    </div> -->
-
-                    <div>
+                    <v-form v-model="isFormValid" ref="form">
+                        <div class="subheading bold">Company</div>
                         <div class="row">
-                            <div class="col-1">
-                                <v-checkbox label="Is active" v-model="isActive"></v-checkbox>
-                            </div>
-                            <div class="col-11">
-                                <v-btn class="ml-5 ma-0 width-10" color="primary" @click="save()" :disabled="disabled">Save</v-btn>
-                                <span class="c-pr-4"></span>
-                                <v-btn class="ma-0 width-10" color="primary" flat @click.native="meta.isShown = false">Cancel</v-btn>
+                            <div class="col-12">
+                                <v-text-field
+                                    label="Company*"
+                                    v-model="company"
+                                    :rules="[rules.required]"
+                                ></v-text-field>
                             </div>
                         </div>
-                    </div>
+
+                        <div class="subheading bold">Location</div>
+                        <div class="row">
+                            <div class="col-6 c-pr-3">
+                                <v-text-field
+                                    label="City*"
+                                    v-model="city"
+                                    :rules="[rules.required]"
+                                ></v-text-field>
+                            </div>
+                            <div class="col-6 c-pl-3">
+                                <v-text-field
+                                    label="Country*"
+                                    v-model="country"
+                                    :rules="[rules.required]"
+                                ></v-text-field>
+                            </div>
+                        </div>
+
+                        <div class="subheading bold">Period</div>
+                        <div class="row">
+                            <div class="col-6 c-pr-3">
+                                <v-menu
+                                    lazy
+                                    :close-on-content-click="false"
+                                    v-model="dateFromMenu"
+                                    transition="scale-transition"
+                                    offset-y
+                                    full-width
+                                    min-width="290px"
+                                >
+                                    <v-text-field slot="activator" label="From*" 
+                                        ref="dateFromInput"
+                                        v-model="dateFrom"
+                                        append-icon="event"
+                                        :rules="[
+                                            rules.required,
+                                            rules.startDateValidation
+                                        ]"
+                                        readonly></v-text-field>
+                                    <v-date-picker v-model="dateFrom" @input="dateFromMenu = false" type="month"></v-date-picker>
+                                </v-menu>
+                            </div>
+                            <div class="col-6 c-pl-3">
+                                <v-menu
+                                    lazy
+                                    :close-on-content-click="false"
+                                    v-model="dateToMenu"
+                                    transition="scale-transition"
+                                    offset-y
+                                    full-width
+                                    min-width="290px"
+                                >
+                                    <v-text-field slot="activator"
+                                        ref="dateToInput"
+                                        label="To*"
+                                        v-model="dateTo"
+                                        append-icon="event"
+                                        :rules="[
+                                            rules.required,
+                                            rules.endDateValidation
+                                        ]"
+                                        readonly></v-text-field>
+                                    <v-date-picker v-model="dateTo" @input="dateToMenu = false" type="month"></v-date-picker>
+                                </v-menu>
+                            </div>
+                        </div>
+
+                        <div class="subheading bold">Position</div>
+                        <div class="row">
+                            <div class="col-12">
+                                <v-text-field
+                                    label="Position*"
+                                    v-model="position"
+                                    :rules="[rules.required]"
+                                ></v-text-field>
+                            </div>
+                        </div>
+
+                        <div class="subheading bold">Description (optional)</div>
+                        <div class="row">
+                            <div class="col-12">
+                                <v-text-field
+                                    placeholder="Description"
+                                    v-model="description"
+                                ></v-text-field>
+                            </div>
+                        </div>
+
+                        <!--   <div>
+                            <v-btn class="ma-0 width-10" color="primary" @click="save" :disabled="disabled">Save</v-btn>
+                            <span class="c-pr-4"></span>
+                            <v-btn class="ma-0" color="primary" flat @click.native="meta.isShown = false">Cancel</v-btn>
+                        </div> -->
+
+                        <div>
+                            <div class="row">
+                                <div class="col-1">
+                                    <v-checkbox label="Is active" v-model="isActive"></v-checkbox>
+                                </div>
+                                <div class="col-11">
+                                    <v-btn class="ml-5 ma-0 width-10" color="primary" @click="save()" :disabled="disabled">Save</v-btn>
+                                    <span class="c-pr-4"></span>
+                                    <v-btn class="ma-0 width-10" color="primary" flat @click.native="meta.isShown = false">Cancel</v-btn>
+                                </div>
+                            </div>
+                        </div>
+                    </v-form>
                 </contentbar>
             </page-container>
 
@@ -134,7 +157,27 @@
                 dateToMenu: false,
                 position: undefined,
                 description: undefined,
-                isActive: false
+                isActive: false,
+
+                isFormValid: false,
+
+                rules: {
+                    required: value => !!value || 'This field is required',
+                    startDateValidation: value => {
+                        if (!value || !this.dateTo) {
+                            return true;
+                        }
+
+                        return Date.parse(value) < Date.parse(this.dateTo) ? true : 'Start date should be smaller than end date';
+                    },
+                    endDateValidation: value => {
+                        if (!value || !this.dateFrom) {
+                            return true;
+                        }
+
+                        return Date.parse(value) > Date.parse(this.dateFrom) ? true : 'End date should be greater than start date';
+                    },
+                }
             }
         },
         methods: {
@@ -172,8 +215,8 @@
 
         computed: {
             disabled() {
-                return !this.company || !this.country || !this.city || !this.dateFrom || !this.dateTo || !this.position;
-            }
+                return !this.isFormValid;
+            },
         },
         watch: {
             'meta.item': function(employment) {
