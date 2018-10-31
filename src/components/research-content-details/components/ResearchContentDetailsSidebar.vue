@@ -3,70 +3,38 @@
       <sidebar-loader v-if="isLoadingResearchContentPage"></sidebar-loader>
       <div v-if="isLoadingResearchContentPage === false">
 
-        <!-- ### START Research Content Details Section ### -->
-        <div class="research-content-info-container">
-            <div class="c-mb-4" v-if="research">
-                <router-link class="a sm-title" 
-                    :to="{ name: 'research-details', params: { 
-                            research_group_permlink: research.group_permlink,
-                            research_permlink: research.permlink }
-                        }">
+        <div class="ma-0">
+            <router-link class="a sm-title" 
+                :to="{ name: 'research-details', params: { 
+                        research_group_permlink: research.group_permlink,
+                        research_permlink: research.permlink }
+                    }">
                     {{ research.title }}
-                </router-link>
-            </div>
-            <div v-if="content" class="c-mb-6 c-mt-6">
-                <div v-if="disciplinesList.length" class="sm-title">Content Info</div>
-                <div class="c-mt-4">
-                    <div v-for="(discipline, index) in disciplinesList" :key="index"
-                        class="row align-center justify-between vote-btn-area" 
-                        :class="index === 0 ? '' : 'c-mt-1'">
-
-                        <div class="deip-blue-color c-p-2">
-                            {{discipline.name}}:  
-                
-                            {{contentWeightByDiscipline[content.id] !== undefined && 
-                            contentWeightByDiscipline[content.id][discipline.id] !== undefined ?
-                            contentWeightByDiscipline[content.id][discipline.id] : 0}}
-                        </div>
-                    </div>
-                </div>
-
-                <div class="c-mt-6">
-                    <router-link class="a sm-title" :to="{ 
-                        name: 'ResearchContentMetadata', 
-                        params: { 
-                            research_group_permlink: research.group_permlink,
-                            research_permlink: research.permlink,
-                            content_permlink: content.permlink
-                        }}">
-                        Blockchain Metadata
-                    </router-link>
-                </div>
-            </div>
+            </router-link>
         </div>
-        <!-- ### END Research Content Details Section ### -->
 
         <!-- ### START Draft Actions Section ### -->
-        <div v-if="!content && isResearchGroupMember">
-            <div v-if="isInProgress" class="c-pb-6">
+        <div v-if="!isPublished && isResearchGroupMember" class="c-mb-3 c-mt-3">
+            <div class="sidebar-fullwidth"><v-divider></v-divider></div>
+            <div v-if="isInProgress" class="c-mt-3 c-mb-3">
                 <div class="text-align-center">
-                    <v-btn @click="openContentProposalDialog()" color="primary" class="ma-0" block outline>Propose Content</v-btn>
+                    <v-btn @click="openContentProposalDialog()" color="primary" block outline>Propose Content</v-btn>
                 </div>
             </div>
-            <div v-if="isSavingActionAvailable" class="c-pb-6">
+            <div v-if="isSavingActionAvailable" class="c-mt-3 c-mb-3">
                 <div class="text-align-center">
                     <v-btn @click="saveDraft()" :loading="isSavingDraft" :disabled="isSavingDraft" 
-                        color="secondary" class="ma-0" block outline>
+                        color="secondary" block outline>
                         Save Draft
                     </v-btn>
                 </div>
             </div>
-            <div v-if="isProposed" class="c-pb-6">
+            <div v-if="isProposed" class="c-mt-3 c-mb-3">
                 <div class="text-align-center">
                     Draft is proposed as research content and locked for editing
                 </div>
             </div>
-            <div v-if="isUnlockActionAvailable" class="research-content-info-container">
+            <div v-if="isUnlockActionAvailable" class="c-mt-3 c-mb-3">
                 <div class="text-align-center">
                     <v-btn @click="unlockDraft()">Unlock Draft</v-btn>
                 </div>
@@ -74,14 +42,85 @@
         </div>
         <!-- ### END Draft Actions Section ### -->
 
-        <div v-if="isReviewSectionAvailable" class="sidebar-fullwidth">
-            <v-divider></v-divider>
+        <!-- ### START Research TOC Section ### -->
+        <div class="c-mb-6 c-mt-4" v-if="researchTableOfContent.length">
+            <div class="sidebar-fullwidth"><v-divider></v-divider></div>
+            <div class="subheading bold c-mt-4">Research Table of Content</div>
+            <div class="c-mt-2">
+                <div v-for="(item, index) in researchTableOfContent" :key="index" 
+                        :class="index === 0 ? '' : 'c-mt-1'">
+                    <div>
+                        <div class="body-2">{{index + 1 }}. {{item.type}}</div>
+                        <div class="c-pl-5">
+                            <router-link target="_blank" class="a body-1" 
+                                :to="{ name: 'ResearchContentDetails', params: { 
+                                    research_group_permlink: research.group_permlink,
+                                    research_permlink: research.permlink,
+                                    content_permlink: item.permlink } }">
+                                {{ item.title }}
+                            </router-link>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
+        <!-- ### END Research TOC Section ### -->
 
-        <!-- ### START Research Review Section ### -->
-        <div v-if="isReviewSectionAvailable">
-            <div class="sm-title bold c-pt-6">Reviews</div>
-            <div v-if="research" class="c-pt-4 c-pb-6">
+
+        <!-- ### START Research Content ECI Section ### -->
+        <div v-if="isPublished" class="c-mb-6 c-mt-4">
+            <div class="sidebar-fullwidth"><v-divider></v-divider></div>
+            <div class="subheading bold c-mt-4">Expertise Contribution Index</div>
+            <div class="c-mt-4">
+                <div v-for="(discipline, index) in disciplinesList" :key="index"
+                    class="row align-center justify-between eci-item" 
+                    :class="index === 0 ? '' : 'c-mt-1'">
+
+                    <div class="c-p-2 eci-label">
+                        {{discipline.name}}:  
+
+                        {{contentWeightByDiscipline[content.id] !== undefined && 
+                        contentWeightByDiscipline[content.id][discipline.id] !== undefined ?
+                        contentWeightByDiscipline[content.id][discipline.id] : 0}}
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- ### END Research Content ECI Section ### -->
+
+        <!-- ### START Research Content Authors Section ### -->
+        <div v-if="isPublished" class="c-mt-4">
+            <div class="sidebar-fullwidth"><v-divider></v-divider></div>
+            <div class="subheading bold c-mt-4">Authors</div>
+            <div class="row-nowrap justify-between align-center c-pt-4 c-pb-2" v-for="(author, index) in contentAuthorsList" :key="index">
+                <div>
+                    <v-avatar size="40px">
+                        <img v-if="author.profile" v-bind:src="author.profile.avatar | avatarSrc(40, 40, false)" />
+                        <v-gravatar v-else :title="author.account.name" :email="author.account.name + '@deip.world'" />
+                    </v-avatar>
+                    <router-link :to="'/user-details/' + author.account.name" class="a c-pl-3">
+                        {{author | fullname}}
+                    </router-link>
+                </div>
+            </div>
+        </div>
+        <!-- ### END Research Content Authors Section ### -->
+
+        <!-- ### START Research Content Review Section ### -->
+        <div v-if="isPublished" class="c-mt-4">
+            <div class="sidebar-fullwidth"><v-divider></v-divider></div>
+            <div class="subheading bold c-mt-4">
+                Reviews: <span style="color: green">{{positiveReviewsCount}}</span> / <span style="color: red">{{negativeReviewsCount}}</span> 
+            </div>
+            <div class="c-pt-3">
+                <div class="caption"><v-icon small class="c-pr-2">rate_review</v-icon>Reward for review: <span class="bold">{{convertToPercent(research.review_share_in_percent)}}%</span></div>
+                <div class="caption" v-if="isContentRewardDistributionActive">
+                    <div><v-icon small class="c-mr-2">av_timer</v-icon>Reward period active till</div>
+                    <div class="bold"><v-icon small class="c-mr-2">today</v-icon>{{contentRewardDistributionState.end.toDateString()}}</div>
+                </div>
+            </div>
+
+            <div v-if="isCreatingReviewAvailable" class="c-mt-4">
                 <v-btn @click="goAddReview()" dark round outline color="primary" class="full-width ma-0">
                     <v-icon small>add</v-icon>
                     <div class="col-grow add-review-label">
@@ -93,7 +132,24 @@
                 </v-btn>
             </div>
         </div>
-        <!-- ### END Research Review Section ### -->
+        <!-- ### END Research Content Review Section ### -->
+
+        <!-- ### START Research Content Blockchain Data Section ### -->
+        <div v-if="isPublished" class="c-mt-6">
+            <div class="sidebar-fullwidth"><v-divider></v-divider></div>
+            <div class="c-mt-6">
+                <router-link class="a sm-title" 
+                    :to="{  name: 'ResearchContentMetadata', 
+                            params: { 
+                                research_group_permlink: research.group_permlink,
+                                research_permlink: research.permlink,
+                                content_permlink: content.permlink
+                        }}">
+                    Blockchain Metadata
+                </router-link>
+            </div>
+        </div>
+        <!-- ### END Research Content Blockchain Data Section ### -->
       </div>
 
       <v-dialog v-if="research" v-model="proposeContent.isOpen" persistent transition="scale-transition" max-width="500px">
@@ -220,6 +276,7 @@
                 research: 'rcd/research',
                 membersList: 'rcd/membersList',
                 disciplinesList: 'rcd/disciplinesList',
+                contentList: 'rcd/contentList',
                 contentReviewsList: 'rcd/contentReviewsList',
                 contentWeightByDiscipline: 'rcd/contentWeightByDiscipline',
                 contentProposal: 'rcd/contentProposal',
@@ -236,6 +293,9 @@
             },
             isProposed() {
                 return this.contentRef && this.contentRef.status === 'proposed';
+            },
+            isPublished() {
+                return this.content;
             },
             isUnlockActionAvailable() {
                 return this.isResearchGroupMember && this.hasNoActiveProposal && this.isProposed;
@@ -255,15 +315,43 @@
             isCreatingProposalAvailable() {
                 return this.proposeContent.title && this.proposeContent.type && this.proposeContent.authors.length;
             },
-
             userHasExpertise() {
                 return this.userExperise != null && this.research != null
                     ?  this.userExperise.some(exp => this.research.disciplines.some(d => d.id == exp.discipline_id))
                     : false
             },
-            isReviewSectionAvailable() {
+            isCreatingReviewAvailable() {
                 const userHasReview = this.contentReviewsList.some(r => r.author.account.name === this.user.username)
-                return !this.isResearchGroupMember && !userHasReview && this.userHasExpertise && this.isProposed
+                return !this.isResearchGroupMember && !userHasReview && this.userHasExpertise && this.isPublished
+            },
+            positiveReviewsCount() {
+                return this.contentReviewsList.filter(r => r.is_positive).length;
+            },
+            negativeReviewsCount() {
+                return this.contentReviewsList.filter(r => !r.is_positive).length;
+            },
+            contentRewardDistributionState() {
+                return this.content ? {
+                    state: this.content.activity_state,
+                    start: new Date(`${this.content.activity_window_start}Z`),
+                    end: new Date(`${this.content.activity_window_end}Z`)
+                } : null;
+            },
+            isContentRewardDistributionActive() {
+                return this.contentRewardDistributionState && this.contentRewardDistributionState.state === 'active';
+            },
+            contentAuthorsList() {
+                return this.content ? this.membersList.filter(m => this.content.authors.some(a => a === m.account.name)) : [];
+            },
+            researchTableOfContent() {
+                return this.contentList.map(content => {
+                    let typeObj = contentTypes.find(c => c.type === content.content_type);
+                    return {
+                        type: typeObj ? typeObj.text : 'Milestone',
+                        title: content.title,
+                        permlink: content.permlink
+                    }
+                })
             }
         },
 
@@ -414,13 +502,19 @@
 </script>
 
 <style lang="less" scoped>
-    .vote-btn-area {
-        border: 1px solid #2F80ED;
+    .eci-item {
+        border: 1px solid #e4e4e4;
         border-radius: 3px;
+    }
+    .eci-label {
+       color: #818181;
     }
     .selected-author-item {
         background-color: #e0e0e0;
         width: 100%;
         height: 100%;
+    }
+    .add-review-label {
+        text-transform: none;
     }
 </style>

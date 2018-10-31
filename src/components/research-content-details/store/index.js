@@ -16,6 +16,7 @@ const state = {
     disciplinesList: [],
     totalVotesList: [],
     membersList: [],
+    contentList: [],
     contentReviewsList: [],
     contentProposal: undefined,
 
@@ -52,6 +53,10 @@ const getters = {
 
     totalVotesList: (state, getters) => {
         return state.totalVotesList;
+    },
+
+    contentList: (state, getters) => {
+        return state.contentList;
     },
 
     contentReviewsList: (state, getters) => {
@@ -184,9 +189,11 @@ const actions = {
         commit('SET_RESEARCH_DETAILS_LOADING_STATE', true)
 
         const rgtList = [];
+        var researchId;
         deipRpc.api.getResearchByAbsolutePermlinkAsync(group_permlink, research_permlink)
             .then((research) => {
                 commit('SET_RESEARCH_DETAILS', research)
+                researchId = research.id;
                 return deipRpc.api.getResearchGroupTokensByResearchGroupAsync(research.research_group_id)
             }).then((members) => {
                 rgtList.push(...members)
@@ -199,8 +206,11 @@ const actions = {
                     user.rgt = rgtList.find(rgt => rgt.owner == user.account.name);
                 }
                 commit('SET_RESEARCH_MEMBERS_LIST', users)
-                return deipRpc.api.getProposalsByResearchGroupIdAsync(state.research.research_group_id);
+                return deipRpc.api.getAllResearchContentAsync(researchId)
             }, (err) => {console.log(err)})
+            .then((list) => {
+                commit('SET_RESEARCH_CONTENT_LIST', list)
+            }, (err) => { console.log(err) })
             .finally(() => {
                 commit('SET_RESEARCH_DETAILS_LOADING_STATE', false)
                 if (notify) notify();
@@ -464,6 +474,10 @@ const mutations = {
         Vue.set(state, 'contentReviewsList', list)
     },
 
+    ['SET_RESEARCH_CONTENT_LIST'](state, list) {
+        Vue.set(state, 'contentList', list)
+    },
+
     ['SET_RESEARCH_DETAILS'](state, research) {
         Vue.set(state, 'research', research)
     },
@@ -516,6 +530,7 @@ const mutations = {
         Vue.set(state, 'disciplinesList', [])
         Vue.set(state, 'totalVotesList', [])
         Vue.set(state, 'contentReviewsList', [])
+        Vue.set(state, 'contentList', [])
         Vue.set(state, 'content', null)
         Vue.set(state, 'contentProposal', undefined)
         Vue.set(state, 'research', null)
