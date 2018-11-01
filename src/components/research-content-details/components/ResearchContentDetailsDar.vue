@@ -1,20 +1,19 @@
 <template>
-
 <div>
-    <v-progress-circular v-if="isLoadingResearchContentPage" :size="100" indeterminate color="primary"></v-progress-circular>
-    <div v-if="isLoadingResearchContentPage === false">
-        <div style="margin-bottom: 50px">
-            <div v-if="isLoadingResearchContentPage === false">
-                <div ref='deip-texture-container' class="deip-texture" 
-                    :class="[{'read-only-texture': isReadOnly}]"
-                    :style="{ height: contentHeight + 'px' }">
-                </div>
-            </div>
-            <div v-if="isContentExpansionAvailable" class="c-m-10 right">
-                <a @click="expandContent()">{{ isContentExpanded ? 'Collapse chapter' : 'Expand chapter'}}</a>
-            </div>
+  <v-progress-circular v-if="isLoadingResearchContentPage" :size="100" indeterminate color="primary"></v-progress-circular>
+  <div v-if="isLoadingResearchContentPage === false">
+    <div style="margin-bottom: 50px">
+      <div v-if="isLoadingResearchContentPage === false">
+        <div ref='deip-texture-container' class="deip-texture" 
+          :class="[{'read-only-texture': isReadOnly}]"
+          :style="{ height: contentHeight + 'px' }">
         </div>
+      </div>
+      <div v-if="isContentExpansionAvailable" class="c-m-10 right">
+        <a @click="expandContent()">{{ isContentExpanded ? 'Collapse chapter' : 'Expand chapter'}}</a>
+      </div>
     </div>
+  </div>
 </div>
 
 </template>
@@ -118,7 +117,7 @@
                 })
                 .then((texture) => {
                     self.isContentExpansionAvailable = self.getContentHeight() > window.screen.height && self.isReadOnly;
-                    self.contentHeight = self.isReadOnly ? DEFAULT_READ_CONTENT_HEIGHT : (2 * window.screen.height);
+                    self.contentHeight = self.isReadOnly ? DEFAULT_READ_CONTENT_HEIGHT : window.screen.height;
                     self.$store.dispatch('rcd/setTexture', { texture });
                 })
         }
