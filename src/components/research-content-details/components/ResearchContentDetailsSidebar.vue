@@ -33,17 +33,16 @@
         <div v-if="isPublished" class="c-mb-6 c-mt-4">
             <div class="sidebar-fullwidth"><v-divider></v-divider></div>
             <div class="subheading bold c-mt-4">Expertise Contribution Index</div>
+            
             <div class="c-mt-4">
-                <div v-for="(discipline, index) in disciplinesList" :key="index"
-                    class="row align-center justify-between eci-item" 
-                    :class="index === 0 ? '' : 'c-mt-1'">
+                <div v-for="(eci, index) in eciList" :key="index"
+                    class="row align-center justify-between eci-item c-ph-2" 
+                    :class="index === 0 ? '' : 'c-mt-1'"
+                >
+                    <div class="grey--text">ECI</div>
 
-                    <div class="c-p-2 eci-label">
-                        {{discipline.name}}:  
-
-                        {{contentWeightByDiscipline[content.id] !== undefined && 
-                        contentWeightByDiscipline[content.id][discipline.id] !== undefined ?
-                        contentWeightByDiscipline[content.id][discipline.id] : 0}}
+                    <div class="c-pv-2 eci-label">
+                        {{ eci.disciplineName }}: {{ eci.value }}
                     </div>
                 </div>
             </div>
@@ -292,6 +291,16 @@
                     text: labels[CREATE_RESEARCH_MATERIAL],
                     value: this.group.proposal_quorums[CREATE_RESEARCH_MATERIAL - 1][1]
                 } : undefined;
+            },
+            eciList() {
+                return this.disciplinesList.map(discipline => {
+                    const eciObj = this.content.eci_per_discipline.find(item => item[0] === discipline.id);
+
+                    return {
+                        disciplineName: discipline.name,
+                        value: eciObj ? eciObj[1] : 0
+                    }
+                });
             }
         },
 
