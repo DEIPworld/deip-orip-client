@@ -2,10 +2,10 @@
 <div>
   <v-progress-circular v-if="isLoadingResearchContentPage" :size="100" indeterminate color="primary"></v-progress-circular>
   <div v-if="isLoadingResearchContentPage === false">
-    <div style="margin-bottom: 50px">
-      <div v-if="isLoadingResearchContentPage === false">
+    <div>
+      <div>
         <div ref='deip-texture-container' class="deip-texture" 
-          :class="[{'read-only-texture': isReadOnly}]"
+          :class="[{ 'read-only-texture': isReadOnly }]"
           :style="{ height: contentHeight + 'px' }">
         </div>
       </div>
@@ -109,7 +109,7 @@
                             ? DeipTextureReaderApp.mount(params, container) 
                             : DeipTextureEditorApp.mount(params, container);
                         
-                        texture.on('archive:ready', () => { resolve(texture) })
+                        texture.on('archive:ready', () => { resolve(texture) });
                     })
 
                     self.isReadOnly = isReadOnly;

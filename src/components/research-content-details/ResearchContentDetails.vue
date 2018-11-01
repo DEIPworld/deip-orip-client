@@ -1,14 +1,29 @@
 <template>
   <page-container>
+    <sidebar v-if="isLoadingResearchContentPage === false && isInProgress" small>
+      <div >
+        <div>
+          <v-tooltip right>
+            <v-btn v-if="isSavingDraftAvailable" slot="activator" flat icon color="primary" 
+              @click="saveDraft()" :loading="isSavingDraft" :disabled="isSavingDraft">
+              <v-icon>save</v-icon>
+            </v-btn>
+            <span>Save Draft</span>
+          </v-tooltip>
+        </div>
+        <div>
+          <v-tooltip right>
+            <v-btn v-if="isInProgress" slot="activator" flat icon color="primary" 
+              @click="openContentProposalDialog()">
+              <v-icon>send</v-icon>
+            </v-btn>
+            <span>Propose Content</span>
+          </v-tooltip>
+        </div>
+      </div>
+    </sidebar>
     <div class="col-grow full-height">
       <div v-if="isLoadingResearchContentPage === false">
-        <div v-if="!isPublished && isResearchGroupMember" class="deip-panel-container">
-          <v-btn v-if="isInProgress" @click="openContentProposalDialog()" class="propose-content-btn" small color="primary">Propose Content</v-btn>
-          <v-btn v-if="isSavingDraftAvailable" @click="saveDraft()" :loading="isSavingDraft" :disabled="isSavingDraft" 
-            class="save-draft-btn" small color="primary">
-            Save Draft
-          </v-btn>
-        </div>
         <research-content-details-file v-if="isFileContent"></research-content-details-file>
         <research-content-details-dar v-if="isDarContent" :contentRef="contentRef"></research-content-details-dar>
         <div class="research-reviews-container" v-if="contentReviewsList.length">
@@ -17,6 +32,32 @@
             <review-list-item v-for="(review, i) in contentReviewsList" :review="review" :key="i"></review-list-item>
           </div>
         </div>
+        <v-card v-if="isInProgress">
+          <template>
+            <div class="row c-p-3">
+              <div class="c-pt-6 c-pr-4">
+                <v-icon color="primary">mdi-note-text</v-icon>
+              </div>
+              <div class="col-grow">
+                <v-text-field
+                  label="Material title"
+                  ></v-text-field>
+              </div>
+              <div class="c-pt-5 c-pl-4">
+                <v-btn class="ma-0" icon>
+                  <v-icon color="grey">close</v-icon>
+                </v-btn>
+              </div>
+            </div>
+            <v-divider></v-divider>
+          </template>
+          <div class="c-p-6">
+            <v-btn outline icon color="primary" class="ma-0">
+              <v-icon small>add</v-icon>
+            </v-btn>
+            <span class="deip-blue-color c-pl-3">Add Reference to research posted at DEIP</span>
+          </div>
+        </v-card>
         <v-dialog v-if="research" v-model="proposeContent.isOpen" persistent transition="scale-transition" max-width="500px">
           <v-card class="">
             <v-toolbar dark color="primary">
