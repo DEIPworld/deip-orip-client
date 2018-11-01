@@ -4,28 +4,49 @@ import { signOperation } from './../utils/blockchain'
 import contentHttpService from './http/content'
 import { getDecodedToken, getOwnerWif } from './../utils/auth'
 
-const contentTypes = [
-    { id: 1, text: 'Announcement', type: 'announcement' },
-    { id: 3, text: 'Article', type: 'milestone_article' },
-    { id: 4, text: 'Book', type: 'milestone_book' },
-    { id: 5, text: 'Chapter', type: 'milestone_chapter' },
-    { id: 6, text: 'Code', type: 'milestone_code' },
-    { id: 7, text: 'Conference paper', type: 'milestone_conference_paper' },
-    { id: 8, text: 'Cover page', type: 'milestone_cover_page' },
-    { id: 9, text: 'Data', type: 'milestone_data' },
-    { id: 10, text: 'Experiment findings', type: 'milestone_experiment_findings' },
-    { id: 11, text: 'Method', type: 'milestone_method' },
-    { id: 12, text: 'Negative results', type: 'milestone_negative_results' },
-    { id: 13, text: 'Patent', type: 'milestone_patent' },
-    { id: 14, text: 'Poster', type: 'milestone_poster' },
-    { id: 15, text: 'Preprint', type: 'milestone_preprint' },
-    { id: 16, text: 'Presentation', type: 'milestone_presentation' },
-    { id: 17, text: 'Raw data', type: 'milestone_raw_data' },
-    { id: 18, text: 'Research proposal', type: 'milestone_research_proposal' },
-    { id: 19, text: 'Technical report', type: 'milestone_technical_report' },
-    { id: 20, text: 'Thesis', type: 'milestone_thesis' },
+export const ANNOUNCEMENT = 1;
+export const FINAL_RESULT = 2;
+export const ARTICLE = 3;
+export const BOOK = 4;
+export const CHAPTER = 5;
+export const CODE = 6;
+export const CONFERENCE_PAPER = 7;
+export const COVER_PAGE = 8;
+export const DATA = 9;
+export const EXPERIMENT_FINDINGS = 10;
+export const METHOD = 11;
+export const NEGATIVE_RESULTS = 12;
+export const PATENT = 13;
+export const POSTER = 14;
+export const PREPRINT = 15;
+export const PRESENTATION = 16;
+export const RAW_DATA = 17;
+export const RESEARCH_PROPOSAL = 18;
+export const TECHNICAL_REPORT = 19;
+export const THESIS = 20;
 
-    { id: 2, text: 'Final Result', type: 'final_result' }
+const contentTypes = [
+    { id: ANNOUNCEMENT, text: 'Announcement', type: 'announcement' },
+    { id: ARTICLE, text: 'Article', type: 'milestone_article' },
+    { id: BOOK, text: 'Book', type: 'milestone_book' },
+    { id: CHAPTER, text: 'Chapter', type: 'milestone_chapter' },
+    { id: CODE, text: 'Code', type: 'milestone_code' },
+    { id: CONFERENCE_PAPER, text: 'Conference paper', type: 'milestone_conference_paper' },
+    { id: COVER_PAGE, text: 'Cover page', type: 'milestone_cover_page' },
+    { id: DATA, text: 'Data', type: 'milestone_data' },
+    { id: EXPERIMENT_FINDINGS, text: 'Experiment findings', type: 'milestone_experiment_findings' },
+    { id: METHOD, text: 'Method', type: 'milestone_method' },
+    { id: NEGATIVE_RESULTS, text: 'Negative results', type: 'milestone_negative_results' },
+    { id: PATENT, text: 'Patent', type: 'milestone_patent' },
+    { id: POSTER, text: 'Poster', type: 'milestone_poster' },
+    { id: PREPRINT, text: 'Preprint', type: 'milestone_preprint' },
+    { id: PRESENTATION, text: 'Presentation', type: 'milestone_presentation' },
+    { id: RAW_DATA, text: 'Raw data', type: 'milestone_raw_data' },
+    { id: RESEARCH_PROPOSAL, text: 'Research proposal', type: 'milestone_research_proposal' },
+    { id: TECHNICAL_REPORT, text: 'Technical report', type: 'milestone_technical_report' },
+    { id: THESIS, text: 'Thesis', type: 'milestone_thesis' },
+
+    { id: FINAL_RESULT, text: 'Final Result', type: 'final_result' }
 ];
 
 const createContentProposal = function(contentRef, contentType) {
