@@ -116,7 +116,7 @@
                                 {{draft.title || draft._id}}
                             </a>
                         </span>
-                        <span class="c-pl-2 italic" v-if="draftIsProposed(draft)">(proposed)</span>
+                        <span v-if="draftIsProposed(draft)" class="c-pl-2 italic orange--text">(proposed)</span>
                     </div>
                     <v-card>
                         <v-card-text class="pt-0">

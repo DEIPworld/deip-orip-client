@@ -18,7 +18,7 @@
                     </v-badge>
                 </v-btn>
 
-                <!-- temporary solution for notifications. will be done well -->
+                <!-- temporary solution for notifications. will be better -->
                 <v-list class="hidden-last-child" v-show="user.notifications.proposals.length || groupsInvites.length">
                     <template v-for="invite in groupsInvites">
                         <div class="c-pv-2 c-ph-4">
@@ -29,9 +29,9 @@
                                         params: { research_group_permlink: invite.group.permlink }
                                     }"
                                 >{{ invite.group.name }}</router-link>
-                                invites you to work in it<br>
+                                invites you to work in team<br>
                                 Please
-                                <router-link class="a" :to="{ name: 'UserDetails', params: { account_name: user.username }}">handle</router-link>
+                                <router-link class="a" :to="{ name: 'UserDetails', params: { account_name: user.username }}">review</router-link>
                                 the request
                             </div>
                             <!-- by design here should be info about time, but we have no data about it -->
@@ -44,8 +44,8 @@
                         <div class="c-pv-2 c-ph-4">
                             <div>
                                 <router-link class="a"
-                                    :to="{ name: 'UserDetails', params: { account_name: proposal.creator }}"
-                                >{{ proposal.creator }}</router-link>
+                                    :to="{ name: 'UserDetails', params: { account_name: proposal.creator.account.name }}"
+                                >{{ proposal.creator | fullname }}</router-link>
                                 created a proposal in
                                 <router-link class="a" :to="{
                                         name: 'ResearchGroupDetails', 
@@ -55,7 +55,7 @@
                             </div>
 
                             <div class="grey--text caption c-mt-1">
-                                <v-icon size="16" color="grey">event</v-icon> {{ proposal.creation_time }}
+                                <v-icon size="16" color="grey">event</v-icon> {{ new Date(`${proposal.creation_time}Z`).toDateString() }}
                             </div>
                         </div>
                         
@@ -74,11 +74,11 @@
 
                 <v-list dark dense>
                     <v-list-tile @click="goToState('UserDetails', {account_name: user.username})">
-                        <v-list-tile-title>My Page</v-list-tile-title>
+                        <v-list-tile-title>Profile</v-list-tile-title>
                     </v-list-tile>
 
                     <v-list-tile v-if="user" @click="goToState('UserWallet')">
-                        <v-list-tile-title>My Wallet</v-list-tile-title>
+                        <v-list-tile-title>Wallet</v-list-tile-title>
                     </v-list-tile>
                     
                     <v-list-tile v-if="user" @click="goToState('CreateGrant')">

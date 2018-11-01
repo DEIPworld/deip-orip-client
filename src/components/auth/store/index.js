@@ -91,33 +91,35 @@ const actions = {
     loadNotifications({ state, commit, getters }) {
         const user = getters.user;
         let tokens = undefined;
+        const proposals = [];
 
         deipRpc.api.getResearchGroupTokensByAccountAsync(user.username)
             .then(groupTokens => {
                 tokens = groupTokens;
-
-                return Promise.all(
-                    groupTokens.map(token => deipRpc.api.getProposalsByResearchGroupIdAsync(token.research_group_id))
-                )
+                return Promise.all(groupTokens.map(token => deipRpc.api.getProposalsByResearchGroupIdAsync(token.research_group_id)))
             })
             .then(proposalsList => {
                 _.each(tokens, (token, i) => {
                     _.each(proposalsList[i], proposal => proposal.groupId = token.research_group_id);
                 });
 
-                let proposals = _(proposalsList).flatten()
+                proposals.push(..._(proposalsList).flatten()
                     .filter(proposal => 
-                        proposal.creator !== user.username
-                        && !proposal.voted_accounts.some(el => el === user.username)
-                        && !proposal.is_completed
+                        // proposal.creator !== user.username && 
+                        !proposal.voted_accounts.some(el => el === user.username) && !proposal.is_completed
                     )
                     .each(proposal => {
                         proposalService.getParsedProposal(proposal);
-
                         proposal.group = _.find(user.groups, group => group.id === proposal.groupId);
                         delete proposal.groupId;
-                    });
+                    }));
 
+                return getEnrichedProfiles(proposals.map(p => p.creator));
+            })
+            .then((users) => {
+                proposals.forEach((proposal, i) => {
+                    proposal.creator = users.find(u => u.account.name == proposal.creator);
+                });
                 commit('SET_USER_NOTIFICATION_PROPOSALS', proposals);
             });
     },
