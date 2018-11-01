@@ -71,7 +71,7 @@
         </div>
         <!-- ### END Research Members Section ### -->
         
-        <sidebar-splitted-btn>
+    <!--    <sidebar-splitted-btn>
             <div slot="left" class="default-half-splitted">
                 <span class="c-m-auto clickable-label">23<br>Followers</span>
             </div>
@@ -79,61 +79,44 @@
             <div slot="right" class="default-half-splitted">
                 <span class="c-m-auto clickable-label">Follow</span>
             </div>
-        </sidebar-splitted-btn>
+        </sidebar-splitted-btn> -->
 
-        <!-- ### START Research Disciplines Section ### -->
-        <div class="research-dicsciplines-container spinner-container">
-            <v-progress-circular class="section-spinner"
-                v-if="isLoadingResearchDisciplines"
-                indeterminate color="primary"
-            ></v-progress-circular>
+        <!-- ### START Research Content ECI Section ### -->
+        <div class="c-mb-6 c-mt-4">
+            <div class="sidebar-fullwidth"><v-divider></v-divider></div>
+            <div class="subheading bold c-mt-4">Expertise Contribution Index</div>
 
-            <div v-if="isLoadingResearchDisciplines === false">
-                <div class="c-pb-6">
-                    <div class="sm-title bold c-pb-4 c-pt-4">Weight:</div>
-                    <div v-for="(discipline, index) in disciplinesList" :key="index"
-                        class="row align-center justify-between vote-btn-area" :class="index == 0 ? '':'c-mt-1'">
-                        <!--     <v-btn small color="primary" dark class="ma-0">Vote</v-btn> -->
-                        <div class="deip-blue-color c-p-2">
+            <div class="c-mt-4">
+                <div v-for="(discipline, index) in disciplinesList" :key="index"
+                    class="row align-center justify-between eci-item" :class="index === 0 ? '' : 'c-mt-1'">
+                        <div class="c-p-2 eci-label">
                             {{discipline.name}}:  
                             {{researchWeightByDiscipline[discipline.id] != null ? researchWeightByDiscipline[discipline.id] : 0}}
                         </div>
-                    </div>
                 </div>
             </div>
         </div>
-        <!-- ### END Research Disciplines Section ### -->
-
-        <div class="sidebar-fullwidth">
-            <v-divider></v-divider>
-        </div>
+        <!-- ### END Research Content ECI Section ### -->
 
     <!-- <div class="sm-title bold c-pt-6">Citations: 10</div>
         <div class="sm-title bold c-pb-6 c-mt-2">References: 2</div> -->
  
         <!-- ### START Research Info Section ### -->
-        <div class="research-info-container spinner-container">
-            <v-progress-circular class="section-spinner"
-                v-if="isLoadingResearchDetails"
-                indeterminate color="primary"
-            ></v-progress-circular>
-
-            <div v-if="isLoadingResearchDetails === false">
-                <div class="sm-title bold c-pt-6">Research Info</div>
-                <div class="c-pt-4 c-pb-6">
-                    <div>
-                        <span class="half-bold">Review reward</span>
-                        <span class="deip-blue-color right">{{convertToPercent(research.review_share_in_percent)}}%</span>
+        <div class="c-mb-6 c-mt-4">
+            <div class="sidebar-fullwidth"><v-divider></v-divider></div>
+            <div class="subheading bold c-mt-4">
+                Reviews: <span style="color: green">{{positiveReviewsCount}}</span> / <span style="color: red">{{negativeReviewsCount}}</span> 
+            </div>
+            <div class="c-pt-3">
+                <div class="caption"><v-icon small class="c-pr-2">rate_review</v-icon>Reward for review: <span class="bold">{{convertToPercent(research.review_share_in_percent)}}%</span></div>
+                    <div class="caption" v-if="isResearchRewardDistributionActive">
+                        <div><v-icon small class="c-mr-2">av_timer</v-icon>Reward period active till</div>
+                        <div class="bold"><v-icon small class="c-mr-2">today</v-icon>{{researchRewardDistributionState.end.toDateString()}}</div> 
                     </div>
-                </div>
+                </div> 
             </div>
         </div>
         <!-- ### END Research Info Section ### -->
-
-        <div class="sidebar-fullwidth">
-            <v-divider></v-divider>
-        </div>
-
        
         <!--  <div class="sm-title bold c-pt-6">Total Earned</div>
         
@@ -158,43 +141,31 @@
 
 
         <!-- ### START Research Token Holders Section ### -->
-        <div class="research-token-holders-container spinner-container">
-            <v-progress-circular class="section-spinner"
-                v-if="isLoadingResearchTokenHolders"
-                indeterminate color="primary"
-            ></v-progress-circular>
-
-            <div v-if="isLoadingResearchTokenHolders === false">
-                <div class="sm-title bold c-pt-6">Research Token Holders</div>
+        <div class="c-mb-6 c-mt-4">
+            <div class="sidebar-fullwidth"><v-divider></v-divider></div>
+            <div>
+                <div class="subheading bold c-mt-4">Research Token Holders</div>
                 <div class="c-pt-4 c-pb-6">
                     <span class="half-bold">Research group</span>
-                    <span class="deip-blue-color right">
+                    <span class="right">
                         {{convertToPercent(DEIP_100_PERCENT - tokenHoldersList.reduce((share, holder) => {
                         return share + holder.amount;}, 0))}}%
                     </span>
                     <div v-for="holder in tokenHoldersList">
                         <span class="half-bold">{{holder.account_name}}</span>
-                        <span class="deip-blue-color right">{{convertToPercent(holder.amount)}}%</span>
+                        <span class="right">{{convertToPercent(holder.amount)}}%</span>
                     </div>
                 </div>
             </div>
         </div>
         <!-- ### END Research Token Holders Section ### -->
-
-        <div class="sidebar-fullwidth">
-            <v-divider></v-divider>
-        </div>
-
+        
         <!-- ### START Research Token Sale Section ### -->
-        <div v-if="isTokenSaleSectionAvailable">
-            <div class="research-token-sale-container spinner-container">
-                <v-progress-circular class="section-spinner"
-                    v-if="isLoadingResearchTokenSale"
-                    indeterminate color="primary"
-                ></v-progress-circular>
-                
-                <div v-if="isLoadingResearchTokenSale === false">
-                    <div class="sm-title bold c-pt-6">Research Token Sale</div>
+        <div class="c-mb-6 c-mt-4" v-if="isTokenSaleSectionAvailable">
+            <div class="sidebar-fullwidth"><v-divider></v-divider></div>
+            <div>
+                <div>
+                    <div class="subheading bold c-mt-4">Research Token Sale</div>
                     <div v-if="(isMissingTokenSale && isResearchGroupMember)" class="c-pt-4 c-pb-6">
                         <router-link v-if="research" :to="`/${research.group_permlink}/create-token-sale/${research.permlink}`" style="text-decoration: none">
                             <v-btn dark round outline color="primary" class="full-width c-mt-3 c-mb-3">
@@ -206,19 +177,19 @@
                     <div v-if="isActiveTokenSale" class="c-pt-4 c-pb-6">
                         <div>
                             <span class="half-bold">On Sale</span>
-                            <span class="deip-blue-color right">{{ convertToPercent(tokenSale.balance_tokens) }}%</span>
+                            <span class="right">{{ convertToPercent(tokenSale.balance_tokens) }}%</span>
                         </div>
                         <div>
                             <span class="half-bold">Deadline</span>
-                            <span class="deip-blue-color right">{{ tokenSale.end_time | dateFormat('HH:mm D MMM YYYY', true) }}</span>
+                            <span class="right">{{ tokenSale.end_time | dateFormat('HH:mm D MMM YYYY', true) }}</span>
                         </div>
                         <div>
                             <span class="half-bold">Soft Cap</span>
-                            <span class="deip-blue-color right">{{ fromAssetsToFloat(tokenSale.soft_cap) }}</span>
+                            <span class="right">{{ fromAssetsToFloat(tokenSale.soft_cap) }}</span>
                         </div>
                         <div>
                             <span class="half-bold">Hard Cap</span>
-                            <span class="deip-blue-color right">{{ fromAssetsToFloat(tokenSale.hard_cap) }}</span>
+                            <span class="right">{{ fromAssetsToFloat(tokenSale.hard_cap) }}</span>
                         </div>
 
                         <div class="c-mt-8">
@@ -262,20 +233,19 @@
                         </div>
                     </div>
 
-                    <div v-if="isInActiveTokenSale" class="c-pt-4 c-pb-6">
-                        <div class="text-align-center">
-                            Token Sale will start on<br>
-                            {{ tokenSale.start_time | dateFormat('HH:mm D MMM YYYY', true) }}
+                    <div v-if="isInActiveTokenSale" class="c-mt-4 c-mb-6">
+                        <div>
+                            <div class="body-1">Token Sale will start on:</div>
+                            <div class="body-2">
+                                <v-icon small class="c-pr-2">av_timer</v-icon>
+                                {{ tokenSale.start_time | dateFormat('HH:mm D MMM YYYY', true) }}
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
         <!-- ### END Research Token Sale Section ### -->
-
-        <div v-if="isTokenSaleSectionAvailable" class="sidebar-fullwidth">
-            <v-divider></v-divider>
-        </div>
       </div>
     </div>
 </template>
@@ -286,6 +256,7 @@
     import joinRequestsService from './../../../services/http/joinRequests'
     import { extractName } from './../../../utils/user'
     import moment from 'moment';
+    import { contentTypes } from './../../../services/ResearchService';
 
     export default {
         name: "ResearchDetailsSidebar",
@@ -309,6 +280,7 @@
                 research: 'rd/research',
                 contentList: 'rd/contentList',
                 membersList: 'rd/membersList',
+                reviewsList: 'rd/reviewsList',
                 disciplinesList: 'rd/disciplinesList',
                 totalVotesList: 'rd/totalVotesList',
                 researchWeightByDiscipline: 'rd/researchWeightByDiscipline',
@@ -323,10 +295,29 @@
                 isLoadingResearchTokenSale: 'rd/isLoadingResearchTokenSale',
                 isLoadingResearchDetails: 'rd/isLoadingResearchDetails'
             }),
-            isResearchGroupMember(){
+            isResearchGroupMember() {
                 return this.research != null 
                     ? this.$store.getters['auth/userIsResearchGroupMember'](this.research.research_group_id) 
                     : false
+            },
+
+            positiveReviewsCount() {
+                return this.reviewsList.filter(r => r.is_positive).length;
+            },
+            negativeReviewsCount() {
+                return this.reviewsList.filter(r => !r.is_positive).length;
+            },
+            isResearchRewardDistributionActive() {
+                return this.contentList.some(c => c.content_type == 'final_result');
+            },
+            researchRewardDistributionState() {
+                const finalResult = this.contentList.find(c => c.content_type == 'final_result');
+                debugger
+                return finalResult ? {
+                    state: finalResult.activity_state,
+                    start: new Date(`${finalResult.activity_window_start}Z`),
+                    end: new Date(`${finalResult.activity_window_end}Z`)
+                } : null;
             },
             isMissingTokenSale(){
                 return this.tokenSale === null;
@@ -495,6 +486,14 @@
 
     .research-token-sale-container {
         // min-height: 150px
+    }
+
+    .eci-item {
+        border: 1px solid #e4e4e4;
+        border-radius: 3px;
+    }
+    .eci-label {
+       color: #818181;
     }
 
 </style>
