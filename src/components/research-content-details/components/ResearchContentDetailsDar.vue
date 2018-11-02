@@ -2,14 +2,14 @@
 <div>
   <v-progress-circular v-if="isLoadingResearchContentPage" :size="100" indeterminate color="primary"></v-progress-circular>
   <div v-if="isLoadingResearchContentPage === false">
-    <div style="margin-bottom: 50px">
-      <div v-if="isLoadingResearchContentPage === false">
+    <div>
+      <div>
         <div ref='deip-texture-container' class="deip-texture" 
-          :class="[{'read-only-texture': isReadOnly}]"
+          :class="[{ 'read-only-texture': isReadOnly }]"
           :style="{ height: contentHeight + 'px' }">
         </div>
       </div>
-      <div v-if="isContentExpansionAvailable" class="c-m-10 right">
+      <div v-if="isContentExpansionAvailable" class="c-m-5 right">
         <a @click="expandContent()">{{ isContentExpanded ? 'Collapse chapter' : 'Expand chapter'}}</a>
       </div>
     </div>
@@ -26,8 +26,6 @@
     import { getAccessToken, getDecodedToken } from './../../../utils/auth'
     import deipRpc from '@deip/deip-rpc-client'
 
-    const DEFAULT_READ_CONTENT_HEIGHT = 540;
-
     export default {
         name: "ResearchContentDetailsDar",
         props: {
@@ -39,7 +37,7 @@
                 isReadOnly: undefined,
                 isContentExpansionAvailable: undefined,
                 isContentExpanded: false,
-                contentHeight: DEFAULT_READ_CONTENT_HEIGHT
+                contentHeight: window.screen.height * 0.7
             }
         },
         computed: {
@@ -60,15 +58,31 @@
             expandContent() {
                 this.isContentExpanded = !this.isContentExpanded;
                 if (this.isContentExpanded) {
-                    let contentHeight = this.getContentHeight();
-                    this.contentHeight = contentHeight > DEFAULT_READ_CONTENT_HEIGHT ? contentHeight : DEFAULT_READ_CONTENT_HEIGHT;
+                    let height = this.getContentHeight();
+                    height = height > (window.screen.height * 0.7) ? (height + 100) : (window.screen.height * 0.7);
+                    this.contentHeight = height;
                 } else {
-                    this.contentHeight = DEFAULT_READ_CONTENT_HEIGHT;
+                    this.contentHeight = window.screen.height * 0.7;
                 }
             },
             getContentHeight() {
                 const contentEl = document.querySelector('.se-content');
                 return contentEl && contentEl.offsetHeight ? contentEl.offsetHeight : 0;
+            },
+            setContentHeight() {
+                let height = this.getContentHeight();
+                let isHigherThanHalfScreen = height > window.screen.height * 0.5;
+                height = isHigherThanHalfScreen ? (height + 100) : (window.screen.height * 0.7);
+                this.contentHeight = height;
+            },
+            setDefaultContentHeight() {
+                let height = this.getContentHeight();
+                let isHigherThanScreen = height > window.screen.height;
+                this.isContentExpansionAvailable = this.isReadOnly && isHigherThanScreen;
+                height = this.isReadOnly 
+                    ? (window.screen.height * 0.7)
+                    : isHigherThanScreen ? (height + 100) : (window.screen.height * 0.7);
+                this.contentHeight = height;
             }
         },
         mounted () {
@@ -92,6 +106,8 @@
                         || this.contentRef.status != "in-progress"
                         || !groups.some(id => id == research.research_group_id);
 
+                    self.isReadOnly = isReadOnly;
+
                     const archiveId = self.contentRef._id;
                     const storageType = 'fs';
                     const storageUrl = `${self.fileStorageBaseUrl}/content`;
@@ -104,20 +120,24 @@
                         };
 
                         const viewName = isReadOnly ? 'reader' : 'manuscript';
-                        const params = { archiveId, storageType, storageUrl, headers, viewName };
+                        const deip = { tocThreshold: isReadOnly ? 900: 1200 };
+                        const params = { archiveId, storageType, storageUrl, headers, viewName, deip };
                         const texture = isReadOnly
                             ? DeipTextureReaderApp.mount(params, container) 
                             : DeipTextureEditorApp.mount(params, container);
                         
-                        texture.on('archive:ready', () => { resolve(texture) })
+                        texture.on('archive:ready', () => {
+                            texture.state.archive.on('archive:changed', self.setContentHeight);
+                            setTimeout(() => {
+                                self.setDefaultContentHeight();
+                            }, 100)
+                            resolve(texture);
+                        });
                     })
 
-                    self.isReadOnly = isReadOnly;
                     return promise;
                 })
                 .then((texture) => {
-                    self.isContentExpansionAvailable = self.getContentHeight() > window.screen.height && self.isReadOnly;
-                    self.contentHeight = self.isReadOnly ? DEFAULT_READ_CONTENT_HEIGHT : window.screen.height;
                     self.$store.dispatch('rcd/setTexture', { texture });
                 })
         }

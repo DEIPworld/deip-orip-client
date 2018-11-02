@@ -1,14 +1,29 @@
 <template>
   <page-container>
+    <sidebar v-if="isLoadingResearchContentPage === false && isInProgress" small>
+      <div >
+        <div>
+          <v-tooltip right>
+            <v-btn v-if="isSavingDraftAvailable" slot="activator" flat icon color="primary" 
+              @click="saveDraft()" :loading="isSavingDraft" :disabled="isSavingDraft">
+              <v-icon>save</v-icon>
+            </v-btn>
+            <span>Save Draft</span>
+          </v-tooltip>
+        </div>
+        <div>
+          <v-tooltip right>
+            <v-btn v-if="isInProgress" slot="activator" flat icon color="primary" 
+              @click="openContentProposalDialog()">
+              <v-icon>send</v-icon>
+            </v-btn>
+            <span>Propose Content</span>
+          </v-tooltip>
+        </div>
+      </div>
+    </sidebar>
     <div class="col-grow full-height">
       <div v-if="isLoadingResearchContentPage === false">
-        <div v-if="!isPublished && isResearchGroupMember" class="deip-panel-container">
-          <v-btn v-if="isInProgress" @click="openContentProposalDialog()" class="propose-content-btn" small color="primary">Propose Content</v-btn>
-          <v-btn v-if="isSavingDraftAvailable" @click="saveDraft()" :loading="isSavingDraft" :disabled="isSavingDraft" 
-            class="save-draft-btn" small color="primary">
-            Save Draft
-          </v-btn>
-        </div>
         <research-content-details-file v-if="isFileContent"></research-content-details-file>
         <research-content-details-dar v-if="isDarContent" :contentRef="contentRef"></research-content-details-dar>
         <div class="research-reviews-container" v-if="contentReviewsList.length">
@@ -17,6 +32,53 @@
             <review-list-item v-for="(review, i) in contentReviewsList" :review="review" :key="i"></review-list-item>
           </div>
         </div>
+
+
+        <!-- START Research Content References section -->
+        <v-card v-if="isInProgress">
+          <template>
+            <div class="row c-p-3 c-mb-5">
+              <div class="col-grow">
+                <div class="row c-mh-auto group-members-max-width">
+                  <div class="col-12">
+                    <div>
+                      <div class="row-nowrap justify-between align-center c-pt-4"
+                        v-for="(reference, i) in internalReferences.selected" :key="i + '-picked'">
+                        <div>
+                          {{reference}}
+                        </div>
+                        <v-btn @click="removeReference(reference)" flat color="grey" class="ma-0">Remove</v-btn>
+                      </div>
+                    </div>
+                    <v-divider class="c-mt-4 c-mb-4" v-show="internalReferences.selected.length"></v-divider>
+                    <div>
+                      <div class="row-nowrap justify-between align-center c-pt-4" v-for="(reference, i) in internalReferences.searchable" 
+                        :key="i + '-selectable'" v-if="!isReferenceSelected(reference)">
+                        <div>
+                          {{reference}}
+                        </div>
+                        <v-btn @click="addReference(reference)" flat color="primary" class="ma-0">+ Add reference</v-btn>
+                      </div>
+                    </div>
+                    <v-text-field
+                      label="Add references to material posted at DEIP"
+                      single-line
+                      append-icon="search"
+                      prepend-icon="mdi-note-text"
+                      v-model="internalReferences.search"
+                      @input="searchReferences()">
+                    </v-text-field>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <v-divider></v-divider>
+          </template>
+        </v-card>
+        <!-- END Research Content References section -->
+
+
+        <!-- START Proposal dialog section -->
         <v-dialog v-if="research" v-model="proposeContent.isOpen" persistent transition="scale-transition" max-width="500px">
           <v-card class="">
             <v-toolbar dark color="primary">
@@ -82,6 +144,7 @@
             </page-container>
           </v-card>
         </v-dialog>
+        <!-- END Proposal dialog section -->
       </div>
     </div>
     <sidebar>
@@ -98,7 +161,7 @@
 
     export default {
         name: "ResearchContentDetails",
-        data() { 
+        data() {
             return {
                 isSavingDraft: false,
                 proposeContent: {
@@ -109,8 +172,26 @@
                     deipRefs: [],
                     isOpen: false,
                     isLoading: false
-                }
-            } 
+                },
+
+                internalReferences: {
+                    loading: false,
+                    selected: [],
+                    search: '',
+                    searchable: []
+                },
+                
+                // TODO: Replace with server call
+                references: [
+                    'DEIP High-Level Roadmap', 
+                    'Object vision to hand action in macaque parietal, premotor, and motor cortices',
+                    'Simultaneous two-photon imaging and two-photon optogenetics of cortical circuits in three dimensions',
+                    'Data Categories for Marine Planning',
+                    'Purpose of Category Terms',
+                    'Data Needs for Ocean and Coastal Management',
+                    'Data Category Terms and Definitions'
+                ]
+            }
         },
         computed:{
             ...mapGetters({
@@ -267,6 +348,33 @@
 
             isAuthorSelected(member) {
                 return this.proposeContent.authors.some(a => a.account.name === member.account.name)
+            },
+            
+            searchReferences: _.debounce(
+                function() {
+                    const q = this.internalReferences.search.toLowerCase();
+                    if (!q) {
+                        this.internalReferences.searchable = [];
+                        return;
+                    };
+                    this.internalReferences.searchable = this.references.filter(ref => {
+                        return ref.toLowerCase().startsWith(q);
+                    })
+                }, 600
+            ),
+
+            addReference(ref) {
+                if (!this.internalReferences.selected.some(r => r == ref)) {
+                    this.internalReferences.selected.push(ref);
+                }
+            },
+
+            removeReference(ref) {
+                this.internalReferences.selected = this.internalReferences.selected.filter(r => r != ref);
+            },
+
+            isReferenceSelected(ref) {
+                return this.internalReferences.selected.some(r => r == ref);
             }
         },
         created() {

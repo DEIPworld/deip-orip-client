@@ -312,7 +312,6 @@
             },
             researchRewardDistributionState() {
                 const finalResult = this.contentList.find(c => c.content_type == 'final_result');
-                debugger
                 return finalResult ? {
                     state: finalResult.activity_state,
                     start: new Date(`${finalResult.activity_window_start}Z`),
