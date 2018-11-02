@@ -37,7 +37,7 @@
                 isReadOnly: undefined,
                 isContentExpansionAvailable: undefined,
                 isContentExpanded: false,
-                contentHeight: window.screen.height * 0.7
+                contentHeight: window.screen.height
             }
         },
         computed: {
@@ -59,7 +59,7 @@
                 this.isContentExpanded = !this.isContentExpanded;
                 if (this.isContentExpanded) {
                     let height = this.getContentHeight();
-                    height = height > (window.screen.height * 0.7) ? (height + 100) : (window.screen.height * 0.7);
+                    height = height > (window.screen.height * 0.7) ? (height + 100) : (window.screen.height);
                     this.contentHeight = height;
                 } else {
                     this.contentHeight = window.screen.height * 0.7;
@@ -71,8 +71,8 @@
             },
             setContentHeight() {
                 let height = this.getContentHeight();
-                let isHigherThanHalfScreen = height > window.screen.height * 0.5;
-                height = isHigherThanHalfScreen ? (height + 100) : (window.screen.height * 0.7);
+                let isHigherThanHalfScreen = height > window.screen.height * 0.85;
+                height = isHigherThanHalfScreen ? (height + 100) : (window.screen.height);
                 this.contentHeight = height;
             },
             setDefaultContentHeight() {
@@ -81,7 +81,7 @@
                 this.isContentExpansionAvailable = this.isReadOnly && isHigherThanScreen;
                 height = this.isReadOnly 
                     ? (window.screen.height * 0.7)
-                    : isHigherThanScreen ? (height + 100) : (window.screen.height * 0.7);
+                    : isHigherThanScreen ? (height + 100) : (window.screen.height);
                 this.contentHeight = height;
             }
         },
