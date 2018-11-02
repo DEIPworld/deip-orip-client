@@ -12,12 +12,36 @@
                 </v-btn>
             </div>
         </div>
+
+        <div class="sidebar-fullwidth">
+            <v-divider></v-divider>
+        </div>
+
+        <div class="c-mb-6 c-mt-4" v-if="eciList.length">
+
+            <div class="subheading bold c-mt-4">Expertise Contribution Index</div>
+
+            <div class="c-mt-4">
+                <div v-for="(eci, index) in eciList" :key="index"
+                    class="row align-center justify-between eci-item c-ph-2"
+                    :class="index === 0 ? '' : 'c-mt-1'"
+                >
+                    <div class="grey--text">ECI</div>
+                    <div class="c-pv-2 eci-label">{{ eci.disciplineName }}: {{ eci.value }}</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="sidebar-fullwidth">
+            <v-divider></v-divider>
+        </div>
     </div>
 </template>
 
 <script>
     import { mapGetters } from 'vuex';
     import deipRpc from '@deip/deip-rpc-client';
+    import * as disciplineTreeService from '../../common/disciplines/DisciplineTreeService'; 
 
     export default {
         name: "ResearchContentReviewSidebar",
@@ -48,6 +72,14 @@
                 return this.review != null ? 
                     this.review.votes.some(vote => vote.voter === this.user.username) 
                     : false;
+            },
+            eciList() {
+                return this.review.evaluation_per_discipline.map(item => {
+                    return {
+                        disciplineName: disciplineTreeService.getNodeById(item[0]).label,
+                        value: item[1]
+                    };
+                });
             }
         },
         methods: {
@@ -115,4 +147,11 @@
 </script>
 
 <style lang="less" scoped>
+    .eci-item {
+        border: 1px solid #e4e4e4;
+        border-radius: 3px;
+    }
+    .eci-label {
+       color: #818181;
+    }
 </style>
