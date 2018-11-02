@@ -120,7 +120,8 @@
                         };
 
                         const viewName = isReadOnly ? 'reader' : 'manuscript';
-                        const params = { archiveId, storageType, storageUrl, headers, viewName };
+                        const deip = { tocThreshold: isReadOnly ? 900: 1200 };
+                        const params = { archiveId, storageType, storageUrl, headers, viewName, deip };
                         const texture = isReadOnly
                             ? DeipTextureReaderApp.mount(params, container) 
                             : DeipTextureEditorApp.mount(params, container);

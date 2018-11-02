@@ -32,32 +32,53 @@
             <review-list-item v-for="(review, i) in contentReviewsList" :review="review" :key="i"></review-list-item>
           </div>
         </div>
+
+
+        <!-- START Research Content References section -->
         <v-card v-if="isInProgress">
           <template>
-            <div class="row c-p-3">
-              <div class="c-pt-6 c-pr-4">
-                <v-icon color="primary">mdi-note-text</v-icon>
-              </div>
+            <div class="row c-p-3 c-mb-5">
               <div class="col-grow">
-                <v-text-field
-                  label="Material title"
-                  ></v-text-field>
-              </div>
-              <div class="c-pt-5 c-pl-4">
-                <v-btn class="ma-0" icon>
-                  <v-icon color="grey">close</v-icon>
-                </v-btn>
+                <div class="row c-mh-auto group-members-max-width">
+                  <div class="col-12">
+                    <div>
+                      <div class="row-nowrap justify-between align-center c-pt-4"
+                        v-for="(reference, i) in internalReferences.selected" :key="i + '-picked'">
+                        <div>
+                          {{reference}}
+                        </div>
+                        <v-btn @click="removeReference(reference)" flat color="grey" class="ma-0">Remove</v-btn>
+                      </div>
+                    </div>
+                    <v-divider class="c-mt-4 c-mb-4" v-show="internalReferences.selected.length"></v-divider>
+                    <div>
+                      <div class="row-nowrap justify-between align-center c-pt-4" v-for="(reference, i) in internalReferences.searchable" 
+                        :key="i + '-selectable'" v-if="!isReferenceSelected(reference)">
+                        <div>
+                          {{reference}}
+                        </div>
+                        <v-btn @click="addReference(reference)" flat color="primary" class="ma-0">+ Add reference</v-btn>
+                      </div>
+                    </div>
+                    <v-text-field
+                      label="Add references to material posted at DEIP"
+                      single-line
+                      append-icon="search"
+                      prepend-icon="mdi-note-text"
+                      v-model="internalReferences.search"
+                      @input="searchReferences()">
+                    </v-text-field>
+                  </div>
+                </div>
               </div>
             </div>
             <v-divider></v-divider>
           </template>
-          <div class="c-p-6">
-            <v-btn outline icon color="primary" class="ma-0">
-              <v-icon small>add</v-icon>
-            </v-btn>
-            <span class="deip-blue-color c-pl-3">Add Reference to research posted at DEIP</span>
-          </div>
         </v-card>
+        <!-- END Research Content References section -->
+
+
+        <!-- START Proposal dialog section -->
         <v-dialog v-if="research" v-model="proposeContent.isOpen" persistent transition="scale-transition" max-width="500px">
           <v-card class="">
             <v-toolbar dark color="primary">
@@ -123,6 +144,7 @@
             </page-container>
           </v-card>
         </v-dialog>
+        <!-- END Proposal dialog section -->
       </div>
     </div>
     <sidebar>
@@ -139,7 +161,7 @@
 
     export default {
         name: "ResearchContentDetails",
-        data() { 
+        data() {
             return {
                 isSavingDraft: false,
                 proposeContent: {
@@ -150,8 +172,26 @@
                     deipRefs: [],
                     isOpen: false,
                     isLoading: false
-                }
-            } 
+                },
+
+                internalReferences: {
+                    loading: false,
+                    selected: [],
+                    search: '',
+                    searchable: []
+                },
+                
+                // TODO: Replace with server call
+                references: [
+                    'DEIP High-Level Roadmap', 
+                    'Object vision to hand action in macaque parietal, premotor, and motor cortices',
+                    'Simultaneous two-photon imaging and two-photon optogenetics of cortical circuits in three dimensions',
+                    'Data Categories for Marine Planning',
+                    'Purpose of Category Terms',
+                    'Data Needs for Ocean and Coastal Management',
+                    'Data Category Terms and Definitions'
+                ]
+            }
         },
         computed:{
             ...mapGetters({
@@ -308,6 +348,33 @@
 
             isAuthorSelected(member) {
                 return this.proposeContent.authors.some(a => a.account.name === member.account.name)
+            },
+            
+            searchReferences: _.debounce(
+                function() {
+                    const q = this.internalReferences.search.toLowerCase();
+                    if (!q) {
+                        this.internalReferences.searchable = [];
+                        return;
+                    };
+                    this.internalReferences.searchable = this.references.filter(ref => {
+                        return ref.toLowerCase().startsWith(q);
+                    })
+                }, 600
+            ),
+
+            addReference(ref) {
+                if (!this.internalReferences.selected.some(r => r == ref)) {
+                    this.internalReferences.selected.push(ref);
+                }
+            },
+
+            removeReference(ref) {
+                this.internalReferences.selected = this.internalReferences.selected.filter(r => r != ref);
+            },
+
+            isReferenceSelected(ref) {
+                return this.internalReferences.selected.some(r => r == ref);
             }
         },
         created() {
