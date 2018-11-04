@@ -250,7 +250,7 @@
                             return contentHttpService.getContentRef(this.contentRef._id);
                         });
                 } else if (this.isFileContent) {
-                    return contentHttpService.getContentRef(this.contentRef._id);
+                    promise = contentHttpService.getContentRef(this.contentRef._id);
                 }
 
                 promise
@@ -305,24 +305,26 @@
             },
             setDraftAuthors(authors) {
                 if (!authors.length) return; // do not set empty list to texture
-                const texture = this.$store.getters['rcd/texture']; 
-                const persons = texture.api.getAuthors();
-                const deletedAuthors = persons
-                    .filter(p => !authors.some(a => a.account.name == p.alias))
-                    // filter out authors without DEIP account
-                    .filter(p => this.membersList.some(m => m.account.name === p.alias));
-                const addedAuthors = authors.filter(a => !persons.some(p => a.account.name == p.alias)); 
-                for (let i = 0; i < deletedAuthors.length; i++) { 
-                    let person = deletedAuthors[i];
-                    texture.api.removeAuthor(person);
-                } 
+                if (this.isDarContent) {
+                    const texture = this.$store.getters['rcd/texture']; 
+                    const persons = texture.api.getAuthors();
+                    const deletedAuthors = persons
+                        .filter(p => !authors.some(a => a.account.name == p.alias))
+                        // filter out authors without DEIP account
+                        .filter(p => this.membersList.some(m => m.account.name === p.alias));
+                    const addedAuthors = authors.filter(a => !persons.some(p => a.account.name == p.alias)); 
+                    for (let i = 0; i < deletedAuthors.length; i++) { 
+                        let person = deletedAuthors[i];
+                        texture.api.removeAuthor(person);
+                    }
 
-                for (let i = 0; i < addedAuthors.length; i++) { 
-                    let author = addedAuthors[i];
-                    let alias = author.account.name;
-                    let surname = author.profile && author.profile.lastName ? author.profile.lastName : "";
-                    let givenName = author.profile && author.profile.firstName ? author.profile.firstName : alias;
-                    texture.api.addAuthor(alias, surname, givenName);
+                    for (let i = 0; i < addedAuthors.length; i++) { 
+                        let author = addedAuthors[i];
+                        let alias = author.account.name;
+                        let surname = author.profile && author.profile.lastName ? author.profile.lastName : "";
+                        let givenName = author.profile && author.profile.firstName ? author.profile.firstName : alias;
+                        texture.api.addAuthor(alias, surname, givenName);
+                    }
                 }
                 this.$store.dispatch('rcd/setDraftAuthors', authors.map(a => a.account.name));
             },
@@ -358,25 +360,29 @@
             ),
             
             addReference(ref) {
-                const texture = this.$store.getters['rcd/texture'];
-                if (!this.internalReferences.selected.some(r => r.title == ref.title)) {
-                    let uri = `${location.protocol}//${process.env.HOST}/#/${ref.group_permlink}/research/${ref.research_permlink}/${ref.permlink}`;
-                    let title = `${ref.title} (${ref.research_title})`, containerTitle = title;
-                    texture.api.addReference(uri, title, containerTitle);
-                    this.internalReferences.selected.push(ref);
-                    this.internalReferences.search = '';
-                    this.internalReferences.searchable = [];
-                    this.$store.dispatch('rcd/setDraftReferences', this.internalReferences.selected.map(r => r.id));
+                if (this.isDarContent) {
+                    const texture = this.$store.getters['rcd/texture'];
+                    if (!this.internalReferences.selected.some(r => r.title == ref.title)) {
+                        let uri = `${location.protocol}//${process.env.HOST}/#/${ref.group_permlink}/research/${ref.research_permlink}/${ref.permlink}`;
+                        let title = `${ref.title} (${ref.research_title})`, containerTitle = title;
+                        texture.api.addReference(uri, title, containerTitle);
+                        this.internalReferences.selected.push(ref);
+                        this.internalReferences.search = '';
+                        this.internalReferences.searchable = [];
+                        this.$store.dispatch('rcd/setDraftReferences', this.internalReferences.selected.map(r => r.id));
+                    }
                 }
             },
             
             removeReference(ref) {
-                const texture = this.$store.getters['rcd/texture'];
-                let uri = `${location.protocol}//${process.env.HOST}/#/${ref.group_permlink}/research/${ref.research_permlink}/${ref.permlink}`;
-                let reference = texture.api.getReferences().find(r => r.uri == uri);
-                texture.api.removeReference(reference);
-                this.internalReferences.selected = this.internalReferences.selected.filter(r => r.title != ref.title);
-                this.$store.dispatch('rcd/setDraftReferences', this.internalReferences.selected.map(r => r.id));
+                if (this.isDarContent) {
+                    const texture = this.$store.getters['rcd/texture'];
+                    let uri = `${location.protocol}//${process.env.HOST}/#/${ref.group_permlink}/research/${ref.research_permlink}/${ref.permlink}`;
+                    let reference = texture.api.getReferences().find(r => r.uri == uri);
+                    texture.api.removeReference(reference);
+                    this.internalReferences.selected = this.internalReferences.selected.filter(r => r.title != ref.title);
+                    this.$store.dispatch('rcd/setDraftReferences', this.internalReferences.selected.map(r => r.id));
+                }
             },
 
             isReferenceSelected(ref) {
