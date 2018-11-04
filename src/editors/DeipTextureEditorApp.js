@@ -70,28 +70,6 @@ export default class DeipTextureEditorApp extends TextureWebApp {
         return authorsNode.children;
       },
 
-      getDeipReferences: () => {
-        const refs = this.api.getReferences();
-        const webpageRefs = refs.filter(r => r.type === 'webpage-ref');
-        const deipRefs = webpageRefs
-          .map(wr => {
-            const source = wr.uri || wr.containerTitle;
-            try {
-              const url = new URL(source);
-              if (url.host === process.env.HOST) {
-                const segments = url.hash.split('/');
-                const researchGroupPermlink = segments[1];
-                const researchPermlink = segments[3];
-                const researchContentPermlink = segments[4];
-                return { researchGroupPermlink, researchPermlink, researchContentPermlink }
-              }
-            } catch(err){}
-              return null;
-            })
-          .filter(r => r != null);
-          return deipRefs;
-      },
-
       addAuthor: (alias, surname, givenNames) => {
         if (!this.refs.texture) return;
         const collectionId = "authors";
@@ -116,6 +94,31 @@ export default class DeipTextureEditorApp extends TextureWebApp {
         editorSession.transaction(tx => {
           tx.get(collectionId).removeChild(tx.get(person.id))
           tx.delete(person.id)
+        })
+        // refresh view
+        this.refs.texture.refs.resource.send('updateViewName', 'manuscript')
+      },
+
+      addReference: (uri, title, containerTitle) => {
+        if (!this.refs.texture) return;
+        const collectionId = "references";
+        const ref = { type: "webpage-ref", uri, title, containerTitle };
+        const editorSession = this.refs.texture.refs.resource.refs.content.editorSession;
+        editorSession.transaction(tx => {
+          let node = tx.create(ref)
+          tx.get(collectionId).appendChild(node);
+        })
+        // refresh view
+        this.refs.texture.refs.resource.send('updateViewName', 'manuscript')
+      },
+
+      removeReference: (reference) => {
+        if (!this.refs.texture) return;
+        const collectionId = "references";
+        const editorSession = this.refs.texture.refs.resource.refs.content.editorSession;
+        editorSession.transaction(tx => {
+          tx.get(collectionId).removeChild(tx.get(reference.id))
+          tx.delete(reference.id)
         })
         // refresh view
         this.refs.texture.refs.resource.send('updateViewName', 'manuscript')

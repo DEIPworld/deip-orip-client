@@ -18,7 +18,14 @@
             <div v-if="isProposed || isUnlockActionAvailable" class="sidebar-fullwidth"><v-divider></v-divider></div>
             <div v-if="isProposed" class="c-mt-3 c-mb-3">
                 <div class="subheading orange--text text-align-center">
-                    Draft is proposed as research content and locked for editing
+                    Draft is
+                    <router-link class="a orange--text" 
+                        :to="{ name: 'ResearchGroupDetails', params: { 
+                                research_group_permlink: research.group_permlink
+                            }}">
+                        proposed
+                    </router-link>
+                    as research content and locked for editing
                 </div>
             </div>
             <div v-if="isUnlockActionAvailable" class="c-mt-3 c-mb-3">
