@@ -30,7 +30,7 @@
             </div>
             <div v-if="isUnlockActionAvailable" class="c-mt-3 c-mb-3">
                 <div class="text-align-center">
-                    <v-btn @click="unlockDraft()">Unlock Draft</v-btn>
+                    <v-btn color="orange" @click="unlockDraft()">Unlock Draft</v-btn>
                 </div>
             </div>
         </div>
