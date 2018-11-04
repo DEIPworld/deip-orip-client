@@ -23,6 +23,9 @@ Vue.component('discipline-tree-item', DisciplineTreeItem);
 import AdvancedDisciplinePicker from './disciplines/components/AdvancedDisciplinePicker';
 Vue.component('advanced-discipline-picker', AdvancedDisciplinePicker);
 
+import InternalReferencesPicker from './components/InternalReferencesPicker';
+Vue.component('internal-references-picker', InternalReferencesPicker);
+
 // filters
 
 import './filters/index';

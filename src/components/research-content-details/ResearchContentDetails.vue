@@ -1,7 +1,7 @@
 <template>
   <page-container>
     <sidebar v-if="isLoadingResearchContentPage === false && isInProgress" small>
-      <div >
+      <div>
         <div>
           <v-tooltip right>
             <v-btn v-if="isSavingDraftAvailable" slot="activator" flat icon color="primary" 
@@ -33,53 +33,16 @@
           </div>
         </div>
 
-
         <!-- START Research Content References section -->
-        <v-card v-if="isInProgress && isDarContent">
-          <template>
-            <div class="row c-p-3 c-mb-5">
-              <div class="col-grow">
-                <div class="row c-mh-auto group-members-max-width">
-                  <div class="col-12">
-               <!-- <div>
-                      <div class="row-nowrap justify-between align-center c-pt-4"
-                        v-for="(reference, i) in internalReferences.selected" :key="i + '-picked'">
-                        <div>
-                          {{reference.title}} ({{reference.research_title}})
-                        </div>
-                        <v-btn @click="removeReference(reference)" flat color="grey" class="ma-0">Remove</v-btn>
-                      </div>
-                    </div>
-                    <v-divider class="c-mt-4 c-mb-4" v-show="internalReferences.selected.length"></v-divider> -->
-                    <div>
-                      <div class="row-nowrap justify-between align-center c-pt-4" v-for="(reference, i) in internalReferences.searchable" 
-                        :key="i + '-selectable'" v-if="!isReferenceSelected(reference)">
-                        <div>
-                            <router-link target="_blank" class="a body-1"
-                                :to="{ name: 'ResearchContentDetails', params: { research_group_permlink: reference.group_permlink, research_permlink: reference.research_permlink, content_permlink: reference.permlink } }">
-                                {{reference.title}} ({{reference.research_title}})
-                            </router-link>
-                        </div>
-                        <v-btn @click="addReference(reference)" flat color="primary" class="ma-0">+ Add reference</v-btn>
-                      </div>
-                    </div>
-                    <v-text-field
-                      label="Add references to material posted at DEIP"
-                      single-line
-                      append-icon="search"
-                      prepend-icon="mdi-note-text"
-                      v-model="internalReferences.search"
-                      @input="searchReferences()">
-                    </v-text-field>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <v-divider></v-divider>
-          </template>
-        </v-card>
+        <div v-if="isInProgress && isDarContent">
+            <internal-references-picker 
+                :currentResearchId="research.id"
+                :preselected="contentRef.references.slice()" 
+                @referenceAdded="addReference" 
+                @referenceRemoved="removeReference">
+            </internal-references-picker>
+        </div>
         <!-- END Research Content References section -->
-
 
         <!-- START Proposal dialog section -->
         <v-dialog v-if="research" v-model="proposeContent.isOpen" persistent transition="scale-transition" max-width="500px">
@@ -173,19 +136,9 @@
                     type: null,
                     authors: [],
                     contentTypes: contentTypes,
-                    references: [],
                     isOpen: false,
                     isLoading: false
-                },
-
-                internalReferences: {
-                    loading: false,
-                    selected: [],
-                    search: '',
-                    searchable: []
-                },
-                
-                references: []
+                }
             }
         },
         computed:{
@@ -333,60 +286,27 @@
                 return this.proposeContent.authors.some(a => a.account.name === member.account.name)
             },
             
-            searchReferences: _.debounce(
-                function() {
-                    const q = this.internalReferences.search.toLowerCase();
-                    if (!q) {
-                        this.internalReferences.searchable = [];
-                        return;
-                    };
-                    if (!this.references.length) {
-                        searchHttpService.getAllResearchContents()
-                            .then((contents) => {
-                                this.references.push(...contents);
-                                this.internalReferences.searchable = filter.call(this, q);
-                            });
-                    } else {
-                        this.internalReferences.searchable = filter.call(this, q);
-                    }
-
-                    function filter(term) {
-                        return this.references.filter(content => {
-                            return content.title.toLowerCase().startsWith(term) && content.research_id != this.research.id;
-                        });
-                    }
-                    
-                }, 600
-            ),
-            
             addReference(ref) {
                 if (this.isDarContent) {
                     const texture = this.$store.getters['rcd/texture'];
-                    if (!this.internalReferences.selected.some(r => r.title == ref.title)) {
-                        let uri = `${location.protocol}//${process.env.HOST}/#/${ref.group_permlink}/research/${ref.research_permlink}/${ref.permlink}`;
-                        let title = `${ref.title} (${ref.research_title})`, containerTitle = title;
-                        texture.api.addReference(uri, title, containerTitle);
-                        this.internalReferences.selected.push(ref);
-                        this.internalReferences.search = '';
-                        this.internalReferences.searchable = [];
-                        this.$store.dispatch('rcd/setDraftReferences', this.internalReferences.selected.map(r => r.id));
-                    }
+                    const uri = `${location.protocol}//${process.env.HOST}/#/${ref.group_permlink}/research/${ref.research_permlink}/${ref.permlink}`;
+                    const title = `${ref.title} (${ref.research_title})`, containerTitle = title;
+                    const refs = this.contentRef.references.slice();
+                    texture.api.addReference(uri, title, containerTitle);
+                    refs.push(ref.id);
+                    this.$store.dispatch('rcd/setDraftReferences', refs);
                 }
             },
             
             removeReference(ref) {
                 if (this.isDarContent) {
                     const texture = this.$store.getters['rcd/texture'];
-                    let uri = `${location.protocol}//${process.env.HOST}/#/${ref.group_permlink}/research/${ref.research_permlink}/${ref.permlink}`;
-                    let reference = texture.api.getReferences().find(r => r.uri == uri);
+                    const uri = `${location.protocol}//${process.env.HOST}/#/${ref.group_permlink}/research/${ref.research_permlink}/${ref.permlink}`;
+                    const reference = texture.api.getReferences().find(r => r.uri == uri);
                     texture.api.removeReference(reference);
-                    this.internalReferences.selected = this.internalReferences.selected.filter(r => r.title != ref.title);
-                    this.$store.dispatch('rcd/setDraftReferences', this.internalReferences.selected.map(r => r.id));
+                    const refs = this.contentRef.references.slice().filter(r => r != ref.id);
+                    this.$store.dispatch('rcd/setDraftReferences', refs);
                 }
-            },
-
-            isReferenceSelected(ref) {
-                return this.contentRef.references.some(r => r == ref.id);
             }
         },
         created() {
