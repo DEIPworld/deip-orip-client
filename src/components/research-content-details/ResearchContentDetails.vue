@@ -35,27 +35,30 @@
 
 
         <!-- START Research Content References section -->
-        <v-card v-if="isInProgress">
+        <v-card v-if="isInProgress && isDarContent">
           <template>
             <div class="row c-p-3 c-mb-5">
               <div class="col-grow">
                 <div class="row c-mh-auto group-members-max-width">
                   <div class="col-12">
-                    <div>
+               <!-- <div>
                       <div class="row-nowrap justify-between align-center c-pt-4"
                         v-for="(reference, i) in internalReferences.selected" :key="i + '-picked'">
                         <div>
-                          {{reference}}
+                          {{reference.title}} ({{reference.research_title}})
                         </div>
                         <v-btn @click="removeReference(reference)" flat color="grey" class="ma-0">Remove</v-btn>
                       </div>
                     </div>
-                    <v-divider class="c-mt-4 c-mb-4" v-show="internalReferences.selected.length"></v-divider>
+                    <v-divider class="c-mt-4 c-mb-4" v-show="internalReferences.selected.length"></v-divider> -->
                     <div>
                       <div class="row-nowrap justify-between align-center c-pt-4" v-for="(reference, i) in internalReferences.searchable" 
                         :key="i + '-selectable'" v-if="!isReferenceSelected(reference)">
                         <div>
-                          {{reference}}
+                            <router-link target="_blank" class="a body-1"
+                                :to="{ name: 'ResearchContentDetails', params: { research_group_permlink: reference.group_permlink, research_permlink: reference.research_permlink, content_permlink: reference.permlink } }">
+                                {{reference.title}} ({{reference.research_title}})
+                            </router-link>
                         </div>
                         <v-btn @click="addReference(reference)" flat color="primary" class="ma-0">+ Add reference</v-btn>
                       </div>
@@ -158,6 +161,7 @@
     import deipRpc from '@deip/deip-rpc-client';
     import { contentTypes, createContentProposal } from './../../services/ResearchService';
     import contentHttpService from './../../services/http/content';
+    import searchHttpService from './../../services/http/search'
 
     export default {
         name: "ResearchContentDetails",
@@ -169,7 +173,7 @@
                     type: null,
                     authors: [],
                     contentTypes: contentTypes,
-                    deipRefs: [],
+                    references: [],
                     isOpen: false,
                     isLoading: false
                 },
@@ -181,16 +185,7 @@
                     searchable: []
                 },
                 
-                // TODO: Replace with server call
-                references: [
-                    'DEIP High-Level Roadmap', 
-                    'Object vision to hand action in macaque parietal, premotor, and motor cortices',
-                    'Simultaneous two-photon imaging and two-photon optogenetics of cortical circuits in three dimensions',
-                    'Data Categories for Marine Planning',
-                    'Purpose of Category Terms',
-                    'Data Needs for Ocean and Coastal Management',
-                    'Data Category Terms and Definitions'
-                ]
+                references: []
             }
         },
         computed:{
@@ -233,26 +228,13 @@
             openContentProposalDialog() {
                 if (this.isDarContent) {
                     const texture = this.$store.getters['rcd/texture'];
-                    const articleTitle = texture.api.getArticleTitle();
-                    const deipRefs = texture.api.getDeipReferences();
-                    const authors = texture.api.getAuthors();
-                    
-                    const deipAuthors = this.membersList.filter(m => authors.some(a => a.alias === m.account.name));
-                    const deipRefsPromises = deipRefs.filter(ref => ref.researchGroupPermlink != this.researchGroupPermlink && ref.researchPermlink != this.researchPermlink)
-                        .map(ref => 
-                            deipRpc.api.getResearchContentByAbsolutePermlinkAsync(ref.researchGroupPermlink, ref.researchPermlink, ref.researchContentPermlink)
-                        );
-
-                    Promise.all(deipRefsPromises)
-                        .then((contents) => {
-                            this.proposeContent.deipRefs = contents;
-                            this.proposeContent.authors = deipAuthors;
-                            this.proposeContent.title = articleTitle || "";
-                            this.proposeContent.isOpen = true;
-                        });
+                    this.proposeContent.title = texture.api.getArticleTitle() || "";
                 } else if (this.isFileContent) {
-                    this.proposeContent.isOpen = true;
+                    this.proposeContent.title = this.contentRef.title;
                 }
+
+                this.proposeContent.authors = this.membersList.filter(m => this.contentRef.authors.some(a => a === m.account.name));
+                this.proposeContent.isOpen = true;
             },
             closeContentProposalDialog() {
                 this.proposeContent.isOpen = false;
@@ -265,18 +247,17 @@
                     const texture = this.$store.getters['rcd/texture'];
                     promise = texture.save()
                         .then(() => {
-                            return contentHttpService.getContentRef(this.contentRef._id)
+                            return contentHttpService.getContentRef(this.contentRef._id);
                         });
                 } else if (this.isFileContent) {
-                    contentRef.title = this.proposeContent.title;
-                    promise = Promise.resolve(this.contentRef)
+                    return contentHttpService.getContentRef(this.contentRef._id);
                 }
 
                 promise
                     .then((contentRef) => {
-                        contentRef.title = contentRef.title || this.proposeContent.title;
+                        contentRef.title = this.proposeContent.title || contentRef.title;
                         contentRef.authors = this.proposeContent.authors.map(a => a.account.name);
-                        contentRef.references = this.proposeContent.deipRefs.map(r => r.id);
+                        
                         createContentProposal(contentRef, this.proposeContent.type)
                             .then(() => {
                                 this.$store.dispatch('layout/setSuccess', {
@@ -357,24 +338,49 @@
                         this.internalReferences.searchable = [];
                         return;
                     };
-                    this.internalReferences.searchable = this.references.filter(ref => {
-                        return ref.toLowerCase().startsWith(q);
-                    })
+                    if (!this.references.length) {
+                        searchHttpService.getAllResearchContents()
+                            .then((contents) => {
+                                this.references.push(...contents);
+                                this.internalReferences.searchable = filter.call(this, q);
+                            });
+                    } else {
+                        this.internalReferences.searchable = filter.call(this, q);
+                    }
+
+                    function filter(term) {
+                        return this.references.filter(content => {
+                            return content.title.toLowerCase().startsWith(term) && content.research_id != this.research.id;
+                        });
+                    }
+                    
                 }, 600
             ),
-
+            
             addReference(ref) {
-                if (!this.internalReferences.selected.some(r => r == ref)) {
+                const texture = this.$store.getters['rcd/texture'];
+                if (!this.internalReferences.selected.some(r => r.title == ref.title)) {
+                    let uri = `${location.protocol}//${process.env.HOST}/#/${ref.group_permlink}/research/${ref.research_permlink}/${ref.permlink}`;
+                    let title = `${ref.title} (${ref.research_title})`, containerTitle = title;
+                    texture.api.addReference(uri, title, containerTitle);
                     this.internalReferences.selected.push(ref);
+                    this.internalReferences.search = '';
+                    this.internalReferences.searchable = [];
+                    this.$store.dispatch('rcd/setDraftReferences', this.internalReferences.selected.map(r => r.id));
                 }
             },
-
+            
             removeReference(ref) {
-                this.internalReferences.selected = this.internalReferences.selected.filter(r => r != ref);
+                const texture = this.$store.getters['rcd/texture'];
+                let uri = `${location.protocol}//${process.env.HOST}/#/${ref.group_permlink}/research/${ref.research_permlink}/${ref.permlink}`;
+                let reference = texture.api.getReferences().find(r => r.uri == uri);
+                texture.api.removeReference(reference);
+                this.internalReferences.selected = this.internalReferences.selected.filter(r => r.title != ref.title);
+                this.$store.dispatch('rcd/setDraftReferences', this.internalReferences.selected.map(r => r.id));
             },
 
             isReferenceSelected(ref) {
-                return this.internalReferences.selected.some(r => r == ref);
+                return this.contentRef.references.some(r => r == ref.id);
             }
         },
         created() {

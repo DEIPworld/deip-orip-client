@@ -302,6 +302,10 @@ const actions = {
     setDraftAuthors({ state, commit, dispatch }, authors) {
         commit('SET_DRAFT_AUTHORS_LIST', authors);
     },
+
+    setDraftReferences({ state, commit, dispatch }, references) {
+        commit('SET_DRAFT_REFERENCES_LIST', references);
+    },
     
     async loadResearchContentMetadata({ state, commit, dispatch }, 
         { group_permlink, research_permlink, content_permlink,  notify }) {
@@ -545,6 +549,10 @@ const mutations = {
 
     ['SET_DRAFT_AUTHORS_LIST'](state, list) {
         Vue.set(state.contentRef, 'authors', list)
+    },
+
+    ['SET_DRAFT_REFERENCES_LIST'](state, list) {
+        Vue.set(state.contentRef, 'references', list)
     },
     
     ['SET_RESEARCH_CONTENT_METADATA_PAGE_LOADING_STATE'](state, value) {
