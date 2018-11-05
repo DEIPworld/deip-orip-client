@@ -4,24 +4,41 @@
             {{research.title}}
         </router-link>
 
-        <div class="caption grey--text c-pt-2" v-if="research.authors">
-            {{ research.authors.join("  ·  ") }}
+        <div class="c-pt-2">
+            <router-link class="a c-pr-2 caption" 
+                :to="{
+                    name: 'ResearchGroupDetails',
+                    params: { research_group_permlink: research.group_permlink }
+                }"
+            >{{ research.group.name }}:</router-link>
+
+            <span class="caption grey--text hidden-last-child">
+                <template v-for="author in research.enrichedAuthors">
+                    <span>{{ author | fullname}}</span>
+                    <span> · </span>
+                </template>
+            </span>
+        </div>
+
+        <div v-show="!research.isCollapsed" class="c-pt-2">
+            <v-divider></v-divider>
+            <div class="c-pv-2 half-bold">{{ research.abstract }}</div>
+            <v-divider></v-divider>
         </div>
 
         <div class="row c-pt-2">
-            <div v-for="tvo in disciplines">
+            <div v-for="eci in eciList" class="grey--text">
                 <span class="c-pr-1">
-                    <span class="bold green--text text--darken-2">{{ tvo.disciplineName }}</span>
+                    <span class="">{{ eci.disciplineName }}</span>
                 </span>
-                <span class="c-pr-4">
-                    <span>{{tvo.totalWeight}}</span>
+
+                <span class="c-pr-4 bold">
+                    <span>{{ eci.value }}</span>
                 </span>
             </div>
         </div>
-        
-        <div class="c-pt-4 half-bold" v-show="!research.isCollapsed">{{ research.abstract }}</div>
 
-        <div class="row-nowrap c-pt-2" v-show="!research.isCollapsed">
+        <div class="row-nowrap" v-show="!research.isCollapsed">
             <div class="c-pr-8" v-if="research.created_at">
                 <v-icon size="18px">event</v-icon> Created
                 <span class="half-bold">{{ research.created_at | dateFormat('D MMM, YYYY', true) }}</span>
@@ -38,11 +55,13 @@
             </div>
 
             <div class="c-pr-8">
-                <v-icon size="18px">visibility</v-icon> <span>1999</span>
-            </div>
-
-            <div class="c-pr-8">
-                <v-icon size="18px">chat_bubble</v-icon> <span>23</span>
+                <v-icon size="18px">chat_bubble</v-icon>
+                
+                <span class="bold display-inline-flex">
+                    <span class="green--text text--darken-2">{{ countReviews(true) }}</span>
+                    <span>/</span>
+                    <span class="red--text text--darken-2">{{ countReviews(false) }}</span>
+                </span>
             </div>
         </div>
 
@@ -78,7 +97,17 @@
                         };
                     })
                     : [];
-            }
+            },
+            eciList() {
+                return this.research.disciplines.map(discipline => {
+                    const eciObj = this.research.eci_per_discipline.find(item => item[0] === discipline.id);
+
+                    return {
+                        disciplineName: discipline.name,
+                        value: eciObj ? eciObj[1] : 0
+                    }
+                });
+            },
         },
         data() {
             return {};
@@ -86,6 +115,12 @@
         methods: {
             toggleItem() {
                 this.$store.dispatch('feed/toggleFeedItem', this.research.research_id)
+            },
+            countReviews(isPositive) {
+                return this.research.reviews.reduce(
+                    (acc, review) => review.is_positive && isPositive || !review.is_positive && !isPositive ? acc + 1 : acc,
+                    0
+                );
             },
         }
     };
