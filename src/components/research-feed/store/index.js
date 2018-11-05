@@ -1,5 +1,6 @@
 import _ from 'lodash';
 import deipRpc from '@deip/deip-rpc-client';
+import { getEnrichedProfiles } from './../../../utils/user'
 import Vue from 'vue'
 
 const state = {
@@ -71,31 +72,47 @@ const actions = {
 
         deipRpc.api.getAllResearchesListingAsync(0, disciplineId)
             .then(list => {
-                const promises = [];
+                const researchPromises = [];
 
-                const fullResearchList = _.each(list, (item, i) => {
-                    promises.push(deipRpc.api.getTotalVotesByResearchAsync(item.research_id))
+                researchResult = _.each(list, (item, i) => {
+                    researchPromises.push(deipRpc.api.getTotalVotesByResearchAsync(item.research_id))
                     item.isCollapsed = true;
-                })
+                });
 
-                researchResult = fullResearchList;
-                return Promise.all(promises);
+                let reviewsPromises = researchResult.map(research =>
+                    deipRpc.api.getReviewsByResearchAsync(research.research_id)
+                );
+
+                let groupPromises = researchResult.map(research =>
+                    deipRpc.api.getResearchGroupByIdAsync(research.group_id)
+                );
+
+                let authorsPromises = researchResult.map(research => getEnrichedProfiles(research.authors));
+
+                return Promise.all([
+                    Promise.all(researchPromises),
+                    Promise.all(reviewsPromises),
+                    Promise.all(groupPromises),
+                    Promise.all(authorsPromises)
+                ]);
             })
-            .then(list => {
-                let tvoMap = _.chain(list)
+            .then(([totalVotes, reviews, groups, authors]) => {
+                let tvoMap = _.chain(totalVotes)
                     .flatten()
                     .groupBy('research_id')
                     .value();
-                researchResult.forEach(research => {
+
+                researchResult.forEach((research, index) => {
                     research.totalVotes = tvoMap[research.research_id] ? tvoMap[research.research_id] : [];
+                    research.reviews = reviews[index];
+                    research.group = groups[index];
+                    research.enrichedAuthors = authors[index];
                 });
 
                 return researchResult;
             })
             .then(data => {
                 commit('SET_FULL_RESEARCH_LIST', data);
-            }).catch(() => {
-                commit('SET_FULL_RESEARCH_LIST', researchResult);
             })
             .finally(() => {
                 commit('SET_RESEARCH_FEED_LOADING_STATE', false)

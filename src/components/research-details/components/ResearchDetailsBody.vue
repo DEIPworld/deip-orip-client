@@ -48,6 +48,7 @@
             There is no content posted in the research yet. 
             <span v-if="isResearchGroupMember">Please use the form below to upload your pdf files and images</span>
         </div>
+
         <div class="c-pt-6 research-content-container spinner-container">
             <v-progress-circular class="section-spinner"
                 v-if="isLoadingResearchContent"
@@ -65,34 +66,46 @@
                             </router-link>
                         </span>
                     </div>
+
                     <v-card>
                         <v-card-text class="pt-0">
                             <div class="c-ph-2">
                                 <div class="caption grey--text c-pt-2"> {{contentAuthorsStr(content.authors)}}</div>
                                 <div class="c-pt-4 half-bold">
                                 </div>
+
                                 <div class="c-pt-2">
                                     <div class="row-nowrap">
-                                        <div v-for="(discipline, index) in disciplinesList">
-                                            <span v-if="contentWeightByDiscipline[content.id] && contentWeightByDiscipline[content.id][discipline.id]">
+                                        <div v-for="(eci, index) in getContentEciList(content)">
+                                            <span>
                                                 <span class="c-pr-1">
-                                                    <span class="bold green--text text--darken-2">{{discipline.name}}</span>
+                                                    <span class="bold green--text text--darken-2">{{ eci.disciplineName}}</span>
                                                 </span>
+
                                                 <span class="c-pr-4">
-                                                    <span>{{contentWeightByDiscipline[content.id][discipline.id] }}</span>
+                                                    <span>{{ eci.value }}</span>
                                                 </span>
                                             </span>
                                         </div>
                                     </div>
+
                                     <div class="row-nowrap c-mt-3">
-                                        <div class="c-pr-10">
+                                        <!-- <div class="c-pr-10">
                                             <v-icon size="18px">visibility</v-icon> <span>1999</span>
-                                        </div>
+                                        </div> -->
                                         <div class="c-pr-10">
-                                            <v-icon size="18px">chat_bubble</v-icon> <span>23</span>
+                                            <v-icon size="18px">event</v-icon>
+                                            <span>{{ content.created_at | dateFormat('D MMM YYYY', true) }}</span>
                                         </div>
-                                        <div>
-                                            <v-icon size="18px">date_range</v-icon> <span>{{new Date(content.created_at).toDateString()}}</span>
+
+                                        <div class="c-pr-10">
+                                            <v-icon size="18px">chat_bubble</v-icon>
+
+                                            <span class="bold display-inline-flex">
+                                                <span class="green--text text--darken-2">{{ countContentReviews(content, true) }}</span>
+                                                <span>/</span>
+                                                <span class="red--text text--darken-2">{{ countContentReviews(content, false) }}</span>
+                                            </span>
                                         </div>
                                     </div>
                                 </div>
@@ -241,6 +254,22 @@
             }
         },
         methods: {
+            countContentReviews(content, isPositive) {
+                return content.reviews.reduce(
+                    (acc, review) => review.is_positive && isPositive || !review.is_positive && !isPositive ? acc + 1 : acc,
+                    0
+                );
+            },
+            getContentEciList(content) {
+                return this.disciplinesList.map(discipline => {
+                    const eciObj = content.eci_per_discipline.find(item => item[0] === discipline.id);
+
+                    return {
+                        disciplineName: discipline.name,
+                        value: eciObj ? eciObj[1] : 0
+                    }
+                });
+            },
             openDarDraft(draft) {
                 if (draft.type === 'dar' && draft.status === 'in-progress') {
                     // we have to do it this way as Texture InMemory buffer is getting flushed after the first saving

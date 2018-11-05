@@ -240,12 +240,25 @@ const actions = {
     },
 
     loadResearchContent({ state, dispatch, commit }, { researchId, notify }) {
-        commit('SET_RESEARCH_CONTENT_LOADING_STATE', true)
-        deipRpc.api.getAllResearchContentAsync(researchId)
-            .then((list) => {
-                commit('SET_RESEARCH_CONTENT_LIST', list)
+        let contents = [];
+        commit('SET_RESEARCH_CONTENT_LOADING_STATE', true);
 
-            }, (err) => { console.log(err) })
+        deipRpc.api.getAllResearchContentAsync(researchId)
+            .then(list => {
+                contents = list;
+
+                return Promise.all(
+                    contents.map(content => deipRpc.api.getReviewsByContentAsync(content.id))
+                );
+            })
+            .then(reviews => {
+                contents.forEach((content, index) => {
+                    content.reviews = reviews[index];
+                });
+
+                commit('SET_RESEARCH_CONTENT_LIST', contents);
+            })
+            .catch(err => { console.log(err) })
             .finally(() => {
                 commit('SET_RESEARCH_CONTENT_LOADING_STATE', false)
                 if (notify) notify();
