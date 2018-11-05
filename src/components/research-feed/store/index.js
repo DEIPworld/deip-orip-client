@@ -89,14 +89,22 @@ const actions = {
 
                 let authorsPromises = researchResult.map(research => getEnrichedProfiles(research.authors));
 
+                let tokenSalesPromises = researchResult.map(research =>
+                    deipRpc.api.checkResearchTokenSaleExistenceByResearchIdAsync(research.research_id)
+                        .then(exists => 
+                            exists ? deipRpc.api.getResearchTokenSaleByResearchIdAsync(research.research_id) : undefined
+                        )
+                );
+
                 return Promise.all([
                     Promise.all(researchPromises),
                     Promise.all(reviewsPromises),
                     Promise.all(groupPromises),
-                    Promise.all(authorsPromises)
+                    Promise.all(authorsPromises),
+                    Promise.all(tokenSalesPromises)
                 ]);
             })
-            .then(([totalVotes, reviews, groups, authors]) => {
+            .then(([totalVotes, reviews, groups, authors, tokenSales]) => {
                 let tvoMap = _.chain(totalVotes)
                     .flatten()
                     .groupBy('research_id')
@@ -107,6 +115,7 @@ const actions = {
                     research.reviews = reviews[index];
                     research.group = groups[index];
                     research.enrichedAuthors = authors[index];
+                    research.tokenSale = tokenSales[index];
                 });
 
                 return researchResult;

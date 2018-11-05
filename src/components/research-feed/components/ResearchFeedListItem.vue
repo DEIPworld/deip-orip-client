@@ -38,7 +38,7 @@
             </div>
         </div>
 
-        <div class="row-nowrap" v-show="!research.isCollapsed">
+        <div class="row-nowrap c-pt-1" v-show="!research.isCollapsed">
             <div class="c-pr-8" v-if="research.created_at">
                 <v-icon size="18px">event</v-icon> Created
                 <span class="half-bold">{{ research.created_at | dateFormat('D MMM, YYYY', true) }}</span>
@@ -52,6 +52,11 @@
             <div class="c-pr-8" v-if="research.review_share_in_percent">
                 <v-icon size="18px">pie_chart</v-icon> Review award
                 <span class="half-bold">{{ convertToPercent(research.review_share_in_percent) }}%</span>
+            </div>
+
+            <div class="c-pr-8" v-if="tokenSaleStr">
+                <v-icon size="18px">attach_money</v-icon>
+                <span class="grey--text">{{ tokenSaleStr }}</span>
             </div>
 
             <div class="c-pr-8">
@@ -75,7 +80,8 @@
 </template>
 
 <script>
-    import { mapGetters } from 'vuex'
+    import { mapGetters } from 'vuex';
+    import moment from 'moment';
 
     export default {
         name: "ResearchFeedListItem",
@@ -108,6 +114,24 @@
                     }
                 });
             },
+            tokenSaleStr() {
+                if (!this.research.tokenSale) {
+                    return undefined;
+                }
+
+                const now = moment().valueOf();
+                const startTime = moment.utc(this.research.tokenSale.start_time).local().valueOf();
+                const endTime = moment.utc(this.research.tokenSale.end_time).local().valueOf();
+                const dateFormat = 'D MMM YYYY';
+
+                if (now < startTime) {
+                    return `Starts on ${moment(startTime).format(dateFormat)}`;
+                } else if (now < endTime) {
+                    return `Ends on ${moment(endTime).format(dateFormat)}`;
+                } else {
+                    return undefined;
+                }
+            }
         },
         data() {
             return {};
