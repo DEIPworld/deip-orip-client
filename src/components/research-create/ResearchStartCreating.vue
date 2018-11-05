@@ -6,9 +6,9 @@
                 <div class="text-align-center pt-4">
                     <v-btn large color="primary" dark class="ma-0" to="/create-new-research">Create new</v-btn>
                 </div>
-                <div class="text-align-center pt-4">
+            <!--    <div class="text-align-center pt-4">
                     <span class="a">Import exising standalone publication</span>
-                </div>
+                </div> -->
             </div>
         </v-layout>
     </v-container>   

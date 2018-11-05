@@ -321,7 +321,8 @@ const actions = {
                 const currentMillis = new Date(`${dgp.time}Z`).getTime();
                 const genesisMillis = currentMillis - millisSinceGenesis;
                 const isGenesisContent = new Date(`${content.created_at}Z`).getTime() === new Date(genesisMillis).getTime();
-                const research = await deipRpc.api.getResearchByAbsolutePermlinkAsync(group_permlink, research_permlink)
+                const research = await deipRpc.api.getResearchByAbsolutePermlinkAsync(group_permlink, research_permlink);
+                const group = await deipRpc.api.getResearchGroupByPermlinkAsync(group_permlink);
 
                 if (!isGenesisContent) {
                     const proposals = await deipRpc.api.getProposalsByResearchGroupIdAsync(research.research_group_id)
@@ -381,8 +382,13 @@ const actions = {
                     const txHex = await getTransactionHex(tx)
                     // const witness = await getWitnessByAccount(block.witness)
                     const witnessUser = await getEnrichedProfiles([block.witness])
-                    const votersMeta = await getProposalVotesMeta(contentProposal, endTime)
-
+                    const votersMeta = [];
+                    
+                    if (!group.is_personal) {
+                         const voters = await getProposalVotesMeta(contentProposal, endTime);
+                         votersMeta.push(...voters);
+                    }
+                    
                     const contentMetadata = {
                         blockId: block.block_id,
                         blockNum: blockNum,

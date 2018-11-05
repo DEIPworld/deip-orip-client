@@ -7,12 +7,12 @@ import contentHttpService from './../../../services/http/content'
 
 const state = {
     research: null,
+    group: null,
     contentList: [],
     membersList: [],
     reviewsList: [],
     disciplinesList: [],
     totalVotesList: [],
-    isReviewDialogOpen : false,
     tokenSale: undefined,
     tokenHoldersList: [],
     contributionsList: [],
@@ -28,7 +28,8 @@ const state = {
     isLoadingResearchDisciplines: undefined,
     isLoadingResearchTokenHolders: undefined,
     isLoadingResearchTokenSale: undefined,
-    isLoadingResearchContentRefs: undefined
+    isLoadingResearchContentRefs: undefined,
+    isLoadingResearchGroupDetails: undefined
 }
 
 // getters
@@ -38,6 +39,10 @@ const getters = {
         return state.research;
     },
 
+    group: () => {
+        return state.group;
+    },
+    
     contentList: (state, getters) => {
         return state.contentList;
     },
@@ -59,10 +64,6 @@ const getters = {
 
     totalVotesList: (state, getters) => {
         return state.totalVotesList;
-    },
-
-    isReviewDialogOpen: (state, getters) => {
-        return state.isReviewDialogOpen;
     },
 
     tokenSale: (state, getters) => {
@@ -228,9 +229,12 @@ const actions = {
                 const invitesLoad = new Promise((resolve, reject) => {
                     dispatch('loadResearchGroupInvites', { researchGroupId: state.research.research_group_id, notify: resolve })
                 });
+                const groupLoad = new Promise((resolve, reject) => {
+                    dispatch('loadResearchGroupDetails', { group_permlink, notify: resolve })
+                });
 
                 return Promise.all([contentLoad, membersLoad, reviewsLoad, disciplinesLoad, 
-                    tokenHoldersLoad, tokenSaleLoad, invitesLoad, contentRefsLoad])
+                    tokenHoldersLoad, tokenSaleLoad, invitesLoad, contentRefsLoad, groupLoad])
 
             }, (err => {console.log(err)}))
             .finally(() => {
@@ -400,13 +404,17 @@ const actions = {
                 if (notify) notify();
             })
     },
-    
-    openReviewDialog({ state, commit }) {
-        commit('TOGGLE_REVIEW_DIALOG', true)
-    },
 
-    closeReviewDialog({ state, commit }) {
-        commit('TOGGLE_REVIEW_DIALOG', false)
+    loadResearchGroupDetails({ state, commit, dispatch }, { group_permlink, notify }) {
+        commit('SET_RESEARCH_GROUP_DETAILS_LOADING_STATE', true)
+        deipRpc.api.getResearchGroupByPermlinkAsync(group_permlink)
+            .then((group) => {
+                commit('SET_RESEARCH_GROUP_DETAILS', group)
+            }, (err) => {console.log(err)})
+            .finally(() => {
+                commit('SET_RESEARCH_GROUP_DETAILS_LOADING_STATE', false)
+                if (notify) notify();
+            });
     }
 }
 
@@ -435,10 +443,6 @@ const mutations = {
 
     ['SET_RESEARCH_TOTAL_VOTES_LIST'](state, list) {
         Vue.set(state, 'totalVotesList', list)
-    },
-
-    ['TOGGLE_REVIEW_DIALOG'](state, isOpen) {
-        state.isReviewDialogOpen = isOpen;
     },
 
     ['SET_RESEARCH_TOKEN_SALE'](state, tokenSale) {
@@ -499,8 +503,15 @@ const mutations = {
 
     ['SET_RESEARCH_PAGE_LOADING_STATE'](state, value) {
         state.isLoadingResearchPage = value
-    }
+    },
 
+    ['SET_RESEARCH_GROUP_DETAILS_LOADING_STATE'](state, value) {
+        state.isLoadingResearchGroupDetails = value
+    },
+
+    ['SET_RESEARCH_GROUP_DETAILS'](state, value) {
+        Vue.set(state, 'group', value)
+    }
 }
 
 const namespaced = true;

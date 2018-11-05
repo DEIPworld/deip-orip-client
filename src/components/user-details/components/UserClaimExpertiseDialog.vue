@@ -142,7 +142,7 @@
                 this.isLoading = true;
 
                 expertiseClaimsService.createExpertiseClaim(
-                    this.user.account[0].name,
+                    this.user.username,
                     this.discipline.id,
                     this.coverLetter,
                     this.publications.map(item => item.value)

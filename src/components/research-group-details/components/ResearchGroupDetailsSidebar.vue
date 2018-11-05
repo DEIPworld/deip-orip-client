@@ -23,11 +23,15 @@
             </div>
             <!-- ### END Research Group Details Section ### -->
             
-            <sidebar-splitted-btn :right-ripple="false">
+            <div class="sidebar-fullwidth">
+                <v-divider></v-divider>
+            </div>
+            
+        <!-- <sidebar-splitted-btn :right-ripple="false">
                 <div slot="left" class="default-half-splitted">
                     <span class="c-m-auto clickable-label">23<br>Followers</span>
                 </div>
-            </sidebar-splitted-btn>
+            </sidebar-splitted-btn> -->
 
             <div v-if="group">
                 <div class="sm-title bold c-pt-6">Quorum Setup</div>
