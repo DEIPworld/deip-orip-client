@@ -24,7 +24,7 @@
         </div>
         <!-- ### END User Profile Expertise Section ### -->
 
-        <sidebar-splitted-btn>
+    <!--    <sidebar-splitted-btn>
             <div slot="left" class="default-half-splitted">
                 <span class="c-m-auto clickable-label">23<br>Followers</span>
             </div>
@@ -32,8 +32,12 @@
             <div slot="right" class="default-half-splitted">
                 <span class="c-m-auto clickable-label">4<br>Following</span>
             </div>
-        </sidebar-splitted-btn>
+        </sidebar-splitted-btn> -->
 
+        <div class="sidebar-fullwidth">
+            <v-divider></v-divider>
+        </div>
+        
         <!-- ### START User Profile Contacts Section ### -->
         <div class="user-contacts-container spinner-container">
             <v-progress-circular class="section-spinner"

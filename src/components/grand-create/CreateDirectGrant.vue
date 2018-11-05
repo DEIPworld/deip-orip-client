@@ -36,7 +36,7 @@
                                 @incStep="incStep" @decStep="decStep"
                                 :grant-info="grantInfo"
                                 :deip-token-balance="
-                                    user.account ? this.fromAssetsToFloat(user.account[0].balance) : 0
+                                    user.account ? this.fromAssetsToFloat(user.account.balance) : 0
                                 "
                             ></direct-grant-amount>
                         </div>

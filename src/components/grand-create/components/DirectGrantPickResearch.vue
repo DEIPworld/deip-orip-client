@@ -1,5 +1,6 @@
 <template>
-    <div class="column full-height">
+        <div class="step-title">Coming soon</div>
+ <!--   <div class="column full-height">
         <div class="c-mb-4 col-grow column">
             <div class="step-title">Direct grants distribution</div>
             <div class="sm-title bold c-mb-2 text-align-center">Please select research</div>
@@ -26,7 +27,7 @@
         <div class="row justify-center align-center">
             <v-btn color="primary" :disabled="nextDisabled" @click.native="nextStep()">Next</v-btn>
         </div>
-    </div>
+    </div> -->
 </template>
 
 <script>

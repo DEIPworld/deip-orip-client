@@ -4,14 +4,13 @@
             <div class="step-title">Select research group</div>
 
             <div class="col-grow overflow-y-auto">
-                
                 <div class="c-mh-auto c-pt-4" style="max-width: 800px;">
-                    <div v-for="group in userGroups" v-if="!group.is_personal" 
+                    <div v-for="group in groups"
                         v-bind:class="{'selected-group': research.group && group.id == research.group.id }"
                         @click="setGroup(group)" 
-                        class="row-nowrap group-line c-p-3"
-                    >
-                        <div class="group-nameplate c-pr-2">{{group.name}}</div>
+                        class="row-nowrap group-line c-p-3">
+                        <div v-if="group.is_personal" class="group-nameplate c-pr-2">{{ user | fullname}} 's personal group</div>
+                        <div v-if="!group.is_personal" class="group-nameplate c-pr-2">{{group.name}}</div>
                         <div class="">{{ getGroupCoworkers(group).join(' · ') }}</div>
                     </div>
 
@@ -55,6 +54,10 @@
                 userGroups: 'auth/userGroups',
                 userCoworkers: 'auth/userCoworkers'
             }),
+
+            groups() {
+                return this.userGroups.slice().sort(g => g.is_personal ? -1 : 1)
+            },
 
             nextDisabled(){
                 return !this.research.group;

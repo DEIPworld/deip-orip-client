@@ -14,7 +14,7 @@
 
                 <div class="c-pt-4 half-bold">
                     <div v-if="!isExpertiseEmpty">
-                        {{ VOTES_MAX_COUNT - user.account[0].witnesses_voted_for }} votes left. You can vote for {{ VOTES_MAX_COUNT }} delegates
+                        {{ VOTES_MAX_COUNT - user.account.witnesses_voted_for }} votes left. You can vote for {{ VOTES_MAX_COUNT }} delegates
                     </div>
 
                     <div v-else>You have no expert tokens to vote for delegates</div>
@@ -41,7 +41,7 @@
                                 <td class="text-xs-right">
                                     {{ props.item.votingIndex + 1 }}
 
-                                    <v-btn v-if="!user.account[0].witness_votes.includes(props.item.owner)"
+                                    <v-btn v-if="!user.account.witness_votes.includes(props.item.owner)"
                                         flat icon small
                                         class="ma-0" color="primary"
                                         :loading="isVoteBtnDisabled(props.item)"
@@ -100,7 +100,7 @@
             }),
 
             isExpertiseEmpty() {
-                return this.user.account[0].expert_tokens_balance === 0;
+                return this.user.account.expert_tokens_balance === 0;
             }
         },
         
@@ -116,7 +116,7 @@
                 )
                     .then(() => this.$store.dispatch('auth/loadAccount'))
                     .then(() => {
-                        const balance = this.user.account[0].expert_tokens_balance;
+                        const balance = this.user.account.expert_tokens_balance;
 
                         witness.votes = isApproving ? witness.votes + balance : witness.votes - balance;
                         _.pull(this.loadingWitnessesIds, witness.id);

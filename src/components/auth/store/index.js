@@ -256,7 +256,7 @@ const actions = {
         if (user.username) {
             return deipRpc.api.getAccountsAsync([user.username])
                 .then((account) => {
-                    commit('SET_USER_ACCOUNT', account)
+                    commit('SET_USER_ACCOUNT', account[0])
                 }, (err) => {
                     console.log(err)
                 })

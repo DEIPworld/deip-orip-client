@@ -90,7 +90,7 @@
                             </template>
                         </div>
 
-                        <div v-if="isResearchGroupMember" class="c-pv-4 c-ph-6">
+                        <div v-if="isResearchGroupMember && !group.is_personal" class="c-pv-4 c-ph-6">
                             <v-btn outline icon color="primary" class="ma-0" @click="$store.dispatch('researchGroup/changeOptions', { key: 'isAddMemberDialogOpen', value: true })">
                                 <v-icon small>add</v-icon>
                             </v-btn>

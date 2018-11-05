@@ -223,7 +223,7 @@
                                     :rules="[deipTokenValidator]"
                                 ></v-text-field>
 
-                                <v-btn :disabled="!$refs.amountToContribute.valid || isTokensBuying"
+                                <v-btn :disabled="!$refs.amountToContribute.valid || isTokensBuying || !this.amountToContribute"
                                     v-if="$refs.amountToContribute"
                                     :loading="isTokensBuying"
                                     color="primary"
@@ -235,10 +235,10 @@
 
                     <div v-if="isInActiveTokenSale" class="c-mt-4 c-mb-6">
                         <div>
-                            <div class="body-1">Token Sale will start on:</div>
-                            <div class="body-2">
-                                <v-icon small class="c-pr-2">av_timer</v-icon>
-                                {{ tokenSale.start_time | dateFormat('HH:mm D MMM YYYY', true) }}
+                            <div class="body-1"> <v-icon small class="c-pr-1">av_timer</v-icon> Token Sale will start on: 
+                                <div class="body-2 c-pl-6">
+                                    {{ tokenSale.start_time | dateFormat('HH:mm D MMM YYYY', true) }}
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -278,6 +278,7 @@
                 userExperise: 'auth/userExperise',
                 userJoinRequests: 'auth/userJoinRequests',
                 research: 'rd/research',
+                group: 'rd/group',
                 contentList: 'rd/contentList',
                 membersList: 'rd/membersList',
                 reviewsList: 'rd/reviewsList',
@@ -375,7 +376,7 @@
                 return (this.isMissingTokenSale && this.isResearchGroupMember && !this.isFinishedResearch) || this.isActiveTokenSale || this.isInActiveTokenSale;
             },
             isJoinRequestSectionAvailable() {
-                return this.isProfileAvailable && (this.canJoinResearchGroup || this.isActiveJoinRequest || this.isActiveInvite)
+                return this.isProfileAvailable && (this.canJoinResearchGroup || this.isActiveJoinRequest || this.isActiveInvite) && !this.group.is_personal;
             },
             eciList() {
                 return this.research.disciplines.map(discipline => {
@@ -389,9 +390,6 @@
             }
         },
         methods: {
-            openReviewDialog() {
-                this.$store.dispatch('rd/openReviewDialog');
-            },
             contributeToTokenSale() {
                 this.isTokensBuying = true;
 
@@ -404,7 +402,7 @@
                     this.$store.dispatch('rd/loadResearchTokenSale', {researchId: this.research.id})
                     this.$store.dispatch('rd/loadResearchTokenHolders', {researchId: this.research.id})
                     this.isTokensBuying = false;
-                    this.amountToContribute = '';
+                    this.amountToContribute = undefined;
                     this.$store.dispatch('layout/setSuccess', {
                         message: `You've contributed to "${this.research.title}" token sale successfully !`
                     });

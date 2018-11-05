@@ -137,15 +137,19 @@
                     <v-card class="c-mt-6">
                         <template v-for="group in commonGroups">
                             <div class="c-p-6">
-                                <router-link :to="'/' + group.permlink + '/group-details'" class="research-group-title">{{ group.name }}</router-link>
-                                <span v-if="group.is_personal" class="grey--text caption">(personal group)</span>
-                        
-                                <div class="caption grey--text c-pt-2 hidden-last-child" v-if="!group.is_personal">
-                                    <template v-for="share in group.shares">
-                                        <span>{{ share.owner }}</span>
-                                        <span> · </span>
-                                    </template>
-                                </div>
+                                <router-link v-if="group.is_personal" :to="'/' + group.permlink + '/group-details'" class="research-group-title">
+                                    {{currentUser | fullname}}
+                                    <span class="grey--text caption">(personal group)</span>
+                                </router-link>
+                                <router-link v-if="!group.is_personal" :to="'/' + group.permlink + '/group-details'" class="research-group-title">
+                                    {{group.name}}
+                                    <div class="caption grey--text c-pt-2 hidden-last-child">
+                                        <template v-for="share in group.shares">
+                                            <span>{{ share.owner }}</span>
+                                            <span> · </span>
+                                        </template>
+                                    </div>
+                                </router-link>
                             </div>
                             <v-divider></v-divider>
                         </template>
@@ -262,7 +266,7 @@
             <div class="c-pt-12 c-pb-2"></div>
             <v-btn class="ma-0" @click="isClaimExpertiseShown = true">Claim Expertise</v-btn>
 
-            <div class="c-mt-6 c-mb-2" v-if="tmpClaimObjects.length">Active claims:</div>
+            <div class="c-mt-6 c-mb-2 body-2" v-if="tmpClaimObjects.length">Active claims:</div>
             <div v-for="(item, i) in tmpClaimObjects" :key="i">
                 <router-link :to="{
                         name: 'claim-user-expertise-page', 
@@ -357,7 +361,7 @@
                 return this.userInfo && this.userInfo.profile && this.userInfo.profile.employment.length;
             },
             commonGroups() {
-                return this.groups.filter(g => !g.is_personal);
+                return this.groups.slice().sort(g => g.is_personal ? -1 : 1);
             },
             dropzoneOptions() {
                 return this.currentUser != null ? {
