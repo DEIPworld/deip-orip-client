@@ -22,18 +22,19 @@
             return {
                 currentOrderIdx : 0,
                 orders: [
+                    // todo: by date when BC will send this data
                     {
                         default: 'asc',
                         asc: { title: 'Z-A Title',  iteratee: ['title'], order: ['asc']},
                         desc: { title: 'A-Z Title', iteratee: ['title'], order: ['desc']}
                     }, {
-                        default: 'desc',
-                        asc: { title: 'Z-A Author', iteratee: (r) => r.authors.join().toLowerCase(), order: ['asc']},
-                        desc: { title: 'A-Z Author', iteratee: (r) => r.authors.join().toLowerCase(), order: ['desc']}
+                        default: 'asc',
+                        asc: { title: 'Reviews >', iteratee: (r) => r.reviews.length, order: ['asc']},
+                        desc: { title: 'Reviews <', iteratee: (r) => r.reviews.length, order: ['desc']}
                     }, {
                         default: 'desc',
-                        asc: { title: 'Votes <', iteratee: ['total_votes'], order: ['asc']},
-                        desc: { title: 'Votes >', iteratee: ['total_votes'], order: ['desc']},
+                        asc: { title: 'ECI >', iteratee: (r) => r.eci_per_discipline.reduce((acc, item) => acc + item[1], 0), order: ['asc']},
+                        desc: { title: 'ECI <', iteratee: (r) => r.eci_per_discipline.reduce((acc, item) => acc + item[1], 0), order: ['desc']}
                     }
                 ]
             } 
