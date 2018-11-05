@@ -33,12 +33,12 @@
 
                         <div class="red--text c-pt-2 text-align-center">
                             <v-icon color="red">warning</v-icon>
-                            Please be accurate, you’ll need community assistance to change the disciplines
+                            Please be accurate, you will need the community assistance to change the disciplines
                         </div>
 
                         <div class="c-pt-6">
                             <v-text-field
-                                label="Competently initiate quality experiences through mission-critical vortals" 
+                                label="Provide a cover letter"
                                 multi-line auto-grow
                                 rows="2"
                                 v-model="description"

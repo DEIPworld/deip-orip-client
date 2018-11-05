@@ -59,7 +59,7 @@
         <!-- ### START Research TOC Section ### -->
         <div class="c-mb-6 c-mt-4" v-if="researchTableOfContent.length">
             <div class="sidebar-fullwidth"><v-divider></v-divider></div>
-            <div class="subheading bold c-mt-4">Research Table of Content</div>
+            <div class="subheading bold c-mt-4">Research table of content</div>
             <div class="c-mt-2">
                 <div v-for="(item, index) in researchTableOfContent" :key="index" 
                         :class="index === 0 ? '' : 'c-mt-1'">

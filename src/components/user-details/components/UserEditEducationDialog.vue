@@ -12,17 +12,17 @@
             <page-container>
                 <contentbar>
 
-                    <div class="subheading bold">Educational Institution</div>
+                    <div class="subheading bold">Educational institution</div>
                     <div class="row">
                         <div class="col-12">
                             <v-text-field
-                                placeholder="Educational Institution"
+                                placeholder="Educational institution"
                                 v-model="educationalInstitution"
                             ></v-text-field>
                         </div>
                     </div>
 
-                    <div class="subheading bold">Dates Attended</div>
+                    <div class="subheading bold">Dates attended</div>
                     <div class="row">
                         <div class="col-6 c-pr-3">
                             <v-menu
@@ -54,11 +54,11 @@
                         </div>
                     </div>
 
-                    <div class="subheading bold">Degree</div>
+                    <div class="subheading bold">Degree obtained</div>
                     <div class="row">
                         <div class="col-12">
                             <v-text-field
-                                placeholder="Degree"
+                                placeholder="Degree obtained"
                                 v-model="degree"
                             ></v-text-field>
                         </div>
@@ -74,7 +74,7 @@
                         </div>
                     </div>
 
-                    <div class="subheading bold">Description (optional)</div>
+                    <div class="subheading bold">Description <span class="caption">(optional)</span></div>
                     <div class="row">
                         <div class="col-12">
                             <v-text-field
@@ -86,10 +86,10 @@
                     
                     <div>
                         <div class="row">
-                            <div class="col-1">
-                                <v-checkbox label="Is active" v-model="isActive"></v-checkbox>
+                            <div class="col-2">
+                                <v-checkbox label="In progress" v-model="isActive"></v-checkbox>
                             </div>
-                            <div class="col-11">
+                            <div class="col-10">
                                 <v-btn class="ml-5 ma-0 width-10" color="primary" @click="save()" :disabled="disabled">Save</v-btn>
                                 <span class="c-pr-4"></span>
                                 <v-btn class="ma-0 width-10" color="primary" flat @click.native="meta.isShown = false">Cancel</v-btn>

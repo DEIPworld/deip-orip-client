@@ -51,7 +51,7 @@
               <v-btn icon dark @click="closeContentProposalDialog()">
                 <v-icon>close</v-icon>
               </v-btn>
-              <v-toolbar-title>Propose content for research</v-toolbar-title>
+              <v-toolbar-title>Propose content for the research project</v-toolbar-title>
               <v-spacer></v-spacer>
             </v-toolbar>
             <page-container>

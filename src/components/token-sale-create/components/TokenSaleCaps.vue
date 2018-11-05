@@ -1,7 +1,7 @@
 <template>
     <div class="column full-height">
         <div class="c-mb-4 col-grow column">
-            <div class="step-title">Please select soft cap and hard cap amounts</div>
+            <div class="step-title">Select soft cap and hard cap amounts</div>
             <div class="col-grow overflow-y-auto">
 
                 <div class="c-mh-auto caps-max-width c-pt-4">

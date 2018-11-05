@@ -33,13 +33,13 @@ labels[START_RESEARCH] = 'Start research';
 labels[INVITE_MEMBER] = 'Invite member';
 labels[DROPOUT_MEMBER] = 'Dropout member';
 labels[SEND_FUNDS] = 'Send funds';
-labels[START_RESEARCH_TOKEN_SALE] = 'Start research token sale';
-labels[REBALANCE_RESEARCH_GROUP_TOKENS] = 'Rebalance research group tokens';
+labels[START_RESEARCH_TOKEN_SALE] = 'Start Research Token sale';
+labels[REBALANCE_RESEARCH_GROUP_TOKENS] = 'Rebalance Research Group Tokens';
 labels[CHANGE_QUORUM] = 'Change quorum';
-labels[CHANGE_RESEARCH_REVIEW_SHARE_PERCENT] = 'Change research review share percent';
-labels[OFFER_RESEARCH_TOKENS] = 'Offer research tokens';
-labels[ACCEPT_RESEARCH_TOKEN_OFFER] = 'Accept research token offer';
-labels[CREATE_RESEARCH_MATERIAL] = 'Create  research material';
+labels[CHANGE_RESEARCH_REVIEW_SHARE_PERCENT] = 'Change research review share';
+labels[OFFER_RESEARCH_TOKENS] = 'Offer Research Tokens';
+labels[ACCEPT_RESEARCH_TOKEN_OFFER] = 'Accept Research Tokens offer';
+labels[CREATE_RESEARCH_MATERIAL] = 'Publish research results';
 
 // maybe will be OK to add param validations or type conversion
 // in every function to be sure every time about right data

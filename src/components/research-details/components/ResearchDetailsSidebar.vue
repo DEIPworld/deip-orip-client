@@ -4,7 +4,7 @@
       <div v-if="isLoadingResearchPage === false">
 
         <router-link :to="`/${groupLink}/group-details`" style="text-decoration: none; color: black">
-            <div class="sm-title bold">Research Group <span class="caption grey--text">(view)</span></div>
+            <div class="sm-title bold">Research group <span class="caption grey--text">(view)</span></div>
         </router-link>
         
         <!-- ### START Research Members Section ### -->
@@ -35,7 +35,7 @@
                 </v-btn>
                 <span class="deip-blue-color c-pl-3">Join research group</span>
             </div>
-            <div v-if="isActiveJoinRequest" class="text-align-center italic pt-2">You have sent join request on {{new Date(currentJoinRequest.created).toDateString()}}, please wait for approval</div>
+            <div v-if="isActiveJoinRequest" class="text-align-center italic pt-2">You have sent a join request on {{new Date(currentJoinRequest.created).toDateString()}}, please wait for approval</div>
             <div v-if="isActiveInvite" class="text-align-center italic pt-2">
                 Your join request has been approved ! Please, accept invite on
                 <router-link :to="`/user-details/${user.username}`" style="text-decoration: none">your profile page</router-link>
@@ -46,7 +46,7 @@
                         <v-btn icon dark @click="isJoinGroupDialogOpen = false">
                             <v-icon>close</v-icon>
                         </v-btn>
-                        <v-toolbar-title>Please, provide a Cover Letter to your join request</v-toolbar-title>
+                        <v-toolbar-title>Please provide a cover letter to your join request</v-toolbar-title>
                         <v-spacer></v-spacer>
                     </v-toolbar>
             
@@ -144,7 +144,7 @@
         <div class="c-mb-6 c-mt-4">
             <div class="sidebar-fullwidth"><v-divider></v-divider></div>
             <div>
-                <div class="subheading bold c-mt-4">Research Token Holders</div>
+                <div class="subheading bold c-mt-4">Research Token holders</div>
                 <div class="c-pt-4 c-pb-6">
                     <span class="half-bold">Research group</span>
                     <span class="right">
@@ -165,11 +165,11 @@
             <div class="sidebar-fullwidth"><v-divider></v-divider></div>
             <div>
                 <div>
-                    <div class="subheading bold c-mt-4">Research Token Sale</div>
+                    <div class="subheading bold c-mt-4">Research Token sale</div>
                     <div v-if="(isMissingTokenSale && isResearchGroupMember)" class="c-pt-4 c-pb-6">
                         <router-link v-if="research" :to="`/${research.group_permlink}/create-token-sale/${research.permlink}`" style="text-decoration: none">
                             <v-btn dark round outline color="primary" class="full-width c-mt-3 c-mb-3">
-                                <div class="col-grow add-review-label">Propose Token Sale</div>
+                                <div class="col-grow add-review-label">Propose Token sale</div>
                             </v-btn>
                         </router-link>
                     </div>
@@ -235,7 +235,7 @@
 
                     <div v-if="isInActiveTokenSale" class="c-mt-4 c-mb-6">
                         <div>
-                            <div class="body-1"> <v-icon small class="c-pr-1">av_timer</v-icon> Token Sale will start on: 
+                            <div class="body-1"> <v-icon small class="c-pr-1">av_timer</v-icon>Research Token sale will start at: 
                                 <div class="body-2 c-pl-6">
                                     {{ tokenSale.start_time | dateFormat('HH:mm D MMM YYYY', true) }}
                                 </div>

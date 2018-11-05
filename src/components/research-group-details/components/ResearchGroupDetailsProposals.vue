@@ -4,7 +4,7 @@
 
         <div class="row c-pt-2 justify-between align-center">
             <div class="row align-center">
-                <span class="uppercase half-bold">Show past proposals</span>
+                <span class="uppercase half-bold">Show approved proposals</span>
 
                 <v-switch class="c-ml-4" 
                     color="primary" 
