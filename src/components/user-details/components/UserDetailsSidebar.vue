@@ -12,7 +12,7 @@
             ></v-progress-circular>
 
             <div v-if="isLoadingUserExpertise === false">
-                <div class="sm-title bold">Expertise</div>
+                <div class="sm-title bold">Expertise Tokens</div>
                 <div class="c-pt-4 c-pb-6">
                     <div class="row justify-between" v-for="(item, i) in expertise" :key="i">
                         <div class="half-bold">{{ item.discipline_name }}</div>
@@ -37,7 +37,7 @@
         <div class="sidebar-fullwidth">
             <v-divider></v-divider>
         </div>
-        
+
         <!-- ### START User Profile Contacts Section ### -->
         <div class="user-contacts-container spinner-container">
             <v-progress-circular class="section-spinner"
@@ -49,7 +49,7 @@
                 <div v-if="isProfileAvailable && (isContactsInfoSpecified || isOwner)">
                     <div class="sm-title bold c-pt-4">
                         <span class="row">
-                            <span class="col-11 mt-1">Contacts Info</span>
+                            <span class="col-11 mt-1">Contacts info</span>
                             <v-tooltip v-if="isOwner && !isEditingContacts" bottom class="col-1">
                                 <v-btn slot="activator" @click="editContacts" flat small icon color="grey" class="mt-0">
                                     <v-icon small>mode_edit</v-icon>
@@ -114,12 +114,12 @@
                 <div v-if="isProfileAvailable && (isPersonalInfoSpecified || isOwner)">
                     <div class="sm-title bold c-pt-6">
                         <span class="row">
-                        <span class="col-11 mt-1">Personal Info</span>
+                        <span class="col-11 mt-1">Personal info</span>
                             <v-tooltip v-if="isOwner && !isEditingPersonalInfo" bottom class="col-1">
                                 <v-btn slot="activator" @click="editPersonalInfo" flat small icon color="grey" class="mt-0">
                                     <v-icon small>mode_edit</v-icon>
                                 </v-btn>
-                                <span>Edit Personal Info</span>
+                                <span>Edit personal info</span>
                             </v-tooltip>
                         </span>
                     </div>

@@ -10,7 +10,7 @@
         ></v-text-field>
 
         <div class="c-pv-4">
-            <div class="subheading c-pb-4">Discipline</div>
+            <div class="subheading c-pb-4">Disciplines</div>
             <discipline-tree-picker :preselected="filter.disciplines" @select="filterDisciplines"></discipline-tree-picker>
         </div>
 

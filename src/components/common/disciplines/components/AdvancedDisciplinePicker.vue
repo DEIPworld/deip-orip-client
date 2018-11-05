@@ -16,7 +16,7 @@
         </div>
 
         <div class="col-8 c-p-4 full-height overflow-y-auto">
-            <div class="bold uppercase c-pb-4">All</div>
+            <div class="bold uppercase c-pb-4">All disciplines</div>
 
             <discipline-tree-picker
                 :is-multiple-select="isMultipleSelect"

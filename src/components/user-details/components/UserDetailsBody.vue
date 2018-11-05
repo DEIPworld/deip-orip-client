@@ -82,7 +82,7 @@
                     <div v-if="!isEditingBio && userInfo.profile" class="row">
                         <span v-if="isOwner && !userInfo.profile.bio" class="half-bold owner-hint col-12">
                             <v-icon small>subject</v-icon>
-                            Add short bio here
+                            Add short bio
                         </span>
                         <span v-else class="col-12">{{userInfo.profile.bio}}</span>
                         <v-tooltip v-if="isOwner && !isEditingBio" bottom class="col-12 right">
@@ -94,7 +94,7 @@
                     </div>
     
                     <div v-if="isOwner && isEditingBio" class="row">
-                        <v-text-field class="col-12" v-model="editedBio" label="Short Bio here" multi-line></v-text-field>
+                        <v-text-field class="col-12" v-model="editedBio" label="Short Bio" multi-line></v-text-field>
                         <span class="col-12">
                             <v-tooltip bottom>
                                 <v-btn slot="activator" @click="isEditingBio = false" flat icon color="grey" class="ma-0 mr-3 right">
@@ -126,12 +126,12 @@
                     <div class="c-pt-7">
                         <state-research-list
                             :research-list="researchList"
-                            :header-text="'Participation in research'"
+                            :header-text="'Research projects'"
                         ></state-research-list>
                     </div>
 
                     <div class="c-pt-8" v-if="commonGroups.length">
-                        <div class="title">Research Groups: {{ commonGroups.length }}</div>
+                        <div class="title">Research groups: {{ commonGroups.length }}</div>
                     </div>
 
                     <v-card class="c-mt-6">
@@ -198,7 +198,7 @@
                                 <v-btn class="ma-0" @click="showSaveEducationDialog(null, -1)" outline icon color="primary">
                                     <v-icon small>add</v-icon>
                                 </v-btn>
-                                <span class="c-pl-2 deip-blue-color">Add Education Institutions</span>
+                                <span class="c-pl-2 deip-blue-color">Add education institutions</span>
                             </div>
                             <div v-if="isOwner">
                                 <user-edit-education-dialog 
@@ -241,7 +241,7 @@
                                 <v-btn class="ma-0" @click="showSaveEmploymentDialog(null, -1)" outline icon color="primary">
                                     <v-icon small>add</v-icon>
                                 </v-btn>
-                                <span class="c-pl-2 deip-blue-color">Add Employment</span>
+                                <span class="c-pl-2 deip-blue-color">Add employment</span>
                             </div>
                             <div v-if="isOwner">
                                 <user-edit-employment-dialog 
@@ -264,7 +264,7 @@
 
         <div v-if="isLoadingUserProfilePage === false">
             <div class="c-pt-12 c-pb-2"></div>
-            <v-btn class="ma-0" @click="isClaimExpertiseShown = true">Claim Expertise</v-btn>
+            <v-btn class="ma-0" @click="isClaimExpertiseShown = true">Claim Expertise Tokens</v-btn>
 
             <div class="c-mt-6 c-mb-2 body-2" v-if="tmpClaimObjects.length">Active claims:</div>
             <div v-for="(item, i) in tmpClaimObjects" :key="i">

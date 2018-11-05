@@ -7,7 +7,6 @@
                 <div class="row c-mh-auto group-share-max-width">
                     <div class="col-12">
                         <div class="subheading c-pv-4">Distribute tokens of this group as follows</div>
-
                         <div class="row-nowrap justify-between align-center c-pt-4" 
                             v-for="(member, i) in group.members" :key="i"
                         >

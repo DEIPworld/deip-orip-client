@@ -26,7 +26,7 @@
         </div>
 
         <div class="bold title c-pt-8">Discipline: {{ claim.discipline.name }}</div>
-        <div class="bold title c-pt-8">Motivation letter</div>
+        <div class="bold title c-pt-8">Cover letter</div>
         <div class="c-pt-4">{{ claim.coverLetter }}</div>
         <div class="bold title c-pt-8">Publications</div>
 

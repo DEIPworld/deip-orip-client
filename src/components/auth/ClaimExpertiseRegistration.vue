@@ -2,8 +2,7 @@
     <v-container fluid fill-height class="pa-0 justify-center">
 
         <div class="page-container c-pv-10">
-            <div class="headline text-align-center">Select Disciplines you’re Working With</div>
-            <div class="text-align-center">This is very important for the distribution of the expert tokens</div>
+            <div class="headline text-align-center">Select your disciplines</div>
 
             <div class="row discipline-picker c-mt-8">
 
@@ -25,7 +24,7 @@
             </div>
             <div class="red--text c-pt-2 text-align-center">
                 <v-icon color="red">warning</v-icon>
-                Please be accurate, you’ll need community assistance to change the disciplines
+                Please be accurate, you will need the community assistance to change the disciplines
             </div>
 
             <div class="row justify-center c-pt-8">

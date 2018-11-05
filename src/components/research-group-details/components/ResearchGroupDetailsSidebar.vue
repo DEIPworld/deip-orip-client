@@ -12,7 +12,7 @@
                 ></v-progress-circular>
 
                 <div v-if="isLoadingResearchGroupDetails === false">
-                    <div class="sm-title bold">Group Info</div>
+                    <div class="sm-title bold">Group info</div>
                     <div class="c-pt-4 c-pb-6">
                         <div v-for="(item, i) in groupExpertise" :key="i">
                             <span class="half-bold">{{ item.disciplineName }}</span>
@@ -26,7 +26,7 @@
             <div class="sidebar-fullwidth">
                 <v-divider></v-divider>
             </div>
-            
+
         <!-- <sidebar-splitted-btn :right-ripple="false">
                 <div slot="left" class="default-half-splitted">
                     <span class="c-m-auto clickable-label">23<br>Followers</span>
@@ -34,7 +34,7 @@
             </sidebar-splitted-btn> -->
 
             <div v-if="group">
-                <div class="sm-title bold c-pt-6">Quorum Setup</div>
+                <div class="sm-title bold c-pt-6">Quorum setup</div>
 
                 <div class="c-pt-4 c-pb-6">
                     <!-- no v-for bc order and padding are important -->

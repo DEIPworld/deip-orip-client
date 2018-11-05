@@ -27,7 +27,7 @@
         <!-- ### END Research Group Details Section ### -->
 
 
-        <!-- ### START Research Group Members Section ### -->
+        <!-- ### START Research Group members Section ### -->
         <div class="research-group-members-container spinner-container">
             <v-progress-circular class="section-spinner"
                 v-if="isLoadingResearchGroupDetails"
@@ -35,7 +35,7 @@
             ></v-progress-circular>
 
             <div v-if="isLoadingResearchGroupMembers === false">
-                <div class="c-pt-8 title">Group Members: {{ members.length }}</div>
+                <div class="c-pt-8 title">Group members: {{ members.length }}</div>
                 <div class="c-pt-6">
                     <v-card>
                         <div class="info-card-list">
@@ -109,7 +109,7 @@
                 </div>
             </div>
         </div>
-        <!-- ### END Research Group Members Section ### -->
+        <!-- ### END Research Group members Section ### -->
 
         <!-- ### START Research Group Research List Section ### -->
         <div class="research-list-container spinner-container c-pt-7">

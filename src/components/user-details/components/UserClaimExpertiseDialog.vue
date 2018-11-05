@@ -12,8 +12,7 @@
             <page-container>
                 <contentbar>
 
-                    <div class="headline text-align-center half-bold">Select Disciplines you’re Working With</div>
-                    <div class="text-align-center">This is very important for the distribution of the expert tokens</div>
+                    <div class="headline text-align-center half-bold">Select your disciplines</div>
 
                     <div class="discipline-picker c-mt-8">
                         <advanced-discipline-picker
@@ -25,13 +24,13 @@
 
                     <div class="red--text c-pt-2 text-align-center">
                         <v-icon color="red">warning</v-icon>
-                        Please be accurate, you’ll need community assistance to change the disciplines
+                        Please be accurate, you will need the community assistance to change the disciplines
                     </div>
 
                     <v-form ref="form">
                         <div class="c-pt-6">
                             <v-text-field
-                                label="Competently initiate quality experiences through mission-critical vortals" 
+                                label="Provide a cover letter" 
                                 multi-line auto-grow
                                 rows="2"
                                 v-model="coverLetter"
@@ -39,7 +38,7 @@
                             ></v-text-field>
                         </div>
 
-                        <div class="sm-title bold c-pt-6">Add links to your relevant publication in this discipline</div>
+                        <div class="sm-title bold c-pt-6">Add links to your relevant publications in this discipline</div>
 
                         <v-card class="c-mt-6">
                             <template v-for="(publication, index) in publications">
@@ -80,7 +79,7 @@
                                 :disabled="isClaimBtnDisabled || isLoading"
                                 :loading="isLoading"
                                 @click="claimExpertise"
-                            >Claim expertise</v-btn>
+                            >Claim Expertise Tokens</v-btn>
                         </div>
                     </v-form>
 

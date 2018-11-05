@@ -7,13 +7,12 @@
                 <div class="row c-mh-auto group-quorum-max-width">
                     <div class="col-12">
                         <div>
-                            Quorum shows how many votes it takes to approve a proposal (such as change in the reseach
-                            content, adding research group members, research token sale, etc.) You can setup Quorum for each 
+                            Quorum shows how many votes it takes to approve a proposal (such as changing the research
+                            content, adding the research group members, initiating research token sale, etc.) You can setup Quorum for each 
                             proposal individually using
                             <span class="deip-blue-color half-bold clickable" @click="changeMode()">Advanced</span>
                             options.
                         </div>
-
                         <v-text-field v-model="totalQuorum"
                             :disabled="isAdvanced"
                             suffix="%"
@@ -47,7 +46,7 @@
                                             hide-details
                                         ></v-text-field>
                                     </div>
-                                    <div class="col-grow c-ml-8">Create research material</div>
+                                    <div class="col-grow c-ml-8">Publish research results</div>
                                 </div>
 
                                 <div class="row align-items-end">

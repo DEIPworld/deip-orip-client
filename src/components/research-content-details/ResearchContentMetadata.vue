@@ -16,7 +16,7 @@
                             <span v-if="isGenesisBlock" class="caption grey--text">GENESIS</span>
                         </div>
 
-                        <qrcode value="Hello, World!" :options="{ size: 120 }"></qrcode>
+                       <!-- <qrcode value="Hello, World!" :options="{ size: 120 }"></qrcode> -->
                     </div>
 
                     <div class="c-mt-4">

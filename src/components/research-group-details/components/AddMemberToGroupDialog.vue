@@ -41,7 +41,7 @@
                         </v-select>
 
                         <v-text-field
-                            label="Group tokens share"
+                            label="Research Group Tokens"
                             v-model="tokensAmount"
                             suffix="%"
                             mask="###"

@@ -1,9 +1,12 @@
 <template>
     <div class="column full-height">
         <div class="c-mb-4 col-grow column">
-            <div class="step-title">
+         <!--   <div class="step-title">
                 Please type percent (%) of research token<br>
                 belonging to your group you’re going to sell
+            </div> -->
+            <div class="step-title">
+                Determine the percent of research tokens for sale
             </div>
 
             <div class="col-grow overflow-y-auto">

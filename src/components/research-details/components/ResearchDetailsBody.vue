@@ -42,11 +42,11 @@
             </div>
         </div>
 
-        <div v-if="research" class="c-pt-8 title">Research</div>
+        <div v-if="research" class="c-pt-8 title">Research results</div>
 
         <div v-if="!contentList.length && isLoadingResearchContent === false" class="c-pt-8">
             There is no content posted in the research yet. 
-            <span v-if="isResearchGroupMember">Please use the form below to upload your pdf files and images</span>
+            <span v-if="isResearchGroupMember">Please use the form below to upload your pdf files and images or add them manually with the Editor.</span>
         </div>
 
         <div class="c-pt-6 research-content-container spinner-container">
@@ -117,7 +117,7 @@
         </div>
         <!-- ### END Research Content Section ### -->
 
-        <div v-if="isResearchGroupMember && !research.is_finished" class="c-pt-8 title">Work In Progress</div>
+        <div v-if="isResearchGroupMember && !research.is_finished" class="c-pt-8 title">Work in progress</div>
 
         <div class="c-pt-6 research-drafts-container" v-if="isResearchGroupMember && !research.is_finished">
             <v-expansion-panel v-if="isLoadingResearchContentRefs === false">

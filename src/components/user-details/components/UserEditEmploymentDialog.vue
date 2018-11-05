@@ -5,7 +5,7 @@
                 <v-btn icon dark @click.native="meta.isShown = false">
                     <v-icon>close</v-icon>
                 </v-btn>
-                <v-toolbar-title>Add Employment</v-toolbar-title>
+                <v-toolbar-title>Add employment</v-toolbar-title>
                 <v-spacer></v-spacer>
             </v-toolbar>
 

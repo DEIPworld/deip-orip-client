@@ -1,7 +1,7 @@
 <template>
     <div class="column full-height">
         <div class="c-mb-4 col-grow column">
-            <div class="step-title">Select disciplines your research is related</div>
+            <div class="step-title">Select research disciplines</div>
             <div class="sm-title bold c-mb-4 text-align-center">Please select discipline</div>
 
             <div class="subheading c-mb-4 text-align-center c-mh-auto selected-disciplines discipline-picker">

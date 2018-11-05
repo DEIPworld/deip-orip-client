@@ -1,7 +1,7 @@
 <template>
     <div>
         <div class="row justify-between align-center">
-            <div class="title">{{ !headerText ? 'Research' : headerText }}</div>
+            <div class="title">{{ !headerText ? 'Research projects' : headerText }}</div>
             
             <v-menu offset-y>
                 <v-btn slot="activator" class="ma-0">

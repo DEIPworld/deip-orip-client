@@ -5,7 +5,7 @@
                 <v-btn icon dark @click="close()">
                     <v-icon>close</v-icon>
                 </v-btn>
-                <v-toolbar-title>Handle join request</v-toolbar-title>
+                <v-toolbar-title>Join request</v-toolbar-title>
                 <v-spacer></v-spacer>
             </v-toolbar>
             
@@ -21,7 +21,7 @@
                     </div>
 
                     <v-text-field
-                        label="Group tokens share"
+                        label="Research Group Tokens"
                         v-model="tokensAmount"
                         suffix="%"
                         mask="###"
