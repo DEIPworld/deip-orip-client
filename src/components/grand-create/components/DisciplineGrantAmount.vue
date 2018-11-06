@@ -65,7 +65,7 @@
                         if (formatValidationResult !== true) {
                             return formatValidationResult;
                         } else if (parseFloat(value) > this.deipTokenBalance) {
-                            return 'Amount is greater than your DEIP token balance';
+                            return 'Amount is greater than your DEIP Token balance';
                         }
                         
                         return true;

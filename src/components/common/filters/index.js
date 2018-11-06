@@ -8,9 +8,20 @@ Vue.filter('fullname', function (enrichedProfile) {
 });
 
 Vue.filter('userLocation', function (enrichedProfile) {
-    return enrichedProfile && enrichedProfile.profile && enrichedProfile.profile.location 
-        ? `${enrichedProfile.profile.location.city || ''} ${enrichedProfile.profile.location.country || ''}` 
-        : '';
+    const hasCity = enrichedProfile && enrichedProfile.profile && enrichedProfile.profile.location.city;
+    const hasCountry = enrichedProfile && enrichedProfile.profile && enrichedProfile.profile.location.country;
+    const city = hasCity 
+        ? enrichedProfile.profile.location.city 
+        : null;
+    const country = hasCountry 
+        ? enrichedProfile.profile.location.country
+        : null;
+
+    if (!city && !country) {
+        return '';
+    }
+
+    return `${city ? city : ''}${ city && country ? ', ' : '' }${country ? country : ''}`;
 });
 
 Vue.filter('employmentOrEducation', function (enrichedProfile) {
