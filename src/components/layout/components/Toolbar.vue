@@ -6,7 +6,7 @@
 
             <v-spacer></v-spacer>
 
-            <v-btn v-if="isLoggedIn()" icon large class="ma-0">
+            <v-btn v-if="isLoggedIn()" to="/research-feed" icon large class="ma-0">
                 <v-icon size="32px" color="grey lighten-1">search</v-icon>
             </v-btn>
 
@@ -94,7 +94,7 @@
             </v-menu>
 
             <div v-if="isLoggedIn()" class="mx-3" style="width: 180px">
-                <v-btn dark round color="primary" class="full-width ma-0" to="/create-research">
+                <v-btn dark round color="primary" class="full-width ma-0" to="/create-new-research">
                     <div class="col-grow">Add Research</div>
                     <v-icon dark small class="ml-2">add</v-icon>
                 </v-btn>

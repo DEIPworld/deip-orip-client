@@ -72,5 +72,6 @@ const createContentProposal = function(contentRef, contentType) {
 
 export {
     contentTypes,
+    contentTypesDictionary,
     createContentProposal
 }

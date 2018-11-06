@@ -6,7 +6,10 @@
 
                 <div class="row c-mh-auto group-share-max-width">
                     <div class="col-12">
-                        <div class="subheading c-pv-4">Distribute tokens of this group as follows</div>
+                        <div>
+                            Each research group is assigned its own Research Group Tokens which are distributed among its members and can be used to manage the group and its research activity.
+                        </div>
+                        <div class="body-2 c-pv-4">Distribute tokens of this group as follows:</div>
                         <div class="row-nowrap justify-between align-center c-pt-4" 
                             v-for="(member, i) in group.members" :key="i"
                         >
@@ -30,13 +33,11 @@
 
                         <div class="text-align-right c-pt-4">
                             <div class="caption grey--text">
-                                <div>Total:</div>
-                                <div>{{sum}} %</div>
+                                <div>Total: <span>{{sum}} %</span></div>
                             </div>
                         </div>
                     </div>
                 </div>
-
             </div>
         </div>
         <div class="row justify-center align-center">
@@ -83,7 +84,7 @@
 
 <style lang="less" scoped>
     .group-share-max-width {
-        max-width: 600px;
+        max-width: 510px;
     }
 
     .rtl.input-group input {

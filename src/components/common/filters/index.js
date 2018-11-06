@@ -14,15 +14,27 @@ Vue.filter('userLocation', function (enrichedProfile) {
 });
 
 Vue.filter('employmentOrEducation', function (enrichedProfile) {
-    const activeEmployment = enrichedProfile && enrichedProfile.profile && enrichedProfile.profile.employment && enrichedProfile.profile.employment.some(e => e.isActive) 
+    const hasEmployment = enrichedProfile && enrichedProfile.profile && enrichedProfile.profile.employment && enrichedProfile.profile.employment.length;
+    const hasActiveEmployment = enrichedProfile && enrichedProfile.profile && enrichedProfile.profile.employment && enrichedProfile.profile.employment.some(e => e.isActive);
+    const employment = hasActiveEmployment
         ? enrichedProfile.profile.employment.find(e => e.isActive)
-        : null;
+        : hasEmployment 
+            ? enrichedProfile.profile.employment[enrichedProfile.profile.employment.length - 1] 
+            : null;
 
-    const activeEducation = enrichedProfile && enrichedProfile.profile && enrichedProfile.profile.education && enrichedProfile.profile.education.some(e => e.isActive) 
+    const hasEducation = enrichedProfile && enrichedProfile.profile && enrichedProfile.profile.education && enrichedProfile.profile.education.length;
+    const hasActiveEducation = enrichedProfile && enrichedProfile.profile && enrichedProfile.profile.education && enrichedProfile.profile.education.some(e => e.isActive);
+    const education = hasActiveEducation
         ? enrichedProfile.profile.education.find(e => e.isActive)
-        : null;
+        : hasEducation 
+            ? enrichedProfile.profile.education[enrichedProfile.profile.education.length - 1] 
+            : null;
 
-    return activeEmployment ? activeEmployment.company : activeEducation ? activeEducation.educationalInstitution : "";
+    if (!education && !employment) {
+        return '';
+    }
+
+    return `${education ? education.educationalInstitution : ''}${ education && employment ? ', ' : '' }${employment ? employment.company : ''}`;
 });
 
 Vue.filter('avatarSrc', function (avatar, width, height, noCache ) {

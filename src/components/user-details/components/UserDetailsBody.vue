@@ -73,6 +73,7 @@
 
                         <!-- display either the current employment or education, todo: add isActive flag to employment/education -->
                         <div v-if="isProfileAvailable" class="c-pt-2">
+                            <v-icon small class="c-pr-1" v-if="getEmploymentOrEducation(userInfo)">school</v-icon>
                             {{ userInfo | employmentOrEducation}}
                         </div>
                     </div>
@@ -135,7 +136,7 @@
                     </div>
 
                     <v-card class="c-mt-6">
-                        <template v-for="group in commonGroups">
+                        <template v-for="group in commonGroups" :class="[{'personal-group': group.is_personal}]">
                             <div class="c-p-6">
                                 <router-link v-if="group.is_personal" :to="'/' + group.permlink + '/group-details'" class="research-group-title">
                                     {{currentUser | fullname}}
@@ -274,7 +275,7 @@
                     }"
                     class="a subheading"
                 >{{ item.discipline.name }}</router-link>
-                <span>{{ item._id }}</span>
+                <span class="caption">({{ item._id }})</span>
             </div>
         </div>
             
@@ -575,6 +576,10 @@
                     message: "Sorry, an error occurred while uploading avatar, please try again later"
                 });
                 console.log(message);
+            },
+
+            getEmploymentOrEducation(user) {
+                return this.$options.filters.employmentOrEducation(user)
             }
         },
 
@@ -655,6 +660,10 @@
 
     .user-education-employment-container {
          min-height: 100px
+    }
+
+    .personal-group {
+        margin-bottom: 20px;
     }
 
 </style>

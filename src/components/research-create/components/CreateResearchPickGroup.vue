@@ -6,7 +6,7 @@
             <div class="col-grow overflow-y-auto">
                 <div class="c-mh-auto c-pt-4" style="max-width: 800px;">
                     <div v-for="group in groups"
-                        v-bind:class="{'selected-group': research.group && group.id == research.group.id }"
+                        :class="{'selected-group': research.group && group.id == research.group.id, 'personal-group': group.is_personal }"
                         @click="setGroup(group)" 
                         class="row-nowrap group-line c-p-3">
                         <div v-if="group.is_personal" class="group-nameplate c-pr-2">{{ user | fullname}} 's personal group</div>
@@ -109,4 +109,9 @@
     .selected-group {
         background-color: #eaeaea;
     }
+
+    .personal-group {
+        margin-bottom: 20px;
+    }
+
 </style>

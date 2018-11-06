@@ -159,6 +159,6 @@
 
 <style lang="less" scoped>
     .group-members-max-width {
-        max-width: 600px;
+        max-width: 510px;
     }
 </style>

@@ -101,7 +101,9 @@
                             </div>
                         </div>
 
-                        <div class="subheading bold">Description (optional)</div>
+                        <div class="subheading bold">Description  
+                            <span class="caption">(optional)</span>
+                        </div>
                         <div class="row">
                             <div class="col-12">
                                 <v-text-field

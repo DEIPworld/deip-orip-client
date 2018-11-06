@@ -41,13 +41,13 @@
                         <span class="half-bold">{{ convertToPercent(research.review_share_in_percent) }}%</span>
                     </div>
 
-                    <div class="c-pr-8">
+                    <!-- <div class="c-pr-8">
                         <v-icon size="18px">visibility</v-icon> <span>1999</span>
-                    </div>
+                    </div> -->
 
-                    <div class="c-pr-8">
+                    <!-- <div class="c-pr-8">
                         <v-icon size="18px">chat_bubble</v-icon> <span>23</span>
-                    </div>
+                    </div> -->
                 </div>
             </div>
         </div>
