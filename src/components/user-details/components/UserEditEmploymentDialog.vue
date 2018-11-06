@@ -16,7 +16,7 @@
                         <div class="row">
                             <div class="col-12">
                                 <v-text-field
-                                    label="Company*"
+                                    label="Company"
                                     v-model="company"
                                     :rules="[rules.required]"
                                 ></v-text-field>
@@ -27,14 +27,14 @@
                         <div class="row">
                             <div class="col-6 c-pr-3">
                                 <v-text-field
-                                    label="City*"
+                                    label="City"
                                     v-model="city"
                                     :rules="[rules.required]"
                                 ></v-text-field>
                             </div>
                             <div class="col-6 c-pl-3">
                                 <v-text-field
-                                    label="Country*"
+                                    label="Country"
                                     v-model="country"
                                     :rules="[rules.required]"
                                 ></v-text-field>
@@ -43,7 +43,7 @@
 
                         <div class="subheading bold">Period</div>
                         <div class="row">
-                            <div class="col-6 c-pr-3">
+                            <div class="col-5 c-pr-3">
                                 <v-menu
                                     lazy
                                     :close-on-content-click="false"
@@ -53,7 +53,7 @@
                                     full-width
                                     min-width="290px"
                                 >
-                                    <v-text-field slot="activator" label="From*" 
+                                    <v-text-field slot="activator" label="From" 
                                         ref="dateFromInput"
                                         v-model="dateFrom"
                                         append-icon="event"
@@ -65,7 +65,8 @@
                                     <v-date-picker v-model="dateFrom" @input="dateFromMenu = false" type="month"></v-date-picker>
                                 </v-menu>
                             </div>
-                            <div class="col-6 c-pl-3">
+
+                            <div class="col-5 c-pl-3">
                                 <v-menu
                                     lazy
                                     :close-on-content-click="false"
@@ -77,7 +78,7 @@
                                 >
                                     <v-text-field slot="activator"
                                         ref="dateToInput"
-                                        label="To*"
+                                        label="To"
                                         v-model="dateTo"
                                         append-icon="event"
                                         :rules="[
@@ -88,13 +89,19 @@
                                     <v-date-picker v-model="dateTo" @input="dateToMenu = false" type="month"></v-date-picker>
                                 </v-menu>
                             </div>
+
+                            <div class="col-2 c-pt-5">
+                                <div class="row justify-end">
+                                    <v-checkbox label="Is active" v-model="isActive" hide-details style="max-width: 125px"></v-checkbox>
+                                </div>
+                            </div>
                         </div>
 
                         <div class="subheading bold">Position</div>
                         <div class="row">
                             <div class="col-12">
                                 <v-text-field
-                                    label="Position*"
+                                    label="Position"
                                     v-model="position"
                                     :rules="[rules.required]"
                                 ></v-text-field>
@@ -121,11 +128,8 @@
 
                         <div>
                             <div class="row">
-                                <div class="col-1">
-                                    <v-checkbox label="Is active" v-model="isActive"></v-checkbox>
-                                </div>
                                 <div class="col-11">
-                                    <v-btn class="ml-5 ma-0 width-10" color="primary" @click="save()" :disabled="disabled">Save</v-btn>
+                                    <v-btn class="ma-0 width-10" color="primary" @click="save()" :disabled="disabled">Save</v-btn>
                                     <span class="c-pr-4"></span>
                                     <v-btn class="ma-0 width-10" color="primary" flat @click.native="meta.isShown = false">Cancel</v-btn>
                                 </div>
