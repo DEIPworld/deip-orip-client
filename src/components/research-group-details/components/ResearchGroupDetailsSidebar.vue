@@ -33,7 +33,7 @@
                 </div>
             </sidebar-splitted-btn> -->
 
-            <div v-if="group">
+            <div v-if="group && !isPersonalGroup">
                 <div class="sm-title bold c-pt-6">Quorum setup</div>
 
                 <div class="c-pt-4 c-pb-6">
@@ -153,6 +153,7 @@
         computed: {
             ...mapGetters({
                 user: 'auth/user',
+                userPersonalGroup: 'auth/userPersonalGroup',
                 group: 'researchGroup/group',
                 members: 'researchGroup/members',
                 options: 'researchGroup/options',
@@ -162,7 +163,11 @@
                 isLoadingResearchGroupDetails: 'researchGroup/isLoadingResearchGroupDetails',
                 isLoadingResearchGroupJoinRequests: 'researchGroup/isLoadingResearchGroupJoinRequests'
             }),
-
+            isPersonalGroup() {
+                return this.group 
+                    ? this.group.id == this.userPersonalGroup.id 
+                    : false;
+            },
             groupExpertise() {
                 return _.chain(this.members)
                     .map('expertise')

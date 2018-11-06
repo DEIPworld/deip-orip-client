@@ -171,7 +171,7 @@
                     <div v-if="(isMissingTokenSale && isResearchGroupMember)" class="c-pt-4 c-pb-6">
                         <router-link v-if="research" :to="`/${research.group_permlink}/create-token-sale/${research.permlink}`" style="text-decoration: none">
                             <v-btn dark round outline color="primary" class="full-width c-mt-3 c-mb-3">
-                                <div class="col-grow add-review-label">Propose Token sale</div>
+                                <div class="col-grow add-review-label">{{!isPersonalGroup ? 'Propose Token sale' : 'Create Token sale'}}</div>
                             </v-btn>
                         </router-link>
                     </div>
@@ -296,8 +296,14 @@
                 isLoadingResearchDisciplines: 'rd/isLoadingResearchDisciplines',
                 isLoadingResearchTokenHolders: 'rd/isLoadingResearchTokenHolders',
                 isLoadingResearchTokenSale: 'rd/isLoadingResearchTokenSale',
-                isLoadingResearchDetails: 'rd/isLoadingResearchDetails'
+                isLoadingResearchDetails: 'rd/isLoadingResearchDetails',
+                userPersonalGroup: 'auth/userPersonalGroup'
             }),
+            isPersonalGroup() {
+                return this.research 
+                    ? this.research.research_group_id == this.userPersonalGroup.id 
+                    : false;
+            },
             isResearchGroupMember() {
                 return this.research != null 
                     ? this.$store.getters['auth/userIsResearchGroupMember'](this.research.research_group_id) 
