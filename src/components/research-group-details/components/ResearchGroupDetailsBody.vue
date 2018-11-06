@@ -16,10 +16,10 @@
             ></v-progress-circular>
 
             <div v-if="isLoadingResearchGroupDetails === false">
-                <div>
+            <!--<div>
                     <v-icon small>date_range</v-icon>
                     <span>Created on 22 Aug 2018</span>
-                </div>
+                </div> -->
                 <div class="display-1 half-bold c-mt-10">{{ group ? group.name : '' }}</div>
                 <div class="c-pt-8">{{ group ? group.description : '' }}</div>
             </div>
@@ -83,7 +83,7 @@
                                         {{ member.created | dateFormat("D MMM YYYY") }}
                                     </div>
 
-                                    <div class="col-2 text-align-center list-body-cell">Belarus</div>
+                                    <div class="col-2 text-align-center list-body-cell">{{member | userLocation}}</div>
                                 </div>
 
                                 <v-divider></v-divider>

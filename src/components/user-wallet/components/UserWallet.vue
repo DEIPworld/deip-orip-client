@@ -34,7 +34,11 @@
 
                                     <v-tooltip bottom>
                                         <v-icon class="clickable c-pb-1" slot="activator" size="20">help</v-icon>
-                                        <span>DEIP Token</span>
+                                        <span>
+                                            The DEIP Token is the liquid currency of the platform. 
+                                            It is used to reward scientists for their contribution of expertise and to finance projects published on the platform. 
+                                            It is also distributed as a reward for maintenance of the platform infrastructure.
+                                        </span>
                                     </v-tooltip>
                                 </div>
 
@@ -69,7 +73,11 @@
 
                                     <v-tooltip bottom>
                                         <v-icon class="clickable c-pb-1" slot="activator" size="20">help</v-icon>
-                                        <span>DEIP Common Token</span>
+                                        <span>
+                                            The DEIP Common Token is used to distribute network throughput among DEIP participants. It is allocated to new platform members and allows them to use its functionality for free.
+                                            The amount of DEIP Common influences the storage capacity assigned to researchers and defines the maximum frequency of their operations. DEIP Common tokens cannot be transferred but can be converted to and from the DEIP Token.
+                                            Important note! The conversion from DEIP Token to DEIP Common happens immediately, but the reverse action takes a certain period of time. The amount of DEIP Common on a member’s account cannot be lower than that initially received.
+                                        </span>
                                     </v-tooltip>
                                 </div>
 
@@ -93,7 +101,11 @@
                         Research Tokens
                         <v-tooltip bottom>
                             <v-icon class="clickable c-pb-1" slot="activator" size="20">help</v-icon>
-                            <span>Research Tokens</span>
+                            <span>
+                                Research Tokens define the ownership rights for a research project on the DEIP platform. Every research project is allocated a number of unique tokens, all of which initially belong to the research group. 
+                                The research group may sell some of them to stakeholders to raise funds for its project. 
+                                A research project conducted on the platform can be rewarded by the emission of DEIP Tokens which are then distributed among the Research Token holders.
+                            </span>
                         </v-tooltip>
                     </div>
 
@@ -145,7 +157,7 @@
                             </div>
 
                             <div class="list-line height-7" v-else>
-                                <div class="c-m-auto grey--text">Research token list is empty</div>
+                                <div class="c-m-auto grey--text">Research Token list is empty</div>
                             </div>
                         </div>
                     </v-card>

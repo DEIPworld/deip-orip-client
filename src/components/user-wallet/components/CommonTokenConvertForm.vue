@@ -35,7 +35,7 @@
                             </svg>
                         </div>
 
-                        <div class="c-m-auto caption grey--text">DEIP token</div>
+                        <div class="c-m-auto caption grey--text">DEIP Token</div>
                     </div>
 
                     <v-btn large flat icon class="ma-0" color="primary" @click="changeMode()">
@@ -51,7 +51,7 @@
                             </svg>
                         </div>
 
-                        <div class="c-m-auto caption grey--text">DEIP common</div>
+                        <div class="c-m-auto caption grey--text">DEIP Common</div>
                     </div>
                 </div>
 
@@ -92,7 +92,7 @@
                         if (formatValidationResult !== true) {
                             return formatValidationResult;
                         } else if (parseFloat(value) > this.deipTokenBalance) {
-                            return 'Amount is greater than your DEIP token balance';
+                            return 'Amount is greater than your DEIP Token balance';
                         }
                         
                         return true;
@@ -107,7 +107,7 @@
                         if (number === 0) {
                             return 'Amount should be greater than zero';
                         } else if (number > this.commonTokensBalance) {
-                            return 'Amount is greater than DEIP common balance';
+                            return 'Amount is greater than DEIP Common balance';
                         } else {
                             return true;
                         }
