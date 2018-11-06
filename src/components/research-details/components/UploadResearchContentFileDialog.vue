@@ -81,7 +81,7 @@
                                 :disabled="isDisabled || isLoading"
                                 :loading="isLoading"
                                 @click="proposeContent()"
-                            >Create proposal</v-btn>
+                            >{{!isPersonalGroup ? 'Create Proposal' : 'Create Content'}}</v-btn>
                         </div>
                     </div>
 
@@ -128,7 +128,13 @@
                 user: 'auth/user',
                 membersList: 'rd/membersList',
                 research: 'rd/research',
+                userPersonalGroup: 'auth/userPersonalGroup'
             }),
+            isPersonalGroup() {
+                return this.research 
+                    ? this.research.research_group_id == this.userPersonalGroup.id 
+                    : false;
+            },
             isDisabled() {
                 return !this.title ||
                        !this.type ||

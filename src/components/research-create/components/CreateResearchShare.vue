@@ -35,7 +35,9 @@
             <v-btn flat small @click.native="prevStep()">
                 <v-icon dark class="pr-1">keyboard_arrow_left</v-icon> Back
             </v-btn>
-            <v-btn color="primary" :disabled="nextDisabled" :loading="isLoading" @click.native="finish()">Create Proposal</v-btn>
+            <v-btn color="primary" :disabled="nextDisabled" :loading="isLoading" @click.native="finish()"> 
+                {{!isPersonalGroup ? 'Create Proposal' : 'Create Research'}}
+            </v-btn>
         </div>
     </div>
 </template>
@@ -56,10 +58,18 @@
             }
         },
         computed: {
+            ...mapGetters({
+                userPersonalGroup: 'auth/userPersonalGroup'
+            }),
             nextDisabled() {
                 return !this.research.review_share_in_percent
                     || !(this.research.review_share_in_percent >= 0 && this.research.review_share_in_percent <= 50)
                     || this.isLoading;
+            },
+            isPersonalGroup() {
+                return this.research.group 
+                    ? this.research.group.id == this.userPersonalGroup.id 
+                    : false;
             }
         },
         methods: {

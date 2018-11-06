@@ -17,7 +17,7 @@
               @click="openContentProposalDialog()">
               <v-icon>send</v-icon>
             </v-btn>
-            <span>Propose Content</span>
+            <span>{{!isPersonalGroup ? 'Create Proposal' : 'Create Content'}}</span>
           </v-tooltip>
         </div>
       </div>
@@ -103,7 +103,7 @@
                       :disabled="proposeContent.isLoading || !isCreatingProposalAvailable"
                       :loading="proposeContent.isLoading"
                       @click="sendContentProposal()"
-                      >Create proposal</v-btn>
+                      >{{!isPersonalGroup ? 'Create Proposal' : 'Create Content'}}</v-btn>
                   </div>
                 </div>
               </contentbar>
@@ -150,8 +150,14 @@
                 membersList: 'rcd/membersList',
                 contentReviewsList: 'rcd/contentReviewsList',
                 isLoadingResearchContentPage: 'rcd/isLoadingResearchContentPage',
-                contentRef: 'rcd/contentRef'
+                contentRef: 'rcd/contentRef',
+                userPersonalGroup: 'auth/userPersonalGroup'
             }),
+            isPersonalGroup() {
+                return this.research 
+                    ? this.research.research_group_id == this.userPersonalGroup.id 
+                    : false;
+            },
             isResearchGroupMember() {
                 return this.research != null 
                     ? this.$store.getters['auth/userIsResearchGroupMember'](this.research.research_group_id) 

@@ -61,6 +61,10 @@ const getters = {
         return groups;
     },
 
+    userPersonalGroup: (state, getters) => {
+        return getters.userGroups.find(g => g.permlink == getters.user.username);
+    },
+
     userIsResearchGroupMember: (state, getters) => {
         return groupId => getters.userGroups.find(group => {
             return groupId === group.id}) !== undefined;

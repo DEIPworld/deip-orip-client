@@ -132,7 +132,7 @@
             ></v-progress-circular>
             
             <div v-if="isLoadingResearchGroupProposals === false">
-                <research-group-details-proposals></research-group-details-proposals>
+                <research-group-details-proposals v-if="!isPersonalGroup"></research-group-details-proposals>
             </div>
         </div>
         <!-- ### END Research Group Proposals Section ### -->
@@ -163,8 +163,14 @@
                 isLoadingResearchGroupMembers: 'researchGroup/isLoadingResearchGroupMembers',
                 isLoadingResearchGroupResearchList: 'researchGroup/isLoadingResearchGroupResearchList',
                 isLoadingResearchGroupProposals: 'researchGroup/isLoadingResearchGroupProposals',
-                isLoadingResearchGroupPage: 'researchGroup/isLoadingResearchGroupPage'
+                isLoadingResearchGroupPage: 'researchGroup/isLoadingResearchGroupPage',
+                userPersonalGroup: 'auth/userPersonalGroup'
             }),
+            isPersonalGroup() {
+                return this.group 
+                    ? this.group.id == this.userPersonalGroup.id 
+                    : false;
+            },
             isResearchGroupMember() {
                 return this.group != null 
                     ? this.$store.getters['auth/userIsResearchGroupMember'](this.group.id) 
