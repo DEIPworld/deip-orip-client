@@ -75,24 +75,33 @@
                                     offset-y
                                     full-width
                                     min-width="290px"
+                                    :disabled="isActive"
                                 >
                                     <v-text-field slot="activator"
                                         ref="dateToInput"
                                         label="To"
                                         v-model="dateTo"
                                         append-icon="event"
+                                        :disabled="isActive"
                                         :rules="[
-                                            rules.required,
+                                            rules.requiredDateTo,
                                             rules.endDateValidation
                                         ]"
-                                        readonly></v-text-field>
+                                        readonly
+                                    ></v-text-field>
+
                                     <v-date-picker v-model="dateTo" @input="dateToMenu = false" type="month"></v-date-picker>
                                 </v-menu>
                             </div>
 
                             <div class="col-2 c-pt-5">
                                 <div class="row justify-end">
-                                    <v-checkbox label="Is active" v-model="isActive" hide-details style="max-width: 125px"></v-checkbox>
+                                    <v-checkbox label="Is active"
+                                        :input-value="isActive"
+                                        hide-details
+                                        style="max-width: 125px"
+                                        @click="changeIsActive()"
+                                    ></v-checkbox>
                                 </div>
                             </div>
                         </div>
@@ -114,7 +123,7 @@
                         <div class="row">
                             <div class="col-12">
                                 <v-text-field
-                                    placeholder="Description"
+                                    label="Description"
                                     v-model="description"
                                 ></v-text-field>
                             </div>
@@ -169,6 +178,7 @@
 
                 rules: {
                     required: value => !!value || 'This field is required',
+                    requiredDateTo: value => this.isActive || !!value || 'This field is required',
                     startDateValidation: value => {
                         if (!value || !this.dateTo) {
                             return true;
@@ -187,6 +197,15 @@
             }
         },
         methods: {
+            changeIsActive() {
+                this.isActive = !this.isActive;
+
+                if (this.isActive) {
+                    this.dateTo = undefined;
+                }
+
+                this.$refs.dateToInput.validate();
+            },
             save() {
                 this.$emit('saveEmployment', { 
                     item: {
