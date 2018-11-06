@@ -11,8 +11,7 @@ export const REBALANCE_RESEARCH_GROUP_TOKENS = 6;
 export const CHANGE_QUORUM = 7;
 export const CHANGE_RESEARCH_REVIEW_SHARE_PERCENT = 8;
 export const OFFER_RESEARCH_TOKENS = 9;
-export const ACCEPT_RESEARCH_TOKEN_OFFER = 10;
-export const CREATE_RESEARCH_MATERIAL = 11;
+export const CREATE_RESEARCH_MATERIAL = 10;
 
 const types = {
     START_RESEARCH,
@@ -24,7 +23,6 @@ const types = {
     CHANGE_QUORUM,
     CHANGE_RESEARCH_REVIEW_SHARE_PERCENT,
     OFFER_RESEARCH_TOKENS,
-    ACCEPT_RESEARCH_TOKEN_OFFER,
     CREATE_RESEARCH_MATERIAL
 };
 
@@ -38,7 +36,6 @@ labels[REBALANCE_RESEARCH_GROUP_TOKENS] = 'Rebalance Research Group Tokens';
 labels[CHANGE_QUORUM] = 'Change quorum';
 labels[CHANGE_RESEARCH_REVIEW_SHARE_PERCENT] = 'Change research review share';
 labels[OFFER_RESEARCH_TOKENS] = 'Offer Research Tokens';
-labels[ACCEPT_RESEARCH_TOKEN_OFFER] = 'Accept Research Tokens offer';
 labels[CREATE_RESEARCH_MATERIAL] = 'Publish research results';
 
 // maybe will be OK to add param validations or type conversion

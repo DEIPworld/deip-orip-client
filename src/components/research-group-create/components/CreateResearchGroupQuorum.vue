@@ -101,18 +101,6 @@
                                 <div class="row align-items-end">
                                     <div>
                                         <v-text-field class="width-6 pa-0"
-                                            v-model="group.quorum.acceptResearchTokenOffer"
-                                            suffix="%"
-                                            mask="###"
-                                            hide-details
-                                        ></v-text-field>
-                                    </div>
-                                    <div class="col-grow c-ml-8">Accept research token offer</div>
-                                </div>
-
-                                <div class="row align-items-end">
-                                    <div>
-                                        <v-text-field class="width-6 pa-0"
                                             v-model="group.quorum.offerResearchTokens"
                                             suffix="%"
                                             mask="###"
