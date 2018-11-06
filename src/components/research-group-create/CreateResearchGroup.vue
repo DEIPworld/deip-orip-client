@@ -116,7 +116,6 @@
                         changeQuorum: 0,
                         changeReviewSharePercent: 0,
                         offerResearchTokens: 0,
-                        acceptResearchTokenOffer: 0,
                         createMaterial: 0
                     }
                 }

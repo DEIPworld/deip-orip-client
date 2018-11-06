@@ -43,8 +43,8 @@
                         <div class="">{{ convertToPercent( group.proposal_quorums[0][1] ) }}%</div>
                     </div>
                     <div class="row-nowrap justify-between">
-                        <div class="half-bold">{{ proposalLabels[ group.proposal_quorums[10][0] ] }}</div>
-                        <div class="">{{ convertToPercent( group.proposal_quorums[10][1] ) }}%</div>
+                        <div class="half-bold">{{ proposalLabels[ group.proposal_quorums[9][0] ] }}</div>
+                        <div class="">{{ convertToPercent( group.proposal_quorums[9][1] ) }}%</div>
                     </div>
                     <div class="row-nowrap justify-between">
                         <div class="half-bold">{{ proposalLabels[ group.proposal_quorums[7][0] ] }}</div>
@@ -61,10 +61,6 @@
                     <div class="row-nowrap justify-between c-pt-2">
                         <div class="half-bold">{{ proposalLabels[ group.proposal_quorums[4][0] ] }}</div>
                         <div class="">{{ convertToPercent( group.proposal_quorums[4][1] ) }}%</div>
-                    </div>
-                    <div class="row-nowrap justify-between">
-                        <div class="half-bold">{{ proposalLabels[ group.proposal_quorums[9][0] ] }}</div>
-                        <div class="">{{ convertToPercent( group.proposal_quorums[9][1] ) }}%</div>
                     </div>
                     <div class="row-nowrap justify-between">
                         <div class="half-bold">{{ proposalLabels[ group.proposal_quorums[8][0] ] }}</div>
