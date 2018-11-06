@@ -1,5 +1,6 @@
 import _ from 'lodash';
 import researchContentSvc from './http/content.js';
+import notificationsHttpService from './http/notifications.js';
 import deipRpc from '@deip/deip-rpc-client';
 
 export const START_RESEARCH = 1;
@@ -134,9 +135,34 @@ const extendProposalByRelatedInfo = proposal => {
         });
 };
 
+const createProposal = function(privKey, username, groupId, stringifiedPayload, proposalType) {
+    return deipRpc.broadcast.createProposalAsync(privKey, username, groupId, stringifiedPayload, proposalType,
+        new Date(new Date().getTime() + 2 * 24 * 60 * 60 * 1000))
+            .then((block) => {
+                var proposal = null;
+                for (let i = 0; i < block.operations.length; i++) {
+                    const op = block.operations[i];
+                    const opName = op[0];
+                    const opPayload = op[1];
+                    if (opName === 'create_proposal') {
+                        if (opPayload.data == stringifiedPayload) {
+                            proposal = opPayload;
+                            break;
+                        }
+                    }
+                }
+                if (proposal) {
+                    proposal.data = JSON.parse(proposal.data)
+                }
+                return notificationsHttpService.createResearchGroupNotification(
+                    groupId, { type: 'proposal', meta: proposal });
+            });
+    }
+
 export {
     types,
     labels,
+    createProposal,
     getStringifiedProposalData,
     getParsedProposal,
     extendProposalByRelatedInfo

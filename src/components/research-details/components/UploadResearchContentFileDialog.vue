@@ -183,7 +183,7 @@
                 contentRef.references = [];
 
                 createContentProposal(contentRef, this.type)
-                    .then((updatedRequest) => {
+                    .then(() => {
                         this.$store.dispatch('layout/setSuccess', {
                             message: "New Content Proposal has been created successfuly!"
                         });

@@ -91,7 +91,7 @@
 
 <script>
     import deipRpc from '@deip/deip-rpc-client';
-    import * as proposalService from "./../../services/ProposalService"; 
+    import { createProposal, getStringifiedProposalData, START_RESEARCH } from "./../../services/ProposalService"; 
     import * as disciplineTreeService from "./../common/disciplines/DisciplineTreeService"; 
     import { mapGetters } from 'vuex';
 
@@ -150,7 +150,7 @@
                 const self = this;
                 this.isLoading = true;
 
-                let proposal = proposalService.getStringifiedProposalData(proposalService.types.START_RESEARCH, [
+                let proposal = getStringifiedProposalData(START_RESEARCH, [
                     this.research.group.id,
                     this.research.title,
                     this.research.description,
@@ -160,13 +160,12 @@
                     this.research.disciplines.map(d => d.id)
                 ]);
 
-                deipRpc.broadcast.createProposalAsync(
+                createProposal(
 					this.user.privKey,
 					this.user.username, 
 					this.research.group.id,
                     proposal,
-                    proposalService.types.START_RESEARCH,
-					new Date( new Date().getTime() + 2 * 24 * 60 * 60 * 1000 )
+                    START_RESEARCH
 				).then(() => {
                     this.isLoading = false;
 

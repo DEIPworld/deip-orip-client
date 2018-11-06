@@ -78,7 +78,7 @@
     import _ from 'lodash';
     import deipRpc from '@deip/deip-rpc-client';
     import { mapGetters } from 'vuex';
-    import * as proposalService from './../../../services/ProposalService';
+    import { getStringifiedProposalData, createProposal, INVITE_MEMBER } from './../../../services/ProposalService';
     import { getEnrichedProfiles } from './../../../utils/user'
 
     export default {
@@ -117,8 +117,8 @@
             sendProposal() {
                 this.isLoading = true;
 
-                let proposal = proposalService.getStringifiedProposalData(
-                    proposalService.types.INVITE_MEMBER, [
+                let proposal = getStringifiedProposalData(
+                    INVITE_MEMBER, [
                         this.groupId,
                         this.selectedUser.account.name,
                         parseInt(this.tokensAmount) * this.DEIP_1_PERCENT,
@@ -126,12 +126,12 @@
                     ]
                 );
 
-                deipRpc.broadcast.createProposalAsync(
+                createProposal(
 					this.user.privKey,
 					this.user.username,
 					this.groupId,
 					proposal,
-                    proposalService.types.INVITE_MEMBER,
+                    INVITE_MEMBER,
 					new Date( new Date().getTime() + 2 * 24 * 60 * 60 * 1000 )
 				).then(() => {
                     this.$store.dispatch('layout/setSuccess', {
