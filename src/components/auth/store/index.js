@@ -5,6 +5,7 @@ import Vue from 'vue'
 import { isLoggedIn, getDecodedToken, getOwnerWif } from './../../../utils/auth'
 import usersService from './../../../services/http/users'
 import joinRequestsService from './../../../services/http/joinRequests'
+import notificationsHttpService from './../../../services/http/notifications'
 import { getEnrichedProfiles } from './../../../utils/user'
 import * as proposalService from "./../../../services/ProposalService";
 
@@ -21,10 +22,7 @@ const state = {
         groups: [],
         coworkers: [],
         joinRequests: [],
-
-        notifications: {
-            proposals: []
-        }
+        notifications: []
     }
 }
 
@@ -93,34 +91,51 @@ const actions = {
         let tokens = undefined;
         const proposals = [];
 
-        deipRpc.api.getResearchGroupTokensByAccountAsync(user.username)
-            .then(groupTokens => {
-                tokens = groupTokens;
-                return Promise.all(groupTokens.map(token => deipRpc.api.getProposalsByResearchGroupIdAsync(token.research_group_id)))
-            })
-            .then(proposalsList => {
-                _.each(tokens, (token, i) => {
-                    _.each(proposalsList[i], proposal => proposal.groupId = token.research_group_id);
-                });
+        // deipRpc.api.getResearchGroupTokensByAccountAsync(user.username)
+            // .then(groupTokens => {
+            //     tokens = groupTokens;
+            //     return Promise.all(groupTokens.map(token => deipRpc.api.getProposalsByResearchGroupIdAsync(token.research_group_id)))
+            // })
+        //     .then(proposalsList => {
+        //         _.each(tokens, (token, i) => {
+        //             _.each(proposalsList[i], proposal => proposal.groupId = token.research_group_id);
+        //         });
 
-                proposals.push(..._(proposalsList).flatten()
-                    .filter(proposal => 
-                        // proposal.creator !== user.username && 
-                        !proposal.voted_accounts.some(el => el === user.username) && !proposal.is_completed
-                    )
-                    .each(proposal => {
-                        proposalService.getParsedProposal(proposal);
-                        proposal.group = _.find(user.groups, group => group.id === proposal.groupId);
-                        delete proposal.groupId;
-                    }));
+        //         proposals.push(..._(proposalsList).flatten()
+        //             .filter(proposal => 
+        //                 // proposal.creator !== user.username && 
+        //                 !proposal.voted_accounts.some(el => el === user.username) && !proposal.is_completed
+        //             )
+        //             .each(proposal => {
+        //                 proposalService.getParsedProposal(proposal);
+        //                 proposal.group = _.find(user.groups, group => group.id === proposal.groupId);
+        //                 delete proposal.groupId;
+        //             }));
 
-                return getEnrichedProfiles(proposals.map(p => p.creator));
+        //         return getEnrichedProfiles(proposals.map(p => p.creator));
+        //     })
+        //     .then((users) => {
+        //         proposals.forEach((proposal, i) => {
+        //             proposal.creator = users.find(u => u.account.name == proposal.creator);
+        //         });
+        //         commit('SET_USER_NOTIFICATION_PROPOSALS', proposals);
+        //     });
+
+        const notifications = [];
+        notificationsHttpService.getNotificationsByUser(user.username)
+            .then((list) => {
+                const groupProposals = list.filter(n => n.type == 'proposal');
+                notifications.push(...groupProposals);
+                return getEnrichedProfiles(groupProposals.map(n => n.meta.creator));
             })
             .then((users) => {
-                proposals.forEach((proposal, i) => {
-                    proposal.creator = users.find(u => u.account.name == proposal.creator);
-                });
-                commit('SET_USER_NOTIFICATION_PROPOSALS', proposals);
+                debugger;
+                for (let i = 0; i < notifications.length; i++) {
+                    const notification = notifications[i];
+                    notification.meta.creatorUser = users.find(user => notification.meta.creator == user.account.name);
+                }
+                debugger;
+                commit('SET_USER_NOTIFICATION_PROPOSALS', notifications);
             });
     },
 
@@ -286,7 +301,7 @@ const mutations = {
     },
 
     ['SET_USER_NOTIFICATION_PROPOSALS'](state, list) {
-        Vue.set(state.user.notifications, 'proposals', list)
+        Vue.set(state.user, 'notifications', list)
     },
 
     ['SET_USER_COWORKERS_LIST'](state, list) {

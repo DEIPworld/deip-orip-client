@@ -8,7 +8,7 @@
                     <div v-for="group in groups"
                         :class="{'selected-group': research.group && group.id == research.group.id, 'personal-group': group.is_personal }"
                         @click="setGroup(group)" 
-                        class="row-nowrap group-line c-p-3">
+                        class="row-nowrap group-line c-p-3 c-mt-1">
                         <div v-if="group.is_personal" class="group-nameplate c-pr-2">{{ user | fullname}} 's personal group</div>
                         <div v-if="!group.is_personal" class="group-nameplate c-pr-2">{{group.name}}</div>
                         <div class="">{{ getGroupCoworkers(group).join(' · ') }}</div>
