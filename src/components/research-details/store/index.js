@@ -351,7 +351,6 @@ const actions = {
                 return getEnrichedProfiles(tokenHolders.map(m => m.account_name))
             }, (err) => {console.log(err)})
             .then((users) => {
-                debugger;
                 for (let i = 0; i < tokenHolders.length; i++) {
                     const holder = tokenHolders[i];
                     holder.user = users.find(user => holder.account_name == user.account.name);
