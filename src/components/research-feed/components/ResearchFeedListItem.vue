@@ -39,28 +39,28 @@
         </div>
 
         <div class="row-nowrap c-pt-1" v-show="!research.isCollapsed">
-            <div class="c-pr-8" v-if="research.created_at">
-                <v-icon size="18px">event</v-icon> Created
+            <div class="c-pr-8 grey--text" v-if="research.created_at">
+                <v-icon color="grey" size="18px">event</v-icon> Created
                 <span class="half-bold">{{ research.created_at | dateFormat('D MMM, YYYY', true) }}</span>
             </div>
 
-            <div class="c-pr-8" v-if="research.owned_tokens">
-                <v-icon size="18px">timelapse</v-icon> Owned tokens
+            <div class="c-pr-8 grey--text" v-if="research.owned_tokens">
+                <v-icon color="grey" size="18px">timelapse</v-icon> Owned tokens
                 <span class="half-bold">{{ convertToPercent(research.owned_tokens) }}%</span>
             </div>
 
-            <div class="c-pr-8" v-if="research.review_share_in_percent">
-                <v-icon size="18px">pie_chart</v-icon> Review award
+            <div class="c-pr-8 grey--text" v-if="research.review_share_in_percent">
+                <v-icon color="grey" size="18px">pie_chart</v-icon> Review award
                 <span class="half-bold">{{ convertToPercent(research.review_share_in_percent) }}%</span>
             </div>
 
-            <div class="c-pr-8" v-if="tokenSaleStr">
-                <v-icon size="18px">attach_money</v-icon>
-                <span class="grey--text">{{ tokenSaleStr }}</span>
+            <div class="c-pr-8 grey--text" v-if="tokenSaleStr">
+                <v-icon color="grey" size="18px">attach_money</v-icon>
+                <span class="">{{ tokenSaleStr }}</span>
             </div>
 
             <div class="c-pr-8">
-                <v-icon size="18px">chat_bubble</v-icon>
+                <v-icon color="grey" size="18px">chat_bubble</v-icon>
                 
                 <span class="bold display-inline-flex">
                     <span class="green--text text--darken-2">{{ countReviews(true) }}</span>
