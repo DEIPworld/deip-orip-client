@@ -18,7 +18,7 @@
                         <div class="half-bold">{{ item.discipline_name }}</div>
                         <div>{{ item.amount }}</div>
                     </div>
-                    <div v-if="!expertise.length" class="italic">No expertise tokens</div>
+                    <div v-if="!expertise.length" class="body-1">You have no expertise tokens yet. Use <span class="a" @click="openClaimExpertiseDialog()">Claim</span> process to apply for Expertise Tokens</div>
                 </div>
             </div>
         </div>
@@ -406,6 +406,10 @@
                     this.isRejectingInvite = false;
                     this.rejectInviteMeta.isShown = false
                 })
+            },
+
+            openClaimExpertiseDialog() {
+                this.$store.dispatch('userDetails/openExpertiseTokensClaimDialog')
             }
         }
     };

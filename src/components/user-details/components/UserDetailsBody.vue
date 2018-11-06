@@ -265,7 +265,7 @@
 
         <div v-if="isLoadingUserProfilePage === false">
             <div class="c-pt-12 c-pb-2"></div>
-            <v-btn class="ma-0" @click="isClaimExpertiseShown = true">Claim Expertise Tokens</v-btn>
+            <v-btn class="ma-0" @click="openClaimExpertiseDialog()">Claim Expertise Tokens</v-btn>
 
             <div class="c-mt-6 c-mb-2 body-2" v-if="tmpClaimObjects.length">Active claims:</div>
             <div v-for="(item, i) in tmpClaimObjects" :key="i">
@@ -280,8 +280,9 @@
         </div>
             
         <user-claim-expertise-dialog
-            :is-shown="isClaimExpertiseShown"
-            @close="isClaimExpertiseShown = false"
+            :is-shown="isClaimExpertiseDialogShown"
+            @onPublish="loadExpertiseClaims"
+            @close="closeClaimExpertiseDialog"
         ></user-claim-expertise-dialog>
     </div>
 </template>
@@ -319,8 +320,6 @@
                 accountName: this.$route.params.account_name,
                 fileStorageBaseUrl: process.env.DEIP_SERVER_URL,
 
-                isClaimExpertiseShown: false,
-
                 tmpClaimObjects: []
             }
         },
@@ -335,7 +334,8 @@
                 isLoadingUserProfile: 'userDetails/isLoadingUserProfile',
                 isLoadingUserGroups: 'userDetails/isLoadingUserGroups',
                 isLoadingUserResearch: 'userDetails/isLoadingUserResearch',
-                isLoadingUserProfilePage: 'userDetails/isLoadingUserProfilePage'
+                isLoadingUserProfilePage: 'userDetails/isLoadingUserProfilePage',
+                isClaimExpertiseDialogShown: 'userDetails/isClaimExpertiseDialogShown'
             }),
 
             isOwner() {
@@ -580,27 +580,35 @@
 
             getEmploymentOrEducation(user) {
                 return this.$options.filters.employmentOrEducation(user)
-            }
+            },
+
+            openClaimExpertiseDialog() {
+                this.$store.dispatch('userDetails/openExpertiseTokensClaimDialog')
+            },
+            closeClaimExpertiseDialog() {
+                this.$store.dispatch('userDetails/closeExpertiseTokensClaimDialog')
+            },
+
+            loadExpertiseClaims() {
+                let resData;
+                expertiseClaimsService.getExpertiseClaimsByUser(this.$route.params.account_name)
+                    .then(data => {
+                        resData = data;
+                        return Promise.all(
+                            data.map(item => deipRpc.api.getDisciplineAsync(item.disciplineId))
+                        );
+                    })
+                    .then(disciplines => {
+                        resData.forEach((item, index) => {
+                            item.discipline = disciplines[index];
+                        });
+                        this.tmpClaimObjects = resData;
+                    });
+                }
         },
 
         created() {
-            let resData;
-
-            expertiseClaimsService.getExpertiseClaimsByUser(this.$route.params.account_name)
-                .then(data => {
-                    resData = data;
-
-                    return Promise.all(
-                        data.map(item => deipRpc.api.getDisciplineAsync(item.disciplineId))
-                    );
-                })
-                .then(disciplines => {
-                    resData.forEach((item, index) => {
-                        item.discipline = disciplines[index];
-                    });
-
-                    this.tmpClaimObjects = resData;
-                });
+            this.loadExpertiseClaims();
         }
     }
 </script>

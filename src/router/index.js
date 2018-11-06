@@ -61,12 +61,14 @@ const router = new Router({
         path: '/sign-up',
         name: 'SignUp',
         component: SignUp
-    }, {
-        // page for test net only
-        path: '/create-testnet-account',
-        name: 'create-testnet-account',
-        component: CreateAccountTestNet
-    }, {
+    }, 
+    // {
+    //     // page for test net only
+    //     path: '/create-testnet-account',
+    //     name: 'create-testnet-account',
+    //     component: CreateAccountTestNet
+    // }, 
+    {
         path: '/voting-for-block-producers',
         name: 'voting-for-block-producers',
         component: VotingForBlockProducers
@@ -114,11 +116,13 @@ const router = new Router({
         path: '/emailSendingRegesitration',
         name: 'EmailSendingRegesitration',
         component: EmailSendingRegistration
-    }, {
-        path: '/dataFillingRegesitration',
-        name: 'DataFillingRegesitration',
-        component: DataFillingRegistration
-    }, {
+    },
+    // {
+    //     path: '/dataFillingRegesitration',
+    //     name: 'DataFillingRegesitration',
+    //     component: DataFillingRegistration
+    // }, 
+    {
         path: '/claimExpertiseRegesitration',
         name: 'ClaimExpertiseRegesitration',
         component: ClaimExpertiseRegistration
@@ -168,7 +172,7 @@ router.beforeEach((to, from, next) => {
         if (isLoggedIn()) {
             next() // if there is a token allow to visit requested route
         } else {
-            next('/sign-up') // otherwise redirect to sign-in page
+            next('/sign-in') // otherwise redirect to sign-in page
         }
     }
 })

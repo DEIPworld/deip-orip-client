@@ -177,8 +177,9 @@
 
         watch: {
             '$route' (to, from) {
-                this.$store.dispatch('auth/loadNotifications');
-                // this.$store.dispatch('userDetails/loadUserInvites', { username: this.user.username });
+                if (this.isLoggedIn()) {
+                    this.$store.dispatch('auth/loadNotifications');
+                }
             }
         }
     }

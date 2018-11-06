@@ -147,9 +147,9 @@
                     this.publications.map(item => item.value)
                 ).then(() => {
                     this.$store.dispatch('layout/setSuccess', {
-                        message: "Success"
+                        message: "You have posted the claim successfully! Please wait for community approval before you obtain the expertise tokens"
                     });
-
+                    this.$emit('onPublish');
                     setTimeout(() => this.$emit('close'), 1000);
                 }).catch(err => 
                     console.log(err)

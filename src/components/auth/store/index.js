@@ -159,7 +159,6 @@ const actions = {
                     
                     // todo: move it to specific scope
                     dispatch('loadCoworkers');
-                    dispatch('loadNotifications');
                 });
         }
     },
