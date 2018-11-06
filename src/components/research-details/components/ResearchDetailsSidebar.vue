@@ -152,7 +152,9 @@
                         return share + holder.amount;}, 0))}}%
                     </span>
                     <div v-for="holder in tokenHoldersList">
-                        <span class="half-bold">{{holder.account_name}}</span>
+                        <router-link class="a half-bold" :to="'/user-details/' + holder.user.account.name">
+                            {{holder.user | fullname}}
+                        </router-link>
                         <span class="right">{{convertToPercent(holder.amount)}}%</span>
                     </div>
                 </div>

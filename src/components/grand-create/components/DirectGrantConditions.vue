@@ -32,7 +32,9 @@
 
                         <div class="row">
                             <div class="col-12">
-                                <div class="c-pt-4 subheading bold">Description (optional)</div>
+                                <div class="c-pt-4 subheading bold">Description 
+                                    <span class="caption">(optional)</span>
+                                </div>
 
                                 <v-text-field v-model="grantInfo.description"
                                     multi-line

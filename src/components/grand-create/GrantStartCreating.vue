@@ -3,7 +3,6 @@
         <v-layout>
             <div class="c-m-auto page-container">
                 <div class="text-align-center display-1 bold">Grants distribution</div>
-                <div class="text-align-center c-pt-4 headline bold">Please select grant type</div>
 
                 <div class="row c-pt-12">
                     <div class="col-grow c-pr-8">

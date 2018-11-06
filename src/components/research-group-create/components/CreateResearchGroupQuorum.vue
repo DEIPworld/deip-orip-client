@@ -13,7 +13,8 @@
                             <span class="deip-blue-color half-bold clickable" @click="changeMode()">Advanced</span>
                             options.
                         </div>
-                        <v-text-field v-model="totalQuorum"
+                        <v-text-field 
+                            v-model="totalQuorum"
                             :disabled="isAdvanced"
                             suffix="%"
                             mask="###"
@@ -58,7 +59,7 @@
                                             hide-details
                                         ></v-text-field>
                                     </div>
-                                    <div class="col-grow c-ml-8">Change research review share percent</div>
+                                    <div class="col-grow c-ml-8">Change research review share</div>
                                 </div>
 
                                 <div class="row align-items-end">

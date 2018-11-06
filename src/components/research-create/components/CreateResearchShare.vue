@@ -2,27 +2,28 @@
     <div class="column full-height">
         <div class="c-mb-4 col-grow column">
             <div class="step-title">Share reward with reviewers</div>
-
             <div class="col-grow overflow-y-auto">
 
-                <div class="c-mh-auto c-pt-4" style="max-width: 1000px;">
-                    <div class="sm-title bold text-align-center c-pv-12">
-                        How much reward would you like to share with reviewers?<br>
-                        The bigger the percent is, the better chance of getting reviews and increasing research popularity you have.<br>
-                        You can choose between 0-50%
-                    </div>
-
-                    <div class="column align-center">
+                <div class="row c-mh-auto research-reward-max-width">
+                    <div class="col-12">
                         <div>
-                            <div class="display-inline-block width-12">
-                                <v-text-field v-model="reviewShare" v-on:keyup="setReviewShare" solo mask="##" label="min 0%"></v-text-field>
-                            </div>
-
-                            <div class="display-inline-block sm-title bold deip-blue-color c-pl-2">%</div>
+                            How much reward would you like to share with reviewers?
+                            The bigger the percent is, the better chance of getting reviews and increasing research popularity you have.
+                            You can choose between 0-50%
                         </div>
-                        <div class="c-pt-8 caption grey--text" v-if="reviewShare">
-                            {{reviewShare}}% of  potential research reward will be shared between all
-                            the reviewers according to their Review Index  
+                        <v-text-field 
+                            v-model="reviewShare" 
+                            v-on:keyup="setReviewShare"
+                            suffix="%"
+                            mask="##"
+                            hide-details>
+                        </v-text-field>
+
+                        <div class="column align-center">
+                            <div class="c-pt-8 caption grey--text" v-if="reviewShare">
+                                {{reviewShare}}% of  potential research reward will be shared between all
+                                the reviewers according to their Review Index  
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -79,4 +80,7 @@
 </script>
 
 <style lang="less" scoped>
+    .research-reward-max-width {
+        max-width: 510px;
+    }
 </style>

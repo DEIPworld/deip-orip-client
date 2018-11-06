@@ -47,7 +47,7 @@
 
             <div v-if="isLoadingUserAccount === false && isLoadingUserProfile === false">
                 <div v-if="isProfileAvailable && (isContactsInfoSpecified || isOwner)">
-                    <div class="sm-title bold c-pt-4">
+                    <div class="subheading bold c-mt-4">
                         <span class="row">
                             <span class="col-11 mt-1">Contacts info</span>
                             <v-tooltip v-if="isOwner && !isEditingContacts" bottom class="col-1">
@@ -112,7 +112,7 @@
 
             <div v-if="isLoadingUserAccount === false && isLoadingUserProfile === false">
                 <div v-if="isProfileAvailable && (isPersonalInfoSpecified || isOwner)">
-                    <div class="sm-title bold c-pt-6">
+                    <div class="subheading bold c-mt-4">
                         <span class="row">
                         <span class="col-11 mt-1">Personal info</span>
                             <v-tooltip v-if="isOwner && !isEditingPersonalInfo" bottom class="col-1">

@@ -58,7 +58,7 @@
             <v-expansion-panel v-if="isLoadingResearchContent === false">
                 <v-expansion-panel-content v-for="(content, index) in contentList" :key="index">
                     <div slot="header">
-                        <span class="bold">Chapter {{index + 1}}</span>
+                        <span class="bold">{{getContentType(content.content_type)}}</span>
                         <span class="deip-blue-color bold c-pl-4"> 
                             <router-link style="text-decoration: none" 
                                 :to="{ name: 'ResearchContentDetails', params: { research_group_permlink: research.group_permlink, research_permlink: research.permlink, content_permlink: content.permlink } }">
@@ -219,6 +219,7 @@
 
     import { mapGetters } from 'vuex'
     import contentHttpService from './../../../services/http/content'
+    import { contentTypes } from './../../../services/ResearchService'
 
     export default {
         name: "ResearchDetailsBody",
@@ -323,6 +324,10 @@
                     .filter(m => authors.some(a => a == m.account.name))
                     .map(m => this.$options.filters.fullname(m))
                     .join("  ·  ");
+            },
+            getContentType(type) {
+                let contentType = contentTypes.find(item => item.type === type);
+                return contentType.text;
             }
         }
     };

@@ -343,11 +343,21 @@ const actions = {
     },
 
     loadResearchTokenHolders({ state, dispatch, commit }, { researchId, notify }) {
+        const tokenHolders = [];
         commit('SET_RESEARCH_TOKEN_HOLDERS_LOADING_STATE', true)
         deipRpc.api.getResearchTokensByResearchIdAsync(researchId)
-            .then((tokenHolders) => {
-                commit('SET_RESEARCH_TOKEN_HOLDERS_LIST', tokenHolders)
+            .then((rtList) => {
+                tokenHolders.push(...rtList);
+                return getEnrichedProfiles(tokenHolders.map(m => m.account_name))
             }, (err) => {console.log(err)})
+            .then((users) => {
+                debugger;
+                for (let i = 0; i < tokenHolders.length; i++) {
+                    const holder = tokenHolders[i];
+                    holder.user = users.find(user => holder.account_name == user.account.name);
+                }
+                commit('SET_RESEARCH_TOKEN_HOLDERS_LIST', tokenHolders)
+            })
             .finally(() => {
                 commit('SET_RESEARCH_TOKEN_HOLDERS_LOADING_STATE', false)
                 if (notify) notify();

@@ -1,7 +1,7 @@
 <template>
     <page-container>
         <contentbar>
-            <div class="display-1 bold">My Wallet</div>
+            <div class="display-1 bold">Wallet</div>
 
             <div class="row-nowrap c-pt-8">
                 <div class="col-grow c-pr-8">
@@ -30,11 +30,11 @@
                                         </svg>
                                     </div>
 
-                                    <span class="subheading deip-blue-color c-pl-4 c-pr-2">DEIP token</span>
+                                    <span class="subheading deip-blue-color c-pl-4 c-pr-2">DEIP Token</span>
 
                                     <v-tooltip bottom>
                                         <v-icon class="clickable c-pb-1" slot="activator" size="20">help</v-icon>
-                                        <span>DEIP token</span>
+                                        <span>DEIP Token</span>
                                     </v-tooltip>
                                 </div>
 
@@ -65,11 +65,11 @@
                                         </svg>
                                     </div>
 
-                                    <span class="subheading deip-blue-color c-pl-4 c-pr-2">DEIP common</span>
+                                    <span class="subheading deip-blue-color c-pl-4 c-pr-2">DEIP Common Token</span>
 
                                     <v-tooltip bottom>
                                         <v-icon class="clickable c-pb-1" slot="activator" size="20">help</v-icon>
-                                        <span>DEIP common</span>
+                                        <span>DEIP Common Token</span>
                                     </v-tooltip>
                                 </div>
 
@@ -90,10 +90,10 @@
                     </v-card>
 
                     <div class="title c-pt-8">
-                        Research tokens
+                        Research Tokens
                         <v-tooltip bottom>
                             <v-icon class="clickable c-pb-1" slot="activator" size="20">help</v-icon>
-                            <span>Research tokens</span>
+                            <span>Research Tokens</span>
                         </v-tooltip>
                     </div>
 

@@ -2,11 +2,9 @@
     <div class="column full-height">
         <div class="c-mb-4 col-grow column">
             <div class="step-title">
-                {{ this.grantInfo.discipline && this.grantInfo.discipline.label }} supply grant
+                Supply grant for "{{ this.grantInfo.discipline && this.grantInfo.discipline.label }}" discipline
             </div>
             
-            <div class="sm-title bold c-mb-4 text-align-center">Please type amount</div>
-
             <div class="col-grow overflow-y-auto">
 
                 <div class="c-mh-auto full-height discipline-amount display-flex">
@@ -33,7 +31,7 @@
             
             <v-btn color="primary" 
                 @click.native="nextStep()" 
-                :disabled="!$refs.amount || !$refs.amount.valid"
+                :disabled="nextIsDisabled"
             >Next</v-btn>
         </div>
     </div>
@@ -54,7 +52,7 @@
             },
             prevStep() {
                 this.$emit('decStep');
-            },
+            }
         },
 
         data() {
@@ -73,6 +71,12 @@
                         return true;
                     },
                 },
+            }
+        },
+
+        computed: {
+            nextIsDisabled() {
+                return !this.grantInfo.amount || !this.$refs.amount.valid || this.grantInfo.amount.length < 3;
             }
         }
     };

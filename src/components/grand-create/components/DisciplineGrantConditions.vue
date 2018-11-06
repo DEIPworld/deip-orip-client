@@ -2,7 +2,6 @@
     <div class="column full-height">
         <div class="c-mb-4 col-grow column">
             <div class="step-title">Discipline supply grant</div>
-            <div class="sm-title bold c-mb-4 text-align-center">Please define conditions</div>
 
             <div class="col-grow overflow-y-auto">
 
@@ -27,7 +26,9 @@
                         </div>
                     </div>
 
-                    <div class="c-pt-4 subheading bold">Description (optional)</div>
+                    <div class="c-pt-4 subheading bold">Description 
+                        <span class="caption">(optional)</span>
+                    </div>
 
                     <v-text-field v-model="grantInfo.description" multi-line rows="2" auto-grow></v-text-field>
                 </div>

@@ -11,7 +11,6 @@
                             solo multi-line
                             auto-grow
                             v-model="description"
-                            hint="Description/summary guidlines text. You can change this text any time"
                             :rules="descriptionRules"
                         ></v-text-field>
                     </div>
@@ -63,6 +62,6 @@
 
 <style lang="less" scoped>
     .group-description-max-width {
-        max-width: 700px;
+        max-width: 700px ;
     }
 </style>
