@@ -10,9 +10,6 @@
             </div>
 
             <v-form v-model="isFormValid" ref="form" class="c-mt-10" v-show="!isServerValidated">
-                <div class="c-pb-6 text-align-center">
-                    Please fill the fields for preliminary registration
-                </div>
 
                 <v-text-field 
                     label="Email"
@@ -49,12 +46,11 @@
                 ></v-text-field>
 
                 <div class="c-pv-4 text-align-justify caption grey--text">
-                    DEIPworld OÜ will use the information you provide on this form to add you to the
-                    list of private beta participants. As soon as you finish the registration (add all the required information,
+                    DEIPWORLD INC will use the information you provide on this form to add you to the
+                    list of public beta participants. As soon as you finish the registration (add all the required information,
                     generate and save the private key, and press the “Finish Registration” button that appears after you generate
-                    and save the key), you will be added to the list and a DEIP representative will either accept or decline your
-                    request. The procedure can take about a week. After the request is accepted you can use the generated key to
-                    access the private beta. No data is stored until you press the “Finish Registration” button.<br><br>
+                    and save the key), you will be redirected to the Sign In page where you can use the username and the generated private key
+                    to access the public beta. No data is stored until you press the “Finish Registration” button.<br><br>
                     To receive a private key, press the “Generate Private Key” button.
                 </div>
 
@@ -103,12 +99,12 @@
                 </div>
             </v-form>
 
-            <div class="c-mt-10" v-show="isServerValidated">
+        <!--<div class="c-mt-10" v-show="isServerValidated">
                 <div class="text-align-center half-bold">
                     Thank you for your interest in DEIP!<br>
                     The inviting letter will be sent to your email after approving
                 </div>
-            </div>
+            </div> -->
         </div>
     </v-container>   
 </template>
@@ -172,9 +168,11 @@
                     .then(() => {
                         this.isSaving = false;
                         this.isServerValidated = true;
+                        this.$store.dispatch('layout/setSuccess', 
+                            { message: `Account '${this.formData.username}' has been created successfully! Use the private key to sign in to the DEIP platform!`});
+                        this.$router.push({ name: 'SignIn', query: { username: this.formData.username }});
                     }, (err) => {
                         this.isSaving = false;
-
                         const message = err.response && err.response.data && err.response.data.errors[0] 
                             ? err.response.data.errors[0] 
                             : "Sorry, the service is temporarily unavailable, please try again later";

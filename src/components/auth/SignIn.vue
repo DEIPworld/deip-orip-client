@@ -132,6 +132,9 @@
                     return new TextEncoder("utf-8").encode(myString);
                 }
             }
+        },
+        created() {
+             this.username = this.$route.query.username || '';
         }
     }
 </script>

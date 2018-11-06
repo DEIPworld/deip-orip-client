@@ -18,7 +18,9 @@ const state = {
     isLoadingUserGroups: undefined,
     isLoadingUserResearch: undefined,
     isLoadingUserExpertise: undefined,
-    isLoadingUserInvites: undefined
+    isLoadingUserInvites: undefined,
+
+    isClaimExpertiseDialogShown: false
 }
 
 // getters
@@ -39,7 +41,8 @@ const getters = {
     isLoadingUserGroups: state => state.isLoadingUserGroups,
     isLoadingUserResearch: state => state.isLoadingUserResearch,
     isLoadingUserExpertise: state => state.isLoadingUserExpertise,
-    isLoadingUserInvites: state => state.isLoadingUserInvites
+    isLoadingUserInvites: state => state.isLoadingUserInvites,
+    isClaimExpertiseDialogShown: state => state.isClaimExpertiseDialogShown
 }
 
 // actions
@@ -207,6 +210,14 @@ const actions = {
                 commit('SET_USER_INVITES_LOADING_STATE', false)
                 if (notify) notify();
             });
+    },
+
+    openExpertiseTokensClaimDialog({ commit }) {
+        commit('SET_EXPERTISE_TOKENS_CLAIM_DIALOG_VISIBILITY_STATE', true);
+    },
+
+    closeExpertiseTokensClaimDialog({ commit }) {
+        commit('SET_EXPERTISE_TOKENS_CLAIM_DIALOG_VISIBILITY_STATE', false);
     }
 }
 
@@ -263,6 +274,10 @@ const mutations = {
     
     ['SET_USER_INVITES_LOADING_STATE'](state, value) {
         state.isLoadingUserInvites = value;
+    },
+
+    ['SET_EXPERTISE_TOKENS_CLAIM_DIALOG_VISIBILITY_STATE'](state, value) {
+        state.isClaimExpertiseDialogShown = value;
     }
 }
 

@@ -28,7 +28,7 @@
                 ></v-text-field>
 
                 <div class="c-pv-4 text-align-justify caption grey--text">
-                    DEIPworld OÜ will use the information you provide on this form to add you to the
+                    DEIPWORLD INC will use the information you provide on this form to add you to the
                     list of private beta participants. As soon as you finish the registration (add all the required information,
                     generate and save the private key, and press the “Finish Registration” button that appears after you generate
                     and save the key), you will be added to the list and a DEIP representative will either accept or decline your
