@@ -138,18 +138,28 @@ const extendProposalByRelatedInfo = proposal => {
         });
 };
 
-const createProposal = function(privKey, username, groupId, data, type) {
-    return deipRpc.broadcast.createProposalAsync(privKey, username, groupId, data, type,
+const createProposal = function(privKey, username, groupId, stringifiedPayload, proposalType) {
+    return deipRpc.broadcast.createProposalAsync(privKey, username, groupId, stringifiedPayload, proposalType,
         new Date(new Date().getTime() + 2 * 24 * 60 * 60 * 1000))
-            .then(() => {
-                debugger;
+            .then((block) => {
+                var proposal = null;
+                for (let i = 0; i < block.operations.length; i++) {
+                    const op = block.operations[i];
+                    const opName = op[0];
+                    const opPayload = op[1];
+                    if (opName === 'create_proposal') {
+                        if (opPayload.data == stringifiedPayload) {
+                            proposal = opPayload;
+                            break;
+                        }
+                    }
+                }
+                if (proposal) {
+                    proposal.data = JSON.parse(proposal.data)
+                }
                 return notificationsHttpService.createResearchGroupNotification(
-                    groupId, { type: 'proposal', meta: JSON.parse(data) } 
-                );
-            })
-            .then((notifications) => {
-                debugger;
-            })
+                    groupId, { type: 'proposal', meta: proposal });
+            });
     }
 
 export {

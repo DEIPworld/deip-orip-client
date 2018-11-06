@@ -121,20 +121,8 @@ const actions = {
         //         commit('SET_USER_NOTIFICATION_PROPOSALS', proposals);
         //     });
 
-        const notifications = [];
         notificationsHttpService.getNotificationsByUser(user.username)
-            .then((list) => {
-                const groupProposals = list.filter(n => n.type == 'proposal');
-                notifications.push(...groupProposals);
-                return getEnrichedProfiles(groupProposals.map(n => n.meta.creator));
-            })
-            .then((users) => {
-                debugger;
-                for (let i = 0; i < notifications.length; i++) {
-                    const notification = notifications[i];
-                    notification.meta.creatorUser = users.find(user => notification.meta.creator == user.account.name);
-                }
-                debugger;
+            .then((notifications) => {
                 commit('SET_USER_NOTIFICATION_PROPOSALS', notifications);
             });
     },

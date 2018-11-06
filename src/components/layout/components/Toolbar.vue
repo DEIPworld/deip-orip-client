@@ -11,7 +11,7 @@
             </v-btn>
 
             <v-menu v-if="isLoggedIn()" bottom left offset-y :close-on-content-click="false">
-                <v-btn icon large class="ma-0" slot="activator">
+                <v-btn icon large class="ma-0" slot="activator" v-show="user.notifications.length">
                     <v-badge color="amber darken-3" right overlap>
                         <v-icon size="32px" color="grey lighten-1">chat_bubble</v-icon>
                         <span slot="badge">{{ user.notifications.length }}</span>
@@ -39,22 +39,25 @@
                         <v-divider></v-divider>
                     </template> -->
 
+                    <!-- TODO: move this to component -->
                     <template v-for="notification in user.notifications">
                         <div class="c-pv-2 c-ph-4">
                             <div>
                                 <router-link class="a"
                                     :to="{ name: 'UserDetails', params: { account_name: notification.meta.creator }}"
-                                >{{ notification.meta.creatorUser | fullname }}</router-link>
-                                created a proposal in
-                            <!--    <router-link class="a" :to="{
-                                        name: 'ResearchGroupDetails', 
-                                        params: { research_group_permlink: notification.meta.group.permlink }
-                                    }"
-                                >{{ notification.meta.group.name }}</router-link> -->
-                            </div>
+                                >{{ { profile: notification.meta.creatorProfile, account: { name: notification.meta.creator} } | fullname }}</router-link>
+                                
+                                {{getNotificationText(notification.meta)}} in
 
+                                <router-link class="a" :to="{
+                                        name: 'ResearchGroupDetails', 
+                                        params: { research_group_permlink: notification.meta.groupInfo.permlink }
+                                    }"
+                                >{{ notification.meta.groupInfo.name }}</router-link>
+                            </div>
                             <div class="grey--text caption c-mt-1">
-                                <v-icon size="16" color="grey">event</v-icon> {{ new Date(`${notification.meta.creation_time}Z`).toDateString() }}
+                                <v-icon size="16" color="grey">event</v-icon> {{ new Date(notification.created_at).toDateString() }}
+                                <span style="cursor: pointer" class="a orange--text right" @click="readNotification(notification)">Mark as read</span>
                             </div>
                         </div>
                         
@@ -108,6 +111,9 @@
 <script>
 
     import { isLoggedIn, clearAccessToken } from './../../../utils/auth';
+    import notificationsHttpService from './../../../services/http/notifications';
+    import { START_RESEARCH, INVITE_MEMBER, START_RESEARCH_TOKEN_SALE, CREATE_RESEARCH_MATERIAL } from './../../../services/ProposalService';
+
     import { mapGetters } from 'vuex';
 
     export default {
@@ -139,14 +145,40 @@
                 }
 
                 this.$router.push({ name: state, params: params });
+            },
+            readNotification(notification) {
+                notificationsHttpService.markUserNotificationAsRead(this.user.username, notification._id)
+                    .then(() => {
+                        this.$store.dispatch('auth/loadNotifications');
+                    })
+            },
+            getNotificationText(proposal) {
+                // TODO: move this to component
+                let text = "";
+                switch(proposal.action) {
+                    case START_RESEARCH:
+                        text = "proposes to start new research"
+                        break;
+                    case CREATE_RESEARCH_MATERIAL:
+                        text = "proposes new research result"
+                        break;
+                    case START_RESEARCH_TOKEN_SALE:
+                        text = "proposes to start token sale"
+                        break;
+                    case INVITE_MEMBER:
+                        text = "proposes to invite new member"
+                        break;
+                    default:
+                       text = "created a proposal"
+                }
+                return text;
             }
         },
 
         watch: {
             '$route' (to, from) {
-                // loading notifications on every state change
                 this.$store.dispatch('auth/loadNotifications');
-                this.$store.dispatch('userDetails/loadUserInvites', { username: this.user.username });
+                // this.$store.dispatch('userDetails/loadUserInvites', { username: this.user.username });
             }
         }
     }
