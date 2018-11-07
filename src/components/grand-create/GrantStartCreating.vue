@@ -13,9 +13,8 @@
 
                         <div class="c-pt-8 text-align-right">
                             <div class="bold">Indirect Grant is</div>
-                            Phosfluorescently strategize user friendly portals before high-payoff process improvements. 
-                            Dynamically fashion functional action items through real-time functionalities. Interactively 
-                            exploit wireless ROI rather than backward-compatible niche markets.
+                            DEIP Token holders can allocate grants to a particular discipline. In this case funds are distributed among
+                            research groups working in this domain in accordance with their Expertise Contribution Index
                         </div>
                     </div>
 
@@ -26,9 +25,8 @@
 
                         <div class="c-pt-8 text-align-left">
                             <div class="bold">Direct Grant is</div>
-                            Phosfluorescently strategize user friendly portals before high-payoff process improvements.
-                            Dynamically fashion functional action items through real-time functionalities. Interactively
-                            exploit wireless ROI rather than backward-compatible niche markets.
+                            DEIP Token holders are able to allocate a grant to a research group or to a particular research. In this case
+                            the grant is directly transferred to the research group account.
                         </div>
                     </div>
                 </div>
