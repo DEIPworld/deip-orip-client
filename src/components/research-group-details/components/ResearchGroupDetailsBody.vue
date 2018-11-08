@@ -36,6 +36,7 @@
 
             <div v-if="isLoadingResearchGroupMembers === false">
                 <div class="c-pt-8 title">Group members: {{ members.length }}</div>
+
                 <div class="c-pt-6">
                     <v-card>
                         <div class="info-card-list">
@@ -96,6 +97,52 @@
                             </v-btn>
                     
                             <span class="c-pl-2 deip-blue-color">Invite researchers</span>
+                        </div>
+
+                        <div v-if="isResearchGroupMember && invites.length">
+                            <v-divider></v-divider>
+
+                            <v-expansion-panel class="group-invites">
+                                <v-expansion-panel-content>
+                                    <div slot="header" class="deip-blue-color">
+                                        <!-- <v-icon small color="primary">access_time</v-icon> -->
+                                        <span class="">Waiting for accept of invites</span>
+                                    </div>
+
+                                    <div class="">
+                                        <template v-for="(invite, i) in invites">
+                                            <v-divider></v-divider>
+
+                                            <div class="row c-pv-4 c-ph-6 align-items-center">
+                                                <div class="row-nowrap col-4">
+                                                    <v-avatar size="40px" class="c-pt-3">
+                                                        <img v-if="invite.user.profile" v-bind:src="invite.user.profile.avatar | avatarSrc(40, 40, false)" />
+                                                        <v-gravatar v-else :email="invite.user.account.name + '@deip.world'" />
+                                                    </v-avatar>
+
+                                                    <div class="col-grow c-pl-4">
+                                                        <router-link :to="{
+                                                                name: 'UserDetails', 
+                                                                params: { account_name: invite.user.account.name }
+                                                            }" 
+                                                            class="a subheading"
+                                                        >{{ invite.user | fullname }}</router-link>
+
+                                                        <div class="caption c-pt-1">{{invite.user | employmentOrEducation}}</div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="col-grow text-align-center">{{ invite.user | userLocation }}</div>
+
+                                                <div class="col-2 text-align-center">
+                                                    <span class="grey--text">Amount:</span>
+                                                    {{ convertToPercent(invite.research_group_token_amount) }}%
+                                                </div>
+                                            </div>
+                                        </template>
+                                    </div>
+                                </v-expansion-panel-content>
+                            </v-expansion-panel>
                         </div>
                     </v-card>
 
@@ -159,6 +206,7 @@
                 researchList: 'researchGroup/researchList',
                 options: 'researchGroup/options',
                 members: 'researchGroup/members',
+                invites: 'researchGroup/invites',
                 isLoadingResearchGroupDetails: 'researchGroup/isLoadingResearchGroupDetails',
                 isLoadingResearchGroupMembers: 'researchGroup/isLoadingResearchGroupMembers',
                 isLoadingResearchGroupResearchList: 'researchGroup/isLoadingResearchGroupResearchList',
@@ -181,6 +229,9 @@
 </script>
 
 <style lang="less" scoped>
+    .group-invites.expansion-panel {
+        box-shadow: initial;
+    }
 
     .research-group-body-container {
         position: relative; 

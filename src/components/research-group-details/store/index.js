@@ -13,6 +13,7 @@ const state = {
     researchList: [],
     members: [],
     joinRequests: [],
+    invites: [],
 
     options: {
         isAddMemberDialogOpen: false,
@@ -41,6 +42,7 @@ const getters = {
     group: state => state.group,
     groupShares: state => state.groupShares,
     members: state => state.members,
+    invites: state => state.invites,
     proposalListFilter: state => state.proposalListFilter,
     researchList: state => state.researchList,
     options: state => state.options,
@@ -60,26 +62,37 @@ const getters = {
 const actions = {
 
     loadResearchGroup({ commit, dispatch, state }, permlink) {
-        commit('SET_RESEARCH_GROUP_PAGE_LOADING_STATE', true)
+        commit('SET_RESEARCH_GROUP_PAGE_LOADING_STATE', true);
+        commit('SET_GROUP_DETAILS_LOADING_STATE', true);
         
-        commit('SET_GROUP_DETAILS_LOADING_STATE', true)
         deipRpc.api.getResearchGroupByPermlinkAsync(permlink).then(data => {
             commit('SET_RESEARCH_GROUP', data);
 
             const proposalsLoad = new Promise((resolve, reject) => {
                 dispatch('loadResearchGroupProposals', { groupId: state.group.id, notify: resolve });
             });
+
             const researchLoad = new Promise((resolve, reject) => {
                 dispatch('loadResearchList', { groupId: state.group.id, notify: resolve });
             });
+
             const membersLoad = new Promise((resolve, reject) => {
                 dispatch('loadResearchGroupMembers', { groupId: state.group.id, notify: resolve });
             });
+
             const joinRequestsLoad = new Promise((resolve, reject) => {
                 dispatch('loadJoinRequests', { groupId: state.group.id, notify: resolve });
             });
 
-            return Promise.all([proposalsLoad, researchLoad, membersLoad, joinRequestsLoad])
+            const groupInvitesPromise = dispatch('loadGroupInvites', { groupId: state.group.id });
+
+            return Promise.all([
+                proposalsLoad, 
+                researchLoad, 
+                membersLoad, 
+                joinRequestsLoad,
+                groupInvitesPromise
+            ]);
         })
         .finally(() => {
             commit('SET_GROUP_DETAILS_LOADING_STATE', false)
@@ -145,6 +158,7 @@ const actions = {
     loadResearchGroupMembers({ commit, state }, { groupId, notify }) {
         const members = [];
         commit('SET_GROUP_MEMBERS_LOADING_STATE', true)
+
         deipRpc.api.getResearchGroupTokensByResearchGroupAsync(groupId)
             .then(rgtList => {
                 commit('SET_GROUP_SHARES', rgtList);
@@ -172,6 +186,26 @@ const actions = {
                 commit('SET_GROUP_MEMBERS_LOADING_STATE', false)
                 if (notify) notify()
             })
+    },
+
+    loadGroupInvites({ commit, state }, { groupId }) {
+        let invites = [];
+        
+        return deipRpc.api.getResearchGroupInvitesByResearchGroupIdAsync(groupId)
+            .then(invitesList => {
+                invites = invitesList;
+                return getEnrichedProfiles(invites.map(invite => invite.account_name));
+            })
+            .then(users => {
+                invites.forEach((invite, index) => {
+                    invite.user = users[index];
+                });
+
+                commit('SET_GROUP_INVITES', invites);
+            })
+            .catch(e => {
+                console.log(e);
+            });
     },
 
     changeProposal({ commit }, payload) {
@@ -235,6 +269,10 @@ const mutations = {
         if (index !== -1) {
             state.proposals.splice(index, 1, payload.new);
         }
+    },
+
+    ['SET_GROUP_INVITES'](state, invites) {
+        Vue.set(state, 'invites', invites);
     },
 
     ['UPDATE_PROPOSAL_FILTER'](state, { key, value }) {
