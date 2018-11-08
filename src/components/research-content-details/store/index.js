@@ -6,6 +6,7 @@ import contentHttpService from './../../../services/http/content'
 import { 
     findBlocksByRange, getDynamicGlobalProperties, getConfig, 
     getBlock, getTransaction, getTransactionHex } from './../../../utils/blockchain';
+import { CREATE_RESEARCH_MATERIAL } from './../../../services/ProposalService';
     
 var texture = undefined;
 var reviewEditor = undefined;
@@ -246,7 +247,7 @@ const actions = {
             }, (err) => {console.log(err)})
             .then((proposals) => {
                 const contentRef = state.contentRef;
-                const contentProposal = proposals.filter(p => p.action == 11).find(p => {
+                const contentProposal = proposals.filter(p => p.action == CREATE_RESEARCH_MATERIAL).find(p => {
                     const data = JSON.parse(p.data);
                     const proposalContent = data.content;
                     return proposalContent === `${contentRef.type}:${contentRef.hash}`;
@@ -327,7 +328,7 @@ const actions = {
                 if (!isGenesisContent) {
                     const proposals = await deipRpc.api.getProposalsByResearchGroupIdAsync(research.research_group_id)
 
-                    const contentProposal = proposals.filter(p => p.action == 11 && p.is_completed).find(p => {
+                    const contentProposal = proposals.filter(p => p.action == CREATE_RESEARCH_MATERIAL && p.is_completed).find(p => {
                         const data = JSON.parse(p.data)
                         return data.content == content.content && data.permlink == content.permlink;
                     });
@@ -360,7 +361,7 @@ const actions = {
                         for (let k = 0; k < block.transactions.length; k++) {
                             const tx = block.transactions[k];
                             const createProposalOps = tx.operations.filter(o => o[0] === 'create_proposal');
-                            const contentProposals = createProposalOps.filter(o => o[1].action == 11);
+                            const contentProposals = createProposalOps.filter(o => o[1].action == CREATE_RESEARCH_MATERIAL);
                             const wanted = contentProposals.find(p => {
                                 const data = JSON.parse(p[1].data);
                                 return data.content == content.content && data.permlink == content.permlink;
