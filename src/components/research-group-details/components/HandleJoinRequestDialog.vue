@@ -29,8 +29,8 @@
 
                     <v-text-field
                         label="Cover letter" 
-                        multi-line auto-grow
-                        rows="3"
+                        multi-line
+                        :disabled="true"
                         v-model="coverLetter"
                     ></v-text-field>
 

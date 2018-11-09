@@ -2,24 +2,16 @@
     <div class="user-profile-sidebar-container">
       <sidebar-loader v-if="isLoadingUserProfilePage"></sidebar-loader>
       <div v-if="isLoadingUserProfilePage === false">
-      <!-- <v-btn color="primary" block class="ma-0">Profile settings</v-btn> -->
 
         <!-- ### START User Profile Expertise Section ### -->
-        <div class="user-expertise-container spinner-container">
-            <v-progress-circular class="section-spinner"
-                v-if="isLoadingUserExpertise"
-                indeterminate color="primary"
-            ></v-progress-circular>
-
-            <div v-if="isLoadingUserExpertise === false">
-                <div class="sm-title bold">Expertise Tokens</div>
-                <div class="c-pt-4 c-pb-6">
-                    <div class="row justify-between" v-for="(item, i) in expertise" :key="i">
-                        <div class="half-bold">{{ item.discipline_name }}</div>
-                        <div>{{ item.amount }}</div>
-                    </div>
-                    <div v-if="!expertise.length" class="body-1">You have no expertise tokens yet. Use <span class="a" @click="openClaimExpertiseDialog()">Claim</span> process to apply for Expertise Tokens</div>
+        <div>
+            <div class="sm-title bold">Expertise Tokens</div>
+            <div class="c-pt-4 c-pb-6">
+                <div class="row justify-between" v-for="(item, i) in expertise" :key="i">
+                    <div class="half-bold">{{ item.discipline_name }}</div>
+                    <div>{{ item.amount }}</div>
                 </div>
+                <div v-if="!expertise.length" class="body-1">You have no expertise tokens yet. Use <span class="a" @click="openClaimExpertiseDialog()">Claim</span> process to apply for Expertise Tokens</div>
             </div>
         </div>
         <!-- ### END User Profile Expertise Section ### -->
@@ -34,216 +26,178 @@
             </div>
         </sidebar-splitted-btn> -->
 
-        <div class="sidebar-fullwidth">
-            <v-divider></v-divider>
-        </div>
 
         <!-- ### START User Profile Contacts Section ### -->
-        <div class="user-contacts-container spinner-container">
-            <v-progress-circular class="section-spinner"
-                v-if="isLoadingUserAccount || isLoadingUserProfile"
-                indeterminate color="primary"
-            ></v-progress-circular>
-
-            <div v-if="isLoadingUserAccount === false && isLoadingUserProfile === false">
-                <div v-if="isProfileAvailable && (isContactsInfoSpecified || isOwner)">
-                    <div class="subheading bold c-mt-4">
-                        <span class="row">
-                            <span class="col-11 mt-1">Contacts info</span>
-                            <v-tooltip v-if="isOwner && !isEditingContacts" bottom class="col-1">
-                                <v-btn slot="activator" @click="editContacts" flat small icon color="grey" class="mt-0">
-                                    <v-icon small>mode_edit</v-icon>
-                                </v-btn>
-                                <span>Edit Contacts</span>
-                            </v-tooltip>
+        <div class="c-mt-4" v-if="isProfileAvailable && (isContactsInfoSpecified || isOwner)">
+            <div class="sidebar-fullwidth"><v-divider></v-divider></div>
+            <div class="subheading bold c-mt-4">
+                <span class="row">
+                    <span class="col-11 mt-1">Contacts info</span>
+                    <v-tooltip v-if="isOwner && !isEditingContacts" bottom class="col-1">
+                        <v-btn slot="activator" @click="editContacts" flat small icon color="grey" class="mt-0">
+                            <v-icon small>mode_edit</v-icon>
+                        </v-btn>
+                        <span>Edit Contacts</span>
+                    </v-tooltip>
+                </span>
+            </div>
+            <div class="c-pt-2 c-pb-6 pos-relative">
+                <div v-if="userInfo.profile">
+                    <div v-if="!isEditingContacts">
+                        <span v-if="isOwner && !userInfo.profile.email" class="owner-hint">
+                            <v-icon size="18" class="c-mr-2">mail</v-icon>
+                            Add your email here
                         </span>
+                        <span v-else>
+                            <v-icon v-if="userInfo.profile.email" size="18" class="c-mr-2">mail</v-icon>
+                            {{userInfo.profile.email || '-'}}
+                        </span>
+                <!-- Phone number is very private info, let's do not store it for now -->
+                <!--<div class="c-pt-1">
+                    <v-icon size="18" class="c-mr-2">phone</v-icon>
+                        +375 25 90 05 003
+                    </div> -->
                     </div>
-                    <div class="c-pt-2 c-pb-6 pos-relative">
-                        <div v-if="userInfo.profile">
-                            <div v-if="!isEditingContacts">
-                                <span v-if="isOwner && !userInfo.profile.email" class="owner-hint">
-                                    <v-icon size="18" class="c-mr-2">mail</v-icon>
-                                    Add your email here
-                                </span>
-                                <span v-else>
-                                    <v-icon v-if="userInfo.profile.email" size="18" class="c-mr-2">mail</v-icon>
-                                    {{userInfo.profile.email || '-'}}
-                                </span>
-                        <!-- Phone number is very private info, let's do not store it for now -->
-                        <!--<div class="c-pt-1">
-                            <v-icon size="18" class="c-mr-2">phone</v-icon>
-                                +375 25 90 05 003
-                            </div> -->
-                            </div>
-                        </div>
-                        <div v-if="isOwner && isEditingContacts">
-                            <v-text-field v-model="editedEmail" label="Email" append-icon="email"></v-text-field>
-                            <div class="text-align-center">
-                                <v-tooltip bottom>
-                                    <v-btn slot="activator" @click="saveContacts" flat icon color="grey">
-                                        <v-icon>done</v-icon>
-                                    </v-btn>
-                                    <span>Save</span>
-                                </v-tooltip>
-                                <v-tooltip bottom>
-                                    <v-btn slot="activator" @click="isEditingContacts = false" flat icon color="grey">
-                                        <v-icon>close</v-icon>
-                                    </v-btn>
-                                    <span>Cancel</span>
-                                </v-tooltip>
-                            </div>
-                        </div>
+                </div>
+                <div v-if="isOwner && isEditingContacts">
+                    <v-text-field v-model="editedEmail" label="Email" append-icon="email"></v-text-field>
+                    <div class="text-align-center">
+                        <v-tooltip bottom>
+                            <v-btn slot="activator" @click="saveContacts" flat icon color="grey">
+                                <v-icon>done</v-icon>
+                            </v-btn>
+                            <span>Save</span>
+                        </v-tooltip>
+                        <v-tooltip bottom>
+                            <v-btn slot="activator" @click="isEditingContacts = false" flat icon color="grey">
+                                <v-icon>close</v-icon>
+                            </v-btn>
+                            <span>Cancel</span>
+                        </v-tooltip>
                     </div>
                 </div>
             </div>
         </div>
         <!-- ### END User Profile Contacts Section ### -->
 
-        <div class="sidebar-fullwidth">
-            <v-divider></v-divider>
-        </div>
 
         <!-- ### START User Profile Info Section ### -->
-        <div class="user-info-container spinner-container">
-            <v-progress-circular class="section-spinner"
-                v-if="isLoadingUserAccount || isLoadingUserProfile"
-                indeterminate color="primary"
-            ></v-progress-circular>
+        <div class="c-mt-4" v-if="isProfileAvailable && (isPersonalInfoSpecified || isOwner)">
+            <div class="sidebar-fullwidth"><v-divider></v-divider></div>
+            <div class="subheading bold c-mt-4">
+                <span class="row">
+                    <span class="col-11 mt-1">Personal info</span>
+                    <v-tooltip v-if="isOwner && !isEditingPersonalInfo" bottom class="col-1">
+                        <v-btn slot="activator" @click="editPersonalInfo" flat small icon color="grey" class="mt-0">
+                            <v-icon small>mode_edit</v-icon>
+                        </v-btn>
+                        <span>Edit personal info</span>
+                    </v-tooltip>
+                </span>
+            </div>
 
-            <div v-if="isLoadingUserAccount === false && isLoadingUserProfile === false">
-                <div v-if="isProfileAvailable && (isPersonalInfoSpecified || isOwner)">
-                    <div class="subheading bold c-mt-4">
-                        <span class="row">
-                        <span class="col-11 mt-1">Personal info</span>
-                            <v-tooltip v-if="isOwner && !isEditingPersonalInfo" bottom class="col-1">
-                                <v-btn slot="activator" @click="editPersonalInfo" flat small icon color="grey" class="mt-0">
-                                    <v-icon small>mode_edit</v-icon>
-                                </v-btn>
-                                <span>Edit personal info</span>
-                            </v-tooltip>
-                        </span>
+            <div class="c-pt-4 c-pb-6">
+                <div v-if="userInfo.profile">
+                    <div v-if="!isEditingPersonalInfo">
+                        <div v-if="isOwner && !userInfo.profile.firstName" class="row">
+                            <span class="col-4 half-bold">First Name</span>
+                            <span class="col-8 text-align-right owner-hint">add first name</span>
+                        </div>
+                        <div v-else class="row">
+                            <span class="col-7 half-bold">First Name</span>
+                            <span class="col-5 text-align-left">{{userInfo.profile.firstName || '-'}}</span>
+                        </div>
+
+                        <div v-if="isOwner && !userInfo.profile.lastName" class="row">
+                            <span class="col-4 half-bold">Last Name</span>
+                            <span class="col-8 text-align-right owner-hint">add last name</span>
+                        </div>
+                        <div v-else class="row">
+                            <span class="col-7 half-bold">Last Name</span>
+                            <span class="col-5 text-align-left">{{userInfo.profile.lastName || '-'}}</span>
+                        </div>
+
+                        <div v-if="isOwner && !userInfo.profile.birthday" class="row">
+                            <span class="col-4 half-bold">Birthday</span>
+                            <span class="col-8 text-align-right owner-hint">add birthday</span>
+                        </div>
+                        <div v-else class="row">
+                            <span class="col-4 half-bold">Birthday</span>
+                            <span class="col-8 text-align-right">{{ userInfo.profile.birthday ? new Date(userInfo.profile.birthday).toDateString() : '-'}}</span>
+                        </div>
+
+                        <div v-if="userInfo.profile.created" class="row mt-3">
+                            <span class="col-4 half-bold">Registered</span>
+                            <span class="col-8 text-align-right">{{new Date(userInfo.profile.created).toDateString()}}</span>
+                        </div>
                     </div>
+                </div>
+                <div v-if="isOwner && isEditingPersonalInfo">
+                    <v-text-field v-model="editedFirstName" label="First name"></v-text-field>
+                    <v-text-field v-model="editedLastName" label="Last name"></v-text-field>
+                    <v-menu lazy :close-on-content-click="false" v-model="editedBirthdayMenu" transition="scale-transition" offset-y full-width min-width="290px">
+                        <v-text-field slot="activator" label="Birthday" v-model="editedBirthdayDate" append-icon="event" readonly></v-text-field>
+                        <v-date-picker v-model="editedBirthdayDate" @input="editedBirthdayMenu = false"></v-date-picker>
+                    </v-menu>
 
-                    <div class="c-pt-4 c-pb-6">
-                        <div v-if="userInfo.profile">
-                            <div v-if="!isEditingPersonalInfo">
-                                <div v-if="isOwner && !userInfo.profile.firstName" class="row">
-                                    <span class="col-4 half-bold">First Name</span>
-                                    <span class="col-8 text-align-right owner-hint">add first name</span>
-                                </div>
-                                <div v-else class="row">
-                                    <span class="col-7 half-bold">First Name</span>
-                                    <span class="col-5 text-align-left">{{userInfo.profile.firstName || '-'}}</span>
-                                </div>
-
-                                <div v-if="isOwner && !userInfo.profile.lastName" class="row">
-                                    <span class="col-4 half-bold">Last Name</span>
-                                 <span class="col-8 text-align-right owner-hint">add last name</span>
-                                </div>
-                                <div v-else class="row">
-                                    <span class="col-7 half-bold">Last Name</span>
-                                    <span class="col-5 text-align-left">{{userInfo.profile.lastName || '-'}}</span>
-                                </div>
-
-                                <div v-if="isOwner && !userInfo.profile.birthday" class="row">
-                                    <span class="col-4 half-bold">Birthday</span>
-                                    <span class="col-8 text-align-right owner-hint">add birthday</span>
-                                </div>
-                                <div v-else class="row">
-                                    <span class="col-4 half-bold">Birthday</span>
-                                    <span class="col-8 text-align-right">{{ userInfo.profile.birthday ? new Date(userInfo.profile.birthday).toDateString() : '-'}}</span>
-                                </div>
-
-                                <div v-if="userInfo.profile.created" class="row mt-3">
-                                    <span class="col-4 half-bold">Registered</span>
-                                    <span class="col-8 text-align-right">{{new Date(userInfo.profile.created).toDateString()}}</span>
-                                </div>
-                            </div>
-                        </div>
-                        <div v-if="isOwner && isEditingPersonalInfo">
-                            <v-text-field v-model="editedFirstName" label="First name"></v-text-field>
-                            <v-text-field v-model="editedLastName" label="Last name"></v-text-field>
-                            <v-menu lazy :close-on-content-click="false" v-model="editedBirthdayMenu" transition="scale-transition" offset-y full-width min-width="290px">
-                                <v-text-field slot="activator" label="Birthday" v-model="editedBirthdayDate" append-icon="event" readonly></v-text-field>
-                                <v-date-picker v-model="editedBirthdayDate" @input="editedBirthdayMenu = false"></v-date-picker>
-                            </v-menu>
-
-                            <div class="text-align-center">
-                                <v-tooltip bottom>
-                                    <v-btn slot="activator" @click="savePersonalInfo" flat icon color="grey">
-                                        <v-icon>done</v-icon>
-                                    </v-btn>
-                                    <span>Save</span>
-                                </v-tooltip>
-                                <v-tooltip bottom>
-                                    <v-btn slot="activator" @click="isEditingPersonalInfo = false" flat icon color="grey">
-                                        <v-icon>close</v-icon>
-                                    </v-btn>
-                                    <span>Cancel</span>
-                                </v-tooltip>
-                            </div>
-                        </div>
+                    <div class="text-align-center">
+                        <v-tooltip bottom>
+                            <v-btn slot="activator" @click="savePersonalInfo" flat icon color="grey">
+                                <v-icon>done</v-icon>
+                            </v-btn>
+                            <span>Save</span>
+                        </v-tooltip>
+                        <v-tooltip bottom>
+                            <v-btn slot="activator" @click="isEditingPersonalInfo = false" flat icon color="grey">
+                                <v-icon>close</v-icon>
+                            </v-btn>
+                            <span>Cancel</span>
+                        </v-tooltip>
                     </div>
                 </div>
             </div>
         </div>
         <!-- ### END User Profile Info Section ### -->
 
-        <div class="sidebar-fullwidth">
-            <v-divider></v-divider>
-        </div>
-
 
         <!-- ### START User Profile Invites Section ### -->
-        <div class="user-invites-container spinner-container">
-            <v-progress-circular class="section-spinner"
-                v-if="isLoadingUserInvites"
-                indeterminate color="primary"
-            ></v-progress-circular>
-            
-            <div v-if="isLoadingUserInvites === false">
-                <div v-if="isOwner && hasInvites">
-                    <div class="sm-title bold c-pt-6">Invites: {{invites.length}}</div>
-                    <div class="c-pb-6">
-                        <div v-for="(invite, index) in invites" class="row-nowrap justify-between align-center c-pt-4">
-                            <div class="left">
-                                <router-link :to="`/${invite.group.permlink}/group-details`" style="text-decoration: none">
-                                    <span class="a">{{invite.group.name}}</span>
-                                </router-link>
-                                <span class="c-pl-1">({{convertToPercent(invite.research_group_token_amount)}}%)</span>
-                            </div>
-                            <div class="right">
-                                <v-tooltip bottom>
-                                    <v-btn slot="activator" @click="approveInvite(invite)"  
-                                        :disabled="isApprovingInvite" :loading="isApprovingInvite" small flat icon color="grey" class="ma-0">
-                                        <v-icon>done</v-icon>
-                                    </v-btn>
-                                    <span>Accept</span>
-                                </v-tooltip>
-                                <v-tooltip bottom>
-                                    <v-btn slot="activator" @click="showRejectInviteDialog(invite)" 
-                                        :disabled="isRejectingInvite" :loading="isRejectingInvite" small flat icon color="grey" class="ma-0">
-                                        <v-icon>close</v-icon>
-                                    </v-btn>
-                                    <span>Reject</span>
-                                </v-tooltip>
-                            </div>
-                        </div>
-                        <confirm-action-dialog
-                            :meta="rejectInviteMeta"
-                            :title="``" :text="`Are you sure you want to reject this invite ?`"
-                            @confirmed="rejectInviteMeta.isShown = false; rejectInvite(rejectInviteMeta.item);" 
-                            @canceled="rejectInviteMeta.isShown = false">
-                        </confirm-action-dialog>
+        <div class="c-mt-4" v-if="isOwner && hasInvites">
+            <div class="sidebar-fullwidth"><v-divider></v-divider></div>
+            <div class="sm-title bold c-pt-6">Invites: {{invites.length}}</div>
+            <div class="c-pb-6">
+                <div v-for="(invite, index) in invites" class="row-nowrap justify-between align-center c-pt-4">
+                    <div class="left">
+                        <router-link :to="`/${invite.group.permlink}/group-details`" style="text-decoration: none">
+                            <span class="a">{{invite.group.name}}</span>
+                        </router-link>
+                        <span class="c-pl-1">({{convertToPercent(invite.research_group_token_amount)}}%)</span>
+                    </div>
+                    <div class="right">
+                        <v-tooltip bottom>
+                            <v-btn slot="activator" @click="approveInvite(invite)"  
+                                :disabled="isApprovingInvite" :loading="isApprovingInvite" small flat icon color="grey" class="ma-0">
+                                <v-icon>done</v-icon>
+                            </v-btn>
+                            <span>Accept</span>
+                        </v-tooltip>
+                        <v-tooltip bottom>
+                            <v-btn slot="activator" @click="showRejectInviteDialog(invite)" 
+                                :disabled="isRejectingInvite" :loading="isRejectingInvite" small flat icon color="grey" class="ma-0">
+                                <v-icon>close</v-icon>
+                            </v-btn>
+                            <span>Reject</span>
+                        </v-tooltip>
                     </div>
                 </div>
+                <confirm-action-dialog
+                    :meta="rejectInviteMeta"
+                    :title="``" :text="`Are you sure you want to reject this invite ?`"
+                    @confirmed="rejectInviteMeta.isShown = false; rejectInvite(rejectInviteMeta.item);" 
+                    @canceled="rejectInviteMeta.isShown = false">
+                </confirm-action-dialog>
             </div>
         </div>
         <!-- ### END User Profile Invites Section ### -->
-
-        <div v-if="isOwner && hasInvites" class="sidebar-fullwidth">
-            <v-divider></v-divider>
-        </div>
       </div>
     </div>
 </template>
@@ -279,11 +233,7 @@
                 userInfo: 'userDetails/userInfo',
                 expertise: 'userDetails/expertise',
                 invites: 'userDetails/invites',
-                isLoadingUserProfilePage:'userDetails/isLoadingUserProfilePage',
-                isLoadingUserExpertise: 'userDetails/isLoadingUserExpertise',
-                isLoadingUserAccount: 'userDetails/isLoadingUserAccount',
-                isLoadingUserProfile: 'userDetails/isLoadingUserProfile',
-                isLoadingUserInvites: 'userDetails/isLoadingUserInvites'
+                isLoadingUserProfilePage:'userDetails/isLoadingUserProfilePage'
             }),
             isOwner() {
                 return this.currentUser && this.currentUser.username === this.$route.params.account_name
@@ -424,25 +374,4 @@
     .owner-hint {
         font-style: italic;
     }
-
-    .user-expertise-container {
-        // min-height: 150px
-    }
-
-    .user-profile-sidebar-container {
-        
-    }
-
-    .user-contacts-container {
-        // min-height: 100px
-    }
-
-    .user-info-container {
-        //  min-height: 150px
-    }
-
-    .user-invites-container {
-        // min-height: 100px
-    }
-
 </style>
