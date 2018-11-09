@@ -38,7 +38,7 @@
 
         <div class="c-mt-5">
             <v-card class="c-p-8">
-                <div class="bold subheading c-pb-2">Related expert tokens:</div>
+                <div class="bold subheading c-pb-2">Related Expertise Tokens:</div>
                 <div class="c-pt-4" v-for="(exp, index) in relatedExpertise" :key="index">
                     <span>{{exp.discipline_name}}</span>
                     <span class="right half-bold">{{exp.amount}}</span>
@@ -46,7 +46,7 @@
             </v-card>
             <div class="orange--text c-pt-4 text-align-center">
                 <v-icon color="orange">warning</v-icon>
-                100% of your expert tokens will be locked for 24 hours after you've published the review
+                100% of your Expertise Tokens will be locked for 24 hours after you have published the review
             </div>
         </div>
     </div>

@@ -4,7 +4,7 @@
             <div class="display-flex full-height pos-relative overflow-hidden">
                 <div class="c-m-auto text-align-center">
                     <div class="display-3 bold">Sorry</div>
-                    <div class="headline">You don't have the access to this page</div>
+                    <div class="headline">You have no access to this page</div>
                 </div>
 
                 <img class="left-polygon" :src="'./static/polygon.svg'">

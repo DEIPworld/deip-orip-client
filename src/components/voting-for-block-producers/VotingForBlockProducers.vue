@@ -17,7 +17,7 @@
                         {{ VOTES_MAX_COUNT - user.account.witnesses_voted_for }} votes left. You can vote for {{ VOTES_MAX_COUNT }} delegates
                     </div>
 
-                    <div v-else>You have no expert tokens to vote for delegates</div>
+                    <div v-else>You have no Expertise Tokens to vote for delegates</div>
                 </div>
 
                 <div class="c-mt-6">

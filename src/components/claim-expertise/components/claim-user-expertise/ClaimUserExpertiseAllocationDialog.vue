@@ -5,7 +5,7 @@
                 <v-btn icon dark @click="$emit('close')">
                     <v-icon>close</v-icon>
                 </v-btn>
-                <v-toolbar-title>Allocation of expertise</v-toolbar-title>
+                <v-toolbar-title>Allocation of Expertise Tokens</v-toolbar-title>
                 <v-spacer></v-spacer>
             </v-toolbar>
 
@@ -13,19 +13,19 @@
                 <contentbar>
 
                     <div class="headline text-align-center half-bold">
-                        You're suggesting to supply
+                        You are suggesting to supply
 
                         <router-link class="a" :to="{ name: 'UserDetails', params: { account_name: claimer.account.name }}">
                             {{ claimer | fullname }}
                         </router-link>
 
-                        with expert tokens in 
+                        with Expertise Tokens in 
                     </div>
 
                     <v-form v-model="isFormValid" ref="form">
                         <div class="discipline-picker c-mt-8">
                             <v-text-field
-                                label="Amount of expert tokens"
+                                label="Amount of Expertise Tokens"
                                 v-model="amount"
                                 :rules="[required, digitRule]"
                             ></v-text-field>
