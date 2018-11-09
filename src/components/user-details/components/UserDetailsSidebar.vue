@@ -11,7 +11,10 @@
                     <div class="half-bold">{{ item.discipline_name }}</div>
                     <div>{{ item.amount }}</div>
                 </div>
-                <div v-if="!expertise.length" class="body-1">You have no expertise tokens yet. Use <span class="a" @click="openClaimExpertiseDialog()">Claim</span> process to apply for Expertise Tokens</div>
+                <div v-if="!expertise.length" class="body-1"> 
+                    <div v-if="isOwner">You have no expertise tokens yet. Use <span class="a" @click="openClaimExpertiseDialog()">Claim</span> process to apply for Expertise Tokens</div>
+                    <div v-if="!isOwner"><span class="body-2">{{userInfo | fullname}}</span> has no expertise tokens yet</div>
+                </div>
             </div>
         </div>
         <!-- ### END User Profile Expertise Section ### -->

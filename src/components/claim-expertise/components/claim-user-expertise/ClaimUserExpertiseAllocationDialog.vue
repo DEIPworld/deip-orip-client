@@ -12,17 +12,17 @@
             <page-container>
                 <contentbar>
 
-                    <div class="headline text-align-center half-bold">
+                    <div class="headline text-align-center">
                         You are suggesting to supply
 
                         <router-link class="a" :to="{ name: 'UserDetails', params: { account_name: claimer.account.name }}">
                             {{ claimer | fullname }}
                         </router-link>
 
-                        with Expertise Tokens in 
+                        with Expertise Tokens in "{{ discipline.label }}" discipline
                     </div>
 
-                    <v-form v-model="isFormValid" ref="form">
+                    <v-form v-model="isFormValid" ref="form" style="margin-top: 50px">
                         <div class="discipline-picker c-mt-8">
                             <v-text-field
                                 label="Amount of Expertise Tokens"
@@ -31,7 +31,7 @@
                             ></v-text-field>
                         </div>
 
-                        <div class="red--text c-pt-2 text-align-center">
+                        <div class="red--text text-align-center">
                             <v-icon color="red">warning</v-icon>
                             Please be accurate, you will need the community assistance to change the disciplines
                         </div>
@@ -40,7 +40,7 @@
                             <v-text-field
                                 label="Provide a cover letter"
                                 multi-line auto-grow
-                                rows="2"
+                                :rows="6"
                                 v-model="description"
                                 :rules="[required]"
                             ></v-text-field>
@@ -66,6 +66,7 @@
     import _ from 'lodash';
     import deipRpc from '@deip/deip-rpc-client';
     import { mapGetters } from 'vuex';
+    import { getNodeById } from "./../../../common/disciplines/DisciplineTreeService"; 
 
     export default {
         name: "ClaimUserExpertiseAllocationDialog",
@@ -85,7 +86,8 @@
                 isLoading: false,
 
                 amount: '',
-                description: ''
+                description: '',
+                discipline: getNodeById(this.disciplineId)
             }
         },
         computed: {
