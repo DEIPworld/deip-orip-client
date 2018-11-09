@@ -5,22 +5,34 @@
 
             <div class="col-grow overflow-y-auto">
 
-                <div class="row c-mh-auto period-max-width c-pt-4">
-                    <div class="col-12">
-                        <datetime-picker
-                            label="Start date"
-                            :datetime="startDate"
-                            @input="setStartDate"
-                        ></datetime-picker>
-                    </div>
+                <div class="c-mh-auto period-max-width c-pt-4">
+                    <v-form class="row" ref="form" v-model="isFormValid">
+                        <div class="col-12">
+                            <datetime-picker
+                                label="Start date"
+                                :datetime="startDate"
+                                :rules="[
+                                    rules.required,
+                                    rules.greaterThanNow,
+                                    rules.startDateShouldBeSmaller
+                                ]"
+                                @input="setStartDate"
+                            ></datetime-picker>
+                        </div>
 
-                    <div class="col-12">
-                        <datetime-picker
-                            label="End date"
-                            :datetime="endDate"
-                            @input="setEndDate"
-                        ></datetime-picker>
-                    </div>
+                        <div class="col-12">
+                            <datetime-picker
+                                label="End date"
+                                :datetime="endDate"
+                                :rules="[
+                                    rules.required,
+                                    rules.greaterThanNow,
+                                    rules.endDateShouldBeGreater
+                                ]"
+                                @input="setEndDate"
+                            ></datetime-picker>
+                        </div>
+                    </v-form>
                 </div>
             </div>
         </div>
@@ -32,40 +44,54 @@
             
             <v-btn color="primary" 
                 @click.native="nextStep()" 
-                :disabled="!this.tokenSaleInfo.startDate || !this.tokenSaleInfo.endDate"
+                :disabled="!isFormValid"
             >Next</v-btn>
         </div>
     </div>
 </template>
 
 <script>
+    import moment from 'moment';
+
     export default {
         name: "TokenSalePeriod",
+
         props: {
             tokenSaleInfo: { type: Object, required: true }
         },
+
         data() { 
             return {
                 startDate: undefined,
-                endDate: undefined
+                endDate: undefined,
+
+                isFormValid: false,
+
+                rules: {
+                    required: val => !!val || 'This field is required',
+                    greaterThanNow: val => Date.parse(val) > Date.now() || 'Date should be in the future',
+
+                    startDateShouldBeSmaller: val => {
+                        return !this.endDate
+                            || Date.parse(val) < Date.parse(this.endDate)
+                            || 'Start date should be smaller than end date';
+                    },
+
+                    endDateShouldBeGreater: val => {
+                        return !this.startDate
+                            || Date.parse(val) > Date.parse(this.startDate)
+                            || 'End date should be greater than start date';
+                    },
+                }
             } 
         },
+
         methods: {
             nextStep() {
                 this.$emit('incStep');
             },
             prevStep() {
                 this.$emit('decStep');
-            },
-            allowedStartDates(val) {
-                const date = Date.parse(val);
-
-                return this.tokenSaleInfo.endDate 
-                    ? date > Date.now() && date < this.tokenSaleInfo.endDate.getTime()
-                    : date > Date.now();
-            },
-            allowedEndDates(val) {
-                return Date.parse(val) > this.tokenSaleInfo.startDate.getTime()
             },
             
             setStartDate(value) {
@@ -76,6 +102,11 @@
                 this.endDate = value;
                 this.tokenSaleInfo.endDate = new Date(value);
             },
+        },
+
+        created() {
+            const startDate = moment().add(10, 'minutes').format('YYYY-MM-DD HH:mm');
+            this.setStartDate(startDate);
         }
     };
 </script>
