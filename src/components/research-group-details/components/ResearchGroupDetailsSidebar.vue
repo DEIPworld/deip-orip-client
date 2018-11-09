@@ -1,31 +1,21 @@
 <template>
-    <div class="research-group-details-sidebar-container">
+    <div>
         <sidebar-loader v-if="isLoadingResearchGroupPage"></sidebar-loader>
 
         <div v-if="isLoadingResearchGroupPage === false">
 
             <!-- ### START Research Group Details Section ### -->
-            <div class="research-group-info-container spinner-container">
-                <v-progress-circular class="section-spinner"
-                    v-if="isLoadingResearchGroupDetails"
-                    indeterminate color="primary"
-                ></v-progress-circular>
-
-                <div v-if="isLoadingResearchGroupDetails === false">
-                    <div class="sm-title bold">Group info</div>
-                    <div class="c-pt-4 c-pb-6">
-                        <div v-for="(item, i) in groupExpertise" :key="i">
-                            <span class="half-bold">{{ item.disciplineName }}</span>
-                            <span class="right">{{ item.value }}</span>
-                        </div>
+            <div>
+                <div class="sm-title bold">Group info</div>
+                <div class="c-pt-4 c-pb-2">
+                    <div v-for="(item, i) in groupExpertise" :key="i">
+                        <span class="half-bold">{{ item.disciplineName }}</span>
+                        <span class="right">{{ item.value }}</span>
                     </div>
                 </div>
             </div>
+
             <!-- ### END Research Group Details Section ### -->
-            
-            <div class="sidebar-fullwidth">
-                <v-divider></v-divider>
-            </div>
 
         <!-- <sidebar-splitted-btn :right-ripple="false">
                 <div slot="left" class="default-half-splitted">
@@ -33,10 +23,11 @@
                 </div>
             </sidebar-splitted-btn> -->
 
-            <div v-if="group && !isPersonalGroup">
-                <div class="sm-title bold c-pt-6">Quorum setup</div>
+            <div v-if="group && !isPersonalGroup" class="c-mt-6">
+                <div class="sidebar-fullwidth"><v-divider></v-divider></div>
+                <div class="sm-title bold c-mt-4">Quorum setup</div>
 
-                <div class="c-pt-4 c-pb-6">
+                <div class="c-pt-4 c-pb-4">
                     <!-- no v-for bc order and padding are important -->
                     <div class="row-nowrap justify-between">
                         <div class="half-bold">{{ proposalLabels[ group.proposal_quorums[0][0] ] }}</div>
@@ -79,23 +70,13 @@
                         <div class="">{{ convertToPercent( group.proposal_quorums[5][1] ) }}%</div>
                     </div>
                 </div>
-
-                <div class="sidebar-fullwidth">
-                    <v-divider></v-divider>
-                </div>
             </div>
 
             <!-- ### START Research Group Join Requests Section ### -->
-            <div v-if="isJoinRequestsSectionAvailable || isLoadingResearchGroupJoinRequests !== false"
-                class="research-group-join-requests-container spinner-container"
-            >
-                <v-progress-circular class="section-spinner"
-                    v-if="isLoadingResearchGroupJoinRequests"
-                    indeterminate color="primary"
-                ></v-progress-circular>
-
-                <div v-if="isLoadingResearchGroupJoinRequests === false">
-                    <div class="sm-title bold c-pt-6">Join requests: {{pendingJoinRequests.length}}</div>
+            <div v-if="isJoinRequestsSectionAvailable" class="c-mt-6">
+                <div>
+                    <div class="sidebar-fullwidth"><v-divider></v-divider></div>
+                    <div class="sm-title bold c-mt-4">Join requests: {{pendingJoinRequests.length}}</div>
 
                     <div class="c-pb-6">
                         <div v-for="(join, index) in pendingJoinRequests" class="row-nowrap justify-between align-center c-pt-4">
@@ -115,10 +96,6 @@
                 </div>
             </div>
             <!-- ### END Research Group Join Requests Section ### -->
-
-            <div v-if="isJoinRequestsSectionAvailable" class="sidebar-fullwidth">
-                <v-divider></v-divider>
-            </div>
         </div>
 
         <handle-join-request-dialog v-if="group"
@@ -157,11 +134,8 @@
                 group: 'researchGroup/group',
                 members: 'researchGroup/members',
                 options: 'researchGroup/options',
-                
                 isLoadingResearchGroupPage: 'researchGroup/isLoadingResearchGroupPage',
-                pendingJoinRequests: 'researchGroup/pendingJoinRequests',
-                isLoadingResearchGroupDetails: 'researchGroup/isLoadingResearchGroupDetails',
-                isLoadingResearchGroupJoinRequests: 'researchGroup/isLoadingResearchGroupJoinRequests'
+                pendingJoinRequests: 'researchGroup/pendingJoinRequests'
             }),
             isPersonalGroup() {
                 return this.group 
@@ -212,17 +186,4 @@
         padding-left: 10px;
         padding-top: 3px;
     }
-
-    .research-group-details-sidebar-container {
-        
-    }
-
-    .research-group-info-container {
-        min-height: 200px;
-    }
-
-    .research-group-join-requests-container {
-        // min-height: 200px;
-    }
-
 </style>

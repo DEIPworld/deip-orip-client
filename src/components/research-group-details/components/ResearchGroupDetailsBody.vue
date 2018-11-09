@@ -106,7 +106,7 @@
                                 <v-expansion-panel-content>
                                     <div slot="header" class="deip-blue-color">
                                         <!-- <v-icon small color="primary">access_time</v-icon> -->
-                                        <span class="">Waiting for accept of invites</span>
+                                        <span class="">Pending invites ({{invites.length}})</span>
                                     </div>
 
                                     <div class="">

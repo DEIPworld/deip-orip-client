@@ -53,7 +53,7 @@
                     <page-container>
                         <contentbar>
                             <div>
-                                <v-text-field v-model="coverLetter" name="Cover letter" label="Cover Letter" multi-line></v-text-field>
+                                <v-text-field v-model="coverLetter" :rows="8" name="Cover letter" label="Cover letter" multi-line></v-text-field>
                                 <div class="display-flex c-pt-8">
                                     <v-btn color="primary" 
                                         class="c-m-auto"
