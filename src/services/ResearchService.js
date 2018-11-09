@@ -72,7 +72,7 @@ const createContentProposal = function(contentRef, contentType) {
         })
         .then(() => {
             return notificationsHttpService.createResearchGroupNotification(
-                contentRef.researchId, { type: 'proposal', meta: proposal });
+                contentRef.researchGroupId, { type: 'proposal', meta: proposal });
         });
 }
 
