@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div class="pos-relative">
         <div class="row">
             <v-menu class="width-6"
                 lazy
@@ -13,7 +13,9 @@
             >
                 <v-text-field
                     slot="activator"
+                    ref="datePicker"
                     :label="label"
+                    :rules="[() => !time && !datetime || $refs.errorMsg.valid || '']"
                     placeholder="Date"
                     v-model="date"
                     readonly
@@ -29,6 +31,8 @@
             <v-menu class="col-grow" bottom left offset-y :nudge-top="20">
                 <v-text-field
                     slot="activator"
+                    ref="timePicker"
+                    :rules="[() => !date && !datetime || $refs.errorMsg.valid || '']"
                     placeholder="Time"
                     v-model="time"
                     append-icon="event"
@@ -46,21 +50,32 @@
                 </div>
             </v-menu>
         </div>
+
+        <v-text-field
+            ref="errorMsg"
+            class="datetime-picker-error-hack"
+            v-model="datetime"
+            :rules="rules"
+        ></v-text-field>
     </div>
 </template>
 
 <script>
     export default {
         name:'DatetimePicker',
+
         props: {
+            label: { type: String, default: '' },
+            rules: { required: false, type: Array, default: () => [] },
+
             datetime: { 
                 required: true,
                 validator(value) {
                     return value === undefined || typeof value === 'string';
                 }
             },
-            label: { type: String, default: '' }
         },
+
         data() {
             return {
                 date: undefined,
@@ -83,6 +98,7 @@
                 ]
             }
         },
+
         methods: {
             apply() {
                 if (this.date && this.time) {
@@ -99,14 +115,36 @@
                 }
             }
         },
-        created(){
+
+        watch: {
+            datetime(newValue) {
+                this.setValues();
+
+                setTimeout(() => {
+                    this.$refs.datePicker.validate();
+                    this.$refs.timePicker.validate();
+                }, 1);
+            }
+        },
+
+        created() {
             this.setValues();
         }
     }
 </script>
 
-<style lang="less" scoped>
+<style lang="less">
     .time-points-list {
         max-height: 250px;
+    }
+
+    .datetime-picker-error-hack {
+        padding: 0px;
+        position: absolute;
+        top: 48px;
+
+        .input-group__input {
+            display: none;
+        }
     }
 </style>
