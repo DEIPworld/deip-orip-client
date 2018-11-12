@@ -1,7 +1,7 @@
 <template>
     <div id="deip-app">
         <div v-if="$route.meta.withoutHeader">
-            <router-view/>
+            <router-view :key="$route.fullPath"/>
         </div>
 
         <v-app v-else>
@@ -19,7 +19,7 @@
             </v-navigation-drawer> -->
             <toolbar :drawer="drawer" @update="onDrawerUpdate"></toolbar>
             <v-content>
-                <router-view/>
+                <router-view :key="$route.fullPath"/>
             </v-content>
         </v-app>
 

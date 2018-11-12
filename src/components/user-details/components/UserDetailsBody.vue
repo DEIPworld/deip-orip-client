@@ -265,7 +265,7 @@
 
         <div v-if="isLoadingUserProfilePage === false">
             <div class="c-pt-12 c-pb-2"></div>
-            <v-btn class="ma-0" @click="openClaimExpertiseDialog()">Claim Expertise Tokens</v-btn>
+            <v-btn v-if="isOwner" class="ma-0" @click="openClaimExpertiseDialog()">Claim Expertise Tokens</v-btn>
 
             <div class="c-mt-6 c-mb-2 body-2" v-if="tmpClaimObjects.length">Active claims:</div>
             <div v-for="(item, i) in tmpClaimObjects" :key="i">
