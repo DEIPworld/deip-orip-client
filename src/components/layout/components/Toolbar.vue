@@ -10,7 +10,7 @@
                 <v-icon size="32px" color="grey lighten-1">search</v-icon>
             </v-btn>
 
-            <v-menu v-if="isLoggedIn()" bottom left offset-y :close-on-content-click="false">
+            <v-menu v-if="isLoggedIn()" bottom left offset-y>
                 <v-btn icon large class="ma-0" slot="activator" v-show="user.notifications.length">
                     <v-badge color="amber darken-3" right overlap>
                         <v-icon size="32px" color="grey lighten-1">chat_bubble</v-icon>
@@ -43,24 +43,19 @@
                     <template v-for="notification in user.notifications">
                         <div class="c-pv-2 c-ph-4">
                             <div>
-                                <router-link class="a"
-                                    :to="{ name: 'UserDetails', params: { account_name: notification.meta.creator }}"
-                                >{{ { profile: notification.meta.creatorProfile, account: { name: notification.meta.creator} } | fullname }}</router-link>
-                                
-                                {{getNotificationText(notification.meta)}} in
-
-                                <router-link class="a" :to="{
-                                        name: 'ResearchGroupDetails', 
-                                        params: { research_group_permlink: notification.meta.groupInfo.permlink }
-                                    }"
-                                >{{ notification.meta.groupInfo.name }}</router-link>
+                                <router-link class="a" :to="{ name: 'UserDetails', params: { account_name: notification.meta.creator } }">
+                                    {{ { profile: notification.meta.creatorProfile, account: { name: notification.meta.creator} } | fullname }}
+                                </router-link>
+                                <span class="clickable" @click="$router.push({ name: 'ResearchGroupDetails', params: { research_group_permlink: notification.meta.groupInfo.permlink }, hash: '#proposals'})">
+                                    <span>{{getNotificationText(notification.meta)}}</span>
+                                    <span class="a">{{ notification.meta.groupInfo.name }}</span>
+                                </span>
                             </div>
                             <div class="grey--text caption c-mt-1">
                                 <v-icon size="16" color="grey">event</v-icon> {{ new Date(notification.created_at).toDateString() }}
                                 <span style="cursor: pointer" class="a orange--text right" @click="readNotification(notification)">Mark as read</span>
                             </div>
                         </div>
-                        
                         <v-divider></v-divider>
                     </template>
                 </v-list>
@@ -75,15 +70,15 @@
                 </v-btn>
 
                 <v-list dark dense>
-                    <v-list-tile @click="goToState('UserDetails', {account_name: user.username})">
+                    <v-list-tile :to="{ name: 'UserDetails', params: { account_name: user.username } }">
                         <v-list-tile-title>Profile</v-list-tile-title>
                     </v-list-tile>
 
-                    <v-list-tile v-if="user" @click="goToState('UserWallet')">
+                    <v-list-tile v-if="user" :to="{ name: 'UserWallet' }">
                         <v-list-tile-title>Wallet</v-list-tile-title>
                     </v-list-tile>
                     
-                    <v-list-tile v-if="user" @click="goToState('CreateDisciplineGrant')">
+                    <v-list-tile v-if="user" :to="{ name: 'CreateDisciplineGrant' }">
                         <v-list-tile-title>Create Grant</v-list-tile-title>
                     </v-list-tile>
 
@@ -139,13 +134,6 @@
             updateDrawer(value) {
                 this.$emit('update', value);
             },
-            goToState(state, params) {
-                if (this.$route.name === 'UserDetails' && params && params.account_name) {
-                    this.$store.dispatch('userDetails/loadUser', params.account_name);
-                }
-
-                this.$router.push({ name: state, params: params });
-            },
             readNotification(notification) {
                 notificationsHttpService.markUserNotificationAsRead(this.user.username, notification._id)
                     .then(() => {
@@ -157,19 +145,19 @@
                 let text = "";
                 switch(proposal.action) {
                     case START_RESEARCH:
-                        text = "proposes to start new research"
+                        text = "proposed to start new research in"
                         break;
                     case CREATE_RESEARCH_MATERIAL:
-                        text = "proposes new research result"
+                        text = "proposed new research result in"
                         break;
                     case START_RESEARCH_TOKEN_SALE:
-                        text = "proposes to start token sale"
+                        text = "proposed to start token sale in"
                         break;
                     case INVITE_MEMBER:
-                        text = "proposes to invite new member"
+                        text = "proposed to invite new member in"
                         break;
                     default:
-                       text = "created a proposal"
+                       text = "created a proposal in"
                 }
                 return text;
             }
@@ -180,6 +168,11 @@
                 if (this.isLoggedIn()) {
                     this.$store.dispatch('auth/loadNotifications');
                 }
+            }
+        },
+        created() {
+            if (this.isLoggedIn()) {
+                this.$store.dispatch('auth/loadNotifications');
             }
         }
     }

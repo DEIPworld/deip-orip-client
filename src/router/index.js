@@ -157,7 +157,21 @@ const router = new Router({
     }, {
         path: '*',
         redirect: '/research-feed'
-    }]
+    }],
+
+    scrollBehavior(to, from, savedPosition) {
+        if (to.hash) {
+            // TODO: Remove this timeout after router\loader refactoring
+            setTimeout(() => {
+                const anchor = document.querySelector(to.hash);
+                if (anchor) {
+                    return window.scrollTo({ top: anchor.offsetTop, behavior: 'smooth' });
+                }
+            }, 1000);
+        } else {
+            return { x: 0, y: 0 }
+        }
+    }
 })
 
 

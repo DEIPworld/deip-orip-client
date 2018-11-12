@@ -172,7 +172,7 @@
         <!-- ### END Research Group Research List Section ### -->
 
         <!-- ### START Research Group Proposals Section ### -->
-        <div v-if="isResearchGroupMember" class="research-group-proposals-container spinner-container c-pt-8">
+        <div id="proposals" v-if="isResearchGroupMember" class="research-group-proposals-container spinner-container c-pt-8">
             <v-progress-circular class="section-spinner"
                 v-if="isLoadingResearchGroupProposals"
                 indeterminate color="primary"
