@@ -91,7 +91,7 @@
 
 <script>
     import deipRpc from '@deip/deip-rpc-client';
-    import { createProposal, getStringifiedProposalData, START_RESEARCH } from "./../../services/ProposalService"; 
+    import { createResearchProposal } from "./../../services/ProposalService"; 
     import * as disciplineTreeService from "./../common/disciplines/DisciplineTreeService"; 
     import { mapGetters } from 'vuex';
 
@@ -149,24 +149,13 @@
             finish() {
                 const self = this;
                 this.isLoading = true;
-
-                let proposal = getStringifiedProposalData(START_RESEARCH, [
-                    this.research.group.id,
-                    this.research.title,
-                    this.research.description,
-                    this.research.title.replace(/ /g, "-").replace(/_/g, "-").toLowerCase(),
+                
+                createResearchProposal(
+                    this.research.group.id, this.research.title, this.research.description, 
+                    this.research.title.replace(/ /g, "-").replace(/_/g, "-").toLowerCase(), 
                     this.research.review_share_in_percent * this.DEIP_1_PERCENT,
-                    5,
                     this.research.disciplines.map(d => d.id)
-                ]);
-
-                createProposal(
-					this.user.privKey,
-					this.user.username, 
-					this.research.group.id,
-                    proposal,
-                    START_RESEARCH
-				).then(() => {
+                ).then(() => {
                     this.isLoading = false;
 
                     this.$store.dispatch('layout/setSuccess', {

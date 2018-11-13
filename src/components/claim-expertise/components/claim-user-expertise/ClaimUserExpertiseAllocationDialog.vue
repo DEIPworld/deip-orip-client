@@ -51,7 +51,7 @@
                         <v-btn color="primary"
                             :disabled="!isFormValid || isLoading"
                             :loading="isLoading"
-                            @click="createProposal()"
+                            @click="createExpertiseAllocationProposal()"
                         >Create proposal</v-btn>
                     </div>
 
@@ -96,7 +96,7 @@
             })
         },
         methods: {
-            createProposal() {
+            createExpertiseAllocationProposal() {
                 this.isLoading = true;
 
                 deipRpc.broadcast.createExpertiseAllocationProposalAsync(

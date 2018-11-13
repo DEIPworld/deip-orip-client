@@ -1,5 +1,5 @@
 
-import { getStringifiedProposalData, CREATE_RESEARCH_MATERIAL } from './ProposalService'
+import { CREATE_RESEARCH_MATERIAL } from './ProposalService'
 import { signOperation } from './../utils/blockchain'
 import contentHttpService from './http/content'
 import notificationsHttpService from './http/notifications'
@@ -50,34 +50,7 @@ const contentTypes = [
     { id: FINAL_RESULT, text: 'Final Result', type: 'final_result' }
 ];
 
-const createContentProposal = function(contentRef, contentType) {
-    const data = getStringifiedProposalData(CREATE_RESEARCH_MATERIAL, [
-            contentRef.researchId, contentType, contentRef.title, 
-            contentRef.title.replace(/ /g, "-").replace(/_/g, "-").toLowerCase(),
-            `${contentRef.type}:${contentRef.hash}`, contentRef.authors, contentRef.references, []
-        ]);
-
-    const proposal = {
-        creator: getDecodedToken().username,
-        research_group_id: contentRef.researchGroupId,
-        data: data,
-        action: CREATE_RESEARCH_MATERIAL,
-        expiration_time: new Date( new Date().getTime() + 2 * 24 * 60 * 60 * 1000 )
-    };
-    const operation = ["create_proposal", proposal];
-
-    return signOperation(operation, getOwnerWif())
-        .then((signedTX) => {
-            return contentHttpService.createContentProposal(signedTX, contentRef.type);
-        })
-        .then(() => {
-            return notificationsHttpService.createResearchGroupNotification(
-                contentRef.researchGroupId, { type: 'proposal', meta: proposal });
-        });
-}
-
 export {
     contentTypes,
-    contentTypesDictionary,
-    createContentProposal
+    contentTypesDictionary
 }

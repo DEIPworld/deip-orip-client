@@ -1,7 +1,10 @@
 import _ from 'lodash';
-import researchContentSvc from './http/content.js';
-import notificationsHttpService from './http/notifications.js';
 import deipRpc from '@deip/deip-rpc-client';
+import researchContentSvc from './http/content.js';
+import proposalsHttp from './http/proposals';
+import notificationsHttpService from './http/notifications.js';
+import { getDecodedToken, getOwnerWif } from './../utils/auth'
+import { signOperation } from './../utils/blockchain';
 
 export const START_RESEARCH = 1;
 export const INVITE_MEMBER = 2;
@@ -152,13 +155,106 @@ const createProposal = function(privKey, username, groupId, stringifiedPayload, 
                 return notificationsHttpService.createResearchGroupNotification(
                     groupId, { type: 'proposal', meta: proposal });
             });
-    }
+}
+
+const createInviteProposal = function(groupId, invitee, rgtAmount, coverLetter) {
+    const data = getStringifiedProposalData(INVITE_MEMBER, [ 
+        groupId, invitee, rgtAmount, coverLetter
+    ]);
+
+    const proposal = {
+        creator: getDecodedToken().username,
+        research_group_id: groupId,
+        data: data,
+        action: INVITE_MEMBER,
+        expiration_time: new Date(new Date().getTime() + 2 * 24 * 60 * 60 * 1000)
+    };
+
+    const operation = ["create_proposal", proposal];
+    return signOperation(operation, getOwnerWif())
+        .then((signedTx) => {
+            return proposalsHttp.sendInviteProposal(signedTx);
+        })
+}
+
+const createResearchProposal = function(groupId, title, description, permlink, reviewShare, disciplines) {
+    const data = getStringifiedProposalData(START_RESEARCH, [
+        groupId, title, description, permlink, reviewShare, 5, disciplines
+    ]);
+
+    const proposal = {
+        creator: getDecodedToken().username,
+        research_group_id: groupId,
+        data: data,
+        action: START_RESEARCH,
+        expiration_time: new Date(new Date().getTime() + 2 * 24 * 60 * 60 * 1000)
+    };
+
+    const operation = ["create_proposal", proposal];
+    return signOperation(operation, getOwnerWif())
+        .then((signedTx) => {
+            return proposalsHttp.sendResearchProposal(signedTx);
+        })
+}
+
+const createContentProposal = function(contentRef, contentType) {
+    const data = getStringifiedProposalData(CREATE_RESEARCH_MATERIAL, [
+        contentRef.researchId, contentType, contentRef.title, 
+        contentRef.title.replace(/ /g, "-").replace(/_/g, "-").toLowerCase(),
+        `${contentRef.type}:${contentRef.hash}`, contentRef.authors, contentRef.references, []
+    ]);
+
+    const proposal = {
+        creator: getDecodedToken().username,
+        research_group_id: contentRef.researchGroupId,
+        data: data,
+        action: CREATE_RESEARCH_MATERIAL,
+        expiration_time: new Date(new Date().getTime() + 2 * 24 * 60 * 60 * 1000)
+    };
+
+    const operation = ["create_proposal", proposal];
+    return signOperation(operation, getOwnerWif())
+        .then((signedTx) => {
+            return proposalsHttp.sendContentProposal(signedTx, contentRef.type);
+        })
+
+    // return signOperation(operation, getOwnerWif())
+    //     .then((signedTX) => {
+    //         return contentHttpService.createContentProposal(signedTX, contentRef.type);
+    //     })
+    //     .then(() => {
+    //         return notificationsHttpService.createResearchGroupNotification(
+    //             contentRef.researchGroupId, { type: 'proposal', meta: proposal });
+    //     });
+}
+
+const createTokenSaleProposal = function(groupId, researchId, startDate, endDate, amount, softCap, hardCap) {
+    const data = getStringifiedProposalData(START_RESEARCH_TOKEN_SALE, [
+        researchId, startDate, endDate, amount, softCap, hardCap
+    ]);
+
+    const proposal = {
+        creator: getDecodedToken().username,
+        research_group_id: groupId,
+        data: data,
+        action: START_RESEARCH_TOKEN_SALE,
+        expiration_time: new Date(new Date().getTime() + 2 * 24 * 60 * 60 * 1000)
+    };
+
+    const operation = ["create_proposal", proposal];
+    return signOperation(operation, getOwnerWif())
+        .then((signedTx) => {
+            return proposalsHttp.sendTokenSaleProposal(signedTx);
+        })
+}
 
 export {
     types,
     labels,
-    createProposal,
-    getStringifiedProposalData,
+    createInviteProposal,
+    createResearchProposal,
+    createContentProposal,
+    createTokenSaleProposal,
     getParsedProposal,
     extendProposalByRelatedInfo
 };

@@ -17,9 +17,6 @@ const service = {
     },
     unlockContentDraft(refId) {
         return http.put(`/refs/unlock/${refId}`, {}, { baseURL: `${apiUrl}/content/` });
-    },
-    createContentProposal(tx, type) {
-        return http.post(`/propose/${type}`, tx, { baseURL: `${apiUrl}/content/` });
     }
 }
 

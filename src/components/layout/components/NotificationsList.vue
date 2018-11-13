@@ -14,7 +14,7 @@
                 <div class="c-pv-2 c-ph-4">
                     <div>
                         <router-link class="a" :to="{ name: 'UserDetails', params: { account_name: notification.meta.creator } }">
-                            {{ { profile: notification.meta.creatorProfile, account: { name: notification.meta.creator} } | fullname }}
+                            {{ { profile: notification.meta.creatorInfo, account: { name: notification.meta.creator} } | fullname }}
                         </router-link>
                         <span class="clickable" @click="clickProposalNotification(notification)">
                             <span v-if="notification.meta.action === START_RESEARCH">proposed to start new research in</span>
