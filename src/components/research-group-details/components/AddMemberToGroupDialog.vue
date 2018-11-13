@@ -147,8 +147,8 @@
 
                     deipRpc.api.getAllAccountsAsync()
                         .then(accounts => {
-                            const invitees = accounts.filter(a => !this.groupMembers.some(m => m.account.name == a.name )).map(a => a.name);
-                            return getEnrichedProfiles(invitees)
+                            const invitees = accounts.filter(a => !this.groupMembers.some(memberUsername => memberUsername === a.name)).map(a => a.name);
+                            return getEnrichedProfiles(invitees);
                         })
                         .then((users) => {
                              this.allUsers = users;

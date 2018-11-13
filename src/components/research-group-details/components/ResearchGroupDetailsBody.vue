@@ -149,7 +149,10 @@
                     <add-member-to-group-dialog v-if="group"
                         :is-open="options.isAddMemberDialogOpen"
                         :group-id="group.id"
-                        :group-members="members"
+                        :group-members="
+                            members.map(member => member.account.name)
+                                .concat( invites.map(invite => invite.user.account.name) )
+                        "
                         @onClose="$store.dispatch('researchGroup/changeOptions', { key: 'isAddMemberDialogOpen', value: false })"
                         @onSuccess="$store.dispatch('researchGroup/loadResearchGroupProposals', { groupId: group.id })">
                     </add-member-to-group-dialog>
