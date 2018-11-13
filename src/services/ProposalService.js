@@ -103,12 +103,7 @@ extenderMap[INVITE_MEMBER] = undefined;
 extenderMap[START_RESEARCH_TOKEN_SALE] = undefined;
 extenderMap[CREATE_RESEARCH_MATERIAL] = {
     research: proposal => deipRpc.api.getResearchByIdAsync(proposal.data.research_id),
-    draftContent: proposal =>
-        researchContentSvc.getContentRefs({ researchId: proposal.data.research_id })
-            .then(contents => {
-                const contentHash = proposal.data.content.split(':')[1];
-                return _.find(contents, content => content.hash === contentHash);
-            })
+    draftContent: proposal => researchContentSvc.getContentRef( proposal.data.content.split(':')[1] )
 };
 
 const extendProposalByRelatedInfo = proposal => {

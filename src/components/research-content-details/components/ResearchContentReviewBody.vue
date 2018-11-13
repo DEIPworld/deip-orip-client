@@ -8,6 +8,7 @@
                     <v-gravatar v-else :title="review.author.account.name" :email="review.author.account.name + '@deip.world'" />
                 </v-avatar>
             </div>
+            
             <div class="column c-ml-10">
                 <div class="c-pt-4">
                     <router-link class="a sm-title" :to="{ name: 'UserDetails', params: { account_name: review.author.account.name }}">
@@ -18,6 +19,7 @@
                 <div v-if="review.author.profile" class="c-pt-2 c-pb-1">
                     <span class="caption bold">{{review.author | employmentOrEducation}}</span>
                 </div>
+
                 <div v-if="hasLocation" class="c-pb-1">
                     <v-icon small>location_on</v-icon><span class="caption"> {{review.author | userLocation}}</span>
                 </div>
@@ -33,11 +35,18 @@
                     review for
                 </span>
             </div>
+
             <div class="c-pt-2 c-pb-2">
                 <router-link class="a sm-title" 
-                    :to="{ name: 'ResearchContentDetails', params: { research_group_permlink: research.group_permlink, research_permlink: research.permlink, content_permlink: content.permlink } }">
-                    {{ content.title }}
-                </router-link>
+                    :to="{
+                        name: 'ResearchContentDetails',
+                        params: {
+                            research_group_permlink: encodeURIComponent(research.group_permlink),
+                            research_permlink: encodeURIComponent(research.permlink),
+                            content_permlink: encodeURIComponent(content.permlink)
+                        }
+                    }"
+                >{{ content.title }}</router-link>
             </div>
         </div>
 

@@ -3,6 +3,7 @@
         <contentbar>
             <research-content-add-review-body></research-content-add-review-body>
         </contentbar>
+        
         <sidebar>
             <research-content-add-review-sidebar></research-content-add-review-sidebar>
         </sidebar>
@@ -14,22 +15,19 @@
 
     export default {
         name: "ResearchContentAddReview",
+
         data() { 
             return {} 
         },
-        computed:{
 
-        },
-        methods: {
-
-        },
         created() {
             const permlinks = {
-                group_permlink: this.$route.params.research_group_permlink,
-                research_permlink: this.$route.params.research_permlink,
-                content_permlink: this.$route.params.content_permlink,
+                group_permlink: decodeURIComponent(this.$route.params.research_group_permlink),
+                research_permlink: decodeURIComponent(this.$route.params.research_permlink),
+                content_permlink: decodeURIComponent(this.$route.params.content_permlink),
                 ref: this.$route.query.ref
-            }
+            };
+
             this.$store.dispatch('rcd/loadResearchContentDetails', permlinks);
         }
     };

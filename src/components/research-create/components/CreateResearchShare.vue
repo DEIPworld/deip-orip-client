@@ -48,15 +48,18 @@
 
     export default {
         name: "CreateResearchShare",
+
         props: {
             research : { type: Object, required: true },
             isLoading: { type: Boolean, required: true }
         },
+
         data(){
             return {
                 reviewShare: this.research.review_share_in_percent // default
             }
         },
+
         computed: {
             ...mapGetters({
                 userPersonalGroup: 'auth/userPersonalGroup'
@@ -72,6 +75,7 @@
                     : false;
             }
         },
+        
         methods: {
             nextStep() {
                 this.$emit('incStep');

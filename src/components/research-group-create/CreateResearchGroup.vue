@@ -186,7 +186,7 @@
                         if (!this.backRouterToken) {
                             this.$router.push({ 
                                 name: 'ResearchGroupDetails',
-                                params: { research_group_permlink: this.group.permlink }
+                                params: { research_group_permlink: encodeURIComponent(this.group.permlink) }
                             });
                         } else {
                             this.$router.push(this.backRouterToken);

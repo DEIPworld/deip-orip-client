@@ -88,9 +88,10 @@
         mounted () {
             const self = this;
             var research;
+            
             deipRpc.api.getResearchByAbsolutePermlinkAsync(
-                    this.$route.params.research_group_permlink, 
-                    this.$route.params.research_permlink
+                    decodeURIComponent(this.$route.params.research_group_permlink), 
+                    decodeURIComponent(this.$route.params.research_permlink)
                 )
                 .then((_research) => {
                     research = _research;
