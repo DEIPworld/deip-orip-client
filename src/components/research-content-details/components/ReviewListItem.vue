@@ -103,17 +103,18 @@
 
             goToReviewPage() {
                 const params = { review_id: this.review.id };
+                
                 deipRpc.api.getResearchContentByIdAsync(this.review.research_content_id)
                     .then((content) => {
-                        params.content_permlink = content.permlink;
+                        params.content_permlink = encodeURIComponent(content.permlink);
                         return deipRpc.api.getResearchByIdAsync(content.research_id)
                     })
                     .then((research) => {
-                        params.research_permlink = research.permlink;
+                        params.research_permlink = encodeURIComponent(research.permlink);
                         return deipRpc.api.getResearchGroupByIdAsync(research.research_group_id)
                     })
                     .then((group) => {
-                        params.research_group_permlink = group.permlink;
+                        params.research_group_permlink = encodeURIComponent(group.permlink);
                         this.$router.push({ name: 'ResearchContentReview', params });
                     });
             }

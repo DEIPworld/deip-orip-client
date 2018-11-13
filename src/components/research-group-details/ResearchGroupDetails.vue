@@ -27,7 +27,7 @@
             return {} 
         },
         created() {
-            const groupPermlink = this.$route.params.research_group_permlink;
+            const groupPermlink = decodeURIComponent(this.$route.params.research_group_permlink);
             this.$store.dispatch('researchGroup/loadResearchGroup', groupPermlink);
         }
     };

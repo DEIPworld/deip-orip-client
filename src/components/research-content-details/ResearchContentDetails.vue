@@ -223,6 +223,7 @@
                                 this.$store.dispatch('layout/setSuccess', {
                                     message: "New Content Proposal has been created successfuly!"
                                 });
+                                
                                 this.$router.push({
                                     name: 'ResearchGroupDetails',
                                     params: { research_group_permlink: this.$route.params.research_group_permlink  }
@@ -296,7 +297,7 @@
             addReference(ref) {
                 if (this.isDarContent) {
                     const texture = this.$store.getters['rcd/texture'];
-                    const uri = `${location.protocol}//${process.env.HOST}/#/${ref.group_permlink}/research/${ref.research_permlink}/${ref.permlink}`;
+                    const uri = `${location.protocol}//${process.env.HOST}/#/${encodeURIComponent(ref.group_permlink)}/research/${encodeURIComponent(ref.research_permlink)}/${encodeURIComponent(ref.permlink)}`;
                     const title = `${ref.title} (${ref.research_title})`, containerTitle = title;
                     const refs = this.contentRef.references.slice();
                     texture.api.addReference(uri, title, containerTitle);
@@ -308,7 +309,7 @@
             removeReference(ref) {
                 if (this.isDarContent) {
                     const texture = this.$store.getters['rcd/texture'];
-                    const uri = `${location.protocol}//${process.env.HOST}/#/${ref.group_permlink}/research/${ref.research_permlink}/${ref.permlink}`;
+                    const uri = `${location.protocol}//${process.env.HOST}/#/${encodeURIComponent(ref.group_permlink)}/research/${encodeURIComponent(ref.research_permlink)}/${encodeURIComponent(ref.permlink)}`;
                     const reference = texture.api.getReferences().find(r => r.uri == uri);
                     texture.api.removeReference(reference);
                     const refs = this.contentRef.references.slice().filter(r => r != ref.id);
@@ -318,11 +319,12 @@
         },
         created() {
             const permlinks = {
-                group_permlink: this.$route.params.research_group_permlink,
-                research_permlink: this.$route.params.research_permlink,
-                content_permlink: this.$route.params.content_permlink,
+                group_permlink: decodeURIComponent(this.$route.params.research_group_permlink),
+                research_permlink: decodeURIComponent(this.$route.params.research_permlink),
+                content_permlink: decodeURIComponent(this.$route.params.content_permlink),
                 ref: this.$route.query.ref
-            }
+            };
+
             this.$store.dispatch('rcd/loadResearchContentDetails', permlinks);
         }
     };

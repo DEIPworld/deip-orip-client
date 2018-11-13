@@ -138,11 +138,12 @@
                     <v-card class="c-mt-6">
                         <template v-for="group in commonGroups" :class="[{'personal-group': group.is_personal}]">
                             <div class="c-p-6">
-                                <router-link v-if="group.is_personal" :to="'/' + group.permlink + '/group-details'" class="research-group-title">
+                                <router-link v-if="group.is_personal" :to="'/' + encodeURIComponent(group.permlink) + '/group-details'" class="research-group-title">
                                     {{currentUser | fullname}}
                                     <span class="grey--text caption">(personal group)</span>
                                 </router-link>
-                                <router-link v-if="!group.is_personal" :to="'/' + group.permlink + '/group-details'" class="research-group-title">
+                                
+                                <router-link v-if="!group.is_personal" :to="'/' + encodeURIComponent(group.permlink) + '/group-details'" class="research-group-title">
                                     {{group.name}}
                                     <div class="caption grey--text c-pt-2 hidden-last-child">
                                         <template v-for="share in group.shares">

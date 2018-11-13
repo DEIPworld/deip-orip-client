@@ -1,14 +1,20 @@
 <template>
     <div class="c-p-6 pos-relative">
-        <router-link :to="`/${research.group_permlink}/research/${research.permlink}`" class="a subheading">
-            {{research.title}}
-        </router-link>
+        <router-link :fto="`/${research.group_permlink}/research/${research.permlink}`" class="a subheading"
+            :to="{
+                name: 'research-details',
+                params: {
+                    research_group_permlink: encodeURIComponent(research.group_permlink),
+                    research_permlink: encodeURIComponent(research.permlink)
+                }
+            }"
+        >{{research.title}}</router-link>
 
         <div class="c-pt-2">
             <router-link class="a c-pr-2 caption" 
                 :to="{
                     name: 'ResearchGroupDetails',
-                    params: { research_group_permlink: research.group_permlink }
+                    params: { research_group_permlink: encodeURIComponent(research.group_permlink) }
                 }"
             >{{ research.group.name }}:</router-link>
 

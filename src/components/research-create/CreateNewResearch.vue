@@ -163,7 +163,7 @@
                     });
                     
                     setTimeout(() => {
-                        self.$router.push(`/${self.research.group.permlink}/group-details`)
+                        self.$router.push(`/${encodeURIComponent(self.research.group.permlink)}/group-details`)
                     }, 1500)
 
                 }, (err) => {

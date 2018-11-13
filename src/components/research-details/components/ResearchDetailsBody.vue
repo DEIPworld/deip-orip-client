@@ -61,9 +61,15 @@
                         <span class="bold">{{getContentType(content.content_type)}}</span>
                         <span class="deip-blue-color bold c-pl-4"> 
                             <router-link style="text-decoration: none" 
-                                :to="{ name: 'ResearchContentDetails', params: { research_group_permlink: research.group_permlink, research_permlink: research.permlink, content_permlink: content.permlink } }">
-                                {{content.title}}
-                            </router-link>
+                                :to="{
+                                    name: 'ResearchContentDetails',
+                                    params: {
+                                        research_group_permlink: encodeURIComponent(research.group_permlink), 
+                                        research_permlink: encodeURIComponent(research.permlink), 
+                                        content_permlink: encodeURIComponent(content.permlink) 
+                                    }
+                                }"
+                            >{{content.title}}</router-link>
                         </span>
                     </div>
 
@@ -283,6 +289,7 @@
                         research_permlink: this.$route.params.research_permlink,
                         content_permlink: `!draft`
                     };
+                    
                     const query = { 'ref': draft._id };
                     this.$router.push({ name: 'ResearchContentDetails', params, query });
                 }

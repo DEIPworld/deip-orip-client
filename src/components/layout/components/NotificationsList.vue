@@ -61,7 +61,7 @@
             clickProposalNotification(notification) {
                 this.$router.push({ 
                     name: 'ResearchGroupDetails', 
-                    params: { research_group_permlink: notification.meta.groupInfo.permlink }, 
+                    params: { research_group_permlink: encodeURIComponent(notification.meta.groupInfo.permlink) }, 
                     hash: '#proposals'
                 });
                 this.readNotification(null, notification)

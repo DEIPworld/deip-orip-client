@@ -219,11 +219,12 @@
 
         created() {
             const permlinks = {
-                group_permlink: this.$route.params.research_group_permlink,
-                research_permlink: this.$route.params.research_permlink,
-                content_permlink: this.$route.params.content_permlink,
+                group_permlink: decodeURIComponent(this.$route.params.research_group_permlink),
+                research_permlink: decodeURIComponent(this.$route.params.research_permlink),
+                content_permlink: decodeURIComponent(this.$route.params.content_permlink),
                 ref: this.$route.query.ref
-            }
+            };
+            
             this.$store.dispatch('rcd/loadResearchContentMetadata', permlinks);
         }
     };

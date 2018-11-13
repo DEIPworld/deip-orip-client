@@ -135,12 +135,12 @@
 
         created(){
             deipRpc.api.getResearchByAbsolutePermlinkAsync(
-                    this.$route.params.research_group_permlink,
-                    this.$route.params.research_permlink
+                    decodeURIComponent(this.$route.params.research_group_permlink),
+                    decodeURIComponent(this.$route.params.research_permlink)
                 )
                 .then((research) => {
                    this.research = research;
-                })
+                });
         }
     };
 </script>

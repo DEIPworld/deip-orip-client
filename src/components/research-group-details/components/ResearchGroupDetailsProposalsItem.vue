@@ -39,8 +39,8 @@
                         <router-link class="a" :to="{
                                 name: 'research-details', 
                                 params: {
-                                    research_group_permlink: proposal.extension.research.group_permlink,
-                                    research_permlink: proposal.extension.research.permlink
+                                    research_group_permlink: encodeURIComponent(proposal.extension.research.group_permlink),
+                                    research_permlink: encodeURIComponent(proposal.extension.research.permlink)
                                 }
                             }"
                         >{{ proposal.extension.research.title }}</router-link>
@@ -212,7 +212,9 @@
                 return contentType.text;
             },
             getContentUrl(proposal) {
-                return `/#/${proposal.extension.research.group_permlink}/research/${proposal.extension.research.permlink}/!draft?ref=${proposal.extension.draftContent._id}`;
+                console.log(proposal);
+
+                return `/#/${encodeURIComponent(proposal.extension.research.group_permlink)}/research/${encodeURIComponent(proposal.extension.research.permlink)}/!draft?ref=${proposal.extension.draftContent._id}`;
             }
         },
         computed: {
