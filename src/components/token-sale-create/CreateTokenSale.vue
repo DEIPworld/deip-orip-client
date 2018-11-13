@@ -58,7 +58,7 @@
 <script>
     import { mapGetters } from 'vuex';
     import deipRpc from '@deip/deip-rpc-client';
-    import { getStringifiedProposalData, createProposal, START_RESEARCH_TOKEN_SALE } from './../../services/ProposalService'; 
+    import { createTokenSaleProposal } from './../../services/ProposalService'; 
 
     export default {
         name: "CreateTokenSale",
@@ -100,24 +100,15 @@
                 // there is no way to pick time in date picker currently, 
                 // but Token Sale status is set to inactive initially until its start_time
                 // const nowPlus2Minutes = new Date(Date.now() + (2 * 60 * 1000)); 
-                
-                let proposal = getStringifiedProposalData(START_RESEARCH_TOKEN_SALE, [
+
+                createTokenSaleProposal(
+					this.research.research_group_id,
                     this.research.id,
                     this.tokenSaleInfo.startDate.toISOString().split('.')[0],
-                    // nowPlus2Minutes.toISOString().split('.')[0],
                     this.tokenSaleInfo.endDate.toISOString().split('.')[0],
                     this.toDeipPercent(parseInt(this.tokenSaleInfo.amountToSell)),
                     this.toAssetUnits(this.tokenSaleInfo.softCap),
                     this.toAssetUnits(this.tokenSaleInfo.hardCap)
-                ]);
-
-                createProposal(
-					this.user.privKey,
-					this.user.username, 
-					this.research.research_group_id,
-					proposal,
-                    START_RESEARCH_TOKEN_SALE,
-					new Date( new Date().getTime() + 2 * 24 * 60 * 60 * 1000)
 				).then(() => {
                     this.isLoading = false;
 

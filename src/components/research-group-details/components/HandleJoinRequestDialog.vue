@@ -59,7 +59,7 @@
     import _ from 'lodash';
     import deipRpc from '@deip/deip-rpc-client';
     import { mapGetters } from 'vuex';
-    import * as proposalService from './../../../services/ProposalService';
+    import { createInviteProposal } from './../../../services/ProposalService';
     import { signOperation } from './../../../utils/blockchain';
     import joinRequestsService from './../../../services/http/joinRequests'
     import { getEnrichedProfiles } from './../../../utils/user';
@@ -99,47 +99,30 @@
             },
 
             sendProposal() {
-                const update = Object.assign({}, this.joinRequest, { status: 'Approved' });
                 const amount = parseInt(this.tokensAmount) * this.DEIP_1_PERCENT
-
-                const proposal = proposalService.getStringifiedProposalData(
-                    proposalService.types.INVITE_MEMBER, [
+                this.isApprovingLoading = true;
+                createInviteProposal(
                     this.groupId,
                     this.joinRequest.username,
                     amount,
                     this.coverLetter
-                ]);
-
-                const operation = ["create_proposal", {
-                    creator: this.user.username,
-                    research_group_id: this.groupId,
-                    data: proposal,
-                    action: proposalService.types.INVITE_MEMBER,
-                    expiration_time: new Date( new Date().getTime() + 2 * 24 * 60 * 60 * 1000 )
-                }];
-
-                this.isApprovingLoading = true;
-                signOperation(operation, this.user.privKey)
-                    .then((signedTX) => {
-                        return joinRequestsService.updateJoinRequest({request: update, tx: signedTX})
-                    })
-                    .then((updatedRequest) => {
-                        this.$store.dispatch('researchGroup/loadJoinRequests', { groupId: this.groupId });
-                        this.$store.dispatch('researchGroup/loadResearchGroupProposals', { groupId: this.groupId });
-                        this.$store.dispatch('layout/setSuccess', { message: `Invite proposal for "${this.joinRequest.username}" has been created successfully !`});
-                    }, (err) => {
-                        this.$store.dispatch('layout/setError', { message: "An error occurred while approving join request, please try again later" });
-                        console.log(err)
-                    })
-                    .finally(() => {
-                        this.isApprovingLoading = false;
-                        this.close();
-                    })
+                ).then(() => {
+                    this.$store.dispatch('researchGroup/loadJoinRequests', { groupId: this.groupId });
+                    this.$store.dispatch('researchGroup/loadResearchGroupProposals', { groupId: this.groupId });
+                    this.$store.dispatch('layout/setSuccess', { message: `Invite proposal for "${this.joinRequest.username}" has been created successfully !`});
+                }, (err) => {
+                    this.$store.dispatch('layout/setError', { message: "An error occurred while approving join request, please try again later" });
+                    console.log(err)
+                })
+                .finally(() => {
+                    this.isApprovingLoading = false;
+                    this.close();
+                })
             },
 
             denyJoinRequest() {
                 const self = this;
-                const update = Object.assign({}, self.joinRequest, { status: 'Denied' });
+                const update = Object.assign({}, self.joinRequest, { status: 'denied' });
                 self.isDenyingLoading = true;
 
                 joinRequestsService.updateJoinRequest({request: update})

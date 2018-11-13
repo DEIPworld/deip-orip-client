@@ -102,7 +102,8 @@
     import {getAccessToken} from './../../../utils/auth'
     import { mapGetters } from 'vuex';
     import { signOperation } from './../../../utils/blockchain'
-    import { createContentProposal, contentTypes } from './../../../services/ResearchService'
+    import { contentTypes } from './../../../services/ResearchService'
+    import { createContentProposal } from './../../../services/ProposalService';
     import vueDropzone from 'vue2-dropzone';
 
     export default {

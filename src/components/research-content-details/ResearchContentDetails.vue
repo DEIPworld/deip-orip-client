@@ -122,7 +122,8 @@
 <script>
     import { mapGetters } from 'vuex';
     import deipRpc from '@deip/deip-rpc-client';
-    import { contentTypes, createContentProposal } from './../../services/ResearchService';
+    import { contentTypes } from './../../services/ResearchService';
+    import { createContentProposal } from './../../services/ProposalService';
     import contentHttpService from './../../services/http/content';
     import searchHttpService from './../../services/http/search'
 

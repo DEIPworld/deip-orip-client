@@ -47,7 +47,7 @@ const getters = {
     researchList: state => state.researchList,
     options: state => state.options,
     joinRequests: state => state.joinRequests,
-    pendingJoinRequests: state => state.joinRequests.filter(r => r.status == 'Pending'),
+    pendingJoinRequests: state => state.joinRequests.filter(r => r.status == 'pending'),
 
     isLoadingResearchGroupPage: state => state.isLoadingResearchGroupPage,
 

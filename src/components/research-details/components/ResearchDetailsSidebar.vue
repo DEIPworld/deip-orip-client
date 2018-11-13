@@ -367,7 +367,7 @@
                 return this.research ? this.userJoinRequests.find(r => r.groupId == this.research.research_group_id) : undefined;
             },
             isActiveJoinRequest() {
-                return this.currentJoinRequest && this.currentJoinRequest.status == 'Pending';
+                return this.currentJoinRequest && this.currentJoinRequest.status == 'pending';
             },
             isActiveInvite() {
                 return this.groupInvitesList.some(invite => invite.account_name == this.user.username)
