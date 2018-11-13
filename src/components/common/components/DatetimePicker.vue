@@ -15,7 +15,7 @@
                     slot="activator"
                     ref="datePicker"
                     :label="label"
-                    :rules="[() => !time && !datetime || $refs.errorMsg.valid || '']"
+                    :rules="[() => !time || !datetime || $refs.errorMsg.valid || '']"
                     placeholder="Date"
                     v-model="date"
                     readonly
@@ -24,6 +24,7 @@
                 <v-date-picker
                     no-title
                     v-model="date" 
+                    :allowed-dates="checkAllowedDate"
                     @input="dateMenu = false; apply();"
                 ></v-date-picker>
             </v-menu>
@@ -32,7 +33,7 @@
                 <v-text-field
                     slot="activator"
                     ref="timePicker"
-                    :rules="[() => !date && !datetime || $refs.errorMsg.valid || '']"
+                    :rules="[() => !date || !datetime || $refs.errorMsg.valid || '']"
                     placeholder="Time"
                     v-model="time"
                     append-icon="event"
@@ -43,6 +44,7 @@
                     <v-list>
                         <v-list-tile @click="time = timePoint; apply();"
                             v-for="(timePoint, i) in timePoints" :key="i"
+                            v-show="checkAllowedTime(date, timePoint)"
                         >
                             <v-list-tile-title>{{ timePoint }}</v-list-tile-title>
                         </v-list-tile>
@@ -61,12 +63,15 @@
 </template>
 
 <script>
+    import moment from 'moment';
+
     export default {
         name:'DatetimePicker',
 
         props: {
             label: { type: String, default: '' },
             rules: { required: false, type: Array, default: () => [] },
+            availableFromNow: { required: false, type: Boolean, default: false },
 
             datetime: { 
                 required: true,
@@ -105,6 +110,7 @@
                     this.$emit('input', `${this.date} ${this.time}`);
                 }
             },
+
             setValues() {
                 if (this.datetime) {
                     this.date = this.datetime.split(' ')[0];
@@ -113,6 +119,22 @@
                     this.date = undefined;
                     this.time = undefined;
                 }
+            },
+
+            checkAllowedDate(date) {
+                if (!this.availableFromNow) {
+                    return true;
+                }
+
+                return moment().subtract(1, 'day').valueOf() < Date.parse(date);
+            },
+
+            checkAllowedTime(date, time) {
+                if (!date) {
+                    return true;
+                }
+
+                return moment().valueOf() < Date.parse(`${date} ${time}`);
             }
         },
 
