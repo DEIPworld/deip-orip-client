@@ -14,6 +14,7 @@
                                 <datetime-picker
                                     label="Start date"
                                     :datetime="grantInfo.startDate"
+                                    :available-from-now="true"
                                     :rules="[
                                         rules.required,
                                         rules.greaterThanNow,
@@ -27,6 +28,7 @@
                                 <datetime-picker
                                     label="End date"
                                     :datetime="grantInfo.endDate"
+                                    :available-from-now="true"
                                     :rules="[
                                         rules.required,
                                         rules.greaterThanNow,
