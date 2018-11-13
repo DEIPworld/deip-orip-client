@@ -33,9 +33,10 @@
         },
         created() {
             const permlinks = {
-                group_permlink: this.$route.params.research_group_permlink,
-                research_permlink: this.$route.params.research_permlink
-            }
+                group_permlink: decodeURIComponent(this.$route.params.research_group_permlink),
+                research_permlink: decodeURIComponent(this.$route.params.research_permlink)
+            };
+
             this.$store.dispatch('rd/loadResearchDetails', permlinks);
         }
     };

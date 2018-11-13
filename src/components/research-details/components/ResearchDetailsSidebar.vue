@@ -3,7 +3,7 @@
       <sidebar-loader v-if="isLoadingResearchPage"></sidebar-loader>
       <div v-if="isLoadingResearchPage === false">
 
-        <router-link :to="`/${groupLink}/group-details`" style="text-decoration: none; color: black">
+        <router-link :to="`/${encodeURIComponent(groupLink)}/group-details`" style="text-decoration: none; color: black">
             <div class="sm-title bold">Research group <span class="caption grey--text">(view)</span></div>
         </router-link>
         
@@ -262,6 +262,7 @@
 
     export default {
         name: "ResearchDetailsSidebar",
+
         data(){
            return {
                 amountToContribute: '',
@@ -273,6 +274,7 @@
                 isSendingJoinGroupRequest: false
            }
         },
+
         computed: {
             ...mapGetters({
                 user: 'auth/user',
@@ -397,6 +399,7 @@
                 });
             }
         },
+
         methods: {
             contributeToTokenSale() {
                 this.isTokensBuying = true;

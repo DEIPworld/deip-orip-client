@@ -2,7 +2,14 @@
     <div v-if="isLoadingResearchContentPage === false">
         <div class="c-mb-8" v-if="research">
             <router-link class="a sm-title" 
-                :to="{ name: 'ResearchContentDetails', params: { research_group_permlink: research.group_permlink, research_permlink: research.permlink, content_permlink: content.permlink } }"
+                :to="{
+                    name: 'ResearchContentDetails',
+                    params: {
+                        research_group_permlink: encodeURIComponent(research.group_permlink),
+                        research_permlink: encodeURIComponent(research.permlink),
+                        content_permlink: encodeURIComponent(content.permlink)
+                    }
+                }"
             >{{ content.title }}</router-link>
         </div>
 

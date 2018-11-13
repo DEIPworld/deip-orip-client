@@ -6,11 +6,11 @@
         <div class="ma-0">
             <router-link class="a sm-title" 
                 :to="{ name: 'research-details', params: { 
-                        research_group_permlink: research.group_permlink,
-                        research_permlink: research.permlink }
-                    }">
-                    {{ research.title }}
-            </router-link>
+                        research_group_permlink: encodeURIComponent(research.group_permlink),
+                        research_permlink: encodeURIComponent(research.permlink)
+                    }
+                }"
+            >{{ research.title }}</router-link>
         </div>
 
         <!-- ### START Draft Actions Section ### -->
@@ -20,11 +20,11 @@
                 <div class="subheading orange--text text-align-center">
                     Draft is
                     <router-link class="a orange--text" 
-                        :to="{ name: 'ResearchGroupDetails', params: { 
-                                research_group_permlink: research.group_permlink
-                            }}">
-                        proposed
-                    </router-link>
+                        :to="{
+                            name: 'ResearchGroupDetails',
+                            params: { research_group_permlink: encodeURIComponent(research.group_permlink) }
+                        }"
+                    >proposed</router-link>
                     as research content and locked for editing
                 </div>
             </div>
@@ -62,17 +62,22 @@
             <div class="subheading bold c-mt-4">Research table of content</div>
             <div class="c-mt-2">
                 <div v-for="(item, index) in researchTableOfContent" :key="index" 
-                        :class="index === 0 ? '' : 'c-mt-1'">
+                    :class="index === 0 ? '' : 'c-mt-1'"
+                >
                     <div>
                         <div class="body-2">{{index + 1 }}. {{item.type}}</div>
+
                         <div class="c-pl-5">
                             <router-link target="_blank" class="a body-1" 
-                                :to="{ name: 'ResearchContentDetails', params: { 
-                                    research_group_permlink: research.group_permlink,
-                                    research_permlink: research.permlink,
-                                    content_permlink: item.permlink } }">
-                                {{ item.title }}
-                            </router-link>
+                                :to="{ 
+                                    name: 'ResearchContentDetails', 
+                                    params: { 
+                                        research_group_permlink: encodeURIComponent(research.group_permlink),
+                                        research_permlink: encodeURIComponent(research.permlink),
+                                        content_permlink: encodeURIComponent(item.permlink)
+                                    }
+                                }"
+                            >{{ item.title }}</router-link>
                         </div>
                     </div>
                 </div>
@@ -150,17 +155,21 @@
 
         <!-- ### START Research Content Blockchain Data Section ### -->
         <div v-if="isPublished" class="c-mt-6">
-            <div class="sidebar-fullwidth"><v-divider></v-divider></div>
+            <div class="sidebar-fullwidth">
+                <v-divider></v-divider>
+            </div>
+
             <div class="c-mt-6">
-                <router-link class="a sm-title" 
-                    :to="{  name: 'ResearchContentMetadata', 
-                            params: { 
-                                research_group_permlink: research.group_permlink,
-                                research_permlink: research.permlink,
-                                content_permlink: content.permlink
-                        }}">
-                    Blockchain Metadata
-                </router-link>
+                <router-link class="a sm-title"
+                    :to="{ 
+                        name: 'ResearchContentMetadata', 
+                        params: { 
+                            research_group_permlink: encodeURIComponent(research.group_permlink),
+                            research_permlink: encodeURIComponent(research.permlink),
+                            content_permlink: encodeURIComponent(content.permlink)
+                        }
+                    }"
+                >Blockchain Metadata</router-link>
             </div>
         </div>
         <!-- ### END Research Content Blockchain Data Section ### -->
@@ -203,13 +212,11 @@
 
     export default {
         name: "ResearchContentDetailsSidebar",
+
         data() {
-            return {
-                researchGroupPermlink: this.$route.params.research_group_permlink,
-                researchPermlink: this.$route.params.research_permlink,
-                researchContentPermlink: this.$route.params.content_permlink
-            };
+            return {};
         },
+        
         computed: {
             ...mapGetters({
                 user: 'auth/user',

@@ -1,47 +1,60 @@
 <template>
-  <v-card>
-    <template>
-      <div class="row c-p-3 c-mb-5">
-        <div class="col-grow">
-          <div class="row c-mh-auto group-members-max-width">
-            <div class="col-12">
-              <div v-if="showSelected">
-                <div class="row-nowrap justify-between align-center c-pt-4"
-                  v-for="(ref, i) in selected" :key="i + '-picked'">
-                  <div>
-                    {{ref.title}} ({{ref.research_title}})
-                  </div>
-                  <v-btn @click="removeReference(ref)" flat color="grey" class="ma-0">Remove</v-btn>
+    <v-card>
+        <template>
+            <div class="row c-p-3 c-mb-5">
+                <div class="col-grow">
+                    <div class="row c-mh-auto group-members-max-width">
+                        <div class="col-12">
+                            <div v-if="showSelected">
+                                <div class="row-nowrap justify-between align-center c-pt-4"
+                                    v-for="(ref, i) in selected" :key="i + '-picked'"
+                                >
+                                    <div>{{ref.title}} ({{ref.research_title}})</div>
+                                    <v-btn @click="removeReference(ref)" flat color="grey" class="ma-0">Remove</v-btn>
+                                </div>
+                            </div>
+
+                            <v-divider v-if="showSelected" class="c-mt-4 c-mb-4" v-show="selected.length"></v-divider>
+
+                            <div>
+                                <div class="row-nowrap justify-between align-center c-pt-4" v-for="(ref, i) in searchable" 
+                                    :key="i + '-selectable'" v-if="!isReferenceSelected(ref)"
+                                >
+                                    <div>
+                                        <router-link target="_blank" class="a body-1"
+                                            :to="{ 
+                                                name: 'ResearchContentDetails',
+                                                params: { 
+                                                    research_group_permlink: encodeURIComponent(ref.group_permlink),
+                                                    research_permlink: encodeURIComponent(ref.research_permlink),
+                                                    content_permlink: encodeURIComponent(ref.permlink)
+                                                } 
+                                            }"
+                                        >
+                                            {{ref.title}} ({{ref.research_title}})
+                                        </router-link>
+                                    </div>
+
+                                    <v-btn @click="addReference(ref)" flat color="primary" class="ma-0">+ Add reference</v-btn>
+                                </div>
+                            </div>
+
+                            <v-text-field
+                                label="Add references to material posted at DEIP"
+                                single-line
+                                append-icon="search"
+                                prepend-icon="mdi-note-text"
+                                v-model="term"
+                                @input="searchReferences()">
+                            </v-text-field>
+                        </div>
+                    </div>
                 </div>
-              </div>
-              <v-divider v-if="showSelected" class="c-mt-4 c-mb-4" v-show="selected.length"></v-divider>
-              <div>
-                <div class="row-nowrap justify-between align-center c-pt-4" v-for="(ref, i) in searchable" 
-                  :key="i + '-selectable'" v-if="!isReferenceSelected(ref)">
-                  <div>
-                    <router-link target="_blank" class="a body-1"
-                      :to="{ name: 'ResearchContentDetails', params: { research_group_permlink: ref.group_permlink, research_permlink: ref.research_permlink, content_permlink: ref.permlink } }">
-                      {{ref.title}} ({{ref.research_title}})
-                    </router-link>
-                  </div>
-                  <v-btn @click="addReference(ref)" flat color="primary" class="ma-0">+ Add reference</v-btn>
-                </div>
-              </div>
-              <v-text-field
-                label="Add references to material posted at DEIP"
-                single-line
-                append-icon="search"
-                prepend-icon="mdi-note-text"
-                v-model="term"
-                @input="searchReferences()">
-              </v-text-field>
             </div>
-          </div>
-        </div>
-      </div>
-      <v-divider></v-divider>
-    </template>
-  </v-card>
+
+            <v-divider></v-divider>
+        </template>
+    </v-card>
 </template>
 
 <script>
@@ -92,9 +105,7 @@
 
                     function filter(term) {
                         return this.references.filter(content => {
-                            return content.title.toLowerCase().startsWith(term) && content.research_id != this.currentResearchId;
-                        });
-                    }
+                            return content.title.toLowerCase().startsWith(term) && content.research_id != this.currentResearchId;});}
                     
                 }, 600
             ),
