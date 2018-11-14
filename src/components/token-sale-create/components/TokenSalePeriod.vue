@@ -11,6 +11,7 @@
                             <datetime-picker
                                 label="Start date"
                                 :datetime="startDate"
+                                :available-from-now="true"
                                 :rules="[
                                     rules.required,
                                     rules.greaterThanNow,
@@ -24,6 +25,7 @@
                             <datetime-picker
                                 label="End date"
                                 :datetime="endDate"
+                                :available-from-now="true"
                                 :rules="[
                                     rules.required,
                                     rules.greaterThanNow,
