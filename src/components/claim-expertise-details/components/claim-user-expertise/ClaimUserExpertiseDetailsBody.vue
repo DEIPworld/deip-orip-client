@@ -127,13 +127,13 @@
             </v-card>
         </div>
 
-        <claim-user-expertise-allocation-dialog
+        <claim-user-expertise-details-allocation-dialog
             :is-shown="isAllocationDialogShown"
             :claimer="claimerInfo"
             :discipline-id="claim.disciplineId"
             @close="isAllocationDialogShown = false"
             @onCreate="reloadProposals()"
-        ></claim-user-expertise-allocation-dialog>
+        ></claim-user-expertise-details-allocation-dialog>
     </div>
 </template>
 
@@ -142,7 +142,7 @@
     import deipRpc from '@deip/deip-rpc-client';
 
     export default {
-        name: 'ClaimUserExpertiseBody',
+        name: 'ClaimUserExpertiseDetailsBody',
         data() {
             return {
                 isAllocationDialogShown: false,
@@ -158,9 +158,9 @@
         },
         computed: {
             ...mapGetters({
-                claimerInfo: 'claimExpertise/claimerInfo',
-                claim: 'claimExpertise/claim',
-                proposals: 'claimExpertise/proposals',
+                claimerInfo: 'claimExpertiseDetails/claimerInfo',
+                claim: 'claimExpertiseDetails/claim',
+                proposals: 'claimExpertiseDetails/proposals',
                 user: 'auth/user',
             }),
 
@@ -244,7 +244,7 @@
             },
             
             reloadProposals() {
-                this.$store.dispatch('claimExpertise/loadClaimProposals', {
+                this.$store.dispatch('claimExpertiseDetails/loadClaimProposals', {
                     username: this.claim.username,
                     disciplineId: this.claim.disciplineId
                 });

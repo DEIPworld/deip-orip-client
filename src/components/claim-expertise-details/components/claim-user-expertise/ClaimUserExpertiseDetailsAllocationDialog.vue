@@ -69,7 +69,7 @@
     import { getNodeById } from "./../../../common/disciplines/DisciplineTreeService"; 
 
     export default {
-        name: "ClaimUserExpertiseAllocationDialog",
+        name: "ClaimUserExpertiseDetailsAllocationDialog",
         props: {
             isShown: { type: Boolean, required: true },
             claimer: { type: Object, required: true },
