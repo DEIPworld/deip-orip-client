@@ -32,7 +32,7 @@ import GrantStartCreating from '@/components/grand-create/GrantStartCreating'
 import CreateDisciplineGrant from '@/components/grand-create/CreateDisciplineGrant'
 import CreateDirectGrant from '@/components/grand-create/CreateDirectGrant'
 
-import ClaimUserExpertisePage from '@/components/claim-expertise/ClaimUserExpertisePage'
+import ClaimUserExpertiseDetails from '@/components/claim-expertise-details/ClaimUserExpertiseDetails'
 
 import { isLoggedIn } from './../utils/auth';
 
@@ -152,8 +152,8 @@ const router = new Router({
         component: CreateDirectGrant
     }, {
         path: '/:account_name/claim-user-experience/:claim_id',
-        name: 'claim-user-expertise-page',
-        component: ClaimUserExpertisePage
+        name: 'claim-user-expertise-details',
+        component: ClaimUserExpertiseDetails
     }, {
         path: '*',
         redirect: '/research-feed'

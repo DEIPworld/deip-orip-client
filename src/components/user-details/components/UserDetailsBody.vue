@@ -271,7 +271,7 @@
             <div class="c-mt-6 c-mb-2 body-2" v-if="tmpClaimObjects.length">Active claims:</div>
             <div v-for="(item, i) in tmpClaimObjects" :key="i">
                 <router-link :to="{
-                        name: 'claim-user-expertise-page', 
+                        name: 'claim-user-expertise-details', 
                         params: { account_name: item.username, claim_id: item._id }
                     }"
                     class="a subheading"

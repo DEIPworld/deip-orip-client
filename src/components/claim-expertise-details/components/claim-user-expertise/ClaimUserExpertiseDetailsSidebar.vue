@@ -53,14 +53,14 @@
     import { mapGetters } from 'vuex';
 
     export default {
-        name: "ClaimUserExpertiseSidebar",
+        name: "ClaimUserExpertiseDetailsSidebar",
         data() {
             return {
             };
         },
         computed: {
             ...mapGetters({
-                claimerInfo: 'claimExpertise/claimerInfo'
+                claimerInfo: 'claimExpertiseDetails/claimerInfo'
             }),
         },
         methods: {

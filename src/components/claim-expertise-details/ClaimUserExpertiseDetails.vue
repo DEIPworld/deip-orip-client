@@ -8,13 +8,13 @@
                     :size="100" indeterminate color="primary"
                 ></v-progress-circular>
 
-                <claim-user-expertise-body v-else></claim-user-expertise-body>
+                <claim-user-expertise-details-body v-else></claim-user-expertise-details-body>
             </div>
         </contentbar>
 
         <sidebar>
             <sidebar-loader v-if="isDataLoading"></sidebar-loader>
-            <claim-user-expertise-sidebar v-else></claim-user-expertise-sidebar>
+            <claim-user-expertise-details-sidebar v-else></claim-user-expertise-details-sidebar>
         </sidebar>
 
     </page-container>
@@ -24,7 +24,8 @@
     import deipRpc from '@deip/deip-rpc-client';
 
     export default {
-        name: 'ClaimUserExpertisePage',
+        name: 'ClaimUserExpertiseDetails',
+
         data() {
             return {
                 claimerUsername: this.$route.params.account_name,
@@ -33,11 +34,13 @@
                 isDataLoading: true
             }
         },
+
         methods: {
 
         },
+        
         created() {
-            this.$store.dispatch('claimExpertise/loadClaimer', {
+            this.$store.dispatch('claimExpertiseDetails/loadClaimer', {
                 username: this.claimerUsername,
                 claimId: this.claimId
             }).then(() => {
