@@ -21,7 +21,7 @@
                             <span v-if="notification.meta.action === START_RESEARCH">proposed to start new research in</span>
                             <span v-else-if="notification.meta.action === CREATE_RESEARCH_MATERIAL">proposed new research result in</span>
                             <span v-else-if="notification.meta.action === START_RESEARCH_TOKEN_SALE">proposed to start token sale in</span>
-                            <span v-else-if="notification.meta.action === INVITE_MEMBER">proposed to invite new member in</span>
+                            <span v-else-if="notification.meta.action === INVITE_MEMBER">proposed to invite new member to</span>
                             <span v-else>created a proposal in</span>
                             <span class="a">{{ notification.meta.groupInfo.name }}</span>
                         </span>
@@ -98,6 +98,27 @@
                         <span style="cursor: pointer" class="a orange--text right" @click="readNotification($event, notification)">Mark as read</span>
                     </div>
                 </div>
+
+                <div class="c-pv-2 c-ph-4" v-if="notification.type === 'invitation'">
+                    <div>
+                        <router-link class="a" :to="{ 
+                                name: 'ResearchGroupDetails', 
+                                params: { 
+                                    research_group_permlink: encodeURIComponent(notification.meta.groupInfo.permlink) 
+                                } }">
+                        {{ notification.meta.groupInfo.name }}
+                        </router-link>
+                        <span class="clickable" @click="clickInvitationNotification(notification)">
+                            group has invited you to join them
+                        </span>
+                    </div>
+                    <div class="grey--text caption c-mt-1">
+                        <v-icon size="16" color="grey">event</v-icon> {{ new Date(notification.created_at).toDateString() }}
+                        <span style="cursor: pointer" class="a orange--text right" @click="readNotification($event, notification)">Mark as read</span>
+                    </div>
+                </div>
+
+
                 <v-divider></v-divider>
             </template>
         </v-list>
@@ -178,6 +199,15 @@
                     params: { 
                         research_group_permlink: encodeURIComponent(notification.meta.groupInfo.permlink) 
                     }, 
+                });
+                this.readNotification(null, notification);
+            },
+
+            clickInvitationNotification(notification) {
+                this.$router.push({
+                    name: 'UserDetails', 
+                    params: { account_name: encodeURIComponent(notification.meta.inviteeInfo._id) },
+                    hash: "#invites"
                 });
                 this.readNotification(null, notification);
             },

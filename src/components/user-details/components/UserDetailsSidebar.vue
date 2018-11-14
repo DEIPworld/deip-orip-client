@@ -164,9 +164,9 @@
 
 
         <!-- ### START User Profile Invites Section ### -->
-        <div class="c-mt-4" v-if="isOwner && hasInvites">
+        <div v-if="isOwner && hasInvites" id="invites" class="c-mt-4">
             <div class="sidebar-fullwidth"><v-divider></v-divider></div>
-            <div class="sm-title bold c-pt-6">Invites: {{invites.length}}</div>
+            <div class="subheading bold c-pt-4">Invites: {{invites.length}}</div>
             <div class="c-pb-6">
                 <div v-for="(invite, index) in invites" class="row-nowrap justify-between align-center c-pt-4">
                     <div class="left">
