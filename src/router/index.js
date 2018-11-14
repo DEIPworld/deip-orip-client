@@ -78,7 +78,7 @@ const router = new Router({
         component: ResearchFeed
     }, {
         path: '/:research_group_permlink/research/:research_permlink',
-        name: 'research-details',
+        name: 'ResearchDetails',
         component: ResearchDetails
     }, {
         path: '/:research_group_permlink/research/:research_permlink/:content_permlink',

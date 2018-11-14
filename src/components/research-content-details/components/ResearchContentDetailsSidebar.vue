@@ -5,7 +5,7 @@
 
         <div class="ma-0">
             <router-link class="a sm-title" 
-                :to="{ name: 'research-details', params: { 
+                :to="{ name: 'ResearchDetails', params: { 
                         research_group_permlink: encodeURIComponent(research.group_permlink),
                         research_permlink: encodeURIComponent(research.permlink)
                     }
@@ -207,7 +207,7 @@
     import { mapGetters } from 'vuex';
     import deipRpc from '@deip/deip-rpc-client';
     import contentHttpService from './../../../services/http/content'
-    import { contentTypes } from './../../../services/ResearchService';
+    import { contentTypesList } from './../../../services/ResearchService';
     import { CREATE_RESEARCH_MATERIAL, labels } from './../../../services/ProposalService';
 
     export default {
@@ -292,7 +292,7 @@
             },
             researchTableOfContent() {
                 return this.contentList.map(content => {
-                    let typeObj = contentTypes.find(c => c.type === content.content_type);
+                    let typeObj = contentTypesList.find(c => c.type === content.content_type);
                     return {
                         type: typeObj ? typeObj.text : 'Milestone',
                         title: content.title,

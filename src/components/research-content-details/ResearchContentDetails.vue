@@ -63,7 +63,7 @@
                     hide-details>
                   </v-text-field>
                   <v-select v-model="proposeContent.type" 
-                    :items="proposeContent.contentTypes" 
+                    :items="proposeContent.contentTypesList" 
                     label="Content Type" 
                     class="c-mt-6"
                     item-value="id">
@@ -122,7 +122,7 @@
 <script>
     import { mapGetters } from 'vuex';
     import deipRpc from '@deip/deip-rpc-client';
-    import { contentTypes } from './../../services/ResearchService';
+    import { contentTypesList } from './../../services/ResearchService';
     import { createContentProposal } from './../../services/ProposalService';
     import contentHttpService from './../../services/http/content';
     import searchHttpService from './../../services/http/search'
@@ -136,7 +136,7 @@
                     title: "",
                     type: null,
                     authors: [],
-                    contentTypes: contentTypes,
+                    contentTypesList: contentTypesList,
                     isOpen: false,
                     isLoading: false
                 }

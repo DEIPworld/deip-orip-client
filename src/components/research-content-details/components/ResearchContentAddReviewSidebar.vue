@@ -105,7 +105,7 @@
                             message: "Your review has been published successfully !"
                         });
                         // TODO: redirect to content page
-                        this.$router.push({ name: 'research-details', params: this.$route.params });
+                        this.$router.push({ name: 'ResearchDetails', params: this.$route.params });
                     })
                     .catch((err) => {
                         this.$store.dispatch('layout/setError', {

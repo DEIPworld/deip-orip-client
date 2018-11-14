@@ -2,7 +2,6 @@ import _ from 'lodash';
 import deipRpc from '@deip/deip-rpc-client';
 import researchContentSvc from './http/content.js';
 import proposalsHttp from './http/proposals';
-import notificationsHttpService from './http/notifications.js';
 import { getDecodedToken, getOwnerWif } from './../utils/auth'
 import { signOperation } from './../utils/blockchain';
 
@@ -152,9 +151,20 @@ const createProposal = function(privKey, username, groupId, stringifiedPayload, 
                 if (proposal) {
                     proposal.data = JSON.parse(proposal.data)
                 }
-                return notificationsHttpService.createResearchGroupNotification(
-                    groupId, { type: 'proposal', meta: proposal });
             });
+}
+
+const voteForProposal = function(groupId, proposalId) {
+    const vote = {
+        voter: getDecodedToken().username,
+        research_group_id: groupId,
+        proposal_id: proposalId
+    };
+    const operation = ["vote_proposal", vote];
+    return signOperation(operation, getOwnerWif())
+        .then((signedTx) => {
+            return proposalsHttp.sendVoteForProposal(signedTx);
+        })
 }
 
 const createInviteProposal = function(groupId, invitee, rgtAmount, coverLetter) {
@@ -217,15 +227,6 @@ const createContentProposal = function(contentRef, contentType) {
         .then((signedTx) => {
             return proposalsHttp.sendContentProposal(signedTx, contentRef.type);
         })
-
-    // return signOperation(operation, getOwnerWif())
-    //     .then((signedTX) => {
-    //         return contentHttpService.createContentProposal(signedTX, contentRef.type);
-    //     })
-    //     .then(() => {
-    //         return notificationsHttpService.createResearchGroupNotification(
-    //             contentRef.researchGroupId, { type: 'proposal', meta: proposal });
-    //     });
 }
 
 const createTokenSaleProposal = function(groupId, researchId, startDate, endDate, amount, softCap, hardCap) {
@@ -251,6 +252,7 @@ const createTokenSaleProposal = function(groupId, researchId, startDate, endDate
 export {
     types,
     labels,
+    voteForProposal,
     createInviteProposal,
     createResearchProposal,
     createContentProposal,

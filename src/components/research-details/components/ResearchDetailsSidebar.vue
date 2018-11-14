@@ -258,7 +258,7 @@
     import joinRequestsService from './../../../services/http/joinRequests'
     import { extractName } from './../../../utils/user'
     import moment from 'moment';
-    import { contentTypes } from './../../../services/ResearchService';
+    import { contentTypesList } from './../../../services/ResearchService';
 
     export default {
         name: "ResearchDetailsSidebar",

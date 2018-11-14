@@ -2,17 +2,20 @@ import http from './http'
 const apiUrl = process.env.DEIP_SERVER_URL;
 
 const service = {
+    sendVoteForProposal(tx) {
+        return http.post(`proposals/vote`, tx, { baseURL: `${apiUrl}/api/` });
+    },
     sendContentProposal(tx, type) {
-        return http.post(`/propose/content/${type}`, tx, { baseURL: `${apiUrl}/api/` });
+        return http.post(`/proposals/content/${type}`, tx, { baseURL: `${apiUrl}/api/` });
     },
     sendResearchProposal(tx) {
-        return http.post(`/propose/research`, tx, { baseURL: `${apiUrl}/api/` });
+        return http.post(`/proposals/research`, tx, { baseURL: `${apiUrl}/api/` });
     },
     sendInviteProposal(tx) {
-        return http.post(`/propose/invite`, tx, { baseURL: `${apiUrl}/api/` });
+        return http.post(`/proposals/invite`, tx, { baseURL: `${apiUrl}/api/` });
     },
     sendTokenSaleProposal(tx) {
-        return http.post(`/propose/token-sale`, tx, { baseURL: `${apiUrl}/api/` });
+        return http.post(`/proposals/token-sale`, tx, { baseURL: `${apiUrl}/api/` });
     }
 }
 

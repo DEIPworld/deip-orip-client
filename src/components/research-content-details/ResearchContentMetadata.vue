@@ -31,7 +31,7 @@
                         <div class="row">
                             <div class="bold width-7">Research</div>
                             <div class="bold deip-blue-color c-pl-4">
-                                <router-link class="a" :to="{ name: 'research-details', params: { 
+                                <router-link class="a" :to="{ name: 'ResearchDetails', params: { 
                                     research_group_permlink: $route.params.research_group_permlink,
                                     research_permlink: $route.params.research_permlink}}">
                                     {{ contentMetadata.research.title }}
