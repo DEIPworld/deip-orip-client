@@ -2,7 +2,7 @@
     <div class="c-p-6 pos-relative">
         <router-link :fto="`/${research.group_permlink}/research/${research.permlink}`" class="a subheading"
             :to="{
-                name: 'research-details',
+                name: 'ResearchDetails',
                 params: {
                     research_group_permlink: encodeURIComponent(research.group_permlink),
                     research_permlink: encodeURIComponent(research.permlink)

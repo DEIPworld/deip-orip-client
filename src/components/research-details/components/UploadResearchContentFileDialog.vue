@@ -33,7 +33,7 @@
                         </v-text-field>
 
                         <v-select v-model="type" 
-                            :items="contentTypes" 
+                            :items="contentTypesList" 
                             label="Content Type" 
                             class="c-mt-6"
                             item-value="id">
@@ -102,7 +102,7 @@
     import {getAccessToken} from './../../../utils/auth'
     import { mapGetters } from 'vuex';
     import { signOperation } from './../../../utils/blockchain'
-    import { contentTypes } from './../../../services/ResearchService'
+    import { contentTypesList } from './../../../services/ResearchService'
     import { createContentProposal } from './../../../services/ProposalService';
     import vueDropzone from 'vue2-dropzone';
 
@@ -116,7 +116,7 @@
                 title: "",
                 type: null,
                 authors: [],
-                contentTypes: contentTypes,
+                contentTypesList: contentTypesList,
 
                 isOpen: false,
                 isLoading: false,

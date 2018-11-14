@@ -225,7 +225,7 @@
 
     import { mapGetters } from 'vuex'
     import contentHttpService from './../../../services/http/content'
-    import { contentTypes } from './../../../services/ResearchService'
+    import { contentTypesList } from './../../../services/ResearchService'
 
     export default {
         name: "ResearchDetailsBody",
@@ -333,7 +333,8 @@
                     .join("  ·  ");
             },
             getContentType(type) {
-                let contentType = contentTypes.find(item => item.type === type);
+                console.log(contentTypesList)
+                let contentType = contentTypesList.find(item => item.type === type);
                 return contentType.text;
             }
         }

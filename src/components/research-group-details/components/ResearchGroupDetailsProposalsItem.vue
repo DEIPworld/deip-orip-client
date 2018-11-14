@@ -37,7 +37,7 @@
                     >
                         <v-icon small color="primary" class="c-mr-2">note_add</v-icon>
                         <router-link class="a" :to="{
-                                name: 'research-details', 
+                                name: 'ResearchDetails', 
                                 params: {
                                     research_group_permlink: encodeURIComponent(proposal.extension.research.group_permlink),
                                     research_permlink: encodeURIComponent(proposal.extension.research.permlink)
@@ -160,7 +160,7 @@
 
 <script>
     import { mapGetters, mapActions } from 'vuex';
-    import * as proposalService from "./../../../services/ProposalService";
+    import { voteForProposal, types } from "./../../../services/ProposalService";
     import * as researchService from "./../../../services/ResearchService";
     import * as disciplineTreeService from "./../../common/disciplines/DisciplineTreeService";
     import _ from 'lodash';
@@ -173,7 +173,7 @@
         },
         data() { 
             return {
-                proposalTypes: proposalService.types,
+                proposalTypes: types,
                 isApprovingLoading: false
             } 
         },
@@ -183,21 +183,15 @@
             }),
             approve() {
                 this.isApprovingLoading = true;
-
-                deipRpc.broadcast.voteProposalAsync(
-                    this.currentUser.privKey,
-                    this.currentUser.username, 
-                    this.proposal.id, 
-                    this.group.id
-                ).then(() => {
-                    this.isApprovingLoading = false;
-
-                    let copy = _.cloneDeep(this.proposal);
-                    copy.voted_accounts.push(this.currentUser.username);
-                    this.changeProposal({ old: this.proposal, new: copy });
-                }).catch(err => {
-                    alert(err.message);
-                });
+                voteForProposal(this.group.id, this.proposal.id)
+                    .then(() => {
+                        this.isApprovingLoading = false;
+                        let copy = _.cloneDeep(this.proposal);
+                        copy.voted_accounts.push(this.currentUser.username);
+                        this.changeProposal({ old: this.proposal, new: copy });
+                    }).catch(err => {
+                        alert(err.message);
+                    });
             },
 
             // for START_RESEARCH
@@ -208,7 +202,7 @@
 
             // for CREATE_RESEARCH_MATERIAL
             getContentTypeStrById(id) {
-                let contentType = _.find(researchService.contentTypes, item => item.id === id);
+                let contentType = _.find(researchService.contentTypesList, item => item.id === id);
                 return contentType.text;
             },
             getContentUrl(proposal) {
