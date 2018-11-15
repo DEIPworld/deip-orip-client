@@ -201,6 +201,7 @@
             },
 
             sendContentProposal() {
+                const self = this;
                 var promise;
                 this.proposeContent.isLoading = true;
                 if (this.isDarContent) {
@@ -223,11 +224,6 @@
                                 this.$store.dispatch('layout/setSuccess', {
                                     message: "New Content Proposal has been created successfuly!"
                                 });
-                                
-                                this.$router.push({
-                                    name: 'ResearchGroupDetails',
-                                    params: { research_group_permlink: this.$route.params.research_group_permlink  }
-                                });
                             }, (err) => {
                                 console.log(err) 
                                 this.$store.dispatch('layout/setError', {
@@ -237,6 +233,9 @@
                             .finally(() => {
                                 this.proposeContent.isOpen = false;
                                 this.proposeContent.isLoading = false;
+                                setTimeout(() => {
+                                    self.$router.push({ name: 'ResearchFeed' });
+                                }, 1500);
                             })
                     })
             },
