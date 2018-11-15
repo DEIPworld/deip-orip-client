@@ -58,7 +58,7 @@
             <v-expansion-panel v-if="isLoadingResearchContent === false">
                 <v-expansion-panel-content v-for="(content, index) in contentList" :key="index">
                     <div slot="header">
-                        <span class="bold">{{getContentType(content.content_type)}}</span>
+                        <span class="bold">{{getContentType(content.content_type).text}}</span>
                         <span class="deip-blue-color bold c-pl-4"> 
                             <router-link style="text-decoration: none" 
                                 :to="{
@@ -80,15 +80,15 @@
                                 <div class="c-pt-4 half-bold">
                                 </div>
 
-                                <div class="c-pt-2">
+                                <div>
                                     <div class="row-nowrap">
-                                        <div v-for="(eci, index) in getContentEciList(content)">
+                                        <div v-for="(eci, index) in getContentEciList(content)" class="grey--text">
                                             <span>
                                                 <span class="c-pr-1">
-                                                    <span class="bold green--text text--darken-2">{{ eci.disciplineName}}</span>
+                                                    <span>{{ eci.disciplineName}}</span>
                                                 </span>
 
-                                                <span class="c-pr-4">
+                                                <span class="c-pr-4 bold">
                                                     <span>{{ eci.value }}</span>
                                                 </span>
                                             </span>
@@ -225,7 +225,7 @@
 
     import { mapGetters } from 'vuex'
     import contentHttpService from './../../../services/http/content'
-    import { contentTypesList } from './../../../services/ResearchService'
+    import { getContentType } from './../../../services/ResearchService'
 
     export default {
         name: "ResearchDetailsBody",
@@ -332,11 +332,7 @@
                     .map(m => this.$options.filters.fullname(m))
                     .join("  ·  ");
             },
-            getContentType(type) {
-                console.log(contentTypesList)
-                let contentType = contentTypesList.find(item => item.type === type);
-                return contentType.text;
-            }
+            getContentType
         }
     };
 </script>

@@ -62,6 +62,7 @@
 <script>
     import { mapGetters } from 'vuex';
     import deipRpc from '@deip/deip-rpc-client';
+    import { makeReview } from './../../../services/ReviewsService'
 
     export default {
         name: "ResearchContentAddReviewSidebar",
@@ -93,19 +94,20 @@
                 this.isLoading = true;
                 reviewEditor.save()
                     .then((reviewHtmlContent) => {
-                        return deipRpc.broadcast.makeReviewAsync(
-                            this.user.privKey,
-                            this.user.username,
-                            this.content.id,
-                            reviewHtmlContent,
-                            this.isPositive,
-                            10000)
+                        return makeReview(this.content.id, this.isPositive, reviewHtmlContent)
                     }).then((data) => {
                         this.$store.dispatch('layout/setSuccess', {
                             message: "Your review has been published successfully !"
                         });
-                        // TODO: redirect to content page
-                        this.$router.push({ name: 'ResearchDetails', params: this.$route.params });
+                        this.$router.push({ 
+                            name: 'ResearchContentDetails',
+                            params:  {   
+                                research_group_permlink: encodeURIComponent(this.$route.params.research_group_permlink), 
+                                research_permlink: encodeURIComponent(this.$route.params.research_permlink),
+                                content_permlink: encodeURIComponent(this.content.permlink)
+                            },
+                            hash: "#reviews"
+                        });
                     })
                     .catch((err) => {
                         this.$store.dispatch('layout/setError', {

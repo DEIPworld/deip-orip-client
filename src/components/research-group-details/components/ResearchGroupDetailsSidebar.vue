@@ -23,7 +23,7 @@
                 </div>
             </sidebar-splitted-btn> -->
 
-            <div v-if="group && !isPersonalGroup" class="c-mt-6">
+            <div v-if="!group.is_personal" class="c-mt-6">
                 <div class="sidebar-fullwidth"><v-divider></v-divider></div>
                 <div class="sm-title bold c-mt-4">Quorum setup</div>
 
@@ -137,11 +137,6 @@
                 isLoadingResearchGroupPage: 'researchGroup/isLoadingResearchGroupPage',
                 pendingJoinRequests: 'researchGroup/pendingJoinRequests'
             }),
-            isPersonalGroup() {
-                return this.group 
-                    ? this.group.id == this.userPersonalGroup.id 
-                    : false;
-            },
             groupExpertise() {
                 return _.chain(this.members)
                     .map('expertise')

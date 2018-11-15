@@ -8,7 +8,7 @@
                 </v-avatar>
                 <div class="bold c-pt-2">{{ review.author | fullname }}</div>
             </div>
-            <div class="column c-ml-6">
+            <div class="column c-ml-6 clickable" @click="goToReviewPage()">
                 <div>
                     <span class="grey--text">{{ review.created_at | dateFormat('D MMM YYYY', true) }}</span>
                     <span class="half-bold c-pl-2">
@@ -17,16 +17,16 @@
                     </span>
                 </div>
 
-                <div class="c-pt-4 col-grow review-preview" @click="goToReviewPage()">
+                <div class="c-pt-4 col-grow review-preview">
                     <span v-html="extractPreview(review)"></span>
                 </div>
 
                 <div class="row-nowrap">
-                    <div v-for="tvo in disciplines">
+                    <div v-for="tvo in disciplines" class="grey--text">
                         <span class="c-pr-1">
-                            <span class="bold green--text text--darken-2">{{ tvo.disciplineName }}</span>
+                            <span>{{ tvo.disciplineName }}</span>
                         </span>
-                        <span class="c-pr-4">
+                        <span class="c-pr-4 bold">
                             <span>{{tvo.totalWeight}}</span>
                         </span>
                     </div>

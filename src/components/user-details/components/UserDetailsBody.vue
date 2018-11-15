@@ -139,7 +139,7 @@
                         <template v-for="group in commonGroups" :class="[{'personal-group': group.is_personal}]">
                             <div class="c-p-6">
                                 <router-link v-if="group.is_personal" :to="'/' + encodeURIComponent(group.permlink) + '/group-details'" class="research-group-title">
-                                    {{currentUser | fullname}}
+                                    {{userInfo | fullname}}
                                     <span class="grey--text caption">(personal group)</span>
                                 </router-link>
                                 

@@ -47,7 +47,6 @@
         min-height: 800px;
     }
     .file-content-container {
-        text-align: center; 
-        margin-bottom: 50px; 
+        text-align: center;
     }
 </style>
