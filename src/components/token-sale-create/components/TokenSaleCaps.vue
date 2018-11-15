@@ -33,17 +33,30 @@
             <v-btn color="primary" @click.native="finish()" 
                 :loading="isLoading" 
                 :disabled="!isFormValid || isLoading"
-            >Finish</v-btn>
+            >{{!isPersonalGroup ? 'Create Proposal' : 'Finish'}}</v-btn>
         </div>
     </div>
 </template>
 
 <script>
+    import { mapGetters } from 'vuex';
+
     export default {
         name: "TokenSaleCaps",
         props: {
             tokenSaleInfo: { type: Object, required: true },
-            isLoading: {type: Boolean, required: true }
+            research: { type: Object },
+            isLoading: { type: Boolean, required: true }
+        },
+        computed: {
+            ...mapGetters({
+                userPersonalGroup: 'auth/userPersonalGroup'
+            }),
+            isPersonalGroup() {
+                return this.research 
+                    ? this.research.research_group_id == this.userPersonalGroup.id 
+                    : false;
+            }
         },
         data() { 
             return {

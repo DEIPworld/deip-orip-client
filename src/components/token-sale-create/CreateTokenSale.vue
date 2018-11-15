@@ -44,6 +44,7 @@
                             <token-sale-caps
                                 @finish="finish" @decStep="decStep"
                                 :token-sale-info="tokenSaleInfo"
+                                :research="research"
                                 :isLoading="isLoading"
                             ></token-sale-caps>
                         </div>
@@ -133,7 +134,7 @@
             }
         },
 
-        created(){
+        created() {
             deipRpc.api.getResearchByAbsolutePermlinkAsync(
                     decodeURIComponent(this.$route.params.research_group_permlink),
                     decodeURIComponent(this.$route.params.research_permlink)

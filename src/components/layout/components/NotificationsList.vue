@@ -1,8 +1,8 @@
 <template>
-    <v-menu bottom left offset-y>
+    <v-menu bottom left offset-y :max-height="500">
         <v-btn icon large class="ma-0" slot="activator" v-show="notifications.length">
             <v-badge color="amber darken-3" right overlap>
-                <v-icon size="32px" color="grey lighten-1">chat_bubble</v-icon>
+                <v-icon size="32px" color="grey lighten-1">notifications</v-icon>
                 <span slot="badge">{{ notifications.length }}</span>
             </v-badge>
         </v-btn>
@@ -24,6 +24,7 @@
                             <span v-else-if="notification.meta.action === INVITE_MEMBER">proposed to invite new member to</span>
                             <span v-else>created a proposal in</span>
                             <span class="a">{{ notification.meta.groupInfo.name }}</span>
+                            group
                         </span>
                     </div>
                     <div class="grey--text caption c-mt-1">
@@ -82,14 +83,14 @@
                         </span>
 
                         <span v-else-if="notification.meta.action === INVITE_MEMBER">
+                            <span @click="clickNewMemberInvitedNotification(notification)">
+                                Invitation to
+                                <span class="a">{{ notification.meta.groupInfo.name }}</span>
+                                group has been sent to
+                            </span>
                             <router-link class="a" :to="{ name: 'UserDetails', params: { account_name: notification.meta.data.name } }">
                                 {{ { profile: notification.meta.inviteeInfo, account: { name: notification.meta.data.name } } | fullname }}
                             </router-link>
-                            <span @click="clickNewMemberInvitedNotification(notification)">
-                                has been invited to 
-                                <span class="a">{{ notification.meta.groupInfo.name }}</span>
-                                group
-                            </span>
                         </span>
                         <span v-else></span>
                     </div>
@@ -118,6 +119,59 @@
                     </div>
                 </div>
 
+                <div class="c-pv-2 c-ph-4" v-if="notification.type === 'approved-invitation'">
+                    <div>
+                        <router-link class="a" :to="{
+                                name: 'UserDetails',
+                                params: { 
+                                    account_name: encodeURIComponent(notification.meta.inviteeInfo._id) 
+                                } }">
+                            {{ { profile: notification.meta.inviteeInfo, account: { name: notification.meta.inviteeInfo._id } } | fullname }}
+                        </router-link>
+                        <span class="clickable" @click="clickInvitationResolvedNotification(notification)">
+                            has approved invite to
+                            <router-link class="a" :to="{
+                                name: 'ResearchGroupDetails',
+                                params: { 
+                                    research_group_permlink: encodeURIComponent(notification.meta.groupInfo.permlink) 
+                                } }">
+                            {{ notification.meta.groupInfo.name }}
+                            </router-link>
+                            group
+                        </span>
+                    </div>
+                    <div class="grey--text caption c-mt-1">
+                        <v-icon size="16" color="grey">event</v-icon> {{ new Date(notification.created_at).toDateString() }}
+                        <span style="cursor: pointer" class="a orange--text right" @click="readNotification($event, notification)">Mark as read</span>
+                    </div>
+                </div>
+
+                <div class="c-pv-2 c-ph-4" v-if="notification.type === 'rejected-invitation'">
+                    <div>
+                        <router-link class="a" :to="{
+                                name: 'UserDetails',
+                                params: { 
+                                    account_name: encodeURIComponent(notification.meta.inviteeInfo._id) 
+                                } }">
+                            {{ { profile: notification.meta.inviteeInfo, account: { name: notification.meta.inviteeInfo._id } } | fullname }}
+                        </router-link>
+                        <span class="clickable" @click="clickInvitationResolvedNotification(notification)">
+                            has rejected invite to
+                            <router-link class="a" :to="{
+                                name: 'ResearchGroupDetails',
+                                params: { 
+                                    research_group_permlink: encodeURIComponent(notification.meta.groupInfo.permlink) 
+                                } }">
+                            {{ notification.meta.groupInfo.name }}
+                            </router-link>
+                            group
+                        </span>
+                    </div>
+                    <div class="grey--text caption c-mt-1">
+                        <v-icon size="16" color="grey">event</v-icon> {{ new Date(notification.created_at).toDateString() }}
+                        <span style="cursor: pointer" class="a orange--text right" @click="readNotification($event, notification)">Mark as read</span>
+                    </div>
+                </div>
 
                 <v-divider></v-divider>
             </template>
@@ -208,6 +262,14 @@
                     name: 'UserDetails', 
                     params: { account_name: encodeURIComponent(notification.meta.inviteeInfo._id) },
                     hash: "#invites"
+                });
+                this.readNotification(null, notification);
+            },
+
+            clickInvitationResolvedNotification(notification) {
+                this.$router.push({
+                    name: 'UserDetails', 
+                    params: { account_name: encodeURIComponent(notification.meta.inviteeInfo._id) }
                 });
                 this.readNotification(null, notification);
             },
