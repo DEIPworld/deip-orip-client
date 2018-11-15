@@ -15,6 +15,7 @@ import './components/token-sale-create/index';
 import './components/user-wallet/index';
 import './components/grand-create/index';
 import './components/claim-expertise-details/index';
+import './components/claim-expertise-list/index';
 
 import Gravatar from 'vue-gravatar';
 Vue.component('v-gravatar', Gravatar);
