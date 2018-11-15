@@ -5,19 +5,8 @@
         </div>
 
         <v-app v-else>
-            <!-- <v-navigation-drawer clipped fixed v-model="drawer" app>
-                <v-list dense>
-                    <v-list-tile @click="">
-                        <v-list-tile-action>
-                            <v-icon>dashboard</v-icon>
-                        </v-list-tile-action>
-                        <v-list-tile-content>
-                            <v-list-tile-title>Dashboard</v-list-tile-title>
-                        </v-list-tile-content>
-                    </v-list-tile>
-                </v-list>
-            </v-navigation-drawer> -->
-            <toolbar :drawer="drawer" @update="onDrawerUpdate"></toolbar>
+            <toolbar></toolbar>
+
             <v-content>
                 <router-view :key="$route.fullPath"/>
             </v-content>
@@ -27,6 +16,7 @@
             {{errorSnack.message}}
             <v-btn dark flat @click.native="closeError()">Close</v-btn>
         </v-snackbar>
+
         <v-snackbar :timeout="5000" color="success" v-model="successSnack.isVisible">
             {{successSnack.message}}
             <v-btn dark flat @click.native="closeSuccess();">Close</v-btn>
@@ -40,6 +30,7 @@
 
     export default {
         name: 'App',
+
         data() {
             return {
                 successSnack: {isVisible: false, message: ""},
@@ -47,16 +38,15 @@
                 drawer: true
             };
         },
+
         computed: {
             ...mapGetters({
                 success: 'layout/success',
                 error: 'layout/error'
             })
         },
+
         methods: {
-            onDrawerUpdate(value) {
-                this.drawer = value;
-            },
             closeError(){
                 this.$store.dispatch('layout/setError', {isVisible: false, message: ""});
             },
@@ -76,6 +66,7 @@
                 this.errorSnack.message = newVal.message;
             }
         },
+        
         created() {
             this.$store.dispatch('auth/loadUser');
         }
