@@ -4,7 +4,7 @@
       <div v-if="isLoadingResearchPage === false">
 
         <router-link :to="`/${encodeURIComponent(groupLink)}/group-details`" style="text-decoration: none; color: black">
-            <div class="sm-title bold">Research group <span class="caption grey--text">(view)</span></div>
+            <div class="sm-title bold">Research group <span class="a caption">(view)</span></div>
         </router-link>
         
         <!-- ### START Research Members Section ### -->

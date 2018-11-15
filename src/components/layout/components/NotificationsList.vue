@@ -60,7 +60,7 @@
 
                         <span v-else-if="notification.meta.action === CREATE_RESEARCH_MATERIAL">
                             <span @click="clickNewResearchContentPublishedNotification(notification)"> 
-                                New <span class="a">{{ contentTypesDictionary[notification.meta.data.type]['text'] }}</span> 
+                                New <span class="a">{{ contentTypesMap[notification.meta.data.type]['text'] }}</span> 
                                 has been published in
                             </span>
                             <router-link class="a" :to="{ 
@@ -173,6 +173,29 @@
                     </div>
                 </div>
 
+                <div class="c-pv-2 c-ph-4" v-if="notification.type === 'review'">
+                    <div>
+                        <router-link class="a" :to="{
+                                name: 'UserDetails',
+                                params: { 
+                                    account_name: encodeURIComponent(notification.meta.reviewerInfo._id) 
+                                } }">
+                            {{ { profile: notification.meta.reviewerInfo, account: { name: notification.meta.reviewerInfo._id } } | fullname }}
+                        </router-link>
+                        <span class="clickable" @click="clickReviewPublishedNotification(notification)">
+                            published a review for 
+                            <span class="a">
+                                {{ notification.meta.contentInfo.title }}
+                            </span>
+                            {{ getContentType(notification.meta.contentInfo.content_type).text }}
+                        </span>
+                    </div>
+                    <div class="grey--text caption c-mt-1">
+                        <v-icon size="16" color="grey">event</v-icon> {{ new Date(notification.created_at).toDateString() }}
+                        <span style="cursor: pointer" class="a orange--text right" @click="readNotification($event, notification)">Mark as read</span>
+                    </div>
+                </div>
+
                 <v-divider></v-divider>
             </template>
         </v-list>
@@ -183,7 +206,8 @@
 
     import httpService from './../../../services/http/notifications';
     import { types } from './../../../services/ProposalService';
-    import { contentTypesDictionary } from './../../../services/ResearchService';
+    import { getContentType } from './../../../services/ResearchService';
+    import { contentTypesMap } from './../../../services/ResearchService';
     import { mapGetters } from 'vuex';
     import deipRpc from '@deip/deip-rpc-client';
 
@@ -195,7 +219,7 @@
         data() {
             return {
                 ...types,
-                contentTypesDictionary
+                contentTypesMap
             }
         },
         computed: {
@@ -274,6 +298,19 @@
                 this.readNotification(null, notification);
             },
 
+            clickReviewPublishedNotification(notification) {
+                this.$router.push({
+                    name: 'ResearchContentReview', 
+                    params:  {   
+                        research_group_permlink: encodeURIComponent(notification.meta.groupInfo.permlink), 
+                        research_permlink: encodeURIComponent(notification.meta.researchInfo.permlink),
+                        content_permlink: encodeURIComponent(notification.meta.contentInfo.permlink),
+                        review_id: encodeURIComponent(notification.meta.reviewInfo.id)
+                    }
+                });
+                this.readNotification(null, notification);
+            },
+
             readNotification($event, notification) {
                 if ($event) {
                     $event.preventDefault();
@@ -283,7 +320,8 @@
                     .then(() => {
                         this.$store.dispatch('auth/loadNotifications');
                     })
-            }
+            },
+            getContentType
         },
         watch: {
             '$route' (to, from) {

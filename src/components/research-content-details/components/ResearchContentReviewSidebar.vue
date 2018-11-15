@@ -1,26 +1,7 @@
 <template>
     <div v-if="isLoadingResearchContentPage === false">
-        <div class="row justify-center">
-            <div>
-                <v-btn block color="primary"
-                    v-if="review.author.account.name !== user.username && userHasExpertise" 
-                    class="ma-0 mt-2" 
-                    :loading="isReviewVoting" 
-                    :disabled="isReviewVoting || userHasVoted || votingDisabled"
-                    @click="voteReview()">
-                    Support Review
-                </v-btn>
-            </div>
-        </div>
-
-        <div class="sidebar-fullwidth">
-            <v-divider></v-divider>
-        </div>
-
-        <div class="c-mb-6 c-mt-4" v-if="eciList.length">
-
-            <div class="subheading bold c-mt-4">Expertise Contribution Index</div>
-
+        <div class="c-mb-6" v-if="eciList.length">
+            <div class="subheading bold">Expertise Contribution Index</div>
             <div class="c-mt-4">
                 <div v-for="(eci, index) in eciList" :key="index"
                     class="row align-center justify-between eci-item c-ph-2"
@@ -31,9 +12,17 @@
                 </div>
             </div>
         </div>
-
-        <div class="sidebar-fullwidth">
-            <v-divider></v-divider>
+        <div v-if="review.author.account.name !== user.username && userHasExpertise" class="c-mt-4">
+            <div class="sidebar-fullwidth"><v-divider></v-divider></div>
+            <div class="support-review-button">
+                <v-btn block color="primary"
+                    class="c-mt-4"
+                    :loading="isReviewVoting" 
+                    :disabled="isReviewVoting || userHasVoted || votingDisabled"
+                    @click="voteReview()">
+                    Support Review
+                </v-btn>
+            </div>
         </div>
     </div>
 </template>
@@ -153,5 +142,9 @@
     }
     .eci-label {
        color: #818181;
+    }
+    .support-review-button {
+        width: 60%;
+        margin: auto;
     }
 </style>

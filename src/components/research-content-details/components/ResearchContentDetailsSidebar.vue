@@ -22,7 +22,8 @@
                     <router-link class="a orange--text" 
                         :to="{
                             name: 'ResearchGroupDetails',
-                            params: { research_group_permlink: encodeURIComponent(research.group_permlink) }
+                            params: { research_group_permlink: encodeURIComponent(research.group_permlink) },
+                            hash: '#proposals'
                         }"
                     >proposed</router-link>
                     as research content and locked for editing

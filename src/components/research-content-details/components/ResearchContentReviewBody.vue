@@ -2,7 +2,7 @@
     <div v-if="isLoadingResearchContentPage === false" class="review-content-container">
 
         <div class="row-nowrap c-pb-4">
-            <div class="review-left-block text-align-center">
+            <div class="text-align-center">
                 <v-avatar size="120px">
                     <img v-if="review.author.profile" v-bind:src="review.author.profile.avatar | avatarSrc(90, 90, false)" />
                     <v-gravatar v-else :title="review.author.account.name" :email="review.author.account.name + '@deip.world'" />

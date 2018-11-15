@@ -22,16 +22,34 @@
         </div>
       </div>
     </sidebar>
+
     <div class="col-grow full-height">
       <div v-if="isLoadingResearchContentPage === false">
         <research-content-details-file v-if="isFileContent"></research-content-details-file>
         <research-content-details-dar v-if="isDarContent" :contentRef="contentRef"></research-content-details-dar>
-        <div class="research-reviews-container" v-if="contentReviewsList.length">
-          <div class="c-pt-2 title">Reviews: {{ contentReviewsList.length }}</div>
-          <div class="c-pt-6">
-            <review-list-item v-for="(review, i) in contentReviewsList" :review="review" :key="i"></review-list-item>
+
+        <!-- START Research Content Reviews section -->
+        <div v-if="isPublished && contentReviewsList.length">
+          <div class="sidebar-fullwidth"><v-divider></v-divider></div>
+          <div id="reviews" class="reviews-container">
+            <div class="c-pt-2 title">Reviews: {{ contentReviewsList.length }}</div>
+            <div class="c-pt-6">
+              <review-list-item v-for="(review, i) in contentReviewsList" :review="review" :key="i"></review-list-item>
+            </div>
           </div>
         </div>
+        <div v-else-if="isPublished && !contentReviewsList.length">
+            <div class="sidebar-fullwidth"><v-divider></v-divider></div>
+            <div id="reviews" class="subheading text-align-center no-reviews-container">
+                <span>There are no reviews for this {{ getContentType(content.content_type).text }} yet.</span>
+                <div>
+                    <span v-if="isCreatingReviewAvailable">
+                        <a class="a" @click="goAddReview()">Add your review</a> to make a contribution to the research.
+                    </span>
+                </div>
+            </div>
+        </div>
+        <!-- END Research Content Reviews section -->
 
         <!-- START Research Content References section -->
         <div v-if="isInProgress && isDarContent">
@@ -111,6 +129,7 @@
           </v-card>
         </v-dialog>
         <!-- END Proposal dialog section -->
+
       </div>
     </div>
     <sidebar>
@@ -122,7 +141,7 @@
 <script>
     import { mapGetters } from 'vuex';
     import deipRpc from '@deip/deip-rpc-client';
-    import { contentTypesList } from './../../services/ResearchService';
+    import { contentTypesList, getContentType } from './../../services/ResearchService';
     import { createContentProposal } from './../../services/ProposalService';
     import contentHttpService from './../../services/http/content';
     import searchHttpService from './../../services/http/search'
@@ -181,6 +200,18 @@
             },
             isCreatingProposalAvailable() {
                 return this.proposeContent.title && this.proposeContent.type && this.proposeContent.authors.length;
+            },
+            userHasExpertise() {
+                return this.userExperise != null && this.research != null
+                    ?  this.userExperise.some(exp => this.research.disciplines.some(d => d.id == exp.discipline_id))
+                    : false
+            },
+            isCreatingReviewAvailable() {
+                const userHasReview = this.contentReviewsList.some(r => r.author.account.name === this.user.username)
+                return !this.isResearchGroupMember && !userHasReview && this.userHasExpertise && this.isPublished
+            },
+            goAddReview() {
+                this.$router.push({ name: 'ResearchContentAddReview', params: this.$route.params });
             }
         },
         
@@ -314,7 +345,8 @@
                     const refs = this.contentRef.references.slice().filter(r => r != ref.id);
                     this.$store.dispatch('rcd/setDraftReferences', refs);
                 }
-            }
+            },
+            getContentType
         },
         created() {
             const permlinks = {
@@ -330,19 +362,13 @@
 </script>
 
 <style lang="less" scoped>
-    .research-reviews-container {
+    .reviews-container {
         margin: 5%;
     }
-    .deip-panel-container {
-        position: relative;
-        z-index: 101 !important;
-        
-        .save-draft-btn {
-            position: absolute;
-            left: 150px;
-        }
-        .propose-content-btn {
-            position: absolute;
-        }
+    .no-reviews-container {
+        margin: auto;
+        width: 50%;
+        margin-top: 5%;
+        margin-bottom: 5%;
     }
 </style>
