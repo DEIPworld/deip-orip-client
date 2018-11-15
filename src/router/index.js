@@ -33,6 +33,7 @@ import CreateDisciplineGrant from '@/components/grand-create/CreateDisciplineGra
 import CreateDirectGrant from '@/components/grand-create/CreateDirectGrant'
 
 import ClaimUserExpertiseDetails from '@/components/claim-expertise-details/ClaimUserExpertiseDetails'
+import ClaimUserExpertiseList from '@/components/claim-expertise-list/ClaimUserExpertiseList'
 
 import { isLoggedIn } from './../utils/auth';
 
@@ -151,14 +152,18 @@ const router = new Router({
         name: 'CreateDirectGrant',
         component: CreateDirectGrant
     }, {
-        path: '/:account_name/claim-user-experience/:claim_id',
+        path: '/claim-user-experience',
+        name: 'claim-user-expertise-list',
+        component: ClaimUserExpertiseList
+    }, {
+        path: '/claim-user-experience/:account_name/:claim_id',
         name: 'claim-user-expertise-details',
         component: ClaimUserExpertiseDetails
     }, {
         path: '*',
         redirect: '/research-feed'
     }],
-
+    
     scrollBehavior(to, from, savedPosition) {
         if (to.hash) {
             // TODO: Remove this timeout after router\loader refactoring

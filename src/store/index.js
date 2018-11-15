@@ -10,6 +10,7 @@ import userDetails from './../components/user-details/store/index.js'
 import userWallet from './../components/user-wallet/store/index.js'
 import layout from './../components/layout/store/index.js'
 import claimExpertiseDetails from './../components/claim-expertise-details/store/index.js'
+import claimExpertiseList from './../components/claim-expertise-list/store/index.js'
 
 
 Vue.use(Vuex)
@@ -26,7 +27,8 @@ export default new Vuex.Store({
         userDetails,
         userWallet,
         layout,
-        claimExpertiseDetails
+        claimExpertiseDetails,
+        claimExpertiseList
     },
     strict: debug,
     plugins: debug ? [createLogger()] : []
