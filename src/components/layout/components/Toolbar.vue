@@ -33,6 +33,10 @@
                         <v-list-tile-title>Create Grant</v-list-tile-title>
                     </v-list-tile>
 
+                    <v-list-tile v-if="user" :to="{ name: 'claim-user-expertise-list' }">
+                        <v-list-tile-title>Claim expertise list</v-list-tile-title>
+                    </v-list-tile>
+
                     <v-divider></v-divider>
 
                     <v-list-tile @click="signOut()">
@@ -47,6 +51,7 @@
                     <v-icon dark small class="ml-2">add</v-icon>
                 </v-btn>
             </div>
+
             <v-toolbar-items v-if="!isLoggedIn()">
                 <!-- <v-btn flat to="/sign-in">Sign In</v-btn> -->
                 <v-btn flat to="/sign-up">Beta Registration</v-btn>
@@ -55,28 +60,24 @@
 </template>
 
 <script>
-
     import { isLoggedIn, clearAccessToken } from './../../../utils/auth';
     import { mapGetters } from 'vuex';
 
     export default {
         name: 'Toolbar',
-        props: {
-            drawer: Boolean
-        },
+
         computed: {
             ...mapGetters({
                 user: 'auth/user'
             })
         },
+
         methods: {
             isLoggedIn: isLoggedIn,
+
             signOut: function() {
                 clearAccessToken()
                 this.$router.go('/sign-in')
-            },
-            updateDrawer(value) {
-                this.$emit('update', value);
             }
         }
     }
