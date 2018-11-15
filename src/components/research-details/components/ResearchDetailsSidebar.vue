@@ -37,8 +37,9 @@
             </div>
             <div v-if="isActiveJoinRequest" class="text-align-center italic pt-2">You have sent a join request on {{new Date(currentJoinRequest.created).toDateString()}}, please wait for approval</div>
             <div v-if="isActiveInvite" class="text-align-center italic pt-2">
-                Your join request has been approved ! Please, accept invite on
+                Please accept invite on
                 <router-link :to="`/user-details/${user.username}`" style="text-decoration: none">your profile page</router-link>
+                to join the research group
             </div>
             <v-dialog v-if="research" v-model="isJoinGroupDialogOpen" persistent transition="scale-transition" max-width="800px">
                 <v-card class="">
@@ -361,7 +362,7 @@
                     if (this.userJoinRequests.some(r => r.groupId == this.research.research_group_id))
                         return false;
 
-                    return true;
+                    return !this.isActiveInvite;
                 }
                 return false;
             },

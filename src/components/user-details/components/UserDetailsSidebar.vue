@@ -164,9 +164,9 @@
 
 
         <!-- ### START User Profile Invites Section ### -->
-        <div class="c-mt-4" v-if="isOwner && hasInvites">
+        <div v-if="isOwner && hasInvites" id="invites" class="c-mt-4">
             <div class="sidebar-fullwidth"><v-divider></v-divider></div>
-            <div class="sm-title bold c-pt-6">Invites: {{invites.length}}</div>
+            <div class="subheading bold c-pt-4">Invites: {{invites.length}}</div>
             <div class="c-pb-6">
                 <div v-for="(invite, index) in invites" class="row-nowrap justify-between align-center c-pt-4">
                     <div class="left">
@@ -208,6 +208,7 @@
 <script>
     import { mapGetters } from 'vuex';
     import usersService from './../../../services/http/users'
+    import { approveInvite, rejectInvite } from './../../../services/InvitesService'
     import moment from 'moment';
     import deipRpc from '@deip/deip-rpc-client';
 
@@ -310,8 +311,7 @@
             approveInvite(invite) {
                 this.isApprovingInvite = true;
                 
-                deipRpc.broadcast.approveResearchGroupInviteAsync(
-                    this.currentUser.privKey,
+                approveInvite(
                     invite.id,
                     this.currentUser.username
                 ).then(() => {
@@ -326,8 +326,7 @@
                         message: `An error occurred while accepting invite, please try again later`
                     });
                     console.log(err);
-                })
-                .finally(() => {
+                }).finally(() => {
                     this.isApprovingInvite = false;
                 })
             },
@@ -340,12 +339,12 @@
 
             rejectInvite(invite) {
                 this.isRejectingInvite = true;
-                deipRpc.broadcast.rejectResearchGroupInviteAsync(
-                    this.currentUser.privKey,
+
+                rejectInvite(
                     invite.id,
                     this.currentUser.username
                 ).then(() => {
-                    this.$store.dispatch('userDetails/loadUserInvites', {username: this.currentUser.username});
+                    this.$store.dispatch('userDetails/loadUserInvites', { username: this.currentUser.username });
                     this.$store.dispatch('layout/setSuccess', {
                         message: `"Invite has been rejected successfully !"`
                     });
@@ -354,8 +353,7 @@
                         message: `An error occurred while rejecting invite, please try again later`
                     });
                     console.log(err);
-                })
-                .finally(() => {
+                }).finally(() => {
                     this.isRejectingInvite = false;
                     this.rejectInviteMeta.isShown = false
                 })

@@ -181,6 +181,7 @@
                 this.isOpen = true;
             },
             vdropzoneSuccess(file, res) {
+                const self = this;
                 const contentRef = res;
                 if (!contentRef.hash) {
                     throw new Error("File upload has failed")
@@ -194,10 +195,6 @@
                         this.$store.dispatch('layout/setSuccess', {
                             message: "New Content Proposal has been created successfuly!"
                         });
-                        this.$router.push({
-                            name: 'ResearchGroupDetails',
-                            params: { research_group_permlink: this.$route.params.research_group_permlink  }
-                        });
                     }, (err) => {
                         console.log(err) 
                         this.$store.dispatch('layout/setError', {
@@ -207,6 +204,9 @@
                     .finally(() => {
                         this.proposeContent.isOpen = false;
                         this.proposeContent.isLoading = false;
+                        setTimeout(() => {
+                            self.$router.push({ name: 'ResearchFeed' });
+                        }, 1500);
                     })
                 }
         },

@@ -157,21 +157,19 @@
                     this.research.disciplines.map(d => d.id)
                 ).then(() => {
                     this.isLoading = false;
-
                     this.$store.dispatch('layout/setSuccess', {
                         message: `Proposal for "${this.research.title}" research is created !`
                     });
-                    
-                    setTimeout(() => {
-                        self.$router.push(`/${encodeURIComponent(self.research.group.permlink)}/group-details`)
-                    }, 1500)
-
                 }, (err) => {
                     this.isLoading = false;
                     this.$store.dispatch('layout/setError', {
                         message: "An error occurred while creating proposal, please try again later"
                     });
                     console.log(err)
+                }).finally(() => {
+                    setTimeout(() => {
+                        self.$router.push({ name: 'ResearchFeed' });
+                    }, 1500);
                 });
             }
         },

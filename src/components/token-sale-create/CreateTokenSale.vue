@@ -44,6 +44,7 @@
                             <token-sale-caps
                                 @finish="finish" @decStep="decStep"
                                 :token-sale-info="tokenSaleInfo"
+                                :research="research"
                                 :isLoading="isLoading"
                             ></token-sale-caps>
                         </div>
@@ -115,25 +116,21 @@
                     this.$store.dispatch('layout/setSuccess', {
                         message: "Token Sale Proposal has been created successfully! Approve it to start the Token Sale !"
                     });
-
-                    setTimeout(() => {
-                        self.$router.push({ 
-                            name: 'ResearchGroupDetails',
-                            params: { research_group_permlink: self.$route.params.research_group_permlink  }
-                        }); 
-                    }, 1500);
-
                 }).catch(err => {
                     this.isLoading = false;
                     this.$store.dispatch('layout/setError', {
                         message: "An error occurred while creating proposal, please try again later"
                     });
                     console.log(err)
+                }).finally(() => {
+                    setTimeout(() => {
+                        self.$router.push({ name: 'ResearchFeed' });
+                    }, 1500);
                 })
             }
         },
 
-        created(){
+        created() {
             deipRpc.api.getResearchByAbsolutePermlinkAsync(
                     decodeURIComponent(this.$route.params.research_group_permlink),
                     decodeURIComponent(this.$route.params.research_permlink)

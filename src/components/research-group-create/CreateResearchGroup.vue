@@ -91,6 +91,7 @@
 <script>
     import { mapGetters } from 'vuex'
     import deipRpc from '@deip/deip-rpc-client';
+    import { createResearchGroup } from './../../services/ResearchGroupService'
 
     export default {
         name: "CreateResearchGroup",
@@ -165,15 +166,12 @@
                     ]
                 });
 
-                deipRpc.broadcast.createResearchGroupAsync(
-                    this.user.privKey,
-                    this.user.username,
-                    this.group.name,
-                    this.group.permlink,
+                createResearchGroup(
+                    this.group.name, 
+                    this.group.permlink, 
                     this.group.description,
-                    parseInt( maxProposalPercent ) * this.DEIP_1_PERCENT,
+                    parseInt(maxProposalPercent) * this.DEIP_1_PERCENT,
                     proposalQuorums,
-                    false,
                     invitees
                 ).then(() => {
                     this.isLoading = false;
