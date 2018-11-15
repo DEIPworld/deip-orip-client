@@ -23,7 +23,9 @@
                     </td>
 
                     <td>
-                        <div class="half-bold">{{ props.item.discipline.label }}</div>
+                        <div :class="[ isAbleToVote(props.item) ? 'bold green--text text--darken-3' : 'half-bold' ]">
+                            {{ props.item.discipline.label }}
+                        </div>
                     </td>
                     
                     <td class="text-xs-center">{{ props.item.created_at | dateFormat('HH:mm D MMM YYYY', true) }}</td> 
@@ -60,6 +62,7 @@
             ...mapGetters({
                 claims: 'claimExpertiseList/claims',
                 sorting: 'claimExpertiseList/sorting',
+                user: 'auth/user'
             }),
 
             pagination: {
@@ -77,6 +80,9 @@
         },
 
         methods: {
+            isAbleToVote(claim) {
+                return _.some(this.user.expertTokens, token => token.discipline_id === claim.disciplineId);
+            }
         }
     };
 </script>
