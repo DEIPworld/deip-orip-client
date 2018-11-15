@@ -1,14 +1,18 @@
 <template>
     <v-card class="review-container hidden-last-child">
-        <div class="row-nowrap c-p-6">
-            <div class="review-left-block text-align-center">
+        <div class="row-nowrap c-p-6 clickable" @click="goToReviewPage()">
+            <div class="column text-align-center" @click="goToReviewerProfilePage($event, review.author.account.name)">
                 <v-avatar size="90px">
                     <img v-if="review.author.profile" v-bind:src="review.author.profile.avatar | avatarSrc(90, 90, false)" />
                     <v-gravatar v-else :title="review.author.account.name" :email="review.author.account.name + '@deip.world'" />
                 </v-avatar>
-                <div class="bold c-pt-2">{{ review.author | fullname }}</div>
+                <div class="bold c-pt-2">
+                    <span class="a">
+                        {{ review.author | fullname }}
+                    </span>
+                </div>
             </div>
-            <div class="column c-ml-6 clickable" @click="goToReviewPage()">
+            <div class="column c-ml-6">
                 <div>
                     <span class="grey--text">{{ review.created_at | dateFormat('D MMM YYYY', true) }}</span>
                     <span class="half-bold c-pl-2">
@@ -99,6 +103,12 @@
                 function isParagraph(el) {
                      return el.nodeName === 'P';
                 }
+            },
+
+            goToReviewerProfilePage($event, reviewer) {
+                $event.preventDefault();
+                $event.stopPropagation();
+                this.$router.push({ name: 'UserDetails', params: { account_name: reviewer }});
             },
 
             goToReviewPage() {

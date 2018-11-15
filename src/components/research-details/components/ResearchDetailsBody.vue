@@ -8,13 +8,8 @@
 
     <div v-if="isLoadingResearchPage === false">
         <!-- ### START Research Details Section ### -->
-        <div class="c-pt-6 research-details-container spinner-container">
-            <v-progress-circular class="section-spinner"
-                v-if="isLoadingResearchDetails"
-                indeterminate color="primary"
-            ></v-progress-circular>
-
-            <div v-if="isLoadingResearchDetails === false">
+        <div class="c-mt-6">
+            <div>
                 <div class="row justify-between align-center">
                     <div>
                         <v-icon size="18px">date_range</v-icon>
@@ -44,18 +39,13 @@
 
         <div v-if="research" class="c-pt-8 title">Research results</div>
 
-        <div v-if="!contentList.length && isLoadingResearchContent === false" class="c-pt-8">
+        <div v-if="!contentList.length" class="c-pt-8">
             There is no content posted in the research yet. 
             <span v-if="isResearchGroupMember">Please use the form below to upload your pdf files and images or add them manually with the Editor.</span>
         </div>
 
-        <div class="c-pt-6 research-content-container spinner-container">
-            <v-progress-circular class="section-spinner"
-                v-if="isLoadingResearchContent"
-                indeterminate color="primary"
-            ></v-progress-circular>
-
-            <v-expansion-panel v-if="isLoadingResearchContent === false">
+        <div class="c-mt-6">
+            <v-expansion-panel>
                 <v-expansion-panel-content v-for="(content, index) in contentList" :key="index">
                     <div slot="header">
                         <span class="bold">{{getContentType(content.content_type).text}}</span>
@@ -71,15 +61,21 @@
                                 }"
                             >{{content.title}}</router-link>
                         </span>
+                        <div class="c-pr-10 right" v-show="contentHasReviews(content)">
+                            <v-icon size="12px">chat_bubble</v-icon>
+                            <span class="bold display-inline-flex">
+                                <span v-show="contentHasPositiveReviews(content)" class="green--text text--darken-2">{{ countContentReviews(content, true) }}</span>
+                                <span v-show="contentHasPositiveReviews(content) && contentHasNegativeReviews(content)">/</span>
+                                <span v-show="contentHasNegativeReviews(content)" class="red--text text--darken-2">{{ countContentReviews(content, false) }}</span>
+                            </span>
+                        </div>
                     </div>
 
                     <v-card>
                         <v-card-text class="pt-0">
                             <div class="c-ph-2">
                                 <div class="caption grey--text c-pt-2"> {{contentAuthorsStr(content.authors)}}</div>
-                                <div class="c-pt-4 half-bold">
-                                </div>
-
+                                <div class="c-pt-2 half-bold"></div>
                                 <div>
                                     <div class="row-nowrap">
                                         <div v-for="(eci, index) in getContentEciList(content)" class="grey--text">
@@ -104,15 +100,14 @@
                                             <span>{{ content.created_at | dateFormat('D MMM YYYY', true) }}</span>
                                         </div>
 
-                                        <div class="c-pr-10">
+                                    <!-- <div class="c-pr-10">
                                             <v-icon size="18px">chat_bubble</v-icon>
-
                                             <span class="bold display-inline-flex">
                                                 <span class="green--text text--darken-2">{{ countContentReviews(content, true) }}</span>
                                                 <span>/</span>
                                                 <span class="red--text text--darken-2">{{ countContentReviews(content, false) }}</span>
                                             </span>
-                                        </div>
+                                        </div> -->
                                     </div>
                                 </div>
                             </div>
@@ -125,8 +120,8 @@
 
         <div v-if="isResearchGroupMember && !research.is_finished" class="c-pt-8 title">Work in progress</div>
 
-        <div class="c-pt-6 research-drafts-container" v-if="isResearchGroupMember && !research.is_finished">
-            <v-expansion-panel v-if="isLoadingResearchContentRefs === false">
+        <div class="c-mt-6" v-if="isResearchGroupMember && !research.is_finished">
+            <v-expansion-panel>
                 <v-expansion-panel-content v-for="(draft, index) in contentRefsList.filter(d => !draftIsApproved(d))" :key="index">
                     <div slot="header">
                         <span class="bold">Draft {{index + 1}}</span>
@@ -247,12 +242,7 @@
                 totalVotesList: 'rd/totalVotesList',
                 contentWeightByDiscipline: 'rd/contentWeightByDiscipline',
                 membersList: 'rd/membersList',
-                isLoadingResearchPage: 'rd/isLoadingResearchPage',
-                isLoadingResearchContent: 'rd/isLoadingResearchContent',
-                isLoadingResearchDetails: 'rd/isLoadingResearchDetails',
-                isLoadingResearchReviews: 'rd/isLoadingResearchReviews',
-                isLoadingResearchReviews: 'rd/isLoadingResearchReviews',
-                isLoadingResearchContentRefs: 'rd/isLoadingResearchContentRefs'
+                isLoadingResearchPage: 'rd/isLoadingResearchPage'
             }),
             isResearchGroupMember() {
                 return this.research != null 
@@ -266,6 +256,15 @@
                     (acc, review) => review.is_positive && isPositive || !review.is_positive && !isPositive ? acc + 1 : acc,
                     0
                 );
+            },
+            contentHasReviews(content) {
+                return content.reviews.length;
+            },
+            contentHasPositiveReviews(content) {
+                return content.reviews.some(r => r.is_positive);
+            },
+            contentHasNegativeReviews(content) {
+                return content.reviews.some(r => !r.is_positive);
             },
             getContentEciList(content) {
                 return this.disciplinesList.map(discipline => {
@@ -341,21 +340,4 @@
     .research-body-container {
         min-height: 500px;
     }
-
-    .research-details-container {
-        min-height: 200px;
-    }
-
-    .research-content-container {
-        min-height: 70px;
-    }
-
-    .research-drafts-container {
-
-    }
-
-    .research-reviews-container {
-        min-height: 150px;
-    }
-
 </style>
