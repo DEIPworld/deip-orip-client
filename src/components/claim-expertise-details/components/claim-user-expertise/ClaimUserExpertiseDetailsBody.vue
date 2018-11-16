@@ -42,19 +42,33 @@
         </v-card>
 
         <div class="c-mt-8">
-            <v-btn color="primary" class="ma-0"
+            <!-- <v-btn color="primary" class="ma-0"
                 v-if="claim.username !== user.username && !isClaimAccepted"
                 :disabled="isCreateProposalBtnDisabled"
                 @click="isAllocationDialogShown = true"
-            >Create proposal</v-btn>
+            >Create proposal</v-btn> -->
 
-            <div class="row align-items-center justify-end" v-if="isClaimAccepted">
+            <div class="row align-items-center justify-center" v-if="claim.username !== user.username && !isClaimAccepted">
+                <v-btn color="primary" class="ma-0" large
+                    :disabled="isApproveBtnDisabled(proposal)"
+                    :loading="isApproveBtnLoading(proposal)"
+                    @click="approveProposal(proposal)"
+                >{{ isApproveBtnVoted(proposal) ? 'Approved' : 'Approve' }}</v-btn>
+
+                <div class="grey--text c-pl-6">
+                    voted 
+                    {{ (proposal.total_voted_expertise / proposal.discipline.total_expertise_amount * 100).toFixed(2) }}
+                    %
+                </div>
+            </div>
+
+            <div class="row align-items-center justify-center" v-if="isClaimAccepted">
                 <span class="headline green--text text--darken-1 c-pr-3">Claimed</span>
                 <v-icon size="35" color="green darken-1">mdi-check</v-icon>
             </div>
         </div>
         
-        <div class="" v-if="proposals.length">
+        <!-- <div class="" v-if="proposals.length">
             <div class="bold title c-pt-8">Proposals: {{ proposals.length }}</div>
 
             <v-card class="c-mt-6 hidden-last-child">
@@ -125,7 +139,7 @@
                     <v-divider></v-divider>
                 </template>
             </v-card>
-        </div>
+        </div> -->
 
         <claim-user-expertise-details-allocation-dialog
             :is-shown="isAllocationDialogShown"
@@ -160,7 +174,7 @@
             ...mapGetters({
                 claimerInfo: 'claimExpertiseDetails/claimerInfo',
                 claim: 'claimExpertiseDetails/claim',
-                proposals: 'claimExpertiseDetails/proposals',
+                proposal: 'claimExpertiseDetails/proposal',
                 user: 'auth/user',
             }),
 
@@ -177,15 +191,16 @@
                 return location;
             },
 
-            isCreateProposalBtnDisabled() {
-                const hasExpertise = !!this.user.expertTokens.find(token => token.discipline_id === this.claim.disciplineId);
-                const hasVoted = !!this.proposals.find(proposal => proposal.initiator === this.user.username);
+            // isCreateProposalBtnDisabled() {
+            //     const hasExpertise = !!this.user.expertTokens.find(token => token.discipline_id === this.claim.disciplineId);
+            //     const hasVoted = !!this.proposals.find(proposal => proposal.initiator === this.user.username);
 
-                return !hasExpertise || hasVoted;
-            },
+            //     return !hasExpertise || hasVoted;
+            // },
 
             isClaimAccepted() {
-                return _.some(this.proposals, proposal => proposal.status === this.PROPOSAL_STATUS.ACCEPTED);
+                // return _.some(this.proposals, proposal => proposal.status === this.PROPOSAL_STATUS.ACCEPTED);
+                return this.proposal.status === this.PROPOSAL_STATUS.ACCEPTED;
             }
         },
         methods: {
@@ -212,13 +227,13 @@
             },
 
             approveProposal(proposal) {
-                this.loadingProposalIds.push(proposal.id);                
+                this.loadingProposalIds.push(proposal.id);
+                
+                console.log(proposal);
 
                 deipRpc.broadcast.voteForExpertiseAllocationProposalAsync(
                     this.user.privKey,
-                    proposal.initiator,
-                    proposal.claimer,
-                    proposal.discipline_id,
+                    proposal.id,
                     this.user.username,
                     this.DEIP_100_PERCENT
                 ).then(() => {
@@ -244,7 +259,7 @@
             },
             
             reloadProposals() {
-                this.$store.dispatch('claimExpertiseDetails/loadClaimProposals', {
+                this.$store.dispatch('claimExpertiseDetails/loadClaimProposal', {
                     username: this.claim.username,
                     disciplineId: this.claim.disciplineId
                 });
