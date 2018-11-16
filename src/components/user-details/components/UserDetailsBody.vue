@@ -282,7 +282,6 @@
             
         <user-claim-expertise-dialog
             :is-shown="isClaimExpertiseDialogShown"
-            @onPublish="loadExpertiseClaims"
             @close="closeClaimExpertiseDialog"
         ></user-claim-expertise-dialog>
     </div>

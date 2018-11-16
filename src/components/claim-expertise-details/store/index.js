@@ -11,7 +11,7 @@ const state = {
     claimerProfile: undefined,
     claimerExpertise: [],
     claim: undefined,
-    proposals: []
+    proposal: undefined
 }
 
 // getters
@@ -24,7 +24,7 @@ const getters = {
         }
     },
     claim: (state, getters) => state.claim,
-    proposals: (state, getters) => state.proposals
+    proposal: (state, getters) => state.proposal
 }
 
 // actions
@@ -37,7 +37,7 @@ const actions = {
 
         const loadClaim = dispatch('loadClaim', { username, claimId })
             .then(() => {
-                return dispatch('loadClaimProposals', { username, disciplineId: state.claim.disciplineId });
+                return dispatch('loadClaimProposal', { username, disciplineId: state.claim.disciplineId });
             });
 
         return Promise.all([loadClaimerAccount, loadClaimerProfile, loadClaimerExpertise, loadClaim]);
@@ -85,49 +85,56 @@ const actions = {
             .catch(err => console.log(err));
     },
 
-    loadClaimProposals({ commit }, { username, disciplineId }) {
-        let resProposals = [];
+    loadClaimProposal({ commit }, { username, disciplineId }) {
+        let resProposal = [];
 
         return deipRpc.api.getExpertiseAllocationProposalsByClaimerAndDisciplineAsync(username, disciplineId)
-            .then(proposals => {
-                resProposals = proposals;
+            .then(proposal => {
+                resProposal = proposal;
 
-                const disciplinesPromise = Promise.all(
-                    resProposals.map(item => deipRpc.api.getDisciplineAsync(item.discipline_id))
-                );
+                // const disciplinesPromise = Promise.all(
+                //     resProposals.map(item => deipRpc.api.getDisciplineAsync(item.discipline_id))
+                // );
 
-                const profilesPromise = getEnrichedProfiles(
-                    resProposals.map(item => item.initiator)
-                );
+                // const profilesPromise = getEnrichedProfiles(
+                //     resProposals.map(item => item.initiator)
+                // );
 
-                const expertTokensPromise = Promise.all(
-                    resProposals.map(item => deipRpc.api.getExpertTokensByAccountNameAsync(item.initiator))
-                );
+                // const expertTokensPromise = Promise.all(
+                //     resProposals.map(item => deipRpc.api.getExpertTokensByAccountNameAsync(item.initiator))
+                // );
 
-                const proposalVotesPromise = Promise.all(
-                    resProposals.map(item => 
-                        deipRpc.api.getExpertiseAllocationProposalVotesByExpertiseAllocationProposalIdAsync(item.id)
-                    )
-                );
+                // const proposalVotesPromise = Promise.all(
+                //     resProposals.map(item => 
+                //         deipRpc.api.getExpertiseAllocationProposalVotesByExpertiseAllocationProposalIdAsync(item.id)
+                //     )
+                // );
 
                 return Promise.all([
-                    disciplinesPromise,
-                    profilesPromise,
-                    expertTokensPromise,
-                    proposalVotesPromise
+                    // disciplinesPromise,
+                    // profilesPromise,
+                    // expertTokensPromise,
+                    // proposalVotesPromise,
+                    deipRpc.api.getDisciplineAsync(resProposal.discipline_id),
+                    getEnrichedProfiles([resProposal.claimer]),
+                    deipRpc.api.getExpertiseAllocationProposalVotesByExpertiseAllocationProposalIdAsync(resProposal.id),
                 ]);
             })
-            .then(([disciplines, profiles, expertTokens, proposalVotes]) => {
-                resProposals.forEach((proposal, index) => {
-                    proposal.discipline = disciplines[index];
-                    proposal.initiatorInfo = profiles[index];
-                    proposal.initiatorExpertise = expertTokens[index];
-                    proposal.votes = proposalVotes[index];
-                });
+            .then(([discipline, profile, proposalVotes]) => {
+                // resProposals.forEach((proposal, index) => {
+                //     proposal.discipline = disciplines[index];
+                //     proposal.initiatorInfo = profiles[index];
+                //     proposal.initiatorExpertise = expertTokens[index];
+                //     proposal.votes = proposalVotes[index];
+                // });
 
-                commit('SET_PROPOSALS', resProposals);
+                resProposal.discipline = discipline;
+                resProposal.claimerInfo = profile[0];
+                resProposal.proposalVotes = proposalVotes;
 
-                return resProposals;
+                commit('SET_PROPOSAL', resProposal);
+
+                return resProposal;
             })
             .catch(err => console.log(err));
     }
@@ -144,8 +151,8 @@ const mutations = {
     ['SET_CLAIM'](state, claim) {
         Vue.set(state, 'claim', claim)
     },
-    ['SET_PROPOSALS'](state, proposals) {
-        Vue.set(state, 'proposals', proposals)
+    ['SET_PROPOSAL'](state, proposal) {
+        Vue.set(state, 'proposal', proposal)
     },
     ['SET_CLAIMER_EXPERTISE'](state, expertise) {
         Vue.set(state, 'claimerExpertise', expertise);

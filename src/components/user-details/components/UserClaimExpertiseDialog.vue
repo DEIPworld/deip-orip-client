@@ -94,12 +94,15 @@
     import _ from 'lodash';
     import expertiseClaimsService from '../../../services/http/expertiseClaims.js';
     import { mapGetters } from 'vuex';
+    import deipRpc from '@deip/deip-rpc-client';
 
     export default {
         name: "UserClaimExpertiseDialog",
+
         props: {
             isShown: { type: Boolean, required: true }
         },
+
         data() {
             return {
                 URL_REGEX: /^(https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/#\w \.-]*)*\/?$/,
@@ -116,10 +119,12 @@
                 isLoading: false
             }
         },
+
         computed: {
             ...mapGetters({
                 user: 'auth/user'
             }),
+
             isClaimBtnDisabled() {
                 const isLinkArrayValid = !_.isEmpty(this.publications) 
                     && this.publications.reduce((acc, curr) => acc && curr.value.match(this.URL_REGEX) !== null, true);
@@ -127,6 +132,7 @@
                 return !this.discipline || !this.coverLetter || !isLinkArrayValid;
             }
         },
+
         methods: {
             setDiscipline(discipline) {
                 this.discipline = discipline;
@@ -146,11 +152,30 @@
                     this.coverLetter,
                     this.publications.map(item => item.value)
                 ).then(() => {
+                    return deipRpc.broadcast.createExpertiseAllocationProposalAsync(
+                        this.user.privKey,
+                        this.user.username,
+                        this.discipline.id,
+                        this.coverLetter
+                    );
+                }).then(() => {
                     this.$store.dispatch('layout/setSuccess', {
                         message: "You have posted the claim successfully! Please wait for community approval before you obtain the expertise tokens"
                     });
-                    this.$emit('onPublish');
-                    setTimeout(() => this.$emit('close'), 1000);
+
+                    setTimeout(() => {
+                        this.$emit('close');
+
+                        expertiseClaimsService.getExpertiseClaimsByUser(this.user.username)
+                            .then(data => {
+                                const claim = _.find(data, { disciplineId: this.discipline.id });
+
+                                this.$router.push({
+                                    name: 'claim-user-expertise-details', 
+                                    params: { account_name: this.user.username, claim_id: claim._id }
+                                });
+                            });
+                    }, 1000);
                 }).catch(err => 
                     console.log(err)
                 ).finally(() => {
@@ -158,6 +183,7 @@
                 });
             }
         },
+
         watch: {
             'isShown': function(newValue) {
                 if (newValue) {
