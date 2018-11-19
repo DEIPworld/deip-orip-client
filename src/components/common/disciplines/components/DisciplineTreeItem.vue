@@ -3,7 +3,7 @@
         <span class="deip-label" 
             v-if="!discipline.isTop" 
             @click="select(discipline)"
-            :class="[{'selected': isSelected}]"
+            :class="[{ 'selected': isSelected || isHighlighted }]"
         >{{ discipline.label }}</span>
         
         <div v-if="discipline.children" v-show="isExpanded">
@@ -12,6 +12,7 @@
                     :discipline="val"
                     :selected="selected"
                     :is-multiple-select="isMultipleSelect"
+                    :is-highlighted-parent="isHighlightedParent"
                     @update="select"
                 ></discipline-tree-item>
             </div>
@@ -25,21 +26,26 @@
     // todo: make single and multiselect handled by arrays bc it will be easier and more readable
     export default {
         name: "DisciplineTreeItem",
+        
         props: {
             discipline: { type: Object, required: true },
+            isMultipleSelect: { type: Boolean, required: false, default: true },
+            isHighlightedParent: { type: Boolean, required: false, default: false },
+
             selected: { 
                 validator(value) {
                     return value === undefined || typeof value === 'array' || typeof value === 'object';
                 }, 
                 required: true 
             },
-            isMultipleSelect: { type: Boolean, required: false, default: true }
         },
+
         methods: {
             select(discipline) {
                 this.$emit('update', discipline);
             }
         },
+
         computed: {
             isSelected() {
                 return this.isMultipleSelect 
@@ -50,6 +56,12 @@
                 return this.isSelected 
                     || this.discipline.isTop 
                     || !this.isMultipleSelect && this.selected && _.startsWith(this.selected.path, this.discipline.path);
+            },
+            isHighlighted() {
+                return !this.isMultipleSelect
+                    && this.isHighlightedParent
+                    && this.selected
+                    && _.startsWith(this.selected.path, this.discipline.path);
             }
         }
     };

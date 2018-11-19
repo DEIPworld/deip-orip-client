@@ -4,6 +4,7 @@
             :discipline="tree"
             :selected="selected"
             :is-multiple-select="isMultipleSelect"
+            :is-highlighted-parent="isHighlightedParent"
             @update="selectDiscipline"
         ></discipline-tree-item>
     </div>
@@ -32,7 +33,9 @@
                 },
                 required: false
             },
-            isMultipleSelect: { type: Boolean, required: false, default: true }
+            
+            isMultipleSelect: { type: Boolean, required: false, default: true },
+            isHighlightedParent: { type: Boolean, required: false, default: false },
         },
 
         methods: {

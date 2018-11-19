@@ -17,6 +17,7 @@
                     <div class="discipline-picker c-mt-8">
                         <advanced-discipline-picker
                             :is-multiple-select="false"
+                            :is-highlighted-parent="true"
                             :preselected="discipline"
                             @select="setDiscipline"
                         ></advanced-discipline-picker>
