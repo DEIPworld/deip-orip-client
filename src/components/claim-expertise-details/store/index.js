@@ -92,45 +92,14 @@ const actions = {
             .then(proposal => {
                 resProposal = proposal;
 
-                // const disciplinesPromise = Promise.all(
-                //     resProposals.map(item => deipRpc.api.getDisciplineAsync(item.discipline_id))
-                // );
-
-                // const profilesPromise = getEnrichedProfiles(
-                //     resProposals.map(item => item.initiator)
-                // );
-
-                // const expertTokensPromise = Promise.all(
-                //     resProposals.map(item => deipRpc.api.getExpertTokensByAccountNameAsync(item.initiator))
-                // );
-
-                // const proposalVotesPromise = Promise.all(
-                //     resProposals.map(item => 
-                //         deipRpc.api.getExpertiseAllocationProposalVotesByExpertiseAllocationProposalIdAsync(item.id)
-                //     )
-                // );
-
                 return Promise.all([
-                    // disciplinesPromise,
-                    // profilesPromise,
-                    // expertTokensPromise,
-                    // proposalVotesPromise,
                     deipRpc.api.getDisciplineAsync(resProposal.discipline_id),
-                    getEnrichedProfiles([resProposal.claimer]),
                     deipRpc.api.getExpertiseAllocationProposalVotesByExpertiseAllocationProposalIdAsync(resProposal.id),
                 ]);
             })
-            .then(([discipline, profile, proposalVotes]) => {
-                // resProposals.forEach((proposal, index) => {
-                //     proposal.discipline = disciplines[index];
-                //     proposal.initiatorInfo = profiles[index];
-                //     proposal.initiatorExpertise = expertTokens[index];
-                //     proposal.votes = proposalVotes[index];
-                // });
-
+            .then(([discipline, proposalVotes]) => {
                 resProposal.discipline = discipline;
-                resProposal.claimerInfo = profile[0];
-                resProposal.proposalVotes = proposalVotes;
+                resProposal.votes = proposalVotes;
 
                 commit('SET_PROPOSAL', resProposal);
 
