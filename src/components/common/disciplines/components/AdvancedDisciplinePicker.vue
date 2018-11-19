@@ -20,6 +20,7 @@
 
             <discipline-tree-picker
                 :is-multiple-select="isMultipleSelect"
+                :is-highlighted-parent="isHighlightedParent"
                 :preselected="preselected"
                 @select="select"
             ></discipline-tree-picker>
@@ -36,6 +37,8 @@
 
         props: {
             isMultipleSelect: { type: Boolean, required: false, default: true },
+            isHighlightedParent: { type: Boolean, required: false, default: false },
+            
             preselected: {
                 validator(value) {
                     return value === undefined || typeof value === 'array' || typeof value === 'object';
