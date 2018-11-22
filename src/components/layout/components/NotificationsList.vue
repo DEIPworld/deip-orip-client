@@ -196,6 +196,19 @@
                     </div>
                 </div>
 
+                <div class="c-pv-2 c-ph-4" v-if="notification.type === 'allocated-expertise'">
+                    <div>
+                        <span class="clickable" @click="clickAllocatedExpertiseNotification(notification)">
+                           Claim for <span class="a">{{getDiscipline(notification.meta.expertiseProposal.discipline_id).label}}</span> 
+                           discipline has been approved by experts community
+                        </span>
+                    </div>
+                    <div class="grey--text caption c-mt-1">
+                        <v-icon size="16" color="grey">event</v-icon> {{ new Date(notification.created_at).toDateString() }}
+                        <span style="cursor: pointer" class="a orange--text right" @click="readNotification($event, notification)">Mark as read</span>
+                    </div>
+                </div>
+
                 <v-divider></v-divider>
             </template>
         </v-list>
@@ -206,8 +219,8 @@
 
     import httpService from './../../../services/http/notifications';
     import { types } from './../../../services/ProposalService';
-    import { getContentType } from './../../../services/ResearchService';
-    import { contentTypesMap } from './../../../services/ResearchService';
+    import { getContentType, contentTypesMap } from './../../../services/ResearchService';
+    import { getNodeById } from "./../../common/disciplines/DisciplineTreeService"; 
     import { mapGetters } from 'vuex';
     import deipRpc from '@deip/deip-rpc-client';
 
@@ -311,6 +324,14 @@
                 this.readNotification(null, notification);
             },
 
+            clickAllocatedExpertiseNotification(notification) {
+                this.$router.push({
+                    name: 'UserDetails', 
+                    params: { account_name: encodeURIComponent(notification.meta.userInfo._id) }
+                });
+                this.readNotification(null, notification);
+            },
+
             readNotification($event, notification) {
                 if ($event) {
                     $event.preventDefault();
@@ -321,7 +342,8 @@
                         this.$store.dispatch('auth/loadNotifications');
                     })
             },
-            getContentType
+            getContentType,
+            getDiscipline: getNodeById
         },
         watch: {
             '$route' (to, from) {

@@ -34,7 +34,7 @@
                     </v-list-tile>
 
                     <v-list-tile v-if="user" :to="{ name: 'claim-user-expertise-list' }">
-                        <v-list-tile-title>Claim expertise list</v-list-tile-title>
+                        <v-list-tile-title>Expertise Committee</v-list-tile-title>
                     </v-list-tile>
 
                     <v-divider></v-divider>

@@ -84,6 +84,7 @@ const mutations = {
         Vue.set(state, 'sorting', Object.assign(state.sorting, sorting));
     },
     ['SET_CLAIMS'](state, claims) {
+        debugger;
         Vue.set(state, 'claims', claims);
     },
 }

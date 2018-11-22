@@ -94,6 +94,7 @@
 <script>
     import _ from 'lodash';
     import expertiseClaimsService from '../../../services/http/expertiseClaims.js';
+    import { createExpertiseClaim } from './../../../services/ExpertiseClaimsService';
     import { mapGetters } from 'vuex';
     import deipRpc from '@deip/deip-rpc-client';
 
@@ -106,7 +107,7 @@
 
         data() {
             return {
-                URL_REGEX: /^(https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/#\w \.-]*)*\/?$/,
+                URL_REGEX: /^(?:(?:https?|ftp):\/\/)?(?:(?!(?:10|127)(?:\.\d{1,3}){3})(?!(?:169\.254|192\.168)(?:\.\d{1,3}){2})(?!172\.(?:1[6-9]|2\d|3[0-1])(?:\.\d{1,3}){2})(?:[1-9]\d?|1\d\d|2[01]\d|22[0-3])(?:\.(?:1?\d{1,2}|2[0-4]\d|25[0-5])){2}(?:\.(?:[1-9]\d?|1\d\d|2[0-4]\d|25[0-4]))|(?:(?:[a-z\u00a1-\uffff0-9]-*)*[a-z\u00a1-\uffff0-9]+)(?:\.(?:[a-z\u00a1-\uffff0-9]-*)*[a-z\u00a1-\uffff0-9]+)*(?:\.(?:[a-z\u00a1-\uffff]{2,})))(?::\d{2,5})?(?:\/\S*)?$/,
 
                 required: value => !!value || 'This field is required',
                 urlRule: value => {
@@ -147,41 +148,24 @@
             claimExpertise() {
                 this.isLoading = true;
 
-                expertiseClaimsService.createExpertiseClaim(
-                    this.user.username,
-                    this.discipline.id,
-                    this.coverLetter,
-                    this.publications.map(item => item.value)
-                ).then(() => {
-                    return deipRpc.broadcast.createExpertiseAllocationProposalAsync(
-                        this.user.privKey,
-                        this.user.username,
-                        this.discipline.id,
-                        this.coverLetter
-                    );
-                }).then(() => {
-                    this.$store.dispatch('layout/setSuccess', {
-                        message: "You have posted the claim successfully! Please wait for community approval before you obtain the expertise tokens"
-                    });
+                createExpertiseClaim(this.user.username, this.discipline.id, this.coverLetter, this.publications.map(item => item.value))
+                    .then((claim) => {
+                        this.$store.dispatch('layout/setSuccess', {
+                            message: "You have posted the claim successfully! Please wait for community approval before you obtain the expertise tokens"
+                        });
 
-                    setTimeout(() => {
-                        this.$emit('close');
-
-                        expertiseClaimsService.getExpertiseClaimsByUser(this.user.username)
-                            .then(data => {
-                                const claim = _.find(data, { disciplineId: this.discipline.id });
-
-                                this.$router.push({
-                                    name: 'claim-user-expertise-details', 
-                                    params: { account_name: this.user.username, claim_id: claim._id }
-                                });
+                        setTimeout(() => {
+                            this.$emit('close');
+                            this.$router.push({
+                                name: 'claim-user-expertise-details', 
+                                params: { account_name: this.user.username, claim_id: claim._id }
                             });
-                    }, 1000);
-                }).catch(err => 
-                    console.log(err)
-                ).finally(() => {
-                    this.isLoading = false;
-                });
+                        }, 1000);
+                    }).catch(err => 
+                        console.log(err)
+                    ).finally(() => {
+                        this.isLoading = false;
+                    });
             }
         },
 

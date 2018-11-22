@@ -15,8 +15,11 @@ const service = {
     getExpertiseClaimsByUserAndDiscipline: (username, disciplineId) => {
         return http.get(`/expertise-claims/user/${username}/discipline/${disciplineId}`, { baseURL: `${apiUrl}/api/` });
     },
-    createExpertiseClaim: (username, disciplineId, coverLetter, publications) => {
-        return http.post(`/expertise-claims`, { username, disciplineId, coverLetter, publications }, { baseURL: `${apiUrl}/api/` });
+    createExpertiseClaim: (tx, publications) => {
+        return http.post(`/expertise-claims`, { tx, publications }, { baseURL: `${apiUrl}/api/` });
+    },
+    voteForExpertiseClaim: (tx) => {
+        return http.post(`/expertise-claims/vote`, tx, { baseURL: `${apiUrl}/api/` });
     }
 }
 
