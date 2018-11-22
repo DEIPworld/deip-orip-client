@@ -51,6 +51,7 @@
 
     export default {
         name: 'SignIn',
+
         data() {
             return {
                 isFormValid: false,
@@ -63,6 +64,7 @@
                 }
             }
         },
+
         methods: {
             login() {
                 const self = this;
@@ -133,6 +135,7 @@
                 }
             }
         },
+        
         created() {
              this.username = this.$route.query.username || '';
         }

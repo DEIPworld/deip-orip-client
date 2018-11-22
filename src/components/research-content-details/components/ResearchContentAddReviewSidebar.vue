@@ -1,5 +1,5 @@
 <template>
-    <div v-if="isLoadingResearchContentPage === false">
+    <div>
         <div class="c-mb-8" v-if="research">
             <router-link class="a sm-title" 
                 :to="{
@@ -77,8 +77,7 @@
                 user: 'auth/user',
                 userExperise: 'auth/userExperise',
                 content: 'rcd/content',
-                research: 'rcd/research',
-                isLoadingResearchContentPage: 'rcd/isLoadingResearchContentPage'
+                research: 'rcd/research'
             }),
             relatedExpertise() {
                 return this.userExperise != null && this.research != null

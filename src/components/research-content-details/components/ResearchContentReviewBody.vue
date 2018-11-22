@@ -1,5 +1,5 @@
 <template>
-    <div v-if="isLoadingResearchContentPage === false" class="review-content-container">
+    <div class="review-content-container">
 
         <div class="row-nowrap c-pb-4">
             <div class="text-align-center">
@@ -60,18 +60,19 @@
 
     export default {
         name: "ResearchContentReviewBody",
+
         data() {
             return {
             };
         },
+
         computed: {
             ...mapGetters({
                 user: 'auth/user',
                 userExperise: 'auth/userExperise',
                 content: 'rcd/content',
                 research: 'rcd/research',
-                contentReviewsList: 'rcd/contentReviewsList',
-                isLoadingResearchContentPage: 'rcd/isLoadingResearchContentPage',
+                contentReviewsList: 'rcd/contentReviewsList'
             }),
             review() {
                 return this.contentReviewsList.find(r => r.id == this.$route.params.review_id)
@@ -84,9 +85,11 @@
             }
 
         },
+
         methods: {
 
         },
+        
         mounted() {
 
         }

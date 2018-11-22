@@ -16,9 +16,12 @@ const getters = {
 // actions
 const actions = {
     loadWallet({ dispatch }, accountName) {
-        dispatch('loadUser', accountName);
-        dispatch('loadResearchTokens', accountName);
+        return Promise.all([
+            dispatch('loadUser', accountName),
+            dispatch('loadResearchTokens', accountName)
+        ]);
     },
+
     loadUser({ commit }, accountName) {
         return deipRpc.api.getAccountsAsync([accountName])
             .then(data => {
@@ -27,11 +30,12 @@ const actions = {
                 return data[0];
             });
     },
+
     loadResearchTokens({ commit }, accountName) {
         let userResearches = [];
         let researchTokens = [];
 
-        deipRpc.api.getResearchTokensByAccountNameAsync(accountName)
+        return deipRpc.api.getResearchTokensByAccountNameAsync(accountName)
             .then(tokens => {
                 researchTokens = tokens;
 
@@ -53,7 +57,7 @@ const actions = {
                 return Promise.all(promises);
             }).then(groupsTokensArray => {
                 userResearches.forEach((research, i) => { research.groupTokens = groupsTokensArray[i] });
-            }).finally(() => {
+
                 commit('SET_RESEARCHES', userResearches);
             });
     }

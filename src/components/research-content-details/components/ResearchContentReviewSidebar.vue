@@ -1,5 +1,5 @@
 <template>
-    <div v-if="isLoadingResearchContentPage === false">
+    <div>
         <div class="c-mb-6" v-if="eciList.length">
             <div class="subheading bold">Expertise Contribution Index</div>
             <div class="c-mt-4">
@@ -34,19 +34,20 @@
 
     export default {
         name: "ResearchContentReviewSidebar",
+
         data() {
             return {
                 isReviewVoting: false,
                 votingDisabled: false
             };
         },
+
         computed: {
             ...mapGetters({
                 user: 'auth/user',
                 userExperise: 'auth/userExperise',
                 research: 'rcd/research',
-                contentReviewsList: 'rcd/contentReviewsList',
-                isLoadingResearchContentPage: 'rcd/isLoadingResearchContentPage',
+                contentReviewsList: 'rcd/contentReviewsList'
             }),
             review() {
                 return this.contentReviewsList.find(r => r.id == this.$route.params.review_id)
@@ -71,6 +72,7 @@
                 });
             }
         },
+        
         methods: {
             voteReview() {
                 const self = this;

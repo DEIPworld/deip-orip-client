@@ -22,7 +22,6 @@
         },
 
         created() {
-            this.$store.dispatch('claimExpertiseList/loadAllClaims');
         }
     };
 </script>

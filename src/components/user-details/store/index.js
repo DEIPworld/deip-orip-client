@@ -11,7 +11,6 @@ const state = {
     expertise: [],
     invites:[],
 
-    isLoadingUserProfilePage: undefined,
 
     isLoadingUserAccount: undefined,
     isLoadingUserProfile: undefined,
@@ -33,9 +32,6 @@ const getters = {
     expertise: state => state.expertise,
     invites: state => state.invites,
 
-    
-    isLoadingUserProfilePage: state => state.isLoadingUserProfilePage,
-
     isLoadingUserAccount: state => state.isLoadingUserAccount,
     isLoadingUserProfile: state => state.isLoadingUserProfile,
     isLoadingUserGroups: state => state.isLoadingUserGroups,
@@ -49,8 +45,6 @@ const getters = {
 const actions = {
     
     loadUser({ dispatch, commit }, username) {
-        commit('SET_USER_PROFILE_PAGE_LOADING_STATE', true)
-
         const accountLoad = new Promise((resolve, reject) => {
             dispatch('loadUserAccount', {username: username, notify: resolve });
         });
@@ -67,16 +61,14 @@ const actions = {
         const invitesLoad = new Promise((resolve, reject) => {
             dispatch('loadUserInvites', {username: username, notify: resolve });
         });
-        Promise.all([accountLoad, profileLoad, researchLoad, expertiseLoad, invitesLoad])
-            .then(() => {
-                commit('SET_USER_PROFILE_PAGE_LOADING_STATE', false)
-            })
+
+        return Promise.all([accountLoad, profileLoad, researchLoad, expertiseLoad, invitesLoad]);
     },
 
     loadUserAccount({ commit }, { username, notify }) {
         commit('SET_USER_ACCOUNT_LOADING_STATE', true)
 
-        deipRpc.api.getAccountsAsync([username])
+        return deipRpc.api.getAccountsAsync([username])
             .then(data => {
                 commit('SET_USER_ACCOUNT', data[0]);
             })
@@ -161,7 +153,7 @@ const actions = {
     loadExpertise({ commit }, { username, notify }) {
         commit('SET_USER_EXPERTISE_LOADING_STATE', true)
 
-        deipRpc.api.getExpertTokensByAccountNameAsync(username)
+        return deipRpc.api.getExpertTokensByAccountNameAsync(username)
             .then(data => {
                 commit('SET_EXPERTISE', data);
             }).finally(() => {
@@ -246,10 +238,6 @@ const mutations = {
     
     ['SET_USER_INVITES'](state, invites) {
         Vue.set(state, 'invites', invites);
-    },
-
-    ['SET_USER_PROFILE_PAGE_LOADING_STATE'](state, value) {
-        state.isLoadingUserProfilePage = value;
     },
 
     ['SET_USER_ACCOUNT_LOADING_STATE'](state, value) {

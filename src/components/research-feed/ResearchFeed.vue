@@ -43,14 +43,8 @@
                 </div>
             </div>
 
-            <div class="c-pt-6 feed-items-container spinner-container">
-                <v-progress-circular class="section-spinner"
-                    v-if="isLoadingResearchFeed"
-                    :size="100" indeterminate
-                    color="primary"
-                ></v-progress-circular>
-                
-                <v-card v-if="isLoadingResearchFeed === false" class="hidden-last-child">
+            <div class="c-pt-6">
+                <v-card class="hidden-last-child">
                     <template v-for="item in researchFeed">
                         <research-feed-list-item :research="item"></research-feed-list-item>
                         <v-divider></v-divider>
@@ -62,20 +56,20 @@
 </template>
 
 <script>
-
     import { mapGetters } from 'vuex';
     import _ from 'lodash';
 
     export default {
         name: "ResearchFeed",
+
         computed: {
             ...mapGetters({
                 researchFeed: 'feed/researchFeed',
                 filter: 'feed/filter',
                 allCollapsed: 'feed/allCollapsed',
-                isLoadingResearchFeed: 'feed/isLoadingResearchFeed'
             })
         },
+
         methods: {
             toggleFeed() {
                 this.$store.dispatch('feed/toggleFeed')
@@ -87,8 +81,8 @@
                 return this.$store.getters['feed/hasSelectedChildDiscipline'](node)
             }
         },
+
         created() {
-            this.$store.dispatch('feed/loadAllResearches')
         }
     };
 </script>
@@ -105,8 +99,5 @@
         &:hover {
             opacity: 1;
         }
-    }
-    .feed-items-container {
-        min-height: 400px
     }
 </style>

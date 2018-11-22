@@ -17,18 +17,15 @@
 
     export default {
         name: "ResearchGroupDetails",
+
         computed: {
-            ...mapGetters({
-                user: 'auth/user',
-                userGroups: 'auth/userGroups'
-            })
         },
+
         data() { 
             return {} 
         },
+
         created() {
-            const groupPermlink = decodeURIComponent(this.$route.params.research_group_permlink);
-            this.$store.dispatch('researchGroup/loadResearchGroup', groupPermlink);
         }
     };
 </script>

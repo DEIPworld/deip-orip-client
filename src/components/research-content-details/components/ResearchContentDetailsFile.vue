@@ -19,7 +19,6 @@
         },
         data() { 
             return {
-                isLoadingResearchContentPage: false,
                 isLoadingResearchContentDetails: false,
                 fileStorageBaseUrl: process.env.DEIP_SERVER_URL,
             }

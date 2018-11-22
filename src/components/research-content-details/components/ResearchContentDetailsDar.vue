@@ -1,21 +1,16 @@
 <template>
-<div>
-  <v-progress-circular v-if="isLoadingResearchContentPage" :size="100" indeterminate color="primary"></v-progress-circular>
-  <div v-if="isLoadingResearchContentPage === false">
     <div>
-      <div>
-        <div ref='deip-texture-container' class="deip-texture" 
-          :class="[{ 'read-only-texture': isReadOnly }]"
-          :style="{ height: contentHeight + 'px' }">
+        <div>
+            <div ref='deip-texture-container' class="deip-texture" 
+                :class="[{ 'read-only-texture': isReadOnly }]"
+                :style="{ height: contentHeight + 'px' }">
+            </div>
         </div>
-      </div>
-      <div v-if="isContentExpansionAvailable" class="c-m-5 right">
-        <a @click="expandContent()">{{ isContentExpanded ? 'Collapse chapter' : 'Expand chapter'}}</a>
-      </div>
+        
+        <div v-if="isContentExpansionAvailable" class="c-m-5 right">
+            <a @click="expandContent()">{{ isContentExpanded ? 'Collapse chapter' : 'Expand chapter'}}</a>
+        </div>
     </div>
-  </div>
-</div>
-
 </template>
 
 <script>
@@ -45,8 +40,7 @@
                 user: 'auth/user',
                 userGroups: 'auth/userGroups',
                 content: 'rcd/content',
-                research: 'rcd/research',
-                isLoadingResearchContentPage: 'rcd/isLoadingResearchContentPage'
+                research: 'rcd/research'
             }),
             isResearchGroupMember() {
                 return this.research != null 

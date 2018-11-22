@@ -19,8 +19,6 @@ const state = {
     groupInvitesList: [],
     contentRefsList: [],
 
-    isLoadingResearchPage: undefined,
-
     isLoadingResearchDetails: undefined,
     isLoadingResearchContent: undefined,
     isLoadingResearchMembers: undefined,
@@ -81,8 +79,6 @@ const getters = {
     groupInvitesList: (state, getters) => {
         return state.groupInvitesList;
     },
-
-    isLoadingResearchPage: state => state.isLoadingResearchPage,
 
     isLoadingResearchContent: (state, getters) => {
         return state.isLoadingResearchContent;
@@ -197,10 +193,9 @@ const getters = {
 const actions = {
 
     loadResearchDetails({ state, commit, dispatch }, { group_permlink, research_permlink }) {
-        commit('SET_RESEARCH_PAGE_LOADING_STATE', true)
+        commit('SET_RESEARCH_DETAILS_LOADING_STATE', true);
 
-        commit('SET_RESEARCH_DETAILS_LOADING_STATE', true)
-        deipRpc.api.getResearchByAbsolutePermlinkAsync(group_permlink, research_permlink)
+        return deipRpc.api.getResearchByAbsolutePermlinkAsync(group_permlink, research_permlink)
             .then((research) => {
                 research.group_permlink = group_permlink;
                 commit('SET_RESEARCH_DETAILS', research)
@@ -239,7 +234,6 @@ const actions = {
             }, (err => {console.log(err)}))
             .finally(() => {
                 commit('SET_RESEARCH_DETAILS_LOADING_STATE', false)
-                commit('SET_RESEARCH_PAGE_LOADING_STATE', false)
             })
     },
 
@@ -508,10 +502,6 @@ const mutations = {
 
     ['SET_RESEARCH_CONTENT_REFS_LOADING_STATE'](state, value) {
         state.isLoadingResearchContentRefs = value
-    },
-
-    ['SET_RESEARCH_PAGE_LOADING_STATE'](state, value) {
-        state.isLoadingResearchPage = value
     },
 
     ['SET_RESEARCH_GROUP_DETAILS_LOADING_STATE'](state, value) {

@@ -201,6 +201,7 @@
 
     export default {
         name: "UserWallet",
+
         data() { 
             return {
                 username: undefined,
@@ -215,6 +216,7 @@
                 }
             }
         },
+
         computed: {
             ...mapGetters({
                 account: 'userWallet/account',
@@ -231,6 +233,7 @@
                 return _.find(this.researches, { id: this.selectedResearchId })
             }
         },
+
         methods: {
             loadUserAccount() {
                 this.$store.dispatch('userWallet/loadUser', this.username);
@@ -246,9 +249,8 @@
                 this.selectedResearchId = id;
             }
         },
+        
         created() {
-            this.username = this.user.username;
-            this.$store.dispatch('userWallet/loadWallet', this.username);
         }
     };
 </script>
@@ -267,7 +269,6 @@
         height: 70px;
     }
 
-    // experimental :)
     .v-enter-active, .v-leave-active {
         transition: opacity .1s;
     }

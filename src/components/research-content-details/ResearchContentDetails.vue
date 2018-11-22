@@ -1,141 +1,157 @@
 <template>
-  <page-container>
-    <sidebar v-if="isLoadingResearchContentPage === false && isInProgress" small>
-      <div>
-        <div>
-          <v-tooltip right>
-            <v-btn v-if="isSavingDraftAvailable" slot="activator" flat icon color="primary" 
-              @click="saveDraft()" :loading="isSavingDraft" :disabled="isSavingDraft">
-              <v-icon>save</v-icon>
-            </v-btn>
-            <span>Save Draft</span>
-          </v-tooltip>
-        </div>
-        <div>
-          <v-tooltip right>
-            <v-btn v-if="isInProgress" slot="activator" flat icon color="primary" 
-              @click="openContentProposalDialog()">
-              <v-icon>send</v-icon>
-            </v-btn>
-            <span>{{!isPersonalGroup ? 'Create Proposal' : 'Create Content'}}</span>
-          </v-tooltip>
-        </div>
-      </div>
-    </sidebar>
-
-    <div class="col-grow full-height">
-      <div v-if="isLoadingResearchContentPage === false">
-        <research-content-details-file v-if="isFileContent"></research-content-details-file>
-        <research-content-details-dar v-if="isDarContent" :contentRef="contentRef"></research-content-details-dar>
-
-        <!-- START Research Content Reviews section -->
-        <div v-if="isPublished && contentReviewsList.length">
-          <div class="sidebar-fullwidth"><v-divider></v-divider></div>
-          <div id="reviews" class="reviews-container">
-            <div class="c-pt-2 title">Reviews: {{ contentReviewsList.length }}</div>
-            <div class="c-pt-6">
-              <review-list-item v-for="(review, i) in contentReviewsList" :review="review" :key="i"></review-list-item>
-            </div>
-          </div>
-        </div>
-        <div v-else-if="isPublished && !contentReviewsList.length">
-            <div class="sidebar-fullwidth"><v-divider></v-divider></div>
-            <div id="reviews" class="subheading text-align-center no-reviews-container">
-                <span>There are no reviews for this {{ getContentType(content.content_type).text }} yet.</span>
+    <page-container>
+        <sidebar v-if="isInProgress" small>
+            <div>
                 <div>
-                    <span v-if="isCreatingReviewAvailable">
-                        <a class="a" @click="goAddReview()">Add your review</a> to make a contribution to the research.
-                    </span>
+                    <v-tooltip right>
+                        <v-btn v-if="isSavingDraftAvailable" slot="activator" flat icon color="primary" 
+                            @click="saveDraft()" :loading="isSavingDraft" :disabled="isSavingDraft">
+                            <v-icon>save</v-icon>
+                        </v-btn>
+
+                        <span>Save Draft</span>
+                    </v-tooltip>
+                </div>
+
+                <div>
+                    <v-tooltip right>
+                        <v-btn v-if="isInProgress" slot="activator" flat icon color="primary" 
+                            @click="openContentProposalDialog()">
+                            <v-icon>send</v-icon>
+                        </v-btn>
+
+                        <span>{{!isPersonalGroup ? 'Create Proposal' : 'Create Content'}}</span>
+                    </v-tooltip>
                 </div>
             </div>
-        </div>
-        <!-- END Research Content Reviews section -->
+        </sidebar>
 
-        <!-- START Research Content References section -->
-        <div v-if="isInProgress && isDarContent">
-            <internal-references-picker 
-                :currentResearchId="research.id"
-                :preselected="contentRef.references.slice()" 
-                @referenceAdded="addReference" 
-                @referenceRemoved="removeReference">
-            </internal-references-picker>
-        </div>
-        <!-- END Research Content References section -->
+        <div class="col-grow full-height">
+            <div>
+                <research-content-details-file v-if="isFileContent"></research-content-details-file>
+                <research-content-details-dar v-if="isDarContent" :contentRef="contentRef"></research-content-details-dar>
 
-        <!-- START Proposal dialog section -->
-        <v-dialog v-if="research" v-model="proposeContent.isOpen" persistent transition="scale-transition" max-width="500px">
-          <v-card class="">
-            <v-toolbar dark color="primary">
-              <v-btn icon dark @click="closeContentProposalDialog()">
-                <v-icon>close</v-icon>
-              </v-btn>
-              <v-toolbar-title>Propose content for the research project</v-toolbar-title>
-              <v-spacer></v-spacer>
-            </v-toolbar>
-            <page-container>
-              <contentbar>
-                <div>
-                  <v-text-field
-                    label="Title"
-                    v-model="proposeContent.title"
-                    hide-details>
-                  </v-text-field>
-                  <v-select v-model="proposeContent.type" 
-                    :items="proposeContent.contentTypesList" 
-                    label="Content Type" 
-                    class="c-mt-6"
-                    item-value="id">
-                  </v-select>
-                  <v-select
-                    :items="membersList"
-                    v-model="proposeContent.authors"
-                    placeholder="Authors"
-                    v-on:change="setDraftAuthors"
-                    autocomplete
-                    multiple>
-                    <template slot="selection" slot-scope="data">
-                      <div class="row-nowrap align-center c-pl-4">
-                        <v-avatar size="30px">
-                          <img v-if="data.item.profile" v-bind:src="data.item.profile.avatar | avatarSrc(30, 30, false)" />
-                          <v-gravatar v-else :email="data.item.account.name + '@deip.world'" />
-                        </v-avatar>
-                        <span class="deip-blue-color c-pl-3">{{ data.item | fullname }}</span>
-                      </div>
-                    </template>
-                    <template slot="item" slot-scope="data">
-                      <template>
-                        <div class="row-nowrap align-center author-item" 
-                          :class="{ 'selected-author-item': isAuthorSelected(data.item) }">
-                          <v-avatar size="30px">
-                            <img v-if="data.item.profile" v-bind:src="data.item.profile.avatar | avatarSrc(30, 30, false)" />
-                            <v-gravatar v-else :email="data.item.account.name + '@deip.world'" />
-                          </v-avatar>
-                          <span class="deip-blue-color c-pl-3">{{ data.item | fullname  }}</span>
+                <!-- START Research Content Reviews section -->
+                <div v-if="isPublished && contentReviewsList.length">
+                    <div class="sidebar-fullwidth"><v-divider></v-divider></div>
+
+                    <div id="reviews" class="reviews-container">
+                        <div class="c-pt-2 title">Reviews: {{ contentReviewsList.length }}</div>
+
+                        <div class="c-pt-6">
+                            <review-list-item v-for="(review, i) in contentReviewsList" :review="review" :key="i"></review-list-item>
                         </div>
-                      </template>
-                    </template>
-                  </v-select>
-                  <div class="display-flex c-pt-8">
-                    <v-btn color="primary" 
-                      class="c-m-auto"
-                      :disabled="proposeContent.isLoading || !isCreatingProposalAvailable"
-                      :loading="proposeContent.isLoading"
-                      @click="sendContentProposal()"
-                      >{{!isPersonalGroup ? 'Create Proposal' : 'Create Content'}}</v-btn>
-                  </div>
+                    </div>
                 </div>
-              </contentbar>
-            </page-container>
-          </v-card>
-        </v-dialog>
-        <!-- END Proposal dialog section -->
 
-      </div>
-    </div>
-    <sidebar>
-      <research-content-details-sidebar @setDraftAuthors="setDraftAuthors"></research-content-details-sidebar>
-    </sidebar>
-  </page-container>
+                <div v-else-if="isPublished && !contentReviewsList.length">
+                    <div class="sidebar-fullwidth"><v-divider></v-divider></div>
+
+                    <div id="reviews" class="subheading text-align-center no-reviews-container">
+                        <span>There are no reviews for this {{ getContentType(content.content_type).text }} yet.</span>
+                        
+                        <div>
+                            <span v-if="isCreatingReviewAvailable">
+                                <a class="a" @click="goAddReview()">Add your review</a> to make a contribution to the research.
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                <!-- END Research Content Reviews section -->
+
+                <!-- START Research Content References section -->
+                <div v-if="isInProgress && isDarContent">
+                    <internal-references-picker 
+                        :currentResearchId="research.id"
+                        :preselected="contentRef.references.slice()" 
+                        @referenceAdded="addReference" 
+                        @referenceRemoved="removeReference">
+                    </internal-references-picker>
+                </div>
+                <!-- END Research Content References section -->
+
+                <!-- START Proposal dialog section -->
+                <v-dialog v-if="research" v-model="proposeContent.isOpen" persistent transition="scale-transition" max-width="500px">
+                    <v-card class="">
+                        <v-toolbar dark color="primary">
+                            <v-btn icon dark @click="closeContentProposalDialog()">
+                                <v-icon>close</v-icon>
+                            </v-btn>
+
+                            <v-toolbar-title>Propose content for the research project</v-toolbar-title>
+                            <v-spacer></v-spacer>
+                        </v-toolbar>
+
+                        <page-container>
+                            <contentbar>
+                                <div>
+                                    <v-text-field
+                                        label="Title"
+                                        v-model="proposeContent.title"
+                                        hide-details>
+                                    </v-text-field>
+
+                                    <v-select v-model="proposeContent.type" 
+                                        :items="proposeContent.contentTypesList" 
+                                        label="Content Type" 
+                                        class="c-mt-6"
+                                        item-value="id">
+                                    </v-select>
+
+                                    <v-select
+                                        :items="membersList"
+                                        v-model="proposeContent.authors"
+                                        placeholder="Authors"
+                                        v-on:change="setDraftAuthors"
+                                        autocomplete
+                                        multiple>
+                                        <template slot="selection" slot-scope="data">
+                                            <div class="row-nowrap align-center c-pl-4">
+                                                <v-avatar size="30px">
+                                                    <img v-if="data.item.profile" v-bind:src="data.item.profile.avatar | avatarSrc(30, 30, false)" />
+                                                    <v-gravatar v-else :email="data.item.account.name + '@deip.world'" />
+                                                </v-avatar>
+
+                                                <span class="deip-blue-color c-pl-3">{{ data.item | fullname }}</span>
+                                            </div>
+                                        </template>
+
+                                        <template slot="item" slot-scope="data">
+                                            <template>
+                                                <div class="row-nowrap align-center author-item" 
+                                                    :class="{ 'selected-author-item': isAuthorSelected(data.item) }">
+                                                    <v-avatar size="30px">
+                                                        <img v-if="data.item.profile" v-bind:src="data.item.profile.avatar | avatarSrc(30, 30, false)" />
+                                                        <v-gravatar v-else :email="data.item.account.name + '@deip.world'" />
+                                                    </v-avatar>
+
+                                                    <span class="deip-blue-color c-pl-3">{{ data.item | fullname  }}</span>
+                                                </div>
+                                            </template>
+                                        </template>
+                                    </v-select>
+
+                                    <div class="display-flex c-pt-8">
+                                        <v-btn color="primary" 
+                                            class="c-m-auto"
+                                            :disabled="proposeContent.isLoading || !isCreatingProposalAvailable"
+                                            :loading="proposeContent.isLoading"
+                                            @click="sendContentProposal()"
+                                        >{{!isPersonalGroup ? 'Create Proposal' : 'Create Content'}}</v-btn>
+                                    </div>
+                                </div>
+                            </contentbar>
+                        </page-container>
+                    </v-card>
+                </v-dialog>
+                <!-- END Proposal dialog section -->
+            </div>
+        </div>
+
+        <sidebar>
+            <research-content-details-sidebar @setDraftAuthors="setDraftAuthors"></research-content-details-sidebar>
+        </sidebar>
+    </page-container>
 </template>
 
 <script>
@@ -148,9 +164,11 @@
 
     export default {
         name: "ResearchContentDetails",
+
         data() {
             return {
                 isSavingDraft: false,
+                
                 proposeContent: {
                     title: "",
                     type: null,
@@ -161,6 +179,7 @@
                 }
             }
         },
+
         computed:{
             ...mapGetters({
                 user: 'auth/user',
@@ -169,7 +188,6 @@
                 research: 'rcd/research',
                 membersList: 'rcd/membersList',
                 contentReviewsList: 'rcd/contentReviewsList',
-                isLoadingResearchContentPage: 'rcd/isLoadingResearchContentPage',
                 contentRef: 'rcd/contentRef',
                 userPersonalGroup: 'auth/userPersonalGroup'
             }),
@@ -348,15 +366,8 @@
             },
             getContentType
         },
-        created() {
-            const permlinks = {
-                group_permlink: decodeURIComponent(this.$route.params.research_group_permlink),
-                research_permlink: decodeURIComponent(this.$route.params.research_permlink),
-                content_permlink: decodeURIComponent(this.$route.params.content_permlink),
-                ref: this.$route.query.ref
-            };
 
-            this.$store.dispatch('rcd/loadResearchContentDetails', permlinks);
+        created() {
         }
     };
 </script>

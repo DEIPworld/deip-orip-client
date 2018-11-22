@@ -1,7 +1,6 @@
 <template>
-    <div class="research-details-sidebar-container">
-      <sidebar-loader v-if="isLoadingResearchPage"></sidebar-loader>
-      <div v-if="isLoadingResearchPage === false">
+    <div>
+      <div>
 
         <router-link :to="`/${encodeURIComponent(groupLink)}/group-details`" style="text-decoration: none; color: black">
             <div class="sm-title bold">Research group <span class="a caption">(view)</span></div>
@@ -294,7 +293,6 @@
                 tokenHoldersList: 'rd/tokenHoldersList',
                 contributionsList: 'rd/contributionsList',
                 groupInvitesList: 'rd/groupInvitesList',
-                isLoadingResearchPage: 'rd/isLoadingResearchPage',
                 isLoadingResearchMembers: 'rd/isLoadingResearchMembers',
                 isLoadingResearchDisciplines: 'rd/isLoadingResearchDisciplines',
                 isLoadingResearchTokenHolders: 'rd/isLoadingResearchTokenHolders',

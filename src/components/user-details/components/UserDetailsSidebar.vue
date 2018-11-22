@@ -1,8 +1,6 @@
 <template>
-    <div class="user-profile-sidebar-container">
-      <sidebar-loader v-if="isLoadingUserProfilePage"></sidebar-loader>
-      <div v-if="isLoadingUserProfilePage === false">
-
+    <div class="">
+      <div>
         <!-- ### START User Profile Expertise Section ### -->
         <div>
             <div class="sm-title bold">Expertise Tokens</div>
@@ -236,8 +234,7 @@
                 currentUser: 'auth/user',
                 userInfo: 'userDetails/userInfo',
                 expertise: 'userDetails/expertise',
-                invites: 'userDetails/invites',
-                isLoadingUserProfilePage:'userDetails/isLoadingUserProfilePage'
+                invites: 'userDetails/invites'
             }),
             isOwner() {
                 return this.currentUser && this.currentUser.username === this.$route.params.account_name
