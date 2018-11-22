@@ -6,7 +6,7 @@
 
             <!-- ### START Research Group Details Section ### -->
             <div>
-                <div class="sm-title bold">Group info</div>
+                <div class="sm-title bold">Group expertise tokens</div>
                 <div class="c-pt-4 c-pb-2">
                     <div v-for="(item, i) in groupExpertise" :key="i">
                         <span class="half-bold">{{ item.disciplineName }}</span>
@@ -25,7 +25,7 @@
 
             <div v-if="!group.is_personal" class="c-mt-6">
                 <div class="sidebar-fullwidth"><v-divider></v-divider></div>
-                <div class="sm-title bold c-mt-4">Quorum setup</div>
+                <div class="subheading bold c-mt-4">Quorum setup</div>
 
                 <div class="c-pt-4 c-pb-4">
                     <!-- no v-for bc order and padding are important -->

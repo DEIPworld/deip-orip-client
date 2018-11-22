@@ -23,9 +23,11 @@
                     </td>
 
                     <td>
-                        <div :class="[ isAbleToVote(props.item) ? 'bold green--text text--darken-3' : 'half-bold' ]">
-                            {{ props.item.discipline.label }}
+                        <div>
+                            <span :class="[ isAbleToVote(props.item) ? 'bold green--text text--darken-3' : 'half-bold' ]">{{ props.item.discipline.label }}</span>
+                            <span class="caption grey--text" v-if="props.item.status == 'approved'">(approved)</span>
                         </div>
+                        
                     </td>
                     
                     <td class="text-xs-center">{{ props.item.created_at | dateFormat('HH:mm D MMM YYYY', true) }}</td> 

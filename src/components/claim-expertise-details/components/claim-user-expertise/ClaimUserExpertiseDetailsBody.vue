@@ -51,7 +51,7 @@
 
                 <div class="grey--text c-pl-6">
                     voted 
-                    {{ (proposal.total_voted_expertise / proposal.discipline.total_expertise_amount * 100).toFixed(2) }}
+                    {{ (proposal.total_voted_expertise / (proposal.discipline.total_expertise_amount || 1) * 100).toFixed(2) }}
                     %
                 </div>
             </div>
@@ -75,6 +75,7 @@
 <script>
     import { mapGetters } from 'vuex';
     import deipRpc from '@deip/deip-rpc-client';
+    import { voteForExpertiseClaim } from './../../../../services/ExpertiseClaimsService';
 
     export default {
         name: 'ClaimUserExpertiseDetailsBody',
@@ -132,28 +133,23 @@
         methods: {
             approveProposal(proposal) {
                 this.isApproveBtnLoading = true;
+                voteForExpertiseClaim(proposal.id, this.user.username, this.DEIP_100_PERCENT)
+                    .then(() => {
+                        this.$store.dispatch('layout/setSuccess', {
+                            message: "You have voted for the claim successfully"
+                        });
 
-                deipRpc.broadcast.voteForExpertiseAllocationProposalAsync(
-                    this.user.privKey,
-                    proposal.id,
-                    this.user.username,
-                    this.DEIP_100_PERCENT
-                ).then(() => {
-                    this.$store.dispatch('layout/setSuccess', {
-                        message: "Proposal was successfully created"
+                        this.wasApproved = true;
+                        this.reloadProposal();
+                    }).catch(e => {
+                        this.$store.dispatch('layout/setError', {
+                            message: "Error occured"
+                        });
+
+                        console.log(e);
+                    }).finally(() => {
+                        this.isApproveBtnLoading = false;
                     });
-
-                    this.wasApproved = true;
-                    this.reloadProposal();
-                }).catch(e => {
-                    this.$store.dispatch('layout/setError', {
-                        message: "Error occured"
-                    });
-
-                    console.log(e);
-                }).finally(() => {
-                    this.isApproveBtnLoading = false;
-                });
             },
             
             reloadProposal() {
