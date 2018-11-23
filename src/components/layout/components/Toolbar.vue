@@ -1,11 +1,8 @@
 <template>
-    <div>
-        <!-- move progress bar to separate component, which should control length of filling -->
-        <v-progress-linear class="ma-0 global-loader"
-            :active="globalLoader.isLoading"
-            :indeterminate="true"
-            :height="3"
-        ></v-progress-linear>
+    <div class="pos-relative">
+        <div class="global-loader-container">
+            <global-loader></global-loader>
+        </div>
 
         <v-toolbar app fixed clipped-left dark color="black" class="deip-toolbar">
             <v-toolbar-title>
@@ -77,8 +74,7 @@
 
         computed: {
             ...mapGetters({
-                user: 'auth/user',
-                globalLoader: 'layout/globalLoader'
+                user: 'auth/user'
             })
         },
 
@@ -105,7 +101,11 @@
         z-index: 200;
     }
 
-    .global-loader {
+    .global-loader-container {
+        position: fixed;
+        top: 0px;
+        right: 0px;
+        left: 0px;
         z-index: 201;
     }
 </style>
