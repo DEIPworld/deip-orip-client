@@ -37,7 +37,9 @@ const router = new Router({
                 }
             }, 1000);
         } else {
-            return { x: 0, y: 0 }
+            setTimeout(() => {
+                window.scrollTo(0, 0);
+            }, 150);
         }
     }
 })
