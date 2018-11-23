@@ -2,7 +2,7 @@ import Vue from 'vue';
 import Router from 'vue-router';
 
 import authRoutes from './authRoutes';
-import grandRoutes from './grantRoutes';
+import grantRoutes from './grantRoutes';
 import researchRoutes from './researchRoutes';
 import researchGroupRoutes from './researchGroupRoutes';
 import userRoutes from './userRoutes';
@@ -15,7 +15,7 @@ Vue.use(Router);
 const router = new Router({
     routes: [
         ...authRoutes,
-        ...grandRoutes,
+        ...grantRoutes,
         ...researchRoutes,
         ...researchGroupRoutes,
         ...userRoutes,

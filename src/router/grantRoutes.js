@@ -1,8 +1,8 @@
 import store from './../store/index';
 
-import GrantStartCreating from '@/components/grand-create/GrantStartCreating';
-import CreateDisciplineGrant from '@/components/grand-create/CreateDisciplineGrant';
-import CreateDirectGrant from '@/components/grand-create/CreateDirectGrant';
+import GrantStartCreating from '@/components/grant-create/GrantStartCreating';
+import CreateDisciplineGrant from '@/components/grant-create/CreateDisciplineGrant';
+import CreateDirectGrant from '@/components/grant-create/CreateDirectGrant';
 
 const grantRoutes =[{
         path: '/create-grant',
