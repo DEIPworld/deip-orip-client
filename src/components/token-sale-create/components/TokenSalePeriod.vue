@@ -9,6 +9,7 @@
                     <v-form class="row" ref="form" v-model="isFormValid">
                         <div class="col-12">
                             <datetime-picker
+                                ref="startDatePicker"
                                 label="Start date"
                                 :datetime="startDate"
                                 :available-from-now="true"
@@ -106,7 +107,7 @@
             },
         },
 
-        created() {
+        mounted() {
             const startDate = moment().add(10, 'minutes').format('YYYY-MM-DD HH:mm');
             this.setStartDate(startDate);
         }
