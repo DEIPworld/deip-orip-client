@@ -39,7 +39,7 @@ const router = new Router({
         } else {
             setTimeout(() => {
                 window.scrollTo(0, 0);
-            }, 150);
+            }, 100);
         }
     }
 })
