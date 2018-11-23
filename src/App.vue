@@ -1,8 +1,8 @@
 <template>
     <div id="deip-app">
-        <div v-if="$route.meta.withoutHeader">
+        <v-app v-if="$route.meta.withoutHeader">
             <router-view :key="$route.fullPath"/>
-        </div>
+        </v-app>
 
         <v-app v-else>
             <toolbar></toolbar>
