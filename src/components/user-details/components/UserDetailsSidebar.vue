@@ -4,7 +4,7 @@
         <!-- ### START User Profile Expertise Section ### -->
         <div>
             <div class="sm-title bold">Expertise Tokens</div>
-            <div class="c-pt-4 c-pb-6">
+            <div class="c-pt-4 c-pb-2">
                 <div class="row justify-between" v-for="(item, i) in expertise" :key="i">
                     <div class="half-bold">{{ item.discipline_name }}</div>
                     <div>{{ item.amount }}</div>
@@ -12,6 +12,9 @@
                 <div v-if="!expertise.length" class="body-1"> 
                     <div v-if="isOwner">You have no expertise tokens yet. Use <span class="a" @click="openClaimExpertiseDialog()">Claim</span> process to apply for Expertise Tokens</div>
                     <div v-if="!isOwner"><span class="body-2">{{userInfo | fullname}}</span> has no expertise tokens yet</div>
+                </div>
+                <div v-if="expertise.length && isOwner" class="body-1 text-align-center c-mt-4">
+                    <span class="a" @click="openClaimExpertiseDialog()">Claim new Discipline</span>
                 </div>
             </div>
         </div>
@@ -199,6 +202,11 @@
             </div>
         </div>
         <!-- ### END User Profile Invites Section ### -->
+
+        <user-claim-expertise-dialog
+            :is-shown="isClaimExpertiseDialogShown"
+            @close="closeClaimExpertiseDialog"
+        ></user-claim-expertise-dialog>
       </div>
     </div>
 </template>
@@ -234,7 +242,8 @@
                 currentUser: 'auth/user',
                 userInfo: 'userDetails/userInfo',
                 expertise: 'userDetails/expertise',
-                invites: 'userDetails/invites'
+                invites: 'userDetails/invites',
+                isClaimExpertiseDialogShown: 'userDetails/isClaimExpertiseDialogShown'
             }),
             isOwner() {
                 return this.currentUser && this.currentUser.username === this.$route.params.account_name
@@ -358,7 +367,11 @@
 
             openClaimExpertiseDialog() {
                 this.$store.dispatch('userDetails/openExpertiseTokensClaimDialog')
-            }
+            },
+
+            closeClaimExpertiseDialog() {
+                this.$store.dispatch('userDetails/closeExpertiseTokensClaimDialog')
+            },
         }
     };
 </script>

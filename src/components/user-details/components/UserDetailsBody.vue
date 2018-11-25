@@ -257,27 +257,6 @@
             </div>
         </div>
         <!-- ### END User Profile Education\Employment Section ### -->
-
-        <div>
-            <div class="c-pt-12 c-pb-2"></div>
-            <v-btn v-if="isOwner" class="ma-0" @click="openClaimExpertiseDialog()">Claim Expertise Tokens</v-btn>
-
-            <div class="c-mt-6 c-mb-2 body-2" v-if="tmpClaimObjects.length">Active claims:</div>
-            <div v-for="(item, i) in tmpClaimObjects" :key="i">
-                <router-link :to="{
-                        name: 'claim-user-expertise-details', 
-                        params: { account_name: item.username, claim_id: item._id }
-                    }"
-                    class="a subheading"
-                >{{ item.discipline.name }}</router-link>
-                <span class="caption">({{ item._id }})</span>
-            </div>
-        </div>
-            
-        <user-claim-expertise-dialog
-            :is-shown="isClaimExpertiseDialogShown"
-            @close="closeClaimExpertiseDialog"
-        ></user-claim-expertise-dialog>
     </div>
 </template>
 
@@ -327,8 +306,7 @@
                 isLoadingUserAccount: 'userDetails/isLoadingUserAccount',
                 isLoadingUserProfile: 'userDetails/isLoadingUserProfile',
                 isLoadingUserGroups: 'userDetails/isLoadingUserGroups',
-                isLoadingUserResearch: 'userDetails/isLoadingUserResearch',
-                isClaimExpertiseDialogShown: 'userDetails/isClaimExpertiseDialogShown'
+                isLoadingUserResearch: 'userDetails/isLoadingUserResearch'
             }),
 
             isOwner() {

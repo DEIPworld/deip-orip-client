@@ -5,7 +5,7 @@
                 <v-btn icon dark @click="$emit('close')">
                     <v-icon>close</v-icon>
                 </v-btn>
-                <v-toolbar-title>Claim for expertise tokens</v-toolbar-title>
+                <v-toolbar-title>Claim for Expertise Tokens</v-toolbar-title>
                 <v-spacer></v-spacer>
             </v-toolbar>
 
