@@ -59,7 +59,7 @@
                 @click.native="finish()" 
                 :disabled="!isFormValid || isLoading"
                 :loading="isLoading"
-            >Give grant</v-btn>
+            >Create grant</v-btn>
         </div>
     </div>
 </template>

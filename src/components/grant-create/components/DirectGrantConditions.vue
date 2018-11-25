@@ -58,7 +58,7 @@
                 @click.native="finish()" 
                 :disabled="!grantInfo.startDate || !grantInfo.endDate || isLoading"
                 :loading="isLoading"
-            >Give grant</v-btn>
+            >Create grant</v-btn>
         </div>
     </div>
 </template>

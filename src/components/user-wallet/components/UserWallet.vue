@@ -135,10 +135,6 @@
                                     >
                                         <div class="col-grow list-body-cell">
                                             <div class="deip-blue-color subheading">{{ research.title }}</div>
-
-                                            <div class="caption grey--text c-pt-2">
-                                                {{ research.groupTokens.map(item => item.owner).join(' · ') }}
-                                            </div>
                                         </div>
 
                                         <!-- <div class="width-7 list-body-cell text-align-center half-bold">10</div> -->
