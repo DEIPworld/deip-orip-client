@@ -14,7 +14,9 @@
                     <div v-if="!isOwner"><span class="body-2">{{userInfo | fullname}}</span> has no expertise tokens yet</div>
                 </div>
                 <div v-if="expertise.length && isOwner" class="body-1 text-align-center c-mt-4">
-                    <span class="a" @click="openClaimExpertiseDialog()">Claim new Discipline</span>
+                    <v-btn @click="openClaimExpertiseDialog()" flat small color="primary" class="ma-0">
+                        <span>Claim new Discipline</span>
+                    </v-btn>
                 </div>
             </div>
         </div>
@@ -174,29 +176,29 @@
         <!-- ### START User Profile Invites Section ### -->
         <div v-if="isOwner && hasInvites" id="invites" class="c-mt-4">
             <div class="sidebar-fullwidth"><v-divider></v-divider></div>
-            <div class="subheading bold c-pt-4">Invites: {{invites.length}}</div>
-            <div class="c-pb-6">
-                <div v-for="(invite, index) in invites" class="row-nowrap justify-between align-center c-pt-4">
-                    <div class="left">
+            <div class="sm-title bold c-pt-4">Invites: {{invites.length}}</div>
+            <div class="c-pb-4">
+                <div v-for="(invite, index) in invites" class="c-pt-2 c-pb-4 invite-item">
+                    <div class="row text-align-center c-pt-4 c-pb-2">
                         <router-link :to="`/${invite.group.permlink}/group-details`" style="text-decoration: none">
                             <span class="a">{{invite.group.name}}</span>
+                            <span class="grey--text c-pl-1">({{convertToPercent(invite.research_group_token_amount)}}%)</span>
                         </router-link>
-                        <span class="c-pl-1">({{convertToPercent(invite.research_group_token_amount)}}%)</span>
                     </div>
-                    <div class="right">
-                        <v-tooltip bottom>
-                            <v-btn slot="activator" @click="approveInvite(invite)"  
-                                :disabled="isApprovingInvite" :loading="isApprovingInvite" small flat icon color="grey" class="ma-0">
-                                <v-icon>done</v-icon>
+                    <div class="text-align-center c-pt-2">
+                        <v-tooltip class="c-pr-2" bottom>
+                            <v-btn slot="activator" @click="approveInvite(invite)" 
+                                :disabled="isApprovingInvite || isRejectingInvite" small flat color="green" class="ma-0">
+                                <span>Accept</span>
                             </v-btn>
-                            <span>Accept</span>
+                            <span>Accept invite</span>
                         </v-tooltip>
-                        <v-tooltip bottom>
+                        <v-tooltip class="c-pl-2" bottom>
                             <v-btn slot="activator" @click="showRejectInviteDialog(invite)" 
-                                :disabled="isRejectingInvite" :loading="isRejectingInvite" small flat icon color="grey" class="ma-0">
-                                <v-icon>close</v-icon>
+                                :disabled="isApprovingInvite || isRejectingInvite" small flat color="red" class="ma-0">
+                                <span>Reject</span>
                             </v-btn>
-                            <span>Reject</span>
+                            <span>Reject invite</span>
                         </v-tooltip>
                     </div>
                 </div>
@@ -328,12 +330,13 @@
                     invite.id,
                     this.currentUser.username
                 ).then(() => {
-                    this.$store.dispatch('userDetails/loadUserInvites', {username: this.currentUser.username});
+                    this.$store.dispatch('userDetails/loadUserInvites', { username: this.currentUser.username });
+                    this.$store.dispatch('auth/loadGroups');
+                    this.$store.dispatch('userDetails/loadGroups', { username: this.currentUser.username })
                     this.$store.dispatch('layout/setSuccess', {
                         message: `"Invite has been approved successfully !"`
                     });
-                    this.$store.dispatch('auth/loadGroups');
-                    
+
                 }, (err) => {
                     this.$store.dispatch('layout/setError', {
                         message: `An error occurred while accepting invite, please try again later`
@@ -361,6 +364,7 @@
                     this.$store.dispatch('layout/setSuccess', {
                         message: `"Invite has been rejected successfully !"`
                     });
+
                 }, (err) => {
                     this.$store.dispatch('layout/setError', {
                         message: `An error occurred while rejecting invite, please try again later`
@@ -391,5 +395,8 @@
     }
     .owner-hint {
         font-style: italic;
+    }
+    .invite-item {
+        border-bottom: 1px solid rgb(224, 224, 224)
     }
 </style>
