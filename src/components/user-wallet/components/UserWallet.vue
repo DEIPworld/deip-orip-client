@@ -200,7 +200,6 @@
 
         data() { 
             return {
-                username: undefined,
                 sendingType: undefined,
 
                 selectedResearchId: undefined,
@@ -232,14 +231,14 @@
 
         methods: {
             loadUserAccount() {
-                this.$store.dispatch('userWallet/loadUser', this.username);
+                this.$store.dispatch('userWallet/loadUser', this.user.username);
             },
             selectResearch(research) {
                 this.selectedResearchId = research.id;
                 this.sendingType = this.sendingTypes.researchToken;
             },
             loadResearches() {
-                this.$store.dispatch('userWallet/loadResearchTokens', this.username);
+                this.$store.dispatch('userWallet/loadResearchTokens', this.user.username);
             },
             researchChanged(id) {
                 this.selectedResearchId = id;
