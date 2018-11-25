@@ -105,34 +105,41 @@
                     <div v-if="!isEditingPersonalInfo">
                         <div v-if="isOwner && !userInfo.profile.firstName" class="row">
                             <span class="col-4 half-bold">First Name</span>
-                            <span class="col-8 text-align-right owner-hint">add first name</span>
+                            <span class="col-1"></span>
+                            <span class="col-7 text-align-left owner-hint">add first name</span>
                         </div>
                         <div v-else class="row">
-                            <span class="col-7 half-bold">First Name</span>
-                            <span class="col-5 text-align-left">{{userInfo.profile.firstName || '-'}}</span>
+                            <span class="col-4 half-bold">First Name</span>
+                            <span class="col-1"></span>
+                            <span class="col-7 text-align-left">{{userInfo.profile.firstName || '-'}}</span>
                         </div>
 
                         <div v-if="isOwner && !userInfo.profile.lastName" class="row">
                             <span class="col-4 half-bold">Last Name</span>
-                            <span class="col-8 text-align-right owner-hint">add last name</span>
+                            <span class="col-1"></span>
+                            <span class="col-7 text-align-left owner-hint">add last name</span>
                         </div>
                         <div v-else class="row">
-                            <span class="col-7 half-bold">Last Name</span>
-                            <span class="col-5 text-align-left">{{userInfo.profile.lastName || '-'}}</span>
+                            <span class="col-4 half-bold">Last Name</span>
+                            <span class="col-1"></span>
+                            <span class="col-7 text-align-left">{{userInfo.profile.lastName || '-'}}</span>
                         </div>
 
                         <div v-if="isOwner && !userInfo.profile.birthday" class="row">
                             <span class="col-4 half-bold">Birthday</span>
-                            <span class="col-8 text-align-right owner-hint">add birthday</span>
+                            <span class="col-1"></span>
+                            <span class="col-7 text-align-left owner-hint">add birthday</span>
                         </div>
                         <div v-else class="row">
                             <span class="col-4 half-bold">Birthday</span>
-                            <span class="col-8 text-align-right">{{ userInfo.profile.birthday ? new Date(userInfo.profile.birthday).toDateString() : '-'}}</span>
+                            <span class="col-1"></span>
+                            <span class="col-7 text-align-left">{{ userInfo.profile.birthday ? new Date(userInfo.profile.birthday).toDateString() : '-'}}</span>
                         </div>
 
                         <div v-if="userInfo.profile.created" class="row mt-3">
                             <span class="col-4 half-bold">Registered</span>
-                            <span class="col-8 text-align-right">{{new Date(userInfo.profile.created).toDateString()}}</span>
+                            <span class="col-1"></span>
+                            <span class="col-7 text-align-left">{{new Date(userInfo.profile.created).toDateString()}}</span>
                         </div>
                     </div>
                 </div>

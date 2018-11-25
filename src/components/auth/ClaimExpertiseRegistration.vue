@@ -2,7 +2,7 @@
     <v-container fluid fill-height class="pa-0 justify-center">
 
         <div class="page-container c-pv-10">
-            <div class="headline text-align-center">Select your disciplines</div>
+            <div class="headline text-align-center">Select your discipline</div>
 
             <div class="row discipline-picker c-mt-8">
 
