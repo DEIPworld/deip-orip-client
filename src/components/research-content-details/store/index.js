@@ -24,15 +24,13 @@ const state = {
 
     contentRef: null,
 
-    isLoadingResearchContentPage: undefined,
     isLoadingResearchContentVotes: undefined,
     isLoadingResearchDetails: undefined,
     isLoadingResearchContentDetails: undefined,
     isLoadingResearchContentReviews: undefined,
     isLoadingResearchGroupDetails: undefined,
 
-    contentMetadata: null,
-    isLoadingResearchContentMetadataPage: undefined
+    contentMetadata: null
 }
 
 // getters
@@ -86,16 +84,8 @@ const getters = {
         return state.membersList;
     },
 
-    isLoadingResearchContentPage: (state, getters) => {
-        return state.isLoadingResearchContentPage;
-    },
-
     contentMetadata: (state, getters) => {
         return state.contentMetadata;
-    },
-
-    isLoadingResearchContentMetadataPage: (state, getters) => {
-        return state.isLoadingResearchContentMetadataPage;
     },
 
     contentWeightByDiscipline: function() {
@@ -126,26 +116,26 @@ const actions = {
             { group_permlink, research_permlink, content_permlink, ref }) {
 
         commit('RESET_STATE');
-        commit('SET_RESEARCH_CONTENT_PAGE_LOADING_STATE', true)
 
         if (!content_permlink || content_permlink === '!draft') {
             // this is draft
             const contentRefLoad = new Promise((resolve, reject) => {
                 dispatch('loadResearchContentRef', { hashOrId: ref, notify: resolve })
             });
+
             const researchDetailsLoad = new Promise((resolve, reject) => {
                 dispatch('loadResearchDetails', { group_permlink, research_permlink, notify: resolve })
             });
+
             const researchGroupDetailsLoad = new Promise((resolve, reject) => {
                 dispatch('loadResearchGroupDetails', { group_permlink, notify: resolve })
             });
-            Promise.all([contentRefLoad, researchDetailsLoad, researchGroupDetailsLoad])
-                .finally(() => {
-                    commit('SET_RESEARCH_CONTENT_PAGE_LOADING_STATE', false)
-                });
+
+            return Promise.all([contentRefLoad, researchDetailsLoad, researchGroupDetailsLoad]);
         } else {
-            commit('SET_RESEARCH_CONTENT_DETAILS_LOADING_STATE', true)
-            deipRpc.api.getResearchContentByAbsolutePermlinkAsync(group_permlink, research_permlink, content_permlink)
+            commit('SET_RESEARCH_CONTENT_DETAILS_LOADING_STATE', true);
+
+            return deipRpc.api.getResearchContentByAbsolutePermlinkAsync(group_permlink, research_permlink, content_permlink)
                 .then((contentObj) => {
                     commit('SET_RESEARCH_CONTENT_DETAILS', contentObj)
                     const content = contentObj.content;
@@ -154,12 +144,15 @@ const actions = {
                     const contentRefLoad = new Promise((resolve, reject) => {
                         dispatch('loadResearchContentRef', { hashOrId: ref, notify: resolve })
                     });
+
                     const researchDetailsLoad = new Promise((resolve, reject) => {
                         dispatch('loadResearchDetails', { group_permlink, research_permlink, notify: resolve })
                     });
+
                     const contentReviewsLoad = new Promise((resolve, reject) => {
                         dispatch('loadContentReviews', { researchContentId: contentObj.id, notify: resolve })
                     });
+
                     const contentVotesLoad = new Promise((resolve, reject) => {
                         dispatch('loadResearchContentVotes', { researchId: contentObj.research_id, notify: resolve })
                     });
@@ -167,8 +160,7 @@ const actions = {
                     return Promise.all([contentRefLoad, researchDetailsLoad, contentReviewsLoad, contentVotesLoad])
                 }, (err) => {console.log(err)})
                 .finally(() => {
-                    commit('SET_RESEARCH_CONTENT_DETAILS_LOADING_STATE', false)
-                    commit('SET_RESEARCH_CONTENT_PAGE_LOADING_STATE', false)
+                    commit('SET_RESEARCH_CONTENT_DETAILS_LOADING_STATE', false);
                 });
         }
     },
@@ -312,7 +304,6 @@ const actions = {
         { group_permlink, research_permlink, content_permlink,  notify }) {
 
             commit('RESET_METADATA_STATE');
-            commit('SET_RESEARCH_CONTENT_METADATA_PAGE_LOADING_STATE', true)
 
             try {
                 const dgp = await getDynamicGlobalProperties();
@@ -342,7 +333,7 @@ const actions = {
                     const startTime = contentProposal.creation_time;
                     
                     /* todo: replace approximate estimated endTime with actual values 
-                       once we have moved this to aggreagtion server */
+                    once we have moved this to aggreagtion server */
                     const endTime = contentProposal.expiration_time;
 
                     // var contentCreatedTimePlus10Minutes = new Date(new Date(`${content.created_at}Z`).getTime() + 1 * 60000);
@@ -386,8 +377,8 @@ const actions = {
                     const votersMeta = [];
                     
                     if (!group.is_personal) {
-                         const voters = await getProposalVotesMeta(contentProposal, endTime);
-                         votersMeta.push(...voters);
+                        const voters = await getProposalVotesMeta(contentProposal, endTime);
+                        votersMeta.push(...voters);
                     }
                     
                     const contentMetadata = {
@@ -408,7 +399,8 @@ const actions = {
                             hex: txHex
                         }
                     };
-                    commit('SET_RESEARCH_CONTENT_METADATA', contentMetadata)
+
+                    commit('SET_RESEARCH_CONTENT_METADATA', contentMetadata);
 
                     async function getProposalVotesMeta(proposal, endTime) {
                         const votersMeta = [];
@@ -478,13 +470,10 @@ const actions = {
                         transaction: null
                     };
 
-                    commit('SET_RESEARCH_CONTENT_METADATA', contentMetadata)
+                    commit('SET_RESEARCH_CONTENT_METADATA', contentMetadata);
                 }
-
-                commit('SET_RESEARCH_CONTENT_METADATA_PAGE_LOADING_STATE', false)
-
             } catch (err) {
-                console.error(err)
+                console.error(err);
             }
     }
 }
@@ -526,10 +515,6 @@ const mutations = {
         state.contentRef = contentRef
     },
 
-    ['SET_RESEARCH_CONTENT_PAGE_LOADING_STATE'](state, value) {
-        state.isLoadingResearchContentPage = value
-    },
-
     ['SET_RESEARCH_DETAILS_LOADING_STATE'](state, value) {
         state.isLoadingResearchDetails = value
     },
@@ -561,10 +546,6 @@ const mutations = {
     ['SET_DRAFT_REFERENCES_LIST'](state, list) {
         Vue.set(state.contentRef, 'references', list)
     },
-    
-    ['SET_RESEARCH_CONTENT_METADATA_PAGE_LOADING_STATE'](state, value) {
-        Vue.set(state, 'isLoadingResearchContentMetadataPage', value)
-    },
 
     ['SET_RESEARCH_CONTENT_METADATA'](state, value) {
         Vue.set(state, 'contentMetadata', value)
@@ -577,15 +558,6 @@ const mutations = {
     ['RESET_STATE'](state) {
         texture = undefined;
         reviewEditor = undefined;
-        Vue.set(state, 'membersList', [])
-        Vue.set(state, 'disciplinesList', [])
-        Vue.set(state, 'totalVotesList', [])
-        Vue.set(state, 'contentReviewsList', [])
-        Vue.set(state, 'contentList', [])
-        Vue.set(state, 'content', null)
-        Vue.set(state, 'contentProposal', undefined)
-        Vue.set(state, 'research', null)
-        Vue.set(state, 'contentRef', null)
     },
 
     ['RESET_METADATA_STATE'](state) {

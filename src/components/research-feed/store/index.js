@@ -14,8 +14,7 @@ const state = {
         },
         dateFrom: null,
         dateTo: null
-    },
-    isLoadingResearchFeed: undefined
+    }
 }
 
 
@@ -55,10 +54,6 @@ const getters = {
             const parts = d.path.split('.')
             return d.id != discipline.id && parts.some(p => p == discipline.path);
         }) !== undefined;
-    },
-
-    isLoadingResearchFeed: (state, getters) => {
-        return state.isLoadingResearchFeed;
     }
 }
 
@@ -66,11 +61,10 @@ const getters = {
 const actions = {
 
     loadAllResearches({ state, dispatch, commit }) {
-        commit('SET_RESEARCH_FEED_LOADING_STATE', true)
         const disciplineId = _.get(state.filter, 'discipline.id') || 0;
         let researchResult = [];
 
-        deipRpc.api.getAllResearchesListingAsync(0, disciplineId)
+        return deipRpc.api.getAllResearchesListingAsync(0, disciplineId)
             .then(list => {
                 const researchPromises = [];
 
@@ -122,9 +116,6 @@ const actions = {
             })
             .then(data => {
                 commit('SET_FULL_RESEARCH_LIST', data);
-            })
-            .finally(() => {
-                commit('SET_RESEARCH_FEED_LOADING_STATE', false)
             });
     },
 
@@ -160,10 +151,6 @@ const mutations = {
 
     ['UPDATE_FILTER'](state, { key, value }) {
         Vue.set(state.filter, key, value)
-    },
-
-    ['SET_RESEARCH_FEED_LOADING_STATE'](state, value) {
-        state.isLoadingResearchFeed = value
     }
 }
 

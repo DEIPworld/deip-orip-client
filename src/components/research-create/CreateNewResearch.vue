@@ -97,6 +97,7 @@
 
     export default {
         name: "CreateNewResearch",
+
         data() { 
             return {
                 currentStep: 0,
@@ -111,6 +112,7 @@
                 }
             } 
         },
+
         computed: {
             ...mapGetters({
                 user: 'auth/user',
@@ -118,6 +120,7 @@
                 userCoworkers: 'auth/userCoworkers'
             })
         },
+
         methods: {
             incStep() {
                 this.currentStep++;
@@ -162,9 +165,11 @@
                     });
                 }, (err) => {
                     this.isLoading = false;
+                    
                     this.$store.dispatch('layout/setError', {
                         message: "An error occurred while creating proposal, please try again later"
                     });
+
                     console.log(err)
                 }).finally(() => {
                     setTimeout(() => {

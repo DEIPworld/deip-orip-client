@@ -1,4 +1,9 @@
 <template>
+    <div class="pos-relative">
+        <div class="global-loader-container">
+            <global-loader></global-loader>
+        </div>
+
         <v-toolbar app fixed clipped-left dark color="black" class="deip-toolbar">
             <v-toolbar-title>
                 <router-link class="app-title" to="/research-feed" tag="img" src="./static/logo.svg"></router-link>
@@ -57,6 +62,7 @@
                 <v-btn flat to="/sign-up">Beta Registration</v-btn>
             </v-toolbar-items>
         </v-toolbar>
+    </div>
 </template>
 
 <script>
@@ -93,5 +99,13 @@
 
     .deip-toolbar {
         z-index: 200;
+    }
+
+    .global-loader-container {
+        position: fixed;
+        top: 0px;
+        right: 0px;
+        left: 0px;
+        z-index: 201;
     }
 </style>

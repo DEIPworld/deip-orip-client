@@ -43,21 +43,25 @@
 
     export default {
         name: "TokenSaleCaps",
+
         props: {
             tokenSaleInfo: { type: Object, required: true },
             research: { type: Object },
             isLoading: { type: Boolean, required: true }
         },
+
         computed: {
             ...mapGetters({
                 userPersonalGroup: 'auth/userPersonalGroup'
             }),
+            
             isPersonalGroup() {
-                return this.research 
-                    ? this.research.research_group_id == this.userPersonalGroup.id 
+                return this.research && this.userPersonalGroup
+                    ? this.research.research_group_id === this.userPersonalGroup.id 
                     : false;
             }
         },
+
         data() { 
             return {
                 isFormValid: false,
@@ -71,6 +75,7 @@
                 }
             } 
         },
+
         methods: {
             finish() {
                 this.$emit('finish');

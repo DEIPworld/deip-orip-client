@@ -26,8 +26,6 @@ const state = {
         order: 'asc'
     },
 
-    isLoadingResearchGroupPage: undefined,
-
     isLoadingResearchGroupDetails: undefined,
     isLoadingResearchGroupMembers: undefined,
     isLoadingResearchGroupResearchList: undefined,
@@ -49,8 +47,6 @@ const getters = {
     joinRequests: state => state.joinRequests,
     pendingJoinRequests: state => state.joinRequests.filter(r => r.status == 'pending'),
 
-    isLoadingResearchGroupPage: state => state.isLoadingResearchGroupPage,
-
     isLoadingResearchGroupDetails: state => state.isLoadingResearchGroupDetails,
     isLoadingResearchGroupMembers: state => state.isLoadingResearchGroupMembers,
     isLoadingResearchGroupResearchList: state => state.isLoadingResearchGroupResearchList,
@@ -62,10 +58,9 @@ const getters = {
 const actions = {
 
     loadResearchGroup({ commit, dispatch, state }, permlink) {
-        commit('SET_RESEARCH_GROUP_PAGE_LOADING_STATE', true);
         commit('SET_GROUP_DETAILS_LOADING_STATE', true);
         
-        deipRpc.api.getResearchGroupByPermlinkAsync(permlink).then(data => {
+        return deipRpc.api.getResearchGroupByPermlinkAsync(permlink).then(data => {
             commit('SET_RESEARCH_GROUP', data);
 
             const proposalsLoad = new Promise((resolve, reject) => {
@@ -95,8 +90,7 @@ const actions = {
             ]);
         })
         .finally(() => {
-            commit('SET_GROUP_DETAILS_LOADING_STATE', false)
-            commit('SET_RESEARCH_GROUP_PAGE_LOADING_STATE', false)
+            commit('SET_GROUP_DETAILS_LOADING_STATE', false);
         });
     },
 
@@ -305,11 +299,7 @@ const mutations = {
 
     ['SET_GROUP_JOIN_REQUESTS_LOADING_STATE'](state, value) {
         state.isLoadingResearchGroupJoinRequests = value;
-    },
-
-    ['SET_RESEARCH_GROUP_PAGE_LOADING_STATE'](state, value) {
-        state.isLoadingResearchGroupPage = value;
-    }    
+    }  
 }
 
 const namespaced = true;

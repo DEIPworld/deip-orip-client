@@ -1,8 +1,5 @@
 <template>
-    <div class="research-content-details-sidebar-container">
-      <sidebar-loader v-if="isLoadingResearchContentPage"></sidebar-loader>
-      <div v-if="isLoadingResearchContentPage === false">
-
+    <div>
         <div class="ma-0">
             <router-link class="a sm-title" 
                 :to="{ name: 'ResearchDetails', params: { 
@@ -90,6 +87,7 @@
         <div class="c-mt-4">
             <div class="sidebar-fullwidth"><v-divider></v-divider></div>
             <div class="subheading bold c-mt-4">Authors</div>
+
             <div v-if="isPublished" class="row-nowrap justify-between align-center c-pt-2 c-pb-2" v-for="(author, index) in contentAuthorsList" :key="index">
                 <div>
                     <v-avatar size="40px">
@@ -101,16 +99,19 @@
                     </router-link>
                 </div>
             </div>
+
             <div v-if="!isPublished" class="row-nowrap justify-between align-center c-pt-2 c-pb-2" v-for="(member, index) in draftAuthorsList" :key="index">
                 <div class="col-10">
                     <v-avatar size="40px">
                         <img v-if="member.profile" v-bind:src="member.profile.avatar | avatarSrc(40, 40, false)" />
                         <v-gravatar v-else :title="member.account.name" :email="member.account.name + '@deip.world'" />
                     </v-avatar>
+
                     <router-link :to="'/user-details/' + member.account.name" class="a c-pl-3">
                         {{member | fullname}}
                     </router-link>
                 </div>
+
                 <div class="col-2">
                     <div v-if="isInProgress" class="author-checkbox">
                         <!-- v-checkbox depends on v-model binding which doesn't play well with Vuex.
@@ -129,9 +130,11 @@
         <!-- ### START Research Content Review Section ### -->
         <div v-if="isPublished" class="c-mt-4">
             <div class="sidebar-fullwidth"><v-divider></v-divider></div>
+
             <div class="subheading bold c-mt-4">
                 Reviews: <span style="color: green">{{positiveReviewsCount}}</span> / <span style="color: red">{{negativeReviewsCount}}</span> 
             </div>
+
             <div class="c-pt-3">
                 <div class="caption"><v-icon small class="c-pr-2">rate_review</v-icon>Reward for review: <span class="bold">{{convertToPercent(research.review_share_in_percent)}}%</span></div>
                 <div class="caption" v-if="isContentRewardDistributionActive">
@@ -179,6 +182,7 @@
         <div v-if="!isPublished" class="c-mt-6">
             <div class="sidebar-fullwidth"><v-divider></v-divider></div>
             <div class="subheading bold c-mt-4">Quorum</div>
+
             <div class="body-2 c-mt-2">
                 <div class="row-nowrap align-center body-2 c-pt-1 c-pb-1">
                     <div class="col-10">{{createContentGroupQuorumValue.text}}:</div>
@@ -192,6 +196,7 @@
         <div v-if="!isPublished" class="c-mt-6">
             <div class="sidebar-fullwidth"><v-divider></v-divider></div>
             <div class="subheading bold c-mt-4">Reviews</div>
+            
             <div class="body-2 c-mt-2">
                 <div class="row-nowrap align-center body-2 c-pt-1 c-pb-1">
                     <div class="col-10"><v-icon small class="c-pr-2">rate_review</v-icon> Reward for review:</div>
@@ -200,7 +205,6 @@
             </div>
         </div>
         <!-- ### END Reward Info Section ### -->
-      </div>
     </div>
 </template>
 
@@ -231,7 +235,6 @@
                 contentReviewsList: 'rcd/contentReviewsList',
                 contentWeightByDiscipline: 'rcd/contentWeightByDiscipline',
                 contentProposal: 'rcd/contentProposal',
-                isLoadingResearchContentPage: 'rcd/isLoadingResearchContentPage',
                 contentRef: 'rcd/contentRef'
             }),
             isResearchGroupMember() {

@@ -1,12 +1,6 @@
 <template>
-    <div class="user-profile-body-container spinner-container">
-        <v-progress-circular class="section-spinner"
-            v-if="isLoadingUserProfilePage"
-            :size="100"
-            indeterminate color="primary"
-        ></v-progress-circular>
-
-        <div v-if="isLoadingUserProfilePage === false">
+    <div>
+        <div>
         <!-- ### START User Profile Details Section ### -->
             <div class="user-profile-info-container spinner-container">
                 <v-progress-circular class="section-spinner"
@@ -264,7 +258,7 @@
         </div>
         <!-- ### END User Profile Education\Employment Section ### -->
 
-        <div v-if="isLoadingUserProfilePage === false">
+        <div>
             <div class="c-pt-12 c-pb-2"></div>
             <v-btn v-if="isOwner" class="ma-0" @click="openClaimExpertiseDialog()">Claim Expertise Tokens</v-btn>
 
@@ -334,7 +328,6 @@
                 isLoadingUserProfile: 'userDetails/isLoadingUserProfile',
                 isLoadingUserGroups: 'userDetails/isLoadingUserGroups',
                 isLoadingUserResearch: 'userDetails/isLoadingUserResearch',
-                isLoadingUserProfilePage: 'userDetails/isLoadingUserProfilePage',
                 isClaimExpertiseDialogShown: 'userDetails/isClaimExpertiseDialogShown'
             }),
 
@@ -652,10 +645,6 @@
 
     .owner-hint {
         font-style: italic;
-    }
-    
-    .user-profile-body-container {
-        min-height: 500px
     }
 
     .username-caption {

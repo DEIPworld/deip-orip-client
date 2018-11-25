@@ -1,14 +1,16 @@
 <template>
     <div id="deip-app">
-        <div v-if="$route.meta.withoutHeader">
+        <v-app v-if="$route.meta.withoutHeader">
             <router-view :key="$route.fullPath"/>
-        </div>
+        </v-app>
 
         <v-app v-else>
             <toolbar></toolbar>
 
             <v-content>
-                <router-view :key="$route.fullPath"/>
+                <transition mode="out-in">
+                    <router-view :key="$route.fullPath"/>
+                </transition>
             </v-content>
         </v-app>
 
@@ -34,8 +36,7 @@
         data() {
             return {
                 successSnack: {isVisible: false, message: ""},
-                errorSnack: {isVisible: false, message: ""},
-                drawer: true
+                errorSnack: {isVisible: false, message: ""}
             };
         },
 
@@ -79,5 +80,12 @@
         -webkit-font-smoothing: antialiased;
         -moz-osx-font-smoothing: grayscale;
         color: #2c3e50;
+    }
+
+    .v-enter-active, .v-leave-active {
+        transition: opacity 50ms;
+    }
+    .v-enter, .v-leave-to {
+        opacity: 0;
     }
 </style>

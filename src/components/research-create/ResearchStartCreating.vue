@@ -17,6 +17,7 @@
 <script>
     export default {
         name: "ResearchStartCreating",
+        
         data() { 
             return {} 
         }

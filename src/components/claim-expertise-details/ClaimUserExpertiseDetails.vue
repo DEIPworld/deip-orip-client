@@ -2,19 +2,11 @@
     <page-container>
 
         <contentbar>
-            <div class="spinner-container">
-                <v-progress-circular class="section-spinner"
-                    v-if="isDataLoading"
-                    :size="100" indeterminate color="primary"
-                ></v-progress-circular>
-
-                <claim-user-expertise-details-body v-else></claim-user-expertise-details-body>
-            </div>
+            <claim-user-expertise-details-body></claim-user-expertise-details-body>
         </contentbar>
 
         <sidebar>
-            <sidebar-loader v-if="isDataLoading"></sidebar-loader>
-            <claim-user-expertise-details-sidebar v-else></claim-user-expertise-details-sidebar>
+            <claim-user-expertise-details-sidebar></claim-user-expertise-details-sidebar>
         </sidebar>
 
     </page-container>
@@ -28,24 +20,13 @@
 
         data() {
             return {
-                claimerUsername: this.$route.params.account_name,
-                claimId: this.$route.params.claim_id,
-
-                isDataLoading: true
             }
         },
 
         methods: {
-
         },
         
         created() {
-            this.$store.dispatch('claimExpertiseDetails/loadClaimer', {
-                username: this.claimerUsername,
-                claimId: this.claimId
-            }).then(() => {
-                this.isDataLoading = false;
-            });
         }
     }
 </script>

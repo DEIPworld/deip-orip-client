@@ -116,6 +116,7 @@
 
     export default {
         name: 'SignUp',
+
         data() {
             return {
                 isFormValid: false,
@@ -151,6 +152,7 @@
                 }
             }
         },
+        
         methods: {
             resetKey() {
                 if (this.formData.privKey) {

@@ -1,12 +1,5 @@
 <template>
-<div class="research-body-container spinner-container">
-    <v-progress-circular class="section-spinner"
-        v-if="isLoadingResearchPage"
-        :size="100" indeterminate
-        color="primary"
-    ></v-progress-circular>
-
-    <div v-if="isLoadingResearchPage === false">
+    <div class="">
         <!-- ### START Research Details Section ### -->
         <div class="c-mt-6">
             <div>
@@ -212,8 +205,6 @@
             </div>
         </div>  -->
     </div>
-</div>
-
 </template>
 
 <script>
@@ -241,8 +232,7 @@
                 disciplinesList: 'rd/disciplinesList',
                 totalVotesList: 'rd/totalVotesList',
                 contentWeightByDiscipline: 'rd/contentWeightByDiscipline',
-                membersList: 'rd/membersList',
-                isLoadingResearchPage: 'rd/isLoadingResearchPage'
+                membersList: 'rd/membersList'
             }),
             isResearchGroupMember() {
                 return this.research != null 
@@ -337,7 +327,4 @@
 </script>
 
 <style lang="less">
-    .research-body-container {
-        min-height: 500px;
-    }
 </style>

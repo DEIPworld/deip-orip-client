@@ -1,13 +1,5 @@
 <template>
-
-<div class="research-group-body-container spinner-container">
-    <v-progress-circular class="section-spinner"
-        v-if="isLoadingResearchGroupPage"
-        :size="100" indeterminate color="primary"
-    ></v-progress-circular>
-
-    <div v-if="isLoadingResearchGroupPage === false">
-
+    <div>
         <!-- ### START Research Group Details Section ### -->
         <div class="research-group-details-container spinner-container">
             <v-progress-circular class="section-spinner"
@@ -187,8 +179,6 @@
         </div>
         <!-- ### END Research Group Proposals Section ### -->
     </div>
-</div>
-
 </template>
 
 <script>
@@ -214,7 +204,6 @@
                 isLoadingResearchGroupMembers: 'researchGroup/isLoadingResearchGroupMembers',
                 isLoadingResearchGroupResearchList: 'researchGroup/isLoadingResearchGroupResearchList',
                 isLoadingResearchGroupProposals: 'researchGroup/isLoadingResearchGroupProposals',
-                isLoadingResearchGroupPage: 'researchGroup/isLoadingResearchGroupPage',
                 userPersonalGroup: 'auth/userPersonalGroup'
             }),
             isPersonalGroup() {
@@ -234,11 +223,6 @@
 <style lang="less" scoped>
     .group-invites.expansion-panel {
         box-shadow: initial;
-    }
-
-    .research-group-body-container {
-        position: relative; 
-        min-height: 500px;
     }
     .research-group-details-container {
         min-height: 200px

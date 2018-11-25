@@ -17,14 +17,12 @@
         name: 'UserDetails',
         data() {
             return {
-                accountName: this.$route.params.account_name
             }
         },
         methods: {
 
         },
         created() {
-            this.$store.dispatch('userDetails/loadUser', this.accountName);
         }
     }
 </script>
