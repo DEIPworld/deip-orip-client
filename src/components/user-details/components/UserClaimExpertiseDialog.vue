@@ -12,7 +12,7 @@
             <page-container>
                 <contentbar>
 
-                    <div class="headline text-align-center half-bold">Select your disciplines</div>
+                    <div class="headline text-align-center half-bold">Select your discipline</div>
 
                     <div class="discipline-picker c-mt-8">
                         <advanced-discipline-picker
