@@ -84,9 +84,10 @@ const actions = {
                 let authorsPromises = researchResult.map(research => getEnrichedProfiles(research.authors));
 
                 let tokenSalesPromises = researchResult.map(research =>
-                    deipRpc.api.checkResearchTokenSaleExistenceByResearchIdAsync(research.research_id)
-                        .then(exists => 
-                            exists ? deipRpc.api.getResearchTokenSaleByResearchIdAsync(research.research_id) : undefined
+                    deipRpc.api.getResearchTokenSalesByResearchIdAsync(research.research_id)
+                        .then(tokenSales => {
+                                return tokenSales[0];
+                            }
                         )
                 );
 
