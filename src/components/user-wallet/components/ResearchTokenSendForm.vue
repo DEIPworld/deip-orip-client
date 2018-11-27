@@ -149,7 +149,7 @@
                         this.$store.dispatch('layout/setError', {
                             message: "Transaction was failed"
                         });
-                        console.error(error);
+                        console.error(err);
                     }).finally(() => {
                         this.isSending = false;
                     });
