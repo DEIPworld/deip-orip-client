@@ -10,8 +10,8 @@
                     <div>{{ item.amount }}</div>
                 </div>
                 <div v-if="!expertise.length" class="body-1"> 
-                    <div v-if="isOwner">You have no expertise tokens yet. Use <span class="a" @click="openClaimExpertiseDialog()">Claim</span> process to apply for Expertise Tokens</div>
-                    <div v-if="!isOwner"><span class="body-2">{{userInfo | fullname}}</span> has no expertise tokens yet</div>
+                    <div v-if="isOwner">You have no Expertise Tokens yet. Use <span class="a" @click="openClaimExpertiseDialog()">Claim</span> process to apply for Expertise Tokens</div>
+                    <div v-if="!isOwner"><span class="body-2">{{userInfo | fullname}}</span> has no Expertise Tokens yet</div>
                 </div>
                 <div v-if="expertise.length && isOwner" class="body-1 text-align-center c-mt-4">
                     <v-btn @click="openClaimExpertiseDialog()" flat small color="primary" class="ma-0">
