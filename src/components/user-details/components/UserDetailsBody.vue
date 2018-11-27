@@ -558,28 +558,10 @@
             },
             closeClaimExpertiseDialog() {
                 this.$store.dispatch('userDetails/closeExpertiseTokensClaimDialog')
-            },
-
-            loadExpertiseClaims() {
-                let resData;
-                expertiseClaimsService.getExpertiseClaimsByUser(this.$route.params.account_name)
-                    .then(data => {
-                        resData = data;
-                        return Promise.all(
-                            data.map(item => deipRpc.api.getDisciplineAsync(item.disciplineId))
-                        );
-                    })
-                    .then(disciplines => {
-                        resData.forEach((item, index) => {
-                            item.discipline = disciplines[index];
-                        });
-                        this.tmpClaimObjects = resData;
-                    });
-                }
+            }
         },
 
         created() {
-            this.loadExpertiseClaims();
         }
     }
 </script>

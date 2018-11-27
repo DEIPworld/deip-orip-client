@@ -27,7 +27,7 @@ deipRpc.api.setOptions({ url: process.env.DEIP_FULL_NODE_URL });
 deipRpc.config.set('chain_id', process.env.CHAIN_ID);
 
 /* eslint-disable no-new */
-new Vue({
+window.deipApp = new Vue({
     el: '#app',
     store,
     router,

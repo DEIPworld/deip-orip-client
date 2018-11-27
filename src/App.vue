@@ -8,9 +8,7 @@
             <toolbar></toolbar>
 
             <v-content>
-                <transition mode="out-in">
-                    <router-view :key="$route.fullPath"/>
-                </transition>
+                <router-view :key="$route.fullPath"/>
             </v-content>
         </v-app>
 
@@ -80,12 +78,5 @@
         -webkit-font-smoothing: antialiased;
         -moz-osx-font-smoothing: grayscale;
         color: #2c3e50;
-    }
-
-    .v-enter-active, .v-leave-active {
-        transition: opacity 50ms;
-    }
-    .v-enter, .v-leave-to {
-        opacity: 0;
     }
 </style>

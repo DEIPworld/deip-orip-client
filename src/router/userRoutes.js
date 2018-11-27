@@ -1,5 +1,7 @@
 import store from './../store/index';
 
+import preliminaryDataLoader from './utils/preliminaryDataLoader';
+
 import UserDetails from '@/components/user-details/UserDetails';
 import UserWallet from '@/components/user-wallet/components/UserWallet';
 import ClaimUserExpertiseDetails from '@/components/claim-expertise-details/ClaimUserExpertiseDetails';
@@ -8,62 +10,70 @@ import ClaimUserExpertiseList from '@/components/claim-expertise-list/ClaimUserE
 const userRoutes = [{
         path: '/user-details/:account_name',
         name: 'UserDetails',
-        component: UserDetails,
 
-        beforeEnter: (to, from, next) => {
-            store.dispatch('layout/setGlobalLoader');
+        component: preliminaryDataLoader(
+            UserDetails, {
+            beforeEnter: (to, from, next) => {
+                store.dispatch('layout/setGlobalLoader');
 
-            store.dispatch('userDetails/loadUser', to.params.account_name)
-                .then(() => {
-                    store.dispatch('layout/hideGlobalLoader');
-                    next();
-                });
-        }
+                store.dispatch('userDetails/loadUser', to.params.account_name)
+                    .then(() => {
+                        store.dispatch('layout/hideGlobalLoader');
+                        next();
+                    });
+            }
+        })
     }, {
         path: '/user-wallet',
         name: 'UserWallet',
-        component: UserWallet,
 
-        beforeEnter: (to, from, next) => {
-            store.dispatch('layout/setGlobalLoader');
+        component: preliminaryDataLoader(
+            UserWallet, {
+            beforeEnter: (to, from, next) => {
+                store.dispatch('layout/setGlobalLoader');
 
-            store.dispatch('userWallet/loadWallet', store.getters['auth/user'].username)
-                .then(() => {
-                    store.dispatch('layout/hideGlobalLoader');
-                    next();
-                });
-        }
+                store.dispatch('userWallet/loadWallet', store.getters['auth/user'].username)
+                    .then(() => {
+                        store.dispatch('layout/hideGlobalLoader');
+                        next();
+                    });
+            }
+        })
     }, {
         path: '/claim-user-experience',
         name: 'claim-user-expertise-list',
-        component: ClaimUserExpertiseList,
 
-        beforeEnter: (to, from, next) => {
-            store.dispatch('layout/setGlobalLoader');
+        component: preliminaryDataLoader(
+            ClaimUserExpertiseList, {
+            beforeEnter: (to, from, next) => {
+                store.dispatch('layout/setGlobalLoader');
 
-            store.dispatch('claimExpertiseList/loadAllClaims')
-                .then(() => {
-                    store.dispatch('layout/hideGlobalLoader');
-                    next();
-                });
-        }
+                store.dispatch('claimExpertiseList/loadAllClaims')
+                    .then(() => {
+                        store.dispatch('layout/hideGlobalLoader');
+                        next();
+                    });
+            }
+        })
     }, {
         path: '/claim-user-experience/:account_name/:claim_id',
         name: 'claim-user-expertise-details',
-        component: ClaimUserExpertiseDetails,
 
-        beforeEnter: (to, from, next) => {
-            store.dispatch('layout/setGlobalLoader');
+        component: preliminaryDataLoader(
+            ClaimUserExpertiseDetails, {
+            beforeEnter: (to, from, next) => {
+                store.dispatch('layout/setGlobalLoader');
 
-            store.dispatch('claimExpertiseDetails/loadClaimer', {
-                username: to.params.account_name,
-                claimId: to.params.claim_id
-            })
-                .then(() => {
-                    store.dispatch('layout/hideGlobalLoader');
-                    next();
-                });
-        }
+                store.dispatch('claimExpertiseDetails/loadClaimer', {
+                    username: to.params.account_name,
+                    claimId: to.params.claim_id
+                })
+                    .then(() => {
+                        store.dispatch('layout/hideGlobalLoader');
+                        next();
+                    });
+            }
+        })
     }];
 
 
