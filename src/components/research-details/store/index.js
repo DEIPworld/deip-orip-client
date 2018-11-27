@@ -359,14 +359,12 @@ const actions = {
 
     loadResearchTokenSale({ state, dispatch, commit }, { researchId, notify }) {
         commit('SET_RESEARCH_TOKEN_SALE_LOADING_STATE', true)
-        deipRpc.api.checkResearchTokenSaleExistenceByResearchIdAsync(researchId)
-            .then((exists) => {
-                if (exists) {
-                  return deipRpc.api.getResearchTokenSaleByResearchIdAsync(researchId)
-                    .then((tokenSale) => {
-                        commit('SET_RESEARCH_TOKEN_SALE', tokenSale)
-                        dispatch('loadTokenSaleContributors');
-                    });
+        deipRpc.api.getResearchTokenSalesByResearchIdAsync(researchId)
+            .then((tokenSales) => {
+                const firstTokenSale = tokenSales[0];
+                if (firstTokenSale) {
+                    commit('SET_RESEARCH_TOKEN_SALE', firstTokenSale)
+                    dispatch('loadTokenSaleContributors');
                 } else {
                     commit('SET_RESEARCH_TOKEN_SALE', null)
                 }
