@@ -1,5 +1,7 @@
 import store from './../store/index';
 
+import preliminaryDataLoader from './utils/preliminaryDataLoader';
+
 import ResearchFeed from '@/components/research-feed/ResearchFeed';
 import ResearchDetails from '@/components/research-details/ResearchDetails';
 import ResearchContentDetails from '@/components/research-content-details/ResearchContentDetails';
@@ -13,119 +15,131 @@ import CreateTokenSale from '@/components/token-sale-create/CreateTokenSale';
 const researchRoutes = [{
         path: '/research-feed',
         name: 'ResearchFeed',
-        component: ResearchFeed,
 
-        beforeEnter: (to, from, next) => {
-            store.dispatch('layout/setGlobalLoader');
+        component: preliminaryDataLoader(
+            ResearchFeed, {
+            beforeEnter: (to, from, next) => {
+                store.dispatch('layout/setGlobalLoader');
 
-            store.dispatch('feed/loadAllResearches')
-                .then(() => {
-                    store.dispatch('layout/hideGlobalLoader');
-                    next();
-                });
-        }
+                store.dispatch('feed/loadAllResearches')
+                    .then(() => {
+                        store.dispatch('layout/hideGlobalLoader');
+                        next();
+                    });
+            }
+        })
     }, {
         path: '/:research_group_permlink/research/:research_permlink',
         name: 'ResearchDetails',
-        component: ResearchDetails,
-        
-        beforeEnter: (to, from, next) => {
-            store.dispatch('layout/setGlobalLoader');
 
-            const permlinks = {
-                group_permlink: decodeURIComponent(to.params.research_group_permlink),
-                research_permlink: decodeURIComponent(to.params.research_permlink)
-            };
+        component: preliminaryDataLoader(
+            ResearchDetails, {
+            beforeEnter: (to, from, next) => {
+                store.dispatch('layout/setGlobalLoader');
 
-            store.dispatch('rd/loadResearchDetails', permlinks)
-                .then(() => {
-                    store.dispatch('layout/hideGlobalLoader');
-                    next();
-                });
-        }
+                const permlinks = {
+                    group_permlink: decodeURIComponent(to.params.research_group_permlink),
+                    research_permlink: decodeURIComponent(to.params.research_permlink)
+                };
+
+                store.dispatch('rd/loadResearchDetails', permlinks)
+                    .then(() => {
+                        store.dispatch('layout/hideGlobalLoader');
+                        next();
+                    });
+            }
+        })
     }, {
         path: '/:research_group_permlink/research/:research_permlink/:content_permlink',
         name: 'ResearchContentDetails',
-        component: ResearchContentDetails,
 
-        beforeEnter: (to, from, next) => {
-            store.dispatch('layout/setGlobalLoader');
+        component: preliminaryDataLoader(
+            ResearchContentDetails, {
+            beforeEnter: (to, from, next) => {
+                store.dispatch('layout/setGlobalLoader');
 
-            const permlinks = {
-                group_permlink: decodeURIComponent(to.params.research_group_permlink),
-                research_permlink: decodeURIComponent(to.params.research_permlink),
-                content_permlink: decodeURIComponent(to.params.content_permlink),
-                ref: to.query.ref
-            };
+                const permlinks = {
+                    group_permlink: decodeURIComponent(to.params.research_group_permlink),
+                    research_permlink: decodeURIComponent(to.params.research_permlink),
+                    content_permlink: decodeURIComponent(to.params.content_permlink),
+                    ref: to.query.ref
+                };
 
-            store.dispatch('rcd/loadResearchContentDetails', permlinks)
-                .then(() => {
-                    store.dispatch('layout/hideGlobalLoader');
-                    next();
-                });
-        }
+                store.dispatch('rcd/loadResearchContentDetails', permlinks)
+                    .then(() => {
+                        store.dispatch('layout/hideGlobalLoader');
+                        next();
+                    });
+            }
+        })
     }, {
         path: '/:research_group_permlink/research/:research_permlink/:content_permlink/metadata',
         name: 'ResearchContentMetadata',
-        component: ResearchContentMetadata,
 
-        beforeEnter: async (to, from, next) => {
-            store.dispatch('layout/setGlobalLoader');
+        component: preliminaryDataLoader(
+            ResearchContentMetadata, {
+            beforeEnter: async (to, from, next) => {
+                store.dispatch('layout/setGlobalLoader');
 
-            const permlinks = {
-                group_permlink: decodeURIComponent(to.params.research_group_permlink),
-                research_permlink: decodeURIComponent(to.params.research_permlink),
-                content_permlink: decodeURIComponent(to.params.content_permlink),
-                ref: to.query.ref
-            };
+                const permlinks = {
+                    group_permlink: decodeURIComponent(to.params.research_group_permlink),
+                    research_permlink: decodeURIComponent(to.params.research_permlink),
+                    content_permlink: decodeURIComponent(to.params.content_permlink),
+                    ref: to.query.ref
+                };
 
-            await store.dispatch('rcd/loadResearchContentMetadata', permlinks);
+                await store.dispatch('rcd/loadResearchContentMetadata', permlinks);
 
-            store.dispatch('layout/hideGlobalLoader');
-            next();
-        }
+                store.dispatch('layout/hideGlobalLoader');
+                next();
+            }
+        })
     }, {
         path: '/:research_group_permlink/research/:research_permlink/:content_permlink/review/:review_id',
         name: 'ResearchContentReview',
-        component: ResearchContentReview,
 
-        beforeEnter: (to, from, next) => {
-            store.dispatch('layout/setGlobalLoader');
+        component: preliminaryDataLoader(
+            ResearchContentReview, {
+            beforeEnter: (to, from, next) => {
+                store.dispatch('layout/setGlobalLoader');
 
-            const permlinks = {
-                group_permlink: decodeURIComponent(to.params.research_group_permlink),
-                research_permlink: decodeURIComponent(to.params.research_permlink),
-                content_permlink: decodeURIComponent(to.params.content_permlink),
-                ref: to.query.ref
-            };
+                const permlinks = {
+                    group_permlink: decodeURIComponent(to.params.research_group_permlink),
+                    research_permlink: decodeURIComponent(to.params.research_permlink),
+                    content_permlink: decodeURIComponent(to.params.content_permlink),
+                    ref: to.query.ref
+                };
 
-            store.dispatch('rcd/loadResearchContentDetails', permlinks)
-                .then(() => {
-                    store.dispatch('layout/hideGlobalLoader');
-                    next();
-                });
-        }
+                store.dispatch('rcd/loadResearchContentDetails', permlinks)
+                    .then(() => {
+                        store.dispatch('layout/hideGlobalLoader');
+                        next();
+                    });
+            }
+        })
     }, {
         path: '/:research_group_permlink/research/:research_permlink/:content_permlink/add-review',
         name: 'ResearchContentAddReview',
-        component: ResearchContentAddReview,
+        
+        component: preliminaryDataLoader(
+            ResearchContentAddReview, {
+            beforeEnter: (to, from, next) => {
+                store.dispatch('layout/setGlobalLoader');
 
-        beforeEnter: (to, from, next) => {
-            store.dispatch('layout/setGlobalLoader');
+                const permlinks = {
+                    group_permlink: decodeURIComponent(to.params.research_group_permlink),
+                    research_permlink: decodeURIComponent(to.params.research_permlink),
+                    content_permlink: decodeURIComponent(to.params.content_permlink),
+                    ref: to.query.ref
+                };
 
-            const permlinks = {
-                group_permlink: decodeURIComponent(to.params.research_group_permlink),
-                research_permlink: decodeURIComponent(to.params.research_permlink),
-                content_permlink: decodeURIComponent(to.params.content_permlink),
-                ref: to.query.ref
-            };
-
-            store.dispatch('rcd/loadResearchContentDetails', permlinks)
-                .then(() => {
-                    store.dispatch('layout/hideGlobalLoader');
-                    next();
-                });
-        }
+                store.dispatch('rcd/loadResearchContentDetails', permlinks)
+                    .then(() => {
+                        store.dispatch('layout/hideGlobalLoader');
+                        next();
+                    });
+            }
+        })
     }, {
         path: '/create-research',
         name: 'StartCreateResearch',
