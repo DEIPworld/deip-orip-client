@@ -1,7 +1,8 @@
 import _ from 'lodash';
+import Vue from 'vue'
 import deipRpc from '@deip/deip-rpc-client';
 import { getEnrichedProfiles } from './../../../utils/user'
-import Vue from 'vue'
+import tokenSaleSvc from './../../../services/TokenSaleService'
 
 const state = {
     fullResearchList: [],
@@ -81,14 +82,12 @@ const actions = {
                     deipRpc.api.getResearchGroupByIdAsync(research.group_id)
                 );
 
-                let authorsPromises = researchResult.map(research => getEnrichedProfiles(research.authors));
+                let authorsPromises = researchResult.map(research =>
+                    getEnrichedProfiles(research.authors)
+                );
 
                 let tokenSalesPromises = researchResult.map(research =>
-                    deipRpc.api.getResearchTokenSalesByResearchIdAsync(research.research_id)
-                        .then(tokenSales => {
-                                return tokenSales[0];
-                            }
-                        )
+                    tokenSaleSvc.getCurrentTokenSaleByResearchId(research.research_id)
                 );
 
                 return Promise.all([

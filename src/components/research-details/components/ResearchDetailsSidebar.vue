@@ -168,6 +168,7 @@
             <div>
                 <div>
                     <div class="subheading bold c-mt-4">Research Token sale</div>
+
                     <div v-if="(isMissingTokenSale && isResearchGroupMember)" class="c-pt-4 c-pb-6">
                         <router-link v-if="research" :to="`/${research.group_permlink}/create-token-sale/${research.permlink}`" style="text-decoration: none">
                             <v-btn dark round outline color="primary" class="full-width c-mt-3 c-mb-3">
@@ -181,24 +182,25 @@
                             <span class="half-bold">On Sale</span>
                             <span class="right">{{ convertToPercent(tokenSale.balance_tokens) }}%</span>
                         </div>
+
                         <div>
                             <span class="half-bold">Deadline</span>
                             <span class="right">{{ tokenSale.end_time | dateFormat('HH:mm D MMM YYYY', true) }}</span>
                         </div>
+
                         <div>
                             <span class="half-bold">Soft Cap</span>
                             <span class="right">{{ fromAssetsToFloat(tokenSale.soft_cap) }}</span>
                         </div>
+
                         <div>
                             <span class="half-bold">Hard Cap</span>
                             <span class="right">{{ fromAssetsToFloat(tokenSale.hard_cap) }}</span>
                         </div>
 
                         <div class="c-mt-8">
-                            <div class="row">
-                                <div>
-                                    <span class="left grey--text c-mr-2 cap-value">0</span>
-                                </div>
+                            <div class="row-nowrap">
+                                <div class="grey--text c-mr-4 cap-value">0</div>
 
                                 <div class="col-grow pos-relative row-nowrap align-center">
                                     <div class="chapter-line black" :style="{ width: currentCapPercent + '%' }"></div>
@@ -207,14 +209,15 @@
                                     <div class="pos-absolute" :style="{ left: currentCapPercent + '%' }">
                                         <v-tooltip bottom color="white">
                                             <div class="chapter-point deip-blue-bg" slot="activator"></div>
+                                            
                                             <div>
                                                 <div class="grey--text cap-value text-align-center">{{ currentCap }}</div>
                                             </div>
                                         </v-tooltip>
                                     </div>
-
-                                    <div><span class="right grey--text c-ml-2 cap-value">{{ fromAssetsToFloat(tokenSale.hard_cap) }}</span></div>
                                 </div>
+
+                                <div class="grey--text c-ml-4 cap-value">{{ fromAssetsToFloat(tokenSale.hard_cap) }}</div>
                             </div>
 
                             <div v-if="!isResearchGroupMember" class="c-mt-5 text-align-center">
@@ -329,7 +332,7 @@
                 } : null;
             },
             isMissingTokenSale(){
-                return this.tokenSale === null;
+                return this.tokenSale === undefined;
             },
             isActiveTokenSale() {
                 return this.tokenSale && this.tokenSale.status == 1;
@@ -409,18 +412,23 @@
                     this.user.username,
                     this.toAssetUnits(this.amountToContribute)
                 ).then((data) => {
-                    this.$store.dispatch('rd/loadResearchTokenSale', {researchId: this.research.id})
-                    this.$store.dispatch('rd/loadResearchTokenHolders', {researchId: this.research.id})
+                    this.$store.dispatch('rd/loadResearchTokenSale', {researchId: this.research.id});
+                    this.$store.dispatch('rd/loadResearchTokenHolders', {researchId: this.research.id});
+
                     this.isTokensBuying = false;
-                    this.amountToContribute = undefined;
+                    this.$refs.amountToContribute.reset();
+                    this.amountToContribute = '';
+
                     this.$store.dispatch('layout/setSuccess', {
                         message: `You've contributed to "${this.research.title}" token sale successfully !`
                     });
                 }, (err) => {
                     this.isTokensBuying = false;
+
                     this.$store.dispatch('layout/setError', {
                         message: "An error occurred while contributing to Token Sale, please try again later"
                     });
+
                     console.log(err)
                 })
             },
