@@ -44,7 +44,7 @@
             return {
                 amountToSellRules: [
                     v => !!v || 'This field is required',
-                    v => this.verifyAmountRange(v) || 'Amount should be from 1 to 100'
+                    v => this.verifyAmountRange(v) || 'Amount should be from 1 to 100%'
                 ]
             } 
         },
