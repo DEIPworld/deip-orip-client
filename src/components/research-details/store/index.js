@@ -3,6 +3,7 @@ import deipRpc from '@deip/deip-rpc-client'
 import Vue from 'vue'
 import { getAccessToken } from './../../../utils/auth'
 import { getEnrichedProfiles } from './../../../utils/user'
+import tokenSaleSvc from './../../../services/TokenSaleService'
 import contentHttpService from './../../../services/http/content'
 
 const state = {
@@ -358,15 +359,14 @@ const actions = {
     },
 
     loadResearchTokenSale({ state, dispatch, commit }, { researchId, notify }) {
-        commit('SET_RESEARCH_TOKEN_SALE_LOADING_STATE', true)
-        deipRpc.api.getResearchTokenSalesByResearchIdAsync(researchId)
-            .then((tokenSales) => {
-                const firstTokenSale = tokenSales[0];
-                if (firstTokenSale) {
-                    commit('SET_RESEARCH_TOKEN_SALE', firstTokenSale)
+        commit('SET_RESEARCH_TOKEN_SALE_LOADING_STATE', true);
+
+        return tokenSaleSvc.getCurrentTokenSaleByResearchId(researchId)
+            .then(tokenSale => {
+                commit('SET_RESEARCH_TOKEN_SALE', tokenSale);
+
+                if (tokenSale) {
                     dispatch('loadTokenSaleContributors');
-                } else {
-                    commit('SET_RESEARCH_TOKEN_SALE', null)
                 }
             }, (err) => {console.log(err)})
         .finally(() => {
