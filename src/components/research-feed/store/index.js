@@ -1,11 +1,11 @@
 import _ from 'lodash';
-import Vue from 'vue'
+import Vue from 'vue';
 import deipRpc from '@deip/deip-rpc-client';
-import { getEnrichedProfiles } from './../../../utils/user'
-import tokenSaleSvc from './../../../services/TokenSaleService'
+import stateApiSvc from './stateApiSvc';
 
 const state = {
     fullResearchList: [],
+    
     filter: {
         disciplines: [],
         q: '',
@@ -17,7 +17,6 @@ const state = {
         dateTo: null
     }
 }
-
 
 // getters
 const getters = {
@@ -62,58 +61,7 @@ const getters = {
 const actions = {
 
     loadAllResearches({ state, dispatch, commit }) {
-        const disciplineId = _.get(state.filter, 'discipline.id') || 0;
-        let researchResult = [];
-
-        return deipRpc.api.getAllResearchesListingAsync(0, disciplineId)
-            .then(list => {
-                const researchPromises = [];
-
-                researchResult = _.each(list, (item, i) => {
-                    researchPromises.push(deipRpc.api.getTotalVotesByResearchAsync(item.research_id))
-                    item.isCollapsed = true;
-                });
-
-                let reviewsPromises = researchResult.map(research =>
-                    deipRpc.api.getReviewsByResearchAsync(research.research_id)
-                );
-
-                let groupPromises = researchResult.map(research =>
-                    deipRpc.api.getResearchGroupByIdAsync(research.group_id)
-                );
-
-                let authorsPromises = researchResult.map(research =>
-                    getEnrichedProfiles(research.authors)
-                );
-
-                let tokenSalesPromises = researchResult.map(research =>
-                    tokenSaleSvc.getCurrentTokenSaleByResearchId(research.research_id)
-                );
-
-                return Promise.all([
-                    Promise.all(researchPromises),
-                    Promise.all(reviewsPromises),
-                    Promise.all(groupPromises),
-                    Promise.all(authorsPromises),
-                    Promise.all(tokenSalesPromises)
-                ]);
-            })
-            .then(([totalVotes, reviews, groups, authors, tokenSales]) => {
-                let tvoMap = _.chain(totalVotes)
-                    .flatten()
-                    .groupBy('research_id')
-                    .value();
-
-                researchResult.forEach((research, index) => {
-                    research.totalVotes = tvoMap[research.research_id] ? tvoMap[research.research_id] : [];
-                    research.reviews = reviews[index];
-                    research.group = groups[index];
-                    research.enrichedAuthors = authors[index];
-                    research.tokenSale = tokenSales[index];
-                });
-
-                return researchResult;
-            })
+        return stateApiSvc.loadAllResearches()
             .then(data => {
                 commit('SET_FULL_RESEARCH_LIST', data);
             });
