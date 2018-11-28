@@ -9,7 +9,7 @@
                         <v-text-field 
                             label="Soft cap"
                             v-model="tokenSaleInfo.softCap"
-                            :rules="[required, deipTokenValidator]"
+                            :rules="[required, deipTokenValidator, softCapSmaller]"
                             suffix="DEIP"
                         ></v-text-field>
 
@@ -67,11 +67,27 @@
                 isFormValid: false,
 
                 required: value => !!value || 'This field is required',
+                
+                softCapSmaller: () => {
+                    const isHardCapValid = this.deipTokenValidator(this.tokenSaleInfo.hardCap) === true;
+                    const isSoftCapValid = this.deipTokenValidator(this.tokenSaleInfo.softCap) === true;
+
+                    return !isHardCapValid
+                        || isSoftCapValid 
+                            && isHardCapValid
+                            && parseFloat(this.tokenSaleInfo.hardCap) > parseFloat(this.tokenSaleInfo.softCap)
+                        || 'Soft cap should be smaller than hard cap';
+                },
+                
                 hardCapGreater: () => {
-                    return this.deipTokenValidator(this.tokenSaleInfo.hardCap) === true 
-                        && this.deipTokenValidator(this.tokenSaleInfo.softCap) === true
-                        && parseFloat(this.tokenSaleInfo.hardCap) > parseFloat(this.tokenSaleInfo.softCap)
-                        || 'Soft cap should be greater than soft cap or be equal';
+                    const isSoftCapValid = this.deipTokenValidator(this.tokenSaleInfo.softCap) === true;
+                    const isHardCapValid = this.deipTokenValidator(this.tokenSaleInfo.hardCap) === true;
+
+                    return !isSoftCapValid
+                        || isSoftCapValid
+                            && isHardCapValid
+                            && parseFloat(this.tokenSaleInfo.hardCap) > parseFloat(this.tokenSaleInfo.softCap)
+                        || 'Hard cap should be greater than soft cap';
                 }
             } 
         },
