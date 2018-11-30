@@ -21,51 +21,8 @@
 
         <div v-if="!group.is_personal" class="c-mt-6">
             <div class="sidebar-fullwidth"><v-divider></v-divider></div>
-            <div class="subheading bold c-mt-4">Quorum setup</div>
-
-            <div class="c-pt-4 c-pb-4">
-                <!-- no v-for bc order and padding are important -->
-                <div class="row-nowrap justify-between">
-                    <div class="half-bold">{{ proposalLabels[ group.proposal_quorums[0][0] ] }}</div>
-                    <div class="">{{ convertToPercent( group.proposal_quorums[0][1] ) }}%</div>
-                </div>
-                <div class="row-nowrap justify-between">
-                    <div class="half-bold">{{ proposalLabels[ group.proposal_quorums[9][0] ] }}</div>
-                    <div class="">{{ convertToPercent( group.proposal_quorums[9][1] ) }}%</div>
-                </div>
-                <div class="row-nowrap justify-between">
-                    <div class="half-bold">{{ proposalLabels[ group.proposal_quorums[7][0] ] }}</div>
-                    <div class="">{{ convertToPercent( group.proposal_quorums[7][1] ) }}%</div>
-                </div>
-                <div class="row-nowrap justify-between c-pt-2">
-                    <div class="half-bold">{{ proposalLabels[ group.proposal_quorums[1][0] ] }}</div>
-                    <div class="">{{ convertToPercent( group.proposal_quorums[1][1] ) }}%</div>
-                </div>
-                <div class="row-nowrap justify-between">
-                    <div class="half-bold">{{ proposalLabels[ group.proposal_quorums[2][0] ] }}</div>
-                    <div class="">{{ convertToPercent( group.proposal_quorums[2][1] ) }}%</div>
-                </div>
-                <div class="row-nowrap justify-between c-pt-2">
-                    <div class="half-bold">{{ proposalLabels[ group.proposal_quorums[4][0] ] }}</div>
-                    <div class="">{{ convertToPercent( group.proposal_quorums[4][1] ) }}%</div>
-                </div>
-                <div class="row-nowrap justify-between">
-                    <div class="half-bold">{{ proposalLabels[ group.proposal_quorums[8][0] ] }}</div>
-                    <div class="">{{ convertToPercent( group.proposal_quorums[8][1] ) }}%</div>
-                </div>
-                <div class="row-nowrap justify-between">
-                    <div class="half-bold">{{ proposalLabels[ group.proposal_quorums[3][0] ] }}</div>
-                    <div class="">{{ convertToPercent( group.proposal_quorums[3][1] ) }}%</div>
-                </div>
-                <div class="row-nowrap justify-between c-pt-2">
-                    <div class="half-bold">{{ proposalLabels[ group.proposal_quorums[6][0] ] }}</div>
-                    <div class="">{{ convertToPercent( group.proposal_quorums[6][1] ) }}%</div>
-                </div>
-                <div class="row-nowrap justify-between">
-                    <div class="half-bold">{{ proposalLabels[ group.proposal_quorums[5][0] ] }}</div>
-                    <div class="">{{ convertToPercent( group.proposal_quorums[5][1] ) }}%</div>
-                </div>
-            </div>
+            
+            <quorum-size-sidebar-section></quorum-size-sidebar-section>
         </div>
 
         <!-- ### START Research Group Join Requests Section ### -->
@@ -92,6 +49,10 @@
             </div>
         </div>
         <!-- ### END Research Group Join Requests Section ### -->
+        
+        <div class="sidebar-fullwidth">
+            <v-divider></v-divider>
+        </div>
 
         <handle-join-request-dialog v-if="group"
             :is-open="options.isHandleRequestDialogOpen"
@@ -105,23 +66,22 @@
 <script>
     import { mapGetters } from 'vuex';
     import _ from 'lodash';
-    import joinRequestsService from './../../../services/http/joinRequests'
-    import * as proposalService from './../../../services/ProposalService';
+    import joinRequestsService from './../../../services/http/joinRequests';
     import deipRpc from '@deip/deip-rpc-client';
 
     export default {
         name: "ResearchGroupDetailsSidebar",
+
         data() {
             return {
                 isApprovingJoinRequest: false,
                 isDenyingJoinRequest: false,
 
                 selectedJoinRequest: undefined,
-                isHandleRequestDialogOpen: true,
-
-                proposalLabels: _.cloneDeep(proposalService.labels)
+                isHandleRequestDialogOpen: true
             };
         },
+
         computed: {
             ...mapGetters({
                 user: 'auth/user',
