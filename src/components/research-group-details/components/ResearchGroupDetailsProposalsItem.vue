@@ -160,8 +160,7 @@
                             <div>
                                 Proposed percent:
                                 <span class="bold">
-                                    <!-- change on deip percents -->
-                                    {{ proposal.data.quorum_percent }}%
+                                    {{ convertToPercent(proposal.data.quorum_percent) }}%
                                 </span>
                             </div>
                         </div>

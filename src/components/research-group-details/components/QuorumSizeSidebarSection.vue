@@ -4,7 +4,7 @@
             <div class="subheading bold c-mt-4">Quorum size</div>
 
             <div class="c-mt-3" v-if="isResearchGroupMember">
-                <v-btn slot="activator" @click="isEditMode = !isEditMode" flat small icon color="grey" class="ma-0">
+                <v-btn slot="activator" @click="changeMode()" flat small icon color="grey" class="ma-0">
                     <v-icon small>{{ !isEditMode ? 'mode_edit' : 'close' }}</v-icon>
                 </v-btn>
             </div>
@@ -124,6 +124,14 @@
                 this.shadowProposalOrderMap = _.cloneDeep(this.proposalOrderMap);
             },
 
+            changeMode() {
+                this.isEditMode = !this.isEditMode;
+
+                if (!this.isEditMode) {
+                    this.proposalOrderMap = _.cloneDeep(this.shadowProposalOrderMap);
+                }
+            },
+
             sendChangeQuorumProposal() {
                 this.isLoading = true;
                 const promises = [];
@@ -134,9 +142,7 @@
                             const promise = proposalService.createChangeQuorumProposal(
                                 this.group.id,
                                 proposalData.key,
-                                // change on deip percents
-                                // this.toDeipPercent(proposalData.value)
-                                parseInt(proposalData.value)
+                                this.toDeipPercent(proposalData.value)
                             );
 
                             promises.push(promise);
