@@ -13,6 +13,7 @@
                             <span class="deip-blue-color half-bold clickable" @click="changeMode()">Advanced</span>
                             options.
                         </div>
+
                         <v-text-field 
                             v-model="totalQuorum"
                             :disabled="isAdvanced"
@@ -166,28 +167,30 @@
 
 <script>
     import _ from "lodash";
+    import * as proposalService from './../../../services/ProposalService';
 
     export default {
         name: "CreateResearchGroupQuorum",
+
         props: {
             group: { type: Object, required: true }
         },
+
         data() { 
             return {
                 isAdvanced: false,
                 totalQuorum: 50
             } 
         },
+
         computed: {
             nextDisabled() {
-                return _.some(this.group.quorum, el => {
-                    let value = parseInt(el);
-                    let isNumber = _.isFinite(value);
-
-                    return !isNumber || isNumber && (value > 100 || value < 6);
-                });
+                return _.some(this.group.quorum, value => 
+                    proposalService.validateQuorumValue(value)
+                );
             }
         },
+
         methods: {
             nextStep() {
                 this.$emit('incStep');
@@ -208,6 +211,7 @@
                 }
             }
         },
+
         created() {
             this.onChangeTotalQuorum();
         }

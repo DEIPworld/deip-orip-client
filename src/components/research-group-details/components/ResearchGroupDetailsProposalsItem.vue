@@ -33,6 +33,15 @@
                     </div>
 
                     <div class="display-flex" 
+                        v-else-if="proposal.action === proposalTypes.CHANGE_QUORUM"
+                    >
+                        <v-icon small color="primary" class="c-mr-2">mdi-percent</v-icon>
+                        <div class="a">
+                            Change of quorum
+                        </div>
+                    </div>
+
+                    <div class="display-flex" 
                         v-else-if="proposal.action === proposalTypes.CREATE_RESEARCH_MATERIAL"
                     >
                         <v-icon small color="primary" class="c-mr-2">note_add</v-icon>
@@ -142,6 +151,21 @@
                         </div>
                     </div>
 
+                    <div class="row" v-else-if="proposal.action === proposalTypes.CHANGE_QUORUM">
+                        <div class="col-6">
+                            <div>
+                                Type:
+                                <span class="bold">{{ proposalLabels[proposal.data.proposal_type] }}</span>
+                            </div>
+                            <div>
+                                Proposed percent:
+                                <span class="bold">
+                                    {{ convertToPercent(proposal.data.quorum_percent) }}%
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+
                     <div class="row" v-else-if="proposal.action === proposalTypes.CREATE_RESEARCH_MATERIAL">
                         <div class="col-6">
                             <div class="grey--text">{{ proposal.data.authors.join(' · ') }}</div>
@@ -160,7 +184,7 @@
 
 <script>
     import { mapGetters, mapActions } from 'vuex';
-    import { voteForProposal, types } from "./../../../services/ProposalService";
+    import { voteForProposal, types, labels } from "./../../../services/ProposalService";
     import * as researchService from "./../../../services/ResearchService";
     import * as disciplineTreeService from "./../../common/disciplines/DisciplineTreeService";
     import _ from 'lodash';
@@ -168,15 +192,19 @@
 
     export default {
         name: "ResearchGroupDetailsProposalsItem",
+
         props: {
             proposal: { type: Object, required: true }
         },
+
         data() { 
             return {
-                proposalTypes: types,
+                proposalTypes: _.cloneDeep(types),
+                proposalLabels: _.cloneDeep(labels),
                 isApprovingLoading: false
             } 
         },
+
         methods: {
             ...mapActions({
                 changeProposal: 'researchGroup/changeProposal'
@@ -206,11 +234,10 @@
                 return contentType.text;
             },
             getContentUrl(proposal) {
-                console.log(proposal);
-
                 return `/#/${encodeURIComponent(proposal.extension.research.group_permlink)}/research/${encodeURIComponent(proposal.extension.research.permlink)}/!draft?ref=${proposal.extension.draftContent._id}`;
             }
         },
+
         computed: {
             ...mapGetters({
                 group: 'researchGroup/group',

@@ -54,7 +54,7 @@ schemasMap[START_RESEARCH] = (researchGroupId, title, abstract, permlink, review
         "dropout_compensation_in_percent": dropoutCompensationInPercent, 
         "disciplines": disciplines
     };
-}
+};
 schemasMap[INVITE_MEMBER] = (researchGroupId, name, researchGroupTokenAmount, coverLetter) => {
     return {
         "research_group_id": researchGroupId,
@@ -62,7 +62,7 @@ schemasMap[INVITE_MEMBER] = (researchGroupId, name, researchGroupTokenAmount, co
         "research_group_token_amount_in_percent": researchGroupTokenAmount,
         "cover_letter": coverLetter
     };
-}
+};
 schemasMap[START_RESEARCH_TOKEN_SALE] = (researchId, startTime, endTime, amount, softCap, hardCap) => {
     return {
         "research_id": researchId,
@@ -72,7 +72,14 @@ schemasMap[START_RESEARCH_TOKEN_SALE] = (researchId, startTime, endTime, amount,
         "soft_cap": softCap,
         "hard_cap": hardCap
     };
-}
+};
+schemasMap[CHANGE_QUORUM] = (researchGroupId, proposalType, quorumPercent) => {
+    return {
+        'research_group_id': researchGroupId,
+        'proposal_type': proposalType,
+        'quorum_percent': quorumPercent
+    };
+};
 schemasMap[CREATE_RESEARCH_MATERIAL] = (researchId, type, title, permlink, content, authors, references, externalReferences) => {
     return {
         "research_id": researchId,
@@ -84,7 +91,7 @@ schemasMap[CREATE_RESEARCH_MATERIAL] = (researchId, type, title, permlink, conte
         "references": references,
         "external_references": externalReferences
     };
-}
+};
 
 
 const getStringifiedProposalData = (type, params) => {
@@ -207,6 +214,23 @@ const createResearchProposal = function(groupId, title, description, permlink, r
         })
 }
 
+const createChangeQuorumProposal = (groupId, proposalType, quorumPercent) => {
+    const data = getStringifiedProposalData(CHANGE_QUORUM, [
+        groupId,
+        proposalType,
+        quorumPercent
+    ]);
+
+    return deipRpc.broadcast.createProposalAsync(
+        getOwnerWif(),
+        getDecodedToken().username,
+        groupId,
+        data,
+        CHANGE_QUORUM,
+        new Date(new Date().getTime() + 2 * 24 * 60 * 60 * 1000)
+    );
+};
+
 const createContentProposal = function(contentRef, contentType) {
     const data = getStringifiedProposalData(CREATE_RESEARCH_MATERIAL, [
         contentRef.researchId, contentType, contentRef.title, 
@@ -249,14 +273,24 @@ const createTokenSaleProposal = function(groupId, researchId, startDate, endDate
         })
 }
 
+const validateQuorumValue = value => {
+    let intValue = parseInt(value);
+    let isNumber = _.isFinite(intValue);
+
+    return !isNumber || isNumber && (intValue > 100 || intValue < 5);
+}
+
 export {
     types,
     labels,
     voteForProposal,
     createInviteProposal,
+    createChangeQuorumProposal,
     createResearchProposal,
     createContentProposal,
     createTokenSaleProposal,
     getParsedProposal,
-    extendProposalByRelatedInfo
+    extendProposalByRelatedInfo,
+
+    validateQuorumValue
 };
