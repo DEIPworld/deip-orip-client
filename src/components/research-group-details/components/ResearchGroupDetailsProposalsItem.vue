@@ -24,6 +24,13 @@
                     </div>
 
                     <div class="display-flex" 
+                        v-else-if="proposal.action === proposalTypes.SEND_FUNDS"
+                    >
+                        <v-icon small color="primary" class="c-mr-2">money_off</v-icon>
+                        <div class="a">Transfer tokens</div>
+                    </div>
+
+                    <div class="display-flex" 
                         v-else-if="proposal.action === proposalTypes.START_RESEARCH_TOKEN_SALE"
                     >
                         <v-icon small color="primary" class="c-mr-2">attach_money</v-icon>
@@ -126,6 +133,26 @@
                             </span>
                         </div>
                         <div class="col-6 grey--text break-word white-space-pre-line">{{ proposal.data.cover_letter }}</div>
+                    </div>
+
+                    <div class="row" v-else-if="proposal.action === proposalTypes.SEND_FUNDS">
+                        <div class="col-6">
+                            <div>
+                                User:
+                                <router-link :to="{
+                                        name: 'UserDetails', 
+                                        params: { account_name: proposal.data.recipient }
+                                    }" 
+                                    class="a"
+                                >{{ proposal.extension.recipient | fullname }}</router-link>
+                            </div>
+                            <div>
+                                Amount:
+                                <span class="bold">
+                                    {{ proposal.data.funds }}
+                                </span>
+                            </div>
+                        </div>
                     </div>
 
                     <div class="row" v-else-if="proposal.action === proposalTypes.START_RESEARCH_TOKEN_SALE">

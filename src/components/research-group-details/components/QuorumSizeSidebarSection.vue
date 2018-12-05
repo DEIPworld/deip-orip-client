@@ -1,16 +1,16 @@
 <template>
     <div>
         <div class="row-nowrap justify-between">
-            <div class="subheading bold c-mt-4">Quorum size</div>
+            <div class="subheading bold">Quorum size</div>
 
-            <div class="c-mt-3" v-if="isResearchGroupMember">
+            <div class="mode-btn-wrapper" v-if="isResearchGroupMember">
                 <v-btn slot="activator" @click="changeMode()" flat small icon color="grey" class="ma-0">
                     <v-icon small>{{ !isEditMode ? 'mode_edit' : 'close' }}</v-icon>
                 </v-btn>
             </div>
         </div>
 
-        <div class="c-pt-4 c-pb-4">
+        <div class="c-pt-4">
             <div v-if="!isResearchGroupMember || !isEditMode">
                 <div v-for="(proposalBlock, i) in proposalOrderMap" :class="{ 'c-pt-2': i !== 0 }">
                     <div v-for="proposalData in proposalBlock">
@@ -184,5 +184,9 @@
     .percent-input.input-group {
         max-width: 45px;
         padding-top: 0px;
+    }
+
+    .mode-btn-wrapper {
+        margin-top: -4px;
     }
 </style>

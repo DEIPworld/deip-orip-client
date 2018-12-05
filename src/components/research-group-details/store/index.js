@@ -17,7 +17,8 @@ const state = {
 
     options: {
         isAddMemberDialogOpen: false,
-        isHandleRequestDialogOpen: false
+        isHandleRequestDialogOpen: false,
+        isTransferTokensDialogOpen: false
     },
 
     proposalListFilter: {
