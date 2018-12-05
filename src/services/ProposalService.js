@@ -4,6 +4,7 @@ import researchContentSvc from './http/content.js';
 import proposalsHttp from './http/proposals';
 import { getDecodedToken, getOwnerWif } from './../utils/auth'
 import { signOperation } from './../utils/blockchain';
+import { getEnrichedProfiles } from './../utils/user'
 
 export const START_RESEARCH = 1;
 export const INVITE_MEMBER = 2;
@@ -63,6 +64,13 @@ schemasMap[INVITE_MEMBER] = (researchGroupId, name, researchGroupTokenAmount, co
         "cover_letter": coverLetter
     };
 };
+schemasMap[SEND_FUNDS] = (researchGroupId, recipient, funds) => {
+    return {
+        "research_group_id": researchGroupId,
+        "recipient": recipient,
+        "funds": funds
+    };
+};
 schemasMap[START_RESEARCH_TOKEN_SALE] = (researchId, startTime, endTime, amount, softCap, hardCap) => {
     return {
         "research_id": researchId,
@@ -109,6 +117,9 @@ const getParsedProposal = proposal => {
 const extenderMap = {}
 extenderMap[START_RESEARCH] = undefined;
 extenderMap[INVITE_MEMBER] = undefined;
+extenderMap[SEND_FUNDS] = {
+    recipient: proposal => getEnrichedProfiles([proposal.data.recipient]).then(data => data[0])
+};
 extenderMap[START_RESEARCH_TOKEN_SALE] = undefined;
 extenderMap[CREATE_RESEARCH_MATERIAL] = {
     research: proposal => deipRpc.api.getResearchByIdAsync(proposal.data.research_id),
@@ -139,9 +150,10 @@ const extendProposalByRelatedInfo = proposal => {
         });
 };
 
+const getProposalExpirationTime = () => new Date(new Date().getTime() + 2 * 24 * 60 * 60 * 1000);
+
 const createProposal = function(privKey, username, groupId, stringifiedPayload, proposalType) {
-    return deipRpc.broadcast.createProposalAsync(privKey, username, groupId, stringifiedPayload, proposalType,
-        new Date(new Date().getTime() + 2 * 24 * 60 * 60 * 1000))
+    return deipRpc.broadcast.createProposalAsync(privKey, username, groupId, stringifiedPayload, proposalType, getProposalExpirationTime())
             .then((block) => {
                 var proposal = null;
                 for (let i = 0; i < block.operations.length; i++) {
@@ -184,7 +196,7 @@ const createInviteProposal = function(groupId, invitee, rgtAmount, coverLetter) 
         research_group_id: groupId,
         data: data,
         action: INVITE_MEMBER,
-        expiration_time: new Date(new Date().getTime() + 2 * 24 * 60 * 60 * 1000)
+        expiration_time: getProposalExpirationTime()
     };
 
     const operation = ["create_proposal", proposal];
@@ -193,6 +205,23 @@ const createInviteProposal = function(groupId, invitee, rgtAmount, coverLetter) 
             return proposalsHttp.sendInviteProposal(signedTx);
         })
 }
+
+const createSendFundsProposal = (groupId, recipient, funds) => {
+    const data = getStringifiedProposalData(SEND_FUNDS, [
+        groupId,
+        recipient,
+        funds
+    ]);
+
+    return deipRpc.broadcast.createProposalAsync(
+        getOwnerWif(),
+        getDecodedToken().username,
+        groupId,
+        data,
+        SEND_FUNDS,
+        getProposalExpirationTime()
+    );
+};
 
 const createResearchProposal = function(groupId, title, description, permlink, reviewShare, disciplines) {
     const data = getStringifiedProposalData(START_RESEARCH, [
@@ -204,7 +233,7 @@ const createResearchProposal = function(groupId, title, description, permlink, r
         research_group_id: groupId,
         data: data,
         action: START_RESEARCH,
-        expiration_time: new Date(new Date().getTime() + 2 * 24 * 60 * 60 * 1000)
+        expiration_time: getProposalExpirationTime()
     };
 
     const operation = ["create_proposal", proposal];
@@ -227,7 +256,7 @@ const createChangeQuorumProposal = (groupId, proposalType, quorumPercent) => {
         groupId,
         data,
         CHANGE_QUORUM,
-        new Date(new Date().getTime() + 2 * 24 * 60 * 60 * 1000)
+        getProposalExpirationTime()
     );
 };
 
@@ -243,7 +272,7 @@ const createContentProposal = function(contentRef, contentType) {
         research_group_id: contentRef.researchGroupId,
         data: data,
         action: CREATE_RESEARCH_MATERIAL,
-        expiration_time: new Date(new Date().getTime() + 2 * 24 * 60 * 60 * 1000)
+        expiration_time: getProposalExpirationTime()
     };
 
     const operation = ["create_proposal", proposal];
@@ -263,7 +292,7 @@ const createTokenSaleProposal = function(groupId, researchId, startDate, endDate
         research_group_id: groupId,
         data: data,
         action: START_RESEARCH_TOKEN_SALE,
-        expiration_time: new Date(new Date().getTime() + 2 * 24 * 60 * 60 * 1000)
+        expiration_time: getProposalExpirationTime()
     };
 
     const operation = ["create_proposal", proposal];
@@ -283,12 +312,16 @@ const validateQuorumValue = value => {
 export {
     types,
     labels,
+
     voteForProposal,
+
     createInviteProposal,
     createChangeQuorumProposal,
+    createSendFundsProposal,
     createResearchProposal,
     createContentProposal,
     createTokenSaleProposal,
+
     getParsedProposal,
     extendProposalByRelatedInfo,
 
