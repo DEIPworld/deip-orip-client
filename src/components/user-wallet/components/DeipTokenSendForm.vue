@@ -56,9 +56,11 @@
 
     export default {
         name: "DeipTokenSendForm",
+
         props: {
             deipTokenBalance: { required: true, type: Number }
         },
+
         data() { 
             return {
                 form: {
@@ -95,6 +97,7 @@
                 isSending: false
             }
         },
+
         methods: {
             usernameChanged: _.debounce(
                 function() {
@@ -150,6 +153,7 @@
                 }
             }
         },
+        
         computed: {
             ...mapGetters({
                 user: 'auth/user'
