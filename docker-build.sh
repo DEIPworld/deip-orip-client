@@ -5,9 +5,9 @@ set -e
 TAG=$(git log -1 --pretty=%h)
 LATEST="latest"
 
-echo "Build deip client"
+echo "Building deipworld/client image..."
 export IMAGE_NAME="deipworld/client:$TAG"
 npm install && npm run build
 
 docker build -t=${IMAGE_NAME} .
-docker push "deipworld/client:$TAG"
+docker push ${IMAGE_NAME}
