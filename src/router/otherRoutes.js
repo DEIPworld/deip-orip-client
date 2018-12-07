@@ -1,5 +1,7 @@
 import store from './../store/index';
 
+import preliminaryDataLoader from './utils/preliminaryDataLoader';
+
 import SetExpertisePage from '@/components/SetExpertisePage';
 import NoAccessPage from '@/components/NoAccessPage';
 import CreateAccountTestNet from '@/components/auth/CreateAccountTestNet';
@@ -26,7 +28,19 @@ const otherRoutes = [{
     {
         path: '/voting-for-block-producers',
         name: 'voting-for-block-producers',
-        component: VotingForBlockProducers
+
+        component: preliminaryDataLoader(
+            VotingForBlockProducers, {
+            beforeEnter: (to, from, next) => {
+                store.dispatch('layout/setGlobalLoader');
+
+                store.dispatch('votingForBlockProducers/loadProducers')
+                    .then(() => {
+                        store.dispatch('layout/hideGlobalLoader');
+                        next();
+                    });
+            }
+        })
     }];
 
 
