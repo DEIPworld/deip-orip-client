@@ -42,6 +42,10 @@
                         <v-list-tile-title>Expertise Committee</v-list-tile-title>
                     </v-list-tile>
 
+                    <v-list-tile v-if="user" :to="{ name: 'voting-for-block-producers' }">
+                        <v-list-tile-title>Voting for block producers</v-list-tile-title>
+                    </v-list-tile>
+
                     <v-divider></v-divider>
 
                     <v-list-tile @click="signOut()">

@@ -6,11 +6,12 @@ import feed from './../components/research-feed/store/index'
 import researchGroup from './../components/research-group-details/store/index'
 import rd from './../components/research-details/store/index'
 import rcd from './../components/research-content-details/store/index'
-import userDetails from './../components/user-details/store/index.js'
-import userWallet from './../components/user-wallet/store/index.js'
-import layout from './../components/layout/store/index.js'
-import claimExpertiseDetails from './../components/claim-expertise-details/store/index.js'
-import claimExpertiseList from './../components/claim-expertise-list/store/index.js'
+import userDetails from './../components/user-details/store/index'
+import userWallet from './../components/user-wallet/store/index'
+import layout from './../components/layout/store/index'
+import claimExpertiseDetails from './../components/claim-expertise-details/store/index'
+import claimExpertiseList from './../components/claim-expertise-list/store/index'
+import votingForBlockProducers from './../components/voting-for-block-producers/store/index'
 
 
 Vue.use(Vuex)
@@ -28,7 +29,8 @@ export default new Vuex.Store({
         userWallet,
         layout,
         claimExpertiseDetails,
-        claimExpertiseList
+        claimExpertiseList,
+        votingForBlockProducers
     },
     strict: debug,
     plugins: debug ? [createLogger()] : []
