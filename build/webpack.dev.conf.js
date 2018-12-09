@@ -47,7 +47,8 @@ const devWebpackConfig = merge(baseWebpackConfig, {
   },
   plugins: [
     new Dotenv({
-      path: path.resolve(__dirname, `./../config/.${process.env.USE_LOCAL_CONFIG ? 'local' : 'dev'}.env`),
+      path: path.resolve(__dirname, `./../config/.${ (process.env.USE_LOCAL_CONFIG || process.env.NODE_ENV == 'local') ? 'local' : 'dev'}.env`),
+      systemvars: true
     }),
     new webpack.HotModuleReplacementPlugin(),
     new webpack.NamedModulesPlugin(), // HMR shows correct file names in console on update.

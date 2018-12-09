@@ -29,6 +29,7 @@ const webpackConfig = merge(baseWebpackConfig, {
   plugins: [
     new Dotenv({
       path: path.resolve(__dirname, './../config/.prod.env'),
+      systemvars: true
     }),
     new UglifyJsPlugin({
       uglifyOptions: {
