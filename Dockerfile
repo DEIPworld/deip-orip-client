@@ -1,3 +1,10 @@
-FROM halverneus/static-file-server
-ENV PORT=80
-COPY ./dist ./web
+FROM node:8
+
+RUN mkdir -p /var/app
+COPY . /var/app
+WORKDIR /var/app
+
+RUN npm install && npm run build
+EXPOSE 80
+
+CMD [ "node", "server" ]
