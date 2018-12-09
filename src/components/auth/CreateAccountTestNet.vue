@@ -137,7 +137,7 @@
             finishRegistration() {
                 this.isSaving = true;
                 const jsonMetadata = '';
-                const config = JSON.parse(process.env.TEST_NET_USER_FACTORY_CONFIG);
+                const config = JSON.parse(window.env.TEST_NET_USER_FACTORY_CONFIG);
 
                 const authority = {
                     weight_threshold: 1,

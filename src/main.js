@@ -10,6 +10,7 @@ import 'vuetify/dist/vuetify.css';
 import './styles/common.less';
 import 'vue2-dropzone/dist/vue2Dropzone.css';
 import '@mdi/font/css/materialdesignicons.css';
+import axios from 'axios'
 
 import deipRpc from '@deip/deip-rpc-client';
 import './index';
@@ -23,14 +24,21 @@ Vue.use(Vuetify, {
 
 Vue.config.productionTip = false;
 
-deipRpc.api.setOptions({ url: process.env.DEIP_FULL_NODE_URL });
-deipRpc.config.set('chain_id', process.env.CHAIN_ID);
-
-/* eslint-disable no-new */
-window.deipApp = new Vue({
-    el: '#app',
-    store,
-    router,
-    components: { App },
-    template: '<App/>'
-});
+axios.get('/env')
+    .then((env) => {
+        window.env = env.data;
+        deipRpc.api.setOptions({ url: window.env.DEIP_FULL_NODE_URL });
+        deipRpc.config.set('chain_id', window.env.CHAIN_ID);
+        console.log(window.env);
+        /* eslint-disable no-new */
+        window.app = new Vue({
+            el: '#app',
+            store,
+            router,
+            components: { App },
+            template: '<App/>'
+        });
+    })
+    .catch((err) => {
+        console.error(err)
+    })

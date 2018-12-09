@@ -9,7 +9,6 @@ const CopyWebpackPlugin = require('copy-webpack-plugin')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const FriendlyErrorsPlugin = require('friendly-errors-webpack-plugin')
 const portfinder = require('portfinder')
-const Dotenv = require('dotenv-webpack');
 
 const HOST = process.env.HOST
 const PORT = process.env.PORT && Number(process.env.PORT)
@@ -23,6 +22,11 @@ const devWebpackConfig = merge(baseWebpackConfig, {
 
   // these devServer options should be customized in /config/index.js
   devServer: {
+    setup(app) {
+      app.get('/env', (req, res) => {
+          res.json(require('./../config/env.js'));
+      });
+    },
     clientLogLevel: 'warning',
     historyApiFallback: {
       rewrites: [
@@ -46,10 +50,6 @@ const devWebpackConfig = merge(baseWebpackConfig, {
     }
   },
   plugins: [
-    new Dotenv({
-      path: path.resolve(__dirname, `./../config/.${ (process.env.USE_LOCAL_CONFIG || process.env.NODE_ENV == 'local') ? 'local' : 'dev'}.env`),
-      systemvars: true
-    }),
     new webpack.HotModuleReplacementPlugin(),
     new webpack.NamedModulesPlugin(), // HMR shows correct file names in console on update.
     new webpack.NoEmitOnErrorsPlugin(),

@@ -345,7 +345,7 @@
             addReference(ref) {
                 if (this.isDarContent) {
                     const texture = this.$store.getters['rcd/texture'];
-                    const uri = `${location.protocol}//${process.env.HOST}/#/${encodeURIComponent(ref.group_permlink)}/research/${encodeURIComponent(ref.research_permlink)}/${encodeURIComponent(ref.permlink)}`;
+                    const uri = `${location.protocol}//${window.env.HOST}/#/${encodeURIComponent(ref.group_permlink)}/research/${encodeURIComponent(ref.research_permlink)}/${encodeURIComponent(ref.permlink)}`;
                     const title = `${ref.title} (${ref.research_title})`, containerTitle = title;
                     const refs = this.contentRef.references.slice();
                     texture.api.addReference(uri, title, containerTitle);
@@ -357,7 +357,7 @@
             removeReference(ref) {
                 if (this.isDarContent) {
                     const texture = this.$store.getters['rcd/texture'];
-                    const uri = `${location.protocol}//${process.env.HOST}/#/${encodeURIComponent(ref.group_permlink)}/research/${encodeURIComponent(ref.research_permlink)}/${encodeURIComponent(ref.permlink)}`;
+                    const uri = `${location.protocol}//${window.env.HOST}/#/${encodeURIComponent(ref.group_permlink)}/research/${encodeURIComponent(ref.research_permlink)}/${encodeURIComponent(ref.permlink)}`;
                     const reference = texture.api.getReferences().find(r => r.uri == uri);
                     texture.api.removeReference(reference);
                     const refs = this.contentRef.references.slice().filter(r => r != ref.id);

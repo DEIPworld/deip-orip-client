@@ -83,7 +83,7 @@
                     }
 
                     // sig-seed should be uint8 array with length = 32
-                    const secretSig = secretKey.sign(encodeUint8Arr(process.env.SIG_SEED).buffer);
+                    const secretSig = secretKey.sign(encodeUint8Arr(window.env.SIG_SEED).buffer);
                     const secretSigHex = crypto.hexify(secretSig);
                     
                     authService.signIn({username: this.username, secretSigHex: secretSigHex})

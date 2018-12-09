@@ -10,7 +10,6 @@ const HtmlWebpackPlugin = require('html-webpack-plugin')
 const ExtractTextPlugin = require('extract-text-webpack-plugin')
 const OptimizeCSSPlugin = require('optimize-css-assets-webpack-plugin')
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin')
-const Dotenv = require('dotenv-webpack');
 
 const webpackConfig = merge(baseWebpackConfig, {
   module: {
@@ -27,10 +26,6 @@ const webpackConfig = merge(baseWebpackConfig, {
     chunkFilename: utils.assetsPath('js/[id].[chunkhash].js')
   },
   plugins: [
-    new Dotenv({
-      path: path.resolve(__dirname, './../config/.prod.env'),
-      systemvars: true
-    }),
     new UglifyJsPlugin({
       uglifyOptions: {
         compress: {

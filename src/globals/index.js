@@ -13,7 +13,7 @@ Vue.prototype.toDeipPercent = amount => parseFloat(amount) * 100;
 Vue.prototype.ASSET_QUANTITY_REGEX = /^(?:0|(?:[1-9]\d*))(?:\.\d{1,3})?$/;
 Vue.prototype.toAssetUnits = amount => {
     let value = parseFloat(amount).toFixed(3);
-    return `${value} ${process.env.ASSET_UNIT}`;
+    return `${value} ${window.env.ASSET_UNIT}`;
 };
 Vue.prototype.fromAssetsToFloat = assets => parseFloat(assets.split(' ')[0]);
 Vue.prototype.deipTokenValidator = value => {
@@ -34,6 +34,3 @@ Vue.prototype.deipTokenValidator = value => {
 Vue.prototype.COMMON_TOKEN_QUANTITY_REGEX = /^(?:0|(?:[1-9]\d*))(?:\.\d{1,3})?$/;
 Vue.prototype.toCommonTokens = amount => parseFloat(amount / 1000);
 Vue.prototype.fromCommonTokensToAmount = common => common * 1000;
-
-// from config
-Vue.prototype.fileStorageBaseUrl = process.env.DEIP_SERVER_URL;

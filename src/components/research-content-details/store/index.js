@@ -393,7 +393,7 @@ const actions = {
                             signature: block.witness_signature
                         },
                         voters: votersMeta,
-                        chainId: process.env.CHAIN_ID,
+                        chainId: window.env.CHAIN_ID,
                         transaction: {
                             id: tx.transaction_id,
                             hex: txHex
@@ -466,7 +466,7 @@ const actions = {
                             signature: genesisBlock.witness_signature
                         },
                         voters: [],
-                        chainId: process.env.CHAIN_ID,
+                        chainId: window.env.CHAIN_ID,
                         transaction: null
                     };
 

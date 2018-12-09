@@ -143,7 +143,7 @@
             },
             dropzoneOptions() {
                 return this.research != null ? {
-                        url: `${process.env.DEIP_SERVER_URL}/content/upload-file`,
+                        url: `${window.env.DEIP_SERVER_URL}/content/upload-file`,
                         paramName: "research-content",
                         headers: {
                             "Research-Id": this.research.id.toString(),

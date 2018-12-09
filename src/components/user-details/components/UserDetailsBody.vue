@@ -291,7 +291,7 @@
                 avatarUploadIsShown: false,
 
                 accountName: this.$route.params.account_name,
-                fileStorageBaseUrl: process.env.DEIP_SERVER_URL,
+                fileStorageBaseUrl: window.env.DEIP_SERVER_URL,
 
                 tmpClaimObjects: []
             }
@@ -337,7 +337,7 @@
             },
             dropzoneOptions() {
                 return this.currentUser != null ? {
-                        url: `${process.env.DEIP_SERVER_URL}/api/files/upload-avatar`,
+                        url: `${window.env.DEIP_SERVER_URL}/api/files/upload-avatar`,
                         paramName: "user-avatar",
                         headers: {
                             "username": this.currentUser.username.toString(),

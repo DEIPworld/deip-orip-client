@@ -16,8 +16,6 @@ import votingForBlockProducers from './../components/voting-for-block-producers/
 
 Vue.use(Vuex)
 
-const debug = process.env.NODE_ENV !== 'production'
-
 export default new Vuex.Store({
     modules: {
         auth,
@@ -32,6 +30,6 @@ export default new Vuex.Store({
         claimExpertiseList,
         votingForBlockProducers
     },
-    strict: debug,
-    plugins: debug ? [createLogger()] : []
+    strict: process.env.NODE_ENV !== 'production',
+    plugins: process.env.NODE_ENV !== 'production' ? [createLogger()] : []
 });

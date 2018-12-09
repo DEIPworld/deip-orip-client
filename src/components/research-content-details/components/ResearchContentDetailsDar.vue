@@ -28,7 +28,7 @@
         },
         data() { 
             return {
-                fileStorageBaseUrl: process.env.DEIP_SERVER_URL,
+                fileStorageBaseUrl: window.env.DEIP_SERVER_URL,
                 isReadOnly: undefined,
                 isContentExpansionAvailable: undefined,
                 isContentExpanded: false,
