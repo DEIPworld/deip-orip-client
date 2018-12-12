@@ -34,9 +34,9 @@
                         <v-list-tile-title>Wallet</v-list-tile-title>
                     </v-list-tile>
                     
-                    <v-list-tile v-if="user" :to="{ name: 'CreateDisciplineGrant' }">
+                <!-- <v-list-tile v-if="user" :to="{ name: 'CreateDisciplineGrant' }">
                         <v-list-tile-title>Create Grant</v-list-tile-title>
-                    </v-list-tile>
+                    </v-list-tile> -->
 
                     <v-list-tile v-if="user" :to="{ name: 'claim-user-expertise-list' }">
                         <v-list-tile-title>Expertise Committee</v-list-tile-title>
