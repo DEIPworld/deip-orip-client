@@ -46,6 +46,10 @@
                         <v-list-tile-title>Voting for block producers</v-list-tile-title>
                     </v-list-tile>
 
+                    <v-list-tile v-if="user" :to="{ name: 'investor-dashboard' }">
+                        <v-list-tile-title>Investor dashboard</v-list-tile-title>
+                    </v-list-tile>
+
                     <v-divider></v-divider>
 
                     <v-list-tile @click="signOut()">

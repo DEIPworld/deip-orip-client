@@ -6,6 +6,7 @@ import SetExpertisePage from '@/components/SetExpertisePage';
 import NoAccessPage from '@/components/NoAccessPage';
 import CreateAccountTestNet from '@/components/auth/CreateAccountTestNet';
 import VotingForBlockProducers from '@/components/voting-for-block-producers/VotingForBlockProducers';
+import InvestorDashboard from '@/components/investor-flow/dashboard/InvestorDashboard';
 
 const otherRoutes = [{
         path: '/set-expertise',
@@ -41,6 +42,10 @@ const otherRoutes = [{
                     });
             }
         })
+    }, {
+        path: '/investor-dashboard',
+        name: 'investor-dashboard',
+        component: InvestorDashboard
     }];
 
 
