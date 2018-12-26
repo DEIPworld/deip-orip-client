@@ -8,7 +8,7 @@
                     <div class="col-12">
                         <div>
                             Quorum shows how many votes it takes to approve a proposal (such as changing the research
-                            content, adding the research group members, initiating research token sale, etc.) You can setup Quorum for each 
+                            content, adding the research group members, initiating research fundraise, etc.) You can setup Quorum for each 
                             proposal individually using
                             <span class="deip-blue-color half-bold clickable" @click="changeMode()">Advanced</span>
                             options.
@@ -96,7 +96,7 @@
                                             hide-details
                                         ></v-text-field>
                                     </div>
-                                    <div class="col-grow c-ml-8">Start research token sale</div>
+                                    <div class="col-grow c-ml-8">Start research fundraise</div>
                                 </div>
 
                                 <div class="row align-items-end">

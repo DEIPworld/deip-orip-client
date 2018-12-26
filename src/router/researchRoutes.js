@@ -149,7 +149,7 @@ const researchRoutes = [{
         name: 'CreateResearch',
         component: CreateNewResearch
     }, {
-        path: '/:research_group_permlink/create-token-sale/:research_permlink',
+        path: '/:research_group_permlink/create-fundraise/:research_permlink',
         name: 'CreateTokenSale',
         component: CreateTokenSale
     }];

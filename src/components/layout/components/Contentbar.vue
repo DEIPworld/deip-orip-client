@@ -16,6 +16,7 @@
     .content-column {
         height: 100%;
         flex: 1 1 0;
+        overflow: hidden;
         
         .filling {
             padding: 40px;

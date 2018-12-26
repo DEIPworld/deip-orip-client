@@ -38,8 +38,9 @@
                         <v-checkbox hide-details></v-checkbox>
                     </div>
 
-                    <div class="a subheading">Integrated mobility network</div>
-                    <div class="col-grow"></div>
+                    <div class="col-grow overflow-hidden">
+                        <div class="a subheading ellipsis">Integrated mobility network Integrated mobility network Integrated mobility network</div>
+                    </div>
 
                     <div class="display-flex">
                         <span class="c-mh-1 color-label blue lighten-3">A. Lawren</span>
@@ -56,8 +57,9 @@
                         <v-checkbox hide-details></v-checkbox>
                     </div>
 
-                    <div class="a subheading">Parallel	functional	preprocessor</div>
-                    <div class="col-grow"></div>
+                    <div class="col-grow overflow-hidden">
+                        <div class="a subheading ellipsis">Parallel functional preprocessor</div>
+                    </div>
 
                     <div class="display-flex">
                         <span class="c-mh-1 color-label green lighten-3">Sponsored</span>
@@ -73,8 +75,9 @@
                         <v-checkbox hide-details></v-checkbox>
                     </div>
 
-                    <div class="a subheading">Virtual programmable compiler</div>
-                    <div class="col-grow"></div>
+                    <div class="col-grow overflow-hidden">
+                        <div class="a subheading ellipsis">Virtual programmable compiler</div>
+                    </div>
 
                     <div class="display-flex">
                         <span class="c-mh-1 color-label light-blue lighten-3">Quant. Op</span>

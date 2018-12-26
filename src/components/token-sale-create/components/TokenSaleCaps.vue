@@ -1,20 +1,20 @@
 <template>
     <div class="column full-height">
         <div class="c-mb-4 col-grow column">
-            <div class="step-title">Select soft cap and hard cap amounts</div>
+            <div class="step-title">Select min and max amounts</div>
             <div class="col-grow overflow-y-auto">
 
                 <div class="c-mh-auto caps-max-width c-pt-4">
                     <v-form v-model="isFormValid" ref="form">
                         <v-text-field 
-                            label="Soft cap"
+                            label="Min"
                             v-model="tokenSaleInfo.softCap"
                             :rules="[required, deipTokenValidator, softCapSmaller]"
                             suffix="DEIP"
                         ></v-text-field>
 
                         <v-text-field
-                            label="Hard cap"
+                            label="Max"
                             :rules="[required, deipTokenValidator, hardCapGreater]"
                             v-model="tokenSaleInfo.hardCap"
                             suffix="DEIP"
@@ -76,7 +76,7 @@
                         || isSoftCapValid 
                             && isHardCapValid
                             && parseFloat(this.tokenSaleInfo.hardCap) > parseFloat(this.tokenSaleInfo.softCap)
-                        || 'Soft cap should be smaller than hard cap';
+                        || 'Min amount should be smaller than max amount';
                 },
                 
                 hardCapGreater: () => {
@@ -87,7 +87,7 @@
                         || isSoftCapValid
                             && isHardCapValid
                             && parseFloat(this.tokenSaleInfo.hardCap) > parseFloat(this.tokenSaleInfo.softCap)
-                        || 'Hard cap should be greater than soft cap';
+                        || 'Max amount should be greater than min amount';
                 }
             } 
         },
