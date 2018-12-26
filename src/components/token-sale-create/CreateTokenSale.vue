@@ -16,7 +16,7 @@
                     <v-divider></v-divider>
 
                     <v-stepper-step step="3" :complete="currentStep > 3">
-                        <div class="uppercase">Soft/Hard Cap</div>
+                        <div class="uppercase">Min/Max Amount</div>
                     </v-stepper-step>
                 </v-stepper-header>
 
@@ -114,7 +114,7 @@
                     this.isLoading = false;
 
                     this.$store.dispatch('layout/setSuccess', {
-                        message: "Token Sale Proposal has been created successfully! Approve it to start the Token Sale !"
+                        message: "Fundraise Proposal has been created successfully! Approve it to start the fundraise!"
                     });
                 }).catch(err => {
                     this.isLoading = false;

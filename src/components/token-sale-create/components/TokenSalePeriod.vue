@@ -1,7 +1,7 @@
 <template>
     <div class="column full-height">
         <div class="c-mb-4 col-grow column">
-            <div class="step-title">Select start and end dates of research token sale</div>
+            <div class="step-title">Select start and end dates of research fundraise</div>
 
             <div class="col-grow overflow-y-auto">
 

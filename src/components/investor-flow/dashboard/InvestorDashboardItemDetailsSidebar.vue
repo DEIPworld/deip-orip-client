@@ -131,7 +131,7 @@
                 </div>
                 
                 <div class="row-nowrap">
-                    <div class="bold">Token sale</div>
+                    <div class="bold">Fundraise</div>
                     <div class="col-grow"></div>
                     <div class="">20% on sale</div>
                 </div>

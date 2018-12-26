@@ -35,7 +35,7 @@
                     >
                         <v-icon small color="primary" class="c-mr-2">attach_money</v-icon>
                         <div class="a">
-                            {{ convertToPercent(proposal.data.amount_for_sale) }}% Token sale
+                            {{ convertToPercent(proposal.data.amount_for_sale) }}% fundraise
                         </div>
                     </div>
 
@@ -159,10 +159,10 @@
                         <div class="col-6 row justify-between">
                             <div class="width-8">
                                 <div>
-                                    Soft Cap: <span class="bold right">{{ fromAssetsToFloat(proposal.data.soft_cap) }}</span>
+                                    Min: <span class="bold right">{{ fromAssetsToFloat(proposal.data.soft_cap) }}</span>
                                 </div>
                                 <div>
-                                    Hard Cap: <span class="bold right">{{ fromAssetsToFloat(proposal.data.hard_cap) }}</span>
+                                    Max: <span class="bold right">{{ fromAssetsToFloat(proposal.data.hard_cap) }}</span>
                                 </div>
                             </div>
                             <div class="width-11 c-mr-10">
