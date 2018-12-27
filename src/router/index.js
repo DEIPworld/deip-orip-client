@@ -7,7 +7,8 @@ import researchRoutes from './researchRoutes';
 import researchGroupRoutes from './researchGroupRoutes';
 import userRoutes from './userRoutes';
 import otherRoutes from './otherRoutes';
-
+import store from './../store/index';
+import usersService from './../services/http/users';
 import { isLoggedIn } from './../utils/auth';
 
 Vue.use(Router);
@@ -20,10 +21,23 @@ const router = new Router({
         ...researchGroupRoutes,
         ...userRoutes,
         ...otherRoutes,
-        
         {
             path: '*',
-            redirect: '/research-feed'
+            name: 'Default',
+            beforeEnter: (to, from, next) => {
+                const user = store.getters['auth/user'];
+                const rolePromise = user.profile 
+                    ? Promise.resolve(user.profile.role) 
+                    : usersService.getUserProfile(user.username).then((p) => { return p.role });
+                rolePromise.then((role) => {
+                    if (role === 'grantor') {
+                        // todo: replace with Grants list
+                        next({ name: 'CreateResearch' })
+                    } else {
+                        next({ name: 'ResearchFeed' })
+                    }
+                })
+            }
         }
     ],
     

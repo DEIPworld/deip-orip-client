@@ -6,7 +6,7 @@
 
         <v-toolbar app fixed clipped-left dark color="black" class="deip-toolbar">
             <v-toolbar-title>
-                <router-link class="app-title" to="/research-feed" tag="img" src="./static/logo.svg"></router-link>
+                <router-link class="app-title" :to="{ name: 'Default' }" tag="img" src="./static/logo.svg"></router-link>
             </v-toolbar-title>
 
             <v-spacer></v-spacer>
