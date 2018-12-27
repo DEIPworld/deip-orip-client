@@ -164,17 +164,22 @@
         
         <!-- ### START Research Token Sale Section ### -->
         <div class="c-mb-6 c-mt-4" v-if="isTokenSaleSectionAvailable">
-            <div class="sidebar-fullwidth"><v-divider></v-divider></div>
+            <div class="sidebar-fullwidth">
+                <v-divider></v-divider>
+            </div>
+
             <div>
                 <div>
-                    <div class="subheading bold c-mt-4">Research Token sale</div>
+                    <div class="subheading bold c-mt-4">Research fundraise</div>
 
-                    <div v-if="(isMissingTokenSale && isResearchGroupMember)" class="c-pt-4 c-pb-6">
-                        <router-link v-if="research" :to="`/${research.group_permlink}/create-token-sale/${research.permlink}`" style="text-decoration: none">
-                            <v-btn dark round outline color="primary" class="full-width c-mt-3 c-mb-3">
-                                <div class="col-grow add-review-label">{{!isPersonalGroup ? 'Propose Token sale' : 'Create Token sale'}}</div>
-                            </v-btn>
-                        </router-link>
+                    <div v-if="isMissingTokenSale && isResearchGroupMember && research" class="c-pt-4 c-pb-6">
+                        <v-btn round outline color="primary" block
+                            class="ma-0"
+                            :to="{
+                                name: 'CreateTokenSale',
+                                params: { research_group_permlink: research.group_permlink, research_permlink: research.permlink }
+                            }"
+                        >{{ !isPersonalGroup ? 'Propose fundraise' : 'Create fundraise' }}</v-btn>
                     </div>
 
                     <div v-if="isActiveTokenSale" class="c-pt-4 c-pb-6">
@@ -189,12 +194,12 @@
                         </div>
 
                         <div>
-                            <span class="half-bold">Soft Cap</span>
+                            <span class="half-bold">Min amount</span>
                             <span class="right">{{ fromAssetsToFloat(tokenSale.soft_cap) }}</span>
                         </div>
 
                         <div>
-                            <span class="half-bold">Hard Cap</span>
+                            <span class="half-bold">Max amount</span>
                             <span class="right">{{ fromAssetsToFloat(tokenSale.hard_cap) }}</span>
                         </div>
 
@@ -239,11 +244,11 @@
                     </div>
 
                     <div v-if="isInActiveTokenSale" class="c-mt-4 c-mb-6">
-                        <div>
-                            <div class="body-1"> <v-icon small class="c-pr-1">av_timer</v-icon>Research Token sale will start at: 
-                                <div class="body-2 c-pl-6">
-                                    {{ tokenSale.start_time | dateFormat('HH:mm D MMM YYYY', true) }}
-                                </div>
+                        <div class="body-1">
+                            <v-icon small class="c-pr-1">av_timer</v-icon>Research fundraise will start at:
+
+                            <div class="body-2 c-pl-6">
+                                {{ tokenSale.start_time | dateFormat('HH:mm D MMM YYYY', true) }}
                             </div>
                         </div>
                     </div>
@@ -420,13 +425,13 @@
                     this.amountToContribute = '';
 
                     this.$store.dispatch('layout/setSuccess', {
-                        message: `You've contributed to "${this.research.title}" token sale successfully !`
+                        message: `You've contributed to "${this.research.title}" fundraise successfully !`
                     });
                 }, (err) => {
                     this.isTokensBuying = false;
 
                     this.$store.dispatch('layout/setError', {
-                        message: "An error occurred while contributing to Token Sale, please try again later"
+                        message: "An error occurred while contributing to fundraise, please try again later"
                     });
 
                     console.log(err)

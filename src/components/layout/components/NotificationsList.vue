@@ -20,7 +20,7 @@
                         <span class="clickable" @click="clickNewProposalNotification(notification)">
                             <span v-if="notification.meta.action === START_RESEARCH">proposed to start new research in</span>
                             <span v-else-if="notification.meta.action === CREATE_RESEARCH_MATERIAL">proposed new research result in</span>
-                            <span v-else-if="notification.meta.action === START_RESEARCH_TOKEN_SALE">proposed to start token sale in</span>
+                            <span v-else-if="notification.meta.action === START_RESEARCH_TOKEN_SALE">proposed to start fundraise in</span>
                             <span v-else-if="notification.meta.action === INVITE_MEMBER">proposed to invite new member to</span>
                             <span v-else>created a proposal in</span>
                             <span class="a">{{ notification.meta.groupInfo.name }}</span>
@@ -76,7 +76,7 @@
                         
                         <span v-else-if="notification.meta.action === START_RESEARCH_TOKEN_SALE">
                             <span @click="clickTokenSaleScheduledNotification(notification)"> 
-                                Token Sale has been scheduled for
+                                Fundraise has been scheduled for
                                 <span class="a">{{ notification.meta.researchInfo.title }}</span>
                                 research
                             </span>
