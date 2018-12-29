@@ -27,16 +27,19 @@ const router = new Router({
             beforeEnter: (to, from, next) => {
                 const user = store.getters['auth/user'];
                 const rolePromise = user.profile 
-                    ? Promise.resolve(user.profile.role) 
-                    : usersService.getUserProfile(user.username).then((p) => { return p.role });
-                rolePromise.then((role) => {
-                    if (role === 'grantor') {
+                    ? Promise.resolve(user.profile.agencies || []) 
+                    : usersService.getUserProfile(user.username).then((p) => { return p.agencies });
+                
+                rolePromise.then((agencies) => {
+                    const sub = window.location.host.split('.')[0]
+                    const agency = agencies.find(a => a.name.toLowerCase() == sub.toLowerCase())
+                    if (agency) {
                         // todo: replace with Grants list
                         next({ name: 'CreateResearch' })
                     } else {
                         next({ name: 'ResearchFeed' })
                     }
-                })
+                });
             }
         }
     ],
