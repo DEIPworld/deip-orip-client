@@ -1,0 +1,211 @@
+<template>
+  <v-container fluid class="ma-0 pa-0">
+    <v-layout row wrap v-if="agencyInfo">
+     <v-flex xs12>
+        <v-card>
+          <v-card-text class="px-0 pa-0">
+            <v-breadcrumbs divider="/">
+                <v-breadcrumbs-item v-for="item in breadcrumbs" :key="item.text" :disabled="item.disabled">
+                    {{ item.text }}
+                </v-breadcrumbs-item>
+            </v-breadcrumbs>
+          </v-card-text>
+        </v-card>
+      </v-flex>
+      <v-flex xs12>
+        <v-divider></v-divider>
+        <v-card>
+          <v-card-text class="px-0">
+            <v-layout row wrap>
+                  <v-flex xs3 text-xs-center>
+                      <v-avatar size="160px">
+                          <img :src="agencyInfo.logo | agencyLogoSrc(160, 160, false)" />
+                      </v-avatar>
+                  </v-flex>
+                  <v-flex xs9>
+                    <div v-if="selectedArea">
+                      <div class="primary--text body-2">PROGRAMS</div>
+                      <div class="headline c-mt-2">{{selectedArea.title}}</div>
+                      <div class="body-1 c-mt-2">{{selectedArea.subAreaTitle}}</div>
+                    </div>
+                    <div v-else>
+                      <div class="headline c-mt-2">{{agencyInfo.name}}</div>
+                      <!-- <div class="body-1 c-mt-2">{{agencyInfo.description}}</div> -->
+                    </div>
+                  </v-flex>
+              </v-layout>
+          </v-card-text>
+        </v-card>
+      </v-flex>
+
+      <v-flex xs3>
+        <v-divider></v-divider>
+        <v-card>
+          <div class="subheading c-pl-6 c-pb-5 c-pt-5 bold">Research Areas</div>
+          <v-expansion-panel>
+            <v-expansion-panel-content v-for="(area,i) in agencyInfo.researchAreas" :key="area.title">
+              <div slot="header"><b>{{area.title}}</b></div>
+              <v-card>
+                <v-card-text class="pa-0">
+                  <div class="sub-area-list-item"
+                      :class="isSelectedSubArea(subArea) ? 'active' : ''"
+                      v-for="(subArea, i) in area.subAreas" 
+                      @click="selectArea(area, subArea)">
+                    <div class="sub-area-list-item-content">{{subArea.title}}</div>
+                  </div>  
+                </v-card-text>
+              </v-card>
+            </v-expansion-panel-content>
+          </v-expansion-panel>
+        </v-card>
+      </v-flex>
+      <v-flex xs9>
+        <v-divider></v-divider>
+        <v-card>
+          <v-layout row wrap>
+            <v-flex xs6 text-xs-center>
+              <div class="row c-pb-6 c-pt-6">
+                <div class="col-grow sort-option">
+                  <span class="body-1 grey--text">SORT BY</span>
+                </div>
+                <div class="col-grow sort-option">
+                  <span class="body-2">New</span>
+                  <v-icon>swap_vert</v-icon>
+                </div>
+                <div class="col-grow sort-option">
+                  <span class="body-2">End Date</span>
+                  <v-icon>swap_vert</v-icon>
+                </div>
+                <div class="col-grow sort-option">
+                  <span class="body-2">A-Z Title</span>
+                  <v-icon>swap_vert</v-icon>
+                </div>
+                <div class="col-grow sort-option">
+                  <span class="body-2">Award</span>
+                  <v-icon color="blue darken-2">swap_vert</v-icon>
+                </div>
+              </div>
+            </v-flex>
+            <v-flex xs5 offset-xs1 text-xs-center>
+              <div class="c-pr-5">
+                  <v-text-field 
+                    append-icon="search"
+                    name="search-term"
+                    v-model="filter.searchTerm">
+                  </v-text-field> 
+              </div>
+            </v-flex>
+            <v-flex xs12 v-if="selectedArea">
+              <div class="subheading bold c-pl-5 c-pb-5 c-pt-2">{{selectedArea.subAreaTitle}}: Core Programs</div>
+              <template v-for="(program, i) in corePrograms">
+                <program-list-item :is-first="i == 0" :program="program"></program-list-item>
+              </template> 
+            </v-flex>
+            <v-flex xs12 v-if="selectedArea" class="c-pt-10">
+              <div class="subheading bold c-pl-5 c-pb-5 c-pt-2">Additional Funding Opportunities for the {{selectedArea.abbreviation}}</div>
+              <template v-for="(program, i) in additionalPrograms">
+                <program-list-item :is-first="i == 0" :program="program"></program-list-item>
+              </template> 
+            </v-flex>
+          </v-layout>
+        </v-card>
+      </v-flex>
+    </v-layout>
+  </v-container>
+</template>
+
+<script>
+    import { mapGetters } from 'vuex';
+
+    export default {
+        name: "AgencyProfile",
+        data() {
+            return {
+                selectedArea: null,
+                filter: {
+                  searchTerm: "",
+                  sortCriteria: ""
+                },
+
+                corePrograms: [
+                  { title: "Cyber-Human Systems (CHS)", postedDate: new Date(), closingDate: new Date(), number: "PAR-19-36", award: 50000 },
+                  { title: "Information Integration and Informatics (III)", postedDate: new Date(), closingDate: new Date(), number: "PAR-20-36", award: 100000 },
+                  { title: "Robust Intelligence (RI)", postedDate: new Date(), closingDate: new Date(), number: "PAR-21-36", award: 100000 }
+                ],
+
+                additionalPrograms: [
+                  { title: "CISE Community Research Infrastructure (CCRI)", postedDate: new Date(), closingDate: new Date(), number: "PAR-22-36", award: 450000 },
+                  { title: "Collaborative Research in Computational Neuroscience (CRCNS)", postedDate: new Date(), closingDate: new Date(), number: "PAR-23-36", award: 130000 },
+                  { title: "Computer and Information Science and Engineering (CISE) Research Initiation Initiative (CRII)", postedDate: new Date(), closingDate: new Date(), number: "PAR-24-36", award: 60000 },
+                  { title: "Computer Science for All (CSforAll:RPP)", postedDate: new Date(), closingDate: new Date(), number: "PAR-25-36", award: 940000 },
+                  { title: "Critical Techniques, Technologies and Methodologies for Advancing Foundations and Applications of Big Data Sciences and Engineering (BIGDATA)", postedDate: new Date(), closingDate: new Date(), number: "PAR-25-36",  award: 900000},
+                  { title: "Cyber-Physical Systems (CPS)", postedDate: new Date(), closingDate: new Date(), number: "PAR-26-36", award: 540000 },
+                  { title: "Cyberlearning for Work at the Human-Technology Frontier", postedDate: new Date(), closingDate: new Date(), number: "PAR-27-36", award: 80000 },
+                  { title: "Designing Materials to Revolutionize and Engineer our Future (DMREF)", postedDate: new Date(), closingDate: new Date(), number: "PAR-28-36", award: 30000 },
+                  { title: "Documenting Endangered Languages (DEL)", postedDate: new Date(), closingDate: new Date(), number: "PAR-29-36", award: 70000 },
+                  { title: "Expeditions in Computing", postedDate: new Date(), closingDate: new Date(), number: "PAR-30-36", award: 80000 }
+                ]
+            }
+        },
+        computed: {
+            ...mapGetters({
+                agencyInfo: 'agency/profile'
+            }),
+            breadcrumbs() {
+              return this.selectedArea ? [
+                { text: this.agencyInfo.shortName, disabled: false }, 
+                { text: "Programs", disabled: false },
+                { text: this.selectedArea.abbreviation, disabled: false }, 
+                { text: this.selectedArea.subAreaAbbreviation, disabled: false }
+              ] : [
+                { text: this.agencyInfo.shortName, disabled: false }, 
+                { text: "Programs", disabled: false }
+              ];
+            }
+        },
+        methods: {
+          selectArea(area, subArea) {
+            this.selectedArea = {
+              title: area.title,
+              abbreviation: area.abbreviation,
+              subAreaTitle: subArea.title,
+              subAreaAbbreviation: subArea.abbreviation,
+              disciplines: subArea.disciplines
+            };
+          },
+          isSelectedSubArea(subArea) {
+            return this.selectedArea && subArea.title == this.selectedArea.subAreaTitle;
+          }
+        },
+        mounted() {
+        }
+    };
+</script>
+
+<style lang="less" scoped>
+
+  .sub-area-list-item {
+    cursor: pointer;
+  }
+
+  .sub-area-list-item:hover {
+    background: #f1f8fe;
+  }
+
+  .sub-area-list-item.active {
+    background: #f1f8fe;
+  }
+
+  .sub-area-list-item-content {
+    padding-left: 20%;
+    padding-top: 2%;
+    padding-bottom: 2%;
+    padding-right: 5%;
+    min-height: 45px;
+  }
+
+  .sort-option {
+    cursor: pointer;
+  }
+
+</style>

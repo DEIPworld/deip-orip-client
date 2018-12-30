@@ -35,7 +35,7 @@ const router = new Router({
                     const agency = agencies.find(a => a.name.toLowerCase() == sub.toLowerCase())
                     if (agency) {
                         // todo: replace with Grants list
-                        next({ name: 'CreateResearch' })
+                        next({ name: 'AgencyProfile', params: { agency: agency.name } })
                     } else {
                         next({ name: 'ResearchFeed' })
                     }

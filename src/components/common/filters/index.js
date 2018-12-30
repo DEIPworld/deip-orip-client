@@ -52,6 +52,10 @@ Vue.filter('avatarSrc', function (avatar, width, height, noCache ) {
     return `${window.env.DEIP_SERVER_URL}/public/files/avatars/${avatar}?width=${width}&height=${height}&noCache=${noCache}`
 });
 
+Vue.filter('agencyLogoSrc', function (logo, width, height, noCache ) {
+    return `${window.env.DEIP_SERVER_URL}/public/agencies/logo/${logo}?width=${width}&height=${height}&noCache=${noCache}`
+});
+
 Vue.filter('dateFormat', (value, format, fromUtcToLocal = false) => {
     return !fromUtcToLocal 
         ? moment(value).format(format)

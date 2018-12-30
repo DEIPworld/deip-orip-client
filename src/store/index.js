@@ -12,6 +12,7 @@ import layout from './../components/layout/store/index'
 import claimExpertiseDetails from './../components/claim-expertise-details/store/index'
 import claimExpertiseList from './../components/claim-expertise-list/store/index'
 import votingForBlockProducers from './../components/voting-for-block-producers/store/index'
+import agency from './../components/agency-profile/store/index'
 
 
 Vue.use(Vuex)
@@ -28,7 +29,8 @@ export default new Vuex.Store({
         layout,
         claimExpertiseDetails,
         claimExpertiseList,
-        votingForBlockProducers
+        votingForBlockProducers,
+        agency
     },
     strict: process.env.NODE_ENV !== 'production',
     plugins: process.env.NODE_ENV !== 'production' ? [createLogger()] : []
