@@ -17,23 +17,23 @@
         <v-card>
           <v-card-text class="px-0">
             <v-layout row wrap>
-                  <v-flex xs3 text-xs-center>
-                      <v-avatar size="160px">
-                          <img :src="agencyInfo.logo | agencyLogoSrc(160, 160, false)" />
-                      </v-avatar>
-                  </v-flex>
-                  <v-flex xs9>
-                    <div v-if="selectedArea">
-                      <div class="primary--text body-2">PROGRAMS</div>
-                      <div class="headline c-mt-2">{{selectedArea.title}}</div>
-                      <div class="body-1 c-mt-2">{{selectedArea.subAreaTitle}}</div>
-                    </div>
-                    <div v-else>
-                      <div class="headline c-mt-2">{{agencyInfo.name}}</div>
-                      <!-- <div class="body-1 c-mt-2">{{agencyInfo.description}}</div> -->
-                    </div>
-                  </v-flex>
-              </v-layout>
+              <v-flex xs3 text-xs-center>
+                <v-avatar size="160px">
+                    <img :src="agencyInfo.logo | agencyLogoSrc(160, 160, false)" />
+                </v-avatar>
+              </v-flex>
+              <v-flex xs9>
+                <div v-if="selectedArea">
+                  <div class="primary--text body-2">PROGRAMS</div>
+                  <div class="headline c-mt-2">{{selectedArea.title}}</div>
+                  <div class="body-1 c-mt-2">{{selectedArea.subAreaTitle}}</div>
+                </div>
+                <div v-else>
+                  <div class="headline c-mt-2">{{agencyInfo.name}}</div>
+                  <!-- <div class="body-1 c-mt-2">{{agencyInfo.description}}</div> -->
+                </div>
+              </v-flex>
+            </v-layout>
           </v-card-text>
         </v-card>
       </v-flex>
@@ -61,51 +61,65 @@
       </v-flex>
       <v-flex xs9>
         <v-divider></v-divider>
-        <v-card>
+        <v-card class="c-pb-6">
           <v-layout row wrap>
             <v-flex xs6 text-xs-center>
               <div class="row c-pb-6 c-pt-6">
                 <div class="col-grow sort-option">
                   <span class="body-1 grey--text">SORT BY</span>
                 </div>
-                <div class="col-grow sort-option">
+                <div class="col-grow sort-option" @click="setSortCriteria('postedDate')">
                   <span class="body-2">New</span>
-                  <v-icon>swap_vert</v-icon>
+                  <v-icon class="sort-icon">
+                    {{getSortIcon('postedDate')}}
+                  </v-icon>
                 </div>
-                <div class="col-grow sort-option">
+                <div class="col-grow sort-option" @click="setSortCriteria('closingDate')">
                   <span class="body-2">End Date</span>
-                  <v-icon>swap_vert</v-icon>
+                  <v-icon class="sort-icon">
+                    {{getSortIcon('closingDate')}}
+                  </v-icon>
                 </div>
-                <div class="col-grow sort-option">
+                <div class="col-grow sort-option" @click="setSortCriteria('title')">
                   <span class="body-2">A-Z Title</span>
-                  <v-icon>swap_vert</v-icon>
+                  <v-icon class="sort-icon">
+                    {{getSortIcon('title')}}
+                  </v-icon>
                 </div>
-                <div class="col-grow sort-option">
+                <div class="col-grow sort-option" @click="setSortCriteria('award')">
                   <span class="body-2">Award</span>
-                  <v-icon color="blue darken-2">swap_vert</v-icon>
+                  <v-icon class="sort-icon">
+                    {{getSortIcon('award')}}
+                  </v-icon>
                 </div>
               </div>
             </v-flex>
             <v-flex xs5 offset-xs1 text-xs-center>
               <div class="c-pr-5">
-                  <v-text-field 
-                    append-icon="search"
-                    name="search-term"
-                    v-model="filter.searchTerm">
-                  </v-text-field> 
+                <v-text-field 
+                  append-icon="search"
+                  name="search-term"
+                  v-model="filter.searchTerm">
+                </v-text-field> 
               </div>
             </v-flex>
             <v-flex xs12 v-if="selectedArea">
               <div class="subheading bold c-pl-5 c-pb-5 c-pt-2">{{selectedArea.subAreaTitle}}: Core Programs</div>
-              <template v-for="(program, i) in corePrograms">
+              <template v-for="(program, i) in filteredCorePrograms">
                 <program-list-item :is-first="i == 0" :program="program"></program-list-item>
-              </template> 
+              </template>
+              <div v-show="!filteredCorePrograms.length" class="caption c-pl-5">
+                No core programs found for specified criteria
+              </div>
             </v-flex>
             <v-flex xs12 v-if="selectedArea" class="c-pt-10">
               <div class="subheading bold c-pl-5 c-pb-5 c-pt-2">Additional Funding Opportunities for the {{selectedArea.abbreviation}}</div>
-              <template v-for="(program, i) in additionalPrograms">
+              <template v-for="(program, i) in filteredAdditionalPrograms">
                 <program-list-item :is-first="i == 0" :program="program"></program-list-item>
-              </template> 
+              </template>
+              <div v-show="!filteredAdditionalPrograms.length" class="caption c-pl-5">
+                No additional programs found for specified criteria
+              </div>
             </v-flex>
           </v-layout>
         </v-card>
@@ -124,7 +138,7 @@
                 selectedArea: null,
                 filter: {
                   searchTerm: "",
-                  sortCriteria: ""
+                  sortCriteria: { key: "title", order: 1 }
                 },
 
                 corePrograms: [
@@ -161,9 +175,23 @@
                 { text: this.agencyInfo.shortName, disabled: false }, 
                 { text: "Programs", disabled: false }
               ];
+            },
+            filteredCorePrograms() {
+              return this.filterPrograms('corePrograms');
+
+            },
+            filteredAdditionalPrograms() {
+              return this.filterPrograms('additionalPrograms');
             }
         },
         methods: {
+          getSortIcon(key) {
+            if (this.filter.sortCriteria.key == key) {
+              return this.filter.sortCriteria.order == 1 ? 'arrow_drop_up' : 'arrow_drop_down';
+            }
+            return '';
+          },
+
           selectArea(area, subArea) {
             this.selectedArea = {
               title: area.title,
@@ -173,11 +201,39 @@
               disciplines: subArea.disciplines
             };
           },
+          
+          setSortCriteria(key) {
+            let sorting = this.filter.sortCriteria;
+            if (!sorting || sorting.key != key) {
+              this.filter.sortCriteria = { key: key, order: 1 }
+            } else if (sorting.key == key) {
+               if (sorting.order == 1) {
+                  sorting.order = -1
+               } else {
+                  sorting.order = 1;
+               }
+            }
+          },
           isSelectedSubArea(subArea) {
             return this.selectedArea && subArea.title == this.selectedArea.subAreaTitle;
+          },
+          filterPrograms(collection) {
+            let filtered = this[collection].filter(p => {
+              if (!this.filter.searchTerm) {
+                return true;
+              }
+              return p.title.toLowerCase().includes(this.filter.searchTerm.toLowerCase());
+            });
+
+            let filter = this.filter;
+            filtered.sort(function(a, b) {
+              if(a[filter.key] < b[filter.key]) { return -1; }
+              if(a[filter.key] > b[filter.key]) { return 1; }
+              return 0;
+            });
+
+            return this.filter.sortCriteria.order == 1 ? filtered : filtered.reverse();
           }
-        },
-        mounted() {
         }
     };
 </script>
@@ -206,6 +262,11 @@
 
   .sort-option {
     cursor: pointer;
+  }
+
+  .sort-icon {
+    min-width: 24px; 
+    min-height: 24px;
   }
 
 </style>
