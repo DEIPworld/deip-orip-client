@@ -1,0 +1,216 @@
+<template>
+    <v-container fluid fill-height class="pa-0">
+        <v-layout>
+            <v-stepper v-model="currentStep" v-if="!isFinished" alt-labels class="column full-width full-height">
+                <v-stepper-header>
+                    <v-stepper-step step="1" :complete="currentStep > 1">
+                        <div class="uppercase">Title</div>
+                    </v-stepper-step>
+
+                    <v-divider></v-divider>
+
+                    <v-stepper-step step="2" :complete="currentStep > 2">
+                        <div class="uppercase">Discipline</div>
+                    </v-stepper-step>
+                    
+                    <v-divider></v-divider>
+
+                    <v-stepper-step step="3" :complete="currentStep > 3">
+                        <div class="uppercase white-space-nowrap">Due dates</div>
+                    </v-stepper-step>
+
+                    <v-divider></v-divider>
+
+                    <v-stepper-step step="4" :complete="currentStep > 4">
+                        <div class="uppercase">Funding amount</div>
+                    </v-stepper-step>
+                    
+                    <v-divider></v-divider>
+
+                    <v-stepper-step step="5" :complete="currentStep > 5">
+                        <div class="uppercase">Eligibility</div>
+                    </v-stepper-step>
+                    
+                    <v-divider></v-divider>
+
+                    <v-stepper-step step="6" :complete="currentStep > 6">
+                        <div class="uppercase white-space-nowrap">Program officers</div>
+                    </v-stepper-step>
+                    
+                    <v-divider></v-divider>
+
+                    <v-stepper-step step="7" :complete="currentStep > 7">
+                        <div class="uppercase white-space-nowrap">Additional</div>
+                    </v-stepper-step>
+                </v-stepper-header>
+
+                <v-stepper-items class="col-grow">
+                    <v-stepper-content step="1">
+                        <div class="full-height">
+                            <funding-opportunity-title
+                                @incStep="incStep"
+                                :opportunity="opportunity"
+                            ></funding-opportunity-title>
+                        </div>
+                    </v-stepper-content>
+
+                    <v-stepper-content step="2">
+                        <div class="full-height">
+                            <funding-opportunity-discipline
+                                @incStep="incStep" @decStep="decStep"
+                                :opportunity="opportunity"
+                            ></funding-opportunity-discipline>
+                        </div>
+                    </v-stepper-content>
+
+                    <v-stepper-content step="3">
+                        <div class="full-height">
+                            <funding-opportunity-period
+                                @incStep="incStep" @decStep="decStep"
+                                :opportunity="opportunity"
+                            ></funding-opportunity-period>
+                        </div>
+                    </v-stepper-content>
+
+                    <v-stepper-content step="4">
+                        <div class="full-height">
+                            <funding-opportunity-awards
+                                @incStep="incStep" @decStep="decStep"
+                                :opportunity="opportunity"
+                            ></funding-opportunity-awards>
+                        </div>
+                    </v-stepper-content>
+
+                    <v-stepper-content step="5">
+                        <div class="full-height">
+                            <funding-opportunity-guidelines
+                                @incStep="incStep" @decStep="decStep"
+                                :opportunity="opportunity"
+                            ></funding-opportunity-guidelines>
+                        </div>
+                    </v-stepper-content>
+
+                    <v-stepper-content step="6">
+                        <div class="full-height">
+                            <funding-opportunity-program-officers
+                                @incStep="incStep" @decStep="decStep"
+                                :opportunity="opportunity"
+                            ></funding-opportunity-program-officers>
+                        </div>
+                    </v-stepper-content>
+
+                    <v-stepper-content step="7">
+                        <div class="full-height">
+                            <funding-opportunity-additional
+                                @finish="finish" @decStep="decStep"
+                                :opportunity="opportunity"
+                            ></funding-opportunity-additional>
+                        </div>
+                    </v-stepper-content>
+                </v-stepper-items>
+            </v-stepper>
+
+            <div class="display-flex full-width full-height" v-else>
+                <div class="c-m-auto text-align-center">
+                    <div class="display-1">You have successfully created<br>funding opportunity</div>
+
+                    <div class="subheading c-mt-8">
+                        <span class="bold">#</span>
+                        <span class="a">PAR-17-236</span>
+                    </div>
+
+                    <div class="a subheading c-mt-2">
+                        Genetic Susceptibility and Variability of Human Structural Birth Defects (R01)
+                    </div>
+
+                    <div class="c-mt-12">
+                        <v-btn color="primary" class="ma-0">Close</v-btn>
+                    </div>
+                </div>
+            </div>
+        </v-layout>
+    </v-container>
+</template>
+
+
+<script>
+    import { mapGetters } from 'vuex';
+    import deipRpc from '@deip/deip-rpc-client';
+
+    export default {
+        name: "FundingOpportunityAnnouncement",
+
+        computed: {
+            ...mapGetters({
+                user: 'auth/user'
+            })
+        },
+
+        data() { 
+            return {
+                currentStep: 0,
+                
+                opportunity: {
+                    title: '',
+                    number: '',
+                    agencyName: '',
+                    disciplines: [],
+                    totalProgramFunding: '',
+                    awardCeiling: '',
+                    awardFloor: '',
+                    numberOfAwards: '',
+                    eligibleApplicants: '',
+                    eligibilityAdditionalInformation: '',
+                    programOfficers: [],
+                    description: '',
+                    additionalInfoLink: '',
+                    grantorEmail: ''
+                },
+
+                isLoading: false,
+                isFinished: false
+            }
+        },
+
+        methods: {
+            incStep() {
+                if (this.currentStep < 7) {
+                    this.currentStep++;
+                } else {
+                    this.currentStep = 1;
+                }
+            },
+            
+            decStep() {
+                this.currentStep--;
+            },
+
+            finish() {
+                console.log('finished', this.opportunity);
+
+                this.isFinished = true;
+            }
+        },
+
+        created() {
+        }
+    };
+</script>
+
+<style lang="less">    
+    .stepper__content {
+        height: 100%;
+        padding-right: 0px;
+        padding-left: 0px;
+        .stepper__wrapper {
+            height: 100%;
+        }
+    }
+
+    .step-title {
+        font-size: 24px;
+        font-weight: bold;
+        text-align: center;
+        padding-bottom: 16px;
+    }
+</style>

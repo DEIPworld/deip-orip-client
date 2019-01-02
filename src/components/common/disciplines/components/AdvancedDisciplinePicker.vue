@@ -1,6 +1,6 @@
 <template>
     <div class="row discipline-picker full-height overflow-y-auto">
-        <div class="col-4 c-p-4 overflow-y-auto">
+        <div v-if="!withoutUserDisciplines" class="col-4 c-p-4 overflow-y-auto">
             <div class="bold uppercase c-pb-4">Your disciplines</div>
 
             <div v-if="userDisciplines.length">
@@ -15,7 +15,7 @@
             <div v-else class="grey--text">You have no expertise</div>
         </div>
 
-        <div class="col-8 c-p-4 full-height overflow-y-auto">
+        <div class="c-p-4 full-height overflow-y-auto" :class="[!withoutUserDisciplines ? 'col-8' : 'col-12']">
             <div class="bold uppercase c-pb-4">All disciplines</div>
 
             <discipline-tree-picker
@@ -38,6 +38,8 @@
         props: {
             isMultipleSelect: { type: Boolean, required: false, default: true },
             isHighlightedParent: { type: Boolean, required: false, default: false },
+
+            withoutUserDisciplines: { type: Boolean, required: false, default: false },
             
             preselected: {
                 validator(value) {
