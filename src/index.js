@@ -16,6 +16,7 @@ import './components/user-wallet/index';
 import './components/grant-create/index';
 import './components/claim-expertise-details/index';
 import './components/claim-expertise-list/index';
+import './components/funding-opportunity-announcement/index';
 import './components/agency-profile/index';
 import './components/investor-flow/index';
 

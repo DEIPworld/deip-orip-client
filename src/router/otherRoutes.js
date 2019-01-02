@@ -6,6 +6,7 @@ import SetExpertisePage from '@/components/SetExpertisePage';
 import NoAccessPage from '@/components/NoAccessPage';
 import CreateAccountTestNet from '@/components/auth/CreateAccountTestNet';
 import VotingForBlockProducers from '@/components/voting-for-block-producers/VotingForBlockProducers';
+import FundingOpportunityAnnouncement from '@/components/funding-opportunity-announcement/FundingOpportunityAnnouncement';
 import InvestorDashboard from '@/components/investor-flow/dashboard/InvestorDashboard';
 
 const otherRoutes = [{
@@ -46,6 +47,10 @@ const otherRoutes = [{
         path: '/investor-dashboard',
         name: 'investor-dashboard',
         component: InvestorDashboard
+    }, {
+        path: '/funding-opportunity-announcement',
+        name: 'funding-opportunity-announcement',
+        component: FundingOpportunityAnnouncement
     }];
 
 
