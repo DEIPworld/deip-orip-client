@@ -22,7 +22,7 @@ const actions = {
     loadAgencyProfile({ state, dispatch, commit }, { agency }) {
         commit('SET_AGENCY_PROFILE_LOADING_STATE', true);
 
-        agencyHttp.getAgencyProfile(agency)
+        return agencyHttp.getAgencyProfile(agency)
             .then((agencyProfile) => {
                 commit('SET_AGENCY_PROFILE', agencyProfile);
             })

@@ -1,6 +1,6 @@
 <template>
   <v-container fluid class="ma-0 pa-0">
-    <v-layout row wrap v-if="agencyInfo">
+    <v-layout row wrap>
      <v-flex xs12>
         <v-card>
           <v-card-text class="px-0 pa-0">
@@ -135,29 +135,26 @@
         name: "AgencyProfile",
         data() {
             return {
-                selectedArea: null,
+                selectedArea: null, // the 1st area is being selected by default
                 filter: {
                   searchTerm: "",
-                  sortCriteria: { key: "title", order: 1 }
+                  sortCriteria: { key: "title", order: 1 },
                 },
 
                 corePrograms: [
-                  { title: "Cyber-Human Systems (CHS)", postedDate: new Date(), closingDate: new Date(), number: "PAR-19-36", award: 50000 },
-                  { title: "Information Integration and Informatics (III)", postedDate: new Date(), closingDate: new Date(), number: "PAR-20-36", award: 100000 },
-                  { title: "Robust Intelligence (RI)", postedDate: new Date(), closingDate: new Date(), number: "PAR-21-36", award: 100000 }
+                  { title: "Cyber-Human Systems (CHS)", postedDate: new Date(), closingDate: new Date(), number: "PAR-19-36", award: 50000, disciplines: [8, 140] },
+                  { title: "Atomic, Molecular and Optical Physics - Theory", postedDate: new Date(), closingDate: new Date(), number: "PAR-20-36", award: 100000, disciplines: [4] },
+                  { title: "Improvements to Biological Field Stations and Marine Laboratories (FSML)", postedDate: new Date(), closingDate: new Date(), number: "PAR-21-36", award: 100000, disciplines: [3] }
                 ],
 
                 additionalPrograms: [
-                  { title: "CISE Community Research Infrastructure (CCRI)", postedDate: new Date(), closingDate: new Date(), number: "PAR-22-36", award: 450000 },
-                  { title: "Collaborative Research in Computational Neuroscience (CRCNS)", postedDate: new Date(), closingDate: new Date(), number: "PAR-23-36", award: 130000 },
-                  { title: "Computer and Information Science and Engineering (CISE) Research Initiation Initiative (CRII)", postedDate: new Date(), closingDate: new Date(), number: "PAR-24-36", award: 60000 },
-                  { title: "Computer Science for All (CSforAll:RPP)", postedDate: new Date(), closingDate: new Date(), number: "PAR-25-36", award: 940000 },
-                  { title: "Critical Techniques, Technologies and Methodologies for Advancing Foundations and Applications of Big Data Sciences and Engineering (BIGDATA)", postedDate: new Date(), closingDate: new Date(), number: "PAR-25-36",  award: 900000},
-                  { title: "Cyber-Physical Systems (CPS)", postedDate: new Date(), closingDate: new Date(), number: "PAR-26-36", award: 540000 },
-                  { title: "Cyberlearning for Work at the Human-Technology Frontier", postedDate: new Date(), closingDate: new Date(), number: "PAR-27-36", award: 80000 },
-                  { title: "Designing Materials to Revolutionize and Engineer our Future (DMREF)", postedDate: new Date(), closingDate: new Date(), number: "PAR-28-36", award: 30000 },
-                  { title: "Documenting Endangered Languages (DEL)", postedDate: new Date(), closingDate: new Date(), number: "PAR-29-36", award: 70000 },
-                  { title: "Expeditions in Computing", postedDate: new Date(), closingDate: new Date(), number: "PAR-30-36", award: 80000 }
+                  { title: "Collaborative Research in Computational Neuroscience (CRCNS)", postedDate: new Date(), closingDate: new Date(), number: "PAR-23-36", award: 130000, disciplines: [3] },
+                  { title: "Computer Science for All (CSforAll:RPP)", postedDate: new Date(), closingDate: new Date(), number: "PAR-25-36", award: 940000, disciplines: [8] },
+                  { title: "Critical Techniques, Technologies and Methodologies for Advancing Foundations and Applications of Big Data Sciences and Engineering (BIGDATA)", postedDate: new Date(), closingDate: new Date(), number: "PAR-25-36", award: 900000, disciplines: [135]},
+                  { title: "Cyber-Physical Systems (CPS)", postedDate: new Date(), closingDate: new Date(), number: "PAR-26-36", award: 540000, disciplines: [151] },
+                  { title: "Cyberlearning for Work at the Human-Technology Frontier", postedDate: new Date(), closingDate: new Date(), number: "PAR-27-36", award: 80000, disciplines: [140] },
+                  { title: "Designing Materials to Revolutionize and Engineer our Future (DMREF)", postedDate: new Date(), closingDate: new Date(), number: "PAR-28-36", award: 30000, disciplines: [80, 81] },
+                  { title: "Expeditions in Computing", postedDate: new Date(), closingDate: new Date(), number: "PAR-30-36", award: 80000, disciplines: [10] }
                 ]
             }
         },
@@ -217,12 +214,16 @@
           isSelectedSubArea(subArea) {
             return this.selectedArea && subArea.title == this.selectedArea.subAreaTitle;
           },
-          filterPrograms(collection) {
-            let filtered = this[collection].filter(p => {
+          filterPrograms(collectionName) {
+            let filtered = this[collectionName].filter(p => {
               if (!this.filter.searchTerm) {
                 return true;
               }
               return p.title.toLowerCase().includes(this.filter.searchTerm.toLowerCase());
+            });
+
+            filtered = this[collectionName].filter(p => {
+              return p.disciplines.some(d => this.selectedArea.disciplines.includes(d));
             });
 
             let filter = this.filter;
@@ -234,7 +235,14 @@
 
             return this.filter.sortCriteria.order == 1 ? filtered : filtered.reverse();
           }
-        }
+        },
+
+        mounted () {
+            const self = this;
+            const area = self.agencyInfo.researchAreas[0];
+            const subArea = area.subAreas[0];
+            self.selectArea(area, subArea);
+        },
     };
 </script>
 
