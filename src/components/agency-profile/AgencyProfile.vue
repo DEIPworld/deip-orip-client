@@ -222,7 +222,7 @@
               return p.title.toLowerCase().includes(this.filter.searchTerm.toLowerCase());
             });
 
-            filtered = this[collectionName].filter(p => {
+            filtered = filtered.filter(p => {
               return p.disciplines.some(d => this.selectedArea.disciplines.includes(d));
             });
 
