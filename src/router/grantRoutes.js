@@ -3,8 +3,8 @@ import store from './../store/index';
 import GrantStartCreating from '@/components/grant-create/GrantStartCreating';
 import CreateDisciplineGrant from '@/components/grant-create/CreateDisciplineGrant';
 import CreateDirectGrant from '@/components/grant-create/CreateDirectGrant';
-import AgencyPrograms from '@/components/agency/AgencyPrograms';
-import AgencyProgramDetails from '@/components/agency/AgencyProgramDetails';
+import AgencyPrograms from '@/components/agency-programs/AgencyPrograms';
+import AgencyProgramDetails from '@/components/agency-program-details/AgencyProgramDetails';
 
 const grantRoutes =[{
         path: '/create-grant',
@@ -24,7 +24,7 @@ const grantRoutes =[{
         component: AgencyPrograms,
         beforeEnter: (to, from, next) => {
             store.dispatch('layout/setGlobalLoader');
-            store.dispatch('agency/loadAgencyProgramsListingPage', { agency: decodeURIComponent(to.params.agency) })
+            store.dispatch('agencyPrograms/loadAgencyProgramsPage', { agency: decodeURIComponent(to.params.agency), areaCode: to.query.areaCode, subAreaCode: to.query.subAreaCode })
                 .then(() => {
                     store.dispatch('layout/hideGlobalLoader');
                     next();
@@ -36,7 +36,7 @@ const grantRoutes =[{
         component: AgencyProgramDetails,
         beforeEnter: (to, from, next) => {
             store.dispatch('layout/setGlobalLoader');
-            store.dispatch('agency/loadAgencyProgramDetailsPage', { agency: decodeURIComponent(to.params.agency), foaId: decodeURIComponent(to.params.foa) })
+            store.dispatch('agencyProgramDetails/loadAgencyProgramDetailsPage', { agency: decodeURIComponent(to.params.agency), foaId: decodeURIComponent(to.params.foa) })
                 .then(() => {
                     store.dispatch('layout/hideGlobalLoader');
                     next();

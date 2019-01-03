@@ -143,15 +143,13 @@
         },
         computed: {
             ...mapGetters({
-                agencyProfile: 'agency/agency',
-                selectedArea: 'agency/area',
+                agencyProfile: 'agencyPrograms/agency',
+                selectedArea: 'agencyPrograms/selectedArea',
 
-                corePrograms: 'agency/corePrograms',
-                additionalPrograms: 'agency/additionalPrograms',
-
-                isLoadingAgencyProgramsListingPage: 'agency/isLoadingAgencyProgramsListingPage'
+                corePrograms: 'agencyPrograms/corePrograms',
+                additionalPrograms: 'agencyPrograms/additionalPrograms'
             }),
-            breadcrumbs() {
+            breadcrumbs(){
               return [ 
                 { text: this.agencyProfile.shortName, disabled: false }, 
                 { text: "Programs", disabled: false },
@@ -176,7 +174,7 @@
           },
 
           selectArea(area, subArea) {
-            this.$store.dispatch('agency/setResearchArea', { area, subArea });
+            this.$store.dispatch('agencyPrograms/setResearchArea', { area, subArea });
           },
           
           setSortCriteria(key) {
