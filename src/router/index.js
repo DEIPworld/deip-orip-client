@@ -1,5 +1,6 @@
 import Vue from 'vue';
 import Router from 'vue-router';
+import _ from 'lodash';
 
 import authRoutes from './authRoutes';
 import grantRoutes from './grantRoutes';
@@ -31,13 +32,19 @@ const router = new Router({
                     : usersService.getUserProfile(user.username).then((p) => { return p.agencies });
                 
                 rolePromise.then((agencies) => {
+                    if (_.isEmpty(agencies)) {
+                        next({ name: 'ResearchFeed' });
+                        return;
+                    }
+
                     const sub = "nsf";// window.location.host.split('.')[0]
-                    const agency = agencies.find(a => a.name.toLowerCase() == sub.toLowerCase())
+                    const agency = agencies.find(a => a.name.toLowerCase() == sub.toLowerCase());
+
                     if (agency) {
                         // todo: replace with Grants list
-                        next({ name: 'AgencyPrograms', params: { agency: agency.name } })
+                        next({ name: 'AgencyPrograms', params: { agency: agency.name } });
                     } else {
-                        next({ name: 'ResearchFeed' })
+                        next({ name: 'ResearchFeed' });
                     }
                 });
             }
