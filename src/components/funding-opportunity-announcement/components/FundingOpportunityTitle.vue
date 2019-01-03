@@ -20,8 +20,8 @@
 
                     <v-text-field
                         label="Agency name"
-                        v-model="opportunity.agencyName"
-                        :rules="[rules.required]"
+                        v-model="opportunity.agency.name"
+                        disabled
                     ></v-text-field>
                 </div>
 

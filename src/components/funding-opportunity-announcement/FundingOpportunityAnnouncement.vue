@@ -136,6 +136,7 @@
 <script>
     import { mapGetters } from 'vuex';
     import deipRpc from '@deip/deip-rpc-client';
+    import agency from './agencyTmp.js';
 
     export default {
         name: "FundingOpportunityAnnouncement",
@@ -153,7 +154,7 @@
                 opportunity: {
                     title: '',
                     number: '',
-                    agencyName: '',
+                    agency: null,
                     disciplines: [],
                     totalProgramFunding: '',
                     awardCeiling: '',
@@ -193,6 +194,7 @@
         },
 
         created() {
+            this.opportunity.agency = agency;
         }
     };
 </script>
