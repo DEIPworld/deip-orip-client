@@ -26,3 +26,6 @@ Vue.component('v-gravatar', Gravatar);
 
 import VueQrcode from '@xkeshi/vue-qrcode';
 Vue.component(VueQrcode.name, VueQrcode);
+
+import VueGoogleCharts from 'vue-google-charts';
+Vue.use(VueGoogleCharts);
