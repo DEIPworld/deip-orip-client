@@ -56,7 +56,7 @@
             },
 
             isNextDisabled() {
-                return !this.opportunity.title || !this.opportunity.number || !this.opportunity.agencyName;
+                return !this.opportunity.title || !this.opportunity.number;
             }
         }
     };
