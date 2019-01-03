@@ -12,8 +12,7 @@ import layout from './../components/layout/store/index'
 import claimExpertiseDetails from './../components/claim-expertise-details/store/index'
 import claimExpertiseList from './../components/claim-expertise-list/store/index'
 import votingForBlockProducers from './../components/voting-for-block-producers/store/index'
-import agency from './../components/agency-profile/store/index'
-
+import agency from './../components/agency/store/index'
 
 Vue.use(Vuex)
 

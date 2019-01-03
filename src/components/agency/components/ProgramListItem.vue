@@ -3,7 +3,11 @@
         <div v-if="isFirst" class="program-divider"><v-divider></v-divider></div>
         <v-layout row wrap class="c-pl-5 c-pb-2">
             <v-flex xs9>
-            <div class="c-pl-5 c-pt-3 subheading a">{{program.title}}</div>
+                <div class="c-pl-5 c-pt-3">
+                    <router-link class="a subheading" :to="{ name: 'AgencyProgramDetails', params: { agency: program.agency, foa: program.number }}">
+                        {{program.title}}
+                    </router-link>
+                </div>
                 <div class="row c-pl-5 c-pt-2 c-pb-3">
                     <div class="col-grow caption grey--text">
                         <span class="c-pr-2">Posted Date:</span>

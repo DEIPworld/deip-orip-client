@@ -19,7 +19,7 @@
             <v-layout row wrap>
               <v-flex xs3 text-xs-center>
                 <v-avatar size="160px">
-                    <img :src="agencyInfo.logo | agencyLogoSrc(160, 160, false)" />
+                    <img :src="agencyProfile.logo | agencyLogoSrc(160, 160, false)" />
                 </v-avatar>
               </v-flex>
               <v-flex xs9>
@@ -29,8 +29,8 @@
                   <div class="body-1 c-mt-2">{{selectedArea.subAreaTitle}}</div>
                 </div>
                 <div v-else>
-                  <div class="headline c-mt-2">{{agencyInfo.name}}</div>
-                  <!-- <div class="body-1 c-mt-2">{{agencyInfo.description}}</div> -->
+                  <div class="headline c-mt-2">{{agencyProfile.name}}</div>
+                  <!-- <div class="body-1 c-mt-2">{{agencyProfile.description}}</div> -->
                 </div>
               </v-flex>
             </v-layout>
@@ -43,7 +43,7 @@
         <v-card>
           <div class="subheading c-pl-6 c-pb-5 c-pt-5 bold">Research Areas</div>
           <v-expansion-panel>
-            <v-expansion-panel-content v-for="(area,i) in agencyInfo.researchAreas" :key="area.title">
+            <v-expansion-panel-content v-for="(area,i) in agencyProfile.researchAreas" :key="area.title" :value="isSelectedArea(area)">
               <div slot="header"><b>{{area.title}}</b></div>
               <v-card>
                 <v-card-text class="pa-0">
@@ -132,53 +132,39 @@
     import { mapGetters } from 'vuex';
 
     export default {
-        name: "AgencyProfile",
+        name: "AgencyPrograms",
         data() {
             return {
-                selectedArea: null, // the 1st area is being selected by default
                 filter: {
                   searchTerm: "",
                   sortCriteria: { key: "title", order: 1 },
-                },
-
-                corePrograms: [
-                  { title: "Cyber-Human Systems (CHS)", postedDate: new Date(), closingDate: new Date(), number: "PAR-19-36", award: 50000, disciplines: [8, 140] },
-                  { title: "Atomic, Molecular and Optical Physics - Theory", postedDate: new Date(), closingDate: new Date(), number: "PAR-20-36", award: 100000, disciplines: [4] },
-                  { title: "Improvements to Biological Field Stations and Marine Laboratories (FSML)", postedDate: new Date(), closingDate: new Date(), number: "PAR-21-36", award: 100000, disciplines: [3] }
-                ],
-
-                additionalPrograms: [
-                  { title: "Collaborative Research in Computational Neuroscience (CRCNS)", postedDate: new Date(), closingDate: new Date(), number: "PAR-23-36", award: 130000, disciplines: [3] },
-                  { title: "Computer Science for All (CSforAll:RPP)", postedDate: new Date(), closingDate: new Date(), number: "PAR-25-36", award: 940000, disciplines: [8] },
-                  { title: "Critical Techniques, Technologies and Methodologies for Advancing Foundations and Applications of Big Data Sciences and Engineering (BIGDATA)", postedDate: new Date(), closingDate: new Date(), number: "PAR-25-36", award: 900000, disciplines: [135]},
-                  { title: "Cyber-Physical Systems (CPS)", postedDate: new Date(), closingDate: new Date(), number: "PAR-26-36", award: 540000, disciplines: [151] },
-                  { title: "Cyberlearning for Work at the Human-Technology Frontier", postedDate: new Date(), closingDate: new Date(), number: "PAR-27-36", award: 80000, disciplines: [140] },
-                  { title: "Designing Materials to Revolutionize and Engineer our Future (DMREF)", postedDate: new Date(), closingDate: new Date(), number: "PAR-28-36", award: 30000, disciplines: [80, 81] },
-                  { title: "Expeditions in Computing", postedDate: new Date(), closingDate: new Date(), number: "PAR-30-36", award: 80000, disciplines: [10] }
-                ]
+                }
             }
         },
         computed: {
             ...mapGetters({
-                agencyInfo: 'agency/profile'
+                agencyProfile: 'agency/agency',
+                selectedArea: 'agency/area',
+
+                corePrograms: 'agency/corePrograms',
+                additionalPrograms: 'agency/additionalPrograms',
+
+                isLoadingAgencyProgramsListingPage: 'agency/isLoadingAgencyProgramsListingPage'
             }),
             breadcrumbs() {
-              return this.selectedArea ? [
-                { text: this.agencyInfo.shortName, disabled: false }, 
+              return [ 
+                { text: this.agencyProfile.shortName, disabled: false }, 
                 { text: "Programs", disabled: false },
                 { text: this.selectedArea.abbreviation, disabled: false }, 
                 { text: this.selectedArea.subAreaAbbreviation, disabled: false }
-              ] : [
-                { text: this.agencyInfo.shortName, disabled: false }, 
-                { text: "Programs", disabled: false }
               ];
             },
             filteredCorePrograms() {
-              return this.filterPrograms('corePrograms');
+              return this.filterPrograms(this.corePrograms);
 
             },
             filteredAdditionalPrograms() {
-              return this.filterPrograms('additionalPrograms');
+              return this.filterPrograms(this.additionalPrograms);
             }
         },
         methods: {
@@ -190,13 +176,7 @@
           },
 
           selectArea(area, subArea) {
-            this.selectedArea = {
-              title: area.title,
-              abbreviation: area.abbreviation,
-              subAreaTitle: subArea.title,
-              subAreaAbbreviation: subArea.abbreviation,
-              disciplines: subArea.disciplines
-            };
+            this.$store.dispatch('agency/setResearchArea', { area, subArea });
           },
           
           setSortCriteria(key) {
@@ -211,11 +191,17 @@
                }
             }
           },
-          isSelectedSubArea(subArea) {
-            return this.selectedArea && subArea.title == this.selectedArea.subAreaTitle;
+
+          isSelectedArea(area) {
+            return area.title == this.selectedArea.title ? 1 : 0;
           },
-          filterPrograms(collectionName) {
-            let filtered = this[collectionName].filter(p => {
+
+          isSelectedSubArea(subArea) {
+            return subArea.title == this.selectedArea.subAreaTitle;
+          },
+
+          filterPrograms(collection) {
+            let filtered = collection.filter(p => {
               if (!this.filter.searchTerm) {
                 return true;
               }
@@ -235,14 +221,7 @@
 
             return this.filter.sortCriteria.order == 1 ? filtered : filtered.reverse();
           }
-        },
-
-        mounted () {
-            const self = this;
-            const area = self.agencyInfo.researchAreas[0];
-            const subArea = area.subAreas[0];
-            self.selectArea(area, subArea);
-        },
+        }
     };
 </script>
 

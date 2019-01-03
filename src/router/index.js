@@ -31,11 +31,11 @@ const router = new Router({
                     : usersService.getUserProfile(user.username).then((p) => { return p.agencies });
                 
                 rolePromise.then((agencies) => {
-                    const sub = window.location.host.split('.')[0]
+                    const sub = "nsf";// window.location.host.split('.')[0]
                     const agency = agencies.find(a => a.name.toLowerCase() == sub.toLowerCase())
                     if (agency) {
                         // todo: replace with Grants list
-                        next({ name: 'AgencyProfile', params: { agency: agency.name } })
+                        next({ name: 'AgencyPrograms', params: { agency: agency.name } })
                     } else {
                         next({ name: 'ResearchFeed' })
                     }
