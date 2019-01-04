@@ -38,11 +38,18 @@ const getNodesByIdList = idList => {
 const mapAreaToProgram = (program, researchAreas)  => {
     // to do: prepare a better algo for the demo, must be revised in the future
     program.disciplines = [program.target_discipline];
-    
-    let area = researchAreas.find(a => {
-        return a.subAreas.some(sa => sa.disciplines.some(d => program.disciplines.includes(d)));
-    });
-    let subArea = area.subAreas.find(sa => sa.disciplines.some(d => program.disciplines.includes(d)));
+
+    var area = researchAreas.find(a => { return a.subAreas.some(sa => sa.disciplines.some(d => program.disciplines.includes(d))); });
+    if (!area) {
+        area = researchAreas[0];
+    }
+
+    var subArea = area.subAreas.find(sa => sa.disciplines.some(d => program.disciplines.includes(d)));
+    if (!subArea) {
+        area = researchAreas[0];
+        subArea = researchAreas[0].subAreas[0];
+    }
+
     program.area = area;
     program.subArea = subArea;
 }

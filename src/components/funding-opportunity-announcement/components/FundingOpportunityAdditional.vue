@@ -32,7 +32,7 @@
                 <v-icon dark class="pr-1">keyboard_arrow_left</v-icon> Back
             </v-btn>
             
-            <v-btn color="primary" @click.native="finish()" :disabled="isNextDisabled()">Finish</v-btn>
+            <v-btn color="primary" @click.native="finish()" :loading="isSending" :disabled="isNextDisabled() || isSending">Finish</v-btn>
         </div>
     </div>
 </template>
@@ -42,7 +42,8 @@
         name: "FundingOpportunityAdditional",
 
         props: {
-            opportunity: { type: Object, required: true }
+            opportunity: { type: Object, required: true },
+            isSending: { type: Boolean, default: false },
         },
 
         data() { 

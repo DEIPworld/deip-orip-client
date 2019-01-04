@@ -103,6 +103,7 @@
                         <div class="full-height">
                             <funding-opportunity-additional
                                 @finish="finish" @decStep="decStep"
+                                :is-sending="isSending"
                                 :opportunity="opportunity"
                             ></funding-opportunity-additional>
                         </div>
@@ -112,7 +113,7 @@
 
             <div class="display-flex full-width full-height" v-else>
                 <div class="c-m-auto text-align-center">
-                    <div class="display-1">You have successfully created<br>funding opportunity</div>
+                    <div class="display-1">New Funding Opportunity has been created <br/> successfully</div>
 
                     <div class="subheading c-mt-8">
                         <span class="bold">#</span>
@@ -162,7 +163,7 @@
                     numberOfAwards: '',
                     eligibleApplicants: '',
                     eligibilityAdditionalInformation: '',
-                    programOfficers: [],
+                    officers: [],
                     description: '',
                     additionalInfoLink: '',
                     grantorEmail: '',
@@ -170,8 +171,8 @@
                     endDate: null
                 },
 
-                isLoading: false,
-                isFinished: false
+                isFinished: false,
+                isSending: false
             }
         },
 
@@ -190,6 +191,8 @@
 
             finish() {
                 console.log('finished', this.opportunity);
+                this.isSending = true;
+                debugger;
                 deipRpc.broadcast.createFundingOpportunityAsync(
                     this.user.privKey,
                     this.opportunity.number,
@@ -205,6 +208,7 @@
                     this.toAssetUnits(this.opportunity.awardCeiling),
                     this.toAssetUnits(this.opportunity.awardFloor),
                     this.user.username,
+                    this.opportunity.officers.map(a => a),
                     100,
                     100,
                     parseInt(this.opportunity.numberOfAwards),
@@ -212,9 +216,17 @@
                     this.opportunity.endDate
                 ).then((res) => {
                     this.isFinished = true;
+                    this.$store.dispatch('layout/setSuccess', {
+                        message: `Funding Opportunity has been created successfully!`
+                    });
                 })
-                .catch(err => { console.log(err)})
-                .finally(() => {});
+                .catch(err => { 
+                    this.$store.dispatch('layout/setError', {
+                        message: "An error occurred while creating Funding Opportunity, please try again later"
+                    });
+                    console.log(err)
+                })
+                .finally(() => { this.isSending = false; });
             }
         },
 

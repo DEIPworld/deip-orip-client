@@ -2,6 +2,7 @@ import Vue from 'vue';
 import deipRpc from '@deip/deip-rpc-client';
 import agencyHttp from './../../../services/http/agency';
 import { mapAreaToProgram } from '../../common/disciplines/DisciplineTreeService'
+import { getEnrichedProfiles } from './../../../utils/user';
 
 const state = {
     agency: undefined,
@@ -46,9 +47,14 @@ const actions = {
     loadAgencyProgramDetails({ state, dispatch, commit }, { foaId, notify }) {
         commit('SET_AGENCY_PROGRAM_LOADING_STATE', true);
 
+        var program;
         deipRpc.api.getFundingOpportunitiesByOpportunityNumberAsync(foaId)
             .then((programs) => {
-                const program = programs.find(p => p.agency_name == state.agency._id)
+                program = programs.find(p => p.agency_name == state.agency._id);
+                return getEnrichedProfiles(program.officers);
+            })
+            .then((profiles) => {
+                program.officers = profiles
                 commit('SET_AGENCY_PROGRAM', program);
             })
             .catch(err => { console.log(err) })

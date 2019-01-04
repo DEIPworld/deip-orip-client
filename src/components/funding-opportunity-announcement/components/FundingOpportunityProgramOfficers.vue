@@ -30,49 +30,22 @@
                             </div>
                         </v-radio-group>
 
-                        <div class="c-pt-8">
-                            <div class="row-nowrap align-items-center">
-                                <v-avatar size="40px" class="">
-                                    <!-- <img v-if="member.profile" v-bind:src="member.profile.avatar | avatarSrc(40, 40, false)" /> -->
-                                    <v-gravatar :email="'shawna' + '@deip.world'" />
+                        <div>
+                            <div class="row-nowrap align-items-center c-mt-2" v-for="(member, i) in members">
+                                <v-avatar size="40px">
+                                    <img v-if="member.profile" v-bind:src="member.profile.avatar | avatarSrc(40, 40, false)" />
+                                    <v-gravatar v-else :title="member.account.name" :email="member.account.name + '@deip.world'" />
                                 </v-avatar>
-
                                 <div class="c-pl-4 col-grow">
-                                    <span class="a">Shawna Mathis</span>
+                                    <router-link :to="{ name: 'UserDetails', params: { account_name: member.account.name } }" class="a c-pl-3">
+                                        {{member | fullname}}
+                                    </router-link>
                                 </div>
-
-                                <div class="">
-                                    <v-checkbox hide-details></v-checkbox>
-                                </div>
-                            </div>
-
-                            <div class="row-nowrap align-items-center c-pt-4">
-                                <v-avatar size="40px" class="">
-                                    <!-- <img v-if="member.profile" v-bind:src="member.profile.avatar | avatarSrc(40, 40, false)" /> -->
-                                    <v-gravatar :email="'egow' + '@deip.world'" />
-                                </v-avatar>
-
-                                <div class="c-pl-4 col-grow">
-                                    <span class="a">Egow Tompson</span>
-                                </div>
-
-                                <div class="">
-                                    <v-checkbox hide-details></v-checkbox>
-                                </div>
-                            </div>
-
-                            <div class="row-nowrap align-items-center c-pt-4">
-                                <v-avatar size="40px" class="">
-                                    <!-- <img v-if="member.profile" v-bind:src="member.profile.avatar | avatarSrc(40, 40, false)" /> -->
-                                    <v-gravatar :email="'Egota' + '@deip.world'" />
-                                </v-avatar>
-
-                                <div class="c-pl-4 col-grow">
-                                    <span class="a">Egota Rydberg</span>
-                                </div>
-
-                                <div class="">
-                                    <v-checkbox hide-details></v-checkbox>
+                                <div>
+                                    <input id="checkbox"
+                                        type="checkbox"
+                                        :checked="isSelected(member)"
+                                        v-on:input="setOpportunityOfficer($event, member)"/>
                                 </div>
                             </div>
                         </div>
@@ -93,6 +66,10 @@
 </template>
 
 <script>
+    import deipRpc from '@deip/deip-rpc-client';
+    import { getEnrichedProfiles } from './../../../utils/user';
+    import { mapGetters } from 'vuex';
+
     export default {
         name: "FundingOpportunityProgramOfficers",
 
@@ -102,9 +79,14 @@
 
         data() { 
             return {
+                members: []
             } 
         },
-        
+        computed: {
+            ...mapGetters({
+                user: 'auth/user'
+            })
+        },
         methods: {
             nextStep() {
                 this.$emit('incStep');
@@ -113,10 +95,34 @@
                 this.$emit('decStep');
             },
 
+            isSelected(member) {
+                return this.opportunity.officers.some(a => a == member.account.name);
+            },
+            setOpportunityOfficer($event, member) {
+                event.preventDefault();
+                event.stopPropagation();
+                const checked = event.target.checked;
+                this.opportunity.officers = checked
+                    ? [...this.opportunity.officers, member.account.name]
+                    : this.opportunity.officers.filter(a => a !== member.account.name);
+            },
             isNextDisabled() {
                 return false;
             }
-        }
+        },
+        created() {
+            deipRpc.api.getAllAccountsAsync()
+                .then(accounts => {
+                    const usernames = [];
+                    let sliceFrom = window.tenant == 'nsf' ? 1 : 5;
+                    let sliceTo = window.tenant == 'nsf' ? 5 : 10;
+                    usernames.push(...accounts.slice(sliceFrom, sliceTo).filter(a => a.name != this.user.username).map(a => a.name))
+                    return getEnrichedProfiles(usernames);
+                })
+                .then((users) => {
+                    this.members = users;
+                })
+        },
     };
 </script>
 
