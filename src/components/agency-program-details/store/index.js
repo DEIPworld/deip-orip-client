@@ -1,8 +1,7 @@
-import _ from 'lodash';
 import Vue from 'vue';
 import deipRpc from '@deip/deip-rpc-client';
 import agencyHttp from './../../../services/http/agency';
-import { originalCorePrograms, originalAdditionalPrograms, mapArea } from './../../tempPrograms'
+import { mapAreaToProgram } from '../../common/disciplines/DisciplineTreeService'
 
 const state = {
     agency: undefined,
@@ -46,10 +45,10 @@ const actions = {
 
     loadAgencyProgramDetails({ state, dispatch, commit }, { foaId, notify }) {
         commit('SET_AGENCY_PROGRAM_LOADING_STATE', true);
-        const programs = [...originalCorePrograms, ...originalAdditionalPrograms]; // todo: replace with server call;
-        debugger;
-        Promise.resolve(programs.find(p => p.number == foaId))
-            .then((program) => {
+
+        deipRpc.api.getFundingOpportunitiesByOpportunityNumberAsync(foaId)
+            .then((programs) => {
+                const program = programs.find(p => p.agency_name == state.agency._id)
                 commit('SET_AGENCY_PROGRAM', program);
             })
             .catch(err => { console.log(err) })
@@ -68,7 +67,7 @@ const mutations = {
     },
 
     ['SET_AGENCY_PROGRAM'](state, program) {
-        mapArea(program, state.agency.researchAreas);
+        mapAreaToProgram(program, state.agency.researchAreas);
         Vue.set(state, 'program', program)
     },
 

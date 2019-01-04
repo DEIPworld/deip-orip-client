@@ -7,7 +7,6 @@ import usersService from './../../../services/http/users'
 import joinRequestsService from './../../../services/http/joinRequests'
 import notificationsHttpService from './../../../services/http/notifications'
 import { getEnrichedProfiles } from './../../../utils/user'
-import * as proposalService from "./../../../services/ProposalService";
 
 const state = {
     user: {
@@ -76,6 +75,20 @@ const getters = {
 
     userJoinRequests: (state, getters) => {
         return state.user.joinRequests;
+    },
+
+    isGrantor: (state, getters) => {
+        if (state.user.profile) {
+            const sub = window.tenant;
+            return state.user.profile.agencies.some(
+                a => a.name.toLowerCase() == sub.toLowerCase() && a.role === 'grantor'
+            );
+        }
+        return false;
+    },
+
+    isApplicant: (state, getters) => {
+        return !getters.isGrantor;
     }
 }
 

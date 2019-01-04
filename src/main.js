@@ -39,6 +39,8 @@ axios.get('/env')
             components: { App },
             template: '<App/>'
         });
+
+        window.tenant = window.location.host.split('.')[0];
     })
     .catch((err) => {
         console.error(err)

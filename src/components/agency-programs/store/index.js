@@ -1,8 +1,7 @@
-import _ from 'lodash';
 import Vue from 'vue';
 import deipRpc from '@deip/deip-rpc-client';
 import agencyHttp from './../../../services/http/agency';
-import { originalCorePrograms, originalAdditionalPrograms, mapArea } from './../../tempPrograms'
+import { mapAreaToProgram } from '../../common/disciplines/DisciplineTreeService'
 
 const state = {
     agency: undefined,
@@ -19,7 +18,6 @@ const state = {
 // getters
 const getters = {
     agency: (state, getters) => state.agency,
-
     selectedArea: (state, getters) => state.selectedArea,
     
     corePrograms: (state, getters) => state.corePrograms,
@@ -63,15 +61,17 @@ const actions = {
     loadAgencyPrograms({ state, dispatch, commit }, { notify }) {
         commit('SET_AGENCY_PROGRAMS_LOADING_STATE', true);
 
-        Promise.resolve({ corePrograms: originalCorePrograms, additionalPrograms: originalAdditionalPrograms })
-            .then(({ corePrograms, additionalPrograms }) => {
-                commit('SET_AGENCY_PROGRAMS', { corePrograms, additionalPrograms });
-            })
-            .catch(err => { console.log(err) })
-            .finally(() => {
-                commit('SET_AGENCY_PROGRAMS_LOADING_STATE', false);
-                if (notify) notify();
-            });
+            deipRpc.api.getFundingOpportunitiesByAgencyNameAsync("nsf")
+                .then((programs) => {
+                    console.log(programs);
+                    const corePrograms = programs;
+                    commit('SET_AGENCY_PROGRAMS', { corePrograms, additionalPrograms: [] });
+                })
+                .catch(err => { console.log(err) })
+                .finally(() => {
+                    commit('SET_AGENCY_PROGRAMS_LOADING_STATE', false);
+                    if (notify) notify();
+                });
     },
 
     setResearchArea({ state, dispatch, commit }, { area, subArea }) {
@@ -97,8 +97,8 @@ const mutations = {
     },
 
     ['SET_AGENCY_PROGRAMS'](state, { corePrograms, additionalPrograms }) {
-        corePrograms.forEach(p => { mapArea(p, state.agency.researchAreas) });
-        additionalPrograms.forEach(p => { mapArea(p, state.agency.researchAreas) });
+        corePrograms.forEach(p => { mapAreaToProgram(p, state.agency.researchAreas) });
+        additionalPrograms.forEach(p => { mapAreaToProgram(p, state.agency.researchAreas) });
 
         Vue.set(state, 'corePrograms', corePrograms);
         Vue.set(state, 'additionalPrograms', additionalPrograms)

@@ -35,8 +35,21 @@ const getNodesByIdList = idList => {
     return idList.map(id => getNodeById(id));
 };
 
+const mapAreaToProgram = (program, researchAreas)  => {
+    // to do: prepare a better algo for the demo, must be revised in the future
+    program.disciplines = [program.target_discipline];
+    
+    let area = researchAreas.find(a => {
+        return a.subAreas.some(sa => sa.disciplines.some(d => program.disciplines.includes(d)));
+    });
+    let subArea = area.subAreas.find(sa => sa.disciplines.some(d => program.disciplines.includes(d)));
+    program.area = area;
+    program.subArea = subArea;
+}
+
 export {
     disciplineTree,
     getNodeById,
-    getNodesByIdList
+    getNodesByIdList,
+    mapAreaToProgram
 }

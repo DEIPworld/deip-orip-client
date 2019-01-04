@@ -49,7 +49,7 @@ const otherRoutes = [{
         component: InvestorDashboard
     }, {
         path: '/funding-opportunity-announcement',
-        name: 'funding-opportunity-announcement',
+        name: 'FundingOpportunityAnnouncement',
         component: FundingOpportunityAnnouncement
     }];
 

@@ -36,8 +36,8 @@ const router = new Router({
                         next({ name: 'ResearchFeed' });
                         return;
                     }
-
-                    const sub = "nsf";// window.location.host.split('.')[0]
+                    
+                    const sub = window.tenant;
                     const agency = agencies.find(a => a.name.toLowerCase() == sub.toLowerCase());
 
                     if (agency) {

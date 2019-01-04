@@ -116,15 +116,15 @@
 
                     <div class="subheading c-mt-8">
                         <span class="bold">#</span>
-                        <span class="a">PAR-17-236</span>
+                        <span class="a">{{opportunity.number}}</span>
                     </div>
 
                     <div class="a subheading c-mt-2">
-                        Genetic Susceptibility and Variability of Human Structural Birth Defects (R01)
+                        {{opportunity.title}}
                     </div>
 
                     <div class="c-mt-12">
-                        <v-btn color="primary" class="ma-0">Close</v-btn>
+                        <v-btn color="primary" class="ma-0" :to="{name: 'Default'}">Close</v-btn>
                     </div>
                 </div>
             </div>
@@ -165,7 +165,9 @@
                     programOfficers: [],
                     description: '',
                     additionalInfoLink: '',
-                    grantorEmail: ''
+                    grantorEmail: '',
+                    startDate: null,
+                    endDate: null
                 },
 
                 isLoading: false,
@@ -188,8 +190,31 @@
 
             finish() {
                 console.log('finished', this.opportunity);
-
-                this.isFinished = true;
+                deipRpc.broadcast.createFundingOpportunityAsync(
+                    this.user.privKey,
+                    this.opportunity.number,
+                    this.opportunity.title,
+                    this.opportunity.eligibleApplicants,
+                    this.opportunity.eligibilityAdditionalInformation,
+                    "nsf",
+                    this.opportunity.description,
+                    this.opportunity.additionalInfoLink,
+                    this.opportunity.grantorEmail,
+                    this.opportunity.disciplines[0].id,
+                    this.toAssetUnits(this.opportunity.totalProgramFunding),
+                    this.toAssetUnits(this.opportunity.awardCeiling),
+                    this.toAssetUnits(this.opportunity.awardFloor),
+                    this.user.username,
+                    100,
+                    100,
+                    parseInt(this.opportunity.numberOfAwards),
+                    this.opportunity.startDate,
+                    this.opportunity.endDate
+                ).then((res) => {
+                    this.isFinished = true;
+                })
+                .catch(err => { console.log(err)})
+                .finally(() => {});
             }
         },
 

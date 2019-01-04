@@ -31,32 +31,32 @@
                 <span class="col-grow body-2">{{agencyProfile.name}}</span>
 
                 <span class="col-grow body-1">Estimated total program funding:</span>
-                <span class="col-grow body-2">$ {{program.estimatedTotalFunding}}</span>
+                <span class="col-grow body-2">$ {{fromAssetsToFloat(program.amount)}}</span>
               </div>
               <div class="row c-pt-5">
                 <span class="col-grow body-1">Opportunity Number:</span>
-                <span class="col-grow body-2">{{program.number}}</span>
+                <span class="col-grow body-2">{{program.funding_opportunity_number}}</span>
 
                 <span class="col-grow body-1">Expected number of awards:</span>
-                <span class="col-grow body-2">{{program.expectedNumberOfAwards}}</span>
+                <span class="col-grow body-2">{{program.expected_number_of_awards}}</span>
               </div>
               <div class="row c-pt-5">
                 <span class="col-grow body-1">Area:</span>
                 <span class="col-grow body-2">{{program.area.title}}</span>
 
                 <span class="col-grow body-1">Award ceiling:</span>
-                <span class="col-grow body-2">$ {{program.awardCeiling}}</span>
+                <span class="col-grow body-2">$ {{fromAssetsToFloat(program.award_ceiling)}}</span>
               </div> 
               <div class="row c-pt-5">
                 <span class="col-grow body-1">Open date:</span>
-                <span class="col-grow body-2">{{program.postedDate.toDateString()}}</span>
+                <span class="col-grow body-2">{{new Date(`${program.posted_date}Z`).toDateString()}}</span>
 
                 <span class="col-grow body-1">Award floor:</span>
-                <span class="col-grow body-2">$ {{program.awardFloor}}</span>
+                <span class="col-grow body-2">$ {{fromAssetsToFloat(program.award_floor)}}</span>
               </div>
               <div class="row c-pt-5 c-pb-10">
                 <span class="col-grow body-1">Close date:</span>
-                <span class="col-grow body-2">{{program.closingDate.toDateString()}}</span>
+                <span class="col-grow body-2">{{new Date(`${program.close_date}Z`).toDateString()}}</span>
 
                 <span class="col-grow body-1">Number of applications:</span>
                 <span class="col-grow body-2">0</span>
@@ -68,13 +68,13 @@
               <div class="sm-title bold c-pt-10">Program Guidlines</div>
 
               <div class="subheading bold c-pt-10">Eligible Aplicants</div>
-              <div class="body-1 c-pt-5">{{program.eligibleApplicantsText}}</div>
+              <div class="body-1 c-pt-5">{{program.eligible_applicants}}</div>
 
               <div class="subheading bold c-pt-5">Additional Information on Eligibility</div>
-              <div class="body-1 c-pt-5">Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.</div>
+              <div class="body-1 c-pt-5">{{program.additional_info_of_eligibility}}</div>
 
               <div class="subheading bold c-pt-5">Description</div>
-              <div class="body-1 c-pt-5 c-pb-5">There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form, by injected humour, or randomised words which don't look even slightly believable. If you are going to use a passage of Lorem Ipsum, you need to be sure there isn't anything embarrassing hidden in the middle of text. All the Lorem Ipsum generators on the Internet tend to repeat predefined chunks as necessary, making this the first true generator on the Internet. It uses a dictionary of over 200 Latin words, combined with a handful of model sentence structures, to generate Lorem Ipsum which looks reasonable. The generated Lorem Ipsum is therefore always free from repetition, injected humour, or non-characteristic words etc.</div>
+              <div class="body-1 c-pt-5 c-pb-5">{{program.description}}</div>
 
               <v-divider></v-divider>
 
@@ -135,7 +135,7 @@
                   <div class="caption"><v-icon small class="c-pr-2">rate_review</v-icon>Reward for review: <span class="bold">15 %</span></div>
                     <div class="caption">
                         <div><v-icon small class="c-mr-2">av_timer</v-icon>Reward period active till</div>
-                        <div class="bold"><v-icon small class="c-mr-2">today</v-icon>{{program.closingDate.toDateString()}}</div> 
+                        <div class="bold"><v-icon small class="c-mr-2">today</v-icon>{{new Date(`${program.close_date}Z`).toDateString()}}</div> 
                     </div>
                   </div> 
                 </div>

@@ -3,20 +3,18 @@
         <div class="c-mb-4 col-grow column">
             <div class="step-title">Select discipline(s) your funding opportunity is related to</div>
 
-            <div class="subheading c-mb-4 text-align-center c-mh-auto discipline-max-width">
+            <div class="subheading c-mb-2 text-align-center c-mh-auto discipline-max-width">
                 {{ opportunity.disciplines.map(discipline => discipline.label).join(' · ') }}
             </div>
 
             <div class="col-grow overflow-y-auto">
-
-                <div class="c-mh-auto discipline-max-width c-pt-4 full-height">
+                <div class="c-mh-auto discipline-max-width c-pt-2 full-height">
                     <advanced-discipline-picker
                         :preselected="opportunity.disciplines"
                         :without-user-disciplines="true"
                         @select="selectDiscipline"
                     ></advanced-discipline-picker>
                 </div>
-
             </div>
         </div>
 
@@ -72,5 +70,6 @@
 <style lang="less" scoped>
     .discipline-max-width {
         max-width: 600px;
+        min-height: 25px;
     }
 </style>

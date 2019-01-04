@@ -30,7 +30,7 @@
                         <v-list-tile-title>Profile</v-list-tile-title>
                     </v-list-tile>
 
-                    <v-list-tile v-if="user" :to="{ name: 'UserWallet' }">
+                    <v-list-tile :to="{ name: 'UserWallet' }">
                         <v-list-tile-title>Wallet</v-list-tile-title>
                     </v-list-tile>
                     
@@ -38,16 +38,20 @@
                         <v-list-tile-title>Create Grant</v-list-tile-title>
                     </v-list-tile> -->
 
-                    <v-list-tile v-if="user" :to="{ name: 'claim-user-expertise-list' }">
+                    <v-list-tile :to="{ name: 'claim-user-expertise-list' }">
                         <v-list-tile-title>Expertise Committee</v-list-tile-title>
                     </v-list-tile>
 
-                    <v-list-tile v-if="user" :to="{ name: 'voting-for-block-producers' }">
+                    <v-list-tile :to="{ name: 'voting-for-block-producers' }">
                         <v-list-tile-title>Voting for block producers</v-list-tile-title>
                     </v-list-tile>
 
-                    <v-list-tile v-if="user" :to="{ name: 'investor-dashboard' }">
+                    <v-list-tile :to="{ name: 'investor-dashboard' }">
                         <v-list-tile-title>Investor dashboard</v-list-tile-title>
+                    </v-list-tile>
+
+                    <v-list-tile v-if="isGrantor" :to="{ name: 'FundingOpportunityAnnouncement' }">
+                        <v-list-tile-title>Create Funding Opportunity</v-list-tile-title>
                     </v-list-tile>
 
                     <v-divider></v-divider>
@@ -82,7 +86,8 @@
 
         computed: {
             ...mapGetters({
-                user: 'auth/user'
+                user: 'auth/user',
+                isGrantor: 'auth/isGrantor'
             })
         },
 
