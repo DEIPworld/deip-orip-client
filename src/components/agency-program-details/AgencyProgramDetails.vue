@@ -21,7 +21,7 @@
         <v-card class="c-pl-5 c-pr-5 c-pb-10">
           <v-layout row wrap>
             <v-flex xs12>
-              <div class="display-1 c-pb-10 c-pt-10">{{program.title}}</div>
+              <div class="display-1 c-pb-10 c-pt-10">{{program.funding_opportunity_title}}</div>
               <v-divider></v-divider>
             </v-flex>
             
@@ -58,8 +58,12 @@
                 <span class="col-grow body-1">Close date:</span>
                 <span class="col-grow body-2">{{new Date(`${program.close_date}Z`).toDateString()}}</span>
 
-                <span class="col-grow body-1">Number of applications:</span>
-                <span class="col-grow body-2">0</span>
+                <span class="col-grow body-1" v-if="isGrantor">Number of applications:</span>
+                <span class="col-grow body-2" v-if="isGrantor">{{applications.length}}</span>
+                
+                <span class="col-grow body-1" v-if="isApplicant"></span>
+                <span class="col-grow body-2" v-if="isApplicant"></span>
+
               </div>
               <v-divider></v-divider>
             </v-flex>
@@ -80,10 +84,11 @@
 
             </v-flex>
 
-            <v-flex xs12>
-              <div class="sm-title bold c-pt-10 c-pb-5">Applications: {{applications.length}}</div>
+            <v-flex xs12 v-if="isGrantor">
+              <div class="sm-title bold c-pt-10 c-pb-5">Applications: {{mockApplications.length}}</div>
               <div>
-                <application-list-item v-for="(application, index) in applications" 
+                <application-list-item v-for="(application, index) in mockApplications"
+                  :key="'application' + application.id" 
                   :application="application" 
                   :isFirst="index == 0">
                 </application-list-item>
@@ -129,7 +134,7 @@
               </div>
               <v-divider></v-divider>
 
-              <div class="c-pb-5 c-pl-5 c-pt-5">
+              <div class="c-pb-5 c-pl-5 c-pt-5" v-if="isGrantor">
                 <div class="subheading bold">
                   Reviews: <span style="color: green">5</span> / <span style="color: red">2</span> 
                 </div>
@@ -142,6 +147,11 @@
                   </div> 
                 </div>
               </div>
+
+              <div class="c-p-10" v-if="isApplicant">
+                <v-btn block color="primary" @click="applyToProgram()">Apply</v-btn>
+              </div>
+
             </v-card>
           </v-flex>
         </v-layout>
@@ -153,12 +163,15 @@
 
 <script>
     import { mapGetters } from 'vuex';
+    import deipRpc from '@deip/deip-rpc-client';
 
     export default {
         name: "AgencyProgramDetails",
         data() {
             return {
-              applications: [{
+              // todo: replace with applications from the store
+              mockApplications: [{
+                id: 0,
                 researchGroup: 'Test RG', 
                 authors: ['alice', 'nick', 'bob'], 
                 expertise: [
@@ -166,19 +179,26 @@
                   { name: 'Quantum Electronics', amount: 200 }, 
                   { name: 'Quantum Coherence', amount: 6000 } ] 
               }, {
+                id: 0,
                 researchGroup: 'Test RG 2', 
                 authors: ['rachel', 'rick', 'nastya'], 
                 expertise: [
                   { name: 'Physics', amount: 1500 }, 
                   { name: 'Biology', amount: 200 }, 
                   { name: 'Chemistry', amount: 6000 } ] 
-              }]
+              }],
+
+              isSendingApplication: false
             }
         },
         computed: {
             ...mapGetters({
                 agencyProfile: 'agencyProgramDetails/agency',
-                program: 'agencyProgramDetails/program'
+                program: 'agencyProgramDetails/program',
+                applications: 'agencyProgramDetails/applications',
+                user: 'auth/user',
+                isGrantor: 'auth/isGrantor',
+                isApplicant: 'auth/isApplicant'
             }),
             breadcrumbs() {
               return [
@@ -191,6 +211,31 @@
             }
         },
         methods: {
+
+          applyToProgram() {
+            this.isSendingApplication = true;
+            deipRpc.broadcast.createGrantApplicationAsync(
+              this.user.privKey,
+              this.program.id, //grant_id 
+              0,  // research_id
+              this.user.username, // creator
+              "er34ry348rfef" // application_hash
+            )
+            .then((res) => {
+              // todo: Reload applications section
+              this.$store.dispatch('layout/setSuccess', {
+                  message: `Application has been sent successfully!`
+              });
+            })
+            .catch(err => { 
+                this.$store.dispatch('layout/setError', {
+                    message: "An error occurred while sending Application, please try again later"
+                });
+                console.log(err)
+            })
+            .finally(() => { this.isSendingApplication = false; });
+          }
+
         },
         mounted() {
         }

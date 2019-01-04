@@ -12,7 +12,7 @@
                             append-icon="search"
                         ></v-text-field>
 
-                        <v-radio-group>
+                    <!--    <v-radio-group>
                             <div class="row">
                                 <div class="width-8">
                                     <v-radio
@@ -28,7 +28,7 @@
                                     ></v-radio>
                                 </div>
                             </div>
-                        </v-radio-group>
+                        </v-radio-group> -->
 
                         <div>
                             <div class="row-nowrap align-items-center c-mt-2" v-for="(member, i) in members">

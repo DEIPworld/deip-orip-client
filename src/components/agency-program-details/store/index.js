@@ -7,18 +7,21 @@ import { getEnrichedProfiles } from './../../../utils/user';
 const state = {
     agency: undefined,
     program: undefined,
+    applications: [],
 
     corePrograms: [],
     additionalPrograms: [],
     
     isLoadingAgencyProgramDetailsPage: undefined,
     isLoadingAgencyProgramDetails: undefined,
+    isLoadingAgencyProgramApplications: undefined
 }
 
 // getters
 const getters = {
     agency: (state, getters) => state.agency,
     program: (state, getters) => state.program,
+    applications: (state, getters) => state.applications,
     
     corePrograms: (state, getters) => state.corePrograms,
     additionalPrograms: (state, getters) => state.additionalPrograms,
@@ -34,7 +37,10 @@ const actions = {
             .then((agencyProfile) => {
                 commit('SET_AGENCY_PROFILE', agencyProfile);
                 const agencyProgramDetailsLoad = new Promise((resolve, reject) => {
-                    dispatch('loadAgencyProgramDetails', { foaId, notify: resolve });
+                    dispatch('loadAgencyProgramDetails', { foaId })
+                        .then(() => {
+                            dispatch('loadAgencyProgramApplications', { notify: resolve })
+                        });
                 });
                 return Promise.all([agencyProgramDetailsLoad])
             })
@@ -48,7 +54,7 @@ const actions = {
         commit('SET_AGENCY_PROGRAM_LOADING_STATE', true);
 
         var program;
-        deipRpc.api.getFundingOpportunitiesByOpportunityNumberAsync(foaId)
+        return deipRpc.api.getFundingOpportunitiesByOpportunityNumberAsync(foaId)
             .then((programs) => {
                 program = programs.find(p => p.agency_name == state.agency._id);
                 return getEnrichedProfiles(program.officers);
@@ -60,6 +66,21 @@ const actions = {
             .catch(err => { console.log(err) })
             .finally(() => {
                 commit('SET_AGENCY_PROGRAM_LOADING_STATE', false);
+                if (notify) notify();
+            });
+    },
+
+    loadAgencyProgramApplications({ state, dispatch, commit }, { notify }) {
+        commit('SET_AGENCY_PROGRAM_APPLICATIONS_LOADING_STATE', true);
+
+        deipRpc.api.getApplicationsByGrantAsync(state.program.id)
+            .then((applications) => {
+                // todo: fill applications with additional data
+                commit('SET_AGENCY_PROGRAM_APPLICATIONS', applications);
+            })
+            .catch(err => { console.log(err) })
+            .finally(() => {
+                commit('SET_AGENCY_PROGRAM_APPLICATIONS_LOADING_STATE', false);
                 if (notify) notify();
             });
     }
@@ -77,8 +98,16 @@ const mutations = {
         Vue.set(state, 'program', program)
     },
 
+    ['SET_AGENCY_PROGRAM_APPLICATIONS'](state, applications) {
+        Vue.set(state, 'applications', applications)
+    },
+
     ['SET_AGENCY_PROGRAM_LOADING_STATE'](state, isLoading) {
         Vue.set(state, 'isLoadingAgencyProgramDetails', isLoading)
+    },
+
+    ['SET_AGENCY_PROGRAM_APPLICATIONS_LOADING_STATE'](state, isLoading) {
+        Vue.set(state, 'isLoadingAgencyProgramApplications', isLoading)
     },
 
     ['SET_AGENCY_PROGRAM_DETAILS_PAGE_LOADING_STATE'](state, isLoading) {

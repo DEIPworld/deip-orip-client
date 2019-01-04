@@ -192,7 +192,6 @@
             finish() {
                 console.log('finished', this.opportunity);
                 this.isSending = true;
-                debugger;
                 deipRpc.broadcast.createFundingOpportunityAsync(
                     this.user.privKey,
                     this.opportunity.number,

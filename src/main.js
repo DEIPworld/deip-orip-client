@@ -40,7 +40,7 @@ axios.get('/env')
             template: '<App/>'
         });
 
-        window.tenant = window.location.host.split('.')[0];
+        window.tenant = window.env.TENANT || window.location.host.split('.')[0];
     })
     .catch((err) => {
         console.error(err)

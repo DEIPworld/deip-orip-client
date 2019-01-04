@@ -41,13 +41,16 @@ const mapAreaToProgram = (program, researchAreas)  => {
 
     var area = researchAreas.find(a => { return a.subAreas.some(sa => sa.disciplines.some(d => program.disciplines.includes(d))); });
     if (!area) {
-        area = researchAreas[0];
+        program.area = researchAreas[0];
+        program.subArea = researchAreas[0].subAreas[0];
+        return;
     }
 
     var subArea = area.subAreas.find(sa => sa.disciplines.some(d => program.disciplines.includes(d)));
     if (!subArea) {
-        area = researchAreas[0];
-        subArea = researchAreas[0].subAreas[0];
+        program.area = researchAreas[0];
+        program.subArea = researchAreas[0].subAreas[0];
+        return;
     }
 
     program.area = area;

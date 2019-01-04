@@ -14,7 +14,8 @@ const config = {
     SIG_SEED: process.env.SIG_SEED,
     CHAIN_ID: process.env.CHAIN_ID,
     ASSET_UNIT: process.env.ASSET_UNIT,
-    TEST_NET_USER_FACTORY_CONFIG: process.env.TEST_NET_USER_FACTORY_CONFIG
+    TEST_NET_USER_FACTORY_CONFIG: process.env.TEST_NET_USER_FACTORY_CONFIG,
+    TENANT: process.env.TENANT
 };
 
 module.exports = config;
