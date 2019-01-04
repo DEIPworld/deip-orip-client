@@ -1,7 +1,7 @@
 <template>
     <v-container fluid fill-height class="pa-0">
         <v-layout>
-            <v-stepper v-model="currentStep" v-if="!isFinished" alt-labels class="column full-width full-height">
+            <v-stepper v-model="currentStep" v-if="!isFinished && agency" alt-labels class="column full-width full-height">
                 <v-stepper-header>
                     <v-stepper-step step="1" :complete="currentStep > 1">
                         <div class="uppercase">Title</div>
@@ -50,6 +50,7 @@
                             <funding-opportunity-title
                                 @incStep="incStep"
                                 :opportunity="opportunity"
+                                :agency="agency"
                             ></funding-opportunity-title>
                         </div>
                     </v-stepper-content>
@@ -111,7 +112,7 @@
                 </v-stepper-items>
             </v-stepper>
 
-            <div class="display-flex full-width full-height" v-else>
+            <div class="display-flex full-width full-height" v-if="isFinished">
                 <div class="c-m-auto text-align-center">
                     <div class="display-1">New Funding Opportunity has been created <br/> successfully</div>
 
@@ -137,7 +138,7 @@
 <script>
     import { mapGetters } from 'vuex';
     import deipRpc from '@deip/deip-rpc-client';
-    import agency from './agencyTmp.js';
+    import agencyHttp from './../../services/http/agency';
 
     export default {
         name: "FundingOpportunityAnnouncement",
@@ -151,11 +152,11 @@
         data() { 
             return {
                 currentStep: 0,
-                
+
+                agency: null,
                 opportunity: {
                     title: '',
                     number: '',
-                    agency: null,
                     disciplines: [],
                     totalProgramFunding: '',
                     awardCeiling: '',
@@ -198,7 +199,7 @@
                     this.opportunity.title,
                     this.opportunity.eligibleApplicants,
                     this.opportunity.eligibilityAdditionalInformation,
-                    "nsf",
+                    this.agency._id,
                     this.opportunity.description,
                     this.opportunity.additionalInfoLink,
                     this.opportunity.grantorEmail,
@@ -228,9 +229,11 @@
                 .finally(() => { this.isSending = false; });
             }
         },
-
         created() {
-            this.opportunity.agency = agency;
+            agencyHttp.getAgencyProfile(window.tenant)
+                .then((agency) => {
+                    this.agency = agency;
+                })
         }
     };
 </script>

@@ -30,6 +30,7 @@ axios.get('/env')
         deipRpc.api.setOptions({ url: window.env.DEIP_FULL_NODE_URL });
         deipRpc.config.set('chain_id', window.env.CHAIN_ID);
         console.log(window.env);
+        window.tenant = window.env.TENANT || window.location.host.split('.')[0];
 
         /* eslint-disable no-new */
         window.app = new Vue({
@@ -39,8 +40,6 @@ axios.get('/env')
             components: { App },
             template: '<App/>'
         });
-
-        window.tenant = window.env.TENANT || window.location.host.split('.')[0];
     })
     .catch((err) => {
         console.error(err)

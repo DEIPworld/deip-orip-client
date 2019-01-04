@@ -18,9 +18,9 @@
                         :rules="[rules.required]"
                     ></v-text-field>
 
-                    <v-text-field
+                    <v-text-field v-if="agency"
                         label="Agency name"
-                        v-model="opportunity.agency.name"
+                        v-model="agency.name"
                         disabled
                     ></v-text-field>
                 </div>
@@ -39,7 +39,8 @@
         name: "FundingOpportunityTitle",
 
         props: {
-            opportunity: { type: Object, required: true }
+            opportunity: { type: Object, required: true },
+            agency: { type: Object },
         },
 
         data() { 
