@@ -107,7 +107,7 @@
 
               <div class="c-pt-5 c-pb-5 text-align-center">
                 <v-avatar size="120px">
-                    <img :src="agencyProfile.logo | agencyLogoSrc(160, 160, false)" />
+                    <img :src="agencyProfile._id | agencyLogoSrc(160, 160, false)" />
                 </v-avatar>
               </div>
               <v-divider></v-divider>
@@ -150,6 +150,7 @@
 
               <div class="c-p-10" v-if="isApplicant">
                 <v-btn block color="primary" @click="applyToProgram()">Apply</v-btn>
+                <send-application-dialog :meta="applicationDialogMeta" :program="program"></send-application-dialog>
               </div>
 
             </v-card>
@@ -188,7 +189,8 @@
                   { name: 'Chemistry', amount: 6000 } ] 
               }],
 
-              isSendingApplication: false
+              isSendingApplication: false,
+              applicationDialogMeta: { isOpen: false }
             }
         },
         computed: {
@@ -213,27 +215,7 @@
         methods: {
 
           applyToProgram() {
-            this.isSendingApplication = true;
-            deipRpc.broadcast.createGrantApplicationAsync(
-              this.user.privKey,
-              this.program.id, //grant_id 
-              0,  // research_id
-              this.user.username, // creator
-              "er34ry348rfef" // application_hash
-            )
-            .then((res) => {
-              // todo: Reload applications section
-              this.$store.dispatch('layout/setSuccess', {
-                  message: `Application has been sent successfully!`
-              });
-            })
-            .catch(err => { 
-                this.$store.dispatch('layout/setError', {
-                    message: "An error occurred while sending Application, please try again later"
-                });
-                console.log(err)
-            })
-            .finally(() => { this.isSendingApplication = false; });
+            this.applicationDialogMeta.isOpen = true;
           }
 
         },

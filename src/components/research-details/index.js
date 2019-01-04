@@ -9,4 +9,4 @@ import UploadResearchContentFileDialog from './components/UploadResearchContentF
 Vue.component('research-details-sidebar', ResearchDetailsSidebar);
 Vue.component('research-details-body', ResearchDetailsBody);
 Vue.component('research-timeline', ResearchTimeline);
-Vue.component('upload-research-contnet-file-dialog', UploadResearchContentFileDialog);
+Vue.component('upload-research-content-file-dialog', UploadResearchContentFileDialog);
