@@ -88,7 +88,7 @@
               <div class="sm-title bold c-pt-10 c-pb-5">Applications: {{mockApplications.length}}</div>
               <div>
                 <application-list-item v-for="(application, index) in mockApplications"
-                  :key="'application' + application.id" 
+                  :key="'application-' + application.id" 
                   :application="application" 
                   :isFirst="index == 0">
                 </application-list-item>
@@ -179,7 +179,7 @@
                   { name: 'Quantum Electronics', amount: 200 }, 
                   { name: 'Quantum Coherence', amount: 6000 } ] 
               }, {
-                id: 0,
+                id: 1,
                 researchGroup: 'Test RG 2', 
                 authors: ['rachel', 'rick', 'nastya'], 
                 expertise: [
