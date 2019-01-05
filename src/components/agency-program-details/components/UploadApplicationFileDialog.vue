@@ -1,5 +1,5 @@
 <template>
-  <v-dialog v-model="meta.isOpen" persistent transition="scale-transition" max-width="500px">
+  <v-dialog v-model="meta.isOpen" fullscreen persistent transition="scale-transition">
     <v-card class="">
       <v-toolbar dark color="primary">
         <v-btn icon dark @click="close()">
@@ -12,16 +12,25 @@
       <page-container>
         <contentbar>
           <div v-if="researchList">
+            <div class="row c-mb-4">
+              <div class="c-pr-6">Funding opportunity:</div>
+              <div class="col-grow a subheading">{{ program.funding_opportunity_title }}</div>
+            </div>
+
+            <v-divider></v-divider>
+
             <v-select
+              class="c-mt-4"
               :items="researchList"
               v-model="research"
-              placeholder="Select Research Project"
-              >
+              label="Research"
+            >
               <template slot="selection" slot-scope="data">
-                <div class="row-nowrap align-center c-pl-4">
-                  <span class="deip-blue-color c-pl-3">{{ data.item.title }}</span>
+                <div class="row-nowrap align-center">
+                  <span class="deip-blue-color">{{ data.item.title }}</span>
                 </div>
               </template>
+
               <template slot="item" slot-scope="data">
                 <template>
                   <div class="row-nowrap align-center author-item">
@@ -31,26 +40,121 @@
               </template>
             </v-select>
 
-            <div v-if="dropzoneOptions">
-              <div>
-                <vue-dropzone ref="newApplication" id="application-dropzone" 
-                    :options="dropzoneOptions" 
-                    @vdropzone-success="vdropzoneSuccess"
-                    @vdropzone-error="vdropzoneError">
-                </vue-dropzone>
+            <div v-if="research">
+              <div class="c-pt-4 c-pb-8">
+                <div class="sm-title">
+                  <span class="half-bold">Research group:</span>
+
+                  <router-link class="a"
+                    :to="{
+                        name: 'ResearchDetails',
+                        params: {
+                            research_group_permlink: encodeURIComponent(research.group_permlink),
+                            research_permlink: encodeURIComponent(research.permlink)
+                        }
+                    }"
+                  >{{ research.group.name }}</router-link>
+                </div>
+
+                <div class="c-pt-4 row">
+                  <div v-for="(member, i) in research.group.enrichedMembers" :key="i"
+                    class="row-nowrap text-align-center c-pt-2 c-pr-8"
+                  >
+                      <v-avatar size="40px">
+                          <img v-if="member.profile" v-bind:src="member.profile.avatar | avatarSrc(30, 30, false)" />
+                          <v-gravatar v-else :email="member.account.name + '@deip.world'" />
+                      </v-avatar>
+
+                      <router-link class="a deip-blue-color body-1 c-pl-3 c-pt-2" :to="{ name: 'UserDetails', params: { account_name: member.account.name } }">
+                        {{ member | fullname }}
+                      </router-link>
+                    </div>
+                </div>
+              </div>
+
+              <v-divider></v-divider>
+
+              <div class="c-pv-4">
+                <v-text-field label="Title" v-model="title"></v-text-field>
+              </div>
+
+              <div v-if="dropzoneOptions">
+                <div>
+                  <vue-dropzone ref="newApplication" id="application-dropzone" 
+                      :options="dropzoneOptions" 
+                      @vdropzone-success="vdropzoneSuccess"
+                      @vdropzone-error="vdropzoneError">
+                  </vue-dropzone>
+                </div>
+              </div>
+
+              <div class="row c-pt-8">
+                <div class="col-6">
+                  <div class="bold">Mandatory forms</div>
+
+                  <div class="row align-items-center height-2 c-pt-4">
+                    <div class="half-bold primary--text">SF424 (R &amp; R) [V2.0]</div>
+                    <v-icon color="green" class="c-pl-4">check_circle</v-icon>
+                  </div>
+
+                  <div class="row align-items-center height-2 c-pt-4">
+                    <div class="half-bold primary--text">Project/Performance Site Location(s) [V2.0]</div>
+                  </div>
+
+                  <div class="row align-items-center height-2 c-pt-4">
+                    <div class="half-bold primary--text">Research And Related Other Project Information [V1.4]</div>
+                    <v-icon color="green" class="c-pl-4">check_circle</v-icon>
+                  </div>
+
+                  <div class="row align-items-center height-2 c-pt-4">
+                    <div class="half-bold primary--text">NSF Senior Key Person Profile (Expanded) [V1.1]</div>
+                  </div>
+
+                  <div class="row align-items-center height-2 c-pt-4">
+                    <div class="half-bold primary--text">Research &amp; Related Budget [V1.4]</div>
+                  </div>
+
+                  <div class="row align-items-center height-2 c-pt-4">
+                    <div class="half-bold primary--text">Research &amp; Related Personal Data [V1.2]</div>
+                  </div>
+
+                  <div class="row align-items-center height-2 c-pt-4">
+                    <div class="half-bold primary--text">NSF Cover Page [V1.8]</div>
+                  </div>
+                </div>
+                
+                <div class="col-6">
+                  <div class="bold">Optional forms</div>
+
+                  <div class="row align-items-center height-2 c-pt-4">
+                    <div class="half-bold primary--text">NFS Deviation Authorization [V1.1]</div>
+                    <v-icon color="green" class="c-pl-4">check_circle</v-icon>
+                  </div>
+
+                  <div class="row align-items-center height-2 c-pt-4">
+                    <div class="half-bold primary--text">NFS Suggested Reviewers [V1.1]</div>
+                    <v-icon color="green" class="c-pl-4">check_circle</v-icon>
+                  </div>
+
+                  <div class="row align-items-center height-2 c-pt-4">
+                    <div class="half-bold primary--text">R &amp; R Subaward Budget Attachment(s) Form [V1.4]</div>
+                  </div>
+                </div>
               </div>
             </div>
 
             <div class="display-flex c-pt-8">
                 <v-btn color="primary" 
-                    class="c-m-auto"
-                    :disabled="isDisabled || isLoading"
-                    :loading="isLoading"
-                    @click="sendApplication()">
+                  class="c-m-auto"
+                  :disabled="isDisabled || isLoading"
+                  :loading="isLoading"
+                  @click="sendApplication()"
+                >
                   Send Application
                 </v-btn>
             </div>
           </div>
+
           <div class="display-flex" v-else>
             <v-progress-circular class="c-m-auto" indeterminate color="primary"></v-progress-circular>
           </div>
@@ -63,6 +167,7 @@
 <script>
     import deipRpc from '@deip/deip-rpc-client';
     import { getAccessToken } from './../../../utils/auth'
+    import { getEnrichedProfiles } from './../../../utils/user';
     import { mapGetters } from 'vuex';
     import { signOperation } from './../../../utils/blockchain'
     import vueDropzone from 'vue2-dropzone';
@@ -71,18 +176,24 @@
         components: {
           vueDropzone
         },
+
         props: {
           program: { required: true, type: Object },
           meta: { required: true, type: Object}
         },
+
         name: "UploadApplicationFileDialog",
+
         data() { 
           return {
             isLoading: false,
             research: null,
-            researchList: null
+            researchList: null,
+
+            title: ''
           }
         },
+
         computed: {
           ...mapGetters({
               user: 'auth/user',
@@ -95,12 +206,14 @@
             return this.research != null && this.program != null ? {
               url: `${window.env.DEIP_SERVER_URL}/applications/upload-file`,
               paramName: "application-content",
+
               headers: {
                 "Agency": window.tenant,
                 "Research-Id": this.research.id.toString(),
                 "Foa-Id": this.program.id.toString(),
                 "Authorization": 'Bearer ' + getAccessToken()
               },
+
               timeout: 0,
               maxFiles: 1,
               thumbnailWidth: 150,
@@ -113,8 +226,11 @@
         methods: {
           close() {
               this.isLoading = false;
-              this.$refs.newApplication.removeAllFiles();
               this.meta.isOpen = false;
+
+              if (this.$refs.newApplication) {
+                this.$refs.newApplication.removeAllFiles();
+              }
           },
           sendApplication() {
               this.isLoading = true;
@@ -129,9 +245,11 @@
           vdropzoneSuccess(file, res) {
             const self = this;
             const applicationRef = res;
+
             if (!applicationRef.hash) {
                 throw new Error("File upload has failed")
             }
+
             deipRpc.broadcast.createGrantApplicationAsync(
               this.user.privKey,
               this.program.id,
@@ -157,19 +275,41 @@
             });
           }
         },
+
         watch: {
           'meta.isOpen': function (newVal, oldVal) {
             if (newVal) {
               this.research = null;
+              this.title = '';
             } 
           }
         },
+
         created() {
           const researchPromises = this.userGroups.map(g => deipRpc.api.getResearchesByResearchGroupIdAsync(g.id));
-          Promise.all(researchPromises)
-            .then((groupsResearchList) => {
+          const researchGroupPromises = this.userGroups.map(g => deipRpc.api.getResearchGroupByIdAsync(g.id));
+
+          Promise.all([
+            Promise.all(researchPromises),
+            Promise.all(researchGroupPromises)
+          ])
+            .then(([groupsResearchList, groups]) => {
               const flatten = [].concat.apply([], groupsResearchList);
               this.researchList = flatten;
+
+              this.researchList.forEach(research => {
+                research.group = groups.find(group => group.permlink === research.group_permlink);
+              })
+
+              groups.map(group =>
+                deipRpc.api.getResearchGroupTokensByResearchGroupAsync(group.id)
+                    .then(researchGroupTokens => 
+                        getEnrichedProfiles(researchGroupTokens.map(t => t.owner))
+                    )
+                    .then(profiles => 
+                      group.enrichedMembers = profiles
+                    )
+              )
             })
         },
     };
