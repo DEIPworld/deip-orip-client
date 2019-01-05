@@ -108,7 +108,10 @@ const actions = {
         // temporal hack to avoid blocking while converting substance nested props to reactive ones, 
         // do not do this in regular code without 'commit' call!
         applicationReviewEditor = instance.applicationReviewEditor;
-    }
+    },
+    setApplicationStatus({ state, commit, dispatch }, status) {
+        commit('SET_APPLICATION_STATUS', status)
+    },
 }
 
 
@@ -118,6 +121,10 @@ const mutations = {
 
     ['SET_RESEARCH_APPLICATION_DETAILS'](state, application) {
         Vue.set(state, 'application', application)
+    },
+
+    ['SET_APPLICATION_STATUS'](state, {status}) {
+        Vue.set(state.application, 'status', status)
     },
 
     ['SET_RESEARCH_APPLICATION_REF'](state, ref) {
