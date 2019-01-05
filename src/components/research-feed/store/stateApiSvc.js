@@ -11,7 +11,7 @@ const loadAllResearches = () => {
         .then(list => {
             researchResult = list;
 
-            const researchPromises = researchResult.map(research => 
+            const totalVotesPromises = researchResult.map(research => 
                 deipRpc.api.getTotalVotesByResearchAsync(research.research_id)
             );
 
@@ -32,7 +32,7 @@ const loadAllResearches = () => {
             );
 
             return Promise.all([
-                Promise.all(researchPromises),
+                Promise.all(totalVotesPromises),
                 Promise.all(reviewsPromises),
                 Promise.all(groupPromises),
                 Promise.all(authorsPromises),

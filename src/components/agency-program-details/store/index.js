@@ -73,9 +73,68 @@ const actions = {
     loadAgencyProgramApplications({ state, dispatch, commit }, { notify }) {
         commit('SET_AGENCY_PROGRAM_APPLICATIONS_LOADING_STATE', true);
 
+        let applications = [];
+
         deipRpc.api.getApplicationsByGrantAsync(state.program.id)
-            .then((applications) => {
-                // todo: fill applications with additional data
+            .then(list => {
+                applications = list;
+    
+                const totalVotesPromises = applications.map(application => 
+                    deipRpc.api.getTotalVotesByResearchAsync(application.research_id)
+                );
+    
+                const researchesPromises = applications.map(application =>
+                    deipRpc.api.getResearchByIdAsync(application.research_id)
+                );
+    
+                return Promise.all([
+                    Promise.all(totalVotesPromises),
+                    Promise.all(researchesPromises)
+                ]);
+            })
+            .then(([totalVotes, researches]) => {
+                let totalVotesMap = _.chain(totalVotes)
+                    .flatten()
+                    .groupBy('research_id')
+                    .value();
+    
+                applications.forEach((application, index) => {
+                    application.totalVotes = totalVotesMap[application.research_id] ? totalVotesMap[application.research_id] : [];
+                    application.research = researches[index];
+                });
+
+                const groupPromises = researches.map(research =>
+                    deipRpc.api.getResearchGroupByPermlinkAsync(research.group_permlink)
+                );
+    
+                return Promise.all([
+                    Promise.all(groupPromises)
+                ]);
+            })
+            .then(([groups]) => {
+                applications.forEach((application, index) => {
+                    application.group = groups[index];
+                });
+    
+                const authorsPromises = groups.map(group =>
+                    deipRpc.api.getResearchGroupTokensByResearchGroupAsync(group.id)
+                        .then(researchGroupTokens => 
+                            getEnrichedProfiles(researchGroupTokens.map(t => t.owner))
+                        )
+                );
+
+                return Promise.all([
+                    Promise.all(authorsPromises)
+                ]);
+            })
+            .then(([authors]) => {
+                applications.forEach((application, index) => {
+                    application.enrichedAuthors = authors[index];
+                });
+
+                return applications;
+            })
+            .then(applications => {
                 commit('SET_AGENCY_PROGRAM_APPLICATIONS', applications);
             })
             .catch(err => { console.log(err) })

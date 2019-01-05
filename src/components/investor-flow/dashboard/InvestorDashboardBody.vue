@@ -193,15 +193,6 @@
                 </div>
             </v-card>
         </div>
-
-        <div class="c-pt-12">
-            <GChart
-                type="BarChart"
-                :settings="{ packages: ['corechart', 'bar'] }"
-                :data="chartData"
-                :options="chartOptions"
-            />
-        </div>
     </div>
 </template>
 
@@ -211,27 +202,6 @@
 
         data() {
             return {
-                chartData: [
-                    [
-                        '',
-                        'Approved',
-                        'Declined',
-                        'Undercided',
-                        'Not submitted',
-                    ], [
-                        '',
-                        8,
-                        12,
-                        15,
-                        22
-                    ]
-                ],
-                chartOptions: {
-                    isStacked: true,
-                    legend: { position: 'top' },
-                    colors: ['#C8E6C9', '#FFCCBC', '#8FC3F7', '#F6F6F6'],
-                    dataOpacity: 0.8
-                }
             }
         },
 
