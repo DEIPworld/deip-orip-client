@@ -193,6 +193,7 @@
 <script>
     import { mapGetters } from 'vuex';
     import deipRpc from '@deip/deip-rpc-client';
+    import _ from 'lodash';
 
     export default {
         name: "AgencyProgramDetails",
@@ -201,29 +202,10 @@
             return {
               isSendingApplication: false,
 
-              applicationsChart: {
-                data: [
-                  [
-                    '',
-                    'Approved',
-                    'Declined',
-                    'Undercided',
-                    'Not submitted',
-                  ], [
-                    '',
-                    8,
-                    12,
-                    15,
-                    22
-                  ]
-                ],
-                options: {
-                  isStacked: true,
-                  legend: { position: 'top' },
-                  colors: ['#C8E6C9', '#FFCCBC', '#8FC3F7', '#F6F6F6'],
-                  dataOpacity: 0.8,
-                  chartArea: { left: 0 }
-                }
+              applicationStatusMap: {
+                PENDING: 'application_pending',
+                APPROVED: 'application_approved',
+                REJECTED: 'application_rejected'
               },
               
               financialChart: {
@@ -264,6 +246,7 @@
                 isGrantor: 'auth/isGrantor',
                 isApplicant: 'auth/isApplicant'
             }),
+
             breadcrumbs() {
               return [
                 { text: this.agencyProfile.shortName, disabled: false, to: `${this.agencyProfile._id}/programs` }, 
@@ -272,7 +255,32 @@
                 { text: this.program.subArea.abbreviation, disabled: false, to:`/${this.agencyProfile._id}/programs?areaCode=${this.program.area.abbreviation}&subAreaCode=${this.program.subArea.abbreviation}` },
                 { text: this.program.title, disabled: true }
               ];
-            }
+            },
+
+            applicationsChart() {
+              return {
+                data: [
+                  [
+                    '',
+                    'Approved',
+                    'Declined',
+                    'Pending'
+                  ], [
+                    '',
+                    _.filter(this.applications, app => app.status === this.applicationStatusMap.APPROVED).length,
+                    _.filter(this.applications, app => app.status === this.applicationStatusMap.REJECTED).length,
+                    _.filter(this.applications, app => app.status === this.applicationStatusMap.PENDING).length
+                  ]
+                ],
+                options: {
+                  isStacked: true,
+                  legend: { position: 'top' },
+                  colors: ['#C8E6C9', '#FFCCBC', '#8FC3F7', '#F6F6F6'],
+                  dataOpacity: 0.8,
+                  chartArea: { left: 0 }
+                }
+              }
+            },
         },
 
         methods: {
