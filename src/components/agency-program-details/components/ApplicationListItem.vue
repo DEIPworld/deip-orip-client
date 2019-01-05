@@ -48,6 +48,30 @@
                     </div>
                 </div>
             </v-flex>
+
+            <v-flex xs12>
+                <div class="row-nowrap c-pl-5">
+                    <div class="c-pr-8">
+                        <v-icon color="grey" size="18px">chat_bubble</v-icon>
+                        
+                        <span class="bold display-inline-flex">
+                            <span class="green--text text--darken-2">{{ countReviews(true) }}</span>
+                            <span>/</span>
+                            <span class="red--text text--darken-2">{{ countReviews(false) }}</span>
+                        </span>
+                    </div>
+
+                    <div class="c-pr-8">
+                        <span class="grey--text">Status</span>
+                        
+                        <span class="bold display-inline-flex">
+                            <span v-if="application.status === applicationStatusMap.APPROVED" class="green--text text--darken-2">Approved</span>
+                            <span v-if="application.status === applicationStatusMap.REJECTED" class="red--text text--darken-2">Declined</span>
+                            <span v-if="application.status === applicationStatusMap.PENDING" class="grey--text text--darken-2">Pending</span>
+                        </span>
+                    </div>
+                </div>
+            </v-flex>
         </v-layout>
 
         <v-divider></v-divider>
@@ -55,16 +79,20 @@
 </template>
 
 <script>
+    import _ from 'lodash';
+
     export default {
         name: "ProgramListItem",
 
         props: {
             application: { required: true, default: undefined },
-            isFirst: { default: false }
+            isFirst: { default: false },
+            applicationStatusMap: Object
         },
 
         data() { 
-            return {}
+            return {
+            }
         },
 
         computed: {
@@ -93,6 +121,12 @@
                     }
                 });
             },
+        },
+
+        methods: {
+            countReviews(isPositive = true) {
+                return _.filter(this.application.reviews, review => review.is_positive === isPositive).length;
+            }
         }
     };
 </script>
