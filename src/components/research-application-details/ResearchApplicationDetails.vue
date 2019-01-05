@@ -1,8 +1,10 @@
 <template>
 	<page-container>
-		<div class="col-grow full-height">
-			<research-application-details-file></research-application-details-file>
-		</div>
+		<v-layout row wrap>
+      <v-flex xs12>
+   			<research-application-details-file></research-application-details-file>
+      </v-flex>
+    </v-layout>
 		<sidebar>
 			<research-application-details-sidebar></research-application-details-sidebar>
 		</sidebar>
