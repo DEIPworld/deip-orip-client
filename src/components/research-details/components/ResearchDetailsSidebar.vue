@@ -105,7 +105,7 @@
         <div class="c-mb-6 c-mt-4">
             <div class="sidebar-fullwidth"><v-divider></v-divider></div>
             <div class="subheading bold c-mt-4">
-                Reviews: <span style="color: green">{{positiveReviewsCount}}</span> / <span style="color: red">{{negativeReviewsCount}}</span> 
+                Reviews: <span class="green--text text--darken-2">{{positiveReviewsCount}}</span> / <span class="red--text text--darken-2">{{negativeReviewsCount}}</span> 
             </div>
             <div class="c-pt-3">
                 <div class="caption"><v-icon small class="c-pr-2">rate_review</v-icon>Reward for review: <span class="bold">{{convertToPercent(research.review_share_in_percent)}}%</span></div>

@@ -68,7 +68,7 @@
               <v-divider></v-divider>
             </v-flex>
 
-            <v-flex xs12>
+            <v-flex xs12 v-if="isGrantor">
               <div class="row">
                 <div class="col-6">
                   <div class="sm-title bold c-pv-10">Applications</div>

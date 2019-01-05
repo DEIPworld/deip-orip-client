@@ -83,7 +83,7 @@
 							return deipRpc.broadcast.makeReviewForApplicationAsync(
 								this.user.privKey,
 								this.user.username,
-								this.program.id,
+								this.application.id,
 								this.isPositive,
 								reviewHtmlContent,
 								10000

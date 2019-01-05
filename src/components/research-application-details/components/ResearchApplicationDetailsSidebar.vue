@@ -23,8 +23,8 @@
     <div v-if="!isApplicationPending" class="c-mt-4">
       <div class="sidebar-fullwidth"><v-divider></v-divider></div>
       <div class="text-align-center c-mt-4">
-          <span class="sm-title" style="color: green" v-if="isApplicationApproved">Approved</span>
-          <span class="sm-title" style="color: red" v-if="isApplicationRejected">Rejected</span>
+          <span class="sm-title green--text text--darken-2" v-if="isApplicationApproved">Approved</span>
+          <span class="sm-title red--text text--darken-2" v-if="isApplicationRejected">Rejected</span>
       </div>
     </div>  
 
@@ -47,13 +47,13 @@
     </div>
     <!-- ### END Research Application Applicants Section ### -->
 
-    <!-- ### START Research Content Review Section ### -->
-    <div class="c-mt-4">
+    <!-- ### START Research Applications Review Section ### -->
+    <div class="c-mt-4" v-if="userHasExpertise">
       <div class="sidebar-fullwidth"><v-divider></v-divider></div>
       <div class="subheading bold c-mt-4">
         Reviews: 
-        <span style="color: green">{{positiveReviewsCount}}</span> / 
-        <span style="color: red">{{negativeReviewsCount}}</span> 
+        <span class="green--text text--darken-2">{{positiveReviewsCount}}</span> / 
+        <span class="red--text text--darken-2">{{negativeReviewsCount}}</span> 
       </div>
       <div class="c-pt-3">
         <div class="caption">
@@ -74,7 +74,7 @@
         </v-btn>
       </div>
     </div>
-    <!-- ### END Research Content Review Section ### -->
+    <!-- ### END Research Applications Review Section ### -->
   </div>
 
 </template>

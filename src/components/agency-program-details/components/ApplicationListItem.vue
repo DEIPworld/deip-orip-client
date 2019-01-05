@@ -62,12 +62,12 @@
                     </div>
 
                     <div class="c-pr-8">
-                        <span class="grey--text">Status</span>
+                        <span class="grey--text">Status:</span>
                         
-                        <span class="bold display-inline-flex">
+                        <span class="bold display-inline-flex c-pl-1">
                             <span v-if="application.status === applicationStatusMap.APPROVED" class="green--text text--darken-2">Approved</span>
                             <span v-if="application.status === applicationStatusMap.REJECTED" class="red--text text--darken-2">Declined</span>
-                            <span v-if="application.status === applicationStatusMap.PENDING" class="grey--text text--darken-2">Pending</span>
+                            <span v-if="application.status === applicationStatusMap.PENDING" class="grey--text">Pending</span>
                         </span>
                     </div>
                 </div>

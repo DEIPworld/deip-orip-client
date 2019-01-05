@@ -132,7 +132,7 @@
             <div class="sidebar-fullwidth"><v-divider></v-divider></div>
 
             <div class="subheading bold c-mt-4">
-                Reviews: <span style="color: green">{{positiveReviewsCount}}</span> / <span style="color: red">{{negativeReviewsCount}}</span> 
+                Reviews: <span class="green--text text--darken-2">{{positiveReviewsCount}}</span> / <span class="red--text text--darken-2">{{negativeReviewsCount}}</span> 
             </div>
 
             <div class="c-pt-3">
