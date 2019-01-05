@@ -6,6 +6,7 @@ import ResearchFeed from '@/components/research-feed/ResearchFeed';
 import ResearchDetails from '@/components/research-details/ResearchDetails';
 import ResearchContentDetails from '@/components/research-content-details/ResearchContentDetails';
 import ResearchApplicationDetails from '@/components/research-application-details/ResearchApplicationDetails';
+import ResearchApplicationAddReview from '@/components/research-application-details/ResearchApplicationAddReview';
 import ResearchContentMetadata from '@/components/research-content-details/ResearchContentMetadata';
 import ResearchContentReview from '@/components/research-content-details/ResearchContentReview';
 import ResearchContentAddReview from '@/components/research-content-details/ResearchContentAddReview';
@@ -155,6 +156,28 @@ const researchRoutes = [{
                 };
 
                 store.dispatch('rcd/loadResearchContentDetails', permlinks)
+                    .then(() => {
+                        store.dispatch('layout/hideGlobalLoader');
+                        next();
+                    });
+            }
+        })
+    }, {
+        path: '/:research_group_permlink/research/:research_permlink/application/:application_id/add-review',
+        name: 'ResearchApplicationAddReview',
+
+        component: preliminaryDataLoader(
+            ResearchApplicationAddReview, {
+            beforeEnter: (to, from, next) => {
+                store.dispatch('layout/setGlobalLoader');
+
+                const permlinks = {
+                    group_permlink: decodeURIComponent(to.params.research_group_permlink),
+                    research_permlink: decodeURIComponent(to.params.research_permlink),
+                    application_id: to.params.application_id
+                };
+
+                store.dispatch('rad/loadResearchApplicationDetails', permlinks)
                     .then(() => {
                         store.dispatch('layout/hideGlobalLoader');
                         next();

@@ -3,7 +3,7 @@ import Vue from 'vue'
 import { getEnrichedProfiles } from './../../../utils/user'
 import applicationHttpService from './../../../services/http/application'
 
-var reviewEditor = undefined;
+var applicationReviewEditor = undefined;
 
 const state = {
     application: null,
@@ -26,7 +26,8 @@ const getters = {
     applicationRef: (state, getters) => state.applicationRef,
     program: (state, getters) => state.program,
     membersList: (state, getters) => state.membersList,
-    applicationReviewsList: (state, getters) => state.applicationReviewsList
+    applicationReviewsList: (state, getters) => state.applicationReviewsList,
+    applicationReviewEditor: (state, getters) => applicationReviewEditor
 }
 
 // actions
@@ -39,17 +40,14 @@ const actions = {
 
         return deipRpc.api.getGrantApplicationAsync(application_id)
             .then((application) => {
-                debugger;
                 commit('SET_RESEARCH_APPLICATION_DETAILS', application)
 
                 const contentRefLoad = new Promise((resolve, reject) => {
                     dispatch('loadResearchApplicationRef', { hashOrId: application.application_hash, notify: resolve })
                 });
-
                 const programLoad = new Promise((resolve, reject) => {
                     dispatch('loadResearchApplicationRef', { hashOrId: application.application_hash, notify: resolve })
                 });
-
                 const researchDetailsLoad = new Promise((resolve, reject) => {
                     dispatch('loadResearchDetails', { group_permlink, research_permlink, notify: resolve })
                 });
@@ -106,6 +104,11 @@ const actions = {
             });
     },
 
+    setApplicationReviewEditor({ state, commit, dispatch }, instance) {
+        // temporal hack to avoid blocking while converting substance nested props to reactive ones, 
+        // do not do this in regular code without 'commit' call!
+        applicationReviewEditor = instance.applicationReviewEditor;
+    }
 }
 
 
@@ -142,7 +145,7 @@ const mutations = {
     },
 
     ['RESET_STATE'](state) {
-        reviewEditor = undefined;
+        applicationReviewEditor = undefined;
     },
 }
 

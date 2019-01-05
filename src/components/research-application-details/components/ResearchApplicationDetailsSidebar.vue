@@ -94,7 +94,7 @@
           },
           isCreatingReviewAvailable() {
             const userHasReview = this.applicationReviewsList.some(r => r.author.account.name === this.user.username);
-            return !this.isResearchGroupMember && !userHasReview && this.userHasExpertise;
+            return !this.isResearchGroupMember && !userHasReview;
           },
           positiveReviewsCount() {
             return this.applicationReviewsList.filter(r => r.is_positive).length;
@@ -110,7 +110,7 @@
               : false
           },
           goAddReview() {
-            this.$router.push({ name: 'ResearchContentAddReview', params: this.$route.params });
+            this.$router.push({ name: 'ResearchApplicationAddReview', params: this.$route.params });
           }
         }
     };
