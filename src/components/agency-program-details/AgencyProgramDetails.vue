@@ -69,6 +69,34 @@
             </v-flex>
 
             <v-flex xs12>
+              <div class="row">
+                <div class="col-6">
+                  <div class="sm-title bold c-pv-10">Applications</div>
+
+                  <GChart
+                    type="BarChart"
+                    :settings="{ packages: ['corechart', 'bar'] }"
+                    :data="applicationsChart.data"
+                    :options="applicationsChart.options"
+                  />
+                </div>
+
+                <div class="col-6">
+                  <div class="sm-title bold c-pv-10">Financial</div>
+
+                  <GChart
+                    type="BarChart"
+                    :settings="{ packages: ['corechart', 'bar'] }"
+                    :data="financialChart.data"
+                    :options="financialChart.options"
+                  />
+                </div>
+              </div>
+
+              <v-divider></v-divider>
+            </v-flex>
+
+            <v-flex xs12>
               <div class="sm-title bold c-pt-10">Program Guidlines</div>
 
               <div class="subheading bold c-pt-10">Eligible Aplicants</div>
@@ -85,9 +113,9 @@
             </v-flex>
 
             <v-flex xs12 v-if="isGrantor">
-              <div class="sm-title bold c-pt-10 c-pb-5">Applications: {{mockApplications.length}}</div>
+              <div class="sm-title bold c-pt-10 c-pb-5">Applications: {{applications.length}}</div>
               <div>
-                <application-list-item v-for="(application, index) in mockApplications"
+                <application-list-item v-for="(application, index) in applications"
                   :key="'application-' + application.id" 
                   :application="application" 
                   :isFirst="index == 0">
@@ -168,31 +196,65 @@
 
     export default {
         name: "AgencyProgramDetails",
+        
         data() {
             return {
-              // todo: replace with applications from the store
-              mockApplications: [{
-                id: 0,
-                researchGroup: 'Test RG', 
-                authors: ['alice', 'nick', 'bob'], 
-                expertise: [
-                  { name: 'Quantum Optics', amount: 1500 }, 
-                  { name: 'Quantum Electronics', amount: 200 }, 
-                  { name: 'Quantum Coherence', amount: 6000 } ] 
-              }, {
-                id: 1,
-                researchGroup: 'Test RG 2', 
-                authors: ['rachel', 'rick', 'nastya'], 
-                expertise: [
-                  { name: 'Physics', amount: 1500 }, 
-                  { name: 'Biology', amount: 200 }, 
-                  { name: 'Chemistry', amount: 6000 } ] 
-              }],
-
               isSendingApplication: false,
+
+              applicationsChart: {
+                data: [
+                  [
+                    '',
+                    'Approved',
+                    'Declined',
+                    'Undercided',
+                    'Not submitted',
+                  ], [
+                    '',
+                    8,
+                    12,
+                    15,
+                    22
+                  ]
+                ],
+                options: {
+                  isStacked: true,
+                  legend: { position: 'top' },
+                  colors: ['#C8E6C9', '#FFCCBC', '#8FC3F7', '#F6F6F6'],
+                  dataOpacity: 0.8,
+                  chartArea: { left: 0 }
+                }
+              },
+              
+              financialChart: {
+                data: [
+                  [
+                    '',
+                    'Paid',
+                    'Approved',
+                    'Pending',
+                    'Remaining',
+                  ], [
+                    '',
+                    2000000,
+                    1500000,
+                    300000,
+                    5000000
+                  ]
+                ],
+                options: {
+                  isStacked: true,
+                  legend: { position: 'top' },
+                  colors: ['#C8E6C9', '#FFCCBC', '#8FC3F7', '#F6F6F6'],
+                  dataOpacity: 0.8,
+                  chartArea: { left: 0 }
+                }
+              },
+
               applicationDialogMeta: { isOpen: false }
             }
         },
+
         computed: {
             ...mapGetters({
                 agencyProfile: 'agencyProgramDetails/agency',
@@ -212,13 +274,14 @@
               ];
             }
         },
-        methods: {
 
+        methods: {
           applyToProgram() {
             this.applicationDialogMeta.isOpen = true;
           }
 
         },
+
         mounted() {
         }
     }

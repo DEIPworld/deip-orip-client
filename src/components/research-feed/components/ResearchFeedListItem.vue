@@ -1,6 +1,6 @@
 <template>
     <div class="c-p-6 pos-relative">
-        <router-link :fto="`/${research.group_permlink}/research/${research.permlink}`" class="a subheading"
+        <router-link class="a subheading"
             :to="{
                 name: 'ResearchDetails',
                 params: {
