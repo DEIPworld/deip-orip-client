@@ -46,7 +46,7 @@ const actions = {
                     dispatch('loadResearchApplicationRef', { hashOrId: application.application_hash, notify: resolve })
                 });
                 const programLoad = new Promise((resolve, reject) => {
-                    dispatch('loadResearchApplicationRef', { hashOrId: application.application_hash, notify: resolve })
+                    dispatch('loadResearchApplicationProgram', { grant_id: application.grant_id, notify: resolve })
                 });
                 const researchDetailsLoad = new Promise((resolve, reject) => {
                     dispatch('loadResearchDetails', { group_permlink, research_permlink, notify: resolve })
@@ -70,7 +70,7 @@ const actions = {
     },
 
     loadResearchApplicationProgram({ state, commit, dispatch }, { grant_id, notify }) {
-        return applicationHttpService.getFundingOpportunityAsync(grant_id)
+        return deipRpc.api.getFundingOpportunityAsync(grant_id)
             .then((foa) => {
                 commit('SET_RESEARCH_APPLICATION_PROGRAM', foa);
             }, (err) => {console.log(err)})

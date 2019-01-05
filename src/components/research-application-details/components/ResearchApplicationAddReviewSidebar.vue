@@ -80,7 +80,14 @@
 					this.isLoading = true;
 					applicationReviewEditor.save()
 						.then((reviewHtmlContent) => {
-								// return makeReview(this.content.id, this.isPositive, reviewHtmlContent)
+							return deipRpc.broadcast.makeReviewForApplicationAsync(
+								this.user.privKey,
+								this.user.username,
+								this.program.id,
+								this.isPositive,
+								reviewHtmlContent,
+								10000
+							)
 						})
 						.then((data) => {
 							this.$store.dispatch('layout/setSuccess', {
