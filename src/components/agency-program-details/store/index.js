@@ -86,13 +86,18 @@ const actions = {
                 const researchesPromises = applications.map(application =>
                     deipRpc.api.getResearchByIdAsync(application.research_id)
                 );
+
+                const reviewsPromises = applications.map(application =>
+                    deipRpc.api.getReviewsByGrantApplicationAsync(application.id)
+                );
     
                 return Promise.all([
                     Promise.all(totalVotesPromises),
-                    Promise.all(researchesPromises)
+                    Promise.all(researchesPromises),
+                    Promise.all(reviewsPromises)
                 ]);
             })
-            .then(([totalVotes, researches]) => {
+            .then(([totalVotes, researches, reviewsList]) => {
                 let totalVotesMap = _.chain(totalVotes)
                     .flatten()
                     .groupBy('research_id')
@@ -101,6 +106,7 @@ const actions = {
                 applications.forEach((application, index) => {
                     application.totalVotes = totalVotesMap[application.research_id] ? totalVotesMap[application.research_id] : [];
                     application.research = researches[index];
+                    application.reviews = reviewsList[index];
                 });
 
                 const groupPromises = researches.map(research =>
