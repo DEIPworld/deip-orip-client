@@ -118,8 +118,9 @@
                 <application-list-item v-for="(application, index) in applications"
                   :key="'application-' + application.id" 
                   :application="application" 
-                  :isFirst="index == 0">
-                </application-list-item>
+                  :isFirst="index == 0"
+                  :application-status-map="applicationStatusMap"
+                ></application-list-item>
               </div>
             </v-flex>
 
@@ -161,20 +162,6 @@
                 <span class="c-pl-1 deip-blue-color bold">{{program.grantor_contact_info || agencyProfile.email}}</span>
               </div>
               <v-divider></v-divider>
-
-              <div class="c-pb-5 c-pl-5 c-pt-5" v-if="isGrantor">
-                <div class="subheading bold">
-                  Reviews: <span style="color: green">5</span> / <span style="color: red">2</span> 
-                </div>
-                <div class="c-pt-3">
-                  <div class="caption"><v-icon small class="c-pr-2">rate_review</v-icon>Reward for review: <span class="bold">15 %</span></div>
-                    <div class="caption">
-                        <div><v-icon small class="c-mr-2">av_timer</v-icon>Reward period active till</div>
-                        <div class="bold"><v-icon small class="c-mr-2">today</v-icon>{{new Date(`${program.close_date}Z`).toDateString()}}</div> 
-                    </div>
-                  </div> 
-                </div>
-              </div>
 
               <div class="c-p-10" v-if="isApplicant">
                 <v-btn block color="primary" @click="applyToProgram()">Apply</v-btn>
