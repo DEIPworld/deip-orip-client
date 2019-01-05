@@ -19,6 +19,7 @@ import './components/claim-expertise-list/index';
 import './components/funding-opportunity-announcement/index';
 import './components/agency-programs/index';
 import './components/agency-program-details/index';
+import './components/research-application-details/index';
 import './components/investor-flow/index';
 
 import Gravatar from 'vue-gravatar';

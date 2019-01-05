@@ -5,11 +5,13 @@ import { getAccessToken } from './../../../utils/auth'
 import { getEnrichedProfiles } from './../../../utils/user'
 import tokenSaleSvc from './../../../services/TokenSaleService'
 import contentHttpService from './../../../services/http/content'
+import applicationsHttpService from './../../../services/http/application'
 
 const state = {
     research: null,
     group: null,
     contentList: [],
+    applicationsList: [],
     membersList: [],
     reviewsList: [],
     disciplinesList: [],
@@ -19,6 +21,7 @@ const state = {
     contributionsList: [],
     groupInvitesList: [],
     contentRefsList: [],
+    applicationsRefsList: [],
 
     isLoadingResearchDetails: undefined,
     isLoadingResearchContent: undefined,
@@ -28,7 +31,9 @@ const state = {
     isLoadingResearchTokenHolders: undefined,
     isLoadingResearchTokenSale: undefined,
     isLoadingResearchContentRefs: undefined,
-    isLoadingResearchGroupDetails: undefined
+    isLoadingResearchGroupDetails: undefined,
+    isLoadingResearchApplications: undefined,
+    isLoadingResearchApplicationsRefs: undefined
 }
 
 // getters
@@ -45,6 +50,11 @@ const getters = {
     contentList: (state, getters) => {
         return state.contentList;
     },
+
+    applicationsList: (state, getters) => {
+        return state.applicationsList;
+    },
+
     contentRefsList: (state, getters) => {
         return state.contentRefsList;
     },
@@ -228,9 +238,15 @@ const actions = {
                 const groupLoad = new Promise((resolve, reject) => {
                     dispatch('loadResearchGroupDetails', { group_permlink, notify: resolve })
                 });
+                const applicationsLoad = new Promise((resolve, reject) => {
+                    dispatch('loadResearchApplications', { researchId: state.research.id, notify: resolve })
+                });
+                const applicationsRefsLoad = new Promise((resolve, reject) => {
+                    dispatch('loadResearchApplicationsRefs', { researchId: state.research.id, notify: resolve })
+                });
 
-                return Promise.all([contentLoad, membersLoad, reviewsLoad, disciplinesLoad, 
-                    tokenHoldersLoad, tokenSaleLoad, invitesLoad, contentRefsLoad, groupLoad])
+                return Promise.all([contentLoad, membersLoad, reviewsLoad, disciplinesLoad, tokenHoldersLoad,
+                     tokenSaleLoad, invitesLoad, contentRefsLoad, groupLoad, applicationsLoad, applicationsRefsLoad])
 
             }, (err => {console.log(err)}))
             .finally(() => {
@@ -260,6 +276,29 @@ const actions = {
             .catch(err => { console.log(err) })
             .finally(() => {
                 commit('SET_RESEARCH_CONTENT_LOADING_STATE', false)
+                if (notify) notify();
+            })
+    },
+
+    loadResearchApplications({ state, dispatch, commit }, { researchId, notify }) {
+        var applications = [];
+        commit('SET_RESEARCH_APPLICATONS_LOADING_STATE', true);
+
+        deipRpc.api.getApplicationsByResearchIdAsync(researchId)
+            .then(list => {
+                applications = list;
+                return Promise.all(applications.map(a => deipRpc.api.getFundingOpportunityAsync(a.grant_Id)));
+            })
+            .then((foaList) => {
+                for (let i = 0; i < applications.length; i++) {
+                    const application = applications[i];
+                    application.foa = foaList[i];
+                }
+                commit('SET_RESEARCH_APPLICATIONS_LIST', applications);
+            })
+            .catch(err => { console.log(err) })
+            .finally(() => {
+                commit('SET_RESEARCH_APPLICATONS_LOADING_STATE', false)
                 if (notify) notify();
             })
     },
@@ -387,13 +426,24 @@ const actions = {
             })
     },
 
+    loadResearchApplicationsRefs({ state, dispatch, commit }, { researchId, notify }) {
+        commit('SET_RESEARCH_APPLICATIONS_REFS_LOADING_STATE', true)
+        applicationsHttpService.getApplicationsRefsByResearch(researchId)
+            .then((refs) => {
+                commit('SET_RESEARCH_APPLICATIONS_REFS', refs)
+            }, (err) => { console.log(err)})
+            .finally(() => {
+                commit('SET_RESEARCH_APPLICATIONS_REFS_LOADING_STATE', false)
+                if (notify) notify();
+            })
+    },
+
     loadTokenSaleContributors({ state, commit }) {
         deipRpc.api.getResearchTokenSaleContributionsByResearchTokenSaleIdAsync(state.tokenSale.id)
             .then((contributions) => {
                 commit('SET_RESEARCH_TOKEN_SALE_CONTRIBUTIONS_LIST', contributions)
             })
     },
-
 
     loadResearchGroupInvites({ commit }, { researchGroupId, notify }) {
         deipRpc.api.getResearchGroupInvitesByResearchGroupIdAsync(researchGroupId)
@@ -434,6 +484,10 @@ const mutations = {
         Vue.set(state, 'contentList', list)
     },
 
+    ['SET_RESEARCH_APPLICATIONS_LIST'](state, list) {
+        Vue.set(state, 'applicationsList', list)
+    },
+
     ['SET_RESEARCH_REVIEWS_LIST'](state, list) {
         Vue.set(state, 'reviewsList', list)
     },
@@ -466,6 +520,10 @@ const mutations = {
         Vue.set(state, 'contentRefsList', refs)
     },
 
+    ['SET_RESEARCH_APPLICATIONS_REFS'](state, refs) {
+        Vue.set(state, 'applicationsRefsList', refs)
+    },
+
     ['SET_RESEARCH_DETAILS_LOADING_STATE'](state, value) {
         state.isLoadingResearchDetails = value
     },
@@ -478,6 +536,10 @@ const mutations = {
         state.isLoadingResearchContent = value
     },
 
+    ['SET_RESEARCH_APPLICATONS_LOADING_STATE'](state, value) {
+        state.isLoadingResearchApplications = value
+    },
+    
     ['SET_RESEARCH_MEMBERS_LOADING_STATE'](state, value) {
         state.isLoadingResearchMembers = value
     },
@@ -500,6 +562,10 @@ const mutations = {
 
     ['SET_RESEARCH_CONTENT_REFS_LOADING_STATE'](state, value) {
         state.isLoadingResearchContentRefs = value
+    },
+
+    ['SET_RESEARCH_APPLICATIONS_REFS_LOADING_STATE'](state, value) {
+        state.isLoadingResearchApplicationsRefs = value
     },
 
     ['SET_RESEARCH_GROUP_DETAILS_LOADING_STATE'](state, value) {

@@ -8,7 +8,6 @@
                         <v-icon size="18px">date_range</v-icon>
                         <span>Created on {{ research.created_at | dateFormat('D MMM YYYY', true) }}</span>
                     </div>
-                <!-- <v-btn @click="afterComplete" small color="primary" class="ma-0">Vote</v-btn> -->
                 </div>
 
                 <div class="display-1 half-bold c-mt-10">
@@ -22,95 +21,142 @@
         </div>
         <!-- ### END Research Details Section ### -->
 
-        <!-- ### START Research Content Section ### -->
-        <div v-if="contentList.length">
-            <div class="c-pt-8 title">Timeline</div>
+        <!-- ### START Research Timeline Section ### -->
+        <div class="c-mt-8" v-if="contentList.length">
+            <div class="title">Timeline</div>
             <div class="c-pt-6">
                 <research-timeline :contentList="contentList" :research="research"></research-timeline>
             </div>
         </div>
+        <!-- ### END Research Timeline Section ### -->
 
-        <div v-if="research" class="c-pt-8 title">Research results</div>
 
-        <div v-if="!contentList.length" class="c-pt-8">
-            There is no content posted in the research yet. 
-            <span v-if="isResearchGroupMember">Please use the form below to upload your pdf files and images or add them manually with the Editor.</span>
-        </div>
-
-        <div class="c-mt-6">
-            <v-expansion-panel>
-                <v-expansion-panel-content v-for="(content, index) in contentList" :key="index">
-                    <div slot="header">
-                        <span class="bold">{{getContentType(content.content_type).text}}</span>
-                        <span class="deip-blue-color bold c-pl-4"> 
-                            <router-link style="text-decoration: none" 
-                                :to="{
-                                    name: 'ResearchContentDetails',
-                                    params: {
-                                        research_group_permlink: encodeURIComponent(research.group_permlink), 
-                                        research_permlink: encodeURIComponent(research.permlink), 
-                                        content_permlink: encodeURIComponent(content.permlink) 
-                                    }
-                                }"
-                            >{{content.title}}</router-link>
-                        </span>
-                        <div class="c-pr-10 right" v-show="contentHasReviews(content)">
-                            <v-icon size="12px">chat_bubble</v-icon>
-                            <span class="bold display-inline-flex">
-                                <span v-show="contentHasPositiveReviews(content)" class="green--text text--darken-2">{{ countContentReviews(content, true) }}</span>
-                                <span v-show="contentHasPositiveReviews(content) && contentHasNegativeReviews(content)">/</span>
-                                <span v-show="contentHasNegativeReviews(content)" class="red--text text--darken-2">{{ countContentReviews(content, false) }}</span>
-                            </span>
-                        </div>
-                    </div>
-
+        <!-- ### START Grant Applications Section ### -->
+        <div class="c-mt-8" v-if="flattenedApplicationsList.length">
+            <div class="title">Applications</div>
+            <div class="c-pt-6">
+                <div v-for="item in flattenedApplicationsList"> 
                     <v-card>
-                        <v-card-text class="pt-0">
-                            <div class="c-ph-2">
-                                <div class="caption grey--text c-pt-2"> {{contentAuthorsStr(content.authors)}}</div>
-                                <div class="c-pt-2 half-bold"></div>
-                                <div>
-                                    <div class="row-nowrap">
-                                        <div v-for="(eci, index) in getContentEciList(content)" class="grey--text">
-                                            <span>
-                                                <span class="c-pr-1">
-                                                    <span>{{ eci.disciplineName}}</span>
-                                                </span>
-
-                                                <span class="c-pr-4 bold">
-                                                    <span>{{ eci.value }}</span>
-                                                </span>
-                                            </span>
-                                        </div>
-                                    </div>
-
-                                    <div class="row-nowrap c-mt-3">
-                                        <!-- <div class="c-pr-10">
-                                            <v-icon size="18px">visibility</v-icon> <span>1999</span>
-                                        </div> -->
-                                        <div class="c-pr-10">
-                                            <v-icon size="18px">event</v-icon>
-                                            <span>{{ content.created_at | dateFormat('D MMM YYYY', true) }}</span>
-                                        </div>
-
-                                    <!-- <div class="c-pr-10">
-                                            <v-icon size="18px">chat_bubble</v-icon>
-                                            <span class="bold display-inline-flex">
-                                                <span class="green--text text--darken-2">{{ countContentReviews(content, true) }}</span>
-                                                <span>/</span>
-                                                <span class="red--text text--darken-2">{{ countContentReviews(content, false) }}</span>
-                                            </span>
-                                        </div> -->
-                                    </div>
+                        <v-card-text>
+                            <div class="row-nowrap">
+                                <div class="col-11">
+                                    <span class="body-2"># {{item.application.foa.funding_opportunity_number}}</span> 
+                                    <span class="c-pl-5">
+                                        <router-link v-if="item.isAccessible" class="a deip-blue-color" 
+                                            :to="{ name: 'AgencyProgramDetails', 
+                                                params: { 
+                                                    agency: item.application.foa.agency_name, 
+                                                    foa: item.application.foa.funding_opportunity_number }}">
+                                            {{ item.application.foa.funding_opportunity_title }}
+                                        </router-link>
+                                        <span v-else>{{ item.application.foa.funding_opportunity_title }}</span>
+                                    </span>
+                                </div> 
+                                <div class="col-1">
+                                    <router-link v-if="item.isAccessible" class="a deip-blue-color" 
+                                        :to="{ name: 'ResearchApplicationDetails', 
+                                            params: { 
+                                                research_group_permlink: group.permlink, 
+                                                research_permlink: research.permlink,
+                                                application_id: item.application.id }}">
+                                        {{item.application.application_hash.slice(0, 8)}}
+                                    </router-link>
+                                    <span v-else>{{ item.application.application_hash.slice(0, 8) }}</span>
                                 </div>
                             </div>
                         </v-card-text>
                     </v-card>
-                </v-expansion-panel-content>
-            </v-expansion-panel>
+                </div>
+            </div>
+        </div>
+        <!-- ### END Grant Applications Section ### -->
+
+
+        <!-- ### START Research Content Section ### -->
+        <div class="c-mt-8">
+            <div class="title">Research results</div>
+
+            <div v-if="!contentList.length" class="c-pt-8">
+                There is no content posted in the research yet. 
+                <span v-if="isResearchGroupMember">Please use the form below to upload your pdf files and images or add them manually with the Editor.</span>
+            </div>
+
+            <div class="c-mt-6">
+                <v-expansion-panel>
+                    <v-expansion-panel-content v-for="(content, index) in contentList" :key="index">
+                        <div slot="header">
+                            <span class="bold">{{getContentType(content.content_type).text}}</span>
+                            <span class="deip-blue-color bold c-pl-4"> 
+                                <router-link style="text-decoration: none" 
+                                    :to="{
+                                        name: 'ResearchContentDetails',
+                                        params: {
+                                            research_group_permlink: encodeURIComponent(research.group_permlink), 
+                                            research_permlink: encodeURIComponent(research.permlink), 
+                                            content_permlink: encodeURIComponent(content.permlink) 
+                                        }
+                                    }"
+                                >{{content.title}}</router-link>
+                            </span>
+                            <div class="c-pr-10 right" v-show="contentHasReviews(content)">
+                                <v-icon size="12px">chat_bubble</v-icon>
+                                <span class="bold display-inline-flex">
+                                    <span v-show="contentHasPositiveReviews(content)" class="green--text text--darken-2">{{ countContentReviews(content, true) }}</span>
+                                    <span v-show="contentHasPositiveReviews(content) && contentHasNegativeReviews(content)">/</span>
+                                    <span v-show="contentHasNegativeReviews(content)" class="red--text text--darken-2">{{ countContentReviews(content, false) }}</span>
+                                </span>
+                            </div>
+                        </div>
+
+                        <v-card>
+                            <v-card-text class="pt-0">
+                                <div class="c-ph-2">
+                                    <div class="caption grey--text c-pt-2"> {{contentAuthorsStr(content.authors)}}</div>
+                                    <div class="c-pt-2 half-bold"></div>
+                                    <div>
+                                        <div class="row-nowrap">
+                                            <div v-for="(eci, index) in getContentEciList(content)" class="grey--text">
+                                                <span>
+                                                    <span class="c-pr-1">
+                                                        <span>{{ eci.disciplineName}}</span>
+                                                    </span>
+
+                                                    <span class="c-pr-4 bold">
+                                                        <span>{{ eci.value }}</span>
+                                                    </span>
+                                                </span>
+                                            </div>
+                                        </div>
+
+                                        <div class="row-nowrap c-mt-3">
+                                            <!-- <div class="c-pr-10">
+                                                <v-icon size="18px">visibility</v-icon> <span>1999</span>
+                                            </div> -->
+                                            <div class="c-pr-10">
+                                                <v-icon size="18px">event</v-icon>
+                                                <span>{{ content.created_at | dateFormat('D MMM YYYY', true) }}</span>
+                                            </div>
+
+                                        <!-- <div class="c-pr-10">
+                                                <v-icon size="18px">chat_bubble</v-icon>
+                                                <span class="bold display-inline-flex">
+                                                    <span class="green--text text--darken-2">{{ countContentReviews(content, true) }}</span>
+                                                    <span>/</span>
+                                                    <span class="red--text text--darken-2">{{ countContentReviews(content, false) }}</span>
+                                                </span>
+                                            </div> -->
+                                        </div>
+                                    </div>
+                                </div>
+                            </v-card-text>
+                        </v-card>
+                    </v-expansion-panel-content>
+                </v-expansion-panel>
+            </div>
         </div>
         <!-- ### END Research Content Section ### -->
 
+        <!-- ### START Research Drafts Section ### -->
         <div v-if="isResearchGroupMember && !research.is_finished" class="c-pt-8 title">Work in progress</div>
 
         <div class="c-mt-6" v-if="isResearchGroupMember && !research.is_finished">
@@ -163,6 +209,7 @@
                     </v-card>
                 </v-expansion-panel-content>
             </v-expansion-panel>
+            <!-- ### END Research Drafts Section ### -->
             
             <div v-if="isResearchGroupMember && !research.is_finished">
                 <upload-research-content-file-dialog></upload-research-content-file-dialog>
@@ -226,9 +273,12 @@
                 user: 'auth/user',
                 userExperise: 'auth/userExperise',
                 research: 'rd/research',
+                group: 'rd/group',
                 contentList: 'rd/contentList',
+                applicationsList: 'rd/applicationsList',
                 reviewsList: 'rd/reviewsList',
                 contentRefsList: 'rd/contentRefsList',
+                applicationsRefsList: 'rd/applicationsRefsList',
                 disciplinesList: 'rd/disciplinesList',
                 totalVotesList: 'rd/totalVotesList',
                 contentWeightByDiscipline: 'rd/contentWeightByDiscipline',
@@ -238,6 +288,31 @@
                 return this.research != null 
                     ? this.$store.getters['auth/userIsResearchGroupMember'](this.research.research_group_id) 
                     : false
+            },
+
+            flattenedApplicationsList() {
+                const tenant = window.tenant;
+
+                // we need to distinct applications by hash and find accessible applications for current agency
+                const agencyApplications = this.applicationsList
+                    .filter(a => a.foa.agency_name.toLowerCase() == tenant.toLowerCase())
+                    .map(a => { return { isAccessible: true, application: a } });
+
+                const otherApplications = this.applicationsList
+                    .filter(a => a.foa.agency_name.toLowerCase() != tenant.toLowerCase() &&
+                        !agencyApplications.some(item => item.application.application_hash == a.application_hash))
+                    .map(a => { return { isAccessible: false, application: a } });
+
+                const merged = [...agencyApplications, ...otherApplications];
+                const flattened = [];
+
+                for (let i = 0; i < merged.length; i++) {
+                    const item = merged[i];
+                    if (!flattened.some(item2 => item.application.application_hash == item2.application.application_hash)) {
+                        flattened.push(item);
+                    }
+                }
+                return flattened;
             }
         },
         methods: {
