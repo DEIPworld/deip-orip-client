@@ -15,7 +15,8 @@ const state = {
     applicationReviewsList: [],
 
     isLoadingResearchDetails: undefined,
-    isLoadingResearchApplicationDetails: undefined
+    isLoadingResearchApplicationDetails: undefined,
+    isLoadingResearchApplicationReviews: undefined
 }
 
 // getters
@@ -51,8 +52,11 @@ const actions = {
                 const researchDetailsLoad = new Promise((resolve, reject) => {
                     dispatch('loadResearchDetails', { group_permlink, research_permlink, notify: resolve })
                 });
+                const applicationReviewsLoad = new Promise((resolve, reject) => {
+                    dispatch('loadApplicationReviews', { application_id, notify: resolve })
+                });
 
-                return Promise.all([contentRefLoad, programLoad, researchDetailsLoad])
+                return Promise.all([contentRefLoad, programLoad, researchDetailsLoad, applicationReviewsLoad])
             }, (err) => {console.log(err)})
             .finally(() => {
                 commit('SET_RESEARCH_APPLICATIONS_DETAILS_LOADING_STATE', false);
@@ -77,6 +81,34 @@ const actions = {
             .finally(() => {
                 if (notify) notify();
             });
+    },
+
+    loadApplicationReviews({ state, dispatch, commit }, { application_id, notify }) {
+        const reviews = [];
+        commit('SET_RESEARCH_APPLICATION_REVIEWS_LOADING_STATE', true);
+        
+        deipRpc.api.getReviewsByGrantApplicationAsync(application_id)
+            .then(items => {
+                reviews.push(...items);
+                return Promise.all([
+                    Promise.all(
+                        reviews.map(item => deipRpc.api.getReviewVotesByReviewIdAsync(item.id))
+                    ),
+                    getEnrichedProfiles(reviews.map(r => r.author))
+                ]);
+            }, (err) => {console.log(err)})
+            .then(([reviewVotes, users]) => {
+                reviews.forEach((review, i) => {
+                    review.author = users.find(u => u.account.name == review.author);
+                    review.votes = reviewVotes[i];
+                });
+
+                commit('SET_RESEARCH_APPLICATION_REVIEWS_LIST', reviews);
+            }, (err) => {console.log(err)})
+            .finally(() => {
+                commit('SET_RESEARCH_APPLICATION_REVIEWS_LOADING_STATE', false)
+                if (notify) notify();
+            })
     },
 
     loadResearchDetails({ state, commit, dispatch }, { group_permlink, research_permlink, notify }) {
@@ -143,6 +175,10 @@ const mutations = {
         Vue.set(state, 'membersList', research)
     },
     
+    ['SET_RESEARCH_APPLICATION_REVIEWS_LIST'](state, list) {
+        Vue.set(state, 'applicationReviewsList', list)
+    },
+    
     ['SET_RESEARCH_APPLICATIONS_DETAILS_LOADING_STATE'](state, value) {
         state.isLoadingResearchApplicationDetails = value
     },
@@ -151,6 +187,10 @@ const mutations = {
         state.isLoadingResearchDetails = value
     },
 
+    ['SET_RESEARCH_APPLICATION_REVIEWS_LOADING_STATE'](state, value) {
+        state.isLoadingResearchApplicationReviews = value
+    },
+    
     ['RESET_STATE'](state) {
         applicationReviewEditor = undefined;
     },

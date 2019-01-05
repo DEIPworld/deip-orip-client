@@ -10,7 +10,7 @@
                 </v-btn>
             </div>
         </div>
-        <div class="c-mt-8" v-if="eciList.length">
+    <!--   <div class="c-mt-8" v-if="eciList.length">
             <div class="sidebar-fullwidth"><v-divider></v-divider></div>
             <div class="subheading bold c-mt-4">Expertise Contribution Index</div>
             <div class="c-mt-4">
@@ -22,7 +22,7 @@
                     <div class="c-pv-2 eci-label">{{ eci.disciplineName }}: {{ eci.value }}</div>
                 </div>
             </div>
-        </div>
+        </div> -->
     </div>
 </template>
 
@@ -32,7 +32,7 @@
     import * as disciplineTreeService from '../../common/disciplines/DisciplineTreeService'; 
 
     export default {
-        name: "ResearchContentReviewSidebar",
+        name: "ResearchApplicationReviewSidebar",
 
         data() {
             return {
@@ -45,11 +45,11 @@
             ...mapGetters({
                 user: 'auth/user',
                 userExperise: 'auth/userExperise',
-                research: 'rcd/research',
-                contentReviewsList: 'rcd/contentReviewsList'
+                research: 'rad/research',
+                applicationReviewsList: 'rad/applicationReviewsList'
             }),
             review() {
-                return this.contentReviewsList.find(r => r.id == this.$route.params.review_id)
+                return this.applicationReviewsList.find(r => r.id == this.$route.params.review_id)
             },
             userHasExpertise() {
                 return this.userExperise != null && this.research != null
