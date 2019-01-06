@@ -255,10 +255,11 @@ const actions = {
     loadContentReviews({ state, dispatch, commit }, { researchContentId, notify }) {
         const reviews = [];
         commit('SET_RESEARCH_CONTENT_REVIEWS_LOADING_STATE', true);
-
+        // todo: fix the method in database_api to return reviews for content only
         deipRpc.api.getReviewsByContentAsync(researchContentId)
             .then(items => {
-                reviews.push(...items);
+                reviews.push(...items.filter(r => !r.is_grant_application));
+
                 return Promise.all([
                     Promise.all(
                         reviews.map(item => deipRpc.api.getReviewVotesByReviewIdAsync(item.id))

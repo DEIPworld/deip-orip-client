@@ -276,7 +276,6 @@
                 group: 'rd/group',
                 contentList: 'rd/contentList',
                 applicationsList: 'rd/applicationsList',
-                reviewsList: 'rd/reviewsList',
                 contentRefsList: 'rd/contentRefsList',
                 applicationsRefsList: 'rd/applicationsRefsList',
                 disciplinesList: 'rd/disciplinesList',

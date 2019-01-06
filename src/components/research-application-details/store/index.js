@@ -89,7 +89,7 @@ const actions = {
         
         deipRpc.api.getReviewsByGrantApplicationAsync(application_id)
             .then(items => {
-                reviews.push(...items);
+                reviews.push(...items.filter(r => r.is_grant_application));
                 return Promise.all([
                     Promise.all(
                         reviews.map(item => deipRpc.api.getReviewVotesByReviewIdAsync(item.id))

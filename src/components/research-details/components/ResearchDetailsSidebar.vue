@@ -293,7 +293,7 @@
                 group: 'rd/group',
                 contentList: 'rd/contentList',
                 membersList: 'rd/membersList',
-                reviewsList: 'rd/reviewsList',
+                contentReviewsList: 'rd/contentReviewsList',
                 disciplinesList: 'rd/disciplinesList',
                 totalVotesList: 'rd/totalVotesList',
                 researchWeightByDiscipline: 'rd/researchWeightByDiscipline',
@@ -320,10 +320,10 @@
             },
 
             positiveReviewsCount() {
-                return this.reviewsList.filter(r => r.is_positive).length;
+                return this.contentReviewsList.filter(r => r.is_positive).length;
             },
             negativeReviewsCount() {
-                return this.reviewsList.filter(r => !r.is_positive).length;
+                return this.contentReviewsList.filter(r => !r.is_positive).length;
             },
             isResearchRewardDistributionActive() {
                 return this.contentList.some(c => c.content_type == 'final_result');

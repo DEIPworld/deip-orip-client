@@ -48,7 +48,7 @@
     <!-- ### END Research Application Applicants Section ### -->
 
     <!-- ### START Research Applications Review Section ### -->
-    <div class="c-mt-4" v-if="userHasExpertise">
+    <div class="c-mt-4">
       <div class="sidebar-fullwidth"><v-divider></v-divider></div>
       <div class="subheading bold c-mt-4">
         Reviews: 
@@ -123,7 +123,7 @@
           },
           isCreatingReviewAvailable() {
             const userHasReview = this.applicationReviewsList.some(r => r.author.account.name === this.user.username);
-            return !this.isResearchGroupMember && !userHasReview;
+            return !this.isResearchGroupMember && !userHasReview && this.userHasExpertise;
           },
           positiveReviewsCount() {
             return this.applicationReviewsList.filter(r => r.is_positive).length;

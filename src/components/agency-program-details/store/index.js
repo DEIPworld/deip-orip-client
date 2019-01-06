@@ -106,7 +106,7 @@ const actions = {
                 applications.forEach((application, index) => {
                     application.totalVotes = totalVotesMap[application.research_id] ? totalVotesMap[application.research_id] : [];
                     application.research = researches[index];
-                    application.reviews = reviewsList[index];
+                    application.reviews = reviewsList[index].filter(r => r.is_grant_application);
                 });
 
                 const groupPromises = researches.map(research =>

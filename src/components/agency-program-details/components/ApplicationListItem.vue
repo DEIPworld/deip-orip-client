@@ -82,7 +82,7 @@
     import _ from 'lodash';
 
     export default {
-        name: "ProgramListItem",
+        name: "ApplicationListItem",
 
         props: {
             application: { required: true, default: undefined },

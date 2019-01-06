@@ -14,6 +14,8 @@ const state = {
     applicationsList: [],
     membersList: [],
     reviewsList: [],
+    contentReviewsList: [],
+    applicationsReviewsList: [],
     disciplinesList: [],
     totalVotesList: [],
     tokenSale: undefined,
@@ -66,6 +68,9 @@ const getters = {
     reviewsList: (state, getters) => {
         return state.reviewsList;
     },
+
+    contentReviewsList: (state, getters) => state.reviewsList.filter(r => !r.is_grant_application),
+    applicationsReviewsList: (state, getters) =>  state.reviewsList.filter(r => r.is_grant_application),
 
     disciplinesList: (state, getters) => {
         return state.disciplinesList;
@@ -261,14 +266,11 @@ const actions = {
         deipRpc.api.getAllResearchContentAsync(researchId)
             .then(list => {
                 contents = list;
-
-                return Promise.all(
-                    contents.map(content => deipRpc.api.getReviewsByContentAsync(content.id))
-                );
+                return Promise.all(contents.map(content => deipRpc.api.getReviewsByContentAsync(content.id)));
             })
             .then(reviews => {
                 contents.forEach((content, index) => {
-                    content.reviews = reviews[index];
+                    content.reviews = reviews[index].filter(r => !r.is_grant_application);
                 });
 
                 commit('SET_RESEARCH_CONTENT_LIST', contents);
@@ -343,7 +345,6 @@ const actions = {
                     review.author = users.find(u => u.account.name == review.author);
                     review.votes = reviewVotes[i];
                 });
-
                 commit('SET_RESEARCH_REVIEWS_LIST', reviews);
             }, (err) => {console.log(err)})
             .finally(() => {
