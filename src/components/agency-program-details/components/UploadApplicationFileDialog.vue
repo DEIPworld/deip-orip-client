@@ -82,8 +82,8 @@
                 <div>
                   <vue-dropzone ref="newApplication" id="application-dropzone" 
                       :options="dropzoneOptions" 
-                      @vdropzone-success="vdropzoneSuccess"
-                      @vdropzone-error="vdropzoneError">
+                      @vdropzone-error="vdropzoneError"
+                      @vdropzone-success-multiple="vsuccessMultiple">
                   </vue-dropzone>
                 </div>
               </div>
@@ -189,8 +189,8 @@
             isLoading: false,
             research: null,
             researchList: null,
-
-            title: ''
+            title: '',
+            timestamp: null
           }
         },
 
@@ -203,19 +203,20 @@
               return !this.research;
           },
           dropzoneOptions() {
-            return this.research != null && this.program != null ? {
-              url: `${window.env.DEIP_SERVER_URL}/applications/upload-file`,
+            return this.research != null && this.program != null && this.timestamp ? {
+              url: `${window.env.DEIP_SERVER_URL}/applications/upload-files`,
               paramName: "application-content",
-
               headers: {
                 "Agency": window.tenant,
                 "Research-Id": this.research.id.toString(),
                 "Foa-Id": this.program.id.toString(),
-                "Authorization": 'Bearer ' + getAccessToken()
+                "Authorization": 'Bearer ' + getAccessToken(),
+                "Upload-Session": `${this.timestamp}-${getAccessToken().split('.')[2]}`
               },
-
               timeout: 0,
-              maxFiles: 1,
+              maxFiles: 10,
+              parallelUploads: 10,
+              uploadMultiple: true,
               thumbnailWidth: 150,
               autoProcessQueue: false,
               acceptedFiles: ['application/pdf', 'image/png', 'image/jpeg'].join(',')
@@ -242,7 +243,7 @@
               });
               this.close();
           },
-          vdropzoneSuccess(file, res) {
+          vsuccessMultiple(files, res) {
             const self = this;
             const applicationRef = res;
 
@@ -273,12 +274,13 @@
               this.isLoading = false;
               this.close();
             });
-          }
+          },
         },
 
         watch: {
           'meta.isOpen': function (newVal, oldVal) {
             if (newVal) {
+              this.timestamp = (new Date()).getTime();
               this.research = null;
               this.title = '';
             } 

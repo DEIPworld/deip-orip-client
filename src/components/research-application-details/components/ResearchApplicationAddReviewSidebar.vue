@@ -1,6 +1,6 @@
 <template>
 	<div>
-		<div class="c-mb-8" v-if="research">
+		<div class="c-mb-8 text-align-center" v-if="research">
 			<router-link class="a sm-title" 
 					:to="{
 						name: 'ResearchApplicationDetails',
@@ -10,7 +10,7 @@
 							application_id: application.id
 						}
 					}"
-			>{{ application.application_hash }}</router-link>
+			>{{ application.application_hash.slice(0, 8) }}</router-link>
 		</div>
 
 		<div class="row justify-center">

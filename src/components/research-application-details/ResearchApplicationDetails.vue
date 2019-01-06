@@ -2,22 +2,8 @@
 	<page-container>
 		<v-layout row wrap>
       		<v-flex xs12>
-   				<research-application-details-file></research-application-details-file>
+				<research-application-details-package></research-application-details-package>
       		</v-flex>
-			<v-flex xs10 offset-xs1>
-				<!-- START Research Content Reviews section -->
-				<div class="c-pt-5 sidebar-fullwidth"><v-divider></v-divider></div>
-
-                <div class="c-pt-5 c-pb-10" v-if="allApplicationsReviewsList.length">
-                    <div id="appliation-reviews">
-                        <div class="c-pt-2 title">Reviews: {{ allApplicationsReviewsList.length }}</div>
-                        <div class="c-pt-6">
-                            <application-review-list-item v-for="(review, i) in allApplicationsReviewsList" :review="review" :key="i"></application-review-list-item>
-                        </div>
-                    </div>
-                </div>
-                <!-- END Research Content Reviews section -->
-			</v-flex>
     	</v-layout>
 		<sidebar>
 			<research-application-details-sidebar></research-application-details-sidebar>
@@ -36,8 +22,7 @@
 		},
 		computed: {
 			...mapGetters({
-				user: 'auth/user',
-				allApplicationsReviewsList: 'rad/allApplicationsReviewsList'
+				user: 'auth/user'
 			})
 		},
 		methods: {

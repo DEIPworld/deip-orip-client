@@ -12,22 +12,6 @@
       </router-link>
     </div>
 
-    <div v-if="isGrantor && isApplicationPending" class="c-mt-4">
-      <div class="sidebar-fullwidth"><v-divider></v-divider></div>
-      <div class="c-mt-4">
-        <v-btn block flat color="primary" @click="approveApplication()" :loading="isApproveBtnLoading">Approve Application</v-btn>
-        <v-btn block flat color="error" @click="rejectApplication()" :loading="isRejectBtnLoading">Reject Application</v-btn>
-      </div>
-    </div>
-
-    <div v-if="!isApplicationPending" class="c-mt-4">
-      <div class="sidebar-fullwidth"><v-divider></v-divider></div>
-      <div class="text-align-center c-mt-4">
-          <span class="sm-title green--text text--darken-2" v-if="isApplicationApproved">Approved</span>
-          <span class="sm-title red--text text--darken-2" v-if="isApplicationRejected">Rejected</span>
-      </div>
-    </div>  
-
     <!-- ### START Research Application Applicants Section ### -->
     <div class="c-mt-4">
       <div class="sidebar-fullwidth"><v-divider></v-divider></div>
@@ -55,21 +39,21 @@
         <span class="green--text text--darken-2">{{positiveReviewsCount}}</span> / 
         <span class="red--text text--darken-2">{{negativeReviewsCount}}</span> 
       </div>
-      <div class="c-pt-3">
+    <!--  <div class="c-pt-3">
         <div class="caption">
           <v-icon small class="c-pr-2">rate_review</v-icon>
           Reward for review: 
           <span class="bold">{{convertToPercent(research.review_share_in_percent)}}%</span>
         </div>
-      </div>
+      </div> -->
       <div v-if="isCreatingReviewAvailable" class="c-mt-4">
         <v-btn @click="goAddReview()" dark round outline color="primary" class="full-width ma-0">
           <v-icon small>add</v-icon>
           <div class="col-grow add-review-label">
             Add a review
-            <span class="caption grey--text">
+          <!--  <span class="caption grey--text">
                 reward {{convertToPercent(research.review_share_in_percent)}}%
-            </span>
+            </span> -->
           </div>
         </v-btn>
       </div>
@@ -87,14 +71,11 @@
         name: "ResearchApplicationDetailsSidebar",
         data() {
           return {
-            isApproveBtnLoading: false,
-            isRejectBtnLoading: false
           };
         },
         computed: {
           ...mapGetters({
             user: 'auth/user',
-            isGrantor: 'auth/isGrantor',
             userExperise: 'auth/userExperise',
             application: 'rad/application',
             research: 'rad/research',
@@ -107,15 +88,6 @@
             return this.research != null 
               ? this.$store.getters['auth/userIsResearchGroupMember'](this.research.research_group_id) 
               : false
-          },
-          isApplicationApproved() {
-            return this.application && this.application.status === 'application_approved';
-          },
-          isApplicationRejected() {
-            return this.application && this.application.status === 'application_rejected';
-          },
-          isApplicationPending() {
-            return this.application && this.application.status === 'application_pending';
           },
           userHasExpertise() {
             return this.userExperise != null && this.research != null
@@ -138,46 +110,6 @@
             return this.userExperise != null && this.research != null
               ? this.userExperise.some(exp => exp.discipline_id == discipline.id)
               : false
-          },
-          approveApplication() {
-            this.isApproveBtnLoading = true;
-            deipRpc.broadcast.approveGrantApplicationAsync(
-              this.user.privKey, 
-              this.application.id, 
-              this.user.username
-            ).then(() => {
-              this.$store.dispatch('layout/setSuccess', {
-                message: "Application has been approved successfully"
-              });
-              this.$store.dispatch('rad/setApplicationStatus', { status: "application_approved" });
-            }).catch(e => {
-                this.$store.dispatch('layout/setError', {
-                    message: "An error occured while approving application, please try again later"
-                });
-                console.log(e);
-            }).finally(() => {
-                this.isApproveBtnLoading = false;
-            });
-          },
-          rejectApplication() {
-            this.isRejectBtnLoading = true;
-            deipRpc.broadcast.rejectGrantApplicationAsync(
-              this.user.privKey, 
-              this.application.id, 
-              this.user.username
-            ).then(() => {
-              this.$store.dispatch('layout/setSuccess', {
-                message: "Application has been rejected successfully"
-              });
-              this.$store.dispatch('rad/setApplicationStatus', { status: "application_rejected" });
-            }).catch(e => {
-                this.$store.dispatch('layout/setError', {
-                    message: "An error occured while rejecting application, please try again later"
-                });
-                console.log(e);
-            }).finally(() => {
-                this.isRejectBtnLoading = false;
-            });
           },
           goAddReview() {
             this.$router.push({ name: 'ResearchApplicationAddReview', params: this.$route.params });
