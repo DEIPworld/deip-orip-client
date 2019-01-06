@@ -291,7 +291,6 @@
 
             flattenedApplicationsList() {
                 const tenant = window.tenant;
-
                 // we need to distinct applications by hash and find accessible applications for current agency
                 const agencyApplications = this.applicationsList
                     .filter(a => a.foa.agency_name.toLowerCase() == tenant.toLowerCase())

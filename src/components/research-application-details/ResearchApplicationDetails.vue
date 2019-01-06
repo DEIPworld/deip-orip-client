@@ -8,11 +8,11 @@
 				<!-- START Research Content Reviews section -->
 				<div class="c-pt-5 sidebar-fullwidth"><v-divider></v-divider></div>
 
-                <div class="c-pt-5 c-pb-10" v-if="applicationReviewsList.length">
+                <div class="c-pt-5 c-pb-10" v-if="allApplicationsReviewsList.length">
                     <div id="appliation-reviews">
-                        <div class="c-pt-2 title">Reviews: {{ applicationReviewsList.length }}</div>
+                        <div class="c-pt-2 title">Reviews: {{ allApplicationsReviewsList.length }}</div>
                         <div class="c-pt-6">
-                            <application-review-list-item v-for="(review, i) in applicationReviewsList" :review="review" :key="i"></application-review-list-item>
+                            <application-review-list-item v-for="(review, i) in allApplicationsReviewsList" :review="review" :key="i"></application-review-list-item>
                         </div>
                     </div>
                 </div>
@@ -37,7 +37,7 @@
 		computed: {
 			...mapGetters({
 				user: 'auth/user',
-				applicationReviewsList: 'rad/applicationReviewsList'
+				allApplicationsReviewsList: 'rad/allApplicationsReviewsList'
 			})
 		},
 		methods: {

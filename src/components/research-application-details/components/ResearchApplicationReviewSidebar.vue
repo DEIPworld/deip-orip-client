@@ -1,6 +1,14 @@
 <template>
     <div>
-        <div v-if="review.author.account.name !== user.username && userHasExpertise">
+        <div v-if="agency" class="text-align-center">         
+            <div>
+                <v-avatar size="120px">
+                    <img :src="agency._id | agencyLogoSrc(160, 160, false)" />
+                </v-avatar>
+            </div>
+            <div class="c-pt-5 title">{{agency.name}}</div>
+        </div>
+    <!--  <div v-if="review.author.account.name !== user.username && userHasExpertise">
             <div class="support-review-button">
                 <v-btn block color="primary"
                     :loading="isReviewVoting" 
@@ -9,7 +17,7 @@
                     Support Review
                 </v-btn>
             </div>
-        </div>
+        </div> -->
     <!--   <div class="c-mt-8" v-if="eciList.length">
             <div class="sidebar-fullwidth"><v-divider></v-divider></div>
             <div class="subheading bold c-mt-4">Expertise Contribution Index</div>
@@ -30,6 +38,7 @@
     import { mapGetters } from 'vuex';
     import deipRpc from '@deip/deip-rpc-client';
     import * as disciplineTreeService from '../../common/disciplines/DisciplineTreeService'; 
+    import agencyHttp from './../../../services/http/agency';
 
     export default {
         name: "ResearchApplicationReviewSidebar",
@@ -37,7 +46,8 @@
         data() {
             return {
                 isReviewVoting: false,
-                votingDisabled: false
+                votingDisabled: false,
+                agencies: []
             };
         },
 
@@ -46,8 +56,12 @@
                 user: 'auth/user',
                 userExperise: 'auth/userExperise',
                 research: 'rad/research',
+                program: 'rad/program',
                 applicationReviewsList: 'rad/applicationReviewsList'
             }),
+            agency() {
+                return this.agencies.find(r => r._id == this.program.agency_name);
+            },
             review() {
                 return this.applicationReviewsList.find(r => r.id == this.$route.params.review_id)
             },
@@ -132,6 +146,12 @@
                     }
                 });
             }
+        },
+        created() {
+            agencyHttp.getAgenciesProfiles()
+                .then((agencies) => {
+                    this.agencies = agencies;
+                })
         }
     };
 </script>

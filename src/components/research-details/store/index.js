@@ -289,7 +289,7 @@ const actions = {
         deipRpc.api.getApplicationsByResearchIdAsync(researchId)
             .then(list => {
                 applications = list;
-                return Promise.all(applications.map(a => deipRpc.api.getFundingOpportunityAsync(a.grant_Id)));
+                return Promise.all(applications.map(a => deipRpc.api.getFundingOpportunityAsync(a.grant_id)));
             })
             .then((foaList) => {
                 for (let i = 0; i < applications.length; i++) {

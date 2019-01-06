@@ -13,10 +13,12 @@ const state = {
     program: null,
     membersList: [],
     applicationReviewsList: [],
+    thirdpartyApplicationsReviewsList: [],
 
     isLoadingResearchDetails: undefined,
     isLoadingResearchApplicationDetails: undefined,
-    isLoadingResearchApplicationReviews: undefined
+    isLoadingResearchApplicationReviews: undefined,
+    isLoadingThirdpartyResearchApplicationsReviews: undefined
 }
 
 // getters
@@ -28,7 +30,9 @@ const getters = {
     program: (state, getters) => state.program,
     membersList: (state, getters) => state.membersList,
     applicationReviewsList: (state, getters) => state.applicationReviewsList,
-    applicationReviewEditor: (state, getters) => applicationReviewEditor
+    thirdpartyApplicationsReviewsList: (state, getters) => state.thirdpartyApplicationsReviewsList,
+    allApplicationsReviewsList: (state, getters) => state.applicationReviewsList.concat(state.thirdpartyApplicationsReviewsList),
+    applicationReviewEditor: (state, getters) => applicationReviewEditor,
 }
 
 // actions
@@ -55,8 +59,11 @@ const actions = {
                 const applicationReviewsLoad = new Promise((resolve, reject) => {
                     dispatch('loadApplicationReviews', { application_id, notify: resolve })
                 });
+                const thirdpatyReviewsLoad = new Promise((resolve, reject) => {
+                    dispatch('loadThirdpatyReviews', { application_id, application_hash: application.application_hash, group_permlink, research_permlink, notify: resolve })
+                });
 
-                return Promise.all([contentRefLoad, programLoad, researchDetailsLoad, applicationReviewsLoad])
+                return Promise.all([contentRefLoad, programLoad, researchDetailsLoad, applicationReviewsLoad, thirdpatyReviewsLoad])
             }, (err) => {console.log(err)})
             .finally(() => {
                 commit('SET_RESEARCH_APPLICATIONS_DETAILS_LOADING_STATE', false);
@@ -91,9 +98,7 @@ const actions = {
             .then(items => {
                 reviews.push(...items.filter(r => r.is_grant_application));
                 return Promise.all([
-                    Promise.all(
-                        reviews.map(item => deipRpc.api.getReviewVotesByReviewIdAsync(item.id))
-                    ),
+                    Promise.all(reviews.map(item => deipRpc.api.getReviewVotesByReviewIdAsync(item.id))),
                     getEnrichedProfiles(reviews.map(r => r.author))
                 ]);
             }, (err) => {console.log(err)})
@@ -109,6 +114,41 @@ const actions = {
                 commit('SET_RESEARCH_APPLICATION_REVIEWS_LOADING_STATE', false)
                 if (notify) notify();
             })
+    },
+
+    loadThirdpatyReviews({ state, dispatch, commit }, { application_id, application_hash, group_permlink, research_permlink, notify }) {
+        commit('SET_THIRDPARTY_RESEARCH_APPLICATIONS_REVIEWS_LOADING_STATE', true);
+
+        var reviews;
+        deipRpc.api.getResearchByAbsolutePermlinkAsync(group_permlink, research_permlink)
+            .then((research) => {
+                return deipRpc.api.getApplicationsByResearchIdAsync(research.id)
+            })
+            .then((applications) => {
+                const related = applications.filter(a => a.application_hash == application_hash && a.id != application_id);
+                return Promise.all(related.map(a => deipRpc.api.getReviewsByGrantApplicationAsync(a.id)))
+            }, (err) => {console.log(err)})
+            .then(items => {
+                const flatten = [].concat.apply([], items);
+                reviews = flatten.filter(r => r.is_grant_application);
+                return Promise.all([
+                    Promise.all(reviews.map(item => deipRpc.api.getReviewVotesByReviewIdAsync(item.id))),
+                    getEnrichedProfiles(reviews.map(r => r.author))
+                ]);
+            }, (err) => {console.log(err)})
+            .then(([reviewVotes, users]) => {
+                reviews.forEach((review, i) => {
+                    review.author = users.find(u => u.account.name == review.author);
+                    review.votes = reviewVotes[i];
+                });
+                commit('SET_THIRDPARTY_RESEARCH_APPLICATIONS_REVIEWS_LIST', reviews);
+
+            }, (err) => {console.log(err)})
+            .finally(() => {
+                commit('SET_THIRDPARTY_RESEARCH_APPLICATIONS_REVIEWS_LOADING_STATE', false);
+                if (notify) notify();
+            })
+
     },
 
     loadResearchDetails({ state, commit, dispatch }, { group_permlink, research_permlink, notify }) {
@@ -171,16 +211,24 @@ const mutations = {
         Vue.set(state, 'research', research)
     },
 
-    ['SET_RESEARCH_MEMBERS_LIST'](state, research) {
-        Vue.set(state, 'membersList', research)
+    ['SET_RESEARCH_MEMBERS_LIST'](state, users) {
+        Vue.set(state, 'membersList', users)
     },
     
-    ['SET_RESEARCH_APPLICATION_REVIEWS_LIST'](state, list) {
-        Vue.set(state, 'applicationReviewsList', list)
+    ['SET_RESEARCH_APPLICATION_REVIEWS_LIST'](state, reviews) {
+        Vue.set(state, 'applicationReviewsList', reviews)
+    },
+
+    ['SET_THIRDPARTY_RESEARCH_APPLICATIONS_REVIEWS_LIST'](state, reviews) {
+        Vue.set(state, 'thirdpartyApplicationsReviewsList', reviews)
     },
     
     ['SET_RESEARCH_APPLICATIONS_DETAILS_LOADING_STATE'](state, value) {
         state.isLoadingResearchApplicationDetails = value
+    },
+
+    ['SET_THIRDPARTY_RESEARCH_APPLICATIONS_REVIEWS_LOADING_STATE'](state, value) {
+        state.isLoadingThirdpartyResearchApplicationsReviews = value
     },
 
     ['SET_RESEARCH_DETAILS_LOADING_STATE'](state, value) {

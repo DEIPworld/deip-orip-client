@@ -30,8 +30,8 @@
         <div class="c-pt-5 c-pb-4 reviewed-content-container">
             <div>
                 <span>
-                    <span style="color: green" v-if="review.is_positive">Approved</span>
-                    <span style="color: red" v-if="!review.is_positive">Rejected</span>
+                    <span class="green--text text--darken-2" v-if="review.is_positive">Approved</span>
+                    <span class="red--text text--darken-2" v-if="!review.is_positive">Rejected</span>
                     review for
                 </span>
             </div>

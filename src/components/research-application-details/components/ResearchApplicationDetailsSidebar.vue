@@ -100,6 +100,7 @@
             research: 'rad/research',
             membersList: 'rad/membersList',
             applicationReviewsList: 'rad/applicationReviewsList',
+            allApplicationsReviewsList: 'rad/allApplicationsReviewsList',
             applicationRef: 'rad/applicationRef',
           }),
           isResearchGroupMember() {
@@ -126,10 +127,10 @@
             return !this.isResearchGroupMember && !userHasReview && this.userHasExpertise;
           },
           positiveReviewsCount() {
-            return this.applicationReviewsList.filter(r => r.is_positive).length;
+            return this.allApplicationsReviewsList.filter(r => r.is_positive).length;
           },
           negativeReviewsCount() {
-            return this.applicationReviewsList.filter(r => !r.is_positive).length;
+            return this.allApplicationsReviewsList.filter(r => !r.is_positive).length;
           }
         },
         methods: {

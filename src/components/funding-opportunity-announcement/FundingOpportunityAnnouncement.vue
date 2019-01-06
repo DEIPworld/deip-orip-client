@@ -126,7 +126,7 @@
                     </div>
 
                     <div class="c-mt-12">
-                        <v-btn color="primary" class="ma-0" :to="{name: 'Default'}">Close</v-btn>
+                        <v-btn color="primary" class="ma-0" :to="{name: 'Default'}">OK</v-btn>
                     </div>
                 </div>
             </div>

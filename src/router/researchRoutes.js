@@ -165,7 +165,7 @@ const researchRoutes = [{
             }
         })
     },  {
-        path: '/:research_group_permlink/research/:research_permlink/application/:application_id/review/review_id',
+        path: '/:research_group_permlink/research/:research_permlink/application/:application_id/review/:review_id',
         name: 'ResearchApplicationReview',
 
         component: preliminaryDataLoader(
