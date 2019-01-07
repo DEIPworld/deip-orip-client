@@ -17,7 +17,7 @@
                 </div>
             </v-flex>
 
-            <v-flex xs12>
+            <v-flex xs10>
                 <div class="c-pl-5 c-pt-2 c-pb-2">
                     <router-link class="a c-pr-2 caption" 
                         :to="{
@@ -32,6 +32,12 @@
                             <span> · </span>
                         </template>
                     </span>
+                </div>
+            </v-flex>
+
+            <v-flex xs2>
+                <div class="c-pl-5 c-pt-2 c-pb-2">
+                    <span class="title">$ {{fromAssetsToFloat(application.total_amount)}}</span>      
                 </div>
             </v-flex>
 

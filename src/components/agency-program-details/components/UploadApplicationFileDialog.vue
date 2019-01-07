@@ -269,7 +269,9 @@
               this.user.privKey,
               this.program.id,
               this.research.id,
+              this.title,
               this.user.username,
+              this.toAssetUnits(this.totalAmount),
               applicationRef.hash
             )
             .then((res) => {

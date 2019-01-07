@@ -40,16 +40,25 @@
                         <v-card-text>
                             <div class="row-nowrap">
                                 <div class="col-11">
-                                    <span class="body-2"># {{item.application.foa.funding_opportunity_number}}</span> 
-                                    <span class="c-pl-5">
-                                        <router-link v-if="item.isAccessible" class="a deip-blue-color" 
+                                    <span class="body-2">
+                                        <router-link class="a deip-blue-color" 
                                             :to="{ name: 'AgencyProgramDetails', 
                                                 params: { 
                                                     agency: item.application.foa.agency_name, 
                                                     foa: item.application.foa.funding_opportunity_number }}">
-                                            {{ item.application.foa.funding_opportunity_title }}
+                                            {{ '# ' + item.application.foa.funding_opportunity_number }}
                                         </router-link>
-                                        <span v-else>{{ item.application.foa.funding_opportunity_title }}</span>
+                                    </span> 
+                                    <span class="c-pl-5">
+                                        <router-link v-if="item.isAccessible" class="a deip-blue-color" 
+                                            :to="{ name: 'ResearchApplicationDetails', 
+                                                params: { 
+                                                    research_group_permlink: group.permlink, 
+                                                    research_permlink: research.permlink,
+                                                    application_id: item.application.id }}">
+                                            {{ item.application.title}}
+                                        </router-link>
+                                        <span v-else>{{ item.application.title }}</span>
                                     </span>
                                 </div> 
                                 <div class="col-1">
@@ -59,9 +68,9 @@
                                                 research_group_permlink: group.permlink, 
                                                 research_permlink: research.permlink,
                                                 application_id: item.application.id }}">
-                                        {{item.application.application_hash.slice(0, 8)}}
+                                        {{ item.application.application_hash.slice(0, 8)}}
                                     </router-link>
-                                    <span v-else>{{ item.application.application_hash.slice(0, 8) }}</span>
+                                    <span v-else>{{item.application.application_hash.slice(0, 8) }}</span>
                                 </div>
                             </div>
                         </v-card-text>

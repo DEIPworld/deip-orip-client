@@ -10,7 +10,7 @@
 							application_id: application.id
 						}
 					}"
-			>{{ application.application_hash.slice(0, 8) }}</router-link>
+			>{{ application.title || application.application_hash.slice(0, 8) }}</router-link>
 		</div>
 
 		<div class="row justify-center">

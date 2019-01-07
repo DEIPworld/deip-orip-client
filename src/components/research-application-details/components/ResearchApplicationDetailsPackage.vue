@@ -2,7 +2,7 @@
   <div>
     <v-layout row wrap>
 			<v-flex xs8>
-				<div class="title c-pb-10">{{application.application_hash}}</div>
+				<div class="title c-pb-10">{{application.title}} <span class="caption">({{application.application_hash}})</span></div>
 			</v-flex>
 			<v-flex xs4 v-if="isGrantor && isApplicationPending">
 				<div class="right">
@@ -17,6 +17,9 @@
 						<span class="sm-title red--text text--darken-2" v-if="isApplicationRejected">Rejected</span>
 					</div>
 				</div>
+			</v-flex>
+			<v-flex xs12>
+				<div class="subheading c-pb-5">Total amount: $ {{fromAssetsToFloat(application.total_amount)}}</div>
 			</v-flex>
 			<v-flex xs12>
 				<div>

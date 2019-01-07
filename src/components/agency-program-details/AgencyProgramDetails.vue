@@ -132,7 +132,7 @@
         <v-divider></v-divider>
         <v-layout row wrap>
           <v-flex xs12>
-            <v-card style="height: 300%">
+            <v-card style="height: 400%">
 
               <div class="c-pt-5 c-pb-5 text-align-center">
                 <v-avatar size="120px">
