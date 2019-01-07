@@ -49,7 +49,7 @@ const loadAllResearches = () => {
                 research.isCollapsed = true;
 
                 research.totalVotes = totalVotesMap[research.research_id] ? totalVotesMap[research.research_id] : [];
-                research.reviews = reviews[index].filter(r => !r.is_grant_application);
+                research.reviews = reviews[index];
                 research.group = groups[index];
                 research.enrichedAuthors = authors[index];
                 research.tokenSale = tokenSales[index];

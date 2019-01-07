@@ -258,7 +258,7 @@ const actions = {
         // todo: fix the method in database_api to return reviews for content only
         deipRpc.api.getReviewsByContentAsync(researchContentId)
             .then(items => {
-                reviews.push(...items.filter(r => !r.is_grant_application));
+                reviews.push(...items);
 
                 return Promise.all([
                     Promise.all(

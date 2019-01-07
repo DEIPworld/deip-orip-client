@@ -1,8 +1,8 @@
 import http from './http'
 
 const service = {
-    getApplicationRef(refId) {
-        return http.get(`/refs/${refId}`, { baseURL: `${window.env.DEIP_SERVER_URL}/applications/` });
+    getApplicationPackageRef(agency, foaId, hash) {
+        return http.get(`/refs/${agency}/${foaId}/${hash}`, { baseURL: `${window.env.DEIP_SERVER_URL}/applications/` });
     },
     getApplicationsRefsByResearch(researchId) {
         return http.get(`/refs/research/${researchId}`, { baseURL: `${window.env.DEIP_SERVER_URL}/applications/` });

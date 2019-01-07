@@ -1,6 +1,6 @@
 <template>
     <div>
-        <div v-if="review.author.account.name !== user.username && userHasExpertise">
+        <div class="c-mb-8" v-if="review.author.account.name !== user.username && userHasExpertise">
             <div class="support-review-button">
                 <v-btn block color="primary"
                     :loading="isReviewVoting" 
@@ -10,9 +10,8 @@
                 </v-btn>
             </div>
         </div>
-        <div class="c-mt-8" v-if="eciList.length">
-            <div class="sidebar-fullwidth"><v-divider></v-divider></div>
-            <div class="subheading bold c-mt-4">Expertise Contribution Index</div>
+        <div v-if="eciList.length">
+            <div class="subheading bold text-align-center">Expertise Contribution Index</div>
             <div class="c-mt-4">
                 <div v-for="(eci, index) in eciList" :key="index"
                     class="row align-center justify-between eci-item c-ph-2"

@@ -2,16 +2,16 @@
   <div>
     <v-layout row wrap>
 			<v-flex xs8>
-				<div class="title c-pt-10 c-pr-10 c-pl-10">{{application.application_hash}}</div>
+				<div class="title c-pb-10">{{application.application_hash}}</div>
 			</v-flex>
 			<v-flex xs4 v-if="isGrantor && isApplicationPending">
-				<div class="right c-pr-10 c-pt-5">
+				<div class="right">
 					<v-btn outline color="primary" @click="approveApplication()" :loading="isApproveBtnLoading">Approve</v-btn>
 					<v-btn outline color="error" @click="rejectApplication()" :loading="isRejectBtnLoading">Reject</v-btn>
 				</div>
 			</v-flex>
 			<v-flex offset-xs2 v-if="!isApplicationPending">
-				<div class="c-pt-10">
+				<div>
 					<div class="text-align-center">
 						<span class="sm-title green--text text--darken-2" v-if="isApplicationApproved">Approved</span>
 						<span class="sm-title red--text text--darken-2" v-if="isApplicationRejected">Rejected</span>
@@ -19,7 +19,7 @@
 				</div>
 			</v-flex>
 			<v-flex xs12>
-				<div class="c-p-10">
+				<div>
 					<v-card v-for="form in applicationRef.packageForms" :key="form.hash">
 						<v-card-text>
 							<a target="_blank" class="a" :href="`${fileStorageBaseUrl}/applications/files/${applicationRef.agency}/${applicationRef.foaId}/${applicationRef.hash}/${form.hash}`">
@@ -30,7 +30,7 @@
 					</v-card>
 				</div>
 			</v-flex>
-        <v-flex xs10 offset-xs1>
+        <v-flex xs12>
 					<!-- START Research Content Reviews section -->
 					<div class="c-pt-5 sidebar-fullwidth"><v-divider></v-divider></div>
 					<div class="c-pt-5 c-pb-10" v-if="allApplicationsReviewsList.length">
@@ -45,7 +45,6 @@
 			</v-flex>
     </v-layout>
   </div>
-
 </template>
 
 <script>

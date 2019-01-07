@@ -75,9 +75,13 @@
               <v-divider></v-divider>
 
               <div class="c-pv-4">
-                <v-text-field label="Title" v-model="title"></v-text-field>
+                <div class="row justify-center">
+                  <v-text-field class="col-6 c-pr-1" label="Title" v-model="title"></v-text-field>
+                  <v-text-field class="col-6 c-pl-1" label="Total amount" v-model="totalAmount"></v-text-field>
+                </div>
               </div>
 
+            
               <div v-if="dropzoneOptions">
                 <div>
                   <vue-dropzone ref="newApplication" id="application-dropzone" 
@@ -190,6 +194,7 @@
             research: null,
             researchList: null,
             title: '',
+            totalAmount: '',
             timestamp: null
           }
         },

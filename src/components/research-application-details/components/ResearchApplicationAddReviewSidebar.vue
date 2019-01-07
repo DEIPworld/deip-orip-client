@@ -85,8 +85,7 @@
 								this.user.username,
 								this.application.id,
 								this.isPositive,
-								reviewHtmlContent,
-								10000
+								reviewHtmlContent
 							)
 						})
 						.then((data) => {

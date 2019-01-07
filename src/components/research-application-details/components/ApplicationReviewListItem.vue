@@ -27,12 +27,12 @@
 
                 <div class="row-nowrap">
                     <div v-for="tvo in disciplines" class="grey--text">
-                        <span class="c-pr-1">
+                   <!--      <span class="c-pr-1">
                             <span>{{ tvo.disciplineName }}</span>
                         </span>
-                        <span class="c-pr-4 bold">
+                       <span class="c-pr-4 bold">
                             <span>{{tvo.totalWeight}}</span>
-                        </span>
+                        </span> -->
                     </div>
                 </div>
             </div>
@@ -62,10 +62,9 @@
 
                 for (var i = 0; i < review.disciplines.length; i++) {
                     const discipline = review.disciplines[i];
-                    const weight = review.weight_per_discipline.find(arr => arr[0] === discipline.id);
                     const tvo = {
                         disciplineName: discipline.name,
-                        totalWeight: weight !== undefined ? weight[1] : 0
+                        totalWeight: 0
                     }
                     out.push(tvo)
                 }

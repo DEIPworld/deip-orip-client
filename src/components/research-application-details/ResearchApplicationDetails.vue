@@ -1,10 +1,8 @@
 <template>
 	<page-container>
-		<v-layout row wrap>
-      		<v-flex xs12>
-				<research-application-details-package></research-application-details-package>
-      		</v-flex>
-    	</v-layout>
+		<contentbar>
+			<research-application-details-package></research-application-details-package>
+		</contentbar>
 		<sidebar>
 			<research-application-details-sidebar></research-application-details-sidebar>
 		</sidebar>

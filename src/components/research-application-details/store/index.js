@@ -47,9 +47,6 @@ const actions = {
             .then((application) => {
                 commit('SET_RESEARCH_APPLICATION_DETAILS', application)
 
-                const contentRefLoad = new Promise((resolve, reject) => {
-                    dispatch('loadResearchApplicationRef', { hashOrId: application.application_hash, notify: resolve })
-                });
                 const programLoad = new Promise((resolve, reject) => {
                     dispatch('loadResearchApplicationProgram', { grant_id: application.grant_id, notify: resolve })
                 });
@@ -63,16 +60,24 @@ const actions = {
                     dispatch('loadThirdpatyReviews', { application_id, application_hash: application.application_hash, group_permlink, research_permlink, notify: resolve })
                 });
 
-                return Promise.all([contentRefLoad, programLoad, researchDetailsLoad, applicationReviewsLoad, thirdpatyReviewsLoad])
+                return Promise.all([programLoad, researchDetailsLoad, applicationReviewsLoad, thirdpatyReviewsLoad])
+            }, (err) => {console.log(err)})
+            .then(() => {
+                const applicationRefLoad = new Promise((resolve, reject) => {
+                    dispatch('loadResearchApplicationRef', 
+                    { agency: state.program.agency_name, foaId: state.program.id, hash: state.application.application_hash, notify: resolve })
+                });
+                return Promise.all([applicationRefLoad])
             }, (err) => {console.log(err)})
             .finally(() => {
                 commit('SET_RESEARCH_APPLICATIONS_DETAILS_LOADING_STATE', false);
             });
     },
 
-    loadResearchApplicationRef({ state, commit, dispatch }, { hashOrId, notify }) {
-        return applicationHttpService.getApplicationRef(hashOrId)
+    loadResearchApplicationRef({ state, commit, dispatch }, { agency, foaId, hash, notify }) {
+        return applicationHttpService.getApplicationPackageRef(agency, foaId, hash)
             .then((applicationRef) => {
+                debugger;
                 commit('SET_RESEARCH_APPLICATION_REF', applicationRef);
             }, (err) => {console.log(err)})
             .finally(() => {
@@ -94,9 +99,9 @@ const actions = {
         const reviews = [];
         commit('SET_RESEARCH_APPLICATION_REVIEWS_LOADING_STATE', true);
         
-        deipRpc.api.getReviewsByGrantApplicationAsync(application_id)
+        deipRpc.api.getGrantApplicationReviewsByGrantApplicationAsync(application_id)
             .then(items => {
-                reviews.push(...items.filter(r => r.is_grant_application));
+                reviews.push(...items);
                 return Promise.all([
                     Promise.all(reviews.map(item => deipRpc.api.getReviewVotesByReviewIdAsync(item.id))),
                     getEnrichedProfiles(reviews.map(r => r.author))
@@ -126,11 +131,11 @@ const actions = {
             })
             .then((applications) => {
                 const related = applications.filter(a => a.application_hash == application_hash && a.id != application_id);
-                return Promise.all(related.map(a => deipRpc.api.getReviewsByGrantApplicationAsync(a.id)))
+                return Promise.all(related.map(a => deipRpc.api.getGrantApplicationReviewsByGrantApplicationAsync(a.id)))
             }, (err) => {console.log(err)})
             .then(items => {
                 const flatten = [].concat.apply([], items);
-                reviews = flatten.filter(r => r.is_grant_application);
+                reviews = flatten;
                 return Promise.all([
                     Promise.all(reviews.map(item => deipRpc.api.getReviewVotesByReviewIdAsync(item.id))),
                     getEnrichedProfiles(reviews.map(r => r.author))
@@ -216,10 +221,12 @@ const mutations = {
     },
     
     ['SET_RESEARCH_APPLICATION_REVIEWS_LIST'](state, reviews) {
+        reviews.sort((a, b) => a.id - b.id);
         Vue.set(state, 'applicationReviewsList', reviews)
     },
 
     ['SET_THIRDPARTY_RESEARCH_APPLICATIONS_REVIEWS_LIST'](state, reviews) {
+        reviews.sort((a, b) => a.id - b.id);
         Vue.set(state, 'thirdpartyApplicationsReviewsList', reviews)
     },
     

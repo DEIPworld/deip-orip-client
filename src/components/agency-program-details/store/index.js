@@ -88,7 +88,7 @@ const actions = {
                 );
 
                 const reviewsPromises = applications.map(application =>
-                    deipRpc.api.getReviewsByGrantApplicationAsync(application.id)
+                    deipRpc.api.getGrantApplicationReviewsByGrantApplicationAsync(application.id)
                 );
     
                 return Promise.all([
@@ -106,7 +106,7 @@ const actions = {
                 applications.forEach((application, index) => {
                     application.totalVotes = totalVotesMap[application.research_id] ? totalVotesMap[application.research_id] : [];
                     application.research = researches[index];
-                    application.reviews = reviewsList[index].filter(r => r.is_grant_application);
+                    application.reviews = reviewsList[index];
                 });
 
                 const groupPromises = researches.map(research =>

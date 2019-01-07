@@ -270,7 +270,7 @@ const actions = {
             })
             .then(reviews => {
                 contents.forEach((content, index) => {
-                    content.reviews = reviews[index].filter(r => !r.is_grant_application);
+                    content.reviews = reviews[index];
                 });
 
                 commit('SET_RESEARCH_CONTENT_LIST', contents);
@@ -334,9 +334,7 @@ const actions = {
             .then(items => {
                 reviews.push(...items);
                 return Promise.all([
-                    Promise.all(
-                        reviews.map(item => deipRpc.api.getReviewVotesByReviewIdAsync(item.id))
-                    ),
+                    Promise.all(reviews.map(item => deipRpc.api.getReviewVotesByReviewIdAsync(item.id))),
                     getEnrichedProfiles(reviews.map(r => r.author))
                 ]);
             }, (err) => {console.log(err)})
