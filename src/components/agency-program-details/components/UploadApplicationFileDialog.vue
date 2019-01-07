@@ -86,6 +86,7 @@
                 <div>
                   <vue-dropzone ref="newApplication" id="application-dropzone" 
                       :options="dropzoneOptions" 
+                      @vdropzone-file-added="vdropzoneFileAdded"
                       @vdropzone-error="vdropzoneError"
                       @vdropzone-success-multiple="vsuccessMultiple">
                   </vue-dropzone>
@@ -98,32 +99,37 @@
 
                   <div class="row align-items-center height-2 c-pt-4">
                     <div class="half-bold primary--text">SF424 (R &amp; R) [V2.0]</div>
-                    <v-icon color="green" class="c-pl-4">check_circle</v-icon>
+                    <v-icon v-show="allAttached" color="green" class="c-pl-4">check_circle</v-icon>
                   </div>
 
                   <div class="row align-items-center height-2 c-pt-4">
                     <div class="half-bold primary--text">Project/Performance Site Location(s) [V2.0]</div>
+                    <v-icon v-show="allAttached" color="green" class="c-pl-4">check_circle</v-icon>
                   </div>
 
                   <div class="row align-items-center height-2 c-pt-4">
                     <div class="half-bold primary--text">Research And Related Other Project Information [V1.4]</div>
-                    <v-icon color="green" class="c-pl-4">check_circle</v-icon>
+                    <v-icon v-show="allAttached" color="green" class="c-pl-4">check_circle</v-icon>
                   </div>
 
                   <div class="row align-items-center height-2 c-pt-4">
                     <div class="half-bold primary--text">NSF Senior Key Person Profile (Expanded) [V1.1]</div>
+                    <v-icon v-show="allAttached" color="green" class="c-pl-4">check_circle</v-icon>
                   </div>
 
                   <div class="row align-items-center height-2 c-pt-4">
                     <div class="half-bold primary--text">Research &amp; Related Budget [V1.4]</div>
+                    <v-icon v-show="allAttached" color="green" class="c-pl-4">check_circle</v-icon>
                   </div>
 
                   <div class="row align-items-center height-2 c-pt-4">
                     <div class="half-bold primary--text">Research &amp; Related Personal Data [V1.2]</div>
+                    <v-icon v-show="allAttached" color="green" class="c-pl-4">check_circle</v-icon>
                   </div>
 
                   <div class="row align-items-center height-2 c-pt-4">
                     <div class="half-bold primary--text">NSF Cover Page [V1.8]</div>
+                    <v-icon v-show="allAttached" color="green" class="c-pl-4">check_circle</v-icon>
                   </div>
                 </div>
                 
@@ -132,12 +138,10 @@
 
                   <div class="row align-items-center height-2 c-pt-4">
                     <div class="half-bold primary--text">NFS Deviation Authorization [V1.1]</div>
-                    <v-icon color="green" class="c-pl-4">check_circle</v-icon>
                   </div>
 
                   <div class="row align-items-center height-2 c-pt-4">
                     <div class="half-bold primary--text">NFS Suggested Reviewers [V1.1]</div>
-                    <v-icon color="green" class="c-pl-4">check_circle</v-icon>
                   </div>
 
                   <div class="row align-items-center height-2 c-pt-4">
@@ -195,7 +199,8 @@
             researchList: null,
             title: '',
             totalAmount: '',
-            timestamp: null
+            timestamp: null,
+            allAttached: true
           }
         },
 
@@ -248,6 +253,10 @@
               });
               this.close();
           },
+
+          vdropzoneFileAdded() {
+            this.allAttached = true;
+          },
           vsuccessMultiple(files, res) {
             const self = this;
             const applicationRef = res;
@@ -285,6 +294,7 @@
         watch: {
           'meta.isOpen': function (newVal, oldVal) {
             if (newVal) {
+              this.allAttached = false;
               this.timestamp = (new Date()).getTime();
               this.research = null;
               this.title = '';
