@@ -39,14 +39,19 @@
                     <v-card>
                         <v-card-text>
                             <div class="row-nowrap">
-                                <div class="col-11">
+                                <div class="col-9">
+                                    <span class="c-pr-3">
+                                        <v-avatar size="20px">
+                                            <img :src="item.application.foa.agency_name | agencyLogoSrc(160, 160, false)" />
+                                        </v-avatar>
+                                    </span>
                                     <span class="body-2">
                                         <router-link class="a deip-blue-color" 
                                             :to="{ name: 'AgencyProgramDetails', 
                                                 params: { 
                                                     agency: item.application.foa.agency_name, 
                                                     foa: item.application.foa.funding_opportunity_number }}">
-                                            {{ '# ' + item.application.foa.funding_opportunity_number }}
+                                            {{ item.application.foa.funding_opportunity_number }}
                                         </router-link>
                                     </span> 
                                     <span class="c-pl-5">
@@ -61,6 +66,12 @@
                                         <span v-else>{{ item.application.title }}</span>
                                     </span>
                                 </div> 
+                                <div class="col-2">
+                                    <div class="text-align-center">
+                                        <span class="green--text text--darken-2" v-if="isApplicationApproved(item.application)">Approved</span>
+                                        <span class="red--text text--darken-2" v-if="isApplicationRejected(item.application)">Rejected</span>
+                                    </div>
+                                </div>
                                 <div class="col-1">
                                     <router-link v-if="item.isAccessible" class="a deip-blue-color" 
                                         :to="{ name: 'ResearchApplicationDetails', 
@@ -68,9 +79,9 @@
                                                 research_group_permlink: group.permlink, 
                                                 research_permlink: research.permlink,
                                                 application_id: item.application.id }}">
-                                        {{ item.application.application_hash.slice(0, 8)}}
+                                        {{ item.application.letterHash.slice(0, 8)}}
                                     </router-link>
-                                    <span v-else>{{item.application.application_hash.slice(0, 8) }}</span>
+                                    <span v-else>{{item.application.letterHash.slice(0, 8) }}</span>
                                 </div>
                             </div>
                         </v-card-text>
@@ -297,30 +308,34 @@
                     ? this.$store.getters['auth/userIsResearchGroupMember'](this.research.research_group_id) 
                     : false
             },
-
-            flattenedApplicationsList() {
-                const tenant = window.tenant;
-                // we need to distinct applications by hash and find accessible applications for current agency
-                const agencyApplications = this.applicationsList
-                    .filter(a => a.foa.agency_name.toLowerCase() == tenant.toLowerCase())
-                    .map(a => { return { isAccessible: true, application: a } });
-
-                const otherApplications = this.applicationsList
-                    .filter(a => a.foa.agency_name.toLowerCase() != tenant.toLowerCase() &&
-                        !agencyApplications.some(item => item.application.application_hash == a.application_hash))
-                    .map(a => { return { isAccessible: false, application: a } });
-
-                const merged = [...agencyApplications, ...otherApplications];
+             flattenedApplicationsList() {
+                const tenant = window.tenant.toLowerCase();
                 const flattened = [];
-
-                for (let i = 0; i < merged.length; i++) {
-                    const item = merged[i];
-                    if (!flattened.some(item2 => item.application.application_hash == item2.application.application_hash)) {
-                        flattened.push(item);
-                    }
+                for (let i = 0; i < this.applicationsList.length; i++) {
+                    const application = this.applicationsList[i];
+                    flattened.push({ 
+                        isAccessible: tenant == application.foa.agency_name.toLowerCase(), 
+                        application: application 
+                    });
                 }
                 return flattened;
             }
+            // flattenedApplicationsList() {
+            //     const tenant = window.tenant.toLowerCase();
+            //     const flattened = [];
+            //     for (let i = 0; i < this.applicationsList.length; i++) {
+            //         const application = this.applicationsList[i];
+            //         if (!flattened.some(item => application.application_hash == item.application.application_hash && 
+            //                 application.foa.agency_name.toLowerCase() == item.application.foa.agency_name.toLowerCase())) {
+
+            //             flattened.push({ 
+            //                 isAccessible: tenant == application.foa.agency_name.toLowerCase(), 
+            //                 application: application 
+            //             });
+            //         }
+            //     }
+            //     return flattened;
+            // }
         },
         methods: {
             countContentReviews(content, isPositive) {
@@ -337,6 +352,15 @@
             },
             contentHasNegativeReviews(content) {
                 return content.reviews.some(r => !r.is_positive);
+            },
+            isApplicationApproved(application) {
+                return application.status === 'application_approved';
+            },
+            isApplicationRejected(application) {
+                return application.status === 'application_rejected';
+            },
+            isApplicationPending(application) {
+                return application.status === 'application_pending';
             },
             getContentEciList(content) {
                 return this.disciplinesList.map(discipline => {

@@ -45,6 +45,10 @@ const actions = {
 
         return deipRpc.api.getGrantApplicationAsync(application_id)
             .then((application) => {
+                const hashes = application.application_hash.split(':');
+                application.letterHash = hashes[0];
+                application.packageHash = hashes[1];
+
                 commit('SET_RESEARCH_APPLICATION_DETAILS', application)
 
                 const programLoad = new Promise((resolve, reject) => {
@@ -57,7 +61,7 @@ const actions = {
                     dispatch('loadApplicationReviews', { application_id, notify: resolve })
                 });
                 const thirdpatyReviewsLoad = new Promise((resolve, reject) => {
-                    dispatch('loadThirdpatyReviews', { application_id, application_hash: application.application_hash, group_permlink, research_permlink, notify: resolve })
+                    dispatch('loadThirdpatyReviews', { application, group_permlink, research_permlink, notify: resolve })
                 });
 
                 return Promise.all([programLoad, researchDetailsLoad, applicationReviewsLoad, thirdpatyReviewsLoad])
@@ -65,7 +69,7 @@ const actions = {
             .then(() => {
                 const applicationRefLoad = new Promise((resolve, reject) => {
                     dispatch('loadResearchApplicationRef', 
-                    { agency: state.program.agency_name, foaId: state.program.id, hash: state.application.application_hash, notify: resolve })
+                    { agency: state.program.agency_name, foaId: state.program.id, hash: state.application.packageHash, notify: resolve })
                 });
                 return Promise.all([applicationRefLoad])
             }, (err) => {console.log(err)})
@@ -77,7 +81,6 @@ const actions = {
     loadResearchApplicationRef({ state, commit, dispatch }, { agency, foaId, hash, notify }) {
         return applicationHttpService.getApplicationPackageRef(agency, foaId, hash)
             .then((applicationRef) => {
-                debugger;
                 commit('SET_RESEARCH_APPLICATION_REF', applicationRef);
             }, (err) => {console.log(err)})
             .finally(() => {
@@ -104,13 +107,15 @@ const actions = {
                 reviews.push(...items);
                 return Promise.all([
                     Promise.all(reviews.map(item => deipRpc.api.getReviewVotesByReviewIdAsync(item.id))),
-                    getEnrichedProfiles(reviews.map(r => r.author))
+                    getEnrichedProfiles(reviews.map(r => r.author)),
+                    Promise.all(reviews.map(item => deipRpc.api.getFundingOpportunityAsync(item.grant_id)))
                 ]);
             }, (err) => {console.log(err)})
-            .then(([reviewVotes, users]) => {
+            .then(([reviewVotes, users, programs]) => {
                 reviews.forEach((review, i) => {
                     review.author = users.find(u => u.account.name == review.author);
                     review.votes = reviewVotes[i];
+                    review.program = programs[i];
                 });
 
                 commit('SET_RESEARCH_APPLICATION_REVIEWS_LIST', reviews);
@@ -121,7 +126,7 @@ const actions = {
             })
     },
 
-    loadThirdpatyReviews({ state, dispatch, commit }, { application_id, application_hash, group_permlink, research_permlink, notify }) {
+    loadThirdpatyReviews({ state, dispatch, commit }, { application, group_permlink, research_permlink, notify }) {
         commit('SET_THIRDPARTY_RESEARCH_APPLICATIONS_REVIEWS_LOADING_STATE', true);
 
         var reviews;
@@ -130,7 +135,13 @@ const actions = {
                 return deipRpc.api.getApplicationsByResearchIdAsync(research.id)
             })
             .then((applications) => {
-                const related = applications.filter(a => a.application_hash == application_hash && a.id != application_id);
+                const related = applications.filter((a) => {
+                    const hashes = a.application_hash.split(':');
+                    a.letterHash = hashes[0];
+                    a.packageHash = hashes[1];
+
+                    return a.letterHash == application.letterHash && a.id != application.id
+                });
                 return Promise.all(related.map(a => deipRpc.api.getGrantApplicationReviewsByGrantApplicationAsync(a.id)))
             }, (err) => {console.log(err)})
             .then(items => {
@@ -138,13 +149,15 @@ const actions = {
                 reviews = flatten;
                 return Promise.all([
                     Promise.all(reviews.map(item => deipRpc.api.getReviewVotesByReviewIdAsync(item.id))),
-                    getEnrichedProfiles(reviews.map(r => r.author))
+                    getEnrichedProfiles(reviews.map(r => r.author)),
+                    Promise.all(reviews.map(item => deipRpc.api.getFundingOpportunityAsync(item.grant_id))),
                 ]);
             }, (err) => {console.log(err)})
-            .then(([reviewVotes, users]) => {
+            .then(([reviewVotes, users, programs]) => {
                 reviews.forEach((review, i) => {
                     review.author = users.find(u => u.account.name == review.author);
                     review.votes = reviewVotes[i];
+                    review.program = programs[i];
                 });
                 commit('SET_THIRDPARTY_RESEARCH_APPLICATIONS_REVIEWS_LIST', reviews);
 

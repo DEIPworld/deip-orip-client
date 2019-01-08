@@ -46,7 +46,7 @@
                             application_id: application.id
                         }
                     }"
-                >{{ application.title || application.application_hash.slice(0, 8) }}</router-link>
+                >{{ application.title || application.letterHash.slice(0, 8) }}</router-link>
             </div>
         </div>
 
@@ -104,13 +104,13 @@
     }
 
     .review-content-container h1, h2, h3 {
-        margin-top: 3%;
-        margin-bottom: 3%;
+        margin-top: 1%;
+        margin-bottom: 1%;
     }
     
     .review-content-container h4, h5, h6 {
-        margin-top: 2%;
-        margin-bottom: 2%;
+        margin-top: 1%;
+        margin-bottom: 1%;
     }
 
     .review-content-container p, img {

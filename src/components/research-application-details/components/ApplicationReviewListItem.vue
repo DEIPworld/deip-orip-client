@@ -1,7 +1,7 @@
 <template>
     <v-card class="review-container hidden-last-child">
         <div class="row-nowrap c-p-6 clickable" @click="goToReviewPage()">
-            <div class="column text-align-center" @click="goToReviewerProfilePage($event, review.author.account.name)">
+            <div style="width: 10%" class="column text-align-center" @click="goToReviewerProfilePage($event, review.author.account.name)">
                 <v-avatar size="90px">
                     <img v-if="review.author.profile" v-bind:src="review.author.profile.avatar | avatarSrc(90, 90, false)" />
                     <v-gravatar v-else :title="review.author.account.name" :email="review.author.account.name + '@deip.world'" />
@@ -12,7 +12,7 @@
                     </span>
                 </div>
             </div>
-            <div class="column c-ml-6">
+            <div class="col-grow c-ml-6">
                 <div>
                     <span class="grey--text">{{ review.created_at | dateFormat('D MMM YYYY', true) }}</span>
                     <span class="half-bold c-pl-2">
@@ -21,19 +21,27 @@
                     </span>
                 </div>
 
-                <div class="c-pt-4 col-grow review-preview">
+                <div class="c-pt-2 review-preview">
                     <span v-html="extractPreview(review)"></span>
                 </div>
 
                 <div class="row-nowrap">
                     <div v-for="tvo in disciplines" class="grey--text">
-                   <!--      <span class="c-pr-1">
+                   <!-- <span class="c-pr-1">
                             <span>{{ tvo.disciplineName }}</span>
                         </span>
                        <span class="c-pr-4 bold">
                             <span>{{tvo.totalWeight}}</span>
                         </span> -->
                     </div>
+                </div>
+            </div>
+
+            <div class="column" style="width: 5%">
+                <div class="right">
+                    <v-avatar size="40px">
+                        <img :src="review.program.agency_name | agencyLogoSrc(160, 160, false)" />
+                    </v-avatar>
                 </div>
             </div>
         </div>

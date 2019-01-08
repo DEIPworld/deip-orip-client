@@ -10,7 +10,7 @@
 							application_id: application.id
 						}
 					}"
-			>{{ application.title || application.application_hash.slice(0, 8) }}</router-link>
+			>{{ application.title || application.letterHash.slice(0, 8) }}</router-link>
 		</div>
 
 		<div class="row justify-center">
@@ -38,8 +38,9 @@
 			<div>
 				<v-btn color="primary" class="width-9"
 						@click="publishApplicationReview()"
-						:loading="isLoading"
-				>Publish</v-btn>
+						:loading="isLoading">
+					Send
+				</v-btn>
 			</div>
 		</div>
 	</div>

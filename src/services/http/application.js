@@ -9,6 +9,12 @@ const service = {
     },
     getApplicationsRefsByFoa(foaId) {
         return http.get(`/refs/foa/${foaId}`, { baseURL: `${window.env.DEIP_SERVER_URL}/applications/` });
+    },
+    getSimilarRefsByLetter(letterHash) {
+        return http.get(`/refs/similar/${letterHash}`, { baseURL: `${window.env.DEIP_SERVER_URL}/applications/` });
+    },
+    updateApplicationRef(agency, foaId, hash, status) {
+        return http.put(`/refs/update-status`, {agency, foaId, hash, status}, { baseURL: `${window.env.DEIP_SERVER_URL}/applications/` });
     }
 }
 

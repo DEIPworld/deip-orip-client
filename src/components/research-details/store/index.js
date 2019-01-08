@@ -14,8 +14,6 @@ const state = {
     applicationsList: [],
     membersList: [],
     reviewsList: [],
-    contentReviewsList: [],
-    applicationsReviewsList: [],
     disciplinesList: [],
     totalVotesList: [],
     tokenSale: undefined,
@@ -68,9 +66,6 @@ const getters = {
     reviewsList: (state, getters) => {
         return state.reviewsList;
     },
-
-    contentReviewsList: (state, getters) => state.reviewsList.filter(r => !r.is_grant_application),
-    applicationsReviewsList: (state, getters) =>  state.reviewsList.filter(r => r.is_grant_application),
 
     disciplinesList: (state, getters) => {
         return state.disciplinesList;
@@ -295,6 +290,9 @@ const actions = {
                 for (let i = 0; i < applications.length; i++) {
                     const application = applications[i];
                     application.foa = foaList[i];
+                    const hashes = application.application_hash.split(':');
+                    application.letterHash = hashes[0];
+                    application.packageHash = hashes[1];
                 }
                 commit('SET_RESEARCH_APPLICATIONS_LIST', applications);
             })
@@ -483,8 +481,8 @@ const mutations = {
         Vue.set(state, 'contentList', list)
     },
 
-    ['SET_RESEARCH_APPLICATIONS_LIST'](state, list) {
-        Vue.set(state, 'applicationsList', list)
+    ['SET_RESEARCH_APPLICATIONS_LIST'](state, applications) {
+        Vue.set(state, 'applicationsList', applications)
     },
 
     ['SET_RESEARCH_REVIEWS_LIST'](state, list) {

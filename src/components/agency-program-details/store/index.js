@@ -1,6 +1,7 @@
 import Vue from 'vue';
 import deipRpc from '@deip/deip-rpc-client';
 import agencyHttp from './../../../services/http/agency';
+import applicationHttp from './../../../services/http/application';
 import { mapAreaToProgram } from '../../common/disciplines/DisciplineTreeService'
 import { getEnrichedProfiles } from './../../../utils/user';
 
@@ -90,14 +91,18 @@ const actions = {
                 const reviewsPromises = applications.map(application =>
                     deipRpc.api.getGrantApplicationReviewsByGrantApplicationAsync(application.id)
                 );
-    
+
+                const similarApplicationsRefsPromises = applications.map(a => 
+                    applicationHttp.getSimilarRefsByLetter(a.application_hash.split(':')[0]));
+
                 return Promise.all([
                     Promise.all(totalVotesPromises),
                     Promise.all(researchesPromises),
-                    Promise.all(reviewsPromises)
+                    Promise.all(reviewsPromises),
+                    Promise.all(similarApplicationsRefsPromises)
                 ]);
             })
-            .then(([totalVotes, researches, reviewsList]) => {
+            .then(([totalVotes, researches, reviews, similarApplicationsRefs]) => {
                 let totalVotesMap = _.chain(totalVotes)
                     .flatten()
                     .groupBy('research_id')
@@ -106,9 +111,11 @@ const actions = {
                 applications.forEach((application, index) => {
                     application.totalVotes = totalVotesMap[application.research_id] ? totalVotesMap[application.research_id] : [];
                     application.research = researches[index];
-                    application.reviews = reviewsList[index];
+                    application.reviews = reviews[index];
+                    application.similarApplicationsRefs = similarApplicationsRefs[index]
+                        .filter(ref => application.application_hash != `${ref.letterHash}:${ref.hash}` 
+                            && application.agency_name != ref.agency);
                 });
-
                 const groupPromises = researches.map(research =>
                     deipRpc.api.getResearchGroupByPermlinkAsync(research.group_permlink)
                 );
@@ -137,7 +144,6 @@ const actions = {
                 applications.forEach((application, index) => {
                     application.enrichedAuthors = authors[index];
                 });
-
                 return applications;
             })
             .then(applications => {

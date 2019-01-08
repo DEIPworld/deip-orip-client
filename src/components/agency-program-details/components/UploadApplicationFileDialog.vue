@@ -229,6 +229,7 @@
               uploadMultiple: true,
               thumbnailWidth: 150,
               autoProcessQueue: false,
+              addRemoveLinks: true,
               acceptedFiles: ['application/pdf', 'image/png', 'image/jpeg'].join(',')
             } : null;
           }
@@ -272,7 +273,7 @@
               this.title,
               this.user.username,
               this.toAssetUnits(this.totalAmount),
-              applicationRef.hash
+              `${applicationRef.letterHash}:${applicationRef.hash}`
             )
             .then((res) => {
               // todo: Reload applications section
