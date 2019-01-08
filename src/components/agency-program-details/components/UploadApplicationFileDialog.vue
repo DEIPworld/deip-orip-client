@@ -87,6 +87,7 @@
                   <vue-dropzone ref="newApplication" id="application-dropzone" 
                       :options="dropzoneOptions" 
                       @vdropzone-file-added="vdropzoneFileAdded"
+                      @vdropzone-removed-file="vdropzoneRemovedFile"
                       @vdropzone-error="vdropzoneError"
                       @vdropzone-success-multiple="vsuccessMultiple">
                   </vue-dropzone>
@@ -94,62 +95,79 @@
               </div>
 
               <div class="row c-pt-8">
-                <div class="col-6">
-                  <div class="bold">Mandatory forms</div>
 
-                  <div class="row align-items-center height-2 c-pt-4">
-                    <div class="half-bold primary--text">SF424 (R &amp; R) [V2.0]</div>
-                    <v-icon v-show="allAttached" color="green" class="c-pl-4">check_circle</v-icon>
-                  </div>
+            <div class="col-12">
+              <div class="row align-items-center height-2 c-pt-4 c-pb-8">
+                <div class="bold c-pr-4">Application</div>
+                <div class="half-bold primary--text">Application content</div>
+                <v-icon v-show="filesMap['Application Content.pdf']" color="green" class="c-pl-4">check_circle</v-icon>
+              </div>
+            </div>
 
-                  <div class="row align-items-center height-2 c-pt-4">
-                    <div class="half-bold primary--text">Project/Performance Site Location(s) [V2.0]</div>
-                    <v-icon v-show="allAttached" color="green" class="c-pl-4">check_circle</v-icon>
-                  </div>
+            <div class="col-12">
+                <div class="row">
+                  <div class="col-6">
+                    <div class="bold">Mandatory forms</div>
 
-                  <div class="row align-items-center height-2 c-pt-4">
-                    <div class="half-bold primary--text">Research And Related Other Project Information [V1.4]</div>
-                    <v-icon v-show="allAttached" color="green" class="c-pl-4">check_circle</v-icon>
-                  </div>
+                    <div class="row align-items-center height-2 c-pt-4">
+                      <div class="half-bold primary--text">SF424 (R &amp; R) [V2.0]</div>
+                      <v-icon v-show="filesMap['RR_SF424_2_0-V2.0.pdf']" color="green" class="c-pl-4">check_circle</v-icon>
+                    </div>
 
-                  <div class="row align-items-center height-2 c-pt-4">
-                    <div class="half-bold primary--text">NSF Senior Key Person Profile (Expanded) [V1.1]</div>
-                    <v-icon v-show="allAttached" color="green" class="c-pl-4">check_circle</v-icon>
-                  </div>
+                    <div class="row align-items-center height-2 c-pt-4">
+                      <div class="half-bold primary--text">PHS 398 Cover Page Supplement [V4.0]</div>
+                      <v-icon v-show="filesMap['PHS398_CoverPageSupplement_4_0-V4.0.pdf']" color="green" class="c-pl-4">check_circle</v-icon>
+                    </div>
 
-                  <div class="row align-items-center height-2 c-pt-4">
-                    <div class="half-bold primary--text">Research &amp; Related Budget [V1.4]</div>
-                    <v-icon v-show="allAttached" color="green" class="c-pl-4">check_circle</v-icon>
-                  </div>
+                    <div class="row align-items-center height-2 c-pt-4">
+                      <div class="half-bold primary--text">Research And Related Other Project Information [V1.4]</div>
+                      <v-icon v-show="filesMap['RR_OtherProjectInfo_1_4-V1.4.pdf']" color="green" class="c-pl-4">check_circle</v-icon>
+                    </div>
 
-                  <div class="row align-items-center height-2 c-pt-4">
-                    <div class="half-bold primary--text">Research &amp; Related Personal Data [V1.2]</div>
-                    <v-icon v-show="allAttached" color="green" class="c-pl-4">check_circle</v-icon>
-                  </div>
+                    <div class="row align-items-center height-2 c-pt-4">
+                      <div class="half-bold primary--text">Project/Performance Site Location(s) [V2.0]</div>
+                      <v-icon v-show="filesMap['PerformanceSite_2_0-V2.0.pdf']" color="green" class="c-pl-4">check_circle</v-icon>
+                    </div>
 
-                  <div class="row align-items-center height-2 c-pt-4">
-                    <div class="half-bold primary--text">NSF Cover Page [V1.8]</div>
-                    <v-icon v-show="allAttached" color="green" class="c-pl-4">check_circle</v-icon>
+                    <div class="row align-items-center height-2 c-pt-4">
+                      <div class="half-bold primary--text">Research and Related Senior/Key Person Profile (Expanded) [V2.0]</div>
+                      <v-icon v-show="filesMap['RR_KeyPersonExpanded_2_0-V2.0.pdf']" color="green" class="c-pl-4">check_circle</v-icon>
+                    </div>
+
+                    <div class="row align-items-center height-2 c-pt-4">
+                      <div class="half-bold primary--text">PHS 398 Research Plan [V4.0]</div>
+                      <v-icon v-show="filesMap['PHS398_ResearchPlan_4_0-V4.0.pdf']" color="green" class="c-pl-4">check_circle</v-icon>
+                    </div>
+
+                    <div class="row align-items-center height-2 c-pt-4">
+                      <div class="half-bold primary--text">PHS Human Subjects and Clinical Trials Information [V1.0]</div>
+                      <v-icon v-show="filesMap['PHSHumanSubjectsAndClinicalTrialsInfo-V1.0.pdf']" color="green" class="c-pl-4">check_circle</v-icon>
+                    </div>
                   </div>
-                </div>
                 
-                <div class="col-6">
-                  <div class="bold">Optional forms</div>
+                  <div class="col-6">
+                    <div class="bold">Optional forms</div>
 
-                  <div class="row align-items-center height-2 c-pt-4">
-                    <div class="half-bold primary--text">NFS Deviation Authorization [V1.1]</div>
+                    <div class="row align-items-center height-2 c-pt-4">
+                      <div class="half-bold primary--text">Research &amp; Related Budget [V1.4]</div>
+                    </div>
+
+                    <div class="row align-items-center height-2 c-pt-4">
+                      <div class="half-bold primary--text">R &amp; R Subaward Budget Attachment(s) Form 5 YR 30 ATT [V1.4]</div>
+                    </div>
+
+                    <div class="row align-items-center height-2 c-pt-4">
+                      <div class="half-bold primary--text">PHS 398 Modular Budget [V1.2]</div>
+                    </div>
+                    <div class="row align-items-center height-2 c-pt-4">
+                      <div class="half-bold primary--text">PHS Assignment Request Form [V2.0]</div>
+                    </div>
                   </div>
 
-                  <div class="row align-items-center height-2 c-pt-4">
-                    <div class="half-bold primary--text">NFS Suggested Reviewers [V1.1]</div>
-                  </div>
-
-                  <div class="row align-items-center height-2 c-pt-4">
-                    <div class="half-bold primary--text">R &amp; R Subaward Budget Attachment(s) Form [V1.4]</div>
-                  </div>
                 </div>
               </div>
             </div>
+          </div>
 
             <div class="display-flex c-pt-8">
                 <v-btn color="primary" 
@@ -200,7 +218,18 @@
             title: '',
             totalAmount: '',
             timestamp: null,
-            allAttached: true
+            allAttached: true,
+            filesMap: {
+              "Application Content.pdf": false,
+
+              "PerformanceSite_2_0-V2.0.pdf": false,
+              "PHS398_CoverPageSupplement_4_0-V4.0": false,
+              "PHS398_ResearchPlan_4_0-V4.0.pdf": false,
+              "PHSHumanSubjectsAndClinicalTrialsInfo-V1.0.pdf": false,
+              "RR_KeyPersonExpanded_2_0-V2.0.pdf": false,
+              "RR_OtherProjectInfo_1_4-V1.4.pdf": false,
+              "RR_SF424_2_0-V2.0.pdf": false
+            }
           }
         },
 
@@ -254,9 +283,11 @@
               });
               this.close();
           },
-
-          vdropzoneFileAdded() {
-            this.allAttached = true;
+          vdropzoneFileAdded(file) {
+            this.filesMap[file.name] = true;
+          },
+          vdropzoneRemovedFile(file) {
+            this.filesMap[file.name] = false;
           },
           vsuccessMultiple(files, res) {
             const self = this;

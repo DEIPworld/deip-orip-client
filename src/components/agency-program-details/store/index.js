@@ -119,12 +119,10 @@ const actions = {
                     .groupBy('research_id')
                     .value();
 
-                debugger;
                 applications.forEach((application, index) => {
                     application.totalVotes = totalVotesMap[application.research_id] ? totalVotesMap[application.research_id] : [];
                     application.research = researches[index];
                     application.reviews = reviews[index];
-                    debugger;
                     application.similarResearchApplications = otherResearchApplications[index]
                         .filter(a => application.id != a.id && a.program.agency_name != state.program.agency_name && 
                             a.application_hash.split(':')[0] == application.application_hash.split(':')[0]);
