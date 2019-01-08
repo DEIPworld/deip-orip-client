@@ -69,6 +69,7 @@
     import deipRpc from '@deip/deip-rpc-client';
     import { getEnrichedProfiles } from './../../../utils/user';
     import { mapGetters } from 'vuex';
+    import _ from 'lodash';
 
     export default {
         name: "FundingOpportunityProgramOfficers",
@@ -112,16 +113,16 @@
         },
         created() {
             deipRpc.api.getAllAccountsAsync()
-                .then(accounts => {
-                    const usernames = [];
-                    let sliceFrom = window.tenant == 'nsf' ? 1 : 5;
-                    let sliceTo = window.tenant == 'nsf' ? 5 : 10;
-                    usernames.push(...accounts.slice(sliceFrom, sliceTo).filter(a => a.name != this.user.username).map(a => a.name))
-                    return getEnrichedProfiles(usernames);
-                })
-                .then((users) => {
-                    this.members = users;
-                })
+                .then(accounts => getEnrichedProfiles(accounts.map(account => account.name)))
+                .then(users => {
+                    this.members = _.filter(users, user => {
+                        if (_.isEmpty(user.profile)) {
+                            return false;
+                        }
+
+                        return !!_.find(user.profile.agencies, agency => agency.name === window.tenant && agency.role === 'officer');
+                    });
+                });
         },
     };
 </script>
