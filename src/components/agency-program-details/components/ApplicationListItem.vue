@@ -85,19 +85,19 @@
                         </span>
                     </div>
                     <div v-if="isDuplicated" class="c-pr-8 body-2">
-                        <span v-if="duplicate.status == 'approved'">
+                        <span v-if="duplicate.status === applicationStatusMap.APPROVED">
                             Similar application has been <span class="green--text text--darken-2">approved</span> by 
                         </span>
-                        <span v-if="duplicate.status == 'rejected'">
+                        <span v-if="duplicate.status == applicationStatusMap.REJECTED">
                             Similar application has been <span class="red--text text--darken-2">rejected</span> by 
                         </span>
-                        <span v-if="duplicate.status == 'pending'" >
+                        <span v-if="duplicate.status == applicationStatusMap.PENDING">
                             There is a similar application in 
                         </span>
-                        <span class="c-pr-1 c-pl-1">{{ duplicate.agency.toUpperCase()}}</span>
+                        <span class="c-pr-1 c-pl-1">{{ duplicate.program.agency_name.toUpperCase()}}</span>
                         <span>
                             <v-avatar size="30px">
-                                <img :src="duplicate.agency | agencyLogoSrc(160, 160, false)" />
+                                <img :src="duplicate.program.agency_name | agencyLogoSrc(160, 160, false)" />
                             </v-avatar>
                         </span>
                     </div>
@@ -151,13 +151,12 @@
                 });
             },
             isDuplicated() {
-                return this.application.similarApplicationsRefs
-                        .some(a => a.researchId == this.application.research.id);
+                return this.application.similarResearchApplications.length;
             },
             duplicate() {
                 debugger;
                 return this.isDuplicated 
-                    ? this.application.similarApplicationsRefs.find(a => a.researchId == this.application.research.id)
+                    ? this.application.similarResearchApplications[0]
                     : null
             }
         },

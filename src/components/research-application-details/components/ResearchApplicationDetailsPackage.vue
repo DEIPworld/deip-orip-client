@@ -128,14 +128,6 @@
               this.user.username
             )
 						.then(() => {
-							debugger;
-							return applicationsHttp.updateApplicationRef(
-								this.program.agency_name, 
-								this.application.grant_id, 
-								this.application.application_hash.split(':')[1],
-								'approved')
-            })
-						.then(() => {
 							this.$store.dispatch('layout/setSuccess', {
                 message: "Application has been approved successfully"
               });
@@ -158,14 +150,6 @@
               this.application.id, 
               this.user.username
             )
-						.then(() => {
-							return applicationsHttp.updateApplicationRef(
-								this.program.agency_name, 
-								this.application.grant_id,
-								this.application.application_hash.split(':')[1],
-								'rejected'
-							)
-            })
 						.then(() => {
               this.$store.dispatch('layout/setSuccess', {
                 message: "Application has been rejected successfully"

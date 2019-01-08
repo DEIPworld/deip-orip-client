@@ -92,29 +92,42 @@ const actions = {
                     deipRpc.api.getGrantApplicationReviewsByGrantApplicationAsync(application.id)
                 );
 
-                const similarApplicationsRefsPromises = applications.map(a => 
-                    applicationHttp.getSimilarRefsByLetter(a.application_hash.split(':')[0]));
+                const otherResearchApplicationsPromises = applications.map(application => 
+                    deipRpc.api.getApplicationsByResearchIdAsync(application.research_id)
+                        .then((otherResearchApplications) => {
+                            const grants = otherResearchApplications.map(a => deipRpc.api.getFundingOpportunityAsync(a.grant_id));
+                            return Promise.all([otherResearchApplications, Promise.all(grants)]);
+                        })
+                        .then(([applications, grants]) => {
+                            applications.forEach((application, index) => {
+                                application.program = grants[index];
+                            });
+                            return applications;
+                        })
+                );
 
                 return Promise.all([
                     Promise.all(totalVotesPromises),
                     Promise.all(researchesPromises),
                     Promise.all(reviewsPromises),
-                    Promise.all(similarApplicationsRefsPromises)
+                    Promise.all(otherResearchApplicationsPromises)
                 ]);
             })
-            .then(([totalVotes, researches, reviews, similarApplicationsRefs]) => {
+            .then(([totalVotes, researches, reviews, otherResearchApplications]) => {
                 let totalVotesMap = _.chain(totalVotes)
                     .flatten()
                     .groupBy('research_id')
                     .value();
-    
+
+                debugger;
                 applications.forEach((application, index) => {
                     application.totalVotes = totalVotesMap[application.research_id] ? totalVotesMap[application.research_id] : [];
                     application.research = researches[index];
                     application.reviews = reviews[index];
-                    application.similarApplicationsRefs = similarApplicationsRefs[index]
-                        .filter(ref => application.application_hash != `${ref.letterHash}:${ref.hash}` 
-                            && application.agency_name != ref.agency);
+                    debugger;
+                    application.similarResearchApplications = otherResearchApplications[index]
+                        .filter(a => application.id != a.id && a.program.agency_name != state.program.agency_name && 
+                            a.application_hash.split(':')[0] == application.application_hash.split(':')[0]);
                 });
                 const groupPromises = researches.map(research =>
                     deipRpc.api.getResearchGroupByPermlinkAsync(research.group_permlink)
