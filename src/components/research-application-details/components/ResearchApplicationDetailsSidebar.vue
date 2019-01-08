@@ -79,24 +79,20 @@
             userExperise: 'auth/userExperise',
             application: 'rad/application',
             research: 'rad/research',
+            program: 'rad/program',
             membersList: 'rad/membersList',
             applicationReviewsList: 'rad/applicationReviewsList',
             allApplicationsReviewsList: 'rad/allApplicationsReviewsList',
             applicationRef: 'rad/applicationRef',
           }),
-          isResearchGroupMember() {
-            return this.research != null 
-              ? this.$store.getters['auth/userIsResearchGroupMember'](this.research.research_group_id) 
-              : false
-          },
-          userHasExpertise() {
-            return this.userExperise != null && this.research != null
-              ?  this.userExperise.some(exp => this.research.disciplines.some(d => d.id == exp.discipline_id))
+          isReviewCommitteeMember() {
+            return this.program != null 
+              ? this.$store.getters['auth/userIsResearchGroupMember'](this.program.review_committee_id) 
               : false
           },
           isCreatingReviewAvailable() {
             const userHasReview = this.applicationReviewsList.some(r => r.author.account.name === this.user.username);
-            return !this.isResearchGroupMember && !userHasReview && this.userHasExpertise;
+            return this.isReviewCommitteeMember && !userHasReview;
           },
           positiveReviewsCount() {
             return this.allApplicationsReviewsList.filter(r => r.is_positive).length;
@@ -106,11 +102,6 @@
           }
         },
         methods: {
-          userHasExpertiseInDiscipline(discipline) {
-            return this.userExperise != null && this.research != null
-              ? this.userExperise.some(exp => exp.discipline_id == discipline.id)
-              : false
-          },
           goAddReview() {
             this.$router.push({ name: 'ResearchApplicationAddReview', params: this.$route.params });
           }

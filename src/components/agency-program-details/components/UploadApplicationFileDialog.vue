@@ -1,51 +1,47 @@
 <template>
-  <v-dialog v-model="meta.isOpen" fullscreen persistent transition="scale-transition">
-    <v-card class="">
-      <v-toolbar dark color="primary">
-        <v-btn icon dark @click="close()">
-            <v-icon>close</v-icon>
-        </v-btn>
-        <v-toolbar-title>Application</v-toolbar-title>
-        <v-spacer></v-spacer>
-      </v-toolbar>
-
-      <page-container>
-        <contentbar>
-          <div v-if="researchList">
-            <div class="row c-mb-4">
-              <div class="c-pr-6">Funding opportunity:</div>
-              <div class="col-grow a subheading">{{ program.funding_opportunity_title }}</div>
-            </div>
-
-            <v-divider></v-divider>
-
-            <v-select
+	<v-dialog v-model="meta.isOpen" fullscreen persistent transition="scale-transition">
+		<v-card class="">
+			<v-toolbar dark color="primary">
+				<v-btn icon dark @click="close()">
+					<v-icon>close</v-icon>
+				</v-btn>
+				<v-toolbar-title>Application</v-toolbar-title>
+				<v-spacer></v-spacer>
+			</v-toolbar>
+			<page-container>
+				<contentbar>
+					<div v-if="researchList">
+						<div class="row c-mb-4">
+							<div class="c-pr-6">Funding opportunity:</div>
+							<div class="col-grow a subheading">{{ program.funding_opportunity_title }}</div>
+						</div>
+						<v-divider></v-divider>
+						<v-select
               class="c-mt-4"
               :items="researchList"
+              :filter="researchFilter"
               v-model="research"
               label="Research"
+              autocomplete
             >
-              <template slot="selection" slot-scope="data">
-                <div class="row-nowrap align-center">
-                  <span class="deip-blue-color">{{ data.item.title }}</span>
-                </div>
-              </template>
-
-              <template slot="item" slot-scope="data">
-                <template>
-                  <div class="row-nowrap align-center author-item">
-                    <span class="deip-blue-color c-pl-3">{{ data.item.title}}</span>
-                  </div>
-                </template>
-              </template>
-            </v-select>
-
-            <div v-if="research">
-              <div class="c-pt-4 c-pb-8">
-                <div class="sm-title">
-                  <span class="half-bold">Research group:</span>
-
-                  <router-link class="a"
+							<template slot="selection" slot-scope="data">
+								<div class="row-nowrap align-center">
+									<span class="deip-blue-color">{{ data.item.title }}</span>
+								</div>
+							</template>
+							<template slot="item" slot-scope="data">
+								<template>
+									<div class="row-nowrap align-center author-item">
+										<span class="deip-blue-color c-pl-3">{{ data.item.title}}</span>
+									</div>
+								</template>
+							</template>
+						</v-select>
+						<div v-if="research">
+							<div class="c-pt-4 c-pb-8">
+								<div class="sm-title">
+									<span class="half-bold">Research group:</span>
+									<router-link class="a"
                     :to="{
                         name: 'ResearchDetails',
                         params: {
@@ -54,144 +50,124 @@
                         }
                     }"
                   >{{ research.group.name }}</router-link>
-                </div>
-
-                <div class="c-pt-4 row">
-                  <div v-for="(member, i) in research.group.enrichedMembers" :key="i"
-                    class="row-nowrap text-align-center c-pt-2 c-pr-8"
-                  >
-                      <v-avatar size="40px">
-                          <img v-if="member.profile" v-bind:src="member.profile.avatar | avatarSrc(30, 30, false)" />
-                          <v-gravatar v-else :email="member.account.name + '@deip.world'" />
-                      </v-avatar>
-
-                      <router-link class="a deip-blue-color body-1 c-pl-3 c-pt-2" :to="{ name: 'UserDetails', params: { account_name: member.account.name } }">
+								</div>
+								<div class="c-pt-4 row">
+									<div v-for="(member, i) in research.group.enrichedMembers" :key="i"
+                    class="row-nowrap text-align-center c-pt-2 c-pr-8">
+										<v-avatar size="40px">
+											<img v-if="member.profile" v-bind:src="member.profile.avatar | avatarSrc(30, 30, false)" />
+											<v-gravatar v-else :email="member.account.name + '@deip.world'" />
+										</v-avatar>
+										<router-link class="a deip-blue-color body-1 c-pl-3 c-pt-2" :to="{ name: 'UserDetails', params: { account_name: member.account.name } }">
                         {{ member | fullname }}
                       </router-link>
-                    </div>
-                </div>
-              </div>
-
-              <v-divider></v-divider>
-
-              <div class="c-pv-4">
-                <div class="row justify-center">
-                  <div class="col-6 c-pr-4">
-                    <v-text-field class="" label="Title" v-model="title"></v-text-field>
-                  </div>
-                  
-                  <div class="col-6 c-pl-4">
-                    <v-text-field class="" label="Total amount" v-model="totalAmount"></v-text-field>
-                  </div>
-                </div>
-                
-                <div class="row justify-center">
-                  <div class="col-6 c-pr-4">
-                    <v-select
-                      :items="allGroupList"
-                      :filter="customFilter"
-                      v-model="reveiwCommittee"
-                      item-text="name"
-                      label="Reveiw committee"
-                      autocomplete
-                    ></v-select>
-                  </div>
-                  
-                  <div class="col-6 c-pl-4">
-                    <v-text-field class="" label="Organization" v-model="organization"></v-text-field>
-                  </div>
-                </div>
-              </div>
-            
-              <div v-if="dropzoneOptions">
-                <div>
-                  <vue-dropzone ref="newApplication" id="application-dropzone" 
+									</div>
+								</div>
+							</div>
+							<v-divider></v-divider>
+							<div class="c-pv-4">
+								<div class="row justify-center">
+									<div class="col-6 c-pr-4">
+										<v-text-field class="" 
+                      label="Title" 
+                      v-model="title"
+                      :rules="[
+                        applicationTitleRule
+                      ]">
+                    </v-text-field>
+									</div>
+									<div class="col-6 c-pl-4">
+										<v-text-field class="" 
+                      label="Total amount"
+                      suffix="$"
+                      v-model="totalAmount" 
+                      :rules="[
+                        applicationTotalAmountRule
+                      ]">
+                    </v-text-field>
+									</div>
+								</div>
+								<div class="row justify-center">
+									<div class="col-12">
+										<v-text-field class="" 
+                      label="Organization" 
+                      v-model="organization"
+                      ></v-text-field>
+									</div>
+								</div>
+							</div>
+							<div v-if="dropzoneOptions">
+								<div>
+									<vue-dropzone ref="newApplication" id="application-dropzone" 
                       :options="dropzoneOptions" 
                       @vdropzone-file-added="vdropzoneFileAdded"
                       @vdropzone-removed-file="vdropzoneRemovedFile"
                       @vdropzone-error="vdropzoneError"
-                      @vdropzone-success-multiple="vsuccessMultiple">
-                  </vue-dropzone>
-                </div>
-              </div>
-
-              <div class="row c-pt-8">
-
-            <div class="col-12">
-              <div class="row align-items-center height-2 c-pt-4 c-pb-8">
-                <div class="bold c-pr-4">Application</div>
-                <div class="half-bold primary--text">Application content</div>
-                <v-icon v-show="filesMap['Application Content.pdf']" color="green" class="c-pl-4">check_circle</v-icon>
-              </div>
-            </div>
-
-            <div class="col-12">
-                <div class="row">
-                  <div class="col-6">
-                    <div class="bold">Mandatory forms</div>
-
-                    <div class="row align-items-center height-2 c-pt-4">
-                      <div class="half-bold primary--text">SF424 (R &amp; R) [V2.0]</div>
-                      <v-icon v-show="filesMap['RR_SF424_2_0-V2.0.pdf']" color="green" class="c-pl-4">check_circle</v-icon>
-                    </div>
-
-                    <div class="row align-items-center height-2 c-pt-4">
-                      <div class="half-bold primary--text">PHS 398 Cover Page Supplement [V4.0]</div>
-                      <v-icon v-show="filesMap['PHS398_CoverPageSupplement_4_0-V4.0.pdf']" color="green" class="c-pl-4">check_circle</v-icon>
-                    </div>
-
-                    <div class="row align-items-center height-2 c-pt-4">
-                      <div class="half-bold primary--text">Research And Related Other Project Information [V1.4]</div>
-                      <v-icon v-show="filesMap['RR_OtherProjectInfo_1_4-V1.4.pdf']" color="green" class="c-pl-4">check_circle</v-icon>
-                    </div>
-
-                    <div class="row align-items-center height-2 c-pt-4">
-                      <div class="half-bold primary--text">Project/Performance Site Location(s) [V2.0]</div>
-                      <v-icon v-show="filesMap['PerformanceSite_2_0-V2.0.pdf']" color="green" class="c-pl-4">check_circle</v-icon>
-                    </div>
-
-                    <div class="row align-items-center height-2 c-pt-4">
-                      <div class="half-bold primary--text">Research and Related Senior/Key Person Profile (Expanded) [V2.0]</div>
-                      <v-icon v-show="filesMap['RR_KeyPersonExpanded_2_0-V2.0.pdf']" color="green" class="c-pl-4">check_circle</v-icon>
-                    </div>
-
-                    <div class="row align-items-center height-2 c-pt-4">
-                      <div class="half-bold primary--text">PHS 398 Research Plan [V4.0]</div>
-                      <v-icon v-show="filesMap['PHS398_ResearchPlan_4_0-V4.0.pdf']" color="green" class="c-pl-4">check_circle</v-icon>
-                    </div>
-
-                    <div class="row align-items-center height-2 c-pt-4">
-                      <div class="half-bold primary--text">PHS Human Subjects and Clinical Trials Information [V1.0]</div>
-                      <v-icon v-show="filesMap['PHSHumanSubjectsAndClinicalTrialsInfo-V1.0.pdf']" color="green" class="c-pl-4">check_circle</v-icon>
-                    </div>
-                  </div>
-                
-                  <div class="col-6">
-                    <div class="bold">Optional forms</div>
-
-                    <div class="row align-items-center height-2 c-pt-4">
-                      <div class="half-bold primary--text">Research &amp; Related Budget [V1.4]</div>
-                    </div>
-
-                    <div class="row align-items-center height-2 c-pt-4">
-                      <div class="half-bold primary--text">R &amp; R Subaward Budget Attachment(s) Form 5 YR 30 ATT [V1.4]</div>
-                    </div>
-
-                    <div class="row align-items-center height-2 c-pt-4">
-                      <div class="half-bold primary--text">PHS 398 Modular Budget [V1.2]</div>
-                    </div>
-                    <div class="row align-items-center height-2 c-pt-4">
-                      <div class="half-bold primary--text">PHS Assignment Request Form [V2.0]</div>
-                    </div>
-                  </div>
-
-                </div>
-              </div>
-            </div>
-          </div>
-
-            <div class="display-flex c-pt-8">
-                <v-btn color="primary" 
+                      @vdropzone-success-multiple="vsuccessMultiple"></vue-dropzone>
+								</div>
+							</div>
+							<div class="row c-pt-8">
+								<div class="col-12">
+									<div class="row align-items-center height-2 c-pt-4 c-pb-8">
+										<div class="bold c-pr-4">Application</div>
+										<div class="half-bold primary--text">Application content</div>
+										<v-icon v-show="filesMap['Application Content.pdf']" color="green" class="c-pl-4">check_circle</v-icon>
+									</div>
+								</div>
+								<div class="col-12">
+									<div class="row">
+										<div class="col-6">
+											<div class="bold">Mandatory forms</div>
+											<div class="row align-items-center height-2 c-pt-4">
+												<div class="half-bold primary--text">SF424 (R &amp; R) [V2.0]</div>
+												<v-icon v-show="filesMap['RR_SF424_2_0-V2.0.pdf']" color="green" class="c-pl-4">check_circle</v-icon>
+											</div>
+											<div class="row align-items-center height-2 c-pt-4">
+												<div class="half-bold primary--text">PHS 398 Cover Page Supplement [V4.0]</div>
+												<v-icon v-show="filesMap['PHS398_CoverPageSupplement_4_0-V4.0.pdf']" color="green" class="c-pl-4">check_circle</v-icon>
+											</div>
+											<div class="row align-items-center height-2 c-pt-4">
+												<div class="half-bold primary--text">Research And Related Other Project Information [V1.4]</div>
+												<v-icon v-show="filesMap['RR_OtherProjectInfo_1_4-V1.4.pdf']" color="green" class="c-pl-4">check_circle</v-icon>
+											</div>
+											<div class="row align-items-center height-2 c-pt-4">
+												<div class="half-bold primary--text">Project/Performance Site Location(s) [V2.0]</div>
+												<v-icon v-show="filesMap['PerformanceSite_2_0-V2.0.pdf']" color="green" class="c-pl-4">check_circle</v-icon>
+											</div>
+											<div class="row align-items-center height-2 c-pt-4">
+												<div class="half-bold primary--text">Research and Related Senior/Key Person Profile (Expanded) [V2.0]</div>
+												<v-icon v-show="filesMap['RR_KeyPersonExpanded_2_0-V2.0.pdf']" color="green" class="c-pl-4">check_circle</v-icon>
+											</div>
+											<div class="row align-items-center height-2 c-pt-4">
+												<div class="half-bold primary--text">PHS 398 Research Plan [V4.0]</div>
+												<v-icon v-show="filesMap['PHS398_ResearchPlan_4_0-V4.0.pdf']" color="green" class="c-pl-4">check_circle</v-icon>
+											</div>
+											<div class="row align-items-center height-2 c-pt-4">
+												<div class="half-bold primary--text">PHS Human Subjects and Clinical Trials Information [V1.0]</div>
+												<v-icon v-show="filesMap['PHSHumanSubjectsAndClinicalTrialsInfo-V1.0.pdf']" color="green" class="c-pl-4">check_circle</v-icon>
+											</div>
+										</div>
+										<div class="col-6">
+											<div class="bold">Optional forms</div>
+											<div class="row align-items-center height-2 c-pt-4">
+												<div class="half-bold primary--text">Research &amp; Related Budget [V1.4]</div>
+											</div>
+											<div class="row align-items-center height-2 c-pt-4">
+												<div class="half-bold primary--text">R &amp; R Subaward Budget Attachment(s) Form 5 YR 30 ATT [V1.4]</div>
+											</div>
+											<div class="row align-items-center height-2 c-pt-4">
+												<div class="half-bold primary--text">PHS 398 Modular Budget [V1.2]</div>
+											</div>
+											<div class="row align-items-center height-2 c-pt-4">
+												<div class="half-bold primary--text">PHS Assignment Request Form [V2.0]</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="display-flex c-pt-8">
+							<v-btn color="primary" 
                   class="c-m-auto"
                   :disabled="isDisabled || isLoading"
                   :loading="isLoading"
@@ -199,16 +175,15 @@
                 >
                   Send Application
                 </v-btn>
-            </div>
-          </div>
-
-          <div class="display-flex" v-else>
-            <v-progress-circular class="c-m-auto" indeterminate color="primary"></v-progress-circular>
-          </div>
-        </contentbar>
-      </page-container>
-    </v-card>
-  </v-dialog>
+						</div>
+					</div>
+					<div class="display-flex" v-else>
+						<v-progress-circular class="c-m-auto" indeterminate color="primary"></v-progress-circular>
+					</div>
+				</contentbar>
+			</page-container>
+		</v-card>
+	</v-dialog>
 </template>
 
 <script>
@@ -240,9 +215,6 @@
             totalAmount: '',
             timestamp: null,
             allAttached: true,
-
-            allGroupList: [],
-            reveiwCommittee: null,
             organization: '',
 
             filesMap: {
@@ -266,7 +238,12 @@
               applications: 'agencyProgramDetails/applications',
           }),
           isDisabled() {
-              return !this.research;
+              if (!this.totalAmount) return true;
+              const amount = parseInt(this.totalAmount);
+              const minFloor = this.fromAssetsToFloat(this.program.award_floor);
+              const maxCeiling = this.fromAssetsToFloat(this.program.award_ceiling);
+              return !this.research || !(amount >= minFloor && amount <= maxCeiling) || 
+                      !this.organization || !this.title;
           },
           dropzoneOptions() {
             return this.research != null && this.program != null && this.timestamp ? {
@@ -292,23 +269,36 @@
         },
 
         methods: {
+          applicationTotalAmountRule(value) {
+            if (value === '') return true;
+            const amount = parseInt(value);
+            const minFloor = this.fromAssetsToFloat(this.program.award_floor);
+            const maxCeiling = this.fromAssetsToFloat(this.program.award_ceiling);
+            return (amount >= minFloor && amount <= maxCeiling) || `Amount should be between $${minFloor} and $${maxCeiling}`;
+          },
+          applicationTitleRule(value) {
+            return value != "" || 'Title field is required';
+          },
+          researchFilter(item, queryText, itemText) {
+            return item.disciplines.some(d => d.id == this.program.target_discipline);
+          },
           close() {
-              this.isLoading = false;
-              this.meta.isOpen = false;
+            this.isLoading = false;
+            this.meta.isOpen = false;
 
-              if (this.$refs.newApplication) {
-                this.$refs.newApplication.removeAllFiles();
-              }
+            if (this.$refs.newApplication) {
+              this.$refs.newApplication.removeAllFiles();
+            }
           },
           sendApplication() {
-              this.isLoading = true;
-              this.$refs.newApplication.processQueue();
+            this.isLoading = true;
+            this.$refs.newApplication.processQueue();
           },
           vdropzoneError(file, message, xhr) {
-              this.$store.dispatch('layout/setError', {
-                  message: "Sorry, the file storage server is temporarily unavailable, please try again later"
-              });
-              this.close();
+            this.$store.dispatch('layout/setError', {
+                message: "Sorry, the file storage server is temporarily unavailable, please try again later"
+            });
+            this.close();
           },
           vdropzoneFileAdded(file) {
             this.filesMap[file.name] = true;
@@ -331,7 +321,8 @@
               this.title,
               this.user.username,
               this.toAssetUnits(this.totalAmount),
-              `${applicationRef.letterHash}:${applicationRef.hash}`
+              `${applicationRef.letterHash}:${applicationRef.hash}`,
+              this.organization
             )
             .then((res) => {
               // todo: Reload applications section
@@ -349,16 +340,6 @@
               this.isLoading = false;
               this.close();
             });
-          },
-
-          customFilter(item, queryText, itemText) {
-            const hasValue = val => val != null ? val : '';
-            const text = hasValue(item.name);
-            const query = hasValue(queryText);
-
-            return text.toString()
-              .toLowerCase()
-              .indexOf(query.toString().toLowerCase()) > -1;
           }
         },
 
@@ -368,8 +349,8 @@
               this.allAttached = false;
               this.timestamp = (new Date()).getTime();
               this.research = null;
-              this.title = `${this.applications.length + 1}-application`;
-              this.reveiwCommittee = null;
+              this.title = 
+                `Application for ${this.program.funding_opportunity_number + ' # ' + (this.applications.length + 1)}`;
               this.organization = '';
             } 
           }
@@ -383,27 +364,20 @@
             Promise.all(researchPromises),
             Promise.all(researchGroupPromises)
           ])
-            .then(([groupsResearchList, groups]) => {
-              const flatten = [].concat.apply([], groupsResearchList);
-              this.researchList = flatten;
+          .then(([groupsResearchList, groups]) => {
+            const flatten = [].concat.apply([], groupsResearchList);
+            this.researchList = flatten;
 
-              // todo: make workable receiving of all groups in system
-              this.allGroupList = groups;
+            // todo: make workable receiving of all groups in system
+            this.researchList.forEach(research => {
+              research.group = groups.find(group => group.permlink === research.group_permlink);
+            })
 
-              this.researchList.forEach(research => {
-                research.group = groups.find(group => group.permlink === research.group_permlink);
-              })
-
-              groups.map(group =>
-                deipRpc.api.getResearchGroupTokensByResearchGroupAsync(group.id)
-                    .then(researchGroupTokens => 
-                        getEnrichedProfiles(researchGroupTokens.map(t => t.owner))
-                    )
-                    .then(profiles => 
-                      group.enrichedMembers = profiles
-                    )
-              )
-            });
+            groups.map(group =>
+              deipRpc.api.getResearchGroupTokensByResearchGroupAsync(group.id)
+                .then(researchGroupTokens => getEnrichedProfiles(researchGroupTokens.map(t => t.owner)))
+                .then(profiles => group.enrichedMembers = profiles))
+          });
         },
     };
 </script>

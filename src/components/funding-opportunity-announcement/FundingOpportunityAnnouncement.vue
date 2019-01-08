@@ -36,10 +36,16 @@
                     <v-stepper-step step="6" :complete="currentStep > 6">
                         <div class="uppercase white-space-nowrap">Program officers</div>
                     </v-stepper-step>
-                    
+
                     <v-divider></v-divider>
 
                     <v-stepper-step step="7" :complete="currentStep > 7">
+                        <div class="uppercase white-space-nowrap">Reviewers</div>
+                    </v-stepper-step>
+                    
+                    <v-divider></v-divider>
+
+                    <v-stepper-step step="8" :complete="currentStep > 8">
                         <div class="uppercase white-space-nowrap">Additional</div>
                     </v-stepper-step>
                 </v-stepper-header>
@@ -102,6 +108,15 @@
 
                     <v-stepper-content step="7">
                         <div class="full-height">
+                            <funding-opportunity-review-committee
+                                @incStep="incStep" @decStep="decStep"
+                                :opportunity="opportunity"
+                            ></funding-opportunity-review-committee>
+                        </div>
+                    </v-stepper-content>
+
+                    <v-stepper-content step="8">
+                        <div class="full-height">
                             <funding-opportunity-additional
                                 @finish="finish" @decStep="decStep"
                                 :is-sending="isSending"
@@ -148,7 +163,6 @@
                 user: 'auth/user'
             })
         },
-
         data() { 
             return {
                 currentStep: 0,
@@ -169,7 +183,8 @@
                     additionalInfoLink: '',
                     grantorEmail: '',
                     startDate: null,
-                    endDate: null
+                    endDate: null,
+                    reveiwCommittee: null
                 },
 
                 isFinished: false,
@@ -179,7 +194,7 @@
 
         methods: {
             incStep() {
-                if (this.currentStep < 7) {
+                if (this.currentStep < 8) {
                     this.currentStep++;
                 } else {
                     this.currentStep = 1;
@@ -214,7 +229,7 @@
                     parseInt(this.opportunity.numberOfAwards),
                     this.opportunity.startDate,
                     this.opportunity.endDate,
-                    0 // todo: set research group from select list here (review comitee)
+                    this.opportunity.reveiwCommittee.id
                 ).then((res) => {
                     this.isFinished = true;
                     this.$store.dispatch('layout/setSuccess', {

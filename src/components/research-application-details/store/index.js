@@ -61,7 +61,7 @@ const actions = {
                     dispatch('loadApplicationReviews', { application_id, notify: resolve })
                 });
                 const thirdpatyReviewsLoad = new Promise((resolve, reject) => {
-                    dispatch('loadThirdpatyReviews', { application, group_permlink, research_permlink, notify: resolve })
+                    dispatch('loadThirdpatyReviews', { currentApplication: application, group_permlink, research_permlink, notify: resolve })
                 });
 
                 return Promise.all([programLoad, researchDetailsLoad, applicationReviewsLoad, thirdpatyReviewsLoad])
@@ -101,16 +101,18 @@ const actions = {
     loadApplicationReviews({ state, dispatch, commit }, { application_id, notify }) {
         const reviews = [];
         commit('SET_RESEARCH_APPLICATION_REVIEWS_LOADING_STATE', true);
-        
+
         deipRpc.api.getGrantApplicationReviewsByGrantApplicationAsync(application_id)
             .then(items => {
                 reviews.push(...items);
                 return Promise.all([
-                    Promise.all(reviews.map(item => deipRpc.api.getReviewVotesByReviewIdAsync(item.id))),
+                    Promise.all(reviews.map(review => deipRpc.api.getReviewVotesByReviewIdAsync(review.id))),
                     getEnrichedProfiles(reviews.map(r => r.author)),
-                    Promise.all(reviews.map(item => deipRpc.api.getFundingOpportunityAsync(item.grant_id)))
+                    Promise.all(reviews.map(review => 
+                        deipRpc.api.getGrantApplicationAsync(review.grant_application_id)
+                            .then((application) => deipRpc.api.getFundingOpportunityAsync(application.grant_id))))
                 ]);
-            }, (err) => {console.log(err)})
+            }, (err) => { console.log(err) })
             .then(([reviewVotes, users, programs]) => {
                 reviews.forEach((review, i) => {
                     review.author = users.find(u => u.account.name == review.author);
@@ -126,10 +128,10 @@ const actions = {
             })
     },
 
-    loadThirdpatyReviews({ state, dispatch, commit }, { application, group_permlink, research_permlink, notify }) {
+    loadThirdpatyReviews({ state, dispatch, commit }, { currentApplication, group_permlink, research_permlink, notify }) {
         commit('SET_THIRDPARTY_RESEARCH_APPLICATIONS_REVIEWS_LOADING_STATE', true);
 
-        var reviews;
+        const reviews = [];
         deipRpc.api.getResearchByAbsolutePermlinkAsync(group_permlink, research_permlink)
             .then((research) => {
                 return deipRpc.api.getApplicationsByResearchIdAsync(research.id)
@@ -139,20 +141,21 @@ const actions = {
                     const hashes = a.application_hash.split(':');
                     a.letterHash = hashes[0];
                     a.packageHash = hashes[1];
-
-                    return a.letterHash == application.letterHash && a.id != application.id
+                    return a.letterHash == currentApplication.letterHash && a.id != currentApplication.id
                 });
                 return Promise.all(related.map(a => deipRpc.api.getGrantApplicationReviewsByGrantApplicationAsync(a.id)))
-            }, (err) => {console.log(err)})
+            }, (err) => { console.log(err) })
             .then(items => {
                 const flatten = [].concat.apply([], items);
-                reviews = flatten;
+                reviews.push(...flatten);
                 return Promise.all([
                     Promise.all(reviews.map(item => deipRpc.api.getReviewVotesByReviewIdAsync(item.id))),
                     getEnrichedProfiles(reviews.map(r => r.author)),
-                    Promise.all(reviews.map(item => deipRpc.api.getFundingOpportunityAsync(item.grant_id))),
+                    Promise.all(reviews.map(review => 
+                        deipRpc.api.getGrantApplicationAsync(review.grant_application_id)
+                            .then((application) => deipRpc.api.getFundingOpportunityAsync(application.grant_id)))),
                 ]);
-            }, (err) => {console.log(err)})
+            }, (err) => { console.log(err) })
             .then(([reviewVotes, users, programs]) => {
                 reviews.forEach((review, i) => {
                     review.author = users.find(u => u.account.name == review.author);
@@ -166,7 +169,6 @@ const actions = {
                 commit('SET_THIRDPARTY_RESEARCH_APPLICATIONS_REVIEWS_LOADING_STATE', false);
                 if (notify) notify();
             })
-
     },
 
     loadResearchDetails({ state, commit, dispatch }, { group_permlink, research_permlink, notify }) {
@@ -199,9 +201,10 @@ const actions = {
         // do not do this in regular code without 'commit' call!
         applicationReviewEditor = instance.applicationReviewEditor;
     },
+    
     setApplicationStatus({ state, commit, dispatch }, status) {
         commit('SET_APPLICATION_STATUS', status)
-    },
+    }
 }
 
 
