@@ -1,5 +1,5 @@
 <template>
-    <page-container>
+    <page-container v-if="isPageLoaded">
         <contentbar>
             <research-application-review-body></research-application-review-body>
         </contentbar>
@@ -19,12 +19,12 @@
             return {} 
         },
         computed: {
-
-        },
-        methods: {
-
-        },
-        created() {
+			...mapGetters({
+				isLoadingResearchApplicationDetails: 'rad/isLoadingResearchApplicationDetails'
+			}),
+			isPageLoaded() {
+				return this.isLoadingResearchApplicationDetails === false;
+			}
         }
     };
 </script>

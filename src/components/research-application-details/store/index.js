@@ -33,6 +33,7 @@ const getters = {
     thirdpartyApplicationsReviewsList: (state, getters) => state.thirdpartyApplicationsReviewsList,
     allApplicationsReviewsList: (state, getters) => state.applicationReviewsList.concat(state.thirdpartyApplicationsReviewsList),
     applicationReviewEditor: (state, getters) => applicationReviewEditor,
+    isLoadingResearchApplicationDetails: (state, getters) => state.isLoadingResearchApplicationDetails
 }
 
 // actions
