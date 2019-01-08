@@ -47,7 +47,7 @@
 			</v-flex>
 			<v-flex xs12>
 				<div>
-					<div class="subheading c-pt-5 c-pb-5">Package: <span class="caption grey--text">({{application.packageHash}})</span></div>
+					<div class="subheading c-pt-5 c-pb-5">Package: <!-- <span class="caption grey--text">({{application.packageHash}})</span> --></div>
 					<v-card v-for="form in formsContent" :key="form.hash">
 						<v-card-text>
 							<a target="_blank" class="a" :href="`${fileStorageBaseUrl}/applications/files/${applicationRef.agency}/${applicationRef.foaId}/${applicationRef.hash}/${form.hash}`">

@@ -154,7 +154,6 @@
                 return this.application.similarResearchApplications.length;
             },
             duplicate() {
-                debugger;
                 return this.isDuplicated 
                     ? this.application.similarResearchApplications[0]
                     : null

@@ -213,7 +213,8 @@
                     100,
                     parseInt(this.opportunity.numberOfAwards),
                     this.opportunity.startDate,
-                    this.opportunity.endDate
+                    this.opportunity.endDate,
+                    0 // todo: set research group from select list here (review comitee)
                 ).then((res) => {
                     this.isFinished = true;
                     this.$store.dispatch('layout/setSuccess', {

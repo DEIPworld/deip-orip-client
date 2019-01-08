@@ -137,11 +137,11 @@ export default {
                     "id": 34,
                     "path": "psychology.neuropsychology"
                 },
-                "parapsychology": {
-                    "label": "Parapsychology",
-                    "id": 35,
-                    "path": "psychology.parapsychology"
-                },
+                // "parapsychology": {
+                //     "label": "Parapsychology",
+                //     "id": 35,
+                //     "path": "psychology.parapsychology"
+                // },
                 "personality_psychology": {
                     "label": "Personality psychology",
                     "id": 36,
@@ -783,11 +783,11 @@ export default {
             "id": 9,
             "path": "medicine_and_health",
             "children": {
-                "alternative_medicine": {
-                    "label": "Alternative medicine",
-                    "id": 153,
-                    "path": "medicine_and_health.alternative_medicine"
-                },
+                // "alternative_medicine": {
+                //     "label": "Alternative medicine",
+                //     "id": 153,
+                //     "path": "medicine_and_health.alternative_medicine"
+                // },
                 "cardiology": {
                     "label": "Cardiology",
                     "id": 154,
