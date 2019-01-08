@@ -76,22 +76,32 @@
 
               <div class="c-pv-4">
                 <div class="row justify-center">
-                  <v-text-field class="col-6 c-pr-1" label="Title" v-model="title"></v-text-field>
-                  <v-text-field class="col-6 c-pl-1" label="Total amount" v-model="totalAmount"></v-text-field>
+                  <div class="col-6 c-pr-4">
+                    <v-text-field class="" label="Title" v-model="title"></v-text-field>
+                  </div>
+                  
+                  <div class="col-6 c-pl-4">
+                    <v-text-field class="" label="Total amount" v-model="totalAmount"></v-text-field>
+                  </div>
                 </div>
                 
                 <div class="row justify-center">
-                  <v-select
-                    :items="allGroupList"
-                    :filter="customFilter"
-                    v-model="reveiwCommittee"
-                    item-text="name"
-                    label="Reveiw committee"
-                    autocomplete
-                  ></v-select>
+                  <div class="col-6 c-pr-4">
+                    <v-select
+                      :items="allGroupList"
+                      :filter="customFilter"
+                      v-model="reveiwCommittee"
+                      item-text="name"
+                      label="Reveiw committee"
+                      autocomplete
+                    ></v-select>
+                  </div>
+                  
+                  <div class="col-6 c-pl-4">
+                    <v-text-field class="" label="Organization" v-model="organization"></v-text-field>
+                  </div>
                 </div>
               </div>
-
             
               <div v-if="dropzoneOptions">
                 <div>
@@ -233,6 +243,7 @@
 
             allGroupList: [],
             reveiwCommittee: null,
+            organization: '',
 
             filesMap: {
               "Application Content.pdf": false,
@@ -251,7 +262,8 @@
         computed: {
           ...mapGetters({
               user: 'auth/user',
-              userGroups: 'auth/userGroups'
+              userGroups: 'auth/userGroups',
+              applications: 'agencyProgramDetails/applications',
           }),
           isDisabled() {
               return !this.research;
@@ -356,8 +368,9 @@
               this.allAttached = false;
               this.timestamp = (new Date()).getTime();
               this.research = null;
-              this.title = '';
+              this.title = `${this.applications.length + 1}-application`;
               this.reveiwCommittee = null;
+              this.organization = '';
             } 
           }
         },
