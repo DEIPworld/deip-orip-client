@@ -31,7 +31,7 @@
                     ></v-text-field>
 
                     <v-text-field
-                        label="Agency floor"
+                        label="Award floor"
                         mask="##############"
                         suffix="$"
                         v-model="opportunity.awardFloor"

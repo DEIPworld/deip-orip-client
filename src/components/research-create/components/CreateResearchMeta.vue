@@ -10,9 +10,9 @@
                         <div class="col-3"></div>
                         <div class="col-6">
                             <v-text-field v-model="title" v-on:keyup="setTitle" 
-                                    name="title" label="Title" 
-                                    solo multi-line>
-                            </v-text-field>
+                                name="title" label="Title" 
+                                solo multi-line
+                            ></v-text-field>
                         </div>
                         <div class="col-3"></div>
                     </div>
@@ -21,9 +21,9 @@
                         <div class="col-3"></div>
                         <div class="col-6">
                             <v-text-field v-model="description" v-on:keyup="setDescription" 
-                                        name="Description" label="Description" 
-                                        solo multi-line>
-                            </v-text-field>
+                                name="Description" label="Description" 
+                                solo multi-line
+                            ></v-text-field>
                         </div>
                         <div class="col-3"></div>
                     </div>
@@ -50,7 +50,11 @@
                 <v-icon dark class="pr-1">keyboard_arrow_left</v-icon> Back
             </v-btn>
 
-            <v-btn color="primary" :disabled="nextDisabled" @click.native="nextStep()">Next</v-btn>
+            <v-btn color="primary"
+                :disabled="nextDisabled"
+                :loading="isLoading"
+                @click.native="nextStep()"
+            >Create research</v-btn>
         </div>
     </div>
 </template>
@@ -62,7 +66,8 @@
     export default {
         name: "CreateResearchMeta",
         props: {
-            research: { type: Object, required: true } 
+            research: { type: Object, required: true },
+            isLoading: { type: Boolean, required: true }
         },
         data() { 
             return {
@@ -73,12 +78,13 @@
         },
         computed: {
             nextDisabled(){
-                return !this.research.title || !this.research.description;
+                return !this.research.title || !this.research.description || this.isLoading;
             }
         },
         methods: {
             nextStep() {
-                this.$emit('incStep');
+                // temporary it is the last step
+                this.$emit('finish');
             },
             prevStep() {
                 this.$emit('decStep');

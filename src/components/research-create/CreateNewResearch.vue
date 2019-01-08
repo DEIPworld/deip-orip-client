@@ -20,7 +20,7 @@
                         <div class="uppercase">Title</div>
                     </v-stepper-step>
 
-                    <v-divider></v-divider>
+                    <!-- <v-divider></v-divider> -->
 
             <!--    <v-stepper-step step="4" :complete="currentStep > 4">
                         <div class="uppercase">Roadmap</div>
@@ -28,9 +28,9 @@
                     
                     <v-divider></v-divider> -->
 
-                    <v-stepper-step step="4">
+                    <!-- <v-stepper-step step="4">
                         <div class="uppercase">Reward shares</div>
-                    </v-stepper-step>
+                    </v-stepper-step> -->
                 </v-stepper-header>
 
                 <v-stepper-items class="col-grow">
@@ -57,10 +57,11 @@
                     <v-stepper-content step="3">
                         <div class="full-height">
                             <create-research-meta
-                                @incStep="incStep" @decStep="decStep"
+                                @finish="finish" @decStep="decStep"
                                 @setTitle="setTitle"
                                 @setDescription="setDescription"
                                 :research="research"
+                                :isLoading="isLoading"
                             ></create-research-meta>
                         </div>
                     </v-stepper-content>
@@ -73,7 +74,8 @@
                         </div>
                     </v-stepper-content> -->
 
-                    <v-stepper-content step="4">
+                    <!-- temporary commented -->
+                    <!-- <v-stepper-content step="4">
                         <div class="full-height">
                             <create-research-share 
                                 @finish="finish" @decStep="decStep"
@@ -82,7 +84,7 @@
                                 :isLoading="isLoading"
                             ></create-research-share>
                         </div>
-                    </v-stepper-content>
+                    </v-stepper-content> -->
                 </v-stepper-items>
             </v-stepper>
         </v-layout>
@@ -156,7 +158,7 @@
                 createResearchProposal(
                     this.research.group.id, this.research.title, this.research.description, 
                     this.research.title.replace(/ /g, "-").replace(/_/g, "-").toLowerCase(), 
-                    this.research.review_share_in_percent * this.DEIP_1_PERCENT,
+                    500, // this.research.review_share_in_percent * this.DEIP_1_PERCENT,
                     this.research.disciplines.map(d => d.id)
                 ).then(() => {
                     this.isLoading = false;
