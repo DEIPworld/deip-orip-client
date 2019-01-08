@@ -79,6 +79,17 @@
                   <v-text-field class="col-6 c-pr-1" label="Title" v-model="title"></v-text-field>
                   <v-text-field class="col-6 c-pl-1" label="Total amount" v-model="totalAmount"></v-text-field>
                 </div>
+                
+                <div class="row justify-center">
+                  <v-select
+                    :items="allGroupList"
+                    :filter="customFilter"
+                    v-model="reveiwCommittee"
+                    item-text="name"
+                    label="Reveiw committee"
+                    autocomplete
+                  ></v-select>
+                </div>
               </div>
 
             
@@ -219,6 +230,10 @@
             totalAmount: '',
             timestamp: null,
             allAttached: true,
+
+            allGroupList: [],
+            reveiwCommittee: null,
+
             filesMap: {
               "Application Content.pdf": false,
 
@@ -323,6 +338,16 @@
               this.close();
             });
           },
+
+          customFilter(item, queryText, itemText) {
+            const hasValue = val => val != null ? val : '';
+            const text = hasValue(item.name);
+            const query = hasValue(queryText);
+
+            return text.toString()
+              .toLowerCase()
+              .indexOf(query.toString().toLowerCase()) > -1;
+          }
         },
 
         watch: {
@@ -332,6 +357,7 @@
               this.timestamp = (new Date()).getTime();
               this.research = null;
               this.title = '';
+              this.reveiwCommittee = null;
             } 
           }
         },
@@ -348,6 +374,9 @@
               const flatten = [].concat.apply([], groupsResearchList);
               this.researchList = flatten;
 
+              // todo: make workable receiving of all groups in system
+              this.allGroupList = groups;
+
               this.researchList.forEach(research => {
                 research.group = groups.find(group => group.permlink === research.group_permlink);
               })
@@ -361,7 +390,7 @@
                       group.enrichedMembers = profiles
                     )
               )
-            })
+            });
         },
     };
 </script>

@@ -185,7 +185,7 @@
         max-height: 250px;
     }
 
-    .datetime-picker-error-hack {
+    .datetime-picker-error-hack.input-group {
         padding: 0px;
         position: absolute;
         top: 48px;
