@@ -194,31 +194,6 @@
                 APPROVED: 'application_approved',
                 REJECTED: 'application_rejected'
               },
-              
-              financialChart: {
-                data: [
-                  [
-                    '',
-                    'Paid',
-                    'Approved',
-                    'Pending',
-                    'Remaining',
-                  ], [
-                    '',
-                    2000000,
-                    1500000,
-                    300000,
-                    5000000
-                  ]
-                ],
-                options: {
-                  isStacked: true,
-                  legend: { position: 'top' },
-                  colors: ['#C8E6C9', '#FFCCBC', '#8FC3F7', '#F6F6F6'],
-                  dataOpacity: 0.8,
-                  chartArea: { left: 0 }
-                }
-              },
 
               applicationDialogMeta: { isOpen: false }
             }
@@ -244,6 +219,10 @@
               ];
             },
 
+            approvedApps() { return _.filter(this.applications, app => app.status === this.applicationStatusMap.APPROVED); },
+            rejectedApps() { return _.filter(this.applications, app => app.status === this.applicationStatusMap.REJECTED); },
+            pendingApps() { return _.filter(this.applications, app => app.status === this.applicationStatusMap.PENDING); },
+
             applicationsChart() {
               return {
                 data: [
@@ -254,9 +233,9 @@
                     'Pending'
                   ], [
                     '',
-                    _.filter(this.applications, app => app.status === this.applicationStatusMap.APPROVED).length,
-                    _.filter(this.applications, app => app.status === this.applicationStatusMap.REJECTED).length,
-                    _.filter(this.applications, app => app.status === this.applicationStatusMap.PENDING).length
+                    this.approvedApps.length,
+                    this.rejectedApps.length,
+                    this.pendingApps.length
                   ]
                 ],
                 options: {
@@ -268,6 +247,41 @@
                 }
               }
             },
+
+            financialChart() {
+              let countAppAmount = apps => _(apps)
+                .map(app => this.fromAssetsToFloat(app.total_amount))
+                .reduce((sum, amount) => sum + amount, 0);
+                
+              let approvedAmount = countAppAmount(this.approvedApps);
+              let pendingAmount = countAppAmount(this.pendingApps);
+              let remainingAmount = this.fromAssetsToFloat(this.program.award_ceiling) - approvedAmount - pendingAmount;
+
+              return {
+                data: [
+                  [
+                    '',
+                    'Paid',
+                    'Approved',
+                    'Pending',
+                    'Remaining',
+                  ], [
+                    '',
+                    0,
+                    approvedAmount,
+                    pendingAmount,
+                    remainingAmount
+                  ]
+                ],
+                options: {
+                  isStacked: true,
+                  legend: { position: 'top' },
+                  colors: ['#C8E6C9', '#FFCCBC', '#8FC3F7', '#F6F6F6'],
+                  dataOpacity: 0.8,
+                  chartArea: { left: 0 }
+                }
+              }
+            }
         },
 
         methods: {
