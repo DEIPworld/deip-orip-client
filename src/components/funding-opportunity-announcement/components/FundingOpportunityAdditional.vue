@@ -6,12 +6,12 @@
             <div class="col-grow overflow-y-auto">
 
                 <div class="c-mh-auto guidelines-max-width">
-                    <v-text-field
+                    <v-textarea
                         label="Opportunity description"
-                        multi-line auto-grow
+                        auto-grow
                         rows="2"
                         v-model="opportunity.description"
-                    ></v-text-field>
+                    ></v-textarea>
 
                     <v-text-field
                         label="Link to additional information"

@@ -16,6 +16,14 @@
                                     :rules="titleRules"
                                 ></v-text-field>
                             </div>
+
+                            <!-- example where label moves on focus -->
+                            <!-- <v-text-field
+                                label="Amount"
+                                value="10.00"
+                                prefix="deip.world"
+                            ></v-text-field> -->
+
                             <div class="">
                                 <v-text-field class="permlink-input" 
                                     prefix="deip.world/"
@@ -122,15 +130,18 @@
     }
 
     .permlink-input {
-        .input-group--text-field__prefix {
+        .v-text-field__prefix {
             background: @grey-lighten-2;
             border-radius: 2px 2px 0 0;
-            padding: 0 8px;
+            padding: 3px 8px 3px;
+            margin-top: 2px;
+            margin-right: 3px;
         }
         // standart vuetify prefixes of big length are buged, so this is workaround
-        &.input-group--prefix:not(.input-group--focused):not(.input-group--dirty) label {
-            left: 105px;
-            // width: 50%;
-        }
+        // vuetify v1.0.16
+        // &.v-input-group--prefix:not(.v-input-group--focused):not(.v-input-group--dirty) label {
+        //     left: 105px;
+        //     // width: 50%;
+        // }
     }
 </style>

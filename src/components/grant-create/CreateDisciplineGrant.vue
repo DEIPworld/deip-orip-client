@@ -1,7 +1,7 @@
 <template>
     <v-container fluid fill-height class="pa-0">
         <v-layout>
-            <v-stepper v-model="currentStep" alt-labels class="column full-width full-height">
+            <v-stepper v-model="currentStep" alt-labels class="column full-width full-height stepper-page">
                 <v-stepper-header>
                     <v-stepper-step step="1" :complete="currentStep > 1">
                         <div class="uppercase">Discipline</div>
@@ -149,20 +149,5 @@
     };
 </script>
 
-<style lang="less">    
-    .stepper__content {
-        height: 100%;
-        padding-right: 0px;
-        padding-left: 0px;
-        .stepper__wrapper {
-            height: 100%;
-        }
-    }
-
-    .step-title {
-        font-size: 24px;
-        font-weight: bold;
-        text-align: center;
-        padding-bottom: 16px;
-    }
+<style lang="less">
 </style>

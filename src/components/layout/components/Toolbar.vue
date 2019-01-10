@@ -50,7 +50,7 @@
                         <v-list-tile-title>Investor dashboard</v-list-tile-title>
                     </v-list-tile> -->
 
-                    <v-list-tile v-if="isGrantor" :to="{ name: 'FundingOpportunityAnnouncement' }">
+                    <v-list-tile v-if="isGrantor" :to="{ name: 'CreateFundingOpportunityAnnouncement' }">
                         <v-list-tile-title>Create Funding Opportunity</v-list-tile-title>
                     </v-list-tile>
 

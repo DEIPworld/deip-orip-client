@@ -26,9 +26,8 @@
                     :suffix="'DEIP'"
                 ></v-text-field>
 
-                <v-text-field
+                <v-textarea
                     label="Memo - optional" 
-                    multi-line
                     rows="3"
                     counter="2000"
                     no-resize
@@ -36,7 +35,7 @@
                     :rules="[
                         rules.memo
                     ]"
-                ></v-text-field>
+                ></v-textarea>
 
                 <v-btn block color="primary" 
                     @click="sendTokens()"

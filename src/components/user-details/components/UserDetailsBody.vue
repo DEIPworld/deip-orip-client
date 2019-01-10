@@ -89,7 +89,7 @@
                     </div>
     
                     <div v-if="isOwner && isEditingBio" class="row">
-                        <v-text-field class="col-12" v-model="editedBio" label="Short Bio" multi-line></v-text-field>
+                        <v-textarea class="col-12" v-model="editedBio" label="Short Bio"></v-textarea>
                         <span class="col-12">
                             <v-tooltip bottom>
                                 <v-btn slot="activator" @click="isEditingBio = false" flat icon color="grey" class="ma-0 mr-3 right">

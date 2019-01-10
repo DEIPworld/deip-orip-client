@@ -52,6 +52,7 @@
                                     <v-icon size="18px">mdi-arrow-up-drop-circle</v-icon>
                                 </v-btn>
                             </td>
+                            
                             <td class="">{{ props.item.owner }}</td>
                             <td class="">{{ props.item.url }}</td>
                             <td class="">{{ props.item.votes }}</td> 
@@ -127,8 +128,4 @@
 
 <style lang="less">
     @import '../../styles/colors.less';
-
-    .witnesses-table .datatable.table .column {
-        display: table-cell;
-    }
 </style>

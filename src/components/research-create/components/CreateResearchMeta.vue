@@ -9,10 +9,10 @@
                     <div class="row">
                         <div class="col-3"></div>
                         <div class="col-6">
-                            <v-text-field v-model="title" v-on:keyup="setTitle" 
+                            <v-textarea v-model="title" v-on:keyup="setTitle" 
                                 name="title" label="Title" 
-                                solo multi-line
-                            ></v-text-field>
+                                solo
+                            ></v-textarea>
                         </div>
                         <div class="col-3"></div>
                     </div>
@@ -20,10 +20,10 @@
                     <div class="row c-pt-4">
                         <div class="col-3"></div>
                         <div class="col-6">
-                            <v-text-field v-model="description" v-on:keyup="setDescription" 
+                            <v-textarea v-model="description" v-on:keyup="setDescription" 
                                 name="Description" label="Description" 
-                                solo multi-line
-                            ></v-text-field>
+                                solo
+                            ></v-textarea>
                         </div>
                         <div class="col-3"></div>
                     </div>

@@ -98,12 +98,11 @@
                                         item-value="id">
                                     </v-select>
 
-                                    <v-select
+                                    <v-autocomplete
                                         :items="membersList"
                                         v-model="proposeContent.authors"
                                         placeholder="Authors"
                                         v-on:change="setDraftAuthors"
-                                        autocomplete
                                         multiple>
                                         <template slot="selection" slot-scope="data">
                                             <div class="row-nowrap align-center c-pl-4">
@@ -129,7 +128,7 @@
                                                 </div>
                                             </template>
                                         </template>
-                                    </v-select>
+                                    </v-autocomplete>
 
                                     <div class="display-flex c-pt-8">
                                         <v-btn color="primary" 

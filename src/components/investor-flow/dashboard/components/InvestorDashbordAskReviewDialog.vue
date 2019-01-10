@@ -78,12 +78,12 @@
                     </v-card>
 
                     <div class="c-pt-6">
-                        <v-text-field
+                        <v-textarea
                             label="Type your cover letter"
-                            multi-line auto-grow
+                            auto-grow
                             :rows="2"
                             value="HI! I’m reprsenting XYZ fund supporting perspective and undiscovered computer science research all over the world. Can you please review the following publication for the reward of 200 Deip Tokens? Thank you in advance. Cheers, John."
-                        ></v-text-field>
+                        ></v-textarea>
                     </div>
 
                     <div class="c-pt-5">
@@ -105,14 +105,14 @@
 
                                         <v-radio-group>
                                             <div class="row">
-                                                <div class="width-8">
+                                                <div class="width-9">
                                                     <v-radio
                                                         label="By name"
                                                         value="by-name"
                                                     ></v-radio>
                                                 </div>
 
-                                                <div class="width-8">
+                                                <div class="width-9">
                                                     <v-radio
                                                         label="By keywords"
                                                         value="by-keywords"
@@ -133,7 +133,7 @@
                                                 </div>
 
                                                 <div class="">
-                                                    <v-checkbox hide-details></v-checkbox>
+                                                    <v-checkbox class="ma-0 pa-0" hide-details></v-checkbox>
                                                 </div>
                                             </div>
 
@@ -148,7 +148,7 @@
                                                 </div>
 
                                                 <div class="">
-                                                    <v-checkbox hide-details></v-checkbox>
+                                                    <v-checkbox class="ma-0 pa-0" hide-details></v-checkbox>
                                                 </div>
                                             </div>
 
@@ -163,7 +163,7 @@
                                                 </div>
 
                                                 <div class="">
-                                                    <v-checkbox hide-details></v-checkbox>
+                                                    <v-checkbox class="ma-0 pa-0" hide-details></v-checkbox>
                                                 </div>
                                             </div>
                                         </div>
@@ -185,7 +185,7 @@
                                             </div>
 
                                             <div class="">
-                                                <v-checkbox hide-details></v-checkbox>
+                                                <v-checkbox class="ma-0 pa-0" hide-details></v-checkbox>
                                             </div>
                                         </div>
 
@@ -200,7 +200,7 @@
                                             </div>
 
                                             <div class="">
-                                                <v-checkbox hide-details></v-checkbox>
+                                                <v-checkbox class="ma-0 pa-0" hide-details></v-checkbox>
                                             </div>
                                         </div>
 
@@ -215,7 +215,7 @@
                                             </div>
 
                                             <div class="">
-                                                <v-checkbox hide-details></v-checkbox>
+                                                <v-checkbox class="ma-0 pa-0" hide-details></v-checkbox>
                                             </div>
                                         </div>
 
@@ -230,7 +230,7 @@
                                             </div>
 
                                             <div class="">
-                                                <v-checkbox hide-details></v-checkbox>
+                                                <v-checkbox class="ma-0 pa-0" hide-details></v-checkbox>
                                             </div>
                                         </div>
                                     </v-card>

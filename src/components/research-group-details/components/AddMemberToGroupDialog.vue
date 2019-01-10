@@ -13,11 +13,10 @@
                 <contentbar>
 
                     <div v-if="allUsers">
-                        <v-select
+                        <v-autocomplete
                             :items="allUsers"
                             v-model="selectedUser"
                             placeholder="Researcher"
-                            autocomplete
                         >
                             <template slot="selection" slot-scope="data">
                                 <div class="row-nowrap align-center c-pl-4">
@@ -38,7 +37,7 @@
                                     <span class="deip-blue-color c-pl-3">{{ data.item | fullname }}</span>
                                 </div>
                             </template>
-                        </v-select>
+                        </v-autocomplete>
 
                         <v-text-field
                             label="Research Group Tokens"
@@ -47,12 +46,12 @@
                             mask="###"
                         ></v-text-field>
 
-                        <v-text-field
+                        <v-textarea
                             label="Cover letter" 
-                            multi-line auto-grow
+                            auto-grow
                             rows="3"
                             v-model="coverLetter"
-                        ></v-text-field>
+                        ></v-textarea>
 
                         <div class="display-flex c-pt-8">
                             <v-btn color="primary" 
@@ -162,7 +161,4 @@
 </script>
 
 <style lang="less" scoped>
-    .dialog.dialog--active {
-        overflow: visible;
-    }
 </style>

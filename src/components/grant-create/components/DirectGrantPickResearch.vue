@@ -10,14 +10,13 @@
 
                 <div class="c-mh-auto full-height overflow-y-auto research-picker">
                     <div class="c-ph-8 c-pt-12">
-                        <v-select
+                        <v-autocomplete
                             :items="researches"
                             :filter="customFilter"
                             v-model="grantInfo.research"
                             item-text="title"
                             label="Start typing research title or researcher's name"
-                            autocomplete
-                        ></v-select>
+                        ></v-autocomplete>
                     </div>
                 </div>
 

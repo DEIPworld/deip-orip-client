@@ -181,7 +181,7 @@
 </script>
 
 <style lang="less">
-    .percent-input.input-group {
+    .percent-input.v-text-field {
         max-width: 45px;
         padding-top: 0px;
     }

@@ -22,8 +22,8 @@
                     v-model="privKey" 
                     :rules="[rules.required]"
                     :append-icon="isHiddenPassword ? 'visibility' : 'visibility_off'"
-                    :append-icon-cb="() => { isHiddenPassword = !isHiddenPassword }"
                     :type="isHiddenPassword ? 'password' : 'text'"
+                    @click:append="() => { isHiddenPassword = !isHiddenPassword }"
                 ></v-text-field>
 
                 <v-btn type="submit"

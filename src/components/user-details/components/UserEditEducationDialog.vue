@@ -81,7 +81,8 @@
 
                             <div class="col-2 c-pt-5">
                                 <div class="row justify-end">
-                                    <v-checkbox label="In progress"
+                                    <v-checkbox class="ma-0 pa-0"
+                                        label="In progress"
                                         :input-value="isActive"
                                         hide-details
                                         style="max-width: 140px"
