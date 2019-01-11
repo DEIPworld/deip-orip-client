@@ -255,7 +255,7 @@
                 
               let approvedAmount = countAppAmount(this.approvedApps);
               let pendingAmount = countAppAmount(this.pendingApps);
-              let remainingAmount = this.fromAssetsToFloat(this.program.award_ceiling) - approvedAmount - pendingAmount;
+              let remainingAmount = this.fromAssetsToFloat(this.program.amount) - approvedAmount - pendingAmount;
 
               return {
                 data: [
