@@ -39,7 +39,7 @@
                     <v-card>
                         <v-card-text>
                             <div class="row-nowrap">
-                                <div class="col-9">
+                                <div class="col-8">
                                     <span class="c-pr-3">
                                         <v-avatar size="20px">
                                             <img :src="item.application.foa.agency_name | agencyLogoSrc(160, 160, false)" />
@@ -66,10 +66,15 @@
                                         <span v-else>{{ item.application.title }}</span>
                                     </span>
                                 </div> 
-                                <div class="col-2">
+                                <div class="col-1">
                                     <div class="text-align-center">
                                         <span class="green--text text--darken-2" v-if="isApplicationApproved(item.application)">Approved</span>
                                         <span class="red--text text--darken-2" v-if="isApplicationRejected(item.application)">Rejected</span>
+                                    </div>
+                                </div>
+                                <div class="col-2">
+                                    <div class="text-align-center">
+                                        <span class="caption grey--text">($ {{fromAssetsToFloat(item.application.total_amount)}} requested)</span>
                                     </div>
                                 </div>
                                 <div class="col-1">

@@ -100,6 +100,7 @@
                                 <img :src="duplicate.program.agency_name | agencyLogoSrc(160, 160, false)" />
                             </v-avatar>
                         </span>
+                        <span class="caption grey--text">($ {{fromAssetsToFloat(duplicate.total_amount)}} requested)</span>
                     </div>
                 </div>
             </v-flex>
