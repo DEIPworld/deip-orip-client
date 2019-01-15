@@ -4,7 +4,7 @@
 			<v-flex xs8>
 				<div class="title c-pb-10">{{application.title}}</div>
 			</v-flex>
-			<v-flex xs4 v-if="isGrantor && isApplicationPending">
+			<v-flex xs4 v-if="isResolvingApplicationAvailable">
 				<div class="right">
 					<v-btn outline color="primary" @click="approveApplication()" :loading="isApproveBtnLoading">Approve</v-btn>
 					<v-btn outline color="error" @click="rejectApplication()" :loading="isRejectBtnLoading">Reject</v-btn>
@@ -93,6 +93,7 @@
           ...mapGetters({
             user: 'auth/user',
             isGrantor: 'auth/isGrantor',
+            isOfficer: 'auth/isOfficer',
             userExperise: 'auth/userExperise',
             application: 'rad/application',
 						program: 'rad/program',
@@ -102,6 +103,9 @@
             allApplicationsReviewsList: 'rad/allApplicationsReviewsList',
             applicationRef: 'rad/applicationRef',
           }),
+					isResolvingApplicationAvailable() {
+						return (this.isGrantor || this.program.officers.some(o => o == this.user.username)) && this.isApplicationPending;
+					},
           isApplicationApproved() {
             return this.application && this.application.status === 'application_approved';
           },

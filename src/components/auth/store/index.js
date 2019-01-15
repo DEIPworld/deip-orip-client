@@ -87,8 +87,18 @@ const getters = {
         return false;
     },
 
+    isOfficer: (state, getters) => {
+        if (state.user.profile) {
+            const sub = window.tenant;
+            return state.user.profile.agencies.some(
+                a => a.name.toLowerCase() == sub.toLowerCase() && a.role === 'officer'
+            );
+        }
+        return false;
+    },
+
     isApplicant: (state, getters) => {
-        return !getters.isGrantor;
+        return !getters.isGrantor && !getters.isOfficer;
     }
 }
 

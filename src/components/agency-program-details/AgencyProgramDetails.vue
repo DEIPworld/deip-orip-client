@@ -58,8 +58,8 @@
                 <span class="col-grow body-1">Close date:</span>
                 <span class="col-grow body-2">{{new Date(`${program.close_date}Z`).toDateString()}}</span>
 
-                <span class="col-grow body-1" v-if="isGrantor">Number of applications:</span>
-                <span class="col-grow body-2" v-if="isGrantor">{{applications.length}}</span>
+                <span class="col-grow body-1" v-if="isGrantor || isOfficer">Number of applications:</span>
+                <span class="col-grow body-2" v-if="isGrantor || isOfficer">{{applications.length}}</span>
                 
                 <span class="col-grow body-1" v-if="isApplicant"></span>
                 <span class="col-grow body-2" v-if="isApplicant"></span>
@@ -68,7 +68,7 @@
               <v-divider></v-divider>
             </v-flex>
 
-            <v-flex xs12 v-if="isGrantor">
+            <v-flex xs12 v-if="isGrantor || isOfficer">
               <div class="row">
                 <div class="col-6">
                   <div class="sm-title bold c-pv-10">Applications</div>
@@ -112,7 +112,7 @@
 
             </v-flex>
 
-            <v-flex xs12 v-if="isGrantor">
+            <v-flex xs12 v-if="isGrantor || isOfficer">
               <div class="sm-title bold c-pt-10 c-pb-5">Applications: {{applications.length}}</div>
               <div>
                 <application-list-item v-for="(application, index) in applications"
@@ -206,6 +206,7 @@
                 applications: 'agencyProgramDetails/applications',
                 user: 'auth/user',
                 isGrantor: 'auth/isGrantor',
+                isOfficer: 'auth/isOfficer',
                 isApplicant: 'auth/isApplicant'
             }),
 
