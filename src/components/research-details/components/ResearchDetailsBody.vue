@@ -314,7 +314,7 @@
                     : false
             },
              flattenedApplicationsList() {
-                const tenant = window.tenant.toLowerCase();
+                const tenant = window.env.TENANT.toLowerCase();
                 const flattened = [];
                 for (let i = 0; i < this.applicationsList.length; i++) {
                     const application = this.applicationsList[i];
@@ -326,7 +326,7 @@
                 return flattened;
             }
             // flattenedApplicationsList() {
-            //     const tenant = window.tenant.toLowerCase();
+            //     const tenant = window.env.TENANT.toLowerCase();
             //     const flattened = [];
             //     for (let i = 0; i < this.applicationsList.length; i++) {
             //         const application = this.applicationsList[i];

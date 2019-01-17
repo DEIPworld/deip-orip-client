@@ -250,7 +250,7 @@
               url: `${window.env.DEIP_SERVER_URL}/applications/upload-files`,
               paramName: "application-content",
               headers: {
-                "Agency": window.tenant,
+                "Agency": window.env.TENANT,
                 "Research-Id": this.research.id.toString(),
                 "Foa-Id": this.program.id.toString(),
                 "Authorization": 'Bearer ' + getAccessToken(),

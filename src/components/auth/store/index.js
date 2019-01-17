@@ -79,7 +79,7 @@ const getters = {
 
     isGrantor: (state, getters) => {
         if (state.user.profile) {
-            const sub = window.tenant;
+            const sub = window.env.TENANT;
             return state.user.profile.agencies.some(
                 a => a.name.toLowerCase() == sub.toLowerCase() && a.role === 'grantor'
             );
@@ -89,7 +89,7 @@ const getters = {
 
     isOfficer: (state, getters) => {
         if (state.user.profile) {
-            const sub = window.tenant;
+            const sub = window.env.TENANT;
             return state.user.profile.agencies.some(
                 a => a.name.toLowerCase() == sub.toLowerCase() && a.role === 'officer'
             );

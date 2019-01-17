@@ -37,7 +37,7 @@ const router = new Router({
                         return;
                     }
                     
-                    const sub = window.tenant;
+                    const sub = window.env.TENANT;
                     const agency = agencies.find(a => a.name.toLowerCase() == sub.toLowerCase());
 
                     if (agency) {

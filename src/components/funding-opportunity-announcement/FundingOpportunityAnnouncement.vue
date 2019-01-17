@@ -246,7 +246,7 @@
             }
         },
         created() {
-            agencyHttp.getAgencyProfile(window.tenant)
+            agencyHttp.getAgencyProfile(window.env.TENANT)
                 .then((agency) => {
                     this.agency = agency;
                 })

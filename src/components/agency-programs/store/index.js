@@ -61,7 +61,7 @@ const actions = {
     loadAgencyPrograms({ state, dispatch, commit }, { notify }) {
         commit('SET_AGENCY_PROGRAMS_LOADING_STATE', true);
 
-            deipRpc.api.getFundingOpportunitiesByAgencyNameAsync(window.tenant)
+            deipRpc.api.getFundingOpportunitiesByAgencyNameAsync(window.env.TENANT)
                 .then((programs) => {
                     console.log(programs);
                     const corePrograms = programs;

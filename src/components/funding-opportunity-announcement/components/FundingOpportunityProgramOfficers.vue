@@ -120,7 +120,7 @@
                             return false;
                         }
 
-                        return !!_.find(user.profile.agencies, agency => agency.name === window.tenant && agency.role === 'officer');
+                        return !!_.find(user.profile.agencies, agency => agency.name === window.env.TENANT && agency.role === 'officer');
                     });
                 });
         },
