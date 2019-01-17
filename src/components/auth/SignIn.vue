@@ -7,6 +7,7 @@
                 <div class="deip-emblem">
                     <div class="emblem-logo">Deip.world</div>
                     <div class="emblem-caption">Decentralized research platform</div>
+                    <div v-if="tenant" class="c-pt-5 subheading" style="text-decoration: underline">Use credentials from Grants Community Blockchain</div>
                 </div>
             </div>
 
@@ -61,7 +62,8 @@
                 isChecking: false,
                 rules: {
                     required: (value) => !!value || 'This field is required'
-                }
+                },
+                tenant: window.env.TENANT
             }
         },
 

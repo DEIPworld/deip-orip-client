@@ -4,9 +4,14 @@
             <global-loader></global-loader>
         </div>
 
-        <v-toolbar app fixed clipped-left dark color="black" class="deip-toolbar">
+        <v-toolbar app fixed clipped-left color="black" dark class="deip-toolbar">
             <v-toolbar-title>
-                <router-link class="app-title" :to="{ name: 'Default' }" tag="img" src="./static/logo.svg"></router-link>
+                <router-link v-if="tenant" :to="{ name: 'Default' }">
+                    <v-avatar size="60px">
+                        <img :src="tenant | agencyLogoSrc(160, 160, false)" />
+                    </v-avatar>
+                </router-link>
+                <router-link v-else class="app-title" :to="{ name: 'Default' }" tag="img" src="./static/logo.svg"></router-link>
             </v-toolbar-title>
 
             <v-spacer></v-spacer>
@@ -83,7 +88,11 @@
 
     export default {
         name: 'Toolbar',
-
+        data() {
+            return {
+                tenant: window.env.TENANT
+            }
+        },
         computed: {
             ...mapGetters({
                 user: 'auth/user',
@@ -113,6 +122,7 @@
 
     .deip-toolbar {
         z-index: 200;
+        // background-color: #313a53 !important;
     }
 
     .global-loader-container {

@@ -52,8 +52,8 @@ Vue.filter('avatarSrc', function (avatar, width, height, noCache ) {
     return `${window.env.DEIP_SERVER_URL}/public/files/avatars/${avatar}?width=${width}&height=${height}&noCache=${noCache}`
 });
 
-Vue.filter('agencyLogoSrc', function (agency, width, height, noCache ) {
-    return `${window.env.DEIP_SERVER_URL}/public/agencies/logo/${agency}?width=${width}&height=${height}&noCache=${noCache}`
+Vue.filter('agencyLogoSrc', function (agency, width, height, noCache, ext = 'png') {
+    return `${window.env.DEIP_SERVER_URL}/public/agencies/logo/${agency}?width=${width}&height=${height}&noCache=${noCache}&ext=${ext}`
 });
 
 Vue.filter('dateFormat', (value, format, fromUtcToLocal = false) => {
