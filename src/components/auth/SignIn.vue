@@ -1,46 +1,55 @@
 <template>
-    <v-container fluid fill-height class="pa-0 justify-center">
-
-        <div class="page-container">
-            <div class="text-align-center">
-                <div class="sm-title c-pb-4 bold">Welcome to</div>
-                <div class="deip-emblem">
-                    <div class="emblem-logo">Deip.world</div>
-                    <div class="emblem-caption">Decentralized research platform</div>
-                    <div v-if="tenant" class="c-pt-5 subheading" style="text-decoration: underline">Use credentials from Grants Community Blockchain</div>
-                </div>
+  <v-container fluid  class="pa-0 c-mt-10">
+    <v-layout row wrap fill-height align-space-around justify-space-around text-xs-center>
+      <v-flex xs3></v-flex>
+      <v-flex xs5>
+        <div>
+          <div class="text-align-center">
+            <div class="sm-title c-pb-4 bold">Welcome to</div>
+            <div class="deip-emblem">
+              <div class="emblem-logo">Deip.world</div>
+              <div class="emblem-caption">Decentralized research platform</div>
+              <div v-if="tenant" class="c-pt-5 subheading" style="text-decoration: underline">Use credentials from Grants Community Blockchain</div>
             </div>
+          </div>
+          <v-form v-model="isFormValid" ref="form" class="c-mt-10" @submit.prevent>
+              <v-text-field 
+                  label="Username"
+                  v-model="username" 
+                  :rules="[rules.required]"
+              ></v-text-field>
 
-            <v-form v-model="isFormValid" ref="form" class="c-mt-10" @submit.prevent>
-                <v-text-field 
-                    label="Username"
-                    v-model="username" 
-                    :rules="[rules.required]"
-                ></v-text-field>
+              <v-text-field 
+                  label="Private key"
+                  v-model="privKey" 
+                  :rules="[rules.required]"
+                  :append-icon="isHiddenPassword ? 'visibility' : 'visibility_off'"
+                  :append-icon-cb="() => { isHiddenPassword = !isHiddenPassword }"
+                  :type="isHiddenPassword ? 'password' : 'text'"
+              ></v-text-field>
 
-                <v-text-field 
-                    label="Private key"
-                    v-model="privKey" 
-                    :rules="[rules.required]"
-                    :append-icon="isHiddenPassword ? 'visibility' : 'visibility_off'"
-                    :append-icon-cb="() => { isHiddenPassword = !isHiddenPassword }"
-                    :type="isHiddenPassword ? 'password' : 'text'"
-                ></v-text-field>
-
-                <v-btn type="submit"
-                    block 
-                    color="primary" 
-                    :loading="isChecking" 
-                    :disabled="isChecking" 
-                    @click="login()"
-                >Login</v-btn>
-                <!-- <div class="row justify-center c-pt-3" v-show="isChecking">
-                    <v-progress-circular indeterminate color="primary"></v-progress-circular>
-                </div> -->
-            </v-form>
+              <v-btn type="submit"
+                  block 
+                  color="primary" 
+                  :loading="isChecking" 
+                  :disabled="isChecking" 
+                  @click="login()"
+              >Login</v-btn>
+              <!-- <div class="row justify-center c-pt-3" v-show="isChecking">
+                  <v-progress-circular indeterminate color="primary"></v-progress-circular>
+              </div> -->
+          </v-form>
         </div>
-
-    </v-container>   
+      </v-flex>
+			<v-flex xs3>
+				<div v-if="tenant">
+          <v-avatar size="120px">
+            <img :src="tenant | agencyLogoSrc(160, 160, false)" />
+          </v-avatar>
+        </div>
+			</v-flex>
+    </v-layout>
+  </v-container>   
 </template>
 
 <script>
@@ -144,9 +153,6 @@
     }
 </script>
 
-<style lang="less" scoped>
-    .page-container {
-        width: 550px;
-        height: 400px;
-    }
+<style>
+ 
 </style>
