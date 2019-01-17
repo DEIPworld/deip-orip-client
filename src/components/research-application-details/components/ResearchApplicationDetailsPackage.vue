@@ -61,11 +61,28 @@
         <v-flex xs12>
 					<!-- START Research Content Reviews section -->
 					<div class="c-pt-5 sidebar-fullwidth"><v-divider></v-divider></div>
-					<div class="c-pt-5 c-pb-10" v-if="allApplicationsReviewsList.length">
-						<div id="appliation-reviews">
-							<div class="c-pt-2 title">Reviews: {{ allApplicationsReviewsList.length }}</div>
+					
+					<div class="c-pt-5 c-pb-5" v-if="applicationReviewsList.length">
+						<div id="agency-appliation-reviews">
+							<div class="c-pt-2 title">{{program.agency_name.toUpperCase()}} reviews: {{ applicationReviewsList.length }}</div>
 							<div class="c-pt-6">
-								<application-review-list-item v-for="(review, i) in allApplicationsReviewsList" :review="review" :key="'review-' + i"></application-review-list-item>
+								<application-review-list-item v-for="(review, i) in applicationReviewsList" :review="review" :key="'agency-review-' + i"></application-review-list-item>
+							</div>
+						</div>
+					</div>
+					<div class="c-pt-5 c-pb-5" v-else>
+						<div class="subheading text-align-center">There are no reviews from {{program.agency_name.toUpperCase()}}</div>
+					</div>
+
+					<div class="subheading text-align-center" v-if="thirdpartyApplicationsReviewsList.length" @click="isThirdpartyReviewsVisible = !isThirdpartyReviewsVisible">
+						<a>{{ !isThirdpartyReviewsVisible ? `Show other reviews (${thirdpartyApplicationsReviewsList.length})` : `Hide other reviews`}}</a>
+					</div>
+
+					<div class="c-pt-5 c-pb-10" v-if="thirdpartyApplicationsReviewsList.length" v-show="isThirdpartyReviewsVisible">
+						<div id="other-appliation-reviews">
+							<div class="c-pt-2 title">Other reviews: {{ thirdpartyApplicationsReviewsList.length }}</div>
+							<div class="c-pt-6">
+								<application-review-list-item v-for="(review, i) in thirdpartyApplicationsReviewsList" :review="review" :key="'other-review-' + i"></application-review-list-item>
 							</div>
 						</div>
 					</div>
@@ -86,7 +103,8 @@
           return {
             fileStorageBaseUrl: window.env.DEIP_SERVER_URL,
             isApproveBtnLoading: false,
-            isRejectBtnLoading: false
+            isRejectBtnLoading: false,
+						isThirdpartyReviewsVisible: false
           };
         },
         computed: {
@@ -99,8 +117,9 @@
 						program: 'rad/program',
             research: 'rad/research',
             membersList: 'rad/membersList',
+						allApplicationsReviewsList: 'rad/allApplicationsReviewsList',
             applicationReviewsList: 'rad/applicationReviewsList',
-            allApplicationsReviewsList: 'rad/allApplicationsReviewsList',
+						thirdpartyApplicationsReviewsList: 'rad/thirdpartyApplicationsReviewsList',
             applicationRef: 'rad/applicationRef',
           }),
 					isResolvingApplicationAvailable() {
