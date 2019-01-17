@@ -18,7 +18,6 @@
                         <v-text-field
                             label="Expected number of awards"
                             mask="##############"
-                            suffix="$"
                             v-model="opportunity.numberOfAwards"
                             :rules="[ rules.required ]"
                         ></v-text-field>
