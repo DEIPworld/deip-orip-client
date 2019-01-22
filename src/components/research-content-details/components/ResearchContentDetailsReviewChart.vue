@@ -1,6 +1,6 @@
 <template>
     <div>
-        <div id="d3-chart" class="pos-relative">
+        <div :id="'d3-chart-disc-' + chartsDataItem.discipline.id" class="pos-relative">
             <div class="dynamic-tooltip" style="display: none;">
                 <v-card class="c-pv-1 c-ph-2" dark v-html="dynamicTooltipContent"></v-card>
             </div>
@@ -19,6 +19,7 @@
         name: "ResearchContentDetailsReviewChart",
 
         props: {
+            chartsDataItem: Object
         },
 
         data() {
@@ -29,110 +30,14 @@
 
         computed: {
             ...mapGetters({
-                contentReviewsList: 'rcd/contentReviewsList',
-                disciplinesList: 'rcd/disciplinesList'
             })
         },
 
         mounted() {
-            let resList = _.map(this.disciplinesList, discipline => {
-                return {
-                    discipline: _.clone(discipline),
-                    chartData: _.chain(this.contentReviewsList)
-                        .cloneDeep()
-                        .filter(review => review.disciplines.find(reviewDiscipline => reviewDiscipline.id === discipline.id))
-                        .map(review => {
-                            return {
-                                reviewData: {
-                                    type: 'review',
-                                    date: moment(review.created_at).unix(),
-                                    y: null,
-                                    weight: review.weight_per_discipline.find(weight => weight[0] === discipline.id)[1],
-                                    review: review
-                                },
-                                votesData: _(review.votes)
-                                    .filter(vote => vote.discipline_id = discipline.id)
-                                    .map(vote => {
-                                        return {
-                                            type: 'vote',
-                                            date: moment(vote.voting_time).unix(),
-                                            y: null,
-                                            vote: vote
-                                        };
-                                    })
-                                    .value()
-                            };
-                        })
-                        .each(item => {
-                            item.votesData = _.filter(item.votesData, );
-                        })
-                        .value()
-                }
-            });
-
-            console.log(resList);
-            // return;
-
-            let res = resList[0];
-
-            let resLine = _(res.chartData)
-                .map(item => [].concat(item.reviewData, item.votesData))
-                .flatten()
-                .sortBy(['date'])
-                .value();
-
-            _.each(resLine, timeItem => {
-                // console.log('TIME POINT', timeItem.date);
-
-                let iterationReviews = _(res.chartData).filter(item => item.reviewData.date <= timeItem.date).map(item => _.clone(item)).value();
-                
-                _.each(iterationReviews, item => {
-                    item.votesData = _.filter(item.votesData, voteData => voteData.date <= timeItem.date);
-                });
-
-                let totalVotesWeight = _.reduce(iterationReviews, (acc, item) => {
-                    return acc + _.reduce(item.votesData, (sum, voteData) => sum + voteData.vote.weight, 0);
-                }, 0);
-
-                let averageExpertise = _.reduce(iterationReviews, (acc, item) => {
-                    return acc + item.reviewData.review.expertise_amounts_used.find(expertise => expertise[0] === res.discipline.id)[1];
-                }, 0) / iterationReviews.length;
-
-                // console.log(iterationReviews);
-
-                // console.log(totalVotesWeight);
-                // console.log(averageExpertise);
-
-                console.log('PARTS')
-
-                let iterationEci = _.reduce(iterationReviews, (acc, item) => {
-                    let mr = item.reviewData.review.is_positive ? 1 : -1;
-                    let er = item.reviewData.review.expertise_amounts_used.find(expertise => expertise[0] === res.discipline.id)[1];
-                    let vr = _.reduce(item.votesData, (sum, voteData) => sum + voteData.vote.weight, 0);
-                    let itemRes = mr * er * (er / averageExpertise + 10 * (1 - 1 / iterationReviews.length) * vr / (totalVotesWeight || 1));
-
-                    // console.log(itemRes);
-                    // if (iterationReviews.length === 4) {
-                    //     // debugger;
-                    // }
-
-                    return acc + itemRes;
-                }, 0);
-
-                console.log('iterationEci', iterationEci);
-
-                timeItem.y = Math.round(iterationEci);
-            });
-
-            console.log(res);
-            console.log(resLine);
-
-            ////////////////////////
-            
             let component = this;
 
-            let chartData = res.chartData;
-            let lineChartData = resLine;
+            let chartData = this.chartsDataItem.chartData;
+            let lineChartData = this.chartsDataItem.lineChartData;
 
             let margin = { top: 20, right: 20, bottom: 30, left: 40 },
                 width = 850,
@@ -154,9 +59,9 @@
                 .rangeRound([height, 0])
                 .domain([ minY - 0.02 * (maxY - minY), maxY ]);
             
-            let dynamicTooltip = d3.select("#d3-chart").select('.dynamic-tooltip');
+            let dynamicTooltip = d3.select("#d3-chart-disc-" + this.chartsDataItem.discipline.id).select('.dynamic-tooltip');
 
-            let svg = d3.select("#d3-chart")
+            let svg = d3.select("#d3-chart-disc-" + this.chartsDataItem.discipline.id)
                 .append("svg")
                 .attr("width", width + margin.left + margin.right)
                 .attr("height", height + margin.top + margin.bottom);
@@ -190,22 +95,39 @@
             let g = svg.append("g")
                 .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
+            // axis-y
+            g.append("g")
+                .attr("class", "grid")
+                .call(d3.axisLeft(yScale)
+                    .tickSize(-width)
+                    .tickFormat("")
+                );
+
+            g.append("g")
+                .attr("class", "axis axis--y")
+                .call(d3.axisLeft(yScale));
+
             // axis-x
             g.append("g")
-                .attr("class", "axis axis--x")
+                .attr("class", "grid")
                 .attr("transform", "translate(0," + height + ")")
+                .call(
+                    d3.axisBottom(xScale)
+                        .ticks(10, "s")
+                        .tickFormat("")
+                        .tickSize(-height)
+                );
+
+            g.append("g")
+                .attr("class", "axis axis--x")
+                .attr("transform", "translate(0," + yScale(0) + ")")
                 .call(
                     d3.axisBottom(xScale)
                         .ticks(10, "s")
                         .tickFormat(unix => moment.unix(unix).format('DDD MMM HH:mm'))
                 );
-
+                
             window.d3 = d3;
-
-            // axis-y
-            g.append("g")
-                .attr("class", "axis axis--y")
-                .call(d3.axisLeft(yScale));
 
             // line chart
             let line = d3.line()
@@ -271,6 +193,7 @@
                                 ${d.reviewData.review.is_positive ? 'Approve' : 'Reject'}
                             </div>
                             ${expertiseTags}
+                            <div class="c-pt-2 bold">ECI ${d.reviewData.y}</div>
                         </div>
                     `;
                 })
@@ -292,7 +215,21 @@
                 .attr("class", "vote-dot")
                 .attr("cx", (d, i) => xScale(d.date))
                 .attr("cy", d => yScale(d.y))
-                .attr("r", 3);
+                .attr("r", 3)
+                .on("mouseover", function(d) {
+                    dynamicTooltip.style("display", "block");
+                    dynamicTooltip.style("top", `${parseFloat(d3.select(this).attr('cy')) + margin.top}px`);
+                    dynamicTooltip.style("left", `${parseFloat(d3.select(this).attr('cx')) + margin.left}px`);
+
+                    component.dynamicTooltipContent = `
+                        <div class="caption">
+                            <div class="bold">${d.vote.voter}</div>
+                            <div class="">Weight ${d.vote.weight}</div>
+                            <div class="c-pt-2 bold">ECI ${d.y}</div>
+                        </div>
+                    `;
+                })
+                .on('mouseleave', function(d) { dynamicTooltip.style("display", "none") });
         }
     };
 </script>
@@ -305,12 +242,25 @@
         opacity: 0.9;
     }
 
-    .bar { fill: steelblue; }
-    // .bar:hover {fill: orange; }
-    // .axis--x path { display: none; }
+    .grid line {
+        stroke: lightgrey;
+        stroke-opacity: 0.7;
+        shape-rendering: crispEdges;
+        stroke-dasharray: 4;
+    }
+
+    .grid path {
+        stroke-width: 0;
+    }
+
+    .bar {
+        fill: #2962FF;
+        opacity: 0.5;
+    }
+    
     .line {
         fill: none;
-        stroke: royalblue;
+        stroke: #2962FF;
         stroke-width: 1;
     }
 
@@ -319,22 +269,22 @@
     }
 
     .review-dot:hover {
-        stroke: orange;
+        stroke: #8BC34A;
         stroke-width: 2;
     }
     .review-dot:hover + .vote-dots {
         display: inline;
 
-        .vote-dot { fill: orange; }
+        .vote-dot { fill: #8BC34A; }
     }
 
     .review-dot.highlighted {
-        stroke: red;
+        stroke: #1B5E20;
         stroke-width: 2;
     }
     .review-dot.highlighted + .vote-dots {
         display: inline;
         
-        .vote-dot { fill: red; }
+        .vote-dot { fill: #1B5E20; }
     }
 </style>

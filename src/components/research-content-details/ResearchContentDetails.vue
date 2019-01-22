@@ -39,8 +39,8 @@
                         <div class="c-pt-2 title">Reviews: {{ contentReviewsList.length }}</div>
 
                         <div v-if="contentReviewsList.length" class="c-pt-6">
-                            <research-content-details-review-chart
-                            ></research-content-details-review-chart>
+                            <research-content-details-review-tab-chart
+                            ></research-content-details-review-tab-chart>
                         </div>
 
                         <div class="c-pt-6">
