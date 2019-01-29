@@ -4,6 +4,7 @@ import preliminaryDataLoader from './utils/preliminaryDataLoader';
 
 import CreateResearchGroup from '@/components/research-group-create/CreateResearchGroup';
 import ResearchGroupDetails from '@/components/research-group-details/ResearchGroupDetails';
+import ResearchGroupWallet from '@/components/research-group-wallet/ResearchGroupWallet';
 
 const resesarchGrouproutes = [{
         path: '/:research_group_permlink/group-details',
@@ -25,6 +26,10 @@ const resesarchGrouproutes = [{
         path: '/:account_name/create-research-group',
         name: 'CreateResearchGroup',
         component: CreateResearchGroup
+    }, {
+        path: '/research-group-wallet',
+        name: 'ResearchGroupWallet',
+        component: ResearchGroupWallet
     }];
 
 export default resesarchGrouproutes;
