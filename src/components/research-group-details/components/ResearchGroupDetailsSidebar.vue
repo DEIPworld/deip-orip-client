@@ -26,7 +26,16 @@
 
         <div v-if="isResearchGroupMember" class="">
             <div class="c-pv-6">
-                <div class="sm-title bold">Assets</div>
+                <div class="sm-title bold">
+                    <span class="">Assets</span>
+                    
+                    <router-link class="a float-right" 
+                        :to="{
+                            name: 'ResearchGroupWallet',
+                            params: { research_group_permlink: this.group.permlink }
+                        }"
+                    >Group wallet</router-link>
+                </div>
 
                 <div class="c-pt-4">
                     <div class="row-nowrap align-items-center c-pb-4">
