@@ -25,7 +25,7 @@
                 </div>
             </v-flex>
             <v-flex xs2 offset-xs1 text-xs-center>
-                <div class="grey--text c-pt-4 body-2">AWARD</div>
+                <div class="grey--text c-pt-4 body-2">FUNDING</div>
                 <div class="sm-title c-pt-2 bold">$ {{fromAssetsToFloat(program.amount)}}</div>
             </v-flex>
         </v-layout>

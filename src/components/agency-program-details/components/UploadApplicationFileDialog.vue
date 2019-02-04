@@ -216,6 +216,7 @@
             timestamp: null,
             allAttached: true,
             organization: '',
+            filesCount: 0,
 
             filesMap: {
               "Application Content.pdf": false,
@@ -243,7 +244,7 @@
               const minFloor = this.fromAssetsToFloat(this.program.award_floor);
               const maxCeiling = this.fromAssetsToFloat(this.program.award_ceiling);
               return !this.research || !(amount >= minFloor && amount <= maxCeiling) || 
-                      !this.organization || !this.title;
+                      !this.organization || !this.title || !this.filesCount;
           },
           dropzoneOptions() {
             return this.research != null && this.program != null && this.timestamp ? {
@@ -285,7 +286,6 @@
           close() {
             this.isLoading = false;
             this.meta.isOpen = false;
-
             if (this.$refs.newApplication) {
               this.$refs.newApplication.removeAllFiles();
             }
@@ -301,9 +301,11 @@
             this.close();
           },
           vdropzoneFileAdded(file) {
+            this.filesCount++;
             this.filesMap[file.name] = true;
           },
           vdropzoneRemovedFile(file) {
+            this.filesCount--;
             this.filesMap[file.name] = false;
           },
           vsuccessMultiple(files, res) {
@@ -329,6 +331,10 @@
               this.$store.dispatch('layout/setSuccess', {
                 message: `Application has been sent successfully!`
               });
+
+              return new Promise((resolve, reject) => {
+                this.$store.dispatch('agencyProgramDetails/loadAgencyProgramApplications', { notify: resolve })
+              });
             })
             .catch(err => { 
               this.$store.dispatch('layout/setError', {
@@ -351,8 +357,10 @@
               this.research = null;
               this.title = 
                 `Application for ${this.program.funding_opportunity_number + ' # ' + (this.applications.length + 1)}`;
+              this.totalAmount = '';
               this.organization = '';
-            } 
+              this.filesCount = 0;
+            }
           }
         },
 
