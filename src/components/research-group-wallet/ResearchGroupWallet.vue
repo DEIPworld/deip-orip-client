@@ -2,7 +2,14 @@
     <page-container>
         <contentbar>
             <div class="display-1 bold">
-                <span class="a">Minsk 1</span> RG Wallet
+                <router-link class="a" 
+                    :to="{
+                        name: 'ResearchGroupDetails',
+                        params: { research_group_permlink: encodeURIComponent(group.permlink) }
+                    }"
+                >{{ group.name }}</router-link>
+            
+                RG Wallet
             </div>
 
             <div class="row-nowrap c-pt-8">
@@ -36,7 +43,7 @@
                                 </div>
 
                                 <div class="width-10 list-body-cell text-align-center">
-                                    <div class="half-bold headline">10 000</div>
+                                    <div class="half-bold headline">{{ deipTokenBalance }}</div>
                                 </div>
 
                                 <div class="list-body-cell token-actions">
@@ -56,56 +63,41 @@
                         <div class="info-card-list">
                             <div class="reserarch-table-header c-ph-3">
                                 <div class="list-header-cell col-grow">Title</div>
-                                <div class="list-header-cell width-7 text-align-center">
+                                <!-- <div class="list-header-cell width-7 text-align-center">
                                     Market price<br>
                                     (DEIP Tokens)
-                                </div>
+                                </div> -->
                                 <div class="list-header-cell width-5 text-align-center">Amount</div>
                             </div>
 
                             <v-divider></v-divider>
 
-                            <div class="hidden-last-child">
-                                <!-- <template v-for="research in researches"> -->
+                            <div class="hidden-last-child" v-if="researches.length">
+                                <template v-for="research in researches">
                                     <div class="list-line">
                                         <div class="col-grow list-body-cell">
-                                            <div class="deip-blue-color subheading">Research title</div>
-                                            <div class="grey--text caption">alice · bob</div>
+                                            <div class="deip-blue-color subheading">{{ research.title }}</div>
+                                            <!-- <div class="grey--text caption">alice · bob</div> -->
                                         </div>
 
-                                        <div class="width-7 list-body-cell text-align-center half-bold">10</div>
+                                        <!-- <div class="width-7 list-body-cell text-align-center half-bold">10</div> -->
 
                                         <div class="width-5 list-body-cell text-align-center half-bold">
-                                            10%
+                                            {{ convertToPercent(research.owned_tokens) }}%
                                         </div>
                                     </div>
 
                                     <v-divider></v-divider>
-                                    
-                                    <div class="list-line">
-                                        <div class="col-grow list-body-cell">
-                                            <div class="deip-blue-color subheading">Research title</div>
-                                            <div class="grey--text caption">alice · bob</div>
-                                        </div>
-
-                                        <div class="width-7 list-body-cell text-align-center half-bold">10</div>
-
-                                        <div class="width-5 list-body-cell text-align-center half-bold">
-                                            10%
-                                        </div>
-                                    </div>
-
-                                    <v-divider></v-divider>
-                                <!-- </template> -->
+                                </template>
                             </div>
 
-                            <!-- <div class="list-line height-7" v-else>
+                            <div class="list-line height-7" v-else>
                                 <div class="c-m-auto grey--text">Research Token list is empty</div>
-                            </div> -->
+                            </div>
                         </div>
                     </v-card>
 
-                    <div class="title c-pt-8">Other assets</div>
+                    <!-- <div class="title c-pt-8">Other assets</div>
 
                     <div class="row c-pt-6">
                         <v-card class="col-4 c-p-6 c-mr-6">
@@ -117,25 +109,15 @@
                             <div class="subheading bold">Expertise Tokens</div>
                             <div class="display-1">85635</div>
                         </v-card>
-                    </div>
+                    </div> -->
                 </div>
 
                 <div class="tokens-send-panel">
                     <transition mode="out-in">
-                        <deip-token-send-form
+                        <rg-deip-token-send-form
                             v-if="sendingType === sendingTypes.deipToken"
-                            :deip-token-balance="10000"
-                            @deipTokensTransfered="() => {}"
-                        ></deip-token-send-form>
-
-                        <!-- <research-token-send-form
-                            v-else-if="account && sendingType === sendingTypes.researchToken && selectedResearch"
-                            :research-id="selectedResearch.id"
-                            :research-token="selectedResearch.researchToken"
-                            :researches="researches"
-                            @researchTokensTransfered="loadResearches"
-                            @researchChanged="researchChanged"
-                        ></research-token-send-form> -->
+                            :deip-token-balance="deipTokenBalance"
+                        ></rg-deip-token-send-form>
                     </transition>
                 </div>
 
@@ -148,9 +130,14 @@
     import _ from 'lodash';
     import deipRpc from '@deip/deip-rpc-client';
     import { mapGetters } from 'vuex';
+    import RGDeipTokenSendForm from './components/RGDeipTokenSendForm.vue';
 
     export default {
         name: "ResearchGroupWallet",
+
+        components: {
+            'rg-deip-token-send-form': RGDeipTokenSendForm
+        },
 
         data() { 
             return {
@@ -159,17 +146,21 @@
                 selectedResearchId: undefined,
 
                 sendingTypes: {
-                    deipToken: 'deipToken',
-                    deipCommon: 'deipCommon',
-                    researchToken: 'researchToken'
+                    deipToken: 'deipToken'
                 }
             }
         },
 
         computed: {
             ...mapGetters({
-                user: 'auth/user'
-            })
+                user: 'auth/user',
+                group: 'rgWallet/group',
+                researches: 'rgWallet/researches'
+            }),
+
+            deipTokenBalance() {
+                return this.group ? this.fromAssetsToFloat(this.group.balance) : 0;
+            },
         },
 
         methods: {

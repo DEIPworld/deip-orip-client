@@ -27,9 +27,23 @@ const resesarchGrouproutes = [{
         name: 'CreateResearchGroup',
         component: CreateResearchGroup
     }, {
-        path: '/research-group-wallet',
+        path: '/:research_group_permlink/wallet',
         name: 'ResearchGroupWallet',
-        component: ResearchGroupWallet
+
+        component: preliminaryDataLoader(
+            ResearchGroupWallet, {
+            beforeEnter: (to, from, next) => {
+                store.dispatch('layout/setGlobalLoader');
+
+                store.dispatch('rgWallet/loadGroupWallet', {
+                    permlink: decodeURIComponent(to.params.research_group_permlink) 
+                })
+                    .then(() => {
+                        store.dispatch('layout/hideGlobalLoader');
+                        next();
+                    });
+            }
+        })
     }];
 
 export default resesarchGrouproutes;

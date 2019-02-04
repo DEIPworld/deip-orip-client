@@ -26,7 +26,7 @@
                     :suffix="'DEIP'"
                 ></v-text-field>
 
-                <v-text-field
+                <!-- <v-text-field
                     label="Memo - optional" 
                     multi-line
                     rows="3"
@@ -36,7 +36,7 @@
                     :rules="[
                         rules.memo
                     ]"
-                ></v-text-field>
+                ></v-text-field> -->
 
                 <v-btn block color="primary" 
                     @click="sendTokens()"
@@ -53,9 +53,10 @@
     import _ from 'lodash';
     import deipRpc from '@deip/deip-rpc-client';
     import { mapGetters } from 'vuex';
+    import * as proposalService from './../../../services/ProposalService';
 
     export default {
-        name: "DeipTokenSendForm",
+        name: "RGDeipTokenSendForm",
 
         props: {
             deipTokenBalance: { required: true, type: Number }
@@ -65,7 +66,7 @@
             return {
                 form: {
                     to: '',
-                    memo: '',
+                    // memo: '',
                     amount: ''
                 },
 
@@ -78,7 +79,7 @@
                             ? this.isUsernameExist !== false || 'No user with such name'
                             : 'You can\'t send tokens to this user';
                     },
-                    memo: value => !value || !!value && value.length <= 2000 || 'String should be shorter',
+                    // memo: value => !value || !!value && value.length <= 2000 || 'String should be shorter',
                     amount: value => {
                         let formatValidationResult = this.deipTokenValidator(value);
 
@@ -121,42 +122,43 @@
                 this.$refs.form.reset();
 
                 this.form.to = '';
-                this.form.memo = '';
+                // this.form.memo = '';
                 this.form.amount = '';
             },
             sendTokens() {
                 if (this.$refs.form.validate()) {
                     this.isSending = true;
 
-                    deipRpc.broadcast.transferAsync(
-                        this.user.privKey,
-                        this.user.username,
+                    proposalService.createSendFundsProposal(
+                        this.group.id,
                         this.form.to,
-                        this.toAssetUnits( this.form.amount ),
-                        this.form.memo
-                    ).then(data => {
-                        this.$emit('deipTokensTransfered')
-                        this.clearForm();
-                        
-                        this.$store.dispatch('layout/setSuccess', {
-                            message: "Amount of DEIP tokens was sent"
-                        });
+                        this.toAssetUnits(this.form.amount)
+                    )
+                        .then(data => {
+                            this.clearForm();
 
-                        return data;
-                    }).catch(err => {
-                        this.$store.dispatch('layout/setError', {
-                            message: "Transaction was failed"
+                            this.$store.dispatch('layout/setSuccess', {
+                                message: "Proposal was successfully created"
+                            });
+
+                            return data
+                        })
+                        .catch(err => {
+                            this.$store.dispatch('layout/setError', {
+                                message: "Proposal was failed"
+                            });
+                        })
+                        .finally(() => {
+                            this.isSending = false;
                         });
-                    }).finally(() => {
-                        this.isSending = false;
-                    });
                 }
             }
         },
-        
+
         computed: {
             ...mapGetters({
-                user: 'auth/user'
+                user: 'auth/user',
+                group: 'rgWallet/group'
             })
         }
     };
