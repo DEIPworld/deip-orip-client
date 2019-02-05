@@ -64,7 +64,11 @@
 					
 					<div class="c-pt-5 c-pb-5" v-if="applicationReviewsList.length">
 						<div id="agency-appliation-reviews">
-							<div class="c-pt-2 title">{{program.agency_name.toUpperCase()}} reviews: {{ applicationReviewsList.length }}</div>
+							<div class="c-pt-2 title">
+								{{program.agency_name.toUpperCase()}} reviews:        
+								<span class="green--text text--darken-2">{{agencyPositiveReviewsCount}}</span> / 
+								<span class="red--text text--darken-2">{{agencyNegativeReviewsCount}}</span>
+							</div>
 							<div class="c-pt-6">
 								<application-review-list-item v-for="(review, i) in applicationReviewsList" :review="review" :key="'agency-review-' + i"></application-review-list-item>
 							</div>
@@ -80,7 +84,11 @@
 
 					<div class="c-pt-5 c-pb-10" v-if="thirdpartyApplicationsReviewsList.length" v-show="isThirdpartyReviewsVisible">
 						<div id="other-appliation-reviews">
-							<div class="c-pt-2 title">Other reviews: {{ thirdpartyApplicationsReviewsList.length }}</div>
+							<div class="c-pt-2 title">
+								Other reviews:
+								<span class="green--text text--darken-2">{{otherPositiveReviewsCount}}</span> / 
+								<span class="red--text text--darken-2">{{otherNegativeReviewsCount}}</span>
+							</div>
 							<div class="c-pt-6">
 								<application-review-list-item v-for="(review, i) in thirdpartyApplicationsReviewsList" :review="review" :key="'other-review-' + i"></application-review-list-item>
 							</div>
@@ -139,7 +147,19 @@
 					},
 					formsContent() {
 						return this.applicationRef.packageForms.filter(f => f.hash != this.application.letterHash);
-					}
+					},
+					agencyPositiveReviewsCount() {
+            return this.applicationReviewsList.filter(r => r.is_positive).length;
+          },
+          agencyNegativeReviewsCount() {
+            return this.applicationReviewsList.filter(r => !r.is_positive).length;
+          },
+					otherPositiveReviewsCount() {
+            return this.thirdpartyApplicationsReviewsList.filter(r => r.is_positive).length;
+          },
+          otherNegativeReviewsCount() {
+            return this.thirdpartyApplicationsReviewsList.filter(r => !r.is_positive).length;
+          }
         },
         methods: {
 

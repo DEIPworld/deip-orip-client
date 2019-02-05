@@ -34,10 +34,14 @@
     <!-- ### START Research Applications Review Section ### -->
     <div class="c-mt-4">
       <div class="sidebar-fullwidth"><v-divider></v-divider></div>
-      <div class="subheading bold c-mt-4">
+    <!--  <div class="subheading bold c-mt-4">
         Reviews: 
         <span class="green--text text--darken-2">{{positiveReviewsCount}}</span> / 
         <span class="red--text text--darken-2">{{negativeReviewsCount}}</span> 
+      </div> -->
+      <div class="subheading bold c-mt-4">
+        <div class="c-pb-2">{{program.agency_name.toUpperCase()}} Reviews: <span>{{applicationReviewsList.length}}</span></div>
+        <div class="grey--text" v-if="thirdpartyApplicationsReviewsList.length">Other Reviews: <span>{{thirdpartyApplicationsReviewsList.length}}</span></div>
       </div>
     <!--  <div class="c-pt-3">
         <div class="caption">
@@ -81,8 +85,9 @@
             research: 'rad/research',
             program: 'rad/program',
             membersList: 'rad/membersList',
+						allApplicationsReviewsList: 'rad/allApplicationsReviewsList',
             applicationReviewsList: 'rad/applicationReviewsList',
-            allApplicationsReviewsList: 'rad/allApplicationsReviewsList',
+						thirdpartyApplicationsReviewsList: 'rad/thirdpartyApplicationsReviewsList',
             applicationRef: 'rad/applicationRef',
           }),
           isReviewCommitteeMember() {
