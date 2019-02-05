@@ -76,7 +76,7 @@
 						if (item && item.is_personal) {
 							return false;
 						}
-						const hasValue = val => val != null ? val : '';
+						const hasValue = val => val != null ? val : 'review';
 						const text = hasValue(item.name);
 						const query = hasValue(queryText);
 
