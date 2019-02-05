@@ -30,18 +30,16 @@
                     </v-avatar>
                 </v-btn>
 
-                <v-list dark dense>
+                <v-list class="dropdown-list" dark dense>
                     <v-list-tile :to="{ name: 'UserDetails', params: { account_name: user.username } }">
                         <v-list-tile-title>Profile</v-list-tile-title>
                     </v-list-tile>
 
+                    <!-- temporary commented for the NSF demo -->
+                    <!--
                     <v-list-tile :to="{ name: 'UserWallet' }">
                         <v-list-tile-title>Wallet</v-list-tile-title>
                     </v-list-tile>
-                    
-                <!-- <v-list-tile v-if="user" :to="{ name: 'CreateDisciplineGrant' }">
-                        <v-list-tile-title>Create Grant</v-list-tile-title>
-                    </v-list-tile> -->
 
                     <v-list-tile :to="{ name: 'claim-user-expertise-list' }">
                         <v-list-tile-title>Expertise Committee</v-list-tile-title>
@@ -50,6 +48,11 @@
                     <v-list-tile :to="{ name: 'voting-for-block-producers' }">
                         <v-list-tile-title>Voting for block producers</v-list-tile-title>
                     </v-list-tile>
+                    -->
+                    
+                <!-- <v-list-tile v-if="user" :to="{ name: 'CreateDisciplineGrant' }">
+                        <v-list-tile-title>Create Grant</v-list-tile-title>
+                    </v-list-tile> -->
 
                    <!-- <v-list-tile :to="{ name: 'investor-dashboard' }">
                         <v-list-tile-title>Investor dashboard</v-list-tile-title>
@@ -131,5 +134,9 @@
         right: 0px;
         left: 0px;
         z-index: 201;
+    }
+
+    .dropdown-list {
+        min-width: 170px;
     }
 </style>

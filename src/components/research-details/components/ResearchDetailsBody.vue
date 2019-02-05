@@ -70,6 +70,7 @@
                                     <div class="text-align-center">
                                         <span class="green--text text--darken-2" v-if="isApplicationApproved(item.application)">Approved</span>
                                         <span class="red--text text--darken-2" v-if="isApplicationRejected(item.application)">Rejected</span>
+                                        <span class="grey--text" v-if="isApplicationPending(item.application)">Pending</span>
                                     </div>
                                 </div>
                                 <div class="col-2">
