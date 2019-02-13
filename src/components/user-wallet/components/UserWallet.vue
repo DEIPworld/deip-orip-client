@@ -4,7 +4,7 @@
             <div class="display-1 bold">Wallet</div>
 
             <div class="row-nowrap c-pt-8">
-                <div class="col-grow c-pr-8">
+                <div class="col-grow c-p-1 c-mr-7 overflow-hidden">
                     <v-card>
                         <div class="info-card-list">
                             <div class="list-line">
@@ -157,6 +157,60 @@
                             </div>
                         </div>
                     </v-card>
+
+                    <div class="title c-pt-8">Account transfers</div>
+                    
+                    <v-card class="c-mt-6">
+                        <div class="info-card-list">
+                            <div class="reserarch-table-header c-ph-3">
+                                <div class="list-header-cell col-grow">TX hash</div>
+                                <div class="list-header-cell width-8 text-align-center">Who</div>
+                                <div class="list-header-cell width-10 text-align-center">Date (UTC)</div>
+                                <div class="list-header-cell width-10 text-align-center">Amount</div>
+                            </div>
+
+                            <v-divider></v-divider>
+
+                            <div class="hidden-last-child" v-if="transfers.length">
+                                <template v-for="transfer in transfers">
+                                    <div class="list-line">
+                                        <div class="col-grow list-body-cell overflow-hidden">
+                                            <div class="deip-blue-color subheading overflow-ellipsis">
+                                                {{ transfer[1].trx_id }}
+                                            </div>
+                                        </div>
+
+                                        <div class="width-8 col-shrink list-body-cell text-align-center half-bold">
+                                            <router-link v-if="transfer[1].op[1].from === user.username" class="a"
+                                                :to="{ name: 'UserDetails', params: { account_name: transfer[1].op[1].to }}"
+                                            >{{ transfer[1].op[1].to }}</router-link>
+
+                                            <router-link v-else class="a"
+                                                :to="{ name: 'UserDetails', params: { account_name: transfer[1].op[1].from }}"
+                                            >{{ transfer[1].op[1].from }}</router-link>
+                                        </div>
+
+                                        <div class="width-10 col-shrink list-body-cell text-align-center half-bold">
+                                            {{ transfer[1].timestamp | dateFormat('HH:mm D MMM YYYY', true) }}
+                                        </div>
+
+                                        <div v-if="transfer[1].op[1].from === user.username"
+                                            class="width-10 col-shrink list-body-cell text-align-center red--text text--darken-2"
+                                        >- {{ fromAssetsToFloat(transfer[1].op[1].amount) }} DT</div>
+                                        <div v-else
+                                            class="width-10 col-shrink list-body-cell text-align-center green--text text--darken-2"
+                                        >+ {{ fromAssetsToFloat(transfer[1].op[1].amount) }} DT</div>
+                                    </div>
+
+                                    <v-divider></v-divider>
+                                </template>
+                            </div>
+
+                            <div class="list-line height-7" v-else>
+                                <div class="c-m-auto grey--text">Research Token list is empty</div>
+                            </div>
+                        </div>
+                    </v-card>
                 </div>
 
                 <div class="tokens-send-panel">
@@ -216,6 +270,7 @@
             ...mapGetters({
                 account: 'userWallet/account',
                 researches: 'userWallet/researches',
+                transfers: 'userWallet/transfers',
                 user: 'auth/user'
             }),
             deipTokenBalance() {
@@ -232,20 +287,25 @@
         methods: {
             loadUserAccount() {
                 this.$store.dispatch('userWallet/loadUser', this.user.username);
+                this.$store.dispatch('userWallet/loadTransfers', this.user.username);
             },
+
             selectResearch(research) {
                 this.selectedResearchId = research.id;
                 this.sendingType = this.sendingTypes.researchToken;
             },
+
             loadResearches() {
                 this.$store.dispatch('userWallet/loadResearchTokens', this.user.username);
             },
+
             researchChanged(id) {
                 this.selectedResearchId = id;
             }
         },
         
         created() {
+            
         }
     };
 </script>
@@ -253,6 +313,7 @@
 <style lang="less" scoped>
     .tokens-send-panel {
         width: 300px;
+        flex-shrink: 0;
     }
     .token-actions {
         width: 230px;
