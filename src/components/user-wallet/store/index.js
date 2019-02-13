@@ -4,13 +4,15 @@ import Vue from 'vue';
 
 const state = {
     account: undefined,
-    researches: []
+    researches: [],
+    transfers: []
 };
 
 // getters
 const getters = {
     account: state => state.account,
-    researches: state => state.researches
+    researches: state => state.researches,
+    transfers: state => state.transfers
 };
 
 // actions
@@ -18,7 +20,8 @@ const actions = {
     loadWallet({ dispatch }, accountName) {
         return Promise.all([
             dispatch('loadUser', accountName),
-            dispatch('loadResearchTokens', accountName)
+            dispatch('loadResearchTokens', accountName),
+            dispatch('loadTransfers', accountName)
         ]);
     },
 
@@ -60,6 +63,13 @@ const actions = {
 
                 commit('SET_RESEARCHES', userResearches);
             });
+    },
+
+    loadTransfers({ commit }, accountName) {
+        return deipRpc.api.getAccountDeipToDeipTransfersAsync(accountName, -1, 30)
+            .then(transfers => {
+                commit('SET_TRANSFERS', transfers.reverse());
+            });
     }
 };
 
@@ -68,8 +78,13 @@ const mutations = {
     ['SET_ACCOUNT'](state, account) {
         Vue.set(state, 'account', account);
     },
+
     ['SET_RESEARCHES'](state, researches) {
         Vue.set(state, 'researches', researches);
+    },
+
+    ['SET_TRANSFERS'](state, transfers) {
+        Vue.set(state, 'transfers', transfers);
     }
 };
 
