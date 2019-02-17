@@ -33,14 +33,24 @@
         </div>
 
         <div class="row c-pt-2">
-            <div v-for="eci in eciList" class="grey--text">
+            <div v-for="eci in eciList" class="grey--text c-pr-4">
                 <span class="c-pr-1">
                     <span class="">{{ eci.disciplineName }}</span>
                 </span>
 
-                <span class="c-pr-4 bold">
+                <span class="bold">
                     <span>{{ eci.value }}</span>
                 </span>
+
+                <div class="width-7 grey lighten-1" style="height: 2px;">
+                    <div class="full-height grey darken-2"
+                        :style="{ width: `${countEciBarWidth(
+                            eci.value, 
+                            eci.stats.max_research_eci_in_discipline, 
+                            eci.stats.average_research_eci_in_discipline
+                        )}%` }"
+                    ></div>
+                </div>
             </div>
         </div>
 
@@ -91,9 +101,11 @@
 
     export default {
         name: "ResearchFeedListItem",
+
         props: {
             research: { required: true, default: undefined }
         },
+
         computed: {
             disciplines() {
                 return this.research.disciplines && this.research.totalVotes
@@ -110,16 +122,19 @@
                     })
                     : [];
             },
+
             eciList() {
                 return this.research.disciplines.map(discipline => {
                     const eciObj = this.research.eci_per_discipline.find(item => item[0] === discipline.id);
 
                     return {
                         disciplineName: discipline.name,
+                        stats: discipline.stats,
                         value: eciObj ? eciObj[1] : 0
                     }
                 });
             },
+
             tokenSaleStr() {
                 if (!this.research.tokenSale) {
                     return undefined;
@@ -139,13 +154,16 @@
                 }
             }
         },
+
         data() {
             return {};
         },
+
         methods: {
             toggleItem() {
                 this.$store.dispatch('feed/toggleFeedItem', this.research.research_id)
             },
+
             countReviews(isPositive) {
                 return this.research.reviews.reduce(
                     (acc, review) => review.is_positive && isPositive || !review.is_positive && !isPositive ? acc + 1 : acc,
