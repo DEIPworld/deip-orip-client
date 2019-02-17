@@ -352,18 +352,40 @@ const actions = {
     loadResearchDisciplines({ state, dispatch,commit }, { researchId, notify }) {
         const disciplinesList = [];
         commit('SET_RESEARCH_DISCIPLINES_LOADING_STATE', true)
+
         deipRpc.api.getDisciplinesByResearchAsync(researchId)
             .then((data) => {
-                const promises = [];
+                const tvoPromises = [];
+                const statsPromises = [];
+
                 for (var i = 0; i < data.length; i++) {
                     var discipline = data[i];
                     disciplinesList.push(discipline);
-                    promises.push(deipRpc.api.getTotalVotesByResearchAndDisciplineAsync(researchId, discipline.id))
-                }
-                return Promise.all(promises);
+                    tvoPromises.push(deipRpc.api.getTotalVotesByResearchAndDisciplineAsync(researchId, discipline.id));
 
+                    statsPromises.push(
+                        deipRpc.api.getEciAndExpertiseStatsByDisciplineIdAsync(discipline.id)
+                            // when blockchain API will be repaired, catch section should be deleted
+                            .catch(() => {
+                                return {
+                                    average_content_eci_in_discipline: 1000,
+                                    average_expertise_in_discipline: 3357,
+                                    average_research_eci_in_discipline: 1000,
+                                    max_research_eci_in_discipline: 8000
+                                }
+                            })
+                    )
+                }
+
+                return Promise.all([
+                    Promise.all(tvoPromises),
+                    Promise.all(statsPromises)
+                ]);
             }, (err) => {console.log(err)})
-            .then((tvoList) => {
+            .then(([tvoList, disciplinesStats]) => {
+                disciplinesList.forEach((discipline, i) => {
+                    discipline.stats = disciplinesStats[i];
+                });
                 commit('SET_RESEARCH_DISCIPLINES_LIST', disciplinesList)
                 commit('SET_RESEARCH_TOTAL_VOTES_LIST', tvoList)
             }, (err) => {console.log(err)})

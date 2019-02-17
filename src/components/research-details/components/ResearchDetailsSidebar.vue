@@ -88,11 +88,23 @@
 
             <div class="c-mt-4">
                 <div v-for="(eci, index) in eciList" :key="index"
-                    class="row align-center justify-between eci-item c-ph-2"
+                    class="eci-item"
                     :class="index === 0 ? '' : 'c-mt-1'"
                 >
-                    <div class="grey--text">ECI</div>
-                    <div class="c-pv-2 eci-label">{{ eci.disciplineName }}: {{ eci.value }}</div>
+                    <div class="row align-center justify-between c-ph-2">
+                        <div class="grey--text">ECI</div>
+                        <div class="c-pv-2 eci-label">{{ eci.disciplineName }}: {{ eci.value }}</div>
+                    </div>
+
+                    <div class="grey lighten-1" style="height: 4px; border-radius: 0px 0px 3px 3px">
+                        <div class="full-height grey darken-2" style="border-radius: inherit"
+                            :style="{ width: `${countEciBarWidth(
+                                eci.value, 
+                                eci.stats.max_research_eci_in_discipline, 
+                                eci.stats.average_research_eci_in_discipline
+                            )}%` }"
+                        ></div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -396,12 +408,13 @@
                 return this.isProfileAvailable && (this.canJoinResearchGroup || this.isActiveJoinRequest || this.isActiveInvite) && !this.group.is_personal;
             },
             eciList() {
-                return this.research.disciplines.map(discipline => {
+                return this.disciplinesList.map(discipline => {
                     const eciObj = this.research.eci_per_discipline.find(item => item[0] === discipline.id);
 
                     return {
                         disciplineName: discipline.name,
-                        value: eciObj ? eciObj[1] : 0
+                        value: eciObj ? eciObj[1] : 0,
+                        stats: discipline.stats
                     }
                 });
             }
