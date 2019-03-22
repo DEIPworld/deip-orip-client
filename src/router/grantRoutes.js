@@ -5,6 +5,7 @@ import CreateDisciplineGrant from '@/components/grant-create/CreateDisciplineGra
 import CreateDirectGrant from '@/components/grant-create/CreateDirectGrant';
 import AgencyPrograms from '@/components/agency-programs/AgencyPrograms';
 import AgencyProgramDetails from '@/components/agency-program-details/AgencyProgramDetails';
+import FundingOpportunityGrantProposal from '@/components/funding-opportunity-grant-proposal/FundingOpportunityGrantProposal';
 
 const grantRoutes =[{
         path: '/create-grant',
@@ -37,6 +38,18 @@ const grantRoutes =[{
         beforeEnter: (to, from, next) => {
             store.dispatch('layout/setGlobalLoader');
             store.dispatch('agencyProgramDetails/loadAgencyProgramDetailsPage', { agency: decodeURIComponent(to.params.agency), foaId: decodeURIComponent(to.params.foa) })
+                .then(() => {
+                    store.dispatch('layout/hideGlobalLoader');
+                    next();
+                });
+        }
+    }, {
+        path: '/:agency/programs/:foa/grant-proposal',
+        name: 'FundingOpportunityGrantProposal',
+        component: FundingOpportunityGrantProposal,
+        beforeEnter: (to, from, next) => {
+            store.dispatch('layout/setGlobalLoader');
+            store.dispatch('agencyProgramGrantProposal/loadProgramGrantProposalPage', { agency: decodeURIComponent(to.params.agency), foaId: decodeURIComponent(to.params.foa) })
                 .then(() => {
                     store.dispatch('layout/hideGlobalLoader');
                     next();

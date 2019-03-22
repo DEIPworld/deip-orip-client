@@ -61,7 +61,7 @@
               <v-divider></v-divider>
             </v-flex>
 
-            <v-flex xs12 v-if="isGrantor || isOfficer">
+      <!--  <v-flex xs12 v-if="isGrantor || isOfficer">
               <div class="row">
                 <div class="col-6">
                   <div class="sm-title bold c-pv-10">Applications</div>
@@ -87,7 +87,7 @@
               </div>
 
               <v-divider></v-divider>
-            </v-flex>
+            </v-flex> -->
 
             <v-flex xs12>
               <div class="sm-title bold c-pt-10">Program Guidlines</div>
@@ -103,9 +103,14 @@
 
               <v-divider></v-divider>
 
+              <div class="c-pt-5 c-pb-10">
+                <v-btn class="ma-0" color="primary" @click="proposeGrant()">
+                  Add Grant Receivers
+                </v-btn>
+              </div>
             </v-flex>
 
-            <v-flex xs12 v-if="isGrantor || isOfficer">
+          <!--  <v-flex xs12 v-if="isGrantor || isOfficer">
               <div class="sm-title bold c-pt-10 c-pb-5">Applications: {{applications.length}}</div>
               <div>
                 <application-list-item v-for="(application, index) in applications"
@@ -115,7 +120,7 @@
                   :application-status-map="applicationStatusMap"
                 ></application-list-item>
               </div>
-            </v-flex>
+            </v-flex> -->
 
           </v-layout>
         </v-card>
@@ -156,10 +161,10 @@
               </div>
               <v-divider></v-divider>
 
-              <div class="c-p-10" v-if="isApplicant">
+        <!--  <div class="c-p-10" v-if="isApplicant">
                 <v-btn block color="primary" @click="applyToProgram()">Apply</v-btn>
                 <send-application-dialog :meta="applicationDialogMeta" :program="program"></send-application-dialog>
-              </div>
+              </div> -->
 
             </v-card>
           </v-flex>
@@ -281,8 +286,18 @@
         methods: {
           applyToProgram() {
             this.applicationDialogMeta.isOpen = true;
-          }
+          },
 
+          proposeGrant() {
+            debugger;
+            this.$router.push({ 
+              name: 'FundingOpportunityGrantProposal', 
+              params: { 
+                agency: decodeURIComponent(this.agencyProfile._id), 
+                foaId: decodeURIComponent(this.program.funding_opportunity_number)
+              }
+            });
+          }
         },
 
         mounted() {

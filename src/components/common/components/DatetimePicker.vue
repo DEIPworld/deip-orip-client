@@ -1,7 +1,7 @@
 <template>
     <div class="pos-relative">
         <div class="row">
-            <v-menu class="width-6"
+            <v-menu :class="dateOnly ? 'col-grow': 'width-6'"
                 lazy
                 :close-on-content-click="false"
                 v-model="dateMenu"
@@ -18,6 +18,7 @@
                     :rules="[() => !time || !datetime || $refs.errorMsg.valid || '']"
                     placeholder="Date"
                     v-model="date"
+                    :append-icon="dateOnly ? 'event' : ''"
                     readonly
                 ></v-text-field>
 
@@ -29,7 +30,7 @@
                 ></v-date-picker>
             </v-menu>
 
-            <v-menu class="col-grow" bottom left offset-y :nudge-top="20">
+            <v-menu v-if="!dateOnly" class="col-grow" bottom left offset-y :nudge-top="20">
                 <v-text-field
                     slot="activator"
                     ref="timePicker"
@@ -72,6 +73,7 @@
             label: { type: String, default: '' },
             rules: { required: false, type: Array, default: () => [] },
             availableFromNow: { required: false, type: Boolean, default: false },
+            dateOnly: { required: false, type: Boolean, default: false },
 
             datetime: { 
                 required: true,
@@ -84,7 +86,7 @@
         data() {
             return {
                 date: undefined,
-                time: undefined,
+                time: !this.dateOnly ? undefined : '00:00',
                 dateMenu: false,
                 timePoints15minStep: [
                     '00:00', '00:15', '00:30', '00:45', '01:00', '01:15', '01:30', '01:45',
@@ -169,7 +171,9 @@
 
                 setTimeout(() => {
                     this.$refs.datePicker.validate();
-                    this.$refs.timePicker.validate();
+                    if (!this.dateOnly) {
+                        this.$refs.timePicker.validate();
+                    }
                 }, 1);
             }
         },
