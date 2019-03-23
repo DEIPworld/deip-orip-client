@@ -287,9 +287,9 @@
 
         computed: {
             ...mapGetters({
-                agencyProfile: 'agencyProgramGrantProposal/agency',
-                program: 'agencyProgramGrantProposal/program',
-                allUsers: 'agencyProgramGrantProposal/allUsers',
+                agencyProfile: 'agencyProgramContractProposal/agency',
+                program: 'agencyProgramContractProposal/program',
+                allUsers: 'agencyProgramContractProposal/allUsers',
                 user: 'auth/user',
                 isGrantor: 'auth/isGrantor',
                 isOfficer: 'auth/isOfficer',
@@ -476,7 +476,7 @@
               op.total_amount
             ).then(() => {
 
-              // alert("Created");
+              alert("Created");
 
             }).catch((err) => {
               console.log(err);

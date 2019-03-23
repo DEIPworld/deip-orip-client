@@ -104,7 +104,7 @@
               <v-divider></v-divider>
 
               <div class="c-pt-5 c-pb-10">
-                <v-btn class="ma-0" color="primary" @click="proposeGrant()">
+                <v-btn class="ma-0" color="primary" @click="proposeContract()">
                   Add Grant Receivers
                 </v-btn>
               </div>
@@ -288,9 +288,9 @@
             this.applicationDialogMeta.isOpen = true;
           },
 
-          proposeGrant() {
+          proposeContract() {
             this.$router.push({ 
-              name: 'FundingOpportunityGrantProposal', 
+              name: 'FundingOpportunityContractProposal', 
               params: { 
                 agency: decodeURIComponent(this.agencyProfile._id), 
                 foaId: decodeURIComponent(this.program.funding_opportunity_number)

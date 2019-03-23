@@ -25,7 +25,7 @@ const getters = {
 
 // actions
 const actions = {
-    loadProgramGrantProposalPage({ state, dispatch, commit }, { agency, foaId }) {
+    loadProgramContractProposalPage({ state, dispatch, commit }, { agency, foaId }) {
         commit('SET_AGENCY_PROGRAM_DETAILS_PAGE_LOADING_STATE', true);
         return agencyHttp.getAgencyProfile(agency)
           .then((agencyProfile) => {
