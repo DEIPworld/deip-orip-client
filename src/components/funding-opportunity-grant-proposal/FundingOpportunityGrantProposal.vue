@@ -196,7 +196,7 @@
                       <span class="col-2">
                         <v-btn class="ma-0" outline block color="primary" @click="removeMilestone(funding, milestoneIdx)">
                           <v-icon>remove</v-icon>
-                          Milestone #{{milestoneIdx + 1}}
+                          Milestone #{{milestoneIdx + 2}}
                         </v-btn>
                       </span>
                     </div>
@@ -215,7 +215,7 @@
                 </span>
                 <span class="col-8"></span>
                 <span class="col-2">
-                  <v-btn class="ma-0" block color="primary" @click="save()">Save</v-btn>
+                  <v-btn class="ma-0" block color="primary" @click="save()" :disabled="saveIsDisabled">Save</v-btn>
                 </span>
               </div>
             </v-flex>
@@ -304,6 +304,17 @@
                 { text: this.program.subArea.abbreviation, disabled: false, to:`/${this.agencyProfile._id}/programs?areaCode=${this.program.area.abbreviation}&subAreaCode=${this.program.subArea.abbreviation}` },
                 { text: this.program.title, disabled: true }
               ];
+            },
+
+            saveIsDisabled() {
+              return this.fundings.some(f => {
+                let isInvalid = !f.researcher || !f.research || f.overhead == null || 
+                  f.purpose.salary == null || f.purpose.equipment == null || f.purpose.businessTravel == null || 
+                  f.milestones.some(m => {
+                    return !m.description || m.amount == null || !m.deadlineDate;
+                  });
+                return isInvalid;
+              });
             }
         },
 
@@ -349,7 +360,6 @@
               foundResearch: [],
               foundResearchGroups: [],
 
-              organization: null,
               researchGroup: null,
               research: null,
               overhead: null,
