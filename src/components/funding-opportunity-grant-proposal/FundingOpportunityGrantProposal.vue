@@ -423,35 +423,30 @@
           },
 
           save() {
-
-            let research_expenses = [];
-            let university_overheads = [];
-            let milestones = [];
             let total_amount = 0;
+            let researches = [];
 
-            let researcher = this.fundings[0].researcher.user.account.name;
             for (let i = 0; i < this.fundings.length; i++) {
               let funding = this.fundings[i];
-
               let salary = parseInt(funding.purpose.salary) || 0;
               let equipment = parseInt(funding.purpose.equipment) || 0;
               let businessTravel = parseInt(funding.purpose.businessTravel) || 0;
-
-              let expenses = [
-                [1, salary],
-                [2, equipment],
-                [3, businessTravel]
-              ];
 
               total_amount += salary;
               total_amount += equipment;
               total_amount += businessTravel;
 
-              research_expenses.push([funding.research.id, expenses]);
-              university_overheads.push([funding.research.id, parseInt(funding.overhead) || 0]);
-
-              milestones.push([funding.research.id, 
-                funding.milestones
+              let research = {
+                researcher: funding.researcher.user.account.name,
+                research_id: funding.research.id,
+                research_expenses: [
+                  [1, salary],
+                  [2, equipment],
+                  [3, businessTravel]
+                ],
+                organisation_id: funding.researcher.user.account.organisation_id,
+                university_overhead: parseInt(funding.overhead) || 0,
+                milestones: funding.milestones
                   .map((milestone) => {
                     return {
                       description: milestone.description,
@@ -459,28 +454,29 @@
                       amount: parseInt(milestone.amount) || 0
                     }
                   })
-              ]);
+              }
+
+              researches.push(research);
             }
 
             let op = {
               fundingOpportunityId: this.program.id,
               creator: this.user.username,
-              researcher: researcher,
-              research_expenses,
-              university_overheads,
-              total_amount: total_amount,
-              milestones
+              researches: researches,
+              total_amount: this.toAssetUnits(total_amount),
             }
+
+            console.log(op);
+
             deipRpc.broadcast.createFundingAsync(
               this.user.privKey,
               op.fundingOpportunityId,
               op.creator,
-              op.researcher,
-              op.university_overheads,
-              op.research_expenses,
-              this.toAssetUnits(op.total_amount),
-              op.milestones
+              op.researches,
+              op.total_amount
             ).then(() => {
+
+              // alert("Created");
 
             }).catch((err) => {
               console.log(err);
