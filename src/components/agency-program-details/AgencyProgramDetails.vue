@@ -289,7 +289,6 @@
           },
 
           proposeGrant() {
-            debugger;
             this.$router.push({ 
               name: 'FundingOpportunityGrantProposal', 
               params: { 

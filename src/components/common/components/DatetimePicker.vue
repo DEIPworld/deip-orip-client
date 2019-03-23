@@ -86,7 +86,7 @@
         data() {
             return {
                 date: undefined,
-                time: !this.dateOnly ? undefined : '00:00',
+                time: this.dateOnly ? '00:00' : undefined,
                 dateMenu: false,
                 timePoints15minStep: [
                     '00:00', '00:15', '00:30', '00:45', '01:00', '01:15', '01:30', '01:45',
@@ -144,7 +144,7 @@
                     this.time = this.datetime.split(' ')[1];
                 } else {
                     this.date = undefined;
-                    this.time = undefined;
+                    this.time = this.dateOnly ? '00:00' : undefined;
                 }
             },
 

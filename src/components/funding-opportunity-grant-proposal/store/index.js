@@ -8,6 +8,7 @@ import { getEnrichedProfiles } from './../../../utils/user';
 const state = {
     agency: undefined,
     program: undefined,
+    allUsers: [],
 
     isLoadingAgencyProgramDetailsPage: undefined,
     isLoadingAgencyProgramDetails: undefined,
@@ -17,6 +18,7 @@ const state = {
 const getters = {
     agency: (state, getters) => state.agency,
     program: (state, getters) => state.program,
+    allUsers: (state) => state.allUsers,
     
     isLoadingAgencyProgramDetailsPage: (state, getters) => state.isLoadingAgencyProgramDetailsPage !== false
 }
@@ -26,21 +28,17 @@ const actions = {
     loadProgramGrantProposalPage({ state, dispatch, commit }, { agency, foaId }) {
         commit('SET_AGENCY_PROGRAM_DETAILS_PAGE_LOADING_STATE', true);
         return agencyHttp.getAgencyProfile(agency)
-            .then((agencyProfile) => {
-                commit('SET_AGENCY_PROFILE', agencyProfile);
-                const agencyProgramDetailsLoad = new Promise((resolve, reject) => {
-                    dispatch('loadProgramDetails', { foaId })
-                        .then(() => {
+          .then((agencyProfile) => {
+            commit('SET_AGENCY_PROFILE', agencyProfile);
+            const agencyProgramDetailsLoad = dispatch('loadProgramDetails', { foaId });
+            const usersLoad = dispatch('loadUsers');
 
-                            resolve();
-                        });
-                });
-                return Promise.all([agencyProgramDetailsLoad])
-            })
-            .catch(err => { console.log(err) })
-            .finally(() => {
-                commit('SET_AGENCY_PROGRAM_DETAILS_PAGE_LOADING_STATE', false);
-            });
+            return Promise.all([agencyProgramDetailsLoad, usersLoad])
+          })
+          .catch(err => { console.log(err) })
+          .finally(() => {
+              commit('SET_AGENCY_PROGRAM_DETAILS_PAGE_LOADING_STATE', false);
+          });
     },
 
     loadProgramDetails({ state, dispatch, commit }, { foaId, notify }) {
@@ -48,41 +46,54 @@ const actions = {
 
         var program;
         return deipRpc.api.getFundingOpportunitiesByOpportunityNumberAsync(foaId)
-            .then((programs) => {
-                program = programs.find(p => p.agency_name == state.agency._id);
-                return getEnrichedProfiles(program.officers);
-            })
-            .then((profiles) => {
-                program.officers = profiles
-                commit('SET_AGENCY_PROGRAM', program);
-            })
-            .catch(err => { console.log(err) })
-            .finally(() => {
-                commit('SET_AGENCY_PROGRAM_LOADING_STATE', false);
-                if (notify) notify();
-            });
+          .then((programs) => {
+              program = programs.find(p => p.agency_name == state.agency._id);
+              return getEnrichedProfiles(program.officers);
+          })
+          .then((profiles) => {
+              program.officers = profiles
+              commit('SET_AGENCY_PROGRAM', program);
+          })
+          .catch(err => { console.log(err) })
+          .finally(() => {
+              commit('SET_AGENCY_PROGRAM_LOADING_STATE', false);
+              if (notify) notify();
+          });
+    },
+
+    loadUsers({ state, dispatch, commit }) {
+      return deipRpc.api.getAllAccountsAsync()
+        .then((accounts) => {
+          return getEnrichedProfiles(accounts.map(a => a.name))
+        }, (err) => {console.log(err)}) 
+        .then((users) => {
+          commit('SET_ALL_USERS', users);
+        }, (err) => {console.log(err)})
     }
 }
 
 // mutations
 const mutations = {
+  ['SET_AGENCY_PROFILE'](state, agency) {
+      Vue.set(state, 'agency', agency)
+  },
 
-    ['SET_AGENCY_PROFILE'](state, agency) {
-        Vue.set(state, 'agency', agency)
-    },
+  ['SET_ALL_USERS'](state, users) {
+    Vue.set(state, 'allUsers', users)
+  },
 
-    ['SET_AGENCY_PROGRAM'](state, program) {
-        mapAreaToProgram(program, state.agency.researchAreas);
-        Vue.set(state, 'program', program)
-    },
+  ['SET_AGENCY_PROGRAM'](state, program) {
+      mapAreaToProgram(program, state.agency.researchAreas);
+      Vue.set(state, 'program', program)
+  },
 
-    ['SET_AGENCY_PROGRAM_LOADING_STATE'](state, isLoading) {
-        Vue.set(state, 'isLoadingAgencyProgramDetails', isLoading)
-    },
+  ['SET_AGENCY_PROGRAM_LOADING_STATE'](state, isLoading) {
+      Vue.set(state, 'isLoadingAgencyProgramDetails', isLoading)
+  },
 
-    ['SET_AGENCY_PROGRAM_DETAILS_PAGE_LOADING_STATE'](state, isLoading) {
-        Vue.set(state, 'isLoadingAgencyProgramDetailsPage', isLoading)
-    }
+  ['SET_AGENCY_PROGRAM_DETAILS_PAGE_LOADING_STATE'](state, isLoading) {
+      Vue.set(state, 'isLoadingAgencyProgramDetailsPage', isLoading)
+  }
 }
 
 const namespaced = true;

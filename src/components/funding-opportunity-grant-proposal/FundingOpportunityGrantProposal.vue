@@ -26,158 +26,201 @@
             </v-flex>
             
             <v-flex xs12>
-              <div class="headline c-pb-5 c-pt-10">Grant Receivers</div>
+              <div class="headline c-pt-5">Grant Receivers</div>
+              <div v-for="(funding, fundingIdx) in fundings">
+                <div v-if="fundingIdx != 0" class="row">
+                  <span class="col-2"> 
+                      <v-btn v-if="fundingIdx != 0" @click="removeReceiver(fundingIdx)" class="ma-0" block outline color="primary">
+                        <v-icon>remove</v-icon>
+                        Receiver #{{fundingIdx + 1}}
+                      </v-btn>
+                  </span>
+                  <span class="col-10 title"></span>
+                </div>
 
-              <div class="row c-pt-3">
-                <span class="col-8">
-                  <div class="subheading bold">Researcher Name</div>
-                  <v-text-field label="Full Name"></v-text-field>
-                </span>
-                <span class="col-1"></span>
-                <span class="col-3">
-                    <div class="subheading bold">Organization</div>
+                <div class="row c-pt-12">
+                  <span class="col-8">
+                    <div class="subheading bold">Researcher Name</div>
                     <v-select
-                      :items="[]"
-                      v-model="funding.organization"
-                      label="Title"
+                      label="Full Name"
+                      autocomplete
+                      :loading="funding.isResearchersLoading"
+                      :items="funding.foundResearchers"
+                      item-text="name"
+                      :rules="[() => funding.researcher && funding.researcher.name.length > 0 || 'Researcher name is required']"
+                      :search-input.sync="funding.researcherSearch"
+                      v-on:keyup="queryResearchers(funding)"
+                      v-model="funding.researcher"
+                      @input="setResearchGroupsList(funding)"
                     ></v-select>
-                </span>
-              </div>
-
-              <div class="row c-pt-3">
-                <span class="col-12">
-                  <div class="subheading bold">Research Group</div>
-                    <v-select :items="[]"
-                      v-model="funding.researchGroupId"
-                      label="Group name"
-                    ></v-select>
-                </span>
-              </div>
-
-              <div class="row c-pt-3">
-                <span class="col-12">
-                  <div class="subheading bold">Research</div>
-                    <v-select :items="[]"
-                      v-model="funding.researchId"
-                      label="Title"
-                    ></v-select>
-                </span>
-              </div>
-              
-              <div class="row c-pt-5">
-                <span class="col-8">
-                  <div class="subheading bold">Purpose</div>
-                  <div @click="salaryClick($event)" class="input-group input-group--text-field primary--text">
-                    <div class="input-group__input"><label>Salary</label></div>
-                    <div class="input-group__details"></div>
-                  </div>
-                </span>
-                <span class="col-1"></span>
-                <span class="col-3">
-                    <div class="subheading bold">&nbsp;</div>
-                    <v-text-field v-model="funding.purpose.salary" class="right-input" ref="salaryInput" mask="##############" suffix="$"></v-text-field>
-                </span>
-              </div>
-
-              <div class="row">
-                <span class="col-8">
-                  <div @click="equipmentClick($event)" class="input-group input-group--text-field primary--text">
-                    <div class="input-group__input"><label>Equipment</label></div>
-                    <div class="input-group__details"></div>
-                  </div>
-                </span>
-                <span class="col-1"></span>
-                <span class="col-3">
-                    <v-text-field v-model="funding.purpose.equipment" class="right-input" ref="equipmentInput" mask="##############" suffix="$"></v-text-field>
-                </span>
-              </div>
-
-              <div class="row">
-                <span class="col-8">
-                  <div @click="businessTravelClick($event)" class="input-group input-group--text-field primary--text">
-                    <div class="input-group__input"><label>Business travel</label></div>
-                    <div class="input-group__details"></div>
-                  </div>
-                </span>
-                <span class="col-1"></span>
-                <span class="col-3">
-                    <v-text-field v-model="funding.purpose.businessTravel" class="right-input" ref="businessTravelInput" mask="##############" suffix="$"></v-text-field>
-                </span>
-              </div>
-
-              <div class="row">
-                <span class="col-8">
-                  <div class="subheading bold">University overhead</div>
-                  <v-text-field v-model="funding.overhead" suffix="%"></v-text-field>
-                </span>
-                <span class="col-1"></span>
-                <span class="col-3">
-                    <div class="subheading bold">&nbsp;</div>
-                    <div style="text-align: right; background-color: #ebf5fe; padding: 5px">
-                      <div class="subheading bold">Total amount</div>
-                      <div class="headline">$ 90000</div>
+                  </span>
+                  <span class="col-1"></span>
+                  <span class="col-3">
+                    <div class="subheading bold">Organization</div>
+                    <div class="input-group input-group--text-field primary--text">
+                      <div class="input-group__input"><label>{{funding.researcher ? funding.researcher.user.account.organisation_id : "Organization"}}</label></div>
+                      <div class="input-group__details"></div>
                     </div>
-                </span>
-              </div>
-
-              <div>
-                <div class="row c-pt-5 c-pb-5">
-                  <span class="col-12">
-                    <div class="subheading bold">Milestones</div>
                   </span>
                 </div>
-                <div v-for="(milestone, i) in funding.milestones">
-                  <div class="row">
-                    <span class="col-5">
-                      <div class="subheading bold">Description</div>
-                      <v-text-field v-model="milestone.description" :prefix="i + 1 + '.'"></v-text-field>
-                    </span>
-                    <span class="col-1"></span>
-                    <span class="col-2">
-                      <div class="subheading bold">Deadline</div>
-                        <datetime-picker
-                            :datetime="milestone.deadline"
-                            :available-from-now="true"
-                            :dateOnly="true"
-                        ></datetime-picker>
-                    </span>
-                    <span class="col-1"></span>
-                    <span class="col-3">
-                      <div class="subheading bold">Amount</div>
-                      <div class="right-input">
-                        <v-text-field v-model="milestone.amount" suffix="%"></v-text-field>
+
+                <div class="row c-pt-3">
+                  <span class="col-12">
+                    <div class="subheading bold">Research Group</div>
+                      <v-select 
+                        :items="funding.foundResearchGroups"
+                        item-text="name"
+                        :loading="funding.isResearchGroupsLoading"
+                        v-model="funding.researchGroup"
+                        label="Group name"
+                        @input="setResearchList(funding)"
+                      ></v-select>
+                  </span>
+                </div>
+
+                <div class="row c-pt-3">
+                  <span class="col-12">
+                    <div class="subheading bold">Research</div>
+                      <v-select 
+                        :items="funding.foundResearch"
+                        item-text="title"
+                        :loading="funding.isResearchLoading"
+                        v-model="funding.research"
+                        label="Title"
+                      ></v-select>
+                  </span>
+                </div>
+                
+                <div class="row c-pt-5">
+                  <span class="col-8">
+                    <div class="subheading bold">Purpose</div>
+                    <div @click="focusInputByRef($event, 'funding-salary-' + fundingIdx)" class="input-group input-group--text-field primary--text">
+                      <div class="input-group__input"><label>Salary</label></div>
+                      <div class="input-group__details"></div>
+                    </div>
+                  </span>
+                  <span class="col-1"></span>
+                  <span class="col-3">
+                      <div class="subheading bold">&nbsp;</div>
+                      <v-text-field v-model="funding.purpose.salary" class="right-input" :ref="'funding-salary-' + fundingIdx" mask="##############" suffix="$"></v-text-field>
+                  </span>
+                </div>
+
+                <div class="row">
+                  <span class="col-8">
+                    <div @click="focusInputByRef($event, 'funding-equipment-' + fundingIdx)" class="input-group input-group--text-field primary--text">
+                      <div class="input-group__input"><label>Equipment</label></div>
+                      <div class="input-group__details"></div>
+                    </div>
+                  </span>
+                  <span class="col-1"></span>
+                  <span class="col-3">
+                      <v-text-field v-model="funding.purpose.equipment" class="right-input" :ref="'funding-equipment-' + fundingIdx" mask="##############" suffix="$"></v-text-field>
+                  </span>
+                </div>
+
+                <div class="row">
+                  <span class="col-8">
+                    <div @click="focusInputByRef($event, 'funding-businessTravel-' + fundingIdx)" class="input-group input-group--text-field primary--text">
+                      <div class="input-group__input"><label>Business travel</label></div>
+                      <div class="input-group__details"></div>
+                    </div>
+                  </span>
+                  <span class="col-1"></span>
+                  <span class="col-3">
+                      <v-text-field v-model="funding.purpose.businessTravel" class="right-input" :ref="'funding-businessTravel-' + fundingIdx" mask="##############" suffix="$"></v-text-field>
+                  </span>
+                </div>
+
+                <div class="row">
+                  <span class="col-8">
+                    <div class="subheading bold">University overhead</div>
+                    <v-text-field v-model="funding.overhead" suffix="%" mask="###"></v-text-field>
+                  </span>
+                  <span class="col-1"></span>
+                  <span class="col-3">
+                      <div class="subheading bold">&nbsp;</div>
+                      <div style="text-align: right; background-color: #ebf5fe; padding: 5px; padding-right: 10px">
+                        <div class="subheading bold">Total amount</div>
+                        <div class="headline">$ {{calculateTotalExpenses(funding)}}</div>
                       </div>
+                  </span>
+                </div>
+
+                <div>
+                  <div class="row c-pt-5 c-pb-5">
+                    <span class="col-12">
+                      <div class="subheading bold">Milestones</div>
                     </span>
                   </div>
+                  <div v-for="(milestone, milestoneIdx) in funding.milestones">
+                    <div>
+                      <div class="row">
+                        <span class="col-5">
+                          <div class="subheading bold">Description</div>
+                          <v-text-field v-model="milestone.description" :prefix="milestoneIdx + 1 + '.'"></v-text-field>
+                        </span>
+                        <span class="col-1"></span>
+                        <span class="col-2">
+                          <div class="subheading bold">Deadline</div>
+                            <datetime-picker
+                                :datetime="milestone.deadline"
+                                :available-from-now="true"
+                                :dateOnly="true"
+                                @input="(val) => {
+                                  milestone.deadline = val; 
+                                  milestone.deadlineDate = new Date(val); 
+                                }"
+                            ></datetime-picker>
+                        </span>
+                        <span class="col-1"></span>
+                        <span class="col-3">
+                          <div class="subheading bold">Amount</div>
+                          <div class="right-input">
+                            <v-text-field v-model="milestone.amount" suffix="%" mask="###"></v-text-field>
+                          </div>
+                        </span>
+                      </div>
+                    </div>
+                    <div v-if="(funding.milestones.length - 1) == milestoneIdx" class="row c-pb-3">
+                      <span class="col-10"></span>
+                      <span class="col-2">
+                        <v-btn class="ma-0" block color="primary" @click="addMilestone(funding)">
+                          <v-icon>add</v-icon>
+                          Milestone
+                        </v-btn>
+                      </span>
+                    </div>
+                    <div v-if="funding.milestones.length > 1 && (funding.milestones.length - 1) != milestoneIdx" class="row c-pb-6">
+                      <span class="col-10"></span>
+                      <span class="col-2">
+                        <v-btn class="ma-0" outline block color="primary" @click="removeMilestone(funding, milestoneIdx)">
+                          <v-icon>remove</v-icon>
+                          Milestone #{{milestoneIdx + 1}}
+                        </v-btn>
+                      </span>
+                    </div>
+                  </div>
                 </div>
-                <div class="row">
-                    <span class="col-10"></span>
-                    <span class="col-2">
-                      <v-btn class="ma-0" block color="primary">
-                        <v-icon>add</v-icon>
-                        Milestone
-                      </v-btn>
-                    </span>
-                </div>
+                <v-divider class="c-mt-12"></v-divider>
+                <v-divider class="c-mb-12"></v-divider>
               </div>
-
+              
               <div class="row c-pt-5 c-pb-5">
                 <span class="col-2">
-                  <v-btn class="ma-0" block color="primary">
+                  <v-btn class="ma-0" block color="primary" @click="addReceiver()">
                     <v-icon>add</v-icon>
                     Receiver
                   </v-btn>
                 </span>
-                <span class="col-1"></span>
+                <span class="col-8"></span>
                 <span class="col-2">
-                  <v-btn class="ma-0" block color="primary">Save</v-btn>
+                  <v-btn class="ma-0" block color="primary" @click="save()">Save</v-btn>
                 </span>
               </div>
-
             </v-flex>
 
             <v-flex xs12>
-
             </v-flex>
 
           </v-layout>
@@ -238,22 +281,7 @@
         
         data() {
             return {
-              funding: {
-                organization: null,
-                researchGroupId: null,
-                researchId: null,
-                overhead: null,
-                purpose: {
-                  businessTravel: null,
-                  equipment: null,
-                  salary: null
-                },
-                milestones: [{
-                  deadline: new Date().toISOString().substr(0, 10),
-                  description: null,
-                  amount: null
-                }],
-              }
+              fundings: [],
             }
         },
 
@@ -261,6 +289,7 @@
             ...mapGetters({
                 agencyProfile: 'agencyProgramGrantProposal/agency',
                 program: 'agencyProgramGrantProposal/program',
+                allUsers: 'agencyProgramGrantProposal/allUsers',
                 user: 'auth/user',
                 isGrantor: 'auth/isGrantor',
                 isOfficer: 'auth/isOfficer',
@@ -280,28 +309,179 @@
 
         methods: {
 
-          salaryClick($event) {
+          focusInputByRef($event, ref) {
             $event.stopPropagation();
             $event.preventDefault();
-            this.$refs.salaryInput.focus();
+            let input = this.$refs[ref][0];
+            input.focus();
           },
 
-          equipmentClick($event) {
-            $event.stopPropagation();
-            $event.preventDefault();
-            this.$refs.equipmentInput.focus();
+          calculateTotalExpenses(funding) {
+            let salary = parseInt(funding.purpose.salary);
+            let equipment = parseInt(funding.purpose.equipment);
+            let businessTravel = parseInt(funding.purpose.businessTravel);
+            return (salary || 0) + (equipment || 0) + (businessTravel || 0);
           },
 
-          businessTravelClick($event) {
-            $event.stopPropagation();
-            $event.preventDefault();
-            this.$refs.businessTravelInput.focus();
+          queryResearchers(funding) {
+            funding.isResearchersLoading = true;
+            funding.foundResearchers = this.allUsers.filter(user => {
+              let name = this.$options.filters.fullname(user);
+              return name.toLowerCase().indexOf((funding.researcherSearch || '').toLowerCase()) > -1 
+                || user.account.name.toLowerCase().indexOf((funding.researcherSearch || '').toLowerCase()) > -1;
+            })
+            .map((user => {
+              const name = this.$options.filters.fullname(user);
+              return { name, user };
+            }))
+            funding.isResearchersLoading = false;
+          },
+
+          addReceiver() {
+            const funding = {
+              isResearchersLoading: false,
+              isResearchGroupsLoading: false,
+              isResearchLoading: false,
+
+              researcherSearch: "",
+              researcher: null,
+              foundResearchers: [],
+              foundResearch: [],
+              foundResearchGroups: [],
+
+              organization: null,
+              researchGroup: null,
+              research: null,
+              overhead: null,
+              purpose: {
+                businessTravel: null,
+                equipment: null,
+                salary: null
+              },
+              milestones: [],
+            };
+            this.addMilestone(funding);
+            this.fundings.push(funding);
+          },
+
+          removeReceiver(idx) {
+            this.fundings.splice(idx, 1);
+          },
+
+          addMilestone(funding) {
+            funding.milestones.push({
+              description: null,
+              deadline: undefined,
+              amount: null
+            });
+          },
+
+          removeMilestone(funding, idx) {
+            funding.milestones.splice(idx, 1);
+          },
+
+          setResearchGroupsList(funding) {
+            funding.foundResearchGroups = [];
+            funding.foundResearch = [];
+            funding.isResearchGroupsLoading = true;
+
+            deipRpc.api.getResearchGroupTokensByAccountAsync(funding.researcher.user.account.name)
+              .then(tokens => {
+                return Promise.all(tokens.map(token => deipRpc.api.getResearchGroupByIdAsync(token.research_group_id)));
+              })
+              .then((groups) => {
+                funding.foundResearchGroups.push(...groups);
+                return Promise.all(groups.map(group => deipRpc.api.getResearchesByResearchGroupIdAsync(group.id))); 
+              })
+              .finally(() => {
+                funding.isResearchGroupsLoading = false;
+              });
+          },
+
+          setResearchList(funding) {
+            funding.foundResearch = [];
+            funding.isResearchLoading = true;
+
+            deipRpc.api.getResearchesByResearchGroupIdAsync(funding.researchGroup.id)
+              .then(groupsResearchList => {
+                let researches = [].concat.apply([], groupsResearchList);
+                funding.foundResearch.push(...researches);
+              })
+              .finally(() => {
+                funding.isResearchLoading = false;
+              });
+          },
+
+          save() {
+
+            let research_expenses = [];
+            let university_overheads = [];
+            let milestones = [];
+            let total_amount = 0;
+
+            let researcher = this.fundings[0].researcher.user.account.name;
+            for (let i = 0; i < this.fundings.length; i++) {
+              let funding = this.fundings[i];
+
+              let salary = parseInt(funding.purpose.salary) || 0;
+              let equipment = parseInt(funding.purpose.equipment) || 0;
+              let businessTravel = parseInt(funding.purpose.businessTravel) || 0;
+
+              let expenses = [
+                [1, salary],
+                [2, equipment],
+                [3, businessTravel]
+              ];
+
+              total_amount += salary;
+              total_amount += equipment;
+              total_amount += businessTravel;
+
+              research_expenses.push([funding.research.id, expenses]);
+              university_overheads.push([funding.research.id, parseInt(funding.overhead) || 0]);
+
+              milestones.push([funding.research.id, 
+                funding.milestones
+                  .map((milestone) => {
+                    return {
+                      description: milestone.description,
+                      deadline: milestone.deadlineDate.toISOString().split('.')[0],
+                      amount: parseInt(milestone.amount) || 0
+                    }
+                  })
+              ]);
+            }
+
+            let op = {
+              fundingOpportunityId: this.program.id,
+              creator: this.user.username,
+              researcher: researcher,
+              research_expenses,
+              university_overheads,
+              total_amount: total_amount,
+              milestones
+            }
+            deipRpc.broadcast.createFundingAsync(
+              this.user.privKey,
+              op.fundingOpportunityId,
+              op.creator,
+              op.researcher,
+              op.university_overheads,
+              op.research_expenses,
+              this.toAssetUnits(op.total_amount),
+              op.milestones
+            ).then(() => {
+
+            }).catch((err) => {
+              console.log(err);
+            })
           }
-
         },
 
-        mounted() {
-        }
+        mounted() {},
+        created() {
+          this.addReceiver();
+        },
     }
 </script>
 
