@@ -475,10 +475,19 @@
               op.researches,
               op.total_amount
             ).then(() => {
-
-              alert("Created");
-
-            }).catch((err) => {
+              return deipRpc.api.getFundingsAsync();
+            }).then((contracts) => {
+              let contractId = contracts.length ? contracts[contracts.length -1].id : 0;
+              this.$router.push({
+                name: 'FundingOpportunityContractDetails', 
+                params: { 
+                  agency: decodeURIComponent(this.agencyProfile._id), 
+                  foaId: decodeURIComponent(this.program.funding_opportunity_number),
+                  contractId: decodeURIComponent(contractId)
+                }
+              });
+            })
+            .catch((err) => {
               console.log(err);
             })
           }

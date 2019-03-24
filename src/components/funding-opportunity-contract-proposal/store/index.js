@@ -10,8 +10,7 @@ const state = {
     program: undefined,
     allUsers: [],
 
-    isLoadingAgencyProgramDetailsPage: undefined,
-    isLoadingAgencyProgramDetails: undefined,
+    isLoadingContractProposalPage: undefined
 }
 
 // getters
@@ -20,30 +19,27 @@ const getters = {
     program: (state, getters) => state.program,
     allUsers: (state) => state.allUsers,
     
-    isLoadingAgencyProgramDetailsPage: (state, getters) => state.isLoadingAgencyProgramDetailsPage !== false
+    isLoadingContractProposalPage: (state, getters) => state.isLoadingContractProposalPage !== false
 }
 
 // actions
 const actions = {
     loadProgramContractProposalPage({ state, dispatch, commit }, { agency, foaId }) {
-        commit('SET_AGENCY_PROGRAM_DETAILS_PAGE_LOADING_STATE', true);
+        commit('SET_FUNDING_CONTACT_PROPOSAL_PAGE_LOADING_STATE', true);
         return agencyHttp.getAgencyProfile(agency)
           .then((agencyProfile) => {
             commit('SET_AGENCY_PROFILE', agencyProfile);
             const agencyProgramDetailsLoad = dispatch('loadProgramDetails', { foaId });
             const usersLoad = dispatch('loadUsers');
-
             return Promise.all([agencyProgramDetailsLoad, usersLoad])
           })
           .catch(err => { console.log(err) })
           .finally(() => {
-              commit('SET_AGENCY_PROGRAM_DETAILS_PAGE_LOADING_STATE', false);
+              commit('SET_FUNDING_CONTACT_PROPOSAL_PAGE_LOADING_STATE', false);
           });
     },
 
     loadProgramDetails({ state, dispatch, commit }, { foaId, notify }) {
-        commit('SET_AGENCY_PROGRAM_LOADING_STATE', true);
-
         var program;
         return deipRpc.api.getFundingOpportunitiesByOpportunityNumberAsync(foaId)
           .then((programs) => {
@@ -56,7 +52,6 @@ const actions = {
           })
           .catch(err => { console.log(err) })
           .finally(() => {
-              commit('SET_AGENCY_PROGRAM_LOADING_STATE', false);
               if (notify) notify();
           });
     },
@@ -87,12 +82,8 @@ const mutations = {
       Vue.set(state, 'program', program)
   },
 
-  ['SET_AGENCY_PROGRAM_LOADING_STATE'](state, isLoading) {
-      Vue.set(state, 'isLoadingAgencyProgramDetails', isLoading)
-  },
-
-  ['SET_AGENCY_PROGRAM_DETAILS_PAGE_LOADING_STATE'](state, isLoading) {
-      Vue.set(state, 'isLoadingAgencyProgramDetailsPage', isLoading)
+  ['SET_FUNDING_CONTACT_PROPOSAL_PAGE_LOADING_STATE'](state, isLoading) {
+      Vue.set(state, 'isLoadingContractProposalPage', isLoading)
   }
 }
 

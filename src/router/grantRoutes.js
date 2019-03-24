@@ -6,6 +6,7 @@ import CreateDirectGrant from '@/components/grant-create/CreateDirectGrant';
 import AgencyPrograms from '@/components/agency-programs/AgencyPrograms';
 import AgencyProgramDetails from '@/components/agency-program-details/AgencyProgramDetails';
 import FundingOpportunityContractProposal from '@/components/funding-opportunity-contract-proposal/FundingOpportunityContractProposal';
+import FundingOpportunityContractDetails from '@/components/funding-opportunity-contract-details/FundingOpportunityContractDetails';
 
 const grantRoutes =[{
         path: '/create-grant',
@@ -50,6 +51,19 @@ const grantRoutes =[{
         beforeEnter: (to, from, next) => {
             store.dispatch('layout/setGlobalLoader');
             store.dispatch('agencyProgramContractProposal/loadProgramContractProposalPage', { agency: decodeURIComponent(to.params.agency), foaId: decodeURIComponent(to.params.foa) })
+                .then(() => {
+                    store.dispatch('layout/hideGlobalLoader');
+                    next();
+                });
+        }
+    }, {
+        path: '/:agency/programs/:foa/contract-details/:contractId',
+        name: 'FundingOpportunityContractDetails',
+        component: FundingOpportunityContractDetails,
+        beforeEnter: (to, from, next) => {
+            store.dispatch('layout/setGlobalLoader');
+            store.dispatch('agencyProgramContractDetails/loadProgramContractDetailsPage', 
+                { agency: decodeURIComponent(to.params.agency), foaId: decodeURIComponent(to.params.foa), contractId: decodeURIComponent(to.params.contractId) })
                 .then(() => {
                     store.dispatch('layout/hideGlobalLoader');
                     next();

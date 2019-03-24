@@ -18,7 +18,7 @@ import votingForBlockProducers from './../components/voting-for-block-producers/
 import agencyPrograms from './../components/agency-programs/store/index'
 import agencyProgramDetails from './../components/agency-program-details/store/index'
 import agencyProgramContractProposal from './../components/funding-opportunity-contract-proposal/store/index'
-
+import agencyProgramContractDetails from './../components/funding-opportunity-contract-details/store/index'
 
 Vue.use(Vuex)
 
@@ -39,7 +39,8 @@ export default new Vuex.Store({
         votingForBlockProducers,
         agencyPrograms,
         agencyProgramDetails,
-        agencyProgramContractProposal
+        agencyProgramContractProposal,
+        agencyProgramContractDetails
     },
     strict: process.env.NODE_ENV !== 'production',
     plugins: process.env.NODE_ENV !== 'production' ? [createLogger()] : []
