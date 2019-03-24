@@ -7,6 +7,7 @@ import AgencyPrograms from '@/components/agency-programs/AgencyPrograms';
 import AgencyProgramDetails from '@/components/agency-program-details/AgencyProgramDetails';
 import FundingOpportunityContractProposal from '@/components/funding-opportunity-contract-proposal/FundingOpportunityContractProposal';
 import FundingOpportunityContractDetails from '@/components/funding-opportunity-contract-details/FundingOpportunityContractDetails';
+import TreasuryDepartment from '@/components/treasury-department/TreasuryDepartment';
 
 const grantRoutes =[{
         path: '/create-grant',
@@ -69,6 +70,19 @@ const grantRoutes =[{
                     next();
                 });
         }
-    }];
+    }, {
+        path: '/treasury/agencies-contracts',
+        name: 'TreasuryDepartment',
+        component: TreasuryDepartment,
+        beforeEnter: (to, from, next) => {
+            store.dispatch('layout/setGlobalLoader');
+            store.dispatch('treasuryDepartment/loadTreasuryDepartmentPage')
+                .then(() => {
+                    store.dispatch('layout/hideGlobalLoader');
+                    next();
+                });
+        }
+    }
+];
 
 export default grantRoutes;

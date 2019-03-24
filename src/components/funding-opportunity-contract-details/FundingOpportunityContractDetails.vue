@@ -61,7 +61,7 @@
               </div>
 
               <div v-for="(organization, organizationIdx) in relationsByOrganizations" :key="'org-' + organizationIdx">
-                <div class="subtitle bold c-pt-5 c-pb-5">{{getOrganizationTitle(organization.orgId)}}</div>
+                <div class="subtitle bold c-pt-10 c-pb-5">{{getOrganizationTitle(organization.orgId)}}</div>
                 <v-expansion-panel>
                   <v-expansion-panel-content v-for="(funding, fundingIdx) in organization.relations" :key="'funding-' + fundingIdx + '-org-' + organizationIdx">
                     <div slot="header">
@@ -213,14 +213,13 @@
 <script>
     import { mapGetters } from 'vuex';
     import deipRpc from '@deip/deip-rpc-client';
-    import organizations from './../../utils/organizations';
+    import { getOrganizationTitle } from './../../utils/organizations';
 
     export default {
         name: "FundingOpportunityContractDetails",
         
         data() {
             return {
-              organizations
             }
         },
 
@@ -258,6 +257,7 @@
         },
 
         methods: {
+          getOrganizationTitle,
           totalFundingAmount(funding) {
             return funding.research_expenses.reduce((acc, exp) => acc + parseInt(exp[1], 10), 0);
           },
@@ -272,7 +272,7 @@
               isStacked: 'percent',
               height: 50,
               legend: { position: 'top', maxLines: 1, textStyle: {fontSize: 12, bold: true} },
-              chartArea: { width: '100%', height:'100%' , top: 20, /* left: 0 */},
+              chartArea: { width: '95%', height:'100%' , top: 20, /* left: 0 */},
               hAxis: {                    
                 minValue: 0,
                 ticks: [0],
@@ -321,12 +321,6 @@
               ['Milestone', ...names, { role: 'annotation' } ],
               ['', ...amount, '']
             ];
-          },
-
-          getOrganizationTitle(orgId) {
-            orgId = orgId == 2 ? 0 : orgId; // temp filter for treasury
-            let org = this.organizations[orgId];
-            return org ? `${org.title} ${(org.abbreviation ? "(" + org.abbreviation + ")" : "")}` : "";
           }
         },
 
