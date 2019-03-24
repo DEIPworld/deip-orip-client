@@ -26,7 +26,19 @@
             </v-flex>
             
             <v-flex xs12>
-              <div class="headline c-pb-5 c-pt-5">Grant Summary</div>
+              <div class="row c-pb-5 c-pt-5">
+                <div class="headline col-8">Grant Summary</div>
+                <div class="col-4 text-align-right">
+                  <span v-if="contractIsPending && isGrantor">
+                    <v-chip label color="red" text-color="white">
+                      <span class="bold">Waiting for treasury approve</span>
+                    </v-chip>
+                  </span>
+                  <span v-if="contractIsPending && isTreasury">
+                    <v-btn color="primary" class="ma-0">Approve</v-btn>
+                  </span>
+                </div>
+              </div>
 
               <div class="row c-pt-8">
                 <div class="col-2">
@@ -49,8 +61,8 @@
               </div>
 
               <div v-for="(organization, organizationIdx) in relationsByOrganizations" :key="'org-' + organizationIdx">
-                <div class="subtitle bold c-pt-5 c-pb-5">Org {{organizationIdx}}</div>
-                <v-expansion-panel> <!-- class="c-pt-2 c-pb-2" -->
+                <div class="subtitle bold c-pt-5 c-pb-5">{{getOrganizationTitle(organization.orgId)}}</div>
+                <v-expansion-panel>
                   <v-expansion-panel-content v-for="(funding, fundingIdx) in organization.relations" :key="'funding-' + fundingIdx + '-org-' + organizationIdx">
                     <div slot="header">
                       <div class="row">
@@ -87,7 +99,7 @@
                               <div class="col-2">
                                 <div class="body-2 c-pt-4">{{expense.title}}</div>
                               </div>
-                              <div class="col-6">
+                              <div v-if="!contractIsPending" class="col-6">
                                 <div class="row">
                                   <div class="col-12">                         
                                     <GChart
@@ -99,8 +111,28 @@
                                   </div>
                                 </div>
                               </div>
-                              <div class="col-2">
-                                <div class="c-pt-4">${{expense.amount}}</div>
+                              <div :class="!contractIsPending ? 'col-2' : 'col-8'">
+                                <div class="c-pt-4 body-2">${{expense.amount}}</div>
+                              </div>
+                            </div>
+                          </div>
+                          <div class="row" v-if="contractIsPending">
+                            <div class="col-2"></div>
+                            <div class="col-2">
+                              <div class="body-2 c-pt-4">University overhead</div>
+                            </div>
+                            <div class="col-8">
+                              <div class="body-2 c-pt-4">{{funding.university_overhead}}%</div>
+                            </div>
+                          </div>
+                          <div class="row" v-else>
+                            <div class="col-2"></div>
+                            <div class="col-2">
+                              <div class="body-2 c-pt-4">Total spent:</div>
+                            </div>
+                            <div class="col-8">
+                              <div class="body-2 c-pt-4 c-pl-2">
+                                ${{totalCurrentExpensesAmount(funding)}}
                               </div>
                             </div>
                           </div>
@@ -125,8 +157,6 @@
                   </span>
                 </div>
               </div>
-
-
             </v-flex>
 
             <v-flex xs12>
@@ -183,12 +213,14 @@
 <script>
     import { mapGetters } from 'vuex';
     import deipRpc from '@deip/deip-rpc-client';
+    import organizations from './../../utils/organizations';
 
     export default {
         name: "FundingOpportunityContractDetails",
         
         data() {
             return {
+              organizations
             }
         },
 
@@ -201,7 +233,8 @@
             user: 'auth/user',
             isGrantor: 'auth/isGrantor',
             isOfficer: 'auth/isOfficer',
-            isApplicant: 'auth/isApplicant'
+            isApplicant: 'auth/isApplicant',
+            isTreasury: 'auth/isTreasury'
           }),
 
           breadcrumbs() {
@@ -213,17 +246,26 @@
               { text: this.program.title, disabled: true }
             ];
           },
-
+          
           totalContractAmount() {
             return this.relationsByOrganizations.reduce((acc, org) => acc + org.totalAmount, 0);
-          }
+          },
+
+          contractIsPending() {
+            return this.contract.status == 1;
+          },
+
         },
 
         methods: {
           totalFundingAmount(funding) {
             return funding.research_expenses.reduce((acc, exp) => acc + parseInt(exp[1], 10), 0);
           },
-          
+
+          totalCurrentExpensesAmount(funding) {
+            return funding.current_expenses.reduce((acc, exp) => acc + parseInt(exp[1], 10), 0);
+          },
+
           fundingMilestonesChartOptions(funding) {
             let colors = funding.milestones.map((m, i) => m.status == 2 ? '#8dc2f9' : '#e0e0e0');
             return {
@@ -281,6 +323,11 @@
             ];
           },
 
+          getOrganizationTitle(orgId) {
+            orgId = orgId == 2 ? 0 : orgId; // temp filter for treasury
+            let org = this.organizations[orgId];
+            return org ? `${org.title} ${(org.abbreviation ? "(" + org.abbreviation + ")" : "")}` : "";
+          }
         },
 
         mounted() {},
