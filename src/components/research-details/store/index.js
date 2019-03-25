@@ -22,6 +22,7 @@ const state = {
     groupInvitesList: [],
     contentRefsList: [],
     applicationsRefsList: [],
+    fundingContractsList: [],
 
     isLoadingResearchDetails: undefined,
     isLoadingResearchContent: undefined,
@@ -89,6 +90,10 @@ const getters = {
 
     groupInvitesList: (state, getters) => {
         return state.groupInvitesList;
+    },
+
+    fundingContractsList: (state, getters) => {
+        return state.fundingContractsList.filter(c => c.relation != null);
     },
 
     isLoadingResearchContent: (state, getters) => {
@@ -244,9 +249,12 @@ const actions = {
                 const applicationsRefsLoad = new Promise((resolve, reject) => {
                     dispatch('loadResearchApplicationsRefs', { researchId: state.research.id, notify: resolve })
                 });
+                const grantsLoad = new Promise((resolve, reject) => {
+                    dispatch('loadFundingContracts', { researchId: state.research.id, notify: resolve })
+                });
 
                 return Promise.all([contentLoad, membersLoad, reviewsLoad, disciplinesLoad, tokenHoldersLoad,
-                     tokenSaleLoad, invitesLoad, contentRefsLoad, groupLoad, applicationsLoad, applicationsRefsLoad])
+                     tokenSaleLoad, invitesLoad, contentRefsLoad, groupLoad, applicationsLoad, applicationsRefsLoad, grantsLoad])
 
             }, (err => {console.log(err)}))
             .finally(() => {
@@ -267,7 +275,6 @@ const actions = {
                 contents.forEach((content, index) => {
                     content.reviews = reviews[index];
                 });
-
                 commit('SET_RESEARCH_CONTENT_LIST', contents);
             })
             .catch(err => { console.log(err) })
@@ -275,6 +282,68 @@ const actions = {
                 commit('SET_RESEARCH_CONTENT_LOADING_STATE', false)
                 if (notify) notify();
             })
+    },
+
+    loadFundingContracts({ state, dispatch, commit }, { researchId, notify }) {
+        const contracts = [];
+        return deipRpc.api.getFundingsAsync()
+          .then((items) => {
+            items = items.filter(i => i.status == 2); // approved only
+            contracts.push(...items)
+            return Promise.all(items.map(c => dispatch('loadFundingContractDetails', { researchId, contract: c, notify: notify })));
+          })
+          .then(() => {
+            return Promise.all(contracts.map(c => deipRpc.api.getFundingOpportunityAsync(c.funding_opportunity_id)))
+          })
+          .then((fundingOpportunities) => {
+            for (let i = 0; i < fundingOpportunities.length; i++) {
+              let foa = fundingOpportunities[i];
+              let contract = contracts[i];
+              contract.foa = foa;
+            }
+            let names = contracts.map(r => r.granter);
+            return getEnrichedProfiles(names);
+          })
+          .then((creators) => {
+            for (let i = 0; i < creators.length; i++) {
+              let creator = creators[i];
+              let contract = contracts[i];
+              contract.creatorUser = creator;
+            }
+            commit('SET_RESEARCH_FUNDING_CONTRACTS_DETAILS', contracts);
+          })
+          .catch(err => { console.log(err) })
+          .finally(() => {
+              if (notify) notify();
+          });
+    },
+  
+    loadFundingContractDetails({ state, dispatch, commit }, { researchId, contract, notify }) {
+        return deipRpc.api.getFundingResearchRelationsByFundingAsync(contract.id)
+            .then((relations) => {
+                contract.relation = relations.find(rel => rel.research_id == researchId);
+                if (!contract.relation) return;
+
+                return deipRpc.api.getFundingMilestonesByResearchAsync(contract.relation.research_id)
+                  .then((milestones) => {
+                      contract.relation.milestones = milestones;
+                      return getEnrichedProfiles([contract.relation.researcher]);
+                  })
+                  .then(([researcher]) => {
+                      contract.relation.researcherUser = researcher;
+                      contract.relation.researchExpenses = contract.relation
+                          .research_expenses.map((exp) => {
+                              let title = exp[0] == 1 ? 'Salary' : exp[0] == 2 ? 'Equipment' : 'Business Travel';
+                              let amount = exp[1];
+                              let type = exp[0];
+                              return { title, amount, type };
+                          })
+                  })
+            })
+            .catch(err => { console.log(err) })
+            .finally(() => {
+                if (notify) notify();
+            });
     },
 
     loadResearchApplications({ state, dispatch, commit }, { researchId, notify }) {
@@ -494,6 +563,10 @@ const mutations = {
         Vue.set(state, 'contentList', list)
     },
 
+    ['SET_RESEARCH_FUNDING_CONTRACTS_DETAILS'](state, list) {
+        Vue.set(state, 'fundingContractsList', list)
+    },
+    
     ['SET_RESEARCH_APPLICATIONS_LIST'](state, applications) {
         Vue.set(state, 'applicationsList', applications)
     },

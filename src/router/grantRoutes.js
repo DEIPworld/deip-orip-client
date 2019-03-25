@@ -8,6 +8,7 @@ import AgencyProgramDetails from '@/components/agency-program-details/AgencyProg
 import FundingOpportunityContractProposal from '@/components/funding-opportunity-contract-proposal/FundingOpportunityContractProposal';
 import FundingOpportunityContractDetails from '@/components/funding-opportunity-contract-details/FundingOpportunityContractDetails';
 import TreasuryDepartment from '@/components/treasury-department/TreasuryDepartment';
+import AgencyProgramWithdrawalRequests from '@/components/agency-program-withdrawal-requests/AgencyProgramWithdrawalRequests';
 
 const grantRoutes =[{
         path: '/create-grant',
@@ -77,6 +78,19 @@ const grantRoutes =[{
         beforeEnter: (to, from, next) => {
             store.dispatch('layout/setGlobalLoader');
             store.dispatch('treasuryDepartment/loadTreasuryDepartmentPage')
+                .then(() => {
+                    store.dispatch('layout/hideGlobalLoader');
+                    next();
+                });
+        }
+    }, {
+        path: '/:agency/organizations/withdrawal-requests',
+        name: 'AgencyProgramWithdrawalRequests',
+        component: AgencyProgramWithdrawalRequests,
+        beforeEnter: (to, from, next) => {
+            store.dispatch('layout/setGlobalLoader');
+            store.dispatch('agencyProgramWithdrawalRequests/loadAgencyProgramWithdrawalRequestsPage', 
+            { agency: decodeURIComponent(to.params.agency) })
                 .then(() => {
                     store.dispatch('layout/hideGlobalLoader');
                     next();

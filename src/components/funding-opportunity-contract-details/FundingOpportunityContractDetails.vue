@@ -29,13 +29,23 @@
               <div class="row c-pb-5 c-pt-5">
                 <div class="headline col-8">Grant Summary</div>
                 <div class="col-4 text-align-right">
-                  <span v-if="contractIsPending && isGrantor">
-                    <v-chip label color="red" text-color="white">
+                  <span v-if="isGrantor">
+                    <v-chip v-if="contractIsPending" label color="red" text-color="white">
                       <span class="bold">Waiting for treasury approve</span>
                     </v-chip>
+                    <v-chip v-if="contractIsApproved" label color="green" text-color="white">
+                      <span class="bold">Approved by treasury</span>
+                    </v-chip>
                   </span>
-                  <span v-if="contractIsPending && isTreasury">
-                    <v-btn color="primary" class="ma-0">Approve</v-btn>
+                  <span v-if="isTreasury">
+                    <v-btn v-if="contractIsPending" color="primary" class="ma-0" @click="approve()" 
+                      :loading="isApproving" 
+                      :disabled="isApproving">
+                      Approve
+                    </v-btn>
+                    <v-chip v-if="contractIsApproved" label color="green" text-color="white">
+                      <span class="bold">Approved</span>
+                    </v-chip>
                   </span>
                 </div>
               </div>
@@ -220,6 +230,7 @@
         
         data() {
             return {
+              isApproving: false
             }
         },
 
@@ -253,6 +264,9 @@
           contractIsPending() {
             return this.contract.status == 1;
           },
+          contractIsApproved() {
+            return this.contract.status == 2;
+          }
 
         },
 
@@ -321,6 +335,34 @@
               ['Milestone', ...names, { role: 'annotation' } ],
               ['', ...amount, '']
             ];
+          },
+
+          approve() {
+            this.isApproving = true;
+            deipRpc.broadcast.approveFundingAsync(
+              this.user.privKey,
+              this.contract.id,
+              this.user.username
+            ).then(() => {
+              this.$store.dispatch('layout/setSuccess', {
+                message: "Funding opportunity contract is approved successfully !"
+              });
+
+              this.$store.dispatch('agencyProgramContractDetails/loadProgramContractDetailsPage', 
+                { agency: this.agencyProfile._id, 
+                  foaId: this.program.funding_opportunity_number, 
+                  contractId: this.contract.id
+                });
+
+            }, (err) => {
+              this.$store.dispatch('layout/setError', {
+                message: `An error occurred while accepting invite, please try again later`
+              });
+              console.log(err);
+            })
+            .finally(() => {
+              this.isApproving = false;
+            });
           }
         },
 

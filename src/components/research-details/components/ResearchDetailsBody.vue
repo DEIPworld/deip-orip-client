@@ -246,6 +246,58 @@
                 <v-btn @click="createDarDraft()" :loading="isCreatingDraft" :disabled="isCreatingDraft" block outline color="primary" dark>Use Editor</v-btn>
             </div>
         </div>
+        
+        <div v-if="fundingContractsList.length" class="c-mt-8 title">Grants: 4</div>
+
+        <div v-if="fundingContractsList.length" class="c-pt-6 c-pb-6">
+            <div v-for="(contract, contractIdx) in fundingContractsList">
+                <div :key="'contract-' + contractIdx" :class="contractIdx != fundingContractsList.length - 1 ? 'c-pb-3' : ''">
+                    <v-divider v-if="contractIdx == 0" class="c-mb-3"></v-divider>
+                    <div class="row c-pl-10">
+
+                        <div class="col-10">
+                            <div class="row">
+                                <span class="col-12">
+                                    <router-link class="a" style="text-decoration: none"
+                                        :to="{  name: 'AgencyProgramDetails', 
+                                                params: { 
+                                                    agency: decodeURIComponent(contract.foa.agency_name),
+                                                    foa: decodeURIComponent(contract.foa.funding_opportunity_number) 
+                                                }}">
+                                            {{ contract.foa.funding_opportunity_title }}
+                                    </router-link>
+                                </span>
+                            </div>
+                            <div class="row c-pt-3">
+                                <div class="col-4">
+                                    <span class="grey--text c-pr-2">Posted Date:</span>
+                                    <span class="bold grey--text">
+                                        {{new Date(`${contract.relation.milestones[0].deadline}Z`).toDateString()}}
+                                    </span>
+                                </div>
+                                <div class="col-4">
+                                    <span class="grey--text c-pr-2">Closing Date:</span>
+                                    <span class="bold grey--text">
+                                        {{new Date(`${contract.relation.milestones[contract.relation.milestones.length -1].deadline}Z`).toDateString()}}
+                                    </span>
+                                </div>
+                                <div class="col-4">
+                                    <span class="bold grey--text"># {{contract.foa.funding_opportunity_number}}</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-2">
+                            <div><span class="bold grey--text">FUNDING</span></div>
+                            <div class="c-mt-2">
+                                <span class="bold">${{contractTotalAmount(contract)}}</span>
+                            </div>
+                        </div>
+                    </div>
+                    <v-divider class="c-mt-2"></v-divider>
+                </div>
+            </div>
+        </div>
 
         <!-- <div class="c-pt-4 title">Grants: 4</div>
 
@@ -311,7 +363,8 @@
                 disciplinesList: 'rd/disciplinesList',
                 totalVotesList: 'rd/totalVotesList',
                 contentWeightByDiscipline: 'rd/contentWeightByDiscipline',
-                membersList: 'rd/membersList'
+                membersList: 'rd/membersList',
+                fundingContractsList: 'rd/fundingContractsList'
             }),
             isResearchGroupMember() {
                 return this.research != null 
@@ -435,6 +488,9 @@
                     .filter(m => authors.some(a => a == m.account.name))
                     .map(m => this.$options.filters.fullname(m))
                     .join("  ·  ");
+            },
+            contractTotalAmount(contract) {
+                return contract.relation.research_expenses.reduce((acc, exp) => acc + parseInt(exp[1], 10), 0);
             },
             getContentType
         }
