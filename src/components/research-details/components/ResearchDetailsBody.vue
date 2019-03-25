@@ -252,7 +252,7 @@
         <div v-if="fundingContractsList.length" class="c-pt-6 c-pb-6">
             <div v-for="(contract, contractIdx) in fundingContractsList">
                 <div :key="'contract-' + contractIdx" :class="contractIdx != fundingContractsList.length - 1 ? 'c-pb-3' : ''">
-                    <v-divider v-if="contractIdx == 0" class="c-mb-3"></v-divider>
+                    <v-divider  class="c-mb-3"></v-divider>
                     <div class="row c-pl-10">
 
                         <div class="col-10">
@@ -286,7 +286,6 @@
                                 </div>
                             </div>
                         </div>
-
                         <div class="col-2">
                             <div><span class="bold grey--text">FUNDING</span></div>
                             <div class="c-mt-2">
@@ -295,6 +294,21 @@
                         </div>
                     </div>
                     <v-divider class="c-mt-2"></v-divider>
+                    
+                    <div class="row c-pt-4 c-pb-5">
+                        <div class="col-7"></div>
+                        <div class="col-2">
+                            <v-btn flat color="primary">
+                             Funding History
+                            </v-btn>
+                        </div>
+                        <div class="col-1"></div>
+                        <div class="col-2">
+                            <v-btn block color="primary">
+                                Withdraw Request
+                            </v-btn>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
