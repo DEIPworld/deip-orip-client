@@ -445,13 +445,13 @@
                   [3, businessTravel]
                 ],
                 organisation_id: funding.researcher.user.account.organisation_id,
-                university_overhead: parseInt(funding.overhead) || 0,
+                university_overhead: (parseInt(funding.overhead) || 0) * this.DEIP_1_PERCENT,
                 milestones: funding.milestones
                   .map((milestone) => {
                     return {
                       description: milestone.description,
                       deadline: milestone.deadlineDate.toISOString().split('.')[0],
-                      amount: parseInt(milestone.amount) || 0
+                      amount: (parseInt(milestone.amount) || 0) * this.DEIP_1_PERCENT
                     }
                   })
               }

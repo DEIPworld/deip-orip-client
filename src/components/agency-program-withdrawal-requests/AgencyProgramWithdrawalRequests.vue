@@ -2,8 +2,7 @@
   <v-container fluid class="c-p-10">
     <v-layout row wrap>
       <v-flex xs12>
-        <div class="display-1 c-pb-10">{{agencyProfile._id}} Grants</div>
-        <v-divider></v-divider>
+        <div class="display-1 c-pb-10">{{agencyProfile._id.toUpperCase()}} Grants</div>
 
         <div class="row c-pt-8">
 
@@ -61,7 +60,7 @@
             </span>
           </div>
 
-          <div class="col-2 text-align-right">
+          <div class="col-2">
             <span class="caption grey--text">
             </span>
           </div>
@@ -70,29 +69,64 @@
       </v-flex>
 
       <v-flex xs12>
-        <div class="c-pb-5">
-          <div class="subtitle bold c-pt-5 c-pb-2 c-pl-5"></div>
-          <div>
-            <v-divider class="c-mb-4"></v-divider>
-              <div class="row">
-                <div class="col-2">
-                </div>
-                <div class="col-3">
-                </div>
-                <div class="col-2">
-                </div>
-                <div class="col-1">
-                </div>
-                <div class="col-1">
-                </div>
-                <div class="col-1">
-                </div>
-                <div class="col-2">
+        <div class="c-pb-5" v-for="(organization, organizationIdx) in withdrawRequestsByOrganizations" :key="'org-' + organizationIdx">
+          <div class="sm-title bold c-pt-10 c-pb-5 c-pl-5">{{getOrganizationTitle(organization.orgId)}}</div>
+          <div v-for="(request, requestIdx) in organization.withdraws" :key="'org-' + organizationIdx + '-' + requestIdx">
+            <v-divider v-if="requestIdx == 0"></v-divider>
+            <div class="row c-mt-2 c-mb-2">
+              <div class="col-2">
+                <div class="c-pl-5 c-pt-3 bold deip-blue-color">
+                  <router-link class="a subheading" :to="{ name: 'UserDetails', params: { account_name: request.requesterUser.account.name }}">
+                      {{request.requesterUser | fullname }}
+                  </router-link>
                 </div>
               </div>
-            <v-divider class="c-mt-4"></v-divider>
+              <div class="col-3">
+                <div class="c-pt-3">
+                  <router-link class="a subheading" :to="{
+                      name: 'ResearchDetails',
+                      params: {
+                        research_group_permlink: encodeURIComponent(request.research.group_permlink),
+                        research_permlink: encodeURIComponent(request.research.permlink)
+                      }
+                    }"
+                  >{{request.research.title}}
+                  </router-link>
+                </div>
+              </div>
+              <div class="col-2">
+                <div class="bold grey--text c-pt-3">{{new Date(`${request.foa.posted_date}Z`).toDateString()}}</div>
+              </div>
+              <div class="col-1">
+                <div class="bold deip-blue-color c-pt-3">#
+                	<router-link class="a deip-blue-color" 
+                    :to="{ name: 'AgencyProgramDetails', 
+                          params: { 
+                            agency: request.foa.agency_name, 
+                            foa: request.foa.funding_opportunity_number }}">
+                    {{ request.foa.funding_opportunity_number }}
+					        </router-link>
+                </div>
+              </div>
+              <div class="col-1 c-pt-3">
+                <div>
+                  {{request.purpose == 1 ? 'Salary' : request.purpose == 2 ? 'Equipment' : 'Business Travel'}}
+                </div>
+              </div>
+              <div class="col-1 c-pt-3">
+                <div class="bold">
+                  $ {{fromAssetsToFloat(request.amount)}}
+                </div>
+              </div>
+              <div class="col-2">
+                <v-btn outline color="primary ma-0"
+                  @click=""
+                >Approve
+                </v-btn>
+              </div>
+            </div>
+            <v-divider></v-divider>
           </div>
-
         </div>
       </v-flex>
     </v-layout>
@@ -120,7 +154,8 @@
             isApplicant: 'auth/isApplicant',
             isTreasury: 'auth/isTreasury',
             agencyProfile: 'agencyProgramWithdrawalRequests/agency',
-
+            withdrawRequests: 'agencyProgramWithdrawalRequests/withdrawRequests',
+            withdrawRequestsByOrganizations: 'agencyProgramWithdrawalRequests/withdrawRequestsByOrganizations'
           }),
         },
 

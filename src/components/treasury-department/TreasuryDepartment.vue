@@ -43,7 +43,7 @@
 
       <v-flex xs12 v-for="(agency, agencyIdx) in contractsByAgencies" :key="'agency-' + agencyIdx">
         <div class="c-pb-5">
-          <div class="subtitle bold c-pt-5 c-pb-2 c-pl-5">{{getOrganizationTitle(agency.id)}}</div>
+          <div class="sm-title bold c-pt-5 c-pb-2 c-pl-5">{{getOrganizationTitle(agency.id)}}</div>
           <div v-for="(contract, contractIdx) in agency.contracts" 
             :key="'contract-' + contractIdx" class="c-pt-2" 
             :class="contractIdx != agency.contracts.length - 1 ? 'c-pb-3' : ''">
@@ -64,7 +64,7 @@
                   </span>
                 </div>
                 <div class="col-2 text-align-right">
-                  <span class="grey--text bold">{{contract.foa.funding_opportunity_number}}</span>
+                  <span class="grey--text bold"># {{contract.foa.funding_opportunity_number}}</span>
                 </div>
                 <div class="col-2 text-align-right">
                   <span class="bold">{{contract.relations.length}}</span>

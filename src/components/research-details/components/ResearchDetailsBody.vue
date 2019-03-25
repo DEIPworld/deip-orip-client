@@ -247,7 +247,7 @@
             </div>
         </div>
         
-        <div v-if="fundingContractsList.length" class="c-mt-8 title">Grants: 4</div>
+        <div v-if="fundingContractsList.length" class="c-mt-8 title">Grants: {{fundingContractsList.length}}</div>
 
         <div v-if="fundingContractsList.length" class="c-pt-6 c-pb-6">
             <div v-for="(contract, contractIdx) in fundingContractsList">
@@ -304,13 +304,14 @@
                         </div>
                         <div class="col-1"></div>
                         <div class="col-2">
-                            <v-btn block color="primary">
+                            <v-btn block color="primary" @click="selectContractToWithdraw(contract)">
                                 Withdraw Request
                             </v-btn>
                         </div>
                     </div>
                 </div>
             </div>
+            <withdraw-funding-request-dialog v-if="selectedContractToWithdrawMeta.contract" :meta="selectedContractToWithdrawMeta"></withdraw-funding-request-dialog>
         </div>
 
         <!-- <div class="c-pt-4 title">Grants: 4</div>
@@ -361,7 +362,8 @@
         data() {
             return {
                 isCreatingDraft: false,
-                isDeletingDraft: false
+                isDeletingDraft: false,
+                selectedContractToWithdrawMeta: { isOpen: false, contract: null }
             }
         },
         computed: {
@@ -505,6 +507,10 @@
             },
             contractTotalAmount(contract) {
                 return contract.relation.research_expenses.reduce((acc, exp) => acc + parseInt(exp[1], 10), 0);
+            },
+            selectContractToWithdraw(contract) {
+                this.selectedContractToWithdrawMeta.contract = contract;
+                this.selectedContractToWithdrawMeta.isOpen = true;
             },
             getContentType
         }

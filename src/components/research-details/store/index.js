@@ -324,7 +324,7 @@ const actions = {
                 contract.relation = relations.find(rel => rel.research_id == researchId);
                 if (!contract.relation) return;
 
-                return deipRpc.api.getFundingMilestonesByResearchAsync(contract.relation.research_id)
+                return deipRpc.api.getFundingMilestonesByResearchAsync(contract.relation.id)
                   .then((milestones) => {
                       contract.relation.milestones = milestones;
                       return getEnrichedProfiles([contract.relation.researcher]);
