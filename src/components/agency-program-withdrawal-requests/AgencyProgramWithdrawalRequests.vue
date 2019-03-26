@@ -95,7 +95,7 @@
                       </router-link>
                     </div>
                   </div>
-                  <div class="col-2">
+                  <div class="col-2 text-align-center">
                     <div class="bold grey--text c-pt-3">{{new Date(`${request.foa.posted_date}Z`).toDateString()}}</div>
                   </div>
                   <div class="col-1">
