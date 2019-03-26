@@ -194,9 +194,14 @@
             )
             .then(() => deipRpc.api.getFundingWithdrawalRequestsAsync())
             .then((requests) => {
-              debugger;
               let requestId = requests.length ? requests[requests.length -1].id : 0;
               return deipRpc.broadcast.approveFundingWithdrawalRequestAsync(this.user.privKey, requestId, this.user.username);
+            })
+            .then(() => {
+                let reload = new Promise((resolve, reject) => {
+                  this.$store.dispatch('rd/loadFundingContracts', { researchId: this.research.id, notify: resolve });
+                });
+              return Promise.all([reload]);
             })
             .then(() => {
               this.$store.dispatch('layout/setSuccess', {

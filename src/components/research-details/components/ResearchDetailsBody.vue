@@ -364,7 +364,18 @@
                 </div>
               </div>
             </div>
-            <withdraw-funding-request-dialog v-if="selectedContractToWithdrawMeta.contract" :meta="selectedContractToWithdrawMeta"></withdraw-funding-request-dialog>
+            <confirm-action-dialog 
+                v-if="isResearchGroupMember && selectedContractToWithdrawMeta.contract"
+                :meta="universityAgreement" 
+                :title="``" 
+                :text="`University provides you with the following facilities... and will charge you ${this.convertToPercent(selectedContractToWithdrawMeta.contract.relation.university_overhead)}% overhead fees. Do you agree to proceed ?`" 
+                @confirmed="openContractWithdrawDialog(); universityAgreement.isShown = false"  
+                @canceled="universityAgreement.isShown = false">
+            </confirm-action-dialog>
+            <withdraw-funding-request-dialog 
+                v-if="selectedContractToWithdrawMeta.contract" 
+                :meta="selectedContractToWithdrawMeta">
+            </withdraw-funding-request-dialog>
         </div>
 
         <!-- <div class="c-pt-4 title">Grants: 4</div>
@@ -418,7 +429,8 @@
                 isDeletingDraft: false,
                 isExpanded: false,
 
-                selectedContractToWithdrawMeta: { isOpen: false, contract: null }
+                selectedContractToWithdrawMeta: { isOpen: false, contract: null },
+                universityAgreement: { isShown: false, item: null, index: null }
             }
         },
         computed: {
@@ -563,7 +575,19 @@
 
             selectContractToWithdraw(contract) {
                 this.selectedContractToWithdrawMeta.contract = contract;
+                if (contract.relation.withdrawals.length) {
+                    this.openContractWithdrawDialog();
+                } else {
+                    this.openConfirmContractWithdrawDialog();
+                }
+            },
+
+            openContractWithdrawDialog() {
                 this.selectedContractToWithdrawMeta.isOpen = true;
+            },
+            
+            openConfirmContractWithdrawDialog() {
+                this.universityAgreement.isShown = true;
             },
 
             getTotalFundingAmount(funding) {
