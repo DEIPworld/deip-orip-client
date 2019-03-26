@@ -281,7 +281,28 @@
           },
 
           fundingMilestonesChartOptions(funding) {
-            let colors = funding.milestones.map((m, i) => m.status == 2 ? '#8dc2f9' : '#e0e0e0');
+            // TODO: Revise this algo after we implement milestone finalization
+            let totalCurrentExpencesAmount = funding.current_expenses.reduce((acc, exp) => acc += exp[1], 0);
+            let totalExpencesAmount = funding.research_expenses.reduce((acc, exp) => acc += exp[1], 0);
+            let spentPercent = parseFloat(((totalCurrentExpencesAmount / totalExpencesAmount) * 100)).toFixed(2);
+            spentPercent = parseFloat(spentPercent);
+            let amount = [];
+            let spentPercentReached = false;
+
+            for (let i = 0; i < funding.milestones.length; i++) {
+              let current = funding.milestones[i];
+              let milestonePercent = this.convertToPercent(current.amount);
+              if (!spentPercentReached && milestonePercent > spentPercent) {
+                amount.push(spentPercent);
+                amount.push(milestonePercent - spentPercent);
+                spentPercentReached = true;
+              } else {
+                amount.push(milestonePercent);
+              }
+            }
+
+            let colors = amount.map((a, i) => a <= spentPercent ? '#8dc2f9' : '#e0e0e0');
+
             return {
               isStacked: 'percent',
               height: 50,
@@ -298,8 +319,32 @@
           },
 
           fundingMilestonesChartData(funding) {
-            let names = funding.milestones.map((m, i) => `Milestone ${i + 1} - ${m.amount}%` );
-            let amount = funding.milestones.map((m, i) => m.amount);
+            // TODO: Revise this algo after we implement milestone finalization
+            let totalCurrentExpencesAmount = funding.current_expenses.reduce((acc, exp) => acc += exp[1], 0);
+            let totalExpencesAmount = funding.research_expenses.reduce((acc, exp) => acc += exp[1], 0);
+            let spentPercent = parseFloat(((totalCurrentExpencesAmount / totalExpencesAmount) * 100)).toFixed(2);
+            spentPercent = parseFloat(spentPercent);
+
+            let names = [];
+            let amount = [];
+            let spentPercentReached = false;
+
+            for (let i = 0; i < funding.milestones.length; i++) {
+              let current = funding.milestones[i];
+              let milestonePercent = this.convertToPercent(current.amount);
+
+              if (!spentPercentReached && milestonePercent > spentPercent) {
+                names.push(`Spent - ${spentPercent}%`);
+                amount.push(spentPercent);
+                amount.push(milestonePercent - spentPercent);
+                names.push(`Milestone ${i + 1} - ${milestonePercent}%`);
+                spentPercentReached = true;
+              } else {
+                names.push(`Milestone ${i + 1} - ${milestonePercent}%`);
+                amount.push(milestonePercent);
+              }
+            }
+
             return [
               ['Milestone', ...names, { role: 'annotation' } ],
               ['', ...amount, '']
@@ -328,7 +373,7 @@
             let currentExpense = funding.current_expenses.find(e => e[0] == expense.type);
             let percent = currentExpense[1] == 0 ? 0 : (currentExpense[1] / expense.amount) * 100;
 
-            let names = percent == 0 ? ['', ''] : ['Spent', ''];
+            let names = percent == 0 ? ['', ''] : [`Spent: $${currentExpense[1]}`, ''];
             let amount = percent == 0 ? [0, 100] : [percent, 100];
 
             return [

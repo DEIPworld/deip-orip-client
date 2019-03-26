@@ -324,21 +324,28 @@ const actions = {
                 contract.relation = relations.find(rel => rel.research_id == researchId);
                 if (!contract.relation) return;
 
+                contract.relation.isExpanded = false;
+
                 return deipRpc.api.getFundingMilestonesByResearchAsync(contract.relation.id)
                   .then((milestones) => {
                       contract.relation.milestones = milestones;
                       return getEnrichedProfiles([contract.relation.researcher]);
                   })
                   .then(([researcher]) => {
-                      contract.relation.researcherUser = researcher;
-                      contract.relation.researchExpenses = contract.relation
-                          .research_expenses.map((exp) => {
+                    contract.relation.researcherUser = researcher;
+                    contract.relation.researchExpenses = contract.relation
+                        .research_expenses.map((exp) => {
                               let title = exp[0] == 1 ? 'Salary' : exp[0] == 2 ? 'Equipment' : 'Business Travel';
                               let amount = exp[1];
                               let type = exp[0];
                               return { title, amount, type };
                           })
+                    return deipRpc.api.getFundingWithdrawalRequestsByResearchAsync(contract.relation.research_id);
                   })
+                  .then((withdrawals) => {
+                        contract.relation.withdrawals = withdrawals;
+                  })
+
             })
             .catch(err => { console.log(err) })
             .finally(() => {
@@ -545,6 +552,13 @@ const actions = {
                 commit('SET_RESEARCH_GROUP_DETAILS_LOADING_STATE', false)
                 if (notify) notify();
             });
+    },
+    
+    toggleRelationHistory({ state, commit, dispatch }, { relation_id}) {
+        let contract = state.fundingContractsList.find(c => c.relation != null && c.relation.id == relation_id);
+        if (contract) {
+            commit('TOGGLE_RELATION_HISTORY', contract.relation);
+        }
     }
 }
 
@@ -657,6 +671,10 @@ const mutations = {
 
     ['SET_RESEARCH_GROUP_DETAILS'](state, value) {
         Vue.set(state, 'group', value)
+    },
+
+    ['TOGGLE_RELATION_HISTORY'](state, relation) {
+        relation.isExpanded = !relation.isExpanded;
     }
 }
 

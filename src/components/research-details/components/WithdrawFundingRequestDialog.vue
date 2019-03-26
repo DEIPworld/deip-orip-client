@@ -181,7 +181,6 @@
           },
           withdraw() {
             this.isLoading = true;
-            debugger;
             deipRpc.broadcast.createFundingWithdrawalRequestAsync(
               this.user.privKey,
               this.meta.contract.relation.id,
@@ -194,7 +193,6 @@
               this.description
             )
             .then(() => {
-              debugger;
               this.$store.dispatch('layout/setSuccess', {
                 message: `Withdraw request has been created successfully!`
               });

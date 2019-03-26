@@ -19,7 +19,6 @@ const getters = {
     withdrawRequestsByOrganizations: (state) => {
       let organizations = [];
       state.withdrawRequests.forEach(r => {
-        debugger;
         const orgId = r.requesterUser.account.organisation_id;
         var organization = organizations.find(o => o.orgId == orgId);
         if (!organization) {
@@ -43,6 +42,7 @@ const actions = {
 
     loadAgencyProgramWithdrawalRequestsPage({ state, dispatch, commit }, { agency }) {
         commit('SET_AGENCY_PROGRAM_WITHDRAWAL_REQUESTS_PAGE_LOADING_STATE', true);
+        agency = "nsf"; // demo
         return agencyHttp.getAgencyProfile(agency)
           .then((agencyProfile) => {
             commit('SET_AGENCY_PROFILE', agencyProfile);
@@ -59,15 +59,16 @@ const actions = {
       const requests = [];
       deipRpc.api.getFundingWithdrawalRequestsAsync()
         .then((items) => {
-            requests.push(...items);
-            let requesters = requests.map(r => r.requester);
-            return getEnrichedProfiles(requesters);
+          items = items.filter(i => i.status == 1); // pending only
+          requests.push(...items);
+          let requesters = requests.map(r => r.requester);
+          return getEnrichedProfiles(requesters);
         })
         .then((requesters) => {
-            for (let i = 0; i < requesters.length; i++) {
-              requests[i].requesterUser = requesters[i];
-            }
-            return Promise.all(requests.map(r => deipRpc.api.getFundingResearchRelationAsync(r.funding_research_relation_id)))
+          for (let i = 0; i < requesters.length; i++) {
+            requests[i].requesterUser = requesters[i];
+          }
+          return Promise.all(requests.map(r => deipRpc.api.getFundingResearchRelationAsync(r.funding_research_relation_id)))
         })
         .then((relations) => {
           for (let i = 0; i < relations.length; i++) {
