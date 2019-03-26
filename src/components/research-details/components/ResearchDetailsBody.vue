@@ -289,7 +289,7 @@
                         <div class="col-2">
                             <div><span class="bold grey--text">FUNDING</span></div>
                             <div class="c-mt-2">
-                                <span class="bold">${{contractTotalAmount(contract)}}</span>
+                                <span class="bold">${{getTotalFundingAmount(contract.relation)}}</span>
                             </div>
                         </div>
                     </div>
@@ -333,7 +333,7 @@
                                       />
                               </div>
                               <div class="col-2">
-                                  <div class="c-pt-4 body-2">${{expense.amount}}</div>
+                                  <div class="c-pt-4 body-2">${{fromAssetsToFloat(expense.amount)}}</div>
                               </div>
                               <div class="col-4"></div>
                           </div>
@@ -344,7 +344,7 @@
                           </div>
                           <div class="col-2">
                               <div class="subheading bold c-pt-4 c-pl-2">
-                                  ${{totalCurrentExpensesAmount(contract.relation)}}
+                                  ${{getTotalCurrentExpensesAmount(contract.relation)}}
                               </div>
                           </div>
                           <div class="col-6"></div>
@@ -560,26 +560,34 @@
                     .map(m => this.$options.filters.fullname(m))
                     .join("  ·  ");
             },
-            contractTotalAmount(contract) {
-                return contract.relation.research_expenses.reduce((acc, exp) => acc + parseInt(exp[1], 10), 0);
-            },
+
             selectContractToWithdraw(contract) {
                 this.selectedContractToWithdrawMeta.contract = contract;
                 this.selectedContractToWithdrawMeta.isOpen = true;
             },
 
-            totalCurrentExpensesAmount(funding) {
-                return funding.current_expenses.reduce((acc, exp) => acc + parseInt(exp[1], 10), 0);
+            getTotalFundingAmount(funding) {
+                return funding.research_expenses.reduce((acc, exp) => {
+                    let amount = this.fromAssetsToFloat(exp[1]);
+                    return acc += amount;
+                }, 0);
+            },
+
+            getTotalCurrentExpensesAmount(funding) {
+                return funding.current_expenses.reduce((acc, exp) => {
+                    let amount = this.fromAssetsToFloat(exp[1]);
+                    return acc += amount;
+                }, 0);
             },
 
             getApprovedWithdrawals(relation) {
-                    return relation.withdrawals.filter(r => r.status == 2);
+                return relation.withdrawals.filter(r => r.status == 2);
             },
 
             fundingMilestonesChartOptions(funding) {
                 // TODO: Revise this algo after we implement milestone finalization
-                let totalCurrentExpencesAmount = funding.current_expenses.reduce((acc, exp) => acc += exp[1], 0);
-                let totalExpencesAmount = funding.research_expenses.reduce((acc, exp) => acc += exp[1], 0);
+                let totalCurrentExpencesAmount = this.getTotalCurrentExpensesAmount(funding);
+                let totalExpencesAmount = this.getTotalFundingAmount(funding);
                 let spentPercent = parseFloat(((totalCurrentExpencesAmount / totalExpencesAmount) * 100)).toFixed(2);
                 spentPercent = parseFloat(spentPercent);
                 let amount = [];
@@ -616,8 +624,8 @@
 
           fundingMilestonesChartData(funding) {
               // TODO: Revise this algo after we implement milestone finalization
-              let totalCurrentExpencesAmount = funding.current_expenses.reduce((acc, exp) => acc += exp[1], 0);
-              let totalExpencesAmount = funding.research_expenses.reduce((acc, exp) => acc += exp[1], 0);
+              let totalCurrentExpencesAmount = this.getTotalCurrentExpensesAmount(funding);
+              let totalExpencesAmount = this.getTotalFundingAmount(funding);
               let spentPercent = parseFloat(((totalCurrentExpencesAmount / totalExpencesAmount) * 100)).toFixed(2);
               spentPercent = parseFloat(spentPercent);
 
@@ -647,9 +655,11 @@
               ];
           },
 
-          fundingExpenseChartOptions(funding, expense) {
-            let currentExpense = funding.current_expenses.find(e => e[0] == expense.type);
-            let colors = currentExpense[1] == 0 ? ['#e0e0e0', '#e0e0e0'] : ['#8dc2f9', '#e0e0e0'];
+          fundingExpenseChartOptions(funding, maxExpense) {
+            let currentExpense = funding.current_expenses.find(e => e[0] == maxExpense.type);
+            let currentExpenseAmount = currentExpense[1] ? this.fromAssetsToFloat(currentExpense[1]) : 0;
+            let colors = currentExpenseAmount == 0 ? ['#e0e0e0', '#e0e0e0'] : ['#8dc2f9', '#e0e0e0'];
+
             return {
               isStacked: 'percent',
               height: 50,
@@ -665,11 +675,14 @@
             }
           },
 
-          fundingExpenseChartData(funding, expense) {
-            let currentExpense = funding.current_expenses.find(e => e[0] == expense.type);
-            let percent = currentExpense[1] == 0 ? 0 : (currentExpense[1] / expense.amount) * 100;
+          fundingExpenseChartData(funding, maxExpense) {
+            let currentExpense = funding.current_expenses.find(e => e[0] == maxExpense.type);
+            let currentExpenseAmount = currentExpense[1] ? this.fromAssetsToFloat(currentExpense[1]) : 0;
+            let maxExpenseAmount = this.fromAssetsToFloat(maxExpense.amount);
 
-            let names = percent == 0 ? ['', ''] : [`Spent: $${currentExpense[1]}`, ''];
+            let percent = currentExpenseAmount == 0 ? 0 : (currentExpenseAmount / maxExpenseAmount) * 100;
+
+            let names = percent == 0 ? ['', ''] : [`Spent: $${currentExpenseAmount}`, ''];
             let amount = percent == 0 ? [0, 100] : [percent, 100];
 
             return [

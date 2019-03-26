@@ -382,8 +382,6 @@
             let currentExpenseAmount = currentExpense[1] ? this.fromAssetsToFloat(currentExpense[1]) : 0;
             let maxExpenseAmount = this.fromAssetsToFloat(maxExpense.amount);
             
-            debugger;
-
             let percent = currentExpenseAmount == 0 ? 0 : (currentExpenseAmount / maxExpenseAmount) * 100;
 
             let names = percent == 0 ? ['', ''] : [`Spent: $${currentExpenseAmount}`, ''];
