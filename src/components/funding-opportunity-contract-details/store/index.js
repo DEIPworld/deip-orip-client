@@ -33,7 +33,10 @@ const getters = {
           organizations.push(organization);
         }
         organization.relations.push(r);
-        organization.totalAmount += r.research_expenses.reduce((acc, exp) => acc + parseInt(exp[1], 10), 0);
+        organization.totalAmount += r.research_expenses.reduce((acc, exp) => {
+          let amount = parseFloat(exp[1].split(' ')[0])
+          return acc += amount;
+        }, 0);
       });
       return organizations;
     },

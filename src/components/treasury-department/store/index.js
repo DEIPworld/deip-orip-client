@@ -33,7 +33,10 @@ const getters = {
 
       agency.contracts.push(contract);
       agency.totalAgencyAmount += contract.relations.reduce((acc, rel) => {
-         return acc + rel.research_expenses.reduce((acc, exp) => acc + parseInt(exp[1], 10), 0);
+         return acc + rel.research_expenses.reduce((acc, exp) => {
+            let amount = parseFloat(exp[1].split(' ')[0])
+            return acc += amount;
+          }, 0);
       }, 0);
     }
     

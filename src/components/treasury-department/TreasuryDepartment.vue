@@ -3,7 +3,7 @@
     <v-layout row wrap>
 
       <v-flex xs12>
-        <div class="display-1 c-pb-10">Treasury Department</div>
+        <div class="display-1 c-pb-10">Funding Contracts</div>
         <v-divider></v-divider>
         <div class="row c-pt-8">
           <div class="col-5">
@@ -40,7 +40,9 @@
           </div>
         </div>
       </v-flex>
-
+      <v-flex xs12 class="headline c-pb-10 c-pt-10 text-align-center" v-if="!contractsByAgencies.length">
+        No grant contracts found
+      </v-flex>
       <v-flex xs12 v-for="(agency, agencyIdx) in contractsByAgencies" :key="'agency-' + agencyIdx">
         <div class="c-pb-5">
           <div class="sm-title bold c-pt-5 c-pb-2 c-pl-5">{{getOrganizationTitle(agency.id)}}</div>
@@ -125,7 +127,10 @@
 
           contractTotalAmount(contract) {
             return contract.relations.reduce((acc, rel) => {
-              return acc + rel.research_expenses.reduce((acc, exp) => acc + parseInt(exp[1], 10), 0);
+              return acc + rel.research_expenses.reduce((acc, exp) => {
+                  let amount = this.fromAssetsToFloat(exp[1]);
+                  return acc += amount;
+              }, 0);
             }, 0);
           }
         },

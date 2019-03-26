@@ -96,7 +96,7 @@
                       </div>
                       <div class="row">
                         <div class="col-12">
-                          <div class="text-align-right body-2" style="padding-right: 2%;">${{totalFundingAmount(funding)}}</div>
+                          <div class="text-align-right body-2" style="padding-right: 2%;">${{getTotalFundingAmount(funding)}}</div>
                         </div>
                       </div>
                     </div>
@@ -122,7 +122,7 @@
                                 </div>
                               </div>
                               <div :class="!contractIsPending ? 'col-2' : 'col-8'">
-                                <div class="c-pt-4 body-2">${{expense.amount}}</div>
+                                <div class="c-pt-4 body-2">${{fromAssetsToFloat(expense.amount)}}</div>
                               </div>
                             </div>
                           </div>
@@ -142,7 +142,7 @@
                             </div>
                             <div class="col-8">
                               <div class="body-2 c-pt-4 c-pl-2">
-                                ${{totalCurrentExpensesAmount(funding)}}
+                                ${{getTotalCurrentExpensesAmount(funding)}}
                               </div>
                             </div>
                           </div>
@@ -272,18 +272,25 @@
 
         methods: {
           getOrganizationTitle,
-          totalFundingAmount(funding) {
-            return funding.research_expenses.reduce((acc, exp) => acc + parseInt(exp[1], 10), 0);
-          },
 
-          totalCurrentExpensesAmount(funding) {
-            return funding.current_expenses.reduce((acc, exp) => acc + parseInt(exp[1], 10), 0);
+          getTotalFundingAmount(funding) {
+            return funding.research_expenses.reduce((acc, exp) => {
+              let amount = this.fromAssetsToFloat(exp[1]);
+              return acc += amount;
+            }, 0);
+          },
+          
+          getTotalCurrentExpensesAmount(funding) {
+            return funding.current_expenses.reduce((acc, exp) => {
+              let amount = this.fromAssetsToFloat(exp[1]);
+              return acc += amount;
+            }, 0);
           },
 
           fundingMilestonesChartOptions(funding) {
             // TODO: Revise this algo after we implement milestone finalization
-            let totalCurrentExpencesAmount = funding.current_expenses.reduce((acc, exp) => acc += exp[1], 0);
-            let totalExpencesAmount = funding.research_expenses.reduce((acc, exp) => acc += exp[1], 0);
+            let totalCurrentExpencesAmount = this.getTotalCurrentExpensesAmount(funding);
+            let totalExpencesAmount = this.getTotalFundingAmount(funding);
             let spentPercent = parseFloat(((totalCurrentExpencesAmount / totalExpencesAmount) * 100)).toFixed(2);
             spentPercent = parseFloat(spentPercent);
             let amount = [];
@@ -320,8 +327,8 @@
 
           fundingMilestonesChartData(funding) {
             // TODO: Revise this algo after we implement milestone finalization
-            let totalCurrentExpencesAmount = funding.current_expenses.reduce((acc, exp) => acc += exp[1], 0);
-            let totalExpencesAmount = funding.research_expenses.reduce((acc, exp) => acc += exp[1], 0);
+            let totalCurrentExpencesAmount = this.getTotalCurrentExpensesAmount(funding);
+            let totalExpencesAmount = this.getTotalFundingAmount(funding);
             let spentPercent = parseFloat(((totalCurrentExpencesAmount / totalExpencesAmount) * 100)).toFixed(2);
             spentPercent = parseFloat(spentPercent);
 
@@ -351,9 +358,10 @@
             ];
           },
 
-          fundingExpenseChartOptions(funding, expense) {
-            let currentExpense = funding.current_expenses.find(e => e[0] == expense.type);
-            let colors = currentExpense[1] == 0 ? ['#e0e0e0', '#e0e0e0'] : ['#8dc2f9', '#e0e0e0'];
+          fundingExpenseChartOptions(funding, maxExpense) {
+            let currentExpense = funding.current_expenses.find(e => e[0] == maxExpense.type);
+            let currentExpenseAmount = currentExpense[1] ? this.fromAssetsToFloat(currentExpense[1]) : 0;
+            let colors = currentExpenseAmount == 0 ? ['#e0e0e0', '#e0e0e0'] : ['#8dc2f9', '#e0e0e0'];
             return {
               isStacked: 'percent',
               height: 50,
@@ -369,11 +377,16 @@
             }
           },
 
-          fundingExpenseChartData(funding, expense) {
-            let currentExpense = funding.current_expenses.find(e => e[0] == expense.type);
-            let percent = currentExpense[1] == 0 ? 0 : (currentExpense[1] / expense.amount) * 100;
+          fundingExpenseChartData(funding, maxExpense) {
+            let currentExpense = funding.current_expenses.find(e => e[0] == maxExpense.type);
+            let currentExpenseAmount = currentExpense[1] ? this.fromAssetsToFloat(currentExpense[1]) : 0;
+            let maxExpenseAmount = this.fromAssetsToFloat(maxExpense.amount);
+            
+            debugger;
 
-            let names = percent == 0 ? ['', ''] : [`Spent: $${currentExpense[1]}`, ''];
+            let percent = currentExpenseAmount == 0 ? 0 : (currentExpenseAmount / maxExpenseAmount) * 100;
+
+            let names = percent == 0 ? ['', ''] : [`Spent: $${currentExpenseAmount}`, ''];
             let amount = percent == 0 ? [0, 100] : [percent, 100];
 
             return [
@@ -383,31 +396,31 @@
           },
 
           approve() {
-            this.isApproving = true;
-            deipRpc.broadcast.approveFundingAsync(
-              this.user.privKey,
-              this.contract.id,
-              this.user.username
-            ).then(() => {
-              this.$store.dispatch('layout/setSuccess', {
-                message: "Funding opportunity contract is approved successfully !"
-              });
+            // this.isApproving = true;
+            // deipRpc.broadcast.approveFundingAsync(
+            //   this.user.privKey,
+            //   this.contract.id,
+            //   this.user.username
+            // ).then(() => {
+            //   this.$store.dispatch('layout/setSuccess', {
+            //     message: "Funding opportunity contract is approved successfully !"
+            //   });
 
-              this.$store.dispatch('agencyProgramContractDetails/loadProgramContractDetailsPage', 
-                { agency: this.agencyProfile._id, 
-                  foaId: this.program.funding_opportunity_number, 
-                  contractId: this.contract.id
-                });
+            //   this.$store.dispatch('agencyProgramContractDetails/loadProgramContractDetailsPage', 
+            //     { agency: this.agencyProfile._id, 
+            //       foaId: this.program.funding_opportunity_number, 
+            //       contractId: this.contract.id
+            //     });
 
-            }, (err) => {
-              this.$store.dispatch('layout/setError', {
-                message: `An error occurred while accepting invite, please try again later`
-              });
-              console.log(err);
-            })
-            .finally(() => {
-              this.isApproving = false;
-            });
+            // }, (err) => {
+            //   this.$store.dispatch('layout/setError', {
+            //     message: `An error occurred while accepting invite, please try again later`
+            //   });
+            //   console.log(err);
+            // })
+            // .finally(() => {
+            //   this.isApproving = false;
+            // });
           }
         },
 
