@@ -157,7 +157,7 @@
         data() { 
           return {
             description: "",
-            purpose: purposes[0],
+            purpose: 1,
             purposes: purposes,
             amount: null,
             isLoading: false
@@ -189,7 +189,7 @@
               this.user.account.organisation_id,
               this.user.username,
               this.purpose,
-              parseInt(this.amount),
+              parseInt(this.amount) * this.DEIP_1_PERCENT,
               this.description
             )
             .then(() => {
@@ -198,9 +198,8 @@
               });
             }, (err) => {
                 console.log(err);
-                ;
                 this.$store.dispatch('layout/setError', {
-                    message: `An error occurred while saving short bio, please try again later`
+                    message: `An error occurred while sending the request, please try again later`
                 });
             }).finally(() => {
               this.isLoading = false;
@@ -214,7 +213,7 @@
                 if (newVal) {
                     this.description = '';
                     this.amount = null;
-                    this.purpose = purposes[0];
+                    this.purpose = 1;
                 } 
             }
         }

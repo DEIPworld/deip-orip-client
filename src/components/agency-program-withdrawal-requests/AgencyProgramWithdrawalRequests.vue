@@ -117,7 +117,7 @@
                   </div>
                   <div class="col-1 c-pt-3">
                     <div class="bold text-align-center">
-                      $ {{parseAsset(request.amount)}}
+                      $ {{fromAssetsToFloat(request.amount)}}
                     </div>
                   </div>
                   <div class="col-2">
@@ -173,10 +173,6 @@
 
         methods: {
           getOrganizationTitle,
-          parseAsset(asset) {
-              let amount = this.fromAssetsToFloat(asset);
-              return amount * this.DEIP_100_PERCENT;
-          },
 
           approve(request) {
             deipRpc.broadcast.approveFundingWithdrawalRequestAsync(

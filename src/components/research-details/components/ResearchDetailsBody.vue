@@ -356,7 +356,7 @@
                               <div class="col-6">{{withdrawal.description}}</div>
                               <div class="col-2 body-2">{{withdrawal.purpose == 1 ? 'Salary' : withdrawal.purpose == 2 ? 'Equipment' : 'Business Travel'}}</div>
                               <div class="col-2 grey--text bold">{{new Date().toDateString()}}</div>
-                              <div class="col-2 bold text-align-right c-pr-4">$ {{parseAsset(withdrawal.amount)}}</div>
+                              <div class="col-2 bold text-align-right c-pr-4">$ {{fromAssetsToFloat(withdrawal.amount)}}</div>
                           </div>
                       </div>
                   </div>
@@ -676,11 +676,6 @@
               ['Milestone', ...names, { role: 'annotation' } ],
               ['', ...amount, '']
             ];
-          },
-
-          parseAsset(asset) {
-              let amount = this.fromAssetsToFloat(asset);
-              return amount * this.DEIP_100_PERCENT;
           },
 
           toggleWithdrawal(relation) {
