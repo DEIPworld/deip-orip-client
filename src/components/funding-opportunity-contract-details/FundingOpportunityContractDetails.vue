@@ -132,7 +132,7 @@
                               <div class="body-2 c-pt-4">University overhead</div>
                             </div>
                             <div class="col-8">
-                              <div class="body-2 c-pt-4">{{funding.university_overhead}}%</div>
+                              <div class="body-2 c-pt-4">{{convertToPercent(funding.university_overhead)}}%</div>
                             </div>
                           </div>
                           <div class="row" v-else>

@@ -58,7 +58,7 @@
                   <span class="col-3">
                     <div class="subheading bold">Organization</div>
                     <div class="input-group input-group--text-field primary--text">
-                      <div class="input-group__input"><label>{{funding.researcher ? funding.researcher.user.account.organisation_id : "Organization"}}</label></div>
+                      <div class="input-group__input"><label>{{funding.researcher ? getOrganizationTitle(funding.researcher.user.account.organisation_id) : "Organization"}}</label></div>
                       <div class="input-group__details"></div>
                     </div>
                   </span>
@@ -215,7 +215,8 @@
                 </span>
                 <span class="col-8"></span>
                 <span class="col-2">
-                  <v-btn class="ma-0" block color="primary" @click="save()" :disabled="saveIsDisabled">Save</v-btn>
+                  <v-btn class="ma-0" block color="primary" 
+                    @click="save()" :disabled="saveIsDisabled || isSaving" :loading="isSaving">Save</v-btn>
                 </span>
               </div>
             </v-flex>
@@ -275,6 +276,7 @@
     import { mapGetters } from 'vuex';
     import deipRpc from '@deip/deip-rpc-client';
     import _ from 'lodash';
+    import { getOrganizationTitle } from './../../utils/organizations';
 
     export default {
         name: "FundingOpportunityGrantProposal",
@@ -282,6 +284,7 @@
         data() {
             return {
               fundings: [],
+              isSaving: false
             }
         },
 
@@ -319,7 +322,7 @@
         },
 
         methods: {
-
+          getOrganizationTitle,
           focusInputByRef($event, ref) {
             $event.stopPropagation();
             $event.preventDefault();
@@ -426,6 +429,8 @@
             let total_amount = 0;
             let researches = [];
 
+            this.isSaving = true;
+
             for (let i = 0; i < this.fundings.length; i++) {
               let funding = this.fundings[i];
               let salary = parseInt(funding.purpose.salary) || 0;
@@ -478,6 +483,11 @@
               return deipRpc.api.getFundingsAsync();
             }).then((contracts) => {
               let contractId = contracts.length ? contracts[contracts.length -1].id : 0;
+
+              this.$store.dispatch('layout/setSuccess', {
+                message: "Funding proposal has been created succesfully!"
+              });
+
               this.$router.push({
                 name: 'FundingOpportunityContractDetails', 
                 params: { 
@@ -486,9 +496,14 @@
                   contractId: decodeURIComponent(contractId)
                 }
               });
-            })
-            .catch((err) => {
+            }, (err) => {
               console.log(err);
+              this.$store.dispatch('layout/setError', {
+                message: "An error occurred while contributing to fundraise, please try again later"
+              });
+            })
+            .finally(() => {
+              this.isSaving = false;
             })
           }
         },

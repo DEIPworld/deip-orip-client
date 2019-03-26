@@ -343,9 +343,8 @@ const actions = {
                     return deipRpc.api.getFundingWithdrawalRequestsByResearchAsync(contract.relation.research_id);
                   })
                   .then((withdrawals) => {
-                        contract.relation.withdrawals = withdrawals;
+                        contract.relation.withdrawals = withdrawals.filter(w => w.funding_research_relation_id == contract.relation.id);
                   })
-
             })
             .catch(err => { console.log(err) })
             .finally(() => {
