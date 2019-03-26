@@ -295,83 +295,75 @@
                     </div>
                     <v-divider class="c-mt-2"></v-divider>
                     
-                    <div class="row c-pt-4 c-pb-5">
-                        <div class="col-7"></div>
-                        <div class="col-2">
-													<v-btn flat color="primary" @click="toggleWithdrawal(contract.relation)">
-														Funding History
-													</v-btn>
-                        </div>
-                        <div class="col-1"></div>
-                        <div class="col-2">
-													<v-btn block color="primary" @click="selectContractToWithdraw(contract)">
-															Withdraw Request
-													</v-btn>
+                    <div class="row c-pt-4 c-pb-5">      
+                        <div class="col-12 text-align-right">
+                            <v-btn flat color="primary" @click="toggleWithdrawal(contract.relation)">
+                              Funding History
+                            </v-btn>
+                            <v-btn v-if="isResearchGroupMember" color="primary" @click="selectContractToWithdraw(contract)">
+                                Withdraw Request
+                            </v-btn>
                         </div>
                     </div>
-								 	<div>
+                <div>
 
-									<div v-if="contract.relation.isExpanded">
-               <!-- <v-card>
-                  	<v-card-text class="pt-0"> -->
-                			<div class="row">
-												<div class="col-10">
-													<GChart
-														type="BarChart"
-														:settings="{ packages: ['corechart', 'bar'] }"
-														:data="fundingMilestonesChartData(contract.relation)"
-														:options="fundingMilestonesChartOptions(contract.relation)"
-													/>
-												</div>
-												<div class="col-2"></div>
-                			</div>
-											<div v-for="(expense, expenseIdx) in contract.relation.researchExpenses" :key="'funding-' + contractIdx + '-exp-' + expenseIdx">
-												<div class="row c-pl-4">
-													<div class="col-2">
-														<div class="body-2 c-pt-4">{{expense.title}}</div>
-													</div>
-													<div class="col-4">
-														<GChart
-																type="BarChart"
-																:settings="{ packages: ['corechart', 'bar'] }"
-																:data="fundingExpenseChartData(contract.relation, expense)"
-																:options="fundingExpenseChartOptions(contract.relation, expense)"
-															/>
-													</div>
-													<div class="col-2">
-														<div class="c-pt-4 body-2">${{expense.amount}}</div>
-													</div>
-													<div class="col-4"></div>
-												</div>
-											</div>
-											<div class="row c-pl-4 c-pb-2">
-												<div class="col-2">
-													<div class="body-2 c-pt-4">Total spent:</div>
-												</div>
-												<div class="col-2">
-													<div class="subheading bold c-pt-4 c-pl-2">
-														${{totalCurrentExpensesAmount(contract.relation)}}
-													</div>
-												</div>
-												<div class="col-6"></div>
+                <div v-if="contract.relation.isExpanded">
+                    <div class="row">
+                        <div class="col-10">
+                          <GChart
+                              type="BarChart"
+                              :settings="{ packages: ['corechart', 'bar'] }"
+                              :data="fundingMilestonesChartData(contract.relation)"
+                              :options="fundingMilestonesChartOptions(contract.relation)"
+                          />
+                        </div>
+                        <div class="col-2"></div>
                       </div>
-								<!-- </v-card-text>
-									</v-card> -->
-
-											<div class="c-pb-10" v-if="getApprovedWithdrawals(contract.relation).length">
-												<div class="c-pt-6 c-pb-8 c-pl-4 bold subheading">Payment History</div>
-												<div class="row c-pl-4 c-pt-2 c-pb-2" v-for="(withdrawal, withdrawalsIdx) in getApprovedWithdrawals(contract.relation)" :key="'funding-' + contractIdx + '-'+ withdrawalsIdx">
-													<div class="col-6">{{withdrawal.description}}</div>
-													<div class="col-2 body-2">{{withdrawal.purpose == 1 ? 'Salary' : withdrawal.purpose == 2 ? 'Equipment' : 'Business Travel'}}</div>
-													<div class="col-2 grey--text bold">{{new Date().toDateString()}}</div>
-													<div class="col-2 bold text-align-right c-pr-4">$ {{parseAsset(withdrawal.amount)}}</div>
-												</div>
-											</div>
-										</div>
-                	<v-divider class="c-mb-3"></v-divider>
-            			</div>
+                      <div v-for="(expense, expenseIdx) in contract.relation.researchExpenses" :key="'funding-' + contractIdx + '-exp-' + expenseIdx">
+                          <div class="row c-pl-4">
+                              <div class="col-2">
+                                  <div class="body-2 c-pt-4">{{expense.title}}</div>
+                              </div>
+                              <div class="col-4">
+                                  <GChart
+                                    type="BarChart"
+                                    :settings="{ packages: ['corechart', 'bar'] }"
+                                    :data="fundingExpenseChartData(contract.relation, expense)"
+                                    :options="fundingExpenseChartOptions(contract.relation, expense)"
+                                      />
+                              </div>
+                              <div class="col-2">
+                                  <div class="c-pt-4 body-2">${{expense.amount}}</div>
+                              </div>
+                              <div class="col-4"></div>
+                          </div>
+                      </div>
+                      <div class="row c-pl-4 c-pb-2">
+                          <div class="col-2">
+                              <div class="body-2 c-pt-4">Total spent:</div>
+                          </div>
+                          <div class="col-2">
+                              <div class="subheading bold c-pt-4 c-pl-2">
+                                  ${{totalCurrentExpensesAmount(contract.relation)}}
+                              </div>
+                          </div>
+                          <div class="col-6"></div>
+                      </div>
+          
+                      <div class="c-pb-10" v-if="getApprovedWithdrawals(contract.relation).length">
+                          <div class="c-pt-6 c-pb-8 c-pl-4 bold subheading">Payment History</div>
+                          <div class="row c-pl-4 c-pt-2 c-pb-2" v-for="(withdrawal, withdrawalsIdx) in getApprovedWithdrawals(contract.relation)" :key="'funding-' + contractIdx + '-'+ withdrawalsIdx">
+                              <div class="col-6">{{withdrawal.description}}</div>
+                              <div class="col-2 body-2">{{withdrawal.purpose == 1 ? 'Salary' : withdrawal.purpose == 2 ? 'Equipment' : 'Business Travel'}}</div>
+                              <div class="col-2 grey--text bold">{{new Date().toDateString()}}</div>
+                              <div class="col-2 bold text-align-right c-pr-4">$ {{parseAsset(withdrawal.amount)}}</div>
+                          </div>
+                      </div>
+                  </div>
+                  <v-divider class="c-mb-3"></v-divider>
                 </div>
-            	</div>
+              </div>
+            </div>
             <withdraw-funding-request-dialog v-if="selectedContractToWithdrawMeta.contract" :meta="selectedContractToWithdrawMeta"></withdraw-funding-request-dialog>
         </div>
 
@@ -424,7 +416,7 @@
             return {
                 isCreatingDraft: false,
                 isDeletingDraft: false,
-								isExpanded: false,
+                isExpanded: false,
 
                 selectedContractToWithdrawMeta: { isOpen: false, contract: null }
             }
@@ -576,84 +568,84 @@
                 this.selectedContractToWithdrawMeta.isOpen = true;
             },
 
-						totalCurrentExpensesAmount(funding) {
-							return funding.current_expenses.reduce((acc, exp) => acc + parseInt(exp[1], 10), 0);
-						},
+            totalCurrentExpensesAmount(funding) {
+                return funding.current_expenses.reduce((acc, exp) => acc + parseInt(exp[1], 10), 0);
+            },
 
-						getApprovedWithdrawals(relation) {
-								return relation.withdrawals.filter(r => r.status == 2);
-						},
+            getApprovedWithdrawals(relation) {
+                    return relation.withdrawals.filter(r => r.status == 2);
+            },
 
             fundingMilestonesChartOptions(funding) {
-							// TODO: Revise this algo after we implement milestone finalization
-							let totalCurrentExpencesAmount = funding.current_expenses.reduce((acc, exp) => acc += exp[1], 0);
-							let totalExpencesAmount = funding.research_expenses.reduce((acc, exp) => acc += exp[1], 0);
-							let spentPercent = parseFloat(((totalCurrentExpencesAmount / totalExpencesAmount) * 100)).toFixed(2);
-							spentPercent = parseFloat(spentPercent);
-							let amount = [];
-							let spentPercentReached = false;
+                // TODO: Revise this algo after we implement milestone finalization
+                let totalCurrentExpencesAmount = funding.current_expenses.reduce((acc, exp) => acc += exp[1], 0);
+                let totalExpencesAmount = funding.research_expenses.reduce((acc, exp) => acc += exp[1], 0);
+                let spentPercent = parseFloat(((totalCurrentExpencesAmount / totalExpencesAmount) * 100)).toFixed(2);
+                spentPercent = parseFloat(spentPercent);
+                let amount = [];
+                let spentPercentReached = false;
 
-							for (let i = 0; i < funding.milestones.length; i++) {
-								let current = funding.milestones[i];
-								let milestonePercent = this.convertToPercent(current.amount);
-								if (!spentPercentReached && milestonePercent > spentPercent) {
-									amount.push(spentPercent);
-									amount.push(milestonePercent - spentPercent);
-									spentPercentReached = true;
-								} else {
-									amount.push(milestonePercent);
-								}
-							}
+                for (let i = 0; i < funding.milestones.length; i++) {
+                    let current = funding.milestones[i];
+                    let milestonePercent = this.convertToPercent(current.amount);
+                    if (!spentPercentReached && milestonePercent > spentPercent) {
+                        amount.push(spentPercent);
+                        amount.push(milestonePercent - spentPercent);
+                        spentPercentReached = true;
+                    } else {
+                        amount.push(milestonePercent);
+                    }
+                }
 
-							let colors = amount.map((a, i) => a <= spentPercent ? '#8dc2f9' : '#e0e0e0');
+                let colors = amount.map((a, i) => a <= spentPercent ? '#8dc2f9' : '#e0e0e0');
 
-							return {
-								isStacked: 'percent',
-								height: 50,
-								legend: { position: 'top', maxLines: 1, textStyle: {fontSize: 12, bold: true} },
-								chartArea: { width: '95%', height:'100%' , top: 20, /* left: 0 */},
-								hAxis: {                    
-									minValue: 0,
-									ticks: [0],
-									textPosition: 'none',
-									baselineColor: '#FFFFFF'
-								},
-								colors: [...colors]
-							}
-          	},
+                return {
+                    isStacked: 'percent',
+                    height: 50,
+                    legend: { position: 'top', maxLines: 1, textStyle: {fontSize: 12, bold: true} },
+                    chartArea: { width: '95%', height:'100%' , top: 20, /* left: 0 */},
+                    hAxis: {                    
+                        minValue: 0,
+                        ticks: [0],
+                        textPosition: 'none',
+                        baselineColor: '#FFFFFF'
+                    },
+                    colors: [...colors]
+                }
+              },
 
-						fundingMilestonesChartData(funding) {
-							// TODO: Revise this algo after we implement milestone finalization
-							let totalCurrentExpencesAmount = funding.current_expenses.reduce((acc, exp) => acc += exp[1], 0);
-							let totalExpencesAmount = funding.research_expenses.reduce((acc, exp) => acc += exp[1], 0);
-							let spentPercent = parseFloat(((totalCurrentExpencesAmount / totalExpencesAmount) * 100)).toFixed(2);
-							spentPercent = parseFloat(spentPercent);
+          fundingMilestonesChartData(funding) {
+              // TODO: Revise this algo after we implement milestone finalization
+              let totalCurrentExpencesAmount = funding.current_expenses.reduce((acc, exp) => acc += exp[1], 0);
+              let totalExpencesAmount = funding.research_expenses.reduce((acc, exp) => acc += exp[1], 0);
+              let spentPercent = parseFloat(((totalCurrentExpencesAmount / totalExpencesAmount) * 100)).toFixed(2);
+              spentPercent = parseFloat(spentPercent);
 
-							let names = [];
-							let amount = [];
-							let spentPercentReached = false;
+              let names = [];
+              let amount = [];
+              let spentPercentReached = false;
 
-							for (let i = 0; i < funding.milestones.length; i++) {
-								let current = funding.milestones[i];
-								let milestonePercent = this.convertToPercent(current.amount);
+              for (let i = 0; i < funding.milestones.length; i++) {
+                  let current = funding.milestones[i];
+                  let milestonePercent = this.convertToPercent(current.amount);
 
-								if (!spentPercentReached && milestonePercent > spentPercent) {
-									names.push(`Spent - ${spentPercent}%`);
-									amount.push(spentPercent);
-									amount.push(milestonePercent - spentPercent);
-									names.push(`Milestone ${i + 1} - ${milestonePercent}%`);
-									spentPercentReached = true;
-								} else {
-									names.push(`Milestone ${i + 1} - ${milestonePercent}%`);
-									amount.push(milestonePercent);
-								}
-							}
+                  if (!spentPercentReached && milestonePercent > spentPercent) {
+                      names.push(`Spent - ${spentPercent}%`);
+                      amount.push(spentPercent);
+                      amount.push(milestonePercent - spentPercent);
+                      names.push(`Milestone ${i + 1} - ${milestonePercent}%`);
+                      spentPercentReached = true;
+                  } else {
+                      names.push(`Milestone ${i + 1} - ${milestonePercent}%`);
+                      amount.push(milestonePercent);
+                  }
+              }
 
-							return [
-								['Milestone', ...names, { role: 'annotation' } ],
-								['', ...amount, '']
-							];
-						},
+              return [
+                  ['Milestone', ...names, { role: 'annotation' } ],
+                  ['', ...amount, '']
+              ];
+          },
 
           fundingExpenseChartOptions(funding, expense) {
             let currentExpense = funding.current_expenses.find(e => e[0] == expense.type);
@@ -686,14 +678,14 @@
             ];
           },
 
-					parseAsset(asset) {
-						let amount = this.fromAssetsToFloat(asset);
-						return amount * this.DEIP_100_PERCENT;
-					},
+          parseAsset(asset) {
+              let amount = this.fromAssetsToFloat(asset);
+              return amount * this.DEIP_100_PERCENT;
+          },
 
-					toggleWithdrawal(relation) {
-						this.$store.dispatch('rd/toggleRelationHistory', { relation_id: relation.id });
-					},
+          toggleWithdrawal(relation) {
+              this.$store.dispatch('rd/toggleRelationHistory', { relation_id: relation.id });
+          },
 
           getContentType
         }
