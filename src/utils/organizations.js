@@ -5,20 +5,30 @@ export const organizations = {
       "abbreviation": "",
   },
   1: {
-      "id": 1,
-      "title": "National Science Foundation",
-      "abbreviation": "NSF",
+    "id": 1,
+    "title": "Treasury",
+    "abbreviation": "",
   },
   2: {
       "id": 2,
-      "title": "Treasury",
-      "abbreviation": "",
+      "title": "National Science Foundation",
+      "abbreviation": "NSF",
   },
   3: {
       "id": 3,
       "title": "Massachusetts Institute of Technology",
       "abbreviation": "MIT",
-  }
+  },
+  4: {
+    "id": 4,
+    "title": "Stanford University",
+    "abbreviation": "",
+  },
+  5: {
+      "id": 5,
+      "title": "California Institute of Technology",
+      "abbreviation": "CalTech",
+  }   
 }
 
 export const getOrganizationTitle = (orgId) => {
