@@ -103,7 +103,7 @@
 
               <v-divider></v-divider>
 
-              <div class="c-pt-5 c-pb-10">
+              <div class="c-pt-5 c-pb-10" v-if="isGrantor">
                 <v-btn class="ma-0" color="primary" @click="proposeContract()">
                   Add Grant Receivers
                 </v-btn>
@@ -161,6 +161,13 @@
               </div>
               <v-divider></v-divider>
 
+              <div class="c-p-10" v-if="isGrantor || isTreasury">
+                <v-btn block color="primary" 
+                  :to="{ name: 'AgencyProgramWithdrawalRequests', params: { agency: agencyProfile._id } }">
+                  View Funding Withdrawals
+                </v-btn>
+              </div>
+
         <!--  <div class="c-p-10" v-if="isApplicant">
                 <v-btn block color="primary" @click="applyToProgram()">Apply</v-btn>
                 <send-application-dialog :meta="applicationDialogMeta" :program="program"></send-application-dialog>
@@ -205,7 +212,8 @@
                 user: 'auth/user',
                 isGrantor: 'auth/isGrantor',
                 isOfficer: 'auth/isOfficer',
-                isApplicant: 'auth/isApplicant'
+                isApplicant: 'auth/isApplicant',
+                isTreasury: 'auth/isTreasury'
             }),
 
             breadcrumbs() {

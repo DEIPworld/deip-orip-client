@@ -57,7 +57,7 @@ const actions = {
 
     loadFundingWithdrawalRequests({ state, dispatch, commit }, { notify }) {
       const requests = [];
-      deipRpc.api.getFundingWithdrawalRequestsAsync()
+      return deipRpc.api.getFundingWithdrawalRequestsAsync()
         .then((items) => {
           items = items.filter(i => i.status == 1); // pending only
           requests.push(...items);

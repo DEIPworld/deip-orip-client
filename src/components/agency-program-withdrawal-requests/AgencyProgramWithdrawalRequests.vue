@@ -99,13 +99,13 @@
                     <div class="bold grey--text c-pt-3">{{new Date(`${request.foa.posted_date}Z`).toDateString()}}</div>
                   </div>
                   <div class="col-1">
-                    <div class="bold deip-blue-color c-pt-3">#
+                    <div class="bold deip-blue-color c-pt-3">
                       <router-link class="a deip-blue-color" 
                         :to="{ name: 'AgencyProgramDetails', 
                                 params: {
                                   agency: request.foa.agency_name, 
                                   foa: request.foa.funding_opportunity_number }}">
-                        {{ request.foa.funding_opportunity_number }}
+                        # {{request.foa.funding_opportunity_number }}
                       </router-link>
                     </div>
                   </div>

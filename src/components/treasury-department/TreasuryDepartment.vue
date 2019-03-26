@@ -16,7 +16,7 @@
           </div>
           <div class="col-2 text-align-right">
             <span class="caption grey--text">
-              FUNDING OPPORTUNITY
+              PROGRAM NUMBER
               <v-icon class="sort-icon">
                 unfold_more
               </v-icon>
@@ -64,7 +64,13 @@
                   </span>
                 </div>
                 <div class="col-2 text-align-right">
-                  <span class="grey--text bold"># {{contract.foa.funding_opportunity_number}}</span>
+                  <router-link class="a bold deip-blue-color" 
+                      :to="{ name: 'AgencyProgramDetails', 
+                          params: { 
+                              agency: contract.foa.agency_name, 
+                              foa: contract.foa.funding_opportunity_number }}">
+                      # {{ contract.foa.funding_opportunity_number }}
+                  </router-link>
                 </div>
                 <div class="col-2 text-align-right">
                   <span class="bold">{{contract.relations.length}}</span>
