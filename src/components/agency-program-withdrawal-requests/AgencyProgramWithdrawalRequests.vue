@@ -177,40 +177,40 @@
           getOrganizationTitle,
 
           approve(request) {
-            deipRpc.broadcast.approveFundingWithdrawalRequestAsync(
-              this.user.privKey,
-              request.id,
-              this.user.username
-            ).then(() => {
-              this.$store.dispatch('layout/setSuccess', {
-                message: "Funding withdraw request has been approved successfully!"
-              });
-              this.$store.dispatch('agencyProgramWithdrawalRequests/loadAgencyProgramWithdrawalRequestsPage', { agency: this.agencyProfile._id});
-            }, (err) => {
-              console.log(err);
-              this.$store.dispatch('layout/setError', {
-                message: "An error occurred while sending Application, please try again later"
-              });
-            });
+            // deipRpc.broadcast.approveFundingWithdrawalRequestAsync(
+            //   this.user.privKey,
+            //   request.id,
+            //   this.user.username
+            // ).then(() => {
+            //   this.$store.dispatch('layout/setSuccess', {
+            //     message: "Funding withdraw request has been approved successfully!"
+            //   });
+            //   this.$store.dispatch('agencyProgramWithdrawalRequests/loadAgencyProgramWithdrawalRequestsPage', { agency: this.agencyProfile._id});
+            // }, (err) => {
+            //   console.log(err);
+            //   this.$store.dispatch('layout/setError', {
+            //     message: "An error occurred while sending Application, please try again later"
+            //   });
+            // });
           },
 
           reject(request) {
-            return;
-            deipRpc.broadcast.rejectFundingWithdrawalRequestAsync(
-              this.user.privKey,
-              request.id,
-              this.user.username
-            ).then(() => {
-              this.$store.dispatch('layout/setSuccess', {
-                message: "Funding withdraw request has been rejected successfully!"
-              });
-              this.$store.dispatch('agencyProgramWithdrawalRequests/loadAgencyProgramWithdrawalRequestsPage', { agency: this.agencyProfile._id});
-            }, (err) => {
-              console.log(err);
-              this.$store.dispatch('layout/setError', {
-                message: "An error occurred while sending Application, please try again later"
-              });
-            });
+            // return;
+            // deipRpc.broadcast.rejectFundingWithdrawalRequestAsync(
+            //   this.user.privKey,
+            //   request.id,
+            //   this.user.username
+            // ).then(() => {
+            //   this.$store.dispatch('layout/setSuccess', {
+            //     message: "Funding withdraw request has been rejected successfully!"
+            //   });
+            //   this.$store.dispatch('agencyProgramWithdrawalRequests/loadAgencyProgramWithdrawalRequestsPage', { agency: this.agencyProfile._id});
+            // }, (err) => {
+            //   console.log(err);
+            //   this.$store.dispatch('layout/setError', {
+            //     message: "An error occurred while sending Application, please try again later"
+            //   });
+            // });
           }
         },
 

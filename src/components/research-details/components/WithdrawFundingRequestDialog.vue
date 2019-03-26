@@ -189,19 +189,27 @@
               this.user.account.organisation_id,
               this.user.username,
               this.purpose,
-              parseInt(this.amount) * this.DEIP_1_PERCENT,
+              this.toAssetUnits(this.amount),
               this.description
             )
+            .then(() => deipRpc.api.getFundingWithdrawalRequestsAsync())
+            .then((requests) => {
+              debugger;
+              let requestId = requests.length ? requests[requests.length -1].id : 0;
+              return deipRpc.broadcast.approveFundingWithdrawalRequestAsync(this.user.privKey, requestId, this.user.username);
+            })
             .then(() => {
               this.$store.dispatch('layout/setSuccess', {
                 message: `Withdraw request has been created successfully!`
               });
-            }, (err) => {
-                console.log(err);
-                this.$store.dispatch('layout/setError', {
-                    message: `An error occurred while sending the request, please try again later`
-                });
-            }).finally(() => {
+            })
+            .catch((err) => {
+              console.log(err);
+              this.$store.dispatch('layout/setError', {
+                  message: `An error occurred while sending the request, please try again later.`
+              });
+            })
+            .finally(() => {
               this.isLoading = false;
               this.close();
             });
