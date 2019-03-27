@@ -294,7 +294,6 @@
                         </div>
                     </div>
                     <v-divider class="c-mt-2"></v-divider>
-                    
                     <div class="row c-pt-4 c-pb-5">      
                         <div class="col-12 text-align-right">
                             <v-btn flat color="primary" @click="toggleWithdrawal(contract.relation)">
@@ -454,7 +453,7 @@
                     ? this.$store.getters['auth/userIsResearchGroupMember'](this.research.research_group_id) 
                     : false
             },
-             flattenedApplicationsList() {
+            flattenedApplicationsList() {
                 const tenant = window.env.TENANT.toLowerCase();
                 const flattened = [];
                 for (let i = 0; i < this.applicationsList.length; i++) {
@@ -465,7 +464,8 @@
                     });
                 }
                 return flattened;
-            }
+            },
+
             // flattenedApplicationsList() {
             //     const tenant = window.env.TENANT.toLowerCase();
             //     const flattened = [];
@@ -646,21 +646,31 @@
                 let amount = [];
                 let spentPercentReached = false;
                 let orderedMilestones = this.getOrderedMilestones(funding.milestones);
-                for (let i = 0; i < orderedMilestones.length; i++) {
-                  let current = orderedMilestones[i];
-                  let milestonePercent = this.convertToPercent(current.amount);
-                  if (!spentPercentReached && milestonePercent >= spentPercent) {
 
-                      if (milestonePercent != spentPercent) {
-                        amount.push(milestonePercent - (milestonePercent - spentPercent));
-                        amount.push(milestonePercent - spentPercent)
-                      } else {
-                        amount.push(milestonePercent);
-                      }
-                      spentPercentReached = true;
+                let accumulated = 0;
+                for (let i = 0; i < orderedMilestones.length; i++) {
+                let current = orderedMilestones[i];
+                let milestonePercent = this.convertToPercent(current.amount);
+                if (!spentPercentReached && ((accumulated + milestonePercent) >= spentPercent)) {
+
+                  if (milestonePercent != spentPercent) {
+                    amount.push(milestonePercent - (milestonePercent - spentPercent));
+                    amount.push(milestonePercent - spentPercent)
                   } else {
-                      amount.push(milestonePercent);
+                    amount.push(milestonePercent);
                   }
+                  spentPercentReached = true;
+
+                  } else {
+                    if ((accumulated + milestonePercent) > spentPercent) {
+                      amount.push((milestonePercent > spentPercent) ? milestonePercent : ((accumulated + milestonePercent) - spentPercent));
+                    } else if (!spentPercentReached) {
+                      amount.push(spentPercent);
+                      spentPercentReached = true;
+                    }
+                  }
+
+                  accumulated += milestonePercent;
                 }
 
                 let colors = amount.map((a, i) => i == 0 ? '#8dc2f9' : '#e0e0e0');
@@ -692,28 +702,37 @@
               let spentPercentReached = false;
               let orderedMilestones = this.getOrderedMilestones(funding.milestones);
         
+              let accumulated = 0;
               for (let i = 0; i < orderedMilestones.length; i++) {
                 let current = orderedMilestones[i];
                 let milestonePercent = this.convertToPercent(current.amount);
 
-                if (!spentPercentReached && milestonePercent >= spentPercent) {
-        
-                    if (milestonePercent != spentPercent) {
+                if (!spentPercentReached && ((accumulated + milestonePercent) >= spentPercent)) {
+      
+                  if (milestonePercent != spentPercent) {
                     names.push(`Spent - ${spentPercent}%`);
                     amount.push(milestonePercent - (milestonePercent - spentPercent));
                     names.push(`Milestone ${i + 1} - ${milestonePercent}%`);
                     amount.push(milestonePercent - spentPercent);
-                    } else {
+                  } else {
                     names.push(`Milestone ${i + 1} - ${milestonePercent}%`);
                     amount.push(milestonePercent);
-                    }
-                    spentPercentReached = true;
-                } else {
-                    names.push(`Milestone ${i + 1} - ${milestonePercent}%`);
-                    amount.push(milestonePercent);
-                }
-              }
+                  }
+                  spentPercentReached = true;
 
+                } else {
+                    if ((accumulated + milestonePercent) > spentPercent) {
+                      names.push(`Milestone ${i + 1} - ${milestonePercent}%`);
+                      amount.push((milestonePercent > spentPercent) ? milestonePercent : ((accumulated + milestonePercent) - spentPercent));
+                    } else if (!spentPercentReached) {
+                      names.push(`Spent - ${spentPercent}%`);
+                      amount.push(spentPercent);
+                      spentPercentReached = true;
+                    }
+                }
+
+                accumulated += milestonePercent;
+              }
               return [
                   ['Milestone', ...names, { role: 'annotation' } ],
                   ['', ...amount, '']
@@ -758,6 +777,11 @@
 
           toggleWithdrawal(relation) {
               this.$store.dispatch('rd/toggleRelationHistory', { relation_id: relation.id });
+          },
+
+          activeMilestoneData(funding) {
+            let activeMilesone = funding.milestones.find(m => m.status == 1);
+            if (!activeMilesone) return null;
           },
 
           getContentType
