@@ -246,7 +246,6 @@
                 <v-btn @click="createDarDraft()" :loading="isCreatingDraft" :disabled="isCreatingDraft" block outline color="primary" dark>Use Editor</v-btn>
             </div>
         </div>
-        
         <div v-if="fundingContractsList.length" class="c-mt-8 title">Grants: {{fundingContractsList.length}}</div>
 
         <div v-if="fundingContractsList.length" class="c-pt-6 c-pb-6">
@@ -255,7 +254,7 @@
                     <v-divider class="c-mb-3"></v-divider>
                     <div class="row c-pl-10">
 
-                        <div class="col-10">
+                        <div class="col-9">
                             <div class="row">
                                 <span class="col-12">
                                     <router-link class="a" style="text-decoration: none"
@@ -286,11 +285,11 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="col-2">
-                            <div><span class="bold grey--text">FUNDING</span></div>
-                            <div class="c-mt-2">
-                                <span class="bold">${{getTotalFundingAmount(contract.relation)}}</span>
-                            </div>
+                        <div class="col-3 text-align-center">
+                              <div class="bold grey--text">FUNDING</div>
+                              <div class="bold">${{getTotalFundingAmount(contract.relation)}}</div>
+                              <div class="caption grey--text" v-if="activeMilestoneData(contract)">($ {{activeMilestoneData(contract)}} available to withdraw)</div>
+                          </div>
                         </div>
                     </div>
                     <v-divider class="c-mt-2"></v-divider>
@@ -779,9 +778,15 @@
               this.$store.dispatch('rd/toggleRelationHistory', { relation_id: relation.id });
           },
 
-          activeMilestoneData(funding) {
-            let activeMilesone = funding.milestones.find(m => m.status == 1);
+          activeMilestoneData(contract) {
+            let activeMilesone = contract.relation.milestones.find(m => m.status == 1);
             if (!activeMilesone) return null;
+
+            let totalAmount = this.getTotalFundingAmount(contract.relation);
+            let currentExpenses = this.getTotalCurrentExpensesAmount(contract.relation);
+            let milestoneShare = totalAmount * (activeMilesone.amount / this.DEIP_100_PERCENT);
+            let availableToWithdraw = milestoneShare - currentExpenses;
+            return availableToWithdraw > 0 ? availableToWithdraw : 0;
           },
 
           getContentType

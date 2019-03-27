@@ -2,7 +2,7 @@
   <v-container fluid class="c-p-10">
     <v-layout row wrap>
       <v-flex xs12>
-        <div class="display-1 c-pb-10">{{agencyProfile._id.toUpperCase()}} milestone reports</div>
+        <div class="display-1 c-pb-10">{{agencyProfile._id.toUpperCase()}} withdraw requests</div>
 
         <div class="row c-pt-8">
 
