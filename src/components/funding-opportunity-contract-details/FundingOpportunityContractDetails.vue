@@ -169,7 +169,116 @@
               </div>
             </v-flex>
 
-            <v-flex xs12>
+            <v-flex xs12 v-if="transactions.length">
+            
+              <div class="row c-pt-10">
+                <div class="col-12 bold subheading">Transactions</div>
+              </div>
+
+              <div class="row c-pt-8 text-align-center">
+                <div class="col-2">
+                  <span class="caption grey--text">
+                    FROM
+                    <v-icon class="sort-icon">
+                      unfold_more
+                    </v-icon>
+                  </span>
+                </div>
+
+                <div class="col-2">
+                  <span class="caption grey--text">
+                    TO
+                    <v-icon class="sort-icon">
+                      unfold_more
+                    </v-icon>
+                  </span>
+                </div>
+
+                <div class="col-2">
+                  <span class="caption grey--text">
+                    ORGANIZATION
+                    <v-icon class="sort-icon">
+                      unfold_more
+                    </v-icon>
+                  </span>
+                </div>
+
+                <div class="col-2">
+                  <span class="caption grey--text">
+                    TRANSACTION
+                    <v-icon class="sort-icon">
+                      unfold_more
+                    </v-icon>
+                  </span>
+                </div>
+
+                <div class="col-2">
+                  <span class="caption grey--text">
+                    DATE & TIME (UTC)
+                    <v-icon class="sort-icon">
+                      unfold_more
+                    </v-icon>
+                  </span>
+                </div>
+
+                <div class="col-2">
+                  <span class="caption grey--text">
+                    AMOUNT
+                    <v-icon class="sort-icon">
+                      unfold_more
+                    </v-icon>
+                  </span>
+                </div>
+
+                <div class="col-2">
+                  <span class="caption grey--text">
+                  </span>
+                </div>
+              </div>
+
+              <div class="row">
+                <div class="col-12 c-pt-5">
+                  <v-expansion-panel>
+                    <v-expansion-panel-content v-for="(tx, transactionIdx) in transactions" :key="'tx-' + transactionIdx">
+                      <div slot="header">
+                        <div class="row text-align-center">
+                          <div class="col-2">
+                           <!-- <v-icon small class="c-pr-1">
+                              {{ !tx.isUniversityReceiver ? 'school' : 'face'}}
+                            </v-icon> -->
+                            {{getTransactionSenderName(tx)}}
+                          </div>
+                          <div class="col-2">
+                          <!--  <v-icon small class="c-pr-1">
+                              {{ !tx.isUniversityReceiver ? 'school' : 'face'}}
+                            </v-icon> -->
+                            {{getTransactionReceiverName(tx)}}</div>
+                          <div class="col-2">
+                            <v-icon small class="c-pr-1" v-if="getTxUniversity(tx)">
+                              {{'school'}}
+                            </v-icon>
+                            {{getTxUniversity(tx)}}
+                          </div>
+                          <div class="col-2 grey--text">
+                            {{getTransactionType(tx)}}
+                          </div>
+                          <div class="col-2 grey--text ">{{new Date(`${tx.time}Z`).toDateString()}}</div>
+                          <div class="col-2 bold">$ {{fromAssetsToFloat(tx.amount)}}</div>
+                        </div>
+                      </div>
+                      <v-card style="background-color: #f1f8fe">
+                        <v-card-text>
+                          <div class="row" >
+                            <div class="col-2"></div>
+                            <div class="col-8"></div>
+                            <div class="col-2"></div>
+                          </div>
+                        </v-card-text>
+                      </v-card>
+                    </v-expansion-panel-content>
+                  </v-expansion-panel>
+                </div>
+              </div>
             </v-flex>
 
           </v-layout>
@@ -223,7 +332,7 @@
 <script>
     import { mapGetters } from 'vuex';
     import deipRpc from '@deip/deip-rpc-client';
-    import { getOrganizationTitle } from './../../utils/organizations';
+    import { getOrganizationTitle,getUniversityById } from './../../utils/organizations';
 
     export default {
         name: "FundingOpportunityContractDetails",
@@ -240,6 +349,7 @@
             program: 'agencyProgramContractDetails/program',
             contract: 'agencyProgramContractDetails/contract',
             relationsByOrganizations: 'agencyProgramContractDetails/relationsByOrganizations',
+            transactions: 'agencyProgramContractDetails/transactions',
             user: 'auth/user',
             isGrantor: 'auth/isGrantor',
             isOfficer: 'auth/isOfficer',
@@ -272,6 +382,29 @@
 
         methods: {
           getOrganizationTitle,
+          getUniversityById,
+
+          getTransactionSenderName(tx) {
+            return tx.senderProfile && tx.senderProfile.account ? this.$options.filters.fullname(tx.senderProfile) : (tx.senderProfile ? tx.senderProfile.name : "");
+          },
+
+          getTransactionReceiverName(tx) {
+            return tx.receiverProfile && tx.receiverProfile.account ? this.$options.filters.fullname(tx.receiverProfile) : (tx.receiverProfile ? tx.receiverProfile.name : "");
+          },
+
+          getTxUniversity(tx) {
+            return getUniversityById(tx.receiver_organisation_id) ? getUniversityById(tx.receiver_organisation_id).name : "";
+          },
+
+          getTransactionType(tx) {
+            if (tx.sender_organisation_id == 1) {
+              return "Grant";
+            }
+            if (tx.isUniversityOverhead) {
+              return "University Overhead";
+            }
+            return "Withdraw";
+          },
 
           getTotalFundingAmount(funding) {
             return funding.research_expenses.reduce((acc, exp) => {

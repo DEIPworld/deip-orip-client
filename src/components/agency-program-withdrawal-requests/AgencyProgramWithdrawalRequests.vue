@@ -70,7 +70,7 @@
 
       <v-flex xs12>
         <div class="headline c-pb-10 c-pt-10 text-align-center" v-if="!relationsWithReportsByOrganizations.length">
-          No active reports requests found
+          No active reports found
         </div>
        <!-- <div class="c-pb-5" v-for="(organization, organizationIdx) in withdrawRequestsByOrganizations" :key="'org-' + organizationIdx">
           <div class="sm-title bold c-pt-10 c-pb-5 c-pl-5">{{getOrganizationTitle(organization.orgId)}}</div>

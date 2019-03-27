@@ -4,11 +4,13 @@ import agencyHttp from './../../../services/http/agency';
 import applicationHttp from './../../../services/http/application';
 import { mapAreaToProgram } from '../../common/disciplines/DisciplineTreeService'
 import { getEnrichedProfiles } from './../../../utils/user';
+import { isUniversityName, getUniversityByName, getUniversityById} from './../../../utils/organizations';
 
 const state = {
     agency: undefined,
     program: undefined,
     contract: undefined,
+    transactions: [],
 
     isLoadingContractDetailsPage: undefined
 }
@@ -18,7 +20,8 @@ const getters = {
     agency: (state, getters) => state.agency,
     program: (state, getters) => state.program,
     contract: (state, getters) => state.contract,
-
+    transactions: (state, getters) => state.transactions,
+    
     relationsByOrganizations: (state, getters) => {
       let organizations = [];
       state.contract.relations.forEach(r => {
@@ -56,6 +59,9 @@ const actions = {
             const agencyProgramDetailsLoad = dispatch('loadProgramDetails', { foaId });
             const fundingContractLoad = dispatch('loadFundingContractDetails', { contractId });
             return Promise.all([agencyProgramDetailsLoad, fundingContractLoad])
+          })
+          .then(() => {
+            return dispatch('loadTransactions');
           })
           .catch(err => { console.log(err) })
           .finally(() => {
@@ -121,7 +127,47 @@ const actions = {
           });
     },
 
+    loadTransactions({ state, dispatch, commit, getters }) {
+      const transactions = []
+        let organisations = getters.relationsByOrganizations.map(o => o.orgId);
+        return Promise.all(organisations.map(id => deipRpc.api.getFundingTransactionsByReceiverOrganisationAsync(id)))
+          .then((items) => {
+            console.log(items);
+            const flatten = [].concat.apply([], items);
+            transactions.push(...flatten);
+            for (let i = 0; i < transactions.length; i++) {
+              let tx = transactions[i];
+              tx.original;
+              tx.isUniversityReceiver = isUniversityName(tx.to_account);
+              tx.isUniversityOverhead = (tx.sender_organisation_id == tx.receiver_organisation_id) && tx.isUniversityReceiver;
+            }
+            let researchers = transactions.filter(t => !t.isUniversityReceiver).map(t => t.to_account);
+            return getEnrichedProfiles(researchers);
+          })
+          .then((profiles) => {
+            let researchers = transactions.filter(t => !t.isUniversityReceiver);
+            for (let i = 0; i < researchers.length; i++) {
+              let tx = researchers[i];
+              tx.receiverProfile = profiles[i];
+              tx.senderProfile = getUniversityById(tx.sender_organisation_id);
+            }
 
+            let universities = transactions.filter(t => t.isUniversityReceiver);
+            for (let i = 0; i < universities.length; i++) {
+              let tx = universities[i];
+              tx.receiverProfile = getUniversityByName(tx.to_account);
+              tx.senderProfile = tx.sender_organisation_id == 1 
+                ? getUniversityByName("Treasury") 
+                : profiles.find(r => r.account.organisation_id == tx.sender_organisation_id);
+            }
+
+            commit('SET_TRANSACTIONS_HISTORY_LIST', transactions);
+            console.log(transactions);
+          })
+          .catch(err => { console.log(err) })
+          .finally(() => {
+          });
+    }
 }
 
 // mutations
@@ -133,6 +179,10 @@ const mutations = {
   ['SET_AGENCY_PROGRAM'](state, program) {
       mapAreaToProgram(program, state.agency.researchAreas);
       Vue.set(state, 'program', program)
+  },
+
+  ['SET_TRANSACTIONS_HISTORY_LIST'](state, transactions) {
+    Vue.set(state, 'transactions', transactions)
   },
 
   ['SET_FUNDING_CONTRACT_DETAILS'](state, contract) {
