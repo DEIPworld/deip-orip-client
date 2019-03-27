@@ -69,10 +69,14 @@
       </v-flex>
 
       <v-flex xs12>
-        <div class="headline c-pb-10 c-pt-10 text-align-center" v-if="!relationsWithReportsByOrganizations.length">
-          No active reports found
+        <div class="headline c-pb-10 c-pt-10" v-if="!relationsWithReportsByOrganizations.length && !withdrawRequestsByOrganizations.length">
+          No active reports and withdraw requests found
         </div>
-       <!-- <div class="c-pb-5" v-for="(organization, organizationIdx) in withdrawRequestsByOrganizations" :key="'org-' + organizationIdx">
+
+        <div class="sm-title c-pl-5 c-pt-10" style="text-decoration: underline" v-if="withdrawRequestsByOrganizations.length">
+          Withdraw Requests
+        </div>
+        <div class="c-pb-5" v-for="(organization, organizationIdx) in withdrawRequestsByOrganizations" :key="'org-' + organizationIdx">
           <div class="sm-title bold c-pt-10 c-pb-5 c-pl-5">{{getOrganizationTitle(organization.orgId)}}</div>
           <v-expansion-panel>
             <v-expansion-panel-content v-for="(request, requestIdx) in organization.withdraws" :key="'funding-' + requestIdx + '-org-' + organizationIdx">
@@ -141,8 +145,11 @@
               </v-card>
             </v-expansion-panel-content>
           </v-expansion-panel>
-        </div> -->
+        </div>
 
+        <div class="sm-title c-pl-5 c-pt-10" style="text-decoration: underline" v-if="relationsWithReportsByOrganizations.length">
+          Milestone Reports
+        </div>
         <div class="c-pb-5" v-for="(organization, organizationIdx) in relationsWithReportsByOrganizations" :key="'rel-org-' + organizationIdx">
           <div class="sm-title bold c-pt-10 c-pb-5 c-pl-5">{{getOrganizationTitle(organization.orgId)}}</div>
           <v-expansion-panel>
@@ -224,6 +231,7 @@
             </v-expansion-panel-content>
           </v-expansion-panel>
         </div>
+
       </v-flex>
     </v-layout>
   </v-container>
@@ -302,40 +310,39 @@
           },
 
           approve(request) {
-            // deipRpc.broadcast.approveFundingWithdrawalRequestAsync(
-            //   this.user.privKey,
-            //   request.id,
-            //   this.user.username
-            // ).then(() => {
-            //   this.$store.dispatch('layout/setSuccess', {
-            //     message: "Funding withdraw request has been approved successfully!"
-            //   });
-            //   this.$store.dispatch('agencyProgramWithdrawalRequests/loadAgencyProgramWithdrawalRequestsPage', { agency: this.agencyProfile._id});
-            // }, (err) => {
-            //   console.log(err);
-            //   this.$store.dispatch('layout/setError', {
-            //     message: "An error occurred while sending Application, please try again later"
-            //   });
-            // });
+            deipRpc.broadcast.approveFundingWithdrawalRequestAsync(
+              this.user.privKey,
+              request.id,
+              this.user.username
+            ).then(() => {
+              this.$store.dispatch('layout/setSuccess', {
+                message: "Funding withdraw request has been approved successfully!"
+              });
+              this.$store.dispatch('agencyProgramWithdrawalRequests/loadAgencyProgramWithdrawalRequestsPage', { agency: this.agencyProfile._id});
+            }, (err) => {
+              console.log(err);
+              this.$store.dispatch('layout/setError', {
+                message: "An error occurred while sending Application, please try again later"
+              });
+            });
           },
 
           reject(request) {
-            // return;
-            // deipRpc.broadcast.rejectFundingWithdrawalRequestAsync(
-            //   this.user.privKey,
-            //   request.id,
-            //   this.user.username
-            // ).then(() => {
-            //   this.$store.dispatch('layout/setSuccess', {
-            //     message: "Funding withdraw request has been rejected successfully!"
-            //   });
-            //   this.$store.dispatch('agencyProgramWithdrawalRequests/loadAgencyProgramWithdrawalRequestsPage', { agency: this.agencyProfile._id});
-            // }, (err) => {
-            //   console.log(err);
-            //   this.$store.dispatch('layout/setError', {
-            //     message: "An error occurred while sending Application, please try again later"
-            //   });
-            // });
+            return deipRpc.broadcast.rejectFundingWithdrawalRequestAsync(
+                this.user.privKey,
+                request.id,
+                this.user.username
+              ).then(() => {
+                this.$store.dispatch('layout/setSuccess', {
+                  message: "Funding withdraw request has been rejected successfully!"
+                });
+                this.$store.dispatch('agencyProgramWithdrawalRequests/loadAgencyProgramWithdrawalRequestsPage', { agency: this.agencyProfile._id});
+              }, (err) => {
+                console.log(err);
+                this.$store.dispatch('layout/setError', {
+                  message: "An error occurred while sending Application, please try again later"
+                });
+              });
           }
         },
 
