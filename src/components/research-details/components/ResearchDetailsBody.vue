@@ -285,11 +285,11 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="col-3 text-align-center">
-                              <div class="bold grey--text">FUNDING</div>
-                              <div class="bold">${{getTotalFundingAmount(contract.relation)}}</div>
-                              <div class="caption grey--text" v-if="activeMilestoneData(contract)">($ {{activeMilestoneData(contract)}} available to withdraw)</div>
-                          </div>
+                            <div class="col-3 text-align-center">
+                                <div class="bold grey--text">Available to withdraw</div>
+                                <div class="bold">$ {{activeMilestoneData(contract)}}</div>
+                                <div class="caption grey--text" v-if="activeMilestoneData(contract)">(Total Funding: ${{getTotalFundingAmount(contract.relation)}})</div>
+                            </div>
                         </div>
                     </div>
                     <v-divider class="c-mt-2"></v-divider>
@@ -779,13 +779,10 @@
           },
 
           activeMilestoneData(contract) {
-            let activeMilesone = contract.relation.milestones.find(m => m.status == 1);
-            if (!activeMilesone) return null;
-
+            if (!contract || !contract.relation) return null;
             let totalAmount = this.getTotalFundingAmount(contract.relation);
             let currentExpenses = this.getTotalCurrentExpensesAmount(contract.relation);
-            let milestoneShare = totalAmount * (activeMilesone.amount / this.DEIP_100_PERCENT);
-            let availableToWithdraw = milestoneShare - currentExpenses;
+            let availableToWithdraw = totalAmount - currentExpenses;
             return availableToWithdraw > 0 ? availableToWithdraw : 0;
           },
 
