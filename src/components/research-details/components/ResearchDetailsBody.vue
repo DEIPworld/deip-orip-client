@@ -608,6 +608,35 @@
                 return relation.withdrawals.filter(r => r.status == 2);
             },
 
+            getOrderedMilestones(milestones) {
+              let orderedMilestones = [];
+              for (let i = 0; i < milestones.length; i++){
+                let milestone = milestones[i];
+                if (milestone.status == 2) {
+                  orderedMilestones.push(milestone)
+                }
+              }
+              for (let i = 0; i < milestones.length; i++){
+                let milestone = milestones[i];
+                if (milestone.status == 1) {
+                  orderedMilestones.push(milestone)
+                }
+              }
+              for (let i = 0; i < milestones.length; i++){
+                let milestone = milestones[i];
+                if (milestone.status == 4) {
+                  orderedMilestones.push(milestone)
+                }
+              }
+              for (let i = 0; i < milestones.length; i++){
+                let milestone = milestones[i];
+                if (milestone.status == 3) {
+                  orderedMilestones.push(milestone)
+                }
+              }
+              return orderedMilestones;
+            },
+
             fundingMilestonesChartOptions(funding) {
                 // TODO: Revise this algo after we implement milestone finalization
                 let totalCurrentExpencesAmount = this.getTotalCurrentExpensesAmount(funding);
@@ -616,20 +645,25 @@
                 spentPercent = parseFloat(spentPercent);
                 let amount = [];
                 let spentPercentReached = false;
+                let orderedMilestones = this.getOrderedMilestones(funding.milestones);
+                for (let i = 0; i < orderedMilestones.length; i++) {
+                  let current = orderedMilestones[i];
+                  let milestonePercent = this.convertToPercent(current.amount);
+                  if (!spentPercentReached && milestonePercent >= spentPercent) {
 
-                for (let i = 0; i < funding.milestones.length; i++) {
-                    let current = funding.milestones[i];
-                    let milestonePercent = this.convertToPercent(current.amount);
-                    if (!spentPercentReached && milestonePercent > spentPercent) {
-                        amount.push(spentPercent);
-                        amount.push(milestonePercent - spentPercent);
-                        spentPercentReached = true;
-                    } else {
+                      if (milestonePercent != spentPercent) {
+                        amount.push(milestonePercent - (milestonePercent - spentPercent));
+                        amount.push(milestonePercent - spentPercent)
+                      } else {
                         amount.push(milestonePercent);
-                    }
+                      }
+                      spentPercentReached = true;
+                  } else {
+                      amount.push(milestonePercent);
+                  }
                 }
 
-                let colors = amount.map((a, i) => a <= spentPercent ? '#8dc2f9' : '#e0e0e0');
+                let colors = amount.map((a, i) => i == 0 ? '#8dc2f9' : '#e0e0e0');
 
                 return {
                     isStacked: 'percent',
@@ -656,21 +690,28 @@
               let names = [];
               let amount = [];
               let spentPercentReached = false;
+              let orderedMilestones = this.getOrderedMilestones(funding.milestones);
+        
+              for (let i = 0; i < orderedMilestones.length; i++) {
+                let current = orderedMilestones[i];
+                let milestonePercent = this.convertToPercent(current.amount);
 
-              for (let i = 0; i < funding.milestones.length; i++) {
-                  let current = funding.milestones[i];
-                  let milestonePercent = this.convertToPercent(current.amount);
-
-                  if (!spentPercentReached && milestonePercent > spentPercent) {
-                      names.push(`Spent - ${spentPercent}%`);
-                      amount.push(spentPercent);
-                      amount.push(milestonePercent - spentPercent);
-                      names.push(`Milestone ${i + 1} - ${milestonePercent}%`);
-                      spentPercentReached = true;
-                  } else {
-                      names.push(`Milestone ${i + 1} - ${milestonePercent}%`);
-                      amount.push(milestonePercent);
-                  }
+                if (!spentPercentReached && milestonePercent >= spentPercent) {
+        
+                    if (milestonePercent != spentPercent) {
+                    names.push(`Spent - ${spentPercent}%`);
+                    amount.push(milestonePercent - (milestonePercent - spentPercent));
+                    names.push(`Milestone ${i + 1} - ${milestonePercent}%`);
+                    amount.push(milestonePercent - spentPercent);
+                    } else {
+                    names.push(`Milestone ${i + 1} - ${milestonePercent}%`);
+                    amount.push(milestonePercent);
+                    }
+                    spentPercentReached = true;
+                } else {
+                    names.push(`Milestone ${i + 1} - ${milestonePercent}%`);
+                    amount.push(milestonePercent);
+                }
               }
 
               return [
@@ -707,7 +748,7 @@
             let percent = currentExpenseAmount == 0 ? 0 : (currentExpenseAmount / maxExpenseAmount) * 100;
 
             let names = percent == 0 ? ['', ''] : [`Spent: $${currentExpenseAmount}`, ''];
-            let amount = percent == 0 ? [0, 100] : [percent, 100];
+            let amount = percent == 0 ? [0, 100] : [percent, 100 - percent];
 
             return [
               ['Milestone', ...names, { role: 'annotation' } ],
