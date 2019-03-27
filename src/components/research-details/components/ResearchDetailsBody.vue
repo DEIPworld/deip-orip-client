@@ -367,7 +367,7 @@
                 v-if="isResearchGroupMember && selectedContractToWithdrawMeta.contract"
                 :meta="universityAgreement" 
                 :title="``" 
-                :text="`University provides you with the following facilities... and will charge you ${this.convertToPercent(selectedContractToWithdrawMeta.contract.relation.university_overhead)}% overhead fees. Do you agree to proceed ?`" 
+                :text="`The University charges grantees for providing them with research facilities: laboratories, equipment, data processing services, administrative personnel and others. You will be charged ${this.convertToPercent(selectedContractToWithdrawMeta.contract.relation.university_overhead)} % over-head fee.`" 
                 @confirmed="openContractWithdrawDialog(); universityAgreement.isShown = false"  
                 @canceled="universityAgreement.isShown = false">
             </confirm-action-dialog>

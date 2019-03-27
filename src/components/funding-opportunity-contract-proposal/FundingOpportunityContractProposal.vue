@@ -134,7 +134,7 @@
 
                 <div class="row">
                   <span class="col-8">
-                    <div class="subheading bold">University overhead</div>
+                    <div class="subheading bold">University overhead cap</div>
                     <v-text-field v-model="funding.overhead" suffix="%" mask="###"></v-text-field>
                   </span>
                   <span class="col-1"></span>

@@ -129,7 +129,7 @@
                           <div class="row" v-if="contractIsPending">
                             <div class="col-2"></div>
                             <div class="col-2">
-                              <div class="body-2 c-pt-4">University overhead</div>
+                              <div class="body-2 c-pt-4">University overhead cap</div>
                             </div>
                             <div class="col-8">
                               <div class="body-2 c-pt-4">{{convertToPercent(funding.university_overhead)}}%</div>
@@ -401,7 +401,7 @@
               return "Grant";
             }
             if (tx.isUniversityOverhead) {
-              return "University Overhead";
+              return "University overhead cap";
             }
             return "Withdraw";
           },
