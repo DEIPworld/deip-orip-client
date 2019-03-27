@@ -34,7 +34,7 @@
                       <span class="bold">Waiting for treasury approve</span>
                     </v-chip>
                     <v-chip v-if="contractIsApproved" label color="green" text-color="white">
-                      <span class="bold">Approved by treasury</span>
+                      <span class="bold">Approved</span>
                     </v-chip>
                   </span>
                   <span v-if="isTreasury">
