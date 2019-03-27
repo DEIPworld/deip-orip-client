@@ -47,7 +47,7 @@
                             </svg>
                         </div>
 
-                        <div class="c-pl-4 half-bold">DEIP Tokens</div>
+                        <div class="c-pl-4 half-bold">NSF Grant Tokens</div>
                         <div class="col-grow text-align-right">{{ deipTokenBalance }}</div>
                     </div>
 

@@ -401,7 +401,7 @@
               return "Grant";
             }
             if (tx.isUniversityOverhead) {
-              return "University overhead cap";
+              return "University overhead";
             }
             return "Withdraw";
           },
