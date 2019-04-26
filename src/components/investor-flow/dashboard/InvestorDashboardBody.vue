@@ -207,9 +207,6 @@
 
         methods: {
         },
-        
-        created() {
-        }
     }
 </script>
 

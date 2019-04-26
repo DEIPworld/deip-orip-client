@@ -32,7 +32,8 @@
         "vuetify": "1.0.16",
         "vuetify-upload-button": "^0.1.2",
         "vuex": "^3.0.1",
-        "vue-google-charts": "^0.3.2"
+        "vue-google-charts": "^0.3.2",
+        "d3": "^5.7.0"
     },
     "devDependencies": {
         "autoprefixer": "^7.1.2",

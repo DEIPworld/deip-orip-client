@@ -123,6 +123,8 @@
             </v-flex>
           </v-layout>
         </v-card>
+
+        <top-funding-opportunities-chart></top-funding-opportunities-chart>
       </v-flex>
     </v-layout>
   </v-container>
