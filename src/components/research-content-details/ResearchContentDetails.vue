@@ -38,15 +38,15 @@
                     <div id="reviews" class="reviews-container">
                         <div class="c-pt-2 title">Reviews: {{ contentReviewsList.length }}</div>
 
-                        <div v-if="contentReviewsList.length" class="c-pt-6">
-                            <research-content-details-review-tab-chart
-                            ></research-content-details-review-tab-chart>
-                        </div>
-
                         <div class="c-pt-6">
                             <review-list-item v-for="(review, i) in contentReviewsList" :review="review" :key="i"></review-list-item>
                         </div>
                     </div>
+                </div>
+
+                <div v-if="contentReviewsList.length" class="c-pt-6">
+                    <research-content-details-review-tab-chart>
+                    </research-content-details-review-tab-chart>
                 </div>
 
                 <div v-else-if="isPublished && !contentReviewsList.length">

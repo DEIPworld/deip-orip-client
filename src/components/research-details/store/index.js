@@ -365,15 +365,6 @@ const actions = {
 
                     statsPromises.push(
                         deipRpc.api.getEciAndExpertiseStatsByDisciplineIdAsync(discipline.id)
-                            // when blockchain API will be repaired, catch section should be deleted
-                            .catch(() => {
-                                return {
-                                    average_content_eci_in_discipline: 1000,
-                                    average_expertise_in_discipline: 3357,
-                                    average_research_eci_in_discipline: 1000,
-                                    max_research_eci_in_discipline: 8000
-                                }
-                            })
                     )
                 }
 
