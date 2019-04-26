@@ -1,24 +1,25 @@
 <template>
-    <div v-if="chartsDataList">
-        <v-tabs slot="extension" v-model="tab" grow color="blue lighten-4">
-            <v-tabs-slider color="black"></v-tabs-slider>
+  <div class="c-pt-5" v-if="chartsDataList">
+    <v-tabs slot="extension" v-model="tab" grow color="blue lighten-4">
+      <v-tabs-slider color="black"></v-tabs-slider>
+      <v-tab :key="'tab-' + item.discipline.id" v-for="item in chartsDataList" :disabled="false">
+          {{ item.discipline.name }}
+      </v-tab>
+    </v-tabs>
 
-            <v-tab :key="'tab-' + item.discipline.id" v-for="item in chartsDataList" :disabled="false">
-                {{ item.discipline.name }}
-            </v-tab>
-        </v-tabs>
-
-        <v-tabs-items v-model="tab">
-            <v-tab-item v-for="(item, i) in chartsDataList" :key="'tab-item-' + item.discipline.id">
-                <div class="c-p-8">
-                    <research-content-details-review-chart
-                        v-if="tab === i.toString()"
-                        :charts-data-item="item"
-                    ></research-content-details-review-chart>
-                </div>
-            </v-tab-item>
-        </v-tabs-items>
-    </div>
+    <v-tabs-items v-model="tab" style="margin: 0px -2px -3px;">
+        <v-tab-item v-for="(item, i) in chartsDataList" :key="'tab-item-' + item.discipline.id">
+          <v-card flat>
+              <v-card-text>
+                <research-content-details-review-chart
+                  v-if="tab === i"
+                  :charts-data-item="item"
+                ></research-content-details-review-chart>
+              </v-card-text>
+          </v-card>
+        </v-tab-item>
+    </v-tabs-items>
+  </div>
 </template>
 
 <script>

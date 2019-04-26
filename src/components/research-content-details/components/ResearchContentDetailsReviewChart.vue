@@ -127,8 +127,6 @@
                         .tickFormat(unix => moment.unix(unix).format('DDD MMM HH:mm'))
                 );
                 
-            window.d3 = d3;
-
             // line chart
             let line = d3.line()
                 .x((d, i) => xScale(d.date))
