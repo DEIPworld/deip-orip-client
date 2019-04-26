@@ -119,14 +119,14 @@
             <div class="subheading bold c-mt-4">
                 Reviews: <span class="green--text text--darken-2">{{positiveReviewsCount}}</span> / <span class="red--text text--darken-2">{{negativeReviewsCount}}</span> 
             </div>
-        <!--    <div class="c-pt-3">
+            <div class="c-pt-3">
                 <div class="caption"><v-icon small class="c-pr-2">rate_review</v-icon>Reward for review: <span class="bold">{{convertToPercent(research.review_share_in_percent)}}%</span></div>
                     <div class="caption" v-if="isResearchRewardDistributionActive">
                         <div><v-icon small class="c-mr-2">av_timer</v-icon>Reward period active till</div>
                         <div class="bold"><v-icon small class="c-mr-2">today</v-icon>{{researchRewardDistributionState.end.toDateString()}}</div> 
                     </div>
-                </div> 
-            </div> -->
+                </div>
+            </div>
         </div>
         <!-- ### END Research Info Section ### -->
        
@@ -151,9 +151,8 @@
             </div>
         </div> -->
 
-
         <!-- ### START Research Token Holders Section ### -->
-       <!-- <div class="c-mb-6 c-mt-4">
+        <div class="c-mb-6 c-mt-4">
             <div class="sidebar-fullwidth"><v-divider></v-divider></div>
             <div>
                 <div class="subheading bold c-mt-4">Research Token holders</div>
@@ -171,11 +170,11 @@
                     </div>
                 </div>
             </div>
-        </div> -->
+        </div>
         <!-- ### END Research Token Holders Section ### -->
         
         <!-- ### START Research Token Sale Section ### -->
-        <!-- <div class="c-mb-6 c-mt-4" v-if="isTokenSaleSectionAvailable">
+        <div class="c-mb-6 c-mt-4" v-if="isTokenSaleSectionAvailable">
             <div class="sidebar-fullwidth">
                 <v-divider></v-divider>
             </div>
@@ -266,7 +265,7 @@
                     </div>
                 </div>
             </div>
-        </div> -->
+        </div>
         <!-- ### END Research Token Sale Section ### -->
       </div>
     </div>

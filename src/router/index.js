@@ -37,11 +37,10 @@ const router = new Router({
                         return;
                     }
                     
-                    const sub = window.env.TENANT;
-                    const agency = agencies.find(a => a.name.toLowerCase() == sub.toLowerCase());
+                    const sub = window.env.TENANT || "";
+                    const agency = agencies.find(a => a.name.toLowerCase() === sub.toLowerCase());
 
                     if (agency) {
-                        // todo: replace with Grants list
                         next({ name: 'AgencyPrograms', params: { agency: agency.name } });
                     } else {
                         next({ name: 'ResearchFeed' });
