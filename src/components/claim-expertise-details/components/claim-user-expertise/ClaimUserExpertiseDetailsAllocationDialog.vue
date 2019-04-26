@@ -37,13 +37,13 @@
                         </div>
 
                         <div class="c-pt-6">
-                            <v-text-field
+                            <v-textarea
                                 label="Provide a cover letter"
-                                multi-line auto-grow
+                                auto-grow
                                 :rows="6"
                                 v-model="description"
                                 :rules="[required]"
-                            ></v-text-field>
+                            ></v-textarea>
                         </div>
                     </v-form>
                     

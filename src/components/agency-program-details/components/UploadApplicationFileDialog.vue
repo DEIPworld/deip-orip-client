@@ -16,13 +16,12 @@
 							<div class="col-grow a subheading">{{ program.funding_opportunity_title }}</div>
 						</div>
 						<v-divider></v-divider>
-						<v-select
+						<v-autocomplete
               class="c-mt-4"
               :items="researchList"
               :filter="researchFilter"
               v-model="research"
               label="Research"
-              autocomplete
             >
 							<template slot="selection" slot-scope="data">
 								<div class="row-nowrap align-center">
@@ -36,7 +35,7 @@
 									</div>
 								</template>
 							</template>
-						</v-select>
+						</v-autocomplete>
 						<div v-if="research">
 							<div class="c-pt-4 c-pb-8">
 								<div class="sm-title">
@@ -395,10 +394,6 @@
     #application-dropzone {
         margin-left: -1px;
         margin-right: -1px;
-    }
-
-    .dialog.dialog--active {
-        overflow: visible;
     }
 
     .author-item {

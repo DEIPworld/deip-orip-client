@@ -6,13 +6,13 @@
 
                 <div class="row c-mh-auto group-description-max-width">
                     <div class="col-12">
-                        <v-text-field name="Description"
+                        <v-textarea name="Description"
                             label="Description"
-                            solo multi-line
+                            solo
                             auto-grow
                             v-model="description"
                             :rules="descriptionRules"
-                        ></v-text-field>
+                        ></v-textarea>
                     </div>
                 </div>
 

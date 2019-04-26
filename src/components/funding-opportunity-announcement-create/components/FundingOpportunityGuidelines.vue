@@ -1,27 +1,26 @@
 <template>
     <div class="column full-height">
         <div class="c-mb-4 col-grow column">
-            <div class="step-title">Provide additional information</div>
+            <div class="step-title">Describe program guidelines</div>
 
             <div class="col-grow overflow-y-auto">
 
                 <div class="c-mh-auto guidelines-max-width">
-                    <v-text-field
-                        label="Opportunity description"
-                        multi-line auto-grow
+                    <v-textarea
+                        label="Eligible applicants"
+                        auto-grow
                         rows="2"
-                        v-model="opportunity.description"
-                    ></v-text-field>
+                        v-model="opportunity.eligibleApplicants"
+                        :rules="[rules.required]"
+                    ></v-textarea>
 
-                    <v-text-field
-                        label="Link to additional information"
-                        v-model="opportunity.additionalInfoLink"
-                    ></v-text-field>
-
-                    <v-text-field
-                        label="Grantor contact e-mail address"
-                        v-model="opportunity.grantorEmail"
-                    ></v-text-field>
+                    <v-textarea
+                        label="Additional information on eligibility"
+                        auto-grow
+                        rows="2"
+                        v-model="opportunity.eligibilityAdditionalInformation"
+                        :rules="[rules.required]"
+                    ></v-textarea>
                 </div>
 
             </div>
@@ -32,18 +31,17 @@
                 <v-icon dark class="pr-1">keyboard_arrow_left</v-icon> Back
             </v-btn>
             
-            <v-btn color="primary" @click.native="finish()" :loading="isSending" :disabled="isNextDisabled() || isSending">Finish</v-btn>
+            <v-btn color="primary" @click.native="nextStep()" :disabled="isNextDisabled()">Next</v-btn>
         </div>
     </div>
 </template>
 
 <script>
     export default {
-        name: "FundingOpportunityAdditional",
+        name: "FundingOpportunityGuidelines",
 
         props: {
-            opportunity: { type: Object, required: true },
-            isSending: { type: Boolean, default: false },
+            opportunity: { type: Object, required: true }
         },
 
         data() { 
@@ -55,8 +53,8 @@
         },
         
         methods: {
-            finish() {
-                this.$emit('finish');
+            nextStep() {
+                this.$emit('incStep');
             },
             prevStep() {
                 this.$emit('decStep');

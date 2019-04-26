@@ -21,11 +21,12 @@ const actions = {
                 );
             })
             .then(witnesses => {
-                _.chain(witnesses).clone()
+                return _.chain(witnesses).clone()
                     .orderBy(['votes'], ['desc'])
                     .each((item, i) => { item.votingIndex = i; })
                     .value();
-
+            })
+            .then(witnesses => {
                 commit('SET_WITNESSES', witnesses);
             })
             .catch(err => console.log(err));

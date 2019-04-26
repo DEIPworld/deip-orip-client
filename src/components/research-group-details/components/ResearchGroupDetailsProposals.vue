@@ -6,11 +6,11 @@
             <div class="row align-center">
                 <span class="uppercase half-bold">Show approved proposals</span>
 
-                <v-switch class="c-ml-4" 
+                <v-switch class="c-ml-4 mt-0 pt-0" 
                     color="primary" 
                     hide-details 
-                    v-model="filter.areShownPastProposals"
-                    @click="updateProposalFilter(
+                    :value="filter.areShownPastProposals"
+                    @change="updateProposalFilter(
                         { key: 'areShownPastProposals', value: !filter.areShownPastProposals }
                     )"
                 ></v-switch>

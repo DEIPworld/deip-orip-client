@@ -74,7 +74,7 @@
                     </div>
 
                     <v-checkbox
-                        class="c-mv-4"
+                        class="c-mv-4 pa-0"
                         label="I have saved the key and want to be added to the list"
                         v-model="formData.isPrivKeySaved"
                         :disabled="isSaving"

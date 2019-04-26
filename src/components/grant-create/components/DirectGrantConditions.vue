@@ -36,11 +36,10 @@
                                     <span class="caption">(optional)</span>
                                 </div>
 
-                                <v-text-field v-model="grantInfo.description"
-                                    multi-line
+                                <v-textarea v-model="grantInfo.description"
                                     rows="3" auto-grow
                                     label="You can mention some important features"
-                                ></v-text-field>
+                                ></v-textarea>
                             </div>
                         </div>
                     </div>

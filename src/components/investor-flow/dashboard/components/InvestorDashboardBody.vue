@@ -35,7 +35,7 @@
                     <div class="item-tag primary"></div>
 
                     <div class="c-pl-2 c-pr-2">
-                        <v-checkbox hide-details></v-checkbox>
+                        <v-checkbox class="ma-0 pa-0" hide-details></v-checkbox>
                     </div>
 
                     <div class="col-grow overflow-hidden">
@@ -54,7 +54,7 @@
                     <div class="item-tag primary"></div>
 
                     <div class="c-pl-2 c-pr-2">
-                        <v-checkbox hide-details></v-checkbox>
+                        <v-checkbox class="ma-0 pa-0" hide-details></v-checkbox>
                     </div>
 
                     <div class="col-grow overflow-hidden">
@@ -72,7 +72,7 @@
                     <div class="item-tag primary"></div>
 
                     <div class="c-pl-2 c-pr-2">
-                        <v-checkbox hide-details></v-checkbox>
+                        <v-checkbox class="ma-0 pa-0" hide-details></v-checkbox>
                     </div>
 
                     <div class="col-grow overflow-hidden">
@@ -103,7 +103,7 @@
                     <div class="item-tag"></div>
 
                     <div class="c-pl-2 c-pr-2">
-                        <v-checkbox hide-details></v-checkbox>
+                        <v-checkbox class="ma-0 pa-0" hide-details></v-checkbox>
                     </div>
 
                     <div class="a subheading">Integrated mobility network</div>
@@ -120,7 +120,7 @@
                     <div class="item-tag"></div>
 
                     <div class="c-pl-2 c-pr-2">
-                        <v-checkbox hide-details></v-checkbox>
+                        <v-checkbox class="ma-0 pa-0" hide-details></v-checkbox>
                     </div>
 
                     <div class="a subheading">Parallel	functional	preprocessor</div>
@@ -137,7 +137,7 @@
                     <div class="item-tag primary"></div>
 
                     <div class="c-pl-2 c-pr-2">
-                        <v-checkbox hide-details></v-checkbox>
+                        <v-checkbox class="ma-0 pa-0" hide-details></v-checkbox>
                     </div>
 
                     <div class="a subheading">Virtual programmable compiler</div>
@@ -162,7 +162,7 @@
                     <div class="item-tag primary"></div>
 
                     <div class="c-pl-2 c-pr-2">
-                        <v-checkbox hide-details></v-checkbox>
+                        <v-checkbox class="ma-0 pa-0" hide-details></v-checkbox>
                     </div>
 
                     <div class="a subheading">Integrated mobility network</div>
@@ -180,7 +180,7 @@
                     <div class="item-tag"></div>
 
                     <div class="c-pl-2 c-pr-2">
-                        <v-checkbox hide-details></v-checkbox>
+                        <v-checkbox class="ma-0 pa-0" hide-details></v-checkbox>
                     </div>
 
                     <div class="a subheading">Parallel	functional	preprocessor</div>

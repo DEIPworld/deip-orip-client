@@ -39,11 +39,10 @@
                             item-value="id">
                         </v-select>
 
-                        <v-select
+                        <v-autocomplete
                             :items="membersList"
                             v-model="authors"
                             placeholder="Authors"
-                            autocomplete
                             multiple>
                             
                             <template slot="selection" slot-scope="data">
@@ -68,7 +67,7 @@
                                     </div>
                                 </template>
                             </template>
-                        </v-select>
+                        </v-autocomplete>
 
                     <!--    <v-checkbox class="c-mt-6"
                             v-model="tmpIsPrivate"
@@ -227,10 +226,6 @@
     #content-dropzone {
         margin-left: -1px;
         margin-right: -1px;
-    }
-
-    .dialog.dialog--active {
-        overflow: visible;
     }
 
     .author-item {

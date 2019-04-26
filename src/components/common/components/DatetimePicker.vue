@@ -185,12 +185,14 @@
         max-height: 250px;
     }
 
-    .datetime-picker-error-hack.input-group {
+    .datetime-picker-error-hack.v-text-field {
         padding: 0px;
         position: absolute;
         top: 48px;
+        width: 100%;
+        margin-top: 0px;
 
-        .input-group__input {
+        & > .v-input__control > .v-input__slot > .v-text-field__slot {
             display: none;
         }
     }

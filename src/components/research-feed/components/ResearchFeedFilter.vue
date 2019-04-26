@@ -108,14 +108,14 @@
 </script>
 
 <style lang="less" scoped>
-    .input-group.input-group--text-field.textfield-low {
-        min-height: initial;
+    // .input-group.input-group--text-field.textfield-low {
+    //     min-height: initial;
 
-        & .input-group__input {
-            padding: 0px 5px;
-        }
-    }
-    .date-picker {
-        max-width: 70px;
-    }
+    //     & .input-group__input {
+    //         padding: 0px 5px;
+    //     }
+    // }
+    // .date-picker {
+    //     max-width: 70px;
+    // }
 </style>

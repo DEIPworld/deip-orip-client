@@ -4,11 +4,7 @@
      <v-flex xs12>
         <v-card>
           <v-card-text class="px-0 pa-0">
-            <v-breadcrumbs divider="/">
-                <v-breadcrumbs-item v-for="item in breadcrumbs" :key="item.text" :disabled="item.disabled">
-                    {{ item.text }}
-                </v-breadcrumbs-item>
-            </v-breadcrumbs>
+            <v-breadcrumbs divider="/" :items="breadcrumbs"></v-breadcrumbs>
           </v-card-text>
         </v-card>
       </v-flex>
@@ -42,8 +38,8 @@
         <v-divider></v-divider>
         <v-card>
           <div class="subheading c-pl-6 c-pb-5 c-pt-5 bold">Research Areas</div>
-          <v-expansion-panel>
-            <v-expansion-panel-content v-for="(area,i) in agencyProfile.researchAreas" :key="area.title" :value="isSelectedArea(area)">
+          <v-expansion-panel :value="selectedAreas">
+            <v-expansion-panel-content v-for="(area,i) in agencyProfile.researchAreas" :key="i">
               <div slot="header"><b>{{area.title}}</b></div>
               <v-card>
                 <v-card-text class="pa-0">
@@ -135,6 +131,7 @@
 
     export default {
         name: "AgencyPrograms",
+
         data() {
             return {
                 filter: {
@@ -143,6 +140,7 @@
                 }
             }
         },
+
         computed: {
             ...mapGetters({
                 agencyProfile: 'agencyPrograms/agency',
@@ -165,8 +163,12 @@
             },
             filteredAdditionalPrograms() {
               return this.filterPrograms(this.additionalPrograms);
+            },
+            selectedAreas() {
+              return this.agencyProfile.researchAreas.map(area => area.title == this.selectedArea.title ? 1 : 0);
             }
         },
+
         methods: {
           getSortIcon(key) {
             if (this.filter.sortCriteria.key == key) {
@@ -190,10 +192,6 @@
                   sorting.order = 1;
                }
             }
-          },
-
-          isSelectedArea(area) {
-            return area.title == this.selectedArea.title ? 1 : 0;
           },
 
           isSelectedSubArea(subArea) {

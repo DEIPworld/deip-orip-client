@@ -17,7 +17,7 @@ Vue.prototype.toAssetUnits = amount => {
 };
 Vue.prototype.fromAssetsToFloat = assets => parseFloat(assets.split(' ')[0]);
 Vue.prototype.deipTokenValidator = value => {
-    if (value.match(Vue.prototype.ASSET_QUANTITY_REGEX) === null) {
+    if (!value || value.match(Vue.prototype.ASSET_QUANTITY_REGEX) === null) {
         return "Incorrect format";
     }
 

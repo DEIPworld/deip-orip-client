@@ -30,13 +30,13 @@
 
                     <v-form ref="form">
                         <div class="c-pt-6">
-                            <v-text-field
+                            <v-textarea
                                 label="Provide a cover letter" 
-                                multi-line auto-grow
+                                auto-grow
                                 rows="2"
                                 v-model="coverLetter"
                                 :rules="[required]"
-                            ></v-text-field>
+                            ></v-textarea>
                         </div>
 
                         <div class="sm-title bold c-pt-6">Add links to your relevant publications in this discipline</div>
@@ -111,7 +111,7 @@
 
                 required: value => !!value || 'This field is required',
                 urlRule: value => {
-                    return value.match(this.URL_REGEX) === null ? 'Incorrect url format' : true
+                    return value && value.match(this.URL_REGEX) === null ? 'Incorrect url format' : true
                 },
 
                 discipline: undefined,

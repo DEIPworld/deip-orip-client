@@ -1,25 +1,26 @@
 <template>
     <div class="column full-height">
         <div class="c-mb-4 col-grow column">
-            <div class="step-title">Describe program guidelines</div>
+            <div class="step-title">Provide additional information</div>
 
             <div class="col-grow overflow-y-auto">
 
                 <div class="c-mh-auto guidelines-max-width">
-                    <v-text-field
-                        label="Eligible applicants"
-                        multi-line auto-grow
+                    <v-textarea
+                        label="Opportunity description"
+                        auto-grow
                         rows="2"
-                        v-model="opportunity.eligibleApplicants"
-                        :rules="[rules.required]"
+                        v-model="opportunity.description"
+                    ></v-textarea>
+
+                    <v-text-field
+                        label="Link to additional information"
+                        v-model="opportunity.additionalInfoLink"
                     ></v-text-field>
 
                     <v-text-field
-                        label="Additional information on eligibility"
-                        multi-line auto-grow
-                        rows="2"
-                        v-model="opportunity.eligibilityAdditionalInformation"
-                        :rules="[rules.required]"
+                        label="Grantor contact e-mail address"
+                        v-model="opportunity.grantorEmail"
                     ></v-text-field>
                 </div>
 
@@ -31,17 +32,18 @@
                 <v-icon dark class="pr-1">keyboard_arrow_left</v-icon> Back
             </v-btn>
             
-            <v-btn color="primary" @click.native="nextStep()" :disabled="isNextDisabled()">Next</v-btn>
+            <v-btn color="primary" @click.native="finish()" :loading="isSending" :disabled="isNextDisabled() || isSending">Finish</v-btn>
         </div>
     </div>
 </template>
 
 <script>
     export default {
-        name: "FundingOpportunityGuidelines",
+        name: "FundingOpportunityAdditional",
 
         props: {
-            opportunity: { type: Object, required: true }
+            opportunity: { type: Object, required: true },
+            isSending: { type: Boolean, default: false },
         },
 
         data() { 
@@ -53,8 +55,8 @@
         },
         
         methods: {
-            nextStep() {
-                this.$emit('incStep');
+            finish() {
+                this.$emit('finish');
             },
             prevStep() {
                 this.$emit('decStep');

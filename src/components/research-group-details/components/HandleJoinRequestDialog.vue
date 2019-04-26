@@ -27,12 +27,11 @@
                         mask="###"
                     ></v-text-field>
 
-                    <v-text-field
-                        label="Cover letter" 
-                        multi-line
+                    <v-textarea
+                        label="Cover letter"
                         :disabled="true"
                         v-model="coverLetter"
-                    ></v-text-field>
+                    ></v-textarea>
 
                     <div class="display-flex c-pt-8">
                         <div class="c-m-auto">
@@ -154,7 +153,4 @@
 </script>
 
 <style lang="less" scoped>
-    .dialog.dialog--active {
-        overflow: visible;
-    }
 </style>

@@ -1,7 +1,9 @@
 <template>
     <v-container fluid fill-height class="pa-0">
         <v-layout>
-            <v-stepper v-model="currentStep" v-if="!isFinished && agency" alt-labels class="column full-width full-height">
+            <v-stepper v-model="currentStep" v-if="!isFinished && agency" alt-labels
+                class="column stepper-page full-width full-height"
+            >
                 <v-stepper-header>
                     <v-stepper-step step="1" :complete="currentStep > 1">
                         <div class="uppercase">Title</div>
@@ -156,7 +158,7 @@
     import agencyHttp from './../../services/http/agency';
 
     export default {
-        name: "FundingOpportunityAnnouncement",
+        name: "CreateFundingOpportunityAnnouncement",
 
         computed: {
             ...mapGetters({
@@ -254,20 +256,5 @@
     };
 </script>
 
-<style lang="less">    
-    .stepper__content {
-        height: 100%;
-        padding-right: 0px;
-        padding-left: 0px;
-        .stepper__wrapper {
-            height: 100%;
-        }
-    }
-
-    .step-title {
-        font-size: 24px;
-        font-weight: bold;
-        text-align: center;
-        padding-bottom: 16px;
-    }
+<style lang="less">
 </style>

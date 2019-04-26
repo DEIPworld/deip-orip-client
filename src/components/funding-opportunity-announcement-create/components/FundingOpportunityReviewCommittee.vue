@@ -7,14 +7,13 @@
 					<v-card class="c-ph-12 c-pv-6">
 						<div class="row-nowrap align-items-center">
 								<div class="col-12">
-										<v-select
-											:items="allGroupList"
-											:filter="committeesFilter"
-											v-model="opportunity.reveiwCommittee"
-											item-text="name"
-											label="Reveiw committee"
-											autocomplete
-										></v-select>
+									<v-autocomplete
+										:items="allGroupList"
+										:filter="committeesFilter"
+										v-model="opportunity.reveiwCommittee"
+										item-text="name"
+										label="Reveiw committee"
+									></v-autocomplete>
 								</div>
 						</div>
 

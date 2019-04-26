@@ -43,7 +43,7 @@
                             <span class="caption">(optional)</span>
                         </div>
 
-                        <v-text-field v-model="grantInfo.description" multi-line rows="2" auto-grow></v-text-field>
+                        <v-textarea v-model="grantInfo.description" rows="2" auto-grow></v-textarea>
                     </v-form>
                 </div>
 

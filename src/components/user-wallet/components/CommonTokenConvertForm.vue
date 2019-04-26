@@ -98,7 +98,7 @@
                         return true;
                     },
                     deipCommonAmount: value => {
-                        if (value.match(this.COMMON_TOKEN_QUANTITY_REGEX) === null) {
+                        if (value && value.match(this.COMMON_TOKEN_QUANTITY_REGEX) === null) {
                             return "Incorrect format";
                         }
 
@@ -163,7 +163,9 @@
                 this.isDeipToCommonMode = !this.isDeipToCommonMode;
                 this.$refs.form.reset();
 
-                this.amount = '';
+                setTimeout(() => {
+                    this.amount = '';
+                }, 0);
             }
         },
         computed: {
