@@ -40,8 +40,10 @@
 									</div> -->
 							</v-form>
 						</div>
-            </v-flex>
-			<v-flex xs3>
+					</div>
+					</div>
+        </v-flex>
+				<v-flex xs3>
 				<div v-if="tenant">
           <v-avatar size="120px">
             <img :src="tenant | agencyLogoSrc(160, 160, false)" />
