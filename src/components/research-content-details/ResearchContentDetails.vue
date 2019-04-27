@@ -28,7 +28,7 @@
 
         <div class="col-grow full-height">
             <div>
-                <research-content-details-file v-if="isFileContent"></research-content-details-file>
+                <research-content-details-package v-if="isFilePackageContent"></research-content-details-package>
                 <research-content-details-dar v-if="isDarContent" :contentRef="contentRef"></research-content-details-dar>
 
                 <!-- START Research Content Reviews section -->
@@ -205,8 +205,8 @@
                     ? this.$store.getters['auth/userIsResearchGroupMember'](this.research.research_group_id) 
                     : false
             },
-            isFileContent() {
-                return this.contentRef && this.contentRef.type === 'file';
+            isFilePackageContent() {
+                return this.contentRef && (this.contentRef.type === 'package' || this.contentRef.type === 'file' /* legacy*/);
             },
             isDarContent() {
                 return this.contentRef && this.contentRef.type === 'dar';
@@ -261,10 +261,10 @@
                     const texture = this.$store.getters['rcd/texture'];
                     promise = texture.save()
                         .then(() => {
-                            return contentHttpService.getContentRef(this.contentRef._id);
+                            return contentHttpService.getContentRef(this.contentRef.researchId, this.contentRef.hash);
                         });
-                } else if (this.isFileContent) {
-                    promise = contentHttpService.getContentRef(this.contentRef._id);
+                } else if (this.isFilePackageContent) {
+                    promise = contentHttpService.getContentRef(this.contentRef.researchId, this.contentRef.hash);
                 }
 
                 promise
@@ -296,7 +296,7 @@
                 this.isSavingDraft = true;
                 const texture = this.$store.getters['rcd/texture'];
 
-                contentHttpService.getContentRef(this.contentRef._id)
+                contentHttpService.getContentRef(this.contentRef.researchId, this.contentRef.hash)
                     .then((draft) => {
                         return draft.status == 'in-progress' ? 
                             texture.save()

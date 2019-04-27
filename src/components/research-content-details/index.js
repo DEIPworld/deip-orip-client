@@ -1,7 +1,6 @@
 import Vue from 'vue';
 import ResearchContentDetails from './ResearchContentDetails';
 import ResearchContentDetailsDar from './components/ResearchContentDetailsDar';
-import ResearchContentDetailsFile from './components/ResearchContentDetailsFile';
 import ResearchContentDetailsSidebar from './components/ResearchContentDetailsSidebar';
 
 import ResearchContentReviewBody from './components/ResearchContentReviewBody';
@@ -13,10 +12,11 @@ import ResearchContentAddReviewSidebar from './components/ResearchContentAddRevi
 import ReviewListItem from './components/ReviewListItem';
 import ResearchContentDetailsReviewTabChart from './components/ResearchContentDetailsReviewTabChart';
 import ResearchContentDetailsReviewChart from './components/ResearchContentDetailsReviewChart';
+import ResearchContentDetailsPackage from './components/ResearchContentDetailsPackage';
 
 Vue.component('research-content-details', ResearchContentDetails);
 Vue.component('research-content-details-dar', ResearchContentDetailsDar);
-Vue.component('research-content-details-file', ResearchContentDetailsFile);
+Vue.component('research-content-details-package', ResearchContentDetailsPackage);
 Vue.component('research-content-details-sidebar', ResearchContentDetailsSidebar);
 Vue.component('research-content-review-body', ResearchContentReviewBody);
 Vue.component('research-content-review-sidebar', ResearchContentReviewSidebar);

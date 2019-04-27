@@ -116,53 +116,45 @@ const actions = {
             { group_permlink, research_permlink, content_permlink, ref }) {
 
         commit('RESET_STATE');
-
-        if (!content_permlink || content_permlink === '!draft') {
-            // this is draft
-            const contentRefLoad = new Promise((resolve, reject) => {
-                dispatch('loadResearchContentRef', { hashOrId: ref, notify: resolve })
-            });
-
-            const researchDetailsLoad = new Promise((resolve, reject) => {
-                dispatch('loadResearchDetails', { group_permlink, research_permlink, notify: resolve })
-            });
-
-            const researchGroupDetailsLoad = new Promise((resolve, reject) => {
-                dispatch('loadResearchGroupDetails', { group_permlink, notify: resolve })
-            });
-
-            return Promise.all([contentRefLoad, researchDetailsLoad, researchGroupDetailsLoad]);
-        } else {
-            commit('SET_RESEARCH_CONTENT_DETAILS_LOADING_STATE', true);
-
-            return deipRpc.api.getResearchContentByAbsolutePermlinkAsync(group_permlink, research_permlink, content_permlink)
-                .then((contentObj) => {
-                    commit('SET_RESEARCH_CONTENT_DETAILS', contentObj)
-                    const content = contentObj.content;
-                    const ref = content.indexOf('file:') == 0 ? content.slice(5) : content.indexOf('dar:') == 0 ? content.slice(4) : content;
-
+        return dispatch('loadResearchDetails', { group_permlink, research_permlink})
+            .then(() => {
+                if (!content_permlink || content_permlink === '!draft') {
+                    // this is draft
                     const contentRefLoad = new Promise((resolve, reject) => {
-                        dispatch('loadResearchContentRef', { hashOrId: ref, notify: resolve })
+                        dispatch('loadResearchContentRef', { researchId: state.research.id, hashOrId: ref, notify: resolve })
                     });
-
-                    const researchDetailsLoad = new Promise((resolve, reject) => {
-                        dispatch('loadResearchDetails', { group_permlink, research_permlink, notify: resolve })
+                    const researchGroupDetailsLoad = new Promise((resolve, reject) => {
+                        dispatch('loadResearchGroupDetails', { group_permlink, notify: resolve })
                     });
-
-                    const contentReviewsLoad = new Promise((resolve, reject) => {
-                        dispatch('loadContentReviews', { researchContentId: contentObj.id, notify: resolve })
-                    });
-
-                    const contentVotesLoad = new Promise((resolve, reject) => {
-                        dispatch('loadResearchContentVotes', { researchId: contentObj.research_id, notify: resolve })
-                    });
-
-                    return Promise.all([contentRefLoad, researchDetailsLoad, contentReviewsLoad, contentVotesLoad])
-                }, (err) => {console.log(err)})
-                .finally(() => {
-                    commit('SET_RESEARCH_CONTENT_DETAILS_LOADING_STATE', false);
-                });
-        }
+        
+                    return Promise.all([contentRefLoad, researchGroupDetailsLoad]);
+                } else {
+                    commit('SET_RESEARCH_CONTENT_DETAILS_LOADING_STATE', true);
+        
+                    return deipRpc.api.getResearchContentByAbsolutePermlinkAsync(group_permlink, research_permlink, content_permlink)
+                        .then((contentObj) => {
+                            commit('SET_RESEARCH_CONTENT_DETAILS', contentObj)
+                            const content = contentObj.content;
+                            const ref = content.indexOf('file:') == 0 ? content.slice(5) : content.indexOf('dar:') == 0 ? content.slice(4) : content.indexOf('package:') == 0 ? content.slice(8) : content;
+                            const contentRefLoad = new Promise((resolve, reject) => {
+                                dispatch('loadResearchContentRef', { researchId: state.research.id, hashOrId: ref, notify: resolve })
+                            });
+        
+                            const contentReviewsLoad = new Promise((resolve, reject) => {
+                                dispatch('loadContentReviews', { researchContentId: contentObj.id, notify: resolve })
+                            });
+        
+                            const contentVotesLoad = new Promise((resolve, reject) => {
+                                dispatch('loadResearchContentVotes', { researchId: contentObj.research_id, notify: resolve })
+                            });
+        
+                            return Promise.all([contentRefLoad, contentReviewsLoad, contentVotesLoad])
+                        }, (err) => {console.log(err)})
+                        .finally(() => {
+                            commit('SET_RESEARCH_CONTENT_DETAILS_LOADING_STATE', false);
+                        });
+                }
+            })
     },
 
     loadResearchContentVotes({ state, commit }, { researchId, notify }) {
@@ -192,7 +184,7 @@ const actions = {
 
         const rgtList = [];
         var researchId;
-        deipRpc.api.getResearchByAbsolutePermlinkAsync(group_permlink, research_permlink)
+        return deipRpc.api.getResearchByAbsolutePermlinkAsync(group_permlink, research_permlink)
             .then((research) => {
                 commit('SET_RESEARCH_DETAILS', research)
                 researchId = research.id;
@@ -231,8 +223,8 @@ const actions = {
             });
     },
 
-    loadResearchContentRef({ state, commit, dispatch }, { hashOrId, notify }) {
-        return contentHttpService.getContentRef(hashOrId)
+    loadResearchContentRef({ state, commit, dispatch }, { researchId, hashOrId, notify }) {
+        return contentHttpService.getContentRef(researchId, hashOrId)
             .then((contentRef) => {
                 commit('SET_RESEARCH_CONTENT_REF', contentRef);
                 return deipRpc.api.getProposalsByResearchGroupIdAsync(contentRef.researchGroupId) 

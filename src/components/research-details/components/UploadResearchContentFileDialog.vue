@@ -6,7 +6,7 @@
             <vue-dropzone ref="newContent" id="content-dropzone" 
                 :options="dropzoneOptions" 
                 @vdropzone-file-added="vdropzoneFileAdded"
-                @vdropzone-success="vdropzoneSuccess"
+                @vdropzone-success-multiple="vdropzoneSuccess"
                 @vdropzone-error="vdropzoneError">
             </vue-dropzone>
         </div>
@@ -142,16 +142,20 @@
             },
             dropzoneOptions() {
                 return this.research != null ? {
-                        url: `${window.env.DEIP_SERVER_URL}/content/upload-file`,
+                        url: `${window.env.DEIP_SERVER_URL}/content/upload-files`,
                         paramName: "research-content",
                         headers: {
                             "Research-Id": this.research.id.toString(),
-                            "Authorization": 'Bearer ' + getAccessToken()
+                            "Authorization": 'Bearer ' + getAccessToken(),
+                            "Upload-Session": `${this.timestamp}-${getAccessToken().split('.')[2]}`
                         },
                         timeout: 0,
-                        maxFiles: 1,
+                        maxFiles: 10,
+                        parallelUploads: 10,
+                        uploadMultiple: true,
                         thumbnailWidth: 150,
                         autoProcessQueue: false,
+                        addRemoveLinks: true,
                         acceptedFiles: ['application/pdf', 'image/png', 'image/jpeg'].join(',')
                     } : null;
             }
@@ -214,6 +218,7 @@
                 if (newVal) {
                     this.title = '';
                     this.type = null;
+                    this.timestamp = (new Date()).getTime();
                     this.authors = [];
                 } 
             }
