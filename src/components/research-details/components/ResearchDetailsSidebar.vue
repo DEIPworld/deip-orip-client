@@ -95,16 +95,6 @@
                         <div class="grey--text">ECI</div>
                         <div class="c-pv-2 eci-label">{{ eci.disciplineName }}: {{ eci.value }}</div>
                     </div>
-
-                    <div class="grey lighten-1" style="height: 4px; border-radius: 0px 0px 3px 3px">
-                        <div class="full-height grey darken-2" style="border-radius: inherit"
-                            :style="{ width: `${countEciBarWidth(
-                                eci.value, 
-                                eci.stats.max_research_eci_in_discipline, 
-                                eci.stats.average_research_eci_in_discipline
-                            )}%` }"
-                        ></div>
-                    </div>
                 </div>
             </div>
         </div>

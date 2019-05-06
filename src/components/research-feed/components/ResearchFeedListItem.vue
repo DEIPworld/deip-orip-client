@@ -41,16 +41,6 @@
                 <span class="bold">
                     <span>{{ eci.value }}</span>
                 </span>
-
-                <div class="width-7 grey lighten-1" style="height: 2px;">
-                    <div class="full-height grey darken-2"
-                        :style="{ width: `${countEciBarWidth(
-                            eci.value, 
-                            eci.stats.max_research_eci_in_discipline, 
-                            eci.stats.average_research_eci_in_discipline
-                        )}%` }"
-                    ></div>
-                </div>
             </div>
         </div>
 
