@@ -390,7 +390,6 @@
                         research_permlink: this.$route.params.research_permlink,
                         content_permlink: `!draft`
                     };
-                    
                     const query = { 'ref': draft._id };
                     this.$router.push({ name: 'ResearchContentDetails', params, query });
                 }

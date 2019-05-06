@@ -261,10 +261,10 @@
                     const texture = this.$store.getters['rcd/texture'];
                     promise = texture.save()
                         .then(() => {
-                            return contentHttpService.getContentRef(this.contentRef.researchId, this.contentRef.hash);
+                            return contentHttpService.getContentRefById(this.contentRef._id);
                         });
                 } else if (this.isFilePackageContent) {
-                    promise = contentHttpService.getContentRef(this.contentRef.researchId, this.contentRef.hash);
+                    promise = contentHttpService.getContentRefById(this.contentRef._id);
                 }
 
                 promise
@@ -296,7 +296,7 @@
                 this.isSavingDraft = true;
                 const texture = this.$store.getters['rcd/texture'];
 
-                contentHttpService.getContentRef(this.contentRef.researchId, this.contentRef.hash)
+                contentHttpService.getContentRefById(this.contentRef._id)
                     .then((draft) => {
                         return draft.status == 'in-progress' ? 
                             texture.save()

@@ -114,14 +114,13 @@ const actions = {
 
     loadResearchContentDetails({ state, commit, dispatch },
             { group_permlink, research_permlink, content_permlink, ref }) {
-
         commit('RESET_STATE');
         return dispatch('loadResearchDetails', { group_permlink, research_permlink})
             .then(() => {
                 if (!content_permlink || content_permlink === '!draft') {
                     // this is draft
                     const contentRefLoad = new Promise((resolve, reject) => {
-                        dispatch('loadResearchContentRef', { researchId: state.research.id, hashOrId: ref, notify: resolve })
+                        dispatch('loadResearchContentRef', { researchId: state.research.id, refId: ref, hash: null, notify: resolve })
                     });
                     const researchGroupDetailsLoad = new Promise((resolve, reject) => {
                         dispatch('loadResearchGroupDetails', { group_permlink, notify: resolve })
@@ -135,9 +134,13 @@ const actions = {
                         .then((contentObj) => {
                             commit('SET_RESEARCH_CONTENT_DETAILS', contentObj)
                             const content = contentObj.content;
-                            const ref = content.indexOf('file:') == 0 ? content.slice(5) : content.indexOf('dar:') == 0 ? content.slice(4) : content.indexOf('package:') == 0 ? content.slice(8) : content;
+                            const ref = content.indexOf('file:') == 0 
+                                ? content.slice(5) : content.indexOf('dar:') == 0 
+                                ? content.slice(4) : content.indexOf('package:') == 0 
+                                ? content.slice(8) : content;
+
                             const contentRefLoad = new Promise((resolve, reject) => {
-                                dispatch('loadResearchContentRef', { researchId: state.research.id, hashOrId: ref, notify: resolve })
+                                dispatch('loadResearchContentRef', { researchId: state.research.id, refId: null, hash: ref, notify: resolve })
                             });
         
                             const contentReviewsLoad = new Promise((resolve, reject) => {
@@ -223,8 +226,9 @@ const actions = {
             });
     },
 
-    loadResearchContentRef({ state, commit, dispatch }, { researchId, hashOrId, notify }) {
-        return contentHttpService.getContentRef(researchId, hashOrId)
+    loadResearchContentRef({ state, commit, dispatch }, { refId, researchId, hash, notify }) {
+        let refPromies = refId != null ? contentHttpService.getContentRefById(refId) : contentHttpService.getContentRefByHash(researchId, hash);
+        refPromies
             .then((contentRef) => {
                 commit('SET_RESEARCH_CONTENT_REF', contentRef);
                 return deipRpc.api.getProposalsByResearchGroupIdAsync(contentRef.researchGroupId) 
@@ -242,6 +246,7 @@ const actions = {
                 commit('SET_RESEARCH_DETAILS_LOADING_STATE', false)
                 if (notify) notify();
             });
+        return refPromies;
     },
 
     loadContentReviews({ state, dispatch, commit }, { researchContentId, notify }) {

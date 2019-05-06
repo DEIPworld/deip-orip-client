@@ -123,7 +123,7 @@ extenderMap[SEND_FUNDS] = {
 extenderMap[START_RESEARCH_TOKEN_SALE] = undefined;
 extenderMap[CREATE_RESEARCH_MATERIAL] = {
     research: proposal => deipRpc.api.getResearchByIdAsync(proposal.data.research_id),
-    draftContent: proposal => researchContentSvc.getContentRef(proposal.data.research_id, proposal.data.content.split(':')[1])
+    draftContent: proposal => researchContentSvc.getContentRefByHash(proposal.data.research_id, proposal.data.content.split(':')[1])
 };
 
 const extendProposalByRelatedInfo = proposal => {
