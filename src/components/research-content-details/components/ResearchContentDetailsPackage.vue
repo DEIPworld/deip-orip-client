@@ -29,7 +29,7 @@
 			</v-flex>
 			<v-flex xs12>
 				<div>
-					<div class="subheading c-pt-5 c-pb-5">Package: <span class="caption grey--text">({{contentRef.hash}})</span></div>
+					<div class="subheading c-pt-5 c-pb-3"><span class="caption grey--text">{{contentRef.hash}}</span></div>
 					<v-card v-for="file in contentRef.packageFiles" :key="file.hash">
 						<v-card-text>
 							<a target="_blank" class="a" :href="`${fileStorageBaseUrl}/content/refs/research/package/${contentRef.researchId}/${contentRef.hash}/${file.hash}`">
