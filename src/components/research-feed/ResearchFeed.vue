@@ -8,13 +8,13 @@
             <div class="row-nowrap">
                 <div :class="{ 'invisible': !filter.disciplines.length && filter.q === '' }"
                     class="filter-title subheading grey--text"
-                >My choice</div>
+                >Filters</div>
 
                 <div class="row col-grow align-center">
                     <div class="c-pr-4 display-flex" v-if="filter.q !== ''">
                         <span>{{ filter.q }}</span>
                         <span class="small-remove-btn ml-1" @click="updateFilter({ key: 'q', value: '' })">
-                            <v-icon>close</v-icon>
+                            <v-icon small>close</v-icon>
                         </span>
                     </div>
 
