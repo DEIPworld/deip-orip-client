@@ -156,7 +156,7 @@
                         thumbnailWidth: 150,
                         autoProcessQueue: false,
                         addRemoveLinks: true,
-                        acceptedFiles: ['application/pdf', 'image/png', 'image/jpeg'].join(',')
+                        // acceptedFiles: ['application/pdf', 'image/png', 'image/jpeg'].join(',')
                     } : null;
             }
         },

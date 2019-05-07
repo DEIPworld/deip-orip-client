@@ -32,10 +32,26 @@
 					<div class="subheading c-pt-5 c-pb-3"><span class="caption grey--text">{{contentRef.hash}}</span></div>
 					<v-card v-for="file in contentRef.packageFiles" :key="file.hash">
 						<v-card-text>
-							<a target="_blank" class="a" :href="`${fileStorageBaseUrl}/content/refs/research/package/${contentRef.researchId}/${contentRef.hash}/${file.hash}`">
-									{{file.filename}}
-							</a>
-							<span class="right body-2 grey--text">{{file.hash.slice(0, 8)}}</span>
+							<div class="row-nowrap">
+								<span class="col-10">
+									<a v-if="isPreviewAvailable(file.ext)" target="_blank" class="a" :href="`${fileStorageBaseUrl}/content/refs/research/package/${contentRef.researchId}/${contentRef.hash}/${file.hash}`">
+										{{file.filename}}
+									</a>
+									<span v-else class="body-2">
+										{{file.filename}}
+									</span>
+								</span>
+								<span class="col-1 text-align-right">
+									<span>
+										<a class="a download-content" :href="`${fileStorageBaseUrl}/content/refs/research/package/${contentRef.researchId}/${contentRef.hash}/${file.hash}?download=true`">
+											<v-icon small>save</v-icon>
+										</a>
+									</span>
+								</span>
+								<span class="col-1 text-align-right">
+									<span class="body-2 grey--text">{{file.hash.slice(0, 8)}}</span>
+								</span>
+							</div>
 						</v-card-text>
 					</v-card>
 				</div>
@@ -66,14 +82,23 @@
             user: 'auth/user',
             userExperise: 'auth/userExperise',
 						contentRef: 'rcd/contentRef'
-          })
+          }),
         },
         methods: {
-
+					isPreviewAvailable(ext) {
+						return ['.png', '.jpg', '.jpeg', '.pdf'].some(e => e === ext);
+					}
         }
     };
 </script>
 
 <style lang="less" scoped>
 
+	.download-content {
+		text-decoration: none;
+	}
+	.download-content i:hover {
+		color: #2962FF;
+	}
+	
 </style>
