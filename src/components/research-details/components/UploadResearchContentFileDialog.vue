@@ -147,7 +147,7 @@
                         headers: {
                             "Research-Id": this.research.id.toString(),
                             "Authorization": 'Bearer ' + getAccessToken(),
-                            "Upload-Session": `${this.timestamp}-${getAccessToken().split('.')[2]}`
+                            "Upload-Session": `${(new Date()).getTime()}-${getAccessToken().split('.')[2]}`
                         },
                         timeout: 0,
                         maxFiles: 10,
