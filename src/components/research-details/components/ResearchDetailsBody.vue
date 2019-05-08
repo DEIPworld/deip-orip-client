@@ -111,26 +111,28 @@
                 <v-expansion-panel>
                     <v-expansion-panel-content v-for="(content, index) in contentList" :key="index">
                         <div slot="header">
-                            <span class="bold">{{getContentType(content.content_type).text}}</span>
-                            <span class="deip-blue-color bold c-pl-4"> 
-                                <router-link style="text-decoration: none" 
-                                    :to="{
-                                        name: 'ResearchContentDetails',
-                                        params: {
-                                            research_group_permlink: encodeURIComponent(research.group_permlink), 
-                                            research_permlink: encodeURIComponent(research.permlink), 
-                                            content_permlink: encodeURIComponent(content.permlink) 
-                                        }
-                                    }"
-                                >{{content.title}}</router-link>
-                            </span>
-                            <div class="c-pr-10 right" v-show="contentHasReviews(content)">
-                                <v-icon size="12px">chat_bubble</v-icon>
-                                <span class="bold display-inline-flex">
-                                    <span v-show="contentHasPositiveReviews(content)" class="green--text text--darken-2">{{ countContentReviews(content, true) }}</span>
-                                    <span v-show="contentHasPositiveReviews(content) && contentHasNegativeReviews(content)">/</span>
-                                    <span v-show="contentHasNegativeReviews(content)" class="red--text text--darken-2">{{ countContentReviews(content, false) }}</span>
+                            <div v-on:click.stop>
+                                <span class="bold">{{getContentType(content.content_type).text}}</span>
+                                <span class="deip-blue-color bold c-pl-4"> 
+                                    <router-link class="a" 
+                                        :to="{
+                                            name: 'ResearchContentDetails',
+                                            params: {
+                                                research_group_permlink: encodeURIComponent(research.group_permlink), 
+                                                research_permlink: encodeURIComponent(research.permlink), 
+                                                content_permlink: encodeURIComponent(content.permlink) 
+                                            }
+                                        }"
+                                    >{{content.title}}</router-link>
                                 </span>
+                                <div class="c-pr-10 right" v-show="contentHasReviews(content)">
+                                    <v-icon size="12px">chat_bubble</v-icon>
+                                    <span class="bold display-inline-flex">
+                                        <span v-show="contentHasPositiveReviews(content)" class="green--text text--darken-2">{{ countContentReviews(content, true) }}</span>
+                                        <span v-show="contentHasPositiveReviews(content) && contentHasNegativeReviews(content)">/</span>
+                                        <span v-show="contentHasNegativeReviews(content)" class="red--text text--darken-2">{{ countContentReviews(content, false) }}</span>
+                                    </span>
+                                </div>
                             </div>
                         </div>
 
@@ -189,13 +191,15 @@
             <v-expansion-panel>
                 <v-expansion-panel-content v-for="(draft, index) in contentRefsList.filter(d => !draftIsApproved(d))" :key="index">
                     <div slot="header">
-                        <span class="bold">Draft {{index + 1}}</span>
-                        <span class="deip-blue-color bold c-pl-4"> 
-                            <a @click="openDarDraft(draft)" style="text-decoration: none">
-                                {{draft.title || draft._id}}
-                            </a>
-                        </span>
-                        <span v-if="draftIsProposed(draft)" class="c-pl-2 italic orange--text">(proposed)</span>
+                        <div v-on:click.stop>
+                            <span class="bold">Draft {{index + 1}}</span>
+                            <span class="deip-blue-color bold c-pl-4"> 
+                                <a @click="openDarDraft(draft)" class="a">
+                                    {{draft.title || draft._id}}
+                                </a>
+                            </span>
+                            <span v-if="draftIsProposed(draft)" class="c-pl-2 italic orange--text">(proposed)</span>
+                        </div>
                     </div>
                     <v-card>
                         <v-card-text class="pt-0">
