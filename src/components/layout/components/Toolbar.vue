@@ -36,7 +36,7 @@
                     </v-list-tile>
 
                     <!-- temporary commented for the NSF demo -->
-                    <!--
+                    
                     <v-list-tile :to="{ name: 'UserWallet' }">
                         <v-list-tile-title>Wallet</v-list-tile-title>
                     </v-list-tile>
@@ -48,7 +48,7 @@
                     <v-list-tile :to="{ name: 'voting-for-block-producers' }">
                         <v-list-tile-title>Voting for block producers</v-list-tile-title>
                     </v-list-tile>
-                    -->
+                    
                     
                 <!-- <v-list-tile v-if="user" :to="{ name: 'CreateDisciplineGrant' }">
                         <v-list-tile-title>Create Grant</v-list-tile-title>
