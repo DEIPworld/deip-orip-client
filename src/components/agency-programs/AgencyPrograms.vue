@@ -117,10 +117,13 @@
                 No additional programs found for specified criteria
               </div>
             </v-flex>
+            <v-flex xs12 class="c-pt-10">
+              <v-divider class="c-mt-4 c-mb-4" ></v-divider>
+              <top-funding-opportunities-chart></top-funding-opportunities-chart>
+            </v-flex>
           </v-layout>
         </v-card>
 
-        <top-funding-opportunities-chart></top-funding-opportunities-chart>
       </v-flex>
     </v-layout>
   </v-container>

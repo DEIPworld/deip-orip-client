@@ -12,6 +12,7 @@
 										:filter="committeesFilter"
 										v-model="opportunity.reveiwCommittee"
 										item-text="name"
+										return-object
 										label="Reveiw committee"
 									></v-autocomplete>
 								</div>
