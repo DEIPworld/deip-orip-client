@@ -105,7 +105,7 @@
 
               <div class="c-pt-5 c-pb-10" v-if="isGrantor">
                 <v-btn class="ma-0" color="primary" @click="proposeContract()">
-                  Add Grant Receivers
+                  Add Award Receivers
                 </v-btn>
               </div>
             </v-flex>
@@ -291,7 +291,7 @@
 
           proposeContract() {
             this.$router.push({ 
-              name: 'FundingOpportunityContractProposal', 
+              name: 'FundingOpportunityAwardProposal', 
               params: { 
                 agency: decodeURIComponent(this.agencyProfile._id), 
                 foaId: decodeURIComponent(this.program.funding_opportunity_number)

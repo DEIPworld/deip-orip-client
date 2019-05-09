@@ -27,7 +27,7 @@
             
             <v-flex xs12>
               <div class="row c-pb-5 c-pt-5">
-                <div class="headline col-8">Grant Summary</div>
+                <div class="headline col-8">Award Summary</div>
                 <div class="col-4 text-align-right">
                   <span v-if="isGrantor">
                     <v-chip v-if="contractIsPending" label color="red" text-color="white">
@@ -335,7 +335,7 @@
     import { getOrganizationTitle,getUniversityById } from './../../utils/organizations';
 
     export default {
-        name: "FundingOpportunityContractDetails",
+        name: "FundingOpportunityAwardDetails",
         
         data() {
             return {
@@ -345,11 +345,11 @@
 
         computed: {
           ...mapGetters({
-            agencyProfile: 'agencyProgramContractDetails/agency',
-            program: 'agencyProgramContractDetails/program',
-            contract: 'agencyProgramContractDetails/contract',
-            relationsByOrganizations: 'agencyProgramContractDetails/relationsByOrganizations',
-            transactions: 'agencyProgramContractDetails/transactions',
+            agencyProfile: 'foa_award_details/agency',
+            program: 'foa_award_details/program',
+            contract: 'foa_award_details/contract',
+            relationsByOrganizations: 'foa_award_details/relationsByOrganizations',
+            transactions: 'foa_award_details/transactions',
             user: 'auth/user',
             isGrantor: 'auth/isGrantor',
             isOfficer: 'auth/isOfficer',
@@ -595,7 +595,7 @@
             //     message: "Funding opportunity contract is approved successfully !"
             //   });
 
-            //   this.$store.dispatch('agencyProgramContractDetails/loadProgramContractDetailsPage', 
+            //   this.$store.dispatch('foa_award_details/loadProgramAwardDetailsPage', 
             //     { agency: this.agencyProfile._id, 
             //       foaId: this.program.funding_opportunity_number, 
             //       contractId: this.contract.id

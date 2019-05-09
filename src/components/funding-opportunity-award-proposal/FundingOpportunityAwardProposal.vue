@@ -26,7 +26,7 @@
             </v-flex>
             
             <v-flex xs12>
-              <div class="headline c-pt-5">Grant Receivers</div>
+              <div class="headline c-pt-5">Award Receivers</div>
               <div v-for="(funding, fundingIdx) in fundings">
                 <div v-if="fundingIdx != 0" class="row">
                   <span class="col-2"> 
@@ -57,9 +57,10 @@
                   <span class="col-1"></span>
                   <span class="col-3">
                     <div class="subheading bold">Organization</div>
-                    <div class="input-group input-group--text-field primary--text">
-                      <div class="input-group__input"><label>{{funding.researcher ? getOrganizationTitle(funding.researcher.user.account.organisation_id) : "Organization"}}</label></div>
-                      <div class="input-group__details"></div>
+                    <div class="v-input v-text-field theme--light">
+                      <div class="v-input__control">
+                        <div ><label>{{funding.researcher ? getOrganizationTitle(funding.researcher.user.account.organisation_id) : "Organization"}}</label></div>
+                      </div>
                     </div>
                   </span>
                 </div>
@@ -287,7 +288,7 @@
     import { getOrganizationTitle } from './../../utils/organizations';
 
     export default {
-        name: "FundingOpportunityGrantProposal",
+        name: "FundingOpportunityAwardProposal",
         
         data() {
             return {
@@ -298,9 +299,9 @@
 
         computed: {
             ...mapGetters({
-                agencyProfile: 'agencyProgramContractProposal/agency',
-                program: 'agencyProgramContractProposal/program',
-                allUsers: 'agencyProgramContractProposal/allUsers',
+                agencyProfile: 'foa_award_proposal/agency',
+                program: 'foa_award_proposal/program',
+                allUsers: 'foa_award_proposal/allUsers',
                 user: 'auth/user',
                 isGrantor: 'auth/isGrantor',
                 isOfficer: 'auth/isOfficer',
@@ -498,7 +499,7 @@
                 message: "Funding proposal has been created succesfully!"
               });
               this.$router.push({
-                name: 'FundingOpportunityContractDetails', 
+                name: 'FundingOpportunityAwardDetails', 
                 params: { 
                   agency: decodeURIComponent(this.agencyProfile._id), 
                   foaId: decodeURIComponent(this.program.funding_opportunity_number),

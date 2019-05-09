@@ -94,7 +94,7 @@
                     </v-list-tile>
 
                     <v-list-tile v-if="isGrantor || isTreasury" :to="{ name: 'TreasuryDepartment' }">
-                        <v-list-tile-title>Funding Contracts</v-list-tile-title>
+                        <v-list-tile-title>Granted Awards</v-list-tile-title>
                     </v-list-tile>
 
                     <v-divider></v-divider>

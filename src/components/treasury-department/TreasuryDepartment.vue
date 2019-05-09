@@ -3,7 +3,7 @@
     <v-layout row wrap>
 
       <v-flex xs12>
-        <div class="display-1 c-pb-10">Funding Contracts</div>
+        <div class="display-1 c-pb-10">Granted Awards</div>
         <v-divider></v-divider>
         <div class="row c-pt-8">
           <div class="col-5">
@@ -55,7 +55,7 @@
                 <div class="col-5">
                   <span class="c-pl-5">
                     <router-link class="a" :to="{
-                          name: 'FundingOpportunityContractDetails', 
+                          name: 'FundingOpportunityAwardDetails', 
                           params: { 
                             agency: decodeURIComponent(contract.foa.agency_name), 
                             foa: decodeURIComponent(contract.foa.funding_opportunity_number), 

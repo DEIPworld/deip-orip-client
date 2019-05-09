@@ -17,8 +17,8 @@ import claimExpertiseList from './../components/claim-expertise-list/store/index
 import votingForBlockProducers from './../components/voting-for-block-producers/store/index'
 import agencyPrograms from './../components/agency-programs/store/index'
 import agencyProgramDetails from './../components/agency-program-details/store/index'
-import agencyProgramContractProposal from './../components/funding-opportunity-contract-proposal/store/index'
-import agencyProgramContractDetails from './../components/funding-opportunity-contract-details/store/index'
+import foa_award_proposal from './../components/funding-opportunity-award-proposal/store/index'
+import foa_award_details from './../components/funding-opportunity-award-details/store/index'
 import agencyProgramWithdrawalRequests from './../components/agency-program-withdrawal-requests/store/index'
 import treasuryDepartment from './../components/treasury-department/store/index'
 
@@ -41,8 +41,8 @@ export default new Vuex.Store({
         votingForBlockProducers,
         agencyPrograms,
         agencyProgramDetails,
-        agencyProgramContractProposal,
-        agencyProgramContractDetails,
+        foa_award_proposal,
+        foa_award_details,
         agencyProgramWithdrawalRequests,
         treasuryDepartment
     },

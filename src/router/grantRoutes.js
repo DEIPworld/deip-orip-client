@@ -5,8 +5,8 @@ import CreateDisciplineGrant from '@/components/grant-create/CreateDisciplineGra
 import CreateDirectGrant from '@/components/grant-create/CreateDirectGrant';
 import AgencyPrograms from '@/components/agency-programs/AgencyPrograms';
 import AgencyProgramDetails from '@/components/agency-program-details/AgencyProgramDetails';
-import FundingOpportunityContractProposal from '@/components/funding-opportunity-contract-proposal/FundingOpportunityContractProposal';
-import FundingOpportunityContractDetails from '@/components/funding-opportunity-contract-details/FundingOpportunityContractDetails';
+import FundingOpportunityAwardProposal from '@/components/funding-opportunity-award-proposal/FundingOpportunityAwardProposal';
+import FundingOpportunityAwardDetails from '@/components/funding-opportunity-award-details/FundingOpportunityAwardDetails';
 import TreasuryDepartment from '@/components/treasury-department/TreasuryDepartment';
 import AgencyProgramWithdrawalRequests from '@/components/agency-program-withdrawal-requests/AgencyProgramWithdrawalRequests';
 
@@ -47,24 +47,24 @@ const grantRoutes =[{
                 });
         }
     }, {
-        path: '/:agency/programs/:foa/contract-proposal',
-        name: 'FundingOpportunityContractProposal',
-        component: FundingOpportunityContractProposal,
+        path: '/:agency/programs/:foa/award-proposal',
+        name: 'FundingOpportunityAwardProposal',
+        component: FundingOpportunityAwardProposal,
         beforeEnter: (to, from, next) => {
             store.dispatch('layout/setGlobalLoader');
-            store.dispatch('agencyProgramContractProposal/loadProgramContractProposalPage', { agency: decodeURIComponent(to.params.agency), foaId: decodeURIComponent(to.params.foa) })
+            store.dispatch('foa_award_proposal/loadProgramAwardProposalPage', { agency: decodeURIComponent(to.params.agency), foaId: decodeURIComponent(to.params.foa) })
                 .then(() => {
                     store.dispatch('layout/hideGlobalLoader');
                     next();
                 });
         }
     }, {
-        path: '/:agency/programs/:foa/contract-details/:contractId',
-        name: 'FundingOpportunityContractDetails',
-        component: FundingOpportunityContractDetails,
+        path: '/:agency/programs/:foa/award-details/:contractId',
+        name: 'FundingOpportunityAwardDetails',
+        component: FundingOpportunityAwardDetails,
         beforeEnter: (to, from, next) => {
             store.dispatch('layout/setGlobalLoader');
-            store.dispatch('agencyProgramContractDetails/loadProgramContractDetailsPage', 
+            store.dispatch('foa_award_details/loadProgramAwardDetailsPage', 
                 { agency: decodeURIComponent(to.params.agency), foaId: decodeURIComponent(to.params.foa), contractId: decodeURIComponent(to.params.contractId) })
                 .then(() => {
                     store.dispatch('layout/hideGlobalLoader');
