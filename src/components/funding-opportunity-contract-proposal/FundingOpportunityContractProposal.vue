@@ -41,18 +41,18 @@
                 <div class="row c-pt-12">
                   <span class="col-8">
                     <div class="subheading bold">Researcher Name</div>
-                    <v-select
+                    <v-autocomplete
                       label="Full Name"
-                      autocomplete
                       :loading="funding.isResearchersLoading"
                       :items="funding.foundResearchers"
                       item-text="name"
+                      return-object
                       :rules="[() => funding.researcher && funding.researcher.name.length > 0 || 'Researcher name is required']"
                       :search-input.sync="funding.researcherSearch"
                       v-on:keyup="queryResearchers(funding)"
                       v-model="funding.researcher"
                       @input="setResearchGroupsList(funding)"
-                    ></v-select>
+                    ></v-autocomplete>
                   </span>
                   <span class="col-1"></span>
                   <span class="col-3">
@@ -70,6 +70,7 @@
                       <v-select 
                         :items="funding.foundResearchGroups"
                         item-text="name"
+                        return-object
                         :loading="funding.isResearchGroupsLoading"
                         v-model="funding.researchGroup"
                         label="Group name"
@@ -84,6 +85,7 @@
                       <v-select 
                         :items="funding.foundResearch"
                         item-text="title"
+                        return-object
                         :loading="funding.isResearchLoading"
                         v-model="funding.research"
                         label="Title"
@@ -94,9 +96,11 @@
                 <div class="row c-pt-5">
                   <span class="col-8">
                     <div class="subheading bold">Purpose</div>
-                    <div @click="focusInputByRef($event, 'funding-salary-' + fundingIdx)" class="input-group input-group--text-field primary--text">
-                      <div class="input-group__input"><label>Salary</label></div>
-                      <div class="input-group__details"></div>
+                    <div @click="focusInputByRef($event, 'funding-salary-' + fundingIdx)" class="v-input v-text-field theme--light">
+                      <div class="v-input__control">
+                        <div class="v-input__slot"><label>Salary</label></div>
+                        <div class="v-text-field__details"></div> 
+                      </div>
                     </div>
                   </span>
                   <span class="col-1"></span>
@@ -108,9 +112,11 @@
 
                 <div class="row">
                   <span class="col-8">
-                    <div @click="focusInputByRef($event, 'funding-equipment-' + fundingIdx)" class="input-group input-group--text-field primary--text">
-                      <div class="input-group__input"><label>Equipment</label></div>
-                      <div class="input-group__details"></div>
+                    <div @click="focusInputByRef($event, 'funding-equipment-' + fundingIdx)" class="v-input v-text-field theme--light">
+                      <div class="v-input__control">
+                        <div class="v-input__slot"><label>Equipment</label></div>
+                        <div class="v-text-field__details"></div>
+                      </div>
                     </div>
                   </span>
                   <span class="col-1"></span>
@@ -121,9 +127,11 @@
 
                 <div class="row">
                   <span class="col-8">
-                    <div @click="focusInputByRef($event, 'funding-businessTravel-' + fundingIdx)" class="input-group input-group--text-field primary--text">
-                      <div class="input-group__input"><label>Business travel</label></div>
-                      <div class="input-group__details"></div>
+                    <div @click="focusInputByRef($event, 'funding-businessTravel-' + fundingIdx)" class="v-input v-text-field theme--light">
+                      <div class="v-input__control">
+                        <div class="v-input__slot"><label>Business travel</label></div>
+                        <div class="v-text-field__details"></div>
+                      </div>
                     </div>
                   </span>
                   <span class="col-1"></span>

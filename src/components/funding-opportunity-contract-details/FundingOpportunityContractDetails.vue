@@ -241,7 +241,7 @@
                   <v-expansion-panel>
                     <v-expansion-panel-content v-for="(tx, transactionIdx) in transactions" :key="'tx-' + transactionIdx">
                       <div slot="header">
-                        <div class="row text-align-center">
+                        <div class="row text-align-center non-clickable" v-on:click.stop>
                           <div class="col-2">
                            <!-- <v-icon small class="c-pr-1">
                               {{ !tx.isUniversityReceiver ? 'school' : 'face'}}
