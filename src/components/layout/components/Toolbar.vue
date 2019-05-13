@@ -97,6 +97,10 @@
                         <v-list-tile-title>Granted Awards</v-list-tile-title>
                     </v-list-tile>
 
+                    <v-list-tile :to="{ name: 'OrganizationDashboard', params: { org: 3 } }">
+                        <v-list-tile-title>Dashboard</v-list-tile-title>
+                    </v-list-tile>
+
                     <v-divider></v-divider>
 
                     <v-list-tile @click="signOut()">

@@ -199,3 +199,12 @@ export async function findBlocksByRange(startTime, endTime) {
     console.log("Last block:", upperBound - 1, lastBlock['timestamp'])
     return { first: { num: lowerBound, block: firstBlock }, last: { num: upperBound - 1, block: lastBlock } };
 }
+
+export function toAssetUnits(amount) {
+    let value = parseFloat(amount).toFixed(3);
+    return `${value} ${window.env.ASSET_UNIT}`;
+};
+
+export function fromAssetsToFloat(assets) {
+    return parseFloat(assets.split(' ')[0]);
+};

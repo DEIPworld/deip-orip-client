@@ -16,17 +16,21 @@
                     ref="datePicker"
                     :label="label"
                     :rules="[() => !time || !datetime || $refs.errorMsg.valid || '']"
-                    placeholder="Date"
+                    :placeholder="datePlaceholder"
+                    :hint="dateHint"
+                    :persistent-hint="datePersistentHint"
                     v-model="date"
                     :append-icon="dateOnly ? 'event' : ''"
                     readonly
+                    :disabled="disabled"
                 ></v-text-field>
 
                 <v-date-picker
                     no-title
                     v-model="date" 
-                    :allowed-dates="checkAllowedDate"
+                    :allowed-dates="allowedDates"
                     @input="dateMenu = false; apply();"
+                    :disabled="disabled"
                 ></v-date-picker>
             </v-menu>
 
@@ -35,17 +39,18 @@
                     slot="activator"
                     ref="timePicker"
                     :rules="[() => !date || !datetime || $refs.errorMsg.valid || '']"
-                    placeholder="Time"
+                    :placeholder="timePlaceholder"
                     v-model="time"
                     append-icon="event"
                     readonly
+                    :disabled="disabled"
                 ></v-text-field>
 
                 <div class="time-points-list">
                     <v-list>
                         <v-list-tile @click="time = timePoint; apply();"
                             v-for="(timePoint, i) in timePoints5minStep" :key="i"
-                            v-show="checkAllowedTime(date, timePoint)"
+                            v-show="allowedDates(date, timePoint)"
                         >
                             <v-list-tile-title>{{ timePoint }}</v-list-tile-title>
                         </v-list-tile>
@@ -59,6 +64,7 @@
             class="datetime-picker-error-hack"
             v-model="datetime"
             :rules="rules"
+            :disabled="disabled"
         ></v-text-field>
     </div>
 </template>
@@ -71,15 +77,25 @@
 
         props: {
             label: { type: String, default: '' },
+            datePlaceholder: { required: false, type: String, default: '' },
+            timePlaceholder: { required: false, type: String, default: '' },
+            dateHint: { required: false, type: String, default: '' },
+            datePersistentHint: { required: false, type: Boolean, default: false},
+            disabled: { required: false, type: Boolean, default: false },
             rules: { required: false, type: Array, default: () => [] },
             availableFromNow: { required: false, type: Boolean, default: false },
+            allowedDates: { required: false, type: Function, default: (date, time) => {
+                return time && date ? moment().valueOf() < Date.parse(`${date} ${time}`)
+                    : moment().subtract(1, 'day').valueOf() < (date ? Date.parse(date) : Date.now());
+                }
+            },
             dateOnly: { required: false, type: Boolean, default: false },
-
-            datetime: { 
-                required: true,
+            datetime: {  // TODO: GET RID OF THIS !!!
+                required: false,
                 validator(value) {
                     return value === undefined || typeof value === 'string';
-                }
+                },
+                default: undefined
             },
         },
 
@@ -147,22 +163,6 @@
                     this.time = this.dateOnly ? '00:00' : undefined;
                 }
             },
-
-            checkAllowedDate(date) {
-                if (!this.availableFromNow) {
-                    return true;
-                }
-
-                return moment().subtract(1, 'day').valueOf() < Date.parse(date);
-            },
-
-            checkAllowedTime(date, time) {
-                if (!date) {
-                    return true;
-                }
-
-                return moment().valueOf() < Date.parse(`${date} ${time}`);
-            }
         },
 
         watch: {

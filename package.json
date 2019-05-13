@@ -10,7 +10,7 @@
         "build": "node build/build.js"
     },
     "dependencies": {
-        "@deip/deip-rpc-client": "1.0.41",
+        "@deip/deip-rpc-client": "1.0.42",
         "@deip/lib-crypto": "^1.0.2",
         "@deip/substance-texture": "1.0.0-0bb17ee3f9e9b4dfb44687ea0d08772f32b6e6b7.patch.4",
         "@mdi/font": "^2.7.94",
@@ -25,7 +25,7 @@
         "koa-static": "^5.0.0",
         "moment": "^2.22.1",
         "substance": "^1.0.0-beta.6.2",
-        "vue": "^2.5.2",
+        "vue": "^2.6.0",
         "vue-google-charts": "^0.3.2",
         "vue-gravatar": "^1.2.1",
         "vue-router": "^3.0.1",

@@ -73,17 +73,17 @@
           No active reports and withdraw requests found
         </div>
 
-        <div class="sm-title c-pl-5 c-pt-10" style="text-decoration: underline" v-if="withdrawRequestsByOrganizations.length">
-          Withdraw Requests
+        <div class="sm-title c-pl-5 c-pt-10" v-if="withdrawRequestsByOrganizations.length">
+          Payment Requests:
         </div>
         <div class="c-pb-5" v-for="(organization, organizationIdx) in withdrawRequestsByOrganizations" :key="'org-' + organizationIdx">
-          <div class="sm-title bold c-pt-10 c-pb-5 c-pl-5">{{getOrganizationTitle(organization.orgId)}}</div>
+          <div class="subheading bold c-pt-7 c-pb-5 c-pl-5">{{getOrganizationTitle(organization.orgId)}}</div>
           <v-expansion-panel>
             <v-expansion-panel-content v-for="(request, requestIdx) in organization.withdraws" :key="'funding-' + requestIdx + '-org-' + organizationIdx">
               <div slot="header">
-                <div class="row">
+                <div class="row non-clickable" v-on:click.stop>
                   <div class="col-2">
-                    <div class="c-pl-5 c-pt-3 bold deip-blue-color">
+                    <div class="c-pl-5 c-pt-3">
                       <router-link class="a subheading" :to="{ name: 'UserDetails', params: { account_name: request.requesterUser.account.name }}">
                           {{request.requesterUser | fullname }}
                       </router-link>
@@ -128,7 +128,7 @@
                   </div>
                   <div class="col-2">
                     <v-btn outline color="primary ma-0" @click="approve(request)">Approve</v-btn>
-                    <span class="c-pl-2"><v-icon @click="reject(request)">highlight_off</v-icon></span>
+                    <span class="c-p-2 clickable"><v-icon @click="reject(request)">highlight_off</v-icon></span>
                   </div>
                 </div>
               </div>
@@ -147,17 +147,17 @@
           </v-expansion-panel>
         </div>
 
-        <div class="sm-title c-pl-5 c-pt-10" style="text-decoration: underline" v-if="relationsWithReportsByOrganizations.length">
-          Milestone Reports
+        <div class="sm-title c-pl-5 c-pt-10" v-if="relationsWithReportsByOrganizations.length">
+          Milestone Reports:
         </div>
         <div class="c-pb-5" v-for="(organization, organizationIdx) in relationsWithReportsByOrganizations" :key="'rel-org-' + organizationIdx">
-          <div class="sm-title bold c-pt-10 c-pb-5 c-pl-5">{{getOrganizationTitle(organization.orgId)}}</div>
+          <div class="subheading bold c-pt-7 c-pb-5 c-pl-5">{{getOrganizationTitle(organization.orgId)}}</div>
           <v-expansion-panel>
             <v-expansion-panel-content v-for="(relation, relationIdx) in organization.relationsWithReports" :key="'report-' + relationIdx + '-org-' + organizationIdx">
               <div slot="header">
-                <div class="row">
+                <div class="row non-clickable" v-on:click.stop>
                   <div class="col-2">
-                    <div class="c-pl-5 c-pt-3 bold deip-blue-color">
+                    <div class="c-pl-5 c-pt-3">
                       <router-link class="a subheading" :to="{ name: 'UserDetails', params: { account_name: relation.researcherUser.account.name }}">
                           {{relation.researcherUser | fullname }}
                       </router-link>
@@ -192,14 +192,15 @@
                   </div>
                   <div class="col-1 c-pt-3">
                   
-                    <router-link class="a subheading" :to="{
+                    <router-link class="a subheading clickable" :to="{
                           name: 'ResearchDetails',
                           params: {
                             research_group_permlink: encodeURIComponent(relation.research.group_permlink),
                             research_permlink: encodeURIComponent(relation.research.permlink)
                           }
                         }"
-                      ><v-chip label color="blue" style="cursor: pointer" small text-color="white">
+                      >
+                      <v-chip label color="blue" small text-color="white">
                       <span class="bold">Milestone report</span>
                     </v-chip>
                     </router-link>
@@ -210,7 +211,7 @@
                     <v-btn outline color="primary ma-0" @click="approveMilestone(relation.activeMilestone)">
                       Approve
                     </v-btn>
-                    <span class="c-pl-2" style="cursor: pointer">
+                    <span class="c-p-2 clickable">
                       <v-icon @click="rejectMilestone(relation.activeMilestone)">highlight_off</v-icon>
                     </span>
                   </div>

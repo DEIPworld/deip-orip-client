@@ -1,6 +1,8 @@
 // global funcs and constants
 
 import Vue from 'vue'
+import { toAssetUnits, fromAssetsToFloat } from './../utils/blockchain'
+import moment from 'moment'
 
 // regarding with DEIP PERCENTS
 Vue.prototype.PERCENT_QUANTITY_REGEX = /^(?:0|(?:[1-9]\d*))(?:\.\d{1,2})?$/;
@@ -11,11 +13,9 @@ Vue.prototype.toDeipPercent = amount => parseFloat(amount) * 100;
 
 // regarding with ASSETS
 Vue.prototype.ASSET_QUANTITY_REGEX = /^(?:0|(?:[1-9]\d*))(?:\.\d{1,3})?$/;
-Vue.prototype.toAssetUnits = amount => {
-    let value = parseFloat(amount).toFixed(3);
-    return `${value} ${window.env.ASSET_UNIT}`;
-};
-Vue.prototype.fromAssetsToFloat = assets => parseFloat(assets.split(' ')[0]);
+Vue.prototype.toAssetUnits = toAssetUnits;
+Vue.prototype.fromAssetsToFloat = fromAssetsToFloat;
+
 Vue.prototype.deipTokenValidator = value => {
     if (!value || value.match(Vue.prototype.ASSET_QUANTITY_REGEX) === null) {
         return "Incorrect format";
@@ -50,3 +50,5 @@ Vue.prototype.countEciBarWidth = (eci, eciMax, eciAverage) => {
 
     return fxEci !== 0 ? (fxEci / fxEciMax * 100) : 0;
 }
+
+Vue.prototype.moment = moment

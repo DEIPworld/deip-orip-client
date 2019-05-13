@@ -1,14 +1,11 @@
 <template>
     <div id="deip-app">
-        <v-app v-if="$route.meta.withoutHeader">
-            <router-view :key="$route.fullPath"/>
-        </v-app>
-
-        <v-app v-else>
-            <toolbar></toolbar>
-
+        <v-app>
+            <toolbar v-if="!$route.meta.withoutHeader"></toolbar>
             <v-content>
-                <router-view :key="$route.fullPath"/>
+                <v-container fluid class="ma-0 pa-0">
+                    <router-view :key="$route.fullPath"/>
+                </v-container>
             </v-content>
         </v-app>
 
@@ -21,7 +18,6 @@
             {{successSnack.message}}
             <v-btn dark flat @click.native="closeSuccess();">Close</v-btn>
         </v-snackbar>
-
     </div>
 </template>
 

@@ -102,7 +102,8 @@
                       @vdropzone-file-added="vdropzoneFileAdded"
                       @vdropzone-removed-file="vdropzoneRemovedFile"
                       @vdropzone-error="vdropzoneError"
-                      @vdropzone-success-multiple="vsuccessMultiple"></vue-dropzone>
+                      @vdropzone-success-multiple="vsuccessMultiple">
+                  </vue-dropzone>
 								</div>
 							</div>
 							<div class="row c-pt-8">

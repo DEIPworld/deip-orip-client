@@ -7,7 +7,7 @@
                 <v-btn icon dark @click="close()">
                     <v-icon>close</v-icon>
                 </v-btn>
-                <v-toolbar-title>Apply for funding</v-toolbar-title>
+                <v-toolbar-title>Payment Request</v-toolbar-title>
                 <v-spacer></v-spacer>
             </v-toolbar>
             
@@ -60,14 +60,14 @@
                         </div>
 
                         <div class="row c-pt-3">
-                          <div class="row-nowrap justify-between align-center c-pt-4"
+                          <div class="row-nowrap justify-between align-center c-mr-5"
                               v-for="(member, i) in membersList" :key="i + '-picked'">
                               <div>
                                 <v-avatar size="40px">
                                     <img v-if="member.profile" v-bind:src="member.profile.avatar | avatarSrc(40, 40, false)" />
                                     <v-gravatar v-else :email="member.account.name + '@deip.world'" />
                                 </v-avatar>
-                                <router-link to="#" class="a c-pl-3">{{ member | fullname }}</router-link>
+                                <router-link to="#" class="a c-pl-1">{{ member | fullname }}</router-link>
                               </div>
                           </div>
                         </div>
@@ -77,7 +77,7 @@
                         <div class="row">
                           <div class="col-8">
                             <v-select v-model="purpose" 
-                                :items="purposes" 
+                                :items="purposes"
                                 label="Purpose" 
                                 item-text="title"
                                 item-value="id">
