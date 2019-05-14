@@ -2,12 +2,7 @@
   <v-container fluid class="ma-0 pa-0">
     <v-layout row wrap>
      <v-flex xs12 class="c-p-5 c-pt-10">
-      <!-- <v-card>
-          <v-card-text class="px-0 pa-0">
-            <v-breadcrumbs divider="/" :items="[]"></v-breadcrumbs>
-          </v-card-text>
-        </v-card> -->
-        <div> <h1 class="title">{{organization.name}} Dashboard</h1></div>
+        <div><h1 class="title">{{organization.name}} Dashboard</h1></div>
       </v-flex>
       <v-flex xs12 class="c-p-5">
 
@@ -26,7 +21,6 @@
           <v-tab-item key="awards">
             <div>
               <v-card height="100vh">
-                <v-card-title class="headline"></v-card-title>
                 <v-card-text>
                   <v-layout>
                     <v-flex xs12>
@@ -34,9 +28,17 @@
                         <v-data-table
                           :headers="awardHeaders"
                           :items="awards"
-                          >
+                          v-model="selectedAwards">
 
                           <template slot="items" slot-scope="props">
+                            <td v-if="isProgramOfficer">
+                              <v-checkbox v-if="isProgramOfficer && props.item.availableAmount == 0"
+                                v-model="props.selected"
+                                primary
+                                hide-details
+                              ></v-checkbox>
+                            </td>
+
                             <td>{{ props.item.awardNumber }}</td>
                             <td>{{ moment(new Date(props.item.from)).format("MM/YY") }}</td>
                             <td>{{ moment(new Date(props.item.to)).format("MM/YY") }}</td>
@@ -47,15 +49,27 @@
                             <td>$ {{ props.item.pendingAmount }}</td>
                             <td>$ {{ props.item.availableAmount }}</td>
                           </template>
-
                         </v-data-table>
+
+                        <div v-if="isProgramOfficer">
+                          <v-btn style="min-width: 150px" @click="confirmDistribution.isShown = true" color="success" :disabled="!selectedToDistribute.length || isDistributing" :loading="isDistributing">
+                            {{ selectedToDistribute.length ? `Distribute (${selectedToDistribute.length})` : `Distribute`}}
+                          </v-btn>
+                         <confirm-action-dialog
+                            :meta="confirmDistribution" 
+                            :title="``"
+                            :text="`Are you sure you want to distribute selected awards?`" 
+                            @confirmed="confirmDistribution.isShown = false"  
+                            @canceled="confirmDistribution.isShown = false">
+                          </confirm-action-dialog>
+                        </div>
+
+                        <div v-if="isPrincipalInvestigator || isCertifier">
+                          <v-btn color="primary" @click="openRequestPaymentDialog()" dark>Request Payment</v-btn>
+                          <request-award-payment-dialog :meta="selectedAwardToWithdrawMeta"></request-award-payment-dialog>
+                        </div>
+
                       </template>
-
-                      <div v-if="isPrincipalInvestigator || isCertifier">
-                        <v-btn color="primary" @click="openRequestPaymentDialog()" dark>Request Payment</v-btn>
-                        <request-award-payment-dialog :meta="selectedAwardToWithdrawMeta"></request-award-payment-dialog>
-                      </div>
-
                     </v-flex>
                   </v-layout>
                 </v-card-text>
@@ -67,7 +81,6 @@
           <v-tab-item key="transactions">
             <div>
               <v-card height="100vh">
-                <v-card-title class="headline"></v-card-title>
                 <v-card-text>
                   <v-layout>
                     <v-flex xs12>
@@ -75,12 +88,11 @@
                         <v-data-table
                           :headers="transactionsHeaders"
                           :items="transactions"
-                          v-model="selected">
+                          v-model="selectedPayments">
 
                           <template slot="items" slot-scope="props">
-                            <td>
-                              <v-checkbox v-if="
-                                (isCertifier && props.item.status == WITHDRAWAL_PENDING) || (props.item.status == WITHDRAWAL_CERTIFIED && isProgramOfficer)"
+                            <td v-if="isCertifier || isProgramOfficer">
+                              <v-checkbox v-if="(isCertifier && props.item.status == WITHDRAWAL_PENDING) || (props.item.status == WITHDRAWAL_CERTIFIED && isProgramOfficer)"
                                 v-model="props.selected"
                                 primary
                                 hide-details
@@ -101,45 +113,35 @@
 							                  </a>
                               </div>
                             </td>
-                         <!--   <td class="layout px-0">
-                              <div> 
-                                <v-btn @click="certifyPaymentRequest(props.item.paymentId)" v-if="props.item.status == WITHDRAWAL_PENDING && isCertifier" small color="warning" dark>Certify</v-btn>
-                                <v-btn @click="approvePaymentRequest(props.item.paymentId)" v-if="props.item.status == WITHDRAWAL_CERTIFIED && isProgramOfficer" small color="success" dark>Approve</v-btn>
-                                <v-btn v-else-if="props.item.status == WITHDRAWAL_APPROVED" disabled small >Approved</v-btn>
-                              </div>
-                            </td> -->
                           </template>
-
                         </v-data-table>
-                      </template>
 
-                      <div v-if="isCertifier">
-                        <v-btn style="min-width: 150px" @click="confirmCertifying.isShown = true" color="warning" :disabled="!selectedToCertify.length || isCertifying" :loading="isCertifying">
-                          {{ selectedToCertify.length ? `Certify (${selectedToCertify.length})` : `Certify`}}
-                        </v-btn>
+                        <div v-if="isCertifier">
+                          <v-btn style="min-width: 150px" @click="confirmCertifying.isShown = true" color="warning" :disabled="!selectedToCertify.length || isCertifying" :loading="isCertifying">
+                            {{ selectedToCertify.length ? `Certify (${selectedToCertify.length})` : `Certify`}}
+                          </v-btn>
+                          <confirm-action-dialog
+                            :meta="confirmCertifying" 
+                            :title="``" 
+                            :text="`Are you sure you want to certify selected payment requests?`" 
+                            @confirmed="certifySelectedPaymentRequests(); confirmCertifying.isShown = false"  
+                            @canceled="confirmCertifying.isShown = false">
+                          </confirm-action-dialog>
+                        </div>
 
-                        <confirm-action-dialog
-                          :meta="confirmCertifying" 
-                          :title="``" 
-                          :text="`Are you sure you want to certify selected payment requests?`" 
-                          @confirmed="certifySelectedPaymentRequests(); confirmCertifying.isShown = false"  
-                          @canceled="confirmCertifying.isShown = false">
-                        </confirm-action-dialog>
-                      </div>
-
-                      <div v-if="isProgramOfficer">
-                        <v-btn style="min-width: 150px" @click="confirmApproval.isShown = true" color="success" :disabled="!selectedToApprove.length || isApproving" :loading="isApproving">
-                          {{ selectedToApprove.length ? `Approve (${selectedToApprove.length})` : `Approve`}}
-                        </v-btn>
-                        <confirm-action-dialog
-                          :meta="confirmApproval" 
-                          :title="``"
-                          :text="`Are you sure you want to approve selected payment requests?`" 
-                          @confirmed="approveSelectedPaymentRequests(); confirmApproval.isShown = false"  
-                          @canceled="confirmApproval.isShown = false">
-                        </confirm-action-dialog>
-                      </div>
-                      
+                        <div v-if="isProgramOfficer">
+                          <v-btn style="min-width: 150px" @click="confirmApproval.isShown = true" color="success" :disabled="!selectedToApprove.length || isApproving" :loading="isApproving">
+                            {{ selectedToApprove.length ? `Approve (${selectedToApprove.length})` : `Approve`}}
+                          </v-btn>
+                          <confirm-action-dialog
+                            :meta="confirmApproval" 
+                            :title="``"
+                            :text="`Are you sure you want to approve selected payment requests?`" 
+                            @confirmed="approveSelectedPaymentRequests(); confirmApproval.isShown = false"  
+                            @canceled="confirmApproval.isShown = false">
+                          </confirm-action-dialog>
+                        </div>
+                      </template>                            
                     </v-flex>
                   </v-layout>
                 </v-card-text>
@@ -165,7 +167,8 @@
 
       data() {
         return {
-          selected: [],
+          selectedPayments: [],
+          selectedAwards: [],
 
           selectedToCertify: [],
           isCertifying: false,
@@ -174,6 +177,10 @@
           selectedToApprove: [],
           isApproving: false,
           confirmApproval: { isShown: false },
+
+          selectedToDistribute: [],
+          isDistributing: false,
+          confirmDistribution: { isShown: false },
 
           tab: null,
           selectedAwardToWithdrawMeta: { isOpen: false, contract: null },
@@ -196,6 +203,7 @@
 
         awardHeaders() {
           return this.isProgramOfficer ? [
+            { text: '', sortable: false  },  // display checkbox for NSF ABT sending
             { text: 'Award ID', align: 'left', sortable: false, value: 'awardNumber' },
             { text: 'From', value: 'from' },
             { text: 'To', value: 'to' },
@@ -319,9 +327,12 @@
       },
       
       watch: {
-        'selected': function (newVal, oldVal) {
+        'selectedPayments': function (newVal, oldVal) {
           this.selectedToCertify = newVal.filter(p => p.status == WITHDRAWAL_PENDING);
           this.selectedToApprove = newVal.filter(p => p.status == WITHDRAWAL_CERTIFIED);
+        },
+        'selectedAwards': function (newVal, oldVal) {
+          this.selectedToDistribute = newVal.filter(p => p.availableAmount == 0);
         }
       }
     };

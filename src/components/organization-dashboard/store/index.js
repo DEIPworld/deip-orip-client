@@ -22,7 +22,7 @@ const getters = {
 			let rels = state.organization.permlink == "nsf" ? c.relations : c.relations.filter(r => r.organisation_id == state.organization.id);
 			if (!rels.length) return [];
 
-			return rels.map(rel => {
+			return rels.map((rel, index) => {
 				let totalAmount = fromAssetsToFloat(rel.total_amount);
 				let pendingAmount = 0;
 				let withdrawnAmount = 0;
@@ -36,6 +36,7 @@ const getters = {
 				let org = state.organizations.find(o => o.id == rel.organisation_id);
 				let pi = rel.researcherUser;
 				let award = {
+					id: rel.id,
 					awardId: rel.id,
 					awardNumber: `${(rel.id + 1)}${parseInt(`${md5(`${rel.id}-award`)}`, 16)}`.replace(/\./g, "").slice(0, 7),
 					totalAmount,
