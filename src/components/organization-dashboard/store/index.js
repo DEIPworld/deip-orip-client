@@ -9,7 +9,8 @@ import md5 from 'md5'
 const state = {
 	organization: null,
 	contracts: null,
-	isLoadingOrganizationDashboardPage: undefined
+	isLoadingOrganizationDashboardPage: undefined,
+	organizations: []
 }
 
 // getters
@@ -31,6 +32,9 @@ const getters = {
 					if (withdrawal.status == WITHDRAWAL_APPROVED) withdrawnAmount += fromAssetsToFloat(withdrawal.amount);
 				}
 				let availableAmount = totalAmount - pendingAmount - withdrawnAmount;
+
+				let org = state.organizations.find(o => o.id == rel.organisation_id);
+				let pi = rel.researcherUser;
 				let award = {
 					awardId: rel.id,
 					awardNumber: `${(rel.id + 1)}${parseInt(`${md5(`${rel.id}-award`)}`, 16)}`.replace(/\./g, "").slice(0, 7),
@@ -41,7 +45,9 @@ const getters = {
 					from: c.foa.open_date,
 					to: c.foa.close_date,
 					contract: c,
-					relation: rel
+					relation: rel,
+					org,
+					pi
 				}
 				return award;
 			});
@@ -59,6 +65,8 @@ const getters = {
 
 			for (let j = 0; j < rels.length; j++) {
 				let rel = rels[j];
+				let org = state.organizations.find(o => o.id == rel.organisation_id);
+				let pi = rel.researcherUser;
 				for (let i = 0; i < rel.withdrawals.length; i++) {
 					let withdrawal = rel.withdrawals[i];
 					let item = {
@@ -70,7 +78,9 @@ const getters = {
 						status: withdrawal.status,
 						statusTitle: getStatusName(withdrawal.status),
 						award: rel,
-						attachment: withdrawal.attachment
+						attachment: withdrawal.attachment,
+						org, 
+						pi
 					}
 					items.push(item);
 				}
@@ -94,7 +104,10 @@ const actions = {
 			const fundingContractsLoad = new Promise((resolve, reject) => {
 				dispatch('loadFundingContracts', { notify: resolve });
 			});
-			return Promise.all([fundingContractsLoad]);
+			const organizationsLoad = new Promise((resolve, reject) => {
+				dispatch('loadOrganizations', { notify: resolve });
+			});
+			return Promise.all([fundingContractsLoad, organizationsLoad]);
 		})
 			.finally(() => {
 				commit('SET_ORGANIZATION_DASHBOARD_LOADING_STATE', false);
@@ -180,6 +193,17 @@ const actions = {
 			.finally(() => {
 				if (notify) notify();
 			});
+	},
+
+	loadOrganizations({ state, dispatch, commit }, { notify }) {
+		return deipRpc.api.getOrganisationsAsync()
+			.then((items) => {
+				commit('SET_ORGANIZATIONS_LIST', items);
+			})
+			.catch(err => { console.log(err) })
+			.finally(() => {
+				if (notify) notify();
+			});
 	}
 
 }
@@ -192,6 +216,10 @@ const mutations = {
 
 	['SET_ORGANIZATION'](state, org) {
 		Vue.set(state, 'organization', org);
+	},
+
+	['SET_ORGANIZATIONS_LIST'](state, list) {
+		Vue.set(state, 'organizations', list);
 	},
 
 	['SET_FUNDING_CONTRACTS_DETAILS'](state, contracts) {

@@ -40,6 +40,8 @@
                             <td>{{ props.item.awardNumber }}</td>
                             <td>{{ moment(new Date(props.item.from)).format("MM/YY") }}</td>
                             <td>{{ moment(new Date(props.item.to)).format("MM/YY") }}</td>
+                            <td v-if="isProgramOfficer || isFinancialOfficer">{{ props.item.org.name }}</td>
+                            <td v-if="isProgramOfficer || isFinancialOfficer">{{ props.item.pi | fullname}}</td>
                             <td>$ {{ props.item.totalAmount }}</td>
                             <td>$ {{ props.item.withdrawnAmount }}</td>
                             <td>$ {{ props.item.pendingAmount }}</td>
@@ -79,6 +81,8 @@
                             <td>{{ props.item.paymentNumber }}</td>
                             <td>{{ props.item.awardNumber }}</td>
                             <td>$ {{ props.item.amount }}</td>
+                            <td v-if="isProgramOfficer || isFinancialOfficer">{{ props.item.org.name }}</td>
+                            <td v-if="isProgramOfficer || isFinancialOfficer">{{ props.item.pi | fullname}}</td>
                             <td>{{ props.item.statusTitle }}</td>
                             <td v-if="!props.item.attachment"></td>
                             <td v-else>
@@ -127,31 +131,7 @@
           tab: null,
           selectedAwardToWithdrawMeta: { isOpen: false, contract: null },
           fileStorageBaseUrl: window.env.DEIP_SERVER_URL,
-          ...withdrawalStatus,
-
-          awardHeaders: [
-            {
-              text: 'Award ID',
-              align: 'left',
-              sortable: false,
-              value: 'awardNumber'
-            },
-            { text: 'From', value: 'from' },
-            { text: 'To', value: 'to' },
-            { text: 'Total amount', value: 'totalAmount' },
-            { text: 'Withdrawn amount', value: 'withdrawnAmount' },
-            { text: 'Pending amount', value: 'pendingAmount' },
-            { text: 'Avalable amount', value: 'availableAmount' }
-          ],
-
-          transactionsHeaders: [
-            { text: 'Payment ID', value: 'paymentNumber' },
-            { text: 'Award ID', value: 'awardNumber' },
-            { text: 'Amount', value: 'amount' },
-            { text: 'Status', value: 'status' },
-            { text: 'Attachments', value: 'attachment' },
-            { text: 'Actions', sortable: false }
-          ]
+          ...withdrawalStatus
         }
       },
 
@@ -165,7 +145,54 @@
           isCertifier: 'auth/isCertifier',
           isProgramOfficer: 'auth/isProgramOfficer',
           isFinancialOfficer: 'auth/isFinancialOfficer'
-        })
+        }),
+
+        awardHeaders() {
+          return (this.isProgramOfficer || this.isFinancialOfficer) ? [
+            { text: 'Award ID', align: 'left', sortable: false, value: 'awardNumber' },
+            { text: 'From', value: 'from' },
+            { text: 'To', value: 'to' },
+
+            { text: 'Organization', value: 'org' },
+            { text: 'PI', value: 'org' },
+
+            { text: 'Total amount', value: 'totalAmount' },
+            { text: 'Withdrawn amount', value: 'withdrawnAmount' },
+            { text: 'Pending amount', value: 'pendingAmount' },
+            { text: 'Avalable amount', value: 'availableAmount' }
+          ] : [
+            { text: 'Award ID', align: 'left', sortable: false, value: 'awardNumber' },
+            { text: 'From', value: 'from' },
+            { text: 'To', value: 'to' },
+
+            { text: 'Total amount', value: 'totalAmount' },
+            { text: 'Withdrawn amount', value: 'withdrawnAmount' },
+            { text: 'Pending amount', value: 'pendingAmount' },
+            { text: 'Avalable amount', value: 'availableAmount' }
+          ];
+        },
+        
+        transactionsHeaders() {
+          return (this.isProgramOfficer || this.isFinancialOfficer) ? [
+            { text: 'Payment ID', value: 'paymentNumber' },
+            { text: 'Award ID', value: 'awardNumber' },
+            { text: 'Amount', value: 'amount' },
+            
+            { text: 'Organization', value: 'org' },
+            { text: 'PI', value: 'org' },
+
+            { text: 'Status', value: 'status' },
+            { text: 'Attachments', value: 'attachment' },
+            { text: 'Actions', sortable: false }
+          ] : [
+            { text: 'Payment ID', value: 'paymentNumber' },
+            { text: 'Award ID', value: 'awardNumber' },
+            { text: 'Amount', value: 'amount' },
+            { text: 'Status', value: 'status' },
+            { text: 'Attachments', value: 'attachment' },
+            { text: 'Actions', sortable: false }
+          ];
+        }
       },
 
       methods: {
