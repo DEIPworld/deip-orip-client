@@ -101,6 +101,10 @@
                         <v-list-tile-title>Dashboard</v-list-tile-title>
                     </v-list-tile>
 
+                    <v-list-tile v-if="isFinancialOfficer" :to="{ name: 'OrganizationFinanceDashboard', params: { org: tenant } }">
+                        <v-list-tile-title>Finance</v-list-tile-title>
+                    </v-list-tile>
+
                     <v-divider></v-divider>
 
                     <v-list-tile @click="signOut()">
@@ -140,7 +144,8 @@
                 user: 'auth/user',
                 isGrantor: 'auth/isGrantor',
                 isOfficer: 'auth/isOfficer',
-                isTreasury: 'auth/isTreasury'
+                isTreasury: 'auth/isTreasury',
+                isFinancialOfficer: 'auth/isFinancialOfficer'
             })
         },
 

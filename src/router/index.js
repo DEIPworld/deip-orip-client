@@ -1,7 +1,5 @@
 import Vue from 'vue';
 import Router from 'vue-router';
-import _ from 'lodash';
-
 import authRoutes from './authRoutes';
 import grantRoutes from './grantRoutes';
 import researchRoutes from './researchRoutes';
@@ -32,14 +30,14 @@ const router = new Router({
                     : usersService.getUserProfile(user.username).then((p) => { return p.agencies });
                 
                 rolePromise.then((agencies) => {
-                    if (_.isEmpty(agencies)) {
+                    if (!agencies.length) {
                         next({ name: 'ResearchFeed' });
                         return;
                     }
                     
                     const sub = window.env.TENANT || "";
-                    const agency = agencies.find(a => a.name.toLowerCase() == sub.toLowerCase());
-                    const isTreasury = agency ? agencies.some(a => a.role == "treasury") : false;
+                    // const agency = agencies.find(a => a.name.toLowerCase() == sub.toLowerCase());
+                    // const isTreasury = agency ? agencies.some(a => a.role == "treasury") : false;
 
                     // if (isTreasury) {
                     //     next({ name: 'TreasuryDepartment', params: { agency: agency.name } });
@@ -53,7 +51,12 @@ const router = new Router({
                     // }
 
                     if (sub) {
-                        next({ name: 'OrganizationDashboard', params: { org: sub } });
+                        const isFinancialOfficer = agencies.find(a => a.name.toLowerCase() == sub.toLowerCase() && a.role == "financial-officer");
+                        if (isFinancialOfficer) {
+                            next({ name: 'OrganizationFinanceDashboard', params: { org: sub } });
+                        } else {
+                            next({ name: 'OrganizationDashboard', params: { org: sub } });
+                        }
                     } else {
                         next({ name: 'ResearchFeed' });
                     }

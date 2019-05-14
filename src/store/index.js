@@ -22,6 +22,7 @@ import foa_award_details from './../components/funding-opportunity-award-details
 import agencyProgramWithdrawalRequests from './../components/agency-program-withdrawal-requests/store/index'
 import treasuryDepartment from './../components/treasury-department/store/index'
 import org_dashboard from './../components/organization-dashboard/store/index'
+import org_finance_dashboard from './../components/organization-finance-dashboard/store/index'
 
 Vue.use(Vuex)
 
@@ -46,7 +47,8 @@ export default new Vuex.Store({
         foa_award_details,
         agencyProgramWithdrawalRequests,
         treasuryDepartment,
-        org_dashboard
+        org_dashboard,
+        org_finance_dashboard
     },
     strict: process.env.NODE_ENV !== 'production',
     plugins: process.env.NODE_ENV !== 'production' ? [createLogger()] : []

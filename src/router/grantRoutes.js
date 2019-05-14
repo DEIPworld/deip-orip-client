@@ -10,6 +10,7 @@ import FundingOpportunityAwardDetails from '@/components/funding-opportunity-awa
 import TreasuryDepartment from '@/components/treasury-department/TreasuryDepartment';
 import AgencyProgramWithdrawalRequests from '@/components/agency-program-withdrawal-requests/AgencyProgramWithdrawalRequests';
 import OrganizationDashboard from '@/components/organization-dashboard/OrganizationDashboard';
+import OrganizationFinanceDashboard from '@/components/organization-finance-dashboard/OrganizationFinanceDashboard';
 
 const grantRoutes = [{
   path: '/create-grant',
@@ -98,7 +99,18 @@ const grantRoutes = [{
     });
     loadPage(loadPagePromise, next);
   }
-}];
+}, {
+    path: '/:org/finance',
+    name: 'OrganizationFinanceDashboard',
+    component: OrganizationFinanceDashboard,
+    beforeEnter: (to, from, next) => {
+      let loadPagePromise = store.dispatch('org_finance_dashboard/loadOrganizationFinanceDashboardPage', {
+        permlink: decodeURIComponent(to.params.org)
+      });
+      loadPage(loadPagePromise, next);
+    }
+  }
+];
 
 function loadPage(loadPagePromise, next) {
   store.dispatch('layout/setGlobalLoader');
