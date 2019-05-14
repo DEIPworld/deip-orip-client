@@ -1,15 +1,15 @@
 <template>
   <v-container fluid class="ma-0 pa-0">
     <v-layout row wrap>
-     <v-flex xs12>
+     <v-flex xs12 class="c-p-5 c-pt-10">
       <!-- <v-card>
           <v-card-text class="px-0 pa-0">
             <v-breadcrumbs divider="/" :items="[]"></v-breadcrumbs>
           </v-card-text>
         </v-card> -->
-        <div>{{organization.name}}</div>
+        <div> <h1 class="title">{{organization.name}} Dashboard</h1></div>
       </v-flex>
-      <v-flex xs12>
+      <v-flex xs12 class="c-p-5">
 
         <v-tabs slot="extension" v-model="tab" grow color="blue lighten-4">
           <v-tabs-slider color="grey"></v-tabs-slider>
@@ -49,14 +49,10 @@
                         </v-data-table>
                       </template>
 
-                      <div class="">
+                      <div v-if="isPrincipalInvestigator || isCertifier">
                         <v-btn color="primary" @click="openRequestPaymentDialog()" dark>Request Payment</v-btn>
-                        <request-award-payment-dialog 
-                          :meta="selectedAwardToWithdrawMeta">
-                        </request-award-payment-dialog>
+                        <request-award-payment-dialog :meta="selectedAwardToWithdrawMeta"></request-award-payment-dialog>
                       </div>
-                      
-
 
                     </v-flex>
                   </v-layout>
@@ -88,14 +84,15 @@
                             <td v-else>
                               <div v-for="file in props.item.attachment.packageFiles">
                                 <a target="_blank" class="a" :href="`${fileStorageBaseUrl}/payment-requests/refs/research/${props.item.award.research_id}/payment-attachment/${props.item.award.id}/${props.item.attachment.hash}/${file.hash}`">
-									                  {{file.filename}}
+									                {{file.filename}}
 							                  </a>
                               </div>
                             </td>
                             <td class="layout px-0">
-                              <div>
-                                <v-btn v-if="props.item.status == 1" small color="warning" dark>Certify</v-btn>
-                                <v-btn v-else-if="props.item.status == 2" disabled small >Approved</v-btn>
+                              <div> 
+                                <v-btn @click="certifyPaymentRequest(props.item.paymentId)" v-if="props.item.status == WITHDRAWAL_PENDING && isCertifier" small color="warning" dark>Certify</v-btn>
+                                <v-btn @click="approvePaymentRequest(props.item.paymentId)" v-if="props.item.status == WITHDRAWAL_CERTIFIED && isProgramOfficer" small color="success" dark>Approve</v-btn>
+                                <v-btn v-else-if="props.item.status == WITHDRAWAL_APPROVED" disabled small >Approved</v-btn>
                               </div>
                             </td>
                           </template>
@@ -119,6 +116,8 @@
 <script>
     import { mapGetters } from 'vuex';
     import moment from 'moment';
+    import { withdrawalStatus } from './../../services/FundingService'
+    import deipRpc from '@deip/deip-rpc-client';
 
     export default {
       name: "OrganizationDashboard",
@@ -128,6 +127,7 @@
           tab: null,
           selectedAwardToWithdrawMeta: { isOpen: false, contract: null },
           fileStorageBaseUrl: window.env.DEIP_SERVER_URL,
+          ...withdrawalStatus,
 
           awardHeaders: [
             {
@@ -159,7 +159,12 @@
         ...mapGetters({
           awards: 'org_dashboard/currentOrganizationAwards',
           transactions: 'org_dashboard/currentOrganizationTransactions',
-          organization: 'org_dashboard/organization'
+          organization: 'org_dashboard/organization',
+          user: 'auth/user',
+          isPrincipalInvestigator: 'auth/isPrincipalInvestigator',
+          isCertifier: 'auth/isCertifier',
+          isProgramOfficer: 'auth/isProgramOfficer',
+          isFinancialOfficer: 'auth/isFinancialOfficer'
         })
       },
 
@@ -167,6 +172,59 @@
         openRequestPaymentDialog() {
           // this.selectedAwardToWithdrawMeta.contract = contract;
           this.selectedAwardToWithdrawMeta.isOpen = true;
+        },
+
+        certifyPaymentRequest(paymentId) {
+          deipRpc.broadcast.certifyFundingWithdrawalRequestAsync(
+            this.user.privKey,
+            this.user.username,
+            paymentId
+          ) 
+          .then(() => {
+            let reload = new Promise((resolve, reject) => {
+              this.$store.dispatch('org_dashboard/loadFundingContracts', { notify: resolve });
+            });
+            return Promise.all([reload]);
+          })
+          .then(() => {
+            this.$store.dispatch('layout/setSuccess', {
+              message: `Payment request has been certified successfully!`
+            });
+          })
+          .catch((err) => {
+            console.log(err);
+            this.$store.dispatch('layout/setError', {
+                message: `An error occurred while sending the request, please try again later.`
+            });
+          })
+          .finally(() => {
+            this.isLoading = false;
+            this.close();
+          });
+        },
+
+        approvePaymentRequest(paymentId) {
+          deipRpc.broadcast.approveFundingWithdrawalRequestAsync(
+            this.user.privKey,
+            paymentId,
+            this.user.username
+          )
+          .then(() => {
+            let reload = new Promise((resolve, reject) => {
+              this.$store.dispatch('org_dashboard/loadFundingContracts', { notify: resolve });
+            });
+            return Promise.all([reload]);
+          })
+          .then(() => {
+            this.$store.dispatch('layout/setSuccess', {
+              message: "Payment request has been approved successfully!"
+            });
+          }, (err) => {
+            console.log(err);
+            this.$store.dispatch('layout/setError', {
+              message: "An error occurred while sending the request, please try again later"
+            });
+          });
         }
       }
     };

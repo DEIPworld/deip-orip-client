@@ -1,9 +1,8 @@
 <template>
-    <div class="column full-height">
-        <div class="c-mb-4 col-grow column">
+    <div class="full-height">
+        <div>
             <div class="step-title">Research Group Tokens</div>
-            <div class="col-grow overflow-y-auto">
-
+            <div class="overflow-y-auto">
                 <div class="row c-mh-auto group-share-max-width">
                     <div class="col-12">
                         <div>

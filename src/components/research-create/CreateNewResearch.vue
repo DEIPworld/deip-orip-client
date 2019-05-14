@@ -1,8 +1,8 @@
 <template>
     <v-container fluid fill-height class="pa-0">
         <v-layout>
-
-            <v-stepper v-model="currentStep" alt-labels class="column full-width full-height stepper-page">
+          <v-flex xs12 class="full-height">
+            <v-stepper v-model="currentStep" alt-labels class="full-width full-height stepper-page">
                 <v-stepper-header>
                     <v-stepper-step step="1" :complete="currentStep > 1">
                         <div class="uppercase">Discipline</div>
@@ -33,29 +33,29 @@
                     </v-stepper-step> -->
                 </v-stepper-header>
 
-                <v-stepper-items class="col-grow">
+                <v-stepper-items>
                     <v-stepper-content step="1">
-                        <div class="full-height">
+                        <v-card height="100%">
                             <create-research-pick-discipline
                                 @incStep="incStep"
                                 @setDisciplines="setDisciplines"
                                 :research="research"
                             ></create-research-pick-discipline>
-                        </div>
+                        </v-card>
                     </v-stepper-content>
 
                     <v-stepper-content step="2">
-                        <div class="full-height">
+                        <v-card height="100%">
                             <create-research-pick-group
                                 @incStep="incStep" @decStep="decStep"
                                 @setGroup="setGroup"
                                 :research="research"
                             ></create-research-pick-group>
-                        </div>
+                        </v-card>
                     </v-stepper-content>
 
                     <v-stepper-content step="3">
-                        <div class="full-height">
+                        <v-card height="100%">
                             <create-research-meta
                                 @finish="finish" @decStep="decStep"
                                 @setTitle="setTitle"
@@ -63,30 +63,31 @@
                                 :research="research"
                                 :isLoading="isLoading"
                             ></create-research-meta>
-                        </div>
+                        </v-card>
                     </v-stepper-content>
 
             <!--    <v-stepper-content step="4">
-                        <div class="full-height">
+                        <v-card height="100%">
                             <create-research-roadmap
                                 @incStep="incStep" @decStep="decStep"
                             ></create-research-roadmap>
-                        </div>
+                        </v-card>
                     </v-stepper-content> -->
 
                     <!-- temporary commented -->
                     <!-- <v-stepper-content step="4">
-                        <div class="full-height">
+                        <v-card height="100%">
                             <create-research-share 
                                 @finish="finish" @decStep="decStep"
                                 @setReviewShare="setReviewShare"
                                 :research="research"
                                 :isLoading="isLoading"
                             ></create-research-share>
-                        </div>
+                        </v-card>
                     </v-stepper-content> -->
                 </v-stepper-items>
             </v-stepper>
+          </v-flex>
         </v-layout>
     </v-container>   
 </template>

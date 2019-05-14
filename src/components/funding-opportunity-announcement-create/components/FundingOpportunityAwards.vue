@@ -1,9 +1,9 @@
 <template>
-    <div class="column full-height">
-        <div class="c-mb-4 col-grow column">
+    <div>
+        <div>
             <div class="step-title">Enter funding amount</div>
 
-            <div class="col-grow overflow-y-auto">
+            <div class="overflow-y-auto">
 
                 <div class="c-mh-auto meta-max-width">
                     <v-form v-model="isFormValid">

@@ -34,7 +34,7 @@
                 </router-link>
 
                 <router-link v-else-if="tenant" :to="{ name: 'Default' }">
-                    <v-avatar size="60px">
+                    <v-avatar size="50px">
                         <img :src="tenant | agencyLogoSrc(160, 160, false)" />
                     </v-avatar>
                 </router-link>
@@ -97,7 +97,7 @@
                         <v-list-tile-title>Granted Awards</v-list-tile-title>
                     </v-list-tile>
 
-                    <v-list-tile :to="{ name: 'OrganizationDashboard', params: { org: 3 } }">
+                    <v-list-tile :to="{ name: 'OrganizationDashboard', params: { org: tenant } }">
                         <v-list-tile-title>Dashboard</v-list-tile-title>
                     </v-list-tile>
 

@@ -3,7 +3,7 @@
         <v-app>
             <toolbar v-if="!$route.meta.withoutHeader"></toolbar>
             <v-content>
-                <v-container fluid class="ma-0 pa-0">
+                <v-container fluid class="ma-0 pa-0 full-height full-width">
                     <router-view :key="$route.fullPath"/>
                 </v-container>
             </v-content>

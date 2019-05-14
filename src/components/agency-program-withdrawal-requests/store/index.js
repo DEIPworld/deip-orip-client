@@ -2,6 +2,8 @@ import Vue from 'vue';
 import deipRpc from '@deip/deip-rpc-client';
 import agencyHttp from './../../../services/http/agency';
 import applicationHttp from './../../../services/http/application';
+import { WITHDRAWAL_PENDING } from './../../../services/FundingService';
+
 import { mapAreaToProgram } from '../../common/disciplines/DisciplineTreeService'
 import { getEnrichedProfiles } from './../../../utils/user';
 import { organizations } from './../../../utils/organizations';
@@ -158,7 +160,7 @@ const actions = {
       const requests = [];
       return deipRpc.api.getFundingWithdrawalRequestsAsync()
         .then((items) => {
-          items = items.filter(i => i.status == 1); // pending only
+          items = items.filter(i => i.status == WITHDRAWAL_PENDING); // pending only
           requests.push(...items);
           let requesters = requests.map(r => r.requester);
           return getEnrichedProfiles(requesters);

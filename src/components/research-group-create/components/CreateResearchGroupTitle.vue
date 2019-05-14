@@ -1,13 +1,13 @@
 <template>
-    <div class="column full-height">
-        <div class="c-mb-4 col-grow column">
+    <div class="full-height">
+        <div>
             <div class="step-title">Group name</div>
-            <div class="col-grow overflow-y-auto">
+            <div class="overflow-y-auto">
 
                 <div class="row c-mh-auto group-title-max-width">
                     <div class="col-12">
                         <v-form ref="form">
-                            <div class="">
+                            <div>
                                 <v-text-field 
                                     v-model="name" 
                                     name="title"
@@ -24,7 +24,7 @@
                                 prefix="deip.world"
                             ></v-text-field> -->
 
-                            <div class="">
+                            <div>
                                 <v-text-field class="permlink-input" 
                                     prefix="deip.world/"
                                     name="permlink"
@@ -39,7 +39,6 @@
                         </v-form>
                     </div>
                 </div>
-
             </div>
         </div>
         <div class="row justify-center align-center">

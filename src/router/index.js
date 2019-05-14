@@ -41,15 +41,21 @@ const router = new Router({
                     const agency = agencies.find(a => a.name.toLowerCase() == sub.toLowerCase());
                     const isTreasury = agency ? agencies.some(a => a.role == "treasury") : false;
 
-                    if (isTreasury) {
-                        next({ name: 'TreasuryDepartment', params: { agency: agency.name } });
+                    // if (isTreasury) {
+                    //     next({ name: 'TreasuryDepartment', params: { agency: agency.name } });
+                    // } else {
+                    //     if (agency) {
+                    //         // todo: replace with Grants list
+                    //         next({ name: 'AgencyPrograms', params: { agency: agency.name } });
+                    //     } else {
+                            // next({ name: 'ResearchFeed' });
+                    //     }
+                    // }
+
+                    if (sub) {
+                        next({ name: 'OrganizationDashboard', params: { org: sub } });
                     } else {
-                        if (agency) {
-                            // todo: replace with Grants list
-                            next({ name: 'AgencyPrograms', params: { agency: agency.name } });
-                        } else {
-                            next({ name: 'ResearchFeed' });
-                        }
+                        next({ name: 'ResearchFeed' });
                     }
                 });
             }

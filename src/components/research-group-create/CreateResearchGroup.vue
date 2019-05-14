@@ -1,7 +1,8 @@
 <template>
     <v-container fluid fill-height class="pa-0">
         <v-layout>
-            <v-stepper v-model="currentStep" alt-labels class="column full-width full-height stepper-page">
+          <v-flex xs12 class="full-height">
+            <v-stepper v-model="currentStep" alt-labels class="full-width full-height stepper-page">
                 <v-stepper-header>
                     <v-stepper-step step="1" :complete="currentStep > 1">
                         <div class="uppercase">Title</div>
@@ -32,58 +33,59 @@
                     </v-stepper-step>
                 </v-stepper-header>
 
-                <v-stepper-items class="col-grow">
+                <v-stepper-items>
                     <v-stepper-content step="1">
-                        <div class="full-height">
+                        <v-card height="100%">
                             <create-research-group-title
                                 @incStep="incStep"
                                 :group="group"
                                 @setName="setName"
                                 @setPermlink="setPermlink"
                             ></create-research-group-title>
-                        </div>
+                        </v-card>
                     </v-stepper-content>
 
                     <v-stepper-content step="2">
-                        <div class="full-height">
+                        <v-card height="100%">
                             <create-research-group-description
                                 @incStep="incStep" @decStep="decStep"
                                 @setDescription="setDescription"
                                 :group="group"
                             ></create-research-group-description>
-                        </div>
+                        </v-card>
                     </v-stepper-content>
 
                     <v-stepper-content step="3">
-                        <div class="full-height">
+                        <v-card height="100%">
                             <create-research-group-members
                                 @incStep="incStep" @decStep="decStep"
                                 @setGroupMembers="setGroupMembers"
                                 :group="group"
                             ></create-research-group-members>
-                        </div>
+                        </v-card>
                     </v-stepper-content>
 
                     <v-stepper-content step="4">
-                        <div class="full-height">
+                        <v-card height="100%">
                             <create-research-group-quorum
                                 @incStep="incStep" @decStep="decStep"
                                 :group="group"
                             ></create-research-group-quorum>
-                        </div>
+                        </v-card>
                     </v-stepper-content>
 
                     <v-stepper-content step="5">
-                        <div class="full-height">
+                        <v-card height="100%">
                             <create-research-group-share
                                 @finish="finish" @decStep="decStep"
                                 :group="group"
                                 :isLoading="isLoading"
                             ></create-research-group-share>
-                        </div>
+                        </v-card>
                     </v-stepper-content>
                 </v-stepper-items>
             </v-stepper>
+          </v-flex>
         </v-layout>
     </v-container>   
 </template>

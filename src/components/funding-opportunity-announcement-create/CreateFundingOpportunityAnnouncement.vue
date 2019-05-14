@@ -1,9 +1,8 @@
 <template>
     <v-container fluid fill-height class="pa-0">
         <v-layout>
-            <v-stepper v-model="currentStep" v-if="!isFinished && agency" alt-labels
-                class="column stepper-page full-width full-height"
-            >
+            <v-flex xs12 class="full-height" v-if="!isFinished && agency">
+              <v-stepper v-model="currentStep" alt-labels class="stepper-page full-height">
                 <v-stepper-header>
                     <v-stepper-step step="1" :complete="currentStep > 1">
                         <div class="uppercase">Title</div>
@@ -52,101 +51,101 @@
                     </v-stepper-step>
                 </v-stepper-header>
 
-                <v-stepper-items class="col-grow">
+                <v-stepper-items>
                     <v-stepper-content step="1">
-                        <div class="full-height">
+                        <v-card height="100%">
                             <funding-opportunity-title
                                 @incStep="incStep"
                                 :opportunity="opportunity"
                                 :agency="agency"
                             ></funding-opportunity-title>
-                        </div>
+                        </v-card>
                     </v-stepper-content>
 
                     <v-stepper-content step="2">
-                        <div class="full-height">
+                        <v-card height="100%">
                             <funding-opportunity-discipline
                                 @incStep="incStep" @decStep="decStep"
                                 :opportunity="opportunity"
                             ></funding-opportunity-discipline>
-                        </div>
+                        </v-card>
                     </v-stepper-content>
 
                     <v-stepper-content step="3">
-                        <div class="full-height">
+                        <v-card height="100%">
                             <funding-opportunity-period
                                 @incStep="incStep" @decStep="decStep"
                                 :opportunity="opportunity"
                             ></funding-opportunity-period>
-                        </div>
+                        </v-card>
                     </v-stepper-content>
 
                     <v-stepper-content step="4">
-                        <div class="full-height">
+                        <v-card height="100%">
                             <funding-opportunity-awards
                                 @incStep="incStep" @decStep="decStep"
                                 :opportunity="opportunity"
                             ></funding-opportunity-awards>
-                        </div>
+                        </v-card>
                     </v-stepper-content>
 
                     <v-stepper-content step="5">
-                        <div class="full-height">
+                        <v-card height="100%">
                             <funding-opportunity-guidelines
                                 @incStep="incStep" @decStep="decStep"
                                 :opportunity="opportunity"
                             ></funding-opportunity-guidelines>
-                        </div>
+                        </v-card>
                     </v-stepper-content>
 
                     <v-stepper-content step="6">
-                        <div class="full-height">
+                        <v-card height="100%">
                             <funding-opportunity-program-officers
                                 @incStep="incStep" @decStep="decStep"
                                 :opportunity="opportunity"
                             ></funding-opportunity-program-officers>
-                        </div>
+                        </v-card>
                     </v-stepper-content>
 
                     <v-stepper-content step="7">
-                        <div class="full-height">
+                        <v-card height="100%">
                             <funding-opportunity-review-committee
                                 @incStep="incStep" @decStep="decStep"
                                 :opportunity="opportunity"
                             ></funding-opportunity-review-committee>
-                        </div>
+                        </v-card>
                     </v-stepper-content>
 
                     <v-stepper-content step="8">
-                        <div class="full-height">
+                        <v-card height="100%">
                             <funding-opportunity-additional
                                 @finish="finish" @decStep="decStep"
                                 :is-sending="isSending"
                                 :opportunity="opportunity"
                             ></funding-opportunity-additional>
-                        </div>
+                        </v-card>
                     </v-stepper-content>
                 </v-stepper-items>
-            </v-stepper>
-
-            <div class="display-flex full-width full-height" v-if="isFinished">
+              </v-stepper>
+            </v-flex>
+            
+            <v-flex xs12 class="full-height" v-if="isFinished">
+              <div class="display-flex full-width full-height" v-if="isFinished">
                 <div class="c-m-auto text-align-center">
                     <div class="display-1">New Funding Opportunity has been created <br/> successfully</div>
-
                     <div class="subheading c-mt-8">
                         <span class="bold">#</span>
                         <span class="a">{{opportunity.number}}</span>
                     </div>
-
                     <div class="a subheading c-mt-2">
                         {{opportunity.title}}
                     </div>
-
                     <div class="c-mt-12">
                         <v-btn color="primary" class="ma-0" :to="{name: 'Default'}">OK</v-btn>
                     </div>
                 </div>
-            </div>
+              </div>
+            </v-flex>
         </v-layout>
     </v-container>
 </template>
@@ -168,7 +167,7 @@
         data() { 
             return {
                 currentStep: 0,
-
+                e1: 0,
                 agency: null,
                 opportunity: {
                     title: '',

@@ -1,7 +1,9 @@
 <template>
     <v-container fluid fill-height class="pa-0">
         <v-layout>
-            <v-stepper v-model="currentStep" alt-labels class="column full-width full-height stepper-page">
+          <v-flex xs12 class="full-height">
+
+            <v-stepper v-model="currentStep" alt-labels class="full-width full-height stepper-page">
                 <v-stepper-header>
                     <v-stepper-step step="1" :complete="currentStep > 1">
                         <div class="uppercase">Amount</div>
@@ -20,37 +22,38 @@
                     </v-stepper-step>
                 </v-stepper-header>
 
-                <v-stepper-items class="col-grow">
+                <v-stepper-items>
                     <v-stepper-content step="1">
-                        <div class="full-height">
+                       <v-card height="100%">
                             <token-sale-amount
                                 @incStep="incStep"
                                 :token-sale-info="tokenSaleInfo"
                             ></token-sale-amount>
-                        </div>
+                        </v-card>
                     </v-stepper-content>
 
                     <v-stepper-content step="2">
-                        <div class="full-height">
+                        <v-card height="100%">
                             <token-sale-period
                                 @incStep="incStep" @decStep="decStep"
                                 :token-sale-info="tokenSaleInfo"
                             ></token-sale-period>
-                        </div>
+                        </v-card>
                     </v-stepper-content>
 
                     <v-stepper-content step="3">
-                        <div class="full-height">
+                        <v-card height="100%">
                             <token-sale-caps
                                 @finish="finish" @decStep="decStep"
                                 :token-sale-info="tokenSaleInfo"
                                 :research="research"
                                 :isLoading="isLoading"
                             ></token-sale-caps>
-                        </div>
+                        </v-card>
                     </v-stepper-content>
                 </v-stepper-items>
             </v-stepper>
+          </v-flex>
         </v-layout>
     </v-container>
 </template>

@@ -94,7 +94,7 @@ const grantRoutes = [{
   component: OrganizationDashboard,
   beforeEnter: (to, from, next) => {
     let loadPagePromise = store.dispatch('org_dashboard/loadOrganizationDashboardPage', { 
-      orgId: decodeURIComponent(to.params.org) 
+      permlink: decodeURIComponent(to.params.org) 
     });
     loadPage(loadPagePromise, next);
   }

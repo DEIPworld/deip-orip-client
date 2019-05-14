@@ -155,7 +155,6 @@
             return false;
           },
           dropzoneOptions() {
-            debugger;
             console.log(this.award);
             return this.award && this.timestamp ? {
               url: `${window.env.DEIP_SERVER_URL}/payment-requests/upload-files`,
@@ -195,9 +194,7 @@
           },
           requestPayment() {
             this.isLoading = true;
-            debugger;
-            let d = this.$refs.paymentAttachments.processQueue();
-            debugger;
+            this.$refs.paymentAttachments.processQueue();
           },
 
           vdropzoneError(file, message, xhr) {
@@ -224,12 +221,13 @@
               this.user.username,
               1, // purpose
               this.toAssetUnits(this.paymentAmount),
-              this.paymentPurpose
+              this.paymentPurpose,
+              attachmentsRef.hash
             )
             .then(() => {
-                let reload = new Promise((resolve, reject) => {
-                  this.$store.dispatch('org_dashboard/loadFundingContracts', { notify: resolve });
-                });
+              let reload = new Promise((resolve, reject) => {
+                this.$store.dispatch('org_dashboard/loadFundingContracts', { notify: resolve });
+              });
               return Promise.all([reload]);
             })
             .then(() => {

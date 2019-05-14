@@ -1,9 +1,9 @@
 <template>
-    <div class="column full-height">
-        <div class="c-mb-4 col-grow column">
+    <div class="full-height">
+        <div>
             <div class="step-title">Select research group</div>
 
-            <div class="col-grow overflow-y-auto">
+            <div class="overflow-y-auto">
                 <div class="c-mh-auto c-pt-4" style="max-width: 800px;">
                     <div v-for="group in groups"
                         :class="{'selected-group': research.group && group.id == research.group.id, 'personal-group': group.is_personal }"
@@ -21,7 +21,7 @@
                                 query: { 'back-token': getReturningToken }
                             }"
                         >
-                            <span  class="deip-label">+ Add new group</span>
+                            <span class="deip-label">+ Add new group</span>
                         </router-link>
                     </div>
                 </div>

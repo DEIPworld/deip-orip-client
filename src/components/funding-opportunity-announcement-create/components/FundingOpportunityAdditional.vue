@@ -1,10 +1,8 @@
 <template>
-    <div class="column full-height">
-        <div class="c-mb-4 col-grow column">
+    <div>
+        <div>
             <div class="step-title">Provide additional information</div>
-
-            <div class="col-grow overflow-y-auto">
-
+            <div class="overflow-y-auto">
                 <div class="c-mh-auto guidelines-max-width">
                     <v-textarea
                         label="Opportunity description"
@@ -23,7 +21,6 @@
                         v-model="opportunity.grantorEmail"
                     ></v-text-field>
                 </div>
-
             </div>
         </div>
         
@@ -31,7 +28,6 @@
             <v-btn flat small @click.native="prevStep()">
                 <v-icon dark class="pr-1">keyboard_arrow_left</v-icon> Back
             </v-btn>
-            
             <v-btn color="primary" @click.native="finish()" :loading="isSending" :disabled="isNextDisabled() || isSending">Finish</v-btn>
         </div>
     </div>

@@ -1,9 +1,9 @@
 <template>
-    <div class="column full-height">
-        <div class="c-mb-4 col-grow column">
+    <div>
+        <div>
             <div class="step-title">Describe program guidelines</div>
 
-            <div class="col-grow overflow-y-auto">
+            <div class="overflow-y-auto">
 
                 <div class="c-mh-auto guidelines-max-width">
                     <v-textarea

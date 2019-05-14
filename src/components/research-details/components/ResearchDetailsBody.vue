@@ -418,6 +418,7 @@
     import { mapGetters } from 'vuex'
     import contentHttpService from './../../../services/http/content'
     import { getContentType } from './../../../services/ResearchService'
+    import { WITHDRAWAL_APPROVED } from './../../../services/FundingService'
 
     export default {
         name: "ResearchDetailsBody",
@@ -604,7 +605,7 @@
             },
 
             getApprovedWithdrawals(relation) {
-                return relation.withdrawals.filter(r => r.status == 2);
+                return relation.withdrawals.filter(r => r.status == WITHDRAWAL_APPROVED);
             },
 
             getOrderedMilestones(milestones) {

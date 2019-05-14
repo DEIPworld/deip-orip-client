@@ -1,10 +1,8 @@
 <template>
-    <div class="column full-height">
-        <div class="c-mb-4 col-grow column">
+    <div>
+        <div>
             <div class="step-title">Add title and number</div>
-
-            <div class="col-grow overflow-y-auto">
-
+            <div class="overflow-y-auto">
                 <div class="c-mh-auto meta-max-width">
                     <v-text-field
                         label="Opportunity title"
@@ -24,7 +22,6 @@
                         disabled
                     ></v-text-field>
                 </div>
-
             </div>
         </div>
         

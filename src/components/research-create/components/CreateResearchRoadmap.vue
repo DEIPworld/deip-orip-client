@@ -1,15 +1,15 @@
 <template>
-    <div class="column full-height col-grow" style="max-width: 700px;">
-        <div class="c-mb-4 col-grow column overflow-y-auto">
+    <div class="full-height" style="max-width: 700px;">
+        <div class="overflow-y-auto">
 
             <div class="step-title">Roadmap</div>
-            <div class="col-grow">
+            <div>
                 <div class="bold text-align-center c-pv-6">
                     Let’s create a roadmap for your research. Well-presented and detailed roadmap attracts 
                     more investors to help you to get the funding
                 </div>
 
-                <div class="">
+                <div>
                     <div class="row align-center c-pb-4" v-for="i in 3" :key="i">
                         <div class="pos-relative">
                             <v-btn dark outline color="grey darken-1" class="remove-milestone like-fab">

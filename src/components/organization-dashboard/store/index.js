@@ -2,6 +2,7 @@ import deipRpc from '@deip/deip-rpc-client';
 import Vue from 'vue';
 import { getEnrichedProfiles } from './../../../utils/user'
 import paymentRequestsHttp from './../../../services/http/paymentRequests'
+import { WITHDRAWAL_PENDING, WITHDRAWAL_CERTIFIED, WITHDRAWAL_APPROVED, WITHDRAWAL_REJECTED } from './../../../services/FundingService'
 import { toAssetUnits, fromAssetsToFloat } from './../../../utils/blockchain'
 import md5 from 'md5'
 
@@ -17,7 +18,7 @@ const getters = {
 
 	currentOrganizationAwards: state => {
 		let awards = state.contracts.map(c => {
-			let rels = c.relations.filter(r => r.organisation_id == state.organization.id);
+			let rels = state.organization.permlink == "nsf" ? c.relations : c.relations.filter(r => r.organisation_id == state.organization.id);
 			if (!rels.length) return [];
 
 			return rels.map(rel => {
@@ -26,8 +27,8 @@ const getters = {
 				let withdrawnAmount = 0;
 				for (let i = 0; i < rel.withdrawals.length; i++) {
 					let withdrawal = rel.withdrawals[i];
-					if (withdrawal.status == 1) pendingAmount += fromAssetsToFloat(withdrawal.amount);
-					if (withdrawal.status == 2) withdrawnAmount += fromAssetsToFloat(withdrawal.amount);
+					if (withdrawal.status == WITHDRAWAL_PENDING || withdrawal.status == WITHDRAWAL_CERTIFIED) pendingAmount += fromAssetsToFloat(withdrawal.amount);
+					if (withdrawal.status == WITHDRAWAL_APPROVED) withdrawnAmount += fromAssetsToFloat(withdrawal.amount);
 				}
 				let availableAmount = totalAmount - pendingAmount - withdrawnAmount;
 				let award = {
@@ -51,7 +52,7 @@ const getters = {
 
 	currentOrganizationTransactions: state => {
 		let transactions = state.contracts.map(c => {
-			let rels = c.relations.filter(r => r.organisation_id == state.organization.id);
+			let rels = state.organization.permlink == "nsf" ? c.relations : c.relations.filter(r => r.organisation_id == state.organization.id);
 			if (!rels.length) return [];
 
 			let items = [];
@@ -71,7 +72,6 @@ const getters = {
 						award: rel,
 						attachment: withdrawal.attachment
 					}
-					debugger
 					items.push(item);
 				}
 			}
@@ -87,9 +87,9 @@ const getters = {
 // actions
 const actions = {
 
-	loadOrganizationDashboardPage({ commit, dispatch, state }, { orgId }) {
+	loadOrganizationDashboardPage({ commit, dispatch, state }, { permlink }) {
 		commit('SET_ORGANIZATION_DASHBOARD_LOADING_STATE', true);
-		return deipRpc.api.getOrganisationAsync(orgId).then(org => {
+		return deipRpc.api.getOrganisationByPermlinkAsync(permlink).then(org => {
 			commit('SET_ORGANIZATION', org);
 			const fundingContractsLoad = new Promise((resolve, reject) => {
 				dispatch('loadFundingContracts', { notify: resolve });
@@ -169,10 +169,9 @@ const actions = {
 					contract.relations[i].withdrawals = withdrawals[i];
 				}
 				flattenWithdrawals.push(...[].concat.apply([], withdrawals));
-				return Promise.all(flattenWithdrawals.map(payment => paymentRequestsHttp.getPaymentRequestRefByHash(payment.research_id, payment.funding_research_relation_id, payment.hash || "dc0f22d59048325ae4453059317461de")));
+				return Promise.all(flattenWithdrawals.map(payment => paymentRequestsHttp.getPaymentRequestRefByHash(payment.research_id, payment.funding_research_relation_id, payment.attachment)));
 			})
 			.then((attachments) => {
-				debugger;
 				for (let i = 0; i < flattenWithdrawals.length; i++) {
 					flattenWithdrawals[i].attachment = attachments[i] || null;
 				}
@@ -199,11 +198,11 @@ const mutations = {
 		Vue.set(state, 'contracts', contracts);
 	}
 }
-
 function getStatusName(status) {
-	return status == 1 ? 'Awaiting Certification' :
-		status == 2 ? 'Approved' :
-		status == 3 ? 'Rejected' : null;
+	return status == WITHDRAWAL_PENDING ? 'Awaiting Certification' :
+		status == WITHDRAWAL_CERTIFIED ? 'Certified' :
+		status == WITHDRAWAL_APPROVED ? 'Approved' : 
+		status == WITHDRAWAL_REJECTED ? 'Rejected' : null;
 }
 
 const namespaced = true;

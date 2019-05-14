@@ -1,9 +1,9 @@
 <template>
-    <div class="column full-height">
-        <div class="c-mb-4 col-grow column">
+    <div class="full-height">
+        <div>
             <div class="step-title">Share reward with reviewers</div>
-            <div class="col-grow overflow-y-auto">
-
+            
+            <div class="overflow-y-auto">
                 <div class="row c-mh-auto research-reward-max-width">
                     <div class="col-12">
                         <div>
@@ -19,7 +19,7 @@
                             hide-details>
                         </v-text-field>
 
-                        <div class="column align-center">
+                        <div class="align-center">
                             <div class="c-pt-8 caption grey--text" v-if="reviewShare">
                                 {{reviewShare}}% of  potential research reward will be shared between all
                                 the reviewers according to their Review Index  

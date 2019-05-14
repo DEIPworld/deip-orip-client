@@ -1,12 +1,11 @@
 <template>
-    <div class="column full-height">
-        <div class="c-mb-4 col-grow column">
+    <div>
+        <div>
             <div class="step-title">Select Program Officers</div>
-
-            <div class="col-grow overflow-y-auto">
+            <div class="overflow-y-auto">
 
                 <div class="c-mh-auto program-officers-max-width">
-                    <v-card class="c-ph-12 c-pv-6">
+                    <v-card class="c-ph-12 c-pv-6 c-m-10">
                         <v-text-field
                             label="Start typing for suggestion"
                             append-icon="search"

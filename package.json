@@ -10,7 +10,7 @@
         "build": "node build/build.js"
     },
     "dependencies": {
-        "@deip/deip-rpc-client": "1.0.42",
+        "@deip/deip-rpc-client": "1.0.44",
         "@deip/lib-crypto": "^1.0.2",
         "@deip/substance-texture": "1.0.0-0bb17ee3f9e9b4dfb44687ea0d08772f32b6e6b7.patch.4",
         "@mdi/font": "^2.7.94",
@@ -25,14 +25,14 @@
         "koa-static": "^5.0.0",
         "moment": "^2.22.1",
         "substance": "^1.0.0-beta.6.2",
-        "vue": "^2.6.0",
-        "vue-google-charts": "^0.3.2",
+        "vue": "2.5.18",
         "vue-gravatar": "^1.2.1",
         "vue-router": "^3.0.1",
         "vue2-dropzone": "^3.1.0",
         "vuetify": "1.5.13",
         "vuetify-upload-button": "^0.1.2",
         "vuex": "^3.0.1",
+        "vue-google-charts": "^0.3.2",
         "d3": "^5.7.0"
     },
     "devDependencies": {
@@ -76,7 +76,7 @@
         "url-loader": "^0.5.8",
         "vue-loader": "^13.3.0",
         "vue-style-loader": "^3.0.1",
-        "vue-template-compiler": "^2.5.2",
+        "vue-template-compiler": "2.5.18",
         "webpack": "^3.6.0",
         "webpack-bundle-analyzer": "^2.13.1",
         "webpack-dev-server": "^2.9.1",

@@ -109,6 +109,46 @@ const getters = {
 
     isApplicant: (state, getters) => {
         return !getters.isGrantor && !getters.isOfficer && !getters.isTreasury;
+    },
+
+    isPrincipalInvestigator: (state, getters) => {
+        if (state.user.profile) {
+            const sub = window.env.TENANT;
+            return state.user.profile.agencies.some(
+                a => a.name.toLowerCase() == sub.toLowerCase() && a.role === 'principal-investigator'
+            );
+        }
+        return false;
+    },
+
+    isCertifier: (state, getters) => {
+        if (state.user.profile) {
+            const sub = window.env.TENANT;
+            return state.user.profile.agencies.some(
+                a => a.name.toLowerCase() == sub.toLowerCase() && a.role === 'certifier'
+            );
+        }
+        return false;
+    },
+
+    isProgramOfficer: (state, getters) => {
+        if (state.user.profile) {
+            const sub = window.env.TENANT;
+            return state.user.profile.agencies.some(
+                a => a.name.toLowerCase() == sub.toLowerCase() && a.role === 'program-officer'
+            );
+        }
+        return false;
+    },
+
+    isFinancialOfficer : (state, getters) => {
+        if (state.user.profile) {
+            const sub = window.env.TENANT;
+            return state.user.profile.agencies.some(
+                a => a.name.toLowerCase() == sub.toLowerCase() && a.role === 'financial-officer'
+            );
+        }
+        return false;
     }
 }
 

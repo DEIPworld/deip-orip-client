@@ -1,6 +1,6 @@
 <template>
-    <div class="column full-height">
-        <div class="c-mb-4 col-grow column">
+    <div class="full-height">
+        <div>
          <!--   <div class="step-title">
                 Please type percent (%) of research token<br>
                 belonging to your group you’re going to sell
@@ -9,7 +9,7 @@
                 Determine the percent of research tokens for sale
             </div>
 
-            <div class="col-grow overflow-y-auto">
+            <div class="overflow-y-auto full-height">
 
                 <div class="row c-mh-auto amount-max-width">
                     <div class="col-12">

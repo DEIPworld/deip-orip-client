@@ -1,9 +1,9 @@
 <template>
-    <div class="column full-height">
-        <div class="c-mb-4 col-grow column">
+    <div class="full-height">
+        <div>
             <div class="step-title">Add title and description</div>
 
-            <div class="col-grow overflow-y-auto">
+            <div class="overflow-y-auto">
 
                 <div class="c-mh-auto c-pt-4" style="max-width: 1000px;">
                     <div class="row">
