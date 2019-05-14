@@ -70,6 +70,7 @@ const getters = {
 				for (let i = 0; i < rel.withdrawals.length; i++) {
 					let withdrawal = rel.withdrawals[i];
 					let item = {
+						id: withdrawal.id,
 						paymentId: withdrawal.id,
 						paymentNumber: `${(withdrawal.id + 1)}${parseInt(`${md5(`${withdrawal.id}-payment`)}`, 16)}`.replace(/\./g, "").slice(0, 7),
 						awardId: rel.id,

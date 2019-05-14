@@ -40,8 +40,8 @@
                             <td>{{ props.item.awardNumber }}</td>
                             <td>{{ moment(new Date(props.item.from)).format("MM/YY") }}</td>
                             <td>{{ moment(new Date(props.item.to)).format("MM/YY") }}</td>
-                            <td v-if="isProgramOfficer || isFinancialOfficer">{{ props.item.org.name }}</td>
-                            <td v-if="isProgramOfficer || isFinancialOfficer">{{ props.item.pi | fullname}}</td>
+                            <td v-if="isProgramOfficer">{{ props.item.org.name }}</td>
+                            <td v-if="isProgramOfficer">{{ props.item.pi | fullname}}</td>
                             <td>$ {{ props.item.totalAmount }}</td>
                             <td>$ {{ props.item.withdrawnAmount }}</td>
                             <td>$ {{ props.item.pendingAmount }}</td>
@@ -75,14 +75,23 @@
                         <v-data-table
                           :headers="transactionsHeaders"
                           :items="transactions"
-                          >
+                          v-model="selected">
 
                           <template slot="items" slot-scope="props">
+                            <td>
+                              <v-checkbox v-if="
+                                (isCertifier && props.item.status == WITHDRAWAL_PENDING) || (props.item.status == WITHDRAWAL_CERTIFIED && isProgramOfficer)"
+                                v-model="props.selected"
+                                primary
+                                hide-details
+                              ></v-checkbox>
+                            </td>
+
                             <td>{{ props.item.paymentNumber }}</td>
                             <td>{{ props.item.awardNumber }}</td>
                             <td>$ {{ props.item.amount }}</td>
-                            <td v-if="isProgramOfficer || isFinancialOfficer">{{ props.item.org.name }}</td>
-                            <td v-if="isProgramOfficer || isFinancialOfficer">{{ props.item.pi | fullname}}</td>
+                            <td v-if="isProgramOfficer">{{ props.item.org.name }}</td>
+                            <td v-if="isProgramOfficer">{{ props.item.pi | fullname}}</td>
                             <td>{{ props.item.statusTitle }}</td>
                             <td v-if="!props.item.attachment"></td>
                             <td v-else>
@@ -92,17 +101,45 @@
 							                  </a>
                               </div>
                             </td>
-                            <td class="layout px-0">
+                         <!--   <td class="layout px-0">
                               <div> 
                                 <v-btn @click="certifyPaymentRequest(props.item.paymentId)" v-if="props.item.status == WITHDRAWAL_PENDING && isCertifier" small color="warning" dark>Certify</v-btn>
                                 <v-btn @click="approvePaymentRequest(props.item.paymentId)" v-if="props.item.status == WITHDRAWAL_CERTIFIED && isProgramOfficer" small color="success" dark>Approve</v-btn>
                                 <v-btn v-else-if="props.item.status == WITHDRAWAL_APPROVED" disabled small >Approved</v-btn>
                               </div>
-                            </td>
+                            </td> -->
                           </template>
 
                         </v-data-table>
                       </template>
+
+                      <div v-if="isCertifier">
+                        <v-btn style="min-width: 150px" @click="confirmCertifying.isShown = true" color="warning" :disabled="!selectedToCertify.length || isCertifying" :loading="isCertifying">
+                          {{ selectedToCertify.length ? `Certify (${selectedToCertify.length})` : `Certify`}}
+                        </v-btn>
+
+                        <confirm-action-dialog
+                          :meta="confirmCertifying" 
+                          :title="``" 
+                          :text="`Are you sure you want to certify selected payment requests?`" 
+                          @confirmed="certifySelectedPaymentRequests(); confirmCertifying.isShown = false"  
+                          @canceled="confirmCertifying.isShown = false">
+                        </confirm-action-dialog>
+                      </div>
+
+                      <div v-if="isProgramOfficer">
+                        <v-btn style="min-width: 150px" @click="confirmApproval.isShown = true" color="success" :disabled="!selectedToApprove.length || isApproving" :loading="isApproving">
+                          {{ selectedToApprove.length ? `Approve (${selectedToApprove.length})` : `Approve`}}
+                        </v-btn>
+                        <confirm-action-dialog
+                          :meta="confirmApproval" 
+                          :title="``"
+                          :text="`Are you sure you want to approve selected payment requests?`" 
+                          @confirmed="approveSelectedPaymentRequests(); confirmApproval.isShown = false"  
+                          @canceled="confirmApproval.isShown = false">
+                        </confirm-action-dialog>
+                      </div>
+                      
                     </v-flex>
                   </v-layout>
                 </v-card-text>
@@ -120,7 +157,7 @@
 <script>
     import { mapGetters } from 'vuex';
     import moment from 'moment';
-    import { withdrawalStatus } from './../../services/FundingService'
+    import { withdrawalStatus, WITHDRAWAL_PENDING, WITHDRAWAL_CERTIFIED, WITHDRAWAL_APPROVED, WITHDRAWAL_REJECTED } from './../../services/FundingService'
     import deipRpc from '@deip/deip-rpc-client';
 
     export default {
@@ -128,6 +165,16 @@
 
       data() {
         return {
+          selected: [],
+
+          selectedToCertify: [],
+          isCertifying: false,
+          confirmCertifying: { isShown: false },
+
+          selectedToApprove: [],
+          isApproving: false,
+          confirmApproval: { isShown: false },
+
           tab: null,
           selectedAwardToWithdrawMeta: { isOpen: false, contract: null },
           fileStorageBaseUrl: window.env.DEIP_SERVER_URL,
@@ -148,14 +195,12 @@
         }),
 
         awardHeaders() {
-          return (this.isProgramOfficer || this.isFinancialOfficer) ? [
+          return this.isProgramOfficer ? [
             { text: 'Award ID', align: 'left', sortable: false, value: 'awardNumber' },
             { text: 'From', value: 'from' },
             { text: 'To', value: 'to' },
-
-            { text: 'Organization', value: 'org' },
-            { text: 'PI', value: 'org' },
-
+            { text: 'Organization', value: 'org' }, // display organization info for NSF stuff
+            { text: 'PI', value: 'org' }, // display PI info for NSF stuff
             { text: 'Total amount', value: 'totalAmount' },
             { text: 'Withdrawn amount', value: 'withdrawnAmount' },
             { text: 'Pending amount', value: 'pendingAmount' },
@@ -164,7 +209,6 @@
             { text: 'Award ID', align: 'left', sortable: false, value: 'awardNumber' },
             { text: 'From', value: 'from' },
             { text: 'To', value: 'to' },
-
             { text: 'Total amount', value: 'totalAmount' },
             { text: 'Withdrawn amount', value: 'withdrawnAmount' },
             { text: 'Pending amount', value: 'pendingAmount' },
@@ -173,24 +217,28 @@
         },
         
         transactionsHeaders() {
-          return (this.isProgramOfficer || this.isFinancialOfficer) ? [
+          return this.isProgramOfficer ? [
+            { text: '', sortable: false  },  // display checkbox for NSF approval
             { text: 'Payment ID', value: 'paymentNumber' },
             { text: 'Award ID', value: 'awardNumber' },
             { text: 'Amount', value: 'amount' },
-            
-            { text: 'Organization', value: 'org' },
-            { text: 'PI', value: 'org' },
-
+            { text: 'Organization', value: 'org' }, // display organization info for NSF stuff
+            { text: 'PI', value: 'org' }, // display PI info for NSF stuff
             { text: 'Status', value: 'status' },
             { text: 'Attachments', value: 'attachment' },
-            { text: 'Actions', sortable: false }
+          ] : this.isCertifier ? [
+            { text: '', sortable: false  }, // display checkbox for Organization Certifier
+            { text: 'Payment ID', value: 'paymentNumber' },
+            { text: 'Award ID', value: 'awardNumber' },
+            { text: 'Amount', value: 'amount' },
+            { text: 'Status', value: 'status' },
+            { text: 'Attachments', value: 'attachment' },
           ] : [
             { text: 'Payment ID', value: 'paymentNumber' },
             { text: 'Award ID', value: 'awardNumber' },
             { text: 'Amount', value: 'amount' },
             { text: 'Status', value: 'status' },
             { text: 'Attachments', value: 'attachment' },
-            { text: 'Actions', sortable: false }
           ];
         }
       },
@@ -201,57 +249,79 @@
           this.selectedAwardToWithdrawMeta.isOpen = true;
         },
 
-        certifyPaymentRequest(paymentId) {
-          deipRpc.broadcast.certifyFundingWithdrawalRequestAsync(
-            this.user.privKey,
-            this.user.username,
-            paymentId
-          ) 
-          .then(() => {
-            let reload = new Promise((resolve, reject) => {
-              this.$store.dispatch('org_dashboard/loadFundingContracts', { notify: resolve });
+        certifySelectedPaymentRequests() {
+          this.isCertifying = true;
+
+          let promises = this.selectedToCertify.map(
+            p => deipRpc.broadcast.certifyFundingWithdrawalRequestAsync(
+              this.user.privKey,
+              this.user.username,
+              p.paymentId
+          ));
+
+          Promise.all(promises)
+            .then(() => {
+              let reload = new Promise((resolve, reject) => {
+                this.$store.dispatch('org_dashboard/loadFundingContracts', { notify: resolve });
+              });
+              return Promise.all([reload]);
+            })
+            .then(() => {
+              this.$store.dispatch('layout/setSuccess', {
+                message: `Payment requests have been certified successfully!`
+              });
+            })
+            .catch((err) => {
+              console.log(err);
+              this.$store.dispatch('layout/setError', {
+                  message: `An error occurred while sending the request, please try again later.`
+              });
+            })
+            .finally(() => {
+              this.selectedToCertify = [];
+              this.isCertifying = false;
             });
-            return Promise.all([reload]);
-          })
-          .then(() => {
-            this.$store.dispatch('layout/setSuccess', {
-              message: `Payment request has been certified successfully!`
-            });
-          })
-          .catch((err) => {
-            console.log(err);
-            this.$store.dispatch('layout/setError', {
-                message: `An error occurred while sending the request, please try again later.`
-            });
-          })
-          .finally(() => {
-            this.isLoading = false;
-            this.close();
-          });
         },
 
-        approvePaymentRequest(paymentId) {
-          deipRpc.broadcast.approveFundingWithdrawalRequestAsync(
-            this.user.privKey,
-            paymentId,
-            this.user.username
-          )
-          .then(() => {
-            let reload = new Promise((resolve, reject) => {
-              this.$store.dispatch('org_dashboard/loadFundingContracts', { notify: resolve });
+        approveSelectedPaymentRequests() {
+          this.isApproving = true;
+
+          let promises = this.selectedToApprove.map(
+            p => deipRpc.broadcast.approveFundingWithdrawalRequestAsync(
+              this.user.privKey,
+              p.paymentId,
+              this.user.username
+          ));
+
+          Promise.all(promises)
+            .then(() => {
+              let reload = new Promise((resolve, reject) => {
+                this.$store.dispatch('org_dashboard/loadFundingContracts', { notify: resolve });
+              });
+              return Promise.all([reload]);
+            })
+            .then(() => {
+              this.$store.dispatch('layout/setSuccess', {
+                message: `Payment requests have been approved successfully!`
+              });
+            })
+            .catch((err) => {
+              console.log(err);
+              this.$store.dispatch('layout/setError', {
+                  message: `An error occurred while sending the request, please try again later.`
+              });
+            })
+            .finally(() => {
+              this.selectedToApprove = [];
+              this.isApproving = false;
             });
-            return Promise.all([reload]);
-          })
-          .then(() => {
-            this.$store.dispatch('layout/setSuccess', {
-              message: "Payment request has been approved successfully!"
-            });
-          }, (err) => {
-            console.log(err);
-            this.$store.dispatch('layout/setError', {
-              message: "An error occurred while sending the request, please try again later"
-            });
-          });
+        }
+      },
+      
+      watch: {
+        'selected': function (newVal, oldVal) {
+          this.selectedToCertify = newVal.filter(p => p.status == WITHDRAWAL_PENDING);
+          this.selectedToApprove = newVal.filter(p => p.status == WITHDRAWAL_CERTIFIED);
         }
       }
     };
