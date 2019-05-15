@@ -117,7 +117,8 @@
                         deipRpc.broadcast.createGrantAsync(
                             this.user.privKey,
                             this.user.username,
-                            this.toAssetUnits( this.grantInfo.amount ),
+                            his.grantInfo.amount,
+                            window.env.ASSET_UNIT,
                             this.grantInfo.discipline.label,
                             startBlock,
                             endBlock,

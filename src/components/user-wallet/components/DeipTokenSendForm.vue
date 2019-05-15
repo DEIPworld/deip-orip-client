@@ -57,7 +57,7 @@
         name: "DeipTokenSendForm",
 
         props: {
-            deipTokenBalance: { required: true, type: Number }
+            deipTokenBalance: { required: true }
         },
 
         data() { 
@@ -131,7 +131,8 @@
                         this.user.privKey,
                         this.user.username,
                         this.form.to,
-                        this.toAssetUnits( this.form.amount ),
+                        this.form.amount,
+                        window.env.ASSET_UNIT,
                         this.form.memo
                     ).then(data => {
                         this.$emit('deipTokensTransfered')

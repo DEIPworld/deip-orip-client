@@ -274,7 +274,7 @@
                 user: 'auth/user'
             }),
             deipTokenBalance() {
-                return this.account ? this.fromAssetsToFloat(this.account.balance) : 0;
+                return this.account ? this.fromAssetsToFloat(this.account.balances.find(a => a.asset_id == 0)) : 0;
             },
             commonTokenBalance() {
                 return this.account ? this.toCommonTokens(this.account.common_tokens_balance) : 0;

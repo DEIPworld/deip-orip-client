@@ -181,12 +181,16 @@ const actions = {
 			})
 			.then((withdrawals) => {
 				for (let i = 0; i < contract.relations.length; i++) {
-					contract.relations[i].withdrawals = withdrawals[i];
+					contract.relations[i].withdrawals = withdrawals[i].filter(w => w.funding_research_relation_id == contract.relations[i].id);
 				}
 				flattenWithdrawals.push(...[].concat.apply([], withdrawals));
-				return Promise.all(flattenWithdrawals.map(payment => paymentRequestsHttp.getPaymentRequestRefByHash(payment.research_id, payment.funding_research_relation_id, payment.attachment)));
+				return Promise.all(flattenWithdrawals
+					.map(payment => payment.attachment 
+						? paymentRequestsHttp.getPaymentRequestRefByHash(payment.research_id, payment.funding_research_relation_id, payment.attachment) 
+						: Promise.resolve(null)));
 			})
 			.then((attachments) => {
+				debugger;
 				for (let i = 0; i < flattenWithdrawals.length; i++) {
 					flattenWithdrawals[i].attachment = attachments[i] || null;
 				}

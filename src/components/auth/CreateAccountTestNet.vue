@@ -147,7 +147,8 @@
 
                 deipRpc.broadcast.accountCreateAsync(
                     config.key,
-                    this.toAssetUnits(config.fee),
+                    config.fee,
+                    window.env.ASSET_UNIT,
                     config.name,
                     this.formData.username,
                     authority,

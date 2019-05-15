@@ -89,6 +89,10 @@
                         <v-list-tile-title>Create Funding Opportunity</v-list-tile-title>
                     </v-list-tile>
 
+                    <v-list-tile v-if="isGrantor" :to="{ name: 'AgencyPrograms', params: { agency: tenant } }">
+                        <v-list-tile-title>Funding Opportunities</v-list-tile-title>
+                    </v-list-tile>
+                    
                     <v-list-tile v-if="isGrantor || isTreasury" :to="{ name: 'AgencyProgramWithdrawalRequests', params: { agency: tenant } }">
                         <v-list-tile-title>Milestone Reports</v-list-tile-title>
                     </v-list-tile>

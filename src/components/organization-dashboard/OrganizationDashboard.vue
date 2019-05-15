@@ -2,7 +2,7 @@
   <v-container fluid class="ma-0 pa-0">
     <v-layout row wrap>
      <v-flex xs12 class="c-p-5 c-pt-10">
-        <div><h1 class="title">{{organization.name}} Dashboard</h1></div>
+        <div><h1 class="title">{{organization.name == "NSF" ? "NSF" : "PI"}} Dashboard</h1></div>
       </v-flex>
       <v-flex xs12 class="c-p-5">
 
@@ -32,7 +32,8 @@
 
                           <template slot="items" slot-scope="props">
                             <td v-if="isProgramOfficer">
-                              <v-checkbox v-if="isProgramOfficer && props.item.availableAmount == 0"
+                              <v-checkbox 
+                                v-if="props.item.contract.status == FUNDING_CONTRACT_PENDING"
                                 v-model="props.selected"
                                 primary
                                 hide-details
@@ -42,12 +43,13 @@
                             <td>{{ props.item.awardNumber }}</td>
                             <td>{{ moment(new Date(props.item.from)).format("MM/YY") }}</td>
                             <td>{{ moment(new Date(props.item.to)).format("MM/YY") }}</td>
-                            <td v-if="isProgramOfficer">{{ props.item.org.name }}</td>
-                            <td v-if="isProgramOfficer">{{ props.item.pi | fullname}}</td>
+                            <td v-if="isProgramOfficer || isFinancialOfficer">{{ props.item.org.name }}</td>
+                            <td v-if="isProgramOfficer || isFinancialOfficer">{{ props.item.pi | fullname}}</td>
                             <td>$ {{ props.item.totalAmount }}</td>
                             <td>$ {{ props.item.withdrawnAmount }}</td>
                             <td>$ {{ props.item.pendingAmount }}</td>
-                            <td>$ {{ props.item.availableAmount }}</td>
+                            <td>$ {{ props.item.contract.status == FUNDING_CONTRACT_PENDING ? 0 : props.item.availableAmount }}</span>
+                            </td>
                           </template>
                         </v-data-table>
 
@@ -55,16 +57,20 @@
                           <v-btn style="min-width: 150px" @click="confirmDistribution.isShown = true" color="success" :disabled="!selectedToDistribute.length || isDistributing" :loading="isDistributing">
                             {{ selectedToDistribute.length ? `Distribute (${selectedToDistribute.length})` : `Distribute`}}
                           </v-btn>
+                          <span v-if="selectedToDistribute.length">
+                            <span class="title c-ml-5">{{selectedToDistribute.map(p => p.totalAmount).reduce((sum, amount) => sum + amount, 0)}}  </span>
+                            <v-icon size="20px">attach_money</v-icon>
+                          </span>
                          <confirm-action-dialog
                             :meta="confirmDistribution" 
                             :title="``"
                             :text="`Are you sure you want to distribute selected awards?`" 
-                            @confirmed="confirmDistribution.isShown = false"  
+                            @confirmed="distributeTokensToSelectedAwards(); confirmDistribution.isShown = false"  
                             @canceled="confirmDistribution.isShown = false">
                           </confirm-action-dialog>
                         </div>
 
-                        <div v-if="isPrincipalInvestigator || isCertifier">
+                        <div v-if="isPrincipalInvestigator">
                           <v-btn color="primary" @click="openRequestPaymentDialog()" dark>Request Payment</v-btn>
                           <request-award-payment-dialog :meta="selectedAwardToWithdrawMeta"></request-award-payment-dialog>
                         </div>
@@ -102,8 +108,8 @@
                             <td>{{ props.item.paymentNumber }}</td>
                             <td>{{ props.item.awardNumber }}</td>
                             <td>$ {{ props.item.amount }}</td>
-                            <td v-if="isProgramOfficer">{{ props.item.org.name }}</td>
-                            <td v-if="isProgramOfficer">{{ props.item.pi | fullname}}</td>
+                            <td v-if="isProgramOfficer || isFinancialOfficer">{{ props.item.org.name }}</td>
+                            <td v-if="isProgramOfficer || isFinancialOfficer">{{ props.item.pi | fullname}}</td>
                             <td>{{ props.item.statusTitle }}</td>
                             <td v-if="!props.item.attachment"></td>
                             <td v-else>
@@ -159,7 +165,10 @@
 <script>
     import { mapGetters } from 'vuex';
     import moment from 'moment';
-    import { withdrawalStatus, WITHDRAWAL_PENDING, WITHDRAWAL_CERTIFIED, WITHDRAWAL_APPROVED, WITHDRAWAL_REJECTED } from './../../services/FundingService'
+    import {
+      withdrawalStatus, WITHDRAWAL_PENDING, WITHDRAWAL_CERTIFIED, WITHDRAWAL_APPROVED, WITHDRAWAL_REJECTED, 
+      fundingContractStatus, FUNDING_CONTRACT_PENDING, FUNDING_CONTRACT_APPROVED, FUNDING_CONTRACT_REJECTED
+    } from './../../services/FundingService';
     import deipRpc from '@deip/deip-rpc-client';
 
     export default {
@@ -185,7 +194,8 @@
           tab: null,
           selectedAwardToWithdrawMeta: { isOpen: false, contract: null },
           fileStorageBaseUrl: window.env.DEIP_SERVER_URL,
-          ...withdrawalStatus
+          ...withdrawalStatus,
+          ...fundingContractStatus
         }
       },
 
@@ -202,13 +212,23 @@
         }),
 
         awardHeaders() {
-          return this.isProgramOfficer ? [
-            { text: '', sortable: false  },  // display checkbox for NSF ABT sending
+          return this.isFinancialOfficer ? [
             { text: 'Award ID', align: 'left', sortable: false, value: 'awardNumber' },
             { text: 'From', value: 'from' },
             { text: 'To', value: 'to' },
-            { text: 'Organization', value: 'org' }, // display organization info for NSF stuff
-            { text: 'PI', value: 'org' }, // display PI info for NSF stuff
+            { text: 'Organization', value: 'org' }, // display organization info for NSF PO
+            { text: 'PI', value: 'org' }, // display PI info for NSF PO
+            { text: 'Total amount', value: 'totalAmount' },
+            { text: 'Withdrawn amount', value: 'withdrawnAmount' },
+            { text: 'Pending amount', value: 'pendingAmount' },
+            { text: 'Avalable amount', value: 'availableAmount' }
+          ] : this.isProgramOfficer ? [
+            { text: '', sortable: false  },  // display checkbox for NSF PO
+            { text: 'Award ID', align: 'left', sortable: false, value: 'awardNumber' },
+            { text: 'From', value: 'from' },
+            { text: 'To', value: 'to' },
+            { text: 'Organization', value: 'org' }, // display organization info for NSF PO
+            { text: 'PI', value: 'org' }, // display PI info for NSF PO
             { text: 'Total amount', value: 'totalAmount' },
             { text: 'Withdrawn amount', value: 'withdrawnAmount' },
             { text: 'Pending amount', value: 'pendingAmount' },
@@ -226,12 +246,20 @@
         
         transactionsHeaders() {
           return this.isProgramOfficer ? [
-            { text: '', sortable: false  },  // display checkbox for NSF approval
+            { text: '', sortable: false  },  // display checkbox for NSF PO
             { text: 'Payment ID', value: 'paymentNumber' },
             { text: 'Award ID', value: 'awardNumber' },
             { text: 'Amount', value: 'amount' },
-            { text: 'Organization', value: 'org' }, // display organization info for NSF stuff
-            { text: 'PI', value: 'org' }, // display PI info for NSF stuff
+            { text: 'Organization', value: 'org' }, // display organization info for NSF PO
+            { text: 'PI', value: 'org' }, // display PI info for NSF PO
+            { text: 'Status', value: 'status' },
+            { text: 'Attachments', value: 'attachment' },
+          ] : this.isFinancialOfficer ? [
+            { text: 'Payment ID', value: 'paymentNumber' },
+            { text: 'Award ID', value: 'awardNumber' },
+            { text: 'Amount', value: 'amount' },
+            { text: 'Organization', value: 'org' }, // display organization info for NSF FO
+            { text: 'PI', value: 'org' }, // display PI info for NSF FO
             { text: 'Status', value: 'status' },
             { text: 'Attachments', value: 'attachment' },
           ] : this.isCertifier ? [
@@ -323,7 +351,35 @@
               this.selectedToApprove = [];
               this.isApproving = false;
             });
-        }
+        },
+
+        distributeTokensToSelectedAwards() {
+          this.isDistributing = true;
+          let uniqueContracts = [...new Set(this.selectedToDistribute.map(a => a.contract.id))];
+          let promises = uniqueContracts.map(contractId => deipRpc.broadcast.approveFundingAsync(this.user.privKey, contractId, this.user.username))
+          Promise.all(promises)
+            .then(() => {
+              let reload = new Promise((resolve, reject) => {
+                this.$store.dispatch('org_dashboard/loadFundingContracts', { notify: resolve });
+              });
+              return Promise.all([reload]);
+            })
+            .then(() => {
+              this.$store.dispatch('layout/setSuccess', {
+                message: `NSF Grant Tokens have been sent successfully!`
+              });
+            })
+            .catch((err) => {
+              console.log(err);
+              this.$store.dispatch('layout/setError', {
+                message: `An error occurred while sending the request, please try again later.`
+              });
+            })
+            .finally(() => {
+              this.selectedToDistribute = [];
+              this.isDistributing = false;
+            });
+        }        
       },
       
       watch: {
@@ -332,7 +388,7 @@
           this.selectedToApprove = newVal.filter(p => p.status == WITHDRAWAL_CERTIFIED);
         },
         'selectedAwards': function (newVal, oldVal) {
-          this.selectedToDistribute = newVal.filter(p => p.availableAmount == 0);
+          this.selectedToDistribute = newVal;
         }
       }
     };

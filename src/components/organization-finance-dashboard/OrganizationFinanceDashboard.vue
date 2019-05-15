@@ -96,7 +96,27 @@
 
         issueTokens() {
           this.isIssuingTokens = true;
-          this.isIssuingTokens = false;
+
+          deipRpc.broadcast.issueAssetBackedTokensAsync(
+            this.user.privKey,
+            this.user.username,
+            3, parseInt(this.amountToIssue)
+          )
+          .then(() => {
+            this.$store.dispatch('layout/setSuccess', {
+              message: `Tokens have been issued successfully!`
+            });
+          })
+          .catch((err) => {
+            console.log(err);
+            this.$store.dispatch('layout/setError', {
+                message: `An error occurred while sending the request, please try again later.`
+            });
+          })
+          .finally(() => {
+            this.isIssuingTokens = false;
+            this.amountToIssue = null;
+          })
         }
 
       },

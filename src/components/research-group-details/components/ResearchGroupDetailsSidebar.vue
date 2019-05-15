@@ -145,7 +145,7 @@
             }),
 
             deipTokenBalance() {
-                return this.fromAssetsToFloat(this.group.balance);
+                return this.fromAssetsToFloat(this.group.balances.find(a => a.asset_id == 0));
             },
 
             isResearchGroupMember() {

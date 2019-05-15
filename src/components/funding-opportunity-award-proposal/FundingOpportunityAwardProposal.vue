@@ -286,6 +286,7 @@
     import deipRpc from '@deip/deip-rpc-client';
     import _ from 'lodash';
     import { getOrganizationTitle } from './../../utils/organizations';
+    import { signOperation, sendTransaction } from './../../utils/blockchain'
 
     export default {
         name: "FundingOpportunityAwardProposal",
@@ -454,9 +455,12 @@
                 researcher: funding.researcher.user.account.name,
                 research_id: funding.research.id,
                 research_expenses: [
-                  [1, this.toAssetUnits(salary)],
-                  [2, this.toAssetUnits(equipment)],
-                  [3, this.toAssetUnits(businessTravel)]
+                  // [1, this.toAssetUnits(salary)],
+                  // [2, this.toAssetUnits(equipment)],
+                  // [3, this.toAssetUnits(businessTravel)]
+                  [1, salary ],
+                  [2, equipment ],
+                  [3, businessTravel ]
                 ],
                 organisation_id: funding.researcher.user.account.organisation_id,
                 university_overhead: (parseInt(funding.overhead) || 0) * this.DEIP_1_PERCENT,
@@ -473,49 +477,42 @@
               researches.push(research);
             }
 
-            let op = {
-              fundingOpportunityId: this.program.id,
-              creator: this.user.username,
-              researches: researches,
-              total_amount: this.toAssetUnits(total_amount),
-            }
-
-            console.log(op);            
             var contractId;
             deipRpc.broadcast.createFundingAsync(
               this.user.privKey,
-              op.fundingOpportunityId,
-              op.creator,
-              op.researches,
-              op.total_amount
+              this.program.id,
+              this.user.username,
+              researches,
+              total_amount,
+              "NGT"
             )
-            .then(() => deipRpc.api.getFundingsAsync())
-            .then((contracts) => {
-              contractId = contracts.length ? contracts[contracts.length -1].id : 0;
-              return deipRpc.broadcast.approveFundingAsync(this.user.privKey, contractId,this.user.username);
-            })
-            .then(() => {
-              this.$store.dispatch('layout/setSuccess', {
-                message: "Funding proposal has been created succesfully!"
-              });
-              this.$router.push({
-                name: 'FundingOpportunityAwardDetails', 
-                params: { 
-                  agency: decodeURIComponent(this.agencyProfile._id), 
-                  foaId: decodeURIComponent(this.program.funding_opportunity_number),
-                  contractId: decodeURIComponent(contractId)
-                }
-              });
-            })
-            .catch((err) => {
-              console.log(err);
-              this.$store.dispatch('layout/setError', {
-                message: "An error occurred while contributing to fundraise, please try again later"
-              });
-            })
-            .finally(() => {
-              this.isSaving = false;
-            })
+              .then(() => deipRpc.api.getFundingsAsync())
+              .then((contracts) => {
+                contractId = contracts.length ? contracts[contracts.length -1].id : 0;
+                // return deipRpc.broadcast.approveFundingAsync(this.user.privKey, contractId,this.user.username);
+              })
+              .then(() => {
+                this.$store.dispatch('layout/setSuccess', {
+                  message: "Funding proposal has been created succesfully!"
+                });
+                this.$router.push({
+                  name: 'FundingOpportunityAwardDetails', 
+                  params: { 
+                    agency: decodeURIComponent(this.agencyProfile._id), 
+                    foaId: decodeURIComponent(this.program.funding_opportunity_number),
+                    contractId: decodeURIComponent(contractId)
+                  }
+                });
+              })
+              .catch((err) => {
+                console.log(err);
+                this.$store.dispatch('layout/setError', {
+                  message: "An error occurred while contributing to fundraise, please try again later"
+                });
+              })
+              .finally(() => {
+                this.isSaving = false;
+              })
           }
         },
 

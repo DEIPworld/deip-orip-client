@@ -159,7 +159,7 @@
             }),
 
             deipTokenBalance() {
-                return this.group ? this.fromAssetsToFloat(this.group.balance) : 0;
+                return this.group ? this.fromAssetsToFloat(this.group.balances.find(a => a.asset_id == 0)) : 0;
             },
         },
 

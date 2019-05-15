@@ -189,8 +189,10 @@
               this.user.account.organisation_id,
               this.user.username,
               this.purpose,
-              this.toAssetUnits(this.amount),
-              this.description
+              this.amount,
+              "NGT",
+              this.description,
+              ""
             )
             // .then(() => deipRpc.api.getFundingWithdrawalRequestsAsync())
             // .then((requests) => {

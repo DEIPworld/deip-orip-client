@@ -417,7 +417,8 @@
 				    this.user.privKey,
                     this.tokenSale.id,
                     this.user.username,
-                    this.toAssetUnits(this.amountToContribute)
+                    this.amountToContribute,
+                    window.env.ASSET_UNIT
                 ).then((data) => {
                     this.$store.dispatch('rd/loadResearchTokenSale', {researchId: this.research.id});
                     this.$store.dispatch('rd/loadResearchTokenHolders', {researchId: this.research.id});

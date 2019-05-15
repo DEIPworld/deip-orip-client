@@ -30,6 +30,21 @@ export function signOperation(operation, ownerKey) {
     })
 }
 
+export async function sendTransaction(tx) {
+    const promise = new Promise((resolve) => {
+        deipRpc.api.broadcastTransactionSynchronous(tx, function (err, result) {
+            if (err) {
+                console.log(err);
+                resolve({ isSuccess: false, txInfo: null })
+            } else {
+                console.log(result);
+                resolve({ isSuccess: true, txInfo: result })
+            }
+        });
+    });
+    return promise;
+}
+
 export async function getTransaction(trxId) {
     return new Promise((resolve, reject) => {
         deipRpc.api.getTransaction(trxId, function(err, result) {
@@ -206,5 +221,6 @@ export function toAssetUnits(amount) {
 };
 
 export function fromAssetsToFloat(assets) {
-    return parseFloat(assets.split(' ')[0]);
+    // return parseFloat(assets.split(' ')[0]);
+    return assets ? assets.amount : 0;
 };

@@ -2,7 +2,7 @@
 <template>
   <div>
     <v-dialog v-model="meta.isOpen" persistent transition="scale-transition" max-width="700px">
-      <v-card class="">
+      <v-card>
         <v-toolbar dark color="primary">
           <v-btn icon dark @click="close()">
             <v-icon>close</v-icon>
@@ -10,96 +10,98 @@
           <v-toolbar-title>Payment Request</v-toolbar-title>
           <v-spacer></v-spacer>
         </v-toolbar>
-        <v-card-title></v-card-title>
-        <v-card-text>
-            <v-select
-              ref="paymentAward"
-              v-model="award"
-              :items="awards"
-              label="Award ID"
-              return-object
-            >
-              <template slot="item" slot-scope="data">
-                <span class="c-mr-1 c-ml-1">{{ data.item.awardNumber }}</span>
-                <span class="c-mr-1 c-ml-1">|</span>
-                <span class="c-mr-1 c-ml-1">{{ data.item.contract.foa.funding_opportunity_number }}</span>
-              </template>
-              <template slot="selection" slot-scope="data">
-                <span class="c-mr-1 c-ml-1">{{ data.item.awardNumber }}</span>
-                <span class="c-mr-1 c-ml-1">|</span>
-                <span class="c-mr-1 c-ml-1">{{ data.item.contract.foa.funding_opportunity_number }}</span>
-              </template>
-            </v-select>
+        <v-card-text class="c-pt-5 c-pr-10 c-pl-10">
+          <v-select
+            ref="paymentAward"
+            v-model="award"
+            :items="awards"
+            label="Award ID"
+            return-object
+          >
+            <template slot="item" slot-scope="data">
+              <span class="c-mr-1 c-ml-1">{{ data.item.awardNumber }}</span>
+              <span class="c-mr-1 c-ml-1">|</span>
+              <span class="c-mr-1 c-ml-1">{{ data.item.contract.foa.funding_opportunity_number }}</span>
+            </template>
+            <template slot="selection" slot-scope="data">
+              <span class="c-mr-1 c-ml-1">{{ data.item.awardNumber }}</span>
+              <span class="c-mr-1 c-ml-1">|</span>
+              <span class="c-mr-1 c-ml-1">{{ data.item.contract.foa.funding_opportunity_number }}</span>
+            </template>
+          </v-select>
 
-            <v-text-field
-              label="Amount"
-              ref="paymentAmount"
-              v-model="paymentAmount"
-              :rules="[
-                rules.required, 
-                rules.isDigit,
-                rules.withinAwardAvailableAmount
-              ]"
-              :hint="award ? `Available amount: $ ${this.award.availableAmount}` : ''"
-              persistent-hint
-              mask="##############"
-              append-icon="local_atm"
-              :disabled="!award"
-            ></v-text-field>
+          <v-text-field
+            label="Amount"
+            ref="paymentAmount"
+            v-model="paymentAmount"
+            :rules="[
+              rules.required, 
+              rules.isDigit,
+              rules.withinAwardAvailableAmount
+            ]"
+            :hint="award ? `Available amount: $ ${this.award.availableAmount}` : ''"
+            persistent-hint
+            mask="##############"
+            append-icon="local_atm"
+            :disabled="!award"
+          ></v-text-field>
 
-            <datetime-picker
-              :allowed-dates="allowedPaymentDates"
-              date-placeholder="Payment Date"
-              :date-hint="award ? `Award period: ${moment(new Date(award.from)).format('MM/YY')} - ${moment(new Date(award.to)).format('MM/YY')}` : ''"
-              :date-persistent-hint="true"
-              :dateOnly="true"
-              @input="(val) => {
-                paymentDate = new Date(val); 
-              }"
-              :rules="[
-                rules.greaterThanNow,
-                rules.withinAwardPeriod
-              ]"
-              :disabled="!award"
-            ></datetime-picker>
+          <datetime-picker
+            :allowed-dates="allowedPaymentDates"
+            date-placeholder="Payment Date"
+            :date-hint="award ? `Award period: ${moment(new Date(award.from)).format('MM/YY')} - ${moment(new Date(award.to)).format('MM/YY')}` : ''"
+            :date-persistent-hint="true"
+            :dateOnly="true"
+            @input="(val) => {
+              paymentDate = new Date(val); 
+            }"
+            :rules="[
+              rules.greaterThanNow,
+              rules.withinAwardPeriod
+            ]"
+            :disabled="!award"
+          ></datetime-picker>
 
-            <v-textarea
-              class="c-mt-2"
-              label="Payment purpose"
-              rows="2"
-              ref="paymentPurpose"
-              v-model="paymentPurpose"
-              auto-grow
-              append-icon="notes"
-              :disabled="!award"
-            ></v-textarea>
-            
-            <div>
-              <div v-if="dropzoneOptions">
-                <vue-dropzone ref="paymentAttachments" id="attachments-dropzone" 
-                  :options="dropzoneOptions" 
-                  @vdropzone-success-multiple="vdropzoneSuccessMultiple"
-                  @vdropzone-error="vdropzoneError">
-                </vue-dropzone>
-              </div>
-              <div v-else>
-                <div id="attachments-dropzone" class="vue-dropzone dropzone non-clickable">
-                  <div class="dz-default dz-message">
-                    <span>Drop files here to upload</span>
-                  </div>
+          <v-textarea
+            class="c-mt-2"
+            label="Payment purpose"
+            rows="2"
+            ref="description"
+            v-model="description"
+            auto-grow
+            append-icon="notes"
+            :disabled="!award"
+          ></v-textarea>
+          
+          <div>
+            <div v-if="dropzoneOptions">
+              <vue-dropzone ref="paymentAttachments" id="attachments-dropzone" 
+                :options="dropzoneOptions" 
+                @vdropzone-success-multiple="vdropzoneSuccessMultiple"
+                @vdropzone-error="vdropzoneError">
+              </vue-dropzone>
+            </div>
+            <div v-else>
+              <div id="attachments-dropzone" class="vue-dropzone dropzone non-clickable">
+                <div class="dz-default dz-message">
+                  <span>Drop files here to upload</span>
                 </div>
               </div>
             </div>
+          </div>
         </v-card-text>
 
-        <v-card-actions class="text-align-right">
-          <v-btn color="primary" @click="close()" flat>Close</v-btn>
-          <v-btn color="primary" @click="requestPayment()" flat>Submit</v-btn>
-
+        <v-card-actions class="c-pb-5 c-pr-10">
+          <v-spacer></v-spacer>
+          <v-btn class="grey--text" @click="close()" flat>Close</v-btn>
+          <v-btn color="primary" 
+            @click="requestPayment()" outline 
+            :disabled="isSubmitDisabled || isLoading" 
+            :loading="isLoading">Submit</v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
-    </div>
+</div>
 </template>
 
 
@@ -123,7 +125,7 @@
             award: undefined,
             paymentAmount: undefined,
             paymentDate: undefined,
-            paymentPurpose: undefined,
+            description: undefined,
             isLoading: false,
             rules: {
               greaterThanNow: val => Date.parse(val) > Date.now() || 'Date should be greater than now',
@@ -151,11 +153,10 @@
             user: 'auth/user',
             awards: 'org_dashboard/currentOrganizationAwards'
           }),
-          isDisabled() {
-            return false;
+          isSubmitDisabled() {
+            return !this.award || !this.paymentAmount || !this.paymentDate || !this.description;
           },
           dropzoneOptions() {
-            console.log(this.award);
             return this.award && this.timestamp ? {
               url: `${window.env.DEIP_SERVER_URL}/payment-requests/upload-files`,
               paramName: "application-content",
@@ -178,6 +179,7 @@
           }
         },
         methods: {
+
           close() {
             this.isLoading = false;
             this.meta.isOpen = false;
@@ -185,6 +187,7 @@
               this.$refs.paymentAttachments.removeAllFiles();
             }
           },
+
           allowedPaymentDates(val) {
             return this.award ? (
               Date.parse(val) >= Date.parse(this.award.from) && 
@@ -192,9 +195,23 @@
               Date.parse(val) > Date.now()
             ) : false;
           },
+
           requestPayment() {
             this.isLoading = true;
-            this.$refs.paymentAttachments.processQueue();
+            let queuedFiles = this.$refs.paymentAttachments.getQueuedFiles();
+            if (queuedFiles.length) {
+              this.$refs.paymentAttachments.processQueue();
+            } else {
+              this.sendRequest("");
+            }
+          },
+
+          vdropzoneSuccessMultiple(files, res) {
+            const attachmentsRef = res;
+            if (!attachmentsRef.hash) {
+                throw new Error("File upload has failed")
+            }
+            this.sendRequest(attachmentsRef.hash)
           },
 
           vdropzoneError(file, message, xhr) {
@@ -204,14 +221,7 @@
             this.close();
           },
           
-          vdropzoneSuccessMultiple(files, res) {
-            const self = this;
-            const attachmentsRef = res;
-
-            if (!attachmentsRef.hash) {
-                throw new Error("File upload has failed")
-            }
-
+          sendRequest(hash) {
             deipRpc.broadcast.createFundingWithdrawalRequestAsync(
               this.user.privKey,
               this.award.relation.id,
@@ -220,9 +230,10 @@
               this.user.account.organisation_id,
               this.user.username,
               1, // purpose
-              this.toAssetUnits(this.paymentAmount),
-              this.paymentPurpose,
-              attachmentsRef.hash
+              this.paymentAmount,
+              "NGT",
+              this.description,
+              hash
             )
             .then(() => {
               let reload = new Promise((resolve, reject) => {
@@ -253,7 +264,7 @@
               if (newVal) {
                 this.timestamp = (new Date()).getTime();
                 this.$refs.paymentAmount.reset();
-                this.$refs.paymentPurpose.reset();
+                this.$refs.description.reset();
                 this.$refs.paymentAward.reset();
                 this.paymentDate = undefined;
               } 
@@ -262,7 +273,7 @@
 
         created() {
           this.timestamp = (new Date()).getTime();
-        },
+        }
     };
 </script>
 

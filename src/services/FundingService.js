@@ -10,7 +10,17 @@ const withdrawalStatus = {
   WITHDRAWAL_REJECTED
 };
 
+export const FUNDING_CONTRACT_PENDING = 1;
+export const FUNDING_CONTRACT_APPROVED = 2;
+export const FUNDING_CONTRACT_REJECTED = 3;
+
+const fundingContractStatus = {
+  FUNDING_CONTRACT_PENDING,
+  FUNDING_CONTRACT_APPROVED,
+  FUNDING_CONTRACT_REJECTED
+};
 
 export {
-  withdrawalStatus
+  withdrawalStatus,
+  fundingContractStatus
 }

@@ -127,7 +127,8 @@
                             this.user.privKey,
                             this.user.username,
                             this.user.username, // send myself (convert)
-                            this.toAssetUnits(this.amount)
+                            this.amount,
+                            window.env.ASSET_UNIT
                         );
                     } else {
                         // commons to deip tokens
