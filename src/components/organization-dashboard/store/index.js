@@ -190,7 +190,6 @@ const actions = {
 						: Promise.resolve(null)));
 			})
 			.then((attachments) => {
-				debugger;
 				for (let i = 0; i < flattenWithdrawals.length; i++) {
 					flattenWithdrawals[i].attachment = attachments[i] || null;
 				}

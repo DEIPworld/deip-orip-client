@@ -1,7 +1,7 @@
 <template>
-  <v-container fluid class="ma-0 pa-0">
-    <v-layout row wrap>
-      <v-flex xs12 class="c-p-5 c-pt-10">
+  <v-container fluid class="ma-0 pb-0">
+    <v-layout row wrap class="c-pt-10">
+      <v-flex xs12 class="c-pl-5">
         <div><h1 class="title">{{organization.name}} Balance</h1></div>
       </v-flex>
       <v-flex xs12 class="c-p-5">
@@ -24,24 +24,52 @@
           </v-list>
         </v-card>
       </v-flex>
-      <v-flex xs12 class="c-p-5">
-        <div>
-          <v-btn class="ma-0" color="primary"><v-icon>attach_money</v-icon>Issue Tokens</v-btn>
-        </div>
-      </v-flex>
-      <v-flex xs4 class="c-p-5">
-        <div class="body-2">NSF grant tokens</div>
-        <div class="c-pt-2">
-          <v-text-field v-model="amountToIssue" label="Amount" mask="##############" suffix="$"></v-text-field>
-        </div>
-        <div class="c-pt-2">
-          <v-btn @click="issueTokens()" 
-            class="ma-0" block color="primary" 
-            :disabled="!amountToIssue || isIssuingTokens" 
-            :loading="isIssuingTokens">
-            Emit
+      <v-flex xs3 class="c-p-5">
+        <div class="c-pb-10">
+          <v-btn :outline="showIssueTokensControl" class="ma-0" style="min-width: 150px" color="primary" @click="toggleIssueTokensControl()">
+            <v-icon v-if="!showIssueTokensControl">attach_money</v-icon> {{showIssueTokensControl ? 'Hide' : 'Issue Tokens'}}</span>
           </v-btn>
         </div>
+        <div v-show="showIssueTokensControl">
+          <div class="body-2">NSF grant tokens</div>
+          <div class="c-pt-2">
+            <v-text-field v-model="amountToIssue" label="Amount" mask="##############" suffix="$"></v-text-field>
+          </div>
+          <div class="c-pt-2">
+            <v-btn @click="issueTokens()" 
+              class="ma-0" block color="primary" 
+              :disabled="!amountToIssue || isIssuingTokens" 
+              :loading="isIssuingTokens">
+              Emit
+            </v-btn>
+          </div>
+        </div>
+      </v-flex>
+      <v-flex xs9 class="c-p-5">
+        <v-flex xs12>
+          <template row v-if="transactions.length">
+            <v-data-table :headers="financialTransactionsHeaders" :items="transactions">
+              <template slot="items" slot-scope="props">
+                <td>
+                  <v-icon small class="c-pr-1" v-if="props.item.senderProfile.account">account_box</v-icon>
+                  <v-icon small class="c-pr-1" v-else-if="props.item.senderProfile.permlink == 'nsf'">account_balance</v-icon>                  
+                  <v-icon small class="c-pr-1" v-else>school</v-icon>
+                  {{ getFinancialTransactionSenderName(props.item) }}</td>
+                <td>
+                  <v-icon small class="c-pr-1" v-if="props.item.receiverProfile.account">account_box</v-icon>
+                  <v-icon small class="c-pr-1" v-else>school</v-icon>
+                  {{ getFinancialTransactionReceiverName(props.item) }}</td>
+                <td>
+                <!--  <v-icon small class="c-pr-1">school</v-icon> -->
+                  {{ getTxUniversity(props.item) }}
+                </td>
+                <td>{{ getTransactionType(props.item) }}</td>
+                <td>{{moment(props.item.time).format('MMMM Do YYYY, h:mm:ss a')}}</td>
+                <td>$ {{fromAssetsToFloat(props.item.amount)}}</td>
+              </template>
+            </v-data-table>
+          </template>
+        </v-flex>
       </v-flex>
     </v-layout>
   </v-container>
@@ -51,6 +79,12 @@
     import { mapGetters } from 'vuex';
     import moment from 'moment';
     import deipRpc from '@deip/deip-rpc-client';
+    import {
+      FUNDING_TRANSACTION_TRANSFER,
+      FUNDING_TRANSACTION_WITHDRAW,
+      FUNDING_TRANSACTION_FEE,
+      fundingTransactionStatus
+    } from './../../services/FundingService'
 
     export default {
       name: "OrganizationFinanceDashboard",
@@ -59,6 +93,7 @@
         return {
           amountToIssue: null,
           isIssuingTokens: false,
+          showIssueTokensControl: false,
           items: [{
               amount: 1000000,
               text: "Issued",
@@ -77,7 +112,29 @@
               text: "Withdrawn by PI's",
               isGreen: true
             }
-          ]
+          ],
+
+          financialTransactionsHeaders: [{
+              text: 'From', 
+              value: 'sender_organisation_id' 
+            }, {
+              text: 'To', 
+              value: 'receiver_organisation_id' 
+            }, {
+              text: 'Organization', 
+              value: 'receiver_organisation_id' 
+            }, {
+              text: 'Transaction', 
+              value: 'type' 
+            }, {
+              text: 'Date & Time', 
+              value: 'time' 
+            }, {
+              text: 'Amount', 
+              value: 'amount.amount' 
+            },
+          ],
+          ...fundingTransactionStatus
         }
       },
 
@@ -88,7 +145,9 @@
           isCertifier: 'auth/isCertifier',
           isProgramOfficer: 'auth/isProgramOfficer',
           isFinancialOfficer: 'auth/isFinancialOfficer',
-          organization: 'org_finance_dashboard/organization'
+          organization: 'org_finance_dashboard/organization',
+          organizations: 'org_finance_dashboard/organizations',
+          transactions: 'org_finance_dashboard/transactions'
         })
       },
 
@@ -117,6 +176,35 @@
             this.isIssuingTokens = false;
             this.amountToIssue = null;
           })
+        },
+
+        toggleIssueTokensControl() {
+          this.showIssueTokensControl = !this.showIssueTokensControl;
+        },
+
+        getFinancialTransactionSenderName(tx) {
+          return tx.senderProfile && tx.senderProfile.account ? this.$options.filters.fullname(tx.senderProfile) : (tx.senderProfile ? tx.senderProfile.name : "");
+        },
+
+        getFinancialTransactionReceiverName(tx) {
+          return tx.receiverProfile && tx.receiverProfile.account ? this.$options.filters.fullname(tx.receiverProfile) : (tx.receiverProfile ? tx.receiverProfile.name : "");
+        },
+
+        getTxUniversity(tx) {
+          return this.organizations.filter(o => o.id == tx.receiver_organisation_id).map(o => o.name)[0] || "";
+        },
+
+        getTransactionType(tx) {
+          if (tx.type == FUNDING_TRANSACTION_TRANSFER) {
+            return "Grant";
+          }
+          if (tx.type == FUNDING_TRANSACTION_WITHDRAW) {
+            return "Withdraw";
+          }
+          if (tx.type == FUNDING_TRANSACTION_FEE) {
+            return "University overhead";
+          }
+          return "";
         }
 
       },
@@ -124,6 +212,50 @@
       watch: {
 
       }
+
+
+
+                  // <v-expansion-panel>
+                  //   <v-expansion-panel-content v-for="(tx, transactionIdx) in transactions" :key="'tx-' + transactionIdx">
+                  //     <div slot="header">
+                  //       <div class="row text-align-center non-clickable" v-on:click.stop>
+                  //         <div class="col-2">
+                  //          <!-- <v-icon small class="c-pr-1">
+                  //             {{ !tx.isUniversityReceiver ? 'school' : 'face'}}
+                  //           </v-icon> -->
+                  //           {{getTransactionSenderName(tx)}}
+                  //         </div>
+                  //         <div class="col-2">
+                  //         <!--  <v-icon small class="c-pr-1">
+                  //             {{ !tx.isUniversityReceiver ? 'school' : 'face'}}
+                  //           </v-icon> -->
+                  //           {{getTransactionReceiverName(tx)}}</div>
+                  //         <div class="col-2">
+                  //           <v-icon small class="c-pr-1" v-if="getTxUniversity(tx)">
+                  //             {{'school'}}
+                  //           </v-icon>
+                  //           {{getTxUniversity(tx)}}
+                  //         </div>
+                  //         <div class="col-2 grey--text">
+                  //           {{getTransactionType(tx)}}
+                  //         </div>
+                  //         <div class="col-2 grey--text ">{{new Date(`${tx.time}Z`).toDateString()}}</div>
+                  //         <div class="col-2 bold">$ {{fromAssetsToFloat(tx.amount)}}</div>
+                  //       </div>
+                  //     </div>
+                  //     <v-card style="background-color: #f1f8fe">
+                  //       <v-card-text>
+                  //         <div class="row" >
+                  //           <div class="col-2"></div>
+                  //           <div class="col-8"></div>
+                  //           <div class="col-2"></div>
+                  //         </div>
+                  //       </v-card-text>
+                  //     </v-card>
+                  //   </v-expansion-panel-content>
+                  // </v-expansion-panel>
+
+
     };
 </script>
 
