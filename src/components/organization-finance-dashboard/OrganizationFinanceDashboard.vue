@@ -48,6 +48,7 @@
       <v-flex xs9 class="c-p-5">
         <v-flex xs12>
           <template row v-if="transactions.length">
+            <div class="subheading c-mb-5">Financial Transactions</div>
             <v-data-table :headers="financialTransactionsHeaders" :items="transactions">
               <template slot="items" slot-scope="props">
                 <td>

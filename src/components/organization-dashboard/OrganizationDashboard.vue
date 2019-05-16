@@ -13,7 +13,7 @@
           </v-tab>
 
           <v-tab key="transactions">
-            Transactions
+            Payment Requests
           </v-tab>
         </v-tabs>
 
