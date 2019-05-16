@@ -270,6 +270,7 @@
             { text: 'Payment ID', value: 'paymentNumber' },
             { text: 'Award ID', value: 'awardNumber' },
             { text: 'Amount', value: 'amount' },
+            { text: 'Payment Date', value: 'paymentDate' },
             { text: 'Status', value: 'status' },
             { text: 'Attachments', value: 'attachment' },
           ] : [

@@ -11,7 +11,8 @@ const state = {
 	organization: null,
 	organizations: [],
 	isLoadingOrganizationFinanceDashboardPage: undefined,
-	transactions: []
+	transactions: [],
+	tokenInfo: null
 }
 
 // getters
@@ -19,7 +20,8 @@ const getters = {
 	isLoadingOrganizationFinanceDashboardPage: state => state.isLoadingOrganizationFinanceDashboardPage,
 	organization: state => state.organization,
 	organizations: state => state.organizations,
-	transactions: state => state.transactions
+	transactions: state => state.transactions,
+	tokenInfo: state => state.tokenInfo
 }
 
 // actions
@@ -33,8 +35,11 @@ const actions = {
 			const organizationsLoad = new Promise((resolve, reject) => {
 				dispatch('loadOrganizations', { notify: resolve });
 			});
+			const tokenStatiscticLoad = new Promise((resolve, reject) => {
+				dispatch('loadStatisticToken', { notify: resolve, symbol: "NGT" });
+			});
 
-			return Promise.all([organizationsLoad]);
+			return Promise.all([organizationsLoad, tokenStatiscticLoad]);
 		})
 			.then(() => {
 				return dispatch('loadTransactions');
@@ -42,6 +47,16 @@ const actions = {
 			.finally(() => {
 				commit('SET_ORGANIZATION_DASHBOARD_LOADING_STATE', false);
 			});
+	},
+
+	loadStatisticToken({ commit, dispatch, state }, { symbol, notify }) {
+		return deipRpc.api.getAssetStatisticsAsync(symbol).then(stat => {
+			commit('SET_TOKEN_INFO', stat);
+		})
+		.catch(err => { console.log(err) })
+		.finally(() => {
+			if (notify) notify();
+		});
 	},
 
 	loadTransactions({ state, dispatch, commit, getters }) {
@@ -117,6 +132,10 @@ const mutations = {
 
 	['SET_TRANSACTIONS_HISTORY_LIST'](state, transactions) {
 		Vue.set(state, 'transactions', transactions)
+	},
+
+	['SET_TOKEN_INFO'](state, stat) {
+		Vue.set(state, 'tokenInfo', stat)
 	}
 
 }

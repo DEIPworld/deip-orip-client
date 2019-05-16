@@ -5,7 +5,7 @@
         <div><h1 class="title">{{organization.name}} Balance</h1></div>
       </v-flex>
       <v-flex xs12 class="c-p-5">
-        <v-card height="200px" width="20%" v-for="(item, i) in items" :key="i + '-stat'" style="float: left">
+        <v-card height="200px" width="20%" v-for="(item, i) in tokenStat" :key="i + '-stat'" style="float: left">
           <v-list dense class="c-p-5">
             <v-list-tile>
               <v-list-tile-content class="grey--text">
@@ -95,26 +95,6 @@
           amountToIssue: null,
           isIssuingTokens: false,
           showIssueTokensControl: false,
-          items: [{
-              amount: 1000000,
-              text: "Issued",
-            }, {
-              amount: 900000,
-              text: "Circulating",
-            }, {
-              amount: 300000,
-              text: "Available for NSF",
-            }, {
-              amount: 600000,
-              text: "Awarded to PI's",
-              isGreen: true
-            }, {
-              amount: 100000,
-              text: "Withdrawn by PI's",
-              isGreen: true
-            }
-          ],
-
           financialTransactionsHeaders: [{
               text: 'From', 
               value: 'sender_organisation_id' 
@@ -148,15 +128,39 @@
           isFinancialOfficer: 'auth/isFinancialOfficer',
           organization: 'org_finance_dashboard/organization',
           organizations: 'org_finance_dashboard/organizations',
-          transactions: 'org_finance_dashboard/transactions'
-        })
+          transactions: 'org_finance_dashboard/transactions',
+          tokenInfo: 'org_finance_dashboard/tokenInfo'
+        }),
+
+        tokenStat() {
+		      return this.tokenInfo ? [
+            {
+              amount: this.tokenInfo.total_issued,
+              text: "Issued",
+            },
+            {
+              amount: this.tokenInfo.circulating_supply,
+              text: "Circulating",
+            }, {
+              amount: this.tokenInfo.available_to_issuer,
+              text: "Available for NSF",
+            }, {
+              amount: this.tokenInfo.distributed,
+              text: "Awarded to PI's",
+              isGreen: true
+            }, {
+              amount: this.tokenInfo.withdrawn,
+              text: "Withdrawn by PI's",
+              isGreen: true
+            }
+          ] : [];
+        }
       },
 
       methods: {
 
         issueTokens() {
           this.isIssuingTokens = true;
-
           deipRpc.broadcast.issueAssetBackedTokensAsync(
             this.user.privKey,
             this.user.username,
@@ -166,6 +170,7 @@
             this.$store.dispatch('layout/setSuccess', {
               message: `Tokens have been issued successfully!`
             });
+            return this.$store.dispatch('org_finance_dashboard/loadStatisticToken', { symbol: "NGT"});
           })
           .catch((err) => {
             console.log(err);
