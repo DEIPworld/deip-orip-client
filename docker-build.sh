@@ -6,7 +6,7 @@ LATEST="latest"
 
 echo "Building deipworld/nsf-transparency-demo-web-client image..."
 export IMAGE_NAME="deipworld/nsf-transparency-demo-web-client:$TAG"
-export LATEST_IMAGE_NAME="deipworld/web-client:$LATEST"
+export LATEST_IMAGE_NAME="deipworld/nsf-transparency-demo-web-client:$LATEST"
 
 docker build -t=${IMAGE_NAME} . && 
 docker tag ${IMAGE_NAME} ${LATEST_IMAGE_NAME} && 
