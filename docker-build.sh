@@ -4,8 +4,8 @@ set -e
 TAG=$(git log -1 --pretty=%h)
 LATEST="latest"
 
-echo "Building deipworld/web-client image..."
-export IMAGE_NAME="deipworld/web-client:$TAG"
+echo "Building deipworld/nsf-transparency-demo-web-client image..."
+export IMAGE_NAME="deipworld/nsf-transparency-demo-web-client:$TAG"
 export LATEST_IMAGE_NAME="deipworld/web-client:$LATEST"
 
 docker build -t=${IMAGE_NAME} . && 
