@@ -110,6 +110,7 @@
                             <td>$ {{ props.item.amount }}</td>
                             <td v-if="isProgramOfficer || isFinancialOfficer">{{ props.item.org.name }}</td>
                             <td v-if="isProgramOfficer || isFinancialOfficer">{{ props.item.pi | fullname}}</td>
+                            <td>{{moment(props.item.paymentDate ).format('MMMM Do YYYY')}}</td>
                             <td>{{ props.item.statusTitle }}</td>
                             <td v-if="!props.item.attachment"></td>
                             <td v-else>
@@ -252,6 +253,7 @@
             { text: 'Amount', value: 'amount' },
             { text: 'Organization', value: 'org' }, // display organization info for NSF PO
             { text: 'PI', value: 'org' }, // display PI info for NSF PO
+            { text: 'Payment Date', value: 'paymentDate' },
             { text: 'Status', value: 'status' },
             { text: 'Attachments', value: 'attachment' },
           ] : this.isFinancialOfficer ? [
@@ -260,6 +262,7 @@
             { text: 'Amount', value: 'amount' },
             { text: 'Organization', value: 'org' }, // display organization info for NSF FO
             { text: 'PI', value: 'org' }, // display PI info for NSF FO
+            { text: 'Payment Date', value: 'paymentDate' },
             { text: 'Status', value: 'status' },
             { text: 'Attachments', value: 'attachment' },
           ] : this.isCertifier ? [
@@ -273,6 +276,7 @@
             { text: 'Payment ID', value: 'paymentNumber' },
             { text: 'Award ID', value: 'awardNumber' },
             { text: 'Amount', value: 'amount' },
+            { text: 'Payment Date', value: 'paymentDate' },
             { text: 'Status', value: 'status' },
             { text: 'Attachments', value: 'attachment' },
           ];

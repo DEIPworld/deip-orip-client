@@ -81,6 +81,7 @@ const getters = {
 						statusTitle: getStatusName(withdrawal.status),
 						award: rel,
 						attachment: withdrawal.attachment,
+						paymentDate: rel.milestones[0] ? rel.milestones[0].deadline : '',
 						org, 
 						pi
 					}
