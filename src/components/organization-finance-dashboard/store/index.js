@@ -103,6 +103,7 @@ const actions = {
 							.subtract(i + 1, "seconds")
 							.toString();
 					}
+					tx.time = new Date(tx.time.toString());
 				}
 
 				transactions.sort(function (a, b) {

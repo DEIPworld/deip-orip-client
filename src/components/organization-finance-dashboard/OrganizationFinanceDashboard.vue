@@ -24,7 +24,7 @@
           </v-list>
         </v-card>
       </v-flex>
-      <v-flex xs3 class="c-p-5">
+      <v-flex xs2 class="c-p-5">
         <div class="c-pb-10">
           <v-btn :outline="showIssueTokensControl" class="ma-0" style="min-width: 150px" color="primary" @click="toggleIssueTokensControl()">
             <v-icon v-if="!showIssueTokensControl">attach_money</v-icon> {{showIssueTokensControl ? 'Hide' : 'Issue Tokens'}}</span>
@@ -45,7 +45,7 @@
           </div>
         </div>
       </v-flex>
-      <v-flex xs9 class="c-p-5">
+      <v-flex xs10 class="c-p-5">
         <v-flex xs12>
           <template row v-if="transactions.length">
             <div class="subheading c-mb-5">Financial Transactions</div>
@@ -116,7 +116,9 @@
             },
           ],
           financialTransactionsPagination: {
-            rowsPerPage: 25
+            rowsPerPage: 25,
+            sortBy: 'time',
+            descending: true
           },
           ...fundingTransactionStatus
         }
