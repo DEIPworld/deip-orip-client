@@ -40,16 +40,15 @@
                               ></v-checkbox>
                             </td>
 
-                            <td>{{ props.item.awardNumber }}</td>
-                            <td>{{ moment(new Date(props.item.from)).format("MM/YY") }}</td>
-                            <td>{{ moment(new Date(props.item.to)).format("MM/YY") }}</td>
-                            <td v-if="isProgramOfficer || isFinancialOfficer">{{ props.item.org.name }}</td>
-                            <td v-if="isProgramOfficer || isFinancialOfficer">{{ props.item.pi | fullname}}</td>
-                            <td>$ {{ props.item.totalAmount }}</td>
-                            <td>$ {{ props.item.withdrawnAmount }}</td>
-                            <td>$ {{ props.item.pendingAmount }}</td>
-                            <td>$ {{ props.item.contract.status == FUNDING_CONTRACT_PENDING ? 0 : props.item.availableAmount }}</span>
-                            </td>
+                            <td><span class="body-1">{{ props.item.awardNumber }}</span></td>
+                            <td><span class="body-1">{{ moment(new Date(props.item.from)).format("MM/YY") }}</span></td>
+                            <td><span class="body-1">{{ moment(new Date(props.item.to)).format("MM/YY") }}</span></td>
+                            <td v-if="isProgramOfficer || isFinancialOfficer"><span class="body-1">{{ props.item.org.name }}</span></td>
+                            <td v-if="isProgramOfficer || isFinancialOfficer"><div style="min-width: 100px"><span class="body-1">{{ props.item.pi | fullname}}</span></div></td>
+                            <td><span class="body-1">$ {{ props.item.totalAmount }}</span></td>
+                            <td><span class="body-1">$ {{ props.item.withdrawnAmount }}</span></td>
+                            <td><span class="body-1">$ {{ props.item.pendingAmount }}</span></td>
+                            <td><span class="body-2">$ {{ props.item.contract.status == FUNDING_CONTRACT_PENDING ? 0 : props.item.availableAmount }}</span></td>
                           </template>
                         </v-data-table>
 
@@ -105,18 +104,31 @@
                               ></v-checkbox>
                             </td>
 
-                            <td>{{ props.item.paymentNumber }}</td>
-                            <td>{{ props.item.awardNumber }}</td>
-                            <td>$ {{ props.item.amount }}</td>
-                            <td v-if="isProgramOfficer || isFinancialOfficer">{{ props.item.org.name }}</td>
-                            <td v-if="isProgramOfficer || isFinancialOfficer">{{ props.item.pi | fullname}}</td>
-                            <td>{{moment(props.item.paymentDate ).format('MMMM Do YYYY')}}</td>
-                            <td>{{ props.item.statusTitle }}</td>
+                            <td><span class="body-1">{{ props.item.paymentNumber }}</span></td>
+                            <td><span class="body-1">{{ props.item.awardNumber }}</span></td>
+                            <td v-if="isProgramOfficer || isFinancialOfficer"><span class="body-1">{{ props.item.org.name }}</span></td>
+                            <td v-if="isProgramOfficer || isFinancialOfficer"><div style="min-width: 100px"><span class="body-1">{{ props.item.pi | fullname}}</span></div></td>
+                            <td><div style="min-width: 100px"><span class="body-1">{{moment(props.item.paymentDate ).format('MMMM Do YYYY')}}</span></div></td>
+                            <td><span class="body-2">$ {{ props.item.amount }}</span></td>
+                            <td>
+                              <v-chip class="payment-chip" v-if="props.item.status == WITHDRAWAL_PENDING" color="#d7edff" text-color="black">
+                                <span class="payment-label">{{ props.item.statusTitle }}</span>
+                              </v-chip>
+                              <v-chip class="payment-chip" v-else-if="props.item.status == WITHDRAWAL_APPROVED" color="#90da93" text-color="black">
+                                <span class="payment-label">{{ props.item.statusTitle }}</span>
+                              </v-chip>
+                              <v-chip class="payment-chip" v-else-if="props.item.status == WITHDRAWAL_CERTIFIED" color="#ffefbc" text-color="black">
+                                <span class="payment-label">{{ props.item.statusTitle }}</span>
+                              </v-chip>
+                              <v-chip class="payment-chip" v-else text-color="black">
+                                <span class="payment-label">{{ props.item.statusTitle }}</span>
+                              </v-chip>
+                            </td>
                             <td v-if="!props.item.attachment"></td>
                             <td v-else>
-                              <div v-for="file in props.item.attachment.packageFiles">
-                                <a target="_blank" class="a" :href="`${fileStorageBaseUrl}/payment-requests/refs/research/${props.item.award.research_id}/payment-attachment/${props.item.award.id}/${props.item.attachment.hash}/${file.hash}`">
-									                {{file.filename}}
+                              <div v-for="(file, i) in props.item.attachment.packageFiles">                              
+                                <a target="_blank" class="a" :title="file.filename" :href="`${fileStorageBaseUrl}/payment-requests/refs/research/${props.item.award.research_id}/payment-attachment/${props.item.award.id}/${props.item.attachment.hash}/${file.hash}`">
+                                  {{file.hash.slice(0, 8)}}
 							                  </a>
                               </div>
                             </td>
@@ -250,34 +262,34 @@
             { text: '', sortable: false  },  // display checkbox for NSF PO
             { text: 'Payment ID', value: 'paymentNumber' },
             { text: 'Award ID', value: 'awardNumber' },
-            { text: 'Amount', value: 'amount' },
             { text: 'Organization', value: 'org' }, // display organization info for NSF PO
             { text: 'PI', value: 'org' }, // display PI info for NSF PO
             { text: 'Payment Date', value: 'paymentDate' },
+            { text: 'Amount', value: 'amount' },
             { text: 'Status', value: 'status' },
             { text: 'Attachments', value: 'attachment' },
           ] : this.isFinancialOfficer ? [
             { text: 'Payment ID', value: 'paymentNumber' },
             { text: 'Award ID', value: 'awardNumber' },
-            { text: 'Amount', value: 'amount' },
             { text: 'Organization', value: 'org' }, // display organization info for NSF FO
             { text: 'PI', value: 'org' }, // display PI info for NSF FO
             { text: 'Payment Date', value: 'paymentDate' },
+            { text: 'Amount', value: 'amount' },
             { text: 'Status', value: 'status' },
             { text: 'Attachments', value: 'attachment' },
           ] : this.isCertifier ? [
             { text: '', sortable: false  }, // display checkbox for Organization Certifier
             { text: 'Payment ID', value: 'paymentNumber' },
             { text: 'Award ID', value: 'awardNumber' },
-            { text: 'Amount', value: 'amount' },
             { text: 'Payment Date', value: 'paymentDate' },
+            { text: 'Amount', value: 'amount' },
             { text: 'Status', value: 'status' },
             { text: 'Attachments', value: 'attachment' },
           ] : [
             { text: 'Payment ID', value: 'paymentNumber' },
             { text: 'Award ID', value: 'awardNumber' },
-            { text: 'Amount', value: 'amount' },
             { text: 'Payment Date', value: 'paymentDate' },
+            { text: 'Amount', value: 'amount' },
             { text: 'Status', value: 'status' },
             { text: 'Attachments', value: 'attachment' },
           ];
@@ -400,5 +412,14 @@
 </script>
 
 <style lang="less" scoped>
+
+.payment-chip {
+  height: 25px;
+}
+
+.payment-label {
+  width: 130px;
+  text-align: center;
+}
 
 </style>

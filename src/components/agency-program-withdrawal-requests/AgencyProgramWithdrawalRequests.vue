@@ -4,7 +4,7 @@
       <v-flex xs12>
         <div class="display-1 c-pb-10">{{agencyProfile._id.toUpperCase()}} withdraw requests</div>
 
-        <div class="row c-pt-8">
+        <div class="row c-pt-8" v-if="relationsWithReportsByOrganizations.length || withdrawRequestsByOrganizations.length">
 
           <div class="col-2">
             <span class="caption grey--text c-pl-5">

@@ -68,13 +68,13 @@
                         <v-list-tile-title>Wallet</v-list-tile-title>
                     </v-list-tile>
 
-                    <v-list-tile :to="{ name: 'claim-user-expertise-list' }">
+                <!-- <v-list-tile :to="{ name: 'claim-user-expertise-list' }">
                         <v-list-tile-title>Expertise Committee</v-list-tile-title>
-                    </v-list-tile>
+                    </v-list-tile> -->
 
-                    <v-list-tile :to="{ name: 'voting-for-block-producers' }">
+                <!-- <v-list-tile :to="{ name: 'voting-for-block-producers' }">
                         <v-list-tile-title>Voting for block producers</v-list-tile-title>
-                    </v-list-tile>
+                    </v-list-tile> -->
                     
                     
                 <!-- <v-list-tile v-if="user" :to="{ name: 'CreateDisciplineGrant' }">
@@ -117,7 +117,7 @@
                 </v-list>
             </v-menu>
 
-            <div v-if="isLoggedIn() && !isGrantor && !isOfficer && !isTreasury" class="mx-3" style="width: 180px">
+            <div v-if="isLoggedIn() && addResearchButtonAvailable" class="mx-3" style="width: 180px">
                 <v-btn dark round color="primary" class="full-width ma-0" to="/create-new-research">
                     <div class="col-grow">Add Research</div>
                     <v-icon dark small class="ml-2">add</v-icon>
@@ -125,8 +125,7 @@
             </div>
 
             <v-toolbar-items v-if="!isLoggedIn()">
-                <!-- <v-btn flat to="/sign-in">Sign In</v-btn> -->
-                <v-btn flat to="/sign-up">Beta Registration</v-btn>
+                <!-- <v-btn flat to="/sign-up">Beta Registration</v-btn> -->
             </v-toolbar-items>
         </v-toolbar>
     </div>
@@ -149,8 +148,17 @@
                 isGrantor: 'auth/isGrantor',
                 isOfficer: 'auth/isOfficer',
                 isTreasury: 'auth/isTreasury',
-                isFinancialOfficer: 'auth/isFinancialOfficer'
-            })
+                isFinancialOfficer: 'auth/isFinancialOfficer',
+                isProgramOfficer: 'auth/isProgramOfficer',
+                isPrincipalInvestigator: 'auth/isPrincipalInvestigator',
+                isCertifier: 'auth/isCertifier'
+            }),
+
+            addResearchButtonAvailable() {
+                return !this.isGrantor && !this.isOfficer && !this.isTreasury 
+                    && !this.isProgramOfficer && !this.isFinancialOfficer
+                    && !this.isPrincipalInvestigator && !this.isCertifier;
+            }
         },
 
         methods: {

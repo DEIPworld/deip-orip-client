@@ -1,7 +1,7 @@
 <template>
-  <v-container fluid class="ma-0 pb-0">
-    <v-layout row wrap class="c-pt-10">
-      <v-flex xs12 class="c-pl-5">
+  <v-container fluid class="ma-0 pa-0 c-pb-10">
+    <v-layout row wrap>
+      <v-flex xs12 class="c-p-5 c-pt-10">
         <div><h1 class="title">{{organization.name}} Balance</h1></div>
       </v-flex>
       <v-flex xs12 class="c-p-5">
@@ -31,7 +31,7 @@
           </v-btn>
         </div>
         <div v-show="showIssueTokensControl">
-          <div class="body-2">NSF grant tokens</div>
+          <div class="body-2">NSF Grant Tokens</div>
           <div class="c-pt-2">
             <v-text-field v-model="amountToIssue" label="Amount" mask="##############" suffix="$"></v-text-field>
           </div>
@@ -51,22 +51,22 @@
             <div class="subheading c-mb-5">Financial Transactions</div>
             <v-data-table :headers="financialTransactionsHeaders" :items="transactions">
               <template slot="items" slot-scope="props">
-                <td>
+                <td class="body-1">
                   <v-icon small class="c-pr-1" v-if="props.item.senderProfile.account">account_box</v-icon>
                   <v-icon small class="c-pr-1" v-else-if="props.item.senderProfile.permlink == 'nsf'">account_balance</v-icon>                  
                   <v-icon small class="c-pr-1" v-else>school</v-icon>
                   {{ getFinancialTransactionSenderName(props.item) }}</td>
-                <td>
+                <td class="body-1">
                   <v-icon small class="c-pr-1" v-if="props.item.receiverProfile.account">account_box</v-icon>
                   <v-icon small class="c-pr-1" v-else>school</v-icon>
                   {{ getFinancialTransactionReceiverName(props.item) }}</td>
-                <td>
+                <td class="body-1">
                 <!--  <v-icon small class="c-pr-1">school</v-icon> -->
                   {{ getTxUniversity(props.item) }}
                 </td>
-                <td>{{ getTransactionType(props.item) }}</td>
-                <td>{{moment(props.item.time).format('MMMM Do YYYY, h:mm:ss a')}}</td>
-                <td>$ {{fromAssetsToFloat(props.item.amount)}}</td>
+                <td class="body-1">{{ getTransactionType(props.item) }}</td>
+                <td class="body-1">{{moment(props.item.time).format('MMMM Do YYYY, h:mm:ss a')}}</td>
+                <td><span class="body-2">$ {{fromAssetsToFloat(props.item.amount)}}</span></td>
               </template>
             </v-data-table>
           </template>
@@ -202,7 +202,7 @@
 
         getTransactionType(tx) {
           if (tx.type == FUNDING_TRANSACTION_TRANSFER) {
-            return "Grant";
+            return "Award";
           }
           if (tx.type == FUNDING_TRANSACTION_WITHDRAW) {
             return "Withdraw";
@@ -218,49 +218,6 @@
       watch: {
 
       }
-
-
-
-                  // <v-expansion-panel>
-                  //   <v-expansion-panel-content v-for="(tx, transactionIdx) in transactions" :key="'tx-' + transactionIdx">
-                  //     <div slot="header">
-                  //       <div class="row text-align-center non-clickable" v-on:click.stop>
-                  //         <div class="col-2">
-                  //          <!-- <v-icon small class="c-pr-1">
-                  //             {{ !tx.isUniversityReceiver ? 'school' : 'face'}}
-                  //           </v-icon> -->
-                  //           {{getTransactionSenderName(tx)}}
-                  //         </div>
-                  //         <div class="col-2">
-                  //         <!--  <v-icon small class="c-pr-1">
-                  //             {{ !tx.isUniversityReceiver ? 'school' : 'face'}}
-                  //           </v-icon> -->
-                  //           {{getTransactionReceiverName(tx)}}</div>
-                  //         <div class="col-2">
-                  //           <v-icon small class="c-pr-1" v-if="getTxUniversity(tx)">
-                  //             {{'school'}}
-                  //           </v-icon>
-                  //           {{getTxUniversity(tx)}}
-                  //         </div>
-                  //         <div class="col-2 grey--text">
-                  //           {{getTransactionType(tx)}}
-                  //         </div>
-                  //         <div class="col-2 grey--text ">{{new Date(`${tx.time}Z`).toDateString()}}</div>
-                  //         <div class="col-2 bold">$ {{fromAssetsToFloat(tx.amount)}}</div>
-                  //       </div>
-                  //     </div>
-                  //     <v-card style="background-color: #f1f8fe">
-                  //       <v-card-text>
-                  //         <div class="row" >
-                  //           <div class="col-2"></div>
-                  //           <div class="col-8"></div>
-                  //           <div class="col-2"></div>
-                  //         </div>
-                  //       </v-card-text>
-                  //     </v-card>
-                  //   </v-expansion-panel-content>
-                  // </v-expansion-panel>
-
 
     };
 </script>
