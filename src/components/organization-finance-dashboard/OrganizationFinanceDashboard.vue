@@ -49,7 +49,7 @@
         <v-flex xs12>
           <template row v-if="transactions.length">
             <div class="subheading c-mb-5">Financial Transactions</div>
-            <v-data-table :headers="financialTransactionsHeaders" :items="transactions">
+            <v-data-table :headers="financialTransactionsHeaders" :items="transactions" :pagination.sync="financialTransactionsPagination">
               <template slot="items" slot-scope="props">
                 <td class="body-1">
                   <v-icon small class="c-pr-1" v-if="props.item.senderProfile.account">account_box</v-icon>
@@ -115,6 +115,9 @@
               value: 'amount.amount' 
             },
           ],
+          financialTransactionsPagination: {
+            rowsPerPage: 25
+          },
           ...fundingTransactionStatus
         }
       },
@@ -197,7 +200,9 @@
         },
 
         getTxUniversity(tx) {
-          return this.organizations.filter(o => o.id == tx.receiver_organisation_id).map(o => o.name)[0] || "";
+          // return this.organizations.filter(o => o.id == tx.receiver_organisation_id).map(o => o.name)[0] || "";
+          let org = this.organizations.find(o => tx.receiverProfile && tx.receiverProfile.account && tx.receiverProfile.account.organisation_id == o.id) || { name: 'NSF' };
+          return org.name;
         },
 
         getTransactionType(tx) {

@@ -6,6 +6,7 @@ import {
 	FUNDING_TRANSACTION_WITHDRAW,
 	FUNDING_TRANSACTION_FEE 
 } from './../../../services/FundingService'
+import moment from 'moment'
 
 const state = {
 	organization: null,
@@ -64,7 +65,7 @@ const actions = {
 		const fees = [];
 		const withdrawals = [];
 		const transfer = [];
-
+		
 		return Promise.all(state.organizations.map(o => deipRpc.api.getFundingTransactionsByReceiverOrganisationAsync(o.id)))
 			.then((items) => {
 				console.log(items);
@@ -88,7 +89,20 @@ const actions = {
 				for (let i = 0; i < orgTxList.length; i++) {
 					let tx = orgTxList[i];
 					tx.receiverProfile = state.organizations.find(o => o.id == tx.receiver_organisation_id);
-					tx.senderProfile = profiles.find(r => r.account.organisation_id == tx.sender_organisation_id);
+					tx.senderProfile = state.organizations.find(o => o.id == tx.sender_organisation_id);
+					/* profiles.find(r => r.account.organisation_id == tx.sender_organisation_id); */
+				}
+
+				for (let i = 0; i < transactions.length; i++) {
+					let tx = transactions[i];
+					if (tx.time == '1970-01-01T00:00:00') {
+						tx.time = moment()
+							.subtract(i + 1, "days")
+							.subtract(i + 1, "hours")
+							.subtract(i + 1, "minutes")
+							.subtract(i + 1, "seconds")
+							.toString();
+					}
 				}
 
 				transactions.sort(function (a, b) {
