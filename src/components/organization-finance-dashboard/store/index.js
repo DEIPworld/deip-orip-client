@@ -22,7 +22,36 @@ const getters = {
 	organization: state => state.organization,
 	organizations: state => state.organizations,
 	transactions: state => state.transactions,
-	tokenInfo: state => state.tokenInfo
+	tokenInfo: state => {
+
+		let total_issued = 2153500;
+
+		let withdrawn = state.transactions
+			.filter(tx => tx.type == FUNDING_TRANSACTION_WITHDRAW)
+			.map(tx => tx.amount.amount)
+			.reduce((sum, amount) => sum + amount, 0);
+
+		let distributed = state.transactions
+			.filter(tx => tx.type == FUNDING_TRANSACTION_TRANSFER || tx.type == FUNDING_TRANSACTION_FEE)
+			.map(tx => tx.amount.amount)
+			.reduce((sum, amount) => sum + amount, 0);
+
+		let available_to_issuer = total_issued - withdrawn - distributed;
+		let circulating_supply = total_issued - withdrawn;
+
+		return {
+			available_to_issuer: state.tokenInfo.available_to_issuer + available_to_issuer,
+			circulating_supply: state.tokenInfo.circulating_supply + circulating_supply,
+			description: state.tokenInfo.description,
+			distributed: state.tokenInfo.distributed + distributed,
+			id: state.tokenInfo.id,
+			issuer: state.tokenInfo.issuer,
+			name: state.tokenInfo.name,
+			symbol: state.tokenInfo.symbol,
+			total_issued: state.tokenInfo.total_issued + total_issued,
+			withdrawn: state.tokenInfo.withdrawn + withdrawn
+		}
+	}
 }
 
 // actions
