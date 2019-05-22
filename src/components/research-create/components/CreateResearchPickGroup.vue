@@ -92,12 +92,14 @@
 </script>
 
 <style lang="less" scoped>
+    @import "./../../../styles/colors";
+
     .group-line {
-        border: 1px solid #E0E0E0;
-        border-radius: 2px;
+        border: 1px solid @grey-lighten-2;
+        border-radius: 3px;
         cursor: pointer;
         &:hover  {
-            border-color: #2F80ED;
+            border-color: @grey-lighten-1;
         }
     }
     .group-nameplate {
@@ -107,7 +109,7 @@
     }
 
     .selected-group {
-        background-color: #eaeaea;
+        background-color: @grey-lighten-3;
     }
 
     .personal-group {

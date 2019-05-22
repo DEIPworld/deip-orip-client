@@ -3,17 +3,12 @@
       <div>
 
         <router-link :to="`/${encodeURIComponent(groupLink)}/group-details`" style="text-decoration: none; color: black">
-            <div class="sm-title bold">Research group <span class="a caption">(view)</span></div>
+            <div class="sm-title bold">Research group <span class="a caption view-group-caption ">(view)</span></div>
         </router-link>
         
         <!-- ### START Research Members Section ### -->
-        <div class="research-members-container spinner-container">
-            <v-progress-circular class="section-spinner"
-                v-if="isLoadingResearchMembers"
-                indeterminate color="primary"
-            ></v-progress-circular>
-
-            <div v-if="isLoadingResearchMembers === false" class="row-nowrap justify-between align-center c-pt-4 c-pb-2" v-for="(member, index) in membersList" :key="index">
+        <div class="research-members-container">
+            <div class="row-nowrap justify-between align-center c-pt-4 c-pb-2" v-for="(member, index) in membersList" :key="index">
                 <div>
                     <v-avatar size="40px">
                         <img v-if="member.profile" v-bind:src="member.profile.avatar | avatarSrc(40, 40, false)" />
@@ -27,12 +22,12 @@
             </div>
         </div>
         
-        <div v-if="isLoadingResearchMembers === false && isJoinRequestSectionAvailable" class="c-pt-4 c-pb-6">
+        <div v-if="isJoinRequestSectionAvailable" class="c-pt-4 c-pb-6">
             <div v-if="canJoinResearchGroup">
                 <v-btn @click="openJoinGroupDialog()" outline icon color="primary" class="ma-0">
                     <v-icon small>add</v-icon>
                 </v-btn>
-                <span class="deip-blue-color c-pl-3">Join research group</span>
+                <span class="c-pl-3">Join research group</span>
             </div>
             <div v-if="isActiveJoinRequest" class="text-align-center italic pt-2">You have sent a join request on {{new Date(currentJoinRequest.created).toDateString()}}, please wait for approval</div>
             <div v-if="isActiveInvite" class="text-align-center italic pt-2">
@@ -214,7 +209,7 @@
 
                                     <div class="pos-absolute" :style="{ left: currentCapPercent + '%' }">
                                         <v-tooltip bottom color="white">
-                                            <div class="chapter-point deip-blue-bg" slot="activator"></div>
+                                            <div class="chapter-point" slot="activator"></div>
                                             
                                             <div>
                                                 <div class="grey--text cap-value text-align-center">{{ currentCap }}</div>
@@ -468,6 +463,8 @@
 </script>
 
 <style lang="less" scoped>
+    @import './../../../styles/colors';
+
     .vote-btn-area {
         border: 1px solid #2F80ED;
         border-radius: 3px;
@@ -485,6 +482,7 @@
         width: 14px;
         height: 14px;
         border-radius: 50%;
+        background-color: var(--v-primary-base);
 
         &:hover {
             box-shadow: 0px 6px 6px -3px rgba(0,0,0,0.2), 
@@ -522,11 +520,15 @@
     }
 
     .eci-item {
-        border: 1px solid #e4e4e4;
+        border: 1px solid @grey-lighten-2;
         border-radius: 3px;
     }
     .eci-label {
-       color: #818181;
+       color: @grey;
+    }
+
+    .view-group-caption {
+        color: var(--v-primary-base)
     }
 
 </style>

@@ -71,7 +71,7 @@
                                     <v-icon small>add</v-icon>
                                 </v-btn>
 
-                                <span class="deip-blue-color c-pl-3">Add a link to a publication</span>
+                                <span class="c-pl-3">Add a link to a publication</span>
                             </div>
                         </v-card>
                         

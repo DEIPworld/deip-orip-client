@@ -9,7 +9,7 @@
                             Quorum shows how many votes it takes to approve a proposal (such as changing the research
                             content, adding the research group members, initiating research fundraise, etc.) You can setup Quorum for each 
                             proposal individually using
-                            <span class="deip-blue-color half-bold clickable" @click="changeMode()">Advanced</span>
+                            <span class="half-bold clickable" @click="changeMode()">Advanced</span>
                             options.
                         </div>
 
@@ -24,7 +24,7 @@
 
                         <div class="row" v-show="isAdvanced">
                             <div class="col-offset-2">
-                                <div class="c-pv-4 deip-blue-color bold">Advanced quorum setup</div>
+                                <div class="c-pv-4 bold">Advanced quorum setup</div>
 
                                 <div class="row align-items-end">
                                     <div>

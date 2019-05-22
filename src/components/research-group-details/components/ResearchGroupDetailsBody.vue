@@ -1,13 +1,8 @@
 <template>
     <div>
         <!-- ### START Research Group Details Section ### -->
-        <div class="research-group-details-container spinner-container">
-            <v-progress-circular class="section-spinner"
-                v-if="isLoadingResearchGroupDetails"
-                indeterminate color="primary"
-            ></v-progress-circular>
-
-            <div v-if="isLoadingResearchGroupDetails === false">
+        <div class="research-group-details-container">
+            <div>
             <!--<div>
                     <v-icon small>date_range</v-icon>
                     <span>Created on 22 Aug 2018</span>
@@ -20,13 +15,9 @@
 
 
         <!-- ### START Research Group members Section ### -->
-        <div class="research-group-members-container spinner-container">
-            <v-progress-circular class="section-spinner"
-                v-if="isLoadingResearchGroupDetails"
-                indeterminate color="primary"
-            ></v-progress-circular>
+        <div class="research-group-members-container">
 
-            <div v-if="isLoadingResearchGroupMembers === false">
+            <div>
                 <div class="c-pt-8 title">Group members: {{ members.length }}</div>
 
                 <div class="c-pt-6">
@@ -88,7 +79,7 @@
                                 <v-icon small>add</v-icon>
                             </v-btn>
                     
-                            <span class="c-pl-2 deip-blue-color">Invite researchers</span>
+                            <span class="c-pl-2">Invite researchers</span>
                         </div>
 
                         <div v-if="isResearchGroupMember && invites.length">
@@ -96,7 +87,7 @@
 
                             <v-expansion-panel class="group-invites">
                                 <v-expansion-panel-content>
-                                    <div slot="header" class="deip-blue-color">
+                                    <div slot="header">
                                         <!-- <v-icon small color="primary">access_time</v-icon> -->
                                         <span class="">Pending invites ({{invites.length}})</span>
                                     </div>
@@ -154,26 +145,16 @@
         <!-- ### END Research Group members Section ### -->
 
         <!-- ### START Research Group Research List Section ### -->
-        <div class="research-list-container spinner-container c-pt-7">
-            <v-progress-circular class="section-spinner"
-                v-if="isLoadingResearchGroupResearchList"
-                indeterminate color="primary"
-            ></v-progress-circular>
-
-            <div v-if="isLoadingResearchGroupResearchList === false">
+        <div class="research-list-container c-pt-7">
+            <div>
                 <state-research-list :research-list="researchList"></state-research-list>
             </div>
         </div>
         <!-- ### END Research Group Research List Section ### -->
 
         <!-- ### START Research Group Proposals Section ### -->
-        <div id="proposals" v-if="isResearchGroupMember" class="research-group-proposals-container spinner-container c-pt-8">
-            <v-progress-circular class="section-spinner"
-                v-if="isLoadingResearchGroupProposals"
-                indeterminate color="primary"
-            ></v-progress-circular>
-            
-            <div v-if="isLoadingResearchGroupProposals === false">
+        <div id="proposals" v-if="isResearchGroupMember" class="research-group-proposals-container c-pt-8">
+            <div>
                 <research-group-details-proposals v-if="!isPersonalGroup"></research-group-details-proposals>
             </div>
         </div>

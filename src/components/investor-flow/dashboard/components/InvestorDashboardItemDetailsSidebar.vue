@@ -226,4 +226,14 @@
 </script>
 
 <style lang="less" scoped>
+    .color-label {
+        line-height: 25px;
+        border-radius: 2px;
+        text-transform: uppercase;
+        font-size: 12px;
+        padding: 0 10px;
+        display: inline-block;
+        vertical-align: middle;
+        white-space: nowrap;
+    }
 </style>

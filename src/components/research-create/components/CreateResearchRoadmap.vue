@@ -70,6 +70,8 @@
 </script>
 
 <style lang="less" scoped>
+    @import "./../../../styles/colors";
+
     .milestone-devider {
         position: absolute;
         border-right: 1px solid;
@@ -79,7 +81,7 @@
         left: calc(50%);
     }
     .milestone-devider.last {
-        border-color: #ddd;
+        border-color: @grey;
         height: 50px;
     }
     .remove-milestone {

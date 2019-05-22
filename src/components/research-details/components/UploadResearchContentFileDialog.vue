@@ -51,7 +51,7 @@
                                         <img v-if="data.item.profile" v-bind:src="data.item.profile.avatar | avatarSrc(30, 30, false)" />
                                         <v-gravatar v-else :email="data.item.account.name + '@deip.world'" />
                                     </v-avatar>
-                                    <span class="deip-blue-color c-pl-3">{{ data.item | fullname }}</span>
+                                    <span class="c-pl-3">{{ data.item | fullname }}</span>
                                 </div>
                             </template>
                             
@@ -63,7 +63,7 @@
                                             <img v-if="data.item.profile" v-bind:src="data.item.profile.avatar | avatarSrc(30, 30, false)" />
                                             <v-gravatar v-else :email="data.item.account.name + '@deip.world'" />
                                         </v-avatar>
-                                        <span class="deip-blue-color c-pl-3">{{ data.item | fullname  }}</span>
+                                        <span class="c-pl-3">{{ data.item | fullname  }}</span>
                                     </div>
                                 </template>
                             </template>
@@ -227,6 +227,7 @@
 </script>
 
 <style lang="less" scoped>
+    @import './../../../styles/colors';
 
     #content-dropzone {
         margin-left: -1px;
@@ -240,7 +241,7 @@
     .selected-author-item {
         padding-top: 8px;
         padding-bottom: 8px;
-        background-color: rgb(224, 224, 224);
+        background-color: @grey-lighten-3;
     }
 
     .avatar {

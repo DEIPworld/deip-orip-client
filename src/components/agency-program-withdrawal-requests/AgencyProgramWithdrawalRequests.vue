@@ -106,8 +106,8 @@
                     <div class="bold grey--text c-pt-3">{{new Date(`${request.foa.posted_date}Z`).toDateString()}}</div>
                   </div>
                   <div class="col-1">
-                    <div class="bold deip-blue-color c-pt-3">
-                      <router-link class="a deip-blue-color" 
+                    <div class="bold c-pt-3">
+                      <router-link class="a" 
                         :to="{ name: 'AgencyProgramDetails', 
                                 params: {
                                   agency: request.foa.agency_name, 
@@ -132,7 +132,7 @@
                   </div>
                 </div>
               </div>
-              <v-card style="background-color: #f1f8fe">
+              <v-card>
                 <v-card-text>
                   <div class="row" >
                     <div class="col-2"></div>
@@ -180,8 +180,8 @@
                     <div class="bold grey--text c-pt-3">{{new Date(`${relation.report.created_at}Z`).toDateString()}}</div>
                   </div>
                   <div class="col-1">
-                    <div class="bold deip-blue-color c-pt-3">
-                      <router-link class="a deip-blue-color" 
+                    <div class="bold c-pt-3">
+                      <router-link class="a" 
                         :to="{ name: 'AgencyProgramDetails', 
                                 params: {
                                   agency: relation.foa.agency_name, 
@@ -200,8 +200,8 @@
                           }
                         }"
                       >
-                      <v-chip label color="blue" small text-color="white">
-                      <span class="bold">Milestone report</span>
+                      <v-chip label color="primary" small text-color="white">
+                      <span class="primary">Milestone report</span>
                     </v-chip>
                     </router-link>
                   </div>
@@ -217,7 +217,7 @@
                   </div>
                 </div>
               </div>
-              <v-card style="background-color: #f1f8fe">
+              <v-card>
                 <v-card-text>
                   <div class="row" >
                     <div class="col-2"></div>

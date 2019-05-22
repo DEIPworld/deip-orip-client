@@ -39,7 +39,7 @@
                                         </svg>
                                     </div>
 
-                                    <span class="subheading deip-blue-color c-pl-4 c-pr-2">DEIP Token</span>
+                                    <span class="subheading c-pl-4 c-pr-2">DEIP Token</span>
                                 </div>
 
                                 <div class="width-10 list-body-cell text-align-center">
@@ -76,7 +76,7 @@
                                 <template v-for="research in researches">
                                     <div class="list-line">
                                         <div class="col-grow list-body-cell">
-                                            <div class="deip-blue-color subheading">{{ research.title }}</div>
+                                            <div class="subheading">{{ research.title }}</div>
                                             <!-- <div class="grey--text caption">alice · bob</div> -->
                                         </div>
 

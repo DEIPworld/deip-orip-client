@@ -136,13 +136,16 @@
 </script>
 
 <style lang="less" scoped>
+    @import '../../../styles/colors';
+    
     .eci-item {
-        border: 1px solid #e4e4e4;
+        border: 1px solid @grey-lighten-2;
         border-radius: 3px;
     }
     .eci-label {
-       color: #818181;
+       color: @grey;
     }
+
     .support-review-button {
         width: 60%;
         margin: auto;

@@ -66,7 +66,7 @@
                   </span>
                 </div>
                 <div class="col-2 text-align-right">
-                  <router-link class="a bold deip-blue-color" 
+                  <router-link class="a bold" 
                       :to="{ name: 'AgencyProgramDetails', 
                           params: { 
                               agency: contract.foa.agency_name, 
@@ -85,7 +85,7 @@
           </div>
           <div class="row shadow">
             <span class="col-12 text-align-right">
-              <div style="text-align: right; background-color: #ebf5fe; padding: 15px; padding-right: 10px">
+              <div class="total-row">
                 <div class="subheading bold">Total: $ {{agency.totalAgencyAmount}}</div>
               </div>
             </span>
@@ -141,6 +141,13 @@
 </script>
 
 <style lang="less" scoped>
+@import './../../styles/colors';
 
+  .total-row {
+    text-align: right; 
+    background-color: var(--v-secondary-base); 
+    padding: 15px; 
+    padding-right: 10px
+  }
 
 </style>

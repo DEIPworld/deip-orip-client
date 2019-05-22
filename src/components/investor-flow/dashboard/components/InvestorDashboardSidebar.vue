@@ -49,7 +49,7 @@
                         <v-icon small>add</v-icon>
                     </v-btn>
 
-                    <span class="c-pl-2 deip-blue-color">Add new list</span>
+                    <span class="c-pl-2">Add new list</span>
                 </div>
             </div>
         </div>

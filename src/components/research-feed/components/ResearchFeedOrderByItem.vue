@@ -1,12 +1,12 @@
 <template>
     <div>
         <div v-if="!isAsc" class="subheading clickable" 
-            :class="[{'deip-blue-color underlined': isSelected }]"
+            :class="[{'underlined': isSelected }]"
             @click.stop="select(order.asc)">
             {{ order.asc.title }}
         </div>
         <div v-if="isAsc" class="subheading clickable" 
-            :class="[{'deip-blue-color underlined': isSelected }]"
+            :class="[{'underlined': isSelected }]"
             @click.stop="select(order.desc)">
             {{ order.desc.title }}
         </div>

@@ -20,7 +20,7 @@
                             <div>Funding Opportunity:</div>        
                           </div>
                           <div class="col-9">
-                            <div class="deip-blue-color bold">
+                            <div class="bold">
                               {{meta.contract.foa.funding_opportunity_title}}
                             </div>
                             <div class="grey--text bold">
@@ -33,7 +33,7 @@
                             <div>Research:</div>        
                           </div>
                           <div class="col-9">
-                            <div class="deip-blue-color bold">
+                            <div class="bold">
                               {{ research.title}}
                             </div>        
                           </div>
@@ -46,7 +46,7 @@
                             <div class="bold">Research Group:</div>        
                           </div>
                           <div class="col-9">
-                            <div class="deip-blue-color bold">{{ researchGroup.name }}</div>        
+                            <div class="bold">{{ researchGroup.name }}</div>        
                           </div>
                         </div>
 
@@ -55,7 +55,7 @@
                             <div class="bold">Organization:</div>        
                           </div>
                           <div class="col-9">
-                            <div class="deip-blue-color bold">{{ getOrganizationTitle(user.account.organisation_id) }}</div>        
+                            <div class="bold">{{ getOrganizationTitle(user.account.organisation_id) }}</div>        
                           </div>
                         </div>
 
@@ -236,6 +236,7 @@
 </script>
 
 <style lang="less" scoped>
+    @import './../../../styles/colors';
 
     #content-dropzone {
         margin-left: -1px;
@@ -253,7 +254,7 @@
     .selected-author-item {
         padding-top: 8px;
         padding-bottom: 8px;
-        background-color: rgb(224, 224, 224);
+        background-color: @grey-lighten-3;
     }
 
     .avatar {

@@ -30,7 +30,7 @@
                                         </svg>
                                     </div>
 
-                                    <span class="subheading deip-blue-color c-pl-4 c-pr-2">DEIP Token</span>
+                                    <span class="subheading c-pl-4 c-pr-2">DEIP Token</span>
 
                                     <v-tooltip bottom>
                                         <v-icon class="clickable c-pb-1" slot="activator" size="20">help</v-icon>
@@ -69,7 +69,7 @@
                                         </svg>
                                     </div>
 
-                                    <span class="subheading deip-blue-color c-pl-4 c-pr-2">DEIP Common Token</span>
+                                    <span class="subheading c-pl-4 c-pr-2">DEIP Common Token</span>
 
                                     <v-tooltip bottom>
                                         <v-icon class="clickable c-pb-1" slot="activator" size="20">help</v-icon>
@@ -134,7 +134,7 @@
                                         }"
                                     >
                                         <div class="col-grow list-body-cell">
-                                            <div class="deip-blue-color subheading">{{ research.title }}</div>
+                                            <div class="subheading">{{ research.title }}</div>
                                         </div>
 
                                         <!-- <div class="width-7 list-body-cell text-align-center half-bold">10</div> -->
@@ -175,7 +175,7 @@
                                 <template v-for="transfer in transfers">
                                     <div class="list-line">
                                         <div class="col-grow list-body-cell overflow-hidden">
-                                            <div class="deip-blue-color subheading overflow-ellipsis">
+                                            <div class="subheading overflow-ellipsis">
                                                 {{ transfer[1].trx_id }}
                                             </div>
                                         </div>

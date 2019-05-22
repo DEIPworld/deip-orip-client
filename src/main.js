@@ -4,21 +4,23 @@ import Vue from 'vue';
 import Vuetify from 'vuetify';
 import axios from 'axios';
 import deipRpc from '@deip/deip-rpc-client';
-
 import App from './App';
 import store from './store';
 import router from './router';
 import './index';
 import './globals/index';
-
 import 'vuetify/dist/vuetify.css';
-import './styles/common.less';
 import 'vue2-dropzone/dist/vue2Dropzone.css';
 import '@mdi/font/css/materialdesignicons.css';
+import colors from 'vuetify/es5/util/colors';
 
 Vue.use(Vuetify, {
     theme: {
-        'primary': '#2962FF'
+        primary: colors.blue.accent4,
+        secondary: colors.blue.lighten4
+    },
+    options: {
+        customProperties: true
     }
 });
 

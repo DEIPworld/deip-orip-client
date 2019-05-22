@@ -7,7 +7,7 @@
             
             <v-menu offset-y>
                 <v-btn slot="activator" class="ma-0">
-                    <div class="deip-blue-color">
+                    <div>
                         ALL
                         <v-icon class="c-pl-4" small>keyboard_arrow_down</v-icon>
                     </div>
@@ -219,5 +219,16 @@
             width: 4px;
             height: 100%;
         }
+    }
+
+    .color-label {
+        line-height: 25px;
+        border-radius: 2px;
+        text-transform: uppercase;
+        font-size: 12px;
+        padding: 0 10px;
+        display: inline-block;
+        vertical-align: middle;
+        white-space: nowrap;
     }
 </style>

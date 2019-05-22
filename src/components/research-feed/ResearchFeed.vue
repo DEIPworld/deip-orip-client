@@ -13,14 +13,14 @@
                 <div class="row col-grow align-center">
                     <div class="c-pr-4 display-flex" v-if="filter.q !== ''">
                         <span>{{ filter.q }}</span>
-                        <span class="small-remove-btn ml-1" @click="updateFilter({ key: 'q', value: '' })">
+                        <span class="remove-filter-btn ml-1" @click="updateFilter({ key: 'q', value: '' })">
                             <v-icon small>close</v-icon>
                         </span>
                     </div>
 
                     <div v-for="discipline in filter.disciplines" class="c-pr-4 display-flex">
                         <span>{{ discipline.label }}</span>
-                        <span v-if="!hasSelectedChildDiscipline(discipline)" class="small-remove-btn ml-1" 
+                        <span v-if="!hasSelectedChildDiscipline(discipline)" class="remove-filter-btn ml-1" 
                                 @click="updateFilter({
                                     key: 'disciplines', 
                                     value: filter.disciplines.filter(d => { return d.id != discipline.id })
@@ -100,4 +100,27 @@
             opacity: 1;
         }
     }
+
+    .remove-filter-btn {
+        cursor: pointer;
+        display: inline-flex;
+        align-items: center;
+        width: 20px;
+        height: 20px;
+
+        & > .icon {
+            font-size: 20px;
+            opacity: 0.5;
+        }
+
+        & > .icon:hover {
+            opacity: 1;
+        }
+
+        :hover {
+            background-color: var(--v-secondary-base);
+            border-radius: 50%;
+        }
+    }
+
 </style>

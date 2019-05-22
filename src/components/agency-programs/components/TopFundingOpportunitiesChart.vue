@@ -127,6 +127,5 @@
 
     .axis.axis--x text {
         transform: translate(-20px, 25px) rotate(-45deg);
-        // color: #2962FF;
     }
 </style>

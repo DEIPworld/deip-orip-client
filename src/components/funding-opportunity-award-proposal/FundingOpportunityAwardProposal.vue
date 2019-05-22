@@ -149,7 +149,7 @@
                   <span class="col-1"></span>
                   <span class="col-3">
                       <div class="subheading bold">&nbsp;</div>
-                      <div style="text-align: right; background-color: #ebf5fe; padding: 5px; padding-right: 10px">
+                      <div class="total-row">
                         <div class="subheading bold">Total amount</div>
                         <div class="headline">$ {{calculateTotalExpenses(funding)}}</div>
                       </div>
@@ -258,7 +258,7 @@
                         <img v-if="officer.profile" v-bind:src="officer.profile.avatar | avatarSrc(30, 30, false)" />
                         <v-gravatar v-else :email="officer.account.name + '@deip.world'" />
                     </v-avatar>
-                    <router-link class="a deip-blue-color body-1 c-pl-3 c-pt-2" :to="{ name: 'UserDetails', params: { account_name: officer.account.name } }">
+                    <router-link class="a body-1 c-pl-3 c-pt-2" :to="{ name: 'UserDetails', params: { account_name: officer.account.name } }">
                       {{ officer | fullname }}
                     </router-link>
                   </div>
@@ -267,8 +267,8 @@
               <v-divider></v-divider>
 
               <div class="c-pt-5 c-pl-5 c-pb-5">
-                <v-icon color="#2962FF">email</v-icon>
-                <span class="c-pl-1 deip-blue-color bold">{{program.grantor_contact_info || agencyProfile.email}}</span>
+                <v-icon color="primary">email</v-icon>
+                <span class="c-pl-1 bold">{{program.grantor_contact_info || agencyProfile.email}}</span>
               </div>
               <v-divider></v-divider>
 
@@ -552,6 +552,13 @@
   .sort-icon {
     min-width: 24px; 
     min-height: 24px;
+  }
+
+  .total-row {
+    text-align: right; 
+    background-color: var(--v-secondary-lighten2); 
+    padding: 5px;
+    padding-right: 10px
   }
 
 </style>

@@ -359,15 +359,17 @@
 </script>
 
 <style lang="less" scoped>
+    @import '../../../styles/colors';
+
     .eci-item {
-        border: 1px solid #e4e4e4;
+        border: 1px solid @grey-lighten-2;
         border-radius: 3px;
     }
     .eci-label {
-       color: #818181;
+       color: @grey;
     }
     .selected-author-item {
-        background-color: #e0e0e0;
+        background-color: var(--secondary-lighten2);
         width: 100%;
         height: 100%;
     }

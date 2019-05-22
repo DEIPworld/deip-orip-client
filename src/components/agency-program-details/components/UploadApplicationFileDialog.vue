@@ -25,13 +25,13 @@
             >
 							<template slot="selection" slot-scope="data">
 								<div class="row-nowrap align-center">
-									<span class="deip-blue-color">{{ data.item.title }}</span>
+									<span>{{ data.item.title }}</span>
 								</div>
 							</template>
 							<template slot="item" slot-scope="data">
 								<template>
 									<div class="row-nowrap align-center author-item">
-										<span class="deip-blue-color c-pl-3">{{ data.item.title}}</span>
+										<span class="c-pl-3">{{ data.item.title}}</span>
 									</div>
 								</template>
 							</template>
@@ -57,7 +57,7 @@
 											<img v-if="member.profile" v-bind:src="member.profile.avatar | avatarSrc(30, 30, false)" />
 											<v-gravatar v-else :email="member.account.name + '@deip.world'" />
 										</v-avatar>
-										<router-link class="a deip-blue-color body-1 c-pl-3 c-pt-2" :to="{ name: 'UserDetails', params: { account_name: member.account.name } }">
+										<router-link class="a body-1 c-pl-3 c-pt-2" :to="{ name: 'UserDetails', params: { account_name: member.account.name } }">
                         {{ member | fullname }}
                       </router-link>
 									</div>

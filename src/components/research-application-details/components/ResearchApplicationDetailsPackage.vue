@@ -20,7 +20,7 @@
 			</v-flex>
 			<v-flex xs8>
 				<div class="left">
-					<router-link class="subheading deip-blue-color"  style="text-decoration: none"
+					<router-link class="subheading"  style="text-decoration: none"
 							:to="{ name: 'AgencyProgramDetails', 
 									params: { 
 										agency: program.agency_name, 

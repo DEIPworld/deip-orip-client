@@ -78,7 +78,7 @@
                       <div class="row">
                         <div class="col-2">
                           <div class="c-pt-4">
-                            <router-link class="a deip-blue-color body-1" :to="{ name: 'UserDetails', params: { account_name: funding.researcherUser.account.name } }">
+                            <router-link class="a body-1" :to="{ name: 'UserDetails', params: { account_name: funding.researcherUser.account.name } }">
                               {{ funding.researcherUser | fullname }}
                             </router-link>
                           </div>
@@ -153,7 +153,7 @@
                 </v-expansion-panel>
                 <div class="row shadow">
                   <span class="col-12 text-align-right">
-                    <div style="text-align: right; background-color: #ebf5fe; padding: 15px; padding-right: 10px">
+                    <div class="total-row">
                       <div class="subheading bold">Total: ${{organization.totalAmount}}</div>
                     </div>
                   </span>
@@ -161,7 +161,7 @@
 
                 <div v-if="organizationIdx == (relationsByOrganizations.length - 1)" class="row shadow">
                   <span class="col-12 text-align-right">
-                    <div style="text-align: right; background-color: #badefc; padding: 15px; padding-right: 10px">
+                    <div class="all-total-row">
                       <div class="subheading bold">All total: ${{totalContractAmount}}</div>
                     </div>
                   </span>
@@ -266,7 +266,7 @@
                           <div class="col-2 bold">$ {{fromAssetsToFloat(tx.amount)}}</div>
                         </div>
                       </div>
-                      <v-card style="background-color: #f1f8fe">
+                      <v-card color="secondary lighten-2">
                         <v-card-text>
                           <div class="row" >
                             <div class="col-2"></div>
@@ -306,7 +306,7 @@
                         <img v-if="officer.profile" v-bind:src="officer.profile.avatar | avatarSrc(30, 30, false)" />
                         <v-gravatar v-else :email="officer.account.name + '@deip.world'" />
                     </v-avatar>
-                    <router-link class="a deip-blue-color body-1 c-pl-3 c-pt-2" :to="{ name: 'UserDetails', params: { account_name: officer.account.name } }">
+                    <router-link class="a body-1 c-pl-3 c-pt-2" :to="{ name: 'UserDetails', params: { account_name: officer.account.name } }">
                       {{ officer | fullname }}
                     </router-link>
                   </div>
@@ -315,8 +315,8 @@
               <v-divider></v-divider>
 
               <div class="c-pt-5 c-pl-5 c-pb-5">
-                <v-icon color="#2962FF">email</v-icon>
-                <span class="c-pl-1 deip-blue-color bold">{{program.grantor_contact_info || agencyProfile.email}}</span>
+                <v-icon color="primary">email</v-icon>
+                <span class="c-pl-1 bold">{{program.grantor_contact_info || agencyProfile.email}}</span>
               </div>
               <v-divider></v-divider>
 
@@ -623,6 +623,20 @@
   .shadow {
     -webkit-box-shadow: 0px 0px 1px -1px rgba(0,0,0,0.2), 0px 1px 1px 0px rgba(0,0,0,0.14), 0px 1px 3px 0px rgba(0,0,0,0.12);
     box-shadow: 0px 0px 1px -1px rgba(0,0,0,0.2), 0px 1px 1px 0px rgba(0,0,0,0.14), 0px 1px 3px 0px rgba(0,0,0,0.12);
+  }
+
+  .total-row {
+    text-align: right; 
+    background-color: var(--v-secondary-lighten2); 
+    padding: 15px; 
+    padding-right: 10px
+  }
+
+  .all-total-row {
+    text-align: right; 
+    background-color: var(--v-secondary-base); 
+    padding: 15px; 
+    padding-right: 10px
   }
 
 </style>

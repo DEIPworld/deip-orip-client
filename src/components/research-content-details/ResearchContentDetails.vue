@@ -116,7 +116,7 @@
                                                     <v-gravatar v-else :email="data.item.account.name + '@deip.world'" />
                                                 </v-avatar>
 
-                                                <span class="deip-blue-color c-pl-3">{{ data.item | fullname }}</span>
+                                                <span class="c-pl-3">{{ data.item | fullname }}</span>
                                             </div>
                                         </template>
 
@@ -129,7 +129,7 @@
                                                         <v-gravatar v-else :email="data.item.account.name + '@deip.world'" />
                                                     </v-avatar>
 
-                                                    <span class="deip-blue-color c-pl-3">{{ data.item | fullname  }}</span>
+                                                    <span class="c-pl-3">{{ data.item | fullname  }}</span>
                                                 </div>
                                             </template>
                                         </template>

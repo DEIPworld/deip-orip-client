@@ -26,13 +26,8 @@
                 <div class="step-title">User</div>
                 <div v-if="selectedUser" class="subheading c-mt-2 bold">{{selectedUser | fullname}}</div>
 
-                <div v-if="selectedUser && selectedUser.expertise" class="selected-user-expertise-container spinner-container c-mr-4">
-                    <v-progress-circular class="section-spinner"
-                        v-if="isLoadingUserExpertise"
-                        indeterminate color="primary"
-                    ></v-progress-circular>
-
-                    <div v-if="isLoadingUserExpertise === false">
+                <div v-if="selectedUser && selectedUser.expertise" class="selected-user-expertise-container c-mr-4">
+                    <div>
                         <div class="c-pt-4 c-pb-6">
                             <div class="row justify-between" v-for="(item, i) in selectedUser.expertise" :key="i">
                                 <div>{{ item.discipline_name }}</div>
@@ -45,13 +40,8 @@
             </div>
 
             <div class="col-3 text-align-center">
-                <div class="users-container spinner-container">
-                    <v-progress-circular class="section-spinner"
-                        v-if="isLoadingUsers"
-                        indeterminate color="primary"
-                    ></v-progress-circular>
-                    
-                    <div v-if="isLoadingUsers === false">
+                <div class="users-container">
+                    <div>
                         <div v-for="(user, index) in users" :key="index" class="row-nowrap user-item justify-between align-center c-pt-2 c-pb-2" 
                             v-bind:class="{'selected-user': user === selectedUser }"
                             @click="selectUser(user)">
@@ -166,6 +156,8 @@
 
 
 <style lang="less" scoped>
+    @import './../styles/colors';
+
     .users-container {
         min-height: 500px;
         max-height: 800px;
@@ -181,11 +173,11 @@
     }
 
     .selected-user {
-       background-color: #eae7e7;
+       background-color: @grey-lighten-2;
     }
 
     .user-item:hover {
-       background-color: #f5f5f5;
+       background-color: @grey-lighten-3;
     }
 
     .discipline-amount {

@@ -5,7 +5,7 @@
             
             <v-menu offset-y>
                 <v-btn slot="activator" class="ma-0">
-                    <div class="deip-blue-color">Newest First <v-icon class="c-pl-4" small>keyboard_arrow_down</v-icon></div>
+                    <div>Newest First <v-icon class="c-pl-4" small>keyboard_arrow_down</v-icon></div>
                 </v-btn>
 
                 <v-list>
@@ -21,8 +21,8 @@
         </div>
 
         <div class="c-pt-5">
-            <v-tabs slot="extension" v-model="tab" grow color="blue lighten-4">
-                <v-tabs-slider color="black"></v-tabs-slider>
+            <v-tabs slot="extension" v-model="tab" grow color="secondary">
+                <v-tabs-slider color="grey"></v-tabs-slider>
 
                 <v-tab key="active" :disabled="activeResearchList.length === 0">
                     Acitive research: {{ activeResearchList.length }}

@@ -2,13 +2,8 @@
     <div>
         <div>
         <!-- ### START User Profile Details Section ### -->
-            <div class="user-profile-info-container spinner-container">
-                <v-progress-circular class="section-spinner"
-                    v-if="isLoadingUserAccount || isLoadingUserProfile"
-                    indeterminate color="primary"
-                ></v-progress-circular>
-
-                <div v-if="isLoadingUserAccount === false && isLoadingUserProfile === false" class="row">
+            <div class="user-profile-info-container">
+                <div class="row">
                     <v-avatar size="160px" class="user-avatar" 
                             v-on:mouseover="onAvatarMouseOver"
                             v-on:mouseout="onAvatarMouseOut">
@@ -110,14 +105,8 @@
             <!-- ### END User Profile Details Section ### -->
 
             <!-- ### START User Profile Research Section ### -->
-            <div class="user-research-groups-container spinner-container">
-                <v-progress-circular class="section-spinner"
-                    v-if="isLoadingUserGroups || isLoadingUserResearch"
-                    indeterminate color="primary"
-                ></v-progress-circular>
-
-                <div v-if="isLoadingUserGroups === false && isLoadingUserResearch === false">
-
+            <div class="user-research-groups-container">
+                <div>
                     <div class="c-pt-7">
                         <state-research-list
                             :research-list="researchList"
@@ -133,12 +122,12 @@
                         <template v-for="group in commonGroups" :class="[{'personal-group': group.is_personal}]">
                             <div class="c-p-6">
                                 <router-link v-if="group.is_personal" :to="'/' + encodeURIComponent(group.permlink) + '/group-details'" class="research-group-title">
-                                    {{userInfo | fullname}}
+                                    <span class="a">{{userInfo | fullname}}</span>
                                     <span class="grey--text caption">(personal group)</span>
                                 </router-link>
                                 
                                 <router-link v-if="!group.is_personal" :to="'/' + encodeURIComponent(group.permlink) + '/group-details'" class="research-group-title">
-                                    {{group.name}}
+                                    <span class="a">{{group.name}}</span>
                                     <div class="caption grey--text c-pt-2 hidden-last-child">
                                         <template v-for="share in group.shares">
                                             <span>{{ share.owner }}</span>
@@ -155,7 +144,7 @@
                                 <v-icon small>add</v-icon>
                             </v-btn>
 
-                            <span class="c-pl-2 deip-blue-color">Add group</span>
+                            <span class="c-pl-2">Add group</span>
                         </div>
                     </v-card>
                 </div>
@@ -163,12 +152,7 @@
             <!-- ### END User Profile Research Section ### -->
 
             <!-- ### START User Profile Education\Employment Section ### -->
-            <div class="user-education-employment-container spinner-container">
-                <v-progress-circular class="section-spinner"
-                    v-if="isLoadingUserAccount || isLoadingUserProfile"
-                    indeterminate color="primary"
-                ></v-progress-circular>
-                
+            <div class="user-education-employment-container">
                 <div v-if="isLoadingUserAccount === false && isLoadingUserProfile === false">
                     <div v-if="isProfileAvailable && (isEducationSpecified || isOwner)" class="c-pt-8">
                         <div class="title">Education</div>
@@ -194,7 +178,7 @@
                                 <v-btn class="ma-0" @click="showSaveEducationDialog(null, -1)" outline icon color="primary">
                                     <v-icon small>add</v-icon>
                                 </v-btn>
-                                <span class="c-pl-2 deip-blue-color">Add education institutions</span>
+                                <span class="c-pl-2">Add education institutions</span>
                             </div>
                             <div v-if="isOwner">
                                 <user-edit-education-dialog 
@@ -237,7 +221,7 @@
                                 <v-btn class="ma-0" @click="showSaveEmploymentDialog(null, -1)" outline icon color="primary">
                                     <v-icon small>add</v-icon>
                                 </v-btn>
-                                <span class="c-pl-2 deip-blue-color">Add employment</span>
+                                <span class="c-pl-2">Add employment</span>
                             </div>
                             <div v-if="isOwner">
                                 <user-edit-employment-dialog 
@@ -598,7 +582,7 @@
 
     .research-group-title {
         font-size: 16px;
-        color: #2F80ED;
+        color: var(--v-primary-base);
         font-weight: 500;
         text-decoration: none;
     }
