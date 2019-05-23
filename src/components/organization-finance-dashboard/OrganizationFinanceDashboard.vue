@@ -1,12 +1,14 @@
 <template>
   <v-container fluid class="ma-0 pa-0 c-pb-10">
     <v-layout row wrap>
+    
       <v-flex xs12 class="c-p-5 c-pt-10">
-        <div><h1 class="title">{{organization.name}} Balance</h1></div>
+        <div><h1 class="display-1">{{organization.name}} Balance</h1></div>
       </v-flex>
-      <v-flex xs12 class="c-p-5">
-        <v-card height="200px" width="20%" v-for="(item, i) in tokenStat" :key="i + '-stat'" style="float: left">
-          <v-list dense class="c-p-5">
+
+      <v-flex xs2 class="c-pt-3 c-pb-1 grey-background" v-for="(item, i) in tokenStat" :key="i + '-stat'"> 
+        <v-card elevation="0" height="200px" class="grey-background">
+          <v-list dense class="c-p-5 grey-background" :class="[{ 'delimiter': (i + 1) != tokenStat.length }]">
             <v-list-tile>
               <v-list-tile-content class="grey--text">
                 <span class="body-2"> 
@@ -24,28 +26,34 @@
           </v-list>
         </v-card>
       </v-flex>
-      <v-flex xs2 class="c-p-5">
-        <div class="c-pb-10">
-          <v-btn :outline="showIssueTokensControl" class="ma-0" style="min-width: 150px" color="primary" @click="toggleIssueTokensControl()">
-            <v-icon v-if="!showIssueTokensControl">attach_money</v-icon> {{showIssueTokensControl ? 'Hide' : 'Issue Tokens'}}</span>
-          </v-btn>
-        </div>
-        <div v-show="showIssueTokensControl">
-          <div class="body-2">NSF Grant Tokens</div>
-          <div class="c-pt-2">
-            <v-text-field v-model="amountToIssue" label="Amount" mask="##############" suffix="$"></v-text-field>
+
+      <v-flex xs2 class="grey-background">
+        <v-card elevation="0" height="100%" class="grey-background">
+          <div class="c-pt-3 c-pr-4 c-pl-4 grey-background ">
+            <!-- <div>
+              <v-btn :outline="showIssueTokensControl" class="ma-0" block color="primary" @click="toggleIssueTokensControl()">
+                <v-icon v-if="!showIssueTokensControl">attach_money</v-icon> {{showIssueTokensControl ? 'Hide' : 'Issue Tokens'}}</span>
+              </v-btn>
+            </div> -->
+            <div class="c-pt-2">
+              <div class="body-2">NSF Grant Tokens</div>
+              <div class="c-pt-2">
+                <v-text-field v-model="amountToIssue" label="Amount" mask="##############" suffix="$"></v-text-field>
+              </div>
+              <div class="c-pt-2">
+                <v-btn @click="issueTokens()" 
+                  class="ma-0" block color="primary" 
+                  :disabled="!amountToIssue || isIssuingTokens" 
+                  :loading="isIssuingTokens">
+                  Emit
+                </v-btn>
+              </div>
+            </div>
           </div>
-          <div class="c-pt-2">
-            <v-btn @click="issueTokens()" 
-              class="ma-0" block color="primary" 
-              :disabled="!amountToIssue || isIssuingTokens" 
-              :loading="isIssuingTokens">
-              Emit
-            </v-btn>
-          </div>
-        </div>
+        </v-card>
       </v-flex>
-      <v-flex xs10 class="c-p-5">
+
+      <v-flex xs12 class="c-p-5">
         <v-flex xs12>
           <template row v-if="transactions.length">
             <div class="subheading c-mb-5">Financial Transactions</div>
@@ -72,6 +80,7 @@
           </template>
         </v-flex>
       </v-flex>
+
     </v-layout>
   </v-container>
 </template>
@@ -230,5 +239,12 @@
 </script>
 
 <style lang="less" scoped>
+  .grey-background {
+    background-color: #f5f5f5
+  }
 
+  .delimiter {
+    border-right: 2px solid #e0e0e0;
+    border-radius: 0px;
+  }
 </style>
