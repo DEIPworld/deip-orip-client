@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import moment from 'moment';
+import VueCurrencyFilter from 'vue-currency-filter';
 
 Vue.filter('fullname', function (enrichedProfile) {
     return enrichedProfile && enrichedProfile.profile && enrichedProfile.profile.firstName 
@@ -61,3 +62,13 @@ Vue.filter('dateFormat', (value, format, fromUtcToLocal = false) => {
         ? moment(value).format(format)
         : moment.utc(value).local().format(format);
 });
+
+Vue.use(VueCurrencyFilter,
+    {
+        // symbol: '$',
+        thousandsSeparator: '.',
+        fractionCount: 2,
+        fractionSeparator: ',',
+        symbolPosition: 'front',
+        symbolSpacing: true
+    })

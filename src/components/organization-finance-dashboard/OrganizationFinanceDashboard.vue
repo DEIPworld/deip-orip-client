@@ -8,7 +8,7 @@
 
       <v-flex xs2 class="c-pt-3 c-pb-1 grey-background" v-for="(item, i) in tokenStat" :key="i + '-stat'"> 
         <v-card elevation="0" height="200px" class="grey-background">
-          <v-list dense class="c-p-5 grey-background" :class="[{ 'delimiter': (i + 1) != tokenStat.length }]">
+          <v-list dense class="c-p-1 c-pb-5 grey-background" :class="[{ 'delimiter': (i + 1) != tokenStat.length }]">
             <v-list-tile>
               <v-list-tile-content class="grey--text">
                 <span class="body-2"> 
@@ -18,7 +18,7 @@
               </v-list-tile-content>
             </v-list-tile>
             <v-list-tile>
-              <v-list-tile-content class="headline bold" :class="item.isGreen ? 'green--text': 'blue--text'">{{item.amount}}</v-list-tile-content>
+              <v-list-tile-content class="headline bold" :class="item.isGreen ? 'green--text': 'blue--text'">{{item.amount | currency}}</v-list-tile-content>
             </v-list-tile>
             <v-list-tile>
               <v-list-tile-content class="subheading grey--text">{{item.text}}</v-list-tile-content>
@@ -54,31 +54,64 @@
       </v-flex>
 
       <v-flex xs12 class="c-p-5">
-        <v-flex xs12>
-          <template row v-if="transactions.length">
-            <div class="subheading c-mb-5">Financial Transactions</div>
-            <v-data-table :headers="financialTransactionsHeaders" :items="transactions" :pagination.sync="financialTransactionsPagination">
-              <template slot="items" slot-scope="props">
-                <td class="body-1">
-                  <v-icon small class="c-pr-1" v-if="props.item.senderProfile.account">account_box</v-icon>
-                  <v-icon small class="c-pr-1" v-else-if="props.item.senderProfile.permlink == 'nsf'">account_balance</v-icon>                  
-                  <v-icon small class="c-pr-1" v-else>school</v-icon>
-                  {{ getFinancialTransactionSenderName(props.item) }}</td>
-                <td class="body-1">
-                  <v-icon small class="c-pr-1" v-if="props.item.receiverProfile.account">account_box</v-icon>
-                  <v-icon small class="c-pr-1" v-else>school</v-icon>
-                  {{ getFinancialTransactionReceiverName(props.item) }}</td>
-                <td class="body-1">
-                <!--  <v-icon small class="c-pr-1">school</v-icon> -->
-                  {{ getTxUniversity(props.item) }}
-                </td>
-                <td class="body-1">{{ getTransactionType(props.item) }}</td>
-                <td class="body-1">{{moment(props.item.time).format('MMMM Do YYYY, h:mm:ss a')}}</td>
-                <td><span class="body-2">$ {{fromAssetsToFloat(props.item.amount)}}</span></td>
-              </template>
-            </v-data-table>
-          </template>
-        </v-flex>
+
+        <v-tabs slot="extension" v-model="tab" grow color="blue lighten-4">
+          <v-tabs-slider color="grey"></v-tabs-slider>
+          <v-tab  key="awards">
+            Awards
+          </v-tab>
+
+          <v-tab key="transactions">
+            Payments
+          </v-tab>
+        </v-tabs>
+
+        <v-tabs-items v-model="tab">
+          <v-tab-item key="awards">
+            <div>
+              <v-card height="100vh">
+                <v-card-text>
+                  <v-layout>
+                    <v-flex xs12>
+                      <template row>
+                        <v-data-table
+                          :headers="awardHeaders"
+                          :items="awards">
+
+                          <template slot="items" slot-scope="props">
+                            <td>
+                              <span class="body-1">
+                                <router-link class="a" :to="{ name: 'AwardDetails', 
+                                  params: { awardNumber: props.item.awardNumber  }}">
+                                  {{ props.item.awardNumber }}
+                                </router-link>
+                              </span>
+                            </td>
+                            <td><span class="body-1">{{ props.item.pi | fullname }}</span></td>
+                            <td><span class="body-1">{{ props.item.org.name }}</span></td>
+                            <td><span class="body-1">{{ moment(new Date(props.item.from)).format("MM/YY") }} - {{ moment(new Date(props.item.to)).format("MM/YY") }}</span></td>
+                            <td><span class="body-2">$ {{ props.item.totalAmount | currency }}</span></td>
+                            <td><span class="body-2">$ {{ props.item.withdrawnAmount | currency }}</span></td>
+                          </template>
+                        </v-data-table>
+
+                      </template>
+                    </v-flex>
+                  </v-layout>
+                </v-card-text>
+              </v-card>
+            </div>
+          </v-tab-item>
+
+          <v-tab-item key="transactions">
+            <div>
+              <v-card height="100vh">
+                <v-card-text></v-card-text>
+              </v-card>
+            </div>
+          </v-tab-item>
+        </v-tabs-items>
+
       </v-flex>
 
     </v-layout>
@@ -101,6 +134,7 @@
 
       data() {
         return {
+          tab: null,
           amountToIssue: null,
           isIssuingTokens: false,
           showIssueTokensControl: false,
@@ -143,8 +177,20 @@
           organization: 'org_finance_dashboard/organization',
           organizations: 'org_finance_dashboard/organizations',
           transactions: 'org_finance_dashboard/transactions',
-          tokenInfo: 'org_finance_dashboard/tokenInfo'
+          tokenInfo: 'org_finance_dashboard/tokenInfo',
+          awards: 'org_finance_dashboard/awards'
         }),
+
+        awardHeaders() {
+          return [
+            { text: 'AWARD ID', value: 'awardNumber' },
+            { text: 'PI', value: 'from' },
+            { text: 'ORGANIZATION', value: 'to' },
+            { text: 'DURATION', value: 'org' },
+            { text: 'AMOUNT', value: 'totalAmount' },
+            { text: 'WITHDRAWN', value: 'withdrawnAmount' }
+          ];
+        },
 
         tokenStat() {
 		      return this.tokenInfo ? [

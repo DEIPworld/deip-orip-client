@@ -62,7 +62,7 @@ const actions = {
             return Promise.all([agencyProgramDetailsLoad, fundingContractLoad])
           })
           .then(() => {
-            return dispatch('loadTransactions');
+            return dispatch('loadFinancialTransactions');
           })
           .catch(err => { console.log(err) })
           .finally(() => {
@@ -128,7 +128,7 @@ const actions = {
           });
     },
 
-    loadTransactions({ state, dispatch, commit, getters }) {
+    loadFinancialTransactions({ state, dispatch, commit, getters }) {
       const transactions = []
         let organisations = getters.relationsByOrganizations.map(o => o.orgId);
         return Promise.all(organisations.map(id => deipRpc.api.getFundingTransactionsByReceiverOrganisationAsync(id)))

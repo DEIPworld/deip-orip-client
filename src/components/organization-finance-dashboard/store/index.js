@@ -1,19 +1,29 @@
 import deipRpc from '@deip/deip-rpc-client';
 import Vue from 'vue';
-import { getEnrichedProfiles } from './../../../utils/user'
+import { getEnrichedProfiles } from './../../../utils/user';
+import { fromAssetsToFloat } from './../../../utils/blockchain';
+import moment from 'moment'
+import md5 from 'md5'
 import {
 	FUNDING_TRANSACTION_TRANSFER,
 	FUNDING_TRANSACTION_WITHDRAW,
-	FUNDING_TRANSACTION_FEE 
+	FUNDING_TRANSACTION_FEE,
+
+	WITHDRAWAL_PENDING,
+	WITHDRAWAL_CERTIFIED,
+	WITHDRAWAL_APPROVED,
+	WITHDRAWAL_REJECTED ,
+
+	loadFundingContracts
 } from './../../../services/FundingService'
-import moment from 'moment'
 
 const state = {
 	organization: null,
 	organizations: [],
 	isLoadingOrganizationFinanceDashboardPage: undefined,
 	transactions: [],
-	tokenInfo: null
+	tokenInfo: null,
+	contracts: []
 }
 
 // getters
@@ -51,7 +61,51 @@ const getters = {
 			total_issued: state.tokenInfo.total_issued + total_issued,
 			withdrawn: state.tokenInfo.withdrawn + withdrawn
 		}
+	},
+
+	awards: state => {
+		let awards = state.contracts.map(c => {
+			let rels = c.relations;
+			if (!rels.length) return [];
+
+			return rels.map((rel, index) => {
+				let totalAmount = fromAssetsToFloat(rel.total_amount);
+				let universityOverhead = totalAmount - (totalAmount - (totalAmount * (rel.university_overhead / 100) / 100));
+				let pendingAmount = 0;
+				let withdrawnAmount = 0;
+				for (let i = 0; i < rel.withdrawals.length; i++) {
+					let withdrawal = rel.withdrawals[i];
+					if (withdrawal.status == WITHDRAWAL_PENDING || withdrawal.status == WITHDRAWAL_CERTIFIED) pendingAmount += fromAssetsToFloat(withdrawal.amount);
+					if (withdrawal.status == WITHDRAWAL_APPROVED) withdrawnAmount += fromAssetsToFloat(withdrawal.amount);
+				}
+
+				let availableAmount = totalAmount - pendingAmount - withdrawnAmount - universityOverhead;
+				
+				let org = state.organizations.find(o => o.id == rel.organisation_id);
+				let pi = rel.researcherUser;
+				let award = {
+					id: rel.id,
+					awardId: rel.id,
+					awardNumber: `${(rel.id + 1)}${parseInt(`${md5(`${rel.id}-award`)}`, 16)}`.replace(/\./g, "").slice(0, 7),
+					totalAmount,
+					availableAmount,
+					pendingAmount,
+					withdrawnAmount,
+					from: c.foa.open_date,
+					to: c.foa.close_date,
+					contract: c,
+					relation: rel,
+					org,
+					pi,
+					withdrawnUniversityOverhead: withdrawnAmount
+				}
+				return award;
+			});
+		});
+
+		return [].concat.apply([], awards);
 	}
+
 }
 
 // actions
@@ -68,11 +122,14 @@ const actions = {
 			const tokenStatiscticLoad = new Promise((resolve, reject) => {
 				dispatch('loadStatisticToken', { notify: resolve, symbol: "NGT" });
 			});
+			const awardsLoad = new Promise((resolve, reject) => {
+				dispatch('loadAwards', { notify: resolve});
+			});
 
-			return Promise.all([organizationsLoad, tokenStatiscticLoad]);
+			return Promise.all([organizationsLoad, tokenStatiscticLoad, awardsLoad]);
 		})
 			.then(() => {
-				return dispatch('loadTransactions');
+				return dispatch('loadFinancialTransactions');
 			})
 			.finally(() => {
 				commit('SET_ORGANIZATION_DASHBOARD_LOADING_STATE', false);
@@ -89,7 +146,18 @@ const actions = {
 		});
 	},
 
-	loadTransactions({ state, dispatch, commit, getters }) {
+	loadAwards({ commit, dispatch, state }, { notify }) {
+		return loadFundingContracts()
+			.then(contracts => {
+				commit('SET_FUNDING_CONTRACTS_LIST', contracts);
+			})
+			.catch(err => { console.log(err) })
+			.finally(() => {
+				if (notify) notify();
+			});
+	},
+
+	loadFinancialTransactions({ state, dispatch, commit, getters }) {
 		const transactions = [];
 		const fees = [];
 		const withdrawals = [];
@@ -180,8 +248,11 @@ const mutations = {
 
 	['SET_TOKEN_INFO'](state, stat) {
 		Vue.set(state, 'tokenInfo', stat)
-	}
+	},
 
+	['SET_FUNDING_CONTRACTS_LIST'](state, contracts) {
+		Vue.set(state, 'contracts', contracts)
+	}
 }
 
 const namespaced = true;
