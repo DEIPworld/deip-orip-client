@@ -66,6 +66,26 @@ export async function loadFundingContracts() {
     });
 }
 
+export async function loadFundingContract(id) {
+  var contract = null;
+  return deipRpc.api.getFundingAsync(id)
+    .then((item) => {
+      contract = item;
+      return loadFundingContractDetails(contract);
+    })
+    .then(() => {
+      return deipRpc.api.getFundingOpportunityAsync(contract.funding_opportunity_id);
+    })
+    .then((foa) => {
+      contract.foa = foa;
+      return getEnrichedProfiles([contract.granter]);
+    })
+    .then(([creator, ...rest]) => {
+      contract.creatorUser = creator;
+      return contract;
+    });
+}
+
 export async function loadFundingContractDetails(contract) {
   const flattenWithdrawals = []
   return deipRpc.api.getFundingResearchRelationsByFundingAsync(contract.id)

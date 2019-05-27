@@ -40,7 +40,6 @@ const getters = {
 				let award = {
 					id: rel.id,
 					awardId: rel.id,
-					awardNumber: `${(rel.id + 1)}${parseInt(`${md5(`${rel.id}-award`)}`, 16)}`.replace(/\./g, "").slice(0, 7),
 					totalAmount,
 					availableAmount,
 					pendingAmount,
@@ -78,7 +77,6 @@ const getters = {
 						paymentId: withdrawal.id,
 						paymentNumber: `${(withdrawal.id + 1)}${parseInt(`${md5(`${withdrawal.id}-payment`)}`, 16)}`.replace(/\./g, "").slice(0, 7),
 						awardId: rel.id,
-						awardNumber: `${(rel.id + 1)}${parseInt(`${md5(`${rel.id}-award`)}`, 16)}`.replace(/\./g, "").slice(0, 7),
 						amount: fromAssetsToFloat(withdrawal.amount),
 						status: withdrawal.status,
 						statusTitle: getStatusName(withdrawal.status),

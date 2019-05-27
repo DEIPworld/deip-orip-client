@@ -19,12 +19,12 @@
             return-object
           >
             <template slot="item" slot-scope="data">
-              <span class="c-mr-1 c-ml-1">{{ data.item.awardNumber }}</span>
+              <span class="c-mr-1 c-ml-1">{{ data.item | awardNumber }}</span>
               <span class="c-mr-1 c-ml-1">|</span>
               <span class="c-mr-1 c-ml-1">{{ data.item.contract.foa.funding_opportunity_number }}</span>
             </template>
             <template slot="selection" slot-scope="data">
-              <span class="c-mr-1 c-ml-1">{{ data.item.awardNumber }}</span>
+              <span class="c-mr-1 c-ml-1">{{ data.item | awardNumber }}</span>
               <span class="c-mr-1 c-ml-1">|</span>
               <span class="c-mr-1 c-ml-1">{{ data.item.contract.foa.funding_opportunity_number }}</span>
             </template>

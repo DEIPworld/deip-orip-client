@@ -1,6 +1,7 @@
-import Vue from 'vue'
+import Vue from 'vue';
 import moment from 'moment';
 import VueCurrencyFilter from 'vue-currency-filter';
+import md5 from 'md5';
 
 Vue.filter('fullname', function (enrichedProfile) {
     return enrichedProfile && enrichedProfile.profile && enrichedProfile.profile.firstName 
@@ -66,9 +67,14 @@ Vue.filter('dateFormat', (value, format, fromUtcToLocal = false) => {
 Vue.use(VueCurrencyFilter,
     {
         // symbol: '$',
-        thousandsSeparator: '.',
+        thousandsSeparator: ',',
         fractionCount: 2,
-        fractionSeparator: ',',
+        fractionSeparator: '.',
         symbolPosition: 'front',
         symbolSpacing: true
     })
+
+
+Vue.filter('awardNumber', (rel) => {
+    return `${(rel.id + 1)}${parseInt(`${md5(`${rel.id}-award`)}`, 16)}`.replace(/\./g, "").slice(0, 7);
+});

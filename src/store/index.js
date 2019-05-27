@@ -23,6 +23,7 @@ import agencyProgramWithdrawalRequests from './../components/agency-program-with
 import treasuryDepartment from './../components/treasury-department/store/index'
 import org_dashboard from './../components/organization-dashboard/store/index'
 import org_finance_dashboard from './../components/organization-finance-dashboard/store/index'
+import award_details from './../components/award-details/store/index'
 
 Vue.use(Vuex)
 
@@ -48,7 +49,8 @@ export default new Vuex.Store({
         agencyProgramWithdrawalRequests,
         treasuryDepartment,
         org_dashboard,
-        org_finance_dashboard
+        org_finance_dashboard,
+        award_details
     },
     strict: process.env.NODE_ENV !== 'production',
     plugins: process.env.NODE_ENV !== 'production' ? [createLogger()] : []

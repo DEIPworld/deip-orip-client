@@ -23,6 +23,7 @@ import './components/research-application-details/index';
 import './components/investor-flow/index';
 import './components/organization-dashboard/index';
 import './components/organization-finance-dashboard/index';
+import './components/award-details/index';
 
 import Gravatar from 'vue-gravatar';
 Vue.component('v-gravatar', Gravatar);

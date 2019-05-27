@@ -2,8 +2,8 @@ import deipRpc from '@deip/deip-rpc-client';
 import Vue from 'vue';
 import { getEnrichedProfiles } from './../../../utils/user';
 import { fromAssetsToFloat } from './../../../utils/blockchain';
-import moment from 'moment'
-import md5 from 'md5'
+import moment from 'moment';
+import md5 from 'md5';
 import {
 	FUNDING_TRANSACTION_TRANSFER,
 	FUNDING_TRANSACTION_WITHDRAW,
@@ -15,7 +15,7 @@ import {
 	WITHDRAWAL_REJECTED ,
 
 	loadFundingContracts
-} from './../../../services/FundingService'
+} from './../../../services/FundingService';
 
 const state = {
 	organization: null,
@@ -73,24 +73,32 @@ const getters = {
 				let universityOverhead = totalAmount - (totalAmount - (totalAmount * (rel.university_overhead / 100) / 100));
 				let pendingAmount = 0;
 				let withdrawnAmount = 0;
+				let requestedAmount = 0;
 				for (let i = 0; i < rel.withdrawals.length; i++) {
 					let withdrawal = rel.withdrawals[i];
 					if (withdrawal.status == WITHDRAWAL_PENDING || withdrawal.status == WITHDRAWAL_CERTIFIED) pendingAmount += fromAssetsToFloat(withdrawal.amount);
 					if (withdrawal.status == WITHDRAWAL_APPROVED) withdrawnAmount += fromAssetsToFloat(withdrawal.amount);
+					requestedAmount += fromAssetsToFloat(withdrawal.amount);
 				}
 
 				let availableAmount = totalAmount - pendingAmount - withdrawnAmount - universityOverhead;
+				let remainingAmount = totalAmount - requestedAmount - universityOverhead;
+				if (remainingAmount != availableAmount) {
+					console.warn(`WARNING: award available amount (${availableAmount}) is not equal to remaining amount (${remainingAmount})`);
+				}
 				
 				let org = state.organizations.find(o => o.id == rel.organisation_id);
 				let pi = rel.researcherUser;
 				let award = {
 					id: rel.id,
 					awardId: rel.id,
-					awardNumber: `${(rel.id + 1)}${parseInt(`${md5(`${rel.id}-award`)}`, 16)}`.replace(/\./g, "").slice(0, 7),
 					totalAmount,
 					availableAmount,
+					remainingAmount,
 					pendingAmount,
 					withdrawnAmount,
+					requestedAmount,
+					universityOverhead,
 					from: c.foa.open_date,
 					to: c.foa.close_date,
 					contract: c,
@@ -104,8 +112,51 @@ const getters = {
 		});
 
 		return [].concat.apply([], awards);
+	},
+
+	payments: state => {
+		let transactions = state.contracts.map(c => {
+			let rels = state.organization.permlink == "nsf" ? c.relations : c.relations.filter(r => r.organisation_id == state.organization.id);
+			if (!rels.length) return [];
+
+			let items = [];
+
+			for (let j = 0; j < rels.length; j++) {
+				let rel = rels[j];
+				let org = state.organizations.find(o => o.id == rel.organisation_id);
+				let pi = rel.researcherUser;
+				for (let i = 0; i < rel.withdrawals.length; i++) {
+					let withdrawal = rel.withdrawals[i];
+					let item = {
+						id: withdrawal.id,
+						paymentId: withdrawal.id,
+						paymentNumber: `${(withdrawal.id + 1)}${parseInt(`${md5(`${withdrawal.id}-payment`)}`, 16)}`.replace(/\./g, "").slice(0, 7),
+						awardId: rel.id,
+						amount: fromAssetsToFloat(withdrawal.amount),
+						status: withdrawal.status,
+						statusTitle: getStatusName(withdrawal.status),
+						award: rel,
+						attachment: withdrawal.attachment,
+						paymentDate: rel.milestones[0] ? rel.milestones[0].deadline : '',
+						org,
+						pi
+					}
+					items.push(item);
+				}
+			}
+			return items;
+		});
+
+		return [].concat.apply([], transactions);
 	}
 
+}
+
+function getStatusName(status) {
+	return status == WITHDRAWAL_PENDING ? 'Awaiting Certification' :
+		status == WITHDRAWAL_CERTIFIED ? 'Certified' :
+			status == WITHDRAWAL_APPROVED ? 'Approved' :
+				status == WITHDRAWAL_REJECTED ? 'Rejected' : null;
 }
 
 // actions

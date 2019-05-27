@@ -11,6 +11,7 @@ import TreasuryDepartment from '@/components/treasury-department/TreasuryDepartm
 import AgencyProgramWithdrawalRequests from '@/components/agency-program-withdrawal-requests/AgencyProgramWithdrawalRequests';
 import OrganizationDashboard from '@/components/organization-dashboard/OrganizationDashboard';
 import OrganizationFinanceDashboard from '@/components/organization-finance-dashboard/OrganizationFinanceDashboard';
+import AwardDetails from '@/components/award-details/AwardDetails';
 
 const grantRoutes = [{
   path: '/create-grant',
@@ -106,6 +107,17 @@ const grantRoutes = [{
     beforeEnter: (to, from, next) => {
       let loadPagePromise = store.dispatch('org_finance_dashboard/loadOrganizationFinanceDashboardPage', {
         permlink: decodeURIComponent(to.params.org)
+      });
+      loadPage(loadPagePromise, next);
+    }
+  }, {
+    path: '/:org/award-details/:id',
+    name: 'AwardDetails',
+    component: AwardDetails,
+    beforeEnter: (to, from, next) => {
+      let loadPagePromise = store.dispatch('award_details/loadAwardDetailsPage', {
+        orgPermlink: decodeURIComponent(to.params.org),
+        awardId: decodeURIComponent(to.params.id)
       });
       loadPage(loadPagePromise, next);
     }

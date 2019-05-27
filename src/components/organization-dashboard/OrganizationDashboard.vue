@@ -40,7 +40,7 @@
                               ></v-checkbox>
                             </td>
 
-                            <td><span class="body-1">{{ props.item.awardNumber }}</span></td>
+                            <td><span class="body-1">{{ props.item | awardNumber }}</span></td>
                             <td><span class="body-1">{{ moment(new Date(props.item.from)).format("MM/YY") }}</span></td>
                             <td><span class="body-1">{{ moment(new Date(props.item.to)).format("MM/YY") }}</span></td>
                             <td v-if="isProgramOfficer || isFinancialOfficer"><span class="body-1">{{ props.item.org.name }}</span></td>
@@ -105,7 +105,7 @@
                             </td>
 
                             <td><span class="body-1">{{ props.item.paymentNumber }}</span></td>
-                            <td><span class="body-1">{{ props.item.awardNumber }}</span></td>
+                            <td><span class="body-1">{{ props.item | awardNumber }}</span></td>
                             <td v-if="isProgramOfficer || isFinancialOfficer"><span class="body-1">{{ props.item.org.name }}</span></td>
                             <td v-if="isProgramOfficer || isFinancialOfficer"><div style="min-width: 100px"><span class="body-1">{{ props.item.pi | fullname}}</span></div></td>
                             <td><div style="min-width: 100px"><span class="body-1">{{moment(props.item.paymentDate ).format('MMMM Do YYYY')}}</span></div></td>
@@ -226,7 +226,7 @@
 
         awardHeaders() {
           return this.isFinancialOfficer ? [
-            { text: 'Award ID', align: 'left', sortable: false, value: 'awardNumber' },
+            { text: 'Award ID', align: 'left', sortable: false, value: 'awardId' },
             { text: 'From', value: 'from' },
             { text: 'To', value: 'to' },
             { text: 'Organization', value: 'org' }, // display organization info for NSF PO
@@ -237,7 +237,7 @@
             { text: 'Avalable amount', value: 'availableAmount' }
           ] : this.isProgramOfficer ? [
             { text: '', sortable: false  },  // display checkbox for NSF PO
-            { text: 'Award ID', align: 'left', sortable: false, value: 'awardNumber' },
+            { text: 'Award ID', align: 'left', sortable: false, value: 'awardId' },
             { text: 'From', value: 'from' },
             { text: 'To', value: 'to' },
             { text: 'Organization', value: 'org' }, // display organization info for NSF PO
@@ -247,7 +247,7 @@
             { text: 'Pending amount', value: 'pendingAmount' },
             { text: 'Avalable amount', value: 'availableAmount' }
           ] : [
-            { text: 'Award ID', align: 'left', sortable: false, value: 'awardNumber' },
+            { text: 'Award ID', align: 'left', sortable: false, value: 'awardId' },
             { text: 'From', value: 'from' },
             { text: 'To', value: 'to' },
             { text: 'Total amount', value: 'totalAmount' },
@@ -261,7 +261,7 @@
           return this.isProgramOfficer ? [
             { text: '', sortable: false  },  // display checkbox for NSF PO
             { text: 'Payment ID', value: 'paymentNumber' },
-            { text: 'Award ID', value: 'awardNumber' },
+            { text: 'Award ID', value: 'awardId' },
             { text: 'Organization', value: 'org' }, // display organization info for NSF PO
             { text: 'PI', value: 'org' }, // display PI info for NSF PO
             { text: 'Payment Date', value: 'paymentDate' },
@@ -270,7 +270,7 @@
             { text: 'Attachments', value: 'attachment' },
           ] : this.isFinancialOfficer ? [
             { text: 'Payment ID', value: 'paymentNumber' },
-            { text: 'Award ID', value: 'awardNumber' },
+            { text: 'Award ID', value: 'awardId' },
             { text: 'Organization', value: 'org' }, // display organization info for NSF FO
             { text: 'PI', value: 'org' }, // display PI info for NSF FO
             { text: 'Payment Date', value: 'paymentDate' },
@@ -280,14 +280,14 @@
           ] : this.isCertifier ? [
             { text: '', sortable: false  }, // display checkbox for Organization Certifier
             { text: 'Payment ID', value: 'paymentNumber' },
-            { text: 'Award ID', value: 'awardNumber' },
+            { text: 'Award ID', value: 'awardId' },
             { text: 'Payment Date', value: 'paymentDate' },
             { text: 'Amount', value: 'amount' },
             { text: 'Status', value: 'status' },
             { text: 'Attachments', value: 'attachment' },
           ] : [
             { text: 'Payment ID', value: 'paymentNumber' },
-            { text: 'Award ID', value: 'awardNumber' },
+            { text: 'Award ID', value: 'awardId' },
             { text: 'Payment Date', value: 'paymentDate' },
             { text: 'Amount', value: 'amount' },
             { text: 'Status', value: 'status' },
