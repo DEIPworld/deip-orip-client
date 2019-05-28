@@ -130,14 +130,12 @@ const getters = {
 					let item = {
 						id: withdrawal.id,
 						paymentId: withdrawal.id,
-						paymentNumber: `${(withdrawal.id + 1)}${parseInt(`${md5(`${withdrawal.id}-payment`)}`, 16)}`.replace(/\./g, "").slice(0, 7),
 						awardId: rel.id,
 						amount: fromAssetsToFloat(withdrawal.amount),
 						status: withdrawal.status,
-						statusTitle: getStatusName(withdrawal.status),
 						award: rel,
 						attachment: withdrawal.attachment,
-						paymentDate: rel.milestones[0] ? rel.milestones[0].deadline : '',
+						timestamp: withdrawal.time,
 						org,
 						pi
 					}
@@ -150,13 +148,6 @@ const getters = {
 		return [].concat.apply([], transactions);
 	}
 
-}
-
-function getStatusName(status) {
-	return status == WITHDRAWAL_PENDING ? 'Awaiting Certification' :
-		status == WITHDRAWAL_CERTIFIED ? 'Certified' :
-			status == WITHDRAWAL_APPROVED ? 'Approved' :
-				status == WITHDRAWAL_REJECTED ? 'Rejected' : null;
 }
 
 // actions

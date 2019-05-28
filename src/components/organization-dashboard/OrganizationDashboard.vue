@@ -104,7 +104,7 @@
                               ></v-checkbox>
                             </td>
 
-                            <td><span class="body-1">{{ props.item.paymentNumber }}</span></td>
+                            <td><span class="body-1">{{ props.item | paymentNumber }}</span></td>
                             <td><span class="body-1">{{ props.item | awardNumber }}</span></td>
                             <td v-if="isProgramOfficer || isFinancialOfficer"><span class="body-1">{{ props.item.org.name }}</span></td>
                             <td v-if="isProgramOfficer || isFinancialOfficer"><div style="min-width: 100px"><span class="body-1">{{ props.item.pi | fullname}}</span></div></td>
@@ -260,7 +260,7 @@
         transactionsHeaders() {
           return this.isProgramOfficer ? [
             { text: '', sortable: false  },  // display checkbox for NSF PO
-            { text: 'Payment ID', value: 'paymentNumber' },
+            { text: 'Payment ID', value: 'paymentId' },
             { text: 'Award ID', value: 'awardId' },
             { text: 'Organization', value: 'org' }, // display organization info for NSF PO
             { text: 'PI', value: 'org' }, // display PI info for NSF PO
@@ -269,7 +269,7 @@
             { text: 'Status', value: 'status' },
             { text: 'Attachments', value: 'attachment' },
           ] : this.isFinancialOfficer ? [
-            { text: 'Payment ID', value: 'paymentNumber' },
+            { text: 'Payment ID', value: 'paymentId' },
             { text: 'Award ID', value: 'awardId' },
             { text: 'Organization', value: 'org' }, // display organization info for NSF FO
             { text: 'PI', value: 'org' }, // display PI info for NSF FO
@@ -279,14 +279,14 @@
             { text: 'Attachments', value: 'attachment' },
           ] : this.isCertifier ? [
             { text: '', sortable: false  }, // display checkbox for Organization Certifier
-            { text: 'Payment ID', value: 'paymentNumber' },
+            { text: 'Payment ID', value: 'paymentId' },
             { text: 'Award ID', value: 'awardId' },
             { text: 'Payment Date', value: 'paymentDate' },
             { text: 'Amount', value: 'amount' },
             { text: 'Status', value: 'status' },
             { text: 'Attachments', value: 'attachment' },
           ] : [
-            { text: 'Payment ID', value: 'paymentNumber' },
+            { text: 'Payment ID', value: 'paymentId' },
             { text: 'Award ID', value: 'awardId' },
             { text: 'Payment Date', value: 'paymentDate' },
             { text: 'Amount', value: 'amount' },

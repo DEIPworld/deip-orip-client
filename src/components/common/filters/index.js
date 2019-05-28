@@ -78,3 +78,7 @@ Vue.use(VueCurrencyFilter,
 Vue.filter('awardNumber', (rel) => {
     return `${(rel.id + 1)}${parseInt(`${md5(`${rel.id}-award`)}`, 16)}`.replace(/\./g, "").slice(0, 7);
 });
+
+Vue.filter('paymentNumber', (withdrawal) => {
+    return `${(withdrawal.id + 1)}${parseInt(`${md5(`${withdrawal.id}-payment`)}`, 16)}`.replace(/\./g, "").slice(0, 7);
+});

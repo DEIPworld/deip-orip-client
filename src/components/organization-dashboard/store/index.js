@@ -75,7 +75,6 @@ const getters = {
 					let item = {
 						id: withdrawal.id,
 						paymentId: withdrawal.id,
-						paymentNumber: `${(withdrawal.id + 1)}${parseInt(`${md5(`${withdrawal.id}-payment`)}`, 16)}`.replace(/\./g, "").slice(0, 7),
 						awardId: rel.id,
 						amount: fromAssetsToFloat(withdrawal.amount),
 						status: withdrawal.status,

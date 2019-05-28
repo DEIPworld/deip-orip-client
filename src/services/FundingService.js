@@ -13,6 +13,13 @@ const withdrawalStatus = {
   WITHDRAWAL_REJECTED
 };
 
+const withdrawalStatusMap = {};
+withdrawalStatusMap[WITHDRAWAL_PENDING] = { id: WITHDRAWAL_PENDING, text: 'Pending Certification', color: '#ffccbc', textColor: '#302a1b' };
+withdrawalStatusMap[WITHDRAWAL_CERTIFIED] = { id: WITHDRAWAL_CERTIFIED, text: 'Pending Approval', color: '#ffe492', textColor: '#302a1b' };
+withdrawalStatusMap[WITHDRAWAL_APPROVED] = { id: WITHDRAWAL_APPROVED, text: 'Paid', color: '#02b56a', textColor: '#dbf5ea' };
+withdrawalStatusMap[WITHDRAWAL_REJECTED] = { id: WITHDRAWAL_REJECTED, text: 'Rejected', color: '#f24821', textColor: '#302a1b' };
+
+
 export const FUNDING_CONTRACT_PENDING = 1;
 export const FUNDING_CONTRACT_APPROVED = 2;
 export const FUNDING_CONTRACT_REJECTED = 3;
@@ -33,6 +40,7 @@ const fundingTransactionStatus = {
 
 export {
   withdrawalStatus,
+  withdrawalStatusMap,
   fundingContractStatus,
   fundingTransactionStatus
 }
