@@ -80,6 +80,36 @@
                     <v-flex xs12>
 
                       <template row>
+
+                        <v-layout style="padding: 10px 0px 0px 0px">
+                          <v-flex xs2 v-if="isProgramOfficer">
+                            <div style="padding: 0px 10px 0px 10px">
+                              <v-btn block @click="confirmDistribution.isShown = true" color="success" :disabled="!selectedToDistribute.length || isDistributing" :loading="isDistributing">
+                                {{ selectedToDistribute.length ? `Distribute (${selectedToDistribute.length})` : `Distribute`}}
+                              </v-btn>
+                              <span v-if="selectedToDistribute.length">
+                                <span class="title c-ml-5">{{selectedToDistribute.map(p => p.totalAmount).reduce((sum, amount) => sum + amount, 0)}}  </span>
+                                <v-icon size="20px">attach_money</v-icon>
+                              </span>
+                              <confirm-action-dialog
+                                :meta="confirmDistribution" 
+                                :title="``"
+                                :text="`Are you sure you want to distribute selected awards?`" 
+                                @confirmed="distributeTokensToSelectedAwards(); confirmDistribution.isShown = false"  
+                                @canceled="confirmDistribution.isShown = false">
+                              </confirm-action-dialog>
+                            </div>
+                          </v-flex>
+
+                          <v-flex xs2 v-if="isPrincipalInvestigator">
+                            <div style="padding: 0px 10px 0px 10px">
+                              <v-btn block color="primary" @click="openRequestPaymentDialog()" dark>Request Payment</v-btn>
+                              <request-award-payment-dialog :meta="selectedAwardToWithdrawMeta"></request-award-payment-dialog>
+                            </div>
+                          </v-flex>
+
+                        </v-layout>
+
                         <v-data-table
                           :headers="awardHeaders"
                           :items="awards"
@@ -106,28 +136,6 @@
                             <td><span class="body-1">$ {{ (props.item.contract.status == FUNDING_CONTRACT_PENDING ? 0 : props.item.remainingAmount) | currency }}</span></td>
                           </template>
                         </v-data-table>
-
-                        <div v-if="isProgramOfficer">
-                          <v-btn style="min-width: 150px" @click="confirmDistribution.isShown = true" color="success" :disabled="!selectedToDistribute.length || isDistributing" :loading="isDistributing">
-                            {{ selectedToDistribute.length ? `Distribute (${selectedToDistribute.length})` : `Distribute`}}
-                          </v-btn>
-                          <span v-if="selectedToDistribute.length">
-                            <span class="title c-ml-5">{{selectedToDistribute.map(p => p.totalAmount).reduce((sum, amount) => sum + amount, 0)}}  </span>
-                            <v-icon size="20px">attach_money</v-icon>
-                          </span>
-                         <confirm-action-dialog
-                            :meta="confirmDistribution" 
-                            :title="``"
-                            :text="`Are you sure you want to distribute selected awards?`" 
-                            @confirmed="distributeTokensToSelectedAwards(); confirmDistribution.isShown = false"  
-                            @canceled="confirmDistribution.isShown = false">
-                          </confirm-action-dialog>
-                        </div>
-
-                        <div v-if="isPrincipalInvestigator">
-                          <v-btn color="primary" @click="openRequestPaymentDialog()" dark>Request Payment</v-btn>
-                          <request-award-payment-dialog :meta="selectedAwardToWithdrawMeta"></request-award-payment-dialog>
-                        </div>
                       </template>
                     </v-flex>
                   </v-layout>
@@ -165,9 +173,80 @@
                   <v-layout>
                     <v-flex xs12>
                       <template row>
+
+                        <v-layout style="padding: 10px 0px 0px 0px">
+                          <v-flex xs2 v-if="isProgramOfficer">
+                            <div style="padding: 0px 10px 0px 10px">
+                              <v-btn block @click="confirmApproval.isShown = true" color="success" :disabled="!selectedToApprove.length || isApproving" :loading="isApproving">
+                                {{ selectedToApprove.length ? `Approve (${selectedToApprove.length})` : `Approve`}}
+                              </v-btn>
+                              <confirm-action-dialog
+                                :meta="confirmApproval" 
+                                :title="``"
+                                :text="`Are you sure you want to approve selected payment requests?`" 
+                                @confirmed="approveSelectedPaymentRequests(); confirmApproval.isShown = false"  
+                                @canceled="confirmApproval.isShown = false">
+                              </confirm-action-dialog>
+                            </div>
+                          </v-flex>
+
+                          <v-flex xs2 v-if="isCertifier">
+                            <div style="padding: 0px 10px 0px 10px">
+                              <v-btn block @click="confirmCertifying.isShown = true" color="warning" :disabled="!selectedToCertify.length || isCertifying" :loading="isCertifying">
+                                {{ selectedToCertify.length ? `Certify (${selectedToCertify.length})` : `Certify`}}
+                              </v-btn>
+                              <confirm-action-dialog
+                                :meta="confirmCertifying" 
+                                :title="``" 
+                                :text="`Are you sure you want to certify selected payment requests?`" 
+                                @confirmed="certifySelectedPaymentRequests(); confirmCertifying.isShown = false"  
+                                @canceled="confirmCertifying.isShown = false">
+                              </confirm-action-dialog>
+                            </div>
+                          </v-flex>
+
+                          <v-flex xs3>
+                            <div style="padding: 0px 10px 0px 10px">
+                              <v-select
+                                v-model="paymentsFilter.status"
+                                :items="paymentsFilterByStatus"
+                                label="STATUS"
+                                return-object
+                                solo dense>
+                              </v-select>   
+                            </div>
+                          </v-flex>
+
+                          <v-flex xs3 v-if="isProgramOfficer || isFinancialOfficer">
+                            <div style="padding: 0px 10px 0px 10px">
+                              <v-select
+                                v-model="paymentsFilter.org"
+                                :items="paymentsFilterByOrganization"
+                                label="ORGANIZATION"
+                                return-object
+                                solo dense>
+                              </v-select>
+                            </div>                       
+                          </v-flex>
+
+                          <v-flex xs3 v-if="isProgramOfficer || isFinancialOfficer">
+                            <div style="padding: 0px 10px 0px 10px">
+                              <v-select
+                                v-model="paymentsFilter.pi"
+                                :items="paymentsFilterByPI"
+                                label="PI"
+                                return-object
+                                solo dense>
+                              </v-select>
+                            </div>                       
+                          </v-flex>
+
+                          <v-flex xs1></v-flex>
+                        </v-layout>
+
                         <v-data-table
                           :headers="paymentHeaders"
-                          :items="payments"
+                          :items="filteredPayments"
                           v-model="selectedPayments"
                           hide-actions>
 
@@ -194,31 +273,6 @@
                           </template>
                         </v-data-table>
 
-                        <div v-if="isCertifier">
-                          <v-btn style="min-width: 150px" @click="confirmCertifying.isShown = true" color="warning" :disabled="!selectedToCertify.length || isCertifying" :loading="isCertifying">
-                            {{ selectedToCertify.length ? `Certify (${selectedToCertify.length})` : `Certify`}}
-                          </v-btn>
-                          <confirm-action-dialog
-                            :meta="confirmCertifying" 
-                            :title="``" 
-                            :text="`Are you sure you want to certify selected payment requests?`" 
-                            @confirmed="certifySelectedPaymentRequests(); confirmCertifying.isShown = false"  
-                            @canceled="confirmCertifying.isShown = false">
-                          </confirm-action-dialog>
-                        </div>
-
-                        <div v-if="isProgramOfficer">
-                          <v-btn style="min-width: 150px" @click="confirmApproval.isShown = true" color="success" :disabled="!selectedToApprove.length || isApproving" :loading="isApproving">
-                            {{ selectedToApprove.length ? `Approve (${selectedToApprove.length})` : `Approve`}}
-                          </v-btn>
-                          <confirm-action-dialog
-                            :meta="confirmApproval" 
-                            :title="``"
-                            :text="`Are you sure you want to approve selected payment requests?`" 
-                            @confirmed="approveSelectedPaymentRequests(); confirmApproval.isShown = false"  
-                            @canceled="confirmApproval.isShown = false">
-                          </confirm-action-dialog>
-                        </div>
                       </template>
                     </v-flex>
                   </v-layout>
@@ -268,6 +322,12 @@
       data() {
         return {
           tab: null,
+
+          paymentsFilter: {
+            status: { text: 'ALL STATUSES', value: undefined },
+            org: { text: "ALL ORGANIZATIONS", value: undefined },
+            pi: { text: "ALL PIs", value: undefined }
+          },
 
           amountToIssue: null,
           isIssuingTokens: false,
@@ -397,6 +457,45 @@
             { text: 'REQUESTED TIMESTAMP', value: 'timestamp', width: "10%" },
             { text: 'AMOUNT', value: 'amount', width: "50%"  }
           ];
+        },
+
+        paymentsFilterByStatus() {
+          return [ 
+            { text: 'ALL STATUSES', value: undefined },
+            { text: 'PENDING CERTIFICATION', value: [ WITHDRAWAL_PENDING ] },
+            { text: 'PENDING APPROVAL', value: [ WITHDRAWAL_CERTIFIED ] },
+            { text: 'PAID', value: [ WITHDRAWAL_APPROVED ] },
+          ];
+        },
+
+        paymentsFilterByOrganization() {
+          const uniqueOrganizations = [{ text: "ALL ORGANIZATIONS", value: undefined }];
+          for (let i = 0; i < this.payments.length; i++) {
+            let org = this.payments[i].org;
+            if (!uniqueOrganizations.some(o => o.id == org.id)) {
+              uniqueOrganizations.push({ text: org.name, value: org.id });
+            }
+          }
+          return uniqueOrganizations;
+        },
+
+        paymentsFilterByPI() {
+          const uniquePIs= [{ text: "ALL PIs", value: undefined }];
+          for (let i = 0; i < this.payments.length; i++) {
+            let pi = this.payments[i].pi;
+            if (!uniquePIs.some(o => o.id == pi.account.name)) {
+              let name = this.$options.filters.fullname(pi);
+              uniquePIs.push({ text: name, value: pi.account.name });
+            }
+          }
+          return uniquePIs;
+        },
+
+        filteredPayments() {
+          return this.payments
+            .filter((p) => { return this.paymentsFilter.status != undefined && this.paymentsFilter.status.value != undefined ? this.paymentsFilter.status.value.some(s => s == p.status) : true; })
+            .filter((p) => { return this.paymentsFilter.org != undefined && this.paymentsFilter.org.value != undefined ? this.paymentsFilter.org.value == p.org.id : true; })
+            .filter((p) => { return this.paymentsFilter.pi != undefined && this.paymentsFilter.pi.value != undefined ? this.paymentsFilter.pi.value == p.pi.account.name : true; });
         },
 
         totalPaymentsAmount() {

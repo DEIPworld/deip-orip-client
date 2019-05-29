@@ -52,11 +52,11 @@ const router = new Router({
 
                     if (sub) {
                         const isFinancialOfficer = agencies.find(a => a.name.toLowerCase() == sub.toLowerCase() && a.role == "financial-officer");
-                        if (isFinancialOfficer) {
+                        // if (isFinancialOfficer) {
                             next({ name: 'OrganizationFinanceDashboard', params: { org: sub } });
-                        } else {
-                            next({ name: 'OrganizationDashboard', params: { org: sub } });
-                        }
+                        // } else {
+                        //     next({ name: 'OrganizationDashboard', params: { org: sub } });
+                        // }
                     } else {
                         next({ name: 'ResearchFeed' });
                     }
