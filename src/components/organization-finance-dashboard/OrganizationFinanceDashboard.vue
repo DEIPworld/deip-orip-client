@@ -374,22 +374,22 @@
         awardHeaders() {
           return this.isFinancialOfficer ? [
             { text: 'AWARD #', value: 'awardId', width: "10%" },
-            { text: 'PI', value: 'pi.account.name', width: "13%" }, // display PI info for NSF PO
-            { text: 'ORGANIZATION', value: 'org.name', width: "10%" }, // display organization info for NSF PO
-            { text: 'DURATION', value: 'from', width: "15%" },
+            { text: 'PI', value: 'pi.account.name', width: "11%" }, // display PI info for NSF PO
+            { text: 'ORGANIZATION', value: 'org.name', width: "12%" }, // display organization info for NSF PO
+            { text: 'DURATION', value: 'from', width: "13%" },
             { text: 'AWARD AMOUNT', value: 'totalAmount', width: "13.5%" },
-            { text: 'REQUESTED', value: 'requestedAmount', width: "12.5%" },
-            { text: 'ADMIN EXPENSES', value: 'universityOverhead', width: "12.5%" },
+            { text: 'REQUESTED', value: 'requestedAmount', width: "13.5%" },
+            { text: 'ADMIN EXPENSES', value: 'universityOverhead', width: "13.5%" },
             { text: 'REMAINING', value: 'remainingAmount', width: "13.5%" }
           ] : this.isProgramOfficer ? [
             // { text: '', sortable: false, width: "5%" },  // display checkbox for NSF PO
             { text: 'AWARD #', value: 'awardId', width: "10%" },
-            { text: 'PI', value: 'pi.account.name', width: "13%" }, // display PI info for NSF PO
-            { text: 'ORGANIZATION', value: 'org.name', width: "10%" }, // display organization info for NSF PO
-            { text: 'DURATION', value: 'from', width: "15%" },
+            { text: 'PI', value: 'pi.account.name', width: "11%" }, // display PI info for NSF PO
+            { text: 'ORGANIZATION', value: 'org.name', width: "12%" }, // display organization info for NSF PO
+            { text: 'DURATION', value: 'from', width: "13%" },
             { text: 'AWARD AMOUNT', value: 'totalAmount', width: "13.5%" },
-            { text: 'REQUESTED', value: 'requestedAmount', width: "12.5%" },
-            { text: 'ADMIN EXPENSES', value: 'universityOverhead', width: "12.5%" },
+            { text: 'REQUESTED', value: 'requestedAmount', width: "13.5%" },
+            { text: 'ADMIN EXPENSES', value: 'universityOverhead', width: "13.5%" },
             { text: 'REMAINING', value: 'remainingAmount', width: "13.5%" }
           ] : [
             { text: 'AWARD #', value: 'awardId', width: "16.6%" },
