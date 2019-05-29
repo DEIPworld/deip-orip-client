@@ -8,7 +8,6 @@
 
       <v-flex xs6 class="pa-4 grey-background">
         <v-layout row wrap>
-
           <v-flex xs3 class="pa-1">
             <span class="body-2 grey--text">PI</span>
           </v-flex>
@@ -48,7 +47,6 @@
           <v-flex xs9 class="pa-1">
             <span class="body-2">{{ moment(new Date(award.from)).format("MM/YY") }} - {{ moment(new Date(award.to)).format("MM/YY") }}</span>
           </v-flex>
-
         </v-layout>
       </v-flex>
 
@@ -97,8 +95,44 @@
 
         </v-layout>
       </v-flex>
+    </v-layout>
 
+    <v-layout row wrap class="pa-4">
+      <v-flex xs12 class="py-3"><h3>Subawards</h3></v-flex xs12>
+      <v-flex xs12>
+        <v-data-table
+          :headers="subawardsHeaders"
+          :items="subawards"
+          disable-initial-sort
+          hide-actions>
 
+          <template slot="items" slot-scope="props">
+            <td><a class="a body-2" href="#">{{props.item.subawardNumber}}</a></td>
+            <td><a class="a body-1" href="#">{{props.item.subawardeeProfile}}</a></td>
+            <td><span class="body-1">{{props.item.org.name}}</span></td>
+            <td><span class="body-1">$ {{props.item.totalAmount | currency}}</span></td>
+            <td><span class="body-1">$ {{props.item.requestedAmount | currency}}</span></td>
+            <td><span class="body-1">$ {{props.item.remainingAmount | currency}}</span></td>
+          </template>
+        </v-data-table>
+      </v-flex>
+      <v-flex xs12>
+        <div class="subawards-total-row body-1 bold">
+          <table style="width: 100%">
+            <tbody>
+              <tr>
+                <td v-for="(header, i) in subawardsHeaders" :style="{ width: header.width, padding: '0px 24px'}">
+                  <span v-if="i == 0">Total</span>
+                  <span v-if="header.value == 'totalAmount'">$ {{totalSubawardsAmount | currency}}</span>
+                  <span v-else-if="header.value == 'requestedAmount'">$ {{totalSubawardsRequestedAmount | currency}}</span>
+                  <span v-else-if="header.value == 'remainingAmount'">$ {{totalSubawardsRemainingAmount | currency}}</span>
+                  <span v-else></span>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </v-flex>
     </v-layout>
   </v-container>
 </template>
@@ -112,7 +146,9 @@
         name: "AwardDetails",
 
         data() {
-          return {}
+          return {
+            subawards: [{subawardNumber: "1005001", subawardeeProfile: "John Nelson", org: { name: "MIT" }, totalAmount: 50000,  requestedAmount: 40000, remainingAmount: 10000 }]
+          }
         },
 
         computed: {
@@ -123,8 +159,34 @@
             isProgramOfficer: 'auth/isProgramOfficer',
             isFinancialOfficer: 'auth/isFinancialOfficer',
             organization: 'award_details/organization',
-            award: 'award_details/award'
+            award: 'award_details/award',
           }),
+
+          subawardsHeaders() {
+            return [
+              { text: 'SUBAWARD #', value: 'subawardId', width: "16.5%" },
+              { text: 'SUBAWARDEE', value: 'subawardee', width: "17.5%" },
+              { text: 'ORGANIZATION', value: 'org.name', width: "16.5%" },
+              { text: 'SUBAWARD AMOUNT', value: 'totalAmount', width: "16.5%" },
+              { text: 'REQUESTED', value: 'requestedAmount', width: "16.5%" },
+              { text: 'REMAINING', value: 'remainingAmount', width: "16.5%" }
+            ];
+          },
+
+          totalSubawardsAmount() {
+            return this.subawards.map(tx => tx.totalAmount)
+              .reduce((sum, amount) => sum + amount, 0);
+          },
+
+          totalSubawardsRequestedAmount() {
+            return this.subawards.map(tx => tx.requestedAmount)
+              .reduce((sum, amount) => sum + amount, 0);
+          },
+          
+          totalSubawardsRemainingAmount() {
+            return this.subawards.map(tx => tx.remainingAmount)
+              .reduce((sum, amount) => sum + amount, 0);
+          }
         },
 
         created() {}
@@ -135,6 +197,12 @@
 
   .grey-background {
     background-color: #f5f5f5
+  }
+
+  .subawards-total-row {
+    background-color: var(--v-secondary-base); 
+    padding-top: 10px;
+    padding-bottom: 10px;
   }
 
 </style>
