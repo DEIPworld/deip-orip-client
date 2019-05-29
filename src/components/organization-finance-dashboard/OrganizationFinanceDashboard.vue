@@ -675,6 +675,7 @@
 </script>
 
 <style lang="less" scoped>
+
   .grey-background {
     background-color: #f5f5f5
   }

@@ -32,7 +32,7 @@ const getters = {
     let pendingAmount = 0;
     let withdrawnAmount = 0;
     let requestedAmount = 0;
-    
+
     for (let i = 0; i < rel.withdrawals.length; i++) {
       let withdrawal = rel.withdrawals[i];
       if (withdrawal.status == WITHDRAWAL_PENDING || withdrawal.status == WITHDRAWAL_CERTIFIED) pendingAmount += fromAssetsToFloat(withdrawal.amount);
@@ -77,6 +77,39 @@ const getters = {
       pi
     }
     return award;
+  },
+
+  payments: state => {
+
+    let rels = state.contract.relations;
+    if (!rels.length) return [];
+
+    let items = []; 
+
+    for (let j = 0; j < rels.length; j++) {
+      let rel = rels[j];
+      let org = state.organization;
+      let pi = rel.researcherUser;
+      for (let i = 0; i < rel.withdrawals.length; i++) {
+        let withdrawal = rel.withdrawals[i];
+        let item = {
+          id: withdrawal.id,
+          paymentId: withdrawal.id,
+          awardId: rel.id,
+          amount: fromAssetsToFloat(withdrawal.amount),
+          status: withdrawal.status,
+          award: rel,
+          attachment: withdrawal.attachment,
+          timestamp: withdrawal.time,
+          org,
+          pi,
+          requester: pi
+        }
+        items.push(item);
+      }
+    }
+
+    return items;
   }
 }
 
