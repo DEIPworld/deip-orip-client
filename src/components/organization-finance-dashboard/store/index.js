@@ -70,7 +70,7 @@ const getters = {
 
 			return rels.map((rel, index) => {
 				let totalAmount = fromAssetsToFloat(rel.total_amount);
-				let universityOverhead = totalAmount - (totalAmount - (totalAmount * (rel.university_overhead / 100) / 100));
+				let universityOverheadAmount = totalAmount - (totalAmount - (totalAmount * (rel.university_overhead / 100) / 100));
 				let pendingAmount = 0;
 				let withdrawnAmount = 0;
 				let requestedAmount = 0;
@@ -81,8 +81,8 @@ const getters = {
 					requestedAmount += fromAssetsToFloat(withdrawal.amount);
 				}
 
-				let availableAmount = totalAmount - pendingAmount - withdrawnAmount - universityOverhead;
-				let remainingAmount = totalAmount - requestedAmount - universityOverhead;
+				let availableAmount = totalAmount - pendingAmount - withdrawnAmount - universityOverheadAmount;
+				let remainingAmount = totalAmount - requestedAmount - universityOverheadAmount;
 				if (remainingAmount != availableAmount) {
 					console.warn(`WARNING: award available amount (${availableAmount}) is not equal to remaining amount (${remainingAmount})`);
 				}
@@ -98,14 +98,13 @@ const getters = {
 					pendingAmount,
 					withdrawnAmount,
 					requestedAmount,
-					universityOverhead,
+					universityOverheadAmount,
 					from: c.foa.open_date,
 					to: c.foa.close_date,
 					contract: c,
 					relation: rel,
 					org,
-					pi,
-					withdrawnUniversityOverhead: withdrawnAmount
+					pi
 				}
 				return award;
 			});
@@ -170,9 +169,6 @@ const actions = {
 
 			return Promise.all([organizationsLoad, tokenStatiscticLoad, awardsLoad]);
 		})
-			.then(() => {
-				return dispatch('loadFinancialTransactions');
-			})
 			.finally(() => {
 				commit('SET_ORGANIZATION_DASHBOARD_LOADING_STATE', false);
 			});
@@ -197,63 +193,6 @@ const actions = {
 			.finally(() => {
 				if (notify) notify();
 			});
-	},
-
-	loadFinancialTransactions({ state, dispatch, commit, getters }) {
-		const transactions = [];
-		const fees = [];
-		const withdrawals = [];
-		const transfer = [];
-		
-		return Promise.all(state.organizations.map(o => deipRpc.api.getFundingTransactionsByReceiverOrganisationAsync(o.id)))
-			.then((items) => {
-				console.log(items);
-				const flatten = [].concat.apply([], items);
-				transactions.push(...flatten);
-				fees.push(...transactions.filter(t => t.type == FUNDING_TRANSACTION_FEE));
-				withdrawals.push(...transactions.filter(t => t.type == FUNDING_TRANSACTION_WITHDRAW));
-				transfer.push(...transactions.filter(t => t.type == FUNDING_TRANSACTION_TRANSFER));
-				let researchers = [...withdrawals, ...transfer].map(t => t.to_account);
-				return getEnrichedProfiles(researchers);
-			})
-			.then((profiles) => {
-				let piTxList = [...withdrawals, ...transfer];
-				for (let i = 0; i < piTxList.length; i++) {
-					let tx = piTxList[i];
-					tx.receiverProfile = profiles[i];
-					tx.senderProfile = state.organizations.find(o => o.id == tx.sender_organisation_id);
-				}
-
-				let orgTxList = [...fees];
-				for (let i = 0; i < orgTxList.length; i++) {
-					let tx = orgTxList[i];
-					tx.receiverProfile = state.organizations.find(o => o.id == tx.receiver_organisation_id);
-					tx.senderProfile = state.organizations.find(o => o.id == tx.sender_organisation_id);
-					/* profiles.find(r => r.account.organisation_id == tx.sender_organisation_id); */
-				}
-
-				for (let i = 0; i < transactions.length; i++) {
-					let tx = transactions[i];
-					if (tx.time == '1970-01-01T00:00:00') {
-						tx.time = moment()
-							.subtract(i + 1, "days")
-							.subtract(i + 1, "hours")
-							.subtract(i + 1, "minutes")
-							.subtract(i + 1, "seconds")
-							.toString();
-					}
-					tx.time = new Date(tx.time.toString());
-				}
-
-				transactions.sort(function (a, b) {
-					return new Date(b.time) - new Date(a.time);
-				});
-
-				commit('SET_TRANSACTIONS_HISTORY_LIST', transactions);
-				console.log(transactions);
-			})
-			.catch(err => { console.log(err) })
-			.finally(() => { });
 	},
 
 	loadOrganizations({ state, dispatch, commit }, { notify }) {

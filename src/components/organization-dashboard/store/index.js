@@ -24,7 +24,7 @@ const getters = {
 
 			return rels.map((rel, index) => {
 				let totalAmount = fromAssetsToFloat(rel.total_amount);
-				let universityOverhead = totalAmount - (totalAmount - ( totalAmount * (rel.university_overhead / 100) / 100 ) ) ;
+				let universityOverheadAmount = totalAmount - (totalAmount - ( totalAmount * (rel.university_overhead / 100) / 100 ) ) ;
 				let pendingAmount = 0;
 				let withdrawnAmount = 0;
 				for (let i = 0; i < rel.withdrawals.length; i++) {
@@ -33,7 +33,7 @@ const getters = {
 					if (withdrawal.status == WITHDRAWAL_APPROVED) withdrawnAmount += fromAssetsToFloat(withdrawal.amount);
 				}
 
-				let availableAmount = totalAmount - pendingAmount - withdrawnAmount - universityOverhead;
+				let availableAmount = totalAmount - pendingAmount - withdrawnAmount - universityOverheadAmount;
 
 				let org = state.organizations.find(o => o.id == rel.organisation_id);
 				let pi = rel.researcherUser;
@@ -49,8 +49,7 @@ const getters = {
 					contract: c,
 					relation: rel,
 					org,
-					pi,
-					withdrawnUniversityOverhead: withdrawnAmount
+					pi
 				}
 				return award;
 			});

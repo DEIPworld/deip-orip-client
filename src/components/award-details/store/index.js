@@ -2,8 +2,16 @@ import _ from 'lodash';
 import deipRpc from '@deip/deip-rpc-client';
 import Vue from 'vue';
 import { getEnrichedProfiles } from './../../../utils/user';
-import { loadFundingContract } from './../../../services/FundingService';
 import { stat } from 'fs';
+import { fromAssetsToFloat } from './../../../utils/blockchain';
+import {
+  WITHDRAWAL_PENDING,
+  WITHDRAWAL_CERTIFIED,
+  WITHDRAWAL_APPROVED,
+  WITHDRAWAL_REJECTED,
+
+  loadFundingContract
+} from './../../../services/FundingService';
 
 const state = {
   isLoadingAwardDetailsPage: false,
@@ -15,7 +23,61 @@ const state = {
 const getters = {
   isLoadingAwardDetailsPage: (state) => state.isLoadingAwardDetailsPage,
   organization: (state) => state.organization,
-  award: (state) => state.contract
+
+  award: (state) => {
+    let c = state.contract;
+    let rel = c.relations[0];
+    let totalAmount = fromAssetsToFloat(rel.total_amount);
+    let universityOverheadAmount = totalAmount - (totalAmount - (totalAmount * (rel.university_overhead / 100) / 100));
+    let pendingAmount = 0;
+    let withdrawnAmount = 0;
+    let requestedAmount = 0;
+    
+    for (let i = 0; i < rel.withdrawals.length; i++) {
+      let withdrawal = rel.withdrawals[i];
+      if (withdrawal.status == WITHDRAWAL_PENDING || withdrawal.status == WITHDRAWAL_CERTIFIED) pendingAmount += fromAssetsToFloat(withdrawal.amount);
+      if (withdrawal.status == WITHDRAWAL_APPROVED) withdrawnAmount += fromAssetsToFloat(withdrawal.amount);
+      requestedAmount += fromAssetsToFloat(withdrawal.amount);
+    }
+
+    let availableAmount = totalAmount - pendingAmount - withdrawnAmount - universityOverheadAmount;
+    let remainingAmount = totalAmount - requestedAmount - universityOverheadAmount;
+    if (remainingAmount != availableAmount) {
+      console.warn(`WARNING: award available amount (${availableAmount}) is not equal to remaining amount (${remainingAmount})`);
+    }
+
+    let subawardeesAmount = 0;
+    let requestedSubawardeesAmount = 0;
+    let piAmount = totalAmount - subawardeesAmount - universityOverheadAmount;
+    let requestedPiAmount = requestedAmount;
+
+    let org = state.organization;
+    let pi = rel.researcherUser;
+    let award = {
+      id: rel.id,
+      awardId: rel.id,
+      totalAmount,
+      availableAmount,
+      remainingAmount,
+      pendingAmount,
+      withdrawnAmount,
+      requestedAmount,
+      universityOverheadAmount,
+
+      piAmount,
+      requestedPiAmount,
+
+      subawardeesAmount,
+      requestedSubawardeesAmount,
+      from: c.foa.open_date,
+      to: c.foa.close_date,
+      contract: c,
+      relation: rel,
+      org,
+      pi
+    }
+    return award;
+  }
 }
 
 // actions

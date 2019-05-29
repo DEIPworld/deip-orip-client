@@ -131,7 +131,7 @@
 
                             <td><span class="body-1">$ {{ props.item.totalAmount | currency }}</span></td>
                             <td><span class="body-1">$ {{ props.item.requestedAmount | currency}}</span></td>
-                            <td><span class="body-1">$ {{ props.item.universityOverhead | currency}}</span></td>
+                            <td><span class="body-1">$ {{ props.item.universityOverheadAmount | currency}}</span></td>
                             <td><span class="body-1">$ {{ (props.item.contract.status == FUNDING_CONTRACT_PENDING ? 0 : props.item.remainingAmount) | currency }}</span></td>
                           </template>
                         </v-data-table>
@@ -149,7 +149,7 @@
                                 <span v-if="i == 0">Total</span>
                                 <span v-if="header.value == 'totalAmount'">$ {{totalAwardsAmount | currency}}</span>
                                 <span v-else-if="header.value == 'requestedAmount'">$ {{totalRequestedAmount | currency}}</span>
-                                <span v-else-if="header.value == 'universityOverhead'">$ {{totalAdminExpensesAmount | currency}}</span>
+                                <span v-else-if="header.value == 'universityOverheadAmount'">$ {{totalAdminExpensesAmount | currency}}</span>
                                 <span v-else-if="header.value == 'remainingAmount'">$ {{totalRemainingAmount | currency}}</span>
                                 <span v-else></span>
                               </td>
@@ -264,7 +264,7 @@
                               </v-chip>
                             </td>
                             <td><span class="body-1">{{ props.item | paymentNumber }}</span></td>
-                            <td><router-link class="a body-2" :to="{ name: 'AwardDetails', params: { org: props.item.org.permlink, id: props.item.id } }">{{ props.item | awardNumber }}</router-link></td>
+                            <td><router-link class="a body-2" :to="{ name: 'AwardDetails', params: { org: props.item.org.permlink, id: props.item.award.id } }">{{ props.item.award | awardNumber }}</router-link></td>
                             <td v-if="isProgramOfficer || isFinancialOfficer"><router-link class="a body-1" :to="{ name: 'UserDetails', params: { account_name: props.item.pi.account.name } }">{{ props.item.pi | fullname}}</router-link></td>
                             <td v-if="isProgramOfficer || isFinancialOfficer"><div><a href="#" class="a body-1">{{ props.item.org.name }}</a></div></td>
                             <td><span class="body-1">Requester</span></td>
@@ -379,7 +379,7 @@
             { text: 'DURATION', value: 'from', width: "13%" },
             { text: 'AWARD AMOUNT', value: 'totalAmount', width: "13.5%" },
             { text: 'REQUESTED', value: 'requestedAmount', width: "13.5%" },
-            { text: 'ADMIN EXPENSES', value: 'universityOverhead', width: "13.5%" },
+            { text: 'ADMIN EXPENSES', value: 'universityOverheadAmount', width: "13.5%" },
             { text: 'REMAINING', value: 'remainingAmount', width: "13.5%" }
           ] : this.isProgramOfficer ? [
             // { text: '', sortable: false, width: "5%" },  // display checkbox for NSF PO
@@ -389,14 +389,14 @@
             { text: 'DURATION', value: 'from', width: "13%" },
             { text: 'AWARD AMOUNT', value: 'totalAmount', width: "13.5%" },
             { text: 'REQUESTED', value: 'requestedAmount', width: "13.5%" },
-            { text: 'ADMIN EXPENSES', value: 'universityOverhead', width: "13.5%" },
+            { text: 'ADMIN EXPENSES', value: 'universityOverheadAmount', width: "13.5%" },
             { text: 'REMAINING', value: 'remainingAmount', width: "13.5%" }
           ] : [
             { text: 'AWARD #', value: 'awardId', width: "16.6%" },
             { text: 'DURATION', value: 'from', width: "16.6%" },
             { text: 'AWARD AMOUNT', value: 'totalAmount', width: "16.6%" },
             { text: 'REQUESTED', value: 'requestedAmount', width: "16.6%" },
-            { text: 'ADMIN EXPENSES', value: 'universityOverhead', width: "16.6%" },
+            { text: 'ADMIN EXPENSES', value: 'universityOverheadAmount', width: "16.6%" },
             { text: 'REMAINING', value: 'remainingAmount', width: "16.6%" }
           ];
         },
@@ -412,7 +412,7 @@
         },
         
         totalAdminExpensesAmount() {
-          return this.awards.map(tx => tx.universityOverhead)
+          return this.awards.map(tx => tx.universityOverheadAmount)
 			      .reduce((sum, amount) => sum + amount, 0);
         },
 
