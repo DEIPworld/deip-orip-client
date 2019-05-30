@@ -98,6 +98,24 @@ export async function loadFundingContractDetails(contract) {
   const flattenWithdrawals = []
   return deipRpc.api.getFundingResearchRelationsByFundingAsync(contract.id)
     .then((relations) => {
+
+      let award = relations[0];
+      award.isSubaward = false;
+      award.subawards = [];
+      award.hasSubawards = relations.length > 1;
+
+      for (let i = 1; i < relations.length; i++) {
+        let subaward = relations[i];
+        
+        subaward.isSubaward = true;
+        subaward.parentAward = award;
+
+        subaward.subawards = []; // currently we support only one level of subawards
+        subaward.hasSubawards = false;
+
+        award.subawards.push(subaward);
+      }
+      
       contract.relations = relations;
       return Promise.all(contract.relations.map(r => deipRpc.api.getFundingMilestonesByResearchAsync(r.id)));
     })
@@ -138,6 +156,12 @@ export async function loadFundingContractDetails(contract) {
     .then((attachments) => {
       for (let i = 0; i < flattenWithdrawals.length; i++) {
         flattenWithdrawals[i].attachment = attachments[i] || null;
+      }
+      return Promise.all(contract.relations.map(r => deipRpc.api.getOrganisationAsync(r.organisation_id)));
+    })
+    .then((organizations) => {
+      for (let i = 0; i < organizations.length; i++) {
+        contract.relations[i].organization = organizations[i];
       }
     });
 }

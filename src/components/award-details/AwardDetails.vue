@@ -3,7 +3,17 @@
     <v-layout row wrap>
 
       <v-flex xs10 class="pa-4 grey-background">
-        <h1 class="display-1">Award # {{award | awardNumber}}</h1>
+        <h1 class="display-1">Award # {{award | awardNumber}} 
+          <span v-if="award.isSubaward" class="subheading grey--text">
+            (subaward of 
+            <router-link class="a body-2" :to="{ name: 'AwardDetails', 
+              params: { 
+                org: award.parentAward.organization.permlink, 
+                contractId: award.contract.id,
+                awardId: award.parentAward.id } }"># {{award.parentAward | awardNumber}}
+            </router-link>)
+          </span>
+        </h1>
       </v-flex>
       
       <v-flex xs2 class="pa-4 grey-background">
@@ -39,7 +49,7 @@
             <span class="body-2 grey--text">Organization</span>
           </v-flex>
           <v-flex xs9 class="pa-1">
-            <a href="#" class="a body-2">{{ award.org.name}}</a>
+            <a href="#" class="a body-2">{{ award.organization.name}}</a>
           </v-flex>
 
           <v-flex xs3 class="pa-1">
@@ -117,7 +127,7 @@
       </v-flex>
     </v-layout>
 
-    <v-layout row wrap class="pa-4">
+    <v-layout row wrap class="pa-4" v-if="subawards.length">
       <v-flex xs12 class="py-3"><h3>Subawards</h3></v-flex xs12>
       <v-flex xs12>
         <v-data-table
@@ -127,12 +137,12 @@
           hide-actions>
 
           <template slot="items" slot-scope="props">
-            <td><a class="a body-2" href="#">{{props.item.subawardNumber}}</a></td>
-            <td><a class="a body-1" href="#">{{props.item.subawardeeProfile}}</a></td>
-            <td><span class="body-1">{{props.item.org.name}}</span></td>
-            <td><span class="body-1">$ {{props.item.totalAmount | currency}}</span></td>
-            <td><span class="body-1">$ {{props.item.requestedAmount | currency}}</span></td>
-            <td><span class="body-1">$ {{props.item.remainingAmount | currency}}</span></td>
+            <td><router-link class="a body-2" :to="{ name: 'AwardDetails', params: { org: props.item.organization.permlink, contractId: props.item.contract.id, awardId: props.item.subawardId } }">{{props.item | awardNumber}}</router-link></td>
+            <td><a class="a body-1" href="#">{{props.item.subawardee | fullname}}</a></td>
+            <td><span class="body-1">{{props.item.organization.name}}</span></td>
+            <td><span class="body-1">$ {{props.item.totalSubawardAmount | currency}}</span></td>
+            <td><span class="body-1">$ {{props.item.requestedSubawardAmount | currency}}</span></td>
+            <td><span class="body-1">$ {{props.item.remainingSubawardAmount | currency}}</span></td>
           </template>
         </v-data-table>
       </v-flex>
@@ -143,9 +153,9 @@
               <tr>
                 <td v-for="(header, i) in subawardsHeaders" :style="{ width: header.width, padding: '0px 24px'}">
                   <span v-if="i == 0">Total</span>
-                  <span v-if="header.value == 'totalAmount'">$ {{totalSubawardsAmount | currency}}</span>
-                  <span v-else-if="header.value == 'requestedAmount'">$ {{totalSubawardsRequestedAmount | currency}}</span>
-                  <span v-else-if="header.value == 'remainingAmount'">$ {{totalSubawardsRemainingAmount | currency}}</span>
+                  <span v-if="header.value == 'totalSubawardAmount'">$ {{totalSubawardsAmount | currency}}</span>
+                  <span v-else-if="header.value == 'requestedSubawardAmount'">$ {{totalSubawardsRequestedAmount | currency}}</span>
+                  <span v-else-if="header.value == 'remainingSubawardAmount'">$ {{totalSubawardsRemainingAmount | currency}}</span>
                   <span v-else></span>
                 </td>
               </tr>
@@ -281,7 +291,6 @@
 
         data() {
           return {
-            subawards: [{ subawardNumber: "1005001", subawardeeProfile: "John Nelson", org: { name: "MIT" }, totalAmount: 50000,  requestedAmount: 40000, remainingAmount: 10000 }],
             
             paymentsFilter: {
               status: { text: 'ALL STATUSES', value: undefined },
@@ -318,7 +327,8 @@
               isFinancialOfficer: 'auth/isFinancialOfficer',
               organization: 'award_details/organization',
               award: 'award_details/award',
-              payments: 'award_details/payments'
+              payments: 'award_details/payments',
+              subawards: 'award_details/subawards'
           }),
 
           isAwardNotDistributed() {
@@ -329,10 +339,10 @@
             return [
               { text: 'SUBAWARD #', value: 'subawardId', width: "16.5%" },
               { text: 'SUBAWARDEE', value: 'subawardee', width: "17.5%" },
-              { text: 'ORGANIZATION', value: 'org.name', width: "16.5%" },
-              { text: 'SUBAWARD AMOUNT', value: 'totalAmount', width: "16.5%" },
-              { text: 'REQUESTED', value: 'requestedAmount', width: "16.5%" },
-              { text: 'REMAINING', value: 'remainingAmount', width: "16.5%" }
+              { text: 'ORGANIZATION', value: 'organization.name', width: "16.5%" },
+              { text: 'SUBAWARD AMOUNT', value: 'totalSubawardAmount', width: "16.5%" },
+              { text: 'REQUESTED', value: 'requestedSubawardAmount', width: "16.5%" },
+              { text: 'REMAINING', value: 'remainingSubawardAmount', width: "16.5%" }
             ];
           },
 
@@ -367,17 +377,20 @@
           },
 
           totalSubawardsAmount() {
-            return this.subawards.map(tx => tx.totalAmount)
+            return this.subawards
+              .map(tx => tx.totalSubawardAmount)
               .reduce((sum, amount) => sum + amount, 0);
           },
 
           totalSubawardsRequestedAmount() {
-            return this.subawards.map(tx => tx.requestedAmount)
+            return this.subawards
+              .map(tx => tx.requestedSubawardAmount)
               .reduce((sum, amount) => sum + amount, 0);
           },
           
           totalSubawardsRemainingAmount() {
-            return this.subawards.map(tx => tx.remainingAmount)
+            return this.subawards
+              .map(tx => tx.remainingSubawardAmount)
               .reduce((sum, amount) => sum + amount, 0);
           },
 
@@ -429,7 +442,7 @@
             Promise.all(promises)
               .then(() => {
                 let reload = new Promise((resolve, reject) => {
-                  this.$store.dispatch('award_details/loadAward', { notify: resolve, awardId: this.award.id });
+                  this.$store.dispatch('award_details/loadAward', { notify: resolve, contractId: this.award.contract.id, awardId: this.award.id });
                 });
                 return Promise.all([reload]);
               })
@@ -463,7 +476,7 @@
             Promise.all(promises)
               .then(() => {
                 let reload = new Promise((resolve, reject) => {
-                  this.$store.dispatch('award_details/loadAward', { notify: resolve, awardId: this.award.id });
+                  this.$store.dispatch('award_details/loadAward', { notify: resolve, contractId: this.award.contract.id, awardId: this.award.id });
                 });
                 return Promise.all([reload]);
               })
@@ -490,7 +503,7 @@
             deipRpc.broadcast.approveFundingAsync(this.user.privKey, this.award.contract.id, this.user.username)
               .then(() => {
                 let reload = new Promise((resolve, reject) => {
-                  this.$store.dispatch('award_details/loadAward', { notify: resolve, awardId: this.award.id });
+                  this.$store.dispatch('award_details/loadAward', { notify: resolve, contractId: this.award.contract.id, awardId: this.award.id });
                 });
                 return Promise.all([reload]);
               })
@@ -516,6 +529,16 @@
           'selectedPayments': function (newVal, oldVal) {
             this.selectedToCertify = newVal.filter(p => p.status == WITHDRAWAL_PENDING);
             this.selectedToApprove = newVal.filter(p => p.status == WITHDRAWAL_CERTIFIED);
+          },
+          '$route.params': {
+            handler(params) {
+              if (this.award.organization.permlink != params.org || 
+                  this.award.contract.id != params.contractId || 
+                  this.award.id != params.awardId) {
+                    this.$router.go();
+              }
+            },
+            immediate: true
           }
         },
 

@@ -87,11 +87,10 @@
                           hide-actions>
 
                           <template slot="items" slot-scope="props">
-                            <td><router-link class="a body-2" :to="{ name: 'AwardDetails', params: { org: props.item.org.permlink, id: props.item.id } }">{{ props.item | awardNumber }}</router-link></td>
+                            <td><router-link class="a body-2" :to="{ name: 'AwardDetails', params: { org: props.item.organization.permlink, contractId: props.item.contract.id, awardId: props.item.awardId } }">{{ props.item | awardNumber }}</router-link></td>
                             <td v-if="isProgramOfficer || isFinancialOfficer"><router-link class="a body-1" :to="{ name: 'UserDetails', params: { account_name: props.item.pi.account.name } }">{{ props.item.pi | fullname}}</router-link></td>
-                            <td v-if="isProgramOfficer || isFinancialOfficer"><div><a href="#" class="a body-1">{{ props.item.org.name }}</a></div></td>
+                            <td v-if="isProgramOfficer || isFinancialOfficer"><div><a href="#" class="a body-1">{{ props.item.organization.name }}</a></div></td>
                             <td><span class="body-1">{{ moment(new Date(props.item.from)).format("MM/YY") }} - {{ moment(new Date(props.item.to)).format("MM/YY") }}</span></td>
-
                             <td><span class="body-1">$ {{ props.item.totalAmount | currency }}</span></td>
                             <td>
                               <span class="body-1">
@@ -168,7 +167,7 @@
                           <v-flex xs3 v-if="isProgramOfficer || isFinancialOfficer">
                             <div style="padding: 0px 10px 0px 10px">
                               <v-select
-                                v-model="paymentsFilter.org"
+                                v-model="paymentsFilter.organization"
                                 :items="paymentsFilterByOrganization"
                                 label="ORGANIZATION"
                                 return-object
@@ -244,9 +243,9 @@
                               </v-chip>
                             </td>
                             <td><span class="body-1">{{ props.item | paymentNumber }}</span></td>
-                            <td><router-link class="a body-2" :to="{ name: 'AwardDetails', params: { org: props.item.org.permlink, id: props.item.award.id } }">{{ props.item.award | awardNumber }}</router-link></td>
+                            <td><router-link class="a body-2" :to="{ name: 'AwardDetails', params: { org: props.item.organization.permlink, contractId: props.item.contract.id, awardId: props.item.awardId } }">{{ props.item.award | awardNumber }}</router-link></td>
                             <td v-if="isProgramOfficer || isFinancialOfficer"><router-link class="a body-1" :to="{ name: 'UserDetails', params: { account_name: props.item.pi.account.name } }">{{ props.item.pi | fullname}}</router-link></td>
-                            <td v-if="isProgramOfficer || isFinancialOfficer"><div><a href="#" class="a body-1">{{ props.item.org.name }}</a></div></td>
+                            <td v-if="isProgramOfficer || isFinancialOfficer"><div><a href="#" class="a body-1">{{ props.item.organization.name }}</a></div></td>
                             <td><span class="body-1">Requester</span></td>
                             <td><span class="body-1 grey--text">{{moment(props.item.timestamp).format('MM/DD/YYYY HH:mm:ss')}}</span></td>
                             <td><div class="body-2 text-align-right">$ {{ props.item.amount | currency }}</div></td>
@@ -305,7 +304,7 @@
 
           paymentsFilter: {
             status: { text: 'ALL STATUSES', value: undefined },
-            org: { text: "ALL ORGANIZATIONS", value: undefined },
+            organization: { text: "ALL ORGANIZATIONS", value: undefined },
             pi: { text: "ALL PIs", value: undefined }
           },
 
@@ -348,17 +347,16 @@
           return this.isFinancialOfficer ? [
             { text: 'AWARD #', value: 'awardId', width: "10%" },
             { text: 'PI', value: 'pi.account.name', width: "11%" }, // display PI info for NSF PO
-            { text: 'ORGANIZATION', value: 'org.name', width: "12%" }, // display organization info for NSF PO
+            { text: 'ORGANIZATION', value: 'organization.name', width: "12%" }, // display organization info for NSF PO
             { text: 'DURATION', value: 'from', width: "13%" },
             { text: 'AWARD AMOUNT', value: 'totalAmount', width: "13.5%" },
             { text: 'REQUESTED', value: 'requestedAmount', width: "13.5%" },
             { text: 'ADMIN EXPENSES', value: 'universityOverheadAmount', width: "13.5%" },
             { text: 'REMAINING', value: 'remainingAmount', width: "13.5%" }
           ] : this.isProgramOfficer ? [
-            // { text: '', sortable: false, width: "5%" },  // display checkbox for NSF PO
             { text: 'AWARD #', value: 'awardId', width: "10%" },
             { text: 'PI', value: 'pi.account.name', width: "11%" }, // display PI info for NSF PO
-            { text: 'ORGANIZATION', value: 'org.name', width: "12%" }, // display organization info for NSF PO
+            { text: 'ORGANIZATION', value: 'organization.name', width: "12%" }, // display organization info for NSF PO
             { text: 'DURATION', value: 'from', width: "13%" },
             { text: 'AWARD AMOUNT', value: 'totalAmount', width: "13.5%" },
             { text: 'REQUESTED', value: 'requestedAmount', width: "13.5%" },
@@ -409,7 +407,7 @@
             { text: 'PAYMENT #', value: 'paymentId', width: "10%" },
             { text: 'AWARD #', value: 'awardId', width: "10%" },
             { text: 'PI', value: 'pi.account.name', width: "15%" }, // display PI info for NSF PO
-            { text: 'ORGANIZATION', value: 'org.name', width: "5%" }, // display organization info for NSF PO
+            { text: 'ORGANIZATION', value: 'organization.name', width: "5%" }, // display organization info for NSF PO
             { text: 'REQUESTER', value: 'pi.account.name', width: "15%" },
             { text: 'TIMESTAMP', value: 'timestamp', width: "10%" },
             { text: 'AMOUNT', value: 'amount', align: 'right', width: "15%" }
@@ -418,7 +416,7 @@
             { text: 'PAYMENT #', value: 'paymentId', width: "10%" },
             { text: 'AWARD #', value: 'awardId', width: "10%" },
             { text: 'PI', value: 'pi.account.name', width: "15%" }, // display PI info for NSF FO
-            { text: 'ORGANIZATION', value: 'org.name', width: "10%" }, // display organization info for NSF FO
+            { text: 'ORGANIZATION', value: 'organization.name', width: "10%" }, // display organization info for NSF FO
             { text: 'REQUESTER', value: 'pi.account.name', width: "15%" },
             { text: 'TIMESTAMP', value: 'timestamp', width: "10%" },
             { text: 'AMOUNT', value: 'amount', align: 'right', width: "15%" }
@@ -452,9 +450,9 @@
         paymentsFilterByOrganization() {
           const uniqueOrganizations = [{ text: "ALL ORGANIZATIONS", value: undefined }];
           for (let i = 0; i < this.payments.length; i++) {
-            let org = this.payments[i].org;
-            if (!uniqueOrganizations.some(o => o.id == org.id)) {
-              uniqueOrganizations.push({ text: org.name, value: org.id });
+            let organization = this.payments[i].organization;
+            if (!uniqueOrganizations.some(o => o.id == organization.id)) {
+              uniqueOrganizations.push({ text: organization.name, value: organization.id });
             }
           }
           return uniqueOrganizations;
@@ -475,12 +473,13 @@
         filteredPayments() {
           return this.payments
             .filter((p) => { return this.paymentsFilter.status != undefined && this.paymentsFilter.status.value != undefined ? this.paymentsFilter.status.value.some(s => s == p.status) : true; })
-            .filter((p) => { return this.paymentsFilter.org != undefined && this.paymentsFilter.org.value != undefined ? this.paymentsFilter.org.value == p.org.id : true; })
+            .filter((p) => { return this.paymentsFilter.organization != undefined && this.paymentsFilter.organization.value != undefined ? this.paymentsFilter.organization.value == p.organization.id : true; })
             .filter((p) => { return this.paymentsFilter.pi != undefined && this.paymentsFilter.pi.value != undefined ? this.paymentsFilter.pi.value == p.pi.account.name : true; });
         },
 
         totalPaymentsAmount() {
-          return this.filteredPayments.map(tx => tx.amount)
+          return this.filteredPayments
+            .map(tx => tx.amount)
 			      .reduce((sum, amount) => sum + amount, 0);
         },
 

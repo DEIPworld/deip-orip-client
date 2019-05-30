@@ -68,7 +68,7 @@ const getters = {
 			let rels = c.relations;
 			if (!rels.length) return [];
 
-			return rels.map((rel, index) => {
+			return rels.filter(rel => !rel.isSubaward).map((rel, index) => {
 				let totalAmount = fromAssetsToFloat(rel.total_amount);
 				let universityOverheadAmount = totalAmount - (totalAmount - (totalAmount * (rel.university_overhead / 100) / 100));
 				let pendingAmount = 0;
@@ -103,7 +103,7 @@ const getters = {
 					to: c.foa.close_date,
 					contract: c,
 					relation: rel,
-					org,
+					organization: org,
 					pi
 				}
 				return award;
@@ -122,7 +122,6 @@ const getters = {
 
 			for (let j = 0; j < rels.length; j++) {
 				let rel = rels[j];
-				let org = state.organizations.find(o => o.id == rel.organisation_id);
 				let pi = rel.researcherUser;
 				for (let i = 0; i < rel.withdrawals.length; i++) {
 					let withdrawal = rel.withdrawals[i];
@@ -130,12 +129,13 @@ const getters = {
 						id: withdrawal.id,
 						paymentId: withdrawal.id,
 						awardId: rel.id,
+						contract: c,
 						amount: fromAssetsToFloat(withdrawal.amount),
 						status: withdrawal.status,
 						award: rel,
 						attachment: withdrawal.attachment,
 						timestamp: withdrawal.time,
-						org,
+						organization: rel.organization,
 						pi
 					}
 					items.push(item);

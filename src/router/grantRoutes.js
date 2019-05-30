@@ -111,13 +111,14 @@ const grantRoutes = [{
       loadPage(loadPagePromise, next);
     }
   }, {
-    path: '/:org/award-details/:id',
+    path: '/:org/award-details/:contractId/:awardId',
     name: 'AwardDetails',
     component: AwardDetails,
     beforeEnter: (to, from, next) => {
       let loadPagePromise = store.dispatch('award_details/loadAwardDetailsPage', {
         orgPermlink: decodeURIComponent(to.params.org),
-        awardId: decodeURIComponent(to.params.id)
+        contractId: decodeURIComponent(to.params.contractId),
+        awardId: decodeURIComponent(to.params.awardId)
       });
       loadPage(loadPagePromise, next);
     }

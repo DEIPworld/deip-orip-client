@@ -16,6 +16,7 @@ import {
 const state = {
   isLoadingAwardDetailsPage: false,
   organization: undefined,
+  award: undefined,
   contract: undefined
 }
 
@@ -25,43 +26,42 @@ const getters = {
   organization: (state) => state.organization,
 
   award: (state) => {
-    let c = state.contract;
-    let rel = c.relations[0];
+    let rel = state.award;
     let totalAmount = fromAssetsToFloat(rel.total_amount);
-    let universityOverheadAmount = totalAmount - (totalAmount - (totalAmount * (rel.university_overhead / 100) / 100));
+    let universityOverheadAmount = rel.isSubaward ? 0 : (totalAmount - (totalAmount - (totalAmount * (rel.university_overhead / 100) / 100)));
     let pendingAmount = 0;
     let withdrawnAmount = 0;
-    let requestedAmount = 0;
-
+    let requestedPiAmount = 0;
+    
     for (let i = 0; i < rel.withdrawals.length; i++) {
       let withdrawal = rel.withdrawals[i];
       if (withdrawal.status == WITHDRAWAL_PENDING || withdrawal.status == WITHDRAWAL_CERTIFIED) pendingAmount += fromAssetsToFloat(withdrawal.amount);
       if (withdrawal.status == WITHDRAWAL_APPROVED) withdrawnAmount += fromAssetsToFloat(withdrawal.amount);
-      requestedAmount += fromAssetsToFloat(withdrawal.amount);
+      requestedPiAmount += fromAssetsToFloat(withdrawal.amount);
     }
 
-    let availableAmount = totalAmount - pendingAmount - withdrawnAmount - universityOverheadAmount;
-    let remainingAmount = totalAmount - requestedAmount - universityOverheadAmount;
-    if (remainingAmount != availableAmount) {
-      console.warn(`WARNING: award available amount (${availableAmount}) is not equal to remaining amount (${remainingAmount})`);
-    }
+    let subawardeesAmount = rel.subawards
+      .map(s => s.total_amount.amount)
+      .reduce((sum, amount) => sum + amount, 0);
 
-    let subawardeesAmount = 0;
-    let requestedSubawardeesAmount = 0;
+    let requestedSubawardeesAmount = rel.subawards
+      .map(s => s.withdrawals.map(w => w.amount).reduce((sum, amount) => sum + amount, 0))
+      .reduce((sum, amount) => sum + amount, 0);
+
     let piAmount = totalAmount - subawardeesAmount - universityOverheadAmount;
-    let requestedPiAmount = requestedAmount;
+    let remainingAmount = totalAmount - requestedPiAmount - requestedSubawardeesAmount - universityOverheadAmount;
 
-    let org = state.organization;
     let pi = rel.researcherUser;
+    let contract = state.contract;
+
     let award = {
       id: rel.id,
       awardId: rel.id,
+      isSubaward: rel.isSubaward,
+      parentAward: rel.parentAward,
+
       totalAmount,
-      availableAmount,
       remainingAmount,
-      pendingAmount,
-      withdrawnAmount,
-      requestedAmount,
       universityOverheadAmount,
 
       piAmount,
@@ -69,14 +69,58 @@ const getters = {
 
       subawardeesAmount,
       requestedSubawardeesAmount,
-      from: c.foa.open_date,
-      to: c.foa.close_date,
-      contract: c,
+
+      from: contract.foa.open_date,
+      to: contract.foa.close_date,
+      contract: contract,
       relation: rel,
-      org,
+      organization: rel.organization,
       pi
     }
     return award;
+  },
+
+  subawards: (state) => {
+    let rel = state.award;
+    if (!rel.hasSubawards) return [];
+
+    let subawards = rel.subawards.map(subaward => {
+
+      let totalSubawardAmount = fromAssetsToFloat(subaward.total_amount);
+      let pendingAmount = 0;
+      let withdrawnAmount = 0;
+      let requestedSubawardAmount = 0;
+
+      for (let i = 0; i < subaward.withdrawals.length; i++) {
+        let withdrawal = subaward.withdrawals[i];
+        if (withdrawal.status == WITHDRAWAL_PENDING || withdrawal.status == WITHDRAWAL_CERTIFIED) pendingAmount += fromAssetsToFloat(withdrawal.amount);
+        if (withdrawal.status == WITHDRAWAL_APPROVED) withdrawnAmount += fromAssetsToFloat(withdrawal.amount);
+        requestedSubawardAmount += fromAssetsToFloat(withdrawal.amount);
+      }
+
+      let remainingSubawardAmount = totalSubawardAmount - requestedSubawardAmount;
+
+      let subawardee = subaward.researcherUser;
+      let contract = state.contract;
+
+      let sub = {
+        id: subaward.id,
+        subawardId: subaward.id,
+        totalSubawardAmount,
+        remainingSubawardAmount,
+        requestedSubawardAmount,
+        from: contract.foa.open_date,
+        to: contract.foa.close_date,
+        contract: contract,
+        relation: subaward,
+        organization: subaward.organization,
+        subawardee
+      }
+
+      return sub;
+    });
+
+    return [].concat.apply([], subawards);
   },
 
   payments: state => {
@@ -116,28 +160,28 @@ const getters = {
 // actions
 const actions = {
 
-  loadAwardDetailsPage({ commit, dispatch, state }, { orgPermlink, awardId }) {
+  loadAwardDetailsPage({ commit, dispatch, state }, { orgPermlink, contractId, awardId }) {
     commit('SET_AWARD_DETAILS_LOADING_STATE', true);
-    return deipRpc.api.getOrganisationByPermlinkAsync(orgPermlink).then(org => {
-      commit('SET_ORGANIZATION', org);
+    return deipRpc.api.getOrganisationByPermlinkAsync(orgPermlink)
+      .then(org => {
+        commit('SET_ORGANIZATION', org);
 
-      const awardsLoad = new Promise((resolve, reject) => {
-        dispatch('loadAward', { notify: resolve, awardId });
-      });
+        const awardsLoad = new Promise((resolve, reject) => {
+          dispatch('loadAward', { contractId, awardId, notify: resolve });
+        });
 
-      return Promise.all([awardsLoad]);
-    })
-      .then(() => {
-        
+        return Promise.all([awardsLoad]);
       })
       .finally(() => {
         commit('SET_AWARD_DETAILS_LOADING_STATE', false);
       });
   },
 
-  loadAward({ commit, dispatch, state }, { awardId, notify }) {
-    return loadFundingContract(awardId)
+  loadAward({ commit, dispatch, state }, { contractId, awardId, notify }) {
+    return loadFundingContract(contractId)
       .then(contract => {
+        let award = contract.relations.find(r => r.id == awardId);
+        commit('SET_AWARD', award);
         commit('SET_FUNDING_CONTRACT', contract);
       })
       .catch(err => { console.log(err) })
@@ -163,6 +207,9 @@ const mutations = {
     Vue.set(state, 'contract', contract);
   },
 
+  ['SET_AWARD'](state, award) {
+    Vue.set(state, 'award', award);
+  }
 }
 
 const namespaced = true;
