@@ -79,60 +79,38 @@
                   <v-layout>
                     <v-flex xs12>
                       <template row>
-                        <v-layout style="padding: 10px 0px 0px 0px">
-                    <!--  <v-flex xs2 v-if="isProgramOfficer">
-                            <div style="padding: 0px 10px 0px 10px">
-                              <v-btn block @click="confirmDistribution.isShown = true" color="success" :disabled="!selectedToDistribute.length || isDistributing" :loading="isDistributing">
-                                {{ selectedToDistribute.length ? `Distribute (${selectedToDistribute.length})` : `Distribute`}}
-                              </v-btn>
-                              <span v-if="selectedToDistribute.length">
-                                <span class="title c-ml-5">{{selectedToDistribute.map(p => p.totalAmount).reduce((sum, amount) => sum + amount, 0)}}  </span>
-                                <v-icon size="20px">attach_money</v-icon>
-                              </span>
-                              <confirm-action-dialog
-                                :meta="confirmDistribution" 
-                                :title="``"
-                                :text="`Are you sure you want to distribute selected awards?`" 
-                                @confirmed="distributeTokensToSelectedAwards(); confirmDistribution.isShown = false"  
-                                @canceled="confirmDistribution.isShown = false">
-                              </confirm-action-dialog>
-                            </div>
-                          </v-flex> -->
-
-                    <!--  <v-flex xs2 v-if="isPrincipalInvestigator">
-                            <div style="padding: 0px 10px 0px 10px">
-                              <v-btn block color="primary" @click="openRequestPaymentDialog()" dark>Request Payment</v-btn>
-                              <request-award-payment-dialog :meta="selectedAwardToWithdrawMeta"></request-award-payment-dialog>
-                            </div>
-                          </v-flex> -->
-
-                        </v-layout>
 
                         <v-data-table
                           :headers="awardHeaders"
                           :items="awards"
-                          v-model="selectedAwards"
                           disable-initial-sort
                           hide-actions>
 
                           <template slot="items" slot-scope="props">
-                      <!--  <td v-if="isProgramOfficer">
-                              <v-checkbox 
-                                v-if="props.item.contract.status == FUNDING_CONTRACT_PENDING"
-                                v-model="props.selected"
-                                primary
-                                hide-details
-                              ></v-checkbox>
-                            </td> -->
                             <td><router-link class="a body-2" :to="{ name: 'AwardDetails', params: { org: props.item.org.permlink, id: props.item.id } }">{{ props.item | awardNumber }}</router-link></td>
                             <td v-if="isProgramOfficer || isFinancialOfficer"><router-link class="a body-1" :to="{ name: 'UserDetails', params: { account_name: props.item.pi.account.name } }">{{ props.item.pi | fullname}}</router-link></td>
                             <td v-if="isProgramOfficer || isFinancialOfficer"><div><a href="#" class="a body-1">{{ props.item.org.name }}</a></div></td>
                             <td><span class="body-1">{{ moment(new Date(props.item.from)).format("MM/YY") }} - {{ moment(new Date(props.item.to)).format("MM/YY") }}</span></td>
 
                             <td><span class="body-1">$ {{ props.item.totalAmount | currency }}</span></td>
-                            <td><span class="body-1">$ {{ props.item.requestedAmount | currency}}</span></td>
-                            <td><span class="body-1">$ {{ props.item.universityOverheadAmount | currency}}</span></td>
-                            <td><span class="body-1">$ {{ (props.item.contract.status == FUNDING_CONTRACT_PENDING ? 0 : props.item.remainingAmount) | currency }}</span></td>
+                            <td>
+                              <span class="body-1">
+                                <span v-if="props.item.contract.status == FUNDING_CONTRACT_PENDING">N/A</span>
+                                <span v-else>$ {{ props.item.requestedAmount | currency}}</span>
+                              </span>
+                            </td>
+                            <td>
+                              <span class="body-1">
+                                <span v-if="props.item.contract.status == FUNDING_CONTRACT_PENDING">N/A</span>
+                                <span v-else>$ {{ props.item.universityOverheadAmount | currency}}</span>
+                              </span>
+                            </td>
+                            <td>
+                              <span class="body-1">
+                                <span v-if="props.item.contract.status == FUNDING_CONTRACT_PENDING">N/A</span>
+                                <span v-else>$ {{ props.item.remainingAmount | currency }}</span>
+                              </span>
+                            </td>
                           </template>
                         </v-data-table>
                       </template>
@@ -174,35 +152,6 @@
                       <template row>
 
                         <v-layout style="padding: 10px 0px 0px 0px">
-                          <v-flex xs2 v-if="isProgramOfficer">
-                            <div style="padding: 0px 10px 0px 10px">
-                              <v-btn block @click="confirmApproval.isShown = true" color="success" :disabled="!selectedToApprove.length || isApproving" :loading="isApproving">
-                                {{ selectedToApprove.length ? `Approve (${selectedToApprove.length})` : `Approve`}}
-                              </v-btn>
-                              <confirm-action-dialog
-                                :meta="confirmApproval" 
-                                :title="``"
-                                :text="`Are you sure you want to approve selected payment requests?`" 
-                                @confirmed="approveSelectedPaymentRequests(); confirmApproval.isShown = false"  
-                                @canceled="confirmApproval.isShown = false">
-                              </confirm-action-dialog>
-                            </div>
-                          </v-flex>
-
-                          <v-flex xs2 v-if="isCertifier">
-                            <div style="padding: 0px 10px 0px 10px">
-                              <v-btn block @click="confirmCertifying.isShown = true" color="warning" :disabled="!selectedToCertify.length || isCertifying" :loading="isCertifying">
-                                {{ selectedToCertify.length ? `Certify (${selectedToCertify.length})` : `Certify`}}
-                              </v-btn>
-                              <confirm-action-dialog
-                                :meta="confirmCertifying" 
-                                :title="``" 
-                                :text="`Are you sure you want to certify selected payment requests?`" 
-                                @confirmed="certifySelectedPaymentRequests(); confirmCertifying.isShown = false"  
-                                @canceled="confirmCertifying.isShown = false">
-                              </confirm-action-dialog>
-                            </div>
-                          </v-flex>
 
                           <v-flex xs3>
                             <div style="padding: 0px 10px 0px 10px">
@@ -240,7 +189,38 @@
                             </div>                       
                           </v-flex>
 
-                          <v-flex xs1></v-flex>
+                          <v-spacer></v-spacer>
+
+                          <v-flex xs2 v-if="isProgramOfficer">
+                            <div style="padding: 0px 10px 0px 10px">
+                              <v-btn block @click="confirmApproval.isShown = true" color="success" :disabled="!selectedToApprove.length || isApproving" :loading="isApproving">
+                                {{ selectedToApprove.length ? `Approve (${selectedToApprove.length})` : `Approve`}}
+                              </v-btn>
+                              <confirm-action-dialog
+                                :meta="confirmApproval" 
+                                :title="``"
+                                :text="`Are you sure you want to approve selected payment requests?`" 
+                                @confirmed="approveSelectedPaymentRequests(); confirmApproval.isShown = false"  
+                                @canceled="confirmApproval.isShown = false">
+                              </confirm-action-dialog>
+                            </div>
+                          </v-flex>
+
+                          <v-flex xs2 v-if="isCertifier">
+                            <div style="padding: 0px 10px 0px 10px">
+                              <v-btn block @click="confirmCertifying.isShown = true" color="warning" :disabled="!selectedToCertify.length || isCertifying" :loading="isCertifying">
+                                {{ selectedToCertify.length ? `Certify (${selectedToCertify.length})` : `Certify`}}
+                              </v-btn>
+                              <confirm-action-dialog
+                                :meta="confirmCertifying" 
+                                :title="``" 
+                                :text="`Are you sure you want to certify selected payment requests?`" 
+                                @confirmed="certifySelectedPaymentRequests(); confirmCertifying.isShown = false"  
+                                @canceled="confirmCertifying.isShown = false">
+                              </confirm-action-dialog>
+                            </div>
+                          </v-flex>
+
                         </v-layout>
 
                         <v-data-table
@@ -333,7 +313,6 @@
           isIssuingTokens: false,
           showIssueTokensControl: false,
 
-          selectedAwards: [],
           selectedPayments: [],
 
           selectedToCertify: [],
@@ -343,12 +322,6 @@
           selectedToApprove: [],
           isApproving: false,
           confirmApproval: { isShown: false },
-
-          selectedToDistribute: [],
-          isDistributing: false,
-          confirmDistribution: { isShown: false },
-
-          selectedAwardToWithdrawMeta: { isOpen: false, contract: null },
 
           withdrawalStatusMap,
           ...withdrawalStatus,
@@ -402,22 +375,30 @@
         },
 
         totalAwardsAmount() {
-          return this.awards.map(tx => tx.totalAmount)
+          return this.awards
+            .filter(tx => tx.contract.status != FUNDING_CONTRACT_PENDING)
+            .map(tx => tx.totalAmount)
 			      .reduce((sum, amount) => sum + amount, 0);
         },
 
         totalRequestedAmount() {
-          return this.awards.map(tx => tx.requestedAmount)
+          return this.awards
+            .filter(tx => tx.contract.status != FUNDING_CONTRACT_PENDING)
+            .map(tx => tx.requestedAmount)
 			      .reduce((sum, amount) => sum + amount, 0);
         },
         
         totalAdminExpensesAmount() {
-          return this.awards.map(tx => tx.universityOverheadAmount)
+          return this.awards
+            .filter(tx => tx.contract.status != FUNDING_CONTRACT_PENDING)
+            .map(tx => tx.universityOverheadAmount)
 			      .reduce((sum, amount) => sum + amount, 0);
         },
 
         totalRemainingAmount() {
-          return this.awards.map(tx => tx.remainingAmount)
+          return this.awards
+            .filter(tx => tx.contract.status != FUNDING_CONTRACT_PENDING)
+            .map(tx => tx.remainingAmount)
 			      .reduce((sum, amount) => sum + amount, 0);
         },
 
@@ -558,11 +539,6 @@
           this.showIssueTokensControl = !this.showIssueTokensControl;
         },
 
-        openRequestPaymentDialog() {
-          // this.selectedAwardToWithdrawMeta.contract = contract;
-          this.selectedAwardToWithdrawMeta.isOpen = true;
-        },
-
         certifySelectedPaymentRequests() {
           this.isCertifying = true;
 
@@ -629,45 +605,13 @@
               this.selectedToApprove = [];
               this.isApproving = false;
             });
-        },
-
-        distributeTokensToSelectedAwards() {
-          this.isDistributing = true;
-          let uniqueContracts = [...new Set(this.selectedToDistribute.map(a => a.contract.id))];
-          let promises = uniqueContracts.map(contractId => deipRpc.broadcast.approveFundingAsync(this.user.privKey, contractId, this.user.username))
-          Promise.all(promises)
-            .then(() => {
-              let reload = new Promise((resolve, reject) => {
-                this.$store.dispatch('org_finance_dashboard/loadAwards', { notify: resolve });
-              });
-              return Promise.all([reload]);
-            })
-            .then(() => {
-              this.$store.dispatch('layout/setSuccess', {
-                message: `NSF Grant Tokens have been sent successfully!`
-              });
-            })
-            .catch((err) => {
-              console.log(err);
-              this.$store.dispatch('layout/setError', {
-                message: `An error occurred while sending the request, please try again later.`
-              });
-            })
-            .finally(() => {
-              this.selectedToDistribute = [];
-              this.isDistributing = false;
-            });
         }
-
       },
       
       watch: {
         'selectedPayments': function (newVal, oldVal) {
           this.selectedToCertify = newVal.filter(p => p.status == WITHDRAWAL_PENDING);
           this.selectedToApprove = newVal.filter(p => p.status == WITHDRAWAL_CERTIFIED);
-        },
-        'selectedAwards': function (newVal, oldVal) {
-          this.selectedToDistribute = newVal;
         }
       }
 

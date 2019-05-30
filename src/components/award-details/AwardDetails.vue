@@ -2,8 +2,28 @@
   <v-container fluid class="ma-0 pa-0 c-pb-10">
     <v-layout row wrap>
 
-      <v-flex xs12 class="pa-4 grey-background">
+      <v-flex xs10 class="pa-4 grey-background">
         <h1 class="display-1">Award # {{award | awardNumber}}</h1>
+      </v-flex>
+      
+      <v-flex xs2 class="pa-4 grey-background">
+        <div v-if="isProgramOfficer">
+          <v-btn block @click="confirmDistribution.isShown = true" color="success" :disabled="!isAwardNotDistributed || isDistributing" :loading="isDistributing">
+            {{isAwardNotDistributed ? 'Distribute' : 'Distributed'}}
+          </v-btn>
+          <confirm-action-dialog
+            :meta="confirmDistribution" 
+            :title="``"
+            :text="`Are you sure you want to distribute the award?`" 
+            @confirmed="distributeTokensToAward(); confirmDistribution.isShown = false"  
+            @canceled="confirmDistribution.isShown = false">
+          </confirm-action-dialog>
+        </div>
+
+        <div v-if="isPrincipalInvestigator">
+          <v-btn block color="primary" @click="awardWithdrawMeta.isOpen = true;" dark>Request Payment</v-btn>
+          <request-award-payment-dialog :meta="awardWithdrawMeta"></request-award-payment-dialog>
+        </div>
       </v-flex>
 
       <v-flex xs6 class="pa-4 grey-background">
@@ -139,7 +159,33 @@
       <v-flex xs12 class="py-3"><h3>Payments</h3></v-flex xs12>
       <v-flex xs12>
         <v-layout style="padding: 10px 0px 0px 0px">
-        
+
+          <v-flex xs3>
+            <div style="padding: 0px 20px 0px 0px">
+              <v-select
+                v-model="paymentsFilter.status"
+                :items="paymentsFilterByStatus"
+                label="STATUS"
+                return-object
+                solo dense>
+              </v-select>   
+            </div>
+          </v-flex>
+
+          <v-flex xs3>
+            <div style="padding: 0px 20px 0px 0px">
+              <v-select
+                v-model="paymentsFilter.requester"
+                :items="paymentsFilterByRequester"
+                label="REQUESTER"
+                return-object
+                solo dense>
+              </v-select>   
+            </div>
+          </v-flex>
+
+          <v-spacer></v-spacer>
+
           <v-flex xs2 v-if="isProgramOfficer">
             <div style="padding: 0px 15px 0px 0px">
               <v-btn block @click="confirmApproval.isShown = true" color="success" :disabled="!selectedToApprove.length || isApproving" :loading="isApproving">
@@ -170,30 +216,6 @@
             </div>
           </v-flex>
 
-          <v-flex xs3>
-            <div style="padding: 0px 20px 0px 0px">
-              <v-select
-                v-model="paymentsFilter.status"
-                :items="paymentsFilterByStatus"
-                label="STATUS"
-                return-object
-                solo dense>
-              </v-select>   
-            </div>
-          </v-flex>
-
-          <v-flex xs3>
-            <div style="padding: 0px 20px 0px 0px">
-              <v-select
-                v-model="paymentsFilter.requester"
-                :items="paymentsFilterByRequester"
-                label="REQUESTER"
-                return-object
-                solo dense>
-              </v-select>   
-            </div>
-          </v-flex>
-          
         </v-layout>
       </v-flex>
       <v-flex xs12>
@@ -276,6 +298,11 @@
             isApproving: false,
             confirmApproval: { isShown: false },
 
+            isDistributing: false,
+            confirmDistribution: { isShown: false },
+
+            awardWithdrawMeta: { isOpen: false, award: null },
+
             withdrawalStatusMap,
             ...withdrawalStatus,
             ...fundingContractStatus
@@ -293,6 +320,10 @@
               award: 'award_details/award',
               payments: 'award_details/payments'
           }),
+
+          isAwardNotDistributed() {
+            return this.award.contract.status == FUNDING_CONTRACT_PENDING;
+          },
 
           subawardsHeaders() {
             return [
@@ -380,7 +411,10 @@
           totalPaymentsAmount() {
             return this.filteredPayments.map(tx => tx.amount)
               .reduce((sum, amount) => sum + amount, 0);
-          },
+          }
+        },
+
+        methods: {
 
           certifySelectedPaymentRequests() {
             this.isCertifying = true;
@@ -449,6 +483,32 @@
                 this.isApproving = false;
               });
           },
+
+          distributeTokensToAward() {
+            this.isDistributing = true;
+
+            deipRpc.broadcast.approveFundingAsync(this.user.privKey, this.award.contract.id, this.user.username)
+              .then(() => {
+                let reload = new Promise((resolve, reject) => {
+                  this.$store.dispatch('award_details/loadAward', { notify: resolve, awardId: this.award.id });
+                });
+                return Promise.all([reload]);
+              })
+              .then(() => {
+                this.$store.dispatch('layout/setSuccess', {
+                  message: `NSF Grant Tokens have been sent successfully!`
+                });
+              })
+              .catch((err) => {
+                console.log(err);
+                this.$store.dispatch('layout/setError', {
+                  message: `An error occurred while sending the request, please try again later.`
+                });
+              })
+              .finally(() => {
+                this.isDistributing = false;
+              });
+          }
 
         },
 
