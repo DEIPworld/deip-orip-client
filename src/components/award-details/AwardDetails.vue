@@ -141,8 +141,18 @@
             <td><router-link class="a body-2" :to="{ name: 'UserDetails', params: { account_name: props.item.subawardee.account.name } }">{{props.item.subawardee | fullname}}</router-link></td>
             <td><span class="body-1"><a class="a body-1" href="#">{{props.item.organization.name}}</a></span></td>
             <td><span class="body-1">$ {{props.item.totalSubawardAmount | currency}}</span></td>
-            <td><span class="body-1">$ {{props.item.requestedSubawardAmount | currency}}</span></td>
-            <td><span class="body-1">$ {{props.item.remainingSubawardAmount | currency}}</span></td>
+            <td>
+              <span class="body-1">
+                <span v-if="isAwardNotDistributed">N/A</span>
+                <span v-else>$ {{props.item.requestedSubawardAmount | currency}}</span>
+              </span>
+            </td>
+            <td>
+              <span class="body-1">
+                <span v-if="isAwardNotDistributed">N/A</span>
+                <span v-else>$ {{props.item.remainingSubawardAmount | currency}}</span>
+              </span>
+            </td>
           </template>
         </v-data-table>
       </v-flex>
@@ -234,6 +244,7 @@
           :items="filteredPayments"
           v-model="selectedPayments"
           disable-initial-sort
+          :no-data-text="isAwardNotDistributed ? `Award is not distributed yet` : `No payments requested`" 
           hide-actions>
 
           <template slot="items" slot-scope="props">
@@ -387,12 +398,14 @@
 
           totalSubawardsRequestedAmount() {
             return this.subawards
+              .filter(tx => tx.contract.status != FUNDING_CONTRACT_PENDING)
               .map(tx => tx.requestedSubawardAmount)
               .reduce((sum, amount) => sum + amount, 0);
           },
           
           totalSubawardsRemainingAmount() {
             return this.subawards
+              .filter(tx => tx.contract.status != FUNDING_CONTRACT_PENDING)
               .map(tx => tx.remainingSubawardAmount)
               .reduce((sum, amount) => sum + amount, 0);
           },

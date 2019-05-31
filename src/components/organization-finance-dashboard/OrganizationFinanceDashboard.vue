@@ -377,7 +377,7 @@
 
         totalAwardsAmount() {
           return this.awards
-            .filter(tx => tx.contract.status != FUNDING_CONTRACT_PENDING)
+            // .filter(tx => tx.contract.status != FUNDING_CONTRACT_PENDING)
             .map(tx => tx.totalAmount)
 			      .reduce((sum, amount) => sum + amount, 0);
         },
@@ -428,16 +428,16 @@
             { text: 'STATUS', value: 'status', align: 'center', width: "20%" },
             { text: 'PAYMENT #', value: 'paymentId', width: "10%" },
             { text: 'AWARD #', value: 'awardId', width: "10%" },
-            { text: 'REQUESTER', value: 'pi.account.name', width: "15%" },
+            { text: 'REQUESTER', value: 'pi.account.name', width: "20%" },
             { text: 'TIMESTAMP', value: 'timestamp', width: "15%" },
-            { text: 'AMOUNT', value: 'amount', align: 'right', width: "25%" }
+            { text: 'AMOUNT', value: 'amount', align: 'right', width: "20%" }
           ] : [
             { text: 'STATUS', value: 'status', align: 'center', width: "20%" },
             { text: 'PAYMENT #', value: 'paymentId', width: "10%" },
             { text: 'AWARD #', value: 'awardId', width: "10%"  },
-            { text: 'REQUESTER', value: 'pi.account.name', width: "15%"  },
+            { text: 'REQUESTER', value: 'pi.account.name', width: "20%"  },
             { text: 'TIMESTAMP', value: 'timestamp', width: "15%" },
-            { text: 'AMOUNT', value: 'amount', align: 'right', width: "30%"  }
+            { text: 'AMOUNT', value: 'amount', align: 'right', width: "25%"  }
           ];
         },
 
