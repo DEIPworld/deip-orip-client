@@ -138,8 +138,8 @@
 
           <template slot="items" slot-scope="props">
             <td><router-link class="a body-2" :to="{ name: 'AwardDetails', params: { org: props.item.organization.permlink, contractId: props.item.contract.id, awardId: props.item.subawardId } }">{{props.item | awardNumber}}</router-link></td>
-            <td><a class="a body-1" href="#">{{props.item.subawardee | fullname}}</a></td>
-            <td><span class="body-1">{{props.item.organization.name}}</span></td>
+            <td><router-link class="a body-2" :to="{ name: 'UserDetails', params: { account_name: props.item.subawardee.account.name } }">{{props.item.subawardee | fullname}}</router-link></td>
+            <td><span class="body-1"><a class="a body-1" href="#">{{props.item.organization.name}}</a></span></td>
             <td><span class="body-1">$ {{props.item.totalSubawardAmount | currency}}</span></td>
             <td><span class="body-1">$ {{props.item.requestedSubawardAmount | currency}}</span></td>
             <td><span class="body-1">$ {{props.item.remainingSubawardAmount | currency}}</span></td>
@@ -252,7 +252,7 @@
             <td><span class="body-1">{{ props.item | paymentNumber }}</span></td>
             <td>
               <router-link class="a body-1" :to="{ name: 'UserDetails', params: { account_name: props.item.requester.account.name } }">{{ props.item.requester | fullname}}</router-link>
-              <span v-if="props.item.requester.account.name != props.item.pi.account.name" class="grey--text caption">(subawardee)</span>
+              <span v-if="(props.item.requester.account.name != props.item.pi.account.name) && !award.isSubaward" class="grey--text caption">(subawardee)</span>
             </td>
             <td><span class="body-1 grey--text">{{moment(props.item.timestamp).format('MM/DD/YYYY HH:mm:ss')}}</span></td>
             <td><div class="body-2 text-align-right">$ {{ props.item.amount | currency }}</div></td>

@@ -130,9 +130,16 @@ const getters = {
 
   payments: state => {
 
-    let rels = state.contract.relations;
-    let items = [];
+    let rels = [];
+    let award = state.award;
 
+    if (award.isSubaward) {
+      rels.push(award);
+    } else {
+      rels.push(...state.contract.relations);
+    }
+
+    let items = [];
     for (let j = 0; j < rels.length; j++) {
       let rel = rels[j];
       let org = rel.organization;
