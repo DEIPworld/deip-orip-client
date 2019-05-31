@@ -45,13 +45,16 @@ const getters = {
       .reduce((sum, amount) => sum + amount, 0);
 
     let requestedSubawardeesAmount = rel.subawards
-      .map(s => s.withdrawals.map(w => w.amount).reduce((sum, amount) => sum + amount, 0))
+      .map(s => s.withdrawals.map(w => w.amount.amount).reduce((sum, amount) => sum + amount, 0))
       .reduce((sum, amount) => sum + amount, 0);
 
+    let remainingSubawardeesAmount = subawardeesAmount - requestedSubawardeesAmount;
+
     let piAmount = totalAmount - subawardeesAmount - universityOverheadAmount;
+    let remainingPiAmount = piAmount - requestedPiAmount;
+
     let remainingAmount = totalAmount - requestedPiAmount - requestedSubawardeesAmount - universityOverheadAmount;
 
-    let pi = rel.researcherUser;
     let contract = state.contract;
 
     let award = {
@@ -66,16 +69,18 @@ const getters = {
 
       piAmount,
       requestedPiAmount,
+      remainingPiAmount,
 
       subawardeesAmount,
       requestedSubawardeesAmount,
+      remainingSubawardeesAmount,
 
       from: contract.foa.open_date,
       to: contract.foa.close_date,
       contract: contract,
       relation: rel,
       organization: rel.organization,
-      pi
+      pi: rel.researcherUser
     }
     return award;
   },
@@ -126,14 +131,14 @@ const getters = {
   payments: state => {
 
     let rels = state.contract.relations;
-    if (!rels.length) return [];
-
-    let items = []; 
+    let items = [];
 
     for (let j = 0; j < rels.length; j++) {
       let rel = rels[j];
-      let org = state.organization;
-      let pi = rel.researcherUser;
+      let org = rel.organization;
+      let pi = rel.isSubaward ? rel.parentAward.researcherUser : rel.researcherUser;
+      let requester = rel.researcherUser;
+
       for (let i = 0; i < rel.withdrawals.length; i++) {
         let withdrawal = rel.withdrawals[i];
         let item = {
@@ -147,7 +152,7 @@ const getters = {
           timestamp: withdrawal.time,
           org,
           pi,
-          requester: pi
+          requester
         }
         items.push(item);
       }

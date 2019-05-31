@@ -106,7 +106,7 @@ export async function loadFundingContractDetails(contract) {
 
       for (let i = 1; i < relations.length; i++) {
         let subaward = relations[i];
-        
+
         subaward.isSubaward = true;
         subaward.parentAward = award;
 

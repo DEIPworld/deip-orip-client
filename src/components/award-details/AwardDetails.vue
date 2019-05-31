@@ -31,7 +31,7 @@
         </div>
 
         <div v-if="isPrincipalInvestigator">
-          <v-btn block color="primary" @click="awardWithdrawMeta.isOpen = true;" dark>Request Payment</v-btn>
+          <v-btn block color="primary" @click="awardWithdrawMeta.isOpen = true;" :disabled="award.pi.account.name != user.username">Request Payment</v-btn>
           <request-award-payment-dialog :meta="awardWithdrawMeta"></request-award-payment-dialog>
         </div>
       </v-flex>
@@ -250,7 +250,10 @@
               </v-chip>
             </td>
             <td><span class="body-1">{{ props.item | paymentNumber }}</span></td>
-            <td><span class="body-1"><router-link class="a body-1" :to="{ name: 'UserDetails', params: { account_name: props.item.requester.account.name } }">{{ props.item.requester | fullname}}</router-link></span></td>
+            <td>
+              <router-link class="a body-1" :to="{ name: 'UserDetails', params: { account_name: props.item.requester.account.name } }">{{ props.item.requester | fullname}}</router-link>
+              <span v-if="props.item.requester.account.name != props.item.pi.account.name" class="grey--text caption">(subawardee)</span>
+            </td>
             <td><span class="body-1 grey--text">{{moment(props.item.timestamp).format('MM/DD/YYYY HH:mm:ss')}}</span></td>
             <td><div class="body-2 text-align-right">$ {{ props.item.amount | currency }}</div></td>
           </template>
@@ -351,26 +354,26 @@
               { text: '', sortable: false, width: "5%" },  // display checkbox for NSF PO
               { text: 'STATUS', value: 'status', align: 'center', width: "20%" },
               { text: 'PAYMENT #', value: 'paymentId', width: "15%" },
-              { text: 'REQUESTER', value: 'pi.account.name', width: "20%" },
+              { text: 'REQUESTER', value: 'requester.account.name', width: "20%" },
               { text: 'TIMESTAMP', value: 'timestamp', width: "20%" },
               { text: 'AMOUNT', value: 'amount', align: 'right', width: "20%" }
             ] : this.isFinancialOfficer ? [
               { text: 'STATUS', value: 'status', align: 'center', width: "20%" },
               { text: 'PAYMENT #', value: 'paymentId', width: "20%" },
-              { text: 'REQUESTER', value: 'pi.account.name', width: "20%" },
+              { text: 'REQUESTER', value: 'requester.account.name', width: "20%" },
               { text: 'TIMESTAMP', value: 'timestamp', width: "20%" },
               { text: 'AMOUNT', value: 'amount', align: 'right', width: "20%" }
             ] : this.isCertifier ? [
               { text: '', sortable: false, width: "5%" }, // display checkbox for Organization Certifier
               { text: 'STATUS', value: 'status', align: 'center', width: "20%" },
               { text: 'PAYMENT #', value: 'paymentId', width: "15%" },
-              { text: 'REQUESTER', value: 'pi.account.name', width: "20%" },
+              { text: 'REQUESTER', value: 'requester.account.name', width: "20%" },
               { text: 'TIMESTAMP', value: 'timestamp', width: "20%" },
               { text: 'AMOUNT', value: 'amount', align: 'right', width: "20%" }
             ] : [
               { text: 'STATUS', value: 'status', align: 'center', width: "20%" },
               { text: 'PAYMENT #', value: 'paymentId', width: "20%" },
-              { text: 'REQUESTER', value: 'pi.account.name', width: "20%" },
+              { text: 'REQUESTER', value: 'requester.account.name', width: "20%" },
               { text: 'TIMESTAMP', value: 'timestamp', width: "20%" },
               { text: 'AMOUNT', value: 'amount', align: 'right', width: "20%" }
             ];

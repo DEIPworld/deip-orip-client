@@ -116,15 +116,17 @@ const getters = {
 	payments: state => {
 		let transactions = state.contracts.map(c => {
 			let rels = state.organization.permlink == "nsf" ? c.relations : c.relations.filter(r => r.organisation_id == state.organization.id);
-			if (!rels.length) return [];
-
 			let items = [];
 
 			for (let j = 0; j < rels.length; j++) {
 				let rel = rels[j];
-				let pi = rel.researcherUser;
+
 				for (let i = 0; i < rel.withdrawals.length; i++) {
 					let withdrawal = rel.withdrawals[i];
+
+					let pi = rel.isSubaward ? rel.parentAward.researcherUser : rel.researcherUser;
+					let requester = rel.researcherUser;
+
 					let item = {
 						id: withdrawal.id,
 						paymentId: withdrawal.id,
@@ -136,7 +138,8 @@ const getters = {
 						attachment: withdrawal.attachment,
 						timestamp: withdrawal.time,
 						organization: rel.organization,
-						pi
+						pi,
+						requester
 					}
 					items.push(item);
 				}

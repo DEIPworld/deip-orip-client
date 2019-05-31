@@ -246,7 +246,10 @@
                             <td><router-link class="a body-2" :to="{ name: 'AwardDetails', params: { org: props.item.organization.permlink, contractId: props.item.contract.id, awardId: props.item.awardId } }">{{ props.item.award | awardNumber }}</router-link></td>
                             <td v-if="isProgramOfficer || isFinancialOfficer"><router-link class="a body-1" :to="{ name: 'UserDetails', params: { account_name: props.item.pi.account.name } }">{{ props.item.pi | fullname}}</router-link></td>
                             <td v-if="isProgramOfficer || isFinancialOfficer"><div><a href="#" class="a body-1">{{ props.item.organization.name }}</a></div></td>
-                            <td><span class="body-1">Requester</span></td>
+                            <td>
+                              <router-link class="a body-1" :to="{ name: 'UserDetails', params: { account_name: props.item.requester.account.name } }">{{ props.item.requester | fullname}}</router-link>
+                              <span v-if="props.item.requester.account.name != props.item.pi.account.name" class="grey--text caption">(subawardee)</span>
+                            </td>
                             <td><span class="body-1 grey--text">{{moment(props.item.timestamp).format('MM/DD/YYYY HH:mm:ss')}}</span></td>
                             <td><div class="body-2 text-align-right">$ {{ props.item.amount | currency }}</div></td>
                           </template>

@@ -39,7 +39,7 @@
               rules.isDigit,
               rules.withinAwardAvailableAmount
             ]"
-            :hint="award ? `Available amount: $ ${this.award.availableAmount}` : ''"
+            :hint="`Available amount: $ ${amountHint}`"
             persistent-hint
             mask="##############"
             append-icon="local_atm"
@@ -137,7 +137,7 @@
               },
               withinAwardAvailableAmount: val => {
                 if (this.award) {
-                  return this.award.availableAmount >= val || `Amount should be less or equal to award available amount: $ ${this.award.availableAmount}`;
+                  return this.award.remainingAmount >= val || `Amount should be less or equal to award available amount: $ ${this.award.remainingAmount}`;
                 }
                 return false;                
               },
@@ -175,6 +175,12 @@
               autoProcessQueue: false,
               addRemoveLinks: true
             } : null;
+          },
+
+          amountHint() {
+            return this.award.isSubaward 
+              ? this.$options.filters.currency(this.award.remainingPiAmount) // rename this field
+              : this.$options.filters.currency(this.award.remainingPiAmount);
           }
         },
         methods: {
@@ -237,7 +243,7 @@
             )
             .then(() => {
               let reload = new Promise((resolve, reject) => {
-                this.$store.dispatch('award_details/loadAward', { notify: resolve, awardId: this.award.id });
+                this.$store.dispatch('award_details/loadAward', { notify: resolve, contractId: this.award.contract.id, awardId: this.award.id });
               });
               return Promise.all([reload]);
             })
