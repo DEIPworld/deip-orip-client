@@ -12,6 +12,7 @@ import AgencyProgramWithdrawalRequests from '@/components/agency-program-withdra
 import OrganizationDashboard from '@/components/organization-dashboard/OrganizationDashboard';
 import OrganizationFinanceDashboard from '@/components/organization-finance-dashboard/OrganizationFinanceDashboard';
 import AwardDetails from '@/components/award-details/AwardDetails';
+import PaymentDetails from '@/components/payment-details/PaymentDetails';
 
 const grantRoutes = [{
   path: '/create-grant',
@@ -119,6 +120,19 @@ const grantRoutes = [{
         orgPermlink: decodeURIComponent(to.params.org),
         contractId: decodeURIComponent(to.params.contractId),
         awardId: decodeURIComponent(to.params.awardId)
+      });
+      loadPage(loadPagePromise, next);
+    }
+  }, {
+    path: '/:org/payment-details/:contractId/:awardId/:paymentId',
+    name: 'PaymentDetails',
+    component: PaymentDetails,
+    beforeEnter: (to, from, next) => {
+      let loadPagePromise = store.dispatch('payment_details/loadPaymentDetailsPage', {
+        orgPermlink: decodeURIComponent(to.params.org),
+        contractId: decodeURIComponent(to.params.contractId),
+        awardId: decodeURIComponent(to.params.awardId),
+        paymentId: decodeURIComponent(to.params.paymentId)
       });
       loadPage(loadPagePromise, next);
     }

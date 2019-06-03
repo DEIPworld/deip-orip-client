@@ -242,7 +242,7 @@
                                 <div class="payment-chip-label">{{ withdrawalStatusMap[props.item.status].text }}</div>
                               </v-chip>
                             </td>
-                            <td><span class="body-1">{{ props.item | paymentNumber }}</span></td>
+                            <td><router-link class="a body-2" :to="{ name: 'PaymentDetails', params: { org: props.item.organization.permlink, contractId: props.item.contract.id, awardId: props.item.awardId, paymentId: props.item.id } }">{{ props.item | paymentNumber }}</router-link></td>
                             <td><router-link class="a body-2" :to="{ name: 'AwardDetails', params: { org: props.item.organization.permlink, contractId: props.item.contract.id, awardId: props.item.awardId } }">{{ props.item.award | awardNumber }}</router-link></td>
                             <td v-if="isProgramOfficer || isFinancialOfficer"><router-link class="a body-1" :to="{ name: 'UserDetails', params: { account_name: props.item.pi.account.name } }">{{ props.item.pi | fullname}}</router-link></td>
                             <td v-if="isProgramOfficer || isFinancialOfficer"><div><a href="#" class="a body-1">{{ props.item.organization.name }}</a></div></td>
@@ -295,7 +295,6 @@
     import {
       withdrawalStatus, withdrawalStatusMap, WITHDRAWAL_PENDING, WITHDRAWAL_CERTIFIED, WITHDRAWAL_APPROVED, WITHDRAWAL_REJECTED, 
       fundingContractStatus, FUNDING_CONTRACT_PENDING, FUNDING_CONTRACT_APPROVED, FUNDING_CONTRACT_REJECTED,
-      fundingTransactionStatus, FUNDING_TRANSACTION_TRANSFER, FUNDING_TRANSACTION_WITHDRAW, FUNDING_TRANSACTION_FEE
     } from './../../services/FundingService';
 
     export default {
@@ -327,7 +326,6 @@
 
           withdrawalStatusMap,
           ...withdrawalStatus,
-          ...fundingTransactionStatus,
           ...fundingContractStatus
         }
       },
@@ -548,7 +546,8 @@
             p => deipRpc.broadcast.certifyFundingWithdrawalRequestAsync(
               this.user.privKey,
               this.user.username,
-              p.paymentId
+              p.paymentId,
+              p.org.id
           ));
 
           Promise.all(promises)
@@ -582,7 +581,8 @@
             p => deipRpc.broadcast.approveFundingWithdrawalRequestAsync(
               this.user.privKey,
               p.paymentId,
-              this.user.username
+              this.user.username,
+              p.org.id
           ));
 
           Promise.all(promises)

@@ -309,7 +309,8 @@
             p => deipRpc.broadcast.certifyFundingWithdrawalRequestAsync(
               this.user.privKey,
               this.user.username,
-              p.paymentId
+              p.paymentId,
+              p.org.id
           ));
 
           Promise.all(promises)
@@ -343,7 +344,8 @@
             p => deipRpc.broadcast.approveFundingWithdrawalRequestAsync(
               this.user.privKey,
               p.paymentId,
-              this.user.username
+              this.user.username,
+              p.org.id
           ));
 
           Promise.all(promises)

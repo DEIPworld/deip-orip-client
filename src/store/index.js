@@ -24,6 +24,7 @@ import treasuryDepartment from './../components/treasury-department/store/index'
 import org_dashboard from './../components/organization-dashboard/store/index'
 import org_finance_dashboard from './../components/organization-finance-dashboard/store/index'
 import award_details from './../components/award-details/store/index'
+import payment_details from './../components/payment-details/store/index'
 
 Vue.use(Vuex)
 
@@ -50,7 +51,8 @@ export default new Vuex.Store({
         treasuryDepartment,
         org_dashboard,
         org_finance_dashboard,
-        award_details
+        award_details,
+        payment_details
     },
     strict: process.env.NODE_ENV !== 'production',
     plugins: process.env.NODE_ENV !== 'production' ? [createLogger()] : []

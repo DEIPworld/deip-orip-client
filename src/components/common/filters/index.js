@@ -82,3 +82,8 @@ Vue.filter('awardNumber', (rel) => {
 Vue.filter('paymentNumber', (withdrawal) => {
     return `${(withdrawal.id + 1)}${parseInt(`${md5(`${withdrawal.id}-payment`)}`, 16)}`.replace(/\./g, "").slice(0, 7);
 });
+
+Vue.filter('ellipsis', (val, size = 30) => {
+    if (!val) return "";
+    return val.length > size ? `${val.slice(0, size)}...` : val;
+});

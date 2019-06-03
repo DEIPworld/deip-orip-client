@@ -244,7 +244,7 @@
           :items="filteredPayments"
           v-model="selectedPayments"
           disable-initial-sort
-          :no-data-text="isAwardNotDistributed ? `Award is not distributed yet` : `No payments requested`" 
+          :no-data-text="isAwardNotDistributed ? `Award is not distributed yet` : `No payments found`" 
           hide-actions>
 
           <template slot="items" slot-scope="props">
@@ -438,7 +438,8 @@
           },
           
           totalPaymentsAmount() {
-            return this.filteredPayments.map(tx => tx.amount)
+            return this.filteredPayments
+              .map(tx => tx.amount)
               .reduce((sum, amount) => sum + amount, 0);
           }
         },
@@ -452,7 +453,8 @@
               p => deipRpc.broadcast.certifyFundingWithdrawalRequestAsync(
                 this.user.privKey,
                 this.user.username,
-                p.paymentId
+                p.paymentId,
+                p.org.id
             ));
 
             Promise.all(promises)
@@ -486,7 +488,8 @@
               p => deipRpc.broadcast.approveFundingWithdrawalRequestAsync(
                 this.user.privKey,
                 p.paymentId,
-                this.user.username
+                this.user.username,
+                p.org.id
             ));
 
             Promise.all(promises)
