@@ -83,7 +83,25 @@ Vue.filter('paymentNumber', (withdrawal) => {
     return `${(withdrawal.id + 1)}${parseInt(`${md5(`${withdrawal.id}-payment`)}`, 16)}`.replace(/\./g, "").slice(0, 7);
 });
 
-Vue.filter('ellipsis', (val, size = 30) => {
-    if (!val) return "";
-    return val.length > size ? `${val.slice(0, size)}...` : val;
+Vue.filter('ellipsis', (str, size = 30) => {
+    if (!str) return "";
+    return str.length > size ? `${str.slice(0, size)}...` : str;
+});
+
+Vue.filter('breakingSpace', (str, size = 50) => {
+    debugger
+    if (!str) return "";
+
+    let result = "";
+    let counter = 0;
+    for (var i = 0; i < str.length; i++) {
+        result += str.charAt(i);
+        counter++;
+        if (counter == size) {
+            result += " ";
+            counter = 0; 
+        }
+    }
+
+    return result;
 });

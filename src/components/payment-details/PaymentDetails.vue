@@ -99,6 +99,111 @@
         </v-layout>
       </v-flex>
 
+      <v-flex xs12>
+        <div class="subheading bold pl-4 pt-2 pb-2 tx-data-divider">Related Blockchain Transactions/Actions</div>
+      </v-flex>
+
+      <v-flex xs12 v-for="record in historyRecords">
+        <v-layout row wrap>
+          <v-flex xs5>
+            <v-layout row wrap>
+              <v-flex xs12 class="pa-4">
+                <div>
+                  {{ record.status == WITHDRAWAL_PENDING ? 'REQUESTED' :
+                     record.status == WITHDRAWAL_CERTIFIED ? 'CERTIFIED' :
+                     record.status == WITHDRAWAL_APPROVED ? 'APPROVED' : '' }}
+                </div>
+              </v-flex>
+              <v-flex xs12 class="pl-4 pr-2">
+                <v-layout class="pt-2 pb-2">
+                  <v-flex xs4><span class="body-1 grey--text">Timestamp</span></v-flex>
+                  <v-flex xs8><span class="body-1 grey--text">{{moment(record.timestamp).format('MM/DD/YYYY HH:mm:ss')}}</span></v-flex>
+                </v-layout>
+                <v-layout class="pt-2 pb-2">
+                  <v-flex xs4><span class="body-1 grey--text">Transaction ID</span></v-flex>
+                  <v-flex xs8><a class="a" href="#">{{record.trx_id}}</a></v-flex>
+                </v-layout>
+                <v-layout class="pt-2 pb-2">
+                  <v-flex xs4><span class="body-1 grey--text">Signed By</span></v-flex>
+                  <v-flex xs8><router-link class="a body-2" :to="{ name: 'UserDetails', params: { account_name: record.trxSigner.account.name } }">{{ record.trxSigner | fullname }}</router-link></v-flex>
+                </v-layout>
+                <v-layout class="pt-2 pb-2">
+                  <v-flex xs2 class="tx-algo pa-2">
+                    <div class="body-1 grey--text">SHA256</div>
+                    <div class="body-1 grey--text mt-1">Signature</div>
+                  </v-flex>
+                  <v-flex xs10 class="tx-data pa-2">
+                    <div class="body-1 grey--text">{{record.trxSigner.account.owner.key_auths[0][0] }}</div>
+                    <div class="body-1 grey--text mt-1">{{record.trxInfo.signatures[0] | breakingSpace}}</div>
+                  </v-flex>
+                </v-layout>
+              </v-flex>
+            </v-layout>
+          </v-flex>
+
+          <v-flex xs7 class="pa-4">
+            <v-layout row wrap class="pt-2 pb-2">
+              <v-flex xs2>
+                <div class="body-1 grey--text">Block</div>
+              </v-flex>
+              <v-flex xs10>
+                <div class="body-1 grey--text"># {{record.block}}</div>
+              </v-flex>
+            </v-layout>
+
+            <v-layout row wrap class="pt-2 pb-2">
+              <v-flex xs2>
+                <div class="body-1 grey--text">Block ID</div>
+              </v-flex>
+              <v-flex xs10>
+                <v-layout row wrap>
+                  <v-flex xs2 class="tx-algo pa-2">
+                    <div class="body-1 grey--text pa-1">RIPEMD-160</div>
+                  </v-flex>
+                  <v-flex xs10 class="tx-data pa-2">
+                    <div class="body-1 grey--text pa-1">{{record.blockInfo.block_id}}</div>
+                  </v-flex>
+                </v-layout>
+              </v-flex>
+            </v-layout>
+
+            <v-layout row wrap class="pt-2 pb-2">
+              <v-flex xs2>
+                <div class="body-1 grey--text">Block Hash</div>
+              </v-flex>
+              <v-flex xs10>
+                <v-layout row wrap>
+                  <v-flex xs2 class="tx-algo pa-2">
+                    <div class="body-1 grey--text pa-1">RIPEMD-160</div>
+                  </v-flex>
+                  <v-flex xs10 class="tx-data pa-2">
+                    <div class="body-1 grey--text pa-1">{{record.blockInfo.transaction_merkle_root}}</div>
+                  </v-flex>
+                </v-layout>
+              </v-flex>
+            </v-layout>
+
+            <v-layout row wrap class="pt-2 pb-2">
+              <v-flex xs2>
+                <div class="body-1 grey--text">Block Signatures</div>
+              </v-flex>
+              <v-flex xs10>
+                <v-layout row wrap>
+                  <v-flex xs2 class="tx-algo pa-2">
+                    <div class="body-1 grey--text">SHA256</div>
+                    <div class="body-1 grey--text pt-1">Signature</div>
+                  </v-flex>
+                  <v-flex xs10 class="tx-data pa-2">
+                    <div class="body-1 grey--text">{{record.blockInfo.signing_key}}</div>
+                    <div class="body-1 grey--text pt-1">{{record.blockInfo.witness_signature | breakingSpace(50)}}</div>
+                  </v-flex>
+                </v-layout>
+              </v-flex>
+            </v-layout>
+          </v-flex>
+        </v-layout>
+      </v-flex>
+
     </v-layout>
   </v-container>
 </template>
@@ -131,7 +236,8 @@
               isProgramOfficer: 'auth/isProgramOfficer',
               isFinancialOfficer: 'auth/isFinancialOfficer',
               organization: 'payment_details/organization',
-              payment: 'payment_details/payment'
+              payment: 'payment_details/payment',
+              historyRecords: 'payment_details/historyRecords'
           })
         },
 
@@ -160,6 +266,23 @@
     border: 1.3px solid #e0e0e0;
     border-top-right-radius: 5px;
     border-bottom-right-radius: 5px;
+  }
+
+  .tx-algo {
+    background-color: #e0e0e0;
+    border: 1.3px solid #e0e0e0;
+    border-top-left-radius: 5px;
+    border-bottom-left-radius: 5px;
+  }
+
+  .tx-data {
+    border: 1.3px solid #e0e0e0;
+    border-top-right-radius: 5px;
+    border-bottom-right-radius: 5px;
+  }
+
+  .tx-data-divider {
+    background-color: #cfe8fc
   }
 
 </style>

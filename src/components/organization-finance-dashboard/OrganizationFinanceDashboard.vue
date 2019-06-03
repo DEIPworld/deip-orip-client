@@ -547,7 +547,7 @@
               this.user.privKey,
               this.user.username,
               p.paymentId,
-              p.org.id
+              p.organization.id
           ));
 
           Promise.all(promises)
@@ -582,7 +582,7 @@
               this.user.privKey,
               p.paymentId,
               this.user.username,
-              p.org.id
+              p.organization.id
           ));
 
           Promise.all(promises)
