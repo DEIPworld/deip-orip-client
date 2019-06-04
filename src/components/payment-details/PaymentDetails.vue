@@ -103,16 +103,20 @@
         <div class="subheading bold pl-4 pt-2 pb-2 tx-data-divider">Related Blockchain Transactions/Actions</div>
       </v-flex>
 
-      <v-flex xs12 v-for="record in historyRecords">
+      <v-flex xs12 v-for="(record, i) in historyRecords" :key="'status-' + i" class="ma-1" :style="{ 'border-left': '6px solid' +  withdrawalStatusMap[record.status].color }">
         <v-layout row wrap>
           <v-flex xs6>
             <v-layout row wrap>
               <v-flex xs12 class="pa-4">
-                <div>
-                  {{ record.status == WITHDRAWAL_PENDING ? 'REQUESTED' :
-                     record.status == WITHDRAWAL_CERTIFIED ? 'CERTIFIED' :
-                     record.status == WITHDRAWAL_APPROVED ? 'APPROVED' : '' }}
-                </div>
+                <v-chip class="payment-chip" :color="withdrawalStatusMap[record.status].color" :text-color="withdrawalStatusMap[record.status].textColor">
+                  <div class="payment-chip-label">
+                    <div class="subheading">
+                      {{i + 1}}. {{ record.status == WITHDRAWAL_PENDING ? 'REQUESTED' :
+                        record.status == WITHDRAWAL_CERTIFIED ? 'CERTIFIED' :
+                        record.status == WITHDRAWAL_APPROVED ? 'APPROVED' : '' }}
+                    </div>
+                  </div>
+                </v-chip>
               </v-flex>
               <v-flex xs12 class="pl-4 pr-2">
                 <v-layout class="pt-2 pb-2">
@@ -286,6 +290,11 @@
 
   .tx-data-divider {
     background-color: #cfe8fc
+  }
+
+  .payment-chip .payment-chip-label {
+    min-width: 150px; 
+    text-align: center;
   }
 
 </style>
