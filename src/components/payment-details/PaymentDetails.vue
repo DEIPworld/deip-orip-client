@@ -205,12 +205,19 @@
                   </v-flex>
                 </v-layout>
               </v-flex>
-
             </v-layout>
           </v-flex>
         </v-layout>
-      </v-flex>
 
+        <v-layout>
+          <v-spacer></v-spacer>
+          <v-flex xs10>
+            <v-divider></v-divider>
+          </v-flex>
+          <v-spacer></v-spacer>
+        </v-layout>
+        
+      </v-flex>
     </v-layout>
   </v-container>
 </template>
