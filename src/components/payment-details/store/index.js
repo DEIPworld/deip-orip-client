@@ -8,6 +8,7 @@ import {
   WITHDRAWAL_PENDING,
   WITHDRAWAL_CERTIFIED,
   WITHDRAWAL_APPROVED,
+  WITHDRAWAL_PAID,
   WITHDRAWAL_REJECTED,
   
   loadFundingContract
@@ -39,6 +40,7 @@ const getters = {
     let payment = {
       id: state.payment.id,
       amount: state.payment.amount.amount,
+      status: state.payment.status,
       pi,
       requester,
       organization: state.organization,
@@ -128,6 +130,14 @@ const actions = {
           paymentRecords.push(approvePaymentOp);
         }
 
+        let paidPaymentOp = records.find(
+          r => r.op[0] == "pay_funding_withdrawal_request"
+            && r.op[1].funding_withdrawal_request_id == paymentId);
+        if (paidPaymentOp) {
+          paidPaymentOp.status = WITHDRAWAL_PAID;
+          paymentRecords.push(paidPaymentOp);
+        }
+
         let blocksPromises = paymentRecords.map(r => getBlock(r.block))
         return Promise.all(blocksPromises);
       })
@@ -159,6 +169,8 @@ const actions = {
           } else if (i == 1) { // certified
             trxSigners.push(item.op[1].certifier);
           } else if (i == 2) { // approved
+            trxSigners.push(item.op[1].approver);
+          } else if (i == 3) { // paid
             trxSigners.push(item.op[1].approver);
           }
         }

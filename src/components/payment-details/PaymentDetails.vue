@@ -111,9 +111,12 @@
                 <v-chip class="payment-chip" :color="withdrawalStatusMap[record.status].color" :text-color="withdrawalStatusMap[record.status].textColor">
                   <div class="payment-chip-label">
                     <div class="subheading">
-                      {{i + 1}}. {{ record.status == WITHDRAWAL_PENDING ? 'REQUESTED' :
+                      {{i + 1}}. {{ 
+                        record.status == WITHDRAWAL_PENDING ? 'REQUESTED' :
                         record.status == WITHDRAWAL_CERTIFIED ? 'CERTIFIED' :
-                        record.status == WITHDRAWAL_APPROVED ? 'APPROVED' : '' }}
+                        record.status == WITHDRAWAL_APPROVED ? 'APPROVED' :
+                        record.status == WITHDRAWAL_PAID ? 'PAID' : '' 
+                      }}
                     </div>
                   </div>
                 </v-chip>
@@ -227,7 +230,7 @@
     import deipRpc from '@deip/deip-rpc-client';
     import { mapGetters } from 'vuex';
     import {
-      withdrawalStatus, withdrawalStatusMap, WITHDRAWAL_PENDING, WITHDRAWAL_CERTIFIED, WITHDRAWAL_APPROVED, WITHDRAWAL_REJECTED, 
+      withdrawalStatus, withdrawalStatusMap, WITHDRAWAL_PENDING, WITHDRAWAL_CERTIFIED, WITHDRAWAL_APPROVED, WITHDRAWAL_PAID, WITHDRAWAL_REJECTED, 
       fundingContractStatus, FUNDING_CONTRACT_PENDING, FUNDING_CONTRACT_APPROVED, FUNDING_CONTRACT_REJECTED,
     } from './../../services/FundingService';
 
@@ -300,6 +303,11 @@
   }
 
   .payment-chip .payment-chip-label {
+    min-width: 150px; 
+    text-align: center;
+  }
+
+  .top-payment-chip .top-payment-chip-label {
     min-width: 150px; 
     text-align: center;
   }

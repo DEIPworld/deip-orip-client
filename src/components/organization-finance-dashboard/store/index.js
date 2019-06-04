@@ -12,7 +12,8 @@ import {
 	WITHDRAWAL_PENDING,
 	WITHDRAWAL_CERTIFIED,
 	WITHDRAWAL_APPROVED,
-	WITHDRAWAL_REJECTED ,
+	WITHDRAWAL_PAID,
+	WITHDRAWAL_REJECTED,
 
 	loadFundingContracts
 } from './../../../services/FundingService';
@@ -73,32 +74,49 @@ const getters = {
 				let universityOverheadAmount = totalAmount - (totalAmount - (totalAmount * (rel.university_overhead / 100) / 100));
 				let pendingAmount = 0;
 				let withdrawnAmount = 0;
-				let requestedAmount = 0;
+				let requestedPiAmount = 0;
+
 				for (let i = 0; i < rel.withdrawals.length; i++) {
 					let withdrawal = rel.withdrawals[i];
-					if (withdrawal.status == WITHDRAWAL_PENDING || withdrawal.status == WITHDRAWAL_CERTIFIED) pendingAmount += fromAssetsToFloat(withdrawal.amount);
-					if (withdrawal.status == WITHDRAWAL_APPROVED) withdrawnAmount += fromAssetsToFloat(withdrawal.amount);
-					requestedAmount += fromAssetsToFloat(withdrawal.amount);
+					if (withdrawal.status == WITHDRAWAL_PENDING || withdrawal.status == WITHDRAWAL_CERTIFIED || withdrawal.status == WITHDRAWAL_APPROVED) pendingAmount += fromAssetsToFloat(withdrawal.amount);
+					if (withdrawal.status == WITHDRAWAL_PAID) withdrawnAmount += fromAssetsToFloat(withdrawal.amount);
+					requestedPiAmount += fromAssetsToFloat(withdrawal.amount);
 				}
 
-				let availableAmount = totalAmount - pendingAmount - withdrawnAmount - universityOverheadAmount;
-				let remainingAmount = totalAmount - requestedAmount - universityOverheadAmount;
-				if (remainingAmount != availableAmount) {
-					console.warn(`WARNING: award available amount (${availableAmount}) is not equal to remaining amount (${remainingAmount})`);
-				}
-				
+				let subawardeesAmount = rel.subawards
+					.map(s => s.total_amount.amount)
+					.reduce((sum, amount) => sum + amount, 0);
+
+				let requestedSubawardeesAmount = rel.subawards
+					.map(s => s.withdrawals.map(w => w.amount.amount).reduce((sum, amount) => sum + amount, 0))
+					.reduce((sum, amount) => sum + amount, 0);
+
+				let remainingSubawardeesAmount = subawardeesAmount - requestedSubawardeesAmount;
+
+				let piAmount = totalAmount - subawardeesAmount - universityOverheadAmount;
+				let remainingPiAmount = piAmount - requestedPiAmount;
+
+				let remainingAmount = totalAmount - requestedPiAmount - requestedSubawardeesAmount - universityOverheadAmount;
+
 				let org = state.organizations.find(o => o.id == rel.organisation_id);
 				let pi = rel.researcherUser;
 				let award = {
 					id: rel.id,
 					awardId: rel.id,
+
 					totalAmount,
-					availableAmount,
 					remainingAmount,
-					pendingAmount,
-					withdrawnAmount,
-					requestedAmount,
 					universityOverheadAmount,
+
+					piAmount,
+					requestedPiAmount,
+					remainingPiAmount,
+
+					subawardeesAmount,
+					requestedSubawardeesAmount,
+					remainingSubawardeesAmount,
+
+					requestedAmount: requestedPiAmount + requestedSubawardeesAmount,
 					from: c.foa.open_date,
 					to: c.foa.close_date,
 					contract: c,

@@ -8,6 +8,7 @@ import {
   WITHDRAWAL_PENDING,
   WITHDRAWAL_CERTIFIED,
   WITHDRAWAL_APPROVED,
+  WITHDRAWAL_PAID,
   WITHDRAWAL_REJECTED,
 
   loadFundingContract
@@ -35,8 +36,8 @@ const getters = {
     
     for (let i = 0; i < rel.withdrawals.length; i++) {
       let withdrawal = rel.withdrawals[i];
-      if (withdrawal.status == WITHDRAWAL_PENDING || withdrawal.status == WITHDRAWAL_CERTIFIED) pendingAmount += fromAssetsToFloat(withdrawal.amount);
-      if (withdrawal.status == WITHDRAWAL_APPROVED) withdrawnAmount += fromAssetsToFloat(withdrawal.amount);
+      if (withdrawal.status == WITHDRAWAL_PENDING || withdrawal.status == WITHDRAWAL_CERTIFIED || withdrawal.status == WITHDRAWAL_APPROVED) pendingAmount += fromAssetsToFloat(withdrawal.amount);
+      if (withdrawal.status == WITHDRAWAL_PAID) withdrawnAmount += fromAssetsToFloat(withdrawal.amount);
       requestedPiAmount += fromAssetsToFloat(withdrawal.amount);
     }
 
@@ -77,7 +78,7 @@ const getters = {
 
       from: contract.foa.open_date,
       to: contract.foa.close_date,
-      contract: contract,
+      contract,
       relation: rel,
       organization: rel.organization,
       pi: rel.researcherUser
@@ -98,8 +99,8 @@ const getters = {
 
       for (let i = 0; i < subaward.withdrawals.length; i++) {
         let withdrawal = subaward.withdrawals[i];
-        if (withdrawal.status == WITHDRAWAL_PENDING || withdrawal.status == WITHDRAWAL_CERTIFIED) pendingAmount += fromAssetsToFloat(withdrawal.amount);
-        if (withdrawal.status == WITHDRAWAL_APPROVED) withdrawnAmount += fromAssetsToFloat(withdrawal.amount);
+        if (withdrawal.status == WITHDRAWAL_PENDING || withdrawal.status == WITHDRAWAL_CERTIFIED || withdrawal.status == WITHDRAWAL_APPROVED) pendingAmount += fromAssetsToFloat(withdrawal.amount);
+        if (withdrawal.status == WITHDRAWAL_PAID) withdrawnAmount += fromAssetsToFloat(withdrawal.amount);
         requestedSubawardAmount += fromAssetsToFloat(withdrawal.amount);
       }
 
@@ -116,7 +117,7 @@ const getters = {
         requestedSubawardAmount,
         from: contract.foa.open_date,
         to: contract.foa.close_date,
-        contract: contract,
+        contract,
         relation: subaward,
         organization: subaward.organization,
         subawardee
@@ -139,10 +140,11 @@ const getters = {
       rels.push(...state.contract.relations);
     }
 
+    let contract = state.contract;
+
     let items = [];
     for (let j = 0; j < rels.length; j++) {
       let rel = rels[j];
-      let org = rel.organization;
       let pi = rel.isSubaward ? rel.parentAward.researcherUser : rel.researcherUser;
       let requester = rel.researcherUser;
 
@@ -157,7 +159,8 @@ const getters = {
           award: rel,
           attachment: withdrawal.attachment,
           timestamp: withdrawal.time,
-          org,
+          organization: rel.organization,
+          contract,
           pi,
           requester
         }

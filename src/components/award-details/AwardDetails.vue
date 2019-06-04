@@ -235,7 +235,22 @@
               </confirm-action-dialog>
             </div>
           </v-flex>
-
+          
+          <v-flex xs2 v-if="isTreasury">
+            <div style="padding: 0px 15px 0px 0px">
+              <v-btn block @click="confirmPayment.isShown = true" color="success" :disabled="!selectedToPay.length || isPaying" :loading="isPaying">
+                {{ selectedToPay.length ? `Confirm Payment (${selectedToPay.length})` : `Confirm Payment`}}
+              </v-btn>
+              <confirm-action-dialog
+                :meta="confirmPayment" 
+                :title="``" 
+                :text="`Are you sure you want to send payment to selected payment requests?`" 
+                @confirmed="paySelectedPaymentRequests(); confirmPayment.isShown = false"  
+                @canceled="confirmPayment.isShown = false">
+              </confirm-action-dialog>
+            </div>
+          </v-flex>
+          
         </v-layout>
       </v-flex>
       <v-flex xs12>
@@ -248,8 +263,11 @@
           hide-actions>
 
           <template slot="items" slot-scope="props">
-            <td v-if="isCertifier || isProgramOfficer">
-              <v-checkbox v-if="(isCertifier && props.item.status == WITHDRAWAL_PENDING) || (props.item.status == WITHDRAWAL_CERTIFIED && isProgramOfficer)"
+            <td v-if="isCertifier || isProgramOfficer || isTreasury">
+              <v-checkbox v-if="
+              (props.item.status == WITHDRAWAL_PENDING && isCertifier) || 
+              (props.item.status == WITHDRAWAL_CERTIFIED && isProgramOfficer) ||
+              (props.item.status == WITHDRAWAL_APPROVED && isTreasury)"
                 v-model="props.selected"
                 primary
                 hide-details
@@ -260,7 +278,7 @@
                 <div class="payment-chip-label">{{ withdrawalStatusMap[props.item.status].text }}</div>
               </v-chip>
             </td>
-            <td><span class="body-1">{{ props.item | paymentNumber }}</span></td>
+            <td><router-link class="a body-2" :to="{ name: 'PaymentDetails', params: { org: props.item.organization.permlink, contractId: props.item.contract.id, awardId: props.item.awardId, paymentId: props.item.id } }">{{ props.item | paymentNumber }}</router-link></td>
             <td>
               <router-link class="a body-1" :to="{ name: 'UserDetails', params: { account_name: props.item.requester.account.name } }">{{ props.item.requester | fullname}}</router-link>
               <span v-if="(props.item.requester.account.name != props.item.pi.account.name) && !award.isSubaward" class="grey--text caption">(subawardee)</span>
@@ -296,7 +314,7 @@
     import deipRpc from '@deip/deip-rpc-client';
     import { mapGetters } from 'vuex';
     import {
-      withdrawalStatus, withdrawalStatusMap, WITHDRAWAL_PENDING, WITHDRAWAL_CERTIFIED, WITHDRAWAL_APPROVED, WITHDRAWAL_REJECTED, 
+      withdrawalStatus, withdrawalStatusMap, WITHDRAWAL_PENDING, WITHDRAWAL_CERTIFIED, WITHDRAWAL_APPROVED, WITHDRAWAL_PAID, WITHDRAWAL_REJECTED, 
       fundingContractStatus, FUNDING_CONTRACT_PENDING, FUNDING_CONTRACT_APPROVED, FUNDING_CONTRACT_REJECTED,
     } from './../../services/FundingService';
 
@@ -321,6 +339,10 @@
             isApproving: false,
             confirmApproval: { isShown: false },
 
+            selectedToPay: [],
+            isPaying: false,
+            confirmPayment: { isShown: false },
+
             isDistributing: false,
             confirmDistribution: { isShown: false },
 
@@ -339,6 +361,7 @@
               isCertifier: 'auth/isCertifier',
               isProgramOfficer: 'auth/isProgramOfficer',
               isFinancialOfficer: 'auth/isFinancialOfficer',
+              isTreasury: 'auth/isTreasury',
               organization: 'award_details/organization',
               award: 'award_details/award',
               payments: 'award_details/payments',
@@ -381,6 +404,13 @@
               { text: 'REQUESTER', value: 'requester.account.name', width: "20%" },
               { text: 'TIMESTAMP', value: 'timestamp', width: "20%" },
               { text: 'AMOUNT', value: 'amount', align: 'right', width: "20%" }
+            ] : this.isTreasury ? [
+              { text: '', sortable: false, width: "5%" }, // display checkbox for Treasury
+              { text: 'STATUS', value: 'status', align: 'center', width: "20%" },
+              { text: 'PAYMENT #', value: 'paymentId', width: "15%" },
+              { text: 'REQUESTER', value: 'requester.account.name', width: "20%" },
+              { text: 'TIMESTAMP', value: 'timestamp', width: "20%" },
+              { text: 'AMOUNT', value: 'amount', align: 'right', width: "20%" }
             ] : [
               { text: 'STATUS', value: 'status', align: 'center', width: "20%" },
               { text: 'PAYMENT #', value: 'paymentId', width: "20%" },
@@ -415,7 +445,8 @@
               { text: 'ALL STATUSES', value: undefined },
               { text: 'PENDING CERTIFICATION', value: [ WITHDRAWAL_PENDING ] },
               { text: 'PENDING APPROVAL', value: [ WITHDRAWAL_CERTIFIED ] },
-              { text: 'PAID', value: [ WITHDRAWAL_APPROVED ] },
+              { text: 'PENDING MONEY TRANSFER', value: [ WITHDRAWAL_APPROVED ] },
+              { text: 'PAID', value: [ WITHDRAWAL_PAID ] },
             ];
           },
 
@@ -454,7 +485,7 @@
                 this.user.privKey,
                 this.user.username,
                 p.paymentId,
-                p.org.id
+                p.organization.id
             ));
 
             Promise.all(promises)
@@ -489,7 +520,7 @@
                 this.user.privKey,
                 p.paymentId,
                 this.user.username,
-                p.org.id
+                p.organization.id
             ));
 
             Promise.all(promises)
@@ -513,6 +544,41 @@
               .finally(() => {
                 this.selectedToApprove = [];
                 this.isApproving = false;
+              });
+          },
+
+          paySelectedPaymentRequests() {
+            this.isPaying = true;
+
+            let promises = this.selectedToPay.map(
+              p => deipRpc.broadcast.payFundingWithdrawalRequestAsync(
+                this.user.privKey,
+                p.paymentId,
+                this.user.username,
+                p.organization.id
+            ));
+
+            Promise.all(promises)
+              .then(() => {
+                let reload = new Promise((resolve, reject) => {
+                  this.$store.dispatch('award_details/loadAward', { notify: resolve, contractId: this.award.contract.id, awardId: this.award.id });
+                });
+                return Promise.all([reload]);
+              })
+              .then(() => {
+                this.$store.dispatch('layout/setSuccess', {
+                  message: `Money transfer has been sent successfully!`
+                });
+              })
+              .catch((err) => {
+                console.log(err);
+                this.$store.dispatch('layout/setError', {
+                    message: `An error occurred while sending the request, please try again later.`
+                });
+              })
+              .finally(() => {
+                this.selectedToPay = [];
+                this.isPaying = false;
               });
           },
 
@@ -548,6 +614,7 @@
           'selectedPayments': function (newVal, oldVal) {
             this.selectedToCertify = newVal.filter(p => p.status == WITHDRAWAL_PENDING);
             this.selectedToApprove = newVal.filter(p => p.status == WITHDRAWAL_CERTIFIED);
+            this.selectedToPay = newVal.filter(p => p.status == WITHDRAWAL_APPROVED);
           },
           '$route.params': {
             handler(params) {

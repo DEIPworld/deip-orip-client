@@ -2,21 +2,24 @@ import deipRpc from '@deip/deip-rpc-client';
 import { getEnrichedProfiles } from './../utils/user';
 import { getPaymentRequestRefByHash } from './http/paymentRequests';
 
-export const WITHDRAWAL_PENDING= 1;
+export const WITHDRAWAL_PENDING = 1;
 export const WITHDRAWAL_CERTIFIED = 2;
-export const WITHDRAWAL_APPROVED= 3;
-export const WITHDRAWAL_REJECTED = 4;
+export const WITHDRAWAL_APPROVED = 3;
+export const WITHDRAWAL_PAID = 4;
+export const WITHDRAWAL_REJECTED = 5;
 const withdrawalStatus = {
   WITHDRAWAL_PENDING,
   WITHDRAWAL_CERTIFIED,
   WITHDRAWAL_APPROVED,
+  WITHDRAWAL_PAID,
   WITHDRAWAL_REJECTED
 };
 
 const withdrawalStatusMap = {};
 withdrawalStatusMap[WITHDRAWAL_PENDING] = { id: WITHDRAWAL_PENDING, text: 'Pending Certification', color: '#ffccbc', textColor: '#302a1b' };
 withdrawalStatusMap[WITHDRAWAL_CERTIFIED] = { id: WITHDRAWAL_CERTIFIED, text: 'Pending Approval', color: '#ffe492', textColor: '#302a1b' };
-withdrawalStatusMap[WITHDRAWAL_APPROVED] = { id: WITHDRAWAL_APPROVED, text: 'Paid', color: '#02b56a', textColor: '#dbf5ea' };
+withdrawalStatusMap[WITHDRAWAL_APPROVED] = { id: WITHDRAWAL_APPROVED, text: 'Pending Money Transfer', color: '#8fc3f7', textColor: '#302a1b' };
+withdrawalStatusMap[WITHDRAWAL_PAID] = { id: WITHDRAWAL_PAID, text: 'Paid', color: '#02b56a', textColor: '#dbf5ea' };
 withdrawalStatusMap[WITHDRAWAL_REJECTED] = { id: WITHDRAWAL_REJECTED, text: 'Rejected', color: '#f24821', textColor: '#302a1b' };
 
 
