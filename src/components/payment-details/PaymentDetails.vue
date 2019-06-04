@@ -80,7 +80,7 @@
             <div v-for="(file, i) in payment.attachment.packageFiles">
               <v-layout class="pt-2">
                 <v-flex xs6>
-                  <div class="pa-1 attachment-hash grey--text text-align-center">{{file.hash}}</div>
+                  <div class="pa-1 attachment-hash grey--text text--darken-1 text-align-center">{{file.hash}}</div>
                 </v-flex>
                 <v-flex xs6>
                   <div class="pa-1 pl-3 attachment-file">
@@ -117,7 +117,7 @@
               <v-flex xs12 class="pl-4 pr-2">
                 <v-layout class="pt-2 pb-2">
                   <v-flex xs3><span class="body-1 grey--text">Timestamp</span></v-flex>
-                  <v-flex xs9><span class="body-1 grey--text">{{moment(record.timestamp).format('MM/DD/YYYY HH:mm:ss')}}</span></v-flex>
+                  <v-flex xs9><span class="body-2 grey--text">{{moment(record.timestamp).format('MM/DD/YYYY HH:mm:ss')}}</span></v-flex>
                 </v-layout>
                 <v-layout class="pt-2 pb-2">
                   <v-flex xs3><span class="body-1 grey--text">Transaction ID</span></v-flex>
@@ -134,25 +134,10 @@
                     <div class="body-2 grey--text text--darken-1 pt-1 pl-1">Signature</div>
                   </v-flex>
                   <v-flex xs10 class="tx-data pa-1">
-                    <div class="body-1 grey--text pt-1">{{record.trxSigner.account.owner.key_auths[0][0] }}</div>
-                    <div class="body-1 grey--text pt-1">{{record.trxInfo.signatures[0] | breakingSpace}}</div>
+                    <div class="break-letter body-1 grey--text text--darken-1 pt-1 pl-2 pr-2">{{record.trxSigner.account.owner.key_auths[0][0] }}</div>
+                    <div class="break-letter body-1 grey--text text--darken-1 pt-1 pl-2 pr-2">{{record.trxInfo.signatures[0]}}</div>
                   </v-flex>
                 </v-layout>
-
-
-       <!--   <v-flex xs12 class="pt-2">
-                <v-layout row wrap>
-                  <v-flex xs2 class="tx-algo pa-1">
-                    <div class="body-2 white--text text--darken-4 pt-1 pl-1">SHA256</div>
-                    <div class="body-2 grey--text text--darken-1 pt-1 pl-1">Signature</div>
-                  </v-flex>
-                  <v-flex xs10 class="tx-data pa-1">
-                    <div class="body-1 grey--text pt-1">{{record.blockInfo.signing_key}}</div>
-                    <div class="body-1 grey--text pt-1">{{record.blockInfo.witness_signature | breakingSpace}}</div>
-                  </v-flex>
-                </v-layout>
-              </v-flex> -->
-
               </v-flex>
             </v-layout>
           </v-flex>
@@ -177,7 +162,7 @@
                     <div class="body-2 white--text text--darken-4 pt-1 pl-1">RIPEMD-160</div>
                   </v-flex>
                   <v-flex xs10 class="tx-data pa-1">
-                    <div class="body-1 grey--text pt-1">{{record.blockInfo.block_id}}</div>
+                    <div class="break-letter body-1 grey--text text--darken-1 pt-1 pl-2 pr-2">{{record.blockInfo.block_id}}</div>
                   </v-flex>
                 </v-layout>
               </v-flex>
@@ -193,7 +178,7 @@
                     <div class="body-2 white--text text--darken-4 pt-1 pl-1">RIPEMD-160</div>
                   </v-flex>
                   <v-flex xs10 class="tx-data pa-1">
-                    <div class="body-1 grey--text pt-1">{{record.blockInfo.transaction_merkle_root}}</div>
+                    <div class="break-letter body-1 grey--text text--darken-1 pt-1 pl-2 pr-2">{{record.blockInfo.transaction_merkle_root}}</div>
                   </v-flex>
                 </v-layout>
               </v-flex>
@@ -211,8 +196,8 @@
                     <div class="body-2 grey--text text--darken-1 pt-1 pl-1">Signature</div>
                   </v-flex>
                   <v-flex xs10 class="tx-data pa-1">
-                    <div class="body-1 grey--text pt-1">{{record.blockInfo.signing_key}}</div>
-                    <div class="body-1 grey--text pt-1">{{record.blockInfo.witness_signature | breakingSpace}}</div>
+                    <div class="break-letter body-1 grey--text text--darken-1 pt-1 pl-2 pr-2">{{record.blockInfo.signing_key}}</div>
+                    <div class="break-letter body-1 grey--text text--darken-1 pt-1 pl-2 pr-2">{{record.blockInfo.witness_signature}}</div>
                   </v-flex>
                 </v-layout>
               </v-flex>
