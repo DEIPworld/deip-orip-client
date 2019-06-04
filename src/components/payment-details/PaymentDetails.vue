@@ -105,7 +105,7 @@
 
       <v-flex xs12 v-for="record in historyRecords">
         <v-layout row wrap>
-          <v-flex xs5>
+          <v-flex xs6>
             <v-layout row wrap>
               <v-flex xs12 class="pa-4">
                 <div>
@@ -127,21 +127,23 @@
                   <v-flex xs4><span class="body-1 grey--text">Signed By</span></v-flex>
                   <v-flex xs8><router-link class="a body-2" :to="{ name: 'UserDetails', params: { account_name: record.trxSigner.account.name } }">{{ record.trxSigner | fullname }}</router-link></v-flex>
                 </v-layout>
+
                 <v-layout class="pt-2 pb-2">
                   <v-flex xs2 class="tx-algo pa-2">
                     <div class="body-1 grey--text">SHA256</div>
-                    <div class="body-1 grey--text mt-1">Signature</div>
+                    <div class="body-1 grey--text pt-2">Signature</div>
                   </v-flex>
                   <v-flex xs10 class="tx-data pa-2">
                     <div class="body-1 grey--text">{{record.trxSigner.account.owner.key_auths[0][0] }}</div>
-                    <div class="body-1 grey--text mt-1">{{record.trxInfo.signatures[0] | breakingSpace}}</div>
+                    <div class="body-1 grey--text pt-2">{{record.trxInfo.signatures[0] | breakingSpace}}</div>
                   </v-flex>
                 </v-layout>
+
               </v-flex>
             </v-layout>
           </v-flex>
 
-          <v-flex xs7 class="pa-4">
+          <v-flex xs6 class="pa-4">
             <v-layout row wrap class="pt-2 pb-2">
               <v-flex xs2>
                 <div class="body-1 grey--text">Block</div>
@@ -152,10 +154,10 @@
             </v-layout>
 
             <v-layout row wrap class="pt-2 pb-2">
-              <v-flex xs2>
+              <v-flex xs12>
                 <div class="body-1 grey--text">Block ID</div>
               </v-flex>
-              <v-flex xs10>
+              <v-flex xs12 class="pt-2">
                 <v-layout row wrap>
                   <v-flex xs2 class="tx-algo pa-2">
                     <div class="body-1 grey--text pa-1">RIPEMD-160</div>
@@ -168,10 +170,10 @@
             </v-layout>
 
             <v-layout row wrap class="pt-2 pb-2">
-              <v-flex xs2>
+              <v-flex xs12>
                 <div class="body-1 grey--text">Block Hash</div>
               </v-flex>
-              <v-flex xs10>
+              <v-flex xs12 class="pt-2">
                 <v-layout row wrap>
                   <v-flex xs2 class="tx-algo pa-2">
                     <div class="body-1 grey--text pa-1">RIPEMD-160</div>
@@ -184,21 +186,23 @@
             </v-layout>
 
             <v-layout row wrap class="pt-2 pb-2">
-              <v-flex xs2>
+              <v-flex xs12>
                 <div class="body-1 grey--text">Block Signatures</div>
               </v-flex>
-              <v-flex xs10>
+
+              <v-flex xs12 class="pt-2">
                 <v-layout row wrap>
                   <v-flex xs2 class="tx-algo pa-2">
                     <div class="body-1 grey--text">SHA256</div>
-                    <div class="body-1 grey--text pt-1">Signature</div>
+                    <div class="body-1 grey--text pt-2">Signature</div>
                   </v-flex>
                   <v-flex xs10 class="tx-data pa-2">
                     <div class="body-1 grey--text">{{record.blockInfo.signing_key}}</div>
-                    <div class="body-1 grey--text pt-1">{{record.blockInfo.witness_signature | breakingSpace(50)}}</div>
+                    <div class="body-1 grey--text pt-2">{{record.blockInfo.witness_signature | breakingSpace}}</div>
                   </v-flex>
                 </v-layout>
               </v-flex>
+
             </v-layout>
           </v-flex>
         </v-layout>

@@ -88,7 +88,7 @@ Vue.filter('ellipsis', (str, size = 30) => {
     return str.length > size ? `${str.slice(0, size)}...` : str;
 });
 
-Vue.filter('breakingSpace', (str, size = 50) => {
+Vue.filter('breakingSpace', (str, size = 60) => {
     debugger
     if (!str) return "";
 
