@@ -89,7 +89,6 @@ Vue.filter('ellipsis', (str, size = 30) => {
 });
 
 Vue.filter('breakingSpace', (str, size = 60) => {
-    debugger
     if (!str) return "";
 
     let result = "";
