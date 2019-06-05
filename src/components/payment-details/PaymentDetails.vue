@@ -2,8 +2,24 @@
   <v-container fluid class="ma-0 pa-0 c-pb-10">
     <v-layout row wrap>
       
-      <v-flex xs12 class="pa-4">
-        <h1 class="display-1">Payment # {{payment | paymentNumber}}</h1>
+      <v-flex xs12 class="pb-4 pt-4 pl-4">
+        <div class="display-1">Payment # {{payment | paymentNumber}}
+          <span class="ml-2 paymnet-current-status-box">
+            <span class="body-1 paymnet-current-status-label" 
+              :style="{ 
+                'background-color': withdrawalStatusMap[payment.status].color, 
+                'border-color': withdrawalStatusMap[payment.status].color,
+                'color': withdrawalStatusMap[payment.status].textColor
+              }">
+              {{ 
+                payment.status == WITHDRAWAL_PENDING ? 'REQUESTED' :
+                payment.status == WITHDRAWAL_CERTIFIED ? 'CERTIFIED' :
+                payment.status == WITHDRAWAL_APPROVED ? 'APPROVED' :
+                payment.status == WITHDRAWAL_PAID ? 'PAID' : '' 
+              }}
+            </span>
+          </span>
+        </div>
       </v-flex>
 
       <v-flex xs12>
@@ -310,6 +326,17 @@
   .top-payment-chip .top-payment-chip-label {
     min-width: 150px; 
     text-align: center;
+  }
+
+  .paymnet-current-status-box {
+    display: inline-block;
+    vertical-align: super;
+  }
+
+  .paymnet-current-status-label {
+    border: 1px solid;
+    padding: 3px 35px;
+    border-radius: 12px;
   }
 
 </style>

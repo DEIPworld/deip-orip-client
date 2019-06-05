@@ -4,7 +4,7 @@
             <global-loader></global-loader>
         </div>
 
-        <v-toolbar app fixed clipped-left color="black" dark class="deip-toolbar">
+        <v-toolbar app fixed clipped-left color="#529371" dark class="deip-toolbar">
             <v-toolbar-title>
                 <router-link v-if="tenant && isTreasury" :to="{ name: 'Default' }">
                     <div style="width: 40px; height: 40px">
@@ -33,6 +33,10 @@
                     </div>
                 </router-link>
 
+                <router-link v-else-if="tenant && tenant == 'nsf'" class="a" style="text-decoration: none" :to="{ name: 'Default' }">
+                    <div class="display-1" style="color: #ffffff;"><span>my</span><span class="bold">NSF</span></div>
+                </router-link>
+
                 <router-link v-else-if="tenant" :to="{ name: 'Default' }">
                     <v-avatar size="50px">
                         <img :src="tenant | agencyLogoSrc(160, 160, false)" />
@@ -51,7 +55,12 @@
 
             <v-menu v-if="isLoggedIn()" bottom left offset-y>
                 <v-btn fab flat icon class="ma-0" slot="activator">
-                    <v-avatar size="32px">
+                    
+                    <v-avatar v-if="tenant && tenant == 'nsf'" size="50px">
+                        <img :src="tenant | agencyLogoSrc(160, 160, false)" />
+                    </v-avatar>
+
+                    <v-avatar v-else size="32px">
                         <img v-if="user.profile" v-bind:src="user.profile.avatar | avatarSrc(32, 32, false)" />
                         <v-gravatar v-if="!user.profile && user.account" :title="user.username" :email="user.username + '@deip.world'" />
                     </v-avatar>
@@ -59,7 +68,7 @@
 
                 <v-list class="dropdown-list" dark dense>
                     <v-list-tile :to="{ name: 'UserDetails', params: { account_name: user.username } }">
-                        <v-list-tile-title>Profile</v-list-tile-title>
+                        <v-list-tile-title>My Profile</v-list-tile-title>
                     </v-list-tile>
 
                     <!-- temporary commented for the NSF demo -->

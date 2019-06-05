@@ -3,7 +3,7 @@
     <v-layout row wrap>
     
       <v-flex xs12 class="c-p-5 c-pt-10">
-        <div><h1 class="display-1">{{organization.name}} Balance</h1></div>
+        <h1 class="display-1">Dashboard</h1>
       </v-flex>
 
       <v-flex xs2 class="c-pt-5 c-pb-1 grey-background" v-for="(item, i) in tokenStat" :key="i + '-stat'"> 

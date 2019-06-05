@@ -35,20 +35,25 @@ const getters = {
 	transactions: state => state.transactions,
 	tokenInfo: state => {
 
-		let total_issued = 2153500;
+		// let total_issued = 2153500;
+		let total_issued = 0;
 
-		let withdrawn = state.transactions
-			.filter(tx => tx.type == FUNDING_TRANSACTION_WITHDRAW)
-			.map(tx => tx.amount.amount)
-			.reduce((sum, amount) => sum + amount, 0);
+		// let withdrawn = state.transactions
+		// 	.filter(tx => tx.type == FUNDING_TRANSACTION_WITHDRAW)
+		// 	.map(tx => tx.amount.amount)
+		// 	.reduce((sum, amount) => sum + amount, 0);
+		let withdrawn = 0;
 
-		let distributed = state.transactions
-			.filter(tx => tx.type == FUNDING_TRANSACTION_TRANSFER || tx.type == FUNDING_TRANSACTION_FEE)
-			.map(tx => tx.amount.amount)
-			.reduce((sum, amount) => sum + amount, 0);
+		// let distributed = state.transactions
+		// 	.filter(tx => tx.type == FUNDING_TRANSACTION_TRANSFER || tx.type == FUNDING_TRANSACTION_FEE)
+		// 	.map(tx => tx.amount.amount)
+		// 	.reduce((sum, amount) => sum + amount, 0);
+		let distributed = 0;
 
-		let available_to_issuer = total_issued - withdrawn - distributed;
-		let circulating_supply = total_issued - withdrawn;
+		// let available_to_issuer = total_issued - withdrawn - distributed;
+		let available_to_issuer = 0;
+		// let circulating_supply = total_issued - withdrawn;
+		let circulating_supply = 0;
 
 		return {
 			available_to_issuer: state.tokenInfo.available_to_issuer + available_to_issuer,
