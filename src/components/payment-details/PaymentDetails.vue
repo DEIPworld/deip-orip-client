@@ -60,10 +60,13 @@
             <span class="body-2 grey--text">Award #</span>
           </v-flex>
           <v-flex xs9 class="pa-1">
-            <router-link class="a body-2" 
-              :to="{ name: 'AgencyProgramDetails', params: {
-                      agency: payment.foa.agency_name, 
-                      foa: payment.foa.funding_opportunity_number }}">
+            <router-link class="a body-2" :to="{ 
+                name: 'AwardDetails', 
+                params: { 
+                  org: payment.organization.permlink, 
+                  contractId: payment.contract.id, 
+                  awardId: payment.award.id } 
+                }">
               {{ payment.award | awardNumber}}
             </router-link>
           </v-flex>

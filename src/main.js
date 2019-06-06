@@ -13,16 +13,17 @@ import 'vuetify/dist/vuetify.css';
 import 'vue2-dropzone/dist/vue2Dropzone.css';
 import '@mdi/font/css/materialdesignicons.css';
 import colors from 'vuetify/es5/util/colors';
+import theme from './theme';
 
-Vue.use(Vuetify, {
-    theme: {
-        primary: colors.blue.accent4,
-        secondary: colors.blue.lighten4
-    },
-    options: {
-        customProperties: true
-    }
-});
+// Vue.use(Vuetify, {
+//     theme: {
+//         primary: colors.blue.accent4,
+//         secondary: colors.blue.lighten4
+//     },
+//     options: {
+//         customProperties: true
+//     }
+// });
 
 Vue.config.productionTip = false;
 
@@ -32,6 +33,21 @@ axios.get('/env')
         deipRpc.api.setOptions({ url: window.env.DEIP_FULL_NODE_URL });
         deipRpc.config.set('chain_id', window.env.CHAIN_ID);
         if (!window.env.TENANT) window.env.TENANT = "";
+
+        window.env.THEME = theme[window.env.TENANT] 
+            ? theme[window.env.TENANT] 
+            : theme['default'];
+
+        Vue.use(Vuetify, {
+            theme: {
+                primary: window.env.THEME['primary-color'],
+                secondary: window.env.THEME['secondary-color']
+            },
+            options: {
+                customProperties: true
+            }
+        });
+
         console.log(window.env);
 
         /* eslint-disable no-new */

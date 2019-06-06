@@ -9,7 +9,6 @@ import FundingOpportunityAwardProposal from '@/components/funding-opportunity-aw
 import FundingOpportunityAwardDetails from '@/components/funding-opportunity-award-details/FundingOpportunityAwardDetails';
 import TreasuryDepartment from '@/components/treasury-department/TreasuryDepartment';
 import AgencyProgramWithdrawalRequests from '@/components/agency-program-withdrawal-requests/AgencyProgramWithdrawalRequests';
-import OrganizationDashboard from '@/components/organization-dashboard/OrganizationDashboard';
 import OrganizationFinanceDashboard from '@/components/organization-finance-dashboard/OrganizationFinanceDashboard';
 import AwardDetails from '@/components/award-details/AwardDetails';
 import PaymentDetails from '@/components/payment-details/PaymentDetails';
@@ -88,16 +87,6 @@ const grantRoutes = [{
   beforeEnter: (to, from, next) => {
     let loadPagePromise = store.dispatch('agencyProgramWithdrawalRequests/loadAgencyProgramWithdrawalRequestsPage', { 
       agency: decodeURIComponent(to.params.agency) 
-    });
-    loadPage(loadPagePromise, next);
-  }
-}, {
-  path: '/:org/dashboard',
-  name: 'OrganizationDashboard',
-  component: OrganizationDashboard,
-  beforeEnter: (to, from, next) => {
-    let loadPagePromise = store.dispatch('org_dashboard/loadOrganizationDashboardPage', { 
-      permlink: decodeURIComponent(to.params.org) 
     });
     loadPage(loadPagePromise, next);
   }

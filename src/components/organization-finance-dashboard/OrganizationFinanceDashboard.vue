@@ -6,7 +6,7 @@
         <h1 class="display-1">Dashboard</h1>
       </v-flex>
 
-      <v-flex xs2 class="c-pt-5 c-pb-1 grey-background" v-for="(item, i) in tokenStat" :key="i + '-stat'"> 
+      <v-flex xs2 class="c-pt-5 c-pb-5 grey-background" v-for="(item, i) in tokenStat" :key="i + '-stat'" v-if="isFinancialOfficer"> 
         <v-card elevation="0" height="200px" class="grey-background">
           <v-list dense class="c-p-1 c-pb-5 grey-background" :class="[{ 'delimiter': (i + 1) != tokenStat.length }]">
             <v-list-tile>
@@ -27,7 +27,7 @@
         </v-card>
       </v-flex>
 
-      <v-flex xs2 class="grey-background">
+      <v-flex xs2 class="grey-background" v-if="isFinancialOfficer">
         <v-card elevation="0" height="100%" class="grey-background">
           <div class="c-pt-3 c-pr-4 c-pl-4 grey-background ">
             <!-- <div>
@@ -54,15 +54,15 @@
       </v-flex>
 
 
-      <v-flex xs6 class="c-pr-5 c-pl-5 c-pt-5 c-mt-10">
+      <v-flex xs6 class="c-pr-5 c-pl-5 c-mt-10">
 
         <v-tabs slot="extension" v-model="tab" grow color="#f5f5f5">
-          <v-tabs-slider color="green"></v-tabs-slider>
-          <v-tab key="awards" class="green--text text--darken-1">
+          <v-tabs-slider :color="theme['tabs-slider-color']"></v-tabs-slider>
+          <v-tab key="awards" :class="theme['tabs-text-class']">
             Awards
           </v-tab>
 
-          <v-tab key="payments" class="green--text text--darken-1">
+          <v-tab key="payments" :class="theme['tabs-text-class']">
             Payments
           </v-tab>
         </v-tabs>
@@ -321,6 +321,7 @@
       data() {
         return {
           tab: null,
+          theme: window.env.THEME,
 
           paymentsFilter: {
             status: { text: 'ALL STATUSES', value: undefined },

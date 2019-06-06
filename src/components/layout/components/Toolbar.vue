@@ -4,9 +4,9 @@
             <global-loader></global-loader>
         </div>
 
-        <v-toolbar app fixed clipped-left color="#529371" dark class="deip-toolbar">
+        <v-toolbar app fixed clipped-left :color="theme['top-bar-color']" dark class="deip-toolbar">
             <v-toolbar-title>
-                <router-link v-if="tenant && isTreasury" :to="{ name: 'Default' }">
+        <!--    <router-link v-if="tenant && isTreasury" :to="{ name: 'Default' }">
                     <div style="width: 40px; height: 40px">
                         <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
                             viewBox="0 0 512 512" style="enable-background:new 0 0 512 512;" xml:space="preserve">
@@ -31,10 +31,21 @@
                             <g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g>
                         </svg>
                     </div>
+                </router-link> -->
+
+                <router-link v-if="tenant && tenant == 'treasury'" class="a" style="text-decoration: none" :to="{ name: 'Default' }">
+                    <div class="subheading" style="color: #ffffff; display: flex;">
+                        <img style="width: 21px; height: 21px;" src="https://home.treasury.gov/themes/custom/hamilton/images/usflag.png" /> 
+                        <span class="pl-2">U.S. DEPARTMENT OF THE TREASURY</span>
+                    </div>
                 </router-link>
 
                 <router-link v-else-if="tenant && tenant == 'nsf'" class="a" style="text-decoration: none" :to="{ name: 'Default' }">
-                    <div class="display-1" style="color: #ffffff;"><span>my</span><span class="bold">NSF</span></div>
+                    <div class="display-1" style="color: #ffffff;"><span>My</span><span class="bold">NSF</span></div>
+                </router-link>
+
+                <router-link v-else-if="tenant && tenant == 'mit'" class="a" style="text-decoration: none" :to="{ name: 'Default' }">
+                    <div><img style="width: 200px; height: 40px" src="https://idea2.mitlinq.org/wp-content/uploads/2018/05/MIT-side-text-red.png"/> </div>
                 </router-link>
 
                 <router-link v-else-if="tenant" :to="{ name: 'Default' }">
@@ -56,7 +67,15 @@
             <v-menu v-if="isLoggedIn()" bottom left offset-y>
                 <v-btn fab flat icon class="ma-0" slot="activator">
                     
-                    <v-avatar v-if="tenant && tenant == 'nsf'" size="50px">
+                    <v-avatar v-if="tenant == 'nsf'" size="45px">
+                        <img :src="tenant | agencyLogoSrc(160, 160, false)" />
+                    </v-avatar>
+
+                    <v-avatar v-else-if="tenant == 'mit'" size="45px">
+                        <img :src="tenant | agencyLogoSrc(160, 160, false)" />
+                    </v-avatar>
+
+                    <v-avatar v-else-if="tenant == 'treasury'" size="45px">
                         <img :src="tenant | agencyLogoSrc(160, 160, false)" />
                     </v-avatar>
 
@@ -110,10 +129,6 @@
                         <v-list-tile-title>Granted Awards</v-list-tile-title>
                     </v-list-tile>
 
-                    <v-list-tile :to="{ name: 'OrganizationDashboard', params: { org: tenant } }">
-                        <v-list-tile-title>Dashboard</v-list-tile-title>
-                    </v-list-tile>
-
                     <v-list-tile v-if="isFinancialOfficer" :to="{ name: 'OrganizationFinanceDashboard', params: { org: tenant } }">
                         <v-list-tile-title>Finance</v-list-tile-title>
                     </v-list-tile>
@@ -148,7 +163,8 @@
         name: 'Toolbar',
         data() {
             return {
-                tenant: window.env.TENANT
+                tenant: window.env.TENANT,
+                theme: window.env.THEME
             }
         },
         computed: {

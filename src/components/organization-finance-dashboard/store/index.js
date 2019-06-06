@@ -138,7 +138,11 @@ const getters = {
 
 	payments: state => {
 		let transactions = state.contracts.map(c => {
-			let rels = state.organization.permlink == "nsf" ? c.relations : c.relations.filter(r => r.organisation_id == state.organization.id);
+			let rels = 
+				state.organization.permlink == "nsf" || state.organization.permlink == "treasury" 
+				? c.relations 
+				: c.relations.filter(r => r.organisation_id == state.organization.id);
+
 			let items = [];
 
 			for (let j = 0; j < rels.length; j++) {

@@ -21,7 +21,6 @@ import './components/agency-programs/index';
 import './components/agency-program-details/index';
 import './components/research-application-details/index';
 import './components/investor-flow/index';
-import './components/organization-dashboard/index';
 import './components/organization-finance-dashboard/index';
 import './components/award-details/index';
 
