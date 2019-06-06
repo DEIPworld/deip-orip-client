@@ -211,6 +211,24 @@
                             </div>
                         </div>
                     </v-card>
+                    <v-card height="100%" class="mt-4 mb-4 pa-4" v-if="isFinancialOfficer || isProgramOfficer">
+                      <div>
+                        <div class="c-pt-2">
+                          <div class="body-2">NSF Grant Tokens</div>
+                          <div class="c-pt-2">
+                            <v-text-field v-model="amountToIssue" label="Amount" mask="##############" append-icon="local_atm"></v-text-field>
+                          </div>
+                          <div class="c-pt-2">
+                            <v-btn @click="issueTokens()" 
+                            class="ma-0" block color="primary" 
+                            :disabled="!amountToIssue || isIssuingTokens" 
+                            :loading="isIssuingTokens">
+                            Emit
+                            </v-btn>
+                          </div>
+                        </div>
+                      </div>
+                    </v-card>
                 </div>
 
                 <div class="tokens-send-panel">
@@ -238,7 +256,6 @@
                         ></research-token-send-form>
                     </transition>
                 </div>
-
             </div>
         </contentbar>
     </page-container>
@@ -254,59 +271,91 @@
 
         data() { 
             return {
-                sendingType: undefined,
+              sendingType: undefined,
 
-                selectedResearchId: undefined,
+              selectedResearchId: undefined,
 
-                sendingTypes: {
-                    deipToken: 'deipToken',
-                    deipCommon: 'deipCommon',
-                    researchToken: 'researchToken'
-                }
+              sendingTypes: {
+                deipToken: 'deipToken',
+                deipCommon: 'deipCommon',
+                researchToken: 'researchToken'
+              },
+
+              amountToIssue: null,
+              isIssuingTokens: false,
+              showIssueTokensControl: false,
             }
         },
 
         computed: {
-            ...mapGetters({
-                account: 'userWallet/account',
-                researches: 'userWallet/researches',
-                transfers: 'userWallet/transfers',
-                user: 'auth/user'
-            }),
-            deipTokenBalance() {
-                return this.account ? this.fromAssetsToFloat(this.account.balances.find(a => a.asset_id == 0)) : 0;
-            },
-            commonTokenBalance() {
-                return this.account ? this.toCommonTokens(this.account.common_tokens_balance) : 0;
-            },
-            selectedResearch() {
-                return _.find(this.researches, { id: this.selectedResearchId })
-            }
+          ...mapGetters({
+              account: 'userWallet/account',
+              researches: 'userWallet/researches',
+              transfers: 'userWallet/transfers',
+              user: 'auth/user',
+              isFinancialOfficer: 'auth/isFinancialOfficer',
+              isProgramOfficer: 'auth/isProgramOfficer'
+
+          }),
+          deipTokenBalance() {
+              return this.account ? this.fromAssetsToFloat(this.account.balances.find(a => a.asset_id == 0)) : 0;
+          },
+          commonTokenBalance() {
+              return this.account ? this.toCommonTokens(this.account.common_tokens_balance) : 0;
+          },
+          selectedResearch() {
+              return _.find(this.researches, { id: this.selectedResearchId })
+          }
         },
 
         methods: {
-            loadUserAccount() {
-                this.$store.dispatch('userWallet/loadUser', this.user.username);
-                this.$store.dispatch('userWallet/loadTransfers', this.user.username);
-            },
+          loadUserAccount() {
+            this.$store.dispatch('userWallet/loadUser', this.user.username);
+            this.$store.dispatch('userWallet/loadTransfers', this.user.username);
+          },
 
-            selectResearch(research) {
-                this.selectedResearchId = research.id;
-                this.sendingType = this.sendingTypes.researchToken;
-            },
+          selectResearch(research) {
+            this.selectedResearchId = research.id;
+            this.sendingType = this.sendingTypes.researchToken;
+          },
 
-            loadResearches() {
-                this.$store.dispatch('userWallet/loadResearchTokens', this.user.username);
-            },
+          loadResearches() {
+            this.$store.dispatch('userWallet/loadResearchTokens', this.user.username);
+          },
 
-            researchChanged(id) {
-                this.selectedResearchId = id;
-            }
+          researchChanged(id) {
+            this.selectedResearchId = id;
+          },
+
+          issueTokens() {
+            this.isIssuingTokens = true;
+            deipRpc.broadcast.issueAssetBackedTokensAsync(
+              this.user.privKey,
+              this.user.username,
+              3, parseInt(this.amountToIssue)
+            )
+            .then(() => {
+              this.$store.dispatch('layout/setSuccess', {
+                message: `Tokens have been issued successfully!`
+              });
+              return this.$store.dispatch('org_dashboard/loadStatisticToken', { symbol: "NGT"});
+            })
+            .catch((err) => {
+              console.log(err);
+              this.$store.dispatch('layout/setError', {
+                  message: `An error occurred while sending the request, please try again later.`
+              });
+            })
+            .finally(() => {
+              this.isIssuingTokens = false;
+              this.amountToIssue = null;
+            })
         },
+      },
         
-        created() {
-            
-        }
+      created() {
+          
+      }
     };
 </script>
 

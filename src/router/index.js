@@ -51,7 +51,7 @@ const router = new Router({
                     // }
 
                     if (sub) {
-                        next({ name: 'OrganizationFinanceDashboard', params: { org: sub } });
+                        next({ name: 'OrganizationDashboard', params: { org: sub } });
                     } else {
                         next({ name: 'ResearchFeed' });
                     }

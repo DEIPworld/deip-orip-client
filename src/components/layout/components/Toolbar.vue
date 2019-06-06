@@ -35,7 +35,7 @@
 
                 <router-link v-if="tenant && tenant == 'treasury'" class="a" style="text-decoration: none" :to="{ name: 'Default' }">
                     <div class="subheading" style="color: #ffffff; display: flex;">
-                        <img style="width: 21px; height: 21px;" src="https://home.treasury.gov/themes/custom/hamilton/images/usflag.png" /> 
+                        <img style="width: 21px; height: 21px;" src="https://previews.dropbox.com/p/thumb/AAdPguRXXPH77UAUZzHaq26-plYyY3CPghAF3bc92nvbo0IEE62z1e9BpzKUqHKpSLP16KdAmWTt7Jo_-cgK77MiN0Dt5KARgUv7K8NAJcRGlApWkdbxtFZhPJqKQi84qxlaZB3K_0-IeueA089lxdtmMdxoLY3crkuArIII0i95Kk7TTG5zB93ZQMOm5ACGs0aVa9EhrAuBiVnF12vVHkBxNgeKenCm2KihVIuz_GQWBHOwkQWrYbL9VbDwL2aG2Ij1hq_PNbjW4bNTkObv5NPY3mrsYUoXkXIjZR4N_j4z7oPlaWHlEop9TkHTKEGPWESaXINqlpmF6bf70EZZAww37O3I5yDpT9g_iHxmAtMmEjEQjESpeIxJjOvF2OY3c-PH0mo1SAyATUa-ifVctmKKuD2Y1feDr8Xac4m8qxz8YUr0uhbLIkw8UVKC-rEAopncc5vSeNhbHGVTgLvrBYs_lnVDroJ_9RWoH5S52t8XJw/p.png?fv_content=true&size_mode=5" /> 
                         <span class="pl-2">U.S. DEPARTMENT OF THE TREASURY</span>
                     </div>
                 </router-link>
@@ -45,7 +45,7 @@
                 </router-link>
 
                 <router-link v-else-if="tenant && tenant == 'mit'" class="a" style="text-decoration: none" :to="{ name: 'Default' }">
-                    <div><img style="width: 200px; height: 40px" src="https://idea2.mitlinq.org/wp-content/uploads/2018/05/MIT-side-text-red.png"/> </div>
+                    <div><img style="width: 200px; height: 40px" src="https://previews.dropbox.com/p/thumb/AAfOP1HBNTfJ9mUi3vmX9VSrMkCXkOoKv1mJl_Fo8mj3Ov2LNxtPjQ377BQA0Sf-z5dzYRgb_kg0yX5AF2FDYGSUiulMTp-t-MZF4Z99PCjxc0kBTTo43Tew4gAsX3ofokjSr-rsKEAp0y2yFW1dOuytQ72N0AuWt5TDwD6FkfDZZpLFpOKXSIkmvyEawlJ4Pojk7lW3aeYW5mYH1VcfRyR-5moDDBsPQ7f8iBzIgvzoS1IvHjVwgqX0TzhfxzNVos5erLLoyrweCgJI5cogFyTjvldmOHNBRisJvrE_7FFwfZ9ldAgG4QNEtipkal7V6toSdYukqa_TKYAbYgltaMiMkaObtU1i0m5-5zmaDP-9bq_zlwJvywOjdmtDtd6pw2DykW-WwCtuF-a8zvbIVoQm8_Ab7IHgLVfymHyKKZiCPjAit_DD9QYT41ZQwp3IA1OC-4GzTOuAfPO86ybiOe-M/p.png?fv_content=true&size_mode=5"/> </div>
                 </router-link>
 
                 <router-link v-else-if="tenant" :to="{ name: 'Default' }">
@@ -129,7 +129,7 @@
                         <v-list-tile-title>Granted Awards</v-list-tile-title>
                     </v-list-tile>
 
-                    <v-list-tile v-if="isFinancialOfficer" :to="{ name: 'OrganizationFinanceDashboard', params: { org: tenant } }">
+                    <v-list-tile v-if="isFinancialOfficer" :to="{ name: 'OrganizationDashboard', params: { org: tenant } }">
                         <v-list-tile-title>Finance</v-list-tile-title>
                     </v-list-tile>
 

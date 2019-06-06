@@ -17,7 +17,7 @@
       </v-flex>
       
       <v-flex xs2 class="pa-4 grey-background">
-        <div v-if="isProgramOfficer">
+        <div v-if="isProgramOfficer && !award.isSubaward">
           <v-btn block @click="confirmDistribution.isShown = true" color="success" :disabled="!isAwardNotDistributed || isDistributing" :loading="isDistributing">
             {{isAwardNotDistributed ? 'Distribute' : 'Distributed'}}
           </v-btn>
@@ -31,7 +31,7 @@
         </div>
 
         <div v-if="isPrincipalInvestigator">
-          <v-btn block color="primary" @click="awardWithdrawMeta.isOpen = true;" :disabled="award.pi.account.name != user.username">Request Payment</v-btn>
+          <v-btn block color="primary" @click="awardWithdrawMeta.isOpen = true;" :disabled="isAwardNotDistributed || award.pi.account.name != user.username">Request Payment</v-btn>
           <request-award-payment-dialog :meta="awardWithdrawMeta"></request-award-payment-dialog>
         </div>
       </v-flex>
@@ -369,6 +369,9 @@
           }),
 
           isAwardNotDistributed() {
+            debugger;
+            let h = this.award.contract.status;
+
             return this.award.contract.status == FUNDING_CONTRACT_PENDING;
           },
 

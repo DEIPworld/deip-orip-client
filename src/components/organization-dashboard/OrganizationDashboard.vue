@@ -6,7 +6,8 @@
         <h1 class="display-1">Dashboard</h1>
       </v-flex>
 
-      <v-flex xs2 class="c-pt-5 c-pb-5 grey-background" v-for="(item, i) in tokenStat" :key="i + '-stat'" v-if="isFinancialOfficer"> 
+      <v-flex xs1 v-if="isFinancialOfficer" class="grey-background"></v-flex>
+      <v-flex xs2 v-if="isFinancialOfficer" class="c-pt-5 c-pb-5 grey-background" v-for="(item, i) in tokenStat" :key="i + '-stat'"> 
         <v-card elevation="0" height="200px" class="grey-background">
           <v-list dense class="c-p-1 c-pb-5 grey-background" :class="[{ 'delimiter': (i + 1) != tokenStat.length }]">
             <v-list-tile>
@@ -26,33 +27,7 @@
           </v-list>
         </v-card>
       </v-flex>
-
-      <v-flex xs2 class="grey-background" v-if="isFinancialOfficer">
-        <v-card elevation="0" height="100%" class="grey-background">
-          <div class="c-pt-3 c-pr-4 c-pl-4 grey-background ">
-            <!-- <div>
-              <v-btn :outline="showIssueTokensControl" class="ma-0" block color="primary" @click="toggleIssueTokensControl()">
-                <v-icon v-if="!showIssueTokensControl">attach_money</v-icon> {{showIssueTokensControl ? 'Hide' : 'Issue Tokens'}}</span>
-              </v-btn>
-            </div> -->
-            <div class="c-pt-2">
-              <div class="body-2">NSF Grant Tokens</div>
-              <div class="c-pt-2">
-                <v-text-field v-model="amountToIssue" label="Amount" mask="##############" append-icon="local_atm"></v-text-field>
-              </div>
-              <div class="c-pt-2">
-                <v-btn @click="issueTokens()" 
-                  class="ma-0" block color="primary" 
-                  :disabled="!amountToIssue || isIssuingTokens" 
-                  :loading="isIssuingTokens">
-                  Emit
-                </v-btn>
-              </div>
-            </div>
-          </div>
-        </v-card>
-      </v-flex>
-
+      <v-flex xs1 v-if="isFinancialOfficer" class="grey-background"></v-flex>
 
       <v-flex xs6 class="c-pr-5 c-pl-5 c-mt-10">
 
@@ -84,6 +59,7 @@
                           :headers="awardHeaders"
                           :items="awards"
                           disable-initial-sort
+                          :no-data-text="`No awards found`"
                           hide-actions>
 
                           <template slot="items" slot-scope="props">
@@ -241,6 +217,7 @@
                           :headers="paymentHeaders"
                           :items="filteredPayments"
                           v-model="selectedPayments"
+                          :no-data-text="`No payments found`"
                           disable-initial-sort
                           hide-actions>
 
@@ -316,7 +293,7 @@
     } from './../../services/FundingService';
 
     export default {
-      name: "OrganizationFinanceDashboard",
+      name: "OrganizationDashboard",
 
       data() {
         return {
@@ -328,10 +305,6 @@
             organization: { text: "ALL ORGANIZATIONS", value: undefined },
             pi: { text: "ALL PIs", value: undefined }
           },
-
-          amountToIssue: null,
-          isIssuingTokens: false,
-          showIssueTokensControl: false,
 
           selectedPayments: [],
 
@@ -361,11 +334,11 @@
           isProgramOfficer: 'auth/isProgramOfficer',
           isFinancialOfficer: 'auth/isFinancialOfficer',
           isTreasury: 'auth/isTreasury',
-          organization: 'org_finance_dashboard/organization',
-          organizations: 'org_finance_dashboard/organizations',
-          tokenInfo: 'org_finance_dashboard/tokenInfo',
-          awards: 'org_finance_dashboard/awards',
-          payments: 'org_finance_dashboard/payments'
+          organization: 'org_dashboard/organization',
+          organizations: 'org_dashboard/organizations',
+          tokenInfo: 'org_dashboard/tokenInfo',
+          awards: 'org_dashboard/awards',
+          payments: 'org_dashboard/payments'
         }),
 
         awardHeaders() {
@@ -545,35 +518,6 @@
 
       methods: {
 
-        issueTokens() {
-          this.isIssuingTokens = true;
-          deipRpc.broadcast.issueAssetBackedTokensAsync(
-            this.user.privKey,
-            this.user.username,
-            3, parseInt(this.amountToIssue)
-          )
-          .then(() => {
-            this.$store.dispatch('layout/setSuccess', {
-              message: `Tokens have been issued successfully!`
-            });
-            return this.$store.dispatch('org_finance_dashboard/loadStatisticToken', { symbol: "NGT"});
-          })
-          .catch((err) => {
-            console.log(err);
-            this.$store.dispatch('layout/setError', {
-                message: `An error occurred while sending the request, please try again later.`
-            });
-          })
-          .finally(() => {
-            this.isIssuingTokens = false;
-            this.amountToIssue = null;
-          })
-        },
-
-        toggleIssueTokensControl() {
-          this.showIssueTokensControl = !this.showIssueTokensControl;
-        },
-
         certifySelectedPaymentRequests() {
           this.isCertifying = true;
 
@@ -588,7 +532,7 @@
           Promise.all(promises)
             .then(() => {
               let reload = new Promise((resolve, reject) => {
-                this.$store.dispatch('org_finance_dashboard/loadAwards', { notify: resolve });
+                this.$store.dispatch('org_dashboard/loadAwards', { notify: resolve });
               });
               return Promise.all([reload]);
             })
@@ -623,7 +567,7 @@
           Promise.all(promises)
             .then(() => {
               let reload = new Promise((resolve, reject) => {
-                this.$store.dispatch('org_finance_dashboard/loadAwards', { notify: resolve });
+                this.$store.dispatch('org_dashboard/loadAwards', { notify: resolve });
               });
               return Promise.all([reload]);
             })
@@ -658,7 +602,7 @@
           Promise.all(promises)
             .then(() => {
               let reload = new Promise((resolve, reject) => {
-                this.$store.dispatch('org_finance_dashboard/loadAwards', { notify: resolve });
+                this.$store.dispatch('org_dashboard/loadAwards', { notify: resolve });
               });
               return Promise.all([reload]);
             })

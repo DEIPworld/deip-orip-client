@@ -21,7 +21,7 @@ import {
 const state = {
 	organization: null,
 	organizations: [],
-	isLoadingOrganizationFinanceDashboardPage: undefined,
+	isLoadingOrganizationDashboardPage: undefined,
 	transactions: [],
 	tokenInfo: null,
 	contracts: []
@@ -29,7 +29,7 @@ const state = {
 
 // getters
 const getters = {
-	isLoadingOrganizationFinanceDashboardPage: state => state.isLoadingOrganizationFinanceDashboardPage,
+	isLoadingOrganizationDashboardPage: state => state.isLoadingOrganizationDashboardPage,
 	organization: state => state.organization,
 	organizations: state => state.organizations,
 	transactions: state => state.transactions,
@@ -182,7 +182,7 @@ const getters = {
 // actions
 const actions = {
 
-	loadOrganizationFinanceDashboardPage({ commit, dispatch, state }, { permlink }) {
+	loadOrganizationDashboardPage({ commit, dispatch, state }, { permlink }) {
 		commit('SET_ORGANIZATION_DASHBOARD_LOADING_STATE', true);
 		return deipRpc.api.getOrganisationByPermlinkAsync(permlink).then(org => {
 			commit('SET_ORGANIZATION', org);
@@ -242,7 +242,7 @@ const actions = {
 const mutations = {
 
 	['SET_ORGANIZATION_DASHBOARD_LOADING_STATE'](state, isLoading) {
-		Vue.set(state, 'isLoadingOrganizationFinanceDashboardPage', isLoading);
+		Vue.set(state, 'isLoadingOrganizationDashboardPage', isLoading);
 	},
 
 	['SET_ORGANIZATION'](state, org) {

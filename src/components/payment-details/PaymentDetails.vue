@@ -119,7 +119,7 @@
       </v-flex>
 
       <v-flex xs12>
-        <div class="subheading bold pl-4 pt-2 pb-2 tx-data-divider">Related Blockchain Transactions/Actions</div>
+        <div class="subheading bold pl-4 pt-2 pb-2 tx-data-divider" :style="{'background-color': theme['secondary-color']}">Related Blockchain Transactions/Actions</div>
       </v-flex>
 
       <v-flex xs12 v-for="(record, i) in historyRecords" :key="'status-' + i" class="ma-1" :style="{ 'border-left': '6px solid' +  withdrawalStatusMap[record.status].color }">
@@ -258,6 +258,7 @@
 
         data() {
           return {
+            theme: window.env.THEME,
             fileStorageBaseUrl: window.env.DEIP_SERVER_URL,
             ...withdrawalStatus, 
             withdrawalStatusMap
