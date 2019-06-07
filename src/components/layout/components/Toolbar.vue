@@ -45,7 +45,7 @@
                 </router-link>
 
                 <router-link v-else-if="tenant && tenant == 'mit'" class="a" style="text-decoration: none" :to="{ name: 'Default' }">
-                    <div><img style="width: 200px; height: 40px" src="https://previews.dropbox.com/p/thumb/AAfOP1HBNTfJ9mUi3vmX9VSrMkCXkOoKv1mJl_Fo8mj3Ov2LNxtPjQ377BQA0Sf-z5dzYRgb_kg0yX5AF2FDYGSUiulMTp-t-MZF4Z99PCjxc0kBTTo43Tew4gAsX3ofokjSr-rsKEAp0y2yFW1dOuytQ72N0AuWt5TDwD6FkfDZZpLFpOKXSIkmvyEawlJ4Pojk7lW3aeYW5mYH1VcfRyR-5moDDBsPQ7f8iBzIgvzoS1IvHjVwgqX0TzhfxzNVos5erLLoyrweCgJI5cogFyTjvldmOHNBRisJvrE_7FFwfZ9ldAgG4QNEtipkal7V6toSdYukqa_TKYAbYgltaMiMkaObtU1i0m5-5zmaDP-9bq_zlwJvywOjdmtDtd6pw2DykW-WwCtuF-a8zvbIVoQm8_Ab7IHgLVfymHyKKZiCPjAit_DD9QYT41ZQwp3IA1OC-4GzTOuAfPO86ybiOe-M/p.png?fv_content=true&size_mode=5"/> </div>
+                    <div class="pt-2"><img style="width: 200px; height: 40px" src="https://previews.dropbox.com/p/thumb/AAfOP1HBNTfJ9mUi3vmX9VSrMkCXkOoKv1mJl_Fo8mj3Ov2LNxtPjQ377BQA0Sf-z5dzYRgb_kg0yX5AF2FDYGSUiulMTp-t-MZF4Z99PCjxc0kBTTo43Tew4gAsX3ofokjSr-rsKEAp0y2yFW1dOuytQ72N0AuWt5TDwD6FkfDZZpLFpOKXSIkmvyEawlJ4Pojk7lW3aeYW5mYH1VcfRyR-5moDDBsPQ7f8iBzIgvzoS1IvHjVwgqX0TzhfxzNVos5erLLoyrweCgJI5cogFyTjvldmOHNBRisJvrE_7FFwfZ9ldAgG4QNEtipkal7V6toSdYukqa_TKYAbYgltaMiMkaObtU1i0m5-5zmaDP-9bq_zlwJvywOjdmtDtd6pw2DykW-WwCtuF-a8zvbIVoQm8_Ab7IHgLVfymHyKKZiCPjAit_DD9QYT41ZQwp3IA1OC-4GzTOuAfPO86ybiOe-M/p.png?fv_content=true&size_mode=5"/> </div>
                 </router-link>
 
                 <router-link v-else-if="tenant" :to="{ name: 'Default' }">

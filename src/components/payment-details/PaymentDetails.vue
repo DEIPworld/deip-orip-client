@@ -130,7 +130,7 @@
                 <v-chip class="payment-chip" :color="withdrawalStatusMap[record.status].color" :text-color="withdrawalStatusMap[record.status].textColor">
                   <div class="payment-chip-label">
                     <div class="subheading">
-                      {{i + 1}}. {{ 
+                      {{ 
                         record.status == WITHDRAWAL_PENDING ? 'REQUESTED' :
                         record.status == WITHDRAWAL_CERTIFIED ? 'CERTIFIED' :
                         record.status == WITHDRAWAL_APPROVED ? 'APPROVED' :

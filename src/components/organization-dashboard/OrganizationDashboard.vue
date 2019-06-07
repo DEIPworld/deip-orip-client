@@ -11,18 +11,18 @@
         <v-card elevation="0" height="200px" class="grey-background">
           <v-list dense class="c-p-1 c-pb-5 grey-background" :class="[{ 'delimiter': (i + 1) != tokenStat.length }]">
             <v-list-tile>
+              <v-list-tile-content class="subheading grey--text bold">{{item.text}}</v-list-tile-content>
+            </v-list-tile>
+            <v-list-tile>
+              <v-list-tile-content class="headline bold" :class="item.isGreen ? 'green--text text--darken-1': 'blue--text text--darken-1'">{{item.amount | currency}}</v-list-tile-content>
+            </v-list-tile>
+            <v-list-tile>
               <v-list-tile-content class="grey--text">
                 <span class="body-2"> 
                   <v-icon class="subheading">local_atm</v-icon>
                   NSF Grant Tokens
                 </span>
               </v-list-tile-content>
-            </v-list-tile>
-            <v-list-tile>
-              <v-list-tile-content class="headline bold" :class="item.isGreen ? 'green--text text--darken-1': 'blue--text text--darken-1'">{{item.amount | currency}}</v-list-tile-content>
-            </v-list-tile>
-            <v-list-tile>
-              <v-list-tile-content class="subheading grey--text">{{item.text}}</v-list-tile-content>
             </v-list-tile>
           </v-list>
         </v-card>
