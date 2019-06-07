@@ -31,13 +31,13 @@ const getters = {
     let totalAmount = fromAssetsToFloat(rel.total_amount);
     let universityOverheadAmount = rel.isSubaward ? 0 : (totalAmount - (totalAmount - (totalAmount * (rel.university_overhead / 100) / 100)));
     let pendingAmount = 0;
-    let withdrawnAmount = 0;
+    let withdrawnPiAmount = 0;
     let requestedPiAmount = 0;
     
     for (let i = 0; i < rel.withdrawals.length; i++) {
       let withdrawal = rel.withdrawals[i];
       if (withdrawal.status == WITHDRAWAL_PENDING || withdrawal.status == WITHDRAWAL_CERTIFIED || withdrawal.status == WITHDRAWAL_APPROVED) pendingAmount += fromAssetsToFloat(withdrawal.amount);
-      if (withdrawal.status == WITHDRAWAL_PAID) withdrawnAmount += fromAssetsToFloat(withdrawal.amount);
+      if (withdrawal.status == WITHDRAWAL_PAID) withdrawnPiAmount += fromAssetsToFloat(withdrawal.amount);
       requestedPiAmount += fromAssetsToFloat(withdrawal.amount);
     }
 
@@ -46,15 +46,26 @@ const getters = {
       .reduce((sum, amount) => sum + amount, 0);
 
     let requestedSubawardeesAmount = rel.subawards
-      .map(s => s.withdrawals.map(w => w.amount.amount).reduce((sum, amount) => sum + amount, 0))
+      .map(s => s.withdrawals
+        .map(w => w.amount.amount)
+        .reduce((sum, amount) => sum + amount, 0)
+      )
       .reduce((sum, amount) => sum + amount, 0);
 
-    let remainingSubawardeesAmount = subawardeesAmount - requestedSubawardeesAmount;
+    let withdrawnSubawardeesAmount = rel.subawards
+      .map(s => s.withdrawals
+        .filter(w => w.status == WITHDRAWAL_PAID)
+        .map(w => w.amount.amount)
+        .reduce((sum, amount) => sum + amount, 0)
+      )
+      .reduce((sum, amount) => sum + amount, 0);
+
+    let remainingSubawardeesAmount = subawardeesAmount - withdrawnSubawardeesAmount;
 
     let piAmount = totalAmount - subawardeesAmount - universityOverheadAmount;
-    let remainingPiAmount = piAmount - requestedPiAmount;
+    let remainingPiAmount = piAmount - withdrawnPiAmount;
 
-    let remainingAmount = totalAmount - requestedPiAmount - requestedSubawardeesAmount - universityOverheadAmount;
+    let remainingAmount = totalAmount - withdrawnPiAmount - withdrawnSubawardeesAmount - universityOverheadAmount;
 
     let contract = state.contract;
 
@@ -70,10 +81,12 @@ const getters = {
 
       piAmount,
       requestedPiAmount,
+      withdrawnPiAmount,
       remainingPiAmount,
 
       subawardeesAmount,
       requestedSubawardeesAmount,
+      withdrawnSubawardeesAmount,
       remainingSubawardeesAmount,
 
       from: contract.foa.open_date,
@@ -92,19 +105,19 @@ const getters = {
 
     let subawards = rel.subawards.map(subaward => {
 
-      let totalSubawardAmount = fromAssetsToFloat(subaward.total_amount);
-      let pendingAmount = 0;
-      let withdrawnAmount = 0;
+      let subawardAmount = fromAssetsToFloat(subaward.total_amount);
+      let pendingSubawardAmount = 0;
+      let withdrawnSubawardAmount = 0;
       let requestedSubawardAmount = 0;
 
       for (let i = 0; i < subaward.withdrawals.length; i++) {
         let withdrawal = subaward.withdrawals[i];
-        if (withdrawal.status == WITHDRAWAL_PENDING || withdrawal.status == WITHDRAWAL_CERTIFIED || withdrawal.status == WITHDRAWAL_APPROVED) pendingAmount += fromAssetsToFloat(withdrawal.amount);
-        if (withdrawal.status == WITHDRAWAL_PAID) withdrawnAmount += fromAssetsToFloat(withdrawal.amount);
+        if (withdrawal.status == WITHDRAWAL_PENDING || withdrawal.status == WITHDRAWAL_CERTIFIED || withdrawal.status == WITHDRAWAL_APPROVED) pendingSubawardAmount += fromAssetsToFloat(withdrawal.amount);
+        if (withdrawal.status == WITHDRAWAL_PAID) withdrawnSubawardAmount += fromAssetsToFloat(withdrawal.amount);
         requestedSubawardAmount += fromAssetsToFloat(withdrawal.amount);
       }
 
-      let remainingSubawardAmount = totalSubawardAmount - requestedSubawardAmount;
+      let remainingSubawardAmount = subawardAmount - withdrawnSubawardAmount;
 
       let subawardee = subaward.researcherUser;
       let contract = state.contract;
@@ -112,7 +125,8 @@ const getters = {
       let sub = {
         id: subaward.id,
         subawardId: subaward.id,
-        totalSubawardAmount,
+        subawardAmount,
+        withdrawnSubawardAmount,
         remainingSubawardAmount,
         requestedSubawardAmount,
         from: contract.foa.open_date,

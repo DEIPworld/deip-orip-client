@@ -56,6 +56,7 @@
                       <template row>
 
                         <v-data-table
+                          class="awards-table"
                           :headers="awardHeaders"
                           :items="awards"
                           disable-initial-sort
@@ -71,13 +72,19 @@
                             <td>
                               <span class="body-1">
                                 <span v-if="props.item.contract.status == FUNDING_CONTRACT_PENDING">N/A</span>
+                                <span v-else>$ {{ props.item.universityOverheadAmount | currency}}</span>
+                              </span>
+                            </td>
+                            <td>
+                              <span class="body-1">
+                                <span v-if="props.item.contract.status == FUNDING_CONTRACT_PENDING">N/A</span>
                                 <span v-else>$ {{ props.item.requestedAmount | currency}}</span>
                               </span>
                             </td>
                             <td>
                               <span class="body-1">
                                 <span v-if="props.item.contract.status == FUNDING_CONTRACT_PENDING">N/A</span>
-                                <span v-else>$ {{ props.item.universityOverheadAmount | currency}}</span>
+                                <span v-else>$ {{ props.item.withdrawnAmount | currency }}</span>
                               </span>
                             </td>
                             <td>
@@ -87,29 +94,21 @@
                               </span>
                             </td>
                           </template>
+
+                          <template slot="footer">
+                            <td v-for="(header, i) in awardHeaders" class="body-2 bold">
+                              <span v-if="i == 0">Total</span>
+                              <span v-if="header.value == 'totalAmount'">$ {{totalAwardsAmount | currency}}</span>
+                              <span v-else-if="header.value == 'universityOverheadAmount'">$ {{totalAdminExpensesAmount | currency}}</span>
+                              <span v-else-if="header.value == 'requestedAmount'">$ {{totalRequestedAmount | currency}}</span>
+                              <span v-else-if="header.value == 'withdrawnAmount'">$ {{totalWithdrawnAmount | currency}}</span>
+                              <span v-else-if="header.value == 'remainingAmount'">$ {{totalRemainingAmount | currency}}</span>
+                              <span v-else></span>
+                            </td>
+                          </template>
+       
                         </v-data-table>
                       </template>
-                    </v-flex>
-                  </v-layout>
-
-                  <v-layout>
-                    <v-flex xs12>
-                      <div class="awards-total-row body-1 bold">
-                        <table style="width: 100%">
-                          <tbody>
-                            <tr>
-                              <td v-for="(header, i) in awardHeaders" :style="{ width: header.width, padding: '0px 24px'}">
-                                <span v-if="i == 0">Total</span>
-                                <span v-if="header.value == 'totalAmount'">$ {{totalAwardsAmount | currency}}</span>
-                                <span v-else-if="header.value == 'requestedAmount'">$ {{totalRequestedAmount | currency}}</span>
-                                <span v-else-if="header.value == 'universityOverheadAmount'">$ {{totalAdminExpensesAmount | currency}}</span>
-                                <span v-else-if="header.value == 'remainingAmount'">$ {{totalRemainingAmount | currency}}</span>
-                                <span v-else></span>
-                              </td>
-                            </tr>
-                          </tbody>
-                        </table>
-                      </div>
                     </v-flex>
                   </v-layout>
                 </v-card-text>
@@ -214,6 +213,7 @@
                         </v-layout>
 
                         <v-data-table
+                          class="payments-table"
                           :headers="paymentHeaders"
                           :items="filteredPayments"
                           v-model="selectedPayments"
@@ -248,27 +248,18 @@
                             <td><span class="body-1 grey--text">{{moment(props.item.timestamp).format('MM/DD/YYYY HH:mm:ss')}}</span></td>
                             <td><div class="body-2 text-align-right">$ {{ props.item.amount | currency }}</div></td>
                           </template>
+
+                          <template slot="footer">
+                            <td v-for="(header, i) in paymentHeaders" class="body-2 bold">
+                              <span v-if="i == 0">Total</span>
+                              <div v-if="header.value == 'amount'" class="text-align-right">$ {{totalPaymentsAmount | currency}}</div>
+                              <span v-else></span>
+                            </td>
+                          </template>
+
                         </v-data-table>
-
                       </template>
-                    </v-flex>
-                  </v-layout>
 
-                  <v-layout>
-                    <v-flex xs12>
-                      <div class="awards-total-row body-1 bold">
-                        <table style="width: 100%">
-                          <tbody>
-                            <tr>
-                              <td v-for="(header, i) in paymentHeaders" :style="{ width: header.width, padding: '0px 24px' }">
-                                <span v-if="i == 0">Total</span>
-                                <div v-if="header.value == 'amount'" class="body-2 text-align-right">$ {{totalPaymentsAmount | currency}}</div>
-                                <span v-else></span>
-                              </td>
-                            </tr>
-                          </tbody>
-                        </table>
-                      </div>
                     </v-flex>
                   </v-layout>
 
@@ -343,30 +334,33 @@
 
         awardHeaders() {
           return this.isFinancialOfficer ? [
-            { text: 'AWARD #', value: 'awardId', width: "10%" },
-            { text: 'PI', value: 'pi.account.name', width: "11%" }, // display PI info for NSF PO
-            { text: 'ORGANIZATION', value: 'organization.name', width: "12%" }, // display organization info for NSF PO
-            { text: 'DURATION', value: 'from', width: "13%" },
-            { text: 'AWARD AMOUNT', value: 'totalAmount', width: "13.5%" },
-            { text: 'REQUESTED', value: 'requestedAmount', width: "13.5%" },
-            { text: 'ADMIN EXPENSES', value: 'universityOverheadAmount', width: "13.5%" },
-            { text: 'REMAINING', value: 'remainingAmount', width: "13.5%" }
+            { text: 'AWARD #', value: 'awardId' },
+            { text: 'PI', value: 'pi.account.name' }, // display PI info for NSF PO
+            { text: 'ORGANIZATION', value: 'organization.name' }, // display organization info for NSF PO
+            { text: 'DURATION', value: 'from' },
+            { text: 'AWARD AMOUNT', value: 'totalAmount' },
+            { text: 'ADMIN EXPENSES', value: 'universityOverheadAmount' },
+            { text: 'REQUESTED', value: 'requestedAmount' },
+            { text: 'WITHDRAWN', value: 'withdrawnAmount' },
+            { text: 'REMAINING', value: 'remainingAmount'}
           ] : this.isProgramOfficer ? [
-            { text: 'AWARD #', value: 'awardId', width: "10%" },
-            { text: 'PI', value: 'pi.account.name', width: "11%" }, // display PI info for NSF PO
-            { text: 'ORGANIZATION', value: 'organization.name', width: "12%" }, // display organization info for NSF PO
-            { text: 'DURATION', value: 'from', width: "13%" },
-            { text: 'AWARD AMOUNT', value: 'totalAmount', width: "13.5%" },
-            { text: 'REQUESTED', value: 'requestedAmount', width: "13.5%" },
-            { text: 'ADMIN EXPENSES', value: 'universityOverheadAmount', width: "13.5%" },
-            { text: 'REMAINING', value: 'remainingAmount', width: "13.5%" }
+            { text: 'AWARD #', value: 'awardId' },
+            { text: 'PI', value: 'pi.account.name' }, // display PI info for NSF PO
+            { text: 'ORGANIZATION', value: 'organization.name' }, // display organization info for NSF PO
+            { text: 'DURATION', value: 'from' },
+            { text: 'AWARD AMOUNT', value: 'totalAmount' },
+            { text: 'ADMIN EXPENSES', value: 'universityOverheadAmount' },
+            { text: 'REQUESTED', value: 'requestedAmount' },
+            { text: 'WITHDRAWN', value: 'withdrawnAmount' },
+            { text: 'REMAINING', value: 'remainingAmount' }
           ] : [
-            { text: 'AWARD #', value: 'awardId', width: "16.6%" },
-            { text: 'DURATION', value: 'from', width: "16.6%" },
-            { text: 'AWARD AMOUNT', value: 'totalAmount', width: "16.6%" },
-            { text: 'REQUESTED', value: 'requestedAmount', width: "16.6%" },
-            { text: 'ADMIN EXPENSES', value: 'universityOverheadAmount', width: "16.6%" },
-            { text: 'REMAINING', value: 'remainingAmount', width: "16.6%" }
+            { text: 'AWARD #', value: 'awardId' },
+            { text: 'DURATION', value: 'from' },
+            { text: 'AWARD AMOUNT', value: 'totalAmount' },
+            { text: 'ADMIN EXPENSES', value: 'universityOverheadAmount' },
+            { text: 'REQUESTED', value: 'requestedAmount' },
+            { text: 'WITHDRAWN', value: 'withdrawnAmount' },
+            { text: 'REMAINING', value: 'remainingAmount' }
           ];
         },
 
@@ -391,6 +385,13 @@
 			      .reduce((sum, amount) => sum + amount, 0);
         },
 
+        totalWithdrawnAmount() {
+          return this.awards
+            .filter(tx => tx.contract.status != FUNDING_CONTRACT_PENDING)
+            .map(tx => tx.withdrawnAmount)
+			      .reduce((sum, amount) => sum + amount, 0);
+        },
+
         totalRemainingAmount() {
           return this.awards
             .filter(tx => tx.contract.status != FUNDING_CONTRACT_PENDING)
@@ -400,49 +401,49 @@
 
         paymentHeaders() {
           return this.isProgramOfficer ? [
-            { text: '', sortable: false, width: "5%" },  // display checkbox for NSF PO
-            { text: 'STATUS', value: 'status', align: 'center', width: "15%" },
-            { text: 'PAYMENT #', value: 'paymentId', width: "10%" },
-            { text: 'AWARD #', value: 'awardId', width: "10%" },
-            { text: 'PI', value: 'pi.account.name', width: "15%" }, // display PI info for NSF PO
-            { text: 'ORGANIZATION', value: 'organization.name', width: "5%" }, // display organization info for NSF PO
-            { text: 'REQUESTER', value: 'pi.account.name', width: "15%" },
-            { text: 'TIMESTAMP', value: 'timestamp', width: "10%" },
-            { text: 'AMOUNT', value: 'amount', align: 'right', width: "15%" }
+            { text: '', sortable: false },  // display checkbox for NSF PO
+            { text: 'STATUS', value: 'status' },
+            { text: 'PAYMENT #', value: 'paymentId' },
+            { text: 'AWARD #', value: 'awardId' },
+            { text: 'PI', value: 'pi.account.name' }, // display PI info for NSF PO
+            { text: 'ORGANIZATION', value: 'organization.name' }, // display organization info for NSF PO
+            { text: 'REQUESTER', value: 'pi.account.name' },
+            { text: 'TIMESTAMP', value: 'timestamp' },
+            { text: 'AMOUNT', value: 'amount', align: 'right' }
           ] : this.isFinancialOfficer ? [
-            { text: 'STATUS', value: 'status', align: 'center', width: "15%" },
-            { text: 'PAYMENT #', value: 'paymentId', width: "10%" },
-            { text: 'AWARD #', value: 'awardId', width: "10%" },
-            { text: 'PI', value: 'pi.account.name', width: "15%" }, // display PI info for NSF FO
-            { text: 'ORGANIZATION', value: 'organization.name', width: "10%" }, // display organization info for NSF FO
-            { text: 'REQUESTER', value: 'pi.account.name', width: "15%" },
-            { text: 'TIMESTAMP', value: 'timestamp', width: "10%" },
-            { text: 'AMOUNT', value: 'amount', align: 'right', width: "15%" }
+            { text: 'STATUS', value: 'status' },
+            { text: 'PAYMENT #', value: 'paymentId' },
+            { text: 'AWARD #', value: 'awardId' },
+            { text: 'PI', value: 'pi.account.name' }, // display PI info for NSF FO
+            { text: 'ORGANIZATION', value: 'organization.name' }, // display organization info for NSF FO
+            { text: 'REQUESTER', value: 'pi.account.name' },
+            { text: 'TIMESTAMP', value: 'timestamp' },
+            { text: 'AMOUNT', value: 'amount', align: 'right' }
           ] : this.isCertifier ? [
-            { text: '', sortable: false, width: "5%" }, // display checkbox for Organization Certifier
-            { text: 'STATUS', value: 'status', align: 'center', width: "20%" },
-            { text: 'PAYMENT #', value: 'paymentId', width: "10%" },
-            { text: 'AWARD #', value: 'awardId', width: "10%" },
-            { text: 'REQUESTER', value: 'pi.account.name', width: "20%" },
-            { text: 'TIMESTAMP', value: 'timestamp', width: "15%" },
-            { text: 'AMOUNT', value: 'amount', align: 'right', width: "20%" }
+            { text: '', sortable: false }, // display checkbox for Organization Certifier
+            { text: 'STATUS', value: 'status' },
+            { text: 'PAYMENT #', value: 'paymentId' },
+            { text: 'AWARD #', value: 'awardId' },
+            { text: 'REQUESTER', value: 'pi.account.name' },
+            { text: 'TIMESTAMP', value: 'timestamp' },
+            { text: 'AMOUNT', value: 'amount', align: 'right' }
           ] : this.isTreasury ? [
-            { text: '', sortable: false, width: "5%" },  // display checkbox for Treasury
-            { text: 'STATUS', value: 'status', align: 'center', width: "15%" },
-            { text: 'PAYMENT #', value: 'paymentId', width: "10%" },
-            { text: 'AWARD #', value: 'awardId', width: "10%" },
-            { text: 'PI', value: 'pi.account.name', width: "15%" }, // display PI info for Treasury
-            { text: 'ORGANIZATION', value: 'organization.name', width: "5%" }, // display organization info for Treasury
-            { text: 'REQUESTER', value: 'pi.account.name', width: "15%" },
-            { text: 'TIMESTAMP', value: 'timestamp', width: "10%" },
-            { text: 'AMOUNT', value: 'amount', align: 'right', width: "15%" }
+            { text: '', sortable: false },  // display checkbox for Treasury
+            { text: 'STATUS', value: 'status' },
+            { text: 'PAYMENT #', value: 'paymentId' },
+            { text: 'AWARD #', value: 'awardId' },
+            { text: 'PI', value: 'pi.account.name' }, // display PI info for Treasury
+            { text: 'ORGANIZATION', value: 'organization.name' }, // display organization info for Treasury
+            { text: 'REQUESTER', value: 'pi.account.name' },
+            { text: 'TIMESTAMP', value: 'timestamp' },
+            { text: 'AMOUNT', value: 'amount', align: 'right' }
           ] : [
-            { text: 'STATUS', value: 'status', align: 'center', width: "20%" },
-            { text: 'PAYMENT #', value: 'paymentId', width: "10%" },
-            { text: 'AWARD #', value: 'awardId', width: "10%"  },
-            { text: 'REQUESTER', value: 'pi.account.name', width: "20%"  },
-            { text: 'TIMESTAMP', value: 'timestamp', width: "15%" },
-            { text: 'AMOUNT', value: 'amount', align: 'right', width: "25%"  }
+            { text: 'STATUS', value: 'status' },
+            { text: 'PAYMENT #', value: 'paymentId' },
+            { text: 'AWARD #', value: 'awardId' },
+            { text: 'REQUESTER', value: 'pi.account.name' },
+            { text: 'TIMESTAMP', value: 'timestamp' },
+            { text: 'AMOUNT', value: 'amount', align: 'right' }
           ];
         },
 
@@ -644,12 +645,6 @@
   .delimiter {
     border-right: 2px solid #e0e0e0;
     border-radius: 0px;
-  }
-
-  .awards-total-row {
-    background-color: var(--v-secondary-base); 
-    padding-top: 10px;
-    padding-bottom: 10px;
   }
 
   .payment-chip .payment-chip-label {

@@ -101,17 +101,17 @@
           </v-flex>
 
           <v-flex xs5 class="pa-1">
-            <span class="body-2 grey--text">Requested by PI</span>
+            <span class="body-2 grey--text">Withdrawn by PI</span>
           </v-flex>
           <v-flex xs7 class="pa-1">
-            <span class="body-2">$ {{ award.requestedPiAmount | currency}}</span><span class="body-2 grey--text"> of $ {{award.piAmount | currency}}</span>
+            <span class="body-2">$ {{ award.withdrawnPiAmount | currency}}</span><span class="body-2 grey--text"> of $ {{award.piAmount | currency}}</span>
           </v-flex>
 
           <v-flex xs5 class="pa-1">
-            <span class="body-2 grey--text">Requested by Subawardees</span>
+            <span class="body-2 grey--text">Withdrawn by Subawardees</span>
           </v-flex>
           <v-flex xs7 class="pa-1">
-            <span class="body-2">$ {{ award.requestedSubawardeesAmount | currency}}</span><span class="body-2 grey--text"> of $ {{award.subawardeesAmount | currency}}</span>
+            <span class="body-2">$ {{ award.withdrawnSubawardeesAmount | currency}}</span><span class="body-2 grey--text"> of $ {{award.subawardeesAmount | currency}}</span>
           </v-flex>
 
           <v-flex xs8 class="pa-1"><v-divider></v-divider></v-flex><v-flex xs4></v-flex>
@@ -131,6 +131,7 @@
       <v-flex xs12 class="py-3"><h3>Subawards</h3></v-flex xs12>
       <v-flex xs12>
         <v-data-table
+          class="subawards-table"
           :headers="subawardsHeaders"
           :items="subawards"
           disable-initial-sort
@@ -140,7 +141,7 @@
             <td><router-link class="a body-2" :to="{ name: 'AwardDetails', params: { org: props.item.organization.permlink, contractId: props.item.contract.id, awardId: props.item.subawardId } }">{{props.item | awardNumber}}</router-link></td>
             <td><router-link class="a body-2" :to="{ name: 'UserDetails', params: { account_name: props.item.subawardee.account.name } }">{{props.item.subawardee | fullname}}</router-link></td>
             <td><span class="body-1"><a class="a body-1" href="#">{{props.item.organization.name}}</a></span></td>
-            <td><span class="body-1">$ {{props.item.totalSubawardAmount | currency}}</span></td>
+            <td><span class="body-1">$ {{props.item.subawardAmount | currency}}</span></td>
             <td>
               <span class="body-1">
                 <span v-if="isAwardNotDistributed">N/A</span>
@@ -150,29 +151,30 @@
             <td>
               <span class="body-1">
                 <span v-if="isAwardNotDistributed">N/A</span>
+                <span v-else>$ {{props.item.withdrawnSubawardAmount | currency}}</span>
+              </span>
+            </td>
+            <td>
+              <span class="body-1">
+                <span v-if="isAwardNotDistributed">N/A</span>
                 <span v-else>$ {{props.item.remainingSubawardAmount | currency}}</span>
               </span>
             </td>
           </template>
+
+          <template slot="footer">
+            <td v-for="(header, i) in subawardsHeaders" class="body-2 bold">
+              <span v-if="i == 0">Total</span>
+              <span v-if="header.value == 'subawardAmount'">$ {{totalSubawardsAmount | currency}}</span>
+              <span v-else-if="header.value == 'requestedSubawardAmount'">$ {{totalSubawardsRequestedAmount | currency}}</span>
+              <span v-else-if="header.value == 'withdrawnSubawardAmount'">$ {{totalSubawardsWithdrawnAmount | currency}}</span>
+              <span v-else-if="header.value == 'remainingSubawardAmount'">$ {{totalSubawardsRemainingAmount | currency}}</span>
+              <span v-else></span>
+            </td>
+          </template>
         </v-data-table>
       </v-flex>
-      <v-flex xs12>
-        <div class="total-row body-1 bold">
-          <table style="width: 100%">
-            <tbody>
-              <tr>
-                <td v-for="(header, i) in subawardsHeaders" :style="{ width: header.width, padding: '0px 24px'}">
-                  <span v-if="i == 0">Total</span>
-                  <span v-if="header.value == 'totalSubawardAmount'">$ {{totalSubawardsAmount | currency}}</span>
-                  <span v-else-if="header.value == 'requestedSubawardAmount'">$ {{totalSubawardsRequestedAmount | currency}}</span>
-                  <span v-else-if="header.value == 'remainingSubawardAmount'">$ {{totalSubawardsRemainingAmount | currency}}</span>
-                  <span v-else></span>
-                </td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-      </v-flex>
+
     </v-layout>
 
     <v-layout row wrap class="pa-4">
@@ -255,6 +257,7 @@
       </v-flex>
       <v-flex xs12>
         <v-data-table
+          class="awards-table"
           :headers="paymentHeaders"
           :items="filteredPayments"
           v-model="selectedPayments"
@@ -286,22 +289,16 @@
             <td><span class="body-1 grey--text">{{moment(props.item.timestamp).format('MM/DD/YYYY HH:mm:ss')}}</span></td>
             <td><div class="body-2 text-align-right">$ {{ props.item.amount | currency }}</div></td>
           </template>
+
+          <template slot="footer">
+            <td v-for="(header, i) in paymentHeaders" class="body-2 bold">
+              <span v-if="i == 0">Total</span>
+              <div v-if="header.value == 'amount'" class="body-2 bold text-align-right">$ {{totalPaymentsAmount | currency}}</div>
+              <span v-else></span>
+            </td>
+          </template>
+
         </v-data-table>
-      </v-flex>
-      <v-flex xs12 class="pb-5">
-        <div class="total-row body-1 bold">
-          <table style="width: 100%">
-            <tbody>
-              <tr>
-                <td v-for="(header, i) in paymentHeaders" :style="{ width: header.width, padding: '0px 24px' }">
-                  <span v-if="i == 0">Total</span>
-                  <div v-if="header.value == 'amount'" class="body-2 text-align-right">$ {{totalPaymentsAmount | currency}}</div>
-                  <span v-else></span>
-                </td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
       </v-flex>
 
     </v-layout>
@@ -377,55 +374,63 @@
 
           subawardsHeaders() {
             return [
-              { text: 'SUBAWARD #', value: 'subawardId', width: "16.5%" },
-              { text: 'SUBAWARDEE', value: 'subawardee', width: "17.5%" },
-              { text: 'ORGANIZATION', value: 'organization.name', width: "16.5%" },
-              { text: 'SUBAWARD AMOUNT', value: 'totalSubawardAmount', width: "16.5%" },
-              { text: 'REQUESTED', value: 'requestedSubawardAmount', width: "16.5%" },
-              { text: 'REMAINING', value: 'remainingSubawardAmount', width: "16.5%" }
+              { text: 'SUBAWARD #', value: 'subawardId' },
+              { text: 'SUBAWARDEE', value: 'subawardee' },
+              { text: 'ORGANIZATION', value: 'organization.name' },
+              { text: 'SUBAWARD AMOUNT', value: 'subawardAmount' },
+              { text: 'REQUESTED', value: 'requestedSubawardAmount' },
+              { text: 'WITHDRAWN', value: 'withdrawnSubawardAmount' },
+              { text: 'REMAINING', value: 'remainingSubawardAmount' }
             ];
           },
 
           paymentHeaders() {
             return this.isProgramOfficer ? [
-              { text: '', sortable: false, width: "5%" },  // display checkbox for NSF PO
-              { text: 'STATUS', value: 'status', align: 'center', width: "20%" },
-              { text: 'PAYMENT #', value: 'paymentId', width: "15%" },
-              { text: 'REQUESTER', value: 'requester.account.name', width: "20%" },
-              { text: 'TIMESTAMP', value: 'timestamp', width: "20%" },
-              { text: 'AMOUNT', value: 'amount', align: 'right', width: "20%" }
+              { text: '', sortable: false },  // display checkbox for NSF PO
+              { text: 'STATUS', value: 'status' },
+              { text: 'PAYMENT #', value: 'paymentId' },
+              { text: 'REQUESTER', value: 'requester.account.name' },
+              { text: 'TIMESTAMP', value: 'timestamp' },
+              { text: 'AMOUNT', value: 'amount', align: 'right' }
             ] : this.isFinancialOfficer ? [
-              { text: 'STATUS', value: 'status', align: 'center', width: "20%" },
-              { text: 'PAYMENT #', value: 'paymentId', width: "20%" },
-              { text: 'REQUESTER', value: 'requester.account.name', width: "20%" },
-              { text: 'TIMESTAMP', value: 'timestamp', width: "20%" },
-              { text: 'AMOUNT', value: 'amount', align: 'right', width: "20%" }
+              { text: 'STATUS', value: 'status' },
+              { text: 'PAYMENT #', value: 'paymentId' },
+              { text: 'REQUESTER', value: 'requester.account.name' },
+              { text: 'TIMESTAMP', value: 'timestamp' },
+              { text: 'AMOUNT', value: 'amount', align: 'right' }
             ] : this.isCertifier ? [
-              { text: '', sortable: false, width: "5%" }, // display checkbox for Organization Certifier
-              { text: 'STATUS', value: 'status', align: 'center', width: "20%" },
-              { text: 'PAYMENT #', value: 'paymentId', width: "15%" },
-              { text: 'REQUESTER', value: 'requester.account.name', width: "20%" },
-              { text: 'TIMESTAMP', value: 'timestamp', width: "20%" },
-              { text: 'AMOUNT', value: 'amount', align: 'right', width: "20%" }
+              { text: '', sortable: false }, // display checkbox for Organization Certifier
+              { text: 'STATUS', value: 'status' },
+              { text: 'PAYMENT #', value: 'paymentId' },
+              { text: 'REQUESTER', value: 'requester.account.name' },
+              { text: 'TIMESTAMP', value: 'timestamp' },
+              { text: 'AMOUNT', value: 'amount', align: 'right' }
             ] : this.isTreasury ? [
-              { text: '', sortable: false, width: "5%" }, // display checkbox for Treasury
-              { text: 'STATUS', value: 'status', align: 'center', width: "20%" },
-              { text: 'PAYMENT #', value: 'paymentId', width: "15%" },
-              { text: 'REQUESTER', value: 'requester.account.name', width: "20%" },
-              { text: 'TIMESTAMP', value: 'timestamp', width: "20%" },
-              { text: 'AMOUNT', value: 'amount', align: 'right', width: "20%" }
+              { text: '', sortable: false }, // display checkbox for Treasury
+              { text: 'STATUS', value: 'status' },
+              { text: 'PAYMENT #', value: 'paymentId' },
+              { text: 'REQUESTER', value: 'requester.account.name' },
+              { text: 'TIMESTAMP', value: 'timestamp' },
+              { text: 'AMOUNT', value: 'amount', align: 'right' }
             ] : [
-              { text: 'STATUS', value: 'status', align: 'center', width: "20%" },
-              { text: 'PAYMENT #', value: 'paymentId', width: "20%" },
-              { text: 'REQUESTER', value: 'requester.account.name', width: "20%" },
-              { text: 'TIMESTAMP', value: 'timestamp', width: "20%" },
-              { text: 'AMOUNT', value: 'amount', align: 'right', width: "20%" }
+              { text: 'STATUS', value: 'status' },
+              { text: 'PAYMENT #', value: 'paymentId' },
+              { text: 'REQUESTER', value: 'requester.account.name' },
+              { text: 'TIMESTAMP', value: 'timestamp' },
+              { text: 'AMOUNT', value: 'amount', align: 'right' }
             ];
           },
 
           totalSubawardsAmount() {
             return this.subawards
-              .map(tx => tx.totalSubawardAmount)
+              .map(tx => tx.subawardAmount)
+              .reduce((sum, amount) => sum + amount, 0);
+          },
+
+          totalSubawardsWithdrawnAmount() {
+            return this.subawards
+              .filter(tx => tx.contract.status != FUNDING_CONTRACT_PENDING)
+              .map(tx => tx.withdrawnSubawardAmount)
               .reduce((sum, amount) => sum + amount, 0);
           },
 

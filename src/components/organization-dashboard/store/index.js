@@ -77,14 +77,14 @@ const getters = {
 			return rels.filter(rel => !rel.isSubaward).map((rel, index) => {
 				let totalAmount = fromAssetsToFloat(rel.total_amount);
 				let universityOverheadAmount = totalAmount - (totalAmount - (totalAmount * (rel.university_overhead / 100) / 100));
-				let pendingAmount = 0;
-				let withdrawnAmount = 0;
+				let pendingPiAmount = 0;
+				let withdrawnPiAmount = 0;
 				let requestedPiAmount = 0;
 
 				for (let i = 0; i < rel.withdrawals.length; i++) {
 					let withdrawal = rel.withdrawals[i];
-					if (withdrawal.status == WITHDRAWAL_PENDING || withdrawal.status == WITHDRAWAL_CERTIFIED || withdrawal.status == WITHDRAWAL_APPROVED) pendingAmount += fromAssetsToFloat(withdrawal.amount);
-					if (withdrawal.status == WITHDRAWAL_PAID) withdrawnAmount += fromAssetsToFloat(withdrawal.amount);
+					if (withdrawal.status == WITHDRAWAL_PENDING || withdrawal.status == WITHDRAWAL_CERTIFIED || withdrawal.status == WITHDRAWAL_APPROVED) pendingPiAmount += fromAssetsToFloat(withdrawal.amount);
+					if (withdrawal.status == WITHDRAWAL_PAID) withdrawnPiAmount += fromAssetsToFloat(withdrawal.amount);
 					requestedPiAmount += fromAssetsToFloat(withdrawal.amount);
 				}
 
@@ -93,15 +93,29 @@ const getters = {
 					.reduce((sum, amount) => sum + amount, 0);
 
 				let requestedSubawardeesAmount = rel.subawards
-					.map(s => s.withdrawals.map(w => w.amount.amount).reduce((sum, amount) => sum + amount, 0))
+					.map(s => s.withdrawals
+							.map(w => w.amount.amount)
+							.reduce((sum, amount) => sum + amount, 0)
+					)
 					.reduce((sum, amount) => sum + amount, 0);
 
-				let remainingSubawardeesAmount = subawardeesAmount - requestedSubawardeesAmount;
+				let withdrawnSubawardeesAmount = rel.subawards
+					.map(s => s.withdrawals
+							.filter(w => w.status == WITHDRAWAL_PAID)
+							.map(w => w.amount.amount)
+							.reduce((sum, amount) => sum + amount, 0)
+					)
+					.reduce((sum, amount) => sum + amount, 0);
+
+				let remainingSubawardeesAmount = subawardeesAmount - withdrawnSubawardeesAmount;
 
 				let piAmount = totalAmount - subawardeesAmount - universityOverheadAmount;
-				let remainingPiAmount = piAmount - requestedPiAmount;
+				let remainingPiAmount = piAmount - withdrawnPiAmount;
 
-				let remainingAmount = totalAmount - requestedPiAmount - requestedSubawardeesAmount - universityOverheadAmount;
+				let requestedAmount = requestedPiAmount + requestedSubawardeesAmount;
+				let withdrawnAmount = withdrawnPiAmount + withdrawnSubawardeesAmount;
+
+				let remainingAmount = totalAmount - withdrawnPiAmount - withdrawnSubawardeesAmount - universityOverheadAmount;
 
 				let org = state.organizations.find(o => o.id == rel.organisation_id);
 				let pi = rel.researcherUser;
@@ -112,16 +126,19 @@ const getters = {
 					totalAmount,
 					remainingAmount,
 					universityOverheadAmount,
+					withdrawnAmount,
+					requestedAmount,
 
 					piAmount,
 					requestedPiAmount,
+					withdrawnPiAmount,
 					remainingPiAmount,
 
 					subawardeesAmount,
 					requestedSubawardeesAmount,
+					withdrawnSubawardeesAmount,
 					remainingSubawardeesAmount,
 
-					requestedAmount: requestedPiAmount + requestedSubawardeesAmount,
 					from: c.foa.open_date,
 					to: c.foa.close_date,
 					contract: c,
