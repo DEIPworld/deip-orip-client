@@ -366,9 +366,6 @@
           }),
 
           isAwardNotDistributed() {
-            debugger;
-            let h = this.award.contract.status;
-
             return this.award.contract.status == FUNDING_CONTRACT_PENDING;
           },
 
