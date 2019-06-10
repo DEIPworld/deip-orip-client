@@ -23,7 +23,7 @@ const state = {
   payment: undefined,
   contract: undefined,
   award: undefined,
-  witnesses: []
+  // witnesses: []
 }
 
 // getters
@@ -42,6 +42,7 @@ const getters = {
       id: state.payment.id,
       amount: state.payment.amount.amount,
       status: state.payment.status,
+      description: state.payment.description,
       pi,
       requester,
       organization: state.organization,
@@ -57,7 +58,7 @@ const getters = {
   },
 
   historyRecords: (state) => state.historyRecords,
-  witnesses: (state) => state.witnesses
+  // witnesses: (state) => state.witnesses
 }
 
 // actions
@@ -75,11 +76,11 @@ const actions = {
             });
         });
 
-        const witnessesLoad = new Promise((resolve, reject) => {
-          dispatch('loadWitnesses', { notify: resolve });
-        });
+        // const witnessesLoad = new Promise((resolve, reject) => {
+        //   dispatch('loadWitnesses', { notify: resolve });
+        // });
 
-        return Promise.all([paymentLoad, witnessesLoad]);
+        return Promise.all([paymentLoad]);
       })
       .catch(err => { console.log(err) })
       .finally(() => {
@@ -193,20 +194,20 @@ const actions = {
       });
   },
 
-  loadWitnesses({ commit, dispatch, state }, { notify }) {
-    return deipRpc.api.getActiveWitnessesAsync()
-      .then((items) => {
-        let witnesses = items.filter(w => w != "");
-        return Promise.all(witnesses.map(w => deipRpc.api.getWitnessByAccountAsync(w)));
-      })
-      .then(witnesses => {
-        commit('SET_WITNESSES_LIST', witnesses);
-      })
-      .catch(err => { console.log(err) })
-      .finally(() => {
-        if (notify) notify();
-      });
-  }
+  // loadWitnesses({ commit, dispatch, state }, { notify }) {
+  //   return deipRpc.api.getActiveWitnessesAsync()
+  //     .then((items) => {
+  //       let witnesses = items.filter(w => w != "");
+  //       return Promise.all(witnesses.map(w => deipRpc.api.getWitnessByAccountAsync(w)));
+  //     })
+  //     .then(witnesses => {
+  //       commit('SET_WITNESSES_LIST', witnesses);
+  //     })
+  //     .catch(err => { console.log(err) })
+  //     .finally(() => {
+  //       if (notify) notify();
+  //     });
+  // }
   
 }
 

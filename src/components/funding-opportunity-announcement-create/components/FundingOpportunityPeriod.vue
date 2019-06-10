@@ -12,10 +12,9 @@
                                 ref="startDatePicker"
                                 label="Open date"
                                 :datetime="startDate"
-                                :available-from-now="true"
+                                :allowedDates="() => true"
                                 :rules="[
                                     rules.required,
-                                    rules.greaterThanNow,
                                     rules.startDateShouldBeSmaller
                                 ]"
                                 @input="setStartDate"
@@ -26,10 +25,9 @@
                             <datetime-picker
                                 label="Close date"
                                 :datetime="endDate"
-                                :available-from-now="true"
+                                :allowedDates="() => true"
                                 :rules="[
                                     rules.required,
-                                    rules.greaterThanNow,
                                     rules.endDateShouldBeGreater
                                 ]"
                                 @input="setEndDate"
@@ -72,7 +70,7 @@
 
                 rules: {
                     required: val => !!val || 'This field is required',
-                    greaterThanNow: val => Date.parse(val) > Date.now() || 'Date should be in the future',
+                    // greaterThanNow: val => Date.parse(val) > Date.now() || 'Date should be in the future',
 
                     startDateShouldBeSmaller: val => {
                         return !this.endDate

@@ -117,7 +117,7 @@
           <v-flex xs8 class="pa-1"><v-divider></v-divider></v-flex><v-flex xs4></v-flex>
 
           <v-flex xs5 class="pa-1">
-            <span class="body-2 grey--text">Remaining amount</span>
+            <span class="body-2 grey--text">Available amount</span>
           </v-flex>
           <v-flex xs7 class="pa-1">
             <span class="bold">$ {{ award.remainingAmount | currency}}</span>
@@ -277,8 +277,8 @@
               ></v-checkbox>
             </td>
             <td>
-              <v-chip class="payment-chip" :color="withdrawalStatusMap[props.item.status].color" :text-color="withdrawalStatusMap[props.item.status].textColor">
-                <div class="payment-chip-label">{{ withdrawalStatusMap[props.item.status].text }}</div>
+              <v-chip class="payment-status-chip" :color="withdrawalStatusMap[props.item.status].color" :text-color="withdrawalStatusMap[props.item.status].textColor">
+                <div class="payment-status-chip-label">{{ withdrawalStatusMap[props.item.status].text }}</div>
               </v-chip>
             </td>
             <td><router-link class="a body-2" :to="{ name: 'PaymentDetails', params: { org: props.item.organization.permlink, contractId: props.item.contract.id, awardId: props.item.awardId, paymentId: props.item.id } }">{{ props.item | paymentNumber }}</router-link></td>
@@ -377,7 +377,7 @@
               { text: 'SUBAWARD AMOUNT', value: 'subawardAmount' },
               { text: 'REQUESTED', value: 'requestedSubawardAmount' },
               { text: 'WITHDRAWN', value: 'withdrawnSubawardAmount' },
-              { text: 'REMAINING', value: 'remainingSubawardAmount' }
+              { text: 'AVAILABLE AMOUNT', value: 'remainingSubawardAmount' }
             ];
           },
 
@@ -649,9 +649,10 @@
     padding-bottom: 10px;
   }
 
-  .payment-chip .payment-chip-label {
-    min-width: 150px; 
+  .payment-status-chip .payment-status-chip-label {
+    min-width: 170px; 
     text-align: center;
+    text-transform: uppercase;
   }
 
 </style>

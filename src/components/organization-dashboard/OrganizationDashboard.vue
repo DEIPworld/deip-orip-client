@@ -1,15 +1,15 @@
 <template>
-  <v-container fluid class="ma-0 pa-0 c-pb-10">
+  <v-container fluid class="ma-0 pa-0 pb-5">
     <v-layout row wrap>
     
-      <v-flex xs12 class="c-p-5 c-pt-10">
+      <v-flex xs12 class="pa-4">
         <h1 class="display-1">Dashboard</h1>
       </v-flex>
 
       <v-flex xs1 v-if="isFinancialOfficer" class="grey-background"></v-flex>
-      <v-flex xs2 v-if="isFinancialOfficer" class="c-pt-5 c-pb-5 grey-background" v-for="(item, i) in tokenStat" :key="i + '-stat'"> 
+      <v-flex xs2 v-if="isFinancialOfficer" class="pa-2 pt-4 grey-background" v-for="(item, i) in tokenStat" :key="i + '-stat'"> 
         <v-card elevation="0" height="200px" class="grey-background">
-          <v-list dense class="c-p-1 c-pb-5 grey-background" :class="[{ 'delimiter': (i + 1) != tokenStat.length }]">
+          <v-list dense class="pa-1 pb-2 grey-background" :class="[{ 'delimiter': (i + 1) != tokenStat.length }]">
             <v-list-tile>
               <v-list-tile-content class="subheading grey--text bold">{{item.text}}</v-list-tile-content>
             </v-list-tile>
@@ -29,7 +29,7 @@
       </v-flex>
       <v-flex xs1 v-if="isFinancialOfficer" class="grey-background"></v-flex>
 
-      <v-flex xs6 class="c-pr-5 c-pl-5 c-mt-10">
+      <v-flex xs6 class="pr-4 pl-4 mt-5">
 
         <v-tabs slot="extension" v-model="tab" grow color="#f5f5f5">
           <v-tabs-slider :color="theme['tabs-slider-color']"></v-tabs-slider>
@@ -65,6 +65,11 @@
 
                           <template slot="items" slot-scope="props">
                             <td><router-link class="a body-2" :to="{ name: 'AwardDetails', params: { org: props.item.organization.permlink, contractId: props.item.contract.id, awardId: props.item.awardId } }">{{ props.item | awardNumber }}</router-link></td>
+                            <td>
+                              <v-chip class="award-status-chip" :color="fundingContractStatusMap[props.item.contract.status].color" :text-color="fundingContractStatusMap[props.item.contract.status].textColor">
+                                <div class="award-status-chip-label">{{ fundingContractStatusMap[props.item.contract.status].text }}</div>
+                              </v-chip>
+                            </td>
                             <td v-if="isProgramOfficer || isFinancialOfficer"><router-link class="a body-1" :to="{ name: 'UserDetails', params: { account_name: props.item.pi.account.name } }">{{ props.item.pi | fullname}}</router-link></td>
                             <td v-if="isProgramOfficer || isFinancialOfficer"><div><a href="#" class="a body-1">{{ props.item.organization.name }}</a></div></td>
                             <td><span class="body-1">{{ moment(new Date(props.item.from)).format("MM/YY") }} - {{ moment(new Date(props.item.to)).format("MM/YY") }}</span></td>
@@ -233,8 +238,8 @@
                               ></v-checkbox>
                             </td>
                             <td>
-                              <v-chip class="payment-chip" :color="withdrawalStatusMap[props.item.status].color" :text-color="withdrawalStatusMap[props.item.status].textColor">
-                                <div class="payment-chip-label">{{ withdrawalStatusMap[props.item.status].text }}</div>
+                              <v-chip class="payment-status-chip" :color="withdrawalStatusMap[props.item.status].color" :text-color="withdrawalStatusMap[props.item.status].textColor">
+                                <div class="payment-status-chip-label">{{ withdrawalStatusMap[props.item.status].text }}</div>
                               </v-chip>
                             </td>
                             <td><router-link class="a body-2" :to="{ name: 'PaymentDetails', params: { org: props.item.organization.permlink, contractId: props.item.contract.id, awardId: props.item.awardId, paymentId: props.item.id } }">{{ props.item | paymentNumber }}</router-link></td>
@@ -280,7 +285,7 @@
     import deipRpc from '@deip/deip-rpc-client';
     import {
       withdrawalStatus, withdrawalStatusMap, WITHDRAWAL_PENDING, WITHDRAWAL_CERTIFIED, WITHDRAWAL_APPROVED, WITHDRAWAL_PAID, WITHDRAWAL_REJECTED, 
-      fundingContractStatus, FUNDING_CONTRACT_PENDING, FUNDING_CONTRACT_APPROVED, FUNDING_CONTRACT_REJECTED,
+      fundingContractStatus, fundingContractStatusMap, FUNDING_CONTRACT_PENDING, FUNDING_CONTRACT_APPROVED, FUNDING_CONTRACT_REJECTED
     } from './../../services/FundingService';
 
     export default {
@@ -313,6 +318,8 @@
 
           withdrawalStatusMap,
           ...withdrawalStatus,
+
+          fundingContractStatusMap,
           ...fundingContractStatus
         }
       },
@@ -335,6 +342,7 @@
         awardHeaders() {
           return this.isFinancialOfficer ? [
             { text: 'AWARD #', value: 'awardId' },
+            { text: 'STATUS', value: 'contract.status' },
             { text: 'PI', value: 'pi.account.name' }, // display PI info for NSF PO
             { text: 'ORGANIZATION', value: 'organization.name' }, // display organization info for NSF PO
             { text: 'DURATION', value: 'from' },
@@ -342,9 +350,10 @@
             { text: 'ADMIN EXPENSES', value: 'universityOverheadAmount' },
             { text: 'REQUESTED', value: 'requestedAmount' },
             { text: 'WITHDRAWN', value: 'withdrawnAmount' },
-            { text: 'REMAINING', value: 'remainingAmount'}
+            { text: 'AVAILABLE AMOUNT', value: 'remainingAmount'}
           ] : this.isProgramOfficer ? [
             { text: 'AWARD #', value: 'awardId' },
+            { text: 'STATUS', value: 'contract.status' },
             { text: 'PI', value: 'pi.account.name' }, // display PI info for NSF PO
             { text: 'ORGANIZATION', value: 'organization.name' }, // display organization info for NSF PO
             { text: 'DURATION', value: 'from' },
@@ -352,15 +361,16 @@
             { text: 'ADMIN EXPENSES', value: 'universityOverheadAmount' },
             { text: 'REQUESTED', value: 'requestedAmount' },
             { text: 'WITHDRAWN', value: 'withdrawnAmount' },
-            { text: 'REMAINING', value: 'remainingAmount' }
+            { text: 'AVAILABLE AMOUNT', value: 'remainingAmount' }
           ] : [
             { text: 'AWARD #', value: 'awardId' },
+            { text: 'STATUS', value: 'contract.status' },
             { text: 'DURATION', value: 'from' },
             { text: 'AWARD AMOUNT', value: 'totalAmount' },
             { text: 'ADMIN EXPENSES', value: 'universityOverheadAmount' },
             { text: 'REQUESTED', value: 'requestedAmount' },
             { text: 'WITHDRAWN', value: 'withdrawnAmount' },
-            { text: 'REMAINING', value: 'remainingAmount' }
+            { text: 'AVAILABLE AMOUNT', value: 'remainingAmount' }
           ];
         },
 
@@ -647,8 +657,16 @@
     border-radius: 0px;
   }
 
-  .payment-chip .payment-chip-label {
-    min-width: 150px; 
+  .award-status-chip .award-status-chip-label {
+    min-width: 120px; 
     text-align: center;
+    text-transform: uppercase;
   }
+
+  .payment-status-chip .payment-status-chip-label {
+    min-width: 170px; 
+    text-align: center;
+    text-transform: uppercase;
+  }
+
 </style>

@@ -1,55 +1,51 @@
 <template>
-  <v-container fluid  class="pa-0 c-mt-10">
+  <v-container fluid class="pa-0">
     <v-layout row wrap fill-height align-space-around justify-space-around text-xs-center>
-      <v-flex xs3 class="mt-3"></v-flex>
-      <v-flex xs5 class="mt-3">
-        <div>
-          <div class="text-align-center">
-        <!--    <div class="sm-title c-pb-4 bold">Welcome to</div> -->
-            <div class="deip-emblem">
-            <!--  <div class="emblem-logo">Deip.world</div> -->
-            <!--  <div class="emblem-caption">Decentralized research platform</div> -->
+      <v-flex xs3 class="mt-5"></v-flex>
+      <v-flex xs5 class="mt-5">
+        <div class="text-align-center">
+          <!--    <div class="sm-title c-pb-4 bold">Welcome to</div> -->
+          <div class="deip-emblem">
+              <!--  <div class="emblem-logo">Deip.world</div> -->
+              <!--  <div class="emblem-caption">Decentralized research platform</div> -->
               <div v-if="tenant" class="pt-2 subheading" style="text-decoration: underline">Use credentials from Grants Community Blockchain</div>
-            </div>
-						<div>
-							<v-form v-model="isFormValid" ref="form" class="c-mt-10" @submit.prevent>
-									<v-text-field 
-											label="Username"
-											v-model="username" 
-											:rules="[rules.required]"
-									></v-text-field>
-
-									<v-text-field 
-											label="Private key"
-											v-model="privKey" 
-											:rules="[rules.required]"
-											:append-icon="isHiddenPassword ? 'visibility' : 'visibility_off'"
-											:type="isHiddenPassword ? 'password' : 'text'"
-											@click:append="() => { isHiddenPassword = !isHiddenPassword }"
-									></v-text-field>
-
-									<v-btn type="submit"
-											block 
-											color="primary" 
-											:loading="isChecking" 
-											:disabled="isChecking" 
-											@click="login()"
-									>Login</v-btn>
-									<!-- <div class="row justify-center c-pt-3" v-show="isChecking">
-											<v-progress-circular indeterminate color="primary"></v-progress-circular>
-									</div> -->
-							</v-form>
-						</div>
-					</div>
-					</div>
-        </v-flex>
-	    <v-flex xs3 class="mt-3">
-			<div v-if="tenant">
-                <v-avatar size="120px">
-                    <img :src="tenant | agencyLogoSrc(160, 160, false)" />
-                </v-avatar>
-            </div>
-		</v-flex>
+          </div>
+          <div>
+              <v-form v-model="isFormValid" ref="form" class="c-mt-10" @submit.prevent>
+                <v-text-field 
+                    label="Username"
+                    v-model="username" 
+                    :rules="[rules.required]"
+                    ></v-text-field>
+                <v-text-field 
+                    label="Private key"
+                    v-model="privKey" 
+                    :rules="[rules.required]"
+                    :append-icon="isHiddenPassword ? 'visibility' : 'visibility_off'"
+                    :type="isHiddenPassword ? 'password' : 'text'"
+                    @click:append="() => { isHiddenPassword = !isHiddenPassword }"
+                    ></v-text-field>
+                <v-btn type="submit"
+                    block 
+                    color="primary" 
+                    :loading="isChecking" 
+                    :disabled="isChecking" 
+                    @click="login()"
+                    >Login</v-btn>
+                <!-- <div class="row justify-center c-pt-3" v-show="isChecking">
+                    <v-progress-circular indeterminate color="primary"></v-progress-circular>
+                    </div> -->
+              </v-form>
+          </div>
+        </div>
+      </v-flex>
+      <v-flex xs3 class="mt-5">
+        <div v-if="tenant">
+          <v-avatar size="120px">
+              <img :src="tenant | agencyLogoSrc(160, 160, false)" />
+          </v-avatar>
+        </div>
+      </v-flex>
     </v-layout>
   </v-container>   
 </template>

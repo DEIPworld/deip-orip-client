@@ -28,6 +28,9 @@
               <span class="c-mr-1 c-ml-1">|</span>
               <span class="c-mr-1 c-ml-1">{{ data.item.contract.foa.funding_opportunity_number }}</span>
             </template>
+            
+            :hint="`Available amount: $ ${amountHint}`"
+
           </v-select> -->
 
           <v-text-field
@@ -39,7 +42,6 @@
               rules.isDigit,
               rules.withinAwardAvailableAmount
             ]"
-            :hint="`Available amount: $ ${amountHint}`"
             persistent-hint
             mask="##############"
             append-icon="local_atm"

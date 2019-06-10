@@ -32,6 +32,12 @@ const fundingContractStatus = {
   FUNDING_CONTRACT_REJECTED
 };
 
+const fundingContractStatusMap = {};
+fundingContractStatusMap[FUNDING_CONTRACT_PENDING] = { id: FUNDING_CONTRACT_PENDING, text: 'Not Distributed', color: '#e0e0e0', textColor: '#302a1b' };
+fundingContractStatusMap[FUNDING_CONTRACT_APPROVED] = { id: FUNDING_CONTRACT_APPROVED, text: 'Distributed', color: '#02b56a', textColor: '#dbf5ea' };
+fundingContractStatusMap[FUNDING_CONTRACT_REJECTED] = { id: FUNDING_CONTRACT_REJECTED, text: 'Canceled', color: '#d6898b', textColor: '#302a1b' };
+
+
 export const FUNDING_TRANSACTION_TRANSFER = 1;
 export const FUNDING_TRANSACTION_WITHDRAW = 2;
 export const FUNDING_TRANSACTION_FEE = 3;
@@ -45,6 +51,7 @@ export {
   withdrawalStatus,
   withdrawalStatusMap,
   fundingContractStatus,
+  fundingContractStatusMap,
   fundingTransactionStatus
 }
 
