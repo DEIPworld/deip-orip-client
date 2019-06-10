@@ -7,7 +7,7 @@
       </v-flex>
 
       <v-flex xs1 v-if="isFinancialOfficer" class="grey-background"></v-flex>
-      <v-flex xs2 v-if="isFinancialOfficer" class="pa-2 pt-4 grey-background" v-for="(item, i) in tokenStat" :key="i + '-stat'"> 
+      <v-flex xs2 v-if="isFinancialOfficer" class="pb-3 pt-4 grey-background" v-for="(item, i) in tokenStat" :key="i + '-stat'"> 
         <v-card elevation="0" height="200px" class="grey-background">
           <v-list dense class="pa-1 pb-2 grey-background" :class="[{ 'delimiter': (i + 1) != tokenStat.length }]">
             <v-list-tile>
@@ -647,10 +647,6 @@
 </script>
 
 <style lang="less" scoped>
-
-  .grey-background {
-    background-color: #f5f5f5
-  }
 
   .delimiter {
     border-right: 2px solid #e0e0e0;

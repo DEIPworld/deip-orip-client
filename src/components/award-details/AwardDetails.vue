@@ -639,10 +639,6 @@
 
 <style lang="less" scoped>
 
-  .grey-background {
-    background-color: #f5f5f5
-  }
-
   .total-row {
     background-color: var(--v-secondary-base); 
     padding-top: 10px;
