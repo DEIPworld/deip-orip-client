@@ -1,15 +1,15 @@
 <template>
   <v-container fluid  class="pa-0 c-mt-10">
     <v-layout row wrap fill-height align-space-around justify-space-around text-xs-center>
-      <v-flex xs3></v-flex>
-      <v-flex xs5>
+      <v-flex xs3 class="mt-3"></v-flex>
+      <v-flex xs5 class="mt-3">
         <div>
           <div class="text-align-center">
         <!--    <div class="sm-title c-pb-4 bold">Welcome to</div> -->
             <div class="deip-emblem">
             <!--  <div class="emblem-logo">Deip.world</div> -->
             <!--  <div class="emblem-caption">Decentralized research platform</div> -->
-              <div v-if="tenant" class="c-pt-5 subheading" style="text-decoration: underline">Use credentials from Grants Community Blockchain</div>
+              <div v-if="tenant" class="pt-2 subheading" style="text-decoration: underline">Use credentials from Grants Community Blockchain</div>
             </div>
 						<div>
 							<v-form v-model="isFormValid" ref="form" class="c-mt-10" @submit.prevent>
@@ -43,13 +43,13 @@
 					</div>
 					</div>
         </v-flex>
-				<v-flex xs3>
-				<div v-if="tenant">
-          <v-avatar size="120px">
-            <img :src="tenant | agencyLogoSrc(160, 160, false)" />
-          </v-avatar>
-        </div>
-			</v-flex>
+	    <v-flex xs3 class="mt-3">
+			<div v-if="tenant">
+                <v-avatar size="120px">
+                    <img :src="tenant | agencyLogoSrc(160, 160, false)" />
+                </v-avatar>
+            </div>
+		</v-flex>
     </v-layout>
   </v-container>   
 </template>

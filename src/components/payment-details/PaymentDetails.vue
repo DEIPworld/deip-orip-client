@@ -218,10 +218,12 @@
               <v-flex xs12 class="pt-2">
                 <v-layout row wrap>
                   <v-flex xs2 class="tx-algo pa-1">
-                    <div class="body-2 white--text text--darken-4 pt-1 pl-1">SHA256</div>
+                    <div class="body-2 bold white--text text--darken-4 pt-1 pl-1 mb-1 signer">{{getWitnessOrg(record.blockInfo.witness)}}</div>
+                    <div class="body-2 white--text text--darken-4 pl-1">SHA256</div>
                     <div class="body-2 grey--text text--darken-1 pt-1 pl-1">Signature</div>
                   </v-flex>
                   <v-flex xs10 class="tx-data pa-1">
+                    <div class="body-2 white--text text--darken-4 pt-1 pl-1 pb-4"></div>
                     <div class="break-letter body-1 grey--text text--darken-1 pt-1 pl-2 pr-2">{{record.blockInfo.signing_key}}</div>
                     <div class="break-letter body-1 grey--text text--darken-1 pt-1 pl-2 pr-2">{{record.blockInfo.witness_signature}}</div>
                   </v-flex>
@@ -231,10 +233,12 @@
               <v-flex xs12 class="pt-2" v-for="witness in getOtherWitnesses(record)">
                 <v-layout row wrap>
                   <v-flex xs2 class="tx-algo pa-1">
-                    <div class="body-2 white--text text--darken-4 pt-1 pl-1">SHA256</div>
+                    <div class="body-2 bold white--text text--darken-4 pt-1 pl-1 mb-1 signer">{{getWitnessOrg(witness.owner)}}</div>
+                    <div class="body-2 white--text text--darken-4 pl-1">SHA256</div>
                     <div class="body-2 grey--text text--darken-1 pt-1 pl-1">Signature</div>
                   </v-flex>
                   <v-flex xs10 class="tx-data pa-1">
+                    <div class="body-2 white--text text--darken-4 pt-1 pl-1 pb-4"></div>
                     <div class="break-letter body-1 grey--text text--darken-1 pt-1 pl-2 pr-2">{{witness.signing_key}}</div>
                     <div class="break-letter body-1 grey--text text--darken-1 pt-1 pl-2 pr-2">{{witness.witness_signature}}</div>
                   </v-flex>
@@ -312,8 +316,22 @@
               }
             }
             return witnesses;
+          },
+          getWitnessOrg(witness) {
+
+            if (witness == "initdelegate") {
+              return "NSF";
+            } 
+            if (witness == "initdelegate1") {
+              return "MIT";
+            }
+
+            if (witness == "initdelegate2") {
+              return "TREASURY";
+            } 
+              return "NSF";
           }
-          
+
         },
 
         watch: {
@@ -375,6 +393,10 @@
     border: 1px solid;
     padding: 3px 35px;
     border-radius: 12px;
+  }
+
+  .signer {
+    border-bottom: 1px solid white;
   }
 
 </style>
