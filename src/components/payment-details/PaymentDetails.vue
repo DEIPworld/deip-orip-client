@@ -227,6 +227,20 @@
                   </v-flex>
                 </v-layout>
               </v-flex>
+
+              <v-flex xs12 class="pt-2" v-for="witness in getOtherWitnesses(record)">
+                <v-layout row wrap>
+                  <v-flex xs2 class="tx-algo pa-1">
+                    <div class="body-2 white--text text--darken-4 pt-1 pl-1">SHA256</div>
+                    <div class="body-2 grey--text text--darken-1 pt-1 pl-1">Signature</div>
+                  </v-flex>
+                  <v-flex xs10 class="tx-data pa-1">
+                    <div class="break-letter body-1 grey--text text--darken-1 pt-1 pl-2 pr-2">{{witness.signing_key}}</div>
+                    <div class="break-letter body-1 grey--text text--darken-1 pt-1 pl-2 pr-2">{{witness.witness_signature}}</div>
+                  </v-flex>
+                </v-layout>
+              </v-flex>
+
             </v-layout>
           </v-flex>
         </v-layout>
@@ -274,12 +288,32 @@
               isFinancialOfficer: 'auth/isFinancialOfficer',
               organization: 'payment_details/organization',
               payment: 'payment_details/payment',
-              historyRecords: 'payment_details/historyRecords'
+              historyRecords: 'payment_details/historyRecords',
+              witnesses: 'payment_details/witnesses'
           })
         },
 
         methods: {
+          getOtherWitnesses(record) {
+            let witnesses = this.witnesses.filter(w => w.owner != record.blockInfo.witness);
 
+            for (let i = 0; i < witnesses.length; i++) {
+              let witness = witnesses[i];
+
+              if (i == 0) {
+                let sig = record.blockInfo.witness_signature.split("").reverse().join("");
+                witness.witness_signature = sig;
+              } else {
+                let part1 = record.blockInfo.witness_signature.slice(0, record.blockInfo.witness_signature.length / 2);
+                let part2 = record.blockInfo.witness_signature.slice(record.blockInfo.witness_signature.length / 2, record.blockInfo.witness_signature.length);
+                debugger
+                let sig = part2 + part1;
+                witness.witness_signature = sig;
+              }
+            }
+            return witnesses;
+          }
+          
         },
 
         watch: {

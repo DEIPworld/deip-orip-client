@@ -22,7 +22,8 @@ const state = {
   organization: undefined,
   payment: undefined,
   contract: undefined,
-  award: undefined
+  award: undefined,
+  witnesses: []
 }
 
 // getters
@@ -55,9 +56,8 @@ const getters = {
     return payment;
   },
 
-  historyRecords: (state) => {
-    return state.historyRecords
-  }
+  historyRecords: (state) => state.historyRecords,
+  witnesses: (state) => state.witnesses
 }
 
 // actions
@@ -75,7 +75,11 @@ const actions = {
             });
         });
 
-        return Promise.all([paymentLoad]);
+        const witnessesLoad = new Promise((resolve, reject) => {
+          dispatch('loadWitnesses', { notify: resolve });
+        });
+
+        return Promise.all([paymentLoad, witnessesLoad]);
       })
       .catch(err => { console.log(err) })
       .finally(() => {
@@ -187,6 +191,21 @@ const actions = {
       .finally(() => {
         if (notify) notify();
       });
+  },
+
+  loadWitnesses({ commit, dispatch, state }, { notify }) {
+    return deipRpc.api.getActiveWitnessesAsync()
+      .then((items) => {
+        let witnesses = items.filter(w => w != "");
+        return Promise.all(witnesses.map(w => deipRpc.api.getWitnessByAccountAsync(w)));
+      })
+      .then(witnesses => {
+        commit('SET_WITNESSES_LIST', witnesses);
+      })
+      .catch(err => { console.log(err) })
+      .finally(() => {
+        if (notify) notify();
+      });
   }
   
 }
@@ -216,6 +235,10 @@ const mutations = {
 
   ['SET_ORGANIZATION_HISTORY_RECORDS_LIST'](state, historyRecords) {
     Vue.set(state, 'historyRecords', historyRecords);
+  },
+
+  ['SET_WITNESSES_LIST'](state, witnesses) {
+    Vue.set(state, 'witnesses', witnesses);
   }
 
 }
