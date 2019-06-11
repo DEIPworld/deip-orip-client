@@ -53,6 +53,7 @@
             date-placeholder="Payment Date"
             :date-hint="award ? `Award period: ${moment(new Date(award.from)).format('MM/YY')} - ${moment(new Date(award.to)).format('MM/YY')}` : ''"
             :date-persistent-hint="true"
+            :datetime="paymentDate"
             :dateOnly="true"
             @input="(val) => {
               paymentDate = new Date(val); 
@@ -125,7 +126,7 @@
         data() { 
           return {
             paymentAmount: undefined,
-            paymentDate: undefined,
+            paymentDate: moment().add(10, 'minutes').format('YYYY-MM-DD HH:mm'),
             description: undefined,
             isLoading: false,
             rules: {
@@ -273,7 +274,7 @@
               this.timestamp = (new Date()).getTime();
               this.$refs.paymentAmount.reset();
               this.$refs.description.reset();
-              this.paymentDate = undefined;
+              this.paymentDate = moment().add(10, 'minutes').format('YYYY-MM-DD HH:mm');
             } 
           }
         },
