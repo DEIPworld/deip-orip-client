@@ -248,7 +248,7 @@
                             <td v-if="isProgramOfficer || isFinancialOfficer || isTreasury"><div><a href="#" class="a body-1">{{ props.item.organization.name }}</a></div></td>
                             <td>
                               <router-link class="a body-1" :to="{ name: 'UserDetails', params: { account_name: props.item.requester.account.name } }">{{ props.item.requester | fullname}}</router-link>
-                              <span v-if="props.item.award.isSubaward && !isSubawardee" class="grey--text caption">(subawardee)</span>
+                              <span v-if="props.item.award.isSubaward && props.item.requester.account.name != user.account.name" class="grey--text caption">(subawardee)</span>
                             </td>
                             <td><span class="body-1 grey--text">{{moment(props.item.timestamp).format('MM/DD/YYYY HH:mm:ss')}}</span></td>
                             <td><div class="body-2 text-align-right">$ {{ props.item.amount | currency }}</div></td>
@@ -328,11 +328,12 @@
         ...mapGetters({
           user: 'auth/user',
           isPrincipalInvestigator: 'auth/isPrincipalInvestigator',
-          isSubawardee: 'auth/isSubawardee',
           isCertifier: 'auth/isCertifier',
+          
           isProgramOfficer: 'auth/isProgramOfficer',
           isFinancialOfficer: 'auth/isFinancialOfficer',
           isTreasury: 'auth/isTreasury',
+
           organization: 'org_dashboard/organization',
           organizations: 'org_dashboard/organizations',
           tokenInfo: 'org_dashboard/tokenInfo',
@@ -376,7 +377,18 @@
         },
 
         filteredAwards() {
-          return this.awards.filter(a => a.isSubaward == this.isSubawardee);
+          var filtered = [];
+          if (this.isProgramOfficer || this.isFinancialOfficer || this.isTreasury) {
+            // display all top-level awards for all organizations
+            filtered = this.awards.filter(a => !a.isSubaward);
+          } else if (this.isCertifier) {
+            // display all top-level awards for certifier organization
+            filtered = this.awards.filter(a => !a.isSubaward && a.organization.id == this.user.account.organisation_id);
+          } else if (this.isPrincipalInvestigator) {
+            // display all awards allocated for PI
+            filtered = this.awards.filter(a => a.organization.id == this.user.account.organisation_id && a.pi.account.name == this.user.account.name);
+          }
+          return filtered;
         },
 
         totalAwardsAmount() {
@@ -496,8 +508,25 @@
         },
 
         filteredPayments() {
-          return this.payments
-            .filter((p) => { return this.isSubawardee ? p.award.isSubaward : true })
+          var filtered = [];
+
+          if (this.isProgramOfficer || this.isFinancialOfficer || this.isTreasury) {
+            // display all payments for all organizations
+            filtered = this.payments.filter(p => true);
+          } else if (this.isCertifier) {
+            // display all payments for certifier organization
+            filtered = this.payments.filter(p => p.award.organization.id == this.user.account.organisation_id);
+          } else if (this.isPrincipalInvestigator) {
+            // display all payments for PI
+            // filtered = this.payments.filter(p => p.award.organization.id == this.user.account.organisation_id && p.requester.account.name == this.user.account.name);
+            
+            // display all payments related to PI
+            filtered = this.payments.filter(p => p.award.organization.id == this.user.account.organisation_id && p.award.isSubaward 
+              ? (p.award.parentAward.researcher == this.user.account.name || p.requester.account.name == this.user.account.name) 
+              : p.requester.account.name == this.user.account.name);
+          };
+          
+          return filtered
             .filter((p) => { return this.paymentsFilter.status != undefined && this.paymentsFilter.status.value != undefined ? this.paymentsFilter.status.value.some(s => s == p.status) : true; })
             .filter((p) => { return this.paymentsFilter.organization != undefined && this.paymentsFilter.organization.value != undefined ? this.paymentsFilter.organization.value == p.organization.id : true; })
             .filter((p) => { return this.paymentsFilter.pi != undefined && this.paymentsFilter.pi.value != undefined ? this.paymentsFilter.pi.value == p.pi.account.name : true; });

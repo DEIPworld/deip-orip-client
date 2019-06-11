@@ -6,7 +6,8 @@
         <h1 class="display-1">Award # {{award | awardNumber}} 
           <span v-if="award.isSubaward" class="subheading grey--text">
             (subaward of 
-            <router-link class="a body-2" :to="{ name: 'AwardDetails', 
+            <span v-if="isPrincipalInvestigator && award.pi.account.name == user.account.name" class="body-2"># {{award.parentAward | awardNumber}}</span>
+            <router-link v-else class="a body-2" :to="{ name: 'AwardDetails', 
               params: { 
                 org: award.parentAward.organization.permlink, 
                 contractId: award.contract.id,
