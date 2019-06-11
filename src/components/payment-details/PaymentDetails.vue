@@ -201,7 +201,7 @@
 
             <v-layout row wrap class="pt-2 pb-2">
               <v-flex xs12>
-                <div class="body-1 grey--text">Block Hash</div>
+                <div class="body-1 grey--text">Merkle Root</div>
               </v-flex>
               <v-flex xs12 class="pt-2">
                 <v-layout row wrap>
@@ -235,7 +235,7 @@
                 </v-layout>
               </v-flex>
 
-              <v-flex xs12 class="pt-2" v-for="witness in getOtherWitnesses(record)">
+              <v-flex xs12 class="pt-2" v-for="(witness, i) in getOtherWitnesses(record)" :key="i + '-block-signer'">
                 <v-layout row wrap>
                   <v-flex xs2 class="tx-algo pa-1">
                     <div class="body-2 bold white--text text--darken-4 pt-1 pl-1 mb-1 signer">{{getWitnessOrg(witness.owner)}}</div>

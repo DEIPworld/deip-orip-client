@@ -237,12 +237,12 @@
                                 hide-details
                               ></v-checkbox>
                             </td>
+                            <td><router-link class="a body-2" :to="{ name: 'PaymentDetails', params: { org: props.item.organization.permlink, contractId: props.item.contract.id, awardId: props.item.awardId, paymentId: props.item.id } }">{{ props.item | paymentNumber }}</router-link></td>
                             <td>
                               <v-chip class="payment-status-chip" :color="withdrawalStatusMap[props.item.status].color" :text-color="withdrawalStatusMap[props.item.status].textColor">
                                 <div class="payment-status-chip-label">{{ withdrawalStatusMap[props.item.status].text }}</div>
                               </v-chip>
                             </td>
-                            <td><router-link class="a body-2" :to="{ name: 'PaymentDetails', params: { org: props.item.organization.permlink, contractId: props.item.contract.id, awardId: props.item.awardId, paymentId: props.item.id } }">{{ props.item | paymentNumber }}</router-link></td>
                             <td><router-link class="a body-2" :to="{ name: 'AwardDetails', params: { org: props.item.organization.permlink, contractId: props.item.contract.id, awardId: props.item.awardId } }">{{ props.item.award | awardNumber }}</router-link></td>
                             <td v-if="isProgramOfficer || isFinancialOfficer || isTreasury"><router-link class="a body-1" :to="{ name: 'UserDetails', params: { account_name: props.item.pi.account.name } }">{{ props.item.pi | fullname}}</router-link></td>
                             <td v-if="isProgramOfficer || isFinancialOfficer || isTreasury"><div><a href="#" class="a body-1">{{ props.item.organization.name }}</a></div></td>
@@ -417,8 +417,8 @@
         paymentHeaders() {
           return this.isProgramOfficer ? [
             { text: '', sortable: false },  // display checkbox for NSF PO
-            { text: 'STATUS', value: 'status' },
             { text: 'PAYMENT #', value: 'paymentId' },
+            { text: 'STATUS', value: 'status' },
             { text: 'AWARD #', value: 'awardId' },
             { text: 'PI', value: 'pi.account.name' }, // display PI info for NSF PO
             { text: 'ORGANIZATION', value: 'organization.name' }, // display organization info for NSF PO
@@ -426,8 +426,8 @@
             { text: 'TIMESTAMP', value: 'timestamp' },
             { text: 'AMOUNT', value: 'amount', align: 'right' }
           ] : this.isFinancialOfficer ? [
-            { text: 'STATUS', value: 'status' },
             { text: 'PAYMENT #', value: 'paymentId' },
+            { text: 'STATUS', value: 'status' },
             { text: 'AWARD #', value: 'awardId' },
             { text: 'PI', value: 'pi.account.name' }, // display PI info for NSF FO
             { text: 'ORGANIZATION', value: 'organization.name' }, // display organization info for NSF FO
@@ -436,16 +436,16 @@
             { text: 'AMOUNT', value: 'amount', align: 'right' }
           ] : this.isCertifier ? [
             { text: '', sortable: false }, // display checkbox for Organization Certifier
-            { text: 'STATUS', value: 'status' },
             { text: 'PAYMENT #', value: 'paymentId' },
+            { text: 'STATUS', value: 'status' },
             { text: 'AWARD #', value: 'awardId' },
             { text: 'REQUESTER', value: 'pi.account.name' },
             { text: 'TIMESTAMP', value: 'timestamp' },
             { text: 'AMOUNT', value: 'amount', align: 'right' }
           ] : this.isTreasury ? [
             { text: '', sortable: false },  // display checkbox for Treasury
-            { text: 'STATUS', value: 'status' },
             { text: 'PAYMENT #', value: 'paymentId' },
+            { text: 'STATUS', value: 'status' },
             { text: 'AWARD #', value: 'awardId' },
             { text: 'PI', value: 'pi.account.name' }, // display PI info for Treasury
             { text: 'ORGANIZATION', value: 'organization.name' }, // display organization info for Treasury
@@ -453,8 +453,8 @@
             { text: 'TIMESTAMP', value: 'timestamp' },
             { text: 'AMOUNT', value: 'amount', align: 'right' }
           ] : [
-            { text: 'STATUS', value: 'status' },
             { text: 'PAYMENT #', value: 'paymentId' },
+            { text: 'STATUS', value: 'status' },
             { text: 'AWARD #', value: 'awardId' },
             { text: 'REQUESTER', value: 'pi.account.name' },
             { text: 'TIMESTAMP', value: 'timestamp' },
