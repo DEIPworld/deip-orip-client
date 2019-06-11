@@ -74,9 +74,9 @@ const getters = {
 			let rels = c.relations;
 			if (!rels.length) return [];
 
-			return rels.filter(rel => !rel.isSubaward).map((rel, index) => {
+			return rels.map((rel, index) => {
 				let totalAmount = fromAssetsToFloat(rel.total_amount);
-				let universityOverheadAmount = totalAmount - (totalAmount - (totalAmount * (rel.university_overhead / 100) / 100));
+				let universityOverheadAmount = rel.isSubaward ? 0 : totalAmount - (totalAmount - (totalAmount * (rel.university_overhead / 100) / 100));
 				let pendingPiAmount = 0;
 				let withdrawnPiAmount = 0;
 				let requestedPiAmount = 0;
@@ -139,6 +139,7 @@ const getters = {
 					withdrawnSubawardeesAmount,
 					remainingSubawardeesAmount,
 
+					isSubaward: rel.isSubaward,
 					from: c.foa.open_date,
 					to: c.foa.close_date,
 					contract: c,

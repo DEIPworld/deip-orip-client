@@ -58,7 +58,7 @@
                         <v-data-table
                           class="awards-table"
                           :headers="awardHeaders"
-                          :items="awards"
+                          :items="filteredAwards"
                           disable-initial-sort
                           :no-data-text="`No awards found`"
                           hide-actions>
@@ -248,7 +248,7 @@
                             <td v-if="isProgramOfficer || isFinancialOfficer || isTreasury"><div><a href="#" class="a body-1">{{ props.item.organization.name }}</a></div></td>
                             <td>
                               <router-link class="a body-1" :to="{ name: 'UserDetails', params: { account_name: props.item.requester.account.name } }">{{ props.item.requester | fullname}}</router-link>
-                              <span v-if="props.item.requester.account.name != props.item.pi.account.name" class="grey--text caption">(subawardee)</span>
+                              <span v-if="props.item.award.isSubaward && !isSubawardee" class="grey--text caption">(subawardee)</span>
                             </td>
                             <td><span class="body-1 grey--text">{{moment(props.item.timestamp).format('MM/DD/YYYY HH:mm:ss')}}</span></td>
                             <td><div class="body-2 text-align-right">$ {{ props.item.amount | currency }}</div></td>
@@ -328,6 +328,7 @@
         ...mapGetters({
           user: 'auth/user',
           isPrincipalInvestigator: 'auth/isPrincipalInvestigator',
+          isSubawardee: 'auth/isSubawardee',
           isCertifier: 'auth/isCertifier',
           isProgramOfficer: 'auth/isProgramOfficer',
           isFinancialOfficer: 'auth/isFinancialOfficer',
@@ -374,38 +375,42 @@
           ];
         },
 
+        filteredAwards() {
+          return this.awards.filter(a => a.isSubaward == this.isSubawardee);
+        },
+
         totalAwardsAmount() {
-          return this.awards
+          return this.filteredAwards
             // .filter(tx => tx.contract.status != FUNDING_CONTRACT_PENDING)
-            .map(tx => tx.totalAmount)
+            .map(a => a.totalAmount)
 			      .reduce((sum, amount) => sum + amount, 0);
         },
 
         totalRequestedAmount() {
-          return this.awards
-            .filter(tx => tx.contract.status != FUNDING_CONTRACT_PENDING)
-            .map(tx => tx.requestedAmount)
+          return this.filteredAwards
+            .filter(a => a.contract.status != FUNDING_CONTRACT_PENDING)
+            .map(a => a.requestedAmount)
 			      .reduce((sum, amount) => sum + amount, 0);
         },
         
         totalAdminExpensesAmount() {
-          return this.awards
-            .filter(tx => tx.contract.status != FUNDING_CONTRACT_PENDING)
-            .map(tx => tx.universityOverheadAmount)
+          return this.filteredAwards
+            .filter(a => a.contract.status != FUNDING_CONTRACT_PENDING)
+            .map(a => a.universityOverheadAmount)
 			      .reduce((sum, amount) => sum + amount, 0);
         },
 
         totalWithdrawnAmount() {
-          return this.awards
-            .filter(tx => tx.contract.status != FUNDING_CONTRACT_PENDING)
-            .map(tx => tx.withdrawnAmount)
+          return this.filteredAwards
+            .filter(a => a.contract.status != FUNDING_CONTRACT_PENDING)
+            .map(a => a.withdrawnAmount)
 			      .reduce((sum, amount) => sum + amount, 0);
         },
 
         totalRemainingAmount() {
-          return this.awards
-            .filter(tx => tx.contract.status != FUNDING_CONTRACT_PENDING)
-            .map(tx => tx.remainingAmount)
+          return this.filteredAwards
+            .filter(a => a.contract.status != FUNDING_CONTRACT_PENDING)
+            .map(a => a.remainingAmount)
 			      .reduce((sum, amount) => sum + amount, 0);
         },
 
@@ -492,6 +497,7 @@
 
         filteredPayments() {
           return this.payments
+            .filter((p) => { return this.isSubawardee ? p.award.isSubaward : true })
             .filter((p) => { return this.paymentsFilter.status != undefined && this.paymentsFilter.status.value != undefined ? this.paymentsFilter.status.value.some(s => s == p.status) : true; })
             .filter((p) => { return this.paymentsFilter.organization != undefined && this.paymentsFilter.organization.value != undefined ? this.paymentsFilter.organization.value == p.organization.id : true; })
             .filter((p) => { return this.paymentsFilter.pi != undefined && this.paymentsFilter.pi.value != undefined ? this.paymentsFilter.pi.value == p.pi.account.name : true; });

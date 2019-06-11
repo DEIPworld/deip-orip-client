@@ -118,6 +118,17 @@ const getters = {
         return false;
     },
 
+    isSubawardee: (state, getters) => {
+        if (state.user.profile) {
+            const sub = window.env.TENANT;
+            return state.user.profile.agencies.some(
+                a => a.name.toLowerCase() == sub.toLowerCase() && a.role === 'principal-investigator' &&
+                    a.metadata && a.metadata.isSubawardee
+            );
+        }
+        return false;
+    },
+
     isCertifier: (state, getters) => {
         if (state.user.profile) {
             const sub = window.env.TENANT;
