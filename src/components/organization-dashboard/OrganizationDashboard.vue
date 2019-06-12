@@ -288,12 +288,25 @@
       fundingContractStatus, fundingContractStatusMap, FUNDING_CONTRACT_PENDING, FUNDING_CONTRACT_APPROVED, FUNDING_CONTRACT_REJECTED
     } from './../../services/FundingService';
 
+    const awardsTab = 0;
+    const paymentsTab = 1;
+
+    const tabPreferenceMap = {
+      'alice-lee': awardsTab,
+      'thomas-winder': paymentsTab,
+      'peter-miller': awardsTab,
+      'bob-tucker': awardsTab,
+      'john-nelson': awardsTab,
+      'anastasia-brown': paymentsTab,
+      'kim-taylor': paymentsTab
+    }
+
     export default {
       name: "OrganizationDashboard",
 
       data() {
         return {
-          tab: null,
+          tab: 0,
           theme: window.env.THEME,
 
           paymentsFilter: {
@@ -678,6 +691,13 @@
           this.selectedToCertify = newVal.filter(p => p.status == WITHDRAWAL_PENDING);
           this.selectedToApprove = newVal.filter(p => p.status == WITHDRAWAL_CERTIFIED);
           this.selectedToPay = newVal.filter(p => p.status == WITHDRAWAL_APPROVED);
+        }
+      },
+
+      created() {
+        let preference = tabPreferenceMap[this.user.account.name];
+        if (preference !== undefined) {
+          this.tab = preference;
         }
       }
 
