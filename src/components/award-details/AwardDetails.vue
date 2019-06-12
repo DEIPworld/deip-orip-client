@@ -146,7 +146,7 @@
             <td>
               <span class="body-1">
                 <span v-if="isAwardNotDistributed">N/A</span>
-                <span v-else>$ {{props.item.requestedSubawardAmount | currency}}</span>
+                <span v-else>$ {{props.item.pendingSubawardAmount | currency}}</span>
               </span>
             </td>
             <td>
@@ -167,7 +167,7 @@
             <td v-for="(header, i) in subawardsHeaders" class="body-2 bold">
               <span v-if="i == 0">Total</span>
               <span v-if="header.value == 'subawardAmount'">$ {{totalSubawardsAmount | currency}}</span>
-              <span v-else-if="header.value == 'requestedSubawardAmount'">$ {{totalSubawardsRequestedAmount | currency}}</span>
+              <span v-else-if="header.value == 'pendingSubawardAmount'">$ {{totalPendingRequestedAmount | currency}}</span>
               <span v-else-if="header.value == 'withdrawnSubawardAmount'">$ {{totalSubawardsWithdrawnAmount | currency}}</span>
               <span v-else-if="header.value == 'remainingSubawardAmount'">$ {{totalSubawardsRemainingAmount | currency}}</span>
               <span v-else></span>
@@ -376,7 +376,7 @@
               { text: 'SUBAWARDEE', value: 'subawardee' },
               { text: 'ORGANIZATION', value: 'organization.name' },
               { text: 'SUBAWARD AMOUNT', value: 'subawardAmount' },
-              { text: 'REQUESTED', value: 'requestedSubawardAmount' },
+              { text: 'REQUESTED', value: 'pendingSubawardAmount' },
               { text: 'WITHDRAWN', value: 'withdrawnSubawardAmount' },
               { text: 'AVAILABLE AMOUNT', value: 'remainingSubawardAmount' }
             ];
@@ -432,10 +432,10 @@
               .reduce((sum, amount) => sum + amount, 0);
           },
 
-          totalSubawardsRequestedAmount() {
+          totalPendingRequestedAmount() {
             return this.subawards
               .filter(tx => tx.contract.status != FUNDING_CONTRACT_PENDING)
-              .map(tx => tx.requestedSubawardAmount)
+              .map(tx => tx.pendingSubawardAmount)
               .reduce((sum, amount) => sum + amount, 0);
           },
           
@@ -513,6 +513,7 @@
                 });
               })
               .finally(() => {
+                this.selectedPayments = [];
                 this.selectedToCertify = [];
                 this.isCertifying = false;
               });
@@ -548,6 +549,7 @@
                 });
               })
               .finally(() => {
+                this.selectedPayments = [];
                 this.selectedToApprove = [];
                 this.isApproving = false;
               });
@@ -583,6 +585,7 @@
                 });
               })
               .finally(() => {
+                this.selectedPayments = [];
                 this.selectedToPay = [];
                 this.isPaying = false;
               });

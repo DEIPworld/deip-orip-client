@@ -83,7 +83,7 @@
                             <td>
                               <span class="body-1">
                                 <span v-if="props.item.contract.status == FUNDING_CONTRACT_PENDING">N/A</span>
-                                <span v-else>$ {{ props.item.requestedAmount | currency}}</span>
+                                <span v-else>$ {{ props.item.pendingAmount | currency}}</span>
                               </span>
                             </td>
                             <td>
@@ -105,7 +105,7 @@
                               <span v-if="i == 0">Total</span>
                               <span v-if="header.value == 'totalAmount'">$ {{totalAwardsAmount | currency}}</span>
                               <span v-else-if="header.value == 'universityOverheadAmount'">$ {{totalAdminExpensesAmount | currency}}</span>
-                              <span v-else-if="header.value == 'requestedAmount'">$ {{totalRequestedAmount | currency}}</span>
+                              <span v-else-if="header.value == 'pendingAmount'">$ {{totalPendingAmount | currency}}</span>
                               <span v-else-if="header.value == 'withdrawnAmount'">$ {{totalWithdrawnAmount | currency}}</span>
                               <span v-else-if="header.value == 'remainingAmount'">$ {{totalRemainingAmount | currency}}</span>
                               <span v-else></span>
@@ -350,7 +350,7 @@
             { text: 'DURATION', value: 'from' },
             { text: 'AWARD AMOUNT', value: 'totalAmount' },
             { text: 'ADMIN EXPENSES', value: 'universityOverheadAmount' },
-            { text: 'REQUESTED', value: 'requestedAmount' },
+            { text: 'REQUESTED', value: 'pendingAmount' },
             { text: 'WITHDRAWN', value: 'withdrawnAmount' },
             { text: 'AVAILABLE AMOUNT', value: 'remainingAmount'}
           ] : this.isProgramOfficer ? [
@@ -361,7 +361,7 @@
             { text: 'DURATION', value: 'from' },
             { text: 'AWARD AMOUNT', value: 'totalAmount' },
             { text: 'ADMIN EXPENSES', value: 'universityOverheadAmount' },
-            { text: 'REQUESTED', value: 'requestedAmount' },
+            { text: 'REQUESTED', value: 'pendingAmount' },
             { text: 'WITHDRAWN', value: 'withdrawnAmount' },
             { text: 'AVAILABLE AMOUNT', value: 'remainingAmount' }
           ] : [
@@ -370,7 +370,7 @@
             { text: 'DURATION', value: 'from' },
             { text: 'AWARD AMOUNT', value: 'totalAmount' },
             { text: 'ADMIN EXPENSES', value: 'universityOverheadAmount' },
-            { text: 'REQUESTED', value: 'requestedAmount' },
+            { text: 'REQUESTED', value: 'pendingAmount' },
             { text: 'WITHDRAWN', value: 'withdrawnAmount' },
             { text: 'AVAILABLE AMOUNT', value: 'remainingAmount' }
           ];
@@ -398,10 +398,10 @@
 			      .reduce((sum, amount) => sum + amount, 0);
         },
 
-        totalRequestedAmount() {
+        totalPendingAmount() {
           return this.filteredAwards
             .filter(a => a.contract.status != FUNDING_CONTRACT_PENDING)
-            .map(a => a.requestedAmount)
+            .map(a => a.pendingAmount)
 			      .reduce((sum, amount) => sum + amount, 0);
         },
         
@@ -594,6 +594,7 @@
               });
             })
             .finally(() => {
+              this.selectedPayments = [];
               this.selectedToCertify = [];
               this.isCertifying = false;
             });
@@ -629,6 +630,7 @@
               });
             })
             .finally(() => {
+              this.selectedPayments = [];
               this.selectedToApprove = [];
               this.isApproving = false;
             });
@@ -664,6 +666,7 @@
               });
             })
             .finally(() => {
+              this.selectedPayments = [];
               this.selectedToPay = [];
               this.isPaying = false;
             });

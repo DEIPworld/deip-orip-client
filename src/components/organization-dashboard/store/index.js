@@ -107,12 +107,21 @@ const getters = {
 					)
 					.reduce((sum, amount) => sum + amount, 0);
 
+				let pendingSubawardeesAmount = rel.subawards
+					.map(s => s.withdrawals
+						.filter(w => w.status == WITHDRAWAL_PENDING || w.status == WITHDRAWAL_CERTIFIED || w.status == WITHDRAWAL_APPROVED)
+						.map(w => w.amount.amount)
+						.reduce((sum, amount) => sum + amount, 0)
+					)
+					.reduce((sum, amount) => sum + amount, 0);
+
 				let remainingSubawardeesAmount = subawardeesAmount - withdrawnSubawardeesAmount;
 
 				let piAmount = totalAmount - subawardeesAmount - universityOverheadAmount;
 				let remainingPiAmount = piAmount - withdrawnPiAmount;
 
 				let requestedAmount = requestedPiAmount + requestedSubawardeesAmount;
+				let pendingAmount = pendingPiAmount + pendingSubawardeesAmount;
 				let withdrawnAmount = withdrawnPiAmount + withdrawnSubawardeesAmount;
 
 				let remainingAmount = totalAmount - withdrawnPiAmount - withdrawnSubawardeesAmount - universityOverheadAmount;
@@ -124,18 +133,21 @@ const getters = {
 					awardId: rel.id,
 
 					totalAmount,
-					remainingAmount,
-					universityOverheadAmount,
-					withdrawnAmount,
 					requestedAmount,
+					universityOverheadAmount,
+					pendingAmount,
+					withdrawnAmount,
+					remainingAmount,
 
 					piAmount,
 					requestedPiAmount,
+					pendingPiAmount,
 					withdrawnPiAmount,
 					remainingPiAmount,
 
 					subawardeesAmount,
 					requestedSubawardeesAmount,
+					pendingSubawardeesAmount,
 					withdrawnSubawardeesAmount,
 					remainingSubawardeesAmount,
 
