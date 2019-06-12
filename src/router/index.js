@@ -27,7 +27,7 @@ const router = new Router({
                 const user = store.getters['auth/user'];
                 const rolePromise = user.profile 
                     ? Promise.resolve(user.profile.agencies || []) 
-                    : usersService.getUserProfile(user.username).then((p) => { return p.agencies });
+                    : usersService.getUserProfile(user.username).then((p) => { return p.agencies || [] });
                 
                 rolePromise.then((agencies) => {
                     if (!agencies.length) {
