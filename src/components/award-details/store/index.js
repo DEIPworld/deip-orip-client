@@ -11,6 +11,10 @@ import {
   WITHDRAWAL_PAID,
   WITHDRAWAL_REJECTED,
 
+  FUNDING_CONTRACT_PENDING,
+  FUNDING_CONTRACT_APPROVED, 
+  FUNDING_CONTRACT_REJECTED,
+
   loadFundingContract
 } from './../../../services/FundingService';
 
@@ -18,7 +22,8 @@ const state = {
   isLoadingAwardDetailsPage: false,
   organization: undefined,
   award: undefined,
-  contract: undefined
+  contract: undefined,
+  NSFBalances: []
 }
 
 // getters
@@ -196,6 +201,13 @@ const getters = {
     }
 
     return items;
+  },
+
+  isAwardNotDistributed: (state, getters) => getters.award.contract.status == FUNDING_CONTRACT_PENDING,
+  isAwardAvailableToDistribute: (state, getters) => {
+    let ngtBalance = state.NSFBalances.find(b => b.amount.asset_id == 3);
+    if (!ngtBalance) return false;
+    return getters.isAwardNotDistributed && getters.award.totalAmount <= ngtBalance.amount.amount;
   }
 }
 
@@ -212,7 +224,11 @@ const actions = {
           dispatch('loadAward', { contractId, awardId, notify: resolve });
         });
 
-        return Promise.all([awardsLoad]);
+        const NSFLoad = new Promise((resolve, reject) => {
+          dispatch('loadNSFBalance', { notify: resolve });
+        });
+
+        return Promise.all([awardsLoad, NSFLoad]);
       })
       .finally(() => {
         commit('SET_AWARD_DETAILS_LOADING_STATE', false);
@@ -225,6 +241,17 @@ const actions = {
         let award = contract.relations.find(r => r.id == awardId);
         commit('SET_AWARD', award);
         commit('SET_FUNDING_CONTRACT', contract);
+      })
+      .catch(err => { console.log(err) })
+      .finally(() => {
+        if (notify) notify();
+      });
+  },
+
+  loadNSFBalance({ commit, dispatch, state }, { notify }) {
+    return deipRpc.api.getAccountBalancesByOwnerAsync("nsf")
+      .then(balances => {
+        commit('SET_NSF_BALANCES', balances);
       })
       .catch(err => { console.log(err) })
       .finally(() => {
@@ -251,6 +278,10 @@ const mutations = {
 
   ['SET_AWARD'](state, award) {
     Vue.set(state, 'award', award);
+  },
+
+  ['SET_NSF_BALANCES'](state, balances) {
+    Vue.set(state, 'NSFBalances', balances);
   }
 }
 

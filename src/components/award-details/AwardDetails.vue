@@ -19,7 +19,7 @@
       
       <v-flex xs2 class="pa-4 grey-background">
         <div v-if="isProgramOfficer && !award.isSubaward">
-          <v-btn block @click="confirmDistribution.isShown = true" color="success" :disabled="!isAwardNotDistributed || isDistributing" :loading="isDistributing">
+          <v-btn block @click="confirmDistribution.isShown = true" color="success" :disabled="!isAwardAvailableToDistribute || isDistributing" :loading="isDistributing">
             {{isAwardNotDistributed ? 'Distribute' : 'Distributed'}}
           </v-btn>
           <confirm-action-dialog
@@ -363,12 +363,10 @@
               organization: 'award_details/organization',
               award: 'award_details/award',
               payments: 'award_details/payments',
-              subawards: 'award_details/subawards'
+              subawards: 'award_details/subawards',
+              isAwardNotDistributed: 'award_details/isAwardNotDistributed',
+              isAwardAvailableToDistribute: 'award_details/isAwardAvailableToDistribute'
           }),
-
-          isAwardNotDistributed() {
-            return this.award.contract.status == FUNDING_CONTRACT_PENDING;
-          },
 
           subawardsHeaders() {
             return [
