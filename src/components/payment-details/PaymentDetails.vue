@@ -104,7 +104,7 @@
                 <v-flex xs6>
                   <div class="pa-1 pl-3 attachment-file">
                     <a target="_blank" class="a" :title="file.filename" :href="`${fileStorageBaseUrl}/payment-requests/refs/research/${payment.award.research_id}/payment-attachment/${payment.award.id}/${payment.attachment.hash}/${file.hash}`">
-                      {{file.filename | ellipsis}}{{file.ext}}
+                      {{file.filename | ellipsis}} <!-- {{file.ext}} -->
                     </a>
                   </div>
                 </v-flex>
