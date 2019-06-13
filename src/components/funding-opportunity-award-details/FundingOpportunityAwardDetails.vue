@@ -4,14 +4,14 @@
      <v-flex xs12>
         <v-card>
           <v-card-text class="px-0 pa-0">
-            <v-breadcrumbs divider="/">
+          <!--  <v-breadcrumbs divider="/">
                 <v-breadcrumbs-item v-for="item in breadcrumbs"
                         :key="item.text" 
                         :disabled="item.disabled" 
                         :to="item.to">
                     {{ item.text }}
                 </v-breadcrumbs-item>
-            </v-breadcrumbs>
+            </v-breadcrumbs> -->
           </v-card-text>
         </v-card>
       </v-flex>
