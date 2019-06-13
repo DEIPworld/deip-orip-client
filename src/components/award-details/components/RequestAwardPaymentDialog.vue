@@ -56,7 +56,7 @@
             :datetime="paymentDate"
             :dateOnly="true"
             @input="(val) => {
-              paymentDate = new Date(val); 
+              paymentDate = val; 
             }"
             :rules="[
               rules.greaterThanNow,

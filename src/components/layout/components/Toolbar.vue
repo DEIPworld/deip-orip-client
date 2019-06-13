@@ -141,12 +141,12 @@
                 </v-list>
             </v-menu>
 
-            <div v-if="isLoggedIn() && addResearchButtonAvailable" class="mx-3" style="width: 180px">
-            <!-- <v-btn dark round color="primary" class="full-width ma-0" to="/create-new-research">
+      <!--  <div v-if="isLoggedIn() && addResearchButtonAvailable" class="mx-3" style="width: 180px">
+                <v-btn dark round color="primary" class="full-width ma-0" to="/create-new-research">
                     <div class="col-grow">Add Research</div>
                     <v-icon dark small class="ml-2">add</v-icon>
-                </v-btn> -->
-            </div>
+                </v-btn>
+            </div>-->
 
             <v-toolbar-items v-if="!isLoggedIn()">
                 <!-- <v-btn flat to="/sign-up">Beta Registration</v-btn> -->

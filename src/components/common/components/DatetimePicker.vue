@@ -15,7 +15,6 @@
                     slot="activator"
                     ref="datePicker"
                     :label="label"
-                    :rules="[() => !time || !datetime || $refs.errorMsg.valid || '']"
                     :placeholder="datePlaceholder"
                     :hint="dateHint"
                     :persistent-hint="datePersistentHint"
@@ -38,7 +37,6 @@
                 <v-text-field
                     slot="activator"
                     ref="timePicker"
-                    :rules="[() => !date || !datetime || $refs.errorMsg.valid || '']"
                     :placeholder="timePlaceholder"
                     v-model="time"
                     append-icon="event"
