@@ -4,14 +4,14 @@
      <v-flex xs12>
         <v-card>
           <v-card-text class="px-0 pa-0">
-            <v-breadcrumbs divider="/">
+            <!-- <v-breadcrumbs divider="/">
                 <v-breadcrumbs-item v-for="item in breadcrumbs"
                         :key="item.text" 
                         :disabled="item.disabled" 
                         :to="item.to">
                     {{ item.text }}
                 </v-breadcrumbs-item>
-            </v-breadcrumbs>
+            </v-breadcrumbs> -->
           </v-card-text>
         </v-card>
       </v-flex>
@@ -26,7 +26,12 @@
             </v-flex>
             
             <v-flex xs12>
-              <div class="headline c-pt-5">Award Receivers</div>
+              <div class="headline c-pt-5">Award Receivers 
+                <v-switch
+                  v-model="mustBeEqualToStandard"
+                  label="Must be equal to standard"
+                ></v-switch>
+              </div>
               <div v-for="(funding, fundingIdx) in fundings">
                 <div v-if="fundingIdx != 0" class="row">
                   <span class="col-2"> 
@@ -294,7 +299,9 @@
         data() {
             return {
               fundings: [],
-              isSaving: false
+              isSaving: false,
+              standard: '[{"researcher":"bob-tucker","research_id":2,"research_expenses":[[1,1000000],[2,0],[3,0]],"organisation_id":3,"university_overhead":1000,"milestones":[{"description":"milestone1","deadline":"2019-06-29T21:00:00","amount":10000}]},{"researcher":"john-nelson","research_id":9,"research_expenses":[[1,50000],[2,0],[3,0]],"organisation_id":3,"university_overhead":1000,"milestones":[{"description":"milestone1","deadline":"2019-06-29T21:00:00","amount":10000}]}]',
+              mustBeEqualToStandard: true
             }
         },
 
@@ -476,6 +483,18 @@
 
               researches.push(research);
             }
+
+            if (this.mustBeEqualToStandard) {
+              let stringifiedResearches = JSON.stringify(researches);
+              if (stringifiedResearches !== this.standard) {
+                alert("Input is different from standard !");
+                console.log(`${stringifiedResearches} is not equal to ${this.standard}`);
+                this.isSaving = false;
+                return;
+              }
+            }
+            // alert("Sent!")
+            // this.isSaving = false;
 
             var contractId;
             deipRpc.broadcast.createFundingAsync(
