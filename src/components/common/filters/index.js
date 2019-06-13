@@ -76,7 +76,7 @@ Vue.use(VueCurrencyFilter,
 
 
 Vue.filter('awardNumber', (rel) => {
-    return `${(rel.id + 1)}${parseInt(`${md5(`${rel.id}-award`)}`, 16)}`.replace(/\./g, "").slice(0, 7);
+    return `19${(rel.id + 1)}${parseInt(`${md5(`${rel.id}-award`)}`, 16)}`.replace(/\./g, "").slice(0, 7);
 });
 
 Vue.filter('paymentNumber', (withdrawal) => {
