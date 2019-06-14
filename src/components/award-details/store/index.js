@@ -140,6 +140,7 @@ const getters = {
       let sub = {
         id: subaward.id,
         subawardId: subaward.id,
+        isSubaward: true,
 
         subawardAmount,
         requestedSubawardAmount,

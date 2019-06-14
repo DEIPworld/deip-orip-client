@@ -6,8 +6,8 @@
         <h1 class="display-1">Dashboard</h1>
       </v-flex>
 
-      <v-flex xs1 v-if="isFinancialOfficer" class="grey-background"></v-flex>
-      <v-flex xs2 v-if="isFinancialOfficer" class="pb-3 pt-4 grey-background" v-for="(item, i) in tokenStat" :key="i + '-stat'"> 
+      <v-flex xs1 v-if="isFinancialOfficer || isTreasury" class="grey-background"></v-flex>
+      <v-flex xs2 v-if="isFinancialOfficer || isTreasury" class="pb-3 pt-4 grey-background" v-for="(item, i) in tokenStat" :key="i + '-stat'"> 
         <v-card elevation="0" height="200px" class="grey-background">
           <v-list dense class="pa-1 pb-2 grey-background" :class="[{ 'delimiter': (i + 1) != tokenStat.length }]">
             <v-list-tile>
@@ -27,7 +27,7 @@
           </v-list>
         </v-card>
       </v-flex>
-      <v-flex xs1 v-if="isFinancialOfficer" class="grey-background"></v-flex>
+      <v-flex xs1 v-if="isFinancialOfficer || isTreasury" class="grey-background"></v-flex>
 
       <v-flex xs6 class="pr-4 pl-4 mt-5">
 
@@ -298,13 +298,13 @@
     const paymentsTab = 1;
 
     const tabPreferenceMap = {
-      'alice-lee': awardsTab,
-      'thomas-winder': paymentsTab,
-      'peter-miller': awardsTab,
-      'bob-tucker': awardsTab,
-      'john-nelson': awardsTab,
-      'anastasia-brown': paymentsTab,
-      'kim-taylor': paymentsTab
+      'nsf-go-alice': awardsTab,
+      'nsf-pm-thomas': paymentsTab,
+      'nsf-fm-peter': awardsTab,
+      'mit-pi-bob': awardsTab,
+      'mit-sa-john': awardsTab,
+      'mit-cert-david': paymentsTab,
+      'treasury-pm-kim': paymentsTab
     }
 
     export default {
@@ -570,11 +570,11 @@
               text: "Available for NSF",
             }, {
               amount: this.tokenInfo.distributed,
-              text: "Awarded to PI's",
+              text: "Awarded",
               isGreen: true
             }, {
               amount: this.tokenInfo.withdrawn,
-              text: "Withdrawn by PI's",
+              text: "Withdrawn",
               isGreen: true
             }
           ] : [];
@@ -668,10 +668,14 @@
 
           Promise.all(promises)
             .then(() => {
-              let reload = new Promise((resolve, reject) => {
+              let reloadAwards = new Promise((resolve, reject) => {
                 this.$store.dispatch('org_dashboard/loadAwards', { notify: resolve });
               });
-              return Promise.all([reload]);
+              let reloadTokens = new Promise((resolve, reject) => {
+                this.$store.dispatch('org_dashboard/loadStatisticToken', { notify: resolve, symbol: "NGT" });
+              });
+
+              return Promise.all([reloadAwards, reloadTokens]);
             })
             .then(() => {
               this.$store.dispatch('layout/setSuccess', {

@@ -51,7 +51,7 @@ const getters = {
       foa: state.contract.foa,
       fundingAgency: { name: state.contract.foa.agency_name.toUpperCase() },
       contract: { id: state.contract.id },
-      award: { id: state.award.id, research_id: state.award.research_id },
+      award: { id: state.award.id, research_id: state.award.research_id, isSubaward: state.award.isSubaward },
       timestamp: state.payment.time,
       attachment: attachmentObj ? attachmentObj.attachment : null
     }

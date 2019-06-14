@@ -79,7 +79,10 @@ const getters = {
 
     isTreasury: (state, getters) => {
         if (state.user.profile) {
-            return state.user.profile.agencies.some(a => a.role === 'treasury');
+            const sub = window.env.TENANT;
+            return state.user.profile.agencies.some(
+                a => a.name.toLowerCase() == sub.toLowerCase() && a.role === 'treasury'
+            );
         }
         return false;
     },

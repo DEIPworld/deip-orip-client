@@ -300,7 +300,7 @@
             return {
               fundings: [],
               isSaving: false,
-              standard: '[{"researcher":"bob-tucker","research_id":2,"research_expenses":[[1,1000000],[2,0],[3,0]],"organisation_id":3,"university_overhead":1000,"milestones":[{"description":"milestone1","deadline":"2019-06-29T21:00:00","amount":10000}]},{"researcher":"john-nelson","research_id":9,"research_expenses":[[1,50000],[2,0],[3,0]],"organisation_id":3,"university_overhead":1000,"milestones":[{"description":"milestone1","deadline":"2019-06-29T21:00:00","amount":10000}]}]',
+              standard: '[{"researcher":"mit-pi-bob","research_id":2,"research_expenses":[[1,1000000],[2,0],[3,0]],"organisation_id":3,"university_overhead":1000,"milestones":[{"description":"milestone1","deadline":"2019-06-29T21:00:00","amount":10000}]},{"researcher":"mit-sa-john","research_id":9,"research_expenses":[[1,50000],[2,0],[3,0]],"organisation_id":3,"university_overhead":1000,"milestones":[{"description":"milestone1","deadline":"2019-06-29T21:00:00","amount":10000}]}]',
               mustBeEqualToStandard: true
             }
         },

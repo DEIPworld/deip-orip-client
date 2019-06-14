@@ -83,7 +83,18 @@
 
       <v-flex xs1 class="grey-background py-3 text-xs-center"><v-divider vertical></v-divider></v-flex>
 
-      <v-flex xs5 class="pa-4 grey-background">
+      <v-flex v-if="isAwardNotDistributed" xs5 class="pa-4 grey-background">
+        <v-layout row wrap>
+          <v-flex xs5 class="pa-1">
+            <span class="body-2 grey--text">Award amount</span>
+          </v-flex>
+          <v-flex xs7 class="pa-1">
+            <span class="bold">$ {{ award.totalAmount | currency}}</span>
+          </v-flex>
+        </v-layout>
+      </v-flex>
+
+      <v-flex v-if="!isAwardNotDistributed" xs5 class="pa-4 grey-background">
         <v-layout row wrap>
           <v-flex xs5 class="pa-1">
             <span class="body-2 grey--text">Award amount</span>
@@ -126,9 +137,12 @@
 
         </v-layout>
       </v-flex>
+
+      <v-flex v-if="isAwardNotDistributed" xs12 class="pa-4 grey-background" style="height: 100vh"></v-flex>
+
     </v-layout>
 
-    <v-layout row wrap class="pa-4" v-if="subawards.length">
+    <v-layout row wrap class="pa-4" v-if="!isAwardNotDistributed && subawards.length">
       <v-flex xs12 class="py-3"><h3>Subawards</h3></v-flex xs12>
       <v-flex xs12>
         <v-data-table
@@ -178,7 +192,7 @@
 
     </v-layout>
 
-    <v-layout row wrap class="pa-4">
+    <v-layout v-if="!isAwardNotDistributed" row wrap class="pa-4">
       <v-flex xs12 class="py-3"><h3>Payments</h3></v-flex xs12>
       <v-flex xs12>
         <v-layout style="padding: 10px 0px 0px 0px">
