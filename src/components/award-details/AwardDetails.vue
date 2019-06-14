@@ -5,7 +5,7 @@
       <v-flex xs10 class="pa-4 grey-background">
         <h1 class="display-1">Award # {{award | awardNumber}} 
           <span v-if="award.isSubaward" class="subheading grey--text">
-            (subaward of 
+            ( subaward of 
             <span v-if="isPrincipalInvestigator && award.pi.account.name == user.account.name" class="body-2"># {{award.parentAward | awardNumber}}</span>
             <router-link v-else class="a body-2" :to="{ name: 'AwardDetails', 
               params: { 

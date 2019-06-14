@@ -156,7 +156,10 @@
                 </v-layout>
                 <v-layout class="pt-2 pb-2">
                   <v-flex xs3><span class="body-1 grey--text">Signed By</span></v-flex>
-                  <v-flex xs9><router-link class="a body-2" :to="{ name: 'UserDetails', params: { account_name: record.trxSigner.account.name } }">{{ record.trxSigner | fullname }}</router-link></v-flex>
+                  <v-flex xs9>
+                    <router-link class="a body-2" :to="{ name: 'UserDetails', params: { account_name: record.trxSigner.account.name } }">{{ record.trxSigner | fullname }}</router-link>
+                    <span class="body-2 grey--text pl-1">{{ getSignerOrg(record.trxSigner) }}</span>
+                  </v-flex>
                 </v-layout>
 
                 <v-layout class="pt-2 pb-2">
@@ -301,6 +304,7 @@
               isProgramOfficer: 'auth/isProgramOfficer',
               isFinancialOfficer: 'auth/isFinancialOfficer',
               organization: 'payment_details/organization',
+              organizations: 'payment_details/organizations',
               payment: 'payment_details/payment',
               historyRecords: 'payment_details/historyRecords'
           })
@@ -331,6 +335,12 @@
             if (witness == "initdelegate1") return "MIT";
             if (witness == "initdelegate2") return "TREASURY";
             return "NSF";
+          },
+
+          getSignerOrg(signer) {
+            let org = this.organizations.find(o => o.id == signer.account.organisation_id);
+            if (org) return `(${org.name})`;
+            return "";
           }
         },
 

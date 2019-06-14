@@ -20,6 +20,7 @@ const state = {
   isLoadingAwardDetailsPage: false,
   historyRecords: [],
   organization: undefined,
+  organizations: [],
   payment: undefined,
   contract: undefined,
   award: undefined,
@@ -30,6 +31,7 @@ const state = {
 const getters = {
   isLoadingPaymentDetailsPage: (state) => state.isLoadingPaymentDetailsPage,
   organization: (state) => state.organization,
+  organizations: state => state.organizations,
   contract: (state) => state.contract,
   award: (state) => state.award,
   payment: (state) => {
@@ -76,11 +78,15 @@ const actions = {
             });
         });
 
+        const organizationsLoad = new Promise((resolve, reject) => {
+          dispatch('loadOrganizations', { notify: resolve });
+        });
+
         // const witnessesLoad = new Promise((resolve, reject) => {
         //   dispatch('loadWitnesses', { notify: resolve });
         // });
 
-        return Promise.all([paymentLoad]);
+        return Promise.all([paymentLoad, organizationsLoad]);
       })
       .catch(err => { console.log(err) })
       .finally(() => {
@@ -192,7 +198,18 @@ const actions = {
       .finally(() => {
         if (notify) notify();
       });
-  },
+    },
+
+  loadOrganizations({ state, dispatch, commit }, { notify }) {
+    return deipRpc.api.getOrganisationsAsync()
+      .then((items) => {
+        commit('SET_ORGANIZATIONS_LIST', items);
+      })
+      .catch(err => { console.log(err) })
+      .finally(() => {
+        if (notify) notify();
+      });
+  }
 
   // loadWitnesses({ commit, dispatch, state }, { notify }) {
   //   return deipRpc.api.getActiveWitnessesAsync()
@@ -220,6 +237,10 @@ const mutations = {
 
   ['SET_ORGANIZATION'](state, org) {
     Vue.set(state, 'organization', org);
+  },
+
+  ['SET_ORGANIZATIONS_LIST'](state, list) {
+    Vue.set(state, 'organizations', list);
   },
 
   ['SET_PAYMENT'](state, payment) {

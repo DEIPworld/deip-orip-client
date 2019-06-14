@@ -243,7 +243,13 @@
                                 <div class="payment-status-chip-label">{{ withdrawalStatusMap[props.item.status].text }}</div>
                               </v-chip>
                             </td>
-                            <td><router-link class="a body-2" :to="{ name: 'AwardDetails', params: { org: props.item.organization.permlink, contractId: props.item.contract.id, awardId: props.item.awardId } }">{{ props.item.award | awardNumber }}</router-link></td>
+                            <td>
+                              <span v-if="!props.item.award.isSubaward"><router-link class="a body-2" :to="{ name: 'AwardDetails', params: { org: props.item.organization.permlink, contractId: props.item.contract.id, awardId: props.item.awardId } }">{{ props.item.award | awardNumber }}</router-link></span>
+                              <span v-else>
+                                <router-link v-if="props.item.requester.account.name == user.account.name" class="a body-2" :to="{ name: 'AwardDetails', params: { org: props.item.organization.permlink, contractId: props.item.contract.id, awardId: props.item.awardId } }">{{ props.item.award | awardNumber }}</router-link>
+                                <router-link v-else class="a body-2" :to="{ name: 'AwardDetails', params: { org: props.item.organization.permlink, contractId: props.item.contract.id, awardId: props.item.award.parentAward.id } }">{{ props.item.award.parentAward | awardNumber }}</router-link>
+                              </span>
+                            </td>
                             <td v-if="isProgramOfficer || isFinancialOfficer || isTreasury"><router-link class="a body-1" :to="{ name: 'UserDetails', params: { account_name: props.item.pi.account.name } }">{{ props.item.pi | fullname}}</router-link></td>
                             <td v-if="isProgramOfficer || isFinancialOfficer || isTreasury"><div><a href="#" class="a body-1">{{ props.item.organization.name }}</a></div></td>
                             <td>
