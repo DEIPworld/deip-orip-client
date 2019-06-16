@@ -38,6 +38,16 @@ axios.get('/env')
             ? theme[window.env.TENANT] 
             : theme['default'];
 
+        if (document && window.env.TENANT) {
+            if (window.env.TENANT == "nsf") {
+                document.title = "MyNSF - DEIP Grants Transparency";
+            } else if (window.env.TENANT == "mit") {
+                document.title = "MIT - DEIP Grants Transparency";
+            } else if (window.env.TENANT == "treasury") {
+                document.title = "U.S. Treasury - DEIP Grants Transparency";
+            }
+        }
+
         Vue.use(Vuetify, {
             theme: {
                 primary: window.env.THEME['primary-color'],
