@@ -144,7 +144,7 @@
                             </div>
                           </v-flex>
 
-                          <v-flex xs3 v-if="isProgramOfficer || isFinancialOfficer">
+                          <v-flex xs3 v-if="isProgramOfficer || isFinancialOfficer || isTreasury">
                             <div style="padding: 0px 10px 0px 10px">
                               <v-select
                                 v-model="paymentsFilter.organization"
@@ -156,7 +156,7 @@
                             </div>                       
                           </v-flex>
 
-                          <v-flex xs3 v-if="isProgramOfficer || isFinancialOfficer">
+                          <v-flex xs3 v-if="isProgramOfficer || isFinancialOfficer || isTreasury || isCertifier">
                             <div style="padding: 0px 10px 0px 10px">
                               <v-select
                                 v-model="paymentsFilter.pi"
