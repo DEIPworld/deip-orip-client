@@ -33,7 +33,7 @@
                     <td class="text-xs-center">{{ props.item.created_at | dateFormat('HH:mm D MMM YYYY', true) }}</td> 
                     <td class="text-xs-center">{{ props.item.publications.length }}</td>
 
-                    <td class="row justify-end">
+                    <td class="row legacy-justify-end">
                         <v-btn color="primary" flat :to="{
                                 name: 'claim-user-expertise-details', 
                                 params: { account_name: props.item.username, claim_id: props.item._id }

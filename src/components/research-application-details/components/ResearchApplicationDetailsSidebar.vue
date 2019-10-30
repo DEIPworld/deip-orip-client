@@ -17,7 +17,7 @@
       <div class="sidebar-fullwidth"><v-divider></v-divider></div>
       <div class="subheading bold c-mt-4">Applicants</div>
 
-      <div class="row-nowrap justify-between align-center c-pt-2 c-pb-2" v-for="(author, index) in membersList" :key="index">
+      <div class="row-nowrap legacy-justify-between align-center c-pt-2 c-pb-2" v-for="(author, index) in membersList" :key="index">
         <div>
           <v-avatar size="40px">
             <img v-if="author.profile" v-bind:src="author.profile.avatar | avatarSrc(40, 40, false)" />

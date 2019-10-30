@@ -6,7 +6,7 @@
                     <div class="row c-mh-auto group-members-max-width">
                         <div class="col-12">
                             <div v-if="showSelected">
-                                <div class="row-nowrap justify-between align-center c-pt-4"
+                                <div class="row-nowrap legacy-justify-between align-center c-pt-4"
                                     v-for="(ref, i) in selected" :key="i + '-picked'"
                                 >
                                     <div>{{ref.title}} ({{ref.research_title}})</div>
@@ -17,7 +17,7 @@
                             <v-divider v-if="showSelected" class="c-mt-4 c-mb-4" v-show="selected.length"></v-divider>
 
                             <div>
-                                <div class="row-nowrap justify-between align-center c-pt-4" v-for="(ref, i) in searchable" 
+                                <div class="row-nowrap legacy-justify-between align-center c-pt-4" v-for="(ref, i) in searchable" 
                                     :key="i + '-selectable'" v-if="!isReferenceSelected(ref)"
                                 >
                                     <div>

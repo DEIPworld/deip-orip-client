@@ -1,6 +1,6 @@
 <template>
     <div>
-        <div class="row justify-between align-center">
+        <div class="row legacy-justify-between align-center">
             <div class="title">{{ !headerText ? 'Research projects' : headerText }}</div>
             
             <v-menu offset-y>

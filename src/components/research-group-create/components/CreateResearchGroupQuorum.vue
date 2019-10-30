@@ -27,7 +27,7 @@
                             <div class="col-offset-2">
                                 <div class="c-pv-4 deip-blue-color bold">Advanced quorum setup</div>
 
-                                <div class="row align-items-end">
+                                <div class="row legacy-align-items-end">
                                     <div>
                                         <v-text-field class="width-6 pa-0"
                                             v-model="group.quorum.startResearch"
@@ -39,7 +39,7 @@
                                     <div class="col-grow c-ml-8">Start research</div>
                                 </div>
 
-                                <div class="row align-items-end">
+                                <div class="row legacy-align-items-end">
                                     <div>
                                         <v-text-field class="width-6 pa-0"
                                             v-model="group.quorum.createMaterial"
@@ -51,7 +51,7 @@
                                     <div class="col-grow c-ml-8">Publish research results</div>
                                 </div>
 
-                                <div class="row align-items-end">
+                                <div class="row legacy-align-items-end">
                                     <div>
                                         <v-text-field class="width-6 pa-0"
                                             v-model="group.quorum.changeReviewSharePercent"
@@ -63,7 +63,7 @@
                                     <div class="col-grow c-ml-8">Change research review share</div>
                                 </div>
 
-                                <div class="row align-items-end">
+                                <div class="row legacy-align-items-end">
                                     <div>
                                         <v-text-field class="width-6"
                                             v-model="group.quorum.inviteMembers"
@@ -75,7 +75,7 @@
                                     <div class="col-grow c-ml-8">Invite members</div>
                                 </div>
 
-                                <div class="row align-items-end">
+                                <div class="row legacy-align-items-end">
                                     <div>
                                         <v-text-field class="width-6 pa-0"
                                             v-model="group.quorum.dropoutMembers"
@@ -87,7 +87,7 @@
                                     <div class="col-grow c-ml-8">Dropout member</div>
                                 </div>
 
-                                <div class="row align-items-end">
+                                <div class="row legacy-align-items-end">
                                     <div>
                                         <v-text-field class="width-6"
                                             v-model="group.quorum.startResearchTokenSale"
@@ -99,7 +99,7 @@
                                     <div class="col-grow c-ml-8">Start research fundraise</div>
                                 </div>
 
-                                <div class="row align-items-end">
+                                <div class="row legacy-align-items-end">
                                     <div>
                                         <v-text-field class="width-6 pa-0"
                                             v-model="group.quorum.offerResearchTokens"
@@ -111,7 +111,7 @@
                                     <div class="col-grow c-ml-8">Offer research tokens</div>
                                 </div>
 
-                                <div class="row align-items-end">
+                                <div class="row legacy-align-items-end">
                                     <div>
                                         <v-text-field class="width-6 pa-0"
                                             v-model="group.quorum.sendFunds"
@@ -123,7 +123,7 @@
                                     <div class="col-grow c-ml-8">Send funds</div>
                                 </div>
 
-                                <div class="row align-items-end">
+                                <div class="row legacy-align-items-end">
                                     <div>
                                         <v-text-field class="width-6"
                                             v-model="group.quorum.changeQuorum"
@@ -135,7 +135,7 @@
                                     <div class="col-grow c-ml-8">Change quorum</div>
                                 </div>
 
-                                <div class="row align-items-end">
+                                <div class="row legacy-align-items-end">
                                     <div>
                                         <v-text-field class="width-6 pa-0"
                                             v-model="group.quorum.rebalanceGroupTokens"
@@ -155,7 +155,7 @@
             </div>
         </div>
 
-        <div class="row justify-center align-center">
+        <div class="row legacy-justify-center align-center">
             <v-btn flat small @click.native="prevStep()">
                 <v-icon dark class="pr-1">keyboard_arrow_left</v-icon> Back
             </v-btn>

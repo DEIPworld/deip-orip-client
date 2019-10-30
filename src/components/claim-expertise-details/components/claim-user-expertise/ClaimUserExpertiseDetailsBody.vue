@@ -42,7 +42,7 @@
         </v-card>
 
         <div class="c-mt-8">
-            <div class="row align-items-center justify-center" v-if="claim.username !== user.username && !isClaimAccepted">
+            <div class="row legacy-align-items-center legacy-justify-center" v-if="claim.username !== user.username && !isClaimAccepted">
                 <v-btn color="primary" class="ma-0 width-9" large
                     :disabled="isApproveBtnDisabled"
                     :loading="isApproveBtnLoading"
@@ -56,7 +56,7 @@
                 </div>
             </div>
 
-            <div class="row align-items-center justify-center" v-if="isClaimAccepted">
+            <div class="row legacy-align-items-center legacy-justify-center" v-if="isClaimAccepted">
                 <span class="headline green--text text--darken-1 c-pr-3">Claimed</span>
                 <v-icon size="35" color="green darken-1">mdi-check</v-icon>
             </div>

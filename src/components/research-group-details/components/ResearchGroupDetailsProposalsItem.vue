@@ -156,7 +156,7 @@
                     </div>
 
                     <div class="row" v-else-if="proposal.action === proposalTypes.START_RESEARCH_TOKEN_SALE">
-                        <div class="col-6 row justify-between">
+                        <div class="col-6 row legacy-justify-between">
                             <div class="width-8">
                                 <div>
                                     Min: <span class="bold right">{{ fromAssetsToFloat(proposal.data.soft_cap) }}</span>

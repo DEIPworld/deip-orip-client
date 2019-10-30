@@ -25,21 +25,6 @@
     order: 13;
 }
 
-.align-content-around {
-    align-content: space-around;
-}
-.align-content-center {
-    align-content: center;
-}
-.align-content-between {
-    align-content: space-between;
-}
-.align-content-end {
-    align-content: flex-end;
-}
-.align-content-start {
-    align-content: flex-start;
-}
 
 .create-columns(@view-port, @n, @i: 1) when (@i =< @n) {
     .col@{view-port}-@{i} {
@@ -68,48 +53,24 @@
         flex: 1 1 0;
         max-width: 100%;
     }
-    .col-shrink@{view-port} {
+    .legacy-col-shrink@{view-port} {
         flex: 0 0 auto;
         max-width: none;
     }
-
-    .justify-start@{view-port} {
-        justify-content: flex-start;
-    }
-    .justify-center@{view-port} {
+    .legacy-justify-center@{view-port} {
         justify-content: center;
     }
-    .justify-end@{view-port} {
+    .legacy-justify-end@{view-port} {
         justify-content: flex-end;
     }
-    .justify-between@{view-port} {
+    .legacy-justify-between@{view-port} {
         justify-content: space-between;
     }
-    .justify-around@{view-port} {
-        justify-content: space-around;
-    }
-
-    .align-items-start@{view-port} {
-        align-items: flex-start;
-    }
-    .align-items-center@{view-port} {
+    .legacy-align-items-center@{view-port} {
         align-items: center;
     }
-    .align-items-end@{view-port} {
+    .legacy-align-items-end@{view-port} {
         align-items: flex-end;
-    }
-
-    .align-self-end@{view-port} {
-        align-self: flex-end;
-    }
-    .align-self-start@{view-port} {
-        align-self: flex-start;
-    }
-    .align-self-center@{view-port} {
-        align-self: center;
-    }
-    .align-self-stretch@{view-port} {
-        align-self: stretch;
     }
 
     .create-columns(@view-port, @cols-count);

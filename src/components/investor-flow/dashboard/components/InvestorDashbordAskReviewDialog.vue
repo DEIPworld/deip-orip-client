@@ -122,7 +122,7 @@
                                         </v-radio-group>
 
                                         <div class="c-pt-8">
-                                            <div class="row-nowrap align-items-center">
+                                            <div class="row-nowrap legacy-align-items-center">
                                                 <v-avatar size="40px" class="">
                                                     <!-- <img v-if="member.profile" v-bind:src="member.profile.avatar | avatarSrc(40, 40, false)" /> -->
                                                     <v-gravatar :email="'shawna' + '@deip.world'" />
@@ -137,7 +137,7 @@
                                                 </div>
                                             </div>
 
-                                            <div class="row-nowrap align-items-center c-pt-4">
+                                            <div class="row-nowrap legacy-align-items-center c-pt-4">
                                                 <v-avatar size="40px" class="">
                                                     <!-- <img v-if="member.profile" v-bind:src="member.profile.avatar | avatarSrc(40, 40, false)" /> -->
                                                     <v-gravatar :email="'egow' + '@deip.world'" />
@@ -152,7 +152,7 @@
                                                 </div>
                                             </div>
 
-                                            <div class="row-nowrap align-items-center c-pt-4">
+                                            <div class="row-nowrap legacy-align-items-center c-pt-4">
                                                 <v-avatar size="40px" class="">
                                                     <!-- <img v-if="member.profile" v-bind:src="member.profile.avatar | avatarSrc(40, 40, false)" /> -->
                                                     <v-gravatar :email="'Egota' + '@deip.world'" />
@@ -174,7 +174,7 @@
                             <v-tab-item key="myReviewers">
                                 <div style="margin: 0px 2px 3px;">
                                     <v-card class="c-ph-12 c-pv-6">
-                                        <div class="row-nowrap align-items-center">
+                                        <div class="row-nowrap legacy-align-items-center">
                                             <v-avatar size="40px" class="">
                                                 <!-- <img v-if="member.profile" v-bind:src="member.profile.avatar | avatarSrc(40, 40, false)" /> -->
                                                 <v-gravatar :email="'shawna' + '@deip.world'" />
@@ -189,7 +189,7 @@
                                             </div>
                                         </div>
 
-                                        <div class="row-nowrap align-items-center c-pt-4">
+                                        <div class="row-nowrap legacy-align-items-center c-pt-4">
                                             <v-avatar size="40px" class="">
                                                 <!-- <img v-if="member.profile" v-bind:src="member.profile.avatar | avatarSrc(40, 40, false)" /> -->
                                                 <v-gravatar :email="'egow' + '@deip.world'" />
@@ -204,7 +204,7 @@
                                             </div>
                                         </div>
 
-                                        <div class="row-nowrap align-items-center c-pt-4">
+                                        <div class="row-nowrap legacy-align-items-center c-pt-4">
                                             <v-avatar size="40px" class="">
                                                 <!-- <img v-if="member.profile" v-bind:src="member.profile.avatar | avatarSrc(40, 40, false)" /> -->
                                                 <v-gravatar :email="'Egota' + '@deip.world'" />
@@ -219,7 +219,7 @@
                                             </div>
                                         </div>
 
-                                        <div class="row-nowrap align-items-center c-pt-4">
+                                        <div class="row-nowrap legacy-align-items-center c-pt-4">
                                             <v-avatar size="40px" class="">
                                                 <!-- <img v-if="member.profile" v-bind:src="member.profile.avatar | avatarSrc(40, 40, false)" /> -->
                                                 <v-gravatar :email="'Bern' + '@deip.world'" />
@@ -239,7 +239,7 @@
                         </v-tabs-items>
                     </div>
                     
-                    <div class="row justify-center c-p-6">
+                    <div class="row legacy-justify-center c-p-6">
                         <v-btn color="primary"
                         >Send a review request</v-btn>
                     </div>

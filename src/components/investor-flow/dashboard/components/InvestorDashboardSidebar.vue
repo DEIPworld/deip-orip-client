@@ -16,28 +16,28 @@
             </div>
 
             <div class="c-pt-4">
-                <div class="row-nowrap align-items-center">
+                <div class="row-nowrap legacy-align-items-center">
                     <div class="color-circle green"></div>
                     <div class="c-pl-2">My investments</div>
                     <div class="col-grow"></div>
                     <div class="">8</div>
                 </div>
 
-                <div class="row-nowrap align-items-center c-pt-2">
+                <div class="row-nowrap legacy-align-items-center c-pt-2">
                     <div class="color-circle yellow"></div>
                     <div class="c-pl-2">Reviewed</div>
                     <div class="col-grow"></div>
                     <div class="">5</div>
                 </div>
                 
-                <div class="row-nowrap align-items-center c-pt-2">
+                <div class="row-nowrap legacy-align-items-center c-pt-2">
                     <div class="color-circle red"></div>
                     <div class="c-pl-2">Computer science</div>
                     <div class="col-grow"></div>
                     <div class="">3</div>
                 </div>
                 
-                <div class="row-nowrap align-items-center c-pt-2">
+                <div class="row-nowrap legacy-align-items-center c-pt-2">
                     <div class="color-circle blue"></div>
                     <div class="c-pl-2">A. Lawrence</div>
                     <div class="col-grow"></div>
@@ -65,7 +65,7 @@
             </div>
 
             <div class="c-pt-4">
-                <div class="row-nowrap align-items-center">
+                <div class="row-nowrap legacy-align-items-center">
                     <v-avatar size="40px">
                         <v-gravatar :email="'shkor' + '@deip.world'" />
                     </v-avatar>
@@ -75,7 +75,7 @@
                     <div class="">8</div>
                 </div>
 
-                <div class="row-nowrap align-items-center c-pt-2">
+                <div class="row-nowrap legacy-align-items-center c-pt-2">
                     <v-avatar size="40px">
                         <v-gravatar :email="'debra' + '@deip.world'" />
                     </v-avatar>
@@ -85,7 +85,7 @@
                     <div class="">2</div>
                 </div>
 
-                <div class="row-nowrap align-items-center c-pt-2">
+                <div class="row-nowrap legacy-align-items-center c-pt-2">
                     <v-avatar size="40px">
                         <v-gravatar :email="'lawson' + '@deip.world'" />
                     </v-avatar>

@@ -28,7 +28,7 @@
             </div>
         </div>
         
-        <div class="row justify-center align-center">
+        <div class="row legacy-justify-center align-center">
             <v-btn color="primary" @click.native="nextStep()" :disabled="isNextDisabled()">Next</v-btn>
         </div>
     </div>

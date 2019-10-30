@@ -5,7 +5,7 @@
         <div>
             <div class="sm-title bold">Expertise Tokens</div>
             <div class="c-pt-4 c-pb-2">
-                <div class="row justify-between" v-for="(item, i) in expertise" :key="i">
+                <div class="row legacy-justify-between" v-for="(item, i) in expertise" :key="i">
                     <div class="half-bold">{{ item.discipline_name }}</div>
                     <div>{{ item.amount }}</div>
                 </div>

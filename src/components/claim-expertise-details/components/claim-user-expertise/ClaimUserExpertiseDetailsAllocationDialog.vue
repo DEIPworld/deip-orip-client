@@ -47,7 +47,7 @@
                         </div>
                     </v-form>
                     
-                    <div class="row justify-center c-p-6">
+                    <div class="row legacy-justify-center c-p-6">
                         <v-btn color="primary"
                             :disabled="!isFormValid || isLoading"
                             :loading="isLoading"

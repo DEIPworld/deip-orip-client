@@ -77,7 +77,7 @@
             </div>
 
             <div class="c-pt-4">
-                <div class="row-nowrap align-items-center">
+                <div class="row-nowrap legacy-align-items-center">
                     <v-avatar size="40px" class="">
                         <!-- <img v-if="member.profile" v-bind:src="member.profile.avatar | avatarSrc(40, 40, false)" /> -->
                         <v-gravatar :email="'rudberg' + '@deip.world'" />
@@ -180,7 +180,7 @@
             </div>
 
             <div class="c-pt-4">
-                <div class="row-nowrap align-items-center">
+                <div class="row-nowrap legacy-align-items-center">
                     <v-avatar size="40px" class="">
                         <!-- <img v-if="member.profile" v-bind:src="member.profile.avatar | avatarSrc(40, 40, false)" /> -->
                         <v-gravatar :email="'shawna' + '@deip.world'" />

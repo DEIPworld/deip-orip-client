@@ -1,5 +1,5 @@
 <template>
-    <v-container fluid fill-height class="pa-0 justify-center">
+    <v-container fluid fill-height class="pa-0 legacy-justify-center">
 
         <div class="page-container c-pv-10">
             <div class="headline text-align-center">Select your discipline</div>
@@ -27,12 +27,12 @@
                 Please be accurate, you will need the community assistance to change the disciplines
             </div>
 
-            <div class="row justify-center c-pt-8">
+            <div class="row legacy-justify-center c-pt-8">
                 <v-btn color="primary" @click="setDiscipline()" :disabled="selectedDiscipline === undefined">
                     Set disciplines
                 </v-btn>
             </div>
-            <div class="row justify-center c-pt-2">
+            <div class="row legacy-justify-center c-pt-2">
                 <router-link to="/research-feed" class="a">Skip</router-link>
             </div>
         </div>

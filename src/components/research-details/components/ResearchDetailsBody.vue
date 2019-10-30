@@ -3,7 +3,7 @@
         <!-- ### START Research Details Section ### -->
         <div class="c-mt-6">
             <div>
-                <div class="row justify-between align-center">
+                <div class="row legacy-justify-between align-center">
                     <div>
                         <v-icon size="18px">date_range</v-icon>
                         <span>Created on {{ research.created_at | dateFormat('D MMM YYYY', true) }}</span>

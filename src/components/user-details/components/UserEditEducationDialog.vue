@@ -80,7 +80,7 @@
                             </div>
 
                             <div class="col-2 c-pt-5">
-                                <div class="row justify-end">
+                                <div class="row legacy-justify-end">
                                     <v-checkbox class="ma-0 pa-0"
                                         label="In progress"
                                         :input-value="isActive"

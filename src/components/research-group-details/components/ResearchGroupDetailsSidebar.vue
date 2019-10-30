@@ -38,7 +38,7 @@
                 </div>
 
                 <div class="c-pt-4">
-                    <div class="row-nowrap align-items-center c-pb-4">
+                    <div class="row-nowrap legacy-align-items-center c-pb-4">
                         <!-- TODO: make service component which can manage our all SVG items -->
                         <div style="height: 30px; width: 30px;">
                             <svg width="100%" height="100%" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -79,7 +79,7 @@
                 <div class="sm-title bold">Join requests: {{pendingJoinRequests.length}}</div>
 
                 <div class="">
-                    <div v-for="(join, index) in pendingJoinRequests" class="row-nowrap justify-between align-center c-pt-4">
+                    <div v-for="(join, index) in pendingJoinRequests" class="row-nowrap legacy-justify-between align-center c-pt-4">
                         <div>
                             <v-avatar size="40px">
                                 <img v-if="join.user.profile" v-bind:src="join.user.profile.avatar | avatarSrc(40, 40, false)" />

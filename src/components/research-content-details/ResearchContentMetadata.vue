@@ -2,7 +2,7 @@
     <page-container>
         <contentbar>
             <div>
-                <div class="row justify-between align-items-end">
+                <div class="row legacy-justify-between legacy-align-items-end">
                     <div class="display-1 bold">
                         Block #{{contentMetadata.blockNum}}
                         <span v-if="isGenesisBlock" class="caption grey--text">GENESIS</span>

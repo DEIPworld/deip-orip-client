@@ -2,7 +2,7 @@
     <div> 
         <div class="title">Proposals</div>
 
-        <div class="row c-pt-2 justify-between align-center">
+        <div class="row c-pt-2 legacy-justify-between align-center">
             <div class="row align-center">
                 <span class="uppercase half-bold">Show approved proposals</span>
 

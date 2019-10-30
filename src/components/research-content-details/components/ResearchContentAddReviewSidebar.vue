@@ -13,7 +13,7 @@
             >{{ content.title }}</router-link>
         </div>
 
-        <div class="row justify-center">
+        <div class="row legacy-justify-center">
             <div>
                 <span class="c-pr-2">
                     <v-btn class="ma-0" 
@@ -34,7 +34,7 @@
             </div>
         </div>
         
-        <div class="row justify-center c-mt-10 c-mb-10">
+        <div class="row legacy-justify-center c-mt-10 c-mb-10">
             <div>
                 <v-btn color="primary" class="width-9"
                         @click="publishReview()"

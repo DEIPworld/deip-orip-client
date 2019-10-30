@@ -5,7 +5,7 @@
 			<div class="col-grow overflow-y-auto">
 				<div class="c-mh-auto review-comitee-max-width">
 					<v-card class="c-ph-12 c-pv-6">
-						<div class="row-nowrap align-items-center">
+						<div class="row-nowrap legacy-align-items-center">
 								<div class="col-12">
 									<v-autocomplete
 										:items="allGroupList"
@@ -18,7 +18,7 @@
 						</div>
 
 						<div v-if="opportunity.reveiwCommittee">
-							<div class="row-nowrap align-items-center c-mt-2" v-for="(member, i) in opportunity.reveiwCommittee.enrichedMembers">
+							<div class="row-nowrap legacy-align-items-center c-mt-2" v-for="(member, i) in opportunity.reveiwCommittee.enrichedMembers">
 								<v-avatar size="40px">
 									<img v-if="member.profile" v-bind:src="member.profile.avatar | avatarSrc(40, 40, false)" />
 									<v-gravatar v-else :title="member.account.name" :email="member.account.name + '@deip.world'" />
@@ -34,7 +34,7 @@
 				</div>
 			</div>
 		</div>
-		<div class="row justify-center align-center">
+		<div class="row legacy-justify-center align-center">
 			<v-btn flat small @click.native="prevStep()">
 					<v-icon dark class="pr-1">keyboard_arrow_left</v-icon> Back
 			</v-btn>

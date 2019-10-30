@@ -65,7 +65,7 @@
 							</div>
 							<v-divider></v-divider>
 							<div class="c-pv-4">
-								<div class="row justify-center">
+								<div class="row legacy-justify-center">
 									<div class="col-6 c-pr-4">
 										<v-text-field class="" 
                       label="Title" 
@@ -86,7 +86,7 @@
                     </v-text-field>
 									</div>
 								</div>
-								<div class="row justify-center">
+								<div class="row legacy-justify-center">
 									<div class="col-12">
 										<v-text-field class="" 
                       label="Organization" 
@@ -107,7 +107,7 @@
 							</div>
 							<div class="row c-pt-8">
 								<div class="col-12">
-									<div class="row align-items-center height-2 c-pt-4 c-pb-8">
+									<div class="row legacy-align-items-center height-2 c-pt-4 c-pb-8">
 										<div class="bold c-pr-4">Application</div>
 										<div class="half-bold primary--text">Application content</div>
 										<v-icon v-show="filesMap['Application Content.pdf']" color="green" class="c-pl-4">check_circle</v-icon>
@@ -117,47 +117,47 @@
 									<div class="row">
 										<div class="col-6">
 											<div class="bold">Mandatory forms</div>
-											<div class="row align-items-center height-2 c-pt-4">
+											<div class="row legacy-align-items-center height-2 c-pt-4">
 												<div class="half-bold primary--text">SF424 (R &amp; R) [V2.0]</div>
 												<v-icon v-show="filesMap['RR_SF424_2_0-V2.0.pdf']" color="green" class="c-pl-4">check_circle</v-icon>
 											</div>
-											<div class="row align-items-center height-2 c-pt-4">
+											<div class="row legacy-align-items-center height-2 c-pt-4">
 												<div class="half-bold primary--text">PHS 398 Cover Page Supplement [V4.0]</div>
 												<v-icon v-show="filesMap['PHS398_CoverPageSupplement_4_0-V4.0.pdf']" color="green" class="c-pl-4">check_circle</v-icon>
 											</div>
-											<div class="row align-items-center height-2 c-pt-4">
+											<div class="row legacy-align-items-center height-2 c-pt-4">
 												<div class="half-bold primary--text">Research And Related Other Project Information [V1.4]</div>
 												<v-icon v-show="filesMap['RR_OtherProjectInfo_1_4-V1.4.pdf']" color="green" class="c-pl-4">check_circle</v-icon>
 											</div>
-											<div class="row align-items-center height-2 c-pt-4">
+											<div class="row legacy-align-items-center height-2 c-pt-4">
 												<div class="half-bold primary--text">Project/Performance Site Location(s) [V2.0]</div>
 												<v-icon v-show="filesMap['PerformanceSite_2_0-V2.0.pdf']" color="green" class="c-pl-4">check_circle</v-icon>
 											</div>
-											<div class="row align-items-center height-2 c-pt-4">
+											<div class="row legacy-align-items-center height-2 c-pt-4">
 												<div class="half-bold primary--text">Research and Related Senior/Key Person Profile (Expanded) [V2.0]</div>
 												<v-icon v-show="filesMap['RR_KeyPersonExpanded_2_0-V2.0.pdf']" color="green" class="c-pl-4">check_circle</v-icon>
 											</div>
-											<div class="row align-items-center height-2 c-pt-4">
+											<div class="row legacy-align-items-center height-2 c-pt-4">
 												<div class="half-bold primary--text">PHS 398 Research Plan [V4.0]</div>
 												<v-icon v-show="filesMap['PHS398_ResearchPlan_4_0-V4.0.pdf']" color="green" class="c-pl-4">check_circle</v-icon>
 											</div>
-											<div class="row align-items-center height-2 c-pt-4">
+											<div class="row legacy-align-items-center height-2 c-pt-4">
 												<div class="half-bold primary--text">PHS Human Subjects and Clinical Trials Information [V1.0]</div>
 												<v-icon v-show="filesMap['PHSHumanSubjectsAndClinicalTrialsInfo-V1.0.pdf']" color="green" class="c-pl-4">check_circle</v-icon>
 											</div>
 										</div>
 										<div class="col-6">
 											<div class="bold">Optional forms</div>
-											<div class="row align-items-center height-2 c-pt-4">
+											<div class="row legacy-align-items-center height-2 c-pt-4">
 												<div class="half-bold primary--text">Research &amp; Related Budget [V1.4]</div>
 											</div>
-											<div class="row align-items-center height-2 c-pt-4">
+											<div class="row legacy-align-items-center height-2 c-pt-4">
 												<div class="half-bold primary--text">R &amp; R Subaward Budget Attachment(s) Form 5 YR 30 ATT [V1.4]</div>
 											</div>
-											<div class="row align-items-center height-2 c-pt-4">
+											<div class="row legacy-align-items-center height-2 c-pt-4">
 												<div class="half-bold primary--text">PHS 398 Modular Budget [V1.2]</div>
 											</div>
-											<div class="row align-items-center height-2 c-pt-4">
+											<div class="row legacy-align-items-center height-2 c-pt-4">
 												<div class="half-bold primary--text">PHS Assignment Request Form [V2.0]</div>
 											</div>
 										</div>

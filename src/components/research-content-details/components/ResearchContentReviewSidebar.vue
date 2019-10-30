@@ -14,7 +14,7 @@
             <div class="subheading bold text-align-center">Expertise Contribution Index</div>
             <div class="c-mt-4">
                 <div v-for="(eci, index) in eciList" :key="index"
-                    class="row align-center justify-between eci-item c-ph-2"
+                    class="row align-center legacy-justify-between eci-item c-ph-2"
                     :class="index === 0 ? '' : 'c-mt-1'"
                 >
                     <div class="grey--text">ECI</div>

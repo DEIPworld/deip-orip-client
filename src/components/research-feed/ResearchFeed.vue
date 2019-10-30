@@ -35,7 +35,7 @@
                 <research-feed-order-by></research-feed-order-by>
             </v-flex>
 
-            <div class="row justify-between align-end c-pt-10">
+            <div class="row legacy-justify-between align-end c-pt-10">
                 <div class="title">Search Results: {{ researchFeed.length }}</div>
                 <div class="list-state-label half-bold" @click.stop="toggleFeed()">
                     <span v-show="!allCollapsed">Collapse all</span>

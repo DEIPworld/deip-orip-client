@@ -15,7 +15,7 @@
                         </v-text-field>
                         <div>
 
-                            <div class="row-nowrap justify-between align-center c-pt-4"
+                            <div class="row-nowrap legacy-justify-between align-center c-pt-4"
                                 v-for="(user, i) in group.members" :key="i + '-picked'">
                                 <div>
                                     <v-avatar size="30px">
@@ -31,7 +31,7 @@
                         <v-divider class="c-mt-4" v-show="group.members.length > 0"></v-divider>
                         <div>
 
-                            <div class="row-nowrap justify-between align-center c-pt-4" 
+                            <div class="row-nowrap legacy-justify-between align-center c-pt-4" 
                                 v-for="(user, i) in selectableUsers" :key="i + '-selectable'">
                                 <div>
                                     <v-avatar size="30px">
@@ -49,7 +49,7 @@
 
             </div>
         </div>
-        <div class="row justify-center align-center">
+        <div class="row legacy-justify-center align-center">
             <v-btn flat small @click.native="prevStep()">
                 <v-icon dark class="pr-1">keyboard_arrow_left</v-icon> Back
             </v-btn>

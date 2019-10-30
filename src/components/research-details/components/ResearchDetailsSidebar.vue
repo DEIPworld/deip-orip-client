@@ -13,7 +13,7 @@
                 indeterminate color="primary"
             ></v-progress-circular>
 
-            <div v-if="isLoadingResearchMembers === false" class="row-nowrap justify-between align-center c-pt-4 c-pb-2" v-for="(member, index) in membersList" :key="index">
+            <div v-if="isLoadingResearchMembers === false" class="row-nowrap legacy-justify-between align-center c-pt-4 c-pb-2" v-for="(member, index) in membersList" :key="index">
                 <div>
                     <v-avatar size="40px">
                         <img v-if="member.profile" v-bind:src="member.profile.avatar | avatarSrc(40, 40, false)" />
@@ -91,7 +91,7 @@
                     class="eci-item"
                     :class="index === 0 ? '' : 'c-mt-1'"
                 >
-                    <div class="row align-center justify-between c-ph-2">
+                    <div class="row align-center legacy-justify-between c-ph-2">
                         <div class="grey--text">ECI</div>
                         <div class="c-pv-2 eci-label">{{ eci.disciplineName }}: {{ eci.value }}</div>
                     </div>

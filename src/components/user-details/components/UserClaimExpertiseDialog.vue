@@ -75,7 +75,7 @@
                             </div>
                         </v-card>
                         
-                        <div class="row justify-center c-ph-6 c-pt-6">
+                        <div class="row legacy-justify-center c-ph-6 c-pt-6">
                             <v-btn color="primary"
                                 :disabled="isClaimBtnDisabled || isLoading"
                                 :loading="isLoading"

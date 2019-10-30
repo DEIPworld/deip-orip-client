@@ -10,7 +10,7 @@
                             Each research group is assigned its own Research Group Tokens which are distributed among its members and can be used to manage the group and its research activity.
                         </div>
                         <div class="body-2 c-pv-4">Distribute tokens of this group as follows:</div>
-                        <div class="row-nowrap justify-between align-center c-pt-4" 
+                        <div class="row-nowrap legacy-justify-between align-center c-pt-4" 
                             v-for="(member, i) in group.members" :key="i"
                         >
                             <div>
@@ -40,7 +40,7 @@
                 </div>
             </div>
         </div>
-        <div class="row justify-center align-center">
+        <div class="row legacy-justify-center align-center">
             <v-btn flat small @click.native="prevStep()">
                 <v-icon dark class="pr-1">keyboard_arrow_left</v-icon> Back
             </v-btn>

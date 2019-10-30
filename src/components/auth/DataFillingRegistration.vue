@@ -1,5 +1,5 @@
 <template>
-    <v-container fluid fill-height class="pa-0 justify-center">
+    <v-container fluid fill-height class="pa-0 legacy-justify-center">
 
         <div class="page-container">
             <div class="text-align-center">

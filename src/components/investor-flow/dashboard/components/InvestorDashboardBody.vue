@@ -2,7 +2,7 @@
     <div>
         <div class="display-1 half-bold">Investor 1 Inbox</div>
 
-        <div class="row justify-between align-center c-pt-6">
+        <div class="row legacy-justify-between align-center c-pt-6">
             <div class="title">Recent updates</div>
             
             <v-menu offset-y>
@@ -31,7 +31,7 @@
 
         <div class="c-pt-6">
             <v-card>
-                <div class="row-nowrap align-items-center item">
+                <div class="row-nowrap legacy-align-items-center item">
                     <div class="item-tag primary"></div>
 
                     <div class="c-pl-2 c-pr-2">
@@ -50,7 +50,7 @@
 
                 <v-divider></v-divider>
                 
-                <div class="row-nowrap align-items-center item">
+                <div class="row-nowrap legacy-align-items-center item">
                     <div class="item-tag primary"></div>
 
                     <div class="c-pl-2 c-pr-2">
@@ -68,7 +68,7 @@
 
                 <v-divider></v-divider>
                 
-                <div class="row-nowrap align-items-center item">
+                <div class="row-nowrap legacy-align-items-center item">
                     <div class="item-tag primary"></div>
 
                     <div class="c-pl-2 c-pr-2">
@@ -93,13 +93,13 @@
         <!--
             Dublicating
         -->
-        <div class="row justify-between align-center c-pt-10">
+        <div class="row legacy-justify-between align-center c-pt-10">
             <div class="title">Unread reviews: 3</div>
         </div>
 
         <div class="c-pt-6">
             <v-card>
-                <div class="row-nowrap align-items-center item">
+                <div class="row-nowrap legacy-align-items-center item">
                     <div class="item-tag"></div>
 
                     <div class="c-pl-2 c-pr-2">
@@ -116,7 +116,7 @@
 
                 <v-divider></v-divider>
                 
-                <div class="row-nowrap align-items-center item">
+                <div class="row-nowrap legacy-align-items-center item">
                     <div class="item-tag"></div>
 
                     <div class="c-pl-2 c-pr-2">
@@ -133,7 +133,7 @@
 
                 <v-divider></v-divider>
                 
-                <div class="row-nowrap align-items-center item">
+                <div class="row-nowrap legacy-align-items-center item">
                     <div class="item-tag primary"></div>
 
                     <div class="c-pl-2 c-pr-2">
@@ -152,13 +152,13 @@
         </div>
 
         
-        <div class="row justify-between align-center c-pt-10">
+        <div class="row legacy-justify-between align-center c-pt-10">
             <div class="title">Reviews request: 2</div>
         </div>
 
         <div class="c-pt-6">
             <v-card>
-                <div class="row-nowrap align-items-center item">
+                <div class="row-nowrap legacy-align-items-center item">
                     <div class="item-tag primary"></div>
 
                     <div class="c-pl-2 c-pr-2">
@@ -176,7 +176,7 @@
 
                 <v-divider></v-divider>
                 
-                <div class="row-nowrap align-items-center item">
+                <div class="row-nowrap legacy-align-items-center item">
                     <div class="item-tag"></div>
 
                     <div class="c-pl-2 c-pr-2">

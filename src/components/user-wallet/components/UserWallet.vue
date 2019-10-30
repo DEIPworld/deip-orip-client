@@ -180,7 +180,7 @@
                                             </div>
                                         </div>
 
-                                        <div class="width-8 col-shrink list-body-cell text-align-center half-bold">
+                                        <div class="width-8 legacy-col-shrink list-body-cell text-align-center half-bold">
                                             <router-link v-if="transfer[1].op[1].from === user.username" class="a"
                                                 :to="{ name: 'UserDetails', params: { account_name: transfer[1].op[1].to }}"
                                             >{{ transfer[1].op[1].to }}</router-link>
@@ -190,15 +190,15 @@
                                             >{{ transfer[1].op[1].from }}</router-link>
                                         </div>
 
-                                        <div class="width-10 col-shrink list-body-cell text-align-center half-bold">
+                                        <div class="width-10 legacy-col-shrink list-body-cell text-align-center half-bold">
                                             {{ transfer[1].timestamp | dateFormat('HH:mm D MMM YYYY', true) }}
                                         </div>
 
                                         <div v-if="transfer[1].op[1].from === user.username"
-                                            class="width-10 col-shrink list-body-cell text-align-center red--text text--darken-2"
+                                            class="width-10 legacy-col-shrink list-body-cell text-align-center red--text text--darken-2"
                                         >- {{ fromAssetsToFloat(transfer[1].op[1].amount) }} DT</div>
                                         <div v-else
-                                            class="width-10 col-shrink list-body-cell text-align-center green--text text--darken-2"
+                                            class="width-10 legacy-col-shrink list-body-cell text-align-center green--text text--darken-2"
                                         >+ {{ fromAssetsToFloat(transfer[1].op[1].amount) }} DT</div>
                                     </div>
 
