@@ -1,8 +1,8 @@
 <template>
     <div class="column full-height">
-        <div class="c-mb-4 col-grow column">
+        <div class="c-mb-4 legacy-col-grow column">
             <div class="step-title">Quorum setup</div>
-            <div class="col-grow overflow-y-auto">
+            <div class="legacy-col-grow overflow-y-auto">
 
                 <div class="row c-mh-auto group-quorum-max-width">
                     <div class="col-12">
@@ -24,7 +24,7 @@
                         ></v-text-field>
 
                         <div class="row" v-show="isAdvanced">
-                            <div class="col-offset-2">
+                            <div class="legacy-col-offset-2">
                                 <div class="c-pv-4 deip-blue-color bold">Advanced quorum setup</div>
 
                                 <div class="row legacy-align-items-end">
@@ -36,7 +36,7 @@
                                             hide-details
                                         ></v-text-field>
                                     </div>
-                                    <div class="col-grow c-ml-8">Start research</div>
+                                    <div class="legacy-col-grow c-ml-8">Start research</div>
                                 </div>
 
                                 <div class="row legacy-align-items-end">
@@ -48,7 +48,7 @@
                                             hide-details
                                         ></v-text-field>
                                     </div>
-                                    <div class="col-grow c-ml-8">Publish research results</div>
+                                    <div class="legacy-col-grow c-ml-8">Publish research results</div>
                                 </div>
 
                                 <div class="row legacy-align-items-end">
@@ -60,7 +60,7 @@
                                             hide-details
                                         ></v-text-field>
                                     </div>
-                                    <div class="col-grow c-ml-8">Change research review share</div>
+                                    <div class="legacy-col-grow c-ml-8">Change research review share</div>
                                 </div>
 
                                 <div class="row legacy-align-items-end">
@@ -72,7 +72,7 @@
                                             hide-details
                                         ></v-text-field>
                                     </div>
-                                    <div class="col-grow c-ml-8">Invite members</div>
+                                    <div class="legacy-col-grow c-ml-8">Invite members</div>
                                 </div>
 
                                 <div class="row legacy-align-items-end">
@@ -84,7 +84,7 @@
                                             hide-details
                                         ></v-text-field>
                                     </div>
-                                    <div class="col-grow c-ml-8">Dropout member</div>
+                                    <div class="legacy-col-grow c-ml-8">Dropout member</div>
                                 </div>
 
                                 <div class="row legacy-align-items-end">
@@ -96,7 +96,7 @@
                                             hide-details
                                         ></v-text-field>
                                     </div>
-                                    <div class="col-grow c-ml-8">Start research fundraise</div>
+                                    <div class="legacy-col-grow c-ml-8">Start research fundraise</div>
                                 </div>
 
                                 <div class="row legacy-align-items-end">
@@ -108,7 +108,7 @@
                                             hide-details
                                         ></v-text-field>
                                     </div>
-                                    <div class="col-grow c-ml-8">Offer research tokens</div>
+                                    <div class="legacy-col-grow c-ml-8">Offer research tokens</div>
                                 </div>
 
                                 <div class="row legacy-align-items-end">
@@ -120,7 +120,7 @@
                                             hide-details
                                         ></v-text-field>
                                     </div>
-                                    <div class="col-grow c-ml-8">Send funds</div>
+                                    <div class="legacy-col-grow c-ml-8">Send funds</div>
                                 </div>
 
                                 <div class="row legacy-align-items-end">
@@ -132,7 +132,7 @@
                                             hide-details
                                         ></v-text-field>
                                     </div>
-                                    <div class="col-grow c-ml-8">Change quorum</div>
+                                    <div class="legacy-col-grow c-ml-8">Change quorum</div>
                                 </div>
 
                                 <div class="row legacy-align-items-end">
@@ -144,7 +144,7 @@
                                             hide-details
                                         ></v-text-field>
                                     </div>
-                                    <div class="col-grow c-ml-8">Rebalance research group tokens</div>
+                                    <div class="legacy-col-grow c-ml-8">Rebalance research group tokens</div>
                                 </div>
 
                             </div>

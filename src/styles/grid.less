@@ -6,23 +6,13 @@
     display: flex;
     flex-direction: column;
 }
-.row-nowrap {
+.legacy-row-nowrap {
     display: flex;
 }
-.row-reverse {
+.legacy-row-reverse {
     display: flex;
     flex-wrap: wrap;
     flex-direction: row-reverse;
-}
-.column-reverse {
-    display: flex;
-    flex-direction: column-reverse;
-}
-.order-first {
-    order: -1;
-}
-.order-last {
-    order: 13;
 }
 
 
@@ -35,21 +25,17 @@
     .create-columns(@view-port, @n, (@i + 1));
 }
 .create-column-offsets(@view-port, @n, @i: 1) when (@i =< (@n - 1)) {
-    .col-offset@{view-port}-@{i} {
+    .legacy-col-offset@{view-port}-@{i} {
         margin-left: @i / @n * 100%;
     }
 
     .create-column-offsets(@view-port, @n, (@i + 1));
 }
 .create-order-classes(@n, @i: 1) when (@i =< @n) {
-    .order-@{i} {
-        order: @i;
-    }
-
     .create-order-classes(@n, (@i + 1));
 }
 .create-classes-for-view-port(@view-port, @cols-count) {
-    .col-grow@{view-port} {
+    .legacy-col-grow@{view-port} {
         flex: 1 1 0;
         max-width: 100%;
     }

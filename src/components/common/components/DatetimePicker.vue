@@ -29,7 +29,7 @@
                 ></v-date-picker>
             </v-menu>
 
-            <v-menu class="col-grow" bottom left offset-y :nudge-top="20">
+            <v-menu class="legacy-col-grow" bottom left offset-y :nudge-top="20">
                 <v-text-field
                     slot="activator"
                     ref="timePicker"

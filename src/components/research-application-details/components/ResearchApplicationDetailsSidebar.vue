@@ -17,7 +17,7 @@
       <div class="sidebar-fullwidth"><v-divider></v-divider></div>
       <div class="subheading bold c-mt-4">Applicants</div>
 
-      <div class="row-nowrap legacy-justify-between align-center c-pt-2 c-pb-2" v-for="(author, index) in membersList" :key="index">
+      <div class="legacy-row-nowrap legacy-justify-between align-center c-pt-2 c-pb-2" v-for="(author, index) in membersList" :key="index">
         <div>
           <v-avatar size="40px">
             <img v-if="author.profile" v-bind:src="author.profile.avatar | avatarSrc(40, 40, false)" />
@@ -53,7 +53,7 @@
       <div v-if="isCreatingReviewAvailable" class="c-mt-4">
         <v-btn @click="goAddReview()" dark round outline color="primary" class="full-width ma-0">
           <v-icon small>add</v-icon>
-          <div class="col-grow add-review-label">
+          <div class="legacy-col-grow add-review-label">
             Add a review
           <!--  <span class="caption grey--text">
                 reward {{convertToPercent(research.review_share_in_percent)}}%

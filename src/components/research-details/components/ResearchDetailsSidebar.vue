@@ -13,7 +13,7 @@
                 indeterminate color="primary"
             ></v-progress-circular>
 
-            <div v-if="isLoadingResearchMembers === false" class="row-nowrap legacy-justify-between align-center c-pt-4 c-pb-2" v-for="(member, index) in membersList" :key="index">
+            <div v-if="isLoadingResearchMembers === false" class="legacy-row-nowrap legacy-justify-between align-center c-pt-4 c-pb-2" v-for="(member, index) in membersList" :key="index">
                 <div>
                     <v-avatar size="40px">
                         <img v-if="member.profile" v-bind:src="member.profile.avatar | avatarSrc(40, 40, false)" />
@@ -205,12 +205,12 @@
                         </div>
 
                         <div class="c-mt-8">
-                            <div class="row-nowrap">
+                            <div class="legacy-row-nowrap">
                                 <div class="grey--text c-mr-4 cap-value">0</div>
 
-                                <div class="col-grow pos-relative row-nowrap align-center">
+                                <div class="legacy-col-grow pos-relative legacy-row-nowrap align-center">
                                     <div class="chapter-line black" :style="{ width: currentCapPercent + '%' }"></div>
-                                    <div class="chapter-line grey lighten-1 col-grow"></div>
+                                    <div class="chapter-line grey lighten-1 legacy-col-grow"></div>
 
                                     <div class="pos-absolute" :style="{ left: currentCapPercent + '%' }">
                                         <v-tooltip bottom color="white">

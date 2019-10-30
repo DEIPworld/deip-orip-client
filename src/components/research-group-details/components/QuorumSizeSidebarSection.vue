@@ -1,6 +1,6 @@
 <template>
     <div>
-        <div class="row-nowrap legacy-justify-between">
+        <div class="legacy-row-nowrap legacy-justify-between">
             <div class="subheading bold">Quorum size</div>
 
             <div class="mode-btn-wrapper" v-if="isResearchGroupMember">
@@ -14,7 +14,7 @@
             <div v-if="!isResearchGroupMember || !isEditMode">
                 <div v-for="(proposalBlock, i) in proposalOrderMap" :class="{ 'c-pt-2': i !== 0 }">
                     <div v-for="proposalData in proposalBlock">
-                        <div class="row-nowrap legacy-justify-between legacy-align-items-center">
+                        <div class="legacy-row-nowrap legacy-justify-between legacy-align-items-center">
                             <div class="half-bold line-height-1">{{ proposalLabels[proposalData.key] }}</div>
                             <div class="width-3 text-align-right">{{ proposalData.value }}%</div>
                         </div>
@@ -25,8 +25,8 @@
             <div v-else>
                 <div v-for="(proposalBlock, i) in proposalOrderMap" :class="{ 'c-pt-3': i !== 0 }">
                     <div v-for="proposalData in proposalBlock">
-                        <div class="row-nowrap legacy-align-items-center">
-                            <div class="col-grow half-bold line-height-1">{{ proposalLabels[proposalData.key] }}</div>
+                        <div class="legacy-row-nowrap legacy-align-items-center">
+                            <div class="legacy-col-grow half-bold line-height-1">{{ proposalLabels[proposalData.key] }}</div>
 
                             <v-text-field class="percent-input"
                                 v-model="proposalData.value"

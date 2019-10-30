@@ -72,7 +72,7 @@
 
             <div v-if="isLoggedIn() && !isGrantor && !isOfficer" class="mx-3" style="width: 180px">
                 <v-btn dark round color="primary" class="full-width ma-0" to="/create-new-research">
-                    <div class="col-grow">Add Research</div>
+                    <div class="legacy-col-grow">Add Research</div>
                     <v-icon dark small class="ml-2">add</v-icon>
                 </v-btn>
             </div>

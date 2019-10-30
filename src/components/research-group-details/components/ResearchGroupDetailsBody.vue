@@ -44,13 +44,13 @@
 
                             <template v-for="(member, i) in members">
                                 <div class="list-line">
-                                    <div class="row-nowrap col-4 list-body-cell">
+                                    <div class="legacy-row-nowrap col-4 list-body-cell">
                                         <v-avatar size="40px" class="c-pt-3">
                                             <img v-if="member.profile" v-bind:src="member.profile.avatar | avatarSrc(40, 40, false)" />
                                             <v-gravatar v-else :email="member.account.name + '@deip.world'" />
                                         </v-avatar>
 
-                                        <div class="col-grow c-pl-4">
+                                        <div class="legacy-col-grow c-pl-4">
                                             <router-link :to="{
                                                     name: 'UserDetails', 
                                                     params: { account_name: member.account.name }
@@ -106,13 +106,13 @@
                                             <v-divider></v-divider>
 
                                             <div class="row c-pv-4 c-ph-6 legacy-align-items-center">
-                                                <div class="row-nowrap col-4">
+                                                <div class="legacy-row-nowrap col-4">
                                                     <v-avatar size="40px" class="c-pt-3">
                                                         <img v-if="invite.user.profile" v-bind:src="invite.user.profile.avatar | avatarSrc(40, 40, false)" />
                                                         <v-gravatar v-else :email="invite.user.account.name + '@deip.world'" />
                                                     </v-avatar>
 
-                                                    <div class="col-grow c-pl-4">
+                                                    <div class="legacy-col-grow c-pl-4">
                                                         <router-link :to="{
                                                                 name: 'UserDetails', 
                                                                 params: { account_name: invite.user.account.name }
@@ -124,7 +124,7 @@
                                                     </div>
                                                 </div>
 
-                                                <div class="col-grow text-align-center">{{ invite.user | userLocation }}</div>
+                                                <div class="legacy-col-grow text-align-center">{{ invite.user | userLocation }}</div>
 
                                                 <div class="col-2 text-align-center">
                                                     <span class="grey--text">Amount:</span>

@@ -44,7 +44,7 @@
             </div>
         </div>
 
-        <div class="row-nowrap c-pt-1" v-show="!research.isCollapsed">
+        <div class="legacy-row-nowrap c-pt-1" v-show="!research.isCollapsed">
             <div class="c-pr-8 grey--text" v-if="research.created_at">
                 <v-icon color="grey" size="18px">event</v-icon> Created
                 <span class="half-bold">{{ research.created_at | dateFormat('D MMM, YYYY', true) }}</span>

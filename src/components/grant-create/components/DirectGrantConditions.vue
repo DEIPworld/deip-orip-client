@@ -1,6 +1,6 @@
 <template>
     <div class="column full-height">
-        <div class="c-mb-4 col-grow column">
+        <div class="c-mb-4 legacy-col-grow column">
             <div class="step-title">Direct grants distribution</div>
             <div class="sm-title bold c-mb-2 text-align-center">Please type special conditions</div>
 
@@ -8,7 +8,7 @@
                 You can grant your expertise tokens that match researcher's disciplines
             </div>
 
-            <div class="col-grow overflow-y-auto">
+            <div class="legacy-col-grow overflow-y-auto">
 
                 <div class="c-mh-auto full-height discipline-conditions">
                     <div class="c-pt-6">

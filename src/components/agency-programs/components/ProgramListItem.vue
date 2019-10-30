@@ -9,17 +9,17 @@
                     </router-link>
                 </div>
                 <div class="row c-pl-5 c-pt-2 c-pb-3">
-                    <div class="col-grow caption grey--text">
+                    <div class="legacy-col-grow caption grey--text">
                         <span class="c-pr-2">Posted Date:</span>
                         <v-icon color="grey" small>event</v-icon>
                         <span>{{new Date(`${program.posted_date}Z`).toDateString()}}</span>
                     </div>
-                    <div class="col-grow caption grey--text">
+                    <div class="legacy-col-grow caption grey--text">
                         <span class="c-pr-2">Closing Date:</span>
                         <v-icon color="grey" small>event</v-icon>
                         <span>{{new Date(`${program.close_date}Z`).toDateString()}}</span>
                     </div>
-                    <div class="col-grow caption grey--text">
+                    <div class="legacy-col-grow caption grey--text">
                         <span>#{{program.funding_opportunity_number}}</span>
                     </div>
                 </div>

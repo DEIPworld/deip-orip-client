@@ -52,7 +52,7 @@
                     ></v-progress-circular>
                     
                     <div v-if="isLoadingUsers === false">
-                        <div v-for="(user, index) in users" :key="index" class="row-nowrap user-item legacy-justify-between align-center c-pt-2 c-pb-2" 
+                        <div v-for="(user, index) in users" :key="index" class="legacy-row-nowrap user-item legacy-justify-between align-center c-pt-2 c-pb-2" 
                             v-bind:class="{'selected-user': user === selectedUser }"
                             @click="selectUser(user)">
                             <div>

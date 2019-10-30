@@ -32,7 +32,7 @@
 					<div class="subheading c-pt-5 c-pb-3"><span class="caption grey--text">{{contentRef.hash}}</span></div>
 					<v-card v-for="file in contentRef.packageFiles" :key="file.hash">
 						<v-card-text>
-							<div class="row-nowrap">
+							<div class="legacy-row-nowrap">
 								<span class="col-10">
 									<a v-if="isPreviewAvailable(file.ext)" target="_blank" class="a" :href="`${fileStorageBaseUrl}/content/refs/research/package/${contentRef.researchId}/${contentRef.hash}/${file.hash}`">
 										{{file.filename}}

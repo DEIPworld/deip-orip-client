@@ -38,7 +38,7 @@
                 <div v-for="item in flattenedApplicationsList"> 
                     <v-card>
                         <v-card-text>
-                            <div class="row-nowrap">
+                            <div class="legacy-row-nowrap">
                                 <div class="col-8">
                                     <span class="c-pr-3">
                                         <v-avatar size="20px">
@@ -142,7 +142,7 @@
                                     <div class="caption grey--text c-pt-2"> {{contentAuthorsStr(content.authors)}}</div>
                                     <div class="c-pt-2 half-bold"></div>
                                     <div>
-                                        <div class="row-nowrap">
+                                        <div class="legacy-row-nowrap">
                                             <div v-for="(eci, index) in getContentEciList(content)" class="grey--text">
                                                 <span>
                                                     <span class="c-pr-1">
@@ -156,7 +156,7 @@
                                             </div>
                                         </div>
 
-                                        <div class="row-nowrap c-mt-3">
+                                        <div class="legacy-row-nowrap c-mt-3">
                                             <!-- <div class="c-pr-10">
                                                 <v-icon size="18px">visibility</v-icon> <span>1999</span>
                                             </div> -->

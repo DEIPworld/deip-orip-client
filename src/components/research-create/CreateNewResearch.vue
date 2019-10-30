@@ -33,7 +33,7 @@
                     </v-stepper-step> -->
                 </v-stepper-header>
 
-                <v-stepper-items class="col-grow">
+                <v-stepper-items class="legacy-col-grow">
                     <v-stepper-content step="1">
                         <div class="full-height">
                             <create-research-pick-discipline

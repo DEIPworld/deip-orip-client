@@ -15,7 +15,7 @@
                     <div class="bold">Block ID</div>
                     <div class="row grey-border-stripe">
                         <div class="pill width-7 white--text">RIPEMD-160</div>
-                        <div class="col-grow pill-value">{{contentMetadata.blockId}}</div>
+                        <div class="legacy-col-grow pill-value">{{contentMetadata.blockId}}</div>
                     </div>
                 </div>
 
@@ -32,7 +32,7 @@
                     </div>
                     <div class="row grey-border-stripe">
                         <div class="pill width-7 white--text">Public ID</div>
-                        <div class="col-grow pill-value">{{contentMetadata.research.id}}</div>
+                        <div class="legacy-col-grow pill-value">{{contentMetadata.research.id}}</div>
                     </div>
                 </div> -->
 
@@ -48,7 +48,7 @@
                     </div>
                     <div class="row grey-border-stripe">
                         <div class="pill width-7 white--text">MD5</div>
-                        <div class="col-grow pill-value">{{getContentHash(contentMetadata.content.content)}}</div>
+                        <div class="legacy-col-grow pill-value">{{getContentHash(contentMetadata.content.content)}}</div>
                     </div>
                 </div>
                 
@@ -63,7 +63,7 @@
                     <div class="row">
                         <div class="bold width-7">Signee</div>
 
-                        <div class="col-grow">
+                        <div class="legacy-col-grow">
                             <div>
                                 <div class="row">
                                     <v-avatar size="40px">
@@ -79,20 +79,20 @@
                                 </div>
 
                                 <div class="grey-border-stripe c-mt-4">
-                                    <div class="row-nowrap">
+                                    <div class="legacy-row-nowrap">
                                         <div class="pill width-7">
                                             <div class="white--text">SHA256</div>
                                         </div>
-                                        <div class="col-grow pill-value">
+                                        <div class="legacy-col-grow pill-value">
                                             <div>{{ contentMetadata.witness.signingKey }}</div>
                                         </div>
                                     </div>
                                     
-                                    <div class="row-nowrap">
+                                    <div class="legacy-row-nowrap">
                                         <div class="pill width-7 display-flex">
                                             <div class="grey--text text--darken-3 c-m-auto">Signature</div>
                                         </div>
-                                        <div class="col-grow pill-value">
+                                        <div class="legacy-col-grow pill-value">
                                             <div class="">{{ contentMetadata.witness.signature }}</div>
                                         </div>
                                     </div>
@@ -106,7 +106,7 @@
                     <div class="row">
                         <div class="bold width-7">Approved by</div>
 
-                        <div class="col-grow">
+                        <div class="legacy-col-grow">
 
                             <div class="c-mb-4" v-for="voter in contentMetadata.voters">
                                 <div class="row">
@@ -123,20 +123,20 @@
                                 </div>
 
                                 <div class="grey-border-stripe c-mt-4">
-                                    <div class="row-nowrap">
+                                    <div class="legacy-row-nowrap">
                                         <div class="pill width-7">
                                             <div class="white--text">SHA256</div>
                                         </div>
-                                        <div class="col-grow pill-value">
+                                        <div class="legacy-col-grow pill-value">
                                             <div>{{ voter.user.account.owner.key_auths[0][0] }}</div>
                                         </div>
                                     </div>
                                     
-                                    <div class="row-nowrap">
+                                    <div class="legacy-row-nowrap">
                                         <div class="pill width-7 display-flex">
                                             <div class="grey--text text--darken-3 c-m-auto">Signature</div>
                                         </div>
-                                        <div class="col-grow pill-value">
+                                        <div class="legacy-col-grow pill-value">
                                             <div class="">{{ voter.signature }}</div>
                                         </div>
                                     </div>
@@ -150,17 +150,17 @@
                     <div class="bold">Transaction ID</div>
                     <div class="row grey-border-stripe">
                         <div class="pill width-7 white--text">RIPEMD-160</div>
-                        <div class="col-grow pill-value">{{contentMetadata.transaction.id}}</div>
+                        <div class="legacy-col-grow pill-value">{{contentMetadata.transaction.id}}</div>
                     </div>
                 </div>
                 
                 <div class="c-mt-4" v-if="!isGenesisBlock">
                     <div class="bold">Transaction HEX</div>
-                    <div class="row-nowrap grey-border-stripe">
+                    <div class="legacy-row-nowrap grey-border-stripe">
                         <div class="pill width-7 white--text display-flex">
                             <div class="c-m-auto">HEX</div>
                         </div>
-                        <div class="col-grow pill-value">{{contentMetadata.transaction.hex}}</div>
+                        <div class="legacy-col-grow pill-value">{{contentMetadata.transaction.hex}}</div>
                     </div>
                 </div>
 
@@ -168,7 +168,7 @@
                     <div class="bold">Chain ID</div>
                     <div class="row grey-border-stripe">
                         <div class="pill width-7 white--text">SHA256</div>
-                        <div class="col-grow pill-value">{{contentMetadata.chainId}}</div>
+                        <div class="legacy-col-grow pill-value">{{contentMetadata.chainId}}</div>
                     </div>
                 </div>
 

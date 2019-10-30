@@ -1,9 +1,9 @@
 <template>
     <div class="column full-height">
-        <div class="c-mb-4 col-grow column">
+        <div class="c-mb-4 legacy-col-grow column">
             <div class="step-title">Add title and description</div>
 
-            <div class="col-grow overflow-y-auto">
+            <div class="legacy-col-grow overflow-y-auto">
 
                 <div class="c-mh-auto c-pt-4" style="max-width: 1000px;">
                     <div class="row">
@@ -29,7 +29,7 @@
                     </div>
 
                 <!--    <div class="row c-pt-4">
-                        <div class="col-offset-3 col-6">
+                        <div class="legacy-col-offset-3 col-6">
                             <v-checkbox v-model="tmpIsPrivate" label="Choose if group should be private"></v-checkbox>
                         </div>
                     </div> -->

@@ -19,7 +19,7 @@
 
             <div class="c-pt-6 half-bold">Author</div>
 
-            <div class="c-pt-4 row-nowrap align-center">
+            <div class="c-pt-4 legacy-row-nowrap align-center">
                 <div class="half-bold">Year:from</div>
                 <div class="date-picker c-ml-2">
                     <v-menu

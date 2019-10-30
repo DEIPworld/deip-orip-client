@@ -12,12 +12,12 @@
                 RG Wallet
             </div>
 
-            <div class="row-nowrap c-pt-8">
-                <div class="col-grow c-pr-8">
+            <div class="legacy-row-nowrap c-pt-8">
+                <div class="legacy-col-grow c-pr-8">
                     <v-card>
                         <div class="info-card-list">
                             <div class="list-line">
-                                <div class="list-header-cell col-grow">Token</div>
+                                <div class="list-header-cell legacy-col-grow">Token</div>
                                 <div class="list-header-cell width-10 text-align-center">Amount</div>
 
                                 <div class="list-header-cell token-actions">
@@ -30,7 +30,7 @@
                             <div class="list-line"
                                 :class="{ 'blue lighten-5': sendingType === sendingTypes.deipToken }"
                             >
-                                <div class="col-grow list-body-cell display-flex align-center">
+                                <div class="legacy-col-grow list-body-cell display-flex align-center">
                                     <!-- TODO: make service component which can manage our all SVG items -->
                                     <div style="height: 40px; width: 40px;">
                                         <svg width="100%" height="100%" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -62,7 +62,7 @@
                     <v-card class="c-mt-6">
                         <div class="info-card-list">
                             <div class="reserarch-table-header c-ph-3">
-                                <div class="list-header-cell col-grow">Title</div>
+                                <div class="list-header-cell legacy-col-grow">Title</div>
                                 <!-- <div class="list-header-cell width-7 text-align-center">
                                     Market price<br>
                                     (DEIP Tokens)
@@ -75,7 +75,7 @@
                             <div class="hidden-last-child" v-if="researches.length">
                                 <template v-for="research in researches">
                                     <div class="list-line">
-                                        <div class="col-grow list-body-cell">
+                                        <div class="legacy-col-grow list-body-cell">
                                             <div class="deip-blue-color subheading">{{ research.title }}</div>
                                             <!-- <div class="grey--text caption">alice · bob</div> -->
                                         </div>

@@ -1,8 +1,8 @@
 <template>
     <div class="column full-height">
-        <div class="c-mb-4 col-grow column">
+        <div class="c-mb-4 legacy-col-grow column">
             <div class="step-title">Research Group Tokens</div>
-            <div class="col-grow overflow-y-auto">
+            <div class="legacy-col-grow overflow-y-auto">
 
                 <div class="row c-mh-auto group-share-max-width">
                     <div class="col-12">
@@ -10,7 +10,7 @@
                             Each research group is assigned its own Research Group Tokens which are distributed among its members and can be used to manage the group and its research activity.
                         </div>
                         <div class="body-2 c-pv-4">Distribute tokens of this group as follows:</div>
-                        <div class="row-nowrap legacy-justify-between align-center c-pt-4" 
+                        <div class="legacy-row-nowrap legacy-justify-between align-center c-pt-4" 
                             v-for="(member, i) in group.members" :key="i"
                         >
                             <div>

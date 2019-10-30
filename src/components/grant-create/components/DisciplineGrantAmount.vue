@@ -1,11 +1,11 @@
 <template>
     <div class="column full-height">
-        <div class="c-mb-4 col-grow column">
+        <div class="c-mb-4 legacy-col-grow column">
             <div class="step-title">
                 Supply grant for "{{ this.grantInfo.discipline && this.grantInfo.discipline.label }}" discipline
             </div>
             
-            <div class="col-grow overflow-y-auto">
+            <div class="legacy-col-grow overflow-y-auto">
 
                 <div class="c-mh-auto full-height discipline-amount display-flex">
                     <div class="c-mv-12 full-width">

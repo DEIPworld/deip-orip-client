@@ -31,14 +31,14 @@
 
         <div class="c-pt-6">
             <v-card>
-                <div class="row-nowrap legacy-align-items-center item">
+                <div class="legacy-row-nowrap legacy-align-items-center item">
                     <div class="item-tag primary"></div>
 
                     <div class="c-pl-2 c-pr-2">
                         <v-checkbox class="ma-0 pa-0" hide-details></v-checkbox>
                     </div>
 
-                    <div class="col-grow overflow-hidden">
+                    <div class="legacy-col-grow overflow-hidden">
                         <div class="a subheading ellipsis">Integrated mobility network Integrated mobility network Integrated mobility network</div>
                     </div>
 
@@ -50,14 +50,14 @@
 
                 <v-divider></v-divider>
                 
-                <div class="row-nowrap legacy-align-items-center item">
+                <div class="legacy-row-nowrap legacy-align-items-center item">
                     <div class="item-tag primary"></div>
 
                     <div class="c-pl-2 c-pr-2">
                         <v-checkbox class="ma-0 pa-0" hide-details></v-checkbox>
                     </div>
 
-                    <div class="col-grow overflow-hidden">
+                    <div class="legacy-col-grow overflow-hidden">
                         <div class="a subheading ellipsis">Parallel functional preprocessor</div>
                     </div>
 
@@ -68,14 +68,14 @@
 
                 <v-divider></v-divider>
                 
-                <div class="row-nowrap legacy-align-items-center item">
+                <div class="legacy-row-nowrap legacy-align-items-center item">
                     <div class="item-tag primary"></div>
 
                     <div class="c-pl-2 c-pr-2">
                         <v-checkbox class="ma-0 pa-0" hide-details></v-checkbox>
                     </div>
 
-                    <div class="col-grow overflow-hidden">
+                    <div class="legacy-col-grow overflow-hidden">
                         <div class="a subheading ellipsis">Virtual programmable compiler</div>
                     </div>
 
@@ -99,7 +99,7 @@
 
         <div class="c-pt-6">
             <v-card>
-                <div class="row-nowrap legacy-align-items-center item">
+                <div class="legacy-row-nowrap legacy-align-items-center item">
                     <div class="item-tag"></div>
 
                     <div class="c-pl-2 c-pr-2">
@@ -107,7 +107,7 @@
                     </div>
 
                     <div class="a subheading">Integrated mobility network</div>
-                    <div class="col-grow"></div>
+                    <div class="legacy-col-grow"></div>
 
                     <div class="display-flex">
                         <span class="c-mh-1 color-label yellow lighten-1">Wait for review</span>
@@ -116,7 +116,7 @@
 
                 <v-divider></v-divider>
                 
-                <div class="row-nowrap legacy-align-items-center item">
+                <div class="legacy-row-nowrap legacy-align-items-center item">
                     <div class="item-tag"></div>
 
                     <div class="c-pl-2 c-pr-2">
@@ -124,7 +124,7 @@
                     </div>
 
                     <div class="a subheading">Parallel	functional	preprocessor</div>
-                    <div class="col-grow"></div>
+                    <div class="legacy-col-grow"></div>
 
                     <div class="display-flex">
                         <span class="c-mh-1 color-label brown lighten-2">Reviewed</span>
@@ -133,7 +133,7 @@
 
                 <v-divider></v-divider>
                 
-                <div class="row-nowrap legacy-align-items-center item">
+                <div class="legacy-row-nowrap legacy-align-items-center item">
                     <div class="item-tag primary"></div>
 
                     <div class="c-pl-2 c-pr-2">
@@ -141,7 +141,7 @@
                     </div>
 
                     <div class="a subheading">Virtual programmable compiler</div>
-                    <div class="col-grow"></div>
+                    <div class="legacy-col-grow"></div>
 
                     <div class="display-flex">
                         <span class="c-mh-1 color-label yellow lighten-1">Wait for review</span>
@@ -158,7 +158,7 @@
 
         <div class="c-pt-6">
             <v-card>
-                <div class="row-nowrap legacy-align-items-center item">
+                <div class="legacy-row-nowrap legacy-align-items-center item">
                     <div class="item-tag primary"></div>
 
                     <div class="c-pl-2 c-pr-2">
@@ -166,7 +166,7 @@
                     </div>
 
                     <div class="a subheading">Integrated mobility network</div>
-                    <div class="col-grow"></div>
+                    <div class="legacy-col-grow"></div>
 
                     <div class="display-flex">
                         <span class="c-mh-1 color-label green lighten-3">Sponsored</span>
@@ -176,7 +176,7 @@
 
                 <v-divider></v-divider>
                 
-                <div class="row-nowrap legacy-align-items-center item">
+                <div class="legacy-row-nowrap legacy-align-items-center item">
                     <div class="item-tag"></div>
 
                     <div class="c-pl-2 c-pr-2">
@@ -184,7 +184,7 @@
                     </div>
 
                     <div class="a subheading">Parallel	functional	preprocessor</div>
-                    <div class="col-grow"></div>
+                    <div class="legacy-col-grow"></div>
 
                     <div class="display-flex">
                         <span class="c-mh-1 color-label green lighten-3">Sponsored</span>

@@ -1,5 +1,5 @@
 <template>
-    <div class="row-nowrap">
+    <div class="legacy-row-nowrap">
         <div class="filter-title subheading grey--text">Sort by</div>
         <div class="row">
             <div class="pr-4 sort-label" v-for="(order, index) in orders" :key="index">

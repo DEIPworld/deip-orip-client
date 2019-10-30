@@ -61,28 +61,28 @@
           <v-layout row wrap>
             <v-flex xs6 text-xs-center>
               <div class="row c-pb-6 c-pt-6">
-                <div class="col-grow sort-option">
+                <div class="legacy-col-grow sort-option">
                   <span class="body-1 grey--text">SORT BY</span>
                 </div>
-                <div class="col-grow sort-option" @click="setSortCriteria('postedDate')">
+                <div class="legacy-col-grow sort-option" @click="setSortCriteria('postedDate')">
                   <span class="body-2">New</span>
                   <v-icon class="sort-icon">
                     {{getSortIcon('postedDate')}}
                   </v-icon>
                 </div>
-                <div class="col-grow sort-option" @click="setSortCriteria('closingDate')">
+                <div class="legacy-col-grow sort-option" @click="setSortCriteria('closingDate')">
                   <span class="body-2">End Date</span>
                   <v-icon class="sort-icon">
                     {{getSortIcon('closingDate')}}
                   </v-icon>
                 </div>
-                <div class="col-grow sort-option" @click="setSortCriteria('title')">
+                <div class="legacy-col-grow sort-option" @click="setSortCriteria('title')">
                   <span class="body-2">A-Z Title</span>
                   <v-icon class="sort-icon">
                     {{getSortIcon('title')}}
                   </v-icon>
                 </div>
-                <div class="col-grow sort-option" @click="setSortCriteria('award')">
+                <div class="legacy-col-grow sort-option" @click="setSortCriteria('award')">
                   <span class="body-2">Award</span>
                   <v-icon class="sort-icon">
                     {{getSortIcon('award')}}

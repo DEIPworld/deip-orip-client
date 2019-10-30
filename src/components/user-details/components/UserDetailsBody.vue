@@ -23,7 +23,7 @@
                         </vue-dropzone>
                     </v-avatar>
 
-                    <div class="col-grow c-pl-12">
+                    <div class="legacy-col-grow c-pl-12">
                         <div class="display-1 half-bold c-pt-4">{{userInfo | fullname}} <span v-if="(userInfo.profile && userInfo.profile.firstName)" class="caption username-caption grey--text">({{userInfo.account.name}})</span></div>
 
                         <div class="c-pt-4">

@@ -1,7 +1,7 @@
 <template>
     <v-expansion-panel-content>
         <div slot="header">
-            <div class="row-nowrap align-center" v-on:click.stop>
+            <div class="legacy-row-nowrap align-center" v-on:click.stop>
                 <div class="id-col">
                     <div class="deip-blue-color half-bold">{{ proposal.id }}</div>
                 </div>

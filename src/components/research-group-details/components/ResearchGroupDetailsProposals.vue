@@ -42,7 +42,7 @@
             <v-expansion-panel>
                 <v-expansion-panel-content hide-actions>
                     <div slot="header">
-                        <div class="row-nowrap align-center c-pr-6 grey--text">
+                        <div class="legacy-row-nowrap align-center c-pr-6 grey--text">
                             <div class="id-col">ID</div>
                             <div class="proposal-activity">Proposal</div>
                             <div class="date">Date</div>

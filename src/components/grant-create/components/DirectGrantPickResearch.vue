@@ -1,12 +1,12 @@
 <template>
         <div class="step-title">Coming soon</div>
  <!--   <div class="column full-height">
-        <div class="c-mb-4 col-grow column">
+        <div class="c-mb-4 legacy-col-grow column">
             <div class="step-title">Direct grants distribution</div>
             <div class="sm-title bold c-mb-2 text-align-center">Please select research</div>
             <div class="caption c-mb-4 text-align-center grey--text">Your tokens will be granted to the researchers</div>
 
-            <div class="col-grow overflow-y-auto">
+            <div class="legacy-col-grow overflow-y-auto">
 
                 <div class="c-mh-auto full-height overflow-y-auto research-picker">
                     <div class="c-ph-8 c-pt-12">

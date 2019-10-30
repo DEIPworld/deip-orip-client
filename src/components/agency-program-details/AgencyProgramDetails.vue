@@ -20,42 +20,42 @@
             
             <v-flex xs12>
               <div class="row c-pt-10">
-                <span class="col-grow body-1">Agency Name</span>
-                <span class="col-grow body-2">{{agencyProfile.name}}</span>
+                <span class="legacy-col-grow body-1">Agency Name</span>
+                <span class="legacy-col-grow body-2">{{agencyProfile.name}}</span>
 
-                <span class="col-grow body-1">Estimated total program funding:</span>
-                <span class="col-grow body-2">$ {{fromAssetsToFloat(program.amount)}}</span>
+                <span class="legacy-col-grow body-1">Estimated total program funding:</span>
+                <span class="legacy-col-grow body-2">$ {{fromAssetsToFloat(program.amount)}}</span>
               </div>
               <div class="row c-pt-5">
-                <span class="col-grow body-1">Opportunity Number:</span>
-                <span class="col-grow body-2">{{program.funding_opportunity_number}}</span>
+                <span class="legacy-col-grow body-1">Opportunity Number:</span>
+                <span class="legacy-col-grow body-2">{{program.funding_opportunity_number}}</span>
 
-                <span class="col-grow body-1">Expected number of awards:</span>
-                <span class="col-grow body-2">{{program.expected_number_of_awards}}</span>
+                <span class="legacy-col-grow body-1">Expected number of awards:</span>
+                <span class="legacy-col-grow body-2">{{program.expected_number_of_awards}}</span>
               </div>
               <div class="row c-pt-5">
-                <span class="col-grow body-1">Area:</span>
-                <span class="col-grow body-2">{{program.area.title}}</span>
+                <span class="legacy-col-grow body-1">Area:</span>
+                <span class="legacy-col-grow body-2">{{program.area.title}}</span>
 
-                <span class="col-grow body-1">Award ceiling:</span>
-                <span class="col-grow body-2">$ {{fromAssetsToFloat(program.award_ceiling)}}</span>
+                <span class="legacy-col-grow body-1">Award ceiling:</span>
+                <span class="legacy-col-grow body-2">$ {{fromAssetsToFloat(program.award_ceiling)}}</span>
               </div> 
               <div class="row c-pt-5">
-                <span class="col-grow body-1">Open date:</span>
-                <span class="col-grow body-2">{{new Date(`${program.posted_date}Z`).toDateString()}}</span>
+                <span class="legacy-col-grow body-1">Open date:</span>
+                <span class="legacy-col-grow body-2">{{new Date(`${program.posted_date}Z`).toDateString()}}</span>
 
-                <span class="col-grow body-1">Award floor:</span>
-                <span class="col-grow body-2">$ {{fromAssetsToFloat(program.award_floor)}}</span>
+                <span class="legacy-col-grow body-1">Award floor:</span>
+                <span class="legacy-col-grow body-2">$ {{fromAssetsToFloat(program.award_floor)}}</span>
               </div>
               <div class="row c-pt-5 c-pb-10">
-                <span class="col-grow body-1">Close date:</span>
-                <span class="col-grow body-2">{{new Date(`${program.close_date}Z`).toDateString()}}</span>
+                <span class="legacy-col-grow body-1">Close date:</span>
+                <span class="legacy-col-grow body-2">{{new Date(`${program.close_date}Z`).toDateString()}}</span>
 
-                <span class="col-grow body-1" v-if="isGrantor || isOfficer">Number of applications:</span>
-                <span class="col-grow body-2" v-if="isGrantor || isOfficer">{{applications.length}}</span>
+                <span class="legacy-col-grow body-1" v-if="isGrantor || isOfficer">Number of applications:</span>
+                <span class="legacy-col-grow body-2" v-if="isGrantor || isOfficer">{{applications.length}}</span>
                 
-                <span class="col-grow body-1" v-if="isApplicant"></span>
-                <span class="col-grow body-2" v-if="isApplicant"></span>
+                <span class="legacy-col-grow body-1" v-if="isApplicant"></span>
+                <span class="legacy-col-grow body-2" v-if="isApplicant"></span>
 
               </div>
               <v-divider></v-divider>
@@ -137,7 +137,7 @@
               <div class="c-pt-5 c-pl-5 c-pb-5">
                 <div class="sm-title c-pb-2 bold">Program Officers</div>
                 <div v-for="officer in program.officers">
-                  <div class="row-nowrap text-align-center c-pt-2">
+                  <div class="legacy-row-nowrap text-align-center c-pt-2">
                     <v-avatar size="40px">
                         <img v-if="officer.profile" v-bind:src="officer.profile.avatar | avatarSrc(30, 30, false)" />
                         <v-gravatar v-else :email="officer.account.name + '@deip.world'" />

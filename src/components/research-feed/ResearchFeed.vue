@@ -5,12 +5,12 @@
         </sidebar>
 
         <contentbar>
-            <div class="row-nowrap">
+            <div class="legacy-row-nowrap">
                 <div :class="{ 'invisible': !filter.disciplines.length && filter.q === '' }"
                     class="filter-title subheading grey--text"
                 >Filters</div>
 
-                <div class="row col-grow align-center">
+                <div class="row legacy-col-grow align-center">
                     <div class="c-pr-4 display-flex" v-if="filter.q !== ''">
                         <span>{{ filter.q }}</span>
                         <span class="small-remove-btn ml-1" @click="updateFilter({ key: 'q', value: '' })">

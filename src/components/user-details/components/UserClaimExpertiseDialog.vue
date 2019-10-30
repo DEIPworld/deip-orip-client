@@ -48,7 +48,7 @@
                                         <v-icon color="primary">mdi-note-text</v-icon>
                                     </div>
 
-                                    <div class="col-grow">
+                                    <div class="legacy-col-grow">
                                         <v-text-field
                                             label="Link to publication"
                                             v-model="publication.value"

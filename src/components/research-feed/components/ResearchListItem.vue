@@ -25,7 +25,7 @@
                     </div>
                 </div>
 
-                <div class="row-nowrap c-pt-2">
+                <div class="legacy-row-nowrap c-pt-2">
                     <div class="c-pr-8" v-if="research.created_at">
                         <v-icon size="18px">event</v-icon> Created
                         <span class="half-bold">{{ research.created_at | dateFormat('D MMM, YYYY', true) }}</span>

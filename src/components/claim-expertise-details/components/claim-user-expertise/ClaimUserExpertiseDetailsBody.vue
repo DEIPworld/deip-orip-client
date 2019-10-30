@@ -6,7 +6,7 @@
                 <v-gravatar v-if="!claimerInfo.profile && claimerInfo.account" :email="claimerInfo.account.name + '@deip.world'" />
             </v-avatar>
 
-            <div class="col-grow c-pl-12">
+            <div class="legacy-col-grow c-pl-12">
                 <div class="display-1 half-bold c-pt-4">
                     <router-link class="a" :to="{ name: 'UserDetails', params: { account_name: claimerInfo.account.name }}">
                         {{ claimerInfo | fullname }}

@@ -1,9 +1,9 @@
 <template>
     <div class="column full-height">
-        <div class="c-mb-4 col-grow column">
+        <div class="c-mb-4 legacy-col-grow column">
             <div class="step-title">Select start and end dates of research fundraise</div>
 
-            <div class="col-grow overflow-y-auto">
+            <div class="legacy-col-grow overflow-y-auto">
 
                 <div class="c-mh-auto period-max-width c-pt-4">
                     <v-form class="row" ref="form" v-model="isFormValid">

@@ -10,10 +10,10 @@
                     </div>
                 </v-tooltip>
             </div>
-            <div class="col-grow pos-relative row-nowrap align-center">
+            <div class="legacy-col-grow pos-relative legacy-row-nowrap align-center">
 
                 <div v-if="timelineOffsets && timelineOffsets.length != 0" class="chapter-line black" :style="{ width: timelineOffsets[timelineOffsets.length - 1].value + '%' }"></div>
-                <div class="chapter-line grey lighten-1 col-grow"></div>
+                <div class="chapter-line grey lighten-1 legacy-col-grow"></div>
 
                 <div v-if="timelineOffsets && timelineOffsets.length != 0" class="pos-absolute" :style="{ left: offset.value + '%' }"
                     v-for="(offset, i) in timelineOffsets" :key="i">

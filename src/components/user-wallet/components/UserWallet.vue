@@ -3,12 +3,12 @@
         <contentbar>
             <div class="display-1 bold">Wallet</div>
 
-            <div class="row-nowrap c-pt-8">
-                <div class="col-grow c-p-1 c-mr-7 overflow-hidden">
+            <div class="legacy-row-nowrap c-pt-8">
+                <div class="legacy-col-grow c-p-1 c-mr-7 overflow-hidden">
                     <v-card>
                         <div class="info-card-list">
                             <div class="list-line">
-                                <div class="list-header-cell col-grow">Token</div>
+                                <div class="list-header-cell legacy-col-grow">Token</div>
                                 <div class="list-header-cell width-10 text-align-center">Amount</div>
 
                                 <div class="list-header-cell token-actions">
@@ -21,7 +21,7 @@
                             <div class="list-line"
                                 :class="{ 'blue lighten-5': account && sendingType === sendingTypes.deipToken }"
                             >
-                                <div class="col-grow list-body-cell display-flex align-center">
+                                <div class="legacy-col-grow list-body-cell display-flex align-center">
                                     <!-- TODO: make service component which can manage our all SVG items -->
                                     <div style="height: 40px; width: 40px;">
                                         <svg width="100%" height="100%" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -60,7 +60,7 @@
                             <div class="list-line"
                                 :class="{ 'blue lighten-5': account && sendingType === sendingTypes.deipCommon }"
                             >
-                                <div class="col-grow list-body-cell display-flex align-center">
+                                <div class="legacy-col-grow list-body-cell display-flex align-center">
                                     <!-- TODO: make service component which can manage our all SVG items -->
                                     <div style="height: 40px; width: 40px;">
                                         <svg width="100%" height="100%" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -112,7 +112,7 @@
                     <v-card class="c-mt-6">
                         <div class="info-card-list">
                             <div class="reserarch-table-header c-ph-3">
-                                <div class="list-header-cell col-grow">Title</div>
+                                <div class="list-header-cell legacy-col-grow">Title</div>
                                 <!-- <div class="list-header-cell width-7 text-align-center">
                                     Market price<br>
                                     (DEIP Tokens)
@@ -133,7 +133,7 @@
                                                 && selectedResearch.id === research.id 
                                         }"
                                     >
-                                        <div class="col-grow list-body-cell">
+                                        <div class="legacy-col-grow list-body-cell">
                                             <div class="deip-blue-color subheading">{{ research.title }}</div>
                                         </div>
 
@@ -163,7 +163,7 @@
                     <v-card class="c-mt-6">
                         <div class="info-card-list">
                             <div class="reserarch-table-header c-ph-3">
-                                <div class="list-header-cell col-grow">TX hash</div>
+                                <div class="list-header-cell legacy-col-grow">TX hash</div>
                                 <div class="list-header-cell width-8 text-align-center">Who</div>
                                 <div class="list-header-cell width-10 text-align-center">Date (UTC)</div>
                                 <div class="list-header-cell width-10 text-align-center">Amount</div>
@@ -174,7 +174,7 @@
                             <div class="hidden-last-child" v-if="transfers.length">
                                 <template v-for="transfer in transfers">
                                     <div class="list-line">
-                                        <div class="col-grow list-body-cell overflow-hidden">
+                                        <div class="legacy-col-grow list-body-cell overflow-hidden">
                                             <div class="deip-blue-color subheading overflow-ellipsis">
                                                 {{ transfer[1].trx_id }}
                                             </div>

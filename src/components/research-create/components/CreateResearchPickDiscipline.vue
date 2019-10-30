@@ -1,13 +1,13 @@
 <template>
     <div class="column full-height">
-        <div class="c-mb-4 col-grow column">
+        <div class="c-mb-4 legacy-col-grow column">
             <div class="step-title">Select research disciplines</div>
 
             <div class="subheading c-mb-4 text-align-center c-mh-auto selected-disciplines discipline-picker">
                 {{research.disciplines.map(d => d.label).join("  ·  ")}}
             </div>
 
-            <div class="col-grow overflow-y-auto">
+            <div class="legacy-col-grow overflow-y-auto">
 
                 <div class="c-mh-auto full-height overflow-y-auto discipline-picker">
                     <advanced-discipline-picker

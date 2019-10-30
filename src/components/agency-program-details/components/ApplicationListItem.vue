@@ -66,7 +66,7 @@
             </v-flex>
 
             <v-flex xs12>
-                <div class="row-nowrap c-pl-5">
+                <div class="legacy-row-nowrap c-pl-5">
                     <div class="c-pr-8 c-pt-1">
                         <v-icon color="grey" size="18px">chat_bubble</v-icon>
                         <span class="bold display-inline-flex">

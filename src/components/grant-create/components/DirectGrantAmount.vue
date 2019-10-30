@@ -1,13 +1,13 @@
 <template>
     <div class="column full-height">
-        <div class="c-mb-4 col-grow column">
+        <div class="c-mb-4 legacy-col-grow column">
             <div class="step-title">
                 Direct grants distribution
             </div>
             
             <div class="sm-title bold c-mb-4 text-align-center">Please type amount</div>
 
-            <div class="col-grow overflow-y-auto">
+            <div class="legacy-col-grow overflow-y-auto">
 
                 <div class="c-mh-auto full-height discipline-amount display-flex">
                     <div class="c-mt-12 full-width">

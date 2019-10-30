@@ -19,7 +19,7 @@
                             placeholder="Researcher"
                         >
                             <template slot="selection" slot-scope="data">
-                                <div class="row-nowrap align-center c-pl-4">
+                                <div class="legacy-row-nowrap align-center c-pl-4">
                                     <v-avatar size="30px">
                                         <img v-if="data.item.profile" v-bind:src="data.item.profile.avatar | avatarSrc(30, 30, false)" />
                                         <v-gravatar v-else :email="data.item.account.name + '@deip.world'" />
@@ -29,7 +29,7 @@
                             </template>
                             
                             <template slot="item" slot-scope="data">
-                                <div class="row-nowrap align-center">
+                                <div class="legacy-row-nowrap align-center">
                                     <v-avatar size="30px">
                                         <img v-if="data.item.profile" v-bind:src="data.item.profile.avatar | avatarSrc(30, 30, false)" />
                                         <v-gravatar v-else :email="data.item.account.name + '@deip.world'" />

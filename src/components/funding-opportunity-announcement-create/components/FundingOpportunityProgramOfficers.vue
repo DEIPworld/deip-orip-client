@@ -1,9 +1,9 @@
 <template>
     <div class="column full-height">
-        <div class="c-mb-4 col-grow column">
+        <div class="c-mb-4 legacy-col-grow column">
             <div class="step-title">Select Program Officers</div>
 
-            <div class="col-grow overflow-y-auto">
+            <div class="legacy-col-grow overflow-y-auto">
 
                 <div class="c-mh-auto program-officers-max-width">
                     <v-card class="c-ph-12 c-pv-6">
@@ -31,12 +31,12 @@
                         </v-radio-group> -->
 
                         <div>
-                            <div class="row-nowrap legacy-align-items-center c-mt-2" v-for="(member, i) in members">
+                            <div class="legacy-row-nowrap legacy-align-items-center c-mt-2" v-for="(member, i) in members">
                                 <v-avatar size="40px">
                                     <img v-if="member.profile" v-bind:src="member.profile.avatar | avatarSrc(40, 40, false)" />
                                     <v-gravatar v-else :title="member.account.name" :email="member.account.name + '@deip.world'" />
                                 </v-avatar>
-                                <div class="c-pl-4 col-grow">
+                                <div class="c-pl-4 legacy-col-grow">
                                     <router-link :to="{ name: 'UserDetails', params: { account_name: member.account.name } }" class="a c-pl-3">
                                         {{member | fullname}}
                                     </router-link>

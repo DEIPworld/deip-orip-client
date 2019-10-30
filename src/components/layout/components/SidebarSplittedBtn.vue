@@ -2,7 +2,7 @@
     <div class="sidebar-fullwidth">
         <v-divider></v-divider>
 
-        <div class="row-nowrap">
+        <div class="legacy-row-nowrap">
             <div class="col-6" :class="{ 'clickable': leftRipple !== false }">
                 <div class="display-flex full-height" v-ripple="leftRipple">
                     <slot name="left"></slot>

@@ -77,13 +77,13 @@
             </div>
 
             <div class="c-pt-4">
-                <div class="row-nowrap legacy-align-items-center">
+                <div class="legacy-row-nowrap legacy-align-items-center">
                     <v-avatar size="40px" class="">
                         <!-- <img v-if="member.profile" v-bind:src="member.profile.avatar | avatarSrc(40, 40, false)" /> -->
                         <v-gravatar :email="'rudberg' + '@deip.world'" />
                     </v-avatar>
 
-                    <div class="c-pl-4 col-grow">
+                    <div class="c-pl-4 legacy-col-grow">
                         <div>
                             <span class="a">Anna Rudberg</span>
                             <span class="grey--text caption">10 Dec 2018</span>
@@ -118,21 +118,21 @@
             </div>
 
             <div class="c-pt-4">
-                <div class="row-nowrap">
+                <div class="legacy-row-nowrap">
                     <div class="bold">Research group</div>
-                    <div class="col-grow"></div>
+                    <div class="legacy-col-grow"></div>
                     <div class="">1000</div>
                 </div>
                 
-                <div class="row-nowrap">
+                <div class="legacy-row-nowrap">
                     <div class="bold">Investor</div>
-                    <div class="col-grow"></div>
+                    <div class="legacy-col-grow"></div>
                     <div class="">300</div>
                 </div>
                 
-                <div class="row-nowrap">
+                <div class="legacy-row-nowrap">
                     <div class="bold">Fundraise</div>
-                    <div class="col-grow"></div>
+                    <div class="legacy-col-grow"></div>
                     <div class="">20% on sale</div>
                 </div>
             </div>
@@ -180,13 +180,13 @@
             </div>
 
             <div class="c-pt-4">
-                <div class="row-nowrap legacy-align-items-center">
+                <div class="legacy-row-nowrap legacy-align-items-center">
                     <v-avatar size="40px" class="">
                         <!-- <img v-if="member.profile" v-bind:src="member.profile.avatar | avatarSrc(40, 40, false)" /> -->
                         <v-gravatar :email="'shawna' + '@deip.world'" />
                     </v-avatar>
 
-                    <div class="c-pl-4 col-grow">
+                    <div class="c-pl-4 legacy-col-grow">
                         <div>
                             <span class="a">Shawna Mathis</span>
                             <span class="grey--text caption">10 Dec 2018</span>

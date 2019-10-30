@@ -1,7 +1,7 @@
 <template>
     <div class="review-content-container">
 
-        <div class="row-nowrap c-pb-4">
+        <div class="legacy-row-nowrap c-pb-4">
             <div class="text-align-center">
                 <v-avatar size="120px">
                     <img v-if="review.author.profile" v-bind:src="review.author.profile.avatar | avatarSrc(90, 90, false)" />

@@ -13,7 +13,7 @@
 					<div v-if="researchList">
 						<div class="row c-mb-4">
 							<div class="c-pr-6">Funding opportunity:</div>
-							<div class="col-grow a subheading">{{ program.funding_opportunity_title }}</div>
+							<div class="legacy-col-grow a subheading">{{ program.funding_opportunity_title }}</div>
 						</div>
 						<v-divider></v-divider>
 						<v-autocomplete
@@ -24,13 +24,13 @@
               label="Research"
             >
 							<template slot="selection" slot-scope="data">
-								<div class="row-nowrap align-center">
+								<div class="legacy-row-nowrap align-center">
 									<span class="deip-blue-color">{{ data.item.title }}</span>
 								</div>
 							</template>
 							<template slot="item" slot-scope="data">
 								<template>
-									<div class="row-nowrap align-center author-item">
+									<div class="legacy-row-nowrap align-center author-item">
 										<span class="deip-blue-color c-pl-3">{{ data.item.title}}</span>
 									</div>
 								</template>
@@ -52,7 +52,7 @@
 								</div>
 								<div class="c-pt-4 row">
 									<div v-for="(member, i) in research.group.enrichedMembers" :key="i"
-                    class="row-nowrap text-align-center c-pt-2 c-pr-8">
+                    class="legacy-row-nowrap text-align-center c-pt-2 c-pr-8">
 										<v-avatar size="40px">
 											<img v-if="member.profile" v-bind:src="member.profile.avatar | avatarSrc(30, 30, false)" />
 											<v-gravatar v-else :email="member.account.name + '@deip.world'" />

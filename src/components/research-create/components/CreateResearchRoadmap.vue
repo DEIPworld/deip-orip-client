@@ -1,9 +1,9 @@
 <template>
-    <div class="column full-height col-grow" style="max-width: 700px;">
-        <div class="c-mb-4 col-grow column overflow-y-auto">
+    <div class="column full-height legacy-col-grow" style="max-width: 700px;">
+        <div class="c-mb-4 legacy-col-grow column overflow-y-auto">
 
             <div class="step-title">Roadmap</div>
-            <div class="col-grow">
+            <div class="legacy-col-grow">
                 <div class="bold text-align-center c-pv-6">
                     Let’s create a roadmap for your research. Well-presented and detailed roadmap attracts 
                     more investors to help you to get the funding
@@ -20,7 +20,7 @@
                             </v-btn>
                             <div class="milestone-devider"></div>
                         </div>
-                        <div class="c-pl-8 col-grow">
+                        <div class="c-pl-8 legacy-col-grow">
                             <v-text-field solo label="Milestone name"></v-text-field>
                         </div>
                     </div>

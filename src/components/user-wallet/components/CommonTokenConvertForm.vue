@@ -24,7 +24,7 @@
                 ></v-text-field>
 
                 <div class="align-center justify-space-around c-pv-6" 
-                    :class="isDeipToCommonMode ? 'row' : 'row-reverse'"
+                    :class="isDeipToCommonMode ? 'row' : 'legacy-row-reverse'"
                 >
                     <div class="column width-5">
                         <!-- TODO: make service component which can manage our all SVG items -->

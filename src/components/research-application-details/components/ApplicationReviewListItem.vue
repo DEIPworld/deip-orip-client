@@ -1,6 +1,6 @@
 <template>
     <v-card class="review-container hidden-last-child">
-        <div class="row-nowrap c-p-6 clickable" @click="goToReviewPage()">
+        <div class="legacy-row-nowrap c-p-6 clickable" @click="goToReviewPage()">
             <div style="width: 10%" class="column text-align-center" @click="goToReviewerProfilePage($event, review.author.account.name)">
                 <v-avatar size="90px">
                     <img v-if="review.author.profile" v-bind:src="review.author.profile.avatar | avatarSrc(90, 90, false)" />
@@ -12,7 +12,7 @@
                     </span>
                 </div>
             </div>
-            <div class="col-grow c-ml-6">
+            <div class="legacy-col-grow c-ml-6">
                 <div>
                     <span class="grey--text">{{ review.created_at | dateFormat('D MMM YYYY', true) }}</span>
                     <span class="half-bold c-pl-2">
@@ -25,7 +25,7 @@
                     <span v-html="extractPreview(review)"></span>
                 </div>
 
-                <div class="row-nowrap">
+                <div class="legacy-row-nowrap">
                     <div v-for="tvo in disciplines" class="grey--text">
                    <!-- <span class="c-pr-1">
                             <span>{{ tvo.disciplineName }}</span>

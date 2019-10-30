@@ -48,7 +48,7 @@
                                 </div>
                             </div>
 
-                            <div class="row-nowrap c-pt-1">
+                            <div class="legacy-row-nowrap c-pt-1">
                                 <div class="c-pr-8 grey--text">
                                     <v-icon color="grey" size="18px">event</v-icon> Created
                                     <span class="half-bold">20 Jan 2018</span>
@@ -122,13 +122,13 @@
                                         </v-radio-group>
 
                                         <div class="c-pt-8">
-                                            <div class="row-nowrap legacy-align-items-center">
+                                            <div class="legacy-row-nowrap legacy-align-items-center">
                                                 <v-avatar size="40px" class="">
                                                     <!-- <img v-if="member.profile" v-bind:src="member.profile.avatar | avatarSrc(40, 40, false)" /> -->
                                                     <v-gravatar :email="'shawna' + '@deip.world'" />
                                                 </v-avatar>
 
-                                                <div class="c-pl-4 col-grow">
+                                                <div class="c-pl-4 legacy-col-grow">
                                                     <span class="a">Shawna Mathis</span>
                                                 </div>
 
@@ -137,13 +137,13 @@
                                                 </div>
                                             </div>
 
-                                            <div class="row-nowrap legacy-align-items-center c-pt-4">
+                                            <div class="legacy-row-nowrap legacy-align-items-center c-pt-4">
                                                 <v-avatar size="40px" class="">
                                                     <!-- <img v-if="member.profile" v-bind:src="member.profile.avatar | avatarSrc(40, 40, false)" /> -->
                                                     <v-gravatar :email="'egow' + '@deip.world'" />
                                                 </v-avatar>
 
-                                                <div class="c-pl-4 col-grow">
+                                                <div class="c-pl-4 legacy-col-grow">
                                                     <span class="a">Egow Tompson</span>
                                                 </div>
 
@@ -152,13 +152,13 @@
                                                 </div>
                                             </div>
 
-                                            <div class="row-nowrap legacy-align-items-center c-pt-4">
+                                            <div class="legacy-row-nowrap legacy-align-items-center c-pt-4">
                                                 <v-avatar size="40px" class="">
                                                     <!-- <img v-if="member.profile" v-bind:src="member.profile.avatar | avatarSrc(40, 40, false)" /> -->
                                                     <v-gravatar :email="'Egota' + '@deip.world'" />
                                                 </v-avatar>
 
-                                                <div class="c-pl-4 col-grow">
+                                                <div class="c-pl-4 legacy-col-grow">
                                                     <span class="a">Egota Rydberg</span>
                                                 </div>
 
@@ -174,13 +174,13 @@
                             <v-tab-item key="myReviewers">
                                 <div style="margin: 0px 2px 3px;">
                                     <v-card class="c-ph-12 c-pv-6">
-                                        <div class="row-nowrap legacy-align-items-center">
+                                        <div class="legacy-row-nowrap legacy-align-items-center">
                                             <v-avatar size="40px" class="">
                                                 <!-- <img v-if="member.profile" v-bind:src="member.profile.avatar | avatarSrc(40, 40, false)" /> -->
                                                 <v-gravatar :email="'shawna' + '@deip.world'" />
                                             </v-avatar>
 
-                                            <div class="c-pl-4 col-grow">
+                                            <div class="c-pl-4 legacy-col-grow">
                                                 <span class="a">Shawna Mathis</span>
                                             </div>
 
@@ -189,13 +189,13 @@
                                             </div>
                                         </div>
 
-                                        <div class="row-nowrap legacy-align-items-center c-pt-4">
+                                        <div class="legacy-row-nowrap legacy-align-items-center c-pt-4">
                                             <v-avatar size="40px" class="">
                                                 <!-- <img v-if="member.profile" v-bind:src="member.profile.avatar | avatarSrc(40, 40, false)" /> -->
                                                 <v-gravatar :email="'egow' + '@deip.world'" />
                                             </v-avatar>
 
-                                            <div class="c-pl-4 col-grow">
+                                            <div class="c-pl-4 legacy-col-grow">
                                                 <span class="a">Egow Tompson</span>
                                             </div>
 
@@ -204,13 +204,13 @@
                                             </div>
                                         </div>
 
-                                        <div class="row-nowrap legacy-align-items-center c-pt-4">
+                                        <div class="legacy-row-nowrap legacy-align-items-center c-pt-4">
                                             <v-avatar size="40px" class="">
                                                 <!-- <img v-if="member.profile" v-bind:src="member.profile.avatar | avatarSrc(40, 40, false)" /> -->
                                                 <v-gravatar :email="'Egota' + '@deip.world'" />
                                             </v-avatar>
 
-                                            <div class="c-pl-4 col-grow">
+                                            <div class="c-pl-4 legacy-col-grow">
                                                 <span class="a">Egota Rydberg</span>
                                             </div>
 
@@ -219,13 +219,13 @@
                                             </div>
                                         </div>
 
-                                        <div class="row-nowrap legacy-align-items-center c-pt-4">
+                                        <div class="legacy-row-nowrap legacy-align-items-center c-pt-4">
                                             <v-avatar size="40px" class="">
                                                 <!-- <img v-if="member.profile" v-bind:src="member.profile.avatar | avatarSrc(40, 40, false)" /> -->
                                                 <v-gravatar :email="'Bern' + '@deip.world'" />
                                             </v-avatar>
 
-                                            <div class="c-pl-4 col-grow">
+                                            <div class="c-pl-4 legacy-col-grow">
                                                 <span class="a">John Bern</span>
                                             </div>
 

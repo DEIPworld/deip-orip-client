@@ -1,8 +1,8 @@
 <template>
     <div class="column full-height">
-        <div class="c-mb-4 col-grow column">
+        <div class="c-mb-4 legacy-col-grow column">
             <div class="step-title">Invite members</div>
-            <div class="col-grow overflow-y-auto">
+            <div class="legacy-col-grow overflow-y-auto">
 
                 <div class="row c-mh-auto group-members-max-width">
                     <div class="col-12">
@@ -15,7 +15,7 @@
                         </v-text-field>
                         <div>
 
-                            <div class="row-nowrap legacy-justify-between align-center c-pt-4"
+                            <div class="legacy-row-nowrap legacy-justify-between align-center c-pt-4"
                                 v-for="(user, i) in group.members" :key="i + '-picked'">
                                 <div>
                                     <v-avatar size="30px">
@@ -31,7 +31,7 @@
                         <v-divider class="c-mt-4" v-show="group.members.length > 0"></v-divider>
                         <div>
 
-                            <div class="row-nowrap legacy-justify-between align-center c-pt-4" 
+                            <div class="legacy-row-nowrap legacy-justify-between align-center c-pt-4" 
                                 v-for="(user, i) in selectableUsers" :key="i + '-selectable'">
                                 <div>
                                     <v-avatar size="30px">
