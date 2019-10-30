@@ -24,7 +24,7 @@
             </div>
         </div>
 
-        <div class="row legacy-justify-center align-center">
+        <div class="legacy-row legacy-justify-center align-center">
             <v-btn flat small @click.native="prevStep()">
                 <v-icon dark class="pr-1">keyboard_arrow_left</v-icon> Back
             </v-btn>

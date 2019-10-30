@@ -8,7 +8,7 @@
                     indeterminate color="primary"
                 ></v-progress-circular>
 
-                <div v-if="isLoadingUserAccount === false && isLoadingUserProfile === false" class="row">
+                <div v-if="isLoadingUserAccount === false && isLoadingUserProfile === false" class="legacy-row">
                     <v-avatar size="160px" class="user-avatar" 
                             v-on:mouseover="onAvatarMouseOver"
                             v-on:mouseout="onAvatarMouseOut">
@@ -28,7 +28,7 @@
 
                         <div class="c-pt-4">
                             <div v-if="userInfo.profile">
-                                <div v-if="!isEditingLocation" class="row half-bold">
+                                <div v-if="!isEditingLocation" class="legacy-row half-bold">
                                     <span v-if="isOwner && !isLocationSpecified" class="owner-hint c-mt-1">
                                         <v-icon small>location_on</v-icon>
                                         Add location info
@@ -44,7 +44,7 @@
                                         <span>Edit Location</span>
                                     </v-tooltip>
                                 </div>
-                                <div class="row" v-if="isOwner && isEditingLocation">
+                                <div class="legacy-row" v-if="isOwner && isEditingLocation">
                                     <v-text-field class="col-3 c-pr-3" v-model="editedCity" label="City"></v-text-field>
                                     <v-text-field class="col-3 c-pr-3" v-model="editedCountry" label="Country"></v-text-field>
                                     <span class="col-3">
@@ -74,7 +74,7 @@
                 </div>
 
                 <div class="c-pt-8">
-                    <div v-if="!isEditingBio && userInfo.profile" class="row">
+                    <div v-if="!isEditingBio && userInfo.profile" class="legacy-row">
                         <span v-if="isOwner && !userInfo.profile.bio" class="half-bold owner-hint col-12">
                             <v-icon small>subject</v-icon>
                             Add short bio
@@ -88,7 +88,7 @@
                         </v-tooltip>
                     </div>
     
-                    <div v-if="isOwner && isEditingBio" class="row">
+                    <div v-if="isOwner && isEditingBio" class="legacy-row">
                         <v-textarea class="col-12" v-model="editedBio" label="Short Bio"></v-textarea>
                         <span class="col-12">
                             <v-tooltip bottom>

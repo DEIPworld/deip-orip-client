@@ -11,7 +11,7 @@
 
             <div class="legacy-col-grow overflow-y-auto">
 
-                <div class="row c-mh-auto amount-max-width">
+                <div class="legacy-row c-mh-auto amount-max-width">
                     <div class="col-12">
                         <div class="">
                             <v-text-field 
@@ -28,7 +28,7 @@
             </div>
         </div>
         
-        <div class="row legacy-justify-center align-center">
+        <div class="legacy-row legacy-justify-center align-center">
             <v-btn color="primary" @click.native="nextStep()" :disabled="!verifyAmountRange(tokenSaleInfo.amountToSell)">Next</v-btn>
         </div>
     </div>

@@ -125,7 +125,7 @@
                         </div>
                     </div>
 
-                    <div class="row" v-else-if="proposal.action === proposalTypes.INVITE_MEMBER">
+                    <div class="legacy-row" v-else-if="proposal.action === proposalTypes.INVITE_MEMBER">
                         <div class="col-6">
                             Research group tokens:
                             <span class="bold">
@@ -135,7 +135,7 @@
                         <div class="col-6 grey--text break-word white-space-pre-line">{{ proposal.data.cover_letter }}</div>
                     </div>
 
-                    <div class="row" v-else-if="proposal.action === proposalTypes.SEND_FUNDS">
+                    <div class="legacy-row" v-else-if="proposal.action === proposalTypes.SEND_FUNDS">
                         <div class="col-6">
                             <div>
                                 User:
@@ -155,8 +155,8 @@
                         </div>
                     </div>
 
-                    <div class="row" v-else-if="proposal.action === proposalTypes.START_RESEARCH_TOKEN_SALE">
-                        <div class="col-6 row legacy-justify-between">
+                    <div class="legacy-row" v-else-if="proposal.action === proposalTypes.START_RESEARCH_TOKEN_SALE">
+                        <div class="col-6 legacy-row legacy-justify-between">
                             <div class="width-8">
                                 <div>
                                     Min: <span class="bold right">{{ fromAssetsToFloat(proposal.data.soft_cap) }}</span>
@@ -178,7 +178,7 @@
                         </div>
                     </div>
 
-                    <div class="row" v-else-if="proposal.action === proposalTypes.CHANGE_QUORUM">
+                    <div class="legacy-row" v-else-if="proposal.action === proposalTypes.CHANGE_QUORUM">
                         <div class="col-6">
                             <div>
                                 Type:
@@ -193,7 +193,7 @@
                         </div>
                     </div>
 
-                    <div class="row" v-else-if="proposal.action === proposalTypes.CREATE_RESEARCH_MATERIAL">
+                    <div class="legacy-row" v-else-if="proposal.action === proposalTypes.CREATE_RESEARCH_MATERIAL">
                         <div class="col-6">
                             <div class="grey--text">{{ proposal.data.authors.join(' · ') }}</div>
                             <span class="bold">{{ getContentTypeStrById(proposal.data.type) }}:</span>

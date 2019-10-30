@@ -3,7 +3,7 @@
         <!-- ### START Research Details Section ### -->
         <div class="c-mt-6">
             <div>
-                <div class="row legacy-justify-between align-center">
+                <div class="legacy-row legacy-justify-between align-center">
                     <div>
                         <v-icon size="18px">date_range</v-icon>
                         <span>Created on {{ research.created_at | dateFormat('D MMM YYYY', true) }}</span>
@@ -156,7 +156,7 @@
                                             </div>
                                         </div>
 
-                                        <div class="legacy-row-nowrap c-mt-3">
+                                        <div class="legacy--nowrap c-mt-3">
                                             <!-- <div class="c-pr-10">
                                                 <v-icon size="18px">visibility</v-icon> <span>1999</span>
                                             </div> -->
@@ -204,7 +204,7 @@
                     <v-card>
                         <v-card-text class="pt-0">
                             <div class="c-ph-2">
-                                <div class="row">
+                                <div class="legacy-row">
                                     <div class="col-8">
                                         <div class="c-pt-2">
                                             <span>

@@ -1,6 +1,6 @@
 <template>
     <div class="pos-relative">
-        <div class="row">
+        <div class="legacy-row">
             <v-menu class="width-6"
                 lazy
                 :close-on-content-click="false"

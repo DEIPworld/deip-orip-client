@@ -6,7 +6,7 @@
             <div class="legacy-col-grow overflow-y-auto">
 
                 <div class="c-mh-auto period-max-width c-pt-4">
-                    <v-form class="row" ref="form" v-model="isFormValid">
+                    <v-form class="legacy-row" ref="form" v-model="isFormValid">
                         <div class="col-12">
                             <datetime-picker
                                 ref="startDatePicker"
@@ -40,7 +40,7 @@
             </div>
         </div>
 
-        <div class="row legacy-justify-center align-center">
+        <div class="legacy-row legacy-justify-center align-center">
             <v-btn flat small @click.native="prevStep()">
                 <v-icon dark class="pr-1">keyboard_arrow_left</v-icon> Back
             </v-btn>

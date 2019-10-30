@@ -2,8 +2,8 @@
     <div> 
         <div class="title">Proposals</div>
 
-        <div class="row c-pt-2 legacy-justify-between align-center">
-            <div class="row align-center">
+        <div class="legacy-row c-pt-2 legacy-justify-between align-center">
+            <div class="legacy-row align-center">
                 <span class="uppercase half-bold">Show approved proposals</span>
 
                 <v-switch class="c-ml-4 mt-0 pt-0" 

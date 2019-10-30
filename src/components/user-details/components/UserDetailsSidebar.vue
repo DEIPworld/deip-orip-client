@@ -5,7 +5,7 @@
         <div>
             <div class="sm-title bold">Expertise Tokens</div>
             <div class="c-pt-4 c-pb-2">
-                <div class="row legacy-justify-between" v-for="(item, i) in expertise" :key="i">
+                <div class="legacy-row legacy-justify-between" v-for="(item, i) in expertise" :key="i">
                     <div class="half-bold">{{ item.discipline_name }}</div>
                     <div>{{ item.amount }}</div>
                 </div>
@@ -37,7 +37,7 @@
         <div class="c-mt-4" v-if="isProfileAvailable && (isContactsInfoSpecified || isOwner)">
             <div class="sidebar-fullwidth"><v-divider></v-divider></div>
             <div class="subheading bold c-mt-4">
-                <span class="row">
+                <span class="legacy-row">
                     <span class="col-11 mt-1">Contacts info</span>
                     <v-tooltip v-if="isOwner && !isEditingContacts" bottom class="col-1">
                         <v-btn slot="activator" @click="editContacts" flat small icon color="grey" class="mt-0">
@@ -91,7 +91,7 @@
         <div class="c-mt-4" v-if="isProfileAvailable && (isPersonalInfoSpecified || isOwner)">
             <div class="sidebar-fullwidth"><v-divider></v-divider></div>
             <div class="subheading bold c-mt-4">
-                <span class="row">
+                <span class="legacy-row">
                     <span class="col-11 mt-1">Personal info</span>
                     <v-tooltip v-if="isOwner && !isEditingPersonalInfo" bottom class="col-1">
                         <v-btn slot="activator" @click="editPersonalInfo" flat small icon color="grey" class="mt-0">
@@ -105,40 +105,40 @@
             <div class="c-pt-4 c-pb-6">
                 <div v-if="userInfo.profile">
                     <div v-if="!isEditingPersonalInfo">
-                        <div v-if="isOwner && !userInfo.profile.firstName" class="row">
+                        <div v-if="isOwner && !userInfo.profile.firstName" class="legacy-row">
                             <span class="col-4 half-bold">First Name</span>
                             <span class="col-1"></span>
                             <span class="col-7 text-align-left owner-hint">add first name</span>
                         </div>
-                        <div v-else class="row">
+                        <div v-else class="legacy-row">
                             <span class="col-4 half-bold">First Name</span>
                             <span class="col-1"></span>
                             <span class="col-7 text-align-left">{{userInfo.profile.firstName || '-'}}</span>
                         </div>
 
-                        <div v-if="isOwner && !userInfo.profile.lastName" class="row">
+                        <div v-if="isOwner && !userInfo.profile.lastName" class="legacy-row">
                             <span class="col-4 half-bold">Last Name</span>
                             <span class="col-1"></span>
                             <span class="col-7 text-align-left owner-hint">add last name</span>
                         </div>
-                        <div v-else class="row">
+                        <div v-else class="legacy-row">
                             <span class="col-4 half-bold">Last Name</span>
                             <span class="col-1"></span>
                             <span class="col-7 text-align-left">{{userInfo.profile.lastName || '-'}}</span>
                         </div>
 
-                        <div v-if="isOwner && !userInfo.profile.birthday" class="row">
+                        <div v-if="isOwner && !userInfo.profile.birthday" class="legacy-row">
                             <span class="col-4 half-bold">Birthday</span>
                             <span class="col-1"></span>
                             <span class="col-7 text-align-left owner-hint">add birthday</span>
                         </div>
-                        <div v-else class="row">
+                        <div v-else class="legacy-row">
                             <span class="col-4 half-bold">Birthday</span>
                             <span class="col-1"></span>
                             <span class="col-7 text-align-left">{{ userInfo.profile.birthday ? new Date(userInfo.profile.birthday).toDateString() : '-'}}</span>
                         </div>
 
-                        <div v-if="userInfo.profile.created" class="row mt-3">
+                        <div v-if="userInfo.profile.created" class="legacy-row mt-3">
                             <span class="col-4 half-bold">Registered</span>
                             <span class="col-1"></span>
                             <span class="col-7 text-align-left">{{new Date(userInfo.profile.created).toDateString()}}</span>
@@ -179,7 +179,7 @@
             <div class="sm-title bold c-pt-4">Invites: {{invites.length}}</div>
             <div class="c-pb-4">
                 <div v-for="(invite, index) in invites" class="c-pt-2 c-pb-4 invite-item">
-                    <div class="row text-align-center c-pt-4 c-pb-2">
+                    <div class="legacy-row text-align-center c-pt-4 c-pb-2">
                         <router-link :to="`/${invite.group.permlink}/group-details`" style="text-decoration: none">
                             <span class="a">{{invite.group.name}}</span>
                             <span class="grey--text c-pl-1">({{convertToPercent(invite.research_group_token_amount)}}%)</span>

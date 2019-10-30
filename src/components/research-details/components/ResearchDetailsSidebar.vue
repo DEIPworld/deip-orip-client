@@ -91,7 +91,7 @@
                     class="eci-item"
                     :class="index === 0 ? '' : 'c-mt-1'"
                 >
-                    <div class="row align-center legacy-justify-between c-ph-2">
+                    <div class="legacy-row align-center legacy-justify-between c-ph-2">
                         <div class="grey--text">ECI</div>
                         <div class="c-pv-2 eci-label">{{ eci.disciplineName }}: {{ eci.value }}</div>
                     </div>

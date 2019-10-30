@@ -1,6 +1,6 @@
 <template>
     <div class="">
-        <div class="row">
+        <div class="legacy-row">
             <v-avatar size="160px" class="">
                 <img v-if="claimerInfo.profile" v-bind:src="claimerInfo.profile.avatar | avatarSrc(160, 160, false)" />
                 <v-gravatar v-if="!claimerInfo.profile && claimerInfo.account" :email="claimerInfo.account.name + '@deip.world'" />
@@ -14,7 +14,7 @@
                 </div>
 
                 <div class="c-pt-4" v-if="locationString !== ''">
-                    <div class="row half-bold">
+                    <div class="legacy-row half-bold">
                         <span class="c-mt-1">
                             <v-icon small>location_on</v-icon> {{ locationString }}
                         </span>
@@ -42,7 +42,7 @@
         </v-card>
 
         <div class="c-mt-8">
-            <div class="row legacy-align-items-center legacy-justify-center" v-if="claim.username !== user.username && !isClaimAccepted">
+            <div class="legacy-row legacy-align-items-center legacy-justify-center" v-if="claim.username !== user.username && !isClaimAccepted">
                 <v-btn color="primary" class="ma-0 width-9" large
                     :disabled="isApproveBtnDisabled"
                     :loading="isApproveBtnLoading"
@@ -56,7 +56,7 @@
                 </div>
             </div>
 
-            <div class="row legacy-align-items-center legacy-justify-center" v-if="isClaimAccepted">
+            <div class="legacy-row legacy-align-items-center legacy-justify-center" v-if="isClaimAccepted">
                 <span class="headline green--text text--darken-1 c-pr-3">Claimed</span>
                 <v-icon size="35" color="green darken-1">mdi-check</v-icon>
             </div>

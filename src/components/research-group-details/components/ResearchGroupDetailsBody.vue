@@ -105,7 +105,7 @@
                                         <template v-for="(invite, i) in invites">
                                             <v-divider></v-divider>
 
-                                            <div class="row c-pv-4 c-ph-6 legacy-align-items-center">
+                                            <div class="legacy-row c-pv-4 c-ph-6 legacy-align-items-center">
                                                 <div class="legacy-row-nowrap col-4">
                                                     <v-avatar size="40px" class="c-pt-3">
                                                         <img v-if="invite.user.profile" v-bind:src="invite.user.profile.avatar | avatarSrc(40, 40, false)" />

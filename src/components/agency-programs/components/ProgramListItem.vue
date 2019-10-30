@@ -8,7 +8,7 @@
                         {{program.funding_opportunity_title}}
                     </router-link>
                 </div>
-                <div class="row c-pl-5 c-pt-2 c-pb-3">
+                <div class="legacy-row c-pl-5 c-pt-2 c-pb-3">
                     <div class="legacy-col-grow caption grey--text">
                         <span class="c-pr-2">Posted Date:</span>
                         <v-icon color="grey" small>event</v-icon>

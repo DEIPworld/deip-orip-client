@@ -43,7 +43,7 @@
 
                         <v-card class="c-mt-6">
                             <template v-for="(publication, index) in publications">
-                                <div class="row c-p-6">
+                                <div class="legacy-row c-p-6">
                                     <div class="c-pt-6 c-pr-4">
                                         <v-icon color="primary">mdi-note-text</v-icon>
                                     </div>
@@ -75,7 +75,7 @@
                             </div>
                         </v-card>
                         
-                        <div class="row legacy-justify-center c-ph-6 c-pt-6">
+                        <div class="legacy-row legacy-justify-center c-ph-6 c-pt-6">
                             <v-btn color="primary"
                                 :disabled="isClaimBtnDisabled || isLoading"
                                 :loading="isLoading"

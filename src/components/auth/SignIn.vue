@@ -35,7 +35,7 @@
 											:disabled="isChecking" 
 											@click="login()"
 									>Login</v-btn>
-									<!-- <div class="row legacy-justify-center c-pt-3" v-show="isChecking">
+									<!-- <div class="legacy-row legacy-justify-center c-pt-3" v-show="isChecking">
 											<v-progress-circular indeterminate color="primary"></v-progress-circular>
 									</div> -->
 							</v-form>

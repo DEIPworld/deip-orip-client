@@ -38,7 +38,7 @@
                     </div>
                 </div>
 
-                <div class="row c-pt-4 legacy-justify-end">
+                <div class="legacy-row c-pt-4 legacy-justify-end">
                     <v-btn class="ma-0" flat
                         color="primary"
                         :disabled="isChangeBtnDisabled || isLoading"

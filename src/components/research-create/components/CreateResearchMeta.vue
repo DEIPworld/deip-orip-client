@@ -6,7 +6,7 @@
             <div class="legacy-col-grow overflow-y-auto">
 
                 <div class="c-mh-auto c-pt-4" style="max-width: 1000px;">
-                    <div class="row">
+                    <div class="legacy-row">
                         <div class="col-3"></div>
                         <div class="col-6">
                             <v-textarea v-model="title" v-on:keyup="setTitle" 
@@ -17,7 +17,7 @@
                         <div class="col-3"></div>
                     </div>
 
-                    <div class="row c-pt-4">
+                    <div class="legacy-row c-pt-4">
                         <div class="col-3"></div>
                         <div class="col-6">
                             <v-textarea v-model="description" v-on:keyup="setDescription" 
@@ -28,13 +28,13 @@
                         <div class="col-3"></div>
                     </div>
 
-                <!--    <div class="row c-pt-4">
+                <!--    <div class="legacy-row c-pt-4">
                         <div class="legacy-col-offset-3 col-6">
                             <v-checkbox v-model="tmpIsPrivate" label="Choose if group should be private"></v-checkbox>
                         </div>
                     </div> -->
 
-                <!--    <div class="row c-pt-4">
+                <!--    <div class="legacy-row c-pt-4">
                         <div class="col-3 font-18px bold c-pr-4">Main goals of your research</div>
                         <div class="col-6">
                             <v-text-field name="goals" label="Goals" solo textarea hide-details></v-text-field>
@@ -45,7 +45,7 @@
 
         </div>
 
-        <div class="row legacy-justify-center align-center">
+        <div class="legacy-row legacy-justify-center align-center">
             <v-btn flat small @click.native="prevStep()">
                 <v-icon dark class="pr-1">keyboard_arrow_left</v-icon> Back
             </v-btn>

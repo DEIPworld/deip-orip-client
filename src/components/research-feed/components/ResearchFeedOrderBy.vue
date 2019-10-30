@@ -1,7 +1,7 @@
 <template>
     <div class="legacy-row-nowrap">
         <div class="filter-title subheading grey--text">Sort by</div>
-        <div class="row">
+        <div class="legacy-row">
             <div class="pr-4 sort-label" v-for="(order, index) in orders" :key="index">
                 <research-feed-order-by-item
                     :position="index"

@@ -53,7 +53,7 @@
             </v-flex>
 
             <v-flex xs12>
-                <div class="row c-pl-5 c-pb-2">
+                <div class="legacy-row c-pl-5 c-pb-2">
                     <div v-for="eci in eciList" class="grey--text">
                         <span class="c-pr-5">
                             <span class="">{{ eci.disciplineName }}</span>

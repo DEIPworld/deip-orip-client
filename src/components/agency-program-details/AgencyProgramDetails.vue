@@ -19,35 +19,35 @@
             </v-flex>
             
             <v-flex xs12>
-              <div class="row c-pt-10">
+              <div class="legacy-row c-pt-10">
                 <span class="legacy-col-grow body-1">Agency Name</span>
                 <span class="legacy-col-grow body-2">{{agencyProfile.name}}</span>
 
                 <span class="legacy-col-grow body-1">Estimated total program funding:</span>
                 <span class="legacy-col-grow body-2">$ {{fromAssetsToFloat(program.amount)}}</span>
               </div>
-              <div class="row c-pt-5">
+              <div class="legacy-row c-pt-5">
                 <span class="legacy-col-grow body-1">Opportunity Number:</span>
                 <span class="legacy-col-grow body-2">{{program.funding_opportunity_number}}</span>
 
                 <span class="legacy-col-grow body-1">Expected number of awards:</span>
                 <span class="legacy-col-grow body-2">{{program.expected_number_of_awards}}</span>
               </div>
-              <div class="row c-pt-5">
+              <div class="legacy-row c-pt-5">
                 <span class="legacy-col-grow body-1">Area:</span>
                 <span class="legacy-col-grow body-2">{{program.area.title}}</span>
 
                 <span class="legacy-col-grow body-1">Award ceiling:</span>
                 <span class="legacy-col-grow body-2">$ {{fromAssetsToFloat(program.award_ceiling)}}</span>
               </div> 
-              <div class="row c-pt-5">
+              <div class="legacy-row c-pt-5">
                 <span class="legacy-col-grow body-1">Open date:</span>
                 <span class="legacy-col-grow body-2">{{new Date(`${program.posted_date}Z`).toDateString()}}</span>
 
                 <span class="legacy-col-grow body-1">Award floor:</span>
                 <span class="legacy-col-grow body-2">$ {{fromAssetsToFloat(program.award_floor)}}</span>
               </div>
-              <div class="row c-pt-5 c-pb-10">
+              <div class="legacy-row c-pt-5 c-pb-10">
                 <span class="legacy-col-grow body-1">Close date:</span>
                 <span class="legacy-col-grow body-2">{{new Date(`${program.close_date}Z`).toDateString()}}</span>
 
@@ -62,7 +62,7 @@
             </v-flex>
 
             <v-flex xs12 v-if="isGrantor || isOfficer">
-              <div class="row">
+              <div class="legacy-row">
                 <div class="col-6">
                   <div class="sm-title bold c-pv-10">Applications</div>
 

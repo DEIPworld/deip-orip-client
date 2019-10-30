@@ -14,7 +14,7 @@
             </div>
 
             <div class="c-pt-6">
-                <div class="row">
+                <div class="legacy-row">
                     <div v-for="tvo in disciplines">
                         <span class="c-pr-1">
                             <span class="bold green--text text--darken-2">{{ tvo.disciplineName }}</span>

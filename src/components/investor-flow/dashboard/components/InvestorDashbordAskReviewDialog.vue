@@ -36,7 +36,7 @@
                                 <v-divider></v-divider>
                             </div>
 
-                            <div class="row c-pt-2">
+                            <div class="legacy-row c-pt-2">
                                 <div class="grey--text">
                                     <span class="c-pr-1">
                                         <span class="">Computer science</span>
@@ -104,7 +104,7 @@
                                         ></v-text-field>
 
                                         <v-radio-group>
-                                            <div class="row">
+                                            <div class="legacy-row">
                                                 <div class="width-9">
                                                     <v-radio
                                                         label="By name"
@@ -239,7 +239,7 @@
                         </v-tabs-items>
                     </div>
                     
-                    <div class="row legacy-justify-center c-p-6">
+                    <div class="legacy-row legacy-justify-center c-p-6">
                         <v-btn color="primary"
                         >Send a review request</v-btn>
                     </div>

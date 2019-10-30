@@ -1,6 +1,6 @@
 <template>
     <div>
-        <div class="row discipline-picker c-mt-8">
+        <div class="legacy-row discipline-picker c-mt-8">
             <div class="col-3">
                 <discipline-tree-picker @select="setDisciplines"></discipline-tree-picker>
             </div>
@@ -34,7 +34,7 @@
 
                     <div v-if="isLoadingUserExpertise === false">
                         <div class="c-pt-4 c-pb-6">
-                            <div class="row legacy-justify-between" v-for="(item, i) in selectedUser.expertise" :key="i">
+                            <div class="legacy-row legacy-justify-between" v-for="(item, i) in selectedUser.expertise" :key="i">
                                 <div>{{ item.discipline_name }}</div>
                                 <div>{{ item.amount }}</div>
                             </div>

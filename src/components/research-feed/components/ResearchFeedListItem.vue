@@ -32,7 +32,7 @@
             <v-divider></v-divider>
         </div>
 
-        <div class="row c-pt-2">
+        <div class="legacy-row c-pt-2">
             <div v-for="eci in eciList" class="grey--text c-pr-4">
                 <span class="c-pr-1">
                     <span class="">{{ eci.disciplineName }}</span>

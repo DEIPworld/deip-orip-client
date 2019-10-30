@@ -2,7 +2,7 @@
     <page-container>
         <contentbar>
             <div>
-                <div class="row legacy-justify-between legacy-align-items-end">
+                <div class="legacy-row legacy-justify-between legacy-align-items-end">
                     <div class="display-1 bold">
                         Block #{{contentMetadata.blockNum}}
                         <span v-if="isGenesisBlock" class="caption grey--text">GENESIS</span>
@@ -13,14 +13,14 @@
 
                 <div class="c-mt-4">
                     <div class="bold">Block ID</div>
-                    <div class="row grey-border-stripe">
+                    <div class="legacy-row grey-border-stripe">
                         <div class="pill width-7 white--text">RIPEMD-160</div>
                         <div class="legacy-col-grow pill-value">{{contentMetadata.blockId}}</div>
                     </div>
                 </div>
 
             <!--    <div class="c-mt-4">
-                    <div class="row">
+                    <div class="legacy-row">
                         <div class="bold width-7">Research</div>
                         <div class="bold deip-blue-color c-pl-4">
                             <router-link class="a" :to="{ name: 'ResearchDetails', params: { 
@@ -30,14 +30,14 @@
                             </router-link>
                         </div>
                     </div>
-                    <div class="row grey-border-stripe">
+                    <div class="legacy-row grey-border-stripe">
                         <div class="pill width-7 white--text">Public ID</div>
                         <div class="legacy-col-grow pill-value">{{contentMetadata.research.id}}</div>
                     </div>
                 </div> -->
 
                 <div class="c-mt-4">
-                    <div class="row">
+                    <div class="legacy-row">
                         <div class="bold width-7">Content</div>
                         <div class="bold deip-blue-color c-pl-4">
                             <router-link class="a" 
@@ -46,26 +46,26 @@
                             </router-link>
                         </div>
                     </div>
-                    <div class="row grey-border-stripe">
+                    <div class="legacy-row grey-border-stripe">
                         <div class="pill width-7 white--text">MD5</div>
                         <div class="legacy-col-grow pill-value">{{getContentHash(contentMetadata.content.content)}}</div>
                     </div>
                 </div>
                 
                 <div class="c-mt-4">
-                    <div class="row">
+                    <div class="legacy-row">
                         <div class="bold width-7">Timestamp<br>(ISO 8601)</div>
                         <div class="c-pl-4 c-pt-3">{{new Date(contentMetadata.timestamp).toISOString()}}</div>
                     </div>
                 </div>
 
                 <div class="c-mt-8">
-                    <div class="row">
+                    <div class="legacy-row">
                         <div class="bold width-7">Signee</div>
 
                         <div class="legacy-col-grow">
                             <div>
-                                <div class="row">
+                                <div class="legacy-row">
                                     <v-avatar size="40px">
                                         <img v-if="contentMetadata.witness.user.profile" v-bind:src="contentMetadata.witness.user.profile.avatar | avatarSrc(40, 40, false)" />
                                         <v-gravatar v-else :email="contentMetadata.witness.user.account.name + '@deip.world'" />
@@ -103,13 +103,13 @@
                 </div>
 
                 <div class="c-mt-8" v-if="!isGenesisBlock">
-                    <div class="row">
+                    <div class="legacy-row">
                         <div class="bold width-7">Approved by</div>
 
                         <div class="legacy-col-grow">
 
                             <div class="c-mb-4" v-for="voter in contentMetadata.voters">
-                                <div class="row">
+                                <div class="legacy-row">
                                     <v-avatar size="40px">
                                         <img v-if="voter.user.profile" v-bind:src="voter.user.profile.avatar | avatarSrc(40, 40, false)" />
                                         <v-gravatar v-else :email="voter.user.account.name + '@deip.world'" />
@@ -148,7 +148,7 @@
 
                 <div class="c-mt-4" v-if="!isGenesisBlock">
                     <div class="bold">Transaction ID</div>
-                    <div class="row grey-border-stripe">
+                    <div class="legacy-row grey-border-stripe">
                         <div class="pill width-7 white--text">RIPEMD-160</div>
                         <div class="legacy-col-grow pill-value">{{contentMetadata.transaction.id}}</div>
                     </div>
@@ -166,7 +166,7 @@
 
                 <div class="c-mt-4">
                     <div class="bold">Chain ID</div>
-                    <div class="row grey-border-stripe">
+                    <div class="legacy-row grey-border-stripe">
                         <div class="pill width-7 white--text">SHA256</div>
                         <div class="legacy-col-grow pill-value">{{contentMetadata.chainId}}</div>
                     </div>

@@ -1,6 +1,6 @@
 <template>
     <div>
-        <div v-if="research" class="row">
+        <div v-if="research" class="legacy-row">
             <div>
                 <v-tooltip bottom color="white">
                     <div class="start-point deip-blue-bg white--text" slot="activator">Start</div>

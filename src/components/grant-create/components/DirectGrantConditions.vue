@@ -12,7 +12,7 @@
 
                 <div class="c-mh-auto full-height discipline-conditions">
                     <div class="c-pt-6">
-                        <div class="row">
+                        <div class="legacy-row">
                             <div class="col-6 c-pr-3">
                                 <datetime-picker
                                     label="From"
@@ -30,7 +30,7 @@
                             </div>
                         </div>
 
-                        <div class="row">
+                        <div class="legacy-row">
                             <div class="col-12">
                                 <div class="c-pt-4 subheading bold">Description 
                                     <span class="caption">(optional)</span>
@@ -48,7 +48,7 @@
             </div>
         </div>
 
-        <div class="row legacy-justify-center align-center">
+        <div class="legacy-row legacy-justify-center align-center">
             <v-btn flat small @click.native="prevStep()">
                 <v-icon dark class="pr-1">keyboard_arrow_left</v-icon> Back
             </v-btn>

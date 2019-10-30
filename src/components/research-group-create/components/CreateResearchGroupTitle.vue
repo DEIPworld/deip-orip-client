@@ -4,7 +4,7 @@
             <div class="step-title">Group name</div>
             <div class="legacy-col-grow overflow-y-auto">
 
-                <div class="row c-mh-auto group-title-max-width">
+                <div class="legacy-row c-mh-auto group-title-max-width">
                     <div class="col-12">
                         <v-form ref="form">
                             <div class="">
@@ -42,7 +42,7 @@
 
             </div>
         </div>
-        <div class="row legacy-justify-center align-center">
+        <div class="legacy-row legacy-justify-center align-center">
             <v-btn color="primary" 
                 @click.native="nextStep()" 
                 :disabled="nextDisabled"

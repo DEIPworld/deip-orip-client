@@ -30,12 +30,12 @@
             </div>
 
             <div class="c-pt-4 c-pb-6">
-                <div class="row legacy-justify-between" v-if="claimerInfo.profile.birthday">
+                <div class="legacy-row legacy-justify-between" v-if="claimerInfo.profile.birthday">
                     <span class="half-bold">Birthday</span>
                     <span class="">{{ claimerInfo.profile.birthday | dateFormat("D MMM YYYY") }}</span>
                 </div>
 
-                <div class="row legacy-justify-between" v-if="claimerInfo.profile.created">
+                <div class="legacy-row legacy-justify-between" v-if="claimerInfo.profile.created">
                     <span class="half-bold">Registered</span>
                     <span class="">{{ claimerInfo.profile.created | dateFormat("D MMM YYYY") }}</span>
                 </div>

@@ -1,5 +1,5 @@
 <template>
-    <div class="row discipline-picker full-height overflow-y-auto">
+    <div class="legacy-row discipline-picker full-height overflow-y-auto">
         <div v-if="!withoutUserDisciplines" class="col-4 c-p-4 overflow-y-auto">
             <div class="bold uppercase c-pb-4">Your disciplines</div>
 

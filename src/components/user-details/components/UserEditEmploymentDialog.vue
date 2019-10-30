@@ -13,7 +13,7 @@
                 <contentbar>
                     <v-form v-model="isFormValid" ref="form">
                         <div class="subheading bold">Company</div>
-                        <div class="row">
+                        <div class="legacy-row">
                             <div class="col-12">
                                 <v-text-field
                                     label="Company"
@@ -24,7 +24,7 @@
                         </div>
 
                         <div class="subheading bold">Location</div>
-                        <div class="row">
+                        <div class="legacy-row">
                             <div class="col-6 c-pr-3">
                                 <v-text-field
                                     label="City"
@@ -42,7 +42,7 @@
                         </div>
 
                         <div class="subheading bold">Period</div>
-                        <div class="row">
+                        <div class="legacy-row">
                             <div class="col-5 c-pr-3">
                                 <v-menu
                                     lazy
@@ -95,7 +95,7 @@
                             </div>
 
                             <div class="col-2 c-pt-5">
-                                <div class="row legacy-justify-end">
+                                <div class="legacy-row legacy-justify-end">
                                     <v-checkbox class="ma-0 pa-0"
                                         label="Is present"
                                         :input-value="isActive"
@@ -108,7 +108,7 @@
                         </div>
 
                         <div class="subheading bold">Position</div>
-                        <div class="row">
+                        <div class="legacy-row">
                             <div class="col-12">
                                 <v-text-field
                                     label="Position"
@@ -121,7 +121,7 @@
                         <div class="subheading bold">Description  
                             <span class="caption">(optional)</span>
                         </div>
-                        <div class="row">
+                        <div class="legacy-row">
                             <div class="col-12">
                                 <v-text-field
                                     label="Description"
@@ -137,7 +137,7 @@
                         </div> -->
 
                         <div>
-                            <div class="row">
+                            <div class="legacy-row">
                                 <div class="col-11">
                                     <v-btn class="ma-0 width-10" color="primary" @click="save()" :disabled="disabled">Save</v-btn>
                                     <span class="c-pr-4"></span>

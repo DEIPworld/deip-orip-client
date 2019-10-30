@@ -99,7 +99,7 @@
 
                     <!-- <div class="title c-pt-8">Other assets</div>
 
-                    <div class="row c-pt-6">
+                    <div class="legacy-row c-pt-6">
                         <v-card class="col-4 c-p-6 c-mr-6">
                             <div class="subheading bold">Research Group Tokens</div>
                             <div class="display-1">6566</div>

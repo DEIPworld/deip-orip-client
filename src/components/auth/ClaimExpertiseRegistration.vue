@@ -4,7 +4,7 @@
         <div class="page-container c-pv-10">
             <div class="headline text-align-center">Select your discipline</div>
 
-            <div class="row discipline-picker c-mt-8">
+            <div class="legacy-row discipline-picker c-mt-8">
 
                 <div class="col-4 c-p-4 overflow-y-auto">
                     <div class="half-bold uppercase c-pb-3">Popular</div>
@@ -27,12 +27,12 @@
                 Please be accurate, you will need the community assistance to change the disciplines
             </div>
 
-            <div class="row legacy-justify-center c-pt-8">
+            <div class="legacy-row legacy-justify-center c-pt-8">
                 <v-btn color="primary" @click="setDiscipline()" :disabled="selectedDiscipline === undefined">
                     Set disciplines
                 </v-btn>
             </div>
-            <div class="row legacy-justify-center c-pt-2">
+            <div class="legacy-row legacy-justify-center c-pt-2">
                 <router-link to="/research-feed" class="a">Skip</router-link>
             </div>
         </div>

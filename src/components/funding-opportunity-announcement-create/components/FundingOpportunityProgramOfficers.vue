@@ -13,7 +13,7 @@
                         ></v-text-field>
 
                     <!--    <v-radio-group>
-                            <div class="row">
+                            <div class="legacy-row">
                                 <div class="width-8">
                                     <v-radio
                                         label="By name"
@@ -55,7 +55,7 @@
             </div>
         </div>
         
-        <div class="row legacy-justify-center align-center">
+        <div class="legacy-row legacy-justify-center align-center">
             <v-btn flat small @click.native="prevStep()">
                 <v-icon dark class="pr-1">keyboard_arrow_left</v-icon> Back
             </v-btn>

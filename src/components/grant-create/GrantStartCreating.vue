@@ -4,7 +4,7 @@
             <div class="c-m-auto page-container">
                 <div class="text-align-center display-1 bold">Grants distribution</div>
 
-                <div class="row c-pt-12">
+                <div class="legacy-row c-pt-12">
                     <div class="legacy-col-grow c-pr-8">
                         <v-btn block color="primary"
                             class="ma-0"

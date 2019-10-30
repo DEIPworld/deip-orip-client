@@ -60,7 +60,7 @@
         <v-card class="c-pb-6">
           <v-layout row wrap>
             <v-flex xs6 text-xs-center>
-              <div class="row c-pb-6 c-pt-6">
+              <div class="legacy-row c-pb-6 c-pt-6">
                 <div class="legacy-col-grow sort-option">
                   <span class="body-1 grey--text">SORT BY</span>
                 </div>

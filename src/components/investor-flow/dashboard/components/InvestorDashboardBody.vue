@@ -2,7 +2,7 @@
     <div>
         <div class="display-1 half-bold">Investor 1 Inbox</div>
 
-        <div class="row legacy-justify-between align-center c-pt-6">
+        <div class="legacy-row legacy-justify-between align-center c-pt-6">
             <div class="title">Recent updates</div>
             
             <v-menu offset-y>
@@ -93,7 +93,7 @@
         <!--
             Dublicating
         -->
-        <div class="row legacy-justify-between align-center c-pt-10">
+        <div class="legacy-row legacy-justify-between align-center c-pt-10">
             <div class="title">Unread reviews: 3</div>
         </div>
 
@@ -152,7 +152,7 @@
         </div>
 
         
-        <div class="row legacy-justify-between align-center c-pt-10">
+        <div class="legacy-row legacy-justify-between align-center c-pt-10">
             <div class="title">Reviews request: 2</div>
         </div>
 

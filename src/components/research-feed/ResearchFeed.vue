@@ -10,7 +10,7 @@
                     class="filter-title subheading grey--text"
                 >Filters</div>
 
-                <div class="row legacy-col-grow align-center">
+                <div class="legacy-row legacy-col-grow align-center">
                     <div class="c-pr-4 display-flex" v-if="filter.q !== ''">
                         <span>{{ filter.q }}</span>
                         <span class="small-remove-btn ml-1" @click="updateFilter({ key: 'q', value: '' })">
@@ -35,7 +35,7 @@
                 <research-feed-order-by></research-feed-order-by>
             </v-flex>
 
-            <div class="row legacy-justify-between align-end c-pt-10">
+            <div class="legacy-row legacy-justify-between align-end c-pt-10">
                 <div class="title">Search Results: {{ researchFeed.length }}</div>
                 <div class="list-state-label half-bold" @click.stop="toggleFeed()">
                     <span v-show="!allCollapsed">Collapse all</span>

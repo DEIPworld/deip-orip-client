@@ -73,7 +73,7 @@
                     </v-menu>
                 </div>
             </div>
-            <div class="c-pt-4 row align-center">
+            <div class="c-pt-4 legacy- align-center">
                 <div class="half-bold">Finished</div>
                 <div class="c-ml-2">
                     <v-checkbox v-model="isFinished" hide-details color="green darken-3"></v-checkbox>

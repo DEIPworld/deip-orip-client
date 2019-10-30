@@ -9,7 +9,7 @@
                     <v-form class="" ref="form" v-model="isFormValid">
                         <div class="subheading bold">Dates attended</div>
 
-                        <div class="row">
+                        <div class="legacy-row">
                             <div class="col-6 c-pr-3">
                                 <datetime-picker
                                     label="Start date"
@@ -50,7 +50,7 @@
             </div>
         </div>
 
-        <div class="row legacy-justify-center align-center">
+        <div class="legacy-row legacy-justify-center align-center">
             <v-btn flat small @click.native="prevStep()">
                 <v-icon dark class="pr-1">keyboard_arrow_left</v-icon> Back
             </v-btn>

@@ -10,7 +10,7 @@
                 </div>
 
                 <div class="">
-                    <div class="row align-center c-pb-4" v-for="i in 3" :key="i">
+                    <div class="legacy-row align-center c-pb-4" v-for="i in 3" :key="i">
                         <div class="pos-relative">
                             <v-btn dark outline color="grey darken-1" class="remove-milestone like-fab">
                                 <div>
@@ -25,7 +25,7 @@
                         </div>
                     </div>
                     
-                    <div class="row align-center c-pb-4">
+                    <div class="legacy-row align-center c-pb-4">
                         <div class="pos-relative">
                             <v-btn fab dark color="primary">
                                 <v-icon dark>add</v-icon>
@@ -37,7 +37,7 @@
             </div>
 
         </div>
-        <div class="row legacy-justify-center align-center">
+        <div class="legacy-row legacy-justify-center align-center">
             <v-btn flat small @click.native="prevStep()">
                 <v-icon dark class="pr-1">keyboard_arrow_left</v-icon> Back
             </v-btn>
