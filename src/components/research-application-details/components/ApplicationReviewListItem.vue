@@ -1,7 +1,7 @@
 <template>
     <v-card class="review-container hidden-last-child">
         <div class="legacy-row-nowrap c-p-6 clickable" @click="goToReviewPage()">
-            <div style="width: 10%" class="column text-align-center" @click="goToReviewerProfilePage($event, review.author.account.name)">
+            <div style="width: 10%" class="legacy-column text-align-center" @click="goToReviewerProfilePage($event, review.author.account.name)">
                 <v-avatar size="90px">
                     <img v-if="review.author.profile" v-bind:src="review.author.profile.avatar | avatarSrc(90, 90, false)" />
                     <v-gravatar v-else :title="review.author.account.name" :email="review.author.account.name + '@deip.world'" />
@@ -37,7 +37,7 @@
                 </div>
             </div>
 
-            <div class="column" style="width: 5%">
+            <div class="legacy-column" style="width: 5%">
                 <div class="right">
                     <v-avatar size="40px">
                         <img :src="review.program.agency_name | agencyLogoSrc(160, 160, false)" />

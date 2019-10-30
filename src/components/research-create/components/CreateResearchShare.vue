@@ -1,6 +1,6 @@
 <template>
-    <div class="column full-height">
-        <div class="c-mb-4 legacy-col-grow column">
+    <div class="legacy-column full-height">
+        <div class="c-mb-4 legacy-col-grow legacy-column">
             <div class="step-title">Share reward with reviewers</div>
             <div class="legacy-col-grow overflow-y-auto">
 
@@ -19,7 +19,7 @@
                             hide-details>
                         </v-text-field>
 
-                        <div class="column align-center">
+                        <div class="legacy-column align-center">
                             <div class="c-pt-8 caption grey--text" v-if="reviewShare">
                                 {{reviewShare}}% of  potential research reward will be shared between all
                                 the reviewers according to their Review Index  

@@ -1,6 +1,6 @@
 <template>
-    <div class="column full-height">
-        <div class="c-mb-4 legacy-col-grow column">
+    <div class="legacy-column full-height">
+        <div class="c-mb-4 legacy-col-grow legacy-column">
             <div class="step-title">Select discipline(s) your funding opportunity is related to</div>
 
             <div class="subheading c-mb-2 text-align-center c-mh-auto discipline-max-width">

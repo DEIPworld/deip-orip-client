@@ -1,6 +1,6 @@
 <template>
-    <div class="column full-height legacy-col-grow" style="max-width: 700px;">
-        <div class="c-mb-4 legacy-col-grow column overflow-y-auto">
+    <div class="legacy-column full-height legacy-col-grow" style="max-width: 700px;">
+        <div class="c-mb-4 legacy-col-grow legacy-column overflow-y-auto">
 
             <div class="step-title">Roadmap</div>
             <div class="legacy-col-grow">

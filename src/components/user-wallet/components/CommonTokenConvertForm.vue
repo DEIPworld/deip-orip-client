@@ -26,7 +26,7 @@
                 <div class="align-center justify-space-around c-pv-6" 
                     :class="isDeipToCommonMode ? 'row' : 'legacy-row-reverse'"
                 >
-                    <div class="column width-5">
+                    <div class="legacy-column width-5">
                         <!-- TODO: make service component which can manage our all SVG items -->
                         <div class="c-m-auto c-mb-1" style="height: 40px; width: 40px;">
                             <svg width="100%" height="100%" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -42,7 +42,7 @@
                         <v-icon large>swap_horiz</v-icon>
                     </v-btn>
 
-                    <div class="column width-5">
+                    <div class="legacy-column width-5">
                         <!-- TODO: make service component which can manage our all SVG items -->
                         <div class="c-m-auto c-mb-1" style="height: 40px; width: 40px;">
                             <svg width="100%" height="100%" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">

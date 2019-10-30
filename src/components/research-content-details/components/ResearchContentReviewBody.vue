@@ -9,7 +9,7 @@
                 </v-avatar>
             </div>
             
-            <div class="column c-ml-10">
+            <div class="legacy-column c-ml-10">
                 <div class="c-pt-4">
                     <router-link class="a sm-title" :to="{ name: 'UserDetails', params: { account_name: review.author.account.name }}">
                         {{ review.author | fullname }}

@@ -2,7 +2,7 @@
     <v-container fluid fill-height class="pa-0">
         <v-layout>
             <v-stepper v-model="currentStep" v-if="!isFinished && agency" alt-labels
-                class="column stepper-page full-width full-height"
+                class="legacy-column stepper-page full-width full-height"
             >
                 <v-stepper-header>
                     <v-stepper-step step="1" :complete="currentStep > 1">

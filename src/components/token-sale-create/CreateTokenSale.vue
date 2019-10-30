@@ -1,7 +1,7 @@
 <template>
     <v-container fluid fill-height class="pa-0">
         <v-layout>
-            <v-stepper v-model="currentStep" alt-labels class="column full-width full-height stepper-page">
+            <v-stepper v-model="currentStep" alt-labels class="legacy-column full-width full-height stepper-page">
                 <v-stepper-header>
                     <v-stepper-step step="1" :complete="currentStep > 1">
                         <div class="uppercase">Amount</div>

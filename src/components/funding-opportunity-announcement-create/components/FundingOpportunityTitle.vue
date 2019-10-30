@@ -1,6 +1,6 @@
 <template>
-    <div class="column full-height">
-        <div class="c-mb-4 legacy-col-grow column">
+    <div class="legacy-column full-height">
+        <div class="c-mb-4 legacy-col-grow legacy-column">
             <div class="step-title">Add title and number</div>
 
             <div class="legacy-col-grow overflow-y-auto">

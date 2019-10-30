@@ -1,6 +1,6 @@
 <template>
-    <div class="column full-height">
-        <div class="c-mb-4 legacy-col-grow column">
+    <div class="legacy-column full-height">
+        <div class="c-mb-4 legacy-col-grow legacy-column">
             <div class="step-title">Direct grants distribution</div>
             <div class="sm-title bold c-mb-2 text-align-center">Please type special conditions</div>
 

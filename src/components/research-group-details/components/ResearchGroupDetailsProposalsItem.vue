@@ -120,7 +120,7 @@
                                 <span class="bold">{{ convertToPercent(proposal.data.review_share_in_percent) }}%</span>
                             </div>
                         </div>
-                        <div class="col-6 grey--text column flex-wrap" style="max-height: 70px">
+                        <div class="col-6 grey--text legacy-column flex-wrap" style="max-height: 70px">
                             <div v-for="(label, i) in getDisciplineNames()" :key="i">{{ label }}</div>
                         </div>
                     </div>

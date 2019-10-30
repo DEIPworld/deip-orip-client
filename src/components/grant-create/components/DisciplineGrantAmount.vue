@@ -1,6 +1,6 @@
 <template>
-    <div class="column full-height">
-        <div class="c-mb-4 legacy-col-grow column">
+    <div class="legacy-column full-height">
+        <div class="c-mb-4 legacy-col-grow legacy-column">
             <div class="step-title">
                 Supply grant for "{{ this.grantInfo.discipline && this.grantInfo.discipline.label }}" discipline
             </div>
