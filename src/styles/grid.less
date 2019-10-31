@@ -1,66 +1,77 @@
 .legacy-row {
-    display: flex;
-    flex-wrap: wrap;
-}
-.legacy-column {
-    display: flex;
-    flex-direction: column;
-}
-.legacy-row-nowrap {
-    display: flex;
-}
-.legacy-row-reverse {
-    display: flex;
-    flex-wrap: wrap;
-    flex-direction: row-reverse;
+  display: flex;
+  flex-wrap: wrap;
 }
 
+.legacy-column {
+  display: flex;
+  flex-direction: column;
+}
+
+.legacy-row-nowrap {
+  display: flex;
+}
+
+.legacy-row-reverse {
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: row-reverse;
+}
 
 .create-columns(@view-port, @n, @i: 1) when (@i =< @n) {
-    .legacy-col@{view-port}-@{i} {
-        flex-basis: @i / @n * 100%;
-        max-width: @i / @n * 100%;
-    }
+  .legacy-col@{view-port}-@{i} {
+    flex-basis: @i / @n * 100%;
+    max-width: @i / @n * 100%;
+  }
 
-    .create-columns(@view-port, @n, (@i + 1));
+  .create-columns(@view-port, @n, (@i + 1));
 }
+
 .create-column-offsets(@view-port, @n, @i: 1) when (@i =< (@n - 1)) {
-    .legacy-col-offset@{view-port}-@{i} {
-        margin-left: @i / @n * 100%;
-    }
+  .legacy-col-offset@{view-port}-@{i} {
+    margin-left: @i / @n * 100%;
+  }
 
-    .create-column-offsets(@view-port, @n, (@i + 1));
+  .create-column-offsets(@view-port, @n, (@i + 1));
 }
+
 .create-order-classes(@n, @i: 1) when (@i =< @n) {
-    .create-order-classes(@n, (@i + 1));
+  .create-order-classes(@n, (@i + 1));
 }
-.create-classes-for-view-port(@view-port, @cols-count) {
-    .legacy-col-grow@{view-port} {
-        flex: 1 1 0;
-        max-width: 100%;
-    }
-    .legacy-col-shrink@{view-port} {
-        flex: 0 0 auto;
-        max-width: none;
-    }
-    .legacy-justify-center@{view-port} {
-        justify-content: center;
-    }
-    .legacy-justify-end@{view-port} {
-        justify-content: flex-end;
-    }
-    .legacy-justify-between@{view-port} {
-        justify-content: space-between;
-    }
-    .legacy-align-items-center@{view-port} {
-        align-items: center;
-    }
-    .legacy-align-items-end@{view-port} {
-        align-items: flex-end;
-    }
 
-    .create-columns(@view-port, @cols-count);
-    .create-column-offsets(@view-port, @cols-count);
+.create-classes-for-view-port(@view-port, @cols-count) {
+  .legacy-col-grow@{view-port} {
+    flex: 1 1 0;
+    max-width: 100%;
+  }
+
+  .legacy-col-shrink@{view-port} {
+    flex: 0 0 auto;
+    max-width: none;
+  }
+
+  .legacy-justify-center@{view-port} {
+    justify-content: center;
+  }
+
+  .legacy-justify-end@{view-port} {
+    justify-content: flex-end;
+  }
+
+  .legacy-justify-between@{view-port} {
+    justify-content: space-between;
+  }
+
+  .legacy-align-items-center@{view-port} {
+    align-items: center;
+  }
+  
+  .legacy-align-items-end@{view-port} {
+    align-items: flex-end;
+  }
+
+  .create-columns(@view-port, @cols-count);
+  .create-column-offsets(@view-port, @cols-count);
 }
 
 .create-order-classes(12);
@@ -68,14 +79,14 @@
 .create-classes-for-view-port(~"", @num-of-cols);
 
 @media @small {
-    .create-classes-for-view-port(~"-sm", @num-of-cols);
+  .create-classes-for-view-port(~"-sm", @num-of-cols);
 }
 @media @medium {
-    .create-classes-for-view-port(~"-md", @num-of-cols);
+  .create-classes-for-view-port(~"-md", @num-of-cols);
 }
 @media @large {
-    .create-classes-for-view-port(~"-lg", @num-of-cols);
+  .create-classes-for-view-port(~"-lg", @num-of-cols);
 }
 @media @extralarge {
-    .create-classes-for-view-port(~"-xl", @num-of-cols);
+  .create-classes-for-view-port(~"-xl", @num-of-cols);
 }
