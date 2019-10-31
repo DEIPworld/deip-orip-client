@@ -5,7 +5,7 @@
             <div class="legacy-col-grow overflow-y-auto">
 
                 <div class="legacy-row c-mh-auto group-share-max-width">
-                    <div class="col-12">
+                    <div class="legacy-col-12">
                         <div>
                             Each research group is assigned its own Research Group Tokens which are distributed among its members and can be used to manage the group and its research activity.
                         </div>

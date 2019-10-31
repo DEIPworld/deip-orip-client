@@ -5,7 +5,7 @@
             <div class="legacy-col-grow overflow-y-auto">
 
                 <div class="legacy-row c-mh-auto research-reward-max-width">
-                    <div class="col-12">
+                    <div class="legacy-col-12">
                         <div>
                             How much reward would you like to share with reviewers?
                             The bigger the percent is, the better chance of getting reviews and increasing research popularity you have.

@@ -12,7 +12,7 @@
             <div class="legacy-col-grow overflow-y-auto">
 
                 <div class="legacy-row c-mh-auto amount-max-width">
-                    <div class="col-12">
+                    <div class="legacy-col-12">
                         <div class="">
                             <v-text-field 
                                 :hint="100 - getAmountNumber(tokenSaleInfo.amountToSell) + '% left'"

@@ -6,7 +6,7 @@
 				<div class="c-mh-auto review-comitee-max-width">
 					<v-card class="c-ph-12 c-pv-6">
 						<div class="legacy-row-nowrap legacy-align-items-center">
-								<div class="col-12">
+								<div class="legacy-col-12">
 									<v-autocomplete
 										:items="allGroupList"
 										:filter="committeesFilter"

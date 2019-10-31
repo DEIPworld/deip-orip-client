@@ -17,7 +17,7 @@
 
 
 .create-columns(@view-port, @n, @i: 1) when (@i =< @n) {
-    .col@{view-port}-@{i} {
+    .legacy-col@{view-port}-@{i} {
         flex-basis: @i / @n * 100%;
         max-width: @i / @n * 100%;
     }

@@ -7,7 +7,7 @@
 
                 <div class="c-mh-auto period-max-width c-pt-4">
                     <v-form class="legacy-row" ref="form" v-model="isFormValid">
-                        <div class="col-12">
+                        <div class="legacy-col-12">
                             <datetime-picker
                                 ref="startDatePicker"
                                 label="Open date"
@@ -22,7 +22,7 @@
                             ></datetime-picker>
                         </div>
 
-                        <div class="col-12">
+                        <div class="legacy-col-12">
                             <datetime-picker
                                 label="Close date"
                                 :datetime="endDate"

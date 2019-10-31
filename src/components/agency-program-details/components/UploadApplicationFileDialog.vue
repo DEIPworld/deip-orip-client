@@ -66,7 +66,7 @@
 							<v-divider></v-divider>
 							<div class="c-pv-4">
 								<div class="legacy-row legacy-justify-center">
-									<div class="col-6 c-pr-4">
+									<div class="legacy-col-6 c-pr-4">
 										<v-text-field class="" 
                       label="Title" 
                       v-model="title"
@@ -75,7 +75,7 @@
                       ]">
                     </v-text-field>
 									</div>
-									<div class="col-6 c-pl-4">
+									<div class="legacy-col-6 c-pl-4">
 										<v-text-field class="" 
                       label="Total amount"
                       suffix="$"
@@ -87,7 +87,7 @@
 									</div>
 								</div>
 								<div class="legacy-row legacy-justify-center">
-									<div class="col-12">
+									<div class="legacy-col-12">
 										<v-text-field class="" 
                       label="Organization" 
                       v-model="organization"
@@ -106,16 +106,16 @@
 								</div>
 							</div>
 							<div class="legacy-row c-pt-8">
-								<div class="col-12">
+								<div class="legacy-col-12">
 									<div class="legacy-row legacy-align-items-center height-2 c-pt-4 c-pb-8">
 										<div class="bold c-pr-4">Application</div>
 										<div class="half-bold primary--text">Application content</div>
 										<v-icon v-show="filesMap['Application Content.pdf']" color="green" class="c-pl-4">check_circle</v-icon>
 									</div>
 								</div>
-								<div class="col-12">
+								<div class="legacy-col-12">
 									<div class="legacy-row">
-										<div class="col-6">
+										<div class="legacy-col-6">
 											<div class="bold">Mandatory forms</div>
 											<div class="legacy-row legacy-align-items-center height-2 c-pt-4">
 												<div class="half-bold primary--text">SF424 (R &amp; R) [V2.0]</div>
@@ -146,7 +146,7 @@
 												<v-icon v-show="filesMap['PHSHumanSubjectsAndClinicalTrialsInfo-V1.0.pdf']" color="green" class="c-pl-4">check_circle</v-icon>
 											</div>
 										</div>
-										<div class="col-6">
+										<div class="legacy-col-6">
 											<div class="bold">Optional forms</div>
 											<div class="legacy-row legacy-align-items-center height-2 c-pt-4">
 												<div class="half-bold primary--text">Research &amp; Related Budget [V1.4]</div>

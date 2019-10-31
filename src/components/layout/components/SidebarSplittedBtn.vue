@@ -3,7 +3,7 @@
         <v-divider></v-divider>
 
         <div class="legacy-row-nowrap">
-            <div class="col-6" :class="{ 'clickable': leftRipple !== false }">
+            <div class="legacy-col-6" :class="{ 'clickable': leftRipple !== false }">
                 <div class="display-flex full-height" v-ripple="leftRipple">
                     <slot name="left"></slot>
                 </div>
@@ -11,7 +11,7 @@
 
             <div class="btn-vertical-splitter"></div>
 
-            <div class="col-6" :class="{ 'clickable': rightRipple !== false }">
+            <div class="legacy-col-6" :class="{ 'clickable': rightRipple !== false }">
                 <div class="display-flex full-height" v-ripple="rightRipple">
                     <slot name="right"></slot>
                 </div>

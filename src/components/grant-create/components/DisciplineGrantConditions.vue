@@ -10,7 +10,7 @@
                         <div class="subheading bold">Dates attended</div>
 
                         <div class="legacy-row">
-                            <div class="col-6 c-pr-3">
+                            <div class="legacy-col-6 c-pr-3">
                                 <datetime-picker
                                     label="Start date"
                                     :datetime="grantInfo.startDate"
@@ -24,7 +24,7 @@
                                 ></datetime-picker>
                             </div>
                             
-                            <div class="col-6 c-pl-3">
+                            <div class="legacy-col-6 c-pl-3">
                                 <datetime-picker
                                     label="End date"
                                     :datetime="grantInfo.endDate"

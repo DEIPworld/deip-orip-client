@@ -13,7 +13,7 @@
                 <div class="c-mh-auto full-height discipline-conditions">
                     <div class="c-pt-6">
                         <div class="legacy-row">
-                            <div class="col-6 c-pr-3">
+                            <div class="legacy-col-6 c-pr-3">
                                 <datetime-picker
                                     label="From"
                                     :datetime="grantInfo.startDate"
@@ -21,7 +21,7 @@
                                 ></datetime-picker>
                             </div>
                             
-                            <div class="col-6 c-pl-3">
+                            <div class="legacy-col-6 c-pl-3">
                                 <datetime-picker
                                     label="To"
                                     :datetime="grantInfo.endDate"
@@ -31,7 +31,7 @@
                         </div>
 
                         <div class="legacy-row">
-                            <div class="col-12">
+                            <div class="legacy-col-12">
                                 <div class="c-pt-4 subheading bold">Description 
                                     <span class="caption">(optional)</span>
                                 </div>

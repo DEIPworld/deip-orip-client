@@ -33,7 +33,7 @@
 					<v-card v-for="file in contentRef.packageFiles" :key="file.hash">
 						<v-card-text>
 							<div class="legacy-row-nowrap">
-								<span class="col-10">
+								<span class="legacy-col-10">
 									<a v-if="isPreviewAvailable(file.ext)" target="_blank" class="a" :href="`${fileStorageBaseUrl}/content/refs/research/package/${contentRef.researchId}/${contentRef.hash}/${file.hash}`">
 										{{file.filename}}
 									</a>
@@ -41,14 +41,14 @@
 										{{file.filename}}
 									</span>
 								</span>
-								<span class="col-1 text-align-right">
+								<span class="legacy-col-1 text-align-right">
 									<span>
 										<a class="a download-content" :href="`${fileStorageBaseUrl}/content/refs/research/package/${contentRef.researchId}/${contentRef.hash}/${file.hash}?download=true`">
 											<v-icon small>save</v-icon>
 										</a>
 									</span>
 								</span>
-								<span class="col-1 text-align-right">
+								<span class="legacy-col-1 text-align-right">
 									<span class="body-2 grey--text">{{file.hash.slice(0, 8)}}</span>
 								</span>
 							</div>

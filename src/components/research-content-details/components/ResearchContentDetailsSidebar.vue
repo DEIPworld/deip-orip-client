@@ -101,7 +101,7 @@
             </div>
 
             <div v-if="!isPublished" class="legacy-row-nowrap legacy-justify-between align-center c-pt-2 c-pb-2" v-for="(member, index) in draftAuthorsList" :key="index">
-                <div class="col-10">
+                <div class="legacy-col-10">
                     <v-avatar size="40px">
                         <img v-if="member.profile" v-bind:src="member.profile.avatar | avatarSrc(40, 40, false)" />
                         <v-gravatar v-else :title="member.account.name" :email="member.account.name + '@deip.world'" />
@@ -112,7 +112,7 @@
                     </router-link>
                 </div>
 
-                <div class="col-2">
+                <div class="legacy-col-2">
                     <div v-if="isInProgress" class="author-checkbox">
                         <!-- v-checkbox depends on v-model binding which doesn't play well with Vuex.
                             TODO: create a custom checkbox with the same styles as v-checkbox has -->
@@ -185,8 +185,8 @@
 
             <div class="body-2 c-mt-2">
                 <div class="legacy-row-nowrap align-center body-2 c-pt-1 c-pb-1">
-                    <div class="col-10">{{createContentGroupQuorumValue.text}}:</div>
-                    <div class="col-2">{{convertToPercent(createContentGroupQuorumValue.value)}}%</div>
+                    <div class="legacy-col-10">{{createContentGroupQuorumValue.text}}:</div>
+                    <div class="legacy-col-2">{{convertToPercent(createContentGroupQuorumValue.value)}}%</div>
                 </div> 
             </div>
         </div>
@@ -199,8 +199,8 @@
             
             <div class="body-2 c-mt-2">
                 <div class="legacy-row-nowrap align-center body-2 c-pt-1 c-pb-1">
-                    <div class="col-10"><v-icon small class="c-pr-2">rate_review</v-icon> Reward for review:</div>
-                    <div class="col-2">{{convertToPercent(research.review_share_in_percent)}}%</div>
+                    <div class="legacy-col-10"><v-icon small class="c-pr-2">rate_review</v-icon> Reward for review:</div>
+                    <div class="legacy-col-2">{{convertToPercent(research.review_share_in_percent)}}%</div>
                 </div> 
             </div>
         </div>

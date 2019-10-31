@@ -7,36 +7,36 @@
 
                 <div class="c-mh-auto c-pt-4" style="max-width: 1000px;">
                     <div class="legacy-row">
-                        <div class="col-3"></div>
-                        <div class="col-6">
+                        <div class="legacy-col-3"></div>
+                        <div class="legacy-col-6">
                             <v-textarea v-model="title" v-on:keyup="setTitle" 
                                 name="title" label="Title" 
                                 solo
                             ></v-textarea>
                         </div>
-                        <div class="col-3"></div>
+                        <div class="legacy-col-3"></div>
                     </div>
 
                     <div class="legacy-row c-pt-4">
-                        <div class="col-3"></div>
-                        <div class="col-6">
+                        <div class="legacy-col-3"></div>
+                        <div class="legacy-col-6">
                             <v-textarea v-model="description" v-on:keyup="setDescription" 
                                 name="Description" label="Description" 
                                 solo
                             ></v-textarea>
                         </div>
-                        <div class="col-3"></div>
+                        <div class="legacy-col-3"></div>
                     </div>
 
                 <!--    <div class="legacy-row c-pt-4">
-                        <div class="legacy-col-offset-3 col-6">
+                        <div class="legacy-col-offset-3 legacy-col-6">
                             <v-checkbox v-model="tmpIsPrivate" label="Choose if group should be private"></v-checkbox>
                         </div>
                     </div> -->
 
                 <!--    <div class="legacy-row c-pt-4">
-                        <div class="col-3 font-18px bold c-pr-4">Main goals of your research</div>
-                        <div class="col-6">
+                        <div class="legacy-col-3 font-18px bold c-pr-4">Main goals of your research</div>
+                        <div class="legacy-col-6">
                             <v-text-field name="goals" label="Goals" solo textarea hide-details></v-text-field>
                         </div>
                     </div> -->

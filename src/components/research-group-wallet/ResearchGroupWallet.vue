@@ -100,12 +100,12 @@
                     <!-- <div class="title c-pt-8">Other assets</div>
 
                     <div class="legacy-row c-pt-6">
-                        <v-card class="col-4 c-p-6 c-mr-6">
+                        <v-card class="legacy-col-4 c-p-6 c-mr-6">
                             <div class="subheading bold">Research Group Tokens</div>
                             <div class="display-1">6566</div>
                         </v-card>
 
-                        <v-card class="col-4 c-p-6">
+                        <v-card class="legacy-col-4 c-p-6">
                             <div class="subheading bold">Expertise Tokens</div>
                             <div class="display-1">85635</div>
                         </v-card>

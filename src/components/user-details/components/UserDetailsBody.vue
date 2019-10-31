@@ -45,9 +45,9 @@
                                     </v-tooltip>
                                 </div>
                                 <div class="legacy-row" v-if="isOwner && isEditingLocation">
-                                    <v-text-field class="col-3 c-pr-3" v-model="editedCity" label="City"></v-text-field>
-                                    <v-text-field class="col-3 c-pr-3" v-model="editedCountry" label="Country"></v-text-field>
-                                    <span class="col-3">
+                                    <v-text-field class="legacy-col-3 c-pr-3" v-model="editedCity" label="City"></v-text-field>
+                                    <v-text-field class="legacy-col-3 c-pr-3" v-model="editedCountry" label="Country"></v-text-field>
+                                    <span class="legacy-col-3">
                                         <v-tooltip bottom>
                                             <v-btn slot="activator" @click="saveLocation" flat icon color="grey" class="c-mt-5">
                                                 <v-icon>done</v-icon>
@@ -75,12 +75,12 @@
 
                 <div class="c-pt-8">
                     <div v-if="!isEditingBio && userInfo.profile" class="legacy-row">
-                        <span v-if="isOwner && !userInfo.profile.bio" class="half-bold owner-hint col-12">
+                        <span v-if="isOwner && !userInfo.profile.bio" class="half-bold owner-hint legacy-col-12">
                             <v-icon small>subject</v-icon>
                             Add short bio
                         </span>
-                        <span v-else class="col-12">{{userInfo.profile.bio}}</span>
-                        <v-tooltip v-if="isOwner && !isEditingBio" bottom class="col-12 right">
+                        <span v-else class="legacy-col-12">{{userInfo.profile.bio}}</span>
+                        <v-tooltip v-if="isOwner && !isEditingBio" bottom class="legacy-col-12 right">
                             <v-btn slot="activator" @click="editBio" flat small icon color="grey" class="ma-0 right">
                                 <v-icon small>mode_edit</v-icon>
                             </v-btn>
@@ -89,8 +89,8 @@
                     </div>
     
                     <div v-if="isOwner && isEditingBio" class="legacy-row">
-                        <v-textarea class="col-12" v-model="editedBio" label="Short Bio"></v-textarea>
-                        <span class="col-12">
+                        <v-textarea class="legacy-col-12" v-model="editedBio" label="Short Bio"></v-textarea>
+                        <span class="legacy-col-12">
                             <v-tooltip bottom>
                                 <v-btn slot="activator" @click="isEditingBio = false" flat icon color="grey" class="ma-0 mr-3 right">
                                     <v-icon>close</v-icon>

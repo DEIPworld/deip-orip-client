@@ -14,7 +14,7 @@
                     <v-form v-model="isFormValid" ref="form">
                         <div class="subheading bold">Company</div>
                         <div class="legacy-row">
-                            <div class="col-12">
+                            <div class="legacy-col-12">
                                 <v-text-field
                                     label="Company"
                                     v-model="company"
@@ -25,14 +25,14 @@
 
                         <div class="subheading bold">Location</div>
                         <div class="legacy-row">
-                            <div class="col-6 c-pr-3">
+                            <div class="legacy-col-6 c-pr-3">
                                 <v-text-field
                                     label="City"
                                     v-model="city"
                                     :rules="[rules.required]"
                                 ></v-text-field>
                             </div>
-                            <div class="col-6 c-pl-3">
+                            <div class="legacy-col-6 c-pl-3">
                                 <v-text-field
                                     label="Country"
                                     v-model="country"
@@ -43,7 +43,7 @@
 
                         <div class="subheading bold">Period</div>
                         <div class="legacy-row">
-                            <div class="col-5 c-pr-3">
+                            <div class="legacy-col-5 c-pr-3">
                                 <v-menu
                                     lazy
                                     :close-on-content-click="false"
@@ -66,7 +66,7 @@
                                 </v-menu>
                             </div>
 
-                            <div class="col-5 c-pl-3">
+                            <div class="legacy-col-5 c-pl-3">
                                 <v-menu
                                     lazy
                                     :close-on-content-click="false"
@@ -94,7 +94,7 @@
                                 </v-menu>
                             </div>
 
-                            <div class="col-2 c-pt-5">
+                            <div class="legacy-col-2 c-pt-5">
                                 <div class="legacy-row legacy-justify-end">
                                     <v-checkbox class="ma-0 pa-0"
                                         label="Is present"
@@ -109,7 +109,7 @@
 
                         <div class="subheading bold">Position</div>
                         <div class="legacy-row">
-                            <div class="col-12">
+                            <div class="legacy-col-12">
                                 <v-text-field
                                     label="Position"
                                     v-model="position"
@@ -122,7 +122,7 @@
                             <span class="caption">(optional)</span>
                         </div>
                         <div class="legacy-row">
-                            <div class="col-12">
+                            <div class="legacy-col-12">
                                 <v-text-field
                                     label="Description"
                                     v-model="description"
@@ -138,7 +138,7 @@
 
                         <div>
                             <div class="legacy-row">
-                                <div class="col-11">
+                                <div class="legacy-col-11">
                                     <v-btn class="ma-0 width-10" color="primary" @click="save()" :disabled="disabled">Save</v-btn>
                                     <span class="c-pr-4"></span>
                                     <v-btn class="ma-0 width-10" color="primary" flat @click.native="meta.isShown = false">Cancel</v-btn>

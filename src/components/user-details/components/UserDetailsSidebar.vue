@@ -38,8 +38,8 @@
             <div class="sidebar-fullwidth"><v-divider></v-divider></div>
             <div class="subheading bold c-mt-4">
                 <span class="legacy-row">
-                    <span class="col-11 mt-1">Contacts info</span>
-                    <v-tooltip v-if="isOwner && !isEditingContacts" bottom class="col-1">
+                    <span class="legacy-col-11 mt-1">Contacts info</span>
+                    <v-tooltip v-if="isOwner && !isEditingContacts" bottom class="legacy-col-1">
                         <v-btn slot="activator" @click="editContacts" flat small icon color="grey" class="mt-0">
                             <v-icon small>mode_edit</v-icon>
                         </v-btn>
@@ -92,8 +92,8 @@
             <div class="sidebar-fullwidth"><v-divider></v-divider></div>
             <div class="subheading bold c-mt-4">
                 <span class="legacy-row">
-                    <span class="col-11 mt-1">Personal info</span>
-                    <v-tooltip v-if="isOwner && !isEditingPersonalInfo" bottom class="col-1">
+                    <span class="legacy-col-11 mt-1">Personal info</span>
+                    <v-tooltip v-if="isOwner && !isEditingPersonalInfo" bottom class="legacy-col-1">
                         <v-btn slot="activator" @click="editPersonalInfo" flat small icon color="grey" class="mt-0">
                             <v-icon small>mode_edit</v-icon>
                         </v-btn>
@@ -106,42 +106,42 @@
                 <div v-if="userInfo.profile">
                     <div v-if="!isEditingPersonalInfo">
                         <div v-if="isOwner && !userInfo.profile.firstName" class="legacy-row">
-                            <span class="col-4 half-bold">First Name</span>
-                            <span class="col-1"></span>
-                            <span class="col-7 text-align-left owner-hint">add first name</span>
+                            <span class="legacy-col-4 half-bold">First Name</span>
+                            <span class="legacy-col-1"></span>
+                            <span class="legacy-col-7 text-align-left owner-hint">add first name</span>
                         </div>
                         <div v-else class="legacy-row">
-                            <span class="col-4 half-bold">First Name</span>
-                            <span class="col-1"></span>
-                            <span class="col-7 text-align-left">{{userInfo.profile.firstName || '-'}}</span>
+                            <span class="legacy-col-4 half-bold">First Name</span>
+                            <span class="legacy-col-1"></span>
+                            <span class="legacy-col-7 text-align-left">{{userInfo.profile.firstName || '-'}}</span>
                         </div>
 
                         <div v-if="isOwner && !userInfo.profile.lastName" class="legacy-row">
-                            <span class="col-4 half-bold">Last Name</span>
-                            <span class="col-1"></span>
-                            <span class="col-7 text-align-left owner-hint">add last name</span>
+                            <span class="legacy-col-4 half-bold">Last Name</span>
+                            <span class="legacy-col-1"></span>
+                            <span class="legacy-col-7 text-align-left owner-hint">add last name</span>
                         </div>
                         <div v-else class="legacy-row">
-                            <span class="col-4 half-bold">Last Name</span>
-                            <span class="col-1"></span>
-                            <span class="col-7 text-align-left">{{userInfo.profile.lastName || '-'}}</span>
+                            <span class="legacy-col-4 half-bold">Last Name</span>
+                            <span class="legacy-col-1"></span>
+                            <span class="legacy-col-7 text-align-left">{{userInfo.profile.lastName || '-'}}</span>
                         </div>
 
                         <div v-if="isOwner && !userInfo.profile.birthday" class="legacy-row">
-                            <span class="col-4 half-bold">Birthday</span>
-                            <span class="col-1"></span>
-                            <span class="col-7 text-align-left owner-hint">add birthday</span>
+                            <span class="legacy-col-4 half-bold">Birthday</span>
+                            <span class="legacy-col-1"></span>
+                            <span class="legacy-col-7 text-align-left owner-hint">add birthday</span>
                         </div>
                         <div v-else class="legacy-row">
-                            <span class="col-4 half-bold">Birthday</span>
-                            <span class="col-1"></span>
-                            <span class="col-7 text-align-left">{{ userInfo.profile.birthday ? new Date(userInfo.profile.birthday).toDateString() : '-'}}</span>
+                            <span class="legacy-col-4 half-bold">Birthday</span>
+                            <span class="legacy-col-1"></span>
+                            <span class="legacy-col-7 text-align-left">{{ userInfo.profile.birthday ? new Date(userInfo.profile.birthday).toDateString() : '-'}}</span>
                         </div>
 
                         <div v-if="userInfo.profile.created" class="legacy-row mt-3">
-                            <span class="col-4 half-bold">Registered</span>
-                            <span class="col-1"></span>
-                            <span class="col-7 text-align-left">{{new Date(userInfo.profile.created).toDateString()}}</span>
+                            <span class="legacy-col-4 half-bold">Registered</span>
+                            <span class="legacy-col-1"></span>
+                            <span class="legacy-col-7 text-align-left">{{new Date(userInfo.profile.created).toDateString()}}</span>
                         </div>
                     </div>
                 </div>

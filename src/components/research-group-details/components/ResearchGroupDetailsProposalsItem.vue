@@ -113,30 +113,30 @@
                     <div class="display-flex" 
                         v-if="proposal.action === proposalTypes.START_RESEARCH"
                     >
-                        <div class="col-6">
+                        <div class="legacy-col-6">
                             <div class="grey--text">{{ proposal.creator }}</div>
                             <div class="c-pt-2">
                                 Reviewers' reward:
                                 <span class="bold">{{ convertToPercent(proposal.data.review_share_in_percent) }}%</span>
                             </div>
                         </div>
-                        <div class="col-6 grey--text legacy-column flex-wrap" style="max-height: 70px">
+                        <div class="legacy-col-6 grey--text legacy-column flex-wrap" style="max-height: 70px">
                             <div v-for="(label, i) in getDisciplineNames()" :key="i">{{ label }}</div>
                         </div>
                     </div>
 
                     <div class="legacy-row" v-else-if="proposal.action === proposalTypes.INVITE_MEMBER">
-                        <div class="col-6">
+                        <div class="legacy-col-6">
                             Research group tokens:
                             <span class="bold">
                                 {{ convertToPercent(proposal.data.research_group_token_amount_in_percent) }}%
                             </span>
                         </div>
-                        <div class="col-6 grey--text break-word white-space-pre-line">{{ proposal.data.cover_letter }}</div>
+                        <div class="legacy-col-6 grey--text break-word white-space-pre-line">{{ proposal.data.cover_letter }}</div>
                     </div>
 
                     <div class="legacy-row" v-else-if="proposal.action === proposalTypes.SEND_FUNDS">
-                        <div class="col-6">
+                        <div class="legacy-col-6">
                             <div>
                                 User:
                                 <router-link :to="{
@@ -156,7 +156,7 @@
                     </div>
 
                     <div class="legacy-row" v-else-if="proposal.action === proposalTypes.START_RESEARCH_TOKEN_SALE">
-                        <div class="col-6 legacy-row legacy-justify-between">
+                        <div class="legacy-col-6 legacy-row legacy-justify-between">
                             <div class="width-8">
                                 <div>
                                     Min: <span class="bold right">{{ fromAssetsToFloat(proposal.data.soft_cap) }}</span>
@@ -179,7 +179,7 @@
                     </div>
 
                     <div class="legacy-row" v-else-if="proposal.action === proposalTypes.CHANGE_QUORUM">
-                        <div class="col-6">
+                        <div class="legacy-col-6">
                             <div>
                                 Type:
                                 <span class="bold">{{ proposalLabels[proposal.data.proposal_type] }}</span>
@@ -194,12 +194,12 @@
                     </div>
 
                     <div class="legacy-row" v-else-if="proposal.action === proposalTypes.CREATE_RESEARCH_MATERIAL">
-                        <div class="col-6">
+                        <div class="legacy-col-6">
                             <div class="grey--text">{{ proposal.data.authors.join(' · ') }}</div>
                             <span class="bold">{{ getContentTypeStrById(proposal.data.type) }}:</span>
                             <a :href="getContentUrl(proposal)" class="a" target="_blank">{{ proposal.data.title }}</a>
                         </div>
-                        <div class="col-6"></div>
+                        <div class="legacy-col-6"></div>
                     </div>
                     <!-- proposal description depending on type -->
                         

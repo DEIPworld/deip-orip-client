@@ -14,7 +14,7 @@
                     <v-form v-model="isFormValid" ref="form">
                         <div class="subheading bold">Educational institution</div>
                         <div class="legacy-row">
-                            <div class="col-12">
+                            <div class="legacy-col-12">
                                 <v-text-field
                                     label="Educational institution"
                                     v-model="educationalInstitution"
@@ -25,7 +25,7 @@
 
                         <div class="subheading bold">Dates attended</div>
                         <div class="legacy-row">
-                            <div class="col-5 c-pr-3">
+                            <div class="legacy-col-5 c-pr-3">
                                 <v-menu
                                     lazy
                                     :close-on-content-click="false"
@@ -51,7 +51,7 @@
                                 </v-menu>
                             </div>
 
-                            <div class="col-5 c-pl-3">
+                            <div class="legacy-col-5 c-pl-3">
                                 <v-menu
                                     lazy
                                     :close-on-content-click="false"
@@ -79,7 +79,7 @@
                                 </v-menu>
                             </div>
 
-                            <div class="col-2 c-pt-5">
+                            <div class="legacy-col-2 c-pt-5">
                                 <div class="legacy-row legacy-justify-end">
                                     <v-checkbox class="ma-0 pa-0"
                                         label="In progress"
@@ -94,7 +94,7 @@
 
                         <div class="subheading bold">Degree obtained</div>
                         <div class="legacy-row">
-                            <div class="col-12">
+                            <div class="legacy-col-12">
                                 <v-text-field
                                     label="Degree obtained"
                                     v-model="degree"
@@ -105,7 +105,7 @@
 
                         <div class="subheading bold">Area of study</div>
                         <div class="legacy-row">
-                            <div class="col-12">
+                            <div class="legacy-col-12">
                                 <v-text-field
                                     label="Area of study"
                                     v-model="area"
@@ -116,7 +116,7 @@
 
                         <div class="subheading bold">Description <span class="caption">(optional)</span></div>
                         <div class="legacy-row">
-                            <div class="col-12">
+                            <div class="legacy-col-12">
                                 <v-text-field
                                     label="Description"
                                     v-model="description"

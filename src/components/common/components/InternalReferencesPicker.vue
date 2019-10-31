@@ -4,7 +4,7 @@
             <div class="legacy-row c-p-3 c-mb-5">
                 <div class="legacy-col-grow">
                     <div class="legacy-row c-mh-auto group-members-max-width">
-                        <div class="col-12">
+                        <div class="legacy-col-12">
                             <div v-if="showSelected">
                                 <div class="legacy-row-nowrap legacy-justify-between align-center c-pt-4"
                                     v-for="(ref, i) in selected" :key="i + '-picked'"

@@ -5,7 +5,7 @@
             <div class="legacy-col-grow overflow-y-auto">
 
                 <div class="legacy-row c-mh-auto group-members-max-width">
-                    <div class="col-12">
+                    <div class="legacy-col-12">
                         <v-text-field
                             label="Search..."
                             single-line

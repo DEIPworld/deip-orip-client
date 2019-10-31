@@ -1,11 +1,11 @@
 <template>
     <div>
         <div class="legacy-row discipline-picker c-mt-8">
-            <div class="col-3">
+            <div class="legacy-col-3">
                 <discipline-tree-picker @select="setDisciplines"></discipline-tree-picker>
             </div>
 
-            <div class="col-3 text-align-center">
+            <div class="legacy-col-3 text-align-center">
                 <div class="step-title">Disciplines</div>
                 <div v-for="discipline in selectedDisciplines" class="subheading c-mt-2">
                     <div>
@@ -22,7 +22,7 @@
                 </div>
             </div>
 
-            <div class="col-3 text-align-center">
+            <div class="legacy-col-3 text-align-center">
                 <div class="step-title">User</div>
                 <div v-if="selectedUser" class="subheading c-mt-2 bold">{{selectedUser | fullname}}</div>
 
@@ -44,7 +44,7 @@
                 </div>
             </div>
 
-            <div class="col-3 text-align-center">
+            <div class="legacy-col-3 text-align-center">
                 <div class="users-container spinner-container">
                     <v-progress-circular class="section-spinner"
                         v-if="isLoadingUsers"

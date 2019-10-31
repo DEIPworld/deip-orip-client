@@ -5,7 +5,7 @@
             <div class="legacy-col-grow overflow-y-auto">
 
                 <div class="legacy-row c-mh-auto group-title-max-width">
-                    <div class="col-12">
+                    <div class="legacy-col-12">
                         <v-form ref="form">
                             <div class="">
                                 <v-text-field 

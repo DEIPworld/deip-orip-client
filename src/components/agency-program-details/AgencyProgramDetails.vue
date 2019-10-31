@@ -63,7 +63,7 @@
 
             <v-flex xs12 v-if="isGrantor || isOfficer">
               <div class="legacy-row">
-                <div class="col-6">
+                <div class="legacy-col-6">
                   <div class="sm-title bold c-pv-10">Applications</div>
 
                   <GChart
@@ -74,7 +74,7 @@
                   />
                 </div>
 
-                <div class="col-6">
+                <div class="legacy-col-6">
                   <div class="sm-title bold c-pv-10">Financial</div>
 
                   <GChart

@@ -5,7 +5,7 @@
             <div class="legacy-col-grow overflow-y-auto">
 
                 <div class="legacy-row c-mh-auto group-quorum-max-width">
-                    <div class="col-12">
+                    <div class="legacy-col-12">
                         <div>
                             Quorum shows how many votes it takes to approve a proposal (such as changing the research
                             content, adding the research group members, initiating research fundraise, etc.) You can setup Quorum for each 

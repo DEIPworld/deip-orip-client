@@ -6,7 +6,7 @@
 
             <div class="legacy-row discipline-picker c-mt-8">
 
-                <div class="col-4 c-p-4 overflow-y-auto">
+                <div class="legacy-col-4 c-p-4 overflow-y-auto">
                     <div class="half-bold uppercase c-pb-3">Popular</div>
                     <div class="c-pt-1" v-for="(item, i) in popular" :key="i">
                         <span class="deip-label"
@@ -16,7 +16,7 @@
                     </div>
                 </div>
 
-                <div class="col-8 c-p-4 overflow-y-auto">
+                <div class="legacy-col-8 c-p-4 overflow-y-auto">
                     <div class="half-bold uppercase c-pb-4">All</div>
                     <discipline-tree-picker :preselected="[]" @select="selectDiscipline"></discipline-tree-picker>
                 </div>

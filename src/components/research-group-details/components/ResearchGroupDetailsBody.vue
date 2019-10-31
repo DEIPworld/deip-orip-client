@@ -33,18 +33,18 @@
                     <v-card>
                         <div class="info-card-list">
                             <div class="list-line align-center">
-                                <div class="list-header-cell col-4">Researcher</div>
-                                <div class="list-header-cell col-3">Expertise</div>
-                                <div class="list-header-cell col-1 text-align-center">Group weight</div>
-                                <div class="list-header-cell col-2 text-align-center">Member since</div>
-                                <div class="list-header-cell col-2 text-align-center">Location</div>
+                                <div class="list-header-cell legacy-col-4">Researcher</div>
+                                <div class="list-header-cell legacy-col-3">Expertise</div>
+                                <div class="list-header-cell legacy-col-1 text-align-center">Group weight</div>
+                                <div class="list-header-cell legacy-col-2 text-align-center">Member since</div>
+                                <div class="list-header-cell legacy-col-2 text-align-center">Location</div>
                             </div>
 
                             <v-divider></v-divider>
 
                             <template v-for="(member, i) in members">
                                 <div class="list-line">
-                                    <div class="legacy-row-nowrap col-4 list-body-cell">
+                                    <div class="legacy-row-nowrap legacy-col-4 list-body-cell">
                                         <v-avatar size="40px" class="c-pt-3">
                                             <img v-if="member.profile" v-bind:src="member.profile.avatar | avatarSrc(40, 40, false)" />
                                             <v-gravatar v-else :email="member.account.name + '@deip.world'" />
@@ -62,21 +62,21 @@
                                         </div>
                                     </div>
 
-                                    <div class="col-3 list-body-cell">
+                                    <div class="legacy-col-3 list-body-cell">
                                         <div v-for="(item, i) in member.expertise" :key="i">
                                             <span class="uppercase bold">{{ item.discipline_name }}:</span> {{ item.amount }}
                                         </div>
                                     </div>
 
-                                    <div class="col-1 text-align-center list-body-cell">
+                                    <div class="legacy-col-1 text-align-center list-body-cell">
                                         {{ convertToPercent(member.rgt.amount) }}%
                                     </div>
 
-                                    <div class="col-2 text-align-center list-body-cell">
+                                    <div class="legacy-col-2 text-align-center list-body-cell">
                                         {{ member.created | dateFormat("D MMM YYYY") }}
                                     </div>
 
-                                    <div class="col-2 text-align-center list-body-cell">{{member | userLocation}}</div>
+                                    <div class="legacy-col-2 text-align-center list-body-cell">{{member | userLocation}}</div>
                                 </div>
 
                                 <v-divider></v-divider>
@@ -106,7 +106,7 @@
                                             <v-divider></v-divider>
 
                                             <div class="legacy-row c-pv-4 c-ph-6 legacy-align-items-center">
-                                                <div class="legacy-row-nowrap col-4">
+                                                <div class="legacy-row-nowrap legacy-col-4">
                                                     <v-avatar size="40px" class="c-pt-3">
                                                         <img v-if="invite.user.profile" v-bind:src="invite.user.profile.avatar | avatarSrc(40, 40, false)" />
                                                         <v-gravatar v-else :email="invite.user.account.name + '@deip.world'" />
@@ -126,7 +126,7 @@
 
                                                 <div class="legacy-col-grow text-align-center">{{ invite.user | userLocation }}</div>
 
-                                                <div class="col-2 text-align-center">
+                                                <div class="legacy-col-2 text-align-center">
                                                     <span class="grey--text">Amount:</span>
                                                     {{ convertToPercent(invite.research_group_token_amount) }}%
                                                 </div>

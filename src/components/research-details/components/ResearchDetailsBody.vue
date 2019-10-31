@@ -39,7 +39,7 @@
                     <v-card>
                         <v-card-text>
                             <div class="legacy-row-nowrap">
-                                <div class="col-8">
+                                <div class="legacy-col-8">
                                     <span class="c-pr-3">
                                         <v-avatar size="20px">
                                             <img :src="item.application.foa.agency_name | agencyLogoSrc(160, 160, false)" />
@@ -66,19 +66,19 @@
                                         <span v-else>{{ item.application.title }}</span>
                                     </span>
                                 </div> 
-                                <div class="col-1">
+                                <div class="legacy-col-1">
                                     <div class="text-align-center">
                                         <span class="green--text text--darken-2" v-if="isApplicationApproved(item.application)">Approved</span>
                                         <span class="red--text text--darken-2" v-if="isApplicationRejected(item.application)">Rejected</span>
                                         <span class="grey--text" v-if="isApplicationPending(item.application)">Pending</span>
                                     </div>
                                 </div>
-                                <div class="col-2">
+                                <div class="legacy-col-2">
                                     <div class="text-align-center">
                                         <span class="caption grey--text">($ {{fromAssetsToFloat(item.application.total_amount)}} requested)</span>
                                     </div>
                                 </div>
-                                <div class="col-1">
+                                <div class="legacy-col-1">
                                     <router-link v-if="item.isAccessible" class="a deip-blue-color" 
                                         :to="{ name: 'ResearchApplicationDetails', 
                                             params: { 
@@ -205,7 +205,7 @@
                         <v-card-text class="pt-0">
                             <div class="c-ph-2">
                                 <div class="legacy-row">
-                                    <div class="col-8">
+                                    <div class="legacy-col-8">
                                         <div class="c-pt-2">
                                             <span>
                                                 <v-icon size="18px">date_range</v-icon> 
@@ -217,7 +217,7 @@
                                             </span>
                                         </div>
                                     </div>
-                                    <div class="col-4 c-pr-8">
+                                    <div class="legacy-col-4 c-pr-8">
                                         <div>
                                             <div class="right">
                                                 <v-btn @click="openDarDraft(draft)" outline small depressed color="primary lighten-1">
@@ -253,16 +253,16 @@
             <v-card>
                 <div class="info-card-list">
                     <div class="list-line">
-                        <div class="list-header-cell col-3">Organization</div>
-                        <div class="list-header-cell col-5">Project</div>
-                        <div class="list-header-cell col-2 text-align-center">Date</div>
-                        <div class="list-header-cell col-2 text-align-right">Amount</div>
+                        <div class="list-header-cell legacy-col-3">Organization</div>
+                        <div class="list-header-cell legacy-col-5">Project</div>
+                        <div class="list-header-cell legacy-col-2 text-align-center">Date</div>
+                        <div class="list-header-cell legacy-col-2 text-align-right">Amount</div>
                     </div>
                     <div class="list-line" v-for="i in 5" :key="i">
-                        <div class="col-3 list-body-cell a">JJHK</div>
-                        <div class="col-5 list-body-cell">General Support</div>
-                        <div class="col-2 list-body-cell text-align-center">20 Jan 2018</div>
-                        <div class="col-2 list-body-cell text-align-right">$50 000</div>
+                        <div class="legacy-col-3 list-body-cell a">JJHK</div>
+                        <div class="legacy-col-5 list-body-cell">General Support</div>
+                        <div class="legacy-col-2 list-body-cell text-align-center">20 Jan 2018</div>
+                        <div class="legacy-col-2 list-body-cell text-align-right">$50 000</div>
                     </div>
                 </div>
             </v-card>
