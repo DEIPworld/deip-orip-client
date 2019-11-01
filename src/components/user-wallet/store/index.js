@@ -17,11 +17,11 @@ const getters = {
 
 // actions
 const actions = {
-    loadWallet({ dispatch }, accountName) {
+    loadWallet({ dispatch }, { username }) {
         return Promise.all([
-            dispatch('loadUser', accountName),
-            dispatch('loadResearchTokens', accountName),
-            dispatch('loadTransfers', accountName)
+            dispatch('loadUser', username),
+            dispatch('loadResearchTokens', username),
+            dispatch('loadTransfers', username)
         ]);
     },
 

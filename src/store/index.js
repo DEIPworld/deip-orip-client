@@ -17,6 +17,7 @@ import claimExpertiseList from './../components/claim-expertise-list/store/index
 import votingForBlockProducers from './../components/voting-for-block-producers/store/index'
 import agencyPrograms from './../components/agency-programs/store/index'
 import agencyProgramDetails from './../components/agency-program-details/store/index'
+import dashboard from './../components/dashboard/store/index'
 
 
 Vue.use(Vuex)
@@ -37,7 +38,8 @@ export default new Vuex.Store({
         claimExpertiseList,
         votingForBlockProducers,
         agencyPrograms,
-        agencyProgramDetails
+        agencyProgramDetails,
+        dashboard
     },
     strict: process.env.NODE_ENV !== 'production',
     plugins: process.env.NODE_ENV !== 'production' ? [createLogger()] : []

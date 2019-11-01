@@ -49,8 +49,8 @@
                 .rangeRound([0, width])
                 .domain([ minX - 0.02 * (maxX - minX), maxX ]);
 
-            let minReviewWeight = _.minBy(chartData, item => item.reviewData.weight).reviewData.weight;
-            let maxReviewWeight = _.maxBy(chartData, item => item.reviewData.weight).reviewData.weight;
+            let minReviewWeight = chartData.length ? _.minBy(chartData, item => item.reviewData.weight).reviewData.weight : 0;
+            let maxReviewWeight = chartData.length ? _.maxBy(chartData, item => item.reviewData.weight).reviewData.weight : 0;
             let minLineY = d3.min(lineChartData, d => d.y);
             let maxLineY = d3.max(lineChartData, d => d.y);
             let minY = minReviewWeight > 0 && minLineY > 0 ? 0 : minReviewWeight > minLineY ? minLineY : minReviewWeight;

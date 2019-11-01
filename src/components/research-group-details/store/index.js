@@ -58,7 +58,7 @@ const getters = {
 // actions
 const actions = {
 
-    loadResearchGroup({ commit, dispatch, state }, permlink) {
+    loadResearchGroup({ commit, dispatch, state }, { permlink }) {
         commit('SET_GROUP_DETAILS_LOADING_STATE', true);
         
         return deipRpc.api.getResearchGroupByPermlinkAsync(permlink).then(data => {

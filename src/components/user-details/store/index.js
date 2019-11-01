@@ -45,7 +45,7 @@ const getters = {
 // actions
 const actions = {
     
-    loadUser({ dispatch, commit }, username) {
+    loadUser({ dispatch, commit }, { username }) {
         const accountLoad = stateApiSvc.loadUserAccount(username);
         const profileLoad = stateApiSvc.loadUserProfile(username);
         const expertiseLoad = stateApiSvc.loadExpertise(username);
