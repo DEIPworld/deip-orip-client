@@ -39,7 +39,7 @@
                             ></v-textarea>
                         </div>
 
-                        <div class="sm-title bold c-pt-6">Add links to your relevant publications in this discipline</div>
+                        <div class="title bold c-pt-6">Add links to your relevant publications in this discipline</div>
 
                         <v-card class="c-mt-6">
                             <template v-for="(publication, index) in publications">

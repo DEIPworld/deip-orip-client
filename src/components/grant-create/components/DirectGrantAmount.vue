@@ -5,7 +5,7 @@
                 Direct grants distribution
             </div>
             
-            <div class="sm-title bold c-mb-4 text-align-center">Please type amount</div>
+            <div class="title bold c-mb-4 text-align-center">Please type amount</div>
 
             <div class="legacy-col-grow overflow-y-auto">
 

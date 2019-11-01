@@ -135,12 +135,11 @@ const router = new Router({
 	}, {
 		path: '/dashboard',
 		name: 'Dashboard',
-		component: preliminaryDataLoader(Dashboard, {
-			beforeEnter: (to, from, next) => {
-				let loadPagePromise = store.dispatch('dashboard/loadDashboardPage', {});
-				loadPage(loadPagePromise, next);
-			}
-		}) 
+		component: Dashboard,
+		beforeEnter: (to, from, next) => {
+			let loadPagePromise = store.dispatch('dashboard/loadDashboardPage', {});
+			loadPage(loadPagePromise, next);
+		}
 	}, {
 		path: '/research-feed',
 		name: 'ResearchFeed',

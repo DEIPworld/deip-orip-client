@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="ma-0">
-      <router-link class="a sm-title" 
+      <router-link class="a title" 
         :to="{ 
           name: 'ResearchDetails', 
           params: { 

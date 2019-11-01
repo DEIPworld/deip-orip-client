@@ -13,8 +13,8 @@
 			<v-flex offset-xs2 v-if="!isApplicationPending">
 				<div>
 					<div class="right">
-						<span class="sm-title green--text text--darken-2" v-if="isApplicationApproved">Approved</span>
-						<span class="sm-title red--text text--darken-2" v-if="isApplicationRejected">Rejected</span>
+						<span class="title green--text text--darken-2" v-if="isApplicationApproved">Approved</span>
+						<span class="title red--text text--darken-2" v-if="isApplicationRejected">Rejected</span>
 					</div>
 				</div>
 			</v-flex>

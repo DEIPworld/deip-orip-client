@@ -3,7 +3,7 @@
       <div>
 
         <router-link :to="`/${encodeURIComponent(groupLink)}/group-details`" style="text-decoration: none; color: black">
-            <div class="sm-title bold">Research group <span class="a caption">(view)</span></div>
+            <div class="title bold">Research group <span class="a caption">(view)</span></div>
         </router-link>
         
         <!-- ### START Research Members Section ### -->
@@ -100,8 +100,8 @@
         </div>
         <!-- ### END Research Content ECI Section ### -->
 
-    <!-- <div class="sm-title bold c-pt-6">Citations: 10</div>
-        <div class="sm-title bold c-pb-6 c-mt-2">References: 2</div> -->
+    <!-- <div class="title bold c-pt-6">Citations: 10</div>
+        <div class="title bold c-pb-6 c-mt-2">References: 2</div> -->
  
         <!-- ### START Research Info Section ### -->
         <div class="c-mb-4 c-mt-4">
@@ -120,7 +120,7 @@
         </div>
         <!-- ### END Research Info Section ### -->
        
-        <!--  <div class="sm-title bold c-pt-6">Total Earned</div>
+        <!--  <div class="title bold c-pt-6">Total Earned</div>
         
         <div class="c-pt-4 c-pb-6">
             <div>

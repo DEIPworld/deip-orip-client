@@ -64,7 +64,7 @@
             <v-flex xs12 v-if="isGrantor || isOfficer">
               <div class="legacy-row">
                 <div class="legacy-col-6">
-                  <div class="sm-title bold c-pv-10">Applications</div>
+                  <div class="title bold c-pv-10">Applications</div>
 
                   <GChart
                     type="BarChart"
@@ -75,7 +75,7 @@
                 </div>
 
                 <div class="legacy-col-6">
-                  <div class="sm-title bold c-pv-10">Financial</div>
+                  <div class="title bold c-pv-10">Financial</div>
 
                   <GChart
                     type="BarChart"
@@ -90,7 +90,7 @@
             </v-flex>
 
             <v-flex xs12>
-              <div class="sm-title bold c-pt-10">Program Guidlines</div>
+              <div class="title bold c-pt-10">Program Guidlines</div>
 
               <div class="subheading bold c-pt-10">Eligible Aplicants</div>
               <div class="body-1 c-pt-5">{{program.eligible_applicants}}</div>
@@ -106,7 +106,7 @@
             </v-flex>
 
             <v-flex xs12 v-if="isGrantor || isOfficer">
-              <div class="sm-title bold c-pt-10 c-pb-5">Applications: {{applications.length}}</div>
+              <div class="title bold c-pt-10 c-pb-5">Applications: {{applications.length}}</div>
               <div>
                 <application-list-item v-for="(application, index) in applications"
                   :key="'application-' + application.id" 
@@ -135,7 +135,7 @@
               <v-divider></v-divider>
 
               <div class="c-pt-5 c-pl-5 c-pb-5">
-                <div class="sm-title c-pb-2 bold">Program Officers</div>
+                <div class="title c-pb-2 bold">Program Officers</div>
                 <div v-for="officer in program.officers">
                   <div class="legacy-row-nowrap text-align-center c-pt-2">
                     <v-avatar size="40px">

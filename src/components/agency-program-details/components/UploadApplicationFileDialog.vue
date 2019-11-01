@@ -38,7 +38,7 @@
 						</v-autocomplete>
 						<div v-if="research">
 							<div class="c-pt-4 c-pb-8">
-								<div class="sm-title">
+								<div class="title">
 									<span class="half-bold">Research group:</span>
 									<router-link class="a"
                     :to="{

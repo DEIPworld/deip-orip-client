@@ -11,7 +11,7 @@
             
             <div class="legacy-column c-ml-10">
                 <div class="c-pt-4">
-                    <router-link class="a sm-title" :to="{ name: 'UserDetails', params: { account_name: review.author.account.name }}">
+                    <router-link class="a title" :to="{ name: 'UserDetails', params: { account_name: review.author.account.name }}">
                         {{ review.author | fullname }}
                     </router-link>
                 </div>
@@ -37,7 +37,7 @@
             </div>
 
             <div class="c-pt-2 c-pb-2">
-                <router-link class="a sm-title" 
+                <router-link class="a title" 
                     :to="{
                         name: 'ResearchContentDetails',
                         params: {

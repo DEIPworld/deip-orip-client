@@ -2,7 +2,7 @@
     <div>
         <!-- ### START Research Group Details Section ### -->
         <div class="c-pb-6">
-            <div class="sm-title bold">Group expertise tokens</div>
+            <div class="title bold">Group expertise tokens</div>
 
             <div class="c-pt-4">
                 <div v-for="(item, i) in groupExpertise" :key="i">
@@ -26,7 +26,7 @@
 
         <div v-if="isResearchGroupMember" class="">
             <div class="c-pv-6">
-                <div class="sm-title bold">
+                <div class="title bold">
                     <span class="">Assets</span>
                     
                     <router-link class="a float-right" 
@@ -76,7 +76,7 @@
         <!-- ### START Research Group Join Requests Section ### -->
         <div v-if="isJoinRequestsSectionAvailable" class="">
             <div class="c-pv-6">
-                <div class="sm-title bold">Join requests: {{pendingJoinRequests.length}}</div>
+                <div class="title bold">Join requests: {{pendingJoinRequests.length}}</div>
 
                 <div class="">
                     <div v-for="(join, index) in pendingJoinRequests" class="legacy-row-nowrap legacy-justify-between align-center c-pt-4">

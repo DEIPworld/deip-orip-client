@@ -25,7 +25,7 @@
         </div>
 
         <div class="">
-            <div class="sm-title bold c-pt-6">
+            <div class="title bold c-pt-6">
                 <span class="">Personal Info</span>
             </div>
 

@@ -3,7 +3,7 @@
       <div>
         <!-- ### START User Profile Expertise Section ### -->
         <div>
-            <div class="sm-title bold">Expertise Tokens</div>
+            <div class="title bold">Expertise Tokens</div>
             <div class="c-pt-4 c-pb-2">
                 <div class="legacy-row legacy-justify-between" v-for="(item, i) in expertise" :key="i">
                     <div class="half-bold">{{ item.discipline_name }}</div>
@@ -176,7 +176,7 @@
         <!-- ### START User Profile Invites Section ### -->
         <div v-if="isOwner && hasInvites" id="invites" class="c-mt-4">
             <div class="sidebar-fullwidth"><v-divider></v-divider></div>
-            <div class="sm-title bold c-pt-4">Invites: {{invites.length}}</div>
+            <div class="title bold c-pt-4">Invites: {{invites.length}}</div>
             <div class="c-pb-4">
                 <div v-for="(invite, index) in invites" class="c-pt-2 c-pb-4 invite-item">
                     <div class="legacy-row text-align-center c-pt-4 c-pb-2">

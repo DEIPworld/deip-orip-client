@@ -1,7 +1,7 @@
 <template>
     <div>
         <div class="ma-0">
-            <router-link class="a sm-title" 
+            <router-link class="a title" 
                 :to="{ name: 'ResearchDetails', params: { 
                         research_group_permlink: encodeURIComponent(research.group_permlink),
                         research_permlink: encodeURIComponent(research.permlink)
@@ -164,7 +164,7 @@
             </div>
 
             <div class="c-mt-6">
-                <router-link class="a sm-title"
+                <router-link class="a title"
                     :to="{ 
                         name: 'ResearchContentMetadata', 
                         params: { 

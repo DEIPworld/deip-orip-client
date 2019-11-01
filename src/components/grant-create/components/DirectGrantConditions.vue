@@ -2,7 +2,7 @@
     <div class="legacy-column full-height">
         <div class="c-mb-4 legacy-col-grow legacy-column">
             <div class="step-title">Direct grants distribution</div>
-            <div class="sm-title bold c-mb-2 text-align-center">Please type special conditions</div>
+            <div class="title bold c-mb-2 text-align-center">Please type special conditions</div>
 
             <div class="caption c-mb-4 text-align-center grey--text">
                 You can grant your expertise tokens that match researcher's disciplines

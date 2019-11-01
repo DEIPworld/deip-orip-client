@@ -12,7 +12,7 @@
                 <div class="">
                     <div class="legacy-row align-center c-pb-4" v-for="i in 3" :key="i">
                         <div class="pos-relative">
-                            <v-btn dark outline color="grey darken-1" class="remove-milestone like-fab">
+                            <v-btn dark outline color="grey darken-1" class="remove-milestone">
                                 <div>
                                     <span class="number-icon">{{ i }}</span>
                                     <v-icon class="remove-icon" dark>clear</v-icon>

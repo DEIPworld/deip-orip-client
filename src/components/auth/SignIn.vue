@@ -5,7 +5,7 @@
       <v-flex xs5>
         <div>
           <div class="text-align-center">
-            <div class="sm-title c-pb-4 bold">Welcome to</div>
+            <div class="title c-pb-4 bold">Welcome to</div>
             <div class="deip-emblem">
               <div class="emblem-logo">Deip.world</div>
               <div class="emblem-caption">Decentralized research platform</div>

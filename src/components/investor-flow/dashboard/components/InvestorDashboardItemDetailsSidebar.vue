@@ -1,7 +1,7 @@
 <template>
     <div>
         <div class="c-pb-6">
-            <span class="a sm-title">
+            <span class="a title">
                 Parallel functional	processor
             </span>
         </div>
@@ -17,7 +17,7 @@
             </div>
 
             <div class="c-pt-4">
-                <span class="sm-title bold">Announcement</span>
+                <span class="title bold">Announcement</span>
             </div>
 
             <div class="c-pt-4">
@@ -35,7 +35,7 @@
 
         <div class="c-pt-6 c-pb-6">
             <div class="">
-                <span class="sm-title bold">Research group: Minsk 1</span>
+                <span class="title bold">Research group: Minsk 1</span>
             </div>
 
             <div class="c-pt-4">
@@ -59,7 +59,7 @@
 
         <div class="c-pt-6 c-pb-6">
             <div class="">
-                <span class="sm-title bold">
+                <span class="title bold">
                     Reviews:
                     <span class="green--text text--darken-2">9</span>
                     /
@@ -114,7 +114,7 @@
 
         <div class="c-pt-6 c-pb-6">
             <div class="c-pt-4">
-                <span class="sm-title bold">Research stakeholders</span>
+                <span class="title bold">Research stakeholders</span>
             </div>
 
             <div class="c-pt-4">
@@ -144,7 +144,7 @@
 
         <div class="c-pt-6 c-pb-6">
             <div class="c-pt-4">
-                <span class="sm-title bold">My memo</span>
+                <span class="title bold">My memo</span>
             </div>
 
             <div class="c-pt-4">
@@ -176,7 +176,7 @@
 
         <div class="c-pt-6 c-pb-6">
             <div class="">
-                <span class="sm-title bold">Comments</span>
+                <span class="title bold">Comments</span>
             </div>
 
             <div class="c-pt-4">

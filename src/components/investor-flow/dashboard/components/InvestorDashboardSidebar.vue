@@ -1,7 +1,7 @@
 <template>
     <div>
         <div class="c-pb-6">
-            <span class="sm-title bold">
+            <span class="title bold">
                 <v-icon size="18" class="c-mr-2">dashboard</v-icon> My dashboard
             </span>
         </div>
@@ -12,7 +12,7 @@
         
         <div class="c-pt-6 c-pb-6">
             <div class="">
-                <span class="sm-title bold">My lists</span>
+                <span class="title bold">My lists</span>
             </div>
 
             <div class="c-pt-4">
@@ -60,7 +60,7 @@
         
         <div class="c-pt-6 c-pb-6">
             <div class="">
-                <span class="sm-title bold">My reviewers</span>
+                <span class="title bold">My reviewers</span>
                 <span class="float-right a">See all 25</span>
             </div>
 
@@ -103,7 +103,7 @@
 
         <div class="c-pt-6 c-pb-6">
             <div class="">
-                <span class="sm-title bold">Saved search</span>
+                <span class="title bold">Saved search</span>
             </div>
 
             <div class="c-pt-4">
@@ -116,7 +116,7 @@
 
         <div class="c-pt-6 c-pb-6">
             <div class="">
-                <span class="sm-title bold">Saved comparison</span>
+                <span class="title bold">Saved comparison</span>
             </div>
 
             <div class="c-pt-4">
@@ -127,8 +127,8 @@
 
         <div class="c-pt-6 c-pb-6">
             <div class="">
-                <span class="sm-title bold">Reviews:</span>
-                <span class="sm-title bold a">30</span>
+                <span class="title bold">Reviews:</span>
+                <span class="title bold a">30</span>
             </div>
         </div>
     </div>

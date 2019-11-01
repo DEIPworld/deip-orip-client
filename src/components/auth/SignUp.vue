@@ -66,7 +66,7 @@
                         v-model="formData.privKey"
                     ></v-text-field>
 
-                    <div class="sm-title half-bold c-pb-4 grey--text">Permission to use the data</div>
+                    <div class="title half-bold c-pb-4 grey--text">Permission to use the data</div>
 
                     <div class="text-align-justify caption grey--text">
                         Please confirm you have saved the generated key and want to be added to the list of private beta

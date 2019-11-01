@@ -1,7 +1,7 @@
 <template>
     <div>
         <div class="c-mb-8" v-if="research">
-            <router-link class="a sm-title" 
+            <router-link class="a title" 
                 :to="{
                     name: 'ResearchContentDetails',
                     params: {
