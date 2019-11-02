@@ -1,4 +1,5 @@
 import Vue from 'vue'
 import Dashboard from './Dashboard';
+import ResearchProjectTile from './components/ResearchProjectTile';
 
-Vue.component('dashboard', Dashboard);
+Vue.component('research-project-tile', ResearchProjectTile);

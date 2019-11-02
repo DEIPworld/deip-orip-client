@@ -21,7 +21,7 @@
                   <v-layout row wrap>
 
                     <v-flex xl4 lg4 md4 sm12 xs12 class="projects-column">
-                      <v-layout row justify-space-between>
+                      <v-layout row justify-space-between pb-4>
                         <div class="title bold">Projects <span class="primary--text pl-2">8</span></div>
                         <div>
                           <v-btn color="primary" small class="ma-0">
@@ -29,6 +29,9 @@
                             <v-icon small>add</v-icon>
                           </v-btn>
                         </div>
+                      </v-layout>
+                      <v-layout row v-for="i in [0, 1, 2]" :key="'research-tile-' + i" class="pb-5">
+                        <research-project-tile :research="{id: i}"></research-project-tile>
                       </v-layout>
                     </v-flex>
 
@@ -114,7 +117,7 @@ export default {
 }
 
 .projects-column {
-  padding-left: 1%;
+  // padding-left: 2%;
   padding-right: 1%;
   overflow: scroll; 
 }
@@ -122,18 +125,18 @@ export default {
 .investments-column {
   padding-left: 1%;
   padding-right: 1%;
-  border-left: 1.8px solid @grey-lighten-2;
-  border-right: 1.8px solid @grey-lighten-2;
+  border-left: 1px solid @grey-lighten-2;
+  border-right: 1px solid @grey-lighten-2;
 }
 
 .reviews-column {
   padding-left: 1%;
-  padding-right: 1%;
+  // padding-right: 2%;
 }
 
 .total-assets-column {
   padding-left: 1%;
-  padding-right: 1%;
+  // padding-right: 2%;
 }
 
 </style>

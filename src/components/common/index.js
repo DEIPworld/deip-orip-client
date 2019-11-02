@@ -26,6 +26,8 @@ Vue.component('advanced-discipline-picker', AdvancedDisciplinePicker);
 import InternalReferencesPicker from './components/InternalReferencesPicker';
 Vue.component('internal-references-picker', InternalReferencesPicker);
 
+import PlatformAvatar from './components/PlatformAvatar';
+Vue.component('platform-avatar', PlatformAvatar);
 // filters
 
 import './filters/index';
