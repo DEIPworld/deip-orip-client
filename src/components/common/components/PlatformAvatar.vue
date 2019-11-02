@@ -2,13 +2,13 @@
   <span class="platform-avatar">
     <v-layout row wrap align-center align-baseline>
       <div>
-        <v-avatar :size="size + 'px'">
-          <img
-            v-if="user.profile"
-            v-bind:src="user.profile.avatar | avatarSrc(size * 2, size * 2, false)"
-          />
-          <v-gravatar v-else :email="user.account.name + '@deip.world'" />
-        </v-avatar>
+        <v-tooltip bottom>
+          <v-avatar :size="size + 'px'" slot="activator">
+            <img v-if="user.profile" v-bind:src="user.profile.avatar | avatarSrc(size * 2, size * 2, false)"/>
+            <v-gravatar v-else :email="user.account.name + '@deip.world'" />
+          </v-avatar>
+          <span>{{ user | fullname }}</span>
+        </v-tooltip>
       </div>
       <div>
         <router-link

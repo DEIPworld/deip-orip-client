@@ -21,7 +21,7 @@
                   <v-layout row wrap>
 
                     <v-flex xl4 lg4 md4 sm12 xs12 class="projects-column">
-                      <v-layout row justify-space-between pb-4>
+                      <v-layout row justify-space-between class="column-header">
                         <div class="title bold">Projects <span class="primary--text pl-2">8</span></div>
                         <div>
                           <v-btn color="primary" small class="ma-0">
@@ -39,33 +39,45 @@
                       <v-layout row wrap>
 
                         <v-flex lxl6 lg6 md6 sm12 xs12 class="investments-column">
-                          <v-layout row justify-space-between pb-4>
+                          <v-layout row justify-space-between class="column-header">
                             <div class="title bold">Investments</div>
                             <div></div>
                           </v-layout>
 
-                          <v-layout column>
-                            <v-layout row justify-space-between py-1>
+                          <v-layout column class="pb-5">
+                            <v-layout row justify-space-between py-1 class="column-text-item">
                               <span>Wallet</span>
                               <span></span>
                             </v-layout>
-                            <v-layout row justify-space-between py-1>
+                            <v-layout row justify-space-between py-1 class="column-text-item">
                               <span>Portfolio</span>
                               <span></span>
                             </v-layout>
-                            <v-layout row justify-space-between py-1>
+                            <v-layout row justify-space-between py-1 class="column-text-item">
                               <span>My deals</span>
-                              <span><v-chip class="ma-0" style="height: 20px;" color="#826AF9" text-color="white">3</v-chip></span>
+                              <span><v-chip class="ma-0" color="#826AF9" text-color="white">3</v-chip></span>
                             </v-layout>
-                            <v-layout row justify-space-between py-1>
+                            <v-layout row justify-space-between py-1 class="column-text-item">
                               <span>Explore investment opportunities</span>
-                              <span><v-chip class="ma-0" style="height: 20px;" color="#826AF9" text-color="white">12</v-chip></span>
+                              <span><v-chip class="ma-0" color="#826AF9" text-color="white">12</v-chip></span>
                             </v-layout>
+                          </v-layout>
+
+                          <v-layout column>
+                            <div class="title bold">Distribution</div>
+                            <div class="py-4">
+                              <GChart
+                                type="PieChart"
+                                :settings="{ packages: ['corechart'] }"
+                                :data="distributionChart.data"
+                                :options="distributionChart.options"
+                              />
+                            </div>
                           </v-layout>
                         </v-flex>
 
                         <v-flex xl6 lg6 md6 sm12 xs12 class="reviews-column">
-                          <v-layout row justify-space-between>
+                          <v-layout row justify-space-between class="column-header">
                             <div class="title bold">Reviews</div>
                             <div>
                               <v-btn color="primary" small outline class="ma-0">
@@ -73,11 +85,91 @@
                               </v-btn>
                             </div>
                           </v-layout>
+
+                          <v-layout column class="pb-5">
+                            <v-layout row justify-space-between py-1 class="column-text-item">
+                              <span>My Reviews</span>
+                              <span class="primary--text body-2">10</span>
+                            </v-layout>
+                            <v-layout row justify-space-between py-1 class="column-text-item">
+                              <span>Invites</span>
+                              <span class="primary--text body-2">3</span>
+                            </v-layout>
+                            <v-layout row justify-space-between py-1 class="column-text-item">
+                              <span>Reviews on my research</span>
+                              <span class="primary--text body-2">0</span>
+                            </v-layout>
+                            <v-layout row justify-space-between py-1 class="column-text-item">
+                              <span>Reviews on my request</span>
+                              <span class="primary--text body-2">0</span>
+                            </v-layout>
+                          </v-layout>
+
+                          <v-layout column class="pb-5">
+                            <div class="title bold">Experts <span class="primary--text pl-2">34</span></div>
+                            <div class="pt-2">
+                              <v-autocomplete
+                                label="Expert name"
+                                autocomplete
+                                :append-icon="null"
+                                :loading="isExpertsLoading"
+                                :items="foundExperts"
+                                item-text="name"
+                                item-value="user"
+                                :search-input.sync="expertsSearch"
+                                v-on:keyup="queryExperts()"
+                                v-model="selectedExpert"
+                                @input="onSetExpert()"
+                              ></v-autocomplete>
+                            </div>
+                            <div v-if="!selectedExpert">
+                              <platform-avatar :size="40" v-for="(expert, i) in allUsers.slice(0, 8)" :key="'expert-' + i" :user="expert" class="expert-avatar pr-1" ></platform-avatar>
+                            </div>
+                            <div v-else>
+                              <platform-avatar :user="selectedExpert" :size="40" link-to-profile link-to-profile-class="pl-3"></platform-avatar>
+                              <div class="py-1 body-2">{{selectedExpert | employmentOrEducation}}</div>
+                            </div>
+                          </v-layout>
+
+                          <v-layout column class="pb-5">
+                            <v-layout row justify-space-between class="column-header">
+                              <div class="title bold">Protect IP</div>
+                              <div></div>
+                            </v-layout>
+
+                            <v-layout row justify-space-between py-1 class="column-text-item">
+                              <span class="body-2">
+                                <v-layout row>
+                                  <v-icon color="#2962FF" class="pr-2">visibility</v-icon>
+                                  <span style="color: #4e64db">NDA contracts</span>
+                                </v-layout>
+                              </span>
+                              <span class="primary--text body-2">10</span>
+                            </v-layout>
+                            <v-layout row justify-space-between py-1 class="column-text-item">
+                              <span class="body-2">
+                                <v-layout row>
+                                  <v-icon color="#2962FF" class="pr-2">lock</v-icon>
+                                  <span style="color: #4e64db">IP certificates</span>
+                                </v-layout>
+                              </span>
+                              <span class="primary--text body-2">3</span>
+                            </v-layout>
+                          </v-layout>
+
                         </v-flex>
                       </v-layout>
                       <v-layout row wrap>
                         <v-flex lx12 lg12 md12 sm12 xs12 class="total-assets-column">
                           <div class="title bold">Total assets value</div>
+                          <div class="py-4">
+                            <GChart
+                              type="AreaChart"
+                              :settings="{ packages: ['corechart'] }"
+                              :data="totalAssetsPriceChart.data"
+                              :options="totalAssetsPriceChart.options"
+                            />
+                          </div>
                         </v-flex>
                       </v-layout>
                     </v-flex>
@@ -110,6 +202,8 @@
 
 <script>
 import { mapGetters } from "vuex";
+import deipRpc from '@deip/deip-rpc-client';
+import * as usersService from './../../utils/user';
 
 export default {
   name: "Dashboard",
@@ -117,20 +211,143 @@ export default {
   computed: {
     ...mapGetters({
       user: "auth/user",
-    })
+    }),
+
+    distributionChart() {
+      return {
+        data: [
+          ['Distribution', ''],
+          ['Research 1', 11],
+          ['Research 2', 2],
+          ['Research 3', 2],
+          ['Research 4', 2],
+          ['Research 5', 7]
+        ],
+
+        options: {
+          title: "",
+          legend: { position: 'left' },
+          colors: ['#c6bbff', '#f9c3d7', '#a6dcff', '#826af9', '#2d99ff', '#f3f5f8'],
+          chartArea: { 
+            left: 0, 
+            width: "100%",
+            height: "100%"
+          },
+          pieSliceTextStyle: {
+            color: "#ffffff", 
+            fontSize: 10
+          },
+          pieHole: 0.6
+        }
+      }
+    },
+
+    totalAssetsPriceChart() {
+
+      return {
+        data: [
+          ['Date',                'Asset 1', 'Asset 2', 'Asset 3'],
+          [new Date('11/01/19'),  1000,      400,       700      ],
+          [new Date('11/02/19'),  1170,      460,       300      ],
+          [new Date('11/03/19'),  660,       1120,      500      ],
+          [new Date('11/04/19'),  1030,      540,       1200     ],
+          [new Date('11/05/19'),  550,       300,       600      ],
+          [new Date('11/06/19'),  1000,      1500,      480      ],
+          [new Date('11/07/19'),  1110,      1600,      790      ],
+          [new Date('11/08/19'),  2000,      1700,      1300     ],
+          [new Date('11/09/19'),  2100,      1800,      1400     ],
+          [new Date('11/10/19'),  2200,      1900,      1500     ],
+          [new Date('11/11/19'),  2300,      2000,      1600     ]
+        ],
+
+        options: {
+          title: "",
+          legend: { position: 'top' },
+          hAxis: { title: '', format: 'MMM d, y' },
+          vAxis: { title: '', minValue: 0,  },
+        
+          colors: ['#c6bbff', '#f9c3d7', '#a6dcff'],
+          chartArea: { 
+            left: "5%", 
+            width: "95%",
+            height: "80%"
+          }
+        }
+      }
+    },
+
   },
   data() {
     return {
+      allUsers: [],
+      blackList: ['regacc'],
+      isExpertsLoading: false,
+      expertsSearch: "",
+      selectedExpert: null,
+      foundExperts: []
     };
   },
 
-  created() {}
+  methods: {
+
+    queryExperts() {
+      this.isExpertsLoading = true;
+      this.foundExperts = this.expertsSearch ? this.allUsers.filter(user => {
+        let name = this.$options.filters.fullname(user);
+        return name.toLowerCase().indexOf((this.expertsSearch || '').toLowerCase()) > -1 
+          || user.account.name.toLowerCase().indexOf((this.expertsSearch || '').toLowerCase()) > -1;
+      })
+      .map((user => {
+        const name = this.$options.filters.fullname(user);
+        return { name, user };
+      })) : [];
+
+      if (!this.expertsSearch) {
+        this.selectedExpert = null;
+      }
+
+      this.isExpertsLoading = false;
+    },
+
+    onSetExpert() {
+      console.log(this.selectedExpert);
+    }
+  },
+
+  created() {
+    this.blackList.push(this.user.account.name);
+    deipRpc.api.getAllAccountsAsync()
+      .then((accounts) => {
+        return usersService.getEnrichedProfiles(
+          accounts
+            .filter(acc => !this.blackList.some(a => a == acc.name))
+            .map(a => a.name));
+      })
+      .then((users) => {
+        this.allUsers = users;
+      });
+  }
 };
 </script>
 
 <style lang="less" scoped>
 
 @import "./../../styles/colors.less";
+
+.column-header {
+  min-height: 55px;
+}
+
+.column-text-item {
+  min-height: 30px;
+  .v-chip {  
+    height: 20px;
+  }
+}
+
+.expert-avatar {
+  float: left
+}
 
 .glass-container {
   padding-left: 5%;

@@ -138,21 +138,18 @@
         },
         mounted() {
             deipRpc.api.getAllAccountsAsync()
-                .then(data => {
-                    deipRpc.api.getAllAccountsAsync()
-                        .then(accounts => {
-                            const usernames = [];
-                            usernames.push(this.creatorUsername)
-                            usernames.push(...accounts.filter(a => a.name != this.creatorUsername).map(a => a.name))
-                            return getEnrichedProfiles(usernames)
-                        })
-                        .then((users) => {
-                            users.forEach(u => { u.stake = u.account.name == this.creatorUsername ? 100 : 0 })
-                            this.selectedUsers.push(users[0]) // creator
-                            this.allUsers = users.slice(1)
-                            this.selectableUsers = prepareSelectableUsers(this.allUsers, this.selectedUsers, this.q);
-                        })
-            });
+                .then(accounts => {
+                    const usernames = [];
+                    usernames.push(this.creatorUsername)
+                    usernames.push(...accounts.filter(a => a.name != this.creatorUsername).map(a => a.name))
+                    return getEnrichedProfiles(usernames)
+                })
+                .then((users) => {
+                    users.forEach(u => { u.stake = u.account.name == this.creatorUsername ? 100 : 0 })
+                    this.selectedUsers.push(users[0]) // creator
+                    this.allUsers = users.slice(1)
+                    this.selectableUsers = prepareSelectableUsers(this.allUsers, this.selectedUsers, this.q);
+                })
         }
     };
 </script>
