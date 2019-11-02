@@ -37,12 +37,33 @@
 
                     <v-flex lxl8 lg8 md8 sm12 xs12>
                       <v-layout row wrap>
+
                         <v-flex lxl6 lg6 md6 sm12 xs12 class="investments-column">
-                          <v-layout row justify-space-between>
+                          <v-layout row justify-space-between pb-4>
                             <div class="title bold">Investments</div>
                             <div></div>
                           </v-layout>
+
+                          <v-layout column>
+                            <v-layout row justify-space-between py-1>
+                              <span>Wallet</span>
+                              <span></span>
+                            </v-layout>
+                            <v-layout row justify-space-between py-1>
+                              <span>Portfolio</span>
+                              <span></span>
+                            </v-layout>
+                            <v-layout row justify-space-between py-1>
+                              <span>My deals</span>
+                              <span><v-chip class="ma-0" style="height: 20px;" color="#826AF9" text-color="white">3</v-chip></span>
+                            </v-layout>
+                            <v-layout row justify-space-between py-1>
+                              <span>Explore investment opportunities</span>
+                              <span><v-chip class="ma-0" style="height: 20px;" color="#826AF9" text-color="white">12</v-chip></span>
+                            </v-layout>
+                          </v-layout>
                         </v-flex>
+
                         <v-flex xl6 lg6 md6 sm12 xs12 class="reviews-column">
                           <v-layout row justify-space-between>
                             <div class="title bold">Reviews</div>

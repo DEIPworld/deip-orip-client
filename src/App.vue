@@ -67,7 +67,6 @@
         },
         
         created() {
-            this.$store.dispatch('auth/loadUser');
         }
     }
 </script>

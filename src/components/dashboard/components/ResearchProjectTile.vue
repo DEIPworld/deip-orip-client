@@ -5,7 +5,7 @@
     
     <v-layout row wrap>
       <div class="pt-2 pr-2">
-        <platform-avatar :user="user" link-to-profile link-to-profile-class="pl-3"></platform-avatar>
+        <platform-avatar :user="user" link-to-profile link-to-profile-class="pl-3 grey--text lighten-2"></platform-avatar>
       </div>
     </v-layout>
 
@@ -41,7 +41,7 @@
     data() {
       return {
         fundraisePercent: 35,
-        researchLogoSrc: `./../../../static/research-logo/${this.research.id}.png`
+        researchLogoSrc: `./../../../static/research-logo/${this.research.id < 3 ? this.research.id : 'default'}.png`
       };
     },
     computed: {

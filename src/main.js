@@ -15,32 +15,39 @@ import 'vuetify/dist/vuetify.css';
 import './styles/common.less';
 import 'vue2-dropzone/dist/vue2Dropzone.css';
 import '@mdi/font/css/materialdesignicons.css';
+import { isLoggedIn } from "./utils/auth";
 
 Vue.use(Vuetify, {
-    theme: {
-        'primary': '#2962FF'
-    }
+  theme: {
+    'primary': '#2962FF'
+  }
 });
 
 Vue.config.productionTip = false;
 
-axios.get('/env')
-    .then((env) => {
-        window.env = env.data;
-        deipRpc.api.setOptions({ url: window.env.DEIP_FULL_NODE_URL });
-        deipRpc.config.set('chain_id', window.env.CHAIN_ID);
-        if (!window.env.TENANT) window.env.TENANT = "";
-        console.log(window.env);
+async function initApp() {
+  try {
+    const env = await axios.get('/env');
+    window.env = env.data;
+    deipRpc.api.setOptions({ url: window.env.DEIP_FULL_NODE_URL });
+    deipRpc.config.set('chain_id', window.env.CHAIN_ID);
+    if (!window.env.TENANT) window.env.TENANT = "";
+    console.log(window.env);
 
-        /* eslint-disable no-new */
-        window.app = new Vue({
-            el: '#app',
-            store,
-            router,
-            components: { App },
-            template: '<App/>'
-        });
-    })
-    .catch((err) => {
-        console.error(err)
+    if (isLoggedIn()) {
+      await store.dispatch("auth/loadUser");
+    }
+
+    window.app = new Vue({
+      el: '#app',
+      store,
+      router,
+      components: { App },
+      template: '<App/>'
     });
+  } catch (err) {
+    console.error(err)
+  }
+}
+
+initApp();
