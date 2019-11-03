@@ -12,16 +12,16 @@
     <v-layout row class="pt-1">
       <v-layout column>
         <v-progress-linear v-model="fundraisePercent"></v-progress-linear>
-        <v-layout row wrap>
+        <v-layout row>
           <span class="pr-3">
             <span class="black--text half-bold pr-1">45%</span>
             <span class="grey--text lighten-2">funded</span>
           </span>
-          <span class="px-3" style="border-left: 1px solid #e0e0e0; border-right: 1px solid #e0e0e0;">
+          <span class="px-3" style="border-left: 1px solid #e0e0e0;">
             <span class="black--text half-bold pr-1">$50</span>
             <span class="grey--text lighten-2">goal</span>
           </span>
-          <span class="pl-3">
+          <span class="pl-3" style="border-left: 1px solid #e0e0e0;">
             <span class="black--text half-bold pr-1">23</span>
             <span class="grey--text lighten-2">days left</span>
           </span>

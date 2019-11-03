@@ -16,11 +16,11 @@
 
           <v-tabs-items>
             <v-tab-item value="tab-summary">
-              <v-layout row>
-                <v-card color="white" class="elevation-0 pt-4 glass-container">
+              <v-layout row fill-height>
+                <v-card color="white" class="full-width elevation-0 pt-4 glass-container">
                   <v-layout row wrap>
 
-                    <v-flex lx4 lg4 md4 sm12 xs12>
+                    <v-flex xl4 lg4 md4 sm12 xs12 order-xl1 order-lg1 order-md1 order-sm2 order-xs2>
                       <v-layout column fill-height>
                         <v-layout row wrap>
                           <v-flex xl12 lg12 md12 sm12 xs12 class="projects-column">
@@ -43,10 +43,10 @@
                       </v-layout>
                     </v-flex>
 
-                    <v-flex lxl8 lg8 md8 sm12 xs12>
+                    <v-flex xll8 lg8 md8 sm12 xs12 order-xl2 order-lg2 order-md2 order-sm1 order-xs1>
                       <v-layout column fill-height>
                         <v-layout row wrap>
-                          <v-flex lxl6 lg6 md6 sm12 xs12 class="investments-column">
+                          <v-flex xl6 lg6 md6 sm12 xs12 class="investments-column">
                             <v-layout row justify-space-between class="column-header">
                               <div class="title bold">Investments</div>
                               <div></div>
@@ -131,7 +131,9 @@
                                 ></v-autocomplete>
                               </div>
                               <div v-if="!selectedExpert">
-                                <platform-avatar :size="40" v-for="(expert, i) in allUsers.slice(0, 8)" :key="'expert-' + i" :user="expert" class="expert-avatar pr-1" ></platform-avatar>
+                                <v-layout row justify-space-between>
+                                  <platform-avatar :size="40" v-for="(expert, i) in allUsers.slice(0, 7)" :key="'expert-' + i" :user="expert" class="expert-avatar" ></platform-avatar>
+                                </v-layout>
                               </div>
                               <div v-else>
                                 <platform-avatar :user="selectedExpert" :size="40" link-to-profile link-to-profile-class="pl-3"></platform-avatar>
@@ -168,7 +170,7 @@
                         </v-layout>
 
                         <v-layout row wrap align-end>
-                          <v-flex lx12 lg12 md12 sm12 xs12 class="total-assets-column">
+                          <v-flex xl12 lg12 md12 sm12 xs12 class="total-assets-row">
                             <div class="title bold">Total assets value</div>
                             <div class="pt-4">
                               <GChart
@@ -189,19 +191,49 @@
               </v-layout>
             </v-tab-item>
             <v-tab-item value="tab-projects">
-              Projects content
+              <v-layout row fill-height>
+                <v-card color="white" class="full-width elevation-0 pt-4 glass-container">
+                  <v-layout row wrap>
+                    <div>Projects tab</div>
+                  </v-layout>
+                </v-card>
+              </v-layout>
             </v-tab-item>
             <v-tab-item value="tab-investments">
-              Investments content
+              <v-layout row fill-height>
+                <v-card color="white" class="full-width elevation-0 pt-4 glass-container">
+                  <v-layout row wrap>
+                    <div>Investments tab</div>
+                  </v-layout>
+                </v-card>
+              </v-layout>
             </v-tab-item>
             <v-tab-item value="tab-reviews">
-              Reviews content
+              <v-layout row fill-height>
+                <v-card color="white" class="full-width elevation-0 pt-4 glass-container">
+                  <v-layout row wrap>
+                    <div>Reviews tab</div>
+                  </v-layout>
+                </v-card>
+              </v-layout>
             </v-tab-item>
             <v-tab-item value="tab-experts">
-              Experts content
+              <v-layout row fill-height>
+                <v-card color="white" class="full-width elevation-0 pt-4 glass-container">
+                  <v-layout row wrap>
+                    <div>Experts tab</div>
+                  </v-layout>
+                </v-card>
+              </v-layout>
             </v-tab-item>
             <v-tab-item value="tab-ip-protection">
-              IP-protection content
+              <v-layout row fill-height>
+                <v-card color="white" class="full-width elevation-0 pt-4 glass-container">
+                  <v-layout row wrap>
+                    <div>IP-protection tab</div>
+                  </v-layout>
+                </v-card>
+              </v-layout>
             </v-tab-item>
           </v-tabs-items>
         </v-tabs>
@@ -239,7 +271,7 @@ export default {
           legend: { position: 'left' },
           colors: ['#c6bbff', '#f9c3d7', '#a6dcff', '#826af9', '#2d99ff', '#f3f5f8'],
           chartArea: { 
-            left: 0, 
+            left: 0,
             width: "100%",
             height: "100%"
           },
@@ -350,7 +382,7 @@ export default {
 
 .column-text-item {
   min-height: 30px;
-  
+
   .v-chip {  
     height: 20px;
   }
@@ -365,31 +397,62 @@ export default {
   padding-right: 5%;
 }
 
-.projects-column {
-  // padding-left: 2%;
-  padding-right: 1%;
-  overflow: scroll;
+@media (min-width: 0px) and (max-width: 960px) {
+  .projects-column {
+    padding-top: 10%;
+    // padding-bottom: 5%;
+  }
 }
 
-.research-tiles-container {
-  height: 100vh;
+@media (min-width: 960px) {
+  .projects-column {
+    padding-right: 5%;
+    overflow: scroll;
+  }
+  .research-tiles-container {
+    height: 100vh;
+  }
 }
 
-.investments-column {
-  padding-left: 1%;
-  padding-right: 1%;
-  border-left: 1px solid @grey-lighten-2;
-  border-right: 1px solid @grey-lighten-2;
+@media (min-width: 0px) and (max-width: 960px) {
+  .investments-column {
+    // padding-top: 10%;
+  }
 }
 
-.reviews-column {
-  padding-left: 1%;
-  // padding-right: 2%;
+@media (min-width: 960px) {
+  .investments-column {
+    padding-left: 5%;
+    padding-right: 5%;
+    border-left: 1px solid @grey-lighten-2;
+    border-right: 1px solid @grey-lighten-2;
+  }
 }
 
-.total-assets-column {
-  padding-left: 1%;
-  // padding-right: 2%;
+@media (min-width: 0px) and (max-width: 960px) {
+  .reviews-column {
+    // padding-top: 10%;
+  }
+}
+
+@media (min-width: 960px) {
+  .reviews-column {
+    padding-left: 5%;
+    padding-right: 5%;
+  }
+}
+
+@media (min-width: 0px) and (max-width: 960px) {
+  .total-assets-row {
+    // padding-top: 5%;
+  }
+}
+
+@media (min-width: 960px) {
+  .total-assets-row {
+    padding-top: 5%;
+    padding-right: 5%;
+  }
 }
 
 </style>
