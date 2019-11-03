@@ -14,7 +14,7 @@
           <v-tab href="#tab-ip-protection">IP protection</v-tab>
           <v-spacer></v-spacer>
 
-          <v-tabs-items>
+          <v-tabs-items class="tab-content">
             <v-tab-item value="tab-summary">
               <v-layout row fill-height>
                 <v-card color="white" class="full-width elevation-0 pt-4 glass-container">
@@ -306,12 +306,11 @@ export default {
           title: "",
           legend: { position: 'top' },
           hAxis: { title: '', format: 'MMM d, y' },
-          vAxis: { title: '', minValue: 0,  },
-        
+          vAxis: { title: '', minValue: 0 },
           colors: ['#c6bbff', '#f9c3d7', '#a6dcff'],
-          chartArea: { 
-            left: "5%", 
-            width: "95%",
+          chartArea: {
+            left: this.$vuetify.breakpoint.smAndUp ? "5%" : "10%",
+            width: this.$vuetify.breakpoint.smAndUp ? "95%" : "90%",
             height: "80%"
           }
         }
@@ -375,6 +374,10 @@ export default {
 <style lang="less" scoped>
 
 @import "./../../styles/colors.less";
+
+.tab-content {
+  border-top: 1px solid @grey-lighten-2;
+}
 
 .column-header {
   min-height: 55px;
