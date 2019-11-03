@@ -16,162 +16,170 @@
 
           <v-tabs-items>
             <v-tab-item value="tab-summary">
-              <v-layout row class="full-width full-height">
-                <v-card color="white" height="100%" class="full-width full-height elevation-0 pt-4 glass-container">
+              <v-layout row>
+                <v-card color="white" class="elevation-0 pt-4 glass-container">
                   <v-layout row wrap>
 
-                    <v-flex xl4 lg4 md4 sm12 xs12 class="projects-column">
-                      <v-layout row justify-space-between class="column-header">
-                        <div class="title bold">Projects <span class="primary--text pl-2">8</span></div>
-                        <div>
-                          <v-btn color="primary" small class="ma-0">
-                            Create Project
-                            <v-icon small>add</v-icon>
-                          </v-btn>
-                        </div>
-                      </v-layout>
-                      <v-layout row v-for="i in [0, 1, 2]" :key="'research-tile-' + i" class="pb-5">
-                        <research-project-tile :research="{id: i}"></research-project-tile>
+                    <v-flex lx4 lg4 md4 sm12 xs12>
+                      <v-layout column fill-height>
+                        <v-layout row wrap>
+                          <v-flex xl12 lg12 md12 sm12 xs12 class="projects-column">
+                            <v-layout row justify-space-between class="column-header">
+                              <div class="title bold">Projects <span class="primary--text pl-2">8</span></div>
+                              <div>
+                                <v-btn color="primary" small class="ma-0">
+                                  Create Project
+                                  <v-icon small>add</v-icon>
+                                </v-btn>
+                              </div>
+                            </v-layout>
+                            <v-layout row v-for="i in [0, 1, 2]" :key="'research-tile-' + i" :class="{'pb-5': i != [0, 1, 2].length - 1}">
+                              <research-project-tile :research="{id: i}"></research-project-tile>
+                            </v-layout>
+                          </v-flex>
+                        </v-layout>
                       </v-layout>
                     </v-flex>
 
                     <v-flex lxl8 lg8 md8 sm12 xs12>
-                      <v-layout row wrap>
-
-                        <v-flex lxl6 lg6 md6 sm12 xs12 class="investments-column">
-                          <v-layout row justify-space-between class="column-header">
-                            <div class="title bold">Investments</div>
-                            <div></div>
-                          </v-layout>
-
-                          <v-layout column class="pb-5">
-                            <v-layout row justify-space-between py-1 class="column-text-item">
-                              <span>Wallet</span>
-                              <span></span>
-                            </v-layout>
-                            <v-layout row justify-space-between py-1 class="column-text-item">
-                              <span>Portfolio</span>
-                              <span></span>
-                            </v-layout>
-                            <v-layout row justify-space-between py-1 class="column-text-item">
-                              <span>My deals</span>
-                              <span><v-chip class="ma-0" color="#826AF9" text-color="white">3</v-chip></span>
-                            </v-layout>
-                            <v-layout row justify-space-between py-1 class="column-text-item">
-                              <span>Explore investment opportunities</span>
-                              <span><v-chip class="ma-0" color="#826AF9" text-color="white">12</v-chip></span>
-                            </v-layout>
-                          </v-layout>
-
-                          <v-layout column>
-                            <div class="title bold">Distribution</div>
-                            <div class="py-4">
-                              <GChart
-                                type="PieChart"
-                                :settings="{ packages: ['corechart'] }"
-                                :data="distributionChart.data"
-                                :options="distributionChart.options"
-                              />
-                            </div>
-                          </v-layout>
-                        </v-flex>
-
-                        <v-flex xl6 lg6 md6 sm12 xs12 class="reviews-column">
-                          <v-layout row justify-space-between class="column-header">
-                            <div class="title bold">Reviews</div>
-                            <div>
-                              <v-btn color="primary" small outline class="ma-0">
-                                Ask for Review
-                              </v-btn>
-                            </div>
-                          </v-layout>
-
-                          <v-layout column class="pb-5">
-                            <v-layout row justify-space-between py-1 class="column-text-item">
-                              <span>My Reviews</span>
-                              <span class="primary--text body-2">10</span>
-                            </v-layout>
-                            <v-layout row justify-space-between py-1 class="column-text-item">
-                              <span>Invites</span>
-                              <span class="primary--text body-2">3</span>
-                            </v-layout>
-                            <v-layout row justify-space-between py-1 class="column-text-item">
-                              <span>Reviews on my research</span>
-                              <span class="primary--text body-2">0</span>
-                            </v-layout>
-                            <v-layout row justify-space-between py-1 class="column-text-item">
-                              <span>Reviews on my request</span>
-                              <span class="primary--text body-2">0</span>
-                            </v-layout>
-                          </v-layout>
-
-                          <v-layout column class="pb-5">
-                            <div class="title bold">Experts <span class="primary--text pl-2">34</span></div>
-                            <div class="pt-2">
-                              <v-autocomplete
-                                label="Expert name"
-                                autocomplete
-                                :append-icon="null"
-                                :loading="isExpertsLoading"
-                                :items="foundExperts"
-                                item-text="name"
-                                item-value="user"
-                                :search-input.sync="expertsSearch"
-                                v-on:keyup="queryExperts()"
-                                v-model="selectedExpert"
-                                @input="onSetExpert()"
-                              ></v-autocomplete>
-                            </div>
-                            <div v-if="!selectedExpert">
-                              <platform-avatar :size="40" v-for="(expert, i) in allUsers.slice(0, 8)" :key="'expert-' + i" :user="expert" class="expert-avatar pr-1" ></platform-avatar>
-                            </div>
-                            <div v-else>
-                              <platform-avatar :user="selectedExpert" :size="40" link-to-profile link-to-profile-class="pl-3"></platform-avatar>
-                              <div class="py-1 body-2">{{selectedExpert | employmentOrEducation}}</div>
-                            </div>
-                          </v-layout>
-
-                          <v-layout column class="pb-5">
+                      <v-layout column fill-height>
+                        <v-layout row wrap>
+                          <v-flex lxl6 lg6 md6 sm12 xs12 class="investments-column">
                             <v-layout row justify-space-between class="column-header">
-                              <div class="title bold">Protect IP</div>
+                              <div class="title bold">Investments</div>
                               <div></div>
                             </v-layout>
 
-                            <v-layout row justify-space-between py-1 class="column-text-item">
-                              <span class="body-2">
-                                <v-layout row>
-                                  <v-icon color="#2962FF" class="pr-2">visibility</v-icon>
-                                  <span style="color: #4e64db">NDA contracts</span>
-                                </v-layout>
-                              </span>
-                              <span class="primary--text body-2">10</span>
+                            <v-layout column class="pb-5">
+                              <v-layout row justify-space-between py-1 class="column-text-item">
+                                <span>Wallet</span>
+                                <span></span>
+                              </v-layout>
+                              <v-layout row justify-space-between py-1 class="column-text-item">
+                                <span>Portfolio</span>
+                                <span></span>
+                              </v-layout>
+                              <v-layout row justify-space-between py-1 class="column-text-item">
+                                <span>My deals</span>
+                                <span><v-chip class="ma-0" color="#826AF9" text-color="white">3</v-chip></span>
+                              </v-layout>
+                              <v-layout row justify-space-between py-1 class="column-text-item">
+                                <span>Explore investment opportunities</span>
+                                <span><v-chip class="ma-0" color="#826AF9" text-color="white">12</v-chip></span>
+                              </v-layout>
                             </v-layout>
-                            <v-layout row justify-space-between py-1 class="column-text-item">
-                              <span class="body-2">
-                                <v-layout row>
-                                  <v-icon color="#2962FF" class="pr-2">lock</v-icon>
-                                  <span style="color: #4e64db">IP certificates</span>
-                                </v-layout>
-                              </span>
-                              <span class="primary--text body-2">3</span>
-                            </v-layout>
-                          </v-layout>
 
-                        </v-flex>
+                            <v-layout column>
+                              <div class="title bold">Distribution</div>
+                              <div class="py-4">
+                                <GChart
+                                  type="PieChart"
+                                  :settings="{ packages: ['corechart'] }"
+                                  :data="distributionChart.data"
+                                  :options="distributionChart.options"
+                                />
+                              </div>
+                            </v-layout>
+                          </v-flex>
+
+                          <v-flex xl6 lg6 md6 sm12 xs12 class="reviews-column">
+                            <v-layout row justify-space-between class="column-header">
+                              <div class="title bold">Reviews</div>
+                              <div>
+                                <v-btn color="primary" small outline class="ma-0">
+                                  Ask for Review
+                                </v-btn>
+                              </div>
+                            </v-layout>
+
+                            <v-layout column class="pb-5">
+                              <v-layout row justify-space-between py-1 class="column-text-item">
+                                <span>My Reviews</span>
+                                <span class="primary--text body-2">10</span>
+                              </v-layout>
+                              <v-layout row justify-space-between py-1 class="column-text-item">
+                                <span>Invites</span>
+                                <span class="primary--text body-2">3</span>
+                              </v-layout>
+                              <v-layout row justify-space-between py-1 class="column-text-item">
+                                <span>Reviews on my research</span>
+                                <span class="primary--text body-2">0</span>
+                              </v-layout>
+                              <v-layout row justify-space-between py-1 class="column-text-item">
+                                <span>Reviews on my request</span>
+                                <span class="primary--text body-2">0</span>
+                              </v-layout>
+                            </v-layout>
+
+                            <v-layout column class="pb-5">
+                              <div class="title bold">Experts <span class="primary--text pl-2">34</span></div>
+                              <div class="pt-2">
+                                <v-autocomplete
+                                  label="Expert name"
+                                  autocomplete
+                                  :append-icon="null"
+                                  :loading="isExpertsLoading"
+                                  :items="foundExperts"
+                                  item-text="name"
+                                  item-value="user"
+                                  :search-input.sync="expertsSearch"
+                                  v-on:keyup="queryExperts()"
+                                  v-model="selectedExpert"
+                                  @input="onSetExpert()"
+                                ></v-autocomplete>
+                              </div>
+                              <div v-if="!selectedExpert">
+                                <platform-avatar :size="40" v-for="(expert, i) in allUsers.slice(0, 8)" :key="'expert-' + i" :user="expert" class="expert-avatar pr-1" ></platform-avatar>
+                              </div>
+                              <div v-else>
+                                <platform-avatar :user="selectedExpert" :size="40" link-to-profile link-to-profile-class="pl-3"></platform-avatar>
+                                <div class="py-1 body-2">{{selectedExpert | employmentOrEducation}}</div>
+                              </div>
+                            </v-layout>
+
+                            <v-layout column class="pb-5">
+                              <v-layout row justify-space-between class="column-header">
+                                <div class="title bold">Protect IP</div>
+                                <div></div>
+                              </v-layout>
+
+                              <v-layout row justify-space-between py-1 class="column-text-item">
+                                <span class="body-2">
+                                  <v-layout row>
+                                    <v-icon color="#2962FF" class="pr-2">visibility</v-icon>
+                                    <span style="color: #4e64db">NDA contracts</span>
+                                  </v-layout>
+                                </span>
+                                <span class="primary--text body-2">10</span>
+                              </v-layout>
+                              <v-layout row justify-space-between py-1 class="column-text-item">
+                                <span class="body-2">
+                                  <v-layout row>
+                                    <v-icon color="#2962FF" class="pr-2">lock</v-icon>
+                                    <span style="color: #4e64db">IP certificates</span>
+                                  </v-layout>
+                                </span>
+                                <span class="primary--text body-2">3</span>
+                              </v-layout>
+                            </v-layout>
+                          </v-flex>
+                        </v-layout>
+
+                        <v-layout row wrap align-end>
+                          <v-flex lx12 lg12 md12 sm12 xs12 class="total-assets-column">
+                            <div class="title bold">Total assets value</div>
+                            <div class="pt-4">
+                              <GChart
+                                type="AreaChart"
+                                :settings="{ packages: ['corechart'] }"
+                                :data="totalAssetsPriceChart.data"
+                                :options="totalAssetsPriceChart.options"
+                              />
+                            </div>
+                          </v-flex>
+                        </v-layout>
                       </v-layout>
-                      <v-layout row wrap>
-                        <v-flex lx12 lg12 md12 sm12 xs12 class="total-assets-column">
-                          <div class="title bold">Total assets value</div>
-                          <div class="py-4">
-                            <GChart
-                              type="AreaChart"
-                              :settings="{ packages: ['corechart'] }"
-                              :data="totalAssetsPriceChart.data"
-                              :options="totalAssetsPriceChart.options"
-                            />
-                          </div>
-                        </v-flex>
-                      </v-layout>
+
                     </v-flex>
 
                   </v-layout>
