@@ -33,8 +33,10 @@
                                 </v-btn>
                               </div>
                             </v-layout>
-                            <v-layout row v-for="i in [0, 1, 2]" :key="'research-tile-' + i" :class="{'pb-5': i != [0, 1, 2].length - 1}">
-                              <research-project-tile :research="{id: i}"></research-project-tile>
+                            <v-layout column class="research-tiles-container">
+                              <v-layout row v-for="i in [0, 1, 2]" :key="'research-tile-' + i" :class="{'pb-5': i != [0, 1, 2].length - 1}">
+                                <research-project-tile :research="{id: i}"></research-project-tile>
+                              </v-layout>
                             </v-layout>
                           </v-flex>
                         </v-layout>
@@ -348,6 +350,7 @@ export default {
 
 .column-text-item {
   min-height: 30px;
+  
   .v-chip {  
     height: 20px;
   }
@@ -365,7 +368,11 @@ export default {
 .projects-column {
   // padding-left: 2%;
   padding-right: 1%;
-  overflow: scroll; 
+  overflow: scroll;
+}
+
+.research-tiles-container {
+  height: 100vh;
 }
 
 .investments-column {
