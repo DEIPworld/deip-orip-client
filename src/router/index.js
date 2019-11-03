@@ -357,8 +357,8 @@ const router = new Router({
 			
 			rolePromise.then((agencies) => {
 				if (!agencies || !agencies.length) {
-					// next({ name: 'ResearchFeed' });
-					next({ name: 'Dashboard' });
+					next({ name: 'ResearchFeed' });
+					// next({ name: 'Dashboard' });
 					return;
 				}
 				
