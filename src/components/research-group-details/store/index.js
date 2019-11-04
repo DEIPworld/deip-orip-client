@@ -123,10 +123,9 @@ const actions = {
 
         deipRpc.api.getResearchesByResearchGroupIdAsync(groupId)
             .then(list => {
-                researchResult.push(...list)
-                
+                researchResult.push(...list);
                 return Promise.all(
-                    list.map(item => deipRpc.api.getTotalVotesByResearchAsync(item.research_id))
+                    list.map(item => deipRpc.api.getTotalVotesByResearchAsync(item.id))
                 );
             })
             .then(list => {

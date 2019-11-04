@@ -274,7 +274,7 @@ const router = new Router({
 		name: 'UserDetails',
 		component: preliminaryDataLoader(UserDetails, {
 			beforeEnter: (to, from, next) => {
-				let loadPagePromise = store.dispatch('userDetails/loadUser', {
+				let loadPagePromise = store.dispatch('userDetails/loadUserDetailsPage', {
 					username: decodeURIComponent(to.params.account_name)
 				});
 				loadPage(loadPagePromise, next);
