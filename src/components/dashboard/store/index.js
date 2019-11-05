@@ -11,6 +11,7 @@ const state = {
 	ongoingContributionsList: [],
 	ongoingTokenSalesList: [],
 	ongoingFundraisingResearchesList: [],
+	membershipResearches: []
 }
 
 // getters
@@ -23,14 +24,22 @@ const actions = {
 	loadDashboardPage({ commit, dispatch, state }, { username }) {
 		commit('SET_DASHBOARD_PAGE_LOADING_STATE', true);
 
-		const researchSharesLoad = new Promise((resolve, reject) => {
-			dispatch('loadInvestedResearchShares', { username: username, notify: resolve });
+		const investedResearchesLoad = new Promise((resolve, reject) => {
+			dispatch('loadInvestedResearches', { username: username, notify: resolve });
 		});
-		const contributionsLoad = new Promise((resolve, reject) => {
-			dispatch('loadOngoingFundraisingContributions', { username: username, notify: resolve });
+		const investingResearchesLoad = new Promise((resolve, reject) => {
+			dispatch('loadInvestingResearches', { username: username, notify: resolve });
+		});
+		const membershipResearchesLoad = new Promise((resolve, reject) => {
+			dispatch('loadMembershipResearches', { username: username, notify: resolve });
 		});
 
-		return Promise.all([researchSharesLoad, contributionsLoad])
+
+		return Promise.all([
+			investedResearchesLoad, 
+			investingResearchesLoad, 
+			membershipResearchesLoad
+		])
 			.then((res) => {
 
 			})
@@ -39,7 +48,7 @@ const actions = {
 			})
 	},
 
-	loadInvestedResearchShares({ commit }, { username, notify } = {}) {
+	loadInvestedResearches({ commit }, { username, notify } = {}) {
 		return deipRpc.api.getResearchTokensByAccountNameAsync(username)
 			.then(shares => {
 				commit('SET_INVESTED_RESEARCH_SHARES', shares);
@@ -53,7 +62,7 @@ const actions = {
 			});
 	},
 
-	loadOngoingFundraisingContributions({ commit }, { username, notify } = {}) {
+	loadInvestingResearches({ commit }, { username, notify } = {}) {
 		return deipRpc.api.getResearchTokenSaleContributionsByContributorAsync(username)
 			.then(contributions => {
 				commit('SET_ONGOING_CONTRIBUTIONS', contributions);
@@ -65,6 +74,20 @@ const actions = {
 			})
 			.then((researches) => {
 				commit('SET_ONGOING_FUNDRAISING_RESEARCHES', researches);
+			})
+			.finally(() => {
+				if (notify) notify();
+			});
+	},
+
+	loadMembershipResearches({ commit }, { username, notify } = {}) {
+		return deipRpc.api.getResearchGroupTokensByAccountAsync(username)
+			.then(list => {
+				return Promise.all(list.map(rgt => deipRpc.api.getResearchesByResearchGroupIdAsync(rgt.research_group_id)));
+			})
+			.then((researches) => {
+				const flatten = [].concat.apply([], researches);
+				commit('SET_MEMBERSHIP_RESEARCHES', flatten);
 			})
 			.finally(() => {
 				if (notify) notify();
@@ -97,7 +120,12 @@ const mutations = {
 
 	['SET_ONGOING_FUNDRAISING_RESEARCHES'](state, list) {
 		Vue.set(state, 'ongoingFundraisingResearchesList', list);
+	},
+
+	['SET_MEMBERSHIP_RESEARCHES'](state, list) {
+		Vue.set(state, 'membershipResearches', list);
 	}
+
 }
 
 const namespaced = true;
