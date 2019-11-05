@@ -412,7 +412,6 @@
         methods: {
             contributeToTokenSale() {
                 this.isTokensBuying = true;
-
                 deipRpc.broadcast.contributeToTokenSaleAsync(
 				    this.user.privKey,
                     this.tokenSale.id,

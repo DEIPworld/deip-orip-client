@@ -415,7 +415,7 @@ const actions = {
                 commit('SET_RESEARCH_TOKEN_SALE', tokenSale);
 
                 if (tokenSale) {
-                    dispatch('loadTokenSaleContributors');
+                    return dispatch('loadTokenSaleContributors');
                 }
             }, (err) => {console.log(err)})
         .finally(() => {
@@ -449,7 +449,7 @@ const actions = {
     },
 
     loadTokenSaleContributors({ state, commit }) {
-        deipRpc.api.getResearchTokenSaleContributionsByResearchTokenSaleIdAsync(state.tokenSale.id)
+        return deipRpc.api.getResearchTokenSaleContributionsByResearchTokenSaleIdAsync(state.tokenSale.id)
             .then((contributions) => {
                 commit('SET_RESEARCH_TOKEN_SALE_CONTRIBUTIONS_LIST', contributions)
             })

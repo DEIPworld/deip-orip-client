@@ -6,8 +6,11 @@ import deipRpc from '@deip/deip-oa-rpc-client';
 
 const state = {
 	isLoadingDashboardPage: false,
-	researchSharesList: [],
-	ongoingContributionsList: []
+	investedResearchSharesList: [],
+	investedResearchesList: [],
+	ongoingContributionsList: [],
+	ongoingTokenSalesList: [],
+	ongoingFundraisingResearchesList: [],
 }
 
 // getters
@@ -40,7 +43,12 @@ const actions = {
 		return deipRpc.api.getResearchTokensByAccountNameAsync(username)
 			.then(shares => {
 				commit('SET_INVESTED_RESEARCH_SHARES', shares);
-			}).finally(() => {
+				return Promise.all(shares.map(s => deipRpc.api.getResearchByIdAsync(s.research_id)));
+			})
+			.then(researches => {
+				commit('SET_INVESTED_RESEARCHES', researches);
+			})
+			.finally(() => {
 				if (notify) notify();
 			});
 	},
@@ -48,9 +56,17 @@ const actions = {
 	loadOngoingFundraisingContributions({ commit }, { username, notify } = {}) {
 		return deipRpc.api.getResearchTokenSaleContributionsByContributorAsync(username)
 			.then(contributions => {
-				debugger;
 				commit('SET_ONGOING_CONTRIBUTIONS', contributions);
-			}).finally(() => {
+				return Promise.all(contributions.map(c => deipRpc.api.getResearchTokenSaleByIdAsync(c.research_token_sale_id)));
+			})
+			.then((sales) => {
+				commit('SET_ONGOING_TOKEN_SALES', sales);
+				return Promise.all(sales.map(s => deipRpc.api.getResearchByIdAsync(s.research_id)));
+			})
+			.then((researches) => {
+				commit('SET_ONGOING_FUNDRAISING_RESEARCHES', researches);
+			})
+			.finally(() => {
 				if (notify) notify();
 			});
 	}
@@ -64,11 +80,23 @@ const mutations = {
 	},
 
 	['SET_INVESTED_RESEARCH_SHARES'](state, list) {
-		Vue.set(state, 'researchSharesList', list);
+		Vue.set(state, 'investedResearchSharesList', list);
+	},
+
+	['SET_INVESTED_RESEARCHES'](state, list) {
+		Vue.set(state, 'investedResearchesList', list);
 	},
 
 	['SET_ONGOING_CONTRIBUTIONS'](state, list) {
 		Vue.set(state, 'ongoingContributionsList', list);
+	},
+
+	['SET_ONGOING_TOKEN_SALES'](state, list) {
+		Vue.set(state, 'ongoingTokenSalesList', list);
+	},
+
+	['SET_ONGOING_FUNDRAISING_RESEARCHES'](state, list) {
+		Vue.set(state, 'ongoingFundraisingResearchesList', list);
 	}
 }
 
