@@ -17,6 +17,7 @@ const state = {
     disciplinesList: [],
     totalVotesList: [],
     tokenSale: undefined,
+    tokenSalesList: [],
     tokenHoldersList: [],
     contributionsList: [],
     groupInvitesList: [],
@@ -77,6 +78,10 @@ const getters = {
 
     tokenSale: (state, getters) => {
         return state.tokenSale;
+    },
+
+    tokenSalesList: (state, getters) => {
+        return state.tokenSalesList;
     },
 
     tokenHoldersList: (state, getters) => {
@@ -232,6 +237,9 @@ const actions = {
                 const tokenSaleLoad = new Promise((resolve, reject) => {
                     dispatch('loadResearchTokenSale', { researchId: state.research.id, notify: resolve })
                 });
+                const tokenSalesLoad = new Promise((resolve, reject) => {
+                    dispatch('loadResearchTokenSales', { researchId: state.research.id, notify: resolve })
+                });
                 const invitesLoad = new Promise((resolve, reject) => {
                     dispatch('loadResearchGroupInvites', { researchGroupId: state.research.research_group_id, notify: resolve })
                 });
@@ -246,7 +254,7 @@ const actions = {
                 });
 
                 return Promise.all([contentLoad, membersLoad, reviewsLoad, disciplinesLoad, tokenHoldersLoad,
-                     tokenSaleLoad, invitesLoad, contentRefsLoad, groupLoad, applicationsLoad, applicationsRefsLoad])
+                     tokenSaleLoad, tokenSalesLoad, invitesLoad, contentRefsLoad, groupLoad, applicationsLoad, applicationsRefsLoad])
 
             }, (err => {console.log(err)}))
             .finally(() => {
@@ -424,6 +432,16 @@ const actions = {
         })
     },
 
+    loadResearchTokenSales({ state, dispatch, commit }, { researchId, notify }) {
+        return deipRpc.api.getResearchTokenSalesByResearchIdAsync(researchId)
+            .then(tokenSales => {
+                commit('SET_RESEARCH_TOKEN_SALES', tokenSales);
+            }, (err) => {console.log(err)})
+        .finally(() => {
+            if (notify) notify();
+        })
+    },
+
     loadResearchContentRefs({ state, dispatch, commit }, { researchId, notify }) {
         commit('SET_RESEARCH_CONTENT_REFS_LOADING_STATE', true)
         contentHttpService.getContentRefs({researchId})
@@ -512,6 +530,10 @@ const mutations = {
 
     ['SET_RESEARCH_TOKEN_SALE'](state, tokenSale) {
         Vue.set(state, 'tokenSale', tokenSale)
+    },
+
+    ['SET_RESEARCH_TOKEN_SALES'](state, list) {
+        Vue.set(state, 'tokenSalesList', list)
     },
 
     ['SET_RESEARCH_TOKEN_HOLDERS_LIST'](state, tokenHolders) {
