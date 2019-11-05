@@ -1,7 +1,16 @@
 <template>
   <v-layout column>
     <div><img style="width: 100%; height: 150px" :src="researchLogoSrc" /></div>
-    <div class="subheading half-bold py-2">{{research.title}}</div>
+    <!-- <div class="subheading half-bold py-2">{{research.title}}</div> -->
+    <router-link class="research-title py-2"
+      :to="{
+        name: 'ResearchDetails', 
+        params: {
+          research_group_permlink: encodeURIComponent(research.group_permlink),
+          research_permlink: encodeURIComponent(research.permlink)
+        }
+      }"
+    ><span class="subheading half-bold">{{ research.title }}</span></router-link>
     
     <v-layout row wrap>
       <div class="pt-2 pr-2">
@@ -81,5 +90,14 @@
 </script>
 
 <style lang="less" scoped>
+
+  .research-title {
+    text-decoration: none;
+    color: #000000
+  }
+
+  .research-title:hover {
+    text-decoration: underline;
+  }
 
 </style>
