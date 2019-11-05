@@ -34,8 +34,8 @@
                               </div>
                             </v-layout>
                             <v-layout column class="research-tiles-container">
-                              <v-layout row v-for="i in [0, 1, 2]" :key="'research-tile-' + i" :class="{'pb-5': i != [0, 1, 2].length - 1}">
-                                <research-project-tile :research="{id: i}"></research-project-tile>
+                              <v-layout row v-for="({research, tokenSale, tokenSaleContributions }, i) in researches" :key="'research-tile-' + research.id" :class="{'pb-5': i != researches.length - 1}">
+                                <research-project-tile :research="research" :tokenSale="tokenSale" :tokenSaleContributions="tokenSaleContributions"></research-project-tile>
                               </v-layout>
                             </v-layout>
                           </v-flex>
@@ -253,6 +253,7 @@ export default {
   computed: {
     ...mapGetters({
       user: "auth/user",
+      researches: "dashboard/researches"
     }),
 
     distributionChart() {

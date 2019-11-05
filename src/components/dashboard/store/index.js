@@ -10,13 +10,34 @@ const state = {
 	investedResearchesList: [],
 	ongoingContributionsList: [],
 	ongoingTokenSalesList: [],
-	ongoingFundraisingResearchesList: [],
+	investingResearchesList: [],
 	membershipResearches: []
 }
 
 // getters
 const getters = {
-	isLoadingDashboardPage: state => state.isLoadingDashboardPage
+	isLoadingDashboardPage: state => state.isLoadingDashboardPage,
+	
+	researches: (state) => {
+
+		let unique = [
+			...state.investedResearchesList,
+			...state.investingResearchesList,
+			...state.membershipResearches
+		]
+			.reduce((arr, research) => {
+				if (arr.some(r => r.id == research.id)) return arr;
+				let tokenSale = state.ongoingTokenSalesList.find(s => s.research_id == research.id);
+				if (tokenSale) {
+					let tokenSaleContributions = state.ongoingContributionsList.filter(c => c.research_token_sale_id == tokenSale.id);
+					return [...arr, { research, tokenSale, tokenSaleContributions }];
+				} else {
+					return [...arr, { research }];
+				}
+			}, []);
+
+		return unique;
+	}
 }
 
 // actions
@@ -119,7 +140,7 @@ const mutations = {
 	},
 
 	['SET_ONGOING_FUNDRAISING_RESEARCHES'](state, list) {
-		Vue.set(state, 'ongoingFundraisingResearchesList', list);
+		Vue.set(state, 'investingResearchesList', list);
 	},
 
 	['SET_MEMBERSHIP_RESEARCHES'](state, list) {
