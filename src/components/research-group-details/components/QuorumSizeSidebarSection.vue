@@ -58,7 +58,7 @@
 <script>
     import { mapGetters } from 'vuex';
     import _ from 'lodash';
-    import deipRpc from '@deip/deip-rpc-client';
+    import deipRpc from '@deip/deip-oa-rpc-client';
     import * as proposalService from './../../../services/ProposalService';
 
     export default {

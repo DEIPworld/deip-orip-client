@@ -1,5 +1,5 @@
 import Vue from 'vue';
-import deipRpc from '@deip/deip-rpc-client';
+import deipRpc from '@deip/deip-oa-rpc-client';
 import agencyHttp from './../../../services/http/agency';
 import { mapAreaToProgram } from '../../common/disciplines/DisciplineTreeService'
 

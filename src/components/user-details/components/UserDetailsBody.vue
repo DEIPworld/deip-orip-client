@@ -266,7 +266,7 @@
     import vueDropzone from 'vue2-dropzone';
     import {getAccessToken} from './../../../utils/auth';
     import expertiseClaimsService from '../../../services/http/expertiseClaims.js';
-    import deipRpc from '@deip/deip-rpc-client';
+    import deipRpc from '@deip/deip-oa-rpc-client';
 
     export default {
         name: 'UserDetailsBody',

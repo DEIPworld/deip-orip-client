@@ -92,7 +92,7 @@
 </template>
 
 <script>
-    import deipRpc from '@deip/deip-rpc-client';
+    import deipRpc from '@deip/deip-oa-rpc-client';
     import { createResearchProposal } from "./../../services/ProposalService"; 
     import * as disciplineTreeService from "./../common/disciplines/DisciplineTreeService"; 
     import { mapGetters } from 'vuex';

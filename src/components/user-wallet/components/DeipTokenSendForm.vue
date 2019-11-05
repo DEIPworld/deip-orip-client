@@ -50,7 +50,7 @@
 
 <script>
     import _ from 'lodash';
-    import deipRpc from '@deip/deip-rpc-client';
+    import deipRpc from '@deip/deip-oa-rpc-client';
     import { mapGetters } from 'vuex';
 
     export default {

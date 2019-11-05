@@ -1,4 +1,4 @@
-import deipRpc from '@deip/deip-rpc-client';
+import deipRpc from '@deip/deip-oa-rpc-client';
 
 export function signOperation(operation, ownerKey) {
     return new Promise((resolve, reject) => {

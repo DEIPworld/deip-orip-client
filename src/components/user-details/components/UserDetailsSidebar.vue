@@ -225,7 +225,7 @@
     import usersService from './../../../services/http/users'
     import { approveInvite, rejectInvite } from './../../../services/InvitesService'
     import moment from 'moment';
-    import deipRpc from '@deip/deip-rpc-client';
+    import deipRpc from '@deip/deip-oa-rpc-client';
 
     export default {
         name: "UserDetailsSidebar",

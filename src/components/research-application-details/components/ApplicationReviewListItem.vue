@@ -51,7 +51,7 @@
 
 <script>
     import { mapGetters } from 'vuex'
-    import deipRpc from '@deip/deip-rpc-client';
+    import deipRpc from '@deip/deip-oa-rpc-client';
 
     export default {
         name: "ApplicationReviewListItem",

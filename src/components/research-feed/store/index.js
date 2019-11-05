@@ -1,6 +1,6 @@
 import _ from 'lodash';
 import Vue from 'vue';
-import deipRpc from '@deip/deip-rpc-client';
+import deipRpc from '@deip/deip-oa-rpc-client';
 import * as usersService from './../../../utils/user';
 import tokenSaleService from './../../../services/TokenSaleService';
 

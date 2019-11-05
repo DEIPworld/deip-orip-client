@@ -1,5 +1,5 @@
 import _ from 'lodash';
-import deipRpc from '@deip/deip-rpc-client'
+import deipRpc from '@deip/deip-oa-rpc-client'
 import Vue from 'vue'
 import { getAccessToken } from './../../../utils/auth'
 import { getEnrichedProfiles } from './../../../utils/user'

@@ -62,7 +62,7 @@
 <script>
     import { mapGetters } from 'vuex';
     import moment from 'moment';
-    import deipRpc from '@deip/deip-rpc-client';
+    import deipRpc from '@deip/deip-oa-rpc-client';
 
     export default {
         name: "CreateDisciplineGrant",

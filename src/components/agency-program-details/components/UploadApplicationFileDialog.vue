@@ -186,7 +186,7 @@
 </template>
 
 <script>
-    import deipRpc from '@deip/deip-rpc-client';
+    import deipRpc from '@deip/deip-oa-rpc-client';
     import { getAccessToken } from './../../../utils/auth'
     import { getEnrichedProfiles } from './../../../utils/user';
     import { mapGetters } from 'vuex';

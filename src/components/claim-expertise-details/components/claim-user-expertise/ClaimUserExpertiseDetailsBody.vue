@@ -74,7 +74,7 @@
 
 <script>
     import { mapGetters } from 'vuex';
-    import deipRpc from '@deip/deip-rpc-client';
+    import deipRpc from '@deip/deip-oa-rpc-client';
     import { voteForExpertiseClaim } from './../../../../services/ExpertiseClaimsService';
 
     export default {

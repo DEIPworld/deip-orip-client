@@ -61,7 +61,7 @@
 
 <script>
     import { mapGetters } from 'vuex';
-    import deipRpc from '@deip/deip-rpc-client';
+    import deipRpc from '@deip/deip-oa-rpc-client';
     import { makeReview } from './../../../services/ReviewsService'
 
     export default {

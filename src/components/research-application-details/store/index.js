@@ -1,4 +1,4 @@
-import deipRpc from '@deip/deip-rpc-client'
+import deipRpc from '@deip/deip-oa-rpc-client'
 import Vue from 'vue'
 import { getEnrichedProfiles } from './../../../utils/user'
 import applicationHttpService from './../../../services/http/application'

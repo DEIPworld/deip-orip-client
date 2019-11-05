@@ -19,7 +19,7 @@
     import DeipTextureReaderApp from './../../../editors/DeipTextureReaderApp'
     import DeipTextureEditorApp from './../../../editors/DeipTextureEditorApp'
     import { getAccessToken, getDecodedToken } from './../../../utils/auth'
-    import deipRpc from '@deip/deip-rpc-client'
+    import deipRpc from '@deip/deip-oa-rpc-client'
 
     export default {
         name: "ResearchContentDetailsDar",

@@ -137,7 +137,10 @@ const router = new Router({
 		name: 'Dashboard',
 		component: Dashboard,
 		beforeEnter: (to, from, next) => {
-			let loadPagePromise = store.dispatch('dashboard/loadDashboardPage', {});
+			let loadPagePromise = store.dispatch('dashboard/loadDashboardPage', {
+				username: decodeURIComponent(store.getters['auth/user'].username)
+			});
+			// loadDashboardPage
 			loadPage(loadPagePromise, next);
 		}
 	}, {
@@ -293,7 +296,7 @@ const router = new Router({
 		})
 	}, {
 		path: '/claim-user-experience',
-		name: 'claim-user-expertise-list',
+		name: 'ClaimUserExpertiseList',
 		component: preliminaryDataLoader(ClaimUserExpertiseList, {
 			beforeEnter: (to, from, next) => {
 				let loadPagePromise = store.dispatch('claimExpertiseList/loadAllClaims', {});
@@ -302,7 +305,7 @@ const router = new Router({
 		})
 	}, {
 		path: '/claim-user-experience/:account_name/:claim_id',
-		name: 'claim-user-expertise-details',
+		name: 'ClaimUserExpertiseDetails',
 		component: preliminaryDataLoader(ClaimUserExpertiseDetails, {
 			beforeEnter: (to, from, next) => {
 				let loadPagePromise = store.dispatch('claimExpertiseDetails/loadClaimer', {
@@ -319,7 +322,7 @@ const router = new Router({
 		component: SetExpertisePage,
 	}, {
 		path: '/no-access-page',
-		name: 'no-access-page',
+		name: 'NoAccessPage',
 		component: NoAccessPage,
 		meta: {
 			withoutHeader: true
@@ -331,7 +334,7 @@ const router = new Router({
 			component: CreateAccountTestNet
 	}, */ {
 		path: '/voting-for-block-producers',
-		name: 'voting-for-block-producers',
+		name: 'VotingForBlockProducers',
 		component: preliminaryDataLoader(VotingForBlockProducers, {
 			beforeEnter: (to, from, next) => {
 				let loadPagePromise = store.dispatch('votingForBlockProducers/loadProducers', {});
@@ -340,7 +343,7 @@ const router = new Router({
 		})
 	}, {
 		path: '/investor-dashboard',
-		name: 'investor-dashboard',
+		name: 'InvestorDashboard',
 		component: InvestorDashboard
 	}, {
 		path: '/create-funding-opportunity-announcement',

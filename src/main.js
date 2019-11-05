@@ -3,7 +3,7 @@
 import Vue from 'vue';
 import Vuetify from 'vuetify';
 import axios from 'axios';
-import deipRpc from '@deip/deip-rpc-client';
+import deipRpc from '@deip/deip-oa-rpc-client';
 
 import App from './App';
 import store from './store';

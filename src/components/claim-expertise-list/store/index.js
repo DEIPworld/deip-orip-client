@@ -1,5 +1,5 @@
 import _ from 'lodash';
-import deipRpc from '@deip/deip-rpc-client';
+import deipRpc from '@deip/deip-oa-rpc-client';
 import Vue from 'vue';
 import expertiseClaimsService from '../../../services/http/expertiseClaims.js';
 import { getNodeById } from "./../../common/disciplines/DisciplineTreeService"; 

@@ -27,7 +27,7 @@
 
 <script>
     import { mapGetters } from 'vuex';
-    import deipRpc from '@deip/deip-rpc-client';
+    import deipRpc from '@deip/deip-oa-rpc-client';
     import * as disciplineTreeService from '../../common/disciplines/DisciplineTreeService'; 
 
     export default {

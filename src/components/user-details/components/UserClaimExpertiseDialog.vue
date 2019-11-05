@@ -96,7 +96,7 @@
     import expertiseClaimsService from '../../../services/http/expertiseClaims.js';
     import { createExpertiseClaim } from './../../../services/ExpertiseClaimsService';
     import { mapGetters } from 'vuex';
-    import deipRpc from '@deip/deip-rpc-client';
+    import deipRpc from '@deip/deip-oa-rpc-client';
 
     export default {
         name: "UserClaimExpertiseDialog",

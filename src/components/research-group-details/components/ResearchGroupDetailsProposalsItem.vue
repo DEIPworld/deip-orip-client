@@ -215,7 +215,7 @@
     import * as researchService from "./../../../services/ResearchService";
     import * as disciplineTreeService from "./../../common/disciplines/DisciplineTreeService";
     import _ from 'lodash';
-    import deipRpc from '@deip/deip-rpc-client';
+    import deipRpc from '@deip/deip-oa-rpc-client';
 
     export default {
         name: "ResearchGroupDetailsProposalsItem",

@@ -1,5 +1,5 @@
 import _ from 'lodash';
-import deipRpc from '@deip/deip-rpc-client';
+import deipRpc from '@deip/deip-oa-rpc-client';
 import researchContentSvc from './http/content.js';
 import proposalsHttp from './http/proposals';
 import { getDecodedToken, getOwnerWif } from './../utils/auth'

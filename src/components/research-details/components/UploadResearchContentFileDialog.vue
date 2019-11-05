@@ -97,7 +97,7 @@
 
 <script>
     import _ from 'lodash';
-    import deipRpc from '@deip/deip-rpc-client';
+    import deipRpc from '@deip/deip-oa-rpc-client';
     import {getAccessToken} from './../../../utils/auth'
     import { mapGetters } from 'vuex';
     import { signOperation } from './../../../utils/blockchain'
