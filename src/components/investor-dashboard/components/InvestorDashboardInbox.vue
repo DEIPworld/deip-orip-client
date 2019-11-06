@@ -3,7 +3,7 @@
     <v-layout column>
       <div class="title bold">My Inbox</div>
 
-      <v-layout column>
+      <v-layout column v-if="newNotifications.length">
         <v-layout row align-end fill-height class="py-3"> 
           <v-flex xl1 lg1 md1 sm4 xs4>
             <v-checkbox
@@ -13,7 +13,7 @@
             </v-checkbox>
           </v-flex>
           <v-flex xl8 lg8 md8 sm8 xs8>
-            <div class="subheading half-bold">Recent updates</div>
+            <div class="subheading half-bold">Recent updates: {{newNotifications.length}}</div>
           </v-flex>
           <v-flex xl3 lg3 md3 sm12 xs12>
             <v-select
@@ -29,7 +29,7 @@
           </v-flex>
         </v-layout>
         <v-layout column>
-          <v-card class="pa-2 card-label">
+          <v-card class="pa-2 deal-item" v-for="(item, i) in newNotifications" :key="'deal-' + i">
             <v-layout row wrap align-baseline>
               <v-flex xs1 align-self-center>
                 <v-checkbox
@@ -39,22 +39,22 @@
               </v-flex>
               <v-flex>
                 <router-link class="a px-2" :to="{ name: 'Default' }">
-                  Integrated	mobility	network
+                  {{item.title}}
                 </router-link>
               </v-flex>
               <v-flex class="text-xs-right">
-                <v-chip class="ma-0" color="#CCE0CC" text-color="black">Sponsored</v-chip>
+                <v-chip small v-for="(tag, j) in item.tags" :key="'deal-'+ i + '-tag'+ j" class="ma-0 ml-1 deal-tag caption" :color="tag.color" text-color="black">{{tag.name}}</v-chip>
               </v-flex>
             </v-layout>
           </v-card>
         </v-layout>
       </v-layout>
 
-      <v-layout column class="pt-5">
+      <v-layout column class="pt-5" v-if="outdatedNotifications.length">
         <v-layout row align-end fill-height class="py-3"> 
-          <div class="subheading half-bold">Overdue notifications</div>
+          <div class="subheading half-bold">Overdue notifications: {{outdatedNotifications.length}}</div>
         </v-layout>
-        <v-card class="pa-2 card-label">
+        <v-card class="pa-2 deal-item" v-for="(item, i) in outdatedNotifications" :key="'deal-' + i">
           <v-layout row wrap align-baseline>
             <v-flex xs1 align-self-center>
               <v-checkbox
@@ -64,11 +64,11 @@
             </v-flex>
             <v-flex>
               <router-link class="a px-2" :to="{ name: 'Default' }">
-                Parallel	functional	preprocessor
+                {{item.title}}
               </router-link>
             </v-flex>
             <v-flex class="text-xs-right">
-              <v-chip class="ma-0" color="#CCE0CC" text-color="black">Sponsored</v-chip>
+              <v-chip small v-for="(tag, j) in item.tags" :key="'deal-'+ i + '-tag'+ j" class="ma-0 ml-1 deal-tag caption" :color="tag.color" text-color="black">{{tag.name}}</v-chip>
             </v-flex>
           </v-layout>
         </v-card>
@@ -87,7 +87,28 @@
       return {
         allRecentSelected: false,
         sortingOptions: [{title: "All", id: 1}],
-        sort: 1
+        sort: 1,
+
+        newNotifications: [
+          { title: "Integrated mobility network", tags: [{ name: "Sponsored", color: "#CCE0CC"}, { name: "Reviewed", color: "#fdd4ca"}]},
+          { title: "IT Asset Disposal & Recycling", tags: [{ name: "A. Lawren", color: "#8babfd"}]},
+          { title: "Virtual	programmable compiler distributed	system", tags: [{ name: "Sponsored", color: "#CCE0CC"}, { name: "Reviewed", color: "#fdd4ca"}]},
+          { title: "Responsive logical interface synchronized	digital	protocol", tags: [{ name: "Comp. Sc.", color: "#cfa5b9"} ]},
+          { title: "Meta-level multimedia	algorithm", tags: [{ name: "Sponsored", color: "#CCE0CC"}, { name: "Reviewed", color: "#fdd4ca"}]},
+          { title: "Parameterized	secure technology	language solution...", tags: [{ name: "Quant. op", color: "#c4dff8"} ]},
+          { title: "Coordinated	bioinformatic	hypervisor", tags: [{ name: "Comp. Sc.", color: "#cfa5b9"} ]},
+          { title: "Reliable cloud-based network", tags: [{ name: "Quant. op", color: "#c4dff8"} ]},
+          { title: "Reliable cloud-based network", tags: [{ name: "Wait Review", color: "#f6e1a3"}, { name: "A. Lawren", color: "#91aefd"} ]}
+        ],
+
+        outdatedNotifications: [
+          { title: "Integrated mobility	network", tags: [{ name: "Sponsored", color: "#CCE0CC"}, { name: "Reviewed", color: "#fdd4ca"}]},
+          { title: "Parallel functional	preprocessor", tags: [{ name: "A. Lawren", color: "#8babfd"}]},
+          { title: "Virtual	programmable compiler distributed	system", tags: [{ name: "Sponsored", color: "#CCE0CC"}, { name: "Reviewed", color: "#fdd4ca"}]},
+          { title: "Meta-level multimedia	algorithm", tags: [{ name: "Sponsored", color: "#CCE0CC"}, { name: "Reviewed", color: "#fdd4ca"}]},
+          { title: "Parameterized	secure technology	language solution...", tags: [{ name: "Quant. op", color: "#c4dff8"} ]}
+        ]
+
       }
     },
 
@@ -104,7 +125,10 @@
 </script>
 
 <style lang="less" scoped>
- .card-label {
-   border-left: 4px solid #0039CB
+ .deal-item {
+   border-left: 4px solid #0039CB;
+  .deal-tag {
+    text-transform: uppercase;
+  }
  }
 </style>
