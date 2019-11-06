@@ -1,7 +1,6 @@
 
 
 import Vue from 'vue';
-// import tokenSaleService from './../../../services/TokenSaleService';
 import deipRpc from '@deip/deip-oa-rpc-client';
 
 const state = {
@@ -36,7 +35,15 @@ const getters = {
 				}
 			}, []);
 
+		unique.sort((a, b) => (a.research.title > b.research.title) ? 1 : ((b.research.title > a.research.title ) ? -1 : 0));
 		return unique;
+	},
+
+	currentShares: (state) => {
+		return state.investedResearchSharesList.map(share => {
+			let research = state.investedResearchesList.find(r => r.id == share.research_id);
+			return { share, research };
+		})
 	}
 }
 

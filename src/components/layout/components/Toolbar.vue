@@ -16,7 +16,7 @@
 
             <v-spacer></v-spacer>
 
-            <v-btn v-if="isLoggedIn()" to="/research-feed" icon large class="ma-0">
+            <v-btn v-if="isLoggedIn()" :to="{name: 'ResearchFeed'}" icon large class="ma-0">
                 <v-icon size="32px" color="grey lighten-1">search</v-icon>
             </v-btn>
 
@@ -41,11 +41,11 @@
                         <v-list-tile-title>Wallet</v-list-tile-title>
                     </v-list-tile>
 
-                    <v-list-tile :to="{ name: 'claim-user-expertise-list' }">
+                    <v-list-tile :to="{ name: 'ClaimUserExpertiseList' }">
                         <v-list-tile-title>Expertise Committee</v-list-tile-title>
                     </v-list-tile>
 
-                    <v-list-tile :to="{ name: 'voting-for-block-producers' }">
+                    <v-list-tile :to="{ name: 'VotingForBlockProducers' }">
                         <v-list-tile-title>Voting for block producers</v-list-tile-title>
                     </v-list-tile>
                     
@@ -58,9 +58,9 @@
                         <v-list-tile-title>Investor dashboard</v-list-tile-title>
                     </v-list-tile> -->
 
-                    <v-list-tile v-if="isGrantor" :to="{ name: 'CreateFundingOpportunityAnnouncement' }">
+                    <!-- <v-list-tile v-if="isGrantor" :to="{ name: 'CreateFundingOpportunityAnnouncement' }">
                         <v-list-tile-title>Create Funding Opportunity</v-list-tile-title>
-                    </v-list-tile>
+                    </v-list-tile> -->
 
                     <v-divider></v-divider>
 
@@ -71,15 +71,14 @@
             </v-menu>
 
             <div v-if="isLoggedIn() && !isGrantor && !isOfficer" class="mx-3" style="width: 180px">
-                <v-btn dark round color="primary" class="full-width ma-0" to="/create-new-research">
+                <v-btn dark round color="primary" class="full-width ma-0" :to="{ name: 'CreateResearch' }">
                     <div class="legacy-col-grow">Add Research</div>
                     <v-icon dark small class="ml-2">add</v-icon>
                 </v-btn>
             </div>
 
             <v-toolbar-items v-if="!isLoggedIn()">
-                <!-- <v-btn flat to="/sign-in">Sign In</v-btn> -->
-                <v-btn flat to="/sign-up">Beta Registration</v-btn>
+                <v-btn flat :to="{ name: 'SignUp' }">Sign In</v-btn>
             </v-toolbar-items>
         </v-toolbar>
     </div>

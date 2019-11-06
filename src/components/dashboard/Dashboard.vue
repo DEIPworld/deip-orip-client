@@ -25,18 +25,21 @@
                         <v-layout row wrap>
                           <v-flex xl12 lg12 md12 sm12 xs12 class="projects-column">
                             <v-layout row justify-space-between class="column-header">
-                              <div class="title bold">Projects <span class="primary--text pl-2">8</span></div>
+                              <div class="title bold">Projects <span class="primary--text pl-2">{{researches.length}}</span></div>
                               <div>
-                                <v-btn color="primary" small class="ma-0">
+                                <v-btn :to="{ name: 'CreateResearch' }" color="primary" small class="ma-0">
                                   Create Project
                                   <v-icon small>add</v-icon>
                                 </v-btn>
                               </div>
                             </v-layout>
                             <v-layout column class="research-tiles-container">
-                              <v-layout row v-for="({research, tokenSale, tokenSaleContributions }, i) in researches" :key="'research-tile-' + research.id" :class="{'pb-5': i != researches.length - 1}">
-                                <research-project-tile :research="research" :tokenSale="tokenSale" :tokenSaleContributions="tokenSaleContributions"></research-project-tile>
-                              </v-layout>
+                                <research-project-tile row v-for="({research, tokenSale, tokenSaleContributions }, i) in researches" 
+                                  :key="'research-tile-' + research.id" 
+                                  :research="research" :tokenSale="tokenSale" 
+                                  :tokenSaleContributions="tokenSaleContributions"
+                                  :class="{'pb-5': i != researches.length - 1}">
+                                </research-project-tile>
                             </v-layout>
                           </v-flex>
                         </v-layout>
@@ -77,8 +80,8 @@
                                 <GChart
                                   type="PieChart"
                                   :settings="{ packages: ['corechart'] }"
-                                  :data="distributionChart.data"
-                                  :options="distributionChart.options"
+                                  :data="sharesDistributionChart.data"
+                                  :options="sharesDistributionChart.options"
                                 />
                               </div>
                             </v-layout>
@@ -114,7 +117,7 @@
                             </v-layout>
 
                             <v-layout column class="pb-5">
-                              <div class="title bold">Experts <span class="primary--text pl-2">34</span></div>
+                              <div class="title bold">Experts <span class="primary--text pl-2">{{expertsList.length}}</span></div>
                               <div class="pt-2">
                                 <v-autocomplete
                                   label="Expert name"
@@ -132,7 +135,7 @@
                               </div>
                               <div v-if="!selectedExpert">
                                 <v-layout row justify-space-between>
-                                  <platform-avatar :size="40" v-for="(expert, i) in allUsers.slice(0, 7)" :key="'expert-' + i" :user="expert" class="expert-avatar" ></platform-avatar>
+                                  <platform-avatar :size="40" v-for="(expert, i) in expertsList.slice(0, 7)" :key="'expert-' + i" :user="expert" class="expert-avatar" ></platform-avatar>
                                 </v-layout>
                               </div>
                               <div v-else>
@@ -253,18 +256,17 @@ export default {
   computed: {
     ...mapGetters({
       user: "auth/user",
-      researches: "dashboard/researches"
+      researches: "dashboard/researches",
+      currentShares: "dashboard/currentShares"
     }),
 
-    distributionChart() {
+    sharesDistributionChart() {
+      let totalShares = this.currentShares.reduce((acc, { share }) => acc + this.convertToPercent(share.amount), 0);
       return {
         data: [
           ['Distribution', ''],
-          ['Research 1', 11],
-          ['Research 2', 2],
-          ['Research 3', 2],
-          ['Research 4', 2],
-          ['Research 5', 7]
+          ...this.currentShares.map(({ research, share }) => [research.title,  this.convertToPercent(share.amount) / totalShares * 100])
+          // ['Research title', 10]
         ],
 
         options: {
@@ -277,7 +279,8 @@ export default {
             height: "100%"
           },
           pieSliceTextStyle: {
-            color: "#ffffff", 
+            // color: "#ffffff", 
+            color: "#000000",
             fontSize: 10
           },
           pieHole: 0.6
@@ -321,7 +324,7 @@ export default {
   },
   data() {
     return {
-      allUsers: [],
+      expertsList: [],
       blackList: ['regacc'],
       isExpertsLoading: false,
       expertsSearch: "",
@@ -334,7 +337,7 @@ export default {
 
     queryExperts() {
       this.isExpertsLoading = true;
-      this.foundExperts = this.expertsSearch ? this.allUsers.filter(user => {
+      this.foundExperts = this.expertsSearch ? this.expertsList.filter(user => {
         let name = this.$options.filters.fullname(user);
         return name.toLowerCase().indexOf((this.expertsSearch || '').toLowerCase()) > -1 
           || user.account.name.toLowerCase().indexOf((this.expertsSearch || '').toLowerCase()) > -1;
@@ -366,7 +369,7 @@ export default {
             .map(a => a.name));
       })
       .then((users) => {
-        this.allUsers = users;
+        this.expertsList = users;
       });
   }
 };

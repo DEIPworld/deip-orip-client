@@ -1,7 +1,7 @@
 <template>
+<v-layout row class="research-tile">
   <v-layout column>
     <div><img style="width: 100%; height: 150px" :src="researchLogoSrc" /></div>
-    <!-- <div class="subheading half-bold py-2">{{research.title}}</div> -->
     <router-link class="research-title py-2"
       :to="{
         name: 'ResearchDetails', 
@@ -12,13 +12,11 @@
       }"
     ><span class="subheading half-bold">{{ research.title }}</span></router-link>
     
-    <v-layout row wrap>
-      <div class="pt-2 pr-2">
-        <platform-avatar :user="user" link-to-profile link-to-profile-class="pl-3 grey--text lighten-2"></platform-avatar>
-      </div>
+    <v-layout row wrap justify-start>
+      <platform-avatar :user="user" link-to-profile link-to-profile-class="pl-3 grey--text lighten-2"></platform-avatar>
     </v-layout>
 
-    <v-layout row class="pt-1" v-if="tokenSale">
+    <v-layout v-if="tokenSale" row class="pt-1 token-sale-section">
       <v-layout column>
         <v-progress-linear :value="fundingProgressPercent"></v-progress-linear>
         <v-layout row>
@@ -37,10 +35,11 @@
         </v-layout>
       </v-layout>
     </v-layout>
-      <v-layout row class="pt-4" v-else>
-        <v-divider></v-divider>
-      </v-layout>
+    <v-layout v-else row class="pt-4 divider">
+      <v-divider></v-divider>
+    </v-layout>
   </v-layout>
+</v-layout>
 </template>
 
 <script>
@@ -90,6 +89,18 @@
 </script>
 
 <style lang="less" scoped>
+
+  .research-tile {
+    flex: 0 0 auto;
+
+    .token-sale-section {
+      width: 100%;
+      flex: 0 0 auto;
+    }
+    .divider {
+      flex: 0 0 auto;
+    }
+  }
 
   .research-title {
     text-decoration: none;
