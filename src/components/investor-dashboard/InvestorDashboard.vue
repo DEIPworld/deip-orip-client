@@ -1,7 +1,7 @@
 <template>
   <base-page-layout left-sidebar-class="xl2 lg2 md2 sm12 xs12" content-class="xl7 lg7 md7 sm12 xs12" right-sidebar-class="xl3 lg3 md3 sm12 xs12">
     <div slot="left-sidebar">I AM LEFT</div>
-    <div slot="content">I AM BODY</div>
+    <investor-dashboard-inbox slot="content"></investor-dashboard-inbox>
     <div slot="right-sidebar">I AM RIGHT</div>
   </base-page-layout>
 </template>
