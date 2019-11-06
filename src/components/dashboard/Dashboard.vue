@@ -154,7 +154,7 @@
                                 <span class="body-2">
                                   <v-layout row>
                                     <v-icon color="#2962FF" class="pr-2">visibility</v-icon>
-                                    <span style="color: #4e64db">NDA contracts</span>
+                                    <a href="https://app.deip.co" class="a" style="color: #4e64db;" target="_blank">NDA contracts</a>
                                   </v-layout>
                                 </span>
                                 <span class="primary--text body-2">10</span>
@@ -163,7 +163,7 @@
                                 <span class="body-2">
                                   <v-layout row>
                                     <v-icon color="#2962FF" class="pr-2">lock</v-icon>
-                                    <span style="color: #4e64db">IP certificates</span>
+                                    <a href="https://app.deip.co" class="a" style="color: #4e64db;" target="_blank">IP certificates</a>
                                   </v-layout>
                                 </span>
                                 <span class="primary--text body-2">3</span>
@@ -172,7 +172,7 @@
                           </v-flex>
                         </v-layout>
 
-                        <v-layout row wrap align-end>
+                        <v-layout v-if="hasResearchShares" row wrap align-end>
                           <v-flex xl12 lg12 md12 sm12 xs12 class="total-assets-row">
                             <div class="title bold">Total assets value</div>
                             <div class="pt-4">
@@ -249,6 +249,7 @@
 import { mapGetters } from "vuex";
 import deipRpc from '@deip/deip-oa-rpc-client';
 import * as usersService from './../../utils/user';
+import moment from 'moment';
 
 export default {
   name: "Dashboard",
@@ -259,6 +260,10 @@ export default {
       researches: "dashboard/researches",
       currentShares: "dashboard/currentShares"
     }),
+
+    hasResearchShares() {
+      return this.currentShares.length;
+    },
 
     sharesDistributionChart() {
       let totalShares = this.currentShares.reduce((acc, { share }) => acc + this.convertToPercent(share.amount), 0);
@@ -272,7 +277,7 @@ export default {
         options: {
           title: "",
           legend: { position: 'left' },
-          colors: ['#c6bbff', '#f9c3d7', '#a6dcff', '#826af9', '#2d99ff', '#f3f5f8'],
+          colors: ['#c6bbff', '#f9c3d7', '#a6dcff', '#B9F6CA', '#2d99ff', '#f3f5f8'],
           chartArea: { 
             left: 0,
             width: "100%",
@@ -290,20 +295,27 @@ export default {
 
     totalAssetsPriceChart() {
 
+      let mockPrice = ({ share, research }, i, offset) => {
+        let val = (share.amount / 10) * (research.id || 1);
+        val = val + (i % 2 == 0 ? -(offset * 100) : offset * 200);
+        return val > 0 ? val : 100;
+      };
+
       return {
         data: [
-          ['Date',                'Asset 1', 'Asset 2', 'Asset 3'],
-          [new Date('11/01/19'),  1000,      400,       700      ],
-          [new Date('11/02/19'),  1170,      460,       300      ],
-          [new Date('11/03/19'),  660,       1120,      500      ],
-          [new Date('11/04/19'),  1030,      540,       1200     ],
-          [new Date('11/05/19'),  550,       300,       600      ],
-          [new Date('11/06/19'),  1000,      1500,      480      ],
-          [new Date('11/07/19'),  1110,      1600,      790      ],
-          [new Date('11/08/19'),  2000,      1700,      1300     ],
-          [new Date('11/09/19'),  2100,      1800,      1400     ],
-          [new Date('11/10/19'),  2200,      1900,      1500     ],
-          [new Date('11/11/19'),  2300,      2000,      1600     ]
+         ['Date', ...this.currentShares.map(({ research }) => `Asset ${research.id}`)],
+         [moment().day(-10).toDate(), ...this.currentShares.map((s, i) => mockPrice(s, i, 1))],
+         [moment().day(-9).toDate(), ...this.currentShares.map((s, i) => mockPrice(s, i, 2))],
+         [moment().day(-8).toDate(), ...this.currentShares.map((s, i) => mockPrice(s, i, 3))],
+         [moment().day(-7).toDate(), ...this.currentShares.map((s, i) => mockPrice(s, i, 4))],
+         [moment().day(-6).toDate(), ...this.currentShares.map((s, i) => mockPrice(s, i, 5))],
+         [moment().day(-5).toDate(), ...this.currentShares.map((s, i) => mockPrice(s, i, 6))],
+         [moment().day(-4).toDate(), ...this.currentShares.map((s, i) => mockPrice(s, i, 7))],
+         [moment().day(-3).toDate(), ...this.currentShares.map((s, i) => mockPrice(s, i, 8))],
+         [moment().day(-2).toDate(), ...this.currentShares.map((s, i) => mockPrice(s, i, 9))],
+         [moment().day(-1).toDate(), ...this.currentShares.map((s, i) => mockPrice(s, i, 10))],
+         [moment().toDate(), ...this.currentShares.map((s, i) => mockPrice(s, i, 11))]
+         // [new Date('11/01/19'),  1000,      400,       700      ],
         ],
 
         options: {
@@ -311,7 +323,7 @@ export default {
           legend: { position: 'top' },
           hAxis: { title: '', format: 'MMM d, y' },
           vAxis: { title: '', minValue: 0 },
-          colors: ['#c6bbff', '#f9c3d7', '#a6dcff'],
+          colors: ['#c6bbff', '#f9c3d7', '#a6dcff', '#B9F6CA', '#2d99ff', '#f3f5f8'],
           chartArea: {
             left: this.$vuetify.breakpoint.smAndUp ? "5%" : "10%",
             width: this.$vuetify.breakpoint.smAndUp ? "95%" : "90%",
