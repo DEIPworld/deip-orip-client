@@ -50,3 +50,10 @@ Vue.prototype.countEciBarWidth = (eci, eciMax, eciAverage) => {
 
     return fxEci !== 0 ? (fxEci / fxEciMax * 100) : 0;
 }
+
+Vue.prototype.round2DigitsAfterComma = (x) => {
+  if (!x) {
+    return 0;
+  }
+  return Math.round(x * 100) / 100;
+};

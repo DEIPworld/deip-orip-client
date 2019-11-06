@@ -1,34 +1,1224 @@
 <template>
-    <page-container>
-        <contentbar>
-            <research-details-body></research-details-body>
-        </contentbar>
+  <page-container>
+    <div class="full-width">
+      <v-layout align-end class="rd-header">
+        <v-flex lg8>
+          <v-layout>
+            <v-flex lg11 offset-lg1 class="mb-5">
+              <div class="rd-header__title">{{research.title}}</div>
+              <div class="rd-header__created pt-3">
+                <v-icon small color="white">today</v-icon>
+                &nbsp;Created {{research.created_at | dateFormat('D MMM YYYY', true)}}
+              </div>
+              <div class="rd-header__abstract pt-3">
+                {{research.abstract}}
+              </div>
+            </v-flex>
+          </v-layout>
+        </v-flex>
+      </v-layout>
+      <v-layout class="mt-4">
+        <v-flex lg8>
+          <v-layout v-if="isTokenSaleSectionAvailable" class="my-5">
+            <v-flex lg1>
+              <v-layout justify-end class="pr-3">
+                <v-icon large color="grey lighten-2">mdi-cash-usd-outline</v-icon>
+              </v-layout>
+            </v-flex>
+            <v-flex lg6>
+              <v-layout wrap>
+                <v-flex lg12 class="rd-block-header">Fundrising</v-flex>
+                <v-flex lg12 v-if="isActiveTokenSale || isInactiveTokenSale">
+                  <v-layout class="pt-3">
+                    <v-flex lg2 class="bold">Start:</v-flex>
+                    <v-flex lg10>{{tokenSale.start_time | dateFormat('MMM D, YYYY HH:mm', true)}}</v-flex>
+                  </v-layout>
+                  <v-layout class="pt-3">
+                    <v-flex lg2 class="bold">End:</v-flex>
+                    <v-flex lg10>{{tokenSale.end_time | dateFormat('MMM D, YYYY HH:mm', true)}}</v-flex>
+                  </v-layout>
+                  <v-layout class="pt-3">  
+                    <v-flex lg2 class="bold">On sale:</v-flex>
+                    <v-flex lg10>{{convertToPercent(tokenSale.balance_tokens)}}%</v-flex>
+                  </v-layout>
+                  <v-layout class="pt-3">  
+                    <v-flex lg2 class="bold">Soft Cap:</v-flex>
+                    <v-flex lg10>${{fromAssetsToFloat(tokenSale.soft_cap)}}</v-flex>
+                  </v-layout>
+                  <v-layout class="pt-3">  
+                    <v-flex lg2 class="bold">Hard Cap:</v-flex>
+                    <v-flex lg10>${{fromAssetsToFloat(tokenSale.hard_cap)}}</v-flex>
+                  </v-layout>
+                </v-flex>
+                <v-flex lg12 v-if="isMissingTokenSale && isResearchGroupMember && research" class="pt-3">
+                  <v-btn round outline color="primary"
+                    class="ma-0"
+                    :to="{
+                      name: 'CreateTokenSale',
+                      params: { research_group_permlink: research.group_permlink, research_permlink: research.permlink }
+                    }"
+                  >{{isPersonalGroup ? 'Create fundraise' : 'Propose fundraise'}}</v-btn>
+                </v-flex>
+              </v-layout>
+            </v-flex>
+            <v-flex lg5 v-if="isActiveTokenSale">
+              <v-layout justify-end class="rd-cap-value">${{currentCap}}</v-layout>
+              <v-layout justify-end align-center class="py-2">
+                <div class="rd-cap-chip" v-if="currentCap >= fromAssetsToFloat(tokenSale.soft_cap)">Soft cap reached!</div>
+                <div class="pl-4">Raised of ${{fromAssetsToFloat(tokenSale.soft_cap)}} Goal</div>
+              </v-layout>
+              <v-layout align-center justify-end class="pt-2 pl-5">
+                <v-flex shrink class="rd-cap-progress-bound mr-2">0</v-flex>
+                <v-flex grow class="rd-cap-progress-bar">
+                  <div class="progress-line" />
+                  <div class="progress-current" :style="{ width: `${currentCapPercent}%` }" />
+                </v-flex>
+                <v-flex shrink class="rd-cap-progress-bound ml-2">{{fromAssetsToFloat(tokenSale.hard_cap)}}</v-flex>
+              </v-layout>
+            </v-flex>
+          </v-layout>
+          <v-layout v-if="tokenHoldersList.length" class="my-5">
+            <v-flex lg1>
+              <v-layout justify-end class="pr-3">
+                <v-icon large color="grey lighten-2">mdi-account-box</v-icon>
+              </v-layout>
+            </v-flex>
+            <v-flex lg6>
+              <v-layout wrap>
+                <v-flex lg12 class="rd-block-header">Investors - {{tokenHoldersList.length}}</v-flex>
+                <v-flex lg12>
+                  <v-layout justify-start class="mt-2">
+                    <div class="rd-investment-info">
+                      <span class="rd-investment-info__value">${{investmentsAmount}}</span><br/>
+                      <span class="rd-investment-info__value-text">Total investments</span>
+                    </div>
+                    <div class="rd-investment-info">
+                      <span class="rd-investment-info__value">${{averageInvestmentAmount}}</span><br/>
+                      <span class="rd-investment-info__value-text">Average investment</span>
+                    </div>
+                  </v-layout>
+                  <v-layout justify-start class="mt-2">
+                    <v-tooltip
+                      v-for="investor of tokenHoldersList"
+                      :key="investor.account_name"
+                      class="mr-1"
+                      bottom
+                    >
+                      <div slot="activator">
+                        <router-link
+                          :to="`/user-details/${investor.account_name}`"
+                        >
+                          <v-avatar size="40px">
+                            <img v-if="investor.user.profile" v-bind:src="investor.user.profile.avatar | avatarSrc(40, 40, false)" />
+                            <v-gravatar v-else :title="investor.user.account.name" :email="investor.user.account.name + '@deip.world'" />
+                          </v-avatar>
+                        </router-link>
+                      </div>
+                      <span>{{investor.user | fullname}}</span>
+                    </v-tooltip>
+                  </v-layout>
+                </v-flex>
+              </v-layout>
+            </v-flex>
+            <v-flex lg4 offset-lg1 v-if="isActiveTokenSale && !isResearchGroupMember">
+              <v-layout justify-end class="pt-2">
+                <v-text-field
+                  ref="amountToContribute"
+                  v-model="amountToContribute"
+                  placeholder="Amount" suffix="USD"
+                  :rules="[deipTokenValidator]"
+                  :disabled="areTokensBuying"
+                />
+              </v-layout>
+              <v-layout justify-end class="pt-2">
+                <v-btn
+                  :disabled="!$refs.amountToContribute || !$refs.amountToContribute.valid || areTokensBuying || !this.amountToContribute"
+                  :loading="areTokensBuying"
+                  @click="contributeToTokenSale()"
+                  class="btn--gradient-pb"
+                  block
+                >Invest</v-btn>
+              </v-layout>
+            </v-flex>
+          </v-layout>
+          <v-divider v-if="isTokenSaleSectionAvailable || tokenHoldersList.length" />
+          <v-layout class="my-5">
+            <v-flex lg1>
+              <v-layout justify-end class="pr-3">
+                <v-icon large color="grey lighten-2">mdi-flag</v-icon>
+              </v-layout>
+            </v-flex>
+            <v-flex lg6>
+              <v-layout wrap>
+                <v-flex lg12 class="rd-block-header">Project Timeline</v-flex>
+                <v-flex lg12 class="pt-3">
+                  {{selectedTimelineItem.description}}
+                </v-flex>
+              </v-layout>
+            </v-flex>
+            <v-flex lg5>
+              <v-layout justify-center>
+                <ul :class="{
+                  'rd-timeline': true,
+                  'rd-timeline--full': timelineItemsToShow === timeline.length
+                }">
+                  <li
+                    v-for="(item, index) of timeline.slice(0, timelineItemsToShow)"
+                    :key="`timeline_item_${item.id}`"
+                    class="rd-timeline-item"
+                  >
+                    <div
+                      :class="{
+                        'rd-timeline-item__marker': true,
+                        'rd-timeline-item__marker--clickable': true,
+                        'rd-timeline-item__marker--active': item === selectedTimelineItem,
+                      }"
+                      :style="{
+                        backgroundColor: getTimelineItemColor(index)
+                      }"
+                      @click="onTimelineMarkerClick(item)"
+                    />
+                    <div
+                      v-if="timelineItemsToShow !== timeline.length || index !== (timeline.length - 1)"
+                      class="rd-timeline-item__line"
+                      :style="{
+                        background: `linear-gradient(${getTimelineItemColor(index)}, ${getTimelineItemColor(index + 1)})`
+                      }"
+                    />
+                    <div class="rd-timeline-item__date">{{item.date}}</div>
+                    <div class="rd-timeline-item__label pt-1">{{item.label}}</div>
+                  </li>
+                  <li
+                    v-if="timelineItemsToShow < timeline.length"
+                    class="rd-timeline-item"
+                  >
+                    <div
+                      class="rd-timeline-item__marker"
+                      :style="{
+                        backgroundColor: '#E0E0E0'
+                      }"
+                    />
+                    <div
+                      class="rd-timeline-item__line"
+                      :style="{
+                        background: `#E0E0E0`
+                      }"
+                    />
+                    <v-btn
+                      outline class="ma-0"
+                      @click="onShowMoreTimelineClick()"
+                    >Show more events</v-btn>
+                  </li>
+                </ul>
+              </v-layout>
+            </v-flex>
+          </v-layout>
+          <v-layout class="my-5" v-if="contentList.length">
+            <v-flex lg11 offset-lg1>
+              <v-expansion-panel>
+                <v-expansion-panel-content
+                  v-for="content of contentList"
+                  :key="content.id"
+                >
+                  <template slot="header">
+                    <v-layout align-center v-on:click.stop>
+                      <v-flex lg2 class="text-capitalize bold">{{getContentType(content.content_type).text}}</v-flex>
+                      <v-flex lg9 class="deip-blue-color bold">
+                        <router-link class="a"
+                          :to="{
+                            name: 'ResearchContentDetails',
+                            params: {
+                              research_group_permlink: encodeURIComponent(research.group_permlink),
+                              research_permlink: encodeURIComponent(research.permlink),
+                              content_permlink: encodeURIComponent(content.permlink)
+                            }
+                          }"
+                      >{{content.title}}</router-link>
+                      </v-flex>
+                      <v-flex lg1 v-show="doesContentHaveReviews(content)">
+                        <v-icon size="14px">chat_bubble</v-icon>
+                        <span v-show="doesContentHavePositiveReviews(content)" class="green--text medium">{{countContentReviews(content, true)}}</span>
+                        <span v-show="doesContentHavePositiveReviews(content) && doesContentHaveNegativeReviews(content)">/</span>
+                        <span v-show="doesContentHaveNegativeReviews(content)" class="red--text medium">{{countContentReviews(content, false)}}</span>
+                      </v-flex>
+                    </v-layout>
+                  </template>
+                  <div class="ml-4 py-2">
+                    <div class="grey--text">{{createContentAuthorsString(content.authors)}}</div>
+                    <div>
+                      <span
+                        v-for="eci of getContentEciList(content)"
+                        :key="eci.disciplineName"
+                        class="grey--text"
+                      >
+                        <span class="mr-1">{{eci.disciplineName}}</span>
+                        <span class="mr-4 bold">{{eci.value}}</span>
+                      </span>
+                    </div>
+                    <div class="mt-2">
+                      <v-icon size="18px">event</v-icon>
+                      <span>{{content.created_at | dateFormat('D MMM YYYY', true)}}</span>
+                    </div>
+                  </div>
+                </v-expansion-panel-content>
+              </v-expansion-panel>
+            </v-flex>
+          </v-layout>
+          <v-layout class="my-5" row wrap v-if="isResearchGroupMember && !research.is_finished">
+            <v-flex lg11 offset-lg1>
+              <v-expansion-panel>
+                <v-expansion-panel-content
+                  v-for="(draft, index) of contentRefsList.filter(d => !isDraftApproved(d))"
+                  :key="draft._id"
+                >
+                  <template slot="header">
+                    <v-layout align-center v-on:click.stop>
+                      <v-flex lg2 class="text-capitalize bold">Draft {{index + 1}}</v-flex>
+                      <v-flex lg10>
+                        <span class="deip-blue-color bold">
+                          <a @click="openDarDraft(draft)" class="a">
+                            {{draft.title || draft._id}}
+                          </a>
+                        </span>
+                        <span v-if="isDraftProposed(draft)" class="ml-2 orange--text">(proposed)</span>
+                      </v-flex>
+                    </v-layout>
+                  </template>
+                  <v-card>
+                    <v-card-text class="pl-4 pa-0">
+                      <v-layout justify-space-between>
+                        <div>
+                          <span>
+                            <v-icon size="18px">date_range</v-icon>
+                            <span>{{draft.updated_at | dateFormat('D MMM YYYY HH:mm', true)}}</span>
+                          </span>
+                          <span class="ml-2">
+                            <v-icon size="18px">note_add</v-icon>
+                            <span>{{draft.type}}</span>
+                          </span>
+                        </div>
+                        <div>
+                          <v-btn
+                            v-if="isDraftInProgress(draft)"
+                            @click="deleteDraft(draft)"
+                            :loading="isDeletingDraft"
+                            :disabled="isDeletingDraft"
+                            outline small depressed
+                            color="red lighten-1"
+                          >Delete</v-btn>
+                          <v-btn
+                            @click="openDarDraft(draft)"
+                            outline
+                            small
+                            depressed
+                            color="primary lighten-1"
+                          >View</v-btn>
+                        </div>
+                      </v-layout>
+                    </v-card-text>
+                  </v-card>
+                </v-expansion-panel-content>
+              </v-expansion-panel>
+            </v-flex>
+            <v-flex lg11 offset-lg1 class="mt-4">
+              <upload-research-content-file-dialog />
+              <v-btn
+                @click="createDarDraft()"
+                :loading="isCreatingDraft"
+                :disabled="isCreatingDraft"
+                block outline color="primary" dark
+              >Use Editor</v-btn>
+            </v-flex>
+          </v-layout>
+          <v-divider />
+          <v-layout class="my-5">
+            <v-flex lg1>
+              <v-layout justify-end class="pr-3">
+                <v-icon large color="grey lighten-2">mdi-poll-box</v-icon>
+              </v-layout>
+            </v-flex>
+            <v-flex lg11>
+              <v-layout wrap>
+                <v-flex lg12 class="rd-block-header">Expertise Contibution Index</v-flex>
+                <v-flex lg12>
+                  <GChart
+                    type="LineChart"
+                    :settings="{ packages: ['corechart'] }"
+                    :data="eciChart.data"
+                    :options="eciChart.options"
+                  />
+                </v-flex>
+              </v-layout>
+            </v-flex>
+          </v-layout>
+          <v-divider />
+          <v-layout class="my-5" v-if="reviews.length">
+            <v-flex lg1>
+              <v-layout justify-end class="pr-3">
+                <v-icon large color="grey lighten-2">mdi-message-reply-text</v-icon>
+              </v-layout>
+            </v-flex>
+            <v-flex lg11>
+              <v-layout wrap>
+                <v-flex lg12 class="rd-block-header">Reviews: {{reviewsList.length}}</v-flex>
+                <v-flex lg12>
+                  <template v-for="(review, index) of reviews">
+                    <v-layout
+                      :key="`r_${review.id}`"
+                      class="mt-3"
+                      @click="goToReviewPage(review)"
+                    >
+                      <v-flex lg2 class="rd-reviewer" v-on:click.stop>
+                        <v-avatar size="80px">
+                          <img v-if="review.author.profile" v-bind:src="review.author.profile.avatar | avatarSrc(80, 80, false)" />
+                          <v-gravatar v-else :title="review.author.account.name" :email="review.author.account.name + '@deip.world'" />
+                        </v-avatar>
+                        <div class="mt-2">
+                          <router-link class="a rd-reviewer__title" :to="{ name: 'UserDetails', params: { account_name: review.author.account.name }}">
+                            {{ review.author | fullname }}
+                          </router-link>
+                        </div>
+                        <div v-if="review.author.profile" class="rd-reviewer__subtitle mt-2">
+                          <span>{{review.author | employmentOrEducation}}</span>
+                          <span v-if="doesUserHaveLocation(review.author.profile)">, {{review.author | userLocation}}</span>
+                        </div>
+                      </v-flex>
+                      <v-flex lg10 class="clickable">
+                        <v-layout>
+                          <div class="pr-2 grey--text">{{review.created_at | dateFormat('D MMM YYYY', true)}}</div>
+                          <div v-if="review.is_positive" class="green--text bold">Approveed</div>
+                          <div v-else class="red--text bold">Rejected</div>
+                        </v-layout>
+                        <v-layout v-if="review.research_content" v-on:click.stop class="bold py-1">
+                          Review to:&nbsp;
+                          <router-link class="a" 
+                            :to="{
+                              name: 'ResearchContentDetails',
+                              params: {
+                                research_group_permlink: encodeURIComponent(research.group_permlink),
+                                research_permlink: encodeURIComponent(research.permlink),
+                                content_permlink: encodeURIComponent(review.research_content.permlink)
+                              }
+                            }"
+                          >{{review.research_content.title}}</router-link>
+                        </v-layout>
+                        <div class="black--text" v-html="review.preview_html" />
+                        <v-layout class="pt-1">
+                          <div
+                            v-for="wod of review.weights_of_disciplines"
+                            :key="wod.disciplineName"
+                            class="rd-review-eci"
+                          >{{wod.disciplineName}} {{wod.totalWeight}}</div>
+                        </v-layout>
+                      </v-flex>
+                    </v-layout>
+                    <v-divider
+                      v-if="index !== reviews.length - 1"
+                      :key="`d_${index}`"
+                      class="my-2"
+                    />
+                  </template>
+                </v-flex>
+              </v-layout>
+            </v-flex>
+          </v-layout>
+          <v-layout class="my-5">
+            <v-flex lg1>
+              <v-layout justify-end class="pr-3">
+                <v-icon large color="grey lighten-2">mdi-file-document</v-icon>
+              </v-layout>
+            </v-flex>
+            <v-flex lg11>
+              <div class="rd-block-header">References: {{ references.length }}</div>
+              <template v-for="(ref, i) of references">
+                <v-layout :key="`ref_${i}`">
+                  <v-flex shrink class="pr-3">{{i + 1}}.</v-flex>
+                  <v-flex grow>
+                    <div>{{ref.title}}</div>
+                    <div class="grey--text">{{ref.source}}</div>
+                  </v-flex>
+                </v-layout>
+              </template>
+            </v-flex>
+          </v-layout>
+        </v-flex>
+        <v-flex lg3 offset-lg1>
+          <v-layout column class="mt-5 mb-4 mx-4">
+            <div class="rd-sidebar-block-title">
+              Members:&nbsp;
+              <router-link :to="`/${encodeURIComponent(groupLink)}/group-details`" style="text-decoration: none;">
+                {{membersList.length}}
+              </router-link>
+            </div>
+            <v-layout
+              v-for="member of membersList"
+              :key="member.account.id"
+              class="mt-3"
+              justify-space-between
+              align-center
+            >
+              <div>
+                <v-avatar class="mr-3" size="40px">
+                  <img v-if="member.profile" v-bind:src="member.profile.avatar | avatarSrc(40, 40, false)" />
+                  <v-gravatar v-else :title="member.account.name" :email="member.account.name + '@deip.world'" />
+                </v-avatar>
+                <router-link :to="`/user-details/${member.account.name}`" class="a">
+                  {{member | fullname}}
+                </router-link>
+              </div>
+              <div class="grey--text">{{convertToPercent(member.rgt.amount)}}%</div>
+            </v-layout>
+            <div v-if="isJoinRequestSectionAvailable">
+              <v-btn
+                v-if="canJoinResearchGroup"
+                outline round
+                color="primary"
+                class="px-3 ma-0 mt-3"
+                @click="onJoinResearchGroupClick()"
+              >
+                <v-icon small>add</v-icon>
+                <span class="pl-2 medium text-none">Join Research group</span>
+              </v-btn>
+              <v-dialog v-if="research" v-model="isJoinGroupDialogOpen" persistent transition="scale-transition" max-width="800px">
+                <v-card>
+                  <v-toolbar dark color="primary">
+                    <v-btn icon dark @click="isJoinGroupDialogOpen = false">
+                      <v-icon>close</v-icon>
+                    </v-btn>
+                    <v-toolbar-title>Please provide a cover letter to your join request</v-toolbar-title>
+                    <v-spacer></v-spacer>
+                  </v-toolbar>
 
-        <sidebar>
-            <research-details-sidebar></research-details-sidebar>
-        </sidebar>
-    </page-container>
+                  <page-container>
+                    <contentbar>
+                      <v-textarea v-model="coverLetter" :rows="8" name="Cover letter" label="Cover letter"></v-textarea>
+                      <v-layout justify-center>
+                        <v-btn
+                          color="primary"
+                          :disabled="!coverLetter || isSendingJoinGroupRequest"
+                          :loading="isSendingJoinGroupRequest"
+                          @click="sendJoinGroupRequest()">
+                          Send
+                        </v-btn>
+                      </v-layout>
+                    </contentbar>
+                </page-container>
+                </v-card>
+              </v-dialog>
+              <div v-if="isActiveJoinRequest" class="mt-3">You have sent a join request on {{new Date(currentJoinRequest.created).toDateString()}}, please wait for approval</div>
+              <div v-if="isActiveInvite" class="mt-3">
+                Please accept invite on
+                <router-link :to="`/user-details/${user.username}`" style="text-decoration: none">your profile page</router-link>
+                to join the research group
+              </div>
+            </div>
+          </v-layout>
+          <v-divider />
+          <v-layout column class="my-4 mx-4">
+            <div class="rd-sidebar-block-title">Expertise Contribution Index</div>
+            <v-layout
+              v-for="eci of eciList"
+              :key="eci.disciplineName"
+              justify-space-between
+              class="mt-2 px-3 py-2 rd-eci-item"
+            >
+              <div>{{eci.disciplineName}}</div>
+              <div class="bold">{{eci.value}}</div>
+            </v-layout>
+          </v-layout>
+          <v-divider />
+          <div class="rd-sidebar-block-title mt-4 px-4">Citations: 12</div>
+        </v-flex>
+      </v-layout>
+    </div>
+  </page-container>
 </template>
 
 <script>
+  import deipRpc from '@deip/deip-oa-rpc-client';
+  import * as d3 from "d3";
+  import { mapGetters } from 'vuex';
 
-    import deipRpc from '@deip/deip-oa-rpc-client';
-    import { mapGetters } from 'vuex'
+  import contentHttpService from '@/services/http/content';
+  import joinRequestsService from '@/services/http/joinRequests';
+  import { getContentType } from '@/services/ResearchService';
 
-    export default {
-        name: "ResearchDetails",
+  import references from './references.json';
+  import timeline from './timeline.json';
 
-        data() { 
-            return {}
-        },
+  export default {
+    name: "ResearchDetails",
 
-        computed: {
-        },
+    data() {
+      return {
+        groupLink: this.$route.params.research_group_permlink,
 
-        created() {
+        isJoinGroupDialogOpen: false,
+        coverLetter: '',
+        isSendingJoinGroupRequest: false,
+
+        amountToContribute: '',
+        areTokensBuying: false,
+
+        isDeletingDraft: false,
+        isCreatingDraft: false,
+
+        timeline,
+        timelineItemsToShow: 3,
+        selectedTimelineItem: timeline[0],
+
+        references,
+      }
+    },
+
+    computed: {
+      ...mapGetters({
+        contentList: 'rd/contentList',
+        contentRefsList: 'rd/contentRefsList',
+        contributionsList: 'rd/contributionsList',
+        group: 'rd/group',
+        disciplinesList: 'rd/disciplinesList',
+        groupInvitesList: 'rd/groupInvitesList',
+        membersList: 'rd/membersList',
+        research: 'rd/research',
+        reviewsList: 'rd/reviewsList',
+        tokenHoldersList: 'rd/tokenHoldersList',
+        tokenSale: 'rd/tokenSale',
+        tokenSalesList: 'rd/tokenSalesList',
+        user: 'auth/user',
+        userJoinRequests: 'auth/userJoinRequests',
+        userPersonalGroup: 'auth/userPersonalGroup'
+      }),
+      averageInvestmentAmount() {
+        return this.round2DigitsAfterComma(this.investmentsAmount / this.tokenHoldersList.length);
+      },
+      canJoinResearchGroup() {
+        if (this.research) {
+          if (this.membersList.some(m => m.account.name === this.user.username)) {
+            return false;
+          }
+          if (this.userJoinRequests.some(r => r.groupId === this.research.research_group_id)) {
+            return false;
+          }
+
+          return !this.isActiveInvite;
         }
-    };
+        return false;
+      },
+      currentCap() {
+        return this.contributionsList
+          .map(c => this.fromAssetsToFloat(c.amount))
+          .reduce((acc, val) => acc + val, 0);
+      },
+      currentCapPercent() {
+        return this.tokenSale
+          ? this.currentCap * 100 / this.fromAssetsToFloat(this.tokenSale.hard_cap)
+          : 0;
+      },
+      currentJoinRequest() {
+        return this.research
+          ? this.userJoinRequests.find(r => r.groupId == this.research.research_group_id)
+          : undefined;
+      },
+      eciChart() {
+        const getPointTooltipHtml = (value,reviewerName) => {
+          let feedbackType;
+          let feedbackClass;
+          if (value > 0) {
+            feedbackType = 'Approved';
+            feedbackClass = 'green--text text--lighten-4'
+          } else if (value < 0) {
+            feedbackType = 'Rejected';
+            feedbackClass = 'red--text text--lighten-4'
+          } else {
+            return null;
+          }
+
+          return `
+            <div style="width: 100px; padding: 5px; background: #828282; border-radius: 2px; opacity: 0.9">
+              <div class="bold white--text">${reviewerName}</div>
+              <div class="${feedbackClass} bold">${feedbackType}</div>
+              <div class="white--text">${value}</div>
+            </div>
+          `;
+        };
+
+        return {
+          data: [
+            ['Date', 'ECI', { type: 'string', role: 'tooltip', p: { html: true } }],
+            [new Date('2019-02-23'), -200, getPointTooltipHtml(-200, 'Ahmed Muhmed')],
+            [new Date('2019-03-15'), 70, getPointTooltipHtml(270, 'Jackey Chan')],
+            [new Date('2019-04-17'), 210, getPointTooltipHtml(140, 'Elon Musk')],
+            [new Date('2019-05-19'), 80, getPointTooltipHtml(-60, 'Stephen Hoking')],
+            [new Date('2019-06-02'), -350, getPointTooltipHtml(-410, 'Eva Polna')],
+            [new Date('2019-07-01'), 400, getPointTooltipHtml(750, 'Max Oki')],
+            [new Date('2019-08-29'), 40, getPointTooltipHtml(-710, 'Indi Pontov')],
+            [new Date('2019-09-21'), 27, getPointTooltipHtml(-13, 'Vindy Pumpkin')],
+            [new Date('2019-10-29'), -39, getPointTooltipHtml(-68, 'Lesley Alex')],
+            [new Date('2019-11-08'), 700, getPointTooltipHtml(768, 'Ink Blackwood')]
+          ],
+          options: {
+            title: '',
+            backgroundColor: {
+              fill: '#fafafa'
+            },
+            legend: {
+              position: 'none'
+            },
+            hAxis: {
+              title: '2019',
+              format: 'MMM'
+            },
+            chartArea: {
+              top: '15%',
+              width: '90%',
+            },
+            tooltip: { isHtml: true }
+          },
+        };
+      },
+      eciList() {
+        return this.disciplinesList.map((discipline) => {
+          const eciObj = this.research.eci_per_discipline.find(item => item[0] === discipline.id);
+
+          return {
+            disciplineName: discipline.name,
+            value: eciObj ? eciObj[1] : 0,
+          }
+        });
+      },
+      investmentsAmount () {
+        return this.tokenSalesList.filter(e => e.status === 2)
+          .map((e) => this.fromAssetsToFloat(e.total_amount))
+          .reduce((acc, curr) => acc += curr);
+      },
+      isActiveInvite() {
+        return this.groupInvitesList.some(invite => invite.account_name == this.user.username);
+      },
+      isActiveJoinRequest() {
+        return this.currentJoinRequest && this.currentJoinRequest.status === 'pending';
+      },
+      isActiveTokenSale() {
+        return this.tokenSale && this.tokenSale.status === 1;
+      },
+      isFinishedResearch() {
+        return this.research && this.research.is_finished;
+      },
+      isInactiveTokenSale() {
+        return this.tokenSale && this.tokenSale.status === 4;
+      },
+      isJoinRequestSectionAvailable() {
+        return this.isProfileAvailable && (this.canJoinResearchGroup || this.isActiveJoinRequest || this.isActiveInvite) && !this.group.is_personal;
+      },
+      isMissingTokenSale() {
+        return this.tokenSale === undefined;
+      },
+      isPersonalGroup() {
+        return this.research 
+          ? this.research.research_group_id === this.userPersonalGroup.id 
+          : false;
+      },
+      isProfileAvailable() {
+        return !!this.user.profile;
+      },
+      isResearchGroupMember() {
+        return this.research
+          ? this.$store.getters['auth/userIsResearchGroupMember'](this.research.research_group_id) 
+          : false;
+      },
+      isTokenSaleSectionAvailable() {
+        return (this.isMissingTokenSale && this.isResearchGroupMember && !this.isFinishedResearch) || this.isActiveTokenSale || this.isInactiveTokenSale;
+      },
+      reviews() {
+        return this.reviewsList.map((review) => {
+          const weights_of_disciplines = [];
+          review.disciplines.forEach((discipline) => {
+            const weight = review.weight_per_discipline.find(arr => arr[0] === discipline.id);
+            weights_of_disciplines.push({
+              disciplineName: discipline.name,
+              totalWeight: weight ? weight[1] : 0,
+            })
+          });
+
+          return {
+            ...review,
+            research_content: this.contentList.find(c => c.id === review.research_content_id),
+            preview_html: this.extractReviewPreview(review),
+            weights_of_disciplines,
+          };
+        });
+      },
+    },
+
+    methods: {
+      contributeToTokenSale() {
+        this.areTokensBuying = true;
+
+        return deipRpc.broadcast.contributeToTokenSaleAsync(
+          this.user.privKey,
+          this.tokenSale.id,
+          this.user.username,
+          this.toAssetUnits(this.amountToContribute)
+        ).then((data) => {
+          this.$store.dispatch('rd/loadResearchTokenSale', {researchId: this.research.id});
+          this.$store.dispatch('rd/loadResearchTokenSales', {researchId: this.research.id});
+          this.$store.dispatch('rd/loadResearchTokenHolders', {researchId: this.research.id});
+
+          this.areTokensBuying = false;
+          this.$refs.amountToContribute.reset();
+          this.amountToContribute = '';
+
+          this.$store.dispatch('layout/setSuccess', {
+            message: `You've contributed to "${this.research.title}" fundraise successfully !`
+          });
+        }).catch((err) => {
+          this.areTokensBuying = false;
+
+          this.$store.dispatch('layout/setError', {
+            message: "An error occurred while contributing to fundraise, please try again later"
+          });
+
+          console.log(err)
+        })
+      },
+      countContentReviews(content, isPositive) {
+        return content.reviews.reduce(
+          (acc, review) => review.is_positive && isPositive || !review.is_positive && !isPositive ? acc + 1 : acc,
+          0
+        );
+      },
+      createContentAuthorsString(authors) {
+        return this.membersList
+          .filter(m => authors.some(a => a === m.account.name))
+          .map(m => this.$options.filters.fullname(m))
+          .join('  ·  ');
+      },
+      createDarDraft() {
+        this.isCreatingDraft = true;
+        contentHttpService.createDarContent(this.research.id)
+          .then((res) => {
+            // we have to load page this way as Texture InMemoryBuffer is getting flushed after the first saving
+            // and doesn't persist new changes for several instances during the current session
+            window.location.replace(`${window.location.href}/!draft?ref=${res.draft._id}`);
+            location.reload()
+          }).catch((err) => {
+            console.log(err)
+          }).finally(()=> {
+            this.isCreatingDraft = false;
+          })
+      },
+      deleteDraft(draft) {
+        this.isDeletingDraft = true;
+        contentHttpService.deleteContentDraft(draft._id)
+          .then(() => {
+            this.$store.dispatch('rd/loadResearchContentRefs', { researchId: draft.researchId });
+          })
+          .finally(() => {
+            this.isDeletingDraft = false;
+          })
+      },
+      doesContentHaveReviews(content) {
+        return content.reviews.length;
+      },
+      doesContentHavePositiveReviews(content) {
+        return content.reviews.some(r => r.is_positive);
+      },
+      doesContentHaveNegativeReviews(content) {
+        return content.reviews.some(r => !r.is_positive);
+      },
+      doesUserHaveLocation(userProfile) {
+        return userProfile.location && 
+          (userProfile.location.country || userProfile.location.city);
+      },
+      extractReviewPreview(review) {
+        const temp = document.createElement('span');
+        temp.innerHTML = review.content;
+        if (temp.children.length) {
+          const paragraphs = [...temp.children].filter((child) => isParagraph(child) && child.innerText);
+          const paragraphText = paragraphs[0] 
+            ? paragraphs[0].innerText
+            : ``;
+
+          return paragraphText.length > 300 ? `${paragraphText.substring(0, 300)}...` : paragraphText;
+        }
+
+        function isHeader(el) {
+          return ['H1', 'H2', 'H3', 'H4', 'H5', 'H6'].some(h => h === el.nodeName);
+        }
+        function isParagraph(el) {
+          return el.nodeName === 'P';
+        }
+      },
+      getContentEciList(content) {
+        return this.disciplinesList.map((discipline) => {
+          const eciObj = content.eci_per_discipline.find(item => item[0] === discipline.id);
+
+          return {
+            disciplineName: discipline.name,
+            value: eciObj ? eciObj[1] : 0
+          }
+        });
+      },
+      getTimelineItemColor(index) {
+        const isIndexValid = index % 1 === 0 && index >= 0;
+        if (!isIndexValid) {
+          throw new Error('invalid index');
+        }
+
+        const colors = [
+          '#8901EF',
+          '#7558F2',
+          '#2962FF',
+          '#60B3F4',
+          '#54E4F5'
+        ];
+
+        const periodicity = (colors.length - 1) * 2;
+
+        const reducedIndex = index % periodicity;
+        const maxIndex = colors.length - 1;
+
+        let colorIndex;
+        if (reducedIndex <= maxIndex) {
+          colorIndex = reducedIndex;
+        } else {
+          colorIndex = maxIndex - (reducedIndex % maxIndex);
+        }
+        return colors[colorIndex];
+      },
+      goToReviewPage(review) {
+        const params = { review_id: review.id };
+        
+        deipRpc.api.getResearchContentByIdAsync(review.research_content_id)
+          .then((content) => {
+            params.content_permlink = encodeURIComponent(content.permlink);
+            return deipRpc.api.getResearchByIdAsync(content.research_id)
+          })
+          .then((research) => {
+            params.research_permlink = encodeURIComponent(research.permlink);
+            return deipRpc.api.getResearchGroupByIdAsync(research.research_group_id)
+          })
+          .then((group) => {
+            params.research_group_permlink = encodeURIComponent(group.permlink);
+            this.$router.push({ name: 'ResearchContentReview', params });
+          });
+      },
+      isDraftApproved(draft) {
+        return this.contentList.some(c => c.content === `${draft.type}:${draft.hash}`);
+      },
+      isDraftInProgress(draft) {
+        return draft.status === 'in-progress';
+      },
+      isDraftProposed(draft) {
+        return draft.status === 'proposed';
+      },
+      onJoinResearchGroupClick() {
+        this.isJoinGroupDialogOpen = true;
+        this.coverLetter = '';
+      },
+      onShowMoreTimelineClick() {
+        this.timelineItemsToShow = Math.min(this.timelineItemsToShow + 3, this.timeline.length);
+      },
+      onTimelineMarkerClick(item) {
+        this.selectedTimelineItem = item;
+      },
+      openDarDraft(draft) {
+        if (draft.type === 'dar' && draft.status === 'in-progress') {
+          // we have to do it this way as Texture InMemory buffer is getting flushed after the first saving
+          // and doesn't persist new changes for several instances during the current session
+          window.location.replace(`${window.location.href}/!draft?ref=${draft._id}`);
+          location.reload()
+        } else {
+          const params = {
+            group_permlink: this.$route.params.research_group_permlink,
+            research_permlink: this.$route.params.research_permlink,
+            content_permlink: `!draft`
+          };
+          const query = { 'ref': draft._id };
+          this.$router.push({ name: 'ResearchContentDetails', params, query });
+        }
+      },
+      sendJoinGroupRequest() {
+        this.isSendingJoinGroupRequest = true;
+
+        joinRequestsService.createJoinRequest({
+          username: this.user.username,
+          groupId: this.research.research_group_id,
+          coverLetter: this.coverLetter
+        }).then(() => {
+          this.$store.dispatch('auth/loadJoinRequests');
+          this.$store.dispatch('layout/setSuccess', { message: "Join request has been sent successfully!"});
+        }).catch((err) => {
+          this.$store.dispatch('layout/setError', { message: "An error occurred while sending join request, please try again later!"});
+          console.log(err)
+        }).finally(() => {
+          this.isSendingJoinGroupRequest = false;
+          this.isJoinGroupDialogOpen = false;
+        })
+      },
+      getContentType,
+    },
+
+    created() {
+    },
+  };
 </script>
 
 <style lang="less" scoped>
+  .rd-header {
+    background: url('/static/rd_background.png') 100% 100% no-repeat;
+    background-size: cover;
+    height: 300px;
+
+    font-style: normal;
+    color: white;
+
+    &__title {
+      font-family: Muli;
+      font-weight: 900;
+      font-size: 48px;
+      line-height: 60px;
+      letter-spacing: 0.25px;
+    }
+    &__created {
+    }
+    &__abstract {
+      font-family: Roboto;
+      font-size: 14px;
+      line-height: 16px;
+      max-height: 80px;
+      overflow: auto;
+    }
+  }
+
+  .rd-block-header {
+    font-family: Muli;
+    font-style: normal;
+    font-weight: 900;
+    font-size: 24px;
+    letter-spacing: 0.25px;
+    color: black;
+  }
+
+  .rd-cap-chip {
+    padding: 4px 16px;
+    background-color: #00D57C;
+    border-radius: 20px;
+    color: white;
+    font-family: Roboto;
+    font-weight: 500;
+    font-size: 14px;
+  }
+
+  .rd-cap-value {
+    font-family: Muli;
+    font-weight: 900;
+    font-size: 36px;
+    color: #000000;
+  }
+
+  .rd-cap-progress-bound {
+    font-family: Roboto;
+    font-size: 14px;
+    color: #9E9E9E;
+  }
+
+  .rd-cap-progress-bar {
+    height: 4px;
+    min-width: 250px;
+    position: relative;
+
+    .progress-line {
+      height: inherit;
+      width: 100%;
+      background-color: #E0E0E0;
+      border-radius: 4px;
+      position: absolute;
+      z-index: 1;
+      &:after {
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+        display: block;
+        content: '';
+        background-color: inherit;
+        position: absolute;
+        top: calc(-50% - 1px);
+        right: 0;
+      }
+    }
+
+    .progress-current {
+      height: inherit;
+      min-width: 10px;
+      position: absolute;
+      background: linear-gradient(
+        90deg,
+        #EF01E5 0%,
+        #8901EF 17.91%,
+        #2962FF 43.25%,
+        #57D8F5 74.02%,
+        #60E5AD 98.85%
+      );
+      border-radius: 4px;
+      z-index: 2;
+      &:after {
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+        display: block;
+        content: '';
+        background-color: #60E5AD;
+        position: absolute;
+        top: calc(-50% - 1px);
+        right: 0;
+      }
+    }
+  }
+
+  .rd-investment-info {
+    padding-right: 48px;
+    &:last-child {
+      padding-right: 0px;
+    }
+
+    &__value {
+      font-family: Muli;
+      font-weight: 900;
+      font-size: 24px;
+      color: #000000;
+    }
+
+    &__value-text {
+      font-family: Roboto;
+      font-size: 12px;
+      color: #9E9E9E;
+    }
+  }
+
+  .rd-timeline {
+    list-style: none;
+    &--full {
+      .rd-timeline-item {
+        &:last-child {
+          height: auto;
+        }
+      }
+    }
+    .rd-timeline-item {
+      padding-left: 40px;
+      position: relative;
+      height: 110px;
+
+      &__marker {
+        border-radius: 50%;
+        width: 12px;
+        height: 12px;
+        position: absolute;
+        top: 10px; left: 0;
+        
+        &--clickable {
+          &:hover {
+            cursor: pointer;
+            opacity: 0.8;
+            box-shadow: 0px 0px 3px 0px rgba(153,153,153, 0.5);
+            transform: scale(1.4, 1.4);
+          }
+        }
+        &--active {
+          transform: scale(1.4, 1.4);
+        }
+      }
+      &__line {
+        height: 92px;
+        width: 2px;
+        position: absolute;
+        top: 25px; left: 5px;
+      }
+      &__date {
+        font-family: Muli;
+        font-weight: bold;
+        font-size: 14px;
+        line-height: 16px;
+        letter-spacing: 1px;
+        text-transform: uppercase;
+        color: #000000;
+      }
+      &__label {
+        font-family: Roboto;
+        font-size: 12px;
+        line-height: 18px;
+        color: #9E9E9E;
+      }
+    }
+  }
+
+  .v-expansion-panel {
+    box-shadow: none;
+    background-color: #fafafa;
+    &__container,
+    &__header,
+    &__body {
+      background: #fafafa !important;
+    }
+  }
+
+  .rd-reviewer {
+    font-family: Roboto;
+    font-size: 12px;
+    line-height: 14px;
+
+    &__title {
+      font-weight: bold;
+      color: #000000;
+    }
+
+    &__subtitle {
+      color: #9E9E9E;
+    }
+  }
+
+  .rd-review-eci {
+    font-family: Roboto;
+    font-size: 12px;
+    line-height: 14px;
+    color: #9E9E9E;
+    margin-right: 8px;
+    padding-right: 8px;
+    border-right: 1px solid #9E9E9E;
+    &:last-child {
+      border-right: none;
+    }
+  }
+
+  .rd-sidebar-block-title {
+    font-family: Roboto;
+    font-weight: bold;
+    font-size: 18px;
+    line-height: 21px;
+    color: #000000;
+  }
+
+  .rd-eci-item {
+    border: 1px solid #BDBDBD;
+    border-radius: 2px;
+    font-family: Roboto;
+    font-size: 12px;
+    line-height: 14px;
+    color: #828282;
+  }
+
+  .btn {
+    &--gradient-pb {
+      background: linear-gradient(165.53deg, #8900EF -32.44%, #4EFEF6 118.73%);
+      box-shadow: 1px 2px 6px rgba(68, 85, 129, 0.15);
+      border-radius: 2px;
+
+      font-family: Roboto;
+      font-style: normal;
+      font-weight: 500;
+      font-size: 14px;
+      color: #FFFFFF;
+    }
+  }
 </style>
