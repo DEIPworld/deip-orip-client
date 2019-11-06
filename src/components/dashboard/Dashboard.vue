@@ -65,7 +65,9 @@
                                 <span></span>
                               </v-layout>
                               <v-layout row justify-space-between py-1 class="column-text-item">
-                                <span>My deals</span>
+                                <router-link :to="{ name: 'InvestorDashboard', params: {}}"> 
+                                  <span>My deals</span>
+                                </router-link>
                                 <span><v-chip class="ma-0" color="#826AF9" text-color="white">3</v-chip></span>
                               </v-layout>
                               <v-layout row justify-space-between py-1 class="column-text-item">
@@ -401,10 +403,20 @@ export default {
 
 .column-text-item {
   min-height: 30px;
+  text-decoration: none;
+  
+  a {
+    text-decoration: none;
+    color: #000000;
+  }
 
+  a:hover {
+    text-decoration: underline;
+  }
+  
   .v-chip {  
     height: 20px;
-  }
+  }  
 }
 
 .expert-avatar {

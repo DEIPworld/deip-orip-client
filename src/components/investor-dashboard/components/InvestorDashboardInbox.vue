@@ -29,7 +29,7 @@
           </v-flex>
         </v-layout>
         <v-layout column>
-          <v-card class="pa-2 deal-item" v-for="(item, i) in newNotifications" :key="'deal-' + i">
+          <v-card @click="selectInvestment(investment)" v-for="(investment, i) in newNotifications" :key="'investment-' + i" class="pa-2 investment-item" :class="{'selected': investment.isSelected}">
             <v-layout row wrap align-baseline>
               <v-flex xs1 align-self-center>
                 <v-checkbox
@@ -38,12 +38,12 @@
                 </v-checkbox>
               </v-flex>
               <v-flex>
-                <router-link class="a px-2" :to="{ name: 'Default' }">
-                  {{item.title}}
+                <router-link class="a" :to="{ name: 'Default' }">
+                  {{investment.title}}
                 </router-link>
               </v-flex>
               <v-flex class="text-xs-right">
-                <v-chip small v-for="(tag, j) in item.tags" :key="'deal-'+ i + '-tag'+ j" class="ma-0 ml-1 deal-tag caption" :color="tag.color" text-color="black">{{tag.name}}</v-chip>
+                <v-chip small v-for="(tag, j) in investment.tags" :key="'investment-'+ i + '-tag'+ j" class="ma-0 ml-1 investment-tag caption" :color="tag.color" text-color="black">{{tag.name}}</v-chip>
               </v-flex>
             </v-layout>
           </v-card>
@@ -54,7 +54,7 @@
         <v-layout row align-end fill-height class="py-3"> 
           <div class="subheading half-bold">Overdue notifications: {{outdatedNotifications.length}}</div>
         </v-layout>
-        <v-card class="pa-2 deal-item" v-for="(item, i) in outdatedNotifications" :key="'deal-' + i">
+        <v-card class="pa-2 investment-item" v-for="(investment, i) in outdatedNotifications" :key="'investment-' + i">
           <v-layout row wrap align-baseline>
             <v-flex xs1 align-self-center>
               <v-checkbox
@@ -63,12 +63,12 @@
               </v-checkbox>
             </v-flex>
             <v-flex>
-              <router-link class="a px-2" :to="{ name: 'Default' }">
-                {{item.title}}
+              <router-link class="a" :to="{ name: 'Default' }">
+                {{investment.title}}
               </router-link>
             </v-flex>
             <v-flex class="text-xs-right">
-              <v-chip small v-for="(tag, j) in item.tags" :key="'deal-'+ i + '-tag'+ j" class="ma-0 ml-1 deal-tag caption" :color="tag.color" text-color="black">{{tag.name}}</v-chip>
+              <v-chip small v-for="(tag, j) in investment.tags" :key="'investment-'+ i + '-tag'+ j" class="ma-0 ml-1 investment-tag caption" :color="tag.color" text-color="black">{{tag.name}}</v-chip>
             </v-flex>
           </v-layout>
         </v-card>
@@ -79,6 +79,7 @@
 </template>
 
 <script>
+  import Vue from 'vue';
   import { mapGetters } from 'vuex';
 
   export default {
@@ -119,16 +120,35 @@
     },
 
     methods: {
+      selectInvestment(investment) {
+        let selected = this.newNotifications.find(item => item.isSelected);
+        if (selected)
+          Vue.set(selected, 'isSelected', false);
 
+        Vue.set(investment, 'isSelected', true);
+      }
     }
   }
 </script>
 
 <style lang="less" scoped>
- .deal-item {
-   border-left: 4px solid #0039CB;
-  .deal-tag {
+
+  @import "./../../../styles/colors.less";
+
+ .investment-item {
+   border-left: 4px solid var(--v-primary-darken1);
+   cursor: pointer;
+
+  .investment-tag {
     text-transform: uppercase;
+  }
+
+  &:hover{
+    background-color: var(--v-secondary-lighten2);
+  }
+  
+  &.selected {
+    background-color: var(--v-primary-lighten5);
   }
  }
 </style>

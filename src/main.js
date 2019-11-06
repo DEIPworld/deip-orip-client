@@ -19,7 +19,11 @@ import { isLoggedIn } from "./utils/auth";
 
 Vue.use(Vuetify, {
   theme: {
-    'primary': '#2962FF'
+    primary: "#2962FF",
+    secondary: "#BBDEFB"
+  },
+  options: {
+    customProperties: true
   }
 });
 
