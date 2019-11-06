@@ -18,7 +18,7 @@
 
     <v-layout v-if="tokenSale" row class="pt-1 token-sale-section">
       <v-layout column>
-        <v-progress-linear :value="fundingProgressPercent"></v-progress-linear>
+        <v-progress-linear class="progress-current" :value="fundingProgressPercent"></v-progress-linear>
         <v-layout row>
           <span class="pr-3">
             <span class="black--text half-bold pr-1">{{fundingProgressPercent}}%</span>

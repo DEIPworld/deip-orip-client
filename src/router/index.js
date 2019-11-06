@@ -41,7 +41,9 @@ import NoAccessPage from '@/components/NoAccessPage';
 import CreateAccountTestNet from '@/components/auth/CreateAccountTestNet';
 import VotingForBlockProducers from '@/components/voting-for-block-producers/VotingForBlockProducers';
 import CreateFundingOpportunityAnnouncement from '@/components/funding-opportunity-announcement-create/CreateFundingOpportunityAnnouncement';
-import InvestorDashboard from '@/components/investor-flow/dashboard/InvestorDashboard';
+import LegacyInvestorDashboard from '@/components/investor-legacy-flow/dashboard/InvestorDashboard';
+import InvestorDashboard from '@/components/investor-dashboard/InvestorDashboard';
+
 
 import store from './../store/index';
 import usersService from './../services/http/users';
@@ -342,9 +344,13 @@ const router = new Router({
 			}
 		})
 	}, {
-		path: '/investor-dashboard',
-		name: 'InvestorDashboard',
-		component: InvestorDashboard
+		path: '/legacy-investor-dashboard',
+		name: 'LegacyInvestorDashboard',
+		component: LegacyInvestorDashboard
+	}, {
+			path: '/investor-dashboard',
+			name: 'InvestorDashboard',
+			component: InvestorDashboard
 	}, {
 		path: '/create-funding-opportunity-announcement',
 		name: 'CreateFundingOpportunityAnnouncement',

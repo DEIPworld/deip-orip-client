@@ -1,0 +1,45 @@
+<template>
+  <base-page-layout left-sidebar-class="xl2 lg2 md2 sm12 xs12" content-class="xl7 lg7 md7 sm12 xs12" right-sidebar-class="xl3 lg3 md3 sm12 xs12">
+    <div slot="left-sidebar">I AM LEFT</div>
+    <div slot="content">I AM BODY</div>
+    <div slot="right-sidebar">I AM RIGHT</div>
+  </base-page-layout>
+</template>
+
+<script>
+import { mapGetters } from "vuex";
+import deipRpc from '@deip/deip-oa-rpc-client';
+import moment from 'moment';
+
+export default {
+  name: "Dashboard",
+  
+  computed: {
+    ...mapGetters({
+      user: "auth/user"
+    }),
+
+  },
+  data() {
+    return {
+
+    };
+  },
+
+  methods: {
+
+
+
+  },
+
+  created() {
+
+  }
+};
+</script>
+
+<style lang="less" scoped>
+
+@import "./../../styles/colors.less";
+
+</style>
