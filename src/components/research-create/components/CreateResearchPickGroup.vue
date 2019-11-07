@@ -5,10 +5,10 @@
 
             <div class="legacy-col-grow overflow-y-auto">
                 <div class="c-mh-auto c-pt-4" style="max-width: 800px;">
-                    <div v-for="group in groups"
+                    <div v-for="(group, i) in groups"
                         :class="{'selected-group': research.group && group.id == research.group.id, 'personal-group': group.is_personal }"
                         @click="setGroup(group)" 
-                        class="legacy-row-nowrap group-line c-p-3 c-mt-1">
+                        class="legacy-row-nowrap group-line c-p-3 c-mt-1" :key="'pick-group '+ i">
                         <div v-if="group.is_personal" class="group-nameplate c-pr-2">{{ user | fullname}} 's personal group</div>
                         <div v-if="!group.is_personal" class="group-nameplate c-pr-2">{{group.name}}</div>
                         <div class="">{{ getGroupCoworkers(group).join(' · ') }}</div>

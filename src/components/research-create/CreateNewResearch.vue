@@ -20,13 +20,13 @@
                         <div class="uppercase">Title</div>
                     </v-stepper-step>
 
-                    <!-- <v-divider></v-divider> -->
+                    <v-divider></v-divider>
 
-            <!--    <v-stepper-step step="4" :complete="currentStep > 4">
+                    <v-stepper-step step="4" :complete="currentStep > 4">
                         <div class="uppercase">Roadmap</div>
                     </v-stepper-step>
                     
-                    <v-divider></v-divider> -->
+                    <!-- <v-divider></v-divider> -->
 
                     <!-- <v-stepper-step step="4">
                         <div class="uppercase">Reward shares</div>
@@ -57,22 +57,25 @@
                     <v-stepper-content step="3">
                         <div class="full-height">
                             <create-research-meta
-                                @finish="finish" @decStep="decStep"
                                 @setTitle="setTitle"
                                 @setDescription="setDescription"
+                                @incStep="incStep" @decStep="decStep"
                                 :research="research"
                                 :isLoading="isLoading"
                             ></create-research-meta>
                         </div>
                     </v-stepper-content>
 
-            <!--    <v-stepper-content step="4">
+                    <v-stepper-content step="4">
                         <div class="full-height">
                             <create-research-roadmap
-                                @incStep="incStep" @decStep="decStep"
+                                @finish="finish"
+                                @decStep="decStep"
+                                :research="research"
+                                :isLoading="isLoading"
                             ></create-research-roadmap>
                         </div>
-                    </v-stepper-content> -->
+                    </v-stepper-content>
 
                     <!-- temporary commented -->
                     <!-- <v-stepper-content step="4">
@@ -99,20 +102,29 @@
 
     export default {
         name: "CreateNewResearch",
+        data() {
+          return {
+            currentStep: 0,
+            isLoading: false,
 
-        data() { 
-            return {
-                currentStep: 0,
-                isLoading: false,
-
-                research: {
-                    disciplines: [],
-                    group: undefined,
-                    title: '',
-                    description: '',
-                    review_share_in_percent: 5,
-                }
-            } 
+            research: {
+                disciplines: [],
+                group: undefined,
+                title: '',
+                description: '',
+                review_share_in_percent: 5,
+                steps: [{
+                    target: '',
+                    eta: '',
+                    details: '',
+                    isMain: true,
+                    validation: {
+                      isValid: true
+                    },
+                    etaMenu: false
+                }],
+            }
+          } 
         },
 
         computed: {

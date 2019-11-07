@@ -32,3 +32,7 @@ Vue.component(VueQrcode.name, VueQrcode);
 
 import VueGoogleCharts from 'vue-google-charts';
 Vue.use(VueGoogleCharts);
+
+import VueResize from 'vue-resize'
+import 'vue-resize/dist/vue-resize.css'
+Vue.use(VueResize)

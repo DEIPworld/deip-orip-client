@@ -54,7 +54,7 @@
                 :disabled="nextDisabled"
                 :loading="isLoading"
                 @click.native="nextStep()"
-            >Create research</v-btn>
+            >Next</v-btn>
         </div>
     </div>
 </template>
@@ -84,7 +84,8 @@
         methods: {
             nextStep() {
                 // temporary it is the last step
-                this.$emit('finish');
+                // this.$emit('finish');
+                this.$emit('incStep');
             },
             prevStep() {
                 this.$emit('decStep');

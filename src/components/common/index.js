@@ -33,4 +33,9 @@ Vue.component('platform-avatar', PlatformAvatar);
 import ToggleText from './components/ToggleText';
 Vue.component('toggle-text', ToggleText);
 
+import MilestoneStepper from './components/milestone-stepper/MilestoneStepper';
+import Milestone from './components/milestone-stepper/Milestone';
+Vue.component('milestone-stepper', MilestoneStepper);
+Vue.component('milestone', Milestone);
+
 import './filters/index';
