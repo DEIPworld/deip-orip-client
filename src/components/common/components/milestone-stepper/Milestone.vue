@@ -7,7 +7,7 @@
     <span class="research-step-icon"></span>
     <div class="research-step-line" v-show="!isLast" :style="lineStyle">
       <div v-if="!isReadOnly" class="research-intermediate-step" :style="intermediateStepStyle">
-        <span class="research-intermediate-step-icon" @click="$emit('insert-step')"></span>
+        <span class="research-intermediate-step-icon" @click="insertStep()"></span>
       </div>
     </div>
   </div>
@@ -21,7 +21,7 @@
               class="my-0 pa-0 mx-2"
               :required="true" 
               v-model="step.target" 
-              @focus.native="$emit('remove-validation')"
+              @focus.native="clearValidation()"
               solo
               label="Milestone Goal"
               prepend-inner-icon="adjust"
@@ -29,7 +29,7 @@
             <span v-if="step.validation && !step.validation.isValid && step.validation.target" class="md-error">{{step.validation.target}}</span>
           </v-flex>
 
-          <v-flex xl5 lg5 sm5 md10 xs10>
+          <v-flex xl5 lg5 sm5 md9 xs9>
             <v-menu
               v-model="step.etaMenu"
               transition="scale-transition"
@@ -39,7 +39,7 @@
               <template slot="activator">
                 <v-text-field
                   v-model="step.eta"
-                  class="mx-2"
+                  class="my-0 pa-0 mx-2"
                   solo
                   label="Start Date"
                   prepend-inner-icon="event"
@@ -49,15 +49,15 @@
               <v-date-picker v-model="step.eta" @input="step.etaMenu = false" type="month"></v-date-picker>
             </v-menu>
           </v-flex>
-          <v-flex xl2 lg2 sm2 md2 xs2 text-xs-right>
+          <v-flex xl2 lg2 sm2 md3 xs3 text-xs-right>
             <v-btn 
               v-if="!isMain" 
               :small="$vuetify.breakpoint.smAndDown" 
               class="mr-2" 
               color="primary"
               outline
-              fab 
-              @click="$emit('remove-step')">
+              fab
+              @click="removeStep()">
               <v-icon>remove</v-icon>
             </v-btn>
           </v-flex>
@@ -73,18 +73,14 @@
         </v-layout>
       </div>
 
-      <div v-else-if="isReadOnly">
-        <v-layout row>
-          <v-flex xs6>
-            <div style="width: 100%; margin-top: 15px">
-              <span class="subheading">{{step.target}}</span>
-            </div>
+      <div v-else-if="isReadOnly" class="mx-3">
+        <v-layout row wrap align-baseline>
+          <v-flex xl4 lg4 sm4 md12 xs12>
+            <p class="subheading">{{step.target}}</p>
           </v-flex>
-          <v-flex xs6>
-            <div>
-              <p style="width: 100%; text-indent: 2em; text-align: justify;">{{step.details}}</p>
-              <p style="width: 100%; text-align: right">{{step.eta}}</p>
-            </div>
+          <v-flex xl8 lg8 sm8 md12 xs12>
+            <p class="grey--text">{{moment(step.eta).format('D MMM YYYY')}}</p>
+            <p>{{step.details}}</p>
           </v-flex>
         </v-layout>
       </div>
@@ -115,6 +111,15 @@ export default {
     methods: {
       handleResize() {
         adjust.call(this)
+      },
+      insertStep() {
+        this.$emit('insertStep');
+      },
+      removeStep() {
+        this.$emit('removeStep');
+      },
+      clearValidation() {
+        this.$emit('clearValidation');
       }
     },
 

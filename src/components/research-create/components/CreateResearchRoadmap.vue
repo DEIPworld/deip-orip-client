@@ -3,7 +3,7 @@
 		<div class="step-title">Roadmap</div>
 		<div class="subheading c-mb-4 px-4">Let’s create a roadmap for your research. Well-presented and detailed roadmap attracts more investors to help you to get the funding</div>
 		<div class="full-width pa-4">
-			<milestone-stepper :is-read-only="false" :steps="research.steps"></milestone-stepper>
+			<milestone-stepper :isReadOnly="false" :steps="research.steps"></milestone-stepper>
 		</div>
 		<div>
 			<v-btn flat small @click.native="prevStep()">

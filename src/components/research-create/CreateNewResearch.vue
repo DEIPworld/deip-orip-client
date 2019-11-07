@@ -106,23 +106,13 @@
           return {
             currentStep: 0,
             isLoading: false,
-
             research: {
                 disciplines: [],
                 group: undefined,
                 title: '',
                 description: '',
                 review_share_in_percent: 5,
-                steps: [{
-                    target: '',
-                    eta: '',
-                    details: '',
-                    isMain: true,
-                    validation: {
-                      isValid: true
-                    },
-                    etaMenu: false
-                }],
+                steps: []
             }
           } 
         },

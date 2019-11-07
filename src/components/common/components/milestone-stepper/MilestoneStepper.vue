@@ -5,9 +5,9 @@
       :isMain="index === 0"
       :isLast="steps.length - 1 === index"
       :isReadOnly="isReadOnly"
-      @remove-step="removeStep(index)"
-      @insert-step="insertStep(index)"
-      @remove-validation="removeValidation(index)">
+      @removeStep="removeStep(index)"
+      @insertStep="insertStep(index)"
+      @clearValidation="clearValidation(index)">
     </milestone>
 
     <v-btn v-if="!isReadOnly" 
@@ -62,10 +62,10 @@ export default {
     insertStep: function(index) {
       this.steps.splice(index + 1, 0, emptyStep(false));
     },
-    removeValidation: function(index){
+    clearValidation: function(index){
       this.steps.forEach(function(step, idx){
         if(idx === index)
-            step.validation.isValid = true;
+          step.validation.isValid = true;
       });
     }
   },
@@ -75,12 +75,17 @@ export default {
         (step, index, array) => step.target != ''
       )
     }
+  },
+  created() {
+    if (!this.isReadOnly && this.steps.length == 0) {
+      this.steps.push(emptyStep(true));
+    }
   }
 };
 
 </script>
 
-<style>
+<style scoped>
 
 </style>
 
