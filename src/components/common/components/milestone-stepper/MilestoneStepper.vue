@@ -2,7 +2,8 @@
   <div :v-show="steps.length" class="text-xs-right"> 
     <milestone v-for="(step, index) in steps" :key="'milestone-' + index"
       :step="step"
-      :isMain="index === 0"
+      :isMain="steps.length - 1 === index"
+      :isFirst="index === 0"
       :isLast="steps.length - 1 === index"
       :isReadOnly="isReadOnly"
       @removeStep="removeStep(index)"

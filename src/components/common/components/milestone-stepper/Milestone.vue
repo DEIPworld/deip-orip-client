@@ -51,7 +51,7 @@
           </v-flex>
           <v-flex xl2 lg2 sm2 md3 xs3 text-xs-right>
             <v-btn 
-              v-if="!isMain" 
+              v-if="!isFirst" 
               :small="$vuetify.breakpoint.smAndDown" 
               class="mr-2" 
               color="primary"
@@ -99,6 +99,7 @@ export default {
     props: {
       step: Object,
       isMain: Boolean,
+      isFirst: Boolean,
       isLast: Boolean,
       isReadOnly: Boolean
     },
