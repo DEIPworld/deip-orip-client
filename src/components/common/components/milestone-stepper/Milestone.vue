@@ -46,7 +46,7 @@
                   readonly
                 ></v-text-field>
               </template>
-              <v-date-picker v-model="step.eta" @input="step.etaMenu = false" type="month"></v-date-picker>
+              <v-date-picker v-model="step.eta" @input="step.etaMenu = false" no-title type="month"></v-date-picker>
             </v-menu>
           </v-flex>
           <v-flex xl2 lg2 sm2 md3 xs3 text-xs-right>
@@ -183,13 +183,13 @@ function adjust() {
  }
 
   .research-step-main.read-only-main-content {
-      text-align: left;
+    text-align: left;
   }
 
  .research-intermediate-step {
     position: absolute;
-    width: 28px
-}
+    width: 28px;
+  }
 
  .research-step-line {
     position: absolute;
@@ -225,4 +225,7 @@ function adjust() {
    cursor: pointer;
 }
 
+.research-intermediate-step-icon:hover {
+   border: dotted 2.5px #2962ff;
+}
 </style>
