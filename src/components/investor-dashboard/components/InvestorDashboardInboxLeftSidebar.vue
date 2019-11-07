@@ -1,37 +1,39 @@
 <template>
-  <v-layout row wrap style="flex: 0 0 auto;">
-    
-    <v-layout column>
-      <div class="subheading half-bold pb-2">My Lists</div>
-      <v-layout v-for="(list, i) in lists" :key="'list-' + i" row justify-space-between class="py-1">
-        <span><span class="dot mr-1" :style="{ 'background-color': list.color }"></span>{{list.name}}</span>
-        <span>{{list.count}}</span>
+  <v-card height="100%">
+    <v-layout row wrap style="flex: 0 0 auto;" class="full-width">
+      
+      <v-layout column class="pa-4">
+        <div class="subheading half-bold pb-2">My Lists</div>
+        <v-layout v-for="(list, i) in lists" :key="'list-' + i" row justify-space-between class="py-1">
+          <span><span class="dot mr-1" :style="{ 'background-color': list.color }"></span>{{list.name}}</span>
+          <span>{{list.count}}</span>
+        </v-layout>
+        <v-btn round outline block large color="primary" class="new-list py-1 mt-3">
+          <v-icon small left>add</v-icon>
+          Add new list
+        </v-btn>
       </v-layout>
-      <v-btn round outline block large color="primary" class="new-list py-1 mt-3">
-        <v-icon small left>add</v-icon>
-        Add new list
-      </v-btn>
-    </v-layout>
 
-    <v-layout row class="py-4 full-width">
-      <v-divider></v-divider>
-    </v-layout>
-
-    <v-layout column>
-      <div class="subheading half-bold pb-2">Saved Search</div>
-      <v-layout v-for="(item, i) in savedSearchList" :key="'search-' + i" row justify-space-between>
-        <a class="a" href="#">{{item.name}}</a>
+      <v-layout column class="full-width py-2">
+        <v-divider></v-divider>
       </v-layout>
-    </v-layout>
 
-    <v-layout column class="pt-4">
-      <div class="subheading half-bold pb-2">Saved Comparison</div>
-      <v-layout v-for="(item, i) in savedComparisonList" :key="'comparison-' + i" row justify-space-between>
-        <a class="a" href="#">{{item.name}}</a>
+      <v-layout column class="px-4 py-2">
+        <div class="subheading half-bold pb-2">Saved Search</div>
+        <v-layout v-for="(item, i) in savedSearchList" :key="'search-' + i" row justify-space-between>
+          <a class="a" href="#">{{item.name}}</a>
+        </v-layout>
       </v-layout>
-    </v-layout>
 
-  </v-layout>
+      <v-layout column class="px-4 py-2">
+        <div class="subheading half-bold pb-2">Saved Comparison</div>
+        <v-layout v-for="(item, i) in savedComparisonList" :key="'comparison-' + i" row justify-space-between>
+          <a class="a" href="#">{{item.name}}</a>
+        </v-layout>
+      </v-layout>
+
+    </v-layout>
+  </v-card>
 </template>
 
 <script>

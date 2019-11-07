@@ -30,4 +30,7 @@ import PlatformAvatar from './components/PlatformAvatar';
 Vue.component('platform-avatar', PlatformAvatar);
 // filters
 
+import ToggleText from './components/ToggleText';
+Vue.component('toggle-text', ToggleText);
+
 import './filters/index';

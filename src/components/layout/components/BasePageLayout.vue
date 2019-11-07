@@ -2,17 +2,13 @@
   <v-container fluid fill-height pa-0 ma-0>
     <v-layout row wrap>
       <v-flex v-if="hasLeftSidebar" :class="leftSidebarClass">
-        <v-card height="100%" class="pa-4">
-          <slot name="left-sidebar"></slot>
-        </v-card>
+        <slot name="left-sidebar"></slot>
       </v-flex>
       <v-flex :class="adjustedContentClass">
         <slot name="content"></slot>
       </v-flex>
       <v-flex v-if="hasRightSidebar" :class="rightSidebarClass">
-        <v-card height="100%" class="pa-4">
-          <slot name="right-sidebar"></slot>
-        </v-card>
+        <slot name="right-sidebar"></slot>
       </v-flex>
     </v-layout>
   </v-container>

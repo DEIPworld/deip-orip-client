@@ -1,6 +1,7 @@
 // global funcs and constants
 
 import Vue from 'vue'
+import moment from 'moment'
 
 // regarding with DEIP PERCENTS
 Vue.prototype.PERCENT_QUANTITY_REGEX = /^(?:0|(?:[1-9]\d*))(?:\.\d{1,2})?$/;
@@ -57,3 +58,5 @@ Vue.prototype.round2DigitsAfterComma = (x) => {
   }
   return Math.round(x * 100) / 100;
 };
+
+Vue.prototype.moment = moment;
