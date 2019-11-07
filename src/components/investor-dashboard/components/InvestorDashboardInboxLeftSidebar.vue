@@ -14,20 +14,17 @@
         </v-btn>
       </v-layout>
 
-      <v-layout column class="full-width py-2">
-        <v-divider></v-divider>
-      </v-layout>
-
-      <v-layout column class="px-4 py-2">
-        <div class="subheading half-bold pb-2">Saved Search</div>
-        <v-layout v-for="(item, i) in savedSearchList" :key="'search-' + i" row justify-space-between>
+      <v-layout column class="py-2">
+        <v-divider class="full-width"></v-divider>
+        <div class="subheading half-bold px-4 py-2">Saved Search</div>
+        <v-layout row justify-space-between v-for="(item, i) in savedSearchList" :key="'search-' + i" class="px-4">
           <a class="a" href="#">{{item.name}}</a>
         </v-layout>
       </v-layout>
 
       <v-layout column class="px-4 py-2">
         <div class="subheading half-bold pb-2">Saved Comparison</div>
-        <v-layout v-for="(item, i) in savedComparisonList" :key="'comparison-' + i" row justify-space-between>
+        <v-layout row justify-space-between v-for="(item, i) in savedComparisonList" :key="'comparison-' + i">
           <a class="a" href="#">{{item.name}}</a>
         </v-layout>
       </v-layout>
