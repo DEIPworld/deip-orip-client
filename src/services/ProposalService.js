@@ -223,9 +223,9 @@ const createSendFundsProposal = (groupId, recipient, funds) => {
     );
 };
 
-const createResearchProposal = function(groupId, title, description, permlink, reviewShare, disciplines) {
+const createResearchProposal = function(groupId, title, description, permlink, reviewShare, disciplines, milestones) {
     const data = getStringifiedProposalData(START_RESEARCH, [
-        groupId, title, description, permlink, reviewShare, 5, disciplines
+        groupId, title, JSON.stringify({ description, milestones }), permlink, reviewShare, 5, disciplines
     ]);
 
     const proposal = {

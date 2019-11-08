@@ -28,7 +28,9 @@
 
         <div v-show="!research.isCollapsed" class="c-pt-2">
             <v-divider></v-divider>
-            <div class="c-pv-2 half-bold">{{ research.abstract }}</div>
+            <div class="c-pv-2 half-bold">
+                <toggle-text :text="$options.filters.researchAbstract(research.abstract)"></toggle-text>
+            </div>
             <v-divider></v-divider>
         </div>
 

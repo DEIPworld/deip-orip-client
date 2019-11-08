@@ -11,7 +11,7 @@
                 &nbsp;Created {{research.created_at | dateFormat('D MMM YYYY', true)}}
               </div>
               <div class="rd-header__abstract pt-3">
-                {{research.abstract}}
+                <toggle-text :text="$options.filters.researchAbstract(research.abstract)"></toggle-text>
               </div>
             </v-flex>
           </v-layout>
@@ -142,7 +142,7 @@
             </v-flex>
           </v-layout>
           <v-divider v-if="isTokenSaleSectionAvailable || tokenHoldersList.length" />
-          <v-layout class="my-5">
+          <v-layout v-if="timeline.length" class="my-5">
             <v-flex lg1>
               <v-layout justify-end class="pr-3">
                 <v-icon large color="grey lighten-2">mdi-flag</v-icon>
@@ -544,7 +544,8 @@
   import { getContentType } from '@/services/ResearchService';
 
   import references from './references.json';
-  import timeline from './timeline.json';
+  // import timeline from './timeline.json';
+  import moment from 'moment';
 
   export default {
     name: "ResearchDetails",
@@ -563,10 +564,8 @@
         isDeletingDraft: false,
         isCreatingDraft: false,
 
-        timeline,
+        selectedTimelineItemId: 1,
         timelineItemsToShow: 3,
-        selectedTimelineItem: timeline[0],
-
         references,
       }
     },
@@ -589,6 +588,22 @@
         userJoinRequests: 'auth/userJoinRequests',
         userPersonalGroup: 'auth/userPersonalGroup'
       }),
+
+      timeline() {
+        let milestones = this.$options.filters.researchMilestones(this.research.abstract);
+        let timeline = milestones.map((milestone, i) => {
+          return {
+            "id": i + 1,
+            "date": moment.utc(milestone.eta).local().format("mmm d, YYYY"),
+            "label": milestone.goal,
+            "description": milestone.details
+          }
+        });
+        return timeline;
+      },
+      selectedTimelineItem() {
+        return this.timeline.find(m => m.id == this.selectedTimelineItemId);
+      },
       averageInvestmentAmount() {
         return this.round2DigitsAfterComma(this.investmentsAmount / this.tokenHoldersList.length);
       },
@@ -920,7 +935,7 @@
         this.timelineItemsToShow = Math.min(this.timelineItemsToShow + 3, this.timeline.length);
       },
       onTimelineMarkerClick(item) {
-        this.selectedTimelineItem = item;
+        this.selectedTimelineItemId = item.id;
       },
       openDarDraft(draft) {
         if (draft.type === 'dar' && draft.status === 'in-progress') {
@@ -987,7 +1002,7 @@
       font-size: 14px;
       line-height: 16px;
       max-height: 80px;
-      overflow: auto;
+      overflow: scroll;
     }
   }
 

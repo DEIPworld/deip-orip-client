@@ -25,15 +25,19 @@
 </template>
 
 <script>
+import Vue from 'vue';
+import moment from 'moment';
 
 function emptyStep(isMain) {
   return {
-    target: '',
+    goal: '',
     eta: '',
     details: '',
     isMain: isMain,
     validation : {
-      isValid: true
+      isValid: undefined,
+      goalError: '',
+      etaError: ''
     }
   }
 }
@@ -41,16 +45,8 @@ function emptyStep(isMain) {
 export default {
   name: 'MilestoneStepper',
   props: {
-    steps: {
-      type: Array,
-      default () {
-        return []
-      }
-    },
-    isReadOnly: {
-      type: Boolean,
-      required: true
-    }
+    steps: { type: Array, required: true },
+    isReadOnly: { type: Boolean, required: true }
   },
 
   methods: {
@@ -63,17 +59,22 @@ export default {
     insertStep: function(index) {
       this.steps.splice(index + 1, 0, emptyStep(false));
     },
-    clearValidation: function(index){
+    clearValidation: function(index) {
       this.steps.forEach(function(step, idx){
-        if(idx === index)
-          step.validation.isValid = true;
+        if (idx === index) {
+          Vue.set(step, 'validation', {
+            isValid: undefined,
+            goalError: '',
+            etaError: ''
+          });
+        }
       });
     }
   },
   computed: {
     isNewStepAvailable: function() {
       return this.steps.every(
-        (step, index, array) => step.target != ''
+        (step, index, array) => step.goal != ''
       )
     }
   },

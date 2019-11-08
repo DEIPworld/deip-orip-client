@@ -15,7 +15,7 @@
                 </div>
 
                 <div class="c-pt-8">
-                    {{ research.abstract }}
+                    <toggle-text :text="$options.filters.researchAbstract(research.abstract)"></toggle-text>
                 </div>
             </div>
         </div>

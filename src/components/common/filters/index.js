@@ -61,3 +61,25 @@ Vue.filter('dateFormat', (value, format, fromUtcToLocal = false) => {
         ? moment(value).format(format)
         : moment.utc(value).local().format(format);
 });
+
+Vue.filter('researchAbstract', (value) => {
+    try {
+        let json = JSON.parse(value);
+        return json.description;
+    } catch (e) {
+        if (typeof value === 'string') {
+            return value;
+        } else {
+            return false;
+        }
+    }
+});
+
+Vue.filter('researchMilestones', (value) => {
+    try {
+        let json = JSON.parse(value);
+        return Array.isArray(json.milestones) ? json.milestones : [];
+    } catch (e) {
+        return [];
+    }
+});

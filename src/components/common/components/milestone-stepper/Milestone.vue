@@ -13,20 +13,19 @@
   </div>
 
   <div class="research-step-main" :class="{'read-only-main-content': isReadOnly}">
-    <div class="research-step-target" ref="title">
+    <div class="research-step-goal" ref="title">
       <div v-if="!isReadOnly">
-        <v-layout row wrap justify-space-between align-baseline>
+        <v-layout row wrap justify-space-between align-top>
           <v-flex xl5 lg5 sm5 md12 xs12>
             <v-text-field
+              v-model="step.goal" 
+              :error-messages="step.validation.goalError"
+              @click.native="clearValidation()"
               class="my-0 pa-0 mx-2"
-              :required="true" 
-              v-model="step.target" 
-              @focus.native="clearValidation()"
               solo
               label="Milestone Goal"
               prepend-inner-icon="adjust"
             ></v-text-field>
-            <span v-if="step.validation && !step.validation.isValid && step.validation.target" class="md-error">{{step.validation.target}}</span>
           </v-flex>
 
           <v-flex xl5 lg5 sm5 md9 xs9>
@@ -39,27 +38,31 @@
               <template slot="activator">
                 <v-text-field
                   v-model="step.eta"
+                  :error-messages="step.validation.etaError"
+                  @click.native="clearValidation()"
                   class="my-0 pa-0 mx-2"
                   solo
-                  label="Start Date"
+                  label="Deadline"
                   prepend-inner-icon="event"
                   readonly
                 ></v-text-field>
               </template>
-              <v-date-picker v-model="step.eta" @input="step.etaMenu = false" no-title type="month"></v-date-picker>
+              <v-date-picker v-model="step.eta" @input="step.etaMenu = false" no-title></v-date-picker>
             </v-menu>
           </v-flex>
           <v-flex xl2 lg2 sm2 md3 xs3 text-xs-right>
-            <v-btn 
-              v-if="!isFirst" 
-              :small="$vuetify.breakpoint.smAndDown" 
-              class="mr-2" 
-              color="primary"
-              outline
-              fab
-              @click="removeStep()">
-              <v-icon>remove</v-icon>
-            </v-btn>
+            <div class="full-height fill-height">
+              <v-btn 
+                v-if="!isFirst" 
+                :small="$vuetify.breakpoint.smAndDown" 
+                color="primary"
+                class="my-0 pa-0"
+                outline
+                fab
+                @click="removeStep()">
+                <v-icon>remove</v-icon>
+              </v-btn>
+            </div>
           </v-flex>
           <v-flex xl12 lg12 sm12 md12 xs12>
             <v-textarea
@@ -76,7 +79,7 @@
       <div v-else-if="isReadOnly" class="mx-3">
         <v-layout row wrap align-baseline>
           <v-flex xl4 lg4 sm4 md12 xs12>
-            <p class="subheading">{{step.target}}</p>
+            <p class="subheading">{{step.goal}}</p>
           </v-flex>
           <v-flex xl8 lg8 sm8 md12 xs12>
             <p class="grey--text">{{moment(step.eta).format('D MMM YYYY')}}</p>
@@ -173,7 +176,7 @@ function adjust() {
     text-align: center; 
  }
 
- .research-step-target {
+ .research-step-goal {
     margin-bottom: 10px;
  }
 
