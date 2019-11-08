@@ -81,7 +81,7 @@
                 <div class="rd-cap-chip" v-if="currentCap >= fromAssetsToFloat(tokenSale.soft_cap)">Soft cap reached!</div>
                 <div class="pl-4">Raised of ${{fromAssetsToFloat(tokenSale.soft_cap)}} Goal</div>
               </v-layout>
-              <v-layout align-center justify-end class="pt-2 pl-5">
+              <v-layout align-center justify-end class="py-2">
                 <v-flex shrink class="rd-cap-progress-bound mr-2">0</v-flex>
                 <v-flex grow class="rd-cap-progress-bar">
                   <div class="progress-line" />
@@ -89,6 +89,28 @@
                 </v-flex>
                 <v-flex shrink class="rd-cap-progress-bound ml-2">{{fromAssetsToFloat(tokenSale.hard_cap)}}</v-flex>
               </v-layout>
+
+              <v-layout column v-if="isActiveTokenSale && !isResearchGroupMember">
+                <v-layout justify-end class="pt-2">
+                  <v-text-field
+                    ref="amountToContribute"
+                    v-model="amountToContribute"
+                    placeholder="Amount" suffix="USD"
+                    :rules="[deipTokenValidator]"
+                    :disabled="areTokensBuying"
+                  />
+                </v-layout>
+                <v-layout justify-end class="pt-2">
+                  <v-btn
+                    :disabled="!$refs.amountToContribute || !$refs.amountToContribute.valid || areTokensBuying || !this.amountToContribute"
+                    :loading="areTokensBuying"
+                    @click="contributeToTokenSale()"
+                    class="btn--gradient-pb"
+                    block
+                  >Invest</v-btn>
+                </v-layout>
+              </v-layout>
+
             </v-flex>
           </v-layout>
           <v-layout v-if="tokenHoldersList.length" class="my-5">
@@ -112,29 +134,12 @@
                     </div>
                   </v-layout>
                   <v-layout justify-start class="mt-2">
-                    <v-tooltip
-                      v-for="investor of tokenHoldersList"
-                      :key="investor.account_name"
-                      class="mr-1"
-                      bottom
-                    >
-                      <div slot="activator">
-                        <router-link
-                          :to="`/user-details/${investor.account_name}`"
-                        >
-                          <v-avatar size="40px">
-                            <img v-if="investor.user.profile" v-bind:src="investor.user.profile.avatar | avatarSrc(40, 40, false)" />
-                            <v-gravatar v-else :title="investor.user.account.name" :email="investor.user.account.name + '@deip.world'" />
-                          </v-avatar>
-                        </router-link>
-                      </div>
-                      <span>{{investor.user | fullname}}</span>
-                    </v-tooltip>
+                    <platform-avatar :size="40" v-for="(investor, i) in tokenHoldersList" :key="'investor-' + i" :user="investor.user" class="mr-1"></platform-avatar>
                   </v-layout>
                 </v-flex>
               </v-layout>
             </v-flex>
-            <v-flex lg4 offset-lg1 v-if="isActiveTokenSale && !isResearchGroupMember">
+            <!-- <v-flex lg4 offset-lg1 v-if="isActiveTokenSale && !isResearchGroupMember">
               <v-layout justify-end class="pt-2">
                 <v-text-field
                   ref="amountToContribute"
@@ -153,7 +158,7 @@
                   block
                 >Invest</v-btn>
               </v-layout>
-            </v-flex>
+            </v-flex> -->
           </v-layout>
           <v-divider v-if="isTokenSaleSectionAvailable || tokenHoldersList.length" />
           <v-layout v-if="timeline.length" class="my-5">
@@ -460,26 +465,18 @@
           <v-layout column class="mt-5 mb-4 mx-4">
             <div class="rd-sidebar-block-title">
               Members:&nbsp;
-              <router-link :to="`/${encodeURIComponent(groupLink)}/group-details`" style="text-decoration: none;">
+              <router-link :to="{ name: 'ResearchGroupDetails', params: {  research_group_permlink: encodeURIComponent(groupLink) } }" style="text-decoration: none;">
                 {{membersList.length}}
               </router-link>
             </div>
             <v-layout
-              v-for="member of membersList"
+              v-for="(member, i) in membersList"
               :key="member.account.id"
               class="mt-3"
               justify-space-between
               align-center
             >
-              <div>
-                <v-avatar class="mr-3" size="40px">
-                  <img v-if="member.profile" v-bind:src="member.profile.avatar | avatarSrc(40, 40, false)" />
-                  <v-gravatar v-else :title="member.account.name" :email="member.account.name + '@deip.world'" />
-                </v-avatar>
-                <router-link :to="`/user-details/${member.account.name}`" class="a">
-                  {{member | fullname}}
-                </router-link>
-              </div>
+              <div><platform-avatar :size="40" :key="'member-' + i" :user="member" link-to-profile link-to-profile-class="pl-3"></platform-avatar></div>
               <div class="grey--text">{{convertToPercent(member.rgt.amount)}}%</div>
             </v-layout>
             <div v-if="isJoinRequestSectionAvailable">
@@ -522,7 +519,7 @@
               <div v-if="isActiveJoinRequest" class="mt-3">You have sent a join request on {{new Date(currentJoinRequest.created).toDateString()}}, please wait for approval</div>
               <div v-if="isActiveInvite" class="mt-3">
                 Please accept invite on
-                <router-link :to="`/user-details/${user.username}`" style="text-decoration: none">your profile page</router-link>
+                <router-link :to="{ name: 'UserDetails', params: { account_name: user.username}}" style="text-decoration: none">your profile page</router-link>
                 to join the research group
               </div>
             </div>
@@ -798,7 +795,7 @@
           this.amountToContribute = '';
 
           this.$store.dispatch('layout/setSuccess', {
-            message: `You've contributed to "${this.research.title}" fundraise successfully !`
+            message: `You have contributed to "${this.research.title}" fundraise successfully !`
           });
         }).catch((err) => {
           this.areTokensBuying = false;

@@ -1,57 +1,58 @@
 <template>
   <v-card height="100%">
-    <v-layout row wrap style="flex: 0 0 auto;" class="py-4 full-width">
+    <v-layout v-if="selectedInvestment" row wrap style="flex: 0 0 auto;" class="py-4 full-width">
 
-      <v-layout column class="px-4">
+      <v-layout column class="px-4 full-width">
         <router-link class="subheading half-bold investment-title"
           :to="{ name: 'ResearchDetails', params: {
-            research_group_permlink: encodeURIComponent(investment.group_permlink),
-            research_permlink: encodeURIComponent(investment.permlink)
+            research_group_permlink: encodeURIComponent(selectedInvestment.group.permlink),
+            research_permlink: encodeURIComponent(selectedInvestment.research.permlink)
           }}">
-          {{ investment.title }}
+          {{ selectedInvestment.research.title }}
         </router-link>
       </v-layout>
 
-      <v-layout column class="py-2">
+      <v-layout column class="py-2 full-width">
         <v-divider></v-divider>
         <v-layout row justify-space-between align-middle class="pa-2">
           <span>
             <v-icon small>event</v-icon>
-            <span class="caption grey--text px-1">Created {{moment(investment.created_at).format("DD MMM YYYY")}} by Alex Shkor</span>
+            <span class="caption grey--text px-1">Created {{moment(selectedInvestment.research.created_at).format("DD MMM YYYY")}} by {{selectedInvestment.research.owner | fullname}}</span>
           </span>
           <span>
-            <span class="icon-btn"><v-icon >attachment</v-icon></span>
-            <span class="icon-btn"><v-icon >compare</v-icon></span>
-            <span class="icon-btn"><v-icon >delete</v-icon></span>
+            <span class="icon-btn"><v-icon>attachment</v-icon></span>
+            <span class="icon-btn"><v-icon>compare</v-icon></span>
+            <span class="icon-btn"><v-icon>delete</v-icon></span>
           </span>
         </v-layout>
         <v-divider></v-divider>
       </v-layout>
 
 
-      <v-layout column class="px-4 py-2">
+      <v-layout v-if="currentPhase" column class="px-4 py-2 full-width">
         <div class="subheading half-bold">Current Phase</div>
-        <div class="body-2 py-1">{{investment.currenStep.title}}</div>
+        <div class="body-2 py-1">{{currentPhase.goal}}</div>
         <div class="py-2">
-          <v-chip class="ma-0 body-1" color="amber" text-color="white">{{investment.currenStep.deadline}}</v-chip>
+          <v-chip v-if="currentPhaseDeadlineLabel.isOverdue" class="ma-0 body-1" color="amber" text-color="white">{{currentPhaseDeadlineLabel.text}}</v-chip>
+          <v-chip v-else class="ma-0 body-1" color="#8BC34A" text-color="white">{{currentPhaseDeadlineLabel.text}}</v-chip>
         </div>
         <div class="body-1 py-2">
-          <toggle-text :text="investment.currenStep.description"></toggle-text>
+          <toggle-text :text="currentPhase.details"></toggle-text>
         </div>
       </v-layout>
 
-      <v-layout column>
+      <v-layout column class="full-width">
         <v-divider class="mb-2"></v-divider>
         <div>
-          <div class="subheading half-bold px-4">Team: IADR Team</div>
+          <div class="subheading half-bold px-4">Team: {{selectedInvestment.group.name}}</div>
           <v-layout row justify-start class="px-4 py-2">
-            <platform-avatar :size="40" v-for="(member, i) in investment.team" :key="'member-' + i" :user="member" class="pr-1" ></platform-avatar>
+            <platform-avatar :size="40" v-for="(member, i) in selectedInvestment.team" :key="'member-' + i" :user="member" class="pr-1" ></platform-avatar>
           </v-layout>
         </div>
         <v-divider class="mt-2"></v-divider>
       </v-layout>
 
-      <v-layout column class="px-4 py-2">
+      <v-layout column class="px-4 py-2 full-width">
         <div class="subheading half-bold">Top investors</div>
         <div class="py-2">
           <GChart
@@ -63,7 +64,7 @@
         </div>
       </v-layout>
 
-      <v-layout column class="py-2">
+      <v-layout column class="py-2 full-width">
         <v-divider class="mb-2"></v-divider>
         <v-layout row justify-space-between class="px-4">
           <div class="subheading half-bold">My memo</div>
@@ -90,7 +91,7 @@
         <v-divider class="mt-2"></v-divider>
       </v-layout>
 
-      <v-layout column class="px-4">
+      <v-layout column class="px-4 full-width">
         <div class="subheading half-bold py-2">Comments</div>
         <div v-for="(comment, i) in investment.comments" :key="'investment-comment-'+ i">
           <v-layout row wrap align-baseline>
@@ -113,6 +114,73 @@
 
   export default {
     name: 'InvestorDashboardInboxRightSidebar',
+    computed: {
+      ...mapGetters({
+        user: "auth/user",
+        selectedInvestment: "investorDashboard/selectedInvestment"
+      }),
+
+      currentPhase() {
+        if (this.selectedInvestment) {
+          let milestones = this.$options.filters.researchMilestones(this.selectedInvestment.research.abstract);
+          let activeMilestone = milestones.find(m => m.is_active);
+          return activeMilestone || milestones[0] || null;
+        }
+        return null;
+      },
+
+      currentPhaseDeadlineLabel() {
+        if (this.currentPhase) {
+          let daysDiff = moment(this.currentPhase.eta).diff(moment(), 'days');
+          let isOverdue = daysDiff < 0;
+
+          let text = isOverdue 
+            ? `Deadline overdue ${daysDiff < 7 ? daysDiff + ' days' : Math.floor(daysDiff / 7) + ' weeks'}`
+            : `Deadline on ${moment(this.currentPhase.eta).local().format("MMM DD, YYYY")}`;
+
+          return { daysDiff, isOverdue, text };
+        }
+        return null;
+      },
+
+      investorsDistributionChart() {
+        if (this.selectedInvestment) {
+          return {
+            data: [
+              ['Distribution', ''],
+              ...this.selectedInvestment.shareHolders.map((shareHolder) => [
+                this.$options.filters.fullname(shareHolder),
+                this.convertToPercent(shareHolder.share.amount)
+              ]),
+              [this.selectedInvestment.group.name, this.convertToPercent(this.selectedInvestment.research.owned_tokens)]
+              // ['Microsoft', 15]
+            ],
+
+            options: {
+              title: "",
+              legend: { position: 'left' },
+              colors: ['#c6bbff', '#f9c3d7', '#a6dcff', '#B9F6CA', '#2d99ff', '#f3f5f8'],
+              chartArea: { 
+                right: 0,
+                width: "100%",
+                height: "100%"
+              },
+              // sliceVisibilityThreshold: .01,
+
+              width: "100%",
+              height: "100%",
+              pieSliceTextStyle: {
+                // color: "#ffffff", 
+                color: "#000000",
+                fontSize: 10
+              },
+              pieHole: 0.6
+            }
+          }
+        }
+      },
+    },
+
     data() {
       return {
         investment: {
@@ -142,49 +210,8 @@
       }
     },
 
-    computed: {
-      ...mapGetters({
-        user: "auth/user"
-      }),
-
-      investorsDistributionChart() {
-        // let totalShares = this.currentShares.reduce((acc, { share }) => acc + this.convertToPercent(share.amount), 0);
-        return {
-          data: [
-            ['Distribution', ''],
-            // ...this.currentShares.map(({ research, share }) => [research.title,  this.convertToPercent(share.amount) / totalShares * 100])
-            ['Microsoft', 15],
-            ['Intel', 40],
-            ['Alphabet', 16],
-            ['International Business Machines', 23],
-            ['Others', 6],
-          ],
-
-          options: {
-            title: "",
-            legend: { position: 'left' },
-            colors: ['#c6bbff', '#f9c3d7', '#a6dcff', '#B9F6CA', '#2d99ff', '#f3f5f8'],
-            chartArea: { 
-              right: 0,
-              width: "100%",
-              height: "100%"
-            },
-
-            width: "100%",
-            height: "100%",
-            pieSliceTextStyle: {
-              // color: "#ffffff", 
-              color: "#000000",
-              fontSize: 10
-            },
-            pieHole: 0.6
-          }
-        }
-      },
-    },
-
     methods: {
-
+      
     }
   }
 </script>

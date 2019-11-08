@@ -39,6 +39,10 @@ const getters = {
 		return unique;
 	},
 
+	deals: (state) => {
+		return state.investedResearchesList;
+	},
+
 	currentShares: (state) => {
 		return state.investedResearchSharesList.map(share => {
 			let research = state.investedResearchesList.find(r => r.id == share.research_id);

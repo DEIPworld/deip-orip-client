@@ -3,7 +3,7 @@
     <v-layout column>
       <div class="title bold">My Inbox</div>
 
-      <v-layout column v-if="newNotifications.length">
+      <v-layout column v-if="investments.length">
         <v-layout row align-end fill-height class="py-3"> 
           <v-flex xl1 lg1 md1 sm4 xs4>
             <v-checkbox
@@ -13,7 +13,7 @@
             </v-checkbox>
           </v-flex>
           <v-flex xl8 lg8 md8 sm8 xs8>
-            <div class="subheading half-bold">Recent updates: {{newNotifications.length}}</div>
+            <div class="subheading half-bold">Recent updates: {{investments.length}}</div>
           </v-flex>
           <v-flex xl3 lg3 md3 sm12 xs12>
             <v-select
@@ -29,7 +29,7 @@
           </v-flex>
         </v-layout>
         <v-layout column>
-          <v-card @click="selectInvestment(investment)" v-for="(investment, i) in newNotifications" :key="'investment-' + i" class="pa-2 investment-item" :class="{'selected': investment.isSelected}">
+          <v-card @click="selectInvestment(investment)" v-for="(investment, i) in investments" :key="'investment-' + i" class="pa-2 investment-item" :class="{'selected': investment === selectedInvestment}">
             <v-layout row wrap align-baseline>
               <v-flex xs1 align-self-center>
                 <v-checkbox
@@ -37,13 +37,18 @@
                   hide-details>
                 </v-checkbox>
               </v-flex>
-              <v-flex>
-                <router-link class="a" :to="{ name: 'Default' }">
-                  {{investment.title}}
+              <v-flex xs6 class="ellipsis">
+                <router-link class="a" :to="{ 
+                  name: 'ResearchDetails', 
+                  params: {
+                    research_group_permlink: encodeURIComponent(investment.group.permlink),
+                    research_permlink: encodeURIComponent(investment.research.permlink)
+                  }}">
+                  {{investment.research.title}}
                 </router-link>
               </v-flex>
               <v-flex class="text-xs-right">
-                <v-chip small v-for="(tag, j) in investment.tags" :key="'investment-'+ i + '-tag'+ j" class="ma-0 ml-1 investment-tag caption" :color="tag.color" text-color="black">{{tag.name}}</v-chip>
+                <v-chip small v-for="(tag, j) in investment.portfolioRef.tags" :key="'investment-'+ i + '-tag'+ j" class="ma-0 ml-1 investment-tag caption" :color="tag.color" text-color="black">{{tag.name}}</v-chip>
               </v-flex>
             </v-layout>
           </v-card>
@@ -84,6 +89,7 @@
 
   export default {
     name: 'InvestorDashboardInbox',
+
     data() {
       return {
         allRecentSelected: false,
@@ -109,23 +115,24 @@
           { title: "Meta-level multimedia	algorithm", tags: [{ name: "Sponsored", color: "#CCE0CC"}, { name: "Reviewed", color: "#fdd4ca"}]},
           { title: "Parameterized	secure technology	language solution...", tags: [{ name: "Quant. op", color: "#c4dff8"} ]}
         ]
-
       }
     },
-
     computed: {
       ...mapGetters({
-        user: "auth/user"
+        user: "auth/user",
+        investmentPortfolio: "investorDashboard/investmentPortfolio",
+        investments: "investorDashboard/investments",
+        selectedInvestment: "investorDashboard/selectedInvestment"
       })
     },
 
     methods: {
       selectInvestment(investment) {
-        let selected = this.newNotifications.find(item => item.isSelected);
-        if (selected)
-          Vue.set(selected, 'isSelected', false);
-
-        Vue.set(investment, 'isSelected', true);
+        // let selected = this.newNotifications.find(item => item.isSelected);
+        // if (selected)
+        //   Vue.set(selected, 'isSelected', false);
+        // Vue.set(investment, 'isSelected', true);
+        this.$store.dispatch('investorDashboard/selectInvestment', investment.research.id);
       }
     }
   }

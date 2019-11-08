@@ -363,7 +363,13 @@ const router = new Router({
 	}, {
 			path: '/investor-dashboard',
 			name: 'InvestorDashboard',
-			component: InvestorDashboard
+			component: InvestorDashboard,
+			beforeEnter: (to, from, next) => {
+				let loadPagePromise = store.dispatch('investorDashboard/loadInvestmentPortfolioPage', {
+					username: decodeURIComponent(store.getters['auth/user'].username)
+				});
+				loadPage(loadPagePromise, next);
+			}
 	}, {
 		path: '/create-funding-opportunity-announcement',
 		name: 'CreateFundingOpportunityAnnouncement',
