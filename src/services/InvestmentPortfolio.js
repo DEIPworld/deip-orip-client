@@ -7,7 +7,7 @@ const getInvestmentPortfolio = function (username) {
     });
 }
 
-const updateInvestmentPortfolio = function (usernamem, updated) {
+const updateInvestmentPortfolio = function (username, updated) {
   return investmentPortfolioHttp.updateInvestmentPortfolio(username, updated)
     .then((investmentPortfolio) => {
       return investmentPortfolio;

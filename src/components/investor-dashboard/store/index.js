@@ -129,8 +129,21 @@ const actions = {
       });
   },
 
-  selectInvestment({ state, commit }, id) {
-    commit('SET_SELECTED_INVESTMENT_ID', id);
+  selectInvestment({ state, commit }, investmentId) {
+    commit('SET_SELECTED_INVESTMENT_ID', investmentId);
+  },
+
+  updateInvestmentMemo({ state, commit }, { investmentId, memo }) {
+    let update = {};
+    let researches = state.investmentPortfolio.researches.map(research => {
+      return research.id == investmentId ? { ...research, memo } : research;
+    });
+    Object.assign(update, state.investmentPortfolio, { researches: researches });
+    return investmentPortfolioService.updateInvestmentPortfolio(state.investmentPortfolio._id, update)
+      .then((updated) => {
+        debugger;
+        commit('UPDATE_INVESTMENT_MEMO', { investmentId, memo });
+      })
   }
 }
 
@@ -171,7 +184,12 @@ const mutations = {
 
   ['SET_SELECTED_INVESTMENT_ID'](state, isLoading) {
     Vue.set(state, 'selectedInvestmentId', isLoading)
-  }
+  },
+
+  ['UPDATE_INVESTMENT_MEMO'](state, { investmentId, memo }) {
+    let investment = state.investmentPortfolio.researches.find(r => r.id == investmentId);
+    Vue.set(investment, 'memo', memo);
+  },
 }
 
 const namespaced = true;

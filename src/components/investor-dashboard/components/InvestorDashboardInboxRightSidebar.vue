@@ -68,10 +68,22 @@
         <v-divider class="mb-2"></v-divider>
         <v-layout row justify-space-between class="px-4">
           <div class="subheading half-bold">My memo</div>
-          <div class="text-xs-right"><span class="icon-btn"><v-icon small>edit</v-icon></span></div>
+          <!-- <div class="text-xs-right"><span class="icon-btn" @click="editMemo()"><v-icon small>edit</v-icon></span></div> -->
+          <v-btn v-if="!isEditingMemo" class="ma-0 pa-0 text-xs-right" flat icon @click="editMemo()">
+            <v-icon small>edit</v-icon>
+          </v-btn>
+          <v-btn v-else class="ma-0 pa-0 text-xs-right" flat icon @click="updateMemo()">
+            <v-icon small>reply</v-icon>
+          </v-btn>
         </v-layout>
         <div class="body-1 px-4 py-2">
-          <toggle-text :text="investment.memo"></toggle-text>
+          <toggle-text v-if="!isEditingMemo" :text="selectedInvestment.portfolioRef.memo"></toggle-text>
+          <v-textarea 
+            v-else
+            v-model="memo"
+            auto-grow
+            :rows="4"
+          ></v-textarea>
         </div>
         <v-divider class="mt-2"></v-divider>
       </v-layout>
@@ -183,6 +195,9 @@
 
     data() {
       return {
+        isEditingMemo: false,
+        memo: "",
+        
         investment: {
           title: "IT Asset Disposal & Recycling",
           created_at: moment().toDate(),
@@ -211,7 +226,26 @@
     },
 
     methods: {
-      
+      editMemo() {
+        this.isEditingMemo = true;
+      },
+      updateMemo() {
+        let investmentId = this.selectedInvestment.research.id;
+        let memo = this.memo;
+        this.$store.dispatch('investorDashboard/updateInvestmentMemo', { investmentId, memo })
+          .finally(() => {
+            this.isEditingMemo = false;
+          })
+      }
+    },
+    watch: {
+      selectedInvestment(newVal, oldVal) {
+        debugger
+        this.memo = newVal.portfolioRef.memo;
+      }
+    },
+    mounted() {
+      this.memo = this.selectedInvestment.portfolioRef.memo;
     }
   }
 </script>

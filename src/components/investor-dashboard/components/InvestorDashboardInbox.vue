@@ -128,10 +128,6 @@
 
     methods: {
       selectInvestment(investment) {
-        // let selected = this.newNotifications.find(item => item.isSelected);
-        // if (selected)
-        //   Vue.set(selected, 'isSelected', false);
-        // Vue.set(investment, 'isSelected', true);
         this.$store.dispatch('investorDashboard/selectInvestment', investment.research.id);
       }
     }
