@@ -12,7 +12,7 @@ import deipRpc from '@deip/deip-oa-rpc-client';
 import moment from 'moment';
 
 export default {
-  name: "Dashboard",
+  name: "InvestorDashboard",
   
   computed: {
     ...mapGetters({

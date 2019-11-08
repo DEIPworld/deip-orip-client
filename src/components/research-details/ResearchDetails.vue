@@ -16,6 +16,20 @@
             </v-flex>
           </v-layout>
         </v-flex>
+        <v-flex lg4>
+          <div v-if="isResearchGroupMember" class="text-xs-right">
+            <v-btn outline color="white"
+              :to="{  
+                name: 'ResearchEdit',
+                params: {
+                  research_group_permlink: encodeURIComponent(research.group_permlink),
+                  research_permlink: encodeURIComponent(research.permlink)
+                } 
+              }">
+              Edit
+            </v-btn>
+          </div>
+        </v-flex>       
       </v-layout>
       <v-layout class="mt-4">
         <v-flex lg8>
@@ -594,7 +608,7 @@
         let timeline = milestones.map((milestone, i) => {
           return {
             "id": i + 1,
-            "date": moment.utc(milestone.eta).local().format("mmm d, YYYY"),
+            "date": moment.utc(milestone.eta).local().format("MMM DD, YYYY"),
             "label": milestone.goal,
             "description": milestone.details
           }

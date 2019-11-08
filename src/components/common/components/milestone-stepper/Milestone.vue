@@ -69,6 +69,7 @@
               v-model="step.details"
               class="my-0 pa-0 mx-2"
               solo
+              auto-grow
               label="Milestone Description"
               prepend-inner-icon="subject"
             ></v-textarea>

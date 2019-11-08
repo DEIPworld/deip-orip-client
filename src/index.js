@@ -8,6 +8,7 @@ import './components/user-details/index';
 import './components/research-feed/index'
 import './components/research-create/index';
 import './components/research-details/index';
+import './components/research-edit/index';
 import './components/research-content-details/index';
 import './components/research-group-details/index';
 import './components/research-group-create/index';

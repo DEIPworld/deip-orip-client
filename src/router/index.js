@@ -20,6 +20,7 @@ import ResearchGroupWallet from '@/components/research-group-wallet/ResearchGrou
 
 import ResearchFeed from '@/components/research-feed/ResearchFeed';
 import ResearchDetails from '@/components/research-details/ResearchDetails';
+import ResearchEdit from '@/components/research-edit/ResearchEdit';
 import ResearchContentDetails from '@/components/research-content-details/ResearchContentDetails';
 import ResearchApplicationDetails from '@/components/research-application-details/ResearchApplicationDetails';
 import ResearchApplicationReview from '@/components/research-application-details/ResearchApplicationReview';
@@ -166,7 +167,19 @@ const router = new Router({
 				loadPage(loadPagePromise, next);
 			}
 		})
-	}, {
+		}, {
+			path: '/:research_group_permlink/edit-research/:research_permlink',
+			name: 'ResearchEdit',
+			component: preliminaryDataLoader(ResearchEdit, {
+				beforeEnter: (to, from, next) => {
+					let loadPagePromise = store.dispatch('re/loadResearchEditPage', {
+						group_permlink: decodeURIComponent(to.params.research_group_permlink),
+						research_permlink: decodeURIComponent(to.params.research_permlink)
+					});
+					loadPage(loadPagePromise, next);
+				}
+			})
+		}, {
 		path: '/:research_group_permlink/research/:research_permlink/:content_permlink',
 		name: 'ResearchContentDetails',
 		component: preliminaryDataLoader(ResearchContentDetails, {

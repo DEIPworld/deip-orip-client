@@ -7,6 +7,7 @@ import feed from './../components/research-feed/store/index'
 import researchGroup from './../components/research-group-details/store/index'
 import rgWallet from './../components/research-group-wallet/store/index'
 import rd from './../components/research-details/store/index'
+import re from './../components/research-edit/store/index'
 import rcd from './../components/research-content-details/store/index'
 import rad from './../components/research-application-details/store/index'
 import userDetails from './../components/user-details/store/index'
@@ -29,6 +30,7 @@ export default new Vuex.Store({
         researchGroup,
         rgWallet,
         rd,
+        re,
         rcd,
         rad,
         userDetails,
