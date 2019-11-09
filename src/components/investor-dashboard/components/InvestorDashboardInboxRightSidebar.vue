@@ -89,17 +89,62 @@
       </v-layout>
 
       <v-layout column class="full-width">
-        <v-layout row justify-space-between class="px-4">
-          <div>
-            <div v-for="(tag, i) in investment.tags" :key="'investment-tag-'+ i">
-              <v-chip small class="mx-0 investment-tag caption" :color="tag.color" text-color="black">{{tag.name}}</v-chip>
+        <v-layout v-if="hasCustomLists">
+          <v-layout row justify-space-between class="px-4">
+            <div v-if="hasCustomLabels">
+              <div v-for="(tag, i) in selectedInvestment.portfolioRef.tags" :key="'investment-tag-'+ i">
+                <v-chip small class="mx-0 investment-tag caption" :color="tag.color" text-color="black">{{tag.name}}</v-chip>
+              </div>
             </div>
-          </div>
-          <div>
-            <span class="icon-btn"><v-icon>playlist_add</v-icon></span>
-            <span class="icon-btn"><v-icon>delete</v-icon></span>
-          </div>
+            <div v-else class="subheading pa-4 grey--text">No attached labels</div>
+            <div>
+              <!-- <span class="icon-btn"><v-icon>playlist_add</v-icon></span>
+              <span class="icon-btn"><v-icon>delete</v-icon></span> -->
+              <v-btn class="ma-0 pa-0 text-xs-right" flat icon @click="openAddTagsDialog()">
+                <v-icon small>playlist_add</v-icon>
+              </v-btn>
+            </div>
+          </v-layout>
+          <v-dialog v-model="updateTagsDialog.isOpened" max-width="500px">
+            <v-card>
+              <v-card-title>
+                <span>Attach to list</span>
+              </v-card-title>
+              <v-card-text>
+                <v-layout column>
+                  <v-select
+                    v-model="updateTagsDialog.list" 
+                    :items="customLists"
+                    solo
+                    dense
+                    item-text="name"
+                    return-object>
+                  </v-select>
+                  <v-combobox v-if="updateTagsDialog.list"
+                    v-model="updateTagsDialog.tagNames" 
+                    multiple
+                    label="Labels" 
+                    append-icon
+                    chips
+                    deletable-chips>
+                    <template v-slot:selection="data">
+                      <v-chip close @input="removeTagName(data.item)" :color="updateTagsDialog.list.color">
+                        <strong>{{ data.item }}</strong>
+                      </v-chip>
+                    </template>
+                  </v-combobox>
+                </v-layout>
+              </v-card-text>
+              <v-card-actions>
+                <v-layout row justify-end>
+                  <v-btn flat @click="closeAddTagsDialog()">Cancel</v-btn>
+                  <v-btn @click="updateTags()" :loading="updateTagsDialog.isSaving" :disabled="updateTagsDialog.isSaving" color="primary">Save</v-btn>
+                </v-layout>
+              </v-card-actions>
+            </v-card>
+          </v-dialog>
         </v-layout>
+        <v-layout v-else><div class="subheading pa-4 grey--text">Please add a list to attach labels</div></v-layout>
         <v-divider class="mt-2"></v-divider>
       </v-layout>
 
@@ -121,6 +166,7 @@
 </template>
 
 <script>
+  import Vue from 'vue';
   import { mapGetters } from 'vuex';
   import moment from 'moment';
 
@@ -129,7 +175,8 @@
     computed: {
       ...mapGetters({
         user: "auth/user",
-        selectedInvestment: "investorDashboard/selectedInvestment"
+        selectedInvestment: "investorDashboard/selectedInvestment",
+        investmentPortfolio: "investorDashboard/investmentPortfolio"
       }),
 
       currentPhase() {
@@ -153,6 +200,15 @@
           return { daysDiff, isOverdue, text };
         }
         return null;
+      },
+      customLists() {
+        return this.investmentPortfolio.lists.filter(l => l.name != "all");
+      },
+      hasCustomLists() {
+        return this.customLists.length != 0;
+      },
+      hasCustomLabels() {
+        return this.selectedInvestment.portfolioRef.tags.length != 0;
       },
 
       investorsDistributionChart() {
@@ -197,6 +253,14 @@
       return {
         isEditingMemo: false,
         memo: "",
+
+        updateTagsDialog: {
+          list: null,
+          tagNames: [],
+
+          isOpened: false,
+          isSaving: false
+        },
         
         investment: {
           title: "IT Asset Disposal & Recycling",
@@ -240,12 +304,46 @@
         } else {
           this.isEditingMemo = false;
         }
+      },
+
+      openAddTagsDialog() {
+        this.updateTagsDialog.isOpened = true;
+        this.updateTagsDialog.list = this.customLists[0];
+        let currentTags = this.selectedInvestment.portfolioRef.tags;
+        let currentListTags = currentTags.filter(t => t.list == this.updateTagsDialog.list.name);
+        this.updateTagsDialog.tagNames = [...currentListTags.map(t => t.name)];
+      },
+
+      closeAddTagsDialog() {
+        this.updateTagsDialog.isOpened = false; 
+      },
+
+      updateTags() {
+        setTimeout(() => { // delay action to catch input text without pressing the 'enter'
+          let investmentId = this.selectedInvestment.research.id;
+          let listTags = this.updateTagsDialog.tagNames.map(t => t.toLowerCase());
+          let listId = this.updateTagsDialog.list.name;
+          this.updateTagsDialog.isSaving = true;
+          this.$store.dispatch('investorDashboard/updateInvestmentListTags', { investmentId, listId, listTags })
+            .finally(() => {
+              this.updateTagsDialog.isSaving = false;
+              this.updateTagsDialog.isOpened = false;
+            });
+        }, 100);
+      },
+
+      removeTagName(item) {
+        this.updateTagsDialog.tagNames.splice(this.updateTagsDialog.tagNames.indexOf(item), 1);
       }
     },
     watch: {
       selectedInvestment(newVal, oldVal) {
-        debugger
         this.memo = newVal.portfolioRef.memo;
+      },
+      'updateTagsDialog.list': function(newVal, oldVal) {
+        let currentTags = this.selectedInvestment.portfolioRef.tags;
+        let currentListTags = currentTags.filter(t => t.list == this.updateTagsDialog.list.name);
+        this.updateTagsDialog.tagNames = [...currentListTags.map(t => t.name)];
       }
     },
     mounted() {
