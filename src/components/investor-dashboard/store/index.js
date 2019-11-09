@@ -47,7 +47,7 @@ const getters = {
 
       let portfolioRef = state.investmentPortfolio.researches.find(r => r.id == research.id);
       let tags = portfolioRef.tags.map(tag => {
-        let list = state.investmentPortfolio.lists.find(l => l.name == tag.list);
+        let list = state.investmentPortfolio.lists.find(l => l.id == tag.list);
         let color = list ? list.color : "";
         return { ...tag, color };
       })
@@ -155,8 +155,8 @@ const actions = {
     let update = {};
     let researches = state.investmentPortfolio.researches.map(research => {
       if (research.id != investmentId) return research;
-      let otherListsTags = research.tags.filter((t => t.list != listId));
-      return { ...research, tags: [...otherListsTags, ...listTags.map((t => { return { name: t, list: listId } }))] }
+      let otherListsTags = research.tags.filter((tag => tag.list != listId));
+      return { ...research, tags: [...otherListsTags, ...listTags.map((tagName => { return { name: tagName, list: listId } }))] }
     });
     Object.assign(update, state.investmentPortfolio, { researches: researches });
     return investmentPortfolioService.updateInvestmentPortfolio(state.investmentPortfolio._id, update)
@@ -166,13 +166,13 @@ const actions = {
   },
 
 
-  addNewInvestmentList({ state, commit }, { name, color }) {
+  addNewInvestmentList({ state, commit }, { listId, listName, color }) {
     let update = {};
-    let lists = [...state.investmentPortfolio.lists, { name, color, researches: [] }];
+    let lists = [...state.investmentPortfolio.lists, { id: listId, name: listName, color, researches: [] }];
     Object.assign(update, state.investmentPortfolio, { lists: lists });
     return investmentPortfolioService.updateInvestmentPortfolio(state.investmentPortfolio._id, update)
       .then((updated) => {
-        commit('ADD_NEW_INVESTMENT_LIST', { name, color });
+        commit('ADD_NEW_INVESTMENT_LIST', { listId, listName, color });
       })
   }
 }
@@ -223,12 +223,12 @@ const mutations = {
 
   ['UPDATE_INVESTMENT_LIST_TAGS'](state, { investmentId, listId, listTags }) {
     let investment = state.investmentPortfolio.researches.find(r => r.id == investmentId);
-    let otherListsTags = investment.tags.filter((t => t.list != listId));
-    Vue.set(investment, 'tags', [...otherListsTags, ...listTags.map((t => { return { name: t, list: listId } }))]);
+    let otherListsTags = investment.tags.filter((tag => tag.list != listId));
+    Vue.set(investment, 'tags', [...otherListsTags, ...listTags.map((tagName => { return { name: tagName, list: listId } }))]);
   },
 
-  ['ADD_NEW_INVESTMENT_LIST'](state, { name, color }) {
-    state.investmentPortfolio.lists.push({ name, color, researches: [] });
+  ['ADD_NEW_INVESTMENT_LIST'](state, { listId, listName, color }) {
+    state.investmentPortfolio.lists.push({ id: listId, name: listName, color, researches: [] });
   }
 }
 

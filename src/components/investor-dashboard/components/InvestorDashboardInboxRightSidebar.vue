@@ -202,7 +202,7 @@
         return null;
       },
       customLists() {
-        return this.investmentPortfolio.lists.filter(l => l.name != "all");
+        return this.investmentPortfolio.lists.filter(l => l.id != "all");
       },
       hasCustomLists() {
         return this.customLists.length != 0;
@@ -310,8 +310,8 @@
         this.updateTagsDialog.isOpened = true;
         this.updateTagsDialog.list = this.customLists[0];
         let currentTags = this.selectedInvestment.portfolioRef.tags;
-        let currentListTags = currentTags.filter(t => t.list == this.updateTagsDialog.list.name);
-        this.updateTagsDialog.tagNames = [...currentListTags.map(t => t.name)];
+        let currentListTags = currentTags.filter(tag => tag.list == this.updateTagsDialog.list.id);
+        this.updateTagsDialog.tagNames = [...currentListTags.map(tag => tag.name)];
       },
 
       closeAddTagsDialog() {
@@ -322,7 +322,7 @@
         setTimeout(() => { // delay action to catch input text without pressing the 'enter'
           let investmentId = this.selectedInvestment.research.id;
           let listTags = this.updateTagsDialog.tagNames.map(t => t.toLowerCase());
-          let listId = this.updateTagsDialog.list.name;
+          let listId = this.updateTagsDialog.list.id;
           this.updateTagsDialog.isSaving = true;
           this.$store.dispatch('investorDashboard/updateInvestmentListTags', { investmentId, listId, listTags })
             .finally(() => {
@@ -342,8 +342,8 @@
       },
       'updateTagsDialog.list': function(newVal, oldVal) {
         let currentTags = this.selectedInvestment.portfolioRef.tags;
-        let currentListTags = currentTags.filter(t => t.list == this.updateTagsDialog.list.name);
-        this.updateTagsDialog.tagNames = [...currentListTags.map(t => t.name)];
+        let currentListTags = currentTags.filter(t => t.list == this.updateTagsDialog.list.id);
+        this.updateTagsDialog.tagNames = [...currentListTags.map(tag => tag.name)];
       }
     },
     mounted() {

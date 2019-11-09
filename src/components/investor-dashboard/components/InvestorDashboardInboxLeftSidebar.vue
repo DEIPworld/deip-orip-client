@@ -124,9 +124,10 @@
 
       addNewList() {
         this.newList.isSaving = true;
-        let name = this.newList.name.toLowerCase();
+        let listName = this.newList.name;
+        let listId = listName.replace(/ /g, "-").replace(/_/g, "-").toLowerCase();
         let color = this.newList.color;
-        this.$store.dispatch('investorDashboard/addNewInvestmentList', { name, color })
+        this.$store.dispatch('investorDashboard/addNewInvestmentList', { listId, listName, color })
           .finally(() => {
             this.newList.isSaving = false;
             this.newList.isOpened = false;
