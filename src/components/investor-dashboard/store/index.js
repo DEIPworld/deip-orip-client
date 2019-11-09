@@ -3,10 +3,15 @@ import Vue from 'vue'
 import deipRpc from '@deip/deip-oa-rpc-client'
 import * as usersService from './../../../utils/user'
 import investmentPortfolioService from './../../../services/InvestmentPortfolio'
+import overdueNotifications from './overdueNotifications.json';
+
+const defaultListId = "all";
 
 const state = {
   investmentPortfolio: null,
+  commentAuthors: [],
   selectedInvestmentId: undefined,
+  selectedListId: undefined,
   isLoadingInvestmentPortfolioPage: undefined,
 
   researches: [],
@@ -24,46 +29,75 @@ const getters = {
   investmentPortfolio: (state, getters) => state.investmentPortfolio,
 
   investments: (state, getters) => {
-    return state.researches.map(research => {
+    return state.researches
+      .filter(r => this.selectedListId == defaultListId || getters.selectedList.listResearchesIds.some(id => id == r.id))
+      .map(research => {
 
-      let group = state.researchGroups.find(group => group.id == research.research_group_id);
-      let researchShares = state.researchTokens.filter(rt => rt.research_id == research.id);
-      let researchGroupsTokens = state.researchGroupsTokens.filter(rgt => rgt.research_group_id == research.research_group_id);
+        let group = state.researchGroups.find(group => group.id == research.research_group_id);
+        let researchShares = state.researchTokens.filter(rt => rt.research_id == research.id);
+        let researchGroupsTokens = state.researchGroupsTokens.filter(rgt => rgt.research_group_id == research.research_group_id);
 
-      let researchSharesHolders = state.researchTokensHolders.filter(user => researchShares.some(rt => rt.account_name == user.account.name));
-      let researchMembers = state.researchGroupsMembers.filter(user => researchGroupsTokens.some(rgt => rgt.owner == user.account.name));
-      
-      let maxRgt = Math.max(...researchGroupsTokens.map(rgt => rgt.amount));
-      let team = researchMembers.map((member) => {
-        let weight = researchGroupsTokens.find(rgt => rgt.owner == member.account.name);
-        let isOwner = weight.amount == maxRgt;
-        return { ...member, isOwner, weight };
+        let researchSharesHolders = state.researchTokensHolders.filter(user => researchShares.some(rt => rt.account_name == user.account.name));
+        let researchMembers = state.researchGroupsMembers.filter(user => researchGroupsTokens.some(rgt => rgt.owner == user.account.name));
+        
+        let maxRgt = Math.max(...researchGroupsTokens.map(rgt => rgt.amount));
+        let team = researchMembers.map((member) => {
+          let weight = researchGroupsTokens.find(rgt => rgt.owner == member.account.name);
+          let isOwner = weight.amount == maxRgt;
+          return { ...member, isOwner, weight };
+        });
+        
+        let shareHolders = researchSharesHolders.map((shareHolder) => {
+          let share = researchShares.find(rt => rt.account_name == shareHolder.account.name);
+          return { ...shareHolder, share };
+        });
+
+        let portfolioRef = state.investmentPortfolio.researches.find(r => r.id == research.id);
+        let tags = portfolioRef.tags.map(tag => {
+          let list = state.investmentPortfolio.lists.find(l => l.id == tag.list);
+          let color = list ? list.color : "";
+          return { ...tag, color };
+        });
+
+        let comments = portfolioRef.comments.map(comment => {
+          let author = state.commentAuthors.find(a => a.account.name == comment.username);
+          return { ...comment, author };
+        });
+
+        return {
+          research: { ...research, comments, owner: team.find(m => m.isOwner) }, 
+          group, 
+          team, 
+          shareHolders, 
+          portfolioRef: { ...portfolioRef, tags }
+        };
       });
-      
-      let shareHolders = researchSharesHolders.map((shareHolder) => {
-        let share = researchShares.find(rt => rt.account_name == shareHolder.account.name);
-        return { ...shareHolder, share };
-      });
-
-      let portfolioRef = state.investmentPortfolio.researches.find(r => r.id == research.id);
-      let tags = portfolioRef.tags.map(tag => {
-        let list = state.investmentPortfolio.lists.find(l => l.id == tag.list);
-        let color = list ? list.color : "";
-        return { ...tag, color };
-      })
-
-      return {
-        research: { ...research, owner: team.find(m => m.isOwner) }, 
-        group, 
-        team, 
-        shareHolders, 
-        portfolioRef: { ...portfolioRef, tags }
-      };
-    })
   },
 
   selectedInvestment: (state, getters) => {
     return getters.investments.find(inv => inv.research.id == state.selectedInvestmentId);   
+  },
+
+  lists: (state, getters) => {
+    return state.investmentPortfolio.lists.map(list => {
+      let listResearchesIds = state.investmentPortfolio.researches.reduce((acc, research) => {
+        return research.tags.some(tag => tag.list == list.id) || list.id == defaultListId ? [research.id, ...acc] : acc;
+      }, []);
+      return { ...list, listResearchesIds };
+    })
+  },
+
+  selectedList: (state, getters) => {
+    return getters.lists.find(list => list.id == state.selectedListId);
+  },
+
+  overdueNotifications: (state, getters) => {
+    if (state.selectedListId == defaultListId) return overdueNotifications;
+    return [];
+  },
+
+  noResult: (state, getters) => {
+    return getters.investments.length + getters.overdueNotifications.length == 0;
   }
 }
 
@@ -80,9 +114,13 @@ const actions = {
         const researchesLoad = new Promise((resolve, reject) => {
           dispatch('loadInvestmentPortfolioResearches', { researchIds: state.investmentPortfolio.researches.map(r => r.id), notify: resolve })
         });
+        const commentsLoad = new Promise((resolve, reject) => {
+          dispatch('loadInvestmentPortfolioComments', { notify: resolve })
+        });
 
-        return Promise.all([researchesLoad])
+        return Promise.all([researchesLoad, commentsLoad])
           .then(() => {
+            commit('SET_SELECTED_LIST_ID', defaultListId);
             let selected = state.researches[0];
             if (selected) commit('SET_SELECTED_INVESTMENT_ID', selected.id);
           });
@@ -134,8 +172,35 @@ const actions = {
       });
   },
 
+  loadInvestmentPortfolioComments({ state, dispatch, commit }, { notify }) {
+    const allComments = [].concat.apply([], state.investmentPortfolio.researches.map(r => r.comments));
+    const distinct = allComments
+      .reduce((unique, comment) => {
+        if (unique.some(username => comment.username == username)) return unique;
+        return [comment.username, ...unique];
+      }, []);
+
+    return usersService.getEnrichedProfiles(distinct)
+      .then((authors) => {
+        commit('SET_INVESTMENT_PORTFOLIO_COMMENT_AUTHORS', authors);
+      })
+      .catch(err => { console.log(err) })
+      .finally(() => {
+        if (notify) notify();
+      });
+  },
+
   selectInvestment({ state, commit }, investmentId) {
     commit('SET_SELECTED_INVESTMENT_ID', investmentId);
+  },
+
+  selectList({ state, getters, commit }, listId) {
+    commit('SET_SELECTED_LIST_ID', listId);
+    if (getters.investments.length) {
+      let investmentId = getters.investments[0].research.id;
+      if (state.selectedInvestmentId != investmentId)
+        commit('SET_SELECTED_INVESTMENT_ID', investmentId);
+    }
   },
 
   updateInvestmentMemo({ state, commit }, { investmentId, memo }) {
@@ -149,7 +214,6 @@ const actions = {
         commit('UPDATE_INVESTMENT_MEMO', { investmentId, memo });
       })
   },
-
 
   updateInvestmentListTags({ state, commit }, { investmentId, listId, listTags }) {
     let update = {};
@@ -212,8 +276,16 @@ const mutations = {
     Vue.set(state, 'researchGroupsMembers', list)
   },
 
-  ['SET_SELECTED_INVESTMENT_ID'](state, isLoading) {
-    Vue.set(state, 'selectedInvestmentId', isLoading)
+  ['SET_INVESTMENT_PORTFOLIO_COMMENT_AUTHORS'](state, list) {
+    Vue.set(state, 'commentAuthors', list)
+  },
+
+  ['SET_SELECTED_INVESTMENT_ID'](state, id) {
+    Vue.set(state, 'selectedInvestmentId', id)
+  },
+
+  ['SET_SELECTED_LIST_ID'](state, id) {
+    Vue.set(state, 'selectedListId', id);
   },
 
   ['UPDATE_INVESTMENT_MEMO'](state, { investmentId, memo }) {

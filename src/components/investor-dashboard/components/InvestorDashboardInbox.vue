@@ -3,7 +3,7 @@
     <v-layout column>
       <div class="title bold">My Inbox</div>
 
-      <v-layout column v-if="investments.length">
+      <v-layout column v-if="recentNotifications.length">
         <v-layout row align-end fill-height class="py-3"> 
           <v-flex xl1 lg1 md1 sm4 xs4>
             <v-checkbox
@@ -13,7 +13,7 @@
             </v-checkbox>
           </v-flex>
           <v-flex xl8 lg8 md8 sm8 xs8>
-            <div class="subheading half-bold">Recent updates: {{investments.length}}</div>
+            <div class="subheading half-bold">Recent updates: {{recentNotifications.length}}</div>
           </v-flex>
           <v-flex xl3 lg3 md3 sm12 xs12>
             <v-select
@@ -29,7 +29,7 @@
           </v-flex>
         </v-layout>
         <v-layout column>
-          <v-card @click="selectInvestment(investment)" v-for="(investment, i) in investments" :key="'investment-' + i" class="pa-2 investment-item" :class="{'selected': investment === selectedInvestment}">
+          <v-card @click="selectInvestment(investment)" v-for="(investment, i) in recentNotifications" :key="'investment-' + i" class="pa-2 investment-item" :class="{'selected': investment === selectedInvestment}">
             <v-layout row wrap align-baseline>
               <v-flex xs1 align-self-center>
                 <v-checkbox
@@ -48,18 +48,18 @@
                 </router-link>
               </v-flex>
               <v-flex class="text-xs-right">
-                <v-chip small v-for="(tag, j) in investment.portfolioRef.tags" :key="'investment-'+ i + '-tag'+ j" class="ma-0 ml-1 investment-tag caption" :color="tag.color" text-color="black">{{tag.name}}</v-chip>
+                <v-chip small v-for="(tag, j) in investment.portfolioRef.tags" :key="'investment-'+ i + '-tag-'+ j" class="ma-0 ml-1 investment-tag caption" :color="tag.color" text-color="black">{{tag.name}}</v-chip>
               </v-flex>
             </v-layout>
           </v-card>
         </v-layout>
       </v-layout>
 
-      <v-layout column class="pt-5" v-if="outdatedNotifications.length">
+      <v-layout column class="pt-5" v-if="overdueNotifications.length">
         <v-layout row align-end fill-height class="py-3"> 
-          <div class="subheading half-bold">Overdue notifications: {{outdatedNotifications.length}}</div>
+          <div class="subheading half-bold">Overdue notifications: {{overdueNotifications.length}}</div>
         </v-layout>
-        <v-card class="pa-2 investment-item" v-for="(investment, i) in outdatedNotifications" :key="'investment-' + i">
+        <v-card v-for="(investment, i) in overdueNotifications" :key="'overdue-investment-' + i" class="pa-2 investment-item">
           <v-layout row wrap align-baseline>
             <v-flex xs1 align-self-center>
               <v-checkbox
@@ -67,18 +67,24 @@
                 hide-details>
               </v-checkbox>
             </v-flex>
-            <v-flex>
-              <router-link class="a" :to="{ name: 'Default' }">
-                {{investment.title}}
+            <v-flex xs6 class="ellipsis">
+              <router-link class="a" :to="{ 
+                name: 'ResearchDetails', 
+                params: {
+                  research_group_permlink: encodeURIComponent(investment.group.permlink),
+                  research_permlink: encodeURIComponent(investment.research.permlink)
+                }}">
+                {{investment.research.title}}
               </router-link>
             </v-flex>
             <v-flex class="text-xs-right">
-              <v-chip small v-for="(tag, j) in investment.tags" :key="'investment-'+ i + '-tag'+ j" class="ma-0 ml-1 investment-tag caption" :color="tag.color" text-color="black">{{tag.name}}</v-chip>
+              <v-chip small v-for="(tag, j) in investment.portfolioRef.tags" :key="'overdue-investment-'+ i + '-tag-'+ j" class="ma-0 ml-1 investment-tag caption" :color="tag.color" text-color="black">{{tag.name}}</v-chip>
             </v-flex>
           </v-layout>
         </v-card>
       </v-layout>
-      
+
+      <v-layout column class="pt-5 subheading" v-if="noResult">There are no items for selected list</v-layout>
     </v-layout>
   </v-layout>
 </template>
@@ -93,35 +99,19 @@
       ...mapGetters({
         user: "auth/user",
         investmentPortfolio: "investorDashboard/investmentPortfolio",
-        investments: "investorDashboard/investments",
-        selectedInvestment: "investorDashboard/selectedInvestment"
+        recentNotifications: "investorDashboard/investments",
+        selectedInvestment: "investorDashboard/selectedInvestment",
+        selectedList: "investorDashboard/selectedList",
+        overdueNotifications: "investorDashboard/overdueNotifications",
+        noResult: "investorDashboard/noResult"
       })
     },
+
     data() {
       return {
         allRecentSelected: false,
         sortingOptions: [{title: "All", id: 1}],
-        sort: 1,
-
-        newNotifications: [
-          { title: "Integrated mobility network", tags: [{ name: "Sponsored", color: "#CCE0CC"}, { name: "Reviewed", color: "#fdd4ca"}]},
-          { title: "IT Asset Disposal & Recycling", tags: [{ name: "A. Lawren", color: "#8babfd"}]},
-          { title: "Virtual	programmable compiler distributed	system", tags: [{ name: "Sponsored", color: "#CCE0CC"}, { name: "Reviewed", color: "#fdd4ca"}]},
-          { title: "Responsive logical interface synchronized	digital	protocol", tags: [{ name: "Comp. Sc.", color: "#cfa5b9"} ]},
-          { title: "Meta-level multimedia	algorithm", tags: [{ name: "Sponsored", color: "#CCE0CC"}, { name: "Reviewed", color: "#fdd4ca"}]},
-          { title: "Parameterized	secure technology	language solution...", tags: [{ name: "Quant. op", color: "#c4dff8"} ]},
-          { title: "Coordinated	bioinformatic	hypervisor", tags: [{ name: "Comp. Sc.", color: "#cfa5b9"} ]},
-          { title: "Reliable cloud-based network", tags: [{ name: "Quant. op", color: "#c4dff8"} ]},
-          { title: "Reliable cloud-based network", tags: [{ name: "Wait Review", color: "#f6e1a3"}, { name: "A. Lawren", color: "#91aefd"} ]}
-        ],
-
-        outdatedNotifications: [
-          { title: "Integrated mobility	network", tags: [{ name: "Sponsored", color: "#CCE0CC"}, { name: "Reviewed", color: "#fdd4ca"}]},
-          { title: "Parallel functional	preprocessor", tags: [{ name: "A. Lawren", color: "#8babfd"}]},
-          { title: "Virtual	programmable compiler distributed	system", tags: [{ name: "Sponsored", color: "#CCE0CC"}, { name: "Reviewed", color: "#fdd4ca"}]},
-          { title: "Meta-level multimedia	algorithm", tags: [{ name: "Sponsored", color: "#CCE0CC"}, { name: "Reviewed", color: "#fdd4ca"}]},
-          { title: "Parameterized	secure technology	language solution...", tags: [{ name: "Quant. op", color: "#c4dff8"} ]}
-        ]
+        sort: 1
       }
     },
 
@@ -139,13 +129,13 @@
 
  .investment-item {
    border-left: 4px solid var(--v-primary-darken1);
-   cursor: pointer;
+   cursor: pointer !important;
 
   .investment-tag {
     text-transform: uppercase;
   }
 
-  &:hover{
+  &:hover {
     background-color: var(--v-secondary-lighten2);
   }
   

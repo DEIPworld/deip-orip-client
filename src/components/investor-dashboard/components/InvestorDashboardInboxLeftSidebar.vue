@@ -2,17 +2,20 @@
   <v-card height="100%">
     <v-layout row wrap style="flex: 0 0 auto;" class="full-width">
       
-      <v-layout column class="pa-4 full-width">
-        <div class="subheading half-bold pb-2">My Lists</div>
-        <v-layout v-for="(list, i) in investmentPortfolio.lists" :key="'list-' + i" row justify-space-between class="py-1">
-          <span style="text-transform: capitalize;"><span class="dot mr-1" :style="{ 'background-color': list.color }"></span>{{list.name}}</span>
-          <span>{{list.researches.length}}</span>
+      <v-layout column class="py-4 full-width">
+        <div class="subheading half-bold pb-2 px-4">My Lists</div>
+        <v-layout row v-for="(list, i) in lists" @click="selectList(list)" :key="'list-' + i" class="list py-1" :class="{'selected': list === selectedList}">
+          <v-layout row justify-space-between class="px-4">
+            <span><span class="dot mr-1" :style="{ 'background-color': list.color }"></span>{{list.name}}</span>
+            <span>{{ list.listResearchesIds.length }}</span>
+          </v-layout>
         </v-layout>
-        <v-btn @click="openNewListDialog()" round outline block large color="primary" class="new-list py-1 mt-3">
-          <v-icon small left>add</v-icon>
-          Add new list
-        </v-btn>
-
+        <div class="mt-2 px-4">
+          <v-btn @click="openNewListDialog()" round outline block large color="primary" class="new-list-btn mx-0 my-2">
+            <v-icon small left>add</v-icon>
+            Add new list
+          </v-btn>
+        </div>
         <v-dialog v-model="newList.isOpened" max-width="500px">
           <v-card>
             <v-card-title>
@@ -67,6 +70,8 @@
       ...mapGetters({
         user: "auth/user",
         investmentPortfolio: "investorDashboard/investmentPortfolio",
+        lists: "investorDashboard/lists",
+        selectedList: "investorDashboard/selectedList"
       }),
       isSavingNewListDisabled() {
         return !this.newList.color || !this.newList.name;
@@ -81,15 +86,6 @@
           isOpened: false,
           isSaving: false
         },
-
-        lists: [
-          { name: "CO2", count: 8, color: "#9ec69f" },
-          { name: "Plastic for review", count: 1, color: "#f2c94c" },
-          { name: "Organic", count: 8, color: "#ffaf9a" },
-          { name: "Textiles", count: 2, color: "#a35078" },
-          { name: "Meds", count: 3, color: "#8fc3f7" },
-          { name: "Chem", count: 2, color: "#2962ff" }
-        ],
 
         savedSearchList: [
           { name: "Belarus", query: "" },
@@ -112,6 +108,10 @@
     },
 
     methods: {
+      selectList(list) {
+        this.$store.dispatch('investorDashboard/selectList', list.id);
+      },
+
       openNewListDialog() {
         this.newList.color = "";
         this.newList.name = "";
@@ -147,8 +147,20 @@
   display: inline-block;
 }
 
-.new-list {
+.new-list-btn {
   text-transform: none;
+  max-height: 30px;
+}
+
+.list {
+  cursor: pointer !important;
+
+  &:hover{
+    background-color: var(--v-secondary-lighten2);
+  }
+  &.selected {
+    background-color: var(--v-primary-lighten5);
+  }
 }
 
 </style>

@@ -148,9 +148,9 @@
         <v-divider class="mt-2"></v-divider>
       </v-layout>
 
-      <v-layout column class="px-4 full-width">
+      <v-layout v-if="selectedInvestment.research.comments.length" column class="px-4 full-width">
         <div class="subheading half-bold py-2">Comments</div>
-        <div v-for="(comment, i) in investment.comments" :key="'investment-comment-'+ i">
+        <div v-for="(comment, i) in selectedInvestment.research.comments" :key="'investment-comment-'+ i" class="py-1">
           <v-layout row wrap align-baseline>
             <platform-avatar :size="40" :user="comment.author" class="pr-1" ></platform-avatar>
             <span class="body-2 px-2">{{comment.author | fullname}}</span>
@@ -253,38 +253,12 @@
       return {
         isEditingMemo: false,
         memo: "",
-
         updateTagsDialog: {
           list: null,
           tagNames: [],
 
           isOpened: false,
           isSaving: false
-        },
-        
-        investment: {
-          title: "IT Asset Disposal & Recycling",
-          created_at: moment().toDate(),
-          currenStep: {
-            title: "Building Facilities",
-            deadline: "Deadline overdue - 3 weeks",
-            description: "Intrinsicly seize resource-leveling infrastructures via prospective human capital. Efficiently aggregate quality users and revolutionary paradigms. Rapidiously aggregate reliable services through functional outsourcing. Completely reinvent B2B convergence before market-driven web-readiness. Uniquely seize principle-centered portals before visionary human capital."
-          },
-
-          team: [
-            { account: {name: "alice"} },
-            { account: {name: "bob"} },
-            { account: {name: "james"} }
-          ],
-
-          memo: "Intrinsicly seize resource-leveling infrastructures via prospective human capital. Efficiently aggregate quality users and revolutionary paradigms. Rapidiously aggregate reliable services through functional outsourcing. Completely reinvent B2B convergence before market-driven web-readiness. Uniquely seize principle-centered portals before visionary human capital.",
-          tags: [{ name: "Sponsored", color: "#CCE0CC"}, { name: "Reviewed", color: "#fdd4ca"}],
-
-          comments: [{ 
-            author: { account: {name: "alice"} }, 
-            text: "I think we can watch the development of the research for a little while",
-            timestamp: moment().toDate()
-          }]
         }
       }
     },
@@ -338,7 +312,9 @@
     },
     watch: {
       selectedInvestment(newVal, oldVal) {
-        this.memo = newVal.portfolioRef.memo;
+        if (this.selectedInvestment) {
+          this.memo = newVal.portfolioRef.memo;
+        }
       },
       'updateTagsDialog.list': function(newVal, oldVal) {
         let currentTags = this.selectedInvestment.portfolioRef.tags;
@@ -347,7 +323,9 @@
       }
     },
     mounted() {
-      this.memo = this.selectedInvestment.portfolioRef.memo;
+      if (this.selectedInvestment) {
+        this.memo = this.selectedInvestment.portfolioRef.memo;
+      }
     }
   }
 </script>
