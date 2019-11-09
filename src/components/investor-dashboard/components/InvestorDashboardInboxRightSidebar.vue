@@ -232,10 +232,14 @@
       updateMemo() {
         let investmentId = this.selectedInvestment.research.id;
         let memo = this.memo;
-        this.$store.dispatch('investorDashboard/updateInvestmentMemo', { investmentId, memo })
-          .finally(() => {
-            this.isEditingMemo = false;
-          })
+        if (memo != this.selectedInvestment.portfolioRef.memo) {
+          this.$store.dispatch('investorDashboard/updateInvestmentMemo', { investmentId, memo })
+            .finally(() => {
+              this.isEditingMemo = false;
+            })
+        } else {
+          this.isEditingMemo = false;
+        }
       }
     },
     watch: {

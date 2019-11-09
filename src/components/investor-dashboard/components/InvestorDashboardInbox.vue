@@ -89,7 +89,14 @@
 
   export default {
     name: 'InvestorDashboardInbox',
-
+    computed: {
+      ...mapGetters({
+        user: "auth/user",
+        investmentPortfolio: "investorDashboard/investmentPortfolio",
+        investments: "investorDashboard/investments",
+        selectedInvestment: "investorDashboard/selectedInvestment"
+      })
+    },
     data() {
       return {
         allRecentSelected: false,
@@ -116,14 +123,6 @@
           { title: "Parameterized	secure technology	language solution...", tags: [{ name: "Quant. op", color: "#c4dff8"} ]}
         ]
       }
-    },
-    computed: {
-      ...mapGetters({
-        user: "auth/user",
-        investmentPortfolio: "investorDashboard/investmentPortfolio",
-        investments: "investorDashboard/investments",
-        selectedInvestment: "investorDashboard/selectedInvestment"
-      })
     },
 
     methods: {

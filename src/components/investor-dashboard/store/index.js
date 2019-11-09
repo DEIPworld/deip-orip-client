@@ -144,6 +144,18 @@ const actions = {
         debugger;
         commit('UPDATE_INVESTMENT_MEMO', { investmentId, memo });
       })
+  },
+
+  addNewInvestmentList({ state, commit }, { name, color }) {
+    let update = {};
+    debugger;
+    let lists = [...state.investmentPortfolio.lists, { name, color, researches: [] }];
+    Object.assign(update, state.investmentPortfolio, { lists: lists });
+    return investmentPortfolioService.updateInvestmentPortfolio(state.investmentPortfolio._id, update)
+      .then((updated) => {
+        debugger
+        commit('ADD_NEW_INVESTMENT_LIST', { name, color });
+      })
   }
 }
 
@@ -190,6 +202,10 @@ const mutations = {
     let investment = state.investmentPortfolio.researches.find(r => r.id == investmentId);
     Vue.set(investment, 'memo', memo);
   },
+
+  ['ADD_NEW_INVESTMENT_LIST'](state, { name, color }) {
+    state.investmentPortfolio.lists.push({ name, color, researches: [] });
+  }
 }
 
 const namespaced = true;
