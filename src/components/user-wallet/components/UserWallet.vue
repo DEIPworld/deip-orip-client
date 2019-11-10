@@ -1,7 +1,7 @@
 <template>
   <base-page-layout>
-    <v-container slot="content" fluid fill-height class="full-width full-height ma-0 pa-0">
-      <v-card class="full-width pa-5">
+    <!-- <v-container slot="content" fluid fill-height class="full-width full-height ma-0 pa-0"> -->
+      <v-card slot="content" class="full-height full-width pa-5">
         <v-layout column>
           <v-layout align-center>
             <v-flex lg1>
@@ -283,7 +283,7 @@
         </v-dialog>
 
       </v-card>
-    </v-container>
+    <!-- </v-container> -->
   </base-page-layout>
 </template>
 
