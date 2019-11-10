@@ -61,14 +61,14 @@
                                 <span></span>
                               </v-layout>
                               <v-layout row justify-space-between py-1 class="column-text-item">
-                                <span>Portfolio</span>
-                                <span></span>
+                                <router-link :to="{ name: 'InvestorDashboard', params: {}}"> 
+                                  <span>My Portfolio</span>
+                                </router-link>
+                                <span><v-chip class="ma-0" color="#826AF9" text-color="white">{{investments.length}}</v-chip></span>
                               </v-layout>
                               <v-layout row justify-space-between py-1 class="column-text-item">
-                                <router-link :to="{ name: 'InvestorDashboard', params: {}}"> 
-                                  <span>My deals</span>
-                                </router-link>
-                                <span><v-chip class="ma-0" color="#826AF9" text-color="white">{{deals.length}}</v-chip></span>
+                                <span>My deals</span>
+                                <span><v-chip class="ma-0" color="#826AF9" text-color="white">3</v-chip></span>
                               </v-layout>
                               <v-layout row justify-space-between py-1 class="column-text-item">
                                 <span>Explore investment opportunities</span>
@@ -261,7 +261,7 @@ export default {
       user: "auth/user",
       researches: "dashboard/researches",
       currentShares: "dashboard/currentShares",
-      deals: "dashboard/deals"
+      investments: "dashboard/investments"
     }),
 
     hasResearchShares() {

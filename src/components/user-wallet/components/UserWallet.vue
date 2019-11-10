@@ -30,7 +30,7 @@
                 </v-layout>
               </v-flex>
               <v-flex lg5 class="bold subheading">EUR</v-flex>
-              <v-flex lg5 class="bold subheading">{{(fromAssetsToFloat(user.account.balance) * 1.10) | currency({ symbol: '€' }) }}</v-flex>
+              <v-flex lg5 class="bold subheading">{{(getAvailableCurrencyAmount('eur')) | currency({ symbol: '€' }) }}</v-flex>
               <v-flex lg1 class="pl-3">
                 <v-icon color="grey" class="balance-table__action">more_vert</v-icon>
               </v-flex>
@@ -42,7 +42,7 @@
                 </v-layout>
               </v-flex>
               <v-flex lg5 class="bold subheading">USD</v-flex>
-              <v-flex lg5 class="bold subheading">{{fromAssetsToFloat(user.account.balance) | currency}}</v-flex>
+              <v-flex lg5 class="bold subheading">{{getAvailableCurrencyAmount('usd') | currency}}</v-flex>
               <v-flex lg1 class="pl-3">
                 <v-icon class="balance-table__action" color="grey">more_vert</v-icon>
               </v-flex>
@@ -167,6 +167,120 @@
         </v-card>
       </v-dialog>
 
+      <v-dialog v-model="depositDialog.isOpened" persistent max-width="500px">
+        <v-card class="px-5 py-2">
+          <v-card-title class="">
+            <span class="headline">Deposit</span>
+          </v-card-title>
+          <!-- <v-card-text> -->
+            <v-layout row wrap>
+              <v-flex xs12>
+                <v-layout column class="full-width">
+                  <v-radio-group v-model="depositDialog.selectedCurrency" class="currency-picker full-width align-center  ma-0 pa-0">
+                    <v-radio
+                      v-for="currencyType in currencyTypes"
+                      :value="currencyType.id"
+                      :key="currencyType.id"
+                      class="currency-item row justify-space-between ma-0 pa-4 full-width"
+                      color="grey darken-1"
+                      style="flex-direction: row-reverse"
+                    >
+                      <template slot="label">
+                        <v-layout row justify-space-between align-center class="full-width px-2">
+                          <div class="bold">
+                            <v-layout column justify-center align-center>
+                              <img width="50px: height: 50px" :src="`../../../../static/currency/${currencyType.id}.png`"/>
+                              <span class="pt-2 black--text">{{currencyType.title}}</span>
+                            </v-layout>
+                          </div>
+                          <div>
+                            <div class="black--text half-bold">{{ getAvailableCurrencyAmount(currencyType.id) | currency({ symbol: currencyType.symbol }) }}</div>
+                          </div>
+                        </v-layout>
+                      </template>
+                    </v-radio>
+                  </v-radio-group>
+                </v-layout>
+              </v-flex>
+              <v-flex xs12>
+                <v-text-field 
+                  class=""
+                  label="Amount" 
+                  v-model="depositDialog.amount">
+                </v-text-field>
+              </v-flex>
+            </v-layout>
+          <!-- </v-card-text> -->
+          <v-card-actions>
+            <v-layout row wrap>
+              <v-flex xs12 class="py-2">
+                <v-btn @click="deposit()" color="primary" block :disabled="isDepositingDisabled || depositDialog.isDepositing" :loading="depositDialog.isDepositing">Deposit</v-btn>
+              </v-flex>
+              <v-flex xs12 class="py-2">
+                <v-btn @click="closeDepositDialog()" color="primary" block flat>Cancel</v-btn>
+              </v-flex>
+            </v-layout>
+          </v-card-actions>
+        </v-card>
+      </v-dialog>
+
+      <v-dialog v-model="withdrawDialog.isOpened" persistent max-width="500px">
+        <v-card class="px-5 py-2">
+          <v-card-title class="">
+            <span class="headline">Withdraw</span>
+          </v-card-title>
+          <!-- <v-card-text> -->
+            <v-layout row wrap>
+              <v-flex xs12>
+                <v-layout column class="full-width">
+                  <v-radio-group v-model="withdrawDialog.selectedCurrency" class="currency-picker full-width align-center  ma-0 pa-0">
+                    <v-radio
+                      v-for="currencyType in currencyTypes"
+                      :value="currencyType.id"
+                      :key="currencyType.id"
+                      class="currency-item row justify-space-between ma-0 pa-4 full-width"
+                      color="grey darken-1"
+                      style="flex-direction: row-reverse"
+                    >
+                      <template slot="label">
+                        <v-layout row justify-space-between align-center class="full-width px-2">
+                          <div class="bold">
+                            <v-layout column justify-center align-center>
+                              <img width="50px: height: 50px" :src="`../../../../static/currency/${currencyType.id}.png`"/>
+                              <span class="pt-2 black--text">{{currencyType.title}}</span>
+                            </v-layout>
+                          </div>
+                          <div>
+                            <div class="black--text half-bold">{{ getAvailableCurrencyAmount(currencyType.id) | currency({ symbol: currencyType.symbol }) }}</div>
+                          </div>
+                        </v-layout>
+                      </template>
+                    </v-radio>
+                  </v-radio-group>
+                </v-layout>
+              </v-flex>
+              <v-flex xs12>
+                <v-text-field 
+                  class=""
+                  label="Amount" 
+                  v-model="withdrawDialog.amount">
+                </v-text-field>
+              </v-flex>
+            </v-layout>
+          <!-- </v-card-text> -->
+          <v-card-actions>
+            <v-layout row wrap>
+              <v-flex xs12 class="py-2">
+                <v-btn @click="withdraw()" color="primary" block :disabled="isWithdrawDisabled || withdrawDialog.isWithdrawing" :loading="withdrawDialog.isWithdrawing">Withdraw</v-btn>
+              </v-flex>
+              <v-flex xs12 class="py-2">
+                <v-btn @click="closeWithdrawDialog()" color="primary" block flat>Cancel</v-btn>
+              </v-flex>
+            </v-layout>
+          </v-card-actions>
+        </v-card>
+      </v-dialog>
+
     </v-card>
   </base-page-layout>
 </template>
@@ -175,6 +289,11 @@
   import { mapGetters } from 'vuex';
   import moment from 'moment';
   import * as bankCardsStorage from './../../../utils/bankCard';
+
+  const currencyTypes = {
+    eur: { id: "eur", title: "EUR", symbol: "€" },
+    usd: { id: "usd", title: "USD", symbol: "$" }
+  }
 
   export default {
     name: "UserWallet",
@@ -198,15 +317,19 @@
         },
 
         withdrawDialog: {
+          amount: 0,
+          selectedCurrency: currencyTypes.usd.id,
           isOpened: false,
           isWithdrawing: false
         },
 
         depositDialog: {
+          amount: 0,
+          selectedCurrency: currencyTypes.usd.id,
           isOpened: false,
           isDepositing: false
-        }
-
+        },
+        currencyTypes: Object.values(currencyTypes)
       }
     },
 
@@ -224,6 +347,14 @@
         || !this.addBankCardDialog.data.security 
         || this.addBankCardDialog.data.security < 3
         || !this.addBankCardDialog.termsConfirmed;
+      },
+
+      isWithdrawDisabled() {
+        return !this.withdrawDialog.amount;
+      },
+
+      isDepositingDisabled() {
+        return !this.depositDialog.amount;
       },
 
       shareHoldersChart() {
@@ -312,22 +443,34 @@
         }
       },
 
-      openWithdrawDialog() {
-        if (bankCardsStorage.hasInvestorBankCard()) {
-          this.withdrawDialog = true;
-        } else {
-          this.openAddBankCardDialog();
-        }
-      },
-
       openDepositDialog() {
         if (bankCardsStorage.hasInvestorBankCard()) {
-          this.depositDialog = true;
+          this.depositDialog.amount = 0;
+          this.depositDialog.selectedCurrency = currencyTypes.usd.id;
+          this.depositDialog.isOpened = true;
         } else {
           this.openAddBankCardDialog();
         }
       },
 
+      closeDepositDialog() {
+        this.depositDialog.isOpened = false;
+      },
+
+      openWithdrawDialog() {
+        if (bankCardsStorage.hasInvestorBankCard()) {
+          this.withdrawDialog.amount = 0;
+          this.withdrawDialog.selectedCurrency = currencyTypes.usd.id;
+          this.withdrawDialog.isOpened = true;
+        } else {
+          this.openAddBankCardDialog();
+        }
+      },
+
+      closeWithdrawDialog() {
+        this.withdrawDialog.isOpened = false;
+      },
+      
       openAddBankCardDialog() {
         this.addBankCardDialog.data.name = "";
         this.addBankCardDialog.data.cardNumber = "";
@@ -351,9 +494,35 @@
         }, 1000);
       },
 
+      deposit() {
+        this.depositDialog.isDepositing = true;
+        setTimeout(() => {
+          this.$store.dispatch('layout/setSuccess', { message: "Funds have been deposited successfully!"});
+          this.depositDialog.isDepositing = false;
+          this.depositDialog.isOpened = false;
+        }, 1000);
+      },
+
+      withdraw() {
+        this.withdrawDialog.isWithdrawing = true;
+        setTimeout(() => {
+          this.$store.dispatch('layout/setSuccess', { message: "Funds have been withdrawn successfully!"});
+          this.withdrawDialog.isWithdrawing = false;
+          this.withdrawDialog.isOpened = false;
+        }, 1000);
+      },
+      
       creditInfoChanged(values) {
         for (const key in values) {
             this.addBankCardDialog.data[key] = values[key];
+        }
+      },
+
+      getAvailableCurrencyAmount(currencyId) {
+        if (currencyTypes.eur.id == currencyId) {
+          return this.fromAssetsToFloat(this.user.account.balance) * 1.10;
+        } else if (currencyTypes.usd.id == currencyId) {
+          return this.fromAssetsToFloat(this.user.account.balance)
         }
       },
 

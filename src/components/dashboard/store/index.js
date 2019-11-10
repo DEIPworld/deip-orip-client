@@ -39,7 +39,7 @@ const getters = {
 		return unique;
 	},
 
-	deals: (state) => {
+	investments: (state) => {
 		return state.investedResearchesList;
 	},
 

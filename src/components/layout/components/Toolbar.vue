@@ -41,13 +41,17 @@
                         <v-list-tile-title>Wallet</v-list-tile-title>
                     </v-list-tile>
 
-                    <v-list-tile :to="{ name: 'ClaimUserExpertiseList' }">
-                        <v-list-tile-title>Expertise Committee</v-list-tile-title>
+                    <v-list-tile :to="{ name: 'InvestorDashboard' }">
+                        <v-list-tile-title>Portfolio</v-list-tile-title>
                     </v-list-tile>
 
-                    <v-list-tile :to="{ name: 'VotingForBlockProducers' }">
+                    <!-- <v-list-tile :to="{ name: 'ClaimUserExpertiseList' }">
+                        <v-list-tile-title>Expertise Committee</v-list-tile-title>
+                    </v-list-tile> -->
+
+                    <!-- <v-list-tile :to="{ name: 'VotingForBlockProducers' }">
                         <v-list-tile-title>Voting for block producers</v-list-tile-title>
-                    </v-list-tile>
+                    </v-list-tile> -->
                     
                     
                 <!-- <v-list-tile v-if="user" :to="{ name: 'CreateDisciplineGrant' }">
