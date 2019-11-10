@@ -1,99 +1,113 @@
-import _ from 'lodash';
-import deipRpc from '@deip/deip-oa-rpc-client';
 import Vue from 'vue';
+import deipRpc from '@deip/deip-oa-rpc-client';
+import * as usersService from './../../../utils/user';
 
 const state = {
-    account: undefined,
-    researches: [],
-    transfers: []
+  researches: [],
+  transfers: [],
+  researchTokens: [],
+  researchTokensHolders: [],
+  researchGroups: []
 };
 
 // getters
 const getters = {
-    account: state => state.account,
-    researches: state => state.researches,
-    transfers: state => state.transfers
+  investments: (state, getters, rootState, rootGetters) => {
+    return state.researches.map(research => {
+      let user = rootGetters['auth/user'];
+      let myShare = state.researchTokens.find(rt => rt.account_name == user.account.name && rt.research_id == research.id);
+      let researchShares = state.researchTokens.filter(rt => rt.research_id == research.id);
+      let researchSharesHolders = state.researchTokensHolders.filter(user => researchShares.some(rt => rt.account_name == user.account.name));
+      let group = state.researchGroups.find(group => group.id == research.research_group_id);
+
+      let shareHolders = researchSharesHolders.map((shareHolder) => {
+        let share = researchShares.find(rt => rt.account_name == shareHolder.account.name);
+        return { ...shareHolder, share };
+      });
+      
+      return { research, group, myShare, shareHolders };
+    })
+  },
+
+  transfers: state => state.transfers
 };
 
 // actions
 const actions = {
-    loadWallet({ dispatch }, { username }) {
-        return Promise.all([
-            dispatch('loadUser', username),
-            dispatch('loadResearchTokens', username),
-            dispatch('loadTransfers', username)
-        ]);
-    },
+  loadWallet({ dispatch, rootGetters }) {
+    let user = rootGetters['auth/user'];
+    let username = user.account.name;
+    return Promise.all([
+      dispatch('loadResearchTokens', username),
+      dispatch('loadTransfers', username)
+    ]);
+  },
 
-    loadUser({ commit }, accountName) {
-        return deipRpc.api.getAccountsAsync([accountName])
-            .then(data => {
-                commit('SET_ACCOUNT', data[0]);
+  loadResearchTokens({ state, commit }, username) {
+    return deipRpc.api.getResearchTokensByAccountNameAsync(username)
+      .then(myResearchTokens => {
+        return Promise.all(myResearchTokens.map(rt => deipRpc.api.getResearchByIdAsync(rt.research_id)));
+      })
+      .then(researches => {
+        commit('SET_RESEARCHES', researches);
+        return Promise.all(researches.map(research => deipRpc.api.getResearchTokensByResearchIdAsync(research.id)));
+      })
+      .then(result => { // all share holders
+        const researchTokens = [].concat.apply([], result);
+        commit('SET_RESEARCH_TOKENS', researchTokens);
 
-                return data[0];
-            });
-    },
+        const distinct = researchTokens.reduce((unique, share) => {
+          if (unique.some(user => share.account_name == user)) return unique;
+          return [share.account_name, ...unique];
+        }, []);
+        return usersService.getEnrichedProfiles(distinct);
+      })
+      .then(researchTokensHolders => {
+        commit('SET_RESEARCH_TOKENS_HOLDERS', researchTokensHolders);
+        return Promise.all(state.researches.map(research => deipRpc.api.getResearchGroupByIdAsync(research.research_group_id)));
+      })
+      .then(groups => {
+        commit('SET_RESEARCH_GROUPS', groups);
+      });
+  },
 
-    loadResearchTokens({ commit }, accountName) {
-        let userResearches = [];
-        let researchTokens = [];
-
-        return deipRpc.api.getResearchTokensByAccountNameAsync(accountName)
-            .then(tokens => {
-                researchTokens = tokens;
-
-                return Promise.all(
-                    researchTokens.map(researchToken => deipRpc.api.getResearchByIdAsync(researchToken.research_id))
-                );
-            }).then(researches => {
-                let promises = [];
-                userResearches = researches;
-
-                userResearches.forEach((research, i) => {
-                    research.researchToken = researchTokens[i];
-                    
-                    promises.push(
-                        deipRpc.api.getResearchGroupTokensByResearchGroupAsync(research.research_group_id)
-                    );
-                });
-
-                return Promise.all(promises);
-            }).then(groupsTokensArray => {
-                userResearches.forEach((research, i) => { research.groupTokens = groupsTokensArray[i] });
-
-                commit('SET_RESEARCHES', userResearches);
-            });
-    },
-
-    loadTransfers({ commit }, accountName) {
-        return deipRpc.api.getAccountDeipToDeipTransfersAsync(accountName, -1, 30)
-            .then(transfers => {
-                commit('SET_TRANSFERS', transfers.reverse());
-            });
-    }
+  loadTransfers({ commit }, username) {
+    return deipRpc.api.getAccountDeipToDeipTransfersAsync(username, -1, 30)
+      .then(transfers => {
+        commit('SET_TRANSFERS', transfers.reverse());
+      });
+  }
 };
 
 // mutations
 const mutations = {
-    ['SET_ACCOUNT'](state, account) {
-        Vue.set(state, 'account', account);
-    },
+  ['SET_RESEARCHES'](state, list) {
+    Vue.set(state, 'researches', list);
+  },
 
-    ['SET_RESEARCHES'](state, researches) {
-        Vue.set(state, 'researches', researches);
-    },
+  ['SET_RESEARCH_TOKENS'](state, list) {
+    Vue.set(state, 'researchTokens', list);
+  },
 
-    ['SET_TRANSFERS'](state, transfers) {
-        Vue.set(state, 'transfers', transfers);
-    }
+  ['SET_RESEARCH_TOKENS_HOLDERS'](state, list) {
+    Vue.set(state, 'researchTokensHolders', list);
+  },
+
+  ['SET_TRANSFERS'](state, list) {
+    Vue.set(state, 'transfers', list);
+  },
+
+  ['SET_RESEARCH_GROUPS'](state, list) {
+    Vue.set(state, 'researchGroups', list);
+  }
 };
 
 const namespaced = true;
 
 export default {
-    namespaced,
-    state,
-    getters,
-    actions,
-    mutations
+  namespaced,
+  state,
+  getters,
+  actions,
+  mutations
 };

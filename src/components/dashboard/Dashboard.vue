@@ -298,26 +298,33 @@ export default {
 
     totalAssetsPriceChart() {
 
-      let mockPrice = ({ share, research }, i, offset) => {
-        let val = (share.amount / 10) * (research.id || 1);
-        val = val + (i % 2 == 0 ? -(offset * 100) : offset * 200);
-        return val > 0 ? val : 100;
+      let mockTokensPrice = (rtId, amount) => {
+        let pricePerToken = Math.pow(rtId || 2, 2);
+        return amount * pricePerToken;
+      }
+
+      let mockPrice = ({ research, share }, i, offset) => {
+        let factor1 = (offset || 1) % 2 == 0;
+        let factor2 = (research.id || 1) % 2 == 0;
+        let currentPricePerToken = mockTokensPrice(research.id, 1);
+        let previousPricePerToken = currentPricePerToken - (factor1 ? currentPricePerToken * (factor2 ? 0.2 : 0.1) : currentPricePerToken * (factor2 ? 0.1 : 0.2)) - offset * 0.9;
+        return previousPricePerToken > 0 ? previousPricePerToken : 1;
       };
 
       return {
         data: [
          ['Date', ...this.currentShares.map(({ research }) => `Asset ${research.id}`)],
-         [moment().day(-10).toDate(), ...this.currentShares.map((s, i) => mockPrice(s, i, 1))],
-         [moment().day(-9).toDate(), ...this.currentShares.map((s, i) => mockPrice(s, i, 2))],
-         [moment().day(-8).toDate(), ...this.currentShares.map((s, i) => mockPrice(s, i, 3))],
-         [moment().day(-7).toDate(), ...this.currentShares.map((s, i) => mockPrice(s, i, 4))],
-         [moment().day(-6).toDate(), ...this.currentShares.map((s, i) => mockPrice(s, i, 5))],
-         [moment().day(-5).toDate(), ...this.currentShares.map((s, i) => mockPrice(s, i, 6))],
-         [moment().day(-4).toDate(), ...this.currentShares.map((s, i) => mockPrice(s, i, 7))],
-         [moment().day(-3).toDate(), ...this.currentShares.map((s, i) => mockPrice(s, i, 8))],
-         [moment().day(-2).toDate(), ...this.currentShares.map((s, i) => mockPrice(s, i, 9))],
-         [moment().day(-1).toDate(), ...this.currentShares.map((s, i) => mockPrice(s, i, 10))],
-         [moment().toDate(), ...this.currentShares.map((s, i) => mockPrice(s, i, 11))]
+         [moment().day(-10).toDate(), ...this.currentShares.map((s, i) => mockPrice(s, i, 10))],
+         [moment().day(-9).toDate(),  ...this.currentShares.map((s, i) => mockPrice(s, i, 9)) ],
+         [moment().day(-8).toDate(),  ...this.currentShares.map((s, i) => mockPrice(s, i, 8)) ],
+         [moment().day(-7).toDate(),  ...this.currentShares.map((s, i) => mockPrice(s, i, 7)) ],
+         [moment().day(-6).toDate(),  ...this.currentShares.map((s, i) => mockPrice(s, i, 6)) ],
+         [moment().day(-5).toDate(),  ...this.currentShares.map((s, i) => mockPrice(s, i, 5)) ],
+         [moment().day(-4).toDate(),  ...this.currentShares.map((s, i) => mockPrice(s, i, 4)) ],
+         [moment().day(-3).toDate(),  ...this.currentShares.map((s, i) => mockPrice(s, i, 3)) ],
+         [moment().day(-2).toDate(),  ...this.currentShares.map((s, i) => mockPrice(s, i, 2)) ],
+         [moment().day(-1).toDate(),  ...this.currentShares.map((s, i) => mockPrice(s, i, 1)) ],
+         [moment().toDate(),          ...this.currentShares.map((s, i) => mockPrice(s, i, 0)) ]
          // [new Date('11/01/19'),  1000,      400,       700      ],
         ],
 

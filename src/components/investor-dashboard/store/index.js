@@ -229,7 +229,6 @@ const actions = {
       })
   },
 
-
   addNewInvestmentList({ state, commit }, { listId, listName, color }) {
     let update = {};
     let lists = [...state.investmentPortfolio.lists, { id: listId, name: listName, color, researches: [] }];

@@ -19,7 +19,7 @@
                             <v-divider></v-divider>
 
                             <div class="list-line"
-                                :class="{ 'blue lighten-5': account && sendingType === sendingTypes.deipToken }"
+                                :class="{ 'blue lighten-5': sendingType === sendingTypes.deipToken }"
                             >
                                 <div class="legacy-col-grow list-body-cell display-flex align-center">
                                     <!-- TODO: make service component which can manage our all SVG items -->
@@ -58,7 +58,7 @@
                             <v-divider></v-divider>
 
                             <div class="list-line"
-                                :class="{ 'blue lighten-5': account && sendingType === sendingTypes.deipCommon }"
+                                :class="{ 'blue lighten-5': sendingType === sendingTypes.deipCommon }"
                             >
                                 <div class="legacy-col-grow list-body-cell display-flex align-center">
                                     <!-- TODO: make service component which can manage our all SVG items -->
@@ -123,32 +123,28 @@
 
                             <v-divider></v-divider>
 
-                            <div class="hidden-last-child" v-if="researches && researches.length">
-                                <template v-for="research in researches">
+                            <div class="hidden-last-child" v-if="investments.length">
+                                <template v-for="(investment, i) in investments">
                                     <div class="list-line"
-                                        :class="{ 
-                                            'blue lighten-5': account 
-                                                && sendingType === sendingTypes.researchToken 
-                                                && selectedResearch 
-                                                && selectedResearch.id === research.id 
-                                        }"
-                                    >
+                                        :class="{ 'blue lighten-5': sendingType === sendingTypes.researchToken && selectedResearch && selectedResearch.id === investment.research.id }"
+                                        :key="'research-'+ i">
+                                        
                                         <div class="legacy-col-grow list-body-cell">
-                                            <div class="deip-blue-color subheading">{{ research.title }}</div>
+                                            <div class="deip-blue-color subheading">{{ investment.research.title }}</div>
                                         </div>
 
                                         <!-- <div class="width-7 list-body-cell text-align-center half-bold">10</div> -->
 
                                         <div class="width-5 list-body-cell text-align-center half-bold">
-                                            {{ convertToPercent(research.researchToken.amount) }}%
+                                            {{ convertToPercent(investment.myShare.amount) }}%
                                         </div>
 
                                         <div class="width-8 list-body-cell text-align-center">
-                                            <v-btn class="ma-0" flat color="primary" @click="selectResearch(research)">Send</v-btn>
+                                            <v-btn class="ma-0" flat color="primary" @click="selectResearch(investment.research)">Send</v-btn>
                                         </div>
                                     </div>
 
-                                    <v-divider></v-divider>
+                                    <v-divider :key="'divider-research-'+ i">></v-divider>
                                 </template>
                             </div>
 
@@ -172,8 +168,8 @@
                             <v-divider></v-divider>
 
                             <div class="hidden-last-child" v-if="transfers.length">
-                                <template v-for="transfer in transfers">
-                                    <div class="list-line">
+                                <template v-for="(transfer, i) in transfers">
+                                    <div class="list-line" :key="'transfer-' + i">
                                         <div class="legacy-col-grow list-body-cell overflow-hidden">
                                             <div class="deip-blue-color subheading overflow-ellipsis">
                                                 {{ transfer[1].trx_id }}
@@ -202,7 +198,7 @@
                                         >+ {{ fromAssetsToFloat(transfer[1].op[1].amount) }} DT</div>
                                     </div>
 
-                                    <v-divider></v-divider>
+                                    <v-divider :key="'transfer-divider-' + i"></v-divider>
                                 </template>
                             </div>
 
@@ -216,23 +212,23 @@
                 <div class="tokens-send-panel">
                     <transition mode="out-in">
                         <deip-token-send-form
-                            v-if="account && sendingType === sendingTypes.deipToken"
+                            v-if="sendingType === sendingTypes.deipToken"
                             :deip-token-balance="deipTokenBalance"
                             @deipTokensTransfered="loadUserAccount"
                         ></deip-token-send-form>
 
                         <common-token-convert-form
-                            v-else-if="account && sendingType === sendingTypes.deipCommon"
+                            v-else-if="sendingType === sendingTypes.deipCommon"
                             :deip-token-balance="deipTokenBalance"
                             :common-tokens-balance="commonTokenBalance"
                             @convertingTransactionWasApplied="loadUserAccount"
                         ></common-token-convert-form>
                         
                         <research-token-send-form
-                            v-else-if="account && sendingType === sendingTypes.researchToken && selectedResearch"
+                            v-else-if="sendingType === sendingTypes.researchToken && selectedResearch"
                             :research-id="selectedResearch.id"
                             :research-token="selectedResearch.researchToken"
-                            :researches="researches"
+                            :researches="investments.map(inv => inv.research)"
                             @researchTokensTransfered="loadResearches"
                             @researchChanged="researchChanged"
                         ></research-token-send-form>
@@ -250,7 +246,7 @@
     import { mapGetters } from 'vuex';
 
     export default {
-        name: "UserWallet",
+        name: "UserWalletOld",
 
         data() { 
             return {
@@ -268,25 +264,25 @@
 
         computed: {
             ...mapGetters({
-                account: 'userWallet/account',
-                researches: 'userWallet/researches',
-                transfers: 'userWallet/transfers',
-                user: 'auth/user'
+                user: 'auth/user',
+                investments: 'userWallet/investments',
+                transfers: 'userWallet/transfers'
             }),
             deipTokenBalance() {
-                return this.account ? this.fromAssetsToFloat(this.account.balance) : 0;
+                return this.fromAssetsToFloat(this.user.account.balance);
             },
             commonTokenBalance() {
-                return this.account ? this.toCommonTokens(this.account.common_tokens_balance) : 0;
+                return this.toCommonTokens(this.user.account.common_tokens_balance);
             },
             selectedResearch() {
-                return _.find(this.researches, { id: this.selectedResearchId })
+                let investment = this.investments.find(inv => inv.research.id == this.selectedResearchId);
+                return investment ? {...investment.research, researchToken: investment.myShare } : null;
             }
         },
 
         methods: {
             loadUserAccount() {
-                this.$store.dispatch('userWallet/loadUser', this.user.username);
+                this.$store.dispatch('auth/loadAccount');
                 this.$store.dispatch('userWallet/loadTransfers', this.user.username);
             },
 

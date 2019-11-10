@@ -10,12 +10,17 @@ import store from './store';
 import router from './router';
 import './index';
 import './globals/index';
-
 import 'vuetify/dist/vuetify.css';
 import './styles/common.less';
 import 'vue2-dropzone/dist/vue2Dropzone.css';
 import '@mdi/font/css/materialdesignicons.css';
+import 'vue-resize/dist/vue-resize.css';
 import { isLoggedIn } from "./utils/auth";
+import VueGoogleCharts from 'vue-google-charts';
+import VueCurrencyFilter from 'vue-currency-filter';
+import VueResize from 'vue-resize';
+
+Vue.config.productionTip = false;
 
 Vue.use(Vuetify, {
   theme: {
@@ -26,8 +31,16 @@ Vue.use(Vuetify, {
     customProperties: true
   }
 });
-
-Vue.config.productionTip = false;
+Vue.use(VueGoogleCharts);
+Vue.use(VueResize);
+Vue.use(VueCurrencyFilter, {
+  symbol: '$',
+  thousandsSeparator: ',',
+  fractionCount: 2,
+  fractionSeparator: '.',
+  symbolPosition: 'front',
+  symbolSpacing: true
+});
 
 async function initApp() {
   try {

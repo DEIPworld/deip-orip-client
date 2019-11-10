@@ -34,6 +34,8 @@ import CreateTokenSale from '@/components/token-sale-create/CreateTokenSale';
 
 import UserDetails from '@/components/user-details/UserDetails';
 import UserWallet from '@/components/user-wallet/components/UserWallet';
+import UserWalletOld from '@/components/user-wallet/components/UserWalletOld';
+
 import ClaimUserExpertiseDetails from '@/components/claim-expertise-details/ClaimUserExpertiseDetails';
 import ClaimUserExpertiseList from '@/components/claim-expertise-list/ClaimUserExpertiseList';
 
@@ -303,13 +305,23 @@ const router = new Router({
 		name: 'UserWallet',
 		component: preliminaryDataLoader(UserWallet, {
 			beforeEnter: (to, from, next) => {
-				let loadPagePromise = store.dispatch('userWallet/loadWallet', {
-					username: decodeURIComponent(store.getters['auth/user'].username)
-				});
+				let loadPagePromise = store.dispatch('userWallet/loadWallet');
 				loadPage(loadPagePromise, next);
 			}
 		})
-	}, {
+		}, {
+			path: '/user-wallet-old',
+		name: 'UserWalletOld',
+		component: preliminaryDataLoader(UserWalletOld, {
+				beforeEnter: (to, from, next) => {
+					let loadPagePromise = store.dispatch('userWallet/loadWallet');
+					loadPage(loadPagePromise, next);
+				}
+			})
+		},
+	
+		
+	{
 		path: '/claim-user-experience',
 		name: 'ClaimUserExpertiseList',
 		component: preliminaryDataLoader(ClaimUserExpertiseList, {
