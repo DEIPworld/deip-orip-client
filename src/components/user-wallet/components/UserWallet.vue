@@ -10,7 +10,7 @@
           </v-flex>
           <v-flex lg4 class="title bold">Balance</v-flex>
           <v-flex lg2 class="pr-2">
-            <v-btn outline block color="#2962FF">Withdraw</v-btn>
+            <v-btn outline block color="#2962FF" @click="dialog=true">Withdraw</v-btn>
           </v-flex>
           <v-flex lg2 class="pl-2">
             <v-btn color="#2962FF" block dark>Deposit</v-btn>
@@ -70,7 +70,7 @@
                     <div class="mt-1 caption text-uppercase grey--text">Your number of tokens</div>
                   </v-flex>
                   <v-flex>
-                    <div class="body-2">{{mockTokensPrice(investment.research.id, 1) | currency }}</div>
+                    <div class="body-2">{{mockTokenPrice(investment.research.id, 1) | currency }}</div>
                     <div class="mt-1 caption text-uppercase grey--text">Price per token</div>
                   </v-flex>
                   <v-flex>
@@ -78,11 +78,11 @@
                     <div class="mt-1 caption text-uppercase grey--text">Your ownership share</div>
                   </v-flex>
                   <v-flex>
-                    <div class="body-2">{{mockTokensPrice(investment.research.id, investment.myShare.amount) | currency}}</div>
+                    <div class="body-2">{{mockTokenPrice(investment.research.id, investment.myShare.amount) | currency}}</div>
                     <div class="mt-1 caption text-uppercase grey--text">Your ownership value</div>
                   </v-flex>
                   <v-flex>
-                    <div class="body-2">{{mockTokensPrice(investment.research.id, DEIP_100_PERCENT) | currency}}</div>
+                    <div class="body-2">{{mockTokenPrice(investment.research.id, DEIP_100_PERCENT)| currency}}</div>
                     <div class="mt-1 caption text-uppercase grey--text">Total value</div>
                   </v-flex>
                   <v-flex>
@@ -133,6 +133,24 @@
           </v-flex>
         </v-layout>
       </v-layout>
+
+
+      <v-dialog v-model="dialog" persistent max-width="600px">
+        <v-card>
+          <v-card-title class="">
+            <span class="headline">Add card</span>
+          </v-card-title>
+          <v-card-text>
+
+          </v-card-text>
+          <v-card-actions>
+            <v-spacer></v-spacer>
+            <v-btn color="blue darken-1" flat @click="dialog = false">Close</v-btn>
+            <v-btn color="blue darken-1" flat @click="dialog = false">Save</v-btn>
+          </v-card-actions>
+        </v-card>
+      </v-dialog>
+
     </v-card>
   </base-page-layout>
 </template>
@@ -146,6 +164,7 @@
 
     data() { 
       return {
+        dialog: false,
         expandedInvestmentIdx: -1
       }
     },
@@ -195,31 +214,21 @@
 
         if (this.expandedInvestmentIdx != -1) {
 
-          let mockPrice = ({ research, myShare }, offset) => {
-            let factor1 = (offset || 1) % 2 == 0;
-            let factor2 = (research.id || 1) % 2 == 0;
-            let pricePerToken = this.mockTokensPrice(research.id, 1);
-            let currentSharePrice = this.mockTokensPrice(research.id, myShare.amount);
-            let previousPrice = currentSharePrice - (factor1 ? offset * (factor2 ? pricePerToken : pricePerToken / 2) : offset + 1 * pricePerToken);
-            return [previousPrice, currentSharePrice - (currentSharePrice - previousPrice) - pricePerToken * 10];
-          };
-
           let investment = this.investments[this.expandedInvestmentIdx];
-
           return {
             data: [
               ['Date', 'Price', 'Average'],
-              [moment().day(-10).toDate(), ...mockPrice(investment, 10) ],
-              [moment().day(-9).toDate(),  ...mockPrice(investment, 9)  ],
-              [moment().day(-8).toDate(),  ...mockPrice(investment, 8)  ],
-              [moment().day(-7).toDate(),  ...mockPrice(investment, 7)  ],
-              [moment().day(-6).toDate(),  ...mockPrice(investment, 6)  ],
-              [moment().day(-5).toDate(),  ...mockPrice(investment, 5)  ],
-              [moment().day(-4).toDate(),  ...mockPrice(investment, 4)  ],
-              [moment().day(-3).toDate(),  ...mockPrice(investment, 3)  ],
-              [moment().day(-2).toDate(),  ...mockPrice(investment, 2)  ],
-              [moment().day(-1).toDate(),  ...mockPrice(investment, 1)  ],
-              [moment().toDate(),          ...mockPrice(investment, 0)  ],
+              [moment().day(-10).toDate(), ...this.mockSharePriceWithAvg({ ...investment, share: investment.myShare }, 10) ],
+              [moment().day(-9).toDate(),  ...this.mockSharePriceWithAvg({ ...investment, share: investment.myShare }, 9)  ],
+              [moment().day(-8).toDate(),  ...this.mockSharePriceWithAvg({ ...investment, share: investment.myShare }, 8)  ],
+              [moment().day(-7).toDate(),  ...this.mockSharePriceWithAvg({ ...investment, share: investment.myShare }, 7)  ],
+              [moment().day(-6).toDate(),  ...this.mockSharePriceWithAvg({ ...investment, share: investment.myShare }, 6)  ],
+              [moment().day(-5).toDate(),  ...this.mockSharePriceWithAvg({ ...investment, share: investment.myShare }, 5)  ],
+              [moment().day(-4).toDate(),  ...this.mockSharePriceWithAvg({ ...investment, share: investment.myShare }, 4)  ],
+              [moment().day(-3).toDate(),  ...this.mockSharePriceWithAvg({ ...investment, share: investment.myShare }, 3)  ],
+              [moment().day(-2).toDate(),  ...this.mockSharePriceWithAvg({ ...investment, share: investment.myShare }, 2)  ],
+              [moment().day(-1).toDate(),  ...this.mockSharePriceWithAvg({ ...investment, share: investment.myShare }, 1)  ],
+              [moment().toDate(),          ...this.mockSharePriceWithAvg({ ...investment, share: investment.myShare }, 0)  ],
             ],
             options: {
               title: '',
@@ -250,11 +259,6 @@
         } else {
           this.expandedInvestmentIdx = index;
         }
-      },
-
-      mockTokensPrice(rtId, amount) {
-        let pricePerToken = Math.pow(rtId || 2, 2);
-        return amount * pricePerToken;
       },
 
       mockPriceChange(rtId) {

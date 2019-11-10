@@ -30,21 +30,3 @@ Vue.component('v-gravatar', Gravatar);
 
 import VueQrcode from '@xkeshi/vue-qrcode';
 Vue.component(VueQrcode.name, VueQrcode);
-
-import VueGoogleCharts from 'vue-google-charts';
-Vue.use(VueGoogleCharts);
-
-import VueResize from 'vue-resize'
-import 'vue-resize/dist/vue-resize.css'
-Vue.use(VueResize);
-
-import VueCurrencyFilter from 'vue-currency-filter';
-Vue.use(VueCurrencyFilter,
-  {
-    symbol: '$',
-    thousandsSeparator: ',',
-    fractionCount: 2,
-    fractionSeparator: '.',
-    symbolPosition: 'front',
-    symbolSpacing: true
-  });

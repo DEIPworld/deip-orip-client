@@ -60,3 +60,28 @@ Vue.prototype.round2DigitsAfterComma = (x) => {
 };
 
 Vue.prototype.moment = moment;
+
+const mockTokenPrice = (rtId, amount) => {
+    let pricePerToken = Math.pow(rtId || 2, 2);
+    return amount * pricePerToken;
+}
+const mockPreviousTokenPrice = ({ research }, offset) => {
+    let currentPricePerToken = mockTokenPrice(research.id, 1);
+    if (offset <= 0) return currentPricePerToken;
+
+    let factor1 = (offset) % 2 == 0;
+    let factor2 = (research.id || 1) % 2 == 0;
+    let previousPricePerToken = currentPricePerToken - (factor1 ? currentPricePerToken * (factor2 ? 0.2 : 0.1) : currentPricePerToken * (factor2 ? 0.1 : 0.2)) - offset * 0.9;
+    return previousPricePerToken > 0 ? previousPricePerToken : 1;
+};
+const mockSharePriceWithAvg = ({ research, share }, offset) => {
+    let pricePerToken = mockTokenPrice(research.id, 1);
+    let currentSharePrice = pricePerToken * share.amount;
+    if (offset <= 0) return [currentSharePrice, currentSharePrice / 2];
+    let previousSharePrice = mockPreviousTokenPrice({ research }, offset) * share.amount;
+    return [previousSharePrice, (currentSharePrice - (currentSharePrice - previousSharePrice)) / 2];
+};
+
+Vue.prototype.mockTokenPrice = mockTokenPrice;
+Vue.prototype.mockPreviousTokenPrice = mockPreviousTokenPrice;
+Vue.prototype.mockSharePriceWithAvg = mockSharePriceWithAvg;
