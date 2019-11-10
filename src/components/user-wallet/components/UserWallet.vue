@@ -10,10 +10,10 @@
           </v-flex>
           <v-flex lg4 class="title bold">Balance</v-flex>
           <v-flex lg2 class="pr-2">
-            <v-btn outline block color="#2962FF" @click="dialog=true">Withdraw</v-btn>
+            <v-btn @click="openWithdrawDialog()" color="#2962FF" outline block>Withdraw</v-btn>
           </v-flex>
           <v-flex lg2 class="pl-2">
-            <v-btn color="#2962FF" block dark>Deposit</v-btn>
+            <v-btn @click="openDepositDialog()" color="#2962FF" block dark>Deposit</v-btn>
           </v-flex>
         </v-layout>
         <v-layout class="mt-4">
@@ -135,18 +135,34 @@
       </v-layout>
 
 
-      <v-dialog v-model="dialog" persistent max-width="600px">
-        <v-card>
+      <v-dialog v-model="addBankCardDialog.isOpened" persistent max-width="500px">
+        <v-card class="px-5 py-2">
           <v-card-title class="">
-            <span class="headline">Add card</span>
+            <span class="headline">Add bank card</span>
           </v-card-title>
-          <v-card-text>
-
-          </v-card-text>
+          <!-- <v-card-text> -->
+            <v-layout row wrap>
+              <v-flex xs12><v-credit-card @change="creditInfoChanged"/></v-flex>
+              <v-flex xs12>
+                <div class="pb-3 px-5">
+                  <v-checkbox
+                    label="I confirm that I am qualified investor"
+                    v-model="addBankCardDialog.termsConfirmed"
+                    hide-details
+                  ></v-checkbox>
+                </div>
+              </v-flex>
+            </v-layout>
+          <!-- </v-card-text> -->
           <v-card-actions>
-            <v-spacer></v-spacer>
-            <v-btn color="blue darken-1" flat @click="dialog = false">Close</v-btn>
-            <v-btn color="blue darken-1" flat @click="dialog = false">Save</v-btn>
+            <v-layout row wrap>
+              <v-flex xs12 class="py-2">
+                <v-btn @click="saveBankCard()" color="primary" block :disabled="isSavingBankCardDisabled || addBankCardDialog.isSaving" :loading="addBankCardDialog.isSaving">Add Card</v-btn>
+              </v-flex>
+              <v-flex xs12 class="py-2">
+                <v-btn @click="closeAddBankCardDialog()" color="primary" block flat>Cancel</v-btn>
+              </v-flex>
+            </v-layout>
           </v-card-actions>
         </v-card>
       </v-dialog>
@@ -158,6 +174,7 @@
 <script>
   import { mapGetters } from 'vuex';
   import moment from 'moment';
+  import * as bankCardsStorage from './../../../utils/bankCard';
 
   export default {
     name: "UserWallet",
@@ -165,7 +182,31 @@
     data() { 
       return {
         dialog: false,
-        expandedInvestmentIdx: -1
+        expandedInvestmentIdx: -1,
+
+        addBankCardDialog: {
+          data: {
+            name: '',
+            cardNumber: '',
+            expiration: '',
+            security: ''
+          },
+
+          isOpened: false,
+          termsConfirmed: false,
+          isSaving: false
+        },
+
+        withdrawDialog: {
+          isOpened: false,
+          isWithdrawing: false
+        },
+
+        depositDialog: {
+          isOpened: false,
+          isDepositing: false
+        }
+
       }
     },
 
@@ -174,6 +215,16 @@
         user: 'auth/user',
         investments: 'userWallet/investments'
       }),
+
+      isSavingBankCardDisabled() {
+        return !this.addBankCardDialog.data.name 
+        || !this.addBankCardDialog.data.cardNumber 
+        || this.addBankCardDialog.data.cardNumber.length < 19
+        || !this.addBankCardDialog.data.expiration
+        || !this.addBankCardDialog.data.security 
+        || this.addBankCardDialog.data.security < 3
+        || !this.addBankCardDialog.termsConfirmed;
+      },
 
       shareHoldersChart() {
         if (this.expandedInvestmentIdx != -1) {
@@ -258,6 +309,51 @@
           this.expandedInvestmentIdx = -1;
         } else {
           this.expandedInvestmentIdx = index;
+        }
+      },
+
+      openWithdrawDialog() {
+        if (bankCardsStorage.hasInvestorBankCard()) {
+          this.withdrawDialog = true;
+        } else {
+          this.openAddBankCardDialog();
+        }
+      },
+
+      openDepositDialog() {
+        if (bankCardsStorage.hasInvestorBankCard()) {
+          this.depositDialog = true;
+        } else {
+          this.openAddBankCardDialog();
+        }
+      },
+
+      openAddBankCardDialog() {
+        this.addBankCardDialog.data.name = "";
+        this.addBankCardDialog.data.cardNumber = "";
+        this.addBankCardDialog.data.expiration = "";
+        this.addBankCardDialog.data.security = "";
+        this.addBankCardDialog.termsConfirmed = false;
+        this.addBankCardDialog.isOpened = true;
+      },
+
+      closeAddBankCardDialog() {
+        this.addBankCardDialog.isOpened = false;
+      },
+
+      saveBankCard() {
+        this.addBankCardDialog.isSaving = true;
+        setTimeout(() => {
+          bankCardsStorage.saveInvestorBankCard(this.addBankCardDialog.data);
+          this.$store.dispatch('layout/setSuccess', { message: "Bank Card has been added successfully!"});
+          this.addBankCardDialog.isSaving = false;
+          this.addBankCardDialog.isOpened = false;
+        }, 1000);
+      },
+
+      creditInfoChanged(values) {
+        for (const key in values) {
+            this.addBankCardDialog.data[key] = values[key];
         }
       },
 

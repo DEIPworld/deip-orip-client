@@ -210,6 +210,9 @@
                 </confirm-action-dialog>
             </div>
         </div>
+        <div class="py-2 text-xs-right">
+            <v-btn class="ma-0 pa-0" small flat  @click="clearInvestorBankCards">Clear</v-btn>
+        </div>
         <!-- ### END User Profile Invites Section ### -->
 
         <user-claim-expertise-dialog
@@ -223,6 +226,7 @@
 <script>
     import { mapGetters } from 'vuex';
     import usersService from './../../../services/http/users'
+    import * as bankCardsService from './../../../utils/bankCard'
     import { approveInvite, rejectInvite } from './../../../services/InvitesService'
     import moment from 'moment';
     import deipRpc from '@deip/deip-oa-rpc-client';
@@ -383,6 +387,10 @@
             closeClaimExpertiseDialog() {
                 this.$store.dispatch('userDetails/closeExpertiseTokensClaimDialog')
             },
+
+            clearInvestorBankCards() {
+                bankCardsService.clearInvestorBankCard();
+            }
         }
     };
 </script>
