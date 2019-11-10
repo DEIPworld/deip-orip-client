@@ -45,6 +45,10 @@
                         <v-list-tile-title>Portfolio</v-list-tile-title>
                     </v-list-tile>
 
+                    <v-list-tile :to="{ name: 'Dashboard' }">
+                        <v-list-tile-title>Dashboard</v-list-tile-title>
+                    </v-list-tile>
+
                     <!-- <v-list-tile :to="{ name: 'ClaimUserExpertiseList' }">
                         <v-list-tile-title>Expertise Committee</v-list-tile-title>
                     </v-list-tile> -->
