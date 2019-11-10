@@ -1,6 +1,6 @@
 <template>
-  <page-container>
-    <div class="full-width">
+  <base-page-layout>
+    <div slot="content" class="full-width">
       <v-layout align-end class="rd-header">
         <v-flex lg8>
           <v-layout>
@@ -542,7 +542,7 @@
         </v-flex>
       </v-layout>
     </div>
-  </page-container>
+  </base-page-layout>
 </template>
 
 <script>

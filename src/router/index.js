@@ -19,6 +19,7 @@ import ResearchGroupDetails from '@/components/research-group-details/ResearchGr
 import ResearchGroupWallet from '@/components/research-group-wallet/ResearchGroupWallet';
 
 import ResearchFeed from '@/components/research-feed/ResearchFeed';
+import NewResearchFeed from '@/components/research-feed/NewResearchFeed';
 import ResearchDetails from '@/components/research-details/ResearchDetails';
 import ResearchEdit from '@/components/research-edit/ResearchEdit';
 import ResearchContentDetails from '@/components/research-content-details/ResearchContentDetails';
@@ -157,7 +158,16 @@ const router = new Router({
 				loadPage(loadPagePromise, next);
 			}
 		})
-	}, {
+		}, {
+			path: '/research-feed-new',
+			name: 'NewResearchFeed',
+			component: preliminaryDataLoader(NewResearchFeed, {
+				beforeEnter: (to, from, next) => {
+					let loadPagePromise = store.dispatch('feed/loadAllResearches', {});
+					loadPage(loadPagePromise, next);
+				}
+			})
+		}, {
 		path: '/:research_group_permlink/research/:research_permlink',
 		name: 'ResearchDetails',
 		component: preliminaryDataLoader(ResearchDetails, {
@@ -318,10 +328,7 @@ const router = new Router({
 					loadPage(loadPagePromise, next);
 				}
 			})
-		},
-	
-		
-	{
+		}, {
 		path: '/claim-user-experience',
 		name: 'ClaimUserExpertiseList',
 		component: preliminaryDataLoader(ClaimUserExpertiseList, {
@@ -342,8 +349,7 @@ const router = new Router({
 				loadPage(loadPagePromise, next);
 			}
 		})
-	},
-	{
+	}, {
 		path: '/set-expertise',
 		name: 'SetExpertisePage',
 		component: SetExpertisePage,
@@ -373,15 +379,15 @@ const router = new Router({
 		name: 'LegacyInvestorDashboard',
 		component: LegacyInvestorDashboard
 	}, {
-			path: '/investor-dashboard',
-			name: 'InvestorDashboard',
-			component: InvestorDashboard,
-			beforeEnter: (to, from, next) => {
-				let loadPagePromise = store.dispatch('investorDashboard/loadInvestmentPortfolioPage', {
-					username: decodeURIComponent(store.getters['auth/user'].username)
-				});
-				loadPage(loadPagePromise, next);
-			}
+		path: '/investor-dashboard',
+		name: 'InvestorDashboard',
+		component: InvestorDashboard,
+		beforeEnter: (to, from, next) => {
+			let loadPagePromise = store.dispatch('investorDashboard/loadInvestmentPortfolioPage', {
+				username: decodeURIComponent(store.getters['auth/user'].username)
+			});
+			loadPage(loadPagePromise, next);
+		}
 	}, {
 		path: '/create-funding-opportunity-announcement',
 		name: 'CreateFundingOpportunityAnnouncement',

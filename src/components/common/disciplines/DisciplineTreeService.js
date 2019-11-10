@@ -55,11 +55,16 @@ const mapAreaToProgram = (program, researchAreas)  => {
 
     program.area = area;
     program.subArea = subArea;
+};
+
+const getTopLevelNodes = () => {
+    return Object.values(disciplineTree.children);
 }
 
 export {
     disciplineTree,
     getNodeById,
     getNodesByIdList,
-    mapAreaToProgram
+    mapAreaToProgram,
+    getTopLevelNodes
 }

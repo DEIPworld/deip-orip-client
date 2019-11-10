@@ -34,12 +34,12 @@
                               </div>
                             </v-layout>
                             <v-layout column class="research-tiles-container">
-                                <research-project-tile row v-for="({research, tokenSale, tokenSaleContributions }, i) in researches" 
-                                  :key="'research-tile-' + research.id" 
-                                  :research="research" :tokenSale="tokenSale" 
-                                  :tokenSaleContributions="tokenSaleContributions"
-                                  :class="{'pb-5': i != researches.length - 1}">
-                                </research-project-tile>
+                              <research-project-tile row v-for="({research, tokenSale, tokenSaleContributions }, i) in researches" 
+                                :key="'research-tile-' + research.id" 
+                                :research="research" :tokenSale="tokenSale" 
+                                :tokenSaleContributions="tokenSaleContributions"
+                                :class="{'pb-5': i != researches.length - 1}">
+                              </research-project-tile>
                             </v-layout>
                           </v-flex>
                         </v-layout>
