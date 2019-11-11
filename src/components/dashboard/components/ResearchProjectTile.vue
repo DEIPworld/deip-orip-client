@@ -64,7 +64,7 @@
       }),
 
       fundingProgressPercent() {
-        let goal = this.fromAssetsToFloat(this.tokenSale.soft_cap);
+        let goal = this.fromAssetsToFloat(this.tokenSale.hard_cap);
         let collected = this.tokenSaleContributions.reduce((acc, item) => {
           return acc + this.fromAssetsToFloat(item.amount);
         }, 0);
@@ -72,7 +72,7 @@
       },
 
       fundingGoalAmount() {
-        return this.fromAssetsToFloat(this.tokenSale.soft_cap);
+        return this.fromAssetsToFloat(this.tokenSale.hard_cap);
       },
 
       fundingDaysLeft() {

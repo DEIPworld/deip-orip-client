@@ -103,7 +103,7 @@
                     <div class="mt-1 caption text-uppercase grey--text"># of tokenholders</div>
                   </v-flex>
                   <v-flex>
-                    <v-btn outline color="primary" class="ma-0" @click="toggleInvestmentDetails(index)">
+                    <v-btn flat color="primary" class="ma-0" @click="toggleInvestmentDetails(index)">
                       {{expandedInvestmentIdx === index ? 'Less' : 'More'}}
                       <v-icon
                         small
@@ -139,9 +139,11 @@
                     </div>
                   </v-flex>
                 </v-layout>
-                <v-layout class="mt-4" justify-center>
+                <v-layout class="mt-4" justify-start>
                   <v-btn
                     color="primary"
+                    outline
+                    class="py-0 ma-0"
                     @click="openSendResearchTokensDialog()"
                   >Send research tokens</v-btn>
                 </v-layout>
