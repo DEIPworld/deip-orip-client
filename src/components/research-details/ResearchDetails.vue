@@ -71,7 +71,7 @@
                       name: 'CreateTokenSale',
                       params: { research_group_permlink: research.group_permlink, research_permlink: research.permlink }
                     }"
-                  >{{isPersonalGroup ? 'Create fundraise' : 'Propose fundraise'}}</v-btn>
+                  >Start fundraise</v-btn>
                 </v-flex>
               </v-layout>
             </v-flex>
@@ -597,7 +597,6 @@
         tokenSalesList: 'rd/tokenSalesList',
         user: 'auth/user',
         userJoinRequests: 'auth/userJoinRequests',
-        userPersonalGroup: 'auth/userPersonalGroup'
       }),
 
       timeline() {
@@ -738,11 +737,6 @@
       },
       isMissingTokenSale() {
         return this.tokenSale === undefined;
-      },
-      isPersonalGroup() {
-        return this.research 
-          ? this.research.research_group_id === this.userPersonalGroup.id 
-          : false;
       },
       isProfileAvailable() {
         return !!this.user.profile;
