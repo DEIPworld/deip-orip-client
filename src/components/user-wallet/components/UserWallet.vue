@@ -114,29 +114,37 @@
                   </v-flex>
                 </v-layout>
               </v-layout>
-              <v-layout v-if="expandedInvestmentIdx === index" row class="portfolio__item-stats py-4">
-                <v-flex lg7>
-                  <div class="title">Share price</div>
-                  <div class="mt-4">
-                    <GChart
-                      type="ComboChart"
-                      :settings="{ packages: ['corechart'] }"
-                      :data="sharePriceChart.data"
-                      :options="sharePriceChart.options"
-                    />
-                  </div>
-                </v-flex>
-                <v-flex lg5>
-                  <div class="title">Share holders</div>
-                  <div class="mt-4">
-                    <GChart
-                      type="PieChart"
-                      :settings="{ packages: ['corechart'] }"
-                      :data="shareHoldersChart.data"
-                      :options="shareHoldersChart.options"
-                    />
-                  </div>
-                </v-flex>
+              <v-layout v-if="expandedInvestmentIdx === index" column class="portfolio__item-stats py-4">
+                <v-layout row>
+                  <v-flex lg7>
+                    <div class="title">Share price</div>
+                    <div class="mt-4">
+                      <GChart
+                        type="ComboChart"
+                        :settings="{ packages: ['corechart'] }"
+                        :data="sharePriceChart.data"
+                        :options="sharePriceChart.options"
+                      />
+                    </div>
+                  </v-flex>
+                  <v-flex lg5>
+                    <div class="title">Share holders</div>
+                    <div class="mt-4">
+                      <GChart
+                        type="PieChart"
+                        :settings="{ packages: ['corechart'] }"
+                        :data="shareHoldersChart.data"
+                        :options="shareHoldersChart.options"
+                      />
+                    </div>
+                  </v-flex>
+                </v-layout>
+                <v-layout class="mt-4" justify-center>
+                  <v-btn
+                    color="primary"
+                    @click="openSendResearchTokensDialog()"
+                  >Send research tokens</v-btn>
+                </v-layout>
               </v-layout>
             </div>
           </v-flex>
@@ -289,13 +297,67 @@
           </v-card-actions>
         </v-card>
       </v-dialog>
+
+      <v-dialog v-model="sendResearchTokensDialog.isOpened" persistent max-width="500px">
+        <v-card class="px-5 py-2">
+          <v-card-title>
+            <span class="title">Send Research Tokens</span>
+          </v-card-title>
+
+          <v-card-text>
+            <v-form v-model="sendResearchTokensDialog.form.valid" ref="sendResearchTokensForm">
+              <v-text-field
+                :value="sendResearchTokensDialog.research.title"
+                label="Research"
+                disabled
+              />
+              <v-text-field
+                label="To"
+                v-model="sendResearchTokensDialog.form.to"
+                :rules="sendResearchTokensDialog.form.rules.username"
+                :disabled="sendResearchTokensDialog.isSending"
+              />
+              <v-text-field
+                label="Amount"
+                v-model="sendResearchTokensDialog.form.amount"
+                :rules="sendResearchTokensDialog.form.rules.amount"
+                :disabled="sendResearchTokensDialog.isSending"
+              />
+            </v-form>
+          </v-card-text>
+
+          <v-card-actions>
+            <v-layout row wrap>
+              <v-flex xs12 class="py-2">
+                <v-btn
+                  @click="sendResearchTokens()"
+                  color="primary"
+                  block
+                  :disabled="!sendResearchTokensDialog.form.valid"
+                  :loading="sendResearchTokensDialog.isSending"
+                >Send</v-btn>
+              </v-flex>
+              <v-flex xs12 class="py-2">
+                <v-btn
+                  @click="closeSendResearchTokensDialog()"
+                  color="primary"
+                  block
+                  flat
+                  :disabled="sendResearchTokensDialog.isSending"
+                >Cancel</v-btn>
+              </v-flex>
+            </v-layout>
+          </v-card-actions>
+        </v-card>
+      </v-dialog>
     </v-card>
   </base-page-layout>
 </template>
 
 <script>
-  import { mapGetters } from 'vuex';
+  import { mapActions, mapGetters } from 'vuex';
   import moment from 'moment';
+  import deipRpc from '@deip/deip-oa-rpc-client';
   import * as bankCardsStorage from './../../../utils/bankCard';
 
   const currencyTypes = {
@@ -337,6 +399,53 @@
           isOpened: false,
           isDepositing: false
         },
+
+        sendResearchTokensDialog: {
+          research: {
+            id: null,
+            title: null,
+          },
+          form: {
+            ref: null,
+            valid: false,
+            to: '',
+            amount: 0,
+            rules: {
+              username: [
+                (value) => {
+                  if (!value) {
+                    return 'Receiver username is required';
+                  }
+
+                  if (value === this.user.username) {
+                    return `You can't send tokens to yourself`;
+                  }
+
+                  return true;
+                }
+              ],
+              amount: [
+                (value) => {
+                  const number = parseInt(value);
+                  if (!number || number < 0) {
+                    return `Amount should be positive integer`;
+                  }
+
+                  if (number > this.sendResearchTokensDialog.maxAmount) {
+                    return 'Amount is greater than research token balance';
+                  }
+
+                  return true;
+                }
+              ],
+            },
+          },
+          maxAmount: 0,
+          amount: 0,
+          isOpened: false,
+          isSending: false
+        },
+
         currencyTypes: Object.values(currencyTypes)
       }
     },
@@ -443,6 +552,10 @@
     },
 
     methods: {
+      ...mapActions({
+        loadResearchTokens: 'userWallet/loadResearchTokens'
+      }),
+
       toggleInvestmentDetails(index) {
         if (this.expandedInvestmentIdx === index) {
           this.expandedInvestmentIdx = -1;
@@ -477,6 +590,50 @@
 
       closeWithdrawDialog() {
         this.withdrawDialog.isOpened = false;
+      },
+
+      openSendResearchTokensDialog() {
+        this.$refs.sendResearchTokensForm.reset();
+        this.sendResearchTokensDialog.isOpened = true;
+
+        const expandedInvestment = this.investments[this.expandedInvestmentIdx];
+        this.sendResearchTokensDialog.research = {
+          id: expandedInvestment.research.id,
+          title: expandedInvestment.research.title,
+        };
+        this.sendResearchTokensDialog.maxAmount = expandedInvestment.myShare.amount;
+        this.sendResearchTokensDialog.form.valid = false;
+        this.sendResearchTokensDialog.form.to = '';
+        this.sendResearchTokensDialog.form.amount = 0;
+      },
+
+      closeSendResearchTokensDialog() {
+        this.sendResearchTokensDialog.isOpened = false;
+      },
+
+      sendResearchTokens() {
+        this.sendResearchTokensDialog.isSending = true;
+
+        return deipRpc.broadcast.transferResearchTokensAsync(
+          this.user.privKey,
+          this.sendResearchTokensDialog.research.id,
+          this.user.username,
+          this.sendResearchTokensDialog.form.to,
+          +this.sendResearchTokensDialog.form.amount,
+        ).then(data => {
+          this.$store.dispatch('layout/setSuccess', {
+            message: 'Research tokens successfully sent'
+          });
+          this.closeSendResearchTokensDialog();
+        }).catch(err => {
+          this.$store.dispatch('layout/setError', {
+            message: 'Transaction was failed'
+          });
+          console.error(err);
+        }).finally(() => {
+          this.sendResearchTokensDialog.isSending = false;
+          return this.loadResearchTokens(this.user.username);
+        });
       },
       
       openAddBankCardDialog() {
