@@ -188,7 +188,7 @@ export default {
         this.research.title.replace(/ /g, "-").replace(/_/g, "-").toLowerCase(), 
         500, // this.research.review_share_in_percent * this.DEIP_1_PERCENT,
         this.research.disciplines.map(d => d.id),
-        this.research.milestones.map((m, i) => { 
+        this.research.milestones.map((m, i) => {
           return {
             goal: m.goal,
             details: m.details,

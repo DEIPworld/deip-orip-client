@@ -38,6 +38,18 @@
             ></v-text-field>
           </div>
 
+          <div>
+            <div class="title half-bold pb-3">Active Milestone:</div>
+            <v-select 
+              v-model="activeMilestone" 
+              :items="milestones" 
+              label="Milestone" 
+              solo
+              item-text="goal"
+              return-object>
+            </v-select>
+          </div>
+
           <div v-if="milestones" class="py-4">
             <div class="title half-bold pb-3">Roadmap:</div>
             <milestone-stepper :isReadOnly="false" :steps="milestones"></milestone-stepper>
@@ -76,6 +88,7 @@ export default {
       description: "",
       milestones: undefined,
       videoSrc: "",
+      activeMilestone: undefined,
 
       isLoading: false,
 
@@ -123,7 +136,8 @@ export default {
           return {
             goal: m.goal,
             details: m.details,
-            eta: moment(m.eta).toDate()
+            eta: moment(m.eta).toDate(),
+            is_active: this.activeMilestone ? m.goal == this.activeMilestone.goal : false
           }
         });
 
@@ -183,6 +197,7 @@ export default {
     this.description = this.$options.filters.researchAbstract(this.research.abstract);
     this.milestones = this.$options.filters.researchMilestones(this.research.abstract);
     this.videoSrc = this.$options.filters.researchVideoSrc(this.research.abstract);
+    this.activeMilestone = this.milestones.find(m => m.is_active);
   }
 };
 </script>
