@@ -1082,6 +1082,98 @@ export default {
                     "path": "mathematics.statistics"
                 }
             }
+        },
+        "sustainable_development_goals": {
+            "label": "Sustainable Development Goals",
+            "id": 211,
+            "path": "sustainable_development_goals",
+            "children": {
+                "no_poverty": {
+                    "label": "No poverty",
+                    "id": 212,
+                    "path": "sustainable_development_goals.no_poverty"
+                },
+                "zero_hunger": {
+                    "label": "Zero hunger",
+                    "id": 213,
+                    "path": "sustainable_development_goals.zero_hunger"
+                }, 
+                "good_health_and_well_being_for_people": {
+                    "label": "Good health and well-being for people",
+                    "id": 214,
+                    "path": "sustainable_development_goals.good_health_and_well_being_for_people"
+                }, 
+                "quality_education": {
+                    "label": "Quality education",
+                    "id": 215,
+                    "path": "sustainable_development_goals.quality_education"
+                },
+                "gender_equality": {
+                    "label": "Gender equality",
+                    "id": 216,
+                    "path": "sustainable_development_goals.gender_equality"
+                }, 
+                "clean_water_and_sanitation": {
+                    "label": "Clean water and sanitation",
+                    "id": 217,
+                    "path": "sustainable_development_goals.clean_water_and_sanitation"
+                }, 
+                "affordable_and_clean_energy": {
+                    "label": "Affordable and clean energy",
+                    "id": 218,
+                    "path": "sustainable_development_goals.affordable_and_clean_energy"
+                }, 
+                "decent_work_and_economic_growth": {
+                    "label": "Decent work and economic growth",
+                    "id": 219,
+                    "path": "sustainable_development_goals.decent_work_and_economic_growth"
+                },
+                "industry_innovation_and_infrastructure": {
+                    "label": "Industry, Innovation, and Infrastructure",
+                    "id": 220,
+                    "path": "sustainable_development_goals.industry_innovation_and_infrastructure"
+                },
+                "reducing_inequalities": {
+                    "label": "Reducing inequalities",
+                    "id": 221,
+                    "path": "sustainable_development_goals.reducing_inequalities"
+                }, 
+                "sustainable_cities_and_communities": {
+                    "label": "Sustainable cities and communities",
+                    "id": 222,
+                    "path": "sustainable_development_goals.sustainable_cities_and_communities"
+                }, 
+                "responsible_consumption_and_production": {
+                    "label": "Responsible consumption and production",
+                    "id": 223,
+                    "path": "sustainable_development_goals.responsible_consumption_and_production"
+                },
+                "climate_action": {
+                    "label": "Climate action",
+                    "id": 224,
+                    "path": "sustainable_development_goals.climate_action"
+                },
+                "life_below_water": {
+                    "label": "Life below water",
+                    "id": 225,
+                    "path": "sustainable_development_goals.life_below_water"
+                },
+                "life_on_land": {
+                    "label": "Life on land",
+                    "id": 226,
+                    "path": "sustainable_development_goals.life_on_land"
+                },
+                "peace_justice_and_strong_institutions": {
+                    "label": "Peace, justice and strong institutions",
+                    "id": 227,
+                    "path": "sustainable_development_goals.peace_justice_and_strong_institutions"
+                },
+                "partnerships_for_the_goals": {
+                    "label": "Partnerships for the goals",
+                    "id": 228,
+                    "path": "sustainable_development_goals.partnerships_for_the_goals"
+                }
+            }
         }
     }
 };
