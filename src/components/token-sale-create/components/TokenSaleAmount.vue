@@ -6,7 +6,7 @@
                 belonging to your group you’re going to sell
             </div> -->
             <div class="step-title">
-                Determine the percent of research tokens for sale
+                Determine the amount of research tokens for sale
             </div>
 
             <div class="legacy-col-grow overflow-y-auto">
@@ -15,9 +15,8 @@
                     <div class="legacy-col-12">
                         <div class="">
                             <v-text-field 
-                                :hint="100 - getAmountNumber(tokenSaleInfo.amountToSell) + '% left'"
-                                suffix="%" 
-                                mask="###"
+                                :hint="ownedAmount - getAmountNumber(tokenSaleInfo.amountToSell) + ' left'"
+                                mask="#####"
                                 v-model="tokenSaleInfo.amountToSell"
                                 :rules="amountToSellRules"
                             ></v-text-field>
@@ -38,13 +37,14 @@
     export default {
         name: "TokenSaleAmount",
         props: {
-            tokenSaleInfo: { type: Object, required: true }
+            tokenSaleInfo: { type: Object, required: true },
+            ownedAmount: { type: Number, required: true }
         },
         data() { 
             return {
                 amountToSellRules: [
                     v => !!v || 'This field is required',
-                    v => this.verifyAmountRange(v) || 'Amount should be from 1 to 100%'
+                    v => this.verifyAmountRange(v) || `Amount should be from 1 to ${this.ownedAmount}`
                 ]
             } 
         },
@@ -57,7 +57,7 @@
             },
             verifyAmountRange(value) {
                 const amountNumber = this.getAmountNumber(value);
-                return amountNumber > 0 && amountNumber <= 100;
+                return amountNumber > 0 && amountNumber <= this.ownedAmount;
             }
         }
     };

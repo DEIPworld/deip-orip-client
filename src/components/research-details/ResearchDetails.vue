@@ -53,11 +53,11 @@
                   </v-layout>
                   <v-layout class="pt-3">
                     <v-flex lg3 class="bold">Tokens On sale:</v-flex>
-                    <v-flex lg9>{{convertToPercent(tokenSale.balance_tokens)}}%</v-flex>
+                    <v-flex lg9>{{tokenSale.balance_tokens}} ({{convertToPercent(tokenSale.balance_tokens)}}%)</v-flex>
                   </v-layout>
                   <v-layout class="pt-3">
                     <v-flex lg3 class="bold">Remaining Tokens:</v-flex>
-                    <v-flex lg9>{{convertToPercent(DEIP_100_PERCENT - tokenHoldersTotalAmount - tokenSale.balance_tokens)}}%</v-flex>
+                    <v-flex lg9>{{research.owned_tokens}} ({{convertToPercent(research.owned_tokens)}}%)</v-flex>
                   </v-layout>
                   <v-layout class="pt-3">
                     <v-flex lg3 class="bold">Soft Cap:</v-flex>
