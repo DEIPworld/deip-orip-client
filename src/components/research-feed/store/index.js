@@ -1,11 +1,18 @@
-import _ from 'lodash';
 import Vue from 'vue';
 import deipRpc from '@deip/deip-oa-rpc-client';
 import * as usersService from './../../../utils/user';
 import tokenSaleService from './../../../services/TokenSaleService';
 
 const state = {
-  fullResearchList: [],
+
+  fullResearchListing: [],
+  feedTotalVotes: [],
+  feedResearchReviews: [],
+  feedResearchGroups: [],
+  feedResearchAuthors: [],
+  feedDisciplinesStatistics: [],
+  feedResearchTokenSales: [],
+  feedResearchTokenSalesContributions: [],
 
   filter: {
     disciplines: [],
@@ -17,6 +24,7 @@ const state = {
     dateFrom: null,
     dateTo: null
   }
+
 }
 
 // getters
@@ -27,27 +35,27 @@ const getters = {
   },
 
   researchFeed: (state, getters) => {
-    let handler = _(state.fullResearchList);
-
-    if (state.filter.q !== '') {
-      handler = handler.filter(research =>
-        _.includes(research.title.toLowerCase(), state.filter.q.toLowerCase())
-      );
-    }
-
-    if (state.filter.disciplines.length) {
-      handler = handler.filter(research => {
-        return research.disciplines.some(discipline => {
-          return state.filter.disciplines.some(d => { return d.id == discipline.id });
+    return state.fullResearchListing
+      .filter(item => !state.filter.q || item.title.toLowerCase().indexOf(state.filter.q.toLowerCase()) != -1)
+      .filter(item => !state.filter.disciplines.length || item.disciplines.some(discipline => state.filter.disciplines.some(d => d.id == discipline.id)))
+      // todo: add ordering here
+      .map(item => {
+        let totalVotes = state.feedTotalVotes.filter(vote => vote.research_id == item.research_id);
+        let reviews = state.feedResearchReviews.filter(review => review.research_id == item.research_id);
+        let group = state.feedResearchGroups.find(group => group.id == item.group_id);
+        let authors = state.feedResearchAuthors.filter(user => item.authors.some(a => a == user.account.name));
+        let tokenSale = state.feedResearchTokenSales.find(tokenSale => tokenSale.research_id == item.research_id);
+        let tokenSaleContributions = tokenSale ? state.feedResearchTokenSalesContributions.filter(c => c.research_token_sale_id == tokenSale.id) : [];
+        let disciplines = item.disciplines.map(discipline => {
+          let stats = state.feedDisciplinesStatistics.find(stat => stat.discipline_id == discipline.id);
+          return { ...discipline, stats };
         });
+        return { ...item, totalVotes, reviews, group, authors, tokenSale, tokenSaleContributions, disciplines };
       });
-    }
-
-    return handler.orderBy(state.filter.orderBy.iteratee, state.filter.orderBy.order).value();
   },
 
   allCollapsed: (state, getters) => {
-    return state.fullResearchList.reduce((acc, item) => acc && item.isCollapsed, true);
+    return state.fullResearchListing.reduce((acc, item) => acc && item.isCollapsed, true);
   },
 
   hasSelectedChildDiscipline: (state, getters) => {
@@ -61,74 +69,85 @@ const getters = {
 // actions
 const actions = {
 
-  loadAllResearches({ state, dispatch, commit }) {
-    const disciplineId = 0;
-    const researchResult = [];
+  loadResearchFeed({ state, dispatch, commit }) {
+    const alldisciplinesId = 0;
 
-    return deipRpc.api.getAllResearchesListingAsync(0, disciplineId)
-      .then(list => {
-        researchResult.push(...list);
+    return deipRpc.api.getAllResearchesListingAsync(0, alldisciplinesId)
+      .then(listing => {
+        commit('SET_FULL_RESEARCH_LISTING', listing.map(item => {return {...item, isCollapsed: true }}));
 
-        const totalVotesPromises = researchResult.map(research =>
-          deipRpc.api.getTotalVotesByResearchAsync(research.research_id)
-        );
-        const reviewsPromises = researchResult.map(research =>
-          deipRpc.api.getReviewsByResearchAsync(research.research_id)
-        );
-        const groupPromises = researchResult.map(research =>
-          deipRpc.api.getResearchGroupByIdAsync(research.group_id)
-        );
-        const disciplineStatsPromises = researchResult.map(research => 
-          Promise.all(research.disciplines.map(d => deipRpc.api.getEciAndExpertiseStatsByDisciplineIdAsync(d.id)))
-        );
-        const authorsPromises = researchResult.map(research =>
-          usersService.getEnrichedProfiles(research.authors)
-        );
-        const tokenSalesPromises = researchResult.map(research =>
-          tokenSaleService.getCurrentTokenSaleByResearchId(research.research_id)
-        );
+        let researchTotalVotesLoad = Promise.all(listing
+          .map(r => deipRpc.api.getTotalVotesByResearchAsync(r.research_id)));
+        
+        let researchReviewsLoad = Promise.all(listing
+          .map(r => deipRpc.api.getReviewsByResearchAsync(r.research_id)
+            .then((reviews) => { return reviews.map(review => { return { ...review, research_id: r.research_id}})})
+          ));
+
+        let researchGroupsLoad = Promise.all(listing
+          .map(r => r.group_id)
+          .reduce((acc, groupId) => {
+            return acc.some(g => g == groupId) ? acc : [groupId, ...acc];
+          }, [])
+          .map(groupId => deipRpc.api.getResearchGroupByIdAsync(groupId)));
+
+        let disciplineStatsLoad = Promise.all(listing
+          .map(r => r.disciplines)
+          .reduce((acc, disciplines) => {
+            let unique = disciplines.filter(d => !acc.some(id => id == d.id));
+            return [...unique.map(d => d.id), ...acc];
+          }, [])
+          .map(d => deipRpc.api.getEciAndExpertiseStatsByDisciplineIdAsync(d)
+            .then((stats) => { return { discipline_id: d, ...stats } })
+          ));
+
+        let authorsLoad = usersService.getEnrichedProfiles(listing
+          .map(r => r.authors)
+          .reduce((acc, authors) => {
+            let unique = authors.filter(name => !acc.some(a => a == name));
+            return [...unique, ...acc];
+          }, []));
+        
+        let tokenSalesLoad = Promise.all(listing
+          .map(r => tokenSaleService.getCurrentTokenSaleByResearchId(r.research_id)));
 
         return Promise.all([
-          Promise.all(totalVotesPromises),
-          Promise.all(reviewsPromises),
-          Promise.all(groupPromises),
-          Promise.all(disciplineStatsPromises),
-          Promise.all(authorsPromises),
-          Promise.all(tokenSalesPromises)
+          researchTotalVotesLoad,
+          researchReviewsLoad,
+          researchGroupsLoad,
+          disciplineStatsLoad,
+          authorsLoad,
+          tokenSalesLoad
         ]);
       })
-      .then(([totalVotes, reviews, groups, disciplineStats, authors, tokenSales]) => {
-        let totalVotesMap = _.chain(totalVotes)
-          .flatten()
-          .groupBy('research_id')
-          .value();
+      .then(([totalVotes, researchReviews, groups, disciplinesStats, authors, tokenSales]) => {
+        commit('SET_RESEARCH_FEED_TOTAL_VOTES_LIST', [].concat.apply([], totalVotes));
+        commit('SET_RESEARCH_FEED_REVIEWS_LIST', [].concat.apply([], researchReviews));
+        commit('SET_RESEARCH_FEED_GROUPS_LIST', groups);
+        commit('SET_RESEARCH_FEED_DISCIPLINES_STATISTIC', disciplinesStats);
+        commit('SET_RESEARCH_FEED_AUTHORS_LIST', authors);
+        commit('SET_RESEARCH_FEED_TOKEN_SALES_LIST', tokenSales.filter(ts => ts != undefined));
 
-        researchResult.forEach((research, index) => {
-          research.isCollapsed = true;
-
-          research.totalVotes = totalVotesMap[research.research_id] ? totalVotesMap[research.research_id] : [];
-          research.reviews = reviews[index];
-          research.group = groups[index];
-          research.enrichedAuthors = authors[index];
-          research.tokenSale = tokenSales[index];
-
-          research.disciplines.forEach((discipline, discIndex) => {
-            discipline.stats = disciplineStats[index][discIndex];
-          });
-        });
-
-        commit('SET_FULL_RESEARCH_LIST', researchResult);
+        let tokenSalesContributionsLoad = Promise.all(state.feedResearchTokenSales
+          .map(tokenSale => deipRpc.api.getResearchTokenSaleContributionsByResearchTokenSaleIdAsync(tokenSale.id)));
+        
+        return Promise.all([
+          tokenSalesContributionsLoad
+        ]);
+      })
+      .then((tokenSalesContributions) => {
+        commit('SET_RESEARCH_FEED_TOKEN_SALES_CONTRIBUTIONS_LIST', [].concat.apply([], [].concat.apply([], tokenSalesContributions)));
       });
   },
 
   toggleFeedItem({ commit, state, getters }, id) {
-    const item = state.fullResearchList.find(item => { return item.research_id == id });
+    let item = state.fullResearchListing.find(item => { return item.research_id == id });
     commit('SET_FEED_ITEM_COLLAPSE_STATE', { item: item, collapsed: !item.isCollapsed })
   },
 
   toggleFeed({ commit, state, getters }) {
-    const collapsed = !getters.allCollapsed
-    commit('SET_FEED_ITEMS_COLLAPSE_STATE', collapsed)
+    let collapsed = !getters.allCollapsed;
+    commit('SET_FEED_ITEMS_COLLAPSE_STATE', collapsed);
   },
 
   updateFilter({ commit, state, getters }, payload) {
@@ -139,8 +158,36 @@ const actions = {
 // mutations
 const mutations = {
 
-  ['SET_FULL_RESEARCH_LIST'](state, list) {
-    Vue.set(state, 'fullResearchList', list)
+  ['SET_FULL_RESEARCH_LISTING'](state, list) {
+    Vue.set(state, 'fullResearchListing', list);
+  },
+
+  ['SET_RESEARCH_FEED_TOTAL_VOTES_LIST'](state, list) {
+    Vue.set(state, 'feedTotalVotes', list);
+  },
+  
+  ['SET_RESEARCH_FEED_REVIEWS_LIST'](state, list) {
+    Vue.set(state, 'feedResearchReviews', list);
+  },
+
+  ['SET_RESEARCH_FEED_GROUPS_LIST'](state, list) {
+    Vue.set(state, 'feedResearchGroups', list);
+  },
+
+  ['SET_RESEARCH_FEED_DISCIPLINES_STATISTIC'](state, list) {
+    Vue.set(state, 'feedDisciplinesStatistics', list);
+  },
+
+  ['SET_RESEARCH_FEED_AUTHORS_LIST'](state, list) {
+    Vue.set(state, 'feedResearchAuthors', list);
+  },
+  
+  ['SET_RESEARCH_FEED_TOKEN_SALES_LIST'](state, list) {
+    Vue.set(state, 'feedResearchTokenSales', list);
+  },
+
+  ['SET_RESEARCH_FEED_TOKEN_SALES_CONTRIBUTIONS_LIST'](state, list) {
+    Vue.set(state, 'feedResearchTokenSalesContributions', list);
   },
 
   ['SET_FEED_ITEM_COLLAPSE_STATE'](state, { item, collapsed }) {
@@ -148,11 +195,11 @@ const mutations = {
   },
 
   ['SET_FEED_ITEMS_COLLAPSE_STATE'](state, collapsed) {
-    state.fullResearchList.forEach(item => { item.isCollapsed = collapsed });
+    state.fullResearchListing.forEach(item => { item.isCollapsed = collapsed });
   },
 
   ['UPDATE_FILTER'](state, { key, value }) {
-    Vue.set(state.filter, key, value)
+    Vue.set(state.filter, key, value);
   }
 }
 

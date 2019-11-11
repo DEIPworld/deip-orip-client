@@ -38,7 +38,7 @@
                     >{{ application.group.name }}:</router-link>
 
                     <span class="caption grey--text hidden-last-child">
-                        <template v-for="author in application.enrichedAuthors">
+                        <template v-for="author in application.authors">
                             <span>{{ author | fullname}}</span>
                             <span> · </span>
                         </template>

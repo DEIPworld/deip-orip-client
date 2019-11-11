@@ -19,7 +19,7 @@ import ResearchGroupDetails from '@/components/research-group-details/ResearchGr
 import ResearchGroupWallet from '@/components/research-group-wallet/ResearchGroupWallet';
 
 import ResearchFeed from '@/components/research-feed/ResearchFeed';
-import NewResearchFeed from '@/components/research-feed/NewResearchFeed';
+import ResearchFeedOld from '@/components/research-feed/ResearchFeedOld';
 import ResearchDetails from '@/components/research-details/ResearchDetails';
 import ResearchEdit from '@/components/research-edit/ResearchEdit';
 import ResearchContentDetails from '@/components/research-content-details/ResearchContentDetails';
@@ -149,21 +149,21 @@ const router = new Router({
 			// loadDashboardPage
 			loadPage(loadPagePromise, next);
 		}
-	}, {
-		path: '/research-feed',
-		name: 'ResearchFeed',
-		component: preliminaryDataLoader(ResearchFeed, {
-			beforeEnter: (to, from, next) => {
-				let loadPagePromise = store.dispatch('feed/loadAllResearches', {});
-				loadPage(loadPagePromise, next);
-			}
-		})
 		}, {
-			path: '/research-feed-new',
-			name: 'NewResearchFeed',
-			component: preliminaryDataLoader(NewResearchFeed, {
+			path: '/research-feed',
+			name: 'ResearchFeed',
+			component: preliminaryDataLoader(ResearchFeed, {
 				beforeEnter: (to, from, next) => {
-					let loadPagePromise = store.dispatch('feed/loadAllResearches', {});
+					let loadPagePromise = store.dispatch('feed/loadResearchFeed', {});
+					loadPage(loadPagePromise, next);
+				}
+			})
+		}, {
+			path: '/legacy-research-feed',
+			name: 'ResearchFeedOld',
+			component: preliminaryDataLoader(ResearchFeedOld, {
+				beforeEnter: (to, from, next) => {
+					let loadPagePromise = store.dispatch('feed/loadResearchFeed', {});
 					loadPage(loadPagePromise, next);
 				}
 			})
@@ -320,7 +320,7 @@ const router = new Router({
 			}
 		})
 		}, {
-			path: '/user-wallet-old',
+		path: '/legacy-user-wallet',
 		name: 'UserWalletOld',
 		component: preliminaryDataLoader(UserWalletOld, {
 				beforeEnter: (to, from, next) => {

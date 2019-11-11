@@ -153,7 +153,7 @@ const actions = {
             })
             .then(([authors]) => {
                 applications.forEach((application, index) => {
-                    application.enrichedAuthors = authors[index];
+                    application.authors = authors[index];
                 });
                 return applications;
             })

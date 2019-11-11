@@ -49,10 +49,6 @@
                         <v-list-tile-title>Dashboard</v-list-tile-title>
                     </v-list-tile>
 
-                    <v-list-tile :to="{ name: 'NewResearchFeed' }">
-                        <v-list-tile-title>NewResearchFeed</v-list-tile-title>
-                    </v-list-tile>
-
                     <!-- <v-list-tile :to="{ name: 'ClaimUserExpertiseList' }">
                         <v-list-tile-title>Expertise Committee</v-list-tile-title>
                     </v-list-tile> -->

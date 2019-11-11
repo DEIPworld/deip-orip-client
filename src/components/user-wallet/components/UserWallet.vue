@@ -1,289 +1,286 @@
 <template>
   <base-page-layout>
-    <!-- <v-container slot="content" fluid fill-height class="full-width full-height ma-0 pa-0"> -->
-      <v-card slot="content" class="full-height full-width pa-5">
-        <v-layout column>
-          <v-layout align-center>
-            <v-flex lg1>
-              <v-layout justify-end class="pr-3">
-                <v-icon large color="grey lighten-2">mdi-cash-usd-outline</v-icon>
-              </v-layout>
-            </v-flex>
-            <v-flex lg4 class="title bold">Balance</v-flex>
-            <v-flex lg2 class="pr-2">
-              <v-btn @click="openWithdrawDialog()" color="#2962FF" outline block>Withdraw</v-btn>
-            </v-flex>
-            <v-flex lg2 class="pl-2">
-              <v-btn @click="openDepositDialog()" color="#2962FF" block dark>Deposit</v-btn>
-            </v-flex>
-          </v-layout>
-          <v-layout class="mt-4">
-            <v-flex lg8 offset-lg1 class="balance-table">
-              <v-layout class="balance-table__line balance-table__line--header">
-                <v-flex lg5 offset-lg1 class="grey--text">Currency</v-flex>
-                <v-flex lg5 class="grey--text">Amount</v-flex>
-                <v-flex lg1 class="grey--text">Actions</v-flex>
-              </v-layout>
-              <v-layout class="balance-table__line" align-center>
-                <v-flex lg1>
-                  <v-layout justify-center align-center>
-                    <img src="/static/eur-blue-round.svg" />
-                  </v-layout>
-                </v-flex>
-                <v-flex lg5 class="bold subheading">EUR</v-flex>
-                <v-flex lg5 class="bold subheading">{{(getAvailableCurrencyAmount('eur')) | currency({ symbol: '€' }) }}</v-flex>
-                <v-flex lg1 class="pl-3">
-                  <v-icon color="grey" class="balance-table__action">more_vert</v-icon>
-                </v-flex>
-              </v-layout>
-              <v-layout class="balance-table__line" align-center>
-                <v-flex lg1>
-                  <v-layout justify-center align-center>
-                    <img src="/static/usd-green-round.svg" />
-                  </v-layout>
-                </v-flex>
-                <v-flex lg5 class="bold subheading">USD</v-flex>
-                <v-flex lg5 class="bold subheading">{{getAvailableCurrencyAmount('usd') | currency}}</v-flex>
-                <v-flex lg1 class="pl-3">
-                  <v-icon class="balance-table__action" color="grey">more_vert</v-icon>
-                </v-flex>
-              </v-layout>
-            </v-flex>
-          </v-layout>
+    <v-card slot="content" class="full-height full-width pa-5">
+      <v-layout column>
+        <v-layout align-center>
+          <v-flex lg1>
+            <v-layout justify-end class="pr-3">
+              <v-icon large color="grey lighten-2">mdi-cash-usd-outline</v-icon>
+            </v-layout>
+          </v-flex>
+          <v-flex lg4 class="title bold">Balance</v-flex>
+          <v-flex lg2 class="pr-2">
+            <v-btn @click="openWithdrawDialog()" color="#2962FF" outline block>Withdraw</v-btn>
+          </v-flex>
+          <v-flex lg2 class="pl-2">
+            <v-btn @click="openDepositDialog()" color="#2962FF" block dark>Deposit</v-btn>
+          </v-flex>
         </v-layout>
-        <v-layout column class="my-5" v-if="investments.length">
-          <v-layout align-center>
-            <v-flex lg1>
-              <v-layout justify-end class="pr-3">
-                <v-icon large color="grey lighten-2">mdi-account-box</v-icon>
-              </v-layout>
-            </v-flex>
-            <v-flex grow class="title bold">Portfolio</v-flex>
-          </v-layout>
-          <v-layout>
-            <v-flex lg10 offset-lg1 class="portfolio">
-              <div v-for="(investment, index) of investments" :key="'investment-' + index" class="my-4">
-                <v-layout column class="portfolio__item-header py-4">
-                  <div class="a subheading ellipsis">{{investment.research.title}}</div>
-                  <v-layout row class="mt-2">
-                    <v-flex>
-                      <div class="body-2">{{investment.myShare.amount}}</div>
-                      <div class="mt-1 caption text-uppercase grey--text">Your number of tokens</div>
-                    </v-flex>
-                    <v-flex>
-                      <div class="body-2">{{mockTokenPrice(investment.research.id, 1) | currency }}</div>
-                      <div class="mt-1 caption text-uppercase grey--text">Price per token</div>
-                    </v-flex>
-                    <v-flex>
-                      <div class="body-2">{{convertToPercent(investment.myShare.amount)}}%</div>
-                      <div class="mt-1 caption text-uppercase grey--text">Your ownership share</div>
-                    </v-flex>
-                    <v-flex>
-                      <div class="body-2">{{mockTokenPrice(investment.research.id, investment.myShare.amount) | currency}}</div>
-                      <div class="mt-1 caption text-uppercase grey--text">Your ownership value</div>
-                    </v-flex>
-                    <v-flex>
-                      <div class="body-2">{{mockTokenPrice(investment.research.id, DEIP_100_PERCENT)| currency}}</div>
-                      <div class="mt-1 caption text-uppercase grey--text">Total value</div>
-                    </v-flex>
-                    <v-flex>
-                      <div class="body-2 green--text text-accent-4">+{{mockPriceChange(investment.research.id).toFixed(2)}}%</div>
-                      <div class="mt-1 caption text-uppercase grey--text">Price change</div>
-                    </v-flex>
-                    <v-flex>
-                      <div class="body-2">{{investment.shareHolders.length}}</div>
-                      <div class="mt-1 caption text-uppercase grey--text"># of tokenholders</div>
-                    </v-flex>
-                    <v-flex>
-                      <v-btn outline color="primary" class="ma-0" @click="toggleInvestmentDetails(index)">
-                        {{expandedInvestmentIdx === index ? 'Less' : 'More'}}
-                        <v-icon
-                          small
-                          right
-                          color="primary"
-                        >{{`keyboard_arrow_${expandedInvestmentIdx === index ? 'up' : 'down'}`}}</v-icon>
-                      </v-btn>
-                    </v-flex>
-                  </v-layout>
+        <v-layout class="mt-4">
+          <v-flex lg8 offset-lg1 class="balance-table">
+            <v-layout class="balance-table__line balance-table__line--header">
+              <v-flex lg5 offset-lg1 class="grey--text">Currency</v-flex>
+              <v-flex lg5 class="grey--text">Amount</v-flex>
+              <v-flex lg1 class="grey--text">Actions</v-flex>
+            </v-layout>
+            <v-layout class="balance-table__line" align-center>
+              <v-flex lg1>
+                <v-layout justify-center align-center>
+                  <img src="/static/eur-blue-round.svg" />
                 </v-layout>
-                <v-layout v-if="expandedInvestmentIdx === index" row class="portfolio__item-stats py-4">
-                  <v-flex lg7>
-                    <div class="title">Share price</div>
-                    <div class="mt-4">
-                      <GChart
-                        type="ComboChart"
-                        :settings="{ packages: ['corechart'] }"
-                        :data="sharePriceChart.data"
-                        :options="sharePriceChart.options"
-                      />
-                    </div>
+              </v-flex>
+              <v-flex lg5 class="bold subheading">EUR</v-flex>
+              <v-flex lg5 class="bold subheading">{{(getAvailableCurrencyAmount('eur')) | currency({ symbol: '€' }) }}</v-flex>
+              <v-flex lg1 class="pl-3">
+                <v-icon color="grey" class="balance-table__action">more_vert</v-icon>
+              </v-flex>
+            </v-layout>
+            <v-layout class="balance-table__line" align-center>
+              <v-flex lg1>
+                <v-layout justify-center align-center>
+                  <img src="/static/usd-green-round.svg" />
+                </v-layout>
+              </v-flex>
+              <v-flex lg5 class="bold subheading">USD</v-flex>
+              <v-flex lg5 class="bold subheading">{{getAvailableCurrencyAmount('usd') | currency}}</v-flex>
+              <v-flex lg1 class="pl-3">
+                <v-icon class="balance-table__action" color="grey">more_vert</v-icon>
+              </v-flex>
+            </v-layout>
+          </v-flex>
+        </v-layout>
+      </v-layout>
+      <v-layout column class="my-5" v-if="investments.length">
+        <v-layout align-center>
+          <v-flex lg1>
+            <v-layout justify-end class="pr-3">
+              <v-icon large color="grey lighten-2">mdi-account-box</v-icon>
+            </v-layout>
+          </v-flex>
+          <v-flex grow class="title bold">Portfolio</v-flex>
+        </v-layout>
+        <v-layout>
+          <v-flex lg10 offset-lg1 class="portfolio">
+            <div v-for="(investment, index) of investments" :key="'investment-' + index" class="my-4">
+              <v-layout column class="portfolio__item-header py-4">
+                <div class="a subheading ellipsis">{{investment.research.title}}</div>
+                <v-layout row class="mt-2">
+                  <v-flex>
+                    <div class="body-2">{{investment.myShare.amount}}</div>
+                    <div class="mt-1 caption text-uppercase grey--text">Your number of tokens</div>
                   </v-flex>
-                  <v-flex lg5>
-                    <div class="title">Share holders</div>
-                    <div class="mt-4">
-                      <GChart
-                        type="PieChart"
-                        :settings="{ packages: ['corechart'] }"
-                        :data="shareHoldersChart.data"
-                        :options="shareHoldersChart.options"
-                      />
-                    </div>
+                  <v-flex>
+                    <div class="body-2">{{mockTokenPrice(investment.research.id, 1) | currency }}</div>
+                    <div class="mt-1 caption text-uppercase grey--text">Price per token</div>
+                  </v-flex>
+                  <v-flex>
+                    <div class="body-2">{{convertToPercent(investment.myShare.amount)}}%</div>
+                    <div class="mt-1 caption text-uppercase grey--text">Your ownership share</div>
+                  </v-flex>
+                  <v-flex>
+                    <div class="body-2">{{mockTokenPrice(investment.research.id, investment.myShare.amount) | currency}}</div>
+                    <div class="mt-1 caption text-uppercase grey--text">Your ownership value</div>
+                  </v-flex>
+                  <v-flex>
+                    <div class="body-2">{{mockTokenPrice(investment.research.id, DEIP_100_PERCENT)| currency}}</div>
+                    <div class="mt-1 caption text-uppercase grey--text">Total value</div>
+                  </v-flex>
+                  <v-flex>
+                    <div class="body-2 green--text text-accent-4">+{{mockPriceChange(investment.research.id).toFixed(2)}}%</div>
+                    <div class="mt-1 caption text-uppercase grey--text">Price change</div>
+                  </v-flex>
+                  <v-flex>
+                    <div class="body-2">{{investment.shareHolders.length}}</div>
+                    <div class="mt-1 caption text-uppercase grey--text"># of tokenholders</div>
+                  </v-flex>
+                  <v-flex>
+                    <v-btn outline color="primary" class="ma-0" @click="toggleInvestmentDetails(index)">
+                      {{expandedInvestmentIdx === index ? 'Less' : 'More'}}
+                      <v-icon
+                        small
+                        right
+                        color="primary"
+                      >{{`keyboard_arrow_${expandedInvestmentIdx === index ? 'up' : 'down'}`}}</v-icon>
+                    </v-btn>
                   </v-flex>
                 </v-layout>
-              </div>
-            </v-flex>
-          </v-layout>
-        </v-layout>
-
-
-        <v-dialog v-model="addBankCardDialog.isOpened" persistent max-width="500px">
-          <v-card class="px-5 py-2">
-            <v-card-title class="">
-              <span class="headline">Add bank card</span>
-            </v-card-title>
-            <!-- <v-card-text> -->
-              <v-layout row wrap>
-                <v-flex xs12><v-credit-card @change="creditInfoChanged"/></v-flex>
-                <v-flex xs12>
-                  <div class="pb-3 px-5">
-                    <v-checkbox
-                      label="I confirm that I am qualified investor"
-                      v-model="addBankCardDialog.termsConfirmed"
-                      hide-details
-                    ></v-checkbox>
+              </v-layout>
+              <v-layout v-if="expandedInvestmentIdx === index" row class="portfolio__item-stats py-4">
+                <v-flex lg7>
+                  <div class="title">Share price</div>
+                  <div class="mt-4">
+                    <GChart
+                      type="ComboChart"
+                      :settings="{ packages: ['corechart'] }"
+                      :data="sharePriceChart.data"
+                      :options="sharePriceChart.options"
+                    />
+                  </div>
+                </v-flex>
+                <v-flex lg5>
+                  <div class="title">Share holders</div>
+                  <div class="mt-4">
+                    <GChart
+                      type="PieChart"
+                      :settings="{ packages: ['corechart'] }"
+                      :data="shareHoldersChart.data"
+                      :options="shareHoldersChart.options"
+                    />
                   </div>
                 </v-flex>
               </v-layout>
-            <!-- </v-card-text> -->
-            <v-card-actions>
-              <v-layout row wrap>
-                <v-flex xs12 class="py-2">
-                  <v-btn @click="saveBankCard()" color="primary" block :disabled="isSavingBankCardDisabled || addBankCardDialog.isSaving" :loading="addBankCardDialog.isSaving">Add Card</v-btn>
-                </v-flex>
-                <v-flex xs12 class="py-2">
-                  <v-btn @click="closeAddBankCardDialog()" color="primary" block flat>Cancel</v-btn>
-                </v-flex>
-              </v-layout>
-            </v-card-actions>
-          </v-card>
-        </v-dialog>
+            </div>
+          </v-flex>
+        </v-layout>
+      </v-layout>
 
-        <v-dialog v-model="depositDialog.isOpened" persistent max-width="500px">
-          <v-card class="px-5 py-2">
-            <v-card-title class="">
-              <span class="headline">Deposit</span>
-            </v-card-title>
-            <!-- <v-card-text> -->
-              <v-layout row wrap>
-                <v-flex xs12>
-                  <v-layout column class="full-width">
-                    <v-radio-group v-model="depositDialog.selectedCurrency" class="currency-picker full-width align-center  ma-0 pa-0">
-                      <v-radio
-                        v-for="currencyType in currencyTypes"
-                        :value="currencyType.id"
-                        :key="currencyType.id"
-                        class="currency-item row justify-space-between ma-0 pa-4 full-width"
-                        color="grey darken-1"
-                        style="flex-direction: row-reverse"
-                      >
-                        <template slot="label">
-                          <v-layout row justify-space-between align-center class="full-width px-2">
-                            <div class="bold">
-                              <v-layout column justify-center align-center>
-                                <img width="50px: height: 50px" :src="`../../../../static/currency/${currencyType.id}.png`"/>
-                                <span class="pt-2 black--text">{{currencyType.title}}</span>
-                              </v-layout>
-                            </div>
-                            <div>
-                              <div class="black--text half-bold">{{ getAvailableCurrencyAmount(currencyType.id) | currency({ symbol: currencyType.symbol }) }}</div>
-                            </div>
-                          </v-layout>
-                        </template>
-                      </v-radio>
-                    </v-radio-group>
-                  </v-layout>
-                </v-flex>
-                <v-flex xs12>
-                  <v-text-field 
-                    class=""
-                    label="Amount" 
-                    v-model="depositDialog.amount">
-                  </v-text-field>
-                </v-flex>
-              </v-layout>
-            <!-- </v-card-text> -->
-            <v-card-actions>
-              <v-layout row wrap>
-                <v-flex xs12 class="py-2">
-                  <v-btn @click="deposit()" color="primary" block :disabled="isDepositingDisabled || depositDialog.isDepositing" :loading="depositDialog.isDepositing">Deposit</v-btn>
-                </v-flex>
-                <v-flex xs12 class="py-2">
-                  <v-btn @click="closeDepositDialog()" color="primary" block flat>Cancel</v-btn>
-                </v-flex>
-              </v-layout>
-            </v-card-actions>
-          </v-card>
-        </v-dialog>
 
-        <v-dialog v-model="withdrawDialog.isOpened" persistent max-width="500px">
-          <v-card class="px-5 py-2">
-            <v-card-title class="">
-              <span class="headline">Withdraw</span>
-            </v-card-title>
-            <!-- <v-card-text> -->
-              <v-layout row wrap>
-                <v-flex xs12>
-                  <v-layout column class="full-width">
-                    <v-radio-group v-model="withdrawDialog.selectedCurrency" class="currency-picker full-width align-center  ma-0 pa-0">
-                      <v-radio
-                        v-for="currencyType in currencyTypes"
-                        :value="currencyType.id"
-                        :key="currencyType.id"
-                        class="currency-item row justify-space-between ma-0 pa-4 full-width"
-                        color="grey darken-1"
-                        style="flex-direction: row-reverse"
-                      >
-                        <template slot="label">
-                          <v-layout row justify-space-between align-center class="full-width px-2">
-                            <div class="bold">
-                              <v-layout column justify-center align-center>
-                                <img width="50px: height: 50px" :src="`../../../../static/currency/${currencyType.id}.png`"/>
-                                <span class="pt-2 black--text">{{currencyType.title}}</span>
-                              </v-layout>
-                            </div>
-                            <div>
-                              <div class="black--text half-bold">{{ getAvailableCurrencyAmount(currencyType.id) | currency({ symbol: currencyType.symbol }) }}</div>
-                            </div>
-                          </v-layout>
-                        </template>
-                      </v-radio>
-                    </v-radio-group>
-                  </v-layout>
-                </v-flex>
-                <v-flex xs12>
-                  <v-text-field 
-                    class=""
-                    label="Amount" 
-                    v-model="withdrawDialog.amount">
-                  </v-text-field>
-                </v-flex>
-              </v-layout>
-            <!-- </v-card-text> -->
-            <v-card-actions>
-              <v-layout row wrap>
-                <v-flex xs12 class="py-2">
-                  <v-btn @click="withdraw()" color="primary" block :disabled="isWithdrawDisabled || withdrawDialog.isWithdrawing" :loading="withdrawDialog.isWithdrawing">Withdraw</v-btn>
-                </v-flex>
-                <v-flex xs12 class="py-2">
-                  <v-btn @click="closeWithdrawDialog()" color="primary" block flat>Cancel</v-btn>
-                </v-flex>
-              </v-layout>
-            </v-card-actions>
-          </v-card>
-        </v-dialog>
+      <v-dialog v-model="addBankCardDialog.isOpened" persistent max-width="500px">
+        <v-card class="px-5 py-2">
+          <v-card-title class="">
+            <span class="headline">Add bank card</span>
+          </v-card-title>
+          <!-- <v-card-text> -->
+            <v-layout row wrap>
+              <v-flex xs12><v-credit-card @change="creditInfoChanged"/></v-flex>
+              <v-flex xs12>
+                <div class="pb-3 px-5">
+                  <v-checkbox
+                    label="I confirm that I am qualified investor"
+                    v-model="addBankCardDialog.termsConfirmed"
+                    hide-details
+                  ></v-checkbox>
+                </div>
+              </v-flex>
+            </v-layout>
+          <!-- </v-card-text> -->
+          <v-card-actions>
+            <v-layout row wrap>
+              <v-flex xs12 class="py-2">
+                <v-btn @click="saveBankCard()" color="primary" block :disabled="isSavingBankCardDisabled || addBankCardDialog.isSaving" :loading="addBankCardDialog.isSaving">Add Card</v-btn>
+              </v-flex>
+              <v-flex xs12 class="py-2">
+                <v-btn @click="closeAddBankCardDialog()" color="primary" block flat>Cancel</v-btn>
+              </v-flex>
+            </v-layout>
+          </v-card-actions>
+        </v-card>
+      </v-dialog>
 
-      </v-card>
-    <!-- </v-container> -->
+      <v-dialog v-model="depositDialog.isOpened" persistent max-width="500px">
+        <v-card class="px-5 py-2">
+          <v-card-title class="">
+            <span class="headline">Deposit</span>
+          </v-card-title>
+          <!-- <v-card-text> -->
+            <v-layout row wrap>
+              <v-flex xs12>
+                <v-layout column class="full-width">
+                  <v-radio-group v-model="depositDialog.selectedCurrency" class="currency-picker full-width align-center  ma-0 pa-0">
+                    <v-radio
+                      v-for="currencyType in currencyTypes"
+                      :value="currencyType.id"
+                      :key="currencyType.id"
+                      class="currency-item row justify-space-between ma-0 pa-4 full-width"
+                      color="grey darken-1"
+                      style="flex-direction: row-reverse"
+                    >
+                      <template slot="label">
+                        <v-layout row justify-space-between align-center class="full-width px-2">
+                          <div class="bold">
+                            <v-layout column justify-center align-center>
+                              <img width="50px: height: 50px" :src="`../../../../static/currency/${currencyType.id}.png`"/>
+                              <span class="pt-2 black--text">{{currencyType.title}}</span>
+                            </v-layout>
+                          </div>
+                          <div>
+                            <div class="black--text half-bold">{{ getAvailableCurrencyAmount(currencyType.id) | currency({ symbol: currencyType.symbol }) }}</div>
+                          </div>
+                        </v-layout>
+                      </template>
+                    </v-radio>
+                  </v-radio-group>
+                </v-layout>
+              </v-flex>
+              <v-flex xs12>
+                <v-text-field 
+                  class=""
+                  label="Amount" 
+                  v-model="depositDialog.amount">
+                </v-text-field>
+              </v-flex>
+            </v-layout>
+          <!-- </v-card-text> -->
+          <v-card-actions>
+            <v-layout row wrap>
+              <v-flex xs12 class="py-2">
+                <v-btn @click="deposit()" color="primary" block :disabled="isDepositingDisabled || depositDialog.isDepositing" :loading="depositDialog.isDepositing">Deposit</v-btn>
+              </v-flex>
+              <v-flex xs12 class="py-2">
+                <v-btn @click="closeDepositDialog()" color="primary" block flat>Cancel</v-btn>
+              </v-flex>
+            </v-layout>
+          </v-card-actions>
+        </v-card>
+      </v-dialog>
+
+      <v-dialog v-model="withdrawDialog.isOpened" persistent max-width="500px">
+        <v-card class="px-5 py-2">
+          <v-card-title class="">
+            <span class="headline">Withdraw</span>
+          </v-card-title>
+          <!-- <v-card-text> -->
+            <v-layout row wrap>
+              <v-flex xs12>
+                <v-layout column class="full-width">
+                  <v-radio-group v-model="withdrawDialog.selectedCurrency" class="currency-picker full-width align-center  ma-0 pa-0">
+                    <v-radio
+                      v-for="currencyType in currencyTypes"
+                      :value="currencyType.id"
+                      :key="currencyType.id"
+                      class="currency-item row justify-space-between ma-0 pa-4 full-width"
+                      color="grey darken-1"
+                      style="flex-direction: row-reverse"
+                    >
+                      <template slot="label">
+                        <v-layout row justify-space-between align-center class="full-width px-2">
+                          <div class="bold">
+                            <v-layout column justify-center align-center>
+                              <img width="50px: height: 50px" :src="`../../../../static/currency/${currencyType.id}.png`"/>
+                              <span class="pt-2 black--text">{{currencyType.title}}</span>
+                            </v-layout>
+                          </div>
+                          <div>
+                            <div class="black--text half-bold">{{ getAvailableCurrencyAmount(currencyType.id) | currency({ symbol: currencyType.symbol }) }}</div>
+                          </div>
+                        </v-layout>
+                      </template>
+                    </v-radio>
+                  </v-radio-group>
+                </v-layout>
+              </v-flex>
+              <v-flex xs12>
+                <v-text-field 
+                  class=""
+                  label="Amount" 
+                  v-model="withdrawDialog.amount">
+                </v-text-field>
+              </v-flex>
+            </v-layout>
+          <!-- </v-card-text> -->
+          <v-card-actions>
+            <v-layout row wrap>
+              <v-flex xs12 class="py-2">
+                <v-btn @click="withdraw()" color="primary" block :disabled="isWithdrawDisabled || withdrawDialog.isWithdrawing" :loading="withdrawDialog.isWithdrawing">Withdraw</v-btn>
+              </v-flex>
+              <v-flex xs12 class="py-2">
+                <v-btn @click="closeWithdrawDialog()" color="primary" block flat>Cancel</v-btn>
+              </v-flex>
+            </v-layout>
+          </v-card-actions>
+        </v-card>
+      </v-dialog>
+    </v-card>
   </base-page-layout>
 </template>
 

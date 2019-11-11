@@ -19,7 +19,7 @@
             >{{ research.group.name }}:</router-link>
 
             <span class="caption grey--text hidden-last-child">
-                <template v-for="author in research.enrichedAuthors">
+                <template v-for="author in research.authors">
                     <span>{{ author | fullname}}</span>
                     <span> · </span>
                 </template>
