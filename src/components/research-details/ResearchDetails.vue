@@ -44,24 +44,28 @@
                 <v-flex lg12 class="rd-block-header">Fundrising</v-flex>
                 <v-flex lg12 v-if="isActiveTokenSale || isInactiveTokenSale">
                   <v-layout class="pt-3">
-                    <v-flex lg2 class="bold">Start:</v-flex>
-                    <v-flex lg10>{{tokenSale.start_time | dateFormat('MMM D, YYYY HH:mm', true)}}</v-flex>
+                    <v-flex lg3 class="bold">Start:</v-flex>
+                    <v-flex lg9>{{tokenSale.start_time | dateFormat('MMM D, YYYY HH:mm', true)}}</v-flex>
                   </v-layout>
                   <v-layout class="pt-3">
-                    <v-flex lg2 class="bold">End:</v-flex>
-                    <v-flex lg10>{{tokenSale.end_time | dateFormat('MMM D, YYYY HH:mm', true)}}</v-flex>
+                    <v-flex lg3 class="bold">End:</v-flex>
+                    <v-flex lg9>{{tokenSale.end_time | dateFormat('MMM D, YYYY HH:mm', true)}}</v-flex>
                   </v-layout>
-                  <v-layout class="pt-3">  
-                    <v-flex lg2 class="bold">On sale:</v-flex>
-                    <v-flex lg10>{{convertToPercent(tokenSale.balance_tokens)}}%</v-flex>
+                  <v-layout class="pt-3">
+                    <v-flex lg3 class="bold">Tokens On sale:</v-flex>
+                    <v-flex lg9>{{convertToPercent(tokenSale.balance_tokens)}}%</v-flex>
                   </v-layout>
-                  <v-layout class="pt-3">  
-                    <v-flex lg2 class="bold">Soft Cap:</v-flex>
-                    <v-flex lg10>${{fromAssetsToFloat(tokenSale.soft_cap)}}</v-flex>
+                  <v-layout class="pt-3">
+                    <v-flex lg3 class="bold">Remaining Tokens:</v-flex>
+                    <v-flex lg9>{{convertToPercent(DEIP_100_PERCENT - tokenHoldersTotalAmount - tokenSale.balance_tokens)}}%</v-flex>
                   </v-layout>
-                  <v-layout class="pt-3">  
-                    <v-flex lg2 class="bold">Hard Cap:</v-flex>
-                    <v-flex lg10>${{fromAssetsToFloat(tokenSale.hard_cap)}}</v-flex>
+                  <v-layout class="pt-3">
+                    <v-flex lg3 class="bold">Soft Cap:</v-flex>
+                    <v-flex lg9>${{fromAssetsToFloat(tokenSale.soft_cap)}}</v-flex>
+                  </v-layout>
+                  <v-layout class="pt-3">
+                    <v-flex lg3 class="bold">Hard Cap:</v-flex>
+                    <v-flex lg9>${{fromAssetsToFloat(tokenSale.hard_cap)}}</v-flex>
                   </v-layout>
                 </v-flex>
                 <v-flex lg12 v-if="isMissingTokenSale && isResearchGroupMember && research" class="pt-3">
@@ -748,6 +752,11 @@
       },
       isTokenSaleSectionAvailable() {
         return (this.isMissingTokenSale && this.isResearchGroupMember && !this.isFinishedResearch) || this.isActiveTokenSale || this.isInactiveTokenSale;
+      },
+      tokenHoldersTotalAmount() {
+        return this.tokenHoldersList.reduce((share, holder) => {
+          return share + holder.amount;
+        }, 0);
       },
       reviews() {
         return this.reviewsList.map((review) => {
