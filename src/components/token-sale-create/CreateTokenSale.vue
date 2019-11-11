@@ -22,12 +22,19 @@
 
                 <v-stepper-items class="legacy-col-grow">
                     <v-stepper-content step="1">
-                        <div class="full-height">
+                        <div v-if="this.research" class="full-height">
                             <token-sale-amount
                                 @incStep="incStep"
                                 :token-sale-info="tokenSaleInfo"
+                                :owned-amount="research.owned_tokens"
                             ></token-sale-amount>
                         </div>
+                        <v-layout v-else justify-center>
+                          <v-progress-circular
+                            indeterminate
+                            color="primary"
+                          />
+                        </v-layout>
                     </v-stepper-content>
 
                     <v-stepper-content step="2">
@@ -73,7 +80,7 @@
                 research: null,
                 currentStep: 0,
                 tokenSaleInfo: {
-                    amountToSell: 10,
+                    amountToSell: 1000,
                     startDate: undefined,
                     endDate: undefined,
                     softCap: '',
@@ -107,7 +114,7 @@
                     this.research.id,
                     this.tokenSaleInfo.startDate.toISOString().split('.')[0],
                     this.tokenSaleInfo.endDate.toISOString().split('.')[0],
-                    this.toDeipPercent(parseInt(this.tokenSaleInfo.amountToSell)),
+                    parseInt(this.tokenSaleInfo.amountToSell),
                     this.toAssetUnits(this.tokenSaleInfo.softCap),
                     this.toAssetUnits(this.tokenSaleInfo.hardCap)
 				).then(() => {

@@ -63,7 +63,16 @@
           <v-flex lg10 offset-lg1 class="portfolio">
             <div v-for="(investment, index) of investments" :key="'investment-' + index" class="my-4">
               <v-layout column class="portfolio__item-header py-4">
-                <div class="a subheading ellipsis">{{investment.research.title}}</div>
+                <router-link
+                  class="a subheading ellipsis"
+                  :to="{
+                    name: 'ResearchDetails',
+                    params: {
+                      research_group_permlink: encodeURIComponent(investment.research.group_permlink),
+                      research_permlink: encodeURIComponent(investment.research.permlink)
+                    }
+                  }"
+                >{{investment.research.title}}</router-link>
                 <v-layout row class="mt-2">
                   <v-flex>
                     <div class="body-2">{{investment.myShare.amount}}</div>

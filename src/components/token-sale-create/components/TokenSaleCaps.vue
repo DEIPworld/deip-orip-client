@@ -10,14 +10,14 @@
                             label="Min"
                             v-model="tokenSaleInfo.softCap"
                             :rules="[required, deipTokenValidator, softCapSmaller]"
-                            suffix="DEIP"
+                            suffix="USD"
                         ></v-text-field>
 
                         <v-text-field
                             label="Max"
                             :rules="[required, deipTokenValidator, hardCapGreater]"
                             v-model="tokenSaleInfo.hardCap"
-                            suffix="DEIP"
+                            suffix="USD"
                         ></v-text-field>
                     </v-form>
                 </div>
