@@ -23,7 +23,8 @@
                 <template v-slot:item="props">
                   <v-flex xs12 sm6 md4 lg4 xl3 px-2 py-4 :key="'feed-item-' + props.item.research_id">
                     <research-project-tile
-                      :research="{ id: props.item.research_id, title: props.item.title, permlink: props.item.permlink, group_permlink: props.item.group_permlink }" 
+                      :research="{ id: props.item.research_id, title: props.item.title, permlink: props.item.permlink, group_permlink: props.item.group_permlink }"
+                      :members="props.item.authors" 
                       :tokenSale="props.item.tokenSale"
                       :tokenSaleContributions="props.item.tokenSaleContributions">
                     </research-project-tile>
@@ -93,7 +94,7 @@ import * as disciplinesService from './../../components/common/disciplines/Disci
 
 export default {
   name: "ResearchFeed",
-  
+
   data() {
     return {
       rowsPerPageItems: [9, 30],

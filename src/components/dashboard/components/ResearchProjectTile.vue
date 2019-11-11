@@ -2,7 +2,7 @@
 <v-layout row class="research-tile">
   <v-layout column>
     <div><img style="width: 100%; height: 150px" :src="researchLogoSrc" /></div>
-    <router-link class="research-title py-2"
+    <router-link class="research-title py-2 ellipsis" 
       :to="{
         name: 'ResearchDetails', 
         params: {
@@ -13,7 +13,7 @@
     ><span class="subheading half-bold">{{ research.title }}</span></router-link>
     
     <v-layout row wrap justify-start>
-      <platform-avatar :user="user" link-to-profile link-to-profile-class="pl-3 grey--text lighten-2"></platform-avatar>
+      <platform-avatar v-for="(member, i) in members" :user="member" :key="`member-${research.permlink}-`+ i" link-to-profile link-to-profile-class="px-2 grey--text lighten-2"></platform-avatar>
     </v-layout>
 
     <v-layout v-if="tokenSale" row class="pt-1 token-sale-section">
@@ -50,8 +50,9 @@
     name: "ResearchProjectTile",
     props: {
       research: { required: true, default: undefined },
+      members: { required: true, default: () => [] },
       tokenSale: { required: false, default: undefined },
-      tokenSaleContributions: { required: false, default: undefined }
+      tokenSaleContributions: { required: false, default: undefined },
     },
     data() {
       return {
@@ -60,7 +61,6 @@
     },
     computed: {
       ...mapGetters({
-        user: "auth/user",
       }),
 
       fundingProgressPercent() {
