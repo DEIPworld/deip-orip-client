@@ -75,6 +75,15 @@ Vue.filter('researchAbstract', (value) => {
     }
 });
 
+Vue.filter('researchVideoSrc', (value) => {
+    try {
+        let json = JSON.parse(value);
+        return json.video_src;
+    } catch (e) {
+        return "";
+    }
+});
+
 Vue.filter('researchMilestones', (value) => {
     try {
         let json = JSON.parse(value);

@@ -25,6 +25,19 @@
               auto-grow
             ></v-textarea>
           </div>
+
+          <div>
+            <div class="title half-bold pb-3">Video Presentation:</div>
+            <v-text-field 
+              prepend-inner-icon="link"
+              label="Link to a video presentation" 
+              single-line
+              solo
+              v-model="videoSrc" 
+              :rules="[rules.link, rules.mp4]"
+            ></v-text-field>
+          </div>
+
           <div v-if="milestones" class="py-4">
             <div class="title half-bold pb-3">Roadmap:</div>
             <milestone-stepper :isReadOnly="false" :steps="milestones"></milestone-stepper>
@@ -62,11 +75,18 @@ export default {
       title: "",
       description: "",
       milestones: undefined,
+      videoSrc: "",
 
       isLoading: false,
 
       rules: {
-        required: value => !!value || 'This field is required'
+        required: value => !!value || 'This field is required',
+        link: (value) => {
+					return (!value || this.isValidLink) || 'Invalid http(s) link';
+				},
+				mp4: (value) => {
+					return (!value || this.isMp4) || 'Only .mp4 format is supported currently';
+				}
       }
     }
   },
@@ -77,7 +97,20 @@ export default {
     }),
 
     isSavingDisabled() {
-      return !this.title || !this.description || !this.milestones || this.milestones.some(step => !step.validation || step.validation.isValid === false);
+      return !this.title || !this.description || !this.milestones || this.milestones.some(step => !step.validation || step.validation.isValid === false) || !this.videoSrcIsValidOrAbsent;
+    },
+
+    isValidLink() {
+			let regexp = /^(http:\/\/www\.|https:\/\/www\.|http:\/\/|https:\/\/)?[a-z0-9]+([\-\.]{1}[a-z0-9]+)*\.[a-z]{2,5}(:[0-9]{1,5})?(\/.*)?$/g;
+			return regexp.test(this.videoSrc || "");
+    },
+    
+		isMp4() {
+			return this.isValidLink && this.videoSrc.substr(this.videoSrc.length - 4) == ".mp4";
+    },
+    
+		videoSrcIsValidOrAbsent() {
+			return !this.videoSrc || (this.isValidLink && this.isMp4);
     }
   },
   methods: {
@@ -94,7 +127,7 @@ export default {
           }
         });
 
-        let abstract = JSON.stringify({description, milestones});
+        let abstract = JSON.stringify({description, milestones, video_src: this.videoSrc });
 
         deipRpc.broadcast.researchUpdateAsync(
           this.user.privKey, 
@@ -149,6 +182,7 @@ export default {
     this.title = this.research.title;
     this.description = this.$options.filters.researchAbstract(this.research.abstract);
     this.milestones = this.$options.filters.researchMilestones(this.research.abstract);
+    this.videoSrc = this.$options.filters.researchVideoSrc(this.research.abstract);
   }
 };
 </script>

@@ -1,35 +1,43 @@
 <template>
   <base-page-layout>
-    <div slot="content" class="full-width">
-      <v-layout align-end class="rd-header">
+    <div slot="content" class="full-width full-height">
+      <v-layout row class="rd-header full-height pa-5" style="overflow: scroll">
         <v-flex lg8>
-          <v-layout>
-            <v-flex lg11 offset-lg1 class="mb-5">
-              <div class="rd-header__title">{{research.title}}</div>
-              <div class="rd-header__created pt-3">
-                <v-icon small color="white">today</v-icon>
-                &nbsp;Created {{research.created_at | dateFormat('D MMM YYYY', true)}}
-              </div>
-              <div class="rd-header__abstract pt-3">
-                <toggle-text :text="$options.filters.researchAbstract(research.abstract)"></toggle-text>
-              </div>
-            </v-flex>
-          </v-layout>
-        </v-flex>
-        <v-flex lg4>
-          <div v-if="isResearchGroupMember" class="text-xs-right">
-            <v-btn outline color="white"
-              :to="{  
-                name: 'ResearchEdit',
-                params: {
-                  research_group_permlink: encodeURIComponent(research.group_permlink),
-                  research_permlink: encodeURIComponent(research.permlink)
-                } 
-              }">
-              Edit
-            </v-btn>
+          <div style="width: 95%">
+            <div class="rd-header__title">{{research.title}}</div>
+            <div class="rd-header__created pt-4">
+              <v-layout row align-baseline>
+                <span>
+                  <v-icon small color="white">today</v-icon>
+                  &nbsp;Created {{research.created_at | dateFormat('D MMM YYYY', true)}}
+                </span>
+                <span v-if="isResearchGroupMember" class="pl-4">
+                  <v-btn class="ma-0 pa-0" small outline color="white"
+                    :to="{  
+                      name: 'ResearchEdit',
+                      params: {
+                        research_group_permlink: encodeURIComponent(research.group_permlink),
+                        research_permlink: encodeURIComponent(research.permlink)
+                      } 
+                    }">
+                    Edit
+                  </v-btn>
+                </span>
+              </v-layout>
+            </div>
+            <div class="rd-header__abstract">
+              <toggle-text class="py-3" :text="$options.filters.researchAbstract(research.abstract)"></toggle-text>
+            </div>
           </div>
-        </v-flex>       
+        </v-flex>
+        <v-flex lg4 text-xs-right class="align-start fill-height">
+          <div v-if="researchPresentationSrc">
+            <video style="border: 2px solid #fafafa" width="100%" height="100%" controls>
+              <source :src="researchPresentationSrc" type="video/mp4">>
+              Your browser does not support the video tag.
+            </video>
+          </div>
+        </v-flex> 
       </v-layout>
       <v-layout class="mt-4">
         <v-flex lg8>
@@ -774,6 +782,10 @@
           };
         });
       },
+
+      researchPresentationSrc() {
+        return this.$options.filters.researchVideoSrc(this.research.abstract);
+      }
     },
 
     methods: {
@@ -1012,8 +1024,6 @@
       font-family: Roboto;
       font-size: 14px;
       line-height: 16px;
-      max-height: 80px;
-      overflow: scroll;
     }
   }
 

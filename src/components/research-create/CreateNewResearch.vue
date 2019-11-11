@@ -23,12 +23,18 @@
                     <v-divider></v-divider>
 
                     <v-stepper-step step="4" :complete="currentStep > 4">
+                        <div class="uppercase">Video</div>
+                    </v-stepper-step>
+
+                    <v-divider></v-divider>
+
+                    <v-stepper-step step="5" :complete="currentStep > 5">
                         <div class="uppercase">Roadmap</div>
                     </v-stepper-step>
                     
                     <!-- <v-divider></v-divider> -->
 
-                    <!-- <v-stepper-step step="4">
+                    <!-- <v-stepper-step step="6">
                         <div class="uppercase">Reward shares</div>
                     </v-stepper-step> -->
                 </v-stepper-header>
@@ -67,6 +73,17 @@
                     </v-stepper-content>
 
                     <v-stepper-content step="4">
+                        <div class="full-height">
+                            <create-research-video
+                                @setVideo="setVideo"
+                                @incStep="incStep" @decStep="decStep"
+                                :research="research"
+                                :isLoading="isLoading"
+                            ></create-research-video>
+                        </div>
+                    </v-stepper-content>
+
+                    <v-stepper-content step="5">
                         <div class="full-height">
                             <create-research-roadmap
                                 @finish="finish"
@@ -113,6 +130,7 @@ export default {
         group: undefined,
         title: '',
         description: '',
+        videoSrc: "",
         review_share_in_percent: 5,
         milestones: []
       }
@@ -151,6 +169,10 @@ export default {
       this.research.description = description;
     },
 
+    setVideo(videoSrc) {
+      this.research.videoSrc = videoSrc;
+    },
+
     setReviewShare(share) {
       this.research.review_share_in_percent = share;
     },
@@ -166,13 +188,15 @@ export default {
         this.research.title.replace(/ /g, "-").replace(/_/g, "-").toLowerCase(), 
         500, // this.research.review_share_in_percent * this.DEIP_1_PERCENT,
         this.research.disciplines.map(d => d.id),
-        this.research.milestones.map(m => { 
+        this.research.milestones.map((m, i) => { 
           return {
             goal: m.goal,
             details: m.details,
-            eta: moment(m.eta).toDate()
+            eta: moment(m.eta).toDate(),
+            is_active: i === 0
           }
-        })
+        }),
+        this.research.videoSrc
       )
       .then(() => {
         this.isLoading = false;
