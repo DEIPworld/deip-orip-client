@@ -135,7 +135,12 @@ const actions = {
     return Promise.all(researchIds.map(rId => deipRpc.api.getResearchByIdAsync(rId)))
       .then((researches) => {
         commit('SET_INVESTMENT_PORTFOLIO_RESEARCHES', researches);
-        return Promise.all(researches.map(research => deipRpc.api.getResearchGroupByIdAsync(research.research_group_id)));
+        return Promise.all(researches
+          .reduce((unique, research) => {
+            if (unique.some(rgId => rgId == research.research_group_id)) return unique;
+            return [research.research_group_id, ...unique];
+          }, [])
+          .map(rgId => deipRpc.api.getResearchGroupByIdAsync(rgId)));
       })
       .then((groups) => {
         commit('SET_INVESTMENT_PORTFOLIO_RESEARCH_GROUPS', groups);
@@ -144,27 +149,25 @@ const actions = {
       .then((researchGroupsTokens) => {
         const tokens = [].concat.apply([], researchGroupsTokens);
         commit('SET_INVESTMENT_PORTFOLIO_RESEARCH_GROUPS_TOKENS', tokens);
-        return usersService.getEnrichedProfiles(tokens.map(m => m.owner));
+        return usersService.getEnrichedProfiles(tokens.reduce((unique, rt) => {
+          if (unique.some(name => name == rt.owner)) return unique;
+          return [rt.owner, ...unique];
+        }, []));
       })
       .then((members) => {
-        const distinct = members.reduce((unique, member) => {
-          if (unique.some(user => member.account.name == user.account.name)) return unique;
-          return [member, ...unique];
-        }, []);
-        commit('SET_INVESTMENT_PORTFOLIO_RESEARCH_GROUPS_MEMBERS', distinct);
+        commit('SET_INVESTMENT_PORTFOLIO_RESEARCH_GROUPS_MEMBERS', members);
         return Promise.all(researchIds.map(rId => deipRpc.api.getResearchTokensByResearchIdAsync(rId)));
       })      
       .then((researchTokens) => {
         const tokens = [].concat.apply([], researchTokens);
         commit('SET_INVESTMENT_PORTFOLIO_RESEARCH_TOKENS', tokens);
-        return usersService.getEnrichedProfiles(tokens.map(m => m.account_name));
+        return usersService.getEnrichedProfiles(tokens.reduce((unique, share) => {
+          if (unique.some(name => name == share.account_name)) return unique;
+          return [share.account_name, ...unique];
+        }, []));
       })
       .then((researchTokensHolders) => {
-        const distinct = researchTokensHolders.reduce((unique, shareHolder) => {
-          if (unique.some(user => shareHolder.account.name == user.account.name)) return unique;
-          return [shareHolder, ...unique];
-        }, []);
-        commit('SET_INVESTMENT_PORTFOLIO_RESEARCH_TOKENS_HOLDERS', distinct);
+        commit('SET_INVESTMENT_PORTFOLIO_RESEARCH_TOKENS_HOLDERS', researchTokensHolders);
       })
       .catch(err => { console.log(err) })
       .finally(() => {
