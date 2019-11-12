@@ -29,7 +29,7 @@ const getters = {
 			...state.membershipResearches
 		]
 			.reduce((acc, research) => {
-				if (acc.some(r => r.id == research.id)) return acc;
+				if (acc.some(a => a.research.id == research.id)) return acc;
 
 				let members = state.researchGroupsTokens
 					.filter(rgt => rgt.research_group_id == research.research_group_id)
@@ -48,7 +48,7 @@ const getters = {
 			}, []);
 
 		unique.sort((a, b) => (a.research.title > b.research.title) ? 1 : ((b.research.title > a.research.title ) ? -1 : 0));
-		return unique;
+    return unique;
 	},
 
 	investments: (state) => {
