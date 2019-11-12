@@ -32,6 +32,25 @@
               <v-flex lg5 class="bold subheading">EUR</v-flex>
               <v-flex lg5 class="bold subheading">{{(getAvailableCurrencyAmount('eur')) | currency({ symbol: '€' }) }}</v-flex>
               <v-flex lg1 class="pl-3">
+                <v-menu bottom left offset-y>
+                  <template v-slot:activator="{ on }">
+                    <v-btn
+                      dark
+                      icon
+                      v-on="on"
+                    >
+                      <v-icon color="grey">more_vert</v-icon>
+                    </v-btn>
+                  </template>
+
+                  <v-list>
+                    <v-list-tile
+                      @click="openSendTokensDialog(currencyTypes.eur.id)"
+                    >
+                      <v-list-tile-title>Transfer</v-list-tile-title>
+                    </v-list-tile>
+                  </v-list>
+                </v-menu>
                 <!-- <v-icon color="grey" class="balance-table__action">more_vert</v-icon> -->
               </v-flex>
             </v-layout>
@@ -57,7 +76,7 @@
 
                   <v-list>
                     <v-list-tile
-                      @click="openSendTokensDialog()"
+                      @click="openSendTokensDialog(currencyTypes.usd.id)"
                     >
                       <v-list-tile-title>Transfer</v-list-tile-title>
                     </v-list-tile>
@@ -375,7 +394,7 @@
       <v-dialog v-model="sendTokensDialog.isOpened" persistent max-width="500px">
         <v-card class="px-5 py-2">
           <v-card-title>
-            <span class="title">Transfer</span>
+            <span class="title">Transfer - {{sendTokensDialog.currency.title}}</span>
           </v-card-title>
 
           <v-card-text>
@@ -389,7 +408,7 @@
               <v-text-field
                 label="Amount"
                 v-model="sendTokensDialog.form.amount"
-                suffix="USD"
+                :suffix="sendTokensDialog.currency.title"
                 :rules="sendTokensDialog.form.rules.amount"
                 :disabled="sendTokensDialog.isSending"
               />
@@ -440,8 +459,8 @@
   import * as bankCardsStorage from './../../../utils/bankCard';
 
   const currencyTypes = {
-    eur: { id: "eur", title: "EUR", symbol: "€" },
-    usd: { id: "usd", title: "USD", symbol: "$" }
+    eur: { id: "eur", title: "EUR", symbol: "€", mockExchange: 1.1 },
+    usd: { id: "usd", title: "USD", symbol: "$", mockExchange: 1.0 }
   }
 
   export default {
@@ -553,10 +572,11 @@
           maxAmount: 0,
           maxMemo: 2000,
           isOpened: false,
-          isSending: false
+          isSending: false,
+          currency: {},
         },
 
-        currencyTypes: Object.values(currencyTypes)
+        currencyTypes,
       }
     },
 
@@ -722,11 +742,13 @@
         this.sendResearchTokensDialog.isOpened = false;
       },
 
-      openSendTokensDialog() {
+      openSendTokensDialog(currencyId) {
         this.$refs.sendTokensForm.reset();
         this.sendTokensDialog.isOpened = true;
 
-        this.sendTokensDialog.maxAmount = this.fromAssetsToFloat(this.user.account.balance);
+        this.sendTokensDialog.maxAmount = this.getAvailableCurrencyAmount(currencyId);
+        this.sendTokensDialog.currency = currencyTypes[currencyId];
+
         this.sendTokensDialog.form.valid = false;
         this.sendTokensDialog.form.to = '';
         this.sendTokensDialog.form.amount = 0;
@@ -744,7 +766,7 @@
           this.user.privKey,
           this.user.username,
           this.sendTokensDialog.form.to,
-          this.toAssetUnits(this.sendTokensDialog.form.amount),
+          this.toAssetUnits(this.sendTokensDialog.form.amount / this.sendTokensDialog.currency.mockExchange),
           this.sendTokensDialog.form.memo
         ).then((data) => {
           this.$store.dispatch('layout/setSuccess', {
@@ -835,11 +857,7 @@
       },
 
       getAvailableCurrencyAmount(currencyId) {
-        if (currencyTypes.eur.id == currencyId) {
-          return this.fromAssetsToFloat(this.user.account.balance) * 1.10;
-        } else if (currencyTypes.usd.id == currencyId) {
-          return this.fromAssetsToFloat(this.user.account.balance)
-        }
+        return this.fromAssetsToFloat(this.user.account.balance) * currencyTypes[currencyId].mockExchange;
       },
 
       mockPriceChange(rtId) {
