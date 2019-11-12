@@ -92,3 +92,12 @@ Vue.filter('researchMilestones', (value) => {
         return [];
     }
 });
+
+Vue.filter('researchTokenized', (value) => {
+    try {
+        let json = JSON.parse(value);
+        return !!json.is_tokenized;
+    } catch (e) {
+        return true;
+    }
+});

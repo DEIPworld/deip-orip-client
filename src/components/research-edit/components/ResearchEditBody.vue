@@ -141,7 +141,12 @@ export default {
           }
         });
 
-        let abstract = JSON.stringify({description, milestones, video_src: this.videoSrc });
+        let abstract = JSON.stringify({
+          description,
+          milestones,
+          video_src: this.videoSrc,
+          is_tokenized: this.$options.filters.researchTokenized(this.research.abstract),
+        });
 
         deipRpc.broadcast.researchUpdateAsync(
           this.user.privKey, 

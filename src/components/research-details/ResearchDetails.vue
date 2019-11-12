@@ -550,7 +550,19 @@
             </v-layout>
           </v-layout>
           <v-divider />
-          <div class="rd-sidebar-block-title mt-4 px-4">Citations: 12</div>
+          <div class="rd-sidebar-block-title my-4 px-4">Citations: 12</div>
+          <v-divider />
+          <v-layout column class="my-4 mx-4">
+            <div class="rd-sidebar-block-title">Tokenization</div>
+            <div v-if="isResearchTokenized" class="mt-3">Issued 10000 research tokens</div>
+            <v-btn
+              v-else-if="isResearchGroupMember"
+              class="mx-0 mt-3"
+              @click="onTokenizeResearchClick()"
+              :loading="isResearchTokenizing"
+            >Tokenize research</v-btn>
+            <div v-else class="mt-3">Research hasn't been tokenized yet</div>
+          </v-layout>
         </v-flex>
       </v-layout>
     </div>
@@ -590,6 +602,8 @@
         selectedTimelineItemId: 1,
         timelineItemsToShow: 3,
         references,
+
+        isResearchTokenizing: false,
       }
     },
 
@@ -758,7 +772,12 @@
           ? this.$store.getters['auth/userIsResearchGroupMember'](this.research.research_group_id) 
           : false;
       },
+      isResearchTokenized() {
+        return this.$options.filters.researchTokenized(this.research.abstract) || this.tokenSalesList.length > 0;
+      },
       isTokenSaleSectionAvailable() {
+        if (!this.isResearchTokenized) return false;
+
         return (this.isMissingTokenSale && this.isResearchGroupMember && !this.isFinishedResearch) || this.isActiveTokenSale || this.isInactiveTokenSale;
       },
       tokenHoldersTotalAmount() {
@@ -962,6 +981,41 @@
       },
       onTimelineMarkerClick(item) {
         this.selectedTimelineItemId = item.id;
+      },
+      onTokenizeResearchClick() {
+        const abstract = JSON.stringify({
+          description: this.$options.filters.researchAbstract(this.research.abstract),
+          milestones: this.$options.filters.researchMilestones(this.research.abstract),
+          video_src: this.$options.filters.researchVideoSrc(this.research.abstract),
+          is_tokenized: true,
+        });
+        const isActionConfirmed = confirm('This project will be tokenized instantly. This action is irreversible. Continue?');
+        if (!isActionConfirmed) return;
+
+        this.isResearchTokenizing = true;
+        return deipRpc.broadcast.researchUpdateAsync(
+          this.user.privKey,
+          this.research.id,
+          this.research.title,
+          abstract,
+          this.research.permlink,
+          this.user.username
+        ).then(() => {
+          this.$store.dispatch('layout/setSuccess', {
+            message: 'Research has been tokenized'
+          });
+        }).catch(() => {
+          this.$store.dispatch('layout/setError', {
+            message: 'An error occurred while tokenizing research, please try again later'
+          });
+        }).then(() => {
+          this.$store.dispatch('rd/loadResearchDetails', {
+            group_permlink: this.research.group_permlink,
+            research_permlink: this.research.permlink,
+          });
+        }).finally(() => {
+          this.isResearchTokenizing = false;
+        });
       },
       openDarDraft(draft) {
         if (draft.type === 'dar' && draft.status === 'in-progress') {
