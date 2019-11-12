@@ -554,14 +554,20 @@
           <v-divider />
           <v-layout column class="my-4 mx-4">
             <div class="rd-sidebar-block-title">Tokenization</div>
-            <div v-if="isResearchTokenized" class="mt-3">Issued 10000 research tokens</div>
+            <div v-if="isResearchTokenized" class="mt-3">10000 research tokens issued</div>
             <v-btn
               v-else-if="isResearchGroupMember"
               class="mx-0 mt-3"
               @click="onTokenizeResearchClick()"
-              :loading="isResearchTokenizing"
             >Tokenize research</v-btn>
             <div v-else class="mt-3">Research hasn't been tokenized yet</div>
+            <confirm-action-dialog
+              :meta="tokenizationConfirmDialog"
+              :title="``"
+              :text="`This project will be tokenized instantly. This action is irreversible. Continue?`"
+              @confirmed="tokenizeResearch($event);" 
+              @canceled="tokenizationConfirmDialog.isShown = false">
+            </confirm-action-dialog>
           </v-layout>
         </v-flex>
       </v-layout>
@@ -587,6 +593,8 @@
 
     data() {
       return {
+        tokenizationConfirmDialog: { isShown: false, isConfirming: false },
+
         groupLink: this.$route.params.research_group_permlink,
 
         isJoinGroupDialogOpen: false,
@@ -601,9 +609,7 @@
 
         selectedTimelineItemId: 1,
         timelineItemsToShow: 3,
-        references,
-
-        isResearchTokenizing: false,
+        references
       }
     },
 
@@ -983,17 +989,19 @@
         this.selectedTimelineItemId = item.id;
       },
       onTokenizeResearchClick() {
+        this.tokenizationConfirmDialog.isShown = true;
+        this.tokenizationConfirmDialog.isConfirming = false;
+      },
+      tokenizeResearch() {
         const abstract = JSON.stringify({
           description: this.$options.filters.researchAbstract(this.research.abstract),
           milestones: this.$options.filters.researchMilestones(this.research.abstract),
           video_src: this.$options.filters.researchVideoSrc(this.research.abstract),
           is_tokenized: true,
         });
-        const isActionConfirmed = confirm('This project will be tokenized instantly. This action is irreversible. Continue?');
-        if (!isActionConfirmed) return;
 
-        this.isResearchTokenizing = true;
-        return deipRpc.broadcast.researchUpdateAsync(
+        this.tokenizationConfirmDialog.isConfirming = true;        
+        deipRpc.broadcast.researchUpdateAsync(
           this.user.privKey,
           this.research.id,
           this.research.title,
@@ -1014,7 +1022,8 @@
             research_permlink: this.research.permlink,
           });
         }).finally(() => {
-          this.isResearchTokenizing = false;
+          this.tokenizationConfirmDialog.isConfirming = false;
+          this.tokenizationConfirmDialog.isShown = false;
         });
       },
       openDarDraft(draft) {

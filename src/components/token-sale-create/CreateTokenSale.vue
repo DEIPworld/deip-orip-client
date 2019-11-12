@@ -22,9 +22,10 @@
 
                 <v-stepper-items class="legacy-col-grow">
                     <v-stepper-content step="1">
-                        <div v-if="this.research" class="full-height">
+                        <div v-if="research" class="full-height">
                             <token-sale-amount
                                 @incStep="incStep"
+                                :research="research"
                                 :token-sale-info="tokenSaleInfo"
                                 :owned-amount="research.owned_tokens"
                             ></token-sale-amount>
@@ -47,7 +48,7 @@
                     </v-stepper-content>
 
                     <v-stepper-content step="3">
-                        <div class="full-height">
+                        <div v-if="research" class="full-height">
                             <token-sale-caps
                                 @finish="finish" @decStep="decStep"
                                 :token-sale-info="tokenSaleInfo"
@@ -64,6 +65,7 @@
 
 
 <script>
+    import Vue from 'vue';
     import { mapGetters } from 'vuex';
     import deipRpc from '@deip/deip-oa-rpc-client';
     import { createTokenSaleProposal } from './../../services/ProposalService'; 
@@ -79,6 +81,8 @@
             return {
                 research: null,
                 currentStep: 0,
+                research_permlink: "",
+                research_group_permlink: "",
                 tokenSaleInfo: {
                     amountToSell: 1000,
                     startDate: undefined,
@@ -102,8 +106,6 @@
                 this.currentStep--;
             },
             finish() {
-                const self = this;
-
                 this.isLoading = true;
                 // there is no way to pick time in date picker currently, 
                 // but Token Sale status is set to inactive initially until its start_time
@@ -131,7 +133,10 @@
                     console.log(err)
                 }).finally(() => {
                     setTimeout(() => {
-                        self.$router.push({ name: 'ResearchFeed' });
+                        this.$router.push({ name: 'ResearchDetails', params: { 
+                            group_permlink: this.research.group_permlink,
+                            research_permlink: this.research.permlink
+                        }});
                     }, 1500);
                 })
             }
@@ -139,12 +144,13 @@
 
         created() {
             deipRpc.api.getResearchByAbsolutePermlinkAsync(
-                    decodeURIComponent(this.$route.params.research_group_permlink),
-                    decodeURIComponent(this.$route.params.research_permlink)
-                )
-                .then((research) => {
-                   this.research = research;
-                });
+                decodeURIComponent(this.$route.params.research_group_permlink),
+                decodeURIComponent(this.$route.params.research_permlink)
+            )
+            .then((research) => {
+                this.group_permlink =  this.$route.params.research_group_permlink;
+                this.research = research;
+            });
         }
     };
 </script>

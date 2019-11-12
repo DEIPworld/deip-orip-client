@@ -1,8 +1,7 @@
 <template>
 <v-layout row class="research-tile">
   <v-layout column>
-    <div><img style="width: 100%; height: 150px" :src="researchLogoSrc" /></div>
-    <router-link class="research-title py-2 ellipsis" 
+    <router-link tag="div" class="research-title" 
       :to="{
         name: 'ResearchDetails', 
         params: {
@@ -10,10 +9,13 @@
           research_permlink: encodeURIComponent(research.permlink)
         }
       }"
-    ><span class="subheading half-bold">{{ research.title }}</span></router-link>
+    >
+      <div><img style="width: 100%; height: 150px" :src="researchLogoSrc" /></div>
+      <div class="subheading ellipsis half-bold py-2">{{ research.title }}</div>
+    </router-link>
     
     <v-layout row wrap justify-start>
-      <platform-avatar v-for="(member, i) in members" :user="member" :size="15" :key="`member-${research.permlink}-`+ i" link-to-profile link-to-profile-class="px-2 grey--text lighten-2 researcher"></platform-avatar>
+      <platform-avatar v-for="(member, i) in members" :user="member" :size="15" :key="`member-${research.permlink}-`+ i" link-to-profile link-to-profile-class="px-2 grey--text lighten-2 research-tile-researcher"></platform-avatar>
     </v-layout>
 
     <v-layout v-if="tokenSale" row class="pt-1 token-sale-section">
@@ -89,6 +91,7 @@
 </script>
 
 <style lang="less" scoped>
+  @import './../../../styles/colors.less';
 
   .research-tile {
     flex: 0 0 auto;
@@ -103,16 +106,13 @@
   }
 
   .research-title {
+    cursor: pointer;
     text-decoration: none;
     color: #000000
   }
 
   .research-title:hover {
-    text-decoration: underline;
-  }
-
-  .researcher {
-    font-weight: 400;
+    color: var(--v-primary-base);
   }
 
 </style>

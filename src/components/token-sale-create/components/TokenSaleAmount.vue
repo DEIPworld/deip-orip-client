@@ -28,6 +28,13 @@
         </div>
         
         <div class="legacy-row legacy-justify-center align-center">
+            <v-btn small flat :to="{ 
+                name: 'ResearchDetails', 
+                params: { 
+                    group_permlink: encodeURIComponent(research.group_permlink),
+                    research_permlink: encodeURIComponent(research.permlink)
+                } 
+                }">Cancel</v-btn>
             <v-btn color="primary" @click.native="nextStep()" :disabled="!verifyAmountRange(tokenSaleInfo.amountToSell)">Next</v-btn>
         </div>
     </div>
@@ -37,6 +44,7 @@
     export default {
         name: "TokenSaleAmount",
         props: {
+            research: { type: Object, required: true },
             tokenSaleInfo: { type: Object, required: true },
             ownedAmount: { type: Number, required: true }
         },
