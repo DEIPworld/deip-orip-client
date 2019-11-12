@@ -36,7 +36,7 @@ Vue.use(VueResize);
 Vue.use(VueCurrencyFilter, {
   symbol: '$',
   thousandsSeparator: ',',
-  fractionCount: 2,
+  fractionCount: 3,
   fractionSeparator: '.',
   symbolPosition: 'front',
   symbolSpacing: true

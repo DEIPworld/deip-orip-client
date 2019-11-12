@@ -32,7 +32,7 @@
               <v-flex lg5 class="bold subheading">EUR</v-flex>
               <v-flex lg5 class="bold subheading">{{(getAvailableCurrencyAmount('eur')) | currency({ symbol: '€' }) }}</v-flex>
               <v-flex lg1 class="pl-3">
-                <v-icon color="grey" class="balance-table__action">more_vert</v-icon>
+                <!-- <v-icon color="grey" class="balance-table__action">more_vert</v-icon> -->
               </v-flex>
             </v-layout>
             <v-layout class="balance-table__line" align-center>
@@ -44,7 +44,26 @@
               <v-flex lg5 class="bold subheading">USD</v-flex>
               <v-flex lg5 class="bold subheading">{{getAvailableCurrencyAmount('usd') | currency}}</v-flex>
               <v-flex lg1 class="pl-3">
-                <v-icon class="balance-table__action" color="grey">more_vert</v-icon>
+                <v-menu bottom left offset-y>
+                  <template v-slot:activator="{ on }">
+                    <v-btn
+                      dark
+                      icon
+                      v-on="on"
+                    >
+                      <v-icon color="grey">more_vert</v-icon>
+                    </v-btn>
+                  </template>
+
+                  <v-list>
+                    <v-list-tile
+                      @click="openSendTokensDialog()"
+                    >
+                      <v-list-tile-title>Transfer</v-list-tile-title>
+                    </v-list-tile>
+                  </v-list>
+                </v-menu>
+                <!-- <v-icon class="balance-table__action" color="grey">more_vert</v-icon> -->
               </v-flex>
             </v-layout>
           </v-flex>
@@ -352,6 +371,64 @@
           </v-card-actions>
         </v-card>
       </v-dialog>
+
+      <v-dialog v-model="sendTokensDialog.isOpened" persistent max-width="500px">
+        <v-card class="px-5 py-2">
+          <v-card-title>
+            <span class="title">Transfer</span>
+          </v-card-title>
+
+          <v-card-text>
+            <v-form v-model="sendTokensDialog.form.valid" ref="sendTokensForm">
+              <v-text-field
+                label="To"
+                v-model="sendTokensDialog.form.to"
+                :rules="sendTokensDialog.form.rules.username"
+                :disabled="sendTokensDialog.isSending"
+              />
+              <v-text-field
+                label="Amount"
+                v-model="sendTokensDialog.form.amount"
+                suffix="USD"
+                :rules="sendTokensDialog.form.rules.amount"
+                :disabled="sendTokensDialog.isSending"
+              />
+              <v-textarea
+                label="Memo - optional"
+                rows="3"
+                :counter="sendTokensDialog.maxMemo"
+                no-resize
+                v-model="sendTokensDialog.form.memo"
+                :rules="sendTokensDialog.form.rules.memo"
+                :disabled="sendTokensDialog.isSending"
+              />
+            </v-form>
+          </v-card-text>
+
+          <v-card-actions>
+            <v-layout row wrap>
+              <v-flex xs12 class="py-2">
+                <v-btn
+                  @click="sendTokens()"
+                  color="primary"
+                  block
+                  :disabled="!sendTokensDialog.form.valid"
+                  :loading="sendTokensDialog.isSending"
+                >Send</v-btn>
+              </v-flex>
+              <v-flex xs12 class="py-2">
+                <v-btn
+                  @click="closeSendTokensDialog()"
+                  color="primary"
+                  block
+                  flat
+                  :disabled="sendTokensDialog.isSending"
+                >Cancel</v-btn>
+              </v-flex>
+            </v-layout>
+          </v-card-actions>
+        </v-card>
+      </v-dialog>
     </v-card>
   </base-page-layout>
 </template>
@@ -370,7 +447,21 @@
   export default {
     name: "UserWallet",
 
-    data() { 
+    data() {
+      const rules = {
+        username: (value) => {
+          if (!value) {
+            return 'Receiver username is required';
+          }
+
+          if (value === this.user.username) {
+            return `Username shouldn't be yours`;
+          }
+
+          return true;
+        },
+      };
+
       return {
         dialog: false,
         expandedInvestmentIdx: -1,
@@ -408,31 +499,17 @@
             title: null,
           },
           form: {
-            ref: null,
             valid: false,
             to: '',
             amount: 0,
             rules: {
-              username: [
-                (value) => {
-                  if (!value) {
-                    return 'Receiver username is required';
-                  }
-
-                  if (value === this.user.username) {
-                    return `You can't send tokens to yourself`;
-                  }
-
-                  return true;
-                }
-              ],
+              username: [rules.username],
               amount: [
                 (value) => {
                   const number = parseInt(value);
                   if (!number || number < 0) {
                     return `Amount should be positive integer`;
                   }
-
                   if (number > this.sendResearchTokensDialog.maxAmount) {
                     return 'Amount is greater than research token balance';
                   }
@@ -443,7 +520,38 @@
             },
           },
           maxAmount: 0,
-          amount: 0,
+          isOpened: false,
+          isSending: false
+        },
+
+        sendTokensDialog: {
+          form: {
+            valid: false,
+            to: '',
+            amount: 0,
+            memo: '',
+            rules: {
+              username: [rules.username],
+              amount: [
+                (value) => {
+                  const formatValidationResult = this.deipTokenValidator(value);
+                  if (formatValidationResult !== true) {
+                    return formatValidationResult;
+                  }
+                  if (value > this.sendTokensDialog.maxAmount) {
+                    return 'Amount is greater than balance';
+                  }
+
+                  return true;
+                }
+              ],
+              memo: [
+                value => !value || !!value && value.length <= this.sendTokensDialog.maxMemo || 'String should be shorter',
+              ],
+            },
+          },
+          maxAmount: 0,
+          maxMemo: 2000,
           isOpened: false,
           isSending: false
         },
@@ -555,7 +663,8 @@
 
     methods: {
       ...mapActions({
-        loadResearchTokens: 'userWallet/loadResearchTokens'
+        loadResearchTokens: 'userWallet/loadResearchTokens',
+        loadUserAccount: 'auth/loadAccount',
       }),
 
       toggleInvestmentDetails(index) {
@@ -611,6 +720,46 @@
 
       closeSendResearchTokensDialog() {
         this.sendResearchTokensDialog.isOpened = false;
+      },
+
+      openSendTokensDialog() {
+        this.$refs.sendTokensForm.reset();
+        this.sendTokensDialog.isOpened = true;
+
+        this.sendTokensDialog.maxAmount = this.fromAssetsToFloat(this.user.account.balance);
+        this.sendTokensDialog.form.valid = false;
+        this.sendTokensDialog.form.to = '';
+        this.sendTokensDialog.form.amount = 0;
+        this.sendTokensDialog.form.memo = '';
+      },
+
+      closeSendTokensDialog() {
+        this.sendTokensDialog.isOpened = false;
+      },
+
+      sendTokens() {
+        this.sendTokensDialog.isSending = true;
+
+        return deipRpc.broadcast.transferAsync(
+          this.user.privKey,
+          this.user.username,
+          this.sendTokensDialog.form.to,
+          this.toAssetUnits(this.sendTokensDialog.form.amount),
+          this.sendTokensDialog.form.memo
+        ).then((data) => {
+          this.$store.dispatch('layout/setSuccess', {
+            message: 'Transfer was successfull'
+          });
+          this.closeSendTokensDialog();
+        }).catch((err) => {
+          console.error(err);
+          this.$store.dispatch('layout/setError', {
+            message: 'Transaction was failed'
+          });
+        }).finally(() => {
+          this.sendTokensDialog.isSending = false;
+          return this.loadUserAccount();
+        });
       },
 
       sendResearchTokens() {
