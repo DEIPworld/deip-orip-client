@@ -262,7 +262,8 @@
               <v-flex xs12>
                 <v-text-field 
                   class=""
-                  label="Amount" 
+                  label="Amount"
+                  :disabled="depositDialog.isDepositing"
                   v-model="depositDialog.amount">
                 </v-text-field>
               </v-flex>
@@ -319,7 +320,8 @@
               <v-flex xs12>
                 <v-text-field 
                   class=""
-                  label="Amount" 
+                  label="Amount"
+                  :disabled="withdrawDialog.isWithdrawing"
                   v-model="withdrawDialog.amount">
                 </v-text-field>
               </v-flex>
@@ -597,11 +599,22 @@
       },
 
       isWithdrawDisabled() {
-        return !this.withdrawDialog.amount;
+        const formatValidationResult = this.deipTokenValidator(this.withdrawDialog.amount);
+        if (formatValidationResult !== true) {
+          return true;
+        }
+        if (this.withdrawDialog.amount > this.getAvailableCurrencyAmount(this.withdrawDialog.selectedCurrency)) {
+          return true;
+        }
+        return false;
       },
 
       isDepositingDisabled() {
-        return !this.depositDialog.amount;
+        const formatValidationResult = this.deipTokenValidator(this.depositDialog.amount);
+        if (formatValidationResult !== true) {
+          return true;
+        }
+        return false;
       },
 
       shareHoldersChart() {
@@ -766,7 +779,7 @@
           this.user.privKey,
           this.user.username,
           this.sendTokensDialog.form.to,
-          this.toAssetUnits(this.sendTokensDialog.form.amount / this.sendTokensDialog.currency.mockExchange),
+          this.toAssetUnits(this.sendTokensDialog.form.amount * this.sendTokensDialog.currency.mockExchange),
           this.sendTokensDialog.form.memo
         ).then((data) => {
           this.$store.dispatch('layout/setSuccess', {
@@ -780,7 +793,7 @@
           });
         }).finally(() => {
           this.sendTokensDialog.isSending = false;
-          return this.loadUserAccount();
+          this.loadUserAccount();
         });
       },
 
@@ -834,20 +847,48 @@
 
       deposit() {
         this.depositDialog.isDepositing = true;
-        setTimeout(() => {
+
+        let amount = this.depositDialog.amount / currencyTypes[this.depositDialog.selectedCurrency].mockExchange;
+        amount = amount.toFixed(3) * 1000; // convert to DEIP;
+        return deipRpc.broadcast.adjustAccountBalanceAsync(
+          this.user.privKey,
+          this.user.username,
+          amount
+        ).then(() => {
           this.$store.dispatch('layout/setSuccess', { message: "Funds have been deposited successfully!"});
+          this.closeDepositDialog();
+        }).catch((err) => {
+          console.error(err);
+          this.$store.dispatch('layout/setError', {
+            message: 'Transaction was failed'
+          });
+        }).finally(() => {
           this.depositDialog.isDepositing = false;
-          this.depositDialog.isOpened = false;
-        }, 1000);
+          return this.loadUserAccount();
+        });
       },
 
       withdraw() {
         this.withdrawDialog.isWithdrawing = true;
-        setTimeout(() => {
+
+        let amount = this.withdrawDialog.amount / currencyTypes[this.withdrawDialog.selectedCurrency].mockExchange;
+        amount = amount.toFixed(3) * 1000; // convert to DEIP;
+        return deipRpc.broadcast.adjustAccountBalanceAsync(
+          this.user.privKey,
+          this.user.username,
+          -amount
+        ).then(() => {
           this.$store.dispatch('layout/setSuccess', { message: "Funds have been withdrawn successfully!"});
+          this.closeWithdrawDialog();
+        }).catch((err) => {
+          console.error(err);
+          this.$store.dispatch('layout/setError', {
+            message: 'Transaction was failed'
+          });
+        }).finally(() => {
           this.withdrawDialog.isWithdrawing = false;
-          this.withdrawDialog.isOpened = false;
-        }, 1000);
+          return this.loadUserAccount();
+        });
       },
       
       creditInfoChanged(values) {
