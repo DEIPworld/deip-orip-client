@@ -13,7 +13,7 @@
     ><span class="subheading half-bold">{{ research.title }}</span></router-link>
     
     <v-layout row wrap justify-start>
-      <platform-avatar v-for="(member, i) in members" :user="member" :size="15" :key="`member-${research.permlink}-`+ i" link-to-profile link-to-profile-class="px-2 grey--text lighten-2"></platform-avatar>
+      <platform-avatar v-for="(member, i) in members" :user="member" :size="15" :key="`member-${research.permlink}-`+ i" link-to-profile link-to-profile-class="px-2 grey--text lighten-2 researcher"></platform-avatar>
     </v-layout>
 
     <v-layout v-if="tokenSale" row class="pt-1 token-sale-section">
@@ -109,6 +109,10 @@
 
   .research-title:hover {
     text-decoration: underline;
+  }
+
+  .researcher {
+    font-weight: 400;
   }
 
 </style>
