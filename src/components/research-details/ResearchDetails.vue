@@ -1,7 +1,7 @@
 <template>
   <base-page-layout>
     <div slot="content" class="full-width full-height">
-      <v-layout row class="rd-header full-height pa-5" style="overflow: scroll">
+      <v-layout row class="rd-header full-height pa-5">
         <v-flex lg8>
           <div style="width: 95%">
             <div class="rd-header__title">{{research.title}}</div>
@@ -1073,6 +1073,7 @@
     background: url('/static/rd_background.png') 100% 100% no-repeat;
     background-size: cover;
     height: 300px;
+    overflow: auto;
 
     font-style: normal;
     color: white;
