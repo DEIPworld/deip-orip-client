@@ -413,7 +413,7 @@ export default {
         this.$store.dispatch('layout/setSuccess', { message: "Proposal was successfully created"});
         this.selectedExpert = null;
         this.selectedResearchToReview = null;
-      }, (err) => { this.$store.dispatch('layout/setError', { message: "An error occurred while creating requesting a review, please try again later"})})
+      }, (err) => { alert(`The "${this.selectedResearchToReview.title}" research does not have an Announcement, please add it before requesting a review`); })
       .finally(() => {
         this.isRequestingReview = false;
       });

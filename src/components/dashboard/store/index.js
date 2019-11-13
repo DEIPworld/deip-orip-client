@@ -4,6 +4,8 @@ import Vue from 'vue';
 import deipRpc from '@deip/deip-oa-rpc-client';
 import * as usersService from './../../../utils/user';
 
+const experts = ["alice", "bob", "mike", "john", "rachel", "james", "rick", "alex", "anastasia", "nick", "carla", "irene", "sherlock", "greg", "doroty", "hermes"];
+
 const state = {
 	isLoadingDashboardPage: false,
 	investedResearchSharesList: [],
@@ -172,10 +174,7 @@ const actions = {
 	},
 
 	loadExperts({ commit }, { username, notify } = {}) {
-		return deipRpc.api.getAllAccountsAsync()
-			.then((accounts) => {
-				return usersService.getEnrichedProfiles(accounts.map(a => a.name));
-			})
+		return usersService.getEnrichedProfiles(experts)
 			.then((users) => {
 				commit('SET_EXPERTS', users);
 				return Promise.all(users.map(user => deipRpc.api.getExpertTokensByAccountNameAsync(user.account.name)))
