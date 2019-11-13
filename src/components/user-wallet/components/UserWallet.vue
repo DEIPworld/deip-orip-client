@@ -848,7 +848,7 @@
       deposit() {
         this.depositDialog.isDepositing = true;
 
-        let amount = this.depositDialog.amount / currencyTypes[this.depositDialog.selectedCurrency].mockExchange;
+        let amount = this.depositDialog.amount * currencyTypes[this.depositDialog.selectedCurrency].mockExchange;
         amount = amount.toFixed(3) * 1000; // convert to DEIP;
         return deipRpc.broadcast.adjustAccountBalanceAsync(
           this.user.privKey,
@@ -871,7 +871,7 @@
       withdraw() {
         this.withdrawDialog.isWithdrawing = true;
 
-        let amount = this.withdrawDialog.amount / currencyTypes[this.withdrawDialog.selectedCurrency].mockExchange;
+        let amount = this.withdrawDialog.amount * currencyTypes[this.withdrawDialog.selectedCurrency].mockExchange;
         amount = amount.toFixed(3) * 1000; // convert to DEIP;
         return deipRpc.broadcast.adjustAccountBalanceAsync(
           this.user.privKey,
@@ -898,7 +898,7 @@
       },
 
       getAvailableCurrencyAmount(currencyId) {
-        return this.fromAssetsToFloat(this.user.account.balance) * currencyTypes[currencyId].mockExchange;
+        return this.fromAssetsToFloat(this.user.account.balance) / currencyTypes[currencyId].mockExchange;
       },
 
       mockPriceChange(rtId) {
