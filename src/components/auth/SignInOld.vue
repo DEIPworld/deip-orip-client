@@ -1,64 +1,61 @@
 <template>
-  <v-container fluid fill-height class="pa-0 ma-0">
-    <v-layout row wrap>
-      <v-flex md6 lg6 xl6 hidden-sm-and-down>
-        <v-layout column wrap fill-height class="description">
-          <div class="description__logo">
-            <img src="/static/logo-iconed.svg" />
-          </div>
-          <div class="description__info-text">
-            Longivity <br/>
-            Open Research and Innovation Platform
-          </div>
-          <div class="description__signup-text">
-            Don't have an account?
-            <router-link
-              :to="{ name: 'SignUp' }"
-            >Sign Up</router-link>
-          </div>
-        </v-layout>
-      </v-flex>
-      <v-flex xs12 sm12 md6 lg6 xl6>
-        <v-layout column wrap fill-height class="login">
-          <div class="login__title">Welcome back!</div>
-          <v-form
-            v-model="isFormValid"
-            ref="form"
-            @submit.prevent
-            class="login__form full-width"
-          >
-            <v-text-field
-              name="username"
-              label="Username"
-              v-model="username"
-              :rules="[rules.required]"
-            ></v-text-field>
-            <v-text-field
-              name="privateKey"
-              label="Private key"
-              v-model="privKey"
-              :rules="[rules.required]"
-              :append-icon="isHiddenPassword ? 'visibility_off' : 'visibility'"
-              :type="isHiddenPassword ? 'password' : 'text'"
-              @click:append="isHiddenPassword = !isHiddenPassword"
-            ></v-text-field>
-            <v-btn
-              type="submit"
-              block
-              color="#485fda"
-              dark
-              :loading="isChecking"
-              :disabled="isChecking"
-              @click="login()"
-            >Log In</v-btn>
-          </v-form>
-        </v-layout>
-      </v-flex>
+  <v-container fluid  class="pa-0 c-mt-10">
+    <v-layout row wrap fill-height align-space-around justify-space-around text-xs-center>
+      <v-flex xs3></v-flex>
+      <v-flex xs5>
+        <div>
+          <div class="text-align-center">
+            <div class="title c-pb-4 bold">Welcome to</div>
+            <div class="deip-emblem">
+              <div class="emblem-logo">Deip.world</div>
+              <div class="emblem-caption">Decentralized research platform</div>
+              <div v-if="tenant" class="c-pt-5 subheading" style="text-decoration: underline">Use credentials from Grants Community Blockchain</div>
+            </div>
+						<div>
+							<v-form v-model="isFormValid" ref="form" class="c-mt-10" @submit.prevent>
+									<v-text-field 
+											label="Username"
+											v-model="username" 
+											:rules="[rules.required]"
+									></v-text-field>
+
+									<v-text-field 
+											label="Private key"
+											v-model="privKey" 
+											:rules="[rules.required]"
+											:append-icon="isHiddenPassword ? 'visibility' : 'visibility_off'"
+											:type="isHiddenPassword ? 'password' : 'text'"
+											@click:append="() => { isHiddenPassword = !isHiddenPassword }"
+									></v-text-field>
+
+									<v-btn type="submit"
+											block 
+											color="primary" 
+											:loading="isChecking" 
+											:disabled="isChecking" 
+											@click="login()"
+									>Login</v-btn>
+									<!-- <div class="legacy-row legacy-justify-center c-pt-3" v-show="isChecking">
+											<v-progress-circular indeterminate color="primary"></v-progress-circular>
+									</div> -->
+							</v-form>
+						</div>
+					</div>
+					</div>
+        </v-flex>
+				<v-flex xs3>
+				<div v-if="tenant">
+          <v-avatar size="120px">
+            <img :src="tenant | agencyLogoSrc(160, 160, false)" />
+          </v-avatar>
+        </div>
+			</v-flex>
     </v-layout>
-  </v-container>
+  </v-container>   
 </template>
 
 <script>
+
     import deipRpc from '@deip/deip-oa-rpc-client'
     import crypto from '@deip/lib-crypto'
     import authService from './../../services/http/auth'
@@ -158,62 +155,6 @@
     }
 </script>
 
-<style lang="less" scoped>
-@import "./../../styles/colors.less";
-
-.description {
-  background-color: #485fda;
-  padding-top: 10%;
-  padding-left: 20%;
-  padding-right: 15%;
-
-  &__logo {
-    margin-top: 5%;
-    margin-bottom: 10%;
-    img {
-      max-width: 100%;
-    }
-  }
-
-  &__info-text {
-    padding-top: 5%;
-    font-family: Muli;
-    font-style: normal;
-    font-weight: 900;
-    font-size: 48px;
-    line-height: 61px;
-    letter-spacing: 0.25px;
-    color: @white;
-  }
-
-  &__signup-text {
-    margin-top: 5%;
-    font-family: Roboto;
-    font-style: normal;
-    font-weight: normal;
-    font-size: 16px;
-    line-height: 19px;
-    color: @white;
-    a {
-      color: inherit;
-    }
-  }
-}
-
-.login {
-  padding: 10% 15%;
-
-  &__title {
-    font-family: Muli;
-    font-style: normal;
-    font-weight: 900;
-    font-size: 24px;
-    line-height: 30px;
-    letter-spacing: 0.25px;
-  }
-
-  &__form {
-    padding-top: 10%;
-  }
-}
+<style>
+ 
 </style>
