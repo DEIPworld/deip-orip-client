@@ -23,7 +23,7 @@
         <v-progress-linear class="progress-current" :value="fundingProgressPercent"></v-progress-linear>
         <v-layout row>
           <span class="pr-3">
-            <span class="black--text half-bold pr-1">{{fundingProgressPercent}}%</span>
+            <span class="black--text half-bold pr-1">{{fundingProgressPercent.toFixed(2)}}%</span>
             <span class="grey--text lighten-2">funded</span>
           </span>
           <span class="px-3" style="border-left: 1px solid #e0e0e0;">

@@ -12,7 +12,7 @@
 			<v-btn flat small @click.native="prevStep()">
 				<v-icon dark class="pr-1">keyboard_arrow_left</v-icon> Back
 			</v-btn>
-			<v-btn :loading="isLoading" :disabled="nextDisabled || isLoading" color="primary" @click.native="nextStep()">Create Research</v-btn>
+			<v-btn :loading="isLoading" :disabled="nextDisabled || isLoading" color="primary" @click.native="nextStep()">Create Project</v-btn>
 		</div> 
 	</v-layout>
 </template>

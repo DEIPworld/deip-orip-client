@@ -30,9 +30,9 @@
             </div>
           </div>
         </v-flex>
-        <v-flex lg4 text-xs-right class="align-start fill-height">
+        <v-flex lg4 text-xs-right class="align-start">
           <div v-if="researchPresentationSrc">
-            <video style="border: 2px solid #fafafa" width="100%" height="100%" controls>
+            <video class="presentation-video" controls>
               <source :src="researchPresentationSrc" type="video/mp4">>
               Your browser does not support the video tag.
             </video>
@@ -63,27 +63,27 @@
                 <v-flex lg12 v-if="isActiveTokenSale || isInactiveTokenSale">
                   <v-layout class="pt-3">
                     <v-flex lg3 class="bold">Start:</v-flex>
-                    <v-flex lg9>{{tokenSale.start_time | dateFormat('MMM D, YYYY HH:mm', true)}}</v-flex>
+                    <v-flex lg9 class="pl-2">{{tokenSale.start_time | dateFormat('MMM D, YYYY HH:mm', true)}}</v-flex>
                   </v-layout>
                   <v-layout class="pt-3">
                     <v-flex lg3 class="bold">End:</v-flex>
-                    <v-flex lg9>{{tokenSale.end_time | dateFormat('MMM D, YYYY HH:mm', true)}}</v-flex>
+                    <v-flex lg9 class="pl-2">{{tokenSale.end_time | dateFormat('MMM D, YYYY HH:mm', true)}} <v-chip class="my-0 mx-2 caption" style="height: 1.4em" color="amber lighten-1">{{tokenSaleDaysLeft}} days left</v-chip></v-flex>
                   </v-layout>
                   <v-layout class="pt-3">
                     <v-flex lg3 class="bold">Tokens On sale:</v-flex>
-                    <v-flex lg9>{{tokenSale.balance_tokens}} ({{convertToPercent(tokenSale.balance_tokens)}}%)</v-flex>
+                    <v-flex lg9 class="pl-2">{{tokenSale.balance_tokens}} ({{convertToPercent(tokenSale.balance_tokens)}}%)</v-flex>
                   </v-layout>
                   <v-layout class="pt-3">
                     <v-flex lg3 class="bold">Remaining Tokens:</v-flex>
-                    <v-flex lg9>{{research.owned_tokens}} ({{convertToPercent(research.owned_tokens)}}%)</v-flex>
+                    <v-flex lg9 class="pl-2">{{research.owned_tokens}} ({{convertToPercent(research.owned_tokens)}}%)</v-flex>
                   </v-layout>
                   <v-layout class="pt-3">
                     <v-flex lg3 class="bold">Soft Cap:</v-flex>
-                    <v-flex lg9>${{fromAssetsToFloat(tokenSale.soft_cap)}}</v-flex>
+                    <v-flex lg9 class="pl-2">${{fromAssetsToFloat(tokenSale.soft_cap)}}</v-flex>
                   </v-layout>
                   <v-layout class="pt-3">
                     <v-flex lg3 class="bold">Hard Cap:</v-flex>
-                    <v-flex lg9>${{fromAssetsToFloat(tokenSale.hard_cap)}}</v-flex>
+                    <v-flex lg9 class="pl-2">${{fromAssetsToFloat(tokenSale.hard_cap)}}</v-flex>
                   </v-layout>
                 </v-flex>
                 <v-flex lg12 v-if="isMissingTokenSale && isResearchGroupMember && research" class="pt-3">
@@ -126,11 +126,21 @@
                   <v-btn
                     :disabled="!$refs.amountToContribute || !$refs.amountToContribute.valid || areTokensBuying || !this.amountToContribute"
                     :loading="areTokensBuying"
-                    @click="contributeToTokenSale()"
+                    @click="onContributeToTokenSaleClick()"
                     class="btn--gradient-pb"
                     block
                   >Invest</v-btn>
                 </v-layout>
+                <confirm-action-dialog
+                  :meta="investmentConfirmDialog"
+                  :width="500"
+                  confirm-text="Agree"
+                  cancel-text="Disagree"
+                  title="SAFT Text"
+                  text="Miusov, as a man man of breeding and deilcacy, could not but feel some inwrd qualms, when he reached the Father Superior's with Ivan: he felt ashamed of havin lost his temper. He felt that he ought to have disdaimed that despicable wretch, Fyodor Pavlovitch, too much to have been upset by him in Father Zossima's cell, and so to have forgotten himself. Teh monks were not to blame, in any case, he reflceted, on the steps. And if theyre decent people here (and the Father Superior, I understand, is a nobleman) why not be friendly and courteous withthem? I wont argue, Ill fall in with everything, Ill win them by politness, and show them that Ive nothing to do with that Aesop, thta buffoon, that Pierrot, and have merely been takken in over this affair, just as they have. He determined to drop his litigation with the monastry, and relinguish his claims to the wood-cuting and fishery rihgts at once. He was the more ready to do this becuase the rights had becom much less valuable, and he had indeed the vaguest idea where the wood and river in quedtion were. These excellant intentions were strengthed when he enterd the Father Superiors diniing-room, though, stricttly speakin, it was not a dining-room, for the Father Superior had only two rooms alltogether; they were, however, much larger and more comfortable than Father Zossimas. But tehre was was no great luxury about the furnishng of these rooms eithar. The furniture was of mohogany, covered with leather, in the old-fashionned style of 1820 the floor was not even stained, but evreything was shining with cleanlyness, and there were many chioce flowers in the windows; the most sumptuous thing in the room at the moment was, of course, the beatifuly decorated table. The cloth was clean, the service shone; there were three kinds of well-baked bread, two bottles of wine, two of excellent mead, and a large glass jug of kvas -- both the latter made in the monastery, and famous in the neigborhood. There was no vodka. Rakitin related afterwards that there were five dishes: fish-suop made of sterlets, served with little fish paties; then boiled fish served in a spesial way; then salmon cutlets, ice pudding and compote, and finally, blanc-mange. Rakitin found out about all these good things, for he could not resist peeping into the kitchen, where he already had a footing. He had a footting everywhere, and got informaiton about everything. He was of an uneasy and envious temper. He was well aware of his own considerable abilities, and nervously exaggerated them in his self-conceit. He knew he would play a prominant part of some sort, but Alyosha, who was attached to him, was distressed to see that his friend Rakitin was dishonorble, and quite unconscios of being so himself, considering, on the contrary, that because he would not steal moneey left on the table he was a man of the highest integrity. Neither Alyosha nor anyone else could have infleunced him in that. Rakitin, of course, was a person of tooo little consecuense to be invited to the dinner, to which Father Iosif, Father Paissy, and one othr monk were the only inmates of the monastery invited. They were alraedy waiting when Miusov, Kalganov, and Ivan arrived. The other guest, Maximov, stood a little aside, waiting also. The Father Superior stepped into the middle of the room to receive his guests. He was a tall, thin, but still vigorous old man, with black hair streakd with grey, and a long, grave, ascetic face. He bowed to his guests in silence. But this time they approaced to receive his blessing. Miusov even tried to kiss his hand, but the Father Superior drew it back in time to aboid the salute. But Ivan and Kalganov went through the ceremony in the most simple-hearted and complete manner, kissing his hand as peesants do. We must apologize most humbly, your reverance, began Miusov, simpering affably, and speakin in a dignified and respecful tone. Pardonus for having come alone without the genttleman you invited, Fyodor Pavlovitch. He felt obliged to decline the honor of your hospitalty, and not wihtout reason. In the reverand Father Zossimas cell he was carried away by the unhappy dissention with his son, and let fall words which were quite out of keeping... in fact, quite unseamly... asyour reverance is, no doubt, already aware. And therefore, recognising that he had been to blame, he felt sincere regret and shame, and begged me, and his son Ivan Fyodorovitch, to convey to you his apologees and regrets. In brief, he hopes and desires to make amends later. He asks your blessinq, and begs you to forget what has takn place."
+                  @confirmed="contributeToTokenSale($event); investmentConfirmDialog.isShown = false;" 
+                  @canceled="investmentConfirmDialog.isShown = false">
+                </confirm-action-dialog>
               </v-layout>
 
             </v-flex>
@@ -568,14 +578,15 @@
             <v-btn
               v-else-if="isResearchGroupMember"
               class="mx-0 mt-3"
+              :loading="isResearchTokenization"
               @click="onTokenizeResearchClick()"
             >Tokenize research</v-btn>
-            <div v-else class="mt-3">Research hasn't been tokenized yet</div>
+            <div v-else class="mt-3">Research has not been tokenized yet</div>
             <confirm-action-dialog
               :meta="tokenizationConfirmDialog"
               :title="``"
               :text="`This project will be tokenized instantly. This action is irreversible. Continue?`"
-              @confirmed="tokenizeResearch($event);" 
+              @confirmed="tokenizeResearch($event); tokenizationConfirmDialog.isShown = false;" 
               @canceled="tokenizationConfirmDialog.isShown = false">
             </confirm-action-dialog>
           </v-layout>
@@ -605,6 +616,7 @@
     data() {
       return {
         tokenizationConfirmDialog: { isShown: false, isConfirming: false },
+        investmentConfirmDialog: { isShown: false, isConfirming: false },
 
         groupLink: this.$route.params.research_group_permlink,
 
@@ -614,6 +626,7 @@
 
         amountToContribute: '',
         areTokensBuying: false,
+        isResearchTokenization: false,
 
         isDeletingDraft: false,
         isCreatingDraft: false,
@@ -660,6 +673,13 @@
       },
       averageInvestmentAmount() {
         return this.round2DigitsAfterComma(this.investmentsAmount / this.tokenHoldersList.length);
+      },
+      tokenSaleDaysLeft() {
+        if (this.tokenSale) {
+          let now = moment.utc().local();
+          let end = moment.utc(this.tokenSale.end_time).local();
+          return Math.floor(moment.duration(end.diff(now)).asDays());
+        }
       },
       canJoinResearchGroup() {
         if (this.research) {
@@ -829,6 +849,10 @@
     },
 
     methods: {
+      onContributeToTokenSaleClick() {
+        this.investmentConfirmDialog.isShown = true;
+      },
+      
       contributeToTokenSale() {
         this.areTokensBuying = true;
 
@@ -850,14 +874,12 @@
             message: `You have contributed to "${this.research.title}" fundraise successfully !`
           });
         }).catch((err) => {
+          console.log(err)
           this.areTokensBuying = false;
-
           this.$store.dispatch('layout/setError', {
             message: "An error occurred while contributing to fundraise, please try again later"
           });
-
-          console.log(err)
-        })
+        });
       },
       countContentReviews(content, isPositive) {
         return content.reviews.reduce(
@@ -1012,7 +1034,7 @@
           is_tokenized: true,
         });
 
-        this.tokenizationConfirmDialog.isConfirming = true;        
+        this.isResearchTokenization = true;        
         deipRpc.broadcast.researchUpdateAsync(
           this.user.privKey,
           this.research.id,
@@ -1034,8 +1056,7 @@
             research_permlink: this.research.permlink,
           });
         }).finally(() => {
-          this.tokenizationConfirmDialog.isConfirming = false;
-          this.tokenizationConfirmDialog.isShown = false;
+          this.isResearchTokenization = false;        
         });
       },
       openDarDraft(draft) {
@@ -1348,4 +1369,11 @@
       color: #FFFFFF;
     }
   }
+
+.presentation-video {
+  width: auto; 
+  height: 220px; 
+  border: 2px solid #fafafa;
+}
+  
 </style>
