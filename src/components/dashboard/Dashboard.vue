@@ -18,7 +18,7 @@
             <v-tab-item value="tab-summary">
               <v-layout row fill-height>
                 <v-card color="white" class="full-width elevation-0 pt-4 glass-container">
-                  <v-layout row wrap>
+                  <v-layout row wrap class="full-height">
 
                     <v-flex xl4 lg4 md4 sm12 xs12 order-xl1 order-lg1 order-md1 order-sm2 order-xs2>
                       <v-layout column fill-height>
@@ -78,7 +78,7 @@
                               </v-layout>
                             </v-layout>
 
-                            <v-layout column>
+                            <v-layout column v-if="hasResearchShares">
                               <div class="title bold">Distribution</div>
                               <div class="py-4">
                                 <GChart
@@ -94,11 +94,11 @@
                           <v-flex xl6 lg6 md6 sm12 xs12 class="reviews-column">
                             <v-layout row justify-space-between class="column-header">
                               <div class="title bold">Reviews</div>
-                              <div>
+                              <!-- <div>
                                 <v-btn color="primary" small outline class="ma-0">
                                   Ask for Review
                                 </v-btn>
-                              </div>
+                              </div> -->
                             </v-layout>
 
                             <v-layout column class="pb-5">
@@ -121,10 +121,10 @@
                             </v-layout>
 
                             <v-layout column class="pb-5">
-                              <div class="title bold">Experts <span class="primary--text pl-2">{{expertsList.length}}</span></div>
+                              <div class="title bold">Experts <span class="primary--text pl-2">{{experts.length}}</span></div>
                               <div class="pt-2">
                                 <v-autocomplete
-                                  label="Expert name"
+                                  label="Find an Expert for Review"
                                   autocomplete
                                   :append-icon="null"
                                   :loading="isExpertsLoading"
@@ -139,12 +139,32 @@
                               </div>
                               <div v-if="!selectedExpert">
                                 <v-layout row justify-space-between>
-                                  <platform-avatar :size="40" v-for="(expert, i) in expertsList.slice(0, 7)" :key="'expert-' + i" :user="expert" class="expert-avatar" ></platform-avatar>
+                                  <platform-avatar :size="40" v-for="(expert, i) in experts.slice(0, 7)" :key="'expert-' + i" :user="expert" class="expert-avatar" ></platform-avatar>
                                 </v-layout>
                               </div>
                               <div v-else>
-                                <platform-avatar :user="selectedExpert" :size="40" link-to-profile link-to-profile-class="pl-3"></platform-avatar>
-                                <div class="py-1 body-2">{{selectedExpert | employmentOrEducation}}</div>
+                                <v-layout column>
+                                  <div>
+                                    <v-layout row wrap justify-space-between align-baseline>
+                                      <platform-avatar :user="selectedExpert" :size="40" link-to-profile link-to-profile-class="pl-3"></platform-avatar>
+                                      <v-btn @click="requestReview()" :loading="isRequestingReview" :disabled="isRequestReviewDisabled" color="primary" small outline class="ma-0">Request Review</v-btn>
+                                    </v-layout>
+                                  </div>
+                                  <div v-if="$options.filters.employmentOrEducation(selectedExpert)">
+                                    <div class="py-2 body-2">{{selectedExpert | employmentOrEducation}}</div>
+                                  </div>
+                                  <div class="pt-3">
+                                    <v-select 
+                                      v-model="selectedResearchToReview" 
+                                      :items="researches" 
+                                      label="Research" 
+                                      solo
+                                      item-text="research.title"
+                                      item-value="research"
+                                      hide-details>
+                                    </v-select>
+                                  </div>
+                                </v-layout>
                               </div>
                             </v-layout>
 
@@ -190,9 +210,7 @@
                           </v-flex>
                         </v-layout>
                       </v-layout>
-
                     </v-flex>
-
                   </v-layout>
                 </v-card>
               </v-layout>
@@ -257,17 +275,41 @@ import moment from 'moment';
 
 export default {
   name: "Dashboard",
+
+  data() {
+    return {
+      selectedResearchToReview: null,
+      isRequestingReview: false,
+
+      blackList: ['regacc'],
+      isExpertsLoading: false,
+      expertsSearch: "",
+      selectedExpert: null,
+      foundExperts: []
+    };
+  },
   
   computed: {
     ...mapGetters({
       user: "auth/user",
       researches: "dashboard/researches",
       currentShares: "dashboard/currentShares",
-      investments: "dashboard/investments"
+      investments: "dashboard/investments",
+      allExperts: "dashboard/experts"
     }),
 
     hasResearchShares() {
       return this.currentShares.length;
+    },
+
+    experts() {
+      return this.allExperts.filter(expert => !this.blackList.some(a => a == expert.account.name));
+    },
+
+    isRequestReviewDisabled() {
+      return !this.selectedExpert 
+        || !this.selectedResearchToReview 
+        || !this.selectedExpert.expertiseTokens.some(exp => this.selectedResearchToReview.disciplines.some(d => d.id == exp.discipline_id));
     },
 
     sharesDistributionChart() {
@@ -333,22 +375,12 @@ export default {
     },
 
   },
-  data() {
-    return {
-      expertsList: [],
-      blackList: ['regacc'],
-      isExpertsLoading: false,
-      expertsSearch: "",
-      selectedExpert: null,
-      foundExperts: []
-    };
-  },
 
   methods: {
 
     queryExperts() {
       this.isExpertsLoading = true;
-      this.foundExperts = this.expertsSearch ? this.expertsList.filter(user => {
+      this.foundExperts = this.expertsSearch ? this.experts.filter(user => {
         let name = this.$options.filters.fullname(user);
         return name.toLowerCase().indexOf((this.expertsSearch || '').toLowerCase()) > -1 
           || user.account.name.toLowerCase().indexOf((this.expertsSearch || '').toLowerCase()) > -1;
@@ -367,21 +399,29 @@ export default {
 
     onSetExpert() {
       console.log(this.selectedExpert);
+    },
+
+    requestReview(review) {
+      this.isRequestingReview = true;
+      deipRpc.broadcast.requestReviewAsync(
+        this.user.privKey,
+        this.selectedResearchToReview.id,
+        [this.selectedExpert.account.name],
+        this.user.username
+      )
+      .then(() => {
+        this.$store.dispatch('layout/setSuccess', { message: "Proposal was successfully created"});
+        this.selectedExpert = null;
+        this.selectedResearchToReview = null;
+      }, (err) => { this.$store.dispatch('layout/setError', { message: "An error occurred while creating requesting a review, please try again later"})})
+      .finally(() => {
+        this.isRequestingReview = false;
+      });
     }
   },
 
   created() {
     this.blackList.push(this.user.account.name);
-    deipRpc.api.getAllAccountsAsync()
-      .then((accounts) => {
-        return usersService.getEnrichedProfiles(
-          accounts
-            .filter(acc => !this.blackList.some(a => a == acc.name))
-            .map(a => a.name));
-      })
-      .then((users) => {
-        this.expertsList = users;
-      });
   }
 };
 </script>

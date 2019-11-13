@@ -14,7 +14,9 @@ const state = {
 	membershipResearches: [],
 
 	researchGroupsTokens: [],
-	researchGroupsMembers: []
+	researchGroupsMembers: [],
+	expertsList: [],
+	expertsExpertiseTokensList: []
 }
 
 // getters
@@ -60,6 +62,13 @@ const getters = {
 			let research = state.investedResearchesList.find(r => r.id == share.research_id);
 			return { share, research };
 		})
+	},
+
+	experts: (state) => {
+		return state.expertsList.map((expert) => {
+			let expertiseTokens = state.expertsExpertiseTokensList.filter(exp => exp.account_name == expert.account.name);
+			return { ...expert, expertiseTokens };
+		});
 	}
 }
 
@@ -77,12 +86,15 @@ const actions = {
 		const membershipResearchesLoad = new Promise((resolve, reject) => {
 			dispatch('loadMembershipResearches', { username: username, notify: resolve });
 		});
-
+		const expertsLoad = new Promise((resolve, reject) => {
+			dispatch('loadExperts', { username: username, notify: resolve });
+		});
 
 		return Promise.all([
 			investedResearchesLoad, 
 			investingResearchesLoad, 
-			membershipResearchesLoad
+			membershipResearchesLoad,
+			expertsLoad
 		])
 			.then((res) => {
 
@@ -157,7 +169,23 @@ const actions = {
 			.finally(() => {
 				if (notify) notify();
 			});
-	}
+	},
+
+	loadExperts({ commit }, { username, notify } = {}) {
+		return deipRpc.api.getAllAccountsAsync()
+			.then((accounts) => {
+				return usersService.getEnrichedProfiles(accounts.map(a => a.name));
+			})
+			.then((users) => {
+				commit('SET_EXPERTS', users);
+				return Promise.all(users.map(user => deipRpc.api.getExpertTokensByAccountNameAsync(user.account.name)))
+			})
+			.then((tokens) => {
+				const flatten = [].concat.apply([], tokens);
+				commit('SET_EXPERTS_EXPERTISE_TOKENS', flatten);
+				if (notify) notify();
+			});
+	},
 
 }
 
@@ -198,6 +226,14 @@ const mutations = {
 	['SET_RESEARCH_GROUPS_MEMBERS'](state, list) {
 		Vue.set(state, 'researchGroupsMembers', list);
 	},
+
+	['SET_EXPERTS'](state, list) {
+		Vue.set(state, 'expertsList', list);
+	},
+
+	['SET_EXPERTS_EXPERTISE_TOKENS'](state, list) {
+		Vue.set(state, 'expertsExpertiseTokensList', list);
+	}	
 }
 
 const namespaced = true;

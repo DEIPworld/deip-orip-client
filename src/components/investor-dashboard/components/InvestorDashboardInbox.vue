@@ -84,7 +84,7 @@
         </v-card>
       </v-layout>
 
-      <v-layout column class="pt-5 subheading" v-if="noResult">There are no items for selected list</v-layout>
+      <v-layout column class="pt-5 subheading" v-if="noResult">There are no investments in selected list</v-layout>
     </v-layout>
   </v-layout>
 </template>

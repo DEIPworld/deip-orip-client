@@ -92,8 +92,9 @@ const getters = {
   },
 
   overdueNotifications: (state, getters) => {
-    if (state.selectedListId == defaultListId) return overdueNotifications;
     return [];
+    /* if (state.selectedListId == defaultListId) return overdueNotifications;
+    return []; */
   },
 
   noResult: (state, getters) => {
