@@ -211,7 +211,7 @@
             </div>
         </div>
         <div class="py-2 text-xs-right">
-            <v-btn class="ma-0 pa-0" small flat  @click="clearInvestorBankCards">Clear</v-btn>
+            <v-btn class="ma-0 pa-0" small flat  @click="clearLocalStorageItems()">Clear</v-btn>
         </div>
         <!-- ### END User Profile Invites Section ### -->
 
@@ -227,6 +227,7 @@
     import { mapGetters } from 'vuex';
     import usersService from './../../../services/http/users'
     import * as bankCardsService from './../../../utils/bankCard'
+    import * as bookmarksService from './../../../utils/bookmarks'
     import { approveInvite, rejectInvite } from './../../../services/InvitesService'
     import moment from 'moment';
     import deipRpc from '@deip/deip-oa-rpc-client';
@@ -388,8 +389,9 @@
                 this.$store.dispatch('userDetails/closeExpertiseTokensClaimDialog')
             },
 
-            clearInvestorBankCards() {
-                bankCardsService.clearInvestorBankCard();
+            clearLocalStorageItems() {
+                bankCardsService.removeInvestorBankCard(this.currentUser.username);
+                bookmarksService.removeResearchBookmarks(this.currentUser.username);
             }
         }
     };

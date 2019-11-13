@@ -697,7 +697,7 @@
     methods: {
       ...mapActions({
         loadResearchTokens: 'userWallet/loadResearchTokens',
-        loadUserAccount: 'auth/loadAccount',
+        loadUserAccount: 'auth/loadAccount'
       }),
 
       toggleInvestmentDetails(index) {
@@ -709,7 +709,7 @@
       },
 
       openDepositDialog() {
-        if (bankCardsStorage.hasInvestorBankCard()) {
+        if (bankCardsStorage.hasInvestorBankCard(this.user.username)) {
           this.depositDialog.amount = 0;
           this.depositDialog.selectedCurrency = currencyTypes.usd.id;
           this.depositDialog.isOpened = true;
@@ -723,7 +723,7 @@
       },
 
       openWithdrawDialog() {
-        if (bankCardsStorage.hasInvestorBankCard()) {
+        if (bankCardsStorage.hasInvestorBankCard(this.user.username)) {
           this.withdrawDialog.amount = 0;
           this.withdrawDialog.selectedCurrency = currencyTypes.usd.id;
           this.withdrawDialog.isOpened = true;
@@ -838,7 +838,7 @@
       saveBankCard() {
         this.addBankCardDialog.isSaving = true;
         setTimeout(() => {
-          bankCardsStorage.saveInvestorBankCard(this.addBankCardDialog.data);
+          bankCardsStorage.saveInvestorBankCard(this.addBankCardDialog.data, this.user.username);
           this.$store.dispatch('layout/setSuccess', { message: "Bank Card has been added successfully!"});
           this.addBankCardDialog.isSaving = false;
           this.addBankCardDialog.isOpened = false;

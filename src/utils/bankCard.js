@@ -1,27 +1,32 @@
 
-const INVESTOR_BANK_CARD_KEY = 'investor_bank_card';
 
-export function getInvestorBankCard() {
-  return localStorage.getItem(INVESTOR_BANK_CARD_KEY);
+const getInvestorBankCardKey = (username) => {
+  return `deip_${username}_investor_bank_card`;
 }
 
-export function getInvestorBankCardJson() {
-  const strCard = getInvestorBankCard();
+export function getInvestorBankCard(username) {
+  let strCard = localStorage.getItem(getInvestorBankCardKey(username));
   if (!strCard) return null;
   return JSON.parse(strCard);
 }
 
-export function clearInvestorBankCard() {
-  localStorage.removeItem(INVESTOR_BANK_CARD_KEY);
-}
-
-export function saveInvestorBankCard(card) {
-  if (hasInvestorBankCard()) clearInvestorBankCard();
+export function setInvestorBankCard(username, card) {
   let strCard = JSON.stringify(card);
-  localStorage.setItem(INVESTOR_BANK_CARD_KEY, strCard);
+  localStorage.setItem(getInvestorBankCardKey(username), strCard);
 }
 
-export function hasInvestorBankCard() {
-  const card = getInvestorBankCardJson();
+export function removeInvestorBankCard(username) {
+  localStorage.removeItem(getInvestorBankCardKey(username));
+}
+
+export function saveInvestorBankCard(card, username) {
+  if (hasInvestorBankCard(username)) {
+    removeInvestorBankCard(username);
+  }
+  setInvestorBankCard(username, card)
+}
+
+export function hasInvestorBankCard(username) {
+  const card = getInvestorBankCard(username);
   return card != null;
 }

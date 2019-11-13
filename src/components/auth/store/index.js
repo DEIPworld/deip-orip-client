@@ -17,7 +17,6 @@ const state = {
     account: null,
     expertTokens: [],
     groupTokens: [],
-    disciplines: [],
     groups: [],
     coworkers: [],
     joinRequests: [],
@@ -35,7 +34,6 @@ const getters = {
     const experise = [];
     for (let i = 0; i < state.user.expertTokens.length; i++) {
       const exp = state.user.expertTokens[i];
-      const discipline = state.user.disciplines.find(d => { return d.id == exp.discipline_id });
       exp.discipline_name = discipline.name;
       experise.push(exp);
     }
@@ -139,20 +137,9 @@ const actions = {
 
   loadExpertTokens({ state, commit, getters }, { notify } = {}) {
     const user = getters.user;
-    const expertTokens = [];
 
     deipRpc.api.getExpertTokensByAccountNameAsync(user.username)
-      .then((tokensList) => {
-        const promises = [];
-        for (var i = 0; i < tokensList.length; i++) {
-          var exp = tokensList[i];
-          expertTokens.push(exp);
-          promises.push(deipRpc.api.getDisciplineAsync(exp.discipline_id))
-        }
-        return Promise.all(promises);
-      })
-      .then((disciplines) => {
-        commit('SET_USER_DISCIPLINES_LIST', disciplines)
+      .then((expertTokens) => {
         commit('SET_USER_EXPERT_TOKENS_LIST', expertTokens)
       })
       .finally(() => {
@@ -273,10 +260,6 @@ const mutations = {
 
   ['SET_USER_EXPERT_TOKENS_LIST'](state, list) {
     Vue.set(state.user, 'expertTokens', list)
-  },
-
-  ['SET_USER_DISCIPLINES_LIST'](state, list) {
-    Vue.set(state.user, 'disciplines', list)
   },
 
   ['SET_USER_GROUPS_LIST'](state, list) {

@@ -39,7 +39,17 @@
           </div>
         </v-flex> 
       </v-layout>
-      <v-layout class="mt-4">
+      <v-layout row wrap>
+        <v-flex lg12>
+          <div class="text-xs-right py-2 px-3">
+            <v-btn v-if="!isBookmarked" class="ma-0 pa-0" flat icon @click="addToBookmarks()">
+              <v-icon>bookmark_border</v-icon>
+            </v-btn>
+            <v-btn v-else class="ma-0 pa-0" flat icon @click="removeFromBookmarks()">
+              <v-icon color="amber">bookmark</v-icon>
+            </v-btn>
+          </div>
+        </v-flex> 
         <v-flex lg8>
           <v-layout v-if="isTokenSaleSectionAvailable" class="my-5">
             <v-flex lg1>
@@ -401,7 +411,7 @@
                     >
                       <v-flex lg2 class="rd-reviewer" v-on:click.stop>
                         <v-avatar size="80px">
-                          <img v-if="review.author.profile" v-bind:src="review.author.profile.avatar | avatarSrc(80, 80, false)" />
+                          <img v-if="review.author.profile" v-bind:src="review.author.profile.avatar | avatarSrc(160, 160, false)" />
                           <v-gravatar v-else :title="review.author.account.name" :email="review.author.account.name + '@deip.world'" />
                         </v-avatar>
                         <div class="mt-2">
@@ -582,6 +592,7 @@
 
   import contentHttpService from '@/services/http/content';
   import joinRequestsService from '@/services/http/joinRequests';
+  import * as bookmarksService from '@/utils/bookmarks';
   import { getContentType } from '@/services/ResearchService';
 
   import references from './references.json';
@@ -609,7 +620,8 @@
 
         selectedTimelineItemId: 1,
         timelineItemsToShow: 3,
-        references
+        references,
+        isBookmarked: undefined
       }
     },
 
@@ -1060,10 +1072,22 @@
           this.isJoinGroupDialogOpen = false;
         })
       },
+
+      addToBookmarks() {
+        bookmarksService.saveResearchBookmark(this.research.id, this.user.username);
+        this.isBookmarked = true;
+      },
+
+      removeFromBookmarks() {
+        bookmarksService.removeResearchBookmark(this.research.id, this.user.username);
+        this.isBookmarked = false;
+      },
+
       getContentType,
     },
 
     created() {
+      this.isBookmarked = bookmarksService.hasResearchBookmark(this.research.id, this.user.username);
     },
   };
 </script>
