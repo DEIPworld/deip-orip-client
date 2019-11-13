@@ -32,7 +32,7 @@
               <v-flex lg5 class="bold subheading">EUR</v-flex>
               <v-flex lg5 class="bold subheading">{{(getAvailableCurrencyAmount('eur')) | currency({ symbol: '€' }) }}</v-flex>
               <v-flex lg1 class="pl-3">
-                <v-menu bottom left offset-y>
+                <!-- <v-menu bottom left offset-y>
                   <template v-slot:activator="{ on }">
                     <v-btn
                       dark
@@ -50,7 +50,7 @@
                       <v-list-tile-title>Transfer</v-list-tile-title>
                     </v-list-tile>
                   </v-list>
-                </v-menu>
+                </v-menu> -->
                 <!-- <v-icon color="grey" class="balance-table__action">more_vert</v-icon> -->
               </v-flex>
             </v-layout>
@@ -238,6 +238,7 @@
                       v-for="currencyType in currencyTypes"
                       :value="currencyType.id"
                       :key="currencyType.id"
+                      :disabled="currencyType.id === currencyTypes.eur.id"
                       class="currency-item row justify-space-between ma-0 pa-4 full-width"
                       color="grey darken-1"
                       style="flex-direction: row-reverse"
@@ -296,6 +297,7 @@
                       v-for="currencyType in currencyTypes"
                       :value="currencyType.id"
                       :key="currencyType.id"
+                      :disabled="currencyType.id === currencyTypes.eur.id"
                       class="currency-item row justify-space-between ma-0 pa-4 full-width"
                       color="grey darken-1"
                       style="flex-direction: row-reverse"
@@ -898,7 +900,11 @@
       },
 
       getAvailableCurrencyAmount(currencyId) {
-        return this.fromAssetsToFloat(this.user.account.balance) / currencyTypes[currencyId].mockExchange;
+        if (currencyId === currencyTypes.eur.id) {
+          return 1542;
+        } else {
+          return this.fromAssetsToFloat(this.user.account.balance) / currencyTypes[currencyId].mockExchange;
+        }
       },
 
       mockPriceChange(rtId) {
