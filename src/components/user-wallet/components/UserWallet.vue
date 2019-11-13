@@ -901,7 +901,7 @@
 
       getAvailableCurrencyAmount(currencyId) {
         if (currencyId === currencyTypes.eur.id) {
-          return 1542;
+          return 0;
         } else {
           return this.fromAssetsToFloat(this.user.account.balance) / currencyTypes[currencyId].mockExchange;
         }
