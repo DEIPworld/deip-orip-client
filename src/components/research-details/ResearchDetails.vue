@@ -1,7 +1,7 @@
 <template>
   <base-page-layout>
     <div slot="content" class="full-width full-height">
-      <v-layout row class="rd-header full-height pa-5" :style="{background: 'url('+researchLogoSrc+')', 'background-repeat': 'no-repeat', 'background-size': 'cover'}">
+      <v-layout row class="rd-header full-height pa-5" :style="{background: 'linear-gradient(0deg, rgba(0, 0, 0, 0.4) 70%, transparent), url('+researchLogoSrc+'), 100%, 100%, no-repeat'}">
         <v-flex lg8>
           <div style="width: 95%">
             <div class="rd-header__title">{{research.title}}</div>
@@ -1113,8 +1113,8 @@
     &__title {
       font-family: Muli;
       font-weight: 900;
-      font-size: 48px;
-      line-height: 60px;
+      font-size: 36px;
+      line-height: 40px;
       letter-spacing: 0.25px;
     }
     &__created {
