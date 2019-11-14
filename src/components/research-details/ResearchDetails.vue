@@ -1,7 +1,7 @@
 <template>
   <base-page-layout>
     <div slot="content" class="full-width full-height">
-      <v-layout row class="rd-header full-height pa-5">
+      <v-layout row class="rd-header full-height pa-5" :style="{background: 'url('+researchLogoSrc+')', 'background-repeat': 'no-repeat', 'background-size': 'cover'}">
         <v-flex lg8>
           <div style="width: 95%">
             <div class="rd-header__title">{{research.title}}</div>
@@ -634,7 +634,9 @@
         selectedTimelineItemId: 1,
         timelineItemsToShow: 3,
         references,
-        isBookmarked: undefined
+        isBookmarked: undefined,
+
+        researchLogoSrc: ""
       }
     },
 
@@ -1108,15 +1110,14 @@
     },
 
     created() {
+      this.researchLogoSrc = `./static/research-logo/${this.research.id < 20 ? this.research.id : 'default'}_background.png`;
       this.isBookmarked = bookmarksService.hasResearchBookmark(this.research.id, this.user.username);
-    },
+    }
   };
 </script>
 
 <style lang="less" scoped>
   .rd-header {
-    background: url('/static/rd_background.png') 100% 100% no-repeat;
-    background-size: cover;
     height: 300px;
     overflow: auto;
 
