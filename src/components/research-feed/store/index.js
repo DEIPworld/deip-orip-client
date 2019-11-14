@@ -35,7 +35,7 @@ const getters = {
   },
 
   researchFeed: (state, getters) => {
-    return state.fullResearchListing
+    let ordered = state.fullResearchListing
       .filter(item => !state.filter.q || item.title.toLowerCase().indexOf(state.filter.q.toLowerCase()) != -1)
       .filter(item => !state.filter.disciplines.length || item.disciplines.some(discipline => state.filter.disciplines.some(d => d.id == discipline.id)))
       // todo: add ordering here
@@ -52,6 +52,9 @@ const getters = {
         });
         return { ...item, totalVotes, reviews, group, authors, tokenSale, tokenSaleContributions, disciplines };
       });
+
+    ordered.reverse();
+    return ordered;
   },
 
   allCollapsed: (state, getters) => {

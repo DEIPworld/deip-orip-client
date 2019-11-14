@@ -19,6 +19,8 @@ const state = {
 	investingResearchesOngoingTokenSalesContributions: [],
 
 	myMembershipResearches: [],
+	myMembershipResearchesOngoingTokenSales: [],
+	myMembershipResearchesOngoingTokenSalesContributions: [],
 
 	bookmarkedResearches: [],
 	bookmarkedResearchesOngoingTokenSales: [],
@@ -54,7 +56,8 @@ const getters = {
 					.filter(member => members.some(name => name == member.account.name));
 
 				let tokenSale = [
-					...state.investingResearchesOngoingTokenSales, 
+					...state.investingResearchesOngoingTokenSales,
+					...state.myMembershipResearchesOngoingTokenSales,
 					...state.bookmarkedResearchesOngoingTokenSales
 				]
 				.find(s => s.research_id == research.id);
@@ -62,6 +65,7 @@ const getters = {
 				if (tokenSale) {
 					let tokenSaleContributions = [
 						...state.investingResearchesOngoingTokenSalesContributions,
+						...state.myMembershipResearchesOngoingTokenSalesContributions,
 						...state.bookmarkedResearchesOngoingTokenSalesContributions
 					]
 					.reduce((acc, tokenSale) => {
@@ -110,10 +114,9 @@ const actions = {
 		const investingResearchesLoad = new Promise((resolve, reject) => {
 			dispatch('loadInvestingResearches', { username: username, notify: resolve });
 		});
-		// Let's display investor-related researches only for now
-		// const membershipResearchesLoad = new Promise((resolve, reject) => {
-		// 	dispatch('loadMembershipResearches', { username: username, notify: resolve });
-		// }); 
+		const membershipResearchesLoad = new Promise((resolve, reject) => {
+			dispatch('loadMembershipResearches', { username: username, notify: resolve });
+		}); 
 		const expertsLoad = new Promise((resolve, reject) => {
 			dispatch('loadExperts', { username: username, notify: resolve });
 		});
@@ -121,7 +124,7 @@ const actions = {
 		return Promise.all([
 			investedResearchesLoad, 
 			investingResearchesLoad, 
-			// membershipResearchesLoad,
+			membershipResearchesLoad,
 			expertsLoad
 		])
 			.then(() => {
@@ -204,9 +207,19 @@ const actions = {
 			.then(list => {
 				return Promise.all(list.map(rgt => deipRpc.api.getResearchesByResearchGroupIdAsync(rgt.research_group_id)));
 			})
-			.then((researches) => {
-				const flatten = [].concat.apply([], researches);
-				commit('SET_MY_MEMBERSHIP_RESEARCHES', flatten);
+			.then((items) => {
+				const researches = [].concat.apply([], items);
+				commit('SET_MY_MEMBERSHIP_RESEARCHES', researches);
+				return Promise.all(researches.map(research => tokenSaleService.getCurrentTokenSaleByResearchId(research.id)));
+			})
+			.then((response) => {
+				let sales = response.filter(ts => ts != undefined)
+				commit('SET_MY_MEMBERSHIP_RESEARCHES_ONGOING_TOKEN_SALES', sales);
+				return Promise.all(sales.map(ts => deipRpc.api.getResearchTokenSaleContributionsByResearchTokenSaleIdAsync(ts.id)));
+			})
+			.then((response) => {
+				const contributions = [].concat.apply([], response);
+				commit('SET_MY_MEMBERSHIP_RESEARCHES_ONGOING_TOKEN_SALES_CONTRIBUTIONS', contributions);
 			})
 			.finally(() => {
 				if (notify) notify();
@@ -225,7 +238,8 @@ const actions = {
 				commit('SET_BOOKMARKED_RESEARCHES_ONGOING_TOKEN_SALES', sales);
 				return Promise.all(sales.map(ts => deipRpc.api.getResearchTokenSaleContributionsByResearchTokenSaleIdAsync(ts.id)));
 			})
-			.then((contributions) => {
+			.then((response) => {
+				const contributions = [].concat.apply([], response);
 				commit('SET_BOOKMARKED_RESEARCHES_ONGOING_TOKEN_SALES_CONTRIBUTIONS', contributions);
 			})
 			.finally(() => {
@@ -276,6 +290,14 @@ const mutations = {
 
 	['SET_MY_MEMBERSHIP_RESEARCHES'](state, list) {
 		Vue.set(state, 'myMembershipResearches', list);
+	},
+
+	['SET_MY_MEMBERSHIP_RESEARCHES_ONGOING_TOKEN_SALES'](state, list) {
+		Vue.set(state, 'myMembershipResearchesOngoingTokenSales', list);
+	},
+
+	['SET_MY_MEMBERSHIP_RESEARCHES_ONGOING_TOKEN_SALES_CONTRIBUTIONS'](state, list) {
+		Vue.set(state, 'myMembershipResearchesOngoingTokenSalesContributions', list);
 	},
 
 	['SET_RESEARCH_GROUPS_TOKENS'](state, list) {
