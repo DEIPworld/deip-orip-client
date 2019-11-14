@@ -12,7 +12,7 @@
                     <v-avatar size="160px" class="user-avatar" 
                             v-on:mouseover="onAvatarMouseOver"
                             v-on:mouseout="onAvatarMouseOut">
-                        <img v-if="userInfo.profile" v-bind:src="userInfo.profile.avatar | avatarSrc(160, 160, false)" />
+                        <img v-if="userInfo.profile" v-bind:src="userInfo.profile.avatar | avatarSrc(320, 320, false)" />
                         
                         <v-gravatar v-if="!userInfo.profile && userInfo.account" :email="userInfo.account.name + '@deip.world'" />
                         
