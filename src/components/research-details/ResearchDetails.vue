@@ -124,7 +124,7 @@
                 </v-layout>
                 <v-layout justify-end class="pt-2">
                   <v-btn
-                    :disabled="!$refs.amountToContribute || !$refs.amountToContribute.valid || areTokensBuying || !this.amountToContribute"
+                    :disabled="isContributionToTokenSaleDisabled"
                     :loading="areTokensBuying"
                     @click="onContributeToTokenSaleClick()"
                     class="btn--gradient-pb"
@@ -171,26 +171,6 @@
                 </v-flex>
               </v-layout>
             </v-flex>
-            <!-- <v-flex lg4 offset-lg1 v-if="isActiveTokenSale && !isResearchGroupMember">
-              <v-layout justify-end class="pt-2">
-                <v-text-field
-                  ref="amountToContribute"
-                  v-model="amountToContribute"
-                  placeholder="Amount" suffix="USD"
-                  :rules="[deipTokenValidator]"
-                  :disabled="areTokensBuying"
-                />
-              </v-layout>
-              <v-layout justify-end class="pt-2">
-                <v-btn
-                  :disabled="!$refs.amountToContribute || !$refs.amountToContribute.valid || areTokensBuying || !this.amountToContribute"
-                  :loading="areTokensBuying"
-                  @click="contributeToTokenSale()"
-                  class="btn--gradient-pb"
-                  block
-                >Invest</v-btn>
-              </v-layout>
-            </v-flex> -->
           </v-layout>
           <v-divider v-if="isTokenSaleSectionAvailable || tokenHoldersList.length" />
           <v-layout v-if="timeline.length" class="my-5">
@@ -683,6 +663,11 @@
           return Math.floor(moment.duration(end.diff(now)).asDays());
         }
       },
+      isContributionToTokenSaleDisabled() {
+        let balance = this.fromAssetsToFloat(this.user.account.balance);
+        let notEnoughFunds = (this.amountToContribute || 0) > balance;
+        return notEnoughFunds || !this.amountToContribute || this.areTokensBuying;
+      },
       canJoinResearchGroup() {
         if (this.research) {
           if (this.membersList.some(m => m.account.name === this.user.username)) {
@@ -867,6 +852,7 @@
           this.$store.dispatch('rd/loadResearchTokenSale', {researchId: this.research.id});
           this.$store.dispatch('rd/loadResearchTokenSales', {researchId: this.research.id});
           this.$store.dispatch('rd/loadResearchTokenHolders', {researchId: this.research.id});
+          this.$store.dispatch('auth/loadAccount');
 
           this.areTokensBuying = false;
           this.$refs.amountToContribute.reset();
