@@ -478,9 +478,18 @@ const actions = {
     },
 
     loadTokenSaleContributors({ state, commit }) {
+        const contributors = []
         return deipRpc.api.getResearchTokenSaleContributionsByResearchTokenSaleIdAsync(state.tokenSale.id)
             .then((contributions) => {
-                commit('SET_RESEARCH_TOKEN_SALE_CONTRIBUTIONS_LIST', contributions)
+              contributors.push(...contributions);
+              return getEnrichedProfiles(contributions.map(m => m.owner))
+            })
+            .then((users) => {
+              for (let i = 0; i < contributors.length; i++) {
+                const contributor = contributors[i];
+                contributor.user = users.find(user => contributor.owner == user.account.name);
+              }
+              commit('SET_RESEARCH_TOKEN_SALE_CONTRIBUTIONS_LIST', contributors)
             })
     },
 

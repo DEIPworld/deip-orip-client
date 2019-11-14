@@ -145,7 +145,7 @@
 
             </v-flex>
           </v-layout>
-          <v-layout v-if="tokenHoldersList.length" class="my-5">
+          <v-layout v-if="investors.length || isActiveTokenSale" class="my-5">
             <v-flex lg1>
               <v-layout justify-end class="pr-3">
                 <v-icon large color="grey lighten-2">mdi-account-box</v-icon>
@@ -153,7 +153,7 @@
             </v-flex>
             <v-flex lg6>
               <v-layout wrap>
-                <v-flex lg12 class="rd-block-header">Investors - {{tokenHoldersList.length}}</v-flex>
+                <v-flex lg12 class="rd-block-header">Investors - {{investors.length}}</v-flex>
                 <v-flex lg12>
                   <v-layout justify-start class="mt-2">
                     <div class="rd-investment-info">
@@ -170,13 +170,13 @@
                     </div>
                   </v-layout>
                   <v-layout justify-start class="mt-2">
-                    <platform-avatar :size="40" v-for="(investor, i) in tokenHoldersList" :key="'investor-' + i" :user="investor.user" class="mr-1"></platform-avatar>
+                    <platform-avatar :size="40" v-for="(investor, i) in investors" :key="'investor-' + i" :user="investor" class="mr-1"></platform-avatar>
                   </v-layout>
                 </v-flex>
               </v-layout>
             </v-flex>
           </v-layout>
-          <v-divider v-if="isTokenSaleSectionAvailable || tokenHoldersList.length" />
+          <v-divider v-if="isTokenSaleSectionAvailable || investors.length" />
           <v-layout v-if="timeline.length" class="my-5">
             <v-flex lg1>
               <v-layout justify-end class="pr-3">
@@ -659,7 +659,7 @@
         return this.timeline.find(m => m.id == this.selectedTimelineItemId);
       },
       averageInvestmentAmount() {
-        return this.round2DigitsAfterComma(this.investmentsAmount / this.tokenHoldersList.length);
+        return this.round2DigitsAfterComma(this.investmentsAmount / (this.investors.length || 1));
       },
       tokenSaleDaysLeft() {
         if (this.tokenSale) {
@@ -769,9 +769,18 @@
         });
       },
       investmentsAmount () {
-        return this.tokenSalesList.filter(e => e.status === 2)
+        return this.tokenSalesList.filter(e => [1, 2].includes(e.status))
           .map((e) => this.fromAssetsToFloat(e.total_amount))
-          .reduce((acc, curr) => acc += curr);
+          .reduce((acc, curr) => acc += curr, 0);
+      },
+      investors () {
+        const investorsSet = {};
+
+        [...this.tokenHoldersList, ...this.contributionsList].forEach((e) => {
+          investorsSet[e.user.account.name] = e.user;
+        });
+
+        return Object.values(investorsSet);
       },
       isActiveInvite() {
         return this.groupInvitesList.some(invite => invite.account_name == this.user.username);
@@ -810,11 +819,6 @@
 
         return (this.isMissingTokenSale && this.isResearchGroupMember && !this.isFinishedResearch) || this.isActiveTokenSale || this.isInactiveTokenSale;
       },
-      tokenHoldersTotalAmount() {
-        return this.tokenHoldersList.reduce((share, holder) => {
-          return share + holder.amount;
-        }, 0);
-      },
       reviews() {
         return this.reviewsList.map((review) => {
           const weights_of_disciplines = [];
@@ -839,10 +843,10 @@
         return this.$options.filters.researchVideoSrc(this.research.abstract);
       },
       userInvestment() {
-        const finishedTokenSalesIds = this.tokenSalesList.filter(e => e.status === 2).map(e => e.id);
+        const legitTokenSalesIds = this.tokenSalesList.filter(e => [1, 2].includes(e.status)).map(e => e.id);
         let amount = 0;
         this.userContributionsList.forEach((c) => {
-          if (finishedTokenSalesIds.includes(c.tokenSaleId)) {
+          if (legitTokenSalesIds.includes(c.tokenSaleId)) {
             amount += this.fromAssetsToFloat(c.amount);
           }
         });
