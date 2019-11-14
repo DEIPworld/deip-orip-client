@@ -137,7 +137,7 @@
                     <div class="mt-1 caption text-uppercase grey--text">Price change</div>
                   </v-flex>
                   <v-flex>
-                    <div class="body-2">{{investment.shareHolders.length}}</div>
+                    <div class="body-2">{{investment.shareHolders.length + 1}}</div>
                     <div class="mt-1 caption text-uppercase grey--text"># of tokenholders</div>
                   </v-flex>
                   <v-flex>
