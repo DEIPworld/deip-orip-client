@@ -51,6 +51,12 @@ const getters = {
           return { ...discipline, stats };
         });
         return { ...item, totalVotes, reviews, group, authors, tokenSale, tokenSaleContributions, disciplines };
+      }).sort((a, b) => {
+        if (b.created_at > a.created_at) {
+          return 1
+        }
+
+        return -1;
       });
   },
 
