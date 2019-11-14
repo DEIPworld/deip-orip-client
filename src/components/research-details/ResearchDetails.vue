@@ -164,6 +164,10 @@
                       <span class="rd-investment-info__value">${{averageInvestmentAmount}}</span><br/>
                       <span class="rd-investment-info__value-text">Average investment</span>
                     </div>
+                    <div class="rd-investment-info" v-if="!isResearchGroupMember">
+                      <span class="rd-investment-info__value">${{userInvestment}}</span><br/>
+                      <span class="rd-investment-info__value-text">Your investment</span>
+                    </div>
                   </v-layout>
                   <v-layout justify-start class="mt-2">
                     <platform-avatar :size="40" v-for="(investor, i) in tokenHoldersList" :key="'investor-' + i" :user="investor.user" class="mr-1"></platform-avatar>
@@ -635,6 +639,7 @@
         tokenSale: 'rd/tokenSale',
         tokenSalesList: 'rd/tokenSalesList',
         user: 'auth/user',
+        userContributionsList: 'rd/userContributionsList',
         userJoinRequests: 'auth/userJoinRequests',
       }),
 
@@ -832,6 +837,16 @@
 
       researchPresentationSrc() {
         return this.$options.filters.researchVideoSrc(this.research.abstract);
+      },
+      userInvestment() {
+        const finishedTokenSalesIds = this.tokenSalesList.filter(e => e.status === 2).map(e => e.id);
+        let amount = 0;
+        this.userContributionsList.forEach((c) => {
+          if (finishedTokenSalesIds.includes(c.tokenSaleId)) {
+            amount += this.fromAssetsToFloat(c.amount);
+          }
+        });
+        return amount;
       }
     },
 
@@ -852,6 +867,7 @@
           this.$store.dispatch('rd/loadResearchTokenSale', {researchId: this.research.id});
           this.$store.dispatch('rd/loadResearchTokenSales', {researchId: this.research.id});
           this.$store.dispatch('rd/loadResearchTokenHolders', {researchId: this.research.id});
+          this.$store.dispatch('rd/loadUserContributions', {researchId: this.research.id});
           this.$store.dispatch('auth/loadAccount');
 
           this.areTokensBuying = false;

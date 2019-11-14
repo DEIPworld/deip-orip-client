@@ -23,6 +23,7 @@ const state = {
     groupInvitesList: [],
     contentRefsList: [],
     applicationsRefsList: [],
+    userContributionsList: [],
 
     isLoadingResearchDetails: undefined,
     isLoadingResearchContent: undefined,
@@ -202,6 +203,10 @@ const getters = {
             return offsets;
         }
         return [];
+    },
+
+    userContributionsList: (state, getters) => {
+      return state.userContributionsList;
     }
 }
 
@@ -252,9 +257,15 @@ const actions = {
                 const applicationsRefsLoad = new Promise((resolve, reject) => {
                     dispatch('loadResearchApplicationsRefs', { researchId: state.research.id, notify: resolve })
                 });
+                const userContributionsLoad = new Promise((resolve, reject) => {
+                  dispatch('loadUserContributions', { researchId: state.research.id, notify: resolve })
+                });
 
-                return Promise.all([contentLoad, membersLoad, reviewsLoad, disciplinesLoad, tokenHoldersLoad,
-                     tokenSaleLoad, tokenSalesLoad, invitesLoad, contentRefsLoad, groupLoad, applicationsLoad, applicationsRefsLoad])
+                return Promise.all([
+                  contentLoad, membersLoad, reviewsLoad, disciplinesLoad, tokenHoldersLoad,
+                  tokenSaleLoad, tokenSalesLoad, invitesLoad, contentRefsLoad, groupLoad,
+                  applicationsLoad, applicationsRefsLoad, userContributionsLoad,
+                ]);
 
             }, (err => {console.log(err)}))
             .finally(() => {
@@ -494,6 +505,22 @@ const actions = {
                 commit('SET_RESEARCH_GROUP_DETAILS_LOADING_STATE', false)
                 if (notify) notify();
             });
+    },
+
+    loadUserContributions({ state, commit, rootGetters }, { researchId, notify }) {
+      const user = rootGetters['auth/user'];
+      return deipRpc.api.getContributionsHistoryByContributorAndResearchAsync(user.account.name, researchId)
+        .then((hist) => {
+          const contributions = hist.map((h) => {
+            return {
+              tokenSaleId: h.op[1].research_token_sale_id,
+              amount: h.op[1].amount
+            };
+          });
+          commit('SET_USER_CONTRIBUTIONS_LIST', contributions);
+        }).finally(() => {
+          if (notify) notify();
+        });
     }
 }
 
@@ -554,6 +581,10 @@ const mutations = {
 
     ['SET_RESEARCH_APPLICATIONS_REFS'](state, refs) {
         Vue.set(state, 'applicationsRefsList', refs)
+    },
+
+    ['SET_USER_CONTRIBUTIONS_LIST'](state, list) {
+        Vue.set(state, 'userContributionsList', list)
     },
 
     ['SET_RESEARCH_DETAILS_LOADING_STATE'](state, value) {
