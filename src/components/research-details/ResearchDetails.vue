@@ -101,7 +101,7 @@
               <v-layout justify-end class="rd-cap-value">${{currentCap}}</v-layout>
               <v-layout justify-end align-center class="py-2">
                 <div class="rd-cap-chip" v-if="currentCap >= fromAssetsToFloat(tokenSale.soft_cap)">Soft cap reached!</div>
-                <div class="pl-4">Raised of ${{fromAssetsToFloat(tokenSale.soft_cap)}} Goal</div>
+                <div class="pl-4">Raised of ${{fromAssetsToFloat(tokenSale.hard_cap)}} Goal</div>
               </v-layout>
               <v-layout align-center justify-end class="py-2">
                 <v-flex shrink class="rd-cap-progress-bound mr-2">0</v-flex>
