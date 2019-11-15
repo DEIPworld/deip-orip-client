@@ -59,7 +59,6 @@ const getters = {
         return -1;
       });
 
-    ordered.reverse();
     return ordered;
   },
 
