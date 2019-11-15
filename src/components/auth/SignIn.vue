@@ -7,7 +7,6 @@
             <img src="/static/logo-iconed.svg" />
           </div>
           <div class="description__info-text">
-            Longivity <br/>
             Open Research and Innovation Platform
           </div>
           <div class="description__signup-text">
