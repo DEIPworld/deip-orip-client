@@ -34,7 +34,6 @@ const getters = {
     const experise = [];
     for (let i = 0; i < state.user.expertTokens.length; i++) {
       const exp = state.user.expertTokens[i];
-      exp.discipline_name = discipline.name;
       experise.push(exp);
     }
     return experise;
