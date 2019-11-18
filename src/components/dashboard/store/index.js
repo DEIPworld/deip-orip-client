@@ -3,7 +3,6 @@
 import Vue from 'vue';
 import deipRpc from '@deip/deip-oa-rpc-client';
 import * as usersService from './../../../utils/user';
-import * as bookmarksService from './../../../utils/bookmarks';
 import tokenSaleService from './../../../services/TokenSaleService';
 
 const experts = ["alice", "bob", "mike", "john", "rachel", "james", "rick", "alex", "anastasia", "nick", "carla", "irene", "sherlock", "greg", "doroty", "hermes"];
@@ -226,9 +225,10 @@ const actions = {
 			});
 	},
 
-	loadBookmarkedResearches({ commit }, { username, excludeIds, notify } = { excludeIds: []}) {
-		let ids = bookmarksService.getResearchBookmarks(username).filter(id => !excludeIds.some(rId => rId == id));
-		return Promise.all(ids.map(id => deipRpc.api.getResearchByIdAsync(id)))
+	loadBookmarkedResearches({ commit, rootGetters }, { excludeIds, notify } = { excludeIds: []}) {
+    const user = rootGetters['auth/user'];
+    const ids = user.researchBookmarks.map((b) => b.researchId).filter(id => !excludeIds.some(rId => rId == id));
+    return Promise.all(ids.map(id => deipRpc.api.getResearchByIdAsync(id)))
 			.then((researches) => {
 				commit('SET_BOOKMARKED_RESEARCHES', researches);
 				return Promise.all(researches.map(research => tokenSaleService.getCurrentTokenSaleByResearchId(research.id)));

@@ -227,7 +227,6 @@
     import { mapGetters } from 'vuex';
     import usersService from './../../../services/http/users'
     import * as bankCardsService from './../../../utils/bankCard'
-    import * as bookmarksService from './../../../utils/bookmarks'
     import { approveInvite, rejectInvite } from './../../../services/InvitesService'
     import moment from 'moment';
     import deipRpc from '@deip/deip-oa-rpc-client';
@@ -391,7 +390,6 @@
 
             clearLocalStorageItems() {
                 bankCardsService.removeInvestorBankCard(this.currentUser.username);
-                bookmarksService.removeResearchBookmarks(this.currentUser.username);
             }
         }
     };

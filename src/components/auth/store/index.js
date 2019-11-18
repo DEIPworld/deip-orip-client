@@ -4,6 +4,7 @@ import Vue from 'vue'
 
 import { isLoggedIn, getDecodedToken, getOwnerWif } from './../../../utils/auth'
 import usersService from './../../../services/http/users'
+import bookmarksHttpService from './../../../services/http/bookmarks'
 import joinRequestsService from './../../../services/http/joinRequests'
 import notificationsHttpService from './../../../services/http/notifications'
 import { getEnrichedProfiles } from './../../../utils/user'
@@ -20,7 +21,8 @@ const state = {
     groups: [],
     coworkers: [],
     joinRequests: [],
-    notifications: []
+    notifications: [],
+    researchBookmarks: [],
   }
 }
 
@@ -119,13 +121,29 @@ const actions = {
     const joinRequestLoad = new Promise((resolve, reject) => {
       dispatch('loadJoinRequests', { notify: resolve })
     });
+    const researchBookmarksLoad = new Promise((resolve, reject) => {
+      dispatch('loadResearchBookmarks', { notify: resolve })
+    });
 
-    return Promise.all([profileLoad, accountLoad, groupsLoad, expLoad, joinRequestLoad])
+    return Promise.all([profileLoad, accountLoad, groupsLoad, expLoad, joinRequestLoad, researchBookmarksLoad])
+  },
+
+  loadResearchBookmarks({ commit, getters }, { notify } = {}) {
+    const user = getters.user;
+    return bookmarksHttpService.getResearchBookmarks(user.username)
+      .then((researchBookmarks) => {
+        commit('SET_USER_RESEARCH_BOOKMARKS', researchBookmarks.map(b => ({
+          _id: b._id,
+          researchId: +b.ref,
+        })));
+      }).finally(() => {
+        if (notify) notify();
+      })
   },
 
   loadNotifications({ state, commit, getters }, { notify } = {}) {
     const user = getters.user;
-    notificationsHttpService.getNotificationsByUser(user.username)
+    return notificationsHttpService.getNotificationsByUser(user.username)
       .then((notifications) => {
         commit('SET_USER_NOTIFICATION_PROPOSALS', notifications);
       })
@@ -267,6 +285,10 @@ const mutations = {
 
   ['SET_USER_RESEARCH_GROUP_TOKENS_LIST'](state, list) {
     Vue.set(state.user, 'groupTokens', list)
+  },
+
+  ['SET_USER_RESEARCH_BOOKMARKS'](state, list) {
+    Vue.set(state.user, 'researchBookmarks', list)
   },
 
   ['SET_USER_NOTIFICATION_PROPOSALS'](state, list) {

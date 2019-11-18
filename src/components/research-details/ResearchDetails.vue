@@ -42,10 +42,24 @@
       <v-layout row wrap>
         <v-flex lg12>
           <div class="text-xs-right py-2 px-3">
-            <v-btn v-if="!isBookmarked" class="ma-0 pa-0" flat icon @click="addToBookmarks()">
+            <v-btn
+              v-if="!bookmarkId"
+              class="ma-0 pa-0"
+              flat
+              icon
+              @click="addToBookmarks()"
+              :loading="isBookmarkActionInProgress"
+            >
               <v-icon>bookmark_border</v-icon>
             </v-btn>
-            <v-btn v-else class="ma-0 pa-0" flat icon @click="removeFromBookmarks()">
+            <v-btn
+              v-else
+              class="ma-0 pa-0"
+              flat
+              icon
+              @click="removeFromBookmarks()"
+              :loading="isBookmarkActionInProgress"
+            >
               <v-icon color="amber">bookmark</v-icon>
             </v-btn>
           </div>
@@ -585,9 +599,9 @@
   import * as d3 from "d3";
   import { mapGetters } from 'vuex';
 
+  import bookmarksService from '@/services/http/bookmarks';
   import contentHttpService from '@/services/http/content';
   import joinRequestsService from '@/services/http/joinRequests';
-  import * as bookmarksService from '@/utils/bookmarks';
   import { getContentType } from '@/services/ResearchService';
 
   import references from './references.json';
@@ -618,7 +632,8 @@
         selectedTimelineItemId: 1,
         timelineItemsToShow: 3,
         references,
-        isBookmarked: undefined,
+        bookmarkId: null,
+        isBookmarkActionInProgress: false,
 
         researchLogoSrc: ""
       }
@@ -1103,13 +1118,31 @@
       },
 
       addToBookmarks() {
-        bookmarksService.saveResearchBookmark(this.research.id, this.user.username);
-        this.isBookmarked = true;
+        this.isBookmarkActionInProgress = true;
+        return bookmarksService.createResearchBookmark(this.user.username, this.research.id)
+          .then((bookmark) => {
+            this.$store.dispatch('auth/loadResearchBookmarks');
+            this.bookmarkId = bookmark._id;
+          }).catch((err) => {
+            console.log(err);
+          })
+          .finally(() => {
+            this.isBookmarkActionInProgress = false;
+          })
       },
 
       removeFromBookmarks() {
-        bookmarksService.removeResearchBookmark(this.research.id, this.user.username);
-        this.isBookmarked = false;
+        this.isBookmarkActionInProgress = true;
+        return bookmarksService.removeResearchBookmark(this.user.username, this.bookmarkId)
+          .then(() => {
+            this.$store.dispatch('auth/loadResearchBookmarks');
+            this.bookmarkId = null;
+          }).catch((err) => {
+            console.log(err);
+          })
+          .finally(() => {
+            this.isBookmarkActionInProgress = false;
+          })
       },
 
       getContentType,
@@ -1117,7 +1150,10 @@
 
     created() {
       this.researchLogoSrc = `./static/research-logo/${this.research.id < 20 ? this.research.id : 'default'}_background.png`;
-      this.isBookmarked = bookmarksService.hasResearchBookmark(this.research.id, this.user.username);
+      const bookmark = this.user.researchBookmarks.find(b => b.researchId === this.research.id);
+      if (bookmark) {
+        this.bookmarkId = bookmark._id;
+      }
     }
   };
 </script>
