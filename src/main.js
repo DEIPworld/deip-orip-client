@@ -46,7 +46,7 @@ async function initApp() {
   try {
     const env = await axios.get('/env');
     window.env = env.data;
-    deipRpc.api.setOptions({ url: window.env.DEIP_FULL_NODE_URL });
+    deipRpc.api.setOptions({ url: window.env.DEIP_FULL_NODE_URL, reconnectTimeout: 3000 });
     deipRpc.config.set('chain_id', window.env.CHAIN_ID);
     if (!window.env.TENANT) window.env.TENANT = "";
     console.log(window.env);
