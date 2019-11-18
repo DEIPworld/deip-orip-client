@@ -129,7 +129,7 @@ const actions = {
           tokenSalesLoad
         ]);
       })
-      .then(([totalVotes, researchReviews, groups, /* disciplinesStats,*/ authors, tokenSales]) => {
+      .then(([totalVotes, researchReviews, groups, disciplinesStats, authors, tokenSales]) => {
         commit('SET_RESEARCH_FEED_TOTAL_VOTES_LIST', [].concat.apply([], totalVotes));
         commit('SET_RESEARCH_FEED_REVIEWS_LIST', [].concat.apply([], researchReviews));
         commit('SET_RESEARCH_FEED_GROUPS_LIST', groups);
