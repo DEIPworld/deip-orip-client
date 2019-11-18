@@ -100,15 +100,15 @@ const actions = {
           }, [])
           .map(groupId => deipRpc.api.getResearchGroupByIdAsync(groupId)));
 
-        let disciplineStatsLoad = Promise.all(listing
-          .map(r => r.disciplines)
-          .reduce((acc, disciplines) => {
-            let unique = disciplines.filter(d => !acc.some(id => id == d.id));
-            return [...unique.map(d => d.id), ...acc];
-          }, [])
-          .map(d => deipRpc.api.getEciAndExpertiseStatsByDisciplineIdAsync(d)
-            .then((stats) => { return { discipline_id: d, ...stats } })
-          ));
+        // let disciplineStatsLoad = Promise.all(listing
+        //   .map(r => r.disciplines)
+        //   .reduce((acc, disciplines) => {
+        //     let unique = disciplines.filter(d => !acc.some(id => id == d.id));
+        //     return [...unique.map(d => d.id), ...acc];
+        //   }, [])
+        //   .map(d => deipRpc.api.getEciAndExpertiseStatsByDisciplineIdAsync(d)
+        //     .then((stats) => { return { discipline_id: d, ...stats } })
+        //   ));
 
         let authorsLoad = usersService.getEnrichedProfiles(listing
           .map(r => r.authors)
@@ -124,16 +124,16 @@ const actions = {
           researchTotalVotesLoad,
           researchReviewsLoad,
           researchGroupsLoad,
-          disciplineStatsLoad,
+          // disciplineStatsLoad,
           authorsLoad,
           tokenSalesLoad
         ]);
       })
-      .then(([totalVotes, researchReviews, groups, disciplinesStats, authors, tokenSales]) => {
+      .then(([totalVotes, researchReviews, groups, /* disciplinesStats, */ authors, tokenSales]) => {
         commit('SET_RESEARCH_FEED_TOTAL_VOTES_LIST', [].concat.apply([], totalVotes));
         commit('SET_RESEARCH_FEED_REVIEWS_LIST', [].concat.apply([], researchReviews));
         commit('SET_RESEARCH_FEED_GROUPS_LIST', groups);
-        commit('SET_RESEARCH_FEED_DISCIPLINES_STATISTIC', disciplinesStats);
+        // commit('SET_RESEARCH_FEED_DISCIPLINES_STATISTIC', disciplinesStats);
         commit('SET_RESEARCH_FEED_AUTHORS_LIST', authors);
         commit('SET_RESEARCH_FEED_TOKEN_SALES_LIST', tokenSales.filter(ts => ts != undefined));
 
