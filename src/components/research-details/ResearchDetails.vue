@@ -382,7 +382,7 @@
               >Use Editor</v-btn>
             </v-flex>
           </v-layout>
-          <v-divider />
+          <v-divider v-if="contentList.length || (isResearchGroupMember && !research.is_finished)"/>
           <template v-if="eciChart">
             <v-layout class="my-5">
               <v-flex lg1>
