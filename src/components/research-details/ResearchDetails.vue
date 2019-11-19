@@ -41,26 +41,29 @@
       </v-layout>
       <v-layout row wrap>
         <v-flex lg12>
-          <div class="text-xs-right py-2 px-3">
+          <div v-if="!isResearchGroupMember" class="text-xs-right pa-3">
             <v-btn
               v-if="!bookmarkId"
               class="ma-0 pa-0"
-              flat
-              icon
+              color="primary"
+              outline
+              small
               @click="addToBookmarks()"
               :loading="isBookmarkActionInProgress"
             >
-              <v-icon>bookmark_border</v-icon>
+              Follow
             </v-btn>
+
             <v-btn
               v-else
               class="ma-0 pa-0"
-              flat
-              icon
+              color="grey"
+              outline
+              small
               @click="removeFromBookmarks()"
               :loading="isBookmarkActionInProgress"
             >
-              <v-icon color="amber">bookmark</v-icon>
+              Unfollow
             </v-btn>
           </div>
         </v-flex> 
