@@ -85,3 +85,9 @@ const mockSharePriceWithAvg = ({ research, share }, offset) => {
 Vue.prototype.mockTokenPrice = mockTokenPrice;
 Vue.prototype.mockPreviousTokenPrice = mockPreviousTokenPrice;
 Vue.prototype.mockSharePriceWithAvg = mockSharePriceWithAvg;
+
+Vue.prototype.getRandomInt = (min, max) => {
+  min = Math.ceil(min);
+  max = Math.floor(max);
+  return Math.floor(Math.random() * (max - min + 1)) + min; // boundaries included
+}
