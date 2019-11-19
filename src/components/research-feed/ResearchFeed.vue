@@ -30,9 +30,9 @@
                         v-for="organization in selectedOrganizations"
                         :key="'filter-by-organization-' + organization.id"
                         @input="toggleOrganization(organization)"
-                        close 
+                        small
+                        close
                         outline>
-
                         <v-avatar>
                           <img :src="`./../../../static/organizations/${organization.thumbnail}`">
                         </v-avatar>
