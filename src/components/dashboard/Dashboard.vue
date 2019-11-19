@@ -7,11 +7,11 @@
           <v-tabs-slider color="primary"></v-tabs-slider>
 
           <v-tab href="#tab-summary">Summary</v-tab>
-          <v-tab href="#tab-projects">Projects</v-tab>
+          <!-- <v-tab href="#tab-projects">Projects</v-tab>
           <v-tab href="#tab-investments">Investments</v-tab>
           <v-tab href="#tab-reviews">Reviews</v-tab>
           <v-tab href="#tab-experts">Experts</v-tab>
-          <v-tab href="#tab-ip-protection">IP protection</v-tab>
+          <v-tab href="#tab-ip-protection">IP protection</v-tab> -->
           <v-spacer></v-spacer>
 
           <v-tabs-items class="tab-content">
@@ -215,7 +215,7 @@
                 </v-card>
               </v-layout>
             </v-tab-item>
-            <v-tab-item value="tab-projects">
+            <!-- <v-tab-item value="tab-projects">
               <v-layout row fill-height>
                 <v-card color="white" class="full-width elevation-0 pt-4 glass-container">
                   <v-layout row wrap>
@@ -259,7 +259,7 @@
                   </v-layout>
                 </v-card>
               </v-layout>
-            </v-tab-item>
+            </v-tab-item> -->
           </v-tabs-items>
         </v-tabs>
       </v-flex>
