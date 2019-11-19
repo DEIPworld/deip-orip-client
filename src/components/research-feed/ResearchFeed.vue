@@ -10,35 +10,56 @@
         <v-flex xs12 sm12 md12 lg12 xl12>
           <v-expansion-panel expand v-model="filtersTabExpansionModel">
             <v-expansion-panel-content>
-              <!-- <template slot="actions"><v-icon></v-icon></template> -->
+              <template slot="actions"><v-icon color="primary">$vuetify.icons.expand</v-icon></template>
               <template slot="header">
-                <div class="text-xs-center">
-                  <v-btn small flat color="primary" class="py-0 my-0 elevation-0">
-                    {{isFiltersTabExpanded ? 'Hide Filters' : 'Show Filters'}}
-                  </v-btn>
-                </div>
+                <v-layout row justify-space-between>
+                  <div class="px-4">
+                    <v-chip
+                      v-for="discipline in selectedTopDisciplines"
+                      :key="'filter-by-discipline-' + discipline.id"
+                      @input="toggleDiscipline(discipline)" 
+                      small
+                      close 
+                      outline>
+                      {{ discipline.label }}
+                    </v-chip>
+                  </div>
+                  <div class="align-self-center">
+                    <v-btn small flat color="primary" class="py-0 my-0 elevation-0">
+                      {{isFiltersTabExpanded ? 'Hide Filters' : 'Show Filters'}}
+                    </v-btn>
+                  </div>
+                </v-layout>
               </template>
               
               <v-layout row wrap px-5 pt-4 pb-5 class="filters-background"> 
-                
                 <v-flex xs12 sm12 md12 lg12 xl12 class="feed-discipline-filter">
-                  <div class="subheading half-bold pb-4">Browse by discipline</div>
+                  <div class="pb-4">
+                    <span class="subheading half-bold">Browse by discipline</span>
+                  </div>
                   <v-layout row wrap justify-space-between>
-                    <v-flex xs6 sm6 md3 lg3 xl3 v-for="(discipline, i) in disciplines" :key="'discipline-filter-' + i">
+                    <v-flex xs6 sm6 md3 lg3 xl3 px-2 key="all-discipline-filter">
                       <v-btn 
-                        @click="selectDisciplineFilter(discipline)" 
+                        @click="selectAllDisciplines()" 
                         flat block small color="primary" 
                         class="text-capitalize filter-btn" 
-                        :class="{'selected': discipline === selectedDisciplineFilter}">
+                        :class="{'selected': isAllDisciplinesSelected}">
+                        All
+                      </v-btn>
+                    </v-flex>
+                    <v-flex xs6 sm6 md3 lg3 xl3 px-2 v-for="(discipline, i) in disciplines" :key="'discipline-filter-' + i">
+                      <v-btn 
+                        @click="toggleDiscipline(discipline)" 
+                        flat block small color="primary" 
+                        class="text-capitalize filter-btn" 
+                        :class="{'selected': isDisciplineSelected(discipline)}">
                         {{discipline.label}}
                       </v-btn>
                     </v-flex>
                     <v-spacer></v-spacer>
                   </v-layout>
                 </v-flex>
-
                 <v-flex xs12 sm12 md12 lg12 xl12 py-4><v-divider></v-divider></v-flex>
-
                 <v-flex xs12 sm12 md12 lg12 xl12>
                   <div class="subheading half-bold pb-4">Browse by organizations | <span class="primary--text">All 24</span></div>
                   <v-layout row wrap justify-space-between>
@@ -57,7 +78,6 @@
                     <v-spacer></v-spacer>
                   </v-layout>
                 </v-flex>
-
               </v-layout>
             </v-expansion-panel-content>
           </v-expansion-panel>
@@ -65,7 +85,7 @@
       </v-layout>
 
       <v-layout row wrap>
-        <v-card class="px-5 elevation-0 full-width" :class="{'py-3': isFiltersTabExpanded}">
+        <v-card class="px-5 pb-4 elevation-0 full-width" :class="{'pt-4': isFiltersTabExpanded}">
           <v-layout row wrap>
             <v-flex xs12 sm12 md12 lg12 xl12>
               <div class="subheading half-bold px-2">Top projects | <span class="primary--text">All {{researchFeed.length}}</span></div>
@@ -114,7 +134,7 @@ export default {
       pagination: {
         rowsPerPage: 9
       },
-      disciplines: [{"id": 0, "label": "All" }, ...disciplinesService.getTopLevelNodes()],
+      disciplines: [...disciplinesService.getTopLevelNodes()],
       organizations: [{
         id: "microsoft"
       },{
@@ -126,7 +146,6 @@ export default {
       }],
 
       filtersTabExpansionModel: [false],
-      selectedDisciplineFilter: null,
       selectedOrganizationFilter: null
     }
   },
@@ -139,7 +158,13 @@ export default {
     }),
     isFiltersTabExpanded() {
       return this.filtersTabExpansionModel[0];
-    }
+    },
+    selectedTopDisciplines() {
+      return this.filter.disciplines.filter(d => d.id != 0 && d.children !== undefined);
+    },
+    isAllDisciplinesSelected() {
+      return this.filter.disciplines.length === 0;
+    },
   },
 
   methods: {
@@ -152,15 +177,23 @@ export default {
       }
     },
 
-    selectDisciplineFilter(discipline) {
-      if (this.selectedDisciplineFilter === discipline) {
-        this.selectedDisciplineFilter = null;
-        this.$store.dispatch('feed/updateFilter', { key: 'disciplines', value: []});
+    selectAllDisciplines() {
+      this.$store.dispatch('feed/updateFilter', { key: 'disciplines', value: [] });
+    },
+
+    toggleDiscipline(discipline) {
+      let disciplinesGraph = [discipline, ...Object.values(discipline.children)];
+      if (!this.isDisciplineSelected(discipline)) {
+        let value = [...disciplinesGraph, ...this.filter.disciplines];
+        this.$store.dispatch('feed/updateFilter', { key: 'disciplines', value });
       } else {
-        this.selectedDisciplineFilter = discipline;
-        let disciplines = discipline.id != 0 ? [discipline, ...Object.values(discipline.children)] : [];
-        this.$store.dispatch('feed/updateFilter', { key: 'disciplines', value: disciplines });
+        let value = this.filter.disciplines.filter(d => !disciplinesGraph.some(item => item === d));
+        this.$store.dispatch('feed/updateFilter', { key: 'disciplines', value });
       }
+    },
+
+    isDisciplineSelected(discipline) {
+      return this.filter.disciplines.some(d => d === discipline);
     },
 
     selectOrganizationFilter(org) {

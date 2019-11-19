@@ -46,8 +46,8 @@
             <div class="c-pt-6">
                 <v-card class="hidden-last-child">
                     <template v-for="item in researchFeed">
-                        <research-feed-list-item :research="item"></research-feed-list-item>
-                        <v-divider></v-divider>
+                        <research-feed-list-item :research="item" :key="item.research_id"></research-feed-list-item>
+                        <v-divider :key="item.research_id + '-divider'"></v-divider>
                     </template> 
                 </v-card>
             </div>
