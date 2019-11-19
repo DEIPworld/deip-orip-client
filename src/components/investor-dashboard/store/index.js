@@ -241,6 +241,22 @@ const actions = {
       .then((updated) => {
         commit('ADD_NEW_INVESTMENT_LIST', { listId, listName, color });
       })
+  },
+
+  editInvestmentList({ state, commit }, { listId, listName, color }) {
+    let update = {};
+    let lists = state.investmentPortfolio.lists.map(list => {
+      if (list.id == listId) {
+        return { id: listId, name: listName, color, researches: list.researches }
+      } else {
+        return list;
+      }
+    });
+    Object.assign(update, state.investmentPortfolio, { lists: lists });
+    return investmentPortfolioService.updateInvestmentPortfolio(state.investmentPortfolio._id, update)
+      .then((updated) => {
+        commit('EDIT_NEW_INVESTMENT_LIST', { listId, listName, color });
+      })
   }
 }
 
@@ -304,6 +320,12 @@ const mutations = {
 
   ['ADD_NEW_INVESTMENT_LIST'](state, { listId, listName, color }) {
     state.investmentPortfolio.lists.push({ id: listId, name: listName, color, researches: [] });
+  },
+
+  ['EDIT_NEW_INVESTMENT_LIST'](state, { listId, listName, color }) {
+    let editedList = state.investmentPortfolio.lists.find(list => list.id == listId);
+    Vue.set(editedList, 'name', listName);
+    Vue.set(editedList, 'color', color);
   }
 }
 

@@ -11,28 +11,60 @@
           </v-layout>
         </v-layout>
         <div class="mt-2 px-4">
-          <v-btn @click="openNewListDialog()" round outline block large color="primary" class="new-list-btn mx-0 my-2">
-            <v-icon small left>add</v-icon>
-            Add new list
-          </v-btn>
+          <v-layout row justify-space-between>
+            <v-flex :class="{'xs5': isCustomListSelected}">
+              <v-btn @click="openNewListDialog()" block round outline small color="primary" class="new-list-btn mx-0 my-2">
+                <v-icon left small>add</v-icon>
+                {{isCustomListSelected ? 'Add' : 'Add new list'}}
+              </v-btn>
+            </v-flex>
+            <v-flex @click="openEditListDialog()" v-if="isCustomListSelected" xs5>
+              <v-btn block round outline small color="primary" class="new-list-btn mx-0 my-2">
+                <v-icon left small>edit</v-icon>
+                Edit
+              </v-btn>
+            </v-flex>
+          </v-layout>
         </div>
-        <v-dialog v-model="newList.isOpened" max-width="500px">
+        <v-dialog v-model="newListDialog.isOpened" max-width="500px">
           <v-card>
             <v-card-title>
               <span>Add new list</span>
             </v-card-title>
             <v-card-text>
-              <swatches v-model="newList.color" inline colors="material-light"/>
+              <swatches v-model="newListDialog.color" inline colors="material-light"/>
               <v-text-field 
                 label="List name"
-                v-model="newList.name" 
+                v-model="newListDialog.name" 
                 :rules="[rules.required]"
               ></v-text-field>
             </v-card-text>
             <v-card-actions>
               <v-layout row justify-end>
                 <v-btn flat @click="closeNewListDialog()">Cancel</v-btn>
-                <v-btn @click="addNewList()" color="primary" :disabled="isSavingNewListDisabled || newList.isSaving">Save</v-btn>
+                <v-btn @click="addNewList()" color="primary" :disabled="isSavingNewListDisabled || newListDialog.isSaving">Save</v-btn>
+              </v-layout>
+            </v-card-actions>
+          </v-card>
+        </v-dialog>
+
+        <v-dialog v-model="editListDialog.isOpened" max-width="500px">
+          <v-card>
+            <v-card-title>
+              <span>Add new list</span>
+            </v-card-title>
+            <v-card-text>
+              <swatches v-model="editListDialog.color" inline colors="material-light"/>
+              <v-text-field 
+                label="List name"
+                v-model="editListDialog.name" 
+                :rules="[rules.required]"
+              ></v-text-field>
+            </v-card-text>
+            <v-card-actions>
+              <v-layout row justify-end>
+                <v-btn flat @click="closeEditListDialog()">Cancel</v-btn>
+                <v-btn @click="editCustomList()" color="primary" :disabled="isSavingEditedListDisabled || editListDialog.isSaving">Save</v-btn>
               </v-layout>
             </v-card-actions>
           </v-card>
@@ -74,13 +106,26 @@
         selectedList: "investorDashboard/selectedList"
       }),
       isSavingNewListDisabled() {
-        return !this.newList.color || !this.newList.name;
+        return !this.newListDialog.color || !this.newListDialog.name;
+      },
+      isSavingEditedListDisabled() {
+        return !this.editListDialog.color || !this.editListDialog.name;
+      },
+      isCustomListSelected() {
+        return this.selectedList.id != 'all';
       }
     },
     
     data() {
       return {
-        newList: {
+        newListDialog: {
+          name: "",
+          color: "",
+          isOpened: false,
+          isSaving: false
+        },
+        editListDialog: {
+          id: "",
           name: "",
           color: "",
           isOpened: false,
@@ -113,24 +158,47 @@
       },
 
       openNewListDialog() {
-        this.newList.color = "";
-        this.newList.name = "";
-        this.newList.isOpened = true;
+        this.newListDialog.color = "";
+        this.newListDialog.name = "";
+        this.newListDialog.isOpened = true;
       },
 
       closeNewListDialog() {
-        this.newList.isOpened = false;
+        this.newListDialog.isOpened = false;
       },
 
       addNewList() {
-        this.newList.isSaving = true;
-        let listName = this.newList.name;
-        let listId = listName.replace(/ /g, "-").replace(/_/g, "-").toLowerCase();
-        let color = this.newList.color;
+        this.newListDialog.isSaving = true;
+        let listName = this.newListDialog.name;
+        let listId = `${listName.replace(/ /g, "-").replace(/_/g, "-").toLowerCase()}-${new Date().getTime()}`;
+        let color = this.newListDialog.color;
         this.$store.dispatch('investorDashboard/addNewInvestmentList', { listId, listName, color })
           .finally(() => {
-            this.newList.isSaving = false;
-            this.newList.isOpened = false;
+            this.newListDialog.isSaving = false;
+            this.newListDialog.isOpened = false;
+          });
+      },
+
+      openEditListDialog() {
+        this.editListDialog.id = this.selectedList.id;
+        this.editListDialog.color = this.selectedList.color;
+        this.editListDialog.name = this.selectedList.name;
+        this.editListDialog.isOpened = true;
+      },
+
+      closeEditListDialog() {
+        this.editListDialog.isOpened = false;
+      },
+
+      editCustomList() {
+        this.editListDialog.isSaving = true;
+        let listId = this.editListDialog.id;
+        let listName = this.editListDialog.name;
+        let color = this.editListDialog.color;
+        this.$store.dispatch('investorDashboard/editInvestmentList', { listId, listName, color })
+          .finally(() => {
+            this.editListDialog.isSaving = false;
+            this.editListDialog.isOpened = false;
           });
       }
     }

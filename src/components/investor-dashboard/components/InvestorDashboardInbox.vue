@@ -16,7 +16,7 @@
             <div class="subheading half-bold">Recent updates: {{recentNotifications.length}}</div>
           </v-flex>
           <v-flex xl3 lg3 md3 sm12 xs12>
-            <v-select
+            <!-- <v-select
               v-model="sort" 
               :items="sortingOptions" 
               solo
@@ -25,7 +25,7 @@
               class="ma-0 pa-0"
               item-text="title"
               item-value="id">
-            </v-select>
+            </v-select> -->
           </v-flex>
         </v-layout>
         <v-layout column>
