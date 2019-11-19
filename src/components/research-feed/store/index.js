@@ -16,6 +16,7 @@ const state = {
 
   filter: {
     disciplines: [],
+    organizations: [],
     q: '',
     orderBy: {
       iteratee: ['title'],

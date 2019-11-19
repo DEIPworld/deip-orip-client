@@ -14,15 +14,31 @@
               <template slot="header">
                 <v-layout row justify-space-between>
                   <div class="px-4">
-                    <v-chip
-                      v-for="discipline in selectedTopDisciplines"
-                      :key="'filter-by-discipline-' + discipline.id"
-                      @input="toggleDiscipline(discipline)" 
-                      small
-                      close 
-                      outline>
-                      {{ discipline.label }}
-                    </v-chip>
+                    <div>
+                      <v-chip
+                        v-for="discipline in selectedTopDisciplines"
+                        :key="'filter-by-discipline-' + discipline.id"
+                        @input="toggleDiscipline(discipline)" 
+                        small
+                        close 
+                        outline>
+                        {{ discipline.label }}
+                      </v-chip>
+                    </div>
+                    <div>
+                      <v-chip
+                        v-for="organization in selectedOrganizations"
+                        :key="'filter-by-organization-' + organization.id"
+                        @input="toggleOrganization(organization)"
+                        close 
+                        outline>
+
+                        <v-avatar>
+                          <img :src="`./../../../static/organizations/${organization.thumbnail}`">
+                        </v-avatar>
+                        {{ organization.name }}
+                      </v-chip>
+                    </div>
                   </div>
                   <div class="align-self-center">
                     <v-btn small flat color="primary" class="py-0 my-0 elevation-0">
@@ -66,12 +82,12 @@
                     <v-flex xs6 sm6 md3 lg3 xl3 
                       v-for="(organization, i) in organizations"
                       :key="'organization-filter-' + i"
-                      @click="selectOrganizationFilter(organization)" 
+                      @click="toggleOrganization(organization)" 
                       class="organization-item px-2" 
-                      :class="{'selected': selectedOrganizationFilter === organization}">
+                      :class="{'selected': isOrganizationSelected(organization)}">
 
                       <div class="organization-item-btn pa-2">
-                        <img style="width: 100%; height: 100%" :src="`./../../../static/organizations/${organization.id}.svg`" />
+                        <img style="width: 100%; height: 100%" :src="`./../../../static/organizations/${organization.logo}`" />
                         <div class="overlay"></div>
                       </div>
                     </v-flex>
@@ -136,17 +152,28 @@ export default {
       },
       disciplines: [...disciplinesService.getTopLevelNodes()],
       organizations: [{
-        id: "microsoft"
-      },{
-        id: "general_mills"
-      },{
-        id: "alphabet"
-      },{
-        id: "apple"
+        id: "microsoft",
+        name: "Microsoft",
+        logo: "microsoft.svg",
+        thumbnail: "microsoft_mini.png"
+      }, {
+        id: "general_mills",
+        name: "General Mills",
+        logo: "general_mills.svg",
+        thumbnail: "general_mills_mini.png"
+      }, {
+        id: "alphabet",
+        name: "Alphabet",
+        logo: "alphabet.svg",
+        thumbnail: "alphabet_mini.png"
+      }, {
+        id: "apple",
+        name: "Apple",
+        logo: "apple.svg",
+        thumbnail: "apple_mini.jpg"
       }],
 
-      filtersTabExpansionModel: [false],
-      selectedOrganizationFilter: null
+      filtersTabExpansionModel: [false]
     }
   },
 
@@ -162,20 +189,15 @@ export default {
     selectedTopDisciplines() {
       return this.filter.disciplines.filter(d => d.id != 0 && d.children !== undefined);
     },
+    selectedOrganizations() {
+      return this.filter.organizations;
+    },
     isAllDisciplinesSelected() {
       return this.filter.disciplines.length === 0;
     },
   },
 
   methods: {
-
-    selectOrganizationFilter(org) {
-      if (this.selectedOrganizationFilter === org) {
-        this.selectedOrganizationFilter = null;
-      } else {
-        this.selectedOrganizationFilter = org;
-      }
-    },
 
     selectAllDisciplines() {
       this.$store.dispatch('feed/updateFilter', { key: 'disciplines', value: [] });
@@ -196,12 +218,18 @@ export default {
       return this.filter.disciplines.some(d => d === discipline);
     },
 
-    selectOrganizationFilter(org) {
-      if (this.selectedOrganizationFilter === org) {
-        this.selectedOrganizationFilter = null;
+    toggleOrganization(organization) {
+      if (!this.isOrganizationSelected(organization)) {
+        let value = [organization, ...this.filter.organizations];
+        this.$store.dispatch('feed/updateFilter', { key: 'organizations', value });
       } else {
-        this.selectedOrganizationFilter = org;
+        let value = this.filter.organizations.filter(o => o.id != organization.id);
+        this.$store.dispatch('feed/updateFilter', { key: 'organizations', value });
       }
+    },
+
+    isOrganizationSelected(organization) {
+      return this.filter.organizations.some(o => o.id === organization.id);
     }
   }
 };
