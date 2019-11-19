@@ -6,10 +6,69 @@
         <div class="py-4"><v-btn :to="{ name: 'CreateResearch' }" color="primary" class="ma-0">Start a project</v-btn></div>
       </v-layout>
       <v-layout row wrap>
-        <v-card class="px-5 py-4 elevation-0 full-width">
+        
+        <v-flex xs12 sm12 md12 lg12 xl12>
+          <v-expansion-panel expand v-model="filtersTabExpansionModel">
+            <v-expansion-panel-content>
+              <!-- <template slot="actions"><v-icon></v-icon></template> -->
+              <template slot="header">
+                <div class="text-xs-center">
+                  <v-btn small flat color="primary" class="py-0 my-0 elevation-0">
+                    {{isFiltersTabExpanded ? 'Hide Filters' : 'Show Filters'}}
+                  </v-btn>
+                </div>
+              </template>
+              
+              <v-layout row wrap px-5 pt-4 pb-5 class="filters-background"> 
+                
+                <v-flex xs12 sm12 md12 lg12 xl12 class="feed-discipline-filter">
+                  <div class="subheading half-bold pb-4">Browse by discipline</div>
+                  <v-layout row wrap justify-space-between>
+                    <v-flex xs6 sm6 md3 lg3 xl3 v-for="(discipline, i) in disciplines" :key="'discipline-filter-' + i">
+                      <v-btn 
+                        @click="selectDisciplineFilter(discipline)" 
+                        flat block small color="primary" 
+                        class="text-capitalize filter-btn" 
+                        :class="{'selected': discipline === selectedDisciplineFilter}">
+                        {{discipline.label}}
+                      </v-btn>
+                    </v-flex>
+                    <v-spacer></v-spacer>
+                  </v-layout>
+                </v-flex>
+
+                <v-flex xs12 sm12 md12 lg12 xl12 py-4><v-divider></v-divider></v-flex>
+
+                <v-flex xs12 sm12 md12 lg12 xl12>
+                  <div class="subheading half-bold pb-4">Browse by organizations | <span class="primary--text">All 24</span></div>
+                  <v-layout row wrap justify-space-between>
+                    <v-flex xs6 sm6 md3 lg3 xl3 
+                      v-for="(organization, i) in organizations"
+                      :key="'organization-filter-' + i"
+                      @click="selectOrganizationFilter(organization)" 
+                      class="organization-item px-2" 
+                      :class="{'selected': selectedOrganizationFilter === organization}">
+
+                      <div class="organization-item-btn pa-2">
+                        <img style="width: 100%; height: 100%" :src="`./../../../static/organizations/${organization.id}.svg`" />
+                        <div class="overlay"></div>
+                      </div>
+                    </v-flex>
+                    <v-spacer></v-spacer>
+                  </v-layout>
+                </v-flex>
+
+              </v-layout>
+            </v-expansion-panel-content>
+          </v-expansion-panel>
+        </v-flex>
+      </v-layout>
+
+      <v-layout row wrap>
+        <v-card class="px-5 elevation-0 full-width" :class="{'py-3': isFiltersTabExpanded}">
           <v-layout row wrap>
             <v-flex xs12 sm12 md12 lg12 xl12>
-              <div class="subheading half-bold">Top projects | <span class="primary--text">All {{researchFeed.length}}</span></div>
+              <div class="subheading half-bold px-2">Top projects | <span class="primary--text">All {{researchFeed.length}}</span></div>
             </v-flex>
             <v-flex xs12 sm12 md12 lg12 xl12>
               <v-data-iterator
@@ -35,53 +94,7 @@
           </v-layout>
         </v-card>
       </v-layout>
-      <v-layout row wrap px-5 pt-4 pb-5>
-        <v-flex xs12 sm12 md12 lg12 xl12 class="pb-4">
-          <div class="subheading half-bold">Browse by discipline</div>
-        </v-flex>
-        <v-flex xs12 sm12 md12 lg12 xl12 class="feed-discipline-filter">
-          <v-layout row wrap justify-space-between>
-            <v-flex xs6 sm6 md3 lg3 xl3 v-for="(discipline, i) in disciplines" :key="'discipline-filter-' + i">
-              <v-btn 
-                @click="selectDisciplineFilter(discipline)" 
-                flat block small color="primary" 
-                class="text-capitalize filter-btn" 
-                :class="{'selected': discipline === selectedDisciplineFilter}">
-                {{discipline.label}}
-              </v-btn>
-            </v-flex>
-            <v-spacer></v-spacer>
-          </v-layout>
-        </v-flex>
-      </v-layout>
 
-      <v-layout row wrap>
-        <v-card class="px-5 py-4 elevation-0 full-width">
-          <v-layout row wrap>
-            <v-flex xs12 sm12 md12 lg12 xl12 class="py-2">
-              <div class="subheading half-bold">Browse by organizations | <span class="primary--text">All 24</span></div>
-            </v-flex>
-            <v-flex xs12 sm12 md12 lg12 xl12 class="py-4">
-              <v-layout row wrap justify-space-between>
-                <v-flex xs6 sm6 md3 lg3 xl3 
-                  v-for="(organization, i) in organizations"
-                  :key="'organization-filter-' + i"
-                  @click="selectOrganizationFilter(organization)" 
-                  class="organization-item px-2" 
-                  :class="{'selected': selectedOrganizationFilter === organization}">
-
-                  <div class="organization-item-btn pa-2">
-                    <img style="width: 100%; height: 100%" :src="`./../../../static/organizations/${organization.id}.svg`" />
-                    <div class="overlay"></div>
-                  </div>
-                </v-flex>
-                <v-spacer></v-spacer>
-              </v-layout>
-            </v-flex>
-          </v-layout>
-        </v-card>
-      </v-layout>
-      
     </div>
   </base-page-layout>
 </template>
@@ -112,6 +125,7 @@ export default {
         id: "apple"
       }],
 
+      filtersTabExpansionModel: [false],
       selectedDisciplineFilter: null,
       selectedOrganizationFilter: null
     }
@@ -122,10 +136,14 @@ export default {
       user: 'auth/user',
       researchFeed: 'feed/researchFeed',
       filter: 'feed/filter'
-    })
+    }),
+    isFiltersTabExpanded() {
+      return this.filtersTabExpansionModel[0];
+    }
   },
 
   methods: {
+
     selectOrganizationFilter(org) {
       if (this.selectedOrganizationFilter === org) {
         this.selectedOrganizationFilter = null;
@@ -166,6 +184,10 @@ export default {
   color: white;
 }
 
+.filters-background {
+  background-color: #fafafa;
+}
+
 .organization-item {
   width: 240px;
   height: 80px;
@@ -189,13 +211,13 @@ export default {
 
     &:hover .overlay {
       display: block;
-      background: rgba(226, 233, 251, .3);
+      background: rgba(219, 228, 251, .6);
     }
   }
 
   &.selected .overlay {
     display: block;
-    background: rgba(226, 233, 251, .3);
+    background: rgba(219, 228, 251, .6);
   }
 }
 
