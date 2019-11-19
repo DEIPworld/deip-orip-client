@@ -382,28 +382,51 @@
               >Use Editor</v-btn>
             </v-flex>
           </v-layout>
-          <v-divider />
-          <v-layout class="my-5">
-            <v-flex lg1>
-              <v-layout justify-end class="pr-3">
-                <v-icon large color="grey lighten-2">mdi-poll-box</v-icon>
-              </v-layout>
-            </v-flex>
-            <v-flex lg11>
-              <v-layout wrap>
-                <v-flex lg12 class="rd-block-header">Expertise Contibution Index</v-flex>
-                <v-flex lg12>
-                  <GChart
-                    type="LineChart"
-                    :settings="{ packages: ['corechart'] }"
-                    :data="eciChart.data"
-                    :options="eciChart.options"
-                  />
-                </v-flex>
-              </v-layout>
-            </v-flex>
-          </v-layout>
-          <v-divider />
+          <v-divider v-if="contentList.length || (isResearchGroupMember && !research.is_finished)"/>
+          <template v-if="eciChart">
+            <v-layout class="my-5">
+              <v-flex lg1>
+                <v-layout justify-end class="pr-3">
+                  <v-icon large color="grey lighten-2">mdi-poll-box</v-icon>
+                </v-layout>
+              </v-flex>
+              <v-flex lg11>
+                <v-layout wrap>
+                  <v-flex lg12 class="rd-block-header">Expertise Contribution Index</v-flex>
+                  <v-flex lg12>
+                    <v-layout row wrap class="mt-2">
+                      <v-flex
+                        v-for="(eci, index) of eciList"
+                        :key="eci.disciplineName"
+                        justify-space-between
+                        class="px-3 py-2 rd-eci-item clickable"
+                        :class="{
+                          'px-3 py-2 rd-eci-item clickable': true,
+                          'elevation-2 grey lighten-5': index === activeEciChartTabIndex
+                        }"
+                        lg3
+                        @click="activeEciChartTabIndex = index"
+                      >
+                        <v-layout justify-space-between>
+                          <span>{{eci.disciplineName}}</span>
+                          <span class="bold">{{eci.value}}</span>
+                        </v-layout>
+                      </v-flex>
+                      <v-flex lg12>
+                        <GChart
+                          type="LineChart"
+                          :settings="{ packages: ['corechart'] }"
+                          :data="eciChart.data"
+                          :options="eciChart.options"
+                        />
+                      </v-flex>
+                    </v-layout>
+                  </v-flex>
+                </v-layout>
+              </v-flex>
+            </v-layout>
+            <v-divider />
+          </template>
           <v-layout class="my-5" v-if="reviews.length">
             <v-flex lg1>
               <v-layout justify-end class="pr-3">
@@ -638,7 +661,9 @@
         bookmarkId: null,
         isBookmarkActionInProgress: false,
 
-        researchLogoSrc: ""
+        researchLogoSrc: "",
+
+        activeEciChartTabIndex: 0,
       }
     },
 
@@ -720,17 +745,33 @@
           : undefined;
       },
       eciChart() {
-        const getPointTooltipHtml = (value,reviewerName) => {
+        if (!this.eciChartCache) {
+          this.eciChartCache = {};
+        }
+        if (this.eciChartCache[this.activeEciChartTabIndex]) {
+          return this.eciChartCache[this.activeEciChartTabIndex];
+        }
+
+        const eci = this.eciList[this.activeEciChartTabIndex];
+        if (!eci) {
+          return null;
+        }
+        const startDate = this.moment(this.research.created_at);
+        const endDate = this.moment();
+        if (!endDate.diff(startDate, 'days')) {
+          return null;
+        }
+        const timeDiff = endDate - startDate;
+
+        const getPointTooltipHtml = (value,reviewerName, isPositive) => {
           let feedbackType;
           let feedbackClass;
-          if (value > 0) {
+          if (isPositive) {
             feedbackType = 'Approved';
             feedbackClass = 'green--text text--lighten-4'
-          } else if (value < 0) {
+          } else {
             feedbackType = 'Rejected';
             feedbackClass = 'red--text text--lighten-4'
-          } else {
-            return null;
           }
 
           return `
@@ -742,20 +783,52 @@
           `;
         };
 
-        return {
-          data: [
-            ['Date', 'ECI', { type: 'string', role: 'tooltip', p: { html: true } }],
-            [new Date('2019-02-23'), -200, getPointTooltipHtml(-200, 'Ahmed Muhmed')],
-            [new Date('2019-03-15'), 70, getPointTooltipHtml(270, 'Jackey Chan')],
-            [new Date('2019-04-17'), 210, getPointTooltipHtml(140, 'Elon Musk')],
-            [new Date('2019-05-19'), 80, getPointTooltipHtml(-60, 'Stephen Hoking')],
-            [new Date('2019-06-02'), -350, getPointTooltipHtml(-410, 'Eva Polna')],
-            [new Date('2019-07-01'), 400, getPointTooltipHtml(750, 'Max Oki')],
-            [new Date('2019-08-29'), 40, getPointTooltipHtml(-710, 'Indi Pontov')],
-            [new Date('2019-09-21'), 27, getPointTooltipHtml(-13, 'Vindy Pumpkin')],
-            [new Date('2019-10-29'), -39, getPointTooltipHtml(-68, 'Lesley Alex')],
-            [new Date('2019-11-08'), 700, getPointTooltipHtml(768, 'Ink Blackwood')]
-          ],
+        const chartData = [
+          ['Date', 'Value', { type: 'string', role: 'tooltip', p: { html: true } }]
+        ];
+
+        const influencers = [
+          'Charles Darwin',
+          'René Descartes',
+          'Albert Einstein',
+          'Leonhard Euler',
+          'Michael Faraday',
+          'Pierre de Fermat',
+          'Alexander Fleming',
+          'Galileo Galilei',
+          'Carl Friedrich Gauss',
+          'Willard Gibbs',
+          'Edwin Hubble',
+          'Ada Lovelace',
+          'Dmitri Mendeleev',
+          'Isaac Newton',
+          'Alfred Nobel'
+        ];
+
+        const timeStep = timeDiff / influencers.length;
+        new Array(influencers.length)
+          .fill(0)
+          .map((e, i) => endDate - (timeStep * i))
+          .sort()
+          .map(ms => new Date(ms))
+          .forEach((timePoint, i, arr) => {
+            let eciValue;
+            if (i === arr.length - 1) {
+              eciValue = eci.value;
+            } else {
+              eciValue = this.getRandomInt(-1000, 1000);
+            }
+            let isPositiveChange;
+            if (i === 0) {
+              isPositiveChange = eciValue > 0;
+            } else {
+              isPositiveChange = eciValue > chartData[i][1];
+            }
+            chartData.push([timePoint, eciValue, getPointTooltipHtml(eciValue, influencers[i], isPositiveChange)]);
+          });
+
+        const _eciChart = {
+          data: chartData,
           options: {
             title: '',
             backgroundColor: {
@@ -764,10 +837,6 @@
             legend: {
               position: 'none'
             },
-            hAxis: {
-              title: '2019',
-              format: 'MMM'
-            },
             chartArea: {
               top: '15%',
               width: '90%',
@@ -775,6 +844,8 @@
             tooltip: { isHtml: true }
           },
         };
+        this.eciChartCache[this.activeEciChartTabIndex] = _eciChart;
+        return _eciChart;
       },
       eciList() {
         return this.disciplinesList.map((discipline) => {
