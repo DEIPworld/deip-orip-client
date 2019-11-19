@@ -73,9 +73,9 @@ export default {
   methods: {
     isLoggedIn: isLoggedIn,
 
-    signOut: () => {
-        clearAccessToken()
-        this.$router.go('/sign-in')
+    signOut: function() {
+      clearAccessToken()
+      this.$router.go('/sign-in')
     }
   }
 }

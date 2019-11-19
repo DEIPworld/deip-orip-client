@@ -9,12 +9,12 @@
           <div class="description__info-text">
             Open Research and Innovation Platform
           </div>
-          <div class="description__signup-text">
+          <!-- <div class="description__signup-text">
             Don't have an account?
             <router-link
               :to="{ name: 'SignUp' }"
             >Sign Up</router-link>
-          </div>
+          </div> -->
         </v-layout>
       </v-flex>
       <v-flex xs12 sm12 md6 lg6 xl6>
