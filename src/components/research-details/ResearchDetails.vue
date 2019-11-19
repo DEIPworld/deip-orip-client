@@ -391,7 +391,7 @@
             </v-flex>
             <v-flex lg11>
               <v-layout wrap>
-                <v-flex lg12 class="rd-block-header">Expertise Contibution Index</v-flex>
+                <v-flex lg12 class="rd-block-header">Expertise Contribution Index</v-flex>
                 <v-flex lg12>
                   <GChart
                     type="LineChart"
