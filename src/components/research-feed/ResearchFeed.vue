@@ -51,18 +51,19 @@
               <v-layout row wrap px-5 pt-4 pb-5 class="filters-background"> 
                 <v-flex xs12 sm12 md12 lg12 xl12 class="feed-disciplines-filter">
                   <div class="pb-4">
-                    <span class="subheading half-bold">Browse by discipline</span>
+                    <v-layout row justify-space-between align-baseline>
+                      <span class="subheading half-bold">Browse by discipline</span>
+                      <v-btn 
+                        @click="selectAllDisciplines()"
+                        class="text-capitalize"
+                        flat small color="primary" 
+                        outline
+                        :disabled="isAllDisciplinesSelected">
+                        Reset
+                      </v-btn>
+                    </v-layout>
                   </div>
                   <v-layout row wrap justify-space-between>
-                    <v-flex xs6 sm6 md3 lg3 xl3 px-2 key="all-discipline-filter">
-                      <v-btn 
-                        @click="selectAllDisciplines()" 
-                        flat block small color="primary" 
-                        class="text-capitalize filter-btn" 
-                        :class="{'selected': isAllDisciplinesSelected}">
-                        All
-                      </v-btn>
-                    </v-flex>
                     <v-flex xs6 sm6 md3 lg3 xl3 px-2 v-for="(discipline, i) in disciplines" :key="'discipline-filter-' + i">
                       <v-btn 
                         @click="toggleDiscipline(discipline)" 
@@ -77,7 +78,19 @@
                 </v-flex>
                 <v-flex xs12 sm12 md12 lg12 xl12 py-4><v-divider></v-divider></v-flex>
                 <v-flex xs12 sm12 md12 lg12 xl12 class="feed-organizations-filter">
-                  <div class="subheading half-bold pb-4">Browse by organizations <!-- | <span class="primary--text">All {{organizations.length}}</span> --></div>
+                  <div class="pb-4">
+                    <v-layout row justify-space-between align-baseline>
+                      <span class="subheading half-bold">Browse by organizations</span>
+                      <v-btn 
+                        @click="selectAllOrganizations()"
+                        class="text-capitalize"
+                        flat small color="primary" 
+                        outline
+                        :disabled="isAllOrganizationsSelected">
+                        Reset
+                      </v-btn>
+                    </v-layout>
+                  </div>
                   <v-layout row wrap justify-space-between>
                     <v-flex xs3 sm3 md2 lg2 xl2 
                       v-for="(organization, i) in organizations"
@@ -176,6 +189,9 @@ export default {
     isAllDisciplinesSelected() {
       return this.filter.disciplines.length === 0;
     },
+    isAllOrganizationsSelected() {
+      return this.filter.organizations.length === 0;
+    },
   },
 
   methods: {
@@ -197,6 +213,10 @@ export default {
 
     isDisciplineSelected(discipline) {
       return this.filter.disciplines.some(d => d === discipline);
+    },
+
+    selectAllOrganizations() {
+      this.$store.dispatch('feed/updateFilter', { key: 'organizations', value: [] });
     },
 
     toggleOrganization(organization) {
