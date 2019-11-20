@@ -7,14 +7,14 @@
       </v-layout>
       <v-layout row wrap>
         
-        <v-flex xs12 sm12 md12 lg12 xl12>
+        <v-flex xs12 sm12 md12 lg12 xl12 class="feed-filter">
           <v-expansion-panel expand v-model="filtersTabExpansionModel">
             <v-expansion-panel-content>
               <template slot="actions"><v-icon color="primary">$vuetify.icons.expand</v-icon></template>
               <template slot="header">
                 <v-layout row justify-space-between>
                   <div class="px-4">
-                    <div>
+                    <div class="discipline-criteria">
                       <v-chip
                         v-for="discipline in selectedTopDisciplines"
                         :key="'filter-by-discipline-' + discipline.id"
@@ -25,7 +25,7 @@
                         {{ discipline.label }}
                       </v-chip>
                     </div>
-                    <div>
+                    <div class="organization-criteria">
                       <v-chip
                         v-for="organization in selectedOrganizations"
                         :key="'filter-by-organization-' + organization.id"
@@ -49,7 +49,7 @@
               </template>
               
               <v-layout row wrap px-5 pt-4 pb-5 class="filters-background"> 
-                <v-flex xs12 sm12 md12 lg12 xl12 class="feed-discipline-filter">
+                <v-flex xs12 sm12 md12 lg12 xl12 class="feed-disciplines-filter">
                   <div class="pb-4">
                     <span class="subheading half-bold">Browse by discipline</span>
                   </div>
@@ -76,17 +76,17 @@
                   </v-layout>
                 </v-flex>
                 <v-flex xs12 sm12 md12 lg12 xl12 py-4><v-divider></v-divider></v-flex>
-                <v-flex xs12 sm12 md12 lg12 xl12>
-                  <div class="subheading half-bold pb-4">Browse by organizations | <span class="primary--text">All 24</span></div>
+                <v-flex xs12 sm12 md12 lg12 xl12 class="feed-organizations-filter">
+                  <div class="subheading half-bold pb-4">Browse by organizations <!-- | <span class="primary--text">All {{organizations.length}}</span> --></div>
                   <v-layout row wrap justify-space-between>
-                    <v-flex xs6 sm6 md3 lg3 xl3 
+                    <v-flex xs3 sm3 md2 lg2 xl2 
                       v-for="(organization, i) in organizations"
                       :key="'organization-filter-' + i"
                       @click="toggleOrganization(organization)" 
-                      class="organization-item px-2" 
+                      class="organization-item px-2 my-2" 
                       :class="{'selected': isOrganizationSelected(organization)}">
 
-                      <div class="organization-item-btn pa-2">
+                      <div class="organization-item-btn pa-1">
                         <img style="width: 100%; height: 100%" :src="`./../../../static/organizations/${organization.logo}`" />
                         <div class="overlay"></div>
                       </div>
@@ -140,6 +140,7 @@ import deipRpc from '@deip/deip-oa-rpc-client';
 import { mapGetters } from 'vuex';
 import moment from 'moment';
 import * as disciplinesService from './../../components/common/disciplines/DisciplineTreeService';
+import * as organizationsService from './../../services/OrganizationsService';
 
 export default {
   name: "ResearchFeed",
@@ -151,27 +152,7 @@ export default {
         rowsPerPage: 9
       },
       disciplines: [...disciplinesService.getTopLevelNodes()],
-      organizations: [{
-        id: "microsoft",
-        name: "Microsoft",
-        logo: "microsoft.svg",
-        thumbnail: "microsoft_mini.png"
-      }, {
-        id: "general_mills",
-        name: "General Mills",
-        logo: "general_mills.svg",
-        thumbnail: "general_mills_mini.png"
-      }, {
-        id: "alphabet",
-        name: "Alphabet",
-        logo: "alphabet.svg",
-        thumbnail: "alphabet_mini.png"
-      }, {
-        id: "apple",
-        name: "Apple",
-        logo: "apple.svg",
-        thumbnail: "apple_mini.jpg"
-      }],
+      organizations: [...organizationsService.getAllOrganizations()],
 
       filtersTabExpansionModel: [false]
     }
@@ -250,13 +231,13 @@ export default {
 }
 
 .organization-item {
-  width: 240px;
-  height: 80px;
+  height: 40px;
   cursor: pointer;
 
   .organization-item-btn {
     width: 100%;
     height: 100%;
+    background: white;
     border: 1px solid #e5e5e5;
     position: relative;
 

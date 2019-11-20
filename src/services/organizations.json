@@ -1,0 +1,56 @@
+[
+  {
+    "id": "microsoft",
+    "name": "Microsoft",
+    "logo": "microsoft.svg",
+    "thumbnail": "microsoft_mini.svg"
+  },
+  {
+    "id": "general_mills",
+    "name": "General Mills",
+    "logo": "general_mills.svg",
+    "thumbnail": "general_mills_mini.svg"
+  },
+  {
+    "id": "alphabet",
+    "name": "Alphabet",
+    "logo": "alphabet.svg",
+    "thumbnail": "alphabet_mini.svg"
+  },
+  {
+    "id": "apple",
+    "name": "Apple",
+    "logo": "apple.svg",
+    "thumbnail": "apple_mini.svg"
+  },
+  {
+    "id": "intel",
+    "name": "Intel",
+    "logo": "intel.svg",
+    "thumbnail": "intel_mini.svg"
+  },
+  {
+    "id": "ibm",
+    "name": "IBM",
+    "logo": "ibm.svg",
+    "thumbnail": "ibm_mini.svg"
+  },
+  {
+    "id": "accenture",
+    "name": "Accenture",
+    "logo": "accenture.svg",
+    "thumbnail": "accenture_mini.svg"
+  },
+  {
+    "id": "at_and_t",
+    "name": "AT&T",
+    "logo": "at_and_t.svg",
+    "thumbnail": "at_and_t_mini.svg"
+  },
+  {
+    "id": "general_motors",
+    "name": "General Motors",
+    "logo": "general_motors.svg",
+    "thumbnail": "general_motors_mini.svg"
+  }
+]
