@@ -128,7 +128,7 @@
   @import "./../../../styles/colors.less";
 
  .investment-item {
-   border-left: 4px solid var(--v-primary-darken1);
+   border-left: 4px solid var(--v-primary-darken1) !important;
    cursor: pointer !important;
 
   .investment-tag {
