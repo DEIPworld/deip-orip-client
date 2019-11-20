@@ -9,12 +9,6 @@
             </v-layout>
           </v-flex>
           <v-flex lg4 class="title bold">Balance</v-flex>
-          <v-flex lg2 class="pr-2">
-            <v-btn @click="openWithdrawDialog()" color="#2962FF" outline block>Withdraw</v-btn>
-          </v-flex>
-          <v-flex lg2 class="pl-2">
-            <v-btn @click="openDepositDialog()" color="#2962FF" block dark>Deposit</v-btn>
-          </v-flex>
         </v-layout>
         <v-layout class="mt-4">
           <v-flex lg8 offset-lg1 class="balance-table">
@@ -79,6 +73,16 @@
                       @click="openSendTokensDialog(currencyTypes.usd.id)"
                     >
                       <v-list-tile-title>Transfer</v-list-tile-title>
+                    </v-list-tile>
+                    <v-list-tile
+                      @click="openDepositDialog(currencyTypes.usd.id)"
+                    >
+                      <v-list-tile-title>Deposit</v-list-tile-title>
+                    </v-list-tile>
+                    <v-list-tile
+                      @click="openWithdrawDialog(currencyTypes.usd.id)"
+                    >
+                      <v-list-tile-title>Withdraw</v-list-tile-title>
                     </v-list-tile>
                   </v-list>
                 </v-menu>
@@ -191,154 +195,129 @@
         </v-layout>
       </v-layout>
 
-
-      <v-dialog v-model="addBankCardDialog.isOpened" persistent max-width="500px">
-        <v-card class="px-5 py-2">
+      <v-dialog v-model="depositDialog.isOpened" persistent max-width="1000px">
+        <v-card class="px-5 pt-2 pb-5">
           <v-card-title class="">
-            <span class="headline">Add bank card</span>
+            <span class="subheading bold">Deposit funds</span>
           </v-card-title>
-          <!-- <v-card-text> -->
+          <v-card-text class="pa-0">
             <v-layout row wrap>
-              <v-flex xs12><v-credit-card @change="creditInfoChanged"/></v-flex>
-              <v-flex xs12>
-                <div class="pb-3 px-5">
-                  <v-checkbox
-                    label="I confirm that I am qualified investor"
-                    v-model="addBankCardDialog.termsConfirmed"
-                    hide-details
-                  ></v-checkbox>
+              <v-flex xs6 class="pr-5" style="border-right: 2px solid #E0E0E0">
+                <v-credit-card @change="creditInfoChanged"/>
+              </v-flex>
+              <v-flex xs6>
+                <v-layout justify-end column fill-height class="pl-5 pr-3">
+                  <div class="balance-form-input">
+                    <label class="balance-form-input__label">Amount</label>
+                    <input
+                      class="balance-form-input__field"
+                      type="text"
+                      placehoder="Amount"
+                      v-model="depositDialog.amount"
+                    />
+                  </div>
+                  <div class="my-3">
+                    <v-checkbox
+                      label="I confirm that I am qualified investor"
+                      v-model="depositDialog.termsConfirmed"
+                      hide-details
+                    ></v-checkbox>
+                  </div>
+                  <div class="my-3">
+                    <v-btn @click="deposit()" color="primary" block :disabled="isDepositingDisabled || depositDialog.isDepositing" :loading="depositDialog.isDepositing">Deposit funds</v-btn>
+                  </div>
+                  <div class="mb-4">
+                    <v-btn
+                      @click="closeDepositDialog()"
+                      color="primary"
+                      class="pa-0"
+                      flat block
+                      :disabled="depositDialog.isDepositing"
+                    >Cancel</v-btn>
+                  </div>
+                </v-layout>
+              </v-flex>
+            </v-layout>
+          </v-card-text>
+        </v-card>
+      </v-dialog>
+
+      <v-dialog v-model="withdrawDialog.isOpened" persistent max-width="1000px">
+        <v-card class="px-5 pt-2 pb-5">
+          <v-card-title class="">
+            <span class="subheading bold">Withdraw funds</span>
+          </v-card-title>
+          <v-card-text class="pa-0">
+            <v-layout row wrap>
+              <v-flex xs6 class="pr-5" style="border-right: 2px solid #E0E0E0">
+                <div class="balance-form-input mx-3 mt-2">
+                  <label class="balance-form-input__label">Full name (Beneficiary)</label>
+                  <input
+                    class="balance-form-input__field"
+                    type="text"
+                    v-model="withdrawDialog.name"
+                  />
+                </div>
+                <div class="balance-form-input mx-3 mt-3">
+                  <label class="balance-form-input__label">IBAN</label>
+                  <input
+                    class="balance-form-input__field"
+                    type="text"
+                    v-model="withdrawDialog.iban"
+                    maxlength="34"
+                  />
+                </div>
+                <div class="balance-form-input mx-3 mt-3">
+                  <label class="balance-form-input__label">Reference number</label>
+                  <input
+                    class="balance-form-input__field"
+                    type="text"
+                    v-model="withdrawDialog.refNum"
+                  />
+                </div>
+                <div class="balance-form-input mx-3 mt-3">
+                  <label class="balance-form-input__label">Message to Beneficiary</label>
+                  <textarea
+                    class="balance-form-input__field"
+                    type="text"
+                    rows="9"
+                    v-model="withdrawDialog.messageText"
+                  />
                 </div>
               </v-flex>
-            </v-layout>
-          <!-- </v-card-text> -->
-          <v-card-actions>
-            <v-layout row wrap>
-              <v-flex xs12 class="py-2">
-                <v-btn @click="saveBankCard()" color="primary" block :disabled="isSavingBankCardDisabled || addBankCardDialog.isSaving" :loading="addBankCardDialog.isSaving">Add Card</v-btn>
-              </v-flex>
-              <v-flex xs12 class="py-2">
-                <v-btn @click="closeAddBankCardDialog()" color="primary" block flat>Cancel</v-btn>
-              </v-flex>
-            </v-layout>
-          </v-card-actions>
-        </v-card>
-      </v-dialog>
-
-      <v-dialog v-model="depositDialog.isOpened" persistent max-width="500px">
-        <v-card class="px-5 py-2">
-          <v-card-title class="">
-            <span class="headline">Deposit</span>
-          </v-card-title>
-          <!-- <v-card-text> -->
-            <v-layout row wrap>
-              <v-flex xs12>
-                <v-layout column class="full-width">
-                  <v-radio-group v-model="depositDialog.selectedCurrency" class="currency-picker full-width align-center  ma-0 pa-0">
-                    <v-radio
-                      v-for="currencyType in currencyTypes"
-                      :value="currencyType.id"
-                      :key="currencyType.id"
-                      :disabled="currencyType.id === currencyTypes.eur.id"
-                      class="currency-item row justify-space-between ma-0 pa-4 full-width"
-                      color="grey darken-1"
-                      style="flex-direction: row-reverse"
-                    >
-                      <template slot="label">
-                        <v-layout row justify-space-between align-center class="full-width px-2">
-                          <div class="bold">
-                            <v-layout column justify-center align-center>
-                              <img width="50px: height: 50px" :src="`../../../../static/currency/${currencyType.id}.png`"/>
-                              <span class="pt-2 black--text">{{currencyType.title}}</span>
-                            </v-layout>
-                          </div>
-                          <div>
-                            <div class="black--text half-bold">{{ getAvailableCurrencyAmount(currencyType.id) | currency({ symbol: currencyType.symbol }) }}</div>
-                          </div>
-                        </v-layout>
-                      </template>
-                    </v-radio>
-                  </v-radio-group>
+              <v-flex xs6 class="pl-3">
+                <v-layout justify-end column fill-height class="pl-5 pr-3">
+                  <div class="balance-form-input">
+                    <label class="balance-form-input__label">Amount</label>
+                    <input
+                      class="balance-form-input__field"
+                      type="text"
+                      v-model="withdrawDialog.amount"
+                    />
+                  </div>
+                  <div class="my-3">
+                    <v-checkbox
+                      label="I confirm that I am qualified investor"
+                      v-model="withdrawDialog.termsConfirmed"
+                      hide-details
+                    ></v-checkbox>
+                  </div>
+                  <div class="my-3">
+                    <v-btn @click="withdraw()" color="primary" block :disabled="isWithdrawDisabled || withdrawDialog.isWithdrawing" :loading="withdrawDialog.isWithdrawing">Withdraw funds</v-btn>
+                  </div>
+                  <div class="mb-4">
+                    <v-btn
+                      @click="closeWithdrawDialog()"
+                      color="primary"
+                      class="pa-0"
+                      flat block
+                      :disabled="withdrawDialog.isWithdrawing"
+                    >Cancel</v-btn>
+                  </div>
                 </v-layout>
               </v-flex>
-              <v-flex xs12>
-                <v-text-field 
-                  class=""
-                  label="Amount"
-                  :disabled="depositDialog.isDepositing"
-                  v-model="depositDialog.amount">
-                </v-text-field>
-              </v-flex>
             </v-layout>
-          <!-- </v-card-text> -->
-          <v-card-actions>
-            <v-layout row wrap>
-              <v-flex xs12 class="py-2">
-                <v-btn @click="deposit()" color="primary" block :disabled="isDepositingDisabled || depositDialog.isDepositing" :loading="depositDialog.isDepositing">Deposit</v-btn>
-              </v-flex>
-              <v-flex xs12 class="py-2">
-                <v-btn @click="closeDepositDialog()" color="primary" block flat>Cancel</v-btn>
-              </v-flex>
-            </v-layout>
-          </v-card-actions>
-        </v-card>
-      </v-dialog>
-
-      <v-dialog v-model="withdrawDialog.isOpened" persistent max-width="500px">
-        <v-card class="px-5 py-2">
-          <v-card-title class="">
-            <span class="headline">Withdraw</span>
-          </v-card-title>
-          <!-- <v-card-text> -->
-            <v-layout row wrap>
-              <v-flex xs12>
-                <v-layout column class="full-width">
-                  <v-radio-group v-model="withdrawDialog.selectedCurrency" class="currency-picker full-width align-center  ma-0 pa-0">
-                    <v-radio
-                      v-for="currencyType in currencyTypes"
-                      :value="currencyType.id"
-                      :key="currencyType.id"
-                      :disabled="currencyType.id === currencyTypes.eur.id"
-                      class="currency-item row justify-space-between ma-0 pa-4 full-width"
-                      color="grey darken-1"
-                      style="flex-direction: row-reverse"
-                    >
-                      <template slot="label">
-                        <v-layout row justify-space-between align-center class="full-width px-2">
-                          <div class="bold">
-                            <v-layout column justify-center align-center>
-                              <img width="50px: height: 50px" :src="`../../../../static/currency/${currencyType.id}.png`"/>
-                              <span class="pt-2 black--text">{{currencyType.title}}</span>
-                            </v-layout>
-                          </div>
-                          <div>
-                            <div class="black--text half-bold">{{ getAvailableCurrencyAmount(currencyType.id) | currency({ symbol: currencyType.symbol }) }}</div>
-                          </div>
-                        </v-layout>
-                      </template>
-                    </v-radio>
-                  </v-radio-group>
-                </v-layout>
-              </v-flex>
-              <v-flex xs12>
-                <v-text-field 
-                  class=""
-                  label="Amount"
-                  :disabled="withdrawDialog.isWithdrawing"
-                  v-model="withdrawDialog.amount">
-                </v-text-field>
-              </v-flex>
-            </v-layout>
-          <!-- </v-card-text> -->
-          <v-card-actions>
-            <v-layout row wrap>
-              <v-flex xs12 class="py-2">
-                <v-btn @click="withdraw()" color="primary" block :disabled="isWithdrawDisabled || withdrawDialog.isWithdrawing" :loading="withdrawDialog.isWithdrawing">Withdraw</v-btn>
-              </v-flex>
-              <v-flex xs12 class="py-2">
-                <v-btn @click="closeWithdrawDialog()" color="primary" block flat>Cancel</v-btn>
-              </v-flex>
-            </v-layout>
-          </v-card-actions>
+          </v-card-text>
         </v-card>
       </v-dialog>
 
@@ -489,29 +468,28 @@
         dialog: false,
         expandedInvestmentIdx: -1,
 
-        addBankCardDialog: {
-          data: {
-            name: '',
-            cardNumber: '',
-            expiration: '',
-            security: ''
-          },
-
-          isOpened: false,
-          termsConfirmed: false,
-          isSaving: false
-        },
-
         withdrawDialog: {
           amount: 0,
+          name: '',
+          iban: '',
+          refNum: '',
+          messageText: '',
           selectedCurrency: currencyTypes.usd.id,
+          termsConfirmed: false,
           isOpened: false,
           isWithdrawing: false
         },
 
         depositDialog: {
+          cardData: {
+            name: '',
+            cardNumber: '',
+            expiration: '',
+            security: ''
+          },
           amount: 0,
           selectedCurrency: currencyTypes.usd.id,
+          termsConfirmed: false,
           isOpened: false,
           isDepositing: false
         },
@@ -590,17 +568,11 @@
         investments: 'userWallet/investments'
       }),
 
-      isSavingBankCardDisabled() {
-        return !this.addBankCardDialog.data.name 
-        || !this.addBankCardDialog.data.cardNumber 
-        || this.addBankCardDialog.data.cardNumber.length < 19
-        || !this.addBankCardDialog.data.expiration
-        || !this.addBankCardDialog.data.security 
-        || this.addBankCardDialog.data.security < 3
-        || !this.addBankCardDialog.termsConfirmed;
-      },
-
       isWithdrawDisabled() {
+        if (this.withdrawDialog.iban.length < 16) {
+          return true;
+        }
+
         const formatValidationResult = this.deipTokenValidator(this.withdrawDialog.amount);
         if (formatValidationResult !== true) {
           return true;
@@ -608,14 +580,32 @@
         if (this.withdrawDialog.amount > this.getAvailableCurrencyAmount(this.withdrawDialog.selectedCurrency)) {
           return true;
         }
+        if (!this.withdrawDialog.termsConfirmed) {
+          return true;
+        }
         return false;
       },
 
       isDepositingDisabled() {
+        const isInvalidBankCard = !this.depositDialog.cardData.name
+          || !this.depositDialog.cardData.cardNumber
+          || this.depositDialog.cardData.cardNumber.length < 19
+          || !this.depositDialog.cardData.expiration
+          || !this.depositDialog.cardData.security
+          || this.depositDialog.cardData.security < 3;
+
+        if (isInvalidBankCard) {
+          return true;
+        }
+
         const formatValidationResult = this.deipTokenValidator(this.depositDialog.amount);
         if (formatValidationResult !== true) {
           return true;
         }
+        if (!this.depositDialog.termsConfirmed) {
+          return true;
+        }
+
         return false;
       },
 
@@ -710,28 +700,30 @@
         }
       },
 
-      openDepositDialog() {
-        if (bankCardsStorage.hasInvestorBankCard(this.user.username)) {
-          this.depositDialog.amount = 0;
-          this.depositDialog.selectedCurrency = currencyTypes.usd.id;
-          this.depositDialog.isOpened = true;
-        } else {
-          this.openAddBankCardDialog();
-        }
+      openDepositDialog(currencyId) {
+        this.depositDialog.amount = 0;
+        this.depositDialog.selectedCurrency = currencyId;
+        this.depositDialog.cardData.name = "";
+        this.depositDialog.cardData.cardNumber = "";
+        this.depositDialog.cardData.expiration = "";
+        this.depositDialog.cardData.security = "";
+        this.depositDialog.termsConfirmed = false;
+        this.depositDialog.isOpened = true;
       },
 
       closeDepositDialog() {
         this.depositDialog.isOpened = false;
       },
 
-      openWithdrawDialog() {
-        if (bankCardsStorage.hasInvestorBankCard(this.user.username)) {
-          this.withdrawDialog.amount = 0;
-          this.withdrawDialog.selectedCurrency = currencyTypes.usd.id;
-          this.withdrawDialog.isOpened = true;
-        } else {
-          this.openAddBankCardDialog();
-        }
+      openWithdrawDialog(currencyId) {
+        this.withdrawDialog.amount = 0;
+        this.withdrawDialog.selectedCurrency = currencyId;
+        this.withdrawDialog.name = "";
+        this.withdrawDialog.iban = "";
+        this.withdrawDialog.refNum = "";
+        this.withdrawDialog.messageText = "";
+        this.withdrawDialog.termsConfirmed = false;
+        this.withdrawDialog.isOpened = true;
       },
 
       closeWithdrawDialog() {
@@ -823,29 +815,6 @@
           return this.loadResearchTokens(this.user.username);
         });
       },
-      
-      openAddBankCardDialog() {
-        this.addBankCardDialog.data.name = "";
-        this.addBankCardDialog.data.cardNumber = "";
-        this.addBankCardDialog.data.expiration = "";
-        this.addBankCardDialog.data.security = "";
-        this.addBankCardDialog.termsConfirmed = false;
-        this.addBankCardDialog.isOpened = true;
-      },
-
-      closeAddBankCardDialog() {
-        this.addBankCardDialog.isOpened = false;
-      },
-
-      saveBankCard() {
-        this.addBankCardDialog.isSaving = true;
-        setTimeout(() => {
-          bankCardsStorage.saveInvestorBankCard(this.addBankCardDialog.data, this.user.username);
-          this.$store.dispatch('layout/setSuccess', { message: "Bank Card has been added successfully!"});
-          this.addBankCardDialog.isSaving = false;
-          this.addBankCardDialog.isOpened = false;
-        }, 1000);
-      },
 
       deposit() {
         this.depositDialog.isDepositing = true;
@@ -895,7 +864,7 @@
       
       creditInfoChanged(values) {
         for (const key in values) {
-            this.addBankCardDialog.data[key] = values[key];
+          this.depositDialog.cardData[key] = values[key];
         }
       },
 
@@ -961,6 +930,23 @@
       font-weight: 500;
     }
     &__item-stats {
+    }
+  }
+
+  .balance-form-input { // same as vue-credit card inputs
+    color: #707070;
+    &__label {
+      padding-bottom: 5px;
+      font-size: 13px;
+    }
+    &__field {
+      box-sizing: border-box;
+      margin-top: 3px;
+      padding: 15px;
+      font-size: 16px;
+      width: 100%;
+      border-radius: 3px;
+      border: 1px solid #dcdcdc;
     }
   }
 </style>

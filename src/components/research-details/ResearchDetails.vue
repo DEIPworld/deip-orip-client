@@ -841,7 +841,13 @@
               top: '15%',
               width: '90%',
             },
-            tooltip: { isHtml: true }
+            tooltip: { isHtml: true },
+            explorer: {
+              actions: ['dragToZoom', 'rightClickToReset'],
+              axis: 'horizontal',
+              keepInBounds: true,
+              maxZoomIn: 4.0
+            },
           },
         };
         this.eciChartCache[this.activeEciChartTabIndex] = _eciChart;
