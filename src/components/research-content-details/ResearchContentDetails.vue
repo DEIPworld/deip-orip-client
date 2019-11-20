@@ -44,10 +44,10 @@
                     </div>
                 </div>
 
-                <div v-if="contentReviewsList.length" class="c-pt-6">
+                <!-- <div v-if="contentReviewsList.length" class="c-pt-6">
                     <research-content-details-review-tab-chart>
                     </research-content-details-review-tab-chart>
-                </div>
+                </div> -->
 
                 <div v-else-if="isPublished && !contentReviewsList.length">
                     <div class="sidebar-fullwidth"><v-divider></v-divider></div>
