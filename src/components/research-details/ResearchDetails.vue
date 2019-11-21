@@ -613,6 +613,42 @@
               @canceled="tokenizationConfirmDialog.isShown = false">
             </confirm-action-dialog>
           </v-layout>
+          <template v-if="contentList.length">
+            <v-divider />
+            <v-layout column class="my-4 mx-4">
+              <div class="rd-sidebar-block-title">Request review from expert</div>
+              <v-autocomplete
+                label="Select an expert to request review"
+                :append-icon="null"
+                :loading="isExpertsLoading"
+                :items="foundExperts"
+                item-text="name"
+                item-value="user"
+                :search-input.sync="expertsSearch"
+                v-on:keyup="queryExperts()"
+                v-model="selectedExpert"
+              />
+              <div v-if="!selectedExpert">
+                <v-layout row>
+                  <platform-avatar :size="40" v-for="(expert, i) in experts.slice(0, 7)" :key="'expert-' + i" :user="expert" class="expert-avatar mr-2" ></platform-avatar>
+                </v-layout>
+              </div>
+              <template v-else>
+                <platform-avatar :user="selectedExpert" :size="40" link-to-profile link-to-profile-class="pl-3"></platform-avatar>
+                <div v-if="$options.filters.employmentOrEducation(selectedExpert)">
+                  <div class="py-2 body-2">{{selectedExpert | employmentOrEducation}}</div>
+                </div>
+              </template>
+              <v-btn
+                @click="requestReview()"
+                :loading="isRequestingReview"
+                :disabled="!selectedExpert"
+                color="primary"
+                outline
+                class="mx-0 mt-3"
+              >Request Review</v-btn>
+            </v-layout>
+          </template>
         </v-flex>
       </v-layout>
     </div>
@@ -663,6 +699,12 @@
         researchLogoSrc: "",
 
         activeEciChartTabIndex: 0,
+
+        selectedExpert: null,
+        isExpertsLoading: false,
+        expertsSearch: '',
+        foundExperts: [],
+        isRequestingReview: false,
       }
     },
 
@@ -673,6 +715,7 @@
         contributionsList: 'rd/contributionsList',
         group: 'rd/group',
         disciplinesList: 'rd/disciplinesList',
+        expertsList: 'rd/expertsList',
         groupInvitesList: 'rd/groupInvitesList',
         membersList: 'rd/membersList',
         research: 'rd/research',
@@ -861,6 +904,13 @@
             value: eciObj ? eciObj[1] : 0,
           }
         });
+      },
+      experts() {
+        const blackList = [
+          'regacc', this.user.username,
+          ...this.membersList.map(m => m.account.name)
+        ];
+        return this.expertsList.filter(e => !blackList.includes(e.account.name));
       },
       investmentsAmount () {
         return this.tokenSalesList.filter(e => [1, 2].includes(e.status))
@@ -1128,6 +1178,25 @@
         this.tokenizationConfirmDialog.isShown = true;
         this.tokenizationConfirmDialog.isConfirming = false;
       },
+      requestReview() {
+        this.isRequestingReview = true;
+        return deipRpc.broadcast.requestReviewAsync(
+          this.user.privKey,
+          this.research.id,
+          [this.selectedExpert.account.name],
+          this.user.username
+        )
+        .then(() => {
+          this.$store.dispatch('layout/setSuccess', { message: 'Review has been requested' });
+          this.$store.dispatch('rd/loadResearchReviews', {researchId: this.research.id});
+          this.selectedExpert = null;
+        }).catch((err) => {
+          alert(`The "${this.research.title}" research does not have an Announcement, please add it before requesting a review`);
+        })
+        .finally(() => {
+          this.isRequestingReview = false;
+        });
+      },
       tokenizeResearch() {
         const abstract = JSON.stringify({
           description: this.$options.filters.researchAbstract(this.research.abstract),
@@ -1222,6 +1291,24 @@
           .finally(() => {
             this.isBookmarkActionInProgress = false;
           })
+      },
+      queryExperts() {
+        this.isExpertsLoading = true;
+        this.foundExperts = this.expertsSearch ? this.experts.filter(user => {
+          let name = this.$options.filters.fullname(user);
+          return name.toLowerCase().indexOf((this.expertsSearch || '').toLowerCase()) > -1
+            || user.account.name.toLowerCase().indexOf((this.expertsSearch || '').toLowerCase()) > -1;
+        })
+        .map((user => {
+          const name = this.$options.filters.fullname(user);
+          return { name, user };
+        })) : [];
+
+        if (!this.expertsSearch) {
+          this.selectedExpert = null;
+        }
+
+        this.isExpertsLoading = false;
       },
 
       getContentType,
