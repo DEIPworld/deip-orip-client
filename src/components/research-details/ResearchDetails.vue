@@ -520,9 +520,8 @@
         <v-flex lg3 offset-lg1>
           <v-layout column class="mt-5 mb-4 mx-4">
             <div class="rd-sidebar-block-title">
-              Members:&nbsp;
               <router-link :to="{ name: 'ResearchGroupDetails', params: {  research_group_permlink: encodeURIComponent(groupLink) } }" style="text-decoration: none;">
-                {{membersList.length}}
+                {{group.name}}
               </router-link>
             </div>
             <v-layout
