@@ -293,6 +293,7 @@
                     class="balance-form-input__field"
                     type="text"
                     rows="9"
+                    style="resize: none"
                     v-model="withdrawDialog.messageText"
                   />
                 </div>
