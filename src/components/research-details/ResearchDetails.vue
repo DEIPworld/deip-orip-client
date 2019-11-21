@@ -858,7 +858,7 @@
             if (i === arr.length - 1) {
               eciValue = eci.value;
             } else {
-              eciValue = this.getRandomInt(-1000, 1000);
+              eciValue = this.getRandomInt(-10000, 10000);
             }
             let isPositiveChange;
             if (i === 0) {
