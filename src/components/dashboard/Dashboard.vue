@@ -122,7 +122,7 @@
 
                             <v-layout column class="pb-5">
                               <div class="title bold">Experts <span class="primary--text pl-2">{{experts.length}}</span></div>
-                              <!-- <div class="pt-2">
+                              <div class="pt-2">
                                 <v-autocomplete
                                   label="Find an Expert for Review"
                                   autocomplete
@@ -136,24 +136,24 @@
                                   v-model="selectedExpert"
                                   @input="onSetExpert()"
                                 ></v-autocomplete>
-                              </div> -->
+                              </div>
                               <div v-if="!selectedExpert" class="mt-2">
                                 <v-layout row justify-space-between>
                                   <platform-avatar :size="40" v-for="(expert, i) in experts.slice(0, 7)" :key="'expert-' + i" :user="expert" class="expert-avatar" ></platform-avatar>
                                 </v-layout>
                               </div>
-                              <!-- <div v-else>
+                              <div v-else>
                                 <v-layout column>
                                   <div>
                                     <v-layout row wrap justify-space-between align-baseline>
                                       <platform-avatar :user="selectedExpert" :size="40" link-to-profile link-to-profile-class="pl-3"></platform-avatar>
-                                      <v-btn @click="requestReview()" :loading="isRequestingReview" :disabled="isRequestReviewDisabled" color="primary" small outline class="ma-0">Request Review</v-btn>
+                                      <!-- <v-btn @click="requestReview()" :loading="isRequestingReview" :disabled="isRequestReviewDisabled" color="primary" small outline class="ma-0">Request Review</v-btn> -->
                                     </v-layout>
                                   </div>
                                   <div v-if="$options.filters.employmentOrEducation(selectedExpert)">
                                     <div class="py-2 body-2">{{selectedExpert | employmentOrEducation}}</div>
                                   </div>
-                                  <div class="pt-3">
+                                  <!-- <div class="pt-3">
                                     <v-select 
                                       v-model="selectedResearchToReview" 
                                       :items="researches" 
@@ -163,9 +163,9 @@
                                       item-value="research"
                                       hide-details>
                                     </v-select>
-                                  </div>
+                                  </div> -->
                                 </v-layout>
-                              </div> -->
+                              </div>
                             </v-layout>
 
                             <v-layout column class="pb-5">
