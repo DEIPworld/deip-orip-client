@@ -20,7 +20,12 @@
 
     <v-layout v-if="tokenSale" row class="pt-1 token-sale-section">
       <v-layout column>
-        <v-progress-linear class="progress-current" :value="fundingProgressPercent"></v-progress-linear>
+        <v-layout row align-center>
+          <v-flex grow>
+            <v-progress-linear class="progress-current" :value="fundingProgressPercent"></v-progress-linear>
+          </v-flex>
+          <v-flex shrink class="grey--text ml-2">TOKEN SALE</v-flex>
+        </v-layout>
         <v-layout row>
           <span class="pr-3">
             <span class="black--text half-bold pr-1">{{fundingProgressPercent.toFixed(2)}}%</span>

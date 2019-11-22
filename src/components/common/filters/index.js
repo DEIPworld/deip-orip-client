@@ -101,3 +101,28 @@ Vue.filter('researchTokenized', (value) => {
         return true;
     }
 });
+
+Vue.filter('reviewContent', (value) => {
+  try {
+    let json = JSON.parse(value);
+    if (json.reviewHtmlContent) {
+      return json.reviewHtmlContent;
+    }
+    return value;
+  } catch (e) {
+    return value;
+  }
+});
+
+Vue.filter('reviewRatings', (value) => {
+  try {
+    let json = JSON.parse(value);
+    return json.ratings;
+  } catch (e) {
+    return {
+      novelty: 0,
+      technicalQuality: 0,
+      methodology: 0,
+    };
+  }
+});

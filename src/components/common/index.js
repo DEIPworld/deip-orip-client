@@ -30,6 +30,9 @@ import PlatformAvatar from './components/PlatformAvatar';
 Vue.component('platform-avatar', PlatformAvatar);
 // filters
 
+import SquaredRating from './components/SquaredRating';
+Vue.component('squared-rating', SquaredRating);
+
 import ToggleText from './components/ToggleText';
 Vue.component('toggle-text', ToggleText);
 

@@ -435,36 +435,45 @@
             </v-flex>
             <v-flex lg11>
               <v-layout wrap>
-                <v-flex lg12 class="rd-block-header">Reviews: {{reviewsList.length}}</v-flex>
+                <v-flex lg12>
+                  <v-layout row justify-space-between>
+                    <div class="rd-block-header">Reviews: {{reviewsList.length}}</div>
+                    <div>
+                      Total reviews score:
+                      <span class="bold">{{totalReviewsScore}}</span>
+                      <v-tooltip bottom>
+                        <v-icon slot="activator" small>help</v-icon>
+                        <span>Total score is the result of these 3 scores which has been rounded to the nearest whole value.</span>
+                      </v-tooltip>
+                    </div>
+                  </v-layout>
+                </v-flex>
                 <v-flex lg12>
                   <template v-for="(review, index) of reviews">
                     <v-layout
                       :key="`r_${review.id}`"
-                      class="mt-3"
-                      @click="goToReviewPage(review)"
+                      class="my-4"
                     >
-                      <v-flex lg2 class="rd-reviewer" v-on:click.stop>
-                        <v-avatar size="80px">
-                          <img v-if="review.author.profile" v-bind:src="review.author.profile.avatar | avatarSrc(160, 160, false)" />
-                          <v-gravatar v-else :title="review.author.account.name" :email="review.author.account.name + '@deip.world'" />
-                        </v-avatar>
-                        <div class="mt-2">
-                          <router-link class="a rd-reviewer__title" :to="{ name: 'UserDetails', params: { account_name: review.author.account.name }}">
-                            {{ review.author | fullname }}
-                          </router-link>
-                        </div>
-                        <div v-if="review.author.profile" class="rd-reviewer__subtitle mt-2">
-                          <span>{{review.author | employmentOrEducation}}</span>
-                          <span v-if="doesUserHaveLocation(review.author.profile)">, {{review.author | userLocation}}</span>
-                        </div>
-                      </v-flex>
-                      <v-flex lg10 class="clickable">
+                      <v-flex lg4 class="right-bordered">
                         <v-layout>
-                          <div class="pr-2 grey--text">{{review.created_at | dateFormat('D MMM YYYY', true)}}</div>
-                          <div v-if="review.is_positive" class="green--text bold">Approveed</div>
-                          <div v-else class="red--text bold">Rejected</div>
+                          <v-avatar size="80px">
+                            <img v-if="review.author.profile" v-bind:src="review.author.profile.avatar | avatarSrc(160, 160, false)" />
+                            <v-gravatar v-else :title="review.author.account.name" :email="review.author.account.name + '@deip.world'" />
+                          </v-avatar>
+                          <div class="ml-4">
+                            <router-link class="a rd-reviewer__title" :to="{ name: 'UserDetails', params: { account_name: review.author.account.name }}">
+                              {{ review.author | fullname }}
+                            </router-link>
+                            <div v-if="review.author.profile" class="rd-reviewer__subtitle mt-2">
+                              <span>{{review.author | employmentOrEducation}}</span>
+                              <span v-if="doesUserHaveLocation(review.author.profile)">, {{review.author | userLocation}}</span>
+                            </div>
+                          </div>
                         </v-layout>
-                        <v-layout v-if="review.research_content" v-on:click.stop class="bold py-1">
+                      </v-flex>
+                      <v-flex lg3 class="clickable pl-4 right-bordered" @click="goToReviewPage(review)">
+                        <div class="grey--text mb-1">{{review.created_at | dateFormat('D MMM YYYY', true)}}</div>
+                        <div v-if="review.research_content" v-on:click.stop class="bold mb-1">
                           Review to:&nbsp;
                           <router-link class="a" 
                             :to="{
@@ -476,14 +485,30 @@
                               }
                             }"
                           >{{review.research_content.title}}</router-link>
-                        </v-layout>
-                        <div class="black--text" v-html="review.preview_html" />
-                        <v-layout class="pt-1">
-                          <div
+                        </div>
+                        <v-layout row wrap>
+                          <v-flex
                             v-for="wod of review.weights_of_disciplines"
                             :key="wod.disciplineName"
-                            class="rd-review-eci"
-                          >{{wod.disciplineName}} {{wod.totalWeight}}</div>
+                            class="rd-review-eci mt-1"
+                            lg12
+                          >{{wod.disciplineName}} {{wod.totalWeight}}</v-flex>
+                        </v-layout>
+                      </v-flex>
+                      <v-flex lg5>
+                        <v-layout>
+                          <v-flex lg3 offset-lg1 class="bold">Approve bar</v-flex>
+                          <v-flex lg8>
+                            <v-layout row justify-space-between align-center class="mb-2">
+                              Novelty:&nbsp;<squared-rating readonly v-model="review.ratings.novelty" />
+                            </v-layout>
+                            <v-layout row justify-space-between align-center class="mb-2">
+                              Technical Quality:&nbsp;<squared-rating readonly v-model="review.ratings.technicalQuality" />
+                            </v-layout>
+                            <v-layout row justify-space-between align-center>
+                              Methodology:&nbsp;<squared-rating readonly v-model="review.ratings.methodology" />
+                            </v-layout>
+                          </v-flex>
                         </v-layout>
                       </v-flex>
                     </v-layout>
@@ -520,9 +545,8 @@
         <v-flex lg3 offset-lg1>
           <v-layout column class="mt-5 mb-4 mx-4">
             <div class="rd-sidebar-block-title">
-              Members:&nbsp;
               <router-link :to="{ name: 'ResearchGroupDetails', params: {  research_group_permlink: encodeURIComponent(groupLink) } }" style="text-decoration: none;">
-                {{membersList.length}}
+                {{group.name}}
               </router-link>
             </div>
             <v-layout
@@ -614,6 +638,50 @@
               @canceled="tokenizationConfirmDialog.isShown = false">
             </confirm-action-dialog>
           </v-layout>
+          <template v-if="contentList.length">
+            <v-divider />
+            <v-layout column class="my-4 mx-4">
+              <div class="rd-sidebar-block-title">Request review from expert</div>
+              <v-autocomplete
+                label="Select an expert to request review"
+                :append-icon="null"
+                :loading="isExpertsLoading"
+                :items="foundExperts"
+                item-text="name"
+                item-value="user"
+                :search-input.sync="expertsSearch"
+                v-on:keyup="queryExperts()"
+                v-model="selectedExpert"
+              />
+              <div v-if="!selectedExpert">
+                <v-layout row>
+                  <platform-avatar :size="40" v-for="(expert, i) in experts.slice(0, 6)" :key="'expert-' + i" :user="expert" class="expert-avatar mr-2" ></platform-avatar>
+                </v-layout>
+              </div>
+              <template v-else>
+                <platform-avatar :user="selectedExpert" :size="40" link-to-profile link-to-profile-class="pl-3"></platform-avatar>
+                <div v-if="$options.filters.employmentOrEducation(selectedExpert)">
+                  <div class="py-2 body-2">{{selectedExpert | employmentOrEducation}}</div>
+                </div>
+              </template>
+              <v-select
+                class="mt-3"
+                label="Select a content to request review"
+                item-text="title"
+                item-value="id"
+                :items="contentList"
+                v-model="selectedContentId"
+              />
+              <v-btn
+                @click="requestReview()"
+                :loading="isRequestingReview"
+                :disabled="!selectedExpert"
+                color="primary"
+                outline
+                class="mx-0 mt-3"
+              >Request Review</v-btn>
+            </v-layout>
+          </template>
         </v-flex>
       </v-layout>
     </div>
@@ -628,6 +696,7 @@
   import bookmarksService from '@/services/http/bookmarks';
   import contentHttpService from '@/services/http/content';
   import joinRequestsService from '@/services/http/joinRequests';
+  import reviewRequestsService from '@/services/http/reviewRequests';
   import { getContentType } from '@/services/ResearchService';
 
   import references from './references.json';
@@ -664,6 +733,13 @@
         researchLogoSrc: "",
 
         activeEciChartTabIndex: 0,
+
+        selectedExpert: null,
+        selectedContentId: null,
+        isExpertsLoading: false,
+        expertsSearch: '',
+        foundExperts: [],
+        isRequestingReview: false,
       }
     },
 
@@ -674,6 +750,7 @@
         contributionsList: 'rd/contributionsList',
         group: 'rd/group',
         disciplinesList: 'rd/disciplinesList',
+        expertsList: 'rd/expertsList',
         groupInvitesList: 'rd/groupInvitesList',
         membersList: 'rd/membersList',
         research: 'rd/research',
@@ -816,7 +893,7 @@
             if (i === arr.length - 1) {
               eciValue = eci.value;
             } else {
-              eciValue = this.getRandomInt(-1000, 1000);
+              eciValue = this.getRandomInt(-10000, 10000);
             }
             let isPositiveChange;
             if (i === 0) {
@@ -862,6 +939,13 @@
             value: eciObj ? eciObj[1] : 0,
           }
         });
+      },
+      experts() {
+        const blackList = [
+          'regacc', this.user.username,
+          ...this.membersList.map(m => m.account.name)
+        ];
+        return this.expertsList.filter(e => !blackList.includes(e.account.name));
       },
       investmentsAmount () {
         return this.tokenSalesList.filter(e => [1, 2].includes(e.status))
@@ -925,13 +1009,23 @@
             })
           });
 
-          return {
+          const _review = {
             ...review,
+            content: this.$options.filters.reviewContent(review.content),
+            ratings: this.$options.filters.reviewRatings(review.content),
             research_content: this.contentList.find(c => c.id === review.research_content_id),
-            preview_html: this.extractReviewPreview(review),
             weights_of_disciplines,
           };
+          _review.preview_html = this.extractReviewPreview(_review);
+          return _review;
         });
+      },
+      totalReviewsScore() {
+        let totalScore = 0;
+        this.reviews.forEach((r) => {
+          Object.values(r.ratings).forEach(rating => totalScore += rating);
+        });
+        return (totalScore / ((this.reviews.length || 1) * 3)).toFixed(1);
       },
 
       researchPresentationSrc() {
@@ -1129,6 +1223,28 @@
         this.tokenizationConfirmDialog.isShown = true;
         this.tokenizationConfirmDialog.isConfirming = false;
       },
+      requestReview() {
+        this.isRequestingReview = true;
+        return reviewRequestsService.createReviewRequest({
+          contentId: this.selectedContentId,
+          expert: this.selectedExpert.account.name,
+        }).then(() => {
+          this.$store.dispatch('layout/setSuccess', { message: 'Review has been requested' });
+          this.selectedExpert = null;
+          this.selectedContentId = null;
+        }).catch((err) => {
+          let errMsg = 'Error while requesting review. Please try again later';
+          if (err.response && err.response.data) {
+            errMsg = err.response.data;
+          }
+          this.$store.dispatch('layout/setError', {
+            message: errMsg
+          });
+        })
+        .finally(() => {
+          this.isRequestingReview = false;
+        });
+      },
       tokenizeResearch() {
         const abstract = JSON.stringify({
           description: this.$options.filters.researchAbstract(this.research.abstract),
@@ -1223,6 +1339,24 @@
           .finally(() => {
             this.isBookmarkActionInProgress = false;
           })
+      },
+      queryExperts() {
+        this.isExpertsLoading = true;
+        this.foundExperts = this.expertsSearch ? this.experts.filter(user => {
+          let name = this.$options.filters.fullname(user);
+          return name.toLowerCase().indexOf((this.expertsSearch || '').toLowerCase()) > -1
+            || user.account.name.toLowerCase().indexOf((this.expertsSearch || '').toLowerCase()) > -1;
+        })
+        .map((user => {
+          const name = this.$options.filters.fullname(user);
+          return { name, user };
+        })) : [];
+
+        if (!this.expertsSearch) {
+          this.selectedExpert = null;
+        }
+
+        this.isExpertsLoading = false;
       },
 
       getContentType,
@@ -1454,12 +1588,6 @@
     font-size: 12px;
     line-height: 14px;
     color: #9E9E9E;
-    margin-right: 8px;
-    padding-right: 8px;
-    border-right: 1px solid #9E9E9E;
-    &:last-child {
-      border-right: none;
-    }
   }
 
   .rd-sidebar-block-title {
@@ -1498,5 +1626,7 @@
   height: 220px; 
   border: 2px solid #fafafa;
 }
-  
+.right-bordered {
+  border-right: 1px solid #E0E0E0;
+}
 </style>

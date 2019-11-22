@@ -259,7 +259,13 @@
                   />
                 </div>
                 <div class="balance-form-input mx-3 mt-3">
-                  <label class="balance-form-input__label">IBAN</label>
+                  <label class="balance-form-input__label">
+                    IBAN
+                    <v-tooltip right>
+                      <v-icon slot="activator" small>help</v-icon>
+                      <span>International Bank Account Number. From 16 to 34 alphanumeric characters</span>
+                    </v-tooltip>
+                  </label>
                   <input
                     class="balance-form-input__field"
                     type="text"
@@ -268,7 +274,13 @@
                   />
                 </div>
                 <div class="balance-form-input mx-3 mt-3">
-                  <label class="balance-form-input__label">Reference number</label>
+                  <label class="balance-form-input__label">
+                    Reference number
+                    <v-tooltip right>
+                      <v-icon slot="activator" small>help</v-icon>
+                      <span>Most reference numbers will be found at the top of the application submission</span>
+                    </v-tooltip>
+                  </label>
                   <input
                     class="balance-form-input__field"
                     type="text"
@@ -281,6 +293,7 @@
                     class="balance-form-input__field"
                     type="text"
                     rows="9"
+                    style="resize: none"
                     v-model="withdrawDialog.messageText"
                   />
                 </div>

@@ -24,6 +24,7 @@ const state = {
     contentRefsList: [],
     applicationsRefsList: [],
     userContributionsList: [],
+    expertsList: [],
 
     isLoadingResearchDetails: undefined,
     isLoadingResearchContent: undefined,
@@ -95,6 +96,10 @@ const getters = {
 
     groupInvitesList: (state, getters) => {
         return state.groupInvitesList;
+    },
+
+    expertsList: (state, getters) => {
+        return state.expertsList;
     },
 
     isLoadingResearchContent: (state, getters) => {
@@ -368,7 +373,7 @@ const actions = {
             })
     },
 
-    loadResearchDisciplines({ state, dispatch,commit }, { researchId, notify }) {
+    loadResearchDisciplines({ state, dispatch, commit }, { researchId, notify }) {
         const disciplinesList = [];
         commit('SET_RESEARCH_DISCIPLINES_LOADING_STATE', true)
 
@@ -376,6 +381,7 @@ const actions = {
             .then((data) => {
                 const tvoPromises = [];
                 const statsPromises = [];
+                const expertsPromises = [];
 
                 for (var i = 0; i < data.length; i++) {
                     var discipline = data[i];
@@ -385,20 +391,32 @@ const actions = {
                     statsPromises.push(
                         deipRpc.api.getEciAndExpertiseStatsByDisciplineIdAsync(discipline.id)
                     )
+                    expertsPromises.push(
+                      deipRpc.api.getExpertTokensByDisciplineIdAsync(discipline.id)
+                    );
                 }
 
                 return Promise.all([
                     Promise.all(tvoPromises),
-                    Promise.all(statsPromises)
+                    Promise.all(statsPromises),
+                    Promise.all(expertsPromises)
                 ]);
             }, (err) => {console.log(err)})
-            .then(([tvoList, disciplinesStats]) => {
+            .then(([tvoList, disciplinesStats, expertTokensPerDiscipline]) => {
+                const expertsAccountNames = [];
+                expertTokensPerDiscipline.forEach((e) => {
+                  expertsAccountNames.push(...e.map(et => et.account_name));
+                });
                 disciplinesList.forEach((discipline, i) => {
                     discipline.stats = disciplinesStats[i];
                 });
                 commit('SET_RESEARCH_DISCIPLINES_LIST', disciplinesList)
                 commit('SET_RESEARCH_TOTAL_VOTES_LIST', tvoList)
+                return getEnrichedProfiles(_.uniq(expertsAccountNames));
             }, (err) => {console.log(err)})
+            .then((expertsList) => {
+              commit('SET_EXPERTS_LIST', expertsList);
+            })
             .finally(() => {
                 commit('SET_RESEARCH_DISCIPLINES_LOADING_STATE', false)
                 if (notify) notify();
@@ -530,7 +548,7 @@ const actions = {
         }).finally(() => {
           if (notify) notify();
         });
-    }
+    },
 }
 
 // mutations
@@ -594,6 +612,10 @@ const mutations = {
 
     ['SET_USER_CONTRIBUTIONS_LIST'](state, list) {
         Vue.set(state, 'userContributionsList', list)
+    },
+
+    ['SET_EXPERTS_LIST'](state, list) {
+        Vue.set(state, 'expertsList', list)
     },
 
     ['SET_RESEARCH_DETAILS_LOADING_STATE'](state, value) {
