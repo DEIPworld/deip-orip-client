@@ -2,7 +2,36 @@
     <div class="">
       <div>
         <!-- ### START User Profile Expertise Section ### -->
-        <div>
+        <div v-if="reviewRequests.length">
+          <div class="title bold">Review Requests: {{reviewRequests.length}}</div>
+          <v-layout
+            column
+            class="mt-4"
+            v-for="(reviewRequest, index) of reviewRequests"
+            :key="reviewRequest._id"
+          >
+            <router-link class="a deip-blue-color bold"
+              :to="{
+                name: 'ResearchContentDetails',
+                params: {
+                  research_group_permlink: encodeURIComponent(reviewRequest.research.group_permlink),
+                  research_permlink: encodeURIComponent(reviewRequest.research.permlink),
+                  content_permlink: encodeURIComponent(reviewRequest.content.permlink)
+                }
+              }"
+            >{{reviewRequest.content.title}}</router-link>
+            <v-btn
+              color="red"
+              flat
+              class="mx-0 mt-2"
+              @click="denyReviewRequest(reviewRequest._id)"
+              :loading="reviewRequest.isDenying"
+            >Deny</v-btn>
+            <v-divider class="ma-2" v-if="index !== reviewRequests.length - 1" />
+          </v-layout>
+          <v-divider />
+        </div>
+        <div class="mt-4">
             <div class="title bold">Expertise Tokens</div>
             <div class="c-pt-4 c-pb-2">
                 <div class="legacy-row legacy-justify-between" v-for="(item, i) in expertise" :key="i">
@@ -256,6 +285,7 @@
                 userInfo: 'userDetails/userInfo',
                 expertise: 'userDetails/expertise',
                 invites: 'userDetails/invites',
+                reviewRequests: 'userDetails/reviewRequests',
                 isClaimExpertiseDialogShown: 'userDetails/isClaimExpertiseDialogShown'
             }),
             isOwner() {
@@ -390,7 +420,12 @@
 
             clearLocalStorageItems() {
                 bankCardsService.removeInvestorBankCard(this.currentUser.username);
+            },
+            denyReviewRequest(reviewRequestId) {
+              return this.$store.dispatch('userDetails/denyReviewRequest', { reviewRequestId });
             }
+        },
+        created() {
         }
     };
 </script>

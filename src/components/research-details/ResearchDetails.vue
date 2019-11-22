@@ -664,6 +664,14 @@
                   <div class="py-2 body-2">{{selectedExpert | employmentOrEducation}}</div>
                 </div>
               </template>
+              <v-select
+                class="mt-3"
+                label="Select a content to request review"
+                item-text="title"
+                item-value="id"
+                :items="contentList"
+                v-model="selectedContentId"
+              />
               <v-btn
                 @click="requestReview()"
                 :loading="isRequestingReview"
@@ -688,6 +696,7 @@
   import bookmarksService from '@/services/http/bookmarks';
   import contentHttpService from '@/services/http/content';
   import joinRequestsService from '@/services/http/joinRequests';
+  import reviewRequestsService from '@/services/http/reviewRequests';
   import { getContentType } from '@/services/ResearchService';
 
   import references from './references.json';
@@ -726,6 +735,7 @@
         activeEciChartTabIndex: 0,
 
         selectedExpert: null,
+        selectedContentId: null,
         isExpertsLoading: false,
         expertsSearch: '',
         foundExperts: [],
@@ -1215,18 +1225,21 @@
       },
       requestReview() {
         this.isRequestingReview = true;
-        return deipRpc.broadcast.requestReviewAsync(
-          this.user.privKey,
-          this.research.id,
-          [this.selectedExpert.account.name],
-          this.user.username
-        )
-        .then(() => {
+        return reviewRequestsService.createReviewRequest({
+          contentId: this.selectedContentId,
+          expert: this.selectedExpert.account.name,
+        }).then(() => {
           this.$store.dispatch('layout/setSuccess', { message: 'Review has been requested' });
-          this.$store.dispatch('rd/loadResearchReviews', {researchId: this.research.id});
           this.selectedExpert = null;
+          this.selectedContentId = null;
         }).catch((err) => {
-          alert(`The "${this.research.title}" research does not have an Announcement, please add it before requesting a review`);
+          let errMsg = 'Error while requesting review. Please try again later';
+          if (err.response && err.response.data) {
+            errMsg = err.response.data;
+          }
+          this.$store.dispatch('layout/setError', {
+            message: errMsg
+          });
         })
         .finally(() => {
           this.isRequestingReview = false;

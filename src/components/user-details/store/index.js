@@ -2,6 +2,7 @@ import _ from 'lodash';
 import deipRpc from '@deip/deip-oa-rpc-client';
 import Vue from 'vue';
 import usersService from './../../../services/http/users';
+import reviewRequestsService from './../../../services/http/reviewRequests';
 
 const state = {
   account: undefined,
@@ -10,6 +11,7 @@ const state = {
   groups: [],
   expertise: [],
   invites: [],
+  reviewRequests: [],
 
   isLoadingUserAccount: false,
   isLoadingUserProfile: false,
@@ -29,6 +31,7 @@ const getters = {
   groups: state => state.groups,
   expertise: state => state.expertise,
   invites: state => state.invites,
+  reviewRequests: state => state.reviewRequests,
 
   isLoadingUserAccount: state => state.isLoadingUserAccount,
   isLoadingUserProfile: state => state.isLoadingUserProfile,
@@ -55,11 +58,14 @@ const actions = {
     const invitesLoad = new Promise((resolve, reject) => {
       dispatch('loadUserInvites', { username: username, notify: resolve });
     });
+    const reviewRequestsLoad = new Promise((resolve, reject) => {
+      dispatch('loadUserReviewRequests', { username: username, notify: resolve });
+    });
     const groupsLoad = new Promise((resolve, reject) => {
       dispatch('loadGroups', { username: username, notify: resolve });
     });
 
-    return Promise.all([accountLoad, profileLoad, expertiseLoad, invitesLoad, groupsLoad])
+    return Promise.all([accountLoad, profileLoad, expertiseLoad, invitesLoad, reviewRequestsLoad, groupsLoad])
       .then(() => {
         const researchLoad = new Promise((resolve, reject) => {
           dispatch('loadResearchList', { username: username, groupIds: state.groups.map(group => group.id), notify: resolve });
@@ -192,6 +198,49 @@ const actions = {
       });
   },
 
+  loadUserReviewRequests({ commit }, { username, notify }) {
+    const reviewRequests = [];
+    return reviewRequestsService.getReviewRequestsByExpert(username)
+      .then((results) => {
+        const detailsPromises = [];
+        reviewRequests.push(...results);
+        reviewRequests.forEach((r) => {
+          detailsPromises.push(
+            deipRpc.api.getResearchContentByIdAsync(r.contentId)
+              .then((content) => {
+                r.content = content;
+                return deipRpc.api.getResearchByIdAsync(content.research_id);
+              }).then(research => r.research = research)
+          );
+        })
+        return Promise.all(detailsPromises);
+      }).then(() => {
+        commit('SET_USER_REVIEW_REQUESTS', reviewRequests)
+      }).finally(() => {
+        if (notify) {
+          notify();
+        }
+      })
+  },
+
+  denyReviewRequest({ commit, getters }, { reviewRequestId }) {
+    const reviewRequests = getters.reviewRequests;
+    const reviewRequestIndex = reviewRequests.findIndex((r) => r._id === reviewRequestId);
+
+    commit('SET_USER_REVIEW_REQUESTS', [
+      ...reviewRequests.slice(0, reviewRequestIndex),
+      {
+        ...reviewRequests[reviewRequestIndex],
+        isDenying: true
+      },
+      ...reviewRequests.slice(reviewRequestIndex + 1)
+    ]);
+    return reviewRequestsService.denyReviewRequest(reviewRequestId)
+      .then(() => {
+        commit('SET_USER_REVIEW_REQUESTS', getters.reviewRequests.filter(r => r._id !== reviewRequestId));
+      })
+  },
+
   openExpertiseTokensClaimDialog({ commit }) {
     commit('SET_EXPERTISE_TOKENS_CLAIM_DIALOG_VISIBILITY_STATE', true);
   },
@@ -226,6 +275,10 @@ const mutations = {
 
   ['SET_USER_INVITES'](state, invites) {
     Vue.set(state, 'invites', invites);
+  },
+
+  ['SET_USER_REVIEW_REQUESTS'](state, list) {
+    Vue.set(state, 'reviewRequests', list);
   },
 
   ['SET_USER_ACCOUNT_LOADING_STATE'](state, value) {
