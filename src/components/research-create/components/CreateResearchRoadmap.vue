@@ -56,7 +56,7 @@ export default {
 					isValid = false;
 					Vue.set(step.validation, 'goalError', index === milestones.length - 1 ? "Research should have the primary Goal" : "Step Goal is required");
 				}
-				if (!step.eta || moment(step.eta).diff(moment(), 'days') < 0) {
+				if (!step.eta /* || moment(step.eta).diff(moment(), 'days') < 0 */) {
 					isValid = false;
 					Vue.set(step.validation, 'etaError', step.eta == "" ? "Goal deadline should be specified" : "Goal deadline can not be in the Past");
 				}
