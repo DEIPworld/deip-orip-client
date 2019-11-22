@@ -545,12 +545,12 @@
         <v-flex lg3 offset-lg1>
           <v-layout column class="mt-5 mb-4 mx-4">
             <div class="rd-sidebar-block-title">
-              <router-link :to="{ name: 'ResearchGroupDetails', params: {  research_group_permlink: encodeURIComponent(groupLink) } }" style="text-decoration: none;">
+              <router-link class="research-group-link" :to="{ name: 'ResearchGroupDetails', params: {  research_group_permlink: encodeURIComponent(groupLink) } }">
                 {{group.name}}
               </router-link>
             </div>
             <v-layout
-              v-for="(member, i) in membersList"
+              v-for="(member, i) in researchMembersList"
               :key="member.account.id"
               class="mt-3"
               justify-space-between
@@ -643,7 +643,7 @@
             <v-layout column class="my-4 mx-4">
               <div class="rd-sidebar-block-title">Request review from expert</div>
               <v-autocomplete
-                label="Select an expert to request review"
+                label="Find an expert to request a review"
                 :append-icon="null"
                 :loading="isExpertsLoading"
                 :items="foundExperts"
@@ -752,7 +752,8 @@
         disciplinesList: 'rd/disciplinesList',
         expertsList: 'rd/expertsList',
         groupInvitesList: 'rd/groupInvitesList',
-        membersList: 'rd/membersList',
+        researchMembersList: 'rd/researchMembersList',
+        researchGroupMembersList: 'rd/researchGroupMembersList',
         research: 'rd/research',
         reviewsList: 'rd/reviewsList',
         tokenHoldersList: 'rd/tokenHoldersList',
@@ -795,7 +796,7 @@
       },
       canJoinResearchGroup() {
         if (this.research) {
-          if (this.membersList.some(m => m.account.name === this.user.username)) {
+          if (this.researchGroupMembersList.some(m => m.account.name === this.user.username)) {
             return false;
           }
           if (this.userJoinRequests.some(r => r.groupId === this.research.research_group_id)) {
@@ -942,8 +943,8 @@
       },
       experts() {
         const blackList = [
-          'regacc', this.user.username,
-          ...this.membersList.map(m => m.account.name)
+          'regacc', 'hermes', this.user.username,
+          ...this.researchGroupMembersList.map(m => m.account.name)
         ];
         return this.expertsList.filter(e => !blackList.includes(e.account.name));
       },
@@ -1085,7 +1086,7 @@
         );
       },
       createContentAuthorsString(authors) {
-        return this.membersList
+        return this.researchGroupMembersList
           .filter(m => authors.some(a => a === m.account.name))
           .map(m => this.$options.filters.fullname(m))
           .join('  ·  ');
@@ -1629,4 +1630,12 @@
 .right-bordered {
   border-right: 1px solid #E0E0E0;
 }
+
+.research-group-link {
+  text-decoration: none;
+  &:hover {
+      text-decoration: underline;
+  }
+}
+
 </style>

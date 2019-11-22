@@ -82,7 +82,7 @@
                     <div v-for="(join, index) in pendingJoinRequests" class="legacy-row-nowrap legacy-justify-between align-center c-pt-4">
                         <div>
                             <v-avatar size="40px">
-                                <img v-if="join.user.profile" v-bind:src="join.user.profile.avatar | avatarSrc(40, 40, false)" />
+                                <img v-if="join.user.profile" v-bind:src="join.user.profile.avatar | avatarSrc(80, 80, false)" />
                                 <v-gravatar v-else :title="join.user.account.name" :email="join.user.account.name + '@deip.world'" />
                             </v-avatar>
                             <span class="a c-pl-3">{{join.user | fullname}}</span>

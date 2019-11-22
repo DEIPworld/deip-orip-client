@@ -47,12 +47,12 @@ const getters = {
 			.reduce((acc, research) => {
 				if (acc.some(a => a.research.id == research.id)) return acc;
 
-				let members = state.researchGroupsTokens
+				let groupMembers = state.researchGroupsTokens
 					.filter(rgt => rgt.research_group_id == research.research_group_id)
 					.map(rgt => rgt.owner);
 
-				let authors = state.researchGroupsMembers
-					.filter(member => members.some(name => name == member.account.name));
+				let researchMembers = state.researchGroupsMembers
+					.filter(member => research.members.some(name => name == member.account.name));
 
 				let tokenSale = [
 					...state.investingResearchesOngoingTokenSales,
@@ -73,9 +73,9 @@ const getters = {
 					}, [])
 					.filter(c => c.research_token_sale_id == tokenSale.id);
 
-					return [...acc, { research, authors, tokenSale, tokenSaleContributions }];
+					return [...acc, { research, authors: researchMembers, tokenSale, tokenSaleContributions }];
 				} else {
-					return [...acc, { research, authors }];
+					return [...acc, { research, authors: researchMembers }];
 				}
 			}, []);
 

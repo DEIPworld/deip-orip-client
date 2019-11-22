@@ -67,7 +67,7 @@
                             <div>
                                 <div class="legacy-row">
                                     <v-avatar size="40px">
-                                        <img v-if="contentMetadata.witness.user.profile" v-bind:src="contentMetadata.witness.user.profile.avatar | avatarSrc(40, 40, false)" />
+                                        <img v-if="contentMetadata.witness.user.profile" v-bind:src="contentMetadata.witness.user.profile.avatar | avatarSrc(80, 80, false)" />
                                         <v-gravatar v-else :email="contentMetadata.witness.user.account.name + '@deip.world'" />
                                     </v-avatar>
                                     <div class="c-ml-4">
@@ -111,7 +111,7 @@
                             <div class="c-mb-4" v-for="voter in contentMetadata.voters">
                                 <div class="legacy-row">
                                     <v-avatar size="40px">
-                                        <img v-if="voter.user.profile" v-bind:src="voter.user.profile.avatar | avatarSrc(40, 40, false)" />
+                                        <img v-if="voter.user.profile" v-bind:src="voter.user.profile.avatar | avatarSrc(80, 80, false)" />
                                         <v-gravatar v-else :email="voter.user.account.name + '@deip.world'" />
                                     </v-avatar>
                                     <div class="c-ml-4">

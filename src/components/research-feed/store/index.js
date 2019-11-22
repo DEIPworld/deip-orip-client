@@ -39,19 +39,18 @@ const getters = {
     let ordered = state.fullResearchListing
       .filter(item => !state.filter.q || item.title.toLowerCase().indexOf(state.filter.q.toLowerCase()) != -1)
       .filter(item => !state.filter.disciplines.length || item.disciplines.some(discipline => state.filter.disciplines.some(d => d.id == discipline.id)))
-      // todo: add ordering here
       .map(item => {
         let totalVotes = state.feedTotalVotes.filter(vote => vote.research_id == item.research_id);
         let reviews = state.feedResearchReviews.filter(review => review.research_id == item.research_id);
         let group = state.feedResearchGroups.find(group => group.id == item.group_id);
-        let authors = state.feedResearchAuthors.filter(user => item.authors.some(a => a == user.account.name));
+        let researchMembers = state.feedResearchAuthors.filter(user => item.members.some(a => a == user.account.name));
         let tokenSale = state.feedResearchTokenSales.find(tokenSale => tokenSale.research_id == item.research_id);
         let tokenSaleContributions = tokenSale ? state.feedResearchTokenSalesContributions.filter(c => c.research_token_sale_id == tokenSale.id) : [];
         let disciplines = item.disciplines.map(discipline => {
           let stats = state.feedDisciplinesStatistics.find(stat => stat.discipline_id == discipline.id);
           return { ...discipline, stats };
         });
-        return { ...item, totalVotes, reviews, group, authors, tokenSale, tokenSaleContributions, disciplines };
+        return { ...item, totalVotes, reviews, group, authors: researchMembers, tokenSale, tokenSaleContributions, disciplines };
       })
       // .sort((a, b) => {
       //   if (b.created_at > a.created_at) {

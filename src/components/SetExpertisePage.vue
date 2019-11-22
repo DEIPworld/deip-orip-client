@@ -57,7 +57,7 @@
                             @click="selectUser(user)">
                             <div>
                                 <v-avatar size="40px">
-                                    <img v-if="user.profile" v-bind:src="user.profile.avatar | avatarSrc(40, 40, false)" />
+                                    <img v-if="user.profile" v-bind:src="user.profile.avatar | avatarSrc(80, 80, false)" />
                                     <v-gravatar v-else :title="user.account.name" :email="user.account.name + '@deip.world'" />
                                 </v-avatar>
                                 <router-link :to="'/user-details/' + user.account.name" class="a c-pl-3">

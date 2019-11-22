@@ -16,7 +16,7 @@
             <div v-if="isLoadingResearchMembers === false" class="legacy-row-nowrap legacy-justify-between align-center c-pt-4 c-pb-2" v-for="(member, index) in membersList" :key="index">
                 <div>
                     <v-avatar size="40px">
-                        <img v-if="member.profile" v-bind:src="member.profile.avatar | avatarSrc(40, 40, false)" />
+                        <img v-if="member.profile" v-bind:src="member.profile.avatar | avatarSrc(80, 80, false)" />
                         <v-gravatar v-else :title="member.account.name" :email="member.account.name + '@deip.world'" />
                     </v-avatar>
                     <router-link :to="'/user-details/' + member.account.name" class="a c-pl-3">

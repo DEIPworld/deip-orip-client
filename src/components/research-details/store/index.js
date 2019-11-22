@@ -12,7 +12,7 @@ const state = {
     group: null,
     contentList: [],
     applicationsList: [],
-    membersList: [],
+    researchGroupMembersList: [],
     reviewsList: [],
     disciplinesList: [],
     totalVotesList: [],
@@ -62,8 +62,13 @@ const getters = {
         return state.contentRefsList;
     },
 
-    membersList: (state, getters) => {
-        return state.membersList;
+    researchGroupMembersList: (state, getters) => {
+        return state.researchGroupMembersList;
+    },
+
+    researchMembersList: (state, getters) => {
+        return state.researchGroupMembersList
+            .filter(member => state.research.members.some(m => m == member.account.name));
     },
 
     reviewsList: (state, getters) => {
@@ -559,7 +564,7 @@ const mutations = {
     },
 
     ['SET_RESEARCH_MEMBERS_LIST'](state, list) {
-        Vue.set(state, 'membersList', list)
+        Vue.set(state, 'researchGroupMembersList', list)
     },
 
     ['SET_RESEARCH_CONTENT_LIST'](state, list) {

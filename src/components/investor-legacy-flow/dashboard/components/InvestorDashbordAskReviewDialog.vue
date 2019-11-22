@@ -124,7 +124,7 @@
                                         <div class="c-pt-8">
                                             <div class="legacy-row-nowrap legacy-align-items-center">
                                                 <v-avatar size="40px" class="">
-                                                    <!-- <img v-if="member.profile" v-bind:src="member.profile.avatar | avatarSrc(40, 40, false)" /> -->
+                                                    <!-- <img v-if="member.profile" v-bind:src="member.profile.avatar | avatarSrc(80, 80, false)" /> -->
                                                     <v-gravatar :email="'shawna' + '@deip.world'" />
                                                 </v-avatar>
 
@@ -139,7 +139,7 @@
 
                                             <div class="legacy-row-nowrap legacy-align-items-center c-pt-4">
                                                 <v-avatar size="40px" class="">
-                                                    <!-- <img v-if="member.profile" v-bind:src="member.profile.avatar | avatarSrc(40, 40, false)" /> -->
+                                                    <!-- <img v-if="member.profile" v-bind:src="member.profile.avatar | avatarSrc(80, 80, false)" /> -->
                                                     <v-gravatar :email="'egow' + '@deip.world'" />
                                                 </v-avatar>
 
@@ -154,7 +154,7 @@
 
                                             <div class="legacy-row-nowrap legacy-align-items-center c-pt-4">
                                                 <v-avatar size="40px" class="">
-                                                    <!-- <img v-if="member.profile" v-bind:src="member.profile.avatar | avatarSrc(40, 40, false)" /> -->
+                                                    <!-- <img v-if="member.profile" v-bind:src="member.profile.avatar | avatarSrc(80, 80, false)" /> -->
                                                     <v-gravatar :email="'Egota' + '@deip.world'" />
                                                 </v-avatar>
 
@@ -176,7 +176,7 @@
                                     <v-card class="c-ph-12 c-pv-6">
                                         <div class="legacy-row-nowrap legacy-align-items-center">
                                             <v-avatar size="40px" class="">
-                                                <!-- <img v-if="member.profile" v-bind:src="member.profile.avatar | avatarSrc(40, 40, false)" /> -->
+                                                <!-- <img v-if="member.profile" v-bind:src="member.profile.avatar | avatarSrc(80, 80, false)" /> -->
                                                 <v-gravatar :email="'shawna' + '@deip.world'" />
                                             </v-avatar>
 
@@ -191,7 +191,7 @@
 
                                         <div class="legacy-row-nowrap legacy-align-items-center c-pt-4">
                                             <v-avatar size="40px" class="">
-                                                <!-- <img v-if="member.profile" v-bind:src="member.profile.avatar | avatarSrc(40, 40, false)" /> -->
+                                                <!-- <img v-if="member.profile" v-bind:src="member.profile.avatar | avatarSrc(80, 80, false)" /> -->
                                                 <v-gravatar :email="'egow' + '@deip.world'" />
                                             </v-avatar>
 
@@ -206,7 +206,7 @@
 
                                         <div class="legacy-row-nowrap legacy-align-items-center c-pt-4">
                                             <v-avatar size="40px" class="">
-                                                <!-- <img v-if="member.profile" v-bind:src="member.profile.avatar | avatarSrc(40, 40, false)" /> -->
+                                                <!-- <img v-if="member.profile" v-bind:src="member.profile.avatar | avatarSrc(80, 80, false)" /> -->
                                                 <v-gravatar :email="'Egota' + '@deip.world'" />
                                             </v-avatar>
 
@@ -221,7 +221,7 @@
 
                                         <div class="legacy-row-nowrap legacy-align-items-center c-pt-4">
                                             <v-avatar size="40px" class="">
-                                                <!-- <img v-if="member.profile" v-bind:src="member.profile.avatar | avatarSrc(40, 40, false)" /> -->
+                                                <!-- <img v-if="member.profile" v-bind:src="member.profile.avatar | avatarSrc(80, 80, false)" /> -->
                                                 <v-gravatar :email="'Bern' + '@deip.world'" />
                                             </v-avatar>
 

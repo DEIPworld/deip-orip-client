@@ -13,7 +13,7 @@
                 <contentbar>
                     <div class="c-pb-4" v-if="joinRequest">
                         <v-avatar size="40px">
-                            <img v-if="joinRequest.user.profile" v-bind:src="joinRequest.user.profile.avatar | avatarSrc(40, 40, false)" />
+                            <img v-if="joinRequest.user.profile" v-bind:src="joinRequest.user.profile.avatar | avatarSrc(80, 80, false)" />
                             <v-gravatar v-else :title="joinRequest.user.account.name" :email="joinRequest.user.account.name + '@deip.world'" />
                         </v-avatar>
 

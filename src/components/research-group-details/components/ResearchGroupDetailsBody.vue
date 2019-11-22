@@ -43,10 +43,10 @@
                             <v-divider></v-divider>
 
                             <template v-for="(member, i) in members">
-                                <div class="list-line">
+                                <div class="list-line" :key="'member-' + i">
                                     <div class="legacy-row-nowrap legacy-col-4 list-body-cell">
                                         <v-avatar size="40px" class="c-pt-3">
-                                            <img v-if="member.profile" v-bind:src="member.profile.avatar | avatarSrc(40, 40, false)" />
+                                            <img v-if="member.profile" v-bind:src="member.profile.avatar | avatarSrc(80, 80, false)" />
                                             <v-gravatar v-else :email="member.account.name + '@deip.world'" />
                                         </v-avatar>
 
@@ -79,7 +79,7 @@
                                     <div class="legacy-col-2 text-align-center list-body-cell">{{member | userLocation}}</div>
                                 </div>
 
-                                <v-divider></v-divider>
+                                <v-divider :key="'member-divider-' + i"></v-divider>
                             </template>
                         </div>
 
@@ -103,12 +103,12 @@
 
                                     <div class="">
                                         <template v-for="(invite, i) in invites">
-                                            <v-divider></v-divider>
+                                            <v-divider :key="'invite-divider-' + i"></v-divider>
 
-                                            <div class="legacy-row c-pv-4 c-ph-6 legacy-align-items-center">
+                                            <div class="legacy-row c-pv-4 c-ph-6 legacy-align-items-center" :key="'invite-' + i">
                                                 <div class="legacy-row-nowrap legacy-col-4">
                                                     <v-avatar size="40px" class="c-pt-3">
-                                                        <img v-if="invite.user.profile" v-bind:src="invite.user.profile.avatar | avatarSrc(40, 40, false)" />
+                                                        <img v-if="invite.user.profile" v-bind:src="invite.user.profile.avatar | avatarSrc(80, 80, false)" />
                                                         <v-gravatar v-else :email="invite.user.account.name + '@deip.world'" />
                                                     </v-avatar>
 

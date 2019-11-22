@@ -24,7 +24,7 @@
             
             <page-container>
                 <contentbar>
-                    <div v-if="membersList.length">
+                    <div v-if="researchGroupMembersList.length">
 
                         <v-text-field
                             label="Title"
@@ -40,7 +40,7 @@
                         </v-select>
 
                         <v-autocomplete
-                            :items="membersList"
+                            :items="researchGroupMembersList"
                             v-model="authors"
                             placeholder="Authors"
                             multiple>
@@ -126,7 +126,7 @@
         computed: {
             ...mapGetters({
                 user: 'auth/user',
-                membersList: 'rd/membersList',
+                researchGroupMembersList: 'rd/researchGroupMembersList',
                 research: 'rd/research',
                 userPersonalGroup: 'auth/userPersonalGroup'
             }),
