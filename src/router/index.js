@@ -402,15 +402,7 @@ const router = new Router({
 				: usersService.getUserProfile(user.username).then((p) => { return p.agencies });
 			
 			rolePromise.then((agencies) => {
-
-				// spb demo
-				if (user.username == "bob") {
-					next({ name: 'Dashboard' });
-				} else {
-					next({ name: 'ResearchFeed' });
-				}
-				return;
-
+				return next({ name: 'ResearchFeed' });
 
 				if (!agencies || !agencies.length) {
 					next({ name: 'ResearchFeed' });
