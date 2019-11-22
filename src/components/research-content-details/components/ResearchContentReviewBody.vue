@@ -50,7 +50,7 @@
             </div>
         </div>
 
-        <div v-html="review.content"></div>
+        <div v-html="reviewContent"></div>
     </div>
 </template>
 
@@ -90,8 +90,8 @@
 
         },
         
-        mounted() {
-
+        created() {
+          this.reviewContent = this.$options.filters.reviewContent(this.review.content);
         }
     };
 </script>

@@ -440,31 +440,28 @@
                   <template v-for="(review, index) of reviews">
                     <v-layout
                       :key="`r_${review.id}`"
-                      class="mt-3"
-                      @click="goToReviewPage(review)"
+                      class="my-4"
                     >
-                      <v-flex lg2 class="rd-reviewer" v-on:click.stop>
-                        <v-avatar size="80px">
-                          <img v-if="review.author.profile" v-bind:src="review.author.profile.avatar | avatarSrc(160, 160, false)" />
-                          <v-gravatar v-else :title="review.author.account.name" :email="review.author.account.name + '@deip.world'" />
-                        </v-avatar>
-                        <div class="mt-2">
-                          <router-link class="a rd-reviewer__title" :to="{ name: 'UserDetails', params: { account_name: review.author.account.name }}">
-                            {{ review.author | fullname }}
-                          </router-link>
-                        </div>
-                        <div v-if="review.author.profile" class="rd-reviewer__subtitle mt-2">
-                          <span>{{review.author | employmentOrEducation}}</span>
-                          <span v-if="doesUserHaveLocation(review.author.profile)">, {{review.author | userLocation}}</span>
-                        </div>
-                      </v-flex>
-                      <v-flex lg10 class="clickable">
+                      <v-flex lg4 class="right-bordered">
                         <v-layout>
-                          <div class="pr-2 grey--text">{{review.created_at | dateFormat('D MMM YYYY', true)}}</div>
-                          <div v-if="review.is_positive" class="green--text bold">Approveed</div>
-                          <div v-else class="red--text bold">Rejected</div>
+                          <v-avatar size="80px">
+                            <img v-if="review.author.profile" v-bind:src="review.author.profile.avatar | avatarSrc(160, 160, false)" />
+                            <v-gravatar v-else :title="review.author.account.name" :email="review.author.account.name + '@deip.world'" />
+                          </v-avatar>
+                          <div class="ml-4">
+                            <router-link class="a rd-reviewer__title" :to="{ name: 'UserDetails', params: { account_name: review.author.account.name }}">
+                              {{ review.author | fullname }}
+                            </router-link>
+                            <div v-if="review.author.profile" class="rd-reviewer__subtitle mt-2">
+                              <span>{{review.author | employmentOrEducation}}</span>
+                              <span v-if="doesUserHaveLocation(review.author.profile)">, {{review.author | userLocation}}</span>
+                            </div>
+                          </div>
                         </v-layout>
-                        <v-layout v-if="review.research_content" v-on:click.stop class="bold py-1">
+                      </v-flex>
+                      <v-flex lg3 class="clickable pl-4 right-bordered" @click="goToReviewPage(review)">
+                        <div class="grey--text mb-1">{{review.created_at | dateFormat('D MMM YYYY', true)}}</div>
+                        <div v-if="review.research_content" v-on:click.stop class="bold mb-1">
                           Review to:&nbsp;
                           <router-link class="a" 
                             :to="{
@@ -476,14 +473,30 @@
                               }
                             }"
                           >{{review.research_content.title}}</router-link>
-                        </v-layout>
-                        <div class="black--text" v-html="review.preview_html" />
-                        <v-layout class="pt-1">
-                          <div
+                        </div>
+                        <v-layout row wrap>
+                          <v-flex
                             v-for="wod of review.weights_of_disciplines"
                             :key="wod.disciplineName"
-                            class="rd-review-eci"
-                          >{{wod.disciplineName}} {{wod.totalWeight}}</div>
+                            class="rd-review-eci mt-1"
+                            lg12
+                          >{{wod.disciplineName}} {{wod.totalWeight}}</v-flex>
+                        </v-layout>
+                      </v-flex>
+                      <v-flex lg5>
+                        <v-layout>
+                          <v-flex lg3 offset-lg1 class="bold">Approve bar</v-flex>
+                          <v-flex lg8>
+                            <v-layout row justify-space-between align-center class="mb-2">
+                              Novelty:&nbsp;<squared-rating readonly v-model="review.ratings.novelty" />
+                            </v-layout>
+                            <v-layout row justify-space-between align-center class="mb-2">
+                              Technical Quality:&nbsp;<squared-rating readonly v-model="review.ratings.technicalQuality" />
+                            </v-layout>
+                            <v-layout row justify-space-between align-center>
+                              Methodology:&nbsp;<squared-rating readonly v-model="review.ratings.methodology" />
+                            </v-layout>
+                          </v-flex>
                         </v-layout>
                       </v-flex>
                     </v-layout>
@@ -630,7 +643,7 @@
               />
               <div v-if="!selectedExpert">
                 <v-layout row>
-                  <platform-avatar :size="40" v-for="(expert, i) in experts.slice(0, 7)" :key="'expert-' + i" :user="expert" class="expert-avatar mr-2" ></platform-avatar>
+                  <platform-avatar :size="40" v-for="(expert, i) in experts.slice(0, 6)" :key="'expert-' + i" :user="expert" class="expert-avatar mr-2" ></platform-avatar>
                 </v-layout>
               </div>
               <template v-else>
@@ -974,12 +987,15 @@
             })
           });
 
-          return {
+          const _review = {
             ...review,
+            content: this.$options.filters.reviewContent(review.content),
+            ratings: this.$options.filters.reviewRatings(review.content),
             research_content: this.contentList.find(c => c.id === review.research_content_id),
-            preview_html: this.extractReviewPreview(review),
             weights_of_disciplines,
           };
+          _review.preview_html = this.extractReviewPreview(_review);
+          return _review;
         });
       },
 
@@ -1540,12 +1556,6 @@
     font-size: 12px;
     line-height: 14px;
     color: #9E9E9E;
-    margin-right: 8px;
-    padding-right: 8px;
-    border-right: 1px solid #9E9E9E;
-    &:last-child {
-      border-right: none;
-    }
   }
 
   .rd-sidebar-block-title {
@@ -1584,5 +1594,7 @@
   height: 220px; 
   border: 2px solid #fafafa;
 }
-  
+.right-bordered {
+  border-right: 1px solid #E0E0E0;
+}
 </style>

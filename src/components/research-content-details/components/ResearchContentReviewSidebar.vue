@@ -22,6 +22,15 @@
                 </div>
             </div>
         </div>
+        <v-layout row justify-space-between align-center class="my-2 py-2">
+          Novelty:&nbsp;<squared-rating readonly v-model="reviewRatings.novelty" />
+        </v-layout>
+        <v-layout row justify-space-between align-center class="my-2 py-2">
+          Technical Quality:&nbsp;<squared-rating readonly v-model="reviewRatings.technicalQuality" />
+        </v-layout>
+        <v-layout row justify-space-between align-center class="my-2 py-2">
+          Methodology:&nbsp;<squared-rating readonly v-model="reviewRatings.methodology" />
+        </v-layout>
     </div>
 </template>
 
@@ -131,6 +140,10 @@
                     }
                 });
             }
+        },
+
+        created() {
+          this.reviewRatings = this.$options.filters.reviewRatings(this.review.content);
         }
     };
 </script>

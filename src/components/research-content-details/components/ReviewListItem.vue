@@ -1,7 +1,7 @@
 <template>
     <v-card class="review-container hidden-last-child">
         <div class="legacy-row-nowrap c-p-6 clickable" @click="goToReviewPage()">
-            <div class="legacy-column text-align-center" @click="goToReviewerProfilePage($event, review.author.account.name)">
+            <div class="legacy-column text-align-center" @click="goToReviewerProfilePage($event, _review.author.account.name)">
                 <v-avatar size="90px">
                     <img v-if="review.author.profile" v-bind:src="review.author.profile.avatar | avatarSrc(90, 90, false)" />
                     <v-gravatar v-else :title="review.author.account.name" :email="review.author.account.name + '@deip.world'" />
@@ -14,15 +14,15 @@
             </div>
             <div class="legacy-column c-ml-6">
                 <div>
-                    <span class="grey--text">{{ review.created_at | dateFormat('D MMM YYYY', true) }}</span>
+                    <span class="grey--text">{{ _review.created_at | dateFormat('D MMM YYYY', true) }}</span>
                     <span class="half-bold c-pl-2">
-                        <span class="green--text text--darken-2" v-if="review.is_positive">Approving</span>
-                        <span class="red--text text--darken-2" v-if="!review.is_positive">Rejecting</span>
+                        <span class="green--text text--darken-2" v-if="_review.is_positive">Approving</span>
+                        <span class="red--text text--darken-2" v-if="!_review.is_positive">Rejecting</span>
                     </span>
                 </div>
 
                 <div class="c-pt-4 legacy-col-grow review-preview">
-                    <span v-html="extractPreview(review)"></span>
+                    <span v-html="extractPreview(_review)"></span>
                 </div>
 
                 <div class="legacy-row-nowrap">
@@ -36,6 +36,17 @@
                     </div>
                 </div>
             </div>
+            <v-layout align-end column>
+              <v-layout row justify-space-between align-center class="mb-2">
+                Novelty:&nbsp;<squared-rating readonly v-model="_review.ratings.novelty" />
+              </v-layout>
+              <v-layout row justify-space-between align-center class="mb-2">
+                Technical Quality:&nbsp;<squared-rating readonly v-model="_review.ratings.technicalQuality" />
+              </v-layout>
+              <v-layout row justify-space-between align-center>
+                Methodology:&nbsp;<squared-rating readonly v-model="_review.ratings.methodology" />
+              </v-layout>
+            </v-layout>
         </div>
         <v-divider></v-divider>
     </v-card>
@@ -55,9 +66,19 @@
                 user: 'auth/user',
                 userExperise: 'auth/userExperise'
             }),
+            _review() {
+              const reviewContent = this.$options.filters.reviewContent(this.review.content);
+              const reviewRatings = this.$options.filters.reviewRatings(this.review.content);
+
+              return {
+                ...this.review,
+                content: reviewContent,
+                ratings: reviewRatings,
+              };
+            },
             disciplines() {
                 const out = [];
-                const review = this.review;
+                const review = this._review;
                 const tvoList = [];
 
                 for (var i = 0; i < review.disciplines.length; i++) {
@@ -80,12 +101,12 @@
         methods: {
             extractPreview() {
                 let temp = document.createElement('span');
-                temp.innerHTML = this.review.content;
+                temp.innerHTML = this._review.content;
                 if (temp.children.length) {
                     let headers = [...temp.children].filter((child) => isHeader(child) && child.innerText);
                     let headerText = headers[0]
                         ? headers[0].innerText 
-                        : `Reviewed by ${this.$options.filters.fullname(this.review.author)}`;
+                        : `Reviewed by ${this.$options.filters.fullname(this._review.author)}`;
                     
                     let paragraphs = [...temp.children].filter((child) => isParagraph(child) && child.innerText);
                     let paragraphText = paragraphs[0] 
@@ -112,9 +133,9 @@
             },
 
             goToReviewPage() {
-                const params = { review_id: this.review.id };
+                const params = { review_id: this._review.id };
                 
-                deipRpc.api.getResearchContentByIdAsync(this.review.research_content_id)
+                deipRpc.api.getResearchContentByIdAsync(this._review.research_content_id)
                     .then((content) => {
                         params.content_permlink = encodeURIComponent(content.permlink);
                         return deipRpc.api.getResearchByIdAsync(content.research_id)
@@ -128,6 +149,9 @@
                         this.$router.push({ name: 'ResearchContentReview', params });
                     });
             }
+        },
+
+        created() {
         }
     };
 </script>

@@ -13,7 +13,7 @@
             >{{ content.title }}</router-link>
         </div>
 
-        <div class="legacy-row legacy-justify-center">
+        <div class="legacy-row legacy-justify-center mb-4">
             <div>
                 <span class="c-pr-2">
                     <v-btn class="ma-0" 
@@ -34,6 +34,16 @@
             </div>
         </div>
         
+        <v-layout row justify-space-between align-center class="my-2 py-2">
+          Novelty:&nbsp;<squared-rating v-model="novelty" />
+        </v-layout>
+        <v-layout row justify-space-between align-center class="my-2 py-2">
+          Technical Quality:&nbsp;<squared-rating v-model="technicalQuality" />
+        </v-layout>
+        <v-layout row justify-space-between align-center class="my-2 py-2">
+          Methodology:&nbsp;<squared-rating v-model="methodology" />
+        </v-layout>
+
         <div class="legacy-row legacy-justify-center c-mt-10 c-mb-10">
             <div>
                 <v-btn color="primary" class="width-9"
@@ -69,7 +79,11 @@
         data() {
             return {
                 isPositive: true,
-                isLoading: false
+                isLoading: false,
+
+                novelty: 0,
+                technicalQuality: 0,
+                methodology: 0,
             };
         },
         computed: {
@@ -93,7 +107,15 @@
                 this.isLoading = true;
                 reviewEditor.save()
                     .then((reviewHtmlContent) => {
-                        return makeReview(this.content.id, this.isPositive, reviewHtmlContent)
+                      const reviewData = JSON.stringify({
+                        reviewHtmlContent,
+                        ratings: {
+                          novelty: this.novelty,
+                          technicalQuality: this.technicalQuality,
+                          methodology: this.methodology,
+                        },
+                      });
+                      return makeReview(this.content.id, this.isPositive, reviewData);
                     }).then((data) => {
                         this.$store.dispatch('layout/setSuccess', {
                             message: "Your review has been published successfully !"
