@@ -435,7 +435,19 @@
             </v-flex>
             <v-flex lg11>
               <v-layout wrap>
-                <v-flex lg12 class="rd-block-header">Reviews: {{reviewsList.length}}</v-flex>
+                <v-flex lg12>
+                  <v-layout row justify-space-between>
+                    <div class="rd-block-header">Reviews: {{reviewsList.length}}</div>
+                    <div>
+                      Total reviews score:
+                      <span class="bold">{{totalReviewsScore}}</span>
+                      <v-tooltip bottom>
+                        <v-icon slot="activator" small>help</v-icon>
+                        <span>Total score is the result of these 3 scores which has been rounded to the nearest whole value.</span>
+                      </v-tooltip>
+                    </div>
+                  </v-layout>
+                </v-flex>
                 <v-flex lg12>
                   <template v-for="(review, index) of reviews">
                     <v-layout
@@ -997,6 +1009,13 @@
           _review.preview_html = this.extractReviewPreview(_review);
           return _review;
         });
+      },
+      totalReviewsScore() {
+        let totalScore = 0;
+        this.reviews.forEach((r) => {
+          Object.values(r.ratings).forEach(rating => totalScore += rating);
+        });
+        return (totalScore / ((this.reviews.length || 1) * 3)).toFixed(1);
       },
 
       researchPresentationSrc() {
