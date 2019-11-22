@@ -62,6 +62,11 @@ const getters = {
         return state.contentRefsList;
     },
 
+    researchReferencesList: (state, getters) => {
+        return [].concat.apply([], state.contentRefsList.map(ref => ref.externalReferences || []))
+            .map(ref => { return { title: ref, source: ""}});
+    },
+
     researchGroupMembersList: (state, getters) => {
         return state.researchGroupMembersList;
     },

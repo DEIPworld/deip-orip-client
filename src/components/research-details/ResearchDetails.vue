@@ -529,9 +529,9 @@
               </v-layout>
             </v-flex>
             <v-flex lg11>
-              <div class="rd-block-header">References: {{ references.length }}</div>
-              <template v-for="(ref, i) of references">
-                <v-layout :key="`ref_${i}`">
+              <div class="rd-block-header pb-2">References: {{ researchReferencesList.length }}</div>
+              <template v-for="(ref, i) of researchReferencesList">
+                <v-layout :key="`ref_${i}`" class="py-1">
                   <v-flex shrink class="pr-3">{{i + 1}}.</v-flex>
                   <v-flex grow>
                     <div>{{ref.title}}</div>
@@ -699,7 +699,7 @@
   import reviewRequestsService from '@/services/http/reviewRequests';
   import { getContentType } from '@/services/ResearchService';
 
-  import references from './references.json';
+  // import references from './references.json';
   // import timeline from './timeline.json';
   import moment from 'moment';
 
@@ -726,7 +726,6 @@
 
         selectedTimelineItemId: 1,
         timelineItemsToShow: 3,
-        references,
         bookmarkId: null,
         isBookmarkActionInProgress: false,
 
@@ -752,6 +751,7 @@
         disciplinesList: 'rd/disciplinesList',
         expertsList: 'rd/expertsList',
         groupInvitesList: 'rd/groupInvitesList',
+        researchReferencesList: 'rd/researchReferencesList',
         researchMembersList: 'rd/researchMembersList',
         researchGroupMembersList: 'rd/researchGroupMembersList',
         research: 'rd/research',
