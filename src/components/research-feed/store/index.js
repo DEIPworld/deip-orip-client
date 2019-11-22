@@ -9,7 +9,7 @@ const state = {
   feedTotalVotes: [],
   feedResearchReviews: [],
   feedResearchGroups: [],
-  feedResearchAuthors: [],
+  feedResearchGroupsMembers: [],
   feedDisciplinesStatistics: [],
   feedResearchTokenSales: [],
   feedResearchTokenSalesContributions: [],
@@ -43,7 +43,7 @@ const getters = {
         let totalVotes = state.feedTotalVotes.filter(vote => vote.research_id == item.research_id);
         let reviews = state.feedResearchReviews.filter(review => review.research_id == item.research_id);
         let group = state.feedResearchGroups.find(group => group.id == item.group_id);
-        let researchMembers = state.feedResearchAuthors.filter(user => item.members.some(a => a == user.account.name));
+        let researchMembers = state.feedResearchGroupsMembers.filter(user => item.members.some(a => a == user.account.name));
         let tokenSale = state.feedResearchTokenSales.find(tokenSale => tokenSale.research_id == item.research_id);
         let tokenSaleContributions = tokenSale ? state.feedResearchTokenSalesContributions.filter(c => c.research_token_sale_id == tokenSale.id) : [];
         let disciplines = item.disciplines.map(discipline => {
@@ -109,11 +109,11 @@ const actions = {
         //   .map(d => deipRpc.api.getEciAndExpertiseStatsByDisciplineIdAsync(d)
         //     .then((stats) => { return { discipline_id: d, ...stats } })
         //   ));
-
-        let authorsLoad = usersService.getEnrichedProfiles(listing
-          .map(r => r.authors)
-          .reduce((acc, authors) => {
-            let unique = authors.filter(name => !acc.some(a => a == name));
+        
+        let groupsMembersLoad = usersService.getEnrichedProfiles(listing
+          .map(r => r.group_members)
+          .reduce((acc, groupMembers) => {
+            let unique = groupMembers.filter(name => !acc.some(a => a == name));
             return [...unique, ...acc];
           }, []));
         
@@ -125,16 +125,16 @@ const actions = {
           researchReviewsLoad,
           researchGroupsLoad,
           // disciplineStatsLoad,
-          authorsLoad,
+          groupsMembersLoad,
           tokenSalesLoad
         ]);
       })
-      .then(([totalVotes, researchReviews, groups, /* disciplinesStats, */ authors, tokenSales]) => {
+      .then(([totalVotes, researchReviews, groups, /* disciplinesStats, */ groupsMembers, tokenSales]) => {
         commit('SET_RESEARCH_FEED_TOTAL_VOTES_LIST', [].concat.apply([], totalVotes));
         commit('SET_RESEARCH_FEED_REVIEWS_LIST', [].concat.apply([], researchReviews));
         commit('SET_RESEARCH_FEED_GROUPS_LIST', groups);
         // commit('SET_RESEARCH_FEED_DISCIPLINES_STATISTIC', disciplinesStats);
-        commit('SET_RESEARCH_FEED_AUTHORS_LIST', authors);
+        commit('SET_RESEARCH_FEED_GROUPS_MEMBERS_LIST', groupsMembers);
         commit('SET_RESEARCH_FEED_TOKEN_SALES_LIST', tokenSales.filter(ts => ts != undefined));
 
         let tokenSalesContributionsLoad = Promise.all(state.feedResearchTokenSales
@@ -187,8 +187,8 @@ const mutations = {
     Vue.set(state, 'feedDisciplinesStatistics', list);
   },
 
-  ['SET_RESEARCH_FEED_AUTHORS_LIST'](state, list) {
-    Vue.set(state, 'feedResearchAuthors', list);
+  ['SET_RESEARCH_FEED_GROUPS_MEMBERS_LIST'](state, list) {
+    Vue.set(state, 'feedResearchGroupsMembers', list);
   },
   
   ['SET_RESEARCH_FEED_TOKEN_SALES_LIST'](state, list) {
