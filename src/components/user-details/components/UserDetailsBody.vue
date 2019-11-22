@@ -130,24 +130,37 @@
                     </div>
 
                     <v-card class="c-mt-6">
-                        <template v-for="group in commonGroups" :class="[{'personal-group': group.is_personal}]">
-                            <div class="c-p-6">
-                                <router-link v-if="group.is_personal" :to="'/' + encodeURIComponent(group.permlink) + '/group-details'" class="research-group-title">
-                                    {{userInfo | fullname}}
+                        <template v-for="(group, i) in commonGroups" :class="[{'personal-group': group.is_personal}]">
+                            <div class="c-p-6" :key="'group-' + i">
+                                <div v-if="group.is_personal">
+                                    <router-link class="research-group-title" :to="{ 
+                                            name: 'ResearchGroupDetails', 
+                                            params: { 
+                                                research_group_permlink: encodeURIComponent(group.permlink) } 
+                                            }">
+                                        {{userInfo | fullname}}
+                                    </router-link>
                                     <span class="grey--text caption">(personal group)</span>
-                                </router-link>
-                                
-                                <router-link v-if="!group.is_personal" :to="'/' + encodeURIComponent(group.permlink) + '/group-details'" class="research-group-title">
-                                    {{group.name}}
+                                </div>
+                                <div v-else>
+                                    <router-link class="research-group-title" :to="{ 
+                                        name: 'ResearchGroupDetails', 
+                                        params: { 
+                                            research_group_permlink: encodeURIComponent(group.permlink) } 
+                                        }">
+                                        {{group.name}}
+                                    </router-link>
                                     <div class="caption grey--text c-pt-2 hidden-last-child">
                                         <template v-for="share in group.shares">
-                                            <span>{{ share.owner }}</span>
-                                            <span> · </span>
+                                            <span :key="'share-' + share.id">
+                                                <span>{{ share.owner }}</span>
+                                                <span> · </span>
+                                            </span>
                                         </template>
                                     </div>
-                                </router-link>
+                                </div>
                             </div>
-                            <v-divider></v-divider>
+                            <v-divider :key="'divider-' + i"></v-divider>
                         </template>
 
                         <div v-if="isOwner" class="c-pv-4 c-ph-6">
@@ -601,6 +614,10 @@
         color: #2F80ED;
         font-weight: 500;
         text-decoration: none;
+        &:hover {
+            text-decoration: underline;
+        }
+        
     }
 
     .owner-hint {

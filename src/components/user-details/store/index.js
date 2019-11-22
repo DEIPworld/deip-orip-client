@@ -45,7 +45,11 @@ const getters = {
 // actions
 const actions = {
 
-  loadUserDetailsPage({ state, dispatch, commit }, { username }) {
+  loadUserDetailsPage({ state, dispatch, commit, rootGetters }, { username }) {
+    const currentUser = rootGetters['auth/user'];
+    debugger
+    const isMyPage = currentUser.username == username;
+
     const accountLoad = new Promise((resolve, reject) => {
       dispatch('loadUserAccount', { username: username, notify: resolve });
     });
@@ -55,12 +59,14 @@ const actions = {
     const expertiseLoad = new Promise((resolve, reject) => {
       dispatch('loadExpertise', { username: username, notify: resolve });
     });
-    const invitesLoad = new Promise((resolve, reject) => {
-      dispatch('loadUserInvites', { username: username, notify: resolve });
-    });
-    const reviewRequestsLoad = new Promise((resolve, reject) => {
+    const invitesLoad = isMyPage ? new Promise((resolve, reject) => {
+        dispatch('loadUserInvites', { username, notify: resolve }) 
+    }) : Promise.resolve();
+    
+    const reviewRequestsLoad = isMyPage ? new Promise((resolve, reject) => {
       dispatch('loadUserReviewRequests', { username: username, notify: resolve });
-    });
+    }) : Promise.resolve();
+
     const groupsLoad = new Promise((resolve, reject) => {
       dispatch('loadGroups', { username: username, notify: resolve });
     });

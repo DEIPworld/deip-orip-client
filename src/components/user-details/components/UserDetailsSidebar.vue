@@ -239,9 +239,9 @@
                 </confirm-action-dialog>
             </div>
         </div>
-        <div class="py-2 text-xs-right">
+        <!-- <div class="py-2 text-xs-right">
             <v-btn class="ma-0 pa-0" small flat  @click="clearLocalStorageItems()">Clear</v-btn>
-        </div>
+        </div> -->
         <!-- ### END User Profile Invites Section ### -->
 
         <user-claim-expertise-dialog
