@@ -47,7 +47,7 @@
                         </div>
                     </div>
                     <div class="legacy-row grey-border-stripe">
-                        <div class="pill width-7 white--text">MD5</div>
+                        <div class="pill width-7 white--text">SHA256</div>
                         <div class="legacy-col-grow pill-value">{{getContentHash(contentMetadata.content.content)}}</div>
                     </div>
                 </div>

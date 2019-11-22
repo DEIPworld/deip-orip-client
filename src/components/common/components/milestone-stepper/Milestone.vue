@@ -31,6 +31,7 @@
           <v-flex xl5 lg5 sm5 md9 xs9>
             <v-menu
               v-model="step.etaMenu"
+              :close-on-content-click="false"
               transition="scale-transition"
               full-width
               min-width="300px"

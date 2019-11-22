@@ -58,7 +58,7 @@
     },
     data() {
       return {
-        researchLogoSrc: `./../../../static/research-logo/${this.research.id < 20 ? this.research.id : 'default'}_thumbnail.png`
+        researchLogoSrc: `./../../../static/researches/${this.research.id < 30 ? this.research.id : 'default'}_thumbnail.png`
       };
     },
     computed: {
