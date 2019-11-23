@@ -39,6 +39,18 @@
                         {{ organization.name }}
                       </v-chip>
                     </div>
+                    <div v-if="filterByTopOnly">
+                      <v-chip
+                        @input="filterByTopOnly = false"
+                        small
+                        close
+                        outline>
+                        <v-avatar>
+                          <img :src="`./../../../static/top-100.png`">
+                        </v-avatar>
+                        Top 100
+                      </v-chip>
+                    </div>
                   </div>
                   <div class="align-self-center">
                     <v-btn small flat color="primary" class="py-0 my-0 elevation-0">
@@ -107,6 +119,23 @@
                     <v-spacer></v-spacer>
                   </v-layout>
                 </v-flex>
+                <v-flex xs12 sm12 md12 lg12 xl12 py-4><v-divider></v-divider></v-flex>
+                <v-flex xs12 sm12 md12 lg12 xl12>
+                  <div class="pb-4">
+                    <v-layout  row align-baseline>
+                      <v-flex shrink>
+                        <span class="subheading half-bold">Browse top projects only</span>
+                      </v-flex>
+                      <v-flex grow align-self-center pl-4>
+                        <v-checkbox
+                          v-model="filterByTopOnly"
+                          class="ma-0 pa-0"
+                          hide-details>
+                        </v-checkbox>
+                      </v-flex>
+                    </v-layout>
+                  </div>
+                </v-flex>
               </v-layout>
             </v-expansion-panel-content>
           </v-expansion-panel>
@@ -117,7 +146,7 @@
         <v-card class="px-5 pb-4 elevation-0 full-width" :class="{'pt-4': isFiltersTabExpanded}">
           <v-layout row wrap>
             <v-flex xs12 sm12 md12 lg12 xl12>
-              <div class="subheading half-bold px-2">Top projects | <span class="primary--text">All {{researchFeed.length}}</span></div>
+              <div class="subheading half-bold px-2">Projects | <span class="primary--text">{{researchFeed.length}}</span></div>
             </v-flex>
             <v-flex xs12 sm12 md12 lg12 xl12>
               <v-data-iterator
@@ -125,16 +154,27 @@
                 :rows-per-page-items="rowsPerPageItems"
                 :pagination.sync="pagination"
                 content-tag="v-layout"
+                no-data-text="No Projects found for specified criteria"
                 row
                 wrap
               >
                 <template v-slot:item="props">
-                  <v-flex xs12 sm6 md4 lg4 xl3 px-2 py-4 :key="'feed-item-' + props.item.research_id">
+                  <v-flex xs12 sm6 md4 lg4 xl3 px-2 py-4 my-1 :key="'feed-item-' + props.item.research_id">
                     <research-project-tile
-                      :research="{ id: props.item.research_id, title: props.item.title, permlink: props.item.permlink, group_permlink: props.item.group_permlink }"
+                      :research="{ 
+                        id: props.item.research_id, 
+                        title: props.item.title, 
+                        permlink: props.item.permlink, 
+                        group_permlink: props.item.group_permlink, 
+                        last_update_time: props.item.last_update_time,
+                        number_of_negative_reviews: props.item.number_of_negative_reviews,
+                        number_of_positive_reviews: props.item.number_of_positive_reviews,
+                        isTop: props.item.isTop,
+                      }"
                       :members="props.item.authors" 
                       :tokenSale="props.item.tokenSale"
-                      :tokenSaleContributions="props.item.tokenSaleContributions">
+                      :tokenSaleContributions="props.item.tokenSaleContributions"
+                      :organization="props.item.organization">
                     </research-project-tile>
                   </v-flex> 
                 </template>
@@ -153,20 +193,20 @@ import deipRpc from '@deip/deip-oa-rpc-client';
 import { mapGetters } from 'vuex';
 import moment from 'moment';
 import * as disciplinesService from './../../components/common/disciplines/DisciplineTreeService';
-import * as organizationsService from './../../services/OrganizationsService';
+import organizationsService from './../../services/OrganizationsService';
 
 export default {
   name: "ResearchFeed",
 
   data() {
     return {
-      rowsPerPageItems: [9, 30],
+      rowsPerPageItems: [9, 30, 100],
       pagination: {
-        rowsPerPage: 9
+        rowsPerPage: 100
       },
       disciplines: [...disciplinesService.getTopLevelNodes()],
       organizations: [...organizationsService.getAllOrganizations()],
-
+      filterByTopOnly: false,
       filtersTabExpansionModel: [false]
     }
   },
@@ -231,6 +271,12 @@ export default {
 
     isOrganizationSelected(organization) {
       return this.filter.organizations.some(o => o.id === organization.id);
+    }
+  },
+
+  watch: {
+    filterByTopOnly(newVal) {
+      this.$store.dispatch('feed/updateFilter', { key: 'topOnly', value: newVal });
     }
   }
 };

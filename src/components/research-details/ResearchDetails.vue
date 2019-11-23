@@ -80,11 +80,17 @@
                 <v-flex lg12 v-if="isActiveTokenSale || isInactiveTokenSale">
                   <v-layout class="pt-3">
                     <v-flex lg3 class="bold">Start:</v-flex>
-                    <v-flex lg9 class="pl-2">{{tokenSale.start_time | dateFormat('MMM D, YYYY HH:mm', true)}}</v-flex>
+                    <v-flex lg9 class="pl-2">
+                      <span>{{tokenSale.start_time | dateFormat('MMM D, YYYY HH:mm', true)}}</span>
+                      <v-chip v-if="hasInactiveTokenSale" class="my-0 mx-2 caption" style="height: 1.4em" color="primary lighten-3">{{tokenSaleStartLeft}} left</v-chip>
+                    </v-flex>
                   </v-layout>
                   <v-layout class="pt-3">
                     <v-flex lg3 class="bold">End:</v-flex>
-                    <v-flex lg9 class="pl-2">{{tokenSale.end_time | dateFormat('MMM D, YYYY HH:mm', true)}} <v-chip class="my-0 mx-2 caption" style="height: 1.4em" color="amber lighten-1">{{tokenSaleDaysLeft}} days left</v-chip></v-flex>
+                    <v-flex lg9 class="pl-2">
+                      <span>{{tokenSale.end_time | dateFormat('MMM D, YYYY HH:mm', true)}}</span>
+                      <v-chip v-if="hasActiveTokenSale" class="my-0 mx-2 caption" style="height: 1.4em" color="amber lighten-1">{{tokenSaleEndLeft}} left</v-chip>
+                    </v-flex>
                   </v-layout>
                   <v-layout class="pt-3">
                     <v-flex lg3 class="bold">Tokens On sale:</v-flex>
@@ -782,12 +788,53 @@
       averageInvestmentAmount() {
         return this.round2DigitsAfterComma(this.investmentsAmount / (this.investors.length || 1));
       },
-      tokenSaleDaysLeft() {
-        if (this.tokenSale) {
-          let now = moment.utc().local();
-          let end = moment.utc(this.tokenSale.end_time).local();
-          return Math.floor(moment.duration(end.diff(now)).asDays());
-        }
+      hasActiveTokenSale() {
+        return this.tokenSale && this.tokenSale.status == 1;
+      },
+      hasInactiveTokenSale() {
+        return this.tokenSale && this.tokenSale.status == 4;
+      },
+      tokenSaleEndLeft() {
+        if (!this.tokenSale) return null;
+
+        let now = moment.utc().local();
+        let end = moment.utc(this.tokenSale.end_time).local();
+
+        let months = Math.floor(moment.duration(end.diff(now)).asMonths());
+        if (months > 1) return `${months} months`;
+
+        let days = Math.floor(moment.duration(end.diff(now)).asDays());
+        if (days > 1) return `${days} days`;
+
+        let hours = Math.floor(moment.duration(end.diff(now)).asHours());
+        if (hours > 1) return `${hours} hours`;
+
+        let minutes = Math.floor(moment.duration(end.diff(now)).asMinutes());
+        if (minutes > 1) return `${minutes} mins`;
+
+        let seconds = Math.floor(moment.duration(end.diff(now)).asSeconds());
+        return `${seconds} secs`;
+      },
+      tokenSaleStartLeft() {
+        if (!this.tokenSale) return null;
+
+        let now = moment.utc().local();
+        let start = moment.utc(this.tokenSale.start_time).local();
+
+        let months = Math.floor(moment.duration(start.diff(now)).asMonths());
+        if (months > 1) return `${months} months`;
+
+        let days = Math.floor(moment.duration(start.diff(now)).asDays());
+        if (days > 1) return `${days} days`;
+
+        let hours = Math.floor(moment.duration(start.diff(now)).asHours());
+        if (hours > 1) return `${hours} hours`;
+
+        let minutes = Math.floor(moment.duration(start.diff(now)).asMinutes());
+        if (minutes > 1) return `${minutes} mins`;
+
+        let seconds = Math.floor(moment.duration(start.diff(now)).asSeconds());
+        return `${seconds} secs`;
       },
       isContributionToTokenSaleDisabled() {
         let balance = this.fromAssetsToFloat(this.user.account.balance);

@@ -41,4 +41,10 @@ import Milestone from './components/milestone-stepper/Milestone';
 Vue.component('milestone-stepper', MilestoneStepper);
 Vue.component('milestone', Milestone);
 
+import ResearchProjectTile from './research/components/ResearchProjectTile';
+Vue.component('research-project-tile', ResearchProjectTile);
+
+import TopResearchLabel from './research/components/TopResearchLabel';
+Vue.component('top-research-label', TopResearchLabel);
+
 import './filters/index';

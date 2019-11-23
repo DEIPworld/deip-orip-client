@@ -2,6 +2,8 @@ import Vue from 'vue';
 import deipRpc from '@deip/deip-oa-rpc-client';
 import * as usersService from './../../../utils/user';
 import tokenSaleService from './../../../services/TokenSaleService';
+import organizationsService from './../../../services/OrganizationsService';
+import * as researchService from './../../../services/ResearchService';
 
 const state = {
 
@@ -22,6 +24,7 @@ const state = {
       iteratee: ['title'],
       order: ['asc']
     },
+    topOnly: false,
     dateFrom: null,
     dateTo: null
   }
@@ -37,8 +40,15 @@ const getters = {
 
   researchFeed: (state, getters) => {
     let ordered = state.fullResearchListing
+      .map(item  => {
+        let isTop = researchService.getTopResearchesIds().some(id => id == item.research_id);
+        let organization = organizationsService.getResearchOrganization(item.research_id) || null;
+        return { ...item, isTop, organization };
+      })
+      .filter(item => !state.filter.topOnly || item.isTop)
       .filter(item => !state.filter.q || item.title.toLowerCase().indexOf(state.filter.q.toLowerCase()) != -1)
       .filter(item => !state.filter.disciplines.length || item.disciplines.some(discipline => state.filter.disciplines.some(d => d.id == discipline.id)))
+      .filter(item => !state.filter.organizations.length || (item.organization && state.filter.organizations.some(org => item.organization.id == org.id)))
       .map(item => {
         let totalVotes = state.feedTotalVotes.filter(vote => vote.research_id == item.research_id);
         let reviews = state.feedResearchReviews.filter(review => review.research_id == item.research_id);

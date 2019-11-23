@@ -4,6 +4,8 @@ import Vue from 'vue';
 import deipRpc from '@deip/deip-oa-rpc-client';
 import * as usersService from './../../../utils/user';
 import tokenSaleService from './../../../services/TokenSaleService';
+import organizationsService from './../../../services/OrganizationsService';
+import * as researchService from './../../../services/ResearchService';
 
 const experts = ["alice", "bob", "mike", "john", "rachel", "james", "rick", "alex", "anastasia", "nick", "carla", "irene", "sherlock", "greg", "doroty", "hermes"];
 
@@ -61,6 +63,9 @@ const getters = {
 				]
 				.find(s => s.research_id == research.id);
 
+				let organization = organizationsService.getResearchOrganization(research.id) || null;
+				let isTop = researchService.getTopResearchesIds().some(id => id == research.id);
+
 				if (tokenSale) {
 					let tokenSaleContributions = [
 						...state.investingResearchesOngoingTokenSalesContributions,
@@ -73,9 +78,9 @@ const getters = {
 					}, [])
 					.filter(c => c.research_token_sale_id == tokenSale.id);
 
-					return [...acc, { research, authors: researchMembers, tokenSale, tokenSaleContributions }];
+					return [...acc, { research: { ...research, isTop }, authors: researchMembers, tokenSale, tokenSaleContributions, organization }];
 				} else {
-					return [...acc, { research, authors: researchMembers }];
+					return [...acc, { research: { ...research, isTop }, authors: researchMembers, organization }];
 				}
 			}, []);
 

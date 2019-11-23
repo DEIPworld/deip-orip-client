@@ -47,7 +47,6 @@ const actions = {
 
   loadUserDetailsPage({ state, dispatch, commit, rootGetters }, { username }) {
     const currentUser = rootGetters['auth/user'];
-    debugger
     const isMyPage = currentUser.username == username;
 
     const accountLoad = new Promise((resolve, reject) => {

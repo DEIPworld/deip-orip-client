@@ -18,6 +18,18 @@
         </div>
         <!-- ### END Research Group Details Section ### -->
 
+        <!-- ### START Research Group Proposals Section ### -->
+        <div id="proposals" v-if="isResearchGroupMember" class="research-group-proposals-container spinner-container py-2">
+            <v-progress-circular class="section-spinner"
+                v-if="isLoadingResearchGroupProposals"
+                indeterminate color="primary"
+            ></v-progress-circular>
+            
+            <div v-if="isLoadingResearchGroupProposals === false">
+                <research-group-details-proposals v-if="!isPersonalGroup"></research-group-details-proposals>
+            </div>
+        </div>
+        <!-- ### END Research Group Proposals Section ### -->
 
         <!-- ### START Research Group members Section ### -->
         <div class="research-group-members-container spinner-container">
@@ -165,19 +177,6 @@
             </div>
         </div>
         <!-- ### END Research Group Research List Section ### -->
-
-        <!-- ### START Research Group Proposals Section ### -->
-        <div id="proposals" v-if="isResearchGroupMember" class="research-group-proposals-container spinner-container c-pt-8">
-            <v-progress-circular class="section-spinner"
-                v-if="isLoadingResearchGroupProposals"
-                indeterminate color="primary"
-            ></v-progress-circular>
-            
-            <div v-if="isLoadingResearchGroupProposals === false">
-                <research-group-details-proposals v-if="!isPersonalGroup"></research-group-details-proposals>
-            </div>
-        </div>
-        <!-- ### END Research Group Proposals Section ### -->
     </div>
 </template>
 
