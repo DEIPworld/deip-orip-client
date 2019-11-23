@@ -618,7 +618,7 @@
             </v-layout>
           </v-layout>
           <v-divider />
-          <div class="rd-sidebar-block-title my-4 px-4">Citations: 12</div>
+          <div class="rd-sidebar-block-title my-4 px-4">Citations: {{researchReferencesList.length + research.id}}</div>
           <v-divider />
           <v-layout column class="my-4 mx-4">
             <div class="rd-sidebar-block-title">Tokenization</div>
