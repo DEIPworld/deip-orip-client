@@ -589,30 +589,50 @@
                 <v-icon small>add</v-icon>
                 <span class="pl-2 medium text-none">Join Research group</span>
               </v-btn>
-              <v-dialog v-if="research" v-model="isJoinGroupDialogOpen" persistent transition="scale-transition" max-width="800px">
-                <v-card>
-                  <v-toolbar dark color="primary">
-                    <v-btn icon dark @click="isJoinGroupDialogOpen = false">
-                      <v-icon>close</v-icon>
-                    </v-btn>
-                    <v-toolbar-title>Please provide a cover letter to your join request</v-toolbar-title>
-                    <v-spacer></v-spacer>
-                  </v-toolbar>
+              <v-dialog v-if="research" v-model="isJoinGroupDialogOpen" persistent transition="scale-transition" max-width="600px">
+                <v-card class="pa-4">
+                  <v-card-title>
+                    <v-layout row align-center align-baseline>
+                      <v-flex grow class="headline">
+                        Provide a cover letter to your Join Request
+                      </v-flex>
+                      <v-flex shrink align-self-center>
+                          <!-- <v-btn @click="isJoinGroupDialogOpen = false" icon class="pa-0 ma-0">
+                              <v-icon color="black">close</v-icon>
+                          </v-btn> -->
+                      </v-flex>
+                    </v-layout>
+                  </v-card-title>
 
-                  <page-container>
-                    <contentbar>
-                      <v-textarea v-model="coverLetter" :rows="8" name="Cover letter" label="Cover letter"></v-textarea>
-                      <v-layout justify-center>
-                        <v-btn
-                          color="primary"
-                          :disabled="!coverLetter || isSendingJoinGroupRequest"
-                          :loading="isSendingJoinGroupRequest"
-                          @click="sendJoinGroupRequest()">
-                          Send
-                        </v-btn>
-                      </v-layout>
-                    </contentbar>
-                </page-container>
+                  <v-card-text>
+                    <v-textarea 
+                      v-model="coverLetter" 
+                      :rows="2"
+                      auto-grow
+                      name="Cover letter" 
+                      label="Cover letter">
+                    </v-textarea>
+                  </v-card-text>
+                  <v-card-actions>
+                    <v-layout column>
+                      <v-btn
+                        color="primary"
+                        class="mx-0 my-1 pa-0"
+                        :disabled="!coverLetter || isSendingJoinGroupRequest"
+                        :loading="isSendingJoinGroupRequest"
+                        @click="sendJoinGroupRequest()">
+                        Send
+                      </v-btn>
+                      <v-btn 
+                          @click="isJoinGroupDialogOpen = false"
+                          :disabled="isLoading"
+                          color="black" 
+                          flat 
+                          class="mx-0 my-1 pa-0">
+                          Cancel
+                      </v-btn>
+                    </v-layout>
+                  </v-card-actions>
                 </v-card>
               </v-dialog>
               <div v-if="isActiveJoinRequest" class="mt-3">You have sent a join request on {{new Date(currentJoinRequest.created).toDateString()}}, please wait for approval</div>

@@ -1,15 +1,14 @@
 <template>
     <page-container>
         <contentbar>
-            <div class="display-1 bold">
+            <div class="headline half-bold">
                 <router-link class="a" 
                     :to="{
                         name: 'ResearchGroupDetails',
                         params: { research_group_permlink: encodeURIComponent(group.permlink) }
                     }"
                 >{{ group.name }}</router-link>
-            
-                Research Group Wallet
+                <span class="grey--text">Group Wallet</span>
             </div>
 
             <div class="legacy-row-nowrap c-pt-8">

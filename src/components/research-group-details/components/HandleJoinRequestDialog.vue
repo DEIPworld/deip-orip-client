@@ -1,57 +1,56 @@
 <template>
     <v-dialog v-model="isOpen" persistent transition="scale-transition" max-width="700px">
-        <v-card class="">
-            <v-toolbar dark color="primary">
-                <v-btn icon dark @click="close()">
-                    <v-icon>close</v-icon>
-                </v-btn>
-                <v-toolbar-title>Join request</v-toolbar-title>
-                <v-spacer></v-spacer>
-            </v-toolbar>
-            
-            <page-container>
-                <contentbar>
-                    <div class="c-pb-4" v-if="joinRequest">
-                        <v-avatar size="40px">
-                            <img v-if="joinRequest.user.profile" v-bind:src="joinRequest.user.profile.avatar | avatarSrc(80, 80, false)" />
-                            <v-gravatar v-else :title="joinRequest.user.account.name" :email="joinRequest.user.account.name + '@deip.world'" />
-                        </v-avatar>
+        <v-card class="pa-4">
+            <v-card-title>
+                <v-layout row align-center align-baseline>
+                    <v-flex grow class="headline">
+                        Join Request
+                    </v-flex>
+                    <v-flex shrink align-self-center>
+                        <v-btn @click="close()" icon class="pa-0 ma-0">
+                            <v-icon color="black">close</v-icon>
+                        </v-btn>
+                    </v-flex>
+                </v-layout>
+            </v-card-title>
+ 
+            <v-card-text>
+                <div>
+                    <platform-avatar :user="joinRequest.user" :size="80" link-to-profile link-to-profile-class="pl-4 title"></platform-avatar>
+                </div>
+                <div class="py-4">{{joinRequest.coverLetter}}</div>
 
-                        <span class="half-bold c-pl-3">{{ joinRequest.user | fullname }}</span>
-                    </div>
+                <v-text-field
+                    label="Research Group Tokens"
+                    v-model="tokensAmount"
+                    suffix="%"
+                    mask="##"
+                ></v-text-field>
+            </v-card-text>
 
-                    <v-text-field
-                        label="Research Group Tokens"
-                        v-model="tokensAmount"
-                        suffix="%"
-                        mask="###"
-                    ></v-text-field>
+            <v-card-actions>
+                <v-layout column>
+                    <v-btn 
+                        color="primary"
+                        class="my-1 pa-0 mx-0"
+                        outline
+                        :disabled="isApprovingDisabled || isApprovingLoading"
+                        :loading="isApprovingLoading"
+                        @click="sendProposal()"
+                    >Approve and create proposal</v-btn>
 
-                    <v-textarea
-                        label="Cover letter"
-                        :disabled="true"
-                        v-model="coverLetter"
-                    ></v-textarea>
-
-                    <div class="display-flex c-pt-8">
-                        <div class="c-m-auto">
-                            <v-btn color="primary"
-                                :disabled="isApprovingDisabled || isApprovingLoading"
-                                :loading="isApprovingLoading"
-                                @click="sendProposal()"
-                            >Approve and create proposal</v-btn>
-
-                            <v-btn color="error" flat
-                                @click="denyJoinRequest()"
-                                :loading="isDenyingLoading"
-                                :disabled="isDenyingLoading"
-                            >Deny</v-btn>
-                        </div>
-                    </div>
-                </contentbar>
-            </page-container>
+                    <v-btn 
+                        color="red" 
+                        class="my-1 pa-0 mx-0"
+                        flat
+                        @click="denyJoinRequest()"
+                        :loading="isDenyingLoading"
+                        :disabled="isDenyingLoading || isApprovingLoading"
+                    >Reject</v-btn>
+                </v-layout>
+            </v-card-actions>
         </v-card>
-    </v-dialog>
+    </v-dialog>    
 </template>
 
 <script>

@@ -1,7 +1,7 @@
 <template>
     <v-card>
         <div class="blue lighten-4 c-p-4">
-            <div class="uppercase text-align-center half-bold">Send assets</div>
+            <div class="uppercase text-align-center half-bold">Send group assets</div>
         </div>
 
         <div class="c-p-4">

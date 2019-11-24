@@ -1,7 +1,38 @@
 <template>
     <div>
+        <div v-if="isJoinRequestsSectionAvailable" class="">
+            <div class="title bold pb-2" id="invites">Join requests: {{pendingJoinRequests.length}}</div>
+
+            <v-layout
+                column
+                class="py-2"
+                v-for="(join, index) in pendingJoinRequests" 
+                :key="'join-request-' + index" >
+
+                <v-layout column align-baseline>
+                    <platform-avatar :user="join.user" link-to-profile :size="40"></platform-avatar>
+                    <div class="py-2 caption half-bold">
+                        wants to join your group
+                    </div>
+                    <div class="text-xs-right full-width">
+                        <v-btn small class="mx-0 py-0 my-2" color="primary" dark outline @click="openJoinRequestDetails(join)">View</v-btn>
+                    </div>
+                </v-layout>
+                <v-divider class="ma-2" v-if="index !== pendingJoinRequests.length - 1" />
+            </v-layout>
+        </div>
+
+        <handle-join-request-dialog 
+            v-if="selectedJoinRequest"
+            :is-open="options.isHandleRequestDialogOpen"
+            :join-request="selectedJoinRequest"
+            :group-id="group.id"
+            @onClose="closeHandleJoinRequestDialog"
+        ></handle-join-request-dialog>
+
+
         <!-- ### START Research Group Details Section ### -->
-        <div class="c-pb-6">
+        <div class="py-4">
             <div class="title bold">Group expertise tokens</div>
 
             <div class="c-pt-4">
@@ -33,7 +64,7 @@
                             name: 'ResearchGroupWallet',
                             params: { research_group_permlink: this.group.permlink }
                         }"
-                    >Group wallet</router-link>
+                    >Group Wallet</router-link>
                 </div>
 
                 <div class="py-4">
@@ -70,41 +101,6 @@
                 <v-divider></v-divider>
             </div>
         </div>
-
-        <!-- ### START Research Group Join Requests Section ### -->
-        <div v-if="isJoinRequestsSectionAvailable" class="">
-            <div class="c-pv-6">
-                <div class="title bold">Join requests: {{pendingJoinRequests.length}}</div>
-
-                <div class="">
-                    <div v-for="(join, index) in pendingJoinRequests" class="legacy-row-nowrap legacy-justify-between align-center c-pt-4">
-                        <div>
-                            <v-avatar size="40px">
-                                <img v-if="join.user.profile" v-bind:src="join.user.profile.avatar | avatarSrc(80, 80, false)" />
-                                <v-gravatar v-else :title="join.user.account.name" :email="join.user.account.name + '@deip.world'" />
-                            </v-avatar>
-                            <span class="a c-pl-3">{{join.user | fullname}}</span>
-                        </div>
-                        
-                        <v-btn @click="openJoinRequestDetails(join)" flat icon color="grey" class="ma-0">
-                            <v-icon>mail_outline</v-icon>
-                        </v-btn>
-                    </div>
-                </div>
-            </div>
-            
-            <div class="sidebar-fullwidth">
-                <v-divider></v-divider>
-            </div>
-        </div>
-        <!-- ### END Research Group Join Requests Section ### -->
-
-        <handle-join-request-dialog v-if="group"
-            :is-open="options.isHandleRequestDialogOpen"
-            :join-request="selectedJoinRequest"
-            :group-id="group.id"
-            @onClose="closeHandleJoinRequestDialog"
-        ></handle-join-request-dialog>
 
         <transfer-group-deip-tokens-dialog
             :is-open="options.isTransferTokensDialogOpen"

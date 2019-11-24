@@ -1,47 +1,65 @@
 <template>
-    <v-dialog v-model="isOpen" persistent transition="scale-transition" max-width="700px">
-        <v-card class="">
-            <v-toolbar dark color="primary">
-                <v-btn icon dark @click="close()">
-                    <v-icon>close</v-icon>
-                </v-btn>
-                <v-toolbar-title>Transfer from group balance</v-toolbar-title>
-                <v-spacer></v-spacer>
-            </v-toolbar>
-            
-            <page-container>
-                <contentbar>
-                    <v-form ref="form" v-model="isFormValid" @submit.prevent>
-                        <v-text-field label="To" 
-                            ref="toUsername"
-                            v-model="form.to"
-                            :rules="[
-                                rules.required,
-                                rules.isExist
-                            ]"
-                            @input="usernameChanged"
-                            :loading="isUsernameChecking"
-                        ></v-text-field>
+    <v-dialog v-model="isOpen" persistent transition="scale-transition" max-width="600px">
+        <v-card class="pa-4">
 
-                        <v-text-field label="Amount" 
-                            v-model="form.amount"
-                            :rules="[
-                                rules.required,
-                                rules.amount
-                            ]"
-                            :suffix="'$'"
-                        ></v-text-field>
+            <v-card-title>
+                <v-layout row align-center align-baseline>
+                    <v-flex grow class="headline">
+                        Transfer from Group balance
+                    </v-flex>
+                    <v-flex shrink align-self-center>
+                        <!-- <v-btn @click="close()" icon class="pa-0 ma-0">
+                            <v-icon color="black">close</v-icon>
+                        </v-btn> -->
+                    </v-flex>
+                </v-layout>
+            </v-card-title>
+                    
+            <v-card-text>
+                <v-form class="pb-4" ref="form" v-model="isFormValid" @submit.prevent>
+                    <v-text-field label="To" 
+                        ref="toUsername"
+                        v-model="form.to"
+                        :rules="[
+                            rules.required,
+                            rules.isExist
+                        ]"
+                        @input="usernameChanged"
+                        :loading="isUsernameChecking"
+                    ></v-text-field>
 
-                        <v-btn block color="primary" 
-                            class="mt-4"
-                            @click="sendTokens()"
-                            :loading="isSending"
-                            :disabled="deipTokenBalance < form.amount || isSending"
-                            type="submit"
-                        >{{ !group.is_personal ? 'Create proposal' : 'Send' }}</v-btn>
-                    </v-form>
-                </contentbar>
-            </page-container>
+                    <v-text-field label="Amount" 
+                        v-model="form.amount"
+                        :rules="[
+                            rules.required,
+                            rules.amount
+                        ]"
+                        :suffix="'$'"
+                    ></v-text-field>
+                </v-form>
+            </v-card-text>
+
+            <v-card-actions>
+                <v-layout column>
+                    <v-btn 
+                        color="primary" 
+                        outline
+                        class="my-1 pa-0 mx-0"
+                        @click="sendTokens()"
+                        :loading="isSending"
+                        :disabled="!form.amount || deipTokenBalance < form.amount || isSending">
+                        {{ !group.is_personal ? 'Create proposal' : 'Send' }}
+                    </v-btn>
+                    <v-btn 
+                        color="black" 
+                        class="my-1 pa-0 mx-0"
+                        flat
+                        :disabled="isSending"
+                        @click="close()"
+                        >Cancel
+                    </v-btn>
+                </v-layout>
+            </v-card-actions>
         </v-card>
     </v-dialog>
 </template>
