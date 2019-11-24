@@ -11,7 +11,7 @@
       }"
     >
       <div style="position: relative">
-        <img style="width: 100%; height: 150px" :src="researchLogoSrc" />
+        <img class="ma-0" style="width: 100%; height: 150px" :src="researchLogoSrc" />
         <div v-if="research.isTop" class="top-research-label">
           <top-research-label class="pa-2"></top-research-label>
         </div>
