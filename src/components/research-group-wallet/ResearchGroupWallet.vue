@@ -9,7 +9,7 @@
                     }"
                 >{{ group.name }}</router-link>
             
-                RG Wallet
+                Research Group Wallet
             </div>
 
             <div class="legacy-row-nowrap c-pt-8">
@@ -17,7 +17,7 @@
                     <v-card>
                         <div class="info-card-list">
                             <div class="list-line">
-                                <div class="list-header-cell legacy-col-grow">Token</div>
+                                <div class="list-header-cell legacy-col-grow">Asset</div>
                                 <div class="list-header-cell width-10 text-align-center">Amount</div>
 
                                 <div class="list-header-cell token-actions">
@@ -33,13 +33,14 @@
                                 <div class="legacy-col-grow list-body-cell display-flex align-center">
                                     <!-- TODO: make service component which can manage our all SVG items -->
                                     <div style="height: 40px; width: 40px;">
-                                        <svg width="100%" height="100%" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <img width="100%" height="100%"  src="/static/usd-green-round.svg" />
+                                        <!-- <svg width="100%" height="100%" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
                                             <circle cx="20" cy="20" r="20" fill="black"/>
                                             <path fill-rule="evenodd" clip-rule="evenodd" d="M3.91431 0H6.15204V1.9375H7.271V0H9.50873V2.01611C10.6616 2.15356 11.725 2.47119 12.6993 2.96875C14.0454 3.64844 15.0944 4.61328 15.8462 5.86328C16.6067 7.10547 16.9913 8.5 17 10.0469V10.832C17 12.3945 16.6285 13.7969 15.8855 15.0391C15.1512 16.2734 14.111 17.2422 12.7648 17.9453C11.767 18.4641 10.6817 18.7915 9.50873 18.9275V21H7.271V19H6.15204V21H3.91431V19H0V1.9375H3.91431V0ZM4 5.11328V15.8359H8.2019C9.52185 15.8359 10.5358 15.418 11.2439 14.582C11.9519 13.7383 12.306 12.4883 12.306 10.832V10.0938C12.306 8.44531 11.9519 7.20312 11.2439 6.36719C10.5358 5.53125 9.50439 5.11328 8.14948 5.11328H4Z" transform="translate(13 9)" fill="#F0F1F4"/>
-                                        </svg>
+                                        </svg> -->
                                     </div>
 
-                                    <span class="subheading deip-blue-color c-pl-4 c-pr-2">DEIP Token</span>
+                                    <span class="subheading deip-blue-color c-pl-4 c-pr-2"></span>
                                 </div>
 
                                 <div class="width-10 list-body-cell text-align-center">

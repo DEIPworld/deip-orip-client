@@ -24,12 +24,11 @@
             </div>
         </sidebar-splitted-btn> -->
 
-        <div v-if="isResearchGroupMember" class="">
+        <div v-if="isResearchGroupMember">
             <div class="c-pv-6">
-                <div class="title bold">
-                    <span class="">Assets</span>
-                    
-                    <router-link class="a float-right" 
+                <div class="title bold">                    
+                    <router-link 
+                        class="a" 
                         :to="{
                             name: 'ResearchGroupWallet',
                             params: { research_group_permlink: this.group.permlink }
@@ -37,9 +36,8 @@
                     >Group wallet</router-link>
                 </div>
 
-                <div class="c-pt-4">
-                    <div class="legacy-row-nowrap legacy-align-items-center c-pb-4">
-                        <!-- TODO: make service component which can manage our all SVG items -->
+                <div class="py-4">
+                    <!-- <div class="legacy-row-nowrap legacy-align-items-center c-pb-4">
                         <div style="height: 30px; width: 30px;">
                             <svg width="100%" height="100%" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
                                 <circle cx="20" cy="20" r="20" fill="black"/>
@@ -49,12 +47,12 @@
 
                         <div class="c-pl-4 half-bold">DEIP Tokens</div>
                         <div class="legacy-col-grow text-align-right">{{ deipTokenBalance }}</div>
-                    </div>
+                    </div> -->
 
                     <v-btn class="ma-0"
                         color="primary" block
                         @click="$store.dispatch('researchGroup/changeOptions', { key: 'isTransferTokensDialogOpen', value: true })"
-                    >Transfer Tokens</v-btn>
+                    >Transfer</v-btn>
                 </div>
             </div>
             

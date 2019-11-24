@@ -26,7 +26,7 @@
                 </div>
 
                 <div class="legacy-row-nowrap">
-                    <div v-for="tvo in disciplines" class="grey--text">
+                    <div v-for="(tvo, i) in disciplines" class="grey--text" :key="'discipline-' + i">
                         <span class="c-pr-1">
                             <span>{{ tvo.disciplineName }}</span>
                         </span>
@@ -38,13 +38,13 @@
             </div>
             <v-layout align-end column>
               <v-layout row justify-space-between align-center class="mb-2">
-                Novelty:&nbsp;<squared-rating readonly v-model="_review.ratings.novelty" />
+                Novelty:<squared-rating class="pl-4" readonly v-model="_review.ratings.novelty" />
               </v-layout>
               <v-layout row justify-space-between align-center class="mb-2">
-                Technical Quality:&nbsp;<squared-rating readonly v-model="_review.ratings.technicalQuality" />
+                Technical Quality:<squared-rating class="pl-4" readonly v-model="_review.ratings.technicalQuality" />
               </v-layout>
               <v-layout row justify-space-between align-center>
-                Methodology:&nbsp;<squared-rating readonly v-model="_review.ratings.methodology" />
+                Methodology:<squared-rating class="pl-4" readonly v-model="_review.ratings.methodology" />
               </v-layout>
             </v-layout>
         </div>

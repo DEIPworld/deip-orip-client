@@ -57,7 +57,11 @@
                         
                         <div>
                             <span v-if="isCreatingReviewAvailable">
-                                <a class="a" @click="goAddReview()">Add your review</a> to make a contribution to the research.
+                                <router-link class="a" :to="{name: 'ResearchContentAddReview', params: {
+                                    group_permlink: decodeURIComponent(research.group_permlink),
+					                research_permlink: decodeURIComponent(research.permlink),
+					                content_permlink: decodeURIComponent(content.permlink),
+                                }}">Add your review</router-link> to make a contribution to the research.
                             </span>
                         </div>
                     </div>
@@ -231,9 +235,6 @@
             isCreatingReviewAvailable() {
                 const userHasReview = this.contentReviewsList.some(r => r.author.account.name === this.user.username)
                 return !this.isResearchGroupMember && !userHasReview && this.userHasExpertise && this.isPublished
-            },
-            goAddReview() {
-                this.$router.push({ name: 'ResearchContentAddReview', params: this.$route.params });
             }
         },
         

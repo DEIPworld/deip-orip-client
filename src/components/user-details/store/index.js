@@ -1,8 +1,9 @@
 import _ from 'lodash';
 import deipRpc from '@deip/deip-oa-rpc-client';
 import Vue from 'vue';
-import usersService from './../../../services/http/users';
+import usersHttp from './../../../services/http/users';
 import reviewRequestsService from './../../../services/http/reviewRequests';
+import { getEnrichedProfiles } from './../../../utils/user';
 
 const state = {
   account: undefined,
@@ -166,7 +167,7 @@ const actions = {
 
   loadUserProfile({ commit }, { username, notify } = {}) {
     commit('SET_USER_PROFILE_LOADING_STATE', true);
-    return usersService.getUserProfile(username)
+    return usersHttp.getUserProfile(username)
       .then(profile => {
         commit('SET_USER_PROFILE', profile || null);
       }, (err) => {
@@ -219,9 +220,17 @@ const actions = {
           );
         })
         return Promise.all(detailsPromises);
-      }).then(() => {
-        commit('SET_USER_REVIEW_REQUESTS', reviewRequests)
-      }).finally(() => {
+      })
+      .then(() => {
+        return getEnrichedProfiles(reviewRequests.map(r => r.requestor));
+      })
+      .then((users) => {
+        let requests = reviewRequests.map((r, i) => {
+          return { ...r, requestorProfile: users[i] }
+        });
+        commit('SET_USER_REVIEW_REQUESTS', requests);
+      })
+      .finally(() => {
         if (notify) {
           notify();
         }

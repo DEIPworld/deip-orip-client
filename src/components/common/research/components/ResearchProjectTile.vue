@@ -64,7 +64,7 @@
       </v-flex>
       <v-flex xs2 text-xs-center>
         <v-icon small color="grey lighten-1">chat_bubble</v-icon>
-        <span class="caption half-bold grey--text lighten-1">{{research.number_of_negative_reviews + research.number_of_positive_reviews}}</span>
+        <span class="caption half-bold grey--text lighten-1">{{ reviewsCount }}</span>
       </v-flex>
       <v-flex xs5 text-xs-right>
         <v-chip v-if="organization" small class="ma-0 pa-0">
@@ -166,6 +166,11 @@
 
         let seconds = Math.floor(moment.duration(start.diff(now)).asSeconds());
         return `${seconds} secs`;
+      },
+
+      reviewsCount() {
+        // todo: there is an odd bug in chain api which doubles this numbers
+        return this.research.number_of_negative_reviews + this.research.number_of_positive_reviews;
       }
 
     },

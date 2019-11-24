@@ -298,7 +298,7 @@
                           }"
                       >{{content.title}}</router-link>
                       </v-flex>
-                      <v-flex lg1 v-show="doesContentHaveReviews(content)">
+                      <v-flex lg1 text-lg-center v-show="doesContentHaveReviews(content)">
                         <v-icon size="14px">chat_bubble</v-icon>
                         <span v-show="doesContentHavePositiveReviews(content)" class="green--text medium">{{countContentReviews(content, true)}}</span>
                         <span v-show="doesContentHavePositiveReviews(content) && doesContentHaveNegativeReviews(content)">/</span>
@@ -449,7 +449,7 @@
                 <v-flex lg12>
                   <v-layout row justify-space-between>
                     <div class="rd-block-header">Reviews: {{reviewsList.length}}</div>
-                    <div>
+                    <div class="half-bold">
                       Total reviews score:
                       <span class="bold">{{totalReviewsScore}}</span>
                       <v-tooltip bottom>
@@ -467,26 +467,22 @@
                     >
                       <v-flex lg4 class="right-bordered">
                         <v-layout>
-                          <v-avatar size="80px">
-                            <img v-if="review.author.profile" v-bind:src="review.author.profile.avatar | avatarSrc(160, 160, false)" />
-                            <v-gravatar v-else :title="review.author.account.name" :email="review.author.account.name + '@deip.world'" />
-                          </v-avatar>
-                          <div class="ml-4">
+                          <platform-avatar :user="review.author" :size="80"></platform-avatar>
+                          <div class="pl-4">
                             <router-link class="a rd-reviewer__title" :to="{ name: 'UserDetails', params: { account_name: review.author.account.name }}">
                               {{ review.author | fullname }}
                             </router-link>
-                            <div v-if="review.author.profile" class="rd-reviewer__subtitle mt-2">
+                            <div v-if="review.author.profile" class="rd-reviewer__subtitle py-2">
                               <span>{{review.author | employmentOrEducation}}</span>
                               <span v-if="doesUserHaveLocation(review.author.profile)">, {{review.author | userLocation}}</span>
                             </div>
                           </div>
                         </v-layout>
                       </v-flex>
-                      <v-flex lg3 class="clickable pl-4 right-bordered" @click="goToReviewPage(review)">
-                        <div class="grey--text mb-1">{{review.created_at | dateFormat('D MMM YYYY', true)}}</div>
-                        <div v-if="review.research_content" v-on:click.stop class="bold mb-1">
-                          Review to:&nbsp;
-                          <router-link class="a" 
+                      <v-flex lg4 class="clickable px-4 right-bordered" @click="goToReviewPage(review)">
+                        <div v-if="review.research_content" v-on:click.stop class="bold">
+                          <div>Review to</div>
+                          <router-link tag="div" class="a py-2" 
                             :to="{
                               name: 'ResearchContentDetails',
                               params: {
@@ -506,20 +502,29 @@
                           >{{wod.disciplineName}} {{wod.totalWeight}}</v-flex>
                         </v-layout>
                       </v-flex>
-                      <v-flex lg5>
-                        <v-layout>
-                          <v-flex lg3 offset-lg1 class="bold">Approve bar</v-flex>
-                          <v-flex lg8>
-                            <v-layout row justify-space-between align-center class="mb-2">
-                              Novelty:&nbsp;<squared-rating readonly v-model="review.ratings.novelty" />
-                            </v-layout>
-                            <v-layout row justify-space-between align-center class="mb-2">
-                              Technical Quality:&nbsp;<squared-rating readonly v-model="review.ratings.technicalQuality" />
-                            </v-layout>
-                            <v-layout row justify-space-between align-center>
-                              Methodology:&nbsp;<squared-rating readonly v-model="review.ratings.methodology" />
-                            </v-layout>
-                          </v-flex>
+                      <v-flex lg4>
+                        <v-layout column fill-height justify-space-between pl-4>
+                          <div>
+                            <div class="bold">Approve bar</div>
+                            <div class="py-2">
+                              <v-layout row justify-space-between align-center class="mb-2">
+                                <span class="pr-2">Novelty:</span>
+                                <squared-rating readonly v-model="review.ratings.novelty" />
+                              </v-layout>
+                              <v-layout row justify-space-between align-center class="mb-2">
+                                <span class="pr-2">Technical Quality:</span>
+                                <squared-rating readonly v-model="review.ratings.technicalQuality" />
+                              </v-layout>
+                              <v-layout row justify-space-between align-center>
+                                <span class="pr-2">Methodology:</span>
+                                <squared-rating readonly v-model="review.ratings.methodology" />
+                              </v-layout>
+                            </div>
+                          </div>
+                          <div class="grey--text text-xs-right pt-2">
+                            <v-icon small>event</v-icon>
+                            {{moment(review.created_at).format("MMM D, YYYY")}}
+                          </div>
                         </v-layout>
                       </v-flex>
                     </v-layout>
@@ -655,6 +660,7 @@
               <div class="rd-sidebar-block-title">Request review from expert</div>
               <v-autocomplete
                 label="Find an expert to request a review"
+                hide-no-data
                 :append-icon="null"
                 :loading="isExpertsLoading"
                 :items="foundExperts"
@@ -686,7 +692,7 @@
               <v-btn
                 @click="requestReview()"
                 :loading="isRequestingReview"
-                :disabled="!selectedExpert"
+                :disabled="!selectedExpert || !selectedContentId"
                 color="primary"
                 outline
                 class="mx-0 mt-3"

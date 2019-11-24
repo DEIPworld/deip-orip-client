@@ -3,33 +3,50 @@
       <div>
         <!-- ### START User Profile Expertise Section ### -->
         <div v-if="reviewRequests.length">
-          <div class="title bold">Review Requests: {{reviewRequests.length}}</div>
+          <div class="title bold pb-2">Review Requests: {{reviewRequests.length}}</div>
           <v-layout
             column
-            class="mt-4"
+            class="py-2"
             v-for="(reviewRequest, index) of reviewRequests"
             :key="reviewRequest._id"
           >
-            <router-link class="a deip-blue-color bold"
-              :to="{
-                name: 'ResearchContentDetails',
-                params: {
-                  research_group_permlink: encodeURIComponent(reviewRequest.research.group_permlink),
-                  research_permlink: encodeURIComponent(reviewRequest.research.permlink),
-                  content_permlink: encodeURIComponent(reviewRequest.content.permlink)
-                }
-              }"
-            >{{reviewRequest.content.title}}</router-link>
-            <v-btn
-              color="red"
-              flat
-              class="mx-0 mt-2"
-              @click="denyReviewRequest(reviewRequest._id)"
-              :loading="reviewRequest.isDenying"
-            >Deny</v-btn>
+            <v-layout column align-baseline>
+                <platform-avatar link-to-profile :user="reviewRequest.requestorProfile"></platform-avatar>
+                <div class="py-2 caption half-bold">requests your review for research</div>
+                <router-link tag="div" class="a full-width break-word half-bold caption"
+                    :to="{ name: 'ResearchDetails', params: {
+                        research_group_permlink: encodeURIComponent(reviewRequest.research.group_permlink),
+                        research_permlink: encodeURIComponent(reviewRequest.research.permlink)
+                    }}"
+                    >{{reviewRequest.research.title}}
+                </router-link>
+
+                <v-layout row justify-space-between class="pt-2 full-width">
+                    <v-btn
+                    color="success"
+                    flat
+                    small
+                    class="ma-0 py-0 px-2"
+                    :to="{ name: 'ResearchContentDetails', params: {
+                        research_group_permlink: encodeURIComponent(reviewRequest.research.group_permlink),
+                        research_permlink: encodeURIComponent(reviewRequest.research.permlink),
+                        content_permlink: encodeURIComponent(reviewRequest.content.permlink)
+                    }}"
+                    >Proceed</v-btn>
+
+                    <v-btn
+                    color="red"
+                    flat
+                    small
+                    class="ma-0 py-0 px-2"
+                    @click="denyReviewRequest(reviewRequest._id)"
+                    :loading="reviewRequest.isDenying"
+                    >Reject</v-btn>
+                </v-layout>
+            </v-layout>
             <v-divider class="ma-2" v-if="index !== reviewRequests.length - 1" />
           </v-layout>
-          <v-divider />
+          <v-divider></v-divider>
         </div>
         <div class="mt-4">
             <div class="title bold">Expertise Tokens</div>

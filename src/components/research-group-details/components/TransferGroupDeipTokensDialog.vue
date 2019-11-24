@@ -5,7 +5,7 @@
                 <v-btn icon dark @click="close()">
                     <v-icon>close</v-icon>
                 </v-btn>
-                <v-toolbar-title>Send group assets</v-toolbar-title>
+                <v-toolbar-title>Transfer from group balance</v-toolbar-title>
                 <v-spacer></v-spacer>
             </v-toolbar>
             
@@ -29,13 +29,14 @@
                                 rules.required,
                                 rules.amount
                             ]"
-                            :suffix="'DEIP'"
+                            :suffix="'$'"
                         ></v-text-field>
 
                         <v-btn block color="primary" 
+                            class="mt-4"
                             @click="sendTokens()"
                             :loading="isSending"
-                            :disabled="isSending"
+                            :disabled="deipTokenBalance < form.amount || isSending"
                             type="submit"
                         >{{ !group.is_personal ? 'Create proposal' : 'Send' }}</v-btn>
                     </v-form>
@@ -62,7 +63,10 @@
             ...mapGetters({
                 user: 'auth/user',
                 group: 'researchGroup/group',
-            })
+            }),
+            deipTokenBalance() {
+                return this.fromAssetsToFloat(this.group.balance);
+            }
         },
 
         data() { 
@@ -85,7 +89,7 @@
                         if (formatValidationResult !== true) {
                             return formatValidationResult;
                         } else if (parseFloat(value) > this.deipTokenBalance) {
-                            return 'Amount is greater than your DEIP Token balance';
+                            return 'Amount is greater than group balance';
                         }
                         
                         return true;

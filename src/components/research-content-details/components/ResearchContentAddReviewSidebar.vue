@@ -122,9 +122,9 @@
                         });
                         this.$router.push({ 
                             name: 'ResearchContentDetails',
-                            params:  {   
-                                research_group_permlink: encodeURIComponent(this.$route.params.research_group_permlink), 
-                                research_permlink: encodeURIComponent(this.$route.params.research_permlink),
+                            params:  {
+                                research_group_permlink: encodeURIComponent(this.research.group_permlink), 
+                                research_permlink: encodeURIComponent(this.research.permlink),
                                 content_permlink: encodeURIComponent(this.content.permlink)
                             },
                             hash: "#reviews"
