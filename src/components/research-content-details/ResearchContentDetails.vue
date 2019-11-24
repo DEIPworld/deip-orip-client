@@ -80,19 +80,12 @@
                 <!-- END Research Content References section -->
 
                 <!-- START Proposal dialog section -->
-                <v-dialog v-if="research" v-model="proposeContent.isOpen" persistent transition="scale-transition" max-width="500px">
-                    <v-card class="">
-                        <v-toolbar dark color="primary">
-                            <v-btn icon dark @click="closeContentProposalDialog()">
-                                <v-icon>close</v-icon>
-                            </v-btn>
-
-                            <v-toolbar-title>Propose content for the research project</v-toolbar-title>
-                            <v-spacer></v-spacer>
-                        </v-toolbar>
-
-                        <page-container>
-                            <contentbar>
+                    <v-dialog v-if="research" v-model="proposeContent.isOpen" persistent transition="scale-transition" max-width="600px">
+                        <v-card class="pa-4">
+                            <v-card-title>
+                                <span class="headline">Propose content for Research</span>
+                            </v-card-title>
+                            <v-card-text>
                                 <div>
                                     <v-text-field
                                         label="Title"
@@ -109,14 +102,17 @@
 
                                     <v-autocomplete
                                         :items="membersList"
+                                        :menu-props="{ closeOnContentClick: true }"
                                         v-model="proposeContent.authors"
+                                        hint="You can select multiple authors"
+                                        persistent-hint
                                         placeholder="Authors"
                                         v-on:change="setDraftAuthors"
                                         multiple>
                                         <template slot="selection" slot-scope="data">
                                             <div class="legacy-row-nowrap align-center c-pl-4">
                                                 <v-avatar size="30px">
-                                                    <img v-if="data.item.profile" v-bind:src="data.item.profile.avatar | avatarSrc(30, 30, false)" />
+                                                    <img v-if="data.item.profile" v-bind:src="data.item.profile.avatar | avatarSrc(60, 60, false)" />
                                                     <v-gravatar v-else :email="data.item.account.name + '@deip.world'" />
                                                 </v-avatar>
 
@@ -129,7 +125,7 @@
                                                 <div class="legacy-row-nowrap align-center author-item" 
                                                     :class="{ 'selected-author-item': isAuthorSelected(data.item) }">
                                                     <v-avatar size="30px">
-                                                        <img v-if="data.item.profile" v-bind:src="data.item.profile.avatar | avatarSrc(30, 30, false)" />
+                                                        <img v-if="data.item.profile" v-bind:src="data.item.profile.avatar | avatarSrc(60, 60, false)" />
                                                         <v-gravatar v-else :email="data.item.account.name + '@deip.world'" />
                                                     </v-avatar>
 
@@ -139,19 +135,26 @@
                                         </template>
                                     </v-autocomplete>
 
-                                    <div class="display-flex c-pt-8">
-                                        <v-btn color="primary" 
-                                            class="c-m-auto"
-                                            :disabled="proposeContent.isLoading || !isCreatingProposalAvailable"
-                                            :loading="proposeContent.isLoading"
-                                            @click="sendContentProposal()"
-                                        >{{!isPersonalGroup ? 'Create Proposal' : 'Create Content'}}</v-btn>
-                                    </div>
                                 </div>
-                            </contentbar>
-                        </page-container>
-                    </v-card>
-                </v-dialog>
+                            </v-card-text>
+                            <v-card-actions>
+                                <v-layout column>
+                                    <v-btn color="primary" 
+                                        class="mx-0 my-1 pa-0"
+                                        :disabled="proposeContent.isLoading || !isCreatingProposalAvailable"
+                                        :loading="proposeContent.isLoading"
+                                        @click="sendContentProposal()"
+                                        >{{!isPersonalGroup ? 'Create Proposal' : 'Create Content'}}</v-btn>
+                                    <v-btn 
+                                        @click="closeContentProposalDialog()"
+                                        :disabled="proposeContent.sLoading"
+                                        color="black" 
+                                        flat 
+                                        class="mx-0 my-1 pa-0">Cancel</v-btn>
+                                </v-layout>
+                            </v-card-actions>
+                        </v-card>
+                    </v-dialog>
                 <!-- END Proposal dialog section -->
             </div>
         </div>
@@ -279,16 +282,23 @@
                                     message: "New Content Proposal has been created successfuly!"
                                 });
                             }, (err) => {
-                                console.log(err) 
-                                this.$store.dispatch('layout/setError', {
-                                    message: "An error occurred while creating proposal, please try again later"
-                                });
+                                console.log(err);
+                                if (err.response && err.response.status == 409) {
+                                    alert("This file was already uploaded. Please vote for existing proposal or propose file again if its existing proposal has expired.");
+                                } else {
+                                    this.$store.dispatch('layout/setError', { 
+                                        message: "An error occurred while creating proposal, please try again later"
+                                    });
+                                }
                             })
                             .finally(() => {
                                 this.proposeContent.isOpen = false;
                                 this.proposeContent.isLoading = false;
                                 setTimeout(() => {
-                                    self.$router.push({ name: 'ResearchFeed' });
+                                    this.$router.push({ name: 'ResearchDetails', params: {
+                                        research_group_permlink: encodeURIComponent(this.research.group_permlink),
+                                        research_permlink: encodeURIComponent(this.research.permlink)
+                                    }});
                                 }, 1500);
                             })
                     })

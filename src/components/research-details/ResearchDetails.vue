@@ -349,7 +349,7 @@
                   </template>
                   <v-card>
                     <v-card-text class="pl-4 pa-0">
-                      <v-layout justify-space-between>
+                      <v-layout align-baseline justify-space-between>
                         <div>
                           <span>
                             <v-icon size="18px">date_range</v-icon>

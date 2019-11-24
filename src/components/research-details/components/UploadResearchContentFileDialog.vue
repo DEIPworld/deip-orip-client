@@ -14,7 +14,7 @@
         <v-dialog v-if="research" v-model="isOpen" persistent transition="scale-transition" max-width="600px">
             <v-card class="pa-4">
               <v-card-title>
-                <span class="headline">Propose content for the Research</span>
+                <span class="headline">Propose content for Research</span>
               </v-card-title>
               <v-card-text>
                     <div v-if="researchGroupMembersList.length">
@@ -35,6 +35,8 @@
                             :items="researchGroupMembersList"
                             :menu-props="{ closeOnContentClick: true }"
                             v-model="authors"
+                            hint="You can select multiple authors"
+                            persistent-hint
                             placeholder="Authors"
                             multiple>
                             
@@ -193,7 +195,7 @@
                     }, (err) => {
                         console.log(err);
                         if (err.response && err.response.status == 409) {
-                            alert("This file was already uploaded. Please vote for existing proposal or propose it again.");
+                            alert("This file was already uploaded. Please vote for existing proposal or propose file again if its existing proposal has expired.");
                         } else {
                             this.$store.dispatch('layout/setError', { 
                                 message: "An error occurred while creating proposal, please try again later"
