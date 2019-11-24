@@ -26,7 +26,8 @@
 </template>
 
 <script>
-    import { mapGetters } from 'vuex'
+    import { mapGetters } from 'vuex';
+    import { isLoggedIn } from './utils/auth';
 
     export default {
         name: 'App',
@@ -40,6 +41,7 @@
 
         computed: {
             ...mapGetters({
+                user: 'auth/user',
                 success: 'layout/success',
                 error: 'layout/error'
             })
@@ -67,6 +69,13 @@
         },
         
         created() {
+            const pollNotifications = () => {
+                if (isLoggedIn()) {
+                    this.$store.dispatch('auth/loadNotifications');
+                }
+            };
+            pollNotifications();
+            setInterval(pollNotifications, 10000);
         }
     }
 </script>

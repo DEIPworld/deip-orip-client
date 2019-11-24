@@ -379,14 +379,9 @@
             getContentType,
             getDiscipline: getNodeById
         },
+        
         watch: {
-            '$route' (to, from) {
-                this.$store.dispatch('auth/loadNotifications');
-            }
-        },
 
-        created() {
-            this.$store.dispatch('auth/loadNotifications');
         }
     }
 </script>
