@@ -1,27 +1,19 @@
 <template>
-    <v-dialog v-model="isOpen" persistent transition="scale-transition" max-width="700px">
-        <v-card class="">
-            <v-toolbar dark color="primary">
-                <v-btn icon dark @click="close()">
-                    <v-icon>close</v-icon>
-                </v-btn>
-                <v-toolbar-title>Invite a researcher</v-toolbar-title>
-                <v-spacer></v-spacer>
-            </v-toolbar>
-            
-            <page-container>
-                <contentbar>
-
-                    <div v-if="allUsers">
+                <v-dialog v-model="isOpen" persistent transition="scale-transition" max-width="600px">
+                    <v-card class="pa-4">
+                    <v-card-title>
+                        <span class="headline">Invite user to Research Group</span>
+                    </v-card-title>
+                    <v-card-text>
                         <v-autocomplete
-                            :items="allUsers"
+                            :items="users"
                             v-model="selectedUser"
                             placeholder="Researcher"
                         >
                             <template slot="selection" slot-scope="data">
                                 <div class="legacy-row-nowrap align-center c-pl-4">
                                     <v-avatar size="30px">
-                                        <img v-if="data.item.profile" v-bind:src="data.item.profile.avatar | avatarSrc(30, 30, false)" />
+                                        <img v-if="data.item.profile" v-bind:src="data.item.profile.avatar | avatarSrc(60, 60, false)" />
                                         <v-gravatar v-else :email="data.item.account.name + '@deip.world'" />
                                     </v-avatar>
                                     <span class="deip-blue-color c-pl-3">{{ data.item | fullname }}</span>
@@ -31,7 +23,7 @@
                             <template slot="item" slot-scope="data">
                                 <div class="legacy-row-nowrap align-center">
                                     <v-avatar size="30px">
-                                        <img v-if="data.item.profile" v-bind:src="data.item.profile.avatar | avatarSrc(30, 30, false)" />
+                                        <img v-if="data.item.profile" v-bind:src="data.item.profile.avatar | avatarSrc(60, 60, false)" />
                                         <v-gravatar v-else :email="data.item.account.name + '@deip.world'" />
                                     </v-avatar>
                                     <span class="deip-blue-color c-pl-3">{{ data.item | fullname }}</span>
@@ -47,30 +39,33 @@
                         ></v-text-field>
 
                         <v-textarea
-                            label="Cover letter" 
+                            label="Invitation letter" 
                             auto-grow
-                            rows="3"
+                            rows="2"
                             v-model="coverLetter"
                         ></v-textarea>
+                    </v-card-text>
 
-                        <div class="display-flex c-pt-8">
-                            <v-btn color="primary" 
-                                class="c-m-auto"
+                    <v-card-actions>
+                        <v-layout column>
+                            <v-btn 
+                                color="primary" 
+                                class="mx-0 my-1 pa-0"
                                 :disabled="isDisabled || isLoading"
                                 :loading="isLoading"
                                 @click="sendProposal()"
                             >Create proposal</v-btn>
-                        </div>
-                    </div>
 
-                    <div class="display-flex" v-else>
-                        <v-progress-circular class="c-m-auto" indeterminate color="primary"></v-progress-circular>
-                    </div>
-                
-                </contentbar>
-            </page-container>
-        </v-card>
-    </v-dialog>
+                            <v-btn 
+                                @click="close()"
+                                :disabled="isLoading"
+                                color="black" 
+                                flat 
+                                class="mx-0 my-1 pa-0">Cancel</v-btn>
+                        </v-layout>
+                    </v-card-actions>
+                </v-card>
+            </v-dialog>
 </template>
 
 <script>
@@ -85,26 +80,20 @@
         props: {
             isOpen: { required: true, type: Boolean },
             groupId: { required: true, type: Number },
-            groupMembers: { required: true, type: Array }
+            users: { required: true, type: Array, default: () => [] },
         },
         computed: {
             isDisabled() {
                 return _.isEmpty(this.selectedUser) 
                     || _.isEmpty(this.tokensAmount) 
                     || !_.isNumber( parseInt(this.tokensAmount) );
-            },
-            ...mapGetters({
-                user: 'auth/user'
-            })
+            }
         },
         data() { 
             return {
-                allUsers: undefined,
-
                 selectedUser: undefined,
                 tokensAmount: '',
                 coverLetter: '',
-
                 isLoading: false
             }
         },
@@ -139,22 +128,9 @@
         },
         watch: {
             isOpen(newVal, oldVal) {
-                if (newVal) {
-                    this.selectedUser = undefined;
-                    this.tokensAmount = '';
-                    this.coverLetter = '';
-
-                    deipRpc.api.getAllAccountsAsync()
-                        .then(accounts => {
-                            const invitees = accounts.filter(a => !this.groupMembers.some(memberUsername => memberUsername === a.name)).map(a => a.name);
-                            return getEnrichedProfiles(invitees);
-                        })
-                        .then((users) => {
-                             this.allUsers = users;
-                        })
-                } else {
-                    this.allUsers = undefined;
-                }
+                this.selectedUser = undefined;
+                this.tokensAmount = '';
+                this.coverLetter = '';
             }
         }
     };

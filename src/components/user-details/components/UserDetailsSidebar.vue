@@ -1,8 +1,81 @@
 <template>
-    <div class="">
+    <div>
       <div>
+    <div v-if="isOwner && hasInvites">
+        <div class="title bold pb-2" id="invites">Invites: {{invites.length}}</div>
+            <v-layout
+                column
+                class="py-2"
+                v-for="(invite, index) of invites"
+                :key="'invite-' + index">
+
+                <v-layout column align-baseline>
+                    <router-link tag="div" class="a full-width break-word half-bold caption"
+                        :to="{ name: 'ResearchGroupDetails', params: {
+                            research_group_permlink: encodeURIComponent(invite.group.permlink),
+                        }}"
+                        >{{invite.group.name}}
+
+                        <span class="a">{{invite.group.name}}</span>
+                    </router-link>
+                    <div class="py-2 caption half-bold">
+                        invites you to join them with
+                        <span class="grey--text bold">{{convertToPercent(invite.research_group_token_amount)}}%</span>
+                        of group weight
+                    </div>
+                    <div class="text-xs-right full-width">
+                        <v-btn small class="mx-0 py-0 my-2" color="primary" dark outline @click="openInviteDetailsDialog(invite, index)">View</v-btn>
+                    </div>
+
+                </v-layout>
+                <v-divider class="ma-2" v-if="index !== reviewRequests.length - 1" />
+            </v-layout>
+
+            <v-dialog v-if="inviteDetailsDialog.item" v-model="inviteDetailsDialog.isShown" persistent max-width="600px">
+                <v-card class="pa-4">
+                    <v-card-title>
+                        <v-layout row align-center align-baseline>
+                            <v-flex grow class="headline">
+                                {{inviteDetailsDialog.item.group.name}}
+                            </v-flex>
+                            <v-flex shrink align-self-center>
+                                <v-btn @click="closeInviteDetailsDialog()" icon class="pa-0 ma-0">
+                                    <v-icon color="black">close</v-icon>
+                                </v-btn>
+                            </v-flex>
+                        </v-layout>
+                    </v-card-title>
+                    <v-card-text>
+                        <div>{{inviteDetailsDialog.item.cover_letter}}</div>
+                        <div class="subheading pt-4 half-bold">Group weight: <span class="grey--text">{{convertToPercent(inviteDetailsDialog.item.research_group_token_amount)}}%</span></div>     
+                    </v-card-text>
+                    <v-card-actions>
+                        <v-layout column>
+                            <v-btn
+                                color="success"
+                                outline
+                                class="my-1 pa-0 mx-0"
+                                @click="approveInvite()" 
+                                :disabled="inviteDetailsDialog.isApprovingInvite || inviteDetailsDialog.isRejectingInvite"
+                                :loading="inviteDetailsDialog.isApprovingInvite"
+                            >Accept</v-btn>
+                            <v-btn
+                                color="red"
+                                flat
+                                class="my-1 pa-0 mx-0"
+                                @click="rejectInvite()"
+                                :disabled="inviteDetailsDialog.isApprovingInvite || inviteDetailsDialog.isRejectingInvite" 
+                                :loading="inviteDetailsDialog.isRejectingInvite"
+                            >Reject</v-btn>
+                        </v-layout>
+                    </v-card-actions>
+                </v-card>
+            </v-dialog>
+        </div>
+        <!-- ### END User Profile Invites Section ### -->
+
         <!-- ### START User Profile Expertise Section ### -->
-        <div v-if="reviewRequests.length">
+        <div v-if="isOwner && hasReviewRequests">
           <div class="title bold pb-2" id="review-requests">Review Requests: {{reviewRequests.length}}</div>
           <v-layout
             column
@@ -219,49 +292,6 @@
         </div>
         <!-- ### END User Profile Info Section ### -->
 
-
-        <!-- ### START User Profile Invites Section ### -->
-        <div v-if="isOwner && hasInvites" id="invites" class="c-mt-4">
-            <div class="sidebar-fullwidth"><v-divider></v-divider></div>
-            <div class="title bold c-pt-4">Invites: {{invites.length}}</div>
-            <div class="c-pb-4">
-                <div v-for="(invite, index) in invites" class="c-pt-2 c-pb-4 invite-item">
-                    <div class="legacy-row text-align-center c-pt-4 c-pb-2">
-                        <router-link :to="`/${invite.group.permlink}/group-details`" style="text-decoration: none">
-                            <span class="a">{{invite.group.name}}</span>
-                            <span class="grey--text c-pl-1">({{convertToPercent(invite.research_group_token_amount)}}%)</span>
-                        </router-link>
-                    </div>
-                    <div class="text-align-center c-pt-2">
-                        <v-tooltip class="c-pr-2" bottom>
-                            <v-btn slot="activator" @click="approveInvite(invite)" 
-                                :disabled="isApprovingInvite || isRejectingInvite" small flat color="green" class="ma-0">
-                                <span>Accept</span>
-                            </v-btn>
-                            <span>Accept invite</span>
-                        </v-tooltip>
-                        <v-tooltip class="c-pl-2" bottom>
-                            <v-btn slot="activator" @click="showRejectInviteDialog(invite)" 
-                                :disabled="isApprovingInvite || isRejectingInvite" small flat color="red" class="ma-0">
-                                <span>Reject</span>
-                            </v-btn>
-                            <span>Reject invite</span>
-                        </v-tooltip>
-                    </div>
-                </div>
-                <confirm-action-dialog
-                    :meta="rejectInviteMeta"
-                    :title="``" :text="`Are you sure you want to reject this invite ?`"
-                    @confirmed="rejectInviteMeta.isShown = false; rejectInvite(rejectInviteMeta.item);" 
-                    @canceled="rejectInviteMeta.isShown = false">
-                </confirm-action-dialog>
-            </div>
-        </div>
-        <!-- <div class="py-2 text-xs-right">
-            <v-btn class="ma-0 pa-0" small flat  @click="clearLocalStorageItems()">Clear</v-btn>
-        </div> -->
-        <!-- ### END User Profile Invites Section ### -->
-
         <user-claim-expertise-dialog
             :is-shown="isClaimExpertiseDialogShown"
             @close="closeClaimExpertiseDialog"
@@ -291,10 +321,13 @@
                 editedBirthdayMenu: false,
                 editedRegisteredDate: null,
                 isEditingPersonalInfo: false,
-
-                isApprovingInvite: false,
-                isRejectingInvite: false,
-                rejectInviteMeta: { isShown: false, item: null, index: null }
+                inviteDetailsDialog: { 
+                    isShown: false, 
+                    item: null, 
+                    isApprovingInvite: false, 
+                    isRejectingInvite: false, 
+                    index: null 
+                }
             };
         },
         computed: {
@@ -321,6 +354,9 @@
             },
             hasInvites() {
                 return this.invites.length;
+            },
+            hasReviewRequests() {
+                return this.reviewRequests.length;
             }
         },
         methods: {
@@ -375,9 +411,21 @@
                     })
             },
 
-            approveInvite(invite) {
-                this.isApprovingInvite = true;
-                
+            openInviteDetailsDialog(invite, index) {
+                this.inviteDetailsDialog.isShown = true;
+                this.inviteDetailsDialog.item = invite;
+                this.inviteDetailsDialog.index = index;
+            },
+
+            closeInviteDetailsDialog(invite, index) {
+                this.inviteDetailsDialog.isShown = false;
+                this.inviteDetailsDialog.isApprovingInvite = false;
+                this.inviteDetailsDialog.isRejectingInvite = false;
+            },
+
+            approveInvite() {
+                let invite = this.inviteDetailsDialog.item;
+                this.inviteDetailsDialog.isApprovingInvite = true;
                 approveInvite(
                     invite.id,
                     this.currentUser.username
@@ -395,19 +443,13 @@
                     });
                     console.log(err);
                 }).finally(() => {
-                    this.isApprovingInvite = false;
+                    this.inviteDetailsDialog.isApprovingInvite = false;
                 })
             },
 
-            showRejectInviteDialog(invite, index) {
-                this.rejectInviteMeta.isShown = true;
-                this.rejectInviteMeta.item = invite;
-                this.rejectInviteMeta.index = index;
-            },
-
-            rejectInvite(invite) {
-                this.isRejectingInvite = true;
-
+            rejectInvite() {
+                let invite = this.inviteDetailsDialog.item;
+                this.inviteDetailsDialog.isRejectingInvite = true;
                 rejectInvite(
                     invite.id,
                     this.currentUser.username
@@ -423,8 +465,8 @@
                     });
                     console.log(err);
                 }).finally(() => {
-                    this.isRejectingInvite = false;
-                    this.rejectInviteMeta.isShown = false
+                    this.inviteDetailsDialog.isRejectingInvite = false;
+                    this.inviteDetailsDialog.isShown = false
                 })
             },
 

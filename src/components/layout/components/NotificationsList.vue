@@ -111,7 +111,7 @@
                         {{ notification.meta.groupInfo.name }}
                         </router-link>
                         <span class="clickable" @click="clickInvitationNotification(notification)">
-                            group has invited you to join them
+                            group invites you to join them
                         </span>
                     </div>
                     <div class="grey--text caption c-mt-1">

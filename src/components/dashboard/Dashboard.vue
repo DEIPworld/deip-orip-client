@@ -71,11 +71,11 @@
                               </v-layout>
                               <v-layout row justify-space-between py-1 class="column-text-item">
                                 <span>My deals</span>
-                                <span><v-chip class="ma-0" color="#826AF9" text-color="white">3</v-chip></span>
+                                <span><v-chip class="ma-0" color="#826AF9" text-color="white">0</v-chip></span>
                               </v-layout>
                               <v-layout row justify-space-between py-1 class="column-text-item">
                                 <span>Explore investment opportunities</span>
-                                <span><v-chip class="ma-0" color="#826AF9" text-color="white">12</v-chip></span>
+                                <span><v-chip class="ma-0" color="#826AF9" text-color="white">30</v-chip></span>
                               </v-layout>
                             </v-layout>
 
@@ -105,11 +105,11 @@
                             <v-layout column class="pb-5">
                               <v-layout row justify-space-between py-1 class="column-text-item">
                                 <span>My Reviews</span>
-                                <span class="primary--text body-2">10</span>
+                                <span class="primary--text body-2">0</span>
                               </v-layout>
                               <v-layout row justify-space-between py-1 class="column-text-item">
                                 <span>Invites</span>
-                                <span class="primary--text body-2">3</span>
+                                <span class="primary--text body-2">0</span>
                               </v-layout>
                               <v-layout row justify-space-between py-1 class="column-text-item">
                                 <span>Reviews on my research</span>
@@ -182,7 +182,7 @@
                                     <a href="https://app.deip.co" class="a" style="color: #4e64db;" target="_blank">NDA contracts</a>
                                   </v-layout>
                                 </span>
-                                <span class="primary--text body-2">10</span>
+                                <span class="primary--text body-2">0</span>
                               </v-layout>
                               <v-layout row justify-space-between py-1 class="column-text-item">
                                 <span class="body-2">
@@ -191,7 +191,7 @@
                                     <a href="https://app.deip.co" class="a" style="color: #4e64db;" target="_blank">IP certificates</a>
                                   </v-layout>
                                 </span>
-                                <span class="primary--text body-2">3</span>
+                                <span class="primary--text body-2">0</span>
                               </v-layout>
                             </v-layout>
                           </v-flex>
@@ -282,7 +282,7 @@ export default {
       selectedResearchToReview: null,
       isRequestingReview: false,
 
-      blackList: ['regacc'],
+      blackList: ['regacc', 'initdelegate'],
       isExpertsLoading: false,
       expertsSearch: "",
       selectedExpert: null,

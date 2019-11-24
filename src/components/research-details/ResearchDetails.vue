@@ -347,7 +347,7 @@
                       </v-flex>
                     </v-layout>
                   </template>
-                  <v-card>
+                  <v-card class="elevation-0">
                     <v-card-text class="pl-4 pa-0">
                       <v-layout align-baseline justify-space-between>
                         <div>
@@ -1044,7 +1044,7 @@
       },
       experts() {
         const blackList = [
-          'regacc', 'hermes', this.user.username,
+          'regacc', 'hermes', 'initdelegate', this.user.username,
           ...this.researchGroupMembersList.map(m => m.account.name)
         ];
         return this.expertsList.filter(e => !blackList.includes(e.account.name));
