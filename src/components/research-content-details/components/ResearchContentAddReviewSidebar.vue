@@ -48,6 +48,7 @@
             <div>
                 <v-btn color="primary" class="width-9"
                         @click="publishReview()"
+                        :disabled="isReviewPublishingDisabled"
                         :loading="isLoading"
                 >Publish</v-btn>
             </div>
@@ -63,7 +64,7 @@
             </v-card>
             <div class="orange--text c-pt-4 text-align-center">
                 <v-icon color="orange">warning</v-icon>
-                100% of your Expertise Tokens will be locked for 24 hours after you have published the review
+                100% of your Expertise Tokens will be locked for 24 hours after you will have published the review
             </div>
         </div>
     </div>
@@ -98,6 +99,9 @@
                     ?  this.userExperise.filter(exp => 
                             this.research.disciplines.find(d => d.id == exp.discipline_id))
                     : false
+            },
+            isReviewPublishingDisabled() {
+                return !this.novelty || !this.technicalQuality || !this.methodology;
             }
         },
 

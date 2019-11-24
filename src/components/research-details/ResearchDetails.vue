@@ -640,11 +640,13 @@
           <div class="rd-sidebar-block-title my-4 px-4">Citations: {{researchReferencesList.length + research.id}}</div>
           <v-divider />
           <v-layout column class="my-4 mx-4">
-            <div class="rd-sidebar-block-title">Tokenization</div>
-            <div v-if="isResearchTokenized" class="mt-3">10000 research tokens issued</div>
+            <div class="rd-sidebar-block-title mb-3">Tokenization</div>
+            <div v-if="isResearchTokenized">10000 research tokens issued</div>
             <v-btn
               v-else-if="isResearchGroupMember"
               class="mx-0 mt-3"
+              color="primary"
+              large
               :loading="isResearchTokenization"
               @click="onTokenizeResearchClick()"
             >Tokenize research</v-btn>
@@ -657,54 +659,77 @@
               @canceled="tokenizationConfirmDialog.isShown = false">
             </confirm-action-dialog>
           </v-layout>
-          <template v-if="contentList.length">
-            <v-divider />
-            <v-layout column class="my-4 mx-4">
-              <div class="rd-sidebar-block-title">Request review from expert</div>
-              <v-autocomplete
-                label="Find an expert to request a review"
-                hide-no-data
-                :append-icon="null"
-                :loading="isExpertsLoading"
-                :items="foundExperts"
-                item-text="name"
-                item-value="user"
-                :search-input.sync="expertsSearch"
-                v-on:keyup="queryExperts()"
-                v-model="selectedExpert"
-              />
-              <div v-if="!selectedExpert">
-                <v-layout row>
-                  <platform-avatar :size="40" v-for="(expert, i) in experts.slice(0, 6)" :key="'expert-' + i" :user="expert" class="expert-avatar mr-2" ></platform-avatar>
-                </v-layout>
+          <v-divider />
+
+          <v-dialog v-if="contentList.length" v-model="requestExpertReviewDialog.isShown" persistent max-width="600px">
+            <template v-slot:activator="{ on }">
+              <div class="my-4 mx-4">
+                <div class="rd-sidebar-block-title mb-3">Expert Review</div>
+                <v-btn large block color="primary" dark v-on="on">Request Review</v-btn>
               </div>
-              <template v-else>
-                <platform-avatar :user="selectedExpert" :size="40" link-to-profile link-to-profile-class="pl-3"></platform-avatar>
-                <div v-if="$options.filters.employmentOrEducation(selectedExpert)">
-                  <div class="py-2 body-2">{{selectedExpert | employmentOrEducation}}</div>
-                </div>
-              </template>
-              <v-select
-                v-if="contentListToReview.length"
-                class="mt-3"
-                label="Select a content to request review"
-                item-text="title"
-                item-value="id"
-                :disabled="!selectedExpert"
-                :items="contentListToReview"
-                v-model="selectedContentId"
-              />
-              <span v-else>There are no content to review for selected expert</span>
-              <v-btn
-                @click="requestReview()"
-                :loading="isRequestingReview"
-                :disabled="isRequestingReviewDisabled"
-                color="primary"
-                outline
-                class="mx-0 mt-3"
-              >Request Review</v-btn>
-            </v-layout>
-          </template>
+            </template>
+            <v-card class="pa-4">
+              <v-card-title>
+                <span class="headline">Request review from an Expert</span>
+              </v-card-title>
+              <v-card-text>
+                <v-layout column>
+                  <v-autocomplete
+                    label="Find an expert to request a review"
+                    hide-no-data
+                    :append-icon="null"
+                    :loading="isExpertsLoading"
+                    :items="foundExperts"
+                    item-text="name"
+                    item-value="user"
+                    :search-input.sync="expertsSearch"
+                    v-on:keyup="queryExperts()"
+                    v-model="selectedExpert"
+                  />
+                  <div v-if="!selectedExpert">
+                    <v-layout row>
+                      <platform-avatar :size="40" v-for="(expert, i) in experts.slice(0, 6)" :key="'expert-' + i" :user="expert" class="expert-avatar mr-2" ></platform-avatar>
+                    </v-layout>
+                  </div>
+                  <template v-else>
+                    <platform-avatar :user="selectedExpert" :size="40" link-to-profile link-to-profile-class="pl-3"></platform-avatar>
+                    <div v-if="$options.filters.employmentOrEducation(selectedExpert)">
+                      <div class="py-2 body-2">{{selectedExpert | employmentOrEducation}}</div>
+                    </div>
+                  </template>
+                  <v-select
+                    v-if="contentListToReview.length"
+                    class="mt-3"
+                    label="Select a content to request review"
+                    item-text="title"
+                    item-value="id"
+                    :disabled="!selectedExpert"
+                    :items="contentListToReview"
+                    v-model="selectedContentId"
+                  />
+                  <span v-else>There are no content to review for selected expert</span>
+                </v-layout>
+              </v-card-text>
+              <v-card-actions>
+                <v-layout column>
+                  <v-btn
+                    @click="requestReview()"
+                    :loading="isRequestingReview"
+                    :disabled="isRequestingReviewDisabled"
+                    outline
+                    color="primary"
+                    class="mx-0 my-1 pa-0"
+                  >Request</v-btn>
+                  <v-btn 
+                    @click="requestExpertReviewDialog.isShown = false"
+                    color="black" 
+                    flat 
+                    class="mx-0 my-1 pa-0">Cancel</v-btn>
+                </v-layout>
+              </v-card-actions>
+            </v-card>
+          </v-dialog>
+
         </v-flex>
       </v-layout>
     </div>
@@ -733,6 +758,7 @@
       return {
         tokenizationConfirmDialog: { isShown: false, isConfirming: false },
         investmentConfirmDialog: { isShown: false, isConfirming: false },
+        requestExpertReviewDialog: { isShown: false },
 
         groupLink: this.$route.params.research_group_permlink,
 
@@ -761,7 +787,7 @@
         isExpertsLoading: false,
         expertsSearch: '',
         foundExperts: [],
-        isRequestingReview: false,
+        isRequestingReview: false
       }
     },
 
@@ -1305,11 +1331,11 @@
           contentId: this.selectedContentId,
           expert: this.selectedExpert.account.name,
         }).then(() => {
-          this.$store.dispatch('layout/setSuccess', { message: 'Review has been requested' });
+          this.$store.dispatch('layout/setSuccess', { message: 'Request for the review has been sent successfully' });
           this.selectedExpert = null;
           this.selectedContentId = null;
         }).catch((err) => {
-          let errMsg = 'Error while requesting review. Please try again later';
+          let errMsg = 'An error occurred while requesting the review. Please try again later';
           if (err.response && err.response.data) {
             errMsg = err.response.data;
           }
@@ -1319,6 +1345,7 @@
         })
         .finally(() => {
           this.isRequestingReview = false;
+          this.requestExpertReviewDialog = false;
         });
       },
       tokenizeResearch() {

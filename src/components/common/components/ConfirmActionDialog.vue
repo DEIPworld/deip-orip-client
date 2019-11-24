@@ -6,7 +6,7 @@
         <v-card-text>{{text}}</v-card-text>
         <v-card-actions class="mt-2">
           <v-spacer></v-spacer>
-          <v-btn color="primary lighten-1" flat :disabled="meta.isConfirming" @click.native="cancel">{{cancelText}}</v-btn>
+          <v-btn color="black" flat :disabled="meta.isConfirming" @click.native="cancel">{{cancelText}}</v-btn>
           <v-btn color="green lighten-1" flat :disabled="meta.isConfirming" :loading="meta.isConfirming" @click.native="confirm">{{confirmText}}</v-btn>
         </v-card-actions>
       </v-card>
