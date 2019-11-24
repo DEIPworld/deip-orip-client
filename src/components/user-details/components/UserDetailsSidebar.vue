@@ -12,14 +12,15 @@
           >
             <v-layout column align-baseline>
                 <platform-avatar link-to-profile :user="reviewRequest.requestorProfile"></platform-avatar>
-                <div class="py-2 caption half-bold">requests your review for research</div>
-                <router-link tag="div" class="a full-width break-word half-bold caption"
-                    :to="{ name: 'ResearchDetails', params: {
+                <div class="py-2 caption half-bold">requests your review for "{{reviewRequest.research.title}}" research</div>
+                <!-- <router-link tag="div" class="a full-width break-word half-bold caption"
+                    :to="{ name: 'ResearchContentDetails', params: {
                         research_group_permlink: encodeURIComponent(reviewRequest.research.group_permlink),
-                        research_permlink: encodeURIComponent(reviewRequest.research.permlink)
+                        research_permlink: encodeURIComponent(reviewRequest.research.permlink),
+                        content_permlink: encodeURIComponent(reviewRequest.content.permlink)
                     }}"
-                    >{{reviewRequest.research.title}}
-                </router-link>
+                    >{{reviewRequest.content.title}}
+                </router-link> -->
 
                 <v-layout row justify-space-between class="pt-2 full-width">
                     <v-btn

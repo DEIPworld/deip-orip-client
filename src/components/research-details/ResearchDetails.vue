@@ -449,7 +449,7 @@
                 <v-flex lg12>
                   <v-layout row justify-space-between>
                     <div class="rd-block-header">Reviews: {{reviewsList.length}}</div>
-                    <div class="half-bold">
+                    <div class="half-bold subheading">
                       Total reviews score:
                       <span class="bold">{{totalReviewsScore}}</span>
                       <v-tooltip bottom>
@@ -466,20 +466,23 @@
                       class="my-4"
                     >
                       <v-flex lg4 class="right-bordered">
-                        <v-layout>
-                          <platform-avatar :user="review.author" :size="80"></platform-avatar>
-                          <div class="pl-4">
-                            <router-link class="a rd-reviewer__title" :to="{ name: 'UserDetails', params: { account_name: review.author.account.name }}">
-                              {{ review.author | fullname }}
-                            </router-link>
-                            <div v-if="review.author.profile" class="rd-reviewer__subtitle py-2">
-                              <span>{{review.author | employmentOrEducation}}</span>
-                              <span v-if="doesUserHaveLocation(review.author.profile)">, {{review.author | userLocation}}</span>
+                        <v-layout column fill-height justify-space-between>
+                          <v-layout row>
+                            <platform-avatar :user="review.author" :size="80"></platform-avatar>
+                            <div class="pl-4">
+                              <router-link class="a rd-reviewer__title" :to="{ name: 'UserDetails', params: { account_name: review.author.account.name }}">
+                                {{ review.author | fullname }}
+                              </router-link>
+                              <div v-if="review.author.profile" class="rd-reviewer__subtitle py-2">
+                                <span>{{review.author | employmentOrEducation}}</span>
+                                <span v-if="doesUserHaveLocation(review.author.profile)">, {{review.author | userLocation}}</span>
+                              </div>
                             </div>
-                          </div>
+                          </v-layout>
+                          <v-btn small @click="goToReviewPage(review)" outline>See review</v-btn>
                         </v-layout>
                       </v-flex>
-                      <v-flex lg4 class="clickable px-4 right-bordered" @click="goToReviewPage(review)">
+                      <v-flex lg4 class="px-4 right-bordered">
                         <div v-if="review.research_content" v-on:click.stop class="bold">
                           <div>Review to</div>
                           <router-link tag="div" class="a py-2" 
@@ -499,7 +502,7 @@
                             :key="wod.disciplineName"
                             class="rd-review-eci mt-1"
                             lg12
-                          >{{wod.disciplineName}} {{wod.totalWeight}}</v-flex>
+                          >{{wod.disciplineName}}: {{wod.totalWeight}}</v-flex>
                         </v-layout>
                       </v-flex>
                       <v-flex lg4>
@@ -682,17 +685,20 @@
                 </div>
               </template>
               <v-select
+                v-if="contentListToReview.length"
                 class="mt-3"
                 label="Select a content to request review"
                 item-text="title"
                 item-value="id"
-                :items="contentList"
+                :disabled="!selectedExpert"
+                :items="contentListToReview"
                 v-model="selectedContentId"
               />
+              <span v-else>There are no content to review for selected expert</span>
               <v-btn
                 @click="requestReview()"
                 :loading="isRequestingReview"
-                :disabled="!selectedExpert || !selectedContentId"
+                :disabled="isRequestingReviewDisabled"
                 color="primary"
                 outline
                 class="mx-0 mt-3"
@@ -780,6 +786,17 @@
         userContributionsList: 'rd/userContributionsList',
         userJoinRequests: 'auth/userJoinRequests',
       }),
+
+      contentListToReview() {
+        let expert = this.selectedExpert;
+        if (!expert) return this.contentList;
+        let expertReviews = this.reviewsList.filter(r => r.author.account.name == expert.account.name);
+        return this.contentList.filter(content => !expertReviews.some(r => r.research_content_id == content.id));
+      },
+
+      isRequestingReviewDisabled() {
+        return !this.selectedExpert || this.selectedContentId == null;
+      },
 
       timeline() {
         let milestones = this.$options.filters.researchMilestones(this.research.abstract);
