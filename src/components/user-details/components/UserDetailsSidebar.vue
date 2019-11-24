@@ -52,7 +52,7 @@
                     <v-card-actions>
                         <v-layout column>
                             <v-btn
-                                color="success"
+                                color="green"
                                 outline
                                 class="my-1 pa-0 mx-0"
                                 @click="approveInvite()" 
@@ -97,7 +97,7 @@
 
                 <v-layout row justify-space-between class="pt-2 full-width">
                     <v-btn
-                    color="success"
+                    color="green"
                     flat
                     small
                     class="ma-0 py-0 px-2"

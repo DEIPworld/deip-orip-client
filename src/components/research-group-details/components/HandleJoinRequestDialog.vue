@@ -31,7 +31,7 @@
             <v-card-actions>
                 <v-layout column>
                     <v-btn 
-                        color="primary"
+                        color="green"
                         class="my-1 pa-0 mx-0"
                         outline
                         :disabled="isApprovingDisabled || isApprovingLoading"
