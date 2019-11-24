@@ -384,7 +384,7 @@
               </v-expansion-panel>
             </v-flex>
             <v-flex lg11 offset-lg1 class="mt-4">
-              <upload-research-content-file-dialog />
+              <upload-research-content-file-dialog @onFinish="newContentUploaded" />
               <v-btn
                 @click="createDarDraft()"
                 :loading="isCreatingDraft"
@@ -1471,6 +1471,11 @@
 
       disagreeSaft() {
         this.investmentConfirmDialog.isShown = false;
+      },
+
+      newContentUploaded() {
+        this.$store.dispatch('rd/loadResearchContent', { researchId: this.research.id });
+        this.$store.dispatch('rd/loadResearchContentRefs', { researchId: this.research.id })
       },
 
       getContentType,

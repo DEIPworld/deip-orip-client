@@ -11,21 +11,13 @@
             </vue-dropzone>
         </div>
     </div>
-
-    <v-dialog v-if="research" v-model="isOpen" persistent transition="scale-transition" max-width="500px">
-        <v-card class="">
-            <v-toolbar dark color="primary">
-                <v-btn icon dark @click="close()">
-                    <v-icon>close</v-icon>
-                </v-btn>
-                <v-toolbar-title>Propose content for the research project</v-toolbar-title>
-                <v-spacer></v-spacer>
-            </v-toolbar>
-            
-            <page-container>
-                <contentbar>
+        <v-dialog v-if="research" v-model="isOpen" persistent transition="scale-transition" max-width="600px">
+            <v-card class="pa-4">
+              <v-card-title>
+                <span class="headline">Propose content for the Research</span>
+              </v-card-title>
+              <v-card-text>
                     <div v-if="researchGroupMembersList.length">
-
                         <v-text-field
                             label="Title"
                             v-model="title"
@@ -41,6 +33,7 @@
 
                         <v-autocomplete
                             :items="researchGroupMembersList"
+                            :menu-props="{ closeOnContentClick: true }"
                             v-model="authors"
                             placeholder="Authors"
                             multiple>
@@ -48,7 +41,7 @@
                             <template slot="selection" slot-scope="data">
                                 <div class="legacy-row-nowrap align-center c-pl-4">
                                     <v-avatar size="30px">
-                                        <img v-if="data.item.profile" v-bind:src="data.item.profile.avatar | avatarSrc(30, 30, false)" />
+                                        <img v-if="data.item.profile" v-bind:src="data.item.profile.avatar | avatarSrc(60, 60, false)" />
                                         <v-gravatar v-else :email="data.item.account.name + '@deip.world'" />
                                     </v-avatar>
                                     <span class="deip-blue-color c-pl-3">{{ data.item | fullname }}</span>
@@ -60,7 +53,7 @@
                                     <div class="legacy-row-nowrap align-center author-item" 
                                         :class="{ 'selected-author-item': isAuthorSelected(data.item) }">
                                         <v-avatar size="30px">
-                                            <img v-if="data.item.profile" v-bind:src="data.item.profile.avatar | avatarSrc(30, 30, false)" />
+                                            <img v-if="data.item.profile" v-bind:src="data.item.profile.avatar | avatarSrc(60, 60, false)" />
                                             <v-gravatar v-else :email="data.item.account.name + '@deip.world'" />
                                         </v-avatar>
                                         <span class="deip-blue-color c-pl-3">{{ data.item | fullname  }}</span>
@@ -68,29 +61,28 @@
                                 </template>
                             </template>
                         </v-autocomplete>
-
-                    <!--    <v-checkbox class="c-mt-6"
-                            v-model="tmpIsPrivate"
-                            label="Choose if content should be private"
-                        ></v-checkbox> -->
-
-                        <div class="display-flex c-pt-8">
-                            <v-btn color="primary" 
-                                class="c-m-auto"
-                                :disabled="isDisabled || isLoading"
-                                :loading="isLoading"
-                                @click="proposeContent()"
-                            >{{!isPersonalGroup ? 'Create Proposal' : 'Create Content'}}</v-btn>
-                        </div>
                     </div>
+              </v-card-text>
+              <v-card-actions>
+                <v-layout column>
+                    <v-btn 
+                        color="primary" 
+                        class="mx-0 my-1 pa-0"
+                        :disabled="isDisabled || isLoading"
+                        :loading="isLoading"
+                        @click="proposeContent()"
+                    >{{!isPersonalGroup ? 'Create Proposal' : 'Create Content'}}</v-btn>
 
-                    <div class="display-flex" v-else>
-                        <v-progress-circular class="c-m-auto" indeterminate color="primary"></v-progress-circular>
-                    </div>
-                </contentbar>
-            </page-container>
-        </v-card>
-    </v-dialog>
+                    <v-btn 
+                        @click="close()"
+                        :disabled="isLoading"
+                        color="black" 
+                        flat 
+                        class="mx-0 my-1 pa-0">Cancel</v-btn>
+                </v-layout>
+              </v-card-actions>
+            </v-card>
+          </v-dialog>
     </div>
 </template>
 
@@ -199,17 +191,18 @@
                             message: "New Content Proposal has been created successfuly!"
                         });
                     }, (err) => {
-                        console.log(err) 
-                        this.$store.dispatch('layout/setError', {
-                            message: "An error occurred while creating proposal, please try again later"
-                        });
+                        console.log(err);
+                        if (err.response && err.response.status == 409) {
+                            alert("This file was already uploaded. Please vote for existing proposal or propose it again.");
+                        } else {
+                            this.$store.dispatch('layout/setError', { 
+                                message: "An error occurred while creating proposal, please try again later"
+                            });
+                        }
                     })
                     .finally(() => {
-                        this.proposeContent.isOpen = false;
-                        this.proposeContent.isLoading = false;
-                        setTimeout(() => {
-                            self.$router.push({ name: 'ResearchFeed' });
-                        }, 1500);
+                        this.$emit('onFinish');
+                        this.close();
                     })
                 }
         },
