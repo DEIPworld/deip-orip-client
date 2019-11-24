@@ -3,7 +3,7 @@
       <div>
         <!-- ### START User Profile Expertise Section ### -->
         <div v-if="reviewRequests.length">
-          <div class="title bold pb-2">Review Requests: {{reviewRequests.length}}</div>
+          <div class="title bold pb-2" id="review-requests">Review Requests: {{reviewRequests.length}}</div>
           <v-layout
             column
             class="py-2"

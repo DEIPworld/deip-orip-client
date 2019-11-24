@@ -7,10 +7,11 @@
             </v-badge>
         </v-btn>
 
-        <!-- temporary solution for notifications. will be better -->
-        <v-list class="hidden-last-child" v-show="notifications.length">
+        <!-- temporary solution for notifications. Will be better -->
+        <v-list v-show="notifications.length">
             <!-- TODO: move this to component -->
-            <template v-for="notification in notifications">
+            <template v-for="(notification, idx) in notifications">
+                <div :key="'notification-' + idx">
 
                 <div class="c-pv-2 c-ph-4" v-if="notification.type === 'new-proposal'">
                     <div>
@@ -100,7 +101,7 @@
                     </div>
                 </div>
 
-                <div class="c-pv-2 c-ph-4" v-if="notification.type === 'invitation'">
+                <div class="c-pv-2 c-ph-4" v-else-if="notification.type === 'invitation'">
                     <div>
                         <router-link class="a" :to="{ 
                                 name: 'ResearchGroupDetails', 
@@ -119,7 +120,7 @@
                     </div>
                 </div>
 
-                <div class="c-pv-2 c-ph-4" v-if="notification.type === 'approved-invitation'">
+                <div class="c-pv-2 c-ph-4" v-else-if="notification.type === 'approved-invitation'">
                     <div>
                         <router-link class="a" :to="{
                                 name: 'UserDetails',
@@ -146,7 +147,7 @@
                     </div>
                 </div>
 
-                <div class="c-pv-2 c-ph-4" v-if="notification.type === 'rejected-invitation'">
+                <div class="c-pv-2 c-ph-4" v-else-if="notification.type === 'rejected-invitation'">
                     <div>
                         <router-link class="a" :to="{
                                 name: 'UserDetails',
@@ -173,7 +174,7 @@
                     </div>
                 </div>
 
-                <div class="c-pv-2 c-ph-4" v-if="notification.type === 'review'">
+                <div class="c-pv-2 c-ph-4" v-else-if="notification.type === 'review'">
                     <div>
                         <router-link class="a" :to="{
                                 name: 'UserDetails',
@@ -196,7 +197,7 @@
                     </div>
                 </div>
 
-                <div class="c-pv-2 c-ph-4" v-if="notification.type === 'allocated-expertise'">
+                <div class="c-pv-2 c-ph-4" v-else-if="notification.type === 'allocated-expertise'">
                     <div>
                         <span class="clickable" @click="clickAllocatedExpertiseNotification(notification)">
                            Claim for <span class="a">{{getDiscipline(notification.meta.expertiseProposal.discipline_id).label}}</span> 
@@ -209,7 +210,31 @@
                     </div>
                 </div>
 
-                <v-divider></v-divider>
+                <div class="c-pv-2 c-ph-4" v-else-if="notification.type === 'review-request'">
+                    <div>
+                        <router-link class="a" :to="{
+                                name: 'UserDetails',
+                                params: { 
+                                    account_name: encodeURIComponent(notification.meta.requestorInfo._id) 
+                                } }">
+                            {{  { profile: notification.meta.requestorInfo, account: { name: notification.meta.requestorInfo._id } } | fullname }}
+                        </router-link>
+                        <span class="clickable" @click="clickRequestReviewNotification(notification)">
+                            requested a review for 
+                            <span class="a">
+                                {{ notification.meta.contentInfo.title }}
+                            </span>
+                            {{ getContentType(notification.meta.contentInfo.content_type).text }}
+                        </span>
+                    </div>
+                    <div class="grey--text caption c-mt-1">
+                        <v-icon size="16" color="grey">event</v-icon> {{ new Date(notification.created_at).toDateString() }}
+                        <span style="cursor: pointer" class="a orange--text right" @click="readNotification($event, notification)">Mark as read</span>
+                    </div>
+                </div>
+
+                <v-divider v-if="idx != notifications.length - 1"></v-divider>
+                </div>
             </template>
         </v-list>
     </v-menu>
@@ -299,6 +324,15 @@
                     name: 'UserDetails', 
                     params: { account_name: encodeURIComponent(notification.meta.inviteeInfo._id) },
                     hash: "#invites"
+                });
+                this.readNotification(null, notification);
+            },
+
+            clickRequestReviewNotification(notification) {
+                this.$router.push({
+                    name: 'UserDetails', 
+                    params: { account_name: encodeURIComponent(notification.meta.expertInfo._id) },
+                    hash: "#review-requests"
                 });
                 this.readNotification(null, notification);
             },
