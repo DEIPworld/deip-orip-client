@@ -38,15 +38,18 @@ const getters = {
         let researchGroupsTokens = state.researchGroupsTokens.filter(rgt => rgt.research_group_id == research.research_group_id);
 
         let researchSharesHolders = state.researchTokensHolders.filter(user => researchShares.some(rt => rt.account_name == user.account.name));
-        let researchMembers = state.researchGroupsMembers.filter(user => researchGroupsTokens.some(rgt => rgt.owner == user.account.name));
+        let researchGroupMembers = state.researchGroupsMembers.filter(user => researchGroupsTokens.some(rgt => rgt.owner == user.account.name));
+        let researchMembers = researchGroupMembers.filter(user => research.members.some(member => member == user.account.name));
         
-        let maxRgt = Math.max(...researchGroupsTokens.map(rgt => rgt.amount));
+        let maxRgtVal = Math.max(...researchGroupsTokens.map(rgt => rgt.amount));
+        let maxRgt = researchGroupsTokens.find(rgt => rgt.amount == maxRgtVal);
+
         let team = researchMembers.map((member) => {
-          let weight = researchGroupsTokens.find(rgt => rgt.owner == member.account.name);
-          let isOwner = weight.amount == maxRgt;
-          return { ...member, isOwner, weight };
+          let rgt = researchGroupsTokens.find(rgt => rgt.owner == member.account.name);
+          let isOwner = rgt.owner == maxRgt.owner;
+          return { ...member, isOwner, weight: rgt };
         });
-        
+        let owner = researchGroupMembers.find(user => user.account.name == maxRgt.owner);
         let shareHolders = researchSharesHolders.map((shareHolder) => {
           let share = researchShares.find(rt => rt.account_name == shareHolder.account.name);
           return { ...shareHolder, share };
@@ -65,7 +68,7 @@ const getters = {
         });
 
         return {
-          research: { ...research, comments, owner: team.find(m => m.isOwner) }, 
+          research: { ...research, comments, owner }, 
           group, 
           team, 
           shareHolders, 
