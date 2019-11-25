@@ -1,16 +1,20 @@
 <template>
-    <v-dialog v-model="meta.isShown" fullscreen persistent transition="scale-transition">
-        <v-card class="">
-            <v-toolbar dark color="primary">
-                <v-btn icon dark @click.native="meta.isShown = false">
-                    <v-icon>close</v-icon>
-                </v-btn>
-                <v-toolbar-title>Add employment</v-toolbar-title>
-                <v-spacer></v-spacer>
-            </v-toolbar>
+        <v-dialog v-model="meta.isShown" persistent transition="scale-transition" max-width="600px">
+            <v-card class="pa-4">
+                <v-card-title>
+                    <v-layout row align-center align-baseline>
+                      <v-flex grow class="headline">
+                        Employment
+                      </v-flex>
+                      <v-flex shrink align-self-center>
+                        <v-btn @click.native="meta.isShown = false" icon class="pa-0 ma-0">
+                            <v-icon color="black">close</v-icon>
+                        </v-btn>
+                      </v-flex>
+                    </v-layout>
+                </v-card-title>
 
-            <page-container>
-                <contentbar>
+                <v-card-text>
                     <v-form v-model="isFormValid" ref="form">
                         <div class="subheading bold">Company</div>
                         <div class="legacy-row">
@@ -93,18 +97,16 @@
                                     <v-date-picker v-model="dateTo" @input="dateToMenu = false" type="month"></v-date-picker>
                                 </v-menu>
                             </div>
+                        </div>
 
-                            <div class="legacy-col-2 c-pt-5">
-                                <div class="legacy-row legacy-justify-end">
-                                    <v-checkbox class="ma-0 pa-0"
-                                        label="Is present"
-                                        :input-value="isActive"
-                                        hide-details
-                                        style="max-width: 125px"
-                                        @click="changeIsActive()"
-                                    ></v-checkbox>
-                                </div>
-                            </div>
+                        <div class="legacy-row pb-3">
+                            <v-checkbox class="ma-0 pa-0"
+                                label="Is present"
+                                :input-value="isActive"
+                                hide-details
+                                style="max-width: 125px"
+                                @click="changeIsActive()"
+                            ></v-checkbox>
                         </div>
 
                         <div class="subheading bold">Position</div>
@@ -119,38 +121,29 @@
                         </div>
 
                         <div class="subheading bold">Description  
-                            <span class="caption">(optional)</span>
+                            <span class="caption grey--text">(optional)</span>
                         </div>
                         <div class="legacy-row">
                             <div class="legacy-col-12">
-                                <v-text-field
+                                <v-textarea
+                                    :rows="2"
+                                    auto-grow
                                     label="Description"
                                     v-model="description"
-                                ></v-text-field>
+                                ></v-textarea>
                             </div>
                         </div>
-
-                        <!--   <div>
-                            <v-btn class="ma-0 width-10" color="primary" @click="save" :disabled="disabled">Save</v-btn>
-                            <span class="c-pr-4"></span>
-                            <v-btn class="ma-0" color="primary" flat @click.native="meta.isShown = false">Cancel</v-btn>
-                        </div> -->
-
                         <div>
-                            <div class="legacy-row">
-                                <div class="legacy-col-11">
-                                    <v-btn class="ma-0 width-10" color="primary" @click="save()" :disabled="disabled">Save</v-btn>
-                                    <span class="c-pr-4"></span>
-                                    <v-btn class="ma-0 width-10" color="primary" flat @click.native="meta.isShown = false">Cancel</v-btn>
-                                </div>
-                            </div>
+                            <v-layout>
+                                <v-spacer></v-spacer>
+                                <v-btn class="ma-0 width-10" color="black" flat @click.native="meta.isShown = false">Cancel</v-btn>
+                                <v-btn class="ma-0 width-10" color="primary" @click="save()" :disabled="disabled">Save</v-btn>
+                            </v-layout>
                         </div>
                     </v-form>
-                </contentbar>
-            </page-container>
-
-        </v-card>
-    </v-dialog>
+                </v-card-text>
+            </v-card>
+        </v-dialog>
 </template>
 
 <script>
