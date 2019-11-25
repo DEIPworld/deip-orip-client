@@ -1066,10 +1066,8 @@
           'regacc', 'hermes', 'initdelegate', this.user.username,
           ...this.researchGroupMembersList.map(m => m.account.name)
         ];
-        const existingReviewForContent = this.reviewsList.find(r => r.research_content_id === this.selectedContentId);
-        if (existingReviewForContent) {
-          blackList.push(existingReviewForContent.author.account.name);
-        }
+        const existingReviewsForContent = this.reviewsList.filter(r => r.research_content_id === this.selectedContentId);
+        blackList.push(...existingReviewsForContent.map(r => r.author.account.name));
         return this.expertsList.filter(e => !blackList.includes(e.account.name));
       },
       investmentsAmount () {

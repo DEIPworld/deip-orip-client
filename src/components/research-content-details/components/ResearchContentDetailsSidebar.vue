@@ -396,6 +396,8 @@
                 'regacc', 'hermes', 'initdelegate', this.user.username,
                 ...this.membersList.map(m => m.account.name)
               ];
+              const existingReviewsForContent = this.contentReviewsList.filter(r => r.research_content_id === this.content.id);
+              blackList.push(...existingReviewsForContent.map(r => r.author.account.name));
               return this.expertsList.filter(e => !blackList.includes(e.account.name));
             },
         },
