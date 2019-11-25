@@ -657,35 +657,12 @@
             </v-layout>
           </v-layout>
           <v-divider />
-          <div class="rd-sidebar-block-title my-4 px-4">Citations: {{researchReferencesList.length + research.id}}</div>
-          <v-divider />
-          <v-layout column class="my-4 mx-4">
-            <div class="rd-sidebar-block-title mb-3">Tokenization</div>
-            <div v-if="isResearchTokenized">10000 research tokens issued</div>
-            <v-btn
-              v-else-if="isResearchGroupMember"
-              class="mx-0 mt-3"
-              color="primary"
-              large
-              :loading="isResearchTokenization"
-              @click="onTokenizeResearchClick()"
-            >Tokenize research</v-btn>
-            <div v-else class="mt-3">Research has not been tokenized yet</div>
-            <confirm-action-dialog
-              :meta="tokenizationConfirmDialog"
-              :title="``"
-              :text="`This project will be tokenized instantly. This action is irreversible. Continue?`"
-              @confirmed="tokenizeResearch($event); tokenizationConfirmDialog.isShown = false;" 
-              @canceled="tokenizationConfirmDialog.isShown = false">
-            </confirm-action-dialog>
-          </v-layout>
-          <v-divider />
 
           <v-dialog v-if="contentList.length" v-model="requestExpertReviewDialog.isShown" persistent max-width="600px">
             <template v-slot:activator="{ on }">
               <div class="my-4 mx-4">
-                <div class="rd-sidebar-block-title mb-3">Expert Review</div>
-                <v-btn large block color="primary" dark v-on="on">Request Review</v-btn>
+                <div class="rd-sidebar-block-title">Expert Review</div>
+                <v-btn large block color="primary" dark v-on="on" class="mt-3">Request Review</v-btn>
               </div>
             </template>
             <v-card class="pa-4">
@@ -748,6 +725,31 @@
               </v-card-actions>
             </v-card>
           </v-dialog>
+          <v-divider />
+
+          <v-layout column class="my-4 mx-4">
+            <div class="rd-sidebar-block-title">Tokenization</div>
+            <div v-if="isResearchTokenized">10000 research tokens issued</div>
+            <v-btn
+              v-else-if="isResearchGroupMember"
+              class="mx-0 mt-3"
+              color="primary"
+              large
+              :loading="isResearchTokenization"
+              @click="onTokenizeResearchClick()"
+            >Tokenize research</v-btn>
+            <div v-else class="mt-3">Research has not been tokenized yet</div>
+            <confirm-action-dialog
+              :meta="tokenizationConfirmDialog"
+              :title="``"
+              :text="`This project will be tokenized instantly. This action is irreversible. Continue?`"
+              @confirmed="tokenizeResearch($event); tokenizationConfirmDialog.isShown = false;" 
+              @canceled="tokenizationConfirmDialog.isShown = false">
+            </confirm-action-dialog>
+          </v-layout>
+
+          <v-divider />
+          <div class="rd-sidebar-block-title my-4 px-4">Citations: {{researchReferencesList.length + research.id}}</div>
 
         </v-flex>
       </v-layout>
