@@ -695,16 +695,14 @@
               <v-card-text>
                 <v-layout column>
                   <v-select
-                    v-if="contentListToReview.length"
                     class="mt-3"
                     label="Select a content to request review"
                     item-text="title"
                     item-value="id"
                     :disabled="isRequestingReview"
-                    :items="contentListToReview"
+                    :items="contentList"
                     v-model="selectedContentId"
                   />
-                  <span v-else>There are no content to review for selected expert</span>
                   <v-autocomplete
                     label="Find an expert to request a review"
                     hide-no-data
@@ -1068,6 +1066,10 @@
           'regacc', 'hermes', 'initdelegate', this.user.username,
           ...this.researchGroupMembersList.map(m => m.account.name)
         ];
+        const existingReviewForContent = this.reviewsList.find(r => r.research_content_id === this.selectedContentId);
+        if (existingReviewForContent) {
+          blackList.push(existingReviewForContent.author.account.name);
+        }
         return this.expertsList.filter(e => !blackList.includes(e.account.name));
       },
       investmentsAmount () {
