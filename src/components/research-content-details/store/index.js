@@ -20,6 +20,7 @@ const state = {
     membersList: [],
     contentList: [],
     contentReviewsList: [],
+    expertsList: [],
     contentProposal: undefined,
 
     contentRef: null,
@@ -66,6 +67,10 @@ const getters = {
 
     contentReviewsList: (state, getters) => {
         return state.contentReviewsList;
+    },
+
+    expertsList: (state, getters) => {
+        return state.expertsList;
     },
 
     contentRef: (state, getters) => {
@@ -165,17 +170,31 @@ const actions = {
         const disciplinesList = []
         deipRpc.api.getDisciplinesByResearchAsync(researchId)
             .then((data) => {
-                const promises = [];
+                const tvoPromises = [];
+                const expertsPromises = [];
                 for (var i = 0; i < data.length; i++) {
                     var discipline = data[i];
                     disciplinesList.push(discipline);
-                    promises.push(deipRpc.api.getTotalVotesByResearchAndDisciplineAsync(researchId, discipline.id))
+                    tvoPromises.push(deipRpc.api.getTotalVotesByResearchAndDisciplineAsync(researchId, discipline.id));
+                    expertsPromises.push(
+                      deipRpc.api.getExpertTokensByDisciplineIdAsync(discipline.id)
+                    );
                 }
-                return Promise.all(promises);
+                return Promise.all([
+                  Promise.all(tvoPromises),
+                  Promise.all(expertsPromises)
+                ]);
             }, (err) => {console.log(err)})
-            .then((tvoList) => {
-                commit('SET_RESEARCH_CONTENT_DISCIPLINES_LIST', disciplinesList)
-                commit('SET_RESEARCH_CONTENT_TOTAL_VOTES_LIST', tvoList)
+            .then(([tvoList, expertTokensPerDiscipline]) => {
+              const expertsAccountNames = [];
+              expertTokensPerDiscipline.forEach((e) => {
+                expertsAccountNames.push(...e.map(et => et.account_name));
+              });  
+              commit('SET_RESEARCH_CONTENT_DISCIPLINES_LIST', disciplinesList)
+              commit('SET_RESEARCH_CONTENT_TOTAL_VOTES_LIST', tvoList)
+              return getEnrichedProfiles(_.uniq(expertsAccountNames));
+            }).then((expertsList) => {
+              commit('SET_EXPERTS_LIST', expertsList);
             }).finally(() => {
                 commit('SET_RESEARCH_CONTENT_VOTES_LOADING_STATE', false)
                 if (notify) notify();
@@ -499,6 +518,10 @@ const mutations = {
 
     ['SET_RESEARCH_CONTENT_LIST'](state, list) {
         Vue.set(state, 'contentList', list)
+    },
+
+    ['SET_EXPERTS_LIST'](state, list) {
+        Vue.set(state, 'expertsList', list)
     },
 
     ['SET_RESEARCH_DETAILS'](state, research) {

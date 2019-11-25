@@ -205,6 +205,65 @@
             </div>
         </div>
         <!-- ### END Reward Info Section ### -->
+
+        <v-dialog v-model="requestExpertReviewDialog.isShown" persistent max-width="600px">
+          <template v-slot:activator="{ on }">
+            <div class="my-4 mx-0">
+              <div class="rd-sidebar-block-title mb-3">Expert Review</div>
+              <v-btn large block color="primary" dark v-on="on">Request Review</v-btn>
+            </div>
+          </template>
+          <v-card class="pa-4">
+            <v-card-title>
+              <span class="headline">Request review from an Expert</span>
+            </v-card-title>
+            <v-card-text>
+              <v-layout column>
+                <v-autocomplete
+                  label="Find an expert to request a review"
+                  hide-no-data
+                  :append-icon="null"
+                  :loading="requestExpertReviewDialog.isExpertsLoading"
+                  :disabled="requestExpertReviewDialog.isRequestingReview"
+                  :items="requestExpertReviewDialog.foundExperts"
+                  item-text="name"
+                  item-value="user"
+                  :search-input.sync="requestExpertReviewDialog.expertsSearch"
+                  v-on:keyup="queryExperts()"
+                  v-model="requestExpertReviewDialog.selectedExpert"
+                />
+                <div v-if="!requestExpertReviewDialog.selectedExpert">
+                  <v-layout row>
+                    <platform-avatar :size="40" v-for="(expert, i) in experts.slice(0, 6)" :key="'expert-' + i" :user="expert" class="expert-avatar mr-2" ></platform-avatar>
+                  </v-layout>
+                </div>
+                <template v-else>
+                  <platform-avatar :user="requestExpertReviewDialog.selectedExpert" :size="40" link-to-profile link-to-profile-class="pl-3"></platform-avatar>
+                  <div v-if="$options.filters.employmentOrEducation(requestExpertReviewDialog.selectedExpert)">
+                    <div class="py-2 body-2">{{requestExpertReviewDialog.selectedExpert | employmentOrEducation}}</div>
+                  </div>
+                </template>
+              </v-layout>
+            </v-card-text>
+            <v-card-actions>
+              <v-layout column>
+                <v-btn
+                  @click="requestReview()"
+                  :loading="requestExpertReviewDialog.isRequestingReview"
+                  :disabled="!requestExpertReviewDialog.selectedExpert"
+                  outline
+                  color="primary"
+                  class="mx-0 my-1 pa-0"
+                >Request</v-btn>
+                <v-btn 
+                  @click="requestExpertReviewDialog.isShown = false"
+                  color="black" 
+                  flat 
+                  class="mx-0 my-1 pa-0">Cancel</v-btn>
+              </v-layout>
+            </v-card-actions>
+          </v-card>
+        </v-dialog>
     </div>
 </template>
 
@@ -212,6 +271,7 @@
     import { mapGetters } from 'vuex';
     import deipRpc from '@deip/deip-oa-rpc-client';
     import contentHttpService from './../../../services/http/content'
+  import reviewRequestsService from './../../../services/http/reviewRequests';
     import { contentTypesList } from './../../../services/ResearchService';
     import { CREATE_RESEARCH_MATERIAL, labels } from './../../../services/ProposalService';
 
@@ -219,7 +279,17 @@
         name: "ResearchContentDetailsSidebar",
 
         data() {
-            return {};
+            return {
+              requestExpertReviewDialog: {
+                isShown: false,
+
+                selectedExpert: null,
+                isExpertsLoading: false,
+                expertsSearch: '',
+                foundExperts: [],
+                isRequestingReview: false
+              },
+            };
         },
         
         computed: {
@@ -227,6 +297,7 @@
                 user: 'auth/user',
                 userExperise: 'auth/userExperise',
                 content: 'rcd/content',
+                expertsList: 'rcd/expertsList',
                 research: 'rcd/research',
                 group: 'rcd/group',
                 membersList: 'rcd/membersList',
@@ -319,7 +390,14 @@
                         value: eciObj ? eciObj[1] : 0
                     }
                 });
-            }
+            },
+            experts() {
+              const blackList = [
+                'regacc', 'hermes', 'initdelegate', this.user.username,
+                ...this.membersList.map(m => m.account.name)
+              ];
+              return this.expertsList.filter(e => !blackList.includes(e.account.name));
+            },
         },
 
         methods: {
@@ -353,7 +431,48 @@
             },
             goAddReview() {
                 this.$router.push({ name: 'ResearchContentAddReview', params: this.$route.params });
-            }
+            },
+            queryExperts() {
+              this.requestExpertReviewDialog.isExpertsLoading = true;
+              this.requestExpertReviewDialog.foundExperts = this.requestExpertReviewDialog.expertsSearch ? this.experts.filter(user => {
+                let name = this.$options.filters.fullname(user);
+                return name.toLowerCase().indexOf((this.requestExpertReviewDialog.expertsSearch || '').toLowerCase()) > -1
+                  || user.account.name.toLowerCase().indexOf((this.requestExpertReviewDialog.expertsSearch || '').toLowerCase()) > -1;
+              })
+              .map((user => {
+                const name = this.$options.filters.fullname(user);
+                return { name, user };
+              })) : [];
+
+              if (!this.requestExpertReviewDialog.expertsSearch) {
+                this.requestExpertReviewDialog.selectedExpert = null;
+              }
+
+              this.requestExpertReviewDialog.isExpertsLoading = false;
+            },
+            requestReview() {
+              this.requestExpertReviewDialog.isRequestingReview = true;
+              return reviewRequestsService.createReviewRequest({
+                contentId: this.content.id,
+                expert: this.requestExpertReviewDialog.selectedExpert.account.name,
+              }).then(() => {
+                this.$store.dispatch('layout/setSuccess', { message: 'Request for the review has been sent successfully' });
+                this.requestExpertReviewDialog.selectedExpert = null;
+                this.requestExpertReviewDialog.expertsSearch = '';
+              }).catch((err) => {
+                let errMsg = 'An error occurred while requesting the review. Please try again later';
+                if (err.response && err.response.data) {
+                  errMsg = err.response.data;
+                }
+                this.$store.dispatch('layout/setError', {
+                  message: errMsg
+                });
+              })
+              .finally(() => {
+                this.requestExpertReviewDialog.isRequestingReview = false;
+                this.requestExpertReviewDialog.isShown = false;
+              });
+            },
         }
     };
 </script>
