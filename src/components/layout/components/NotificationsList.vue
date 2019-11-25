@@ -14,21 +14,25 @@
                 <div :key="'notification-' + idx">
 
                 <div class="c-pv-2 c-ph-4" v-if="notification.type === 'new-proposal'">
-                    <div>
-                        <router-link class="a" :to="{ name: 'UserDetails', params: { account_name: notification.meta.creator } }">
-                            {{ { profile: notification.meta.creatorInfo, account: { name: notification.meta.creator} } | fullname }}
-                        </router-link>
-                        <span class="clickable" @click="clickNewProposalNotification(notification)">
-                            <span v-if="notification.meta.action === START_RESEARCH">proposed to start new research in</span>
-                            <span v-else-if="notification.meta.action === CREATE_RESEARCH_MATERIAL">proposed new research result in</span>
-                            <span v-else-if="notification.meta.action === START_RESEARCH_TOKEN_SALE">proposed to start fundraise in</span>
-                            <span v-else-if="notification.meta.action === INVITE_MEMBER">proposed to invite new member to</span>
-                            <span v-else>created a proposal in</span>
-                            <span class="a">{{ notification.meta.groupInfo.name }}</span>
-                            group
-                        </span>
-                    </div>
-                    <div class="grey--text caption c-mt-1">
+                    <v-layout row class="pb-1">
+                        <v-flex shrink>
+                            <router-link class="a pr-1" :to="{ name: 'UserDetails', params: { account_name: notification.meta.creator } }">
+                                {{ { profile: notification.meta.creatorInfo, account: { name: notification.meta.creator} } | fullname }}
+                            </router-link>
+                        </v-flex>
+                        <v-flex grow>
+                            <div class="clickable" @click="clickNewProposalNotification(notification)">
+                                <span v-if="notification.meta.action === START_RESEARCH">proposed to start new research in</span>
+                                <span v-else-if="notification.meta.action === CREATE_RESEARCH_MATERIAL">proposed new research result in</span>
+                                <span v-else-if="notification.meta.action === START_RESEARCH_TOKEN_SALE">proposed to start fundraise in</span>
+                                <span v-else-if="notification.meta.action === INVITE_MEMBER">proposed to invite new member to</span>
+                                <span v-else>created a proposal in</span>
+                                <span class="a">{{ notification.meta.groupInfo.name }}</span>
+                                group
+                            </div>
+                        </v-flex>
+                    </v-layout>
+                    <div class="grey--text caption">
                         <v-icon size="16" color="grey">event</v-icon> {{ new Date(notification.created_at).toDateString() }}
                         <span style="cursor: pointer" class="a orange--text right" @click="readNotification($event, notification)">Mark as read</span>
                     </div>
