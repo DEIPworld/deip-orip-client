@@ -123,7 +123,7 @@
                               <div class="title bold">Experts <span class="primary--text pl-2">{{experts.length}}</span></div>
                               <div class="pt-2">
                                 <v-autocomplete
-                                  label="Find an Expert for Review"
+                                  label="Find an Expert"
                                   autocomplete
                                   :append-icon="null"
                                   :loading="isExpertsLoading"

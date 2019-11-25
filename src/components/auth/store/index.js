@@ -143,13 +143,17 @@ const actions = {
 
   loadNotifications({ state, commit, getters }, { notify } = {}) {
     const user = getters.user;
-    return notificationsHttpService.getNotificationsByUser(user.username)
-      .then((notifications) => {
-        commit('SET_USER_NOTIFICATION_PROPOSALS', notifications);
-      })
-      .finally(() => {
-        if (notify) notify();
-      });
+    if (user && user.username) {
+      return notificationsHttpService.getNotificationsByUser(user.username)
+        .then((notifications) => {
+          commit('SET_USER_NOTIFICATION_PROPOSALS', notifications);
+        })
+        .finally(() => {
+          if (notify) notify();
+        });
+    } else {
+      if (notify) notify();
+    }
   },
 
   loadExpertTokens({ state, commit, getters }, { notify } = {}) {

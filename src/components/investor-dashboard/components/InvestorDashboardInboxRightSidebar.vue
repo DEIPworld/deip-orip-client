@@ -33,8 +33,9 @@
         <div class="subheading half-bold">Current Phase</div>
         <div class="body-2 py-1">{{currentPhase.goal}}</div>
         <div class="py-2">
-          <v-chip v-if="currentPhaseDeadlineLabel.isOverdue" class="ma-0 body-1" color="amber" text-color="white">{{currentPhaseDeadlineLabel.text}}</v-chip>
-          <v-chip v-else class="ma-0 body-1" color="#8BC34A" text-color="white">{{currentPhaseDeadlineLabel.text}}</v-chip>
+          <v-chip class="ma-0 body-1" color="amber" text-color="white">Deadline on {{moment(currentPhase.eta).format("MMM D, YYYY")}}</v-chip>
+          <!-- <v-chip v-if="currentPhaseDeadlineLabel.isOverdue" class="ma-0 body-1" color="amber" text-color="white">{{currentPhaseDeadlineLabel.text}}</v-chip>
+          <v-chip v-else class="ma-0 body-1" color="#8BC34A" text-color="white">{{currentPhaseDeadlineLabel.text}}</v-chip> -->
         </div>
         <div class="body-1 py-2">
           <toggle-text :text="currentPhase.details"></toggle-text>
