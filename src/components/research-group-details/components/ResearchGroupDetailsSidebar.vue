@@ -1,5 +1,6 @@
 <template>
-    <div>
+<v-card class="pa-4 full-height">
+    <v-layout column>
         <div v-if="isJoinRequestsSectionAvailable" class="">
             <div class="title bold pb-2" id="invites">Join requests: {{pendingJoinRequests.length}}</div>
 
@@ -106,7 +107,10 @@
             :is-open="options.isTransferTokensDialogOpen"
             @onClose="$store.dispatch('researchGroup/changeOptions', { key: 'isTransferTokensDialogOpen', value: false })"
         ></transfer-group-deip-tokens-dialog>
-    </div>
+
+    </v-layout>
+</v-card>
+    
 </template>
 
 <script>

@@ -1,17 +1,8 @@
 <template>
-    <div>
+    <div class="py-5">
         <!-- ### START Research Group Details Section ### -->
-        <div class="research-group-details-container spinner-container">
-            <v-progress-circular class="section-spinner"
-                v-if="isLoadingResearchGroupDetails"
-                indeterminate color="primary"
-            ></v-progress-circular>
-
-            <div v-if="isLoadingResearchGroupDetails === false">
-            <!--<div>
-                    <v-icon small>date_range</v-icon>
-                    <span>Created on 22 Aug 2018</span>
-                </div> -->
+        <div class="px-5 research-group-details-container">
+            <div>
                 <div class="display-1 half-bold c-mt-10">{{ group ? group.name : '' }}</div>
                 <div class="c-pt-8">{{ group ? group.description : '' }}</div>
             </div>
@@ -19,28 +10,24 @@
         <!-- ### END Research Group Details Section ### -->
 
         <!-- ### START Research Group Proposals Section ### -->
-        <div id="proposals" v-if="isResearchGroupMember" class="research-group-proposals-container spinner-container py-2">
-            <v-progress-circular class="section-spinner"
-                v-if="isLoadingResearchGroupProposals"
-                indeterminate color="primary"
-            ></v-progress-circular>
-            
-            <div v-if="isLoadingResearchGroupProposals === false">
-                <research-group-details-proposals v-if="!isPersonalGroup"></research-group-details-proposals>
+        <div id="proposals" v-if="isResearchGroupMember && !isPersonalGroup">
+            <transition v-if="highlightProposalsSection" name="fade">
+                <div v-if="proposalsSectionTransitionTrigger" class="pt-2 pb-4">            
+                    <research-group-details-proposals :key="'group-proposals'" class="px-5"></research-group-details-proposals>
+                </div>
+            </transition>
+            <div v-else>
+                <div class="pt-2 pb-4">            
+                    <research-group-details-proposals :key="'group-proposals'" class="px-5"></research-group-details-proposals>
+                </div>
             </div>
         </div>
         <!-- ### END Research Group Proposals Section ### -->
 
         <!-- ### START Research Group members Section ### -->
-        <div class="research-group-members-container spinner-container">
-            <v-progress-circular class="section-spinner"
-                v-if="isLoadingResearchGroupDetails"
-                indeterminate color="primary"
-            ></v-progress-circular>
-
-            <div v-if="isLoadingResearchGroupMembers === false">
-                <div class="c-pt-8 title">Group members: {{ members.length }}</div>
-
+        <div class="px-5 py-4">
+            <div>
+                <div class="title">Group members: {{ members.length }}</div>
                 <div class="c-pt-6">
                     <v-card>
                         <div class="info-card-list">
@@ -163,15 +150,8 @@
         <!-- ### END Research Group members Section ### -->
 
         <!-- ### START Research Group Research List Section ### -->
-        <div class="research-list-container spinner-container c-pt-7">
-            <v-progress-circular class="section-spinner"
-                v-if="isLoadingResearchGroupResearchList"
-                indeterminate color="primary"
-            ></v-progress-circular>
-
-            <div v-if="isLoadingResearchGroupResearchList === false">
-                <state-research-list :research-list="researchList"></state-research-list>
-            </div>
+        <div class="px-5 py-4">
+            <state-research-list :research-list="researchList"></state-research-list>
         </div>
         <!-- ### END Research Group Research List Section ### -->
     </div>
@@ -188,6 +168,8 @@
         },
         data() { 
             return {
+                highlightProposalsSection: undefined,
+                proposalsSectionTransitionTrigger: false,
                 usersToInvite: []
             } 
         },
@@ -218,7 +200,15 @@
             }
         }, 
 
+        mounted() {
+            if (this.highlightProposalsSection) {
+                this.proposalsSectionTransitionTrigger = true;
+            }
+        },
+
         created() {
+            this.highlightProposalsSection = this.$route.hash == "#proposals";
+            
             deipRpc.api.getAllAccountsAsync()
                 .then(accounts => {
                     let blackList = [
@@ -237,6 +227,8 @@
 </script>
 
 <style lang="less" scoped>
+    @import "./../../../styles/colors.less";
+
     .group-invites.expansion-panel {
         box-shadow: initial;
     }
@@ -244,12 +236,13 @@
         min-height: 200px
     }
 
-    .research-group-members-container {
-        min-height: 300px
+    .fade-enter-active, .fade-leave-active {
+        background-color: none !important;
+        transition: all 2.5s !important;
     }
 
-    .research-list-container {
-        min-height: 200px
+    .fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
+        background-color: @yellow !important;
     }
 
 </style>

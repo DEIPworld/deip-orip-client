@@ -429,7 +429,7 @@ const router = new Router({
 					if (anchor) {
 							return window.scrollTo({ top: anchor.offsetTop, behavior: 'smooth' });
 					}
-			}, 1000);
+			}, 500);
 		} else {
 			return { x: 0, y: 0 };
 		}

@@ -1,15 +1,8 @@
 <template>
-    <page-container>
-
-        <contentbar>
-            <research-group-details-body></research-group-details-body>
-        </contentbar>
-
-        <sidebar>
-            <research-group-details-sidebar></research-group-details-sidebar>
-        </sidebar>
-
-    </page-container>
+  <base-page-layout>
+    <research-group-details-body slot="content"></research-group-details-body>
+    <research-group-details-sidebar slot="right-sidebar"></research-group-details-sidebar>
+  </base-page-layout>
 </template>
 
 <script>
