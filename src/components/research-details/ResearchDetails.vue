@@ -645,7 +645,7 @@
           </v-layout>
           <v-divider />
           <v-layout column class="my-4 mx-4">
-            <div class="rd-sidebar-block-title">Expertise Contribution Index</div>
+            <div class="rd-sidebar-block-title pb-2">Expertise Contribution Index</div>
             <v-layout
               v-for="eci of eciList"
               :key="eci.disciplineName"
@@ -729,7 +729,7 @@
 
           <v-layout column class="my-4 mx-4">
             <div class="rd-sidebar-block-title">Tokenization</div>
-            <div v-if="isResearchTokenized">10000 research tokens issued</div>
+            <div v-if="isResearchTokenized" class="py-2">10000 research tokens issued</div>
             <v-btn
               v-else-if="isResearchGroupMember"
               class="mx-0 mt-3"
@@ -738,7 +738,7 @@
               :loading="isResearchTokenization"
               @click="onTokenizeResearchClick()"
             >Tokenize research</v-btn>
-            <div v-else class="mt-3">Research has not been tokenized yet</div>
+            <div v-else class="py-2">Research has not been tokenized yet</div>
             <confirm-action-dialog
               :meta="tokenizationConfirmDialog"
               :title="``"
