@@ -19,6 +19,7 @@
         <v-btn :to="{ name: 'ResearchFeed' }" color="white" flat class="ma-0">Feed</v-btn>
         <v-btn :to="{ name: 'Dashboard' }"  color="white" flat class="ma-0">Dashboard</v-btn>
         <v-btn :to="{ name: 'InvestorDashboard' }" color="white" flat class="ma-0">Portfolio</v-btn>
+        <v-btn :to="{ name: 'UserWallet', params: { account_name: user.username } }" color="white" flat class="ma-0">Wallet</v-btn>
         <notifications-list :notifications="user.notifications"></notifications-list>
         <v-menu bottom left offset-y>
           <v-btn fab flat icon class="ma-0" slot="activator">
@@ -30,9 +31,6 @@
           <v-list class="dropdown-list" dark dense>
             <v-list-tile :to="{ name: 'UserDetails', params: { account_name: user.username } }">
               <v-list-tile-title>Profile</v-list-tile-title>
-            </v-list-tile>
-            <v-list-tile :to="{ name: 'UserWallet', params: { account_name: user.username } }">
-              <v-list-tile-title>Wallet</v-list-tile-title>
             </v-list-tile>
             <v-divider></v-divider>
             <v-list-tile @click="signOut()">
