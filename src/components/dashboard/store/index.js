@@ -33,7 +33,8 @@ const state = {
 	expertsExpertiseTokensList: [],
 
 	myInvitesList: [],
-	myReviewRequests: []
+  myReviewRequests: [],
+  myReviews: [],
 }
 
 // getters
@@ -107,7 +108,11 @@ const getters = {
 
 	myInvitesCount: (state, getters) => {
 		return state.myInvitesList.length;
-	},
+  },
+
+  myReviewsCount: (state) => {
+    return state.myReviews.length;
+  },
 	
 	currentShares: (state) => {
 		return state.investedResearchShares.map(share => {
@@ -146,7 +151,10 @@ const actions = {
 		});
 		const myReviewRequestsLoad = new Promise((resolve, reject) => {
 			dispatch('loadMyReviewRequests', { username: username, notify: resolve });
-		});
+    });
+		const myReviewsLoad = new Promise((resolve, reject) => {
+			dispatch('loadMyReviews', { username: username, notify: resolve });
+    });
 
 		return Promise.all([
 			investedResearchesLoad, 
@@ -154,7 +162,8 @@ const actions = {
 			membershipResearchesLoad,
 			expertsLoad,
 			myInvitesLoad,
-			myReviewRequestsLoad
+      myReviewRequestsLoad,
+      myReviewsLoad,
 		])
 			.then(() => {
 				let pulled = [
@@ -315,7 +324,16 @@ const actions = {
 			.finally(() => {
 				if (notify) notify();
 			});
-	}
+  },
+
+  loadMyReviews({ commit }, { username, notify } = {}) {
+    return deipRpc.api.getReviewsByAuthorAsync(username)
+      .then((reviews) => {
+        commit('SET_MY_REVIEWS', reviews);
+      }).finally(() => {
+        if (notify) notify()
+      })
+  }
 
 }
 
@@ -391,7 +409,11 @@ const mutations = {
 
 	['SET_MY_REVIEW_REQUESTS'](state, list) {
 		Vue.set(state, 'myReviewRequests', list);
-	}
+  },
+
+  ['SET_MY_REVIEWS'](state, list) {
+		Vue.set(state, 'myReviews', list);
+  },
 }
 
 const namespaced = true;

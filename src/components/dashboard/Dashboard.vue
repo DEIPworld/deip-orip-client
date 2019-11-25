@@ -103,7 +103,7 @@
                             <v-layout column class="pb-5">
                               <v-layout row justify-space-between py-1 class="column-text-item">
                                 <span>My reviews</span>
-                                <span class="primary--text body-2">0</span>
+                                <span class="primary--text body-2">{{myReviewsCount}}</span>
                               </v-layout>
                               <v-layout row justify-space-between py-1 class="column-text-item">
                                 <span>Invites</span>
@@ -297,7 +297,8 @@ export default {
       investments: "dashboard/investments",
       reviewsOnMyResearchCount: "dashboard/reviewsOnMyResearchCount",
       reviewsOnMyRequestsCount: "dashboard/reviewsOnMyRequestsCount",
-      myInvitesCount: "dashboard/myInvitesCount"
+      myInvitesCount: "dashboard/myInvitesCount",
+      myReviewsCount: "dashboard/myReviewsCount",
     }),
 
     hasResearchShares() {
