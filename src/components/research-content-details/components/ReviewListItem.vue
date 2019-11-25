@@ -1,7 +1,7 @@
 <template>
     <v-card class="pa-4">
         <v-layout row>
-            
+
             <v-flex xs2 text-xs-center>
                 <v-layout column fill-height justify-space-between>
                     <div @click="goToReviewerProfilePage($event, _review.author.account.name)">
@@ -48,15 +48,18 @@
             </v-flex>
             
             <v-flex xs4 px-2>
-                <v-layout align-end column>
-                <v-layout row justify-space-between align-center class="mb-2">
-                    Novelty:<squared-rating class="pl-4" readonly v-model="_review.ratings.novelty" />
+                <v-layout align-end column class="">
+                <v-layout row justify-space-between align-center class="pb-2 full-width">
+                    <div class="text-xs-left">Novelty:</div>
+                    <squared-rating class="pl-4" readonly v-model="_review.ratings.novelty" />
                 </v-layout>
-                <v-layout row justify-space-between align-center class="mb-2">
-                    Technical Quality:<squared-rating class="pl-4" readonly v-model="_review.ratings.technicalQuality" />
+                <v-layout row justify-space-between align-center class="pb-2 full-width">
+                    <div class="text-xs-left">Technical Quality:</div>
+                    <squared-rating class="pl-4" readonly v-model="_review.ratings.technicalQuality" />
                 </v-layout>
-                <v-layout row justify-space-between align-center>
-                    Methodology:<squared-rating class="pl-4" readonly v-model="_review.ratings.methodology" />
+                <v-layout row justify-space-between align-center class="full-width">
+                    <div class="text-xs-left">Methodology:</div>
+                    <squared-rating class="pl-4" readonly v-model="_review.ratings.methodology" />
                 </v-layout>
                 </v-layout>
             </v-flex>

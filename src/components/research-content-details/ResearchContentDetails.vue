@@ -38,8 +38,8 @@
                     <div id="reviews" class="reviews-container">
                         <div class="c-pt-2 title">Reviews: {{ contentReviewsList.length }}</div>
 
-                        <div class="c-pt-6">
-                            <review-list-item v-for="(review, i) in contentReviewsList" :review="review" :key="i"></review-list-item>
+                        <div class="py-2">
+                            <review-list-item class="my-4" v-for="(review, i) in contentReviewsList" :review="review" :key="i"></review-list-item>
                         </div>
                     </div>
                 </div>

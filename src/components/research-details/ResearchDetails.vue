@@ -700,7 +700,7 @@
                     item-text="title"
                     item-value="id"
                     :disabled="isRequestingReview"
-                    :items="contentList"
+                    :items="contentListToReview"
                     v-model="selectedContentId"
                   />
                   <v-autocomplete
