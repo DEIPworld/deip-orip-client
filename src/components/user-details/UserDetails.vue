@@ -1,13 +1,8 @@
 <template>
-    <page-container>
-        <contentbar>
-            <user-details-body></user-details-body>
-        </contentbar>
-
-        <sidebar>
-            <user-details-sidebar></user-details-sidebar>
-        </sidebar>
-    </page-container>
+    <base-page-layout>
+        <user-details-body slot="content"></user-details-body>
+        <user-details-sidebar slot="right-sidebar"></user-details-sidebar>
+    </base-page-layout>
 </template>
 
 <script>

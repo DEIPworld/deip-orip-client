@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div class="pa-5">
         <div>
         <!-- ### START User Profile Details Section ### -->
             <div class="user-profile-info-container spinner-container">

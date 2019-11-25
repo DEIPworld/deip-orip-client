@@ -1,6 +1,6 @@
 <template>
-    <div>
-      <div>
+<v-card class="pa-4 full-height">
+    <v-layout column>
     <div v-if="isOwner && hasInvites">
         <div class="title bold pb-2" id="invites">Invites: {{invites.length}}</div>
             <v-layout
@@ -294,8 +294,8 @@
             :is-shown="isClaimExpertiseDialogShown"
             @close="closeClaimExpertiseDialog"
         ></user-claim-expertise-dialog>
-      </div>
-    </div>
+    </v-layout>
+</v-card>
 </template>
 
 <script>
