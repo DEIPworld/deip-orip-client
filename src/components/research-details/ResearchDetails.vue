@@ -624,12 +624,12 @@
                         Send
                       </v-btn>
                       <v-btn 
-                          @click="isJoinGroupDialogOpen = false"
-                          :disabled="isLoading"
-                          color="black" 
-                          flat 
-                          class="mx-0 my-1 pa-0">
-                          Cancel
+                        @click="isJoinGroupDialogOpen = false"
+                        :disabled="isSendingJoinGroupRequest"
+                        color="black" 
+                        flat 
+                        class="mx-0 my-1 pa-0">
+                        Cancel
                       </v-btn>
                     </v-layout>
                   </v-card-actions>

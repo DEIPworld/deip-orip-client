@@ -59,19 +59,17 @@
                             </v-layout>
 
                             <v-layout column class="pb-5">
-                              <v-layout row justify-space-between py-1 class="column-text-item">
+                              <!-- <v-layout row justify-space-between py-1 class="column-text-item">
                                 <span>Wallet</span>
                                 <span></span>
-                              </v-layout>
+                              </v-layout> -->
                               <v-layout row justify-space-between py-1 class="column-text-item">
-                                <router-link :to="{ name: 'InvestorDashboard', params: {}}"> 
-                                  <span>My Portfolio</span>
-                                </router-link>
+                                <span>My portfolio</span>
                                 <span><v-chip class="ma-0" color="#826AF9" text-color="white">{{investments.length}}</v-chip></span>
                               </v-layout>
                               <v-layout row justify-space-between py-1 class="column-text-item">
                                 <span>My deals</span>
-                                <span><v-chip class="ma-0" color="#826AF9" text-color="white">0</v-chip></span>
+                                <span><v-chip class="ma-0" color="#826AF9" text-color="white">2</v-chip></span>
                               </v-layout>
                               <v-layout row justify-space-between py-1 class="column-text-item">
                                 <span>Explore investment opportunities</span>
@@ -104,20 +102,20 @@
 
                             <v-layout column class="pb-5">
                               <v-layout row justify-space-between py-1 class="column-text-item">
-                                <span>My Reviews</span>
+                                <span>My reviews</span>
                                 <span class="primary--text body-2">0</span>
                               </v-layout>
                               <v-layout row justify-space-between py-1 class="column-text-item">
                                 <span>Invites</span>
-                                <span class="primary--text body-2">0</span>
+                                <span class="primary--text body-2">{{myInvitesCount}}</span>
                               </v-layout>
                               <v-layout row justify-space-between py-1 class="column-text-item">
                                 <span>Reviews on my research</span>
-                                <span class="primary--text body-2">0</span>
+                                <span class="primary--text body-2">{{reviewsOnMyResearchCount}}</span>
                               </v-layout>
                               <v-layout row justify-space-between py-1 class="column-text-item">
                                 <span>Reviews on my request</span>
-                                <span class="primary--text body-2">0</span>
+                                <span class="primary--text body-2">{{reviewsOnMyRequestsCount}}</span>
                               </v-layout>
                             </v-layout>
 
@@ -294,17 +292,16 @@ export default {
     ...mapGetters({
       user: "auth/user",
       researches: "dashboard/researches",
+      experts: "dashboard/experts",
       currentShares: "dashboard/currentShares",
       investments: "dashboard/investments",
-      allExperts: "dashboard/experts"
+      reviewsOnMyResearchCount: "dashboard/reviewsOnMyResearchCount",
+      reviewsOnMyRequestsCount: "dashboard/reviewsOnMyRequestsCount",
+      myInvitesCount: "dashboard/myInvitesCount"
     }),
 
     hasResearchShares() {
       return this.currentShares.length;
-    },
-
-    experts() {
-      return this.allExperts.filter(expert => !this.blackList.some(a => a == expert.account.name));
     },
 
     isRequestReviewDisabled() {
@@ -419,10 +416,6 @@ export default {
         this.isRequestingReview = false;
       });
     }
-  },
-
-  created() {
-    this.blackList.push(this.user.account.name);
   }
 };
 </script>

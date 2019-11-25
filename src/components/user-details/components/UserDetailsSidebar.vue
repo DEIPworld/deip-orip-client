@@ -15,8 +15,6 @@
                             research_group_permlink: encodeURIComponent(invite.group.permlink),
                         }}"
                         >{{invite.group.name}}
-
-                        <span class="a">{{invite.group.name}}</span>
                     </router-link>
                     <div class="py-2 caption half-bold">
                         invites you to join them with

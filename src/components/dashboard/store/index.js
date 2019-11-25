@@ -6,8 +6,7 @@ import * as usersService from './../../../utils/user';
 import tokenSaleService from './../../../services/TokenSaleService';
 import organizationsService from './../../../services/OrganizationsService';
 import * as researchService from './../../../services/ResearchService';
-
-const experts = ["alice", "bob", "mike", "john", "rachel", "james", "rick", "alex", "anastasia", "nick", "carla", "irene", "sherlock", "greg", "doroty", "hermes"];
+import reviewRequestsService from './../../../services/http/reviewRequests';
 
 const state = {
 	isLoadingDashboardPage: false,
@@ -31,7 +30,10 @@ const state = {
 	researchGroupsMembers: [],
 	
 	expertsList: [],
-	expertsExpertiseTokensList: []
+	expertsExpertiseTokensList: [],
+
+	myInvitesList: [],
+	myReviewRequests: []
 }
 
 // getters
@@ -92,6 +94,21 @@ const getters = {
 		return state.investedResearches;
 	},
 
+	reviewsOnMyResearchCount: (state, getters) => {
+		return getters.researches.reduce((acc, { research }) => {
+			return acc + research.number_of_negative_reviews + research.number_of_positive_reviews;
+		}, 0);
+	},
+
+	reviewsOnMyRequestsCount: (state, getters) => {
+		let approvedReviews = state.myReviewRequests.filter(req => req.status == "approved");
+		return approvedReviews.length;
+	},
+
+	myInvitesCount: (state, getters) => {
+		return state.myInvitesList.length;
+	},
+	
 	currentShares: (state) => {
 		return state.investedResearchShares.map(share => {
 			let research = state.investedResearches.find(r => r.id == share.research_id);
@@ -124,12 +141,20 @@ const actions = {
 		const expertsLoad = new Promise((resolve, reject) => {
 			dispatch('loadExperts', { username: username, notify: resolve });
 		});
+		const myInvitesLoad = new Promise((resolve, reject) => {
+			dispatch('loadMyInvites', { username: username, notify: resolve });
+		});
+		const myReviewRequestsLoad = new Promise((resolve, reject) => {
+			dispatch('loadMyReviewRequests', { username: username, notify: resolve });
+		});
 
 		return Promise.all([
 			investedResearchesLoad, 
 			investingResearchesLoad, 
 			membershipResearchesLoad,
-			expertsLoad
+			expertsLoad,
+			myInvitesLoad,
+			myReviewRequestsLoad
 		])
 			.then(() => {
 				let pulled = [
@@ -252,8 +277,13 @@ const actions = {
 			});
 	},
 
-	loadExperts({ commit }, { notify } = {}) {
-		return usersService.getEnrichedProfiles(experts)
+	loadExperts({ commit }, { username, notify } = {}) {
+		const blackList = ['regacc', 'hermes', 'initdelegate', username];
+		deipRpc.api.getAllAccountsAsync()
+			.then(accounts => {
+				let experts = accounts.filter(a => !blackList.some(username => username === a.name)).map(a => a.name);
+				return usersService.getEnrichedProfiles(experts);
+			})
 			.then((users) => {
 				commit('SET_EXPERTS', users);
 				return Promise.all(users.map(user => deipRpc.api.getExpertTokensByAccountNameAsync(user.account.name)))
@@ -261,6 +291,28 @@ const actions = {
 			.then((tokens) => {
 				const flatten = [].concat.apply([], tokens);
 				commit('SET_EXPERTS_EXPERTISE_TOKENS', flatten);
+			})
+			.finally(() => {
+				if (notify) notify();
+			});
+	},
+
+	loadMyInvites({ commit }, { username, notify } = {}) {
+		return deipRpc.api.getResearchGroupInvitesByAccountNameAsync(username)
+			.then((invites) => {
+				commit('SET_MY_INVITES', invites);
+			})
+			.finally(() => {
+				if (notify) notify();
+			});
+	},
+
+	loadMyReviewRequests({ commit }, { username, notify } = {}) {
+		return reviewRequestsService.getReviewRequestsByRequestor(username)
+			.then((reviews) => {
+				commit('SET_MY_REVIEW_REQUESTS', reviews);
+			})
+			.finally(() => {
 				if (notify) notify();
 			});
 	}
@@ -331,6 +383,14 @@ const mutations = {
 
 	['SET_BOOKMARKED_RESEARCHES_ONGOING_TOKEN_SALES_CONTRIBUTIONS'](state, list) {
 		Vue.set(state, 'bookmarkedResearchesOngoingTokenSalesContributions', list);
+	},
+
+	['SET_MY_INVITES'](state, list) {
+		Vue.set(state, 'myInvitesList', list);
+	},
+
+	['SET_MY_REVIEW_REQUESTS'](state, list) {
+		Vue.set(state, 'myReviewRequests', list);
 	}
 }
 

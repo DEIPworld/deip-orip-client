@@ -206,7 +206,7 @@ const actions = {
 
   loadUserReviewRequests({ commit }, { username, notify }) {
     const reviewRequests = [];
-    return reviewRequestsService.getReviewRequestsByExpert(username)
+    return reviewRequestsService.getReviewRequestsByExpert(username, "pending")
       .then((results) => {
         const detailsPromises = [];
         reviewRequests.push(...results);
