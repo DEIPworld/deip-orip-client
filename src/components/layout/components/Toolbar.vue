@@ -16,7 +16,7 @@
       <v-spacer></v-spacer>
 
       <v-toolbar-items v-if="isLoggedIn()" class="hidden-sm-and-down">
-        <v-btn :to="{ name: 'ResearchFeed' }" color="white" flat class="ma-0">Feed</v-btn>
+        <v-btn :to="{ name: 'ResearchFeed' }" color="white" flat class="ma-0">Explore</v-btn>
         <v-btn :to="{ name: 'Dashboard' }"  color="white" flat class="ma-0">Dashboard</v-btn>
         <v-btn :to="{ name: 'InvestorDashboard' }" color="white" flat class="ma-0">Portfolio</v-btn>
         <v-btn :to="{ name: 'UserWallet', params: { account_name: user.username } }" color="white" flat class="ma-0">Wallet</v-btn>
