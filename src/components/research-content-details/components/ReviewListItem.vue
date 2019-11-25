@@ -1,54 +1,67 @@
 <template>
-    <v-card class="review-container hidden-last-child">
-        <div class="legacy-row-nowrap c-p-6 clickable" @click="goToReviewPage()">
-            <div class="legacy-column text-align-center" @click="goToReviewerProfilePage($event, _review.author.account.name)">
-                <v-avatar size="90px">
-                    <img v-if="review.author.profile" v-bind:src="review.author.profile.avatar | avatarSrc(180, 180, false)" />
-                    <v-gravatar v-else :title="review.author.account.name" :email="review.author.account.name + '@deip.world'" />
-                </v-avatar>
-                <div class="bold c-pt-2">
-                    <span class="a">
-                        {{ review.author | fullname }}
-                    </span>
-                </div>
-            </div>
-            <div class="legacy-column c-ml-6">
-                <div>
-                    <span class="grey--text">{{ _review.created_at | dateFormat('D MMM YYYY', true) }}</span>
-                    <span class="half-bold c-pl-2">
-                        <span class="green--text text--darken-2" v-if="_review.is_positive">Approving</span>
-                        <span class="red--text text--darken-2" v-if="!_review.is_positive">Rejecting</span>
-                    </span>
-                </div>
+    <v-card class="pa-4">
+        <v-layout row>
+            
+            <v-flex xs2 text-xs-center>
+                <v-layout column fill-height justify-space-between>
+                    <div @click="goToReviewerProfilePage($event, _review.author.account.name)">
+                        <v-avatar size="90px">
+                            <img v-if="review.author.profile" v-bind:src="review.author.profile.avatar | avatarSrc(180, 180, false)" />
+                            <v-gravatar v-else :title="review.author.account.name" :email="review.author.account.name + '@deip.world'" />
+                        </v-avatar>
+                        <div class="bold c-pt-2">
+                            <span class="a">
+                                {{ review.author | fullname }}
+                            </span>
+                        </div>
+                    </div>
 
-                <div class="c-pt-4 legacy-col-grow review-preview">
-                    <span v-html="extractPreview(_review)"></span>
-                </div>
-
-                <div class="legacy-row-nowrap">
-                    <div v-for="(tvo, i) in disciplines" class="grey--text" :key="'discipline-' + i">
-                        <span class="c-pr-1">
-                            <span>{{ tvo.disciplineName }}</span>
-                        </span>
-                        <span class="c-pr-4 bold">
-                            <span>{{tvo.totalWeight}}</span>
+                    <v-btn small outline @click="goToReviewPage()">See Review</v-btn>
+                </v-layout>
+            </v-flex>
+     
+            <v-flex xs6>
+                <div class="pl-4">
+                    <div>
+                        <span class="grey--text">{{ _review.created_at | dateFormat('D MMM YYYY', true) }}</span>
+                        <span class="half-bold c-pl-2">
+                            <span class="green--text text--darken-2" v-if="_review.is_positive">Approving</span>
+                            <span class="red--text text--darken-2" v-if="!_review.is_positive">Rejecting</span>
                         </span>
                     </div>
+
+                    <div class="py-2">
+                        <span v-html="extractPreview(_review)"></span>
+                    </div>
+
+                    <div>
+                        <div v-for="(tvo, i) in disciplines" class="grey--text half-bold" :key="'discipline-' + i">
+                            <span class="pr-2">
+                                <span>{{ tvo.disciplineName }}:</span>
+                            </span>
+                            <span class="pr-4">
+                                <span>{{tvo.totalWeight}}</span>
+                            </span>
+                        </div>
+                    </div>
                 </div>
-            </div>
-            <v-layout align-end column>
-              <v-layout row justify-space-between align-center class="mb-2">
-                Novelty:<squared-rating class="pl-4" readonly v-model="_review.ratings.novelty" />
-              </v-layout>
-              <v-layout row justify-space-between align-center class="mb-2">
-                Technical Quality:<squared-rating class="pl-4" readonly v-model="_review.ratings.technicalQuality" />
-              </v-layout>
-              <v-layout row justify-space-between align-center>
-                Methodology:<squared-rating class="pl-4" readonly v-model="_review.ratings.methodology" />
-              </v-layout>
-            </v-layout>
-        </div>
-        <v-divider></v-divider>
+            </v-flex>
+            
+            <v-flex xs4 px-2>
+                <v-layout align-end column>
+                <v-layout row justify-space-between align-center class="mb-2">
+                    Novelty:<squared-rating class="pl-4" readonly v-model="_review.ratings.novelty" />
+                </v-layout>
+                <v-layout row justify-space-between align-center class="mb-2">
+                    Technical Quality:<squared-rating class="pl-4" readonly v-model="_review.ratings.technicalQuality" />
+                </v-layout>
+                <v-layout row justify-space-between align-center>
+                    Methodology:<squared-rating class="pl-4" readonly v-model="_review.ratings.methodology" />
+                </v-layout>
+                </v-layout>
+            </v-flex>
+        </v-layout>
+
     </v-card>
 </template>
 
