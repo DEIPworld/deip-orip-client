@@ -694,11 +694,23 @@
               </v-card-title>
               <v-card-text>
                 <v-layout column>
+                  <v-select
+                    v-if="contentListToReview.length"
+                    class="mt-3"
+                    label="Select a content to request review"
+                    item-text="title"
+                    item-value="id"
+                    :disabled="isRequestingReview"
+                    :items="contentListToReview"
+                    v-model="selectedContentId"
+                  />
+                  <span v-else>There are no content to review for selected expert</span>
                   <v-autocomplete
                     label="Find an expert to request a review"
                     hide-no-data
                     :append-icon="null"
                     :loading="isExpertsLoading"
+                    :disabled="selectedContentId === null || isRequestingReview"
                     :items="foundExperts"
                     item-text="name"
                     item-value="user"
@@ -717,17 +729,6 @@
                       <div class="py-2 body-2">{{selectedExpert | employmentOrEducation}}</div>
                     </div>
                   </template>
-                  <v-select
-                    v-if="contentListToReview.length"
-                    class="mt-3"
-                    label="Select a content to request review"
-                    item-text="title"
-                    item-value="id"
-                    :disabled="!selectedExpert"
-                    :items="contentListToReview"
-                    v-model="selectedContentId"
-                  />
-                  <span v-else>There are no content to review for selected expert</span>
                 </v-layout>
               </v-card-text>
               <v-card-actions>
