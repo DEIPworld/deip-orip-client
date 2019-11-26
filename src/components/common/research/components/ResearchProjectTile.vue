@@ -53,7 +53,7 @@
         </v-layout> -->
       </v-layout>
       <v-layout v-else-if="hasInactiveTokenSale" row align-baseline justify-end>
-        <v-chip class="my-0 mx-0 px-0 caption" style="height: 1.4em" color="primary lighten-3">Token Sale starts in {{tokenSaleStartLeft}}</v-chip> 
+        <v-chip class="my-0 mx-0 px-0 caption" style="height: 1.4em" color="primary lighten-3">Fundraising starts in {{tokenSaleStartLeft}}</v-chip> 
       </v-layout>
     </v-layout>
     <v-layout row justify-space-between align-baseline>
