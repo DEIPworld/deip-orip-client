@@ -20,9 +20,9 @@
             <span class="caption grey--text px-1">Created {{moment(selectedInvestment.research.created_at).format("DD MMM YYYY")}} by {{selectedInvestment.research.owner | fullname}}</span>
           </span>
           <span>
-            <span class="icon-btn"><v-icon>attachment</v-icon></span>
-            <span class="icon-btn"><v-icon>compare</v-icon></span>
-            <span class="icon-btn"><v-icon>delete</v-icon></span>
+            <span @click="showUnderDevelopmentAlert()" class="icon-btn"><v-icon>attachment</v-icon></span>
+            <span @click="showUnderDevelopmentAlert()" class="icon-btn"><v-icon>compare</v-icon></span>
+            <span @click="showUnderDevelopmentAlert()" class="icon-btn"><v-icon>delete</v-icon></span>
           </span>
         </v-layout>
         <v-divider></v-divider>
@@ -309,6 +309,10 @@
 
       removeTagName(item) {
         this.updateTagsDialog.tagNames.splice(this.updateTagsDialog.tagNames.indexOf(item), 1);
+      },
+      
+      showUnderDevelopmentAlert() {
+        alert('This feature is under development');
       }
     },
     watch: {
