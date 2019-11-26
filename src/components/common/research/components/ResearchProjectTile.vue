@@ -32,7 +32,7 @@
           <v-flex grow>
             <v-tooltip bottom>
               <v-progress-linear slot="activator" class="progress-current my-0" :value="fundingProgressPercent"></v-progress-linear>
-              <span>Token Sale Progress</span>
+              <span>Fundraising Progress</span>
             </v-tooltip>
           </v-flex>
           <!-- <v-flex shrink class="grey--text caption ml-2">Token Sale</v-flex> -->
