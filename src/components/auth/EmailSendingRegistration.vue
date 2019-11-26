@@ -51,7 +51,6 @@
             register() {
                 if (this.$refs.form.validate()) {
                     //check isEmailUnique (now we don't have such method on BE)
-                    console.log('Sending this email to server for further registration');
                     this.wasSent = true;
                 }
             }

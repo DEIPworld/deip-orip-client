@@ -397,7 +397,6 @@ export default {
     },
 
     onSetExpert() {
-      console.log(this.selectedExpert);
     },
 
     requestReview(review) {

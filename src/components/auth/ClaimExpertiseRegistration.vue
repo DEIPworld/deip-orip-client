@@ -57,8 +57,6 @@
                 this.selectedDiscipline = discipline;
             },
             setDiscipline() {
-                console.log('Save discipline by sending to server');
-
                 this.$router.push({ name: 'ResearchFeed' });
             }
         }

@@ -67,7 +67,7 @@ function verb(method, url, model, options) {
 
         httpPromise.then(
                 (response) => {
-                    console.log(response);
+                    // console.log(response);
                     resolve(response.data);
                 })
             .catch(

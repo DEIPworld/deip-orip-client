@@ -161,7 +161,6 @@
             },
             finishRegistration() {
                 const self = this;
-                console.log(this.formData);
                 this.isSaving = true;
 
                 delete this.formData.privKey;

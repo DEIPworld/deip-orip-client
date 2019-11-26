@@ -149,7 +149,7 @@ export async function findBlocksByRange(startTime, endTime) {
     while (lowerBound + 1 < upperBound) {
         var probe = Math.floor((upperBound + lowerBound) / 2)
         var b = await getBlockHeader(probe)
-        console.log("block", probe, b['timestamp'])
+        // console.log("block", probe, b['timestamp'])
 
         if (b['timestamp'] < startTime) {
             lowerBound = probe
@@ -168,7 +168,7 @@ export async function findBlocksByRange(startTime, endTime) {
     while (lowerBound + 1 < tooLarge) {
         var probe = Math.floor((lowerBound + tooLarge) / 2)
         var b = await getBlockHeader(probe)
-        console.log("block", probe, b['timestamp'])
+        // console.log("block", probe, b['timestamp'])
         if (b['timestamp'] <= startTime) {
             lowerBound = probe
         }
@@ -182,7 +182,7 @@ export async function findBlocksByRange(startTime, endTime) {
     while(tooSmall + 1 < upperBound) {
         var probe = Math.floor((tooSmall + upperBound) / 2)
         var b = await getBlockHeader(probe)
-        console.log("block", probe, b['timestamp'])
+        // console.log("block", probe, b['timestamp'])
 
         if (b['timestamp'] <= endTime){
             tooSmall = probe
@@ -195,7 +195,7 @@ export async function findBlocksByRange(startTime, endTime) {
     var firstBlock = await getBlockHeader(lowerBound)
     var lastBlock = await getBlockHeader(upperBound - 1)
 
-    console.log("First block:", lowerBound, firstBlock['timestamp'])
-    console.log("Last block:", upperBound - 1, lastBlock['timestamp'])
+    // console.log("First block:", lowerBound, firstBlock['timestamp'])
+    // console.log("Last block:", upperBound - 1, lastBlock['timestamp'])
     return { first: { num: lowerBound, block: firstBlock }, last: { num: upperBound - 1, block: lastBlock } };
 }

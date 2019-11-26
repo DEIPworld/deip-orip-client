@@ -81,7 +81,7 @@
                                 <div class="grey-border-stripe c-mt-4">
                                     <div class="legacy-row-nowrap">
                                         <div class="pill width-7">
-                                            <div class="white--text">SHA256</div>
+                                            <div class="white--text">ECC</div>
                                         </div>
                                         <div class="legacy-col-grow pill-value">
                                             <div>{{ contentMetadata.witness.signingKey }}</div>

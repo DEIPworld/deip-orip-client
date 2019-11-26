@@ -109,7 +109,6 @@
                         return acc + item.reviewData.review.expertise_amounts_used.find(expertise => expertise[0] === data.discipline.id)[1];
                     }, 0) / iterationReviews.length;
 
-                    console.log('PARTS')
 
                     let iterationEci = _.reduce(iterationReviews, (acc, item) => {
                         let mr = item.reviewData.review.is_positive ? 1 : -1;

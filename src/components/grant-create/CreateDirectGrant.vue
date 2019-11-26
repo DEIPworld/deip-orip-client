@@ -97,7 +97,6 @@
             },
             finish() {
                 // this.isLoading = true;
-                console.log('FINISHED');
             }
         },
 

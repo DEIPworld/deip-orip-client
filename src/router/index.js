@@ -66,14 +66,6 @@ const router = new Router({
 		name: 'SignUp',
 		component: SignUp
 	}, {
-		path: '/emailSendingRegesitration',
-		name: 'EmailSendingRegesitration',
-		component: EmailSendingRegistration
-	}, /* {
-		path: '/dataFillingRegesitration',
-		name: 'DataFillingRegesitration',
-		component: DataFillingRegistration
-	}, */	{
 		path: '/claimExpertiseRegesitration',
 		name: 'ClaimExpertiseRegesitration',
 		component: ClaimExpertiseRegistration

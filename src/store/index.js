@@ -46,5 +46,5 @@ export default new Vuex.Store({
         investorDashboard
     },
     strict: process.env.NODE_ENV !== 'production',
-    plugins: process.env.NODE_ENV !== 'production' ? [createLogger()] : []
+    plugins: process.env.NODE_ENV !== 'production' ? [/* createLogger() */] : []
 });
