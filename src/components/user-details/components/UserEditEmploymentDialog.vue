@@ -6,7 +6,7 @@
                       <v-flex grow class="headline">
                         Employment
                       </v-flex>
-                      <v-flex shrink align-self-center>
+                      <v-flex shrink align-self-center right-top-angle>
                         <v-btn @click.native="meta.isShown = false" icon class="pa-0 ma-0">
                             <v-icon color="black">close</v-icon>
                         </v-btn>
@@ -134,10 +134,13 @@
                             </div>
                         </div>
                         <div>
-                            <v-layout>
-                                <v-spacer></v-spacer>
-                                <v-btn class="ma-0 width-10" color="black" flat @click.native="meta.isShown = false">Cancel</v-btn>
-                                <v-btn class="ma-0 width-10" color="primary" @click="save()" :disabled="disabled">Save</v-btn>
+                            <v-layout row wrap>
+                                <v-flex xs12 py-2>
+                                    <v-btn class="ma-0" color="primary" block @click="save()" :disabled="disabled">Save</v-btn>
+                                </v-flex>
+                                <v-flex xs12 py-2>
+                                    <v-btn class="ma-0" color="primary" block flat @click.native="meta.isShown = false">Cancel</v-btn>
+                                </v-flex>
                             </v-layout>
                         </div>
                     </v-form>

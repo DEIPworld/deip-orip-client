@@ -2,11 +2,11 @@
 
 import Vue from 'vue';
 import deipRpc from '@deip/deip-oa-rpc-client';
-import * as usersService from './../../../utils/user';
-import tokenSaleService from './../../../services/TokenSaleService';
-import organizationsService from './../../../services/OrganizationsService';
-import * as researchService from './../../../services/ResearchService';
-import reviewRequestsService from './../../../services/http/reviewRequests';
+import * as usersService from '@/utils/user';
+import tokenSaleService from '@/services/TokenSaleService';
+import * as researchService from '@/services/ResearchService';
+import * as researchGroupService from '@/services/ResearchGroupService';
+import reviewRequestsService from '@/services/http/reviewRequests';
 
 const state = {
 	isLoadingDashboardPage: false,
@@ -26,6 +26,7 @@ const state = {
 	bookmarkedResearchesOngoingTokenSales: [],
 	bookmarkedResearchesOngoingTokenSalesContributions: [],
 
+  researchGroups: [],
 	researchGroupsTokens: [],
 	researchGroupsMembers: [],
 	
@@ -52,10 +53,6 @@ const getters = {
 			.reduce((acc, research) => {
 				if (acc.some(a => a.research.id == research.id)) return acc;
 
-				let groupMembers = state.researchGroupsTokens
-					.filter(rgt => rgt.research_group_id == research.research_group_id)
-					.map(rgt => rgt.owner);
-
 				let researchMembers = state.researchGroupsMembers
 					.filter(member => research.members.some(name => name == member.account.name));
 
@@ -66,7 +63,7 @@ const getters = {
 				]
 				.find(s => s.research_id == research.id);
 
-				let organization = organizationsService.getResearchOrganization(research.id) || null;
+        let group = state.researchGroups.find(rg => rg.id === research.research_group_id);
 				let isTop = researchService.getTopResearchesIds().some(id => id == research.id);
 
 				if (tokenSale) {
@@ -81,9 +78,9 @@ const getters = {
 					}, [])
 					.filter(c => c.research_token_sale_id == tokenSale.id);
 
-					return [...acc, { research: { ...research, isTop }, authors: researchMembers, tokenSale, tokenSaleContributions, organization }];
+					return [...acc, { research: { ...research, isTop }, authors: researchMembers, tokenSale, tokenSaleContributions, group }];
 				} else {
-					return [...acc, { research: { ...research, isTop }, authors: researchMembers, organization }];
+					return [...acc, { research: { ...research, isTop }, authors: researchMembers, group }];
 				}
 			}, []);
 
@@ -172,29 +169,37 @@ const actions = {
 					...state.myMembershipResearches
 				].map(research => research.id);
 
-				const loadBookmarkedResearchesLoad = new Promise((resolve, reject) => {
+				const bookmarkedResearchesLoad = new Promise((resolve, reject) => {
 					dispatch('loadBookmarkedResearches', { username: username, excludeIds: pulled, notify: resolve });
 				});
 				return Promise.all([
-					loadBookmarkedResearchesLoad
+					bookmarkedResearchesLoad
 				]);
 			})
 			.then(() => {
-				return Promise.all([
+        const rgtPromises = [];
+        const rgPromises = [];
+        [
 					...state.investedResearches,
 					...state.investingResearches,
 					...state.myMembershipResearches,
 					...state.bookmarkedResearches
-				]
-					.reduce((unique, research) => {
-						if (unique.some(rgId => rgId == research.research_group_id)) return unique;
-						return [research.research_group_id, ...unique];
-					}, [])
-					.map(rId => deipRpc.api.getResearchGroupTokensByResearchGroupAsync(rId)));
+				].reduce((unique, research) => {
+          if (unique.some(rgId => rgId == research.research_group_id)) return unique;
+          return [research.research_group_id, ...unique];
+        }, []).forEach((rId) => {
+          rgtPromises.push(deipRpc.api.getResearchGroupTokensByResearchGroupAsync(rId));
+          rgPromises.push(researchGroupService.getResearchGroupById(rId));
+        })
+				return Promise.all([
+          Promise.all(rgtPromises),
+          Promise.all(rgPromises)
+        ]);
 			})
-			.then((researchGroupsTokens) => {
+			.then(([researchGroupsTokens, researchGroups]) => {
 				const tokens = [].concat.apply([], researchGroupsTokens);
 				commit('SET_RESEARCH_GROUPS_TOKENS', tokens);
+				commit('SET_RESEARCH_GROUPS', researchGroups);
 				return usersService.getEnrichedProfiles(tokens.reduce((unique, rt) => {
 					if (unique.some(name => name == rt.owner)) return unique;
 					return [rt.owner, ...unique];
@@ -377,6 +382,10 @@ const mutations = {
 
 	['SET_RESEARCH_GROUPS_TOKENS'](state, list) {
 		Vue.set(state, 'researchGroupsTokens', list);
+  },
+
+	['SET_RESEARCH_GROUPS'](state, list) {
+		Vue.set(state, 'researchGroups', list);
 	},
 
 	['SET_RESEARCH_GROUPS_MEMBERS'](state, list) {

@@ -87,7 +87,7 @@
                                 <v-icon small>add</v-icon>
                             </v-btn>
                     
-                            <span class="c-pl-2 deip-blue-color">Invite researchers</span>
+                            <span class="c-pl-2">Invite researchers</span>
                         </div>
 
                         <div v-if="isResearchGroupMember && invites.length">
@@ -95,7 +95,7 @@
 
                             <v-expansion-panel class="group-invites">
                                 <v-expansion-panel-content>
-                                    <div slot="header" class="deip-blue-color">
+                                    <div slot="header">
                                         <!-- <v-icon small color="primary">access_time</v-icon> -->
                                         <span class="">Pending invites ({{invites.length}})</span>
                                     </div>
@@ -245,4 +245,23 @@
         background-color: @yellow !important;
     }
 
+    .info-card-list {
+        .list-line {
+            display: flex;
+            padding-top: 24px;
+            padding-bottom: 24px;
+            padding-left: 12px;
+            padding-right: 12px;
+        }
+        .list-header-cell {
+            padding-right: 12px;
+            padding-left: 12px;
+            color: @grey;
+        }
+        .list-body-cell {
+            padding-right: 12px;
+            padding-left: 12px;
+            align-self: center;
+        }
+    }
 </style>

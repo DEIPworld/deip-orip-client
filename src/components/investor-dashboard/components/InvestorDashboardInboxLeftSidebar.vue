@@ -26,10 +26,19 @@
             </v-flex>
           </v-layout>
         </div>
-        <v-dialog v-model="newListDialog.isOpened" max-width="500px">
-          <v-card>
+        <v-dialog v-model="newListDialog.isOpened" max-width="600px">
+          <v-card class="pa-4">
             <v-card-title>
-              <span>Add new list</span>
+              <v-layout align-center>
+                <v-flex grow title>
+                  Add new list
+                </v-flex>
+                <v-flex shrink right-top-angle>
+                  <v-btn @click="closeNewListDialog()" icon class="pa-0 ma-0">
+                    <v-icon color="black">close</v-icon>
+                  </v-btn>
+                </v-flex>
+              </v-layout>
             </v-card-title>
             <v-card-text>
               <swatches v-model="newListDialog.color" inline colors="material-light"/>
@@ -40,18 +49,29 @@
               ></v-text-field>
             </v-card-text>
             <v-card-actions>
-              <v-layout row justify-end>
-                <v-btn flat @click="closeNewListDialog()">Cancel</v-btn>
-                <v-btn @click="addNewList()" color="primary" :disabled="isSavingNewListDisabled || newListDialog.isSaving">Save</v-btn>
+              <v-layout row wrap>
+                <v-flex xs12 py-2>
+                  <v-btn @click="addNewList()" color="primary" block :disabled="isSavingNewListDisabled || newListDialog.isSaving">Save</v-btn>
+                </v-flex>
+                <v-flex xs12 py-2>
+                  <v-btn color="primary" flat block @click="closeNewListDialog()">Cancel</v-btn>
+                </v-flex>
               </v-layout>
             </v-card-actions>
           </v-card>
         </v-dialog>
 
-        <v-dialog v-model="editListDialog.isOpened" max-width="500px">
-          <v-card>
+        <v-dialog v-model="editListDialog.isOpened" max-width="600px">
+          <v-card class="pa-4">
             <v-card-title>
-              <span>Add new list</span>
+              <v-layout align-center>
+                <v-flex grow title>Add new list</v-flex>
+                <v-flex shrink right-top-angle>
+                  <v-btn @click="closeEditListDialog()" icon class="pa-0 ma-0">
+                    <v-icon color="black">close</v-icon>
+                  </v-btn>
+                </v-flex>
+              </v-layout>
             </v-card-title>
             <v-card-text>
               <swatches v-model="editListDialog.color" inline colors="material-light"/>
@@ -62,9 +82,13 @@
               ></v-text-field>
             </v-card-text>
             <v-card-actions>
-              <v-layout row justify-end>
-                <v-btn flat @click="closeEditListDialog()">Cancel</v-btn>
-                <v-btn @click="editCustomList()" color="primary" :disabled="isSavingEditedListDisabled || editListDialog.isSaving">Save</v-btn>
+              <v-layout row wrap>
+                <v-flex xs12 py-2>
+                  <v-btn @click="editCustomList()" color="primary" block :disabled="isSavingEditedListDisabled || editListDialog.isSaving">Save</v-btn>
+                </v-flex>
+                <v-flex xs12 py-2>
+                  <v-btn color="primary" flat block @click="closeEditListDialog()">Cancel</v-btn>
+                </v-flex>
               </v-layout>
             </v-card-actions>
           </v-card>

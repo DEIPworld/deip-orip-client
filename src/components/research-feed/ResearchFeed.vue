@@ -1,7 +1,7 @@
 <template>
   <base-page-layout>
     <div slot="content" class="full-width">
-      <v-layout column justify-center class="feed-header px-5">
+      <v-layout column justify-center class="feed-header full-width px-5" :style="{ background: 'url(' + $options.filters.tenantBackgroundSrc(tenant) + '), 100%, 100%, no-repeat'}">
         <div class="display-2 uppercase half-bold">Projects</div>
         <div class="py-4"><v-btn :to="{ name: 'CreateResearch' }" color="primary" class="ma-0">Start a project</v-btn></div>
       </v-layout>
@@ -34,7 +34,7 @@
                         close
                         outline>
                         <v-avatar>
-                          <img :src="`./../../../static/organizations/${organization.thumbnail}`">
+                          <img :src="organization.logoSrc">
                         </v-avatar>
                         {{ organization.name }}
                       </v-chip>
@@ -46,7 +46,7 @@
                         close
                         outline>
                         <v-avatar>
-                          <img :src="`./../../../static/top-100.png`">
+                          <img :src="`./../../../static/top-100.svg`">
                         </v-avatar>
                         Top 100
                       </v-chip>
@@ -82,7 +82,8 @@
                         flat block small color="primary" 
                         class="text-capitalize filter-btn" 
                         :class="{'selected': isDisciplineSelected(discipline)}">
-                        {{discipline.label}}
+                        <div class="full-width text-xs-center">{{discipline.label}}</div>
+                        <!-- {{discipline.label}} -->
                       </v-btn>
                     </v-flex>
                     <v-spacer></v-spacer>
@@ -103,20 +104,31 @@
                       </v-btn>
                     </v-layout>
                   </div>
-                  <v-layout row wrap justify-space-between>
-                    <v-flex xs3 sm3 md2 lg2 xl2 
-                      v-for="(organization, i) in organizations"
-                      :key="'organization-filter-' + i"
-                      @click="toggleOrganization(organization)" 
-                      class="organization-item px-2 my-2" 
-                      :class="{'selected': isOrganizationSelected(organization)}">
-
-                      <div class="organization-item-btn pa-1">
-                        <img style="width: 100%; height: 100%" :src="`./../../../static/organizations/${organization.logo}`" />
-                        <div class="overlay"></div>
-                      </div>
-                    </v-flex>
-                    <v-spacer></v-spacer>
+                  <v-layout row wrap>
+                    <div
+                      v-for="organization of organizations"
+                      :key="`organization-filter-${organization.id}`"
+                    >
+                      <v-tooltip bottom>
+                        <template v-slot:activator="{ on }">
+                          <div
+                            v-on="on"
+                            @click="toggleOrganization(organization)"
+                            :class="{
+                              'organization-item ma-2 pa-1': true,
+                              'organization-item--selected': isOrganizationSelected(organization)
+                            }"
+                          >
+                            <img
+                              class="organization-item__img"
+                              :src="organization.logoSrc"
+                            />
+                            <div class="organization-item__overlay"></div>
+                          </div>
+                        </template>
+                        <span>{{organization.name}}</span>
+                      </v-tooltip>
+                    </div>
                   </v-layout>
                 </v-flex>
                 <v-flex xs12 sm12 md12 lg12 xl12 py-4><v-divider></v-divider></v-flex>
@@ -174,7 +186,7 @@
                       :members="props.item.authors" 
                       :tokenSale="props.item.tokenSale"
                       :tokenSaleContributions="props.item.tokenSaleContributions"
-                      :organization="props.item.organization">
+                      :group="props.item.group">
                     </research-project-tile>
                   </v-flex> 
                 </template>
@@ -193,7 +205,6 @@ import deipRpc from '@deip/deip-oa-rpc-client';
 import { mapGetters } from 'vuex';
 import moment from 'moment';
 import * as disciplinesService from './../../components/common/disciplines/DisciplineTreeService';
-import organizationsService from './../../services/OrganizationsService';
 
 export default {
   name: "ResearchFeed",
@@ -205,7 +216,6 @@ export default {
         rowsPerPage: 100
       },
       disciplines: [...disciplinesService.getTopLevelNodes()],
-      organizations: [...organizationsService.getAllOrganizations()],
       filterByTopOnly: false,
       filtersTabExpansionModel: [false]
     }
@@ -214,7 +224,9 @@ export default {
   computed: {
     ...mapGetters({
       user: 'auth/user',
+      tenant: 'auth/tenant',
       researchFeed: 'feed/researchFeed',
+      organizations: 'feed/organizations',
       filter: 'feed/filter'
     }),
     isFiltersTabExpanded() {
@@ -283,11 +295,11 @@ export default {
 </script>
 
 <style lang="less" scoped>
-
 .feed-header {
-  background: url('/static/feed-background.svg') 100% 100% no-repeat;
-  background-size: cover;
+  background-size: cover !important;
+  background-repeat: no-repeat !important;
   height: 300px;
+  width: 100%;
   font-style: normal;
   color: white;
 }
@@ -297,33 +309,32 @@ export default {
 }
 
 .organization-item {
-  height: 40px;
+  height: 60px;
+  width: 180px;
   cursor: pointer;
+  background: white;
+  border: 1px solid #e5e5e5;
+  position: relative;
+  display: flex;
+  justify-content: center;
 
-  .organization-item-btn {
-    width: 100%;
-    height: 100%;
-    background: white;
-    border: 1px solid #e5e5e5;
-    position: relative;
-
-    .overlay {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      display: none;
-      color: #e5e5e5;
-    }
-
-    &:hover .overlay {
-      display: block;
-      background: rgba(219, 228, 251, .6);
-    }
+  &__img {
+    max-height: 100%;
+    max-width: 100%;
+    align-self: center;
   }
 
-  &.selected .overlay {
+  &__overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: none;
+    color: #e5e5e5;
+  }
+
+  &:hover &__overlay, &--selected &__overlay {
     display: block;
     background: rgba(219, 228, 251, .6);
   }

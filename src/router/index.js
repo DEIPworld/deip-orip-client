@@ -3,6 +3,7 @@ import Router from 'vue-router';
 
 import SignIn from '@/components/auth/SignIn';
 import SignUp from '@/components/auth/SignUp';
+import TenantSignIn from '@/components/auth/TenantSignIn';
 import Dashboard from '@/components/dashboard/Dashboard';
 import EmailSendingRegistration from '@/components/auth/EmailSendingRegistration';
 import DataFillingRegistration from '@/components/auth/DataFillingRegistration';
@@ -45,7 +46,6 @@ import NoAccessPage from '@/components/NoAccessPage';
 import CreateAccountTestNet from '@/components/auth/CreateAccountTestNet';
 import VotingForBlockProducers from '@/components/voting-for-block-producers/VotingForBlockProducers';
 import CreateFundingOpportunityAnnouncement from '@/components/funding-opportunity-announcement-create/CreateFundingOpportunityAnnouncement';
-import LegacyInvestorDashboard from '@/components/investor-legacy-flow/dashboard/InvestorDashboard';
 import InvestorDashboard from '@/components/investor-dashboard/InvestorDashboard';
 
 
@@ -138,7 +138,6 @@ const router = new Router({
 			let loadPagePromise = store.dispatch('dashboard/loadDashboardPage', {
 				username: decodeURIComponent(store.getters['auth/user'].username)
 			});
-			// loadDashboardPage
 			loadPage(loadPagePromise, next);
 		}
 		}, {
@@ -367,10 +366,6 @@ const router = new Router({
 			}
 		})
 	}, {
-		path: '/legacy-investor-dashboard',
-		name: 'LegacyInvestorDashboard',
-		component: LegacyInvestorDashboard
-	}, {
 		path: '/investor-dashboard',
 		name: 'InvestorDashboard',
 		component: InvestorDashboard,
@@ -388,6 +383,7 @@ const router = new Router({
 		path: '*',
 		name: 'Default',
 		beforeEnter: (to, from, next) => {
+      const tenant = store.getters['auth/tenant'];
 			const user = store.getters['auth/user'];
 			const rolePromise = user.profile 
 				? Promise.resolve(user.profile.agencies || []) 

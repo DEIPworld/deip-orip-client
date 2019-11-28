@@ -47,7 +47,7 @@
                     >Change quorum</v-btn>
                 </div>
 
-                <div class="c-pt-2 caption line-height-1 text-align-right blue--text text--lighten-3">
+                <div class="c-pt-2 caption line-height-1 text-align-right primary--text text--lighten-5">
                     The proposal will be sent to the other group members and since it’s approved quorum will be changed
                 </div>
             </div>

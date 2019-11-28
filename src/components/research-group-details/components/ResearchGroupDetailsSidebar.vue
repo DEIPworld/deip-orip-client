@@ -50,12 +50,6 @@
 
         <!-- ### END Research Group Details Section ### -->
 
-    <!-- <sidebar-splitted-btn :right-ripple="false">
-            <div slot="left" class="default-half-splitted">
-                <span class="c-m-auto clickable-label">23<br>Followers</span>
-            </div>
-        </sidebar-splitted-btn> -->
-
         <div v-if="isResearchGroupMember">
             <div class="c-pv-6">
                 <div class="title bold">                    

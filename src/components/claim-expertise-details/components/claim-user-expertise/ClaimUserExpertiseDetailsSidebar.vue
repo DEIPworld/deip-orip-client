@@ -4,15 +4,6 @@
         <div class="sidebar-fullwidth">
             <v-divider></v-divider>
         </div>
-    <!--    <sidebar-splitted-btn>
-            <div slot="left" class="default-half-splitted">
-                <span class="c-m-auto clickable-label">23<br>Followers</span>
-            </div>
-
-            <div slot="right" class="default-half-splitted">
-                <span class="c-m-auto clickable-label">4<br>Following</span>
-            </div>
-        </sidebar-splitted-btn> -->
 
         <div class="c-pt-6 c-pb-6" v-if="claimerInfo.profile.email">
             <span>

@@ -1,12 +1,11 @@
 <template>
   <div class="c-p-5" style="min-height: 500px" v-if="chartsDataList">
-    <v-tabs slot="extension" v-model="tab" grow color="blue lighten-4">
-      <v-tabs-slider color="black"></v-tabs-slider>
-      <v-tab :key="'tab-' + item.discipline.id" v-for="item in chartsDataList" :disabled="false">
+    <v-tabs slot="extension" v-model="tab" grow color="primary lighten-5">
+      <v-tabs-slider :color="themeSettings['tabs-slider-color']"></v-tabs-slider>
+      <v-tab :class="themeSettings['tabs-text-class']" :key="'tab-' + item.discipline.id" v-for="item in chartsDataList" :disabled="false">
           {{ item.discipline.name }}
       </v-tab>
     </v-tabs>
-
     <v-tabs-items v-model="tab">
         <v-tab-item v-for="(item, i) in chartsDataList" :key="'tab-item-' + item.discipline.id">
           <v-card flat>
@@ -45,7 +44,8 @@
         computed: {
             ...mapGetters({
                 contentReviewsList: 'rcd/contentReviewsList',
-                disciplinesList: 'rcd/disciplinesList'
+                disciplinesList: 'rcd/disciplinesList',
+                themeSettings: 'layout/themeSettings'
             })
         },
 

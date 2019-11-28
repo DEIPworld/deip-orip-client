@@ -7,10 +7,10 @@
                     <v-flex grow class="headline">
                         Transfer from Group balance
                     </v-flex>
-                    <v-flex shrink align-self-center>
-                        <!-- <v-btn @click="close()" icon class="pa-0 ma-0">
+                    <v-flex shrink align-self-center right-top-angle>
+                        <v-btn @click="close()" icon class="pa-0 ma-0">
                             <v-icon color="black">close</v-icon>
-                        </v-btn> -->
+                        </v-btn>
                     </v-flex>
                 </v-layout>
             </v-card-title>
@@ -40,24 +40,27 @@
             </v-card-text>
 
             <v-card-actions>
-                <v-layout column>
-                    <v-btn 
-                        color="primary" 
-                        outline
-                        class="my-1 pa-0 mx-0"
-                        @click="sendTokens()"
-                        :loading="isSending"
-                        :disabled="!form.amount || deipTokenBalance < form.amount || isSending">
-                        {{ !group.is_personal ? 'Create proposal' : 'Send' }}
-                    </v-btn>
-                    <v-btn 
-                        color="black" 
-                        class="my-1 pa-0 mx-0"
-                        flat
-                        :disabled="isSending"
-                        @click="close()"
-                        >Cancel
-                    </v-btn>
+                <v-layout row wrap>
+                    <v-flex xs12 py-2>
+                        <v-btn 
+                            color="primary"
+                            block
+                            @click="sendTokens()"
+                            :loading="isSending"
+                            :disabled="!form.amount || deipTokenBalance < form.amount || isSending">
+                            {{ !group.is_personal ? 'Create proposal' : 'Send' }}
+                        </v-btn>
+                    </v-flex>
+                    <v-flex xs12 py-2>
+                        <v-btn 
+                            color="primary"
+                            block 
+                            flat
+                            :disabled="isSending"
+                            @click="close()"
+                            >Cancel
+                        </v-btn>
+                    </v-flex>
                 </v-layout>
             </v-card-actions>
         </v-card>

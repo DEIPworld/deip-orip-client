@@ -3,87 +3,28 @@
     cursor: pointer;
 }
 
-.clickable-label {
-    .clickable;
-    font-weight: 500;
-    text-transform: uppercase;
-    color: @blue-accent-4;
-}
-
-.deip-label {
-    .clickable-label;
+.discipline-picker-label {
     padding: 2px 3px;
     border-radius: 2px;
+    color: var(--v-primary-base);
+    
+    cursor: pointer;
+    user-select: none;
+    font-weight: 500;
+    text-transform: uppercase;
 
     &:hover, &.selected {
-        background-color: rgb(187, 222, 251, 0.5); // @blue-lighten-4
+        background-color: var(--v-primary-lighten5);
     }
 }
 
-.color-label {
-    line-height: 25px;
-    border-radius: 2px;
-    text-transform: uppercase;
-    font-size: 12px;
-    padding: 0 10px;
-    display: inline-block;
-    vertical-align: middle;
-    white-space: nowrap;
-}
-
 .a {
-    color: @blue-accent-4;
+    color: var(--v-primary-base);
     font-weight: 500;
     text-decoration: none;
     cursor: pointer;
     &:hover {
         text-decoration: underline;
-    }
-}
-
-.deip-blue-color {
-    color: @blue-accent-4;
-}
-.deip-blue-bg {
-    background-color: @blue-accent-4;
-}
-
-.small-remove-btn {
-    .clickable;
-    background-color: @grey-lighten-2;
-    border-radius: 50%;
-    display: inline-flex;
-    align-items: center;
-    width: 20px;
-    height: 20px;
-
-    & > .icon {
-        font-size: 20px;
-        opacity: 0.5;
-    }
-
-    & > .icon:hover {
-        opacity: 1;
-    }
-}
-
-.info-card-list {
-    .list-line {
-        display: flex;
-        padding-top: 24px;
-        padding-bottom: 24px;
-        padding-left: 12px;
-        padding-right: 12px;
-    }
-    .list-header-cell {
-        padding-right: 12px;
-        padding-left: 12px;
-        color: @grey;
-    }
-    .list-body-cell {
-        padding-right: 12px;
-        padding-left: 12px;
-        align-self: center;
     }
 }
 
@@ -109,19 +50,14 @@
     }
 }
 
-.spinner-container {
-    position: relative;
-
-    .section-spinner {
-        position: absolute;
-        z-index: 1000;
-        right: 45%;
-        top: 50%;
-    }
-}
-
 svg > g > g:last-child { pointer-events: none }
 
 .research-tile-researcher {
     font-weight: 400;
+}
+
+.right-top-angle {
+    position: absolute;
+    top: 5px;
+    right: 5px;
 }

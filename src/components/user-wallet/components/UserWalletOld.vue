@@ -19,7 +19,7 @@
                             <v-divider></v-divider>
 
                             <div class="list-line"
-                                :class="{ 'blue lighten-5': sendingType === sendingTypes.deipToken }"
+                                :class="{ 'primary lighten-5': sendingType === sendingTypes.deipToken }"
                             >
                                 <div class="legacy-col-grow list-body-cell display-flex align-center">
                                     <!-- TODO: make service component which can manage our all SVG items -->
@@ -30,7 +30,7 @@
                                         </svg>
                                     </div>
 
-                                    <span class="subheading deip-blue-color c-pl-4 c-pr-2">DEIP Token</span>
+                                    <span class="subheading c-pl-4 c-pr-2">DEIP Token</span>
 
                                     <v-tooltip bottom>
                                         <v-icon class="clickable c-pb-1" slot="activator" size="20">help</v-icon>
@@ -58,7 +58,7 @@
                             <v-divider></v-divider>
 
                             <div class="list-line"
-                                :class="{ 'blue lighten-5': sendingType === sendingTypes.deipCommon }"
+                                :class="{ 'primary lighten-5': sendingType === sendingTypes.deipCommon }"
                             >
                                 <div class="legacy-col-grow list-body-cell display-flex align-center">
                                     <!-- TODO: make service component which can manage our all SVG items -->
@@ -69,7 +69,7 @@
                                         </svg>
                                     </div>
 
-                                    <span class="subheading deip-blue-color c-pl-4 c-pr-2">DEIP Common Token</span>
+                                    <span class="subheading c-pl-4 c-pr-2">DEIP Common Token</span>
 
                                     <v-tooltip bottom>
                                         <v-icon class="clickable c-pb-1" slot="activator" size="20">help</v-icon>
@@ -126,11 +126,11 @@
                             <div class="hidden-last-child" v-if="investments.length">
                                 <template v-for="(investment, i) in investments">
                                     <div class="list-line"
-                                        :class="{ 'blue lighten-5': sendingType === sendingTypes.researchToken && selectedResearch && selectedResearch.id === investment.research.id }"
+                                        :class="{ 'primary lighten-5': sendingType === sendingTypes.researchToken && selectedResearch && selectedResearch.id === investment.research.id }"
                                         :key="'research-'+ i">
                                         
                                         <div class="legacy-col-grow list-body-cell">
-                                            <div class="deip-blue-color subheading">{{ investment.research.title }}</div>
+                                            <div class="subheading">{{ investment.research.title }}</div>
                                         </div>
 
                                         <!-- <div class="width-7 list-body-cell text-align-center half-bold">10</div> -->
@@ -171,7 +171,7 @@
                                 <template v-for="(transfer, i) in transfers">
                                     <div class="list-line" :key="'transfer-' + i">
                                         <div class="legacy-col-grow list-body-cell overflow-hidden">
-                                            <div class="deip-blue-color subheading overflow-ellipsis">
+                                            <div class="subheading overflow-ellipsis">
                                                 {{ transfer[1].trx_id }}
                                             </div>
                                         </div>
@@ -307,6 +307,8 @@
 </script>
 
 <style lang="less" scoped>
+    @import './../../../styles/colors.less';
+
     .tokens-send-panel {
         width: 300px;
         flex-shrink: 0;
@@ -326,5 +328,25 @@
     }
     .v-enter, .v-leave-to {
         opacity: 0;
+    }
+
+    .info-card-list {
+        .list-line {
+            display: flex;
+            padding-top: 24px;
+            padding-bottom: 24px;
+            padding-left: 12px;
+            padding-right: 12px;
+        }
+        .list-header-cell {
+            padding-right: 12px;
+            padding-left: 12px;
+            color: @grey;
+        }
+        .list-body-cell {
+            padding-right: 12px;
+            padding-left: 12px;
+            align-self: center;
+        }
     }
 </style>

@@ -27,7 +27,7 @@
                             <v-divider></v-divider>
 
                             <div class="list-line"
-                                :class="{ 'blue lighten-5': sendingType === sendingTypes.deipToken }"
+                                :class="{ 'primary lighten-5': sendingType === sendingTypes.deipToken }"
                             >
                                 <div class="legacy-col-grow list-body-cell display-flex align-center">
                                     <!-- TODO: make service component which can manage our all SVG items -->
@@ -39,7 +39,7 @@
                                         </svg> -->
                                     </div>
 
-                                    <span class="subheading deip-blue-color c-pl-4 c-pr-2"></span>
+                                    <span class="subheading c-pl-4 c-pr-2"></span>
                                 </div>
 
                                 <div class="width-10 list-body-cell text-align-center">
@@ -76,7 +76,7 @@
                                 <template v-for="research in researches">
                                     <div class="list-line">
                                         <div class="legacy-col-grow list-body-cell">
-                                            <div class="deip-blue-color subheading">{{ research.title }}</div>
+                                            <div class="subheading">{{ research.title }}</div>
                                             <!-- <div class="grey--text caption">alice · bob</div> -->
                                         </div>
 
@@ -172,6 +172,8 @@
 </script>
 
 <style lang="less" scoped>
+    @import './../../styles/colors.less';
+
     .tokens-send-panel {
         width: 300px;
     }
@@ -188,7 +190,28 @@
     .v-enter-active, .v-leave-active {
         transition: opacity .1s;
     }
+
     .v-enter, .v-leave-to {
         opacity: 0;
+    }
+
+    .info-card-list {
+        .list-line {
+            display: flex;
+            padding-top: 24px;
+            padding-bottom: 24px;
+            padding-left: 12px;
+            padding-right: 12px;
+        }
+        .list-header-cell {
+            padding-right: 12px;
+            padding-left: 12px;
+            color: @grey;
+        }
+        .list-body-cell {
+            padding-right: 12px;
+            padding-left: 12px;
+            align-self: center;
+        }
     }
 </style>

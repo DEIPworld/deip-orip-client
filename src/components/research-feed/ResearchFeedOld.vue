@@ -88,6 +88,8 @@
 </script>
 
 <style lang="less" scoped>
+    @import './../../styles/colors.less';
+
     .filter-title {
         text-transform: uppercase;
         width: 120px;
@@ -100,4 +102,24 @@
             opacity: 1;
         }
     }
+
+    .small-remove-btn {
+        cursor: pointer;
+        background-color: @grey-lighten-2;
+        border-radius: 50%;
+        display: inline-flex;
+        align-items: center;
+        width: 20px;
+        height: 20px;
+
+        & > .icon {
+            font-size: 20px;
+            opacity: 0.5;
+        }
+
+        & > .icon:hover {
+            opacity: 1;
+        }
+    }
+
 </style>

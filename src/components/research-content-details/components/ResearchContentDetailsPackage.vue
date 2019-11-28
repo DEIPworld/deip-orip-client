@@ -16,7 +16,7 @@
 			</v-flex>
 			<v-flex xs8>
 				<div class="left">
-					<!-- <router-link class="subheading deip-blue-color"  style="text-decoration: none"
+					<!-- <router-link class="subheading"  style="text-decoration: none"
 							:to="{ name: 'AgencyProgramDetails', 
 									params: { 
 										agency: program.agency_name, 
@@ -34,7 +34,7 @@
 						<v-card-text>
 							<div class="legacy-row-nowrap">
 								<span class="legacy-col-10">
-									<a v-if="isPreviewAvailable(file.ext)" target="_blank" class="a" :href="`${fileStorageBaseUrl}/content/refs/research/package/${contentRef.researchId}/${contentRef.hash}/${file.hash}`">
+									<a v-if="isPreviewAvailable(file.ext)" target="_blank" class="a" :href="getContentUrl(file.hash)">
 										{{file.filename}}
 									</a>
 									<span v-else class="body-2">
@@ -43,7 +43,7 @@
 								</span>
 								<span class="legacy-col-1 text-align-right">
 									<span>
-										<a class="a download-content" :href="`${fileStorageBaseUrl}/content/refs/research/package/${contentRef.researchId}/${contentRef.hash}/${file.hash}?download=true`">
+										<a class="a download-content" :href="getContentUrl(file.hash, true)">
 											<v-icon small>save</v-icon>
 										</a>
 									</span>
@@ -68,13 +68,13 @@
 <script>
     import { mapGetters } from 'vuex';
     import deipRpc from '@deip/deip-oa-rpc-client';
-    import applicationsHttp from './../../../services/http/application';
+    import applicationsHttp from '@/services/http/application';
+    import {getAccessToken} from '@/utils/auth'
 
     export default {
         name: "ResearchContentDetailsPackage",
         data() {
           return {
-            fileStorageBaseUrl: window.env.DEIP_SERVER_URL
           };
         },
         computed: {
@@ -87,7 +87,10 @@
         methods: {
 					isPreviewAvailable(ext) {
 						return ['.png', '.jpg', '.jpeg', '.pdf'].some(e => e === ext);
-					}
+          },
+          getContentUrl(fileHash, download = false) {
+            return `${window.env.DEIP_SERVER_URL}/content/refs/research/package/${this.contentRef.researchId}/${this.contentRef.hash}/${fileHash}?download=${download}&authorization=${getAccessToken()}`;
+          }
         }
     };
 </script>
