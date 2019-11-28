@@ -1,8 +1,8 @@
 <template>
-  <span class="platform-avatar">
+  <span @click="disabledAvatar ? selectExpert(user) : null" class="platform-avatar">
     <v-layout row wrap align-center align-baseline>
       <div>
-        <router-link :to="{ name: 'UserDetails', params: { account_name: user.account.name } }">
+        <router-link :disabled="!disabledAvatar" :event="!noFollow ? 'click' : ''" :to="{ name: 'UserDetails', params: { account_name: user.account.name } }">
           <v-tooltip bottom>
             <v-avatar :size="size + 'px'" slot="activator">
               <img v-if="user.profile" v-bind:src="user.profile.avatar | avatarSrc(size * 2, size * 2, false)"/>
@@ -45,11 +45,18 @@ export default {
     size: { type: Number, required: false, default: 30 },
     linkToProfile: { type: Boolean, required: false, default: false },
     linkToProfileClass: { type: String, required: false, default: "px-3" },
-    textHtml: { type: String, required: false, default: null }
+    textHtml: { type: String, required: false, default: null },
+    noFollow: { type: Boolean, required: false, default: false },
+    disabledAvatar: { type: Boolean, required: false, default: false }
   },
 
   data() {
     return {};
+  },
+  methods: {
+    selectExpert(expert){
+      this.$emit('onSelectedExpert', {...expert});
+    }
   },
 
   watch: {}
