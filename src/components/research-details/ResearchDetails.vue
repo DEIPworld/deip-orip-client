@@ -764,11 +764,11 @@
                     :items="contentListToReview"
                     v-model="selectedContentId"
                   />
-                  <select-expert
-                    :experts="experts"
-                    :isDisabledAvatarsExpert="selectedContentId !== null"
-                    :isDisabledInput="selectedContentId === null || isRequestingReview"
-                    @onSelectExpert="selectExpert"
+                  <user-autocomplete-picker
+                    :users="experts"
+                    :isDisabledBlock="isSelectedContentId()"
+                    :quantityDisplayedUsers="6"
+                    @onSelectUser="selectExpert"
                   />
                 </v-layout>
               </v-card-text>
@@ -1302,14 +1302,16 @@ export default {
   },
 
   methods: {
+    
+    isSelectedContentId(){
+      return this.selectedContentId !== null
+    },
     selectExpert(expert) {
       this.selectedExpert = expert;
     },
     onContributeToTokenSaleClick() {
       this.investmentConfirmDialog.isShown = true;
     },
-    // selectExpert(clickable, expert){
-
     contributeToTokenSale() {
       this.areTokensBuying = true;
       return deipRpc.broadcast

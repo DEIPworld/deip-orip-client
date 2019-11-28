@@ -29,8 +29,8 @@ Vue.component('internal-references-picker', InternalReferencesPicker);
 import PlatformAvatar from './components/PlatformAvatar';
 Vue.component('platform-avatar', PlatformAvatar);
 
-import SelectExpert from './components/SelectExpert';
-Vue.component('select-expert', SelectExpert);
+import UserAutocompletePicker from './components/UserAutocompletePicker';
+Vue.component('user-autocomplete-picker', UserAutocompletePicker);
 // filters
 
 import SquaredRating from './components/SquaredRating';
