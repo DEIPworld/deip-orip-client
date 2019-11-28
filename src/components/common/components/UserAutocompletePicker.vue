@@ -1,7 +1,7 @@
 <template>
   <div>
     <v-autocomplete
-      :label="`Find an ${usersLevel} to request a review`"
+      :label="label"
       hide-no-data
       :append-icon="null"
       :loading="isUsersLoading"
@@ -20,7 +20,7 @@
           :pickDisabled="isDisabled"
           :noFollow="true"
           :size="40"
-          v-for="(user, i) in users.slice(0, quantityDisplayedUsers)"
+          v-for="(user, i) in users.slice(0, displayLimit)"
           :key="'user-' + i"
           :user="user"
           class="user-avatar mr-2"
@@ -47,8 +47,8 @@ export default {
   props: {
     users: { type: Array, required: false, default: [] },
     isDisabled: { type: Boolean, required: false, default: false },
-    quantityDisplayedUsers: { type: Number, requride: false, default: 6},
-    usersLevel: {type: String, reqride: false, default:'expert'}
+    displayLimit: { type: Number, requride: false, default: 6 },
+    label: { type: String, reqride: false, default: "" }
   },
   data() {
     return {

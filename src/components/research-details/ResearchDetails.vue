@@ -765,9 +765,10 @@
                     v-model="selectedContentId"
                   />
                   <user-autocomplete-picker
+                    label="Find an expert to request a review"
                     :users="experts"
                     :isDisabled="!isSelectedContentId"
-                    :quantityDisplayedUsers="6"
+                    :displayLimit="6"
                     @onSelectUser="selectExpert"
                   />
                 </v-layout>

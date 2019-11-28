@@ -123,8 +123,9 @@
                               <div class="title bold">Experts <span class="primary--text pl-2">{{experts.length}}</span></div>
                               <div class="pt-2">
                                <user-autocomplete-picker
+                                  label="Find an expert"
                                   :users="experts"
-                                  :quantityDisplayedUsers="7"
+                                  :displayLimit="7"
                                   @onSelectUser="selectExpert"
                                 />
                               </div>
