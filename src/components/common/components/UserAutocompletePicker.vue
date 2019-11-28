@@ -5,7 +5,7 @@
       hide-no-data
       :append-icon="null"
       :loading="isUsersLoading"
-      :disabled="!isDisabledBlock"
+      :disabled="isDisabled"
       :items="foundUsers"
       item-text="fullname"
       return-object
@@ -17,7 +17,7 @@
       <v-layout row>
         <platform-avatar
           @onSelectedUser="selectUser"
-          :pickDisabled="isDisabledBlock"
+          :pickDisabled="isDisabled"
           :noFollow="true"
           :size="40"
           v-for="(user, i) in users.slice(0, quantityDisplayedUsers)"
@@ -46,7 +46,7 @@ export default {
   name: "UserAutocompletePicker",
   props: {
     users: { type: Array, required: false, default: [] },
-    isDisabledBlock: { type: Boolean, required: false, default: false },
+    isDisabled: { type: Boolean, required: false, default: false },
     quantityDisplayedUsers: { type: Number, requride: false, default: 6},
     usersLevel: {type: String, reqride: false, default:'expert'}
   },

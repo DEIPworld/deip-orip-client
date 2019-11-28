@@ -766,7 +766,7 @@
                   />
                   <user-autocomplete-picker
                     :users="experts"
-                    :isDisabledBlock="isSelectedContentId()"
+                    :isDisabled="!isSelectedContentId"
                     :quantityDisplayedUsers="6"
                     @onSelectUser="selectExpert"
                   />
@@ -899,6 +899,10 @@ export default {
       userContributionsList: "rd/userContributionsList",
       userJoinRequests: "auth/userJoinRequests"
     }),
+
+    isSelectedContentId(){
+      return this.selectedContentId !== null
+    },
 
     contentListToReview() {
       let expert = this.selectedExpert;
@@ -1302,10 +1306,6 @@ export default {
   },
 
   methods: {
-    
-    isSelectedContentId(){
-      return this.selectedContentId !== null
-    },
     selectExpert(expert) {
       this.selectedExpert = expert;
     },

@@ -14,7 +14,7 @@
         <span v-else>
            <v-tooltip bottom>
             <v-avatar :size="size + 'px'" slot="activator">
-              <img @click="selectUser(user)" :class="{'cursor-pointer':pickDisabled}" v-if="user.profile" v-bind:src="user.profile.avatar | avatarSrc(size * 2, size * 2, false)"/>
+              <img @click="selectUser(user)" :class="{'cursor-pointer':!pickDisabled}" v-if="user.profile" v-bind:src="user.profile.avatar | avatarSrc(size * 2, size * 2, false)"/>
               <v-gravatar v-else :email="user.account.name + '@deip.world'" />
             </v-avatar>
             <span>{{ user | fullname }}</span>
@@ -64,7 +64,7 @@ export default {
   },
   methods: {
     selectUser(user){
-      if (this.pickDisabled){
+      if (!this.pickDisabled){
         this.$emit('onSelectedUser', {...user});
       }
     }
