@@ -1,5 +1,5 @@
 <template>
-    <div :class="[!discipline.isTop ? 'pt-1 pl-3' : '']">
+    <!-- <div :class="[!discipline.isTop ? 'pt-1 pl-3' : '']">
         <span class="deip-label" 
             v-if="!discipline.isTop" 
             @click="select(discipline)"
@@ -17,7 +17,26 @@
                 ></discipline-tree-item>
             </div>
         </div>
-    </div>
+    </div> -->
+    <v-flex :class="[!discipline.isTop ? 'pt-1 pl-3' : '']">
+        <span class="deip-label" 
+            v-if="!discipline.isTop" 
+            @click="select(discipline)"
+            :class="[{ 'selected': isSelected || isHighlighted }]"
+        >{{ discipline.label }}</span>
+        
+        <v-flex v-if="discipline.children" v-show="isExpanded">
+            <v-flex v-for="(val, key) in discipline.children" :key="key">
+                <discipline-tree-item
+                    :discipline="val"
+                    :selected="selected"
+                    :is-multiple-select="isMultipleSelect"
+                    :is-highlighted-parent="isHighlightedParent"
+                    @update="select"
+                ></discipline-tree-item>
+            </v-flex>
+        </v-flex>
+    </v-flex>
 </template>
 
 <script>

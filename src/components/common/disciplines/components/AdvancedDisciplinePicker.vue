@@ -1,5 +1,5 @@
 <template>
-    <div class="legacy-row discipline-picker full-height overflow-y-auto">
+    <!-- <div class="legacy-row discipline-picker full-height overflow-y-auto">
         <div v-if="!withoutUserDisciplines" class="legacy-col-4 c-p-4 overflow-y-auto">
             <div class="bold uppercase c-pb-4">Your disciplines</div>
 
@@ -25,7 +25,32 @@
                 @select="select"
             ></discipline-tree-picker>
         </div>
-    </div>
+    </div> -->
+    <v-layout fill-height row discipline-picker overflow-y-auto>
+        <v-flex xs4 pa-3 v-if="!withoutUserDisciplines" overflow-y-auto>
+            <v-flex pb-3 bold uppercase>Your disciplines</v-flex>
+
+            <v-flex v-if="userDisciplines.length">
+                <div v-for="(discipline, i) in userDisciplines" :key="i">
+                    <span class="deip-label"
+                        :class="{'selected': isUserLabelSelected(discipline) }"
+                        @click="handleUserDiscipline(discipline)"
+                    >{{ discipline.label }}</span>
+                </div>
+            </v-flex>
+        </v-flex>
+
+        <v-flex pa-3 fill-height overflow-y-auto :class="!withoutUserDisciplines ? 'xs8' : 'xs12'">
+            <v-flex pb-3 bold uppercase>All disciplines</v-flex>
+
+            <discipline-tree-picker
+                :is-multiple-select="isMultipleSelect"
+                :is-highlighted-parent="isHighlightedParent"
+                :preselected="preselected"
+                @select="select"
+            ></discipline-tree-picker>
+        </v-flex>
+    </v-layout>
 </template>
 
 <script>
