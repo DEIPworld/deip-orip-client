@@ -173,13 +173,15 @@
                     parseInt(maxProposalPercent) * this.DEIP_1_PERCENT,
                     proposalQuorums,
                     invitees
-                ).then(() => {
+                ).then((response) => {
                     this.isLoading = false;
                     this.$store.dispatch('auth/loadGroups'); // reload user groups
                     this.$store.dispatch('layout/setSuccess', {
                         message: `"${this.group.name}" research group has been created successfully !`
                     });
-
+                    console.log(  this.group.name, 
+                    this.group.permlink);
+                    
                     setTimeout(() => {
                         if (!this.backRouterToken) {
                             this.$router.push({ 
@@ -187,6 +189,11 @@
                                 params: { research_group_permlink: encodeURIComponent(this.group.permlink) }
                             });
                         } else {
+                          if (this.backRouterToken.name === "CreateResearch"){
+                            this.backRouterToken.query.nextStep = 'true';
+                            this.backRouterToken.query.groupName = this.group.name;
+                            this.backRouterToken.query.groupPermlink = this.group.permlink;
+                          }
                             this.$router.push(this.backRouterToken);
                         }
                     }, 1500);
@@ -199,7 +206,6 @@
                 });
             }
         },
-
         created() {
             if (this.$route.query['back-token']) {
                 try {

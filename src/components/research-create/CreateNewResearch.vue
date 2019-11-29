@@ -49,6 +49,8 @@
                             <create-research-pick-group
                                 @incStep="incStep" @decStep="decStep"
                                 @setGroup="setGroup"
+                                @nextStepAfterCreated="incStep"
+                                :currentStep="+currentStep"
                                 :research="research"
                             ></create-research-pick-group>
                         </div>
