@@ -1,46 +1,8 @@
 <template>
-  <!-- <div class="legacy-column full-height">
-        <div class="c-mb-4 legacy-col-grow legacy-column">
-            <div class="step-title">Select research group</div>
-
-            <div class="legacy-col-grow overflow-y-auto">
-                <div class="c-mh-auto c-pt-4" style="max-width: 800px;">
-                    <div v-for="(group, i) in groups"
-                        :class="{'selected-group': research.group && group.id == research.group.id, 'personal-group': group.is_personal }"
-                        @click="setGroup(group)" 
-                        class="legacy-row-nowrap group-line c-p-3 c-mt-1" :key="'pick-group '+ i">
-                        <div v-if="group.is_personal" class="group-nameplate c-pr-2">{{ user | fullname}} 's personal group</div>
-                        <div v-if="!group.is_personal" class="group-nameplate c-pr-2">{{group.name}}</div>
-                        <div class="">{{ getGroupCoworkers(group).join(' · ') }}</div>
-                    </div>
-
-                    <div class="c-pt-6 c-pl-4">
-                        <router-link class="app-title"
-                            :to="{ name: 'CreateResearchGroup',
-                                params: { 'account_name': user.username },
-                                query: { 'back-token': getReturningToken }
-                            }"
-                        >
-                            <span  class="deip-label">+ Add new group</span>
-                        </router-link>
-                    </div>
-                </div>
-
-            </div>
-        </div>
-
-        <div class="legacy-row legacy-justify-center align-center">
-            <v-btn flat small @click.native="prevStep()">
-                <v-icon dark class="pr-1">keyboard_arrow_left</v-icon> Back
-            </v-btn>
-
-            <v-btn color="primary" :disabled="nextDisabled" @click.native="nextStep()">Next</v-btn>
-        </div>
-  </div>-->
   <v-layout fill-height column>
     <v-flex mb4 col grow column>
       <div class="step-title">Select research group</div>
-
+      
       <div class="legacy-col-grow overflow-y-auto">
         <div class="c-mh-auto c-pt-4" style="max-width: 800px; max-height: 600px;">
           <div
