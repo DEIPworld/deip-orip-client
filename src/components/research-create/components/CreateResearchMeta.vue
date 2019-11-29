@@ -28,6 +28,21 @@
                         <div class="legacy-col-3"></div>
                     </div>
 
+                    <div class="legacy-row c-pt-4">
+                        <div class="legacy-col-3"></div>
+                        <div class="legacy-col-6">
+                            <v-text-field 
+                              v-on:keyup="setVideo" 
+                              prepend-inner-icon="link"
+                              label="Link to a video presentation" 
+                              v-model="videoSrc"
+                              solo
+                              :rules="[rules.link, rules.mp4]"
+                            ></v-text-field>
+                        </div>
+                        <div class="legacy-col-3"></div>
+                    </div>
+
                 <!--    <div class="legacy-row c-pt-4">
                         <div class="legacy-col-offset-3 legacy-col-6">
                             <v-checkbox v-model="tmpIsPrivate" label="Choose if group should be private"></v-checkbox>
@@ -73,12 +88,31 @@
             return {
                 title: "",
                 description: "",
+                videoSrc: "",
+                rules: {
+                  link: (value) => {
+                    return (!value || this.isValidLink) || 'Invalid http(s) link';
+                  },
+                  mp4: (value) => {
+                    return (!value || this.isMp4) || 'Only .mp4 format is supported currently';
+                  }
+                },
                 tmpIsPrivate: false
             }
         },
         computed: {
+            isValidLink() {
+              let regexp = /^(http:\/\/www\.|https:\/\/www\.|http:\/\/|https:\/\/)?[a-z0-9]+([\-\.]{1}[a-z0-9]+)*\.[a-z]{2,5}(:[0-9]{1,5})?(\/.*)?$/g;
+              return regexp.test(this.videoSrc || "");
+            },
+            isMp4() {
+              return this.isValidLink && this.videoSrc.substr(this.videoSrc.length - 4) == ".mp4";
+            },
+            videoSrcIsValidOrAbsent() {
+              return !this.videoSrc || (this.isValidLink && this.isMp4);
+            },
             nextDisabled(){
-                return !this.research.title || !this.research.description || this.isLoading;
+                return !this.research.title || !this.research.description || !this.videoSrcIsValidOrAbsent || this.isLoading;
             }
         },
         methods: {
@@ -95,7 +129,10 @@
             },
             setDescription() {
                 this.$emit('setDescription', this.description);
-            }
+            },
+            setVideo() {
+                this.$emit('setVideo', this.videoSrc);
+            },
         }
     };
 </script>

@@ -23,12 +23,6 @@
                     <v-divider></v-divider>
 
                     <v-stepper-step step="4" :complete="currentStep > 4">
-                        <div class="uppercase">Video</div>
-                    </v-stepper-step>
-
-                    <v-divider></v-divider>
-
-                    <v-stepper-step step="5" :complete="currentStep > 5">
                         <div class="uppercase">Roadmap</div>
                     </v-stepper-step>
                     
@@ -67,6 +61,7 @@
                             <create-research-meta
                                 @setTitle="setTitle"
                                 @setDescription="setDescription"
+                                @setVideo="setVideo"
                                 @incStep="incStep" @decStep="decStep"
                                 :research="research"
                                 :isLoading="isLoading"
@@ -75,17 +70,6 @@
                     </v-stepper-content>
 
                     <v-stepper-content step="4">
-                        <div class="full-height">
-                            <create-research-video
-                                @setVideo="setVideo"
-                                @incStep="incStep" @decStep="decStep"
-                                :research="research"
-                                :isLoading="isLoading"
-                            ></create-research-video>
-                        </div>
-                    </v-stepper-content>
-
-                    <v-stepper-content step="5">
                         <div class="full-height">
                             <create-research-roadmap
                                 @finish="finish"
