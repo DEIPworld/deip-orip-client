@@ -37,7 +37,7 @@
                               label="Link to a video presentation" 
                               v-model="videoSrc"
                               solo
-                              :rules="[rules.link, rules.mp4]"
+                              :rules="[rules.link]"
                             ></v-text-field>
                         </div>
                         <div class="legacy-col-3"></div>
@@ -92,9 +92,6 @@
                 rules: {
                   link: (value) => {
                     return (!value || this.isValidLink) || 'Invalid http(s) link';
-                  },
-                  mp4: (value) => {
-                    return (!value || this.isMp4) || 'Only .mp4 format is supported currently';
                   }
                 },
                 tmpIsPrivate: false
@@ -105,11 +102,8 @@
               let regexp = /^(http:\/\/www\.|https:\/\/www\.|http:\/\/|https:\/\/)?[a-z0-9]+([\-\.]{1}[a-z0-9]+)*\.[a-z]{2,5}(:[0-9]{1,5})?(\/.*)?$/g;
               return regexp.test(this.videoSrc || "");
             },
-            isMp4() {
-              return this.isValidLink && this.videoSrc.substr(this.videoSrc.length - 4) == ".mp4";
-            },
             videoSrcIsValidOrAbsent() {
-              return !this.videoSrc || (this.isValidLink && this.isMp4);
+              return !this.videoSrc || this.isValidLink;
             },
             nextDisabled(){
                 return !this.research.title || !this.research.description || !this.videoSrcIsValidOrAbsent || this.isLoading;

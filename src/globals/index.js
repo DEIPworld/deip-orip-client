@@ -91,3 +91,37 @@ Vue.prototype.getRandomInt = (min, max) => {
   max = Math.floor(max);
   return Math.floor(Math.random() * (max - min + 1)) + min; // boundaries included
 }
+
+const VIMEO_MATCH_RE = /^(?:\/video|\/channels\/[\w-]+|\/groups\/[\w-]+\/videos)?\/(\d+)/;
+
+const getVimeoEmbedUrlFromVideoUrl = (url) => {
+  const _url = new URL(url);
+  const match = VIMEO_MATCH_RE.exec(_url.pathname);
+
+  if (_url.hostname === 'vimeo.com' && match) {
+    return `https://player.vimeo.com/video/${match[1]}`;
+  }
+
+  return null;
+};
+
+const getYoutubeEmbedUrlFromVideoUrl = (url) => {
+  const getUrlFromVideoId = (id) => `https://www.youtube.com/embed/${id}`;
+
+  const _url = new URL(url);
+  if (_url.hostname.indexOf('youtube.com') > -1) {
+    return getUrlFromVideoId(_url.searchParams.get('v'));
+  }
+
+  if (_url.hostname === 'youtu.be') {
+    return getUrlFromVideoId(_url.pathname.split('/')[1]);
+  }
+
+  return null
+};
+
+Vue.prototype.getEmbedVideoUrl = (url) => {
+  return getVimeoEmbedUrlFromVideoUrl(url)
+    || getYoutubeEmbedUrlFromVideoUrl(url)
+    || url;
+};

@@ -42,10 +42,12 @@
         </v-flex>
         <v-flex lg4 text-xs-right class="align-start">
           <div v-if="researchPresentationSrc">
-            <video class="presentation-video" controls>
-              <source :src="researchPresentationSrc" type="video/mp4" />>
-              Your browser does not support the video tag.
-            </video>
+            <iframe
+              class="presentation-video"
+              :src="getEmbedVideoUrl(researchPresentationSrc)"
+              frameborder="0"
+              allowfullscreen
+            />
           </div>
         </v-flex>
       </v-layout>
@@ -1962,7 +1964,7 @@ export default {
 }
 
 .presentation-video {
-  width: auto;
+  width: 390px;
   height: 220px;
   border: 2px solid #fafafa;
 }
