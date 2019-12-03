@@ -86,7 +86,7 @@
                     <v-stepper-content step="4">
                         <div class="fill-height">
                             <create-research-roadmap
-                                @finish="incStep"
+                                @finish="finish"
                                 @decStep="decStep"
                                 :research="research"
                                 :isLoading="isLoading"
@@ -225,7 +225,7 @@ export default {
           this.$route.query['disciplineIds'].map(disciplineId => parseInt(disciplineId))
         );
         if (this.$route.query.groupName && this.$route.query.groupPermlink){
-          const newGroup = this.userGroups.filter(item => item.name == this.$route.query.groupName && item.permlink == this.$route.query.groupPermlink)[0];
+          const newGroup = this.userGroups.find(item => item.permlink == this.$route.query.groupPermlink);
           this.setGroup(newGroup);
           this.currentStep = 3;
         } else {
