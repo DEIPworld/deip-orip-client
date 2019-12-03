@@ -15,7 +15,7 @@
                         </v-flex>
                     </v-layout>
 
-                    <v-layout row pr-3>
+                    <v-layout row>
                         <v-flex xs6 offset-xs3>
                             <v-textarea v-model="description" v-on:keyup="setDescription" 
                                 name="Description" label="Description" 
