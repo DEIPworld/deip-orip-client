@@ -2,12 +2,13 @@ import _ from 'lodash';
 import deipRpc from '@deip/deip-oa-rpc-client';
 import Vue from 'vue'
 
-import { isLoggedIn, getDecodedToken, getOwnerWif } from './../../../utils/auth'
-import usersService from './../../../services/http/users'
-import bookmarksHttpService from './../../../services/http/bookmarks'
-import joinRequestsService from './../../../services/http/joinRequests'
-import notificationsHttpService from './../../../services/http/notifications'
-import { getEnrichedProfiles } from './../../../utils/user'
+import { isLoggedIn, getDecodedToken, getOwnerWif } from '@/utils/auth'
+import usersService from '@/services/http/users'
+import bookmarksHttpService from '@/services/http/bookmarks'
+import joinRequestsService from '@/services/http/joinRequests'
+import notificationsHttpService from '@/services/http/notifications'
+import { getEnrichedProfiles } from '@/utils/user'
+import { viewModeType } from '@/globals/constants';
 
 const state = {
   user: {
@@ -100,7 +101,15 @@ const getters = {
 
   isApplicant: (state, getters) => {
     return !getters.isGrantor && !getters.isOfficer;
-  }
+  },
+
+  isInvestorViewMode: (state, getters) => {
+    return getters.user.viewMode === viewModeType.INVESTOR;
+  },
+
+  isResearcherViewMode: (state, getters) => {
+    return getters.user.viewMode === viewModeType.RESEARCHER;
+  },
 }
 
 // actions
