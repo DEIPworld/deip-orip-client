@@ -1,11 +1,11 @@
 <template>
-    <div class="legacy-column full-height">
-        <div class="c-mb-4 legacy-col-grow legacy-column">
+    <v-layout column fill-height>
+        <v-flex display-flex flex-column flex-grow-1 mb-3>
             <div class="step-title">Invite members</div>
-            <div class="legacy-col-grow overflow-y-auto">
+            <div class="flex-grow-1 overflow-y-auto">
 
-                <div class="legacy-row c-mh-auto group-members-max-width">
-                    <div class="legacy-col-12">
+                <v-layout row mx-auto class="group-members-max-width">
+                    <v-flex xs12>
                         <v-text-field
                             label="Search..."
                             single-line
@@ -15,7 +15,7 @@
                         </v-text-field>
                         <div>
 
-                            <div class="legacy-row-nowrap legacy-justify-between align-center c-pt-4"
+                            <v-layout row justify-space-between align-center pt-3
                                 v-for="(user, i) in group.members" :key="i + '-picked'">
                                 <div>
                                     <v-avatar size="30px">
@@ -25,13 +25,13 @@
                                     <router-link to="#" class="a c-pl-3">{{ user | fullname }}</router-link>
                                 </div>
                                 <v-btn v-if="user.account.name != creatorUsername" flat color="grey" class="ma-0" @click="cancelMember(i)">Cancel</v-btn>
-                            </div>
+                            </v-layout>
 
                         </div>
-                        <v-divider class="c-mt-4" v-show="group.members.length > 0"></v-divider>
+                        <v-divider class="mt-3" v-show="group.members.length > 0"></v-divider>
                         <div>
 
-                            <div class="legacy-row-nowrap legacy-justify-between align-center c-pt-4" 
+                            <v-layout row justify-space-between align-center pt-3 
                                 v-for="(user, i) in selectableUsers" :key="i + '-selectable'">
                                 <div>
                                     <v-avatar size="30px">
@@ -41,21 +41,26 @@
                                     <router-link to="#" class="a c-pl-3">{{ user | fullname }}</router-link>
                                 </div>
                                 <v-btn flat color="primary" class="ma-0" @click="inviteMember(user)">+ Invite</v-btn>
-                            </div>
+                            </v-layout>
 
                         </div>
-                    </div>
-                </div>
+                    </v-flex>
+                </v-layout>
 
             </div>
-        </div>
-        <div class="legacy-row legacy-justify-center align-center">
-            <v-btn flat small @click.native="prevStep()">
-                <v-icon dark class="pr-1">keyboard_arrow_left</v-icon> Back
-            </v-btn>
-            <v-btn color="primary" @click.native="nextStep()" :disabled="group.members.length === 0">Next</v-btn>
-        </div>
-    </div>
+        </v-flex>
+        <v-flex flex-grow-0>
+          <v-layout row justify-center align-center>
+              <v-btn flat small @click.native="prevStep()">
+                  <v-icon dark class="pr-1">keyboard_arrow_left</v-icon> Back
+              </v-btn>
+              <!-- <v-btn color="primary" @click.native="nextStep()" :disabled="group.members.length === 0">Next</v-btn> -->
+              <v-btn color="primary" :loading="isLoading" @click.native="finish()" :disabled="group.members.length === 0 || isLoading">
+                  Create group
+              </v-btn>
+          </v-layout>
+        </v-flex>
+    </v-layout>
 </template>
 
 <script>
@@ -95,7 +100,8 @@
     export default {
         name: "CreateResearchGroupMembers",
         props: {
-            group: {type: Object, required: true }
+            group: {type: Object, required: true },
+            isLoading:  { type: Boolean, required: true }
         },
         data() { 
             return {
@@ -129,6 +135,9 @@
                 this.selectedUsers.splice(index, 1);
                 recalculateDefaultStakes(this.creatorUsername, this.selectedUsers)
                 this.selectableUsers = prepareSelectableUsers(this.allUsers, this.selectedUsers, this.q);
+            },
+              finish() {
+                this.$emit('finish');
             }
         },
         watch: {

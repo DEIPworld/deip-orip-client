@@ -1,13 +1,13 @@
 <template>
-    <div class="legacy-column full-height">
-        <div class="c-mb-4 legacy-col-grow legacy-column">
+      <v-layout column fill-height>
+        <v-flex display-flex flex-column flex-grow-1 mb-3>
             <div class="step-title">Group name</div>
-            <div class="legacy-col-grow overflow-y-auto">
+            <div class="flex-grow-1 overflow-y-auto">
 
-                <div class="legacy-row c-mh-auto group-title-max-width">
-                    <div class="legacy-col-12">
+                <v-layout row mx-auto class="group-title-max-width">
+                    <v-flex xs12>
                         <v-form ref="form">
-                            <div class="">
+                            <div>
                                 <v-text-field 
                                     v-model="name" 
                                     name="title"
@@ -24,7 +24,7 @@
                                 prefix="deip.world"
                             ></v-text-field> -->
 
-                            <div class="">
+                            <div>
                                 <v-text-field class="permlink-input" 
                                     prefix="deip.world/"
                                     name="permlink"
@@ -37,18 +37,20 @@
                                 ></v-text-field>
                             </div>
                         </v-form>
-                    </div>
-                </div>
+                    </v-flex>
+                </v-layout>
 
             </div>
-        </div>
-        <div class="legacy-row legacy-justify-center align-center">
-            <v-btn color="primary" 
-                @click.native="nextStep()" 
-                :disabled="nextDisabled"
-            >Next</v-btn>
-        </div>
-    </div>
+        </v-flex>
+        <v-flex flex-grow-0>
+          <v-layout row justify-center align-center>
+              <v-btn color="primary" 
+                  @click.native="nextStep()" 
+                  :disabled="nextDisabled"
+              >Next</v-btn>
+          </v-layout>
+        </v-flex>
+    </v-layout>
 </template>
 
 <script>

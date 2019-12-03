@@ -1,16 +1,16 @@
 <template>
-    <div class="legacy-column full-height">
-        <div class="c-mb-4 legacy-col-grow legacy-column">
+    <v-layout column fill-height>
+        <v-flex display-flex flex-column flex-grow-1 mb-3>
             <div class="step-title">Quorum setup</div>
-            <div class="legacy-col-grow overflow-y-auto">
+            <div class="flex-grow-1 overflow-y-auto">
 
-                <div class="legacy-row c-mh-auto group-quorum-max-width">
-                    <div class="legacy-col-12">
+                <v-layout row mx-auto class="group-quorum-max-width">
+                    <v-flex xs12>
                         <div>
                             Quorum shows how many votes it takes to approve a proposal (such as changing the research
                             content, adding the research group members, initiating research fundraise, etc.) You can setup Quorum for each 
                             proposal individually using
-                            <span class="deip-blue-color half-bold clickable" @click="changeMode()">Advanced</span>
+                            <span class="deip-blue-color font-weight-medium clickable" @click="changeMode()">Advanced</span>
                             options.
                         </div>
 
@@ -23,11 +23,11 @@
                             @keyup="onChangeTotalQuorum()"
                         ></v-text-field>
 
-                        <div class="legacy-row" v-show="isAdvanced">
-                            <div class="legacy-col-offset-2">
-                                <div class="c-pv-4 deip-blue-color bold">Advanced quorum setup</div>
+                        <v-layout row v-show="isAdvanced">
+                            <v-flex offset-xs2>
+                                <div class="py-3 deip-blue-color font-weight-bold">Advanced quorum setup</div>
 
-                                <div class="legacy-row legacy-align-items-end">
+                                <v-layout row align-end>
                                     <div>
                                         <v-text-field class="width-6 pa-0"
                                             v-model="group.quorum.startResearch"
@@ -36,10 +36,10 @@
                                             hide-details
                                         ></v-text-field>
                                     </div>
-                                    <div class="legacy-col-grow c-ml-8">Start research</div>
-                                </div>
+                                    <div class="flex-grow-1 ml-4">Start research</div>
+                                </v-layout>
 
-                                <div class="legacy-row legacy-align-items-end">
+                                <v-layout row align-end>
                                     <div>
                                         <v-text-field class="width-6 pa-0"
                                             v-model="group.quorum.createMaterial"
@@ -48,10 +48,10 @@
                                             hide-details
                                         ></v-text-field>
                                     </div>
-                                    <div class="legacy-col-grow c-ml-8">Publish research results</div>
-                                </div>
+                                    <div class="flex-grow-1 ml-4">Publish research results</div>
+                                </v-layout>
 
-                                <div class="legacy-row legacy-align-items-end">
+                                <v-layout row align-end>
                                     <div>
                                         <v-text-field class="width-6 pa-0"
                                             v-model="group.quorum.changeReviewSharePercent"
@@ -60,10 +60,10 @@
                                             hide-details
                                         ></v-text-field>
                                     </div>
-                                    <div class="legacy-col-grow c-ml-8">Change research review share</div>
-                                </div>
+                                    <div class="flex-grow-1 ml-4">Change research review share</div>
+                                </v-layout>
 
-                                <div class="legacy-row legacy-align-items-end">
+                                <v-layout row align-end>
                                     <div>
                                         <v-text-field class="width-6"
                                             v-model="group.quorum.inviteMembers"
@@ -72,10 +72,10 @@
                                             hide-details
                                         ></v-text-field>
                                     </div>
-                                    <div class="legacy-col-grow c-ml-8">Invite members</div>
-                                </div>
+                                    <div class="flex-grow-1 ml-4">Invite members</div>
+                                </v-layout>
 
-                                <div class="legacy-row legacy-align-items-end">
+                                <v-layout row align-end>
                                     <div>
                                         <v-text-field class="width-6 pa-0"
                                             v-model="group.quorum.dropoutMembers"
@@ -84,10 +84,10 @@
                                             hide-details
                                         ></v-text-field>
                                     </div>
-                                    <div class="legacy-col-grow c-ml-8">Dropout member</div>
-                                </div>
+                                    <div class="flex-grow-1 ml-4">Dropout member</div>
+                                </v-layout>
 
-                                <div class="legacy-row legacy-align-items-end">
+                                <v-layout row align-end>
                                     <div>
                                         <v-text-field class="width-6"
                                             v-model="group.quorum.startResearchTokenSale"
@@ -96,10 +96,10 @@
                                             hide-details
                                         ></v-text-field>
                                     </div>
-                                    <div class="legacy-col-grow c-ml-8">Start research fundraise</div>
-                                </div>
+                                    <div class="flex-grow-1 ml-4">Start research fundraise</div>
+                                </v-layout>
 
-                                <div class="legacy-row legacy-align-items-end">
+                                <v-layout row align-end>
                                     <div>
                                         <v-text-field class="width-6 pa-0"
                                             v-model="group.quorum.offerResearchTokens"
@@ -108,10 +108,10 @@
                                             hide-details
                                         ></v-text-field>
                                     </div>
-                                    <div class="legacy-col-grow c-ml-8">Offer research tokens</div>
-                                </div>
+                                    <div class="flex-grow-1 ml-4">Offer research tokens</div>
+                                </v-layout>
 
-                                <div class="legacy-row legacy-align-items-end">
+                                <v-layout row align-end>
                                     <div>
                                         <v-text-field class="width-6 pa-0"
                                             v-model="group.quorum.sendFunds"
@@ -120,10 +120,10 @@
                                             hide-details
                                         ></v-text-field>
                                     </div>
-                                    <div class="legacy-col-grow c-ml-8">Send funds</div>
-                                </div>
+                                    <div class="flex-grow-1 ml-4">Send funds</div>
+                                </v-layout>
 
-                                <div class="legacy-row legacy-align-items-end">
+                                <v-layout row align-end>
                                     <div>
                                         <v-text-field class="width-6"
                                             v-model="group.quorum.changeQuorum"
@@ -132,10 +132,10 @@
                                             hide-details
                                         ></v-text-field>
                                     </div>
-                                    <div class="legacy-col-grow c-ml-8">Change quorum</div>
-                                </div>
+                                    <div class="flex-grow-1 ml-4">Change quorum</div>
+                                </v-layout>
 
-                                <div class="legacy-row legacy-align-items-end">
+                                <v-layout row align-end>
                                     <div>
                                         <v-text-field class="width-6 pa-0"
                                             v-model="group.quorum.rebalanceGroupTokens"
@@ -144,25 +144,26 @@
                                             hide-details
                                         ></v-text-field>
                                     </div>
-                                    <div class="legacy-col-grow c-ml-8">Rebalance research group tokens</div>
-                                </div>
+                                    <div class="flex-grow-1 ml-4">Rebalance research group tokens</div>
+                                </v-layout>
 
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                            </v-flex>
+                        </v-layout>
+                    </v-flex>
+                </v-layout>
 
             </div>
-        </div>
+        </v-flex>
+        <v-flex flex-grow-0>
+          <v-layout row justify-center align-center>
+              <v-btn flat small @click.native="prevStep()">
+                  <v-icon dark class="pr-1">keyboard_arrow_left</v-icon> Back
+              </v-btn>
 
-        <div class="legacy-row legacy-justify-center align-center">
-            <v-btn flat small @click.native="prevStep()">
-                <v-icon dark class="pr-1">keyboard_arrow_left</v-icon> Back
-            </v-btn>
-
-            <v-btn color="primary" @click.native="nextStep()" :disabled="nextDisabled">Next</v-btn>
-        </div>
-    </div>
+              <v-btn color="primary" @click.native="nextStep()" :disabled="nextDisabled">Next</v-btn>
+          </v-layout>
+        </v-flex>
+    </v-layout>
 </template>
 
 <script>
