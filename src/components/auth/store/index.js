@@ -14,6 +14,7 @@ const state = {
     username: isLoggedIn() ? getDecodedToken().username : null,
     pubKey: isLoggedIn() ? getDecodedToken().pubKey : null,
     privKey: isLoggedIn() ? getOwnerWif() : null,
+    viewMode: isLoggedIn() ? getDecodedToken().viewMode : null,
     profile: null,
     account: null,
     expertTokens: [],

@@ -41,6 +41,11 @@
               :type="isHiddenPassword ? 'password' : 'text'"
               @click:append="isHiddenPassword = !isHiddenPassword"
             ></v-text-field>
+            <v-select
+              label="Sign in as"
+              v-model="selectedViewMode"
+              :items="viewModes"
+            />
             <v-btn
               type="submit"
               block
@@ -62,22 +67,29 @@
     import crypto from '@deip/lib-crypto'
     import authService from './../../services/http/auth'
     import {decodedToken, clearAccessToken, setAccessToken} from './../../utils/auth'
+    import { viewModeTypeValues, viewModeName } from '@/globals/constants';
 
     export default {
         name: 'SignIn',
 
         data() {
-            return {
-                isFormValid: false,
-                username: '',
-                privKey: '',
-                isHiddenPassword: true,
-                isChecking: false,
-                rules: {
-                    required: (value) => !!value || 'This field is required'
-                },
-                tenant: window.env.TENANT
-            }
+          const viewModes = viewModeTypeValues.map(v => ({
+            value: v,
+            text: viewModeName[v]
+          }));
+          return {
+            isFormValid: false,
+            username: '',
+            privKey: '',
+            selectedViewMode: viewModes[0].value,
+            viewModes,
+            isHiddenPassword: true,
+            isChecking: false,
+            rules: {
+              required: (value) => !!value || 'This field is required'
+            },
+            tenant: window.env.TENANT,
+          }
         },
 
         methods: {
@@ -100,8 +112,11 @@
                     // sig-seed should be uint8 array with length = 32
                     const secretSig = secretKey.sign(encodeUint8Arr(window.env.SIG_SEED).buffer);
                     const secretSigHex = crypto.hexify(secretSig);
-                    
-                    authService.signIn({username: this.username, secretSigHex: secretSigHex})
+                    authService.signIn({
+                      username: this.username,
+                      secretSigHex: secretSigHex,
+                      viewMode: this.selectedViewMode,
+                    })
                         .then((response) => {
 
                             if (response.success) {
