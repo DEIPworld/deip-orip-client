@@ -224,7 +224,7 @@ export default {
         this.research.disciplines = disciplineTreeService.getNodesByIdList(
           this.$route.query['disciplineIds'].map(disciplineId => parseInt(disciplineId))
         );
-        if (this.$route.query.groupName && this.$route.query.groupPermlink){
+        if (this.$route.query.groupPermlink){
           const newGroup = this.userGroups.find(item => item.permlink == this.$route.query.groupPermlink);
           this.setGroup(newGroup);
           this.currentStep = 3;

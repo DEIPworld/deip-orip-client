@@ -190,7 +190,6 @@
                             });
                         } else {
                           if (this.backRouterToken.name === "CreateResearch"){
-                            this.backRouterToken.query.groupName = this.group.name;
                             this.backRouterToken.query.groupPermlink = this.group.permlink;
                           }
                             this.$router.push(this.backRouterToken);
