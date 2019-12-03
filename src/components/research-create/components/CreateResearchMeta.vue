@@ -1,36 +1,31 @@
 <template>
-    <div class="legacy-column full-height">
-        <div class="c-mb-4 legacy-col-grow legacy-column">
+    <v-layout column fill-height>
+        <v-flex display-flex flex-column flex-grow-1 mb-3>
             <div class="step-title">Add title and description</div>
 
-            <div class="legacy-col-grow overflow-y-auto">
+            <div class="flex-grow-1 overflow-y-auto">
 
-                <div class="c-mh-auto c-pt-4" style="max-width: 1000px;">
-                    <div class="legacy-row">
-                        <div class="legacy-col-3"></div>
-                        <div class="legacy-col-6">
+                <div class="mx-auto pt-3" style="max-width: 1000px;">
+                    <v-layout row>
+                        <v-flex xs6 offset-xs3>
                             <v-textarea v-model="title" v-on:keyup="setTitle" 
                                 name="title" label="Title" 
                                 solo
                             ></v-textarea>
-                        </div>
-                        <div class="legacy-col-3"></div>
-                    </div>
+                        </v-flex>
+                    </v-layout>
 
-                    <div class="legacy-row c-pt-4">
-                        <div class="legacy-col-3"></div>
-                        <div class="legacy-col-6">
+                    <v-layout row>
+                        <v-flex xs6 offset-xs3>
                             <v-textarea v-model="description" v-on:keyup="setDescription" 
                                 name="Description" label="Description" 
                                 solo
                             ></v-textarea>
-                        </div>
-                        <div class="legacy-col-3"></div>
-                    </div>
+                        </v-flex>
+                    </v-layout>
 
-                    <div class="legacy-row c-pt-4">
-                        <div class="legacy-col-3"></div>
-                        <div class="legacy-col-6">
+                    <v-layout row pt-3>
+                        <v-flex xs6 offset-xs3>
                             <v-text-field 
                               v-on:keyup="setVideo" 
                               prepend-inner-icon="link"
@@ -39,39 +34,40 @@
                               solo
                               :rules="[rules.link]"
                             ></v-text-field>
-                        </div>
-                        <div class="legacy-col-3"></div>
-                    </div>
+                        </v-flex>
+                    </v-layout>
 
-                <!--    <div class="legacy-row c-pt-4">
-                        <div class="legacy-col-offset-3 legacy-col-6">
+                   <!-- <v-layout row pt-3>
+                        <v-flex xs6 offset-xs3 class="">
                             <v-checkbox v-model="tmpIsPrivate" label="Choose if group should be private"></v-checkbox>
-                        </div>
-                    </div> -->
+                        </v-flex>
+                    </v-layout> -->
 
-                <!--    <div class="legacy-row c-pt-4">
-                        <div class="legacy-col-3 font-18px bold c-pr-4">Main goals of your research</div>
-                        <div class="legacy-col-6">
+                   <!-- <v-layout row pt-3>
+                        <v-flex xs3 pr-3 font-weight-bold subheading>Main goals of your research</v-flex>
+                        <v-flex xs6>
                             <v-text-field name="goals" label="Goals" solo textarea hide-details></v-text-field>
-                        </div>
-                    </div> -->
+                        </v-flex>
+                    </v-layout> -->
                 </div>
             </div>
 
-        </div>
+        </v-flex>
 
-        <div class="legacy-row legacy-justify-center align-center">
-            <v-btn flat small @click.native="prevStep()">
-                <v-icon dark class="pr-1">keyboard_arrow_left</v-icon> Back
-            </v-btn>
+        <v-flex flex-grow-0>
+          <v-layout row justify-center align-center>
+              <v-btn flat small @click.native="prevStep()">
+                  <v-icon dark class="pr-1">keyboard_arrow_left</v-icon> Back
+              </v-btn>
 
-            <v-btn color="primary"
-                :disabled="nextDisabled"
-                :loading="isLoading"
-                @click.native="nextStep()"
-            >Next</v-btn>
-        </div>
-    </div>
+              <v-btn color="primary"
+                  :disabled="nextDisabled"
+                  :loading="isLoading"
+                  @click.native="nextStep()"
+              >Next</v-btn>
+          </v-layout>
+        </v-flex>
+    </v-layout>
 </template>
 
 <script>

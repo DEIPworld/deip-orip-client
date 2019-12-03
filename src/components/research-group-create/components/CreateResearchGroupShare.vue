@@ -1,16 +1,16 @@
 <template>
-    <div class="legacy-column full-height">
-        <div class="c-mb-4 legacy-col-grow legacy-column">
+    <v-layout column fill-height>
+        <v-flex display-flex flex-column flex-grow-1 mb-3>
             <div class="step-title">Research Group Tokens</div>
-            <div class="legacy-col-grow overflow-y-auto">
+            <div class="flex-grow-1 overflow-y-auto">
 
-                <div class="legacy-row c-mh-auto group-share-max-width">
-                    <div class="legacy-col-12">
+                <v-layout row mx-auto class="group-share-max-width">
+                    <v-flex xs12>
                         <div>
                             Each research group is assigned its own Research Group Tokens which are distributed among its members and can be used to manage the group and its research activity.
                         </div>
-                        <div class="body-2 c-pv-4">Distribute tokens of this group as follows:</div>
-                        <div class="legacy-row-nowrap legacy-justify-between align-center c-pt-4" 
+                        <div class="body-2 py-3">Distribute tokens of this group as follows:</div>
+                        <v-layout row justify-space-between align-center pt-3 
                             v-for="(member, i) in group.members" :key="i"
                         >
                             <div>
@@ -18,7 +18,7 @@
                                     <img v-if="member.profile" v-bind:src="member.profile.avatar | avatarSrc(30, 30, false)" />
                                     <v-gravatar v-else :email="member.account.name + '@deip.world'" />
                                 </v-avatar>
-                                <router-link :to="'/user-details' + member.account.name" class="a c-pl-3">{{ member | fullname }}</router-link>
+                                <router-link :to="'/user-details' + member.account.name" class="a pl-2">{{ member | fullname }}</router-link>
                             </div>
 
                             <div>
@@ -29,27 +29,29 @@
                                     mask="###"
                                 ></v-text-field>
                             </div>
-                        </div>
+                        </v-layout>
 
-                        <div class="text-align-right c-pt-4">
+                        <div class="text-align-right pt-3">
                             <div class="caption grey--text">
                                 <div>Total: <span>{{sum}} %</span></div>
                             </div>
                         </div>
-                    </div>
-                </div>
+                    </v-flex>
+                </v-layout>
             </div>
-        </div>
-        <div class="legacy-row legacy-justify-center align-center">
-            <v-btn flat small @click.native="prevStep()">
-                <v-icon dark class="pr-1">keyboard_arrow_left</v-icon> Back
-            </v-btn>
+        </v-flex>
+        <v-flex flex-grow-0>
+          <v-layout row justify-center align-center>
+              <v-btn flat small @click.native="prevStep()">
+                  <v-icon dark class="pr-1">keyboard_arrow_left</v-icon> Back
+              </v-btn>
 
-            <v-btn color="primary" :loading="isLoading" @click.native="finish()" :disabled="sum !== 100 || isLoading">
-                Create group
-            </v-btn>
-        </div>
-    </div>
+              <v-btn color="primary" :loading="isLoading" @click.native="finish()" :disabled="sum !== 100 || isLoading">
+                  Create group
+              </v-btn>
+          </v-layout>
+        </v-flex>
+    </v-layout>
 </template>
 
 <script>

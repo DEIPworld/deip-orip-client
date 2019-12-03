@@ -1,19 +1,21 @@
 <template>
-	<v-layout column align-center class="full-height" style="flex: 0 0 auto; overflow: scroll;">
-		<v-layout row style="padding-left: 10%; padding-right: 10%;">
-			<div>
+	<v-layout column align-center fill-height overflow-auto>
+		<v-flex px-10>
+			<v-flex>
 				<div class="step-title text-xs-center">Roadmap</div>
 				<div class="subheading pb-5 pt-2 text-xs-center">Let’s create a roadmap for your research. Well-presented and detailed roadmap attracts more investors to help you to get the funding</div>
 				<milestone-stepper :isReadOnly="false" :steps="research.milestones"></milestone-stepper>
-			</div>
-		</v-layout>
+			</v-flex>
+		</v-flex>
 
-		<div>
-			<v-btn flat small @click.native="prevStep()">
-				<v-icon dark class="pr-1">keyboard_arrow_left</v-icon> Back
-			</v-btn>
-			<v-btn :loading="isLoading" :disabled="nextDisabled || isLoading" color="primary" @click.native="nextStep()">Create Project</v-btn>
-		</div> 
+		<v-flex flex-grow-0>
+			<v-layout>
+				<v-btn flat small @click.native="prevStep()">
+					<v-icon dark class="pr-1">keyboard_arrow_left</v-icon> Back
+				</v-btn>
+				<v-btn :loading="isLoading" :disabled="nextDisabled || isLoading" color="primary" @click.native="nextStep()">Create Project</v-btn>
+				</v-layout>
+		</v-flex> 
 	</v-layout>
 </template>
 
@@ -94,5 +96,9 @@ export default {
 					display: block;
 			}
 		}
+	}
+	.px-10{
+		padding-left: 10%;
+		padding-right: 10%;
 	}
 </style>
