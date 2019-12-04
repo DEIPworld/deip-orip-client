@@ -15,6 +15,27 @@
               :to="{ name: 'SignUp' }"
             >Sign Up</router-link>
           </div> -->
+          <v-layout class="description__info-list-item mt-5" align-center shrink>
+            <v-icon small color="white">mdi-message-reply-text</v-icon>
+            <span class="ml-2">Collaboration</span>
+          </v-layout>
+          <v-layout class="description__info-list-item mt-4" align-center shrink>
+            <v-icon small color="white" class="icon-upended">mdi-lightbulb-on</v-icon>
+            <span class="ml-2">Project tokenization</span>
+          </v-layout>
+          <v-layout class="description__info-list-item mt-4" align-center shrink>
+            <v-icon small color="white">mdi-shield-check</v-icon>
+            <span class="ml-2">Licensing of intellectual property</span>
+          </v-layout>
+          <v-layout class="description__info-list-item mt-4" align-center shrink>
+            <v-icon small color="white">mdi-account-multiple-plus</v-icon>
+            <span class="ml-2">Crowd investing</span>
+          </v-layout>
+          <v-divider class="description__divider white my-5"/>
+          <v-layout column class="description__disclaimer">
+            <p>This is a demonstration version.</p>
+            <p class="mt-2">You’re welcome to order a <b>white-label solution of DEIP Open Research&Innovation Platform</b></p>
+          </v-layout>
         </v-layout>
       </v-flex>
       <v-flex xs12 sm12 md6 lg6 xl6>
@@ -211,6 +232,31 @@
     a {
       color: inherit;
     }
+  }
+
+  &__info-list-item {
+    font-family: Muli;
+    font-weight: 500;
+    font-size: 18px;
+    line-height: 20px;
+
+    color: #FFFFFF;
+
+    .icon-upended {
+      transform: rotate(180deg);
+    }
+  }
+
+  &__divider {
+    opacity: 0.2;
+  }
+
+  &__disclaimer {
+    font-family: Muli;
+    font-size: 16px;
+    line-height: 20px;
+    color: white;
+    opacity: 0.6;
   }
 }
 
