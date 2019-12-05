@@ -195,7 +195,14 @@
                 <v-dialog v-model="investmentConfirmDialog.isShown" persistent max-width="800px">
                   <v-card class="px-4 py-2">
                     <v-card-title>
-                      <span class="headline bold">SAFT (Simple Agreement for Future Tokens)</span>
+                      <v-layout align-center>
+                        <v-flex grow headline font-weight-bold>SAFT (Simple Agreement for Future Tokens)</v-flex>
+                        <v-flex shrink>
+                          <v-btn @click="disagreeSaft()" icon class="pa-0 ma-0">
+                            <v-icon color="black">close</v-icon>
+                          </v-btn>
+                        </v-flex>
+                      </v-layout>
                     </v-card-title>
                     <v-card-text style="height: 50vh">
                       <iframe
@@ -675,9 +682,9 @@
                     <v-layout row align-center align-baseline>
                       <v-flex grow class="headline">Provide a cover letter to your Join Request</v-flex>
                       <v-flex shrink align-self-center>
-                        <!-- <v-btn @click="isJoinGroupDialogOpen = false" icon class="pa-0 ma-0">
-                              <v-icon color="black">close</v-icon>
-                        </v-btn>-->
+                        <v-btn @click="isJoinGroupDialogOpen = false" icon class="pa-0 ma-0">
+                          <v-icon color="black">close</v-icon>
+                        </v-btn>
                       </v-flex>
                     </v-layout>
                   </v-card-title>
@@ -753,7 +760,14 @@
             </template>
             <v-card class="pa-4">
               <v-card-title>
-                <span class="headline">Request review from an Expert</span>
+                <v-layout align-center>
+                  <v-flex grow class="headline">Request review from an Expert</v-flex>
+                  <v-flex shrink>
+                    <v-btn @click="requestExpertReviewDialog.isShown = false" icon class="pa-0 ma-0">
+                      <v-icon color="black">close</v-icon>
+                    </v-btn>
+                  </v-flex>
+                </v-layout>
               </v-card-title>
               <v-card-text>
                 <v-layout column>

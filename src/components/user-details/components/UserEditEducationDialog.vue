@@ -4,12 +4,12 @@
             <v-card-title>
                 <v-layout row align-center align-baseline>
                     <v-flex grow class="headline">
-                    Education
+                        Education
                     </v-flex>
                     <v-flex shrink align-self-center>
-                    <v-btn @click.native="meta.isShown = false" icon class="pa-0 ma-0">
-                        <v-icon color="black">close</v-icon>
-                    </v-btn>
+                      <v-btn @click.native="meta.isShown = false" icon class="pa-0 ma-0">
+                          <v-icon color="black">close</v-icon>
+                      </v-btn>
                     </v-flex>
                 </v-layout>
             </v-card-title>

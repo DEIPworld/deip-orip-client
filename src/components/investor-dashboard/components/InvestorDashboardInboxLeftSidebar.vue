@@ -26,10 +26,19 @@
             </v-flex>
           </v-layout>
         </div>
-        <v-dialog v-model="newListDialog.isOpened" max-width="500px">
+        <v-dialog v-model="newListDialog.isOpened" max-width="600px">
           <v-card>
             <v-card-title>
-              <span>Add new list</span>
+              <v-layout align-center>
+                <v-flex grow>
+                  Add new list
+                </v-flex>
+                <v-flex shrink>
+                  <v-btn @click="closeNewListDialog()" icon class="pa-0 ma-0">
+                    <v-icon color="black">close</v-icon>
+                  </v-btn>
+                </v-flex>
+              </v-layout>
             </v-card-title>
             <v-card-text>
               <swatches v-model="newListDialog.color" inline colors="material-light"/>
@@ -48,10 +57,17 @@
           </v-card>
         </v-dialog>
 
-        <v-dialog v-model="editListDialog.isOpened" max-width="500px">
+        <v-dialog v-model="editListDialog.isOpened" max-width="600px">
           <v-card>
             <v-card-title>
-              <span>Add new list</span>
+              <v-layout align-center>
+                <v-flex grow>Add new list</v-flex>
+                <v-flex shrink>
+                  <v-btn @click="closeEditListDialog()" icon class="pa-0 ma-0">
+                    <v-icon color="black">close</v-icon>
+                  </v-btn>
+                </v-flex>
+              </v-layout>
             </v-card-title>
             <v-card-text>
               <swatches v-model="editListDialog.color" inline colors="material-light"/>

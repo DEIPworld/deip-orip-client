@@ -64,7 +64,14 @@
           </template>
           <v-card class="pa-4">
             <v-card-title>
-              <span class="headline">Request review from an Expert</span>
+              <v-layout align-center>
+                <v-flex grow class="headline">Request review from an Expert</v-flex>
+                <v-flex shrink>
+                  <v-btn @click="requestExpertReviewDialog.isShown = false" icon class="pa-0 ma-0">
+                    <v-icon color="black">close</v-icon>
+                  </v-btn>
+                </v-flex>
+              </v-layout>
             </v-card-title>
             <v-card-text>
               <v-layout column>

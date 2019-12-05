@@ -106,10 +106,17 @@
               </v-btn>
             </div>
           </v-layout>
-          <v-dialog v-model="updateTagsDialog.isOpened" max-width="500px">
+          <v-dialog v-model="updateTagsDialog.isOpened" max-width="600px">
             <v-card>
               <v-card-title>
-                <span>Attach to list</span>
+                <v-layout align-center>
+                  <v-flex grow>Attach to list</v-flex>
+                  <v-flex shrink>
+                    <v-btn @click="closeAddTagsDialog()" icon class="pa-0 ma-0">
+                      <v-icon color="black">close</v-icon>
+                    </v-btn>
+                  </v-flex>
+                </v-layout>
               </v-card-title>
               <v-card-text>
                 <v-layout column>

@@ -1,5 +1,5 @@
 <template>
-    <v-dialog v-model="isOpen" persistent transition="scale-transition" max-width="700px">
+    <v-dialog v-model="isOpen" persistent transition="scale-transition" max-width="600px">
         <v-card class="pa-4">
             <v-card-title>
                 <v-layout row align-center align-baseline>

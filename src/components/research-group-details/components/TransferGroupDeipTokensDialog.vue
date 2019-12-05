@@ -8,9 +8,9 @@
                         Transfer from Group balance
                     </v-flex>
                     <v-flex shrink align-self-center>
-                        <!-- <v-btn @click="close()" icon class="pa-0 ma-0">
+                        <v-btn @click="close()" icon class="pa-0 ma-0">
                             <v-icon color="black">close</v-icon>
-                        </v-btn> -->
+                        </v-btn>
                     </v-flex>
                 </v-layout>
             </v-card-title>

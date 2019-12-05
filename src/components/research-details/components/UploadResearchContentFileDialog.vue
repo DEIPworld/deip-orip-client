@@ -14,7 +14,14 @@
         <v-dialog v-if="research" v-model="isOpen" persistent transition="scale-transition" max-width="600px">
             <v-card class="pa-4">
               <v-card-title>
-                <span class="headline">Propose content for Research</span>
+                  <v-layout align-center>
+                      <v-flex grow headline>Propose content for Research</v-flex>
+                      <v-flex shrink>
+                        <v-btn @click="close()" icon class="pa-0 ma-0">
+                            <v-icon color="black">close</v-icon>
+                        </v-btn>
+                      </v-flex>
+                  </v-layout>
               </v-card-title>
               <v-card-text>
                     <div v-if="researchGroupMembersList.length">
