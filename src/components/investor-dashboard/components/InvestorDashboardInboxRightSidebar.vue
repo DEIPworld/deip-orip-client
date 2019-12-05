@@ -107,11 +107,11 @@
             </div>
           </v-layout>
           <v-dialog v-model="updateTagsDialog.isOpened" max-width="600px">
-            <v-card>
+            <v-card class="pa-4">
               <v-card-title>
                 <v-layout align-center>
-                  <v-flex grow>Attach to list</v-flex>
-                  <v-flex shrink>
+                  <v-flex grow title>Attach to list</v-flex>
+                  <v-flex shrink right-top-angle>
                     <v-btn @click="closeAddTagsDialog()" icon class="pa-0 ma-0">
                       <v-icon color="black">close</v-icon>
                     </v-btn>
@@ -144,9 +144,13 @@
                 </v-layout>
               </v-card-text>
               <v-card-actions>
-                <v-layout row justify-end>
-                  <v-btn flat @click="closeAddTagsDialog()">Cancel</v-btn>
-                  <v-btn @click="updateTags()" :loading="updateTagsDialog.isSaving" :disabled="updateTagsDialog.isSaving" color="primary">Save</v-btn>
+                <v-layout row wrap>
+                  <v-flex xs12 py-2>
+                    <v-btn @click="updateTags()" :loading="updateTagsDialog.isSaving" :disabled="updateTagsDialog.isSaving" block color="primary">Save</v-btn>
+                  </v-flex>
+                  <v-flex xs12 py-2>
+                    <v-btn flat block color="primary" @click="closeAddTagsDialog()">Cancel</v-btn>
+                  </v-flex>
                 </v-layout>
               </v-card-actions>
             </v-card>

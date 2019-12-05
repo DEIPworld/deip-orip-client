@@ -36,7 +36,7 @@
                             <v-flex grow class="headline">
                                 {{inviteDetailsDialog.item.group.name}}
                             </v-flex>
-                            <v-flex shrink align-self-center>
+                            <v-flex shrink align-self-center right-top-angle>
                                 <v-btn @click="closeInviteDetailsDialog()" icon class="pa-0 ma-0">
                                     <v-icon color="black">close</v-icon>
                                 </v-btn>
@@ -48,23 +48,26 @@
                         <div class="subheading pt-4 half-bold">Group weight: <span class="grey--text">{{convertToPercent(inviteDetailsDialog.item.research_group_token_amount)}}%</span></div>     
                     </v-card-text>
                     <v-card-actions>
-                        <v-layout column>
-                            <v-btn
-                                color="green"
-                                outline
-                                class="my-1 pa-0 mx-0"
-                                @click="approveInvite()" 
-                                :disabled="inviteDetailsDialog.isApprovingInvite || inviteDetailsDialog.isRejectingInvite"
-                                :loading="inviteDetailsDialog.isApprovingInvite"
-                            >Accept</v-btn>
-                            <v-btn
-                                color="red"
-                                flat
-                                class="my-1 pa-0 mx-0"
-                                @click="rejectInvite()"
-                                :disabled="inviteDetailsDialog.isApprovingInvite || inviteDetailsDialog.isRejectingInvite" 
-                                :loading="inviteDetailsDialog.isRejectingInvite"
-                            >Reject</v-btn>
+                        <v-layout row wrap>
+                            <v-flex xs12 py-2>
+                                <v-btn
+                                    color="primary"
+                                    block
+                                    @click="approveInvite()" 
+                                    :disabled="inviteDetailsDialog.isApprovingInvite || inviteDetailsDialog.isRejectingInvite"
+                                    :loading="inviteDetailsDialog.isApprovingInvite"
+                                >Accept</v-btn>
+                            </v-flex>
+                            <v-flex xs12 py-2>
+                                <v-btn
+                                    color="primary"
+                                    block
+                                    flat
+                                    @click="rejectInvite()"
+                                    :disabled="inviteDetailsDialog.isApprovingInvite || inviteDetailsDialog.isRejectingInvite" 
+                                    :loading="inviteDetailsDialog.isRejectingInvite"
+                                >Reject</v-btn>
+                            </v-flex>
                         </v-layout>
                     </v-card-actions>
                 </v-card>

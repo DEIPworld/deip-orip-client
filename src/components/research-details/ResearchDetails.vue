@@ -193,11 +193,11 @@
                   >Invest</v-btn>
                 </v-layout>
                 <v-dialog v-model="investmentConfirmDialog.isShown" persistent max-width="800px">
-                  <v-card class="px-4 py-2">
+                  <v-card class="pa-4">
                     <v-card-title>
                       <v-layout align-center>
                         <v-flex grow headline font-weight-bold>SAFT (Simple Agreement for Future Tokens)</v-flex>
-                        <v-flex shrink>
+                        <v-flex shrink right-top-angle>
                           <v-btn @click="disagreeSaft()" icon class="pa-0 ma-0">
                             <v-icon color="black">close</v-icon>
                           </v-btn>
@@ -212,14 +212,18 @@
                       ></iframe>
                     </v-card-text>
                     <v-card-actions class="pa-0">
-                      <v-layout column>
-                        <v-btn class="mx-0 pa-0 my-2" color="primary" @click="agreeSaft()">Agree</v-btn>
-                        <v-btn
-                          class="mx-0 pa-0"
-                          color="primary"
-                          flat
-                          @click="disagreeSaft()"
-                        >Disagree</v-btn>
+                      <v-layout row wrap>
+                        <v-flex xs12 py-2>
+                          <v-btn block color="primary" @click="agreeSaft()">Agree</v-btn>
+                        </v-flex>
+                        <v-flex xs12 py-2>
+                          <v-btn
+                            color="primary"
+                            block
+                            flat
+                            @click="disagreeSaft()"
+                          >Disagree</v-btn>
+                        </v-flex>
                       </v-layout>
                     </v-card-actions>
                   </v-card>
@@ -681,7 +685,7 @@
                   <v-card-title>
                     <v-layout row align-center align-baseline>
                       <v-flex grow class="headline">Provide a cover letter to your Join Request</v-flex>
-                      <v-flex shrink align-self-center>
+                      <v-flex shrink align-self-center right-top-angle>
                         <v-btn @click="isJoinGroupDialogOpen = false" icon class="pa-0 ma-0">
                           <v-icon color="black">close</v-icon>
                         </v-btn>
@@ -699,21 +703,25 @@
                     ></v-textarea>
                   </v-card-text>
                   <v-card-actions>
-                    <v-layout column>
-                      <v-btn
-                        color="primary"
-                        class="mx-0 my-1 pa-0"
-                        :disabled="!coverLetter || isSendingJoinGroupRequest"
-                        :loading="isSendingJoinGroupRequest"
-                        @click="sendJoinGroupRequest()"
-                      >Send</v-btn>
-                      <v-btn
-                        @click="isJoinGroupDialogOpen = false"
-                        :disabled="isSendingJoinGroupRequest"
-                        color="black"
-                        flat
-                        class="mx-0 my-1 pa-0"
-                      >Cancel</v-btn>
+                    <v-layout row wrap>
+                      <v-flex xs12 py-2>
+                        <v-btn
+                          color="primary"
+                          :disabled="!coverLetter || isSendingJoinGroupRequest"
+                          :loading="isSendingJoinGroupRequest"
+                          @click="sendJoinGroupRequest()"
+                          block
+                        >Send</v-btn>
+                      </v-flex>
+                      <v-flex xs12 py-2>
+                        <v-btn
+                          @click="isJoinGroupDialogOpen = false"
+                          :disabled="isSendingJoinGroupRequest"
+                          color="primary"
+                          flat
+                          block
+                        >Cancel</v-btn>
+                      </v-flex>
                     </v-layout>
                   </v-card-actions>
                 </v-card>
@@ -762,7 +770,7 @@
               <v-card-title>
                 <v-layout align-center>
                   <v-flex grow class="headline">Request review from an Expert</v-flex>
-                  <v-flex shrink>
+                  <v-flex shrink right-top-angle>
                     <v-btn @click="requestExpertReviewDialog.isShown = false" icon class="pa-0 ma-0">
                       <v-icon color="black">close</v-icon>
                     </v-btn>
@@ -790,21 +798,24 @@
                 </v-layout>
               </v-card-text>
               <v-card-actions>
-                <v-layout column>
-                  <v-btn
-                    @click="requestReview()"
-                    :loading="isRequestingReview"
-                    :disabled="isRequestingReviewDisabled"
-                    outline
-                    color="primary"
-                    class="mx-0 my-1 pa-0"
-                  >Request</v-btn>
-                  <v-btn
-                    @click="requestExpertReviewDialog.isShown = false"
-                    color="black"
-                    flat
-                    class="mx-0 my-1 pa-0"
-                  >Cancel</v-btn>
+                <v-layout row wrap>
+                  <v-flex xs12 py-2>
+                    <v-btn
+                      @click="requestReview()"
+                      :loading="isRequestingReview"
+                      :disabled="isRequestingReviewDisabled"
+                      block
+                      color="primary"
+                    >Request</v-btn>
+                  </v-flex>
+                  <v-flex xs12 py-2>
+                    <v-btn
+                      @click="requestExpertReviewDialog.isShown = false"
+                      color="primary"
+                      flat
+                      block
+                    >Cancel</v-btn>
+                  </v-flex>
                 </v-layout>
               </v-card-actions>
             </v-card>

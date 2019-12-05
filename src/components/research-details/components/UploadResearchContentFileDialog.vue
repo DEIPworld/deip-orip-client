@@ -16,7 +16,7 @@
               <v-card-title>
                   <v-layout align-center>
                       <v-flex grow headline>Propose content for Research</v-flex>
-                      <v-flex shrink>
+                      <v-flex shrink right-top-angle>
                         <v-btn @click="close()" icon class="pa-0 ma-0">
                             <v-icon color="black">close</v-icon>
                         </v-btn>
@@ -73,21 +73,24 @@
                     </div>
               </v-card-text>
               <v-card-actions>
-                <v-layout column>
-                    <v-btn 
-                        color="primary" 
-                        class="mx-0 my-1 pa-0"
-                        :disabled="isDisabled || isLoading"
-                        :loading="isLoading"
-                        @click="proposeContent()"
-                    >{{!isPersonalGroup ? 'Create Proposal' : 'Create Content'}}</v-btn>
-
-                    <v-btn 
-                        @click="close()"
-                        :disabled="isLoading"
-                        color="black" 
-                        flat 
-                        class="mx-0 my-1 pa-0">Cancel</v-btn>
+                <v-layout row wrap>
+                    <v-flex xs12 py-2>
+                      <v-btn 
+                          color="primary" 
+                          block
+                          :disabled="isDisabled || isLoading"
+                          :loading="isLoading"
+                          @click="proposeContent()"
+                      >{{!isPersonalGroup ? 'Create Proposal' : 'Create Content'}}</v-btn>
+                    </v-flex>
+                    <v-flex xs12 py-2>
+                      <v-btn 
+                          @click="close()"
+                          :disabled="isLoading"
+                          color="primary" 
+                          block
+                          flat>Cancel</v-btn>
+                    </v-flex>
                 </v-layout>
               </v-card-actions>
             </v-card>

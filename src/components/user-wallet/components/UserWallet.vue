@@ -196,13 +196,13 @@
       </v-layout>
 
       <v-dialog v-model="depositDialog.isOpened" persistent max-width="800px">
-        <v-card class="px-5 pt-2 pb-5">
+        <v-card class="pa-5">
           <v-card-title class="">
             <v-layout align-center>
               <v-flex subheading font-weight-bold grow>
                 Deposit funds
               </v-flex>
-              <v-flex shrink>
+              <v-flex shrink right-top-angle>
                 <v-btn @click="closeDepositDialog()" icon class="pa-0 ma-0">
                   <v-icon color="black">close</v-icon>
                 </v-btn>
@@ -252,13 +252,13 @@
       </v-dialog>
 
       <v-dialog v-model="withdrawDialog.isOpened" persistent max-width="800px">
-        <v-card class="px-5 pt-2 pb-5">
+        <v-card class="pa-5">
           <v-card-title class="">
             <v-layout align-center>
               <v-flex subheading font-weight-bold grow>
                 Withdraw funds
               </v-flex>
-              <v-flex shrink>
+              <v-flex shrink right-top-angle>
                 <v-btn @click="closeWithdrawDialog()" icon class="pa-0 ma-0">
                   <v-icon color="black">close</v-icon>
                 </v-btn>
@@ -353,11 +353,11 @@
       </v-dialog>
 
       <v-dialog v-model="sendResearchTokensDialog.isOpened" persistent max-width="600px">
-        <v-card class="px-5 py-2">
+        <v-card class="pa-5">
           <v-card-title>
             <v-layout align-center>
               <v-flex grow title>Send Research Tokens</v-flex>
-              <v-flex shrink>
+              <v-flex shrink right-top-angle>
                 <v-btn @click="closeSendResearchTokensDialog()" icon class="pa-0 ma-0">
                   <v-icon color="black">close</v-icon>
                 </v-btn>
@@ -413,11 +413,11 @@
       </v-dialog>
 
       <v-dialog v-model="sendTokensDialog.isOpened" persistent max-width="600px">
-        <v-card class="px-5 py-2">
+        <v-card class="pa-5">
           <v-card-title>
             <v-layout align-center>
               <v-flex grow class="title">Transfer - {{sendTokensDialog.currency.title}}</v-flex>
-              <v-flex shrink>
+              <v-flex shrink right-top-angle>
                 <v-btn @click="closeSendTokensDialog()" icon class="pa-0 ma-0">
                   <v-icon color="black">close</v-icon>
                 </v-btn>

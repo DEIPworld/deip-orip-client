@@ -66,7 +66,7 @@
             <v-card-title>
               <v-layout align-center>
                 <v-flex grow class="headline">Request review from an Expert</v-flex>
-                <v-flex shrink>
+                <v-flex shrink right-top-angle>
                   <v-btn @click="requestExpertReviewDialog.isShown = false" icon class="pa-0 ma-0">
                     <v-icon color="black">close</v-icon>
                   </v-btn>
@@ -102,20 +102,23 @@
               </v-layout>
             </v-card-text>
             <v-card-actions>
-              <v-layout column>
-                <v-btn
-                  @click="requestReview()"
-                  :loading="requestExpertReviewDialog.isRequestingReview"
-                  :disabled="!requestExpertReviewDialog.selectedExpert"
-                  outline
-                  color="primary"
-                  class="mx-0 my-1 pa-0"
-                >Request</v-btn>
-                <v-btn 
-                  @click="requestExpertReviewDialog.isShown = false"
-                  color="black" 
-                  flat 
-                  class="mx-0 my-1 pa-0">Cancel</v-btn>
+              <v-layout row wrap>
+                  <v-flex xs12 py-2>
+                    <v-btn
+                    @click="requestReview()"
+                    :loading="requestExpertReviewDialog.isRequestingReview"
+                    :disabled="!requestExpertReviewDialog.selectedExpert"
+                    block
+                    color="primary"
+                    >Request</v-btn>
+                  </v-flex>
+                  <v-flex xs12 py-2>
+                    <v-btn 
+                    @click="requestExpertReviewDialog.isShown = false"
+                    color="primary" 
+                    flat
+                    block>Cancel</v-btn>
+                  </v-flex>
               </v-layout>
             </v-card-actions>
           </v-card>

@@ -6,7 +6,7 @@
                     <v-flex grow class="headline">
                         Join Request
                     </v-flex>
-                    <v-flex shrink align-self-center>
+                    <v-flex shrink align-self-center right-top-angle>
                         <v-btn @click="close()" icon class="pa-0 ma-0">
                             <v-icon color="black">close</v-icon>
                         </v-btn>
@@ -29,24 +29,26 @@
             </v-card-text>
 
             <v-card-actions>
-                <v-layout column>
-                    <v-btn 
-                        color="green"
-                        class="my-1 pa-0 mx-0"
-                        outline
-                        :disabled="isApprovingDisabled || isApprovingLoading"
-                        :loading="isApprovingLoading"
-                        @click="sendProposal()"
-                    >Approve and create proposal</v-btn>
-
-                    <v-btn 
-                        color="red" 
-                        class="my-1 pa-0 mx-0"
-                        flat
-                        @click="denyJoinRequest()"
-                        :loading="isDenyingLoading"
-                        :disabled="isDenyingLoading || isApprovingLoading"
-                    >Reject</v-btn>
+                <v-layout row wrap>
+                    <v-flex xs12 py-2>
+                        <v-btn 
+                            color="primary"
+                            block
+                            :disabled="isApprovingDisabled || isApprovingLoading"
+                            :loading="isApprovingLoading"
+                            @click="sendProposal()"
+                        >Approve and create proposal</v-btn>
+                    </v-flex>
+                    <v-flex xs12 py-2>
+                        <v-btn 
+                            color="primary"
+                            flat
+                            block
+                            @click="denyJoinRequest()"
+                            :loading="isDenyingLoading"
+                            :disabled="isDenyingLoading || isApprovingLoading"
+                        >Reject</v-btn>
+                    </v-flex>
                 </v-layout>
             </v-card-actions>
         </v-card>
