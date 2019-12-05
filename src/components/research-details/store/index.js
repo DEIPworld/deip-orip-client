@@ -6,6 +6,7 @@ import { getEnrichedProfiles } from './../../../utils/user'
 import tokenSaleService from './../../../services/TokenSaleService'
 import contentHttpService from './../../../services/http/content'
 import applicationsHttpService from './../../../services/http/application'
+import * as researchService from './../../../services/ResearchService';
 
 const state = {
     research: null,
@@ -234,6 +235,7 @@ const actions = {
         return deipRpc.api.getResearchByAbsolutePermlinkAsync(group_permlink, research_permlink)
             .then((research) => {
                 research.group_permlink = group_permlink;
+                research.isTop = researchService.getTopResearchesIds().some(id => id == research.id);
                 commit('SET_RESEARCH_DETAILS', research)
 
                 const contentLoad = new Promise((resolve, reject) => {

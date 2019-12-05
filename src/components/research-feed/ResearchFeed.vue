@@ -46,7 +46,7 @@
                         close
                         outline>
                         <v-avatar>
-                          <img :src="`./../../../static/top-100.png`">
+                          <img :src="`./../../../static/top-100.svg`">
                         </v-avatar>
                         Top 100
                       </v-chip>
