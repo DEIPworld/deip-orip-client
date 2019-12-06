@@ -65,6 +65,7 @@
                             <create-research-meta
                                 @setTitle="setTitle"
                                 @setDescription="setDescription"
+                                @setVideo="setVideo"
                                 @incStep="incStep" @decStep="decStep"
                                 :research="research"
                                 :isLoading="isLoading"

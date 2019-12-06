@@ -752,6 +752,23 @@
               <div class="bold">{{eci.value}}</div>
             </v-layout>
           </v-layout>
+          <v-layout column class="my-4 mx-4">
+            <div class="rd-sidebar-block-title pb-2">Score</div>
+            <v-tooltip top>
+              <div class="mt-2" slot="activator">{{researchScorePercent}}%</div>
+              <span class="bold">
+                This score is calculated of Expertise<br/>
+                contribution index and development stage<br/>
+                of the project
+              </span>
+            </v-tooltip>
+            <top-research-label
+              v-if="research.isTop"
+              :number="100"
+              color-class="green--text"
+              class="mt-3"
+            />
+          </v-layout>
           <v-divider />
 
           <v-dialog
@@ -1318,6 +1335,13 @@ export default {
 
     researchPresentationSrc() {
       return this.$options.filters.researchVideoSrc(this.research.abstract);
+    },
+    researchScorePercent() {
+      let eciSum = this.eciList.reduce((acc, curr) => acc + curr.value, 0);
+      const eciSign = eciSum >= 0 ? 1 : -1;
+      const eciRatio = eciSign * Math.min(+`${eciSum * eciSign}`.substring(0, 2), 50);
+      const contentRatio = Math.min(this.contentList.length + 1, 50);
+      return Math.max(eciRatio + contentRatio, 0);
     },
     userInvestment() {
       const legitTokenSalesIds = this.tokenSalesList
