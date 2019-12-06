@@ -196,7 +196,7 @@
       </v-layout>
 
       <v-dialog v-model="depositDialog.isOpened" persistent max-width="800px">
-        <v-card class="pa-5">
+        <v-card class="pa-4">
           <v-card-title class="">
             <v-layout align-center>
               <v-flex subheading font-weight-bold grow>
@@ -252,7 +252,7 @@
       </v-dialog>
 
       <v-dialog v-model="withdrawDialog.isOpened" persistent max-width="800px">
-        <v-card class="pa-5">
+        <v-card class="pa-4">
           <v-card-title class="">
             <v-layout align-center>
               <v-flex subheading font-weight-bold grow>
@@ -353,7 +353,7 @@
       </v-dialog>
 
       <v-dialog v-model="sendResearchTokensDialog.isOpened" persistent max-width="600px">
-        <v-card class="pa-5">
+        <v-card class="pa-4">
           <v-card-title>
             <v-layout align-center>
               <v-flex grow title>Send Research Tokens</v-flex>
@@ -413,7 +413,7 @@
       </v-dialog>
 
       <v-dialog v-model="sendTokensDialog.isOpened" persistent max-width="600px">
-        <v-card class="pa-5">
+        <v-card class="pa-4">
           <v-card-title>
             <v-layout align-center>
               <v-flex grow class="title">Transfer - {{sendTokensDialog.currency.title}}</v-flex>
