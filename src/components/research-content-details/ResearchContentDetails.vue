@@ -83,7 +83,14 @@
                     <v-dialog v-if="research" v-model="proposeContent.isOpen" persistent transition="scale-transition" max-width="600px">
                         <v-card class="pa-4">
                             <v-card-title>
-                                <span class="headline">Propose content for Research</span>
+                                <v-layout align-center>
+                                    <v-flex grow headline>Propose content for Research</v-flex>
+                                    <v-flex shrink right-top-angle>
+                                        <v-btn @click="closeContentProposalDialog()" icon class="pa-0 ma-0">
+                                            <v-icon color="black">close</v-icon>
+                                        </v-btn>
+                                    </v-flex>
+                                </v-layout>
                             </v-card-title>
                             <v-card-text>
                                 <div>
@@ -138,19 +145,23 @@
                                 </div>
                             </v-card-text>
                             <v-card-actions>
-                                <v-layout column>
-                                    <v-btn color="primary" 
-                                        class="mx-0 my-1 pa-0"
-                                        :disabled="proposeContent.isLoading || !isCreatingProposalAvailable"
-                                        :loading="proposeContent.isLoading"
-                                        @click="sendContentProposal()"
-                                        >{{!isPersonalGroup ? 'Create Proposal' : 'Create Content'}}</v-btn>
-                                    <v-btn 
-                                        @click="closeContentProposalDialog()"
-                                        :disabled="proposeContent.sLoading"
-                                        color="black" 
-                                        flat 
-                                        class="mx-0 my-1 pa-0">Cancel</v-btn>
+                                <v-layout row wrap>
+                                    <v-flex xs12 py-2>
+                                        <v-btn color="primary"
+                                            :disabled="proposeContent.isLoading || !isCreatingProposalAvailable"
+                                            :loading="proposeContent.isLoading"
+                                            block
+                                            @click="sendContentProposal()"
+                                            >{{!isPersonalGroup ? 'Create Proposal' : 'Create Content'}}</v-btn>
+                                    </v-flex>
+                                    <v-flex xs12 py-2>
+                                        <v-btn 
+                                            @click="closeContentProposalDialog()"
+                                            :disabled="proposeContent.sLoading"
+                                            color="primary" 
+                                            block
+                                            flat>Cancel</v-btn>
+                                    </v-flex>
                                 </v-layout>
                             </v-card-actions>
                         </v-card>

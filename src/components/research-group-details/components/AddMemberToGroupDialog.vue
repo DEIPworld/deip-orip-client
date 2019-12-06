@@ -1,71 +1,67 @@
 <template>
-                <v-dialog v-model="isOpen" persistent transition="scale-transition" max-width="600px">
-                    <v-card class="pa-4">
-                    <v-card-title>
-                        <span class="headline">Invite user to Research Group</span>
-                    </v-card-title>
-                    <v-card-text>
-                        <v-autocomplete
-                            :items="users"
-                            v-model="selectedUser"
-                            placeholder="Researcher"
-                        >
-                            <template slot="selection" slot-scope="data">
-                                <div class="legacy-row-nowrap align-center c-pl-4">
-                                    <v-avatar size="30px">
-                                        <img v-if="data.item.profile" v-bind:src="data.item.profile.avatar | avatarSrc(60, 60, false)" />
-                                        <v-gravatar v-else :email="data.item.account.name + '@deip.world'" />
-                                    </v-avatar>
-                                    <span class="deip-blue-color c-pl-3">{{ data.item | fullname }}</span>
-                                </div>
-                            </template>
-                            
-                            <template slot="item" slot-scope="data">
-                                <div class="legacy-row-nowrap align-center">
-                                    <v-avatar size="30px">
-                                        <img v-if="data.item.profile" v-bind:src="data.item.profile.avatar | avatarSrc(60, 60, false)" />
-                                        <v-gravatar v-else :email="data.item.account.name + '@deip.world'" />
-                                    </v-avatar>
-                                    <span class="deip-blue-color c-pl-3">{{ data.item | fullname }}</span>
-                                </div>
-                            </template>
-                        </v-autocomplete>
+  <v-dialog v-model="isOpen" persistent transition="scale-transition" max-width="600px">
+    <v-card class="pa-4">
+      <v-card-title>
+        <v-layout align-center>
+          <v-flex grow headline>Invite user to Research Group</v-flex>
+          <v-flex shrink right-top-angle>
+            <v-btn @click="close()" icon class="pa-0 ma-0">
+              <v-icon color="black">close</v-icon>
+            </v-btn>
+          </v-flex>
+        </v-layout>
+      </v-card-title>
+      <v-card-text>
+        <v-autocomplete :items="users" v-model="selectedUser" placeholder="Researcher">
+          <template slot="selection" slot-scope="data">
+            <div class="legacy-row-nowrap align-center c-pl-4">
+              <v-avatar size="30px">
+                <img v-if="data.item.profile" v-bind:src="data.item.profile.avatar | avatarSrc(60, 60, false)" />
+                <v-gravatar v-else :email="data.item.account.name + '@deip.world'" />
+              </v-avatar>
+              <span class="deip-blue-color c-pl-3">{{ data.item | fullname }}</span>
+            </div>
+          </template>
 
-                        <v-text-field
-                            label="Research Group Tokens"
-                            v-model="tokensAmount"
-                            suffix="%"
-                            mask="###"
-                        ></v-text-field>
+          <template slot="item" slot-scope="data">
+            <div class="legacy-row-nowrap align-center">
+              <v-avatar size="30px">
+                <img v-if="data.item.profile" v-bind:src="data.item.profile.avatar | avatarSrc(60, 60, false)" />
+                <v-gravatar v-else :email="data.item.account.name + '@deip.world'" />
+              </v-avatar>
+              <span class="deip-blue-color c-pl-3">{{ data.item | fullname }}</span>
+            </div>
+          </template>
+        </v-autocomplete>
 
-                        <v-textarea
-                            label="Invitation letter" 
-                            auto-grow
-                            rows="2"
-                            v-model="coverLetter"
-                        ></v-textarea>
-                    </v-card-text>
+        <v-text-field label="Research Group Tokens" v-model="tokensAmount" suffix="%" mask="###"></v-text-field>
 
-                    <v-card-actions>
-                        <v-layout column>
-                            <v-btn 
-                                color="primary" 
-                                class="mx-0 my-1 pa-0"
-                                :disabled="isDisabled || isLoading"
-                                :loading="isLoading"
-                                @click="sendProposal()"
-                            >Create proposal</v-btn>
+        <v-textarea label="Invitation letter" auto-grow rows="2" v-model="coverLetter"></v-textarea>
+      </v-card-text>
 
-                            <v-btn 
-                                @click="close()"
-                                :disabled="isLoading"
-                                color="black" 
-                                flat 
-                                class="mx-0 my-1 pa-0">Cancel</v-btn>
-                        </v-layout>
-                    </v-card-actions>
-                </v-card>
-            </v-dialog>
+      <v-card-actions>
+        <v-layout row wrap>
+          <v-flex xs12 py-2>
+            <v-btn 
+              color="primary" 
+              :disabled="isDisabled || isLoading"
+              :loading="isLoading"
+              @click="sendProposal()"
+              block
+            >Create proposal</v-btn>
+          </v-flex>
+          <v-flex xs12 py-2>
+            <v-btn 
+              @click="close()"
+              :disabled="isLoading" 
+              color="primary" 
+              flat
+              block>Cancel</v-btn>
+          </v-flex>
+        </v-layout>
+      </v-card-actions>
+    </v-card>
+  </v-dialog>
 </template>
 
 <script>
