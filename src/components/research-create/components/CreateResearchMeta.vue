@@ -18,7 +18,7 @@
                     <v-layout row>
                         <v-flex xs6 offset-xs3>
                             <v-textarea v-model="description" v-on:keyup="setDescription" 
-                                name="Description" label="Description" 
+                                name="Description" label="Description" placeholder="What problem it solves, how it helps to others, why it is special"
                                 solo
                             ></v-textarea>
                         </v-flex>

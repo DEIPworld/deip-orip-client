@@ -157,7 +157,7 @@
                 <div
                   class="rd-cap-chip"
                   v-if="currentCap >= fromAssetsToFloat(tokenSale.soft_cap)"
-                >Min reached!</div>
+                >Min goal reached!</div>
                 <div class="pl-4">Raised of ${{fromAssetsToFloat(tokenSale.hard_cap)}} Goal</div>
               </v-layout>
               <v-layout align-center justify-end class="py-2">
