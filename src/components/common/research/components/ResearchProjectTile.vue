@@ -56,23 +56,28 @@
         <v-chip class="my-0 mx-0 px-0 caption" style="height: 1.4em" color="primary lighten-3">Fundraising starts in {{tokenSaleStartLeft}}</v-chip> 
       </v-layout>
     </v-layout>
-    <v-layout row justify-space-between align-baseline>
-      <v-flex xs5 text-xs-left class="caption grey--text lighten-1">
+    <v-layout row justify-space-between align-center>
+      <v-flex xs5 class="caption grey--text lighten-1">
         <v-icon small>event</v-icon>
         <span>Updated on</span>
         <span class="half-bold">{{moment(research.last_update_time).format("d MMM YYYY")}}</span>
       </v-flex>
-      <v-flex xs2 text-xs-center>
+      <v-flex xs2>
         <v-icon small color="grey lighten-1">chat_bubble</v-icon>
         <span class="caption half-bold grey--text lighten-1">{{ reviewsCount }}</span>
       </v-flex>
-      <v-flex xs5 text-xs-right>
-        <v-chip v-if="organization" small class="ma-0 pa-0">
+      <v-flex xs5>
+        <v-layout row align-center class="group-logo" v-if="group.logo_src">
           <v-avatar>
-            <img :src="`./../../../../../static/organizations/${organization.thumbnail}`">
+            <img :src="group.logo_src">
           </v-avatar>
-          <span class="caption">{{ organization.name }}</span>
-        </v-chip>
+          <v-tooltip bottom class="group-logo__text">
+            <template v-slot:activator="{ on }">
+              <span v-on="on" class="mx-2 caption text-truncate">{{ group.name }}</span>
+            </template>
+            <span>{{group.name}}</span>
+          </v-tooltip>
+        </v-layout>
       </v-flex>
     </v-layout>
   </v-layout>
@@ -90,7 +95,7 @@
       members: { required: true, default: () => [] },
       tokenSale: { required: false, default: undefined },
       tokenSaleContributions: { required: false, default: undefined },
-      organization: { required: false, default: undefined }
+      group: { required: false, default: undefined }
     },
     data() {
       return {
@@ -213,4 +218,16 @@
     background: linear-gradient(0deg, rgba(0, 0, 0, 0.6) 100%, transparent);
   }
 
+  .group-logo {
+    height: 24px;
+    background: #e0e0e0;
+    border-radius: 28px;
+    .v-avatar {
+      height: 24px !important;
+      width: 24px !important;
+    }
+    &__text {
+      max-width: 100%;
+    }
+  }
 </style>
