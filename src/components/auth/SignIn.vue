@@ -144,7 +144,7 @@
                                 const decoded = decodedToken(response.jwtToken);
                                 const pubKey = decoded.pubKey;
                                 
-                                // this validation is just paranoia as we validate private key at the server using signature
+                                // this validation is not necessary as we validate private key at the server using signature
                                 var isValid;
                                 try {
                                     isValid = deipRpc.auth.wifIsValid(this.privKey, pubKey);
