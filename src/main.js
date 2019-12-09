@@ -22,15 +22,6 @@ import VueResize from 'vue-resize';
 
 Vue.config.productionTip = false;
 
-Vue.use(Vuetify, {
-  theme: {
-    primary: "#2962FF",
-    secondary: "#BBDEFB"
-  },
-  options: {
-    customProperties: true
-  }
-});
 Vue.use(VueGoogleCharts);
 Vue.use(VueResize);
 Vue.use(VueCurrencyFilter, {
@@ -49,7 +40,30 @@ async function initApp() {
     deipRpc.api.setOptions({ url: window.env.DEIP_FULL_NODE_URL, reconnectTimeout: 3000 });
     deipRpc.config.set('chain_id', window.env.CHAIN_ID);
     if (!window.env.TENANT) window.env.TENANT = "";
-    // console.log(window.env);
+
+    window.env.THEME = theme[window.env.TENANT]
+      ? theme[window.env.TENANT]
+      : theme['default'];
+
+    if (document && window.env.TENANT) {
+      if (window.env.TENANT == "nsf") {
+        document.title = "MyNSF - DEIP Grants Transparency";
+      } else if (window.env.TENANT == "mit") {
+        document.title = "MIT - DEIP Grants Transparency";
+      } else if (window.env.TENANT == "treasury") {
+        document.title = "U.S. Treasury - DEIP Grants Transparency";
+      }
+    }
+
+    Vue.use(Vuetify, {
+      theme: {
+        primary: window.env.THEME['primary-color'],
+        secondary: window.env.THEME['secondary-color']
+      },
+      options: {
+        customProperties: true
+      }
+    });
 
     if (isLoggedIn()) {
       await store.dispatch("auth/loadUser");
