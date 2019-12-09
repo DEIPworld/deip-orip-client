@@ -34,13 +34,13 @@
                               </div>
                             </v-layout>
                             <v-layout column class="research-tiles-container">
-                              <research-project-tile row v-for="({research, authors, tokenSale, tokenSaleContributions, organization }, i) in researches" 
+                              <research-project-tile row v-for="({research, authors, tokenSale, tokenSaleContributions, group }, i) in researches" 
                                 :key="'research-tile-' + research.id" 
                                 :research="research" 
                                 :members="authors"
                                 :tokenSale="tokenSale" 
                                 :tokenSaleContributions="tokenSaleContributions"
-                                :organization="organization"
+                                :group="group"
                                 :class="{'pb-5': i != researches.length - 1}">
                               </research-project-tile>
                             </v-layout>
