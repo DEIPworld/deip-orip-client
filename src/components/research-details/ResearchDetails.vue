@@ -125,11 +125,11 @@
                     >{{research.owned_tokens}} ({{convertToPercent(research.owned_tokens)}}%)</v-flex>
                   </v-layout>
                   <v-layout class="pt-3">
-                    <v-flex lg3 class="bold">Soft Cap:</v-flex>
+                    <v-flex lg3 class="bold">Min:</v-flex>
                     <v-flex lg9 class="pl-2">${{fromAssetsToFloat(tokenSale.soft_cap)}}</v-flex>
                   </v-layout>
                   <v-layout class="pt-3">
-                    <v-flex lg3 class="bold">Hard Cap:</v-flex>
+                    <v-flex lg3 class="bold">Max:</v-flex>
                     <v-flex lg9 class="pl-2">${{fromAssetsToFloat(tokenSale.hard_cap)}}</v-flex>
                   </v-layout>
                 </v-flex>
@@ -157,7 +157,7 @@
                 <div
                   class="rd-cap-chip"
                   v-if="currentCap >= fromAssetsToFloat(tokenSale.soft_cap)"
-                >Soft cap reached!</div>
+                >Min goal reached!</div>
                 <div class="pl-4">Raised of ${{fromAssetsToFloat(tokenSale.hard_cap)}} Goal</div>
               </v-layout>
               <v-layout align-center justify-end class="py-2">
