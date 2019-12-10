@@ -295,8 +295,10 @@ export default {
 
 <style lang="less" scoped>
 .feed-header {
-  background-size: cover;
+  background-size: cover !important;
+  background-repeat: no-repeat !important;
   height: 300px;
+  width: 100%;
   font-style: normal;
   color: white;
 }

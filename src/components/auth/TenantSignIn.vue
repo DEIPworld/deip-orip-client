@@ -42,9 +42,7 @@
       </v-flex>
 			<v-flex xs3>
 				<div v-if="tenant">
-          <v-avatar size="200px">
-            <img :src="tenant | tenantSymbolSrc(160, 160, false)" />
-          </v-avatar>
+          <img width="200px" height="200px" :src="tenant | tenantSymbolSrc(160, 160, false)" />
         </div>
 			</v-flex>
     </v-layout>

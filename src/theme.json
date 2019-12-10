@@ -15,6 +15,14 @@
     "tabs-text-class": "red--text text--darken-4",
     "tabs-slider-color": "#bb5b6b"
   },
+  "strathclyde": {
+    "primary-color": "#002b5c",
+    "secondary-color": "#b3d4fc",
+    "top-bar-color": "#002b5c",
+    "top-bar-link-color": "#ffffff",
+    "tabs-text-class": "white--text",
+    "tabs-slider-color": "#267aab"
+  },
   "treasury": {
     "primary-color": "#0053a2",
     "secondary-color": "#FFF9C4",

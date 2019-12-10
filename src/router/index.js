@@ -59,8 +59,8 @@ Vue.use(Router);
 const router = new Router({
 	routes: [{
 		path: '/sign-in',
-		name: 'SignIn',
-		component: SignIn
+		name: 'TenantSignIn',
+		component: TenantSignIn
 	}, {
 		path: '/sign-up',
 		name: 'SignUp',

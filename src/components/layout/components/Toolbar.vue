@@ -5,10 +5,9 @@
     </div>
 
     <v-toolbar :color="themeSettings['top-bar-color']">
-      <v-toolbar-side-icon class="mx-2">
-        <router-link :to="{ name: 'Default' }">
-          <!-- <img width="85px" :src="'./static/logo_customize.svg'" /> -->
-          <img width="85px" :src="tenant | tenantLogoSrc(80, 80, false)" />
+      <v-toolbar-side-icon class="mx-2 my-0">
+        <router-link class="ma-0 pa-0" :to="{ name: 'Default' }">
+          <img height="40px" :src="tenant | tenantLogoSrc(80, 80, false)" />
         </router-link>
       </v-toolbar-side-icon>
 
