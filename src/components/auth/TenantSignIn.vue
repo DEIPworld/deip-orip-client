@@ -9,7 +9,7 @@
             <div class="deip-emblem">
               <div class="emblem-logo">Deip.world</div>
                 <div class="emblem-caption">Decentralized research platform</div>
-                <div v-if="tenant" class="c-pt-5 subheading" style="text-decoration: underline">Use credentials from Grants Community Blockchain</div>
+                <!-- <div v-if="tenant" class="c-pt-5 subheading" style="text-decoration: underline">Use credentials from Grants Community Blockchain</div> -->
               </div>
             <div>
               <v-form v-model="isFormValid" ref="form" class="c-mt-10" @submit.prevent>
@@ -42,8 +42,8 @@
       </v-flex>
 			<v-flex xs3>
 				<div v-if="tenant">
-          <v-avatar size="120px">
-            <img :src="tenant | agencyLogoSrc(160, 160, false)" />
+          <v-avatar size="200px">
+            <img :src="tenant | tenantSymbolSrc(160, 160, false)" />
           </v-avatar>
         </div>
 			</v-flex>
@@ -57,9 +57,16 @@ import deipRpc from '@deip/deip-oa-rpc-client'
 import crypto from '@deip/lib-crypto'
 import authService from './../../services/http/auth'
 import {decodedToken, clearAccessToken, setAccessToken} from './../../utils/auth'
+import { mapGetters } from 'vuex';
 
 export default {
   name: 'SignIn',
+
+  computed: {
+    ...mapGetters({
+      tenant: 'auth/tenant'
+    })
+  },
 
   data() {
     return {
@@ -70,8 +77,7 @@ export default {
       isChecking: false,
       rules: {
         required: (value) => !!value || 'This field is required'
-      },
-      tenant: window.env.TENANT
+      }
     }
   },
 

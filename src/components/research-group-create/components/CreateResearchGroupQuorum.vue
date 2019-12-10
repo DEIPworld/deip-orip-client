@@ -10,7 +10,7 @@
                             Quorum shows how many votes it takes to approve a proposal (such as changing the research
                             content, adding the research group members, initiating research fundraise, etc.) You can setup Quorum for each 
                             proposal individually using
-                            <span class="deip-blue-color font-weight-medium clickable" @click="changeMode()">Advanced</span>
+                            <span class="font-weight-medium clickable" @click="changeMode()">Advanced</span>
                             options.
                         </div>
 
@@ -25,7 +25,7 @@
 
                         <v-layout row v-show="isAdvanced">
                             <v-flex offset-xs2>
-                                <div class="py-3 deip-blue-color font-weight-bold">Advanced quorum setup</div>
+                                <div class="py-3 font-weight-bold">Advanced quorum setup</div>
 
                                 <v-layout row align-end>
                                     <div>

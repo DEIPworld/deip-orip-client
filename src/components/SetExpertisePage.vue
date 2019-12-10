@@ -26,7 +26,7 @@
                 <div class="step-title">User</div>
                 <div v-if="selectedUser" class="subheading c-mt-2 bold">{{selectedUser | fullname}}</div>
 
-                <div v-if="selectedUser && selectedUser.expertise" class="selected-user-expertise-container spinner-container c-mr-4">
+                <div v-if="selectedUser && selectedUser.expertise" class="selected-user-expertise-container c-mr-4">
                     <v-progress-circular class="section-spinner"
                         v-if="isLoadingUserExpertise"
                         indeterminate color="primary"

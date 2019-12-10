@@ -1,6 +1,6 @@
 import Vue from 'vue';
 import deipRpc from '@deip/deip-oa-rpc-client';
-import agencyHttp from './../../../services/http/agency';
+import tenantHttp from './../../../services/http/tenant';
 import applicationHttp from './../../../services/http/application';
 import { mapAreaToProgram } from '../../common/disciplines/DisciplineTreeService'
 import { getEnrichedProfiles } from './../../../utils/user';
@@ -34,7 +34,7 @@ const getters = {
 const actions = {
     loadAgencyProgramDetailsPage({ state, dispatch, commit }, { agency, foaId }) {
         commit('SET_AGENCY_PROGRAM_DETAILS_PAGE_LOADING_STATE', true);
-        return agencyHttp.getAgencyProfile(agency)
+        return tenantHttp.getTenantProfile(agency)
             .then((agencyProfile) => {
                 commit('SET_AGENCY_PROFILE', agencyProfile);
                 const agencyProgramDetailsLoad = new Promise((resolve, reject) => {

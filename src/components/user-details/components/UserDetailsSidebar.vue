@@ -134,25 +134,14 @@
                     <div v-if="isOwner">You have no Expertise Tokens yet. Use <span class="a" @click="openClaimExpertiseDialog()">Claim</span> process to apply for Expertise Tokens</div>
                     <div v-if="!isOwner"><span class="body-2">{{userInfo | fullname}}</span> has no Expertise Tokens yet</div>
                 </div>
-                <div v-if="expertise.length && isOwner" class="body-1 text-align-center c-mt-4">
-                    <v-btn @click="openClaimExpertiseDialog()" flat small color="primary" class="ma-0">
-                        <span>Claim new Discipline</span>
+                <div v-if="expertise.length && isOwner" class="body-1 text-align-right c-mt-4">
+                    <v-btn @click="openClaimExpertiseDialog()" outline small color="primary" class="ma-0">
+                        Claim new Discipline
                     </v-btn>
                 </div>
             </div>
         </div>
         <!-- ### END User Profile Expertise Section ### -->
-
-    <!--    <sidebar-splitted-btn>
-            <div slot="left" class="default-half-splitted">
-                <span class="c-m-auto clickable-label">23<br>Followers</span>
-            </div>
-
-            <div slot="right" class="default-half-splitted">
-                <span class="c-m-auto clickable-label">4<br>Following</span>
-            </div>
-        </sidebar-splitted-btn> -->
-
 
         <!-- ### START User Profile Contacts Section ### -->
         <div class="c-mt-4" v-if="isProfileAvailable && (isContactsInfoSpecified || isOwner)">

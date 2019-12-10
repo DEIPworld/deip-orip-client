@@ -5,7 +5,7 @@
             
             <v-menu offset-y>
                 <v-btn slot="activator" class="ma-0">
-                    <div class="deip-blue-color">Newest First <v-icon class="c-pl-4" small>keyboard_arrow_down</v-icon></div>
+                    <div>Newest First <v-icon class="c-pl-4" small>keyboard_arrow_down</v-icon></div>
                 </v-btn>
 
                 <v-list>
@@ -21,14 +21,14 @@
         </div>
 
         <div class="c-pt-5">
-            <v-tabs slot="extension" v-model="tab" grow color="blue lighten-4">
-                <v-tabs-slider color="black"></v-tabs-slider>
+            <v-tabs slot="extension" v-model="tab" grow color="primary lighten-5">
+                <v-tabs-slider :color="themeSettings['tabs-slider-color']"></v-tabs-slider>
 
-                <v-tab key="active" :disabled="activeResearchList.length === 0">
+                <v-tab :class="themeSettings['tabs-text-class']" key="active" :disabled="activeResearchList.length === 0">
                     Acitive research: {{ activeResearchList.length }}
                 </v-tab>
 
-                <v-tab key="finished" :disabled="finishedResearchList.length === 0">
+                <v-tab :class="themeSettings['tabs-text-class']" key="finished" :disabled="finishedResearchList.length === 0">
                     Finished research: {{ finishedResearchList.length }}
                 </v-tab>
             </v-tabs>
@@ -70,7 +70,8 @@
 
 <script>
     import deipRpc from '@deip/deip-oa-rpc-client';
-    
+    import { mapGetters } from 'vuex';
+
     export default {
         name: 'StateResearchList',
         props: {
@@ -83,12 +84,15 @@
             }
         },
         computed: {
+            ...mapGetters({
+                themeSettings: 'layout/themeSettings'
+            }),
             finishedResearchList() {
                 return this.researchList.filter(research => research.is_finished);
             },
             activeResearchList() {
                 return this.researchList.filter(research => !research.is_finished);
-            }
+            },
         },
         created() {
         }

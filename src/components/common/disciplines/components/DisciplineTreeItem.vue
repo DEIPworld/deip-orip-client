@@ -1,6 +1,6 @@
 <template>
     <!-- <div :class="[!discipline.isTop ? 'pt-1 pl-3' : '']">
-        <span class="deip-label" 
+        <span class="discipline-picker-label" 
             v-if="!discipline.isTop" 
             @click="select(discipline)"
             :class="[{ 'selected': isSelected || isHighlighted }]"
@@ -19,7 +19,7 @@
         </div>
     </div> -->
     <v-flex :class="[!discipline.isTop ? 'pt-1 pl-3' : '']">
-        <span class="deip-label" 
+        <span class="discipline-picker-label" 
             v-if="!discipline.isTop" 
             @click="select(discipline)"
             :class="[{ 'selected': isSelected || isHighlighted }]"

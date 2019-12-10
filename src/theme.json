@@ -3,6 +3,7 @@
     "primary-color": "#1E88E5",
     "secondary-color": "#BBDEFB",
     "top-bar-color": "#529371",
+    "top-bar-link-color": "#1E88E5",
     "tabs-text-class": "green--text text--darken-1",
     "tabs-slider-color": "green"
   },
@@ -10,6 +11,7 @@
     "primary-color": "#a41f35",
     "secondary-color": "#e6e6e6",
     "top-bar-color": "#e6e6e6",
+    "top-bar-link-color": "#a41f35",
     "tabs-text-class": "red--text text--darken-4",
     "tabs-slider-color": "#bb5b6b"
   },
@@ -17,6 +19,7 @@
     "primary-color": "#0053a2",
     "secondary-color": "#FFF9C4",
     "top-bar-color": "#0053a2",
+    "top-bar-link-color": "#0053a2",
     "tabs-text-class": "blue--text text--darken-4",
     "tabs-slider-color": "#00488e"
   },
@@ -24,6 +27,7 @@
     "primary-color": "#2962FF",
     "secondary-color": "#BBDEFB",
     "top-bar-color": "black",
+    "top-bar-link-color": "white",
     "tabs-text-class": "",
     "tabs-slider-color": ""
   }

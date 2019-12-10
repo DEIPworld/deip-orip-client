@@ -53,7 +53,7 @@
                                         <img v-if="data.item.profile" v-bind:src="data.item.profile.avatar | avatarSrc(60, 60, false)" />
                                         <v-gravatar v-else :email="data.item.account.name + '@deip.world'" />
                                     </v-avatar>
-                                    <span class="deip-blue-color c-pl-3">{{ data.item | fullname }}</span>
+                                    <span class="c-pl-3">{{ data.item | fullname }}</span>
                                 </div>
                             </template>
                             
@@ -65,7 +65,7 @@
                                             <img v-if="data.item.profile" v-bind:src="data.item.profile.avatar | avatarSrc(60, 60, false)" />
                                             <v-gravatar v-else :email="data.item.account.name + '@deip.world'" />
                                         </v-avatar>
-                                        <span class="deip-blue-color c-pl-3">{{ data.item | fullname  }}</span>
+                                        <span class="c-pl-3">{{ data.item | fullname  }}</span>
                                     </div>
                                 </template>
                             </template>

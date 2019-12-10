@@ -9,6 +9,7 @@ import joinRequestsService from '@/services/http/joinRequests'
 import notificationsHttpService from '@/services/http/notifications'
 import { getEnrichedProfiles } from '@/utils/user'
 import { viewModeType } from '@/globals/constants';
+import tenantHttp from './../../../services/http/tenant';
 
 const state = {
   user: {
@@ -25,7 +26,8 @@ const state = {
     joinRequests: [],
     notifications: [],
     researchBookmarks: [],
-  }
+  },
+  tenant: null
 }
 
 // getters
@@ -110,6 +112,10 @@ const getters = {
   isResearcherViewMode: (state, getters) => {
     return getters.user.viewMode === viewModeType.RESEARCHER;
   },
+
+  tenant: (state) => {
+    return state.tenant;
+  }
 }
 
 // actions
@@ -283,6 +289,17 @@ const actions = {
       .finally(() => {
         if (notify) notify();
       });
+  },
+
+  loadTenant({ state, commit, getters }, { tenant, notify } = {}) {
+    return tenantHttp.getTenantProfile(tenant)
+      .then((tenantProfile) => {
+        commit('SET_TENANT_PROFILE', tenantProfile);
+      })
+      .catch(err => { console.log(err) })
+      .finally(() => {
+        if (notify) notify();
+      });
   }
 }
 
@@ -323,6 +340,10 @@ const mutations = {
 
   ['SET_USER_ACCOUNT'](state, account) {
     Vue.set(state.user, 'account', account)
+  },
+
+  ['SET_TENANT_PROFILE'](state, tenant) {
+    Vue.set(state, 'tenant', tenant)
   }
 }
 

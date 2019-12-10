@@ -1,6 +1,6 @@
 import Vue from 'vue';
 import deipRpc from '@deip/deip-oa-rpc-client';
-import agencyHttp from './../../../services/http/agency';
+import tenantHttp from './../../../services/http/tenant';
 import { mapAreaToProgram } from '../../common/disciplines/DisciplineTreeService'
 
 const state = {
@@ -32,7 +32,7 @@ const actions = {
     // pages
     loadAgencyProgramsPage({ state, dispatch, commit }, { agency, areaCode, subAreaCode }) {
         commit('SET_AGENCY_PROGRAMS_LISTING_PAGE_LOADING_STATE', true);
-        return agencyHttp.getAgencyProfile(agency)
+        return tenantHttp.getTenantProfile(agency)
             .then((agencyProfile) => {
                 commit('SET_AGENCY_PROFILE', agencyProfile);
                 const agencyProgramsLoad = new Promise((resolve, reject) => {

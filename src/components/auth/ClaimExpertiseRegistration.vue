@@ -9,7 +9,7 @@
                 <div class="legacy-col-4 c-p-4 overflow-y-auto">
                     <div class="half-bold uppercase c-pb-3">Popular</div>
                     <div class="c-pt-1" v-for="(item, i) in popular" :key="i">
-                        <span class="deip-label"
+                        <span class="discipline-picker-label"
                             @click="selectDiscipline(item)"
                             :class="[{'selected': selectedDiscipline && item.id === selectedDiscipline.id}]"
                         >{{ item.label }}</span>

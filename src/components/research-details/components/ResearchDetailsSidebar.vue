@@ -32,7 +32,7 @@
                 <v-btn @click="openJoinGroupDialog()" outline icon color="primary" class="ma-0">
                     <v-icon small>add</v-icon>
                 </v-btn>
-                <span class="deip-blue-color c-pl-3">Join research group</span>
+                <span class="c-pl-3">Join research group</span>
             </div>
             <div v-if="isActiveJoinRequest" class="text-align-center italic pt-2">You have sent a join request on {{new Date(currentJoinRequest.created).toDateString()}}, please wait for approval</div>
             <div v-if="isActiveInvite" class="text-align-center italic pt-2">
@@ -70,16 +70,6 @@
             </v-dialog>
         </div>
         <!-- ### END Research Members Section ### -->
-        
-    <!--    <sidebar-splitted-btn>
-            <div slot="left" class="default-half-splitted">
-                <span class="c-m-auto clickable-label">23<br>Followers</span>
-            </div>
-
-            <div slot="right" class="default-half-splitted">
-                <span class="c-m-auto clickable-label">Follow</span>
-            </div>
-        </sidebar-splitted-btn> -->
 
         <!-- ### START Research Content ECI Section ### -->
         <div class="c-mb-6 c-mt-4">
@@ -214,7 +204,7 @@
 
                                     <div class="pos-absolute" :style="{ left: currentCapPercent + '%' }">
                                         <v-tooltip bottom color="white">
-                                            <div class="chapter-point deip-blue-bg" slot="activator"></div>
+                                            <div class="chapter-point" slot="activator"></div>
                                             
                                             <div>
                                                 <div class="grey--text cap-value text-align-center">{{ currentCap }}</div>
@@ -480,6 +470,7 @@
         height: 2px;
     }
     .chapter-point {
+        background-color: var(--v-primary-lighten5);
         width: 14px;
         height: 14px;
         border-radius: 50%;

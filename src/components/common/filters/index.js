@@ -52,8 +52,19 @@ Vue.filter('avatarSrc', function (avatar, width, height, noCache ) {
     return `${window.env.DEIP_SERVER_URL}/public/files/avatars/${avatar}?width=${width}&height=${height}&noCache=${noCache}`
 });
 
-Vue.filter('agencyLogoSrc', function (agency, width, height, noCache, ext = 'png') {
-    return `${window.env.DEIP_SERVER_URL}/public/agencies/logo/${agency}?width=${width}&height=${height}&noCache=${noCache}&ext=${ext}`
+Vue.filter('tenantLogoSrc', function (tenant, width, height, noCache, ext = 'png') {
+    // return `${window.env.DEIP_SERVER_URL}/public/tenants/logo/${tenant._id}?width=${width}&height=${height}&noCache=${noCache}&ext=${ext}`
+    return tenant ? `/static/tenants/${tenant._id}/logo.svg` : `/static/logo_customize.svg`;
+});
+
+Vue.filter('tenantSymbolSrc', function (tenant, width, height, noCache, ext = 'png') {
+    // return `${window.env.DEIP_SERVER_URL}/public/tenants/symbol/${tenant._id}?width=${width}&height=${height}&noCache=${noCache}&ext=${ext}`
+    return tenant ? `/static/tenants/${tenant._id}/symbol.svg` : `/static/logo.svg`;
+});
+
+Vue.filter('tenantBackgroundSrc', function (tenant, width, height, noCache, ext = 'png') {
+    // return `${window.env.DEIP_SERVER_URL}/public/tenants/background-image/${tenant._id}?width=${width}&height=${height}&noCache=${noCache}&ext=${ext}`
+    return tenant ? `/static/tenants/${tenant._id}/background.svg` : `/static/feed-background.svg`;
 });
 
 Vue.filter('dateFormat', (value, format, fromUtcToLocal = false) => {

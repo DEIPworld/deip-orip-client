@@ -22,7 +22,7 @@
             <!--    <div class="c-mt-4">
                     <div class="legacy-row">
                         <div class="bold width-7">Research</div>
-                        <div class="bold deip-blue-color c-pl-4">
+                        <div class="bold c-pl-4">
                             <router-link class="a" :to="{ name: 'ResearchDetails', params: { 
                                 research_group_permlink: $route.params.research_group_permlink,
                                 research_permlink: $route.params.research_permlink}}">
@@ -39,7 +39,7 @@
                 <div class="c-mt-4">
                     <div class="legacy-row">
                         <div class="bold width-7">Content</div>
-                        <div class="bold deip-blue-color c-pl-4">
+                        <div class="bold c-pl-4">
                             <router-link class="a" 
                                 :to="`/${$route.params.research_group_permlink}/research/${$route.params.research_permlink}/${$route.params.content_permlink}`">
                                     {{ contentMetadata.content.title }}

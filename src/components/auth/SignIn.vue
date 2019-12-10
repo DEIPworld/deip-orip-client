@@ -108,8 +108,7 @@
             isChecking: false,
             rules: {
               required: (value) => !!value || 'This field is required'
-            },
-            tenant: window.env.TENANT,
+            }
           }
         },
 

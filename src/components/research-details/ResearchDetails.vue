@@ -347,7 +347,7 @@
                         lg2
                         class="text-capitalize bold"
                       >{{getContentType(content.content_type).text}}</v-flex>
-                      <v-flex lg9 class="deip-blue-color bold">
+                      <v-flex lg9 class="bold">
                         <router-link
                           class="a"
                           :to="{
@@ -408,7 +408,7 @@
                     <v-layout align-center v-on:click.stop>
                       <v-flex lg2 class="text-capitalize bold">Draft {{index + 1}}</v-flex>
                       <v-flex lg10>
-                        <span class="deip-blue-color bold">
+                        <span class="bold">
                           <a @click="openDarDraft(draft)" class="a">{{draft.title || draft._id}}</a>
                         </span>
                         <span v-if="isDraftProposed(draft)" class="ml-2 orange--text">(proposed)</span>

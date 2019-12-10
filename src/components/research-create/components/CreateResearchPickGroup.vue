@@ -28,7 +28,7 @@
                                   query: { 'back-token': getReturningToken }
                               }"
               >
-                <span class="deip-label">+ Add new group</span>
+                <span class="discipline-picker-label">+ Add new group</span>
               </router-link>
             </div>
           </div>
@@ -104,7 +104,7 @@ export default {
   border-radius: 2px;
   cursor: pointer;
   &:hover {
-    border-color: #2f80ed;
+    border-color: var(--v-primary-base);
   }
 }
 .group-nameplate {

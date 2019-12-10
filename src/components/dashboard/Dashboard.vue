@@ -4,14 +4,14 @@
     <v-layout row class="full-width full-height">
       <v-flex xl12 lg12 md12 sm12 xs12>
         <v-tabs color="#fafafa">
-          <v-tabs-slider color="primary"></v-tabs-slider>
+          <v-tabs-slider :color="themeSettings['tabs-slider-color']"></v-tabs-slider>
 
-          <v-tab href="#tab-summary">Summary</v-tab>
-          <!-- <v-tab href="#tab-projects">Projects</v-tab>
-          <v-tab href="#tab-investments">Investments</v-tab>
-          <v-tab href="#tab-reviews">Reviews</v-tab>
-          <v-tab href="#tab-experts">Experts</v-tab>
-          <v-tab href="#tab-ip-protection">IP protection</v-tab> -->
+          <v-tab :class="themeSettings['tabs-text-class']" href="#tab-summary">Summary</v-tab>
+          <!-- <v-tab :class="themeSettings['tabs-text-class']" href="#tab-projects">Projects</v-tab>
+          <v-tab :class="themeSettings['tabs-text-class']" href="#tab-investments">Investments</v-tab>
+          <v-tab :class="themeSettings['tabs-text-class']" href="#tab-reviews">Reviews</v-tab>
+          <v-tab :class="themeSettings['tabs-text-class']" href="#tab-experts">Experts</v-tab>
+          <v-tab :class="themeSettings['tabs-text-class']" href="#tab-ip-protection">IP protection</v-tab> -->
           <v-spacer></v-spacer>
 
           <v-tabs-items class="tab-content">
@@ -255,6 +255,7 @@ export default {
   computed: {
     ...mapGetters({
       user: "auth/user",
+      themeSettings: 'layout/themeSettings',
       researches: "dashboard/researches",
       experts: "dashboard/experts",
       currentShares: "dashboard/currentShares",
@@ -262,9 +263,8 @@ export default {
       reviewsOnMyResearchCount: "dashboard/reviewsOnMyResearchCount",
       reviewsOnMyRequestsCount: "dashboard/reviewsOnMyRequestsCount",
       myInvitesCount: "dashboard/myInvitesCount",
-      myReviewsCount: "dashboard/myReviewsCount",
+      myReviewsCount: "dashboard/myReviewsCount"
     }),
-
     hasResearchShares() {
       return this.currentShares.length;
     },

@@ -15,7 +15,7 @@
             <v-layout row wrap>
               <v-flex xs3 text-xs-center>
                 <v-avatar size="160px">
-                    <img :src="agencyProfile._id | agencyLogoSrc(160, 160, false)" />
+                  <img :src="agencyProfile | tenantSymbolSrc(320, 320, false)" />
                 </v-avatar>
               </v-flex>
               <v-flex xs9>

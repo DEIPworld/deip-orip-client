@@ -26,7 +26,7 @@
                 </div>
 
                 <div class="legacy-row-nowrap">
-                    <div v-for="tvo in disciplines" class="grey--text">
+                    <div v-for="(tvo, n) in disciplines" class="grey--text" :key="'tvo-' + n">
                    <!-- <span class="c-pr-1">
                             <span>{{ tvo.disciplineName }}</span>
                         </span>
@@ -40,7 +40,7 @@
             <div class="legacy-column" style="width: 5%">
                 <div class="right">
                     <v-avatar size="40px">
-                        <img :src="review.program.agency_name | agencyLogoSrc(160, 160, false)" />
+                        <img :src="{ _id: review.program.agency_name } | tenantLogoSrc(80, 80, false)" />
                     </v-avatar>
                 </div>
             </div>

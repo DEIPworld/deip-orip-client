@@ -1,7 +1,7 @@
 <template>
   <base-page-layout>
     <div slot="content" class="full-width">
-      <v-layout column justify-center class="feed-header px-5">
+      <v-layout column justify-center class="feed-header full-width px-5" :style="{ background: 'url(' + $options.filters.tenantBackgroundSrc(tenant) + '), 100%, 100%, no-repeat'}">
         <div class="display-2 uppercase half-bold">Projects</div>
         <div class="py-4"><v-btn :to="{ name: 'CreateResearch' }" color="primary" class="ma-0">Start a project</v-btn></div>
       </v-layout>
@@ -223,6 +223,7 @@ export default {
   computed: {
     ...mapGetters({
       user: 'auth/user',
+      tenant: 'auth/tenant',
       researchFeed: 'feed/researchFeed',
       organizations: 'feed/organizations',
       filter: 'feed/filter'
@@ -293,9 +294,7 @@ export default {
 </script>
 
 <style lang="less" scoped>
-
 .feed-header {
-  background: url('/static/feed-background.svg') 100% 100% no-repeat;
   background-size: cover;
   height: 300px;
   font-style: normal;

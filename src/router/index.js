@@ -3,6 +3,7 @@ import Router from 'vue-router';
 
 import SignIn from '@/components/auth/SignIn';
 import SignUp from '@/components/auth/SignUp';
+import TenantSignIn from '@/components/auth/TenantSignIn';
 import Dashboard from '@/components/dashboard/Dashboard';
 import EmailSendingRegistration from '@/components/auth/EmailSendingRegistration';
 import DataFillingRegistration from '@/components/auth/DataFillingRegistration';
@@ -45,7 +46,6 @@ import NoAccessPage from '@/components/NoAccessPage';
 import CreateAccountTestNet from '@/components/auth/CreateAccountTestNet';
 import VotingForBlockProducers from '@/components/voting-for-block-producers/VotingForBlockProducers';
 import CreateFundingOpportunityAnnouncement from '@/components/funding-opportunity-announcement-create/CreateFundingOpportunityAnnouncement';
-import LegacyInvestorDashboard from '@/components/investor-legacy-flow/dashboard/InvestorDashboard';
 import InvestorDashboard from '@/components/investor-dashboard/InvestorDashboard';
 
 
@@ -366,10 +366,6 @@ const router = new Router({
 				loadPage(loadPagePromise, next);
 			}
 		})
-	}, {
-		path: '/legacy-investor-dashboard',
-		name: 'LegacyInvestorDashboard',
-		component: LegacyInvestorDashboard
 	}, {
 		path: '/investor-dashboard',
 		name: 'InvestorDashboard',

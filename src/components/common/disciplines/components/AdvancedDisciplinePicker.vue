@@ -5,7 +5,7 @@
 
             <div v-if="userDisciplines.length">
                 <div v-for="(discipline, i) in userDisciplines" :key="i">
-                    <span class="deip-label"
+                    <span class="discipline-picker-label"
                         :class="{'selected': isUserLabelSelected(discipline) }"
                         @click="handleUserDiscipline(discipline)"
                     >{{ discipline.label }}</span>
@@ -32,7 +32,7 @@
 
             <v-flex v-if="userDisciplines.length">
                 <div v-for="(discipline, i) in userDisciplines" :key="i">
-                    <span class="deip-label"
+                    <span class="discipline-picker-label"
                         :class="{'selected': isUserLabelSelected(discipline) }"
                         @click="handleUserDiscipline(discipline)"
                     >{{ discipline.label }}</span>
