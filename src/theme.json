@@ -31,6 +31,14 @@
     "tabs-text-class": "black--text",
     "tabs-slider-color": "#72635d"
   },
+  "pfizer": {
+    "primary-color": "#007dc6",
+    "secondary-color": "#869ecf",
+    "top-bar-color": "#00c1f3",
+    "top-bar-link-color": "#ffffff",
+    "tabs-text-class": "black--text",
+    "tabs-slider-color": "#4d7f94"
+  },
   "treasury": {
     "primary-color": "#0053a2",
     "secondary-color": "#FFF9C4",
