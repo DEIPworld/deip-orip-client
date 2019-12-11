@@ -68,7 +68,7 @@
       </v-flex>
       <v-flex xs5>
         <v-layout row align-center class="group-logo" v-if="group.logo_src">
-          <v-avatar>
+          <v-avatar style="margin: 2px">
             <img :src="group.logo_src">
           </v-avatar>
           <v-tooltip bottom class="group-logo__text">
@@ -223,8 +223,8 @@
     background: #e0e0e0;
     border-radius: 28px;
     .v-avatar {
-      height: 24px !important;
-      width: 24px !important;
+      height: 20px !important;
+      width: 20px !important;
     }
     &__text {
       max-width: 100%;

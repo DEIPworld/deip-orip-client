@@ -25,7 +25,7 @@ const createResearchGroup = function(name, permlink, description, quorumPercent,
 
 const mapResearchGroup = (rg) => ({
   ...rg,
-  logo_src: rg.is_personal ? null : `/static/research_groups/${rg.permlink}.png`,
+  logo_src: rg.is_personal ? null : `/static/research_groups/${rg.permlink}-mini.png`,
 });
 
 const getAllResearchGroups = (withPersonal = false) => deipRpc.api.getAllResearchGroupsAsync(withPersonal)

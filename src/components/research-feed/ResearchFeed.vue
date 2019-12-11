@@ -82,7 +82,8 @@
                         flat block small color="primary" 
                         class="text-capitalize filter-btn" 
                         :class="{'selected': isDisciplineSelected(discipline)}">
-                        {{discipline.label}}
+                        <div class="full-width text-xs-center">{{discipline.label}}</div>
+                        <!-- {{discipline.label}} -->
                       </v-btn>
                     </v-flex>
                     <v-spacer></v-spacer>

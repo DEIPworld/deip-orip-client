@@ -1748,9 +1748,7 @@ export default {
   },
 
   created() {
-    this.researchLogoSrc = `./static/researches/${
-      this.research.id < 30 ? this.research.id : "default"
-    }_background.png`;
+    this.researchLogoSrc = `./static/researches/${this.research.id < 30 ? this.research.id : "default"}_background.png`;
     const bookmark = this.user.researchBookmarks.find(
       b => b.researchId === this.research.id
     );

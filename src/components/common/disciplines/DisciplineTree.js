@@ -3,6 +3,33 @@ export default {
   "isTop": true,
   "path": "",
   "children": {
+    "infections_vaccines_preventable_conditions": {
+      "label": "Infections & Vaccines-Preventable Conditions",
+      "id": 3,
+      "path": "infections_vaccines_preventable_conditions",
+      "children": {
+        "hepatitis": {
+          "label": "Hepatitis",
+          "id": 11,
+          "path": "infections_vaccines_preventable_conditions.hepatitis"
+        },
+        "herpes_simplex_virus": {
+          "label": "Herpes Simplex Virus",
+          "id": 12,
+          "path": "infections_vaccines_preventable_conditions.herpes_simplex_virus"
+        },
+        "human_immunodeficiency_virus": {
+          "label": "Human Immunodeficiency Virus",
+          "id": 13,
+          "path": "infections_vaccines_preventable_conditions.human_immunodeficiency_virus"
+        },
+        "tuberculosis": {
+          "label": "Tuberculosis",
+          "id": 14,
+          "path": "infections_vaccines_preventable_conditions.tuberculosis"
+        }
+      }
+    },
     "cancer": {
       "label": "Cancer",
       "id": 1,
@@ -44,33 +71,6 @@ export default {
           "label": "Thrombosis",
           "id": 10,
           "path": "heart_blood_circulatory.thrombosis"
-        }
-      }
-    },
-    "infections_vaccines_preventable_conditions": {
-      "label": "Infections & Vaccines-Preventable Conditions",
-      "id": 3,
-      "path": "infections_vaccines_preventable_conditions",
-      "children": {
-        "hepatitis": {
-          "label": "Hepatitis",
-          "id": 11,
-          "path": "infections_vaccines_preventable_conditions.hepatitis"
-        },
-        "herpes_simplex_virus": {
-          "label": "Herpes Simplex Virus",
-          "id": 12,
-          "path": "infections_vaccines_preventable_conditions.herpes_simplex_virus"
-        },
-        "human_immunodeficiency_virus": {
-          "label": "Human Immunodeficiency Virus",
-          "id": 13,
-          "path": "infections_vaccines_preventable_conditions.human_immunodeficiency_virus"
-        },
-        "tuberculosis": {
-          "label": "Tuberculosis",
-          "id": 14,
-          "path": "infections_vaccines_preventable_conditions.tuberculosis"
         }
       }
     },
