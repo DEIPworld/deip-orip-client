@@ -99,8 +99,11 @@ export default {
         // sig-seed should be uint8 array with length = 32
         const secretSig = secretKey.sign(encodeUint8Arr(window.env.SIG_SEED).buffer);
         const secretSigHex = crypto.hexify(secretSig);
-        
-        authService.signIn({username: this.username, secretSigHex: secretSigHex})
+        authService.signIn({
+          username: this.username,
+          secretSigHex: secretSigHex,
+          agency: this.tenant._id
+        })
           .then((response) => {
               if (response.success) {
 
