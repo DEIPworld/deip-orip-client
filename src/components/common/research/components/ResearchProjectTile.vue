@@ -67,9 +67,9 @@
         <span class="caption half-bold grey--text lighten-1">{{ reviewsCount }}</span>
       </v-flex>
       <v-flex xs5>
-        <v-layout row align-center class="group-logo" v-if="group.logo_src">
+        <v-layout row align-center class="group-logo" v-if="group.logoMiniSrc">
           <v-avatar style="margin: 2px">
-            <img :src="group.logo_src">
+            <img :src="group.logoMiniSrc">
           </v-avatar>
           <v-tooltip bottom class="group-logo__text">
             <template v-slot:activator="{ on }">
