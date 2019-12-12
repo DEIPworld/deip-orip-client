@@ -15,7 +15,7 @@
             <v-card class="pa-4">
               <v-card-title>
                   <v-layout align-center>
-                      <v-flex grow headline>Propose content for Research</v-flex>
+                      <v-flex grow headline>Upload content for research</v-flex>
                       <v-flex shrink right-top-angle>
                         <v-btn @click="close()" icon class="pa-0 ma-0">
                             <v-icon color="black">close</v-icon>

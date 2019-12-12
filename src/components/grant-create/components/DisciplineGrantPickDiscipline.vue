@@ -1,7 +1,7 @@
 <template>
     <div class="legacy-column full-height">
         <div class="c-mb-4 legacy-col-grow legacy-column">
-            <div class="step-title">Select research disciplines</div>
+            <div class="step-title">Select condition/disease</div>
 
             <div class="subheading c-mb-4 text-align-center c-mh-auto selected-disciplines discipline-picker">
                 {{ grantInfo.discipline && grantInfo.discipline.label }}

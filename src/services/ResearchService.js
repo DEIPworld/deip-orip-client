@@ -47,7 +47,7 @@ const contentTypesList = [...Object.values(contentTypesMap)].sort((a, b) => {
 });
 
 const getContentType = (type) => contentTypesList.find(t => t.type == type);
-const getTopResearchesIds = () => [21, 14, 24, 7, 10, 5, 0, 6, 26, 28, 15, 23, 9, 25, 20, 12];
+const getTopResearchesIds = () => [];
 
 export {
     contentTypesMap,
