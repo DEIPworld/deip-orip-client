@@ -5,6 +5,7 @@ import SignIn from '@/components/auth/SignIn';
 import SignUp from '@/components/auth/SignUp';
 import TenantSignIn from '@/components/auth/TenantSignIn';
 import Dashboard from '@/components/dashboard/Dashboard';
+import DashboardGskDemo from '@/components/dashboard-gsk-demo/DashboardGskDemo';
 import EmailSendingRegistration from '@/components/auth/EmailSendingRegistration';
 import DataFillingRegistration from '@/components/auth/DataFillingRegistration';
 import ClaimExpertiseRegistration from '@/components/auth/ClaimExpertiseRegistration';
@@ -133,12 +134,11 @@ const router = new Router({
 	}, {
 		path: '/dashboard',
 		name: 'Dashboard',
-		component: Dashboard,
+		component: DashboardGskDemo,
 		beforeEnter: (to, from, next) => {
-			let loadPagePromise = store.dispatch('dashboard/loadDashboardPage', {
+			let loadPagePromise = store.dispatch('dashboard_gsk_demo/loadDashboardPage', {
 				username: decodeURIComponent(store.getters['auth/user'].username)
 			});
-			// loadDashboardPage
 			loadPage(loadPagePromise, next);
 		}
 		}, {

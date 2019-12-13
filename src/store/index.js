@@ -19,6 +19,7 @@ import votingForBlockProducers from './../components/voting-for-block-producers/
 import agencyPrograms from './../components/agency-programs/store/index'
 import agencyProgramDetails from './../components/agency-program-details/store/index'
 import dashboard from './../components/dashboard/store/index'
+import dashboard_gsk_demo from './../components/dashboard-gsk-demo/store/index'
 import investorDashboard from './../components/investor-dashboard/store/index'
 
 
@@ -43,6 +44,7 @@ export default new Vuex.Store({
         agencyPrograms,
         agencyProgramDetails,
         dashboard,
+        dashboard_gsk_demo,
         investorDashboard
     },
     strict: process.env.NODE_ENV !== 'production',

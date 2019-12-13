@@ -26,7 +26,7 @@
                           <v-flex xl12 lg12 md12 sm12 xs12 class="projects-column">
                             <v-layout row justify-space-between class="column-header">
                               <div class="title bold">Projects <span class="primary--text pl-2">{{researches.length}}</span></div>
-                              <div v-if="isResearchCreationAvailable">
+                              <div>
                                 <v-btn :to="{ name: 'CreateResearch' }" color="primary" small class="ma-0">
                                   Create Project
                                   <v-icon small>add</v-icon>
@@ -255,10 +255,6 @@ export default {
   computed: {
     ...mapGetters({
       user: "auth/user",
-      isManager: 'auth/isManager',
-      isResearcher: 'auth/isResearcher',
-      isPrincipalInvestigator: 'auth/isPrincipalInvestigator',
-      isProjectManager: 'auth/isProjectManager',
       themeSettings: 'layout/themeSettings',
       researches: "dashboard/researches",
       experts: "dashboard/experts",
@@ -269,10 +265,6 @@ export default {
       myInvitesCount: "dashboard/myInvitesCount",
       myReviewsCount: "dashboard/myReviewsCount"
     }),
-
-    isResearchCreationAvailable() {
-      return this.isProjectManager || this.isPrincipalInvestigator;
-    },
 
     hasResearchShares() {
       return this.currentShares.length;
