@@ -3,7 +3,7 @@
     <div slot="content" class="full-width">
       <v-layout column justify-center class="feed-header full-width px-5" :style="{ background: 'url(' + $options.filters.tenantBackgroundSrc(tenant) + '), 100%, 100%, no-repeat'}">
         <div class="display-2 uppercase half-bold">Projects</div>
-        <div class="py-4"><v-btn :to="{ name: 'CreateResearch' }" color="primary" class="ma-0">Start a project</v-btn></div>
+        <div v-if="isResearchCreationAvailable" class="py-4"><v-btn :to="{ name: 'CreateResearch' }" color="primary" class="ma-0">Start a project</v-btn></div>
       </v-layout>
       <v-layout row wrap>
         
@@ -225,10 +225,17 @@ export default {
     ...mapGetters({
       user: 'auth/user',
       tenant: 'auth/tenant',
+      isManager: 'auth/isManager',
+      isResearcher: 'auth/isResearcher',
+      isPrincipalInvestigator: 'auth/isPrincipalInvestigator',
+      isProjectManager: 'auth/isProjectManager',
       researchFeed: 'feed/researchFeed',
       organizations: 'feed/organizations',
       filter: 'feed/filter'
     }),
+    isResearchCreationAvailable() {
+      return this.isProjectManager || this.isPrincipalInvestigator;
+    },
     isFiltersTabExpanded() {
       return this.filtersTabExpansionModel[0];
     },

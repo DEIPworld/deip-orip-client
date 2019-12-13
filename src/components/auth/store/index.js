@@ -17,6 +17,7 @@ const state = {
     pubKey: isLoggedIn() ? getDecodedToken().pubKey : null,
     privKey: isLoggedIn() ? getOwnerWif() : null,
     viewMode: isLoggedIn() ? getDecodedToken().viewMode : null,
+    role: isLoggedIn() ? getDecodedToken().role : null,
     profile: null,
     account: null,
     expertTokens: [],
@@ -103,6 +104,22 @@ const getters = {
 
   isApplicant: (state, getters) => {
     return !getters.isGrantor && !getters.isOfficer;
+  },
+
+  isManager: (state, getters) => {
+    return state.user.role === "manager";
+  },
+
+  isResearcher: (state, getters) => {
+    return state.user.role === "researcher";
+  },
+
+  isPrincipalInvestigator: (state, getters) => {
+    return state.user.role === "pi";
+  },
+
+  isProjectManager: (state, getters) => {
+    return state.user.role === "pm";
   },
 
   isInvestorViewMode: (state, getters) => {
@@ -307,6 +324,7 @@ const actions = {
 const mutations = {
 
   ['SET_USER_EXPERT_TOKENS_LIST'](state, list) {
+    console.log("eferferferfer", getDecodedToken())
     Vue.set(state.user, 'expertTokens', list)
   },
 
