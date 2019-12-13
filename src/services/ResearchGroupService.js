@@ -12,7 +12,7 @@ const createResearchGroup = function(name, permlink, description, quorumPercent,
     description: description,
     quorum_percent: quorumPercent,
     proposal_quorums: proposalQuorums,
-    is_personal: false,
+    is_dao: true,
     invitees: invitees
   };
 

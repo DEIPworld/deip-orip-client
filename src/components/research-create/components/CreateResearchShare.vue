@@ -37,7 +37,7 @@
                     <v-icon dark class="pr-1">keyboard_arrow_left</v-icon> Back
                 </v-btn>
                 <v-btn color="primary" :disabled="nextDisabled" :loading="isLoading" @click.native="finish()"> 
-                    {{!isPersonalGroup ? 'Create Proposal' : 'Create Project'}}
+                    {{!isPersonalGroup ? 'Create Project' : 'Create Project'}}
                 </v-btn>
             </v-layout>
         </v-flex>

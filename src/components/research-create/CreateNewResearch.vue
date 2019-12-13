@@ -180,7 +180,6 @@ export default {
     },
 
     finish() {
-      const self = this;
       this.isLoading = true;
 
       if (!this.research.group && this.tenant) {
@@ -194,11 +193,14 @@ export default {
         return;
       }
 
+      let groupPermlink = this.research.group.permlink;
+      let permlink = this.research.title.replace(/ /g, "-").replace(/_/g, "-").toLowerCase();
+
       createResearchProposal(
         this.research.group.id, 
         this.research.title, 
         this.research.description, 
-        this.research.title.replace(/ /g, "-").replace(/_/g, "-").toLowerCase(), 
+        permlink, 
         500, // this.research.review_share_in_percent * this.DEIP_1_PERCENT,
         this.research.disciplines.map(d => d.id),
         this.research.milestones.map((m, i) => {
@@ -214,18 +216,24 @@ export default {
       .then(() => {
         this.isLoading = false;
         this.$store.dispatch('layout/setSuccess', {
-            message: `Proposal for "${this.research.title}" research is created !`
+          message: `Project "${this.research.title}" has been created successfully`
         });
       }, (err) => {
         console.log(err);
         this.isLoading = false;
         this.$store.dispatch('layout/setError', {
-            message: "An error occurred while creating proposal, please try again later"
+          message: "An error occurred while creating project, please try again later"
         });
       })
       .finally(() => {
         setTimeout(() => {
-          self.$router.push({ name: 'ResearchFeed' });
+          this.$router.push({
+            name: 'ResearchDetails', 
+            params: { 
+              research_group_permlink: encodeURIComponent(groupPermlink), 
+              research_permlink: encodeURIComponent(permlink) 
+            }
+          });
         }, 1500);
       });
     }

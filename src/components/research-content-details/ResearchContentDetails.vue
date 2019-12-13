@@ -20,7 +20,7 @@
                             <v-icon>send</v-icon>
                         </v-btn>
 
-                        <span>{{!isPersonalGroup ? 'Create Proposal' : 'Create Content'}}</span>
+                        <span>{{!isPersonalGroup ? 'Upload Content' : 'Upload Content'}}</span>
                     </v-tooltip>
                 </div>
             </div>
@@ -152,7 +152,7 @@
                                             :loading="proposeContent.isLoading"
                                             block
                                             @click="sendContentProposal()"
-                                            >{{!isPersonalGroup ? 'Create Proposal' : 'Create Content'}}</v-btn>
+                                            >{{!isPersonalGroup ? 'Upload Content' : 'Upload Content'}}</v-btn>
                                     </v-flex>
                                     <v-flex xs12 py-2>
                                         <v-btn 
@@ -290,7 +290,7 @@
                         createContentProposal(contentRef, this.proposeContent.type)
                             .then(() => {
                                 this.$store.dispatch('layout/setSuccess', {
-                                    message: "New Content Proposal has been created successfuly!"
+                                    message: "New content has been uploaded successfully"
                                 });
                             }, (err) => {
                                 console.log(err);
@@ -298,7 +298,7 @@
                                     alert("This file was already uploaded. Please vote for existing proposal or propose file again if its existing proposal has expired.");
                                 } else {
                                     this.$store.dispatch('layout/setError', { 
-                                        message: "An error occurred while creating proposal, please try again later"
+                                        message: "An error occurred while uploading proposal, please try again later"
                                     });
                                 }
                             })
