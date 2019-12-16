@@ -2,7 +2,9 @@
   <v-layout align-baseline align-center>
     <v-flex xs2>
       <div>
-        <v-chip small color="#673ab7" text-color="white">New Research</v-chip>
+        <v-chip class="log-label-chip" small color="#3f51b5" text-color="white">
+          <div class="log-label-chip-text">New Research</div>
+        </v-chip>
       </div>
     </v-flex>
     <v-flex xs8>

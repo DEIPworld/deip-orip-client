@@ -2,7 +2,9 @@
   <v-layout align-baseline align-center>
     <v-flex xs2>
       <div>
-        <v-chip block small color="grey" text-color="white">Proposal Vote</v-chip>
+        <v-chip class="log-label-chip" small color="grey" text-color="white">
+          <div class="log-label-chip-text">Proposal Vote</div>
+        </v-chip>
       </div>
     </v-flex>
     <v-flex xs8>
