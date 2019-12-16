@@ -183,8 +183,7 @@ export default {
       this.isLoading = true;
 
       if (!this.research.group && this.tenant) {
-        let tenantGroupPermlink = this.tenant.name.replace(/ /g, "-").replace(/_/g, "-").toLowerCase();
-        let tenantGroup = this.userGroups.find(g => g.permlink == tenantGroupPermlink);
+        let tenantGroup = this.userGroups.find(g => g.id == this.tenant.researchGroupId);
         this.research.group = tenantGroup;
       }
 

@@ -80,7 +80,12 @@ const getters = {
   },
 
   activityLogsByGroups: (state) => {
-    return state.activityLogsByGroups;
+    return state.activityLogsByGroups
+      .map(item => {
+        let entries = item.entries.map(e => e);
+        entries.sort((a, b) => (a.created_at < b.created_at) ? 1 : ((b.created_at < a.created_at) ? -1 : 0));
+        return { ...item, entries };
+      });
   },
 
   unlockRequests: (state) => {
@@ -100,7 +105,7 @@ const actions = {
     });
     const activityLogsLoad = new Promise((resolve, reject) => {
       let tenant = rootGetters['auth/tenant'];
-      dispatch('loadActivityLogsEntries', { researchGroupsIds: tenant.researchGroupsIds, notify: resolve });
+      dispatch('loadActivityLogsEntries', { observingResearchGroupsIds: tenant.observingResearchGroupsIds, notify: resolve });
     });
     const unlockRequestsLoad = new Promise((resolve, reject) => {
       dispatch('loadUnlockRequests', { notify: resolve });
@@ -208,7 +213,7 @@ const actions = {
 
   loadTenantObservingResearches({ commit, rootGetters }, { notify } = {}) {
     const tenant = rootGetters['auth/tenant'];
-    return Promise.all(tenant.researchGroupsIds.map(rgId => deipRpc.api.getResearchesByResearchGroupIdAsync(rgId)))
+    return Promise.all(tenant.observingResearchGroupsIds.map(rgId => deipRpc.api.getResearchesByResearchGroupIdAsync(rgId)))
       .then((items) => {
         const researches = [].concat.apply([], items);
         commit('SET_TENANT_OBSERVING_RESEARCHES', researches);
@@ -229,15 +234,15 @@ const actions = {
 
   },
 
-  loadActivityLogsEntries({ commit }, { researchGroupsIds, notify } = { researchGroupsIds: [] }) {
+  loadActivityLogsEntries({ commit }, { observingResearchGroupsIds, notify } = { observingResearchGroupsIds: [] }) {
     let groups = [];
-    return Promise.all(researchGroupsIds.map(rgId => researchGroupService.getResearchGroupById(rgId)))
+    return Promise.all(observingResearchGroupsIds.map(rgId => researchGroupService.getResearchGroupById(rgId)))
       .then((items) => {
         groups.push(...items);
-        return Promise.all(researchGroupsIds.map(rgId => activityLogHttp.getActivityLogsEntriesByResearchGroup(rgId)))
+        return Promise.all(observingResearchGroupsIds.map(rgId => activityLogHttp.getActivityLogsEntriesByResearchGroup(rgId)))
       })
       .then((activityLogsByGroups) => {
-        let entriesByGroups = researchGroupsIds.map((rgId, i) => {
+        let entriesByGroups = observingResearchGroupsIds.map((rgId, i) => {
           return { researchGroup: groups[i], entries: activityLogsByGroups[i] };
         });
         commit('SET_ACTIVITY_LOG_ENTRIES', entriesByGroups);
