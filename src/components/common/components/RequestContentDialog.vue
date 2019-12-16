@@ -35,14 +35,12 @@
             <v-layout class="info-line my-2" v-if="author">
               <v-flex xs3 class="info-line__label">Author</v-flex>
               <v-flex xs9 class="pl-2 info-line__value">
-                <v-layout align-center>
-                  <v-avatar size="20px">
-                    <img
-                      :src="author.avatar | avatarSrc(20, 20, false)"
-                    />
-                  </v-avatar>
-                  <span class="ml-2">{{ { profile: author } | fullname }}</span>
-                </v-layout>
+                <platform-avatar 
+                  :user="{ profile: author, account: { name: author._id} }"
+                  :size="20"
+                  link-to-profile
+                  link-to-profile-class="px-1"
+                ></platform-avatar>
               </v-flex>
             </v-layout>
             <v-layout class="info-line my-2" v-if="organization">

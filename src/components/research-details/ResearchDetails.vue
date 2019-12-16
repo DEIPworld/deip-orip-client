@@ -390,7 +390,7 @@
                             <template v-slot:activator="{ on }">
                               <v-icon small v-on="on">{{`mdi-lock-clock`}}</v-icon>
                             </template>
-                            <span>Your access request is reviewing</span>
+                            <span>Your access request is being reviewed</span>
                           </v-tooltip>
                         </template>
                         <template v-else-if="getContentAccessStatus(content) === 'denied'">
@@ -1619,6 +1619,9 @@ export default {
       this.requestAccessToContentDialog.isShown = false;
       this.$store.dispatch("rd/loadResearchContentRefs", {
         researchId: this.research.id
+      });
+      this.$store.dispatch('layout/setSuccess', {
+        message: `Access request for material was sent successfully`
       });
     },
     onJoinResearchGroupClick() {
