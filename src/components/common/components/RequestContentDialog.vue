@@ -102,6 +102,7 @@
     props: {
       isShown: { type: Boolean, required: true },
       contentRefId: { type: String, required: true },
+      contentId: { type: Number, required: true },
     },
     data() {
       return {
@@ -136,6 +137,7 @@
         this.isRequesting = true;
         contentAccessRequestsService.createResearchContentAccessRequest({
           contentRefId: this.contentRefId,
+          contentId: this.contentId,
           coverLetter: this.coverLetter
         }).then(() => {
           this.$emit('requested');

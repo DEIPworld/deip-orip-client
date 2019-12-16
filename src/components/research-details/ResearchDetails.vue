@@ -930,7 +930,7 @@ export default {
       tokenizationConfirmDialog: { isShown: false, isConfirming: false },
       investmentConfirmDialog: { isShown: false, isConfirming: false },
       requestExpertReviewDialog: { isShown: false },
-      requestAccessToContentDialog: { isShown: false, contentRefId: '' },
+      requestAccessToContentDialog: { isShown: false, contentRefId: '', contentId: -1 },
 
       groupLink: this.$route.params.research_group_permlink,
 
@@ -1610,10 +1610,12 @@ export default {
         return;
       }
       this.requestAccessToContentDialog.contentRefId = contentRef._id;
+      this.requestAccessToContentDialog.contentId = content.id;
       this.requestAccessToContentDialog.isShown = true;
     },
     onAccessToContentRequested() {
       this.requestAccessToContentDialog.contentRefId = '';
+      this.requestAccessToContentDialog.contentId = -1;
       this.requestAccessToContentDialog.isShown = false;
       this.$store.dispatch("rd/loadResearchContentRefs", {
         researchId: this.research.id
