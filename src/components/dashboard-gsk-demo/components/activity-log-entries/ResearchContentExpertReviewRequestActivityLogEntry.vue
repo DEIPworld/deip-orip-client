@@ -2,7 +2,7 @@
   <v-layout align-baseline align-center>
     <v-flex xs2>
       <div>
-        <v-chip class="log-label-chip" small color="#7d4d86" text-color="white">
+        <v-chip class="log-label-chip" small color="cyan" text-color="white">
           <div class="log-label-chip-text">Review Request</div>
         </v-chip>
       </div>
@@ -36,7 +36,7 @@
     </v-flex>
     <v-flex xs2>
       <div class="grey--text text-xs-right">
-        {{ moment(log.created_at).format("DD, MMM YYYY") }}
+        {{ moment(log.created_at).format("DD MMM YYYY") }}
       </div>
     </v-flex>
   </v-layout>

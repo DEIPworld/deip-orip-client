@@ -29,7 +29,7 @@
     </v-flex>
     <v-flex xs2>
       <div class="grey--text text-xs-right">
-        {{ moment(log.created_at).format("DD, MMM YYYY") }}
+        {{ moment(log.created_at).format("DD MMM YYYY") }}
       </div>
     </v-flex>
   </v-layout>
