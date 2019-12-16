@@ -213,7 +213,16 @@ export default {
       })
       .finally(() => {
         setTimeout(() => {
-          self.$router.push({ name: 'ResearchFeed' });
+          if (this.research.group.is_personal){
+            this.$router.push({
+              name: 'ResearchDetails',
+              params: {
+                research_group_permlink: encodeURIComponent(this.research.group.permlink),
+                research_permlink: encodeURIComponent(this.research.title.replace(/ /g, "-").replace(/_/g, "-").toLowerCase())}
+            });
+          } else {
+            self.$router.push({ name: 'ResearchFeed' });
+          }
         }, 1500);
       });
     }
