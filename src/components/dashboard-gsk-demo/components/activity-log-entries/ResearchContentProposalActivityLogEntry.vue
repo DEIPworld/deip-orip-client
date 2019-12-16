@@ -34,7 +34,7 @@
         <span v-else>
           <platform-avatar
             :user="{ profile: log.metadata.creatorProfile, account: { name: log.metadata.creatorProfile._id} }"
-            :size="30"
+            :size="25"
             link-to-profile
             link-to-profile-class="px-1"
           ></platform-avatar>

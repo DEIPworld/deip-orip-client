@@ -2,33 +2,23 @@
   <v-layout align-baseline align-center>
     <v-flex xs2>
       <div>
-        <v-chip small color="#673ab7" text-color="white">New Research</v-chip>
+        <v-chip block small color="grey" text-color="white">Proposal Vote</v-chip>
       </div>
     </v-flex>
     <v-flex xs8>
       <div class="align-baseline px-3">
-        <span v-if="isAcceptedByQuorum">
-          <span>
-            New "<router-link class="a"
-              :to="{
-                name: 'ResearchDetails',
-                params: {
-                  research_group_permlink: encodeURIComponent(log.metadata.researchGroup.permlink),
-                  research_permlink: encodeURIComponent(log.metadata.research.permlink)
-                }
-              }"
-            >{{ log.metadata.research.title }}</router-link>" research was accepted by quorum
+        <platform-avatar 
+          :user="{ profile: log.metadata.voterProfile, account: { name: log.metadata.voterProfile._id} }"
+          :size="25"
+          link-to-profile
+          link-to-profile-class="px-1"
+        ></platform-avatar>
+        <span>
+          <span v-if="log.metadata.proposal.action == 1">
+            approved "<span class="body-2">{{log.metadata.proposal.data.title}}</span>" research start
           </span>
-        </span>
-        <span v-else>
-          <platform-avatar
-            :user="{ profile: log.metadata.creatorProfile, account: { name: log.metadata.creatorProfile._id} }"
-            :size="25"
-            link-to-profile
-            link-to-profile-class="px-1"
-          ></platform-avatar>
-          <span v-if="isAutoAccepted">
-            started "<router-link class="a"
+          <span v-else-if="log.metadata.proposal.action == 10">
+            approved "<span class="body-2">{{log.metadata.proposal.data.title}}</span>" material for "<router-link class="a"
               :to="{
                 name: 'ResearchDetails',
                 params: {
@@ -38,9 +28,26 @@
               }"
             >{{ log.metadata.research.title }}</router-link>" research
           </span>
-          <span v-else>
-            proposed to start "<span class="body-2">{{log.metadata.proposal.data.title}}</span>" research
+          <span v-else-if="log.metadata.proposal.action == 5">
+            approved fundraising campaign for "<router-link class="a"
+              :to="{
+                name: 'ResearchDetails',
+                params: {
+                  research_group_permlink: encodeURIComponent(log.metadata.researchGroup.permlink),
+                  research_permlink: encodeURIComponent(log.metadata.research.permlink)
+                }
+              }"
+            >{{ log.metadata.research.title }}</router-link>" research
           </span>
+          <span v-else-if="log.metadata.proposal.action == 2">
+            approved invitation for <platform-avatar 
+              :user="{ profile: log.metadata.inviteeProfile, account: { name: log.metadata.inviteeProfile._id} }"
+              :size="25"
+              link-to-profile
+              link-to-profile-class="px-1"
+            ></platform-avatar>
+          </span>
+          <span v-else>voted for proposal {{log.metadata.proposal.id}}</span>
         </span>
       </div>
     </v-flex>
@@ -56,17 +63,11 @@
 import { mapGetters } from 'vuex';
 
 export default {
-  name: "ResearchProposalActivityLogEntry",
+  name: "VoteProposalActivityLogEntry",
   props: {
     log: { type: Object, required: true }
   },
   computed: {
-    isAcceptedByQuorum() {
-      return this.log.metadata.researchGroup.is_dao && this.log.metadata.proposal.is_completed;
-    },
-    isAutoAccepted() {
-      return !this.log.metadata.researchGroup.is_dao && this.log.metadata.isProposalAutoAccepted;
-    }
   },
   data() {
     return {

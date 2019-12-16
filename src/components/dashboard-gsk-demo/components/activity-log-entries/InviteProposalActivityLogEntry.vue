@@ -10,7 +10,7 @@
         <span v-if="isAcceptedByQuorum">
           Invitation for <platform-avatar 
             :user="{ profile: log.metadata.inviteeProfile, account: { name: log.metadata.inviteeProfile._id } }"
-            :size="30"
+            :size="25"
             link-to-profile
             link-to-profile-class="px-1"
           ></platform-avatar>
@@ -19,14 +19,14 @@
         <span v-else>
           <platform-avatar 
             :user="{ profile: log.metadata.creatorProfile, account: { name: log.metadata.creatorProfile._id} }"
-            :size="30"
+            :size="25"
             link-to-profile
             link-to-profile-class="px-1"
           ></platform-avatar>
           <span v-if="isAutoAccepted">
             invited <platform-avatar 
               :user="{ profile: log.metadata.inviteeProfile, account: { name: log.metadata.inviteeProfile._id } }"
-              :size="30"
+              :size="25"
               link-to-profile
               link-to-profile-class="px-1"
             ></platform-avatar>
@@ -42,7 +42,7 @@
           <span v-else>
             proposed to invite <platform-avatar 
               :user="{ profile: log.metadata.inviteeProfile, account: { name: log.metadata.inviteeProfile._id } }"
-              :size="30"
+              :size="25"
               link-to-profile
               link-to-profile-class="px-1"
             ></platform-avatar>
