@@ -347,8 +347,9 @@
                         lg2
                         class="text-capitalize bold"
                       >{{getContentType(content.content_type).text}}</v-flex>
-                      <v-flex lg9 class="bold">
+                      <v-flex lg8 class="bold">
                         <router-link
+                          v-if="getContentAccessStatus(content) === 'allowed'"
                           class="a"
                           :to="{
                             name: 'ResearchContentDetails',
@@ -359,8 +360,9 @@
                             }
                           }"
                         >{{content.title}}</router-link>
+                        <span v-else class="bold">{{content.title}}</span>
                       </v-flex>
-                      <v-flex lg1 text-lg-center v-show="doesContentHaveReviews(content)">
+                      <v-flex lg1 text-lg-center v-show="true || doesContentHaveReviews(content)">
                         <v-icon size="14px">chat_bubble</v-icon>
                         <span
                           v-show="doesContentHavePositiveReviews(content)"
@@ -373,6 +375,36 @@
                           v-show="doesContentHaveNegativeReviews(content)"
                           class="red--text medium"
                         >{{countContentReviews(content, false)}}</span>
+                      </v-flex>
+                      <v-flex lg1 text-lg-center class="text-xs-center">
+                        <template v-if="getContentAccessStatus(content) === 'allowed'">
+                          <v-tooltip top>
+                            <template v-slot:activator="{ on }">
+                              <v-icon small v-on="on">{{`mdi-lock-open-variant`}}</v-icon>
+                            </template>
+                            <span>You have access to this file</span>
+                          </v-tooltip>
+                        </template>
+                        <template v-else-if="getContentAccessStatus(content) === 'requested'">
+                          <v-tooltip top>
+                            <template v-slot:activator="{ on }">
+                              <v-icon small v-on="on">{{`mdi-lock-clock`}}</v-icon>
+                            </template>
+                            <span>Your access request is reviewing</span>
+                          </v-tooltip>
+                        </template>
+                        <template v-else-if="getContentAccessStatus(content) === 'denied'">
+                          <v-menu open-on-hover top nudge-left="110" offset-y>
+                            <template v-slot:activator="{ on }">
+                              <v-icon small v-on="on">{{`mdi-lock`}}</v-icon>
+                            </template>
+
+                            <v-layout column align-center class="content-access-tooltip pa-3">
+                              <div class="content-access-tooltip__header my-2">This content is private</div>
+                              <v-btn color="primary" class="my-2" @click="onRequestAccessToContentClicked(content)">request access</v-btn>
+                            </v-layout>
+                          </v-menu>
+                        </template>
                       </v-flex>
                     </v-layout>
                   </template>
@@ -396,6 +428,11 @@
                 </v-expansion-panel-content>
               </v-expansion-panel>
             </v-flex>
+            <request-content-dialog
+              v-bind="requestAccessToContentDialog"
+              @canceled="requestAccessToContentDialog.isShown = false"
+              @requested="onAccessToContentRequested()"
+            />
           </v-layout>
           <v-layout class="my-5" row wrap v-if="isResearchGroupMember && !research.is_finished">
             <v-flex lg11 offset-lg1>
@@ -893,6 +930,7 @@ export default {
       tokenizationConfirmDialog: { isShown: false, isConfirming: false },
       investmentConfirmDialog: { isShown: false, isConfirming: false },
       requestExpertReviewDialog: { isShown: false },
+      requestAccessToContentDialog: { isShown: false, contentRefId: '', contentId: -1 },
 
       groupLink: this.$route.params.research_group_permlink,
 
@@ -1503,6 +1541,12 @@ export default {
         };
       });
     },
+    getContentAccessStatus(content) {
+      const ref = this.contentRefsList.find(
+        r => `${r.type}:${r.hash}` === content.content
+      );
+      return ref ? ref.accessStatus : 'denied';
+    },
     getTimelineItemColor(index) {
       const isIndexValid = index % 1 === 0 && index >= 0;
       if (!isIndexValid) {
@@ -1554,6 +1598,28 @@ export default {
     },
     isDraftProposed(draft) {
       return draft.status === "proposed";
+    },
+    onRequestAccessToContentClicked(content) {
+      const contentRef = this.contentRefsList.find(
+        r => `${r.type}:${r.hash}` === content.content
+      );
+      if (!contentRef) {
+        this.$store.dispatch('layout/setError', {
+          message: `Couldn't find the content`,
+        });
+        return;
+      }
+      this.requestAccessToContentDialog.contentRefId = contentRef._id;
+      this.requestAccessToContentDialog.contentId = content.id;
+      this.requestAccessToContentDialog.isShown = true;
+    },
+    onAccessToContentRequested() {
+      this.requestAccessToContentDialog.contentRefId = '';
+      this.requestAccessToContentDialog.contentId = -1;
+      this.requestAccessToContentDialog.isShown = false;
+      this.$store.dispatch("rd/loadResearchContentRefs", {
+        researchId: this.research.id
+      });
     },
     onJoinResearchGroupClick() {
       this.isJoinGroupDialogOpen = true;
@@ -2023,6 +2089,20 @@ export default {
   text-decoration: none;
   &:hover {
     text-decoration: underline;
+  }
+}
+
+.content-access-tooltip {
+  background: #828282;
+  border-radius: 2px;
+  width: 240px;
+
+  &__header {
+    font-family: Roboto;
+    font-weight: bold;
+    font-size: 16px;
+    line-height: 14px;
+    color: #FFFFFF;
   }
 }
 </style>

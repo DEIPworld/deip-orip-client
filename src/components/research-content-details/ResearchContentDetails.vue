@@ -1,5 +1,5 @@
 <template>
-    <page-container>
+    <page-container v-if="isAccessAllowed">
         <sidebar v-if="isInProgress" small>
             <div>
                 <div>
@@ -190,6 +190,7 @@
         data() {
             return {
                 isSavingDraft: false,
+                isAccessAllowed: false,
                 
                 proposeContent: {
                     title: "",
@@ -394,6 +395,16 @@
         },
 
         created() {
+          this.isAccessAllowed = this.contentRef.accessStatus === 'allowed';
+          if (!this.isAccessAllowed) {
+            this.$router.push({
+              name: 'ResearchDetails',
+              params: {
+                research_group_permlink: encodeURIComponent(this.research.group_permlink),
+                research_permlink: encodeURIComponent(this.research.permlink),
+              }
+            });
+          }
         }
     };
 </script>

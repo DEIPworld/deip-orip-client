@@ -39,4 +39,5 @@ export {
   createResearchGroup,
   getAllResearchGroups,
   getResearchGroupById,
+  mapResearchGroup,
 };
