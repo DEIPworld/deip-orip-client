@@ -18,6 +18,10 @@ const state = {
   bookmarkedResearchesOngoingTokenSales: [],
   bookmarkedResearchesOngoingTokenSalesContributions: [],
 
+  tenantObservingResearches: [],
+  tenantObservingResearchesOngoingTokenSales: [],
+  tenantObservingResearchesOngoingTokenSalesContributions: [],
+
   researchGroups: [],
   researchGroupsTokens: [],
   researchGroupsMembers: [],
@@ -34,7 +38,8 @@ const getters = {
 
     let unique = [
       ...state.myMembershipResearches,
-      ...state.bookmarkedResearches
+      ...state.bookmarkedResearches,
+      ...state.tenantObservingResearches
     ]
       .reduce((acc, research) => {
         if (acc.some(a => a.research.id == research.id)) return acc;
@@ -44,7 +49,8 @@ const getters = {
 
         let tokenSale = [
           ...state.myMembershipResearchesOngoingTokenSales,
-          ...state.bookmarkedResearchesOngoingTokenSales
+          ...state.bookmarkedResearchesOngoingTokenSales,
+          ...state.tenantObservingResearchesOngoingTokenSales
         ]
           .find(s => s.research_id == research.id);
 
@@ -54,7 +60,8 @@ const getters = {
         if (tokenSale) {
           let tokenSaleContributions = [
             ...state.myMembershipResearchesOngoingTokenSalesContributions,
-            ...state.bookmarkedResearchesOngoingTokenSalesContributions
+            ...state.bookmarkedResearchesOngoingTokenSalesContributions,
+            ...state.tenantObservingResearchesOngoingTokenSalesContributions
           ]
             .reduce((acc, tokenSale) => {
               if (acc.some(ts => ts.id.id == tokenSale.id)) return acc;
@@ -88,6 +95,9 @@ const actions = {
     const membershipResearchesLoad = new Promise((resolve, reject) => {
       dispatch('loadMembershipResearches', { username: username, notify: resolve });
     });
+    const tenantObservingResearchesLoad = new Promise((resolve, reject) => {
+      dispatch('loadTenantObservingResearches', { username: username, notify: resolve });
+    });
     const activityLogsLoad = new Promise((resolve, reject) => {
       let tenant = rootGetters['auth/tenant'];
       dispatch('loadActivityLogsEntries', { researchGroupsIds: tenant.researchGroupsIds, notify: resolve });
@@ -98,12 +108,14 @@ const actions = {
 
     return Promise.all([
       membershipResearchesLoad,
+      tenantObservingResearchesLoad,
       activityLogsLoad,
       unlockRequestsLoad
     ])
       .then(() => {
         let pulled = [
-          ...state.myMembershipResearches
+          ...state.myMembershipResearches,
+          ...state.tenantObservingResearches
         ].map(research => research.id);
 
         const bookmarkedResearchesLoad = new Promise((resolve, reject) => {
@@ -116,7 +128,8 @@ const actions = {
       .then(() => {
         const researchGroupsIds = [
           ...state.myMembershipResearches,
-          ...state.bookmarkedResearches
+          ...state.bookmarkedResearches,
+          ...state.tenantObservingResearches
         ].reduce((unique, research) => {
           if (unique.some(rgId => rgId == research.research_group_id)) return unique;
           return [research.research_group_id, ...unique];
@@ -131,10 +144,10 @@ const actions = {
         ]);
       })
       .then(([researchGroupsTokens, researchGroups]) => {
-        const tokens = [].concat.apply([], researchGroupsTokens);
-        commit('SET_RESEARCH_GROUPS_TOKENS', tokens);
+        const rgtList = [].concat.apply([], researchGroupsTokens);
+        commit('SET_RESEARCH_GROUPS_TOKENS', rgtList);
         commit('SET_RESEARCH_GROUPS', researchGroups);
-        return usersService.getEnrichedProfiles(tokens.reduce((unique, rt) => {
+        return usersService.getEnrichedProfiles(rgtList.reduce((unique, rt) => {
           if (unique.some(name => name == rt.owner)) return unique;
           return [rt.owner, ...unique];
         }, []));
@@ -191,6 +204,29 @@ const actions = {
       .finally(() => {
         if (notify) notify();
       });
+  },
+
+  loadTenantObservingResearches({ commit, rootGetters }, { notify } = {}) {
+    const tenant = rootGetters['auth/tenant'];
+    return Promise.all(tenant.researchGroupsIds.map(rgId => deipRpc.api.getResearchesByResearchGroupIdAsync(rgId)))
+      .then((items) => {
+        const researches = [].concat.apply([], items);
+        commit('SET_TENANT_OBSERVING_RESEARCHES', researches);
+        return Promise.all(researches.map(research => tokenSaleService.getCurrentTokenSaleByResearchId(research.id)));
+      })
+      .then((response) => {
+        let sales = response.filter(ts => ts != undefined)
+        commit('SET_TENANT_OBSERVING_RESEARCHES_ONGOING_TOKEN_SALES', sales);
+        return Promise.all(sales.map(ts => deipRpc.api.getResearchTokenSaleContributionsByResearchTokenSaleIdAsync(ts.id)));
+      })
+      .then((response) => {
+        const contributions = [].concat.apply([], response);
+        commit('SET_TENANT_OBSERVING_RESEARCHES_ONGOING_TOKEN_SALES_CONTRIBUTIONS', contributions);
+      })
+      .finally(() => {
+        if (notify) notify();
+      });
+
   },
 
   loadActivityLogsEntries({ commit }, { researchGroupsIds, notify } = { researchGroupsIds: [] }) {
@@ -265,6 +301,18 @@ const mutations = {
 
   ['SET_BOOKMARKED_RESEARCHES_ONGOING_TOKEN_SALES_CONTRIBUTIONS'](state, list) {
     Vue.set(state, 'bookmarkedResearchesOngoingTokenSalesContributions', list);
+  },
+
+  ['SET_TENANT_OBSERVING_RESEARCHES'](state, list) {
+    Vue.set(state, 'tenantObservingResearches', list);
+  },
+
+  ['SET_TENANT_OBSERVING_RESEARCHES_ONGOING_TOKEN_SALES'](state, list) {
+    Vue.set(state, 'tenantObservingResearchesOngoingTokenSales', list);
+  },
+
+  ['SET_TENANT_OBSERVING_RESEARCHES_ONGOING_TOKEN_SALES_CONTRIBUTIONS'](state, list) {
+    Vue.set(state, 'tenantObservingResearchesOngoingTokenSalesContributions', list);
   },
 
   ['SET_ACTIVITY_LOG_ENTRIES'](state, map) {
