@@ -5,7 +5,9 @@
         <v-flex xs8 sm8 md8 lg8 xl8>
           <v-layout column fill-height>
             <activity-log-section-gsk-demo></activity-log-section-gsk-demo>
-            <access-requests-section-gsk-demo></access-requests-section-gsk-demo>
+            <access-requests-section-gsk-demo
+              v-if="isPrincipalInvestigator || isProjectManager"
+            ></access-requests-section-gsk-demo>
           </v-layout>
         </v-flex>
         <v-flex xs4 sm4 md4 lg4 xl4>

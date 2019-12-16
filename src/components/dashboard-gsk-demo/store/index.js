@@ -5,6 +5,7 @@ import tokenSaleService from '@/services/TokenSaleService';
 import * as researchService from '@/services/ResearchService';
 import * as researchGroupService from '@/services/ResearchGroupService';
 import activityLogHttp from '@/services/http/activityLog';
+import contentAccessRequestsHttp from '@/services/http/contentAccessRequests';
 
 const state = {
   isLoadingDashboardPage: false,
@@ -21,7 +22,8 @@ const state = {
   researchGroupsTokens: [],
   researchGroupsMembers: [],
 
-  activityLogsByGroups: []
+  activityLogsByGroups: [],
+  unlockRequests: [],
 }
 
 // getters
@@ -72,8 +74,11 @@ const getters = {
 
   activityLogsByGroups: (state) => {
     return state.activityLogsByGroups;
+  },
+
+  unlockRequests: (state) => {
+    return state.unlockRequests;
   }
-  
 }
 
 // actions
@@ -87,10 +92,14 @@ const actions = {
       let tenant = rootGetters['auth/tenant'];
       dispatch('loadActivityLogsEntries', { researchGroupsIds: tenant.researchGroupsIds, notify: resolve });
     });
+    const unlockRequestsLoad = new Promise((resolve, reject) => {
+      dispatch('loadUnlockRequests', { notify: resolve });
+    });
 
     return Promise.all([
       membershipResearchesLoad,
-      activityLogsLoad
+      activityLogsLoad,
+      unlockRequestsLoad
     ])
       .then(() => {
         let pulled = [
@@ -200,6 +209,18 @@ const actions = {
       .finally(() => {
         if (notify) notify();
       });
+  },
+
+  loadUnlockRequests({ commit }, { notify }) {
+    let requests = [];
+    return contentAccessRequestsHttp.getResearchContentAccessRequests()
+      .then((items) => {
+        requests.push(...items);
+        commit('SET_UNLOCK_REQUESTS', requests);
+      })
+      .finally(() => {
+        if (notify) notify();
+      });
   }
 
 }
@@ -248,7 +269,11 @@ const mutations = {
 
   ['SET_ACTIVITY_LOG_ENTRIES'](state, map) {
     Vue.set(state, 'activityLogsByGroups', map);
-  }
+  },
+
+  ['SET_UNLOCK_REQUESTS'](state, map) {
+    Vue.set(state, 'unlockRequests', map);
+  },
 }
 
 const namespaced = true;

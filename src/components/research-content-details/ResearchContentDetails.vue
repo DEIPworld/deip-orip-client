@@ -396,7 +396,7 @@
 
         created() {
           this.isAccessAllowed = this.contentRef.accessStatus === 'allowed';
-          if (!isAccessAllowed) {
+          if (!this.isAccessAllowed) {
             this.$router.push({
               name: 'ResearchDetails',
               params: {
