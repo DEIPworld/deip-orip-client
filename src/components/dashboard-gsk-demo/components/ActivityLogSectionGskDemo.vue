@@ -14,10 +14,10 @@
             <v-card>
               <v-card-text>
                 <div class="py-2" v-for="(log, j) in item.entries" :key="`activity-log-${i}-${j}`">
-                  <research-proposal-activity-log-entry v-if="log.type == 'new-proposal' && log.metadata.proposal.action == 1" :log="log"></research-proposal-activity-log-entry>
-                  <research-content-proposal-activity-log-entry v-if="log.type == 'new-proposal' && log.metadata.proposal.action == 10" :log="log"></research-content-proposal-activity-log-entry>
-                  <invite-proposal-activity-log-entry v-if="log.type == 'new-proposal' && log.metadata.proposal.action == 2" :log="log"></invite-proposal-activity-log-entry>
-                  <token-sale-proposal-activity-log-entry v-if="log.type == 'new-proposal' && log.metadata.proposal.action == 5" :log="log"></token-sale-proposal-activity-log-entry>
+                  <research-proposal-activity-log-entry v-if="(log.type == 'new-proposal' || log.type == 'accepted-proposal') && log.metadata.proposal.action == 1" :log="log"></research-proposal-activity-log-entry>
+                  <research-content-proposal-activity-log-entry v-if="(log.type == 'new-proposal' || log.type == 'accepted-proposal') && log.metadata.proposal.action == 10" :log="log"></research-content-proposal-activity-log-entry>
+                  <invite-proposal-activity-log-entry v-if="(log.type == 'new-proposal' || log.type == 'accepted-proposal') && log.metadata.proposal.action == 2" :log="log"></invite-proposal-activity-log-entry>
+                  <token-sale-proposal-activity-log-entry v-if="(log.type == 'new-proposal' || log.type == 'accepted-proposal') && log.metadata.proposal.action == 5" :log="log"></token-sale-proposal-activity-log-entry>
                 </div>
               </v-card-text>
             </v-card>
