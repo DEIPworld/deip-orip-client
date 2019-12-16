@@ -11,6 +11,7 @@ import VoteProposalActivityLogEntry from './components/activity-log-entries/Vote
 import ApprovedInvitationActivityLogEntry from './components/activity-log-entries/ApprovedInvitationActivityLogEntry';
 import RejectedInvitationActivityLogEntry from './components/activity-log-entries/RejectedInvitationActivityLogEntry';
 import ResearchContentExpertReviewActivityLogEntry from './components/activity-log-entries/ResearchContentExpertReviewActivityLogEntry';
+import ResearchContentExpertReviewRequestActivityLogEntry from './components/activity-log-entries/ResearchContentExpertReviewRequestActivityLogEntry';
 
 
 Vue.component('projects-list-section-gsk-demo', ProjectsListSectionGskDemo);
@@ -25,3 +26,4 @@ Vue.component('vote-proposal-activity-log-entry', VoteProposalActivityLogEntry);
 Vue.component('approved-invitation-activity-log-entry', ApprovedInvitationActivityLogEntry);
 Vue.component('rejected-invitation-activity-log-entry', RejectedInvitationActivityLogEntry);
 Vue.component('research-content-expert-review-activity-log-entry', ResearchContentExpertReviewActivityLogEntry);
+Vue.component('research-content-expert-review-request-activity-log-entry', ResearchContentExpertReviewRequestActivityLogEntry);

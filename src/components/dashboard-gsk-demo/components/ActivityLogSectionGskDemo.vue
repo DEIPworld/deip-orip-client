@@ -22,6 +22,7 @@
                   <approved-invitation-activity-log-entry v-else-if="log.type == 'approved-invitation'" :log="log"></approved-invitation-activity-log-entry>
                   <rejected-invitation-activity-log-entry v-else-if="log.type == 'rejected-invitation'" :log="log"></rejected-invitation-activity-log-entry>
                   <research-content-expert-review-activity-log-entry v-else-if="log.type == 'research-content-expert-review'" :log="log"></research-content-expert-review-activity-log-entry>
+                  <research-content-expert-review-request-activity-log-entry v-else-if="log.type == 'research-content-expert-review-request'" :log="log"></research-content-expert-review-request-activity-log-entry>
                 </div>
               </v-card-text>
             </v-card>
