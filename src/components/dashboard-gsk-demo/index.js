@@ -8,6 +8,9 @@ import ResearchContentProposalActivityLogEntry from './components/activity-log-e
 import InviteProposalActivityLogEntry from './components/activity-log-entries/InviteProposalActivityLogEntry';
 import TokenSaleProposalActivityLogEntry from './components/activity-log-entries/TokenSaleProposalActivityLogEntry';
 import VoteProposalActivityLogEntry from './components/activity-log-entries/VoteProposalActivityLogEntry';
+import ApprovedInvitationActivityLogEntry from './components/activity-log-entries/ApprovedInvitationActivityLogEntry';
+import RejectedInvitationActivityLogEntry from './components/activity-log-entries/RejectedInvitationActivityLogEntry';
+
 
 Vue.component('projects-list-section-gsk-demo', ProjectsListSectionGskDemo);
 Vue.component('activity-log-section-gsk-demo', ActivityLogSectionGskDemo);
@@ -18,3 +21,5 @@ Vue.component('research-content-proposal-activity-log-entry', ResearchContentPro
 Vue.component('invite-proposal-activity-log-entry', InviteProposalActivityLogEntry);
 Vue.component('token-sale-proposal-activity-log-entry', TokenSaleProposalActivityLogEntry);
 Vue.component('vote-proposal-activity-log-entry', VoteProposalActivityLogEntry);
+Vue.component('approved-invitation-activity-log-entry', ApprovedInvitationActivityLogEntry);
+Vue.component('rejected-invitation-activity-log-entry', RejectedInvitationActivityLogEntry);
