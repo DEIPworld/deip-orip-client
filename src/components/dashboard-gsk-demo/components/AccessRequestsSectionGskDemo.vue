@@ -22,15 +22,12 @@
                     >{{item.metadata.content.title}}</router-link>
                   </v-flex>
                   <v-flex offset-xs1 xs5>
-                    <v-avatar size="20px">
-                      <img
-                        :src="item.metadata.userProfile.avatar | avatarSrc(20, 20, false)"
-                      />
-                    </v-avatar>
-                    <router-link
-                      class="a"
-                      :to="{ name: 'UserDetails', params: { account_name: item.username }}"
-                    >{{ { profile: item.metadata.userProfile } | fullname }}</router-link>
+                    <platform-avatar 
+                      :user="{ profile: item.metadata.userProfile, account: { name: item.metadata.userProfile._id} }"
+                      :size="20"
+                      link-to-profile
+                      link-to-profile-class="px-1"
+                    ></platform-avatar>
                   </v-flex>
                   <v-flex xs2>{{item.created_at | dateFormat('D MMM YYYY', true)}}</v-flex>
                 </v-layout>
@@ -72,30 +69,26 @@
                 <v-layout row align-center class="info-line my-4">
                   <v-flex xs3>Requested by</v-flex>
                   <v-flex xs9 class="pl-2">
-                    <v-avatar size="20px">
-                      <img
-                        :src="item.metadata.userProfile.avatar | avatarSrc(20, 20, false)"
-                      />
-                    </v-avatar>
-                    <router-link
-                      class="a"
-                      :to="{ name: 'UserDetails', params: { account_name: item.username }}"
-                    >{{ { profile: item.metadata.userProfile } | fullname }} ({{item.metadata.userAgency.name}})</router-link>
+                    <platform-avatar 
+                      :user="{ profile: item.metadata.userProfile, account: { name: item.metadata.userProfile._id} }"
+                      :size="20"
+                      link-to-profile
+                      link-to-profile-class="px-1"
+                    ><span class="primary--text bold">({{item.metadata.userAgency.name}})</span>
+                    </platform-avatar>
                     <span class="ml-2">{{item.created_at | dateFormat('D MMM YYYY', true)}}</span>
                   </v-flex>
                 </v-layout>
                 <v-layout row align-center class="info-line my-4" v-if="isProjectManager">
                   <v-flex xs3>Approved by</v-flex>
                   <v-flex xs9 class="pl-2">
-                    <v-avatar size="20px">
-                      <img
-                        :src="item.metadata.piProfile.avatar | avatarSrc(20, 20, false)"
-                      />
-                    </v-avatar>
-                    <router-link
-                      class="a"
-                      :to="{ name: 'UserDetails', params: { account_name: item.piApproval.username }}"
-                    >{{ { profile: item.metadata.piProfile } | fullname }} ({{item.metadata.piAgency.name}})</router-link>
+                    <platform-avatar 
+                      :user="{ profile: item.metadata.piProfile, account: { name: item.metadata.piProfile._id} }"
+                      :size="20"
+                      link-to-profile
+                      link-to-profile-class="px-1"
+                    ><span class="primary--text bold">({{item.metadata.piAgency.name}})</span>
+                    </platform-avatar>
                     <span class="ml-2">{{item.piApproval.date | dateFormat('D MMM YYYY', true)}}</span>
                   </v-flex>
                 </v-layout>
