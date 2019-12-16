@@ -1,18 +1,19 @@
 <template>
   <base-page-layout>
-    <v-layout slot="content" row class="full-width full-height pa-5">
-      <v-flex xs8 sm8 md8 lg8 xl8>
-        <v-layout column fill-height>
-          <activity-log-section-gsk-demo></activity-log-section-gsk-demo>
-          <access-requests-section-gsk-demo></access-requests-section-gsk-demo>
-        </v-layout>
-      </v-flex>
-      <v-flex xs4 sm4 md4 lg4 xl4>
-        <projects-list-section-gsk-demo></projects-list-section-gsk-demo>
-      </v-flex>
-    </v-layout>
-</base-page-layout>
-
+    <v-card slot="content" class="full-height full-width pa-5">
+      <v-layout row>
+        <v-flex xs8 sm8 md8 lg8 xl8>
+          <v-layout column fill-height>
+            <activity-log-section-gsk-demo></activity-log-section-gsk-demo>
+            <access-requests-section-gsk-demo></access-requests-section-gsk-demo>
+          </v-layout>
+        </v-flex>
+        <v-flex xs4 sm4 md4 lg4 xl4>
+          <projects-list-section-gsk-demo></projects-list-section-gsk-demo>
+        </v-flex>
+      </v-layout>
+    </v-card>
+  </base-page-layout>
 </template>
 
 <script>

@@ -4,7 +4,7 @@ import * as usersService from '@/utils/user';
 import tokenSaleService from '@/services/TokenSaleService';
 import * as researchService from '@/services/ResearchService';
 import * as researchGroupService from '@/services/ResearchGroupService';
-import reviewRequestsService from '@/services/http/reviewRequests';
+import activityLogHttp from '@/services/http/activityLog';
 
 const state = {
   isLoadingDashboardPage: false,
@@ -19,7 +19,9 @@ const state = {
 
   researchGroups: [],
   researchGroupsTokens: [],
-  researchGroupsMembers: []
+  researchGroupsMembers: [],
+
+  activityLogsByGroups: []
 }
 
 // getters
@@ -66,20 +68,29 @@ const getters = {
 
     unique.sort((a, b) => (a.research.title > b.research.title) ? 1 : ((b.research.title > a.research.title) ? -1 : 0));
     return unique;
+  },
+
+  activityLogsByGroups: (state) => {
+    return state.activityLogsByGroups;
   }
   
 }
 
 // actions
 const actions = {
-  loadDashboardPage({ commit, dispatch, state }, { username }) {
+  loadDashboardPage({ commit, dispatch, state, rootGetters }, { username }) {
     commit('SET_DASHBOARD_PAGE_LOADING_STATE', true);
     const membershipResearchesLoad = new Promise((resolve, reject) => {
       dispatch('loadMembershipResearches', { username: username, notify: resolve });
     });
+    const activityLogsLoad = new Promise((resolve, reject) => {
+      let tenant = rootGetters['auth/tenant'];
+      dispatch('loadActivityLogsEntries', { researchGroupsIds: tenant.researchGroupsIds, notify: resolve });
+    });
 
     return Promise.all([
-      membershipResearchesLoad
+      membershipResearchesLoad,
+      activityLogsLoad
     ])
       .then(() => {
         let pulled = [
@@ -94,7 +105,7 @@ const actions = {
         ]);
       })
       .then(() => {
-        const researchesIds = [
+        const researchGroupsIds = [
           ...state.myMembershipResearches,
           ...state.bookmarkedResearches
         ].reduce((unique, research) => {
@@ -102,8 +113,8 @@ const actions = {
           return [research.research_group_id, ...unique];
         }, []);
 
-        const rgtLoad = researchesIds.map(rId => deipRpc.api.getResearchGroupTokensByResearchGroupAsync(rId));
-        const rgLoad = researchesIds.map(rId => researchGroupService.getResearchGroupById(rId));
+        const rgtLoad = researchGroupsIds.map(rgId => deipRpc.api.getResearchGroupTokensByResearchGroupAsync(rgId));
+        const rgLoad = researchGroupsIds.map(rgId => researchGroupService.getResearchGroupById(rgId));
 
         return Promise.all([
           Promise.all(rgtLoad),
@@ -171,6 +182,24 @@ const actions = {
       .finally(() => {
         if (notify) notify();
       });
+  },
+
+  loadActivityLogsEntries({ commit }, { researchGroupsIds, notify } = { researchGroupsIds: [] }) {
+    let groups = [];
+    return Promise.all(researchGroupsIds.map(rgId => researchGroupService.getResearchGroupById(rgId)))
+      .then((items) => {
+        groups.push(...items);
+        return Promise.all(researchGroupsIds.map(rgId => activityLogHttp.getActivityLogsEntriesByResearchGroup(rgId)))
+      })
+      .then((activityLogsByGroups) => {
+        let entriesByGroups = researchGroupsIds.map((rgId, i) => {
+          return { researchGroup: groups[i], entries: activityLogsByGroups[i] };
+        });
+        commit('SET_ACTIVITY_LOG_ENTRIES', entriesByGroups);
+      })
+      .finally(() => {
+        if (notify) notify();
+      });
   }
 
 }
@@ -215,6 +244,10 @@ const mutations = {
 
   ['SET_BOOKMARKED_RESEARCHES_ONGOING_TOKEN_SALES_CONTRIBUTIONS'](state, list) {
     Vue.set(state, 'bookmarkedResearchesOngoingTokenSalesContributions', list);
+  },
+
+  ['SET_ACTIVITY_LOG_ENTRIES'](state, map) {
+    Vue.set(state, 'activityLogsByGroups', map);
   }
 }
 
