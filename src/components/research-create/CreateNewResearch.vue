@@ -2,7 +2,7 @@
     <v-container fluid fill-height pa-0>
         <v-layout>
 
-            <v-stepper v-model="currentStep" alt-labels class="d-flex flex-column w-100 fill-height stepper-page">
+            <v-stepper v-model="currentStep" alt-labels class="display-flex flex-column w-100 fill-height stepper-page">
                 <v-stepper-header class="flex-grow-0">
                     <v-stepper-step step="1" :complete="currentStep > 1">
                         <div class="text-uppercase">Discipline</div>
@@ -39,7 +39,7 @@
                     </v-stepper-step> -->
                 </v-stepper-header>
 
-                <v-stepper-items>
+                <v-stepper-items class="flex-grow-1">
                     <v-stepper-content step="1">
                         <div class="fill-height">
                             <create-research-pick-discipline
@@ -263,6 +263,6 @@ export default {
     width: 100%;
   }
   .flex-basis-0{
-    flex-basis: 0;
+    flex-basis: 0 !important;
   }
 </style>

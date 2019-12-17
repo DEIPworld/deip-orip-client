@@ -3,7 +3,7 @@
         <v-flex display-flex flex-column flex-grow-1 mb-3>
             <div class="step-title">Add title and description</div>
 
-            <div class="flex-grow-1 overflow-y-auto">
+            <div class="flex-grow-1 overflow-y-auto flex-basis-0">
 
                 <div class="mx-auto pt-3" style="max-width: 1000px;">
                     <v-layout row>

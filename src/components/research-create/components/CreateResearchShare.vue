@@ -2,7 +2,7 @@
     <v-layout column fill-height>
         <v-flex flex-column mb-3 flex-grow-1 display-flex>
             <div class="step-title">Share reward with reviewers</div>
-            <div class="flex-grow-1 overflow-y-auto">
+            <div class="flex-grow-1 overflow-y-auto flex-basis-0">
 
                 <v-layout row mx-auto class="research-reward-max-width">
                     <v-flex xs12>
