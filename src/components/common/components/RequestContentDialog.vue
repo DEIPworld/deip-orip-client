@@ -14,7 +14,7 @@
         <template v-else>
           <v-card-title>
             <v-layout row align-baseline>
-              <v-flex grow class="headline">Request access to the content</v-flex>
+              <v-flex grow class="headline">Request access to the material</v-flex>
               <v-flex shrink align-self-center right-top-angle>
                 <v-btn @click="cancel()" :disabled="isRequesting" icon class="pa-0 ma-0">
                   <v-icon color="black">close</v-icon>
@@ -25,7 +25,7 @@
 
           <v-card-text>
             <v-layout class="info-line my-2" v-if="contentName">
-              <v-flex xs3 class="info-line__label">Content</v-flex>
+              <v-flex xs3 class="info-line__label">Material</v-flex>
               <v-flex xs9 class="pl-2 info-line__value">{{contentName}}</v-flex>
             </v-layout>
             <v-layout class="info-line my-2" v-if="projectName">
