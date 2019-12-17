@@ -13,6 +13,8 @@ import RejectedInvitationActivityLogEntry from './components/activity-log-entrie
 import ResearchContentExpertReviewActivityLogEntry from './components/activity-log-entries/ResearchContentExpertReviewActivityLogEntry';
 import ResearchContentExpertReviewRequestActivityLogEntry from './components/activity-log-entries/ResearchContentExpertReviewRequestActivityLogEntry';
 import ResearchContentAccessRequestActivityLogEntry from './components/activity-log-entries/ResearchContentAccessRequestActivityLogEntry';
+import ApprovedResearchContentAccessRequestActivityLogEntry from './components/activity-log-entries/ApprovedResearchContentAccessRequestActivityLogEntry';
+import RejectedResearchContentAccessRequestActivityLogEntry from './components/activity-log-entries/RejectedResearchContentAccessRequestActivityLogEntry';
 
 
 Vue.component('projects-list-section-gsk-demo', ProjectsListSectionGskDemo);
@@ -29,3 +31,5 @@ Vue.component('rejected-invitation-activity-log-entry', RejectedInvitationActivi
 Vue.component('research-content-expert-review-activity-log-entry', ResearchContentExpertReviewActivityLogEntry);
 Vue.component('research-content-expert-review-request-activity-log-entry', ResearchContentExpertReviewRequestActivityLogEntry);
 Vue.component('research-content-access-request-activity-log-entry', ResearchContentAccessRequestActivityLogEntry);
+Vue.component('approved-research-content-access-request-activity-log-entry', ApprovedResearchContentAccessRequestActivityLogEntry);
+Vue.component('rejected-research-content-access-request-activity-log-entry', RejectedResearchContentAccessRequestActivityLogEntry);

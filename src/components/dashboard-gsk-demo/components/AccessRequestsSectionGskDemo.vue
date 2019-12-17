@@ -1,7 +1,7 @@
 <template>
   <v-layout row wrap>
     <v-flex xl11 lg11 md11 sm11 xs11 offset-xl1-right offset-lg1-right offset-md1-right offset-sm1-right offset-xs1-right>
-      <div class="title bold pb-5">Unlock Requests</div>
+      <div class="title bold py-5">Unlock Requests</div>
       <div v-if="unlockRequests.length">
         <v-expansion-panel class="elevation-0" v-model="panelIndex">
           <v-expansion-panel-content v-for="(item, i) in unlockRequests" :key="`access-request-${i}`">
@@ -134,6 +134,7 @@ export default {
   computed: {
     ...mapGetters({
       user: "auth/user",
+      tenant: "auth/tenant",
       isManager: 'auth/isManager',
       isResearcher: 'auth/isResearcher',
       isPrincipalInvestigator: 'auth/isPrincipalInvestigator',
@@ -150,14 +151,16 @@ export default {
       this.accessActionDialog.onConfirmed = () => {
         this.accessActionDialog.isConfirming = true;
         return contentAccessRequestsService.approveResearchContentAccessRequest(request._id)
-        .catch((err) => {
-          console.error(err);
-        })
-        .finally(() => {
-          this.accessActionDialog.isConfirming = false;
-          this.accessActionDialog.isShown = false;
-          this.$store.dispatch('dashboard_gsk_demo/loadUnlockRequests', {});
-        })
+          .then(() => {
+            this.accessActionDialog.isConfirming = false;
+            this.accessActionDialog.isShown = false;
+            this.$store.dispatch('dashboard_gsk_demo/loadUnlockRequests', {});
+            this.$store.dispatch('dashboard_gsk_demo/loadActivityLogsEntries', { observingResearchGroupsIds: this.tenant.observingResearchGroupsIds });
+            this.$store.dispatch('layout/setSuccess', { message: "Access request for research material was approved successfully" });
+          })
+          .catch((err) => {
+            console.error(err);
+          });
       };
     },
 
@@ -168,13 +171,16 @@ export default {
       this.accessActionDialog.onConfirmed = () => {
         this.accessActionDialog.isConfirming = true;
         return contentAccessRequestsService.denyResearchContentAccessRequest(request._id)
-        .catch((err) => {
-          console.error(err);
-        })
-        .finally(() => {
-          this.accessActionDialog.isConfirming = false;
-          this.accessActionDialog.isShown = false;
-        })
+          .then(() => {
+            this.accessActionDialog.isConfirming = false;
+            this.accessActionDialog.isShown = false;
+            this.$store.dispatch('dashboard_gsk_demo/loadUnlockRequests', {});
+            this.$store.dispatch('dashboard_gsk_demo/loadActivityLogsEntries', { observingResearchGroupsIds: this.tenant.observingResearchGroupsIds });
+            this.$store.dispatch('layout/setSuccess', { message: "Access request for research material was denied successfully" });
+          })
+          .catch((err) => {
+            console.error(err);
+          });
       };
     },
   },

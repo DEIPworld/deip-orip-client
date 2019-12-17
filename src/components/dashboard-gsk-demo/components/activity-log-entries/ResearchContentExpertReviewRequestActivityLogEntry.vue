@@ -11,7 +11,7 @@
       <div class="align-baseline px-3">
         <platform-avatar 
           :user="{ profile: log.metadata.requestorProfile, account: { name: log.metadata.requestorProfile._id} }"
-          :size="25"
+          :size="20"
           link-to-profile
           link-to-profile-class="px-1"
         ></platform-avatar>
@@ -27,7 +27,7 @@
             }"
           >{{ log.metadata.researchContent.title }}</router-link>" material from <platform-avatar 
             :user="{ profile: log.metadata.expertProfile, account: { name: log.metadata.expertProfile._id} }"
-            :size="25"
+            :size="20"
             link-to-profile
             link-to-profile-class="px-1"
           ></platform-avatar> 

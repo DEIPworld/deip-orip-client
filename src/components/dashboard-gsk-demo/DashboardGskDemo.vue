@@ -3,11 +3,9 @@
     <v-card slot="content" class="full-height full-width pa-5">
       <v-layout row>
         <v-flex xs8 sm8 md8 lg8 xl8>
-          <v-layout column fill-height>
+          <v-layout column>
             <activity-log-section-gsk-demo></activity-log-section-gsk-demo>
-            <access-requests-section-gsk-demo
-              v-if="isPrincipalInvestigator || isProjectManager"
-            ></access-requests-section-gsk-demo>
+            <access-requests-section-gsk-demo v-if="isPrincipalInvestigator || isProjectManager"></access-requests-section-gsk-demo>
           </v-layout>
         </v-flex>
         <v-flex xs4 sm4 md4 lg4 xl4>

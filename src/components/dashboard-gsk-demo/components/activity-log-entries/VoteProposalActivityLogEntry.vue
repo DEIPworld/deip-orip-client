@@ -11,7 +11,7 @@
       <div class="align-baseline px-3">
         <platform-avatar 
           :user="{ profile: log.metadata.voterProfile, account: { name: log.metadata.voterProfile._id} }"
-          :size="25"
+          :size="20"
           link-to-profile
           link-to-profile-class="px-1"
         ></platform-avatar>
@@ -44,7 +44,7 @@
           <span v-else-if="log.metadata.proposal.action == 2">
             approved invitation for <platform-avatar 
               :user="{ profile: log.metadata.inviteeProfile, account: { name: log.metadata.inviteeProfile._id} }"
-              :size="25"
+              :size="20"
               link-to-profile
               link-to-profile-class="px-1"
             ></platform-avatar>
