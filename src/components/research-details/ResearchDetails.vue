@@ -360,6 +360,12 @@
                             }
                           }"
                         >{{content.title}}</router-link>
+                        <span
+                          v-else-if="getContentAccessStatus(content) === 'denied'"
+                          class="a bold"
+                          @click="onRequestAccessToContentClicked(content)"
+                        >{{content.title}}
+                        </span>
                         <span v-else class="bold">{{content.title}}</span>
                       </v-flex>
                       <v-flex lg1 text-lg-center v-show="true || doesContentHaveReviews(content)">
