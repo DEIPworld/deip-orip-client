@@ -901,6 +901,12 @@
           <div
             class="rd-sidebar-block-title my-4 px-4"
           >Citations: {{researchReferencesList.length + research.id}}</div>
+          <v-layout
+            align-center justify-center
+            class="my-4 mx-3 pa-3"
+            style="border: 1px solid #E0E0E0;"
+          ><img src="/static/ip-secured-mark.svg" />
+          </v-layout>
         </v-flex>
       </v-layout>
     </div>
