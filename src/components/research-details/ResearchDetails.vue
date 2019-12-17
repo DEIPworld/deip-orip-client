@@ -913,6 +913,11 @@
             style="border: 1px solid #E0E0E0;"
           ><img src="/static/ip-secured-mark.svg" />
           </v-layout>
+          <div class="my-4 px-4">
+            We’re true believers in the open science.
+            Therefore, we grant you ultimate tool for sharing your research.
+            Feel free to use our <a class="a">Open Journal Platform</a>
+          </div>
         </v-flex>
       </v-layout>
     </div>

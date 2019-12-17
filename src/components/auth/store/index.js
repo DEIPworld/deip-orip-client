@@ -324,7 +324,6 @@ const actions = {
 const mutations = {
 
   ['SET_USER_EXPERT_TOKENS_LIST'](state, list) {
-    console.log("eferferferfer", getDecodedToken())
     Vue.set(state.user, 'expertTokens', list)
   },
 

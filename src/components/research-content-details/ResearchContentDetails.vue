@@ -20,7 +20,7 @@
                             <v-icon>send</v-icon>
                         </v-btn>
 
-                        <span>{{!isPersonalGroup ? 'Upload Content' : 'Upload Content'}}</span>
+                        <span>{{!isPersonalGroup ? 'Upload Material' : 'Upload Material'}}</span>
                     </v-tooltip>
                 </div>
             </div>
@@ -84,7 +84,7 @@
                         <v-card class="pa-4">
                             <v-card-title>
                                 <v-layout align-center>
-                                    <v-flex grow headline>Upload content for research</v-flex>
+                                    <v-flex grow headline>Upload material for research</v-flex>
                                     <v-flex shrink right-top-angle>
                                         <v-btn @click="closeContentProposalDialog()" icon class="pa-0 ma-0">
                                             <v-icon color="black">close</v-icon>
@@ -152,7 +152,7 @@
                                             :loading="proposeContent.isLoading"
                                             block
                                             @click="sendContentProposal()"
-                                            >{{!isPersonalGroup ? 'Upload Content' : 'Upload Content'}}</v-btn>
+                                            >{{!isPersonalGroup ? 'Upload Material' : 'Upload Material'}}</v-btn>
                                     </v-flex>
                                     <v-flex xs12 py-2>
                                         <v-btn 
