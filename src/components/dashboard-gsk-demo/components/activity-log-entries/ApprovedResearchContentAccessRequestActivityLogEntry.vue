@@ -17,7 +17,7 @@
         ><span class="grey--text uppercase half-bold">({{log.metadata.role}})</span>
         </platform-avatar>
         <span>
-          approved access request to "<router-link class="a"
+          {{ log.metadata.role == 'pi' ? 'approved access request' : 'granted access' }} to "<router-link class="a"
             :to="{
               name: 'ResearchContentDetails',
               params: {

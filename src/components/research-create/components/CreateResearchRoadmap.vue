@@ -1,11 +1,9 @@
 <template>
 	<v-layout column align-center fill-height overflow-auto>
-		<v-flex px-10>
-			<v-flex>
-				<div class="step-title text-xs-center">Roadmap</div>
-				<div class="subheading pb-5 pt-2 text-xs-center">Let’s create a roadmap for your research. Well-presented and detailed roadmap attracts more investors to help you to get the funding</div>
-				<milestone-stepper :isReadOnly="false" :steps="research.milestones"></milestone-stepper>
-			</v-flex>
+		<v-flex>
+			<div class="step-title text-xs-center">Roadmap</div>
+			<div class="subheading pb-5 pt-2 text-xs-center">Let’s create a roadmap for your research</div>
+			<milestone-stepper :isReadOnly="false" :steps="research.milestones"></milestone-stepper>
 		</v-flex>
 
 		<v-flex flex-grow-0>
