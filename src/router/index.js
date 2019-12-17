@@ -384,6 +384,11 @@ const router = new Router({
 		path: '*',
 		name: 'Default',
 		beforeEnter: (to, from, next) => {
+      const tenant = store.getters['auth/tenant'];
+      if (tenant && tenant._id === 'gsk') {
+        next({ name: 'Dashboard' });
+        return;
+      }
 			const user = store.getters['auth/user'];
 			const rolePromise = user.profile 
 				? Promise.resolve(user.profile.agencies || []) 
