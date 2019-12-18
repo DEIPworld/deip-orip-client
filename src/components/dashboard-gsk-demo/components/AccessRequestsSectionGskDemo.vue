@@ -109,7 +109,7 @@
           </v-expansion-panel-content>
         </v-expansion-panel>
       </div>
-      <div v-else>There are no any unlock requests yet</div>
+      <div v-else>You don't have any access request yet.</div>
       <confirm-action-dialog
         :meta="accessActionDialog"
         :title="``"
