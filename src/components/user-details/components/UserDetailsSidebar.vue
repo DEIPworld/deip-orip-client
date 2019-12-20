@@ -409,6 +409,7 @@
 
             closeInviteDetailsDialog(invite, index) {
                 this.inviteDetailsDialog.isShown = false;
+                this.inviteDetailsDialog.item = null;
                 this.inviteDetailsDialog.isApprovingInvite = false;
                 this.inviteDetailsDialog.isRejectingInvite = false;
             },
@@ -433,7 +434,7 @@
                     });
                     console.log(err);
                 }).finally(() => {
-                    this.inviteDetailsDialog.isApprovingInvite = false;
+                    this.closeInviteDetailsDialog();
                 })
             },
 
@@ -455,8 +456,7 @@
                     });
                     console.log(err);
                 }).finally(() => {
-                    this.inviteDetailsDialog.isRejectingInvite = false;
-                    this.inviteDetailsDialog.isShown = false
+                    this.closeInviteDetailsDialog();
                 })
             },
 

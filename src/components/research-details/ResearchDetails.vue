@@ -882,7 +882,7 @@
           </v-dialog>
           <v-divider />
 
-          <!-- <v-layout column class="my-4 mx-4">
+          <v-layout column class="my-4 mx-4">
             <div class="rd-sidebar-block-title">Tokenization</div>
             <div v-if="isResearchTokenized" class="py-2">10000 research tokens issued</div>
             <v-btn
@@ -902,7 +902,7 @@
               @canceled="tokenizationConfirmDialog.isShown = false"
             ></confirm-action-dialog>
           </v-layout>
-          <v-divider /> -->
+          <v-divider />
 
           <div
             class="rd-sidebar-block-title my-4 px-4"
