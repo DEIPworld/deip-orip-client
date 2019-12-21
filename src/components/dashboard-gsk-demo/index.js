@@ -7,14 +7,14 @@ import ResearchProposalActivityLogEntry from './components/activity-log-entries/
 import ResearchContentProposalActivityLogEntry from './components/activity-log-entries/ResearchContentProposalActivityLogEntry';
 import InviteProposalActivityLogEntry from './components/activity-log-entries/InviteProposalActivityLogEntry';
 import TokenSaleProposalActivityLogEntry from './components/activity-log-entries/TokenSaleProposalActivityLogEntry';
-import VoteProposalActivityLogEntry from './components/activity-log-entries/VoteProposalActivityLogEntry';
-import ApprovedInvitationActivityLogEntry from './components/activity-log-entries/ApprovedInvitationActivityLogEntry';
-import RejectedInvitationActivityLogEntry from './components/activity-log-entries/RejectedInvitationActivityLogEntry';
+import ProposalVoteActivityLogEntry from './components/activity-log-entries/ProposalVoteActivityLogEntry';
+import InvitationApprovedActivityLogEntry from './components/activity-log-entries/InvitationApprovedActivityLogEntry';
+import InvitationRejectedActivityLogEntry from './components/activity-log-entries/InvitationRejectedActivityLogEntry';
 import ResearchContentExpertReviewActivityLogEntry from './components/activity-log-entries/ResearchContentExpertReviewActivityLogEntry';
 import ResearchContentExpertReviewRequestActivityLogEntry from './components/activity-log-entries/ResearchContentExpertReviewRequestActivityLogEntry';
 import ResearchContentAccessRequestActivityLogEntry from './components/activity-log-entries/ResearchContentAccessRequestActivityLogEntry';
-import ApprovedResearchContentAccessRequestActivityLogEntry from './components/activity-log-entries/ApprovedResearchContentAccessRequestActivityLogEntry';
-import RejectedResearchContentAccessRequestActivityLogEntry from './components/activity-log-entries/RejectedResearchContentAccessRequestActivityLogEntry';
+import ResearchContentAccessRequestApprovedActivityLogEntry from './components/activity-log-entries/ResearchContentAccessRequestApprovedActivityLogEntry';
+import ResearchContentAccessRequestRejectedActivityLogEntry from './components/activity-log-entries/ResearchContentAccessRequestRejectedActivityLogEntry';
 
 
 Vue.component('projects-list-section-gsk-demo', ProjectsListSectionGskDemo);
@@ -25,11 +25,11 @@ Vue.component('research-proposal-activity-log-entry', ResearchProposalActivityLo
 Vue.component('research-content-proposal-activity-log-entry', ResearchContentProposalActivityLogEntry);
 Vue.component('invite-proposal-activity-log-entry', InviteProposalActivityLogEntry);
 Vue.component('token-sale-proposal-activity-log-entry', TokenSaleProposalActivityLogEntry);
-Vue.component('vote-proposal-activity-log-entry', VoteProposalActivityLogEntry);
-Vue.component('approved-invitation-activity-log-entry', ApprovedInvitationActivityLogEntry);
-Vue.component('rejected-invitation-activity-log-entry', RejectedInvitationActivityLogEntry);
+Vue.component('proposal-vote-activity-log-entry', ProposalVoteActivityLogEntry);
+Vue.component('invitation-approved-activity-log-entry', InvitationApprovedActivityLogEntry);
+Vue.component('invitation-rejected-activity-log-entry', InvitationRejectedActivityLogEntry);
 Vue.component('research-content-expert-review-activity-log-entry', ResearchContentExpertReviewActivityLogEntry);
 Vue.component('research-content-expert-review-request-activity-log-entry', ResearchContentExpertReviewRequestActivityLogEntry);
 Vue.component('research-content-access-request-activity-log-entry', ResearchContentAccessRequestActivityLogEntry);
-Vue.component('approved-research-content-access-request-activity-log-entry', ApprovedResearchContentAccessRequestActivityLogEntry);
-Vue.component('rejected-research-content-access-request-activity-log-entry', RejectedResearchContentAccessRequestActivityLogEntry);
+Vue.component('research-content-access-request-approved-activity-log-entry', ResearchContentAccessRequestApprovedActivityLogEntry);
+Vue.component('research-content-access-request-rejected-activity-log-entry', ResearchContentAccessRequestRejectedActivityLogEntry);

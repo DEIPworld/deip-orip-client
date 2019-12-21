@@ -6,7 +6,7 @@
           <span class="primary--text half-bold">{{ proposalCreator | fullname }}</span> uploaded new "<span class="primary--text half-bold">{{notification.metadata.researchContent.title}}</span>" material in "<span class="primary--text half-bold">{{notification.metadata.research.title}}</span>" research
         </span>
         <span v-else-if="isAcceptedByQuorum">
-          <span class="primary--text half-bold">{{notification.metadata.researchGroup.name}}</span> accepted new "<span class="primary--text half-bold">{{notification.metadata.researchContent.title}}</span>" material in "<span class="primary--text half-bold">{{notification.metadata.research.title}}</span>" research
+          "<span class="primary--text half-bold">{{notification.metadata.researchGroup.name}}</span>" accepted new "<span class="primary--text half-bold">{{notification.metadata.researchContent.title}}</span>" material in "<span class="primary--text half-bold">{{notification.metadata.research.title}}</span>" research
         </span>
         <span v-else>
           <span class="primary--text half-bold">{{ proposalCreator | fullname }}</span> proposed to upload "<span class="primary--text half-bold">{{notification.metadata.proposal.data.title}}</span>" material for "<span class="primary--text half-bold">{{notification.metadata.research.title}}</span>" research in "<span class="primary--text half-bold">{{notification.metadata.researchGroup.name}}</span>"

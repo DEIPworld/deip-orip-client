@@ -14,18 +14,54 @@
             <v-card>
               <v-card-text>
                 <div class="py-2" v-for="(log, j) in item.entries" :key="`activity-log-${i}-${j}`">
-                  <research-proposal-activity-log-entry v-if="(log.type == 'new-proposal' || log.type == 'accepted-proposal') && log.metadata.proposal.action == START_RESEARCH" :log="log"></research-proposal-activity-log-entry>
-                  <research-content-proposal-activity-log-entry v-else-if="(log.type == 'new-proposal' || log.type == 'accepted-proposal') && log.metadata.proposal.action == CREATE_RESEARCH_MATERIAL" :log="log"></research-content-proposal-activity-log-entry>
-                  <invite-proposal-activity-log-entry v-else-if="(log.type == 'new-proposal' || log.type == 'accepted-proposal') && log.metadata.proposal.action == INVITE_MEMBER" :log="log"></invite-proposal-activity-log-entry>
-                  <token-sale-proposal-activity-log-entry v-else-if="(log.type == 'new-proposal' || log.type == 'accepted-proposal') && log.metadata.proposal.action == START_RESEARCH_TOKEN_SALE" :log="log"></token-sale-proposal-activity-log-entry>
-                  <vote-proposal-activity-log-entry v-else-if="log.type == 'proposal-vote'" :log="log"></vote-proposal-activity-log-entry>
-                  <approved-invitation-activity-log-entry v-else-if="log.type == 'approved-invitation'" :log="log"></approved-invitation-activity-log-entry>
-                  <rejected-invitation-activity-log-entry v-else-if="log.type == 'rejected-invitation'" :log="log"></rejected-invitation-activity-log-entry>
-                  <research-content-expert-review-activity-log-entry v-else-if="log.type == 'research-content-expert-review'" :log="log"></research-content-expert-review-activity-log-entry>
-                  <research-content-expert-review-request-activity-log-entry v-else-if="log.type == 'research-content-expert-review-request'" :log="log"></research-content-expert-review-request-activity-log-entry>
-                  <research-content-access-request-activity-log-entry v-else-if="log.type == 'research-content-access-request'" :log="log"></research-content-access-request-activity-log-entry>
-                  <approved-research-content-access-request-activity-log-entry v-else-if="log.type == 'approved-research-content-access-request'" :log="log"></approved-research-content-access-request-activity-log-entry>
-                  <rejected-research-content-access-request-activity-log-entry v-else-if="log.type == 'rejected-research-content-access-request'" :log="log"></rejected-research-content-access-request-activity-log-entry>
+                  <research-proposal-activity-log-entry 
+                    v-if="(log.type == 'proposal' || log.type == 'proposal-accepted') && log.metadata.proposal.action == START_RESEARCH" 
+                    :log="log">
+                  </research-proposal-activity-log-entry>
+                  <research-content-proposal-activity-log-entry 
+                    v-else-if="(log.type == 'proposal' || log.type == 'proposal-accepted') && log.metadata.proposal.action == CREATE_RESEARCH_MATERIAL" 
+                    :log="log">
+                  </research-content-proposal-activity-log-entry>
+                  <invite-proposal-activity-log-entry 
+                    v-else-if="(log.type == 'proposal' || log.type == 'proposal-accepted') && log.metadata.proposal.action == INVITE_MEMBER" 
+                    :log="log">
+                  </invite-proposal-activity-log-entry>
+                  <token-sale-proposal-activity-log-entry 
+                    v-else-if="(log.type == 'proposal' || log.type == 'proposal-accepted') && log.metadata.proposal.action == START_RESEARCH_TOKEN_SALE" 
+                    :log="log">
+                  </token-sale-proposal-activity-log-entry>
+                  <proposal-vote-activity-log-entry
+                    v-else-if="log.type == 'proposal-vote'" 
+                    :log="log">
+                  </proposal-vote-activity-log-entry>
+                  <invitation-approved-activity-log-entry 
+                    v-else-if="log.type == 'invitation-approved'" 
+                    :log="log">
+                  </invitation-approved-activity-log-entry>
+                  <invitation-rejected-activity-log-entry 
+                    v-else-if="log.type == 'invitation-rejected'" 
+                    :log="log">
+                  </invitation-rejected-activity-log-entry>
+                  <research-content-expert-review-activity-log-entry 
+                    v-else-if="log.type == 'research-content-expert-review'" 
+                    :log="log">
+                  </research-content-expert-review-activity-log-entry>
+                  <research-content-expert-review-request-activity-log-entry 
+                    v-else-if="log.type == 'research-content-expert-review-request'" 
+                    :log="log">
+                  </research-content-expert-review-request-activity-log-entry>
+                  <research-content-access-request-activity-log-entry 
+                    v-else-if="log.type == 'research-content-access-request'" 
+                    :log="log">
+                  </research-content-access-request-activity-log-entry>
+                  <research-content-access-request-approved-activity-log-entry 
+                    v-else-if="log.type == 'research-content-access-request-approved'" 
+                    :log="log">
+                  </research-content-access-request-approved-activity-log-entry>
+                  <research-content-access-request-rejected-activity-log-entry 
+                    v-else-if="log.type == 'research-content-access-request-rejected'" 
+                    :log="log">
+                  </research-content-access-request-rejected-activity-log-entry>
                 </div>
               </v-card-text>
             </v-card>

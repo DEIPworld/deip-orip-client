@@ -6,7 +6,7 @@
           <span class="primary--text half-bold">{{ proposalCreator | fullname }}</span> scheduled fundraising campaign for "<span class="primary--text half-bold">{{notification.metadata.research.title}}</span>" research
         </span>
         <span v-else-if="isAcceptedByQuorum">
-          <span class="primary--text half-bold">{{notification.metadata.researchGroup.name}}</span> scheduled fundraising campaign for "<span class="primary--text half-bold">{{notification.metadata.research.title}}</span>" research
+          "<span class="primary--text half-bold">{{notification.metadata.researchGroup.name}}</span>" scheduled fundraising campaign for "<span class="primary--text half-bold">{{notification.metadata.research.title}}</span>" research
         </span>
         <span v-else>
           <span class="primary--text half-bold">{{ proposalCreator | fullname }}</span> proposed to schedule fundraising campaign for "<span class="primary--text half-bold">{{notification.metadata.research.title}}</span>" research in "<span class="primary--text half-bold">{{notification.metadata.researchGroup.name}}</span>"

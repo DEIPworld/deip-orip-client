@@ -9,22 +9,22 @@
     <div v-show="notifications.length">
       <div v-for="(notification, i) in notifications" :key="'user-notification-' + i">
         <research-proposal-user-notification 
-          v-if="(notification.type === 'new-proposal' || notification.type === 'accepted-proposal') && notification.metadata.proposal.action === START_RESEARCH" 
+          v-if="(notification.type === 'proposal' || notification.type === 'proposal-accepted') && notification.metadata.proposal.action === START_RESEARCH" 
           :notification="notification" 
           @markAsRead="readNotification">
         </research-proposal-user-notification>
         <research-content-proposal-user-notification
-          v-else-if="(notification.type === 'new-proposal' || notification.type === 'accepted-proposal') && notification.metadata.proposal.action === CREATE_RESEARCH_MATERIAL"
+          v-else-if="(notification.type === 'proposal' || notification.type === 'proposal-accepted') && notification.metadata.proposal.action === CREATE_RESEARCH_MATERIAL"
           :notification="notification"
           @markAsRead="readNotification">
         </research-content-proposal-user-notification>
         <token-sale-proposal-user-notification
-          v-else-if="(notification.type === 'new-proposal' || notification.type === 'accepted-proposal') && notification.metadata.proposal.action === START_RESEARCH_TOKEN_SALE"
+          v-else-if="(notification.type === 'proposal' || notification.type === 'proposal-accepted') && notification.metadata.proposal.action === START_RESEARCH_TOKEN_SALE"
           :notification="notification"
           @markAsRead="readNotification">
         </token-sale-proposal-user-notification>
         <invite-proposal-user-notification 
-          v-else-if="(notification.type === 'new-proposal' || notification.type === 'accepted-proposal')&& notification.metadata.proposal.action === INVITE_MEMBER"
+          v-else-if="(notification.type === 'proposal' || notification.type === 'proposal-accepted')&& notification.metadata.proposal.action === INVITE_MEMBER"
           :notification="notification"
           @markAsRead="readNotification">
         </invite-proposal-user-notification>
@@ -33,16 +33,16 @@
           :notification="notification"
           @markAsRead="readNotification">
         </invitation-user-notification>
-        <approved-invitation-user-notification 
-          v-else-if="notification.type === 'approved-invitation'"
+        <invitation-approved-user-notification
+          v-else-if="notification.type === 'invitation-approved'"
           :notification="notification"
           @markAsRead="readNotification">
-        </approved-invitation-user-notification >
-        <rejected-invitation-user-notification 
-          v-else-if="notification.type === 'rejected-invitation'"
+        </invitation-approved-user-notification>
+        <invitation-rejected-user-notification
+          v-else-if="notification.type === 'invitation-rejected'"
           :notification="notification"
           @markAsRead="readNotification">
-        </rejected-invitation-user-notification>
+        </invitation-rejected-user-notification>
         <expert-review-user-notification
           v-else-if="notification.type === 'research-content-expert-review'"
           :notification="notification"
@@ -53,6 +53,21 @@
           :notification="notification"
           @markAsRead="readNotification">
         </expert-review-request-user-notification>
+        <research-content-access-request-user-notification
+          v-else-if="notification.type === 'research-content-access-request'"
+          :notification="notification"
+          @markAsRead="readNotification"
+        ></research-content-access-request-user-notification>
+        <research-content-access-request-approved-user-notification 
+          v-else-if="notification.type === 'research-content-access-request-approved'"
+          :notification="notification"
+          @markAsRead="readNotification">
+        </research-content-access-request-approved-user-notification>
+        <research-content-access-request-rejected-user-notification 
+          v-else-if="notification.type === 'research-content-access-request-rejected'"
+          :notification="notification"
+          @markAsRead="readNotification">
+        </research-content-access-request-rejected-user-notification>
       </div>
     </div>
   </v-menu>

@@ -2,22 +2,22 @@
   <v-layout align-baseline align-center>
     <v-flex xs2>
       <div>
-        <v-chip class="log-label-chip" small color="green" text-color="white">
-          <div class="log-label-chip-text">{{ log.metadata.role == 'pi' ? 'Access Approved': 'Access Granted' }}</div>
+        <v-chip class="log-label-chip" small color="pink" text-color="white">
+          <div class="log-label-chip-text">Access Denied</div>
         </v-chip>
       </div>
     </v-flex>
     <v-flex xs8>
       <div class="align-baseline px-3">
         <platform-avatar 
-          :user="{ profile: log.metadata.approverProfile, account: { name: log.metadata.approverProfile._id} }"
+          :user="{ profile: log.metadata.rejectorProfile, account: { name: log.metadata.rejectorProfile._id} }"
           :size="20"
           link-to-profile
           link-to-profile-class="px-1"
         ><span class="grey--text uppercase half-bold">({{log.metadata.role}})</span>
         </platform-avatar>
         <span>
-          {{ log.metadata.role == 'pi' ? 'approved access request' : 'granted access' }} to "<router-link class="a"
+          rejected access request to "<router-link class="a"
             :to="{
               name: 'ResearchContentDetails',
               params: {
@@ -56,7 +56,7 @@
 import { mapGetters } from 'vuex';
 
 export default {
-  name: "ApprovedResearchContentAccessRequestActivityLogEntry",
+  name: "ResearchContentAccessRequestRejectedActivityLogEntry",
   props: {
     log: { type: Object, required: true }
   },

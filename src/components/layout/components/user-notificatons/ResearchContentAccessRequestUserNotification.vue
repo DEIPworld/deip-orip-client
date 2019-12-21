@@ -2,7 +2,7 @@
   <v-card class="pa-3 clickable user-notification" @click="clickNotification(notification)">
     <v-layout column align-space-between>
       <div>
-        <span class="primary--text half-bold">{{ inviteeProfile | fullname }}</span> declined invitation to "<span class="primary--text half-bold">{{notification.metadata.researchGroup.name}}</span>"
+        <span class="primary--text half-bold">{{ requestorProfile | fullname }}</span> requested access for "<span class="primary--text half-bold">{{notification.metadata.researchContent.title}}</span>" material
       </div>
       <v-layout row justify-space-between align-end >
         <div class="grey--text caption pt-2">
@@ -19,19 +19,27 @@
 <script>
 
 export default {
-  name: "RejectedInvitationUserNotification",
+  name: "ResearchContentAccessRequestUserNotification",
   props: {
     notification: { type: Object, required: true }
   },
   computed: {
-    inviteeProfile() {
+    requestorProfile() {
       return {
-        profile: this.notification.metadata.inviteeProfile, 
+        profile: this.notification.metadata.requestorProfile, 
         account: { 
-          name: this.notification.metadata.inviteeProfile._id
+          name: this.notification.metadata.requestorProfile._id
         }
       };
-    }
+    },
+    // pmProfile() {
+    //   return {
+    //     profile: this.notification.metadata.pmProfile, 
+    //     account: { 
+    //       name: this.notification.metadata.pmProfile._id
+    //     }
+    //   };
+    // }
   },
   data() {
     return {
@@ -41,10 +49,8 @@ export default {
   methods: {
     clickNotification() {
       this.$router.push({
-        name: 'UserDetails', 
-        params: { 
-          account_name: encodeURIComponent(this.notification.metadata.inviteeProfile._id)
-        }
+        name: 'Dashboard',
+        hash: '#access-requests'
       });
       // this.markAsRead();
     },

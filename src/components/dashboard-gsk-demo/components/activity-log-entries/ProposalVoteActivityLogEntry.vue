@@ -65,7 +65,7 @@
 import { mapGetters } from 'vuex';
 
 export default {
-  name: "VoteProposalActivityLogEntry",
+  name: "ProposalVoteActivityLogEntry",
   props: {
     log: { type: Object, required: true }
   },

@@ -2,7 +2,7 @@
   <v-card class="pa-3 clickable user-notification" @click="clickNotification(notification)">
     <v-layout column align-space-between>
       <div>
-        <span class="primary--text half-bold">{{ requestorProfile | fullname }}</span> requested a review from you for "<span class="primary--text half-bold">{{notification.metadata.researchContent.title}}</span>" material
+        <span class="primary--text half-bold">{{ inviteeProfile | fullname }}</span> declined invitation to "<span class="primary--text half-bold">{{notification.metadata.researchGroup.name}}</span>"
       </div>
       <v-layout row justify-space-between align-end >
         <div class="grey--text caption pt-2">
@@ -19,24 +19,16 @@
 <script>
 
 export default {
-  name: "ExpertReviewRequestUserNotification",
+  name: "InvitationRejectedUserNotification",
   props: {
     notification: { type: Object, required: true }
   },
   computed: {
-    expertProfile() {
+    inviteeProfile() {
       return {
-        profile: this.notification.metadata.expertProfile, 
+        profile: this.notification.metadata.inviteeProfile, 
         account: { 
-          name: this.notification.metadata.expertProfile._id
-        }
-      };
-    },
-    requestorProfile() {
-      return {
-        profile: this.notification.metadata.requestorProfile, 
-        account: { 
-          name: this.notification.metadata.requestorProfile._id
+          name: this.notification.metadata.inviteeProfile._id
         }
       };
     }
@@ -49,14 +41,11 @@ export default {
   methods: {
     clickNotification() {
       this.$router.push({
-        name: 'ResearchContentDetails', 
-        params: {
-          research_group_permlink: encodeURIComponent(this.notification.metadata.researchGroup.permlink),
-          research_permlink: encodeURIComponent(this.notification.metadata.research.permlink),
-          content_permlink: encodeURIComponent(this.notification.metadata.researchContent.permlink) 
+        name: 'UserDetails', 
+        params: { 
+          account_name: encodeURIComponent(this.notification.metadata.inviteeProfile._id)
         }
       });
-
       // this.markAsRead();
     },
 

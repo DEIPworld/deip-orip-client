@@ -14,10 +14,13 @@ import ResearchContentProposalUserNotification from './components/user-notificat
 import TokenSaleProposalUserNotification from './components/user-notificatons/TokenSaleProposalUserNotification';
 import InviteProposalUserNotification from './components/user-notificatons/InviteProposalUserNotification';
 import InvitationUserNotification from './components/user-notificatons/InvitationUserNotification';
-import ApprovedInvitationUserNotification from './components/user-notificatons/ApprovedInvitationUserNotification';
-import RejectedInvitationUserNotification from './components/user-notificatons/RejectedInvitationUserNotification';
+import InvitationApprovedUserNotification from './components/user-notificatons/InvitationApprovedUserNotification';
+import InvitationRejectedUserNotification from './components/user-notificatons/InvitationRejectedUserNotification';
 import ExpertReviewUserNotification from './components/user-notificatons/ExpertReviewUserNotification';
-import ExpertReviewRequestUserNotification from './components/user-notificatons/ExpertReviewRequestUserNotification'
+import ExpertReviewRequestUserNotification from './components/user-notificatons/ExpertReviewRequestUserNotification';
+import ResearchContentAccessRequestUserNotification from './components/user-notificatons/ResearchContentAccessRequestUserNotification';
+import ResearchContentAccessRequestApprovedUserNotification from './components/user-notificatons/ResearchContentAccessRequestApprovedUserNotification';
+import ResearchContentAccessRequestRejectedUserNotification from './components/user-notificatons/ResearchContentAccessRequestRejectedUserNotification';
 
 
 Vue.component('toolbar', Toolbar);
@@ -34,7 +37,10 @@ Vue.component('research-content-proposal-user-notification', ResearchContentProp
 Vue.component('token-sale-proposal-user-notification', TokenSaleProposalUserNotification);
 Vue.component('invite-proposal-user-notification', InviteProposalUserNotification);
 Vue.component('invitation-user-notification', InvitationUserNotification);
-Vue.component('approved-invitation-user-notification', ApprovedInvitationUserNotification);
-Vue.component('rejected-invitation-user-notification', RejectedInvitationUserNotification);
+Vue.component('invitation-approved-user-notification', InvitationApprovedUserNotification);
+Vue.component('invitation-rejected-user-notification', InvitationRejectedUserNotification);
 Vue.component('expert-review-user-notification', ExpertReviewUserNotification);
 Vue.component('expert-review-request-user-notification', ExpertReviewRequestUserNotification);
+Vue.component('research-content-access-request-user-notification', ResearchContentAccessRequestUserNotification);
+Vue.component('research-content-access-request-approved-user-notification', ResearchContentAccessRequestApprovedUserNotification);
+Vue.component('research-content-access-request-rejected-user-notification', ResearchContentAccessRequestRejectedUserNotification);

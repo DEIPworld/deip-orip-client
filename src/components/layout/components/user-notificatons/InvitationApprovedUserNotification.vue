@@ -19,7 +19,7 @@
 <script>
 
 export default {
-  name: "ApprovedInvitationUserNotification",
+  name: "InvitationApprovedUserNotification",
   props: {
     notification: { type: Object, required: true }
   },

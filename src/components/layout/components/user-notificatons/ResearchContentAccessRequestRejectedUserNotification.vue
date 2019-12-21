@@ -2,7 +2,7 @@
   <v-card class="pa-3 clickable user-notification" @click="clickNotification(notification)">
     <v-layout column align-space-between>
       <div>
-        <span class="primary--text half-bold">{{ requestorProfile | fullname }}</span> requested a review from you for "<span class="primary--text half-bold">{{notification.metadata.researchContent.title}}</span>" material
+        <span class="primary--text half-bold">{{ rejectorProfile | fullname }}</span> <span class="primary--text half-bold uppercase">({{rejectorRole}})</span> rejected access request to "<span class="primary--text half-bold">{{notification.metadata.researchContent.title}}</span>" material for <span class="primary--text half-bold">{{ requestorProfile | fullname }}</span>
       </div>
       <v-layout row justify-space-between align-end >
         <div class="grey--text caption pt-2">
@@ -19,26 +19,29 @@
 <script>
 
 export default {
-  name: "ExpertReviewRequestUserNotification",
+  name: "ResearchContentAccessRequestRejectedUserNotification",
   props: {
     notification: { type: Object, required: true }
   },
   computed: {
-    expertProfile() {
+    rejectorProfile() {
       return {
-        profile: this.notification.metadata.expertProfile, 
+        profile: this.notification.metadata.rejectorProfile, 
         account: { 
-          name: this.notification.metadata.expertProfile._id
+          name: this.notification.metadata.rejectorProfile._id
         }
       };
     },
     requestorProfile() {
       return {
-        profile: this.notification.metadata.requestorProfile, 
+        profile: this.notification.metadata.researchContentAccessRequest.metadata.userProfile, 
         account: { 
-          name: this.notification.metadata.requestorProfile._id
+          name: this.notification.metadata.researchContentAccessRequest.metadata.userProfile._id
         }
       };
+    },
+    rejectorRole() {
+      return this.notification.metadata.role;
     }
   },
   data() {
@@ -49,14 +52,12 @@ export default {
   methods: {
     clickNotification() {
       this.$router.push({
-        name: 'ResearchContentDetails', 
+        name: 'ResearchDetails', 
         params: {
           research_group_permlink: encodeURIComponent(this.notification.metadata.researchGroup.permlink),
-          research_permlink: encodeURIComponent(this.notification.metadata.research.permlink),
-          content_permlink: encodeURIComponent(this.notification.metadata.researchContent.permlink) 
+          research_permlink: encodeURIComponent(this.notification.metadata.research.permlink)
         }
       });
-
       // this.markAsRead();
     },
 

@@ -16,7 +16,7 @@
           link-to-profile-class="px-1"
         ></platform-avatar>
         <span>
-          rejected invitation to the "<router-link class="a"
+          accepted invitation and now is a member of the "<router-link class="a"
             :to="{
               name: 'ResearchGroupDetails',
               params: {
@@ -39,7 +39,7 @@
 import { mapGetters } from 'vuex';
 
 export default {
-  name: "RejectedInvitationActivityLogEntry",
+  name: "InvitationApprovedActivityLogEntry",
   props: {
     log: { type: Object, required: true }
   },
@@ -57,7 +57,6 @@ export default {
 </script>
 
 <style lang="less" scoped>
-
 @import "./../../../../styles/colors.less";
 
 </style>
