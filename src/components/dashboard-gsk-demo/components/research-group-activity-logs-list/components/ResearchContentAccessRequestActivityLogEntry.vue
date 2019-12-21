@@ -3,21 +3,20 @@
     <v-flex xs2>
       <div>
         <v-chip class="log-label-chip" small color="green" text-color="white">
-          <div class="log-label-chip-text">{{ log.metadata.role == 'pi' ? 'Access Approved': 'Access Granted' }}</div>
+          <div class="log-label-chip-text">Access Request</div>
         </v-chip>
       </div>
     </v-flex>
     <v-flex xs8>
       <div class="align-baseline px-3">
         <platform-avatar 
-          :user="{ profile: log.metadata.approverProfile, account: { name: log.metadata.approverProfile._id} }"
+          :user="{ profile: log.metadata.requestorProfile, account: { name: log.metadata.requestorProfile._id} }"
           :size="20"
           link-to-profile
           link-to-profile-class="px-1"
-        ><span class="grey--text uppercase half-bold">({{log.metadata.role}})</span>
-        </platform-avatar>
+        ></platform-avatar>
         <span>
-          {{ log.metadata.isAccessGranted ? 'granted access' : 'approved access request' }} to "<router-link class="a"
+          requested access to "<router-link class="a"
             :to="{
               name: 'ResearchContentDetails',
               params: {
@@ -34,13 +33,7 @@
                   research_permlink: encodeURIComponent(log.metadata.research.permlink)
                 }
               }"
-          >{{ log.metadata.research.title }}</router-link>" research for
-          <platform-avatar 
-            :user="{ profile: log.metadata.researchContentAccessRequest.metadata.userProfile, account: { name: log.metadata.researchContentAccessRequest.metadata.userProfile._id} }"
-            :size="20"
-            link-to-profile
-            link-to-profile-class="px-1"
-          ><span class="half-bold primary--text">({{log.metadata.researchContentAccessRequest.metadata.userAgency.name}})</span></platform-avatar>
+            >{{ log.metadata.research.title }}</router-link>" research 
         </span>
       </div>
     </v-flex>
@@ -56,12 +49,11 @@
 import { mapGetters } from 'vuex';
 
 export default {
-  name: "ResearchContentAccessRequestApprovedActivityLogEntry",
+  name: "ResearchContentAccessRequestActivityLogEntry",
   props: {
     log: { type: Object, required: true }
   },
   computed: {
-
   },
   data() {
     return {
@@ -75,6 +67,5 @@ export default {
 </script>
 
 <style lang="less" scoped>
-@import "./../../../../styles/colors.less";
 
 </style>

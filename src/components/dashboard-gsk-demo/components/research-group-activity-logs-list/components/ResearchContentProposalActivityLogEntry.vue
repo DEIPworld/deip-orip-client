@@ -2,8 +2,8 @@
   <v-layout align-baseline align-center>
     <v-flex xs2>
       <div>
-        <v-chip class="log-label-chip" small color="#3f51b5" text-color="white">
-          <div class="log-label-chip-text">New Research</div>
+        <v-chip class="log-label-chip" small color="blue" text-color="white">
+          <div class="log-label-chip-text">New Material</div>
         </v-chip>
       </div>
     </v-flex>
@@ -13,15 +13,26 @@
           <span>
             New "<router-link class="a"
               :to="{
+                name: 'ResearchContentDetails',
+                params: {
+                  research_group_permlink: encodeURIComponent(log.metadata.researchGroup.permlink),
+                  research_permlink: encodeURIComponent(log.metadata.research.permlink),
+                  content_permlink: encodeURIComponent(log.metadata.researchContent.permlink)
+                }
+              }"
+            >{{ log.metadata.researchContent.title }}</router-link>"
+            material was accepted for the "<router-link class="a"
+              :to="{
                 name: 'ResearchDetails',
                 params: {
                   research_group_permlink: encodeURIComponent(log.metadata.researchGroup.permlink),
                   research_permlink: encodeURIComponent(log.metadata.research.permlink)
                 }
               }"
-            >{{ log.metadata.research.title }}</router-link>" research was accepted by quorum
+            >{{ log.metadata.research.title }}</router-link>" research by quorum
           </span>
         </span>
+        
         <span v-else>
           <platform-avatar
             :user="{ profile: log.metadata.creatorProfile, account: { name: log.metadata.creatorProfile._id} }"
@@ -30,7 +41,17 @@
             link-to-profile-class="px-1"
           ></platform-avatar>
           <span v-if="isAutoAccepted">
-            started "<router-link class="a"
+            uploaded new "<router-link class="a"
+              :to="{
+                name: 'ResearchContentDetails',
+                params: {
+                  research_group_permlink: encodeURIComponent(log.metadata.researchGroup.permlink),
+                  research_permlink: encodeURIComponent(log.metadata.research.permlink),
+                  content_permlink: encodeURIComponent(log.metadata.researchContent.permlink)
+                }
+              }"
+            >{{ log.metadata.researchContent.title }}</router-link>"
+            material for the "<router-link class="a"
               :to="{
                 name: 'ResearchDetails',
                 params: {
@@ -41,7 +62,15 @@
             >{{ log.metadata.research.title }}</router-link>" research
           </span>
           <span v-else>
-            proposed to start "<span class="body-2">{{log.metadata.proposal.data.title}}</span>" research
+            proposed a new "<span class="body-2">{{log.metadata.proposal.data.title}}</span>" material for the "<router-link class="a"
+              :to="{
+                name: 'ResearchDetails',
+                params: {
+                  research_group_permlink: encodeURIComponent(log.metadata.researchGroup.permlink),
+                  research_permlink: encodeURIComponent(log.metadata.research.permlink)
+                }
+              }"
+            >{{ log.metadata.research.title }}</router-link>" research
           </span>
         </span>
       </div>
@@ -58,9 +87,9 @@
 import { mapGetters } from 'vuex';
 
 export default {
-  name: "ResearchProposalActivityLogEntry",
+  name: "ResearchContentProposalActivityLogEntry",
   props: {
-    log: { type: Object, required: true }
+    log: { type: Object, required: true },
   },
   computed: {
     isAcceptedByQuorum() {
@@ -82,7 +111,5 @@ export default {
 </script>
 
 <style lang="less" scoped>
-
-@import "./../../../../styles/colors.less";
 
 </style>

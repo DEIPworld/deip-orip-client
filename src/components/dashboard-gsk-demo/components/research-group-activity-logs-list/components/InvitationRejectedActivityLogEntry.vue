@@ -2,30 +2,28 @@
   <v-layout align-baseline align-center>
     <v-flex xs2>
       <div>
-        <v-chip class="log-label-chip" small color="#7d4d86" text-color="white">
-          <div class="log-label-chip-text">Review</div>
+        <v-chip class="log-label-chip" small color="orange" text-color="white">
+          <div class="log-label-chip-text">Invite</div>
         </v-chip>
       </div>
     </v-flex>
     <v-flex xs8>
       <div class="align-baseline px-3">
         <platform-avatar 
-          :user="{ profile: log.metadata.reviewerProfile, account: { name: log.metadata.reviewerProfile._id} }"
+          :user="{ profile: log.metadata.inviteeProfile, account: { name: log.metadata.inviteeProfile._id} }"
           :size="20"
           link-to-profile
           link-to-profile-class="px-1"
         ></platform-avatar>
         <span>
-          left a review for the "<router-link class="a"
+          rejected invitation to the "<router-link class="a"
             :to="{
-              name: 'ResearchContentDetails',
+              name: 'ResearchGroupDetails',
               params: {
                 research_group_permlink: encodeURIComponent(log.metadata.researchGroup.permlink),
-                research_permlink: encodeURIComponent(log.metadata.research.permlink),
-                content_permlink: encodeURIComponent(log.metadata.researchContent.permlink)
               }
             }"
-          >{{ log.metadata.researchContent.title }}</router-link>" material
+          >{{ log.metadata.researchGroup.name }}</router-link>"
         </span>
       </div>
     </v-flex>
@@ -41,12 +39,11 @@
 import { mapGetters } from 'vuex';
 
 export default {
-  name: "ResearchContentExpertReviewActivityLogEntry",
+  name: "InvitationRejectedActivityLogEntry",
   props: {
     log: { type: Object, required: true }
   },
   computed: {
-
   },
   data() {
     return {
@@ -60,7 +57,5 @@ export default {
 </script>
 
 <style lang="less" scoped>
-
-@import "./../../../../styles/colors.less";
 
 </style>

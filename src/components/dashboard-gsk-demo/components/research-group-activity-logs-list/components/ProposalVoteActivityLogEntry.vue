@@ -84,6 +84,4 @@ export default {
 
 <style lang="less" scoped>
 
-@import "./../../../../styles/colors.less";
-
 </style>

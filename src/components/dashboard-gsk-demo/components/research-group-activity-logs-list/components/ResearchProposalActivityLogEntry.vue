@@ -2,33 +2,35 @@
   <v-layout align-baseline align-center>
     <v-flex xs2>
       <div>
-        <v-chip class="log-label-chip" small color="#76de96" text-color="white">
-          <div class="log-label-chip-text">Fundraising</div>
+        <v-chip class="log-label-chip" small color="#3f51b5" text-color="white">
+          <div class="log-label-chip-text">New Research</div>
         </v-chip>
       </div>
     </v-flex>
     <v-flex xs8>
       <div class="align-baseline px-3">
         <span v-if="isAcceptedByQuorum">
-          Fundraising campaign for the "<router-link class="a"
-            :to="{
-              name: 'ResearchDetails',
-              params: {
-                research_group_permlink: encodeURIComponent(log.metadata.researchGroup.permlink),
-                research_permlink: encodeURIComponent(log.metadata.research.permlink)
-              }
-            }"
-          >{{ log.metadata.research.title }}</router-link>" research was accepted by quorum
+          <span>
+            New "<router-link class="a"
+              :to="{
+                name: 'ResearchDetails',
+                params: {
+                  research_group_permlink: encodeURIComponent(log.metadata.researchGroup.permlink),
+                  research_permlink: encodeURIComponent(log.metadata.research.permlink)
+                }
+              }"
+            >{{ log.metadata.research.title }}</router-link>" research was accepted by quorum
+          </span>
         </span>
         <span v-else>
-          <platform-avatar 
+          <platform-avatar
             :user="{ profile: log.metadata.creatorProfile, account: { name: log.metadata.creatorProfile._id} }"
             :size="20"
             link-to-profile
             link-to-profile-class="px-1"
           ></platform-avatar>
           <span v-if="isAutoAccepted">
-            scheduled fundraising campaign for the "<router-link class="a"
+            started "<router-link class="a"
               :to="{
                 name: 'ResearchDetails',
                 params: {
@@ -39,15 +41,7 @@
             >{{ log.metadata.research.title }}</router-link>" research
           </span>
           <span v-else>
-            proposed to schedule fundraising campaign for the "<router-link class="a"
-              :to="{
-                name: 'ResearchDetails',
-                params: {
-                  research_group_permlink: encodeURIComponent(log.metadata.researchGroup.permlink),
-                  research_permlink: encodeURIComponent(log.metadata.research.permlink)
-                }
-              }"
-            >{{ log.metadata.research.title }}</router-link>" research
+            proposed to start "<span class="body-2">{{log.metadata.proposal.data.title}}</span>" research
           </span>
         </span>
       </div>
@@ -64,7 +58,7 @@
 import { mapGetters } from 'vuex';
 
 export default {
-  name: "TokenSaleProposalActivityLogEntry",
+  name: "ResearchProposalActivityLogEntry",
   props: {
     log: { type: Object, required: true }
   },
@@ -88,7 +82,5 @@ export default {
 </script>
 
 <style lang="less" scoped>
-
-@import "./../../../../styles/colors.less";
 
 </style>

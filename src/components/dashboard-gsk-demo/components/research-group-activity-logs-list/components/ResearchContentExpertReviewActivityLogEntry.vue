@@ -2,21 +2,21 @@
   <v-layout align-baseline align-center>
     <v-flex xs2>
       <div>
-        <v-chip class="log-label-chip" small color="cyan" text-color="white">
-          <div class="log-label-chip-text">Review Request</div>
+        <v-chip class="log-label-chip" small color="#7d4d86" text-color="white">
+          <div class="log-label-chip-text">Review</div>
         </v-chip>
       </div>
     </v-flex>
     <v-flex xs8>
       <div class="align-baseline px-3">
         <platform-avatar 
-          :user="{ profile: log.metadata.requestorProfile, account: { name: log.metadata.requestorProfile._id} }"
+          :user="{ profile: log.metadata.reviewerProfile, account: { name: log.metadata.reviewerProfile._id} }"
           :size="20"
           link-to-profile
           link-to-profile-class="px-1"
         ></platform-avatar>
         <span>
-          requested an expert review for the "<router-link class="a"
+          left a review for the "<router-link class="a"
             :to="{
               name: 'ResearchContentDetails',
               params: {
@@ -25,12 +25,7 @@
                 content_permlink: encodeURIComponent(log.metadata.researchContent.permlink)
               }
             }"
-          >{{ log.metadata.researchContent.title }}</router-link>" material from <platform-avatar 
-            :user="{ profile: log.metadata.expertProfile, account: { name: log.metadata.expertProfile._id} }"
-            :size="20"
-            link-to-profile
-            link-to-profile-class="px-1"
-          ></platform-avatar> 
+          >{{ log.metadata.researchContent.title }}</router-link>" material
         </span>
       </div>
     </v-flex>
@@ -46,7 +41,7 @@
 import { mapGetters } from 'vuex';
 
 export default {
-  name: "ResearchContentExpertReviewRequestActivityLogEntry",
+  name: "ResearchContentExpertReviewActivityLogEntry",
   props: {
     log: { type: Object, required: true }
   },
@@ -65,7 +60,5 @@ export default {
 </script>
 
 <style lang="less" scoped>
-
-@import "./../../../../styles/colors.less";
 
 </style>

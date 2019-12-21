@@ -2,21 +2,22 @@
   <v-layout align-baseline align-center>
     <v-flex xs2>
       <div>
-        <v-chip class="log-label-chip" small color="green" text-color="white">
-          <div class="log-label-chip-text">Access Request</div>
+        <v-chip class="log-label-chip" small color="pink" text-color="white">
+          <div class="log-label-chip-text">Access Denied</div>
         </v-chip>
       </div>
     </v-flex>
     <v-flex xs8>
       <div class="align-baseline px-3">
         <platform-avatar 
-          :user="{ profile: log.metadata.requestorProfile, account: { name: log.metadata.requestorProfile._id} }"
+          :user="{ profile: log.metadata.rejectorProfile, account: { name: log.metadata.rejectorProfile._id} }"
           :size="20"
           link-to-profile
           link-to-profile-class="px-1"
-        ></platform-avatar>
+        ><span class="grey--text uppercase half-bold">({{log.metadata.role}})</span>
+        </platform-avatar>
         <span>
-          requested access to "<router-link class="a"
+          rejected access request to "<router-link class="a"
             :to="{
               name: 'ResearchContentDetails',
               params: {
@@ -33,7 +34,13 @@
                   research_permlink: encodeURIComponent(log.metadata.research.permlink)
                 }
               }"
-            >{{ log.metadata.research.title }}</router-link>" research 
+          >{{ log.metadata.research.title }}</router-link>" research for
+          <platform-avatar 
+            :user="{ profile: log.metadata.researchContentAccessRequest.metadata.userProfile, account: { name: log.metadata.researchContentAccessRequest.metadata.userProfile._id} }"
+            :size="20"
+            link-to-profile
+            link-to-profile-class="px-1"
+          ><span class="half-bold primary--text">({{log.metadata.researchContentAccessRequest.metadata.userAgency.name}})</span></platform-avatar>
         </span>
       </div>
     </v-flex>
@@ -49,11 +56,12 @@
 import { mapGetters } from 'vuex';
 
 export default {
-  name: "ResearchContentAccessRequestActivityLogEntry",
+  name: "ResearchContentAccessRequestRejectedActivityLogEntry",
   props: {
     log: { type: Object, required: true }
   },
   computed: {
+
   },
   data() {
     return {
@@ -67,6 +75,5 @@ export default {
 </script>
 
 <style lang="less" scoped>
-@import "./../../../../styles/colors.less";
 
 </style>

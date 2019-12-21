@@ -2,21 +2,23 @@
   <v-layout align-baseline align-center>
     <v-flex xs2>
       <div>
-        <v-chip class="log-label-chip" small color="orange" text-color="white">
-          <div class="log-label-chip-text">Invite</div>
+        <v-chip class="log-label-chip" small color="#76de96" text-color="white">
+          <div class="log-label-chip-text">Fundraising</div>
         </v-chip>
       </div>
     </v-flex>
     <v-flex xs8>
       <div class="align-baseline px-3">
         <span v-if="isAcceptedByQuorum">
-          Invitation for <platform-avatar 
-            :user="{ profile: log.metadata.inviteeProfile, account: { name: log.metadata.inviteeProfile._id } }"
-            :size="20"
-            link-to-profile
-            link-to-profile-class="px-1"
-          ></platform-avatar>
-          was accepted by quorum and sent to the invitee
+          Fundraising campaign for the "<router-link class="a"
+            :to="{
+              name: 'ResearchDetails',
+              params: {
+                research_group_permlink: encodeURIComponent(log.metadata.researchGroup.permlink),
+                research_permlink: encodeURIComponent(log.metadata.research.permlink)
+              }
+            }"
+          >{{ log.metadata.research.title }}</router-link>" research was accepted by quorum
         </span>
         <span v-else>
           <platform-avatar 
@@ -26,36 +28,26 @@
             link-to-profile-class="px-1"
           ></platform-avatar>
           <span v-if="isAutoAccepted">
-            invited <platform-avatar 
-              :user="{ profile: log.metadata.inviteeProfile, account: { name: log.metadata.inviteeProfile._id } }"
-              :size="20"
-              link-to-profile
-              link-to-profile-class="px-1"
-            ></platform-avatar>
-            to the "<router-link class="a"
+            scheduled fundraising campaign for the "<router-link class="a"
               :to="{
-                name: 'ResearchGroupDetails',
-                params: {
-                  research_group_permlink: encodeURIComponent(log.metadata.researchGroup.permlink)
-                }
-              }"
-            >{{ log.metadata.researchGroup.name }}</router-link>"
-          </span>
-          <span v-else>
-            proposed to invite <platform-avatar 
-              :user="{ profile: log.metadata.inviteeProfile, account: { name: log.metadata.inviteeProfile._id } }"
-              :size="20"
-              link-to-profile
-              link-to-profile-class="px-1"
-            ></platform-avatar>
-            to the "<router-link class="a"
-              :to="{
-                name: 'ResearchGroupDetails',
+                name: 'ResearchDetails',
                 params: {
                   research_group_permlink: encodeURIComponent(log.metadata.researchGroup.permlink),
+                  research_permlink: encodeURIComponent(log.metadata.research.permlink)
                 }
               }"
-            >{{ log.metadata.researchGroup.name }}</router-link>"
+            >{{ log.metadata.research.title }}</router-link>" research
+          </span>
+          <span v-else>
+            proposed to schedule fundraising campaign for the "<router-link class="a"
+              :to="{
+                name: 'ResearchDetails',
+                params: {
+                  research_group_permlink: encodeURIComponent(log.metadata.researchGroup.permlink),
+                  research_permlink: encodeURIComponent(log.metadata.research.permlink)
+                }
+              }"
+            >{{ log.metadata.research.title }}</router-link>" research
           </span>
         </span>
       </div>
@@ -72,7 +64,7 @@
 import { mapGetters } from 'vuex';
 
 export default {
-  name: "InviteProposalActivityLogEntry",
+  name: "TokenSaleProposalActivityLogEntry",
   props: {
     log: { type: Object, required: true }
   },
@@ -96,7 +88,5 @@ export default {
 </script>
 
 <style lang="less" scoped>
-
-@import "./../../../../styles/colors.less";
 
 </style>

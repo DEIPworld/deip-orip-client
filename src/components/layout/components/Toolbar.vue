@@ -20,7 +20,7 @@
         <v-btn :to="{ name: 'Dashboard' }" :color="themeSettings['top-bar-link-color']" flat class="ma-0">Dashboard</v-btn>
         <!-- <v-btn :to="{ name: 'InvestorDashboard' }" :color="themeSettings['top-bar-link-color']" flat class="ma-0">Portfolio</v-btn> -->
         <!-- <v-btn :to="{ name: 'UserWallet', params: { account_name: user.username } }" :color="themeSettings['top-bar-link-color']" flat class="ma-0">Wallet</v-btn> -->
-        <notifications-list :notifications="user.notifications"></notifications-list>
+        <user-notifications-list :notifications="user.notifications"></user-notifications-list>
         <v-menu bottom left offset-y>
           <v-btn fab flat icon class="ma-0" slot="activator">
             <v-avatar size="32px">

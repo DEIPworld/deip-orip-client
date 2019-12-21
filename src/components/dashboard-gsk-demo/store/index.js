@@ -82,9 +82,9 @@ const getters = {
   activityLogsByGroups: (state) => {
     return state.activityLogsByGroups
       .map(item => {
-        let entries = item.entries.map(e => e);
-        entries.sort((a, b) => (a.created_at < b.created_at) ? 1 : ((b.created_at < a.created_at) ? -1 : 0));
-        return { ...item, entries };
+        let logs = item.entries.map(e => e);
+        logs.sort((a, b) => (a.created_at < b.created_at) ? 1 : ((b.created_at < a.created_at) ? -1 : 0));
+        return { ...item, logs };
       });
   },
 
