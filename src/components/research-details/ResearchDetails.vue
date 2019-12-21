@@ -795,7 +795,7 @@
               <div class="bold">{{eci.value}}</div>
             </v-layout>
           </v-layout>
-          <v-layout column class="my-4 mx-4">
+          <!-- <v-layout column class="my-4 mx-4">
             <div class="rd-sidebar-block-title pb-2">Score</div>
             <v-tooltip top>
               <div class="mt-2" slot="activator">{{researchScorePercent}}%</div>
@@ -811,7 +811,7 @@
               color-class="green--text"
               class="mt-3"
             />
-          </v-layout>
+          </v-layout> -->
           <v-divider />
 
           <v-dialog
@@ -904,9 +904,9 @@
           </v-layout>
           <v-divider />
 
-          <div
+          <!-- <div
             class="rd-sidebar-block-title my-4 px-4"
-          >Citations: {{researchReferencesList.length + research.id}}</div>
+          >Citations: {{researchReferencesList.length + research.id}}</div> -->
           <v-layout
             align-center justify-center
             class="my-4 mx-3 pa-3"
