@@ -31,15 +31,7 @@ export default {
           name: this.notification.metadata.requestorProfile._id
         }
       };
-    },
-    // pmProfile() {
-    //   return {
-    //     profile: this.notification.metadata.pmProfile, 
-    //     account: { 
-    //       name: this.notification.metadata.pmProfile._id
-    //     }
-    //   };
-    // }
+    }
   },
   data() {
     return {
@@ -52,7 +44,8 @@ export default {
         name: 'Dashboard',
         hash: '#access-requests'
       });
-      // this.markAsRead();
+      
+      this.markAsRead();
     },
 
     markAsRead($event) {
@@ -60,7 +53,7 @@ export default {
         $event.preventDefault();
         $event.stopPropagation();
       }
-      // this.$emit("markAsRead", { notification: this.notification });
+      this.$emit("markAsRead", this.notification);
     }
   }
 };

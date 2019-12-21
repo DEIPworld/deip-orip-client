@@ -11,62 +11,62 @@
         <research-proposal-user-notification 
           v-if="(notification.type === PROPOSAL || notification.type === PROPOSAL_ACCEPTED) && notification.metadata.proposal.action === START_RESEARCH" 
           :notification="notification" 
-          @markAsRead="readNotification">
+          @markAsRead="markNotificationAsRead">
         </research-proposal-user-notification>
         <research-content-proposal-user-notification
           v-else-if="(notification.type === PROPOSAL || notification.type === PROPOSAL_ACCEPTED) && notification.metadata.proposal.action === CREATE_RESEARCH_MATERIAL"
           :notification="notification"
-          @markAsRead="readNotification">
+          @markAsRead="markNotificationAsRead">
         </research-content-proposal-user-notification>
         <token-sale-proposal-user-notification
           v-else-if="(notification.type === PROPOSAL || notification.type === PROPOSAL_ACCEPTED) && notification.metadata.proposal.action === START_RESEARCH_TOKEN_SALE"
           :notification="notification"
-          @markAsRead="readNotification">
+          @markAsRead="markNotificationAsRead">
         </token-sale-proposal-user-notification>
         <invite-proposal-user-notification 
           v-else-if="(notification.type === PROPOSAL || notification.type === PROPOSAL_ACCEPTED)&& notification.metadata.proposal.action === INVITE_MEMBER"
           :notification="notification"
-          @markAsRead="readNotification">
+          @markAsRead="markNotificationAsRead">
         </invite-proposal-user-notification>
         <invitation-user-notification 
           v-else-if="notification.type === INVITATION"
           :notification="notification"
-          @markAsRead="readNotification">
+          @markAsRead="markNotificationAsRead">
         </invitation-user-notification>
         <invitation-approved-user-notification
           v-else-if="notification.type === INVITATION_APPROVED"
           :notification="notification"
-          @markAsRead="readNotification">
+          @markAsRead="markNotificationAsRead">
         </invitation-approved-user-notification>
         <invitation-rejected-user-notification
           v-else-if="notification.type === INVITATION_REJECTED"
           :notification="notification"
-          @markAsRead="readNotification">
+          @markAsRead="markNotificationAsRead">
         </invitation-rejected-user-notification>
         <expert-review-user-notification
           v-else-if="notification.type === RESEARCH_CONTENT_EXPERT_REVIEW"
           :notification="notification"
-          @markAsRead="readNotification">
+          @markAsRead="markNotificationAsRead">
         </expert-review-user-notification>
         <expert-review-request-user-notification
           v-else-if="notification.type === RESEARCH_CONTENT_EXPERT_REVIEW_REQUEST"
           :notification="notification"
-          @markAsRead="readNotification">
+          @markAsRead="markNotificationAsRead">
         </expert-review-request-user-notification>
         <research-content-access-request-user-notification
           v-else-if="notification.type === RESEARCH_CONTENT_ACCESS_REQUEST"
           :notification="notification"
-          @markAsRead="readNotification"
+          @markAsRead="markNotificationAsRead"
         ></research-content-access-request-user-notification>
         <research-content-access-request-approved-user-notification 
           v-else-if="notification.type === RESEARCH_CONTENT_ACCESS_REQUEST_APPROVED"
           :notification="notification"
-          @markAsRead="readNotification">
+          @markAsRead="markNotificationAsRead">
         </research-content-access-request-approved-user-notification>
         <research-content-access-request-rejected-user-notification 
           v-else-if="notification.type === RESEARCH_CONTENT_ACCESS_REQUEST_REJECTED"
           :notification="notification"
-          @markAsRead="readNotification">
+          @markAsRead="markNotificationAsRead">
         </research-content-access-request-rejected-user-notification>
       </div>
     </div>
@@ -102,19 +102,12 @@ export default {
     }
   },
   computed: {
-    ...mapGetters({
-      user: 'auth/user'
-    })
+
   },
 
   methods: {
-    readNotification($event, notification) {
-      if ($event) {
-        $event.preventDefault();
-        $event.stopPropagation();
-      }
-
-      notificationsHTTP.markUserNotificationAsRead(this.user.username, notification._id)
+    markNotificationAsRead(notification) {
+      notificationsHTTP.markUserNotificationAsRead(notification.username, notification._id)
         .then(() => {
           this.$store.dispatch('auth/loadNotifications');
         });

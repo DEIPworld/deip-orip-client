@@ -73,7 +73,7 @@ export default {
         });
       }
 
-      // this.markAsRead();
+      this.markAsRead();
     },
 
     markAsRead($event) {
@@ -81,7 +81,7 @@ export default {
         $event.preventDefault();
         $event.stopPropagation();
       }
-      // this.$emit("markAsRead", { notification: this.notification });
+      this.$emit("markAsRead", this.notification);
     }
   }
 };
