@@ -99,7 +99,7 @@
     },
     data() {
       return {
-        researchLogoSrc: `./../../../../../static/researches/${this.research.id < 5 ? this.research.id : 'default'}_thumbnail.png`
+        researchLogoSrc: `./../../../../../static/researches/${this.research.id < 6 ? this.research.id : 'default'}_thumbnail.png`
       };
     },
     computed: {
