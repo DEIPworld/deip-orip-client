@@ -6,7 +6,7 @@
         <span slot="badge">{{ notifications.length }}</span>
       </v-badge>
     </v-btn>
-    <div v-show="notifications.length">
+    <div v-show="notifications.length" class="user-notifications-list">
       <div v-for="(notification, i) in notifications" :key="'user-notification-' + i">
         <research-proposal-user-notification 
           v-if="(notification.type === PROPOSAL || notification.type === PROPOSAL_ACCEPTED) && notification.metadata.proposal.action === START_RESEARCH" 
@@ -106,5 +106,8 @@ export default {
 <style lang="less">
   .user-notification:hover {
     background-color: #e4f0ff;
+  }
+  .user-notifications-list {
+    width: 500px;
   }
 </style>

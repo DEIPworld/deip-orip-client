@@ -18,11 +18,12 @@
                             <v-layout row justify-space-between align-center pt-3
                                 v-for="(user, i) in group.members" :key="i + '-picked'">
                                 <div>
-                                    <v-avatar size="30px">
-                                        <img v-if="user.profile" v-bind:src="user.profile.avatar | avatarSrc(30, 30, false)" />
-                                        <v-gravatar v-else :email="user.account.name + '@deip.world'" />
-                                    </v-avatar>
-                                    <router-link to="#" class="a c-pl-3">{{ user | fullname }}</router-link>
+                                    <platform-avatar 
+                                        :user="user"
+                                        :size="30"
+                                        link-to-profile
+                                        link-to-profile-class="px-1"
+                                    ></platform-avatar>
                                 </div>
                                 <v-btn v-if="user.account.name != creatorUsername" flat color="grey" class="ma-0" @click="cancelMember(i)">Cancel</v-btn>
                             </v-layout>
@@ -34,11 +35,12 @@
                             <v-layout row justify-space-between align-center pt-3 
                                 v-for="(user, i) in selectableUsers" :key="i + '-selectable'">
                                 <div>
-                                    <v-avatar size="30px">
-                                        <img v-if="user.profile" v-bind:src="user.profile.avatar | avatarSrc(30, 30, false)" />
-                                        <v-gravatar v-else :email="user.account.name + '@deip.world'" />
-                                    </v-avatar>
-                                    <router-link to="#" class="a c-pl-3">{{ user | fullname }}</router-link>
+                                    <platform-avatar 
+                                        :user="user"
+                                        :size="30"
+                                        link-to-profile
+                                        link-to-profile-class="px-1"
+                                    ></platform-avatar>
                                 </div>
                                 <v-btn flat color="primary" class="ma-0" @click="inviteMember(user)">+ Invite</v-btn>
                             </v-layout>

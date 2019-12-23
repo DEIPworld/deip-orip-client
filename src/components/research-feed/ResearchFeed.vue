@@ -34,7 +34,7 @@
                         close
                         outline>
                         <v-avatar>
-                          <img :src="organization.logoMiniSrc">
+                          <img :src="organization.logoSrc">
                         </v-avatar>
                         {{ organization.name }}
                       </v-chip>
