@@ -75,7 +75,6 @@
         </div>
         <!-- ### END User Profile Invites Section ### -->
 
-        <!-- ### START User Profile Expertise Section ### -->
         <div v-if="isOwner && hasReviewRequests">
           <div class="title bold pb-2" id="review-requests">Review Requests: {{reviewRequests.length}}</div>
           <v-layout
@@ -123,7 +122,9 @@
           </v-layout>
           <v-divider></v-divider>
         </div>
-        <div class="mt-4">
+
+        <!-- ### START User Profile Expertise Section ### -->
+        <!-- <div class="mt-4">
             <div class="title bold">Expertise Tokens</div>
             <div class="c-pt-4 c-pb-2">
                 <div class="legacy-row legacy-justify-between" v-for="(item, i) in expertise" :key="i">
@@ -140,12 +141,12 @@
                     </v-btn>
                 </div>
             </div>
-        </div>
+        </div> -->
         <!-- ### END User Profile Expertise Section ### -->
 
         <!-- ### START User Profile Contacts Section ### -->
         <div class="c-mt-4" v-if="isProfileAvailable && (isContactsInfoSpecified || isOwner)">
-            <div class="sidebar-fullwidth"><v-divider></v-divider></div>
+            <!-- <div class="sidebar-fullwidth"><v-divider></v-divider></div> -->
             <div class="subheading bold c-mt-4">
                 <span class="legacy-row">
                     <span class="legacy-col-11 mt-1">Contacts info</span>
