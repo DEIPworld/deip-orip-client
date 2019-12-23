@@ -1,6 +1,6 @@
 <template>
-    <v-layout fill-height column>
-      <v-flex mb4 flex-grow-1 flex-column>
+    <v-layout column fill-height>
+      <v-flex display-flex flex-column flex-grow-1 mb-3>
         <div class="step-title">Select research group</div>
         
         <div class="flex-grow-1">

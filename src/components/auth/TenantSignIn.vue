@@ -5,14 +5,17 @@
       <v-flex xs5>
         <div>
           <div class="text-align-center">
-            <div class="title c-pb-4 bold">Welcome to</div>
+            <div v-if="tenant">
+              <img width="200px" height="200px" :src="tenant | tenantSymbolSrc(160, 160, false)" />
+            </div>
+            <!-- <div class="title c-pb-4 bold">Welcome to</div>
             <div class="deip-emblem">
               <div class="emblem-logo">Deip.world</div>
                 <div class="emblem-caption">Decentralized research platform</div>
-                <!-- <div v-if="tenant" class="c-pt-5 subheading" style="text-decoration: underline">Use credentials from Grants Community Blockchain</div> -->
-              </div>
+                <div v-if="tenant" class="c-pt-5 subheading" style="text-decoration: underline">Use credentials from Grants Community Blockchain</div>
+            </div> -->
             <div>
-              <v-form v-model="isFormValid" ref="form" class="c-mt-10" @submit.prevent>
+              <v-form v-model="isFormValid" ref="form" class="mt-4" @submit.prevent>
                 <v-text-field 
                   label="Username"
                   v-model="username" 
@@ -41,9 +44,6 @@
 				</div>
       </v-flex>
 			<v-flex xs3>
-				<div v-if="tenant">
-          <img width="200px" height="200px" :src="tenant | tenantSymbolSrc(160, 160, false)" />
-        </div>
 			</v-flex>
     </v-layout>
   </v-container>   
@@ -99,8 +99,10 @@ export default {
         // sig-seed should be uint8 array with length = 32
         const secretSig = secretKey.sign(encodeUint8Arr(window.env.SIG_SEED).buffer);
         const secretSigHex = crypto.hexify(secretSig);
-        
-        authService.signIn({username: this.username, secretSigHex: secretSigHex})
+        authService.signIn({
+          username: this.username,
+          secretSigHex: secretSigHex
+        })
           .then((response) => {
               if (response.success) {
 

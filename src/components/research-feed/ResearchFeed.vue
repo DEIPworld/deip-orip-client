@@ -34,7 +34,7 @@
                         close
                         outline>
                         <v-avatar>
-                          <img :src="organization.logo_src">
+                          <img :src="organization.logoMiniSrc">
                         </v-avatar>
                         {{ organization.name }}
                       </v-chip>
@@ -82,7 +82,8 @@
                         flat block small color="primary" 
                         class="text-capitalize filter-btn" 
                         :class="{'selected': isDisciplineSelected(discipline)}">
-                        {{discipline.label}}
+                        <div class="full-width text-xs-center">{{discipline.label}}</div>
+                        <!-- {{discipline.label}} -->
                       </v-btn>
                     </v-flex>
                     <v-spacer></v-spacer>
@@ -120,7 +121,7 @@
                           >
                             <img
                               class="organization-item__img"
-                              :src="organization.logo_src"
+                              :src="organization.logoSrc"
                             />
                             <div class="organization-item__overlay"></div>
                           </div>

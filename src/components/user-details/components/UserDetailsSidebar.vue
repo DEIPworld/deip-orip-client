@@ -75,7 +75,6 @@
         </div>
         <!-- ### END User Profile Invites Section ### -->
 
-        <!-- ### START User Profile Expertise Section ### -->
         <div v-if="isOwner && hasReviewRequests">
           <div class="title bold pb-2" id="review-requests">Review Requests: {{reviewRequests.length}}</div>
           <v-layout
@@ -123,6 +122,8 @@
           </v-layout>
           <v-divider></v-divider>
         </div>
+
+        <!-- ### START User Profile Expertise Section ### -->
         <div class="mt-4">
             <div class="title bold">Expertise Tokens</div>
             <div class="c-pt-4 c-pb-2">
@@ -409,6 +410,7 @@
 
             closeInviteDetailsDialog(invite, index) {
                 this.inviteDetailsDialog.isShown = false;
+                this.inviteDetailsDialog.item = null;
                 this.inviteDetailsDialog.isApprovingInvite = false;
                 this.inviteDetailsDialog.isRejectingInvite = false;
             },
@@ -433,7 +435,7 @@
                     });
                     console.log(err);
                 }).finally(() => {
-                    this.inviteDetailsDialog.isApprovingInvite = false;
+                    this.closeInviteDetailsDialog();
                 })
             },
 
@@ -455,8 +457,7 @@
                     });
                     console.log(err);
                 }).finally(() => {
-                    this.inviteDetailsDialog.isRejectingInvite = false;
-                    this.inviteDetailsDialog.isShown = false
+                    this.closeInviteDetailsDialog();
                 })
             },
 

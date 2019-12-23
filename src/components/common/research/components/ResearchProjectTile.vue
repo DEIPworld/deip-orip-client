@@ -67,9 +67,9 @@
         <span class="caption half-bold grey--text lighten-1">{{ reviewsCount }}</span>
       </v-flex>
       <v-flex xs5>
-        <v-layout row align-center class="group-logo" v-if="group.logo_src">
-          <v-avatar>
-            <img :src="group.logo_src">
+        <v-layout row align-center class="group-logo" v-if="group.logoMiniSrc">
+          <v-avatar style="margin: 2px">
+            <img :src="group.logoMiniSrc">
           </v-avatar>
           <v-tooltip bottom class="group-logo__text">
             <template v-slot:activator="{ on }">
@@ -223,8 +223,8 @@
     background: #e0e0e0;
     border-radius: 28px;
     .v-avatar {
-      height: 24px !important;
-      width: 24px !important;
+      height: 20px !important;
+      width: 20px !important;
     }
     &__text {
       max-width: 100%;

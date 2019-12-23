@@ -104,7 +104,7 @@ const getters = {
   isApplicant: (state, getters) => {
     return !getters.isGrantor && !getters.isOfficer;
   },
-
+  
   isInvestorViewMode: (state, getters) => {
     return getters.user.viewMode === viewModeType.INVESTOR;
   },

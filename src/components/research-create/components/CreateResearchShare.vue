@@ -1,6 +1,6 @@
 <template>
     <v-layout column fill-height>
-        <v-flex flex-column mb-3 flex-grow-1 display-flex>
+        <v-flex display-flex flex-column flex-grow-1 mb-3>
             <div class="step-title">Share reward with reviewers</div>
             <div class="flex-grow-1 overflow-y-auto flex-basis-0">
 

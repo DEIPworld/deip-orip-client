@@ -59,8 +59,8 @@ Vue.use(Router);
 const router = new Router({
 	routes: [{
 		path: '/sign-in',
-		name: 'TenantSignIn',
-		component: TenantSignIn
+		name: 'SignIn',
+		component: SignIn
 	}, {
 		path: '/sign-up',
 		name: 'SignUp',
@@ -138,7 +138,6 @@ const router = new Router({
 			let loadPagePromise = store.dispatch('dashboard/loadDashboardPage', {
 				username: decodeURIComponent(store.getters['auth/user'].username)
 			});
-			// loadDashboardPage
 			loadPage(loadPagePromise, next);
 		}
 		}, {
@@ -384,6 +383,7 @@ const router = new Router({
 		path: '*',
 		name: 'Default',
 		beforeEnter: (to, from, next) => {
+      const tenant = store.getters['auth/tenant'];
 			const user = store.getters['auth/user'];
 			const rolePromise = user.profile 
 				? Promise.resolve(user.profile.agencies || []) 

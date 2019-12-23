@@ -265,6 +265,7 @@ export default {
       myInvitesCount: "dashboard/myInvitesCount",
       myReviewsCount: "dashboard/myReviewsCount"
     }),
+
     hasResearchShares() {
       return this.currentShares.length;
     },
