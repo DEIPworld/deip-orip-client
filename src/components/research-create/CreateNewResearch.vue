@@ -10,13 +10,13 @@
 
                     <v-divider></v-divider>
 
-                    <v-stepper-step step="2" :complete="currentStep > 2">
+                    <!-- <v-stepper-step step="2" :complete="currentStep > 2">
                         <div class="text-uppercase">Research group</div>
                     </v-stepper-step>
 
-                    <v-divider></v-divider>
+                    <v-divider></v-divider> -->
 
-                    <v-stepper-step step="3" :complete="currentStep > 2">
+                    <v-stepper-step step="2" :complete="currentStep > 2">
                         <div class="text-uppercase">Title</div>
                     </v-stepper-step>
 
@@ -28,7 +28,7 @@
 
                     <v-divider></v-divider> -->
 
-                    <v-stepper-step step="4" :complete="currentStep > 3">
+                    <v-stepper-step step="3" :complete="currentStep > 3">
                         <div class="text-uppercase">Roadmap</div>
                     </v-stepper-step>
                     
@@ -50,7 +50,7 @@
                         </div>
                     </v-stepper-content>
 
-                    <v-stepper-content step="2">
+                    <!-- <v-stepper-content step="2">
                         <div class="fill-height">
                             <create-research-pick-group
                                 @incStep="incStep" @decStep="decStep"
@@ -58,9 +58,9 @@
                                 :research="research"
                             ></create-research-pick-group>
                         </div>
-                    </v-stepper-content>
+                    </v-stepper-content> -->
 
-                    <v-stepper-content step="3">
+                    <v-stepper-content step="2">
                         <div class="fill-height">
                             <create-research-meta
                                 @setTitle="setTitle"
@@ -84,7 +84,7 @@
                         </div>
                     </v-stepper-content> -->
 
-                    <v-stepper-content step="4">
+                    <v-stepper-content step="3">
                         <div class="fill-height">
                             <create-research-roadmap
                                 @finish="finish"
@@ -182,10 +182,10 @@ export default {
     finish() {
       this.isLoading = true;
 
-      // if (!this.research.group && this.tenant) {
-      //   let tenantGroup = this.userGroups.find(g => g.id == this.tenant.researchGroupId);
-      //   this.research.group = tenantGroup;
-      // }
+      if (!this.research.group && this.tenant) {
+        let tenantGroup = this.userGroups.find(g => g.id == this.tenant.researchGroupId);
+        this.research.group = tenantGroup;
+      }
 
       if (!this.research.group) {
         alert("Research group is not selected");
