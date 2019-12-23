@@ -46,18 +46,6 @@
               v-else-if="log.type === RESEARCH_CONTENT_EXPERT_REVIEW_REQUEST" 
               :log="log">
             </research-content-expert-review-request-activity-log-entry>
-            <research-content-access-request-activity-log-entry 
-              v-else-if="log.type === RESEARCH_CONTENT_ACCESS_REQUEST" 
-              :log="log">
-            </research-content-access-request-activity-log-entry>
-            <research-content-access-request-approved-activity-log-entry 
-              v-else-if="log.type === RESEARCH_CONTENT_ACCESS_REQUEST_APPROVED" 
-              :log="log">
-            </research-content-access-request-approved-activity-log-entry>
-            <research-content-access-request-rejected-activity-log-entry 
-              v-else-if="log.type === RESEARCH_CONTENT_ACCESS_REQUEST_REJECTED" 
-              :log="log">
-            </research-content-access-request-rejected-activity-log-entry>
           </div>
         </v-card-text>
       </v-card>
@@ -88,10 +76,7 @@ export default {
       INVITATION_APPROVED: "invitation-approved",
       INVITATION_REJECTED: "invitation-rejected",
       RESEARCH_CONTENT_EXPERT_REVIEW: "research-content-expert-review",
-      RESEARCH_CONTENT_EXPERT_REVIEW_REQUEST: "research-content-expert-review-request",
-      RESEARCH_CONTENT_ACCESS_REQUEST: "research-content-access-request",
-      RESEARCH_CONTENT_ACCESS_REQUEST_APPROVED: "research-content-access-request-approved",
-      RESEARCH_CONTENT_ACCESS_REQUEST_REJECTED: "research-content-access-request-rejected"
+      RESEARCH_CONTENT_EXPERT_REVIEW_REQUEST: "research-content-expert-review-request"
     }
   },
   computed: {

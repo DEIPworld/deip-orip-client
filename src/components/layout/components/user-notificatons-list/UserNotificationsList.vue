@@ -53,21 +53,6 @@
           :notification="notification"
           @markAsRead="markNotificationAsRead">
         </expert-review-request-user-notification>
-        <research-content-access-request-user-notification
-          v-else-if="notification.type === RESEARCH_CONTENT_ACCESS_REQUEST"
-          :notification="notification"
-          @markAsRead="markNotificationAsRead"
-        ></research-content-access-request-user-notification>
-        <research-content-access-request-approved-user-notification 
-          v-else-if="notification.type === RESEARCH_CONTENT_ACCESS_REQUEST_APPROVED"
-          :notification="notification"
-          @markAsRead="markNotificationAsRead">
-        </research-content-access-request-approved-user-notification>
-        <research-content-access-request-rejected-user-notification 
-          v-else-if="notification.type === RESEARCH_CONTENT_ACCESS_REQUEST_REJECTED"
-          :notification="notification"
-          @markAsRead="markNotificationAsRead">
-        </research-content-access-request-rejected-user-notification>
       </div>
     </div>
   </v-menu>
@@ -95,9 +80,6 @@ export default {
       INVITATION_REJECTED: "invitation-rejected",
       RESEARCH_CONTENT_EXPERT_REVIEW: "research-content-expert-review",
       RESEARCH_CONTENT_EXPERT_REVIEW_REQUEST: "research-content-expert-review-request",
-      RESEARCH_CONTENT_ACCESS_REQUEST: "research-content-access-request",
-      RESEARCH_CONTENT_ACCESS_REQUEST_APPROVED: "research-content-access-request-approved",
-      RESEARCH_CONTENT_ACCESS_REQUEST_REJECTED: "research-content-access-request-rejected",
       EXPERTISE_ALLOCATED: "expertise-allocated"
     }
   },

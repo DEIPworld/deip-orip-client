@@ -81,7 +81,7 @@
                           :disabled="isDisabled || isLoading"
                           :loading="isLoading"
                           @click="proposeContent()"
-                      >{{!isPersonalGroup ? 'Upload Material' : 'Upload Material'}}</v-btn>
+                      >{{!isPersonalGroup ? 'Create Proposal' : 'Upload Material'}}</v-btn>
                     </v-flex>
                     <v-flex xs12 py-2>
                       <v-btn 
@@ -200,7 +200,7 @@
                 createContentProposal(contentRef, this.type)
                     .then(() => {
                         this.$store.dispatch('layout/setSuccess', {
-                            message: "New content has been uploaded successfully"
+                            message: "New material has been uploaded successfully"
                         });
                     }, (err) => {
                         console.log(err);

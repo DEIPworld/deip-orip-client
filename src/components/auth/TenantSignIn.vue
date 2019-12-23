@@ -101,8 +101,7 @@ export default {
         const secretSigHex = crypto.hexify(secretSig);
         authService.signIn({
           username: this.username,
-          secretSigHex: secretSigHex,
-          agency: this.tenant._id
+          secretSigHex: secretSigHex
         })
           .then((response) => {
               if (response.success) {

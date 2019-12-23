@@ -10,9 +10,6 @@ import InvitationApprovedActivityLogEntry from './components/InvitationApprovedA
 import InvitationRejectedActivityLogEntry from './components/InvitationRejectedActivityLogEntry';
 import ResearchContentExpertReviewActivityLogEntry from './components/ResearchContentExpertReviewActivityLogEntry';
 import ResearchContentExpertReviewRequestActivityLogEntry from './components/ResearchContentExpertReviewRequestActivityLogEntry';
-import ResearchContentAccessRequestActivityLogEntry from './components/ResearchContentAccessRequestActivityLogEntry';
-import ResearchContentAccessRequestApprovedActivityLogEntry from './components/ResearchContentAccessRequestApprovedActivityLogEntry';
-import ResearchContentAccessRequestRejectedActivityLogEntry from './components/ResearchContentAccessRequestRejectedActivityLogEntry';
 
 
 Vue.component('research-group-activity-log-list', ResearchGroupActivityLogList);
@@ -25,6 +22,3 @@ Vue.component('invitation-approved-activity-log-entry', InvitationApprovedActivi
 Vue.component('invitation-rejected-activity-log-entry', InvitationRejectedActivityLogEntry);
 Vue.component('research-content-expert-review-activity-log-entry', ResearchContentExpertReviewActivityLogEntry);
 Vue.component('research-content-expert-review-request-activity-log-entry', ResearchContentExpertReviewRequestActivityLogEntry);
-Vue.component('research-content-access-request-activity-log-entry', ResearchContentAccessRequestActivityLogEntry);
-Vue.component('research-content-access-request-approved-activity-log-entry', ResearchContentAccessRequestApprovedActivityLogEntry);
-Vue.component('research-content-access-request-rejected-activity-log-entry', ResearchContentAccessRequestRejectedActivityLogEntry);

@@ -1,5 +1,5 @@
 <template>
-    <page-container v-if="isAccessAllowed">
+    <page-container>
         <sidebar v-if="isInProgress" small>
             <div>
                 <div>
@@ -20,7 +20,7 @@
                             <v-icon>send</v-icon>
                         </v-btn>
 
-                        <span>{{!isPersonalGroup ? 'Upload Material' : 'Upload Material'}}</span>
+                        <span>{{!isPersonalGroup ? 'Create Proposal' : 'Upload Material'}}</span>
                     </v-tooltip>
                 </div>
             </div>
@@ -152,7 +152,7 @@
                                             :loading="proposeContent.isLoading"
                                             block
                                             @click="sendContentProposal()"
-                                            >{{!isPersonalGroup ? 'Upload Material' : 'Upload Material'}}</v-btn>
+                                            >{{!isPersonalGroup ? 'Create Proposal' : 'Upload Material'}}</v-btn>
                                     </v-flex>
                                     <v-flex xs12 py-2>
                                         <v-btn 
@@ -189,9 +189,7 @@
 
         data() {
             return {
-                isSavingDraft: false,
-                isAccessAllowed: false,
-                
+                isSavingDraft: false,                
                 proposeContent: {
                     title: "",
                     type: null,
@@ -291,7 +289,7 @@
                         createContentProposal(contentRef, this.proposeContent.type)
                             .then(() => {
                                 this.$store.dispatch('layout/setSuccess', {
-                                    message: "New content has been uploaded successfully"
+                                    message: "New material has been uploaded successfully"
                                 });
                             }, (err) => {
                                 console.log(err);
@@ -299,7 +297,7 @@
                                     alert("This file was already uploaded. Please vote for existing proposal or propose file again if its existing proposal has expired.");
                                 } else {
                                     this.$store.dispatch('layout/setError', { 
-                                        message: "An error occurred while uploading proposal, please try again later"
+                                        message: "An error occurred while creating proposal, please try again later"
                                     });
                                 }
                             })
@@ -395,16 +393,7 @@
         },
 
         created() {
-          this.isAccessAllowed = this.contentRef.accessStatus === 'allowed';
-          if (!this.isAccessAllowed) {
-            this.$router.push({
-              name: 'ResearchDetails',
-              params: {
-                research_group_permlink: encodeURIComponent(this.research.group_permlink),
-                research_permlink: encodeURIComponent(this.research.permlink),
-              }
-            });
-          }
+
         }
     };
 </script>

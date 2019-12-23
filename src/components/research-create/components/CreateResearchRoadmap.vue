@@ -2,7 +2,7 @@
 	<v-layout column full-width fill-height overflow-auto align-center>
 		<v-flex style="width: 70%" display-flex flex-column flex-grow-1 mb-3 align-center>
 			<div class="step-title text-xs-center">Roadmap</div>
-			<div class="subheading pb-5 pt-2 text-xs-center">Let’s create a roadmap for your research</div>
+			<div class="subheading pb-5 pt-2 text-xs-center">Let’s create a roadmap for your research. Well-presented and detailed roadmap attracts more investors to help you to get the funding</div>
 			<milestone-stepper style="width: 100%" :isReadOnly="false" :steps="research.milestones"></milestone-stepper>
 		</v-flex>
 

@@ -5,7 +5,6 @@ import SignIn from '@/components/auth/SignIn';
 import SignUp from '@/components/auth/SignUp';
 import TenantSignIn from '@/components/auth/TenantSignIn';
 import Dashboard from '@/components/dashboard/Dashboard';
-import DashboardGskDemo from '@/components/dashboard-gsk-demo/DashboardGskDemo';
 import EmailSendingRegistration from '@/components/auth/EmailSendingRegistration';
 import DataFillingRegistration from '@/components/auth/DataFillingRegistration';
 import ClaimExpertiseRegistration from '@/components/auth/ClaimExpertiseRegistration';
@@ -60,8 +59,8 @@ Vue.use(Router);
 const router = new Router({
 	routes: [{
 		path: '/sign-in',
-		name: 'TenantSignIn',
-		component: TenantSignIn
+		name: 'SignIn',
+		component: SignIn
 	}, {
 		path: '/sign-up',
 		name: 'SignUp',
@@ -134,9 +133,9 @@ const router = new Router({
 	}, {
 		path: '/dashboard',
 		name: 'Dashboard',
-		component: DashboardGskDemo,
+		component: Dashboard,
 		beforeEnter: (to, from, next) => {
-			let loadPagePromise = store.dispatch('dashboard_gsk_demo/loadDashboardPage', {
+			let loadPagePromise = store.dispatch('dashboard/loadDashboardPage', {
 				username: decodeURIComponent(store.getters['auth/user'].username)
 			});
 			loadPage(loadPagePromise, next);
@@ -385,10 +384,6 @@ const router = new Router({
 		name: 'Default',
 		beforeEnter: (to, from, next) => {
       const tenant = store.getters['auth/tenant'];
-      if (tenant && tenant._id === 'gsk') {
-        next({ name: 'Dashboard' });
-        return;
-      }
 			const user = store.getters['auth/user'];
 			const rolePromise = user.profile 
 				? Promise.resolve(user.profile.agencies || []) 

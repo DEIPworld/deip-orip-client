@@ -1,7 +1,7 @@
 <template>
      <v-layout column fill-height>
         <v-flex display-flex flex-column flex-grow-1 mb-3>
-            <div class="headline font-weight-regular text-xs-center">Select condition/disease</div>
+            <div class="headline font-weight-regular text-xs-center">Select research disciplines</div>
             <div class="subheading mb-3 text-xs-center mx-auto selected-disciplines discipline-picker">
                 {{research.disciplines.map(d => d.label).join("  ·  ")}}
             </div>

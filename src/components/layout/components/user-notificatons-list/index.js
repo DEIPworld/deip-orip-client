@@ -9,9 +9,6 @@ import InvitationApprovedUserNotification from './components/InvitationApprovedU
 import InvitationRejectedUserNotification from './components/InvitationRejectedUserNotification';
 import ExpertReviewUserNotification from './components/ExpertReviewUserNotification';
 import ExpertReviewRequestUserNotification from './components/ExpertReviewRequestUserNotification';
-import ResearchContentAccessRequestUserNotification from './components/ResearchContentAccessRequestUserNotification';
-import ResearchContentAccessRequestApprovedUserNotification from './components/ResearchContentAccessRequestApprovedUserNotification';
-import ResearchContentAccessRequestRejectedUserNotification from './components/ResearchContentAccessRequestRejectedUserNotification';
 
 
 Vue.component('user-notifications-list', UserNotificationsList);
@@ -24,6 +21,3 @@ Vue.component('invitation-approved-user-notification', InvitationApprovedUserNot
 Vue.component('invitation-rejected-user-notification', InvitationRejectedUserNotification);
 Vue.component('expert-review-user-notification', ExpertReviewUserNotification);
 Vue.component('expert-review-request-user-notification', ExpertReviewRequestUserNotification);
-Vue.component('research-content-access-request-user-notification', ResearchContentAccessRequestUserNotification);
-Vue.component('research-content-access-request-approved-user-notification', ResearchContentAccessRequestApprovedUserNotification);
-Vue.component('research-content-access-request-rejected-user-notification', ResearchContentAccessRequestRejectedUserNotification);

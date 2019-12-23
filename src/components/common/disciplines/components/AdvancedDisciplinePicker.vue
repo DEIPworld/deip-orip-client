@@ -1,34 +1,7 @@
 <template>
-    <!-- <div class="legacy-row discipline-picker full-height overflow-y-auto">
-        <div v-if="!withoutUserDisciplines" class="legacy-col-4 c-p-4 overflow-y-auto">
-            <div class="bold uppercase c-pb-4">Selected earlier</div>
-
-            <div v-if="userDisciplines.length">
-                <div v-for="(discipline, i) in userDisciplines" :key="i">
-                    <span class="discipline-picker-label"
-                        :class="{'selected': isUserLabelSelected(discipline) }"
-                        @click="handleUserDiscipline(discipline)"
-                    >{{ discipline.label }}</span>
-                </div>
-            </div>
-
-            <div v-else class="grey--text">You have no expertise</div>
-        </div>
-
-        <div class="c-p-4 full-height overflow-y-auto" :class="[!withoutUserDisciplines ? 'legacy-col-8' : 'legacy-col-12']">
-            <div class="bold uppercase c-pb-4">All condition/disease</div>
-
-            <discipline-tree-picker
-                :is-multiple-select="isMultipleSelect"
-                :is-highlighted-parent="isHighlightedParent"
-                :preselected="preselected"
-                @select="select"
-            ></discipline-tree-picker>
-        </div>
-    </div> -->
-    <v-layout fill-height row discipline-picker overflow-y-auto>
+   <v-layout fill-height row discipline-picker overflow-y-auto>
         <v-flex xs4 pa-3 v-if="!withoutUserDisciplines" overflow-y-auto>
-            <v-flex pb-3 bold uppercase>Selected earlier</v-flex>
+            <v-flex pb-3 bold uppercase>Your disciplines</v-flex>
 
             <v-flex v-if="userDisciplines.length">
                 <div v-for="(discipline, i) in userDisciplines" :key="i">
@@ -41,7 +14,7 @@
         </v-flex>
 
         <v-flex pa-3 fill-height overflow-y-auto :class="!withoutUserDisciplines ? 'xs8' : 'xs12'">
-            <v-flex pb-3 bold uppercase>All condition/disease</v-flex>
+            <v-flex pb-3 bold uppercase>All disciplines</v-flex>
 
             <discipline-tree-picker
                 :is-multiple-select="isMultipleSelect"
