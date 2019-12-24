@@ -57,8 +57,9 @@ const getters = {
         quorum_percent: group.quorum_percent,
         weight: rgt.amount,
         rgtId: rgt.id,
-        is_personal: group.is_personal
-      })
+        is_personal: group.is_personal,
+        is_dao: group.is_dao
+      });
     }
     return groups;
   },
