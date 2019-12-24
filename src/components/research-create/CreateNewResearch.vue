@@ -215,7 +215,7 @@ export default {
       })
       .finally(() => {
         setTimeout(() => {
-          if (this.research.group.is_personal || this.research.group.is_dao) {
+          if (this.research.group.is_personal || !this.research.group.is_dao) {
             this.$router.push({
               name: 'ResearchDetails', 
               params: { 
