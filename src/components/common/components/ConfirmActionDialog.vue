@@ -1,8 +1,8 @@
 <template>
   <v-layout row justify-start>
     <v-dialog v-model="meta.isShown" persistent :max-width="width">
-      <v-card>
-        <v-card-title class="headline">{{title}}</v-card-title>
+      <v-card class="pa-4">
+        <v-card-title v-if="title" class="headline">{{title}}</v-card-title>
         <v-card-text>{{text}}</v-card-text>
         <v-card-actions class="mt-2">
           <v-spacer></v-spacer>

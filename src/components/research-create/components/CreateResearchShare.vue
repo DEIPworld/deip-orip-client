@@ -1,11 +1,11 @@
 <template>
-    <div class="legacy-column full-height">
-        <div class="c-mb-4 legacy-col-grow legacy-column">
+    <v-layout column fill-height>
+        <v-flex display-flex flex-column flex-grow-1 mb-3>
             <div class="step-title">Share reward with reviewers</div>
-            <div class="legacy-col-grow overflow-y-auto">
+            <div class="flex-grow-1 overflow-y-auto flex-basis-0">
 
-                <div class="legacy-row c-mh-auto research-reward-max-width">
-                    <div class="legacy-col-12">
+                <v-layout row mx-auto class="research-reward-max-width">
+                    <v-flex xs12>
                         <div>
                             How much reward would you like to share with reviewers?
                             The bigger the percent is, the better chance of getting reviews and increasing research popularity you have.
@@ -19,27 +19,29 @@
                             hide-details>
                         </v-text-field>
 
-                        <div class="legacy-column align-center">
-                            <div class="c-pt-8 caption grey--text" v-if="reviewShare">
+                        <div class="flex-column align-center">
+                            <div class="pt-8 caption grey--text" v-if="reviewShare">
                                 {{reviewShare}}% of  potential research reward will be shared between all
                                 the reviewers according to their Review Index  
                             </div>
                         </div>
-                    </div>
-                </div>
+                    </v-flex>
+                </v-layout>
 
             </div>
-        </div>
+        </v-flex>
 
-        <div class="legacy-row legacy-justify-center align-center">
-            <v-btn flat small @click.native="prevStep()">
-                <v-icon dark class="pr-1">keyboard_arrow_left</v-icon> Back
-            </v-btn>
-            <v-btn color="primary" :disabled="nextDisabled" :loading="isLoading" @click.native="finish()"> 
-                {{!isPersonalGroup ? 'Create Proposal' : 'Create Project'}}
-            </v-btn>
-        </div>
-    </div>
+        <v-flex flex-grow-0>
+            <v-layout row justify-center align-center>
+                <v-btn flat small @click.native="prevStep()">
+                    <v-icon dark class="pr-1">keyboard_arrow_left</v-icon> Back
+                </v-btn>
+                <v-btn color="primary" :disabled="nextDisabled" :loading="isLoading" @click.native="finish()"> 
+                    {{!isPersonalGroup ? 'Create Proposal' : 'Create Project'}}
+                </v-btn>
+            </v-layout>
+        </v-flex>
+    </v-layout>
 </template>
 
 <script>

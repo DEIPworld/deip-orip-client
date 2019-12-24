@@ -73,7 +73,7 @@
 				justify-content: flex-start;
 			}
 			&.selected {
-				background: #dbe4fb;
+				background: var(--v-primary-lighten5);
 			}
 		}
 	}
@@ -96,4 +96,18 @@
 }
 .cursor-pointer{
 	cursor: pointer;
+}
+
+.group-activity-log {
+	.log-label-chip {
+		width: 100%;
+		.v-chip__content {
+			width: 100%;
+		}
+	}
+
+	.log-label-chip-text {
+  	width: 100%;
+  	text-align: center;
+	}
 }

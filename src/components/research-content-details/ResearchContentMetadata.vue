@@ -22,7 +22,7 @@
             <!--    <div class="c-mt-4">
                     <div class="legacy-row">
                         <div class="bold width-7">Research</div>
-                        <div class="bold deip-blue-color c-pl-4">
+                        <div class="bold c-pl-4">
                             <router-link class="a" :to="{ name: 'ResearchDetails', params: { 
                                 research_group_permlink: $route.params.research_group_permlink,
                                 research_permlink: $route.params.research_permlink}}">
@@ -39,7 +39,7 @@
                 <div class="c-mt-4">
                     <div class="legacy-row">
                         <div class="bold width-7">Content</div>
-                        <div class="bold deip-blue-color c-pl-4">
+                        <div class="bold c-pl-4">
                             <router-link class="a" 
                                 :to="`/${$route.params.research_group_permlink}/research/${$route.params.research_permlink}/${$route.params.content_permlink}`">
                                     {{ contentMetadata.content.title }}
@@ -108,7 +108,7 @@
 
                         <div class="legacy-col-grow">
 
-                            <div class="c-mb-4" v-for="voter in contentMetadata.voters">
+                            <div class="c-mb-4" v-for="(voter, idx) in contentMetadata.voters" :key="'approver-' + idx">
                                 <div class="legacy-row">
                                     <v-avatar size="40px">
                                         <img v-if="voter.user.profile" v-bind:src="voter.user.profile.avatar | avatarSrc(80, 80, false)" />
@@ -125,7 +125,7 @@
                                 <div class="grey-border-stripe c-mt-4">
                                     <div class="legacy-row-nowrap">
                                         <div class="pill width-7">
-                                            <div class="white--text">SHA256</div>
+                                            <div class="white--text">ECC</div>
                                         </div>
                                         <div class="legacy-col-grow pill-value">
                                             <div>{{ voter.user.account.owner.key_auths[0][0] }}</div>

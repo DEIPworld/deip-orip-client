@@ -1,40 +1,40 @@
 <template>
-    <v-container fluid fill-height class="pa-0">
+    <v-container fluid fill-height pa-0>
         <v-layout>
-            <v-stepper v-model="currentStep" alt-labels class="legacy-column full-width full-height stepper-page">
-                <v-stepper-header>
+            <v-stepper v-model="currentStep" alt-labels class="display-flex flex-column w-100 fill-height stepper-page">
+                <v-stepper-header class="flex-grow-0">
                     <v-stepper-step step="1" :complete="currentStep > 1">
-                        <div class="uppercase">Title</div>
+                        <div class="text-uppercase">Title</div>
                     </v-stepper-step>
 
                     <v-divider></v-divider>
 
                     <v-stepper-step step="2" :complete="currentStep > 2">
-                        <div class="uppercase">Description</div>
+                        <div class="text-uppercase">Description</div>
                     </v-stepper-step>
 
                     <v-divider></v-divider>
 
                     <v-stepper-step step="3" :complete="currentStep > 3">
-                        <div class="uppercase">Members</div>
+                        <div class="text-uppercase">Members</div>
                     </v-stepper-step>
                     
-                    <v-divider></v-divider>
+                    <!-- <v-divider></v-divider>
 
                     <v-stepper-step step="4" :complete="currentStep > 3">
-                        <div class="uppercase">Quorum</div>
+                        <div class="text-uppercase">Quorum</div>
                     </v-stepper-step>
                     
                     <v-divider></v-divider>
 
                     <v-stepper-step step="5" :complete="currentStep > 4">
-                        <div class="uppercase">Tokens</div>
-                    </v-stepper-step>
+                        <div class="text-uppercase">Tokens</div>
+                    </v-stepper-step> -->
                 </v-stepper-header>
 
-                <v-stepper-items class="legacy-col-grow">
+                <v-stepper-items class="flex-grow-1">
                     <v-stepper-content step="1">
-                        <div class="full-height">
+                        <div class="fill-height">
                             <create-research-group-title
                                 @incStep="incStep"
                                 :group="group"
@@ -45,7 +45,7 @@
                     </v-stepper-content>
 
                     <v-stepper-content step="2">
-                        <div class="full-height">
+                        <div class="fill-height">
                             <create-research-group-description
                                 @incStep="incStep" @decStep="decStep"
                                 @setDescription="setDescription"
@@ -55,17 +55,18 @@
                     </v-stepper-content>
 
                     <v-stepper-content step="3">
-                        <div class="full-height">
+                        <div class="fill-height">
                             <create-research-group-members
-                                @incStep="incStep" @decStep="decStep"
                                 @setGroupMembers="setGroupMembers"
+                                @finish="finish" @decStep="decStep"
                                 :group="group"
+                                :isLoading="isLoading"
                             ></create-research-group-members>
                         </div>
                     </v-stepper-content>
 
-                    <v-stepper-content step="4">
-                        <div class="full-height">
+                    <!-- <v-stepper-content step="4">
+                        <div class="fill-height">
                             <create-research-group-quorum
                                 @incStep="incStep" @decStep="decStep"
                                 :group="group"
@@ -74,14 +75,14 @@
                     </v-stepper-content>
 
                     <v-stepper-content step="5">
-                        <div class="full-height">
+                        <div class="fill-height">
                             <create-research-group-share
                                 @finish="finish" @decStep="decStep"
                                 :group="group"
                                 :isLoading="isLoading"
                             ></create-research-group-share>
                         </div>
-                    </v-stepper-content>
+                    </v-stepper-content> -->
                 </v-stepper-items>
             </v-stepper>
         </v-layout>
@@ -145,27 +146,29 @@
             },
 
             finish() {
-                this.isLoading = true;
+              this.isLoading = true;
 
                 const invitees = this.group.members
                     .filter(m => m.account.name != this.user.username)
                     .map(m => {
-                        return { 
-                            account: m.account.name, 
+                      return { 
+                        account: m.account.name, 
                             research_group_tokens_in_percent: m.stake * this.DEIP_1_PERCENT, 
                             cover_letter: "" 
                         }
                     });
 
+                for(let key in this.group.quorum){
+                  this.group.quorum[key] = 50;
+                }
                 const maxProposalPercent = _(this.group.quorum).values().maxBy(item => parseInt(item));
                 const proposalQuorums = _.keys(this.group.quorum).map((item, i) => {
-                    // as a result we should get array of arrays [proposalType, percents], `i` almost matches proposalType
+                  // as a result we should get array of arrays [proposalType, percents], `i` almost matches proposalType
                     return [
-                        i + 1,
+                      i + 1,
                         parseInt(this.group.quorum[item]) * this.DEIP_1_PERCENT
                     ]
                 });
-
                 createResearchGroup(
                     this.group.name, 
                     this.group.permlink, 
@@ -173,13 +176,12 @@
                     parseInt(maxProposalPercent) * this.DEIP_1_PERCENT,
                     proposalQuorums,
                     invitees
-                ).then(() => {
+                ).then((response) => {
                     this.isLoading = false;
                     this.$store.dispatch('auth/loadGroups'); // reload user groups
                     this.$store.dispatch('layout/setSuccess', {
                         message: `"${this.group.name}" research group has been created successfully !`
                     });
-
                     setTimeout(() => {
                         if (!this.backRouterToken) {
                             this.$router.push({ 
@@ -187,6 +189,9 @@
                                 params: { research_group_permlink: encodeURIComponent(this.group.permlink) }
                             });
                         } else {
+                          if (this.backRouterToken.name === "CreateResearch"){
+                            this.backRouterToken.query.groupPermlink = this.group.permlink;
+                          }
                             this.$router.push(this.backRouterToken);
                         }
                     }, 1500);
@@ -199,7 +204,6 @@
                 });
             }
         },
-
         created() {
             if (this.$route.query['back-token']) {
                 try {
@@ -213,4 +217,19 @@
 </script>
 
 <style lang="less">
+  .flex-column{
+    flex-direction: column;
+  }
+  .flex-grow-0{
+    flex-grow: 0 !important;
+  }
+  .flex-grow-1{
+    flex-grow: 1 !important;
+  }
+  .w-100{
+    width: 100%;
+  }
+  .flex-basis-0{
+    flex-basis: 0 !important;
+  }
 </style>

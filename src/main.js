@@ -19,18 +19,9 @@ import { isLoggedIn } from "./utils/auth";
 import VueGoogleCharts from 'vue-google-charts';
 import VueCurrencyFilter from 'vue-currency-filter';
 import VueResize from 'vue-resize';
+import themes from './theme.json';
 
 Vue.config.productionTip = false;
-
-Vue.use(Vuetify, {
-  theme: {
-    primary: "#2962FF",
-    secondary: "#BBDEFB"
-  },
-  options: {
-    customProperties: true
-  }
-});
 Vue.use(VueGoogleCharts);
 Vue.use(VueResize);
 Vue.use(VueCurrencyFilter, {
@@ -48,12 +39,10 @@ async function initApp() {
     window.env = env.data;
     deipRpc.api.setOptions({ url: window.env.DEIP_FULL_NODE_URL, reconnectTimeout: 3000 });
     deipRpc.config.set('chain_id', window.env.CHAIN_ID);
-    if (!window.env.TENANT) window.env.TENANT = "";
-    // console.log(window.env);
 
-    if (isLoggedIn()) {
-      await store.dispatch("auth/loadUser");
-    }
+    await setGlobalThemeSettings();
+    await setUser();
+    await setTenant();
 
     window.app = new Vue({
       el: '#app',
@@ -64,6 +53,49 @@ async function initApp() {
     });
   } catch (err) {
     console.error(err)
+  }
+}
+
+async function setGlobalThemeSettings() {
+  const tenant = window.env.TENANT || null;
+
+  const themeSettings = tenant && themes[tenant]
+    ? themes[tenant]
+    : themes['default'];
+
+  if (tenant) {
+    if (tenant == "nsf") {
+      document.title = "MyNSF | DEIP";
+    } else if (tenant == "mit") {
+      document.title = "MIT | DEIP";
+    } else if (tenant == "treasury") {
+      document.title = "U.S. Treasury | DEIP";
+    }
+  }
+
+  Vue.use(Vuetify, {
+    theme: {
+      primary: themeSettings['primary-color'],
+      secondary: themeSettings['secondary-color']
+    },
+    options: {
+      customProperties: true
+    }
+  });
+
+  await store.dispatch("layout/setGlobalThemeSettings", themeSettings);
+}
+
+async function setUser() {
+  if (isLoggedIn()) {
+    await store.dispatch("auth/loadUser");
+  }
+}
+
+async function setTenant() {
+  const tenant = window.env.TENANT || null;
+  if (tenant) {
+    await store.dispatch("auth/loadTenant", { tenant });
   }
 }
 

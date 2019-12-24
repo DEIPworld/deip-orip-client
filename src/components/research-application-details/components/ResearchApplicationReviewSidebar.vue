@@ -3,7 +3,7 @@
         <div v-if="agency" class="text-align-center">         
             <div>
                 <v-avatar size="120px">
-                    <img :src="agency._id | agencyLogoSrc(160, 160, false)" />
+                    <img :src="agency | tenantSymbolSrc(160, 160, false)" />
                 </v-avatar>
             </div>
             <div class="c-pt-5 title">{{agency.name}}</div>
@@ -38,7 +38,7 @@
     import { mapGetters } from 'vuex';
     import deipRpc from '@deip/deip-oa-rpc-client';
     import * as disciplineTreeService from '../../common/disciplines/DisciplineTreeService'; 
-    import agencyHttp from './../../../services/http/agency';
+    import tenantHttp from './../../../services/http/tenant';
 
     export default {
         name: "ResearchApplicationReviewSidebar",
@@ -148,7 +148,7 @@
             }
         },
         created() {
-            agencyHttp.getAgenciesProfiles()
+            tenantHttp.getTenantsProfiles()
                 .then((agencies) => {
                     this.agencies = agencies;
                 })

@@ -6,7 +6,6 @@ import Sidebar from './components/Sidebar';
 import Contentbar from './components/Contentbar';
 import PageContainer from './components/PageContainer';
 import SidebarSplittedBtn from './components/SidebarSplittedBtn';
-import NotificationsList from './components/NotificationsList';
 import BasePageLayout from './components/BasePageLayout';
 
 Vue.component('toolbar', Toolbar);
@@ -15,5 +14,6 @@ Vue.component('sidebar', Sidebar);
 Vue.component('contentbar', Contentbar);
 Vue.component('page-container', PageContainer);
 Vue.component('sidebar-splitted-btn', SidebarSplittedBtn);
-Vue.component('notifications-list', NotificationsList);
 Vue.component('base-page-layout', BasePageLayout);
+
+import './components/user-notificatons-list/index';

@@ -36,7 +36,7 @@
                             <v-flex grow class="headline">
                                 {{inviteDetailsDialog.item.group.name}}
                             </v-flex>
-                            <v-flex shrink align-self-center>
+                            <v-flex shrink align-self-center right-top-angle>
                                 <v-btn @click="closeInviteDetailsDialog()" icon class="pa-0 ma-0">
                                     <v-icon color="black">close</v-icon>
                                 </v-btn>
@@ -48,23 +48,26 @@
                         <div class="subheading pt-4 half-bold">Group weight: <span class="grey--text">{{convertToPercent(inviteDetailsDialog.item.research_group_token_amount)}}%</span></div>     
                     </v-card-text>
                     <v-card-actions>
-                        <v-layout column>
-                            <v-btn
-                                color="green"
-                                outline
-                                class="my-1 pa-0 mx-0"
-                                @click="approveInvite()" 
-                                :disabled="inviteDetailsDialog.isApprovingInvite || inviteDetailsDialog.isRejectingInvite"
-                                :loading="inviteDetailsDialog.isApprovingInvite"
-                            >Accept</v-btn>
-                            <v-btn
-                                color="red"
-                                flat
-                                class="my-1 pa-0 mx-0"
-                                @click="rejectInvite()"
-                                :disabled="inviteDetailsDialog.isApprovingInvite || inviteDetailsDialog.isRejectingInvite" 
-                                :loading="inviteDetailsDialog.isRejectingInvite"
-                            >Reject</v-btn>
+                        <v-layout row wrap>
+                            <v-flex xs12 py-2>
+                                <v-btn
+                                    color="primary"
+                                    block
+                                    @click="approveInvite()" 
+                                    :disabled="inviteDetailsDialog.isApprovingInvite || inviteDetailsDialog.isRejectingInvite"
+                                    :loading="inviteDetailsDialog.isApprovingInvite"
+                                >Accept</v-btn>
+                            </v-flex>
+                            <v-flex xs12 py-2>
+                                <v-btn
+                                    color="primary"
+                                    block
+                                    flat
+                                    @click="rejectInvite()"
+                                    :disabled="inviteDetailsDialog.isApprovingInvite || inviteDetailsDialog.isRejectingInvite" 
+                                    :loading="inviteDetailsDialog.isRejectingInvite"
+                                >Reject</v-btn>
+                            </v-flex>
                         </v-layout>
                     </v-card-actions>
                 </v-card>
@@ -72,7 +75,6 @@
         </div>
         <!-- ### END User Profile Invites Section ### -->
 
-        <!-- ### START User Profile Expertise Section ### -->
         <div v-if="isOwner && hasReviewRequests">
           <div class="title bold pb-2" id="review-requests">Review Requests: {{reviewRequests.length}}</div>
           <v-layout
@@ -120,6 +122,8 @@
           </v-layout>
           <v-divider></v-divider>
         </div>
+
+        <!-- ### START User Profile Expertise Section ### -->
         <div class="mt-4">
             <div class="title bold">Expertise Tokens</div>
             <div class="c-pt-4 c-pb-2">
@@ -131,25 +135,14 @@
                     <div v-if="isOwner">You have no Expertise Tokens yet. Use <span class="a" @click="openClaimExpertiseDialog()">Claim</span> process to apply for Expertise Tokens</div>
                     <div v-if="!isOwner"><span class="body-2">{{userInfo | fullname}}</span> has no Expertise Tokens yet</div>
                 </div>
-                <div v-if="expertise.length && isOwner" class="body-1 text-align-center c-mt-4">
-                    <v-btn @click="openClaimExpertiseDialog()" flat small color="primary" class="ma-0">
-                        <span>Claim new Discipline</span>
+                <div v-if="expertise.length && isOwner" class="body-1 text-align-right c-mt-4">
+                    <v-btn @click="openClaimExpertiseDialog()" outline small color="primary" class="ma-0">
+                        Claim new Discipline
                     </v-btn>
                 </div>
             </div>
         </div>
         <!-- ### END User Profile Expertise Section ### -->
-
-    <!--    <sidebar-splitted-btn>
-            <div slot="left" class="default-half-splitted">
-                <span class="c-m-auto clickable-label">23<br>Followers</span>
-            </div>
-
-            <div slot="right" class="default-half-splitted">
-                <span class="c-m-auto clickable-label">4<br>Following</span>
-            </div>
-        </sidebar-splitted-btn> -->
-
 
         <!-- ### START User Profile Contacts Section ### -->
         <div class="c-mt-4" v-if="isProfileAvailable && (isContactsInfoSpecified || isOwner)">
@@ -417,6 +410,7 @@
 
             closeInviteDetailsDialog(invite, index) {
                 this.inviteDetailsDialog.isShown = false;
+                this.inviteDetailsDialog.item = null;
                 this.inviteDetailsDialog.isApprovingInvite = false;
                 this.inviteDetailsDialog.isRejectingInvite = false;
             },
@@ -441,7 +435,7 @@
                     });
                     console.log(err);
                 }).finally(() => {
-                    this.inviteDetailsDialog.isApprovingInvite = false;
+                    this.closeInviteDetailsDialog();
                 })
             },
 
@@ -463,8 +457,7 @@
                     });
                     console.log(err);
                 }).finally(() => {
-                    this.inviteDetailsDialog.isRejectingInvite = false;
-                    this.inviteDetailsDialog.isShown = false
+                    this.closeInviteDetailsDialog();
                 })
             },
 

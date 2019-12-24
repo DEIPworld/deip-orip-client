@@ -34,7 +34,7 @@
               single-line
               solo
               v-model="videoSrc" 
-              :rules="[rules.link, rules.mp4]"
+              :rules="[rules.link]"
             ></v-text-field>
           </div>
 
@@ -96,9 +96,6 @@ export default {
         required: value => !!value || 'This field is required',
         link: (value) => {
 					return (!value || this.isValidLink) || 'Invalid http(s) link';
-				},
-				mp4: (value) => {
-					return (!value || this.isMp4) || 'Only .mp4 format is supported currently';
 				}
       }
     }
@@ -118,12 +115,8 @@ export default {
 			return regexp.test(this.videoSrc || "");
     },
     
-		isMp4() {
-			return this.isValidLink && this.videoSrc.substr(this.videoSrc.length - 4) == ".mp4";
-    },
-    
 		videoSrcIsValidOrAbsent() {
-			return !this.videoSrc || (this.isValidLink && this.isMp4);
+			return !this.videoSrc || this.isValidLink;
     }
   },
   methods: {

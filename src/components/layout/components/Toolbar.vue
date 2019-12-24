@@ -4,10 +4,10 @@
       <global-loader></global-loader>
     </div>
 
-    <v-toolbar color="black">
-      <v-toolbar-side-icon class="mx-2">
-        <router-link :to="{ name: 'Default' }">
-          <img width="85px" :src="'./static/logo_customize.svg'" />
+    <v-toolbar :color="themeSettings['top-bar-color']">
+      <v-toolbar-side-icon class="mx-2 my-0">
+        <router-link class="ma-0 pa-0" :to="{ name: 'Default' }">
+          <img height="40px" :src="tenant | tenantLogoSrc(80, 80, false)" />
         </router-link>
       </v-toolbar-side-icon>
 
@@ -15,12 +15,12 @@
 
       <v-spacer></v-spacer>
 
-      <v-toolbar-items v-if="isLoggedIn()" class="hidden-sm-and-down">
-        <v-btn :to="{ name: 'ResearchFeed' }" color="white" flat class="ma-0">Explore</v-btn>
-        <v-btn :to="{ name: 'Dashboard' }"  color="white" flat class="ma-0">Dashboard</v-btn>
-        <v-btn :to="{ name: 'InvestorDashboard' }" color="white" flat class="ma-0">Portfolio</v-btn>
-        <v-btn :to="{ name: 'UserWallet', params: { account_name: user.username } }" color="white" flat class="ma-0">Wallet</v-btn>
-        <notifications-list :notifications="user.notifications"></notifications-list>
+      <v-toolbar-items v-if="isLoggedIn()">
+        <v-btn :to="{ name: 'ResearchFeed' }" :color="themeSettings['top-bar-link-color']" flat class="ma-0">Explore</v-btn>
+        <v-btn :to="{ name: 'Dashboard' }" :color="themeSettings['top-bar-link-color']" flat class="ma-0">Dashboard</v-btn>
+        <v-btn :to="{ name: 'InvestorDashboard' }" :color="themeSettings['top-bar-link-color']" flat class="ma-0">Portfolio</v-btn>
+        <v-btn :to="{ name: 'UserWallet', params: { account_name: user.username } }" :color="themeSettings['top-bar-link-color']" flat class="ma-0">Wallet</v-btn>
+        <user-notifications-list :notifications="user.notifications"></user-notifications-list>
         <v-menu bottom left offset-y>
           <v-btn fab flat icon class="ma-0" slot="activator">
             <v-avatar size="32px">
@@ -41,8 +41,8 @@
       </v-toolbar-items>
 
       <v-toolbar-items v-else>
-        <v-btn color="white" flat :to="{ name: 'SignIn' }">Sign In</v-btn>
-        <!-- <v-btn color="white" flat :to="{ name: 'SignUp' }">Sign Up</v-btn> -->
+        <v-btn :color="themeSettings['top-bar-link-color']" flat :to="{ name: 'SignIn' }">Sign In</v-btn>
+        <!-- <v-btn :color="themeSettings['top-bar-link-color']" flat :to="{ name: 'SignUp' }">Sign Up</v-btn> -->
       </v-toolbar-items>
     </v-toolbar>
   </div>
@@ -56,15 +56,16 @@ export default {
   name: 'Toolbar',
   data() {
     return {
-      tenant: window.env.TENANT
     }
   },
 
   computed: {
     ...mapGetters({
       user: 'auth/user',
+      tenant: 'auth/tenant',
       isGrantor: 'auth/isGrantor',
-      isOfficer: 'auth/isOfficer'
+      isOfficer: 'auth/isOfficer',
+      themeSettings: 'layout/themeSettings'
     })
   },
 

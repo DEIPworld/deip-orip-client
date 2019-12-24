@@ -97,7 +97,7 @@
                         <span class="c-pr-1 c-pl-1">{{ duplicate.program.agency_name.toUpperCase()}}</span>
                         <span>
                             <v-avatar size="30px">
-                                <img :src="duplicate.program.agency_name | agencyLogoSrc(160, 160, false)" />
+                                <img :src="{ _id: duplicate.program.agency_name } | tenantLogoSrc(60, 60, false)" />
                             </v-avatar>
                         </span>
                         <span class="caption grey--text">($ {{fromAssetsToFloat(duplicate.total_amount)}} requested)</span>

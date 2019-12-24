@@ -168,7 +168,7 @@
                                 <v-icon small>add</v-icon>
                             </v-btn>
 
-                            <span class="c-pl-2 deip-blue-color">Add group</span>
+                            <span class="c-pl-2">Add group</span>
                         </div>
                     </v-card>
                 </div>
@@ -207,7 +207,7 @@
                                 <v-btn class="ma-0" @click="showSaveEducationDialog(null, -1)" outline icon color="primary">
                                     <v-icon small>add</v-icon>
                                 </v-btn>
-                                <span class="c-pl-2 deip-blue-color">Add education institutions</span>
+                                <span class="c-pl-2">Add education institutions</span>
                             </div>
                             <div v-if="isOwner">
                                 <user-edit-education-dialog 
@@ -250,7 +250,7 @@
                                 <v-btn class="ma-0" @click="showSaveEmploymentDialog(null, -1)" outline icon color="primary">
                                     <v-icon small>add</v-icon>
                                 </v-btn>
-                                <span class="c-pl-2 deip-blue-color">Add employment</span>
+                                <span class="c-pl-2">Add employment</span>
                             </div>
                             <div v-if="isOwner">
                                 <user-edit-employment-dialog 
@@ -611,7 +611,7 @@
 
     .research-group-title {
         font-size: 16px;
-        color: #2F80ED;
+        color: var(--v-primary-base);
         font-weight: 500;
         text-decoration: none;
         &:hover {

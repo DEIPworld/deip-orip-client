@@ -1,47 +1,47 @@
 <template>
-    <v-container fluid fill-height class="pa-0">
+    <v-container fluid fill-height pa-0>
         <v-layout>
 
-            <v-stepper v-model="currentStep" alt-labels class="legacy-column full-width full-height stepper-page">
-                <v-stepper-header>
+            <v-stepper v-model="currentStep" alt-labels class="display-flex flex-column w-100 fill-height stepper-page">
+                <v-stepper-header class="flex-grow-0">
                     <v-stepper-step step="1" :complete="currentStep > 1">
-                        <div class="uppercase">Discipline</div>
+                        <div class="text-uppercase">Discipline</div>
                     </v-stepper-step>
 
                     <v-divider></v-divider>
 
                     <v-stepper-step step="2" :complete="currentStep > 2">
-                        <div class="uppercase">Research group</div>
+                        <div class="text-uppercase">Research group</div>
                     </v-stepper-step>
 
                     <v-divider></v-divider>
 
                     <v-stepper-step step="3" :complete="currentStep > 3">
-                        <div class="uppercase">Title</div>
+                        <div class="text-uppercase">Title</div>
                     </v-stepper-step>
 
                     <v-divider></v-divider>
+
+                    <!-- <v-stepper-step step="4" :complete="currentStep > 4">
+                        <div class="text-uppercase">Video</div>
+                    </v-stepper-step>
+
+                    <v-divider></v-divider> -->
 
                     <v-stepper-step step="4" :complete="currentStep > 4">
-                        <div class="uppercase">Video</div>
-                    </v-stepper-step>
-
-                    <v-divider></v-divider>
-
-                    <v-stepper-step step="5" :complete="currentStep > 5">
-                        <div class="uppercase">Roadmap</div>
+                        <div class="text-uppercase">Roadmap</div>
                     </v-stepper-step>
                     
-                    <!-- <v-divider></v-divider> -->
+                    <!-- <v-divider></v-divider>
 
-                    <!-- <v-stepper-step step="6">
-                        <div class="uppercase">Reward shares</div>
+                    <v-stepper-step step="5">
+                        <div class="text-uppercase">Reward shares</div>
                     </v-stepper-step> -->
                 </v-stepper-header>
 
-                <v-stepper-items class="legacy-col-grow">
+                <v-stepper-items class="flex-grow-1">
                     <v-stepper-content step="1">
-                        <div class="full-height">
+                        <div class="fill-height">
                             <create-research-pick-discipline
                                 @incStep="incStep"
                                 @setDisciplines="setDisciplines"
@@ -51,7 +51,7 @@
                     </v-stepper-content>
 
                     <v-stepper-content step="2">
-                        <div class="full-height">
+                        <div class="fill-height">
                             <create-research-pick-group
                                 @incStep="incStep" @decStep="decStep"
                                 @setGroup="setGroup"
@@ -61,10 +61,11 @@
                     </v-stepper-content>
 
                     <v-stepper-content step="3">
-                        <div class="full-height">
+                        <div class="fill-height">
                             <create-research-meta
                                 @setTitle="setTitle"
                                 @setDescription="setDescription"
+                                @setVideo="setVideo"
                                 @incStep="incStep" @decStep="decStep"
                                 :research="research"
                                 :isLoading="isLoading"
@@ -72,8 +73,8 @@
                         </div>
                     </v-stepper-content>
 
-                    <v-stepper-content step="4">
-                        <div class="full-height">
+                    <!-- <v-stepper-content step="4">
+                        <div class="fill-height">
                             <create-research-video
                                 @setVideo="setVideo"
                                 @incStep="incStep" @decStep="decStep"
@@ -81,10 +82,10 @@
                                 :isLoading="isLoading"
                             ></create-research-video>
                         </div>
-                    </v-stepper-content>
+                    </v-stepper-content> -->
 
-                    <v-stepper-content step="5">
-                        <div class="full-height">
+                    <v-stepper-content step="4">
+                        <div class="fill-height">
                             <create-research-roadmap
                                 @finish="finish"
                                 @decStep="decStep"
@@ -94,9 +95,8 @@
                         </div>
                     </v-stepper-content>
 
-                    <!-- temporary commented -->
-                    <!-- <v-stepper-content step="4">
-                        <div class="full-height">
+                    <!-- <v-stepper-content step="5">
+                        <div class="fill-height">
                             <create-research-share 
                                 @finish="finish" @decStep="decStep"
                                 @setReviewShare="setReviewShare"
@@ -140,6 +140,7 @@ export default {
   computed: {
     ...mapGetters({
       user: 'auth/user',
+      tenant: "auth/tenant",
       userGroups: 'auth/userGroups',
       userCoworkers: 'auth/userCoworkers'
     })
@@ -178,14 +179,16 @@ export default {
     },
 
     finish() {
-      const self = this;
       this.isLoading = true;
+
+      let groupPermlink = this.research.group.permlink;
+      let permlink = this.research.title.replace(/ /g, "-").replace(/_/g, "-").toLowerCase();
 
       createResearchProposal(
         this.research.group.id, 
         this.research.title, 
         this.research.description, 
-        this.research.title.replace(/ /g, "-").replace(/_/g, "-").toLowerCase(), 
+        permlink, 
         500, // this.research.review_share_in_percent * this.DEIP_1_PERCENT,
         this.research.disciplines.map(d => d.id),
         this.research.milestones.map((m, i) => {
@@ -201,18 +204,27 @@ export default {
       .then(() => {
         this.isLoading = false;
         this.$store.dispatch('layout/setSuccess', {
-            message: `Proposal for "${this.research.title}" research is created !`
+          message: `Project "${this.research.title}" has been created successfully`
         });
       }, (err) => {
         console.log(err);
         this.isLoading = false;
         this.$store.dispatch('layout/setError', {
-            message: "An error occurred while creating proposal, please try again later"
+          message: "An error occurred while creating project, please try again later"
         });
       })
       .finally(() => {
         setTimeout(() => {
-          self.$router.push({ name: 'ResearchFeed' });
+          if (this.research.group.is_personal || !this.research.group.is_dao) {
+            this.$router.push({
+              name: 'ResearchDetails',
+              params: {
+                research_group_permlink: encodeURIComponent(this.research.group.permlink),
+                research_permlink: encodeURIComponent(this.research.title.replace(/ /g, "-").replace(/_/g, "-").toLowerCase())}
+            });
+          } else {
+            this.$router.push({ name: 'ResearchFeed' });
+          }
         }, 1500);
       });
     }
@@ -224,7 +236,13 @@ export default {
         this.research.disciplines = disciplineTreeService.getNodesByIdList(
           this.$route.query['disciplineIds'].map(disciplineId => parseInt(disciplineId))
         );
-        this.currentStep = 2;
+        if (this.$route.query.groupPermlink){
+          const newGroup = this.userGroups.find(item => item.permlink == this.$route.query.groupPermlink);
+          this.setGroup(newGroup);
+          this.currentStep = 3;
+        } else {
+          this.currentStep = 2;
+        }
       } catch (e) {
         console.error('Invalid url params');
       }
@@ -234,4 +252,19 @@ export default {
 </script>
 
 <style lang="less">
+  .flex-column{
+    flex-direction: column;
+  }
+  .flex-grow-0{
+    flex-grow: 0 !important;
+  }
+  .flex-grow-1{
+    flex-grow: 1 !important;
+  }
+  .w-100{
+    width: 100%;
+  }
+  .flex-basis-0{
+    flex-basis: 0 !important;
+  }
 </style>

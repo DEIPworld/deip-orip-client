@@ -155,7 +155,7 @@
 <script>
     import { mapGetters } from 'vuex';
     import deipRpc from '@deip/deip-oa-rpc-client';
-    import agencyHttp from './../../services/http/agency';
+    import tenantHttp from './../../services/http/tenant';
 
     export default {
         name: "CreateFundingOpportunityAnnouncement",
@@ -248,7 +248,7 @@
             }
         },
         created() {
-            agencyHttp.getAgencyProfile(window.env.TENANT)
+            tenantHttp.getTenantProfile(window.env.TENANT)
                 .then((agency) => {
                     this.agency = agency;
                 })

@@ -35,18 +35,18 @@
         <div class="c-mt-8" v-if="flattenedApplicationsList.length">
             <div class="title">Applications</div>
             <div class="c-pt-6">
-                <div v-for="item in flattenedApplicationsList"> 
+                <div v-for="(item, n) in flattenedApplicationsList" :key="'application-' + n"> 
                     <v-card>
                         <v-card-text>
                             <div class="legacy-row-nowrap">
                                 <div class="legacy-col-8">
                                     <span class="c-pr-3">
                                         <v-avatar size="20px">
-                                            <img :src="item.application.foa.agency_name | agencyLogoSrc(160, 160, false)" />
+                                            <img :src="{ _id: item.application.foa.agency_name } | tenantLogoSrc(40, 40, false)" />
                                         </v-avatar>
                                     </span>
                                     <span class="body-2">
-                                        <router-link class="a deip-blue-color" 
+                                        <router-link class="a" 
                                             :to="{ name: 'AgencyProgramDetails', 
                                                 params: { 
                                                     agency: item.application.foa.agency_name, 
@@ -55,7 +55,7 @@
                                         </router-link>
                                     </span> 
                                     <span class="c-pl-5">
-                                        <router-link v-if="item.isAccessible" class="a deip-blue-color" 
+                                        <router-link v-if="item.isAccessible" class="a" 
                                             :to="{ name: 'ResearchApplicationDetails', 
                                                 params: { 
                                                     research_group_permlink: group.permlink, 
@@ -79,7 +79,7 @@
                                     </div>
                                 </div>
                                 <div class="legacy-col-1">
-                                    <router-link v-if="item.isAccessible" class="a deip-blue-color" 
+                                    <router-link v-if="item.isAccessible" class="a" 
                                         :to="{ name: 'ResearchApplicationDetails', 
                                             params: { 
                                                 research_group_permlink: group.permlink, 
@@ -113,7 +113,7 @@
                         <div slot="header">
                             <div v-on:click.stop>
                                 <span class="bold">{{getContentType(content.content_type).text}}</span>
-                                <span class="deip-blue-color bold c-pl-4"> 
+                                <span class="bold c-pl-4"> 
                                     <router-link class="a" 
                                         :to="{
                                             name: 'ResearchContentDetails',
@@ -193,7 +193,7 @@
                     <div slot="header">
                         <div v-on:click.stop>
                             <span class="bold">Draft {{index + 1}}</span>
-                            <span class="deip-blue-color bold c-pl-4"> 
+                            <span class="bold c-pl-4"> 
                                 <a @click="openDarDraft(draft)" class="a">
                                     {{draft.title || draft._id}}
                                 </a>
@@ -442,4 +442,25 @@
 </script>
 
 <style lang="less">
+    @import './../../../styles/colors.less';
+
+    .info-card-list {
+        .list-line {
+            display: flex;
+            padding-top: 24px;
+            padding-bottom: 24px;
+            padding-left: 12px;
+            padding-right: 12px;
+        }
+        .list-header-cell {
+            padding-right: 12px;
+            padding-left: 12px;
+            color: @grey;
+        }
+        .list-body-cell {
+            padding-right: 12px;
+            padding-left: 12px;
+            align-self: center;
+        }
+    }
 </style>

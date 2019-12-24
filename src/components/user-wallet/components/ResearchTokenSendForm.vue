@@ -1,6 +1,6 @@
 <template>
     <v-card>
-        <div class="blue lighten-4 c-p-4">
+        <div class="primary lighten-5 c-p-4">
             <div class="uppercase text-align-center half-bold">Send research tokens</div>
         </div>
 

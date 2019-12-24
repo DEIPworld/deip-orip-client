@@ -18,7 +18,7 @@
 
             <v-menu offset-y>
                 <v-btn slot="activator" class="ma-0">
-                    <div class="deip-blue-color">
+                    <div>
                         <span v-if="filter.order === 'desc'">Newest First</span>
                         <span v-if="filter.order === 'asc'">Oldest First</span>
 

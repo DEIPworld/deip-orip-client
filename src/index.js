@@ -21,7 +21,6 @@ import './components/funding-opportunity-announcement-create/index';
 import './components/agency-programs/index';
 import './components/agency-program-details/index';
 import './components/research-application-details/index';
-import './components/investor-legacy-flow/index';
 import './components/dashboard/index';
 import './components/investor-dashboard/index';
 

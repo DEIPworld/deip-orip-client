@@ -32,7 +32,7 @@
                 <v-btn @click="openJoinGroupDialog()" outline icon color="primary" class="ma-0">
                     <v-icon small>add</v-icon>
                 </v-btn>
-                <span class="deip-blue-color c-pl-3">Join research group</span>
+                <span class="c-pl-3">Join research group</span>
             </div>
             <div v-if="isActiveJoinRequest" class="text-align-center italic pt-2">You have sent a join request on {{new Date(currentJoinRequest.created).toDateString()}}, please wait for approval</div>
             <div v-if="isActiveInvite" class="text-align-center italic pt-2">
@@ -40,46 +40,36 @@
                 <router-link :to="`/user-details/${user.username}`" style="text-decoration: none">your profile page</router-link>
                 to join the research group
             </div>
-            <v-dialog v-if="research" v-model="isJoinGroupDialogOpen" persistent transition="scale-transition" max-width="800px">
-                <v-card class="">
-                    <v-toolbar dark color="primary">
-                        <v-btn icon dark @click="isJoinGroupDialogOpen = false">
-                            <v-icon>close</v-icon>
+            <v-dialog v-if="research" v-model="isJoinGroupDialogOpen" persistent transition="scale-transition" max-width="600px">
+                <v-card class="pa-4">
+                <v-card-title>
+                    <v-layout align-center>
+                    <v-flex grow title font-weight-bold>Please provide a cover letter to your join request</v-flex>
+                    <v-flex shrink right-top-angle>
+                        <v-btn @click="isJoinGroupDialogOpen = false" icon class="pa-0 ma-0">
+                        <v-icon color="black">close</v-icon>
                         </v-btn>
-                        <v-toolbar-title>Please provide a cover letter to your join request</v-toolbar-title>
-                        <v-spacer></v-spacer>
-                    </v-toolbar>
-            
-                    <page-container>
-                        <contentbar>
-                            <div>
-                                <v-textarea v-model="coverLetter" :rows="8" name="Cover letter" label="Cover letter"></v-textarea>
-                                <div class="display-flex c-pt-8">
-                                    <v-btn color="primary" 
-                                        class="c-m-auto"
-                                        :disabled="!coverLetter || isSendingJoinGroupRequest"
-                                        :loading="isSendingJoinGroupRequest"
-                                        @click="sendJoinGroupRequest()">
-                                        Send
-                                    </v-btn>
-                                </div>
-                            </div>
-                        </contentbar>
-                    </page-container>
+                    </v-flex>
+                    </v-layout>
+                </v-card-title>
+                <v-card-text>
+                    <v-textarea v-model="coverLetter" :rows="8" name="Cover letter" label="Cover letter"></v-textarea>
+                </v-card-text>
+                <v-card-actions class="pa-0">
+                    <v-layout column>
+                    <v-flex xs12 py-2>
+                        <v-btn color="primary"
+                        :disabled="!coverLetter || isSendingJoinGroupRequest"
+                        :loading="isSendingJoinGroupRequest"
+                        @click="sendJoinGroupRequest()"
+                        block>Send</v-btn>
+                    </v-flex>
+                    </v-layout>
+                </v-card-actions>
                 </v-card>
             </v-dialog>
         </div>
         <!-- ### END Research Members Section ### -->
-        
-    <!--    <sidebar-splitted-btn>
-            <div slot="left" class="default-half-splitted">
-                <span class="c-m-auto clickable-label">23<br>Followers</span>
-            </div>
-
-            <div slot="right" class="default-half-splitted">
-                <span class="c-m-auto clickable-label">Follow</span>
-            </div>
-        </sidebar-splitted-btn> -->
 
         <!-- ### START Research Content ECI Section ### -->
         <div class="c-mb-6 c-mt-4">
@@ -214,7 +204,7 @@
 
                                     <div class="pos-absolute" :style="{ left: currentCapPercent + '%' }">
                                         <v-tooltip bottom color="white">
-                                            <div class="chapter-point deip-blue-bg" slot="activator"></div>
+                                            <div class="chapter-point" slot="activator"></div>
                                             
                                             <div>
                                                 <div class="grey--text cap-value text-align-center">{{ currentCap }}</div>
@@ -480,6 +470,7 @@
         height: 2px;
     }
     .chapter-point {
+        background-color: var(--v-primary-lighten5);
         width: 14px;
         height: 14px;
         border-radius: 50%;

@@ -2,12 +2,13 @@ import _ from 'lodash';
 import deipRpc from '@deip/deip-oa-rpc-client';
 import Vue from 'vue'
 
-import { isLoggedIn, getDecodedToken, getOwnerWif } from './../../../utils/auth'
-import usersService from './../../../services/http/users'
-import bookmarksHttpService from './../../../services/http/bookmarks'
-import joinRequestsService from './../../../services/http/joinRequests'
-import notificationsHttpService from './../../../services/http/notifications'
-import { getEnrichedProfiles } from './../../../utils/user'
+import { isLoggedIn, getDecodedToken, getOwnerWif } from '@/utils/auth'
+import usersService from '@/services/http/users'
+import bookmarksHttpService from '@/services/http/bookmarks'
+import joinRequestsService from '@/services/http/joinRequests'
+import notificationsHttpService from '@/services/http/notifications'
+import { getEnrichedProfiles } from '@/utils/user'
+import tenantHttp from './../../../services/http/tenant';
 
 const state = {
   user: {
@@ -23,7 +24,8 @@ const state = {
     joinRequests: [],
     notifications: [],
     researchBookmarks: [],
-  }
+  },
+  tenant: null
 }
 
 // getters
@@ -53,8 +55,9 @@ const getters = {
         quorum_percent: group.quorum_percent,
         weight: rgt.amount,
         rgtId: rgt.id,
-        is_personal: group.is_personal
-      })
+        is_personal: group.is_personal,
+        is_dao: group.is_dao
+      });
     }
     return groups;
   },
@@ -99,6 +102,10 @@ const getters = {
 
   isApplicant: (state, getters) => {
     return !getters.isGrantor && !getters.isOfficer;
+  },
+  
+  tenant: (state) => {
+    return state.tenant;
   }
 }
 
@@ -273,6 +280,17 @@ const actions = {
       .finally(() => {
         if (notify) notify();
       });
+  },
+
+  loadTenant({ state, commit, getters }, { tenant, notify } = {}) {
+    return tenantHttp.getTenantProfile(tenant)
+      .then((tenantProfile) => {
+        commit('SET_TENANT_PROFILE', tenantProfile);
+      })
+      .catch(err => { console.log(err) })
+      .finally(() => {
+        if (notify) notify();
+      });
   }
 }
 
@@ -313,6 +331,10 @@ const mutations = {
 
   ['SET_USER_ACCOUNT'](state, account) {
     Vue.set(state.user, 'account', account)
+  },
+
+  ['SET_TENANT_PROFILE'](state, tenant) {
+    Vue.set(state, 'tenant', tenant)
   }
 }
 
