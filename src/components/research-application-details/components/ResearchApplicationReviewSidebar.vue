@@ -8,7 +8,7 @@
             </div>
             <div class="c-pt-5 title">{{agency.name}}</div>
         </div>
-    <!--  <div v-if="review.author.account.name !== user.username && userHasExpertise">
+  <!--  <div v-if="review.author.account.name !== user.username && userHasExpertise">
             <div class="support-review-button">
                 <v-btn block color="primary"
                     :loading="isReviewVoting" 
@@ -16,19 +16,6 @@
                     @click="voteReview()">
                     Support Review
                 </v-btn>
-            </div>
-        </div> -->
-    <!--   <div class="c-mt-8" v-if="eciList.length">
-            <div class="sidebar-fullwidth"><v-divider></v-divider></div>
-            <div class="subheading bold c-mt-4">Expertise Contribution Index</div>
-            <div class="c-mt-4">
-                <div v-for="(eci, index) in eciList" :key="index"
-                    class="legacy-row align-center legacy-justify-between eci-item c-ph-2"
-                    :class="index === 0 ? '' : 'c-mt-1'"
-                >
-                    <div class="grey--text">ECI</div>
-                    <div class="c-pv-2 eci-label">{{ eci.disciplineName }}: {{ eci.value }}</div>
-                </div>
             </div>
         </div> -->
     </div>
@@ -75,14 +62,6 @@
                 return this.review != null ? 
                     this.review.votes.some(vote => vote.voter === this.user.username) 
                     : false;
-            },
-            eciList() {
-                return this.review.evaluation_per_discipline.map(item => {
-                    return {
-                        disciplineName: disciplineTreeService.getNodeById(item[0]).label,
-                        value: item[1]
-                    };
-                });
             }
         },
         

@@ -573,11 +573,11 @@
                         </div>
                         <v-layout row wrap>
                           <v-flex
-                            v-for="wod of review.weights_of_disciplines"
-                            :key="wod.disciplineName"
+                            v-for="item of review.disciplines"
+                            :key="`${review.id}- ${item.disciplineName}`"
                             class="rd-review-eci mt-1"
                             lg12
-                          >{{wod.disciplineName}}: {{wod.totalWeight}}</v-flex>
+                          >{{item.disciplineName}}</v-flex>
                         </v-layout>
                       </v-flex>
                       <v-flex lg4>
@@ -1301,14 +1301,11 @@ export default {
     },
     reviews() {
       return this.reviewsList.map(review => {
-        const weights_of_disciplines = [];
+        const disciplines = [];
         review.disciplines.forEach(discipline => {
-          const weight = review.weight_per_discipline.find(
-            arr => arr[0] === discipline.id
-          );
-          weights_of_disciplines.push({
-            disciplineName: discipline.name,
-            totalWeight: weight ? weight[1] : 0
+          const weight = 0;
+          disciplines.push({
+            disciplineName: discipline.name
           });
         });
 
@@ -1319,7 +1316,7 @@ export default {
           research_content: this.contentList.find(
             c => c.id === review.research_content_id
           ),
-          weights_of_disciplines
+          disciplines
         };
         _review.preview_html = this.extractReviewPreview(_review);
         return _review;

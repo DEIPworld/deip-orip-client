@@ -317,7 +317,7 @@ const actions = {
         var applications = [];
         commit('SET_RESEARCH_APPLICATONS_LOADING_STATE', true);
 
-        deipRpc.api.getApplicationsByResearchIdAsync(researchId)
+        deipRpc.api.getGrantApplicationsByResearchIdAsync(researchId)
             .then(list => {
                 applications = list;
                 return Promise.all(applications.map(a => deipRpc.api.getFundingOpportunityAsync(a.grant_id)));
