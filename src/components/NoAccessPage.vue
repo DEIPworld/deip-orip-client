@@ -7,11 +7,11 @@
                     <div class="headline">You have no access to this page</div>
                 </div>
 
-                <img class="left-polygon" :src="'./static/polygon.svg'">
-                <img class="right-polygon" :src="'./static/polygon.svg'">
+                <img class="left-polygon" src="/assets/img/polygon.svg">
+                <img class="right-polygon" src="/assets/img/polygon.svg">
             </div>
         </v-content>
-    </v-app>   
+    </v-app>
 </template>
 
 <script>
@@ -30,7 +30,7 @@
 
         right: -150px;
     }
-    
+
     .left-polygon {
         transform: rotate(-65deg);
         position: absolute;

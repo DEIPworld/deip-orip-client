@@ -4,7 +4,7 @@
       <v-flex md6 lg6 xl6 hidden-sm-and-down>
         <v-layout column wrap fill-height class="description">
           <div class="description__logo">
-            <img src="/static/logo-iconed.svg" />
+            <img src="/assets/img/logo-iconed.svg" />
           </div>
           <div class="description__info-text">
             Open Research and Innovation Platform
@@ -129,7 +129,7 @@
                             if (response.success) {
                                 const decoded = decodedToken(response.jwtToken);
                                 const pubKey = decoded.pubKey;
-                                
+
                                 // this validation is not necessary as we validate private key at the server using signature
                                 var isValid;
                                 try {
@@ -137,11 +137,11 @@
                                 } catch (err) {
                                     isValid = false;
                                 }
-                                
+
                                 if (isValid) {
                                     // The jwt is being used by Vue router and File uploader api
                                     // to verify that user has logged successfully and entered his private key.
-                                    // TODO: We should make decision on how to store private keys at UI. 
+                                    // TODO: We should make decision on how to store private keys at UI.
                                     // For now we can use local storage but it's not secure enough due to XSS attacks
                                     // and compromised thirdparty sources.
                                     setAccessToken(response.jwtToken, this.privKey)
@@ -172,7 +172,7 @@
                 }
             }
         },
-        
+
         created() {
              this.username = this.$route.query.username || '';
         }

@@ -87,10 +87,10 @@ const router = new Router({
 		name: 'AgencyPrograms',
 		component: AgencyPrograms,
 		beforeEnter: (to, from, next) => {
-			let loadPagePromise = store.dispatch('agencyPrograms/loadAgencyProgramsPage', { 
-				agency: decodeURIComponent(to.params.agency), 
-				areaCode: to.query.areaCode, 
-				subAreaCode: to.query.subAreaCode 
+			let loadPagePromise = store.dispatch('agencyPrograms/loadAgencyProgramsPage', {
+				agency: decodeURIComponent(to.params.agency),
+				areaCode: to.query.areaCode,
+				subAreaCode: to.query.subAreaCode
 			});
 			loadPage(loadPagePromise, next);
 		}
@@ -99,9 +99,9 @@ const router = new Router({
 		name: 'AgencyProgramDetails',
 		component: AgencyProgramDetails,
 		beforeEnter: (to, from, next) => {
-			let loadPagePromise = store.dispatch('agencyProgramDetails/loadAgencyProgramDetailsPage', { 
-				agency: decodeURIComponent(to.params.agency), 
-				foaId: decodeURIComponent(to.params.foa) 
+			let loadPagePromise = store.dispatch('agencyProgramDetails/loadAgencyProgramDetailsPage', {
+				agency: decodeURIComponent(to.params.agency),
+				foaId: decodeURIComponent(to.params.foa)
 			});
 			loadPage(loadPagePromise, next);
 		}
@@ -111,7 +111,7 @@ const router = new Router({
 		component: preliminaryDataLoader(ResearchGroupDetails, {
 			beforeEnter: (to, from, next) => {
 				let loadPagePromise = store.dispatch('researchGroup/loadResearchGroup', {
-					permlink: decodeURIComponent(to.params.research_group_permlink) 
+					permlink: decodeURIComponent(to.params.research_group_permlink)
 				});
 				loadPage(loadPagePromise, next);
 			}
@@ -360,6 +360,7 @@ const router = new Router({
 		name: 'SetExpertisePage',
 		component: SetExpertisePage,
 	}, {
+	  // TODO: deprecated
 		path: '/no-access-page',
 		name: 'NoAccessPage',
 		component: NoAccessPage,
@@ -395,15 +396,15 @@ const router = new Router({
 		name: 'CreateFundingOpportunityAnnouncement',
 		component: CreateFundingOpportunityAnnouncement
 	}, {
-		path: '*',
+		path: '/',
 		name: 'Default',
 		beforeEnter: (to, from, next) => {
       const tenant = store.getters['auth/tenant'];
 			const user = store.getters['auth/user'];
-			const rolePromise = user.profile 
-				? Promise.resolve(user.profile.agencies || []) 
+			const rolePromise = user.profile
+				? Promise.resolve(user.profile.agencies || [])
 				: usersService.getUserProfile(user.username).then((p) => { return p.agencies });
-			
+
 			rolePromise.then((agencies) => {
 				return next({ name: 'ResearchFeed' });
 
@@ -411,7 +412,7 @@ const router = new Router({
 					next({ name: 'ResearchFeed' });
 					return;
 				}
-				
+
 				const sub = window.env.TENANT || "";
 				const agency = agencies.find(a => a.name.toLowerCase() === sub.toLowerCase());
 
@@ -422,8 +423,11 @@ const router = new Router({
 				}
 			});
 		}
-	}],
-	
+	}, {
+    path: '*',
+    redirect: { name: 'Default' }
+  }],
+
 	scrollBehavior(to, from, savedPosition) {
 		if (to.hash) {
 			// TODO: Remove this timeout after router\loader refactoring

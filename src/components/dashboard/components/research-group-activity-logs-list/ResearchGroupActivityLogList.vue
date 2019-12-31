@@ -10,40 +10,40 @@
       <v-card>
         <v-card-text>
           <div class="py-2" v-for="(log, i) in researchGroupLogs" :key="`activity-log-${i}`">
-            <research-proposal-activity-log-entry 
-              v-if="(log.type === PROPOSAL || log.type === PROPOSAL_ACCEPTED) && log.metadata.proposal.action === START_RESEARCH" 
+            <research-proposal-activity-log-entry
+              v-if="(log.type === PROPOSAL || log.type === PROPOSAL_ACCEPTED) && log.metadata.proposal.action === START_RESEARCH"
               :log="log">
             </research-proposal-activity-log-entry>
-            <research-content-proposal-activity-log-entry 
-              v-else-if="(log.type === PROPOSAL || log.type === PROPOSAL_ACCEPTED) && log.metadata.proposal.action === CREATE_RESEARCH_MATERIAL" 
+            <research-content-proposal-activity-log-entry
+              v-else-if="(log.type === PROPOSAL || log.type === PROPOSAL_ACCEPTED) && log.metadata.proposal.action === CREATE_RESEARCH_MATERIAL"
               :log="log">
             </research-content-proposal-activity-log-entry>
-            <invite-proposal-activity-log-entry 
-              v-else-if="(log.type === PROPOSAL || log.type === PROPOSAL_ACCEPTED) && log.metadata.proposal.action === INVITE_MEMBER" 
+            <invite-proposal-activity-log-entry
+              v-else-if="(log.type === PROPOSAL || log.type === PROPOSAL_ACCEPTED) && log.metadata.proposal.action === INVITE_MEMBER"
               :log="log">
             </invite-proposal-activity-log-entry>
-            <token-sale-proposal-activity-log-entry 
-              v-else-if="(log.type === PROPOSAL || log.type === PROPOSAL_ACCEPTED) && log.metadata.proposal.action === START_RESEARCH_TOKEN_SALE" 
+            <token-sale-proposal-activity-log-entry
+              v-else-if="(log.type === PROPOSAL || log.type === PROPOSAL_ACCEPTED) && log.metadata.proposal.action === START_RESEARCH_TOKEN_SALE"
               :log="log">
             </token-sale-proposal-activity-log-entry>
             <proposal-vote-activity-log-entry
-              v-else-if="log.type === PROPOSAL_VOTE" 
+              v-else-if="log.type === PROPOSAL_VOTE"
               :log="log">
             </proposal-vote-activity-log-entry>
-            <invitation-approved-activity-log-entry 
-              v-else-if="log.type === INVITATION_APPROVED" 
+            <invitation-approved-activity-log-entry
+              v-else-if="log.type === INVITATION_APPROVED"
               :log="log">
             </invitation-approved-activity-log-entry>
-            <invitation-rejected-activity-log-entry 
-              v-else-if="log.type === INVITATION_REJECTED" 
+            <invitation-rejected-activity-log-entry
+              v-else-if="log.type === INVITATION_REJECTED"
               :log="log">
             </invitation-rejected-activity-log-entry>
-            <research-content-expert-review-activity-log-entry 
-              v-else-if="log.type === RESEARCH_CONTENT_EXPERT_REVIEW" 
+            <research-content-expert-review-activity-log-entry
+              v-else-if="log.type === RESEARCH_CONTENT_EXPERT_REVIEW"
               :log="log">
             </research-content-expert-review-activity-log-entry>
-            <research-content-expert-review-request-activity-log-entry 
-              v-else-if="log.type === RESEARCH_CONTENT_EXPERT_REVIEW_REQUEST" 
+            <research-content-expert-review-request-activity-log-entry
+              v-else-if="log.type === RESEARCH_CONTENT_EXPERT_REVIEW_REQUEST"
               :log="log">
             </research-content-expert-review-request-activity-log-entry>
           </div>
@@ -86,7 +86,7 @@ export default {
   methods: {
 
   },
-  
+
   watch: {
 
   }

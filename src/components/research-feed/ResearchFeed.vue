@@ -6,7 +6,7 @@
         <div class="py-4"><v-btn :to="{ name: 'CreateResearch' }" color="primary" class="ma-0">Start a project</v-btn></div>
       </v-layout>
       <v-layout row wrap>
-        
+
         <v-flex xs12 sm12 md12 lg12 xl12 class="feed-filter">
           <v-expansion-panel expand v-model="filtersTabExpansionModel" class="elevation-0">
             <v-expansion-panel-content class="elevation-0">
@@ -18,9 +18,9 @@
                       <v-chip
                         v-for="discipline in selectedTopDisciplines"
                         :key="'filter-by-discipline-' + discipline.id"
-                        @input="toggleDiscipline(discipline)" 
+                        @input="toggleDiscipline(discipline)"
                         small
-                        close 
+                        close
                         outline>
                         {{ discipline.label }}
                       </v-chip>
@@ -46,7 +46,7 @@
                         close
                         outline>
                         <v-avatar>
-                          <img :src="`./../../../static/top-100.svg`">
+                          <img src="/assets/img/top-100.svg">
                         </v-avatar>
                         Top 100
                       </v-chip>
@@ -59,16 +59,16 @@
                   </div>
                 </v-layout>
               </template>
-              
-              <v-layout row wrap px-5 pt-4 pb-5 class="filters-background"> 
+
+              <v-layout row wrap px-5 pt-4 pb-5 class="filters-background">
                 <v-flex xs12 sm12 md12 lg12 xl12 class="feed-disciplines-filter">
                   <div class="pb-4">
                     <v-layout row justify-space-between align-baseline>
                       <span class="subheading half-bold">Browse by discipline</span>
-                      <v-btn 
+                      <v-btn
                         @click="selectAllDisciplines()"
                         class="text-capitalize"
-                        flat small color="primary" 
+                        flat small color="primary"
                         outline
                         :disabled="isAllDisciplinesSelected">
                         Reset
@@ -77,10 +77,10 @@
                   </div>
                   <v-layout row wrap justify-space-between>
                     <v-flex xs6 sm6 md3 lg3 xl3 px-2 v-for="(discipline, i) in disciplines" :key="'discipline-filter-' + i">
-                      <v-btn 
-                        @click="toggleDiscipline(discipline)" 
-                        flat block small color="primary" 
-                        class="text-capitalize filter-btn" 
+                      <v-btn
+                        @click="toggleDiscipline(discipline)"
+                        flat block small color="primary"
+                        class="text-capitalize filter-btn"
                         :class="{'selected': isDisciplineSelected(discipline)}">
                         <div class="full-width text-xs-center">{{discipline.label}}</div>
                         <!-- {{discipline.label}} -->
@@ -94,10 +94,10 @@
                   <div class="pb-4">
                     <v-layout row justify-space-between align-baseline>
                       <span class="subheading half-bold">Browse by organizations</span>
-                      <v-btn 
+                      <v-btn
                         @click="selectAllOrganizations()"
                         class="text-capitalize"
-                        flat small color="primary" 
+                        flat small color="primary"
                         outline
                         :disabled="isAllOrganizationsSelected">
                         Reset
@@ -174,22 +174,22 @@
                 <template v-slot:item="props">
                   <v-flex xs12 sm6 md4 lg4 xl3 px-2 py-4 my-1 :key="'feed-item-' + props.item.research_id">
                     <research-project-tile
-                      :research="{ 
-                        id: props.item.research_id, 
-                        title: props.item.title, 
-                        permlink: props.item.permlink, 
-                        group_permlink: props.item.group_permlink, 
+                      :research="{
+                        id: props.item.research_id,
+                        title: props.item.title,
+                        permlink: props.item.permlink,
+                        group_permlink: props.item.group_permlink,
                         last_update_time: props.item.last_update_time,
                         number_of_negative_reviews: props.item.number_of_negative_reviews,
                         number_of_positive_reviews: props.item.number_of_positive_reviews,
                         isTop: props.item.isTop,
                       }"
-                      :members="props.item.authors" 
+                      :members="props.item.authors"
                       :tokenSale="props.item.tokenSale"
                       :tokenSaleContributions="props.item.tokenSaleContributions"
                       :group="props.item.group">
                     </research-project-tile>
-                  </v-flex> 
+                  </v-flex>
                 </template>
               </v-data-iterator>
             </v-flex>
