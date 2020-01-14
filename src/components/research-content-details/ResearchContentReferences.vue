@@ -4,8 +4,8 @@
       <v-layout column>
         <div>How my data is used by others</div>
         <div>Number of citations: 7</div>
-        <div v-if="references">
-          <references-dependency-graph :data="references"></references-dependency-graph>
+        <div ref="graphContainer" style="height: 500px">
+          <references-dependency-graph :data="references" :width="graphWidth" :height="graphHeight"></references-dependency-graph>
         </div>
 
         <v-layout row>
@@ -41,7 +41,9 @@ export default {
   name: "ResearchContentReferences",
   data() {
     return {
-      references: null
+      references: null,
+      graphWidth: 0,
+      graphHeight: 0
     };
   },
   computed: {
@@ -51,10 +53,11 @@ export default {
     }),
   },
   methods: {
-
   },
   mounted() {
-    debugger
+    let graphContainer = this.$refs["graphContainer"];
+    this.graphWidth = graphContainer.clientWidth;
+    this.graphHeight = graphContainer.clientHeight;
     this.references = references;
   }
 };

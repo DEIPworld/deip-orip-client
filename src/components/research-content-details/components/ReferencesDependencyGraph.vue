@@ -1,8 +1,7 @@
 <template>
-  <div :style="{ width: '100%', height: height + 'px', border: '1px solid black' }">
+  <div :style="{ width: width + 'px', height: height + 'px', border: '1px solid black' }">
     <svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg" xlink="http://www.w3.org/1999/xlink">
-
-      <defs>
+      <defs v-if="isInitialized">
         <pattern id="innerGrid" :width="innerGridSize" :height="innerGridSize" patternUnits="userSpaceOnUse">
           <rect width="100%" height="100%" fill="none" stroke="#CCCCCC7A" stroke-width="0.5"/>
         </pattern>
@@ -20,12 +19,17 @@ import * as d3 from "d3";
 
 export default {
   name: "ReferencesDependencyGraph",
-  props: ['data'],
+  props: {
+    data: { type: Object, default: () => {} },
+    width: { type: Number, required: true, default: window.innerWidth },
+    height: { type: Number, required: true, default: window.innerHeight }
+  },
   data() {
     return {
-      width: 1024,
-      height: 768,
       gridSize: 100,
+      isInitialized: false,
+      refInfoWidth: 500,
+      refInfoHeight: 300,
       openedNodes: [],
       selections: {},
       simulation: null,
@@ -173,8 +177,6 @@ export default {
         .on('mouseout', d => { this.nodeMouseOut(d) })
         .on('click', d => { this.nodeClick(d) })
       
-      let refInfoWidth = 500;
-      let refInfoHeight = 300;
 
       graph.selectAll(".ref-info").remove()
       let refInfo = graph.selectAll(".ref-info")
@@ -183,8 +185,8 @@ export default {
         .append("foreignObject")
           .attr("x", 10)
           .attr("y", 10)
-          .attr("width", refInfoWidth)
-          .attr("height", refInfoHeight)
+          .attr("width", this.refInfoWidth)
+          .attr("height", this.refInfoHeight)
           .attr("visibility", "hidden")
           .classed("ref-info", true)
           .on("mousedown", () => {
@@ -196,10 +198,9 @@ export default {
           .append("xhtml:div")
             .attr("xmlns", "http://www.w3.org/1999/xhtml")
             .attr("class", "ref-info-box")
-            .style("max-height", refInfoHeight + "px")
+            .style("max-height", this.refInfoHeight + "px")
             .style("overflow-y", "scroll");
       
-
 
       let refInfoBox = refInfo
         .append("xhtml:div")
@@ -227,7 +228,6 @@ export default {
         .text(d => { return "Inter-laboratory evolution of a model organism and its epistatic effects on mutagenesis screens"; })
 
 
-
       let organizationBox = refInfoBox.append("xhtml:div")
         .attr("class", "ref-info-org-box");
 
@@ -249,7 +249,6 @@ export default {
         .attr("src", d => { return `/static/research_groups/${d.org}-mini.png` })
         .attr("target", "_blank")
         .attr("class", "ref-info-org-logo");
-
 
 
       let authorsBox = refInfoBox.append("xhtml:div")
@@ -277,7 +276,6 @@ export default {
         .attr("class", "ref-info-author-img")
 
 
-
       let contentAccessBox = refInfoBox.append("xhtml:div")
         .attr("class", "ref-info-access-box");
 
@@ -303,7 +301,6 @@ export default {
       refInfoBox.on('wheel', (e) => {
         d3.event.stopPropagation();
         // d3.event.preventDefault();
-        // updateScrollPosition(event.deltaY)
       })
 
       // Add 'marker-end' attribute to each path
@@ -410,11 +407,11 @@ export default {
       const captionWidth = caption.node().getBBox().width;
       const captionHeight = caption.node().getBBox().height;
       const paddingX = 18;
-      const paddingY = 12;
+      const paddingY = 18;
       caption
         .attr('transform', 'translate(' +
           (this.width - captionWidth - paddingX) + ', ' +
-          (this.height - captionHeight - paddingY) + ')');
+          (/* this.height - captionHeight - */ paddingY) + ')');
     },
     zoomed() {
       const transform = d3.event.transform
@@ -579,13 +576,11 @@ export default {
       // .attr('rx', '10')
       // .attr('ry', '10')
       .attr('class', 'caption');
+
+    this.isInitialized = true;
   },
 
   created() {
-    // You can set the component width and height in any way
-    // you prefer. It's responsive! :)
-    this.width = window.innerWidth - 10
-    this.height = window.innerHeight - 110
     this.simulation = d3.forceSimulation()
       .force("link", d3.forceLink())
       // .force("charge", d3.forceManyBody())
@@ -815,27 +810,5 @@ export default {
     padding: 0px 10px 0px 10px;
   }
 
-
-
-      //   let contentAccessBox = refInfoBox.append("xhtml:div")
-      //   .attr("class", "ref-info-access-box");
-
-      // let contentAccessLabel = contentAccessBox.append("xhtml:div")
-      //   .attr("class", "ref-info-access-label")
-      //   .text("Access to material:")
-
-      // let contentAccess = contentAccessBox.append("xhtml:div")
-      //   .attr("class", "ref-info-access-content")
-
-      // let contentAccessItem = contentAccess.append("xhtml:span")
-      //   .attr("class", "ref-info-access")
-
-      // let contentAccessIcon = contentAccessItem.append("xhtml:img")
-      //   .attr("src", d => { return `Grante` })
-      //   .attr("class", "ref-info-access-icon");
-
-      // let contentAccessText = contentAccessItem.append("xhtml:span")
-      //   .attr("class", "ref-info-access-text")
-      //   .text(d => { return `Granted`; })
 
 </style>
