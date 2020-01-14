@@ -3,17 +3,18 @@
     {
       "id": "0",
       "name": "Material 1",
+      "contentType": "Article",
       "group": 1,
       "class": "in",
       "cx": 100,
       "cy": 100,
       "org": "gsk",
       "orgName": "GlaxoSmithKline"
-
     },
     {
       "id": "1",
       "name": "Material 2",
+      "contentType": "Annnnouncement",
       "group": 1,
       "class": "in",
       "cx": 101,
@@ -24,6 +25,7 @@
     {
       "id": "2",
       "name": "Material 3",
+      "contentType": "Final result",
       "group": 1,
       "class": "in",
       "cx": 102,
@@ -34,6 +36,7 @@
     {
       "id": "3",
       "name": "Current",
+      "contentType": "Book Chapter",
       "group": 1,
       "class": "current",
       "cx": 103,
@@ -44,6 +47,7 @@
     {
       "id": "4",
       "name": "Material 4",
+      "contentType": "Research Proposal",
       "group": 1,
       "class": "out",
       "cx": 200,
@@ -54,6 +58,7 @@
     {
       "id": "5",
       "name": "Material 5",
+      "contentType": "Article",
       "group": 2,
       "class": "out",
       "cx": 301,
@@ -64,6 +69,7 @@
     {
       "id": "6",
       "name": "Material 6",
+      "contentType": "Article",
       "group": 2,
       "class": "in",
       "cx": 0,
@@ -74,6 +80,7 @@
     {
       "id": "7",
       "name": "Material 7",
+      "contentType": "Article",
       "group": 2,
       "class": "out",
       "cx": 103,

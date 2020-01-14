@@ -136,7 +136,8 @@ export default {
       let node = graph.selectAll(".ref-node")
         .data(this.nodes)
       .enter().append("g")
-      .classed("ref-node", true);
+      .attr("class", "ref-node")
+      .attr("id", d => { return `ref-node-${d.id}`})
 
       node.append("circle")
         .attr("r", 30)
@@ -150,11 +151,11 @@ export default {
         .on('click', d => { this.nodeClick(d) })
       
       node.append("text")
-        .classed("ref-title", true)
+        .attr("class", "ref-title")
         .attr("x", 0)
         .attr("y", 15)
         .attr("text-anchor", "middle")
-        .text(d => d.name)
+        .text(d => d.contentType)
         .on("mousedown", () => {
           d3.event.stopPropagation();
         })
@@ -163,7 +164,7 @@ export default {
         });
       
       node.append("image")
-        .classed("ref-org-logo", true)
+        .attr("class", "ref-org-logo")
         .attr("x", -15)
         .attr("y", -20)
         .attr("xlink:href", d => { return `/static/research_groups/${d.org}-mini.png` })
@@ -188,7 +189,8 @@ export default {
           .attr("width", this.refInfoWidth)
           .attr("height", this.refInfoHeight)
           .attr("visibility", "hidden")
-          .classed("ref-info", true)
+          .attr("id", d => { return `ref-info-${d.id}`})
+          .attr("class", "ref-info")
           .on("mousedown", () => {
             d3.event.stopPropagation();
           })
@@ -493,23 +495,12 @@ export default {
       this.simulation.restart()
     },
     nodeClick(d) {
-      const refNode = this.selections.graph.selectAll(".ref-node")
-      refNode.classed('selected', false)
-      refNode.filter((td) => td === d)
-        .classed('selected', true)
-      
-      const rect = this.selections.graph.selectAll(".ref-info")
-      rect.attr('visibility', "hidden")
-      const selected = rect.filter((td) => td === d)
-        .attr("visibility", "visible")
+      const refNode = this.selections.graph.select(`#ref-node-${d.id}`)
+      const refInfoDialog = this.selections.graph.select(`#ref-info-${d.id}`)
+      const isHidden = refInfoDialog.attr("visibility") === "hidden";
 
-      // rect.filter((td) => td === d)
-      //   .attr("visibility", this.openedNodes.some(n => n === d) ? "hidden": "visible");
-      // if (this.openedNodes.some(n => n === d)) {
-      //   this.openedNodes = this.openedNodes.filter(n => n !== d)
-      // } else {
-      //   this.openedNodes.push(d)
-      // }
+      refInfoDialog.attr('visibility', isHidden ? "visible" : "hidden");
+      refNode.classed('selected', !isHidden);
     }
   },
 
@@ -571,12 +562,13 @@ export default {
     // Some caption
     this.selections.caption = svg.append('g');
     this.selections.caption.append('rect')
-      .attr('width', '200')
+      .attr('width', '160')
       .attr('height', '0')
       // .attr('rx', '10')
       // .attr('ry', '10')
       .attr('class', 'caption');
 
+    this.updateData();
     this.isInitialized = true;
   },
 
@@ -687,9 +679,9 @@ export default {
     text-shadow: 0 1px 0 #fff, 1px 0 0 #fff, 0 -1px 0 #fff, -1px 0 0 #fff;
   }
   rect.caption {
-    fill: #CCCCCCAC;
-    stroke: #666;
-    stroke-width: 1px;
+    fill: #efefef;
+    // stroke: #666;
+    // stroke-width: 1px;
   }
   text.caption {
     font-size: 14px;
