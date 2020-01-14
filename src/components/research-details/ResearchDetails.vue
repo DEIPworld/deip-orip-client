@@ -347,7 +347,7 @@
                         lg2
                         class="text-capitalize bold"
                       >{{getContentType(content.content_type).text}}</v-flex>
-                      <v-flex lg8 class="bold">
+                      <v-flex lg7 class="bold">
                         <router-link
                           v-if="getContentAccessStatus(content) === 'allowed'"
                           class="a"
@@ -383,18 +383,24 @@
                         >{{countContentReviews(content, false)}}</span>
                       </v-flex>
                       <v-flex lg1 text-lg-center class="text-xs-center">
-
-                        <router-link
-                          class="a"
-                          :to="{
-                            name: 'ResearchContentReferences',
-                            params: {
-                              research_group_permlink: encodeURIComponent(research.group_permlink),
-                              research_permlink: encodeURIComponent(research.permlink),
-                              content_permlink: encodeURIComponent(content.permlink)
-                            }
-                          }"
-                        >References</router-link>
+                        <v-tooltip top>
+                          <template slot="activator">
+                            <router-link class="a" style="text-decoration: none;"
+                              :to="{
+                                name: 'ResearchContentReferences',
+                                params: {
+                                  research_group_permlink: encodeURIComponent(research.group_permlink),
+                                  research_permlink: encodeURIComponent(research.permlink),
+                                  content_permlink: encodeURIComponent(content.permlink)
+                                }
+                              }">
+                              <v-icon small>device_hub</v-icon>
+                            </router-link>
+                          </template>
+                          <span>See references graph</span>
+                        </v-tooltip>
+                      </v-flex>
+                      <v-flex lg1 text-lg-center class="text-xs-center">
                         <template v-if="getContentAccessStatus(content) === 'allowed'">
                           <v-tooltip top>
                             <template v-slot:activator="{ on }">

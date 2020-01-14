@@ -156,7 +156,11 @@ const actions = {
                                 dispatch('loadResearchContentVotes', { researchId: contentObj.research_id, notify: resolve })
                             });
         
-                            return Promise.all([contentRefLoad, contentReviewsLoad, contentVotesLoad])
+                            const researchGroupDetailsLoad = new Promise((resolve, reject) => {
+                                dispatch('loadResearchGroupDetails', { group_permlink, notify: resolve })
+                            });
+
+                            return Promise.all([contentRefLoad, contentReviewsLoad, contentVotesLoad, researchGroupDetailsLoad])
                         }, (err) => {console.log(err)})
                         .finally(() => {
                             commit('SET_RESEARCH_CONTENT_DETAILS_LOADING_STATE', false);

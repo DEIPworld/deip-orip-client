@@ -30,7 +30,6 @@ export default {
       isInitialized: false,
       refInfoWidth: 500,
       refInfoHeight: 300,
-      openedNodes: [],
       selections: {},
       simulation: null,
       forceProperties: {
@@ -63,7 +62,8 @@ export default {
         link: {
           enabled: true,
           distance: 500,
-          iterations: 0
+          iterations: 0,
+          strength: .8,
         }
       },
     }
@@ -72,7 +72,6 @@ export default {
   computed: {
     innerGridSize() { return this.gridSize / 10 },
     nodes() {
-      // this.data.nodes.forEach(function(d) { d.x = d.cx; d.y = d.cy; });
       return this.data.nodes.map(function(d) { d.x = d.cx; d.y = d.cy; return d; }) 
     },
     links() { return this.data.links },
@@ -139,8 +138,9 @@ export default {
       .attr("class", "ref-node")
       .attr("id", d => { return `ref-node-${d.id}`})
 
-      node.append("circle")
-        .attr("r", 30)
+      node.append("ellipse")
+        .attr("rx", 45)
+        .attr("ry", 30)
         .attr("class", d => d.class)
         .call(d3.drag()
           .on('start', this.nodeDragStarted)
@@ -166,7 +166,7 @@ export default {
       node.append("image")
         .attr("class", "ref-org-logo")
         .attr("x", -15)
-        .attr("y", -20)
+        .attr("y", -25)
         .attr("xlink:href", d => { return `/static/research_groups/${d.org}-mini.png` })
         .attr("height", 30)
         .attr("width", 30)
@@ -417,7 +417,6 @@ export default {
     },
     zoomed() {
       const transform = d3.event.transform
-      console.log(d3.event)
       // The trick here is to move the grid in a way that the user doesn't perceive
       // that the axis aren't really moving
       // The actual movement is between 0 and gridSize only for x and y
@@ -498,6 +497,7 @@ export default {
       const refNode = this.selections.graph.select(`#ref-node-${d.id}`)
       const refInfoDialog = this.selections.graph.select(`#ref-info-${d.id}`)
       const isHidden = refInfoDialog.attr("visibility") === "hidden";
+      this.selections.graph.selectAll(".ref-info").attr('visibility', "hidden");
 
       refInfoDialog.attr('visibility', isHidden ? "visible" : "hidden");
       refNode.classed('selected', !isHidden);
@@ -514,7 +514,7 @@ export default {
         .enter().append("svg:marker")    // This section adds in the arrows
           .attr("id", String)
           .attr("viewBox", "0 -5 10 10")
-          .attr("refX", 43)              // Prevents arrowhead from being covered by circle
+          .attr("refX", 43)              // Prevents arrowhead from being covered by ellipse
           .attr("refY", 0)
           .attr("markerWidth", 6)
           .attr("markerHeight", 6)
@@ -622,25 +622,25 @@ export default {
   path.link.needs {
     stroke: #7f3f00;
   }
-  .ref-node circle {
+  .ref-node ellipse {
     cursor: pointer;
     fill: #ffff99;
     stroke: #191900;
     stroke-width: 1.5px;
   }
-  .ref-node circle.in {
+  .ref-node ellipse.in {
     fill: #cce5ff;
     stroke: #003366;
   }
-  .ref-node circle.out {
+  .ref-node ellipse.out {
     fill: #ffe5e5;
     stroke: #660000;
   }
-  .ref-node circle.init {
+  .ref-node ellipse.init {
     fill: #b2e8b2;
     stroke: #001900;
   }
-  .ref-node circle.selected {
+  .ref-node ellipse.selected {
     stroke: #ff6666FF !important;
     stroke-width: 3px;
     animation: selected 2s infinite alternate ease-in-out;
@@ -717,6 +717,7 @@ export default {
     font-size: 12px;
     padding-left: 7px;
     font-weight: 400;
+    // word-break: break-all;
   }
 
 
