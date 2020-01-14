@@ -76,7 +76,7 @@ const actions = {
 
         let applications = [];
 
-        deipRpc.api.getApplicationsByGrantAsync(state.program.id)
+        deipRpc.api.getGrantApplicationsByGrantAsync(state.program.id)
             .then(list => {
                 applications = list;
     
@@ -93,7 +93,7 @@ const actions = {
                 );
 
                 const otherResearchApplicationsPromises = applications.map(application => 
-                    deipRpc.api.getApplicationsByResearchIdAsync(application.research_id)
+                    deipRpc.api.getGrantApplicationsByResearchIdAsync(application.research_id)
                         .then((otherResearchApplications) => {
                             const grants = otherResearchApplications.map(a => deipRpc.api.getFundingOpportunityAsync(a.grant_id));
                             return Promise.all([otherResearchApplications, Promise.all(grants)]);

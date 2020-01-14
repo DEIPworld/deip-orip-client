@@ -14,6 +14,8 @@ import ResearchContentDetailsReviewTabChart from './components/ResearchContentDe
 import ResearchContentDetailsReviewChart from './components/ResearchContentDetailsReviewChart';
 import ResearchContentDetailsPackage from './components/ResearchContentDetailsPackage';
 
+import ReferencesDependencyGraph from './components/ReferencesDependencyGraph';
+
 Vue.component('research-content-details', ResearchContentDetails);
 Vue.component('research-content-details-dar', ResearchContentDetailsDar);
 Vue.component('research-content-details-package', ResearchContentDetailsPackage);
@@ -25,3 +27,4 @@ Vue.component('research-content-add-review-sidebar', ResearchContentAddReviewSid
 Vue.component('review-list-item', ReviewListItem);
 Vue.component('research-content-details-review-tab-chart', ResearchContentDetailsReviewTabChart);
 Vue.component('research-content-details-review-chart', ResearchContentDetailsReviewChart);
+Vue.component('references-dependency-graph', ReferencesDependencyGraph);

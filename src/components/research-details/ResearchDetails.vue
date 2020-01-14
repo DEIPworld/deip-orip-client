@@ -383,6 +383,18 @@
                         >{{countContentReviews(content, false)}}</span>
                       </v-flex>
                       <v-flex lg1 text-lg-center class="text-xs-center">
+
+                        <router-link
+                          class="a"
+                          :to="{
+                            name: 'ResearchContentReferences',
+                            params: {
+                              research_group_permlink: encodeURIComponent(research.group_permlink),
+                              research_permlink: encodeURIComponent(research.permlink),
+                              content_permlink: encodeURIComponent(content.permlink)
+                            }
+                          }"
+                        >References</router-link>
                         <template v-if="getContentAccessStatus(content) === 'allowed'">
                           <v-tooltip top>
                             <template v-slot:activator="{ on }">
@@ -926,9 +938,7 @@
 
 <script>
 import deipRpc from "@deip/deip-oa-rpc-client";
-import * as d3 from "d3";
 import { mapGetters } from "vuex";
-
 import bookmarksService from "@/services/http/bookmarks";
 import contentHttpService from "@/services/http/content";
 import joinRequestsService from "@/services/http/joinRequests";
@@ -1845,7 +1855,7 @@ export default {
 };
 </script>
 
-<style lang="less" scoped>
+<style lang="less">
 .rd-header {
   height: 300px;
   overflow: auto;

@@ -135,7 +135,7 @@ const actions = {
         const reviews = [];
         deipRpc.api.getResearchByAbsolutePermlinkAsync(group_permlink, research_permlink)
             .then((research) => {
-                return deipRpc.api.getApplicationsByResearchIdAsync(research.id)
+                return deipRpc.api.getGrantApplicationsByResearchIdAsync(research.id)
             })
             .then((applications) => {
                 const related = applications.filter((a) => {

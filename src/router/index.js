@@ -31,6 +31,8 @@ import ResearchApplicationAddReview from '@/components/research-application-deta
 import ResearchContentMetadata from '@/components/research-content-details/ResearchContentMetadata';
 import ResearchContentReview from '@/components/research-content-details/ResearchContentReview';
 import ResearchContentAddReview from '@/components/research-content-details/ResearchContentAddReview';
+import ResearchContentReferences from '@/components/research-content-details/ResearchContentReferences';
+
 import ResearchStartCreating from '@/components/research-create/ResearchStartCreating';
 import CreateNewResearch from '@/components/research-create/CreateNewResearch';
 import CreateTokenSale from '@/components/token-sale-create/CreateTokenSale';
@@ -242,6 +244,20 @@ const router = new Router({
 		path: '/:research_group_permlink/research/:research_permlink/:content_permlink/add-review',
 		name: 'ResearchContentAddReview',
 		component: preliminaryDataLoader(ResearchContentAddReview, {
+			beforeEnter: (to, from, next) => {
+				let loadPagePromise = store.dispatch('rcd/loadResearchContentDetails', {
+					group_permlink: decodeURIComponent(to.params.research_group_permlink),
+					research_permlink: decodeURIComponent(to.params.research_permlink),
+					content_permlink: decodeURIComponent(to.params.content_permlink),
+					ref: to.query.ref
+				});
+				loadPage(loadPagePromise, next);
+			}
+		})
+	}, {
+		path: '/:research_group_permlink/research/:research_permlink/:content_permlink/references',
+		name: 'ResearchContentReferences',
+		component: preliminaryDataLoader(ResearchContentReferences, {
 			beforeEnter: (to, from, next) => {
 				let loadPagePromise = store.dispatch('rcd/loadResearchContentDetails', {
 					group_permlink: decodeURIComponent(to.params.research_group_permlink),

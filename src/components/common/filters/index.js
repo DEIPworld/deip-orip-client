@@ -48,8 +48,15 @@ Vue.filter('employmentOrEducation', function (enrichedProfile) {
     return `${education ? education.educationalInstitution : ''}${ education && employment ? ', ' : '' }${employment ? employment.company : ''}`;
 });
 
-Vue.filter('avatarSrc', function (avatar, width, height, noCache ) {
-    return `${window.env.DEIP_SERVER_URL}/public/files/avatars/${avatar}?width=${width}&height=${height}&noCache=${noCache}`
+Vue.filter('avatarSrc', function (avatar, width, height, noCache, isRound) {
+    let url =  `${window.env.DEIP_SERVER_URL}/public/files/avatars/${avatar}?width=${width}&height=${height}`
+    if (noCache) {
+        url = `${url}&noCache=${noCache}`
+    }
+    if (isRound) {
+        url = `${url}&round=${isRound}`
+    }
+    return url;
 });
 
 Vue.filter('tenantLogoSrc', function (tenant, width, height, noCache, ext = 'png') {

@@ -1,0 +1,129 @@
+{
+  "nodes": [
+    {
+      "id": "0",
+      "name": "Material 1",
+      "group": 1,
+      "class": "in",
+      "cx": 100,
+      "cy": 100,
+      "org": "gsk",
+      "orgName": "GlaxoSmithKline"
+
+    },
+    {
+      "id": "1",
+      "name": "Material 2",
+      "group": 1,
+      "class": "in",
+      "cx": 101,
+      "cy": 200,
+      "org": "tres-cantos-open-lab-foundation",
+      "orgName": "Tres Cantos Open Lab Foundation"
+    },
+    {
+      "id": "2",
+      "name": "Material 3",
+      "group": 1,
+      "class": "in",
+      "cx": 102,
+      "cy": 300,
+      "org": "pfizer",
+      "orgName": "Pfizer"
+    },
+    {
+      "id": "3",
+      "name": "Current",
+      "group": 1,
+      "class": "current",
+      "cx": 103,
+      "cy": 400,
+      "org": "university-of-strathclyde",
+      "orgName": "The University of Strathclyde"
+    },
+    {
+      "id": "4",
+      "name": "Material 4",
+      "group": 1,
+      "class": "out",
+      "cx": 200,
+      "cy": 500,
+      "org": "lineberger-comprehensive-cancer-center",
+      "orgName": "The UNC Lineberger Comprehensive Cancer Center"
+    },
+    {
+      "id": "5",
+      "name": "Material 5",
+      "group": 2,
+      "class": "out",
+      "cx": 301,
+      "cy": 500,
+      "org": "university-of-strathclyde",
+      "orgName": "The University of Strathclyde"
+    },
+    {
+      "id": "6",
+      "name": "Material 6",
+      "group": 2,
+      "class": "in",
+      "cx": 0,
+      "cy": 200,
+      "org": "pfizer",
+      "orgName": "Pfizer"
+    },
+    {
+      "id": "7",
+      "name": "Material 7",
+      "group": 2,
+      "class": "out",
+      "cx": 103,
+      "cy": 500,
+      "org": "durham-university",
+      "orgName": "Durham University"
+    }
+  ],
+  "links": [
+    {
+      "source": 1,
+      "target": 0,
+      "value": 1,
+      "type": "depends"
+    },
+    {
+      "source": 2,
+      "target": 1,
+      "value": 8,
+      "type": "depends"
+    },
+    {
+      "source": 3,
+      "target": 2,
+      "value": 6,
+      "type": "depends"
+    },
+    {
+      "source": 4,
+      "target": 3,
+      "value": 1,
+      "type": "needs"
+    },
+    {
+      "source": 5,
+      "target": 4,
+      "value": 1,
+      "type": "needs"
+    },
+    {
+      "source": 3,
+      "target": 6,
+      "value": 1,
+      "type": "depends"
+    },
+    {
+      "source": 7,
+      "target": 3,
+      "value": 1,
+      "type": "needs"
+    }
+  ]
+}
