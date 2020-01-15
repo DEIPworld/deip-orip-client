@@ -38,7 +38,7 @@
       "name": "Current",
       "contentType": "Book Chapter",
       "group": 1,
-      "class": "current",
+      "class": "root",
       "cx": 103,
       "cy": 400,
       "org": "university-of-strathclyde",

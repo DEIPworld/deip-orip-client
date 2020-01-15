@@ -390,7 +390,7 @@ export default {
         .enter().append('text')
           .attr('x', captionXPadding + 20)
           .attr('y', (d) => captionYPadding + (lineMiddle + 5) + (lineHeight * this.linkTypes.indexOf(d)))
-          .attr('class', 'caption')
+          .attr('class', 'caption capitalize')
           .text((d) => d);
       const classCaption = caption.append('g');
       classCaption.selectAll('.ref-type')
@@ -399,7 +399,7 @@ export default {
           .attr('r', 10)
           .attr('cx', captionXPadding - 2)
           .attr('cy', (d) => captionYPadding + lineMiddle + (lineHeight * (this.linkTypes.length + this.classes.indexOf(d))))
-          .attr('class', (d) => d.toLowerCase())
+          .attr('class', (d) => `${d.toLowerCase()} capitalize`)
           .classed("ref-type", true);
 
       classCaption.selectAll('text')
@@ -408,8 +408,9 @@ export default {
           .attr('x', captionXPadding + 20)
           .attr('y', (d) => captionYPadding + (lineMiddle + 5) +
             (lineHeight * (this.linkTypes.length + this.classes.indexOf(d))))
-          .attr('class', 'caption')
+          .attr('class', 'caption capitalize')
           .text((d) => d);
+      
       const captionWidth = caption.node().getBBox().width;
       const captionHeight = caption.node().getBBox().height;
       const paddingX = 18;
@@ -572,8 +573,10 @@ export default {
       // .attr('ry', '10')
       .attr('class', 'caption');
 
-    this.updateData();
-    this.isInitialized = true;
+    setTimeout(() => {
+      this.updateData();
+      this.isInitialized = true;
+    }, 100);
   },
 
   created() {

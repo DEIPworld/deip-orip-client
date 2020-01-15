@@ -48,7 +48,7 @@
           <v-tabs color="#ffffff">
             <v-tabs-slider :color="themeSettings['tabs-slider-color']"></v-tabs-slider>
             <v-tab :class="themeSettings['tabs-text-class']" href="#tab-file">
-              <span class="subheading" style="text-transform: capitalize;">File Info</span>
+              <span class="subheading capitalize">File Info</span>
             </v-tab>
 
             <v-tabs-items class="tab-content">
@@ -125,7 +125,7 @@
 
                   <v-divider class="my-4"></v-divider>
 
-                  <v-layout row justify-space-between align-baseline>
+                  <v-layout v-if="outerReferences.length" row justify-space-between align-baseline>
                     <v-flex xs4>
                       <span class="subheading">Referenced by:</span>
                     </v-flex>

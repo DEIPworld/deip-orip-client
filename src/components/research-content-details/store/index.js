@@ -123,7 +123,7 @@ const getters = {
                 hash: ref.researchContent.content.split(":")[1],
                 title: ref.researchContent.title,
 
-                class: ref.isRoot ? "current" : ref.isOuter ? "out" : ref.isInner ? "in" : "",
+                class: ref.isRoot ? "root" : ref.isOuter ? "out" : ref.isInner ? "in" : "",
                 org: ref.researchGroup.permlink,
                 orgName: ref.researchGroup.name,
                 contentType: researchService.getContentType(ref.researchContent.content_type).text,
