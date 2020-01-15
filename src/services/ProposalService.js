@@ -264,7 +264,7 @@ const createContentProposal = function(contentRef, contentType) {
     const data = getStringifiedProposalData(CREATE_RESEARCH_MATERIAL, [
         contentRef.researchId, contentType, contentRef.title, 
         contentRef.title.replace(/ /g, "-").replace(/_/g, "-").toLowerCase(),
-        `${contentRef.type}:${contentRef.hash}`, contentRef.authors, contentRef.references, []
+        `${contentRef.type}:${contentRef.hash}`, contentRef.authors, contentRef.references, contentRef.externalReferences
     ]);
 
     const proposal = {

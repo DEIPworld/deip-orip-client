@@ -8,7 +8,7 @@
           <div class="title">How my data is used by others</div>
           <div class="py-4 subheading half-bold">Number of citations: {{referencesCount}}</div>
           <div ref="graphContainer" style="height: 400px">
-            <references-dependency-graph :data="referencesModel" :width="graphWidth" :height="graphHeight"></references-dependency-graph>
+            <references-dependency-graph :data="researchContentReferencesGraph" :width="graphWidth" :height="graphHeight"></references-dependency-graph>
           </div>
 
           <v-layout row class="pt-5">
@@ -130,8 +130,8 @@
                       <span class="subheading">Referenced by:</span>
                     </v-flex>
                     <v-flex xs8>
-                      <div v-for="(ref, i) in outReferences" :key="`out-ref-${i}`">
-                        <span class="a">{{ref.name}}</span>
+                      <div v-for="(ref, i) in outerReferences" :key="`out-ref-${i}`">
+                        <span class="a">{{ref.researchContent.title}}</span>
                       </div>
                     </v-flex>
                   </v-layout>
@@ -151,14 +151,12 @@
 <script>
 import { mapGetters } from 'vuex';
 import deipRpc from '@deip/deip-oa-rpc-client';
-import referencesObj from './references-graph-data.json';
 import { getContentType } from './../../services/ResearchService'
 
 export default {
   name: "ResearchContentReferences",
   data() {
     return {
-      referencesModel: referencesObj,
       graphWidth: 0,
       graphHeight: 0
     };
@@ -170,14 +168,15 @@ export default {
       research: 'rcd/research',
       researchGroup: 'rcd/group',
       contentRef: 'rcd/contentRef',
+      researchContentReferencesGraph: 'rcd/researchContentReferencesGraph',      
       researchGroupMembers: 'rcd/membersList',
       themeSettings: 'layout/themeSettings'
     }),
     referencesCount() {
-      return this.referencesModel.nodes.length;
+      return this.researchContentReferencesGraph.nodes.length;
     },
-    outReferences() {
-      return this.referencesModel.nodes.filter((node) => node.class === "out");
+    outerReferences() {
+      return this.researchContentReferencesGraph.nodes.filter((node) => node.class === "out");
     },
     researchContentAuthorsList() {
       return this.researchContent ? this.researchGroupMembers.filter(m => this.researchContent.authors.some(a => a === m.account.name)) : [];
@@ -187,7 +186,7 @@ export default {
     },
 
     outerReferencesByContentTypeChart() {
-      let outerReferencesByContentType = this.referencesModel.nodes.reduce((acc, node) => {
+      let outerReferencesByContentType = this.researchContentReferencesGraph.nodes.reduce((acc, node) => {
         let { contentType } = node;
         if (node.class === "out") {
           let item = acc[contentType]
@@ -200,7 +199,7 @@ export default {
         return acc;
       }, {});
 
-      let totalInnerReferencesCount = this.referencesModel.nodes.filter((node) => node.class === "out").length;
+      let totalInnerReferencesCount = this.researchContentReferencesGraph.nodes.filter((node) => node.class === "out").length;
 
       return {
         data: [
@@ -228,7 +227,7 @@ export default {
     },
 
     outerReferencesByOrgChart() {
-      let outerReferencesByOrg = this.referencesModel.nodes.reduce((acc, node) => {
+      let outerReferencesByOrg = this.researchContentReferencesGraph.nodes.reduce((acc, node) => {
         let { org } = node;
         if (node.class === "out") {
           let item = acc[org]
@@ -241,7 +240,7 @@ export default {
         return acc;
       }, {});
 
-      let totalOuterReferencesCount = this.referencesModel.nodes.filter((node) => node.class === "out").length;
+      let totalOuterReferencesCount = this.researchContentReferencesGraph.nodes.filter((node) => node.class === "out").length;
       
       return {
         data: [

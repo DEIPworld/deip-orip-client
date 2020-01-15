@@ -69,7 +69,7 @@
                 <!-- END Research Content Reviews section -->
 
                 <!-- START Research Content References section -->
-                <div v-if="isInProgress && isDarContent">
+                <div class="pa-4" v-if="isInProgress && isDarContent">
                     <internal-references-picker 
                         :currentResearchId="research.id"
                         :preselected="contentRef.references.slice()" 
@@ -287,7 +287,8 @@
                     .then((contentRef) => {
                         contentRef.title = this.proposeContent.title || contentRef.title;
                         contentRef.authors = this.proposeContent.authors.map(a => a.account.name);
-                        
+                        contentRef.externalReferences = [];
+
                         createContentProposal(contentRef, this.proposeContent.type)
                             .then(() => {
                                 this.$store.dispatch('layout/setSuccess', {

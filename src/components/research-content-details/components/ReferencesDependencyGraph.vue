@@ -138,16 +138,15 @@ export default {
       .attr("class", "ref-node")
       .attr("id", d => { return `ref-node-${d.id}`})
 
-      node.append("ellipse")
-        .attr("rx", 45)
-        .attr("ry", 30)
+      node.append("circle")
+        .attr("r", 30)
         .attr("class", d => d.class)
         .call(d3.drag()
           .on('start', this.nodeDragStarted)
           .on('drag', this.nodeDragged)
           .on('end', this.nodeDragEnded))
-        .on('mouseover', d => { this.nodeMouseOver(d) })
-        .on('mouseout', d => { this.nodeMouseOut(d) })
+        // .on('mouseover', d => { this.nodeMouseOver(d) })
+        // .on('mouseout', d => { this.nodeMouseOut(d) })
         .on('click', d => { this.nodeClick(d) })
       
       node.append("text")
@@ -174,8 +173,8 @@ export default {
           .on('start', this.nodeDragStarted)
           .on('drag', this.nodeDragged)
           .on('end', this.nodeDragEnded))
-        .on('mouseover', d => { this.nodeMouseOver(d) })
-        .on('mouseout', d => { this.nodeMouseOut(d) })
+        // .on('mouseover', d => { this.nodeMouseOver(d) })
+        // .on('mouseout', d => { this.nodeMouseOut(d) })
         .on('click', d => { this.nodeClick(d) })
       
 
@@ -218,7 +217,7 @@ export default {
 
       hashTextBox.append("xhtml:span")
         .attr("class", "ref-info-hash-value")
-        .text(d => { return `bbcf7cc5396261c2438c11efade09720e3a5d87d03b2a4d68e25d27926477dbe`; })
+        .text(d => { return d.hash; })
 
       let titleLinkBox = refInfoBox.append("xhtml:div")
         .attr("class", "ref-info-title-box");
@@ -227,7 +226,7 @@ export default {
         .attr("href", d => { return `/#/syracuse-university/research/a-quantitative-analysis-of-phenotype-in-a-multicellular-prokaryote/inter-laboratory-evolution-of-a-model-organism-and-its-epistatic-effects-on-mutagenesis-screens` })
         .attr("target", "_blank")
         .attr("class", "a ref-info-title-link")
-        .text(d => { return "Inter-laboratory evolution of a model organism and its epistatic effects on mutagenesis screens"; })
+        .text(d => { return d.title; })
 
 
       let organizationBox = refInfoBox.append("xhtml:div")
@@ -245,7 +244,7 @@ export default {
 
       let organizationName = organizationItem.append("xhtml:span")
         .attr("class", "ref-info-org-name")
-        .text(d => { return `${d.orgName}`; })
+        .text(d => { return d.orgName; })
 
       let organizationLogo = organizationItem.append("xhtml:img")
         .attr("src", d => { return `/static/research_groups/${d.org}-mini.png` })
@@ -264,16 +263,20 @@ export default {
         .attr("class", "ref-info-authors-content")
 
       let authorItem = authorsContent.append("xhtml:a")
-        .attr("href", d => { return `/#/user-details/alice` })
+        .attr("href", d => {
+          return `/#/user-details/${d.researchContent.authorsProfiles[0]._id}` 
+        })
         .attr("target", "_blank")
         .attr("class", "a ref-info-author")
 
       let authorName = authorItem.append("xhtml:span")
         .attr("class", "ref-info-author-name")
-        .text(d => { return "Alice Lee"; })
+        .text(d => { 
+          return this.$options.filters.fullname(d.researchContent.authorsProfiles[0]);
+        });
 
       let authorImg = authorItem.append("xhtml:img")
-        .attr("src", d => { return this.$options.filters.avatarSrc("alice-lee.jpg", 60, 60, false, true); })
+        .attr("src", d => { return this.$options.filters.avatarSrc(d.researchContent.authorsProfiles[0].profile.avatar, 60, 60, false, true); })
         .attr("target", "_blank")
         .attr("class", "ref-info-author-img")
 
@@ -514,7 +517,7 @@ export default {
         .enter().append("svg:marker")    // This section adds in the arrows
           .attr("id", String)
           .attr("viewBox", "0 -5 10 10")
-          .attr("refX", 43)              // Prevents arrowhead from being covered by ellipse
+          .attr("refX", 43)              // Prevents arrowhead from being covered by circle
           .attr("refY", 0)
           .attr("markerWidth", 6)
           .attr("markerHeight", 6)
@@ -622,25 +625,25 @@ export default {
   path.link.needs {
     stroke: #7f3f00;
   }
-  .ref-node ellipse {
+  .ref-node circle {
     cursor: pointer;
     fill: #ffff99;
     stroke: #191900;
     stroke-width: 1.5px;
   }
-  .ref-node ellipse.in {
+  .ref-node circle.in {
     fill: #cce5ff;
     stroke: #003366;
   }
-  .ref-node ellipse.out {
+  .ref-node circle.out {
     fill: #ffe5e5;
     stroke: #660000;
   }
-  .ref-node ellipse.init {
+  .ref-node circle.init {
     fill: #b2e8b2;
     stroke: #001900;
   }
-  .ref-node ellipse.selected {
+  .ref-node circle.selected {
     stroke: #ff6666FF !important;
     stroke-width: 3px;
     animation: selected 2s infinite alternate ease-in-out;
@@ -803,5 +806,8 @@ export default {
     padding: 0px 10px 0px 10px;
   }
 
+  .ref-title {
+    font-size: 9px
+  }
 
 </style>

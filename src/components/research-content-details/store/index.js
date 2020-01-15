@@ -7,7 +7,8 @@ import {
     findBlocksByRange, getDynamicGlobalProperties, getConfig, 
     getBlock, getTransaction, getTransactionHex } from './../../../utils/blockchain';
 import { CREATE_RESEARCH_MATERIAL } from './../../../services/ProposalService';
-    
+import * as researchService from './../../../services/ResearchService';
+
 var texture = undefined;
 var reviewEditor = undefined;
 
@@ -22,6 +23,7 @@ const state = {
     contentReviewsList: [],
     expertsList: [],
     contentProposal: undefined,
+    researchContentReferencesGraph: [],
 
     contentRef: null,
 
@@ -111,7 +113,31 @@ const getters = {
             map[research_content_id][discipline_id] = total_weight;
         }
         return map;
-    }
+    },
+    
+    researchContentReferencesGraph: (state, getters) => {
+        let nodes = state.researchContentReferencesGraph.nodes.map((ref, i) => {
+            return {
+                ...ref,
+                id: ref.researchContent.id,
+                hash: ref.researchContent.content.split(":")[1],
+                title: ref.researchContent.title,
+
+                class: ref.isRoot ? "current" : ref.isOuter ? "out" : ref.isInner ? "in" : "",
+                org: ref.researchGroup.permlink,
+                orgName: ref.researchGroup.name,
+                contentType: researchService.getContentType(ref.researchContent.content_type).text,
+                "cx": ref.isRoot ? 0 : ref.isOuter ? 0 + (0) : ref.isInner ? 0 + (100) : 0,
+                "cy": ref.isRoot ? 0 : ref.isOuter ? 0 + (100) : ref.isInner ? 0 + (-100) : 0,
+            };
+        });
+
+        let links = state.researchContentReferencesGraph.links.map((link, i) => {
+            return { ...link };
+        });
+
+        return { nodes, links };
+    },
 }
 
 // actions
@@ -160,7 +186,11 @@ const actions = {
                                 dispatch('loadResearchGroupDetails', { group_permlink, notify: resolve })
                             });
 
-                            return Promise.all([contentRefLoad, contentReviewsLoad, contentVotesLoad, researchGroupDetailsLoad])
+                            const referencesLoad = new Promise((resolve, reject) => {
+                                dispatch('loadResearchContentReferences', { researchContentId: contentObj.id, notify: resolve })
+                            });
+
+                            return Promise.all([contentRefLoad, contentReviewsLoad, contentVotesLoad, researchGroupDetailsLoad, referencesLoad])
                         }, (err) => {console.log(err)})
                         .finally(() => {
                             commit('SET_RESEARCH_CONTENT_DETAILS_LOADING_STATE', false);
@@ -301,6 +331,12 @@ const actions = {
             })
     },
 
+    async loadResearchContentReferences({ state, dispatch, commit }, { researchContentId, notify }) {
+        let graph = await researchService.loadResearchContentReferencesGraph(researchContentId);
+        commit('SET_RESEARCH_CONTENT_REFERENCES_GRAPH_DATA', graph);
+        if (notify) notify();
+    },
+
     setTexture({ state, commit, dispatch }, instance) {
         // temporal hack to avoid blocking while converting texture nested props to reactive ones, 
         // do not do this in regular code without 'commit' call!
@@ -320,7 +356,7 @@ const actions = {
     setDraftReferences({ state, commit, dispatch }, references) {
         commit('SET_DRAFT_REFERENCES_LIST', references);
     },
-    
+
     async loadResearchContentMetadata({ state, commit, dispatch }, 
         { group_permlink, research_permlink, content_permlink,  notify }) {
 
@@ -587,7 +623,11 @@ const mutations = {
 
     ['RESET_METADATA_STATE'](state) {
         Vue.set(state, 'contentMetadata', null)
-    }    
+    },
+
+    ['SET_RESEARCH_CONTENT_REFERENCES_GRAPH_DATA'](state, graph) {
+        Vue.set(state, 'researchContentReferencesGraph', graph);
+    }
 }
 
 const namespaced = true;

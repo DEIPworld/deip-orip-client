@@ -1,3 +1,5 @@
+import deipRpc from '@deip/deip-oa-rpc-client';
+import * as usersUtils from './../utils/user';
 
 export const ANNOUNCEMENT = 1;
 export const FINAL_RESULT = 2;
@@ -49,9 +51,111 @@ const contentTypesList = [...Object.values(contentTypesMap)].sort((a, b) => {
 const getContentType = (type) => contentTypesList.find(t => t.type == type);
 const getTopResearchesIds = () => [];
 
+const loadResearchContentOuterReferences = async (researchContent, acc) => {
+    let outerReferences = await deipRpc.api.getContentsReferToContentAsync(researchContent.id);
+
+    for (let i = 0; i < outerReferences.length; i++) {
+        let item = outerReferences[i];
+        let { trx_id, block, timestamp, op } = item;
+        let [ opName, payload ] = op;
+        let {
+            research_id: researchId,
+            research_content_id: researchContentId,
+            research_reference_id: referenceResearchId,
+            research_content_reference_id: referenceResearchContentId
+        } = payload;
+
+        let outerRefResearch = await deipRpc.api.getResearchByIdAsync(researchId);
+        let outerRefResearchGroup = await deipRpc.api.getResearchGroupByIdAsync(outerRefResearch.research_group_id);
+        let outerRefResearchContent = await deipRpc.api.getResearchContentByIdAsync(researchContentId);
+        
+        let authorsProfiles = await usersUtils.getEnrichedProfiles(outerRefResearchContent.authors);
+
+        acc.push({
+            isOuter: true,
+            to: referenceResearchContentId,
+            researchGroup: outerRefResearchGroup, 
+            research: outerRefResearch, 
+            researchContent: { ...outerRefResearchContent, authorsProfiles }
+        });
+        await loadResearchContentOuterReferences(outerRefResearchContent, acc);
+    }
+}
+
+const loadResearchContentInnerReferences = async (researchContent, acc) => {
+    let innerReferences = await deipRpc.api.getContentReferencesAsync(researchContent.id);
+    
+    for (let i = 0; i < innerReferences.length; i++) {
+        let item = innerReferences[i];
+        let { trx_id, block, timestamp, op } = item;
+        let [ opName, payload ] = op;
+        let {
+            research_id: researchId,
+            research_content_id: researchContentId,
+            research_reference_id: referenceResearchId,
+            research_content_reference_id: referenceResearchContentId
+        } = payload;
+
+        let innerRefResearch = await deipRpc.api.getResearchByIdAsync(referenceResearchId);
+        let innerRefResearchGroup = await deipRpc.api.getResearchGroupByIdAsync(innerRefResearch.research_group_id);
+        let innerRefResearchContent = await deipRpc.api.getResearchContentByIdAsync(referenceResearchContentId);
+
+        let authorsProfiles = await usersUtils.getEnrichedProfiles(innerRefResearchContent.authors);
+
+        acc.push({
+            isInner: true,
+            to: researchContentId,
+            researchGroup: innerRefResearchGroup, 
+            research: innerRefResearch, 
+            researchContent: { ...innerRefResearchContent, authorsProfiles }
+        });
+        await loadResearchContentInnerReferences(innerRefResearchContent, acc);
+    }
+}
+
+const loadResearchContentReferencesGraph = async (researchContentId) => {
+    let researchContent = await deipRpc.api.getResearchContentByIdAsync(researchContentId);
+    let research = await deipRpc.api.getResearchByIdAsync(researchContent.research_id);
+    let researchGroup = await deipRpc.api.getResearchGroupByIdAsync(research.research_group_id);
+
+    let authorsProfiles = await usersUtils.getEnrichedProfiles(researchContent.authors);
+
+    const mainNode = {
+        isRoot: true,
+        researchContent: { ...researchContent, authorsProfiles },
+        research,
+        researchGroup
+    }
+
+    const outerReferences = [];
+    await loadResearchContentOuterReferences(researchContent, outerReferences);
+
+    const innerReferences = [];
+    await loadResearchContentInnerReferences(researchContent, innerReferences);
+
+    let nodes = [...innerReferences, mainNode, ...outerReferences];
+    let links = [];
+
+    for (let i = 0; i < nodes.length; i++) {
+        let node = nodes[i];
+        if (node.isRoot) continue;
+
+        let type = node.isOuter ? "needs" : "depends";
+        let source = node.isOuter ? nodes.indexOf(node) : nodes.findIndex(n => n.researchContent.id == node.to);
+        let target = node.isOuter ? nodes.findIndex(n => n.researchContent.id == node.to) : nodes.indexOf(node);
+        let link = { source, target, type };
+        links.push(link);
+    }
+
+    return { nodes, links };
+}
+
 export {
     contentTypesMap,
     contentTypesList,
     getContentType,
-    getTopResearchesIds
+    getTopResearchesIds,
+    loadResearchContentOuterReferences,
+    loadResearchContentInnerReferences,
+    loadResearchContentReferencesGraph
 }
