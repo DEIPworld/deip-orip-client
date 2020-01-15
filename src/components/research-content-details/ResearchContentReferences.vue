@@ -186,7 +186,7 @@ export default {
       return this.researchContentReferencesGraph.nodes.length;
     },
     outerReferences() {
-      return this.researchContentReferencesGraph.nodes.filter((node) => node.class === "out");
+      return this.researchContentReferencesGraph.nodes.filter(({ refType }) => refType === "out");
     },
     researchContentAuthorsList() {
       return this.researchContent ? this.researchGroupMembers.filter(m => this.researchContent.authors.some(a => a === m.account.name)) : [];
@@ -197,8 +197,8 @@ export default {
 
     outerReferencesByContentTypeChart() {
       let outerReferencesByContentType = this.researchContentReferencesGraph.nodes.reduce((acc, node) => {
-        let { contentType } = node;
-        if (node.class === "out") {
+        let { contentType, refType } = node;
+        if (refType === "out") {
           let item = acc[contentType]
           if (!item) {
             acc[contentType] = { contentType, count: 1 };
@@ -209,7 +209,7 @@ export default {
         return acc;
       }, {});
 
-      let totalInnerReferencesCount = this.researchContentReferencesGraph.nodes.filter((node) => node.class === "out").length;
+      let totalInnerReferencesCount = this.researchContentReferencesGraph.nodes.filter(({ refType }) => refType === "out").length;
 
       return {
         data: [
@@ -238,11 +238,15 @@ export default {
 
     outerReferencesByOrgChart() {
       let outerReferencesByOrg = this.researchContentReferencesGraph.nodes.reduce((acc, node) => {
-        let { org } = node;
-        if (node.class === "out") {
+        let { refType, "researchGroup": { "permlink": org } } = node;
+        if (refType === "out") {
           let item = acc[org]
           if (!item) {
-            acc[org] = { org, orgName: node.orgName, count: 1 };
+            acc[org] = { 
+              org: node.researchGroup.permlink, 
+              orgName: node.researchGroup.name, 
+              count: 1 
+            };
           } else {
             item.count += 1;
           }
@@ -250,7 +254,7 @@ export default {
         return acc;
       }, {});
 
-      let totalOuterReferencesCount = this.researchContentReferencesGraph.nodes.filter((node) => node.class === "out").length;
+      let totalOuterReferencesCount = this.researchContentReferencesGraph.nodes.filter(({ refType }) => refType === "out").length;
       
       return {
         data: [

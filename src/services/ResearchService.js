@@ -73,10 +73,12 @@ const loadResearchContentOuterReferences = async (researchContent, acc) => {
 
         acc.push({
             isOuter: true,
+            refType: "out",
             to: referenceResearchContentId,
             researchGroup: outerRefResearchGroup, 
             research: outerRefResearch, 
-            researchContent: { ...outerRefResearchContent, authorsProfiles }
+            researchContent: { ...outerRefResearchContent, authorsProfiles },
+            contentType: getContentType(outerRefResearchContent.content_type).text
         });
         await loadResearchContentOuterReferences(outerRefResearchContent, acc);
     }
@@ -104,10 +106,12 @@ const loadResearchContentInnerReferences = async (researchContent, acc) => {
 
         acc.push({
             isInner: true,
+            refType: "in",
             to: researchContentId,
             researchGroup: innerRefResearchGroup, 
             research: innerRefResearch, 
-            researchContent: { ...innerRefResearchContent, authorsProfiles }
+            researchContent: { ...innerRefResearchContent, authorsProfiles },
+            contentType: getContentType(innerRefResearchContent.content_type).text
         });
         await loadResearchContentInnerReferences(innerRefResearchContent, acc);
     }
@@ -122,9 +126,11 @@ const loadResearchContentReferencesGraph = async (researchContentId) => {
 
     const mainNode = {
         isRoot: true,
+        refType: "root",
         researchContent: { ...researchContent, authorsProfiles },
         research,
-        researchGroup
+        researchGroup,
+        contentType: getContentType(researchContent.content_type).text
     }
 
     const outerReferences = [];

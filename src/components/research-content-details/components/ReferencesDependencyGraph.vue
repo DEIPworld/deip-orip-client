@@ -86,8 +86,8 @@ export default {
     classes() {
       const classes = []
       this.nodes.forEach(node => {
-        if (classes.indexOf(node.class) === -1)
-          classes.push(node.class)
+        if (classes.indexOf(node.refType) === -1)
+          classes.push(node.refType)
       })
       return classes.sort()
     }
@@ -135,11 +135,11 @@ export default {
         .data(this.nodes)
       .enter().append("g")
       .attr("class", "ref-node")
-      .attr("id", d => { return `ref-node-${d.id}`})
+      .attr("id", d => { return `ref-node-${d.researchContent.id}`})
 
       node.append("circle")
         .attr("r", 30)
-        .attr("class", d => d.class)
+        .attr("class", d => d.refType)
         .call(d3.drag()
           .on('start', this.nodeDragStarted)
           .on('drag', this.nodeDragged)
@@ -165,7 +165,7 @@ export default {
         .attr("class", "ref-org-logo")
         .attr("x", -15)
         .attr("y", -25)
-        .attr("xlink:href", d => { return `/static/research_groups/${d.org}-mini.png` })
+        .attr("xlink:href", d => { return `/static/research_groups/${d.researchGroup.permlink}-mini.png` })
         .attr("height", 30)
         .attr("width", 30)
         .call(d3.drag()
@@ -187,7 +187,7 @@ export default {
           .attr("width", this.refInfoWidth)
           .attr("height", this.refInfoHeight)
           .attr("visibility", "hidden")
-          .attr("id", d => { return `ref-info-${d.id}`})
+          .attr("id", d => { return `ref-info-${d.researchContent.id}`})
           .attr("class", "ref-info")
           .on("mousedown", () => {
             d3.event.stopPropagation();
@@ -216,7 +216,7 @@ export default {
 
       hashTextBox.append("xhtml:span")
         .attr("class", "ref-info-hash-value")
-        .text(d => { return d.hash; })
+        .text(d => { return d.researchContent.content.split(":")[1]; })
 
       let titleLinkBox = refInfoBox.append("xhtml:div")
         .attr("class", "ref-info-title-box");
@@ -225,7 +225,7 @@ export default {
         .attr("href", d => { return `/#/${d.researchGroup.permlink}/research/${d.research.permlink}/${d.researchContent.permlink}` })
         .attr("target", "_blank")
         .attr("class", "a ref-info-title-link")
-        .text(d => { return d.title; })
+        .text(d => { return d.researchContent.title; })
 
 
       let organizationBox = refInfoBox.append("xhtml:div")
@@ -243,10 +243,10 @@ export default {
 
       let organizationName = organizationItem.append("xhtml:span")
         .attr("class", "ref-info-org-name")
-        .text(d => { return d.orgName; })
+        .text(d => { return d.researchGroup.name; })
 
       let organizationLogo = organizationItem.append("xhtml:img")
-        .attr("src", d => { return `/static/research_groups/${d.org}-mini.png` })
+        .attr("src", d => { return `/static/research_groups/${d.researchGroup.permlink}-mini.png` })
         .attr("target", "_blank")
         .attr("class", "ref-info-org-logo");
 
@@ -499,8 +499,8 @@ export default {
       this.simulation.restart()
     },
     nodeClick(d) {
-      const refNode = this.selections.graph.select(`#ref-node-${d.id}`)
-      const refInfoDialog = this.selections.graph.select(`#ref-info-${d.id}`)
+      const refNode = this.selections.graph.select(`#ref-node-${d.researchContent.id}`)
+      const refInfoDialog = this.selections.graph.select(`#ref-info-${d.researchContent.id}`)
       const isHidden = refInfoDialog.attr("visibility") === "hidden";
       // this.selections.graph.selectAll(".ref-info").attr('visibility', "hidden");
 

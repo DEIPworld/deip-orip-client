@@ -114,28 +114,74 @@ const getters = {
         }
         return map;
     },
-    
+
+
     researchContentReferencesGraph: (state, getters) => {
-        let nodes = state.researchContentReferencesGraph.nodes.map((ref, i) => {
-            return {
-                ...ref,
-                id: ref.researchContent.id,
-                hash: ref.researchContent.content.split(":")[1],
-                title: ref.researchContent.title,
+        const refs = [...state.researchContentReferencesGraph.nodes];
+        const root = refs.find(ref => ref.isRoot);
 
-                class: ref.isRoot ? "root" : ref.isOuter ? "out" : ref.isInner ? "in" : "",
-                org: ref.researchGroup.permlink,
-                orgName: ref.researchGroup.name,
-                contentType: researchService.getContentType(ref.researchContent.content_type).text
-            };
-        });
+        const orderedInnerRefs = [...refs].filter(ref => ref.isInner).sort((a, b) => b.to - a.to);
+        const innerRefsByDepth = [];
+        for (let i = 0; i < orderedInnerRefs.length; i++) {
+            let ref = orderedInnerRefs[i];
 
-        let links = state.researchContentReferencesGraph.links.map((link, i) => {
-            return { ...link };
-        });
+            let targets = [root, ...[].concat.apply([], innerRefsByDepth)];
+            let target = targets.find(r => r.researchContent.id == ref.to);
+            let idx = target === root ? 0 : target.depth;
+
+            let siblings = innerRefsByDepth[idx];
+            if (!siblings) {
+                innerRefsByDepth.push([{ ...ref, depth: idx + 1 }])
+            } else {
+                siblings.push({ ...ref, depth: idx + 1 });
+            }
+        }
+
+        const orderedOuterRefs = [...refs].filter(ref => ref.isOuter).sort((a, b) => a.to - b.to);
+        const outerRefsByDepth = [];
+        for (let i = 0; i < orderedOuterRefs.length; i++) {
+            let ref = orderedOuterRefs[i];
+
+            let targets = [root, ...[].concat.apply([], outerRefsByDepth)];
+            let target = targets.find(r => r.researchContent.id == ref.to);
+            let idx = target === root ? 0 : target.depth;
+
+            let siblings = outerRefsByDepth[idx];
+            if (!siblings) {
+                outerRefsByDepth.push([{ ...ref, depth: idx + 1 }])
+            } else {
+                siblings.push({ ...ref, depth: idx + 1 });
+            }
+        }
+
+        const matrix = [...innerRefsByDepth.reverse(), [{...root, depth: 0}], ...outerRefsByDepth];
+        // console.log(matrix);
+
+        const nodes = [];
+        for (let i = 0; i < matrix.length; i++) {
+            let level = matrix[i];
+            for (let j = 0; j < level.length; j++) {
+                let ref = level[j];
+                let x = j * 100;
+                let y = ref.depth * 100;
+
+                let node = refs.find(n => n.researchContent.id == ref.researchContent.id);
+                nodes.push({
+                    ...node,
+                    x: ref.isInner ? x : -x,
+                    y: ref.isInner ? -y : y
+                });
+            }
+        }
+
+        const links = [];
+        for (let i = 0; i < state.researchContentReferencesGraph.links.length; i++) {
+            let link = state.researchContentReferencesGraph.links[i];
+            links.push({ ...link });
+        }
 
         return { nodes, links };
-    },
+    }
 }
 
 // actions
