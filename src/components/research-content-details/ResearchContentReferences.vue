@@ -131,7 +131,16 @@
                     </v-flex>
                     <v-flex xs8>
                       <div v-for="(ref, i) in outerReferences" :key="`out-ref-${i}`">
-                        <span class="a">{{ref.researchContent.title}}</span>
+                        <router-link class="a"
+                          :to="{
+                            name: 'ResearchContentDetails',
+                            params: {
+                              research_group_permlink: encodeURIComponent(ref.researchGroup.permlink),
+                              research_permlink: encodeURIComponent(ref.research.permlink),
+                              content_permlink: encodeURIComponent(ref.researchContent.permlink)
+                            }
+                          }"
+                        >{{ ref.researchContent.title }}</router-link>
                       </div>
                     </v-flex>
                   </v-layout>

@@ -29,7 +29,7 @@ export default {
       gridSize: 100,
       isInitialized: false,
       refInfoWidth: 500,
-      refInfoHeight: 300,
+      refInfoHeight: 230,
       selections: {},
       simulation: null,
       forceProperties: {
@@ -199,7 +199,7 @@ export default {
           .append("xhtml:div")
             .attr("xmlns", "http://www.w3.org/1999/xhtml")
             .attr("class", "ref-info-box")
-            .style("max-height", this.refInfoHeight + "px")
+            .style("height", this.refInfoHeight + "px")
             .style("overflow-y", "scroll");
       
 
@@ -262,23 +262,24 @@ export default {
       let authorsContent = authorsBox.append("xhtml:div")
         .attr("class", "ref-info-authors-content")
 
-      let authorItem = authorsContent.append("xhtml:a")
-        .attr("href", d => {
-          return `/#/user-details/${d.researchContent.authorsProfiles[0]._id}` 
-        })
-        .attr("target", "_blank")
+      let filters = this.$options.filters;
+      let authorItem = authorsContent.selectAll('.ref-info-author')
+        .data(d => d.researchContent.authorsProfiles)
+        .enter().append('xhtml:a')
         .attr("class", "a ref-info-author")
-
-      let authorName = authorItem.append("xhtml:span")
-        .attr("class", "ref-info-author-name")
-        .text(d => { 
-          return this.$options.filters.fullname(d.researchContent.authorsProfiles[0]);
-        });
-
-      let authorImg = authorItem.append("xhtml:img")
-        .attr("src", d => { return this.$options.filters.avatarSrc(d.researchContent.authorsProfiles[0].profile.avatar, 60, 60, false, true); })
+        .attr("href", a => {return `/#/user-details/${a.profile._id}`})
         .attr("target", "_blank")
-        .attr("class", "ref-info-author-img")
+        .each(function(a, i) {
+
+          let authorName = d3.select(this).append("xhtml:span")
+            .attr("class", "ref-info-author-name")
+            .text(filters.fullname(a));
+
+          let authorImg = d3.select(this).append("xhtml:img")
+            .attr("src", filters.avatarSrc(a.profile.avatar, 60, 60, false, true))
+            .attr("target", "_blank")
+            .attr("class", "ref-info-author-img")
+        });
 
 
       let contentAccessBox = refInfoBox.append("xhtml:div")
@@ -500,7 +501,7 @@ export default {
       const refNode = this.selections.graph.select(`#ref-node-${d.id}`)
       const refInfoDialog = this.selections.graph.select(`#ref-info-${d.id}`)
       const isHidden = refInfoDialog.attr("visibility") === "hidden";
-      this.selections.graph.selectAll(".ref-info").attr('visibility', "hidden");
+      // this.selections.graph.selectAll(".ref-info").attr('visibility', "hidden");
 
       refInfoDialog.attr('visibility', isHidden ? "visible" : "hidden");
       refNode.classed('selected', !isHidden);
@@ -725,7 +726,7 @@ export default {
 
 
   .ref-info-title-box {
-    padding: 5px 10px 5px 10px;
+    padding: 15px 10px 5px 10px;
   }
   .ref-info-title-link {
 
@@ -736,14 +737,18 @@ export default {
 
   }
   .ref-info-authors-content {
-
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
   }
+
   .ref-info-authors-box {
     display: flex;
     align-items: center;
     justify-content: space-between;
     padding: 5px 10px 5px 10px;
   }
+
   .ref-info-author {
     display: flex;
     align-items: center;
