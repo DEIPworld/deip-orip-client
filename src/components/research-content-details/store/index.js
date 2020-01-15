@@ -157,7 +157,7 @@ const getters = {
         const matrix = [...innerRefsByDepth.reverse(), [{...root, depth: 0}], ...outerRefsByDepth];
         // console.log(matrix);
 
-        const nodes = [];
+        const nodes = refs.map(ref => {return { ...ref }});
         for (let i = 0; i < matrix.length; i++) {
             let level = matrix[i];
             for (let j = 0; j < level.length; j++) {
@@ -165,12 +165,9 @@ const getters = {
                 let x = j * 100;
                 let y = ref.depth * 100;
 
-                let node = refs.find(n => n.researchContent.id == ref.researchContent.id);
-                nodes.push({
-                    ...node,
-                    x: ref.isInner ? x : -x,
-                    y: ref.isInner ? -y : y
-                });
+                let node = nodes.find(n => n.researchContent.id == ref.researchContent.id);
+                node.x = ref.isInner ? x : -x;
+                node.y = ref.isInner ? -y : y;
             }
         }
 
