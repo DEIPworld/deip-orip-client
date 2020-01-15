@@ -223,7 +223,7 @@ export default {
         .attr("class", "ref-info-title-box");
 
       titleLinkBox.append("xhtml:a")
-        .attr("href", d => { return `/#/syracuse-university/research/a-quantitative-analysis-of-phenotype-in-a-multicellular-prokaryote/inter-laboratory-evolution-of-a-model-organism-and-its-epistatic-effects-on-mutagenesis-screens` })
+        .attr("href", d => { return `/#/${d.researchGroup.permlink}/research/${d.research.permlink}/${d.researchContent.permlink}` })
         .attr("target", "_blank")
         .attr("class", "a ref-info-title-link")
         .text(d => { return d.title; })
