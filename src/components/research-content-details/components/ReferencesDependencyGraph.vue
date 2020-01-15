@@ -1,7 +1,7 @@
 <template>
   <div :style="{ width: width + 'px', height: height + 'px', border: '1px solid black' }">
     <svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg" xlink="http://www.w3.org/1999/xlink">
-      <defs v-if="isInitialized">
+      <defs>
         <pattern id="innerGrid" :width="innerGridSize" :height="innerGridSize" patternUnits="userSpaceOnUse">
           <rect width="100%" height="100%" fill="none" stroke="#CCCCCC7A" stroke-width="0.5"/>
         </pattern>
@@ -20,22 +20,23 @@ import * as d3 from "d3";
 export default {
   name: "ReferencesDependencyGraph",
   props: {
-    data: { type: Object, default: () => {} },
-    width: { type: Number, required: true, default: window.innerWidth },
-    height: { type: Number, required: true, default: window.innerHeight }
+    data: { type: Object, required: true },
+    width: { type: Number, required: true },
+    height: { type: Number, required: true }
   },
   data() {
     return {
       gridSize: 100,
-      isInitialized: false,
       refInfoWidth: 500,
       refInfoHeight: 230,
       selections: {},
       simulation: null,
       forceProperties: {
         center: {
-          x: 0.5,
-          y: 0.5
+          // x: 0.5,
+          // y: 0.5
+          x: this.width / 2,
+          y: this.height / 2
         },
         // charge: {
         //   enabled: true,
@@ -71,9 +72,7 @@ export default {
 
   computed: {
     innerGridSize() { return this.gridSize / 10 },
-    nodes() {
-      return this.data.nodes.map(function(d) { d.x = d.cx; d.y = d.cy; return d; }) 
-    },
+    nodes() { return this.data.nodes; },
     links() { return this.data.links },
     // These are needed for captions
     linkTypes() {
@@ -322,10 +321,11 @@ export default {
       simulation.alpha(1).restart()
     },
     updateForces() {
-      const { simulation, forceProperties, width, height } = this
+      const { simulation, forceProperties, width, height } = this;
+      
       simulation.force("center")
-      .x(width * forceProperties.center.x)
-      .y(height * forceProperties.center.y)
+        .x(forceProperties.center.x)
+        .y(forceProperties.center.y)
       // simulation.force("charge")
       //   .strength(forceProperties.charge.strength * forceProperties.charge.enabled)
       //   .distanceMin(forceProperties.charge.distanceMin)
@@ -573,10 +573,7 @@ export default {
       // .attr('ry', '10')
       .attr('class', 'caption');
 
-    setTimeout(() => {
-      this.updateData();
-      this.isInitialized = true;
-    }, 100);
+    this.updateData()
   },
 
   created() {

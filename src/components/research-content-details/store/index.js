@@ -126,9 +126,7 @@ const getters = {
                 class: ref.isRoot ? "root" : ref.isOuter ? "out" : ref.isInner ? "in" : "",
                 org: ref.researchGroup.permlink,
                 orgName: ref.researchGroup.name,
-                contentType: researchService.getContentType(ref.researchContent.content_type).text,
-                "cx": ref.isRoot ? 0 : ref.isOuter ? 0 + (0) : ref.isInner ? 0 + (100) : 0,
-                "cy": ref.isRoot ? 0 : ref.isOuter ? 0 + (100) : ref.isInner ? 0 + (-100) : 0,
+                contentType: researchService.getContentType(ref.researchContent.content_type).text
             };
         });
 

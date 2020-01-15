@@ -8,7 +8,7 @@
           <div class="title">How my data is used by others</div>
           <div class="py-4 subheading half-bold">Number of citations: {{referencesCount}}</div>
           <div ref="graphContainer" style="height: 400px">
-            <references-dependency-graph :data="researchContentReferencesGraph" :width="graphWidth" :height="graphHeight"></references-dependency-graph>
+            <references-dependency-graph v-if="isMounted" :data="researchContentReferencesGraph" :width="graphWidth" :height="graphHeight"></references-dependency-graph>
           </div>
 
           <v-layout row class="pt-5">
@@ -167,7 +167,8 @@ export default {
   data() {
     return {
       graphWidth: 0,
-      graphHeight: 0
+      graphHeight: 0,
+      isMounted: false
     };
   },
   computed: {
@@ -284,6 +285,7 @@ export default {
     let graphContainer = this.$refs["graphContainer"];
     this.graphWidth = graphContainer.clientWidth;
     this.graphHeight = graphContainer.clientHeight;
+    this.isMounted = true;
   }
 };
 </script>
