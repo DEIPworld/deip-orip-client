@@ -72,7 +72,83 @@ export default {
 
   computed: {
     innerGridSize() { return this.gridSize / 10 },
-    nodes() { return this.data.nodes; },
+    nodes() {
+      const root = this.data.nodes.find(ref => ref.isRoot);
+
+      const findChildren = (parent, list) => {
+        let children = list.filter(node => node.parent == parent.id);
+        for (let i = 0; i < children.length; i++) {
+            let child = children[i];
+            child.children = findChildren(child, list);
+        }
+        return children;
+      }
+
+      const buildTree = (root, list) => {
+        root.children = list.filter(node => node.parent == root.id);
+        for (let i = 0; i < root.children.length; i++) {
+            let child = root.children[i];
+            child.children = findChildren(child, list);
+        }
+        return root;
+      }
+
+      const innerReferencesTreeModels = [root, ...this.data.nodes.filter(ref => ref.isInner)].map(ref => { return {
+          id: ref.researchContent.id,
+          parent: ref.to,
+          name: ref.researchContent.title,
+          children: []
+      }})
+      const innerReferencesTreeData = buildTree(innerReferencesTreeModels[0], innerReferencesTreeModels);
+      const innerReferencesTreemap = d3.tree().nodeSize([150, 150]); // .size([this.width, this.height]);
+      const innerReferencesTreeNodes = d3.hierarchy(innerReferencesTreeData);
+      const innerReferencesTreeRoot = innerReferencesTreemap(innerReferencesTreeNodes);
+
+
+      const outerReferencesTreeModels = [root, ...this.data.nodes.filter(ref => ref.isOuter)].map(ref => { return {
+          id: ref.researchContent.id,
+          parent: ref.to,
+          name: ref.researchContent.title,
+          children: []
+      }})
+      const outerReferencesTreeData = buildTree(outerReferencesTreeModels[0], outerReferencesTreeModels);
+      const outerReferencesTreemap = d3.tree().nodeSize([150, 150]); // .size([this.width, this.height]);
+      const outerReferencesTreeNodes = d3.hierarchy(outerReferencesTreeData);
+      const outerReferencesTreeRoot = outerReferencesTreemap(outerReferencesTreeNodes);
+
+      const getCoords = (id, node) => {
+        if (id == node.data.id) {
+          return { x: node.x, y: node.y }; 
+        }
+
+        if (node.children) {
+          for (let i = 0; i < node.children.length; i++) {
+            let child = node.children[i];
+            let coords = getCoords(id, child)
+            if (coords) return coords;
+          }
+        }
+      }
+
+      let nodes = this.data.nodes.map((node, i) => {
+        if (node.isInner) {
+          let { x, y } = getCoords(node.researchContent.id, innerReferencesTreeRoot);
+          return { ...node, x, y: -y };
+        }
+        if (node.isRoot) {
+          let { x, y } = innerReferencesTreeRoot;
+          return { ...node, x, y };
+        }
+        if (node.isOuter) {
+          let { x, y } = getCoords(node.researchContent.id, outerReferencesTreeRoot);
+          return { ...node, x, y };
+        }
+      })
+
+      // console.log(nodes);
+
+      return nodes; 
+    },
     links() { return this.data.links },
     // These are needed for captions
     linkTypes() {
@@ -417,7 +493,7 @@ export default {
       const paddingY = 18;
       caption
         .attr('transform', 'translate(' +
-          (this.width - captionWidth - paddingX) + ', ' +
+          (/* this.width - captionWidth - */ paddingX) + ', ' +
           (/* this.height - captionHeight - */ paddingY) + ')');
     },
     zoomed() {
@@ -431,14 +507,14 @@ export default {
 
       // Define some world boundaries based on the graph total size
       // so we don't scroll indefinitely
-      const graphBox = this.selections.graph.node().getBBox()
-      const margin = 200
-      const worldTopLeft = [graphBox.x - margin, graphBox.y - margin]
-      const worldBottomRight = [
-        graphBox.x + graphBox.width + margin,
-        graphBox.y + graphBox.height + margin
-      ]
-      this.zoom.translateExtent([worldTopLeft, worldBottomRight])
+      // const graphBox = this.selections.graph.node().getBBox()
+      // const margin = 200
+      // const worldTopLeft = [graphBox.x - margin, graphBox.y - margin]
+      // const worldBottomRight = [
+      //   graphBox.x + graphBox.width + margin,
+      //   graphBox.y + graphBox.height + margin
+      // ]
+      // this.zoom.translateExtent([worldTopLeft, worldBottomRight])
     },
     nodeDragStarted(d) {
       if (!d3.event.active) { this.simulation.alphaTarget(0.1).restart() }
@@ -567,13 +643,14 @@ export default {
     // Some caption
     this.selections.caption = svg.append('g');
     this.selections.caption.append('rect')
-      .attr('width', '160')
+      .attr('width', '140')
       .attr('height', '0')
       // .attr('rx', '10')
       // .attr('ry', '10')
       .attr('class', 'caption');
 
     this.updateData()
+    this.zoom.scaleBy(svg, 1 / 2);
   },
 
   created() {
