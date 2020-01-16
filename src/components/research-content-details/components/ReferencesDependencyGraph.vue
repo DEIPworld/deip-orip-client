@@ -46,8 +46,8 @@ export default {
         // },
         collide: {
           enabled: true,
-          strength: .7,
-          iterations: 1,
+          strength: 1,
+          iterations: 0,
           radius: 50
         },
         // forceX: {
@@ -62,9 +62,9 @@ export default {
         // },
         link: {
           enabled: true,
-          distance: 500,
+          strength: 1,
           iterations: 0,
-          strength: .8,
+          distance: 100
         }
       },
     }

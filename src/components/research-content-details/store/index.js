@@ -170,18 +170,63 @@ const getters = {
         }
 
         const matrix = [...innerRefsByDepth.reverse(), [{ ...root, depth: 0 }], ...outerRefsByDepth];
-        console.log(matrix)
+        // console.log(matrix);
+
+        const xAxisOffset = (level, levelNum, ref) => {
+            if (ref.isInner) {
+                let nodePos = level.findIndex(p => p.researchContent.id == ref.researchContent.id) + 1;
+                let offset = (level.length == 1 ? 0 :  Math.ceil(level.length / 2 - nodePos)) * 100;
+                if (ref.to == root.researchContent.id) {
+                    return offset;
+                }
+                let lowerLevel = matrix[levelNum + 1];
+                let lowerLevelNodePos = lowerLevel.findIndex(p => p.researchContent.id == ref.to) + 1;
+                return offset + xAxisOffset(lowerLevel, levelNum + 1, lowerLevel[lowerLevelNodePos - 1]);
+            }
+
+            if (ref.isRoot) {
+                return 0;
+            }
+
+            if (ref.isOuter) {
+                let nodePos = level.findIndex(p => p.researchContent.id == ref.researchContent.id) + 1;
+                let offset = (level.length == 1 ? 0 : Math.ceil(level.length / 2 - nodePos)) * 100;
+                if (ref.to == root.researchContent.id) {
+                    return offset;
+                }
+                let upperLevel = matrix[levelNum - 1];
+                let upperLevelNodePos = upperLevel.findIndex(p => p.researchContent.id == ref.to) + 1;
+                return offset + xAxisOffset(upperLevel, levelNum - 1, upperLevel[upperLevelNodePos - 1]);
+            }
+
+            return 0;
+        }
+
+        const yAxisOffset = (ref) => {
+            if (ref.isInner) {
+                return -ref.depth * 100;
+            }
+
+            if (ref.isRoot) {
+                return 0;
+            }
+
+            if (ref.isOuter) {
+                return ref.depth * 100;
+            }
+        }
+
 
         for (let i = 0; i < matrix.length; i++) {
-            let refs = matrix[i];
-            for (let j = 0; j < refs.length; j++) {
-                let ref = refs[j];
-                let x = j * 100;
-                let y = ref.depth * 100;
+            let level = matrix[i];
+            for (let j = 0; j < level.length; j++) {
+                let ref = level[j];
+                let offsetX = xAxisOffset(level, i, ref);
+                let offsetY = yAxisOffset(ref);
 
                 let node = nodes.find(n => n.researchContent.id == ref.researchContent.id);
-                node.x = ref.isInner ? x : -x
-                node.y = ref.isInner ? -y : y
+                node.x = offsetX;
+                node.y = offsetY;
             }
         }
 
