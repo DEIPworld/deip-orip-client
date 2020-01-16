@@ -124,7 +124,7 @@ const loadResearchContentReferencesGraph = async (researchContentId) => {
 
     let authorsProfiles = await usersUtils.getEnrichedProfiles(researchContent.authors);
 
-    const mainNode = {
+    const root = {
         isRoot: true,
         refType: "root",
         researchContent: { ...researchContent, authorsProfiles },
@@ -139,20 +139,25 @@ const loadResearchContentReferencesGraph = async (researchContentId) => {
     const innerReferences = [];
     await loadResearchContentInnerReferences(researchContent, innerReferences);
 
-    let nodes = [...innerReferences, mainNode, ...outerReferences];
-    let links = [];
-
-    for (let i = 0; i < nodes.length; i++) {
-        let node = nodes[i];
-        if (node.isRoot) continue;
-
-        let type = node.isOuter ? "needs" : "depends";
-        let source = node.isOuter ? nodes.indexOf(node) : nodes.findIndex(n => n.researchContent.id == node.to);
-        let target = node.isOuter ? nodes.findIndex(n => n.researchContent.id == node.to) : nodes.indexOf(node);
+    const references = [...innerReferences, root, ...outerReferences];
+    const nodes = references.reduce((acc, ref) => {
+        if (acc.some(r => r.researchContent.id == ref.researchContent.id)) {
+            return acc;
+        }
+        return [...acc, ref];
+    }, []);
+    
+    const links = [];
+    for (let i = 0; i < references.length; i++) {
+        let ref = references[i];
+        if (ref.isRoot) continue;
+        let type = ref.isOuter ? "needs" : "depends";
+        let source = nodes.findIndex(node => ref.isOuter ? node.researchContent.id == ref.researchContent.id : node.researchContent.id == ref.to);
+        let target = nodes.findIndex(node => ref.isOuter ? node.researchContent.id == ref.to : node.researchContent.id == ref.researchContent.id);
         let link = { source, target, type };
         links.push(link);
     }
-
+    
     return { nodes, links };
 }
 

@@ -3,9 +3,10 @@ import deipRpc from '@deip/deip-oa-rpc-client'
 import Vue from 'vue'
 import { getEnrichedProfiles } from './../../../utils/user'
 import contentHttpService from './../../../services/http/content'
-import { 
-    findBlocksByRange, getDynamicGlobalProperties, getConfig, 
-    getBlock, getTransaction, getTransactionHex } from './../../../utils/blockchain';
+import {
+    findBlocksByRange, getDynamicGlobalProperties, getConfig,
+    getBlock, getTransaction, getTransactionHex
+} from './../../../utils/blockchain';
 import { CREATE_RESEARCH_MATERIAL } from './../../../services/ProposalService';
 import * as researchService from './../../../services/ResearchService';
 
@@ -50,7 +51,7 @@ const getters = {
     group: (state, getters) => {
         return state.group;
     },
-    
+
     contentProposal: (state) => {
         return state.contentProposal;
     },
@@ -86,7 +87,7 @@ const getters = {
     reviewEditor: (state, getters) => {
         return reviewEditor;
     },
-    
+
     membersList: (state, getters) => {
         return state.membersList;
     },
@@ -95,10 +96,10 @@ const getters = {
         return state.contentMetadata;
     },
 
-    contentWeightByDiscipline: function() {
+    contentWeightByDiscipline: function () {
         const map = {};
         const flattened = state.totalVotesList.reduce(
-            function(accumulator, currentValue) {
+            function (accumulator, currentValue) {
                 return accumulator.concat(currentValue);
             }, []);
         for (var i = 0; i < flattened.length; i++) {
@@ -117,7 +118,21 @@ const getters = {
 
 
     researchContentReferencesGraph: (state, getters) => {
+        const nodes = [];
         const refs = [...state.researchContentReferencesGraph.nodes];
+        for (let i = 0; i < refs.length; i++) {
+            let ref = refs[i];
+            let node = {
+                ...ref,
+                id: ref.researchContent.id,
+                hash: ref.researchContent.content.split(":")[1],
+                title: ref.researchContent.title,
+                contentType: researchService.getContentType(ref.researchContent.content_type).text,
+            };
+            nodes.push(node);
+        }
+
+
         const root = refs.find(ref => ref.isRoot);
 
         const orderedInnerRefs = [...refs].filter(ref => ref.isInner).sort((a, b) => b.to - a.to);
@@ -154,20 +169,19 @@ const getters = {
             }
         }
 
-        const matrix = [...innerRefsByDepth.reverse(), [{...root, depth: 0}], ...outerRefsByDepth];
-        // console.log(matrix);
+        const matrix = [...innerRefsByDepth.reverse(), [{ ...root, depth: 0 }], ...outerRefsByDepth];
+        console.log(matrix)
 
-        const nodes = refs.map(ref => {return { ...ref }});
         for (let i = 0; i < matrix.length; i++) {
-            let level = matrix[i];
-            for (let j = 0; j < level.length; j++) {
-                let ref = level[j];
+            let refs = matrix[i];
+            for (let j = 0; j < refs.length; j++) {
+                let ref = refs[j];
                 let x = j * 100;
                 let y = ref.depth * 100;
 
                 let node = nodes.find(n => n.researchContent.id == ref.researchContent.id);
-                node.x = ref.isInner ? x : -x;
-                node.y = ref.isInner ? -y : y;
+                node.x = ref.isInner ? x : -x
+                node.y = ref.isInner ? -y : y
             }
         }
 
@@ -185,9 +199,9 @@ const getters = {
 const actions = {
 
     loadResearchContentDetails({ state, commit, dispatch },
-            { group_permlink, research_permlink, content_permlink, ref }) {
+        { group_permlink, research_permlink, content_permlink, ref }) {
         commit('RESET_STATE');
-        return dispatch('loadResearchDetails', { group_permlink, research_permlink})
+        return dispatch('loadResearchDetails', { group_permlink, research_permlink })
             .then(() => {
                 if (!content_permlink || content_permlink === '!draft') {
                     // this is draft
@@ -197,32 +211,32 @@ const actions = {
                     const researchGroupDetailsLoad = new Promise((resolve, reject) => {
                         dispatch('loadResearchGroupDetails', { group_permlink, notify: resolve })
                     });
-        
+
                     return Promise.all([contentRefLoad, researchGroupDetailsLoad]);
                 } else {
                     commit('SET_RESEARCH_CONTENT_DETAILS_LOADING_STATE', true);
-        
+
                     return deipRpc.api.getResearchContentByAbsolutePermlinkAsync(group_permlink, research_permlink, content_permlink)
                         .then((contentObj) => {
                             commit('SET_RESEARCH_CONTENT_DETAILS', contentObj)
                             const content = contentObj.content;
-                            const ref = content.indexOf('file:') == 0 
-                                ? content.slice(5) : content.indexOf('dar:') == 0 
-                                ? content.slice(4) : content.indexOf('package:') == 0 
-                                ? content.slice(8) : content;
+                            const ref = content.indexOf('file:') == 0
+                                ? content.slice(5) : content.indexOf('dar:') == 0
+                                    ? content.slice(4) : content.indexOf('package:') == 0
+                                        ? content.slice(8) : content;
 
                             const contentRefLoad = new Promise((resolve, reject) => {
                                 dispatch('loadResearchContentRef', { researchId: state.research.id, refId: null, hash: ref, notify: resolve })
                             });
-        
+
                             const contentReviewsLoad = new Promise((resolve, reject) => {
                                 dispatch('loadContentReviews', { researchContentId: contentObj.id, notify: resolve })
                             });
-        
+
                             const contentVotesLoad = new Promise((resolve, reject) => {
                                 dispatch('loadResearchContentVotes', { researchId: contentObj.research_id, notify: resolve })
                             });
-        
+
                             const researchGroupDetailsLoad = new Promise((resolve, reject) => {
                                 dispatch('loadResearchGroupDetails', { group_permlink, notify: resolve })
                             });
@@ -232,7 +246,7 @@ const actions = {
                             });
 
                             return Promise.all([contentRefLoad, contentReviewsLoad, contentVotesLoad, researchGroupDetailsLoad, referencesLoad])
-                        }, (err) => {console.log(err)})
+                        }, (err) => { console.log(err) })
                         .finally(() => {
                             commit('SET_RESEARCH_CONTENT_DETAILS_LOADING_STATE', false);
                         });
@@ -252,24 +266,24 @@ const actions = {
                     disciplinesList.push(discipline);
                     tvoPromises.push(deipRpc.api.getTotalVotesByResearchAndDisciplineAsync(researchId, discipline.id));
                     expertsPromises.push(
-                      deipRpc.api.getExpertTokensByDisciplineIdAsync(discipline.id)
+                        deipRpc.api.getExpertTokensByDisciplineIdAsync(discipline.id)
                     );
                 }
                 return Promise.all([
-                  Promise.all(tvoPromises),
-                  Promise.all(expertsPromises)
+                    Promise.all(tvoPromises),
+                    Promise.all(expertsPromises)
                 ]);
-            }, (err) => {console.log(err)})
+            }, (err) => { console.log(err) })
             .then(([tvoList, expertTokensPerDiscipline]) => {
-              const expertsAccountNames = [];
-              expertTokensPerDiscipline.forEach((e) => {
-                expertsAccountNames.push(...e.map(et => et.account_name));
-              });  
-              commit('SET_RESEARCH_CONTENT_DISCIPLINES_LIST', disciplinesList)
-              commit('SET_RESEARCH_CONTENT_TOTAL_VOTES_LIST', tvoList)
-              return getEnrichedProfiles(_.uniq(expertsAccountNames));
+                const expertsAccountNames = [];
+                expertTokensPerDiscipline.forEach((e) => {
+                    expertsAccountNames.push(...e.map(et => et.account_name));
+                });
+                commit('SET_RESEARCH_CONTENT_DISCIPLINES_LIST', disciplinesList)
+                commit('SET_RESEARCH_CONTENT_TOTAL_VOTES_LIST', tvoList)
+                return getEnrichedProfiles(_.uniq(expertsAccountNames));
             }).then((expertsList) => {
-              commit('SET_EXPERTS_LIST', expertsList);
+                commit('SET_EXPERTS_LIST', expertsList);
             }).finally(() => {
                 commit('SET_RESEARCH_CONTENT_VOTES_LOADING_STATE', false)
                 if (notify) notify();
@@ -290,7 +304,7 @@ const actions = {
                 rgtList.push(...members)
                 return getEnrichedProfiles(members.map(m => m.owner))
 
-            }, (err) => {console.log(err)}) 
+            }, (err) => { console.log(err) })
             .then((users) => {
                 for (let i = 0; i < users.length; i++) {
                     const user = users[i];
@@ -298,7 +312,7 @@ const actions = {
                 }
                 commit('SET_RESEARCH_MEMBERS_LIST', users)
                 return deipRpc.api.getAllResearchContentAsync(researchId)
-            }, (err) => {console.log(err)})
+            }, (err) => { console.log(err) })
             .then((list) => {
                 commit('SET_RESEARCH_CONTENT_LIST', list)
             }, (err) => { console.log(err) })
@@ -313,7 +327,7 @@ const actions = {
         deipRpc.api.getResearchGroupByPermlinkAsync(group_permlink)
             .then((group) => {
                 commit('SET_RESEARCH_GROUP_DETAILS', group)
-            }, (err) => {console.log(err)})
+            }, (err) => { console.log(err) })
             .finally(() => {
                 commit('SET_RESEARCH_GROUP_DETAILS_LOADING_STATE', false)
                 if (notify) notify();
@@ -325,15 +339,15 @@ const actions = {
         refPromies
             .then((contentRef) => {
                 commit('SET_RESEARCH_CONTENT_REF', contentRef);
-                return deipRpc.api.getProposalsByResearchGroupIdAsync(contentRef.researchGroupId) 
-            }, (err) => {console.log(err)})
+                return deipRpc.api.getProposalsByResearchGroupIdAsync(contentRef.researchGroupId)
+            }, (err) => { console.log(err) })
             .then((proposals) => {
                 const contentRef = state.contentRef;
                 const contentProposal = proposals.filter(p => p.action == CREATE_RESEARCH_MATERIAL).find(p => {
                     const data = JSON.parse(p.data);
                     const proposalContent = data.content;
                     return proposalContent === `${contentRef.type}:${contentRef.hash}`;
-                });                
+                });
                 commit('SET_CONTENT_PROPOSAL', contentProposal || null)
             })
             .finally(() => {
@@ -357,7 +371,7 @@ const actions = {
                     ),
                     getEnrichedProfiles(reviews.map(r => r.author))
                 ]);
-            }, (err) => {console.log(err)})
+            }, (err) => { console.log(err) })
             .then(([reviewVotes, users]) => {
                 reviews.forEach((review, i) => {
                     review.author = users.find(u => u.account.name == review.author);
@@ -365,7 +379,7 @@ const actions = {
                 });
 
                 commit('SET_RESEARCH_CONTENT_REVIEWS_LIST', reviews);
-            }, (err) => {console.log(err)})
+            }, (err) => { console.log(err) })
             .finally(() => {
                 commit('SET_RESEARCH_CONTENT_REVIEWS_LOADING_STATE', false)
                 if (notify) notify();
@@ -398,181 +412,181 @@ const actions = {
         commit('SET_DRAFT_REFERENCES_LIST', references);
     },
 
-    async loadResearchContentMetadata({ state, commit, dispatch }, 
-        { group_permlink, research_permlink, content_permlink,  notify }) {
+    async loadResearchContentMetadata({ state, commit, dispatch },
+        { group_permlink, research_permlink, content_permlink, notify }) {
 
-            commit('RESET_METADATA_STATE');
+        commit('RESET_METADATA_STATE');
 
-            try {
-                const dgp = await getDynamicGlobalProperties();
-                const conf = await getConfig();
-                const content = await deipRpc.api.getResearchContentByAbsolutePermlinkAsync(group_permlink, research_permlink, content_permlink);
-                const millisSinceGenesis = (dgp.current_aslot * conf.DEIP_BLOCK_INTERVAL) * 1000;
-                const currentMillis = new Date(`${dgp.time}Z`).getTime();
-                const genesisMillis = currentMillis - millisSinceGenesis;
-                const isGenesisContent = new Date(`${content.created_at}Z`).getTime() === new Date(genesisMillis).getTime();
-                const research = await deipRpc.api.getResearchByAbsolutePermlinkAsync(group_permlink, research_permlink);
-                const group = await deipRpc.api.getResearchGroupByPermlinkAsync(group_permlink);
+        try {
+            const dgp = await getDynamicGlobalProperties();
+            const conf = await getConfig();
+            const content = await deipRpc.api.getResearchContentByAbsolutePermlinkAsync(group_permlink, research_permlink, content_permlink);
+            const millisSinceGenesis = (dgp.current_aslot * conf.DEIP_BLOCK_INTERVAL) * 1000;
+            const currentMillis = new Date(`${dgp.time}Z`).getTime();
+            const genesisMillis = currentMillis - millisSinceGenesis;
+            const isGenesisContent = new Date(`${content.created_at}Z`).getTime() === new Date(genesisMillis).getTime();
+            const research = await deipRpc.api.getResearchByAbsolutePermlinkAsync(group_permlink, research_permlink);
+            const group = await deipRpc.api.getResearchGroupByPermlinkAsync(group_permlink);
 
-                if (!isGenesisContent) {
-                    const proposals = await deipRpc.api.getProposalsByResearchGroupIdAsync(research.research_group_id)
+            if (!isGenesisContent) {
+                const proposals = await deipRpc.api.getProposalsByResearchGroupIdAsync(research.research_group_id)
 
-                    const contentProposal = proposals.filter(p => p.action == CREATE_RESEARCH_MATERIAL && p.is_completed).find(p => {
-                        const data = JSON.parse(p.data)
-                        return data.content == content.content && data.permlink == content.permlink;
-                    });
+                const contentProposal = proposals.filter(p => p.action == CREATE_RESEARCH_MATERIAL && p.is_completed).find(p => {
+                    const data = JSON.parse(p.data)
+                    return data.content == content.content && data.permlink == content.permlink;
+                });
 
-                    if (!contentProposal) {
-                        // should never happen
-                        throw new Error("Fatal: content proposal is not found")
-                    }
+                if (!contentProposal) {
+                    // should never happen
+                    throw new Error("Fatal: content proposal is not found")
+                }
 
-                    // to get the block with content tx details we need to run scanning
-                    const startTime = contentProposal.creation_time;
-                    
-                    /* todo: replace approximate estimated endTime with actual values 
-                    once we have moved this to aggreagtion server */
-                    const endTime = contentProposal.expiration_time;
+                // to get the block with content tx details we need to run scanning
+                const startTime = contentProposal.creation_time;
 
-                    // var contentCreatedTimePlus10Minutes = new Date(new Date(`${content.created_at}Z`).getTime() + 1 * 60000);
-                    // const endTimeIso = contentCreatedTimePlus10Minutes.toISOString();
-                    // const endTime = endTimeIso.slice(0, endTimeIso.indexOf('.'));
-                    const bounds = await findBlocksByRange(startTime, endTime);
+                /* todo: replace approximate estimated endTime with actual values 
+                once we have moved this to aggreagtion server */
+                const endTime = contentProposal.expiration_time;
 
-                    var block;
-                    var txIdx;
-                    var blockNum;
-                    for (let i = bounds.first.num; i <= bounds.last.num; i++) {
-                        block = await getBlock(i);
+                // var contentCreatedTimePlus10Minutes = new Date(new Date(`${content.created_at}Z`).getTime() + 1 * 60000);
+                // const endTimeIso = contentCreatedTimePlus10Minutes.toISOString();
+                // const endTime = endTimeIso.slice(0, endTimeIso.indexOf('.'));
+                const bounds = await findBlocksByRange(startTime, endTime);
 
-                        var isFound = false;
+                var block;
+                var txIdx;
+                var blockNum;
+                for (let i = bounds.first.num; i <= bounds.last.num; i++) {
+                    block = await getBlock(i);
 
-                        for (let k = 0; k < block.transactions.length; k++) {
-                            const tx = block.transactions[k];
-                            const createProposalOps = tx.operations.filter(o => o[0] === 'create_proposal');
-                            const contentProposals = createProposalOps.filter(o => o[1].action == CREATE_RESEARCH_MATERIAL);
-                            const wanted = contentProposals.find(p => {
-                                const data = JSON.parse(p[1].data);
-                                return data.content == content.content && data.permlink == content.permlink;
-                            });
+                    var isFound = false;
 
-                            if (wanted) {
-                                isFound = true;
-                                txIdx = k;
-                                break;
-                            }
-                        }
+                    for (let k = 0; k < block.transactions.length; k++) {
+                        const tx = block.transactions[k];
+                        const createProposalOps = tx.operations.filter(o => o[0] === 'create_proposal');
+                        const contentProposals = createProposalOps.filter(o => o[1].action == CREATE_RESEARCH_MATERIAL);
+                        const wanted = contentProposals.find(p => {
+                            const data = JSON.parse(p[1].data);
+                            return data.content == content.content && data.permlink == content.permlink;
+                        });
 
-                        if (isFound) {
-                            blockNum = i;
+                        if (wanted) {
+                            isFound = true;
+                            txIdx = k;
                             break;
                         }
                     }
-                    const tx = await getTransaction(block.transaction_ids[txIdx])
-                    const txHex = await getTransactionHex(tx)
-                    // const witness = await getWitnessByAccount(block.witness)
-                    const witnessUser = await getEnrichedProfiles([block.witness])
-                    const votersMeta = [];
-                    
-                    if (!group.is_personal) {
-                        const voters = await getProposalVotesMeta(contentProposal, endTime);
-                        votersMeta.push(...voters);
+
+                    if (isFound) {
+                        blockNum = i;
+                        break;
                     }
-                    
-                    const contentMetadata = {
-                        blockId: block.block_id,
-                        blockNum: blockNum,
-                        research: research,
-                        content: content,
-                        timestamp: `${block.timestamp}Z`,
-                        witness: {
-                            user: witnessUser[0],
-                            signingKey: block.signing_key,
-                            signature: block.witness_signature
-                        },
-                        voters: votersMeta,
-                        chainId: window.env.CHAIN_ID,
-                        transaction: {
-                            id: tx.transaction_id,
-                            hex: txHex
-                        }
-                    };
+                }
+                const tx = await getTransaction(block.transaction_ids[txIdx])
+                const txHex = await getTransactionHex(tx)
+                // const witness = await getWitnessByAccount(block.witness)
+                const witnessUser = await getEnrichedProfiles([block.witness])
+                const votersMeta = [];
 
-                    commit('SET_RESEARCH_CONTENT_METADATA', contentMetadata);
+                if (!group.is_personal) {
+                    const voters = await getProposalVotesMeta(contentProposal, endTime);
+                    votersMeta.push(...voters);
+                }
 
-                    async function getProposalVotesMeta(proposal, endTime) {
-                        const votersMeta = [];
-                        const sortedVotes = proposal.votes.sort((a,b) => {return (a.voting_time > b.voting_time) ? 1 : ((b.voting_time > a.voting_time) ? -1 : 0);}); 
-                        const firstVote = sortedVotes[0];
-                        const bounds = await findBlocksByRange(firstVote.voting_time, endTime /* proposal.expiration_time */);
+                const contentMetadata = {
+                    blockId: block.block_id,
+                    blockNum: blockNum,
+                    research: research,
+                    content: content,
+                    timestamp: `${block.timestamp}Z`,
+                    witness: {
+                        user: witnessUser[0],
+                        signingKey: block.signing_key,
+                        signature: block.witness_signature
+                    },
+                    voters: votersMeta,
+                    chainId: window.env.CHAIN_ID,
+                    transaction: {
+                        id: tx.transaction_id,
+                        hex: txHex
+                    }
+                };
 
-                        const blocks = {};
+                commit('SET_RESEARCH_CONTENT_METADATA', contentMetadata);
 
-                        for (let i = 0; i < sortedVotes.length; i++) {
-                            const vote = sortedVotes[i];
-                                                            
-                            for (let j = bounds.first.num; j <= bounds.last.num; j++) {
-                                const block = blocks[j] ? blocks[j] : await getBlock(j);
-                                if (!blocks[j]) {
-                                    blocks[j] = block;
-                                }
-                                if (block.timestamp < vote.voting_time) {
-                                    continue;
-                                }
+                async function getProposalVotesMeta(proposal, endTime) {
+                    const votersMeta = [];
+                    const sortedVotes = proposal.votes.sort((a, b) => { return (a.voting_time > b.voting_time) ? 1 : ((b.voting_time > a.voting_time) ? -1 : 0); });
+                    const firstVote = sortedVotes[0];
+                    const bounds = await findBlocksByRange(firstVote.voting_time, endTime /* proposal.expiration_time */);
 
-                                var isFound = false;
+                    const blocks = {};
 
-                                for (let k = 0; k < block.transactions.length; k++) {
-                                    const tx = block.transactions[k];
-                                    const voteProposalOp = tx.operations.find(o => 
-                                        o[0] === 'vote_proposal' && 
-                                        o[1].proposal_id == proposal.id && 
-                                        o[1].voter === vote.voter);
+                    for (let i = 0; i < sortedVotes.length; i++) {
+                        const vote = sortedVotes[i];
 
-                                    if (voteProposalOp) {
-                                        const metadata = voteProposalOp[1];
-                                        metadata.signature = tx.signatures[0];
-                                        const enrichedProfiles = await getEnrichedProfiles([metadata.voter]);
-                                        metadata.user = enrichedProfiles[0];
-                                        votersMeta.push(metadata);
-                                        isFound = true;
-                                        break;
-                                    }
-                                }
+                        for (let j = bounds.first.num; j <= bounds.last.num; j++) {
+                            const block = blocks[j] ? blocks[j] : await getBlock(j);
+                            if (!blocks[j]) {
+                                blocks[j] = block;
+                            }
+                            if (block.timestamp < vote.voting_time) {
+                                continue;
+                            }
 
-                                if (isFound) {
+                            var isFound = false;
+
+                            for (let k = 0; k < block.transactions.length; k++) {
+                                const tx = block.transactions[k];
+                                const voteProposalOp = tx.operations.find(o =>
+                                    o[0] === 'vote_proposal' &&
+                                    o[1].proposal_id == proposal.id &&
+                                    o[1].voter === vote.voter);
+
+                                if (voteProposalOp) {
+                                    const metadata = voteProposalOp[1];
+                                    metadata.signature = tx.signatures[0];
+                                    const enrichedProfiles = await getEnrichedProfiles([metadata.voter]);
+                                    metadata.user = enrichedProfiles[0];
+                                    votersMeta.push(metadata);
+                                    isFound = true;
                                     break;
                                 }
                             }
+
+                            if (isFound) {
+                                break;
+                            }
                         }
-                        return votersMeta;
                     }
-                    
-                } else {
-                    const genesisBlock = await getBlock(1);
-                    const witnessUser = await getEnrichedProfiles([genesisBlock.witness])
-
-                    const contentMetadata = {
-                        blockId: genesisBlock.block_id,
-                        blockNum: 1,
-                        research: research,
-                        content: content,
-                        timestamp: `${genesisBlock.timestamp}Z`,
-                        witness: {
-                            user: witnessUser[0],
-                            signingKey: genesisBlock.signing_key,
-                            signature: genesisBlock.witness_signature
-                        },
-                        voters: [],
-                        chainId: window.env.CHAIN_ID,
-                        transaction: null
-                    };
-
-                    commit('SET_RESEARCH_CONTENT_METADATA', contentMetadata);
+                    return votersMeta;
                 }
-            } catch (err) {
-                console.error(err);
+
+            } else {
+                const genesisBlock = await getBlock(1);
+                const witnessUser = await getEnrichedProfiles([genesisBlock.witness])
+
+                const contentMetadata = {
+                    blockId: genesisBlock.block_id,
+                    blockNum: 1,
+                    research: research,
+                    content: content,
+                    timestamp: `${genesisBlock.timestamp}Z`,
+                    witness: {
+                        user: witnessUser[0],
+                        signingKey: genesisBlock.signing_key,
+                        signature: genesisBlock.witness_signature
+                    },
+                    voters: [],
+                    chainId: window.env.CHAIN_ID,
+                    transaction: null
+                };
+
+                commit('SET_RESEARCH_CONTENT_METADATA', contentMetadata);
             }
+        } catch (err) {
+            console.error(err);
+        }
     }
 }
 
@@ -632,7 +646,7 @@ const mutations = {
     ['SET_RESEARCH_CONTENT_REVIEWS_LOADING_STATE'](state, value) {
         state.isLoadingResearchContentReviews = value
     },
-    
+
     ['SET_RESEARCH_GROUP_DETAILS_LOADING_STATE'](state, value) {
         state.isLoadingResearchGroupDetails = value
     },
