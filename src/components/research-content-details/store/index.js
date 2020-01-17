@@ -119,17 +119,9 @@ const getters = {
 
     researchContentReferencesGraph: (state, getters) => {
         const nodes = [];
-        const refs = [...state.researchContentReferencesGraph.nodes];
-        for (let i = 0; i < refs.length; i++) {
-            let ref = refs[i];
-            let node = {
-                ...ref,
-                id: ref.researchContent.id,
-                hash: ref.researchContent.content.split(":")[1],
-                title: ref.researchContent.title,
-                contentType: researchService.getContentType(ref.researchContent.content_type).text,
-            };
-            nodes.push(node);
+        for (let i = 0; i < state.researchContentReferencesGraph.nodes.length; i++) {
+            let node = state.researchContentReferencesGraph.nodes[i];
+            nodes.push({ ...node});
         }
 
         const links = [];

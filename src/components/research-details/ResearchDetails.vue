@@ -702,7 +702,7 @@
             <div class="rd-sidebar-block-title">
               <router-link
                 class="research-group-link"
-                :to="{ name: 'ResearchGroupDetails', params: {  research_group_permlink: encodeURIComponent(groupLink) } }"
+                :to="{ name: 'ResearchGroupDetails', params: {  research_group_permlink: encodeURIComponent(group.permlink) } }"
               >{{group.name}}</router-link>
             </div>
             <v-layout
@@ -964,8 +964,6 @@ export default {
       investmentConfirmDialog: { isShown: false, isConfirming: false },
       requestExpertReviewDialog: { isShown: false },
       requestAccessToContentDialog: { isShown: false, contentRefId: '', contentId: -1 },
-
-      groupLink: this.$route.params.research_group_permlink,
 
       isJoinGroupDialogOpen: false,
       coverLetter: "",
@@ -1633,12 +1631,10 @@ export default {
       return draft.status === "proposed";
     },
     onRequestAccessToContentClicked(content) {
-      const contentRef = this.contentRefsList.find(
-        r => `${r.type}:${r.hash}` === content.content
-      );
+      const contentRef = this.contentRefsList.find(r => `${r.type}:${r.hash}` === content.content);
       if (!contentRef) {
         this.$store.dispatch('layout/setError', {
-          message: `Couldn't find the content`,
+          message: `Research material is not found`,
         });
         return;
       }
@@ -1654,7 +1650,7 @@ export default {
         researchId: this.research.id
       });
       this.$store.dispatch('layout/setSuccess', {
-        message: `Access request for material was sent successfully`
+        message: `Access request for material has been sent successfully`
       });
     },
     onJoinResearchGroupClick() {
@@ -1847,6 +1843,16 @@ export default {
     },
 
     getContentType
+  },
+
+  mounted() {
+    let query = this.$route.query;
+    if (query.accessRequestTo) {
+      let researchContent = this.contentList.find(rc => rc.id == query.accessRequestTo);
+      if (researchContent) {
+        this.onRequestAccessToContentClicked(researchContent)
+      }
+    }
   },
 
   created() {

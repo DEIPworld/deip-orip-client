@@ -1,5 +1,6 @@
 import deipRpc from '@deip/deip-oa-rpc-client';
 import * as usersUtils from './../utils/user';
+import researchContentHttp from './../services/http/content';
 
 export const ANNOUNCEMENT = 1;
 export const FINAL_RESULT = 2;
@@ -69,6 +70,9 @@ const loadResearchContentOuterReferences = async (researchContent, acc) => {
         let outerRefResearchGroup = await deipRpc.api.getResearchGroupByIdAsync(outerRefResearch.research_group_id);
         let outerRefResearchContent = await deipRpc.api.getResearchContentByIdAsync(researchContentId);
         
+        let hash = outerRefResearchContent.content.split(":")[1];
+        let ref = await researchContentHttp.getContentRefByHash(outerRefResearch.id, hash);
+
         let authorsProfiles = await usersUtils.getEnrichedProfiles(outerRefResearchContent.authors);
 
         acc.push({
@@ -78,6 +82,7 @@ const loadResearchContentOuterReferences = async (researchContent, acc) => {
             researchGroup: outerRefResearchGroup, 
             research: outerRefResearch, 
             researchContent: { ...outerRefResearchContent, authorsProfiles },
+            ref,
             contentType: getContentType(outerRefResearchContent.content_type).text
         });
         await loadResearchContentOuterReferences(outerRefResearchContent, acc);
@@ -102,6 +107,9 @@ const loadResearchContentInnerReferences = async (researchContent, acc) => {
         let innerRefResearchGroup = await deipRpc.api.getResearchGroupByIdAsync(innerRefResearch.research_group_id);
         let innerRefResearchContent = await deipRpc.api.getResearchContentByIdAsync(referenceResearchContentId);
 
+        let hash = innerRefResearchContent.content.split(":")[1];
+        let ref = await researchContentHttp.getContentRefByHash(innerRefResearch.id, hash);
+
         let authorsProfiles = await usersUtils.getEnrichedProfiles(innerRefResearchContent.authors);
 
         acc.push({
@@ -111,6 +119,7 @@ const loadResearchContentInnerReferences = async (researchContent, acc) => {
             researchGroup: innerRefResearchGroup, 
             research: innerRefResearch, 
             researchContent: { ...innerRefResearchContent, authorsProfiles },
+            ref,
             contentType: getContentType(innerRefResearchContent.content_type).text
         });
         await loadResearchContentInnerReferences(innerRefResearchContent, acc);
@@ -122,6 +131,9 @@ const loadResearchContentReferencesGraph = async (researchContentId) => {
     let research = await deipRpc.api.getResearchByIdAsync(researchContent.research_id);
     let researchGroup = await deipRpc.api.getResearchGroupByIdAsync(research.research_group_id);
 
+    let hash = researchContent.content.split(":")[1];
+    let ref = await researchContentHttp.getContentRefByHash(research.id, hash);
+
     let authorsProfiles = await usersUtils.getEnrichedProfiles(researchContent.authors);
 
     const root = {
@@ -130,6 +142,7 @@ const loadResearchContentReferencesGraph = async (researchContentId) => {
         researchContent: { ...researchContent, authorsProfiles },
         research,
         researchGroup,
+        ref,
         contentType: getContentType(researchContent.content_type).text
     }
 

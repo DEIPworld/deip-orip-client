@@ -298,7 +298,10 @@ export default {
         .attr("class", "ref-info-title-box");
 
       titleLinkBox.append("xhtml:a")
-        .attr("href", d => { return `/#/${d.researchGroup.permlink}/research/${d.research.permlink}/${d.researchContent.permlink}` })
+        .attr("href", d => { return d.ref.accessStatus === 'allowed' 
+          ? `/#/${d.researchGroup.permlink}/research/${d.research.permlink}/${d.researchContent.permlink}` 
+          : `/#/${d.researchGroup.permlink}/research/${d.research.permlink}?accessRequestTo=${d.researchContent.id}` // redirect to Project page to request access
+        })
         .attr("target", "_blank")
         .attr("class", "a ref-info-title-link")
         .text(d => { return d.researchContent.title; })
@@ -342,7 +345,7 @@ export default {
         .data(d => d.researchContent.authorsProfiles)
         .enter().append('xhtml:a')
         .attr("class", "a ref-info-author")
-        .attr("href", a => {return `/#/user-details/${a.profile._id}`})
+        .attr("href", a => { return `/#/user-details/${a.profile._id}` })
         .attr("target", "_blank")
         .each(function(a, i) {
 
@@ -372,10 +375,10 @@ export default {
 
       let contentAccessText = contentAccessItem.append("xhtml:span")
         .attr("class", "ref-info-access-text")
-        .text(d => { return `Granted`; })
+        .text(d => { return d.ref.accessStatus === 'allowed' ? `Access granted` : `No access`; })
 
       let contentAccessIcon = contentAccessItem.append("xhtml:img")
-        .attr("src", d => { return `/static/unlocked.png` })
+        .attr("src", d => { return d.ref.accessStatus === 'allowed' ? `/static/unlocked.png` : `/static/locked.png` })
         .attr("class", "ref-info-access-icon");
 
 

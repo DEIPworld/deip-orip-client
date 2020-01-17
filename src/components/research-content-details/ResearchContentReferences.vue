@@ -47,7 +47,7 @@
         <div class="pl-4">
           <v-tabs color="#ffffff">
             <v-tabs-slider :color="themeSettings['tabs-slider-color']"></v-tabs-slider>
-            <v-tab :class="themeSettings['tabs-text-class']" href="#tab-file">
+            <v-tab href="#tab-file">
               <span class="subheading capitalize">File Info</span>
             </v-tab>
 
@@ -220,7 +220,7 @@ export default {
         options: {
           title: "",
           legend: { position: 'left' },
-          colors: [ '#FFAB91','#FFE082','#F48FB1', '#FFCC80', '#E6EE9C', '#EF9A9A' ],
+          colors: [ '#FFAB91', '#FFCC80', '#FFE082','#F48FB1', '#E6EE9C', '#EF9A9A' ],
           chartArea: { 
             left: 0,
             width: "100%",
