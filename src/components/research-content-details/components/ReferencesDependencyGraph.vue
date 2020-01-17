@@ -432,7 +432,7 @@ export default {
         nodeCount = highlightedNodes.size()
         linkCount = highlightedLinks.size()
       }
-      this.selections.stats.text('Nodes: ' + nodeCount + ' / Edges: ' + linkCount);
+      this.selections.stats.text('Materials: ' + nodeCount + ' / References: ' + linkCount);
     },
     updateCaption() {
       // WARNING: Some gross math will happen here!

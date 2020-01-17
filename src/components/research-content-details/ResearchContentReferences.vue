@@ -220,7 +220,7 @@ export default {
         options: {
           title: "",
           legend: { position: 'left' },
-          colors: ['#c6bbff', '#f9c3d7', '#a6dcff', '#B9F6CA', '#2d99ff', '#f3f5f8'],
+          colors: [ '#FFAB91','#FFE082','#F48FB1', '#FFCC80', '#E6EE9C', '#EF9A9A' ],
           chartArea: { 
             left: 0,
             width: "100%",
@@ -265,7 +265,7 @@ export default {
         options: {
           title: "",
           legend: { position: 'left' },
-          colors: ['#c6bbff', '#f9c3d7', '#a6dcff', '#B9F6CA', '#2d99ff', '#f3f5f8'],
+          colors: ['#80DEEA', '#80CBC4', '#A5D6A7', '#B9F6CA', '#CE93D8', '#B39DDB'],          
           chartArea: { 
             left: 0,
             width: "100%",
