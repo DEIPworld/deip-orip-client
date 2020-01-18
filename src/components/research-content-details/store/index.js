@@ -136,7 +136,7 @@ const getters = {
     },
 
     researchContentAccessLogs: (state, getters) => {
-        return state.researchContentAccessLogsList;
+        return [...state.researchContentAccessLogsList].sort((a, b) => (a.created_at < b.created_at) ? 1 : ((b.created_at < a.created_at) ? -1 : 0));
     }
 }
 
