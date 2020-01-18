@@ -150,6 +150,22 @@
                     </div>
                 </div>
             </div>
+            
+            <div class="pt-4">
+                <router-link class="a subheading" style="text-decoration: none;"
+                    :to="{
+                    name: 'ResearchContentReferences',
+                    params: {
+                        research_group_permlink: encodeURIComponent(research.group_permlink),
+                        research_permlink: encodeURIComponent(research.permlink),
+                        content_permlink: encodeURIComponent(content.permlink)
+                    }
+                    }">
+                    <v-icon small>device_hub</v-icon>
+                    References
+                </router-link>
+            </div>
+
         </div>
         <!-- ### END Research TOC Section ### -->
 

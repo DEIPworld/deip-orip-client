@@ -427,7 +427,7 @@ const actions = {
                 const witnessUser = await getEnrichedProfiles([block.witness])
                 const votersMeta = [];
 
-                if (!group.is_personal) {
+                if (!group.is_personal && group.is_dao) {
                     const voters = await getProposalVotesMeta(contentProposal, endTime);
                     votersMeta.push(...voters);
                 }
