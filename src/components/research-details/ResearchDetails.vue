@@ -3,7 +3,7 @@
     <div slot="content" class="full-width full-height">
       <v-layout
         row
-        class="rd-header full-height pa-5"
+        class="rd-header pa-5"
         :style="{background: 'linear-gradient(0deg, rgba(0, 0, 0, 0.4) 70%, transparent), url('+researchLogoSrc+'), 100%, 100%, no-repeat'}"
       >
         <v-flex lg8>
@@ -339,8 +339,8 @@
           </v-layout>
           <v-layout class="my-5" v-if="contentList.length">
             <v-flex lg11 offset-lg1>
-              <v-expansion-panel>
-                <v-expansion-panel-content v-for="content of contentList" :key="content.id">
+              <v-expansion-panel class="elevation-0">
+                <v-expansion-panel-content v-for="content of contentList" :key="content.id" class="elevation-0">
                   <template slot="header">
                     <v-layout align-center v-on:click.stop>
                       <v-flex
