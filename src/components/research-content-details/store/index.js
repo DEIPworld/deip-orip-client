@@ -9,6 +9,7 @@ import {
 } from './../../../utils/blockchain';
 import { CREATE_RESEARCH_MATERIAL } from './../../../services/ProposalService';
 import * as researchService from './../../../services/ResearchService';
+import activityLogHttp from './../../../services/http/activityLog';
 
 var texture = undefined;
 var reviewEditor = undefined;
@@ -25,6 +26,7 @@ const state = {
     expertsList: [],
     contentProposal: undefined,
     researchContentReferencesGraph: [],
+    researchContentAccessLogsList: [],
 
     contentRef: null,
 
@@ -131,6 +133,10 @@ const getters = {
         }
 
         return { nodes, links };
+    },
+
+    researchContentAccessLogs: (state, getters) => {
+        return state.researchContentAccessLogsList;
     }
 }
 
@@ -185,7 +191,18 @@ const actions = {
                             });
 
                             return Promise.all([contentRefLoad, contentReviewsLoad, contentVotesLoad, researchGroupDetailsLoad, referencesLoad])
+                                .then(() => {
+                                    const accessLogsLoad = new Promise((resolve, reject) => {
+                                        let researchGroupId = state.group.id;
+                                        let researchContentId = state.content.id;
+                                        dispatch('loadResearchContentAccessLogs', { researchGroupId: researchGroupId, researchContentId: researchContentId, notify: resolve })
+                                    });
+                                    return Promise.all([accessLogsLoad])
+                                });
                         }, (err) => { console.log(err) })
+                        .then(() => {
+                            
+                        })
                         .finally(() => {
                             commit('SET_RESEARCH_CONTENT_DETAILS_LOADING_STATE', false);
                         });
@@ -325,6 +342,22 @@ const actions = {
             })
     },
 
+    loadResearchContentAccessLogs({ state, dispatch, commit }, { researchGroupId, researchContentId, notify }) {
+        return activityLogHttp.getActivityLogsEntriesByResearchGroup(researchGroupId)
+            .then((logs) => {
+                let accessLogs = logs.filter(l => 
+                    (l.type == "research-content-access-request" ||
+                    l.type == "research-content-access-request-approved" ||
+                    l.type == "research-content-access-request-rejected")
+                    && l.metadata.researchContent.id == researchContentId);
+
+                commit('SET_RESEARCH_CONTENT_ACCESS_LOGS', accessLogs);
+            })
+            .finally(() => {
+                if (notify) notify();
+            })
+    },
+    
     async loadResearchContentReferences({ state, dispatch, commit }, { researchContentId, notify }) {
         let graph = await researchService.loadResearchContentReferencesGraph(researchContentId);
         commit('SET_RESEARCH_CONTENT_REFERENCES_GRAPH_DATA', graph);
@@ -621,6 +654,10 @@ const mutations = {
 
     ['SET_RESEARCH_CONTENT_REFERENCES_GRAPH_DATA'](state, graph) {
         Vue.set(state, 'researchContentReferencesGraph', graph);
+    },
+
+    ['SET_RESEARCH_CONTENT_ACCESS_LOGS'](state, accessLogs) {
+        Vue.set(state, 'researchContentAccessLogsList', accessLogs);
     }
 }
 

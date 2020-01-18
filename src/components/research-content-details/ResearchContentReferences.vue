@@ -50,6 +50,9 @@
             <v-tab href="#tab-file">
               <span class="subheading capitalize">File Info</span>
             </v-tab>
+            <v-tab href="#tab-access-log">
+              <span class="subheading capitalize">Access Log</span>
+            </v-tab>
 
             <v-tabs-items class="tab-content">
               <v-tab-item value="tab-file">
@@ -161,6 +164,87 @@
 
                 </v-layout>
               </v-tab-item>
+
+              <v-tab-item value="tab-access-log">
+                <v-layout column v-if="researchContentAccessLogs.length">
+                  <div v-for="(log, i) in researchContentAccessLogs" :key="`access-log-${i}`" :class="{'py-1': i != 0, 'pt-5 pb-1' : i == 0}">
+                    <v-layout v-if="log.type === RESEARCH_CONTENT_ACCESS_REQUEST" row wrap align-baseline align-center px-3>
+                      <v-flex xs12>
+                        <div class="align-baseline">
+                          <platform-avatar 
+                            :user="{ profile: log.metadata.requestorProfile, account: { name: log.metadata.requestorProfile._id} }"
+                            :size="20"
+                            link-to-profile
+                            link-to-profile-class="px-1"
+                          ></platform-avatar>
+                          <span> requested access </span>
+                        </div>
+                      </v-flex>
+                      <v-flex xs12 text-xs-right>
+                        <span class="grey--text caption">({{ moment(log.created_at).format("DD MMM YYYY") }})</span>
+                      </v-flex>
+                    </v-layout>
+
+                    <v-layout v-if="log.type === RESEARCH_CONTENT_ACCESS_REQUEST_APPROVED" row wrap align-baseline align-center px-3>
+                      <v-flex xs12>
+                        <div class="align-baseline">
+                          <platform-avatar 
+                            :user="{ profile: log.metadata.approverProfile, account: { name: log.metadata.approverProfile._id} }"
+                            :size="20"
+                            link-to-profile
+                            link-to-profile-class="px-1"
+                          ><span class="grey--text uppercase half-bold">({{log.metadata.role}})</span>
+                          </platform-avatar>
+                          <span> 
+                            {{ log.metadata.isAccessGranted ? 'granted access' : 'approved access request' }} for
+                            <platform-avatar 
+                              :user="{ profile: log.metadata.researchContentAccessRequest.metadata.userProfile, account: { name: log.metadata.researchContentAccessRequest.metadata.userProfile._id} }"
+                              :size="20"
+                              link-to-profile
+                              link-to-profile-class="px-1"
+                            ><span class="half-bold primary--text">({{log.metadata.researchContentAccessRequest.metadata.userAgency.name}})</span></platform-avatar>
+                          </span>
+                        </div>
+                      </v-flex>
+                      <v-flex xs12 text-xs-right>
+                        <span class="grey--text caption">({{ moment(log.created_at).format("DD MMM YYYY") }})</span>
+                      </v-flex>
+                    </v-layout>
+
+                    <v-layout v-if="log.type === RESEARCH_CONTENT_ACCESS_REQUEST_REJECTED" row wrap align-baseline align-center px-3>
+                      <v-flex xs12>
+                        <div class="align-baseline">
+                          <platform-avatar 
+                            :user="{ profile: log.metadata.rejectorProfile, account: { name: log.metadata.rejectorProfile._id} }"
+                            :size="20"
+                            link-to-profile
+                            link-to-profile-class="px-1"
+                          ><span class="grey--text uppercase half-bold">({{log.metadata.role}})</span>
+                          </platform-avatar>
+                          <span>
+                            rejected access request to for
+                            <platform-avatar 
+                              :user="{ profile: log.metadata.researchContentAccessRequest.metadata.userProfile, account: { name: log.metadata.researchContentAccessRequest.metadata.userProfile._id} }"
+                              :size="20"
+                              link-to-profile
+                              link-to-profile-class="px-1"
+                            ><span class="half-bold primary--text">({{log.metadata.researchContentAccessRequest.metadata.userAgency.name}})</span></platform-avatar>
+                          </span>
+                        </div>
+                      </v-flex>
+                      <v-flex xs12 text-xs-right>
+                        <span class="grey--text caption">({{ moment(log.created_at).format("DD MMM YYYY") }})</span>
+                      </v-flex>
+                    </v-layout>
+                    <v-divider class="px-3 my-1"></v-divider>
+                  </div>
+                </v-layout>
+                <v-layout v-else row wrap align-baseline align-center px-3>
+                  <div class="py-5">
+                    There are no access logs for this file
+                  </div>
+                </v-layout>
+              </v-tab-item>
             </v-tabs-items>
           </v-tabs>
         </div>
@@ -182,7 +266,11 @@ export default {
     return {
       graphWidth: 0,
       graphHeight: 0,
-      isMounted: false
+      isMounted: false,
+
+      RESEARCH_CONTENT_ACCESS_REQUEST: "research-content-access-request",
+      RESEARCH_CONTENT_ACCESS_REQUEST_APPROVED: "research-content-access-request-approved",
+      RESEARCH_CONTENT_ACCESS_REQUEST_REJECTED: "research-content-access-request-rejected"
     };
   },
   computed: {
@@ -192,6 +280,7 @@ export default {
       research: 'rcd/research',
       researchGroup: 'rcd/group',
       contentRef: 'rcd/contentRef',
+      researchContentAccessLogs: 'rcd/researchContentAccessLogs',
       researchContentReferencesGraph: 'rcd/researchContentReferencesGraph',      
       researchGroupMembers: 'rcd/membersList',
       themeSettings: 'layout/themeSettings'
