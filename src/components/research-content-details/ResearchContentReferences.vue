@@ -125,12 +125,26 @@
 
                   <v-divider class="my-4"></v-divider>
 
-                  <v-layout v-if="outerReferences.length" row justify-space-between align-baseline>
-                    <v-flex xs4>
-                      <span class="subheading">Referenced by:</span>
+                  <v-layout column>
+                    <div class="title">Disciplines</div>
+                    <div class="py-2">
+                      <GChart
+                        type="PieChart"
+                        :settings="{ packages: ['corechart'] }"
+                        :data="referencesByDisciplinesChart.data"
+                        :options="referencesByDisciplinesChart.options"
+                      />
+                    </div>
+                  </v-layout>
+
+                  <!-- <v-divider class="my-2"></v-divider> -->
+
+                  <v-layout v-if="outerReferences.length" row wrap justify-space-between align-baseline>
+                    <v-flex xs12>
+                      <div class="title pt-2 pb-4">Referenced by</div>
                     </v-flex>
-                    <v-flex xs8>
-                      <div v-for="(ref, i) in outerReferences" :key="`out-ref-${i}`">
+                    <v-flex xs12>
+                      <div v-for="(ref, i) in outerReferences" class="py-1" :key="`out-ref-${i}`">
                         <router-link class="a"
                           :to="{
                             name: 'ResearchContentDetails',
@@ -195,13 +209,57 @@ export default {
       return this.researchContent ? this.researchGroupMembers.filter(m => this.researchContent.authors.some(a => a === m.account.name)) : [];
     },
 
+    referencesByDisciplinesChart() {
+
+      let referencesByDiscipline = this.researchContentReferencesGraph.nodes.reduce((acc, node) => {
+        let disciplines = node.research.disciplines;
+        for (let i = 0; i < disciplines.length; i++) {
+          let { name } = disciplines[i];
+          let item = acc[name]
+          if (!item) {
+            acc[name] = { text: name, count: 1 }
+          } else {
+            item.count += 1;
+          }
+        }
+        return acc;
+      }, {})
+
+
+      let totalDisciplinesCount = Object.keys(referencesByDiscipline).length;
+
+      return {
+        data: [
+          ['Distribution', ''],
+          ...Object.values(referencesByDiscipline).map(({ text, count} ) => [text, count / totalDisciplinesCount * 100])
+        ],
+
+        options: {
+          title: "",
+          legend: { position: 'left' },
+          colors: [ '#C62828', '#AD1457', '#6A1B9A','#37474F', '#283593', '#4E342E' ],
+          chartArea: { 
+            right: 0,
+            width: "100%",
+            height: "70%"
+          },
+          pieSliceTextStyle: {
+            // color: "#ffffff", 
+            color: "#000000",
+            fontSize: 10
+          },
+          pieHole: 0.6
+        }
+      }
+    },
+
     outerReferencesByContentTypeChart() {
       let outerReferencesByContentType = this.researchContentReferencesGraph.nodes.reduce((acc, node) => {
-        let { contentType, refType } = node;
-        if (refType === "out") {
-          let item = acc[contentType]
+        let { contentType: { text } } = node;
+        if (node.isOuter) {
+          let item = acc[text]
           if (!item) {
-            acc[contentType] = { contentType, count: 1 };
+            acc[text] = { text, count: 1 };
           } else {
             item.count += 1;
           }
@@ -209,12 +267,12 @@ export default {
         return acc;
       }, {});
 
-      let totalInnerReferencesCount = this.researchContentReferencesGraph.nodes.filter(({ refType }) => refType === "out").length;
+      let totalInnerReferencesCount = this.researchContentReferencesGraph.nodes.filter((node) => node.isOuter).length;
 
       return {
         data: [
           ['Distribution', ''],
-          ...Object.values(outerReferencesByContentType).map(({ contentType, count} ) => [contentType, count / totalInnerReferencesCount * 100])
+          ...Object.values(outerReferencesByContentType).map(({ text, count } ) => [text, count / totalInnerReferencesCount * 100])
         ],
 
         options: {
@@ -238,13 +296,13 @@ export default {
 
     outerReferencesByOrgChart() {
       let outerReferencesByOrg = this.researchContentReferencesGraph.nodes.reduce((acc, node) => {
-        let { refType, "researchGroup": { "permlink": org } } = node;
-        if (refType === "out") {
+        let { "researchGroup": { "permlink": org } } = node;
+        if (node.isOuter) {
           let item = acc[org]
           if (!item) {
             acc[org] = { 
               org: node.researchGroup.permlink, 
-              orgName: node.researchGroup.name, 
+              text: node.researchGroup.name, 
               count: 1 
             };
           } else {
@@ -254,12 +312,12 @@ export default {
         return acc;
       }, {});
 
-      let totalOuterReferencesCount = this.researchContentReferencesGraph.nodes.filter(({ refType }) => refType === "out").length;
+      let totalOuterReferencesCount = this.researchContentReferencesGraph.nodes.filter((node) => node.isOuter).length;
       
       return {
         data: [
           ['Distribution', ''],
-          ...Object.values(outerReferencesByOrg).map(({ orgName, count }) => [orgName, count / totalOuterReferencesCount * 100])
+          ...Object.values(outerReferencesByOrg).map(({ text, count }) => [text, count / totalOuterReferencesCount * 100])
         ],
 
         options: {

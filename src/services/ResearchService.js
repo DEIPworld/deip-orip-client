@@ -32,7 +32,7 @@ contentTypesMap[CODE] = { id: CODE, text: 'Code', type: 'milestone_code', order:
 contentTypesMap[CONFERENCE_PAPER] = { id: CONFERENCE_PAPER, text: 'Conference paper', type: 'milestone_conference_paper', order: 6 };
 contentTypesMap[COVER_PAGE] = { id: COVER_PAGE, text: 'Cover page', type: 'milestone_cover_page', order: 7 };
 contentTypesMap[DATA] = { id: DATA, text: 'Data', type: 'milestone_data', order: 8 };
-contentTypesMap[EXPERIMENT_FINDINGS] = { id: EXPERIMENT_FINDINGS, text: 'Experiment', type: 'milestone_experiment_findings', order: 9 };
+contentTypesMap[EXPERIMENT_FINDINGS] = { id: EXPERIMENT_FINDINGS, text: 'Experiment Findings', shortText: 'Experiment', type: 'milestone_experiment_findings', order: 9 };
 contentTypesMap[METHOD] = { id: METHOD, text: 'Method', type: 'milestone_method', order: 10 };
 contentTypesMap[NEGATIVE_RESULTS] = { id: NEGATIVE_RESULTS, text: 'Negative results', type: 'milestone_negative_results', order: 11 };
 contentTypesMap[PATENT] = { id: PATENT, text: 'Patent', type: 'milestone_patent', order: 12 };
@@ -83,7 +83,7 @@ const loadResearchContentOuterReferences = async (researchContent, acc) => {
             research: outerRefResearch, 
             researchContent: { ...outerRefResearchContent, authorsProfiles },
             ref,
-            contentType: getContentType(outerRefResearchContent.content_type).text
+            contentType: getContentType(outerRefResearchContent.content_type)
         });
         await loadResearchContentOuterReferences(outerRefResearchContent, acc);
     }
@@ -120,7 +120,7 @@ const loadResearchContentInnerReferences = async (researchContent, acc) => {
             research: innerRefResearch, 
             researchContent: { ...innerRefResearchContent, authorsProfiles },
             ref,
-            contentType: getContentType(innerRefResearchContent.content_type).text
+            contentType: getContentType(innerRefResearchContent.content_type)
         });
         await loadResearchContentInnerReferences(innerRefResearchContent, acc);
     }
@@ -143,7 +143,7 @@ const loadResearchContentReferencesGraph = async (researchContentId) => {
         research,
         researchGroup,
         ref,
-        contentType: getContentType(researchContent.content_type).text
+        contentType: getContentType(researchContent.content_type)
     }
 
     const outerReferences = [];

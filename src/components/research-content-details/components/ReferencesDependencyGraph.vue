@@ -229,7 +229,7 @@ export default {
         .attr("x", 0)
         .attr("y", 15)
         .attr("text-anchor", "middle")
-        .text(d => d.contentType)
+        .text(d => d.contentType.shortText || d.contentType.text)
         .on("mousedown", () => {
           d3.event.stopPropagation();
         })
@@ -653,7 +653,7 @@ export default {
       .attr('class', 'caption');
 
     this.updateData()
-    this.zoom.scaleBy(svg, 1 / 2);
+    this.zoom.scaleBy(svg, 0.7);
   },
 
   created() {
