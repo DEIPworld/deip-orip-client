@@ -11,7 +11,7 @@
             <references-dependency-graph v-if="isMounted" :data="researchContentReferencesGraph" :width="graphWidth" :height="graphHeight"></references-dependency-graph>
           </div>
 
-          <v-layout row class="pt-5">
+          <v-layout v-if="hasOuterReferences" row class="pt-5">
             <v-flex xs6 sm6 md6 lg6 xl6>
               <v-layout column class="outer-references-by-org">
                 <div class="title">Who used my data</div>
@@ -139,7 +139,7 @@
 
                   <!-- <v-divider class="my-2"></v-divider> -->
 
-                  <v-layout v-if="outerReferences.length" row wrap justify-space-between align-baseline>
+                  <v-layout v-if="hasOuterReferences" row wrap justify-space-between align-baseline>
                     <v-flex xs12>
                       <div class="title pt-2 pb-4">Referenced by</div>
                     </v-flex>
@@ -200,10 +200,10 @@ export default {
       return this.researchContentReferencesGraph.nodes.length;
     },
     outerReferences() {
-      return this.researchContentReferencesGraph.nodes.filter(({ refType }) => refType === "out");
+      return this.researchContentReferencesGraph.nodes.filter((node) => node.isOuter);
     },
-    researchContentAuthorsList() {
-      return this.researchContent ? this.researchGroupMembers.filter(m => this.researchContent.authors.some(a => a === m.account.name)) : [];
+    hasOuterReferences() {
+      return this.outerReferences.length != 0;
     },
     researchContentAuthorsList() {
       return this.researchContent ? this.researchGroupMembers.filter(m => this.researchContent.authors.some(a => a === m.account.name)) : [];

@@ -397,7 +397,7 @@
                               <v-icon small>device_hub</v-icon>
                             </router-link>
                           </template>
-                          <span>Browse References Graph</span>
+                          <span>Browse references</span>
                         </v-tooltip>
                       </v-flex>
                       <v-flex lg1 text-lg-center class="text-xs-center">
