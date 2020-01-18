@@ -4,8 +4,8 @@ const service = {
   getResearchContentAccessRequests: function() {
     return http.get(`/research-content-access-requests`, { baseURL: `${window.env.DEIP_SERVER_URL}/api/` });
   },
-  researchContentAccessRequestIntent: function(contentRefId) {
-    return http.post(`/research-content-access-requests/intent`, {contentRefId}, { baseURL: `${window.env.DEIP_SERVER_URL}/api/` });
+  getResearchContentAccessRequestFormData: function (refId) {
+    return http.get(`research-content-access-requests/form/${refId}`, { baseURL: `${window.env.DEIP_SERVER_URL}/api/` });
   },
   createResearchContentAccessRequest: function(data) {
     return http.post(`/research-content-access-requests`, data, { baseURL: `${window.env.DEIP_SERVER_URL}/api/` });

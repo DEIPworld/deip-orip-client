@@ -2,15 +2,28 @@
   <v-layout row justify-start>
     <v-dialog v-model="isShown" persistent :max-width="620">
       <v-card class="pa-4">
-        <v-layout
-          row justify-center
-          v-if="isDataLoading"
-        >
-          <v-progress-circular
-            indeterminate
-            color="primary"
-          />
+        <v-layout row justify-center v-if="isDataLoading" >
+          <v-progress-circular indeterminate color="primary"/>
         </v-layout>
+
+        <template v-else-if="isAccessRequestUnavailable">
+          <v-card-title>
+            <v-layout row align-baseline>
+              <v-flex grow class="headline">Request access to the material</v-flex>
+              <v-flex shrink align-self-center right-top-angle>
+                <v-btn @click="cancel()" :disabled="isRequesting" icon class="pa-0 ma-0">
+                  <v-icon color="black">close</v-icon>
+                </v-btn>
+              </v-flex>
+            </v-layout>
+          </v-card-title>
+
+          <v-card-text>
+            Sorry, there is no responsible PI person found for this material. 
+          </v-card-text>
+        </template>
+
+
         <template v-else>
           <v-card-title>
             <v-layout row align-baseline>
@@ -64,6 +77,7 @@
               label="Cover letter"
             ></v-textarea>
           </v-card-text>
+
           <v-card-actions>
             <v-layout row wrap>
               <v-flex xs12 py-2>
@@ -85,6 +99,8 @@
               </v-flex>
             </v-layout>
           </v-card-actions>
+
+
         </template>
       </v-card>
     </v-dialog>
@@ -111,6 +127,7 @@
         coverLetter: '',
         isDataLoading: false,
         isRequesting: false,
+        isAccessRequestUnavailable: false
       }
     },
     methods: {
@@ -119,15 +136,18 @@
       },
       fetchData() {
         this.isDataLoading = true;
-        contentAccessRequestsService.researchContentAccessRequestIntent(this.contentRefId)
+        contentAccessRequestsService.getResearchContentAccessRequestFormData(this.contentRefId)
           .then(({ contentRef, pi, researchGroup, research }) => {
+            this.isAccessRequestUnavailable = false;
             this.contentName = contentRef.title;
             this.projectName = research.title;
             this.author = pi;
             this.organization = ResearchGroupService.mapResearchGroup(researchGroup);
           }).catch((err) => {
             console.error(err);
-          }).finally(() => {
+            this.isAccessRequestUnavailable = true;
+          })
+          .finally(() => {
             this.isDataLoading = false;
           })
       },
