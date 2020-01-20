@@ -5,6 +5,7 @@ import { getAccessToken } from './../../../utils/auth'
 import { getEnrichedProfiles } from './../../../utils/user'
 import tokenSaleService from './../../../services/TokenSaleService'
 import contentHttpService from './../../../services/http/content'
+import contentAccessHttpService from './../../../services/http/contentAccess'
 import applicationsHttpService from './../../../services/http/application'
 import * as researchService from './../../../services/ResearchService';
 
@@ -560,7 +561,7 @@ const actions = {
         }).finally(() => {
           if (notify) notify();
         });
-    },
+    }
 }
 
 // mutations

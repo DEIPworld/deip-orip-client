@@ -2,6 +2,7 @@ import _ from 'lodash';
 import deipRpc from '@deip/deip-oa-rpc-client'
 import Vue from 'vue'
 import { getEnrichedProfiles } from './../../../utils/user'
+import contentAccessHttpService from './../../../services/http/contentAccess'
 import contentHttpService from './../../../services/http/content'
 import {
     findBlocksByRange, getDynamicGlobalProperties, getConfig,
@@ -27,6 +28,7 @@ const state = {
     contentProposal: undefined,
     researchContentReferencesGraph: [],
     researchContentAccessLogsList: [],
+    grantedAccessList: [],
 
     contentRef: null,
 
@@ -137,6 +139,17 @@ const getters = {
 
     researchContentAccessLogs: (state, getters) => {
         return [...state.researchContentAccessLogsList].sort((a, b) => (a.created_at < b.created_at) ? 1 : ((b.created_at < a.created_at) ? -1 : 0));
+    },
+
+    usersWithAccess: (state, getters) => {
+        let groupMembers = state.membersList.map(m => { return { account: m.account, profile: m.profile, agency: state.group.name } });
+        let usersWithGrantedAccess = state.grantedAccessList.map(a => { return { account: a.user.account, profile: a.user.profile, agency: a.agency } });
+        return [...groupMembers, ...usersWithGrantedAccess].reduce((acc, user) => {
+            if (!acc.some(a => a.account.name == user.account.name)) {
+                return [...acc, user]
+            }
+            return acc;
+        }, []);
     }
 }
 
@@ -197,7 +210,13 @@ const actions = {
                                         let researchContentId = state.content.id;
                                         dispatch('loadResearchContentAccessLogs', { researchGroupId: researchGroupId, researchContentId: researchContentId, notify: resolve })
                                     });
-                                    return Promise.all([accessLogsLoad])
+
+                                    const accessLoad = new Promise((resolve, reject) => {
+                                        let researchContentRefId = state.contentRef._id;
+                                        dispatch('listResearchContentAccess', { researchContentRefId: researchContentRefId, notify: resolve })
+                                    });
+
+                                    return Promise.all([accessLogsLoad, accessLoad])
                                 });
                         }, (err) => { console.log(err) })
                         .then(() => {
@@ -356,6 +375,22 @@ const actions = {
             .finally(() => {
                 if (notify) notify();
             })
+    },
+
+    listResearchContentAccess({ state, commit, rootGetters }, { researchContentRefId, notify }) {
+        const list = [];
+        return contentAccessHttpService.listResearchContentAccess(researchContentRefId)
+            .then((items) => {
+                list.push(...items);
+                return getEnrichedProfiles(list.map(a => a.username))
+            })
+            .then((users) => {
+                let models = list.map((a, i) => { return { ...a, user: users[i] } });
+                commit('SET_RESEARCH_CONTENT_GRANTED_ACCESS_LIST', models);
+            })
+            .finally(() => {
+                if (notify) notify();
+            });
     },
     
     async loadResearchContentReferences({ state, dispatch, commit }, { researchContentId, notify }) {
@@ -658,6 +693,10 @@ const mutations = {
 
     ['SET_RESEARCH_CONTENT_ACCESS_LOGS'](state, accessLogs) {
         Vue.set(state, 'researchContentAccessLogsList', accessLogs);
+    },
+
+    ['SET_RESEARCH_CONTENT_GRANTED_ACCESS_LIST'](state, value) {
+        Vue.set(state, 'grantedAccessList', value)
     }
 }
 

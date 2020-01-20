@@ -123,8 +123,7 @@
 
 <script>
 import { mapGetters } from 'vuex';
-
-import contentAccessRequestsService from "@/services/http/contentAccessRequests";
+import contentAccessHttp from "@/services/http/contentAccess";
 
 export default {
   name: "AccessRequestsSectionGskDemo",
@@ -150,7 +149,7 @@ export default {
       this.accessActionDialog.isConfirming = false;
       this.accessActionDialog.onConfirmed = () => {
         this.accessActionDialog.isConfirming = true;
-        return contentAccessRequestsService.approveResearchContentAccessRequest(request._id)
+        return contentAccessHttp.approveResearchContentAccessRequest(request._id)
           .then(() => {
             this.accessActionDialog.isConfirming = false;
             this.accessActionDialog.isShown = false;
@@ -170,7 +169,7 @@ export default {
       this.accessActionDialog.isConfirming = false;
       this.accessActionDialog.onConfirmed = () => {
         this.accessActionDialog.isConfirming = true;
-        return contentAccessRequestsService.denyResearchContentAccessRequest(request._id)
+        return contentAccessHttp.denyResearchContentAccessRequest(request._id)
           .then(() => {
             this.accessActionDialog.isConfirming = false;
             this.accessActionDialog.isShown = false;

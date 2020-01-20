@@ -5,7 +5,7 @@ import tokenSaleService from '@/services/TokenSaleService';
 import * as researchService from '@/services/ResearchService';
 import * as researchGroupService from '@/services/ResearchGroupService';
 import activityLogHttp from '@/services/http/activityLog';
-import contentAccessRequestsHttp from '@/services/http/contentAccessRequests';
+import contentAccessHttp from '@/services/http/contentAccess';
 
 const state = {
   isLoadingDashboardPage: false,
@@ -254,7 +254,7 @@ const actions = {
 
   loadUnlockRequests({ commit }, { notify }) {
     let requests = [];
-    return contentAccessRequestsHttp.getResearchContentAccessRequests()
+    return contentAccessHttp.getResearchContentAccessRequests()
       .then((items) => {
         requests.push(...items);
         commit('SET_UNLOCK_REQUESTS', requests);

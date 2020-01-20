@@ -30,11 +30,13 @@
                 <v-tab href="#tab-access-log">
                   <span class="subheading capitalize">Access Details</span>
                 </v-tab>
-
+                <v-tab href="#tab-users">
+                  <span class="subheading capitalize">Users <span v-if="outerReferences.length">({{usersWithAccess.length}})</span></span>
+                </v-tab>
                 <v-tabs-items class="tab-content">
                   <v-tab-item value="tab-file">
-                    <v-layout column>
-                      <v-layout class="pt-3" row justify-space-between align-baseline>
+                    <v-layout column class="pt-3">
+                      <v-layout row justify-space-between align-baseline>
                         <v-flex xs4>
                           <span class="body-2">Title:</span>
                         </v-flex>
@@ -102,14 +104,11 @@
                           </v-layout>
                         </v-flex>
                       </v-layout>
-
-                      <!-- <v-divider class="my-4"></v-divider> -->
-
                     </v-layout>
                   </v-tab-item>
 
                   <v-tab-item value="tab-references">
-                    <v-layout v-if="hasOuterReferences" class="py-3" row justify-space-between align-baseline>
+                    <v-layout v-if="hasOuterReferences" class="pt-3" row justify-space-between align-baseline>
                       <v-flex xs12>
                         <div v-for="(ref, i) in outerReferences" class="py-1" :key="`out-ref-${i}`">
                           <span class="body-2 pr-2">{{i + 1}}. </span>
@@ -134,8 +133,8 @@
                   </v-tab-item>
 
                   <v-tab-item value="tab-access-log">
-                    <v-layout column v-if="researchContentAccessLogs.length">
-                      <div v-for="(log, i) in researchContentAccessLogs" :key="`access-log-${i}`" :class="{'py-1': i != 0, 'pt-5 pb-1' : i == 0}">
+                    <v-layout column v-if="researchContentAccessLogs.length" class="pt-3">
+                      <div v-for="(log, i) in researchContentAccessLogs" :key="`access-log-${i}`" :class="{'py-1': i != 0, 'pt-3 pb-1' : i == 0}">
                         <v-layout v-if="log.type === RESEARCH_CONTENT_ACCESS_REQUEST" row wrap align-baseline align-center px-3>
                           <v-flex xs12>
                             <div class="align-baseline">
@@ -211,6 +210,20 @@
                       <div class="py-4">
                         There are no access logs for this material
                       </div>
+                    </v-layout>
+                  </v-tab-item>
+
+                  <v-tab-item value="tab-users">
+                    <v-layout class="pt-3" row wrap align-baseline align-center px-3>
+                      <v-flex xs12 v-for="(userWithAccess, i) in usersWithAccess" :key="'user-with-access-' + i" :class="{'py-1': i != 0, 'pt-3 pb-1' : i == 0}">
+                        <platform-avatar 
+                          :user="userWithAccess"
+                          :size="40"
+                          link-to-profile
+                          link-to-profile-class="px-1"
+                        ><span class="grey--text half-bold">from <span class="capitalize">{{userWithAccess.agency}}</span></span>
+                        </platform-avatar>
+                      </v-flex>
                     </v-layout>
                   </v-tab-item>
                 </v-tabs-items>
@@ -301,6 +314,7 @@ export default {
       researchContentAccessLogs: 'rcd/researchContentAccessLogs',
       researchContentReferencesGraph: 'rcd/researchContentReferencesGraph',      
       researchGroupMembers: 'rcd/membersList',
+      usersWithAccess: 'rcd/usersWithAccess',
       themeSettings: 'layout/themeSettings'
     }),
     referencesCount() {

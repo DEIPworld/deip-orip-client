@@ -108,7 +108,7 @@
 </template>
 
 <script>
-  import contentAccessRequestsService from "@/services/http/contentAccessRequests";
+  import contentAccessHttp from "@/services/http/contentAccess";
   import * as ResearchGroupService from "@/services/ResearchGroupService";
 
   export default {
@@ -136,7 +136,7 @@
       },
       fetchData() {
         this.isDataLoading = true;
-        contentAccessRequestsService.getResearchContentAccessRequestFormData(this.contentRefId)
+        contentAccessHttp.getResearchContentAccessRequestFormData(this.contentRefId)
           .then(({ contentRef, pi, researchGroup, research }) => {
             this.isAccessRequestUnavailable = false;
             this.contentName = contentRef.title;
@@ -153,7 +153,7 @@
       },
       requestAccess() {
         this.isRequesting = true;
-        contentAccessRequestsService.createResearchContentAccessRequest({
+        contentAccessHttp.createResearchContentAccessRequest({
           contentRefId: this.contentRefId,
           contentId: this.contentId,
           coverLetter: this.coverLetter
