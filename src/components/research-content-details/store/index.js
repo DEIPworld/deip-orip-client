@@ -142,8 +142,8 @@ const getters = {
     },
 
     usersWithAccess: (state, getters) => {
-        let groupMembers = state.membersList.map(m => { return { account: m.account, profile: m.profile, agency: state.group.name } });
-        let usersWithGrantedAccess = state.grantedAccessList.map(a => { return { account: a.user.account, profile: a.user.profile, agency: a.agency } });
+        let groupMembers = state.membersList.map(m => { return { account: m.account, profile: m.profile, orgName: state.group.name } });
+        let usersWithGrantedAccess = state.grantedAccessList.map(a => { return { account: a.user.account, profile: a.user.profile, orgName: a.agency.replace(/-/g, " ") } });
         return [...groupMembers, ...usersWithGrantedAccess].reduce((acc, user) => {
             if (!acc.some(a => a.account.name == user.account.name)) {
                 return [...acc, user]

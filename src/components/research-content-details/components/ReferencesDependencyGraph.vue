@@ -165,7 +165,7 @@ export default {
       const nodeTypes = []
       this.nodes.forEach(node => {
         if (!nodeTypes.some(n => node.refType == n.refType)) {
-          let text = node.refType == "root" ? "Primary Data" : node.refType == "in" ? "Data providers" : node.refType == "out" ? "Data Users" : "Node";
+          let text = node.refType == "root" ? "Primary data" : node.refType == "in" ? "Data providers" : node.refType == "out" ? "Data users" : "Node";
           nodeTypes.push({ ...node, text });
         }
       })

@@ -100,7 +100,7 @@
                         <v-flex xs8>
                           <v-layout align-baseline>
                             <v-icon small class="align-self-center">event</v-icon>
-                            <span class="pl-2">{{moment(researchContent.created_at).format("d MMM YYYY")}}</span>
+                            <span class="pl-2">{{moment(researchContent.created_at).format("D MMM YYYY")}}</span>
                           </v-layout>
                         </v-flex>
                       </v-layout>
@@ -221,7 +221,7 @@
                           :size="40"
                           link-to-profile
                           link-to-profile-class="px-1"
-                        ><span class="grey--text half-bold">from <span class="capitalize">{{userWithAccess.agency}}</span></span>
+                        ><span class="grey--text half-bold">from <span class="capitalize">{{userWithAccess.orgName}}</span></span>
                         </platform-avatar>
                       </v-flex>
                     </v-layout>
