@@ -154,18 +154,22 @@ export default {
     linkTypes() {
       const linkTypes = []
       this.links.forEach(link => {
-        if (linkTypes.indexOf(link.type) === -1)
-          linkTypes.push(link.type)
-      })
-      return linkTypes.sort()
+        if (!linkTypes.some(l => link.type == l.type)) {
+          let text = link.type == "depends" ? "Reference" : link.type == "needs" ? "Used by" : "Link"
+          linkTypes.push({...link, text });
+        }
+      });
+      return linkTypes.sort((a, b) => (a.type > b.type) ? 1 : ((b.type > a.type) ? -1 : 0));
     },
-    classes() {
-      const classes = []
+    nodeTypes() {
+      const nodeTypes = []
       this.nodes.forEach(node => {
-        if (classes.indexOf(node.refType) === -1)
-          classes.push(node.refType)
+        if (!nodeTypes.some(n => node.refType == n.refType)) {
+          let text = node.refType == "root" ? "Primary Data" : node.refType == "in" ? "Data providers" : node.refType == "out" ? "Data Users" : "Node";
+          nodeTypes.push({ ...node, text });
+        }
       })
-      return classes.sort()
+      return nodeTypes.sort((a, b) => (a.refType > b.refType) ? 1 : ((b.refType > a.refType) ? -1 : 0));
     }
   },
 
@@ -446,7 +450,7 @@ export default {
       const caption = this.selections.caption;
       caption.select('rect')
         .attr('height', (captionYPadding * 2) + lineHeight *
-          (this.classes.length + this.linkTypes.length))
+          (this.nodeTypes.length + this.linkTypes.length))
       const linkLine = (d) => {
         const source = {
           x: captionXPadding + 13,
@@ -463,32 +467,31 @@ export default {
         .data(this.linkTypes)
         .enter().append('path')
           .attr('d', linkLine)
-          .attr('class', (d) => 'link ' + d)
+          .attr('class', (d) => 'link ' + d.type)
       linkCaption.selectAll('text')
         .data(this.linkTypes)
         .enter().append('text')
           .attr('x', captionXPadding + 20)
           .attr('y', (d) => captionYPadding + (lineMiddle + 5) + (lineHeight * this.linkTypes.indexOf(d)))
-          .attr('class', 'caption capitalize')
-          .text((d) => d);
+          .attr('class', 'caption')
+          .text((d) => d.text);
       const classCaption = caption.append('g');
       classCaption.selectAll('.ref-type')
-        .data(this.classes)
+        .data(this.nodeTypes)
         .enter().append('circle')
           .attr('r', 10)
           .attr('cx', captionXPadding - 2)
-          .attr('cy', (d) => captionYPadding + lineMiddle + (lineHeight * (this.linkTypes.length + this.classes.indexOf(d))))
-          .attr('class', (d) => `${d.toLowerCase()} capitalize`)
-          .classed("ref-type", true);
+          .attr('cy', (d) => captionYPadding + lineMiddle + (lineHeight * (this.linkTypes.length + this.nodeTypes.indexOf(d))))
+          .attr('class', (d) => `${d.refType} ref-type`);
 
       classCaption.selectAll('text')
-        .data(this.classes)
+        .data(this.nodeTypes)
         .enter().append('text')
           .attr('x', captionXPadding + 20)
           .attr('y', (d) => captionYPadding + (lineMiddle + 5) +
-            (lineHeight * (this.linkTypes.length + this.classes.indexOf(d))))
-          .attr('class', 'caption capitalize')
-          .text((d) => d);
+            (lineHeight * (this.linkTypes.length + this.nodeTypes.indexOf(d))))
+          .attr('class', 'caption')
+          .text((d) => d.text);
       
       const captionWidth = caption.node().getBBox().width;
       const captionHeight = caption.node().getBBox().height;
@@ -581,7 +584,7 @@ export default {
       const refNode = this.selections.graph.select(`#ref-node-${d.researchContent.id}`)
       const refInfoDialog = this.selections.graph.select(`#ref-info-${d.researchContent.id}`)
       const isHidden = refInfoDialog.attr("visibility") === "hidden";
-      // this.selections.graph.selectAll(".ref-info").attr('visibility', "hidden");
+      this.selections.graph.selectAll(".ref-info").attr('visibility', "hidden");
 
       refInfoDialog.attr('visibility', isHidden ? "visible" : "hidden");
       refNode.classed('selected', !isHidden);
