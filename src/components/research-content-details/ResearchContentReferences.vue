@@ -103,7 +103,7 @@
                         </v-flex>
                       </v-layout>
 
-                      <v-divider class="my-4"></v-divider>
+                      <!-- <v-divider class="my-4"></v-divider> -->
 
                     </v-layout>
                   </v-tab-item>

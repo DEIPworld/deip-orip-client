@@ -677,7 +677,7 @@
               </v-layout>
             </v-flex>
           </v-layout>
-          <v-layout class="my-5">
+          <v-layout class="my-5" v-if="researchReferencesList.length">
             <v-flex lg1>
               <v-layout justify-end class="pr-3">
                 <v-icon large color="grey lighten-2">mdi-file-document</v-icon>
@@ -1222,18 +1222,18 @@ export default {
         .sort()
         .map(ms => new Date(ms))
         .forEach((timePoint, i, arr) => {
-          let eciValue;
-          if (i === arr.length - 1) {
-            eciValue = eci.value;
-          } else {
-            eciValue = this.getRandomInt(-10000, 10000);
-          }
-          let isPositiveChange;
-          if (i === 0) {
-            isPositiveChange = eciValue > 0;
-          } else {
-            isPositiveChange = eciValue > chartData[i][1];
-          }
+          let eciValue = i == 1 ? 1 : i % 2 == 0 ? i - 0.1 : i;
+          // if (i === arr.length - 1) {
+          //   eciValue = eci.value;
+          // } else {
+          //   eciValue = this.getRandomInt(-10000, 10000);
+          // }
+          let isPositiveChange = true;
+          // if (i === 0) {
+          //   isPositiveChange = eciValue > 0;
+          // } else {
+          //   isPositiveChange = eciValue > chartData[i][1];
+          // }
           chartData.push([
             timePoint,
             eciValue,
