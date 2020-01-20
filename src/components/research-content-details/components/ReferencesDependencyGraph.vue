@@ -14,7 +14,7 @@
 </template>
 
 <script>
-// import moment from "moment";
+import moment from "moment";
 import * as d3 from "d3";
 
 export default {
@@ -28,7 +28,7 @@ export default {
     return {
       gridSize: 100,
       refInfoWidth: 500,
-      refInfoHeight: 230,
+      refInfoHeight: 240,
       selections: {},
       simulation: null,
       forceProperties: {
@@ -371,10 +371,10 @@ export default {
         .attr("class", "ref-info-access-label")
         .text("Access to Material:")
 
-      let contentAccess = contentAccessBox.append("xhtml:div")
+      let contentAccessContent = contentAccessBox.append("xhtml:div")
         .attr("class", "ref-info-access-content")
 
-      let contentAccessItem = contentAccess.append("xhtml:span")
+      let contentAccessItem = contentAccessContent.append("xhtml:span")
         .attr("class", "ref-info-access")
 
       let contentAccessText = contentAccessItem.append("xhtml:span")
@@ -384,6 +384,24 @@ export default {
       let contentAccessIcon = contentAccessItem.append("xhtml:img")
         .attr("src", d => { return d.ref.accessStatus === 'allowed' ? `/static/unlocked.png` : `/static/locked.png` })
         .attr("class", "ref-info-access-icon");
+
+
+      let datetimeBox = refInfoBox.append("xhtml:div")
+        .attr("class", "ref-info-datetime-box");
+
+      let datetimeLabel = datetimeBox.append("xhtml:div")
+        .attr("class", "ref-info-datetime-label")
+        .text("Date:")
+
+      let datetimeContent = datetimeBox.append("xhtml:div")
+        .attr("class", "ref-info-datetime-content")
+
+      let datetimeItem = datetimeContent.append("xhtml:span")
+        .attr("class", "ref-info-datetime")
+
+      let datetimeText = datetimeItem.append("xhtml:span")
+        .attr("class", "ref-info-datetime-text")
+        .text(d => { return moment(d.researchContent.created_at).format("D MMM YYYY"); })
 
 
       refInfoBox.on('wheel', (e) => {
@@ -891,6 +909,27 @@ export default {
     width: 30px;
   }
   .ref-info-access-text {
+    padding: 0px 10px 0px 10px;
+  }
+
+
+  .ref-info-datetime-box {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 5px 10px 5px 10px;
+  }
+  .ref-info-datetime-label {
+
+  }
+  .ref-info-datetime-content {
+
+  }
+  .ref-info-datetime {
+    display: flex;
+    align-items: center;
+  }
+  .ref-info-datetime-text {
     padding: 0px 10px 0px 10px;
   }
 
