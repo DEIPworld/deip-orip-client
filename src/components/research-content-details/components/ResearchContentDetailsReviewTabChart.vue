@@ -63,7 +63,7 @@
                                 reviewData: {
                                     date: moment(review.created_at).unix(),
                                     y: null,
-                                    weight: weightCoef * review.weight_per_discipline.find(weight => weight[0] === discipline.id)[1],
+                                    weight: 0,
                                     review: review
                                 },
                                 votesData: _(review.votes)

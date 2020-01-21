@@ -638,7 +638,7 @@
                             :key="wod.disciplineName"
                             class="rd-review-eci mt-1"
                             lg12
-                          >{{wod.disciplineName}}: {{wod.totalWeight}}</v-flex>
+                          >{{wod.disciplineName}}</v-flex>
                         </v-layout>
                       </v-flex>
                       <v-flex lg4>
@@ -1372,13 +1372,7 @@ export default {
       return this.reviewsList.map(review => {
         const weights_of_disciplines = [];
         review.disciplines.forEach(discipline => {
-          const weight = review.weight_per_discipline.find(
-            arr => arr[0] === discipline.id
-          );
-          weights_of_disciplines.push({
-            disciplineName: discipline.name,
-            totalWeight: weight ? weight[1] : 0
-          });
+          weights_of_disciplines.push({ disciplineName: discipline.name });
         });
 
         const _review = {

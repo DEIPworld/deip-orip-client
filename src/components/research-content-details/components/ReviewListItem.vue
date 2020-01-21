@@ -39,9 +39,6 @@
                             <span class="pr-2">
                                 <span>{{ tvo.disciplineName }}:</span>
                             </span>
-                            <span class="pr-4">
-                                <span>{{tvo.totalWeight}}</span>
-                            </span>
                         </div>
                     </div>
                 </div>
@@ -99,10 +96,8 @@
 
                 for (var i = 0; i < review.disciplines.length; i++) {
                     const discipline = review.disciplines[i];
-                    const weight = review.weight_per_discipline.find(arr => arr[0] === discipline.id);
                     const tvo = {
                         disciplineName: discipline.name,
-                        totalWeight: weight !== undefined ? weight[1] : 0
                     }
                     out.push(tvo)
                 }

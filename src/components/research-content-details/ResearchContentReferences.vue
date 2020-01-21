@@ -104,6 +104,28 @@
                           </v-layout>
                         </v-flex>
                       </v-layout>
+
+                      <v-layout v-if="contentReviewsList.length" class="py-3" row justify-space-between align-baseline>
+                        <v-flex xs4>
+                          <span class="body-2">Verified by:</span>
+                        </v-flex>
+                        <v-flex xs8>
+                          <v-layout align-baseline row justify-space-between v-for="(review, i) in contentReviewsList" :key="`file-verifier-${i}`" :class="{'py-2': i != 0}">
+                            <platform-avatar 
+                              :user="review.author"
+                              :size="20"
+                              link-to-profile
+                              link-to-profile-class="px-1"
+                            ></platform-avatar>
+
+                            <v-tooltip class="align-self-center" style="cursor: default" left>
+                              <v-icon color="green" slot="activator">check_circle_outline</v-icon>
+                              <span>Digital Signature: {{mockSignature(review.id)}}</span>
+                            </v-tooltip>
+                          </v-layout>
+                        </v-flex>
+                      </v-layout>
+
                     </v-layout>
                   </v-tab-item>
 
@@ -290,6 +312,7 @@
 import { mapGetters } from 'vuex';
 import deipRpc from '@deip/deip-oa-rpc-client';
 import { getContentType } from './../../services/ResearchService'
+import crypto from '@deip/lib-crypto'
 
 export default {
   name: "ResearchContentReferences",
@@ -315,6 +338,7 @@ export default {
       researchContentReferencesGraph: 'rcd/researchContentReferencesGraph',      
       researchGroupMembers: 'rcd/membersList',
       usersWithAccess: 'rcd/usersWithAccess',
+      contentReviewsList: 'rcd/contentReviewsList',
       themeSettings: 'layout/themeSettings'
     }),
     referencesCount() {
@@ -462,7 +486,10 @@ export default {
 
   },
   methods: {
-    getContentType
+    getContentType,
+    mockSignature(id) {
+      return crypto.hexify(crypto.sha256(new TextEncoder("utf-8").encode("" + id).buffer));
+    }
   },
   mounted() {
     let graphContainer = this.$refs["graphContainer"];
