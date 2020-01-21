@@ -10,18 +10,6 @@
                 </v-btn>
             </div>
         </div>
-        <div v-if="eciList.length">
-            <div class="subheading bold text-align-center">Expertise Contribution Index</div>
-            <div class="c-mt-4">
-                <div v-for="(eci, index) in eciList" :key="index"
-                    class="legacy-row align-center legacy-justify-between eci-item c-ph-2"
-                    :class="index === 0 ? '' : 'c-mt-1'"
-                >
-                    <div class="grey--text">ECI</div>
-                    <div class="c-pv-2 eci-label">{{ eci.disciplineName }}: {{ eci.value }}</div>
-                </div>
-            </div>
-        </div>
         <v-layout row justify-space-between align-center class="my-2 py-2">
           Novelty:&nbsp;<squared-rating readonly v-model="reviewRatings.novelty" />
         </v-layout>
@@ -69,14 +57,6 @@
                 return this.review != null ? 
                     this.review.votes.some(vote => vote.voter === this.user.username) 
                     : false;
-            },
-            eciList() {
-                return this.review.evaluation_per_discipline.map(item => {
-                    return {
-                        disciplineName: disciplineTreeService.getNodeById(item[0]).label,
-                        value: item[1]
-                    };
-                });
             }
         },
         
