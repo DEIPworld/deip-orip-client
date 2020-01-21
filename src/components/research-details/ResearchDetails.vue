@@ -554,7 +554,7 @@
                       >
                         <v-layout justify-space-between>
                           <span>{{eci.disciplineName}}</span>
-                          <span class="bold">{{eci.value}}</span>
+                          <!-- <span class="bold">{{eci.value}}</span> -->
                         </v-layout>
                       </v-flex>
                       <v-flex lg12>
@@ -800,7 +800,7 @@
               </div>
             </div>
           </v-layout>
-          <v-divider />
+          <!-- <v-divider />
           <v-layout column class="my-4 mx-4">
             <div class="rd-sidebar-block-title pb-2">Expertise Contribution Index</div>
             <v-layout
@@ -812,7 +812,7 @@
               <div>{{eci.disciplineName}}</div>
               <div class="bold">{{eci.value}}</div>
             </v-layout>
-          </v-layout>
+          </v-layout> -->
           <!-- <v-layout column class="my-4 mx-4">
             <div class="rd-sidebar-block-title pb-2">Score</div>
             <v-tooltip top>
