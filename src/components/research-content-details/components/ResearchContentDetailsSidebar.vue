@@ -53,7 +53,7 @@
             </div>
         </div> -->
         <!-- ### END Research Content ECI Section ### -->
-        <div class="sidebar-fullwidth"><v-divider></v-divider></div>
+        <div class="sidebar-fullwidth" style="padding-top: 20px"><v-divider></v-divider></div>
         
         <v-dialog v-model="requestExpertReviewDialog.isShown" persistent max-width="600px">
           <template v-slot:activator="{ on }">
