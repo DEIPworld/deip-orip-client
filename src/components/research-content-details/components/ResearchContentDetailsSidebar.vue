@@ -35,7 +35,7 @@
         <!-- ### END Draft Actions Section ### -->
 
         <!-- ### START Research Content ECI Section ### -->
-        <div v-if="isPublished" class="c-mb-6 c-mt-4">
+        <!-- <div v-if="isPublished" class="c-mb-6 c-mt-4">
             <div class="sidebar-fullwidth"><v-divider></v-divider></div>
             <div class="subheading bold c-mt-4">Expertise Contribution Index</div>
             
@@ -51,7 +51,7 @@
                     </div>
                 </div>
             </div>
-        </div>
+        </div> -->
         <!-- ### END Research Content ECI Section ### -->
         <div class="sidebar-fullwidth"><v-divider></v-divider></div>
         
