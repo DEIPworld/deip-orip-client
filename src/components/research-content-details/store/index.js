@@ -149,7 +149,8 @@ const getters = {
                 return [...acc, user]
             }
             return acc;
-        }, []);
+        }, [])
+        .sort((a, b) => (a.orgName > b.orgName) ? 1 : ((b.orgName > a.orgName) ? -1 : 0));
     }
 }
 
