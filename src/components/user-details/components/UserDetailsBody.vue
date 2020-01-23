@@ -350,7 +350,7 @@
             },
             dropzoneOptions() {
                 return this.currentUser != null ? {
-                        url: `${window.env.DEIP_SERVER_URL}/api/files/upload-avatar`,
+                        url: `${window.env.DEIP_SERVER_URL}/api/user/upload-avatar`,
                         paramName: "user-avatar",
                         headers: {
                             "username": this.currentUser.username.toString(),

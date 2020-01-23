@@ -11,7 +11,7 @@
       }"
     >
       <div style="position: relative">
-        <img class="ma-0" style="width: 100%; height: 150px" :src="$options.filters.researchThumbnailSrc(research.id)" />
+        <img class="ma-0" style="width: 100%; height: 150px" :src="$options.filters.researchBackgroundSrc(research.id, 430, 150)" />
         <div v-if="research.isTop" class="top-research-label">
           <top-research-label class="pa-2"></top-research-label>
         </div>
@@ -67,9 +67,9 @@
         <span class="caption half-bold grey--text lighten-1">{{ reviewsCount }}</span>
       </v-flex>
       <v-flex xs5>
-        <v-layout row align-center class="group-logo" v-if="group.logoSrc">
+        <v-layout row align-center class="group-logo" v-if="!group.is_personal">
           <v-avatar style="margin: 2px">
-            <img :src="group.logoSrc">
+            <img :src="$options.filters.researchGroupLogoSrc(group.id, 50, 50, true)">
           </v-avatar>
           <v-tooltip bottom class="group-logo__text">
             <template v-slot:activator="{ on }">
