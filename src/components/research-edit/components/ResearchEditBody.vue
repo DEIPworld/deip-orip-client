@@ -4,18 +4,6 @@
       <v-flex xs10>
         <v-layout column>
 
-          <div class="pb-3">
-            <div class="title half-bold pb-3">Background:</div>
-            <div v-if="backgroundDropzoneOptions">
-              <vue-dropzone ref="researchBackground" id="research-background-dropzone" 
-                :options="backgroundDropzoneOptions"
-                @vdropzone-success="backgroundUploadSuccess"
-                @vdropzone-error="backgroundUploadError">
-              </vue-dropzone>
-              <div class="text-xs-right py-3"><v-btn :disabled="isUploadingBackground" :loading="isUploadingBackground" class="ma-0" @click="updateBackgroundImage()" color="primary">Update image</v-btn></div>
-            </div>
-          </div>
-
           <div>
             <div class="title half-bold pb-3">Tilte:</div>
             <v-text-field 
@@ -68,9 +56,35 @@
             <milestone-stepper :isReadOnly="false" :steps="milestones"></milestone-stepper>
           </div>
 
-          <div class="text-xs-center">
-            <v-btn class="pa-0 my-0 mx-2" large @click="cancel()">Cancel</v-btn>
-            <v-btn class="pa-0 my-0 mx-2" large :loading="isLoading" :disabled="isSavingDisabled || isLoading" color="primary"  @click="save()">Save</v-btn>
+          <div class="py-2">
+            <v-layout justify-end>
+              <v-btn class="my-0 ml-2" large :loading="isLoading" :disabled="isSavingDisabled || isLoading" color="primary" @click="save()">Update Info</v-btn>
+            </v-layout>
+          </div>
+
+          <div class="pb-3">
+            <div class="title half-bold pb-3">Background:</div>
+            <v-layout>
+              <v-flex xs3>
+                <img class="ma-0" style="width: 150px; height: 150px" :src="$options.filters.researchBackgroundSrc(research.id, 300, 300)" />
+              </v-flex>
+              <v-flex xs9>
+                <div v-if="backgroundDropzoneOptions">
+                  <vue-dropzone ref="researchBackground" id="research-background-dropzone" 
+                    :options="backgroundDropzoneOptions"
+                    @vdropzone-success="backgroundUploadSuccess"
+                    @vdropzone-error="backgroundUploadError">
+                  </vue-dropzone>
+                  <div class="text-xs-right py-3">
+                    <v-btn large :disabled="isUploadingBackground" :loading="isUploadingBackground" class="ma-0" color="primary" @click="updateBackgroundImage()">Update image</v-btn>
+                  </div>
+                </div>
+              </v-flex>
+            </v-layout>
+          </div>
+
+          <div class="pb-3">
+            <v-btn class="ma-0" color="primary" outline large @click="cancel()">Back to research</v-btn>
           </div>
 
         </v-layout>

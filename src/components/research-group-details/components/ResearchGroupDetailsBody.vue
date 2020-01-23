@@ -154,6 +154,27 @@
             <state-research-list :research-list="researchList"></state-research-list>
         </div>
         <!-- ### END Research Group Research List Section ### -->
+
+        <div class="px-5 py-4" v-if="isResearchGroupMember">
+            <div class="title half-bold pb-4">Update group logo:</div>
+            <v-layout>
+                <v-flex xs3>
+                    <img width="150px" height="150px" :src="$options.filters.researchGroupLogoSrc(group.id, 300, 300, true)">
+                </v-flex>
+                <v-flex xs9>
+                    <div v-if="logoDropzoneOptions">
+                        <vue-dropzone ref="researchGroupLogo" id="research-group-logo" 
+                            :options="logoDropzoneOptions"
+                            @vdropzone-success="logoUploadSuccess"
+                            @vdropzone-error="logoUploadError">
+                        </vue-dropzone>
+                        <div class="text-xs-right py-3">
+                            <v-btn :disabled="isUploadingLogo" :loading="isUploadingLogo" class="ma-0" @click="updateLogoImage()" color="primary">Update logo</v-btn>
+                        </div>
+                    </div>
+                </v-flex>
+            </v-layout>
+        </div>
     </div>
 </template>
 
@@ -161,16 +182,22 @@
     import { mapGetters } from 'vuex';
     import deipRpc from '@deip/deip-oa-rpc-client';
     import { getEnrichedProfiles } from './../../../utils/user';
+    import { getAccessToken } from './../../../utils/auth';
+    import vueDropzone from 'vue2-dropzone';
 
     export default {
         name: "ResearchGroupDetailsBody",
+        components: {
+            vueDropzone
+        },
         props: {
         },
         data() { 
             return {
                 highlightProposalsSection: undefined,
                 proposalsSectionTransitionTrigger: false,
-                usersToInvite: []
+                usersToInvite: [],
+                isUploadingLogo: false
             } 
         },
         computed: {
@@ -188,6 +215,23 @@
                 isLoadingResearchGroupProposals: 'researchGroup/isLoadingResearchGroupProposals',
                 userPersonalGroup: 'auth/userPersonalGroup'
             }),
+            logoDropzoneOptions() {
+                return this.group != null ? {
+                    url: `${window.env.DEIP_SERVER_URL}/api/groups/logo`,
+                    paramName: "research-background",
+                    headers: {
+                        "Research-Group-Id": this.group.id.toString(),
+                        "Authorization": 'Bearer ' + getAccessToken()
+                    },
+                    timeout: 0,
+                    uploadMultiple: false,
+                    createImageThumbnails: true,
+                    autoProcessQueue: false,
+                    dictDefaultMessage: "Research group logo (.png)",
+                    addRemoveLinks: true,
+                    acceptedFiles: ['image/png'].join(',')
+                } : null;
+            },
             isPersonalGroup() {
                 return this.group 
                     ? this.group.id == this.userPersonalGroup.id 
@@ -199,6 +243,28 @@
                     : false
             }
         }, 
+
+        methods: {
+            updateLogoImage() {
+                if (this.$refs.researchGroupLogo.getQueuedFiles().length) {
+                    this.isUploadingLogo = true;
+                    this.$refs.researchGroupLogo.processQueue();
+                }
+            },
+
+            logoUploadSuccess(file, response) {
+                this.$refs.researchGroupLogo.removeAllFiles();
+                this.isUploadingLogo = false;
+                this.$store.dispatch('layout/setSuccess', { message: "Logo has been updated successfully ! Refresh the page please" });
+            },
+
+            logoUploadError(file, message, xhr) {
+                console.log(message);
+                this.$refs.researchGroupLogo.removeAllFiles();
+                this.isUploadingLogo = false;
+                this.$store.dispatch('layout/setError', { message: "Sorry, an error occurred while uploading logo image, please try again later" });
+            }
+        },
 
         mounted() {
             if (this.highlightProposalsSection) {

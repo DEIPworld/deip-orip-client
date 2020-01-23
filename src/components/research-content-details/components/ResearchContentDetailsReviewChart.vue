@@ -81,7 +81,7 @@
                 .append('image')
                 .attr('xlink:href', d => {
                     return d.reviewData.review.author.profile
-                    ? `${window.env.DEIP_SERVER_URL}/public/files/avatars/${d.reviewData.review.author.profile.avatar}?width=24&height=24&noCache=true`
+                    ? `${window.env.DEIP_SERVER_URL}/api/user/avatar/${d.reviewData.review.author.profile.avatar}?width=24&height=24&noCache=true`
                     // : `http://www.gravatar.com/avatar/0c333262d9b65e9e0045e911b4462c6d?s=24&d=retro&r=g`;
                     : 'http://www.gravatar.com/avatar/'
                         + md5((d.reviewData.review.author.account.name + '@deip.world').trim().toLowerCase())

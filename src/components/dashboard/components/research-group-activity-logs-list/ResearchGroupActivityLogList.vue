@@ -3,7 +3,7 @@
     <v-expansion-panel-content>
       <template slot="header">
         <v-layout align-baseline>
-          <div><img width="30px" height="30px" :src="`/static/research_groups/${researchGroup.permlink}-mini.png`" /></div>
+          <div><img width="30px" height="30px" :src="$options.filters.researchGroupLogoSrc(researchGroup.id)" /></div>
           <div class="primary--text body-2 align-self-center px-2">{{researchGroup.name}}</div>
         </v-layout>
       </template>

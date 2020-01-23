@@ -34,7 +34,7 @@
                         close
                         outline>
                         <v-avatar>
-                          <img :src="organization.logoSrc">
+                          <img :src="$options.filters.researchGroupLogoSrc(organization.id, 50, 50, true)">
                         </v-avatar>
                         {{ organization.name }}
                       </v-chip>
@@ -121,7 +121,7 @@
                           >
                             <img
                               class="organization-item__img"
-                              :src="organization.logoSrc"
+                              :src="$options.filters.researchGroupLogoSrc(organization.id, 150, 150, true)"
                             />
                             <div class="organization-item__overlay"></div>
                           </div>

@@ -49,16 +49,16 @@ Vue.filter('employmentOrEducation', function (enrichedProfile) {
     return `${education ? education.educationalInstitution : ''}${ education && employment ? ', ' : '' }${employment ? employment.company : ''}`;
 });
 
-Vue.filter('avatarSrc', function (avatar, width, height, noCache) {
-    return `${window.env.DEIP_SERVER_URL}/public/files/avatars/${avatar}?width=${width}&height=${height}&noCache=${noCache}`
+Vue.filter('avatarSrc', function (avatar, width, height, isRound = false, noCache = false) {
+    return `${window.env.DEIP_SERVER_URL}/api/user/avatar/${avatar}?authorization=${getAccessToken()}&width=${width}&height=${height}&isRound=${isRound}&noCache=${noCache}`
 });
 
-Vue.filter('researchBackgroundSrc', function (researchId, width = 1440, height = 430, ext = 'png', noCache = true) {
-    return `${window.env.DEIP_SERVER_URL}/api/research/background/${researchId}?authorization=${getAccessToken()}&width=${width}&height=${height}&noCache=${noCache}&ext=${ext}`
+Vue.filter('researchBackgroundSrc', function (researchId, width = 1440, height = 430, isRound = false, noCache = true, ext = 'png') {
+    return `${window.env.DEIP_SERVER_URL}/api/research/background/${researchId}?authorization=${getAccessToken()}&width=${width}&height=${height}&isRound=${isRound}&noCache=${noCache}&ext=${ext}`
 });
 
-Vue.filter('researchThumbnailSrc', function (researchId, width = 430, height = 150, ext = 'png', noCache = true) {
-    return `${window.env.DEIP_SERVER_URL}/api/research/background/${researchId}?authorization=${getAccessToken()}&width=${width}&height=${height}&noCache=${noCache}&ext=${ext}`
+Vue.filter('researchGroupLogoSrc', function (researchGroupId, width = 360, height = 80, isRound = false, noCache = true, ext = 'png') {
+    return `${window.env.DEIP_SERVER_URL}/api/groups/logo/${researchGroupId}?authorization=${getAccessToken()}&width=${width}&height=${height}&isRound=${isRound}&noCache=${noCache}&ext=${ext}`
 });
 
 Vue.filter('tenantLogoSrc', function (tenant, width, height, noCache, ext = 'png') {
