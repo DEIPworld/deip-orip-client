@@ -3,6 +3,19 @@
     <v-layout row wrap justify-center style="flex: 0 0 auto;" class="px-4 py-5 full-width">
       <v-flex xs10>
         <v-layout column>
+
+          <div class="pb-3">
+            <div class="title half-bold pb-3">Background:</div>
+            <div v-if="backgroundDropzoneOptions">
+              <vue-dropzone ref="researchBackground" id="research-background-dropzone" 
+                :options="backgroundDropzoneOptions"
+                @vdropzone-success="backgroundUploadSuccess"
+                @vdropzone-error="backgroundUploadError">
+              </vue-dropzone>
+              <div class="text-xs-right py-3"><v-btn :disabled="isUploadingBackground" :loading="isUploadingBackground" class="ma-0" @click="updateBackgroundImage()" color="primary">Update image</v-btn></div>
+            </div>
+          </div>
+
           <div>
             <div class="title half-bold pb-3">Tilte:</div>
             <v-text-field 
@@ -56,14 +69,7 @@
           </div>
 
           <div class="text-xs-center">
-            <v-btn class="pa-0 my-0 mx-2" large 
-              :to="{
-                name: 'ResearchDetails', 
-                params: { 
-                  research_group_permlink: encodeURIComponent(research.group_permlink), 
-                  research_permlink: encodeURIComponent(research.permlink) 
-                } 
-              }">Cancel</v-btn>
+            <v-btn class="pa-0 my-0 mx-2" large @click="cancel()">Cancel</v-btn>
             <v-btn class="pa-0 my-0 mx-2" large :loading="isLoading" :disabled="isSavingDisabled || isLoading" color="primary"  @click="save()">Save</v-btn>
           </div>
 
@@ -79,9 +85,14 @@ import { mapGetters } from 'vuex';
 import Vue from 'vue';
 import deipRpc from '@deip/deip-oa-rpc-client';
 import moment from 'moment';
+import { getAccessToken } from './../../../utils/auth';
+import vueDropzone from 'vue2-dropzone';
 
 export default {
   name: "ResearchEditBody",
+  components: {
+    vueDropzone
+  },
   data() {
     return {
       title: "",
@@ -89,9 +100,8 @@ export default {
       milestones: undefined,
       videoSrc: "",
       activeMilestone: undefined,
-
       isLoading: false,
-
+      isUploadingBackground: false,
       rules: {
         required: value => !!value || 'This field is required',
         link: (value) => {
@@ -105,6 +115,24 @@ export default {
       user: 'auth/user',
       research: 're/research'
     }),
+
+    backgroundDropzoneOptions() {
+      return this.research != null ? {
+        url: `${window.env.DEIP_SERVER_URL}/api/research/background`,
+        paramName: "research-background",
+        headers: {
+          "Research-Id": this.research.id.toString(),
+          "Authorization": 'Bearer ' + getAccessToken()
+        },
+        timeout: 0,
+        uploadMultiple: false,
+        createImageThumbnails: true,
+        autoProcessQueue: false,
+        dictDefaultMessage: "Background image should be at least 1440 x 430 px in dimension (.png)",
+        addRemoveLinks: true,
+        acceptedFiles: ['image/png'].join(',')
+      } : null;
+    },
 
     isSavingDisabled() {
       return !this.title || !this.description || !this.milestones || this.milestones.some(step => !step.validation || step.validation.isValid === false) || !this.videoSrcIsValidOrAbsent;
@@ -169,6 +197,24 @@ export default {
       }
     },
 
+    updateBackgroundImage() {
+      if (this.$refs.researchBackground.getQueuedFiles().length) {
+        this.isUploadingBackground = true;
+        this.$refs.researchBackground.processQueue();
+      }
+    },
+
+    cancel() {
+      this.$refs.researchBackground.removeAllFiles();
+      this.$router.push({
+        name: 'ResearchDetails', 
+        params: { 
+          research_group_permlink: encodeURIComponent(this.research.group_permlink), 
+          research_permlink: encodeURIComponent(this.research.permlink) 
+        } 
+      })
+    },
+
     validateMilestones() {
 			let milestones = this.milestones;
 			for (let index = 0; index < milestones.length; index++) {
@@ -187,7 +233,20 @@ export default {
 				Vue.set(step.validation, 'isValid', isValid !== false);
 			}
       return milestones.every(step => step.validation.isValid);
-		}
+    },
+    
+    backgroundUploadSuccess(file, response) {
+      this.$refs.researchBackground.removeAllFiles();
+      this.isUploadingBackground = false;
+      this.$store.dispatch('layout/setSuccess', { message: "Background image has been updated successfully ! Refresh the page please" });
+    },
+
+    backgroundUploadError(file, message, xhr) {
+      console.log(message);
+      this.$refs.researchBackground.removeAllFiles();
+      this.isUploadingBackground = false;
+      this.$store.dispatch('layout/setError', { message: "Sorry, an error occurred while uploading background image, please try again later" });
+    }
   },
 
   created() {
