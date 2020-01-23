@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import moment from 'moment';
+import { getAccessToken } from '@/utils/auth'
 
 Vue.filter('fullname', function (enrichedProfile) {
     return enrichedProfile && enrichedProfile.profile && enrichedProfile.profile.firstName 
@@ -48,8 +49,16 @@ Vue.filter('employmentOrEducation', function (enrichedProfile) {
     return `${education ? education.educationalInstitution : ''}${ education && employment ? ', ' : '' }${employment ? employment.company : ''}`;
 });
 
-Vue.filter('avatarSrc', function (avatar, width, height, noCache ) {
+Vue.filter('avatarSrc', function (avatar, width, height, noCache) {
     return `${window.env.DEIP_SERVER_URL}/public/files/avatars/${avatar}?width=${width}&height=${height}&noCache=${noCache}`
+});
+
+Vue.filter('researchBackgroundSrc', function (researchId, width = 1440, height = 430, ext = 'png', noCache = true) {
+    return `${window.env.DEIP_SERVER_URL}/api/research/background/${researchId}?authorization=${getAccessToken()}&width=${width}&height=${height}&noCache=${noCache}&ext=${ext}`
+});
+
+Vue.filter('researchThumbnailSrc', function (researchId, width = 430, height = 150, ext = 'png', noCache = true) {
+    return `${window.env.DEIP_SERVER_URL}/api/research/background/${researchId}?authorization=${getAccessToken()}&width=${width}&height=${height}&noCache=${noCache}&ext=${ext}`
 });
 
 Vue.filter('tenantLogoSrc', function (tenant, width, height, noCache, ext = 'png') {

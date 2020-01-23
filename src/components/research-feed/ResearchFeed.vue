@@ -8,8 +8,8 @@
       <v-layout row wrap>
         
         <v-flex xs12 sm12 md12 lg12 xl12 class="feed-filter">
-          <v-expansion-panel expand v-model="filtersTabExpansionModel">
-            <v-expansion-panel-content>
+          <v-expansion-panel expand v-model="filtersTabExpansionModel" class="elevation-0">
+            <v-expansion-panel-content class="elevation-0">
               <template slot="actions"><v-icon color="primary">$vuetify.icons.expand</v-icon></template>
               <template slot="header">
                 <v-layout row justify-space-between>

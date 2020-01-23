@@ -4,7 +4,7 @@
       <v-layout
         row
         class="rd-header full-height pa-5"
-        :style="{background: 'linear-gradient(0deg, rgba(0, 0, 0, 0.4) 70%, transparent), url('+researchLogoSrc+'), 100%, 100%, no-repeat'}"
+        :style="{ background: 'linear-gradient(0deg, rgba(0, 0, 0, 0.4) 70%, transparent), url('+ $options.filters.researchBackgroundSrc(research.id) +'), 100%, 100%, no-repeat'}"
       >
         <v-flex lg8>
           <div style="width: 95%">
@@ -912,8 +912,6 @@ export default {
       bookmarkId: null,
       isBookmarkActionInProgress: false,
 
-      researchLogoSrc: "",
-
       activeEciChartTabIndex: 0,
 
       selectedExpert: null,
@@ -1745,9 +1743,6 @@ export default {
   },
 
   created() {
-    this.researchLogoSrc = `./static/researches/${
-      this.research.id < 30 ? this.research.id : "default"
-    }_background.png`;
     const bookmark = this.user.researchBookmarks.find(
       b => b.researchId === this.research.id
     );
