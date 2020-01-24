@@ -35,6 +35,7 @@ import CreateNewResearch from '@/components/research-create/CreateNewResearch';
 import CreateTokenSale from '@/components/token-sale-create/CreateTokenSale';
 
 import UserDetails from '@/components/user-details/UserDetails';
+import AccountExpertiseDetails from '@/components/user-details/AccountExpertiseDetails';
 import UserWallet from '@/components/user-wallet/components/UserWallet';
 import UserWalletOld from '@/components/user-wallet/components/UserWalletOld';
 
@@ -302,6 +303,10 @@ const router = new Router({
 			}
 		})
 	}, {
+    path: '/user-details/:account_name/expertise',
+    name: 'AccountExpertiseDetails',
+    component: AccountExpertiseDetails,
+  }, {
 		path: '/user-wallet',
 		name: 'UserWallet',
 		component: preliminaryDataLoader(UserWallet, {

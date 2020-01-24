@@ -125,22 +125,38 @@
 
         <!-- ### START User Profile Expertise Section ### -->
         <div class="mt-4">
-            <div class="title bold">Expertise Tokens</div>
-            <div class="c-pt-4 c-pb-2">
-                <div class="legacy-row legacy-justify-between" v-for="(item, i) in expertise" :key="i">
-                    <div class="half-bold">{{ item.discipline_name }}</div>
-                    <div>{{ item.amount }}</div>
-                </div>
-                <div v-if="!expertise.length" class="body-1"> 
-                    <div v-if="isOwner">You have no Expertise Tokens yet. Use <span class="a" @click="openClaimExpertiseDialog()">Claim</span> process to apply for Expertise Tokens</div>
-                    <div v-if="!isOwner"><span class="body-2">{{userInfo | fullname}}</span> has no Expertise Tokens yet</div>
-                </div>
-                <div v-if="expertise.length && isOwner" class="body-1 text-align-right c-mt-4">
-                    <v-btn @click="openClaimExpertiseDialog()" outline small color="primary" class="ma-0">
-                        Claim new Discipline
-                    </v-btn>
-                </div>
+          <div class="title bold">Expertise Tokens</div>
+          <div class="c-pt-4 c-pb-2">
+            <router-link tag="div"
+              v-for="(item, i) in expertise" :key="`expertise-${i}`"
+              :to="{
+                name: 'AccountExpertiseDetails',
+                params: {
+                  username: currentUser.username,
+                },
+                query: {
+                  discipline_id: item.discipline_id
+                }
+              }"
+              class="expertise pa-2 my-2"
+            >
+              <v-layout justify-space-between class="py-1">
+                <div class="blue--text text--accent-4 bold">TOP <span class="font-weight-bold">{{i + 1}}</span>%</div>
+                <div class="grey--text">ECI {{ item.amount }}</div>
+              </v-layout>
+              <v-divider class="expertise__divider" />
+              <div class="expertise__disc-name pt-1">{{ item.discipline_name }}</div>
+            </router-link>
+            <div v-if="!expertise.length" class="body-1"> 
+              <div v-if="isOwner">You have no Expertise Tokens yet. Use <span class="a" @click="openClaimExpertiseDialog()">Claim</span> process to apply for Expertise Tokens</div>
+              <div v-if="!isOwner"><span class="body-2">{{userInfo | fullname}}</span> has no Expertise Tokens yet</div>
             </div>
+            <div v-if="expertise.length && isOwner" class="body-1 text-align-right c-mt-4">
+              <v-btn @click="openClaimExpertiseDialog()" outline small color="primary" class="ma-0">
+                Claim new Discipline
+              </v-btn>
+            </div>
+          </div>
         </div>
         <!-- ### END User Profile Expertise Section ### -->
 
@@ -492,5 +508,22 @@
     }
     .invite-item {
         border-bottom: 1px solid rgb(224, 224, 224)
+    }
+
+    .expertise {
+      background: #EBF5FE;
+      border: 1px solid #8FC3F7;
+      box-sizing: border-box;
+      border-radius: 2px;
+      font-family: Muli;
+      cursor: pointer;
+
+      &__disc-name {
+        font-weight: 600;
+      }
+
+      &__divider {
+        border-color: #8FC3F7;
+      }
     }
 </style>
