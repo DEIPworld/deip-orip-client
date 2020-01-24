@@ -15,11 +15,13 @@ import './styles/common.less';
 import 'vue2-dropzone/dist/vue2Dropzone.css';
 import '@mdi/font/css/materialdesignicons.css';
 import 'vue-resize/dist/vue-resize.css';
-import { isLoggedIn } from "./utils/auth";
+import { isLoggedIn, setAccessToken } from "./utils/auth";
 import VueGoogleCharts from 'vue-google-charts';
 import VueCurrencyFilter from 'vue-currency-filter';
 import VueResize from 'vue-resize';
 import themes from './theme.json';
+import crypto from '@deip/lib-crypto';
+import authService from './services/http/auth';
 
 Vue.config.productionTip = false;
 Vue.use(VueGoogleCharts);
@@ -89,6 +91,16 @@ async function setGlobalThemeSettings() {
 async function setUser() {
   if (isLoggedIn()) {
     await store.dispatch("auth/loadUser");
+  } else if (window.env.FORCE_LOGIN) {
+    const [username, privateKey] = window.env.FORCE_LOGIN.split(",");
+    const secretKey = crypto.PrivateKey.from(privateKey);
+    const secretSig = secretKey.sign(new TextEncoder("utf-8").encode(window.env.SIG_SEED).buffer);
+    const secretSigHex = crypto.hexify(secretSig);
+    authService.signIn({ username: username, secretSigHex: secretSigHex })
+      .then((response) => {
+        setAccessToken(response.jwtToken, privateKey);
+        window.location.replace(`${window.location.href}`);
+      })
   }
 }
 

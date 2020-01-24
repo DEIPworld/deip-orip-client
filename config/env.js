@@ -15,7 +15,8 @@ const config = {
     CHAIN_ID: process.env.CHAIN_ID,
     ASSET_UNIT: process.env.ASSET_UNIT,
     TEST_NET_USER_FACTORY_CONFIG: process.env.TEST_NET_USER_FACTORY_CONFIG,
-    TENANT: process.env.TENANT
+    TENANT: process.env.TENANT,
+    FORCE_LOGIN: process.env.FORCE_LOGIN
 };
 
 module.exports = config;
