@@ -132,7 +132,7 @@
               :to="{
                 name: 'AccountExpertiseDetails',
                 params: {
-                  username: currentUser.username,
+                  account_name: currentUser.username,
                 },
                 query: {
                   discipline_id: item.discipline_id

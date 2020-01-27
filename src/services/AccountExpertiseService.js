@@ -14,7 +14,7 @@ const mapHistoryElement = (elem) => {
     delta: source.delta,
     action: ACTIONS_MAP[source.action],
     actionObjectId: source.action_object_id,
-    timestamp: (new Date(`${source.timestamp}+0000`)).getTime(), // TODO: direct timestamp after next node pull
+    timestamp: source.timestamp * 1000,
   };
 
   return mappedElem;

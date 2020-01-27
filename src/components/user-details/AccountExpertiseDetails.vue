@@ -24,7 +24,7 @@
 
     methods: {
       getExpertiseHistory(disciplineId) {
-        getExpertiseHistory(this.$route.params.username, disciplineId)
+        getExpertiseHistory(this.$route.params.account_name, disciplineId)
           .then((history) => {
             this.history = history;
           })
