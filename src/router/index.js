@@ -305,7 +305,14 @@ const router = new Router({
 	}, {
     path: '/user-details/:account_name/expertise',
     name: 'AccountExpertiseDetails',
-    component: AccountExpertiseDetails,
+    component: preliminaryDataLoader(AccountExpertiseDetails, {
+			beforeEnter: (to, from, next) => {
+				let loadPagePromise = store.dispatch('userDetails/loadAccountExpertiseDetailsPage', {
+          username: decodeURIComponent(to.params.account_name)
+        });
+				loadPage(loadPagePromise, next);
+			}
+		})
   }, {
 		path: '/user-wallet',
 		name: 'UserWallet',

@@ -80,6 +80,20 @@ const actions = {
       });
   },
 
+  loadAccountExpertiseDetailsPage({ state, dispatch, commit, rootGetters }, { username }) {
+    const accountLoad = new Promise((resolve, reject) => {
+      dispatch('loadUserAccount', { username: username, notify: resolve });
+    });
+    const profileLoad = new Promise((resolve, reject) => {
+      dispatch('loadUserProfile', { username: username, notify: resolve });
+    });
+    const expertiseLoad = new Promise((resolve, reject) => {
+      dispatch('loadExpertise', { username: username, notify: resolve });
+    });
+
+    return Promise.all([accountLoad, profileLoad, expertiseLoad]);
+  },
+
   loadUserAccount({ commit }, { username, notify } = {}) {
     commit('SET_USER_ACCOUNT_LOADING_STATE', true);
 
