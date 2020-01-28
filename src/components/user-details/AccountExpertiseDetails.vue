@@ -197,7 +197,8 @@
         const { page, rowsPerPage: perPage } = this.historyTable.pagination;
         this.historyTable.loading = true;
         const detailsPromises = [];
-        const pageItems = this.history.slice((page - 1) * perPage, page * perPage);
+        const pageItems = this.history.reverse()
+          .slice((page - 1) * perPage, page * perPage);
         pageItems.forEach((pageItem, index) => {
           let detailsPromise;
           switch (pageItem.action) {
