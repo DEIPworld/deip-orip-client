@@ -125,3 +125,5 @@ Vue.prototype.getEmbedVideoUrl = (url) => {
     || getYoutubeEmbedUrlFromVideoUrl(url)
     || url;
 };
+
+Vue.prototype.promiseDelay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
