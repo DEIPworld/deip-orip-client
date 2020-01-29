@@ -24,10 +24,6 @@ export default {
   },
   methods: {
     
-    validate() {
-      return this.value >= 0 && this.value <= this.maxValue;
-    },
-
     getColor(pointIndex) {
       const defaultColor = '#E0E0E0';
       if (pointIndex > this.rating) {
@@ -50,10 +46,8 @@ export default {
     },
 
     onPointClick(ratingValue) {
-      if (this.validate()) {
-        this.rating = ratingValue;
-        this.$emit('input', ratingValue);
-      }
+      this.rating = ratingValue;
+      this.$emit('input', ratingValue);
     }
   }
 };

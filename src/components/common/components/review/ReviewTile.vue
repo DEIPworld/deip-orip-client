@@ -1,5 +1,5 @@
 <template>
-    <v-card class="pa-4">
+    <v-card class="pa-4 elevation-0">
         <v-layout row>
 
             <v-flex xs2 text-xs-center>

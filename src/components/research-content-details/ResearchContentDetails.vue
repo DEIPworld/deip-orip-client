@@ -28,48 +28,52 @@
 
         <div class="legacy-col-grow full-height">
             <div>
-                <research-content-details-package v-if="isFilePackageContent"></research-content-details-package>
+                <research-content-details-package v-if="isFilePackageContent" class="pa-5"></research-content-details-package>
                 <research-content-details-dar v-if="isDarContent" :contentRef="contentRef"></research-content-details-dar>
 
                 <!-- START Research Content Reviews section -->
-                <div v-if="isPublished && contentReviewsList.length">
-                    <div class="sidebar-fullwidth"><v-divider></v-divider></div>
-
-                    <div id="reviews" class="reviews-container">
-                        <div class="c-pt-2 title">Reviews: {{ contentReviewsList.length }}</div>
-
+                <div v-if="isPublished && contentReviewsList.length" class="px-5">
+                    <div id="reviews">
+                        <div class="py-2 title">Reviews: {{ contentReviewsList.length }}</div>
                         <div class="py-2">
                             <review-tile class="my-4" v-for="(review, i) in contentReviewsList" :review="review" :key="`review-${i}`" :researchContentType="content.content_type"></review-tile>
                         </div>
                     </div>
                 </div>
 
-                <!-- <div v-if="contentReviewsList.length" class="c-pt-6">
-                    <research-content-details-review-tab-chart>
-                    </research-content-details-review-tab-chart>
-                </div> -->
-
-                <div v-else-if="isPublished && !contentReviewsList.length">
-                    <div class="sidebar-fullwidth"><v-divider></v-divider></div>
-
-                    <div id="reviews" class="subheading text-align-center no-reviews-container">
-                        <span>There are no reviews for this {{ getResearchContentType(content.content_type).text }} yet.</span>
-                        
-                        <div>
-                            <span v-if="isCreatingReviewAvailable">
-                                <router-link class="a" :to="{name: 'ResearchContentAddReview', params: {
-                                    group_permlink: decodeURIComponent(research.group_permlink),
-					                research_permlink: decodeURIComponent(research.permlink),
-					                content_permlink: decodeURIComponent(content.permlink),
-                                }}">Add your review</router-link> to make a contribution to the research.
-                            </span>
-                        </div>
-                    </div>
+                <div v-if="isPublished && !isResearchGroupMember" class="px-5 pt-2 pb-5">
+                    <v-card class="py-4 px-5 elevation-0">
+                        <v-layout id="reviews" class="py-2" row>
+                            <v-flex shrink align-self-center pr-5>
+                                <img src="/static/add-review-icon.png" />
+                            </v-flex>
+                            <v-flex grow align-self-center pl-5>
+                                <div class="pb-3">
+                                    <div v-if="!contentReviewsList.length" class="pb-1 subheading half-bold">There are no reviews for this material yet</div>
+                                    <div v-if="userHasExpertise && !userHasReview">You will get ECI in <span class="body-2">{{userRelatedExpertise.map(exp => exp.discipline_name).join(", ")}}</span> for your contribution to this project</div>
+                                    <div v-else-if="userHasExpertise && userHasReview" class="pb-1 subheading half-bold">You have reviewed this material already</div>
+                                    <div v-else-if="!userHasExpertise">Users with expertise in <span class="body-2">{{research.disciplines.map(d => d.name).join(", ")}}</span> can review this project only</div>
+                                </div>
+                                <div style="width: 200px">
+                                    <v-btn :to="{ 
+                                            name: 'ResearchContentAddReview', 
+                                            params: {
+                                                group_permlink: decodeURIComponent(research.group_permlink),
+                                                research_permlink: decodeURIComponent(research.permlink),
+                                                content_permlink: decodeURIComponent(content.permlink),
+                                            }}" 
+                                            :disabled="!isCreatingReviewAvailable" block color="primary" class="ma-0">
+                                        Add review
+                                    </v-btn>
+                                </div>
+                            </v-flex>
+                        </v-layout>
+                    </v-card>
                 </div>
                 <!-- END Research Content Reviews section -->
 
                 <!-- START Research Content References section -->
-                <div v-if="isInProgress && isDarContent">
+                <div v-if="isInProgress && isDarContent" class="px-5 py-2">
                     <internal-references-picker 
                         :currentResearchId="research.id"
                         :preselected="contentRef.references.slice()" 
@@ -213,14 +217,10 @@
                 userPersonalGroup: 'auth/userPersonalGroup'
             }),
             isPersonalGroup() {
-                return this.research 
-                    ? this.research.research_group_id == this.userPersonalGroup.id 
-                    : false;
+                return this.research.research_group_id == this.userPersonalGroup.id;
             },
             isResearchGroupMember() {
-                return this.research != null 
-                    ? this.$store.getters['auth/userIsResearchGroupMember'](this.research.research_group_id) 
-                    : false
+                return this.$store.getters['auth/userIsResearchGroupMember'](this.research.research_group_id);
             },
             isFilePackageContent() {
                 return this.contentRef && (this.contentRef.type === 'package' || this.contentRef.type === 'file' /* legacy*/);
@@ -241,13 +241,17 @@
                 return this.proposeContent.title && this.proposeContent.type && this.proposeContent.authors.length;
             },
             userHasExpertise() {
-                return this.userExperise != null && this.research != null
-                    ?  this.userExperise.some(exp => this.research.disciplines.some(d => d.id == exp.discipline_id))
-                    : false
+                return this.userExperise.some(exp => this.research.disciplines.some(d => d.id == exp.discipline_id));
+            },
+            userHasReview() {
+                return this.contentReviewsList.some(r => r.author.account.name === this.user.username);
             },
             isCreatingReviewAvailable() {
                 const userHasReview = this.contentReviewsList.some(r => r.author.account.name === this.user.username)
-                return !this.isResearchGroupMember && !userHasReview && this.userHasExpertise && this.isPublished
+                return !this.isResearchGroupMember && !userHasReview && this.userHasExpertise && this.isPublished;
+            },
+            userRelatedExpertise() {
+                return this.userExperise.filter(exp => this.research.disciplines.some(d => d.id == exp.discipline_id))
             }
         },
         
@@ -399,13 +403,5 @@
 </script>
 
 <style lang="less" scoped>
-    .reviews-container {
-        margin: 5%;
-    }
-    .no-reviews-container {
-        margin: auto;
-        width: 50%;
-        margin-top: 5%;
-        margin-bottom: 5%;
-    }
+
 </style>

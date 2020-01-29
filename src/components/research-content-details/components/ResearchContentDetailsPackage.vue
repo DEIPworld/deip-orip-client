@@ -1,5 +1,5 @@
 <template>
-  <div class="c-p-10">
+  <div>
     <v-layout row wrap>
 			<v-flex xs8>
 				<div class="title c-pb-10">{{contentRef.title}}</div>
@@ -58,7 +58,7 @@
 			</v-flex>
         <v-flex xs12>
 					<!-- START Research Content Reviews section -->
-					<div class="c-pt-5 sidebar-fullwidth"><v-divider></v-divider></div>
+					<div class="pt-5 sidebar-fullwidth"><v-divider></v-divider></div>
 					<!-- END Research Content Reviews section -->
 			</v-flex>
     </v-layout>
