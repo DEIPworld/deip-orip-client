@@ -63,9 +63,11 @@
             </td>
             <td>
               <router-link
+                v-if="getHistoryRecordRouteParams(props.item)"
                 class="a"
                 :to="getHistoryRecordRouteParams(props.item)"
               >{{props.item.meta.title}}</router-link>
+              <template v-else>{{props.item.meta.title}}</template>
             </td>
             <td class="text-xs-center">{{ moment(props.item.timestamp).format('D MMM YYYY') }}</td>
             <td class="text-xs-center">{{ props.item.delta }}</td>
@@ -135,6 +137,7 @@
           actionsColorMap: {
             'content': '#5ABAD1',
             'review': '#161F63',
+            'init': '#8DDAB3',
           },
           pagination: {
             page: 1,
@@ -190,14 +193,15 @@
               }
             };
           default:
-            return { name: 'NoAccessPage' };
+            return null;
         }
       },
       loadExpertiseHistoryDetailsPage() {
         const { page, rowsPerPage: perPage } = this.historyTable.pagination;
         this.historyTable.loading = true;
         const detailsPromises = [];
-        const pageItems = this.history.slice((page - 1) * perPage, page * perPage);
+        const pageItems = [...this.history].reverse()
+          .slice((page - 1) * perPage, page * perPage);
         pageItems.forEach((pageItem, index) => {
           let detailsPromise;
           switch (pageItem.action) {
@@ -206,6 +210,9 @@
               break;
             case 'review':
               detailsPromise = loadReviewDetails(pageItem.actionObjectId);
+              break;
+            case 'init':
+              detailsPromise = Promise.resolve({ title: `Initial value` });
               break;
             default:
               detailsPromise = Promise.resolve({ title: `OBJ_ID: ${pageItem.actionObjectId}` })
