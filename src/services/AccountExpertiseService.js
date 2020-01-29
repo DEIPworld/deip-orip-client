@@ -3,6 +3,7 @@ import deipRpc from '@deip/deip-oa-rpc-client';
 const ACTIONS_MAP = {
   1: 'content',
   2: 'review',
+  3: 'init'
 };
 
 const mapHistoryElement = (elem) => {
@@ -16,6 +17,10 @@ const mapHistoryElement = (elem) => {
     actionObjectId: source.action_object_id,
     timestamp: source.timestamp * 1000,
   };
+
+  if (!mappedElem.action) {
+    throw new Error('Unsupported action found');
+  }
 
   return mappedElem;
 };
