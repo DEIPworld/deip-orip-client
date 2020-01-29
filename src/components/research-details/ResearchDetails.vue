@@ -346,7 +346,7 @@
                       <v-flex
                         lg2
                         class="text-capitalize bold"
-                      >{{getContentType(content.content_type).text}}</v-flex>
+                      >{{getResearchContentType(content.content_type).text}}</v-flex>
                       <v-flex lg9 class="bold">
                         <router-link
                           class="a"
@@ -527,7 +527,7 @@
                       <span class="bold">{{totalReviewsScore}}</span>
                       <v-tooltip bottom>
                         <v-icon slot="activator" small>help</v-icon>
-                        <span>Total score is the result of these 3 scores which has been rounded to the nearest whole value.</span>
+                        <span>Total score is the result of these 3 scores which has been rounded to the nearest whole number.</span>
                       </v-tooltip>
                     </div>
                   </v-layout>
@@ -583,21 +583,8 @@
                       <v-flex lg4>
                         <v-layout column fill-height justify-space-between pl-4>
                           <div>
-                            <div class="bold">Approve bar</div>
-                            <div class="py-2">
-                              <v-layout row justify-space-between align-center class="mb-2">
-                                <span class="pr-2">Novelty:</span>
-                                <squared-rating readonly v-model="review.ratings.novelty" />
-                              </v-layout>
-                              <v-layout row justify-space-between align-center class="mb-2">
-                                <span class="pr-2">Technical Quality:</span>
-                                <squared-rating readonly v-model="review.ratings.technicalQuality" />
-                              </v-layout>
-                              <v-layout row justify-space-between align-center>
-                                <span class="pr-2">Methodology:</span>
-                                <squared-rating readonly v-model="review.ratings.methodology" />
-                              </v-layout>
-                            </div>
+                            <div class="bold">Assessment</div>
+                            <review-assessment v-model="review.ratings" :researchContentType="review.researchContent.content_type"></review-assessment>
                           </div>
                           <div class="grey--text text-xs-right pt-2">
                             <v-icon small>event</v-icon>
@@ -879,7 +866,7 @@ import bookmarksService from "@/services/http/bookmarks";
 import contentHttpService from "@/services/http/content";
 import joinRequestsService from "@/services/http/joinRequests";
 import reviewRequestsService from "@/services/http/reviewRequests";
-import { getContentType } from "@/services/ResearchService";
+import { getResearchContentType } from "@/services/ResearchService";
 
 // import references from './references.json';
 // import timeline from './timeline.json';
@@ -1739,7 +1726,7 @@ export default {
       });
     },
 
-    getContentType
+    getResearchContentType
   },
 
   created() {

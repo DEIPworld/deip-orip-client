@@ -1,49 +1,38 @@
 <template>
-  <div class="squared-rating">
-    <div
-      v-for="i in MAX_VALUE" :key="i"
-      :class="{
-        'point': true,
-        'point--readonly': readonly
-      }"
-      :style="{
-        backgroundColor: getColor(i)
-      }"
+  <div class="review-assessment-squared-rating">
+    <div v-for="i in maxValue" :key="i" 
+      :class="{ 'point': true, 'point--readonly': readonly }"
+      :style="{ backgroundColor: getColor(i) }"
       @click="!readonly && onPointClick(i)"
     />
   </div>
 </template>
 
 <script>
-const MAX_VALUE = 5;
 
 export default {
-  name: "SquaredRating",
+  name: "ReviewAssessmentSquaredRating",
   props: {
-    readonly: { type: Boolean, required: false, default: false },
-    value: {
-      type: Number,
-      required: false,
-      default: 0,
-      validator(value) {
-        return value >=0 && value <= MAX_VALUE;
-      },
-    }
+    readonly: { type: Boolean, required: false, default: true },
+    maxValue: { type: Number, required: false, default: 5 },
+    value: { type: Number, required: false, default: 0 }
   },
   data() {
     return {
-      defaultColor: '#E0E0E0',
-
-      rating: this.value,
-      MAX_VALUE,
+      rating: this.value
     };
   },
   methods: {
-    getColor(pointIndex) {
-      if (pointIndex > this.rating) {
-        return this.defaultColor;
-      }
+    
+    validate() {
+      return this.value >= 0 && this.value <= this.maxValue;
+    },
 
+    getColor(pointIndex) {
+      const defaultColor = '#E0E0E0';
+      if (pointIndex > this.rating) {
+        return defaultColor;
+      }
       switch (this.rating) {
         case 1:
           return '#F44336';
@@ -56,19 +45,22 @@ export default {
         case 5:
           return '#43A047';
         default:
-          return this.defaultColor;
+          return defaultColor;
       }
     },
+
     onPointClick(ratingValue) {
-      this.rating = ratingValue;
-      this.$emit('input', ratingValue);
+      if (this.validate()) {
+        this.rating = ratingValue;
+        this.$emit('input', ratingValue);
+      }
     }
-  },
+  }
 };
 </script>
 
 <style lang="less" scoped>
-  .squared-rating {
+  .review-assessment-squared-rating {
     display: flex;
     .point {
       display: inline-flex;

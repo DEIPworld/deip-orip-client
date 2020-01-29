@@ -78,7 +78,10 @@ const getters = {
     },
 
     reviewsList: (state, getters) => {
-        return state.reviewsList;
+        return state.reviewsList.map((review, i) => {
+            let researchContent = state.contentList.find(content => content.id == review.research_content_id)
+            return { ...review, researchContent };
+        });
     },
 
     disciplinesList: (state, getters) => {

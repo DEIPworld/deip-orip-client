@@ -112,7 +112,7 @@
                     <v-expansion-panel-content v-for="(content, index) in contentList" :key="index">
                         <div slot="header">
                             <div v-on:click.stop>
-                                <span class="bold">{{getContentType(content.content_type).text}}</span>
+                                <span class="bold">{{getResearchContentType(content.content_type).text}}</span>
                                 <span class="bold c-pl-4"> 
                                     <router-link class="a" 
                                         :to="{
@@ -288,7 +288,7 @@
 
     import { mapGetters } from 'vuex'
     import contentHttpService from './../../../services/http/content'
-    import { getContentType } from './../../../services/ResearchService'
+    import { getResearchContentType } from './../../../services/ResearchService'
 
     export default {
         name: "ResearchDetailsBody",
@@ -436,7 +436,7 @@
                     .map(m => this.$options.filters.fullname(m))
                     .join("  ·  ");
             },
-            getContentType
+            getResearchContentType
         }
     };
 </script>

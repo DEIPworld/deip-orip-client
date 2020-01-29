@@ -37,7 +37,7 @@
                     <div>
                         <div v-for="(tvo, i) in disciplines" class="grey--text half-bold" :key="'discipline-' + i">
                             <span class="pr-2">
-                                <span>{{ tvo.disciplineName }}:</span>
+                                <span>{{ tvo.disciplineName }}</span>
                             </span>
                         </div>
                     </div>
@@ -46,18 +46,7 @@
             
             <v-flex xs4 px-2>
                 <v-layout align-end column class="">
-                <v-layout row justify-space-between align-center class="pb-2 full-width">
-                    <div class="text-xs-left">Novelty:</div>
-                    <squared-rating class="pl-4" readonly v-model="_review.ratings.novelty" />
-                </v-layout>
-                <v-layout row justify-space-between align-center class="pb-2 full-width">
-                    <div class="text-xs-left">Technical Quality:</div>
-                    <squared-rating class="pl-4" readonly v-model="_review.ratings.technicalQuality" />
-                </v-layout>
-                <v-layout row justify-space-between align-center class="full-width">
-                    <div class="text-xs-left">Methodology:</div>
-                    <squared-rating class="pl-4" readonly v-model="_review.ratings.methodology" />
-                </v-layout>
+                    <review-assessment v-model="_review.ratings" :researchContentType="researchContentType"></review-assessment>
                 </v-layout>
             </v-flex>
         </v-layout>
@@ -70,9 +59,10 @@
     import deipRpc from '@deip/deip-oa-rpc-client';
 
     export default {
-        name: "ReviewListItem",
+        name: "ReviewTile",
         props: {
-            review: { required: true }
+            review: { required: true },
+            researchContentType: { required: true }
         },
         computed: {
             ...mapGetters({

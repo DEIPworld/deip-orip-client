@@ -10,15 +10,9 @@
                 </v-btn>
             </div>
         </div>
-        <v-layout row justify-space-between align-center class="my-2 py-2">
-          Novelty:&nbsp;<squared-rating readonly v-model="reviewRatings.novelty" />
-        </v-layout>
-        <v-layout row justify-space-between align-center class="my-2 py-2">
-          Technical Quality:&nbsp;<squared-rating readonly v-model="reviewRatings.technicalQuality" />
-        </v-layout>
-        <v-layout row justify-space-between align-center class="my-2 py-2">
-          Methodology:&nbsp;<squared-rating readonly v-model="reviewRatings.methodology" />
-        </v-layout>
+        <div>
+            <review-assessment v-model="reviewRatings" :researchContentType="content.content_type"></review-assessment>
+        </div>
     </div>
 </template>
 
@@ -33,7 +27,8 @@
         data() {
             return {
                 isReviewVoting: false,
-                votingDisabled: false
+                votingDisabled: false,
+                reviewRatings: {}
             };
         },
 
@@ -42,7 +37,8 @@
                 user: 'auth/user',
                 userExperise: 'auth/userExperise',
                 research: 'rcd/research',
-                contentReviewsList: 'rcd/contentReviewsList'
+                content: 'rcd/content',
+                contentReviewsList: 'rcd/contentReviewsList',
             }),
             review() {
                 return this.contentReviewsList.find(r => r.id == this.$route.params.review_id)
@@ -121,7 +117,6 @@
                 });
             }
         },
-
         created() {
           this.reviewRatings = this.$options.filters.reviewRatings(this.review.content);
         }

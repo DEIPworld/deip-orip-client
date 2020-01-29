@@ -39,7 +39,7 @@
                         <div class="c-pt-2 title">Reviews: {{ contentReviewsList.length }}</div>
 
                         <div class="py-2">
-                            <review-list-item class="my-4" v-for="(review, i) in contentReviewsList" :review="review" :key="i"></review-list-item>
+                            <review-tile class="my-4" v-for="(review, i) in contentReviewsList" :review="review" :key="`review-${i}`" :researchContentType="content.content_type"></review-tile>
                         </div>
                     </div>
                 </div>
@@ -53,7 +53,7 @@
                     <div class="sidebar-fullwidth"><v-divider></v-divider></div>
 
                     <div id="reviews" class="subheading text-align-center no-reviews-container">
-                        <span>There are no reviews for this {{ getContentType(content.content_type).text }} yet.</span>
+                        <span>There are no reviews for this {{ getResearchContentType(content.content_type).text }} yet.</span>
                         
                         <div>
                             <span v-if="isCreatingReviewAvailable">
@@ -179,7 +179,7 @@
 <script>
     import { mapGetters } from 'vuex';
     import deipRpc from '@deip/deip-oa-rpc-client';
-    import { contentTypesList, getContentType } from './../../services/ResearchService';
+    import { contentTypesList, getResearchContentType } from './../../services/ResearchService';
     import { createContentProposal } from './../../services/ProposalService';
     import contentHttpService from './../../services/http/content';
     import searchHttpService from './../../services/http/search'
@@ -389,7 +389,7 @@
                     this.$store.dispatch('rcd/setDraftReferences', refs);
                 }
             },
-            getContentType
+            getResearchContentType
         },
 
         created() {
