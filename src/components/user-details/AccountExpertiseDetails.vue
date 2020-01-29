@@ -16,10 +16,10 @@
       <v-flex shrink>
         <v-select
           class="my-0 py-0"
-          v-model="selectedDisciplineId"
+          v-model="selectedExpertiseId"
           :items="expertise"
           item-text="discipline_name"
-          item-value="discipline_id"
+          item-value="id"
           solo
           @change="onDisciplineChanged()"
           :disabled="isHistoryLoading"
@@ -37,6 +37,37 @@
     <div v-else-if="this.history.length">
       <div class="pb-3">
         <div class="bold title">Overview</div>
+        <v-layout row class="mt-3">
+          <v-flex xs4 class="px-3">
+            <GChart
+              type="PieChart"
+              :settings="{ packages: ['corechart'] }"
+              :data="overview.contributionsAllocation"
+              :options="contributionsAllocationChartoptions"
+            />
+          </v-flex>
+          <v-divider vertical inset />
+          <v-flex class="px-3">
+            <v-layout column align-center justify-center full-height>
+              <div class="title grey--text">Expertise Contribution Index</div>
+              <div class="subheading mt-2">{{ selectedExpertise.amount }}</div>
+            </v-layout>
+          </v-flex>
+          <v-divider vertical inset />
+          <v-flex class="px-3">
+            <v-layout column align-center justify-center full-height>
+              <div class="title grey--text">Contributions</div>
+              <div class="subheading mt-2">{{ overview.contributions }}</div>
+            </v-layout>
+          </v-flex>
+          <v-divider vertical inset />
+          <v-flex xs3 class="px-3 headline primary--text">
+            <v-layout column align-center justify-center full-height>
+              <div>TOP <b>{{ overview.percentile }}</b>%</div>
+              <div>in {{ selectedExpertise.discipline_name }}</div>
+            </v-layout>
+          </v-flex>
+        </v-layout>
       </div>
       <div class="py-3">
         <div class="bold title">Chart</div>
@@ -86,6 +117,7 @@
   import deipRpc from '@deip/deip-oa-rpc-client';
   import { mapGetters } from 'vuex';
   import { getExpertiseHistory } from '@/services/AccountExpertiseService';
+  import percentiles from './percentiles.json';
 
   const loadContentDetails = (contentId) => {
     const contentDetails = {};
@@ -116,12 +148,14 @@
       })
   };
 
+  const sortedPercentilesData = percentiles.sort((a, b) => a.eciBound - b.eciBound);
+
   export default {
     name: "AccountExpertiseDetails",
 
     data() {
       return {
-        selectedDisciplineId: null,
+        selectedExpertiseId: null,
 
         history: [],
         isHistoryLoading: false,
@@ -147,6 +181,25 @@
           totalItems: 0,
           loading: false,
         },
+
+        contributionsAllocationChartoptions: {
+          title: "",
+          legend: { position: 'right', alignment: 'center' },
+          colors: ['#3984B6', '#161F63', '#B7DFCB', '#5ABAD1'],
+          chartArea: {
+            right: 0,
+            width: "100%",
+            height: "100%"
+          },
+
+          width: "100%",
+          height: "100%",
+          pieSliceTextStyle: {
+            color: "#ffffff",
+            fontSize: 12
+          },
+          pieHole: 0.6
+        },
       };
     },
 
@@ -155,6 +208,41 @@
         userInfo: 'userDetails/userInfo',
         expertise: 'userDetails/expertise',
       }),
+      selectedExpertise() {
+        return this.expertise.find(e => e.id === this.selectedExpertiseId);
+      },
+      overview() {
+        let percentile;
+        const lowerBoundPercentileData = sortedPercentilesData[0];
+        if (this.selectedExpertise.amount <= lowerBoundPercentileData.eciBound) {
+          percentile = lowerBoundPercentileData.percentile;
+        } else {
+          let i = 0;
+          while (sortedPercentilesData[i].eciBound < this.selectedExpertise.amount && i < sortedPercentilesData.length) {
+            percentile = sortedPercentilesData[i].percentile;
+            i += 1;
+          }
+        }
+        let allocations = {};
+        this.history.forEach((e) => {
+          allocations[e.action] = (allocations[e.action] || 0) + 1;
+        });
+
+        return {
+          contributions: this.history.length,
+          percentile,
+          contributionsAllocation: [
+            ['Contribution Type', ''],
+            ...Object.entries(allocations).map((e) => {
+              const contributionType = e[0];
+              return [
+                `${contributionType[0].toUpperCase()}${contributionType.slice(1)}`,
+                e[1]
+              ];
+            })
+          ],
+        };
+      }
     },
 
     watch: {
@@ -252,19 +340,20 @@
           });
       },
       onDisciplineChanged() {
-        this.loadExpertiseHistory(this.selectedDisciplineId);
+        this.loadExpertiseHistory(this.selectedExpertise.discipline_id);
       }
     },
 
     created() {
       const disciplineId = +this.$route.query.discipline_id;
-      if (this.expertise.find(e => e.discipline_id === disciplineId)) {
-        this.selectedDisciplineId = disciplineId;
+      const expertiseIndex = this.expertise.findIndex(e => e.discipline_id === disciplineId);
+      if (expertiseIndex > -1) {
+        this.selectedExpertiseId = this.expertise[expertiseIndex].id;
       } else if (this.expertise.length) {
-        this.selectedDisciplineId = this.expertise[0].discipline_id;
+        this.selectedExpertiseId = this.expertise[0].id;
       }
-      if (this.selectedDisciplineId !== null) {
-        this.loadExpertiseHistory(this.selectedDisciplineId)
+      if (this.selectedExpertiseId !== null) {
+        this.loadExpertiseHistory(this.selectedExpertise.discipline_id)
       }
     }
   };
