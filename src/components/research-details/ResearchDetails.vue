@@ -278,13 +278,13 @@
                 <v-icon large color="grey lighten-2">mdi-flag</v-icon>
               </v-layout>
             </v-flex>
-            <v-flex lg6>
+            <v-flex lg7>
               <v-layout wrap>
-                <v-flex lg12 class="rd-block-header">Project Timeline</v-flex>
-                <v-flex lg12 class="pt-3">{{selectedTimelineItem.description}}</v-flex>
+                <v-flex lg12 class="rd-block-header pb-1">Project Timeline</v-flex>
+                <v-flex lg12 class="milestone-description pt-3">{{selectedTimelineItem.description}}</v-flex>
               </v-layout>
             </v-flex>
-            <v-flex lg5>
+            <v-flex lg4>
               <v-layout justify-center>
                 <ul
                   :class="{
@@ -2006,4 +2006,9 @@ export default {
     text-decoration: underline;
   }
 }
+.milestone-description {
+  max-height: 500px; 
+  overflow: scroll
+}
+
 </style>
