@@ -101,7 +101,7 @@ async function setUser() {
     authService.signIn({ username: username, secretSigHex: secretSigHex })
       .then((response) => {
         setAccessToken(response.jwtToken, privateKey);
-        window.location.replace(`${window.location.href}`);
+        location.reload();
       })
   }
 }
