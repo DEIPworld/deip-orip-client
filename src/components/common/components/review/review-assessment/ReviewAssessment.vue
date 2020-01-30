@@ -2,7 +2,7 @@
   <div>
     <v-layout v-for="(criteria, i) in criterias" :key="`review-criteria-${i}`" row justify-space-between align-center class="py-2 full-width" >
       <div>{{criteria.title}}:</div>
-      <review-assessment-squared-rating class="pl-4" v-model="form[criteria.name]" :readonly="readonly" />
+      <review-assessment-squared-rating class="pl-4" v-model="form[criteria.name]" :readonly="readonly" :maxValue="criteria.max" />
     </v-layout>
   </div>
 </template>

@@ -72,7 +72,6 @@ export default {
 
     isReviewPublishingDisabled() {
       let criterias = reviewsService.getAssessmentCriteria(this.content.content_type);
-      debugger
       return criterias.some(criteria => {
         return this.assessmentCriteria[criteria.name] == undefined || this.assessmentCriteria[criteria.name] == 0;
       })

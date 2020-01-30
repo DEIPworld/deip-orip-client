@@ -8,19 +8,19 @@ const ASSESSMENT_CRITERIAS = {}
 ASSESSMENT_CRITERIAS[ARTICLE_CODE] = [
   { name: "impact", title: "Impact", max: 5 },
   { name: "novelty", title: "Novelty", max: 5 },
-  { name: "methodology", title: "Methodology", max: 5 },
+  { name: "methodology", title: "Methodology", max: 5 }
 ]
 
 ASSESSMENT_CRITERIAS[DATA_CODE] = [
   { name: "rationality", title: "Rationality", max: 5 },
   { name: "technical_quality", title: "Technical Quality", max: 5 },
-  { name: "replication", title: "Replication", max: 5 },
+  { name: "replication", title: "Replication", max: 5 }
 ]
 
 ASSESSMENT_CRITERIAS["default"] = [
   { name: "novelty", title: "Novelty", max: 5 },
   { name: "technical_quality", title: "Technical Quality", max: 5 },
-  { name: "methodology", title: "Methodology", max: 5 },
+  { name: "methodology", title: "Methodology", max: 5 }
 ]
 
 const getAssessmentCriteria = (typeCode) => {

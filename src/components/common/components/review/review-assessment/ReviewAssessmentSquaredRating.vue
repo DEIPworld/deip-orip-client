@@ -1,9 +1,9 @@
 <template>
   <div class="review-assessment-squared-rating">
-    <div v-for="i in maxValue" :key="i" 
+    <div v-for="val in maxValue" :key="val" 
       :class="{ 'point': true, 'point--readonly': readonly }"
-      :style="{ backgroundColor: getColor(i) }"
-      @click="!readonly && onPointClick(i)"
+      :style="{ backgroundColor: getColor(val) }"
+      @click="!readonly && onPointClick(val)"
     />
   </div>
 </template>
@@ -24,30 +24,40 @@ export default {
   },
   methods: {
     
-    getColor(pointIndex) {
-      const defaultColor = '#E0E0E0';
-      if (pointIndex > this.rating) {
-        return defaultColor;
+    getColor(val) {
+      let max = this.maxValue;
+      let avg = max / 2;
+
+      let neutral = "#E0E0E0";
+
+      let veryLow = "#F44336";
+      let low = "#F49D36";
+      let moderate = "#F2C94C";
+      let high = "#A1CF55";
+      let veryHight = "#43A047";
+
+      if (val > this.rating) {
+        return neutral;
       }
-      switch (this.rating) {
-        case 1:
-          return '#F44336';
-        case 2:
-          return '#F49D36';
-        case 3:
-          return '#F2C94C';
-        case 4:
-          return '#A1CF55';
-        case 5:
-          return '#43A047';
-        default:
-          return defaultColor;
+
+      if (this.rating == 1) {
+        return veryLow;
+      } else if (this.rating > 1 && this.rating < Math.ceil(avg)) {
+        return low;
+      } else if (this.rating == Math.ceil(avg)) {
+        return moderate;
+      } else if (this.rating > Math.ceil(avg) && this.rating < max) {
+        return high;
+      } else if (this.rating == max) {
+        return veryHight;
+      } else {
+        return neutral;
       }
     },
 
-    onPointClick(ratingValue) {
-      this.rating = ratingValue;
-      this.$emit('input', ratingValue);
+    onPointClick(val) {
+      this.rating = val;
+      this.$emit('input', val);
     }
   }
 };
