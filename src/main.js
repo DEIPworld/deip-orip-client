@@ -75,6 +75,8 @@ async function setGlobalThemeSettings() {
     }
   }
 
+  document.title = "Civic Platform";
+
   Vue.use(Vuetify, {
     theme: {
       primary: themeSettings['primary-color'],
