@@ -117,7 +117,7 @@
   import deipRpc from '@deip/deip-oa-rpc-client';
   import { mapGetters } from 'vuex';
   import { getExpertiseHistory } from '@/services/AccountExpertiseService';
-  import percentiles from './percentiles.json';
+  import { getEciPercentile } from '@/utils/user';
 
   const loadContentDetails = (contentId) => {
     const contentDetails = {};
@@ -147,8 +147,6 @@
         };
       })
   };
-
-  const sortedPercentilesData = percentiles.sort((a, b) => a.eciBound - b.eciBound);
 
   export default {
     name: "AccountExpertiseDetails",
@@ -212,17 +210,6 @@
         return this.expertise.find(e => e.id === this.selectedExpertiseId);
       },
       overview() {
-        let percentile;
-        const lowerBoundPercentileData = sortedPercentilesData[0];
-        if (this.selectedExpertise.amount <= lowerBoundPercentileData.eciBound) {
-          percentile = lowerBoundPercentileData.percentile;
-        } else {
-          let i = 0;
-          while (sortedPercentilesData[i].eciBound < this.selectedExpertise.amount && i < sortedPercentilesData.length) {
-            percentile = sortedPercentilesData[i].percentile;
-            i += 1;
-          }
-        }
         let allocations = {};
         this.history.forEach((e) => {
           allocations[e.action] = (allocations[e.action] || 0) + 1;
@@ -230,7 +217,7 @@
 
         return {
           contributions: this.history.length,
-          percentile,
+          percentile: getEciPercentile(this.selectedExpertise.amount),
           contributionsAllocation: [
             ['Contribution Type', ''],
             ...Object.entries(allocations).map((e) => {

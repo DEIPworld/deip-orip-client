@@ -141,7 +141,7 @@
               class="expertise pa-2 my-2"
             >
               <v-layout justify-space-between class="py-1">
-                <div class="blue--text text--accent-4 bold">TOP <span class="font-weight-bold">{{i + 1}}</span>%</div>
+                <div class="blue--text text--accent-4 bold">TOP <span class="font-weight-bold">{{getEciPercentile(item.amount)}}</span>%</div>
                 <div class="grey--text">ECI {{ item.amount }}</div>
               </v-layout>
               <v-divider class="expertise__divider" />
@@ -309,9 +309,10 @@
 
 <script>
     import { mapGetters } from 'vuex';
-    import usersService from './../../../services/http/users'
-    import * as bankCardsService from './../../../utils/bankCard'
-    import { approveInvite, rejectInvite } from './../../../services/InvitesService'
+    import usersService from '@/services/http/users'
+    import * as bankCardsService from '@/utils/bankCard'
+    import { approveInvite, rejectInvite } from '@/services/InvitesService'
+    import { getEciPercentile } from '@/utils/user';
     import moment from 'moment';
     import deipRpc from '@deip/deip-oa-rpc-client';
 
@@ -490,7 +491,8 @@
             },
             denyReviewRequest(reviewRequestId) {
               return this.$store.dispatch('userDetails/denyReviewRequest', { reviewRequestId });
-            }
+            },
+            getEciPercentile,
         },
         created() {
         }

@@ -1,6 +1,9 @@
 import usersService from './../services/http/users'
 import deipRpc from '@deip/deip-oa-rpc-client';
 
+import percentiles from './percentiles.json';
+const sortedPercentilesData = percentiles.sort((a, b) => a.eciBound - b.eciBound);
+
 export function getEnrichedProfiles(usernames) {
     const profilesPromise = usersService.getUsersProfiles(usernames)
         .then((profiles) => {
@@ -30,4 +33,19 @@ export function getEnrichedProfiles(usernames) {
             }
             return results;
         })
+}
+
+export function getEciPercentile(eciValue) {
+  let percentile;
+  const lowerBoundPercentileData = sortedPercentilesData[0];
+  if (eciValue <= lowerBoundPercentileData.eciBound) {
+    percentile = lowerBoundPercentileData.percentile;
+  } else {
+    let i = 0;
+    while (sortedPercentilesData[i].eciBound < eciValue && i < sortedPercentilesData.length) {
+      percentile = sortedPercentilesData[i].percentile;
+      i += 1;
+    }
+  }
+  return percentile;
 }
