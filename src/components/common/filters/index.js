@@ -63,7 +63,7 @@ Vue.filter('researchGroupLogoSrc', function (researchGroupId, width = 360, heigh
 
 Vue.filter('tenantLogoSrc', function (tenant, width, height, noCache, ext = 'png') {
     // return `${window.env.DEIP_SERVER_URL}/public/tenants/logo/${tenant._id}?width=${width}&height=${height}&noCache=${noCache}&ext=${ext}`
-    return tenant ? `/static/tenants/${tenant._id}/logo.svg` : `/static/logo_customize.svg`;
+    return tenant ? `/static/tenants/${tenant._id}/logo.svg` : `/static/platform-earth-logo.svg`;
 });
 
 Vue.filter('tenantSymbolSrc', function (tenant, width, height, noCache, ext = 'png') {
