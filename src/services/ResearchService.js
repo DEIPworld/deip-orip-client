@@ -1,3 +1,5 @@
+import deipRpc from '@deip/deip-oa-rpc-client';
+
 export const ANNOUNCEMENT = 1;
 export const FINAL_RESULT = 2;
 export const ARTICLE = 3;
@@ -66,9 +68,42 @@ const contentTypesList = [...Object.values(contentTypesMap)].sort((a, b) => { re
 const getResearchContentType = (type) => contentTypesList.find(t => t.type == type);
 const getTopResearchesIds = () => [21, 14, 24, 7, 10, 5, 0, 6, 26, 28, 15, 23, 9, 25, 20, 12];
 
+const RESEARCH_CONTENT_ECI_SOURCES = {
+  1: 'review',
+  2: 'vote_for_review',
+  3: 'init'
+};
+
+const getResearchContentEciHistoryRecords = (researchContentId, disciplineId) => {
+
+  function mapResearchContentEciHistoryRecord(item) {
+    const source = item.op[1];
+    const record = {
+      researchContentId: source.research_content_id,
+      disciplineId: source.discipline_id,
+      newAmount: source.new_eci_amount,
+      delta: source.delta,
+      action: RESEARCH_CONTENT_ECI_SOURCES[source.action],
+      actionObjectId: source.action_object_id,
+      timestamp: source.timestamp * 1000
+    };
+    if (!record.action) {
+      throw new Error('Unsupported source found');
+    }
+    return record;
+  };
+
+  return deipRpc.api.getEciHistoryByContentAndDisciplineAsync(researchContentId, disciplineId)
+    .then((history) => {
+      return history.map(mapResearchContentEciHistoryRecord);
+    });
+};
+
+
 export {
   contentTypesMap,
   contentTypesList,
   getResearchContentType,
-  getTopResearchesIds
+  getTopResearchesIds,
+  getResearchContentEciHistoryRecords
 }

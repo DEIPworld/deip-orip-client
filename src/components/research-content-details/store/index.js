@@ -7,6 +7,7 @@ import {
     findBlocksByRange, getDynamicGlobalProperties, getConfig, 
     getBlock, getTransaction, getTransactionHex } from './../../../utils/blockchain';
 import { CREATE_RESEARCH_MATERIAL } from './../../../services/ProposalService';
+import * as researchService from './../../../services/ResearchService';
     
 var texture = undefined;
 var reviewEditor = undefined;
@@ -22,7 +23,7 @@ const state = {
     contentReviewsList: [],
     expertsList: [],
     contentProposal: undefined,
-
+    eciHistoryByDiscipline: {},
     contentRef: null,
 
     isLoadingResearchContentVotes: undefined,
@@ -111,6 +112,70 @@ const getters = {
             map[research_content_id][discipline_id] = total_weight;
         }
         return map;
+    },
+
+    eciHistoryByDiscipline: (state, getters) => {
+        return (disciplineId) => {
+            let records = state.eciHistoryByDiscipline[disciplineId];
+            if (!records) {
+                return null;
+            }
+
+            let researchGroup = state.group;
+            let research = state.research;
+            let researchContent = state.content;
+
+            return records.map(record => {
+
+                if (record.action == 'review') {
+                    let review = state.contentReviewsList.find(review => review.id == record.actionObjectId);
+
+                    let parser = new DOMParser();
+                    let html = parser.parseFromString(review.content, 'text/html');
+                    let allElements = Array.from(html.all);
+                    let bodyIdx = allElements.findIndex(el => el.tagName == 'BODY');
+                    let headerEl = allElements[bodyIdx + 1];
+                    let title = headerEl.innerHTML;
+
+                    let link = {
+                        name: "ResearchContentReview", 
+                        params: {
+                            research_group_permlink: decodeURIComponent(researchGroup.permlink),
+                            research_permlink: decodeURIComponent(research.permlink),
+                            content_permlink: decodeURIComponent(researchContent.permlink),
+                            review_id: review.id
+                        }
+                    }
+                    return { ...record, meta: { title, review, link } };
+                    
+                } else if (record.action == 'vote_for_review') {
+                    let reviewVotes = [].concat.apply([], state.contentReviewsList.map(review => review.votes));
+                    let reviewVote = reviewVotes.find(vote => vote.id == record.actionObjectId);
+                    let review = state.contentReviewsList.find(review => review.id == reviewVote.review_id);
+
+                    let parser = new DOMParser();
+                    let html = parser.parseFromString(review.content, 'text/html');
+                    let allElements = Array.from(html.all);
+                    let bodyIdx = allElements.findIndex(el => el.tagName == 'BODY');
+                    let headerEl = allElements[bodyIdx + 1];
+                    let title = headerEl.innerHTML;
+
+                    let link = {
+                        name: "ResearchContentReview", 
+                        params: {
+                            research_group_permlink: decodeURIComponent(researchGroup.permlink),
+                            research_permlink: decodeURIComponent(research.permlink),
+                            content_permlink: decodeURIComponent(researchContent.permlink),
+                            review_id: review.id
+                        }
+                    }
+                    return { ...record, meta: { title, review, reviewVote, link } };
+
+                } else if (record.action == 'init') {
+                    return { ...record, meta: { title: researchContent.title, researchContent, link: null } };
+                }
+            });
+        }
     }
 }
 
@@ -155,8 +220,12 @@ const actions = {
                             const contentVotesLoad = new Promise((resolve, reject) => {
                                 dispatch('loadResearchContentVotes', { researchId: contentObj.research_id, notify: resolve })
                             });
+
+                            const researchGroupDetailsLoad = new Promise((resolve, reject) => {
+                                dispatch('loadResearchGroupDetails', { group_permlink, notify: resolve })
+                            });
         
-                            return Promise.all([contentRefLoad, contentReviewsLoad, contentVotesLoad])
+                            return Promise.all([contentRefLoad, contentReviewsLoad, contentVotesLoad, researchGroupDetailsLoad ])
                         }, (err) => {console.log(err)})
                         .finally(() => {
                             commit('SET_RESEARCH_CONTENT_DETAILS_LOADING_STATE', false);
@@ -275,11 +344,8 @@ const actions = {
         deipRpc.api.getReviewsByContentAsync(researchContentId)
             .then(items => {
                 reviews.push(...items);
-
                 return Promise.all([
-                    Promise.all(
-                        reviews.map(item => deipRpc.api.getReviewVotesByReviewIdAsync(item.id))
-                    ),
+                    Promise.all(reviews.map(item => deipRpc.api.getReviewVotesByReviewIdAsync(item.id))),
                     getEnrichedProfiles(reviews.map(r => r.author))
                 ]);
             }, (err) => {console.log(err)})
@@ -315,6 +381,16 @@ const actions = {
 
     setDraftReferences({ state, commit, dispatch }, references) {
         commit('SET_DRAFT_REFERENCES_LIST', references);
+    },
+
+    loadResearchContentEciHistoryRecords({ state, dispatch, commit }, { researchContentId, disciplineId, notify }) {
+        return researchService.getResearchContentEciHistoryRecords(researchContentId, disciplineId)
+            .then((records) => {
+                commit('SET_RESEARCH_CONTENT_ECI_HISTORY_BY_DISCIPLINE', { disciplineId, records });
+            }, (err) => { console.log(err) })
+            .finally(() => {
+                if (notify) notify();
+            })
     },
     
     async loadResearchContentMetadata({ state, commit, dispatch }, 
@@ -574,6 +650,10 @@ const mutations = {
 
     ['SET_RESEARCH_GROUP_DETAILS'](state, value) {
         Vue.set(state, 'group', value)
+    },
+
+    ['SET_RESEARCH_CONTENT_ECI_HISTORY_BY_DISCIPLINE'](state, { disciplineId, records }) {
+        Vue.set(state.eciHistoryByDiscipline, disciplineId, records)
     },
 
     ['RESET_STATE'](state) {

@@ -35,11 +35,7 @@
                     </div>
 
                     <div>
-                        <div v-for="(tvo, i) in disciplines" class="grey--text half-bold" :key="'discipline-' + i">
-                            <span class="pr-2">
-                                <span>{{ tvo.disciplineName }}</span>
-                            </span>
-                        </div>
+                        <span class="grey--text half-bold pr-2">{{ disciplines.map(d => d.disciplineName).join(", ") }}</span>
                     </div>
                 </div>
             </v-flex>

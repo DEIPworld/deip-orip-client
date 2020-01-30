@@ -82,6 +82,52 @@
                     </internal-references-picker>
                 </div>
                 <!-- END Research Content References section -->
+                <div class="px-5 py-3">
+                    <v-layout row>
+                        <v-flex grow>
+                            <div class="half-bold title">ECI History</div>
+                        </v-flex>
+                        <v-flex shrink>
+                            <v-select
+                                class="my-0 py-0"
+                                v-model="selectedDisciplineId"
+                                :items="research.disciplines"
+                                item-text="name"
+                                item-value="id"
+                                solo
+                                dense
+                                @change="selectEciDiscipline()"
+                                :disabled="eciHistoryRecordsTable.loading"
+                            ></v-select>
+                        </v-flex>
+                    </v-layout>
+
+                    <v-data-table
+                        :headers="eciHistoryRecordsTable.headers"
+                        :items="eciHistoryRecordsTable.items"
+                        class="elevation-0 mt-3"
+                        disable-initial-sort
+                        :loading="eciHistoryRecordsTable.loading"
+                        :rows-per-page-items="[5, 10]"
+                        :pagination.sync="eciHistoryRecordsTable.pagination"
+                        :total-items="eciHistoryRecordsTable.totalItems"
+                    >
+                    <template v-slot:items="props">
+                        <td>
+                            <v-chip :color="eciHistoryRecordsTable.actionsColorMap[props.item.action]" text-color="white">
+                                <span class="bold">{{ props.item.action.replace(/_/g, ' ').toUpperCase() }}</span>
+                            </v-chip>
+                        </td>
+                        <td>
+                            <router-link v-if="props.item.meta.link" class="a" :to="props.item.meta.link">{{props.item.meta.title}}</router-link>
+                            <span v-else class="body-2">{{props.item.meta.title}}</span>
+                        </td>
+                        <td class="text-xs-center">{{ moment(props.item.timestamp).format('D MMM YYYY') }}</td>
+                        <td class="text-xs-center">{{ props.item.delta }}</td>
+                        <td class="text-xs-center">{{ props.item.newAmount }}</td>
+                    </template>
+                    </v-data-table>
+                </div>
 
                 <!-- START Proposal dialog section -->
                     <v-dialog v-if="research" v-model="proposeContent.isOpen" persistent transition="scale-transition" max-width="600px">
@@ -193,7 +239,7 @@
 
         data() {
             return {
-                isSavingDraft: false,                
+                isSavingDraft: false,
                 proposeContent: {
                     title: "",
                     type: null,
@@ -201,6 +247,30 @@
                     contentTypesList: contentTypesList,
                     isOpen: false,
                     isLoading: false
+                },
+
+                selectedDisciplineId: null,
+
+                eciHistoryRecordsTable: {
+                    headers: [
+                        { text: 'Type', align: 'left', sortable: false },
+                        { text: 'Title', align: 'left', sortable: false },
+                        { text: 'Date', align: 'center', sortable: false },
+                        { text: 'ECI', align: 'center', sortable: false },
+                        { text: 'Total ECI', align: 'center', sortable: false },
+                    ],
+                    actionsColorMap: {
+                        'review': '#161F63',
+                        'vote_for_review': '#5ABAD1',
+                        'init': '#8DDAB3',
+                    },
+                    pagination: {
+                        page: 1,
+                        rowsPerPage: 5,
+                    },
+                    items: [],
+                    totalItems: 0,
+                    loading: false,
                 }
             }
         },
@@ -393,11 +463,35 @@
                     this.$store.dispatch('rcd/setDraftReferences', refs);
                 }
             },
+
+            selectEciDiscipline() {
+                let disciplineId = this.selectedDisciplineId;
+                let researchContentId = this.content.id;
+
+                this.eciHistoryRecordsTable.loading = true;
+                let cachedRecords = this.$store.getters['rcd/eciHistoryByDiscipline'](disciplineId);
+                if (cachedRecords == null) {
+                    this.$store.dispatch('rcd/loadResearchContentEciHistoryRecords', { researchContentId, disciplineId })
+                        .then(() => {
+                            let records = this.$store.getters['rcd/eciHistoryByDiscipline'](disciplineId);
+                            this.eciHistoryRecordsTable.items = records;
+                            this.eciHistoryRecordsTable.pagination.page = 1;
+                            this.eciHistoryRecordsTable.loading = false;
+                        });
+                } else {
+                    this.eciHistoryRecordsTable.items = cachedRecords;
+                    this.eciHistoryRecordsTable.pagination.page = 1;
+                    this.eciHistoryRecordsTable.loading = false;
+                }
+            },
+
             getResearchContentType
         },
 
         created() {
-
+            let discipline = this.research.disciplines[0];
+            this.selectedDisciplineId = discipline.id;
+            this.selectEciDiscipline(discipline.id);
         }
     };
 </script>
