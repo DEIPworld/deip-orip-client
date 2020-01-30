@@ -1,0 +1,400 @@
+[{
+  "percentile": 1,
+  "eciBound": 990000
+},
+{
+  "percentile": 2,
+  "eciBound": 981000
+},
+{
+  "percentile": 3,
+  "eciBound": 972000
+},
+{
+  "percentile": 4,
+  "eciBound": 963000
+},
+{
+  "percentile": 5,
+  "eciBound": 954000
+},
+{
+  "percentile": 6,
+  "eciBound": 945000
+},
+{
+  "percentile": 7,
+  "eciBound": 936000
+},
+{
+  "percentile": 8,
+  "eciBound": 927000
+},
+{
+  "percentile": 9,
+  "eciBound": 918000
+},
+{
+  "percentile": 10,
+  "eciBound": 909000
+},
+{
+  "percentile": 11,
+  "eciBound": 900000
+},
+{
+  "percentile": 12,
+  "eciBound": 891000
+},
+{
+  "percentile": 13,
+  "eciBound": 882000
+},
+{
+  "percentile": 14,
+  "eciBound": 873000
+},
+{
+  "percentile": 15,
+  "eciBound": 864000
+},
+{
+  "percentile": 16,
+  "eciBound": 855000
+},
+{
+  "percentile": 17,
+  "eciBound": 846000
+},
+{
+  "percentile": 18,
+  "eciBound": 837000
+},
+{
+  "percentile": 19,
+  "eciBound": 828000
+},
+{
+  "percentile": 20,
+  "eciBound": 819000
+},
+{
+  "percentile": 21,
+  "eciBound": 810000
+},
+{
+  "percentile": 22,
+  "eciBound": 801000
+},
+{
+  "percentile": 23,
+  "eciBound": 792000
+},
+{
+  "percentile": 24,
+  "eciBound": 783000
+},
+{
+  "percentile": 25,
+  "eciBound": 774000
+},
+{
+  "percentile": 26,
+  "eciBound": 765000
+},
+{
+  "percentile": 27,
+  "eciBound": 756000
+},
+{
+  "percentile": 28,
+  "eciBound": 747000
+},
+{
+  "percentile": 29,
+  "eciBound": 738000
+},
+{
+  "percentile": 30,
+  "eciBound": 729000
+},
+{
+  "percentile": 31,
+  "eciBound": 720000
+},
+{
+  "percentile": 32,
+  "eciBound": 711000
+},
+{
+  "percentile": 33,
+  "eciBound": 702000
+},
+{
+  "percentile": 34,
+  "eciBound": 693000
+},
+{
+  "percentile": 35,
+  "eciBound": 684000
+},
+{
+  "percentile": 36,
+  "eciBound": 675000
+},
+{
+  "percentile": 37,
+  "eciBound": 666000
+},
+{
+  "percentile": 38,
+  "eciBound": 657000
+},
+{
+  "percentile": 39,
+  "eciBound": 648000
+},
+{
+  "percentile": 40,
+  "eciBound": 639000
+},
+{
+  "percentile": 41,
+  "eciBound": 630000
+},
+{
+  "percentile": 42,
+  "eciBound": 621000
+},
+{
+  "percentile": 43,
+  "eciBound": 612000
+},
+{
+  "percentile": 44,
+  "eciBound": 603000
+},
+{
+  "percentile": 45,
+  "eciBound": 594000
+},
+{
+  "percentile": 46,
+  "eciBound": 585000
+},
+{
+  "percentile": 47,
+  "eciBound": 576000
+},
+{
+  "percentile": 48,
+  "eciBound": 567000
+},
+{
+  "percentile": 49,
+  "eciBound": 558000
+},
+{
+  "percentile": 50,
+  "eciBound": 549000
+},
+{
+  "percentile": 51,
+  "eciBound": 540000
+},
+{
+  "percentile": 52,
+  "eciBound": 531000
+},
+{
+  "percentile": 53,
+  "eciBound": 522000
+},
+{
+  "percentile": 54,
+  "eciBound": 513000
+},
+{
+  "percentile": 55,
+  "eciBound": 504000
+},
+{
+  "percentile": 56,
+  "eciBound": 495000
+},
+{
+  "percentile": 57,
+  "eciBound": 486000
+},
+{
+  "percentile": 58,
+  "eciBound": 477000
+},
+{
+  "percentile": 59,
+  "eciBound": 468000
+},
+{
+  "percentile": 60,
+  "eciBound": 459000
+},
+{
+  "percentile": 61,
+  "eciBound": 450000
+},
+{
+  "percentile": 62,
+  "eciBound": 441000
+},
+{
+  "percentile": 63,
+  "eciBound": 432000
+},
+{
+  "percentile": 64,
+  "eciBound": 423000
+},
+{
+  "percentile": 65,
+  "eciBound": 414000
+},
+{
+  "percentile": 66,
+  "eciBound": 405000
+},
+{
+  "percentile": 67,
+  "eciBound": 396000
+},
+{
+  "percentile": 68,
+  "eciBound": 387000
+},
+{
+  "percentile": 69,
+  "eciBound": 378000
+},
+{
+  "percentile": 70,
+  "eciBound": 369000
+},
+{
+  "percentile": 71,
+  "eciBound": 360000
+},
+{
+  "percentile": 72,
+  "eciBound": 351000
+},
+{
+  "percentile": 73,
+  "eciBound": 342000
+},
+{
+  "percentile": 74,
+  "eciBound": 333000
+},
+{
+  "percentile": 75,
+  "eciBound": 324000
+},
+{
+  "percentile": 76,
+  "eciBound": 315000
+},
+{
+  "percentile": 77,
+  "eciBound": 306000
+},
+{
+  "percentile": 78,
+  "eciBound": 297000
+},
+{
+  "percentile": 79,
+  "eciBound": 288000
+},
+{
+  "percentile": 80,
+  "eciBound": 279000
+},
+{
+  "percentile": 81,
+  "eciBound": 270000
+},
+{
+  "percentile": 82,
+  "eciBound": 261000
+},
+{
+  "percentile": 83,
+  "eciBound": 252000
+},
+{
+  "percentile": 84,
+  "eciBound": 243000
+},
+{
+  "percentile": 85,
+  "eciBound": 234000
+},
+{
+  "percentile": 86,
+  "eciBound": 225000
+},
+{
+  "percentile": 87,
+  "eciBound": 216000
+},
+{
+  "percentile": 88,
+  "eciBound": 207000
+},
+{
+  "percentile": 89,
+  "eciBound": 198000
+},
+{
+  "percentile": 90,
+  "eciBound": 189000
+},
+{
+  "percentile": 91,
+  "eciBound": 180000
+},
+{
+  "percentile": 92,
+  "eciBound": 171000
+},
+{
+  "percentile": 93,
+  "eciBound": 162000
+},
+{
+  "percentile": 94,
+  "eciBound": 153000
+},
+{
+  "percentile": 95,
+  "eciBound": 144000
+},
+{
+  "percentile": 96,
+  "eciBound": 135000
+},
+{
+  "percentile": 97,
+  "eciBound": 126000
+},
+{
+  "percentile": 98,
+  "eciBound": 117000
+},
+{
+  "percentile": 99,
+  "eciBound": 108000
+},
+{
+  "percentile": 100,
+  "eciBound": 99000
+}]
