@@ -75,8 +75,6 @@ async function setGlobalThemeSettings() {
     }
   }
   
-  document.title = "Earth Open Innovation Network";
-
   Vue.use(Vuetify, {
     theme: {
       primary: themeSettings['primary-color'],
