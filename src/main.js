@@ -57,7 +57,7 @@ async function initApp() {
     console.error(err)
   }
 }
-
+// Earth Open Innovation Network
 async function setGlobalThemeSettings() {
   const tenant = window.env.TENANT || null;
 
@@ -74,6 +74,8 @@ async function setGlobalThemeSettings() {
       document.title = "U.S. Treasury | DEIP";
     }
   }
+  
+  document.title = "Earth Open Innovation Network";
 
   Vue.use(Vuetify, {
     theme: {
