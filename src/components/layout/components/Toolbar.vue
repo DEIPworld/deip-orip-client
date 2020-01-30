@@ -5,8 +5,8 @@
     </div>
 
     <v-toolbar :color="themeSettings['top-bar-color']">
-      <v-toolbar-side-icon class="mx-2 my-0">
-        <router-link class="ma-0 pa-0" :to="{ name: 'Default' }">
+      <v-toolbar-side-icon tag="div" class="mx-2 my-0 pl-4">
+        <router-link tag="a" class="ma-0 pa-0" :to="{ name: 'Default' }">
           <img height="40px" :src="tenant | tenantLogoSrc(80, 80, false)" />
         </router-link>
       </v-toolbar-side-icon>
