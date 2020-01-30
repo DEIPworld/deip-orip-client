@@ -32,10 +32,10 @@
             <v-list-tile :to="{ name: 'UserDetails', params: { account_name: user.username } }">
               <v-list-tile-title>Profile</v-list-tile-title>
             </v-list-tile>
-            <v-divider></v-divider>
+            <!-- <v-divider></v-divider>
             <v-list-tile @click="signOut()">
               <v-list-tile-title>Sign Out</v-list-tile-title>
-            </v-list-tile>
+            </v-list-tile> -->
           </v-list>
         </v-menu>
       </v-toolbar-items>
