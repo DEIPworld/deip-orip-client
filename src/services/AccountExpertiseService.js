@@ -1,9 +1,15 @@
 import deipRpc from '@deip/deip-oa-rpc-client';
 
+const actionTypes = {
+  CONTENT: 'content',
+  REVIEW: 'review',
+  INIT: 'init',
+};
+
 const ACTIONS_MAP = {
-  1: 'content',
-  2: 'review',
-  3: 'init'
+  1: actionTypes.CONTENT,
+  2: actionTypes.REVIEW,
+  3: actionTypes.INIT,
 };
 
 const mapHistoryElement = (elem) => {
@@ -33,5 +39,6 @@ const getExpertiseHistory = (username, disciplineId) => {
 };
 
 export {
-  getExpertiseHistory
+  getExpertiseHistory,
+  actionTypes
 }
