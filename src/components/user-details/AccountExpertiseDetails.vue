@@ -35,7 +35,7 @@
       />
     </v-layout>
     <div v-else-if="this.history.length">
-      <div class="pb-3">
+      <div class="pb-3" v-if="overview">
         <div class="bold title">Overview</div>
         <v-layout row class="mt-3">
           <v-flex xs4 class="px-3">
@@ -210,6 +210,10 @@
         return this.expertise.find(e => e.id === this.selectedExpertiseId);
       },
       overview() {
+        if (!this.selectedExpertise) {
+          return null;
+        }
+
         let allocations = {};
         this.history.forEach((e) => {
           allocations[e.action] = (allocations[e.action] || 0) + 1;
