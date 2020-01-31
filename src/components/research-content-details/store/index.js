@@ -659,6 +659,7 @@ const mutations = {
     ['RESET_STATE'](state) {
         texture = undefined;
         reviewEditor = undefined;
+        Vue.set(state, "eciHistoryByDiscipline", {})
     },
 
     ['RESET_METADATA_STATE'](state) {

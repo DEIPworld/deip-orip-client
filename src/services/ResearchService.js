@@ -84,6 +84,7 @@ const getResearchContentEciHistoryRecords = (researchContentId, disciplineId) =>
       newAmount: source.new_eci_amount,
       delta: source.delta,
       action: RESEARCH_CONTENT_ECI_SOURCES[source.action],
+      actionText: RESEARCH_CONTENT_ECI_SOURCES[source.action].replace(/_/g, ' '),
       actionObjectId: source.action_object_id,
       timestamp: source.timestamp * 1000
     };
