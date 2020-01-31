@@ -20,7 +20,8 @@
           :items="expertise"
           item-text="discipline_name"
           item-value="id"
-          solo
+          outline
+          label="Discipline"
           @change="onDisciplineChanged()"
           :disabled="isHistoryLoading"
         />
@@ -43,7 +44,7 @@
               type="PieChart"
               :settings="{ packages: ['corechart'] }"
               :data="overview.contributionsAllocation"
-              :options="contributionsAllocationChartoptions"
+              :options="contributionsAllocationChartOptions"
             />
           </v-flex>
           <v-divider vertical inset />
@@ -70,7 +71,93 @@
         </v-layout>
       </div>
       <div class="py-3">
-        <div class="bold title">Chart</div>
+        <v-layout row>
+          <v-flex shrink>
+            <v-menu
+              v-model="filter.fromDateMenu"
+              :close-on-content-click="false"
+              :nudge-right="40"
+              lazy
+              transition="scale-transition"
+              offset-y
+              full-width
+              min-width="290px"
+            >
+              <template v-slot:activator="{ on }">
+                <v-text-field
+                  v-model="filter.fromDate"
+                  :disabled="isHistoryPageLoading"
+                  label="From"
+                  readonly
+                  outline
+                  v-on="on"
+                />
+              </template>
+              <v-date-picker
+                v-model="filter.fromDate"
+                @input="onFromDateSelected()"
+                :max="moment(filter.toDate).subtract(1, 'days').format('YYYY-MM-DD')"
+                :min="moment('2018-01-01').format('YYYY-MM-DD')"
+              />
+            </v-menu>
+          </v-flex>
+          <v-flex shrink class="pl-3">
+            <v-menu
+              v-model="filter.toDateMenu"
+              :close-on-content-click="false"
+              :nudge-right="40"
+              lazy
+              transition="scale-transition"
+              offset-y
+              full-width
+              min-width="290px"
+            >
+              <template v-slot:activator="{ on }">
+                <v-text-field
+                  v-model="filter.toDate"
+                  :disabled="isHistoryPageLoading"
+                  label="To"
+                  readonly
+                  outline
+                  v-on="on"
+                />
+              </template>
+              <v-date-picker
+                v-model="filter.toDate"
+                @input="onToDateSelected()"
+                :max="moment().format('YYYY-MM-DD')"
+                :min="moment(filter.fromDate).add(1, 'days').format('YYYY-MM-DD')"
+              />
+            </v-menu>
+          </v-flex>
+          <v-flex shrink class="pl-3">
+            <v-select
+              class="my-0 py-0"
+              v-model="filter.contentType"
+              :items="filter.contentTypeItems"
+              label="Content Type"
+              outline
+              :disabled="isHistoryPageLoading"
+            />
+          </v-flex>
+          <v-flex shrink class="pl-3">
+            <v-select
+              class="my-0 py-0"
+              v-model="filter.criteria"
+              :items="['Novelty', 'Methodology']"
+              label="Criteria"
+              outline
+              :disabled="isHistoryPageLoading"
+            />
+          </v-flex>
+        </v-layout>
+        <GChart
+          v-if="eciChartData.length"
+          type="LineChart"
+          :settings="{ packages: ['corechart'] }"
+          :data="eciChartData"
+          :options="eciChartOptions"
+        />
       </div>
       <div class="py-3">
         <div class="bold title">History</div>
@@ -79,7 +166,7 @@
           :items="historyTable.items"
           class="elevation-1 mt-3"
           disable-initial-sort
-          :loading="historyTable.loading"
+          :loading="isHistoryPageLoading"
           :rows-per-page-items="[5, 10]"
           :pagination.sync="historyTable.pagination"
           :total-items="historyTable.totalItems"
@@ -116,7 +203,10 @@
 <script>
   import deipRpc from '@deip/deip-oa-rpc-client';
   import { mapGetters } from 'vuex';
-  import { getExpertiseHistory } from '@/services/AccountExpertiseService';
+  import {
+    actionTypes,
+    getExpertiseHistory,
+  } from '@/services/AccountExpertiseService';
   import { getEciPercentile } from '@/utils/user';
 
   const loadContentDetails = (contentId) => {
@@ -152,8 +242,32 @@
     name: "AccountExpertiseDetails",
 
     data() {
+      const now = this.moment();
+      const toDate = now.format('YYYY-MM-DD');
+      const fromDate = now.subtract(7, 'days').format('YYYY-MM-DD');
+
+      const contentTypesNamesMap = {
+        [actionTypes.CONTENT]: 'Content',
+        [actionTypes.REVIEW]: 'Review',
+        [actionTypes.INIT]: 'Initial expertise',
+      };
+
       return {
         selectedExpertiseId: null,
+
+        filter: {
+          fromDate,
+          toDate,
+          fromDateMenu: false,
+          toDateMenu: false,
+
+          contentType: null,
+          contentTypeItems: Object.entries(contentTypesNamesMap)
+            .map(([key, value]) => ({ text: value, value: key })),
+
+          criteria: null,
+        },
+        isHistoryPageLoading: false,
 
         history: [],
         isHistoryLoading: false,
@@ -167,9 +281,9 @@
             { text: 'Total ECI', align: 'center', sortable: false },
           ],
           actionsColorMap: {
-            'content': '#5ABAD1',
-            'review': '#161F63',
-            'init': '#8DDAB3',
+            [actionTypes.CONTENT]: '#5ABAD1',
+            [actionTypes.REVIEW]: '#161F63',
+            [actionTypes.INIT]: '#8DDAB3',
           },
           pagination: {
             page: 1,
@@ -180,7 +294,7 @@
           loading: false,
         },
 
-        contributionsAllocationChartoptions: {
+        contributionsAllocationChartOptions: {
           title: "",
           legend: { position: 'right', alignment: 'center' },
           colors: ['#3984B6', '#161F63', '#B7DFCB', '#5ABAD1'],
@@ -198,6 +312,29 @@
           },
           pieHole: 0.6
         },
+
+        eciChartOptions: {
+          title: "",
+          backgroundColor: {
+            fill: "#fafafa"
+          },
+          legend: {
+            position: "none"
+          },
+          chartArea: {
+            top: "10%",
+            width: "90%"
+          },
+          tooltip: { isHtml: true },
+          explorer: {
+            actions: ["dragToZoom", "rightClickToReset"],
+            axis: "horizontal",
+            keepInBounds: true,
+            maxZoomIn: 4.0
+          }
+        },
+
+        contentTypesNamesMap,
       };
     },
 
@@ -227,12 +364,34 @@
             ...Object.entries(allocations).map((e) => {
               const contributionType = e[0];
               return [
-                `${contributionType[0].toUpperCase()}${contributionType.slice(1)}`,
+                this.contentTypesNamesMap[contributionType],
                 e[1]
               ];
             })
           ],
         };
+      },
+      filteredHistory() {
+        const fromDateMs = (new Date(this.filter.fromDate)).getTime();
+        const toDateMs = +this.moment(this.filter.toDate)
+          .add(1, 'days')
+          .startOf('day');
+        return this.history.filter((item) => {
+          if (item.timestamp < fromDateMs || item.timestamp > toDateMs) {
+            return false;
+          }
+          if (this.filter.contentType && item.action !== this.filter.contentType) {
+            return false;
+          }
+
+          return true;
+        });;
+      },
+      eciChartData() {
+        return [
+          ['Date', 'Value'],
+          ...this.filteredHistory.map((e) => [new Date(e.timestamp), e.newAmount])
+        ];
       }
     },
 
@@ -240,10 +399,6 @@
       'historyTable.pagination': {
         handler()  {
           this.loadExpertiseHistoryDetailsPage()
-            .then(({ items, total }) => {
-              this.historyTable.items = items;
-              this.historyTable.totalItems = total;
-            })
         },
         deep: true,
       }
@@ -252,7 +407,7 @@
     methods: {
       getHistoryRecordRouteParams(item) {
         switch (item.action) {
-          case 'content':
+          case actionTypes.CONTENT:
             return {
               name: 'ResearchContentDetails',
               params: {
@@ -261,7 +416,7 @@
                 content_permlink: encodeURIComponent(item.meta.permlink)
               }
             };
-          case 'review':
+          case actionTypes.REVIEW:
             return {
               name: 'ResearchContentReview',
               params: {
@@ -277,20 +432,22 @@
       },
       loadExpertiseHistoryDetailsPage() {
         const { page, rowsPerPage: perPage } = this.historyTable.pagination;
-        this.historyTable.loading = true;
-        const detailsPromises = [];
-        const pageItems = [...this.history].reverse()
+        this.isHistoryPageLoading = true;
+
+        const pageItems = [...this.filteredHistory].reverse()
           .slice((page - 1) * perPage, page * perPage);
+
+        const detailsPromises = [];
         pageItems.forEach((pageItem, index) => {
           let detailsPromise;
           switch (pageItem.action) {
-            case 'content':
+            case actionTypes.CONTENT:
               detailsPromise = loadContentDetails(pageItem.actionObjectId);
               break;
-            case 'review':
+            case actionTypes.REVIEW:
               detailsPromise = loadReviewDetails(pageItem.actionObjectId);
               break;
-            case 'init':
+            case actionTypes.INIT:
               detailsPromise = Promise.resolve({ title: `Initial value` });
               break;
             default:
@@ -313,9 +470,12 @@
           .catch((err) => {
             console.error(err);
             return { items: [], total: 0 };
+          }).then(({ items, total }) => {
+            this.historyTable.items = items;
+            this.historyTable.totalItems = total;
           })
           .finally(() => {
-            this.historyTable.loading = false;
+            this.isHistoryPageLoading = false;
           });
       },
       loadExpertiseHistory(disciplineId) {
@@ -323,7 +483,6 @@
         return getExpertiseHistory(this.$route.params.account_name, disciplineId)
           .then((history) => {
             this.history = history;
-            // return this.loadExpertiseHistoryDetailsPage();
           })
           .catch(console.error)
           .finally(() => {
@@ -332,7 +491,13 @@
       },
       onDisciplineChanged() {
         this.loadExpertiseHistory(this.selectedExpertise.discipline_id);
-      }
+      },
+      onFromDateSelected() {
+        this.filter.fromDateMenu = false
+      },
+      onToDateSelected() {
+        this.filter.toDateMenu = false
+      },
     },
 
     created() {
