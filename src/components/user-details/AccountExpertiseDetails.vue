@@ -137,6 +137,7 @@
               :items="filter.contentTypeItems"
               label="Content Type"
               outline
+              clearable
               :disabled="isHistoryPageLoading"
             />
           </v-flex>
