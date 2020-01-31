@@ -42,7 +42,7 @@ export function getEciPercentile(eciValue) {
     percentile = lowerBoundPercentileData.percentile;
   } else {
     let i = 0;
-    while (sortedPercentilesData[i].eciBound < eciValue && i < sortedPercentilesData.length) {
+    while (i < sortedPercentilesData.length && sortedPercentilesData[i].eciBound < eciValue) {
       percentile = sortedPercentilesData[i].percentile;
       i += 1;
     }
