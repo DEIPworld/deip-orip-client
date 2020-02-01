@@ -27,7 +27,7 @@
         </sidebar>
 
         <div class="legacy-col-grow full-height">
-            <div>
+            <v-card class="full-height">
                 <research-content-details-package v-if="isFilePackageContent" class="pa-5"></research-content-details-package>
                 <research-content-details-dar v-if="isDarContent" :contentRef="contentRef"></research-content-details-dar>
 
@@ -36,13 +36,16 @@
                     <div id="reviews">
                         <div class="py-2 title">Reviews: {{ contentReviewsList.length }}</div>
                         <div class="py-2">
-                            <review-tile class="my-4" v-for="(review, i) in contentReviewsList" :review="review" :key="`review-${i}`" :researchContentType="content.content_type"></review-tile>
+                            <div v-for="(review, i) in contentReviewsList" :key="`review-${i}`">
+                                <review-tile class="my-2" :review="review" :researchContentType="content.content_type"></review-tile>
+                                <v-divider v-if="i != contentReviewsList.length - 1"></v-divider>
+                            </div>
                         </div>
                     </div>
                 </div>
 
                 <div v-if="isPublished && !isResearchGroupMember" class="px-5 pt-2 pb-5">
-                    <v-card class="py-4 px-5 elevation-0">
+                    <v-card class="py-4 px-5">
                         <v-layout id="reviews" class="py-2" row>
                             <v-flex shrink align-self-center pr-5>
                                 <img src="/static/add-review-icon.png" />
@@ -83,9 +86,9 @@
                 </div>
                 <!-- END Research Content References section -->
                 <div class="px-5 pt-3 pb-5" >
-                    <v-layout row>
+                    <v-layout row align-baseline>
                         <v-flex grow>
-                            <div class="half-bold title">ECI History</div>
+                            <div class="half-bold title">Expertise Contribution Index</div>
                         </v-flex>
                         <v-flex shrink>
                             <v-select
@@ -94,7 +97,8 @@
                                 :items="research.disciplines"
                                 item-text="name"
                                 item-value="id"
-                                solo
+                                label="Discipline"
+                                outline
                                 dense
                                 @change="selectEciDiscipline()"
                                 :disabled="eciHistoryRecordsTable.loading"
@@ -136,7 +140,7 @@
                                         <span v-else class="body-2">{{props.item.meta.title}}</span>
                                     </td>
                                     <td class="text-xs-center">{{ moment(props.item.timestamp).format('D MMM YYYY') }}</td>
-                                    <td class="text-xs-center">{{ props.item.delta == 0 ? '' : props.item.delta > 0 ? '+' : '-' }} {{ props.item.delta }}</td>
+                                    <td class="text-xs-center">{{ props.item.delta }}</td>
                                     <td class="text-xs-center">{{ props.item.newAmount }}</td>
                                 </template>
                             </v-data-table>
@@ -232,7 +236,7 @@
                         </v-card>
                     </v-dialog>
                 <!-- END Proposal dialog section -->
-            </div>
+            </v-card>
         </div>
 
         <sidebar>
@@ -392,7 +396,7 @@
                     options: {
                         title: "",
                         backgroundColor: {
-                            fill: "#fafafa"
+                            fill: "#ffffff"
                         },
                         legend: {
                             position: "none"

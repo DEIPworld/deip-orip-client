@@ -1,5 +1,5 @@
 <template>
-  <div class="ma-5">
+  <v-card class="pa-5 full-height full-width">
     <v-layout row align-center class="pb-3">
       <v-flex shrink>
         <platform-avatar
@@ -20,6 +20,7 @@
           :items="expertise"
           item-text="discipline_name"
           item-value="id"
+          dense
           outline
           label="Discipline"
           @change="onDisciplineChanged()"
@@ -137,6 +138,7 @@
               :items="filter.contentTypeItems"
               label="Content Type"
               outline
+              dense
               clearable
               :disabled="isHistoryPageLoading"
             />
@@ -148,6 +150,7 @@
               :items="['Novelty', 'Methodology']"
               label="Criteria"
               outline
+              dense
               :disabled="isHistoryPageLoading"
             />
           </v-flex>
@@ -165,7 +168,7 @@
         <v-data-table
           :headers="historyTable.headers"
           :items="historyTable.items"
-          class="elevation-1 mt-3"
+          class="elevation-0 mt-3"
           disable-initial-sort
           :loading="isHistoryPageLoading"
           :rows-per-page-items="[5, 10]"
@@ -198,7 +201,7 @@
     <div v-else>
       Empty history for this discipline
     </div>
-  </div>
+  </v-card>
 </template>
 
 <script>
@@ -317,7 +320,7 @@
         eciChartOptions: {
           title: "",
           backgroundColor: {
-            fill: "#fafafa"
+            fill: "#ffffff"
           },
           legend: {
             position: "none"
