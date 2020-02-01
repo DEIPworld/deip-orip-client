@@ -348,7 +348,7 @@
             },
             hasEciDisciplineHistoryChanges() {
                 let records = this.$store.getters['rcd/eciHistoryByDiscipline'](this.selectedEciDisciplineId);
-                return records != null && records.length > 1;
+                return records != null && records.length > 1 && records[0].timestamp != records[records.length - 1].timestamp;
             },
             eciDisciplineHistoryRecordsChart() {
                 let disciplineId = this.selectedEciDisciplineId;
