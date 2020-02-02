@@ -120,8 +120,9 @@
                             }"
                           >
                             <img
+                              
                               class="organization-item__img"
-                              :src="$options.filters.researchGroupLogoSrc(organization.id, 150, 150, true)"
+                              :src="$options.filters.researchGroupLogoSrc(organization.id, 200, 200)"
                             />
                             <div class="organization-item__overlay"></div>
                           </div>

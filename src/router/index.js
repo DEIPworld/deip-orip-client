@@ -33,6 +33,7 @@ import ResearchContentAddReview from '@/components/research-content-details/Rese
 import ResearchStartCreating from '@/components/research-create/ResearchStartCreating';
 import CreateNewResearch from '@/components/research-create/CreateNewResearch';
 import CreateTokenSale from '@/components/token-sale-create/CreateTokenSale';
+import ResearchContentReferences from '@/components/research-content-details/ResearchContentReferences';
 
 import UserDetails from '@/components/user-details/UserDetails';
 import UserWallet from '@/components/user-wallet/components/UserWallet';
@@ -251,7 +252,21 @@ const router = new Router({
 				loadPage(loadPagePromise, next);
 			}
 		})
-	}, {
+		}, {
+			path: '/:research_group_permlink/research/:research_permlink/:content_permlink/references',
+			name: 'ResearchContentReferences',
+			component: preliminaryDataLoader(ResearchContentReferences, {
+				beforeEnter: (to, from, next) => {
+					let loadPagePromise = store.dispatch('rcd/loadResearchContentDetails', {
+						group_permlink: decodeURIComponent(to.params.research_group_permlink),
+						research_permlink: decodeURIComponent(to.params.research_permlink),
+						content_permlink: decodeURIComponent(to.params.content_permlink),
+						ref: to.query.ref
+					});
+					loadPage(loadPagePromise, next);
+				}
+			})
+		}, {
 		path: '/:research_group_permlink/research/:research_permlink/application/:application_id/review/:review_id',
 		name: 'ResearchApplicationReview',
 		component: preliminaryDataLoader(ResearchApplicationReview, {

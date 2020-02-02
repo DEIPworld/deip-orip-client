@@ -347,7 +347,7 @@
                         lg2
                         class="text-capitalize bold"
                       >{{getContentType(content.content_type).text}}</v-flex>
-                      <v-flex lg9 class="bold">
+                      <v-flex lg8 class="bold">
                         <router-link
                           class="a"
                           :to="{
@@ -373,6 +373,24 @@
                           v-show="doesContentHaveNegativeReviews(content)"
                           class="red--text medium"
                         >{{countContentReviews(content, false)}}</span>
+                      </v-flex>
+                      <v-flex lg1 text-lg-center class="text-xs-center">
+                        <v-tooltip top>
+                          <template slot="activator">
+                            <router-link class="a" style="text-decoration: none;"
+                              :to="{
+                                name: 'ResearchContentReferences',
+                                params: {
+                                  research_group_permlink: encodeURIComponent(research.group_permlink),
+                                  research_permlink: encodeURIComponent(research.permlink),
+                                  content_permlink: encodeURIComponent(content.permlink)
+                                }
+                              }">
+                              <v-icon small>device_hub</v-icon>
+                            </router-link>
+                          </template>
+                          <span>Browse references</span>
+                        </v-tooltip>
                       </v-flex>
                     </v-layout>
                   </template>
@@ -616,7 +634,7 @@
               </v-layout>
             </v-flex>
           </v-layout>
-          <v-layout class="my-5">
+          <v-layout class="my-5" v-if="researchReferencesList.length">
             <v-flex lg1>
               <v-layout justify-end class="pr-3">
                 <v-icon large color="grey lighten-2">mdi-file-document</v-icon>
@@ -861,9 +879,9 @@
           </v-layout>
 
           <v-divider />
-          <div
+          <!-- <div
             class="rd-sidebar-block-title my-4 px-4"
-          >Citations: {{researchReferencesList.length + research.id}}</div>
+          >Citations: {{researchReferencesList.length + research.id}}</div> -->
         </v-flex>
       </v-layout>
     </div>
