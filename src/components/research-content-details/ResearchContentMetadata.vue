@@ -102,7 +102,7 @@
                     </div>
                 </div>
 
-                <div class="c-mt-8" v-if="!isGenesisBlock">
+                <div class="c-mt-8" v-if="!isGenesisBlock && contentMetadata.voters.lenght">
                     <div class="legacy-row">
                         <div class="bold width-7">Approved by</div>
 

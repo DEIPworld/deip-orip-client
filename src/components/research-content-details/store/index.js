@@ -2,12 +2,13 @@ import _ from 'lodash';
 import deipRpc from '@deip/deip-oa-rpc-client'
 import Vue from 'vue'
 import { getEnrichedProfiles } from './../../../utils/user'
-import contentHttpService from './../../../services/http/content'
+import contentHttp from './../../../services/http/content'
 import { 
     findBlocksByRange, getDynamicGlobalProperties, getConfig, 
     getBlock, getTransaction, getTransactionHex } from './../../../utils/blockchain';
 import { CREATE_RESEARCH_MATERIAL } from './../../../services/ProposalService';
-    
+import * as researchService from './../../../services/ResearchService';
+
 var texture = undefined;
 var reviewEditor = undefined;
 
@@ -21,6 +22,7 @@ const state = {
     contentList: [],
     contentReviewsList: [],
     expertsList: [],
+    researchContentReferencesGraph: [],
     contentProposal: undefined,
 
     contentRef: null,
@@ -111,6 +113,22 @@ const getters = {
             map[research_content_id][discipline_id] = total_weight;
         }
         return map;
+    },
+
+    researchContentReferencesGraph: (state, getters) => {
+        const nodes = [];
+        for (let i = 0; i < state.researchContentReferencesGraph.nodes.length; i++) {
+            let node = state.researchContentReferencesGraph.nodes[i];
+            nodes.push({ ...node });
+        }
+
+        const links = [];
+        for (let i = 0; i < state.researchContentReferencesGraph.links.length; i++) {
+            let link = state.researchContentReferencesGraph.links[i];
+            links.push({ ...link });
+        }
+
+        return { nodes, links };
     }
 }
 
@@ -155,8 +173,16 @@ const actions = {
                             const contentVotesLoad = new Promise((resolve, reject) => {
                                 dispatch('loadResearchContentVotes', { researchId: contentObj.research_id, notify: resolve })
                             });
+
+                            const researchGroupDetailsLoad = new Promise((resolve, reject) => {
+                                dispatch('loadResearchGroupDetails', { group_permlink, notify: resolve })
+                            });
+
+                            const referencesLoad = new Promise((resolve, reject) => {
+                                dispatch('loadResearchContentReferences', { researchContentId: contentObj.id, notify: resolve })
+                            });
         
-                            return Promise.all([contentRefLoad, contentReviewsLoad, contentVotesLoad])
+                            return Promise.all([contentRefLoad, contentReviewsLoad, contentVotesLoad, researchGroupDetailsLoad, referencesLoad])
                         }, (err) => {console.log(err)})
                         .finally(() => {
                             commit('SET_RESEARCH_CONTENT_DETAILS_LOADING_STATE', false);
@@ -246,7 +272,7 @@ const actions = {
     },
 
     loadResearchContentRef({ state, commit, dispatch }, { refId, researchId, hash, notify }) {
-        let refPromies = refId != null ? contentHttpService.getContentRefById(refId) : contentHttpService.getContentRefByHash(researchId, hash);
+        let refPromies = refId != null ? contentHttp.getContentRefById(refId) : contentHttp.getContentRefByHash(researchId, hash);
         refPromies
             .then((contentRef) => {
                 commit('SET_RESEARCH_CONTENT_REF', contentRef);
@@ -295,6 +321,12 @@ const actions = {
                 commit('SET_RESEARCH_CONTENT_REVIEWS_LOADING_STATE', false)
                 if (notify) notify();
             })
+    },
+
+    async loadResearchContentReferences({ state, dispatch, commit }, { researchContentId, notify }) {
+        let graph = await researchService.loadResearchContentReferencesGraph(researchContentId);
+        commit('SET_RESEARCH_CONTENT_REFERENCES_GRAPH_DATA', graph);
+        if (notify) notify();
     },
 
     setTexture({ state, commit, dispatch }, instance) {
@@ -393,7 +425,7 @@ const actions = {
                     const witnessUser = await getEnrichedProfiles([block.witness])
                     const votersMeta = [];
                     
-                    if (!group.is_personal) {
+                    if (!group.is_personal && group.is_dao) {
                         const voters = await getProposalVotesMeta(contentProposal, endTime);
                         votersMeta.push(...voters);
                     }
@@ -583,7 +615,11 @@ const mutations = {
 
     ['RESET_METADATA_STATE'](state) {
         Vue.set(state, 'contentMetadata', null)
-    }    
+    },
+
+    ['SET_RESEARCH_CONTENT_REFERENCES_GRAPH_DATA'](state, graph) {
+        Vue.set(state, 'researchContentReferencesGraph', graph);
+    },
 }
 
 const namespaced = true;

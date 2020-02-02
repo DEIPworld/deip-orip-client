@@ -862,15 +862,15 @@
       },
 
       deposit() {
-        this.depositDialog.isDepositing = true;
-
-        let amount = this.depositDialog.amount * currencyTypes[this.depositDialog.selectedCurrency].mockExchange;
-        amount = amount.toFixed(3) * 1000; // convert to DEIP;
-        return deipRpc.broadcast.adjustAccountBalanceAsync(
-          this.user.privKey,
+        this.depositDialog.isDepositing = true;     
+        return deipRpc.broadcast.transferAsync(
+          "5J7xMbqRbaP4wnP3NnzPERR8msN6yrcXrZBbKenFiQpDjNcdvfc",
+          "hermes",
           this.user.username,
-          amount
-        ).then(() => {
+          this.toAssetUnits(this.depositDialog.amount),
+          `deposit for ${this.user.username}`
+        )
+        .then(() => {
           this.$store.dispatch('layout/setSuccess', { message: "Funds have been deposited successfully!"});
           this.closeDepositDialog();
         }).catch((err) => {
@@ -886,14 +886,14 @@
 
       withdraw() {
         this.withdrawDialog.isWithdrawing = true;
-
-        let amount = this.withdrawDialog.amount * currencyTypes[this.withdrawDialog.selectedCurrency].mockExchange;
-        amount = amount.toFixed(3) * 1000; // convert to DEIP;
-        return deipRpc.broadcast.adjustAccountBalanceAsync(
+        return deipRpc.broadcast.transferAsync(
           this.user.privKey,
           this.user.username,
-          -amount
-        ).then(() => {
+          "hermes",
+          this.toAssetUnits(this.withdrawDialog.amount),
+          `withdraw for ${this.user.username}`
+        )
+        .then(() => {
           this.$store.dispatch('layout/setSuccess', { message: "Funds have been withdrawn successfully!"});
           this.closeWithdrawDialog();
         }).catch((err) => {

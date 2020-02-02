@@ -70,6 +70,14 @@
                                 </template>
                             </template>
                         </v-autocomplete>
+
+                        <internal-references-picker 
+                            :showSelected="true"
+                            :currentResearchId="research.id"
+                            :preselected="[]" 
+                            @referenceAdded="addReference" 
+                            @referenceRemoved="removeReference">
+                        </internal-references-picker>
                     </div>
               </v-card-text>
               <v-card-actions>
@@ -120,11 +128,10 @@
                 type: null,
                 authors: [],
                 contentTypesList: contentTypesList,
+                references: [],
 
                 isOpen: false,
-                isLoading: false,
-
-                tmpIsPrivate: false
+                isLoading: false
             }
         },
         computed: {
@@ -193,9 +200,11 @@
                 if (!contentRef.hash) {
                     throw new Error("File upload has failed")
                 }
+                
                 contentRef.title = this.title;
                 contentRef.authors = this.authors.map(a => a.account.name);
-                contentRef.references = [];
+                contentRef.references = this.references.map(ref => ref.id);
+                contentRef.externalReferences = [];
 
                 createContentProposal(contentRef, this.type)
                     .then(() => {
@@ -216,6 +225,17 @@
                         this.$emit('onFinish');
                         this.close();
                     })
+                },
+                
+                addReference(ref) {
+                    if (!this.references.some(r => r.id == ref.id)) {
+                        this.references.push(ref);
+                    }
+                },
+                removeReference(ref) {
+                    if (this.references.some(r => r.id == ref.id)) {
+                        this.references = this.references.filter(r => r.id != ref.id);
+                    }
                 }
         },
         watch: {
