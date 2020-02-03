@@ -180,49 +180,53 @@ export default {
 };
 </script>
 
-<style scoped>
+<style scoped lang="less">
+@criteriaLabel-colors:
+  technicalquality #abec95,
+  replication #83d288,
+  impact #64b286,
+  excellence #439583,
+  methodology #277681,
+  rationality #2b5483,
+  novelty #213184,
+  originality #000783,
+  scientificrelevance #290147;
+
+.make-classes(@prefix, @list) {
+    .iter(length(@list));
+    .iter(@i) when (@i > 0) {
+        .iter(@i - 1);
+        @pair:  extract(@list, @i); 
+        @key:   extract(@pair, 1);
+        @value: extract(@pair, 2); 
+        .@{prefix}-@{key} {
+            background: @value;  
+        }
+    }
+}
+
+.max-width(@value){
+  .max-width-@{value}{
+    max-width: @value;
+  }
+}
+.make-classes(criteriaLabel, @criteriaLabel-colors);
+.max-width(150px);
+.max-width(100px);
+
 .criteriaLabel {
   padding: 2px 10px;
   border-radius: 100px;
   color: #fff;
 }
-.bg-hover-lightblue:hover{
-  background: #EBF5FE;
+
+.bg-hover-lightblue{
+  &:hover{
+    background: #EBF5FE;
+  }
 }
-.criteriaLabel-technicalquality {
-  background: #abec95;
-}
-.criteriaLabel-replication {
-  background: #83d288;
-}
-.criteriaLabel-impact {
-  background: #64b286;
-}
-.criteriaLabel-excellence {
-  background: #439583;
-}
-.criteriaLabel-methodology {
-  background: #277681;
-}
-.criteriaLabel-rationality {
-  background: #2b5483;
-}
-.criteriaLabel-novelty {
-  background: #213184;
-}
-.criteriaLabel-originality {
-  background: #000783;
-}
-.criteriaLabel-scientificrelevance {
-  background: #290147;
-}
-.max-width-150{
-  max-width: 150px;
-}
-.max-width-100{
-  max-width: 100px;
-}
-.centered-input >>> input{
+
+.centered-input/deep/input{
   text-align: center;
 }
 </style>
