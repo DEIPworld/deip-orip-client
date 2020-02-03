@@ -12,9 +12,18 @@
           <v-layout row mb-3>
             <v-flex xs3 text-uppercase grey--text>Content types</v-flex>
             <v-flex xs6 text-uppercase grey--text>review criteria</v-flex>
-            <v-flex xs3 text-align-center><span class="max-width-150 text-uppercase grey--text">Reward coefficient</span></v-flex>
+            <v-flex xs3 text-align-center>
+              <span class="max-width-150 text-uppercase grey--text">Reward coefficient</span>
+            </v-flex>
           </v-layout>
-          <v-layout row font-weight-bold bg-hover-lightblue v-for="(item, i) in content" :key="`${item.contentType}${i}`">
+          <v-layout
+            row
+            font-weight-bold
+            bg-hover-lightblue
+            py-3
+            v-for="(item, i) in content"
+            :key="`${item.contentType}${i}`"
+          >
             <v-flex xs3 align-self-center>{{ item.contentType }}</v-flex>
             <v-flex xs6 align-self-center>
               <v-layout row wrap>
@@ -24,11 +33,15 @@
                   v-for="(criteria, j) in item.reviewCriteria"
                   :key="`${criteria}${j}${i}`"
                 >{{ criteria }}</span>
-              <v-icon light>mode_edit</v-icon>
+                <v-icon light>mode_edit</v-icon>
               </v-layout>
             </v-flex>
             <v-flex xs3>
-                <v-text-field class="max-width-150 centered-input font-weight-regular mx-auto" hide-details v-model="item.rewardCoefficient"/>
+              <v-text-field
+                class="pa-0 my-0 mx-auto max-width-150 centered-input font-weight-regular"
+                hide-details
+                v-model="item.rewardCoefficient"
+              />
             </v-flex>
           </v-layout>
         </v-flex>
@@ -40,9 +53,11 @@
           <v-layout row mb-3>
             <v-flex xs5 text-uppercase grey--text>criteria</v-flex>
             <v-flex xs4 text-uppercase grey--text>valid values 2-5</v-flex>
-            <v-flex xs3 text-align-center><span class="max-width-100 text-align-center text-uppercase grey--text">weight 0.1-1</span></v-flex>
+            <v-flex xs3 text-align-center>
+              <span class="max-width-100 text-align-center text-uppercase grey--text">weight 0.1-1</span>
+            </v-flex>
           </v-layout>
-          <v-layout shrink row mb-3 bg-hover-lightblue v-for="(item, i) in criteria" :key="`${i}0`">
+          <v-layout shrink row mb-2 py-1 bg-hover-lightblue v-for="(item, i) in criteria" :key="`${i}0`">
             <v-flex xs5 align-self-center>
               <span
                 class="criteriaLabel"
@@ -62,7 +77,11 @@
               </v-layout>
             </v-flex>
             <v-flex xs3>
-                <v-text-field class="pa-0 my-0 mx-auto max-width-100 centered-input" hide-details v-model="item.weight"/>
+              <v-text-field
+                class="pa-0 my-0 mx-auto max-width-100 centered-input"
+                hide-details
+                v-model="item.weight"
+              />
             </v-flex>
           </v-layout>
         </v-flex>
@@ -181,33 +200,26 @@ export default {
 </script>
 
 <style scoped lang="less">
-@criteriaLabel-colors:
-  technicalquality #abec95,
-  replication #83d288,
-  impact #64b286,
-  excellence #439583,
-  methodology #277681,
-  rationality #2b5483,
-  novelty #213184,
-  originality #000783,
-  scientificrelevance #290147;
+@criteriaLabel-colors: technicalquality #abec95, replication #83d288,
+  impact #64b286, excellence #439583, methodology #277681, rationality #2b5483,
+  novelty #213184, originality #000783, scientificrelevance #290147;
 
 .make-classes(@prefix, @list) {
-    .iter(length(@list));
-    .iter(@i) when (@i > 0) {
-        .iter(@i - 1);
-        @pair:  extract(@list, @i); 
-        @key:   extract(@pair, 1);
-        @value: extract(@pair, 2); 
-        .@{prefix}-@{key} {
-            background: @value;  
-        }
+  .iter(length(@list));
+  .iter(@i) when (@i > 0) {
+    .iter(@i - 1);
+    @pair: extract(@list, @i);
+    @key: extract(@pair, 1);
+    @value: extract(@pair, 2);
+    .@{prefix}-@{key} {
+      background: @value;
     }
+  }
 }
 
-.max-width(@value, @unit){
-  .max-width-@{value}{
-    max-width: unit(@value,@unit);
+.max-width(@value, @unit) {
+  .max-width-@{value} {
+    max-width: unit(@value, @unit);
   }
 }
 .make-classes(criteriaLabel, @criteriaLabel-colors);
@@ -220,13 +232,13 @@ export default {
   color: #fff;
 }
 
-.bg-hover-lightblue{
-  &:hover{
-    background: #EBF5FE;
+.bg-hover-lightblue {
+  &:hover {
+    background: #ebf5fe;
   }
 }
 
-.centered-input/deep/input{
+.centered-input/deep/input {
   text-align: center;
 }
 </style>
