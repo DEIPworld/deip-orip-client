@@ -205,14 +205,14 @@ export default {
     }
 }
 
-.max-width(@value){
+.max-width(@value, @unit){
   .max-width-@{value}{
-    max-width: @value;
+    max-width: "@{value}@{unit}";
   }
 }
 .make-classes(criteriaLabel, @criteriaLabel-colors);
-.max-width(150px);
-.max-width(100px);
+.max-width(150, px);
+.max-width(100, px);
 
 .criteriaLabel {
   padding: 2px 10px;
