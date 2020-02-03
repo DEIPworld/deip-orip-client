@@ -49,6 +49,8 @@ import VotingForBlockProducers from '@/components/voting-for-block-producers/Vot
 import CreateFundingOpportunityAnnouncement from '@/components/funding-opportunity-announcement-create/CreateFundingOpportunityAnnouncement';
 import InvestorDashboard from '@/components/investor-dashboard/InvestorDashboard';
 
+import Review from '@/components/review-setup/Review'
+
 
 import store from './../store/index';
 import usersService from './../services/http/users';
@@ -391,6 +393,10 @@ const router = new Router({
 		path: '/create-funding-opportunity-announcement',
 		name: 'CreateFundingOpportunityAnnouncement',
 		component: CreateFundingOpportunityAnnouncement
+	},{
+		path: '/review',
+		name:'Review',
+		component: Review
 	}, {
 		path: '*',
 		name: 'Default',
