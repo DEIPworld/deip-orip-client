@@ -207,7 +207,7 @@ export default {
 
 .max-width(@value, @unit){
   .max-width-@{value}{
-    max-width: "@{value}@{unit}";
+    max-width: unit(@value,@unit);
   }
 }
 .make-classes(criteriaLabel, @criteriaLabel-colors);
