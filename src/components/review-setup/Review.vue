@@ -11,7 +11,7 @@
         <v-flex xs12 sm12 md10 lg6 my-5>
           <v-layout row mb-3>
             <v-flex xs3 text-uppercase grey--text>Content types</v-flex>
-            <v-flex xs6 text-uppercase grey--text>review criteria</v-flex>
+            <v-flex xs6 text-uppercase grey--text>Review criteria</v-flex>
             <v-flex xs3 text-align-center>
               <span class="max-width-150 text-uppercase grey--text">Reward coefficient</span>
             </v-flex>
@@ -20,23 +20,40 @@
             row
             font-weight-bold
             bg-hover-lightblue
-            py-3
+            py-2
             v-for="(item, i) in content"
             :key="`${item.contentType}${i}`"
           >
             <v-flex xs3 align-self-center>{{ item.contentType }}</v-flex>
             <v-flex xs6 align-self-center>
               <v-layout row wrap>
-                <span
+                <!-- <span
                   class="mr-3 mb-1 criteriaLabel"
-                  :class="`criteriaLabel-${getClass(criteria)}`"
+                  :class="`criteriaLabel-${getClassName(criteria)}`"
                   v-for="(criteria, j) in item.reviewCriteria"
                   :key="`${criteria}${j}${i}`"
                 >{{ criteria }}</span>
-                <v-icon light>mode_edit</v-icon>
+                <v-icon light>mode_edit</v-icon>-->
+                <v-select
+                  v-model="item.reviewCriteria"
+                  :items="criteria"
+                  item-text="name"
+                  item-value="name"
+                  chips
+                  append-icon="mode_edit"
+                  multiple
+                  class="pa-0 no-underline"
+                  hide-details
+                >
+                  <template v-slot:selection="{item}">
+                    <v-chip :class="`criteriaLabel-${getClassName(item.name)}`">
+                      <span class="white--text">{{ item.name }}</span>
+                    </v-chip>
+                  </template>
+                </v-select>
               </v-layout>
             </v-flex>
-            <v-flex xs3>
+            <v-flex xs3 align-self-center>
               <v-text-field
                 class="pa-0 my-0 mx-auto max-width-150 centered-input font-weight-regular"
                 hide-details
@@ -51,17 +68,17 @@
         <v-flex xs12 sm10 md7 lg5 mt-5>
           <div class="title mb-4">Review criteria setup</div>
           <v-layout row mb-3>
-            <v-flex xs5 text-uppercase grey--text>criteria</v-flex>
-            <v-flex xs4 text-uppercase grey--text>valid values 2-5</v-flex>
+            <v-flex xs5 text-uppercase grey--text>Criteria</v-flex>
+            <v-flex xs4 text-uppercase grey--text>Valid values 2-5</v-flex>
             <v-flex xs3 text-align-center>
-              <span class="max-width-100 text-align-center text-uppercase grey--text">weight 0.1-1</span>
+              <span class="max-width-100 text-align-center text-uppercase grey--text">Weight 0.1-1</span>
             </v-flex>
           </v-layout>
-          <v-layout shrink row mb-2 py-1 bg-hover-lightblue v-for="(item, i) in criteria" :key="`${i}0`">
+          <v-layout row mb-2 py-1 bg-hover-lightblue v-for="(item, i) in criteria" :key="`${i}0`">
             <v-flex xs5 align-self-center>
               <span
-                class="criteriaLabel"
-                :class="`criteriaLabel-${getClass(item.name)}`"
+                class="criteriaLabel white--text py-1 px-2"
+                :class="`criteriaLabel-${getClassName(item.name)}`"
               >{{ item.name }}</span>
             </v-flex>
             <v-flex xs4 align-self-center>
@@ -99,7 +116,7 @@ export default {
       content: [
         {
           contentType: "Announcement",
-          reviewCriteria: ["Technical quality", "methodology", "Novelty"],
+          reviewCriteria: ["Technical quality", "Methodology", "Novelty"],
           rewardCoefficient: 10
         },
         {
@@ -114,31 +131,31 @@ export default {
         },
         {
           contentType: "Experiment findings",
-          reviewCriteria: ["Technical quality", "methodology", "Novelty"],
+          reviewCriteria: ["Technical quality", "Methodology", "Novelty"],
           rewardCoefficient: 10
         },
         {
           contentType: "Method",
-          reviewCriteria: ["Technical quality", "methodology", "Novelty"],
+          reviewCriteria: ["Technical quality", "Methodology", "Novelty"],
           rewardCoefficient: 7
         },
         {
           contentType: "Patent",
           reviewCriteria: [
-            "methodology",
-            "originality",
+            "Methodology",
+            "Originality",
             "Scientific relevance"
           ],
           rewardCoefficient: 1
         },
         {
           contentType: "Raw data",
-          reviewCriteria: ["Technical quality", "methodology", "Novelty"],
+          reviewCriteria: ["Technical quality", "Methodology", "Novelty"],
           rewardCoefficient: 4
         },
         {
           contentType: "Research proposal",
-          reviewCriteria: ["Technical quality", "methodology", "Novelty"],
+          reviewCriteria: ["Technical quality", "Methodology", "Novelty"],
           rewardCoefficient: 7
         }
       ],
@@ -164,7 +181,7 @@ export default {
           weight: 0.5
         },
         {
-          name: "methodology",
+          name: "Methodology",
           value: 5,
           weight: 1
         },
@@ -179,7 +196,7 @@ export default {
           weight: 0.7
         },
         {
-          name: "originality",
+          name: "Originality",
           value: 4,
           weight: 0.6
         },
@@ -192,7 +209,7 @@ export default {
     };
   },
   methods: {
-    getClass(name) {
+    getClassName(name) {
       return name.replace(" ", "").toLowerCase();
     }
   }
@@ -227,9 +244,7 @@ export default {
 .max-width(100, px);
 
 .criteriaLabel {
-  padding: 2px 10px;
   border-radius: 100px;
-  color: #fff;
 }
 
 .bg-hover-lightblue {
@@ -240,5 +255,15 @@ export default {
 
 .centered-input/deep/input {
   text-align: center;
+}
+.no-underline.v-text-field/deep/.v-input__control {
+  .v-input__slot {
+    &:before {
+      border-style: none;
+    }
+    &:after {
+      border-style: none;
+    }
+  }
 }
 </style>
