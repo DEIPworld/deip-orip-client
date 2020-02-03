@@ -794,12 +794,12 @@
                 of the project
               </span>
             </v-tooltip>
-            <top-research-label
+            <!-- <top-research-label
               v-if="research.isTop"
               :number="100"
               color-class="green--text"
               class="mt-3"
-            />
+            /> -->
           </v-layout>
           <v-divider />
 
