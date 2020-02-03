@@ -313,8 +313,9 @@ const getters = {
 const actions = {
 
     loadResearchDetails({ state, commit, dispatch }, { group_permlink, research_permlink }) {
+        commit('RESET_STATE');
         commit('SET_RESEARCH_DETAILS_LOADING_STATE', true);
-
+        
         return deipRpc.api.getResearchByAbsolutePermlinkAsync(group_permlink, research_permlink)
             .then((research) => {
                 research.group_permlink = group_permlink;
@@ -778,6 +779,10 @@ const mutations = {
 
     ['SET_RESEARCH_ECI_HISTORY_BY_DISCIPLINE'](state, { disciplineId, records }) {
         Vue.set(state.eciHistoryByDiscipline, disciplineId, records)
+    },
+
+    ['RESET_STATE'](state) {
+        Vue.set(state, "eciHistoryByDiscipline", {})
     }
 }
 
