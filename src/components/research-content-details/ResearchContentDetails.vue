@@ -86,8 +86,12 @@
                                         <span v-else class="body-2">{{props.item.meta.title}}</span>
                                     </td>
                                     <td class="text-xs-center">{{ moment(props.item.timestamp).format('D MMM YYYY') }}</td>
-                                    <td class="text-xs-center">{{ props.item.delta }}</td>
-                                    <td class="text-xs-center">{{ props.item.newAmount }}</td>
+                                    <td class="text-xs-center">
+                                        <div class="half-bold" :class="{ 'eci-up': props.item.delta > 0, 'eci-down': props.item.delta < 0 }">{{ props.item.delta }}</div>
+                                    </td>
+                                    <td class="text-xs-center">
+                                        <div>{{ props.item.newAmount }}</div>
+                                    </td>
                                 </template>
                             </v-data-table>
                         </div>
@@ -117,7 +121,7 @@
                             <v-flex grow align-self-center pl-5>
                                 <div class="pb-3">
                                     <div v-if="!contentReviewsList.length" class="pb-1 subheading half-bold">There are no reviews for this material yet</div>
-                                    <div v-if="userHasExpertise && !userHasReview">You will get ECI in <span class="body-2">{{userRelatedExpertise.map(exp => exp.discipline_name).join(", ")}}</span> for your contribution to this project</div>
+                                    <div v-if="userHasExpertise && !userHasReview">You will get <span class="body-2">approximately 3000 ECI reward in {{userRelatedExpertise.map(exp => exp.discipline_name).join(", ")}}</span> for your contribution to this project</div>
                                     <div v-else-if="userHasExpertise && userHasReview" class="pb-1 subheading half-bold">You have reviewed this material already</div>
                                     <div v-else-if="!userHasExpertise">Users with expertise in <span class="body-2">{{research.disciplines.map(d => d.name).join(", ")}}</span> can review this project only</div>
                                 </div>
@@ -277,7 +281,7 @@
                         { text: 'Type', align: 'left', sortable: false },
                         { text: 'Title', align: 'left', sortable: false },
                         { text: 'Date', align: 'center', sortable: false },
-                        { text: 'ECI', align: 'center', sortable: false },
+                        { text: 'Reward ECI', align: 'center', sortable: false },
                         { text: 'Total ECI', align: 'center', sortable: false },
                     ],
                     actionsColorMap: {
@@ -605,5 +609,13 @@
 </script>
 
 <style lang="less" scoped>
+
+.eci-up {
+  background-color: #b8ddc8;
+}
+
+.eci-down {
+  background-color: #ffbdbd;
+}
 
 </style>

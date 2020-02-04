@@ -1,6 +1,24 @@
 <template>
     <div>
-        <div class="pb-4" v-if="review.author.account.name !== user.username && userHasExpertise">
+
+        <div class="pb-2">
+            <router-link class="a title" 
+                :to="{
+                    name: 'ResearchContentDetails',
+                    params: {
+                        research_group_permlink: encodeURIComponent(research.group_permlink),
+                        research_permlink: encodeURIComponent(research.permlink),
+                        content_permlink: encodeURIComponent(content.permlink)
+                    }
+                }"
+            >{{ content.title }}</router-link>
+        </div>
+        
+        <div class="pb-2">
+            <review-assessment v-model="reviewRatings" :researchContentType="content.content_type"></review-assessment>
+        </div>
+
+        <div v-if="review.author.account.name !== user.username && userHasExpertise">
             <div>
                 <v-btn block color="primary"
                     :loading="isReviewVoting" 
@@ -9,9 +27,6 @@
                     Support Review
                 </v-btn>
             </div>
-        </div>
-        <div>
-            <review-assessment v-model="reviewRatings" :researchContentType="content.content_type"></review-assessment>
         </div>
 
         <div v-if="review.votes.length">
@@ -27,6 +42,7 @@
                 </div>
             </v-layout>
         </div>
+
         <div class="pt-2">
             <v-layout row justify-space-between align-baseline>
                 <div class="half-bold align-self-center">Date Added:</div>

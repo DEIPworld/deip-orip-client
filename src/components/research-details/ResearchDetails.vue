@@ -550,8 +550,12 @@
                       <span v-else class="body-2">{{props.item.meta.title}}</span>
                     </td>
                     <td class="text-xs-center">{{ moment(props.item.timestamp).format('D MMM YYYY') }}</td>
-                    <td class="text-xs-center">{{ props.item.delta }}</td>
-                    <td class="text-xs-center">{{ props.item.newAmount }}</td>
+                    <td class="text-xs-center">
+                      <div class="half-bold" :class="{ 'eci-up': props.item.delta > 0, 'eci-down': props.item.delta < 0 }">{{ props.item.delta }}</div>
+                    </td>
+                    <td class="text-xs-center">
+                      <div>{{ props.item.newAmount }}</div>
+                    </td>
                   </template>
                 </v-data-table>
               </div>
@@ -643,10 +647,10 @@
                       <review-assessment v-model="review.ratings" :researchContentType="review.researchContent.content_type"></review-assessment>
                     </div>
                     <div class="pt-2">
-                      <v-tooltip tag="div" bottom>
+                      <v-tooltip tag="div" bottom v-if="review.votes.length">
                         <v-layout slot="activator" row justify-end align-baseline>
-                            <span class="half-bold subheading align-self-center pr-2">{{review.votes.length}}</span>
-                            <v-icon large>group_add</v-icon>
+                            <span class="half-bold align-self-center pr-2">{{review.votes.length}}</span>
+                            <v-icon>group_add</v-icon>
                         </v-layout>
                         <div v-if="review.votes.length">{{review.votes.length}} experts supported this review</div>
                       </v-tooltip>
@@ -706,7 +710,7 @@
                   link-to-profile-class="pl-3"
                 ></platform-avatar>
               </div>
-              <div class="grey--text">{{convertToPercent(member.rgt.amount)}}%</div>
+              <!-- <div class="grey--text">{{convertToPercent(member.rgt.amount)}}%</div> -->
             </v-layout>
             <div v-if="isJoinRequestSectionAvailable">
               <v-btn
@@ -978,7 +982,7 @@ export default {
           { text: 'Type', align: 'left', sortable: false },
           { text: 'Title', align: 'left', sortable: false },
           { text: 'Date', align: 'center', sortable: false },
-          { text: 'ECI', align: 'center', sortable: false },
+          { text: 'Reward ECI', align: 'center', sortable: false },
           { text: 'Total ECI', align: 'center', sortable: false },
         ],
         actionsColorMap: {
@@ -2117,6 +2121,14 @@ export default {
   &__divider {
     border-color: #8FC3F7;
   }
+}
+
+.eci-up {
+  background-color: #b8ddc8;
+}
+
+.eci-down {
+  background-color: #ffbdbd;
 }
 
 </style>

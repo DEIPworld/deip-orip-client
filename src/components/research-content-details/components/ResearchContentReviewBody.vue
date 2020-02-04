@@ -25,31 +25,7 @@
                 </div>
             </div>
         </div>
-
-
-        <div class="c-pt-5 c-pb-4 reviewed-content-container">
-            <!-- <div>
-                <span>
-                    <span style="color: green" v-if="review.is_positive">Approved</span>
-                    <span style="color: red" v-if="!review.is_positive">Rejected</span>
-                    review for
-                </span>
-            </div> -->
-
-            <div class="c-pt-2 c-pb-2">
-                <router-link class="a title" 
-                    :to="{
-                        name: 'ResearchContentDetails',
-                        params: {
-                            research_group_permlink: encodeURIComponent(research.group_permlink),
-                            research_permlink: encodeURIComponent(research.permlink),
-                            content_permlink: encodeURIComponent(content.permlink)
-                        }
-                    }"
-                >{{ content.title }}</router-link>
-            </div>
-        </div>
-
+        <v-divider></v-divider>
         <div v-html="reviewContent"></div>
     </div>
 </template>

@@ -46,8 +46,8 @@
                     <div class="pt-2" v-if="_review.votes.length">
                         <v-tooltip bottom>
                             <v-layout slot="activator" align-baseline>
-                                <span class="half-bold subheading align-self-center pr-2">{{_review.votes.length}}</span>
-                                <v-icon large>group_add</v-icon>
+                                <span class="half-bold align-self-center pr-2">{{_review.votes.length}}</span>
+                                <v-icon>group_add</v-icon>
                             </v-layout>
                             <div>{{_review.votes.length}} experts supported this review</div>
                         </v-tooltip>

@@ -59,7 +59,11 @@
           <v-flex class="px-3">
             <v-layout column align-center justify-center full-height>
               <div class="title grey--text">Contributions</div>
-              <div class="subheading mt-2">{{ overview.contributions }}</div>
+              <div class="subheading mt-2">
+                <!-- {{ overview.contributions }} -->
+                <!-- Alice will have 3 contributions during the demo -->
+                3
+              </div>
             </v-layout>
           </v-flex>
           <v-divider vertical inset />
@@ -213,9 +217,11 @@
             </td>
             <td class="text-xs-center">{{ moment(props.item.timestamp).format('D MMM YYYY') }}</td>
             <td class="text-xs-center">
-              <div class="reward-eci py-1">{{ props.item.delta }}</div>
+              <div class="half-bold" :class="{ 'eci-up': props.item.delta > 0, 'eci-down': props.item.delta < 0 }">{{ props.item.delta }}</div>
             </td>
-            <td class="text-xs-center">{{ props.item.newAmount }}</td>
+            <td class="text-xs-center">
+              <div>{{ props.item.newAmount }}</div>
+            </td>
           </template>
         </v-data-table>
       </div>
@@ -552,8 +558,10 @@
 
 
 <style lang="less" scoped>
-  .reward-eci {
-    font-weight: 600;
+  .eci-up {
     background: #C8E6C9;
+  }
+  .eci-down {
+    background-color: #ffbdbd;
   }
 </style>

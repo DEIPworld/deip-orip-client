@@ -25,7 +25,7 @@
       >Publish</v-btn>
     </div>
 
-    <div class="pt-4 pb-2">
+    <!-- <div class="pt-4 pb-2">
       <v-card class="pa-4">
         <div class="bold subheading pb-2">Related Expertise Tokens:</div>
         <div class="pt-2" v-for="(exp, index) in relatedExpertise" :key="index">
@@ -37,7 +37,7 @@
         <v-icon color="orange">warning</v-icon>
         100% of your Expertise Tokens will be locked for 24 hours after you will have published the review
       </div>
-    </div>
+    </div> -->
 
   </div>
 </template>
