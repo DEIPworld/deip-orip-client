@@ -71,6 +71,16 @@
           </v-flex>
         </v-layout>
       </div>
+      <v-layout justify-end class="px-5 py-3">
+        <router-link
+          class="a mx-0 mr-3"
+          color="primary"
+          outline
+          :to="{
+            name: 'ReviewSetup',
+          }"
+        >Alternative review model</router-link>
+      </v-layout>
       <div class="py-3">
         <v-layout row>
           <v-flex shrink>
@@ -172,14 +182,6 @@
           />
           <div class="subheading" v-else>No data to show</div>
         </template>
-        <v-btn
-          class="mx-0"
-          color="primary"
-          outline
-          :to="{
-            name: 'ReviewSetup',
-          }"
-        >Expertise Contribution Model Setup</v-btn>
       </div>
       <div class="py-3">
         <div class="bold title">History</div>
