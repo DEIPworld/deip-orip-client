@@ -394,8 +394,8 @@ const router = new Router({
 		name: 'CreateFundingOpportunityAnnouncement',
 		component: CreateFundingOpportunityAnnouncement
 	},{
-		path: '/review',
-		name:'Review',
+		path: '/review-setup',
+		name:'ReviewSetup',
 		component: Review
 	}, {
 		path: '*',

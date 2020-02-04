@@ -152,8 +152,8 @@
               outline
               dense
               :disabled="isHistoryPageLoading"
-            /> -->
-          </v-flex>
+            />
+          </v-flex> -->
         </v-layout>
         <GChart
           v-if="eciChartData.length > 1"
@@ -162,7 +162,15 @@
           :data="eciChartData"
           :options="eciChartOptions"
         />
-        <div class="subheading">No data to show</div>
+        <div class="subheading" v-else>No data to show</div>
+        <v-btn
+          class="mx-0"
+          color="primary"
+          outline
+          :to="{
+            name: 'ReviewSetup',
+          }"
+        >Expertise Contribution Model Setup</v-btn>
       </div>
       <div class="py-3">
         <div class="bold title">History</div>
