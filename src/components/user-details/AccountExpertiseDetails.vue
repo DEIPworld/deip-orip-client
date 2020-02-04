@@ -143,7 +143,7 @@
               :disabled="isHistoryPageLoading"
             />
           </v-flex>
-          <v-flex shrink class="pl-3">
+          <!-- <v-flex shrink class="pl-3">
             <v-select
               class="my-0 py-0"
               v-model="filter.criteria"
@@ -152,7 +152,7 @@
               outline
               dense
               :disabled="isHistoryPageLoading"
-            />
+            /> -->
           </v-flex>
         </v-layout>
         <GChart
