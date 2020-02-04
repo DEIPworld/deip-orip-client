@@ -516,8 +516,8 @@
               </v-flex>
             </v-layout>
 
-            <v-layout row v-if="hasEciDisciplineHistoryChanges">
-              <div class="full-width">
+            <v-layout row>
+              <div class="full-width" v-if="eciDisciplineHistoryRecordsChart">
                 <GChart
                   type="LineChart"
                   :settings="{ packages: ['corechart'] }"
@@ -1140,12 +1140,7 @@ export default {
 
     hasEciDisciplineHistoryRecords() {
       let records = this.$store.getters['rd/eciHistoryByDiscipline'](this.selectedEciDisciplineId);
-      return records != null;
-    },
-
-    hasEciDisciplineHistoryChanges() {
-      let records = this.$store.getters['rd/eciHistoryByDiscipline'](this.selectedEciDisciplineId);
-      return records != null && records.length > 1 && records[0].timestamp != records[records.length - 1].timestamp;
+      return records != null && records.length != 0;
     },
 
     eciDisciplineHistoryRecordsChart() {
@@ -1153,21 +1148,30 @@ export default {
       let records = this.$store.getters['rd/eciHistoryByDiscipline'](disciplineId);
       if (!records) return null;
 
-      const startDate = moment(records[0].timestamp);
-      const endDate = moment();
-      const timeDiff = moment.duration(endDate.diff(startDate));
-
       const getPointTooltipHtml = (eci, action, delta) => {
         let assessmentType = delta >= 0 ? "Approved" : "Rejected";
         let assessmentClass = delta >= 0 ? "green--text text--lighten-4" : "red--text text--lighten-4";
         return `
           <div style="width: 100px; padding: 5px; background: #828282; border-radius: 2px; opacity: 0.9">
               <div class="bold white--text text-capitalize">${action}</div>
-              <div class="${assessmentClass} bold">${assessmentType}</div>
+              ${eci != 0 ? `<div class="${assessmentClass} bold">${assessmentType}</div>` : ''} 
               ${delta != 0 ? `<div class="white--text">${delta > 0 ? '+' : '-'} ${delta}</div>` : ''}
           </div>
         `;
       };
+
+      const data = records.map((record, i) => {
+        let date = new Date(record.timestamp);
+        let value = record.newAmount;
+        let delta = record.delta;
+        let actionText = record.actionText;
+        let tooltip = getPointTooltipHtml(value, actionText, delta);
+        return [
+          date,
+          value,
+          tooltip
+        ]
+      });
 
       return {
         data: [
@@ -1176,18 +1180,21 @@ export default {
             "Value",
             { type: "string", role: "tooltip", p: { html: true } }
           ],
-          ...records.map((record, i) => {
-            let date = new Date(record.timestamp);
-            let value = record.newAmount;
-            let delta = record.delta;
-            let actionText = record.actionText;
-            let tooltip = getPointTooltipHtml(value, actionText, delta);
-            return [
-              date,
-              value,
-              tooltip
-            ]
-          })
+          [
+            moment(this.research.created_at).toDate(),
+            0,
+            `<div style="width: 100px; padding: 5px; background: #828282; border-radius: 2px; opacity: 0.9">
+              <div class="bold white--text text-capitalize">Project Created</div>
+            </div>`
+          ],
+          ...data,
+          [
+            moment().toDate(),
+            0,
+            `<div style="width: 100px; padding: 5px; background: #828282; border-radius: 2px; opacity: 0.9">
+              <div class="bold white--text text-capitalize">Now</div>
+            </div>`
+          ]
         ],
 
         options: {
