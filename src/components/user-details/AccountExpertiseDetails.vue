@@ -71,6 +71,16 @@
           </v-flex>
         </v-layout>
       </div>
+      <v-layout justify-end class="px-5 py-3">
+        <router-link
+          class="a mx-0 mr-3"
+          color="primary"
+          outline
+          :to="{
+            name: 'ReviewSetup',
+          }"
+        >Alternative review model</router-link>
+      </v-layout>
       <div class="py-3">
         <v-layout row>
           <v-flex shrink>
@@ -87,7 +97,7 @@
               <template v-slot:activator="{ on }">
                 <v-text-field
                   v-model="filter.fromDate"
-                  :disabled="isHistoryPageLoading"
+                  :disabled="isHistoryChartLoading"
                   label="From"
                   readonly
                   outline
@@ -116,7 +126,7 @@
               <template v-slot:activator="{ on }">
                 <v-text-field
                   v-model="filter.toDate"
-                  :disabled="isHistoryPageLoading"
+                  :disabled="isHistoryChartLoading"
                   label="To"
                   readonly
                   outline
@@ -136,11 +146,11 @@
               class="my-0 py-0"
               v-model="filter.contentType"
               :items="filter.contentTypeItems"
-              label="Content Type"
+              label="Contribution Type"
               outline
               dense
               clearable
-              :disabled="isHistoryPageLoading"
+              :disabled="isHistoryChartLoading"
             />
           </v-flex>
           <!-- <v-flex shrink class="pl-3">
@@ -151,26 +161,27 @@
               label="Criteria"
               outline
               dense
-              :disabled="isHistoryPageLoading"
+              :disabled="isHistoryChartLoading"
             />
           </v-flex> -->
         </v-layout>
-        <GChart
-          v-if="eciChartData.length > 1"
-          type="LineChart"
-          :settings="{ packages: ['corechart'] }"
-          :data="eciChartData"
-          :options="eciChartOptions"
-        />
-        <div class="subheading" v-else>No data to show</div>
-        <v-btn
-          class="mx-0"
-          color="primary"
-          outline
-          :to="{
-            name: 'ReviewSetup',
-          }"
-        >Expertise Contribution Model Setup</v-btn>
+        <v-layout justify-center align-center v-if="isHistoryChartLoading">
+          <v-progress-circular
+            indeterminate
+            :width="3"
+            :size="40"
+          />
+        </v-layout>
+        <template v-else>
+          <GChart
+            v-if="eciChartData.length > 1"
+            type="LineChart"
+            :settings="{ packages: ['corechart'] }"
+            :data="eciChartData"
+            :options="eciChartOptions"
+          />
+          <div class="subheading" v-else>No data to show</div>
+        </template>
       </div>
       <div class="py-3">
         <div class="bold title">History</div>
@@ -201,7 +212,9 @@
               <template v-else>{{props.item.meta.title}}</template>
             </td>
             <td class="text-xs-center">{{ moment(props.item.timestamp).format('D MMM YYYY') }}</td>
-            <td class="text-xs-center">{{ props.item.delta }}</td>
+            <td class="text-xs-center">
+              <div class="reward-eci py-1">{{ props.item.delta }}</div>
+            </td>
             <td class="text-xs-center">{{ props.item.newAmount }}</td>
           </template>
         </v-data-table>
@@ -283,14 +296,16 @@
         isHistoryPageLoading: false,
 
         history: [],
+        filteredHistory: [],
         isHistoryLoading: false,
+        isHistoryChartLoading: false,
 
         historyTable: {
           headers: [
             { text: 'Type', align: 'left', sortable: false },
             { text: 'Title', align: 'left', sortable: false },
             { text: 'Date', align: 'center', sortable: false },
-            { text: 'ECI', align: 'center', sortable: false },
+            { text: 'Reward ECI', align: 'center', sortable: false },
             { text: 'Total ECI', align: 'center', sortable: false },
           ],
           actionsColorMap: {
@@ -377,22 +392,6 @@
             })
           ],
         };
-      },
-      filteredHistory() {
-        const fromDateMs = (new Date(this.filter.fromDate)).getTime();
-        const toDateMs = +this.moment(this.filter.toDate)
-          .add(1, 'days')
-          .startOf('day');
-        return this.history.filter((item) => {
-          if (item.timestamp < fromDateMs || item.timestamp > toDateMs) {
-            return false;
-          }
-          if (this.filter.contentType && item.action !== this.filter.contentType) {
-            return false;
-          }
-
-          return true;
-        });
       },
       eciChartData() {
         return [
@@ -485,9 +484,9 @@
             this.isHistoryPageLoading = false;
           });
       },
-      loadExpertiseHistory(disciplineId) {
+      loadExpertiseHistory() {
         this.isHistoryLoading = true;
-        return getExpertiseHistory(this.$route.params.account_name, disciplineId)
+        return getExpertiseHistory(this.$route.params.account_name, this.selectedExpertise.discipline_id)
           .then((history) => {
             this.history = history;
           })
@@ -496,14 +495,42 @@
             this.isHistoryLoading = false;
           });
       },
+      loadFilteredHistory() {
+        this.isHistoryChartLoading = true;
+        const fromDateMs = (new Date(this.filter.fromDate)).getTime();
+        const toDateMs = +this.moment(this.filter.toDate)
+          .add(1, 'days')
+          .startOf('day');
+
+        return getExpertiseHistory(
+          this.$route.params.account_name,
+          this.selectedExpertise.discipline_id,
+          fromDateMs,
+          toDateMs
+        ).then((history) => {
+          this.filteredHistory = history.filter((item) => {
+            if (this.filter.contentType && item.action !== this.filter.contentType) {
+              return false;
+            }
+
+            return true;
+          });
+        }).catch((err) => {
+          console.error(err);
+        }).finally(() => {
+          this.isHistoryChartLoading = false;
+        });
+      },
       onDisciplineChanged() {
-        this.loadExpertiseHistory(this.selectedExpertise.discipline_id);
+        this.loadExpertiseHistory();
       },
       onFromDateSelected() {
         this.filter.fromDateMenu = false
+        this.loadFilteredHistory();
       },
       onToDateSelected() {
         this.filter.toDateMenu = false
+        this.loadFilteredHistory();
       },
     },
 
@@ -516,7 +543,8 @@
         this.selectedExpertiseId = this.expertise[0].id;
       }
       if (this.selectedExpertiseId !== null) {
-        this.loadExpertiseHistory(this.selectedExpertise.discipline_id)
+        this.loadExpertiseHistory();
+        this.loadFilteredHistory();
       }
     }
   };
@@ -524,4 +552,8 @@
 
 
 <style lang="less" scoped>
+  .reward-eci {
+    font-weight: 600;
+    background: #C8E6C9;
+  }
 </style>

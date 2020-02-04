@@ -31,8 +31,11 @@ const mapHistoryElement = (elem) => {
   return mappedElem;
 };
 
-const getExpertiseHistory = (username, disciplineId) => {
-  return deipRpc.api.getExpertiseHistoryByAccountAndDisciplineAsync(username, disciplineId)
+const getExpertiseHistory = (username, disciplineId, from = 0, to = Date.now()) => {
+  const _from = Math.round(from / 1000);
+  const _to = Math.ceil(to / 1000);
+
+  return deipRpc.api.getExpertiseHistoryByAccountAndDisciplineAsync(username, disciplineId, _from, _to)
     .then((history) => {
       return history.map(mapHistoryElement);
     });
