@@ -136,7 +136,7 @@
               class="my-0 py-0"
               v-model="filter.contentType"
               :items="filter.contentTypeItems"
-              label="Content Type"
+              label="Contribution Type"
               outline
               dense
               clearable
