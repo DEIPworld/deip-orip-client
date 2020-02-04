@@ -156,7 +156,6 @@
           </v-flex>
         </v-layout>
         <GChart
-          v-if="eciChartData.length"
           type="LineChart"
           :settings="{ packages: ['corechart'] }"
           :data="eciChartData"
@@ -389,13 +388,20 @@
           }
 
           return true;
-        });;
+        });
       },
       eciChartData() {
-        return [
-          ['Date', 'Value'],
-          ...this.filteredHistory.map((e) => [new Date(e.timestamp), e.newAmount])
+        let chartData = [
+          ['Date', 'Value']
         ];
+
+        const data = this.filteredHistory.map((e) => [new Date(e.timestamp), e.newAmount]);
+        if (data.length) {
+          chartData = [...chartData, ...data]
+        } else {
+          chartData = [...chartData, ['', 0]];
+        }
+        return chartData;
       }
     },
 
