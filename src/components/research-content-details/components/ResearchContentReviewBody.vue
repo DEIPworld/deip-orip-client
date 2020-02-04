@@ -28,13 +28,13 @@
 
 
         <div class="c-pt-5 c-pb-4 reviewed-content-container">
-            <div>
+            <!-- <div>
                 <span>
                     <span style="color: green" v-if="review.is_positive">Approved</span>
                     <span style="color: red" v-if="!review.is_positive">Rejected</span>
                     review for
                 </span>
-            </div>
+            </div> -->
 
             <div class="c-pt-2 c-pb-2">
                 <router-link class="a title" 

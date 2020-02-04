@@ -24,7 +24,7 @@
                 <div class="pl-4">
                     <div>
                         <span class="grey--text">{{ _review.created_at | dateFormat('D MMM YYYY', true) }}</span>
-                        <span class="half-bold c-pl-2">
+                        <span class="half-bold pl-2">
                             <span class="green--text text--darken-2" v-if="_review.is_positive">Approving</span>
                             <span class="red--text text--darken-2" v-if="!_review.is_positive">Rejecting</span>
                         </span>
@@ -41,8 +41,17 @@
             </v-flex>
             
             <v-flex xs4 px-2>
-                <v-layout align-end column class="">
+                <v-layout align-end column>
                     <review-assessment v-model="_review.ratings" :researchContentType="researchContentType"></review-assessment>
+                    <div class="pt-2" v-if="_review.votes.length">
+                        <v-tooltip bottom>
+                            <v-layout slot="activator" align-baseline>
+                                <span class="half-bold subheading align-self-center pr-2">{{_review.votes.length}}</span>
+                                <v-icon large>group_add</v-icon>
+                            </v-layout>
+                            <div>{{_review.votes.length}} experts supported this review</div>
+                        </v-tooltip>
+                    </div>
                 </v-layout>
             </v-flex>
         </v-layout>

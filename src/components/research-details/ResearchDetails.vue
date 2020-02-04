@@ -603,31 +603,37 @@
                   </v-layout>
                 </v-flex>
                 <v-flex lg4 class="px-4 right-bordered">
-                  <div v-if="review.research_content" v-on:click.stop>
-                    <div>
-                      <span>Review to </span>
-                      <span class="bold">{{ getResearchContentType(review.research_content.content_type).text }}</span>
+                  <v-layout column fill-height>
+                    <div v-if="review.research_content" v-on:click.stop>
+                      <div>
+                        <span>Review to </span>
+                        <span class="bold">{{ getResearchContentType(review.research_content.content_type).text }}</span>
+                      </div>
+                      <router-link
+                        tag="div"
+                        class="a py-2"
+                        :to="{
+                          name: 'ResearchContentDetails',
+                          params: {
+                            research_group_permlink: encodeURIComponent(research.group_permlink),
+                            research_permlink: encodeURIComponent(research.permlink),
+                            content_permlink: encodeURIComponent(review.research_content.permlink)
+                          }
+                        }"
+                      >{{review.research_content.title}}</router-link>
                     </div>
-                    <router-link
-                      tag="div"
-                      class="a py-2"
-                      :to="{
-                        name: 'ResearchContentDetails',
-                        params: {
-                          research_group_permlink: encodeURIComponent(research.group_permlink),
-                          research_permlink: encodeURIComponent(research.permlink),
-                          content_permlink: encodeURIComponent(review.research_content.permlink)
-                        }
-                      }"
-                    >{{review.research_content.title}}</router-link>
-                  </div>
-                  <v-layout row wrap>
-                    <v-flex
-                      v-for="item of review.disciplines"
-                      :key="`${review.id}- ${item.disciplineName}`"
-                      class="rd-review-eci mt-1"
-                      lg12
-                    >{{item.disciplineName}}</v-flex>
+                    <v-layout row wrap>
+                      <v-flex
+                        v-for="item of review.disciplines"
+                        :key="`${review.id}- ${item.disciplineName}`"
+                        class="rd-review-eci mt-1"
+                        lg12
+                      >{{item.disciplineName}}</v-flex>
+                    </v-layout>
+                    <div class="grey--text text-xs-right pt-2">
+                      <v-icon small>event</v-icon>
+                      {{moment(review.created_at).format("D, MMM YYYY")}}
+                    </div>
                   </v-layout>
                 </v-flex>
                 <v-flex lg4>
@@ -636,9 +642,14 @@
                       <div class="bold">Assessment</div>
                       <review-assessment v-model="review.ratings" :researchContentType="review.researchContent.content_type"></review-assessment>
                     </div>
-                    <div class="grey--text text-xs-right pt-2">
-                      <v-icon small>event</v-icon>
-                      {{moment(review.created_at).format("MMM D, YYYY")}}
+                    <div class="pt-2">
+                      <v-tooltip tag="div" bottom>
+                        <v-layout slot="activator" row justify-end align-baseline>
+                            <span class="half-bold subheading align-self-center pr-2">{{review.votes.length}}</span>
+                            <v-icon large>group_add</v-icon>
+                        </v-layout>
+                        <div v-if="review.votes.length">{{review.votes.length}} experts supported this review</div>
+                      </v-tooltip>
                     </div>
                   </v-layout>
                 </v-flex>

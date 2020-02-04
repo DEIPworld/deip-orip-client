@@ -350,14 +350,35 @@ const actions = {
                     getEnrichedProfiles(reviews.map(r => r.author))
                 ]);
             }, (err) => {console.log(err)})
-            .then(([reviewVotes, users]) => {
-                reviews.forEach((review, i) => {
+            .then(([votes, users]) => {
+                let voters = [];
+                for (let i = 0; i < reviews.length; i++) {
+                    let review = reviews[i];
                     review.author = users.find(u => u.account.name == review.author);
-                    review.votes = reviewVotes[i];
-                });
+                    
+                    let reviewVotes = votes[i];
+                    review.votes = reviewVotes;
 
-                commit('SET_RESEARCH_CONTENT_REVIEWS_LIST', reviews);
+                    for (let j = 0; j < reviewVotes.length; j++) {
+                        let vote = reviewVotes[j];
+                        if (!voters.some(v => v == vote.voter)) {
+                            voters.push(vote.voter)
+                        }
+                    }
+                }
+                
+                return getEnrichedProfiles(voters);
             }, (err) => {console.log(err)})
+            .then((users) => {
+                for (let i = 0; i < reviews.length; i++) {
+                    let review = reviews[i];
+                    for (let j = 0; j < review.votes.length; j++) {
+                        let vote = review.votes[j];
+                        vote.voterProfile = users.find(u => vote.voter == u.account.name);
+                    }
+                }
+                commit('SET_RESEARCH_CONTENT_REVIEWS_LIST', reviews);
+            })
             .finally(() => {
                 commit('SET_RESEARCH_CONTENT_REVIEWS_LOADING_STATE', false)
                 if (notify) notify();

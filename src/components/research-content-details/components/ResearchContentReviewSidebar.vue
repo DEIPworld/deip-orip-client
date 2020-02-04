@@ -1,6 +1,6 @@
 <template>
     <div>
-        <div class="c-mb-8" v-if="review.author.account.name !== user.username && userHasExpertise">
+        <div class="pb-4" v-if="review.author.account.name !== user.username && userHasExpertise">
             <div>
                 <v-btn block color="primary"
                     :loading="isReviewVoting" 
@@ -12,6 +12,29 @@
         </div>
         <div>
             <review-assessment v-model="reviewRatings" :researchContentType="content.content_type"></review-assessment>
+        </div>
+
+        <div v-if="review.votes.length">
+            <div class="subheading bold py-4">Supporters: {{review.votes.length}}</div>
+            <v-layout row v-for="(vote, i) in review.votes" :key="`curator-${i}`" :class="{ 'pb-1': i == 0, 'py-1': i != 0 }">
+                <div>
+                    <platform-avatar 
+                        :user="vote.voterProfile"
+                        :size="40"
+                        link-to-profile
+                        link-to-profile-class="px-1"
+                    ></platform-avatar>
+                </div>
+            </v-layout>
+        </div>
+        <div class="pt-2">
+            <v-layout row justify-space-between align-baseline>
+                <div class="half-bold align-self-center">Date Added:</div>
+                <div class="py-2">
+                    <v-icon color="grey" small>event</v-icon>
+                    <span>{{moment(review.created_at).format("D MMM YYYY")}}</span>
+                </div>
+            </v-layout>
         </div>
     </div>
 </template>
