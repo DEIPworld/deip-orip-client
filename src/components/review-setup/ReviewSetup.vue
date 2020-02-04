@@ -109,7 +109,7 @@
 
 <script>
 export default {
-  name: "Review",
+  name: "ReviewSetup",
 
   data() {
     return {

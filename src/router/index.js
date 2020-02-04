@@ -49,7 +49,7 @@ import VotingForBlockProducers from '@/components/voting-for-block-producers/Vot
 import CreateFundingOpportunityAnnouncement from '@/components/funding-opportunity-announcement-create/CreateFundingOpportunityAnnouncement';
 import InvestorDashboard from '@/components/investor-dashboard/InvestorDashboard';
 
-import Review from '@/components/review-setup/Review'
+import ReviewSetup from '@/components/review-setup/ReviewSetup'
 
 
 import store from './../store/index';
@@ -394,9 +394,9 @@ const router = new Router({
 		name: 'CreateFundingOpportunityAnnouncement',
 		component: CreateFundingOpportunityAnnouncement
 	},{
-		path: '/review',
-		name:'Review',
-		component: Review
+		path: '/eci-model-setup',
+		name:'ReviewSetup',
+		component: ReviewSetup
 	}, {
 		path: '*',
 		name: 'Default',
