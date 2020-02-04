@@ -87,7 +87,7 @@
               <template v-slot:activator="{ on }">
                 <v-text-field
                   v-model="filter.fromDate"
-                  :disabled="isHistoryPageLoading"
+                  :disabled="isHistoryChartLoading"
                   label="From"
                   readonly
                   outline
@@ -116,7 +116,7 @@
               <template v-slot:activator="{ on }">
                 <v-text-field
                   v-model="filter.toDate"
-                  :disabled="isHistoryPageLoading"
+                  :disabled="isHistoryChartLoading"
                   label="To"
                   readonly
                   outline
@@ -140,7 +140,7 @@
               outline
               dense
               clearable
-              :disabled="isHistoryPageLoading"
+              :disabled="isHistoryChartLoading"
             />
           </v-flex>
           <!-- <v-flex shrink class="pl-3">
@@ -151,18 +151,27 @@
               label="Criteria"
               outline
               dense
-              :disabled="isHistoryPageLoading"
+              :disabled="isHistoryChartLoading"
             />
           </v-flex> -->
         </v-layout>
-        <GChart
-          v-if="eciChartData.length > 1"
-          type="LineChart"
-          :settings="{ packages: ['corechart'] }"
-          :data="eciChartData"
-          :options="eciChartOptions"
-        />
-        <div class="subheading" v-else>No data to show</div>
+        <v-layout justify-center align-center v-if="isHistoryChartLoading">
+          <v-progress-circular
+            indeterminate
+            :width="3"
+            :size="40"
+          />
+        </v-layout>
+        <template v-else>
+          <GChart
+            v-if="eciChartData.length > 1"
+            type="LineChart"
+            :settings="{ packages: ['corechart'] }"
+            :data="eciChartData"
+            :options="eciChartOptions"
+          />
+          <div class="subheading" v-else>No data to show</div>
+        </template>
         <v-btn
           class="mx-0"
           color="primary"
@@ -283,7 +292,9 @@
         isHistoryPageLoading: false,
 
         history: [],
+        filteredHistory: [],
         isHistoryLoading: false,
+        isHistoryChartLoading: false,
 
         historyTable: {
           headers: [
@@ -378,22 +389,6 @@
           ],
         };
       },
-      filteredHistory() {
-        const fromDateMs = (new Date(this.filter.fromDate)).getTime();
-        const toDateMs = +this.moment(this.filter.toDate)
-          .add(1, 'days')
-          .startOf('day');
-        return this.history.filter((item) => {
-          if (item.timestamp < fromDateMs || item.timestamp > toDateMs) {
-            return false;
-          }
-          if (this.filter.contentType && item.action !== this.filter.contentType) {
-            return false;
-          }
-
-          return true;
-        });
-      },
       eciChartData() {
         return [
           ['Date', 'Value'],
@@ -485,9 +480,9 @@
             this.isHistoryPageLoading = false;
           });
       },
-      loadExpertiseHistory(disciplineId) {
+      loadExpertiseHistory() {
         this.isHistoryLoading = true;
-        return getExpertiseHistory(this.$route.params.account_name, disciplineId)
+        return getExpertiseHistory(this.$route.params.account_name, this.selectedExpertise.discipline_id)
           .then((history) => {
             this.history = history;
           })
@@ -496,14 +491,42 @@
             this.isHistoryLoading = false;
           });
       },
+      loadFilteredHistory() {
+        this.isHistoryChartLoading = true;
+        const fromDateMs = (new Date(this.filter.fromDate)).getTime();
+        const toDateMs = +this.moment(this.filter.toDate)
+          .add(1, 'days')
+          .startOf('day');
+
+        return getExpertiseHistory(
+          this.$route.params.account_name,
+          this.selectedExpertise.discipline_id,
+          fromDateMs,
+          toDateMs
+        ).then((history) => {
+          this.filteredHistory = history.filter((item) => {
+            if (this.filter.contentType && item.action !== this.filter.contentType) {
+              return false;
+            }
+
+            return true;
+          });
+        }).catch((err) => {
+          console.error(err);
+        }).finally(() => {
+          this.isHistoryChartLoading = false;
+        });
+      },
       onDisciplineChanged() {
-        this.loadExpertiseHistory(this.selectedExpertise.discipline_id);
+        this.loadExpertiseHistory();
       },
       onFromDateSelected() {
         this.filter.fromDateMenu = false
+        this.loadFilteredHistory();
       },
       onToDateSelected() {
         this.filter.toDateMenu = false
+        this.loadFilteredHistory();
       },
     },
 
@@ -516,7 +539,8 @@
         this.selectedExpertiseId = this.expertise[0].id;
       }
       if (this.selectedExpertiseId !== null) {
-        this.loadExpertiseHistory(this.selectedExpertise.discipline_id)
+        this.loadExpertiseHistory();
+        this.loadFilteredHistory();
       }
     }
   };
