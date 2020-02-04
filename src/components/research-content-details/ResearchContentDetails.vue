@@ -31,61 +31,7 @@
                 <research-content-details-package v-if="isFilePackageContent" class="pa-5"></research-content-details-package>
                 <research-content-details-dar v-if="isDarContent" :contentRef="contentRef"></research-content-details-dar>
 
-                <!-- START Research Content Reviews section -->
-                <div v-if="isPublished && contentReviewsList.length" class="px-5">
-                    <div id="reviews">
-                        <div class="py-2 title">Reviews: {{ contentReviewsList.length }}</div>
-                        <div class="py-2">
-                            <div v-for="(review, i) in contentReviewsList" :key="`review-${i}`">
-                                <review-tile class="my-2" :review="review" :researchContentType="content.content_type"></review-tile>
-                                <v-divider v-if="i != contentReviewsList.length - 1"></v-divider>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div v-if="isPublished && !isResearchGroupMember" class="px-5 pt-2 pb-5">
-                    <v-card class="py-4 px-5">
-                        <v-layout id="reviews" class="py-2" row>
-                            <v-flex shrink align-self-center pr-5>
-                                <img src="/static/add-review-icon.png" />
-                            </v-flex>
-                            <v-flex grow align-self-center pl-5>
-                                <div class="pb-3">
-                                    <div v-if="!contentReviewsList.length" class="pb-1 subheading half-bold">There are no reviews for this material yet</div>
-                                    <div v-if="userHasExpertise && !userHasReview">You will get ECI in <span class="body-2">{{userRelatedExpertise.map(exp => exp.discipline_name).join(", ")}}</span> for your contribution to this project</div>
-                                    <div v-else-if="userHasExpertise && userHasReview" class="pb-1 subheading half-bold">You have reviewed this material already</div>
-                                    <div v-else-if="!userHasExpertise">Users with expertise in <span class="body-2">{{research.disciplines.map(d => d.name).join(", ")}}</span> can review this project only</div>
-                                </div>
-                                <div style="width: 200px">
-                                    <v-btn :to="{ 
-                                            name: 'ResearchContentAddReview', 
-                                            params: {
-                                                group_permlink: decodeURIComponent(research.group_permlink),
-                                                research_permlink: decodeURIComponent(research.permlink),
-                                                content_permlink: decodeURIComponent(content.permlink),
-                                            }}" 
-                                            :disabled="!isCreatingReviewAvailable" block color="primary" class="ma-0">
-                                        Add review
-                                    </v-btn>
-                                </div>
-                            </v-flex>
-                        </v-layout>
-                    </v-card>
-                </div>
-                <!-- END Research Content Reviews section -->
-
-                <!-- START Research Content References section -->
-                <div v-if="isInProgress && isDarContent" class="px-5 py-2">
-                    <internal-references-picker 
-                        :currentResearchId="research.id"
-                        :preselected="contentRef.references.slice()" 
-                        @referenceAdded="addReference" 
-                        @referenceRemoved="removeReference">
-                    </internal-references-picker>
-                </div>
-                <!-- END Research Content References section -->
-                <div class="px-5 pt-3 pb-5" >
+                <div class="px-5 py-4" >
                     <v-layout row align-baseline>
                         <v-flex grow>
                             <div class="half-bold title">Expertise Contribution Index</div>
@@ -147,6 +93,62 @@
                         </div>
                     </v-layout>
                 </div>
+                <v-divider class="mx-5"></v-divider>
+
+                <!-- START Research Content Reviews section -->
+                <div v-if="isPublished && contentReviewsList.length" class="px-5 py-4">
+                    <div id="reviews">
+                        <div class="py-2 title">Reviews: {{ contentReviewsList.length }}</div>
+                        <div class="py-2">
+                            <div v-for="(review, i) in contentReviewsList" :key="`review-${i}`">
+                                <review-tile class="my-2" :review="review" :researchContentType="content.content_type"></review-tile>
+                                <v-divider v-if="i != contentReviewsList.length - 1"></v-divider>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div v-if="isPublished && !isResearchGroupMember" class="px-5 pt-2 pb-5">
+                    <v-card class="py-4 px-5">
+                        <v-layout id="reviews" class="py-2" row>
+                            <v-flex shrink align-self-center pr-5>
+                                <img src="/static/add-review-icon.png" />
+                            </v-flex>
+                            <v-flex grow align-self-center pl-5>
+                                <div class="pb-3">
+                                    <div v-if="!contentReviewsList.length" class="pb-1 subheading half-bold">There are no reviews for this material yet</div>
+                                    <div v-if="userHasExpertise && !userHasReview">You will get ECI in <span class="body-2">{{userRelatedExpertise.map(exp => exp.discipline_name).join(", ")}}</span> for your contribution to this project</div>
+                                    <div v-else-if="userHasExpertise && userHasReview" class="pb-1 subheading half-bold">You have reviewed this material already</div>
+                                    <div v-else-if="!userHasExpertise">Users with expertise in <span class="body-2">{{research.disciplines.map(d => d.name).join(", ")}}</span> can review this project only</div>
+                                </div>
+                                <div style="width: 200px">
+                                    <v-btn :to="{ 
+                                            name: 'ResearchContentAddReview', 
+                                            params: {
+                                                group_permlink: decodeURIComponent(research.group_permlink),
+                                                research_permlink: decodeURIComponent(research.permlink),
+                                                content_permlink: decodeURIComponent(content.permlink),
+                                            }}" 
+                                            :disabled="!isCreatingReviewAvailable" block color="primary" class="ma-0">
+                                        Add review
+                                    </v-btn>
+                                </div>
+                            </v-flex>
+                        </v-layout>
+                    </v-card>
+                </div>
+                <!-- END Research Content Reviews section -->
+
+                <!-- START Research Content References section -->
+                <!-- <div v-if="isInProgress && isDarContent" class="px-5 py-2">
+                    <internal-references-picker 
+                        :currentResearchId="research.id"
+                        :preselected="contentRef.references.slice()" 
+                        @referenceAdded="addReference" 
+                        @referenceRemoved="removeReference">
+                    </internal-references-picker>
+                </div> -->
+                <!-- END Research Content References section -->
 
                 <!-- START Proposal dialog section -->
                     <v-dialog v-if="research" v-model="proposeContent.isOpen" persistent transition="scale-transition" max-width="600px">

@@ -39,7 +39,22 @@
             <div class="sidebar-fullwidth"><v-divider></v-divider></div>
             <div class="subheading bold c-mt-4">Expertise Contribution Index</div>
             
-            <div class="c-mt-4">
+            <v-layout
+              v-for="eci of eciList"
+              column
+              tag="div"
+              :key="eci.disciplineName"
+              justify-space-between
+              class="expertise pa-2 my-2"
+            >
+              <v-layout justify-space-between class="">
+                  <div class="blue--text text--accent-4 bold">TOP <span class="font-weight-bold">{{getResearchContentEciPercentile(eci)}}</span>%</div>
+                  <div class="grey--text">ECI {{ eci.value }}</div>
+              </v-layout>
+              <v-divider class="expertise__divider" />
+              <div class="expertise__disc-name pt-1">{{ eci.disciplineName }}</div>
+            </v-layout>
+            <!-- <div class="c-mt-4">
                 <div v-for="(eci, index) in eciList" :key="index"
                     class="legacy-row align-center legacy-justify-between eci-item c-ph-2" 
                     :class="index === 0 ? '' : 'c-mt-1'"
@@ -50,7 +65,7 @@
                         {{ eci.disciplineName }}: {{ eci.value }}
                     </div>
                 </div>
-            </div>
+            </div> -->
         </div>
         <!-- ### END Research Content ECI Section ### -->
         <div class="sidebar-fullwidth"><v-divider></v-divider></div>
@@ -486,18 +501,15 @@
                 this.requestExpertReviewDialog.isShown = false;
               });
             },
+
+            getResearchContentEciPercentile() {
+                return this.research.id < 29 ? 100 - this.research.id : 10;
+            }
         }
     };
 </script>
 
 <style lang="less" scoped>
-    .eci-item {
-        border: 1px solid #e4e4e4;
-        border-radius: 3px;
-    }
-    .eci-label {
-       color: #818181;
-    }
     .selected-author-item {
         background-color: #e0e0e0;
         width: 100%;
@@ -508,5 +520,21 @@
     }
     .author-checkbox {
         max-height: 30px !important;
+    }
+
+    .expertise {
+        background: #EBF5FE;
+        border: 1px solid #8FC3F7;
+        box-sizing: border-box;
+        border-radius: 2px;
+        font-family: Muli;
+
+        &__disc-name {
+            font-weight: 600;
+        }
+
+        &__divider {
+            border-color: #8FC3F7;
+        }
     }
 </style>

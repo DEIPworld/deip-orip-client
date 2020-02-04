@@ -125,7 +125,7 @@
 
         <!-- ### START User Profile Expertise Section ### -->
         <div class="mt-4">
-          <div class="title bold">Expertise Tokens</div>
+          <div class="title bold">Expertise Contribution Index</div>
           <div class="c-pt-4 c-pb-2">
             <router-link tag="div"
               v-for="(item, i) in expertise" :key="`expertise-${i}`"
@@ -140,7 +140,7 @@
               }"
               class="expertise pa-2 my-2"
             >
-              <v-layout justify-space-between class="py-1">
+              <v-layout justify-space-between class="">
                 <div class="blue--text text--accent-4 bold">TOP <span class="font-weight-bold">{{getEciPercentile(item.amount)}}</span>%</div>
                 <div class="grey--text">ECI {{ item.amount }}</div>
               </v-layout>
@@ -151,8 +151,8 @@
               <div v-if="isOwner">You have no Expertise Tokens yet. Use <span class="a" @click="openClaimExpertiseDialog()">Claim</span> process to apply for Expertise Tokens</div>
               <div v-if="!isOwner"><span class="body-2">{{userInfo | fullname}}</span> has no Expertise Tokens yet</div>
             </div>
-            <div v-if="expertise.length && isOwner" class="body-1 text-align-right c-mt-4">
-              <v-btn @click="openClaimExpertiseDialog()" outline small color="primary" class="ma-0">
+            <div v-if="expertise.length && isOwner" class="body-1 full-width c-mt-4">
+              <v-btn @click="openClaimExpertiseDialog()" block outline small color="primary" class="ma-0">
                 Claim new Discipline
               </v-btn>
             </div>

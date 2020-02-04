@@ -603,8 +603,11 @@
                   </v-layout>
                 </v-flex>
                 <v-flex lg4 class="px-4 right-bordered">
-                  <div v-if="review.research_content" v-on:click.stop class="bold">
-                    <div>Review to</div>
+                  <div v-if="review.research_content" v-on:click.stop>
+                    <div>
+                      <span>Review to </span>
+                      <span class="bold">{{ getResearchContentType(review.research_content.content_type).text }}</span>
+                    </div>
                     <router-link
                       tag="div"
                       class="a py-2"
@@ -776,12 +779,18 @@
             <div class="rd-sidebar-block-title pb-2">Expertise Contribution Index</div>
             <v-layout
               v-for="eci of eciList"
+              column
+              tag="div"
               :key="eci.disciplineName"
               justify-space-between
-              class="mt-2 px-3 py-2 rd-eci-item"
+              class="expertise pa-2 my-2"
             >
-              <div>{{eci.disciplineName}}</div>
-              <div class="bold">{{eci.value}}</div>
+              <v-layout justify-space-between class="">
+                  <div class="blue--text text--accent-4 bold">TOP <span class="font-weight-bold">{{getResearchEciPercentile(eci)}}</span>%</div>
+                  <div class="grey--text">ECI {{ eci.value }}</div>
+              </v-layout>
+              <v-divider class="expertise__divider" />
+              <div class="expertise__disc-name pt-1">{{ eci.disciplineName }}</div>
             </v-layout>
           </v-layout>
           <v-layout column class="my-4 mx-4">
@@ -1801,6 +1810,10 @@ export default {
       }
     },
 
+    getResearchEciPercentile(eci) {
+      return this.research.id < 29 ? 100 - this.research.id : 10;
+    },
+
     getResearchContentType
   },
 
@@ -2077,6 +2090,22 @@ export default {
 .milestone-description {
   max-height: 500px; 
   overflow: scroll
+}
+
+.expertise {
+  background: #EBF5FE;
+  border: 1px solid #8FC3F7;
+  box-sizing: border-box;
+  border-radius: 2px;
+  font-family: Muli;
+
+  &__disc-name {
+    font-weight: 600;
+  }
+
+  &__divider {
+    border-color: #8FC3F7;
+  }
 }
 
 </style>
