@@ -210,7 +210,9 @@
               <template v-else>{{props.item.meta.title}}</template>
             </td>
             <td class="text-xs-center">{{ moment(props.item.timestamp).format('D MMM YYYY') }}</td>
-            <td class="text-xs-center">{{ props.item.delta }}</td>
+            <td class="text-xs-center">
+              <div class="reward-eci py-1">{{ props.item.delta }}</div>
+            </td>
             <td class="text-xs-center">{{ props.item.newAmount }}</td>
           </template>
         </v-data-table>
@@ -301,7 +303,7 @@
             { text: 'Type', align: 'left', sortable: false },
             { text: 'Title', align: 'left', sortable: false },
             { text: 'Date', align: 'center', sortable: false },
-            { text: 'ECI', align: 'center', sortable: false },
+            { text: 'Reward ECI', align: 'center', sortable: false },
             { text: 'Total ECI', align: 'center', sortable: false },
           ],
           actionsColorMap: {
@@ -548,4 +550,8 @@
 
 
 <style lang="less" scoped>
+  .reward-eci {
+    font-weight: 600;
+    background: #C8E6C9;
+  }
 </style>
