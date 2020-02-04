@@ -156,11 +156,13 @@
           </v-flex>
         </v-layout>
         <GChart
+          v-if="eciChartData.length > 1"
           type="LineChart"
           :settings="{ packages: ['corechart'] }"
           :data="eciChartData"
           :options="eciChartOptions"
         />
+        <div class="subheading">No data to show</div>
       </div>
       <div class="py-3">
         <div class="bold title">History</div>
@@ -329,12 +331,6 @@
             width: "90%"
           },
           tooltip: { isHtml: true },
-          explorer: {
-            actions: ["dragToZoom", "rightClickToReset"],
-            axis: "horizontal",
-            keepInBounds: true,
-            maxZoomIn: 4.0
-          }
         },
 
         contentTypesNamesMap,
@@ -391,17 +387,10 @@
         });
       },
       eciChartData() {
-        let chartData = [
-          ['Date', 'Value']
+        return [
+          ['Date', 'Value'],
+          ...this.filteredHistory.map((e) => [new Date(e.timestamp), e.newAmount]),
         ];
-
-        const data = this.filteredHistory.map((e) => [new Date(e.timestamp), e.newAmount]);
-        if (data.length) {
-          chartData = [...chartData, ...data]
-        } else {
-          chartData = [...chartData, ['', 0]];
-        }
-        return chartData;
       }
     },
 
