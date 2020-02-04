@@ -248,6 +248,7 @@ const getters = {
                 if (record.action == 'review') {
                     let review = state.reviewsList.find(review => review.id == record.actionObjectId);
                     let researchContent = state.contentList.find(content => content.id == review.research_content_id);
+                    let typeInfo = researchService.getResearchContentType(researchContent.content_type);
 
                     let parser = new DOMParser();
                     let html = parser.parseFromString(review.content, 'text/html');
@@ -265,7 +266,7 @@ const getters = {
                             review_id: review.id
                         }
                     }
-                    return { ...record, meta: { title, review, link } };
+                    return { ...record, actionText: typeInfo && typeInfo.text ? `${typeInfo.text} Reviewed` : record.actionText, meta: { title, review, link } };
 
                 } else if (record.action == 'vote_for_review') {
                     let reviewVotes = [].concat.apply([], state.reviewsList.map(review => review.votes));
@@ -293,7 +294,8 @@ const getters = {
 
                 } else if (record.action == 'init') { // research content
                     let researchContent = state.contentList.find(content => content.id == record.actionObjectId);
-                    
+                    let typeInfo = researchService.getResearchContentType(researchContent.content_type);
+
                     let link = {
                         name: "ResearchContentDetails",
                         params: {
@@ -302,7 +304,7 @@ const getters = {
                             content_permlink: decodeURIComponent(researchContent.permlink)
                         }
                     }
-                    return { ...record, meta: { title: researchContent.title, researchContent, link } };
+                    return { ...record, actionText: typeInfo && typeInfo.text ? `${typeInfo.text} Uploaded` : record.actionText, meta: { title: researchContent.title, researchContent, link } };
                 }
             });
         }

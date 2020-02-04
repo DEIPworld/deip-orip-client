@@ -386,6 +386,9 @@
                     ]
                 ]
 
+                const now = moment().toDate();
+                const lastEciValue = records.length ? records[records.length - 1].newAmount : 0;
+
                 return {
                     data: [
                         [
@@ -395,8 +398,8 @@
                         ],
                         ...data,
                         [
-                            moment().toDate(),
-                            0,
+                            now,
+                            lastEciValue,
                             `<div style="width: 100px; padding: 5px; background: #828282; border-radius: 2px; opacity: 0.9">
                                 <div class="bold white--text text-capitalize">Now</div>
                             </div>`
