@@ -131,7 +131,7 @@
                     </div>
                   </v-layout>
                 </v-flex>
-                <v-flex xs12 sm12 md12 lg12 xl12 py-4><v-divider></v-divider></v-flex>
+                <!-- <v-flex xs12 sm12 md12 lg12 xl12 py-4><v-divider></v-divider></v-flex>
                 <v-flex xs12 sm12 md12 lg12 xl12>
                   <div class="pb-4">
                     <v-layout  row align-baseline>
@@ -147,7 +147,7 @@
                       </v-flex>
                     </v-layout>
                   </div>
-                </v-flex>
+                </v-flex> -->
               </v-layout>
             </v-expansion-panel-content>
           </v-expansion-panel>

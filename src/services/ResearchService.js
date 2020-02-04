@@ -69,9 +69,9 @@ const getResearchContentType = (type) => contentTypesList.find(t => t.type == ty
 const getTopResearchesIds = () => [21, 14, 24, 7, 10, 5, 0, 6, 26, 28, 15, 23, 9, 25, 20, 12];
 
 const RESEARCH_CONTENT_ECI_SOURCES = {
-  1: 'review',
-  2: 'vote_for_review',
-  3: 'init'
+  1: { type: 'review', text: "Review added" },
+  2: { type: 'vote_for_review', text: "Review supported" },
+  3: { type: 'init', text: "Material uploaded" }
 };
 
 const getResearchContentEciHistoryRecords = (researchContentId, disciplineId) => {
@@ -83,7 +83,8 @@ const getResearchContentEciHistoryRecords = (researchContentId, disciplineId) =>
       disciplineId: source.discipline_id,
       newAmount: source.new_eci_amount,
       delta: source.delta,
-      action: RESEARCH_CONTENT_ECI_SOURCES[source.action],
+      action: RESEARCH_CONTENT_ECI_SOURCES[source.action].type,
+      actionText: RESEARCH_CONTENT_ECI_SOURCES[source.action].text,
       actionObjectId: source.action_object_id,
       timestamp: source.timestamp * 1000
     };
@@ -100,10 +101,44 @@ const getResearchContentEciHistoryRecords = (researchContentId, disciplineId) =>
 };
 
 
+const RESEARCH_ECI_SOURCES = {
+  1: { type: 'review', text: "Review added" },
+  2: { type: 'vote_for_review', text: "Review supported" },
+  3: { type: 'init', text: "Material uploaded" }
+};
+
+const getResearchEciHistoryRecords = (researchId, disciplineId) => {
+
+  function mapResearchEciHistoryRecord(item) {
+    const source = item.op[1];
+    const record = {
+      researchId: source.research_id,
+      disciplineId: source.discipline_id,
+      newAmount: source.new_eci_amount,
+      delta: source.delta,
+      action: RESEARCH_ECI_SOURCES[source.action].type,
+      actionText: RESEARCH_ECI_SOURCES[source.action].text,
+      actionObjectId: source.action_object_id,
+      timestamp: source.timestamp * 1000
+    };
+    if (!record.action) {
+      throw new Error('Unsupported source found');
+    }
+    return record;
+  };
+
+  return deipRpc.api.getEciHistoryByResearchAndDisciplineAsync(researchId, disciplineId)
+    .then((history) => {
+      return history.map(mapResearchEciHistoryRecord);
+    });
+};
+
+
 export {
   contentTypesMap,
   contentTypesList,
   getResearchContentType,
   getTopResearchesIds,
-  getResearchContentEciHistoryRecords
+  getResearchContentEciHistoryRecords,
+  getResearchEciHistoryRecords
 }

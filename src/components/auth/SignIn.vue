@@ -3,9 +3,9 @@
     <v-layout row wrap>
       <v-flex md6 lg6 xl6 hidden-sm-and-down>
         <v-layout column wrap fill-height class="description">
-          <div class="description__logo">
+          <!-- <div class="description__logo">
             <img src="/static/logo-iconed.svg" />
-          </div>
+          </div> -->
           <div class="description__info-text">
             Open Research and Innovation Platform
           </div>
@@ -19,15 +19,15 @@
             <v-icon small color="white">mdi-message-reply-text</v-icon>
             <span class="ml-2">Collaboration</span>
           </v-layout>
-          <v-layout class="description__info-list-item mt-4" align-center shrink>
+          <!-- <v-layout class="description__info-list-item mt-4" align-center shrink>
             <v-icon small color="white" class="icon-upended">mdi-lightbulb-on</v-icon>
             <span class="ml-2">Project tokenization</span>
-          </v-layout>
+          </v-layout> -->
           <v-layout class="description__info-list-item mt-4" align-center shrink>
             <v-icon small color="white">mdi-shield-check</v-icon>
             <span class="ml-2">Licensing of intellectual property</span>
           </v-layout>
-          <v-layout class="description__info-list-item mt-4" align-center shrink>
+          <!-- <v-layout class="description__info-list-item mt-4" align-center shrink>
             <v-icon small color="white">mdi-account-multiple-plus</v-icon>
             <span class="ml-2">Crowd investing</span>
           </v-layout>
@@ -35,7 +35,7 @@
           <v-layout column class="description__disclaimer">
             <p>This is a demonstration version.</p>
             <p class="mt-2">You’re welcome to order a <b>white-label solution of DEIP Open Research&Innovation Platform</b></p>
-          </v-layout>
+          </v-layout> -->
         </v-layout>
       </v-flex>
       <v-flex xs12 sm12 md6 lg6 xl6>

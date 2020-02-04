@@ -26,6 +26,7 @@ const state = {
     applicationsRefsList: [],
     userContributionsList: [],
     expertsList: [],
+    eciHistoryByDiscipline: {},
 
     isLoadingResearchDetails: undefined,
     isLoadingResearchContent: undefined,
@@ -226,6 +227,87 @@ const getters = {
 
     userContributionsList: (state, getters) => {
       return state.userContributionsList;
+    },
+
+    eciHistoryByDisciplineMap: (state, getters) => {
+        return state.eciHistoryByDiscipline;
+    },
+
+    eciHistoryByDiscipline: (state, getters) => {
+        return (disciplineId) => {
+            let records = state.eciHistoryByDiscipline[disciplineId];
+            if (!records) {
+                return null;
+            }
+
+            let researchGroup = state.group;
+            let research = state.research;
+
+            return records.map(record => {
+
+                if (record.action == 'review') {
+                    let review = state.reviewsList.find(review => review.id == record.actionObjectId);
+                    let researchContent = state.contentList.find(content => content.id == review.research_content_id);
+                    let typeInfo = researchService.getResearchContentType(researchContent.content_type);
+
+                    let parser = new DOMParser();
+                    let html = parser.parseFromString(review.content, 'text/html');
+                    let allElements = Array.from(html.all);
+                    let bodyIdx = allElements.findIndex(el => el.tagName == 'BODY');
+                    let headerEl = allElements[bodyIdx + 1];
+                    let title = headerEl.innerHTML;
+
+                    let link = {
+                        name: "ResearchContentReview",
+                        params: {
+                            research_group_permlink: decodeURIComponent(researchGroup.permlink),
+                            research_permlink: decodeURIComponent(research.permlink),
+                            content_permlink: decodeURIComponent(researchContent.permlink),
+                            review_id: review.id
+                        }
+                    }
+                    return { ...record, actionText: typeInfo && typeInfo.text ? `${typeInfo.text} Reviewed` : record.actionText, meta: { title, review, link } };
+
+                } else if (record.action == 'vote_for_review') {
+                    let reviewVotes = [].concat.apply([], state.reviewsList.map(review => review.votes));
+                    let reviewVote = reviewVotes.find(vote => vote.id == record.actionObjectId);
+                    let review = state.reviewsList.find(review => review.id == reviewVote.review_id);
+                    let researchContent = state.contentList.find(content => content.id == review.research_content_id);
+
+                    let parser = new DOMParser();
+                    let html = parser.parseFromString(review.content, 'text/html');
+                    let allElements = Array.from(html.all);
+                    let bodyIdx = allElements.findIndex(el => el.tagName == 'BODY');
+                    let headerEl = allElements[bodyIdx + 1];
+                    let title = headerEl.innerHTML;
+
+                    let link = {
+                        name: "ResearchContentReview",
+                        params: {
+                            research_group_permlink: decodeURIComponent(researchGroup.permlink),
+                            research_permlink: decodeURIComponent(research.permlink),
+                            content_permlink: decodeURIComponent(researchContent.permlink),
+                            review_id: review.id
+                        }
+                    }
+                    return { ...record, meta: { title, review, reviewVote, link } };
+
+                } else if (record.action == 'init') { // research content
+                    let researchContent = state.contentList.find(content => content.id == record.actionObjectId);
+                    let typeInfo = researchService.getResearchContentType(researchContent.content_type);
+
+                    let link = {
+                        name: "ResearchContentDetails",
+                        params: {
+                            research_group_permlink: decodeURIComponent(researchGroup.permlink),
+                            research_permlink: decodeURIComponent(research.permlink),
+                            content_permlink: decodeURIComponent(researchContent.permlink)
+                        }
+                    }
+                    return { ...record, actionText: typeInfo && typeInfo.text ? `${typeInfo.text} Uploaded` : record.actionText, meta: { title: researchContent.title, researchContent, link } };
+                }
+            });
+        }
     }
 }
 
@@ -233,8 +315,9 @@ const getters = {
 const actions = {
 
     loadResearchDetails({ state, commit, dispatch }, { group_permlink, research_permlink }) {
+        commit('RESET_STATE');
         commit('SET_RESEARCH_DETAILS_LOADING_STATE', true);
-
+        
         return deipRpc.api.getResearchByAbsolutePermlinkAsync(group_permlink, research_permlink)
             .then((research) => {
                 research.group_permlink = group_permlink;
@@ -297,7 +380,7 @@ const actions = {
         let contents = [];
         commit('SET_RESEARCH_CONTENT_LOADING_STATE', true);
 
-        deipRpc.api.getAllResearchContentAsync(researchId)
+        return deipRpc.api.getAllResearchContentAsync(researchId)
             .then(list => {
                 contents = list;
                 return Promise.all(contents.map(content => deipRpc.api.getReviewsByContentAsync(content.id)));
@@ -488,7 +571,7 @@ const actions = {
 
     loadResearchContentRefs({ state, dispatch, commit }, { researchId, notify }) {
         commit('SET_RESEARCH_CONTENT_REFS_LOADING_STATE', true)
-        contentHttpService.getContentRefs({researchId})
+        return contentHttpService.getContentRefs({researchId})
             .then((refs) => {
                 commit('SET_RESEARCH_CONTENT_REFS', refs)
             }, (err) => { console.log(err)})
@@ -564,6 +647,17 @@ const actions = {
           if (notify) notify();
         });
     },
+
+    loadResearchEciHistoryRecords({ state, dispatch, commit }, { researchId, disciplineId, notify }) {
+        return researchService.getResearchEciHistoryRecords(researchId, disciplineId)
+            .then((records) => {
+                commit('SET_RESEARCH_ECI_HISTORY_BY_DISCIPLINE', { disciplineId, records });
+                return records;
+            }, (err) => { console.log(err) })
+            .finally(() => {
+                if (notify) notify();
+            })
+    }
 }
 
 // mutations
@@ -683,6 +777,14 @@ const mutations = {
 
     ['SET_RESEARCH_GROUP_DETAILS'](state, value) {
         Vue.set(state, 'group', value)
+    },
+
+    ['SET_RESEARCH_ECI_HISTORY_BY_DISCIPLINE'](state, { disciplineId, records }) {
+        Vue.set(state.eciHistoryByDiscipline, disciplineId, records)
+    },
+
+    ['RESET_STATE'](state) {
+        Vue.set(state, "eciHistoryByDiscipline", {})
     }
 }
 

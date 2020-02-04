@@ -124,6 +124,7 @@ const getters = {
             let researchGroup = state.group;
             let research = state.research;
             let researchContent = state.content;
+            let typeInfo = researchService.getResearchContentType(researchContent.content_type);
 
             return records.map(record => {
 
@@ -146,7 +147,7 @@ const getters = {
                             review_id: review.id
                         }
                     }
-                    return { ...record, meta: { title, review, link } };
+                    return { ...record, actionText: typeInfo && typeInfo.text ? `${typeInfo.text} Reviewed` : record.actionText, meta: { title, review, link } };
                     
                 } else if (record.action == 'vote_for_review') {
                     let reviewVotes = [].concat.apply([], state.contentReviewsList.map(review => review.votes));
@@ -172,7 +173,7 @@ const getters = {
                     return { ...record, meta: { title, review, reviewVote, link } };
 
                 } else if (record.action == 'init') {
-                    return { ...record, meta: { title: researchContent.title, researchContent, link: null } };
+                    return { ...record, actionText: typeInfo && typeInfo.text ? `${typeInfo.text} Uploaded` : record.actionText, meta: { title: researchContent.title, researchContent, link: null } };
                 }
             });
         }
@@ -659,6 +660,7 @@ const mutations = {
     ['RESET_STATE'](state) {
         texture = undefined;
         reviewEditor = undefined;
+        Vue.set(state, "eciHistoryByDiscipline", {})
     },
 
     ['RESET_METADATA_STATE'](state) {

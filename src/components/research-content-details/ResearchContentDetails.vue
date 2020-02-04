@@ -27,7 +27,7 @@
         </sidebar>
 
         <div class="legacy-col-grow full-height">
-            <div>
+            <v-card class="full-height">
                 <research-content-details-package v-if="isFilePackageContent" class="pa-5"></research-content-details-package>
                 <research-content-details-dar v-if="isDarContent" :contentRef="contentRef"></research-content-details-dar>
 
@@ -36,13 +36,16 @@
                     <div id="reviews">
                         <div class="py-2 title">Reviews: {{ contentReviewsList.length }}</div>
                         <div class="py-2">
-                            <review-tile class="my-4" v-for="(review, i) in contentReviewsList" :review="review" :key="`review-${i}`" :researchContentType="content.content_type"></review-tile>
+                            <div v-for="(review, i) in contentReviewsList" :key="`review-${i}`">
+                                <review-tile class="my-2" :review="review" :researchContentType="content.content_type"></review-tile>
+                                <v-divider v-if="i != contentReviewsList.length - 1"></v-divider>
+                            </div>
                         </div>
                     </div>
                 </div>
 
                 <div v-if="isPublished && !isResearchGroupMember" class="px-5 pt-2 pb-5">
-                    <v-card class="py-4 px-5 elevation-0">
+                    <v-card class="py-4 px-5">
                         <v-layout id="reviews" class="py-2" row>
                             <v-flex shrink align-self-center pr-5>
                                 <img src="/static/add-review-icon.png" />
@@ -82,19 +85,20 @@
                     </internal-references-picker>
                 </div>
                 <!-- END Research Content References section -->
-                <div class="px-5 py-3">
-                    <v-layout row>
+                <div class="px-5 pt-3 pb-5" >
+                    <v-layout row align-baseline>
                         <v-flex grow>
-                            <div class="half-bold title">ECI History</div>
+                            <div class="half-bold title">Expertise Contribution Index</div>
                         </v-flex>
                         <v-flex shrink>
                             <v-select
                                 class="my-0 py-0"
-                                v-model="selectedDisciplineId"
+                                v-model="selectedEciDisciplineId"
                                 :items="research.disciplines"
                                 item-text="name"
                                 item-value="id"
-                                solo
+                                label="Discipline"
+                                outline
                                 dense
                                 @change="selectEciDiscipline()"
                                 :disabled="eciHistoryRecordsTable.loading"
@@ -102,31 +106,46 @@
                         </v-flex>
                     </v-layout>
 
-                    <v-data-table
-                        :headers="eciHistoryRecordsTable.headers"
-                        :items="eciHistoryRecordsTable.items"
-                        class="elevation-0 mt-3"
-                        disable-initial-sort
-                        :loading="eciHistoryRecordsTable.loading"
-                        :rows-per-page-items="[5, 10]"
-                        :pagination.sync="eciHistoryRecordsTable.pagination"
-                        :total-items="eciHistoryRecordsTable.totalItems"
-                    >
-                    <template v-slot:items="props">
-                        <td>
-                            <v-chip :color="eciHistoryRecordsTable.actionsColorMap[props.item.action]" text-color="white">
-                                <span class="bold">{{ props.item.action.replace(/_/g, ' ').toUpperCase() }}</span>
-                            </v-chip>
-                        </td>
-                        <td>
-                            <router-link v-if="props.item.meta.link" class="a" :to="props.item.meta.link">{{props.item.meta.title}}</router-link>
-                            <span v-else class="body-2">{{props.item.meta.title}}</span>
-                        </td>
-                        <td class="text-xs-center">{{ moment(props.item.timestamp).format('D MMM YYYY') }}</td>
-                        <td class="text-xs-center">{{ props.item.delta }}</td>
-                        <td class="text-xs-center">{{ props.item.newAmount }}</td>
-                    </template>
-                    </v-data-table>
+                    <v-layout row v-if="eciDisciplineHistoryRecordsChart">
+                        <div class="full-width">
+                            <GChart
+                                type="LineChart"
+                                :settings="{ packages: ['corechart'] }"
+                                :data="eciDisciplineHistoryRecordsChart.data"
+                                :options="eciDisciplineHistoryRecordsChart.options"
+                            />
+                        </div>
+                    </v-layout>
+
+                    <v-layout row v-if="hasEciDisciplineHistoryRecords">
+                        <div class="full-width">
+                            <v-data-table
+                                :headers="eciHistoryRecordsTable.headers"
+                                :items="eciHistoryRecordsTable.items"
+                                class="elevation-0 mt-3"
+                                disable-initial-sort
+                                :loading="eciHistoryRecordsTable.loading"
+                                :rows-per-page-items="[5, 10]"
+                                :pagination.sync="eciHistoryRecordsTable.pagination"
+                                :total-items="eciHistoryRecordsTable.totalItems"
+                            >
+                                <template v-slot:items="props">
+                                    <td>
+                                        <v-chip :color="eciHistoryRecordsTable.actionsColorMap[props.item.action]" text-color="white">
+                                            <span class="bold">{{ props.item.actionText.toUpperCase() }}</span>
+                                        </v-chip>
+                                    </td>
+                                    <td>
+                                        <router-link v-if="props.item.meta.link" class="a" :to="props.item.meta.link">{{props.item.meta.title}}</router-link>
+                                        <span v-else class="body-2">{{props.item.meta.title}}</span>
+                                    </td>
+                                    <td class="text-xs-center">{{ moment(props.item.timestamp).format('D MMM YYYY') }}</td>
+                                    <td class="text-xs-center">{{ props.item.delta }}</td>
+                                    <td class="text-xs-center">{{ props.item.newAmount }}</td>
+                                </template>
+                            </v-data-table>
+                        </div>
+                    </v-layout>
                 </div>
 
                 <!-- START Proposal dialog section -->
@@ -217,7 +236,7 @@
                         </v-card>
                     </v-dialog>
                 <!-- END Proposal dialog section -->
-            </div>
+            </v-card>
         </div>
 
         <sidebar>
@@ -233,10 +252,10 @@
     import { createContentProposal } from './../../services/ProposalService';
     import contentHttpService from './../../services/http/content';
     import searchHttpService from './../../services/http/search'
+    import moment from 'moment';
 
     export default {
         name: "ResearchContentDetails",
-
         data() {
             return {
                 isSavingDraft: false,
@@ -249,7 +268,7 @@
                     isLoading: false
                 },
 
-                selectedDisciplineId: null,
+                selectedEciDisciplineId: null,
 
                 eciHistoryRecordsTable: {
                     headers: [
@@ -322,6 +341,93 @@
             },
             userRelatedExpertise() {
                 return this.userExperise.filter(exp => this.research.disciplines.some(d => d.id == exp.discipline_id))
+            },
+            hasEciDisciplineHistoryRecords() {
+                let records = this.$store.getters['rcd/eciHistoryByDiscipline'](this.selectedEciDisciplineId);
+                return records != null && records.length != 0;
+            },
+            eciDisciplineHistoryRecordsChart() {
+                let disciplineId = this.selectedEciDisciplineId;
+                let researchContentId = this.content.id;
+                let records = this.$store.getters['rcd/eciHistoryByDiscipline'](disciplineId);
+                if (!records) return null;
+
+                const getPointTooltipHtml = (eci, action, delta) => {
+                    let assessmentType = delta >= 0 ? "Approved" : "Rejected";
+                    let assessmentClass = delta >= 0 ? "green--text text--lighten-4" : "red--text text--lighten-4";
+                    return `
+                        <div style="width: 100px; padding: 5px; background: #828282; border-radius: 2px; opacity: 0.9">
+                            <div class="bold white--text text-capitalize">${action}</div>
+                            ${eci != 0 ? `<div class="${assessmentClass} bold">${assessmentType}</div>` : ''} 
+                            ${delta != 0 ? `<div class="white--text">${delta > 0 ? '+' : '-'} ${delta}</div>` : ''}
+                        </div>
+                    `;
+                };
+
+                const data = records.length ? 
+                    records.map((record, i) => {
+                        let date = new Date(record.timestamp);
+                        let value = record.newAmount;
+                        let delta = record.delta;
+                        let actionText = record.actionText;
+                        let tooltip = getPointTooltipHtml(value, actionText, delta);
+                        return [
+                            date,
+                            value,
+                            tooltip
+                        ]
+                }) : [
+                    [
+                        moment(this.content.created_at).toDate(),
+                        0,
+                        `<div style="width: 100px; padding: 5px; background: #828282; border-radius: 2px; opacity: 0.9">
+                            <div class="bold white--text text-capitalize">Material Uploaded</div>
+                        </div>`
+                    ]
+                ]
+
+                const now = moment().toDate();
+                const lastEciValue = records.length ? records[records.length - 1].newAmount : 0;
+
+                return {
+                    data: [
+                        [
+                            "Date",
+                            "Value",
+                            { type: "string", role: "tooltip", p: { html: true } }
+                        ],
+                        ...data,
+                        [
+                            now,
+                            lastEciValue,
+                            `<div style="width: 100px; padding: 5px; background: #828282; border-radius: 2px; opacity: 0.9">
+                                <div class="bold white--text text-capitalize">Now</div>
+                            </div>`
+                        ]
+                    ],
+
+                    options: {
+                        title: "",
+                        backgroundColor: {
+                            fill: "#ffffff"
+                        },
+                        legend: {
+                            position: "none"
+                        },
+                        chartArea: {
+                            right: 0,
+                            top: "10%",
+                            width: "90%"
+                        },
+                        tooltip: { isHtml: true },
+                        explorer: {
+                            actions: ["dragToZoom", "rightClickToReset"],
+                            axis: "horizontal",
+                            keepInBounds: true,
+                            maxZoomIn: 4.0
+                        }
+                    }
+                };
             }
         },
         
@@ -465,7 +571,7 @@
             },
 
             selectEciDiscipline() {
-                let disciplineId = this.selectedDisciplineId;
+                let disciplineId = this.selectedEciDisciplineId;
                 let researchContentId = this.content.id;
 
                 this.eciHistoryRecordsTable.loading = true;
@@ -474,12 +580,12 @@
                     this.$store.dispatch('rcd/loadResearchContentEciHistoryRecords', { researchContentId, disciplineId })
                         .then(() => {
                             let records = this.$store.getters['rcd/eciHistoryByDiscipline'](disciplineId);
-                            this.eciHistoryRecordsTable.items = records;
+                            this.eciHistoryRecordsTable.items = records.reverse();
                             this.eciHistoryRecordsTable.pagination.page = 1;
                             this.eciHistoryRecordsTable.loading = false;
                         });
                 } else {
-                    this.eciHistoryRecordsTable.items = cachedRecords;
+                    this.eciHistoryRecordsTable.items = cachedRecords.reverse();
                     this.eciHistoryRecordsTable.pagination.page = 1;
                     this.eciHistoryRecordsTable.loading = false;
                 }
@@ -490,7 +596,7 @@
 
         created() {
             let discipline = this.research.disciplines[0];
-            this.selectedDisciplineId = discipline.id;
+            this.selectedEciDisciplineId = discipline.id;
             this.selectEciDiscipline(discipline.id);
         }
     };
