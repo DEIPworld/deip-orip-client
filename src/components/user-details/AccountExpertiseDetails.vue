@@ -444,7 +444,7 @@
         const { page, rowsPerPage: perPage } = this.historyTable.pagination;
         this.isHistoryPageLoading = true;
 
-        const pageItems = [...this.filteredHistory].reverse()
+        const pageItems = [...this.history].reverse()
           .slice((page - 1) * perPage, page * perPage);
 
         const detailsPromises = [];
