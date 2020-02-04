@@ -143,7 +143,7 @@
               :disabled="isHistoryPageLoading"
             />
           </v-flex>
-          <v-flex shrink class="pl-3">
+          <!-- <v-flex shrink class="pl-3">
             <v-select
               class="my-0 py-0"
               v-model="filter.criteria"
@@ -153,15 +153,24 @@
               dense
               :disabled="isHistoryPageLoading"
             />
-          </v-flex>
+          </v-flex> -->
         </v-layout>
         <GChart
-          v-if="eciChartData.length"
+          v-if="eciChartData.length > 1"
           type="LineChart"
           :settings="{ packages: ['corechart'] }"
           :data="eciChartData"
           :options="eciChartOptions"
         />
+        <div class="subheading" v-else>No data to show</div>
+        <v-btn
+          class="mx-0"
+          color="primary"
+          outline
+          :to="{
+            name: 'ReviewSetup',
+          }"
+        >Expertise Contribution Model Setup</v-btn>
       </div>
       <div class="py-3">
         <div class="bold title">History</div>
@@ -330,12 +339,6 @@
             width: "90%"
           },
           tooltip: { isHtml: true },
-          explorer: {
-            actions: ["dragToZoom", "rightClickToReset"],
-            axis: "horizontal",
-            keepInBounds: true,
-            maxZoomIn: 4.0
-          }
         },
 
         contentTypesNamesMap,
@@ -389,12 +392,12 @@
           }
 
           return true;
-        });;
+        });
       },
       eciChartData() {
         return [
           ['Date', 'Value'],
-          ...this.filteredHistory.map((e) => [new Date(e.timestamp), e.newAmount])
+          ...this.filteredHistory.map((e) => [new Date(e.timestamp), e.newAmount]),
         ];
       }
     },
@@ -438,7 +441,7 @@
         const { page, rowsPerPage: perPage } = this.historyTable.pagination;
         this.isHistoryPageLoading = true;
 
-        const pageItems = [...this.filteredHistory].reverse()
+        const pageItems = [...this.history].reverse()
           .slice((page - 1) * perPage, page * perPage);
 
         const detailsPromises = [];
