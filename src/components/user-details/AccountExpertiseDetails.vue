@@ -596,7 +596,8 @@
             criteriaModifier = (y) => y * (0.9 + 0.1 * Math.cos(0.00008 * Math.PI * y));
             break;
           default:
-            criteriaModifier = y => y;
+            criteriaModifier = (y) => y * (0.7 + 0.3 * Math.cos(0.00008 * Math.PI * y));
+            break;
         }
 
         return getExpertiseHistory(
