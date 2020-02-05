@@ -57,50 +57,54 @@
             />
           </v-flex>
           <v-divider vertical inset />
-          <v-flex class="px-2">
-            <v-layout column align-center justify-center full-height>
-              <div class="title grey--text text-xs-center">Expertise Contribution Index</div>
-              <div class="subheading mt-2">{{ selectedExpertise.amount }}</div>
-            </v-layout>
-          </v-flex>
-          <v-divider vertical inset />
-          <v-flex class="px-2">
-            <v-layout column align-center justify-center full-height>
-              <div class="title grey--text text-xs-center">Contributions</div>
-              <div class="subheading mt-2">
-                <!-- {{ overview.contributions }} -->
-                <!-- Alice will have 3 contributions during the demo -->
-                3
-              </div>
-            </v-layout>
-          </v-flex>
-          <v-divider vertical inset />
-          <v-flex xs3 class="px-2 headline primary--text">
-            <v-layout column align-center justify-center full-height>
-              <div>TOP <b>{{ overview.percentile }}</b>%</div>
-              <div>in {{ selectedExpertise.discipline_name }}</div>
-            </v-layout>
-          </v-flex>
-          <v-divider vertical inset />
-          <v-flex class="px-2">
-            <v-layout column align-center justify-center full-height>
-              <div class="title grey--text text-xs-center">Citations</div>
-              <div class="subheading mt-2">
-                <!-- {{ overview.contributions }} -->
-                <!-- Alice will have 30 citations during the demo -->
-                30
-              </div>
-            </v-layout>
-          </v-flex>
-          <v-divider vertical inset />
-          <v-flex class="px-2">
-            <v-layout column align-center justify-center full-height>
-              <div class="title grey--text text-xs-center">H-index</div>
-              <div class="subheading mt-2">
-                <!-- {{ overview.contributions }} -->
-                <!-- Alice will have 57 h-index during the demo -->
-                57
-              </div>
+          <v-flex xs8>
+            <v-layout row full-height>
+              <v-flex xs2 class="px-2">
+                <v-layout column align-center justify-center full-height>
+                  <div class="title grey--text text-xs-center">Expertise Contribution Index</div>
+                  <div class="subheading mt-2">{{ selectedExpertise.amount }}</div>
+                </v-layout>
+              </v-flex>
+              <v-divider vertical inset class="ma-0" style="max-height: 100%"/>
+              <v-flex xs2 class="px-2">
+                <v-layout column align-center justify-center full-height>
+                  <div class="title grey--text text-xs-center">Contributions</div>
+                  <div class="subheading mt-2">
+                    <!-- {{ overview.contributions }} -->
+                    <!-- Alice will have 3 contributions during the demo -->
+                    3
+                  </div>
+                </v-layout>
+              </v-flex>
+              <v-divider vertical inset class="ma-0" style="max-height: 100%"/>
+              <v-flex xs2 class="px-2 headline primary--text">
+                <v-layout column align-center justify-center full-height>
+                  <div>TOP <b>{{ overview.percentile }}</b>%</div>
+                  <div>in {{ selectedExpertise.discipline_name }}</div>
+                </v-layout>
+              </v-flex>
+              <v-divider vertical inset class="ma-0" style="max-height: 100%"/>
+              <v-flex xs2 class="px-2">
+                <v-layout column align-center justify-center full-height>
+                  <div class="title grey--text text-xs-center">Citations</div>
+                  <div class="subheading mt-2">
+                    <!-- {{ overview.contributions }} -->
+                    <!-- Alice will have 30 citations during the demo -->
+                    30
+                  </div>
+                </v-layout>
+              </v-flex>
+              <v-divider vertical inset class="ma-0" style="max-height: 100%"/>
+              <v-flex xs2 class="px-2">
+                <v-layout column align-center justify-center full-height>
+                  <div class="title grey--text text-xs-center">H-index</div>
+                  <div class="subheading mt-2">
+                    <!-- {{ overview.contributions }} -->
+                    <!-- Alice will have 57 h-index during the demo -->
+                    57
+                  </div>
+                </v-layout>
+              </v-flex>
             </v-layout>
           </v-flex>
         </v-layout>
