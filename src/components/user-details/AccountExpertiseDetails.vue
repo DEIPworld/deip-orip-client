@@ -366,7 +366,7 @@
           actionsColorMap: {
             [actionTypes.CONTENT]: '#5ABAD1',
             [actionTypes.REVIEW]: '#161F63',
-            [actionTypes.INIT]: '#8DDAB3',
+            [actionTypes.INIT]: '#3984B6',
           },
           pagination: {
             page: 1,
@@ -380,7 +380,7 @@
         contributionsAllocationChartOptions: {
           title: "",
           legend: { position: 'right', alignment: 'center' },
-          colors: ['#3984B6', '#161F63', '#B7DFCB', '#5ABAD1'],
+          colors: ['#3984B6', '#5ABAD1', '#161F63', '#B7DFCB'],
           chartArea: {
             right: 0,
             width: "100%",

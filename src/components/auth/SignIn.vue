@@ -16,17 +16,25 @@
             >Sign Up</router-link>
           </div> -->
           <v-layout class="description__info-list-item mt-5" align-center shrink>
-            <v-icon small color="white">mdi-message-reply-text</v-icon>
-            <span class="ml-2">Collaboration</span>
+            <span class="ml-2">Open Research</span>
+          </v-layout>
+          <v-layout class="description__info-list-item mt-5" align-center shrink>
+            <span class="ml-2">Open Peer-Review</span>
+          </v-layout>
+          <v-layout class="description__info-list-item mt-5" align-center shrink>
+            <span class="ml-2">Open Data</span>
+          </v-layout>
+          <v-layout class="description__info-list-item mt-5" align-center shrink>
+            <span class="ml-2">Massive Collaboration</span>
           </v-layout>
           <!-- <v-layout class="description__info-list-item mt-4" align-center shrink>
             <v-icon small color="white" class="icon-upended">mdi-lightbulb-on</v-icon>
             <span class="ml-2">Project tokenization</span>
           </v-layout> -->
-          <v-layout class="description__info-list-item mt-4" align-center shrink>
+          <!-- <v-layout class="description__info-list-item mt-4" align-center shrink>
             <v-icon small color="white">mdi-shield-check</v-icon>
             <span class="ml-2">Licensing of intellectual property</span>
-          </v-layout>
+          </v-layout> -->
           <!-- <v-layout class="description__info-list-item mt-4" align-center shrink>
             <v-icon small color="white">mdi-account-multiple-plus</v-icon>
             <span class="ml-2">Crowd investing</span>
