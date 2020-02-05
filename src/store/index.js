@@ -1,6 +1,5 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
-import createLogger from 'vuex/dist/logger'
 
 import auth from './../components/auth/store/index'
 import feed from './../components/research-feed/store/index'
@@ -46,5 +45,4 @@ export default new Vuex.Store({
         investorDashboard
     },
     strict: process.env.NODE_ENV !== 'production',
-    plugins: process.env.NODE_ENV !== 'production' ? [createLogger()] : []
 });

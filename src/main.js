@@ -12,7 +12,7 @@ import './index';
 import './globals/index';
 import 'vuetify/dist/vuetify.css';
 import './styles/common.less';
-import 'vue2-dropzone/dist/vue2Dropzone.css';
+import 'vue2-dropzone/dist/vue2Dropzone.min.css';
 import '@mdi/font/css/materialdesignicons.css';
 import 'vue-resize/dist/vue-resize.css';
 import { isLoggedIn } from "./utils/auth";
@@ -44,13 +44,12 @@ async function initApp() {
     await setUser();
     await setTenant();
 
-    window.app = new Vue({
-      el: '#app',
-      store,
+    new Vue({
       router,
-      components: { App },
-      template: '<App/>'
-    });
+      store,
+      render: h => h(App)
+    }).$mount('#app')
+
   } catch (err) {
     console.error(err)
   }

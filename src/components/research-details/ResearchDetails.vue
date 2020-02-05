@@ -21,12 +21,12 @@
                     small
                     outline
                     color="white"
-                    :to="{  
+                    :to="{
                       name: 'ResearchEdit',
                       params: {
                         research_group_permlink: encodeURIComponent(research.group_permlink),
                         research_permlink: encodeURIComponent(research.permlink)
-                      } 
+                      }
                     }"
                   >Edit</v-btn>
                 </span>
@@ -208,7 +208,7 @@
                       <iframe
                         height="100%"
                         width="100%"
-                        :src="'./../../../static/form-of-SAFT-for-token-pre-sale.pdf'"
+                        src="/assets/img/form-of-SAFT-for-token-pre-sale.pdf"
                       ></iframe>
                     </v-card-text>
                     <v-card-actions class="pa-0">

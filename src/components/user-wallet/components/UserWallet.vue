@@ -20,7 +20,7 @@
             <v-layout class="balance-table__line" align-center>
               <v-flex lg1>
                 <v-layout justify-center align-center>
-                  <img src="/static/eur-blue-round.svg" />
+                  <img src="/assets/img/eur-blue-round.svg" />
                 </v-layout>
               </v-flex>
               <v-flex lg5 class="bold subheading">EUR</v-flex>
@@ -51,7 +51,7 @@
             <v-layout class="balance-table__line" align-center>
               <v-flex lg1>
                 <v-layout justify-center align-center>
-                  <img src="/static/usd-green-round.svg" />
+                  <img src="/assets/img/usd-green-round.svg" />
                 </v-layout>
               </v-flex>
               <v-flex lg5 class="bold subheading">USD</v-flex>
@@ -906,7 +906,7 @@
           return this.loadUserAccount();
         });
       },
-      
+
       creditInfoChanged(values) {
         for (const key in values) {
           this.depositDialog.cardData[key] = values[key];
@@ -925,7 +925,7 @@
         return rtId * 0.3;
       }
     },
-      
+
     created() {
     }
   };

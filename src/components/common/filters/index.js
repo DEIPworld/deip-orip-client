@@ -3,18 +3,18 @@ import moment from 'moment';
 import { getAccessToken } from '@/utils/auth'
 
 Vue.filter('fullname', function (enrichedProfile) {
-    return enrichedProfile && enrichedProfile.profile && enrichedProfile.profile.firstName 
-        ? `${enrichedProfile.profile.firstName} ${enrichedProfile.profile.lastName || ''}` 
+    return enrichedProfile && enrichedProfile.profile && enrichedProfile.profile.firstName
+        ? `${enrichedProfile.profile.firstName} ${enrichedProfile.profile.lastName || ''}`
         : enrichedProfile.account.name;
 });
 
 Vue.filter('userLocation', function (enrichedProfile) {
     const hasCity = enrichedProfile && enrichedProfile.profile && enrichedProfile.profile.location.city;
     const hasCountry = enrichedProfile && enrichedProfile.profile && enrichedProfile.profile.location.country;
-    const city = hasCity 
-        ? enrichedProfile.profile.location.city 
+    const city = hasCity
+        ? enrichedProfile.profile.location.city
         : null;
-    const country = hasCountry 
+    const country = hasCountry
         ? enrichedProfile.profile.location.country
         : null;
 
@@ -30,16 +30,16 @@ Vue.filter('employmentOrEducation', function (enrichedProfile) {
     const hasActiveEmployment = enrichedProfile && enrichedProfile.profile && enrichedProfile.profile.employment && enrichedProfile.profile.employment.some(e => e.isActive);
     const employment = hasActiveEmployment
         ? enrichedProfile.profile.employment.find(e => e.isActive)
-        : hasEmployment 
-            ? enrichedProfile.profile.employment[enrichedProfile.profile.employment.length - 1] 
+        : hasEmployment
+            ? enrichedProfile.profile.employment[enrichedProfile.profile.employment.length - 1]
             : null;
 
     const hasEducation = enrichedProfile && enrichedProfile.profile && enrichedProfile.profile.education && enrichedProfile.profile.education.length;
     const hasActiveEducation = enrichedProfile && enrichedProfile.profile && enrichedProfile.profile.education && enrichedProfile.profile.education.some(e => e.isActive);
     const education = hasActiveEducation
         ? enrichedProfile.profile.education.find(e => e.isActive)
-        : hasEducation 
-            ? enrichedProfile.profile.education[enrichedProfile.profile.education.length - 1] 
+        : hasEducation
+            ? enrichedProfile.profile.education[enrichedProfile.profile.education.length - 1]
             : null;
 
     if (!education && !employment) {
@@ -63,21 +63,21 @@ Vue.filter('researchGroupLogoSrc', function (researchGroupId, width = 360, heigh
 
 Vue.filter('tenantLogoSrc', function (tenant, width, height, noCache, ext = 'png') {
     // return `${window.env.DEIP_SERVER_URL}/public/tenants/logo/${tenant._id}?width=${width}&height=${height}&noCache=${noCache}&ext=${ext}`
-    return tenant ? `/static/tenants/${tenant._id}/logo.svg` : `/static/logo_customize.svg`;
+    return tenant ? `/assets/img/tenants/${tenant._id}/logo.svg` : `/assets/img/logo_customize.svg`;
 });
 
 Vue.filter('tenantSymbolSrc', function (tenant, width, height, noCache, ext = 'png') {
     // return `${window.env.DEIP_SERVER_URL}/public/tenants/symbol/${tenant._id}?width=${width}&height=${height}&noCache=${noCache}&ext=${ext}`
-    return tenant ? `/static/tenants/${tenant._id}/symbol.svg` : `/static/logo.svg`;
+    return tenant ? `/assets/img/tenants/${tenant._id}/symbol.svg` : `/assets/img/logo.svg`;
 });
 
 Vue.filter('tenantBackgroundSrc', function (tenant, width, height, noCache, ext = 'png') {
     // return `${window.env.DEIP_SERVER_URL}/public/tenants/background-image/${tenant._id}?width=${width}&height=${height}&noCache=${noCache}&ext=${ext}`
-    return tenant ? `/static/tenants/${tenant._id}/background.png` : `/static/feed-background.svg`;
+    return tenant ? `/assets/img/tenants/${tenant._id}/background.png` : `/assets/img/feed-background.svg`;
 });
 
 Vue.filter('dateFormat', (value, format, fromUtcToLocal = false) => {
-    return !fromUtcToLocal 
+    return !fromUtcToLocal
         ? moment(value).format(format)
         : moment.utc(value).local().format(format);
 });
