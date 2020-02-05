@@ -342,7 +342,8 @@
 
           contributionType: null,
           contributionTypeItems: Object.entries(contributionTypesNamesMap)
-            .map(([key, value]) => ({ text: value, value: key })),
+            .map(([key, value]) => ({ text: value, value: key }))
+            .filter((e) => e.value !== actionTypes.INIT),
 
           criteria: null,
           criteriaItems: Object.values(criteriaTypes)
