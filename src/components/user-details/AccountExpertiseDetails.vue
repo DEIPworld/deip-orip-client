@@ -386,7 +386,11 @@
 
         return {
           contributions: this.history.length,
-          percentile: getEciPercentile(this.selectedExpertise.amount),
+          percentile: getEciPercentile(
+            this.selectedExpertise.amount,
+            this.$route.params.account_name,
+            this.selectedExpertise.discipline_id
+          ),
           contributionsAllocation: [
             ['Contribution Type', ''],
             ...Object.entries(allocations).map((e) => {

@@ -141,7 +141,7 @@
               class="expertise pa-2 my-2"
             >
               <v-layout justify-space-between class="">
-                <div class="blue--text text--accent-4 bold">TOP <span class="font-weight-bold">{{getEciPercentile(item.amount)}}</span>%</div>
+                <div class="blue--text text--accent-4 bold">TOP <span class="font-weight-bold">{{getEciPercentile(item.amount, userInfo.account.name, item.discipline_id)}}</span>%</div>
                 <div class="grey--text">ECI {{ item.amount }}</div>
               </v-layout>
               <v-divider class="expertise__divider" />
