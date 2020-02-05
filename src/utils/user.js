@@ -36,8 +36,12 @@ export function getEnrichedProfiles(usernames) {
 }
 
 export function getEciPercentile(eciValue, username, disciplineId) {
-  if (username === 'alice' && disciplineId === 3) {
-    return 5;
+  if (username === 'alice') {
+    if (disciplineId === 3) {
+      return 5;
+    } else if (disciplineId === 48) {
+      return 10;
+    }
   }
   let percentile;
   const lowerBoundPercentileData = sortedPercentilesData[0];
