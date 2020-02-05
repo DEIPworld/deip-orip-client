@@ -9,6 +9,14 @@
       </v-flex>
       <v-flex class="ml-4" grow>
         <div class="headline">{{ userInfo | fullname }}</div>
+        <div v-if="isLocationSpecified">
+          <v-icon v-if="isLocationSpecified" small>location_on</v-icon>
+          {{ locationString }}
+        </div>
+        <div v-if="userInfo.profile && getEmploymentOrEducation()">
+          <v-icon small>school</v-icon>
+          {{ userInfo | employmentOrEducation }}
+        </div>
       </v-flex>
     </v-layout>
     <v-divider class="my-3" />
@@ -430,7 +438,23 @@
           ['Date', 'Value'],
           ...this.filteredHistory.map((e) => [new Date(e.timestamp), e.newAmount]),
         ];
-      }
+      },
+      isLocationSpecified() {
+        return this.userInfo
+          && this.userInfo.profile
+          && this.userInfo.profile.location
+          && (this.userInfo.profile.location.city || this.userInfo.profile.location.country);
+      },
+      locationString() {
+        const profile = this.userInfo ? this.userInfo.profile : null;
+        let location = "";
+        if (profile){
+            location += profile.location.city ? profile.location.city : '';
+            location += profile.location.city && profile.location.country ? ', ' : '';
+            location += profile.location.country ? profile.location.country : '';
+        }
+        return location;
+      },
     },
 
     watch: {
@@ -443,6 +467,9 @@
     },
 
     methods: {
+      getEmploymentOrEducation() {
+        return this.$options.filters.employmentOrEducation(this.userInfo)
+      },
       getHistoryRecordRouteParams(item) {
         switch (item.action) {
           case actionTypes.CONTENT:
