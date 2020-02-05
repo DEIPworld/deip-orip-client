@@ -100,8 +100,8 @@
                   <div class="title grey--text text-xs-center">H-index</div>
                   <div class="subheading mt-2">
                     <!-- {{ overview.contributions }} -->
-                    <!-- Alice will have 57 h-index during the demo -->
-                    57
+                    <!-- Alice will have 27 h-index during the demo -->
+                    7
                   </div>
                 </v-layout>
               </v-flex>
