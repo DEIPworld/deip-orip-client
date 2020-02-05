@@ -242,7 +242,7 @@
               <v-chip
                 :color="historyTable.actionsColorMap[props.item.action]"
                 text-color="white"
-              ><span class="bold">{{ props.item.action.toUpperCase() }}</span>
+              ><span class="bold uppercase">{{ props.item.actionText }}</span>
               </v-chip>
             </td>
             <td>
@@ -317,9 +317,9 @@
       const fromDate = now.subtract(7, 'days').format('YYYY-MM-DD');
 
       const contributionTypesNamesMap = {
-        [actionTypes.CONTENT]: 'Content',
+        [actionTypes.CONTENT]: 'Research',
         [actionTypes.REVIEW]: 'Review',
-        [actionTypes.INIT]: 'Initial expertise',
+        [actionTypes.INIT]: 'Other'
       };
 
       const criteriaTypes = {
@@ -533,7 +533,7 @@
               detailsPromise = loadReviewDetails(pageItem.actionObjectId);
               break;
             case actionTypes.INIT:
-              detailsPromise = Promise.resolve({ title: `Initial value` });
+              detailsPromise = Promise.resolve({ title: `Other` });
               break;
             default:
               detailsPromise = Promise.resolve({ title: `OBJ_ID: ${pageItem.actionObjectId}` })

@@ -20,6 +20,7 @@ const mapHistoryElement = (elem) => {
     newAmount: source.new_expertise_amount,
     delta: source.delta,
     action: ACTIONS_MAP[source.action],
+    actionText: ACTIONS_MAP[source.action] == 'init' ? "other" : ACTIONS_MAP[source.action] == 'content' ? "research" : ACTIONS_MAP[source.action], 
     actionObjectId: source.action_object_id,
     timestamp: source.timestamp * 1000,
   };

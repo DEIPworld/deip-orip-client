@@ -31,7 +31,7 @@
                 <research-content-details-package v-if="isFilePackageContent" class="pa-5"></research-content-details-package>
                 <research-content-details-dar v-if="isDarContent" :contentRef="contentRef"></research-content-details-dar>
 
-                <div class="px-5 py-4" >
+                <div class="px-5 py-4" v-if="isPublished">
                     <v-layout row align-baseline>
                         <v-flex grow>
                             <div class="half-bold title">Expertise Contribution Index</div>
@@ -352,7 +352,7 @@
                 let records = this.$store.getters['rcd/eciHistoryByDiscipline'](this.selectedEciDisciplineId);
                 return records != null && records.length != 0;
             },
-            eciDisciplineHistoryRecordsChart() {
+            eciDisciplineHistoryRecordsChart() {                
                 let disciplineId = this.selectedEciDisciplineId;
                 let researchContentId = this.content.id;
                 let records = this.$store.getters['rcd/eciHistoryByDiscipline'](disciplineId);
@@ -601,9 +601,11 @@
         },
 
         created() {
-            let discipline = this.research.disciplines[0];
-            this.selectedEciDisciplineId = discipline.id;
-            this.selectEciDiscipline(discipline.id);
+            if (this.isPublished) {
+                let discipline = this.research.disciplines[0];
+                this.selectedEciDisciplineId = discipline.id;
+                this.selectEciDiscipline(discipline.id);
+            }
         }
     };
 </script>

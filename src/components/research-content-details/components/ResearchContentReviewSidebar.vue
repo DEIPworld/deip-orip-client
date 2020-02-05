@@ -27,6 +27,10 @@
                     Support Review
                 </v-btn>
             </div>
+
+            <div class="pt-2" v-if="!userHasVoted">
+                <div>You will get <span class="body-2">approximately 1000 ECI reward in {{userRelatedExpertise.map(exp => exp.discipline_name).join(", ")}}</span> for your contribution to this project</div>
+            </div>
         </div>
 
         <div v-if="review.votes.length">
@@ -92,6 +96,9 @@
                 return this.review != null ? 
                     this.review.votes.some(vote => vote.voter === this.user.username) 
                     : false;
+            },
+            userRelatedExpertise() {
+                return this.userExperise.filter(exp => this.research.disciplines.some(d => d.id == exp.discipline_id))
             }
         },
         

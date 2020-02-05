@@ -572,7 +572,7 @@
                   <div class="rd-block-header align-self-center">Reviews</div>
                 </v-layout>
               </v-flex>
-              <v-flex shrink>
+              <!-- <v-flex shrink>
                 <div class="half-bold subheading">
                   Total reviews score:
                   <span class="bold">{{totalReviewsScore}}</span>
@@ -581,7 +581,7 @@
                     <span>Total score is the result of these 3 scores which has been rounded to the nearest whole number.</span>
                   </v-tooltip>
                 </div>
-              </v-flex>
+              </v-flex> -->
             </v-layout>
 
             <div v-for="(review, index) of reviews" :key="`r_${review.id}`">
@@ -808,7 +808,7 @@
               <div class="expertise__disc-name pt-1">{{ eci.disciplineName }}</div>
             </v-layout>
           </v-layout>
-          <v-layout column class="my-4 mx-4">
+          <!-- <v-layout column class="my-4 mx-4">
             <div class="rd-sidebar-block-title pb-2">Score</div>
             <v-tooltip top>
               <div class="mt-2" slot="activator">{{researchScorePercent}}%</div>
@@ -818,13 +818,13 @@
                 of the project
               </span>
             </v-tooltip>
-            <!-- <top-research-label
+            <top-research-label
               v-if="research.isTop"
               :number="100"
               color-class="green--text"
               class="mt-3"
-            /> -->
-          </v-layout>
+            />
+          </v-layout> -->
           <v-divider />
 
           <v-dialog
