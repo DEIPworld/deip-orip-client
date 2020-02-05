@@ -393,7 +393,7 @@
             color: "#ffffff",
             fontSize: 12
           },
-          pieHole: 0.6
+          pieHole: 0.5
         },
 
         eciChartOptions: {
