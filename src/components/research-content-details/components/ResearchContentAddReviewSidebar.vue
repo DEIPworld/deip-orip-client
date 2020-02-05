@@ -23,6 +23,9 @@
         :disabled="isReviewPublishingDisabled"
         :loading="isLoading"
       >Publish</v-btn>
+      <div class="pt-2">
+         <div>You will get <span class="body-2">approximately 3000 ECI reward in {{relatedExpertise.map(exp => exp.discipline_name).join(", ")}}</span> for your contribution to this project</div>
+      </div>
     </div>
 
     <!-- <div class="pt-4 pb-2">
