@@ -178,26 +178,29 @@
           <v-flex shrink class="pl-3">
             <v-select
               class="my-0 py-0"
-              v-model="filter.contentType"
-              :items="filter.contentTypeItems"
+              v-model="filter.contributionType"
+              :items="filter.contributionTypeItems"
               label="Contribution Type"
               outline
               dense
               clearable
               :disabled="isHistoryChartLoading"
+              @change="onContributionTypeSelected()"
             />
           </v-flex>
-          <!-- <v-flex shrink class="pl-3">
+          <v-flex shrink class="pl-3">
             <v-select
               class="my-0 py-0"
               v-model="filter.criteria"
-              :items="['Novelty', 'Methodology']"
+              :items="filter.criteriaItems"
               label="Criteria"
               outline
               dense
+              clearable
               :disabled="isHistoryChartLoading"
+              @change="onCriteriaSelected()"
             />
-          </v-flex> -->
+          </v-flex>
         </v-layout>
         <v-layout justify-center align-center v-if="isHistoryChartLoading">
           <v-progress-circular
@@ -308,10 +311,19 @@
       const toDate = now.format('YYYY-MM-DD');
       const fromDate = now.subtract(7, 'days').format('YYYY-MM-DD');
 
-      const contentTypesNamesMap = {
+      const contributionTypesNamesMap = {
         [actionTypes.CONTENT]: 'Content',
         [actionTypes.REVIEW]: 'Review',
         [actionTypes.INIT]: 'Initial expertise',
+      };
+
+      const criteriaTypes = {
+        IMPACT: 'Impact',
+        NOVELTY: 'Novelty',
+        EXCELENCE: 'Excelence',
+        RATIONALITY: 'Rationality',
+        TECHNICAL_QUALITY: 'Technical Quality',
+        REPLICATION: 'Replication',
       };
 
       return {
@@ -323,11 +335,12 @@
           fromDateMenu: false,
           toDateMenu: false,
 
-          contentType: null,
-          contentTypeItems: Object.entries(contentTypesNamesMap)
+          contributionType: null,
+          contributionTypeItems: Object.entries(contributionTypesNamesMap)
             .map(([key, value]) => ({ text: value, value: key })),
 
           criteria: null,
+          criteriaItems: Object.values(criteriaTypes)
         },
         isHistoryPageLoading: false,
 
@@ -392,7 +405,8 @@
           tooltip: { isHtml: true },
         },
 
-        contentTypesNamesMap,
+        contributionTypesNamesMap,
+        criteriaTypes,
       };
     },
 
@@ -426,7 +440,7 @@
             ...Object.entries(allocations).map((e) => {
               const contributionType = e[0];
               return [
-                this.contentTypesNamesMap[contributionType],
+                this.contributionTypesNamesMap[contributionType],
                 e[1]
               ];
             })
@@ -561,6 +575,30 @@
           .add(1, 'days')
           .startOf('day');
 
+        let criteriaModifier
+        switch (this.filter.criteria) {
+          case this.criteriaTypes.IMPACT:
+            criteriaModifier = (y) => y * (0.5 + 0.3 * Math.cos(0.00008 * Math.PI * y));
+            break;
+          case this.criteriaTypes.NOVELTY:
+            criteriaModifier = (y) => y * (0.3 + 0.2 * Math.sin(0.00008 * Math.PI * y));
+            break;
+          case this.criteriaTypes.EXCELENCE:
+            criteriaModifier = (y) => y * (0.1 + 0.1 * Math.cos(0.00008 * Math.PI * y));
+            break;
+          case this.criteriaTypes.RATIONALITY:
+            criteriaModifier = (y) => y * (0.4 + 0.4 * Math.cos(0.00008 * Math.PI * y));
+            break;
+          case this.criteriaTypes.TECHNICAL_QUALITY:
+            criteriaModifier = (y) => y * (0.7 + 0.5 * Math.sin(0.00008 * Math.PI * y));
+            break;
+          case this.criteriaTypes.REPLICATION:
+            criteriaModifier = (y) => y * (0.9 + 0.1 * Math.cos(0.00008 * Math.PI * y));
+            break;
+          default:
+            criteriaModifier = y => y;
+        }
+
         return getExpertiseHistory(
           this.$route.params.account_name,
           this.selectedExpertise.discipline_id,
@@ -568,11 +606,13 @@
           toDateMs
         ).then((history) => {
           this.filteredHistory = history.filter((item) => {
-            if (this.filter.contentType && item.action !== this.filter.contentType) {
+            if (this.filter.contributionType && item.action !== this.filter.contributionType) {
               return false;
             }
 
             return true;
+          }).map((item) => {
+            return { ...item, newAmount: criteriaModifier(item.newAmount) };
           });
         }).catch((err) => {
           console.error(err);
@@ -589,6 +629,12 @@
       },
       onToDateSelected() {
         this.filter.toDateMenu = false
+        this.loadFilteredHistory();
+      },
+      onCriteriaSelected() {
+        this.loadFilteredHistory();
+      },
+      onContributionTypeSelected() {
         this.loadFilteredHistory();
       },
     },
