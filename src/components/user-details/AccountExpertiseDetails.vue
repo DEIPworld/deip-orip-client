@@ -109,9 +109,10 @@
           </v-flex>
         </v-layout>
       </div>
-      <v-layout justify-end class="px-5 py-3">
+      <v-layout justify-space-between class="pt-5 pb-3">
+        <div class="bold title">Expertise Contribution Index</div>
         <router-link
-          class="a mx-0 mr-3"
+          class="a mx-0 mr-5 pr-3"
           color="primary"
           outline
           :to="{
