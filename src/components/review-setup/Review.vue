@@ -10,7 +10,7 @@
         >In order to make your work efficient and help you receive most accurate feedback Open Research and Innovation Platform gives you the opportunity to change review criteria for different content types. Your reviewers will see the criteria on the review page. By default criteria for every type are: Novelty, Tecechnical quality, Methodology. Allso you can change reward coefficient (which is by default 10%) in order to motivate peer-review process</v-flex>
         <v-flex xs12 sm12 md10 lg7 my-5>
           <v-layout row mb-3>
-            <v-flex xs2 text-uppercase grey--text>Content types</v-flex>
+            <v-flex xs2 text-uppercase grey--text>Contribution type</v-flex>
             <v-flex xs6 text-uppercase grey--text>Review criteria</v-flex>
             <v-flex xs3 text-align-center>
               <span class="max-width-150 text-uppercase grey--text">Reward coefficient</span>
