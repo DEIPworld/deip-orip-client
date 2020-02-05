@@ -40,7 +40,7 @@
       <div class="pb-3" v-if="overview">
         <div class="bold title">Overview</div>
         <v-layout row class="mt-3">
-          <v-flex xs4 class="px-3">
+          <v-flex xs4 class="px-2">
             <GChart
               type="PieChart"
               :settings="{ packages: ['corechart'] }"
@@ -49,16 +49,16 @@
             />
           </v-flex>
           <v-divider vertical inset />
-          <v-flex class="px-3">
+          <v-flex class="px-2">
             <v-layout column align-center justify-center full-height>
-              <div class="title grey--text">Expertise Contribution Index</div>
+              <div class="title grey--text text-xs-center">Expertise Contribution Index</div>
               <div class="subheading mt-2">{{ selectedExpertise.amount }}</div>
             </v-layout>
           </v-flex>
           <v-divider vertical inset />
-          <v-flex class="px-3">
+          <v-flex class="px-2">
             <v-layout column align-center justify-center full-height>
-              <div class="title grey--text">Contributions</div>
+              <div class="title grey--text text-xs-center">Contributions</div>
               <div class="subheading mt-2">
                 <!-- {{ overview.contributions }} -->
                 <!-- Alice will have 3 contributions during the demo -->
@@ -67,10 +67,32 @@
             </v-layout>
           </v-flex>
           <v-divider vertical inset />
-          <v-flex xs3 class="px-3 headline primary--text">
+          <v-flex xs3 class="px-2 headline primary--text">
             <v-layout column align-center justify-center full-height>
               <div>TOP <b>{{ overview.percentile }}</b>%</div>
               <div>in {{ selectedExpertise.discipline_name }}</div>
+            </v-layout>
+          </v-flex>
+          <v-divider vertical inset />
+          <v-flex class="px-2">
+            <v-layout column align-center justify-center full-height>
+              <div class="title grey--text text-xs-center">Citations</div>
+              <div class="subheading mt-2">
+                <!-- {{ overview.contributions }} -->
+                <!-- Alice will have 30 citations during the demo -->
+                30
+              </div>
+            </v-layout>
+          </v-flex>
+          <v-divider vertical inset />
+          <v-flex class="px-2">
+            <v-layout column align-center justify-center full-height>
+              <div class="title grey--text text-xs-center">H-index</div>
+              <div class="subheading mt-2">
+                <!-- {{ overview.contributions }} -->
+                <!-- Alice will have 57 h-index during the demo -->
+                57
+              </div>
             </v-layout>
           </v-flex>
         </v-layout>
