@@ -67,7 +67,7 @@ const getters = {
     },
 
     contentReviewsList: (state, getters) => {
-        return state.contentReviewsList;
+        return [...state.contentReviewsList].sort((a, b) => b.id - a.id);
     },
 
     expertsList: (state, getters) => {

@@ -82,7 +82,7 @@ const getters = {
         return state.reviewsList.map((review, i) => {
             let researchContent = state.contentList.find(content => content.id == review.research_content_id)
             return { ...review, researchContent };
-        });
+        }).sort((a, b) => b.id - a.id);
     },
 
     disciplinesList: (state, getters) => {
