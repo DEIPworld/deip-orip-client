@@ -144,6 +144,7 @@
                                         console.log(err);
                                     } else {
                                         self.votingDisabled = true;
+                                        self.$store.dispatch('rcd/loadContentReviews', { researchContentId: self.content.id });
                                         self.$store.dispatch('layout/setSuccess', { message: "You've voted for review successfully!"});
                                     }
                                 });
