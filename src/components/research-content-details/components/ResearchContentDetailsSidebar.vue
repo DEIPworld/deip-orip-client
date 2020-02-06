@@ -151,7 +151,7 @@
                 </div>
             </div>
 
-            <div class="pt-4">
+            <div class="pt-4" v-if="isPublished">
                 <router-link class="a"
                     :to="{
                     name: 'ResearchContentReferences',
