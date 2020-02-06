@@ -64,7 +64,7 @@ services:
       LETSENCRYPT_EMAIL: yahortsaryk@deip.world
       # DEIP variables
       NODE_ENV: production
-      DEIP_CLIENT_HOST: $subdomain.deip.world
+      DEIP_CLIENT_URL: https://$subdomain.deip.world
       DEIP_SERVER_URL: https://$subdomain-server.deip.world
       DEIP_FULL_NODE_URL: https://$subdomain-full-node.deip.world
       CHAIN_ID: $chain_id

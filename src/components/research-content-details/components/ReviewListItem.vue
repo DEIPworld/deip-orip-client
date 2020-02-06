@@ -6,7 +6,7 @@
                 <v-layout column fill-height justify-space-between>
                     <div @click="goToReviewerProfilePage($event, _review.author.account.name)">
                         <v-avatar size="90px">
-                            <img v-if="review.author.profile" v-bind:src="review.author.profile.avatar | avatarSrc(180, 180, false)" />
+                            <img v-if="review.author.profile" v-bind:src="review.author.profile | avatarSrc(180, 180, false)" />
                             <v-gravatar v-else :title="review.author.account.name" :email="review.author.account.name + '@deip.world'" />
                         </v-avatar>
                         <div class="bold c-pt-2">

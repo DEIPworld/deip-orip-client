@@ -32,7 +32,7 @@ export default class DeipBaseEditor {
         }, containerEl)
     }
 
-    save() {
+    exportHtml() {
         const saveParams = {
             editorSession: this.editorSession,
             fileManager: this.editorSession.fileManager

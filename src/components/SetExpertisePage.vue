@@ -56,13 +56,12 @@
                             v-bind:class="{'selected-user': user === selectedUser }"
                             @click="selectUser(user)">
                             <div>
-                                <v-avatar size="40px">
-                                    <img v-if="user.profile" v-bind:src="user.profile.avatar | avatarSrc(80, 80, false)" />
-                                    <v-gravatar v-else :title="user.account.name" :email="user.account.name + '@deip.world'" />
-                                </v-avatar>
-                                <router-link :to="'/user-details/' + user.account.name" class="a c-pl-3">
-                                    {{user | fullname}}
-                                </router-link>
+                                <platform-avatar 
+                                    :user="user.profile"
+                                    :size="40"
+                                    link-to-profile
+                                    link-to-profile-class="px-1"
+                                ></platform-avatar>
                                <!-- <a href="#" class="a c-pl-3">{{user | fullname}}</a> -->
                             </div>
                         </div>

@@ -1,144 +1,196 @@
 <template>
+  <div>
     <div>
-        <div>
-            <div ref='deip-texture-container' class="deip-texture" 
-                :class="[{ 'read-only-texture': isReadOnly }]"
-                :style="{ height: contentHeight + 'px' }">
-            </div>
-        </div>
-        
-        <div v-if="isContentExpansionAvailable" class="c-m-5 right">
-            <a @click="expandContent()">{{ isContentExpanded ? 'Collapse chapter' : 'Expand chapter'}}</a>
-        </div>
+      <div ref='deip-texture-container' class="deip-texture" 
+        :class="[{ 'read-only-texture': isReadOnly }]"
+        :style="{ height: 100 + 'vh' }">
+      </div>
     </div>
+    
+    <!-- <div v-if="isContentExpansionAvailable" class="pa-5">
+      <a @click="expandContent()">{{ isContentExpanded ? 'Collapse chapter' : 'Expand chapter'}}</a>
+    </div> -->
+  </div>
 </template>
 
 <script>
-    import { mapGetters } from 'vuex';
-    import axios from 'axios'
-    import DeipTextureReaderApp from './../../../editors/DeipTextureReaderApp'
-    import DeipTextureEditorApp from './../../../editors/DeipTextureEditorApp'
-    import { getAccessToken, getDecodedToken } from './../../../utils/auth'
-    import deipRpc from '@deip/deip-oa-rpc-client'
+import { mapGetters } from 'vuex';
+import axios from 'axios'
+import DeipTextureReaderApp from './../../../editors/DeipTextureReaderApp'
+import DeipTextureEditorApp from './../../../editors/DeipTextureEditorApp'
+import { getAccessToken, getDecodedToken } from './../../../utils/auth'
+import deipRpc from '@deip/deip-oa-rpc-client'
+import { bus } from './../../../main';
 
-    export default {
-        name: "ResearchContentDetailsDar",
-        props: {
-            contentRef: { type: Object }
-        },
-        data() { 
-            return {
-                fileStorageBaseUrl: window.env.DEIP_SERVER_URL,
-                isReadOnly: undefined,
-                isContentExpansionAvailable: undefined,
-                isContentExpanded: false,
-                contentHeight: window.screen.height
-            }
-        },
-        computed: {
-            ...mapGetters({
-                user: 'auth/user',
-                userGroups: 'auth/userGroups',
-                content: 'rcd/content',
-                research: 'rcd/research'
-            }),
-            isResearchGroupMember() {
-                return this.research != null 
-                    ? this.$store.getters['auth/userIsResearchGroupMember'](this.research.research_group_id) 
-                    : false
-            }
-        },
-        methods: {
-            expandContent() {
-                this.isContentExpanded = !this.isContentExpanded;
-                if (this.isContentExpanded) {
-                    let height = this.getContentHeight();
-                    height = height > (window.screen.height * 0.7) ? (height + 100) : (window.screen.height);
-                    this.contentHeight = height;
-                } else {
-                    this.contentHeight = window.screen.height * 0.7;
-                }
-            },
-            getContentHeight() {
-                const contentEl = document.querySelector('.se-content');
-                return contentEl && contentEl.offsetHeight ? contentEl.offsetHeight : 0;
-            },
-            setContentHeight() {
-                let height = this.getContentHeight();
-                let isHigherThanHalfScreen = height > window.screen.height * 0.85;
-                height = isHigherThanHalfScreen ? (height + 100) : (window.screen.height);
-                this.contentHeight = height;
-            },
-            setDefaultContentHeight() {
-                let height = this.getContentHeight();
-                let isHigherThanScreen = height > window.screen.height;
-                this.isContentExpansionAvailable = this.isReadOnly && isHigherThanScreen;
-                height = this.isReadOnly 
-                    ? (window.screen.height * 0.7)
-                    : isHigherThanScreen ? (height + 100) : (window.screen.height);
-                this.contentHeight = height;
-            }
-        },
-        mounted () {
-            const self = this;
-            var research;
-            
-            deipRpc.api.getResearchByAbsolutePermlinkAsync(
-                    decodeURIComponent(this.$route.params.research_group_permlink), 
-                    decodeURIComponent(this.$route.params.research_permlink)
-                )
-                .then((_research) => {
-                    research = _research;
-                    const promise = self.userGroups && self.userGroups.length 
-                        ? Promise.resolve(self.userGroups.map(g => g.id))
-                        : deipRpc.api.getResearchGroupTokensByAccountAsync(getDecodedToken().username)
-                            .then((rgtList) => {return rgtList.map(rgt => rgt.research_group_id)});
-                    return promise;
-                })
-                .then((groups) => {
-                    const isReadOnly = 
-                        this.$route.query.isReadOnly === 'true'
-                        || this.contentRef.status != "in-progress"
-                        || !groups.some(id => id == research.research_group_id);
+export default {
+  name: "ResearchContentDetailsDar",
+  props: {
+    contentRef: { type: Object },
+    researchGroupMembers: { type: Array }
+  },
+  data() { 
+    return {
+      texture: null,
+      fileStorageBaseUrl: window.env.DEIP_SERVER_URL,
+      isReadOnly: undefined,
+      isContentExpansionAvailable: undefined,
+      isContentExpanded: false,
+      contentHeight: window.screen.height
+    }
+  },
+  computed: {
+    ...mapGetters({
+      user: 'auth/user',
+      userGroups: 'auth/userGroups'
+    })
+  },
 
-                    self.isReadOnly = isReadOnly;
+  methods: {
 
-                    const archiveId = self.contentRef._id;
-                    const storageType = 'fs';
-                    const storageUrl = `${self.fileStorageBaseUrl}/content`;
+    expandContent() {
+      this.isContentExpanded = !this.isContentExpanded;
+      if (this.isContentExpanded) {
+          let height = this.getContentHeight();
+          height = height > (window.screen.height * 0.7) ? (height + 100) : (window.screen.height);
+          this.contentHeight = height;
+      } else {
+          this.contentHeight = window.screen.height * 0.7;
+      }
+    },
 
-                    const container = this.$refs['deip-texture-container'];
-                    const promise = new Promise((resolve, reject) => {
-                        const headers = {
-                            'Authorization': 'Bearer ' + getAccessToken(),
-                            'DarRef': archiveId
-                        };
+    getContentHeight() {
+      const contentEl = document.querySelector('.se-content');
+      return contentEl && contentEl.offsetHeight ? contentEl.offsetHeight : 0;
+    },
 
-                        const viewName = isReadOnly ? 'reader' : 'manuscript';
-                        const deip = { tocThreshold: isReadOnly ? 900: 1200 };
-                        const params = { archiveId, storageType, storageUrl, headers, viewName, deip };
-                        const texture = isReadOnly
-                            ? DeipTextureReaderApp.mount(params, container) 
-                            : DeipTextureEditorApp.mount(params, container);
-                        
-                        texture.on('archive:ready', () => {
-                            texture.state.archive.on('archive:changed', self.setContentHeight);
-                            setTimeout(() => {
-                                self.setDefaultContentHeight();
-                            }, 100)
-                            resolve(texture);
-                        });
-                    })
+    getArticleTitle(cb) {
+      const title = this.texture.api.getArticleTitle() || "";
+      if (typeof cb === "function") cb(title);
+    },
 
-                    return promise;
-                })
-                .then((texture) => {
-                    self.$store.dispatch('rcd/setTexture', { texture });
-                })
-        }
-    };
+    setContentHeight() {
+      let height = this.getContentHeight();
+      let isHigherThanHalfScreen = height > window.screen.height * 0.85;
+      height = isHigherThanHalfScreen ? (height + 100) : (window.screen.height);
+      this.contentHeight = height;
+    },
+
+    setDefaultContentHeight() {
+      let height = this.getContentHeight();
+      let isHigherThanScreen = height > window.screen.height;
+      this.isContentExpansionAvailable = this.isReadOnly && isHigherThanScreen;
+      height = this.isReadOnly 
+          ? (window.screen.height * 0.7)
+          : isHigherThanScreen ? (height + 100) : (window.screen.height);
+      this.contentHeight = height;
+    },
+
+    setAuthors({ authors }) {
+      const persons = this.texture.api.getAuthors();
+      const deletedAuthors = persons
+        .filter(p => !authors.some(a => a.account.name == p.alias))
+        // filter out authors without DEIP account
+        .filter(p => this.researchGroupMembers.some(m => m.account.name === p.alias));
+      
+      const addedAuthors = authors.filter(a => !persons.some(p => a.account.name == p.alias)); 
+      
+      for (let i = 0; i < deletedAuthors.length; i++) { 
+        let person = deletedAuthors[i];
+        this.texture.api.removeAuthor(person);
+      }
+
+      for (let i = 0; i < addedAuthors.length; i++) { 
+        let author = addedAuthors[i];
+        let alias = author.account.name;
+        let surname = author.profile && author.profile.lastName ? author.profile.lastName : "";
+        let givenName = author.profile && author.profile.firstName ? author.profile.firstName : alias;
+        this.texture.api.addAuthor(alias, surname, givenName);
+      }
+    },
+
+    addReference({ reference }) {
+      const uri = `${window.env.DEIP_CLIENT_URL}/#/${encodeURIComponent(reference.group_permlink)}/research/${encodeURIComponent(reference.research_permlink)}/${encodeURIComponent(reference.permlink)}`;
+      const title = `${reference.title} (${reference.research_title})`, containerTitle = title;
+      this.texture.api.addReference(uri, title, containerTitle);
+    },
+
+    removeReference({ reference }) {
+      const uri = `${window.env.DEIP_CLIENT_URL}/#/${encodeURIComponent(reference.group_permlink)}/research/${encodeURIComponent(reference.research_permlink)}/${encodeURIComponent(reference.permlink)}`;
+      const ref = this.texture.api.getReferences().find(r => r.uri == uri);
+      this.texture.api.removeReference(ref);
+    },
+
+    saveDocument(cb) {
+      this.texture.save()
+        .then(() => {
+          if (typeof cb === "function") cb();
+        });
+    }
+  },
+  mounted () {
+    var research;
+    
+    deipRpc.api.getResearchByAbsolutePermlinkAsync(decodeURIComponent(this.$route.params.research_group_permlink), decodeURIComponent(this.$route.params.research_permlink))
+      .then((_research) => {
+        research = _research;
+        const promise = this.userGroups && this.userGroups.length 
+          ? Promise.resolve(this.userGroups.map(g => g.id))
+          : deipRpc.api.getResearchGroupTokensByAccountAsync(getDecodedToken().username)
+              .then((rgtList) => {return rgtList.map(rgt => rgt.research_group_id)});
+        return promise;
+      })
+      .then((groups) => {
+        const isReadOnly = this.$route.query.isReadOnly === 'true'
+          || this.contentRef.status != "in-progress"
+          || !groups.some(id => id == research.research_group_id);
+
+        this.isReadOnly = isReadOnly;
+
+        const archiveId = this.contentRef._id;
+        const storageType = 'fs';
+        const storageUrl = `${this.fileStorageBaseUrl}/content`;
+
+        const container = this.$refs['deip-texture-container'];
+        const promise = new Promise((resolve, reject) => {
+          const headers = {
+            'Authorization': 'Bearer ' + getAccessToken(),
+            'DarRef': archiveId
+          };
+
+          const editable = !isReadOnly;
+          const params = { archiveId, storageType, storageUrl, headers, editable };
+          const texture = isReadOnly
+            ? DeipTextureReaderApp.mount(params, container) 
+            : DeipTextureEditorApp.mount(params, container);
+          
+          texture.on('archive:ready', () => {
+            texture.state.archive.on('archive:changed', this.setContentHeight);
+            setTimeout(() => {
+              // this.setDefaultContentHeight();
+            }, 100)
+            resolve(texture);
+          });
+        });
+
+        return promise;
+      })
+      .then((texture) => {
+        this.texture = texture;
+      });
+    
+    bus.$on('texture:getArticleTitle', this.getArticleTitle);
+    bus.$on('texture:setAuthors', this.setAuthors);
+    bus.$on('texture:addReference', this.addReference);
+    bus.$on('texture:removeReference', this.removeReference);
+    bus.$on('texture:saveDocument', this.saveDocument);
+  },
+
+  beforeDestroy() {
+    this.texture.dispose();
+  }
+};
 </script>
 
 <style lang="less">
-    @import './../../../styles/texture';
+  @import './../../../styles/texture';
 </style>

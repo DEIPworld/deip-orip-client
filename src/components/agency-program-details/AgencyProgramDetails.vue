@@ -138,13 +138,12 @@
                 <div class="title c-pb-2 bold">Program Officers</div>
                 <div v-for="(officer, n) in program.officers" :key="'officer-' + n">
                   <div class="legacy-row-nowrap text-align-center c-pt-2">
-                    <v-avatar size="40px">
-                        <img v-if="officer.profile" v-bind:src="officer.profile.avatar | avatarSrc(30, 30, false)" />
-                        <v-gravatar v-else :email="officer.account.name + '@deip.world'" />
-                    </v-avatar>
-                    <router-link class="a body-1 c-pl-3 c-pt-2" :to="{ name: 'UserDetails', params: { account_name: officer.account.name } }">
-                      {{ officer | fullname }}
-                    </router-link>
+                    <platform-avatar 
+                      :user="officer"
+                      :size="40"
+                      link-to-profile
+                      link-to-profile-class="px-1"
+                    ></platform-avatar>
                   </div>
                 </div>
               </div>

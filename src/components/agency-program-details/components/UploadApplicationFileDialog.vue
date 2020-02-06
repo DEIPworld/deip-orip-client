@@ -53,13 +53,12 @@
 								<div class="c-pt-4 legacy-row">
 									<div v-for="(member, i) in research.group.enrichedMembers" :key="i"
                     class="legacy-row-nowrap text-align-center c-pt-2 c-pr-8">
-										<v-avatar size="40px">
-											<img v-if="member.profile" v-bind:src="member.profile.avatar | avatarSrc(30, 30, false)" />
-											<v-gravatar v-else :email="member.account.name + '@deip.world'" />
-										</v-avatar>
-										<router-link class="a body-1 c-pl-3 c-pt-2" :to="{ name: 'UserDetails', params: { account_name: member.account.name } }">
-                        {{ member | fullname }}
-                      </router-link>
+                    <platform-avatar 
+                      :user="member"
+                      :size="40"
+                      link-to-profile
+                      link-to-profile-class="px-1"
+                    ></platform-avatar>
 									</div>
 								</div>
 							</div>

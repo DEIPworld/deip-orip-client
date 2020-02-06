@@ -57,11 +57,10 @@
                             <template v-for="(member, i) in members">
                                 <v-layout class="list-line" :key="'member-' + i">
                                     <v-flex xs4 list-body-cell display-flex>
-
-                                        <v-avatar size="40px" class="pt-2">
-                                            <img v-if="member.profile" v-bind:src="member.profile.avatar | avatarSrc(80, 80, false)" />
-                                            <v-gravatar v-else :email="member.account.name + '@deip.world'" />
-                                        </v-avatar>
+                                        <platform-avatar 
+                                            :user="member"
+                                            :size="40"
+                                        ></platform-avatar>
                                         <div class="pl-3">
                                             <router-link :to="{
                                                     name: 'UserDetails', 
@@ -119,10 +118,10 @@
 
                                             <v-layout row py-3 px-4 align-center :key="'invite-' + i">
                                                 <v-flex xs4 display-flex>
-                                                    <v-avatar size="40px" class="pt-2">
-                                                        <img v-if="invite.user.profile" v-bind:src="invite.user.profile.avatar | avatarSrc(80, 80, false)" />
-                                                        <v-gravatar v-else :email="invite.user.account.name + '@deip.world'" />
-                                                    </v-avatar>
+                                                    <platform-avatar 
+                                                        :user="invite.user"
+                                                        :size="40"
+                                                    ></platform-avatar>
 
                                                     <div class="grow pl-3">
                                                         <router-link :to="{

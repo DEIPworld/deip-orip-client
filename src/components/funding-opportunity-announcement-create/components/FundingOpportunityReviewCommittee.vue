@@ -18,16 +18,13 @@
 						</div>
 
 						<div v-if="opportunity.reveiwCommittee">
-							<div class="legacy-row-nowrap legacy-align-items-center c-mt-2" v-for="(member, i) in opportunity.reveiwCommittee.enrichedMembers">
-								<v-avatar size="40px">
-									<img v-if="member.profile" v-bind:src="member.profile.avatar | avatarSrc(80, 80, false)" />
-									<v-gravatar v-else :title="member.account.name" :email="member.account.name + '@deip.world'" />
-								</v-avatar>
-								<div class="c-pl-4 legacy-col-grow">
-									<router-link :to="{ name: 'UserDetails', params: { account_name: member.account.name } }" class="a c-pl-3">
-											{{member | fullname}}
-									</router-link>
-								</div>
+							<div class="legacy-row-nowrap legacy-align-items-center c-mt-2" v-for="(member, i) in opportunity.reveiwCommittee.enrichedMembers" :key="`${i}-member`">
+								<platform-avatar 
+									:user="member"
+									:size="40"
+									link-to-profile
+									link-to-profile-class="px-1"
+								></platform-avatar>
 							</div>
 						</div>
 					</v-card>

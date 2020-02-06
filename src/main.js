@@ -98,4 +98,6 @@ async function setTenant() {
   }
 }
 
+export const bus = new Vue();
+
 initApp();

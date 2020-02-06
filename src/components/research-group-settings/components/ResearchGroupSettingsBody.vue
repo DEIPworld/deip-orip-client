@@ -26,7 +26,7 @@
           <div class="py-2 pt-3">
             <v-layout justify-end>
               <v-btn
-                class="my-0 ml-2"
+                class="ma-0"
                 large
                 :loading="isLoading"
                 :disabled="!isDisabledBtnNameDescription || isLoading"
@@ -80,7 +80,7 @@
           <div class="py-2 pt-3">
             <v-layout justify-end>
               <v-btn
-                class="my-0 ml-2"
+                class="ma-0"
                 large
                 :loading="isLoading"
                 :disabled="isDisabledBtnQuorum || isLoading"
@@ -115,7 +115,7 @@
                         :disabled="isUploadingLogo"
                         :loading="isUploadingLogo"
                         large
-                        class="my-0 ml-2"
+                        class="ma-0"
                         @click="updateLogoImage()"
                         color="primary"
                       >Update logo</v-btn>

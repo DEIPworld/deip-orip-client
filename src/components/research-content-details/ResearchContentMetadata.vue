@@ -66,16 +66,12 @@
                         <div class="legacy-col-grow">
                             <div>
                                 <div class="legacy-row">
-                                    <v-avatar size="40px">
-                                        <img v-if="contentMetadata.witness.user.profile" v-bind:src="contentMetadata.witness.user.profile.avatar | avatarSrc(80, 80, false)" />
-                                        <v-gravatar v-else :email="contentMetadata.witness.user.account.name + '@deip.world'" />
-                                    </v-avatar>
-                                    <div class="c-ml-4">
-                                        <router-link class="a" :to="'/user-details/' + contentMetadata.witness.user.account.name">
-                                            {{contentMetadata.witness.user | fullname}}
-                                        </router-link>
-                                        <div class="caption grey--text">{{contentMetadata.witness.user.account.name}}</div>
-                                    </div>
+                                    <platform-avatar 
+                                        :user="contentMetadata.witness.user"
+                                        :size="40"
+                                        link-to-profile
+                                        link-to-profile-class="px-1"
+                                    ></platform-avatar>
                                 </div>
 
                                 <div class="grey-border-stripe c-mt-4">
@@ -110,16 +106,12 @@
 
                             <div class="c-mb-4" v-for="(voter, idx) in contentMetadata.voters" :key="'approver-' + idx">
                                 <div class="legacy-row">
-                                    <v-avatar size="40px">
-                                        <img v-if="voter.user.profile" v-bind:src="voter.user.profile.avatar | avatarSrc(80, 80, false)" />
-                                        <v-gravatar v-else :email="voter.user.account.name + '@deip.world'" />
-                                    </v-avatar>
-                                    <div class="c-ml-4">
-                                        <router-link class="a" :to="'/user-details/' + voter.user.account.name">
-                                            {{voter.user | fullname}}
-                                        </router-link>
-                                        <div class="caption grey--text">{{voter.user.account.name}}</div>
-                                    </div>
+                                    <platform-avatar 
+                                        :user="voter.user"
+                                        :size="40"
+                                        link-to-profile
+                                        link-to-profile-class="px-1"
+                                    ></platform-avatar>
                                 </div>
 
                                 <div class="grey-border-stripe c-mt-4">

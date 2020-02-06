@@ -3,10 +3,10 @@
 
         <div class="legacy-row-nowrap c-pb-4">
             <div class="text-align-center">
-                <v-avatar size="120px">
-                    <img v-if="review.author.profile" v-bind:src="review.author.profile.avatar | avatarSrc(240, 240, false)" />
-                    <v-gravatar v-else :title="review.author.account.name" :email="review.author.account.name + '@deip.world'" />
-                </v-avatar>
+                <platform-avatar 
+                    :user="review.author"
+                    :size="120"
+                ></platform-avatar>
             </div>
             
             <div class="legacy-column c-ml-10">
