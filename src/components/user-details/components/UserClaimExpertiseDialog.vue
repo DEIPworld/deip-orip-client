@@ -12,9 +12,9 @@
             <page-container>
                 <contentbar>
 
-                    <div class="headline text-align-center half-bold">Select your discipline</div>
+                    <div class="headline text-align-center font-weight-medium">Select your discipline</div>
 
-                    <div class="discipline-picker c-mt-8">
+                    <div class="discipline-picker mt-4">
                         <advanced-discipline-picker
                             :is-multiple-select="false"
                             :is-highlighted-parent="true"
@@ -23,13 +23,13 @@
                         ></advanced-discipline-picker>
                     </div>
 
-                    <div class="red--text c-pt-2 text-align-center">
+                    <div class="red--text pt-2 text-align-center">
                         <v-icon color="red">warning</v-icon>
                         Please be accurate, you will need the community assistance to change the disciplines
                     </div>
 
                     <v-form ref="form">
-                        <div class="c-pt-6">
+                        <div class="pt-4">
                             <v-textarea
                                 label="Provide a cover letter" 
                                 auto-grow
@@ -39,49 +39,49 @@
                             ></v-textarea>
                         </div>
 
-                        <div class="title bold c-pt-6">Add links to your relevant publications in this discipline</div>
+                        <div class="title font-weight-bold pt-4">Add links to your relevant publications in this discipline</div>
 
-                        <v-card class="c-mt-6">
+                        <v-card class="mt-4">
                             <template v-for="(publication, index) in publications">
-                                <div class="legacy-row c-p-6">
-                                    <div class="c-pt-6 c-pr-4">
+                                <v-layout row pa-4>
+                                    <div class="pt-4 pr-3">
                                         <v-icon color="primary">mdi-note-text</v-icon>
                                     </div>
 
-                                    <div class="legacy-col-grow">
+                                    <v-flex>
                                         <v-text-field
                                             label="Link to publication"
                                             v-model="publication.value"
                                             :rules="[required, urlRule]"
                                         ></v-text-field>
-                                    </div>
+                                    </v-flex>
 
-                                    <div class="c-pt-5 c-pl-4">
+                                    <div class="pt-3 pl-3">
                                         <v-btn class="ma-0" icon @click="removeLink(index)">
                                             <v-icon color="grey">close</v-icon>
                                         </v-btn>
                                     </div>
-                                </div>
+                                </v-layout>
 
                                 <v-divider></v-divider>
                             </template>
 
-                            <div class="c-p-6">
+                            <div class="pa-4">
                                 <v-btn outline icon color="primary" class="ma-0" @click="addLinkInput">
                                     <v-icon small>add</v-icon>
                                 </v-btn>
 
-                                <span class="c-pl-3">Add a link to a publication</span>
+                                <span class="pl-2">Add a link to a publication</span>
                             </div>
                         </v-card>
                         
-                        <div class="legacy-row legacy-justify-center c-ph-6 c-pt-6">
+                        <v-layout row legacy-justify-center px-4 pt-4>
                             <v-btn color="primary"
                                 :disabled="isClaimBtnDisabled || isLoading"
                                 :loading="isLoading"
                                 @click="claimExpertise"
                             >Claim Expertise Tokens</v-btn>
-                        </div>
+                        </v-layout>
                     </v-form>
 
                 </contentbar>

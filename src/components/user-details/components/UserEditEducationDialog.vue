@@ -16,20 +16,20 @@
 
             <v-card-text>
                     <v-form v-model="isFormValid" ref="form">
-                        <div class="subheading bold">Educational institution</div>
-                        <div class="legacy-row">
-                            <div class="legacy-col-12">
+                        <div class="subheading font-weight-bold">Educational institution</div>
+                        <v-layout>
+                            <v-flex xs12>
                                 <v-text-field
                                     label="Educational institution"
                                     v-model="educationalInstitution"
                                     :rules="[ rules.required ]"
                                 ></v-text-field>
-                            </div>
-                        </div>
+                            </v-flex>
+                        </v-layout>
 
-                        <div class="subheading bold">Dates attended</div>
-                        <div class="legacy-row">
-                            <div class="legacy-col-5 c-pr-3">
+                        <div class="subheading font-weight-bold">Dates attended</div>
+                        <v-layout row>
+                            <v-flex xs5 pr-3>
                                 <v-menu
                                     lazy
                                     :close-on-content-click="false"
@@ -53,9 +53,9 @@
                                     ></v-text-field>
                                     <v-date-picker v-model="dateFrom" @input="dateFromMenu = false" type="month"></v-date-picker>
                                 </v-menu>
-                            </div>
+                            </v-flex>
 
-                            <div class="legacy-col-5 c-pl-3">
+                            <v-flex xs5 pl-3>
                                 <v-menu
                                     lazy
                                     :close-on-content-click="false"
@@ -81,10 +81,10 @@
                                     
                                     <v-date-picker v-model="dateTo" @input="dateToMenu = false" type="month"></v-date-picker>
                                 </v-menu>
-                            </div>
-                        </div>
+                            </v-flex>
+                        </v-layout>
 
-                        <div class="legacy-row pb-3">
+                        <v-layout row pb-3>
                             <v-checkbox class="ma-0 pa-0"
                                 label="In progress"
                                 :input-value="isActive"
@@ -92,41 +92,41 @@
                                 style="max-width: 140px"
                                 @click="changeIsActive()"
                             ></v-checkbox>
-                        </div>
+                        </v-layout>
 
-                        <div class="subheading bold">Degree obtained</div>
-                        <div class="legacy-row">
-                            <div class="legacy-col-12">
+                        <div class="subheading font-weight-bold">Degree obtained</div>
+                        <v-layout row>
+                            <v-flex xs12>
                                 <v-text-field
                                     label="Degree obtained"
                                     v-model="degree"
                                     :rules="[ rules.required ]"
                                 ></v-text-field>
-                            </div>
-                        </div>
+                            </v-flex>
+                        </v-layout>
 
-                        <div class="subheading bold">Area of study</div>
-                        <div class="legacy-row">
-                            <div class="legacy-col-12">
+                        <div class="subheading font-weight-bold">Area of study</div>
+                        <v-layout row>
+                            <v-flex xs12>
                                 <v-text-field
                                     label="Area of study"
                                     v-model="area"
                                     :rules="[ rules.required ]"
                                 ></v-text-field>
-                            </div>
-                        </div>
+                            </v-flex>
+                        </v-layout>
 
-                        <div class="subheading bold">Description <span class="caption grey--text">(optional)</span></div>
-                        <div class="legacy-row">
-                            <div class="legacy-col-12">
+                        <div class="subheading font-weight-bold">Description <span class="caption grey--text">(optional)</span></div>
+                        <v-layout row>
+                            <v-flex xs12>
                                 <v-textarea
                                     :rows="2"
                                     auto-grow
                                     label="Description"
                                     v-model="description"
                                 ></v-textarea>
-                            </div>
-                        </div>
+                            </v-flex>
+                        </v-layout>
                         
                         <div>
                             <v-card-actions>

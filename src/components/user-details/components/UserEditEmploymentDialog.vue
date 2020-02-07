@@ -16,38 +16,38 @@
 
                 <v-card-text>
                     <v-form v-model="isFormValid" ref="form">
-                        <div class="subheading bold">Company</div>
-                        <div class="legacy-row">
-                            <div class="legacy-col-12">
+                        <div class="subheading font-weight-bold">Company</div>
+                        <v-layout row>
+                            <v-flex xs12>
                                 <v-text-field
                                     label="Company"
                                     v-model="company"
                                     :rules="[rules.required]"
                                 ></v-text-field>
-                            </div>
-                        </div>
+                            </v-flex>
+                        </v-layout>
 
-                        <div class="subheading bold">Location</div>
-                        <div class="legacy-row">
-                            <div class="legacy-col-6 c-pr-3">
+                        <div class="subheading font-weight-bold">Location</div>
+                        <v-layout row>
+                            <v-flex xs6 pr-3>
                                 <v-text-field
                                     label="City"
                                     v-model="city"
                                     :rules="[rules.required]"
                                 ></v-text-field>
-                            </div>
-                            <div class="legacy-col-6 c-pl-3">
+                            </v-flex>
+                            <v-flex xs6 pl-3>
                                 <v-text-field
                                     label="Country"
                                     v-model="country"
                                     :rules="[rules.required]"
                                 ></v-text-field>
-                            </div>
-                        </div>
+                            </v-flex>
+                        </v-layout>
 
-                        <div class="subheading bold">Period</div>
-                        <div class="legacy-row">
-                            <div class="legacy-col-5 c-pr-3">
+                        <div class="subheading font-weight-bold">Period</div>
+                        <v-layout row>
+                            <v-flex xs5 pr-3>
                                 <v-menu
                                     lazy
                                     :close-on-content-click="false"
@@ -68,9 +68,9 @@
                                         readonly></v-text-field>
                                     <v-date-picker v-model="dateFrom" @input="dateFromMenu = false" type="month"></v-date-picker>
                                 </v-menu>
-                            </div>
+                            </v-flex>
 
-                            <div class="legacy-col-5 c-pl-3">
+                            <v-flex xs5 pl-3>
                                 <v-menu
                                     lazy
                                     :close-on-content-click="false"
@@ -96,10 +96,10 @@
 
                                     <v-date-picker v-model="dateTo" @input="dateToMenu = false" type="month"></v-date-picker>
                                 </v-menu>
-                            </div>
-                        </div>
+                            </v-flex>
+                        </v-layout>
 
-                        <div class="legacy-row pb-3">
+                        <v-layout row pb-3>
                             <v-checkbox class="ma-0 pa-0"
                                 label="Is present"
                                 :input-value="isActive"
@@ -107,32 +107,32 @@
                                 style="max-width: 125px"
                                 @click="changeIsActive()"
                             ></v-checkbox>
-                        </div>
+                        </v-layout>
 
-                        <div class="subheading bold">Position</div>
-                        <div class="legacy-row">
-                            <div class="legacy-col-12">
+                        <div class="subheading font-weight-bold">Position</div>
+                        <v-layout row>
+                            <v-flex xs12>
                                 <v-text-field
                                     label="Position"
                                     v-model="position"
                                     :rules="[rules.required]"
                                 ></v-text-field>
-                            </div>
-                        </div>
+                            </v-flex>
+                        </v-layout>
 
-                        <div class="subheading bold">Description  
+                        <div class="subheading font-weight-bold">Description  
                             <span class="caption grey--text">(optional)</span>
                         </div>
-                        <div class="legacy-row">
-                            <div class="legacy-col-12">
+                        <v-layout row>
+                            <v-flex xs12>
                                 <v-textarea
                                     :rows="2"
                                     auto-grow
                                     label="Description"
                                     v-model="description"
                                 ></v-textarea>
-                            </div>
-                        </div>
+                            </v-flex>
+                        </v-layout>
                         <div>
                             <v-layout row wrap>
                                 <v-flex xs12 py-2>
