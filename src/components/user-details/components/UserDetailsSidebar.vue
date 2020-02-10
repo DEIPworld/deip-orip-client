@@ -2,7 +2,7 @@
 <v-card class="pa-4 full-height">
     <v-layout column>
     <div v-if="isOwner && hasInvites">
-        <div class="title bold pb-2" id="invites">Invites: {{invites.length}}</div>
+        <div class="title font-weight-bold pb-2" id="invites">Invites: {{invites.length}}</div>
             <v-layout
                 column
                 class="py-2"
@@ -10,15 +10,15 @@
                 :key="'invite-' + index">
 
                 <v-layout column align-baseline>
-                    <router-link tag="div" class="a full-width break-word half-bold caption"
+                    <router-link tag="div" class="a full-width break-word font-weight-medium caption"
                         :to="{ name: 'ResearchGroupDetails', params: {
                             research_group_permlink: encodeURIComponent(invite.group.permlink),
                         }}"
                         >{{invite.group.name}}
                     </router-link>
-                    <div class="py-2 caption half-bold">
+                    <div class="py-2 caption font-weight-medium">
                         invites you to join them with
-                        <span class="grey--text bold">{{convertToPercent(invite.research_group_token_amount)}}%</span>
+                        <span class="grey--text font-weight-bold">{{convertToPercent(invite.research_group_token_amount)}}%</span>
                         of group weight
                     </div>
                     <div class="text-xs-right full-width">
@@ -45,7 +45,7 @@
                     </v-card-title>
                     <v-card-text>
                         <div>{{inviteDetailsDialog.item.cover_letter}}</div>
-                        <div class="subheading pt-4 half-bold">Group weight: <span class="grey--text">{{convertToPercent(inviteDetailsDialog.item.research_group_token_amount)}}%</span></div>     
+                        <div class="subheading pt-4 font-weight-medium">Group weight: <span class="grey--text">{{convertToPercent(inviteDetailsDialog.item.research_group_token_amount)}}%</span></div>     
                     </v-card-text>
                     <v-card-actions>
                         <v-layout row wrap>
@@ -76,7 +76,7 @@
         <!-- ### END User Profile Invites Section ### -->
 
         <div v-if="isOwner && hasReviewRequests">
-          <div class="title bold pb-2" id="review-requests">Review Requests: {{reviewRequests.length}}</div>
+          <div class="title font-weight-bold pb-2" id="review-requests">Review Requests: {{reviewRequests.length}}</div>
           <v-layout
             column
             class="py-2"
@@ -85,8 +85,8 @@
           >
             <v-layout column align-baseline>
                 <platform-avatar link-to-profile :user="reviewRequest.requestorProfile"></platform-avatar>
-                <div class="py-2 caption half-bold">requests your review for "{{reviewRequest.research.title}}" research</div>
-                <!-- <router-link tag="div" class="a full-width break-word half-bold caption"
+                <div class="py-2 caption font-weight-medium">requests your review for "{{reviewRequest.research.title}}" research</div>
+                <!-- <router-link tag="div" class="a full-width break-word font-weight-medium caption"
                     :to="{ name: 'ResearchContentDetails', params: {
                         research_group_permlink: encodeURIComponent(reviewRequest.research.group_permlink),
                         research_permlink: encodeURIComponent(reviewRequest.research.permlink),
@@ -125,17 +125,17 @@
 
         <!-- ### START User Profile Expertise Section ### -->
         <div class="mt-4">
-            <div class="title bold">Expertise Tokens</div>
-            <div class="c-pt-4 c-pb-2">
-                <div class="legacy-row legacy-justify-between" v-for="(item, i) in expertise" :key="i">
-                    <div class="half-bold">{{ item.discipline_name }}</div>
+            <div class="title font-weight-bold">Expertise Tokens</div>
+            <div class="pt-3 pb-2">
+                <v-layout row legacy-justify-between v-for="(item, i) in expertise" :key="i">
+                    <div class="font-weight-medium">{{ item.discipline_name }}</div>
                     <div>{{ item.amount }}</div>
-                </div>
+                </v-layout>
                 <div v-if="!expertise.length" class="body-1"> 
                     <div v-if="isOwner">You have no Expertise Tokens yet. Use <span class="a" @click="openClaimExpertiseDialog()">Claim</span> process to apply for Expertise Tokens</div>
                     <div v-if="!isOwner"><span class="body-2">{{userInfo | fullname}}</span> has no Expertise Tokens yet</div>
                 </div>
-                <div v-if="expertise.length && isOwner" class="body-1 text-align-right c-mt-4">
+                <div v-if="expertise.length && isOwner" class="body-1 text-align-right mt-3">
                     <v-btn @click="openClaimExpertiseDialog()" outline small color="primary" class="ma-0">
                         Claim new Discipline
                     </v-btn>
@@ -145,52 +145,29 @@
         <!-- ### END User Profile Expertise Section ### -->
 
         <!-- ### START User Profile Contacts Section ### -->
-        <div class="c-mt-4" v-if="isProfileAvailable && (isContactsInfoSpecified || isOwner)">
+        <div class="mt-3" v-if="isProfileAvailable && (isContactsInfoSpecified || isOwner)">
             <div class="sidebar-fullwidth"><v-divider></v-divider></div>
-            <div class="subheading bold c-mt-4">
-                <span class="legacy-row">
-                    <span class="legacy-col-11 mt-1">Contacts info</span>
-                    <v-tooltip v-if="isOwner && !isEditingContacts" bottom class="legacy-col-1">
-                        <v-btn slot="activator" @click="editContacts" flat small icon color="grey" class="mt-0">
-                            <v-icon small>mode_edit</v-icon>
-                        </v-btn>
-                        <span>Edit Contacts</span>
-                    </v-tooltip>
-                </span>
+            <div class="subheading font-weight-bold mt-3">
+                <v-layout row>
+                    <v-flex xs11 mt-1>Contacts info</v-flex>
+                </v-layout>
             </div>
-            <div class="c-pt-2 c-pb-6 pos-relative">
+            <div class="pt-2 pb-4">
                 <div v-if="userInfo.profile">
-                    <div v-if="!isEditingContacts">
+                    <div>
                         <span v-if="isOwner && !userInfo.profile.email" class="owner-hint">
-                            <v-icon size="18" class="c-mr-2">mail</v-icon>
+                            <v-icon size="18" class="mr-2">mail</v-icon>
                             Add your email here
                         </span>
                         <span v-else>
-                            <v-icon v-if="userInfo.profile.email" size="18" class="c-mr-2">mail</v-icon>
+                            <v-icon v-if="userInfo.profile.email" size="18" class="mr-2">mail</v-icon>
                             {{userInfo.profile.email || '-'}}
                         </span>
                 <!-- Phone number is very private info, let's do not store it for now -->
-                <!--<div class="c-pt-1">
-                    <v-icon size="18" class="c-mr-2">phone</v-icon>
+                <!--<div class="pt-1">
+                    <v-icon size="18" class="mr-2">phone</v-icon>
                         +375 25 90 05 003
                     </div> -->
-                    </div>
-                </div>
-                <div v-if="isOwner && isEditingContacts">
-                    <v-text-field v-model="editedEmail" label="Email" append-icon="email"></v-text-field>
-                    <div class="text-align-center">
-                        <v-tooltip bottom>
-                            <v-btn slot="activator" @click="saveContacts" flat icon color="grey">
-                                <v-icon>done</v-icon>
-                            </v-btn>
-                            <span>Save</span>
-                        </v-tooltip>
-                        <v-tooltip bottom>
-                            <v-btn slot="activator" @click="isEditingContacts = false" flat icon color="grey">
-                                <v-icon>close</v-icon>
-                            </v-btn>
-                            <span>Cancel</span>
-                        </v-tooltip>
                     </div>
                 </div>
             </div>
@@ -199,85 +176,70 @@
 
 
         <!-- ### START User Profile Info Section ### -->
-        <div class="c-mt-4" v-if="isProfileAvailable && (isPersonalInfoSpecified || isOwner)">
+        <div class="mt-3" v-if="isProfileAvailable && (isPersonalInfoSpecified || isOwner)">
             <div class="sidebar-fullwidth"><v-divider></v-divider></div>
-            <div class="subheading bold c-mt-4">
-                <span class="legacy-row">
-                    <span class="legacy-col-11 mt-1">Personal info</span>
-                    <v-tooltip v-if="isOwner && !isEditingPersonalInfo" bottom class="legacy-col-1">
-                        <v-btn slot="activator" @click="editPersonalInfo" flat small icon color="grey" class="mt-0">
-                            <v-icon small>mode_edit</v-icon>
-                        </v-btn>
-                        <span>Edit personal info</span>
-                    </v-tooltip>
-                </span>
+            <div class="subheading font-weight-bold mt-3">
+                <v-layout row>
+                    <v-flex xs11 mt-1>Personal info</v-flex>
+                </v-layout>
             </div>
 
-            <div class="c-pt-4 c-pb-6">
+            <div class="pt-3 pb-4">
                 <div v-if="userInfo.profile">
-                    <div v-if="!isEditingPersonalInfo">
-                        <div v-if="isOwner && !userInfo.profile.firstName" class="legacy-row">
-                            <span class="legacy-col-4 half-bold">First Name</span>
-                            <span class="legacy-col-1"></span>
-                            <span class="legacy-col-7 text-align-left owner-hint">add first name</span>
-                        </div>
-                        <div v-else class="legacy-row">
-                            <span class="legacy-col-4 half-bold">First Name</span>
-                            <span class="legacy-col-1"></span>
-                            <span class="legacy-col-7 text-align-left">{{userInfo.profile.firstName || '-'}}</span>
-                        </div>
+                    <div>
+                        <v-layout row v-if="isOwner && !userInfo.profile.firstName">
+                            <v-flex xs4 font-weight-medium>First Name</v-flex>
+                            <v-flex xs1></v-flex>
+                            <v-flex xs7 text-align-left owner-hint>add first name</v-flex>
+                        </v-layout>
+                        <v-layout row v-else>
+                            <v-flex xs4 font-weight-medium>First Name</v-flex>
+                            <v-flex xs1></v-flex>
+                            <v-flex xs7 text-align-left>{{userInfo.profile.firstName || '-'}}</v-flex>
+                        </v-layout>
 
-                        <div v-if="isOwner && !userInfo.profile.lastName" class="legacy-row">
-                            <span class="legacy-col-4 half-bold">Last Name</span>
-                            <span class="legacy-col-1"></span>
-                            <span class="legacy-col-7 text-align-left owner-hint">add last name</span>
-                        </div>
-                        <div v-else class="legacy-row">
-                            <span class="legacy-col-4 half-bold">Last Name</span>
-                            <span class="legacy-col-1"></span>
-                            <span class="legacy-col-7 text-align-left">{{userInfo.profile.lastName || '-'}}</span>
-                        </div>
+                        <v-layout row v-if="isOwner && !userInfo.profile.lastName">
+                            <v-flex xs4 font-weight-medium>Last Name</v-flex>
+                            <v-flex xs1></v-flex>
+                            <v-flex xs7 text-align-left owner-hint>add last name</v-flex>
+                        </v-layout>
+                        <v-layout row v-else>
+                            <v-flex xs4 font-weight-medium>Last Name</v-flex>
+                            <v-flex xs1></v-flex>
+                            <v-flex xs7 text-align-left>{{userInfo.profile.lastName || '-'}}</v-flex>
+                        </v-layout>
 
-                        <div v-if="isOwner && !userInfo.profile.birthday" class="legacy-row">
-                            <span class="legacy-col-4 half-bold">Birthday</span>
-                            <span class="legacy-col-1"></span>
-                            <span class="legacy-col-7 text-align-left owner-hint">add birthday</span>
-                        </div>
-                        <div v-else class="legacy-row">
-                            <span class="legacy-col-4 half-bold">Birthday</span>
-                            <span class="legacy-col-1"></span>
-                            <span class="legacy-col-7 text-align-left">{{ userInfo.profile.birthday ? new Date(userInfo.profile.birthday).toDateString() : '-'}}</span>
-                        </div>
+                        <v-layout row v-if="isOwner && !userInfo.profile.birthday">
+                            <v-flex xs4 font-weight-medium>Birthday</v-flex>
+                            <v-flex xs1></v-flex>
+                            <v-flex xs7 text-align-left owner-hint>add birthday</v-flex>
+                        </v-layout>
+                        <v-layout row v-else>
+                            <v-flex xs4 font-weight-medium>Birthday</v-flex>
+                            <v-flex xs1></v-flex>
+                            <v-flex xs7 text-align-left>{{ userInfo.profile.birthday ? new Date(userInfo.profile.birthday).toDateString() : '-'}}</v-flex>
+                        </v-layout>
 
-                        <div v-if="userInfo.profile.created" class="legacy-row mt-3">
-                            <span class="legacy-col-4 half-bold">Registered</span>
-                            <span class="legacy-col-1"></span>
-                            <span class="legacy-col-7 text-align-left">{{new Date(userInfo.profile.created).toDateString()}}</span>
-                        </div>
+                        <v-layout row mt-3 v-if="userInfo.profile.created">
+                            <v-flex xs4 font-weight-medium>Registered</v-flex>
+                            <v-flex xs1></v-flex>
+                            <v-flex xs7 text-align-left>{{new Date(userInfo.profile.created).toDateString()}}</v-flex>
+                        </v-layout>
                     </div>
                 </div>
-                <div v-if="isOwner && isEditingPersonalInfo">
-                    <v-text-field v-model="editedFirstName" label="First name"></v-text-field>
-                    <v-text-field v-model="editedLastName" label="Last name"></v-text-field>
-                    <v-menu lazy :close-on-content-click="false" v-model="editedBirthdayMenu" transition="scale-transition" offset-y full-width min-width="290px">
-                        <v-text-field slot="activator" label="Birthday" v-model="editedBirthdayDate" append-icon="event" readonly></v-text-field>
-                        <v-date-picker v-model="editedBirthdayDate" @input="editedBirthdayMenu = false"></v-date-picker>
-                    </v-menu>
-
-                    <div class="text-align-center">
-                        <v-tooltip bottom>
-                            <v-btn slot="activator" @click="savePersonalInfo" flat icon color="grey">
-                                <v-icon>done</v-icon>
-                            </v-btn>
-                            <span>Save</span>
-                        </v-tooltip>
-                        <v-tooltip bottom>
-                            <v-btn slot="activator" @click="isEditingPersonalInfo = false" flat icon color="grey">
-                                <v-icon>close</v-icon>
-                            </v-btn>
-                            <span>Cancel</span>
-                        </v-tooltip>
-                    </div>
+                <div v-if="isOwner" class="body-1 text-align-right mt-3">
+                    <v-btn
+                        class="ma-0"
+                        small
+                        outline
+                        color="primary"
+                        :to="{
+                        name: 'UserSettings',
+                        params: {
+                            account_name: currentUser.username
+                            }
+                        }"
+                    >Edit profile</v-btn>
                 </div>
             </div>
         </div>
@@ -303,15 +265,6 @@
         name: "UserDetailsSidebar",
         data() {
             return {
-                editedEmail: "",
-                isEditingContacts: false,
-                
-                editedFirstName: "",
-                editedLastName: "",
-                editedBirthdayDate: null,
-                editedBirthdayMenu: false,
-                editedRegisteredDate: null,
-                isEditingPersonalInfo: false,
                 inviteDetailsDialog: { 
                     isShown: false, 
                     item: null, 
@@ -351,56 +304,6 @@
             }
         },
         methods: {
-            editContacts() {
-                this.editedEmail = this.userInfo.profile.email;
-                this.isEditingContacts = !this.isEditingContacts;
-            },
-            saveContacts() {
-                const update = Object.assign({}, this.userInfo.profile, { email: this.editedEmail });
-                usersService.updateUserProfile(this.currentUser.username, update)
-                    .then((res) => {
-                        this.$store.dispatch('userDetails/loadUserProfile', {username: this.currentUser.username});
-                        this.$store.dispatch('layout/setSuccess', {
-                            message: `"Email has been saved successfully!"`
-                        });
-                    }, (err) => {
-                        this.$store.dispatch('layout/setError', {
-                            message: `An error occurred while saving email, please try again later`
-                        });
-                        console.log(err);
-                    }).finally(() => {
-                        this.isEditingContacts = false;
-                    })
-            },
-
-            editPersonalInfo() {
-                this.editedFirstName = this.userInfo.profile.firstName;
-                this.editedLastName = this.userInfo.profile.lastName;
-                this.editedBirthdayDate = this.userInfo.profile.birthday ? moment(this.userInfo.profile.birthday).format('YYYY-MM-DD') : null;
-                this.isEditingPersonalInfo = !this.isEditingPersonalInfo;
-            },
-
-            savePersonalInfo() {
-                const update = Object.assign({}, this.userInfo.profile, { 
-                        firstName: this.editedFirstName, 
-                        lastName: this.editedLastName, 
-                        birthday: this.editedBirthdayDate 
-                });
-                usersService.updateUserProfile(this.currentUser.username, update)
-                    .then((res) => {
-                        this.$store.dispatch('userDetails/loadUserProfile', {username: this.currentUser.username});
-                        this.$store.dispatch('layout/setSuccess', {
-                            message: `"Personal info has been saved successfully!"`
-                        });
-                    }, (err) => {
-                        this.$store.dispatch('layout/setError', {
-                            message: `An error occurred while saving personal info, please try again later`
-                        });
-                        console.log(err);
-                    }).finally(() => {
-                        this.isEditingPersonalInfo = false;
-                    })
-            },
 
             openInviteDetailsDialog(invite, index) {
                 this.inviteDetailsDialog.isShown = true;

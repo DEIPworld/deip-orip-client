@@ -48,6 +48,7 @@ import CreateAccountTestNet from '@/components/auth/CreateAccountTestNet';
 import VotingForBlockProducers from '@/components/voting-for-block-producers/VotingForBlockProducers';
 import CreateFundingOpportunityAnnouncement from '@/components/funding-opportunity-announcement-create/CreateFundingOpportunityAnnouncement';
 import InvestorDashboard from '@/components/investor-dashboard/InvestorDashboard';
+import UserSettings from '@/components/user-settings/UserSettings'
 
 
 import store from './../store/index';
@@ -311,6 +312,17 @@ const router = new Router({
 		component: preliminaryDataLoader(UserDetails, {
 			beforeEnter: (to, from, next) => {
 				let loadPagePromise = store.dispatch('userDetails/loadUserDetailsPage', {
+					username: decodeURIComponent(to.params.account_name)
+				});
+				loadPage(loadPagePromise, next);
+			}
+		})
+	},{
+		path: '/user-details/:account_name/user-settings',
+		name: 'UserSettings',
+		component: preliminaryDataLoader(UserSettings, {
+			beforeEnter: (to, from , next) => {
+				let loadPagePromise = store.dispatch('userSettings/loadUserSettingsPage', {
 					username: decodeURIComponent(to.params.account_name)
 				});
 				loadPage(loadPagePromise, next);

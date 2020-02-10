@@ -8,8 +8,8 @@
                     indeterminate color="primary"
                 ></v-progress-circular>
 
-                <div v-if="isLoadingUserAccount === false && isLoadingUserProfile === false" class="legacy-row">
-                    <v-avatar size="160px" class="user-avatar" 
+                <v-layout row wrap v-if="isLoadingUserAccount === false && isLoadingUserProfile === false">
+                    <v-avatar size="160px" class="user-avatar mr-5" 
                             v-on:mouseover="onAvatarMouseOver"
                             v-on:mouseout="onAvatarMouseOut">
                         <img v-if="userInfo.profile" v-bind:src="userInfo.profile.avatar | avatarSrc(320, 320, false)" />
@@ -23,88 +23,41 @@
                         </vue-dropzone>
                     </v-avatar>
 
-                    <div class="legacy-col-grow c-pl-12">
-                        <div class="display-1 half-bold c-pt-4">{{userInfo | fullname}} <span v-if="(userInfo.profile && userInfo.profile.firstName)" class="caption username-caption grey--text">({{userInfo.account.name}})</span></div>
+                    <v-flex xs12 sm8>
+                        <div class="display-1 font-weight-medium pt-3">{{userInfo | fullname}} <span v-if="(userInfo.profile && userInfo.profile.firstName)" class="caption username-caption grey--text">({{userInfo.account.name}})</span></div>
 
-                        <div class="c-pt-4">
+                        <div class="pt-3">
                             <div v-if="userInfo.profile">
-                                <div v-if="!isEditingLocation" class="legacy-row half-bold">
-                                    <span v-if="isOwner && !isLocationSpecified" class="owner-hint c-mt-1">
+                                <v-layout row font-weight-medium>
+                                    <span v-if="isOwner && !isLocationSpecified" class="owner-hint mt-1">
                                         <v-icon small>location_on</v-icon>
                                         Add location info
                                     </span>
-                                    <span v-else class="c-mt-1">
+                                    <span v-else class="mt-1">
                                         <v-icon v-if="isLocationSpecified" small>location_on</v-icon>
                                         {{locationString}}
                                     </span>
-                                    <v-tooltip v-if="isOwner && !isEditingLocation" bottom>
-                                        <v-btn slot="activator" @click="editLocation" flat small icon color="grey" class="mt-0">
-                                            <v-icon small>mode_edit</v-icon>
-                                        </v-btn>
-                                        <span>Edit Location</span>
-                                    </v-tooltip>
-                                </div>
-                                <div class="legacy-row" v-if="isOwner && isEditingLocation">
-                                    <v-text-field class="legacy-col-3 c-pr-3" v-model="editedCity" label="City"></v-text-field>
-                                    <v-text-field class="legacy-col-3 c-pr-3" v-model="editedCountry" label="Country"></v-text-field>
-                                    <span class="legacy-col-3">
-                                        <v-tooltip bottom>
-                                            <v-btn slot="activator" @click="saveLocation" flat icon color="grey" class="c-mt-5">
-                                                <v-icon>done</v-icon>
-                                            </v-btn>
-                                            <span>Save</span>
-                                        </v-tooltip>
-                                        <v-tooltip bottom>
-                                            <v-btn slot="activator" @click="isEditingLocation = false" flat icon color="grey" class="c-mt-5">
-                                                <v-icon>close</v-icon>
-                                            </v-btn>
-                                            <span>Cancel</span>
-                                        </v-tooltip>
-                                    </span>
-                                </div>
+                                </v-layout>
                             </div>
                         </div>
 
                         <!-- display either the current employment or education, todo: add isActive flag to employment/education -->
-                        <div v-if="isProfileAvailable" class="c-pt-2">
-                            <v-icon small class="c-pr-1" v-if="getEmploymentOrEducation(userInfo)">school</v-icon>
+                        <div v-if="isProfileAvailable" class="pt-2">
+                            <v-icon small class="pr-1" v-if="getEmploymentOrEducation(userInfo)">school</v-icon>
                             {{ userInfo | employmentOrEducation}}
                         </div>
-                    </div>
-                </div>
+                    </v-flex>
+                </v-layout>
 
-                <div class="c-pt-8">
-                    <div v-if="!isEditingBio && userInfo.profile" class="legacy-row">
-                        <span v-if="isOwner && !userInfo.profile.bio" class="half-bold owner-hint legacy-col-12">
+                <div class="pt-4">
+                    <v-layout row v-if="userInfo.profile">
+                        <v-flex xs12 font-weight-medium owner-hint v-if="isOwner && !userInfo.profile.bio">
                             <v-icon small>subject</v-icon>
                             Add short bio
-                        </span>
-                        <span v-else class="legacy-col-12">{{userInfo.profile.bio}}</span>
-                        <v-tooltip v-if="isOwner && !isEditingBio" bottom class="legacy-col-12 right">
-                            <v-btn slot="activator" @click="editBio" flat small icon color="grey" class="ma-0 right">
-                                <v-icon small>mode_edit</v-icon>
-                            </v-btn>
-                            <span>Edit Bio</span>
-                        </v-tooltip>
-                    </div>
+                        </v-flex>
+                        <v-flex xs12 v-else>{{userInfo.profile.bio}}</v-flex>
+                    </v-layout>
     
-                    <div v-if="isOwner && isEditingBio" class="legacy-row">
-                        <v-textarea class="legacy-col-12" v-model="editedBio" label="Short Bio"></v-textarea>
-                        <span class="legacy-col-12">
-                            <v-tooltip bottom>
-                                <v-btn slot="activator" @click="isEditingBio = false" flat icon color="grey" class="ma-0 mr-3 right">
-                                    <v-icon>close</v-icon>
-                                </v-btn>
-                                <span>Cancel</span>
-                            </v-tooltip>
-                            <v-tooltip bottom>
-                                <v-btn slot="activator" @click="saveBio" flat icon color="grey" class="ma-0 mr-3 right">
-                                    <v-icon>done</v-icon>
-                                </v-btn>
-                                <span>Save</span>
-                            </v-tooltip>
-                        </span>
-                    </div>
                 </div>
             </div>
             <!-- ### END User Profile Details Section ### -->
@@ -118,20 +71,20 @@
 
                 <div v-if="isLoadingUserGroups === false && isLoadingUserResearch === false">
 
-                    <div class="c-pt-7">
+                    <div class="pt-4">
                         <state-research-list
                             :research-list="researchList"
                             :header-text="'Research projects'"
                         ></state-research-list>
                     </div>
 
-                    <div class="c-pt-8" v-if="commonGroups.length">
+                    <div class="pt-4" v-if="commonGroups.length">
                         <div class="title">Research groups: {{ commonGroups.length }}</div>
                     </div>
 
-                    <v-card class="c-mt-6">
+                    <v-card class="mt-4">
                         <template v-for="(group, i) in commonGroups" :class="[{'personal-group': group.is_personal}]">
-                            <div class="c-p-6" :key="'group-' + i">
+                            <div class="pa-4" :key="'group-' + i">
                                 <div v-if="group.is_personal">
                                     <router-link class="research-group-title" :to="{ 
                                             name: 'ResearchGroupDetails', 
@@ -150,7 +103,7 @@
                                         }">
                                         {{group.name}}
                                     </router-link>
-                                    <div class="caption grey--text c-pt-2 hidden-last-child">
+                                    <div class="caption grey--text pt-2 hidden-last-child">
                                         <template v-for="share in group.shares">
                                             <span :key="'share-' + share.id">
                                                 <span>{{ share.owner }}</span>
@@ -163,12 +116,12 @@
                             <v-divider :key="'divider-' + i"></v-divider>
                         </template>
 
-                        <div v-if="isOwner" class="c-pv-4 c-ph-6">
+                        <div v-if="isOwner" class="py-3 px-4">
                             <v-btn class="ma-0" outline icon color="primary" :to="{ name: 'CreateResearchGroup' }">
                                 <v-icon small>add</v-icon>
                             </v-btn>
 
-                            <span class="c-pl-2">Add group</span>
+                            <span class="pl-2">Add group</span>
                         </div>
                     </v-card>
                 </div>
@@ -183,31 +136,31 @@
                 ></v-progress-circular>
                 
                 <div v-if="isLoadingUserAccount === false && isLoadingUserProfile === false">
-                    <div v-if="isProfileAvailable && (isEducationSpecified || isOwner)" class="c-pt-8">
+                    <div v-if="isProfileAvailable && (isEducationSpecified || isOwner)" class="pt-4">
                         <div class="title">Education</div>
-                        <v-card class="c-mt-6" v-if="userInfo && userInfo.profile">
+                        <v-card class="mt-4" v-if="userInfo && userInfo.profile">
                             <div v-for="(item, index) in userInfo.profile.education">
-                                <div v-if="isOwner" class="right c-mt-7 c-mr-5">
-                                    <v-btn class="c-mr-2 c-ml-2" @click="showSaveEducationDialog(item, index)" 
+                                <div v-if="isOwner" class="right mt-4 mr-3">
+                                    <v-btn class="mr-2 ml-2" @click="showSaveEducationDialog(item, index)" 
                                         outline small depressed color="primary lighten-1">
                                         Edit
                                     </v-btn>
-                                    <v-btn class="c-mr-2 c-ml-2" @click="showDeleteEducationDialog(item, index)" 
+                                    <v-btn class="mr-2 ml-2" @click="showDeleteEducationDialog(item, index)" 
                                         outline small depressed color="red lighten-1">
                                         Delete
                                     </v-btn>
                                 </div>
-                                <div class="c-p-6">
-                                    <div class="subheading half-bold">{{item.educationalInstitution}}</div>
+                                <div class="pa-4">
+                                    <div class="subheading font-weight-medium">{{item.educationalInstitution}}</div>
                                     <div class="">{{item.degree}}</div>
                                 </div>
                                 <v-divider></v-divider>
                             </div>
-                            <div v-if="isOwner" class="c-pv-4 c-ph-6">
+                            <div v-if="isOwner" class="py-3 px-4">
                                 <v-btn class="ma-0" @click="showSaveEducationDialog(null, -1)" outline icon color="primary">
                                     <v-icon small>add</v-icon>
                                 </v-btn>
-                                <span class="c-pl-2">Add education institutions</span>
+                                <span class="pl-2">Add education institutions</span>
                             </div>
                             <div v-if="isOwner">
                                 <user-edit-education-dialog 
@@ -225,32 +178,32 @@
                     </div>
 
                     <div v-if="isProfileAvailable && (isEmploymentSpecified || isOwner)">
-                        <div class="c-pt-8">
+                        <div class="pt-4">
                             <div class="title">Employment</div>
                         </div>
-                        <v-card class="c-mt-6" v-if="userInfo && userInfo.profile">
+                        <v-card class="mt-4" v-if="userInfo && userInfo.profile">
                             <div v-for="(item, index) in userInfo.profile.employment">
-                                <div v-if="isOwner" class="right c-mt-7 c-mr-5">
-                                    <v-btn class="c-mr-2 c-ml-2" @click="showSaveEmploymentDialog(item, index)" 
+                                <div v-if="isOwner" class="right mt-4 mr-3">
+                                    <v-btn class="mr-2 ml-2" @click="showSaveEmploymentDialog(item, index)" 
                                         outline small depressed color="primary lighten-1">
                                         Edit
                                     </v-btn>
-                                    <v-btn class="c-mr-2 c-ml-2" @click="showDeleteEmploymentDialog(item, index)" 
+                                    <v-btn class="mr-2 ml-2" @click="showDeleteEmploymentDialog(item, index)" 
                                         outline small depressed color="red lighten-1">
                                         Delete
                                     </v-btn>
                                 </div>
-                                <div class="c-p-6">
-                                    <div class="subheading half-bold">{{item.company}}</div>
+                                <div class="pa-4">
+                                    <div class="subheading font-weight-medium">{{item.company}}</div>
                                     <div class="">{{item.position}}</div>
                                 </div>
                                 <v-divider></v-divider>
                             </div>
-                            <div v-if="isOwner" class="c-pv-4 c-ph-6">
+                            <div v-if="isOwner" class="py-3 px-4">
                                 <v-btn class="ma-0" @click="showSaveEmploymentDialog(null, -1)" outline icon color="primary">
                                     <v-icon small>add</v-icon>
                                 </v-btn>
-                                <span class="c-pl-2">Add employment</span>
+                                <span class="pl-2">Add employment</span>
                             </div>
                             <div v-if="isOwner">
                                 <user-edit-employment-dialog 
@@ -293,13 +246,6 @@
 
                 saveEmploymentMeta: { isShown: false, item: null, index: null },
                 deleteEmploymentMeta: { isShown: false, item: null, index: null },
-
-                editedBio: "",
-                isEditingBio: false,
-
-                editedCity: "",
-                editedCountry: "",
-                isEditingLocation: false,
 
                 avatarUploadIsShown: false,
 
@@ -488,53 +434,6 @@
                             message: `An error occurred while deleting "${item.company}" employment details, please try again later`
                         });
                         console.log(err);
-                    })
-            },
-
-            editBio() {
-                this.editedBio = this.userInfo.profile.bio; 
-                this.isEditingBio = !this.isEditingBio;
-            },
-
-            saveBio() {
-                const update = Object.assign({}, this.userInfo.profile, { bio: this.editedBio });
-                usersService.updateUserProfile(this.currentUser.username, update)
-                    .then((res) => {
-                        this.$store.dispatch('userDetails/loadUserProfile', {username: this.currentUser.username});
-                        this.$store.dispatch('layout/setSuccess', {
-                            message: `"Short bio has been saved successfully!"`
-                        });
-                    }, (err) => {
-                        this.$store.dispatch('layout/setError', {
-                            message: `An error occurred while saving short bio, please try again later`
-                        });
-                        console.log(err);
-                    }).finally(() => {
-                        this.isEditingBio = false;
-                    })
-            },
-
-            editLocation() {
-                this.editedCity = this.userInfo.profile && this.userInfo.profile.location ? this.userInfo.profile.location.city : undefined;
-                this.editedCountry = this.userInfo.profile && this.userInfo.profile.location ? this.userInfo.profile.location.country : undefined;
-                this.isEditingLocation = !this.isEditingLocation;
-            },
-
-            saveLocation(){
-                const update = Object.assign({}, this.userInfo.profile, { location: {city: this.editedCity, country: this.editedCountry} });
-                usersService.updateUserProfile(this.currentUser.username, update)
-                    .then((res) => {
-                        this.$store.dispatch('userDetails/loadUserProfile', {username: this.currentUser.username});
-                        this.$store.dispatch('layout/setSuccess', {
-                            message: `"Location info has been saved successfully!"`
-                        });
-                    }, (err) => {
-                        this.$store.dispatch('layout/setError', {
-                            message: `An error occurred while saving location info, please try again later`
-                        });
-                        console.log(err);
-                    }).finally(() => {
-                        this.isEditingLocation = false;
                     })
             },
 
