@@ -221,9 +221,9 @@
                         </v-layout>
 
                         <v-layout row mt-3 v-if="userInfo.profile.created">
-                            <span xs4 font-weight-medium>Registered</span>
-                            <span xs1></span>
-                            <span xs7 text-align-left>{{new Date(userInfo.profile.created).toDateString()}}</span>
+                            <v-flex xs4 font-weight-medium>Registered</v-flex>
+                            <v-flex xs1></v-flex>
+                            <v-flex xs7 text-align-left>{{new Date(userInfo.profile.created).toDateString()}}</v-flex>
                         </v-layout>
                     </div>
                 </div>
