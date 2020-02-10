@@ -16,6 +16,7 @@ export const CHANGE_QUORUM = 7;
 export const CHANGE_RESEARCH_REVIEW_SHARE_PERCENT = 8;
 export const OFFER_RESEARCH_TOKENS = 9;
 export const CREATE_RESEARCH_MATERIAL = 10;
+export const CHANGE_RESEARCH_GROUP_NAME_DESCRIPTION = 11;
 
 const types = {
     START_RESEARCH,
@@ -27,20 +28,22 @@ const types = {
     CHANGE_QUORUM,
     CHANGE_RESEARCH_REVIEW_SHARE_PERCENT,
     OFFER_RESEARCH_TOKENS,
-    CREATE_RESEARCH_MATERIAL
+    CREATE_RESEARCH_MATERIAL,
+    CHANGE_RESEARCH_GROUP_NAME_DESCRIPTION
 };
 
 const labels = {};
-labels[START_RESEARCH] = 'Start research';
-labels[INVITE_MEMBER] = 'Invite member';
-labels[DROPOUT_MEMBER] = 'Dropout member';
-labels[SEND_FUNDS] = 'Send funds';
-labels[START_RESEARCH_TOKEN_SALE] = 'Start Research fundraise';
-labels[REBALANCE_RESEARCH_GROUP_TOKENS] = 'Rebalance Research Group Tokens';
-labels[CHANGE_QUORUM] = 'Change quorum';
-labels[CHANGE_RESEARCH_REVIEW_SHARE_PERCENT] = 'Change research review share';
-labels[OFFER_RESEARCH_TOKENS] = 'Offer Research Tokens';
-labels[CREATE_RESEARCH_MATERIAL] = 'Publish research results';
+labels[START_RESEARCH] = 'Start new research project';
+labels[INVITE_MEMBER] = 'Invite new member to research group';
+labels[DROPOUT_MEMBER] = 'Exclude member from research group';
+labels[SEND_FUNDS] = 'Transfer research group funds';
+labels[START_RESEARCH_TOKEN_SALE] = 'Schedule research fundraising campaign';
+labels[REBALANCE_RESEARCH_GROUP_TOKENS] = 'Rebalance research group shares';
+labels[CHANGE_QUORUM] = 'Change research group quorum threshold';
+labels[CHANGE_RESEARCH_REVIEW_SHARE_PERCENT] = 'Change research review award share';
+labels[OFFER_RESEARCH_TOKENS] = 'Offer research shares';
+labels[CREATE_RESEARCH_MATERIAL] = 'Publish research project results';
+labels[CHANGE_RESEARCH_GROUP_NAME_DESCRIPTION] = 'Change research group name and description';
 
 // maybe will be OK to add param validations or type conversion
 // in every function to be sure every time about right data
@@ -98,6 +101,13 @@ schemasMap[CREATE_RESEARCH_MATERIAL] = (researchId, type, title, permlink, conte
         "authors": authors,
         "references": references,
         "external_references": externalReferences
+    };
+};
+schemasMap[CHANGE_RESEARCH_GROUP_NAME_DESCRIPTION] = (researchGroupId, newResearchGroupName, newResearchGroupDescription) => {
+    return {
+        'research_group_id': researchGroupId,
+        'new_research_group_name': newResearchGroupName,
+        'new_research_group_description': newResearchGroupDescription
     };
 };
 
@@ -260,6 +270,23 @@ const createChangeQuorumProposal = (groupId, proposalType, quorumPercent) => {
     );
 };
 
+const createChangeNameAndDescriptionProposal = (groupId, newResearchGroupName, newResearchGroupDescription) => {
+    const data = getStringifiedProposalData(CHANGE_RESEARCH_GROUP_NAME_DESCRIPTION, [
+        groupId,
+        newResearchGroupName,
+        newResearchGroupDescription
+    ]);
+
+    return deipRpc.broadcast.createProposalAsync(
+        getOwnerWif(),
+        getDecodedToken().username,
+        groupId,
+        data,
+        CHANGE_RESEARCH_GROUP_NAME_DESCRIPTION,
+        getProposalExpirationTime()
+    );
+};
+
 const createContentProposal = function(contentRef, contentType) {
     const data = getStringifiedProposalData(CREATE_RESEARCH_MATERIAL, [
         contentRef.researchId, contentType, contentRef.title, 
@@ -321,6 +348,7 @@ export {
     createResearchProposal,
     createContentProposal,
     createTokenSaleProposal,
+    createChangeNameAndDescriptionProposal,
 
     getParsedProposal,
     extendProposalByRelatedInfo,

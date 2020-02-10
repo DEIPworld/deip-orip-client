@@ -24,6 +24,7 @@ import './components/research-application-details/index';
 import './components/dashboard/index';
 import './components/investor-dashboard/index';
 import './components/user-settings/index';
+import './components/research-group-settings/index';
 
 import Gravatar from 'vue-gravatar';
 Vue.component('v-gravatar', Gravatar);

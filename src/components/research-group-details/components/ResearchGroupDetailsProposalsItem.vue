@@ -1,9 +1,9 @@
 <template>
     <v-expansion-panel-content>
         <div slot="header">
-            <div class="legacy-row-nowrap align-center" v-on:click.stop>
+            <div class="display-flex align-center" v-on:click.stop>
                 <div class="id-col">
-                    <div class="half-bold">{{ proposal.id }}</div>
+                    <div class="font-weight-medium">{{ proposal.id }}</div>
                 </div>
 
                 <div class="proposal-activity">
@@ -12,28 +12,28 @@
                     <div class="display-flex" 
                         v-if="proposal.action === proposalTypes.START_RESEARCH"
                     >
-                        <v-icon small color="primary" class="c-mr-2">add</v-icon>
+                        <v-icon small color="primary" class="mr-2">add</v-icon>
                         <div class="a">{{ proposal.data.title }}</div>
                     </div>
 
                     <div class="display-flex" 
                         v-else-if="proposal.action === proposalTypes.INVITE_MEMBER"
                     >
-                        <v-icon small color="primary" class="c-mr-2">person_add</v-icon>
+                        <v-icon small color="primary" class="mr-2">person_add</v-icon>
                         <div class="a">{{ proposal.data.name }}</div>
                     </div>
 
                     <div class="display-flex" 
                         v-else-if="proposal.action === proposalTypes.SEND_FUNDS"
                     >
-                        <v-icon small color="primary" class="c-mr-2">money_off</v-icon>
+                        <v-icon small color="primary" class="mr-2">money_off</v-icon>
                         <div class="a">Transfer tokens</div>
                     </div>
 
                     <div class="display-flex" 
                         v-else-if="proposal.action === proposalTypes.START_RESEARCH_TOKEN_SALE"
                     >
-                        <v-icon small color="primary" class="c-mr-2">attach_money</v-icon>
+                        <v-icon small color="primary" class="mr-2">attach_money</v-icon>
                         <div class="a">
                             {{ convertToPercent(proposal.data.amount_for_sale) }}% fundraise
                         </div>
@@ -42,16 +42,25 @@
                     <div class="display-flex" 
                         v-else-if="proposal.action === proposalTypes.CHANGE_QUORUM"
                     >
-                        <v-icon small color="primary" class="c-mr-2">mdi-percent</v-icon>
+                        <v-icon small color="primary" class="mr-2">mdi-percent</v-icon>
                         <div class="a">
                             Change of quorum
                         </div>
                     </div>
 
                     <div class="display-flex" 
+                        v-else-if="proposal.action === proposalTypes.CHANGE_RESEARCH_GROUP_NAME_DESCRIPTION"
+                    >
+                        <!-- <v-icon small color="primary" class="mr-2">mdi-percent</v-icon> -->
+                        <div class="a">
+                            Change research group name and description
+                        </div>
+                    </div>
+
+                    <div class="display-flex" 
                         v-else-if="proposal.action === proposalTypes.CREATE_RESEARCH_MATERIAL"
                     >
-                        <v-icon small color="primary" class="c-mr-2">note_add</v-icon>
+                        <v-icon small color="primary" class="mr-2">note_add</v-icon>
                         <router-link class="a" :to="{
                                 name: 'ResearchDetails', 
                                 params: {
@@ -108,35 +117,34 @@
         <v-card>
             <v-card-text class="pt-0">
                 <div class="description caption">
-
                     <!-- proposal description depending on type -->
-                    <div class="display-flex" 
-                        v-if="proposal.action === proposalTypes.START_RESEARCH"
-                    >
-                        <div class="legacy-col-6">
+                    <v-layout v-if="proposal.action === proposalTypes.START_RESEARCH">
+                        <v-flex xs6>
                             <div class="grey--text">{{ proposal.creator }}</div>
-                            <div class="c-pt-2">
+                            <div class="pt-2">
                                 Reviewers' reward:
-                                <span class="bold">{{ convertToPercent(proposal.data.review_share_in_percent) }}%</span>
+                                <span class="font-weight-bold">{{ convertToPercent(proposal.data.review_share_in_percent) }}%</span>
                             </div>
-                        </div>
-                        <div class="legacy-col-6 grey--text legacy-column flex-wrap" style="max-height: 70px">
-                            <div v-for="(label, i) in getDisciplineNames()" :key="i">{{ label }}</div>
-                        </div>
-                    </div>
+                        </v-flex>
+                        <v-flex xs6 grey--text style="max-height: 70px">
+                            <v-layout column wrap>
+                                <div v-for="(label, i) in getDisciplineNames()" :key="i">{{ label }}</div>
+                            </v-layout>
+                        </v-flex>
+                    </v-layout>
 
-                    <div class="legacy-row" v-else-if="proposal.action === proposalTypes.INVITE_MEMBER">
-                        <div class="legacy-col-6">
+                    <v-layout row v-else-if="proposal.action === proposalTypes.INVITE_MEMBER">
+                        <v-flex xs6>
                             Research group tokens:
-                            <span class="bold">
+                            <span class="font-weight-bold">
                                 {{ convertToPercent(proposal.data.research_group_token_amount_in_percent) }}%
                             </span>
-                        </div>
-                        <div class="legacy-col-6 grey--text break-word white-space-pre-line">{{ proposal.data.cover_letter }}</div>
-                    </div>
+                        </v-flex>
+                        <v-flex xs6 grey--text break-word white-space-pre-line>{{ proposal.data.cover_letter }}</v-flex>
+                    </v-layout>
 
-                    <div class="legacy-row" v-else-if="proposal.action === proposalTypes.SEND_FUNDS">
-                        <div class="legacy-col-6">
+                    <v-layout row v-else-if="proposal.action === proposalTypes.SEND_FUNDS">
+                        <v-flex xs6>
                             <div>
                                 User:
                                 <router-link :to="{
@@ -148,59 +156,73 @@
                             </div>
                             <div>
                                 Amount:
-                                <span class="bold">
+                                <span class="font-weight-bold">
                                     {{ proposal.data.funds }}
                                 </span>
                             </div>
-                        </div>
-                    </div>
+                        </v-flex>
+                    </v-layout>
 
-                    <div class="legacy-row" v-else-if="proposal.action === proposalTypes.START_RESEARCH_TOKEN_SALE">
-                        <div class="legacy-col-6 legacy-row legacy-justify-between">
+                    <v-layout row v-else-if="proposal.action === proposalTypes.START_RESEARCH_TOKEN_SALE">
+                        <v-flex xs6 display-flex justify-space-between>
                             <div class="width-8">
                                 <div>
-                                    Min: <span class="bold right">{{ fromAssetsToFloat(proposal.data.soft_cap) }}</span>
+                                    Min: <span class="font-weight-bold right">{{ fromAssetsToFloat(proposal.data.soft_cap) }}</span>
                                 </div>
                                 <div>
-                                    Max: <span class="bold right">{{ fromAssetsToFloat(proposal.data.hard_cap) }}</span>
+                                    Max: <span class="font-weight-bold right">{{ fromAssetsToFloat(proposal.data.hard_cap) }}</span>
                                 </div>
                             </div>
-                            <div class="width-11 c-mr-10">
+                            <div class="width-11 mr-5">
                                 <div>
                                     Start Date:
-                                    <span class="bold right">{{ proposal.data.start_time | dateFormat("HH:mm DD MMM YYYY", true) }}</span>
+                                    <span class="font-weight-bold right">{{ proposal.data.start_time | dateFormat("HH:mm DD MMM YYYY", true) }}</span>
                                 </div>
                                 <div>
                                     End Date: 
-                                    <span class="bold right">{{ proposal.data.end_time | dateFormat("HH:mm DD MMM YYYY", true) }}</span>
+                                    <span class="font-weight-bold right">{{ proposal.data.end_time | dateFormat("HH:mm DD MMM YYYY", true) }}</span>
                                 </div>
                             </div>
-                        </div>
-                    </div>
+                        </v-flex>
+                    </v-layout>
 
-                    <div class="legacy-row" v-else-if="proposal.action === proposalTypes.CHANGE_QUORUM">
-                        <div class="legacy-col-6">
+                    <v-layout row v-else-if="proposal.action === proposalTypes.CHANGE_QUORUM">
+                        <v-flex xs6>
                             <div>
                                 Type:
-                                <span class="bold">{{ proposalLabels[proposal.data.proposal_type] }}</span>
+                                <span class="font-weight-bold">{{ proposalLabels[proposal.data.proposal_type] }}</span>
                             </div>
                             <div>
                                 Proposed percent:
-                                <span class="bold">
+                                <span class="font-weight-bold">
                                     {{ convertToPercent(proposal.data.quorum_percent) }}%
                                 </span>
                             </div>
-                        </div>
-                    </div>
+                        </v-flex>
+                    </v-layout>
 
-                    <div class="legacy-row" v-else-if="proposal.action === proposalTypes.CREATE_RESEARCH_MATERIAL">
-                        <div class="legacy-col-6">
+                     <v-layout row v-else-if="proposal.action === proposalTypes.CHANGE_RESEARCH_GROUP_NAME_DESCRIPTION">
+                        <v-flex xs6>
+                            <div>
+                                Type:
+                                <span class="font-weight-bold">Change Name and Description</span>
+                            </div>
+                            <div>
+                                Proposed percent:
+                                <span class="font-weight-bold">
+                                    {{ convertToPercent(proposal.data.quorum_percent) }}%
+                                </span>
+                            </div>
+                        </v-flex>
+                    </v-layout>
+
+                    <v-layout row v-else-if="proposal.action === proposalTypes.CREATE_RESEARCH_MATERIAL">
+                        <v-flex xs6>
                             <div class="grey--text">{{ proposal.data.authors.join(' · ') }}</div>
-                            <span class="bold">{{ getContentTypeStrById(proposal.data.type) }}:</span>
+                            <span class="font-weight-bold">{{ getContentTypeStrById(proposal.data.type) }}:</span>
                             <a :href="getContentUrl(proposal)" class="a" target="_blank">{{ proposal.data.title }}</a>
-                        </div>
-                        <div class="legacy-col-6"></div>
-                    </div>
+                        </v-flex>
+                    </v-layout>
                     <!-- proposal description depending on type -->
                         
                 </div>

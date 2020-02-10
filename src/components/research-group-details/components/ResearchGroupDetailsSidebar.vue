@@ -2,7 +2,7 @@
 <v-card class="pa-4 full-height">
     <v-layout column>
         <div v-if="isJoinRequestsSectionAvailable" class="">
-            <div class="title bold pb-2" id="invites">Join requests: {{pendingJoinRequests.length}}</div>
+            <div class="title font-weight-bold pb-2" id="invites">Join requests: {{pendingJoinRequests.length}}</div>
 
             <v-layout
                 column
@@ -12,7 +12,7 @@
 
                 <v-layout column align-baseline>
                     <platform-avatar :user="join.user" link-to-profile :size="40"></platform-avatar>
-                    <div class="py-2 caption half-bold">
+                    <div class="py-2 caption font-weight-medium">
                         wants to join your group
                     </div>
                     <div class="text-xs-right full-width">
@@ -34,11 +34,11 @@
 
         <!-- ### START Research Group Details Section ### -->
         <div class="py-4">
-            <div class="title bold">Group expertise tokens</div>
+            <div class="title font-weight-bold">Group expertise tokens</div>
 
-            <div class="c-pt-4">
+            <div class="pt-3">
                 <div v-for="(item, i) in groupExpertise" :key="i">
-                    <span class="half-bold">{{ item.disciplineName }}</span>
+                    <span class="font-weight-medium">{{ item.disciplineName }}</span>
                     <span class="right">{{ item.value }}</span>
                 </div>
             </div>
@@ -51,8 +51,8 @@
         <!-- ### END Research Group Details Section ### -->
 
         <div v-if="isResearchGroupMember">
-            <div class="c-pv-6">
-                <div class="title bold">                    
+            <div class="py-4">
+                <div class="title font-weight-bold">                    
                     <router-link 
                         class="a" 
                         :to="{
@@ -71,7 +71,7 @@
                             </svg>
                         </div>
 
-                        <div class="c-pl-4 half-bold">DEIP Tokens</div>
+                        <div class="c-pl-4 font-weight-medium">DEIP Tokens</div>
                         <div class="legacy-col-grow text-align-right">{{ deipTokenBalance }}</div>
                     </div> -->
 
@@ -88,7 +88,7 @@
         </div>
 
         <div v-if="!group.is_personal" class="">
-            <div class="c-pv-6">
+            <div class="py-4">
                 <quorum-size-sidebar-section></quorum-size-sidebar-section>
             </div>
             

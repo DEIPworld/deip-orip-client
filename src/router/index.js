@@ -49,6 +49,8 @@ import VotingForBlockProducers from '@/components/voting-for-block-producers/Vot
 import CreateFundingOpportunityAnnouncement from '@/components/funding-opportunity-announcement-create/CreateFundingOpportunityAnnouncement';
 import InvestorDashboard from '@/components/investor-dashboard/InvestorDashboard';
 import UserSettings from '@/components/user-settings/UserSettings'
+import ResearchGroupSettings from '@/components/research-group-settings/ResearchGroupSettings'
+
 
 
 import store from './../store/index';
@@ -112,6 +114,17 @@ const router = new Router({
 		component: preliminaryDataLoader(ResearchGroupDetails, {
 			beforeEnter: (to, from, next) => {
 				let loadPagePromise = store.dispatch('researchGroup/loadResearchGroup', {
+					permlink: decodeURIComponent(to.params.research_group_permlink)
+				});
+				loadPage(loadPagePromise, next);
+			}
+		})
+	},{
+		path: '/:research_group_permlink/group-details/group-settings',
+		name: 'ResearchGroupSettings',
+		component: preliminaryDataLoader(ResearchGroupSettings	, {
+			beforeEnter: (to, from, next) => {
+				let loadPagePromise = store.dispatch('researchGroupSettings/loadResearchGroup', {
 					permlink: decodeURIComponent(to.params.research_group_permlink)
 				});
 				loadPage(loadPagePromise, next);

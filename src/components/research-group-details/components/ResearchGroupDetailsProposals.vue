@@ -2,11 +2,11 @@
     <div> 
         <div class="title">Proposals</div>
 
-        <div class="legacy-row c-pt-2 legacy-justify-between align-center">
-            <div class="legacy-row align-center">
-                <span class="uppercase half-bold">Show approved proposals</span>
+        <div class="display-flex pt-2 justify-space-between align-center">
+            <div class="display-flex align-center">
+                <span class="uppercase font-weight-medium">Show approved proposals</span>
 
-                <v-switch class="c-ml-4 mt-0 pt-0" 
+                <v-switch class="ml-3 mt-0 pt-0" 
                     color="primary" 
                     hide-details 
                     :value="filter.areShownPastProposals"
@@ -22,7 +22,7 @@
                         <span v-if="filter.order === 'desc'">Newest First</span>
                         <span v-if="filter.order === 'asc'">Oldest First</span>
 
-                        <v-icon class="c-pl-4" small>keyboard_arrow_down</v-icon>
+                        <v-icon class="pl-3" small>keyboard_arrow_down</v-icon>
                     </div>
                 </v-btn>
 
@@ -38,11 +38,11 @@
             </v-menu>
         </div>
 
-        <div class="c-pt-4">
+        <div class="pt-3">
             <v-expansion-panel>
                 <v-expansion-panel-content hide-actions>
                     <div slot="header">
-                        <div class="legacy-row-nowrap align-center c-pr-6 grey--text">
+                        <div class="display-flex align-center pr-4 grey--text">
                             <div class="id-col">ID</div>
                             <div class="proposal-activity">Proposal</div>
                             <div class="date">Date</div>
@@ -63,7 +63,7 @@
 
                 <v-expansion-panel-content hide-actions v-if="!proposals.length">
                     <div slot="header" class="grey--text display-flex height-4">
-                        <div class="c-m-auto">Proposal list is empty</div>
+                        <div class="ma-auto">Proposal list is empty</div>
                     </div>
                 </v-expansion-panel-content>
             </v-expansion-panel>
