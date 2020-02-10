@@ -1,0 +1,41 @@
+@use 'vendor/substance';
+
+.deip-base-editor {
+  @include substance.vars();
+
+  height: 500px;
+
+  .sc-split-pane.sm-horizontal {
+    height: 500px;
+    overflow: auto;
+  }
+
+  .se-tool.sc-insert-image-tool {
+    display: none !important;
+  }
+
+  .sc-subscript {
+    bottom: -0.25em;
+  }
+
+  .sc-superscript {
+    top: -0.5em;
+  }
+
+  .sc-subscript, .sc-superscript {
+    font-size: 75%;
+    line-height: 0;
+    position: relative;
+    vertical-align: baseline;
+  }
+
+  /* styles shared by all examples */
+  @import 'vendor/substance.next';
+  @import 'vendor/substance-reset.next';
+  @import 'vendor/substance-pagestyle.next';
+
+  $fa-font-path: "~font-awesome/fonts";
+  @import '~font-awesome/scss/font-awesome';
+}
+
+
