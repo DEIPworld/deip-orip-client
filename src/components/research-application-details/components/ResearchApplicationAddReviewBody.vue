@@ -32,6 +32,6 @@
 	};
 </script>
 
-<style lang="less">
+<style lang="scss">
     @import './../../../styles/substance-editor';
 </style>
