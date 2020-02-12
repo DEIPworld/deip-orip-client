@@ -71,7 +71,7 @@ export default {
         ],
         [
           {
-            key: proposalService.types.CHANGE_RESEARCH_GROUP_NAME_DESCRIPTION,
+            key: proposalService.types.CHANGE_RESEARCH_GROUP_META_DATA_TYPE,
             value: undefined
           }
         ]

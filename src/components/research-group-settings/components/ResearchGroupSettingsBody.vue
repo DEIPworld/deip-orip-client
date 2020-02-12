@@ -191,7 +191,11 @@ export default {
         ],
         [
           {
-            key: proposalService.types.CHANGE_RESEARCH_GROUP_NAME_DESCRIPTION,
+            key: proposalService.types.CHANGE_RESEARCH_GROUP_META_DATA_TYPE,
+            value: undefined
+          },
+          {
+            key: proposalService.types.CHANGE_RESEARCH_META_DATA_TYPE,
             value: undefined
           }
         ]
@@ -346,7 +350,7 @@ export default {
     sendChangeNameAndDescProposal() {
       this.isLoading = true;
 
-      const promise = proposalService.createChangeNameAndDescriptionProposal(
+      const promise = proposalService.createChangeGroupNameAndDescriptionProposal(
         this.group.id,
         this.newResearchGroupName,
         this.newResearchGroupDescription
@@ -365,7 +369,7 @@ export default {
             message: "An error occurred during proposal sending"
           });
         })
-        .finally(err => {
+        .finally(() => {
           this.isLoading = false;
         });
     }
