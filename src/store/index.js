@@ -20,6 +20,7 @@ import agencyProgramDetails from './../components/agency-program-details/store/i
 import dashboard from './../components/dashboard/store/index'
 import investorDashboard from './../components/investor-dashboard/store/index'
 import userSettings from './../components/user-settings/store/index'
+import researchGroupSettings from './../components/research-group-settings/store/index'
 
 
 Vue.use(Vuex)
@@ -44,7 +45,8 @@ export default new Vuex.Store({
         agencyProgramDetails,
         dashboard,
         investorDashboard,
-        userSettings
+        userSettings,
+        researchGroupSettings
     },
     strict: process.env.NODE_ENV !== 'production',
 });

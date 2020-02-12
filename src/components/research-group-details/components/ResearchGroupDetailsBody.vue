@@ -2,10 +2,23 @@
     <div class="py-5">
         <!-- ### START Research Group Details Section ### -->
         <div class="px-5 research-group-details-container">
-            <div>
-                <div class="display-1 half-bold c-mt-10">{{ group ? group.name : '' }}</div>
-                <div class="c-pt-8">{{ group ? group.description : '' }}</div>
-            </div>
+            <v-layout row class="display-1 font-weight-medium mt-4">
+                <div class="pr-4">{{ group ? group.name : '' }}</div>
+                <v-btn
+                    v-if="isResearchGroupMember && !isPersonalGroup"
+                    class="ma-0 align-self-center"
+                    small
+                    outline
+                    color="grey"
+                    :to="{ 
+                        name: 'ResearchGroupSettings', 
+                        params: { 
+                            research_group_permlink: encodeURIComponent(group.permlink) 
+                        }
+                    }"
+                >Edit group</v-btn>
+            </v-layout>
+            <div class="pt-4">{{ group ? group.description : '' }}</div>
         </div>
         <!-- ### END Research Group Details Section ### -->
 
@@ -28,28 +41,28 @@
         <div class="px-5 py-4">
             <div>
                 <div class="title">Group members: {{ members.length }}</div>
-                <div class="c-pt-6">
+                <div class="pt-4">
                     <v-card>
                         <div class="info-card-list">
-                            <div class="list-line align-center">
-                                <div class="list-header-cell legacy-col-4">Researcher</div>
-                                <div class="list-header-cell legacy-col-3">Expertise</div>
-                                <div class="list-header-cell legacy-col-1 text-align-center">Group weight</div>
-                                <div class="list-header-cell legacy-col-2 text-align-center">Member since</div>
-                                <div class="list-header-cell legacy-col-2 text-align-center">Location</div>
-                            </div>
+                            <v-layout row class="list-line align-center">
+                                <v-flex list-header-cell xs4>Researcher</v-flex>
+                                <v-flex list-header-cell xs3>Expertise</v-flex>
+                                <v-flex list-header-cell xs1 text-align-center>Group weight</v-flex>
+                                <v-flex list-header-cell xs2 text-align-center>Member since</v-flex>
+                                <v-flex list-header-cell xs2 text-align-center>Location</v-flex>
+                            </v-layout>
 
                             <v-divider></v-divider>
 
                             <template v-for="(member, i) in members">
-                                <div class="list-line" :key="'member-' + i">
-                                    <div class="legacy-row-nowrap legacy-col-4 list-body-cell">
-                                        <v-avatar size="40px" class="c-pt-3">
+                                <v-layout class="list-line" :key="'member-' + i">
+                                    <v-flex xs4 list-body-cell display-flex>
+
+                                        <v-avatar size="40px" class="pt-2">
                                             <img v-if="member.profile" v-bind:src="member.profile.avatar | avatarSrc(80, 80, false)" />
                                             <v-gravatar v-else :email="member.account.name + '@deip.world'" />
                                         </v-avatar>
-
-                                        <div class="legacy-col-grow c-pl-4">
+                                        <div class="pl-3">
                                             <router-link :to="{
                                                     name: 'UserDetails', 
                                                     params: { account_name: member.account.name }
@@ -59,35 +72,35 @@
 
                                             <div class="caption c-pt-1">{{member | employmentOrEducation}}</div>
                                         </div>
-                                    </div>
+                                    </v-flex>
 
-                                    <div class="legacy-col-3 list-body-cell">
+                                    <v-flex xs3 list-body-cell>
                                         <div v-for="(item, i) in member.expertise" :key="i">
                                             <span class="uppercase bold">{{ item.discipline_name }}:</span> {{ item.amount }}
                                         </div>
-                                    </div>
+                                    </v-flex>
 
-                                    <div class="legacy-col-1 text-align-center list-body-cell">
+                                    <v-flex xs1 text-align-center list-body-cell>
                                         {{ convertToPercent(member.rgt.amount) }}%
-                                    </div>
+                                    </v-flex>
 
-                                    <div class="legacy-col-2 text-align-center list-body-cell">
+                                    <v-flex xs2 text-align-center list-body-cell>
                                         {{ member.created | dateFormat("D MMM YYYY") }}
-                                    </div>
+                                    </v-flex>
 
-                                    <div class="legacy-col-2 text-align-center list-body-cell">{{member | userLocation}}</div>
-                                </div>
+                                    <v-flex xs2 text-align-center list-body-cell>{{member | userLocation}}</v-flex>
+                                </v-layout>
 
                                 <v-divider :key="'member-divider-' + i"></v-divider>
                             </template>
                         </div>
 
-                        <div v-if="isResearchGroupMember && !group.is_personal" class="c-pv-4 c-ph-6">
+                        <div v-if="isResearchGroupMember && !group.is_personal" class="px-4 py-3">
                             <v-btn outline icon color="primary" class="ma-0" @click="$store.dispatch('researchGroup/changeOptions', { key: 'isAddMemberDialogOpen', value: true })">
                                 <v-icon small>add</v-icon>
                             </v-btn>
                     
-                            <span class="c-pl-2">Invite researchers</span>
+                            <span class="pl-2">Invite researchers</span>
                         </div>
 
                         <div v-if="isResearchGroupMember && invites.length">
@@ -104,14 +117,14 @@
                                         <template v-for="(invite, i) in invites">
                                             <v-divider :key="'invite-divider-' + i"></v-divider>
 
-                                            <div class="legacy-row c-pv-4 c-ph-6 legacy-align-items-center" :key="'invite-' + i">
-                                                <div class="legacy-row-nowrap legacy-col-4">
-                                                    <v-avatar size="40px" class="c-pt-3">
+                                            <v-layout row py-3 px-4 align-center :key="'invite-' + i">
+                                                <v-flex xs4 display-flex>
+                                                    <v-avatar size="40px" class="pt-2">
                                                         <img v-if="invite.user.profile" v-bind:src="invite.user.profile.avatar | avatarSrc(80, 80, false)" />
                                                         <v-gravatar v-else :email="invite.user.account.name + '@deip.world'" />
                                                     </v-avatar>
 
-                                                    <div class="legacy-col-grow c-pl-4">
+                                                    <div class="grow pl-3">
                                                         <router-link :to="{
                                                                 name: 'UserDetails', 
                                                                 params: { account_name: invite.user.account.name }
@@ -119,17 +132,17 @@
                                                             class="a subheading"
                                                         >{{ invite.user | fullname }}</router-link>
 
-                                                        <div class="caption c-pt-1">{{invite.user | employmentOrEducation}}</div>
+                                                        <div class="caption pt-1">{{invite.user | employmentOrEducation}}</div>
                                                     </div>
-                                                </div>
+                                                </v-flex>
 
-                                                <div class="legacy-col-grow text-align-center">{{ invite.user | userLocation }}</div>
+                                                <v-flex class="grow text-align-center">{{ invite.user | userLocation }}</v-flex>
 
-                                                <div class="legacy-col-2 text-align-center">
+                                                <v-flex xs2 text-align-center>
                                                     <span class="grey--text">Amount:</span>
                                                     {{ convertToPercent(invite.research_group_token_amount) }}%
-                                                </div>
-                                            </div>
+                                                </v-flex>
+                                            </v-layout>
                                         </template>
                                     </div>
                                 </v-expansion-panel-content>
@@ -154,27 +167,6 @@
             <state-research-list :research-list="researchList"></state-research-list>
         </div>
         <!-- ### END Research Group Research List Section ### -->
-
-        <div class="px-5 py-4" v-if="isResearchGroupMember">
-            <div class="title half-bold pb-4">Update group logo:</div>
-            <v-layout>
-                <v-flex xs3>
-                    <img width="150px" height="150px" :src="$options.filters.researchGroupLogoSrc(group.id, 300, 300, true)">
-                </v-flex>
-                <v-flex xs9>
-                    <div v-if="logoDropzoneOptions">
-                        <vue-dropzone ref="researchGroupLogo" id="research-group-logo" 
-                            :options="logoDropzoneOptions"
-                            @vdropzone-success="logoUploadSuccess"
-                            @vdropzone-error="logoUploadError">
-                        </vue-dropzone>
-                        <div class="text-xs-right py-3">
-                            <v-btn :disabled="isUploadingLogo" :loading="isUploadingLogo" class="ma-0" @click="updateLogoImage()" color="primary">Update logo</v-btn>
-                        </div>
-                    </div>
-                </v-flex>
-            </v-layout>
-        </div>
     </div>
 </template>
 
@@ -182,14 +174,9 @@
     import { mapGetters } from 'vuex';
     import deipRpc from '@deip/deip-oa-rpc-client';
     import { getEnrichedProfiles } from './../../../utils/user';
-    import { getAccessToken } from './../../../utils/auth';
-    import vueDropzone from 'vue2-dropzone';
 
     export default {
         name: "ResearchGroupDetailsBody",
-        components: {
-            vueDropzone
-        },
         props: {
         },
         data() { 
@@ -197,7 +184,6 @@
                 highlightProposalsSection: undefined,
                 proposalsSectionTransitionTrigger: false,
                 usersToInvite: [],
-                isUploadingLogo: false
             } 
         },
         computed: {
@@ -215,23 +201,6 @@
                 isLoadingResearchGroupProposals: 'researchGroup/isLoadingResearchGroupProposals',
                 userPersonalGroup: 'auth/userPersonalGroup'
             }),
-            logoDropzoneOptions() {
-                return this.group != null ? {
-                    url: `${window.env.DEIP_SERVER_URL}/api/groups/logo`,
-                    paramName: "research-background",
-                    headers: {
-                        "Research-Group-Id": this.group.id.toString(),
-                        "Authorization": 'Bearer ' + getAccessToken()
-                    },
-                    timeout: 0,
-                    uploadMultiple: false,
-                    createImageThumbnails: true,
-                    autoProcessQueue: false,
-                    dictDefaultMessage: "Research group logo (.png)",
-                    addRemoveLinks: true,
-                    acceptedFiles: ['image/png'].join(',')
-                } : null;
-            },
             isPersonalGroup() {
                 return this.group 
                     ? this.group.id == this.userPersonalGroup.id 
@@ -245,25 +214,6 @@
         }, 
 
         methods: {
-            updateLogoImage() {
-                if (this.$refs.researchGroupLogo.getQueuedFiles().length) {
-                    this.isUploadingLogo = true;
-                    this.$refs.researchGroupLogo.processQueue();
-                }
-            },
-
-            logoUploadSuccess(file, response) {
-                this.$refs.researchGroupLogo.removeAllFiles();
-                this.isUploadingLogo = false;
-                this.$store.dispatch('layout/setSuccess', { message: "Logo has been updated successfully ! Refresh the page please" });
-            },
-
-            logoUploadError(file, message, xhr) {
-                console.log(message);
-                this.$refs.researchGroupLogo.removeAllFiles();
-                this.isUploadingLogo = false;
-                this.$store.dispatch('layout/setError', { message: "Sorry, an error occurred while uploading logo image, please try again later" });
-            }
         },
 
         mounted() {

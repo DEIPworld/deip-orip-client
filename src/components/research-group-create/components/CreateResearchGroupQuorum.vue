@@ -36,7 +36,7 @@
                                             hide-details
                                         ></v-text-field>
                                     </div>
-                                    <div class="flex-grow-1 ml-4">Start research</div>
+                                    <div class="flex-grow-1 ml-4">Start new research project</div>
                                 </v-layout>
 
                                 <v-layout row align-end>
@@ -48,7 +48,7 @@
                                             hide-details
                                         ></v-text-field>
                                     </div>
-                                    <div class="flex-grow-1 ml-4">Publish research results</div>
+                                    <div class="flex-grow-1 ml-4">Publish research project results</div>
                                 </v-layout>
 
                                 <v-layout row align-end>
@@ -60,7 +60,7 @@
                                             hide-details
                                         ></v-text-field>
                                     </div>
-                                    <div class="flex-grow-1 ml-4">Change research review share</div>
+                                    <div class="flex-grow-1 ml-4">Change research review award share</div>
                                 </v-layout>
 
                                 <v-layout row align-end>
@@ -72,7 +72,7 @@
                                             hide-details
                                         ></v-text-field>
                                     </div>
-                                    <div class="flex-grow-1 ml-4">Invite members</div>
+                                    <div class="flex-grow-1 ml-4">Invite new member to research group</div>
                                 </v-layout>
 
                                 <v-layout row align-end>
@@ -84,7 +84,7 @@
                                             hide-details
                                         ></v-text-field>
                                     </div>
-                                    <div class="flex-grow-1 ml-4">Dropout member</div>
+                                    <div class="flex-grow-1 ml-4">Exclude member from research group</div>
                                 </v-layout>
 
                                 <v-layout row align-end>
@@ -96,7 +96,7 @@
                                             hide-details
                                         ></v-text-field>
                                     </div>
-                                    <div class="flex-grow-1 ml-4">Start research fundraise</div>
+                                    <div class="flex-grow-1 ml-4">Schedule research fundraising campaign</div>
                                 </v-layout>
 
                                 <v-layout row align-end>
@@ -108,7 +108,7 @@
                                             hide-details
                                         ></v-text-field>
                                     </div>
-                                    <div class="flex-grow-1 ml-4">Offer research tokens</div>
+                                    <div class="flex-grow-1 ml-4">Offer research shares</div>
                                 </v-layout>
 
                                 <v-layout row align-end>
@@ -120,7 +120,7 @@
                                             hide-details
                                         ></v-text-field>
                                     </div>
-                                    <div class="flex-grow-1 ml-4">Send funds</div>
+                                    <div class="flex-grow-1 ml-4">Transfer research group funds</div>
                                 </v-layout>
 
                                 <v-layout row align-end>
@@ -132,7 +132,7 @@
                                             hide-details
                                         ></v-text-field>
                                     </div>
-                                    <div class="flex-grow-1 ml-4">Change quorum</div>
+                                    <div class="flex-grow-1 ml-4">Change research group quorum threshold</div>
                                 </v-layout>
 
                                 <v-layout row align-end>

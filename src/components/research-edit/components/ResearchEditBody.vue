@@ -142,7 +142,7 @@ export default {
         uploadMultiple: false,
         createImageThumbnails: true,
         autoProcessQueue: false,
-        dictDefaultMessage: "Background image should be at least 1440 x 430 px in dimension (.png)",
+        dictDefaultMessage: "<i class='v-icon material-icons' style='font-size:40px'>backup</i><p>Background image should be at least 1440 x 430 px in dimension (.png)</p>",
         addRemoveLinks: true,
         acceptedFiles: ['image/png'].join(',')
       } : null;
@@ -273,5 +273,9 @@ export default {
 };
 </script>
 
-<style lang="less">
+<style lang="less" scoped>
+  #research-background-dropzone{
+    background: #ebf5fe;
+    color: #3067ff;
+  }
 </style>

@@ -14,23 +14,23 @@
       <v-card-text>
         <v-autocomplete :items="users" v-model="selectedUser" placeholder="Researcher">
           <template slot="selection" slot-scope="data">
-            <div class="legacy-row-nowrap align-center c-pl-4">
+            <v-layout row align-center pl-3>
               <v-avatar size="30px">
                 <img v-if="data.item.profile" v-bind:src="data.item.profile.avatar | avatarSrc(60, 60, false)" />
                 <v-gravatar v-else :email="data.item.account.name + '@deip.world'" />
               </v-avatar>
-              <span class="c-pl-3">{{ data.item | fullname }}</span>
-            </div>
+              <span class="pl-2">{{ data.item | fullname }}</span>
+            </v-layout>
           </template>
 
           <template slot="item" slot-scope="data">
-            <div class="legacy-row-nowrap align-center">
+            <v-layout row align-center>
               <v-avatar size="30px">
                 <img v-if="data.item.profile" v-bind:src="data.item.profile.avatar | avatarSrc(60, 60, false)" />
                 <v-gravatar v-else :email="data.item.account.name + '@deip.world'" />
               </v-avatar>
-              <span class="c-pl-3">{{ data.item | fullname }}</span>
-            </div>
+              <span class="pl-2">{{ data.item | fullname }}</span>
+            </v-layout>
           </template>
         </v-autocomplete>
 
