@@ -16,7 +16,9 @@ export const CHANGE_QUORUM = 7;
 export const CHANGE_RESEARCH_REVIEW_SHARE_PERCENT = 8;
 export const OFFER_RESEARCH_TOKENS = 9;
 export const CREATE_RESEARCH_MATERIAL = 10;
-export const CHANGE_RESEARCH_GROUP_NAME_DESCRIPTION = 11;
+export const CHANGE_RESEARCH_GROUP_META_DATA_TYPE = 11;
+export const CHANGE_RESEARCH_META_DATA_TYPE = 12;
+
 
 const types = {
     START_RESEARCH,
@@ -29,7 +31,8 @@ const types = {
     CHANGE_RESEARCH_REVIEW_SHARE_PERCENT,
     OFFER_RESEARCH_TOKENS,
     CREATE_RESEARCH_MATERIAL,
-    CHANGE_RESEARCH_GROUP_NAME_DESCRIPTION
+    CHANGE_RESEARCH_GROUP_META_DATA_TYPE,
+    CHANGE_RESEARCH_META_DATA_TYPE
 };
 
 const labels = {};
@@ -43,7 +46,8 @@ labels[CHANGE_QUORUM] = 'Change research group quorum threshold';
 labels[CHANGE_RESEARCH_REVIEW_SHARE_PERCENT] = 'Change research review award share';
 labels[OFFER_RESEARCH_TOKENS] = 'Offer research shares';
 labels[CREATE_RESEARCH_MATERIAL] = 'Publish research project results';
-labels[CHANGE_RESEARCH_GROUP_NAME_DESCRIPTION] = 'Change research group name and description';
+labels[CHANGE_RESEARCH_GROUP_META_DATA_TYPE] = 'Change research group meta';
+labels[CHANGE_RESEARCH_META_DATA_TYPE] = 'Change research meta';
 
 // maybe will be OK to add param validations or type conversion
 // in every function to be sure every time about right data
@@ -103,13 +107,20 @@ schemasMap[CREATE_RESEARCH_MATERIAL] = (researchId, type, title, permlink, conte
         "external_references": externalReferences
     };
 };
-schemasMap[CHANGE_RESEARCH_GROUP_NAME_DESCRIPTION] = (researchGroupId, newResearchGroupName, newResearchGroupDescription) => {
+schemasMap[CHANGE_RESEARCH_GROUP_META_DATA_TYPE] = (researchGroupId, newResearchGroupName, newResearchGroupDescription) => {
     return {
         'research_group_id': researchGroupId,
-        'new_research_group_name': newResearchGroupName,
-        'new_research_group_description': newResearchGroupDescription
+        'research_group_name': newResearchGroupName,
+        'research_group_description': newResearchGroupDescription
     };
 };
+schemasMap[CHANGE_RESEARCH_META_DATA_TYPE] = (researchId, newResearchTitle, newResearchAbstract) => {
+    return {
+        'research_id':researchId,
+        'research_title':newResearchTitle,
+        'research_abstract':newResearchAbstract
+    }
+}
 
 
 const getStringifiedProposalData = (type, params) => {
@@ -270,8 +281,8 @@ const createChangeQuorumProposal = (groupId, proposalType, quorumPercent) => {
     );
 };
 
-const createChangeNameAndDescriptionProposal = (groupId, newResearchGroupName, newResearchGroupDescription) => {
-    const data = getStringifiedProposalData(CHANGE_RESEARCH_GROUP_NAME_DESCRIPTION, [
+const createChangeGroupNameAndDescriptionProposal = (groupId, newResearchGroupName, newResearchGroupDescription) => {
+    const data = getStringifiedProposalData(CHANGE_RESEARCH_GROUP_META_DATA_TYPE, [
         groupId,
         newResearchGroupName,
         newResearchGroupDescription
@@ -282,7 +293,24 @@ const createChangeNameAndDescriptionProposal = (groupId, newResearchGroupName, n
         getDecodedToken().username,
         groupId,
         data,
-        CHANGE_RESEARCH_GROUP_NAME_DESCRIPTION,
+        CHANGE_RESEARCH_GROUP_META_DATA_TYPE,
+        getProposalExpirationTime()
+    );
+};
+
+const createChangeResearchNameAndDescriptionProposal = (researchIds, newResearchTitle, newResearchAbstract) => {
+    const data = getStringifiedProposalData(CHANGE_RESEARCH_META_DATA_TYPE, [
+        researchIds.id,
+        newResearchTitle,
+        newResearchAbstract
+    ]);
+
+    return deipRpc.broadcast.createProposalAsync(
+        getOwnerWif(),
+        getDecodedToken().username,
+        researchIds.researchGroupId,
+        data,
+        CHANGE_RESEARCH_META_DATA_TYPE,
         getProposalExpirationTime()
     );
 };
@@ -348,7 +376,8 @@ export {
     createResearchProposal,
     createContentProposal,
     createTokenSaleProposal,
-    createChangeNameAndDescriptionProposal,
+    createChangeGroupNameAndDescriptionProposal,
+    createChangeResearchNameAndDescriptionProposal,
 
     getParsedProposal,
     extendProposalByRelatedInfo,

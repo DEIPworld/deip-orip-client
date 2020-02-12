@@ -49,11 +49,20 @@
                     </div>
 
                     <div class="display-flex" 
-                        v-else-if="proposal.action === proposalTypes.CHANGE_RESEARCH_GROUP_NAME_DESCRIPTION"
+                        v-else-if="proposal.action === proposalTypes.CHANGE_RESEARCH_GROUP_META_DATA_TYPE"
                     >
                         <!-- <v-icon small color="primary" class="mr-2">mdi-percent</v-icon> -->
                         <div class="a">
-                            Change research group name and description
+                            Change Group meta
+                        </div>
+                    </div>
+
+                     <div class="display-flex" 
+                        v-else-if="proposal.action === proposalTypes.CHANGE_RESEARCH_META_DATA_TYPE"
+                    >
+                        <!-- <v-icon small color="primary" class="mr-2">mdi-percent</v-icon> -->
+                        <div class="a">
+                            Change Research meta
                         </div>
                     </div>
 
@@ -201,17 +210,20 @@
                         </v-flex>
                     </v-layout>
 
-                     <v-layout row v-else-if="proposal.action === proposalTypes.CHANGE_RESEARCH_GROUP_NAME_DESCRIPTION">
+                     <v-layout row v-else-if="proposal.action === proposalTypes.CHANGE_RESEARCH_GROUP_META_DATA_TYPE">
                         <v-flex xs6>
                             <div>
                                 Type:
-                                <span class="font-weight-bold">Change Name and Description</span>
+                                <span class="font-weight-bold">Change Group meta</span>
                             </div>
+                        </v-flex>
+                    </v-layout>
+
+                    <v-layout row v-else-if="proposal.action === proposalTypes.CHANGE_RESEARCH_META_DATA_TYPE">
+                        <v-flex xs6>
                             <div>
-                                Proposed percent:
-                                <span class="font-weight-bold">
-                                    {{ convertToPercent(proposal.data.quorum_percent) }}%
-                                </span>
+                                Type:
+                                <span class="font-weight-bold">Change Research meta</span>
                             </div>
                         </v-flex>
                     </v-layout>
@@ -256,7 +268,7 @@
 
         methods: {
             ...mapActions({
-                changeProposal: 'researchGroup/changeProposal'
+                changeProposal: 'researchGroup/changeProposal',
             }),
             approve() {
                 this.isApprovingLoading = true;
@@ -266,6 +278,9 @@
                         let copy = _.cloneDeep(this.proposal);
                         copy.voted_accounts.push(this.currentUser.username);
                         this.changeProposal({ old: this.proposal, new: copy });
+                        this.$store.dispatch('researchGroup/loadResearchGroup', {
+					        permlink: decodeURIComponent(this.group.permlink)
+				        });
                     }).catch(err => {
                         alert(err.message);
                     });
@@ -304,7 +319,7 @@
                     }, 0)
                 );
             }
-        }
+        },
     };
 </script>
 
