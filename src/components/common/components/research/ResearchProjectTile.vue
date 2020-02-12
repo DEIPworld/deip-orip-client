@@ -60,7 +60,7 @@
       <v-flex xs5 class="caption grey--text lighten-1">
         <v-icon small>event</v-icon>
         <span>Updated on</span>
-        <span class="half-bold">{{moment(research.last_update_time).format("D MMM YYYY")}}</span>
+        <span class="pl-1 half-bold">{{moment(research.last_update_time).format("D MMM YYYY")}}</span>
       </v-flex>
       <v-flex xs2>
         <v-icon small color="grey lighten-1">chat_bubble</v-icon>
