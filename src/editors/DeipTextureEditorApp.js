@@ -1,5 +1,5 @@
 import { TextureWebApp } from '@deip/substance-texture'
-import { parseKeyEvent } from '@deip/substance-texture/node_modules/substance'
+import { parseKeyEvent, documentHelpers, DefaultDOMElement } from '@deip/substance-texture/node_modules/substance'
 import HttpStorageClient from '@deip/substance-texture/src/dar/HttpStorageClient.js'
 
 export default class DeipTextureEditorApp extends TextureWebApp {
@@ -26,17 +26,15 @@ export default class DeipTextureEditorApp extends TextureWebApp {
   }
 
   save() {
-    const self = this;
-    const promise = new Promise((resolve, reject) => {
-      self._save((err) => {
+    return new Promise((resolve, reject) => {
+      this._save((err) => {
         if (err) {
           reject(err);
         } else {
           resolve();
         }
       });
-    })
-    return promise;
+    });
   }
 
   api = ((self) => {
@@ -45,86 +43,79 @@ export default class DeipTextureEditorApp extends TextureWebApp {
       getArticleTitle: () => {
         const archive = this.state.archive;
         if (!archive) return null;
-        const articleSession = archive.getEditorSession('manuscript');
-        const articleDocument = articleSession.getDocument();
-        const titleNode = articleDocument.get('title')
-        if (!titleNode || !titleNode.textContent) return null;
-        return titleNode.textContent;
+        const internalArticleDocument = archive.getDocument('manuscript')
+        const rootNode = internalArticleDocument.getRootNode();
+        const title = rootNode.title;
+        return title;
       },
     
-      getReferences: () => {
-        const archive = this.state.archive;
-        if (!archive) return [];
-        const articleSession = archive.getEditorSession('manuscript');
-        const refs = articleSession.getReferenceManager().getBibliography();
-        return refs;
-      },
-  
       getAuthors: () => {
         const archive = this.state.archive;
-        if (!archive) return [];
-        const articleSession = archive.getEditorSession('manuscript');
-        const articleDocument = articleSession.getDocument();
-        const authorsNode = articleDocument.get("authors");
-        if (!authorsNode || !authorsNode.children) return [];
-        return authorsNode.children;
+        if (!archive) return null;
+        const internalArticleDocument = archive.getDocument('manuscript');
+        const metadata = internalArticleDocument.get("metadata");
+        const authors = metadata.authors.map(a => {
+          return internalArticleDocument.get(a);
+        })
+        return authors;
       },
 
       addAuthor: (alias, surname, givenNames) => {
-        if (!this.refs.texture) return;
-        const collectionId = "authors";
+        const textureRef = this.refs.texture;
+        if (!textureRef) return;
+        const editorSession = textureRef.refs.resource.editorSession;
+        const collectionPath = ['metadata', 'authors'];
         const person = { type: "person", alias, surname, givenNames };
-        const editorSession = this.refs.texture.refs.resource.refs.content.editorSession;
         editorSession.transaction(tx => {
-          const bio = tx.create({type: 'bio'}).append(
-            tx.create({type: 'p'})
-          )
-          person.bio = bio.id
-          const node = tx.create(person)
-          tx.get(collectionId).appendChild(node)
-        })
-        // refresh view
-        this.refs.texture.refs.resource.send('updateViewName', 'manuscript')
+          let node = tx.create(person);
+          documentHelpers.append(tx, collectionPath, node.id);
+        });
       },
 
       removeAuthor: (person) => {
-        if (!this.refs.texture) return;
-        const collectionId = "authors";
-        const editorSession = this.refs.texture.refs.resource.refs.content.editorSession;
+        const textureRef = this.refs.texture;
+        if (!textureRef) return;
+        const editorSession = textureRef.refs.resource.editorSession;
+        const collectionPath = ['metadata', 'authors'];
         editorSession.transaction(tx => {
-          tx.get(collectionId).removeChild(tx.get(person.id))
-          tx.delete(person.id)
+          documentHelpers.removeFromCollection(tx, collectionPath, person.id);
+          documentHelpers.deepDeleteNode(tx, person.id);
+        });
+      },
+
+      getReferences: () => {
+        const archive = this.state.archive;
+        if (!archive) return null;
+        const internalArticleDocument = archive.getDocument('manuscript');
+        const rootNode = internalArticleDocument.getRootNode();
+        const references = rootNode.references.map(a => {
+          return internalArticleDocument.get(a);
         })
-        // refresh view
-        this.refs.texture.refs.resource.send('updateViewName', 'manuscript')
+        return references;
       },
 
       addReference: (uri, title, containerTitle) => {
-        if (!this.refs.texture) return;
-        const collectionId = "references";
+        const textureRef = this.refs.texture;
+        if (!textureRef) return;
+        const editorSession = textureRef.refs.resource.editorSession;
+        const collectionPath = ['article', 'references'];
         const ref = { type: "webpage-ref", uri, title, containerTitle };
-        const editorSession = this.refs.texture.refs.resource.refs.content.editorSession;
         editorSession.transaction(tx => {
-          let node = tx.create(ref)
-          tx.get(collectionId).appendChild(node);
-        })
-        // refresh view
-        this.refs.texture.refs.resource.send('updateViewName', 'manuscript')
+          let node = tx.create(ref);
+          documentHelpers.append(tx, collectionPath, node.id);
+        });
       },
 
       removeReference: (reference) => {
-        if (!this.refs.texture) return;
-        const collectionId = "references";
-        const editorSession = this.refs.texture.refs.resource.refs.content.editorSession;
+        const textureRef = this.refs.texture;
+        if (!textureRef) return;
+        const editorSession = textureRef.refs.resource.editorSession;
+        const collectionPath = ['article', 'references'];
         editorSession.transaction(tx => {
-          tx.get(collectionId).removeChild(tx.get(reference.id))
-          tx.delete(reference.id)
-        })
-        // refresh view
-        this.refs.texture.refs.resource.send('updateViewName', 'manuscript')
+          documentHelpers.removeFromCollection(tx, collectionPath, reference.id);
+          documentHelpers.deepDeleteNode(tx, reference.id);
+        });
       }
     }
   })(this);
-
-
 }

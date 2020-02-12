@@ -8,7 +8,7 @@ require('dotenv').config({ path:  __dirname + '/' +
 
 const config = {
     NODE_ENV: process.env.NODE_ENV,
-    DEIP_CLIENT_HOST: process.env.DEIP_CLIENT_HOST,
+    DEIP_CLIENT_URL: process.env.DEIP_CLIENT_URL,
     DEIP_SERVER_URL: process.env.DEIP_SERVER_URL,
     DEIP_FULL_NODE_URL: process.env.DEIP_FULL_NODE_URL,
     SIG_SEED: process.env.SIG_SEED,

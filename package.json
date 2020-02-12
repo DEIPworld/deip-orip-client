@@ -11,7 +11,7 @@
   "dependencies": {
     "@deip/deip-oa-rpc-client": "1.0.17",
     "@deip/lib-crypto": "1.0.2",
-    "@deip/substance-texture": "1.0.0-0bb17ee3f9e9b4dfb44687ea0d08772f32b6e6b7.patch.4",
+    "@deip/substance-texture": "1.0.0-9d8c0dc6a3ba961c42cd5b494857baf783025cf3.patch.2",
     "@mdi/font": "^4.5.95",
     "@vue/web-component-wrapper": "^1.2.0",
     "@xkeshi/vue-qrcode": "^1.0.0",

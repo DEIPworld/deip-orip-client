@@ -20,7 +20,6 @@ import ResearchGroupDetails from '@/components/research-group-details/ResearchGr
 import ResearchGroupWallet from '@/components/research-group-wallet/ResearchGroupWallet';
 
 import ResearchFeed from '@/components/research-feed/ResearchFeed';
-import ResearchFeedOld from '@/components/research-feed/ResearchFeedOld';
 import ResearchDetails from '@/components/research-details/ResearchDetails';
 import ResearchEdit from '@/components/research-edit/ResearchEdit';
 import ResearchContentDetails from '@/components/research-content-details/ResearchContentDetails';
@@ -159,15 +158,6 @@ const router = new Router({
 			path: '/research-feed',
 			name: 'ResearchFeed',
 			component: preliminaryDataLoader(ResearchFeed, {
-				beforeEnter: (to, from, next) => {
-					let loadPagePromise = store.dispatch('feed/loadResearchFeed', {});
-					loadPage(loadPagePromise, next);
-				}
-			})
-		}, {
-			path: '/legacy-research-feed',
-			name: 'ResearchFeedOld',
-			component: preliminaryDataLoader(ResearchFeedOld, {
 				beforeEnter: (to, from, next) => {
 					let loadPagePromise = store.dispatch('feed/loadResearchFeed', {});
 					loadPage(loadPagePromise, next);

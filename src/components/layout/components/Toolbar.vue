@@ -24,7 +24,7 @@
         <v-menu bottom left offset-y>
           <v-btn fab flat icon class="ma-0" slot="activator">
             <v-avatar size="32px">
-              <img v-if="user.profile" v-bind:src="user.profile.avatar | avatarSrc(2 * 32, 2 * 32, false)" />
+              <img v-if="user.profile" v-bind:src="user.profile | avatarSrc(2 * 32, 2 * 32, false)" />
               <v-gravatar v-if="!user.profile && user.account" :title="user.username" :email="user.username + '@deip.world'" />
             </v-avatar>
           </v-btn>

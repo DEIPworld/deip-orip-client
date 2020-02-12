@@ -1,10 +1,10 @@
 <template>
     <div class="">
         <div class="legacy-row">
-            <v-avatar size="160px" class="">
-                <img v-if="claimerInfo.profile" v-bind:src="claimerInfo.profile.avatar | avatarSrc(160, 160, false)" />
-                <v-gravatar v-if="!claimerInfo.profile && claimerInfo.account" :email="claimerInfo.account.name + '@deip.world'" />
-            </v-avatar>
+            <platform-avatar 
+                :user="claimerInfo"
+                :size="160"
+            ></platform-avatar>
 
             <div class="legacy-col-grow c-pl-12">
                 <div class="display-1 half-bold c-pt-4">

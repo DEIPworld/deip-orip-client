@@ -2,15 +2,12 @@
     <v-card class="review-container hidden-last-child">
         <div class="legacy-row-nowrap c-p-6 clickable" @click="goToReviewPage()">
             <div style="width: 10%" class="legacy-column text-align-center" @click="goToReviewerProfilePage($event, review.author.account.name)">
-                <v-avatar size="90px">
-                    <img v-if="review.author.profile" v-bind:src="review.author.profile.avatar | avatarSrc(90, 90, false)" />
-                    <v-gravatar v-else :title="review.author.account.name" :email="review.author.account.name + '@deip.world'" />
-                </v-avatar>
-                <div class="bold c-pt-2">
-                    <span class="a">
-                        {{ review.author | fullname }}
-                    </span>
-                </div>
+                <platform-avatar 
+                    :user="review.author"
+                    :size="40"
+                    link-to-profile
+                    link-to-profile-class="px-1"
+                ></platform-avatar>
             </div>
             <div class="legacy-col-grow c-ml-6">
                 <div>

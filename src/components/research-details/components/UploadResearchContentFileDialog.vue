@@ -5,6 +5,7 @@
         <div v-if="dropzoneOptions">
             <vue-dropzone ref="newContent" id="content-dropzone" 
                 :options="dropzoneOptions" 
+                @vdropzone-sending="vdropzoneSending"
                 @vdropzone-file-added="vdropzoneFileAdded"
                 @vdropzone-success-multiple="vdropzoneSuccess"
                 @vdropzone-error="vdropzoneError">
@@ -50,7 +51,7 @@
                             <template slot="selection" slot-scope="data">
                                 <div class="legacy-row-nowrap align-center c-pl-4">
                                     <v-avatar size="30px">
-                                        <img v-if="data.item.profile" v-bind:src="data.item.profile.avatar | avatarSrc(60, 60, false)" />
+                                        <img v-if="data.item.profile" v-bind:src="data.item.profile | avatarSrc(60, 60, false)" />
                                         <v-gravatar v-else :email="data.item.account.name + '@deip.world'" />
                                     </v-avatar>
                                     <span class="c-pl-3">{{ data.item | fullname }}</span>
@@ -62,7 +63,7 @@
                                     <div class="legacy-row-nowrap align-center author-item" 
                                         :class="{ 'selected-author-item': isAuthorSelected(data.item) }">
                                         <v-avatar size="30px">
-                                            <img v-if="data.item.profile" v-bind:src="data.item.profile.avatar | avatarSrc(60, 60, false)" />
+                                            <img v-if="data.item.profile" v-bind:src="data.item.profile | avatarSrc(60, 60, false)" />
                                             <v-gravatar v-else :email="data.item.account.name + '@deip.world'" />
                                         </v-avatar>
                                         <span class="c-pl-3">{{ data.item | fullname  }}</span>
@@ -131,7 +132,20 @@
                 references: [],
 
                 isOpen: false,
-                isLoading: false
+                isLoading: false,
+
+                dropzoneOptions: {
+                    url: `${window.env.DEIP_SERVER_URL}/content/upload-files`,
+                    paramName: "research-content",
+                    timeout: 0,
+                    maxFiles: 10,
+                    parallelUploads: 10,
+                    uploadMultiple: true,
+                    thumbnailWidth: 150,
+                    autoProcessQueue: false,
+                    addRemoveLinks: true,
+                    // acceptedFiles: ['application/pdf', 'image/png', 'image/jpeg'].join(',')
+                }
             }
         },
         computed: {
@@ -150,25 +164,6 @@
                 return !this.title ||
                        !this.type ||
                        !this.authors.length
-            },
-            dropzoneOptions() {
-                return this.research != null ? {
-                        url: `${window.env.DEIP_SERVER_URL}/content/upload-files`,
-                        paramName: "research-content",
-                        headers: {
-                            "Research-Id": this.research.id.toString(),
-                            "Authorization": 'Bearer ' + getAccessToken(),
-                            "Upload-Session": `${(new Date()).getTime()}-${getAccessToken().split('.')[2]}`
-                        },
-                        timeout: 0,
-                        maxFiles: 10,
-                        parallelUploads: 10,
-                        uploadMultiple: true,
-                        thumbnailWidth: 150,
-                        autoProcessQueue: false,
-                        addRemoveLinks: true,
-                        // acceptedFiles: ['application/pdf', 'image/png', 'image/jpeg'].join(',')
-                    } : null;
             }
         },
 
@@ -184,6 +179,13 @@
             proposeContent() {
                 this.isLoading = true;
                 this.$refs.newContent.processQueue();
+            },
+            vdropzoneSending(file, xhr, formData) {
+                xhr.setRequestHeader("Authorization", `Bearer ${getAccessToken()}`);
+                xhr.setRequestHeader("Upload-Session", `${(new Date()).getTime()}-${getAccessToken().split('.')[2]}`);
+                // TODO: add as formParam after upgrading back-end
+                xhr.setRequestHeader("Research-Id", this.research.id.toString());
+                xhr.setRequestHeader("Internal-Refs", this.references.map(ref => ref.id));
             },
             vdropzoneError(file, message, xhr) {
                 this.$store.dispatch('layout/setError', {

@@ -9,9 +9,6 @@ import {
 import { CREATE_RESEARCH_MATERIAL } from './../../../services/ProposalService';
 import * as researchService from './../../../services/ResearchService';
 
-var texture = undefined;
-var reviewEditor = undefined;
-
 const state = {
     content: null,
     research: null,
@@ -79,12 +76,49 @@ const getters = {
         return state.contentRef;
     },
 
-    texture: (state, getters) => {
-        return texture;
+    isFilePackageContent(state, getters, rootState, rootGetters) {
+        return state.contentRef && (state.contentRef.type === 'package' || state.contentRef.type === 'file' /* legacy*/);
     },
 
-    reviewEditor: (state, getters) => {
-        return reviewEditor;
+    isDarContent(state, getters, rootState, rootGetters) {
+        return state.contentRef && state.contentRef.type === 'dar';
+    },
+
+    isInProgress(state, getters, rootState, rootGetters) {
+        return state.contentRef && state.contentRef.status === 'in-progress';
+    },
+
+    isPublished(state, getters, rootState, rootGetters) {
+        return state.content != null;
+    },
+
+    isProposed(state, getters, rootState, rootGetters) {
+        return state.contentRef && state.contentRef.status === 'proposed';
+    },
+
+    isPersonalGroup(state, getters, rootState, rootGetters) {
+        let userPersonalGroup = rootGetters['auth/userPersonalGroup'];
+        return state.research.research_group_id == userPersonalGroup.id;
+    },
+
+    isResearchGroupMember(state, getters, rootState, rootGetters) {
+        let isMember = rootGetters['auth/userIsResearchGroupMember'](state.research.research_group_id);
+        return isMember;
+    },
+
+    isCreatingReviewAvailable(state, getters, rootState, rootGetters) {
+        let user = rootGetters['auth/user'];
+        let userHasReview = getters.contentReviewsList.some(r => r.author.account.name === user.username);
+        return !getters.isResearchGroupMember && !userHasReview && getters.userHasResearchExpertise && getters.isPublished;
+    },
+
+    userHasResearchExpertise(state, getters, rootState, rootGetters) {
+        let userExperiseList = rootGetters['auth/userExperise'];
+        return userExperiseList.some(exp => state.research.disciplines.some(d => d.id == exp.discipline_id));
+    },
+
+    isSavingDraftAvailable(state, getters, rootState, rootGetters) {
+        return getters.isResearchGroupMember && getters.isDarContent && getters.isInProgress;
     },
     
     membersList: (state, getters) => {
@@ -327,18 +361,6 @@ const actions = {
         let graph = await researchService.loadResearchContentReferencesGraph(researchContentId);
         commit('SET_RESEARCH_CONTENT_REFERENCES_GRAPH_DATA', graph);
         if (notify) notify();
-    },
-
-    setTexture({ state, commit, dispatch }, instance) {
-        // temporal hack to avoid blocking while converting texture nested props to reactive ones, 
-        // do not do this in regular code without 'commit' call!
-        texture = instance.texture;
-    },
-
-    setReviewEditor({ state, commit, dispatch }, instance) {
-        // temporal hack to avoid blocking while converting substance nested props to reactive ones, 
-        // do not do this in regular code without 'commit' call!
-        reviewEditor = instance.reviewEditor;
     },
 
     setDraftAuthors({ state, commit, dispatch }, authors) {
@@ -608,10 +630,7 @@ const mutations = {
         Vue.set(state, 'group', value)
     },
 
-    ['RESET_STATE'](state) {
-        texture = undefined;
-        reviewEditor = undefined;
-    },
+    ['RESET_STATE'](state) {},
 
     ['RESET_METADATA_STATE'](state) {
         Vue.set(state, 'contentMetadata', null)

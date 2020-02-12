@@ -19,13 +19,12 @@
 
       <div class="legacy-row-nowrap legacy-justify-between align-center c-pt-2 c-pb-2" v-for="(author, index) in membersList" :key="index">
         <div>
-          <v-avatar size="40px">
-            <img v-if="author.profile" v-bind:src="author.profile.avatar | avatarSrc(80, 80, false)" />
-            <v-gravatar v-else :title="author.account.name" :email="author.account.name + '@deip.world'" />
-          </v-avatar>
-          <router-link class="a c-pl-3" :to="{ name: 'UserDetails', params: { account_name: author.account.name } }">
-            {{ author | fullname }}
-          </router-link>
+          <platform-avatar 
+              :user="author"
+              :size="40"
+              link-to-profile
+              link-to-profile-class="px-1"
+          ></platform-avatar>
         </div>
       </div>
     </div>

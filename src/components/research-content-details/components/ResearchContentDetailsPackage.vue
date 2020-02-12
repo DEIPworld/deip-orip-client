@@ -66,33 +66,33 @@
 </template>
 
 <script>
-    import { mapGetters } from 'vuex';
-    import deipRpc from '@deip/deip-oa-rpc-client';
-    import applicationsHttp from '@/services/http/application';
-    import {getAccessToken} from '@/utils/auth'
+import { mapGetters } from 'vuex';
+import deipRpc from '@deip/deip-oa-rpc-client';
+import applicationsHttp from '@/services/http/application';
+import {getAccessToken} from '@/utils/auth'
 
-    export default {
-        name: "ResearchContentDetailsPackage",
-        data() {
-          return {
-          };
-        },
-        computed: {
-          ...mapGetters({
-            user: 'auth/user',
-            userExperise: 'auth/userExperise',
-						contentRef: 'rcd/contentRef'
-          }),
-        },
-        methods: {
-					isPreviewAvailable(ext) {
-						return ['.png', '.jpg', '.jpeg', '.pdf'].some(e => e === ext);
-          },
-          getContentUrl(fileHash, download = false) {
-            return `${window.env.DEIP_SERVER_URL}/content/refs/research/package/${this.contentRef.researchId}/${this.contentRef.hash}/${fileHash}?download=${download}&authorization=${getAccessToken()}`;
-          }
-        }
-    };
+export default {
+	name: "ResearchContentDetailsPackage",
+	data() {
+		return {
+		};
+	},
+	computed: {
+		...mapGetters({
+			user: 'auth/user',
+			userExperise: 'auth/userExperise',
+			contentRef: 'rcd/contentRef'
+		}),
+	},
+	methods: {
+		isPreviewAvailable(ext) {
+			return ['.png', '.jpg', '.jpeg', '.pdf'].some(e => e === ext);
+		},
+		getContentUrl(fileHash, download = false) {
+			return `${window.env.DEIP_SERVER_URL}/content/refs/research/package/${this.contentRef.researchId}/${this.contentRef.hash}/${fileHash}?download=${download}&authorization=${getAccessToken()}`;
+		}
+	}
+};
 </script>
 
 <style lang="less" scoped>

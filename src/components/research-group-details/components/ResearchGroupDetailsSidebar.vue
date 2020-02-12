@@ -87,16 +87,6 @@
             </div>
         </div>
 
-        <div v-if="!group.is_personal" class="">
-            <div class="py-4">
-                <quorum-size-sidebar-section></quorum-size-sidebar-section>
-            </div>
-            
-            <div class="sidebar-fullwidth">
-                <v-divider></v-divider>
-            </div>
-        </div>
-
         <transfer-group-deip-tokens-dialog
             :is-open="options.isTransferTokensDialogOpen"
             @onClose="$store.dispatch('researchGroup/changeOptions', { key: 'isTransferTokensDialogOpen', value: false })"

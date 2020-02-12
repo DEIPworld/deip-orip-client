@@ -105,8 +105,9 @@
     
     @import (less) '~@deip/substance-texture/dist/texture.css';
     @import (less) '~@deip/substance-texture/dist/texture-reset.css';
-    @import (less) '~@deip/substance-texture/dist/katex/katex.min.css';
-    @import (less) '~@deip/substance-texture/dist/font-awesome/css/font-awesome.min.css';
+    @import (less) '~@deip/substance-texture/dist/lib/katex/katex.min.css';
+    // @import (less) '~@deip/substance-texture/dist/lib/inter-ui/inter.css';
+    @import (less) '~@deip/substance-texture/dist/lib/font-awesome/css/font-awesome.min.css';
 
     .sc-app {
         height: 100%;
@@ -128,8 +129,13 @@
         z-index: 100 !important;
     }
 
-    .sc-toggle-tool.sm-save {
+    .sc-tool.sc-button.sm-save {
         display: none !important;
+    }
+
+    .sc-button.se-close-button {
+        top: 1.5% !important;
+        right: 1.5% !important;
     }
 }
 

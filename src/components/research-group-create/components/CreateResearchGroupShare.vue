@@ -10,15 +10,14 @@
                             Each research group is assigned its own Research Group Tokens which are distributed among its members and can be used to manage the group and its research activity.
                         </div>
                         <div class="body-2 py-3">Distribute tokens of this group as follows:</div>
-                        <v-layout row justify-space-between align-center pt-3 
-                            v-for="(member, i) in group.members" :key="i"
-                        >
+                        <v-layout row justify-space-between align-center pt-3 v-for="(member, i) in group.members" :key="i">
                             <div>
-                                <v-avatar size="30px">
-                                    <img v-if="member.profile" v-bind:src="member.profile.avatar | avatarSrc(30, 30, false)" />
-                                    <v-gravatar v-else :email="member.account.name + '@deip.world'" />
-                                </v-avatar>
-                                <router-link :to="'/user-details' + member.account.name" class="a pl-2">{{ member | fullname }}</router-link>
+                                <platform-avatar 
+                                    :user="member"
+                                    :size="30"
+                                    link-to-profile
+                                    link-to-profile-class="px-1"
+                                ></platform-avatar>
                             </div>
 
                             <div>

@@ -358,7 +358,7 @@ export default {
             .text(filters.fullname(a));
 
           let authorImg = d3.select(this).append("xhtml:img")
-            .attr("src", filters.avatarSrc(a.profile.avatar, 60, 60, true, false))
+            .attr("src", filters.avatarSrc(a.profile, 60, 60, true, false))
             .attr("target", "_blank")
             .attr("class", "ref-info-author-img")
         });
