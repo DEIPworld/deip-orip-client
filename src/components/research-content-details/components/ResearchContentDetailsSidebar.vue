@@ -33,20 +33,27 @@
     <!-- ### END Draft Actions Section ### -->
 
     <!-- ### START Research Content ECI Section ### -->
-    <div v-if="isPublished" class="py-4">
-      <div class="sidebar-fullwidth"><v-divider></v-divider></div>
-      <div class="subheading bold pt-2">Expertise Contribution Index</div>
-      
-      <div class="pt-2">
-        <div v-for="(eci, index) in eciList" :key="index" class="legacy-row align-center legacy-justify-between eci-item c-ph-2" :class="index === 0 ? '' : 'c-mt-1'">
-          <div class="grey--text">ECI</div>
-          <div class="c-pv-2 eci-label">
-            {{ eci.disciplineName }}: {{ eci.value }}
-          </div>
+        <div v-if="isPublished" class="py-4">
+            <div class="sidebar-fullwidth"><v-divider></v-divider></div>
+            <div class="subheading bold py-2">Expertise Contribution Index</div>
+            
+            <v-layout
+              v-for="eci of eciList"
+              column
+              tag="div"
+              :key="eci.disciplineName"
+              justify-space-between
+              class="expertise px-1 my-2"
+            >
+              <v-layout justify-space-between class="">
+                  <div class="blue--text text--accent-4 bold">TOP <span class="font-weight-bold">{{getResearchContentEciPercentile(eci)}}</span>%</div>
+                  <div class="grey--text">ECI {{ eci.value }}</div>
+              </v-layout>
+              <v-divider class="expertise__divider" />
+              <div class="expertise__disc-name pt-1">{{ eci.disciplineName }}</div>
+            </v-layout>
         </div>
-      </div>
-    </div>
-      <!-- ### END Research Content ECI Section ### -->
+        <!-- ### END Research Content ECI Section ### -->
     <div class="sidebar-fullwidth"><v-divider></v-divider></div>
       
     <v-dialog v-model="requestExpertReviewDialog.isShown" persistent max-width="600px">
@@ -484,6 +491,10 @@ export default {
         this.requestExpertReviewDialog.isRequestingReview = false;
         this.requestExpertReviewDialog.isShown = false;
       });
+    },
+
+    getResearchContentEciPercentile() {
+      return 10;
     }
   }
 };
@@ -508,4 +519,20 @@ export default {
   .author-checkbox {
     max-height: 30px !important;
   }
+
+  .expertise {
+    background: #EBF5FE;
+    border: 1px solid #8FC3F7;
+    box-sizing: border-box;
+    border-radius: 2px;
+    font-family: Muli;
+
+    &__disc-name {
+        font-weight: 600;
+    }
+
+    &__divider {
+        border-color: #8FC3F7;
+    }
+}
 </style>

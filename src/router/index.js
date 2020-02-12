@@ -18,6 +18,7 @@ import AgencyProgramDetails from '@/components/agency-program-details/AgencyProg
 import CreateResearchGroup from '@/components/research-group-create/CreateResearchGroup';
 import ResearchGroupDetails from '@/components/research-group-details/ResearchGroupDetails';
 import ResearchGroupWallet from '@/components/research-group-wallet/ResearchGroupWallet';
+import ResearchGroupSettings from '@/components/research-group-settings/ResearchGroupSettings';
 
 import ResearchFeed from '@/components/research-feed/ResearchFeed';
 import ResearchDetails from '@/components/research-details/ResearchDetails';
@@ -35,8 +36,10 @@ import CreateTokenSale from '@/components/token-sale-create/CreateTokenSale';
 import ResearchContentReferences from '@/components/research-content-details/ResearchContentReferences';
 
 import UserDetails from '@/components/user-details/UserDetails';
+import UserExpertiseDetails from '@/components/user-details/UserExpertiseDetails';
 import UserWallet from '@/components/user-wallet/components/UserWallet';
 import UserWalletOld from '@/components/user-wallet/components/UserWalletOld';
+import UserSettings from '@/components/user-settings/UserSettings';
 
 import ClaimUserExpertiseDetails from '@/components/claim-expertise-details/ClaimUserExpertiseDetails';
 import ClaimUserExpertiseList from '@/components/claim-expertise-list/ClaimUserExpertiseList';
@@ -47,10 +50,7 @@ import CreateAccountTestNet from '@/components/auth/CreateAccountTestNet';
 import VotingForBlockProducers from '@/components/voting-for-block-producers/VotingForBlockProducers';
 import CreateFundingOpportunityAnnouncement from '@/components/funding-opportunity-announcement-create/CreateFundingOpportunityAnnouncement';
 import InvestorDashboard from '@/components/investor-dashboard/InvestorDashboard';
-import UserSettings from '@/components/user-settings/UserSettings'
-import ResearchGroupSettings from '@/components/research-group-settings/ResearchGroupSettings'
-
-
+import ReviewSetup from '@/components/review-setup/ReviewSetup'
 
 import store from './../store/index';
 import usersService from './../services/http/users';
@@ -256,7 +256,11 @@ const router = new Router({
 				loadPage(loadPagePromise, next);
 			}
 		})
-		}, {
+	}, {
+		path: '/eci-model-setup',
+		name: 'ReviewSetup',
+		component: ReviewSetup
+	}, {
 			path: '/:research_group_permlink/research/:research_permlink/:content_permlink/references',
 			name: 'ResearchContentReferences',
 			component: preliminaryDataLoader(ResearchContentReferences, {
@@ -320,7 +324,18 @@ const router = new Router({
 				loadPage(loadPagePromise, next);
 			}
 		})
-	},{
+		}, {
+			path: '/user-details/:account_name/expertise',
+			name: 'UserExpertiseDetails',
+			component: preliminaryDataLoader(UserExpertiseDetails, {
+				beforeEnter: (to, from, next) => {
+					let loadPagePromise = store.dispatch('userDetails/loadAccountExpertiseDetailsPage', {
+						username: decodeURIComponent(to.params.account_name)
+					});
+					loadPage(loadPagePromise, next);
+				}
+			})
+		}, {
 		path: '/user-details/:account_name/user-settings',
 		name: 'UserSettings',
 		component: preliminaryDataLoader(UserSettings, {

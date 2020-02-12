@@ -382,7 +382,7 @@ export default {
         .text(d => { return true ? `Access granted` : `No access`; })
 
       let contentAccessIcon = contentAccessItem.append("xhtml:img")
-        .attr("src", d => { return true ? `/static/unlocked.png` : `/static/locked.png` })
+        .attr("src", d => { return true ? `/assets/img/unlocked.png` : `/assets/img/locked.png` })
         .attr("class", "ref-info-access-icon");
 
 

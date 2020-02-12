@@ -21,7 +21,7 @@ const state = {
     expertsList: [],
     researchContentReferencesGraph: [],
     contentProposal: undefined,
-
+    eciHistoryByDiscipline: {},
     contentRef: null,
 
     isLoadingResearchContentVotes: undefined,
@@ -106,15 +106,19 @@ const getters = {
         return isMember;
     },
 
-    isCreatingReviewAvailable(state, getters, rootState, rootGetters) {
+    userHasReview(state, getters, rootState, rootGetters) {
         let user = rootGetters['auth/user'];
         let userHasReview = getters.contentReviewsList.some(r => r.author.account.name === user.username);
-        return !getters.isResearchGroupMember && !userHasReview && getters.userHasResearchExpertise && getters.isPublished;
+        return userHasReview;
     },
 
     userHasResearchExpertise(state, getters, rootState, rootGetters) {
         let userExperiseList = rootGetters['auth/userExperise'];
         return userExperiseList.some(exp => state.research.disciplines.some(d => d.id == exp.discipline_id));
+    },
+
+    isCreatingReviewAvailable(state, getters, rootState, rootGetters) {
+        return !getters.isResearchGroupMember && !getters.userHasReview && getters.userHasResearchExpertise && getters.isPublished;
     },
 
     isSavingDraftAvailable(state, getters, rootState, rootGetters) {
@@ -163,6 +167,71 @@ const getters = {
         }
 
         return { nodes, links };
+    },
+
+    eciHistoryByDiscipline: (state, getters) => {
+        return (disciplineId) => {
+            let records = state.eciHistoryByDiscipline[disciplineId];
+            if (!records) {
+                return null;
+            }
+
+            let researchGroup = state.group;
+            let research = state.research;
+            let researchContent = state.content;
+            let typeInfo = researchService.getResearchContentType(researchContent.content_type);
+
+            return records.map(record => {
+
+                if (record.action == 'review') {
+                    let review = state.contentReviewsList.find(review => review.id == record.actionObjectId);
+
+                    let parser = new DOMParser();
+                    let html = parser.parseFromString(review.content, 'text/html');
+                    let allElements = Array.from(html.all);
+                    let bodyIdx = allElements.findIndex(el => el.tagName == 'BODY');
+                    let headerEl = allElements[bodyIdx + 1];
+                    let title = headerEl.innerHTML;
+
+                    let link = {
+                        name: "ResearchContentReview",
+                        params: {
+                            research_group_permlink: decodeURIComponent(researchGroup.permlink),
+                            research_permlink: decodeURIComponent(research.permlink),
+                            content_permlink: decodeURIComponent(researchContent.permlink),
+                            review_id: review.id
+                        }
+                    }
+                    return { ...record, actionText: typeInfo && typeInfo.text ? `${typeInfo.text} Reviewed` : record.actionText, meta: { title, review, link } };
+
+                } else if (record.action == 'vote_for_review') {
+                    let reviewVotes = [].concat.apply([], state.contentReviewsList.map(review => review.votes));
+                    let reviewVote = reviewVotes.find(vote => vote.id == record.actionObjectId);
+                    let review = state.contentReviewsList.find(review => review.id == reviewVote.review_id);
+
+                    let parser = new DOMParser();
+                    let html = parser.parseFromString(review.content, 'text/html');
+                    let allElements = Array.from(html.all);
+                    let bodyIdx = allElements.findIndex(el => el.tagName == 'BODY');
+                    let headerEl = allElements[bodyIdx + 1];
+                    let title = headerEl.innerHTML;
+
+                    let link = {
+                        name: "ResearchContentReview",
+                        params: {
+                            research_group_permlink: decodeURIComponent(researchGroup.permlink),
+                            research_permlink: decodeURIComponent(research.permlink),
+                            content_permlink: decodeURIComponent(researchContent.permlink),
+                            review_id: review.id
+                        }
+                    }
+                    return { ...record, meta: { title, review, reviewVote, link } };
+
+                } else if (record.action == 'init') {
+                    return { ...record, actionText: typeInfo && typeInfo.text ? `${typeInfo.text} Uploaded` : record.actionText, meta: { title: researchContent.title, researchContent, link: null } };
+                }
+            });
+        }
     }
 }
 
@@ -335,22 +404,40 @@ const actions = {
         deipRpc.api.getReviewsByContentAsync(researchContentId)
             .then(items => {
                 reviews.push(...items);
-
                 return Promise.all([
-                    Promise.all(
-                        reviews.map(item => deipRpc.api.getReviewVotesByReviewIdAsync(item.id))
-                    ),
+                    Promise.all(reviews.map(item => deipRpc.api.getReviewVotesByReviewIdAsync(item.id))),
                     getEnrichedProfiles(reviews.map(r => r.author))
                 ]);
-            }, (err) => {console.log(err)})
-            .then(([reviewVotes, users]) => {
-                reviews.forEach((review, i) => {
+            }, (err) => { console.log(err) })
+            .then(([votes, users]) => {
+                let voters = [];
+                for (let i = 0; i < reviews.length; i++) {
+                    let review = reviews[i];
                     review.author = users.find(u => u.account.name == review.author);
-                    review.votes = reviewVotes[i];
-                });
 
+                    let reviewVotes = votes[i];
+                    review.votes = reviewVotes;
+
+                    for (let j = 0; j < reviewVotes.length; j++) {
+                        let vote = reviewVotes[j];
+                        if (!voters.some(v => v == vote.voter)) {
+                            voters.push(vote.voter)
+                        }
+                    }
+                }
+
+                return getEnrichedProfiles(voters);
+            }, (err) => { console.log(err) })
+            .then((users) => {
+                for (let i = 0; i < reviews.length; i++) {
+                    let review = reviews[i];
+                    for (let j = 0; j < review.votes.length; j++) {
+                        let vote = review.votes[j];
+                        vote.voterProfile = users.find(u => vote.voter == u.account.name);
+                    }
+                }
                 commit('SET_RESEARCH_CONTENT_REVIEWS_LIST', reviews);
-            }, (err) => {console.log(err)})
+            })
             .finally(() => {
                 commit('SET_RESEARCH_CONTENT_REVIEWS_LOADING_STATE', false)
                 if (notify) notify();
@@ -358,9 +445,19 @@ const actions = {
     },
 
     async loadResearchContentReferences({ state, dispatch, commit }, { researchContentId, notify }) {
-        let graph = await researchService.loadResearchContentReferencesGraph(researchContentId);
+        let graph = await researchService.getResearchContentReferencesGraph(researchContentId);
         commit('SET_RESEARCH_CONTENT_REFERENCES_GRAPH_DATA', graph);
         if (notify) notify();
+    },
+
+    loadResearchContentEciHistoryRecords({ state, dispatch, commit }, { researchContentId, disciplineId, notify }) {
+        return researchService.getResearchContentEciHistoryRecords(researchContentId, disciplineId)
+            .then((records) => {
+                commit('SET_RESEARCH_CONTENT_ECI_HISTORY_BY_DISCIPLINE', { disciplineId, records });
+            }, (err) => { console.log(err) })
+            .finally(() => {
+                if (notify) notify();
+            })
     },
 
     setDraftAuthors({ state, commit, dispatch }, authors) {
@@ -374,7 +471,7 @@ const actions = {
     async loadResearchContentMetadata({ state, commit, dispatch }, 
         { group_permlink, research_permlink, content_permlink,  notify }) {
 
-            commit('RESET_METADATA_STATE');
+            commit('RESET_STATE');
 
             try {
                 const dgp = await getDynamicGlobalProperties();
@@ -630,15 +727,18 @@ const mutations = {
         Vue.set(state, 'group', value)
     },
 
-    ['RESET_STATE'](state) {},
-
-    ['RESET_METADATA_STATE'](state) {
-        Vue.set(state, 'contentMetadata', null)
-    },
-
     ['SET_RESEARCH_CONTENT_REFERENCES_GRAPH_DATA'](state, graph) {
         Vue.set(state, 'researchContentReferencesGraph', graph);
     },
+
+    ['SET_RESEARCH_CONTENT_ECI_HISTORY_BY_DISCIPLINE'](state, { disciplineId, records }) {
+        Vue.set(state.eciHistoryByDiscipline, disciplineId, records)
+    },
+
+    ['RESET_STATE'](state) {
+        Vue.set(state, "eciHistoryByDiscipline", {});
+        Vue.set(state, 'contentMetadata', null);
+    }
 }
 
 const namespaced = true;

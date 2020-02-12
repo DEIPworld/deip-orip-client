@@ -127,8 +127,8 @@ Vue.filter('researchTokenized', (value) => {
 Vue.filter('reviewContent', (value) => {
   try {
     let json = JSON.parse(value);
-    if (json.reviewHtmlContent) {
-      return json.reviewHtmlContent;
+      if (json.html) {
+          return json.html;
     }
     return value;
   } catch (e) {
