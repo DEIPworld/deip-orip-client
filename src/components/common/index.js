@@ -39,15 +39,23 @@ Vue.component('squared-rating', SquaredRating);
 import ToggleText from './components/ToggleText';
 Vue.component('toggle-text', ToggleText);
 
-import MilestoneStepper from './components/milestone-stepper/MilestoneStepper';
-import Milestone from './components/milestone-stepper/Milestone';
+import MilestoneStepper from './components/research/milestone-stepper/MilestoneStepper';
+import Milestone from './components/research/milestone-stepper/Milestone';
 Vue.component('milestone-stepper', MilestoneStepper);
 Vue.component('milestone', Milestone);
 
-import ResearchProjectTile from './research/components/ResearchProjectTile';
+import ResearchProjectTile from './components/research/ResearchProjectTile';
 Vue.component('research-project-tile', ResearchProjectTile);
 
-import TopResearchLabel from './research/components/TopResearchLabel';
+import TopResearchLabel from './components/research/TopResearchLabel';
 Vue.component('top-research-label', TopResearchLabel);
+
+import ReviewTile from './components/review/ReviewTile';
+Vue.component('review-tile', ReviewTile);
+
+import ReviewAssessment from './components/review/review-assessment/ReviewAssessment';
+import ReviewAssessmentSquaredRating from './components/review/review-assessment/ReviewAssessmentSquaredRating';
+Vue.component('review-assessment', ReviewAssessment);
+Vue.component('review-assessment-squared-rating', ReviewAssessmentSquaredRating);
 
 import './filters/index';

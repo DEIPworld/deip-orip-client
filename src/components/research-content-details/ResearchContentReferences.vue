@@ -5,7 +5,7 @@
     <v-layout class="pa-5" row wrap>
       <v-flex xs12 sm12 md12 lg12 xl12>
 
-        <v-layout row wrap class="pt-5">
+        <v-layout row wrap>
 
           <v-flex xs12 sm12 md8 lg8 xl8>
             <v-layout class="full-width" column>
@@ -54,7 +54,7 @@
                           <span class="body-2">Data Type:</span>
                         </v-flex>
                         <v-flex xs8>
-                          <span>{{getContentType(researchContent.content_type).text}}</span>
+                          <span>{{getResearchContentType(researchContent.content_type).text}}</span>
                         </v-flex>
                       </v-layout>
                       
@@ -212,7 +212,7 @@
 <script>
 import { mapGetters } from 'vuex';
 import deipRpc from '@deip/deip-oa-rpc-client';
-import { getContentType } from './../../services/ResearchService'
+import { getResearchContentType } from './../../services/ResearchService'
 import crypto from '@deip/lib-crypto'
 
 export default {
@@ -377,7 +377,7 @@ export default {
   },
 
   methods: {
-    getContentType,
+    getResearchContentType,
     mockSignature(id) {
       return crypto.hexify(crypto.sha256(new TextEncoder("utf-8").encode("" + id).buffer));
     }

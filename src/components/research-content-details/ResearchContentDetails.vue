@@ -32,29 +32,115 @@
           <v-flex grow>
             <research-content-details-package v-if="isFilePackageContent"></research-content-details-package>
             <research-content-details-dar v-if="isDarContent" :contentRef="contentRef" :researchGroupMembers="membersList"></research-content-details-dar>
-            <div v-if="isPublished && contentReviewsList.length">
-              <div class="sidebar-fullwidth"><v-divider></v-divider></div>
-              <div id="reviews" class="reviews-container">
-                <div class="c-pt-2 title">Reviews: {{ contentReviewsList.length }}</div>
+            <div class="px-5 py-4" v-if="isPublished">
+              <v-layout row align-baseline>
+                <v-flex grow>
+                  <div class="half-bold title">Expertise Contribution Index</div>
+                </v-flex>
+                <v-flex shrink>
+                  <v-select
+                    class="my-0 py-0"
+                    v-model="selectedEciDisciplineId"
+                    :items="research.disciplines"
+                    item-text="name"
+                    item-value="id"
+                    label="Discipline"
+                    outline
+                    dense
+                    @change="selectEciDiscipline()"
+                    :disabled="eciHistoryRecordsTable.loading"
+                  ></v-select>
+                </v-flex>
+              </v-layout>
+
+              <v-layout row v-if="eciDisciplineHistoryRecordsChart">
+                <div class="full-width">
+                  <GChart
+                    type="LineChart"
+                    :settings="{ packages: ['corechart'] }"
+                    :data="eciDisciplineHistoryRecordsChart.data"
+                    :options="eciDisciplineHistoryRecordsChart.options"
+                  />
+                </div>
+              </v-layout>
+
+              <v-layout row v-if="hasEciDisciplineHistoryRecords">
+                <div class="full-width">
+                  <v-data-table
+                    :headers="eciHistoryRecordsTable.headers"
+                    :items="eciHistoryRecordsTable.items"
+                    class="elevation-0 mt-3"
+                    disable-initial-sort
+                    :loading="eciHistoryRecordsTable.loading"
+                    :rows-per-page-items="[5, 10]"
+                    :pagination.sync="eciHistoryRecordsTable.pagination"
+                    :total-items="eciHistoryRecordsTable.totalItems"
+                  >
+                    <template v-slot:items="props">
+                      <td>
+                        <v-chip :color="eciHistoryRecordsTable.actionsColorMap[props.item.action]" text-color="white">
+                          <span class="bold">{{ props.item.actionText.toUpperCase() }}</span>
+                        </v-chip>
+                      </td>
+                      <td>
+                        <router-link v-if="props.item.meta.link" class="a" :to="props.item.meta.link">{{props.item.meta.title}}</router-link>
+                        <span v-else class="body-2">{{props.item.meta.title}}</span>
+                      </td>
+                      <td class="text-xs-center">{{ moment(props.item.timestamp).format('D MMM YYYY') }}</td>
+                      <td class="text-xs-center">
+                        <div class="half-bold" :class="{ 'eci-up': props.item.delta > 0, 'eci-down': props.item.delta < 0 }">{{ props.item.delta }}</div>
+                      </td>
+                      <td class="text-xs-center">
+                        <div>{{ props.item.newAmount }}</div>
+                      </td>
+                    </template>
+                  </v-data-table>
+                </div>
+              </v-layout>
+            </div>
+            <v-divider class="mx-5"></v-divider>
+
+            <!-- START Research Content Reviews section -->
+            <div v-if="isPublished && contentReviewsList.length" class="px-5 py-4">
+              <div id="reviews">
+                <div class="py-2 title">Reviews: {{ contentReviewsList.length }}</div>
                 <div class="py-2">
-                  <review-list-item class="my-4" v-for="(review, i) in contentReviewsList" :review="review" :key="i"></review-list-item>
+                  <div v-for="(review, i) in contentReviewsList" :key="`review-${i}`">
+                    <review-tile class="my-2" :review="review" :researchContentType="content.content_type"></review-tile>
+                    <v-divider v-if="i != contentReviewsList.length - 1"></v-divider>
+                  </div>
                 </div>
               </div>
             </div>
-            <div v-else-if="isPublished && !contentReviewsList.length">
-              <div class="sidebar-fullwidth"><v-divider></v-divider></div>
-              <div id="reviews" class="subheading text-align-center no-reviews-container">
-                <span>There are no reviews for this {{ getContentType(content.content_type).text }} yet.</span>
-                <div>
-                  <span v-if="isCreatingReviewAvailable">
-                    <router-link class="a" :to="{name: 'ResearchContentAddReview', params: {
-                      group_permlink: decodeURIComponent(research.group_permlink),
-                      research_permlink: decodeURIComponent(research.permlink),
-                      content_permlink: decodeURIComponent(content.permlink),
-                    }}">Add your review</router-link> to make a contribution to the research.
-                  </span>
-                </div>
-              </div>
+
+            <div v-if="isPublished && !isResearchGroupMember" class="px-5 pt-2 pb-5">
+              <v-card class="py-4 px-5">
+                <v-layout id="reviews" class="py-2" row>
+                  <v-flex shrink align-self-center pr-5>
+                    <img src="/assets/img/add-review.png" />
+                  </v-flex>
+                  <v-flex grow align-self-center pl-5>
+                    <div class="pb-3">
+                      <div v-if="!contentReviewsList.length" class="pb-1 subheading half-bold">There are no reviews for this material yet</div>
+                      <div v-if="userHasResearchExpertise && !userHasReview">You will get <span class="body-2">approximately 3000 ECI reward in {{userRelatedExpertise.map(exp => exp.discipline_name).join(", ")}}</span> for your contribution to this project</div>
+                      <div v-else-if="userHasResearchExpertise && userHasReview" class="pb-1 subheading half-bold">You have reviewed this material already</div>
+                      <div v-else-if="!userHasResearchExpertise">Users with expertise in <span class="body-2">{{research.disciplines.map(d => d.name).join(", ")}}</span> can review this project only</div>
+                    </div>
+                    <div style="width: 200px">
+                      <v-btn :to="{ 
+                        name: 'ResearchContentAddReview', 
+                        params: {
+                          group_permlink: decodeURIComponent(research.group_permlink),
+                          research_permlink: decodeURIComponent(research.permlink),
+                          content_permlink: decodeURIComponent(content.permlink),
+                        }}" 
+                        :disabled="!isCreatingReviewAvailable" block color="primary" class="ma-0">
+                        Add review
+                      </v-btn>
+                    </div>
+                  </v-flex>
+                </v-layout>
+              </v-card>
             </div>
           </v-flex>
         </v-layout>
@@ -170,10 +256,11 @@
 <script>
 import { mapGetters } from 'vuex';
 import deipRpc from '@deip/deip-oa-rpc-client';
-import { contentTypesList, getContentType } from './../../services/ResearchService';
+import { contentTypesList, getResearchContentType } from './../../services/ResearchService';
 import { createContentProposal } from './../../services/ProposalService';
 import contentHttpService from './../../services/http/content';
-import searchHttpService from './../../services/http/search'
+import searchHttpService from './../../services/http/search';
+import moment from 'moment';
 import { bus } from './../../main';
 
 export default {
@@ -188,6 +275,29 @@ export default {
         contentTypesList: contentTypesList,
         isOpen: false,
         isLoading: false
+      },
+
+      selectedEciDisciplineId: null,
+      eciHistoryRecordsTable: {
+        headers: [
+          { text: 'Type', align: 'left', sortable: false },
+          { text: 'Title', align: 'left', sortable: false },
+          { text: 'Date', align: 'center', sortable: false },
+          { text: 'Reward ECI', align: 'center', sortable: false },
+          { text: 'Total ECI', align: 'center', sortable: false },
+        ],
+        actionsColorMap: {
+          'review': '#161F63',
+          'vote_for_review': '#5ABAD1',
+          'init': '#8DDAB3',
+        },
+        pagination: {
+          page: 1,
+          rowsPerPage: 5,
+        },
+        items: [],
+        totalItems: 0,
+        loading: false,
       }
     }
   },
@@ -195,6 +305,7 @@ export default {
   computed:{
     ...mapGetters({
       user: 'auth/user',
+      userExperise: 'auth/userExperise',
       content: 'rcd/content',
       research: 'rcd/research',
       membersList: 'rcd/membersList',
@@ -208,11 +319,104 @@ export default {
       isResearchGroupMember: 'rcd/isResearchGroupMember',
       isCreatingReviewAvailable: 'rcd/isCreatingReviewAvailable',
       userHasResearchExpertise: 'rcd/userHasResearchExpertise',
+      userHasReview: 'rcd/userHasReview',      
       isSavingDraftAvailable: 'rcd/isSavingDraftAvailable'
     }),
 
     isCreatingProposalAvailable(state, getters, rootState, rootGetters) {
       return this.proposeContent.title && this.proposeContent.type && this.proposeContent.authors.length;
+    },
+
+    userRelatedExpertise() {
+      return this.userExperise.filter(exp => this.research.disciplines.some(d => d.id == exp.discipline_id))
+    },
+
+    hasEciDisciplineHistoryRecords() {
+      let records = this.$store.getters['rcd/eciHistoryByDiscipline'](this.selectedEciDisciplineId);
+      return records != null && records.length != 0;
+    },
+
+    eciDisciplineHistoryRecordsChart() {
+      let disciplineId = this.selectedEciDisciplineId;
+      let researchContentId = this.content.id;
+      let records = this.$store.getters['rcd/eciHistoryByDiscipline'](disciplineId);
+      if (!records) return null;
+
+      const getPointTooltipHtml = (eci, action, delta) => {
+        let assessmentType = delta >= 0 ? "Approved" : "Rejected";
+        let assessmentClass = delta >= 0 ? "green--text text--lighten-4" : "red--text text--lighten-4";
+        return `
+          <div style="width: 100px; padding: 5px; background: #828282; border-radius: 2px; opacity: 0.9">
+              <div class="bold white--text text-capitalize">${action}</div>
+              ${eci != 0 ? `<div class="${assessmentClass} bold">${assessmentType}</div>` : ''} 
+              ${delta != 0 ? `<div class="white--text">${delta > 0 ? '+' : '-'} ${delta}</div>` : ''}
+          </div>
+        `;
+      };
+
+      const data = records.length ? 
+        records.map((record, i) => {
+          let date = new Date(record.timestamp);
+          let value = record.newAmount;
+          let delta = record.delta;
+          let actionText = record.actionText;
+          let tooltip = getPointTooltipHtml(value, actionText, delta);
+          return [
+            date,
+            value,
+            tooltip
+          ]
+      }) : [
+        [
+          moment(this.content.created_at).toDate(),
+          0,
+          `<div style="width: 100px; padding: 5px; background: #828282; border-radius: 2px; opacity: 0.9">
+              <div class="bold white--text text-capitalize">Material Uploaded</div>
+          </div>`
+        ]
+      ]
+
+      const now = moment().toDate();
+      const lastEciValue = records.length ? records[records.length - 1].newAmount : 0;
+
+      return {
+        data: [
+          [
+            "Date",
+            "Value",
+            { type: "string", role: "tooltip", p: { html: true } }
+          ],
+          ...data,
+          [
+            now,
+            lastEciValue,
+            `<div style="width: 100px; padding: 5px; background: #828282; border-radius: 2px; opacity: 0.9">
+                <div class="bold white--text text-capitalize">Now</div>
+            </div>`
+          ]
+        ],
+        options: {
+          title: "",
+          backgroundColor: {
+            fill: "#ffffff"
+          },
+          legend: {
+            position: "none"
+          },
+          chartArea: {
+            right: 0,
+            top: "10%",
+            width: "90%"
+          },
+          tooltip: { isHtml: true },
+          explorer: {
+            actions: ["dragToZoom", "rightClickToReset"],
+            axis: "horizontal",
+            keepInBounds: true,
+            maxZoomIn: 4.0
+          }
+        }
+      };
     }
   },
   
@@ -324,23 +528,45 @@ export default {
       this.$store.dispatch('rcd/setDraftReferences', refs);
     },
 
-    getContentType
+    selectEciDiscipline() {
+      let disciplineId = this.selectedEciDisciplineId;
+      let researchContentId = this.content.id;
+
+      this.eciHistoryRecordsTable.loading = true;
+      let cachedRecords = this.$store.getters['rcd/eciHistoryByDiscipline'](disciplineId);
+      if (cachedRecords == null) {
+        this.$store.dispatch('rcd/loadResearchContentEciHistoryRecords', { researchContentId, disciplineId })
+          .then(() => {
+            let records = this.$store.getters['rcd/eciHistoryByDiscipline'](disciplineId);
+            this.eciHistoryRecordsTable.items = records.reverse();
+            this.eciHistoryRecordsTable.pagination.page = 1;
+            this.eciHistoryRecordsTable.loading = false;
+          });
+      } else {
+        this.eciHistoryRecordsTable.items = cachedRecords.reverse();
+        this.eciHistoryRecordsTable.pagination.page = 1;
+        this.eciHistoryRecordsTable.loading = false;
+      }
+    },
+
+    getResearchContentType
   },
 
   created() {
-
+    if (this.isPublished) {
+      let discipline = this.research.disciplines[0];
+      this.selectedEciDisciplineId = discipline.id;
+      this.selectEciDiscipline(discipline.id);
+    }
   }
 };
 </script>
 
 <style lang="less" scoped>
-    .reviews-container {
-        margin: 5%;
-    }
-    .no-reviews-container {
-        margin: auto;
-        width: 50%;
-        margin-top: 5%;
-        margin-bottom: 5%;
-    }
+.eci-up {
+  background-color: #b8ddc8;
+}
+.eci-down {
+  background-color: #ffbdbd;
+}
 </style>

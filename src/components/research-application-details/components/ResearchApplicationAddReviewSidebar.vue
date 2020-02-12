@@ -80,13 +80,13 @@
 					const applicationReviewEditor = this.$store.getters['rad/applicationReviewEditor'];
 					this.isLoading = true;
 					applicationReviewEditor.save()
-						.then((reviewHtmlContent) => {
+						.then((html) => {
 							return deipRpc.broadcast.makeReviewForApplicationAsync(
 								this.user.privKey,
 								this.user.username,
 								this.application.id,
 								this.isPositive,
-								reviewHtmlContent
+								html
 							)
 						})
 						.then((data) => {

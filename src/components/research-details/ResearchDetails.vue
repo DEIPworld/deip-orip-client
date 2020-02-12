@@ -1,8 +1,9 @@
 <template>
   <base-page-layout>
-    <div slot="content" class="full-width full-height">
-      <v-layout
-        row
+    <v-card slot="content" class="full-width full-height">
+      <!-- Header -->
+      <v-layout 
+        row 
         class="rd-header full-height pa-5"
         :style="{ background: 'linear-gradient(0deg, rgba(0, 0, 0, 0.4) 70%, transparent), url('+ $options.filters.researchBackgroundSrc(research.id) +'), 100%, 100%, no-repeat'}"
       >
@@ -21,12 +22,12 @@
                     small
                     outline
                     color="white"
-                    :to="{
+                    :to="{  
                       name: 'ResearchEdit',
                       params: {
                         research_group_permlink: encodeURIComponent(research.group_permlink),
                         research_permlink: encodeURIComponent(research.permlink)
-                      }
+                      } 
                     }"
                   >Edit</v-btn>
                 </span>
@@ -51,6 +52,7 @@
           </div>
         </v-flex>
       </v-layout>
+
       <v-layout row wrap>
         <v-flex lg12>
           <div v-if="!isResearchGroupMember" class="text-xs-right pa-3">
@@ -75,17 +77,24 @@
             >Unfollow</v-btn>
           </div>
         </v-flex>
-        <v-flex lg8>
+
+        <!-- Body -->
+        <v-flex lg9 class="px-5">
           <v-layout v-if="isTokenSaleSectionAvailable" class="my-5">
-            <v-flex lg1>
-              <v-layout justify-end class="pr-3">
-                <v-icon large color="grey lighten-2">mdi-cash-usd-outline</v-icon>
-              </v-layout>
-            </v-flex>
-            <v-flex lg6>
-              <v-layout wrap>
-                <v-flex lg12 class="rd-block-header">Fundrising</v-flex>
-                <v-flex lg12 v-if="isActiveTokenSale || isInactiveTokenSale">
+            <v-flex lg7>
+              <v-layout column>
+                <v-layout row>
+                  <v-flex grow>
+                    <v-layout>
+                      <div class="pr-3"><v-icon large color="grey lighten-2">mdi-cash-usd-outline</v-icon></div>
+                      <div class="rd-block-header align-self-center">Fundrising</div>
+                    </v-layout>
+                  </v-flex>
+                  <v-flex shrink>
+                  </v-flex>
+                </v-layout>
+
+                <div v-if="isActiveTokenSale || isInactiveTokenSale">
                   <v-layout class="pt-3">
                     <v-flex lg3 class="bold">Start:</v-flex>
                     <v-flex lg9 class="pl-2">
@@ -132,12 +141,9 @@
                     <v-flex lg3 class="bold">Max:</v-flex>
                     <v-flex lg9 class="pl-2">${{fromAssetsToFloat(tokenSale.hard_cap)}}</v-flex>
                   </v-layout>
-                </v-flex>
-                <v-flex
-                  lg12
-                  v-if="isMissingTokenSale && isResearchGroupMember && research"
-                  class="pt-3"
-                >
+                </div>
+
+                <div v-if="isMissingTokenSale && isResearchGroupMember && research" class="pt-3">
                   <v-btn
                     round
                     outline
@@ -148,9 +154,10 @@
                       params: { research_group_permlink: research.group_permlink, research_permlink: research.permlink }
                     }"
                   >Start fundraise</v-btn>
-                </v-flex>
+                </div>
               </v-layout>
             </v-flex>
+
             <v-flex lg5 v-if="isActiveTokenSale">
               <v-layout justify-end class="rd-cap-value">${{currentCap}}</v-layout>
               <v-layout justify-end align-center class="py-2">
@@ -208,7 +215,7 @@
                       <iframe
                         height="100%"
                         width="100%"
-                        src="/assets/img/form-of-SAFT-for-token-pre-sale.pdf"
+                        :src="'./../../../static/form-of-SAFT-for-token-pre-sale.pdf'"
                       ></iframe>
                     </v-card-text>
                     <v-card-actions class="pa-0">
@@ -231,16 +238,22 @@
               </v-layout>
             </v-flex>
           </v-layout>
+
           <v-layout v-if="investors.length || isActiveTokenSale" class="my-5">
-            <v-flex lg1>
-              <v-layout justify-end class="pr-3">
-                <v-icon large color="grey lighten-2">mdi-account-box</v-icon>
-              </v-layout>
-            </v-flex>
-            <v-flex lg6>
-              <v-layout wrap>
-                <v-flex lg12 class="rd-block-header">Investors - {{investors.length}}</v-flex>
-                <v-flex lg12>
+            <v-flex lg7>
+              <v-layout column>
+                <v-layout row class="pb-4">
+                  <v-flex grow>
+                    <v-layout>
+                      <div class="pr-3"><v-icon large color="grey lighten-2">mdi-account-box</v-icon></div>
+                      <div class="rd-block-header align-self-center">Investors: {{investors.length}}</div>
+                    </v-layout>
+                  </v-flex>
+                  <v-flex shrink>
+                  </v-flex>
+                </v-layout>
+
+                <div>
                   <v-layout justify-start class="mt-2">
                     <div class="rd-investment-info">
                       <span class="rd-investment-info__value">${{investmentsAmount}}</span>
@@ -267,24 +280,30 @@
                       class="mr-1"
                     ></platform-avatar>
                   </v-layout>
-                </v-flex>
+                </div>
               </v-layout>
             </v-flex>
           </v-layout>
-          <v-divider v-if="isTokenSaleSectionAvailable || investors.length" />
-          <v-layout v-if="timeline.length" class="my-5">
-            <v-flex lg1>
-              <v-layout justify-end class="pr-3">
-                <v-icon large color="grey lighten-2">mdi-flag</v-icon>
+
+          <v-divider v-if="isTokenSaleSectionAvailable || investors.length"></v-divider>
+          
+          <v-layout row v-if="timeline.length" class="my-5">
+            <v-flex lg8>
+              <v-layout column>
+                <v-layout row>
+                  <v-flex grow>
+                    <v-layout>
+                      <div class="pr-3"><v-icon large color="grey lighten-2">mdi-flag</v-icon></div>
+                      <div class="rd-block-header align-self-center">Project Timeline</div>
+                    </v-layout>
+                  </v-flex>
+                  <v-flex shrink>
+                  </v-flex>
+                </v-layout>
+                <div class="milestone-description pt-3">{{selectedTimelineItem.description}}</div>
               </v-layout>
             </v-flex>
-            <v-flex lg6>
-              <v-layout wrap>
-                <v-flex lg12 class="rd-block-header">Project Timeline</v-flex>
-                <v-flex lg12 class="pt-3">{{selectedTimelineItem.description}}</v-flex>
-              </v-layout>
-            </v-flex>
-            <v-flex lg5>
+            <v-flex lg4>
               <v-layout justify-center>
                 <ul
                   :class="{
@@ -337,16 +356,14 @@
               </v-layout>
             </v-flex>
           </v-layout>
-          <v-layout class="my-5" v-if="contentList.length">
-            <v-flex lg11 offset-lg1>
-              <v-expansion-panel>
+          
+          <v-layout column class="my-4" v-if="contentList.length">
+            <div>
+              <v-expansion-panel class="elevation-0">
                 <v-expansion-panel-content v-for="content of contentList" :key="content.id">
                   <template slot="header">
                     <v-layout align-center v-on:click.stop>
-                      <v-flex
-                        lg2
-                        class="text-capitalize bold"
-                      >{{getContentType(content.content_type).text}}</v-flex>
+                      <v-flex lg2 class="text-capitalize bold">{{getResearchContentType(content.content_type).text}}</v-flex>
                       <v-flex lg8 class="bold">
                         <router-link
                           class="a"
@@ -359,20 +376,6 @@
                             }
                           }"
                         >{{content.title}}</router-link>
-                      </v-flex>
-                      <v-flex lg1 text-lg-center v-show="doesContentHaveReviews(content)">
-                        <v-icon size="14px">chat_bubble</v-icon>
-                        <span
-                          v-show="doesContentHavePositiveReviews(content)"
-                          class="green--text medium"
-                        >{{countContentReviews(content, true)}}</span>
-                        <span
-                          v-show="doesContentHavePositiveReviews(content) && doesContentHaveNegativeReviews(content)"
-                        >/</span>
-                        <span
-                          v-show="doesContentHaveNegativeReviews(content)"
-                          class="red--text medium"
-                        >{{countContentReviews(content, false)}}</span>
                       </v-flex>
                       <v-flex lg1 text-lg-center class="text-xs-center">
                         <v-tooltip top>
@@ -391,6 +394,20 @@
                           </template>
                           <span>Browse references</span>
                         </v-tooltip>
+                      </v-flex>
+                      <v-flex lg1 text-lg-center v-show="doesContentHaveReviews(content)">
+                        <v-icon size="14px">chat_bubble</v-icon>
+                        <span
+                          v-show="doesContentHavePositiveReviews(content)"
+                          class="green--text medium"
+                        >{{countContentReviews(content, true)}}</span>
+                        <span
+                          v-show="doesContentHavePositiveReviews(content) && doesContentHaveNegativeReviews(content)"
+                        >/</span>
+                        <span
+                          v-show="doesContentHaveNegativeReviews(content)"
+                          class="red--text medium"
+                        >{{countContentReviews(content, false)}}</span>
                       </v-flex>
                     </v-layout>
                   </template>
@@ -413,15 +430,15 @@
                   </div>
                 </v-expansion-panel-content>
               </v-expansion-panel>
-            </v-flex>
+            </div>
           </v-layout>
-          <v-layout class="my-5" row wrap v-if="isResearchGroupMember && !research.is_finished">
-            <v-flex lg11 offset-lg1>
-              <v-expansion-panel>
+
+          <v-layout column class="my-4" v-if="isResearchGroupMember && !research.is_finished">
+            <div>
+              <v-expansion-panel class="elevation-0">
                 <v-expansion-panel-content
                   v-for="(draft, index) of contentRefsList.filter(d => !isDraftApproved(d))"
-                  :key="draft._id"
-                >
+                  :key="draft._id">
                   <template slot="header">
                     <v-layout align-center v-on:click.stop>
                       <v-flex lg2 class="text-capitalize bold">Draft {{index + 1}}</v-flex>
@@ -470,191 +487,221 @@
                   </v-card>
                 </v-expansion-panel-content>
               </v-expansion-panel>
-            </v-flex>
-            <v-flex lg11 offset-lg1 class="mt-4">
-              <upload-research-content-file-dialog @onFinish="newContentUploaded" />
-              <v-btn
-                @click="createDarDraft()"
-                :loading="isCreatingDraft"
-                :disabled="isCreatingDraft"
-                block
-                outline
-                color="primary"
-                dark
-              >Use Editor</v-btn>
-            </v-flex>
+            </div>
+
+            <v-layout column class="mt-4">
+              <div><upload-research-content-file-dialog @onFinish="newContentUploaded" /></div>
+              <div class="full-width">
+                <v-btn
+                  @click="createDarDraft()"
+                  :loading="isCreatingDraft"
+                  :disabled="isCreatingDraft"
+                  block
+                  outline
+                  color="primary"
+                  dark
+                >Use Editor</v-btn>
+              </div>
+            </v-layout>
           </v-layout>
+
           <v-divider v-if="contentList.length || (isResearchGroupMember && !research.is_finished)" />
-          <template v-if="eciChart">
-            <v-layout class="my-5">
-              <v-flex lg1>
-                <v-layout justify-end class="pr-3">
-                  <v-icon large color="grey lighten-2">mdi-poll-box</v-icon>
+          
+          <v-layout column class="my-5">
+            <v-layout row align-baseline>
+              <v-flex grow>
+                <v-layout>
+                  <div class="pr-3"><v-icon large color="grey lighten-2">mdi-poll-box</v-icon></div>
+                  <div class="rd-block-header align-self-center">Expertise Contribution Index</div>
                 </v-layout>
               </v-flex>
-              <v-flex lg11>
-                <v-layout wrap>
-                  <v-flex lg12 class="rd-block-header">Expertise Contribution Index</v-flex>
-                  <v-flex lg12>
-                    <v-layout row wrap class="mt-2">
-                      <v-flex
-                        v-for="(eci, index) of eciList"
-                        :key="eci.disciplineName"
-                        justify-space-between
-                        class="px-3 py-2 rd-eci-item clickable"
-                        :class="{
-                          'px-3 py-2 rd-eci-item clickable': true,
-                          'elevation-2 grey lighten-5': index === activeEciChartTabIndex
-                        }"
-                        lg3
-                        @click="activeEciChartTabIndex = index"
-                      >
-                        <v-layout justify-space-between>
-                          <span>{{eci.disciplineName}}</span>
-                          <span class="bold">{{eci.value}}</span>
-                        </v-layout>
-                      </v-flex>
-                      <v-flex lg12>
-                        <GChart
-                          type="LineChart"
-                          :settings="{ packages: ['corechart'] }"
-                          :data="eciChart.data"
-                          :options="eciChart.options"
-                        />
-                      </v-flex>
-                    </v-layout>
-                  </v-flex>
-                </v-layout>
+              <v-flex shrink>
+                <v-select
+                  class="my-0 py-0"
+                  v-model="selectedEciDisciplineId"
+                  :items="research.disciplines"
+                  item-text="name"
+                  item-value="id"
+                  label="Discipline"
+                  outline
+                  dense
+                  @change="selectEciDiscipline()"
+                  :disabled="eciHistoryRecordsTable.loading"
+                ></v-select>
               </v-flex>
             </v-layout>
-            <v-divider />
-          </template>
-          <v-layout class="my-5" v-if="reviews.length">
-            <v-flex lg1>
-              <v-layout justify-end class="pr-3">
-                <v-icon large color="grey lighten-2">mdi-message-reply-text</v-icon>
-              </v-layout>
-            </v-flex>
-            <v-flex lg11>
-              <v-layout wrap>
-                <v-flex lg12>
-                  <v-layout row justify-space-between>
-                    <div class="rd-block-header">Reviews: {{reviewsList.length}}</div>
-                    <div class="half-bold subheading">
-                      Total reviews score:
-                      <span class="bold">{{totalReviewsScore}}</span>
-                      <v-tooltip bottom>
-                        <v-icon slot="activator" small>help</v-icon>
-                        <span>Total score is the result of these 3 scores which has been rounded to the nearest whole value.</span>
+
+            <v-layout row>
+              <div class="full-width" v-if="eciDisciplineHistoryRecordsChart">
+                <GChart
+                  type="LineChart"
+                  :settings="{ packages: ['corechart'] }"
+                  :data="eciDisciplineHistoryRecordsChart.data"
+                  :options="eciDisciplineHistoryRecordsChart.options"
+                />
+              </div>
+            </v-layout>
+
+            <v-layout row v-if="hasEciDisciplineHistoryRecords">
+              <div class="full-width">
+                <v-data-table
+                  :headers="eciHistoryRecordsTable.headers"
+                  :items="eciHistoryRecordsTable.items"
+                  class="elevation-0 mt-3"
+                  disable-initial-sort
+                  :loading="eciHistoryRecordsTable.loading"
+                  :rows-per-page-items="[5, 10]"
+                  :pagination.sync="eciHistoryRecordsTable.pagination"
+                  :total-items="eciHistoryRecordsTable.totalItems"
+                >
+                  <template v-slot:items="props">
+                    <td>
+                      <v-chip :color="eciHistoryRecordsTable.actionsColorMap[props.item.action]" text-color="white">
+                        <span class="bold">{{ props.item.actionText.toUpperCase() }}</span>
+                      </v-chip>
+                    </td>
+                    <td>
+                      <router-link v-if="props.item.meta.link" class="a" :to="props.item.meta.link">{{props.item.meta.title}}</router-link>
+                      <span v-else class="body-2">{{props.item.meta.title}}</span>
+                    </td>
+                    <td class="text-xs-center">{{ moment(props.item.timestamp).format('D MMM YYYY') }}</td>
+                    <td class="text-xs-center">
+                      <div class="half-bold" :class="{ 'eci-up': props.item.delta > 0, 'eci-down': props.item.delta < 0 }">{{ props.item.delta }}</div>
+                    </td>
+                    <td class="text-xs-center">
+                      <div>{{ props.item.newAmount }}</div>
+                    </td>
+                  </template>
+                </v-data-table>
+              </div>
+            </v-layout>
+          </v-layout>
+
+          <v-divider></v-divider>
+
+          <v-layout column class="my-5" v-if="reviews.length">
+            <v-layout row class="pb-4">
+              <v-flex grow>
+                <v-layout>
+                  <div class="pr-3"><v-icon large color="grey lighten-2">mdi-poll-box</v-icon></div>
+                  <div class="rd-block-header align-self-center">Reviews</div>
+                </v-layout>
+              </v-flex>
+              <!-- <v-flex shrink>
+                <div class="half-bold subheading">
+                  Total reviews score:
+                  <span class="bold">{{totalReviewsScore}}</span>
+                  <v-tooltip bottom>
+                    <v-icon slot="activator" small>help</v-icon>
+                    <span>Total score is the result of these 3 scores which has been rounded to the nearest whole number.</span>
+                  </v-tooltip>
+                </div>
+              </v-flex> -->
+            </v-layout>
+
+            <div v-for="(review, index) of reviews" :key="`r_${review.id}`">
+              <v-layout>
+                <v-flex lg4 class="right-bordered">
+                  <v-layout column fill-height justify-space-between>
+                    <v-layout row>
+                      <platform-avatar :user="review.author" :size="80"></platform-avatar>
+                      <div class="px-4">
+                        <router-link class="a" :to="{ name: 'UserDetails', params: { account_name: review.author.account.name }}">
+                          {{ review.author | fullname }}
+                        </router-link>
+                        <div v-if="review.author.profile" class="rd-reviewer__subtitle pt-1">
+                          <span>{{review.author | employmentOrEducation}}</span>
+                          <span
+                            v-if="doesUserHaveLocation(review.author.profile)"
+                          >, {{review.author | userLocation}}</span>
+                        </div>
+                      </div>
+                    </v-layout>
+                    <v-btn small @click="goToReviewPage(review)" outline>See review</v-btn>
+                  </v-layout>
+                </v-flex>
+                <v-flex lg4 class="px-4 right-bordered">
+                  <v-layout column fill-height>
+                    <div v-if="review.research_content" v-on:click.stop>
+                      <div>
+                        <span>Review to </span>
+                        <span class="bold">{{ getResearchContentType(review.research_content.content_type).text }}</span>
+                      </div>
+                      <router-link
+                        tag="div"
+                        class="a py-2"
+                        :to="{
+                          name: 'ResearchContentDetails',
+                          params: {
+                            research_group_permlink: encodeURIComponent(research.group_permlink),
+                            research_permlink: encodeURIComponent(research.permlink),
+                            content_permlink: encodeURIComponent(review.research_content.permlink)
+                          }
+                        }"
+                      >{{review.research_content.title}}</router-link>
+                    </div>
+                    <v-layout row wrap>
+                      <v-flex
+                        lg12
+                        v-for="item of review.disciplines"
+                        :key="`${review.id}- ${item.disciplineName}`"
+                        class="rd-review-eci mt-1">
+                          <span>{{item.disciplineName}}</span>
+                      </v-flex>
+                    </v-layout>
+                    <div class="grey--text text-xs-right pt-2">
+                      <v-icon small>event</v-icon>
+                      {{moment(review.created_at).format("D, MMM YYYY")}}
+                    </div>
+                  </v-layout>
+                </v-flex>
+                <v-flex lg4>
+                  <v-layout column fill-height justify-space-between pl-4>
+                    <div>
+                      <div class="bold">Assessment</div>
+                      <review-assessment v-model="review.ratings" :researchContentType="review.researchContent.content_type"></review-assessment>
+                    </div>
+                    <div class="pt-2">
+                      <v-tooltip tag="div" bottom v-if="review.votes.length">
+                        <v-layout slot="activator" row justify-end align-baseline>
+                            <span class="half-bold align-self-center pr-2">{{review.votes.length}}</span>
+                            <v-icon>group_add</v-icon>
+                        </v-layout>
+                        <div v-if="review.votes.length">{{review.votes.length}} experts supported this review</div>
                       </v-tooltip>
                     </div>
                   </v-layout>
                 </v-flex>
-                <v-flex lg12>
-                  <template v-for="(review, index) of reviews">
-                    <v-layout :key="`r_${review.id}`" class="my-4">
-                      <v-flex lg4 class="right-bordered">
-                        <v-layout column fill-height justify-space-between>
-                          <v-layout row>
-                            <platform-avatar :user="review.author" :size="80"></platform-avatar>
-                            <div class="pl-4">
-                              <router-link
-                                class="a rd-reviewer__title"
-                                :to="{ name: 'UserDetails', params: { account_name: review.author.account.name }}"
-                              >{{ review.author | fullname }}</router-link>
-                              <div v-if="review.author.profile" class="rd-reviewer__subtitle py-2">
-                                <span>{{review.author | employmentOrEducation}}</span>
-                                <span
-                                  v-if="doesUserHaveLocation(review.author.profile)"
-                                >, {{review.author | userLocation}}</span>
-                              </div>
-                            </div>
-                          </v-layout>
-                          <v-btn small @click="goToReviewPage(review)" outline>See review</v-btn>
-                        </v-layout>
-                      </v-flex>
-                      <v-flex lg4 class="px-4 right-bordered">
-                        <div v-if="review.research_content" v-on:click.stop class="bold">
-                          <div>Review to</div>
-                          <router-link
-                            tag="div"
-                            class="a py-2"
-                            :to="{
-                              name: 'ResearchContentDetails',
-                              params: {
-                                research_group_permlink: encodeURIComponent(research.group_permlink),
-                                research_permlink: encodeURIComponent(research.permlink),
-                                content_permlink: encodeURIComponent(review.research_content.permlink)
-                              }
-                            }"
-                          >{{review.research_content.title}}</router-link>
-                        </div>
-                        <v-layout row wrap>
-                          <v-flex
-                            v-for="item of review.disciplines"
-                            :key="`${review.id}- ${item.disciplineName}`"
-                            class="rd-review-eci mt-1"
-                            lg12
-                          >{{item.disciplineName}}</v-flex>
-                        </v-layout>
-                      </v-flex>
-                      <v-flex lg4>
-                        <v-layout column fill-height justify-space-between pl-4>
-                          <div>
-                            <div class="bold">Approve bar</div>
-                            <div class="py-2">
-                              <v-layout row justify-space-between align-center class="mb-2">
-                                <span class="pr-2">Novelty:</span>
-                                <squared-rating readonly v-model="review.ratings.novelty" />
-                              </v-layout>
-                              <v-layout row justify-space-between align-center class="mb-2">
-                                <span class="pr-2">Technical Quality:</span>
-                                <squared-rating readonly v-model="review.ratings.technicalQuality" />
-                              </v-layout>
-                              <v-layout row justify-space-between align-center>
-                                <span class="pr-2">Methodology:</span>
-                                <squared-rating readonly v-model="review.ratings.methodology" />
-                              </v-layout>
-                            </div>
-                          </div>
-                          <div class="grey--text text-xs-right pt-2">
-                            <v-icon small>event</v-icon>
-                            {{moment(review.created_at).format("MMM D, YYYY")}}
-                          </div>
-                        </v-layout>
-                      </v-flex>
-                    </v-layout>
-                    <v-divider
-                      v-if="index !== reviews.length - 1"
-                      :key="`d_${index}`"
-                      class="my-2"
-                    />
-                  </template>
+              </v-layout>
+              <v-divider v-if="index !== reviews.length - 1" :key="`d_${index}`" class="my-2"></v-divider>
+            </div>
+          </v-layout>
+
+          <v-layout column class="my-5" v-if="researchReferencesList.length">
+            <v-layout row class="pb-4">
+              <v-flex grow>
+                <v-layout>
+                  <div class="pr-3"><v-icon large color="grey lighten-2">mdi-file-document</v-icon></div>
+                  <div class="rd-block-header align-self-center">References: {{ researchReferencesList.length }}</div>
+                </v-layout>
+              </v-flex>
+              <v-flex shrink>
+              </v-flex>
+            </v-layout>
+            <div v-for="(ref, i) of researchReferencesList" :key="`ref_${i}`">
+              <v-layout class="py-1">
+                <v-flex shrink class="pr-3">{{i + 1}}.</v-flex>
+                <v-flex grow>
+                  <div>{{ref.title}}</div>
+                  <div class="grey--text">{{ref.source}}</div>
                 </v-flex>
               </v-layout>
-            </v-flex>
-          </v-layout>
-          <v-layout class="my-5" v-if="researchReferencesList.length">
-            <v-flex lg1>
-              <v-layout justify-end class="pr-3">
-                <v-icon large color="grey lighten-2">mdi-file-document</v-icon>
-              </v-layout>
-            </v-flex>
-            <v-flex lg11>
-              <div class="rd-block-header pb-2">References: {{ researchReferencesList.length }}</div>
-              <template v-for="(ref, i) of researchReferencesList">
-                <v-layout :key="`ref_${i}`" class="py-1">
-                  <v-flex shrink class="pr-3">{{i + 1}}.</v-flex>
-                  <v-flex grow>
-                    <div>{{ref.title}}</div>
-                    <div class="grey--text">{{ref.source}}</div>
-                  </v-flex>
-                </v-layout>
-              </template>
-            </v-flex>
+            </div>
           </v-layout>
         </v-flex>
-        <v-flex lg3 offset-lg1>
+
+        <!-- Right-Hand sidebar -->
+        <v-flex lg3>
           <v-layout column class="mt-5 mb-4 mx-4">
             <div class="rd-sidebar-block-title">
               <router-link
@@ -678,7 +725,7 @@
                   link-to-profile-class="pl-3"
                 ></platform-avatar>
               </div>
-              <div class="grey--text">{{convertToPercent(member.rgt.amount)}}%</div>
+              <!-- <div class="grey--text">{{convertToPercent(member.rgt.amount)}}%</div> -->
             </v-layout>
             <div v-if="isJoinRequestSectionAvailable">
               <v-btn
@@ -762,15 +809,21 @@
             <div class="rd-sidebar-block-title pb-2">Expertise Contribution Index</div>
             <v-layout
               v-for="eci of eciList"
+              column
+              tag="div"
               :key="eci.disciplineName"
               justify-space-between
-              class="mt-2 px-3 py-2 rd-eci-item"
+              class="expertise px-1 my-1"
             >
-              <div>{{eci.disciplineName}}</div>
-              <div class="bold">{{eci.value}}</div>
+              <v-layout justify-space-between>
+                  <div class="blue--text text--accent-4 bold">TOP <span class="font-weight-bold">{{getResearchEciPercentile(eci)}}</span>%</div>
+                  <div class="grey--text">ECI {{ eci.value }}</div>
+              </v-layout>
+              <v-divider class="expertise__divider" />
+              <div class="expertise__disc-name pt-1">{{ eci.disciplineName }}</div>
             </v-layout>
           </v-layout>
-          <v-layout column class="my-4 mx-4">
+          <!-- <v-layout column class="my-4 mx-4">
             <div class="rd-sidebar-block-title pb-2">Score</div>
             <v-tooltip top>
               <div class="mt-2" slot="activator">{{researchScorePercent}}%</div>
@@ -786,7 +839,7 @@
               color-class="green--text"
               class="mt-3"
             />
-          </v-layout>
+          </v-layout> -->
           <v-divider />
 
           <v-dialog
@@ -857,7 +910,7 @@
           </v-dialog>
           <v-divider />
 
-          <v-layout column class="my-4 mx-4">
+          <!-- <v-layout column class="my-4 mx-4">
             <div class="rd-sidebar-block-title">Tokenization</div>
             <div v-if="isResearchTokenized" class="py-2">10000 research tokens issued</div>
             <v-btn
@@ -876,15 +929,15 @@
               @confirmed="tokenizeResearch($event); tokenizationConfirmDialog.isShown = false;"
               @canceled="tokenizationConfirmDialog.isShown = false"
             ></confirm-action-dialog>
-          </v-layout>
+          </v-layout> -->
 
           <v-divider />
-          <!-- <div
+          <div
             class="rd-sidebar-block-title my-4 px-4"
-          >Citations: {{researchReferencesList.length + research.id}}</div> -->
+          >Citations: {{researchReferencesList.length + research.id}}</div>
         </v-flex>
       </v-layout>
-    </div>
+    </v-card>
   </base-page-layout>
 </template>
 
@@ -897,7 +950,7 @@ import bookmarksService from "@/services/http/bookmarks";
 import contentHttpService from "@/services/http/content";
 import joinRequestsService from "@/services/http/joinRequests";
 import reviewRequestsService from "@/services/http/reviewRequests";
-import { getContentType } from "@/services/ResearchService";
+import { getResearchContentType } from "@/services/ResearchService";
 
 // import references from './references.json';
 // import timeline from './timeline.json';
@@ -935,7 +988,32 @@ export default {
       selectedExpert: null,
       selectedContentId: null,
 
-      isRequestingReview: false
+      isRequestingReview: false,
+
+      selectedEciDisciplineId: null,
+
+      eciHistoryRecordsTable: {
+        headers: [
+          { text: 'Type', align: 'left', sortable: false },
+          { text: 'Title', align: 'left', sortable: false },
+          { text: 'Date', align: 'center', sortable: false },
+          { text: 'Reward ECI', align: 'center', sortable: false },
+          { text: 'Total ECI', align: 'center', sortable: false },
+        ],
+        actionsColorMap: {
+          'review': '#161F63',
+          'vote_for_review': '#5ABAD1',
+          'init': '#8DDAB3',
+        },
+        pagination: {
+          page: 1,
+          rowsPerPage: 5,
+        },
+        items: [],
+        totalItems: 0,
+        loading: false,
+      }
+
     };
   },
 
@@ -958,7 +1036,8 @@ export default {
       tokenSalesList: "rd/tokenSalesList",
       user: "auth/user",
       userContributionsList: "rd/userContributionsList",
-      userJoinRequests: "auth/userJoinRequests"
+      userJoinRequests: "auth/userJoinRequests",
+      eciHistoryByDisciplineMap: "rd/eciHistoryByDisciplineMap"
     }),
 
     isSelectedContentId(){
@@ -1097,109 +1176,80 @@ export default {
           )
         : undefined;
     },
-    eciChart() {
-      if (!this.eciChartCache) {
-        this.eciChartCache = {};
-      }
-      if (this.eciChartCache[this.activeEciChartTabIndex]) {
-        return this.eciChartCache[this.activeEciChartTabIndex];
-      }
 
-      const eci = this.eciList[this.activeEciChartTabIndex];
-      if (!eci) {
-        return null;
-      }
-      const startDate = this.moment(this.research.created_at);
-      const endDate = this.moment();
-      if (!endDate.diff(startDate, "days")) {
-        return null;
-      }
-      const timeDiff = endDate - startDate;
+    hasEciDisciplineHistoryRecords() {
+      let records = this.$store.getters['rd/eciHistoryByDiscipline'](this.selectedEciDisciplineId);
+      return records != null && records.length != 0;
+    },
 
-      const getPointTooltipHtml = (value, reviewerName, isPositive) => {
-        let feedbackType;
-        let feedbackClass;
-        if (isPositive) {
-          feedbackType = "Approved";
-          feedbackClass = "green--text text--lighten-4";
-        } else {
-          feedbackType = "Rejected";
-          feedbackClass = "red--text text--lighten-4";
-        }
+    eciDisciplineHistoryRecordsChart() {
+      let disciplineId = this.selectedEciDisciplineId;
+      let records = this.$store.getters['rd/eciHistoryByDiscipline'](disciplineId);
+      if (!records) return null;
 
+      const getPointTooltipHtml = (eci, action, delta) => {
+        let assessmentType = delta >= 0 ? "Approved" : "Rejected";
+        let assessmentClass = delta >= 0 ? "green--text text--lighten-4" : "red--text text--lighten-4";
         return `
-            <div style="width: 100px; padding: 5px; background: #828282; border-radius: 2px; opacity: 0.9">
-              <div class="bold white--text">${reviewerName}</div>
-              <div class="${feedbackClass} bold">${feedbackType}</div>
-              <div class="white--text">${value}</div>
-            </div>
-          `;
+          <div style="width: 100px; padding: 5px; background: #828282; border-radius: 2px; opacity: 0.9">
+              <div class="bold white--text text-capitalize">${action}</div>
+              ${eci != 0 ? `<div class="${assessmentClass} bold">${assessmentType}</div>` : ''} 
+              ${delta != 0 ? `<div class="white--text">${delta > 0 ? '+' : '-'} ${delta}</div>` : ''}
+          </div>
+        `;
       };
 
-      const chartData = [
-        [
-          "Date",
-          "Value",
-          { type: "string", role: "tooltip", p: { html: true } }
+      const data = records.map((record, i) => {
+        let date = new Date(record.timestamp);
+        let value = record.newAmount;
+        let delta = record.delta;
+        let actionText = record.actionText;
+        let tooltip = getPointTooltipHtml(value, actionText, delta);
+        return [
+          date,
+          value,
+          tooltip
         ]
-      ];
+      });
 
-      const influencers = [
-        "Charles Darwin",
-        "René Descartes",
-        "Albert Einstein",
-        "Leonhard Euler",
-        "Michael Faraday",
-        "Pierre de Fermat",
-        "Alexander Fleming",
-        "Galileo Galilei",
-        "Carl Friedrich Gauss",
-        "Willard Gibbs",
-        "Edwin Hubble",
-        "Ada Lovelace",
-        "Dmitri Mendeleev",
-        "Isaac Newton",
-        "Alfred Nobel"
-      ];
+      const now = moment().toDate();
+      const lastEciValue = records.length ? records[records.length - 1].newAmount : 0;
 
-      const timeStep = timeDiff / influencers.length;
-      new Array(influencers.length)
-        .fill(0)
-        .map((e, i) => endDate - timeStep * i)
-        .sort()
-        .map(ms => new Date(ms))
-        .forEach((timePoint, i, arr) => {
-          let eciValue;
-          if (i === arr.length - 1) {
-            eciValue = eci.value;
-          } else {
-            eciValue = this.getRandomInt(-10000, 10000);
-          }
-          let isPositiveChange;
-          if (i === 0) {
-            isPositiveChange = eciValue > 0;
-          } else {
-            isPositiveChange = eciValue > chartData[i][1];
-          }
-          chartData.push([
-            timePoint,
-            eciValue,
-            getPointTooltipHtml(eciValue, influencers[i], isPositiveChange)
-          ]);
-        });
+      return {
+        data: [
+          [
+            "Date",
+            "Value",
+            { type: "string", role: "tooltip", p: { html: true } }
+          ],
+          [
+            moment(this.research.created_at).toDate(),
+            0,
+            `<div style="width: 100px; padding: 5px; background: #828282; border-radius: 2px; opacity: 0.9">
+              <div class="bold white--text text-capitalize">Project Created</div>
+            </div>`
+          ],
+          ...data,
+          [
+            now,
+            lastEciValue,
+            `<div style="width: 100px; padding: 5px; background: #828282; border-radius: 2px; opacity: 0.9">
+              <div class="bold white--text text-capitalize">Now</div>
+            </div>`
+          ]
+        ],
 
-      const _eciChart = {
-        data: chartData,
         options: {
           title: "",
           backgroundColor: {
-            fill: "#fafafa"
+            fill: "#ffffff"
           },
           legend: {
             position: "none"
           },
           chartArea: {
-            top: "15%",
+            right: 0,
+            top: "10%",
             width: "90%"
           },
           tooltip: { isHtml: true },
@@ -1211,8 +1261,6 @@ export default {
           }
         }
       };
-      this.eciChartCache[this.activeEciChartTabIndex] = _eciChart;
-      return _eciChart;
     },
     eciList() {
       return this.disciplinesList.map(discipline => {
@@ -1226,6 +1274,7 @@ export default {
         };
       });
     },
+
     experts() {
       const blackList = [
         "regacc",
@@ -1749,24 +1798,64 @@ export default {
     },
 
     newContentUploaded() {
-      this.$store.dispatch("rd/loadResearchContent", {
-        researchId: this.research.id
-      });
-      this.$store.dispatch("rd/loadResearchContentRefs", {
-        researchId: this.research.id
-      });
+      Promise.all([
+        this.$store.dispatch("rd/loadResearchContent", { researchId: this.research.id }),
+        this.$store.dispatch("rd/loadResearchContentRefs", { researchId: this.research.id })
+      ])
+      .then(() => {
+        this.eciHistoryRecordsTable.loading = true;
+        let disciplineIds = Object.keys(this.eciHistoryByDisciplineMap);
+        let promises = [];
+        for (let i = 0; i < disciplineIds.length; i++) {
+          let disciplineId = disciplineIds[i];
+          promises.push(this.$store.dispatch("rd/loadResearchEciHistoryRecords", { researchId: this.research.id, disciplineId }));
+        }
+        return Promise.all(promises)
+      })
+      .then(() => {
+        let records = this.$store.getters['rd/eciHistoryByDiscipline'](this.selectedEciDisciplineId);
+        this.eciHistoryRecordsTable.items = records.reverse();
+        this.eciHistoryRecordsTable.pagination.page = 1;
+        this.eciHistoryRecordsTable.loading = false;
+      })
     },
 
-    getContentType
+    selectEciDiscipline() {
+      let disciplineId = this.selectedEciDisciplineId;
+      let researchId = this.research.id;
+      this.eciHistoryRecordsTable.loading = true;
+      let cachedRecords = this.$store.getters['rd/eciHistoryByDiscipline'](disciplineId);
+      if (cachedRecords == null) {
+        this.$store.dispatch('rd/loadResearchEciHistoryRecords', { researchId, disciplineId })
+          .then(() => {
+            let records = this.$store.getters['rd/eciHistoryByDiscipline'](disciplineId);
+            this.eciHistoryRecordsTable.items = records.reverse();
+            this.eciHistoryRecordsTable.pagination.page = 1;
+            this.eciHistoryRecordsTable.loading = false;
+          });
+      } else {
+        this.eciHistoryRecordsTable.items = cachedRecords.reverse();
+        this.eciHistoryRecordsTable.pagination.page = 1;
+        this.eciHistoryRecordsTable.loading = false;
+      }
+    },
+
+    getResearchEciPercentile(eci) {
+      return 10;
+    },
+
+    getResearchContentType
   },
 
   created() {
-    const bookmark = this.user.researchBookmarks.find(
-      b => b.researchId === this.research.id
-    );
+    const bookmark = this.user.researchBookmarks.find(b => b.researchId === this.research.id);
     if (bookmark) {
       this.bookmarkId = bookmark._id;
     }
+
+    let discipline = this.research.disciplines[0];
+    this.selectedEciDisciplineId = discipline.id;
+    this.selectEciDiscipline(discipline.id);
   }
 };
 </script>
@@ -1959,15 +2048,6 @@ export default {
   }
 }
 
-.v-expansion-panel {
-  box-shadow: none;
-  background-color: #fafafa;
-  &__container,
-  &__header,
-  &__body {
-    background: #fafafa !important;
-  }
-}
 
 .rd-reviewer {
   font-family: Roboto;
@@ -2037,4 +2117,33 @@ export default {
     text-decoration: underline;
   }
 }
+.milestone-description {
+  max-height: 500px; 
+  overflow: scroll
+}
+
+.expertise {
+  background: #EBF5FE;
+  border: 1px solid #8FC3F7;
+  box-sizing: border-box;
+  border-radius: 2px;
+  font-family: Muli;
+
+  &__disc-name {
+    font-weight: 600;
+  }
+
+  &__divider {
+    border-color: #8FC3F7;
+  }
+}
+
+.eci-up {
+  background-color: #b8ddc8;
+}
+
+.eci-down {
+  background-color: #ffbdbd;
+}
+
 </style>
