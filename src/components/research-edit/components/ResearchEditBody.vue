@@ -4,12 +4,12 @@
       <v-flex xs10>
         <v-layout column>
           <div>
-            <div class="title half-bold pb-3">Tilte:</div>
+            <div class="title font-weight-medium pb-3">Tilte:</div>
             <v-text-field v-model="title" :rules="[rules.required]" name="title" label="Title" solo></v-text-field>
           </div>
 
           <div>
-            <div class="title half-bold pb-3">Description:</div>
+            <div class="title font-weight-medium pb-3">Description:</div>
             <v-textarea
               v-model="description"
               :rules="[rules.required]"
@@ -21,7 +21,7 @@
           </div>
 
           <div>
-            <div class="title half-bold pb-3">Video Presentation:</div>
+            <div class="title font-weight-medium pb-3">Video Presentation:</div>
             <v-text-field
               prepend-inner-icon="link"
               label="Link to a video presentation"
@@ -32,8 +32,8 @@
             ></v-text-field>
           </div>
 
-          <div>
-            <div class="title half-bold pb-3">Active Milestone:</div>
+          <div class="mb-5">
+            <div class="title font-weight-medium pb-3">Active Milestone:</div>
             <v-select
               v-model="activeMilestone"
               :items="milestones"
@@ -44,8 +44,21 @@
             ></v-select>
           </div>
 
+          <div>
+            <div class="title font-weight-medium pb-3">Visibility</div>
+            <v-layout row shrink>
+              <v-flex shrink :class="{'grey--text':isPublic}">Private project</v-flex>
+              <v-flex shrink>
+                <v-switch class="my-0 ml-2 py-0" v-model="isPublic" color="primary"></v-switch>
+              </v-flex>
+              <v-flex shrink :class="{'grey--text':!isPublic}">Public project</v-flex>
+            </v-layout>
+          </div>
+
+          <v-divider></v-divider>
+
           <div v-if="milestones" class="py-4">
-            <div class="title half-bold pb-3">Roadmap:</div>
+            <div class="title font-weight-medium pb-3">Roadmap:</div>
             <milestone-stepper :isReadOnly="false" :steps="milestones"></milestone-stepper>
           </div>
 
@@ -63,7 +76,7 @@
           </div>
 
           <div class="pb-3">
-            <div class="title half-bold pb-3">Background:</div>
+            <div class="title font-weight-medium pb-3">Background:</div>
             <v-layout>
               <v-flex xs3>
                 <img
@@ -127,6 +140,7 @@ export default {
       milestones: undefined,
       videoSrc: "",
       activeMilestone: undefined,
+      isPublic: false,
       isLoading: false,
       isUploadingBackground: false,
       rules: {
@@ -184,7 +198,8 @@ export default {
         video_src: this.videoSrc,
         is_tokenized: this.$options.filters.researchTokenized(
           this.research.abstract
-        )
+        ),
+        is_private: !this.isPublic
       });
     },
 
@@ -241,63 +256,34 @@ export default {
             this.research.abstract
           )
         });
+        const researchIds = {
+          id: this.research.id,
+          researchGroupId: this.research.research_group_id
+        };
 
-        if (this.researchGroup.is_personal || !this.researchGroup.is_dao) {
-          deipRpc.broadcast
-            .researchUpdateAsync(
-              this.user.privKey,
-              this.research.id,
-              this.title,
-              abstract,
-              this.research.permlink,
-              this.user.username
-            )
-            .then(
-              () => {
-                this.$store.dispatch("layout/setSuccess", {
-                  message: "Research has been updated successfully!"
-                });
-                setTimeout(() => {
-                  this.$router.push({
-                    name: "ResearchDetails",
-                    params: {
-                      research_group_permlink: encodeURIComponent(
-                        this.research.group_permlink
-                      ),
-                      research_permlink: encodeURIComponent(
-                        this.research.permlink
-                      )
-                    }
-                  });
-                  this.isLoading = false;
-                }, 1500);
-              },
-              err => {
-                console.log(err);
-                this.$store.dispatch("layout/setError", {
-                  message:
-                    "An error occurred while updating research, please try again later"
-                });
-                this.isLoading = false;
-              }
-            );
-        } else {
-          const researchIds = {
-            id: this.research.id,
-            researchGroupId: this.research.research_group_id
-          };
+        const promise = proposalService.createChangeResearchNameAndDescriptionProposal(
+          researchIds,
+          this.title,
+          abstract,
+          !this.isPublic
+        );
 
-          const promise = proposalService.createChangeResearchNameAndDescriptionProposal(
-            researchIds,
-            this.title,
-            abstract
-          );
-
-          promise
-            .then(() => {
-              this.$store.dispatch("layout/setSuccess", {
-                message: "Proposal has been sent successfully!"
+        promise
+          .then(() => {
+            this.$store.dispatch("layout/setSuccess", {
+              message: "Proposal has been sent successfully!"
+            });
+            if (this.researchGroup.is_personal || !this.researchGroup.is_dao) {
+              this.$router.push({
+                name: "ResearchDetails",
+                params: {
+                  research_group_permlink: encodeURIComponent(
+                    this.research.group_permlink
+                  ),
+                  research_permlink: encodeURIComponent(this.research.permlink)
+                }
               });
+            } else {
               this.$router.push({
                 name: "ResearchGroupDetails",
                 params: {
@@ -307,18 +293,18 @@ export default {
                 },
                 hash: "#proposals"
               });
-            })
-            .catch(err => {
-              console.log(err);
+            }
+          })
+          .catch(err => {
+            console.log(err);
 
-              this.$store.dispatch("layout/setError", {
-                message: "An error occurred during proposal sending"
-              });
-            })
-            .finally(() => {
-              this.isLoading = false;
+            this.$store.dispatch("layout/setError", {
+              message: "An error occurred during proposal sending"
             });
-        }
+          })
+          .finally(() => {
+            this.isLoading = false;
+          });
       }
     },
 
@@ -406,6 +392,7 @@ export default {
       this.research.abstract
     );
     this.activeMilestone = this.milestones.find(m => m.is_active);
+    this.isPublic = !this.research.is_private;
 
     let milestones = this.milestones.map(m => {
       return {
@@ -424,8 +411,13 @@ export default {
       video_src: this.videoSrc,
       is_tokenized: this.$options.filters.researchTokenized(
         this.research.abstract
-      )
+      ),
+      is_private: !this.isPublic
     });
+
+    if (this.researchGroup.is_personal || !this.researchGroup.is_dao) {
+      console.log(this.research);
+    }
   }
 };
 </script>

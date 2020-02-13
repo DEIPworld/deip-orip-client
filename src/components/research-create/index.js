@@ -5,12 +5,14 @@ import CreateResearchPickGroup from './components/CreateResearchPickGroup';
 import CreateResearchMeta from './components/CreateResearchMeta';
 import CreateResearchShare from './components/CreateResearchShare';
 import CreateResearchRoadmap from './components/CreateResearchRoadmap';
+import CreateResearchSettings from './components/CreateResearchSettings'
 
 Vue.component('create-research-pick-discipline', CreateResearchPickDiscipline);
 Vue.component('create-research-pick-group', CreateResearchPickGroup);
 Vue.component('create-research-meta', CreateResearchMeta);
 Vue.component('create-research-share', CreateResearchShare);
 Vue.component('create-research-roadmap', CreateResearchRoadmap);
+Vue.component('create-research-settings', CreateResearchSettings);
 
 import CreateNewResearch from './CreateNewResearch';
 import ResearchStartCreating from './ResearchStartCreating';

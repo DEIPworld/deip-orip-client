@@ -52,7 +52,7 @@ labels[CHANGE_RESEARCH_META_DATA_TYPE] = 'Change research meta';
 // maybe will be OK to add param validations or type conversion
 // in every function to be sure every time about right data
 const schemasMap = {};
-schemasMap[START_RESEARCH] = (researchGroupId, title, abstract, permlink, reviewShareInPercent, dropoutCompensationInPercent, disciplines) => {
+schemasMap[START_RESEARCH] = (researchGroupId, title, abstract, permlink, reviewShareInPercent, dropoutCompensationInPercent, disciplines, isPrivate) => {
     return {
         "research_group_id": researchGroupId, 
         "title": title, 
@@ -60,7 +60,8 @@ schemasMap[START_RESEARCH] = (researchGroupId, title, abstract, permlink, review
         "permlink": permlink, 
         "review_share_in_percent": reviewShareInPercent, 
         "dropout_compensation_in_percent": dropoutCompensationInPercent, 
-        "disciplines": disciplines
+        "disciplines": disciplines,
+        "is_private": isPrivate
     };
 };
 schemasMap[INVITE_MEMBER] = (researchGroupId, name, researchGroupTokenAmount, coverLetter) => {
@@ -114,11 +115,12 @@ schemasMap[CHANGE_RESEARCH_GROUP_META_DATA_TYPE] = (researchGroupId, newResearch
         'research_group_description': newResearchGroupDescription
     };
 };
-schemasMap[CHANGE_RESEARCH_META_DATA_TYPE] = (researchId, newResearchTitle, newResearchAbstract) => {
+schemasMap[CHANGE_RESEARCH_META_DATA_TYPE] = (researchId, newResearchTitle, newResearchAbstract, isPrivate) => {
     return {
         'research_id':researchId,
         'research_title':newResearchTitle,
-        'research_abstract':newResearchAbstract
+        'research_abstract':newResearchAbstract,
+        'is_private': isPrivate
     }
 }
 
@@ -244,9 +246,9 @@ const createSendFundsProposal = (groupId, recipient, funds) => {
     );
 };
 
-const createResearchProposal = function (groupId, title, description, permlink, reviewShare, disciplines, milestones, videoSrc) {
+const createResearchProposal = function (groupId, title, description, permlink, reviewShare, disciplines, milestones, videoSrc, isPrivate) {
     const data = getStringifiedProposalData(START_RESEARCH, [
-        groupId, title, JSON.stringify({ description, milestones, video_src: videoSrc }), permlink, reviewShare, 5, disciplines
+        groupId, title, JSON.stringify({ description, milestones, video_src: videoSrc }), permlink, reviewShare, 5, disciplines, isPrivate
     ]);
 
     const proposal = {
@@ -298,11 +300,12 @@ const createChangeGroupNameAndDescriptionProposal = (groupId, newResearchGroupNa
     );
 };
 
-const createChangeResearchNameAndDescriptionProposal = (researchIds, newResearchTitle, newResearchAbstract) => {
+const createChangeResearchNameAndDescriptionProposal = (researchIds, newResearchTitle, newResearchAbstract, isPrivate) => {
     const data = getStringifiedProposalData(CHANGE_RESEARCH_META_DATA_TYPE, [
         researchIds.id,
         newResearchTitle,
-        newResearchAbstract
+        newResearchAbstract,
+        isPrivate
     ]);
 
     return deipRpc.broadcast.createProposalAsync(

@@ -4,7 +4,7 @@
       <!-- Header -->
       <v-layout 
         row 
-        class="rd-header full-height pa-5"
+        class="rd-header full-height pa-5 feed-header"
         :style="{ background: 'linear-gradient(0deg, rgba(0, 0, 0, 0.4) 70%, transparent), url('+ $options.filters.researchBackgroundSrc(research.id) +'), 100%, 100%, no-repeat'}"
       >
         <v-flex lg8>
@@ -2144,6 +2144,14 @@ export default {
 
 .eci-down {
   background-color: #ffbdbd;
+}
+.feed-header {
+  background-size: cover !important;
+  background-repeat: no-repeat !important;
+  height: 300px;
+  width: 100%;
+  font-style: normal;
+  color: white;
 }
 
 </style>
