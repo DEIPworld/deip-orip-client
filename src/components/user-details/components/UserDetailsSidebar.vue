@@ -127,14 +127,16 @@
         <div class="mt-4">
           <div class="title bold">Expertise Contribution Index</div>
           <div class="py-2">
-            <v-layout tag="div" column v-for="(item, i) in expertise" :key="`eci-${i}`" class="expertise px-1 my-2">
-              <v-layout justify-space-between class="">
-                <div class="blue--text text--accent-4 bold">TOP <span class="font-weight-bold">{{getEciPercentile(item.amount, userInfo.account.name, item.discipline_id)}}</span>%</div>
-                <div class="grey--text">ECI {{ item.amount }}</div>
-              </v-layout>
-              <v-divider class="expertise__divider" />
-              <div class="expertise__disc-name pt-1">{{ item.discipline_name }}</div>
-            </v-layout>
+                <router-link :to="{ name: 'UserExpertiseDetails', account_name: userInfo.account.name }" style="text-decoration: none">
+                    <v-layout tag="div" column v-for="(item, i) in expertise" :key="`eci-${i}`" class="expertise px-1 my-2">
+                        <v-layout justify-space-between>
+                            <div class="blue--text text--accent-4 bold">TOP <span class="font-weight-bold">{{getEciPercentile(item.amount, userInfo.account.name, item.discipline_id)}}</span>%</div>
+                            <div class="grey--text">ECI {{ item.amount }}</div>
+                        </v-layout>
+                        <v-divider class="expertise__divider" />
+                        <div class="expertise__disc-name pt-1">{{ item.discipline_name }}</div>
+                    </v-layout>
+                </router-link>
             <div v-if="!expertise.length" class="body-1"> 
               <div v-if="isOwner">You have no Expertise Tokens yet. Use <span class="a" @click="openClaimExpertiseDialog()">Claim</span> process to apply for Expertise Tokens</div>
               <div v-if="!isOwner"><span class="body-2">{{userInfo | fullname}}</span> has no Expertise Tokens yet</div>
