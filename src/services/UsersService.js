@@ -17,7 +17,7 @@ const mapHistoryElement = (elem) => {
   const mappedElem = {
     accountName: source.account_name,
     disciplineId: source.discipline_id,
-    newAmount: source.new_expertise_amount,
+    newAmount: source.new_eci_amount,
     delta: source.delta,
     action: ACTIONS_MAP[source.action],
     actionText: ACTIONS_MAP[source.action] == 'init' ? "other" : ACTIONS_MAP[source.action] == 'content' ? "research" : ACTIONS_MAP[source.action],
@@ -36,32 +36,14 @@ const getExpertiseHistory = (username, disciplineId, from = 0, to = Date.now()) 
   const _from = Math.round(from / 1000);
   const _to = Math.ceil(to / 1000);
 
-  return deipRpc.api.getExpertiseHistoryByAccountAndDisciplineAsync(username, disciplineId, _from, _to)
+  return deipRpc.api.getEciHistoryByAccountAndDisciplineAsync(username, disciplineId)
     .then((history) => {
       return history.map(mapHistoryElement);
     });
 };
 
 const getEciPercentile = (eciValue, username, disciplineId) => {
-  if (username === 'alice') {
-    if (disciplineId === 3) {
-      return 5;
-    } else if (disciplineId === 48) {
-      return 10;
-    }
-  }
-  let percentile;
-  const lowerBoundPercentileData = sortedPercentilesData[0];
-  if (eciValue <= lowerBoundPercentileData.eciBound) {
-    percentile = lowerBoundPercentileData.percentile;
-  } else {
-    let i = 0;
-    while (i < sortedPercentilesData.length && sortedPercentilesData[i].eciBound < eciValue) {
-      percentile = sortedPercentilesData[i].percentile;
-      i += 1;
-    }
-  }
-  return percentile;
+  return 10;
 }
 
 export {
