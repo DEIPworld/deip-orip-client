@@ -23,12 +23,15 @@ const state = {
     contentProposal: undefined,
     eciHistoryByDiscipline: {},
     contentRef: null,
+    researchGroupMembers: [],
+    groupShares: [],
 
     isLoadingResearchContentVotes: undefined,
     isLoadingResearchDetails: undefined,
     isLoadingResearchContentDetails: undefined,
     isLoadingResearchContentReviews: undefined,
     isLoadingResearchGroupDetails: undefined,
+    isLoadingResearchGroupMembers: undefined,
 
     contentMetadata: null
 }
@@ -232,7 +235,10 @@ const getters = {
                 }
             });
         }
-    }
+    },
+    researchGroupMembers: state => state.researchGroupMembers,
+    isLoadingResearchGroupMembers: state => state.isLoadingResearchGroupMembers,
+    groupShares: state => state.groupShares,
 }
 
 // actions
@@ -277,6 +283,10 @@ const actions = {
                                 dispatch('loadResearchContentVotes', { researchId: contentObj.research_id, notify: resolve })
                             });
 
+                            const researchGroupMembersLoad = new Promise((resolve, reject) => {
+                                dispatch('loadResearchGroupMembers', { groupId: state.research.research_group_id, notify: resolve });
+                            });
+
                             const researchGroupDetailsLoad = new Promise((resolve, reject) => {
                                 dispatch('loadResearchGroupDetails', { group_permlink, notify: resolve })
                             });
@@ -285,7 +295,7 @@ const actions = {
                                 dispatch('loadResearchContentReferences', { researchContentId: contentObj.id, notify: resolve })
                             });
         
-                            return Promise.all([contentRefLoad, contentReviewsLoad, contentVotesLoad, researchGroupDetailsLoad, referencesLoad])
+                            return Promise.all([contentRefLoad, contentReviewsLoad, contentVotesLoad, researchGroupMembersLoad, researchGroupDetailsLoad, referencesLoad])
                         }, (err) => {console.log(err)})
                         .finally(() => {
                             commit('SET_RESEARCH_CONTENT_DETAILS_LOADING_STATE', false);
@@ -328,6 +338,39 @@ const actions = {
                 commit('SET_RESEARCH_CONTENT_VOTES_LOADING_STATE', false)
                 if (notify) notify();
             });
+    },
+
+    loadResearchGroupMembers({ commit, state }, { groupId, notify }) {
+        const members = [];
+        commit('SET_GROUP_MEMBERS_LOADING_STATE', true)
+
+        deipRpc.api.getResearchGroupTokensByResearchGroupAsync(groupId)
+            .then(rgtList => {
+                commit('SET_GROUP_SHARES', rgtList);
+                rgtList.forEach(rgt => {members.push({rgt: rgt})})
+                return getEnrichedProfiles(members.map(member => member.rgt.owner))
+            })
+            .then((users) => {
+                const promises = []
+                members.forEach(member => {
+                    const user = users.find(user => user.account.name == member.rgt.owner);
+                    member.account = user.account;
+                    member.profile = user.profile;
+                    promises.push(deipRpc.api.getExpertTokensByAccountNameAsync(member.account.name))
+                })
+                return Promise.all(promises);
+            })
+            .then((expList) => {
+                members.forEach((member, idx) => {
+                    const exp = expList[idx];
+                    member.expertise = exp;
+                })
+                commit('SET_GROUP_MEMBERS', members);
+            })
+            .finally(() => {
+                commit('SET_GROUP_MEMBERS_LOADING_STATE', false)
+                if (notify) notify()
+            })
     },
 
     loadResearchDetails({ state, commit, dispatch }, { group_permlink, research_permlink, notify }) {
@@ -738,7 +781,19 @@ const mutations = {
     ['RESET_STATE'](state) {
         Vue.set(state, "eciHistoryByDiscipline", {});
         Vue.set(state, 'contentMetadata', null);
-    }
+    },
+
+    ['SET_GROUP_MEMBERS'](state, members) {
+        Vue.set(state, 'researchGroupMembers', members);
+    },
+
+    ['SET_GROUP_MEMBERS_LOADING_STATE'](state, value) {
+        state.isLoadingResearchGroupMembers = value;
+    },
+
+    ['SET_GROUP_SHARES'](state, shares) {
+        Vue.set(state, 'groupShares', shares);
+    },
 }
 
 const namespaced = true;

@@ -32,6 +32,17 @@
             ></v-text-field>
           </div>
 
+          <div class="mb-3">
+            <div class="title font-weight-medium pb-3">Visibility</div>
+            <v-layout row shrink>
+              <v-flex shrink :class="{'grey--text':isPublic}">Private project</v-flex>
+              <v-flex shrink>
+                <v-switch class="my-0 ml-2 py-0" v-model="isPublic" color="primary"></v-switch>
+              </v-flex>
+              <v-flex shrink :class="{'grey--text':!isPublic}">Public project</v-flex>
+            </v-layout>
+          </div>
+
           <div class="mb-5">
             <div class="title font-weight-medium pb-3">Active Milestone:</div>
             <v-select
@@ -42,17 +53,6 @@
               item-text="goal"
               return-object
             ></v-select>
-          </div>
-
-          <div>
-            <div class="title font-weight-medium pb-3">Visibility</div>
-            <v-layout row shrink>
-              <v-flex shrink :class="{'grey--text':isPublic}">Private project</v-flex>
-              <v-flex shrink>
-                <v-switch class="my-0 ml-2 py-0" v-model="isPublic" color="primary"></v-switch>
-              </v-flex>
-              <v-flex shrink :class="{'grey--text':!isPublic}">Public project</v-flex>
-            </v-layout>
           </div>
 
           <v-divider></v-divider>
@@ -414,10 +414,6 @@ export default {
       ),
       is_private: !this.isPublic
     });
-
-    if (this.researchGroup.is_personal || !this.researchGroup.is_dao) {
-      console.log(this.research);
-    }
   }
 };
 </script>
