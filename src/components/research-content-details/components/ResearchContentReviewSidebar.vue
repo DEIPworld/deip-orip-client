@@ -87,7 +87,7 @@ export default {
       group: 'rcd/group',
       content: 'rcd/content',
       contentReviewsList: 'rcd/contentReviewsList',
-      groupMembers: 'rcd/researchGroupMembers',
+      groupMembers: 'rcd/membersList'
     }),
     review() {
       return this.contentReviewsList.find(r => r.id == this.$route.params.review_id)
