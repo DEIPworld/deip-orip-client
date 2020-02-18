@@ -1660,7 +1660,7 @@ export default {
         })
         .finally(() => {
           this.isRequestingReview = false;
-          this.requestExpertReviewDialog = false;
+          this.requestExpertReviewDialog.isShown = false;
         });
     },
     tokenizeResearch() {
@@ -2119,7 +2119,7 @@ export default {
 }
 .milestone-description {
   max-height: 500px; 
-  overflow: scroll
+  overflow-y: auto;
 }
 
 .expertise {

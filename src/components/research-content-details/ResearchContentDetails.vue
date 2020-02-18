@@ -189,7 +189,7 @@
                     <platform-avatar
                       :user="data.item"
                       :size="30"
-                      link-to-profile
+                      noFollow
                       link-to-profile-class="pl-2"
                     ></platform-avatar>
                   </div>
@@ -201,7 +201,7 @@
                       <platform-avatar
                         :user="data.item"
                         :size="30"
-                        link-to-profile
+                        noFollow
                         link-to-profile-class="pl-2"
                       ></platform-avatar>
                     </div>

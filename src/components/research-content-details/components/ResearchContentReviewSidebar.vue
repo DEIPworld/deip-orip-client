@@ -21,14 +21,20 @@
     <div>
       <v-btn block color="primary"
         :loading="isReviewVoting" 
-        :disabled="isReviewVoting || userHasVoted || votingDisabled"
+        :disabled="isReviewVoting || userHasVoted || votingDisabled || isGroupMember"
         @click="voteReview()">
         Support Review
       </v-btn>
     </div>
 
-    <div class="pt-2" v-if="!userHasVoted">
+    <div class="pt-2" v-if="isGroupMember">
+      <div class="body-2">Review can be supported only by members of other groups</div>
+    </div>
+    <div class="pt-2" v-else-if="!userHasVoted">
       <div>You will get <span class="body-2">approximately 1000 ECI reward in {{userRelatedExpertise.map(exp => exp.discipline_name).join(", ")}}</span> for your contribution to this project</div>
+    </div>
+    <div class="pt-2" v-else-if="userHasVoted">
+      <div class="body-2">Review can be supported once</div>
     </div>
   </div>
 
@@ -78,8 +84,10 @@ export default {
       user: 'auth/user',
       userExperise: 'auth/userExperise',
       research: 'rcd/research',
+      group: 'rcd/group',
       content: 'rcd/content',
       contentReviewsList: 'rcd/contentReviewsList',
+      groupMembers: 'rcd/membersList'
     }),
     review() {
       return this.contentReviewsList.find(r => r.id == this.$route.params.review_id)
@@ -92,6 +100,9 @@ export default {
     },
     userRelatedExpertise() {
       return this.userExperise.filter(exp => this.research.disciplines.some(d => d.id == exp.discipline_id))
+    },
+    isGroupMember(){
+      return !!this.groupMembers.find(item => item.rgt.owner === this.user.username)
     }
   },
   

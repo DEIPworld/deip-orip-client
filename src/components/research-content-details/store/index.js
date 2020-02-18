@@ -350,7 +350,7 @@ const actions = {
                     const user = users[i];
                     user.rgt = rgtList.find(rgt => rgt.owner == user.account.name);
                 }
-                commit('SET_RESEARCH_MEMBERS_LIST', users)
+                commit('SET_RESEARCH_GROUP_MEMBERS_LIST', users)
                 return deipRpc.api.getAllResearchContentAsync(researchId)
             }, (err) => {console.log(err)})
             .then((list) => {
@@ -707,7 +707,7 @@ const mutations = {
         state.isLoadingResearchGroupDetails = value
     },
 
-    ['SET_RESEARCH_MEMBERS_LIST'](state, list) {
+    ['SET_RESEARCH_GROUP_MEMBERS_LIST'](state, list) {
         Vue.set(state, 'membersList', list)
     },
 
