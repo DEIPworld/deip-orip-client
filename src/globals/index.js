@@ -125,3 +125,6 @@ Vue.prototype.getEmbedVideoUrl = (url) => {
     || getYoutubeEmbedUrlFromVideoUrl(url)
     || url;
 };
+
+Vue.prototype.MASTER_PASSWORD_MIN_LENGTH = 10;
+Vue.prototype.MASTER_PASSWORD_MAX_LENGTH = 100;
