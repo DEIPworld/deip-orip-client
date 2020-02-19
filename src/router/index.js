@@ -35,6 +35,9 @@ import CreateNewResearch from '@/components/research-create/CreateNewResearch';
 import CreateTokenSale from '@/components/token-sale-create/CreateTokenSale';
 import ResearchContentReferences from '@/components/research-content-details/ResearchContentReferences';
 
+import AccountSettings from '@/components/account-settings/AccountSettings';
+import ChangePassword from '@/components/account-settings/components/ChangePassword';
+import PrivateKeyDownload from '@/components/account-settings/components/PrivateKeyDownload';
 import UserDetails from '@/components/user-details/UserDetails';
 import UserExpertiseDetails from '@/components/user-details/UserExpertiseDetails';
 import UserWallet from '@/components/user-wallet/components/UserWallet';
@@ -52,12 +55,16 @@ import CreateFundingOpportunityAnnouncement from '@/components/funding-opportuni
 import InvestorDashboard from '@/components/investor-dashboard/InvestorDashboard';
 import ReviewSetup from '@/components/review-setup/ReviewSetup'
 
-import store from './../store/index';
-import usersService from './../services/http/users';
-import { isLoggedIn } from './../utils/auth';
+import store from '@/store/index';
+import usersService from '@/services/http/users';
+import { isLoggedIn } from '@/utils/auth';
 import preliminaryDataLoader from './utils/preliminaryDataLoader';
 
 Vue.use(Router);
+
+const RouterViewNestedWatcher = {
+  template: '<router-view></router-view>',
+};
 
 const router = new Router({
 	routes: [{
@@ -347,6 +354,32 @@ const router = new Router({
 			}
 		})
 	}, {
+    path: '/account-settings',
+    component: RouterViewNestedWatcher,
+    children: [{
+      path: '/',
+      name: 'AccountSettings',
+      component: AccountSettings,
+    }, {
+      path: '/personal-info',
+      name: 'ProfileSettings',
+      redirect: () => {
+        const user = store.getters['auth/user'];
+        return {
+          name: 'UserSettings',
+          params: { account_name: user.username }
+        };
+      }
+    }, {
+      path: 'change-password',
+      name: 'ChangePassword',
+      component: ChangePassword,
+    }, {
+      path: 'private-key',
+      name: 'PrivateKeyDownload',
+      component: PrivateKeyDownload,
+    }]
+  }, {
 		path: '/user-wallet',
 		name: 'UserWallet',
 		component: preliminaryDataLoader(UserWallet, {

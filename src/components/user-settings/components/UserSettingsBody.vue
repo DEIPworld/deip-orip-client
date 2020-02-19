@@ -57,57 +57,6 @@
             </v-layout>
           </div>
 
-          <div class="py-2">
-            <div class="title font-weight-medium pb-3">Master password:</div>
-            <v-form v-model="isMasterPasswordFormValid" @submit.prevent ref="changePasswordForm">
-              <v-text-field
-                v-model="oldPassword"
-                :rules="[rules.required]"
-                label="Old password / Private Key"
-                solo
-                :disabled="isPasswordChanging"
-                :append-icon="isHiddenOldPassword ? 'visibility_off' : 'visibility'"
-                :type="isHiddenOldPassword ? 'password' : 'text'"
-                @click:append="isHiddenOldPassword = !isHiddenOldPassword"
-              />
-              <v-text-field
-                v-model="newPassword"
-                :rules="[rules.required, rules.masterPassword]"
-                label="New password"
-                solo
-                :disabled="isPasswordChanging"
-                :append-icon="isHiddenNewPassword ? 'visibility_off' : 'visibility'"
-                :type="isHiddenNewPassword ? 'password' : 'text'"
-                @click:append="isHiddenNewPassword = !isHiddenNewPassword"
-                @input="$refs.reEnterNewPassword.validate()"
-              />
-              <v-text-field
-                v-model="reEnterNewPassword"
-                :rules="[rules.required, rules.reEnterMasterPassword]"
-                label="Re-Enter New password"
-                solo
-                ref="reEnterNewPassword"
-                :disabled="isPasswordChanging"
-                :append-icon="isHiddenReEnterNewPassword ? 'visibility_off' : 'visibility'"
-                :type="isHiddenReEnterNewPassword ? 'password' : 'text'"
-                @click:append="isHiddenReEnterNewPassword = !isHiddenReEnterNewPassword"
-              />
-            </v-form>
-          </div>
-
-          <div class="py-2">
-            <v-layout justify-end>
-              <v-btn
-                class="my-0 ml-2"
-                large
-                color="primary"
-                :disabled="!isMasterPasswordFormValid || isPasswordChanging"
-                :loading="isPasswordChanging"
-                @click="updateMasterPassword()"
-              >Update Master Password</v-btn>
-            </v-layout>
-          </div>
-
           <div class="pb-3">
             <v-btn class="ma-0" color="primary" outline large @click="cancel">Back to profile</v-btn>
           </div>
@@ -118,10 +67,8 @@
 </template>
 
 <script>
-import deipRpc from '@deip/deip-oa-rpc-client';
 import { mapGetters } from "vuex";
 import usersService from "@/services/http/users";
-import { getOwnerWif, setOwnerWif } from '@/utils/auth';
 import moment from "moment";
 
 export default {
@@ -137,30 +84,8 @@ export default {
       firstName: "",
       lastName: "",
       isLoading: false,
-
-      oldPassword: '',
-      isHiddenOldPassword: true,
-      newPassword: '',
-      isHiddenNewPassword: true,
-      reEnterNewPassword: '',
-      isHiddenReEnterNewPassword: true,
-      isMasterPasswordFormValid: false,
-      isPasswordChanging: false,
-
       rules: {
         required: value => !!value || "This field is required",
-        masterPassword: (value) => {
-          if (!value) return false;
-
-          if (value.length < this.MASTER_PASSWORD_MIN_LENGTH) {
-            return 'Master password should be at least 10 symbols';
-          } else if (value.length > this.MASTER_PASSWORD_MAX_LENGTH) {
-            return 'Master password max length is 100 symbols';
-          }
-
-          return true;
-        },
-        reEnterMasterPassword: (value) => value === this.newPassword || `Password doesn't match`,
       }
     };
   },
@@ -236,68 +161,6 @@ export default {
             params: { account_name: this.currentUser.username }
           });
         });
-    },
-    updateMasterPassword() {
-      const username = this.currentUser.username;
-
-      let oldPrivateKey;
-      if (deipRpc.auth.isWif(this.oldPassword)) {
-        oldPrivateKey = this.oldPassword;
-      } else {
-        oldPrivateKey = deipRpc.auth.toWif(
-          username,
-          this.oldPassword,
-          'owner'
-        );
-      }
-
-      const oldPublicKey = deipRpc.auth.wifToPublic(oldPrivateKey);
-      if (this.currentUser.pubKey !== oldPublicKey) {
-        this.$store.dispatch("layout/setError", {
-          message: `Old password is invalid`
-        });
-        return;
-      }
-
-      const {
-        owner: newPrivateKey,
-        ownerPubkey: newPublicKey
-      } = deipRpc.auth.getPrivateKeys(
-        username,
-        this.newPassword,
-        ['owner']
-      );
-      const owner = {
-        weight_threshold: 1,
-        account_auths: [],
-        key_auths: [[newPublicKey, 1]]
-      };
-
-      this.isPasswordChanging = true;
-      return deipRpc.broadcast.accountUpdateAsync(
-        oldPrivateKey,
-        username,
-        owner,
-        owner,
-        owner,
-        newPublicKey,
-        this.currentUser.account.json_metadata
-      ).then(() => {
-        this.$store.dispatch('layout/setSuccess', {
-          message: `Master Password successfully changed!`
-        });
-        this.$refs.changePasswordForm.reset();
-
-        setOwnerWif(newPrivateKey);
-        return this.$store.dispatch('auth/loadUser');
-      }).catch((err) => {
-        this.$store.dispatch('layout/setError', {
-          message: `Oops! Something went wrong`
-        });
-        console.error(err.message);
-      }).finally(() => {
-        this.isPasswordChanging = false;
-      });
     },
   },
 
