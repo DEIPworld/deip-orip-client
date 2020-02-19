@@ -118,7 +118,9 @@
                         changeQuorum: 0,
                         changeReviewSharePercent: 0,
                         offerResearchTokens: 0,
-                        createMaterial: 0
+                        createMaterial: 0,
+                        researchGroupMeta:0,
+                        researchMeta:0
                     }
                 }
             } 

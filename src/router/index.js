@@ -130,10 +130,19 @@ const router = new Router({
 		name: 'ResearchGroupSettings',
 		component: preliminaryDataLoader(ResearchGroupSettings	, {
 			beforeEnter: (to, from, next) => {
-				let loadPagePromise = store.dispatch('researchGroupSettings/loadResearchGroup', {
-					permlink: decodeURIComponent(to.params.research_group_permlink)
-				});
-				loadPage(loadPagePromise, next);
+				if(store.getters['auth/user'].groups.find(item => encodeURIComponent(item.permlink) == to.params.research_group_permlink)){
+					let loadPagePromise = store.dispatch('researchGroupSettings/loadResearchGroup', {
+						permlink: decodeURIComponent(to.params.research_group_permlink)
+					});
+					loadPage(loadPagePromise, next);
+				} else {
+					next({
+						name: 'ResearchGroupDetails',
+						params: {
+							research_group_permlink: to.params.research_group_permlink
+						}
+					})
+				}
 			}
 		})
 	}, {
@@ -187,11 +196,21 @@ const router = new Router({
 			name: 'ResearchEdit',
 			component: preliminaryDataLoader(ResearchEdit, {
 				beforeEnter: (to, from, next) => {
-					let loadPagePromise = store.dispatch('re/loadResearchEditPage', {
-						group_permlink: decodeURIComponent(to.params.research_group_permlink),
-						research_permlink: decodeURIComponent(to.params.research_permlink)
-					});
-					loadPage(loadPagePromise, next);
+					if(store.getters['auth/user'].groups.find(item => encodeURIComponent(item.permlink) == to.params.research_group_permlink)){
+						let loadPagePromise = store.dispatch('re/loadResearchEditPage', {
+							group_permlink: decodeURIComponent(to.params.research_group_permlink),
+							research_permlink: decodeURIComponent(to.params.research_permlink)
+						});
+						loadPage(loadPagePromise, next);
+					} else {
+						next({
+							name: 'ResearchDetails',
+							params: {
+								research_group_permlink: to.params.research_group_permlink,
+								research_permlink: to.params.research_permlink
+							}
+						})
+					}
 				}
 			})
 		}, {
@@ -347,10 +366,19 @@ const router = new Router({
 		name: 'UserSettings',
 		component: preliminaryDataLoader(UserSettings, {
 			beforeEnter: (to, from , next) => {
-				let loadPagePromise = store.dispatch('userSettings/loadUserSettingsPage', {
-					username: decodeURIComponent(to.params.account_name)
-				});
-				loadPage(loadPagePromise, next);
+				if (store.getters['auth/user'].username !== to.params.account_name){
+					next({
+						name: 'UserDetails',
+						params: {
+							account_name: to.params.account_name
+						}
+					})
+				} else {
+					let loadPagePromise = store.dispatch('userSettings/loadUserSettingsPage', {
+						username: decodeURIComponent(to.params.account_name)
+					});
+					loadPage(loadPagePromise, next);
+				}
 			}
 		})
 	}, {

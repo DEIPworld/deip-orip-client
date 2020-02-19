@@ -233,20 +233,6 @@
                         </v-layout>
                     </div>
                 </div>
-                <div v-if="isOwner" class="body-1 text-align-right mt-3">
-                    <v-btn
-                        class="ma-0"
-                        small
-                        outline
-                        color="primary"
-                        :to="{
-                        name: 'UserSettings',
-                        params: {
-                            account_name: currentUser.username
-                            }
-                        }"
-                    >Edit profile</v-btn>
-                </div>
             </div>
         </div>
         <!-- ### END User Profile Info Section ### -->

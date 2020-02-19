@@ -45,18 +45,19 @@
                     <v-card>
                         <div class="info-card-list">
                             <v-layout row class="list-line align-center">
-                                <v-flex list-header-cell xs4>Researcher</v-flex>
+                                <v-flex list-header-cell :class="isShowActionColumn ? 'xs3': 'xs4'">Researcher</v-flex>
                                 <v-flex list-header-cell xs3>Expertise</v-flex>
                                 <v-flex list-header-cell xs1 text-align-center>Group weight</v-flex>
                                 <v-flex list-header-cell xs2 text-align-center>Member since</v-flex>
                                 <v-flex list-header-cell xs2 text-align-center>Location</v-flex>
+                                <v-flex v-if="isShowActionColumn" list-header-cell xs1 text-align-center>Action</v-flex>
                             </v-layout>
 
                             <v-divider></v-divider>
 
                             <template v-for="(member, i) in members">
                                 <v-layout class="list-line" :key="'member-' + i">
-                                    <v-flex xs4 list-body-cell display-flex>
+                                    <v-flex list-body-cell display-flex :class="isShowActionColumn ? 'xs3' : 'xs4'">
                                         <platform-avatar 
                                             :user="member"
                                             :size="40"
@@ -88,11 +89,32 @@
                                     </v-flex>
 
                                     <v-flex xs2 text-align-center list-body-cell>{{member | userLocation}}</v-flex>
+
+                                    <v-flex v-if="(isResearchGroupMember && !group.is_dao && member.rgt.owner != group.creator) || 
+                                    (group.is_dao && member.rgt.owner != group.creator && user.username == group.creator)" xs1 text-align-center list-body-cell>
+                                        <v-btn 
+                                          flat 
+                                          icon 
+                                          color="grey" 
+                                          class="ma-0" 
+                                          @click="showConfirmAction(member, i)">
+                                            <v-icon>mdi-close-circle-outline</v-icon>
+                                        </v-btn>
+                                    </v-flex>
                                 </v-layout>
 
                                 <v-divider :key="'member-divider-' + i"></v-divider>
                             </template>
                         </div>
+
+                        <confirm-action-dialog
+                          :meta="dropoutMemberMeta"
+                          :title="`You’re about to exclude`" 
+                          :text="`${dropoutMemberMeta.item ? 
+                          `${dropoutMemberMeta.item.firstName} ${dropoutMemberMeta.item.lastName}` : ''} from ${group.name} Research Group`"
+                          @confirmed="dropoutMember($event);" 
+                          @canceled="dropoutMemberMeta.isShown = false">
+                        </confirm-action-dialog>
 
                         <div v-if="isResearchGroupMember && !group.is_personal" class="px-4 py-3">
                             <v-btn outline icon color="primary" class="ma-0" @click="$store.dispatch('researchGroup/changeOptions', { key: 'isAddMemberDialogOpen', value: true })">
@@ -173,6 +195,7 @@
     import { mapGetters } from 'vuex';
     import deipRpc from '@deip/deip-oa-rpc-client';
     import { getEnrichedProfiles } from './../../../utils/user';
+    import { createDropoutProposal } from "./../../../services/ProposalService";
 
     export default {
         name: "ResearchGroupDetailsBody",
@@ -183,6 +206,10 @@
                 highlightProposalsSection: undefined,
                 proposalsSectionTransitionTrigger: false,
                 usersToInvite: [],
+
+                dropoutMemberMeta:{ isShown: false, item: null, index: null, isConfirming: false},
+                isLoadingDropoutBtn: false,
+                isDisabledDropoutBtn: false
             } 
         },
         computed: {
@@ -209,10 +236,46 @@
                 return this.group != null 
                     ? this.$store.getters['auth/userIsResearchGroupMember'](this.group.id) 
                     : false
+            },
+            isShowActionColumn(){
+                return (!this.group.is_dao && this.isResearchGroupMember) || (this.group.is_dao && this.user.username == this.group.creator)
             }
         }, 
 
         methods: {
+          dropoutMember(member) {
+            this.dropoutMemberMeta.isConfirming = true;
+
+            createDropoutProposal(
+                this.group.id,
+                member.item.owner,
+            ).then(() => {
+                this.$store.dispatch('layout/setSuccess', {
+                    message: "Dropout Proposal has been created successfully!"
+                });
+                this.$store.dispatch('researchGroup/loadResearchGroupProposals', { groupId: this.group.id })
+            }).catch(err => {
+                this.$store.dispatch('layout/setError', {
+                    message: "An error occurred while creating proposal, please try again later"
+                });
+                console.log(err)
+            }).finally(() => {
+                this.dropoutMemberMeta.isConfirming = false;
+                this.dropoutMemberMeta.isShown = false
+                this.$vuetify.goTo('#proposals')
+            });
+          },
+
+          showConfirmAction(member, index){
+            const memberData = {
+              'firstName':member.profile.firstName,
+              'lastName':member.profile.lastName,
+              'owner':member.rgt.owner
+            }
+            this.dropoutMemberMeta.item = memberData
+            this.dropoutMemberMeta.index = index
+            this.dropoutMemberMeta.isShown = true
+          }
         },
 
         mounted() {

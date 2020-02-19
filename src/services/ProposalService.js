@@ -72,6 +72,11 @@ schemasMap[INVITE_MEMBER] = (researchGroupId, name, researchGroupTokenAmount, co
         "cover_letter": coverLetter
     };
 };
+schemasMap[DROPOUT_MEMBER] = name => {
+    return {
+        "name": name,
+    };
+};
 schemasMap[SEND_FUNDS] = (researchGroupId, recipient, funds) => {
     return {
         "research_group_id": researchGroupId,
@@ -229,6 +234,26 @@ const createInviteProposal = function(groupId, invitee, rgtAmount, coverLetter) 
         })
 }
 
+const createDropoutProposal = function(groupId, name) {
+    const data = getStringifiedProposalData(DROPOUT_MEMBER, [ 
+        name
+    ]);
+
+    const proposal = {
+        creator: getDecodedToken().username,
+        research_group_id: groupId,
+        data: data,
+        action: DROPOUT_MEMBER,
+        expiration_time: getProposalExpirationTime()
+    };
+
+    const operation = ["create_proposal", proposal];
+    return signOperation(operation, getOwnerWif())
+        .then((signedTx) => {
+            return proposalsHttp.sendInviteProposal(signedTx);
+        })
+}
+
 const createSendFundsProposal = (groupId, recipient, funds) => {
     const data = getStringifiedProposalData(SEND_FUNDS, [
         groupId,
@@ -374,6 +399,7 @@ export {
     voteForProposal,
 
     createInviteProposal,
+    createDropoutProposal,
     createChangeQuorumProposal,
     createSendFundsProposal,
     createResearchProposal,

@@ -24,7 +24,20 @@
                     </v-avatar>
 
                     <v-flex xs12 sm8>
-                        <div class="display-1 font-weight-medium pt-3">{{userInfo | fullname}} <span v-if="(userInfo.profile && userInfo.profile.firstName)" class="caption username-caption grey--text">({{userInfo.account.name}})</span></div>
+                        <div class="display-1 font-weight-medium pt-3">{{userInfo | fullname}} <span v-if="(userInfo.profile && userInfo.profile.firstName)" class="caption username-caption grey--text">({{userInfo.account.name}})</span>
+                            <v-btn
+                                class="my-0 mr-0 ml-2"
+                                small
+                                outline
+                                color="grey"
+                                :to="{
+                                name: 'UserSettings',
+                                params: {
+                                    account_name: currentUser.username
+                                    }
+                                }"
+                            >Edit profile</v-btn>
+                        </div>
 
                         <div class="pt-3">
                             <div v-if="userInfo.profile">
