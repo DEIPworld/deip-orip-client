@@ -12,9 +12,6 @@ import tenantHttp from './../../../services/http/tenant';
 
 const state = {
   user: {
-    username: isLoggedIn() ? getDecodedToken().username : null,
-    pubKey: isLoggedIn() ? getDecodedToken().pubKey : null,
-    privKey: isLoggedIn() ? getOwnerWif() : null,
     profile: null,
     account: null,
     expertTokens: [],
@@ -31,7 +28,13 @@ const state = {
 // getters
 const getters = {
   user: (state, getters) => {
-    return state.user
+    const privKey = isLoggedIn() ? getOwnerWif() : null;
+    return {
+      ...state.user,
+      username: isLoggedIn() ? getDecodedToken().username : null,
+      privKey,
+      pubKey: isLoggedIn() ? deipRpc.auth.wifToPublic(privKey) : null,
+    }
   },
 
   userExperise: (state, getters) => {
