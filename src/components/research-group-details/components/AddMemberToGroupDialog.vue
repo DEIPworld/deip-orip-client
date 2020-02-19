@@ -12,13 +12,13 @@
         </v-layout>
       </v-card-title>
       <v-card-text>
-        <v-autocomplete :items="users" v-model="selectedUser" placeholder="Researcher">
+        <v-autocomplete :items="users" item-text="profile.firstName" item-value="account" v-model="selectedUser" placeholder="Researcher">
           <template slot="selection" slot-scope="data">
             <div class="pl-2">
               <platform-avatar 
                 :user="data.item"
                 :size="30"
-                link-to-profile
+                noFollow
                 link-to-profile-class="pl-2"
               ></platform-avatar>
             </div>
@@ -29,7 +29,7 @@
               <platform-avatar 
                 :user="data.item"
                 :size="30"
-                link-to-profile
+                noFollow
                 link-to-profile-class="pl-2"
               ></platform-avatar>
             </div>
@@ -105,7 +105,7 @@
                 
                 createInviteProposal(
                     this.groupId,
-                    this.selectedUser.account.name,
+                    this.selectedUser.name,
                     parseInt(this.tokensAmount) * this.DEIP_1_PERCENT,
                     this.coverLetter
 				).then(() => {

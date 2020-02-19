@@ -24,6 +24,13 @@
                     </div>
 
                     <div class="display-flex" 
+                        v-else-if="proposal.action === proposalTypes.DROPOUT_MEMBER"
+                    >
+                        <v-icon small color="primary" class="mr-2">mdi-account-remove</v-icon>
+                        <div class="a">{{ proposal.data.name }}</div>
+                    </div>
+
+                    <div class="display-flex" 
                         v-else-if="proposal.action === proposalTypes.SEND_FUNDS"
                     >
                         <v-icon small color="primary" class="mr-2">money_off</v-icon>

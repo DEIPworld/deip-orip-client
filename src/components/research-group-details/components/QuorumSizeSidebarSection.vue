@@ -7,7 +7,6 @@
         <div
           v-for="(proposalBlock, i) in proposalOrderMap"
           :key="`proposalBlock-${i}`"
-          :class="{ 'c-pt-2': i !== 0 }"
         >
           <div v-for="proposalData in proposalBlock" :key="proposalLabels[proposalData.key]">
             <div class="d-flex justify-space-between align-center">
@@ -35,7 +34,7 @@ export default {
       isEditMode: false,
       proposalLabels: _.cloneDeep(proposalService.labels),
 
-      proposalOrderMap: [
+     proposalOrderMap: [
         [
           { key: proposalService.types.START_RESEARCH, value: undefined },
           {
@@ -73,9 +72,13 @@ export default {
           {
             key: proposalService.types.CHANGE_RESEARCH_GROUP_META_DATA_TYPE,
             value: undefined
+          },
+          {
+            key: proposalService.types.CHANGE_RESEARCH_META_DATA_TYPE,
+            value: undefined
           }
         ]
-      ]
+      ],
     };
   },
 
