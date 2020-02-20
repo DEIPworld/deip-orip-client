@@ -45,19 +45,19 @@
                     <v-card>
                         <div class="info-card-list">
                             <v-layout row class="list-line align-center">
-                                <v-flex list-header-cell :class="isShowActionColumn ? 'xs3': 'xs4'">Researcher</v-flex>
+                                <v-flex list-header-cell :class="isGroupMembersActionsColumnAvailable ? 'xs3': 'xs4'">Researcher</v-flex>
                                 <v-flex list-header-cell xs3>Expertise</v-flex>
                                 <v-flex list-header-cell xs1 text-align-center>Group weight</v-flex>
                                 <v-flex list-header-cell xs2 text-align-center>Member since</v-flex>
                                 <v-flex list-header-cell xs2 text-align-center>Location</v-flex>
-                                <v-flex v-if="isShowActionColumn" list-header-cell xs1 text-align-center>Action</v-flex>
+                                <v-flex v-if="isGroupMembersActionsColumnAvailable" list-header-cell xs1 text-align-center>Action</v-flex>
                             </v-layout>
 
                             <v-divider></v-divider>
 
                             <template v-for="(member, i) in members">
                                 <v-layout class="list-line" :key="'member-' + i">
-                                    <v-flex list-body-cell display-flex :class="isShowActionColumn ? 'xs3' : 'xs4'">
+                                    <v-flex list-body-cell display-flex :class="isGroupMembersActionsColumnAvailable ? 'xs3' : 'xs4'">
                                         <platform-avatar 
                                             :user="member"
                                             :size="40"
@@ -90,8 +90,7 @@
 
                                     <v-flex xs2 text-align-center list-body-cell>{{member | userLocation}}</v-flex>
 
-                                    <v-flex v-if="(isResearchGroupMember && !group.is_dao && member.rgt.owner != group.creator) || 
-                                    (group.is_dao && member.rgt.owner != group.creator && user.username == group.creator)" xs1 text-align-center list-body-cell>
+                                    <v-flex v-if="isExcludingMemberAvailable(member.rgt.owner)" xs1 text-align-center list-body-cell>
                                         <v-btn 
                                           flat 
                                           icon 
@@ -228,17 +227,13 @@
                 userPersonalGroup: 'auth/userPersonalGroup'
             }),
             isPersonalGroup() {
-                return this.group 
-                    ? this.group.id == this.userPersonalGroup.id 
-                    : false;
+                return this.group.id == this.userPersonalGroup.id;
             },
             isResearchGroupMember() {
-                return this.group != null 
-                    ? this.$store.getters['auth/userIsResearchGroupMember'](this.group.id) 
-                    : false
+                return this.$store.getters['auth/userIsResearchGroupMember'](this.group.id);
             },
-            isShowActionColumn(){
-                return (!this.group.is_dao && this.isResearchGroupMember) || (this.group.is_dao && this.user.username == this.group.creator)
+            isGroupMembersActionsColumnAvailable() {
+              return !this.isPersonalGroup && this.isResearchGroupMember && (this.group.is_dao || (!this.group.is_dao && this.user.username == this.group.creator));
             }
         }, 
 
@@ -266,7 +261,7 @@
             });
           },
 
-          showConfirmAction(member, index){
+          showConfirmAction(member, index) {
             const memberData = {
               'firstName':member.profile.firstName,
               'lastName':member.profile.lastName,
@@ -275,6 +270,10 @@
             this.dropoutMemberMeta.item = memberData
             this.dropoutMemberMeta.index = index
             this.dropoutMemberMeta.isShown = true
+          },
+
+          isExcludingMemberAvailable(username) {
+            return this.isGroupMembersActionsColumnAvailable && this.user.username != username;
           }
         },
 
