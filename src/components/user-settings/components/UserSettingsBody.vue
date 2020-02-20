@@ -143,6 +143,7 @@ export default {
             this.$store.dispatch("userSettings/loadUserProfile", {
               username: this.currentUser.username
             });
+            this.$store.dispatch('auth/loadUser');
             this.$store.dispatch("layout/setSuccess", {
               message: `"Personal info has been saved successfully!"`
             });
