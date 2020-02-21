@@ -1,0 +1,52 @@
+[
+  {
+    "type": "management",
+    "title": "Management",
+    "icon": "mdi-equalizer"
+  },
+  {
+    "type": "engineering",
+    "title": "Engineering",
+    "icon": "mdi-wrench"
+  },
+  {
+    "type": "testing_facility",
+    "title": "Testing Facility",
+    "icon": "mdi-bug"
+  },
+  {
+    "type": "laboratory_and_validation",
+    "title": "Laboratory & Validation",
+    "icon": "mdi-puzzle"
+  },
+  {
+    "type": "market_study",
+    "title": "Market Study",
+    "icon": "mdi-chart-donut"
+  },
+  {
+    "type": "technology_study",
+    "title": "Technology Study",
+    "icon": "settings"
+  },
+  {
+    "type": "contractors",
+    "title": "Contractors",
+    "icon": "mdi-briefcase-check"
+  },
+  {
+    "type": "suppliers",
+    "title": "Suppliers",
+    "icon": "mdi-cart"
+  },
+  {
+    "type": "consulting",
+    "title": "Consulting",
+    "icon": "mdi-star-circle"
+  },
+  {
+    "type": "investor",
+    "title": "Investor",
+    "icon": "mdi-cash-usd-outline"
+  }
+]

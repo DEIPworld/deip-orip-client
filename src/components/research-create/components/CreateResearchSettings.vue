@@ -5,12 +5,34 @@
       <div class="font-weight-bold title text-align-left mb-4">Visibility</div>
       <v-layout row shrink>
         <v-flex shrink :class="{'grey--text':isPublic}">Private project</v-flex>
-				<v-flex shrink>
-        	<v-switch class="my-0 ml-2 py-0" v-model="isPublic" @change="setPrivateFlag" color="primary"></v-switch>
-				</v-flex>
+        <v-flex shrink>
+          <v-switch
+            class="my-0 ml-2 py-0"
+            v-model="isPublic"
+            @change="setPrivateFlag"
+            color="primary"
+          ></v-switch>
+        </v-flex>
         <v-flex shrink :class="{'grey--text':!isPublic}">Public project</v-flex>
       </v-layout>
-			<v-divider></v-divider>
+      <v-divider></v-divider>
+    </v-flex>
+
+    <v-flex xs12 sm8 px-5>
+      <div class="my-4">
+        <div class="title font-weight-medium mb-4">Technology Readiness Level</div>
+        <technology-readiness-level
+          :currentTrlStep="research.trlStep"
+          @changeCurrentTrlStep="changeCurrentTrlStep"
+        ></technology-readiness-level>
+      </div>
+    </v-flex>
+
+    <v-flex xs12 sm8 px-5>
+      <div class="my-4">
+        <div class="title font-weight-medium mb-4">Partners</div>
+        <research-partners :partners="research.partners"></research-partners>
+      </div>
     </v-flex>
 
     <v-flex xs12 flex-grow-0 align-self-end>
@@ -20,7 +42,7 @@
         </v-btn>
         <v-btn
           :loading="isLoading"
-          :disabled="isLoading"
+          :disabled="isLoading || isEmptyFields"
           color="primary"
           @click.native="nextStep()"
         >Create project</v-btn>
@@ -40,20 +62,30 @@ export default {
   },
   data() {
     return {
-      isPublic: !this.research.isPrivate
+      isPublic: !this.research.isPrivate,
+      currentTrlStep: undefined,
     };
+  },
+  computed: {
+    isEmptyFields(){
+      return this.research.partners.length ? !!this.research.partners.find(item => item.title == '' || item.type == '') : false
+    }
   },
   methods: {
     nextStep() {
-        this.$emit("finish");
+      this.$emit("finish");
     },
     prevStep() {
       this.$emit("decStep");
     },
-		setPrivateFlag(){
-			this.$emit('setPrivateFlag', this.isPublic)
-		}
-	},
+    setPrivateFlag() {
+      this.$emit("setPrivateFlag", this.isPublic);
+    },
+    changeCurrentTrlStep(step) {
+      this.currentTrlStep = step;
+      this.$emit("setTrlStep", this.currentTrlStep);
+    }
+  }
 };
 </script>
 

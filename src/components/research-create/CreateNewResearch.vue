@@ -112,6 +112,7 @@
                 @finish="finish"
                 @decStep="decStep"
                 @setPrivateFlag='setPrivateFlag'
+                @setTrlStep='setTrlStep'
                 :research="research"
                 :isLoading="isLoading"
               ></create-research-settings>
@@ -156,7 +157,9 @@ export default {
         videoSrc: "",
         review_share_in_percent: 5,
         milestones: [],
-        isPrivate: false
+        isPrivate: false,
+        trlStep: 'basic_principles_of_concept_are_observed_and_reported',
+        partners: []
       }
     };
   },
@@ -206,6 +209,10 @@ export default {
       this.research.isPrivate = !isPublic;
     },
 
+    setTrlStep(step){
+      this.research.trlStep = step;
+    },
+
     finish() {
       this.isLoading = true;
 
@@ -225,13 +232,17 @@ export default {
         this.research.milestones.map((m, i) => {
           return {
             goal: m.goal,
+            budget: m.budget,
+            purpose: m.purpose,
             details: m.details,
             eta: moment(m.eta).toDate(),
-            is_active: i === 0
+            isActive: i === 0
           };
         }),
         this.research.videoSrc,
-        this.research.isPrivate
+        this.research.isPrivate,
+        this.research.trlStep,
+        this.research.partners
       )
         .then(
           () => {

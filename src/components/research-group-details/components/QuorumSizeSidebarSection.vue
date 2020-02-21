@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="subheading bold">Quorum size</div>
+    <div class="subheading bold">Quorum threshold</div>
 
     <div class="pt-3">
       <div v-if="!isResearchGroupMember || !isEditMode">
