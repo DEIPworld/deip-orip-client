@@ -101,8 +101,7 @@ export default {
         !this.bio ||
         !this.email ||
         !this.firstName ||
-        !this.lastName ||
-        !this.editedBirthdayDate
+        !this.lastName
       );
     }
   },

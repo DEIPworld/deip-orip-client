@@ -65,6 +65,31 @@
               </v-btn>
             </div>
           </v-flex>
+
+          <v-flex xl5 lg5 sm5 md12 xs12>
+            <v-text-field
+              v-model="step.budget" 
+              :error-messages="step.validation.budgetError"
+              @click.native="clearValidation()"
+              class="my-0 pa-0 mx-2"
+              solo
+              label="Estimated budget"
+            ></v-text-field>
+          </v-flex>
+
+
+          <v-flex xl7 lg7 sm7 md12 xs12>
+            <v-text-field
+              v-model="step.purpose" 
+              :error-messages="step.validation.purposeError"
+              @click.native="clearValidation()"
+              class="my-0 pa-0 mx-2"
+              solo
+              label="Budget purpose"
+            ></v-text-field>
+          </v-flex>
+
+          
           <v-flex xl12 lg12 sm12 md12 xs12>
             <v-textarea
               v-model="step.details"

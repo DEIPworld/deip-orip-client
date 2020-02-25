@@ -58,4 +58,10 @@ import ReviewAssessmentSquaredRating from './components/review/review-assessment
 Vue.component('review-assessment', ReviewAssessment);
 Vue.component('review-assessment-squared-rating', ReviewAssessmentSquaredRating);
 
+import TechnologyReadinessLevel from './components/research/technology-readiness-level/TechnologyReadinessLevel';
+Vue.component('technology-readiness-level', TechnologyReadinessLevel);
+
+import ResearchPartners from './components/research/research-partners/ResearchPartners';
+Vue.component('research-partners', ResearchPartners);
+
 import './filters/index';

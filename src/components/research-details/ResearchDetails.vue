@@ -336,6 +336,7 @@
                     />
                     <div class="rd-timeline-item__date">{{item.date}}</div>
                     <div class="rd-timeline-item__label pt-1">{{item.label}}</div>
+                    <div class="rd-timeline-item__budget pt-1"><span class="font-weight-bold">${{item.budget}}</span> {{item.purpose}}</div>
                   </li>
                   <li v-if="timelineItemsToShow < timeline.length" class="rd-timeline-item">
                     <div
@@ -840,6 +841,25 @@
               class="mt-3"
             />
           </v-layout> -->
+
+          <v-divider />
+          <v-layout column ma-4>
+            <technology-readiness-level isReadOnly :currentTrlStep="researchRef.trl"></technology-readiness-level>
+          </v-layout>
+
+          <v-divider v-if="isResearchGroupMember"/>
+
+          <v-layout column ma-4 v-if="isResearchGroupMember">
+            <span class="font-weight-bold" v-if="research.is_private"><v-icon class="mr-2" small color="black">lock</v-icon>Private project</span>
+            <span class="font-weight-bold" v-else><v-icon class="mr-2" small color="black">mdi-earth</v-icon>Public project</span>
+          </v-layout>
+
+          <v-divider />
+
+          <v-layout column ma-4 v-if="researchRef.partners.length">
+            <research-partners isReadOnly :partners="researchRef.partners"></research-partners>
+          </v-layout>
+
           <v-divider />
 
           <v-dialog
@@ -908,7 +928,7 @@
               </v-card-actions>
             </v-card>
           </v-dialog>
-          <v-divider />
+          <!-- <v-divider /> -->
 
           <!-- <v-layout column class="my-4 mx-4">
             <div class="rd-sidebar-block-title">Tokenization</div>
@@ -931,7 +951,7 @@
             ></confirm-action-dialog>
           </v-layout> -->
 
-          <v-divider />
+          <!-- <v-divider /> -->
           <div
             class="rd-sidebar-block-title my-4 px-4"
           >Citations: {{researchReferencesList.length + research.id}}</div>
@@ -951,6 +971,7 @@ import contentHttpService from "@/services/http/content";
 import joinRequestsService from "@/services/http/joinRequests";
 import reviewRequestsService from "@/services/http/reviewRequests";
 import { getResearchContentType } from "@/services/ResearchService";
+import { getResearch, updateResearch } from "@/services/ResearchExtendedService";
 
 // import references from './references.json';
 // import timeline from './timeline.json';
@@ -1012,8 +1033,7 @@ export default {
         items: [],
         totalItems: 0,
         loading: false,
-      }
-
+      },
     };
   },
 
@@ -1030,6 +1050,7 @@ export default {
       researchMembersList: "rd/researchMembersList",
       researchGroupMembersList: "rd/researchGroupMembersList",
       research: "rd/research",
+      researchRef: "rd/researchRef",
       reviewsList: "rd/reviewsList",
       tokenHoldersList: "rd/tokenHoldersList",
       tokenSale: "rd/tokenSale",
@@ -1060,9 +1081,7 @@ export default {
     },
 
     timeline() {
-      let milestones = this.$options.filters.researchMilestones(
-        this.research.abstract
-      );
+      let milestones = this.researchRef.milestones
       let timeline = milestones.map((milestone, i) => {
         return {
           id: i + 1,
@@ -1071,7 +1090,9 @@ export default {
             .local()
             .format("MMM DD, YYYY"),
           label: milestone.goal,
-          description: milestone.details
+          description: milestone.details,
+          budget: milestone.budget,
+          purpose: milestone.purpose
         };
       });
       return timeline;
@@ -1668,9 +1689,7 @@ export default {
         description: this.$options.filters.researchAbstract(
           this.research.abstract
         ),
-        milestones: this.$options.filters.researchMilestones(
-          this.research.abstract
-        ),
+        milestones: this.researchRef.milestones,
         video_src: this.$options.filters.researchVideoSrc(
           this.research.abstract
         ),
@@ -2040,6 +2059,13 @@ export default {
       color: #000000;
     }
     &__label {
+      font-family: Roboto;
+      font-size: 12px;
+      font-weight: 500;
+      line-height: 18px;
+      color: #000000;
+    }
+    &__budget, &__purpose {
       font-family: Roboto;
       font-size: 12px;
       line-height: 18px;

@@ -271,24 +271,31 @@ const createSendFundsProposal = (groupId, recipient, funds) => {
     );
 };
 
-const createResearchProposal = function (groupId, title, description, permlink, reviewShare, disciplines, milestones, videoSrc, isPrivate) {
+const createResearchProposal = function (groupId, title, description, permlink, reviewShare, disciplines, milestones, videoSrc, isPrivate, trl, partners) {
+    const meta = {
+      videoSrc,
+      milestones,
+      partners,
+      trl
+    };
+    
     const data = getStringifiedProposalData(START_RESEARCH, [
-        groupId, title, JSON.stringify({ description, milestones, video_src: videoSrc }), permlink, reviewShare, 5, disciplines, isPrivate
+      groupId, title, description, permlink, reviewShare, 5, disciplines, isPrivate
     ]);
 
     const proposal = {
-        creator: getDecodedToken().username,
-        research_group_id: groupId,
-        data: data,
-        action: START_RESEARCH,
-        expiration_time: getProposalExpirationTime()
+      creator: getDecodedToken().username,
+      research_group_id: groupId,
+      data: data,
+      action: START_RESEARCH,
+      expiration_time: getProposalExpirationTime()
     };
 
     const operation = ["create_proposal", proposal];
     return signOperation(operation, getOwnerWif())
-        .then((signedTx) => {
-            return proposalsHttp.sendResearchProposal(signedTx);
-        })
+      .then((signedTx) => {
+        return proposalsHttp.sendResearchProposal(signedTx, meta);
+      })
 }
 
 const createChangeQuorumProposal = (groupId, proposalType, quorumPercent) => {

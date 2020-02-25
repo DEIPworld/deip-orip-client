@@ -20,18 +20,6 @@
             ></v-textarea>
           </div>
 
-          <div>
-            <div class="title font-weight-medium pb-3">Video Presentation:</div>
-            <v-text-field
-              prepend-inner-icon="link"
-              label="Link to a video presentation"
-              single-line
-              solo
-              v-model="videoSrc"
-              :rules="[rules.link]"
-            ></v-text-field>
-          </div>
-
           <div class="mb-3">
             <div class="title font-weight-medium pb-3">Visibility</div>
             <v-layout row shrink>
@@ -43,7 +31,53 @@
             </v-layout>
           </div>
 
-          <div class="mb-5">
+          <div class="py-2 mb-3">
+            <v-layout justify-end>
+              <v-btn
+                class="my-0 ml-2"
+                large
+                :loading="isLoading"
+                :disabled="isSavingMetaDisabled || isLoading"
+                color="primary"
+                @click="saveMeta()"
+              >Update Info</v-btn>
+            </v-layout>
+          </div>
+
+          <v-divider></v-divider>
+
+          <div class="my-4">
+            <div class="title font-weight-medium pb-3">Video Presentation:</div>
+            <v-text-field
+              prepend-inner-icon="link"
+              label="Link to a video presentation"
+              single-line
+              solo
+              v-model="videoSrc"
+              :rules="[rules.link]"
+            ></v-text-field>
+          </div>
+
+          <v-divider></v-divider>
+
+          <div class="my-4">
+            <div class="title font-weight-medium pb-3">Technology Readiness Level</div>
+            <technology-readiness-level
+              :currentTrlStep="currentTrlStep"
+              @changeCurrentTrlStep="changeCurrentTrlStep"
+            ></technology-readiness-level>
+          </div>
+
+          <v-divider></v-divider>
+
+          <div class="my-4">
+            <div class="title font-weight-medium pb-3">Partners</div>
+            <research-partners :partners="partners"></research-partners>
+          </div>
+
+          <v-divider></v-divider>
+
+          <div class="my-4">
             <div class="title font-weight-medium pb-3">Active Milestone:</div>
             <v-select
               v-model="activeMilestone"
@@ -54,8 +88,6 @@
               return-object
             ></v-select>
           </div>
-
-          <v-divider></v-divider>
 
           <div v-if="milestones" class="py-4">
             <div class="title font-weight-medium pb-3">Roadmap:</div>
@@ -68,9 +100,9 @@
                 class="my-0 ml-2"
                 large
                 :loading="isLoading"
-                :disabled="isSavingDisabled || isLoading"
+                :disabled="isSavingRefDisabled || isLoading"
                 color="primary"
-                @click="save()"
+                @click="saveRef()"
               >Update Info</v-btn>
             </v-layout>
           </div>
@@ -125,8 +157,10 @@ import _ from "lodash";
 import deipRpc from "@deip/deip-oa-rpc-client";
 import moment from "moment";
 import { getAccessToken } from "./../../../utils/auth";
+import { updateResearch } from './../../../services/ResearchExtendedService';
 import vueDropzone from "vue2-dropzone";
 import * as proposalService from "./../../../services/ProposalService";
+import router from "../../../router";
 
 export default {
   name: "ResearchEditBody",
@@ -138,6 +172,8 @@ export default {
       title: "",
       description: "",
       milestones: undefined,
+      currentTrlStep: undefined,
+      partners: [],
       videoSrc: "",
       activeMilestone: undefined,
       isPublic: false,
@@ -149,13 +185,15 @@ export default {
           return !value || this.isValidLink || "Invalid http(s) link";
         }
       },
-      shadowMetaData: undefined
+      shadowMetaData: undefined,
+      shadowRefData: undefined
     };
   },
   computed: {
     ...mapGetters({
       user: "auth/user",
       research: "re/research",
+      researchRef: "re/researchRef",
       userGroups: "auth/userGroups"
     }),
 
@@ -181,39 +219,55 @@ export default {
     },
 
     metaData() {
+      return JSON.stringify({
+        title: this.title,
+        description: this.description,
+        is_private: !this.isPublic
+      });
+    },
+
+    refData() {
       let milestones = this.milestones.map(m => {
         return {
           goal: m.goal,
+          budget: m.budget,
+          purpose: m.purpose,
           details: m.details,
           eta: moment(m.eta).toDate(),
-          is_active: this.activeMilestone
+          isActive: this.activeMilestone
             ? m.goal == this.activeMilestone.goal
             : false
         };
       });
       return JSON.stringify({
-        title: this.title,
-        description: this.description,
         milestones,
         video_src: this.videoSrc,
         is_tokenized: this.$options.filters.researchTokenized(
           this.research.abstract
         ),
-        is_private: !this.isPublic
+        currentTrlStep: this.currentTrlStep,
+        partners: this.partners
       });
     },
 
-    isSavingDisabled() {
+    isSavingMetaDisabled() {
       return (
         !this.title ||
         !this.description ||
-        !this.milestones ||
+        _.isEqual(this.shadowMetaData, this.metaData)
+      );
+    },
+
+    isSavingRefDisabled() {
+      return !this.milestones ||
         this.milestones.some(
           step => !step.validation || step.validation.isValid === false
         ) ||
         !this.videoSrcIsValidOrAbsent ||
-        _.isEqual(this.shadowMetaData, this.metaData)
-      );
+        _.isEqual(this.shadowRefData, this.refData) ||
+        (this.partners.length
+        ? !!this.partners.find(item => item.title == "" || item.type == "")
+        : false);
     },
 
     isValidLink() {
@@ -232,74 +286,104 @@ export default {
     }
   },
   methods: {
-    save() {
+    saveMeta() {
+      this.isLoading = true;
+
+      const researchIds = {
+        id: this.research.id,
+        researchGroupId: this.research.research_group_id
+      };
+
+      const promise = proposalService.createChangeResearchNameAndDescriptionProposal(
+        researchIds,
+        this.title,
+        this.description,
+        !this.isPublic
+      );
+
+      promise
+        .then(() => {
+          this.$store.dispatch("layout/setSuccess", {
+            message: "Proposal has been sent successfully!"
+          });
+          if (this.researchGroup.is_personal || !this.researchGroup.is_dao) {
+            this.$router.push({
+              name: "ResearchDetails",
+              params: {
+                research_group_permlink: encodeURIComponent(
+                  this.research.group_permlink
+                ),
+                research_permlink: encodeURIComponent(this.research.permlink)
+              }
+            });
+          } else {
+            this.$router.push({
+              name: "ResearchGroupDetails",
+              params: {
+                research_group_permlink: encodeURIComponent(
+                  this.research.group_permlink
+                )
+              },
+              hash: "#proposals"
+            });
+          }
+        })
+        .catch(err => {
+          console.log(err);
+
+          this.$store.dispatch("layout/setError", {
+            message: "An error occurred during proposal sending"
+          });
+        })
+        .finally(() => {
+          this.isLoading = false;
+        });
+    },
+
+    saveRef() {
       if (this.validateMilestones()) {
         this.isLoading = true;
 
-        let description = this.description;
         let milestones = this.milestones.map(m => {
           return {
             goal: m.goal,
+            budget: m.budget,
+            purpose: m.purpose,
             details: m.details,
             eta: moment(m.eta).toDate(),
-            is_active: this.activeMilestone
+            isActive: this.activeMilestone
               ? m.goal == this.activeMilestone.goal
               : false
+
           };
         });
 
-        let abstract = JSON.stringify({
-          description,
+        updateResearch(
+          this.research.id,
           milestones,
-          video_src: this.videoSrc,
-          is_tokenized: this.$options.filters.researchTokenized(
-            this.research.abstract
-          )
-        });
-        const researchIds = {
-          id: this.research.id,
-          researchGroupId: this.research.research_group_id
-        };
-
-        const promise = proposalService.createChangeResearchNameAndDescriptionProposal(
-          researchIds,
-          this.title,
-          abstract,
-          !this.isPublic
-        );
-
-        promise
+          this.videoSrc,
+          this.partners,
+          this.currentTrlStep
+        )
           .then(() => {
             this.$store.dispatch("layout/setSuccess", {
-              message: "Proposal has been sent successfully!"
+              message: "Info has been change successfully!"
             });
-            if (this.researchGroup.is_personal || !this.researchGroup.is_dao) {
-              this.$router.push({
-                name: "ResearchDetails",
-                params: {
-                  research_group_permlink: encodeURIComponent(
-                    this.research.group_permlink
-                  ),
-                  research_permlink: encodeURIComponent(this.research.permlink)
-                }
-              });
-            } else {
-              this.$router.push({
-                name: "ResearchGroupDetails",
-                params: {
-                  research_group_permlink: encodeURIComponent(
-                    this.research.group_permlink
-                  )
-                },
-                hash: "#proposals"
-              });
-            }
+            this.$router.push({
+              name: "ResearchDetails",
+              params: {
+                research_group_permlink: encodeURIComponent(
+                  this.research.group_permlink
+                ),
+                research_permlink: encodeURIComponent(this.research.permlink)
+              }
+            });
           })
           .catch(err => {
             console.log(err);
 
             this.$store.dispatch("layout/setError", {
-              message: "An error occurred during proposal sending"
+              message: "An error occurred during change info"
             });
           })
           .finally(() => {
@@ -344,6 +428,26 @@ export default {
               : "Step Goal is required"
           );
         }
+        if (step.budget == "") {
+          isValid = false;
+          Vue.set(
+            step.validation,
+            "budgetError",
+            index === milestones.length - 1
+              ? "Research should have the estimated budget"
+              : "Step budget is required"
+          );
+        }
+        if (step.purpose == "") {
+          isValid = false;
+          Vue.set(
+            step.validation,
+            "purposeError",
+            index === milestones.length - 1
+              ? "Research should have the budget purpose"
+              : "Step purpose is required"
+          );
+        }
         if (!step.eta /* || moment(step.eta).diff(moment(), 'days') < 0 */) {
           isValid = false;
           Vue.set(
@@ -377,6 +481,10 @@ export default {
         message:
           "Sorry, an error occurred while uploading background image, please try again later"
       });
+    },
+
+    changeCurrentTrlStep(step) {
+      this.currentTrlStep = step;
     }
   },
 
@@ -385,34 +493,42 @@ export default {
     this.description = this.$options.filters.researchAbstract(
       this.research.abstract
     );
-    this.milestones = this.$options.filters.researchMilestones(
-      this.research.abstract
-    );
+    this.milestones = _.cloneDeep(this.researchRef.milestones)
     this.videoSrc = this.$options.filters.researchVideoSrc(
       this.research.abstract
     );
-    this.activeMilestone = this.milestones.find(m => m.is_active);
+
+    this.activeMilestone = this.milestones.find(m => m.isActive);
     this.isPublic = !this.research.is_private;
+    this.currentTrlStep = this.researchRef.trl;
+    this.partners = this.researchRef.partners.map(item => _.cloneDeep(item));
 
     let milestones = this.milestones.map(m => {
       return {
         goal: m.goal,
+        budget: m.budget,
+        purpose: m.purpose,
         details: m.details,
         eta: moment(m.eta).toDate(),
-        is_active: this.activeMilestone
+        isActive: this.activeMilestone
           ? m.goal == this.activeMilestone.goal
           : false
       };
     });
+
     this.shadowMetaData = JSON.stringify({
       title: this.title,
       description: this.description,
+      is_private: !this.isPublic
+    });
+    this.shadowRefData = JSON.stringify({
       milestones,
       video_src: this.videoSrc,
       is_tokenized: this.$options.filters.researchTokenized(
         this.research.abstract
       ),
-      is_private: !this.isPublic
+      currentTrlStep: this.currentTrlStep,
+      partners: this.partners
     });
   }
 };

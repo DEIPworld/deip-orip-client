@@ -7,9 +7,11 @@ import tokenSaleService from './../../../services/TokenSaleService'
 import contentHttpService from './../../../services/http/content'
 import applicationsHttpService from './../../../services/http/application'
 import * as researchService from './../../../services/ResearchService';
+import { getResearch } from './../../../services/ResearchExtendedService';
 
 const state = {
     research: null,
+    researchRef: null,
     group: null,
     contentList: [],
     applicationsList: [],
@@ -29,6 +31,7 @@ const state = {
     eciHistoryByDiscipline: {},
 
     isLoadingResearchDetails: undefined,
+    isLoadingResearchRefDetails: undefined,
     isLoadingResearchContent: undefined,
     isLoadingResearchMembers: undefined,
     isLoadingResearchReviews: undefined,
@@ -46,6 +49,10 @@ const getters = {
 
     research: (state, getters) => {
         return state.research;
+    },
+
+    researchRef: (state, getters) => {
+        return state.researchRef;
     },
 
     group: () => {
@@ -127,6 +134,10 @@ const getters = {
 
     isLoadingResearchDetails: (state, getters) => {
         return state.isLoadingResearchDetails;
+    },
+
+    isLoadingResearchRefDetails: (state, getters) => {
+        return state.isLoadingResearchRefDetails;
     },
 
     isLoadingResearchReviews: (state, getters) => {
@@ -324,6 +335,9 @@ const actions = {
                 research.isTop = researchService.getTopResearchesIds().some(id => id == research.id);
                 commit('SET_RESEARCH_DETAILS', research)
 
+                const researchRefLoad = new Promise((resolve, reject) => {
+                    dispatch('loadResearchRef', { researchId: state.research.id, notify: resolve })
+                });
                 const contentLoad = new Promise((resolve, reject) => {
                     dispatch('loadResearchContent', { researchId: state.research.id, notify: resolve })
                 });
@@ -365,7 +379,7 @@ const actions = {
                 });
 
                 return Promise.all([
-                  contentLoad, membersLoad, reviewsLoad, disciplinesLoad, tokenHoldersLoad,
+                  researchRefLoad, contentLoad, membersLoad, reviewsLoad, disciplinesLoad, tokenHoldersLoad,
                   tokenSaleLoad, tokenSalesLoad, invitesLoad, contentRefsLoad, groupLoad,
                   applicationsLoad, applicationsRefsLoad, userContributionsLoad,
                 ]);
@@ -647,6 +661,18 @@ const actions = {
           if (notify) notify();
         });
     },
+    
+    loadResearchRef({ state, dispatch, commit }, { researchId, notify }) {
+        commit('SET_RESEARCH_REF_DETAILS_LOADING_STATE', true);
+        return getResearch(researchId)
+            .then(researchRef => {
+                commit('SET_RESEARCH_REF_DETAILS', researchRef);
+            }, (err) => {console.log(err)})
+        .finally(() => {
+            commit('SET_RESEARCH_REF_DETAILS_LOADING_STATE', false);
+            if (notify) notify();
+        })
+    },
 
     loadResearchEciHistoryRecords({ state, dispatch, commit }, { researchId, disciplineId, notify }) {
         return researchService.getResearchEciHistoryRecords(researchId, disciplineId)
@@ -665,6 +691,10 @@ const mutations = {
 
     ['SET_RESEARCH_DETAILS'](state, research) {
         Vue.set(state, 'research', research)
+    },
+
+    ['SET_RESEARCH_REF_DETAILS'](state, researchRef) {
+        Vue.set(state, 'researchRef', researchRef)
     },
 
     ['SET_RESEARCH_MEMBERS_LIST'](state, list) {
@@ -729,6 +759,10 @@ const mutations = {
 
     ['SET_RESEARCH_DETAILS_LOADING_STATE'](state, value) {
         state.isLoadingResearchDetails = value
+    },
+
+    ['SET_RESEARCH_REF_DETAILS_LOADING_STATE'](state, value) {
+        state.isLoadingResearchRefDetails = value
     },
 
     ['SET_RESEARCH_MEMBERS_LOADING_STATE'](state, value) {

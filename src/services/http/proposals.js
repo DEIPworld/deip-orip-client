@@ -7,8 +7,8 @@ const service = {
     sendContentProposal(tx, type) {
         return http.post(`/proposals/content/${type}`, tx, { baseURL: `${window.env.DEIP_SERVER_URL}/api/` });
     },
-    sendResearchProposal(tx) {
-        return http.post(`/proposals/research`, tx, { baseURL: `${window.env.DEIP_SERVER_URL}/api/` });
+    sendResearchProposal(tx, meta) {
+        return http.post(`/proposals/research`, { tx, researchMeta: meta }, { baseURL: `${window.env.DEIP_SERVER_URL}/api/` });
     },
     sendInviteProposal(tx) {
         return http.post(`/proposals/invite`, tx, { baseURL: `${window.env.DEIP_SERVER_URL}/api/` });

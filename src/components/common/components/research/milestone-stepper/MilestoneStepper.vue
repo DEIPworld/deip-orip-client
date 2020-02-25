@@ -31,26 +31,34 @@ import moment from 'moment';
 function emptyStep(isMain) {
   return {
     goal: '',
+    budget: '',
+    purpose: '',
     eta: '',
     details: '',
     isMain: isMain,
     validation : {
       isValid: undefined,
       goalError: '',
+      budgetError: '',
+      purposeError: '',
       etaError: ''
     }
   }
 }
 
-function parseStep({ goal, eta, details, isMain } = {}) {
+function parseStep({ goal, budget, purpose, eta, details, isMain } = {}) {
   return {
     goal: goal || '',
+    budget: budget || '', 
+    purpose: purpose || '',
     eta: moment(eta).format("YYYY-MM-DD"),
     details: details || '',
     isMain: isMain || false,
     validation : {
       isValid: undefined,
       goalError: '',
+      budgetError: '',
+      purposeError: '',
       etaError: ''
     }
   }
@@ -80,6 +88,8 @@ export default {
           Vue.set(step, 'validation', {
             isValid: undefined,
             goalError: '',
+            budgetError: '',
+            purposeError: '',
             etaError: ''
           });
         }
@@ -89,7 +99,7 @@ export default {
   computed: {
     isNewStepAvailable: function() {
       return this.steps.every(
-        (step, index, array) => step.goal != ''
+        (step, index, array) => step.goal != '' && step.budget != '' && step.purpose != ''
       )
     }
   },
@@ -98,9 +108,9 @@ export default {
       this.steps.push(emptyStep(true));
     } else if (!this.isReadOnly && this.steps.length) {
       for (let i = 0; i < this.steps.length; i++) {
-        let { goal, eta, details } = this.steps[i];
+        let { goal, budget, purpose, eta, details } = this.steps[i];
         let isMain = i == this.steps.length - 1;
-        this.steps.splice(i, 1, parseStep({ goal, eta, details, isMain }));
+        this.steps.splice(i, 1, parseStep({ goal, budget, purpose, eta, details, isMain }));
       }
     }
   }
