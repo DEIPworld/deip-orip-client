@@ -78,11 +78,12 @@
           :disabled="group.members.length === 0 || isLoading"
           @click.native="finish()"
         >
-          Create group
+          Create Team
         </v-btn>
       </div>
     </div>
   </div>
+
 </template>
 
 <script>

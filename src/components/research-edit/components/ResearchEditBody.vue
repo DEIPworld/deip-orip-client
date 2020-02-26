@@ -187,10 +187,11 @@
         large
         @click="cancel()"
       >
-        Back to research
+        Back to Project
       </v-btn>
     </div>
   </content-block>
+
 </template>
 
 <script>
@@ -487,8 +488,8 @@
               step.validation,
               'purposeError',
               index === milestones.length - 1
-                ? 'Research should have the budget purpose'
-                : 'Step purpose is required'
+                ? 'Research should have the budget breakdown'
+                : 'Step budget breakdown is required'
             );
           }
           if (!step.eta /* || moment(step.eta).diff(moment(), 'days') < 0 */) {

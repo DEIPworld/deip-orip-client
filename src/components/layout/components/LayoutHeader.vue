@@ -3,12 +3,12 @@
     tile
     :dark="isDark"
     :light="!isDark"
-    class="app-layout__header"
+    class="app-layout__header d-flex align-end"
     :class="classList"
     :style="{ backgroundImage: 'url(' + background + ')'}"
   >
     <div class="app-layout__header-inner pa-6 pa-sm-12">
-      <v-sheet :max-width="maxWidth" color="transparent">
+      <v-sheet :max-width="fullWidth ? '100%' : 800" color="transparent">
         <slot />
       </v-sheet>
     </div>
@@ -23,33 +23,34 @@
     props: {
       background: {
         type: String,
-        required: false,
         default: null
       },
       muted: {
         type: Boolean,
-        required: false,
         default: true
       },
       dark: {
         type: Boolean,
-        required: false,
         default: true
       },
       light: {
         type: Boolean,
-        required: false,
         default: false
       },
-      maxWidth: {
-        type: [String, Number],
-        default: 800
+      fullWidth: {
+        type: Boolean,
+        default: false
+      },
+      centered: {
+        type: Boolean,
+        default: false
       }
     },
     computed: {
       classList() {
         return {
-          'app-layout__header--muted': this.muted === true
+          'app-layout__header--muted': this.muted === true,
+          'justify-center': this.centered
         };
       },
       isDark() {

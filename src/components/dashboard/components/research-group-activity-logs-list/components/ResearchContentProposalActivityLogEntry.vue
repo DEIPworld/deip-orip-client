@@ -38,7 +38,7 @@
                   research_permlink: encodeURIComponent(log.metadata.research.permlink)
                 }
               }"
-            >{{ log.metadata.research.title }}</router-link>" research by quorum
+            >{{ log.metadata.research.title }}</router-link>" project by quorum
           </span>
         </span>
 
@@ -70,7 +70,7 @@
                   research_permlink: encodeURIComponent(log.metadata.research.permlink)
                 }
               }"
-            >{{ log.metadata.research.title }}</router-link>" research
+            >{{ log.metadata.research.title }}</router-link>" project
           </span>
           <span v-else>
             proposed a new "<span class="body-2">{{ log.metadata.proposal.data.title }}</span>" material for the "<router-link
@@ -82,7 +82,7 @@
                   research_permlink: encodeURIComponent(log.metadata.research.permlink)
                 }
               }"
-            >{{ log.metadata.research.title }}</router-link>" research
+            >{{ log.metadata.research.title }}</router-link>" project
           </span>
         </span>
       </div>

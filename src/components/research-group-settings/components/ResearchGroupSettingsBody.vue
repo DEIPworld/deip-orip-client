@@ -4,7 +4,7 @@
       <v-col cols="10">
         <div>
           <div class="title font-weight-medium pb-4">
-            Group name:
+            Team name:
           </div>
           <v-text-field
             v-model="newResearchGroupName"
@@ -15,7 +15,7 @@
         </div>
         <div>
           <div class="title font-weight-medium pb-4">
-            Group description:
+            Team description:
           </div>
           <v-textarea
             v-model="newResearchGroupDescription"
@@ -95,7 +95,7 @@
         <div>
           <div v-if="isResearchGroupMember" class="py-6">
             <div class="title font-weight-medium pb-6">
-              Update group logo:
+              Update team logo:
             </div>
             <v-row>
               <v-col cols="3">
@@ -140,7 +140,7 @@
             large
             @click="cancel()"
           >
-            Back to group
+            Back to team
           </v-btn>
         </div>
       </v-col>
@@ -228,7 +228,7 @@
             createImageThumbnails: true,
             autoProcessQueue: false,
             dictDefaultMessage:
-              "<i class='v-icon material-icons' style='font-size:40px'>backup</i><p>Research group logo (.png)</p>",
+              "<i class='v-icon material-icons' style='font-size:40px'>backup</i><p>Research Team logo (.png)</p>",
             addRemoveLinks: true,
             acceptedFiles: ['image/png'].join(',')
           }

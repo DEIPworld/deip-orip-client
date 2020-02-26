@@ -2,7 +2,7 @@
   <div class="display-flex flex-column fill-height">
     <div class="display-flex flex-column flex-grow-1 mb-4">
       <div class="step-title">
-        Group name
+        Team name
       </div>
       <div class="flex-grow-1 overflow-y-auto flex-basis-0">
         <div class="mx-auto group-title-max-width">
