@@ -22,11 +22,11 @@
       </v-tooltip>
     </router-link>
 
-    <v-layout row wrap justify-start>
+    <!-- <v-layout row wrap justify-start>
       <platform-avatar v-for="(member, i) in membersToDisplay" :user="member" :size="15" :key="`member-${research.permlink}-`+ i" link-to-profile link-to-profile-class="px-2 grey--text lighten-2 research-tile-researcher"></platform-avatar>
-    </v-layout>
+    </v-layout> -->
 
-    <v-layout row class="token-sale-section">
+    <v-layout row class="token-sale-section" v-if="hasActiveTokenSale || hasInactiveTokenSale">
       <v-layout v-if="hasActiveTokenSale" column>
         <v-layout row align-center>
           <v-flex grow>
@@ -56,7 +56,10 @@
         <v-chip class="my-0 mx-0 px-0 caption" style="height: 1.4em" color="primary lighten-3">Fundraising starts in {{tokenSaleStartLeft}}</v-chip> 
       </v-layout>
     </v-layout>
-    <v-layout row justify-space-between align-center>
+    <v-layout row wrap justify-space-between align-center>
+      <v-flex xs12 class="caption grey--text lighten-1">
+        <technology-readiness-level :currentTrlStep="research.researchRef.trl" isReadOnly isChip></technology-readiness-level>
+      </v-flex>
       <v-flex xs5 class="caption grey--text lighten-1">
         <v-icon small>event</v-icon>
         <span>Updated on</span>
