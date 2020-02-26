@@ -8,7 +8,10 @@
     <v-tabs-items v-model="tab">
       <v-tab-item :transition="false" :reverse-transition="false">
         <v-data-table
-          :headers="pendingProjectsHeaders"
+          :headers="
+            pendingProjects.length ?
+              pendingProjectsHeaders :
+              [{text: 'Title'},{text: 'Created'}]"
           :items="pendingProjects"
           :items-per-page="50"
         >

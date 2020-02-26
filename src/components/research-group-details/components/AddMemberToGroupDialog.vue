@@ -8,7 +8,7 @@
     <v-card class="pa-6">
       <v-card-title>
         <div class="text-h5">
-          Invite user to Research Group
+          Invite user to Team
         </div>
         <div class="right-top-angle">
           <v-btn icon class="pa-0 ma-0" @click="close()">

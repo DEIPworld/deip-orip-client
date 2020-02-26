@@ -72,7 +72,7 @@
               settings_applications
             </v-icon>
             <div class="text-body-2">
-              Update group meta
+              Update team information
             </div>
           </div>
           <div
@@ -83,7 +83,7 @@
               edit_attributes
             </v-icon>
             <div class="text-body-2">
-              Update research meta
+              Update project information
             </div>
           </div>
           <div
@@ -300,7 +300,7 @@
               <v-col cols="6">
                 <div>
                   Type:
-                  <span class="font-weight-bold">Update group meta</span>
+                  <span class="font-weight-bold">Update team information</span>
                 </div>
               </v-col>
             </v-row>
@@ -309,7 +309,7 @@
               <v-col cols="6">
                 <div>
                   Type:
-                  <span class="font-weight-bold">Update research meta</span>
+                  <span class="font-weight-bold">Update project information</span>
                 </div>
               </v-col>
             </v-row>

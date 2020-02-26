@@ -1,12 +1,18 @@
 <template>
-  <layout-header muted :background="$options.filters.researchBackgroundSrc(research.external_id)" :max-width="researchRef.videoSrc ? '100%' : 800">
+  <layout-header
+    :muted="false"
+    :light="true"
+    :background="$options.filters.researchBackgroundSrc(research.external_id)"
+    :max-width="researchRef.videoSrc ? '100%' : 800"
+    full-width
+  >
     <v-row no-gutters>
       <v-col cols="12" md="" style="max-width: 800px">
         <div class="text-h4">
           {{ research.title }}
         </div>
         <div class="pt-2">
-          <v-icon small color="white">
+          <v-icon small color="text-primary">
             today
           </v-icon>
           Created {{ research.created_at | dateFormat('D MMM YYYY', true) }}
@@ -16,7 +22,7 @@
             class="ma-0 pa-0"
             small
             outlined
-            color="white"
+            color="text-primary"
             :to="{
               name: 'ResearchEdit',
               params: {

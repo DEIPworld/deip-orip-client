@@ -2,7 +2,7 @@
   <layout-section v-if="$ready">
     <state-research-list
       :research-list="researchList"
-      :header-text="'Research projects'"
+      :header-text="'Projects'"
     />
   </layout-section>
 </template>

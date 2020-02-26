@@ -2,7 +2,7 @@
   <div>
     <div class="display-flex justify-space-between align-center">
       <div class="text-h6">
-        {{ !headerText ? 'Research projects' : headerText }}
+        {{ !headerText ? 'Projects' : headerText }}
       </div>
 
       <v-menu offset-y>
@@ -32,11 +32,11 @@
     <div class="c-pt-5">
       <v-tabs v-model="tab" v-bind="themeSettings.tabs">
         <v-tab href="#active" :disabled="activeResearchList.length === 0">
-          Active research: {{ activeResearchList.length }}
+          Active: {{ activeResearchList.length }}
         </v-tab>
 
         <v-tab href="#finished" :disabled="finishedResearchList.length === 0">
-          Finished research: {{ finishedResearchList.length }}
+          Finished: {{ finishedResearchList.length }}
         </v-tab>
       </v-tabs>
 

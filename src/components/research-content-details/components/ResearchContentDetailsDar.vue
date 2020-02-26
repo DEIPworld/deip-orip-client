@@ -1,17 +1,15 @@
 <template>
-  <div class="full-height">
-    <div class="full-height">
+  <v-sheet min-height="calc(100vh - 160px)" class="full-height">
       <div
         ref="deip-texture-container"
         class="deip-texture full-height"
         :class="[{ 'read-only-texture': isReadOnly }]"
       />
-    </div>
 
     <!-- <div v-if="isContentExpansionAvailable" class="pa-12">
       <a @click="expandContent()">{{ isContentExpanded ? 'Collapse chapter' : 'Expand chapter'}}</a>
     </div> -->
-  </div>
+  </v-sheet>
 </template>
 
 <script>

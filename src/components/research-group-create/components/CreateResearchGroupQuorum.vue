@@ -39,7 +39,7 @@
                   hide-details
                 />
                 <div class="display-inline-block ml-6 vertical-bottom">
-                  Start new research project
+                  Start new project
                 </div>
               </div>
 
@@ -52,7 +52,7 @@
                   hide-details
                 />
                 <div class="display-inline-block ml-6 vertical-bottom">
-                  Publish research project results
+                  Publish project results
                 </div>
               </div>
 

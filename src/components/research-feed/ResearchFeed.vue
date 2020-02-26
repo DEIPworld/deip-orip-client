@@ -1,31 +1,27 @@
 <template>
   <app-layout>
-    <layout-header :background="$options.filters.tenantBackgroundSrc(tenant.account)">
-      <div class="text-h3 uppercase half-bold">
-        Projects
-      </div>
 
-      <div class="py-6">
+    <layout-header centered :background="$options.filters.tenantBackgroundSrc(tenant.account)">
+      <!-- <div class="text-h3 uppercase half-bold">
+        Projects
+      </div> -->
+
+      <div class="py-6 text-center">
         <v-btn
           v-if="isLoggedIn()"
           :to="tenant.profile.settings.newResearchPolicy === 'free' ? { name: 'CreateResearch' } : { name: 'CreateResearchProposal' }"
           color="primary"
-          class="ma-0"
+          class="width-225 ma-0 px-5"
         >
-          Start a project
+          Participate with us
         </v-btn>
-
         <template v-else>
-          <v-btn :to="{ name: 'SignIn' }" color="primary" class="ma-0 px-12">
-            Log In
-          </v-btn>
-          <div class="white--text text-body-1 mt-2">
-            After creating an account/log in you can add
-            new projects or enjoy shared materials
-          </div>
+          <v-btn :to="{ name: 'SignUp' }" color="primary" class="width-225 px-5 ma-2">Become a member</v-btn>
+          <v-btn :to="{ name: 'SignIn' }" light class="width-225 px-5 blue--text ma-2">Participate with us</v-btn>
         </template>
       </div>
     </layout-header>
+    <v-divider />
 
     <!-- TODO: refactoring -->
     <div class="d-flex px-6 px-sm-12 py-4">
@@ -58,7 +54,7 @@
           </template>
         </div>
 
-        <div v-if="selectedOrganizations.length" class="filter-chips__row">
+        <!-- <div v-if="selectedOrganizations.length" class="filter-chips__row">
           <v-chip
             v-for="organization in selectedOrganizations"
             :key="'filter-by-organization-' + organization.id"
@@ -72,7 +68,7 @@
             </v-avatar>
             {{ organization.name }}
           </v-chip>
-        </div>
+        </div> -->
 
         <div v-if="selectedCategories.length" class="filter-chips__row">
           <v-chip
@@ -119,7 +115,7 @@
           <v-row justify="space-between" align="center" class="mb-6">
             <v-col>
               <div class="text-subtitle-1">
-                Browse by discipline
+                Browse by domain
               </div>
             </v-col>
             <v-col cols="auto">
@@ -204,7 +200,6 @@
                     small
                     color="primary"
                     :input-value="isStepSelected(item, j)"
-                    v-on="on"
                     @click="toggleStep(item, j)"
                   >
                     <div class="full-width text--center">
@@ -218,7 +213,7 @@
 
           <v-divider v-if="tenant.profile.settings.researchComponents.length" class="my-6" />
 
-          <v-row class="pb-6" justify="space-between">
+          <!-- <v-row class="pb-6" justify="space-between">
             <v-col>
               <span class="text-subtitle-1">Browse by organizations</span>
             </v-col>
@@ -257,11 +252,14 @@
                     >
                     <div class="organization-item__overlay" />
                   </div>
+
                 </template>
                 <span>{{ organization.name }}</span>
               </v-tooltip>
             </div>
-          </v-row>
+          </v-row> -->
+
+          <!-- <v-divider class="my-6" />  -->
 
           <v-row justify="space-between" align="center" class="pb-6">
             <v-col>
@@ -281,9 +279,6 @@
               </v-btn>
             </v-col>
           </v-row>
-
-          <v-divider class="my-6" />
-
           <v-row>
             <v-col v-for="(category) in tenant.profile.settings.researchCategories" :key="`${category._id}-category`" cols="2">
               <v-tooltip bottom>
@@ -309,12 +304,16 @@
 
           <!-- <v-divider class="my-6" /> -->
 
-          <!-- <v-checkbox
-            v-model="filterByTopOnly"
-            class="ma-0 pa-0"
-            hide-details
-            label="Browse top projects only"
-          /> -->
+          <!-- <v-row>
+            <v-col>
+              <v-checkbox
+                v-model="filterByTopOnly"
+                class="ma-0 pa-0"
+                hide-details
+                label="Browse top projects only"
+              />
+            </v-col>
+          </v-row> -->
         </v-sheet>
         <v-divider />
       </div>
@@ -652,12 +651,16 @@
     }
   }
 
+  .width-225 {
+    width: 225px;
+  }
+
   .category-filter-btn {
-      display: block;
-      width: 150px;
-      overflow: hidden;
-      white-space: nowrap;
-      text-overflow: ellipsis;
+    display: block;
+    width: 150px;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
   }
 
 </style>

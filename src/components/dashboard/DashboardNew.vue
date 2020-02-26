@@ -21,7 +21,7 @@
               :to="tenant.profile.settings.newResearchPolicy === 'free' ? { name: 'CreateResearch' } : { name: 'CreateResearchProposal' }"
               color="primary"
             >
-              Start a project
+              Participate with us
             </v-btn>
           </div>
 

@@ -7,9 +7,7 @@
       </div>
       <div class="mb-6 text-body-2">
         Didn’t find what you were looking for?
-        <router-link :to="'#'" class="a ml-1">
-          Get in touch.
-        </router-link>
+        <a class="a ml-1" href="mailto:info@ar3c.com">Get in touch.</a>
       </div>
       <div
         v-for="(item, i) in faqs"

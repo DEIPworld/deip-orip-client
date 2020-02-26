@@ -59,7 +59,6 @@
                 </v-btn>
               </div>
             </v-card-title>
-
             <v-card-text>
               <v-textarea
                 v-model="coverLetter"
@@ -120,7 +119,7 @@
       </div>
     </v-sheet>
 
-    <v-divider class="my-6" />
+    <!-- <v-divider class="my-6" />
 
     <v-sheet>
       <div class="text-h6">
@@ -148,25 +147,7 @@
           {{ eci.disciplineName }}
         </div>
       </div>
-    </v-sheet>
-
-    <!-- <div class="my-6 mx-6">
-          <div class="rd-sidebar-block-title pb-2">Score</div>
-          <v-tooltip top>
-            <div class="mt-2" slot="activator">{{researchScorePercent}}%</div>
-            <span class="bold">
-              This score is calculated of Expertise<br/>
-              contribution index and development stage<br/>
-              of the project
-            </span>
-          </v-tooltip>
-          <top-research-label
-            v-if="research.isTop"
-            :number="100"
-            color-class="green--text"
-            class="mt-4"
-          />
-    </div>-->
+    </v-sheet> -->
 
     <v-divider v-if="researchRef.tenantCategory && researchRef.tenantCategory.text" class="my-6" />
 
@@ -227,7 +208,7 @@
 
     <v-divider class="my-6" />
 
-    <v-sheet v-if="contentList.length">
+    <!-- <v-sheet v-if="contentList.length">
       <div class="text-h6">
         Expert Review
       </div>
@@ -248,7 +229,7 @@
             Request Review
           </v-btn>
         </template>
-
+        
         <v-card class="pa-6">
           <v-card-title>
             <div class="text-h5">
@@ -309,7 +290,8 @@
           </v-card-actions>
         </v-card>
       </v-dialog>
-    </v-sheet>
+    </v-sheet> -->
+    
   </div>
 </template>
 

@@ -1,7 +1,9 @@
 <template>
   <v-sheet max-width="420" :class="{'text-center': centered}">
-    <div v-if="logo" class="text-h3 mb-6">
-      {{ logo }}
+    <div v-if="logo.length" class="text-h3 mb-6">
+      <div v-for="(item, i) in logo" :key="i">
+        <img :src="item">
+      </div>
     </div>
     <div v-if="title" class="text-h6 mb-6">
       {{ title }}
@@ -94,7 +96,7 @@
     },
     props: {
       logo: {
-        type: String,
+        type: [Array],
         default: null
       },
       title: {

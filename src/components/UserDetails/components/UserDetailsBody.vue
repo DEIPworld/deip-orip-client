@@ -95,13 +95,13 @@
         <div class="pt-6" v-if="!$route.name.includes('account')">
           <state-research-list
             :research-list="researchList"
-            :header-text="'Research projects'"
+            :header-text="'Projects'"
           />
         </div>
 
         <div v-if="commonGroups.length" class="pt-6">
           <div class="text-h6">
-            Research groups: {{ commonGroups.length }}
+            Teams: {{ commonGroups.length }}
           </div>
         </div>
 

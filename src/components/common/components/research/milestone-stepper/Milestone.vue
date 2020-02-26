@@ -24,6 +24,7 @@
               md="12"
               cols="12"
             >
+            
               <v-text-field
                 v-model="step.goal"
                 :error-messages="step.validation.goalError"
@@ -170,6 +171,7 @@
             </v-col>
           </v-row>
         </div>
+
       </div>
     </div>
     <resize-observer @notify="handleResize" />

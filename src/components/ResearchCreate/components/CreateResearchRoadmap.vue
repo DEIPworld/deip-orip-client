@@ -6,8 +6,7 @@
       </div>
 
       <div class="text-subtitle-1 text-center">
-        Let’s create a roadmap for your research. Well-presented and
-        detailed roadmap attracts more investors to help you to get the funding
+        Let’s create a roadmap for your project
       </div>
 
       <div class="pt-4">
