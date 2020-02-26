@@ -2,7 +2,7 @@
   <v-row class="mx-0 fill-height discipline-picker overflow-y-auto">
     <v-col v-if="!withoutUserDisciplines" class="xs4 pa-4 overflow-y-auto">
       <div class="pb-4 bold uppercase">
-        Your disciplines
+        Your domains
       </div>
 
       <v-list
@@ -26,7 +26,7 @@
 
     <v-col class="pa-4 fill-height overflow-y-auto" :cols="!withoutUserDisciplines ? '8' : '12'">
       <div class="pb-4 bold uppercase">
-        All disciplines
+        All domains
       </div>
 
       <discipline-tree-picker

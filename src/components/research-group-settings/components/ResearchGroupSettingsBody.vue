@@ -95,7 +95,7 @@
         <div>
           <div v-if="isResearchGroupMember" class="py-6">
             <div class="title font-weight-medium pb-6">
-              Update group logo:
+              Update team logo:
             </div>
             <v-row>
               <v-col cols="3">
@@ -228,7 +228,7 @@
             createImageThumbnails: true,
             autoProcessQueue: false,
             dictDefaultMessage:
-              "<i class='v-icon material-icons' style='font-size:40px'>backup</i><p>Research group logo (.png)</p>",
+              "<i class='v-icon material-icons' style='font-size:40px'>backup</i><p>Research Team logo (.png)</p>",
             addRemoveLinks: true,
             acceptedFiles: ['image/png'].join(',')
           }

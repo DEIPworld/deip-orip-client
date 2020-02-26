@@ -8,7 +8,7 @@
     :style="{ backgroundImage: 'url(' + background + ')'}"
   >
     <div class="app-layout__header-inner pa-6 pa-sm-12">
-      <v-sheet :max-width="800" color="transparent">
+      <v-sheet :max-width="fullWidth ? '100%' : 800" color="transparent">
         <slot />
       </v-sheet>
     </div>
@@ -37,6 +37,11 @@
         default: true
       },
       light: {
+        type: Boolean,
+        required: false,
+        default: false
+      },
+      fullWidth: {
         type: Boolean,
         required: false,
         default: false
