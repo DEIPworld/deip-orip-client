@@ -8,10 +8,7 @@ import ResearchContentReviewSidebar from './components/ResearchContentReviewSide
 
 import ResearchContentAddReviewBody from './components/ResearchContentAddReviewBody';
 import ResearchContentAddReviewSidebar from './components/ResearchContentAddReviewSidebar';
-
-import ReviewListItem from './components/ReviewListItem';
 import ResearchContentDetailsPackage from './components/ResearchContentDetailsPackage';
-
 import ReferencesDependencyGraph from './components/ReferencesDependencyGraph';
 
 Vue.component('research-content-details', ResearchContentDetails);
@@ -22,5 +19,4 @@ Vue.component('research-content-review-body', ResearchContentReviewBody);
 Vue.component('research-content-review-sidebar', ResearchContentReviewSidebar);
 Vue.component('research-content-add-review-body', ResearchContentAddReviewBody);
 Vue.component('research-content-add-review-sidebar', ResearchContentAddReviewSidebar);
-Vue.component('review-list-item', ReviewListItem);
 Vue.component('references-dependency-graph', ReferencesDependencyGraph);

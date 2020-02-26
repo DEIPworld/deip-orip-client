@@ -2,7 +2,7 @@ import Vue from 'vue';
 
 // components
 
-import StateResearchList from './research/components/StateResearchList';
+import StateResearchList from './components/research/StateResearchList';
 Vue.component('state-research-list', StateResearchList);
 
 import ConfirmActionDialog from './components/ConfirmActionDialog';
@@ -32,9 +32,6 @@ Vue.component('platform-avatar', PlatformAvatar);
 import UserAutocompletePicker from './components/UserAutocompletePicker';
 Vue.component('user-autocomplete-picker', UserAutocompletePicker);
 // filters
-
-import SquaredRating from './components/SquaredRating';
-Vue.component('squared-rating', SquaredRating);
 
 import ToggleText from './components/ToggleText';
 Vue.component('toggle-text', ToggleText);

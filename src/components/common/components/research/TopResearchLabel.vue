@@ -1,7 +1,7 @@
 <template>    
   <v-layout row align-center>
     <div :style="{'width': width + 'px', 'height': height + 'px'}">
-      <img width="100%" height="100%" :src="'./static/top-100.svg'"/>
+      <img width="100%" height="100%" src="/assets/img/top-100.svg"/>
     </div>
     <span :class="`pl-2 bold uppercase top-text ${colorClass}`">
       TOP {{number}}
