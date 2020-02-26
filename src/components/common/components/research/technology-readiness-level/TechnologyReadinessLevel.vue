@@ -41,7 +41,7 @@
     </template>
   </v-layout>
   <v-layout row wrap v-else-if="isChip && isReadOnly">
-     <v-chip :color="trlBGColor" :text-color="trlColor">
+     <v-chip class="mx-0" :color="trlBGColor" :text-color="trlColor">
       <v-avatar>
         <v-icon>mdi-check-circle</v-icon>
       </v-avatar>

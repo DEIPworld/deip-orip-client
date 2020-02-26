@@ -38,7 +38,7 @@ const state = {
   myReviewRequests: [],
 	myReviews: [],
 	
-	researchesRef: [],
+	researchesRefs: [],
 	isLoadingResearchesRefDetails: undefined,
 }
 
@@ -67,6 +67,7 @@ const getters = {
 				]
 				.find(s => s.research_id == research.id);
 
+				let researchRef = state.researchesRefs.find(({ researchId }) => researchId === research.id).researchRef
         let group = state.researchGroups.find(rg => rg.id === research.research_group_id);
 				let isTop = researchService.getTopResearchesIds().some(id => id == research.id);
 
@@ -82,9 +83,9 @@ const getters = {
 					}, [])
 					.filter(c => c.research_token_sale_id == tokenSale.id);
 
-					return [...acc, { research: { ...research, isTop }, authors: researchMembers, tokenSale, tokenSaleContributions, group }];
+					return [...acc, { research: { ...research, isTop, researchRef }, authors: researchMembers, group, tokenSale, tokenSaleContributions }];
 				} else {
-					return [...acc, { research: { ...research, isTop }, authors: researchMembers, group }];
+					return [...acc, { research: { ...research, isTop, researchRef }, authors: researchMembers, group }];
 				}
 			}, []);
 
@@ -94,8 +95,8 @@ const getters = {
 
 	myMembershipAndBookmarkedResearches: (state) => {
 		let unique = [
-			...state.myMembershipResearches.map(item => {item.is_following = false; return item}),
-			...state.bookmarkedResearches.map(item => {item.is_following = true; return item})
+			...state.myMembershipResearches.map(item => { return { ...item, is_following: false }}),
+			...state.bookmarkedResearches.map(item => { return { ...item, is_following: true }})
 		]
 			.reduce((acc, research) => {
 				if (acc.some(a => a.research.id == research.id)) return acc;
@@ -103,8 +104,7 @@ const getters = {
 				let researchMembers = state.researchGroupsMembers
 					.filter(member => research.members.some(name => name == member.account.name));
 
-				let researchRef = {...state.researchesRef.find(({researchId}) => researchId === research.id).researchRef}
-
+				let researchRef = state.researchesRefs.find(({ researchId }) => researchId === research.id).researchRef
         let group = state.researchGroups.find(rg => rg.id === research.research_group_id);
 				let isTop = researchService.getTopResearchesIds().some(id => id == research.id);
 
@@ -206,13 +206,22 @@ const actions = {
 			.then(() => {
         const rgtPromises = [];
 				const rgPromises = [];
-				
-				const researchRefPromises = [
+				const researchRefPromises = [];
+
+				[
+					...state.investedResearches,
+					...state.investingResearches,
 					...state.myMembershipResearches,
 					...state.bookmarkedResearches
-				].map(research => new Promise((resolve, reject) => {
-					dispatch('loadResearchRef', { researchId: research.id, notify: resolve })
-				}));
+				].reduce((unique, research) => {
+					if (unique.some(rId => rId == research.id)) return unique;
+					return [research.id, ...unique];
+				}, []).forEach(rId => {
+					researchRefPromises.push(new Promise((resolve, reject) => {
+						dispatch('loadResearchRef', { researchId: rId, notify: resolve });
+					}));
+				});
+
 
         [
 					...state.investedResearches,
@@ -222,10 +231,11 @@ const actions = {
 				].reduce((unique, research) => {
           if (unique.some(rgId => rgId == research.research_group_id)) return unique;
           return [research.research_group_id, ...unique];
-        }, []).forEach((rId) => {
-          rgtPromises.push(deipRpc.api.getResearchGroupTokensByResearchGroupAsync(rId));
-          rgPromises.push(researchGroupService.getResearchGroupById(rId));
-        })
+        }, []).forEach((rgId) => {
+					rgtPromises.push(deipRpc.api.getResearchGroupTokensByResearchGroupAsync(rgId));
+					rgPromises.push(researchGroupService.getResearchGroupById(rgId));
+				});
+				
 				return Promise.all([
           Promise.all(rgtPromises),
 					Promise.all(rgPromises),
@@ -377,15 +387,16 @@ const actions = {
 	},
 	
 	loadResearchRef({ state, dispatch, commit }, { researchId, notify }) {
-		commit('SET_RESEARCHES_REF_DETAILS_LOADING_STATE', true);
+		commit('SET_RESEARCHES_REFS_DETAILS_LOADING_STATE', true);
+		
 		return getResearch(researchId)
-				.then(researchRef => {
-						commit('SET_RESEARCHES_REF_DETAILS', {researchId,researchRef});
-				}, (err) => {console.log(err)})
-		.finally(() => {
-				commit('SET_RESEARCHES_REF_DETAILS_LOADING_STATE', false);
+			.then(researchRef => {
+				commit('SET_RESEARCHES_REFS_DETAILS', { researchId, researchRef });
+			}, (err) => {console.log(err)})
+			.finally(() => {
+				commit('SET_RESEARCHES_REFS_DETAILS_LOADING_STATE', false);
 				if (notify) notify();
-		})
+			})
 },
 }
 
@@ -471,13 +482,13 @@ const mutations = {
 		Vue.set(state, 'myReviews', list);
 	},
 
-	['SET_RESEARCHES_REF_DETAILS'](state, researchRef) {
-		let researchesRef = [...state.researchesRef];
-		researchesRef.push(researchRef)
-		Vue.set(state, 'researchesRef', researchesRef)
+	['SET_RESEARCHES_REFS_DETAILS'](state, researchRef) {
+		let researchesRefs = [...state.researchesRefs];
+		researchesRefs.push(researchRef)
+		Vue.set(state, 'researchesRefs', researchesRefs)
 },
 	
-	['SET_RESEARCHES_REF_DETAILS_LOADING_STATE'](state, value) {
+	['SET_RESEARCHES_REFS_DETAILS_LOADING_STATE'](state, value) {
 		state.isLoadingResearchesRefDetails = value
 	},
 }

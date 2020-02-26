@@ -125,7 +125,7 @@
                                <user-autocomplete-picker
                                   label="Find an expert"
                                   :users="experts"
-                                  :displayLimit="7"
+                                  :displayLimit="5"
                                   @onSelectUser="selectExpert"
                                 />
                               </div>

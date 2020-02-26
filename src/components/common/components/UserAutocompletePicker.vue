@@ -16,11 +16,11 @@
     <div v-if="!selectedUser">
       <v-layout row>
         <platform-avatar
+          v-for="(user, i) in users.slice(0, displayLimit)"
           @onSelectedUser="selectUser"
           :pickDisabled="isDisabled"
           :noFollow="true"
           :size="40"
-          v-for="(user, i) in users.slice(0, displayLimit)"
           :key="'user-' + i"
           :user="user"
           class="user-avatar mr-2"

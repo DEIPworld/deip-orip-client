@@ -17,7 +17,7 @@
         </div>
       </div>
       <v-tooltip bottom>
-        <div slot="activator" class="subheading ellipsis half-bold py-2">{{ research.title }}</div>
+        <div slot="activator" class="subheading ellipsis half-bold py-1">{{ research.title }}</div>
         <span>{{research.title}}</span>
       </v-tooltip>
     </router-link>
@@ -62,12 +62,12 @@
       </v-flex>
       <v-flex xs5 class="caption grey--text lighten-1">
         <v-icon small>event</v-icon>
-        <span>Updated on</span>
+        <span class="pl-1">Updated on</span>
         <span class="pl-1 half-bold">{{moment(research.last_update_time).format("D MMM YYYY")}}</span>
       </v-flex>
       <v-flex xs2>
         <v-icon small color="grey lighten-1">chat_bubble</v-icon>
-        <span class="caption half-bold grey--text lighten-1">{{ reviewsCount }}</span>
+        <span class="pl-1 caption half-bold grey--text lighten-1">{{ reviewsCount }}</span>
       </v-flex>
       <v-flex xs5>
         <v-layout row align-center class="group-logo" v-if="!group.is_personal">
