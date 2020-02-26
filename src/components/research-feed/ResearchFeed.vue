@@ -258,6 +258,7 @@ import { mapGetters } from 'vuex';
 import moment from 'moment';
 import { isLoggedIn } from '@/utils/auth';
 import * as disciplinesService from '@/components/common/disciplines/DisciplineTreeService';
+import trlData from '@/components/common/trl.json';
 
 export default {
   name: "ResearchFeed",
@@ -271,7 +272,7 @@ export default {
       disciplines: [...disciplinesService.getTopLevelNodes()],
       filterByTopOnly: false,
       filtersTabExpansionModel: [false],
-      trls: this.TRL.map((t, i) => ({
+      trls: trlData.map((t, i) => ({
         id: t.id,
         label: `TRL ${i + 1}`,
         hint: t.description,
