@@ -28,6 +28,7 @@ const state = {
     trl: [],
     steppers: [],
     organizations: [],
+    categories: [],
     q: '',
     orderBy: {
       iteratee: ['title'],
@@ -69,6 +70,7 @@ const getters = {
           }
         })
       )
+      .filter((item) => !state.filter.categories.length || state.filter.categories.some((cat) => item.researchRef.tenantCategory && item.researchRef.tenantCategory._id == cat._id))
       .map((item) => {
         const totalVotes = state.feedTotalVotes.filter((vote) => vote.research_id == item.id);
         const reviews = state.feedResearchReviews.filter((review) => review.research_id == item.id);

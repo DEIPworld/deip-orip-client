@@ -20,50 +20,12 @@
       <v-col class="d-flex align-center justify-center">
         <v-sheet max-width="800" class="pa-12 mx-auto">
           <login-form
+            centered
             :show-sign-up="!adminLogin"
-            logo="DEIP"
+            :logo="['/assets/img/ar3c-logo.png', '/assets/img/wechain-logo.png']"
             :title="adminLogin ? 'Sign in to your admin account' : 'Sign in to your account'"
             :is-admin="adminLogin"
           />
-        </v-sheet>
-      </v-col>
-
-      <v-col>
-        <v-sheet
-          tile
-          min-height="100%"
-          color="primary"
-          dark
-          class="d-flex flex-column justify-center pa-12"
-          style="background: linear-gradient(138.37deg, rgba(40, 56, 139, 0.5) 0%, rgba(10, 29, 43, 0.5) 100%), url(/assets/img/signin.png) center center / cover no-repeat;"
-        >
-          <div class="display-3 font-weight-bold">
-            Open Research and Innovation Platform
-          </div>
-          <div class="subtitle-1 mt-12">
-            <v-icon small>
-              mdi-message-reply-text
-            </v-icon>
-            <span class="ml-4">Collaboration</span>
-          </div>
-          <div class="subtitle-1 mt-2">
-            <v-icon small>
-              mdi-lightbulb-on
-            </v-icon>
-            <span class="ml-4">Project tokenization</span>
-          </div>
-          <div class="subtitle-1 mt-2">
-            <v-icon small>
-              mdi-shield-check
-            </v-icon>
-            <span class="ml-4">Licensing of intellectual property</span>
-          </div>
-          <div class="subtitle-1 mt-2">
-            <v-icon small>
-              mdi-account-multiple-plus
-            </v-icon>
-            <span class="ml-4">Crowd investing</span>
-          </div>
         </v-sheet>
       </v-col>
 

@@ -3,7 +3,7 @@
     <v-col cols="6">
 
       <div class="headline text-center mb-3">
-        Select research disciplines
+        Select domain
       </div>
 
       <div class="subtitle-1 text-center mx-auto selected-disciplines discipline-picker">

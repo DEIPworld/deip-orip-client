@@ -63,7 +63,6 @@ Vue.filter('tenantLogoSrc', (tenant, width = 120, height = 40, isRound = false, 
 
 Vue.filter('tenantBackgroundSrc', (tenant, width = 1440, height = 430, isRound = false, noCache = true) => `${window.env.DEIP_SERVER_URL}/tenant/banner/${tenant.external_id}?width=${width}&height=${height}&noCache=${noCache}`);
 
-
 Vue.filter('dateFormat', (value, format, fromUtcToLocal = false) => (!fromUtcToLocal
   ? moment(value).format(format)
   : moment.utc(value).local().format(format)));

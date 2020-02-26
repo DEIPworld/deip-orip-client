@@ -94,7 +94,7 @@
     },
     props: {
       logo: {
-        type: String,
+        type: [Array],
         default: null
       },
       title: {

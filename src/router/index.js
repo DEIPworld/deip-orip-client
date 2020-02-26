@@ -74,6 +74,7 @@ import { userDetailRouting } from '@/components/UserDetails/router';
 import { adminRouting } from '@/components/AdminPanel/router';
 import ResearchRequestFormCreate from '@/components/ResearchRequest/ResearchRequestFormCreate';
 import { awaitStore } from '@/router/utils/awaitStore';
+import UserRegistration from '@/components/auth/UserRegistration';
 
 const accessService = AccessService.getInstance();
 const usersService = UsersService.getInstance();
@@ -106,7 +107,8 @@ const router = new Router({
   }, {
     path: '/sign-up',
     name: 'SignUp',
-    component: SignUp,
+    // component: SignUp,
+    component: UserRegistration,
     meta: {
       withoutHeader: true,
       viewTitle: 'Sign Up'
@@ -581,6 +583,7 @@ router.beforeEach((to, from, next) => {
   // need router rebuild
 
   if (loginPages.includes(to.path)) {
+
     if (accessService.isLoggedIn()) {
       authDataLoad().then(() => { next(to.path === '/admin/sign-in' ? '/admin' : '/'); }); // if token is already presented redirect user to home page
 

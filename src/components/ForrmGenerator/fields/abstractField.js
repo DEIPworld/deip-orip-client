@@ -6,7 +6,7 @@ export default {
     },
     value: {
       // type: String,
-      default: false,
+      // default: false,
     },
     scope: {
       type: String,

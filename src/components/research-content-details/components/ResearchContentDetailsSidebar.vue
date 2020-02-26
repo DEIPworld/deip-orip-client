@@ -27,7 +27,7 @@
         >
           proposed
         </router-link>
-        as research content and locked for editing
+        as project content and locked for editing
       </div>
       <div v-if="isUnlockActionAvailable" class="mt-6">
         <div class="body-1 pb-4">
@@ -41,7 +41,7 @@
     <!-- ### END Draft Actions Section ### -->
 
     <!-- ### START Research Content ECI Section ### -->
-    <v-sheet v-if="isPublished">
+    <!-- <v-sheet v-if="isPublished">
       <v-divider class="my-6" />
       <div class="title">
         Expertise Contribution Index
@@ -65,7 +65,7 @@
           {{ eci.disciplineName }}
         </div>
       </div>
-    </v-sheet>
+    </v-sheet> -->
     <!-- ### END Research Content ECI Section ### -->
 
 
@@ -79,7 +79,7 @@
       <span class="red--text text--darken-2">{{ negativeReviewsCount }}</span>
     </div> -->
 
-    <v-dialog
+    <!-- <v-dialog
       v-if="isPublished"
       v-model="requestExpertReviewDialog.isShown"
       persistent
@@ -143,7 +143,7 @@
           </v-row>
         </v-card-actions>
       </v-card>
-    </v-dialog>
+    </v-dialog> -->
 
     <!-- ### START Research Content Authors Section ### -->
     <v-divider class="my-6" />
@@ -202,7 +202,7 @@
       <v-divider class="my-6" />
 
       <div class="title mb-6">
-        Research table of content
+        Project table of content
       </div>
 
       <div v-for="(item, index) in researchTableOfContent" :key="index" :class="index === 0 ? '' : 'c-mt-1'">
@@ -227,7 +227,7 @@
         </div>
       </div>
 
-      <div v-if="isPublished" class="pt-2">
+      <!-- <div v-if="isPublished" class="pt-2">
         <router-link
           class="a font-weight-regular display-flex"
           :to="{
@@ -243,7 +243,8 @@
           </v-icon>
           References
         </router-link>
-      </div>
+      </div> -->
+      
     </div>
     <!-- ### END Research TOC Section ### -->
 
@@ -269,10 +270,11 @@
 
 
     <!-- ### START Reward Info Section ### -->
-    <div v-if="!isPublished" class="py-2">
+    <!-- <div v-if="!isPublished" class="py-2">
       <div class="subtitle-1 font-weight-bold">
         Reviews
       </div>
+
       <div class="body-2 c-mt-2">
         <v-row no-gutters justify="space-between" class="body-2 py-1">
           <div>
@@ -284,7 +286,7 @@
           <div>{{ research.review_share }}</div>
         </v-row>
       </div>
-    </div>
+    </div> -->
     <!-- ### END Reward Info Section ### -->
   </div>
 </template>

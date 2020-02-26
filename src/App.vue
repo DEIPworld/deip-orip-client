@@ -1,5 +1,5 @@
 <template>
-  <v-app>
+  <v-app id="deip-app">
     <v-overlay v-if="!$ready" color="#fff">
       <v-sheet min-width="320px">
         <v-progress-linear
@@ -33,7 +33,6 @@
 
 <script>
   import { mapGetters } from 'vuex';
-  import deipRpc from '@deip/rpc-client';
   import { AccessService } from '@deip/access-service';
   import ToolbarAdmin from '@/components/layout/components/ToolbarAdmin';
   import DSnackbar from '@/components/Deipify/DSnackbar/DSnackbar';
@@ -107,4 +106,14 @@
 
 <style lang="scss">
   @import '~vuetify/src/styles/styles.sass';
+
+  #deip-app {
+    font-family: 'Roboto', 'Avenir', Helvetica, Arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    color: #2c3e50;
+  }
+  .full-vh{
+    min-height:100vh;
+  }
 </style>
