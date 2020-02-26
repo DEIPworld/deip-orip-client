@@ -2,7 +2,7 @@
   <div class="display-flex flex-column fill-height">
     <div class="display-flex flex-column flex-grow-1 mb-4">
       <div class="headline text-center">
-        Select research disciplines
+        Select domain
       </div>
       <div class="subtitle-1 mb-4 text-center mx-auto selected-disciplines discipline-picker">
         {{ research.disciplines.map(d => d.label).join(' · ') }}

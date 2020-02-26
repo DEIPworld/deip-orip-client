@@ -15,7 +15,7 @@
           item-text="name"
           item-value="id"
           label="Discipline"
-          outlined
+          filled
           dense
           :disabled="eciHistoryRecordsTable.loading"
           @change="loadDisciplineEciHistory()"

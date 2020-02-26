@@ -5,8 +5,7 @@
         Roadmap
       </div>
       <div class="subtitle-1 pb-12 pt-2 text-center">
-        Let’s create a roadmap for your research. Well-presented and
-        detailed roadmap attracts more investors to help you to get the funding
+        Let’s create a roadmap for your project
       </div>
       <milestone-stepper style="width: 100%" :is-read-only="false" :steps="research.milestones" />
     </div>

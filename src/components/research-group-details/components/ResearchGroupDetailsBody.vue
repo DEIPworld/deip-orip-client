@@ -20,7 +20,7 @@
             }
           }"
         >
-          Edit group
+          Edit team
         </v-btn>
       </v-col>
     </v-row>
@@ -46,7 +46,7 @@
     <!-- ### START Research Group members Section ### -->
     <div class="mt-12">
       <div class="title">
-        Group members: {{ members.length }}
+        Team members: {{ members.length }}
       </div>
       <div class="pt-6">
         <v-card>
@@ -55,9 +55,9 @@
               <v-col class="list-header-cell" :class="isGroupMembersActionsColumnAvailable ? 'xs3': 'xs4'">
                 Researcher
               </v-col>
-              <v-col class="list-header-cell" cols="4">
+              <!-- <v-col class="list-header-cell" cols="4">
                 Expertise
-              </v-col>
+              </v-col> -->
               <v-col class="list-header-cell text-align-center" cols="2">
                 Member since
               </v-col>
@@ -92,11 +92,11 @@
                   </div>
                 </v-col>
 
-                <v-col class="list-body-cell" cols="3">
+                <!-- <v-col class="list-body-cell" cols="3">
                   <div v-for="(item, i) in member.expertise" :key="i">
                     <span class="uppercase bold">{{ item.discipline_name }}:</span> {{ item.amount }}
                   </div>
-                </v-col>
+                </v-col> -->
 
                 <v-col class="text-align-center list-body-cell" cols="2">
                   {{ member.created | dateFormat('D MMM YYYY') }}
@@ -106,7 +106,7 @@
                   {{ member | userLocation }}
                 </v-col>
 
-                <v-col class="text-align-center list-body-cell" cols="1">
+                <v-col v-if="isGroupMembersActionsColumnAvailable" class="text-align-center list-body-cell" cols="1">
                   <div v-if="isExcludingMemberAvailable(member.rgt.owner)">
                     <v-btn
                       text
@@ -146,7 +146,7 @@
               </v-icon>
             </v-btn>
 
-            <span class="pl-2">Invite researchers</span>
+            <span class="pl-2">Invite team members</span>
           </div>
 
           <div v-if="isResearchGroupMember && invites.length">
@@ -220,6 +220,7 @@
     <state-research-list class="mt-12" :research-list="researchWithGroupInfoList" />
     <!-- ### END Research Group Research List Section ### -->
   </div>
+
 </template>
 
 <script>
