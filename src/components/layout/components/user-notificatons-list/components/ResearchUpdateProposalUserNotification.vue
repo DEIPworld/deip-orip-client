@@ -2,13 +2,13 @@
   <v-sheet @click="clickNotification(notification)">
     <div>
       <span v-if="isAutoAccepted">
-        <span class="primary--text half-bold">{{ proposalCreator | fullname }}</span> updated "<span class="primary--text half-bold">{{ notification.metadata.research.title }}</span>" research meta
+        <span class="primary--text half-bold">{{ proposalCreator | fullname }}</span> updated "<span class="primary--text half-bold">{{ notification.metadata.research.title }}</span>" Project information
       </span>
       <span v-else-if="isAcceptedByQuorum">
-        "<span class="primary--text half-bold">{{ notification.metadata.researchGroup.name }}</span>" updated "<span class="primary--text half-bold">{{ notification.metadata.research.title }}</span>" research meta
+        "<span class="primary--text half-bold">{{ notification.metadata.researchGroup.name }}</span>" updated "<span class="primary--text half-bold">{{ notification.metadata.research.title }}</span>" Project information
       </span>
       <span v-else>
-        <span class="primary--text half-bold">{{ proposalCreator | fullname }}</span> proposed to update "<span class="primary--text half-bold">{{ notification.metadata.research.title }}</span>" research meta in "<span class="primary--text half-bold">{{ notification.metadata.researchGroup.name }}</span>"
+        <span class="primary--text half-bold">{{ proposalCreator | fullname }}</span> proposed to update "<span class="primary--text half-bold">{{ notification.metadata.research.title }}</span>" Project information in "<span class="primary--text half-bold">{{ notification.metadata.researchGroup.name }}</span>"
       </span>
     </div>
     <v-row justify="space-between" align="end">

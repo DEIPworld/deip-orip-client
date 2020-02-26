@@ -4,7 +4,7 @@
       <v-col cols="6" class="hidden-sm-and-down">
         <div class="description fill-height">
           <div class="description__logo">
-            <img src="/assets/img/landing-logo.svg">
+            <img src="/assets/img/landing-logo.png">
           </div>
           <div class="description__info-text">
             Open Research and Innovation Platform
@@ -50,6 +50,7 @@
               <v-text-field
                 v-model="formData.email"
                 label="Email"
+
                 :rules="[rules.required, rules.email]"
                 :disabled="isSaving"
               />
@@ -111,6 +112,7 @@
                 participants with the information specified above:
               </div>
 
+
               <v-checkbox
                 v-model="formData.isMasterPasswordSaved"
                 class="c-mv-4 pa-0"
@@ -121,8 +123,8 @@
 
               <div class="c-pb-4 text-justify caption grey--text">
                 No data is stored until you press “Finish Registration” button.
-                For more information about our privacy terms please read <a class="a" target="_blank" href="https://deip.world/DEIP%20PRIVACY%20POLICY.pdf">Privacy Policy</a>.
-                By clicking below, you agree that we may process ypur information in accordance with these terms.
+                For more information about our privacy terms please read <a class="a" target="_blank" href=" https://ar3c-demo-web-server.deip.world/Terms of Service for Open r&d Portal (in Process).pdf">Terms and Conditions</a>.
+                By clicking below, you agree that we may process your information in accordance with these terms.
               </div>
 
               <v-btn
@@ -278,15 +280,18 @@
   @import "./../../styles/colors.less";
 
   .description {
-    background-color: #485fda;
+    background-color: #ffffff;
     padding-top: 10%;
     padding-left: 20%;
     padding-right: 15%;
 
     &__logo {
-      margin-top: 5%;
-      margin-bottom: 10%;
 
+      // margin-top: 5%;
+      // margin-bottom: 10%;
+      width: 80%;
+      max-height: 200px;
+      
       img {
         max-width: 100%;
       }
@@ -300,20 +305,7 @@
       font-size: 48px;
       line-height: 61px;
       letter-spacing: 0.25px;
-      color: @white;
-    }
-
-    &__info-list-item {
-      font-family: Muli;
-      font-weight: 500;
-      font-size: 18px;
-      line-height: 20px;
-
-      color: #FFFFFF;
-
-      .icon-upended {
-        transform: rotate(180deg);
-      }
+      color: var(--v-primary-base);
     }
   }
 

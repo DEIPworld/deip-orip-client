@@ -25,10 +25,11 @@
           >
             {{ content.title }}
           </router-link>
+
           <span v-else class="grey--text">{{ content.title }}</span>
         </v-col>
         <v-col cols="2">
-          <div class="d-flex justify-space-between px-2">
+          <!-- <div class="d-flex justify-space-between px-2">
             <div v-if="isDetailsAvailable">
               <v-tooltip top>
                 <template v-slot:activator="{ on }">
@@ -63,7 +64,7 @@
               <span v-show="hasPositiveReviews(content) && hasNegativeReviews(content)">/</span>
               <span v-show="hasNegativeReviews(content)" class="red--text medium">{{ countContentReviews(content, false) }}</span>
             </div>
-          </div>
+          </div> -->
         </v-col>
       </v-row>
     </v-expansion-panel-header>
@@ -72,7 +73,7 @@
         <div class="grey--text">
           {{ createContentAuthorsString(content.authors) }}
         </div>
-        <div>
+        <!-- <div>
           <span
             v-for="eci of getContentEciList(content)"
             :key="eci.disciplineName"
@@ -81,7 +82,7 @@
             <span class="mr-1">{{ eci.disciplineName }}</span>
             <span class="mr-6 bold">{{ eci.value }}</span>
           </span>
-        </div>
+        </div> -->
         <div class="mt-2">
           <v-icon size="18px">
             event
@@ -92,6 +93,7 @@
     </v-expansion-panel-content>
     <v-divider />
   </v-expansion-panel>
+
 </template>
 
 <script>

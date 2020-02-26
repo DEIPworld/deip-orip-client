@@ -3,7 +3,7 @@
     <layout-toolbar>
       <v-tabs
         v-model="activeTab"
-        :color="themeSettings['tabs-text-class']"
+        v-bind="themeSettings.tabs"
       >
         <v-tab key="my-projects">
           My projects: {{ myResearches.length }}

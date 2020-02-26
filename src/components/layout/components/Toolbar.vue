@@ -9,7 +9,7 @@
       fixed
       flat
       clipped-left
-      :color="themeSettings.topbar.backgroundColor"
+      v-bind="themeSettings.appBar.bar"
     >
       <router-link :to="{ name: 'Default' }">
         <img height="40px" class="logo-image" :src="tenant.account | tenantLogoSrc(80, 80, false)">
@@ -20,10 +20,11 @@
       <v-tabs
         v-if="!isLoggedIn"
         class="main-nav"
-        :color="themeSettings['top-bar-link-color']"
+        :v-bind="themeSettings.appBar.tabs"
         right
       >
         <v-tab v-if="isDefaultToolbar" exact :to="{ name: 'ResearchFeed' }">
+
           Explore
         </v-tab>
         <!-- TODO: need refactoring -->
@@ -38,7 +39,7 @@
       <v-tabs
         v-if="isLoggedIn && isDefaultToolbar"
         class="main-nav ml-a"
-        :color="themeSettings['top-bar-link-color']"
+        :v-bind="themeSettings.appBar.tabs"
         right
       >
         <v-tab exact :to="{ name: 'ResearchFeed' }">
@@ -47,18 +48,18 @@
         <v-tab exact :to="{ name: 'Dashboard' }">
           Dashboard
         </v-tab>
-        <v-tab exact :to="{ name: 'InvestorPortfolio' }">
-          Portfolio
-        </v-tab>
-        <v-tab exact :to="{ name: 'UserWallet', params: { account_name: user.username } }">
-          Wallet
-        </v-tab>
+<!--        <v-tab exact :to="{ name: 'InvestorPortfolio' }">-->
+<!--          Portfolio-->
+<!--        </v-tab> -->
+<!--        <v-tab exact :to="{ name: 'UserWallet', params: { account_name: user.username } }">-->
+<!--          Wallet-->
+<!--        </v-tab> -->
       </v-tabs>
 
       <v-tabs
         v-if="isLoggedIn && isGrantsTransparencyDemo"
         class="main-nav"
-        :color="themeSettings['top-bar-link-color']"
+        :v-bind="themeSettings.appBar.tabs"
         right
       >
         <v-tab exact :to="{ name: 'GrantProgramsAwardsDashboard', params: { agency: 'nsf' } }">
@@ -181,7 +182,7 @@
         themeSettings: 'layout/themeSettings'
       }),
       isDark() {
-        return !this.themeSettings.topbar.light;
+        return this.themeSettings.appBar.dark;
       },
       isLoggedIn() { return accessService.isLoggedIn(); },
       isDefaultToolbar() {
