@@ -7,7 +7,7 @@
         "<span class="primary--text half-bold">{{ notification.metadata.researchContent.title }}</span>"
         material in
         "<span class="primary--text half-bold">{{ notification.metadata.research.title }}</span>"
-        research
+        project
       </span>
       <span v-else-if="isAcceptedByQuorum">
         "<span class="primary--text half-bold">{{ notification.metadata.researchGroup.name }}</span>"
@@ -15,7 +15,7 @@
         "<span class="primary--text half-bold">{{ notification.metadata.researchContent.title }}</span>"
         material in
         "<span class="primary--text half-bold">{{ notification.metadata.research.title }}</span>"
-        research
+        project
       </span>
       <span v-else>
         <span class="primary--text half-bold">{{ proposalCreator | fullname }}</span>
@@ -23,7 +23,7 @@
         "<span class="primary--text half-bold">{{ notification.metadata.proposal.data.title }}</span>"
         material for
         "<span class="primary--text half-bold">{{ notification.metadata.research.title }}</span>"
-        research in
+        project in
         "<span class="primary--text half-bold">{{ notification.metadata.researchGroup.name }}</span>"
       </span>
     </div>

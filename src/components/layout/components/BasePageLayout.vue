@@ -65,10 +65,11 @@
     max-width: 100%;
 
     &__header {
-      background-position: 100% 100%;
+      background-position: 50% 50%;
       background-size: cover;
       background-repeat: no-repeat;
       position: relative;
+      min-height: 380px;
 
       &--muted {
         &::before {
