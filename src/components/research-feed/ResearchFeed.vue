@@ -224,6 +224,7 @@
                     >
                     <div class="organization-item__overlay" />
                   </div>
+
                 </template>
                 <span>{{ organization.name }}</span>
               </v-tooltip>

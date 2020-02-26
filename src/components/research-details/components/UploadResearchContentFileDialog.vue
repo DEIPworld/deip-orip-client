@@ -23,7 +23,7 @@
       <v-card class="pa-6">
         <v-card-title>
           <div class="headline">
-            Upload material for research
+            Upload material for project
           </div>
           <div class="right-top-angle">
             <v-btn icon class="pa-0 ma-0" @click="close()">
@@ -84,13 +84,13 @@
               </template>
             </v-autocomplete>
 
-            <internal-references-picker
+            <!-- <internal-references-picker
               :show-selected="true"
               :current-research="research"
               :preselected="[]"
               @referenceAdded="addReference"
               @referenceRemoved="removeReference"
-            />
+            /> -->
           </div>
         </v-card-text>
         <v-card-actions class="px-6">

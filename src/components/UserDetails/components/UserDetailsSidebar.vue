@@ -42,7 +42,7 @@
         persistent
         max-width="600px"
       >
-        <v-card class="pa-6">
+        <v-card class="pa-4">
           <v-card-title>
             <div class="headline">
               {{ inviteDetailsDialog.item.group.name }}
@@ -88,7 +88,7 @@
     </div>
     <!-- ### END User Profile Invites Section ### -->
 
-    <div v-if="isOwner && hasReviewRequests">
+    <!-- <div v-if="isOwner && hasReviewRequests">
       <div id="review-requests" class="title font-weight-bold pb-2">
         Review Requests: {{ reviewRequests.length }}
       </div>
@@ -102,14 +102,6 @@
           requests your review for "{{ reviewRequest.research.title }}"
           research
         </div>
-        <!-- <router-link tag="div" class="a full-width break-word font-weight-medium caption"
-            :to="{ name: 'ResearchContentDetails', params: {
-                research_group_permlink: encodeURIComponent(reviewRequest.research.research_group.permlink),
-                research_permlink: encodeURIComponent(reviewRequest.research.permlink),
-                content_permlink: encodeURIComponent(reviewRequest.content.permlink)
-            }}"
-            >{{reviewRequest.content.title}}
-        </router-link> -->
 
         <div class="pt-2 full-width display-flex justify-space-between">
           <v-btn
@@ -140,10 +132,10 @@
         <v-divider v-if="index !== reviewRequests.length - 1" class="ma-2" />
       </div>
       <v-divider />
-    </div>
+    </div> -->
 
     <!-- ### START User Profile Expertise Section ### -->
-    <div class="mt-6">
+    <!-- <div class="mt-6">
       <div class="title bold">
         Expertise Contribution Index
       </div>
@@ -185,11 +177,11 @@
           </v-btn>
         </div>
       </div>
-    </div>
+    </div> -->
     <!-- ### END User Profile Expertise Section ### -->
 
     <!-- ### START User Profile Contacts Section ### -->
-    <div v-if="isProfileAvailable && (isContactsInfoSpecified || isOwner)" class="mt-4">
+    <div v-if="isProfileAvailable && (isContactsInfoSpecified || isOwner)">
       <div class="sidebar-fullwidth">
         <v-divider />
       </div>

@@ -46,7 +46,7 @@
     <!-- ### START Research Group members Section ### -->
     <div class="mt-12">
       <div class="title">
-        Group members: {{ members.length }}
+        Team members: {{ members.length }}
       </div>
       <div class="pt-6">
         <v-card>
@@ -92,11 +92,11 @@
                   </div>
                 </v-col>
 
-                <v-col class="list-body-cell" cols="3">
+                <!-- <v-col class="list-body-cell" cols="3">
                   <div v-for="(item, i) in member.expertise" :key="i">
                     <span class="uppercase bold">{{ item.discipline_name }}:</span> {{ item.amount }}
                   </div>
-                </v-col>
+                </v-col> -->
 
                 <v-col class="text-align-center list-body-cell" cols="2">
                   {{ member.created | dateFormat('D MMM YYYY') }}
@@ -220,6 +220,7 @@
     <state-research-list class="mt-12" :research-list="researchWithGroupInfoList" />
     <!-- ### END Research Group Research List Section ### -->
   </div>
+
 </template>
 
 <script>

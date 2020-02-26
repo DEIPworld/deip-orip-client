@@ -49,11 +49,11 @@
           :content-ref="contentRef"
           :research-group-members="membersList"
         />
-        <research-content-details-eci v-if="isPublished" />
+        <!-- <research-content-details-eci v-if="isPublished" /> -->
         <v-divider />
 
         <!-- START Research Content Reviews section -->
-        <div v-if="isPublished && contentReviewsList.length" class="py-6">
+        <!-- <div v-if="isPublished && contentReviewsList.length" class="py-6">
           <div id="reviews">
             <div class="py-2 title">
               Reviews: {{ contentReviewsList.length }}
@@ -69,9 +69,9 @@
               </div>
             </div>
           </div>
-        </div>
+        </div> -->
 
-        <div v-if="isPublished && !isResearchGroupMember" class="pt-2 pb-12">
+        <!-- <div v-if="isPublished && !isResearchGroupMember" class="pt-2 pb-12">
           <v-card class="py-6 px-12">
             <v-row id="reviews" class="py-2">
               <v-col class="shrink pr-12" align-self="center">
@@ -116,7 +116,7 @@
               </v-col>
             </v-row>
           </v-card>
-        </div>
+        </div> -->
       </v-col>
     </v-row>
 
@@ -135,7 +135,7 @@
       <v-card class="pa-6">
         <v-card-title>
           <div class="headline">
-            Upload material for research
+            Upload material for project
           </div>
           <div class="right-top-angle">
             <v-btn icon class="pa-0 ma-0" @click="closeContentProposalDialog()">
@@ -198,13 +198,13 @@
             </template>
           </v-autocomplete>
 
-          <internal-references-picker
+          <!-- <internal-references-picker
             :show-selected="true"
             :current-research="research"
             :preselected="contentRef.references"
             @referenceAdded="addReference"
             @referenceRemoved="removeReference"
-          />
+          /> -->
         </v-card-text>
 
         <v-card-actions class="px-6">

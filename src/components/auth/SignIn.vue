@@ -4,7 +4,7 @@
       <v-col cols="6" class="hidden-sm-and-down">
         <div class="description fill-height">
           <div class="description__logo">
-            <img src="/assets/img/landing-logo.svg">
+            <img src="/assets/img/landing-logo.png">
           </div>
           <div class="description__info-text">
             Open Research and Innovation Platform
@@ -44,6 +44,7 @@
         </div>
       </v-col>
       <v-col cols="12" md="6">
+
         <v-card class="full-height elevation-0" color="secondary">
           <div class="login fill-height">
             <div class="login__title">
@@ -76,7 +77,6 @@
                 type="submit"
                 block
                 color="primary"
-                dark
                 :loading="isChecking"
                 :disabled="isChecking"
                 @click="login()"
@@ -85,6 +85,7 @@
               </v-btn>
             </v-form>
           </div>
+
         </v-card>
       </v-col>
     </v-row>
@@ -209,14 +210,16 @@
 @import "./../../styles/colors.less";
 
 .description {
-  background-color: #485fda;
+  background-color: #ffffff;
   padding-top: 10%;
   padding-left: 20%;
   padding-right: 15%;
 
   &__logo {
-    margin-top: 5%;
-    margin-bottom: 10%;
+    // margin-top: 5%;
+    // margin-bottom: 10%;
+    width: 80%;
+    max-height: 200px;
     img {
       max-width: 100%;
     }
@@ -230,33 +233,7 @@
     font-size: 48px;
     line-height: 61px;
     letter-spacing: 0.25px;
-    color: @white;
-  }
-
-  &__signup-text {
-    margin-top: 5%;
-    font-family: Roboto;
-    font-style: normal;
-    font-weight: normal;
-    font-size: 16px;
-    line-height: 19px;
-    color: @white;
-    a {
-      color: inherit;
-    }
-  }
-
-  &__info-list-item {
-    font-family: Muli;
-    font-weight: 500;
-    font-size: 18px;
-    line-height: 20px;
-
-    color: #FFFFFF;
-
-    .icon-upended {
-      transform: rotate(180deg);
-    }
+    color: var(--v-primary-base);
   }
 }
 
@@ -277,4 +254,14 @@
   }
 }
 
+
+.signup-text {
+  font-family: Roboto;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 16px;
+  a {
+    color: inherit;
+  }
+}
 </style>

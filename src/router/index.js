@@ -561,6 +561,7 @@ router.beforeEach((to, from, next) => {
   ];
 
   if (loginPages.includes(to.path)) {
+
     if (accessService.isLoggedIn()) {
       next(to.path === '/admin/login' ? '/admin' : '/'); // if token is already presented redirect user to home page
     } else {

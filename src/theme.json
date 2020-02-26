@@ -72,17 +72,18 @@
     }
   },
   "default": {
-    "light": false,
-    "dark": true,
-    "primary-color": "#485fda",
+    "light": true,
+    "dark": false,
+    "primary-color": "#00a5ff",
     "secondary-color": "#f5f5f5",
     "top-bar-divider-color": "",
-    "top-bar-class": "",
-    "tabs-text-class": "",
-    "tabs-slider-color": "",
+    "top-bar-class": "elevation-0",
+    "tabs-text-class": "#282828",
+    "tabs-slider-color": "#00a5ff",
+    "top-bar-link-color": "#000000",
     "topbar": {
       "light": false,
-      "backgroundColor": "#000"
+      "backgroundColor": "#f5f5f5"
     }
   }
 }

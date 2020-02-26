@@ -24,6 +24,7 @@
         right
       >
         <v-tab v-if="isDefaultToolbar" exact :to="{ name: 'ResearchFeed' }">
+
           Explore
         </v-tab>
         <!-- TODO: need refactoring -->

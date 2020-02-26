@@ -107,7 +107,7 @@
 
         <div v-if="commonGroups.length" class="pt-6">
           <div class="title">
-            Research groups: {{ commonGroups.length }}
+            Teams: {{ commonGroups.length }}
           </div>
         </div>
 

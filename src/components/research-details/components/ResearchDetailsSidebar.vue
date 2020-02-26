@@ -59,7 +59,6 @@
                 </v-btn>
               </div>
             </v-card-title>
-
             <v-card-text>
               <v-textarea
                 v-model="coverLetter"
@@ -119,7 +118,7 @@
       </div>
     </v-sheet>
 
-    <v-divider class="my-6" />
+    <!-- <v-divider class="my-6" />
 
     <v-sheet>
       <div class="title">
@@ -147,25 +146,7 @@
           {{ eci.disciplineName }}
         </div>
       </div>
-    </v-sheet>
-
-    <!-- <div class="my-6 mx-6">
-          <div class="rd-sidebar-block-title pb-2">Score</div>
-          <v-tooltip top>
-            <div class="mt-2" slot="activator">{{researchScorePercent}}%</div>
-            <span class="bold">
-              This score is calculated of Expertise<br/>
-              contribution index and development stage<br/>
-              of the project
-            </span>
-          </v-tooltip>
-          <top-research-label
-            v-if="research.isTop"
-            :number="100"
-            color-class="green--text"
-            class="mt-4"
-          />
-    </div>-->
+    </v-sheet> -->
 
     <v-divider class="my-6" />
 
@@ -212,7 +193,7 @@
 
     <v-divider class="my-6" />
 
-    <v-sheet v-if="contentList.length">
+    <!-- <v-sheet v-if="contentList.length">
       <div class="title">
         Expert Review
       </div>
@@ -233,67 +214,9 @@
             Request Review
           </v-btn>
         </template>
-
-        <v-card class="pa-6">
-          <v-card-title>
-            <div class="headline">
-              Request review from an Expert
-            </div>
-            <div class="right-top-angle">
-              <v-btn icon class="pa-0 ma-0" @click="requestExpertReviewDialog.isShown = false">
-                <v-icon color="black">
-                  close
-                </v-icon>
-              </v-btn>
-            </div>
-          </v-card-title>
-          <v-card-text>
-            <v-select
-              v-model="selectedContentId"
-              class="mt-4"
-              :menu-props="{maxWidth:500}"
-              label="Select a content to request review"
-              item-text="title"
-              item-value="id"
-              :disabled="isRequestingReview"
-              :items="contentListToReview"
-            />
-            <user-autocomplete-picker
-              label="Find an expert to request a review"
-              :users="experts"
-              :is-disabled="!isSelectedContentId"
-              :display-limit="6"
-              @onSelectUser="selectExpert"
-            />
-          </v-card-text>
-          <v-card-actions class="px-6">
-            <v-row>
-              <v-col class="py-2" cols="12">
-                <v-btn
-                  :loading="isRequestingReview"
-                  :disabled="isRequestingReviewDisabled"
-                  block
-                  color="primary"
-                  @click="requestReview()"
-                >
-                  Request
-                </v-btn>
-              </v-col>
-              <v-col class="py-2" cols="12">
-                <v-btn
-                  color="primary"
-                  text
-                  block
-                  @click="requestExpertReviewDialog.isShown = false"
-                >
-                  Cancel
-                </v-btn>
-              </v-col>
-            </v-row>
-          </v-card-actions>
-        </v-card>
       </v-dialog>
-    </v-sheet>
+    </v-sheet> -->
+    
   </div>
 </template>
 
