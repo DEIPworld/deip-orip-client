@@ -3,7 +3,13 @@
     <div slot="content" class="full-width">
       <v-layout column justify-center class="feed-header full-width px-5" :style="{ background: 'url(' + $options.filters.tenantBackgroundSrc(tenant) + '), 100%, 100%, no-repeat'}">
         <div class="display-2 uppercase half-bold">Projects</div>
-        <div class="py-4"><v-btn :to="{ name: 'CreateResearch' }" color="primary" class="ma-0">Start a project</v-btn></div>
+        <div class="py-4">
+          <v-btn v-if="isLoggedIn()"  :to="{ name: 'CreateResearch' }" color="primary" class="ma-0">Start a project</v-btn>
+          <template v-else>
+            <v-btn :to="{ name: 'SignIn' }" color="primary" class="ma-0 px-5">Log In</v-btn>
+            <div class="white--text body-1 mt-2">After creating an account/log in you can add new projects or enjoy shared materials</div>
+          </template>
+        </div>
       </v-layout>
       <v-layout row wrap>
 
@@ -205,7 +211,8 @@
 import deipRpc from '@deip/deip-oa-rpc-client';
 import { mapGetters } from 'vuex';
 import moment from 'moment';
-import * as disciplinesService from './../../components/common/disciplines/DisciplineTreeService';
+import { isLoggedIn } from '@/utils/auth';
+import * as disciplinesService from '@/components/common/disciplines/DisciplineTreeService';
 
 export default {
   name: "ResearchFeed",
@@ -224,7 +231,6 @@ export default {
 
   computed: {
     ...mapGetters({
-      user: 'auth/user',
       tenant: 'auth/tenant',
       researchFeed: 'feed/researchFeed',
       organizations: 'feed/organizations',
@@ -284,7 +290,8 @@ export default {
 
     isOrganizationSelected(organization) {
       return this.filter.organizations.some(o => o.id === organization.id);
-    }
+    },
+    isLoggedIn,
   },
 
   watch: {

@@ -25,7 +25,7 @@
       :class="linkToProfileClass"
     >{{ user | fullname }}
     </router-link>
-    <span v-if="noFollow" class="a" :class="linkToProfileClass">{{ user | fullname }}</span>
+    <span v-if="noFollow" :class="linkToProfileClass">{{ user | fullname }}</span>
     <slot></slot>
   </span>
 </template>

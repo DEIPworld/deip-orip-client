@@ -297,64 +297,11 @@
                       <div class="rd-block-header align-self-center">Project Timeline</div>
                     </v-layout>
                   </v-flex>
-                  <v-flex shrink>
-                  </v-flex>
                 </v-layout>
-                <div class="milestone-description pt-3">{{selectedTimelineItem.description}}</div>
               </v-layout>
             </v-flex>
-            <v-flex lg4>
-              <v-layout justify-center>
-                <ul
-                  :class="{
-                  'rd-timeline': true,
-                  'rd-timeline--full': timelineItemsToShow === timeline.length
-                }"
-                >
-                  <li
-                    v-for="(item, index) of timeline.slice(0, timelineItemsToShow)"
-                    :key="`timeline_item_${item.id}`"
-                    class="rd-timeline-item"
-                  >
-                    <div
-                      :class="{
-                        'rd-timeline-item__marker': true,
-                        'rd-timeline-item__marker--clickable': true,
-                        'rd-timeline-item__marker--active': item === selectedTimelineItem,
-                      }"
-                      :style="{
-                        backgroundColor: getTimelineItemColor(index)
-                      }"
-                      @click="onTimelineMarkerClick(item)"
-                    />
-                    <div
-                      v-if="timelineItemsToShow !== timeline.length || index !== (timeline.length - 1)"
-                      class="rd-timeline-item__line"
-                      :style="{
-                        background: `linear-gradient(${getTimelineItemColor(index)}, ${getTimelineItemColor(index + 1)})`
-                      }"
-                    />
-                    <div class="rd-timeline-item__date">{{item.date}}</div>
-                    <div class="rd-timeline-item__label pt-1">{{item.label}}</div>
-                    <div class="rd-timeline-item__budget pt-1"><span class="font-weight-bold">${{item.budget}}</span> {{item.purpose}}</div>
-                  </li>
-                  <li v-if="timelineItemsToShow < timeline.length" class="rd-timeline-item">
-                    <div
-                      class="rd-timeline-item__marker"
-                      :style="{
-                        backgroundColor: '#E0E0E0'
-                      }"
-                    />
-                    <div
-                      class="rd-timeline-item__line"
-                      :style="{
-                        background: `#E0E0E0`
-                      }"
-                    />
-                    <v-btn outline class="ma-0" @click="onShowMoreTimelineClick()">Show more events</v-btn>
-                  </li>
-                </ul>
-              </v-layout>
+            <v-flex lg12>
+              <research-timeline :timeline="timeline" />
             </v-flex>
           </v-layout>
           
@@ -973,12 +920,16 @@ import reviewRequestsService from "@/services/http/reviewRequests";
 import { getResearchContentType } from "@/services/ResearchService";
 import { getResearch, updateResearch } from "@/services/ResearchExtendedService";
 
-// import references from './references.json';
-// import timeline from './timeline.json';
 import moment from "moment";
+
+import ResearchTimeline from './components/ResearchTimeline';
 
 export default {
   name: "ResearchDetails",
+
+  components: {
+    ResearchTimeline,
+  },
 
   data() {
     return {
@@ -999,8 +950,6 @@ export default {
       isDeletingDraft: false,
       isCreatingDraft: false,
 
-      selectedTimelineItemId: 1,
-      timelineItemsToShow: 3,
       bookmarkId: null,
       isBookmarkActionInProgress: false,
 
@@ -1096,9 +1045,6 @@ export default {
         };
       });
       return timeline;
-    },
-    selectedTimelineItem() {
-      return this.timeline.find(m => m.id == this.selectedTimelineItemId);
     },
     averageInvestmentAmount() {
       return this.round2DigitsAfterComma(
@@ -1586,27 +1532,6 @@ export default {
         };
       });
     },
-    getTimelineItemColor(index) {
-      const isIndexValid = index % 1 === 0 && index >= 0;
-      if (!isIndexValid) {
-        throw new Error("invalid index");
-      }
-
-      const colors = ["#8901EF", "#7558F2", "#2962FF", "#60B3F4", "#54E4F5"];
-
-      const periodicity = (colors.length - 1) * 2;
-
-      const reducedIndex = index % periodicity;
-      const maxIndex = colors.length - 1;
-
-      let colorIndex;
-      if (reducedIndex <= maxIndex) {
-        colorIndex = reducedIndex;
-      } else {
-        colorIndex = maxIndex - (reducedIndex % maxIndex);
-      }
-      return colors[colorIndex];
-    },
     goToReviewPage(review) {
       const params = { review_id: review.id };
 
@@ -1641,15 +1566,6 @@ export default {
     onJoinResearchGroupClick() {
       this.isJoinGroupDialogOpen = true;
       this.coverLetter = "";
-    },
-    onShowMoreTimelineClick() {
-      this.timelineItemsToShow = Math.min(
-        this.timelineItemsToShow + 3,
-        this.timeline.length
-      );
-    },
-    onTimelineMarkerClick(item) {
-      this.selectedTimelineItemId = item.id;
     },
     onTokenizeResearchClick() {
       this.tokenizationConfirmDialog.isShown = true;
@@ -2007,73 +1923,6 @@ export default {
     color: #9e9e9e;
   }
 }
-
-.rd-timeline {
-  list-style: none;
-  &--full {
-    .rd-timeline-item {
-      &:last-child {
-        height: auto;
-      }
-    }
-  }
-  .rd-timeline-item {
-    padding-left: 40px;
-    position: relative;
-    height: 110px;
-
-    &__marker {
-      border-radius: 50%;
-      width: 12px;
-      height: 12px;
-      position: absolute;
-      top: 10px;
-      left: 0;
-
-      &--clickable {
-        &:hover {
-          cursor: pointer;
-          opacity: 0.8;
-          box-shadow: 0px 0px 3px 0px rgba(153, 153, 153, 0.5);
-          transform: scale(1.4, 1.4);
-        }
-      }
-      &--active {
-        transform: scale(1.4, 1.4);
-      }
-    }
-    &__line {
-      height: 92px;
-      width: 2px;
-      position: absolute;
-      top: 25px;
-      left: 5px;
-    }
-    &__date {
-      font-family: Muli;
-      font-weight: bold;
-      font-size: 14px;
-      line-height: 16px;
-      letter-spacing: 1px;
-      text-transform: uppercase;
-      color: #000000;
-    }
-    &__label {
-      font-family: Roboto;
-      font-size: 12px;
-      font-weight: 500;
-      line-height: 18px;
-      color: #000000;
-    }
-    &__budget, &__purpose {
-      font-family: Roboto;
-      font-size: 12px;
-      line-height: 18px;
-      color: #9e9e9e;
-    }
-  }
-}
-
 
 .rd-reviewer {
   font-family: Roboto;

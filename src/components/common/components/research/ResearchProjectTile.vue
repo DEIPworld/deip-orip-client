@@ -3,7 +3,7 @@
   <v-layout column>
     <router-link tag="div" class="research-title" 
       :to="{
-        name: 'ResearchDetails', 
+        name: isLoggedIn() ? 'ResearchDetails' : 'ResearchDetailsPublic',
         params: {
           research_group_permlink: encodeURIComponent(research.group_permlink),
           research_permlink: encodeURIComponent(research.permlink)
@@ -86,6 +86,7 @@
 
 <script>
   import { mapGetters } from 'vuex';
+  import { isLoggedIn } from '@/utils/auth';
   import moment from 'moment';
 
   export default {
@@ -179,8 +180,8 @@
 
     },
     methods: {
-
-    }
+      isLoggedIn,
+    },
   };
 </script>
 

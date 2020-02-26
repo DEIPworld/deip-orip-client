@@ -22,6 +22,7 @@ import ResearchGroupSettings from '@/components/research-group-settings/Research
 
 import ResearchFeed from '@/components/research-feed/ResearchFeed';
 import ResearchDetails from '@/components/research-details/ResearchDetails';
+import ResearchDetailsPublic from '@/components/research-details/ResearchDetailsPublic';
 import ResearchEdit from '@/components/research-edit/ResearchEdit';
 import ResearchContentDetails from '@/components/research-content-details/ResearchContentDetails';
 import ResearchApplicationDetails from '@/components/research-application-details/ResearchApplicationDetails';
@@ -192,6 +193,18 @@ const router = new Router({
 			}
 		})
 		}, {
+      path: '/:research_group_permlink/research-public/:research_permlink',
+      name: 'ResearchDetailsPublic',
+      component: preliminaryDataLoader(ResearchDetailsPublic, {
+        beforeEnter: (to, from, next) => {
+          let loadPagePromise = store.dispatch('rd/loadResearchDetails', {
+            group_permlink: decodeURIComponent(to.params.research_group_permlink),
+            research_permlink: decodeURIComponent(to.params.research_permlink)
+          });
+          loadPage(loadPagePromise, next);
+        }
+      }),
+      }, {
 			path: '/:research_group_permlink/edit-research/:research_permlink',
 			name: 'ResearchEdit',
 			component: preliminaryDataLoader(ResearchEdit, {
@@ -542,13 +555,20 @@ function loadPage(loadPagePromise, next) {
 }
 
 router.beforeEach((to, from, next) => {
+  const PUBLIC_PAGES_NAMES = [
+    'ResearchFeed',
+    'ResearchDetailsPublic',
+    'NoAccessPage'
+  ];
 	if (to.path === '/sign-in' || to.path === '/sign-up' || to.path === '/create-test-net-account') {
 		if (isLoggedIn()) {
 			next('/') // if token is already presented redirect user to home page
 		} else {
 			next(); // otherwise redirect to sign-in page
 		}
-	} else {
+	} else if (PUBLIC_PAGES_NAMES.includes(to.name)) {
+    next();
+  } else {
 		if (isLoggedIn()) {
 			next() // if there is a token allow to visit requested route
 		} else {

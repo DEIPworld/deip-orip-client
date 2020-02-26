@@ -1,13 +1,13 @@
 import _ from 'lodash';
 import deipRpc from '@deip/deip-oa-rpc-client'
 import Vue from 'vue'
-import { getAccessToken } from './../../../utils/auth'
-import { getEnrichedProfiles } from './../../../utils/user'
-import tokenSaleService from './../../../services/TokenSaleService'
-import contentHttpService from './../../../services/http/content'
-import applicationsHttpService from './../../../services/http/application'
-import * as researchService from './../../../services/ResearchService';
-import { getResearch } from './../../../services/ResearchExtendedService';
+import { isLoggedIn } from '@/utils/auth'
+import { getEnrichedProfiles } from '@/utils/user'
+import tokenSaleService from '@/services/TokenSaleService'
+import contentHttpService from '@/services/http/content'
+import applicationsHttpService from '@/services/http/application'
+import * as researchService from '@/services/ResearchService';
+import { getResearch } from '@/services/ResearchExtendedService';
 
 const state = {
     research: null,
@@ -648,18 +648,21 @@ const actions = {
 
     loadUserContributions({ state, commit, rootGetters }, { researchId, notify }) {
       const user = rootGetters['auth/user'];
-      return deipRpc.api.getContributionsHistoryByContributorAndResearchAsync(user.account.name, researchId)
-        .then((hist) => {
-          const contributions = hist.map((h) => {
-            return {
-              tokenSaleId: h.op[1].research_token_sale_id,
-              amount: h.op[1].amount
-            };
-          });
-          commit('SET_USER_CONTRIBUTIONS_LIST', contributions);
-        }).finally(() => {
-          if (notify) notify();
-        });
+      const loadPromise = !isLoggedIn()
+        ? Promise.resolve()
+        : deipRpc.api.getContributionsHistoryByContributorAndResearchAsync(user.account.name, researchId)
+            .then((hist) => {
+              const contributions = hist.map((h) => {
+                return {
+                  tokenSaleId: h.op[1].research_token_sale_id,
+                  amount: h.op[1].amount
+                };
+              });
+              commit('SET_USER_CONTRIBUTIONS_LIST', contributions);
+            });
+      return loadPromise.finally(() => {
+        if (notify) notify();
+      });
     },
     
     loadResearchRef({ state, dispatch, commit }, { researchId, notify }) {
