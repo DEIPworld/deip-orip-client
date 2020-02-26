@@ -14,40 +14,69 @@
               icon
               :input-value="item.id == currentTrlStep"
               @click="changeCurrentTrlStep(item.id)"
-              color="primary"
+              :color="item.id == currentTrlStep ? 'primary' : 'blue'"
               class="ma-0"
             >{{ i+1 }}</v-btn>
           </v-flex>
           <v-flex px-1>
-            <v-divider style="height:57px" color="#2962ff" vertical></v-divider>
-            <div
-              class="caption"
-              :class="{['font-weight-medium']: item.id == currentTrlStep}"
-            >{{ item.description }}</div>
+            <v-divider
+              style="height:57px"
+              :color="item.id == currentTrlStep ? '#2962ff' : '#2196f3'"
+              vertical
+            ></v-divider>
+
+            <v-tooltip bottom>
+              <template v-slot:activator="{ on }">
+                <div
+                  class="caption"
+                  :class="{['font-weight-bold']: item.id == currentTrlStep,['grey--text']: item.id != currentTrlStep}"
+                  v-on="on"
+                >{{ item.shortTitle }}</div>
+              </template>
+              <span>{{ item.description }}</span>
+            </v-tooltip>
           </v-flex>
         </v-layout>
       </v-flex>
     </template>
   </v-layout>
+  <v-layout row wrap v-else-if="isChip && isReadOnly">
+     <v-chip :color="trlBGColor" :text-color="trlColor">
+      <v-avatar>
+        <v-icon>mdi-check-circle</v-icon>
+      </v-avatar>
+      TRL {{ currentTrlData.step }}
+    </v-chip>
+  </v-layout>
   <v-layout row wrap v-else>
-    <v-flex shrink headline font-weight-bold blue--text display-flex trl-label pl-1 pr-4 mb-2>
-      <v-icon large color="blue">mdi-check-circle</v-icon>
+    <v-flex
+      shrink
+      font-weight-bold
+      display-flex
+      trl-label
+      pl-1
+      pr-4
+      mb-2
+      :class="`trl-label-${trlColor} ${trlColor}--text`"
+    >
+      <v-icon large :color="trlColor">mdi-check-circle</v-icon>
       <span class="mx-3">TRL</span>
       {{ currentTrlData.step }}
     </v-flex>
-    <v-flex grow class="body-2 blue--text">{{ currentTrlData.description }}</v-flex>
+    <v-flex grow class="body-2 grey--text">{{ currentTrlData.description }}</v-flex>
   </v-layout>
 </template>
 
 <script>
-import trlData from './trl.json'
+import trlData from "./trl.json";
 
 export default {
   name: "TechnologyReadinessLevel",
 
   props: {
     currentTrlStep: { type: String, required: true },
-    isReadOnly: { type: Boolean, required: false, default: false }
+    isReadOnly: { type: Boolean, required: false, default: false },
+    isChip: {type: Boolean, required: false, default: false}
   },
   data() {
     return {
@@ -66,6 +95,24 @@ export default {
         }),
         step
       };
+    },
+    trlColor() {
+      return this.currentTrlData.step < 4
+        ? "grey"
+        : this.currentTrlData.step > 3 && this.currentTrlData.step < 9
+        ? "blue"
+        : this.currentTrlData.step > 8
+        ? "green"
+        : null;
+    },
+     trlBGColor() {
+      return this.currentTrlData.step < 4
+        ? "#e0e0e0"
+        : this.currentTrlData.step > 3 && this.currentTrlData.step < 9
+        ? "#bbdefb"
+        : this.currentTrlData.step > 8
+        ? "#c8e6c9"
+        : null;
     }
   },
   methods: {
@@ -116,8 +163,19 @@ export default {
   }
 }
 .trl-label {
-  background: #ebf5fe;
-  border: 1px solid #bbdefb;
   border-radius: 100px;
+  font-size: 24px !important;
+  font-weight: 400;
+  letter-spacing: normal !important;
+  font-family: "Roboto", sans-serif !important;
+  &-grey {
+    background: #e0e0e0;
+  }
+  &-blue {
+    background: #bbdefb;
+  }
+  &-green {
+    background: #c8e6c9;
+  }
 }
 </style>

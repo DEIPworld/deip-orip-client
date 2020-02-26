@@ -74,6 +74,7 @@
               class="my-0 pa-0 mx-2"
               solo
               label="Estimated budget"
+              prepend-inner-icon="mdi-currency-usd"
             ></v-text-field>
           </v-flex>
 
