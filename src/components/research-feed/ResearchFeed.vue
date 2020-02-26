@@ -31,6 +31,17 @@
                         {{ discipline.label }}
                       </v-chip>
                     </div>
+                    <div class="trl-criteria">
+                      <v-chip
+                        v-for="trl in selectedTrls"
+                        :key="'filter-by-trl-' + trl.id"
+                        @input="toggleTrl(trl)"
+                        small
+                        close
+                        outline>
+                        {{ trl.label }}
+                      </v-chip>
+                    </div>
                     <div class="organization-criteria">
                       <v-chip
                         v-for="organization in selectedOrganizations"
@@ -91,6 +102,39 @@
                         <div class="full-width text-xs-center">{{discipline.label}}</div>
                         <!-- {{discipline.label}} -->
                       </v-btn>
+                    </v-flex>
+                    <v-spacer></v-spacer>
+                  </v-layout>
+                </v-flex>
+                <v-flex xs12 sm12 md12 lg12 xl12 py-4><v-divider></v-divider></v-flex>
+                <v-flex xs12 sm12 md12 lg12 xl12 class="feed-trl-filter">
+                  <div class="pb-4">
+                    <v-layout row justify-space-between align-baseline>
+                      <span class="subheading half-bold">Browse by TRL</span>
+                      <v-btn
+                        @click="resetTrl()"
+                        class="text-capitalize"
+                        flat small color="primary"
+                        outline
+                        :disabled="isAllTrlSelected">
+                        Reset
+                      </v-btn>
+                    </v-layout>
+                  </div>
+                  <v-layout row wrap justify-space-between>
+                    <v-flex xs2 px-2 v-for="(trl, i) in trls" :key="'trl-filter-' + i">
+                      <v-tooltip bottom>
+                        <v-btn
+                          slot="activator"
+                          @click="toggleTrl(trl)"
+                          flat block small color="primary"
+                          class="text-capitalize filter-btn"
+                          :class="{'selected': isTrlSelected(trl)}"
+                        >
+                          <div class="full-width text-xs-center" >{{trl.label}}</div>
+                        </v-btn>
+                        <span>{{trl.hint}}</span>
+                      </v-tooltip>
                     </v-flex>
                     <v-spacer></v-spacer>
                   </v-layout>
@@ -189,6 +233,7 @@
                         number_of_negative_reviews: props.item.number_of_negative_reviews,
                         number_of_positive_reviews: props.item.number_of_positive_reviews,
                         isTop: props.item.isTop,
+                        researchRef: props.item.researchRef
                       }"
                       :members="props.item.authors"
                       :tokenSale="props.item.tokenSale"
@@ -225,7 +270,12 @@ export default {
       },
       disciplines: [...disciplinesService.getTopLevelNodes()],
       filterByTopOnly: false,
-      filtersTabExpansionModel: [false]
+      filtersTabExpansionModel: [false],
+      trls: this.TRL.map((t, i) => ({
+        id: t.id,
+        label: `TRL ${i + 1}`,
+        hint: t.description,
+      }))
     }
   },
 
@@ -239,6 +289,9 @@ export default {
     isFiltersTabExpanded() {
       return this.filtersTabExpansionModel[0];
     },
+    selectedTrls() {
+      return this.filter.trl;
+    },
     selectedTopDisciplines() {
       return this.filter.disciplines.filter(d => d.id != 0 && d.children !== undefined);
     },
@@ -251,9 +304,33 @@ export default {
     isAllOrganizationsSelected() {
       return this.filter.organizations.length === 0;
     },
+    isAllTrlSelected() {
+      return this.filter.trl.length === 0;
+    }
   },
 
   methods: {
+    resetTrl() {
+      this.$store.dispatch('feed/updateFilter', { key: 'trl', value: [] });
+    },
+
+    toggleTrl(trl) {
+      if (!this.isTrlSelected(trl)) {
+        this.$store.dispatch('feed/updateFilter', {
+          key: 'trl',
+          value: [trl, ...this.filter.trl]
+        });
+      } else {
+        this.$store.dispatch('feed/updateFilter', {
+          key: 'trl',
+          value: this.filter.trl.filter(t => t.id !== trl.id)
+        });
+      }
+    },
+
+    isTrlSelected(trl) {
+      return !!this.filter.trl.some((t) => t.id === trl.id);
+    },
 
     selectAllDisciplines() {
       this.$store.dispatch('feed/updateFilter', { key: 'disciplines', value: [] });

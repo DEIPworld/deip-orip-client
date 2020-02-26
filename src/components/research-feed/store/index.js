@@ -5,6 +5,7 @@ import * as usersService from '@/utils/user';
 import tokenSaleService from '@/services/TokenSaleService';
 import * as researchGroupService from '@/services/ResearchGroupService';
 import * as researchService from '@/services/ResearchService';
+import { getResearch } from '@/services/ResearchExtendedService';
 
 const state = {
 
@@ -19,6 +20,7 @@ const state = {
 
   filter: {
     disciplines: [],
+    trl: [],
     organizations: [],
     q: '',
     orderBy: {
@@ -49,6 +51,7 @@ const getters = {
       .filter(item => !state.filter.q || item.title.toLowerCase().indexOf(state.filter.q.toLowerCase()) != -1)
       .filter(item => !state.filter.disciplines.length || item.disciplines.some(discipline => state.filter.disciplines.some(d => d.id == discipline.id)))
       .filter(item => !state.filter.organizations.length || state.filter.organizations.some(org => item.group_id == org.id))
+      .filter(item => !state.filter.trl.length || state.filter.trl.some(t => t.id === item.researchRef.trl))
       .map(item => {
         let totalVotes = state.feedTotalVotes.filter(vote => vote.research_id == item.research_id);
         let reviews = state.feedResearchReviews.filter(review => review.research_id == item.research_id);
@@ -96,13 +99,21 @@ const actions = {
     const username = rootGetters['auth/user'].username;
     const alldisciplinesId = 0;
 
+    let fullResearchListing = [];
     return deipRpc.api.getAllResearchesListingAsync(0, alldisciplinesId)
       .then(listing => {
-        commit('SET_FULL_RESEARCH_LISTING', listing.filter((item) => {
+        fullResearchListing = listing.filter((item) => {
           if (!item.is_private) return true;
 
           return username ? item.group_members.includes(username) : false;
-        }).map(item => {return {...item, isCollapsed: true }}));
+        }).map(item => {return {...item, isCollapsed: true }});
+
+        let researchRefsLoad = Promise.all(fullResearchListing
+          .map((r) => getResearch(r.research_id)
+            .then((researchRef) => {
+              r.researchRef = researchRef;
+            })
+          ));
 
         let researchTotalVotesLoad = Promise.all(listing
           .map(r => deipRpc.api.getTotalVotesByResearchAsync(r.research_id)));
@@ -140,6 +151,7 @@ const actions = {
           .map(r => tokenSaleService.getCurrentTokenSaleByResearchId(r.research_id)));
 
         return Promise.all([
+          researchRefsLoad,
           researchTotalVotesLoad,
           researchReviewsLoad,
           researchGroupsLoad,
@@ -148,7 +160,8 @@ const actions = {
           tokenSalesLoad
         ]);
       })
-      .then(([totalVotes, researchReviews, groups, /* disciplinesStats, */ groupsMembers, tokenSales]) => {
+      .then(([, totalVotes, researchReviews, groups, /* disciplinesStats, */ groupsMembers, tokenSales]) => {
+        commit('SET_FULL_RESEARCH_LISTING', fullResearchListing);
         commit('SET_RESEARCH_FEED_TOTAL_VOTES_LIST', [].concat.apply([], totalVotes));
         commit('SET_RESEARCH_FEED_REVIEWS_LIST', [].concat.apply([], researchReviews));
         commit('SET_RESEARCH_FEED_GROUPS_LIST', groups);
