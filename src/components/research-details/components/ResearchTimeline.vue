@@ -1,81 +1,184 @@
 <template>
-    <div>
-        <div v-if="research" class="legacy-row">
-            <div>
-                <v-tooltip bottom color="white">
-                    <div class="start-point white--text" slot="activator">Start</div>
-                    <div>
-                        <div class="black--text half-bold">{{research.title}}</div>
-                        <div class="grey--text">{{new Date(research.created_at).toDateString()}}</div>
-                    </div>
-                </v-tooltip>
-            </div>
-            <div class="legacy-col-grow pos-relative legacy-row-nowrap align-center">
-
-                <div v-if="timelineOffsets && timelineOffsets.length != 0" class="chapter-line black" :style="{ width: timelineOffsets[timelineOffsets.length - 1].value + '%' }"></div>
-                <div class="chapter-line grey lighten-1 legacy-col-grow"></div>
-
-                <div v-if="timelineOffsets && timelineOffsets.length != 0" class="pos-absolute" :style="{ left: offset.value + '%' }"
-                    v-for="(offset, i) in timelineOffsets" :key="i">
-                    <v-tooltip bottom color="white">
-                        <div class="chapter-point" slot="activator"></div>
-                        <div>
-                            <div class="black--text half-bold">Chapter {{ i + 1 }}, {{contentList[i].title}}</div>
-                            <div class="grey--text text-align-center">{{new Date(contentList[i].created_at).toDateString()}}</div>
-                        </div>
-                    </v-tooltip>
-                </div>
-            </div>
-        </div>
-    </div>
+  <v-layout row>
+    <v-flex lg8 class="milestone-description pt-3">
+      {{selectedTimelineItem.description}}
+    </v-flex>
+    <v-flex lg4>
+      <v-layout justify-center>
+        <ul
+          :class="{
+          'rd-timeline': true,
+          'rd-timeline--full': timelineItemsToShow === timeline.length
+        }"
+        >
+          <li
+            v-for="(item, index) of timeline.slice(0, timelineItemsToShow)"
+            :key="`timeline_item_${item.id}`"
+            class="rd-timeline-item"
+          >
+            <div
+              :class="{
+                'rd-timeline-item__marker': true,
+                'rd-timeline-item__marker--clickable': true,
+                'rd-timeline-item__marker--active': item === selectedTimelineItem,
+              }"
+              :style="{
+                backgroundColor: getTimelineItemColor(index)
+              }"
+              @click="onTimelineMarkerClick(item)"
+            />
+            <div
+              v-if="timelineItemsToShow !== timeline.length || index !== (timeline.length - 1)"
+              class="rd-timeline-item__line"
+              :style="{
+                background: `linear-gradient(${getTimelineItemColor(index)}, ${getTimelineItemColor(index + 1)})`
+              }"
+            />
+            <div class="rd-timeline-item__date">{{item.date}}</div>
+            <div class="rd-timeline-item__label pt-1">{{item.label}}</div>
+            <div class="rd-timeline-item__budget pt-1"><span class="font-weight-bold">${{item.budget}}</span> {{item.purpose}}</div>
+          </li>
+          <li v-if="timelineItemsToShow < timeline.length" class="rd-timeline-item">
+            <div
+              class="rd-timeline-item__marker"
+              :style="{
+                backgroundColor: '#E0E0E0'
+              }"
+            />
+            <div
+              class="rd-timeline-item__line"
+              :style="{
+                background: `#E0E0E0`
+              }"
+            />
+            <v-btn outline class="ma-0" @click="onShowMoreTimelineClick()">Show more events</v-btn>
+          </li>
+        </ul>
+      </v-layout>
+    </v-flex>
+  </v-layout>
 </template>
 
 <script>
+export default {
+  name: "ResearchTimeline",
 
-    import { mapGetters } from 'vuex'
+  props: {
+    timeline: { type: Array, required: true },
+  },
 
-    export default {
-        name: "ResearchTimeline",
-        computed: {
-            ...mapGetters({
-                user: 'auth/user',
-                research: 'rd/research',
-                contentList: 'rd/contentList',
-                timelineOffsets: 'rd/timelineOffsets'
-            })
-        }
+  data() {
+    return {
+      selectedTimelineItemId: 1,
+      timelineItemsToShow: 3,
     };
+  },
+
+  computed: {
+    selectedTimelineItem() {
+      return this.timeline.find(m => m.id == this.selectedTimelineItemId);
+    },
+  },
+
+  methods: {
+    getTimelineItemColor(index) {
+      const isIndexValid = index % 1 === 0 && index >= 0;
+      if (!isIndexValid) {
+        throw new Error("invalid index");
+      }
+
+      const colors = ["#8901EF", "#7558F2", "#2962FF", "#60B3F4", "#54E4F5"];
+
+      const periodicity = (colors.length - 1) * 2;
+
+      const reducedIndex = index % periodicity;
+      const maxIndex = colors.length - 1;
+
+      let colorIndex;
+      if (reducedIndex <= maxIndex) {
+        colorIndex = reducedIndex;
+      } else {
+        colorIndex = maxIndex - (reducedIndex % maxIndex);
+      }
+      return colors[colorIndex];
+    },
+    onShowMoreTimelineClick() {
+      this.timelineItemsToShow = Math.min(
+        this.timelineItemsToShow + 3,
+        this.timeline.length
+      );
+    },
+    onTimelineMarkerClick(item) {
+      this.selectedTimelineItemId = item.id;
+    },
+  }
+};
 </script>
 
 <style lang="less" scoped>
-    .start-point {
-        background-color: var(--v-primary-lighten5);
-        text-transform: uppercase;
-        height: 30px;
-        padding: 0 12px;
-        line-height: 32px;
-        border-radius: 20px;
+.rd-timeline {
+  list-style: none;
+  &--full {
+    .rd-timeline-item {
+      &:last-child {
+        height: auto;
+      }
+    }
+  }
+  .rd-timeline-item {
+    padding-left: 40px;
+    position: relative;
+    height: 110px;
 
+    &__marker {
+      border-radius: 50%;
+      width: 12px;
+      height: 12px;
+      position: absolute;
+      top: 10px;
+      left: 0;
+
+      &--clickable {
         &:hover {
-            box-shadow: 0px 6px 6px -3px rgba(0,0,0,0.2), 
-                        0px 10px 14px 1px rgba(0,0,0,0.14), 
-                        0px 4px 18px 3px rgba(0,0,0,0.12);
+          cursor: pointer;
+          opacity: 0.8;
+          box-shadow: 0px 0px 3px 0px rgba(153, 153, 153, 0.5);
+          transform: scale(1.4, 1.4);
         }
+      }
+      &--active {
+        transform: scale(1.4, 1.4);
+      }
     }
-
-    .chapter-line {
-        height: 2px;
+    &__line {
+      height: 92px;
+      width: 2px;
+      position: absolute;
+      top: 25px;
+      left: 5px;
     }
-    .chapter-point {
-        background-color: var(--v-primary-lighten5);
-        width: 22px;
-        height: 22px;
-        border-radius: 50%;
-
-        &:hover {
-            box-shadow: 0px 6px 6px -3px rgba(0,0,0,0.2), 
-                        0px 10px 14px 1px rgba(0,0,0,0.14), 
-                        0px 4px 18px 3px rgba(0,0,0,0.12);
-        }
+    &__date {
+      font-family: Muli;
+      font-weight: bold;
+      font-size: 14px;
+      line-height: 16px;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      color: #000000;
     }
+    &__label {
+      font-family: Roboto;
+      font-size: 12px;
+      font-weight: 500;
+      line-height: 18px;
+      color: #000000;
+    }
+    &__budget, &__purpose {
+      font-family: Roboto;
+      font-size: 12px;
+      line-height: 18px;
+      color: #9e9e9e;
+    }
+  }
+}
 </style>
