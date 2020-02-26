@@ -29,7 +29,7 @@
         <span>{{ research.title }}</span>
       </v-tooltip>
 
-      <div v-if="hasActiveTokenSale">
+      <!-- <div v-if="hasActiveTokenSale">
         <v-tooltip bottom>
           <template v-slot:activator="{ on }">
             <v-progress-linear
@@ -47,7 +47,7 @@
           Fundraising starts in
           {{ tokenSaleStartLeft }}
         </v-chip>
-      </div>
+      </div> -->
 
       <div v-for="(item, i) in research.researchRef.tenantCriterias" :key="`${i}-tenantCriteria`" class="display-inline-block mr-4">
         <div v-if="steppersInfo[i].isVisible && item.value && item.value.index !== null" class="mb-2">
@@ -103,6 +103,7 @@
       </v-row>
     </v-sheet>
   </v-card>
+
 </template>
 
 <script>
@@ -197,6 +198,10 @@
       reviewsCount() {
         // todo: there is an odd bug in chain api which doubles this numbers
         return this.research.number_of_negative_reviews + this.research.number_of_positive_reviews;
+      },
+
+      activeMilestone(){
+        return this.research.researchRef.milestones.find(({isActive}) => isActive)
       }
 
     }

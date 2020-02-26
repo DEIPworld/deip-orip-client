@@ -1,7 +1,7 @@
 <template>
   <v-sheet>
-    <research-details-fundraising />
-    <research-details-investors />
+    <!-- <research-details-fundraising /> -->
+    <!-- <research-details-investors /> -->
     <research-timeline :timeline="timeline" />
     <research-details-materials :is-details-available="true" />
 
@@ -22,14 +22,15 @@
       </v-btn>
     </div>
 
-    <v-divider v-if="contentList.length || (isResearchGroupMember && !research.is_finished)" class="my-12" />
+    <!-- <v-divider v-if="contentList.length || (isResearchGroupMember && !research.is_finished)" class="my-12" /> -->
 
-    <research-details-eci ref="eci" />
+    <!-- <research-details-eci ref="eci" /> -->
 
-    <v-divider class="my-12" />
+    <!-- <v-divider class="my-12" /> -->
 
-    <research-details-reviews />
+    <!-- <research-details-reviews /> -->
   </v-sheet>
+
 </template>
 
 <script>

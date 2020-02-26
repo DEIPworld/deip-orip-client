@@ -72,17 +72,34 @@
     }
   },
   "default": {
-    "light": false,
-    "dark": true,
-    "primary-color": "#485fda",
+    "light": true,
+    "dark": false,
+    "primary-color": "#00a5ff",
     "secondary-color": "#f5f5f5",
     "top-bar-divider-color": "",
-    "top-bar-class": "",
-    "tabs-text-class": "",
-    "tabs-slider-color": "",
-    "topbar": {
-      "light": false,
-      "backgroundColor": "#000"
+    "top-bar-class": "elevation-0",
+    "tabs-text-class": "#282828",
+    "tabs-slider-color": "#00a5ff",
+    "top-bar-link-color": "#000000",
+    "footer": {
+      "dark": true
+    },
+    "appBar": {
+      "dark": false,
+      "bar": {
+        "color": "#f5f5f5",
+        "style": {
+          "borderBottom": "2px solid #00a5ff !important"
+        }
+      },
+      "tabs": {
+        "color": "#000",
+        "sliderColor": "#00a5ff"
+      }
+    },
+    "tabs" : {
+      "color": "#000",
+      "sliderColor": "#00a5ff"
     }
   }
 }

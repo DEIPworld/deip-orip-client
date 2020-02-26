@@ -9,9 +9,11 @@
 
       <router-view :key="$route.fullPath" name="navigator" />
 
-      <v-content>
+      <v-content class="full-vh">
         <router-view :key="$route.fullPath" />
       </v-content>
+
+      <footer-bar></footer-bar>
     </v-app>
 
     <v-snackbar v-model="errorSnack.isVisible" :timeout="5000" color="error">
@@ -32,7 +34,6 @@
 
 <script>
   import { mapGetters } from 'vuex';
-
   import { AccessService } from '@deip/access-service';
   import { AppConfigService } from '@deip/app-config-service';
   import ToolbarAdmin from '@/components/layout/components/ToolbarAdmin';
@@ -103,5 +104,8 @@
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     color: #2c3e50;
+  }
+  .full-vh{
+    min-height:100vh;
   }
 </style>

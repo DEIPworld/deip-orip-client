@@ -9,7 +9,7 @@
         <v-col cols="6" class="py-0">
           <v-text-field
             v-model="formData.firstName"
-            outlined
+            filled
             label="First name"
             :rules="[rules.required, rules.nameChars]"
             :disabled="isSaving"
@@ -19,7 +19,7 @@
         <v-col cols="6" class="py-0">
           <v-text-field
             v-model="formData.lastName"
-            outlined
+            filled
             label="Last name"
             :rules="[rules.required, rules.nameChars]"
             :disabled="isSaving"
@@ -37,7 +37,7 @@
             <template v-slot:activator="{ on }">
               <v-text-field
                 v-model="formData.birthdate"
-                outlined
+                filled
                 label="Birthday"
                 append-icon="event"
                 readonly
@@ -56,7 +56,7 @@
         <v-col cols="6" class="py-0">
           <v-text-field
             v-model="formData.id"
-            outlined
+            filled
             label="ID"
             :rules="[rules.required]"
             :disabled="isSaving"
@@ -72,7 +72,7 @@
         <v-col cols="6" class="py-0">
           <v-text-field
             v-model="formData.username"
-            outlined
+            filled
             name="username"
             label="Username"
             :rules="[
@@ -89,7 +89,7 @@
         <v-col cols="6" class="py-0">
           <v-text-field
             v-model="formData.masterPassword"
-            outlined
+            filled
             class="c-mt-4"
             label="Master Password"
             :disabled="isSaving"
@@ -103,7 +103,7 @@
         <v-col cols="6" class="py-0">
           <v-text-field
             v-model="formData.email"
-            outlined
+            filled
             label="Email"
             :rules="[rules.required, rules.email]"
             :disabled="isSaving"
@@ -115,7 +115,7 @@
             v-model="formData.category"
             :items="category"
             :disabled="isSaving"
-            outlined
+            filled
             label="Category"
             :rules="[rules.required]"
           />
@@ -131,7 +131,7 @@
           <v-select
             v-model="formData.occupation"
             :items="occupation"
-            outlined
+            filled
             :disabled="isSaving"
             label="Occupation"
             :rules="[rules.required]"
@@ -140,7 +140,7 @@
         <v-col cols="6" class="py-0">
           <v-text-field
             v-model="formData.website"
-            outlined
+            filled
             label="Web site"
             :disabled="isSaving"
           />
@@ -155,7 +155,7 @@
         <v-col cols="12" class="py-0">
           <v-text-field
             v-model="formData.address"
-            outlined
+            filled
             label="Address"
             :rules="[rules.required]"
             :disabled="isSaving"
@@ -164,7 +164,7 @@
         <v-col cols="6" class="py-0">
           <v-text-field
             v-model="formData.city"
-            outlined
+            filled
             label="City"
             :rules="[rules.required]"
             :disabled="isSaving"
@@ -174,7 +174,7 @@
           <v-autocomplete
             v-model="formData.country"
             :items="countryList"
-            outlined
+            filled
             :menu-props="{
               maxHeight: 220
             }"
@@ -186,7 +186,7 @@
         <v-col cols="12" class="py-0">
           <v-text-field
             v-model="formData.phoneNumber"
-            outlined
+            filled
             label="Phone Number"
             :disabled="isSaving"
           />
@@ -213,8 +213,10 @@
   import { TenantService } from '@deip/tenant-service';
   import _ from 'lodash';
   import countryList from '@/components/common/country.json';
+  import { AuthService } from '@deip/auth-service';
 
   const tenantService = TenantService.getInstance();
+  const authService = AuthService.getInstance();
 
   export default {
     name: 'UserRegistration',
@@ -291,6 +293,11 @@
       };
     },
     methods: {
+      create(data) {
+        return this.$route.name === 'admin.members.add'
+          ? tenantService.postSignUp(data)
+          : authService.signUp(data);
+      },
       finishCreateAccount() {
         if (!this.$refs.form.validate()) return;
 
@@ -318,49 +325,56 @@
           ['owner']
         );
 
-        tenantService
-          .postSignUp({
-            username,
-            email,
-            firstName,
-            birthdate,
-            lastName,
-            pubKey,
-            phoneNumbers: [
-              {
-                label: 'default',
-                ext: '', // optional
-                number: phoneNumber
-              }
-            ],
-            webPages: [
-              {
-                type: 'webpage',
-                label: 'default',
-                link: website
-              }
-            ],
-            location: {
-              city,
-              country,
-              address
-            },
-            category,
-            occupation,
-            foreignIds: [
-              {
-                label: 'ar3c_member',
-                id
-              }
-            ]
-          })
+        this.create({
+          username,
+          email,
+          firstName,
+          birthdate,
+          lastName,
+          pubKey,
+          phoneNumbers: [
+            ...(
+              phoneNumber
+                ? [{
+                  label: 'default',
+                  ext: '', // optional
+                  number: phoneNumber
+                }]
+                : []
+            )
+          ],
+          webPages: [
+            ...(
+              website
+                ? [{
+                  type: 'webpage',
+                  label: 'default',
+                  link: website
+                }]
+                : []
+            )
+          ],
+          location: {
+            city,
+            country,
+            address
+          },
+          category,
+          occupation,
+          foreignIds: [
+            {
+              label: 'ar3c_member',
+              id
+            }
+          ]
+        })
           .then(() => {
             this.isSaving = false;
             this.isServerValidated = true;
             this.$store.dispatch('layout/setSuccess', {
               message: `Account '${this.formData.username}' successfully created`
             });
-            this.$router.push({ name: 'admin.members' });
+            this.$router.push({ name: this.$route.name === 'admin.members.add' ? 'admin.members' : 'Default' });
           })
           .catch((err) => {
             this.isSaving = false;
