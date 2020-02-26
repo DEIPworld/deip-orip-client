@@ -415,7 +415,7 @@ const actions = {
                     let review = reviews[i];
                     review.author = users.find(u => u.account.name == review.author);
 
-                    let reviewVotes = votes[i];
+                    let reviewVotes = votes[i].reduce((arr, vote) => !!arr.find(({voter}) => voter === vote.voter) ? arr : [...arr, vote], []);
                     review.votes = reviewVotes;
 
                     for (let j = 0; j < reviewVotes.length; j++) {
