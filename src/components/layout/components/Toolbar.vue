@@ -24,6 +24,7 @@
         right
       >
         <v-tab v-if="isDefaultToolbar" exact :to="{ name: 'ResearchFeed' }">
+
           Explore
         </v-tab>
         <!-- TODO: need refactoring -->
@@ -47,12 +48,12 @@
         <v-tab exact :to="{ name: 'Dashboard' }">
           Dashboard
         </v-tab>
-        <v-tab exact :to="{ name: 'InvestorPortfolio' }">
-          Portfolio
-        </v-tab>
-        <v-tab exact :to="{ name: 'UserWallet', params: { account_name: user.username } }">
-          Wallet
-        </v-tab>
+<!--        <v-tab exact :to="{ name: 'InvestorPortfolio' }">-->
+<!--          Portfolio-->
+<!--        </v-tab> -->
+<!--        <v-tab exact :to="{ name: 'UserWallet', params: { account_name: user.username } }">-->
+<!--          Wallet-->
+<!--        </v-tab> -->
       </v-tabs>
 
       <v-tabs

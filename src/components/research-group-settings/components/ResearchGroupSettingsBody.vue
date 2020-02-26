@@ -1,7 +1,7 @@
 <template>
   <div>
     <v-form ref="form-data" class="mb-4">
-      <d-form-block title="Group name">
+      <d-form-block title="Team name">
         <v-col cols="12">
           <v-text-field
             v-model="newResearchGroupName"
@@ -11,7 +11,7 @@
           />
         </v-col>
       </d-form-block>
-      <d-form-block title="Group description:">
+      <d-form-block title="Team description">
         <v-col cols="12">
           <v-textarea
             v-model="newResearchGroupDescription"
@@ -39,7 +39,7 @@
       </div>
     </v-form>
     <!-- <v-form v-if="group.is_dao" ref="form-quorum" class="mb-4">
-      <d-form-block title="Quorum threshold:">
+      <d-form-block title="Quorum threshold">
         <v-col cols="12">
           <div class="pt-4">
             <div v-for="(proposalBlock, i) in proposalOrderMap" :key="`proposalBlock-${i}`">
@@ -90,7 +90,7 @@
       </div>
     </v-form> -->
     <v-form v-if="isResearchGroupMember" ref="form-image">
-      <d-form-block title="Update group logo:">
+      <d-form-block title="Update team logo">
         <v-col cols="3">
           <img
             width="150px"
@@ -134,7 +134,7 @@
         large
         @click="cancel()"
       >
-        Back to group
+        Back to team
       </v-btn>
     </div>
   </div>
@@ -222,7 +222,7 @@
             createImageThumbnails: true,
             autoProcessQueue: false,
             dictDefaultMessage:
-              "<i class='v-icon material-icons' style='font-size:40px'>backup</i><p>Research group logo (.png)</p>",
+              "<i class='v-icon material-icons' style='font-size:40px'>backup</i><p>Research Team logo (.png)</p>",
             addRemoveLinks: true,
             acceptedFiles: ['image/png'].join(',')
           }

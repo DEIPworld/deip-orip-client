@@ -314,15 +314,18 @@
   @import "./../../styles/colors.less";
 
   .description {
-    background-color: #485fda;
+    background-color: #ffffff;
     padding-top: 10%;
     padding-left: 20%;
     padding-right: 15%;
 
     &__logo {
-      margin-top: 5%;
-      margin-bottom: 10%;
 
+      // margin-top: 5%;
+      // margin-bottom: 10%;
+      width: 80%;
+      max-height: 200px;
+      
       img {
         max-width: 100%;
       }
@@ -336,20 +339,7 @@
       font-size: 48px;
       line-height: 61px;
       letter-spacing: 0.25px;
-      color: @white;
-    }
-
-    &__info-list-item {
-      font-family: Muli;
-      font-weight: 500;
-      font-size: 18px;
-      line-height: 20px;
-
-      color: #FFFFFF;
-
-      .icon-upended {
-        transform: rotate(180deg);
-      }
+      color: var(--v-primary-base);
     }
   }
 

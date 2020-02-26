@@ -26,6 +26,8 @@
         <router-view :key="$route.fullPath" />
       </v-content>
 
+      <footer-bar v-if="!$route.path.includes('/admin') && !$route.path.includes('/account') && !$route.path.includes('/user-application-accepted')" />
+
       <d-snackbar />
     </div>
   </v-app>
@@ -33,9 +35,9 @@
 
 <script>
   import { mapGetters } from 'vuex';
-  import deipRpc from '@deip/rpc-client';
   import { AccessService } from '@deip/access-service';
   import ToolbarAdmin from '@/components/layout/components/ToolbarAdmin';
+  import FooterBar from '@/components/layout/components/FooterBar';
   import DSnackbar from '@/components/Deipify/DSnackbar/DSnackbar';
   import deepmerge from 'deepmerge';
 
@@ -46,7 +48,8 @@
     name: 'App',
     components: {
       DSnackbar,
-      ToolbarAdmin
+      ToolbarAdmin,
+      FooterBar
     },
     data() {
       return {

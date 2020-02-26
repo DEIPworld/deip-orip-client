@@ -3,7 +3,7 @@
     <v-row no-gutters class="text-align-center">
       <v-col cols="12">
         <div>
-          <img class="center-text" style="height: 200px" src="/assets/img/landing-logo.svg">
+          <img class="center-text" style="height: 200px" src="/assets/img/landing-logo.png">
         </div>
       </v-col>
       <v-col cols="12">

@@ -4,14 +4,14 @@ import { researchContentTypes } from '@deip/research-service';
 import { AWARD_STATUS, AWARD_RECIPIENT_STATUS, AWARD_WITHDRAWAL_REQUEST_STATUS } from '@deip/grants-service';
 
 const proposalTypesLabels = {
-  [PROPOSAL_TYPES.CREATE_RESEARCH]: 'Start new research project',
-  [PROPOSAL_TYPES.INVITE_MEMBER]: 'Invite new member to research group',
-  [PROPOSAL_TYPES.EXCLUDE_MEMBER]: 'Exclude member from research group',
-  [PROPOSAL_TYPES.TRANSFER]: 'Transfer research group funds',
-  [PROPOSAL_TYPES.CREATE_RESEARCH_TOKEN_SALE]: 'Schedule research fundraising campaign',
-  [PROPOSAL_TYPES.CREATE_RESEARCH_MATERIAL]: 'Publish research project results',
-  [PROPOSAL_TYPES.UPDATE_RESEARCH_GROUP]: 'Update group meta',
-  [PROPOSAL_TYPES.UPDATE_RESEARCH]: 'Update research meta'
+  [PROPOSAL_TYPES.CREATE_RESEARCH]: 'Start new project',
+  [PROPOSAL_TYPES.INVITE_MEMBER]: 'Invite new member to team',
+  [PROPOSAL_TYPES.EXCLUDE_MEMBER]: 'Exclude member from team',
+  [PROPOSAL_TYPES.TRANSFER]: 'Transfer team funds',
+  [PROPOSAL_TYPES.CREATE_RESEARCH_TOKEN_SALE]: 'Schedule project fundraising campaign',
+  [PROPOSAL_TYPES.CREATE_RESEARCH_MATERIAL]: 'Publish project results',
+  [PROPOSAL_TYPES.UPDATE_RESEARCH_GROUP]: 'Update team information',
+  [PROPOSAL_TYPES.UPDATE_RESEARCH]: 'Update project information'
 };
 
 export {

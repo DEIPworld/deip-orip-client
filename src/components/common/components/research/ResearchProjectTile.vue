@@ -20,14 +20,14 @@
       <top-research-label class="pa-2" />
     </div>
 
-    <v-sheet
+    <!-- <v-sheet
       v-if="research.researchRef && research.researchRef.tenantCategory && research.researchRef.tenantCategory.text"
       tile
       color="#0386b0"
       class="project-category-label white--text py-1 pl-1 pr-2 body-2"
     >
       {{ research.researchRef.tenantCategory.text }}
-    </v-sheet>
+    </v-sheet> -->
 
     <v-sheet tile class="pa-6">
       <v-tooltip bottom>
@@ -39,7 +39,7 @@
         <span>{{ research.title }}</span>
       </v-tooltip>
 
-      <div v-if="hasActiveTokenSale">
+      <!-- <div v-if="hasActiveTokenSale">
         <v-tooltip bottom>
           <template v-slot:activator="{ on }">
             <v-progress-linear
@@ -57,7 +57,7 @@
           Fundraising starts in
           {{ tokenSaleStartLeft }}
         </v-chip>
-      </div>
+      </div> -->
 
       <div v-if="research.researchRef && research.researchRef.tenantCriteriasReadingList">
         <div v-for="(item, i) in research.researchRef.tenantCriteriasReadingList" :key="`${i}-tenantCriteria`" class="display-inline-block mr-4">
@@ -84,19 +84,19 @@
       </div>
 
       <v-row no-gutters justify="space-between" class="mt-3 mb-n3">
-        <v-col cols="6" class="caption grey--text align-self-center">
+        <v-col cols="7" class="caption grey--text align-self-center">
           <v-icon small>
             event
           </v-icon>
           <span class="pl-1">Updated on</span>
           <span class="pl-1 half-bold">{{ moment(research.last_update_time).format('D MMM YYYY') }}</span>
         </v-col>
-        <v-col class="align-self-center">
+        <!-- <v-col class="align-self-center">
           <v-icon small color="grey lighten-1">
             chat_bubble
           </v-icon>
           <span class="pl-1 caption half-bold grey--text lighten-1">{{ reviewsCount }}</span>
-        </v-col>
+        </v-col> -->
         <v-col cols="5" class="text-right align-self-center">
           <v-tooltip bottom>
             <template v-slot:activator="{ on }">
@@ -113,6 +113,7 @@
       </v-row>
     </v-sheet>
   </v-card>
+
 </template>
 
 <script>
@@ -204,6 +205,10 @@
       reviewsCount() {
         // todo: there is an odd bug in chain api which doubles this numbers
         return this.research.number_of_negative_reviews + this.research.number_of_positive_reviews;
+      },
+
+      activeMilestone(){
+        return this.research.researchRef.milestones.find(({isActive}) => isActive)
       }
 
     }

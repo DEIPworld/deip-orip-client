@@ -42,7 +42,7 @@
     />
 
     <!-- ### START Research Group Details Section ### -->
-    <div class="py-6">
+    <!-- <div class="py-6">
       <div class="title font-weight-bold">
         Group expertise tokens
       </div>
@@ -53,10 +53,11 @@
           <span class="float-right">{{ item.value }}</span>
         </div>
       </div>
-    </div>
+    </div> -->
     <!-- ### END Research Group Details Section ### -->
 
-    <div v-if="isResearchGroupMember">
+    <!-- ### START Research Group Wallet Section ### -->
+    <!-- <div v-if="isResearchGroupMember">
       <div class="py-6">
         <div class="title font-weight-bold">
           <router-link
@@ -82,15 +83,17 @@
           </v-btn>
         </div>
       </div>
-    </div>
+    </div> -->
+    <!-- ### END Research Group Wallet Section ### -->
 
-    <quorum-size-sidebar-section v-if="group.is_dao" />
+    <!-- <quorum-size-sidebar-section v-if="group.is_dao" /> -->
 
-    <transfer-group-deip-tokens-dialog
+    <!-- <transfer-group-deip-tokens-dialog
       :is-open="options.isTransferTokensDialogOpen"
       @onClose="$store.dispatch('researchGroup/changeOptions', { key: 'isTransferTokensDialogOpen', value: false })"
-    />
+    /> -->
   </div>
+
 </template>
 
 <script>
