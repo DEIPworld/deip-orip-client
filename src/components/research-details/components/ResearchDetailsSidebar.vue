@@ -110,7 +110,8 @@
           </div>
         </div>
       </v-layout>
-      <v-layout column px-4>
+
+      <!-- <v-layout column px-4>
         <div class="sidebar-fullwidth">
           <v-divider></v-divider>
         </div>
@@ -135,7 +136,8 @@
             <div class="expertise__disc-name pt-1">{{ eci.disciplineName }}</div>
           </v-layout>
         </div>
-      </v-layout>
+      </v-layout> -->
+
       <!-- <v-layout column class="my-4 mx-4">
             <div class="rd-sidebar-block-title pb-2">Score</div>
             <v-tooltip top>
@@ -186,7 +188,7 @@
         </div>
       </v-layout>
 
-      <v-dialog
+      <!-- <v-dialog
         v-if="contentList.length"
         v-model="requestExpertReviewDialog.isShown"
         persistent
@@ -256,7 +258,7 @@
             </v-layout>
           </v-card-actions>
         </v-card>
-      </v-dialog>
+      </v-dialog> -->
 
     </v-flex>
   </v-layout>

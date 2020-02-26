@@ -1,5 +1,5 @@
 <template>
-  <v-container fluid fill-height pa-0 ma-0 class="dashboard-page">
+  <v-container fluid fill-height pa-0 pb-5 ma-0 class="dashboard-page">
     <v-layout row class="full-width full-height">
       <v-flex xl12 lg12 md12 sm12 xs12>
         <v-tabs color="secondary lighten-2">

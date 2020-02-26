@@ -1,20 +1,23 @@
 <template>
     <v-layout column fill-height>
       <v-flex display-flex flex-column flex-grow-1 mb-3>
-        <div class="step-title">Select research group</div>
+        <div class="step-title">Select project type</div>
         
         <div class="flex-grow-1">
           <div class="overflow-y-auto mx-auto pt-3 research-pick-group">
+            <div v-for="(group, i) in groups" :key="'pick-group '+ i">
+              
+            <span class="group-nameplate" v-if="i==1">Teams:</span>
             <div
-              v-for="(group, i) in groups"
               :class="{'selected-group': research.group && group.id == research.group.id, 'personal-group': group.is_personal }"
               @click="setGroup(group)"
               class="group-line  pa-3 mt-1"
-              :key="'pick-group '+ i"
             >
-              <div v-if="group.is_personal" class="group-nameplate pr-2">{{ user | fullname}} 's personal group</div>
+              <div v-if="group.is_personal" class="group-nameplate pr-2">{{ user | fullname}}</div>
               <div v-else class="group-nameplate pr-2">{{group.name}}</div>
               <div>{{ getGroupCoworkers(group).join(' · ') }}</div>
+
+            </div>
             </div>
 
             <div class="pt-4 pl-3">
@@ -24,7 +27,7 @@
                   params: { 'account_name': user.username },
                   query: { 'back-token': getReturningToken }
                 }">
-                <span class="discipline-picker-label">+ Add new group</span>
+                <span class="discipline-picker-label">+ Add new team</span>
               </router-link>
             </div>
           </div>

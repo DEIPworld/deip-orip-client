@@ -33,6 +33,7 @@
                 outline
                 color="grey"
                 :to="{
+
                                 name: 'UserSettings',
                                 params: {
                                     account_name: currentUser.username
@@ -90,12 +91,12 @@
           <div class="pt-4">
             <state-research-list
               :research-list="researchList"
-              :header-text="'Research projects'"
+              :header-text="'Projects'"
             ></state-research-list>
           </div>
 
           <div class="pt-4" v-if="commonGroups.length">
-            <div class="title">Research groups: {{ commonGroups.length }}</div>
+            <div class="title">Teams: {{ commonGroups.length }}</div>
           </div>
 
           <v-card class="mt-4">
@@ -137,7 +138,7 @@
                 <v-icon small>add</v-icon>
               </v-btn>
 
-              <span class="pl-2">Add group</span>
+              <span class="pl-2">Add team</span>
             </div>
           </v-card>
         </div>
@@ -240,6 +241,7 @@
     </div>
     <!-- ### END User Profile Education\Employment Section ### -->
   </v-card>
+
 </template>
 
 <script>

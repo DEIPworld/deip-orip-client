@@ -133,7 +133,7 @@
       </div>
 
       <!-- ### START User Profile Expertise Section ### -->
-      <div class="mt-4">
+      <!-- <div class="mt-4">
         <div class="title bold">Expertise Contribution Index</div>
         <div class="py-2">
             <v-layout tag="div" column v-for="(item, i) in expertise" :key="`eci-${i}`" class="expertise px-1 my-2">
@@ -158,17 +158,17 @@
             </v-btn>
           </div>
         </div>
-      </div>
+      </div> -->
       <!-- ### END User Profile Expertise Section ### -->
 
       <!-- ### START User Profile Contacts Section ### -->
-      <div class="mt-3" v-if="isProfileAvailable && (isContactsInfoSpecified || isOwner)">
-        <div class="sidebar-fullwidth">
+      <div v-if="isProfileAvailable && (isContactsInfoSpecified || isOwner)">
+        <!-- <div class="sidebar-fullwidth">
           <v-divider></v-divider>
-        </div>
-        <div class="subheading font-weight-bold mt-3">
+        </div> -->
+        <div class="subheading font-weight-bold">
           <v-layout row>
-            <v-flex xs11 mt-1>Contacts info</v-flex>
+            <div>Contacts info</div>
           </v-layout>
         </div>
         <div class="pt-2 pb-4">

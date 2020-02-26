@@ -27,7 +27,7 @@
         <platform-avatar v-for="(member, i) in membersToDisplay" :user="member" :size="15" :key="`member-${research.permlink}-`+ i" link-to-profile link-to-profile-class="px-2 grey--text lighten-2 research-tile-researcher"></platform-avatar>
       </v-layout> -->
 
-      <v-layout row class="token-sale-section" v-if="hasActiveTokenSale || hasInactiveTokenSale">
+      <!-- <v-layout row class="token-sale-section" v-if="hasActiveTokenSale || hasInactiveTokenSale">
         <v-layout v-if="hasActiveTokenSale" column>
           <v-layout row align-center>
             <v-flex grow>
@@ -37,9 +37,9 @@
                 <span>Fundraising Progress</span>
               </v-tooltip>
             </v-flex>
-            <!-- <v-flex shrink class="grey--text caption ml-2">Token Sale</v-flex> -->
+            <v-flex shrink class="grey--text caption ml-2">Token Sale</v-flex>
           </v-layout>
-          <!-- <v-layout row>
+          <v-layout row>
             <span class="pr-3">
               <span class="black--text half-bold pr-1">{{fundingProgressPercent.toFixed(2)}}%</span>
               <span class="grey--text lighten-2">funded</span>
@@ -52,28 +52,32 @@
               <span class="black--text half-bold pr-1">{{tokenSaleEndLeft}}</span>
               <span class="grey--text lighten-2">left</span>
             </span>
-          </v-layout> -->
+          </v-layout>
         </v-layout>
         <v-layout v-else-if="hasInactiveTokenSale" row align-baseline justify-end>
           <v-chip class="my-0 mx-0 px-0 caption" style="height: 1.4em" color="primary lighten-3">Fundraising starts in
             {{tokenSaleStartLeft}}
           </v-chip>
         </v-layout>
-      </v-layout>
+      </v-layout> -->
       <v-layout row wrap justify-space-between align-center>
-        <v-flex xs12 class="caption grey--text lighten-1">
-          <technology-readiness-level :currentTrlStep="research.researchRef.trl" isReadOnly
-                                      isChip></technology-readiness-level>
+        <v-flex xs4 sm3 md2 class="caption grey--text lighten-1">
+          <technology-readiness-level :currentTrlStep="research.researchRef.trl" isReadOnly isChip></technology-readiness-level>
+        </v-flex>
+        <v-flex xs8 sm9 md10 text-align-right mb-2 grey--text pr-1>
+          <div v-if="activeMilestone">
+            $ {{activeMilestone.budget}} to pursued the next step
+          </div>
         </v-flex>
         <v-flex xs5 class="caption grey--text lighten-1">
           <v-icon small>event</v-icon>
           <span class="pl-1">Updated on</span>
           <span class="pl-1 half-bold">{{moment(research.last_update_time).format('D MMM YYYY')}}</span>
         </v-flex>
-        <v-flex xs2>
+        <!-- <v-flex xs2>
           <v-icon small color="grey lighten-1">chat_bubble</v-icon>
           <span class="pl-1 caption half-bold grey--text lighten-1">{{ reviewsCount }}</span>
-        </v-flex>
+        </v-flex> -->
         <v-flex xs5>
           <v-layout row align-center class="group-logo" v-if="!group.is_personal">
             <v-avatar style="margin: 2px">
@@ -185,6 +189,10 @@
       reviewsCount() {
         // todo: there is an odd bug in chain api which doubles this numbers
         return this.research.number_of_negative_reviews + this.research.number_of_positive_reviews;
+      },
+
+      activeMilestone(){
+        return this.research.researchRef.milestones.find(({isActive}) => isActive)
       }
 
     },

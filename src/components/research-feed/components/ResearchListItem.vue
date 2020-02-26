@@ -14,7 +14,7 @@
             </div>
 
             <div class="c-pt-6">
-                <div class="legacy-row">
+                <!-- <div class="legacy-row">
                     <div v-for="tvo in disciplines">
                         <span class="c-pr-1">
                             <span class="bold green--text text--darken-2">{{ tvo.disciplineName }}</span>
@@ -23,7 +23,7 @@
                             <span>{{tvo.totalWeight}}</span>
                         </span>
                     </div>
-                </div>
+                </div> -->
 
                 <div class="legacy-row-nowrap c-pt-2">
                     <div class="c-pr-8" v-if="research.created_at">
@@ -31,15 +31,15 @@
                         <span class="half-bold">{{ research.created_at | dateFormat('D MMM, YYYY', true) }}</span>
                     </div>
 
-                    <div class="c-pr-8" v-if="research.owned_tokens">
+                    <!-- <div class="c-pr-8" v-if="research.owned_tokens">
                         <v-icon size="18px">timelapse</v-icon> Owned tokens
                         <span class="half-bold">{{ convertToPercent(research.owned_tokens) }}%</span>
-                    </div>
+                    </div> -->
 
-                    <div class="c-pr-8" v-if="research.review_share_in_percent">
+                    <!-- <div class="c-pr-8" v-if="research.review_share_in_percent">
                         <v-icon size="18px">pie_chart</v-icon> Review award
                         <span class="half-bold">{{ convertToPercent(research.review_share_in_percent) }}%</span>
-                    </div>
+                    </div> -->
 
                     <!-- <div class="c-pr-8">
                         <v-icon size="18px">visibility</v-icon> <span>1999</span>

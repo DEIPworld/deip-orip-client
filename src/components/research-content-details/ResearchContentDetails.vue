@@ -33,11 +33,12 @@
             <research-content-details-package v-if="isFilePackageContent"></research-content-details-package>
             <research-content-details-dar v-if="isDarContent" :contentRef="contentRef"
                                           :researchGroupMembers="membersList"></research-content-details-dar>
-            <research-content-details-eci v-if="isPublished"></research-content-details-eci>
+            <!-- <research-content-details-eci v-if="isPublished"></research-content-details-eci> -->
             <v-divider class="mx-5"></v-divider>
 
+
             <!-- START Research Content Reviews section -->
-            <div v-if="isPublished && contentReviewsList.length" class="px-5 py-4">
+            <!-- <div v-if="isPublished && contentReviewsList.length" class="px-5 py-4">
               <div id="reviews">
                 <div class="py-2 title">Reviews: {{ contentReviewsList.length }}</div>
                 <div class="py-2">
@@ -48,9 +49,9 @@
                   </div>
                 </div>
               </div>
-            </div>
+            </div> -->
 
-            <div v-if="isPublished && !isResearchGroupMember" class="px-5 pt-2 pb-5">
+            <!-- <div v-if="isPublished && !isResearchGroupMember" class="px-5 pt-2 pb-5">
               <v-card class="py-4 px-5">
                 <v-layout id="reviews" class="py-2" row>
                   <v-flex shrink align-self-center pr-5>
@@ -86,7 +87,7 @@
                   </v-flex>
                 </v-layout>
               </v-card>
-            </div>
+            </div> -->
           </v-flex>
         </v-layout>
 
@@ -96,7 +97,7 @@
           <v-card class="pa-4">
             <v-card-title>
               <v-layout align-center>
-                <v-flex grow headline>Upload material for research</v-flex>
+                <v-flex grow headline>Upload material for project</v-flex>
                 <v-flex shrink right-top-angle>
                   <v-btn @click="closeContentProposalDialog()" icon class="pa-0 ma-0">
                     <v-icon color="black">close</v-icon>
@@ -157,13 +158,13 @@
                 </template>
               </v-autocomplete>
 
-              <internal-references-picker
+              <!-- <internal-references-picker 
                 :showSelected="true"
                 :currentResearchId="research.id"
                 :preselected="contentRef.references"
                 @referenceAdded="addReference"
                 @referenceRemoved="removeReference">
-              </internal-references-picker>
+              </internal-references-picker> -->
 
             </v-card-text>
 

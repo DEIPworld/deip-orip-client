@@ -24,22 +24,22 @@
       <v-divider class="my-4" />
       <div id="what-is" class="mb-5">
         <div class="headline font-weight-bold mb-3">What is TRL, MaRL, SRL?</div>
-        <v-layout column body-2>
+        <v-layout row wrap body-2>
           <v-flex xs12>TRL: Technology Readiness Levels,</v-flex>
-          <v-flex ml-4>
-            <!-- <img src="/assets/img/trl.jpg" /> -->
+          <v-flex xs12 md8 ml-4>
+            <img class="w-100" src="/assets/img/trl.jpg" />
           </v-flex>
         </v-layout>
-        <v-layout column body-2>
-          <v-flex>MaRL: Marketing Readiness Levels,</v-flex>
-          <v-flex ml-4>
-            <!-- <img src="/assets/img/mrl.jpg" /> -->
+        <v-layout row wrap body-2>
+          <v-flex xs12>MaRL: Marketing Readiness Levels,</v-flex>
+          <v-flex xs12 md8 ml-4>
+            <img class="w-100" src="/assets/img/mrl.jpg" />
           </v-flex>
         </v-layout>
-        <v-layout column body-2>
-          <v-flex>SRL: Sales Readiness Levels.</v-flex>
-          <v-flex ml-4>
-            <!-- <img src="/assets/img/srl.jpg" /> -->
+        <v-layout row wrap body-2>
+          <v-flex xs12>SRL: Sales Readiness Levels.</v-flex>
+          <v-flex xs12 md8 ml-4>
+            <img class="w-100" src="/assets/img/srl.jpg" />
           </v-flex>
         </v-layout>
       </div>

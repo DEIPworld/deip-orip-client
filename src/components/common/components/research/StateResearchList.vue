@@ -1,7 +1,7 @@
 <template>
     <div>
         <div class="legacy-row legacy-justify-between align-center">
-            <div class="title">{{ !headerText ? 'Research projects' : headerText }}</div>
+            <div class="title">{{ !headerText ? 'Projects' : headerText }}</div>
 
             <v-menu offset-y>
                 <v-btn slot="activator" class="ma-0">
@@ -25,11 +25,11 @@
                 <v-tabs-slider :color="themeSettings['tabs-slider-color']"></v-tabs-slider>
 
                 <v-tab :class="themeSettings['tabs-text-class']" key="active" :disabled="activeResearchList.length === 0">
-                    Active research: {{ activeResearchList.length }}
+                    Acitive: {{ activeResearchList.length }}
                 </v-tab>
 
                 <v-tab :class="themeSettings['tabs-text-class']" key="finished" :disabled="finishedResearchList.length === 0">
-                    Finished research: {{ finishedResearchList.length }}
+                    Finished: {{ finishedResearchList.length }}
                 </v-tab>
             </v-tabs>
 
@@ -49,6 +49,7 @@
                 </v-tab-item>
 
                 <v-tab-item key="finished">
+
                     <v-card>
                         <v-layout row wrap style="margin: 0px 2px 3px;">
                             <v-flex xs12 sm6 xl4 px-2 py-4 my-1 v-for="({research, group }, i) in finishedResearchList" :key="`${i}-finished-research`">

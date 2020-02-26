@@ -1,17 +1,12 @@
 <template>
   <v-layout>
     <v-flex class="px-5">
-      <v-layout row wrap>
+
+      <!-- <v-layout row wrap>
         <v-flex xs12>
           <research-details-fundraising />
         </v-flex>
-      </v-layout>
-
-      <v-layout row wrap>
-        <v-flex xs12>
-          <research-details-investors />
-        </v-flex>
-      </v-layout>
+      </v-layout> -->
 
       <v-layout row wrap>
         <v-flex xs12>
@@ -49,21 +44,18 @@
         </v-flex>
       </v-layout>
 
-      <v-divider v-if="contentList.length || (isResearchGroupMember && !research.is_finished)" />
-
-      <v-layout row wrap>
+      <!-- <v-layout row wrap>
         <v-flex xs12>
           <research-details-eci ref="eci" />
         </v-flex>
-      </v-layout>
+      </v-layout> -->
 
-      <v-divider></v-divider>
-
-      <v-layout row wrap>
+      <!-- <v-layout row wrap>
         <v-flex xs12>
           <research-details-reviews />
         </v-flex>
-      </v-layout>
+      </v-layout> -->
+
     </v-flex>
   </v-layout>
 </template>

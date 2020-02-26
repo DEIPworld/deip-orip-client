@@ -29,7 +29,7 @@
                             <v-text-field 
                               v-on:keyup="setVideo" 
                               prepend-inner-icon="link"
-                              label="Link to a video presentation" 
+                              label="Link to a video presentation (optoinal)" 
                               v-model="videoSrc"
                               solo
                               :rules="[rules.link]"

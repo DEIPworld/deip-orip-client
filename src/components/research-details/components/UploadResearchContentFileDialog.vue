@@ -12,11 +12,12 @@
         </vue-dropzone>
       </div>
     </div>
+
     <v-dialog v-if="research" v-model="isOpen" persistent transition="scale-transition" max-width="600px">
       <v-card class="pa-4">
         <v-card-title>
           <v-layout align-center>
-            <v-flex grow headline>Upload material for research</v-flex>
+            <v-flex grow headline>Upload material for project</v-flex>
             <v-flex shrink right-top-angle>
               <v-btn @click="close()" icon class="pa-0 ma-0">
                 <v-icon color="black">close</v-icon>
@@ -72,13 +73,13 @@
               </template>
             </v-autocomplete>
 
-            <internal-references-picker
+            <!-- <internal-references-picker
               :showSelected="true"
               :currentResearchId="research.id"
               :preselected="[]"
               @referenceAdded="addReference"
               @referenceRemoved="removeReference">
-            </internal-references-picker>
+            </internal-references-picker> -->
           </div>
         </v-card-text>
         <v-card-actions>

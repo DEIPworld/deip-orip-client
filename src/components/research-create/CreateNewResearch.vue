@@ -8,13 +8,13 @@
       >
         <v-stepper-header class="flex-grow-0">
           <v-stepper-step step="1" :complete="currentStep > 1">
-            <div class="text-uppercase">Discipline</div>
+            <div class="text-uppercase">Domain</div>
           </v-stepper-step>
 
           <v-divider></v-divider>
 
           <v-stepper-step step="2" :complete="currentStep > 2">
-            <div class="text-uppercase">Research group</div>
+            <div class="text-uppercase">Project type</div>
           </v-stepper-step>
 
           <v-divider></v-divider>

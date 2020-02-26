@@ -586,8 +586,10 @@ router.beforeEach((to, from, next) => {
   const PUBLIC_PAGES_NAMES = [
     'ResearchFeed',
     'ResearchDetailsPublic',
-    'NoAccessPage'
+    'NoAccessPage',
+    'FAQ'
   ];
+  
   if (to.path === '/sign-in' || to.path === '/sign-up' || to.path === '/org-sign-in') {
     if (accessService.isLoggedIn()) {
       next('/') // if token is already presented redirect user to home page

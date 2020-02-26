@@ -62,11 +62,12 @@
         <!-- <v-btn color="primary" @click.native="nextStep()" :disabled="group.members.length === 0">Next</v-btn> -->
         <v-btn color="primary" :loading="isLoading" @click.native="finish()"
                :disabled="group.members.length === 0 || isLoading">
-          Create group
+          Create team
         </v-btn>
       </v-layout>
     </v-flex>
   </v-layout>
+
 </template>
 
 <script>

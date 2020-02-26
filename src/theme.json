@@ -60,15 +60,15 @@
     "tabs-slider-color": "#4d7f94"
   },
   "default": {
-    "light": false,
-    "dark": true,
-    "primary-color": "#485fda",
+    "light": true,
+    "dark": false,
+    "primary-color": "#00a5ff",
     "secondary-color": "#f5f5f5",
-    "top-bar-color": "black",
-    "top-bar-link-color": "white",
-    "top-bar-divider-color": "",
-    "top-bar-class": "",
-    "tabs-text-class": "",
-    "tabs-slider-color": ""
+    "top-bar-color": "#f5f5f5",
+    "top-bar-link-color": "#282828",
+    "top-bar-divider-color": "#00a5ff",
+    "top-bar-class": "elevation-0",
+    "tabs-text-class": "#282828",
+    "tabs-slider-color": "#00a5ff"
   }
 }

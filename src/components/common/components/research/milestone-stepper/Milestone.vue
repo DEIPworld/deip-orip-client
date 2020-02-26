@@ -86,7 +86,7 @@
               @click.native="clearValidation()"
               class="my-0 pa-0 mx-2"
               solo
-              label="Budget purpose"
+              label="Budget breakdown"
             ></v-text-field>
           </v-flex>
 

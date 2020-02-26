@@ -1,5 +1,5 @@
 <template>
-  <v-card>
+  <v-card class="fill-height pb-5">
     <base-page-layout>
       <research-details-header slot="header"></research-details-header>
       <research-details-body slot="content"></research-details-body>

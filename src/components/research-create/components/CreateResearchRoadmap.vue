@@ -2,7 +2,7 @@
 	<v-layout column full-width fill-height overflow-auto align-center>
 		<v-flex style="width: 70%" display-flex flex-column flex-grow-1 mb-3 align-center>
 			<div class="step-title text-xs-center">Roadmap</div>
-			<div class="subheading pb-5 pt-2 text-xs-center">Let’s create a roadmap for your research. Well-presented and detailed roadmap attracts more investors to help you to get the funding</div>
+			<div class="subheading pb-5 pt-2 text-xs-center">Let’s create a roadmap for your project.</div>
 			<milestone-stepper style="width: 100%" :isReadOnly="false" :steps="research.milestones"></milestone-stepper>
 		</v-flex>
 
@@ -63,7 +63,7 @@ export default {
 				}
 				if (step.purpose == "") {
 					isValid = false;
-					Vue.set(step.validation, 'purposeError', index === milestones.length - 1 ? "Research should have the budget purpose" : "Step purpose is required");
+					Vue.set(step.validation, 'purposeError', index === milestones.length - 1 ? "Research should have the budget breakdown" : "Step budget breakdown is required");
 				}
 				if (!step.eta /* || moment(step.eta).diff(moment(), 'days') < 0 */) {
 					isValid = false;

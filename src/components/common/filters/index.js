@@ -77,7 +77,7 @@ Vue.filter('tenantSymbolSrc', function (tenant, width, height, noCache, ext = 'p
 
 Vue.filter('tenantBackgroundSrc', function (tenant, width, height, noCache, ext = 'png') {
     // return `${window.env.DEIP_SERVER_URL}/public/tenants/background-image/${tenant._id}?width=${width}&height=${height}&noCache=${noCache}&ext=${ext}`
-    return tenant ? `/assets/img/tenants/${tenant.permlink}/background.png` : `/assets/img/feed-background.svg`;
+    return tenant ? `/assets/img/tenants/${tenant.permlink}/background.png` : `/assets/img/feed-background.jpg`;
 });
 
 Vue.filter('dateFormat', (value, format, fromUtcToLocal = false) => {

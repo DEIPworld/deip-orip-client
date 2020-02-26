@@ -21,7 +21,7 @@
         </v-flex>
         <v-flex xs2 px-3>
           <v-layout row justify-space-between>
-            <div v-if="isDetailsAvailable">
+            <!-- <div v-if="isDetailsAvailable">
               <v-tooltip top>
                 <template slot="activator">
                   <router-link
@@ -40,7 +40,7 @@
                 </template>
                 <span>Browse references</span>
               </v-tooltip>
-            </div>
+            </div> -->
             <div v-if="hasReviews(content)">
               <v-icon size="14px">chat_bubble</v-icon>
               <span v-show="hasPositiveReviews(content)" class="green--text medium">{{countContentReviews(content, true)}}</span>
@@ -53,7 +53,7 @@
     </template>
     <div class="ml-4 py-2">
       <div class="grey--text">{{createContentAuthorsString(content.authors)}}</div>
-      <div>
+      <!-- <div>
         <span
           v-for="eci of getContentEciList(content)"
           :key="eci.disciplineName"
@@ -62,7 +62,7 @@
           <span class="mr-1">{{eci.disciplineName}}</span>
           <span class="mr-4 bold">{{eci.value}}</span>
         </span>
-      </div>
+      </div> -->
       <div class="mt-2">
         <v-icon size="18px">event</v-icon>
         <span>{{content.created_at | dateFormat('D MMM YYYY', true)}}</span>

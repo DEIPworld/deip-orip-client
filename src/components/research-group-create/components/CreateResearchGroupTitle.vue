@@ -1,7 +1,7 @@
 <template>
       <v-layout column fill-height>
         <v-flex display-flex flex-column flex-grow-1 mb-3>
-            <div class="step-title">Group name</div>
+            <div class="step-title">Team name</div>
             <div class="flex-grow-1 overflow-y-auto flex-basis-0">
 
                 <v-layout row mx-auto class="group-title-max-width">

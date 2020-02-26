@@ -35,7 +35,7 @@
 
 
       <!-- ### START Research Group Details Section ### -->
-      <div class="py-4">
+      <!-- <div class="py-4">
         <div class="title font-weight-bold">Group expertise tokens</div>
 
         <div class="pt-3">
@@ -48,11 +48,11 @@
 
       <div class="sidebar-fullwidth">
         <v-divider></v-divider>
-      </div>
+      </div> -->
 
       <!-- ### END Research Group Details Section ### -->
 
-      <div v-if="isResearchGroupMember">
+      <!-- <div v-if="isResearchGroupMember">
         <div class="py-4">
           <div class="title font-weight-bold">
             <router-link
@@ -66,7 +66,7 @@
           </div>
 
           <div class="py-4">
-            <!-- <div class="legacy-row-nowrap legacy-align-items-center c-pb-4">
+            <div class="legacy-row-nowrap legacy-align-items-center c-pb-4">
                 <div style="height: 30px; width: 30px;">
                     <svg width="100%" height="100%" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <circle cx="20" cy="20" r="20" fill="black"/>
@@ -76,7 +76,7 @@
 
                 <div class="c-pl-4 font-weight-medium">DEIP Tokens</div>
                 <div class="legacy-col-grow text-align-right">{{ deipTokenBalance }}</div>
-            </div> -->
+            </div>
 
             <v-btn class="ma-0"
               :disabled="!this.fromAssetsToFloat(group.balance)"
@@ -90,23 +90,22 @@
         <div class="sidebar-fullwidth">
           <v-divider></v-divider>
         </div>
-      </div>
+      </div> -->
 
       <div v-if="group.is_dao" class="">
         <div class="py-4">
           <quorum-size-sidebar-section></quorum-size-sidebar-section>
         </div>
-
         <div class="sidebar-fullwidth">
           <v-divider></v-divider>
         </div>
       </div>
 
 
-      <transfer-group-deip-tokens-dialog
+      <!-- <transfer-group-deip-tokens-dialog
         :is-open="options.isTransferTokensDialogOpen"
         @onClose="$store.dispatch('researchGroup/changeOptions', { key: 'isTransferTokensDialogOpen', value: false })"
-      ></transfer-group-deip-tokens-dialog>
+      ></transfer-group-deip-tokens-dialog> -->
 
     </v-layout>
   </v-card>

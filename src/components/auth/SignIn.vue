@@ -4,36 +4,14 @@
       <v-flex md6 lg6 xl6 hidden-sm-and-down>
         <v-layout column wrap fill-height class="description">
           <div class="description__logo">
-            <img src="/assets/img/landing-logo.svg" />
+            <img style="width: 100%; height: 100%" src="/assets/img/landing-logo.png" />
           </div>
           <div class="description__info-text">
             Open Research and Innovation Platform
           </div>
-          <div class="description__signup-text">
-            Don't have an account?
-            <router-link
-              :to="{ name: 'SignUp' }"
-            >Sign Up</router-link>
-          </div>
-          <v-layout class="description__info-list-item mt-5" align-center shrink>
-            <v-icon small color="white">mdi-message-reply-text</v-icon>
-            <span class="ml-2">Collaboration</span>
-          </v-layout>
-          <v-layout class="description__info-list-item mt-4" align-center shrink>
-            <v-icon small color="white" class="icon-upended">mdi-lightbulb-on</v-icon>
-            <span class="ml-2">Project tokenization</span>
-          </v-layout>
-          <v-layout class="description__info-list-item mt-4" align-center shrink>
-            <v-icon small color="white">mdi-shield-check</v-icon>
-            <span class="ml-2">Licensing of intellectual property</span>
-          </v-layout>
-          <v-layout class="description__info-list-item mt-4" align-center shrink>
-            <v-icon small color="white">mdi-account-multiple-plus</v-icon>
-            <span class="ml-2">Crowd investing</span>
-          </v-layout>
         </v-layout>
       </v-flex>
-      <v-flex xs12 sm12 md6 lg6 xl6>
+      <v-flex md6 lg6 xl6 xs12 sm12>
         <v-card class="full-height elevation-0" color="secondary">
           <v-layout column wrap fill-height class="login">
             <div class="login__title">Welcome back!</div>
@@ -64,12 +42,18 @@
                 type="submit"
                 block
                 color="primary"
-                dark
                 :loading="isChecking"
                 :disabled="isChecking"
                 @click="login()"
               >Log In</v-btn>
             </v-form>
+            <div class="signup-text text-xs-center mt-2">
+              New on AR3C?
+              <router-link
+                :to="{ name: 'SignUp' }"
+                class="primary--text"
+              >Sign Up</router-link> now
+            </div>
           </v-layout>
         </v-card>
       </v-flex>
@@ -195,14 +179,16 @@
 @import "./../../styles/colors.less";
 
 .description {
-  background-color: #485fda;
+  background-color: #ffffff;
   padding-top: 10%;
   padding-left: 20%;
   padding-right: 15%;
 
   &__logo {
-    margin-top: 5%;
-    margin-bottom: 10%;
+    // margin-top: 5%;
+    // margin-bottom: 10%;
+    width: 80%;
+    max-height: 200px;
     img {
       max-width: 100%;
     }
@@ -216,33 +202,7 @@
     font-size: 48px;
     line-height: 61px;
     letter-spacing: 0.25px;
-    color: @white;
-  }
-
-  &__signup-text {
-    margin-top: 5%;
-    font-family: Roboto;
-    font-style: normal;
-    font-weight: normal;
-    font-size: 16px;
-    line-height: 19px;
-    color: @white;
-    a {
-      color: inherit;
-    }
-  }
-
-  &__info-list-item {
-    font-family: Muli;
-    font-weight: 500;
-    font-size: 18px;
-    line-height: 20px;
-
-    color: #FFFFFF;
-
-    .icon-upended {
-      transform: rotate(180deg);
-    }
+    color: var(--v-primary-base);
   }
 }
 
@@ -263,4 +223,14 @@
   }
 }
 
+
+.signup-text {
+  font-family: Roboto;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 16px;
+  a {
+    color: inherit;
+  }
+}
 </style>

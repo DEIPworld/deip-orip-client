@@ -42,8 +42,8 @@
                 <div class="rd-timeline-item__date">{{item.date}}</div>
                 <div v-if="item.label" class="rd-timeline-item__label pt-1">{{item.label}}</div>
                 <div v-if="item.budget" class="rd-timeline-item__budget pt-1">
-                  <div class="font-weight-bold">$ {{item.budget}}</div>
-                  <div>{{item.purpose}}</div>
+                  <span class="font-weight-bold">$ {{item.budget}}</span>
+                  {{item.purpose}}
                 </div>
               </li>
               <li v-if="timelineItemsToShow < timeline.length" class="rd-timeline-item">

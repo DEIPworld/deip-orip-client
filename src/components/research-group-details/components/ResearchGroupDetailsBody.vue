@@ -41,17 +41,17 @@
     <!-- ### START Research Group members Section ### -->
     <div class="px-5 py-4">
       <div>
-        <div class="title">Group members: {{ members.length }}</div>
+        <div class="title">Team members: {{ members.length }}</div>
         <div class="pt-4">
           <v-card>
             <div class="info-card-list">
               <v-layout row class="list-line align-center">
-                <v-flex list-header-cell :class="isGroupMembersActionsColumnAvailable ? 'xs3': 'xs4'">Researcher
+                <v-flex list-header-cell :class="isGroupMembersActionsColumnAvailable ? 'xs3': 'xs4'">Member
                 </v-flex>
-                <v-flex list-header-cell xs3>Expertise</v-flex>
-                <v-flex list-header-cell xs1 text-align-center>Group weight</v-flex>
-                <v-flex list-header-cell xs2 text-align-center>Member since</v-flex>
-                <v-flex list-header-cell xs2 text-align-center>Location</v-flex>
+                <!-- <v-flex list-header-cell xs3>Expertise</v-flex>
+                <v-flex list-header-cell xs1 text-align-center>Group weight</v-flex> -->
+                <v-flex list-header-cell xs4 text-align-center>Member since</v-flex>
+                <v-flex list-header-cell xs4 text-align-center>Location</v-flex>
                 <v-flex v-if="isGroupMembersActionsColumnAvailable" list-header-cell xs1 text-align-center>Action
                 </v-flex>
               </v-layout>
@@ -77,7 +77,7 @@
                     </div>
                   </v-flex>
 
-                  <v-flex xs3 list-body-cell>
+                  <!-- <v-flex xs3 list-body-cell>
                     <div v-for="(item, i) in member.expertise" :key="i">
                       <span class="uppercase bold">{{ item.discipline_name }}:</span> {{ item.amount }}
                     </div>
@@ -85,13 +85,13 @@
 
                   <v-flex xs1 text-align-center list-body-cell>
                     {{ convertToPercent(member.rgt.amount) }}%
-                  </v-flex>
+                  </v-flex> -->
 
-                  <v-flex xs2 text-align-center list-body-cell>
+                  <v-flex xs4 text-align-center list-body-cell>
                     {{ member.created | dateFormat('D MMM YYYY') }}
                   </v-flex>
 
-                  <v-flex xs2 text-align-center list-body-cell>{{member | userLocation}}</v-flex>
+                  <v-flex xs4 text-align-center list-body-cell>{{member | userLocation}}</v-flex>
 
                   <v-flex v-if="isExcludingMemberAvailable(member.rgt.owner)" xs1 text-align-center list-body-cell>
                     <v-btn
@@ -123,7 +123,7 @@
                 <v-icon small>add</v-icon>
               </v-btn>
 
-              <span class="pl-2">Invite researchers</span>
+              <span class="pl-2">Invite member</span>
             </div>
 
             <div v-if="isResearchGroupMember && invites.length">
@@ -193,6 +193,7 @@
     </div>
     <!-- ### END Research Group Research List Section ### -->
   </v-card>
+
 </template>
 
 <script>

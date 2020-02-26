@@ -7,9 +7,11 @@
     <v-app v-else>
       <toolbar :isGrantsTransparencyDemo="isGrantsTransparencyDemo"></toolbar>
 
-      <v-content>
+      <v-content class="full-vh">
         <router-view :key="$route.fullPath" />
       </v-content>
+
+      <footer-bar></footer-bar>
     </v-app>
 
     <v-snackbar :timeout="5000" color="error" v-model="errorSnack.isVisible">
@@ -21,13 +23,11 @@
       {{ successSnack.message }}
       <v-btn dark flat @click.native="closeSuccess();">Close</v-btn>
     </v-snackbar>
-
   </div>
 </template>
-w
+
 <script>
   import { mapGetters } from 'vuex';
-
   import { AccessService } from '@deip/access-service';
   import { AppConfigService } from '@deip/app-config-service';
 
@@ -42,7 +42,7 @@ w
       return {
         isGrantsTransparencyDemo: false,
         successSnack: { isVisible: false, message: '' },
-        errorSnack: { isVisible: false, message: '' },
+        errorSnack: { isVisible: false, message: '' }
       };
     },
 
@@ -96,5 +96,8 @@ w
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     color: #2c3e50;
+  }
+  .full-vh{
+    min-height:100vh;
   }
 </style>

@@ -38,7 +38,7 @@
     <!-- ### END Draft Actions Section ### -->
 
     <!-- ### START Research Content ECI Section ### -->
-    <div v-if="isPublished" class="py-2">
+    <!-- <div v-if="isPublished" class="py-2">
       <div class="sidebar-fullwidth">
         <v-divider></v-divider>
       </div>
@@ -64,10 +64,10 @@
       <div class="sidebar-fullwidth">
         <v-divider></v-divider>
       </div>
-    </div>
+    </div> -->
     <!-- ### END Research Content ECI Section ### -->
-
-    <v-dialog v-if="isPublished" v-model="requestExpertReviewDialog.isShown" persistent max-width="600px">
+      
+    <!-- <v-dialog v-if="isPublished" v-model="requestExpertReviewDialog.isShown" persistent max-width="600px">
       <template v-slot:activator="{ on }">
         <div class="mx-0">
           <v-layout row justify-space-between class="py-2">
@@ -126,7 +126,7 @@
           </v-layout>
         </v-card-actions>
       </v-card>
-    </v-dialog>
+    </v-dialog> -->
 
     <!-- ### START Research Content Authors Section ### -->
     <div class="py-2">
@@ -201,7 +201,7 @@
             </router-link>
           </div>
         </div>
-        <div class="pt-2" v-if="isPublished">
+        <!-- <div class="pt-2" v-if="isPublished">
           <router-link class="a"
             :to="{
               name: 'ResearchContentReferences',
@@ -213,16 +213,14 @@
             <v-icon small>device_hub</v-icon>
             References
           </router-link>
-        </div>
-      </div>
-      <div class="sidebar-fullwidth">
-        <v-divider></v-divider>
+        </div> -->
       </div>
     </div>
     <!-- ### END Research TOC Section ### -->
 
+
     <!-- ### START Research Content Blockchain Data Section ### -->
-    <div v-if="isPublished" class="py-2">
+    <div v-if="isPublished" class="py-4">
       <div>
         <v-btn large block color="primary" dark 
           :to="{
@@ -250,7 +248,7 @@
     <!-- ### END Quorum Info Section ### -->
 
     <!-- ### START Reward Info Section ### -->
-    <div v-if="!isPublished" class="py-2">
+    <!-- <div v-if="!isPublished" class="py-2">
       <div class="subheading bold">Reviews</div>
       <div class="body-2 c-mt-2">
         <v-layout row justify-space-between class="body-2 py-1">
@@ -260,7 +258,7 @@
           <div>{{convertToPercent(research.review_share_in_percent)}}%</div>
         </v-layout>
       </div>
-    </div>
+    </div> -->
     <!-- ### END Reward Info Section ### -->
   </v-card>
 </template>

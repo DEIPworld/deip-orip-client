@@ -1,7 +1,7 @@
 <template>
    <v-layout fill-height row discipline-picker overflow-y-auto>
         <v-flex xs4 pa-3 v-if="!withoutUserDisciplines" overflow-y-auto>
-            <v-flex pb-3 bold uppercase>Your disciplines</v-flex>
+            <v-flex pb-3 bold uppercase>Your domains</v-flex>
 
             <v-flex v-if="userDisciplines.length">
                 <div v-for="(discipline, i) in userDisciplines" :key="i">
@@ -14,7 +14,7 @@
         </v-flex>
 
         <v-flex pa-3 fill-height overflow-y-auto :class="!withoutUserDisciplines ? 'xs8' : 'xs12'">
-            <v-flex pb-3 bold uppercase>All disciplines</v-flex>
+            <v-flex pb-3 bold uppercase>All domains</v-flex>
 
             <discipline-tree-picker
                 :is-multiple-select="isMultipleSelect"

@@ -1,20 +1,18 @@
 <template>
   <base-page-layout>
     <div slot="content" class="full-width">
-      <v-layout column justify-center class="feed-header full-width px-5"
+      <v-layout column class="feed-header media-banner full-width px-5"
                 :style="{ background: 'url(' + $options.filters.tenantBackgroundSrc(tenant) + '), 100%, 100%, no-repeat'}">
-        <div class="display-2 uppercase half-bold">Projects</div>
-        <div class="py-4">
-          <v-btn v-if="isLoggedIn()" :to="{ name: 'CreateResearch' }" color="primary" class="ma-0">Start a project
+        <div class="py-4 display-flex flex-wrap justify-center">
+          <v-btn v-if="isLoggedIn()" :to="{ name: 'CreateResearch' }" color="primary" class="width-225 ma-0 px-5">Start a project
           </v-btn>
           <template v-else>
-            <v-btn :to="{ name: 'SignIn' }" color="primary" class="ma-0 px-5">Log In</v-btn>
-            <div class="white--text body-1 mt-2">After creating an account/log in you can add new projects or enjoy
-              shared materials
-            </div>
+              <v-btn :to="{ name: 'SignUp' }" color="primary" class="width-225 px-5">Become a member</v-btn>
+              <v-btn :to="{ name: 'SignIn' }" color="" class="width-225 px-5 blue--text">Start a project</v-btn>
           </template>
         </div>
       </v-layout>
+      <v-divider></v-divider>
 
       <v-layout row wrap>
         <v-flex xs12 sm12 md12 lg12 xl12 class="feed-filter" ref="projectsView">
@@ -87,7 +85,7 @@
                 <v-flex xs12 sm12 md12 lg12 xl12 class="feed-disciplines-filter">
                   <div class="pb-4">
                     <v-layout row justify-space-between align-baseline>
-                      <span class="subheading half-bold">Browse by discipline</span>
+                      <span class="subheading half-bold">Browse by domain</span>
                       <v-btn
                         @click="selectAllDisciplines()"
                         class="text-capitalize"
@@ -193,7 +191,8 @@
                     </div>
                   </v-layout>
                 </v-flex>
-                <v-flex xs12 sm12 md12 lg12 xl12 py-4>
+
+               <!-- <v-flex xs12 sm12 md12 lg12 xl12 py-4>
                   <v-divider></v-divider>
                 </v-flex>
                 <v-flex xs12 sm12 md12 lg12 xl12>
@@ -211,7 +210,7 @@
                       </v-flex>
                     </v-layout>
                   </div>
-                </v-flex>
+                </v-flex> -->
               </v-layout>
             </v-expansion-panel-content>
           </v-expansion-panel>
@@ -449,5 +448,18 @@
       background: rgba(219, 228, 251, .6);
     }
   }
-
+  
+  .media-banner{
+    justify-content: flex-end;
+    @media(max-width: 1570px) {
+        height: 220px;
+    }
+    @media(max-width: 1100px){
+      justify-content: center;
+      background: none !important;
+    }
+  }
+  .width-225{
+    width: 225px;
+  }
 </style>
