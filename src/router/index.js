@@ -188,8 +188,14 @@ const router = new Router({
 				let loadPagePromise = store.dispatch('rd/loadResearchDetails', {
 					group_permlink: decodeURIComponent(to.params.research_group_permlink),
 					research_permlink: decodeURIComponent(to.params.research_permlink)
-				});
-				loadPage(loadPagePromise, next);
+				}).then(() => {
+          const username = store.getters['auth/user'].username;
+          const research = store.getters['rd/research'];
+          if (research.is_private && !research.members.includes(username)) {
+            return { name: 'Default' };
+          }
+        });
+        loadPage(loadPagePromise, next);
 			}
 		})
 		}, {
@@ -572,7 +578,7 @@ router.beforeEach((to, from, next) => {
 		if (isLoggedIn()) {
 			next() // if there is a token allow to visit requested route
 		} else {
-			next('/sign-in') // otherwise redirect to sign-in page
+			next({ name: 'ResearchFeed' }) // otherwise redirect to sign-in page
 		}
 	}
 })
