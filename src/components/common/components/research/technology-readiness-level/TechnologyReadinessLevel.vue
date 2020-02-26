@@ -68,6 +68,7 @@
 </template>
 
 <script>
+import trlData from '@/components/common/trl.json';
 
 export default {
   name: "TechnologyReadinessLevel",
@@ -79,7 +80,7 @@ export default {
   },
   data() {
     return {
-      trl: this.TRL
+      trl: trlData
     };
   },
   computed: {
