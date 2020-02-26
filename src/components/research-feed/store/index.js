@@ -1,5 +1,6 @@
 import Vue from 'vue';
 import deipRpc from '@deip/deip-oa-rpc-client';
+import { isLoggedIn, getDecodedToken } from '@/utils/auth'
 import * as usersService from '@/utils/user';
 import tokenSaleService from '@/services/TokenSaleService';
 import * as researchGroupService from '@/services/ResearchGroupService';
@@ -91,12 +92,17 @@ const getters = {
 // actions
 const actions = {
 
-  loadResearchFeed({ state, dispatch, commit }) {
+  loadResearchFeed({ state, dispatch, commit, rootGetters }) {
+    const username = rootGetters['auth/user'].username;
     const alldisciplinesId = 0;
 
     return deipRpc.api.getAllResearchesListingAsync(0, alldisciplinesId)
       .then(listing => {
-        commit('SET_FULL_RESEARCH_LISTING', listing.map(item => {return {...item, isCollapsed: true }}));
+        commit('SET_FULL_RESEARCH_LISTING', listing.filter((item) => {
+          if (!item.is_private) return true;
+
+          return username ? item.group_members.includes(username) : false;
+        }).map(item => {return {...item, isCollapsed: true }}));
 
         let researchTotalVotesLoad = Promise.all(listing
           .map(r => deipRpc.api.getTotalVotesByResearchAsync(r.research_id)));
