@@ -68,7 +68,7 @@ contentTypesMap[FINAL_RESULT] = { id: FINAL_RESULT, text: 'Final Result', type: 
 
 const contentTypesList = [...Object.values(contentTypesMap)].sort((a, b) => { return a.order - b.order; });
 const getResearchContentType = (type) => contentTypesList.find(t => t.type == type);
-const getTopResearchesIds = () => [21, 14, 24, 7, 10, 5, 0, 6, 26, 28, 15, 23, 9, 25, 20, 12];
+const getTopResearchesIds = () => [];
 
 const RESEARCH_CONTENT_ECI_SOURCES = {
   1: { type: 'review', text: "Review added" },

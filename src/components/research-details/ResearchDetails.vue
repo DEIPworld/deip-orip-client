@@ -215,7 +215,7 @@
                       <iframe
                         height="100%"
                         width="100%"
-                        :src="'./../../../static/form-of-SAFT-for-token-pre-sale.pdf'"
+                        src="/assets/img/form-of-SAFT-for-token-pre-sale.pdf"
                       ></iframe>
                     </v-card-text>
                     <v-card-actions class="pa-0">

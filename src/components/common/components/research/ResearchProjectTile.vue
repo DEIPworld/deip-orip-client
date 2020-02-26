@@ -12,9 +12,9 @@
     >
       <div style="position: relative">
         <img class="ma-0" style="width: 100%; height: 150px" :src="$options.filters.researchBackgroundSrc(research.id, 430, 150)" />
-        <!-- <div v-if="research.isTop" class="top-research-label">
+        <div v-if="research.isTop" class="top-research-label">
           <top-research-label class="pa-2"></top-research-label>
-        </div> -->
+        </div>
       </div>
       <v-tooltip bottom>
         <div slot="activator" class="subheading ellipsis half-bold py-2">{{ research.title }}</div>

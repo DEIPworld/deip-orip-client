@@ -37,10 +37,10 @@
                 <v-tab-item key="active">
                     <div style="margin: 0px 2px 3px;">
                         <v-card class="hidden-last-child">
-                            <template v-for="item in activeResearchList">
+                            <div v-for="(item, i) in activeResearchList" :key="`${i}-research`">
                                 <research-list-item :research="item"></research-list-item>
                                 <v-divider></v-divider>
-                            </template>
+                            </div>
                         </v-card>
                     </div>
 
