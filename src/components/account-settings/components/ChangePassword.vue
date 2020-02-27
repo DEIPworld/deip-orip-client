@@ -106,22 +106,24 @@ export default {
       const username = this.currentUser.username;
 
       let oldPrivateKey;
-      if (deipRpc.auth.isWif(this.oldPassword)) {
-        oldPrivateKey = this.oldPassword;
-      } else {
+      if (
+        deipRpc.auth.isWif(this.oldPassword)
+        && deipRpc.auth.wifToPublic(this.oldPassword) === this.currentUser.pubKey
+      ) { // if old private key is entered
+        oldPrivateKey = this.oldPassword
+      } else { // if old password is intered or old password is in private key format
         oldPrivateKey = deipRpc.auth.toWif(
           username,
           this.oldPassword,
           'owner'
         );
-      }
-
-      const oldPublicKey = deipRpc.auth.wifToPublic(oldPrivateKey);
-      if (this.currentUser.pubKey !== oldPublicKey) {
-        this.$store.dispatch("layout/setError", {
-          message: `Old password is invalid`
-        });
-        return;
+        const oldPublicKey = deipRpc.auth.wifToPublic(oldPrivateKey);
+        if (this.currentUser.pubKey !== oldPublicKey) {
+          this.$store.dispatch("layout/setError", {
+            message: `Old password is invalid`
+          });
+          return;
+        }
       }
 
       const {
