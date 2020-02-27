@@ -26,7 +26,7 @@
                     class="ma-0 px-5 py-3"
                   >Start a project</v-btn>
                 </div>
-                <v-layout row wrap>
+                <v-layout row wrap v-if="myResearches.length">
                   <v-flex
                     xs12
                     sm6
@@ -50,12 +50,34 @@
                     ></research-project-tile>
                   </v-flex>
                 </v-layout>
+                <v-layout v-else>
+                  <v-flex shrink>
+                    <v-layout row wrap class="display-flex">
+                      <v-flex mr-5>
+                        <img src="/assets/img/create-project.png" />
+                      </v-flex>
+                      <v-flex>
+                        <div
+                          class="subheading font-weight-bold mb-2"
+                        >You haven’t created any project yet</div>
+                        <div class="body-2 mb-4">Upload a project and collaborate for future success</div>
+                        <div>
+                          <v-btn
+                            :to="{ name: 'CreateResearch' }"
+                            color="primary"
+                            class="px-5 ma-0"
+                          >Create your first project</v-btn>
+                        </div>
+                      </v-flex>
+                    </v-layout>
+                  </v-flex>
+                </v-layout>
               </v-card>
             </v-tab-item>
             <v-tab-item value="tab-following-projects">
               <v-layout row fill-height>
                 <v-card color="white" class="full-width elevation-0 pt-4 glass-container">
-                  <v-layout row wrap>
+                  <v-layout row wrap v-if="followingResearches.length">
                     <v-flex
                       xs12
                       sm6
@@ -77,6 +99,30 @@
                         :group="group"
                         :class="{'pb-5': i != followingResearches.length - 1}"
                       ></research-project-tile>
+                    </v-flex>
+                  </v-layout>
+                  <v-layout v-else justify-center mt-4 pt-4>
+                    <v-flex shrink>
+                      <v-layout row wrap class="display-flex">
+                        <v-flex mr-5>
+                          <img src="/assets/img/follow-project.png" />
+                        </v-flex>
+                        <v-flex>
+                          <div
+                            class="subheading font-weight-bold mb-2"
+                          >You’re not following any project yet</div>
+                          <div
+                            class="body-2 mb-4"
+                          >We have a lot of incredible projects on our platform. Take a look</div>
+                          <div>
+                            <v-btn
+                              :to="{ name: 'ResearchFeed' }"
+                              color="primary"
+                              class="px-5 ma-0"
+                            >Browse projects</v-btn>
+                          </div>
+                        </v-flex>
+                      </v-layout>
                     </v-flex>
                   </v-layout>
                 </v-card>
