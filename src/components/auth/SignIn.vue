@@ -4,7 +4,7 @@
       <v-flex md6 lg6 xl6 hidden-sm-and-down>
         <v-layout column wrap fill-height class="description">
           <div class="description__logo">
-            <img src="/assets/img/logo-iconed.svg" />
+            <img src="/assets/img/landing-logo.svg" />
           </div>
           <div class="description__info-text">
             Open Research and Innovation Platform
@@ -34,42 +34,44 @@
         </v-layout>
       </v-flex>
       <v-flex xs12 sm12 md6 lg6 xl6>
-        <v-layout column wrap fill-height class="login">
-          <div class="login__title">Welcome back!</div>
-          <v-form
-            v-model="isFormValid"
-            ref="form"
-            @submit.prevent
-            class="login__form full-width"
-          >
-            <v-text-field
-              name="username"
-              label="Username"
-              v-model="username"
-              :disabled="isChecking"
-              :rules="[rules.required]"
-            />
-            <v-text-field
-              name="password"
-              label="Password / Private Key"
-              v-model="password"
-              :rules="[rules.required]"
-              :append-icon="isHiddenPassword ? 'visibility_off' : 'visibility'"
-              :type="isHiddenPassword ? 'password' : 'text'"
-              :disabled="isChecking"
-              @click:append="isHiddenPassword = !isHiddenPassword"
-            />
-            <v-btn
-              type="submit"
-              block
-              color="#485fda"
-              dark
-              :loading="isChecking"
-              :disabled="isChecking"
-              @click="login()"
-            >Log In</v-btn>
-          </v-form>
-        </v-layout>
+        <v-card class="full-height elevation-0" color="secondary">
+          <v-layout column wrap fill-height class="login">
+            <div class="login__title">Welcome back!</div>
+            <v-form
+              v-model="isFormValid"
+              ref="form"
+              @submit.prevent
+              class="login__form full-width"
+            >
+              <v-text-field
+                name="username"
+                label="Username"
+                v-model="username"
+                :disabled="isChecking"
+                :rules="[rules.required]"
+              />
+              <v-text-field
+                name="password"
+                label="Password / Private Key"
+                v-model="password"
+                :rules="[rules.required]"
+                :append-icon="isHiddenPassword ? 'visibility_off' : 'visibility'"
+                :type="isHiddenPassword ? 'password' : 'text'"
+                :disabled="isChecking"
+                @click:append="isHiddenPassword = !isHiddenPassword"
+              />
+              <v-btn
+                type="submit"
+                block
+                color="primary"
+                dark
+                :loading="isChecking"
+                :disabled="isChecking"
+                @click="login()"
+              >Log In</v-btn>
+            </v-form>
+          </v-layout>
+        </v-card>
       </v-flex>
     </v-layout>
   </v-container>
@@ -202,7 +204,7 @@
   }
 
   &__info-text {
-    padding-top: 5%;
+    // padding-top: 5%;
     font-family: Muli;
     font-style: normal;
     font-weight: 900;
@@ -255,4 +257,5 @@
     padding-top: 10%;
   }
 }
+
 </style>

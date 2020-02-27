@@ -4,7 +4,7 @@
       <v-flex md6 lg6 xl6 hidden-sm-and-down>
         <v-layout column wrap fill-height class="description">
           <div class="description__logo">
-            <img src="/assets/img/logo-iconed.svg" />
+            <img src="/assets/img/landing-logo.svg" />
           </div>
           <div class="description__info-text">
             Open Research and Innovation Platform
@@ -28,101 +28,103 @@
         </v-layout>
       </v-flex>
       <v-flex xs12 sm12 md6 lg6 xl6>
-        <v-layout column wrap fill-height class="signup">
-          <div class="signup__title">Registration</div>
-          <v-form v-model="isFormValid" ref="form" class="c-mt-10" v-show="!isServerValidated">
+        <v-card class="full-height elevation-0" color="secondary">
+          <v-layout column wrap fill-height class="signup">
+            <div class="signup__title">Registration</div>
+            <v-form v-model="isFormValid" ref="form" class="c-mt-10" v-show="!isServerValidated">
 
-            <v-text-field 
-              label="Email"
-              v-model="formData.email" 
-              :rules="[rules.required, rules.email]"
-              :disabled="isSaving"
-            />
+              <v-text-field 
+                label="Email"
+                v-model="formData.email" 
+                :rules="[rules.required, rules.email]"
+                :disabled="isSaving"
+              />
 
-            <v-text-field 
-              label="First name"
-              v-model="formData.firstName" 
-              :rules="[rules.required, rules.nameChars]"
-              :disabled="isSaving"
-            />
+              <v-text-field 
+                label="First name"
+                v-model="formData.firstName" 
+                :rules="[rules.required, rules.nameChars]"
+                :disabled="isSaving"
+              />
 
-            <v-text-field 
-              label="Last name"
-              v-model="formData.lastName" 
-              :rules="[rules.required, rules.nameChars]"
-              :disabled="isSaving"
-            />
-              
-            <v-text-field 
-              name="username"
-              label="Username"
-              v-model="formData.username" 
-              :rules="[
-                rules.required, 
-                rules.unique, 
-                rules.usernameFormat
-              ]"
-              @input="usernameChanged"
-              :loading="isUsernameChecking"
-              :disabled="isSaving"
-            />
+              <v-text-field 
+                label="Last name"
+                v-model="formData.lastName" 
+                :rules="[rules.required, rules.nameChars]"
+                :disabled="isSaving"
+              />
+                
+              <v-text-field 
+                name="username"
+                label="Username"
+                v-model="formData.username" 
+                :rules="[
+                  rules.required, 
+                  rules.unique, 
+                  rules.usernameFormat
+                ]"
+                @input="usernameChanged"
+                :loading="isUsernameChecking"
+                :disabled="isSaving"
+              />
 
-            <v-text-field
-              v-model="formData.masterPassword"
-              class="c-mt-4"
-              label="Master Password"
-              :disabled="isSaving"
-              :rules="[rules.required, rules.masterPassword]"
-              :append-icon="formData.isHiddenMasterPassword ? 'visibility_off' : 'visibility'"
-              :type="formData.isHiddenMasterPassword ? 'password' : 'text'"
-              @click:append="formData.isHiddenMasterPassword = !formData.isHiddenMasterPassword"
-              @input="$refs.reEnterMasterPassword.validate()"
-            />
+              <v-text-field
+                v-model="formData.masterPassword"
+                class="c-mt-4"
+                label="Master Password"
+                :disabled="isSaving"
+                :rules="[rules.required, rules.masterPassword]"
+                :append-icon="formData.isHiddenMasterPassword ? 'visibility_off' : 'visibility'"
+                :type="formData.isHiddenMasterPassword ? 'password' : 'text'"
+                @click:append="formData.isHiddenMasterPassword = !formData.isHiddenMasterPassword"
+                @input="$refs.reEnterMasterPassword.validate()"
+              />
 
-            <v-text-field
-              v-model="formData.reEnterMasterPassword"
-              ref="reEnterMasterPassword"
-              class="c-mt-4"
-              label="Re-Enter Master Password"
-              :disabled="isSaving"
-              :rules="[rules.required, rules.reEnterMasterPassword]"
-              :append-icon="formData.isHiddenReEnterMasterPassword ? 'visibility_off' : 'visibility'"
-              :type="formData.isHiddenReEnterMasterPassword ? 'password' : 'text'"
-              @click:append="formData.isHiddenReEnterMasterPassword = !formData.isHiddenReEnterMasterPassword"
-            />
+              <v-text-field
+                v-model="formData.reEnterMasterPassword"
+                ref="reEnterMasterPassword"
+                class="c-mt-4"
+                label="Re-Enter Master Password"
+                :disabled="isSaving"
+                :rules="[rules.required, rules.reEnterMasterPassword]"
+                :append-icon="formData.isHiddenReEnterMasterPassword ? 'visibility_off' : 'visibility'"
+                :type="formData.isHiddenReEnterMasterPassword ? 'password' : 'text'"
+                @click:append="formData.isHiddenReEnterMasterPassword = !formData.isHiddenReEnterMasterPassword"
+              />
 
-            <div class="text-align-justify caption grey--text">
-              Please confirm you have saved the generated key and want to be added to the list of private beta
-              participants with the information specified above:
-            </div>
+              <div class="text-align-justify caption grey--text">
+                Please confirm you have saved the generated key and want to be added to the list of private beta
+                participants with the information specified above:
+              </div>
 
-            <v-checkbox
-              class="c-mv-4 pa-0"
-              label="I have saved the password and want to be added to the list"
-              v-model="formData.isMasterPasswordSaved"
-              :disabled="isSaving"
-              hide-details
-            />
+              <v-checkbox
+                class="c-mv-4 pa-0"
+                label="I have saved the password and want to be added to the list"
+                v-model="formData.isMasterPasswordSaved"
+                :disabled="isSaving"
+                hide-details
+              />
 
-            <div class="c-pb-4 text-align-justify caption grey--text">
-              No data is stored until you press “Finish Registration” button.
-              For more information about our privacy terms please read <a class="a" target="_blank" href="https://deip.world/DEIP%20PRIVACY%20POLICY.pdf">Privacy Policy</a>.
-              By clicking below, you agree that we may process ypur information in accordance with these terms.
-            </div>
+              <div class="c-pb-4 text-align-justify caption grey--text">
+                No data is stored until you press “Finish Registration” button.
+                For more information about our privacy terms please read <a class="a" target="_blank" href="https://deip.world/DEIP%20PRIVACY%20POLICY.pdf">Privacy Policy</a>.
+                By clicking below, you agree that we may process ypur information in accordance with these terms.
+              </div>
 
-            <v-btn block color="primary" 
-              :loading="isSaving"
-              @click="finishRegistration()"
-              :disabled="!formData.isMasterPasswordSaved || isSaving"
-            >Finish registration</v-btn>
-            <div class="primary--text text-xs-center mt-2">
-              Already have an account?
-              <router-link
-                :to="{ name: 'SignIn' }"
-              >Sign In</router-link>
-            </div>
-          </v-form>
-        </v-layout>
+              <v-btn block color="primary" 
+                :loading="isSaving"
+                @click="finishRegistration()"
+                :disabled="!formData.isMasterPasswordSaved || isSaving"
+              >Finish registration</v-btn>
+              <div class="primary--text text-xs-center mt-2">
+                Already have an account?
+                <router-link
+                  :to="{ name: 'SignIn' }"
+                >Sign In</router-link>
+              </div>
+            </v-form>
+          </v-layout>
+        </v-card>
       </v-flex>
     </v-layout>
   </v-container>
@@ -266,7 +268,7 @@
     }
 
     &__info-text {
-      padding-top: 5%;
+      // padding-top: 5%;
       font-family: Muli;
       font-style: normal;
       font-weight: 900;
@@ -306,4 +308,5 @@
       padding-top: 10%;
     }
   }
+
 </style>

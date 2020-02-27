@@ -3,7 +3,7 @@
 
     <v-layout row class="full-width full-height">
       <v-flex xl12 lg12 md12 sm12 xs12>
-        <v-tabs color="#fafafa">
+        <v-tabs color="secondary lighten-2">
           <v-tabs-slider :color="themeSettings['tabs-slider-color']"></v-tabs-slider>
 
           <v-tab :class="themeSettings['tabs-text-class']" href="#tab-summary">Summary</v-tab>

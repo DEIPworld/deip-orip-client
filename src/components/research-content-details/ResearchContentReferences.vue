@@ -19,7 +19,7 @@
 
           <v-flex xs12 sm12 md4 lg4 xl4>
             <div class="pl-4 full-width full-height tabs-container">
-              <v-tabs color="#ffffff">
+              <v-tabs color="secondary">
                 <v-tabs-slider></v-tabs-slider>
                 <v-tab href="#tab-file">
                   <span class="subheading capitalize">File Info</span>
