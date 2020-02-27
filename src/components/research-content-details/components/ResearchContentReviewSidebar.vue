@@ -38,9 +38,9 @@
     </div>
   </div>
 
-  <div v-if="review.votes.length">
-    <div class="subheading bold py-4">Supporters: {{review.votes.length}}</div>
-    <v-layout row v-for="(vote, i) in review.votes" :key="`curator-${i}`" :class="{ 'pb-1': i == 0, 'py-1': i != 0 }">
+  <div v-if="reviewSupporters.length">
+    <div class="subheading bold py-4">Supporters: {{reviewSupporters.length}}</div>
+    <v-layout row v-for="(vote, i) in reviewSupporters" :key="`curator-${i}`" :class="{ 'pb-1': i == 0, 'py-1': i != 0 }">
       <div>
         <platform-avatar 
           :user="vote.voterProfile"
@@ -103,6 +103,9 @@ export default {
     },
     isGroupMember(){
       return !!this.groupMembers.find(item => item.rgt.owner === this.user.username)
+    },
+    reviewSupporters(){
+      return this.review.votes.reduce((arr, vote) => arr.some(({voter}) => voter === vote.voter) ? arr : [...arr, vote], []);
     }
   },
   

@@ -610,12 +610,12 @@
                       <review-assessment v-model="review.ratings" :researchContentType="review.researchContent.content_type"></review-assessment>
                     </div>
                     <div class="pt-2">
-                      <v-tooltip tag="div" bottom v-if="review.votes.length">
+                      <v-tooltip tag="div" bottom v-if="review.supporters.length">
                         <v-layout slot="activator" row justify-end align-baseline>
-                            <span class="half-bold align-self-center pr-2">{{review.votes.length}}</span>
+                            <span class="half-bold align-self-center pr-2">{{review.supporters.length}}</span>
                             <v-icon>group_add</v-icon>
                         </v-layout>
-                        <div v-if="review.votes.length">{{review.votes.length}} experts supported this review</div>
+                        <div v-if="review.supporters.length">{{review.supporters.length}} experts supported this review</div>
                       </v-tooltip>
                     </div>
                   </v-layout>

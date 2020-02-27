@@ -475,7 +475,8 @@ const actions = {
             .then(([reviewVotes, users]) => {
                 reviews.forEach((review, i) => {
                     review.author = users.find(u => u.account.name == review.author);
-                    review.votes = reviewVotes[i].reduce((arr, vote) => !!arr.find(({voter}) => voter === vote.voter) ? arr : [...arr, vote], []);
+                    review.votes = reviewVotes[i]
+                    review.supporters = reviewVotes[i].reduce((arr, vote) => arr.some(({voter}) => voter === vote.voter) ? arr : [...arr, vote], []);
                 });
                 commit('SET_RESEARCH_REVIEWS_LIST', reviews);
             }, (err) => {console.log(err)})
