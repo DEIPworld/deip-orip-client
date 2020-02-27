@@ -11,9 +11,9 @@
           </template>
         </div>
       </v-layout>
-      <v-layout row wrap>
 
-        <v-flex xs12 sm12 md12 lg12 xl12 class="feed-filter">
+      <v-layout row wrap>
+        <v-flex xs12 sm12 md12 lg12 xl12 class="feed-filter" ref="projectsView">
           <v-expansion-panel expand v-model="filtersTabExpansionModel" class="elevation-0">
             <v-expansion-panel-content class="elevation-0">
               <template slot="actions"><v-icon color="primary">$vuetify.icons.expand</v-icon></template>
@@ -216,6 +216,7 @@
                 :items="researchFeed"
                 :rows-per-page-items="rowsPerPageItems"
                 :pagination.sync="pagination"
+                @update:pagination="onPaginationUpdated"
                 content-tag="v-layout"
                 no-data-text="No Projects found for specified criteria"
                 row
@@ -276,7 +277,7 @@ export default {
         id: t.id,
         label: `TRL ${i + 1}`,
         hint: t.description,
-      }))
+      })),
     }
   },
 
@@ -369,6 +370,11 @@ export default {
     isOrganizationSelected(organization) {
       return this.filter.organizations.some(o => o.id === organization.id);
     },
+
+    onPaginationUpdated(nextState) {
+      this.$refs.projectsView.scrollIntoView();
+    },
+
     isLoggedIn,
   },
 
