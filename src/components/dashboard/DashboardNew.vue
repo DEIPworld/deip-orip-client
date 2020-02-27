@@ -18,7 +18,7 @@
           <v-tabs-items class="tab-content">
             <v-tab-item value="tab-my-projects">
               <v-card color="white" class="full-width elevation-0 pt-4 glass-container">
-                <div class="column-header">
+                <div class="column-header" v-if="myResearches.length">
                   <v-btn
                     :to="{ name: 'CreateResearch' }"
                     color="primary"
@@ -50,7 +50,7 @@
                     ></research-project-tile>
                   </v-flex>
                 </v-layout>
-                <v-layout v-else>
+                <v-layout v-else justify-center mt-4 pt-4>
                   <v-flex shrink>
                     <v-layout row wrap class="display-flex">
                       <v-flex mr-5>
