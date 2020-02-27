@@ -3,7 +3,7 @@
     <template v-for="(item, i) in trl">
       <v-flex :key="`${item.id}${i}`" text-align-center flex-1 trl-step mb-3>
         <v-layout column>
-          <v-flex px-1 trl-step-header lightBlue>
+          <v-flex px-1 trl-step-header :class="{lightGrey:i+1 < 4,lightBlue:i+1 > 3 && i+1 < 7,lightGreen: i+1 > 6}">
             <v-btn
               outline
               large
@@ -43,7 +43,6 @@
       </v-avatar>
       <span class="subheading align-self-center font-weight-medium black--text">TRL</span>
     </v-flex>
-    <v-flex xs12 class="caption font-weight-bold">{{ currentTrlData.description }}</v-flex>
   </v-layout>
   <v-layout row wrap v-else>
     <v-flex mb-2 xs12 display-flex>
@@ -101,12 +100,20 @@ export default {
 .lightBlue {
   background: #ebf5fe;
 }
+.lightGreen {
+  background: #f4faf4;
+}
+.lightGrey {
+  background: #fafafa;
+}
+
 .trl-step {
   position: relative;
   &-header {
     border-top: 1px solid #e0e0e0;
     border-bottom: 1px solid #e0e0e0;
   }
+  &:nth-child(3n + 4),
   &:first-child {
     .trl-step-header {
       border-left: 1px solid #e0e0e0;
@@ -120,9 +127,9 @@ export default {
     width: 50px;
     height: 60px;
     filter: drop-shadow(1px 0 0px #e0e0e0);
-    background: linear-gradient(to left bottom, transparent 50%, #ebf5fe 50%)
+    background: linear-gradient(to left bottom, transparent 50%, #f4faf4 50%)
         top / 100% 50% no-repeat,
-      linear-gradient(to left top, transparent 50%, #ebf5fe 50%) bottom / 100%
+      linear-gradient(to left top, transparent 50%, #f4faf4 50%) bottom / 100%
         50% no-repeat;
   }
 }
