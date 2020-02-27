@@ -17,7 +17,7 @@
 
           <v-tabs-items class="tab-content">
             <v-tab-item value="tab-my-projects">
-              <v-card color="white" class="full-width elevation-0 pt-4 glass-container">
+              <v-card color="white" class="full-width full-height elevation-0 pt-4 glass-container">
                 <div class="column-header" v-if="myResearches.length">
                   <v-btn
                     :to="{ name: 'CreateResearch' }"
@@ -76,7 +76,7 @@
             </v-tab-item>
             <v-tab-item value="tab-following-projects">
               <v-layout row fill-height>
-                <v-card color="white" class="full-width elevation-0 pt-4 glass-container">
+                <v-card color="white" class="full-width full-height elevation-0 pt-4 glass-container">
                   <v-layout row wrap v-if="followingResearches.length">
                     <v-flex
                       xs12
