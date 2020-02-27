@@ -4,7 +4,7 @@
       <global-loader></global-loader>
     </div>
 
-    <v-toolbar :color="themeSettings['top-bar-color']">
+    <v-toolbar :color="themeSettings['top-bar-color']" :class="themeSettings['top-bar-class']">
       <v-toolbar-side-icon class="mx-2 my-0">
         <router-link class="ma-0 pa-0" :to="{ name: 'Default' }">
           <img height="40px" :src="tenant | tenantLogoSrc(80, 80, false)" />
@@ -28,7 +28,7 @@
               <v-gravatar v-if="!user.profile && user.account" :title="user.username" :email="user.username + '@deip.world'" />
             </v-avatar>
           </v-btn>
-          <v-list class="dropdown-list" dark dense>
+          <v-list class="dropdown-list" :dark="themeSettings['dark']" :light="themeSettings['light']" dense>
             <v-list-tile :to="{ name: 'UserDetails', params: { account_name: user.username } }">
               <v-list-tile-title>Profile</v-list-tile-title>
             </v-list-tile>
@@ -47,9 +47,13 @@
       <v-toolbar-items v-else>
         <v-btn :to="{ name: 'ResearchFeed' }" :color="themeSettings['top-bar-link-color']" flat class="ma-0">Explore</v-btn>
         <v-btn :color="themeSettings['top-bar-link-color']" flat :to="{ name: 'SignIn' }">Sign In</v-btn>
-        <!-- <v-btn :color="themeSettings['top-bar-link-color']" flat :to="{ name: 'SignUp' }">Sign Up</v-btn> -->
+        <v-btn :color="themeSettings['top-bar-link-color']" flat :to="{ name: 'SignUp' }">Sign Up</v-btn>
       </v-toolbar-items>
     </v-toolbar>
+    
+    <div v-if="themeSettings['top-bar-divider-color']">
+      <v-divider style="padding: 0.5px 0px 0.5px 0px" :color="themeSettings['top-bar-divider-color']"></v-divider>
+    </div>
   </div>
 </template>
 

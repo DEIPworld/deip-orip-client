@@ -1,5 +1,5 @@
 <template>
-    <div class="pa-5">
+    <v-card class="pa-5 elevation-0">
         <div>
         <!-- ### START User Profile Details Section ### -->
             <div class="user-profile-info-container spinner-container">
@@ -237,7 +237,7 @@
             </div>
         </div>
         <!-- ### END User Profile Education\Employment Section ### -->
-    </div>
+    </v-card>
 </template>
 
 <script>

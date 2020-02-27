@@ -1,5 +1,5 @@
 <template>
-    <div class="py-5">
+    <v-card class="py-5 elevation-0">
         <!-- ### START Research Group Details Section ### -->
         <div class="px-5 research-group-details-container">
             <v-layout row class="display-1 font-weight-medium mt-4">
@@ -187,7 +187,7 @@
             <state-research-list :research-list="researchList"></state-research-list>
         </div>
         <!-- ### END Research Group Research List Section ### -->
-    </div>
+    </v-card>
 </template>
 
 <script>

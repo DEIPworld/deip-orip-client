@@ -31,7 +31,7 @@
 
       <v-flex xs6 class="pr-4 pl-4 mt-5">
 
-        <v-tabs slot="extension" v-model="tab" grow color="#f5f5f5">
+        <v-tabs slot="extension" v-model="tab" grow color="secondary">
           <v-tabs-slider :color="themeSettings['tabs-slider-color']"></v-tabs-slider>
           <v-tab key="awards" :class="themeSettings['tabs-text-class']">
             Awards
