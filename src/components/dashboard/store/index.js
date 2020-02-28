@@ -7,7 +7,7 @@ import tokenSaleService from '@/services/TokenSaleService';
 import * as researchService from '@/services/ResearchService';
 import * as researchGroupService from '@/services/ResearchGroupService';
 import reviewRequestsService from '@/services/http/reviewRequests';
-import { getResearch } from './../../../services/ResearchExtendedService';
+import { getResearch } from '@/services/ResearchExtendedService';
 
 const state = {
 	isLoadingDashboardPage: false,

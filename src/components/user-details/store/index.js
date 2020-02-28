@@ -4,6 +4,7 @@ import Vue from 'vue';
 import usersHttp from './../../../services/http/users';
 import reviewRequestsService from './../../../services/http/reviewRequests';
 import { getEnrichedProfiles } from './../../../utils/user';
+import { getResearch } from '@/services/ResearchExtendedService';
 
 const state = {
   account: undefined,
@@ -13,6 +14,7 @@ const state = {
   expertise: [],
   invites: [],
   reviewRequests: [],
+  researchesRef: [],
 
   isLoadingUserAccount: false,
   isLoadingUserProfile: false,
@@ -20,7 +22,8 @@ const state = {
   isLoadingUserResearch: false,
   isLoadingUserExpertise: false,
   isLoadingUserInvites: false,
-  isClaimExpertiseDialogShown: false
+  isClaimExpertiseDialogShown: false,
+	isLoadingResearchesRefDetails: false
 }
 
 // getters
@@ -28,7 +31,13 @@ const getters = {
   userInfo: (state, getters) => {
     return { account: state.account, profile: state.profile }
   },
-  researchList: state => state.researchList,
+  researchList: state => {
+    return state.researchList.map(research => {
+      let researchRef = state.researchesRef.find(({ researchId }) => researchId === research.id).researchRef
+			let group = state.groups.find(({ id }) => id === research.research_group_id)
+      return {research: {...research, researchRef}, group}
+    })
+  },
   groups: state => state.groups,
   expertise: state => state.expertise,
   invites: state => state.invites,
@@ -76,7 +85,13 @@ const actions = {
         const researchLoad = new Promise((resolve, reject) => {
           dispatch('loadResearchList', { username: username, groupIds: state.groups.map(group => group.id), notify: resolve });
         });
-        return Promise.all([researchLoad]);
+        return Promise.all([researchLoad])
+          .then(() => {
+            const researchesRefLoad = new Promise((resolve, reject) => { 
+              dispatch('loadResearchesRef', {researchesId:state.researchList.map(({id}) => id), notify: resolve});
+            });
+            return Promise.all([researchesRefLoad])
+          })
       });
   },
   
@@ -269,6 +284,19 @@ const actions = {
       })
   },
 
+  loadResearchesRef({ state, dispatch, commit }, { researchesId, notify }) {
+		commit('SET_RESEARCHES_REFS_DETAILS_LOADING_STATE', true);
+    return Promise.all(researchesId.map(id => getResearch(id)))
+      .then(refs => {
+        const researchesRef = refs.map((researchRef, i) => {return {researchId:researchesId[i],researchRef}})
+				commit('SET_RESEARCHES_REFS_DETAILS', researchesRef );
+			}, (err) => {console.log(err)})
+			.finally(() => {
+        commit('SET_RESEARCHES_REFS_DETAILS_LOADING_STATE', false);
+				if (notify) notify();
+			})
+  },
+
   openExpertiseTokensClaimDialog({ commit }) {
     commit('SET_EXPERTISE_TOKENS_CLAIM_DIALOG_VISIBILITY_STATE', true);
   },
@@ -335,7 +363,15 @@ const mutations = {
 
   ['SET_EXPERTISE_TOKENS_CLAIM_DIALOG_VISIBILITY_STATE'](state, value) {
     state.isClaimExpertiseDialogShown = value;
-  }
+  },
+  
+  ['SET_RESEARCHES_REFS_DETAILS'](state, researchesRef) {
+    Vue.set(state, 'researchesRef', researchesRef)
+  },
+
+  ['SET_RESEARCHES_REFS_DETAILS_LOADING_STATE'](state, value) {
+		state.isLoadingResearchesRefDetails = value
+	},
 }
 
 const namespaced = true;

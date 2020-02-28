@@ -35,14 +35,13 @@
 
             <v-tabs-items v-model="tab" style="margin: 0px -2px -3px;">
                 <v-tab-item key="active">
-                    <div style="margin: 0px 2px 3px;">
-                        <v-card class="hidden-last-child">
-                            <div v-for="(item, i) in activeResearchList" :key="`${i}-research`">
-                                <research-list-item :research="item"></research-list-item>
-                                <v-divider></v-divider>
-                            </div>
-                        </v-card>
-                    </div>
+                    <v-card>
+                        <v-layout row wrap style="margin: 0px 2px 3px;">
+                            <v-flex xs12 sm6 xl4 px-2 py-4 my-1 v-for="({research, group }, i) in activeResearchList" :key="`${i}-research`">
+                                <research-project-tile :research="research" :group="group" :members="research.members"></research-project-tile>
+                            </v-flex>
+                        </v-layout>
+                    </v-card>
 
                     <v-card flat v-if="!activeResearchList.length">
                         <v-card-text>There is no active research at the moment</v-card-text>
@@ -50,14 +49,13 @@
                 </v-tab-item>
 
                 <v-tab-item key="finished">
-                    <div style="margin: 0px 2px 3px;">
-                        <v-card class="hidden-last-child">
-                            <template v-for="item in finishedResearchList">
-                                <research-list-item :research="item"></research-list-item>
-                                <v-divider></v-divider>
-                            </template>
-                        </v-card>
-                    </div>
+                    <v-card>
+                        <v-layout row wrap style="margin: 0px 2px 3px;">
+                            <v-flex xs12 sm6 xl4 px-2 py-4 my-1 v-for="({research, group }, i) in finishedResearchList" :key="`${i}-finished-research`">
+                                <research-project-tile :research="research" :group="group" :members="research.members"></research-project-tile>
+                            </v-flex>
+                        </v-layout>
+                    </v-card>
 
                     <v-card flat v-if="!finishedResearchList.length">
                         <v-card-text>Finished research list is empty at the moment</v-card-text>
@@ -88,10 +86,10 @@
                 themeSettings: 'layout/themeSettings'
             }),
             finishedResearchList() {
-                return this.researchList.filter(research => research.is_finished);
+                return this.researchList.filter(({research}) => research.is_finished);
             },
             activeResearchList() {
-                return this.researchList.filter(research => !research.is_finished);
+                return this.researchList.filter(({research}) => !research.is_finished);
             },
         },
         created() {
