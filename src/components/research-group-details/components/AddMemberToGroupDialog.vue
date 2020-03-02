@@ -19,6 +19,7 @@
                 :user="data.item"
                 :size="30"
                 noFollow
+                noFollowName
                 link-to-profile-class="pl-2"
               ></platform-avatar>
             </div>
@@ -30,6 +31,7 @@
                 :user="data.item"
                 :size="30"
                 noFollow
+                noFollowName
                 link-to-profile-class="pl-2"
               ></platform-avatar>
             </div>

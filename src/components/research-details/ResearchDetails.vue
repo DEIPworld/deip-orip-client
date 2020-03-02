@@ -551,9 +551,11 @@
               <v-layout>
                 <v-flex lg4 class="right-bordered">
                   <v-layout column fill-height justify-space-between>
-                    <v-layout row>
+                    <v-layout row wrap>
+                      <v-flex shrink>
                       <platform-avatar :user="review.author" :size="80"></platform-avatar>
-                      <div class="px-4">
+                      </v-flex>
+                      <v-flex class="px-4" xs12 md8 xl9>
                         <router-link class="a" :to="{ name: 'UserDetails', params: { account_name: review.author.account.name }}">
                           {{ review.author | fullname }}
                         </router-link>
@@ -563,7 +565,7 @@
                             v-if="doesUserHaveLocation(review.author.profile)"
                           >, {{review.author | userLocation}}</span>
                         </div>
-                      </div>
+                      </v-flex>
                     </v-layout>
                     <v-btn small @click="goToReviewPage(review)" outline>See review</v-btn>
                   </v-layout>
