@@ -3,7 +3,11 @@
     <template v-for="(item, i) in trl">
       <v-flex :key="`${item.id}${i}`" text-align-center flex-1 trl-step mb-3>
         <v-layout column>
-          <v-flex px-1 trl-step-header :class="{lightGrey:i+1 < 4,lightBlue:i+1 > 3 && i+1 < 7,lightGreen: i+1 > 6}">
+          <v-flex
+            px-1
+            trl-step-header
+            :class="{lightGrey:i+1 < 4,lightBlue:i+1 > 3 && i+1 < 7,lightGreen: i+1 > 6}"
+          >
             <v-btn
               outline
               large
@@ -38,10 +42,17 @@
   </v-layout>
   <v-layout row wrap v-else-if="isChip && isReadOnly">
     <v-flex mb-2 xs12 display-flex>
-      <v-avatar size="30px" color="align-self-center ">
-        <v-icon color="#0386b0">mdi-numeric-{{ currentTrlData.step }}-circle</v-icon>
-      </v-avatar>
-      <span class="subheading align-self-center font-weight-medium black--text">TRL</span>
+      <v-tooltip bottom>
+        <template v-slot:activator="{ on }">
+          <div class="display-flex" v-on="on">
+            <v-avatar size="30px" color="align-self-center ">
+              <v-icon color="#0386b0">mdi-numeric-{{ currentTrlData.step }}-circle</v-icon>
+            </v-avatar>
+            <span class="subheading align-self-center font-weight-medium black--text">TRL</span>
+          </div>
+        </template>
+        <span>{{ currentTrlData.description }}</span>
+      </v-tooltip>
     </v-flex>
   </v-layout>
   <v-layout row wrap v-else>
