@@ -4,6 +4,7 @@ import Vue from 'vue';
 import * as proposalService from "./../../../services/ProposalService"; 
 import joinRequestsService from './../../../services/http/joinRequests'
 import { getEnrichedProfiles } from './../../../utils/user'
+import { getResearch } from '@/services/ResearchExtendedService';
 import { constants } from 'os';
 
 const state = {
@@ -14,6 +15,7 @@ const state = {
     members: [],
     joinRequests: [],
     invites: [],
+    researchesRef: [],
 
     options: {
         isAddMemberDialogOpen: false,
@@ -31,7 +33,9 @@ const state = {
     isLoadingResearchGroupMembers: undefined,
     isLoadingResearchGroupResearchList: undefined,
     isLoadingResearchGroupProposals: undefined,
-    isLoadingResearchGroupJoinRequests: undefined
+    isLoadingResearchGroupJoinRequests: undefined,
+	isLoadingResearchesRefDetails: undefined
+
 }
 
 
@@ -43,7 +47,12 @@ const getters = {
     members: state => state.members,
     invites: state => state.invites,
     proposalListFilter: state => state.proposalListFilter,
-    researchList: state => state.researchList,
+    researchList: state => {
+      return state.researchList.map(research => {
+        let researchRef = state.researchesRef.find(({ researchId }) => researchId === research.id).researchRef
+        return {...research, researchRef}
+      })
+    },
     options: state => state.options,
     joinRequests: state => state.joinRequests,
     pendingJoinRequests: state => state.joinRequests.filter(r => r.status == 'pending'),
@@ -88,7 +97,13 @@ const actions = {
                 membersLoad, 
                 joinRequestsLoad,
                 groupInvitesPromise
-            ]);
+            ])
+              .then(() => {
+                const researchesRefLoad = new Promise((resolve, reject) => { 
+                  dispatch('loadResearchesRef', {researchesId:state.researchList.map(({id}) => id), notify: resolve});
+                });
+                return Promise.all([researchesRefLoad])
+              })
         })
         .finally(() => {
             commit('SET_GROUP_DETAILS_LOADING_STATE', false);
@@ -232,7 +247,20 @@ const actions = {
                 commit('SET_GROUP_JOIN_REQUESTS_LOADING_STATE', false);
                 if (notify) notify()
             })
-    }
+    },
+
+    loadResearchesRef({ state, dispatch, commit }, { researchesId, notify }) {
+      commit('SET_RESEARCHES_REFS_DETAILS_LOADING_STATE', true);
+      return Promise.all(researchesId.map(id => getResearch(id)))
+        .then(refs => {
+            const researchesRef = refs.map((researchRef, i) => {return {researchId:researchesId[i],researchRef}})
+            commit('SET_RESEARCHES_REFS_DETAILS', researchesRef );
+        }, (err) => {console.log(err)})
+        .finally(() => {
+          commit('SET_RESEARCHES_REFS_DETAILS_LOADING_STATE', false);
+          if (notify) notify();
+        })
+      },
 }
 
 // mutations
@@ -299,7 +327,15 @@ const mutations = {
 
     ['SET_GROUP_JOIN_REQUESTS_LOADING_STATE'](state, value) {
         state.isLoadingResearchGroupJoinRequests = value;
-    }  
+    },
+
+    ['SET_RESEARCHES_REFS_DETAILS'](state, researchesRef) {
+      Vue.set(state, 'researchesRef', researchesRef)
+    },
+  
+    ['SET_RESEARCHES_REFS_DETAILS_LOADING_STATE'](state, value) {
+      state.isLoadingResearchesRefDetails = value
+    },
 }
 
 const namespaced = true;

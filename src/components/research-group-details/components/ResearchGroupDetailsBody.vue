@@ -184,7 +184,7 @@
 
         <!-- ### START Research Group Research List Section ### -->
         <div class="px-5 py-4">
-            <state-research-list :research-list="researchList"></state-research-list>
+            <state-research-list :research-list="researchWithGroupInfoList"></state-research-list>
         </div>
         <!-- ### END Research Group Research List Section ### -->
     </v-card>
@@ -234,6 +234,9 @@
             },
             isGroupMembersActionsColumnAvailable() {
               return !this.isPersonalGroup && this.isResearchGroupMember && (this.group.is_dao || (!this.group.is_dao && this.user.username == this.group.creator));
+            },
+            researchWithGroupInfoList(){
+                return this.researchList.map(research => {return {research, group: this.group}})
             }
         }, 
 
