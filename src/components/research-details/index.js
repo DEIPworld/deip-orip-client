@@ -3,7 +3,15 @@ import Vue from 'vue'
 import ResearchTimeline from './components/ResearchTimeline'
 import UploadResearchContentFileDialog from './components/UploadResearchContentFileDialog';
 import ResearchReviewItem from './components/ResearchReviewItem'
+import ResearchDetailsMaterials from './components/ResearchDetailsMaterials'
+import ResearchDetailsMaterialsItem from './components/ResearchDetailsMaterialsItem'
+import ResearchDetailsDraftList from './components/ResearchDetailsDraftList'
+import ResearchDetailsDraftListItem from './components/ResearchDetailsDraftListItem'
 
 
 Vue.component('upload-research-content-file-dialog', UploadResearchContentFileDialog);
 Vue.component('research-review-item', ResearchReviewItem);
+Vue.component('research-details-materials', ResearchDetailsMaterials);
+Vue.component('research-details-materials-item', ResearchDetailsMaterialsItem);
+Vue.component('research-details-draft-list', ResearchDetailsDraftList);
+Vue.component('research-details-draft-list-item', ResearchDetailsDraftListItem);
