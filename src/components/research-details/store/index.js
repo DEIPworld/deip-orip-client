@@ -566,6 +566,8 @@ const actions = {
 
                 if (tokenSale) {
                     return dispatch('loadTokenSaleContributors');
+                } else {
+                    commit('SET_RESEARCH_TOKEN_SALE_CONTRIBUTIONS_LIST', [])
                 }
             }, (err) => {console.log(err)})
         .finally(() => {
