@@ -306,136 +306,11 @@
           </v-layout>
           
           <v-layout column class="my-4" v-if="contentList.length">
-            <div>
-              <v-expansion-panel class="elevation-0">
-                <v-expansion-panel-content v-for="content of contentList" :key="content.id">
-                  <template slot="header">
-                    <v-layout align-center v-on:click.stop>
-                      <v-flex lg2 class="text-capitalize bold">{{getResearchContentType(content.content_type).text}}</v-flex>
-                      <v-flex lg8 class="bold">
-                        <router-link
-                          class="a"
-                          :to="{
-                            name: 'ResearchContentDetails',
-                            params: {
-                              research_group_permlink: encodeURIComponent(research.group_permlink),
-                              research_permlink: encodeURIComponent(research.permlink),
-                              content_permlink: encodeURIComponent(content.permlink)
-                            }
-                          }"
-                        >{{content.title}}</router-link>
-                      </v-flex>
-                      <v-flex lg1 text-lg-center class="text-xs-center">
-                        <v-tooltip top>
-                          <template slot="activator">
-                            <router-link class="a" style="text-decoration: none;"
-                              :to="{
-                                name: 'ResearchContentReferences',
-                                params: {
-                                  research_group_permlink: encodeURIComponent(research.group_permlink),
-                                  research_permlink: encodeURIComponent(research.permlink),
-                                  content_permlink: encodeURIComponent(content.permlink)
-                                }
-                              }">
-                              <v-icon small>device_hub</v-icon>
-                            </router-link>
-                          </template>
-                          <span>Browse references</span>
-                        </v-tooltip>
-                      </v-flex>
-                      <v-flex lg1 text-lg-center v-show="doesContentHaveReviews(content)">
-                        <v-icon size="14px">chat_bubble</v-icon>
-                        <span
-                          v-show="doesContentHavePositiveReviews(content)"
-                          class="green--text medium"
-                        >{{countContentReviews(content, true)}}</span>
-                        <span
-                          v-show="doesContentHavePositiveReviews(content) && doesContentHaveNegativeReviews(content)"
-                        >/</span>
-                        <span
-                          v-show="doesContentHaveNegativeReviews(content)"
-                          class="red--text medium"
-                        >{{countContentReviews(content, false)}}</span>
-                      </v-flex>
-                    </v-layout>
-                  </template>
-                  <div class="ml-4 py-2">
-                    <div class="grey--text">{{createContentAuthorsString(content.authors)}}</div>
-                    <div>
-                      <span
-                        v-for="eci of getContentEciList(content)"
-                        :key="eci.disciplineName"
-                        class="grey--text"
-                      >
-                        <span class="mr-1">{{eci.disciplineName}}</span>
-                        <span class="mr-4 bold">{{eci.value}}</span>
-                      </span>
-                    </div>
-                    <div class="mt-2">
-                      <v-icon size="18px">event</v-icon>
-                      <span>{{content.created_at | dateFormat('D MMM YYYY', true)}}</span>
-                    </div>
-                  </div>
-                </v-expansion-panel-content>
-              </v-expansion-panel>
-            </div>
+            <research-details-materials />
           </v-layout>
 
           <v-layout column class="my-4" v-if="isResearchGroupMember && !research.is_finished">
-            <div>
-              <v-expansion-panel class="elevation-0">
-                <v-expansion-panel-content
-                  v-for="(draft, index) of contentRefsList.filter(d => !isDraftApproved(d))"
-                  :key="draft._id">
-                  <template slot="header">
-                    <v-layout align-center v-on:click.stop>
-                      <v-flex lg2 class="text-capitalize bold">Draft {{index + 1}}</v-flex>
-                      <v-flex lg10>
-                        <span class="bold">
-                          <a @click="openDarDraft(draft)" class="a">{{draft.title || draft._id}}</a>
-                        </span>
-                        <span v-if="isDraftProposed(draft)" class="ml-2 orange--text">(proposed)</span>
-                      </v-flex>
-                    </v-layout>
-                  </template>
-                  <v-card class="elevation-0">
-                    <v-card-text class="pl-4 pa-0">
-                      <v-layout align-baseline justify-space-between>
-                        <div>
-                          <span>
-                            <v-icon size="18px">date_range</v-icon>
-                            <span>{{draft.updated_at | dateFormat('D MMM YYYY HH:mm', true)}}</span>
-                          </span>
-                          <span class="ml-2">
-                            <v-icon size="18px">note_add</v-icon>
-                            <span>{{draft.type}}</span>
-                          </span>
-                        </div>
-                        <div>
-                          <v-btn
-                            v-if="isDraftInProgress(draft)"
-                            @click="deleteDraft(draft)"
-                            :loading="isDeletingDraft"
-                            :disabled="isDeletingDraft"
-                            outline
-                            small
-                            depressed
-                            color="red lighten-1"
-                          >Delete</v-btn>
-                          <v-btn
-                            @click="openDarDraft(draft)"
-                            outline
-                            small
-                            depressed
-                            color="primary lighten-1"
-                          >View</v-btn>
-                        </div>
-                      </v-layout>
-                    </v-card-text>
-                  </v-card>
-                </v-expansion-panel-content>
-              </v-expansion-panel>
-            </div>
+              <research-details-draft-list />
 
             <v-layout column class="mt-4">
               <div><upload-research-content-file-dialog @onFinish="newContentUploaded" /></div>
@@ -845,7 +720,6 @@ import bookmarksService from "@/services/http/bookmarks";
 import contentHttpService from "@/services/http/content";
 import joinRequestsService from "@/services/http/joinRequests";
 import reviewRequestsService from "@/services/http/reviewRequests";
-import { getResearchContentType } from "@/services/ResearchService";
 import { getResearch, updateResearch } from "@/services/ResearchExtendedService";
 
 import moment from "moment";
@@ -875,7 +749,6 @@ export default {
       areTokensBuying: false,
       isResearchTokenization: false,
 
-      isDeletingDraft: false,
       isCreatingDraft: false,
 
       bookmarkId: null,
@@ -917,7 +790,6 @@ export default {
   computed: {
     ...mapGetters({
       contentList: "rd/contentList",
-      contentRefsList: "rd/contentRefsList",
       contributionsList: "rd/contributionsList",
       group: "rd/group",
       disciplinesList: "rd/disciplinesList",
@@ -1362,22 +1234,6 @@ export default {
           });
         });
     },
-    countContentReviews(content, isPositive) {
-      return content.reviews.reduce(
-        (acc, review) =>
-          (review.is_positive && isPositive) ||
-          (!review.is_positive && !isPositive)
-            ? acc + 1
-            : acc,
-        0
-      );
-    },
-    createContentAuthorsString(authors) {
-      return this.researchGroupMembersList
-        .filter(m => authors.some(a => a === m.account.name))
-        .map(m => this.$options.filters.fullname(m))
-        .join("  ·  ");
-    },
     createDarDraft() {
       this.isCreatingDraft = true;
       contentHttpService
@@ -1396,28 +1252,6 @@ export default {
         .finally(() => {
           this.isCreatingDraft = false;
         });
-    },
-    deleteDraft(draft) {
-      this.isDeletingDraft = true;
-      contentHttpService
-        .deleteContentDraft(draft._id)
-        .then(() => {
-          this.$store.dispatch("rd/loadResearchContentRefs", {
-            researchId: draft.researchId
-          });
-        })
-        .finally(() => {
-          this.isDeletingDraft = false;
-        });
-    },
-    doesContentHaveReviews(content) {
-      return content.reviews.length;
-    },
-    doesContentHavePositiveReviews(content) {
-      return content.reviews.some(r => r.is_positive);
-    },
-    doesContentHaveNegativeReviews(content) {
-      return content.reviews.some(r => !r.is_positive);
     },
     extractReviewPreview(review) {
       const temp = document.createElement("span");
@@ -1441,29 +1275,6 @@ export default {
       function isParagraph(el) {
         return el.nodeName === "P";
       }
-    },
-    getContentEciList(content) {
-      return this.disciplinesList.map(discipline => {
-        const eciObj = content.eci_per_discipline.find(
-          item => item[0] === discipline.id
-        );
-
-        return {
-          disciplineName: discipline.name,
-          value: eciObj ? eciObj[1] : 0
-        };
-      });
-    },
-    isDraftApproved(draft) {
-      return this.contentList.some(
-        c => c.content === `${draft.type}:${draft.hash}`
-      );
-    },
-    isDraftInProgress(draft) {
-      return draft.status === "in-progress";
-    },
-    isDraftProposed(draft) {
-      return draft.status === "proposed";
     },
     onJoinResearchGroupClick() {
       this.isJoinGroupDialogOpen = true;
@@ -1544,24 +1355,6 @@ export default {
         .finally(() => {
           this.isResearchTokenization = false;
         });
-    },
-    openDarDraft(draft) {
-      if (draft.type === "dar" && draft.status === "in-progress") {
-        // we have to do it this way as Texture InMemory buffer is getting flushed after the first saving
-        // and doesn't persist new changes for several instances during the current session
-        window.location.replace(
-          `${window.location.href}/!draft?ref=${draft._id}`
-        );
-        location.reload();
-      } else {
-        const params = {
-          group_permlink: this.$route.params.research_group_permlink,
-          research_permlink: this.$route.params.research_permlink,
-          content_permlink: `!draft`
-        };
-        const query = { ref: draft._id };
-        this.$router.push({ name: "ResearchContentDetails", params, query });
-      }
     },
     sendJoinGroupRequest() {
       this.isSendingJoinGroupRequest = true;
@@ -1680,8 +1473,6 @@ export default {
     getResearchEciPercentile(eci) {
       return 10;
     },
-
-    getResearchContentType
   },
 
   created() {
