@@ -18,7 +18,7 @@
 
       <v-flex xs9>
         <v-divider></v-divider>
-        <v-card class="c-pl-5 c-pr-5 c-pb-10">
+        <v-card class="pa-4 full-height">
           <v-layout row wrap>
             <v-flex xs12>
               <div class="display-1 c-pb-10 c-pt-10">{{program.funding_opportunity_title}} ({{program.funding_opportunity_number}})</div>
@@ -32,7 +32,7 @@
                   label="Must be equal to standard"
                 ></v-switch>
               </div>
-              <div v-for="(funding, fundingIdx) in fundings">
+              <div v-for="(funding, fundingIdx) in fundings" :key="`${fundingIdx}-funding`">
                 <div v-if="fundingIdx != 0" class="row">
                   <span class="col-2"> 
                       <v-btn v-if="fundingIdx != 0" @click="removeReceiver(fundingIdx)" class="ma-0" block outline color="primary">
@@ -167,7 +167,7 @@
                       <div class="subheading bold">Milestones</div>
                     </span>
                   </div>
-                  <div v-for="(milestone, milestoneIdx) in funding.milestones">
+                  <div v-for="(milestone, milestoneIdx) in funding.milestones" :key="`${milestoneIdx}-milestone`">
                     <div>
                       <div class="row">
                         <span class="col-5">
@@ -244,9 +244,9 @@
 
       <v-flex xs3>
         <v-divider></v-divider>
-        <v-layout row wrap>
+        <v-layout row wrap class="full-height">
           <v-flex xs12>
-            <v-card style="height: 400%">
+            <v-card class="full-height">
 
               <div class="c-pt-5 c-pb-5 text-align-center">
                 <v-avatar size="120px">
@@ -257,7 +257,7 @@
 
               <div class="c-pt-5 c-pl-5 c-pb-5">
                 <div class="sm-title c-pb-2 bold">Program Officers</div>
-                <div v-for="officer in program.officers">
+                <div v-for="(officer, i) in program.officers" :key="`${i}-funding-officer`">
                   <div class="row-nowrap text-align-center c-pt-2">
                     <v-avatar size="40px">
                         <img v-if="officer.profile" v-bind:src="officer.profile.avatar | avatarSrc(30, 30, false)" />
@@ -300,7 +300,7 @@
             return {
               fundings: [],
               isSaving: false,
-              standard: '[{"researcher":"mit-pi-bob","research_id":2,"research_expenses":[[1,1000000],[2,0],[3,0]],"organisation_id":3,"university_overhead":1000,"milestones":[{"description":"milestone1","deadline":"2019-06-29T21:00:00","amount":10000}]},{"researcher":"mit-sa-john","research_id":9,"research_expenses":[[1,50000],[2,0],[3,0]],"organisation_id":3,"university_overhead":1000,"milestones":[{"description":"milestone1","deadline":"2019-06-29T21:00:00","amount":10000}]}]',
+              standard: `[{"researcher":"mit-pi-bob","research_id":2,"research_expenses":[[1,1000000],[2,0],[3,0]],"organisation_id":3,"university_overhead":1000,"milestones":[{"description":"milestone1","deadline":"2020-03-30T21:00:00","amount":10000}]},{"researcher":"mit-sa-john","research_id":9,"research_expenses":[[1,50000],[2,0],[3,0]],"organisation_id":3,"university_overhead":1000,"milestones":[{"description":"milestone1","deadline":"2020-03-30T21:00:00","amount":10000}]}]`,
               mustBeEqualToStandard: true
             }
         },

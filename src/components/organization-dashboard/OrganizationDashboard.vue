@@ -1,5 +1,5 @@
 <template>
-  <v-container fluid class="ma-0 pa-0 pb-5">
+  <v-container fluid class="ma-0 pa-0">
     <v-layout row wrap>
     
       <v-flex xs12 class="pa-4">

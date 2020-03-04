@@ -128,9 +128,9 @@
 
       <v-flex xs3>
         <v-divider></v-divider>
-        <v-layout row wrap>
+        <v-layout row wrap class="full-height">
           <v-flex xs12>
-            <v-card style="height: 400%">
+            <v-card style="height: 100%">
 
               <div class="c-pt-5 c-pb-5 text-align-center">
                 <v-avatar size="120px">
@@ -141,7 +141,7 @@
 
               <div class="c-pt-5 c-pl-5 c-pb-5">
                 <div class="sm-title c-pb-2 bold">Program Officers</div>
-                <div v-for="officer in program.officers">
+                <div v-for="(officer, i) in program.officers" :key="`${i}-pm`">
                   <div class="row-nowrap text-align-center c-pt-2">
                     <v-avatar size="40px">
                         <img v-if="officer.profile" v-bind:src="officer.profile.avatar | avatarSrc(30, 30, false)" />

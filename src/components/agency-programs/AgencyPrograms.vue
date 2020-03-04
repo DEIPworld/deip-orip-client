@@ -36,9 +36,9 @@
 
       <v-flex xs3>
         <v-divider></v-divider>
-        <v-card>
-          <div class="subheading c-pl-6 c-pb-5 c-pt-5 bold">Research Areas</div>
-          <v-expansion-panel :value="selectedAreas">
+        <v-card style="height: 100%">
+          <div class="subheading pa-4 bold">Research Areas</div>
+          <v-expansion-panel :value="selectedAreas" class="elevation-0">
             <v-expansion-panel-content v-for="(area,i) in agencyProfile.researchAreas" :key="i">
               <div slot="header"><b>{{area.title}}</b></div>
               <v-card>
@@ -46,6 +46,7 @@
                   <div class="sub-area-list-item"
                       :class="isSelectedSubArea(subArea) ? 'active' : ''"
                       v-for="(subArea, i) in area.subAreas" 
+                      :key="`${i}-sub-area`"
                       @click="selectArea(area, subArea)">
                     <div class="sub-area-list-item-content">{{subArea.title}}</div>
                   </div>  
@@ -239,6 +240,11 @@
   .sub-area-list-item.active {
     background: #f1f8fe;
   }
+
+  .sub-area-list-item:last-child {
+    border-bottom: 1px solid #e0e0e0;
+  } 
+
 
   .sub-area-list-item-content {
     padding-left: 20%;
