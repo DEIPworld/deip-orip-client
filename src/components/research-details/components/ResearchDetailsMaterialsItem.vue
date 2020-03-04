@@ -8,6 +8,7 @@
         >{{getResearchContentType(content.content_type).text}}</v-flex>
         <v-flex lg8 class="bold">
           <router-link
+            v-if="isDetailsAvailable"
             class="a"
             :to="{
               name: 'ResearchContentDetails',
@@ -18,8 +19,9 @@
               }
             }"
           >{{content.title}}</router-link>
+          <span class="grey--text" v-else>{{content.title}}</span>
         </v-flex>
-        <v-flex lg1 text-lg-center class="text-xs-center">
+        <v-flex v-if="isDetailsAvailable" lg1 text-lg-center class="text-xs-center">
           <v-tooltip top>
             <template slot="activator">
               <router-link
@@ -84,7 +86,8 @@ export default {
   name: "ResearchDetailsMaterialsItem",
 
   props: {
-    content: { type: Object, required: true }
+    content: { type: Object, required: true },
+    isDetailsAvailable: {type: Boolean, required:false, default: false}
   },
   data() {
     return {};

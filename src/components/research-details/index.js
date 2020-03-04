@@ -7,6 +7,10 @@ import ResearchDetailsMaterials from './components/ResearchDetailsMaterials'
 import ResearchDetailsMaterialsItem from './components/ResearchDetailsMaterialsItem'
 import ResearchDetailsDraftList from './components/ResearchDetailsDraftList'
 import ResearchDetailsDraftListItem from './components/ResearchDetailsDraftListItem'
+import ResearchDetailsBody from './components/ResearchDetailsBody'
+import ResearchDetailsSidebar from './components/ResearchDetailsSidebar'
+import ResearchDetailsHeader from './components/ResearchDetailsHeader'
+
 
 
 Vue.component('upload-research-content-file-dialog', UploadResearchContentFileDialog);
@@ -15,3 +19,6 @@ Vue.component('research-details-materials', ResearchDetailsMaterials);
 Vue.component('research-details-materials-item', ResearchDetailsMaterialsItem);
 Vue.component('research-details-draft-list', ResearchDetailsDraftList);
 Vue.component('research-details-draft-list-item', ResearchDetailsDraftListItem);
+Vue.component('research-details-body', ResearchDetailsBody);
+Vue.component('research-details-sidebar', ResearchDetailsSidebar);
+Vue.component('research-details-header', ResearchDetailsHeader);
