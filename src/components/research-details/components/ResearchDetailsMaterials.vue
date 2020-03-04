@@ -5,6 +5,7 @@
         v-for="content of contentList"
         :key="content.id"
         :content="content"
+        :isDetailsAvailable="isDetailsAvailable"
       />
     </v-expansion-panel>
   </div>
@@ -15,6 +16,10 @@ import { mapGetters } from "vuex";
 
 export default {
   name: "ResearchDetailsMaterials",
+
+  props:{
+    isDetailsAvailable: {type: Boolean, required: false, default: false}
+  },
 
   data() {
     return {};

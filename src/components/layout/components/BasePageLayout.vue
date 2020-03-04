@@ -1,6 +1,9 @@
 <template>
   <v-container fluid fill-height pa-0 ma-0>
     <v-layout row wrap>
+      <v-flex v-if="hasHeaderBlock" :class="headerClass">
+        <slot name="header"></slot>
+      </v-flex>
       <v-flex v-if="hasLeftSidebar" :class="leftSidebarClass">
         <slot name="left-sidebar"></slot>
       </v-flex>
@@ -20,6 +23,7 @@ export default {
   props: {
     leftSidebarClass: { type: String, required: false, default: "xl3 lg3 md3 sm12 xs12" },
     rightSidebarClass: { type: String, required: false, default: "xl3 lg3 md3 sm12 xs12" },
+    headerClass: { type: String, required: false, default: "xs12" },
     contentClass: { type: String, required: false, default: undefined }
   },
   computed: {
@@ -37,6 +41,9 @@ export default {
     },
     hasRightSidebar() {
       return this.$slots['right-sidebar'] !== undefined;
+    },
+    hasHeaderBlock() {
+      return this.$slots['header'] !== undefined;
     }
   }
 };

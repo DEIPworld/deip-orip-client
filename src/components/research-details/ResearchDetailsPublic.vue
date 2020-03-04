@@ -57,49 +57,7 @@
           </v-layout>
 
           <v-layout column class="my-4" v-if="contentList.length">
-            <div>
-              <v-expansion-panel class="elevation-0">
-                <v-expansion-panel-content v-for="content of contentList" :key="content.id">
-                  <template slot="header">
-                    <v-layout align-center v-on:click.stop>
-                      <v-flex lg2 class="text-capitalize bold">{{getResearchContentType(content.content_type).text}}</v-flex>
-                      <v-flex lg8 class="bold grey--text">{{content.title}}</v-flex>
-                      <v-flex lg1 text-lg-center v-show="doesContentHaveReviews(content)">
-                        <v-icon size="14px">chat_bubble</v-icon>
-                        <span
-                          v-show="doesContentHavePositiveReviews(content)"
-                          class="green--text medium"
-                        >{{countContentReviews(content, true)}}</span>
-                        <span
-                          v-show="doesContentHavePositiveReviews(content) && doesContentHaveNegativeReviews(content)"
-                        >/</span>
-                        <span
-                          v-show="doesContentHaveNegativeReviews(content)"
-                          class="red--text medium"
-                        >{{countContentReviews(content, false)}}</span>
-                      </v-flex>
-                    </v-layout>
-                  </template>
-                  <div class="ml-4 py-2">
-                    <div class="grey--text">{{createContentAuthorsString(content.authors)}}</div>
-                    <div>
-                      <span
-                        v-for="eci of getContentEciList(content)"
-                        :key="eci.disciplineName"
-                        class="grey--text"
-                      >
-                        <span class="mr-1">{{eci.disciplineName}}</span>
-                        <span class="mr-4 bold">{{eci.value}}</span>
-                      </span>
-                    </div>
-                    <div class="mt-2">
-                      <v-icon size="18px">event</v-icon>
-                      <span>{{content.created_at | dateFormat('D MMM YYYY', true)}}</span>
-                    </div>
-                  </div>
-                </v-expansion-panel-content>
-              </v-expansion-panel>
-            </div>
+            <research-details-materials :isDetailsAvailable="false"/>
           </v-layout>
         </v-flex>
 
