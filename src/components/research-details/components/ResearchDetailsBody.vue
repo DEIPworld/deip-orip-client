@@ -44,14 +44,16 @@
               <v-layout class="pt-3">
                 <v-flex xs12 lg3 class="bold">Tokens On sale:</v-flex>
                 <v-flex
-                  xs12 lg9
+                  xs12
+                  lg9
                   class="pl-2"
                 >{{tokenSale.balance_tokens}} ({{convertToPercent(tokenSale.balance_tokens)}}%)</v-flex>
               </v-layout>
               <v-layout class="pt-3">
                 <v-flex xs12 lg3 class="bold">Remaining Tokens:</v-flex>
                 <v-flex
-                  xs12 lg9
+                  xs12
+                  lg9
                   class="pl-2"
                 >{{research.owned_tokens}} ({{convertToPercent(research.owned_tokens)}}%)</v-flex>
               </v-layout>
@@ -158,48 +160,10 @@
 
       <v-layout v-if="investors.length || isActiveTokenSale" class="my-5">
         <v-flex xs12 lg7>
-          <v-layout column>
-            <v-layout row class="pb-4">
-              <v-flex grow>
-                <v-layout>
-                  <div class="pr-3">
-                    <v-icon large color="grey lighten-2">mdi-account-box</v-icon>
-                  </div>
-                  <div class="rd-block-header align-self-center">Investors: {{investors.length}}</div>
-                </v-layout>
-              </v-flex>
-              <v-flex shrink></v-flex>
-            </v-layout>
-
-            <div>
-              <v-layout justify-start class="mt-2">
-                <div class="rd-investment-info">
-                  <span class="rd-investment-info__value">${{investmentsAmount}}</span>
-                  <br />
-                  <span class="rd-investment-info__value-text">Total investments</span>
-                </div>
-                <div class="rd-investment-info">
-                  <span class="rd-investment-info__value">${{averageInvestmentAmount}}</span>
-                  <br />
-                  <span class="rd-investment-info__value-text">Average investment</span>
-                </div>
-                <div class="rd-investment-info" v-if="!isResearchGroupMember">
-                  <span class="rd-investment-info__value">${{userInvestment}}</span>
-                  <br />
-                  <span class="rd-investment-info__value-text">Your investment</span>
-                </div>
-              </v-layout>
-              <v-layout justify-start class="mt-2">
-                <platform-avatar
-                  :size="40"
-                  v-for="(investor, i) in investors"
-                  :key="'investor-' + i"
-                  :user="investor"
-                  class="mr-1"
-                ></platform-avatar>
-              </v-layout>
-            </div>
-          </v-layout>
+          <research-details-investors
+            :investors="investors"
+            :isResearchGroupMember="isResearchGroupMember"
+          ></research-details-investors>
         </v-flex>
       </v-layout>
 
@@ -226,7 +190,7 @@
       </v-layout>
 
       <v-layout column class="my-4" v-if="contentList.length">
-        <research-details-materials :isDetailsAvailable="true"/>
+        <research-details-materials :isDetailsAvailable="true" />
       </v-layout>
 
       <v-layout column class="my-4" v-if="isResearchGroupMember && !research.is_finished">
@@ -470,11 +434,6 @@ export default {
       });
       return timeline;
     },
-    averageInvestmentAmount() {
-      return this.round2DigitsAfterComma(
-        this.investmentsAmount / (this.investors.length || 1)
-      );
-    },
     hasActiveTokenSale() {
       return this.tokenSale && this.tokenSale.status == 1;
     },
@@ -642,12 +601,6 @@ export default {
       };
     },
 
-    investmentsAmount() {
-      return this.tokenSalesList
-        .filter(e => [1, 2].includes(e.status))
-        .map(e => this.fromAssetsToFloat(e.total_amount))
-        .reduce((acc, curr) => (acc += curr), 0);
-    },
     investors() {
       const investorsSet = {};
 
@@ -729,19 +682,6 @@ export default {
 
     researchPresentationSrc() {
       return this.$options.filters.researchVideoSrc(this.research.abstract);
-    },
-
-    userInvestment() {
-      const legitTokenSalesIds = this.tokenSalesList
-        .filter(e => [1, 2].includes(e.status))
-        .map(e => e.id);
-      let amount = 0;
-      this.userContributionsList.forEach(c => {
-        if (legitTokenSalesIds.includes(c.tokenSaleId)) {
-          amount += this.fromAssetsToFloat(c.amount);
-        }
-      });
-      return amount;
     }
   },
 
