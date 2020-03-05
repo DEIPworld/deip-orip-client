@@ -11,11 +11,11 @@
           outline
           color="grey"
           :to="{
-                        name: 'ResearchGroupSettings',
-                        params: {
-                            research_group_permlink: encodeURIComponent(group.permlink)
-                        }
-                    }"
+            name: 'ResearchGroupSettings',
+            params: {
+              research_group_permlink: encodeURIComponent(group.permlink)
+            }
+          }"
         >Edit group
         </v-btn>
       </v-layout>
@@ -216,10 +216,15 @@
         proposalsSectionTransitionTrigger: false,
         usersToInvite: [],
 
-        dropoutMemberMeta: { isShown: false, item: null, index: null, isConfirming: false },
+        dropoutMemberMeta: {
+          isShown: false,
+          item: null,
+          index: null,
+          isConfirming: false
+        },
         isLoadingDropoutBtn: false,
         isDisabledDropoutBtn: false
-      }
+      };
     },
     computed: {
       ...mapGetters({
@@ -246,7 +251,12 @@
         return !this.isPersonalGroup && this.isResearchGroupMember && (this.group.is_dao || (!this.group.is_dao && this.user.username == this.group.creator));
       },
       researchWithGroupInfoList() {
-        return this.researchList.map(research => {return { research, group: this.group }})
+        return this.researchList.map(research => {
+          return {
+            research,
+            group: this.group
+          };
+        });
       }
     },
 
@@ -256,22 +266,25 @@
 
         researchGroupService.createDropoutProposal({
           groupId: this.group.id,
-          name: member.item.owner,
-        }).then(() => {
-          this.$store.dispatch('layout/setSuccess', {
-            message: 'Dropout Proposal has been created successfully!'
+          name: member.item.owner
+        })
+          .then(() => {
+            this.$store.dispatch('layout/setSuccess', {
+              message: 'Dropout Proposal has been created successfully!'
+            });
+            this.$store.dispatch('researchGroup/loadResearchGroupProposals', { groupId: this.group.id });
+          })
+          .catch(err => {
+            this.$store.dispatch('layout/setError', {
+              message: 'An error occurred while creating proposal, please try again later'
+            });
+            console.log(err);
+          })
+          .finally(() => {
+            this.dropoutMemberMeta.isConfirming = false;
+            this.dropoutMemberMeta.isShown = false;
+            this.$vuetify.goTo('#proposals');
           });
-          this.$store.dispatch('researchGroup/loadResearchGroupProposals', { groupId: this.group.id })
-        }).catch(err => {
-          this.$store.dispatch('layout/setError', {
-            message: 'An error occurred while creating proposal, please try again later'
-          });
-          console.log(err)
-        }).finally(() => {
-          this.dropoutMemberMeta.isConfirming = false;
-          this.dropoutMemberMeta.isShown = false
-          this.$vuetify.goTo('#proposals')
-        });
       },
 
       showConfirmAction(member, index) {
@@ -279,10 +292,10 @@
           'firstName': member.profile.firstName,
           'lastName': member.profile.lastName,
           'owner': member.rgt.owner
-        }
-        this.dropoutMemberMeta.item = memberData
-        this.dropoutMemberMeta.index = index
-        this.dropoutMemberMeta.isShown = true
+        };
+        this.dropoutMemberMeta.item = memberData;
+        this.dropoutMemberMeta.index = index;
+        this.dropoutMemberMeta.isShown = true;
       },
 
       isExcludingMemberAvailable(username) {
@@ -306,7 +319,8 @@
             ...this.members.map(member => member.account.name),
             ...this.invites.map(invite => invite.user.account.name)
           ];
-          let usersToInvite = accounts.filter(a => !blackList.some(username => username === a.name)).map(a => a.name);
+          let usersToInvite = accounts.filter(a => !blackList.some(username => username === a.name))
+            .map(a => a.name);
           return usersService.getEnrichedProfiles(usersToInvite);
         })
         .then((users) => {
