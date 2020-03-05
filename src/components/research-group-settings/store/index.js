@@ -49,10 +49,11 @@ const actions = {
     deipRpc.api.getProposalsByResearchGroupIdAsync(groupId)
       .then(data => {
         return Promise.all(
-          data.map((item) =>
-            researchGroupService.extendProposalByRelatedInfo(
-              JSON.parse(item.data)
-            )
+          data.map(
+            (item) => researchGroupService.extendProposalByRelatedInfo({
+              ...item,
+              ...{ data: JSON.parse(item.data) }
+            })
           )
         );
       })
