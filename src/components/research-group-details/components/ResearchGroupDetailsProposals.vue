@@ -56,8 +56,6 @@
           </div>
         </v-expansion-panel-content>
 
-        {{proposals}}
-
         <template v-if="proposals.length">
           <research-group-details-proposals-item
             v-for="(proposal, i) in proposals" :key="i"
