@@ -1,8 +1,8 @@
 <template>
   <div>
     <div class="pb-4" v-if="research">
-      <router-link class="a title" 
-          :to="{
+      <router-link class="a title"
+                   :to="{
               name: 'ResearchContentDetails',
               params: {
                 research_group_permlink: encodeURIComponent(research.group_permlink),
@@ -10,21 +10,26 @@
                 content_permlink: encodeURIComponent(content.permlink)
               }
           }"
-      >{{ content.title }}</router-link>
+      >{{ content.title }}
+      </router-link>
     </div>
     <div>
-      <review-assessment v-model="assessmentCriteria" :researchContentType="content.content_type" :readonly="false"></review-assessment>
+      <review-assessment v-model="assessmentCriteria" :researchContentType="content.content_type"
+                         :readonly="false"></review-assessment>
     </div>
 
     <div class="py-2">
       <v-btn color="primary"
-        block
-        @click="publishReview()"
-        :disabled="isReviewPublishingDisabled"
-        :loading="isLoading"
-      >Publish</v-btn>
+             block
+             @click="publishReview()"
+             :disabled="isReviewPublishingDisabled"
+             :loading="isLoading"
+      >Publish
+      </v-btn>
       <div class="pt-2">
-         <div>You will get <span class="body-2">approximately 3000 ECI reward in {{relatedExpertise.map(exp => exp.discipline_name).join(", ")}}</span> for your contribution to this project</div>
+        <div>You will get <span class="body-2">approximately 3000 ECI reward in {{relatedExpertise.map(exp => exp.discipline_name).join(', ')}}</span>
+          for your contribution to this project
+        </div>
       </div>
     </div>
 
@@ -46,13 +51,16 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex';
-import deipRpc from '@deip/deip-oa-rpc-client';
-import * as reviewsService from './../../../services/ReviewsService'
-import { bus } from './../../../main';
+  import { mapGetters } from 'vuex';
+  import { bus } from '@/main';
 
-export default {
-    name: "ResearchContentAddReviewSidebar",
+  import { ResearchContentReviewsService } from '@deip/research-content-reviews-service';
+
+  const researchContentReviewsService = ResearchContentReviewsService.getInstance();
+
+  export default {
+    name: 'ResearchContentAddReviewSidebar',
+
     data() {
       return {
         isLoading: false,
@@ -71,9 +79,9 @@ export default {
       },
 
       isReviewPublishingDisabled() {
-        let criterias = reviewsService.getAssessmentCriteria(this.content.content_type);
+        let criterias = researchContentReviewsService.getAssessmentCriteria(this.content.content_type);
         return criterias.some(criteria => {
-          return this.assessmentCriteria[criteria.name] == undefined || this.assessmentCriteria[criteria.name] == 0;
+          return this.assessmentCriteria[criteria.name] === undefined || this.assessmentCriteria[criteria.name] == 0;
         })
       }
     },
@@ -82,30 +90,30 @@ export default {
       publishReview() {
         bus.$emit('reviewEditor:exportHtml', (html) => {
           this.isLoading = true;
-          let reviewData = JSON.stringify({ html, ratings: { ...this.assessmentCriteria }});
-          let criterias = reviewsService.getAssessmentCriteria(this.content.content_type);
+          let reviewData = JSON.stringify({ html, ratings: { ...this.assessmentCriteria } });
+          let criterias = researchContentReviewsService.getAssessmentCriteria(this.content.content_type);
           let maxValue = criterias.reduce((total, criteria) => total + criteria.max, 0);
           let value = Object.values(this.assessmentCriteria).reduce((total, val) => total + val, 0);
           let isPositive = value > (maxValue / 2);
 
-          return reviewsService.makeReview(this.content.id, isPositive, reviewData)
+          return researchContentReviewsService.makeReview(this.content.id, isPositive, reviewData)
             .then((data) => {
               this.$store.dispatch('layout/setSuccess', {
-                message: "Your review has been published successfully !"
+                message: 'Your review has been published successfully !'
               });
-              this.$router.push({ 
+              this.$router.push({
                 name: 'ResearchContentDetails',
-                params:  {
-                  research_group_permlink: encodeURIComponent(this.research.group_permlink), 
+                params: {
+                  research_group_permlink: encodeURIComponent(this.research.group_permlink),
                   research_permlink: encodeURIComponent(this.research.permlink),
                   content_permlink: encodeURIComponent(this.content.permlink)
                 },
-                hash: "#reviews"
+                hash: '#reviews'
               });
             })
             .catch((err) => {
               this.$store.dispatch('layout/setError', {
-                message: "An error occurred while adding review, please try again later"
+                message: 'An error occurred while adding review, please try again later'
               });
               console.log(err)
             })
@@ -115,7 +123,7 @@ export default {
         });
       }
     }
-};
+  };
 </script>
 
 <style lang="less" scoped>

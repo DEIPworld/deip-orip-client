@@ -1,413 +1,439 @@
 <template>
-	<v-dialog v-model="meta.isOpen" fullscreen persistent transition="scale-transition">
-		<v-card class="">
-			<v-toolbar dark color="primary">
-				<v-btn icon dark @click="close()">
-					<v-icon>close</v-icon>
-				</v-btn>
-				<v-toolbar-title>Application</v-toolbar-title>
-				<v-spacer></v-spacer>
-			</v-toolbar>
-			<page-container>
-				<contentbar>
-					<div v-if="researchList">
-						<div class="legacy-row c-mb-4">
-							<div class="c-pr-6">Funding opportunity:</div>
-							<div class="legacy-col-grow a subheading">{{ program.funding_opportunity_title }}</div>
-						</div>
-						<v-divider></v-divider>
-						<v-autocomplete
+  <v-dialog v-model="meta.isOpen" fullscreen persistent transition="scale-transition">
+    <v-card class="">
+      <v-toolbar dark color="primary">
+        <v-btn icon dark @click="close()">
+          <v-icon>close</v-icon>
+        </v-btn>
+        <v-toolbar-title>Application</v-toolbar-title>
+        <v-spacer></v-spacer>
+      </v-toolbar>
+      <page-container>
+        <contentbar>
+          <div v-if="researchList">
+            <div class="legacy-row c-mb-4">
+              <div class="c-pr-6">Funding opportunity:</div>
+              <div class="legacy-col-grow a subheading">{{ program.funding_opportunity_title }}</div>
+            </div>
+            <v-divider></v-divider>
+            <v-autocomplete
               class="c-mt-4"
               :items="researchList"
               :filter="researchFilter"
               v-model="research"
               label="Research"
             >
-							<template slot="selection" slot-scope="data">
-								<div class="legacy-row-nowrap align-center">
-									<span>{{ data.item.title }}</span>
-								</div>
-							</template>
-							<template slot="item" slot-scope="data">
-								<template>
-									<div class="legacy-row-nowrap align-center author-item">
-										<span class="c-pl-3">{{ data.item.title}}</span>
-									</div>
-								</template>
-							</template>
-						</v-autocomplete>
-						<div v-if="research">
-							<div class="c-pt-4 c-pb-8">
-								<div class="title">
-									<span class="half-bold">Research group:</span>
-									<router-link class="a"
-                    :to="{
+              <template slot="selection" slot-scope="data">
+                <div class="legacy-row-nowrap align-center">
+                  <span>{{ data.item.title }}</span>
+                </div>
+              </template>
+              <template slot="item" slot-scope="data">
+                <template>
+                  <div class="legacy-row-nowrap align-center author-item">
+                    <span class="c-pl-3">{{ data.item.title}}</span>
+                  </div>
+                </template>
+              </template>
+            </v-autocomplete>
+            <div v-if="research">
+              <div class="c-pt-4 c-pb-8">
+                <div class="title">
+                  <span class="half-bold">Research group:</span>
+                  <router-link class="a"
+                               :to="{
                         name: 'ResearchDetails',
                         params: {
                             research_group_permlink: encodeURIComponent(research.group_permlink),
                             research_permlink: encodeURIComponent(research.permlink)
                         }
                     }"
-                  >{{ research.group.name }}</router-link>
-								</div>
-								<div class="c-pt-4 legacy-row">
-									<div v-for="(member, i) in research.group.enrichedMembers" :key="i"
-                    class="legacy-row-nowrap text-align-center c-pt-2 c-pr-8">
-                    <platform-avatar 
+                  >{{ research.group.name }}
+                  </router-link>
+                </div>
+                <div class="c-pt-4 legacy-row">
+                  <div v-for="(member, i) in research.group.enrichedMembers" :key="i"
+                       class="legacy-row-nowrap text-align-center c-pt-2 c-pr-8">
+                    <platform-avatar
                       :user="member"
                       :size="40"
                       link-to-profile
                       link-to-profile-class="px-1"
                     ></platform-avatar>
-									</div>
-								</div>
-							</div>
-							<v-divider></v-divider>
-							<div class="c-pv-4">
-								<div class="legacy-row legacy-justify-center">
-									<div class="legacy-col-6 c-pr-4">
-										<v-text-field class="" 
-                      label="Title" 
-                      v-model="title"
-                      :rules="[
+                  </div>
+                </div>
+              </div>
+              <v-divider></v-divider>
+              <div class="c-pv-4">
+                <div class="legacy-row legacy-justify-center">
+                  <div class="legacy-col-6 c-pr-4">
+                    <v-text-field class=""
+                                  label="Title"
+                                  v-model="title"
+                                  :rules="[
                         applicationTitleRule
                       ]">
                     </v-text-field>
-									</div>
-									<div class="legacy-col-6 c-pl-4">
-										<v-text-field class="" 
-                      label="Total amount"
-                      suffix="$"
-                      v-model="totalAmount" 
-                      :rules="[
+                  </div>
+                  <div class="legacy-col-6 c-pl-4">
+                    <v-text-field class=""
+                                  label="Total amount"
+                                  suffix="$"
+                                  v-model="totalAmount"
+                                  :rules="[
                         applicationTotalAmountRule
                       ]">
                     </v-text-field>
-									</div>
-								</div>
-								<div class="legacy-row legacy-justify-center">
-									<div class="legacy-col-12">
-										<v-text-field class="" 
-                      label="Organization" 
-                      v-model="organization"
-                      ></v-text-field>
-									</div>
-								</div>
-							</div>
-							<div v-if="dropzoneOptions">
-								<div>
-									<vue-dropzone ref="newApplication" id="application-dropzone" 
-                      :options="dropzoneOptions" 
-                      @vdropzone-file-added="vdropzoneFileAdded"
-                      @vdropzone-removed-file="vdropzoneRemovedFile"
-                      @vdropzone-error="vdropzoneError"
-                      @vdropzone-success-multiple="vsuccessMultiple"></vue-dropzone>
-								</div>
-							</div>
-							<div class="legacy-row c-pt-8">
-								<div class="legacy-col-12">
-									<div class="legacy-row legacy-align-items-center height-2 c-pt-4 c-pb-8">
-										<div class="bold c-pr-4">Application</div>
-										<div class="half-bold primary--text">Application content</div>
-										<v-icon v-show="filesMap['Application Content.pdf']" color="green" class="c-pl-4">check_circle</v-icon>
-									</div>
-								</div>
-								<div class="legacy-col-12">
-									<div class="legacy-row">
-										<div class="legacy-col-6">
-											<div class="bold">Mandatory forms</div>
-											<div class="legacy-row legacy-align-items-center height-2 c-pt-4">
-												<div class="half-bold primary--text">SF424 (R &amp; R) [V2.0]</div>
-												<v-icon v-show="filesMap['RR_SF424_2_0-V2.0.pdf']" color="green" class="c-pl-4">check_circle</v-icon>
-											</div>
-											<div class="legacy-row legacy-align-items-center height-2 c-pt-4">
-												<div class="half-bold primary--text">PHS 398 Cover Page Supplement [V4.0]</div>
-												<v-icon v-show="filesMap['PHS398_CoverPageSupplement_4_0-V4.0.pdf']" color="green" class="c-pl-4">check_circle</v-icon>
-											</div>
-											<div class="legacy-row legacy-align-items-center height-2 c-pt-4">
-												<div class="half-bold primary--text">Research And Related Other Project Information [V1.4]</div>
-												<v-icon v-show="filesMap['RR_OtherProjectInfo_1_4-V1.4.pdf']" color="green" class="c-pl-4">check_circle</v-icon>
-											</div>
-											<div class="legacy-row legacy-align-items-center height-2 c-pt-4">
-												<div class="half-bold primary--text">Project/Performance Site Location(s) [V2.0]</div>
-												<v-icon v-show="filesMap['PerformanceSite_2_0-V2.0.pdf']" color="green" class="c-pl-4">check_circle</v-icon>
-											</div>
-											<div class="legacy-row legacy-align-items-center height-2 c-pt-4">
-												<div class="half-bold primary--text">Research and Related Senior/Key Person Profile (Expanded) [V2.0]</div>
-												<v-icon v-show="filesMap['RR_KeyPersonExpanded_2_0-V2.0.pdf']" color="green" class="c-pl-4">check_circle</v-icon>
-											</div>
-											<div class="legacy-row legacy-align-items-center height-2 c-pt-4">
-												<div class="half-bold primary--text">PHS 398 Research Plan [V4.0]</div>
-												<v-icon v-show="filesMap['PHS398_ResearchPlan_4_0-V4.0.pdf']" color="green" class="c-pl-4">check_circle</v-icon>
-											</div>
-											<div class="legacy-row legacy-align-items-center height-2 c-pt-4">
-												<div class="half-bold primary--text">PHS Human Subjects and Clinical Trials Information [V1.0]</div>
-												<v-icon v-show="filesMap['PHSHumanSubjectsAndClinicalTrialsInfo-V1.0.pdf']" color="green" class="c-pl-4">check_circle</v-icon>
-											</div>
-										</div>
-										<div class="legacy-col-6">
-											<div class="bold">Optional forms</div>
-											<div class="legacy-row legacy-align-items-center height-2 c-pt-4">
-												<div class="half-bold primary--text">Research &amp; Related Budget [V1.4]</div>
-											</div>
-											<div class="legacy-row legacy-align-items-center height-2 c-pt-4">
-												<div class="half-bold primary--text">R &amp; R Subaward Budget Attachment(s) Form 5 YR 30 ATT [V1.4]</div>
-											</div>
-											<div class="legacy-row legacy-align-items-center height-2 c-pt-4">
-												<div class="half-bold primary--text">PHS 398 Modular Budget [V1.2]</div>
-											</div>
-											<div class="legacy-row legacy-align-items-center height-2 c-pt-4">
-												<div class="half-bold primary--text">PHS Assignment Request Form [V2.0]</div>
-											</div>
-										</div>
-									</div>
-								</div>
-							</div>
-						</div>
-						<div class="display-flex c-pt-8">
-							<v-btn color="primary" 
-                  class="c-m-auto"
-                  :disabled="isDisabled || isLoading"
-                  :loading="isLoading"
-                  @click="sendApplication()"
-                >
-                  Send Application
-                </v-btn>
-						</div>
-					</div>
-					<div class="display-flex" v-else>
-						<v-progress-circular class="c-m-auto" indeterminate color="primary"></v-progress-circular>
-					</div>
-				</contentbar>
-			</page-container>
-		</v-card>
-	</v-dialog>
+                  </div>
+                </div>
+                <div class="legacy-row legacy-justify-center">
+                  <div class="legacy-col-12">
+                    <v-text-field class=""
+                                  label="Organization"
+                                  v-model="organization"
+                    ></v-text-field>
+                  </div>
+                </div>
+              </div>
+              <div v-if="dropzoneOptions">
+                <div>
+                  <vue-dropzone ref="newApplication" id="application-dropzone"
+                                :options="dropzoneOptions"
+                                @vdropzone-file-added="vdropzoneFileAdded"
+                                @vdropzone-removed-file="vdropzoneRemovedFile"
+                                @vdropzone-error="vdropzoneError"
+                                @vdropzone-success-multiple="vsuccessMultiple"></vue-dropzone>
+                </div>
+              </div>
+              <div class="legacy-row c-pt-8">
+                <div class="legacy-col-12">
+                  <div class="legacy-row legacy-align-items-center height-2 c-pt-4 c-pb-8">
+                    <div class="bold c-pr-4">Application</div>
+                    <div class="half-bold primary--text">Application content</div>
+                    <v-icon v-show="filesMap['Application Content.pdf']" color="green" class="c-pl-4">check_circle
+                    </v-icon>
+                  </div>
+                </div>
+                <div class="legacy-col-12">
+                  <div class="legacy-row">
+                    <div class="legacy-col-6">
+                      <div class="bold">Mandatory forms</div>
+                      <div class="legacy-row legacy-align-items-center height-2 c-pt-4">
+                        <div class="half-bold primary--text">SF424 (R &amp; R) [V2.0]</div>
+                        <v-icon v-show="filesMap['RR_SF424_2_0-V2.0.pdf']" color="green" class="c-pl-4">check_circle
+                        </v-icon>
+                      </div>
+                      <div class="legacy-row legacy-align-items-center height-2 c-pt-4">
+                        <div class="half-bold primary--text">PHS 398 Cover Page Supplement [V4.0]</div>
+                        <v-icon v-show="filesMap['PHS398_CoverPageSupplement_4_0-V4.0.pdf']" color="green"
+                                class="c-pl-4">check_circle
+                        </v-icon>
+                      </div>
+                      <div class="legacy-row legacy-align-items-center height-2 c-pt-4">
+                        <div class="half-bold primary--text">Research And Related Other Project Information [V1.4]</div>
+                        <v-icon v-show="filesMap['RR_OtherProjectInfo_1_4-V1.4.pdf']" color="green" class="c-pl-4">
+                          check_circle
+                        </v-icon>
+                      </div>
+                      <div class="legacy-row legacy-align-items-center height-2 c-pt-4">
+                        <div class="half-bold primary--text">Project/Performance Site Location(s) [V2.0]</div>
+                        <v-icon v-show="filesMap['PerformanceSite_2_0-V2.0.pdf']" color="green" class="c-pl-4">
+                          check_circle
+                        </v-icon>
+                      </div>
+                      <div class="legacy-row legacy-align-items-center height-2 c-pt-4">
+                        <div class="half-bold primary--text">Research and Related Senior/Key Person Profile (Expanded)
+                          [V2.0]
+                        </div>
+                        <v-icon v-show="filesMap['RR_KeyPersonExpanded_2_0-V2.0.pdf']" color="green" class="c-pl-4">
+                          check_circle
+                        </v-icon>
+                      </div>
+                      <div class="legacy-row legacy-align-items-center height-2 c-pt-4">
+                        <div class="half-bold primary--text">PHS 398 Research Plan [V4.0]</div>
+                        <v-icon v-show="filesMap['PHS398_ResearchPlan_4_0-V4.0.pdf']" color="green" class="c-pl-4">
+                          check_circle
+                        </v-icon>
+                      </div>
+                      <div class="legacy-row legacy-align-items-center height-2 c-pt-4">
+                        <div class="half-bold primary--text">PHS Human Subjects and Clinical Trials Information [V1.0]
+                        </div>
+                        <v-icon v-show="filesMap['PHSHumanSubjectsAndClinicalTrialsInfo-V1.0.pdf']" color="green"
+                                class="c-pl-4">check_circle
+                        </v-icon>
+                      </div>
+                    </div>
+                    <div class="legacy-col-6">
+                      <div class="bold">Optional forms</div>
+                      <div class="legacy-row legacy-align-items-center height-2 c-pt-4">
+                        <div class="half-bold primary--text">Research &amp; Related Budget [V1.4]</div>
+                      </div>
+                      <div class="legacy-row legacy-align-items-center height-2 c-pt-4">
+                        <div class="half-bold primary--text">R &amp; R Subaward Budget Attachment(s) Form 5 YR 30 ATT
+                          [V1.4]
+                        </div>
+                      </div>
+                      <div class="legacy-row legacy-align-items-center height-2 c-pt-4">
+                        <div class="half-bold primary--text">PHS 398 Modular Budget [V1.2]</div>
+                      </div>
+                      <div class="legacy-row legacy-align-items-center height-2 c-pt-4">
+                        <div class="half-bold primary--text">PHS Assignment Request Form [V2.0]</div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="display-flex c-pt-8">
+              <v-btn color="primary"
+                     class="c-m-auto"
+                     :disabled="isDisabled || isLoading"
+                     :loading="isLoading"
+                     @click="sendApplication()"
+              >
+                Send Application
+              </v-btn>
+            </div>
+          </div>
+          <div class="display-flex" v-else>
+            <v-progress-circular class="c-m-auto" indeterminate color="primary"></v-progress-circular>
+          </div>
+        </contentbar>
+      </page-container>
+    </v-card>
+  </v-dialog>
 </template>
 
 <script>
-    import deipRpc from '@deip/deip-oa-rpc-client';
-    import { getAccessToken } from './../../../utils/auth'
-    import { getEnrichedProfiles } from './../../../utils/user';
-    import { mapGetters } from 'vuex';
-    import { signOperation } from './../../../utils/blockchain'
-    import vueDropzone from 'vue2-dropzone';
+  import deipRpc from '@deip/deip-oa-rpc-client';
+  import { mapGetters } from 'vuex';
+  import vueDropzone from 'vue2-dropzone';
+  import { AccessService } from '@deip/access-service';
+  import { UsersService } from '@deip/users-service';
 
-    export default {
-        components: {
-          vueDropzone
-        },
+  const accessService = AccessService.getInstance();
+  const usersService = UsersService.getInstance();
 
-        props: {
-          program: { required: true, type: Object },
-          meta: { required: true, type: Object}
-        },
+  export default {
 
-        name: "UploadApplicationFileDialog",
+    components: {
+      vueDropzone
+    },
 
-        data() { 
-          return {
-            isLoading: false,
-            research: null,
-            researchList: null,
-            title: '',
-            totalAmount: '',
-            timestamp: null,
-            allAttached: true,
-            organization: '',
-            filesCount: 0,
+    props: {
+      program: { required: true, type: Object },
+      meta: { required: true, type: Object }
+    },
 
-            filesMap: {
-              "Application Content.pdf": false,
+    name: 'UploadApplicationFileDialog',
 
-              "PerformanceSite_2_0-V2.0.pdf": false,
-              "PHS398_CoverPageSupplement_4_0-V4.0": false,
-              "PHS398_ResearchPlan_4_0-V4.0.pdf": false,
-              "PHSHumanSubjectsAndClinicalTrialsInfo-V1.0.pdf": false,
-              "RR_KeyPersonExpanded_2_0-V2.0.pdf": false,
-              "RR_OtherProjectInfo_1_4-V1.4.pdf": false,
-              "RR_SF424_2_0-V2.0.pdf": false
-            }
-          }
-        },
+    data() {
+      return {
+        isLoading: false,
+        research: null,
+        researchList: null,
+        title: '',
+        totalAmount: '',
+        timestamp: null,
+        allAttached: true,
+        organization: '',
+        filesCount: 0,
 
-        computed: {
-          ...mapGetters({
-              user: 'auth/user',
-              userGroups: 'auth/userGroups',
-              applications: 'agencyProgramDetails/applications',
-          }),
-          isDisabled() {
-              if (!this.totalAmount) return true;
-              const amount = parseInt(this.totalAmount);
-              const minFloor = this.fromAssetsToFloat(this.program.award_floor);
-              const maxCeiling = this.fromAssetsToFloat(this.program.award_ceiling);
-              return !this.research || !(amount >= minFloor && amount <= maxCeiling) || 
-                      !this.organization || !this.title || !this.filesCount;
+        filesMap: {
+          'Application Content.pdf': false,
+
+          'PerformanceSite_2_0-V2.0.pdf': false,
+          'PHS398_CoverPageSupplement_4_0-V4.0': false,
+          'PHS398_ResearchPlan_4_0-V4.0.pdf': false,
+          'PHSHumanSubjectsAndClinicalTrialsInfo-V1.0.pdf': false,
+          'RR_KeyPersonExpanded_2_0-V2.0.pdf': false,
+          'RR_OtherProjectInfo_1_4-V1.4.pdf': false,
+          'RR_SF424_2_0-V2.0.pdf': false
+        }
+      }
+    },
+
+    computed: {
+      ...mapGetters({
+        user: 'auth/user',
+        userGroups: 'auth/userGroups',
+        applications: 'agencyProgramDetails/applications',
+      }),
+      isDisabled() {
+        if (!this.totalAmount) return true;
+        const amount = parseInt(this.totalAmount);
+        const minFloor = this.fromAssetsToFloat(this.program.award_floor);
+        const maxCeiling = this.fromAssetsToFloat(this.program.award_ceiling);
+        return !this.research || !(amount >= minFloor && amount <= maxCeiling) ||
+          !this.organization || !this.title || !this.filesCount;
+      },
+      dropzoneOptions() {
+        const accessToken = accessService.getAccessToken();
+
+        return this.research != null && this.program != null && this.timestamp ? {
+          url: `${window.env.DEIP_SERVER_URL}/applications/upload-files`,
+          paramName: 'application-content',
+          headers: {
+            'Agency': window.env.TENANT,
+            'Research-Id': this.research.id.toString(),
+            'Foa-Id': this.program.id.toString(),
+            'Authorization': 'Bearer ' + accessToken,
+            'Upload-Session': `${this.timestamp}-${accessToken.split('.')[2]}`
           },
-          dropzoneOptions() {
-            return this.research != null && this.program != null && this.timestamp ? {
-              url: `${window.env.DEIP_SERVER_URL}/applications/upload-files`,
-              paramName: "application-content",
-              headers: {
-                "Agency": window.env.TENANT,
-                "Research-Id": this.research.id.toString(),
-                "Foa-Id": this.program.id.toString(),
-                "Authorization": 'Bearer ' + getAccessToken(),
-                "Upload-Session": `${this.timestamp}-${getAccessToken().split('.')[2]}`
-              },
-              timeout: 0,
-              maxFiles: 10,
-              parallelUploads: 10,
-              uploadMultiple: true,
-              thumbnailWidth: 150,
-              autoProcessQueue: false,
-              addRemoveLinks: true,
-              acceptedFiles: ['application/pdf', 'image/png', 'image/jpeg'].join(',')
-            } : null;
-          }
-        },
+          timeout: 0,
+          maxFiles: 10,
+          parallelUploads: 10,
+          uploadMultiple: true,
+          thumbnailWidth: 150,
+          autoProcessQueue: false,
+          addRemoveLinks: true,
+          acceptedFiles: [ 'application/pdf', 'image/png', 'image/jpeg' ].join(',')
+        } : null;
+      }
+    },
 
-        methods: {
-          applicationTotalAmountRule(value) {
-            if (value === '') return true;
-            const amount = parseInt(value);
-            const minFloor = this.fromAssetsToFloat(this.program.award_floor);
-            const maxCeiling = this.fromAssetsToFloat(this.program.award_ceiling);
-            return (amount >= minFloor && amount <= maxCeiling) || `Amount should be between $${minFloor} and $${maxCeiling}`;
-          },
-          applicationTitleRule(value) {
-            return value != "" || 'Title field is required';
-          },
-          researchFilter(item, queryText, itemText) {
-            return item.disciplines.some(d => d.id == this.program.target_discipline);
-          },
-          close() {
-            this.isLoading = false;
-            this.meta.isOpen = false;
-            if (this.$refs.newApplication) {
-              this.$refs.newApplication.removeAllFiles();
-            }
-          },
-          sendApplication() {
-            this.isLoading = true;
-            this.$refs.newApplication.processQueue();
-          },
-          vdropzoneError(file, message, xhr) {
+    methods: {
+      applicationTotalAmountRule(value) {
+        if (value === '') return true;
+        const amount = parseInt(value);
+        const minFloor = this.fromAssetsToFloat(this.program.award_floor);
+        const maxCeiling = this.fromAssetsToFloat(this.program.award_ceiling);
+        return (amount >= minFloor && amount <= maxCeiling) || `Amount should be between $${minFloor} and $${maxCeiling}`;
+      },
+      applicationTitleRule(value) {
+        return value !== '' || 'Title field is required';
+      },
+      researchFilter(item, queryText, itemText) {
+        return item.disciplines.some(d => d.id === this.program.target_discipline);
+      },
+      close() {
+        this.isLoading = false;
+        this.meta.isOpen = false;
+        if (this.$refs.newApplication) {
+          this.$refs.newApplication.removeAllFiles();
+        }
+      },
+      sendApplication() {
+        this.isLoading = true;
+        this.$refs.newApplication.processQueue();
+      },
+      vdropzoneError(file, message, xhr) {
+        this.$store.dispatch('layout/setError', {
+          message: 'Sorry, the file storage server is temporarily unavailable, please try again later'
+        });
+        this.close();
+      },
+      vdropzoneFileAdded(file) {
+        this.filesCount++;
+        this.filesMap[file.name] = true;
+      },
+      vdropzoneRemovedFile(file) {
+        this.filesCount--;
+        this.filesMap[file.name] = false;
+      },
+      vsuccessMultiple(files, res) {
+        const self = this;
+        const applicationRef = res;
+
+        if (!applicationRef.hash) {
+          throw new Error('File upload has failed')
+        }
+
+        deipRpc.broadcast.createGrantApplicationAsync(
+          this.user.privKey,
+          this.program.id,
+          this.research.id,
+          this.title,
+          this.user.username,
+          this.toAssetUnits(this.totalAmount),
+          `${applicationRef.letterHash}:${applicationRef.hash}`,
+          this.organization
+        )
+          .then((res) => {
+            // todo: Reload applications section
+            this.$store.dispatch('layout/setSuccess', {
+              message: `Application has been sent successfully!`
+            });
+
+            return new Promise((resolve, reject) => {
+              this.$store.dispatch('agencyProgramDetails/loadAgencyProgramApplications', { notify: resolve })
+            });
+          })
+          .catch(err => {
             this.$store.dispatch('layout/setError', {
-                message: "Sorry, the file storage server is temporarily unavailable, please try again later"
+              message: 'An error occurred while sending Application, please try again later'
             });
+            console.log(err)
+          })
+          .finally(() => {
+            this.isLoading = false;
             this.close();
-          },
-          vdropzoneFileAdded(file) {
-            this.filesCount++;
-            this.filesMap[file.name] = true;
-          },
-          vdropzoneRemovedFile(file) {
-            this.filesCount--;
-            this.filesMap[file.name] = false;
-          },
-          vsuccessMultiple(files, res) {
-            const self = this;
-            const applicationRef = res;
-
-            if (!applicationRef.hash) {
-                throw new Error("File upload has failed")
-            }
-
-            deipRpc.broadcast.createGrantApplicationAsync(
-              this.user.privKey,
-              this.program.id,
-              this.research.id,
-              this.title,
-              this.user.username,
-              this.toAssetUnits(this.totalAmount),
-              `${applicationRef.letterHash}:${applicationRef.hash}`,
-              this.organization
-            )
-            .then((res) => {
-              // todo: Reload applications section
-              this.$store.dispatch('layout/setSuccess', {
-                message: `Application has been sent successfully!`
-              });
-
-              return new Promise((resolve, reject) => {
-                this.$store.dispatch('agencyProgramDetails/loadAgencyProgramApplications', { notify: resolve })
-              });
-            })
-            .catch(err => { 
-              this.$store.dispatch('layout/setError', {
-                message: "An error occurred while sending Application, please try again later"
-              });
-              console.log(err)
-            })
-            .finally(() => { 
-              this.isLoading = false;
-              this.close();
-            });
-          }
-        },
-
-        watch: {
-          'meta.isOpen': function (newVal, oldVal) {
-            if (newVal) {
-              this.allAttached = false;
-              this.timestamp = (new Date()).getTime();
-              this.research = null;
-              this.title = 
-                `Application for ${this.program.funding_opportunity_number + ' # ' + (this.applications.length + 1)}`;
-              this.totalAmount = '';
-              this.organization = '';
-              this.filesCount = 0;
-            }
-          }
-        },
-
-        created() {
-          const researchPromises = this.userGroups.map(g => deipRpc.api.getResearchesByResearchGroupIdAsync(g.id));
-          const researchGroupPromises = this.userGroups.map(g => deipRpc.api.getResearchGroupByIdAsync(g.id));
-
-          Promise.all([
-            Promise.all(researchPromises),
-            Promise.all(researchGroupPromises)
-          ])
-          .then(([groupsResearchList, groups]) => {
-            const flatten = [].concat.apply([], groupsResearchList);
-            this.researchList = flatten;
-
-            // todo: make workable receiving of all groups in system
-            this.researchList.forEach(research => {
-              research.group = groups.find(group => group.permlink === research.group_permlink);
-            })
-
-            groups.map(group =>
-              deipRpc.api.getResearchGroupTokensByResearchGroupAsync(group.id)
-                .then(researchGroupTokens => getEnrichedProfiles(researchGroupTokens.map(t => t.owner)))
-                .then(profiles => group.enrichedMembers = profiles))
           });
-        },
-    };
+      }
+    },
+
+    watch: {
+      'meta.isOpen': function (newVal, oldVal) {
+        if (newVal) {
+          this.allAttached = false;
+          this.timestamp = (new Date()).getTime();
+          this.research = null;
+          this.title =
+            `Application for ${this.program.funding_opportunity_number + ' # ' + (this.applications.length + 1)}`;
+          this.totalAmount = '';
+          this.organization = '';
+          this.filesCount = 0;
+        }
+      }
+    },
+
+    created() {
+
+      const researchPromises = this.userGroups.map(g => deipRpc.api.getResearchesByResearchGroupIdAsync(g.id));
+      const researchGroupPromises = this.userGroups.map(g => deipRpc.api.getResearchGroupByIdAsync(g.id));
+
+      Promise.all([
+        Promise.all(researchPromises),
+        Promise.all(researchGroupPromises)
+      ])
+        .then(([ groupsResearchList, groups ]) => {
+          const flatten = [].concat.apply([], groupsResearchList);
+          this.researchList = flatten;
+
+          // todo: make workable receiving of all groups in system
+          this.researchList.forEach(research => {
+            research.group = groups.find(group => group.permlink === research.group_permlink);
+          })
+
+          groups.map(group =>
+            deipRpc.api.getResearchGroupTokensByResearchGroupAsync(group.id)
+              .then(researchGroupTokens => usersService.getEnrichedProfiles(researchGroupTokens.map(t => t.owner)))
+              .then(profiles => group.enrichedMembers = profiles));
+        });
+    },
+  };
 </script>
 
 <style lang="less" scoped>
 
-    #application-dropzone {
-        margin-left: -1px;
-        margin-right: -1px;
-    }
+  #application-dropzone {
+    margin-left: -1px;
+    margin-right: -1px;
+  }
 
-    .author-item {
-        width: 100%
-    }
+  .author-item {
+    width: 100%
+  }
 
-    .selected-author-item {
-        padding-top: 8px;
-        padding-bottom: 8px;
-        background-color: rgb(224, 224, 224);
-    }
+  .selected-author-item {
+    padding-top: 8px;
+    padding-bottom: 8px;
+    background-color: rgb(224, 224, 224);
+  }
 
-    .avatar {
-        margin-left: 10px
-    }
+  .avatar {
+    margin-left: 10px
+  }
 
 </style>
 

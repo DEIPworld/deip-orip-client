@@ -25,7 +25,8 @@
                         <v-layout row wrap>
                           <v-flex xl12 lg12 md12 sm12 xs12 class="projects-column">
                             <v-layout row justify-space-between class="column-header">
-                              <div class="title bold">Projects <span class="primary--text pl-2">{{researches.length}}</span></div>
+                              <div class="title bold">Projects <span
+                                class="primary--text pl-2">{{researches.length}}</span></div>
                               <div>
                                 <v-btn :to="{ name: 'CreateResearch' }" color="primary" small class="ma-0">
                                   Create Project
@@ -34,14 +35,15 @@
                               </div>
                             </v-layout>
                             <v-layout column class="research-tiles-container">
-                              <research-project-tile row v-for="({research, authors, tokenSale, tokenSaleContributions, group }, i) in researches" 
-                                :key="'research-tile-' + research.id" 
-                                :research="research" 
-                                :members="authors"
-                                :tokenSale="tokenSale" 
-                                :tokenSaleContributions="tokenSaleContributions"
-                                :group="group"
-                                :class="{'pb-5': i != researches.length - 1}">
+                              <research-project-tile row
+                                                     v-for="({research, authors, tokenSale, tokenSaleContributions, group }, i) in researches"
+                                                     :key="'research-tile-' + research.id"
+                                                     :research="research"
+                                                     :members="authors"
+                                                     :tokenSale="tokenSale"
+                                                     :tokenSaleContributions="tokenSaleContributions"
+                                                     :group="group"
+                                                     :class="{'pb-5': i != researches.length - 1}">
                               </research-project-tile>
                             </v-layout>
                           </v-flex>
@@ -65,7 +67,8 @@
                               </v-layout> -->
                               <v-layout row justify-space-between py-1 class="column-text-item">
                                 <span>My portfolio</span>
-                                <span><v-chip class="ma-0" color="#826AF9" text-color="white">{{investments.length}}</v-chip></span>
+                                <span><v-chip class="ma-0" color="#826AF9"
+                                              text-color="white">{{investments.length}}</v-chip></span>
                               </v-layout>
                               <v-layout row justify-space-between py-1 class="column-text-item">
                                 <span>My deals</span>
@@ -120,9 +123,10 @@
                             </v-layout>
 
                             <v-layout column class="pb-5">
-                              <div class="title bold">Experts <span class="primary--text pl-2">{{experts.length}}</span></div>
+                              <div class="title bold">Experts <span class="primary--text pl-2">{{experts.length}}</span>
+                              </div>
                               <div class="pt-2">
-                               <user-autocomplete-picker
+                                <user-autocomplete-picker
                                   label="Find an expert"
                                   :users="experts"
                                   :displayLimit="5"
@@ -231,255 +235,257 @@
 </template>
 
 <script>
-import { mapGetters } from "vuex";
-import deipRpc from '@deip/deip-oa-rpc-client';
-import * as usersService from './../../utils/user';
-import moment from 'moment';
+  import deipRpc from '@deip/deip-oa-rpc-client';
+  import moment from 'moment';
+  import { mapGetters } from 'vuex';
 
-export default {
-  name: "Dashboard",
+  export default {
+    name: 'Dashboard',
 
-  data() {
-    return {
-      selectedResearchToReview: null,
-      isRequestingReview: false,
-
-      blackList: ['regacc', 'initdelegate'],
-      isExpertsLoading: false,
-      expertsSearch: "",
-      selectedExpert: null,
-      foundExperts: []
-    };
-  },
-  
-  computed: {
-    ...mapGetters({
-      user: "auth/user",
-      themeSettings: 'layout/themeSettings',
-      researches: "dashboard/researches",
-      experts: "dashboard/experts",
-      currentShares: "dashboard/currentShares",
-      investments: "dashboard/investments",
-      reviewsOnMyResearchCount: "dashboard/reviewsOnMyResearchCount",
-      reviewsOnMyRequestsCount: "dashboard/reviewsOnMyRequestsCount",
-      myInvitesCount: "dashboard/myInvitesCount",
-      myReviewsCount: "dashboard/myReviewsCount"
-    }),
-
-    hasResearchShares() {
-      return this.currentShares.length;
-    },
-
-    isRequestReviewDisabled() {
-      return !this.selectedExpert 
-        || !this.selectedResearchToReview 
-        || !this.selectedExpert.expertiseTokens.some(exp => this.selectedResearchToReview.disciplines.some(d => d.id == exp.discipline_id));
-    },
-
-    sharesDistributionChart() {
-      let totalShares = this.currentShares.reduce((acc, { share }) => acc + this.convertToPercent(share.amount), 0);
+    data() {
       return {
-        data: [
-          ['Distribution', ''],
-          ...this.currentShares.map(({ research, share }) => [research.title,  this.convertToPercent(share.amount) / totalShares * 100])
-          // ['Research title', 10]
-        ],
+        selectedResearchToReview: null,
+        isRequestingReview: false,
 
-        options: {
-          title: "",
-          legend: { position: 'left' },
-          colors: ['#c6bbff', '#f9c3d7', '#a6dcff', '#B9F6CA', '#2d99ff', '#f3f5f8'],
-          chartArea: { 
-            left: 0,
-            width: "100%",
-            height: "100%"
-          },
-          pieSliceTextStyle: {
-            // color: "#ffffff", 
-            color: "#000000",
-            fontSize: 10
-          },
-          pieHole: 0.6
-        }
-      }
+        blackList: ['regacc', 'initdelegate'],
+        isExpertsLoading: false,
+        expertsSearch: '',
+        selectedExpert: null,
+        foundExperts: []
+      };
     },
 
-    totalAssetsPriceChart() {
+    computed: {
+      ...mapGetters({
+        user: 'auth/user',
+        themeSettings: 'layout/themeSettings',
+        researches: 'dashboard/researches',
+        experts: 'dashboard/experts',
+        currentShares: 'dashboard/currentShares',
+        investments: 'dashboard/investments',
+        reviewsOnMyResearchCount: 'dashboard/reviewsOnMyResearchCount',
+        reviewsOnMyRequestsCount: 'dashboard/reviewsOnMyRequestsCount',
+        myInvitesCount: 'dashboard/myInvitesCount',
+        myReviewsCount: 'dashboard/myReviewsCount'
+      }),
 
-      return {
-        data: [
-         ['Date', ...this.currentShares.map(({ research }) => `Asset ${research.id}`)],
-         [moment().day(-10).toDate(), ...this.currentShares.map((s, i) => this.mockPreviousTokenPrice(s, 10))],
-         [moment().day(-9).toDate(),  ...this.currentShares.map((s, i) => this.mockPreviousTokenPrice(s, 9)) ],
-         [moment().day(-8).toDate(),  ...this.currentShares.map((s, i) => this.mockPreviousTokenPrice(s, 8)) ],
-         [moment().day(-7).toDate(),  ...this.currentShares.map((s, i) => this.mockPreviousTokenPrice(s, 7)) ],
-         [moment().day(-6).toDate(),  ...this.currentShares.map((s, i) => this.mockPreviousTokenPrice(s, 6)) ],
-         [moment().day(-5).toDate(),  ...this.currentShares.map((s, i) => this.mockPreviousTokenPrice(s, 5)) ],
-         [moment().day(-4).toDate(),  ...this.currentShares.map((s, i) => this.mockPreviousTokenPrice(s, 4)) ],
-         [moment().day(-3).toDate(),  ...this.currentShares.map((s, i) => this.mockPreviousTokenPrice(s, 3)) ],
-         [moment().day(-2).toDate(),  ...this.currentShares.map((s, i) => this.mockPreviousTokenPrice(s, 2)) ],
-         [moment().day(-1).toDate(),  ...this.currentShares.map((s, i) => this.mockPreviousTokenPrice(s, 1)) ],
-         [moment().toDate(),          ...this.currentShares.map((s, i) => this.mockPreviousTokenPrice(s, 0)) ]
-         // [new Date('11/01/19'),  1000,      400,       700      ],
-        ],
+      hasResearchShares() {
+        return this.currentShares.length;
+      },
 
-        options: {
-          title: "",
-          legend: { position: 'top' },
-          hAxis: { title: '', format: 'MMM d, y' },
-          vAxis: { title: '', minValue: 0 },
-          colors: ['#c6bbff', '#f9c3d7', '#a6dcff', '#B9F6CA', '#2d99ff', '#f3f5f8'],
-          chartArea: {
-            left: this.$vuetify.breakpoint.smAndUp ? "5%" : "10%",
-            width: this.$vuetify.breakpoint.smAndUp ? "95%" : "90%",
-            height: "80%"
+      isRequestReviewDisabled() {
+        return !this.selectedExpert
+          || !this.selectedResearchToReview
+          || !this.selectedExpert.expertiseTokens.some(exp => this.selectedResearchToReview.disciplines.some(d => d.id == exp.discipline_id));
+      },
+
+      sharesDistributionChart() {
+        let totalShares = this.currentShares.reduce((acc, {share}) => acc + this.convertToPercent(share.amount), 0);
+        return {
+          data: [
+            ['Distribution', ''],
+            ...this.currentShares.map(({research, share}) => [research.title, this.convertToPercent(share.amount) / totalShares * 100])
+            // ['Research title', 10]
+          ],
+
+          options: {
+            title: '',
+            legend: {position: 'left'},
+            colors: ['#c6bbff', '#f9c3d7', '#a6dcff', '#B9F6CA', '#2d99ff', '#f3f5f8'],
+            chartArea: {
+              left: 0,
+              width: '100%',
+              height: '100%'
+            },
+            pieSliceTextStyle: {
+              // color: "#ffffff",
+              color: '#000000',
+              fontSize: 10
+            },
+            pieHole: 0.6
           }
         }
+      },
+
+      totalAssetsPriceChart() {
+
+        return {
+          data: [
+            ['Date', ...this.currentShares.map(({research}) => `Asset ${research.id}`)],
+            [moment().day(-10).toDate(), ...this.currentShares.map((s, i) => this.mockPreviousTokenPrice(s, 10))],
+            [moment().day(-9).toDate(), ...this.currentShares.map((s, i) => this.mockPreviousTokenPrice(s, 9))],
+            [moment().day(-8).toDate(), ...this.currentShares.map((s, i) => this.mockPreviousTokenPrice(s, 8))],
+            [moment().day(-7).toDate(), ...this.currentShares.map((s, i) => this.mockPreviousTokenPrice(s, 7))],
+            [moment().day(-6).toDate(), ...this.currentShares.map((s, i) => this.mockPreviousTokenPrice(s, 6))],
+            [moment().day(-5).toDate(), ...this.currentShares.map((s, i) => this.mockPreviousTokenPrice(s, 5))],
+            [moment().day(-4).toDate(), ...this.currentShares.map((s, i) => this.mockPreviousTokenPrice(s, 4))],
+            [moment().day(-3).toDate(), ...this.currentShares.map((s, i) => this.mockPreviousTokenPrice(s, 3))],
+            [moment().day(-2).toDate(), ...this.currentShares.map((s, i) => this.mockPreviousTokenPrice(s, 2))],
+            [moment().day(-1).toDate(), ...this.currentShares.map((s, i) => this.mockPreviousTokenPrice(s, 1))],
+            [moment().toDate(), ...this.currentShares.map((s, i) => this.mockPreviousTokenPrice(s, 0))]
+            // [new Date('11/01/19'),  1000,      400,       700      ],
+          ],
+
+          options: {
+            title: '',
+            legend: {position: 'top'},
+            hAxis: {title: '', format: 'MMM d, y'},
+            vAxis: {title: '', minValue: 0},
+            colors: ['#c6bbff', '#f9c3d7', '#a6dcff', '#B9F6CA', '#2d99ff', '#f3f5f8'],
+            chartArea: {
+              left: this.$vuetify.breakpoint.smAndUp ? '5%' : '10%',
+              width: this.$vuetify.breakpoint.smAndUp ? '95%' : '90%',
+              height: '80%'
+            }
+          }
+        }
+      },
+
+    },
+
+    methods: {
+      selectExpert(expert) {
+        this.selectedExpert = expert;
+      },
+
+      queryExperts() {
+        this.isExpertsLoading = true;
+        this.foundExperts = this.expertsSearch ? this.experts.filter(user => {
+          let name = this.$options.filters.fullname(user);
+          return name.toLowerCase().indexOf((this.expertsSearch || '').toLowerCase()) > -1
+            || user.account.name.toLowerCase().indexOf((this.expertsSearch || '').toLowerCase()) > -1;
+        })
+          .map((user => {
+            const name = this.$options.filters.fullname(user);
+            return {name, user};
+          })) : [];
+
+        if (!this.expertsSearch) {
+          this.selectedExpert = null;
+        }
+
+        this.isExpertsLoading = false;
+      },
+
+      requestReview(review) {
+        this.isRequestingReview = true;
+        deipRpc.broadcast.requestReviewAsync(
+          this.user.privKey,
+          this.selectedResearchToReview.id,
+          [this.selectedExpert.account.name],
+          this.user.username
+        )
+          .then(() => {
+            this.$store.dispatch('layout/setSuccess', {message: 'Proposal was successfully created'});
+            this.selectedExpert = null;
+            this.selectedResearchToReview = null;
+          }, (err) => {
+            alert(`The "${this.selectedResearchToReview.title}" research does not have an Announcement, please add it before requesting a review`);
+          })
+          .finally(() => {
+            this.isRequestingReview = false;
+          });
       }
-    },
-
-  },
-
-  methods: {
-    selectExpert(expert) {
-      this.selectedExpert = expert;
-    },
-
-    queryExperts() {
-      this.isExpertsLoading = true;
-      this.foundExperts = this.expertsSearch ? this.experts.filter(user => {
-        let name = this.$options.filters.fullname(user);
-        return name.toLowerCase().indexOf((this.expertsSearch || '').toLowerCase()) > -1 
-          || user.account.name.toLowerCase().indexOf((this.expertsSearch || '').toLowerCase()) > -1;
-      })
-      .map((user => {
-        const name = this.$options.filters.fullname(user);
-        return { name, user };
-      })) : [];
-
-      if (!this.expertsSearch) {
-        this.selectedExpert = null;
-      }
-
-      this.isExpertsLoading = false;
-    },
-
-    requestReview(review) {
-      this.isRequestingReview = true;
-      deipRpc.broadcast.requestReviewAsync(
-        this.user.privKey,
-        this.selectedResearchToReview.id,
-        [this.selectedExpert.account.name],
-        this.user.username
-      )
-      .then(() => {
-        this.$store.dispatch('layout/setSuccess', { message: "Proposal was successfully created"});
-        this.selectedExpert = null;
-        this.selectedResearchToReview = null;
-      }, (err) => { alert(`The "${this.selectedResearchToReview.title}" research does not have an Announcement, please add it before requesting a review`); })
-      .finally(() => {
-        this.isRequestingReview = false;
-      });
     }
-  }
-};
+  };
 </script>
 
 <style lang="less" scoped>
 
-@import "./../../styles/colors.less";
+  @import "./../../styles/colors.less";
 
-.tab-content {
-  border-top: 1px solid @grey-lighten-2;
-}
+  .tab-content {
+    border-top: 1px solid @grey-lighten-2;
+  }
 
-.column-header {
-  min-height: 55px;
-}
+  .column-header {
+    min-height: 55px;
+  }
 
-.column-text-item {
-  min-height: 30px;
-  text-decoration: none;
-  
-  a {
+  .column-text-item {
+    min-height: 30px;
     text-decoration: none;
-    color: #000000;
+
+    a {
+      text-decoration: none;
+      color: #000000;
+    }
+
+    a:hover {
+      text-decoration: underline;
+    }
+
+    .v-chip {
+      height: 20px;
+    }
   }
 
-  a:hover {
-    text-decoration: underline;
+  .expert-avatar {
+    float: left
   }
-  
-  .v-chip {  
-    height: 20px;
-  }  
-}
 
-.expert-avatar {
-  float: left
-}
-
-.glass-container {
-  padding-left: 5%;
-  padding-right: 5%;
-}
-
-@media (min-width: 0px) and (max-width: 960px) {
-  .projects-column {
-    padding-top: 10%;
-    // padding-bottom: 5%;
-  }
-}
-
-@media (min-width: 960px) {
-  .projects-column {
-    padding-right: 5%;
-    overflow: scroll;
-  }
-  .research-tiles-container {
-    height: 100vh;
-  }
-}
-
-@media (min-width: 0px) and (max-width: 960px) {
-  .investments-column {
-    // padding-top: 10%;
-  }
-}
-
-@media (min-width: 960px) {
-  .investments-column {
-    padding-left: 5%;
-    padding-right: 5%;
-    border-left: 1px solid @grey-lighten-2;
-    border-right: 1px solid @grey-lighten-2;
-  }
-}
-
-@media (min-width: 0px) and (max-width: 960px) {
-  .reviews-column {
-    // padding-top: 10%;
-  }
-}
-
-@media (min-width: 960px) {
-  .reviews-column {
+  .glass-container {
     padding-left: 5%;
     padding-right: 5%;
   }
-}
 
-@media (min-width: 0px) and (max-width: 960px) {
-  .total-assets-row {
-    // padding-top: 5%;
+  @media (min-width: 0px) and (max-width: 960px) {
+    .projects-column {
+      padding-top: 10%;
+      // padding-bottom: 5%;
+    }
   }
-}
 
-@media (min-width: 960px) {
-  .total-assets-row {
-    padding-top: 5%;
-    padding-right: 5%;
+  @media (min-width: 960px) {
+    .projects-column {
+      padding-right: 5%;
+      overflow: scroll;
+    }
+
+    .research-tiles-container {
+      height: 100vh;
+    }
   }
-}
+
+  @media (min-width: 0px) and (max-width: 960px) {
+    .investments-column {
+      // padding-top: 10%;
+    }
+  }
+
+  @media (min-width: 960px) {
+    .investments-column {
+      padding-left: 5%;
+      padding-right: 5%;
+      border-left: 1px solid @grey-lighten-2;
+      border-right: 1px solid @grey-lighten-2;
+    }
+  }
+
+  @media (min-width: 0px) and (max-width: 960px) {
+    .reviews-column {
+      // padding-top: 10%;
+    }
+  }
+
+  @media (min-width: 960px) {
+    .reviews-column {
+      padding-left: 5%;
+      padding-right: 5%;
+    }
+  }
+
+  @media (min-width: 0px) and (max-width: 960px) {
+    .total-assets-row {
+      // padding-top: 5%;
+    }
+  }
+
+  @media (min-width: 960px) {
+    .total-assets-row {
+      padding-top: 5%;
+      padding-right: 5%;
+    }
+  }
 
 </style>

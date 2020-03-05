@@ -20,12 +20,12 @@
                   small
                   outline
                   color="white"
-                  :to="{  
+                  :to="{
                       name: 'ResearchEdit',
                       params: {
                         research_group_permlink: encodeURIComponent(research.group_permlink),
                         research_permlink: encodeURIComponent(research.permlink)
-                      } 
+                      }
                     }"
                 >Edit</v-btn>
               </span>
@@ -78,7 +78,10 @@
 
 <script>
 import { mapGetters } from "vuex";
-import bookmarksService from "@/services/http/bookmarks";
+import { UserService } from '@deip/user-service';
+
+const userService = UserService.getInstance()
+
 
 export default {
   name: "ResearchDetails",
@@ -113,7 +116,7 @@ export default {
   methods: {
     addToBookmarks() {
       this.isBookmarkActionInProgress = true;
-      return bookmarksService
+      return userService
         .createResearchBookmark(this.user.username, this.research.id)
         .then(bookmark => {
           this.$store.dispatch("auth/loadResearchBookmarks");
@@ -129,7 +132,7 @@ export default {
 
     removeFromBookmarks() {
       this.isBookmarkActionInProgress = true;
-      return bookmarksService
+      return userService
         .removeResearchBookmark(this.user.username, this.bookmarkId)
         .then(() => {
           this.$store.dispatch("auth/loadResearchBookmarks");

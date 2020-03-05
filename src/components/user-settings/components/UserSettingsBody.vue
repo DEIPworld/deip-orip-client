@@ -53,7 +53,8 @@
                 :disabled="isSavingDisabled || isLoading"
                 color="primary"
                 @click="save()"
-              >Update Info</v-btn>
+              >Update Info
+              </v-btn>
             </v-layout>
           </div>
 
@@ -67,115 +68,119 @@
 </template>
 
 <script>
-import { mapGetters } from "vuex";
-import usersService from "@/services/http/users";
-import moment from "moment";
+  import { mapGetters } from 'vuex';
+  import moment from 'moment';
 
-export default {
-  name: "UserSettingsBody",
-  data() {
-    return {
-      editedBirthdayMenu: false,
-      editedBirthdayDate: null,
-      city: "",
-      country: "",
-      bio: "",
-      email: "",
-      firstName: "",
-      lastName: "",
-      isLoading: false,
-      rules: {
-        required: value => !!value || "This field is required",
-      }
-    };
-  },
-  computed: {
-    ...mapGetters({
-      currentUser: "auth/user",
-      userInfo: "userSettings/userInfo"
-    }),
-    isSavingDisabled() {
-      return (
-        !this.city ||
-        !this.country ||
-        !this.bio ||
-        !this.email ||
-        !this.firstName ||
-        !this.lastName
-      );
-    }
-  },
+  import { UsersService } from '@deip/users-service';
 
-  methods: {
-    cancel() {
-      this.$router.push({
-        name: "UserDetails",
-        params: { account_name: this.currentUser.username }
-      });
-    },
-    save() {
-      this.isLoading = true;
+  const usersService = UsersService.getInstance();
 
-      const location = { city: this.city, country: this.country };
-      const bio = this.bio;
-      const email = this.email;
-      const firstName = this.firstName;
-      const lastName = this.lastName;
-      const birthday = this.editedBirthdayDate;
-
-      const update = {
-        ...this.userInfo.profile,
-        ...{
-          location,
-          bio,
-          email,
-          firstName,
-          lastName,
-          birthday
+  export default {
+    name: 'UserSettingsBody',
+    data() {
+      return {
+        editedBirthdayMenu: false,
+        editedBirthdayDate: null,
+        city: '',
+        country: '',
+        bio: '',
+        email: '',
+        firstName: '',
+        lastName: '',
+        isLoading: false,
+        rules: {
+          required: value => !!value || 'This field is required'
         }
       };
-
-      usersService
-        .updateUserProfile(this.currentUser.username, update)
-        .then(
-          res => {
-            this.$store.dispatch("userSettings/loadUserProfile", {
-              username: this.currentUser.username
-            });
-            this.$store.dispatch('auth/loadUser');
-            this.$store.dispatch("layout/setSuccess", {
-              message: `"Personal info has been saved successfully!"`
-            });
-          },
-          err => {
-            this.$store.dispatch("layout/setError", {
-              message: `An error occurred while saving, please try again later`
-            });
-            console.log(err);
-          }
-        )
-        .finally(() => {
-          this.isLoading = false;
-          this.$router.push({
-            name: "UserDetails",
-            params: { account_name: this.currentUser.username }
-          });
-        });
     },
-  },
+    computed: {
+      ...mapGetters({
+        currentUser: 'auth/user',
+        userInfo: 'userSettings/userInfo'
+      }),
+      isSavingDisabled() {
+        return (
+          !this.city ||
+          !this.country ||
+          !this.bio ||
+          !this.email ||
+          !this.firstName ||
+          !this.lastName
 
-  created() {
-    this.city = this.userInfo.profile.location.city || " ";
-    this.country = this.userInfo.profile.location.country || " ";
-    this.bio = this.userInfo.profile.bio || " ";
-    this.email = this.userInfo.profile.email || " ";
-    this.firstName = this.userInfo.profile.firstName || " ";
-    this.lastName = this.userInfo.profile.lastName || " ";
-    this.editedBirthdayDate = this.userInfo.profile.birthday
-      ? moment(this.userInfo.profile.birthday).format("YYYY-MM-DD")
-      : null;
-  }
-};
+        );
+      }
+    },
+
+    methods: {
+      cancel() {
+        this.$router.push({
+          name: 'UserDetails',
+          params: { account_name: this.currentUser.username }
+        });
+      },
+      save() {
+        this.isLoading = true;
+
+        const location = { city: this.city, country: this.country };
+        const bio = this.bio;
+        const email = this.email;
+        const firstName = this.firstName;
+        const lastName = this.lastName;
+        const birthday = this.editedBirthdayDate;
+
+        const update = {
+          ...this.userInfo.profile,
+          ...{
+            location,
+            bio,
+            email,
+            firstName,
+            lastName,
+            birthday
+          }
+        };
+
+        usersService
+          .updateUserProfile(this.currentUser.username, update)
+          .then(
+            res => {
+              this.$store.dispatch('userSettings/loadUserProfile', {
+                username: this.currentUser.username
+              });
+              this.$store.dispatch('auth/loadUser');
+              this.$store.dispatch('layout/setSuccess', {
+                message: `"Personal info has been saved successfully!"`
+              });
+            },
+            err => {
+              this.$store.dispatch('layout/setError', {
+                message: `An error occurred while saving, please try again later`
+              });
+              console.log(err);
+            }
+          )
+          .finally(() => {
+            this.isLoading = false;
+            this.$router.push({
+              name: 'UserDetails',
+              params: { account_name: this.currentUser.username }
+            });
+          });
+      },
+    },
+
+    created() {
+      this.city = this.userInfo.profile.location.city || ' ';
+      this.country = this.userInfo.profile.location.country || ' ';
+      this.bio = this.userInfo.profile.bio || ' ';
+      this.email = this.userInfo.profile.email || ' ';
+      this.firstName = this.userInfo.profile.firstName || ' ';
+      this.lastName = this.userInfo.profile.lastName || ' ';
+      this.editedBirthdayDate = this.userInfo.profile.birthday
+        ? moment(this.userInfo.profile.birthday).format('YYYY-MM-DD')
+        : null;
+    }
+  };
 </script>
 
 <style lang="less">

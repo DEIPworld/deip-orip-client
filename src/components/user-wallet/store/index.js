@@ -1,6 +1,9 @@
 import Vue from 'vue';
 import deipRpc from '@deip/deip-oa-rpc-client';
-import * as usersService from './../../../utils/user';
+
+import { UsersService } from '@deip/users-service';
+
+const usersService = UsersService.getInstance()
 
 const state = {
   researches: [],
@@ -22,10 +25,10 @@ const getters = {
 
       let shareHolders = researchSharesHolders.map((shareHolder) => {
         let share = researchShares.find(rt => rt.account_name == shareHolder.account.name);
-        return { ...shareHolder, share };
+        return {...shareHolder, share};
       });
-      
-      return { research, group, myShare, shareHolders };
+
+      return {research, group, myShare, shareHolders};
     })
   },
 
@@ -34,7 +37,7 @@ const getters = {
 
 // actions
 const actions = {
-  loadWallet({ dispatch, rootGetters }) {
+  loadWallet({dispatch, rootGetters}) {
     let user = rootGetters['auth/user'];
     let username = user.account.name;
     return Promise.all([
@@ -43,7 +46,7 @@ const actions = {
     ]);
   },
 
-  loadResearchTokens({ state, commit }, username) {
+  loadResearchTokens({state, commit}, username) {
     return deipRpc.api.getResearchTokensByAccountNameAsync(username)
       .then(myResearchTokens => {
         return Promise.all(myResearchTokens.map(rt => deipRpc.api.getResearchByIdAsync(rt.research_id)));
@@ -71,7 +74,7 @@ const actions = {
       });
   },
 
-  loadTransfers({ commit }, username) {
+  loadTransfers({commit}, username) {
     return deipRpc.api.getAccountDeipToDeipTransfersAsync(username, -1, 30)
       .then(transfers => {
         commit('SET_TRANSFERS', transfers.reverse());
@@ -104,10 +107,10 @@ const mutations = {
 
 const namespaced = true;
 
-export default {
+export const userWalletStore = {
   namespaced,
   state,
   getters,
   actions,
   mutations
-};
+}

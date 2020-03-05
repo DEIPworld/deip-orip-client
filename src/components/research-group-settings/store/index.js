@@ -1,6 +1,9 @@
 import deipRpc from '@deip/deip-oa-rpc-client';
 import Vue from 'vue';
-import * as proposalService from "./../../../services/ProposalService";
+
+import { ResearchGroupService } from '@deip/research-group-service';
+
+const researchGroupService = ResearchGroupService.getInstance();
 
 const state = {
   group: undefined,
@@ -8,7 +11,6 @@ const state = {
   isLoadingResearchGroupDetails: undefined,
   isLoadingResearchGroupProposals: undefined
 }
-
 
 // getters
 const getters = {
@@ -21,46 +23,35 @@ const getters = {
 // actions
 const actions = {
 
-  loadResearchGroup({
-    commit,
-    dispatch,
-    state
-  }, {
-    permlink
-  }) {
+  loadResearchGroup({ commit, dispatch, state }, { permlink }) {
     commit('SET_GROUP_DETAILS_LOADING_STATE', true);
 
     return deipRpc.api.getResearchGroupByPermlinkAsync(permlink).then(data => {
-        commit('SET_RESEARCH_GROUP', data);
+      commit('SET_RESEARCH_GROUP', data);
 
-        const proposalsLoad = new Promise((resolve, reject) => {
-          dispatch('loadResearchGroupProposals', {
-            groupId: state.group.id,
-            notify: resolve
-          });
+      const proposalsLoad = new Promise((resolve, reject) => {
+        dispatch('loadResearchGroupProposals', {
+          groupId: state.group.id,
+          notify: resolve
         });
+      });
 
-        return Promise.all([proposalsLoad]);
-      })
+      return Promise.all([ proposalsLoad ]);
+    })
       .finally(() => {
         commit('SET_GROUP_DETAILS_LOADING_STATE', false);
       });
   },
 
-  loadResearchGroupProposals({
-    commit
-  }, {
-    groupId,
-    notify
-  }) {
+  loadResearchGroupProposals({ commit }, { groupId, notify }) {
     commit('SET_GROUP_PROPOSALS_LOADING_STATE', true);
 
     deipRpc.api.getProposalsByResearchGroupIdAsync(groupId)
       .then(data => {
         return Promise.all(
-          data.map(item =>
-            proposalService.extendProposalByRelatedInfo(
-              proposalService.getParsedProposal(item)
+          data.map((item) =>
+            researchGroupService.extendProposalByRelatedInfo(
+              JSON.parse(item.data)
             )
           )
         );
@@ -96,7 +87,7 @@ const mutations = {
 
 const namespaced = true;
 
-export default {
+export const researchGroupSettingsStore = {
   namespaced,
   state,
   getters,

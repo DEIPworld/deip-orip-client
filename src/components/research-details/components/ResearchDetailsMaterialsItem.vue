@@ -5,7 +5,8 @@
         <v-flex
           lg2
           class="text-capitalize bold"
-        >{{getResearchContentType(content.content_type).text}}</v-flex>
+        >{{getResearchContentType(content.content_type).text}}
+        </v-flex>
         <v-flex lg8 class="bold">
           <router-link
             v-if="isDetailsAvailable"
@@ -18,7 +19,8 @@
                 content_permlink: encodeURIComponent(content.permlink)
               }
             }"
-          >{{content.title}}</router-link>
+          >{{content.title}}
+          </router-link>
           <span class="grey--text" v-else>{{content.title}}</span>
         </v-flex>
         <v-flex v-if="isDetailsAvailable" lg1 text-lg-center class="text-xs-center">
@@ -79,68 +81,80 @@
 </template>
 
 <script>
-import { mapGetters } from "vuex";
-import { getResearchContentType } from "@/services/ResearchService";
+  import { mapGetters } from 'vuex';
 
-export default {
-  name: "ResearchDetailsMaterialsItem",
+  import { ResearchService } from '@deip/research-service';
 
-  props: {
-    content: { type: Object, required: true },
-    isDetailsAvailable: {type: Boolean, required:false, default: false}
-  },
-  data() {
-    return {};
-  },
-  computed: {
-    ...mapGetters({
-      research: "rd/research",
-      researchGroupMembersList: "rd/researchGroupMembersList",
-      disciplinesList: "rd/disciplinesList"
-    })
-  },
-  methods: {
-    getContentEciList(content) {
-      return this.disciplinesList.map(discipline => {
-        const eciObj = content.eci_per_discipline.find(
-          item => item[0] === discipline.id
+  const researchService = ResearchService.getInstance();
+
+  export default {
+    name: 'ResearchDetailsMaterialsItem',
+
+    props: {
+      content: {
+        type: Object,
+        required: true
+      },
+      isDetailsAvailable: {
+        type: Boolean,
+        required: false,
+        default: false
+      }
+    },
+    data() {
+      return {};
+    },
+    computed: {
+      ...mapGetters({
+        research: 'rd/research',
+        researchGroupMembersList: 'rd/researchGroupMembersList',
+        disciplinesList: 'rd/disciplinesList'
+      })
+    },
+    methods: {
+      getContentEciList(content) {
+        return this.disciplinesList.map(discipline => {
+          const eciObj = content.eci_per_discipline.find(
+            item => item[0] === discipline.id
+          );
+
+          return {
+            disciplineName: discipline.name,
+            value: eciObj ? eciObj[1] : 0
+          };
+        });
+      },
+
+      createContentAuthorsString(authors) {
+        return this.researchGroupMembersList
+          .filter(m => authors.some(a => a === m.account.name))
+          .map(m => this.$options.filters.fullname(m))
+          .join('  ·  ');
+      },
+      doesContentHaveNegativeReviews(content) {
+        return content.reviews.some(r => !r.is_positive);
+      },
+      countContentReviews(content, isPositive) {
+        return content.reviews.reduce(
+          (acc, review) =>
+            (review.is_positive && isPositive) ||
+            (!review.is_positive && !isPositive)
+              ? acc + 1
+              : acc,
+          0
         );
-
-        return {
-          disciplineName: discipline.name,
-          value: eciObj ? eciObj[1] : 0
-        };
-      });
-    },
-
-    createContentAuthorsString(authors) {
-      return this.researchGroupMembersList
-        .filter(m => authors.some(a => a === m.account.name))
-        .map(m => this.$options.filters.fullname(m))
-        .join("  ·  ");
-    },
-    doesContentHaveNegativeReviews(content) {
-      return content.reviews.some(r => !r.is_positive);
-    },
-    countContentReviews(content, isPositive) {
-      return content.reviews.reduce(
-        (acc, review) =>
-          (review.is_positive && isPositive) ||
-          (!review.is_positive && !isPositive)
-            ? acc + 1
-            : acc,
-        0
-      );
-    },
-    doesContentHaveReviews(content) {
-      return content.reviews.length;
-    },
-    doesContentHavePositiveReviews(content) {
-      return content.reviews.some(r => r.is_positive);
-    },
-    getResearchContentType
-  }
-};
+      },
+      doesContentHaveReviews(content) {
+        return content.reviews.length;
+      },
+      doesContentHavePositiveReviews(content) {
+        return content.reviews.some(r => r.is_positive);
+      },
+      getResearchContentType(type) {
+        return researchService.getResearchContentType(type);
+      }
+    }
+  };
 </script>
 
 <style scoped>

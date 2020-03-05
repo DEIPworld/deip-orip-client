@@ -1,13 +1,17 @@
 <template>
   <base-page-layout>
     <div slot="content" class="full-width">
-      <v-layout column justify-center class="feed-header full-width px-5" :style="{ background: 'url(' + $options.filters.tenantBackgroundSrc(tenant) + '), 100%, 100%, no-repeat'}">
+      <v-layout column justify-center class="feed-header full-width px-5"
+                :style="{ background: 'url(' + $options.filters.tenantBackgroundSrc(tenant) + '), 100%, 100%, no-repeat'}">
         <div class="display-2 uppercase half-bold">Projects</div>
         <div class="py-4">
-          <v-btn v-if="isLoggedIn()"  :to="{ name: 'CreateResearch' }" color="primary" class="ma-0">Start a project</v-btn>
+          <v-btn v-if="isLoggedIn()" :to="{ name: 'CreateResearch' }" color="primary" class="ma-0">Start a project
+          </v-btn>
           <template v-else>
             <v-btn :to="{ name: 'SignIn' }" color="primary" class="ma-0 px-5">Log In</v-btn>
-            <div class="white--text body-1 mt-2">After creating an account/log in you can add new projects or enjoy shared materials</div>
+            <div class="white--text body-1 mt-2">After creating an account/log in you can add new projects or enjoy
+              shared materials
+            </div>
           </template>
         </div>
       </v-layout>
@@ -16,7 +20,9 @@
         <v-flex xs12 sm12 md12 lg12 xl12 class="feed-filter" ref="projectsView">
           <v-expansion-panel expand v-model="filtersTabExpansionModel" class="elevation-0">
             <v-expansion-panel-content class="elevation-0">
-              <template slot="actions"><v-icon color="primary">$vuetify.icons.expand</v-icon></template>
+              <template slot="actions">
+                <v-icon color="primary">$vuetify.icons.expand</v-icon>
+              </template>
               <template slot="header">
                 <v-layout row justify-space-between>
                   <div class="px-4">
@@ -93,7 +99,8 @@
                     </v-layout>
                   </div>
                   <v-layout row wrap justify-space-between>
-                    <v-flex xs6 sm6 md3 lg3 xl3 px-2 v-for="(discipline, i) in disciplines" :key="'discipline-filter-' + i">
+                    <v-flex xs6 sm6 md3 lg3 xl3 px-2 v-for="(discipline, i) in disciplines"
+                            :key="'discipline-filter-' + i">
                       <v-btn
                         @click="toggleDiscipline(discipline)"
                         flat block small color="primary"
@@ -106,7 +113,9 @@
                     <v-spacer></v-spacer>
                   </v-layout>
                 </v-flex>
-                <v-flex xs12 sm12 md12 lg12 xl12 py-4><v-divider></v-divider></v-flex>
+                <v-flex xs12 sm12 md12 lg12 xl12 py-4>
+                  <v-divider></v-divider>
+                </v-flex>
                 <v-flex xs12 sm12 md12 lg12 xl12 class="feed-trl-filter">
                   <div class="pb-4">
                     <v-layout row justify-space-between align-baseline>
@@ -131,7 +140,7 @@
                           class="text-capitalize filter-btn"
                           :class="{'selected': isTrlSelected(trl)}"
                         >
-                          <div class="full-width text-xs-center" >{{trl.label}}</div>
+                          <div class="full-width text-xs-center">{{trl.label}}</div>
                         </v-btn>
                         <span>{{trl.hint}}</span>
                       </v-tooltip>
@@ -139,7 +148,9 @@
                     <v-spacer></v-spacer>
                   </v-layout>
                 </v-flex>
-                <v-flex xs12 sm12 md12 lg12 xl12 py-4><v-divider></v-divider></v-flex>
+                <v-flex xs12 sm12 md12 lg12 xl12 py-4>
+                  <v-divider></v-divider>
+                </v-flex>
                 <v-flex xs12 sm12 md12 lg12 xl12 class="feed-organizations-filter">
                   <div class="pb-4">
                     <v-layout row justify-space-between align-baseline>
@@ -170,7 +181,7 @@
                             }"
                           >
                             <img
-                              
+
                               class="organization-item__img"
                               :src="$options.filters.researchGroupLogoSrc(organization.id, 200, 200)"
                             />
@@ -182,10 +193,12 @@
                     </div>
                   </v-layout>
                 </v-flex>
-                <v-flex xs12 sm12 md12 lg12 xl12 py-4><v-divider></v-divider></v-flex>
+                <v-flex xs12 sm12 md12 lg12 xl12 py-4>
+                  <v-divider></v-divider>
+                </v-flex>
                 <v-flex xs12 sm12 md12 lg12 xl12>
                   <div class="pb-4">
-                    <v-layout  row align-baseline>
+                    <v-layout row align-baseline>
                       <v-flex shrink>
                         <span class="subheading half-bold">Browse top projects only</span>
                       </v-flex>
@@ -209,7 +222,8 @@
         <v-card class="px-5 pb-4 elevation-0 full-width" :class="{'pt-4': isFiltersTabExpanded}">
           <v-layout row wrap>
             <v-flex xs12 sm12 md12 lg12 xl12>
-              <div class="subheading half-bold px-2">Projects | <span class="primary--text">{{researchFeed.length}}</span></div>
+              <div class="subheading half-bold px-2">Projects | <span
+                class="primary--text">{{researchFeed.length}}</span></div>
             </v-flex>
             <v-flex xs12 sm12 md12 lg12 xl12>
               <v-data-iterator
@@ -254,182 +268,186 @@
 </template>
 
 <script>
-import deipRpc from '@deip/deip-oa-rpc-client';
-import { mapGetters } from 'vuex';
-import moment from 'moment';
-import { isLoggedIn } from '@/utils/auth';
-import * as disciplinesService from '@/components/common/disciplines/DisciplineTreeService';
-import trlData from '@/components/common/trl.json';
+  import deipRpc from '@deip/deip-oa-rpc-client';
+  import { mapGetters } from 'vuex';
+  import moment from 'moment';
 
-export default {
-  name: "ResearchFeed",
+  import { AccessService } from '@deip/access-service';
 
-  data() {
-    return {
-      rowsPerPageItems: [9, 30, 100],
-      pagination: {
-        rowsPerPage: 100
+  import * as disciplinesService from '@/components/common/disciplines/DisciplineTreeService';
+  import trlData from '@/components/common/trl.json';
+
+  const accessService = AccessService.getInstance();
+
+  export default {
+    name: 'ResearchFeed',
+
+    data() {
+      return {
+        rowsPerPageItems: [ 9, 30, 100 ],
+        pagination: {
+          rowsPerPage: 100
+        },
+        disciplines: [ ...disciplinesService.getTopLevelNodes() ],
+        filterByTopOnly: false,
+        filtersTabExpansionModel: [ false ],
+        trls: trlData.map((t, i) => ({
+          id: t.id,
+          label: `TRL ${i + 1}`,
+          hint: t.description,
+        })),
+      }
+    },
+
+    computed: {
+      ...mapGetters({
+        tenant: 'auth/tenant',
+        researchFeed: 'feed/researchFeed',
+        organizations: 'feed/organizations',
+        filter: 'feed/filter'
+      }),
+      isFiltersTabExpanded() {
+        return this.filtersTabExpansionModel[0];
       },
-      disciplines: [...disciplinesService.getTopLevelNodes()],
-      filterByTopOnly: false,
-      filtersTabExpansionModel: [false],
-      trls: trlData.map((t, i) => ({
-        id: t.id,
-        label: `TRL ${i + 1}`,
-        hint: t.description,
-      })),
-    }
-  },
-
-  computed: {
-    ...mapGetters({
-      tenant: 'auth/tenant',
-      researchFeed: 'feed/researchFeed',
-      organizations: 'feed/organizations',
-      filter: 'feed/filter'
-    }),
-    isFiltersTabExpanded() {
-      return this.filtersTabExpansionModel[0];
-    },
-    selectedTrls() {
-      return this.filter.trl;
-    },
-    selectedTopDisciplines() {
-      return this.filter.disciplines.filter(d => d.id != 0 && d.children !== undefined);
-    },
-    selectedOrganizations() {
-      return this.filter.organizations;
-    },
-    isAllDisciplinesSelected() {
-      return this.filter.disciplines.length === 0;
-    },
-    isAllOrganizationsSelected() {
-      return this.filter.organizations.length === 0;
-    },
-    isAllTrlSelected() {
-      return this.filter.trl.length === 0;
-    }
-  },
-
-  methods: {
-    resetTrl() {
-      this.$store.dispatch('feed/updateFilter', { key: 'trl', value: [] });
-    },
-
-    toggleTrl(trl) {
-      if (!this.isTrlSelected(trl)) {
-        this.$store.dispatch('feed/updateFilter', {
-          key: 'trl',
-          value: [trl, ...this.filter.trl]
-        });
-      } else {
-        this.$store.dispatch('feed/updateFilter', {
-          key: 'trl',
-          value: this.filter.trl.filter(t => t.id !== trl.id)
-        });
+      selectedTrls() {
+        return this.filter.trl;
+      },
+      selectedTopDisciplines() {
+        return this.filter.disciplines.filter(d => d.id != 0 && d.children !== undefined);
+      },
+      selectedOrganizations() {
+        return this.filter.organizations;
+      },
+      isAllDisciplinesSelected() {
+        return this.filter.disciplines.length === 0;
+      },
+      isAllOrganizationsSelected() {
+        return this.filter.organizations.length === 0;
+      },
+      isAllTrlSelected() {
+        return this.filter.trl.length === 0;
       }
     },
 
-    isTrlSelected(trl) {
-      return !!this.filter.trl.some((t) => t.id === trl.id);
+    methods: {
+      resetTrl() {
+        this.$store.dispatch('feed/updateFilter', { key: 'trl', value: [] });
+      },
+
+      toggleTrl(trl) {
+        if (!this.isTrlSelected(trl)) {
+          this.$store.dispatch('feed/updateFilter', {
+            key: 'trl',
+            value: [ trl, ...this.filter.trl ]
+          });
+        } else {
+          this.$store.dispatch('feed/updateFilter', {
+            key: 'trl',
+            value: this.filter.trl.filter(t => t.id !== trl.id)
+          });
+        }
+      },
+
+      isTrlSelected(trl) {
+        return !!this.filter.trl.some((t) => t.id === trl.id);
+      },
+
+      selectAllDisciplines() {
+        this.$store.dispatch('feed/updateFilter', { key: 'disciplines', value: [] });
+      },
+
+      toggleDiscipline(discipline) {
+        let disciplinesGraph = [ discipline, ...Object.values(discipline.children) ];
+        if (!this.isDisciplineSelected(discipline)) {
+          let value = [ ...disciplinesGraph, ...this.filter.disciplines ];
+          this.$store.dispatch('feed/updateFilter', { key: 'disciplines', value });
+        } else {
+          let value = this.filter.disciplines.filter(d => !disciplinesGraph.some(item => item === d));
+          this.$store.dispatch('feed/updateFilter', { key: 'disciplines', value });
+        }
+      },
+
+      isDisciplineSelected(discipline) {
+        return this.filter.disciplines.some(d => d === discipline);
+      },
+
+      selectAllOrganizations() {
+        this.$store.dispatch('feed/updateFilter', { key: 'organizations', value: [] });
+      },
+
+      toggleOrganization(organization) {
+        if (!this.isOrganizationSelected(organization)) {
+          let value = [ organization, ...this.filter.organizations ];
+          this.$store.dispatch('feed/updateFilter', { key: 'organizations', value });
+        } else {
+          let value = this.filter.organizations.filter(o => o.id != organization.id);
+          this.$store.dispatch('feed/updateFilter', { key: 'organizations', value });
+        }
+      },
+
+      isOrganizationSelected(organization) {
+        return this.filter.organizations.some(o => o.id === organization.id);
+      },
+
+      onPaginationUpdated(nextState) {
+        this.$refs.projectsView.scrollIntoView();
+      },
+
+      isLoggedIn() { return accessService.isLoggedIn() }
     },
 
-    selectAllDisciplines() {
-      this.$store.dispatch('feed/updateFilter', { key: 'disciplines', value: [] });
-    },
-
-    toggleDiscipline(discipline) {
-      let disciplinesGraph = [discipline, ...Object.values(discipline.children)];
-      if (!this.isDisciplineSelected(discipline)) {
-        let value = [...disciplinesGraph, ...this.filter.disciplines];
-        this.$store.dispatch('feed/updateFilter', { key: 'disciplines', value });
-      } else {
-        let value = this.filter.disciplines.filter(d => !disciplinesGraph.some(item => item === d));
-        this.$store.dispatch('feed/updateFilter', { key: 'disciplines', value });
+    watch: {
+      filterByTopOnly(newVal) {
+        this.$store.dispatch('feed/updateFilter', { key: 'topOnly', value: newVal });
       }
-    },
-
-    isDisciplineSelected(discipline) {
-      return this.filter.disciplines.some(d => d === discipline);
-    },
-
-    selectAllOrganizations() {
-      this.$store.dispatch('feed/updateFilter', { key: 'organizations', value: [] });
-    },
-
-    toggleOrganization(organization) {
-      if (!this.isOrganizationSelected(organization)) {
-        let value = [organization, ...this.filter.organizations];
-        this.$store.dispatch('feed/updateFilter', { key: 'organizations', value });
-      } else {
-        let value = this.filter.organizations.filter(o => o.id != organization.id);
-        this.$store.dispatch('feed/updateFilter', { key: 'organizations', value });
-      }
-    },
-
-    isOrganizationSelected(organization) {
-      return this.filter.organizations.some(o => o.id === organization.id);
-    },
-
-    onPaginationUpdated(nextState) {
-      this.$refs.projectsView.scrollIntoView();
-    },
-
-    isLoggedIn,
-  },
-
-  watch: {
-    filterByTopOnly(newVal) {
-      this.$store.dispatch('feed/updateFilter', { key: 'topOnly', value: newVal });
     }
-  }
-};
+  };
 </script>
 
 <style lang="less" scoped>
-.feed-header {
-  background-size: cover !important;
-  background-repeat: no-repeat !important;
-  height: 300px;
-  width: 100%;
-  font-style: normal;
-  color: white;
-}
-
-.filters-background {
-  background-color: #fafafa;
-}
-
-.organization-item {
-  height: 60px;
-  width: 180px;
-  cursor: pointer;
-  background: white;
-  border: 1px solid #e5e5e5;
-  position: relative;
-  display: flex;
-  justify-content: center;
-
-  &__img {
-    max-height: 100%;
-    max-width: 100%;
-    align-self: center;
-  }
-
-  &__overlay {
-    position: absolute;
-    top: 0;
-    left: 0;
+  .feed-header {
+    background-size: cover !important;
+    background-repeat: no-repeat !important;
+    height: 300px;
     width: 100%;
-    height: 100%;
-    display: none;
-    color: #e5e5e5;
+    font-style: normal;
+    color: white;
   }
 
-  &:hover &__overlay, &--selected &__overlay {
-    display: block;
-    background: rgba(219, 228, 251, .6);
+  .filters-background {
+    background-color: #fafafa;
   }
-}
+
+  .organization-item {
+    height: 60px;
+    width: 180px;
+    cursor: pointer;
+    background: white;
+    border: 1px solid #e5e5e5;
+    position: relative;
+    display: flex;
+    justify-content: center;
+
+    &__img {
+      max-height: 100%;
+      max-width: 100%;
+      align-self: center;
+    }
+
+    &__overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      display: none;
+      color: #e5e5e5;
+    }
+
+    &:hover &__overlay, &--selected &__overlay {
+      display: block;
+      background: rgba(219, 228, 251, .6);
+    }
+  }
 
 </style>

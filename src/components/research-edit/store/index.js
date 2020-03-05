@@ -1,6 +1,9 @@
-import deipRpc from '@deip/deip-oa-rpc-client'
-import Vue from 'vue'
-import { getResearch } from './../../../services/ResearchExtendedService';
+import deipRpc from '@deip/deip-oa-rpc-client';
+import Vue from 'vue';
+
+import { ResearchService } from '@deip/research-service';
+
+const researchService = ResearchService.getInstance();
 
 const state = {
   research: null,
@@ -40,15 +43,15 @@ const actions = {
   },
   loadResearchRef({ state, dispatch, commit }, { researchId, notify }) {
     commit('SET_RESEARCH_REF_DETAILS_LOADING_STATE', true);
-    return getResearch(researchId)
-        .then(researchRef => {
-            commit('SET_RESEARCH_REF_DETAILS', researchRef);
-        }, (err) => {console.log(err)})
-    .finally(() => {
+    return researchService.getResearch(researchId)
+      .then(researchRef => {
+        commit('SET_RESEARCH_REF_DETAILS', researchRef);
+      }, (err) => {console.log(err)})
+      .finally(() => {
         commit('SET_RESEARCH_REF_DETAILS_LOADING_STATE', false);
         if (notify) notify();
-    })
-}
+      })
+  }
 }
 
 // mutations
@@ -73,7 +76,7 @@ const mutations = {
 
 const namespaced = true;
 
-export default {
+export const reStore = {
   namespaced,
   state,
   getters,

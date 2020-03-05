@@ -1,14 +1,17 @@
 import Vue from 'vue';
 import deipRpc from '@deip/deip-oa-rpc-client';
-import { isLoggedIn, getDecodedToken } from '@/utils/auth'
-import * as usersService from '@/utils/user';
-import tokenSaleService from '@/services/TokenSaleService';
-import * as researchGroupService from '@/services/ResearchGroupService';
-import * as researchService from '@/services/ResearchService';
-import { getResearch } from '@/services/ResearchExtendedService';
+
+import { ResearchService } from '@deip/research-service';
+import { UsersService } from '@deip/users-service';
+import { InvestmentsService } from '@deip/investments-service';
+import { ResearchGroupService } from '@deip/research-group-service';
+
+const researchService = ResearchService.getInstance();
+const usersService = UsersService.getInstance();
+const investmentsService = InvestmentsService.getInstance();
+const researchGroupService = ResearchGroupService.getInstance();
 
 const state = {
-
   fullResearchListing: [],
   feedTotalVotes: [],
   feedResearchReviews: [],
@@ -24,8 +27,8 @@ const state = {
     organizations: [],
     q: '',
     orderBy: {
-      iteratee: ['title'],
-      order: ['asc']
+      iteratee: [ 'title' ],
+      order: [ 'asc' ]
     },
     topOnly: false,
     dateFrom: null,
@@ -43,7 +46,7 @@ const getters = {
 
   researchFeed: (state, getters) => {
     let ordered = state.fullResearchListing
-      .map(item  => {
+      .map(item => {
         let isTop = researchService.getTopResearchesIds().some(id => id == item.research_id);
         return { ...item, isTop };
       })
@@ -63,15 +66,24 @@ const getters = {
           let stats = state.feedDisciplinesStatistics.find(stat => stat.discipline_id == discipline.id);
           return { ...discipline, stats };
         });
-        return { ...item, totalVotes, reviews, group, authors: researchMembers, tokenSale, tokenSaleContributions, disciplines };
+        return {
+          ...item,
+          totalVotes,
+          reviews,
+          group,
+          authors: researchMembers,
+          tokenSale,
+          tokenSaleContributions,
+          disciplines
+        };
       })
-      // .sort((a, b) => {
-      //   if (b.created_at > a.created_at) {
-      //     return 1
-      //   }
+    // .sort((a, b) => {
+    //   if (b.created_at > a.created_at) {
+    //     return 1
+    //   }
 
-      //   return -1;
-      // });
+    //   return -1;
+    // });
 
     return ordered;
   },
@@ -106,10 +118,10 @@ const actions = {
           if (!item.is_private) return true;
 
           return username ? item.group_members.includes(username) : false;
-        }).map(item => {return {...item, isCollapsed: true }});
+        }).map(item => {return { ...item, isCollapsed: true }});
 
         let researchRefsLoad = Promise.all(fullResearchListing
-          .map((r) => getResearch(r.research_id)
+          .map((r) => researchService.getResearch(r.research_id)
             .then((researchRef) => {
               r.researchRef = researchRef;
             })
@@ -117,16 +129,20 @@ const actions = {
 
         let researchTotalVotesLoad = Promise.all(listing
           .map(r => deipRpc.api.getTotalVotesByResearchAsync(r.research_id)));
-        
+
         let researchReviewsLoad = Promise.all(listing
           .map(r => deipRpc.api.getReviewsByResearchAsync(r.research_id)
-            .then((reviews) => { return reviews.map(review => { return { ...review, research_id: r.research_id}})})
+            .then((reviews) => {
+              return reviews.map(review => {
+                return { ...review, research_id: r.research_id }
+              })
+            })
           ));
 
         let researchGroupsLoad = Promise.all(listing
           .map(r => r.group_id)
           .reduce((acc, groupId) => {
-            return acc.some(g => g == groupId) ? acc : [groupId, ...acc];
+            return acc.some(g => g == groupId) ? acc : [ groupId, ...acc ];
           }, [])
           .map(groupId => researchGroupService.getResearchGroupById(groupId)));
 
@@ -139,16 +155,16 @@ const actions = {
         //   .map(d => deipRpc.api.getEciAndExpertiseStatsByDisciplineIdAsync(d)
         //     .then((stats) => { return { discipline_id: d, ...stats } })
         //   ));
-        
+
         let groupsMembersLoad = usersService.getEnrichedProfiles(listing
           .map(r => r.group_members)
           .reduce((acc, groupMembers) => {
             let unique = groupMembers.filter(name => !acc.some(a => a == name));
-            return [...unique, ...acc];
+            return [ ...unique, ...acc ];
           }, []));
-        
+
         let tokenSalesLoad = Promise.all(listing
-          .map(r => tokenSaleService.getCurrentTokenSaleByResearchId(r.research_id)));
+          .map(r => investmentsService.getCurrentTokenSaleByResearchId(r.research_id)));
 
         return Promise.all([
           researchRefsLoad,
@@ -160,7 +176,7 @@ const actions = {
           tokenSalesLoad
         ]);
       })
-      .then(([, totalVotes, researchReviews, groups, /* disciplinesStats, */ groupsMembers, tokenSales]) => {
+      .then(([ , totalVotes, researchReviews, groups, /* disciplinesStats, */ groupsMembers, tokenSales ]) => {
         commit('SET_FULL_RESEARCH_LISTING', fullResearchListing);
         commit('SET_RESEARCH_FEED_TOTAL_VOTES_LIST', [].concat.apply([], totalVotes));
         commit('SET_RESEARCH_FEED_REVIEWS_LIST', [].concat.apply([], researchReviews));
@@ -171,7 +187,7 @@ const actions = {
 
         let tokenSalesContributionsLoad = Promise.all(state.feedResearchTokenSales
           .map(tokenSale => deipRpc.api.getResearchTokenSaleContributionsByResearchTokenSaleIdAsync(tokenSale.id)));
-        
+
         return Promise.all([
           tokenSalesContributionsLoad
         ]);
@@ -182,7 +198,9 @@ const actions = {
   },
 
   toggleFeedItem({ commit, state, getters }, id) {
-    let item = state.fullResearchListing.find(item => { return item.research_id == id });
+    let item = state.fullResearchListing.find(item => {
+      return item.research_id == id
+    });
     commit('SET_FEED_ITEM_COLLAPSE_STATE', { item: item, collapsed: !item.isCollapsed })
   },
 
@@ -206,7 +224,7 @@ const mutations = {
   ['SET_RESEARCH_FEED_TOTAL_VOTES_LIST'](state, list) {
     Vue.set(state, 'feedTotalVotes', list);
   },
-  
+
   ['SET_RESEARCH_FEED_REVIEWS_LIST'](state, list) {
     Vue.set(state, 'feedResearchReviews', list);
   },
@@ -222,7 +240,7 @@ const mutations = {
   ['SET_RESEARCH_FEED_GROUPS_MEMBERS_LIST'](state, list) {
     Vue.set(state, 'feedResearchGroupsMembers', list);
   },
-  
+
   ['SET_RESEARCH_FEED_TOKEN_SALES_LIST'](state, list) {
     Vue.set(state, 'feedResearchTokenSales', list);
   },
@@ -236,20 +254,22 @@ const mutations = {
   },
 
   ['SET_FEED_ITEMS_COLLAPSE_STATE'](state, collapsed) {
-    state.fullResearchListing.forEach(item => { item.isCollapsed = collapsed });
+    state.fullResearchListing.forEach(item => {
+      item.isCollapsed = collapsed
+    });
   },
 
   ['UPDATE_FILTER'](state, { key, value }) {
     Vue.set(state.filter, key, value);
   }
-}
+};
 
 const namespaced = true;
 
-export default {
+export const feedStore = {
   namespaced,
   state,
   getters,
   actions,
   mutations
-}
+};

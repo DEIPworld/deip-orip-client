@@ -124,8 +124,11 @@
 import moment from "moment";
 import { mapGetters } from "vuex";
 
-import { getResearchContentType } from "@/services/ResearchService";
+import { ResearchService } from '@deip/research-service'
+
 import ResearchTimeline from './components/ResearchTimeline';
+
+const researchService = ResearchService.getInstance();
 
 export default {
   name: "ResearchDetailsPublic",
@@ -209,7 +212,7 @@ export default {
         };
       });
     },
-    getResearchContentType
+    getResearchContentType(type) { return researchService.getResearchContentType(type)}
   },
 
   created() {
