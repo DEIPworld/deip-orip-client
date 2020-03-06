@@ -80,8 +80,12 @@
 <script>
   import deipRpc from '@deip/deip-oa-rpc-client'
   import crypto from '@deip/lib-crypto'
-  import authService from '@/services/http/auth'
-  import { decodedToken, clearAccessToken, setAccessToken } from '@/utils/auth'
+
+  import { AccessService } from '@deip/access-service';
+  import { AuthService } from '@deip/auth-service';
+
+  const accessService = AccessService.getInstance();
+  const authService = AuthService.getInstance();
 
   const encodeUint8Arr = (inputString) => new TextEncoder('utf-8').encode(inputString);
 
@@ -143,7 +147,7 @@
             try {
               secretKey = crypto.PrivateKey.from(privateKey);
             } catch(err) {
-              clearAccessToken();
+              accessService.clearAccessToken();
               this.isChecking = false;
               this.$store.dispatch('layout/setError', { message: 'Invalid private key format' });
               return;
@@ -157,7 +161,7 @@
             })
           }).then((response) => {
             if (!response.success) {
-              clearAccessToken();
+              accessService.clearAccessToken();
               this.isChecking = false;
               this.$store.dispatch('layout/setError', { message: response.error });
               return;
@@ -168,12 +172,12 @@
             // TODO: We should make decision on how to store private keys at UI.
             // For now we can use local storage but it's not secure enough due to XSS attacks
             // and compromised thirdparty sources.
-            setAccessToken(response.jwtToken, privateKey)
+            accessService.setAccessToken(response.jwtToken, privateKey)
             this.isChecking = false;
             this.isServerValidated = true;
             this.$router.go('/');
           }).catch((err) => {
-            clearAccessToken();
+            accessService.clearAccessToken();
             this.isChecking = false;
             this.$store.dispatch('layout/setError', { message: err.message });
           });

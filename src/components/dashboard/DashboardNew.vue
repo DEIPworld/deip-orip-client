@@ -8,11 +8,13 @@
           <v-tab
             :class="themeSettings['tabs-text-class']"
             href="#tab-my-projects"
-          >My projects: {{ myResearches.length }}</v-tab>
+          >My projects: {{ myResearches.length }}
+          </v-tab>
           <v-tab
             :class="themeSettings['tabs-text-class']"
             href="#tab-following-projects"
-          >Following projects: {{ followingResearches.length }}</v-tab>
+          >Following projects: {{ followingResearches.length }}
+          </v-tab>
           <v-spacer></v-spacer>
 
           <v-tabs-items class="tab-content">
@@ -24,7 +26,8 @@
                     color="primary"
                     small
                     class="ma-0 px-5 py-3"
-                  >Start a project</v-btn>
+                  >Start a project
+                  </v-btn>
                 </div>
                 <v-layout row wrap v-if="myResearches.length">
                   <v-flex
@@ -59,14 +62,16 @@
                       <v-flex>
                         <div
                           class="subheading font-weight-bold mb-2"
-                        >You haven’t created any project yet</div>
+                        >You haven’t created any project yet
+                        </div>
                         <div class="body-2 mb-4">Upload a project and collaborate for future success</div>
                         <div>
                           <v-btn
                             :to="{ name: 'CreateResearch' }"
                             color="primary"
                             class="px-5 ma-0"
-                          >Create your first project</v-btn>
+                          >Create your first project
+                          </v-btn>
                         </div>
                       </v-flex>
                     </v-layout>
@@ -110,16 +115,19 @@
                         <v-flex>
                           <div
                             class="subheading font-weight-bold mb-2"
-                          >You’re not following any project yet</div>
+                          >You’re not following any project yet
+                          </div>
                           <div
                             class="body-2 mb-4"
-                          >We have a lot of incredible projects on our platform. Take a look</div>
+                          >We have a lot of incredible projects on our platform. Take a look
+                          </div>
                           <div>
                             <v-btn
                               :to="{ name: 'ResearchFeed' }"
                               color="primary"
                               class="px-5 ma-0"
-                            >Browse projects</v-btn>
+                            >Browse projects
+                            </v-btn>
                           </div>
                         </v-flex>
                       </v-layout>
@@ -136,59 +144,58 @@
 </template>
 
 <script>
-import { mapGetters } from "vuex";
-import deipRpc from "@deip/deip-oa-rpc-client";
-import * as usersService from "./../../utils/user";
-import moment from "moment";
+  import { mapGetters } from 'vuex';
+  import deipRpc from '@deip/deip-oa-rpc-client';
+  import moment from 'moment';
 
-export default {
-  name: "Dashboard",
+  export default {
+    name: 'Dashboard',
 
-  data() {
-    return {};
-  },
-
-  computed: {
-    ...mapGetters({
-      user: "auth/user",
-      themeSettings: "layout/themeSettings",
-      researches: "dashboard/myMembershipAndBookmarkedResearches"
-    }),
-
-    myResearches() {
-      return this.researches.reduce(
-        (arr, research) =>
-          research.research.is_following === false ? [...arr, research] : arr,
-        []
-      );
+    data() {
+      return {};
     },
 
-    followingResearches() {
-      return this.researches.reduce(
-        (arr, research) =>
-          research.research.is_following === true ? [...arr, research] : arr,
-        []
-      );
-    }
-  },
+    computed: {
+      ...mapGetters({
+        user: 'auth/user',
+        themeSettings: 'layout/themeSettings',
+        researches: 'dashboard/myMembershipAndBookmarkedResearches'
+      }),
 
-  methods: {},
-};
+      myResearches() {
+        return this.researches.reduce(
+          (arr, research) =>
+            research.research.is_following === false ? [ ...arr, research ] : arr,
+          []
+        );
+      },
+
+      followingResearches() {
+        return this.researches.reduce(
+          (arr, research) =>
+            research.research.is_following === true ? [ ...arr, research ] : arr,
+          []
+        );
+      }
+    },
+
+    methods: {},
+  };
 </script>
 
 <style lang="less" scoped>
-@import "./../../styles/colors.less";
+  @import "./../../styles/colors.less";
 
-.tab-content {
-  border-top: 1px solid @grey-lighten-2;
-}
+  .tab-content {
+    border-top: 1px solid @grey-lighten-2;
+  }
 
-.column-header {
-  min-height: 55px;
-}
+  .column-header {
+    min-height: 55px;
+  }
 
-.glass-container {
-  padding-left: 5%;
-  padding-right: 5%;
-}
+  .glass-container {
+    padding-left: 5%;
+    padding-right: 5%;
+  }
 </style>

@@ -1,6 +1,8 @@
 import Vue from 'vue'
 import moment from 'moment';
-import { getAccessToken } from '@/utils/auth'
+import { AccessService } from '@deip/access-service';
+
+const accessService = AccessService.getInstance();
 
 Vue.filter('fullname', function (enrichedProfile) {
     return enrichedProfile && enrichedProfile.profile && enrichedProfile.profile.firstName
@@ -50,17 +52,17 @@ Vue.filter('employmentOrEducation', function (enrichedProfile) {
 });
 
 Vue.filter('avatarSrc', function (profile, width, height, isRound = false, noCache = false) {
-    return profile 
-        ? `${window.env.DEIP_SERVER_URL}/api/user/avatar/${profile._id}/?authorization=${getAccessToken()}&width=${width}&height=${height}&round=${isRound}&noCache=${noCache}` 
-        : `${window.env.DEIP_SERVER_URL}/api/user/avatar/initdelegate/?authorization=${getAccessToken()}&width=${width}&height=${height}&round=${isRound}&noCache=${noCache}`;
+    return profile
+        ? `${window.env.DEIP_SERVER_URL}/api/user/avatar/${profile._id}/?authorization=${accessService.getAccessToken()}&width=${width}&height=${height}&round=${isRound}&noCache=${noCache}`
+        : `${window.env.DEIP_SERVER_URL}/api/user/avatar/initdelegate/?authorization=${accessService.getAccessToken()}&width=${width}&height=${height}&round=${isRound}&noCache=${noCache}`;
 });
 
 Vue.filter('researchBackgroundSrc', function (researchId, width = 1440, height = 430, isRound = false, noCache = true, ext = 'png') {
-    return `${window.env.DEIP_SERVER_URL}/api/research/background/${researchId}?authorization=${getAccessToken()}&width=${width}&height=${height}&round=${isRound}&noCache=${noCache}&ext=${ext}`
+    return `${window.env.DEIP_SERVER_URL}/api/research/background/${researchId}?authorization=${accessService.getAccessToken()}&width=${width}&height=${height}&round=${isRound}&noCache=${noCache}&ext=${ext}`
 });
 
 Vue.filter('researchGroupLogoSrc', function (researchGroupId, width = 360, height = 80, isRound = false, noCache = true, ext = 'png') {
-    return `${window.env.DEIP_SERVER_URL}/api/groups/logo/${researchGroupId}?authorization=${getAccessToken()}&width=${width}&height=${height}&round=${isRound}&noCache=${noCache}&ext=${ext}`
+    return `${window.env.DEIP_SERVER_URL}/api/groups/logo/${researchGroupId}?authorization=${accessService.getAccessToken()}&width=${width}&height=${height}&round=${isRound}&noCache=${noCache}&ext=${ext}`
 });
 
 Vue.filter('tenantLogoSrc', function (tenant, width, height, noCache, ext = 'png') {

@@ -273,7 +273,11 @@
 <script>
   import deipRpc from '@deip/deip-oa-rpc-client';
   import { mapGetters } from 'vuex';
-  import { getExpertiseHistory, getEciPercentile, ECI_REWARD_ACTION_TYPES } from '@/services/UsersService';
+
+  import { ECI_REWARD_ACTION_TYPES } from '@deip/users-service'
+  import { UsersService } from '@deip/users-service';
+
+  const usersService = UsersService.getInstance();
 
   const loadContentDetails = (contentId) => {
     const contentDetails = {};
@@ -305,8 +309,7 @@
   };
 
   export default {
-    name: "UserExpertiseDetails",
-
+    name: 'UserExpertiseDetails',
     data() {
       const now = this.moment();
       const toDate = now.format('YYYY-MM-DD');
@@ -374,37 +377,37 @@
         },
 
         contributionsAllocationChartOptions: {
-          title: "",
-          legend: { position: 'right', alignment: 'center' },
+          title: '',
+          legend: {position: 'right', alignment: 'center'},
           colors: ['#3984B6', '#5ABAD1', '#161F63', '#B7DFCB'],
           chartArea: {
             right: 0,
-            width: "100%",
-            height: "100%"
+            width: '100%',
+            height: '100%'
           },
 
-          width: "100%",
-          height: "100%",
+          width: '100%',
+          height: '100%',
           pieSliceTextStyle: {
-            color: "#ffffff",
+            color: '#ffffff',
             fontSize: 12
           },
           pieHole: 0.5
         },
 
         eciChartOptions: {
-          title: "",
+          title: '',
           backgroundColor: {
-            fill: "#ffffff"
+            fill: '#ffffff'
           },
           legend: {
-            position: "none"
+            position: 'none'
           },
           chartArea: {
-            top: "10%",
-            width: "90%"
+            top: '10%',
+            width: '90%'
           },
-          tooltip: { isHtml: true },
+          tooltip: {isHtml: true},
         },
 
         contributionTypesNamesMap,
@@ -432,7 +435,7 @@
 
         return {
           contributions: this.history.length,
-          percentile: getEciPercentile(
+          percentile: usersService.getEciPercentile(
             this.selectedExpertise.amount,
             this.$route.params.account_name,
             this.selectedExpertise.discipline_id
@@ -463,11 +466,11 @@
       },
       locationString() {
         const profile = this.userInfo ? this.userInfo.profile : null;
-        let location = "";
-        if (profile){
-            location += profile.location.city ? profile.location.city : '';
-            location += profile.location.city && profile.location.country ? ', ' : '';
-            location += profile.location.country ? profile.location.country : '';
+        let location = '';
+        if (profile) {
+          location += profile.location.city ? profile.location.city : '';
+          location += profile.location.city && profile.location.country ? ', ' : '';
+          location += profile.location.country ? profile.location.country : '';
         }
         return location;
       },
@@ -475,7 +478,7 @@
 
     watch: {
       'historyTable.pagination': {
-        handler()  {
+        handler() {
           this.loadExpertiseHistoryDetailsPage()
         },
         deep: true,
@@ -512,7 +515,7 @@
         }
       },
       loadExpertiseHistoryDetailsPage() {
-        const { page, rowsPerPage: perPage } = this.historyTable.pagination;
+        const {page, rowsPerPage: perPage} = this.historyTable.pagination;
         this.isHistoryPageLoading = true;
 
         const pageItems = [...this.history].reverse()
@@ -529,10 +532,10 @@
               detailsPromise = loadReviewDetails(pageItem.actionObjectId);
               break;
             case ECI_REWARD_ACTION_TYPES.INIT:
-              detailsPromise = Promise.resolve({ title: `Other` });
+              detailsPromise = Promise.resolve({title: `Other`});
               break;
             default:
-              detailsPromise = Promise.resolve({ title: `OBJ_ID: ${pageItem.actionObjectId}` })
+              detailsPromise = Promise.resolve({title: `OBJ_ID: ${pageItem.actionObjectId}`})
               break;
           }
           detailsPromise = detailsPromise.then((meta) => {
@@ -550,8 +553,8 @@
           })
           .catch((err) => {
             console.error(err);
-            return { items: [], total: 0 };
-          }).then(({ items, total }) => {
+            return {items: [], total: 0};
+          }).then(({items, total}) => {
             this.historyTable.items = items;
             this.historyTable.totalItems = total;
           })
@@ -561,7 +564,7 @@
       },
       loadExpertiseHistory() {
         this.isHistoryLoading = true;
-        return getExpertiseHistory(this.$route.params.account_name, this.selectedExpertise.discipline_id)
+        return usersService.getExpertiseHistory(this.$route.params.account_name, this.selectedExpertise.discipline_id)
           .then((history) => {
             this.history = history;
           })
@@ -602,7 +605,7 @@
             break;
         }
 
-        return getExpertiseHistory(
+        return usersService.getExpertiseHistory(
           this.$route.params.account_name,
           this.selectedExpertise.discipline_id,
           fromDateMs,
@@ -615,7 +618,7 @@
 
             return true;
           }).map((item) => {
-            return { ...item, newAmount: criteriaModifier(item.newAmount) };
+            return {...item, newAmount: criteriaModifier(item.newAmount)};
           });
         }).catch((err) => {
           console.error(err);

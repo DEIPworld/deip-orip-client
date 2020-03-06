@@ -4,7 +4,7 @@
       <v-flex md6 lg6 xl6 hidden-sm-and-down>
         <v-layout column wrap fill-height class="description">
           <div class="description__logo">
-            <img src="/assets/img/landing-logo.svg" />
+            <img src="/assets/img/landing-logo.svg"/>
           </div>
           <div class="description__info-text">
             Open Research and Innovation Platform
@@ -33,40 +33,40 @@
             <div class="signup__title">Registration</div>
             <v-form v-model="isFormValid" ref="form" class="c-mt-10" v-show="!isServerValidated">
 
-              <v-text-field 
+              <v-text-field
                 label="Email"
-                v-model="formData.email" 
+                v-model="formData.email"
                 :rules="[rules.required, rules.email]"
                 :disabled="isSaving"
               />
 
-              <v-text-field 
+              <v-text-field
                 label="First name"
-                v-model="formData.firstName" 
+                v-model="formData.firstName"
                 :rules="[rules.required, rules.nameChars]"
                 :disabled="isSaving"
               />
 
-              <v-text-field 
-                label="Last name"
-                v-model="formData.lastName" 
-                :rules="[rules.required, rules.nameChars]"
-                :disabled="isSaving"
-              />
-                
-              <v-text-field 
-                name="username"
-                label="Username"
-                v-model="formData.username" 
-                :rules="[
-                  rules.required, 
-                  rules.unique, 
-                  rules.usernameFormat
-                ]"
-                @input="usernameChanged"
-                :loading="isUsernameChecking"
-                :disabled="isSaving"
-              />
+            <v-text-field
+              label="Last name"
+              v-model="formData.lastName"
+              :rules="[rules.required, rules.nameChars]"
+              :disabled="isSaving"
+            />
+
+            <v-text-field
+              name="username"
+              label="Username"
+              v-model="formData.username"
+              :rules="[
+                rules.required,
+                rules.unique,
+                rules.usernameFormat
+              ]"
+              @input="usernameChanged"
+              :loading="isUsernameChecking"
+              :disabled="isSaving"
+            />
 
               <v-text-field
                 v-model="formData.masterPassword"
@@ -111,7 +111,7 @@
                 By clicking below, you agree that we may process ypur information in accordance with these terms.
               </div>
 
-              <v-btn block color="primary" 
+              <v-btn block color="primary"
                 :loading="isSaving"
                 @click="finishRegistration()"
                 :disabled="!formData.isMasterPasswordSaved || isSaving"
@@ -133,7 +133,10 @@
 <script>
   import deipRpc from '@deip/deip-oa-rpc-client';
   import _ from 'lodash';
-  import authService from '@/services/http/auth'
+
+  import { AuthService } from '@deip/auth-service';
+
+  const authService = AuthService.getInstance();
 
   export default {
     name: 'SignUp',
@@ -162,8 +165,8 @@
           required: value => !!value || 'This field is required',
           unique: value => !!value && this.isUsernameVerifyed !== false || 'Username should be unique in system',
           nameChars: value => (
-            value.match(/^[a-z][a-z ,.'-]*$/i) !== null 
-            || "Incorrect value"
+            value.match(/^[a-z][a-z ,.'-]*$/i) !== null
+            || 'Incorrect value'
           ),
           usernameFormat: value => {
             var result = deipRpc.utils.validateAccountName(value);
@@ -186,7 +189,7 @@
         },
       }
     },
-    
+
     methods: {
       finishRegistration() {
         if (!this.$refs.form.validate()) return;
@@ -198,7 +201,7 @@
           masterPassword,
         } = this.formData;
 
-        const { ownerPubkey: pubKey } = deipRpc.auth.getPrivateKeys(
+        const {ownerPubkey: pubKey} = deipRpc.auth.getPrivateKeys(
           username,
           masterPassword,
           ['owner']
@@ -216,18 +219,18 @@
           this.$store.dispatch('layout/setSuccess', {
             message: `Account '${this.formData.username}' has been created successfully! Use the private key to sign in to the DEIP platform!`
           });
-          this.$router.push({ name: 'SignIn', query: { username: this.formData.username }});
+          this.$router.push({name: 'SignIn', query: {username: this.formData.username}});
         }).catch((err) => {
           this.isSaving = false;
           const message = err.response && err.response.data
-            || "Sorry, the service is temporarily unavailable, please try again later";
+            || 'Sorry, the service is temporarily unavailable, please try again later';
 
-          this.$store.dispatch('layout/setError', { message: message });
+          this.$store.dispatch('layout/setError', {message: message});
           console.log(err);
         });
       },
       usernameChanged: _.debounce(
-        function() {
+        function () {
           this.isUsernameVerifyed = undefined;
 
           if (this.formData.username !== '') {
@@ -244,7 +247,7 @@
                 usernameInput.validate();
               });
           }
-        }, 
+        },
         600
       )
     }
@@ -253,6 +256,7 @@
 
 <style lang="less" scoped>
   @import "./../../styles/colors.less";
+
   .description {
     background-color: #485fda;
     padding-top: 10%;
@@ -262,6 +266,7 @@
     &__logo {
       margin-top: 5%;
       margin-bottom: 10%;
+
       img {
         max-width: 100%;
       }

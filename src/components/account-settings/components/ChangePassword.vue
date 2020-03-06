@@ -50,7 +50,8 @@
               :disabled="!isMasterPasswordFormValid || isPasswordChanging"
               :loading="isPasswordChanging"
               @click="updateMasterPassword()"
-            >Change Password</v-btn>
+            >Change Password
+            </v-btn>
           </v-form>
         </v-flex>
       </v-layout>
@@ -59,115 +60,116 @@
 </template>
 
 <script>
-import deipRpc from '@deip/deip-oa-rpc-client';
-import { getOwnerWif, setOwnerWif } from '@/utils/auth';
-import { mapGetters } from "vuex";
+  import deipRpc from '@deip/deip-oa-rpc-client';
+  import { mapGetters } from 'vuex';
+  import { AccessService } from '@deip/access-service';
 
-export default {
-  name: "ChangePassword",
+  const accessService = AccessService.getInstance();
 
-  data() {
-    return {
-      oldPassword: '',
-      isHiddenOldPassword: true,
-      newPassword: '',
-      isHiddenNewPassword: true,
-      reEnterNewPassword: '',
-      isHiddenReEnterNewPassword: true,
-      isMasterPasswordFormValid: false,
-      isPasswordChanging: false,
+  export default {
+    name: 'ChangePassword',
+    data() {
+      return {
+        oldPassword: '',
+        isHiddenOldPassword: true,
+        newPassword: '',
+        isHiddenNewPassword: true,
+        reEnterNewPassword: '',
+        isHiddenReEnterNewPassword: true,
+        isMasterPasswordFormValid: false,
+        isPasswordChanging: false,
 
-      rules: {
-        required: value => !!value || "This field is required",
-        masterPassword: (value) => {
-          if (!value) return false;
+        rules: {
+          required: value => !!value || 'This field is required',
+          masterPassword: (value) => {
+            if (!value) return false;
 
-          if (value.length < this.MASTER_PASSWORD_MIN_LENGTH) {
-            return 'Master password should be at least 10 symbols';
-          } else if (value.length > this.MASTER_PASSWORD_MAX_LENGTH) {
-            return 'Master password max length is 100 symbols';
-          }
+            if (value.length < this.MASTER_PASSWORD_MIN_LENGTH) {
+              return 'Master password should be at least 10 symbols';
+            } else if (value.length > this.MASTER_PASSWORD_MAX_LENGTH) {
+              return 'Master password max length is 100 symbols';
+            }
 
-          return true;
-        },
-        reEnterMasterPassword: (value) => value === this.newPassword || `Password doesn't match`,
-      }
-    };
-  },
-
-  computed: {
-    ...mapGetters({
-      currentUser: 'auth/user',
-    }),
-  },
-
-  methods: {
-    updateMasterPassword() {
-      const username = this.currentUser.username;
-
-      let oldPrivateKey;
-      if (
-        deipRpc.auth.isWif(this.oldPassword)
-        && deipRpc.auth.wifToPublic(this.oldPassword) === this.currentUser.pubKey
-      ) { // if old private key is entered
-        oldPrivateKey = this.oldPassword
-      } else { // if old password is intered or old password is in private key format
-        oldPrivateKey = deipRpc.auth.toWif(
-          username,
-          this.oldPassword,
-          'owner'
-        );
-        const oldPublicKey = deipRpc.auth.wifToPublic(oldPrivateKey);
-        if (this.currentUser.pubKey !== oldPublicKey) {
-          this.$store.dispatch("layout/setError", {
-            message: `Old password is invalid`
-          });
-          return;
+            return true;
+          },
+          reEnterMasterPassword: (value) => value === this.newPassword || `Password doesn't match`,
         }
-      }
-
-      const {
-        owner: newPrivateKey,
-        ownerPubkey: newPublicKey
-      } = deipRpc.auth.getPrivateKeys(
-        username,
-        this.newPassword,
-        ['owner']
-      );
-      const owner = {
-        weight_threshold: 1,
-        account_auths: [],
-        key_auths: [[newPublicKey, 1]]
       };
+    },
 
-      this.isPasswordChanging = true;
-      return deipRpc.broadcast.accountUpdateAsync(
-        oldPrivateKey,
-        username,
-        owner,
-        owner,
-        owner,
-        newPublicKey,
-        this.currentUser.account.json_metadata
-      ).then(() => {
-        this.$store.dispatch('layout/setSuccess', {
-          message: `Master Password successfully changed!`
-        });
-        this.$refs.changePasswordForm.reset();
+    computed: {
+      ...mapGetters({
+        currentUser: 'auth/user',
+      }),
+    },
 
-        setOwnerWif(newPrivateKey);
-        return this.$store.dispatch('auth/loadUser');
-      }).catch((err) => {
-        this.$store.dispatch('layout/setError', {
-          message: `Oops! Something went wrong`
+    methods: {
+      updateMasterPassword() {
+        const username = this.currentUser.username;
+
+        let oldPrivateKey;
+        if (
+          deipRpc.auth.isWif(this.oldPassword)
+          && deipRpc.auth.wifToPublic(this.oldPassword) === this.currentUser.pubKey
+        ) { // if old private key is entered
+          oldPrivateKey = this.oldPassword
+        } else { // if old password is intered or old password is in private key format
+          oldPrivateKey = deipRpc.auth.toWif(
+            username,
+            this.oldPassword,
+            'owner'
+          );
+          const oldPublicKey = deipRpc.auth.wifToPublic(oldPrivateKey);
+          if (this.currentUser.pubKey !== oldPublicKey) {
+            this.$store.dispatch('layout/setError', {
+              message: `Old password is invalid`
+            });
+            return;
+          }
+        }
+
+        const {
+          owner: newPrivateKey,
+          ownerPubkey: newPublicKey
+        } = deipRpc.auth.getPrivateKeys(
+          username,
+          this.newPassword,
+          [ 'owner' ]
+        );
+        const owner = {
+          weight_threshold: 1,
+          account_auths: [],
+          key_auths: [ [ newPublicKey, 1 ] ]
+        };
+
+        this.isPasswordChanging = true;
+        return deipRpc.broadcast.accountUpdateAsync(
+          oldPrivateKey,
+          username,
+          owner,
+          owner,
+          owner,
+          newPublicKey,
+          this.currentUser.account.json_metadata
+        ).then(() => {
+          this.$store.dispatch('layout/setSuccess', {
+            message: `Master Password successfully changed!`
+          });
+          this.$refs.changePasswordForm.reset();
+
+          accessService.setOwnerWif(newPrivateKey);
+          return this.$store.dispatch('auth/loadUser');
+        }).catch((err) => {
+          this.$store.dispatch('layout/setError', {
+            message: `Oops! Something went wrong`
+          });
+          console.error(err.message);
+        }).finally(() => {
+          this.isPasswordChanging = false;
         });
-        console.error(err.message);
-      }).finally(() => {
-        this.isPasswordChanging = false;
-      });
-    }
-  },
-};
+      }
+    },
+  };
 </script>
 
 <style lang="less" scoped>
@@ -175,7 +177,7 @@ export default {
     font-family: Muli;
     font-style: normal;
     color: #000000;
-    
+
     &__header {
       font-weight: 900;
       font-size: 36px;

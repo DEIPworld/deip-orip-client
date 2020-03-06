@@ -1,6 +1,9 @@
 import deipRpc from '@deip/deip-oa-rpc-client';
 import Vue from 'vue';
-import usersHttp from './../../../services/http/users';
+
+import { UsersService } from '@deip/users-service';
+
+const usersService = UsersService.getInstance();
 
 const state = {
   account: undefined,
@@ -58,7 +61,7 @@ const actions = {
   },
   loadUserProfile({commit}, {username, notify} = {}) {
     commit('SET_USER_PROFILE_LOADING_STATE', true);
-    return usersHttp.getUserProfile(username)
+    return usersService.getUserProfile(username)
       .then(profile => {
         commit('SET_USER_PROFILE', profile || null);
       }, (err) => {
@@ -91,7 +94,7 @@ const mutations = {
 
 const namespaced = true;
 
-export default {
+export const userSettingsStore = {
   namespaced,
   state,
   getters,

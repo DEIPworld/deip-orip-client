@@ -1,14 +1,18 @@
 import _ from 'lodash';
 import deipRpc from '@deip/deip-oa-rpc-client';
-import Vue from 'vue'
+import Vue from 'vue';
 
-import { isLoggedIn, getDecodedToken, getOwnerWif } from '@/utils/auth'
-import usersService from '@/services/http/users'
-import bookmarksHttpService from '@/services/http/bookmarks'
-import joinRequestsService from '@/services/http/joinRequests'
-import notificationsHttpService from '@/services/http/notifications'
-import { getEnrichedProfiles } from '@/utils/user'
-import tenantHttp from './../../../services/http/tenant';
+import { AccessService } from '@deip/access-service';
+import { UsersService } from '@deip/users-service';
+import { UserService } from '@deip/user-service';
+import { ResearchGroupService } from '@deip/research-group-service';
+import { TenantService } from '@deip/tenant-service';
+
+const accessService = AccessService.getInstance();
+const usersService = UsersService.getInstance();
+const userService = UserService.getInstance();
+const researchGroupService = ResearchGroupService.getInstance();
+const tenantService = TenantService.getInstance();
 
 const state = {
   user: {
@@ -23,17 +27,17 @@ const state = {
     researchBookmarks: [],
   },
   tenant: null
-}
+};
 
 // getters
 const getters = {
   user: (state, getters) => {
-    const privKey = isLoggedIn() ? getOwnerWif() : null;
+    const privKey = accessService.isLoggedIn() ? accessService.getOwnerWif() : null;
     return {
       ...state.user,
-      username: isLoggedIn() ? getDecodedToken().username : null,
+      username: accessService.isLoggedIn() ? accessService.getDecodedToken().username : null,
       privKey,
-      pubKey: isLoggedIn() ? deipRpc.auth.wifToPublic(privKey) : null,
+      pubKey: accessService.isLoggedIn() ? deipRpc.auth.wifToPublic(privKey) : null,
     }
   },
 
@@ -66,7 +70,7 @@ const getters = {
   },
 
   userPersonalGroup: (state, getters) => {
-    return getters.userGroups.find(g => g.permlink == getters.user.username);
+    return getters.userGroups.find(g => g.permlink === getters.user.username);
   },
 
   userIsResearchGroupMember: (state, getters) => {
@@ -87,7 +91,7 @@ const getters = {
     if (state.user.profile) {
       const sub = window.env.TENANT;
       return state.user.profile.agencies.some(
-        a => a.name.toLowerCase() == sub.toLowerCase() && a.role === 'grantor'
+        a => a.name.toLowerCase() === sub.toLowerCase() && a.role === 'grantor'
       );
     }
     return false;
@@ -97,7 +101,7 @@ const getters = {
     if (state.user.profile) {
       const sub = window.env.TENANT;
       return state.user.profile.agencies.some(
-        a => a.name.toLowerCase() == sub.toLowerCase() && a.role === 'officer'
+        a => a.name.toLowerCase() === sub.toLowerCase() && a.role === 'officer'
       );
     }
     return false;
@@ -106,7 +110,7 @@ const getters = {
   isApplicant: (state, getters) => {
     return !getters.isGrantor && !getters.isOfficer;
   },
-  
+
   tenant: (state) => {
     return state.tenant;
   }
@@ -114,7 +118,7 @@ const getters = {
 
 // actions
 const actions = {
-  
+
   loadUser({ state, dispatch }) {
     const profileLoad = new Promise((resolve, reject) => {
       dispatch('loadProfile', { notify: resolve })
@@ -135,12 +139,12 @@ const actions = {
       dispatch('loadResearchBookmarks', { notify: resolve })
     });
 
-    return Promise.all([profileLoad, accountLoad, groupsLoad, expLoad, joinRequestLoad, researchBookmarksLoad])
+    return Promise.all([ profileLoad, accountLoad, groupsLoad, expLoad, joinRequestLoad, researchBookmarksLoad ])
   },
 
   loadResearchBookmarks({ commit, getters }, { notify } = {}) {
     const user = getters.user;
-    return bookmarksHttpService.getResearchBookmarks(user.username)
+    return userService.getResearchBookmarks(user.username)
       .then((researchBookmarks) => {
         commit('SET_USER_RESEARCH_BOOKMARKS', researchBookmarks.map(b => ({
           _id: b._id,
@@ -154,7 +158,7 @@ const actions = {
   loadNotifications({ state, commit, getters }, { notify } = {}) {
     const user = getters.user;
     if (user && user.username) {
-      return notificationsHttpService.getNotificationsByUser(user.username)
+      return userService.getNotificationsByUser(user.username)
         .then((notifications) => {
           commit('SET_USER_NOTIFICATION_PROPOSALS', notifications);
         })
@@ -193,7 +197,7 @@ const actions = {
 
   loadAccount({ state, commit, getters }, { notify } = {}) {
     const user = getters.user;
-    return deipRpc.api.getAccountsAsync([user.username])
+    return deipRpc.api.getAccountsAsync([ user.username ])
       .then((account) => {
         commit('SET_USER_ACCOUNT', account[0])
       }, (err) => {
@@ -248,17 +252,17 @@ const actions = {
 
           for (var i = 0; i < flattened.length; i++) {
             const rgt = flattened[i]
-            if (rgt.owner != state.user.username && coworkers.find(c => c.owner == rgt.owner) == undefined) {
+            if (rgt.owner !== state.user.username && coworkers.find(c => c.owner === rgt.owner) === undefined) {
               coworkers.push({ rgt: rgt });
             }
           }
 
-          return getEnrichedProfiles(coworkers.map(c => c.rgt.owner))
+          return usersService.getEnrichedProfiles(coworkers.map(c => c.rgt.owner))
 
         })
         .then((users) => {
           coworkers.forEach((coworker, idx) => {
-            const user = users.find(u => u.account.name == coworker.rgt.owner);
+            const user = users.find(u => u.account.name === coworker.rgt.owner);
             coworker.account = user.account;
             coworker.profile = user.profile;
           })
@@ -274,7 +278,7 @@ const actions = {
 
   loadJoinRequests({ state, commit, getters }, { notify } = {}) {
     const user = getters.user;
-    joinRequestsService.getJoinRequestsByUser(user.username)
+    researchGroupService.getJoinRequestsByUser(user.username)
       .then((requests) => {
         commit('SET_USER_JOIN_REQUESTS', requests)
       }, (err) => {
@@ -286,11 +290,13 @@ const actions = {
   },
 
   loadTenant({ state, commit, getters }, { tenant, notify } = {}) {
-    return tenantHttp.getTenantProfile(tenant)
+    return tenantService.getTenantProfile(tenant)
       .then((tenantProfile) => {
         commit('SET_TENANT_PROFILE', tenantProfile);
       })
-      .catch(err => { console.log(err) })
+      .catch(err => {
+        console.log(err)
+      })
       .finally(() => {
         if (notify) notify();
       });
@@ -343,10 +349,11 @@ const mutations = {
 
 const namespaced = true;
 
-export default {
+
+export const authStore = {
   namespaced,
   state,
   getters,
   actions,
   mutations
-}
+};

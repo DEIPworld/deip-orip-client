@@ -6,7 +6,8 @@
           <router-link
             class="research-group-link"
             :to="{ name: 'ResearchGroupDetails', params: {  research_group_permlink: encodeURIComponent(groupLink) } }"
-          >{{group.name}}</router-link>
+          >{{group.name}}
+          </router-link>
         </div>
         <v-layout
           v-for="(member, i) in researchMembersList"
@@ -75,7 +76,8 @@
                       :loading="isSendingJoinGroupRequest"
                       @click="sendJoinGroupRequest()"
                       block
-                    >Send</v-btn>
+                    >Send
+                    </v-btn>
                   </v-flex>
                   <v-flex xs12 py-2>
                     <v-btn
@@ -84,7 +86,8 @@
                       color="primary"
                       flat
                       block
-                    >Cancel</v-btn>
+                    >Cancel
+                    </v-btn>
                   </v-flex>
                 </v-layout>
               </v-card-actions>
@@ -93,13 +96,17 @@
           <div
             v-if="isActiveJoinRequest"
             class="mt-3"
-          >You have sent a join request on {{new Date(currentJoinRequest.created).toDateString()}}, please wait for approval</div>
+          >You have sent a join request on {{new Date(currentJoinRequest.created).toDateString()}}, please wait for
+            approval
+          </div>
           <div v-if="isActiveInvite" class="mt-3">
             Please accept invite on
             <router-link
               :to="{ name: 'UserDetails', params: { account_name: user.username}}"
               style="text-decoration: none"
-            >your profile page</router-link>to join the research group
+            >your profile page
+            </router-link>
+            to join the research group
           </div>
         </div>
       </v-layout>
@@ -219,7 +226,8 @@
                   :disabled="isRequestingReviewDisabled"
                   block
                   color="primary"
-                >Request</v-btn>
+                >Request
+                </v-btn>
               </v-flex>
               <v-flex xs12 py-2>
                 <v-btn
@@ -227,7 +235,8 @@
                   color="primary"
                   flat
                   block
-                >Cancel</v-btn>
+                >Cancel
+                </v-btn>
               </v-flex>
             </v-layout>
           </v-card-actions>
@@ -259,306 +268,317 @@
       <!-- <v-divider /> -->
       <div
         class="rd-sidebar-block-title my-4 px-4"
-      >Citations: {{researchReferencesList.length + research.id}}</div>
+      >Citations: {{researchReferencesList.length + research.id}}
+      </div>
     </v-flex>
   </v-layout>
 </template>
 
 <script>
-import deipRpc from "@deip/deip-oa-rpc-client";
-import { mapGetters } from "vuex";
+  import deipRpc from '@deip/deip-oa-rpc-client';
+  import { mapGetters } from 'vuex';
 
-import joinRequestsService from "@/services/http/joinRequests";
-import reviewRequestsService from "@/services/http/reviewRequests";
+  import { ReviewService } from '@deip/review-service';
+  import { ResearchGroupService } from '@deip/research-group-service';
 
-export default {
-  name: "ResearchDetailsSidebar",
+  const reviewService = ReviewService.getInstance();
+  const researchGroupService = ResearchGroupService.getInstance();
 
-  data() {
-    return {
-      tokenizationConfirmDialog: { isShown: false, isConfirming: false },
-      requestExpertReviewDialog: { isShown: false },
-      groupLink: this.$route.params.research_group_permlink,
-      isJoinGroupDialogOpen: false,
-      coverLetter: "",
-      isSendingJoinGroupRequest: false,
-      isResearchTokenization: false,
-      selectedExpert: null,
-      selectedContentId: null,
-      isRequestingReview: false
-    };
-  },
-  computed: {
-    ...mapGetters({
-      contentList: "rd/contentList",
-      group: "rd/group",
-      disciplinesList: "rd/disciplinesList",
-      expertsList: "rd/expertsList",
-      groupInvitesList: "rd/groupInvitesList",
-      researchReferencesList: "rd/researchReferencesList",
-      researchMembersList: "rd/researchMembersList",
-      researchGroupMembersList: "rd/researchGroupMembersList",
-      research: "rd/research",
-      researchRef: "rd/researchRef",
-      reviewsList: "rd/reviewsList",
-      user: "auth/user",
-      userJoinRequests: "auth/userJoinRequests"
-    }),
-    isSelectedContentId() {
-      return this.selectedContentId !== null;
+
+  export default {
+    name: 'ResearchDetailsSidebar',
+
+    data() {
+      return {
+        tokenizationConfirmDialog: {
+          isShown: false,
+          isConfirming: false
+        },
+        requestExpertReviewDialog: { isShown: false },
+        groupLink: this.$route.params.research_group_permlink,
+        isJoinGroupDialogOpen: false,
+        coverLetter: '',
+        isSendingJoinGroupRequest: false,
+        isResearchTokenization: false,
+        selectedExpert: null,
+        selectedContentId: null,
+        isRequestingReview: false
+      };
     },
-    contentListToReview() {
-      let expert = this.selectedExpert;
-      if (!expert) return this.contentList;
-      let expertReviews = this.reviewsList.filter(
-        r => r.author.account.name == expert.account.name
-      );
-      return this.contentList.filter(
-        content => !expertReviews.some(r => r.research_content_id == content.id)
-      );
-    },
-    isRequestingReviewDisabled() {
-      return !this.selectedExpert || this.selectedContentId == null;
-    },
-    canJoinResearchGroup() {
-      if (this.research) {
-        if (
-          this.researchGroupMembersList.some(
-            m => m.account.name === this.user.username
-          )
-        ) {
-          return false;
+    computed: {
+      ...mapGetters({
+        contentList: 'rd/contentList',
+        group: 'rd/group',
+        disciplinesList: 'rd/disciplinesList',
+        expertsList: 'rd/expertsList',
+        groupInvitesList: 'rd/groupInvitesList',
+        researchReferencesList: 'rd/researchReferencesList',
+        researchMembersList: 'rd/researchMembersList',
+        researchGroupMembersList: 'rd/researchGroupMembersList',
+        research: 'rd/research',
+        researchRef: 'rd/researchRef',
+        reviewsList: 'rd/reviewsList',
+        user: 'auth/user',
+        userJoinRequests: 'auth/userJoinRequests'
+      }),
+      isSelectedContentId() {
+        return this.selectedContentId !== null;
+      },
+      contentListToReview() {
+        let expert = this.selectedExpert;
+        if (!expert) return this.contentList;
+        let expertReviews = this.reviewsList.filter(
+          r => r.author.account.name == expert.account.name
+        );
+        return this.contentList.filter(
+          content => !expertReviews.some(r => r.research_content_id == content.id)
+        );
+      },
+      isRequestingReviewDisabled() {
+        return !this.selectedExpert || this.selectedContentId == null;
+      },
+      canJoinResearchGroup() {
+        if (this.research) {
+          if (
+            this.researchGroupMembersList.some(
+              m => m.account.name === this.user.username
+            )
+          ) {
+            return false;
+          }
+          if (
+            this.userJoinRequests.some(
+              r => r.groupId === this.research.research_group_id
+            )
+          ) {
+            return false;
+          }
+
+          return !this.isActiveInvite;
         }
-        if (
-          this.userJoinRequests.some(
-            r => r.groupId === this.research.research_group_id
-          )
-        ) {
-          return false;
-        }
-
-        return !this.isActiveInvite;
-      }
-      return false;
-    },
-    currentJoinRequest() {
-      return this.research
-        ? this.userJoinRequests.find(
+        return false;
+      },
+      currentJoinRequest() {
+        return this.research
+          ? this.userJoinRequests.find(
             r => r.groupId == this.research.research_group_id
           )
-        : undefined;
-    },
-    eciList() {
-      return this.disciplinesList.map(discipline => {
-        const eciObj = this.research.eci_per_discipline.find(
-          item => item[0] === discipline.id
-        );
+          : undefined;
+      },
+      eciList() {
+        return this.disciplinesList.map(discipline => {
+          const eciObj = this.research.eci_per_discipline.find(
+            item => item[0] === discipline.id
+          );
 
-        return {
-          disciplineName: discipline.name,
-          value: eciObj ? eciObj[1] : 0
-        };
-      });
-    },
-    experts() {
-      const blackList = [
-        "regacc",
-        "hermes",
-        "initdelegate",
-        this.user.username,
-        ...this.researchGroupMembersList.map(m => m.account.name)
-      ];
-      const existingReviewsForContent = this.reviewsList.filter(
-        r => r.research_content_id === this.selectedContentId
-      );
-      blackList.push(
-        ...existingReviewsForContent.map(r => r.author.account.name)
-      );
-      return this.expertsList.filter(e => !blackList.includes(e.account.name));
-    },
-    isActiveInvite() {
-      return this.groupInvitesList.some(
-        invite => invite.account_name == this.user.username
-      );
-    },
-    isActiveJoinRequest() {
-      return (
-        this.currentJoinRequest && this.currentJoinRequest.status === "pending"
-      );
-    },
-    isJoinRequestSectionAvailable() {
-      return (
-        this.isProfileAvailable &&
-        (this.canJoinResearchGroup ||
-          this.isActiveJoinRequest ||
-          this.isActiveInvite) &&
-        !this.group.is_personal
-      );
-    },
-    isProfileAvailable() {
-      return !!this.user.profile;
-    },
-    isResearchGroupMember() {
-      return this.research
-        ? this.$store.getters["auth/userIsResearchGroupMember"](
+          return {
+            disciplineName: discipline.name,
+            value: eciObj ? eciObj[1] : 0
+          };
+        });
+      },
+      experts() {
+        const blackList = [
+          'regacc',
+          'hermes',
+          'initdelegate',
+          this.user.username,
+          ...this.researchGroupMembersList.map(m => m.account.name)
+        ];
+        const existingReviewsForContent = this.reviewsList.filter(
+          r => r.research_content_id === this.selectedContentId
+        );
+        blackList.push(
+          ...existingReviewsForContent.map(r => r.author.account.name)
+        );
+        return this.expertsList.filter(e => !blackList.includes(e.account.name));
+      },
+      isActiveInvite() {
+        return this.groupInvitesList.some(
+          invite => invite.account_name == this.user.username
+        );
+      },
+      isActiveJoinRequest() {
+        return (
+          this.currentJoinRequest && this.currentJoinRequest.status === 'pending'
+        );
+      },
+      isJoinRequestSectionAvailable() {
+        return (
+          this.isProfileAvailable &&
+          (this.canJoinResearchGroup ||
+            this.isActiveJoinRequest ||
+            this.isActiveInvite) &&
+          !this.group.is_personal
+        );
+      },
+      isProfileAvailable() {
+        return !!this.user.profile;
+      },
+      isResearchGroupMember() {
+        return this.research
+          ? this.$store.getters['auth/userIsResearchGroupMember'](
             this.research.research_group_id
           )
-        : false;
+          : false;
+      },
+      researchScorePercent() {
+        let eciSum = this.eciList.reduce((acc, curr) => acc + curr.value, 0);
+        const eciSign = eciSum >= 0 ? 1 : -1;
+        const eciRatio =
+          eciSign * Math.min(+`${eciSum * eciSign}`.substring(0, 2), 50);
+        const contentRatio = Math.min(this.contentList.length + 1, 50);
+        return Math.max(eciRatio + contentRatio, 0);
+      }
     },
-    researchScorePercent() {
-      let eciSum = this.eciList.reduce((acc, curr) => acc + curr.value, 0);
-      const eciSign = eciSum >= 0 ? 1 : -1;
-      const eciRatio =
-        eciSign * Math.min(+`${eciSum * eciSign}`.substring(0, 2), 50);
-      const contentRatio = Math.min(this.contentList.length + 1, 50);
-      return Math.max(eciRatio + contentRatio, 0);
-    }
-  },
-  methods: {
-    selectExpert(expert) {
-      this.selectedExpert = expert;
-    },
-    getResearchEciPercentile(eci) {
-      return 10;
-    },
-    onJoinResearchGroupClick() {
-      this.isJoinGroupDialogOpen = true;
-      this.coverLetter = "";
-    },
-    onTokenizeResearchClick() {
-      this.tokenizationConfirmDialog.isShown = true;
-      this.tokenizationConfirmDialog.isConfirming = false;
-    },
-    requestReview() {
-      this.isRequestingReview = true;
-      return reviewRequestsService
-        .createReviewRequest({
-          contentId: this.selectedContentId,
-          expert: this.selectedExpert.account.name
-        })
-        .then(() => {
-          this.$store.dispatch("layout/setSuccess", {
-            message: "Request for the review has been sent successfully"
+    methods: {
+      selectExpert(expert) {
+        this.selectedExpert = expert;
+      },
+      getResearchEciPercentile(eci) {
+        return 10;
+      },
+      onJoinResearchGroupClick() {
+        this.isJoinGroupDialogOpen = true;
+        this.coverLetter = '';
+      },
+      onTokenizeResearchClick() {
+        this.tokenizationConfirmDialog.isShown = true;
+        this.tokenizationConfirmDialog.isConfirming = false;
+      },
+      requestReview() {
+        this.isRequestingReview = true;
+        return reviewService
+          .createReviewRequest({
+            contentId: this.selectedContentId,
+            expert: this.selectedExpert.account.name
+          })
+          .then(() => {
+            this.$store.dispatch('layout/setSuccess', {
+              message: 'Request for the review has been sent successfully'
+            });
+            this.selectedExpert = null;
+            this.selectedContentId = null;
+          })
+          .catch(err => {
+            let errMsg =
+              'An error occurred while requesting the review. Please try again later';
+            if (err.response && err.response.data) {
+              errMsg = err.response.data;
+            }
+            this.$store.dispatch('layout/setError', {
+              message: errMsg
+            });
+          })
+          .finally(() => {
+            this.isRequestingReview = false;
+            this.requestExpertReviewDialog.isShown = false;
           });
-          this.selectedExpert = null;
-          this.selectedContentId = null;
-        })
-        .catch(err => {
-          let errMsg =
-            "An error occurred while requesting the review. Please try again later";
-          if (err.response && err.response.data) {
-            errMsg = err.response.data;
-          }
-          this.$store.dispatch("layout/setError", {
-            message: errMsg
-          });
-        })
-        .finally(() => {
-          this.isRequestingReview = false;
-          this.requestExpertReviewDialog.isShown = false;
+      },
+      tokenizeResearch() {
+        const abstract = JSON.stringify({
+          description: this.$options.filters.researchAbstract(
+            this.research.abstract
+          ),
+          milestones: this.researchRef.milestones,
+          video_src: this.$options.filters.researchVideoSrc(
+            this.research.abstract
+          ),
+          is_tokenized: true
         });
-    },
-    tokenizeResearch() {
-      const abstract = JSON.stringify({
-        description: this.$options.filters.researchAbstract(
-          this.research.abstract
-        ),
-        milestones: this.researchRef.milestones,
-        video_src: this.$options.filters.researchVideoSrc(
-          this.research.abstract
-        ),
-        is_tokenized: true
-      });
 
-      this.isResearchTokenization = true;
-      deipRpc.broadcast
-        .researchUpdateAsync(
-          this.user.privKey,
-          this.research.id,
-          this.research.title,
-          abstract,
-          this.research.permlink,
-          this.user.username
-        )
-        .then(() => {
-          this.$store.dispatch("layout/setSuccess", {
-            message: "Research has been tokenized"
+        this.isResearchTokenization = true;
+        deipRpc.broadcast
+          .researchUpdateAsync(
+            this.user.privKey,
+            this.research.id,
+            this.research.title,
+            abstract,
+            this.research.permlink,
+            this.user.username
+          )
+          .then(() => {
+            this.$store.dispatch('layout/setSuccess', {
+              message: 'Research has been tokenized'
+            });
+          })
+          .catch(() => {
+            this.$store.dispatch('layout/setError', {
+              message:
+                'An error occurred while tokenizing research, please try again later'
+            });
+          })
+          .then(() => {
+            this.$store.dispatch('rd/loadResearchDetails', {
+              group_permlink: this.research.group_permlink,
+              research_permlink: this.research.permlink
+            });
+          })
+          .finally(() => {
+            this.isResearchTokenization = false;
           });
-        })
-        .catch(() => {
-          this.$store.dispatch("layout/setError", {
-            message:
-              "An error occurred while tokenizing research, please try again later"
-          });
-        })
-        .then(() => {
-          this.$store.dispatch("rd/loadResearchDetails", {
-            group_permlink: this.research.group_permlink,
-            research_permlink: this.research.permlink
-          });
-        })
-        .finally(() => {
-          this.isResearchTokenization = false;
-        });
-    },
-    sendJoinGroupRequest() {
-      this.isSendingJoinGroupRequest = true;
+      },
+      sendJoinGroupRequest() {
+        this.isSendingJoinGroupRequest = true;
 
-      joinRequestsService
-        .createJoinRequest({
-          username: this.user.username,
-          groupId: this.research.research_group_id,
-          coverLetter: this.coverLetter
-        })
-        .then(() => {
-          this.$store.dispatch("auth/loadJoinRequests");
-          this.$store.dispatch("layout/setSuccess", {
-            message: "Join request has been sent successfully!"
+        researchGroupService
+          .createJoinRequest({
+            username: this.user.username,
+            groupId: this.research.research_group_id,
+            coverLetter: this.coverLetter
+          })
+          .then(() => {
+            this.$store.dispatch('auth/loadJoinRequests');
+            this.$store.dispatch('layout/setSuccess', {
+              message: 'Join request has been sent successfully!'
+            });
+          })
+          .catch(err => {
+            this.$store.dispatch('layout/setError', {
+              message:
+                'An error occurred while sending join request, please try again later!'
+            });
+            console.log(err);
+          })
+          .finally(() => {
+            this.isSendingJoinGroupRequest = false;
+            this.isJoinGroupDialogOpen = false;
           });
-        })
-        .catch(err => {
-          this.$store.dispatch("layout/setError", {
-            message:
-              "An error occurred while sending join request, please try again later!"
-          });
-          console.log(err);
-        })
-        .finally(() => {
-          this.isSendingJoinGroupRequest = false;
-          this.isJoinGroupDialogOpen = false;
-        });
+      }
     }
-  }
-};
+  };
 </script>
 
 <style lang="less" scoped>
-.expertise {
-  background: #ebf5fe;
-  border: 1px solid #8fc3f7;
-  box-sizing: border-box;
-  border-radius: 2px;
-  font-family: Muli;
+  .expertise {
+    background: #ebf5fe;
+    border: 1px solid #8fc3f7;
+    box-sizing: border-box;
+    border-radius: 2px;
+    font-family: Muli;
 
-  &__disc-name {
-    font-weight: 600;
+    &__disc-name {
+      font-weight: 600;
+    }
+
+    &__divider {
+      border-color: #8fc3f7;
+    }
   }
 
-  &__divider {
-    border-color: #8fc3f7;
+  .research-group-link {
+    text-decoration: none;
+
+    &:hover {
+      text-decoration: underline;
+    }
   }
-}
-.research-group-link {
-  text-decoration: none;
-  &:hover {
-    text-decoration: underline;
+
+  .rd-sidebar-block-title {
+    font-family: Roboto;
+    font-weight: bold;
+    font-size: 18px;
+    line-height: 21px;
+    color: #000000;
   }
-}
-.rd-sidebar-block-title {
-  font-family: Roboto;
-  font-weight: bold;
-  font-size: 18px;
-  line-height: 21px;
-  color: #000000;
-}
 </style>

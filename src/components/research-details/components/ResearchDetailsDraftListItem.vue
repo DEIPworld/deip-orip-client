@@ -34,14 +34,16 @@
               small
               depressed
               color="red lighten-1"
-            >Delete</v-btn>
+            >Delete
+            </v-btn>
             <v-btn
               @click="openDarDraft(draft)"
               outline
               small
               depressed
               color="primary lighten-1"
-            >View</v-btn>
+            >View
+            </v-btn>
           </div>
         </v-layout>
       </v-card-text>
@@ -50,60 +52,73 @@
 </template>
 
 <script>
-import contentHttpService from "@/services/http/content";
+  import { ResearchContentService } from '@deip/research-content-service';
 
-export default {
-  name: "ResearchDetailsDraftListItem",
+  const researchContentService = ResearchContentService.getInstance();
 
-  props: {
-    draft: { type: Object, required: true },
-    index: { type: Number, required: false, default: 0 }
-  },
-  data() {
-    return {
-      isDeletingDraft: false
-    };
-  },
-  methods: {
-    openDarDraft(draft) {
-      if (draft.type === "dar" && draft.status === "in-progress") {
-        // we have to do it this way as Texture InMemory buffer is getting flushed after the first saving
-        // and doesn't persist new changes for several instances during the current session
-        window.location.replace(
-          `${window.location.href}/!draft?ref=${draft._id}`
-        );
-        location.reload();
-      } else {
-        const params = {
-          group_permlink: this.$route.params.research_group_permlink,
-          research_permlink: this.$route.params.research_permlink,
-          content_permlink: `!draft`
-        };
-        const query = { ref: draft._id };
-        this.$router.push({ name: "ResearchContentDetails", params, query });
+  export default {
+    name: 'ResearchDetailsDraftListItem',
+
+    props: {
+      draft: {
+        type: Object,
+        required: true
+      },
+      index: {
+        type: Number,
+        required: false,
+        default: 0
       }
     },
-    isDraftProposed(draft) {
-      return draft.status === "proposed";
+    data() {
+      return {
+        isDeletingDraft: false
+      };
     },
-    isDraftInProgress(draft) {
-      return draft.status === "in-progress";
-    },
-    deleteDraft(draft) {
-      this.isDeletingDraft = true;
-      contentHttpService
-        .deleteContentDraft(draft._id)
-        .then(() => {
-          this.$store.dispatch("rd/loadResearchContentRefs", {
-            researchId: draft.researchId
+    methods: {
+      openDarDraft(draft) {
+        if (draft.type === 'dar' && draft.status === 'in-progress') {
+          // we have to do it this way as Texture InMemory buffer is getting flushed after the first saving
+          // and doesn't persist new changes for several instances during the current session
+          window.location.replace(
+            `${window.location.href}/!draft?ref=${draft._id}`
+          );
+          location.reload();
+        } else {
+          const params = {
+            group_permlink: this.$route.params.research_group_permlink,
+            research_permlink: this.$route.params.research_permlink,
+            content_permlink: `!draft`
+          };
+          const query = { ref: draft._id };
+          this.$router.push({
+            name: 'ResearchContentDetails',
+            params,
+            query
           });
-        })
-        .finally(() => {
-          this.isDeletingDraft = false;
-        });
+        }
+      },
+      isDraftProposed(draft) {
+        return draft.status === 'proposed';
+      },
+      isDraftInProgress(draft) {
+        return draft.status === 'in-progress';
+      },
+      deleteDraft(draft) {
+        this.isDeletingDraft = true;
+        researchContentService
+          .deleteContentDraft(draft._id)
+          .then(() => {
+            this.$store.dispatch('rd/loadResearchContentRefs', {
+              researchId: draft.researchId
+            });
+          })
+          .finally(() => {
+            this.isDeletingDraft = false;
+          });
+      }
     }
-  }
-};
+  };
 </script>
 
 <style scoped>

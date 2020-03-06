@@ -6,12 +6,33 @@
     "serve": "npx vue-cli-service serve",
     "build": "npx vue-cli-service build",
     "lint": "npx vue-cli-service lint",
-    "start": "npm run serve"
+    "start": "npm run serve",
+    "link": "node ./linkDevModules.js"
   },
   "dependencies": {
+    "@deip/access-service": "^1.0.0",
+    "@deip/app-config-service": "^1.0.0",
+    "@deip/auth-service": "^1.0.0",
+    "@deip/blockchain-service": "^1.0.0",
     "@deip/deip-oa-rpc-client": "1.0.23",
+    "@deip/disciplines-service": "^1.0.0",
+    "@deip/grants-service": "^1.0.0",
+    "@deip/http-service": "^1.0.0",
+    "@deip/investments-service": "^1.0.0",
     "@deip/lib-crypto": "1.0.2",
+    "@deip/organizations-service": "^0.1.0",
+    "@deip/research-content-reviews-service": "^1.0.0",
+    "@deip/research-content-service": "^1.0.0",
+    "@deip/research-group-proposal-voting-service": "^1.0.2",
+    "@deip/research-group-service": "^1.0.2",
+    "@deip/research-service": "^1.0.0",
+    "@deip/review-service": "^1.0.0",
+    "@deip/search-service": "^1.0.0",
     "@deip/substance-texture": "1.0.0-9d8c0dc6a3ba961c42cd5b494857baf783025cf3.patch.2",
+    "@deip/tenant-service": "^1.0.0",
+    "@deip/toolbox": "^0.1.0",
+    "@deip/user-service": "^1.0.0",
+    "@deip/users-service": "^1.0.0",
     "@mdi/font": "^4.5.95",
     "@vue/web-component-wrapper": "^1.2.0",
     "@xkeshi/vue-qrcode": "^1.0.0",
@@ -43,6 +64,9 @@
     "vuex": "^3.1.2"
   },
   "devDependencies": {
+    "@babel/plugin-proposal-class-properties": "^7.8.3",
+    "@babel/plugin-proposal-decorators": "^7.8.3",
+    "@babel/plugin-proposal-object-rest-spread": "^7.8.3",
     "@vue/babel-helper-vue-jsx-merge-props": "^1.0.0",
     "@vue/babel-preset-jsx": "^1.1.2",
     "@vue/cli-plugin-babel": "^4.1.2",
@@ -50,6 +74,7 @@
     "@vue/cli-plugin-router": "^4.1.0",
     "@vue/cli-plugin-vuex": "^4.1.0",
     "@vue/cli-service": "^4.1.0",
+    "@vue/eslint-config-airbnb": "^5.0.2",
     "@vue/eslint-config-standard": "^4.0.0",
     "autoprefixer": "^9.7.4",
     "babel-eslint": "^10.0.3",
@@ -63,7 +88,9 @@
     "postcss-url": "^8.0.0",
     "sass": "^1.23.7",
     "sass-loader": "^8.0.0",
-    "vue-template-compiler": "^2.6.10"
+    "symlink-dir": "^3.1.2",
+    "vue-template-compiler": "^2.6.10",
+    "yargs": "^15.1.0"
   },
   "eslintConfig": {
     "root": true,
@@ -71,14 +98,60 @@
       "node": true
     },
     "extends": [
-      "plugin:vue/essential",
+      "plugin:vue/recommended",
       "eslint:recommended",
-      "@vue/standard"
+      "@vue/airbnb"
     ],
-    "rules": {},
     "parserOptions": {
       "parser": "babel-eslint"
-    }
+    },
+    "rules": {
+      "import/prefer-default-export": "off",
+      "no-underscore-dangle": [
+        "error",
+        {
+          "allowAfterThis": true,
+          "enforceInMethodNames": false
+        }
+      ],
+      "no-console": [
+        "error",
+        {
+          "allow": [
+            "warn",
+            "error",
+            "info"
+          ]
+        }
+      ],
+      "comma-dangle": [
+        "error",
+        "never"
+      ],
+      "vue/script-indent": [
+        "error",
+        2,
+        {
+          "baseIndent": 1
+        }
+      ],
+      "vue/max-attributes-per-line": [
+        "error",
+        {
+          "singleline": 3
+        }
+      ]
+    },
+    "overrides": [
+      {
+        "files": [
+          "*.vue"
+        ],
+        "rules": {
+          "indent": "off"
+        }
+      }
+    ]
   },
   "browserslist": [
     "> 1%",

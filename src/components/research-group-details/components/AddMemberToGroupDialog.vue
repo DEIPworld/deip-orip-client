@@ -12,10 +12,11 @@
         </v-layout>
       </v-card-title>
       <v-card-text>
-        <v-autocomplete :items="users" item-text="profile.firstName" item-value="account" v-model="selectedUser" placeholder="Researcher">
+        <v-autocomplete :items="users" item-text="profile.firstName" item-value="account" v-model="selectedUser"
+                        placeholder="Researcher">
           <template slot="selection" slot-scope="data">
             <div class="pl-2">
-              <platform-avatar 
+              <platform-avatar
                 :user="data.item"
                 :size="30"
                 noFollow
@@ -27,7 +28,7 @@
 
           <template slot="item" slot-scope="data">
             <div>
-              <platform-avatar 
+              <platform-avatar
                 :user="data.item"
                 :size="30"
                 noFollow
@@ -46,21 +47,23 @@
       <v-card-actions>
         <v-layout row wrap>
           <v-flex xs12 py-2>
-            <v-btn 
-              color="primary" 
+            <v-btn
+              color="primary"
               :disabled="isDisabled || isLoading"
               :loading="isLoading"
               @click="sendProposal()"
               block
-            >Create proposal</v-btn>
+            >Create proposal
+            </v-btn>
           </v-flex>
           <v-flex xs12 py-2>
-            <v-btn 
+            <v-btn
               @click="close()"
-              :disabled="isLoading" 
-              color="primary" 
+              :disabled="isLoading"
+              color="primary"
               flat
-              block>Cancel</v-btn>
+              block>Cancel
+            </v-btn>
           </v-flex>
         </v-layout>
       </v-card-actions>
@@ -69,71 +72,74 @@
 </template>
 
 <script>
-    import _ from 'lodash';
-    import deipRpc from '@deip/deip-oa-rpc-client';
-    import { mapGetters } from 'vuex';
-    import { createInviteProposal } from './../../../services/ProposalService';
-    import { getEnrichedProfiles } from './../../../utils/user'
+  import _ from 'lodash';
+  import deipRpc from '@deip/deip-oa-rpc-client';
+  import { mapGetters } from 'vuex';
 
-    export default {
-        name: "AddMemberToGroupDialog",
-        props: {
-            isOpen: { required: true, type: Boolean },
-            groupId: { required: true, type: Number },
-            users: { required: true, type: Array, default: () => [] },
-        },
-        computed: {
-            isDisabled() {
-                return _.isEmpty(this.selectedUser) 
-                    || _.isEmpty(this.tokensAmount) 
-                    || !_.isNumber( parseInt(this.tokensAmount) );
-            }
-        },
-        data() { 
-            return {
-                selectedUser: undefined,
-                tokensAmount: '',
-                coverLetter: '',
-                isLoading: false
-            }
-        },
-        methods: {
-            close() {
-                this.$emit('onClose');
-            },
+  import { ResearchGroupService } from '@deip/research-group-service';
 
-            sendProposal() {
-                this.isLoading = true;
-                
-                createInviteProposal(
-                    this.groupId,
-                    this.selectedUser.name,
-                    parseInt(this.tokensAmount) * this.DEIP_1_PERCENT,
-                    this.coverLetter
-				).then(() => {
-                    this.$store.dispatch('layout/setSuccess', {
-                        message: "Invitation Proposal has been created successfully!"
-                    });
-                    this.$emit('onSuccess');
-                }).catch(err => {
-                    this.$store.dispatch('layout/setError', {
-                        message: "An error occurred while creating proposal, please try again later"
-                    });
-                    console.log(err)
-                }).finally(() => {
-                    this.isLoading = false;
-                    this.close();
-                });
-            }
-        },
-        watch: {
-            isOpen(newVal, oldVal) {
-                this.selectedUser = undefined;
-                this.tokensAmount = '';
-                this.coverLetter = '';
-            }
-        }
-    };
+  const researchGroupService = ResearchGroupService.getInstance();
+
+  export default {
+    name: 'AddMemberToGroupDialog',
+
+    props: {
+      isOpen: { required: true, type: Boolean },
+      groupId: { required: true, type: Number },
+      users: { required: true, type: Array, default: () => [] },
+    },
+    computed: {
+      isDisabled() {
+        return _.isEmpty(this.selectedUser)
+          || _.isEmpty(this.tokensAmount)
+          || !_.isNumber(parseInt(this.tokensAmount));
+      }
+    },
+    data() {
+      return {
+        selectedUser: undefined,
+        tokensAmount: '',
+        coverLetter: '',
+        isLoading: false
+      }
+    },
+    methods: {
+      close() {
+        this.$emit('onClose');
+      },
+
+      sendProposal() {
+        this.isLoading = true;
+
+        researchGroupService.createInviteProposal({
+          groupId: this.groupId,
+          invitee: this.selectedUser.name,
+          rgtAmount: parseInt(this.tokensAmount) * this.DEIP_1_PERCENT,
+          coverLetter: this.coverLetter,
+        }).then(() => {
+          this.$store.dispatch('layout/setSuccess', {
+            message: 'Invitation Proposal has been created successfully!'
+          });
+          this.$emit('onSuccess');
+        }).catch(err => {
+          this.$store.dispatch('layout/setError', {
+            message: 'An error occurred while creating proposal, please try again later'
+          });
+          console.log(err)
+        }).finally(() => {
+          this.isLoading = false;
+          this.close();
+        });
+      }
+    },
+    watch: {
+      isOpen(newVal, oldVal) {
+        this.selectedUser = undefined;
+        this.tokensAmount = '';
+        this.coverLetter = '';
+      }
+    }
+  };
 </script>
 
 <style lang="less" scoped>

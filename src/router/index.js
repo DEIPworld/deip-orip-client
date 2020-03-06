@@ -52,14 +52,19 @@ import SetExpertisePage from '@/components/SetExpertisePage';
 import NoAccessPage from '@/components/NoAccessPage';
 import CreateAccountTestNet from '@/components/auth/CreateAccountTestNet';
 import VotingForBlockProducers from '@/components/voting-for-block-producers/VotingForBlockProducers';
-import CreateFundingOpportunityAnnouncement from '@/components/funding-opportunity-announcement-create/CreateFundingOpportunityAnnouncement';
+import CreateFundingOpportunityAnnouncement
+  from '@/components/funding-opportunity-announcement-create/CreateFundingOpportunityAnnouncement';
 import InvestorDashboard from '@/components/investor-dashboard/InvestorDashboard';
 import ReviewSetup from '@/components/review-setup/ReviewSetup'
 
-import store from '@/store/index';
-import usersService from '@/services/http/users';
-import { isLoggedIn } from '@/utils/auth';
+import { store } from '@/store/index';
 import preliminaryDataLoader from './utils/preliminaryDataLoader';
+
+import { AccessService } from '@deip/access-service';
+import { UsersService } from '@deip/users-service';
+
+const accessService = AccessService.getInstance();
+const usersService = UsersService.getInstance();
 
 Vue.use(Router);
 
@@ -68,127 +73,127 @@ const RouterViewNestedWatcher = {
 };
 
 const router = new Router({
-	routes: [{
-		path: '/sign-in',
-		name: 'SignIn',
-		component: SignIn
-	}, {
-		path: '/sign-up',
-		name: 'SignUp',
-		component: SignUp
-	}, {
-		path: '/claimExpertiseRegesitration',
-		name: 'ClaimExpertiseRegesitration',
-		component: ClaimExpertiseRegistration
-	}, {
-		path: '/create-grant',
-		name: 'CreateGrant',
-		component: GrantStartCreating
-	}, {
-		path: '/create-discipline-grant',
-		name: 'CreateDisciplineGrant',
-		component: CreateDisciplineGrant
-	}, {
-		path: '/create-direct-grant',
-		name: 'CreateDirectGrant',
-		component: CreateDirectGrant
-	}, {
-		path: '/:agency/programs',
-		name: 'AgencyPrograms',
-		component: AgencyPrograms,
-		beforeEnter: (to, from, next) => {
-			let loadPagePromise = store.dispatch('agencyPrograms/loadAgencyProgramsPage', {
-				agency: decodeURIComponent(to.params.agency),
-				areaCode: to.query.areaCode,
-				subAreaCode: to.query.subAreaCode
-			});
-			loadPage(loadPagePromise, next);
-		}
-	}, {
-		path: '/:agency/programs/:foa',
-		name: 'AgencyProgramDetails',
-		component: AgencyProgramDetails,
-		beforeEnter: (to, from, next) => {
-			let loadPagePromise = store.dispatch('agencyProgramDetails/loadAgencyProgramDetailsPage', {
-				agency: decodeURIComponent(to.params.agency),
-				foaId: decodeURIComponent(to.params.foa)
-			});
-			loadPage(loadPagePromise, next);
-		}
-	}, {
-		path: '/:research_group_permlink/group-details',
-		name: 'ResearchGroupDetails',
-		component: preliminaryDataLoader(ResearchGroupDetails, {
-			beforeEnter: (to, from, next) => {
-				let loadPagePromise = store.dispatch('researchGroup/loadResearchGroup', {
-					permlink: decodeURIComponent(to.params.research_group_permlink)
-				});
-				loadPage(loadPagePromise, next);
-			}
-		})
-	},{
-		path: '/:research_group_permlink/group-details/group-settings',
-		name: 'ResearchGroupSettings',
-		component: preliminaryDataLoader(ResearchGroupSettings	, {
-			beforeEnter: (to, from, next) => {
-				if(store.getters['auth/user'].groups.find(item => encodeURIComponent(item.permlink) == to.params.research_group_permlink)){
-					let loadPagePromise = store.dispatch('researchGroupSettings/loadResearchGroup', {
-						permlink: decodeURIComponent(to.params.research_group_permlink)
-					});
-					loadPage(loadPagePromise, next);
-				} else {
-					next({
-						name: 'ResearchGroupDetails',
-						params: {
-							research_group_permlink: to.params.research_group_permlink
-						}
-					})
-				}
-			}
-		})
-	}, {
-		path: '/:account_name/create-research-group',
-		name: 'CreateResearchGroup',
-		component: CreateResearchGroup
-	}, {
-		path: '/:research_group_permlink/wallet',
-		name: 'ResearchGroupWallet',
-		component: preliminaryDataLoader(ResearchGroupWallet, {
-			beforeEnter: (to, from, next) => {
-				let loadPagePromise = store.dispatch('rgWallet/loadGroupWallet', {
-					permlink: decodeURIComponent(to.params.research_group_permlink)
-				});
-				loadPage(loadPagePromise, next);
-			}
-		})
-	}, {
-		path: '/dashboard',
-		name: 'Dashboard',
-		component: Dashboard,
-		beforeEnter: (to, from, next) => {
-			let loadPagePromise = store.dispatch('dashboard/loadDashboardPage', {
-				username: decodeURIComponent(store.getters['auth/user'].username)
-			});
-			loadPage(loadPagePromise, next);
-		}
-		}, {
-			path: '/research-feed',
-			name: 'ResearchFeed',
-			component: preliminaryDataLoader(ResearchFeed, {
-				beforeEnter: (to, from, next) => {
-					let loadPagePromise = store.dispatch('feed/loadResearchFeed', {});
-					loadPage(loadPagePromise, next);
-				}
-			})
-		}, {
-		path: '/:research_group_permlink/research/:research_permlink',
-		name: 'ResearchDetails',
-		component: preliminaryDataLoader(ResearchDetails, {
-			beforeEnter: (to, from, next) => {
-				let loadPagePromise = store.dispatch('rd/loadResearchDetails', {
-					group_permlink: decodeURIComponent(to.params.research_group_permlink),
-					research_permlink: decodeURIComponent(to.params.research_permlink)
-				}).then(() => {
+  routes: [ {
+    path: '/sign-in',
+    name: 'SignIn',
+    component: SignIn
+  }, {
+    path: '/sign-up',
+    name: 'SignUp',
+    component: SignUp
+  }, {
+    path: '/claimExpertiseRegesitration',
+    name: 'ClaimExpertiseRegesitration',
+    component: ClaimExpertiseRegistration
+  }, {
+    path: '/create-grant',
+    name: 'CreateGrant',
+    component: GrantStartCreating
+  }, {
+    path: '/create-discipline-grant',
+    name: 'CreateDisciplineGrant',
+    component: CreateDisciplineGrant
+  }, {
+    path: '/create-direct-grant',
+    name: 'CreateDirectGrant',
+    component: CreateDirectGrant
+  }, {
+    path: '/:agency/programs',
+    name: 'AgencyPrograms',
+    component: AgencyPrograms,
+    beforeEnter: (to, from, next) => {
+      let loadPagePromise = store.dispatch('agencyPrograms/loadAgencyProgramsPage', {
+        agency: decodeURIComponent(to.params.agency),
+        areaCode: to.query.areaCode,
+        subAreaCode: to.query.subAreaCode
+      });
+      loadPage(loadPagePromise, next);
+    }
+  }, {
+    path: '/:agency/programs/:foa',
+    name: 'AgencyProgramDetails',
+    component: AgencyProgramDetails,
+    beforeEnter: (to, from, next) => {
+      let loadPagePromise = store.dispatch('agencyProgramDetails/loadAgencyProgramDetailsPage', {
+        agency: decodeURIComponent(to.params.agency),
+        foaId: decodeURIComponent(to.params.foa)
+      });
+      loadPage(loadPagePromise, next);
+    }
+  }, {
+    path: '/:research_group_permlink/group-details',
+    name: 'ResearchGroupDetails',
+    component: preliminaryDataLoader(ResearchGroupDetails, {
+      beforeEnter: (to, from, next) => {
+        let loadPagePromise = store.dispatch('researchGroup/loadResearchGroup', {
+          permlink: decodeURIComponent(to.params.research_group_permlink)
+        });
+        loadPage(loadPagePromise, next);
+      }
+    })
+  }, {
+    path: '/:research_group_permlink/group-details/group-settings',
+    name: 'ResearchGroupSettings',
+    component: preliminaryDataLoader(ResearchGroupSettings, {
+      beforeEnter: (to, from, next) => {
+        if (store.getters['auth/user'].groups.find(item => encodeURIComponent(item.permlink) == to.params.research_group_permlink)) {
+          let loadPagePromise = store.dispatch('researchGroupSettings/loadResearchGroup', {
+            permlink: decodeURIComponent(to.params.research_group_permlink)
+          });
+          loadPage(loadPagePromise, next);
+        } else {
+          next({
+            name: 'ResearchGroupDetails',
+            params: {
+              research_group_permlink: to.params.research_group_permlink
+            }
+          })
+        }
+      }
+    })
+  }, {
+    path: '/:account_name/create-research-group',
+    name: 'CreateResearchGroup',
+    component: CreateResearchGroup
+  }, {
+    path: '/:research_group_permlink/wallet',
+    name: 'ResearchGroupWallet',
+    component: preliminaryDataLoader(ResearchGroupWallet, {
+      beforeEnter: (to, from, next) => {
+        let loadPagePromise = store.dispatch('rgWallet/loadGroupWallet', {
+          permlink: decodeURIComponent(to.params.research_group_permlink)
+        });
+        loadPage(loadPagePromise, next);
+      }
+    })
+  }, {
+    path: '/dashboard',
+    name: 'Dashboard',
+    component: Dashboard,
+    beforeEnter: (to, from, next) => {
+      let loadPagePromise = store.dispatch('dashboard/loadDashboardPage', {
+        username: decodeURIComponent(store.getters['auth/user'].username)
+      });
+      loadPage(loadPagePromise, next);
+    }
+  }, {
+    path: '/research-feed',
+    name: 'ResearchFeed',
+    component: preliminaryDataLoader(ResearchFeed, {
+      beforeEnter: (to, from, next) => {
+        let loadPagePromise = store.dispatch('feed/loadResearchFeed', {});
+        loadPage(loadPagePromise, next);
+      }
+    })
+  }, {
+    path: '/:research_group_permlink/research/:research_permlink',
+    name: 'ResearchDetails',
+    component: preliminaryDataLoader(ResearchDetails, {
+      beforeEnter: (to, from, next) => {
+        let loadPagePromise = store.dispatch('rd/loadResearchDetails', {
+          group_permlink: decodeURIComponent(to.params.research_group_permlink),
+          research_permlink: decodeURIComponent(to.params.research_permlink)
+        }).then(() => {
           const username = store.getters['auth/user'].username;
           const research = store.getters['rd/research'];
           if (research.is_private && !research.members.includes(username)) {
@@ -196,214 +201,214 @@ const router = new Router({
           }
         });
         loadPage(loadPagePromise, next);
-			}
-		})
-		}, {
-      path: '/:research_group_permlink/research-public/:research_permlink',
-      name: 'ResearchDetailsPublic',
-      component: preliminaryDataLoader(ResearchDetailsPublic, {
-        beforeEnter: (to, from, next) => {
-          let loadPagePromise = store.dispatch('rd/loadResearchDetails', {
+      }
+    })
+  }, {
+    path: '/:research_group_permlink/research-public/:research_permlink',
+    name: 'ResearchDetailsPublic',
+    component: preliminaryDataLoader(ResearchDetailsPublic, {
+      beforeEnter: (to, from, next) => {
+        let loadPagePromise = store.dispatch('rd/loadResearchDetails', {
+          group_permlink: decodeURIComponent(to.params.research_group_permlink),
+          research_permlink: decodeURIComponent(to.params.research_permlink)
+        });
+        loadPage(loadPagePromise, next);
+      }
+    }),
+  }, {
+    path: '/:research_group_permlink/edit-research/:research_permlink',
+    name: 'ResearchEdit',
+    component: preliminaryDataLoader(ResearchEdit, {
+      beforeEnter: (to, from, next) => {
+        if (store.getters['auth/user'].groups.find(item => encodeURIComponent(item.permlink) == to.params.research_group_permlink)) {
+          let loadPagePromise = store.dispatch('re/loadResearchEditPage', {
             group_permlink: decodeURIComponent(to.params.research_group_permlink),
             research_permlink: decodeURIComponent(to.params.research_permlink)
           });
           loadPage(loadPagePromise, next);
+        } else {
+          next({
+            name: 'ResearchDetails',
+            params: {
+              research_group_permlink: to.params.research_group_permlink,
+              research_permlink: to.params.research_permlink
+            }
+          })
         }
-      }),
-      }, {
-			path: '/:research_group_permlink/edit-research/:research_permlink',
-			name: 'ResearchEdit',
-			component: preliminaryDataLoader(ResearchEdit, {
-				beforeEnter: (to, from, next) => {
-					if(store.getters['auth/user'].groups.find(item => encodeURIComponent(item.permlink) == to.params.research_group_permlink)){
-						let loadPagePromise = store.dispatch('re/loadResearchEditPage', {
-							group_permlink: decodeURIComponent(to.params.research_group_permlink),
-							research_permlink: decodeURIComponent(to.params.research_permlink)
-						});
-						loadPage(loadPagePromise, next);
-					} else {
-						next({
-							name: 'ResearchDetails',
-							params: {
-								research_group_permlink: to.params.research_group_permlink,
-								research_permlink: to.params.research_permlink
-							}
-						})
-					}
-				}
-			})
-		}, {
-		path: '/:research_group_permlink/research/:research_permlink/:content_permlink',
-		name: 'ResearchContentDetails',
-		component: preliminaryDataLoader(ResearchContentDetails, {
-			beforeEnter: (to, from, next) => {
-				let loadPagePromise = store.dispatch('rcd/loadResearchContentDetails', {
-					group_permlink: decodeURIComponent(to.params.research_group_permlink),
-					research_permlink: decodeURIComponent(to.params.research_permlink),
-					content_permlink: decodeURIComponent(to.params.content_permlink),
-					ref: to.query.ref
-				});
-				loadPage(loadPagePromise, next);
-			}
-		})
-	}, {
-		path: '/:research_group_permlink/research/:research_permlink/application/:application_id',
-		name: 'ResearchApplicationDetails',
-		component: preliminaryDataLoader(ResearchApplicationDetails, {
-			beforeEnter: (to, from, next) => {
-				let loadPagePromise = store.dispatch('rad/loadResearchApplicationDetails', {
-					group_permlink: decodeURIComponent(to.params.research_group_permlink),
-					research_permlink: decodeURIComponent(to.params.research_permlink),
-					application_id: to.params.application_id
-				});
-				loadPage(loadPagePromise, next);
-			}
-		})
-	}, {
-		path: '/:research_group_permlink/research/:research_permlink/:content_permlink/metadata',
-		name: 'ResearchContentMetadata',
-		component: preliminaryDataLoader(ResearchContentMetadata, {
-			beforeEnter: async (to, from, next) => {
-				let loadPagePromise = store.dispatch('rcd/loadResearchContentMetadata', {
-					group_permlink: decodeURIComponent(to.params.research_group_permlink),
-					research_permlink: decodeURIComponent(to.params.research_permlink),
-					content_permlink: decodeURIComponent(to.params.content_permlink),
-					ref: to.query.ref
-				});
-				loadPage(loadPagePromise, next);
-			}
-		})
-	}, {
-		path: '/:research_group_permlink/research/:research_permlink/:content_permlink/review/:review_id',
-		name: 'ResearchContentReview',
-		component: preliminaryDataLoader(ResearchContentReview, {
-			beforeEnter: (to, from, next) => {
-				let loadPagePromise = store.dispatch('rcd/loadResearchContentDetails', {
-					group_permlink: decodeURIComponent(to.params.research_group_permlink),
-					research_permlink: decodeURIComponent(to.params.research_permlink),
-					content_permlink: decodeURIComponent(to.params.content_permlink),
-					ref: to.query.ref
-				});
-				loadPage(loadPagePromise, next);
-			}
-		})
-	}, {
-		path: '/:research_group_permlink/research/:research_permlink/:content_permlink/add-review',
-		name: 'ResearchContentAddReview',
-		component: preliminaryDataLoader(ResearchContentAddReview, {
-			beforeEnter: (to, from, next) => {
-				let loadPagePromise = store.dispatch('rcd/loadResearchContentDetails', {
-					group_permlink: decodeURIComponent(to.params.research_group_permlink),
-					research_permlink: decodeURIComponent(to.params.research_permlink),
-					content_permlink: decodeURIComponent(to.params.content_permlink),
-					ref: to.query.ref
-				});
-				loadPage(loadPagePromise, next);
-			}
-		})
-	}, {
-		path: '/eci-model-setup',
-		name: 'ReviewSetup',
-		component: ReviewSetup
-	}, {
-			path: '/:research_group_permlink/research/:research_permlink/:content_permlink/references',
-			name: 'ResearchContentReferences',
-			component: preliminaryDataLoader(ResearchContentReferences, {
-				beforeEnter: (to, from, next) => {
-					let loadPagePromise = store.dispatch('rcd/loadResearchContentDetails', {
-						group_permlink: decodeURIComponent(to.params.research_group_permlink),
-						research_permlink: decodeURIComponent(to.params.research_permlink),
-						content_permlink: decodeURIComponent(to.params.content_permlink),
-						ref: to.query.ref
-					});
-					loadPage(loadPagePromise, next);
-				}
-			})
-		}, {
-		path: '/:research_group_permlink/research/:research_permlink/application/:application_id/review/:review_id',
-		name: 'ResearchApplicationReview',
-		component: preliminaryDataLoader(ResearchApplicationReview, {
-			beforeEnter: (to, from, next) => {
-				let loadPagePromise = store.dispatch('rad/loadResearchApplicationDetails', {
-					group_permlink: decodeURIComponent(to.params.research_group_permlink),
-					research_permlink: decodeURIComponent(to.params.research_permlink),
-					application_id: to.params.application_id,
-					review_id: to.params.review_id
-				});
-				loadPage(loadPagePromise, next);
-			}
-		})
-	}, {
-		path: '/:research_group_permlink/research/:research_permlink/application/:application_id/add-review',
-		name: 'ResearchApplicationAddReview',
-		component: preliminaryDataLoader(ResearchApplicationAddReview, {
-			beforeEnter: (to, from, next) => {
-				let loadPagePromise = store.dispatch('rad/loadResearchApplicationDetails', {
-					group_permlink: decodeURIComponent(to.params.research_group_permlink),
-					research_permlink: decodeURIComponent(to.params.research_permlink),
-					application_id: to.params.application_id
-				});
-				loadPage(loadPagePromise, next);
-			}
-		})
-	}, {
-		path: '/create-research',
-		name: 'StartCreateResearch',
-		component: ResearchStartCreating
-	}, {
-		path: '/create-new-research',
-		name: 'CreateResearch',
-		component: CreateNewResearch
-	}, {
-		path: '/:research_group_permlink/create-fundraise/:research_permlink',
-		name: 'CreateTokenSale',
-		component: CreateTokenSale
-	}, {
-		path: '/user-details/:account_name',
-		name: 'UserDetails',
-		component: preliminaryDataLoader(UserDetails, {
-			beforeEnter: (to, from, next) => {
-				let loadPagePromise = store.dispatch('userDetails/loadUserDetailsPage', {
-					username: decodeURIComponent(to.params.account_name)
-				});
-				loadPage(loadPagePromise, next);
-			}
-		})
-		}, {
-			path: '/user-details/:account_name/expertise',
-			name: 'UserExpertiseDetails',
-			component: preliminaryDataLoader(UserExpertiseDetails, {
-				beforeEnter: (to, from, next) => {
-					let loadPagePromise = store.dispatch('userDetails/loadAccountExpertiseDetailsPage', {
-						username: decodeURIComponent(to.params.account_name)
-					});
-					loadPage(loadPagePromise, next);
-				}
-			})
-		}, {
-		path: '/user-details/:account_name/user-settings',
-		name: 'UserSettings',
-		component: preliminaryDataLoader(UserSettings, {
-			beforeEnter: (to, from , next) => {
-				if (store.getters['auth/user'].username !== to.params.account_name){
-					next({
-						name: 'UserDetails',
-						params: {
-							account_name: to.params.account_name
-						}
-					})
-				} else {
-					let loadPagePromise = store.dispatch('userSettings/loadUserSettingsPage', {
-						username: decodeURIComponent(to.params.account_name)
-					});
-					loadPage(loadPagePromise, next);
-				}
-			}
-		})
-	}, {
+      }
+    })
+  }, {
+    path: '/:research_group_permlink/research/:research_permlink/:content_permlink',
+    name: 'ResearchContentDetails',
+    component: preliminaryDataLoader(ResearchContentDetails, {
+      beforeEnter: (to, from, next) => {
+        let loadPagePromise = store.dispatch('rcd/loadResearchContentDetails', {
+          group_permlink: decodeURIComponent(to.params.research_group_permlink),
+          research_permlink: decodeURIComponent(to.params.research_permlink),
+          content_permlink: decodeURIComponent(to.params.content_permlink),
+          ref: to.query.ref
+        });
+        loadPage(loadPagePromise, next);
+      }
+    })
+  }, {
+    path: '/:research_group_permlink/research/:research_permlink/application/:application_id',
+    name: 'ResearchApplicationDetails',
+    component: preliminaryDataLoader(ResearchApplicationDetails, {
+      beforeEnter: (to, from, next) => {
+        let loadPagePromise = store.dispatch('rad/loadResearchApplicationDetails', {
+          group_permlink: decodeURIComponent(to.params.research_group_permlink),
+          research_permlink: decodeURIComponent(to.params.research_permlink),
+          application_id: to.params.application_id
+        });
+        loadPage(loadPagePromise, next);
+      }
+    })
+  }, {
+    path: '/:research_group_permlink/research/:research_permlink/:content_permlink/metadata',
+    name: 'ResearchContentMetadata',
+    component: preliminaryDataLoader(ResearchContentMetadata, {
+      beforeEnter: async (to, from, next) => {
+        let loadPagePromise = store.dispatch('rcd/loadResearchContentMetadata', {
+          group_permlink: decodeURIComponent(to.params.research_group_permlink),
+          research_permlink: decodeURIComponent(to.params.research_permlink),
+          content_permlink: decodeURIComponent(to.params.content_permlink),
+          ref: to.query.ref
+        });
+        loadPage(loadPagePromise, next);
+      }
+    })
+  }, {
+    path: '/:research_group_permlink/research/:research_permlink/:content_permlink/review/:review_id',
+    name: 'ResearchContentReview',
+    component: preliminaryDataLoader(ResearchContentReview, {
+      beforeEnter: (to, from, next) => {
+        let loadPagePromise = store.dispatch('rcd/loadResearchContentDetails', {
+          group_permlink: decodeURIComponent(to.params.research_group_permlink),
+          research_permlink: decodeURIComponent(to.params.research_permlink),
+          content_permlink: decodeURIComponent(to.params.content_permlink),
+          ref: to.query.ref
+        });
+        loadPage(loadPagePromise, next);
+      }
+    })
+  }, {
+    path: '/:research_group_permlink/research/:research_permlink/:content_permlink/add-review',
+    name: 'ResearchContentAddReview',
+    component: preliminaryDataLoader(ResearchContentAddReview, {
+      beforeEnter: (to, from, next) => {
+        let loadPagePromise = store.dispatch('rcd/loadResearchContentDetails', {
+          group_permlink: decodeURIComponent(to.params.research_group_permlink),
+          research_permlink: decodeURIComponent(to.params.research_permlink),
+          content_permlink: decodeURIComponent(to.params.content_permlink),
+          ref: to.query.ref
+        });
+        loadPage(loadPagePromise, next);
+      }
+    })
+  }, {
+    path: '/eci-model-setup',
+    name: 'ReviewSetup',
+    component: ReviewSetup
+  }, {
+    path: '/:research_group_permlink/research/:research_permlink/:content_permlink/references',
+    name: 'ResearchContentReferences',
+    component: preliminaryDataLoader(ResearchContentReferences, {
+      beforeEnter: (to, from, next) => {
+        let loadPagePromise = store.dispatch('rcd/loadResearchContentDetails', {
+          group_permlink: decodeURIComponent(to.params.research_group_permlink),
+          research_permlink: decodeURIComponent(to.params.research_permlink),
+          content_permlink: decodeURIComponent(to.params.content_permlink),
+          ref: to.query.ref
+        });
+        loadPage(loadPagePromise, next);
+      }
+    })
+  }, {
+    path: '/:research_group_permlink/research/:research_permlink/application/:application_id/review/:review_id',
+    name: 'ResearchApplicationReview',
+    component: preliminaryDataLoader(ResearchApplicationReview, {
+      beforeEnter: (to, from, next) => {
+        let loadPagePromise = store.dispatch('rad/loadResearchApplicationDetails', {
+          group_permlink: decodeURIComponent(to.params.research_group_permlink),
+          research_permlink: decodeURIComponent(to.params.research_permlink),
+          application_id: to.params.application_id,
+          review_id: to.params.review_id
+        });
+        loadPage(loadPagePromise, next);
+      }
+    })
+  }, {
+    path: '/:research_group_permlink/research/:research_permlink/application/:application_id/add-review',
+    name: 'ResearchApplicationAddReview',
+    component: preliminaryDataLoader(ResearchApplicationAddReview, {
+      beforeEnter: (to, from, next) => {
+        let loadPagePromise = store.dispatch('rad/loadResearchApplicationDetails', {
+          group_permlink: decodeURIComponent(to.params.research_group_permlink),
+          research_permlink: decodeURIComponent(to.params.research_permlink),
+          application_id: to.params.application_id
+        });
+        loadPage(loadPagePromise, next);
+      }
+    })
+  }, {
+    path: '/create-research',
+    name: 'StartCreateResearch',
+    component: ResearchStartCreating
+  }, {
+    path: '/create-new-research',
+    name: 'CreateResearch',
+    component: CreateNewResearch
+  }, {
+    path: '/:research_group_permlink/create-fundraise/:research_permlink',
+    name: 'CreateTokenSale',
+    component: CreateTokenSale
+  }, {
+    path: '/user-details/:account_name',
+    name: 'UserDetails',
+    component: preliminaryDataLoader(UserDetails, {
+      beforeEnter: (to, from, next) => {
+        let loadPagePromise = store.dispatch('userDetails/loadUserDetailsPage', {
+          username: decodeURIComponent(to.params.account_name)
+        });
+        loadPage(loadPagePromise, next);
+      }
+    })
+  }, {
+    path: '/user-details/:account_name/expertise',
+    name: 'UserExpertiseDetails',
+    component: preliminaryDataLoader(UserExpertiseDetails, {
+      beforeEnter: (to, from, next) => {
+        let loadPagePromise = store.dispatch('userDetails/loadAccountExpertiseDetailsPage', {
+          username: decodeURIComponent(to.params.account_name)
+        });
+        loadPage(loadPagePromise, next);
+      }
+    })
+  }, {
+    path: '/user-details/:account_name/user-settings',
+    name: 'UserSettings',
+    component: preliminaryDataLoader(UserSettings, {
+      beforeEnter: (to, from, next) => {
+        if (store.getters['auth/user'].username !== to.params.account_name) {
+          next({
+            name: 'UserDetails',
+            params: {
+              account_name: to.params.account_name
+            }
+          })
+        } else {
+          let loadPagePromise = store.dispatch('userSettings/loadUserSettingsPage', {
+            username: decodeURIComponent(to.params.account_name)
+          });
+          loadPage(loadPagePromise, next);
+        }
+      }
+    })
+  }, {
     path: '/account-settings',
     component: RouterViewNestedWatcher,
-    children: [{
+    children: [ {
       path: '/',
       name: 'AccountSettings',
       component: AccountSettings,
@@ -425,139 +430,139 @@ const router = new Router({
       path: 'private-key',
       name: 'PrivateKeyDownload',
       component: PrivateKeyDownload,
-    }]
+    } ]
   }, {
-		path: '/user-wallet',
-		name: 'UserWallet',
-		component: preliminaryDataLoader(UserWallet, {
-			beforeEnter: (to, from, next) => {
-				let loadPagePromise = store.dispatch('userWallet/loadWallet');
-				loadPage(loadPagePromise, next);
-			}
-		})
-		}, {
-		path: '/legacy-user-wallet',
-		name: 'UserWalletOld',
-		component: preliminaryDataLoader(UserWalletOld, {
-				beforeEnter: (to, from, next) => {
-					let loadPagePromise = store.dispatch('userWallet/loadWallet');
-					loadPage(loadPagePromise, next);
-				}
-			})
-		}, {
-		path: '/claim-user-experience',
-		name: 'ClaimUserExpertiseList',
-		component: preliminaryDataLoader(ClaimUserExpertiseList, {
-			beforeEnter: (to, from, next) => {
-				let loadPagePromise = store.dispatch('claimExpertiseList/loadAllClaims', {});
-				loadPage(loadPagePromise, next);
-			}
-		})
-	}, {
-		path: '/claim-user-experience/:account_name/:claim_id',
-		name: 'ClaimUserExpertiseDetails',
-		component: preliminaryDataLoader(ClaimUserExpertiseDetails, {
-			beforeEnter: (to, from, next) => {
-				let loadPagePromise = store.dispatch('claimExpertiseDetails/loadClaimer', {
-					username: to.params.account_name,
-					claimId: to.params.claim_id
-				});
-				loadPage(loadPagePromise, next);
-			}
-		})
-	}, {
-		path: '/set-expertise',
-		name: 'SetExpertisePage',
-		component: SetExpertisePage,
-	}, {
-	  // TODO: deprecated
-		path: '/no-access-page',
-		name: 'NoAccessPage',
-		component: NoAccessPage,
-		meta: {
-			withoutHeader: true
-		}
-	}, /* {
+    path: '/user-wallet',
+    name: 'UserWallet',
+    component: preliminaryDataLoader(UserWallet, {
+      beforeEnter: (to, from, next) => {
+        let loadPagePromise = store.dispatch('userWallet/loadWallet');
+        loadPage(loadPagePromise, next);
+      }
+    })
+  }, {
+    path: '/legacy-user-wallet',
+    name: 'UserWalletOld',
+    component: preliminaryDataLoader(UserWalletOld, {
+      beforeEnter: (to, from, next) => {
+        let loadPagePromise = store.dispatch('userWallet/loadWallet');
+        loadPage(loadPagePromise, next);
+      }
+    })
+  }, {
+    path: '/claim-user-experience',
+    name: 'ClaimUserExpertiseList',
+    component: preliminaryDataLoader(ClaimUserExpertiseList, {
+      beforeEnter: (to, from, next) => {
+        let loadPagePromise = store.dispatch('claimExpertiseList/loadAllClaims', {});
+        loadPage(loadPagePromise, next);
+      }
+    })
+  }, {
+    path: '/claim-user-experience/:account_name/:claim_id',
+    name: 'ClaimUserExpertiseDetails',
+    component: preliminaryDataLoader(ClaimUserExpertiseDetails, {
+      beforeEnter: (to, from, next) => {
+        let loadPagePromise = store.dispatch('claimExpertiseDetails/loadClaimer', {
+          username: to.params.account_name,
+          claimId: to.params.claim_id
+        });
+        loadPage(loadPagePromise, next);
+      }
+    })
+  }, {
+    path: '/set-expertise',
+    name: 'SetExpertisePage',
+    component: SetExpertisePage,
+  }, {
+    // TODO: deprecated
+    path: '/no-access-page',
+    name: 'NoAccessPage',
+    component: NoAccessPage,
+    meta: {
+      withoutHeader: true
+    }
+  }, /* {
 			// page for test net only
 			path: '/create-testnet-account',
 			name: 'create-testnet-account',
 			component: CreateAccountTestNet
 	}, */ {
-		path: '/voting-for-block-producers',
-		name: 'VotingForBlockProducers',
-		component: preliminaryDataLoader(VotingForBlockProducers, {
-			beforeEnter: (to, from, next) => {
-				let loadPagePromise = store.dispatch('votingForBlockProducers/loadProducers', {});
-				loadPage(loadPagePromise, next);
-			}
-		})
-	}, {
-		path: '/investor-dashboard',
-		name: 'InvestorDashboard',
-		component: InvestorDashboard,
-		beforeEnter: (to, from, next) => {
-			let loadPagePromise = store.dispatch('investorDashboard/loadInvestmentPortfolioPage', {
-				username: decodeURIComponent(store.getters['auth/user'].username)
-			});
-			loadPage(loadPagePromise, next);
-		}
-	}, {
-		path: '/create-funding-opportunity-announcement',
-		name: 'CreateFundingOpportunityAnnouncement',
-		component: CreateFundingOpportunityAnnouncement
-	}, {
-		path: '/',
-		name: 'Default',
-		beforeEnter: (to, from, next) => {
+    path: '/voting-for-block-producers',
+    name: 'VotingForBlockProducers',
+    component: preliminaryDataLoader(VotingForBlockProducers, {
+      beforeEnter: (to, from, next) => {
+        let loadPagePromise = store.dispatch('votingForBlockProducers/loadProducers', {});
+        loadPage(loadPagePromise, next);
+      }
+    })
+  }, {
+    path: '/investor-dashboard',
+    name: 'InvestorDashboard',
+    component: InvestorDashboard,
+    beforeEnter: (to, from, next) => {
+      let loadPagePromise = store.dispatch('investorDashboard/loadInvestmentPortfolioPage', {
+        username: decodeURIComponent(store.getters['auth/user'].username)
+      });
+      loadPage(loadPagePromise, next);
+    }
+  }, {
+    path: '/create-funding-opportunity-announcement',
+    name: 'CreateFundingOpportunityAnnouncement',
+    component: CreateFundingOpportunityAnnouncement
+  }, {
+    path: '/',
+    name: 'Default',
+    beforeEnter: (to, from, next) => {
       const tenant = store.getters['auth/tenant'];
-			const user = store.getters['auth/user'];
-			const rolePromise = user.profile
-				? Promise.resolve(user.profile.agencies || [])
-				: usersService.getUserProfile(user.username).then((p) => { return p.agencies });
+      const user = store.getters['auth/user'];
+      const rolePromise = user.profile
+        ? Promise.resolve(user.profile.agencies || [])
+        : usersService.getUserProfile(user.username).then((p) => { return p.agencies });
 
-			rolePromise.then((agencies) => {
-				return next({ name: 'ResearchFeed' });
+      rolePromise.then((agencies) => {
+        return next({ name: 'ResearchFeed' });
 
-				if (!agencies || !agencies.length) {
-					next({ name: 'ResearchFeed' });
-					return;
-				}
+        if (!agencies || !agencies.length) {
+          next({ name: 'ResearchFeed' });
+          return;
+        }
 
-				const sub = window.env.TENANT || "";
-				const agency = agencies.find(a => a.name.toLowerCase() === sub.toLowerCase());
+        const sub = window.env.TENANT || '';
+        const agency = agencies.find(a => a.name.toLowerCase() === sub.toLowerCase());
 
-				if (agency) {
-					next({ name: 'AgencyPrograms', params: { agency: agency.name } });
-				} else {
-					next({ name: 'ResearchFeed' });
-				}
-			});
-		}
-	}, {
+        if (agency) {
+          next({ name: 'AgencyPrograms', params: { agency: agency.name } });
+        } else {
+          next({ name: 'ResearchFeed' });
+        }
+      });
+    }
+  }, {
     path: '*',
     redirect: { name: 'Default' }
-  }],
+  } ],
 
-	scrollBehavior(to, from, savedPosition) {
-		if (to.hash) {
-			// TODO: Remove this timeout after router\loader refactoring
-			setTimeout(() => {
-					const anchor = document.querySelector(to.hash);
-					if (anchor) {
-							return window.scrollTo({ top: anchor.offsetTop, behavior: 'smooth' });
-					}
-			}, 500);
-		} else {
-			return { x: 0, y: 0 };
-		}
-	}
+  scrollBehavior(to, from, savedPosition) {
+    if (to.hash) {
+      // TODO: Remove this timeout after router\loader refactoring
+      setTimeout(() => {
+        const anchor = document.querySelector(to.hash);
+        if (anchor) {
+          return window.scrollTo({ top: anchor.offsetTop, behavior: 'smooth' });
+        }
+      }, 500);
+    } else {
+      return { x: 0, y: 0 };
+    }
+  }
 })
 
 function loadPage(loadPagePromise, next) {
-	store.dispatch('layout/setGlobalLoader');
-	loadPagePromise
-		.then(next)
-		.finally(() => { store.dispatch('layout/hideGlobalLoader'); })
+  store.dispatch('layout/setGlobalLoader');
+  loadPagePromise
+    .then(next)
+    .finally(() => { store.dispatch('layout/hideGlobalLoader'); })
 }
 
 router.beforeEach((to, from, next) => {
@@ -566,22 +571,24 @@ router.beforeEach((to, from, next) => {
     'ResearchDetailsPublic',
     'NoAccessPage'
   ];
-	if (to.path === '/sign-in' || to.path === '/sign-up' || to.path === '/create-test-net-account') {
-		if (isLoggedIn()) {
-			next('/') // if token is already presented redirect user to home page
-		} else {
-			next(); // otherwise redirect to sign-in page
-		}
-	} else if (PUBLIC_PAGES_NAMES.includes(to.name)) {
+  if (to.path === '/sign-in' || to.path === '/sign-up' || to.path === '/create-test-net-account') {
+    if (accessService.isLoggedIn()) {
+      next('/') // if token is already presented redirect user to home page
+    } else {
+      next(); // otherwise redirect to sign-in page
+    }
+  } else if (PUBLIC_PAGES_NAMES.includes(to.name)) {
     next();
   } else {
-		if (isLoggedIn()) {
-			next() // if there is a token allow to visit requested route
-		} else {
-			next({ name: 'ResearchFeed' }) // otherwise redirect to sign-in page
-		}
-	}
+    if (accessService.isLoggedIn()) {
+      next() // if there is a token allow to visit requested route
+    } else {
+      next({ name: 'ResearchFeed' }) // otherwise redirect to sign-in page
+    }
+  }
 })
 
 
-export default router;
+export {
+  router
+};
