@@ -10,7 +10,8 @@
             <router-link
               class="a"
               :to="{ name: 'UserDetails', params: { account_name: review.author.account.name }}"
-            >{{ review.author | fullname }}</router-link>
+            >{{ review.author | fullname }}
+            </router-link>
             <div v-if="review.author.profile" class="rd-reviewer__subtitle pt-1">
               <span>{{review.author | employmentOrEducation}}</span>
               <span
@@ -44,7 +45,8 @@
                 content_permlink: encodeURIComponent(review.research_content.permlink)
               }
             }"
-          >{{review.research_content.title}}</router-link>
+          >{{review.research_content.title}}
+          </router-link>
         </div>
         <v-layout row wrap>
           <v-flex
@@ -58,7 +60,7 @@
         </v-layout>
         <div class="grey--text text-xs-right pt-2">
           <v-icon small>event</v-icon>
-          {{moment(review.created_at).format("D, MMM YYYY")}}
+          {{moment(review.created_at).format('D, MMM YYYY')}}
         </div>
       </v-layout>
     </v-flex>
@@ -79,7 +81,8 @@
             </v-layout>
             <div
               v-if="review.supporters.length"
-            >{{review.supporters.length}} experts supported this review</div>
+            >{{review.supporters.length}} experts supported this review
+            </div>
           </v-tooltip>
         </div>
       </v-layout>
@@ -88,75 +91,79 @@
 </template>
 
 <script>
-import { getResearchContentType } from "@/services/ResearchService";
-import deipRpc from "@deip/deip-oa-rpc-client";
+  import deipRpc from '@deip/deip-oa-rpc-client';
+  import { ResearchService } from '@deip/research-service';
 
-export default {
-  name: "ResearchReviewItem",
+  const researchService = ResearchService.getInstance();
 
-  props: {
-    review: { type: Object, required: true },
-    research: { type: Object, required: true }
-  },
-  data() {
-    return {};
-  },
-  methods: {
-    doesUserHaveLocation(userProfile) {
-      return (
-        userProfile.location &&
-        (userProfile.location.country || userProfile.location.city)
-      );
+  export default {
+    name: 'ResearchReviewItem',
+
+    props: {
+      review: { type: Object, required: true },
+      research: { type: Object, required: true }
     },
-    goToReviewPage(review) {
-      const params = { review_id: review.id };
-
-      deipRpc.api
-        .getResearchContentByIdAsync(review.research_content_id)
-        .then(content => {
-          params.content_permlink = encodeURIComponent(content.permlink);
-          return deipRpc.api.getResearchByIdAsync(content.research_id);
-        })
-        .then(research => {
-          params.research_permlink = encodeURIComponent(research.permlink);
-          return deipRpc.api.getResearchGroupByIdAsync(
-            research.research_group_id
-          );
-        })
-        .then(group => {
-          params.research_group_permlink = encodeURIComponent(group.permlink);
-          this.$router.push({ name: "ResearchContentReview", params });
-        });
+    data() {
+      return {};
     },
-    getResearchContentType
-  }
-};
+    methods: {
+      doesUserHaveLocation(userProfile) {
+        return (
+          userProfile.location
+          && (userProfile.location.country || userProfile.location.city)
+        );
+      },
+      goToReviewPage(review) {
+        const params = { review_id: review.id };
+
+        deipRpc.api
+          .getResearchContentByIdAsync(review.research_content_id)
+          .then((content) => {
+            params.content_permlink = encodeURIComponent(content.permlink);
+            return deipRpc.api.getResearchByIdAsync(content.research_id);
+          })
+          .then((research) => {
+            params.research_permlink = encodeURIComponent(research.permlink);
+            return deipRpc.api.getResearchGroupByIdAsync(
+              research.research_group_id
+            );
+          })
+          .then((group) => {
+            params.research_group_permlink = encodeURIComponent(group.permlink);
+            this.$router.push({ name: 'ResearchContentReview', params });
+          });
+      },
+      getResearchContentType(type) {
+        return researchService.getResearchContentType(type);
+      }
+    }
+  };
 </script>
 
 <style lang="less" scoped>
-.rd-reviewer {
-  font-family: Roboto;
-  font-size: 12px;
-  line-height: 14px;
+  .rd-reviewer {
+    font-family: Roboto, sans-serif;
+    font-size: 12px;
+    line-height: 14px;
 
-  &__title {
-    font-weight: bold;
-    color: #000000;
+    &__title {
+      font-weight: bold;
+      color: #000000;
+    }
+
+    &__subtitle {
+      color: #9e9e9e;
+    }
   }
 
-  &__subtitle {
+  .rd-review-eci {
+    font-family: Roboto, sans-serif;
+    font-size: 12px;
+    line-height: 14px;
     color: #9e9e9e;
   }
-}
 
-.rd-review-eci {
-  font-family: Roboto;
-  font-size: 12px;
-  line-height: 14px;
-  color: #9e9e9e;
-}
-
-.right-bordered {
-  border-right: 1px solid #e0e0e0;
-}
+  .right-bordered {
+    border-right: 1px solid #e0e0e0;
+  }
 </style>

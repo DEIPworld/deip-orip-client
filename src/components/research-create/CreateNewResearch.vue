@@ -37,7 +37,7 @@
 
           <v-divider></v-divider>
 
-           <v-stepper-step step="5" :complete="currentStep > 5">
+          <v-stepper-step step="5" :complete="currentStep > 5">
             <div class="text-uppercase">Settings</div>
           </v-stepper-step>
 
@@ -121,7 +121,7 @@
 
           <!-- <v-stepper-content step="5">
                         <div class="fill-height">
-                            <create-research-share 
+                            <create-research-share
                                 @finish="finish" @decStep="decStep"
                                 @setReviewShare="setReviewShare"
                                 :research="research"
@@ -136,200 +136,208 @@
 </template>
 
 <script>
-import moment from "moment";
-import Vue from "vue";
-import deipRpc from "@deip/deip-oa-rpc-client";
-import { createResearchProposal } from "./../../services/ProposalService";
-import * as disciplineTreeService from "./../common/disciplines/DisciplineTreeService";
-import { mapGetters } from "vuex";
+  // import Vue from 'vue';
+  // import deipRpc from '@deip/deip-oa-rpc-client';
+  import moment from 'moment';
+  import * as disciplineTreeService from './../common/disciplines/DisciplineTreeService';
+  import { mapGetters } from 'vuex';
 
-export default {
-  name: "CreateNewResearch",
-  data() {
-    return {
-      currentStep: 0,
-      isLoading: false,
-      research: {
-        disciplines: [],
-        group: undefined,
-        title: "",
-        description: "",
-        videoSrc: "",
-        review_share_in_percent: 5,
-        milestones: [],
-        isPrivate: false,
-        trlStep: 'basic_principles_of_concept_are_observed_and_reported',
-        partners: []
-      }
-    };
-  },
+  import { ResearchGroupService } from '@deip/research-group-service';
 
-  computed: {
-    ...mapGetters({
-      user: "auth/user",
-      tenant: "auth/tenant",
-      userGroups: "auth/userGroups",
-      userCoworkers: "auth/userCoworkers"
-    })
-  },
+  const researchGroupService = ResearchGroupService.getInstance();
 
-  methods: {
-    incStep() {
-      this.currentStep++;
-    },
-    decStep() {
-      this.currentStep--;
-    },
+  export default {
+    name: 'CreateNewResearch',
 
-    setDisciplines(disciplines) {
-      this.research.disciplines = disciplines;
-    },
-
-    setGroup(group) {
-      this.research.group = group;
-    },
-
-    setTitle(title) {
-      this.research.title = title;
-    },
-
-    setDescription(description) {
-      this.research.description = description;
-    },
-
-    setVideo(videoSrc) {
-      this.research.videoSrc = videoSrc;
-    },
-
-    setReviewShare(share) {
-      this.research.review_share_in_percent = share;
-    },
-
-    setPrivateFlag(isPublic){
-      this.research.isPrivate = !isPublic;
-    },
-
-    setTrlStep(step){
-      this.research.trlStep = step;
-    },
-
-    finish() {
-      this.isLoading = true;
-
-      let groupPermlink = this.research.group.permlink;
-      let permlink = this.research.title
-        .replace(/ /g, "-")
-        .replace(/_/g, "-")
-        .toLowerCase();
-
-      createResearchProposal(
-        this.research.group.id,
-        this.research.title,
-        this.research.description,
-        permlink,
-        500, // this.research.review_share_in_percent * this.DEIP_1_PERCENT,
-        this.research.disciplines.map(d => d.id),
-        this.research.milestones.map((m, i) => {
-          return {
-            goal: m.goal,
-            budget: m.budget,
-            purpose: m.purpose,
-            details: m.details,
-            eta: moment(m.eta).toDate(),
-            isActive: i === 0
-          };
-        }),
-        this.research.videoSrc,
-        this.research.isPrivate,
-        this.research.trlStep,
-        this.research.partners
-      )
-        .then(
-          () => {
-            this.isLoading = false;
-            this.$store.dispatch("layout/setSuccess", {
-              message: `Project "${this.research.title}" has been created successfully`
-            });
-          },
-          err => {
-            console.log(err);
-            this.isLoading = false;
-            this.$store.dispatch("layout/setError", {
-              message:
-                "An error occurred while creating project, please try again later"
-            });
-          }
-        )
-        .finally(() => {
-          setTimeout(() => {
-            if (
-              this.research.group.is_personal ||
-              !this.research.group.is_dao
-            ) {
-              this.$router.push({
-                name: "ResearchDetails",
-                params: {
-                  research_group_permlink: encodeURIComponent(
-                    this.research.group.permlink
-                  ),
-                  research_permlink: encodeURIComponent(
-                    this.research.title
-                      .replace(/ /g, "-")
-                      .replace(/_/g, "-")
-                      .toLowerCase()
-                  )
-                }
-              });
-            } else {
-              this.$router.push({ name: "ResearchFeed" });
-            }
-          }, 1500);
-        });
-    }
-  },
-
-  created() {
-    if (
-      this.$route.query["disciplineIds"] &&
-      _.isArray(this.$route.query["disciplineIds"])
-    ) {
-      try {
-        this.research.disciplines = disciplineTreeService.getNodesByIdList(
-          this.$route.query["disciplineIds"].map(disciplineId =>
-            parseInt(disciplineId)
-          )
-        );
-        if (this.$route.query.groupPermlink) {
-          const newGroup = this.userGroups.find(
-            item => item.permlink == this.$route.query.groupPermlink
-          );
-          this.setGroup(newGroup);
-          this.currentStep = 3;
-        } else {
-          this.currentStep = 2;
+    data() {
+      return {
+        currentStep: 0,
+        isLoading: false,
+        research: {
+          disciplines: [],
+          group: undefined,
+          title: '',
+          description: '',
+          videoSrc: '',
+          review_share_in_percent: 5,
+          milestones: [],
+          isPrivate: false,
+          trlStep: 'basic_principles_of_concept_are_observed_and_reported',
+          partners: []
         }
-      } catch (e) {
-        console.error("Invalid url params");
+      };
+    },
+
+    computed: {
+      ...mapGetters({
+        user: 'auth/user',
+        tenant: 'auth/tenant',
+        userGroups: 'auth/userGroups',
+        userCoworkers: 'auth/userCoworkers'
+      })
+    },
+
+    methods: {
+      incStep() {
+        this.currentStep++;
+      },
+      decStep() {
+        this.currentStep--;
+      },
+
+      setDisciplines(disciplines) {
+        this.research.disciplines = disciplines;
+      },
+
+      setGroup(group) {
+        this.research.group = group;
+      },
+
+      setTitle(title) {
+        this.research.title = title;
+      },
+
+      setDescription(description) {
+        this.research.description = description;
+      },
+
+      setVideo(videoSrc) {
+        this.research.videoSrc = videoSrc;
+      },
+
+      setReviewShare(share) {
+        this.research.review_share_in_percent = share;
+      },
+
+      setPrivateFlag(isPublic) {
+        this.research.isPrivate = !isPublic;
+      },
+
+      setTrlStep(step) {
+        this.research.trlStep = step;
+      },
+
+      finish() {
+        this.isLoading = true;
+
+        let groupPermlink = this.research.group.permlink;
+        let permlink = this.research.title
+          .replace(/ /g, '-')
+          .replace(/_/g, '-')
+          .toLowerCase();
+
+        researchGroupService.createResearchProposal({
+          groupId: this.research.group.id,
+          title: this.research.title,
+          description: this.research.description,
+          permlink,
+          reviewShare: 500, // this.research.review_share_in_percent * this.DEIP_1_PERCENT,
+          disciplines: this.research.disciplines.map(d => d.id),
+          milestones: this.research.milestones.map((m, i) => {
+            return {
+              goal: m.goal,
+              budget: m.budget,
+              purpose: m.purpose,
+              details: m.details,
+              eta: moment(m.eta).toDate(),
+              isActive: i === 0,
+            };
+          }),
+          videoSrc: this.research.videoSrc,
+          isPrivate: this.research.isPrivate,
+          trl: this.research.trlStep,
+          partners: this.research.partners,
+        })
+          .then(
+            () => {
+              this.isLoading = false;
+              this.$store.dispatch('layout/setSuccess', {
+                message: `Project "${this.research.title}" has been created successfully`
+              });
+            },
+            err => {
+              console.log(err);
+              this.isLoading = false;
+              this.$store.dispatch('layout/setError', {
+                message:
+                  'An error occurred while creating project, please try again later'
+              });
+            }
+          )
+          .finally(() => {
+            setTimeout(() => {
+              if (
+                this.research.group.is_personal ||
+                !this.research.group.is_dao
+              ) {
+                this.$router.push({
+                  name: 'ResearchDetails',
+                  params: {
+                    research_group_permlink: encodeURIComponent(
+                      this.research.group.permlink
+                    ),
+                    research_permlink: encodeURIComponent(
+                      this.research.title
+                        .replace(/ /g, '-')
+                        .replace(/_/g, '-')
+                        .toLowerCase()
+                    )
+                  }
+                });
+              } else {
+                this.$router.push({ name: 'ResearchFeed' });
+              }
+            }, 1500);
+          });
+      }
+    },
+
+    created() {
+      if (
+        this.$route.query['disciplineIds'] &&
+        _.isArray(this.$route.query['disciplineIds'])
+      ) {
+        try {
+          this.research.disciplines = disciplineTreeService.getNodesByIdList(
+            this.$route.query['disciplineIds'].map(disciplineId =>
+              parseInt(disciplineId)
+            )
+          );
+          if (this.$route.query.groupPermlink) {
+            const newGroup = this.userGroups.find(
+              item => item.permlink === this.$route.query.groupPermlink
+            );
+            this.setGroup(newGroup);
+            this.currentStep = 3;
+          } else {
+            this.currentStep = 2;
+          }
+        } catch (e) {
+          console.error('Invalid url params');
+        }
       }
     }
-  }
-};
+  };
 </script>
 
 <style lang="less">
-.flex-column {
-  flex-direction: column;
-}
-.flex-grow-0 {
-  flex-grow: 0 !important;
-}
-.flex-grow-1 {
-  flex-grow: 1 !important;
-}
-.w-100 {
-  width: 100%;
-}
-.flex-basis-0 {
-  flex-basis: 0 !important;
-}
+  .flex-column {
+    flex-direction: column;
+  }
+
+  .flex-grow-0 {
+    flex-grow: 0 !important;
+  }
+
+  .flex-grow-1 {
+    flex-grow: 1 !important;
+  }
+
+  .w-100 {
+    width: 100%;
+  }
+
+  .flex-basis-0 {
+    flex-basis: 0 !important;
+  }
 </style>

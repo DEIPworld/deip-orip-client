@@ -21,9 +21,9 @@
 			<v-flex xs8>
 				<div class="left">
 					<router-link class="subheading"  style="text-decoration: none"
-							:to="{ name: 'AgencyProgramDetails', 
-									params: { 
-										agency: program.agency_name, 
+							:to="{ name: 'AgencyProgramDetails',
+									params: {
+										agency: program.agency_name,
 										foa: program.funding_opportunity_number }}">
 							{{ program.funding_opportunity_number + ' ' + program.funding_opportunity_title }}
 					</router-link>
@@ -61,12 +61,12 @@
         <v-flex xs12>
 					<!-- START Research Content Reviews section -->
 					<div class="c-pt-5 sidebar-fullwidth"><v-divider></v-divider></div>
-					
+
 					<div class="c-pt-5 c-pb-5" v-if="applicationReviewsList.length">
 						<div id="agency-appliation-reviews">
 							<div class="c-pt-2 title">
-								{{program.agency_name.toUpperCase()}} reviews:        
-								<span class="green--text text--darken-2">{{agencyPositiveReviewsCount}}</span> / 
+								{{program.agency_name.toUpperCase()}} reviews:
+								<span class="green--text text--darken-2">{{agencyPositiveReviewsCount}}</span> /
 								<span class="red--text text--darken-2">{{agencyNegativeReviewsCount}}</span>
 							</div>
 							<div class="c-pt-6">
@@ -86,7 +86,7 @@
 						<div id="other-appliation-reviews">
 							<div class="c-pt-2 title">
 								Other reviews:
-								<span class="green--text text--darken-2">{{otherPositiveReviewsCount}}</span> / 
+								<span class="green--text text--darken-2">{{otherPositiveReviewsCount}}</span> /
 								<span class="red--text text--darken-2">{{otherNegativeReviewsCount}}</span>
 							</div>
 							<div class="c-pt-6">
@@ -103,7 +103,6 @@
 <script>
     import { mapGetters } from 'vuex';
     import deipRpc from '@deip/deip-oa-rpc-client';
-    import applicationsHttp from './../../../services/http/application';
 
     export default {
         name: "ResearchApplicationDetailsPackage",
@@ -166,8 +165,8 @@
           approveApplication() {
             this.isApproveBtnLoading = true;
             deipRpc.broadcast.approveGrantApplicationAsync(
-              this.user.privKey, 
-              this.application.id, 
+              this.user.privKey,
+              this.application.id,
               this.user.username
             )
 						.then(() => {
@@ -189,8 +188,8 @@
           rejectApplication() {
             this.isRejectBtnLoading = true;
             deipRpc.broadcast.rejectGrantApplicationAsync(
-              this.user.privKey, 
-              this.application.id, 
+              this.user.privKey,
+              this.application.id,
               this.user.username
             )
 						.then(() => {

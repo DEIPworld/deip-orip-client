@@ -1,7 +1,7 @@
 <template>
     <page-container>
         <contentbar>
-            <div>
+            <div v-if="contentMetadata">
                 <div class="legacy-row legacy-justify-between legacy-align-items-end">
                     <div class="display-1 bold">
                         Block #{{contentMetadata.blockNum}}
@@ -23,7 +23,7 @@
                     <div class="legacy-row">
                         <div class="bold width-7">Research</div>
                         <div class="bold c-pl-4">
-                            <router-link class="a" :to="{ name: 'ResearchDetails', params: { 
+                            <router-link class="a" :to="{ name: 'ResearchDetails', params: {
                                 research_group_permlink: $route.params.research_group_permlink,
                                 research_permlink: $route.params.research_permlink}}">
                                 {{ contentMetadata.research.title }}
@@ -40,7 +40,7 @@
                     <div class="legacy-row">
                         <div class="bold width-7">Content</div>
                         <div class="bold c-pl-4">
-                            <router-link class="a" 
+                            <router-link class="a"
                                 :to="`/${$route.params.research_group_permlink}/research/${$route.params.research_permlink}/${$route.params.content_permlink}`">
                                     {{ contentMetadata.content.title }}
                             </router-link>
@@ -51,7 +51,7 @@
                         <div class="legacy-col-grow pill-value">{{getContentHash(contentMetadata.content.content)}}</div>
                     </div>
                 </div>
-                
+
                 <div class="c-mt-4">
                     <div class="legacy-row">
                         <div class="bold width-7">Timestamp<br>(ISO 8601)</div>
@@ -66,7 +66,7 @@
                         <div class="legacy-col-grow">
                             <div>
                                 <div class="legacy-row">
-                                    <platform-avatar 
+                                    <platform-avatar
                                         :user="contentMetadata.witness.user"
                                         :size="40"
                                         link-to-profile
@@ -83,7 +83,7 @@
                                             <div>{{ contentMetadata.witness.signingKey }}</div>
                                         </div>
                                     </div>
-                                    
+
                                     <div class="legacy-row-nowrap">
                                         <div class="pill width-7 display-flex">
                                             <div class="grey--text text--darken-3 c-m-auto">Signature</div>
@@ -106,7 +106,7 @@
 
                             <div class="c-mb-4" v-for="(voter, idx) in contentMetadata.voters" :key="'approver-' + idx">
                                 <div class="legacy-row">
-                                    <platform-avatar 
+                                    <platform-avatar
                                         :user="voter.user"
                                         :size="40"
                                         link-to-profile
@@ -123,7 +123,7 @@
                                             <div>{{ voter.user.account.owner.key_auths[0][0] }}</div>
                                         </div>
                                     </div>
-                                    
+
                                     <div class="legacy-row-nowrap">
                                         <div class="pill width-7 display-flex">
                                             <div class="grey--text text--darken-3 c-m-auto">Signature</div>
@@ -134,7 +134,7 @@
                                     </div>
                                 </div>
                             </div>
-                        </div> 
+                        </div>
                     </div>
                 </div>
 
@@ -145,7 +145,7 @@
                         <div class="legacy-col-grow pill-value">{{contentMetadata.transaction.id}}</div>
                     </div>
                 </div>
-                
+
                 <div class="c-mt-4" v-if="!isGenesisBlock">
                     <div class="bold">Transaction HEX</div>
                     <div class="legacy-row-nowrap grey-border-stripe">
@@ -172,14 +172,13 @@
 <script>
     import { mapGetters } from 'vuex'
     import deipRpc from '@deip/deip-oa-rpc-client'
-    import { findBlocksByRange } from './../../utils/blockchain'
 
     export default {
         name: "ResearchContentMetadata",
 
-        data() { 
+        data() {
             return {
-            } 
+            }
         },
 
         computed:{
@@ -188,10 +187,10 @@
             }),
 
             isGenesisBlock(){
-                return this.contentMetadata.blockNum == 1;
+                return this.contentMetadata && this.contentMetadata.blockNum == 1;
             }
         },
-        
+
         methods: {
             getContentHash(content) {
                 return content.indexOf('file:') == 0 ? content.slice(5) : content.indexOf('dar:') == 0 ? content.slice(4) : content;

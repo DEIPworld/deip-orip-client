@@ -24,7 +24,8 @@
 import { mapGetters } from "vuex";
 import _ from "lodash";
 import deipRpc from "@deip/deip-oa-rpc-client";
-import * as proposalService from "./../../../services/ProposalService";
+
+import {PROPOSAL_TYPES, proposalTypesLabels} from '@/variables';
 
 export default {
   name: "QuorumSizeSidebarSection",
@@ -32,51 +33,30 @@ export default {
   data() {
     return {
       isEditMode: false,
-      proposalLabels: _.cloneDeep(proposalService.labels),
+      proposalLabels: _.cloneDeep(proposalTypesLabels),
 
-     proposalOrderMap: [
+      proposalOrderMap: [
         [
-          { key: proposalService.types.START_RESEARCH, value: undefined },
-          {
-            key: proposalService.types.CREATE_RESEARCH_MATERIAL,
-            value: undefined
-          },
-          {
-            key: proposalService.types.CHANGE_RESEARCH_REVIEW_SHARE_PERCENT,
-            value: undefined
-          }
+          { key: PROPOSAL_TYPES.START_RESEARCH, value: undefined },
+          { key: PROPOSAL_TYPES.CREATE_RESEARCH_MATERIAL, value: undefined },
+          { key: PROPOSAL_TYPES.CHANGE_RESEARCH_REVIEW_SHARE_PERCENT, value: undefined }
         ],
         [
-          { key: proposalService.types.INVITE_MEMBER, value: undefined },
-          { key: proposalService.types.DROPOUT_MEMBER, value: undefined }
+          { key: PROPOSAL_TYPES.INVITE_MEMBER, value: undefined },
+          { key: PROPOSAL_TYPES.DROPOUT_MEMBER, value: undefined }
         ],
         [
-          {
-            key: proposalService.types.START_RESEARCH_TOKEN_SALE,
-            value: undefined
-          },
-          {
-            key: proposalService.types.OFFER_RESEARCH_TOKENS,
-            value: undefined
-          },
-          { key: proposalService.types.SEND_FUNDS, value: undefined }
+          { key: PROPOSAL_TYPES.START_RESEARCH_TOKEN_SALE, value: undefined },
+          { key: PROPOSAL_TYPES.OFFER_RESEARCH_TOKENS, value: undefined },
+          { key: PROPOSAL_TYPES.SEND_FUNDS, value: undefined }
         ],
         [
-          { key: proposalService.types.CHANGE_QUORUM, value: undefined },
-          {
-            key: proposalService.types.REBALANCE_RESEARCH_GROUP_TOKENS,
-            value: undefined
-          }
+          { key: PROPOSAL_TYPES.CHANGE_QUORUM, value: undefined },
+          { key: PROPOSAL_TYPES.REBALANCE_RESEARCH_GROUP_TOKENS, value: undefined }
         ],
         [
-          {
-            key: proposalService.types.CHANGE_RESEARCH_GROUP_META_DATA_TYPE,
-            value: undefined
-          },
-          {
-            key: proposalService.types.CHANGE_RESEARCH_META_DATA_TYPE,
-            value: undefined
-          }
+          { key: PROPOSAL_TYPES.CHANGE_RESEARCH_GROUP_META_DATA_TYPE, value: undefined },
+          { key: PROPOSAL_TYPES.CHANGE_RESEARCH_META_DATA_TYPE, value: undefined }
         ]
       ],
     };

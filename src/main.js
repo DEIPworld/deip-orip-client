@@ -1,103 +1,74 @@
-// The Vue build version to load with the `import` command
-// (runtime-only or standalone) has been set in webpack.base.conf with an alias.
 import Vue from 'vue';
-import Vuetify from 'vuetify';
-import axios from 'axios';
-import deipRpc from '@deip/deip-oa-rpc-client';
+
+/**
+ * BOOTSTRAP
+ */
+
+import VueResize from 'vue-resize';
+import VueCurrencyFilter from 'vue-currency-filter';
+import VueGoogleCharts from 'vue-google-charts';
+import { setConfig, setDeipRpc, setTheme, setUser, setTenant } from './bootstrap';
+
+/**
+ * APP
+ */
 
 import App from './App';
-import store from './store';
-import router from './router';
-import './index';
-import './globals/index';
+import { store } from './store';
+import { router } from './router';
+
+import './components/index'; // TODO: need refactoring and remove
+import './globals/index'; // TODO: need refactoring and remove
+
+
+/**
+ * PLUGINS
+ */
+
+
+/**
+ * STYLES
+ */
+
 import 'vuetify/dist/vuetify.css';
-import './styles/common.less';
 import 'vue2-dropzone/dist/vue2Dropzone.min.css';
 import '@mdi/font/css/materialdesignicons.css';
 import 'vue-resize/dist/vue-resize.css';
-import { isLoggedIn } from "./utils/auth";
-import VueGoogleCharts from 'vue-google-charts';
-import VueCurrencyFilter from 'vue-currency-filter';
-import VueResize from 'vue-resize';
-import themes from './theme.json';
+import './styles/common.less';
 
-Vue.config.productionTip = false;
-Vue.use(VueGoogleCharts);
-Vue.use(VueResize);
-Vue.use(VueCurrencyFilter, {
+// ////////////////////////
+
+const currencyFilterOptions = {
   symbol: '$',
   thousandsSeparator: ',',
   fractionCount: 3,
   fractionSeparator: '.',
   symbolPosition: 'front',
-  symbolSpacing: true
-});
+  symbolSpacing: true,
+};
 
-async function initApp() {
+Vue.config.productionTip = false;
+Vue.use(VueGoogleCharts);
+Vue.use(VueResize);
+Vue.use(VueCurrencyFilter, currencyFilterOptions);
+
+(async () => {
   try {
-    const env = await axios.get('/env');
-    window.env = env.data;
-    deipRpc.api.setOptions({ url: window.env.DEIP_FULL_NODE_URL, reconnectTimeout: 3000 });
-    deipRpc.config.set('chain_id', window.env.CHAIN_ID);
+    await setConfig(); // Set global application config config
 
-    await setGlobalThemeSettings();
+    await setDeipRpc();
+    await setTheme();
     await setUser();
     await setTenant();
 
     new Vue({
-      router,
       store,
-      render: h => h(App)
-    }).$mount('#app')
-
+      router,
+      render: (h) => h(App),
+    }).$mount('#app');
   } catch (err) {
-    console.error(err)
+    console.error(err);
   }
-}
-
-async function setGlobalThemeSettings() {
-  const tenant = window.env.TENANT || null;
-
-  const themeSettings = tenant && themes[tenant]
-    ? themes[tenant]
-    : themes['default'];
-
-  if (tenant) {
-    if (tenant == "nsf") {
-      document.title = "MyNSF | DEIP";
-    } else if (tenant == "mit") {
-      document.title = "MIT | DEIP";
-    } else if (tenant == "treasury") {
-      document.title = "U.S. Treasury | DEIP";
-    }
-  }
-
-  Vue.use(Vuetify, {
-    theme: {
-      primary: themeSettings['primary-color'],
-      secondary: themeSettings['secondary-color']
-    },
-    options: {
-      customProperties: true
-    }
-  });
-
-  await store.dispatch("layout/setGlobalThemeSettings", themeSettings);
-}
-
-async function setUser() {
-  if (isLoggedIn()) {
-    await store.dispatch("auth/loadUser");
-  }
-}
-
-async function setTenant() {
-  const tenant = window.env.TENANT || null;
-  if (tenant) {
-    await store.dispatch("auth/loadTenant", { tenant });
-  }
-}
+})();
 
 export const bus = new Vue();
-
-initApp();

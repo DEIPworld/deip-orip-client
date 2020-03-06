@@ -16,8 +16,8 @@
             <v-container grid-list-lg pa-0 ma-0>
               <v-layout row wrap>
                 <v-flex xs12 md6 lg4
-                  v-for="section of sections"
-                  :key="section.routeName"
+                        v-for="section of sections"
+                        :key="section.routeName"
                 >
                   <v-card
                     class="account-settings__section py-3"
@@ -37,44 +37,43 @@
 </template>
 
 <script>
-import { mapGetters } from "vuex";
+  import { mapGetters } from 'vuex';
 
-export default {
-  name: "AccountSettings",
+  export default {
+    name: 'AccountSettings',
 
-  data() {
-    return {
-    };
-  },
+    data() {
+      return {};
+    },
 
-  computed: {
-    ...mapGetters({
-      currentUser: 'auth/user',
-    }),
+    computed: {
+      ...mapGetters({
+        currentUser: 'auth/user',
+      }),
 
-    sections() {
-      return [{
-        label: 'Personal Information',
-        routeName: 'ProfileSettings',
-        isShown: true,
-      }, {
-        label: 'Change Password',
-        routeName: 'ChangePassword',
-        isShown: true,
-      }, {
-        label: 'Private Key',
-        routeName: 'PrivateKeyDownload',
-        isShown: true,
-      }].filter(s => s.isShown);
-    }
-  },
+      sections() {
+        return [ {
+          label: 'Personal Information',
+          routeName: 'ProfileSettings',
+          isShown: true,
+        }, {
+          label: 'Change Password',
+          routeName: 'ChangePassword',
+          isShown: true,
+        }, {
+          label: 'Private Key',
+          routeName: 'PrivateKeyDownload',
+          isShown: true,
+        } ].filter(s => s.isShown);
+      }
+    },
 
-  methods: {
-    onSectionClick(routeName) {
-      this.$router.push({ name: routeName })
-    }
-  },
-};
+    methods: {
+      onSectionClick(routeName) {
+        this.$router.push({ name: routeName })
+      }
+    },
+  };
 </script>
 
 <style lang="less">
@@ -84,8 +83,10 @@ export default {
     font-family: Muli;
     font-style: normal;
     color: @black;
-    
-    p { margin-bottom: 0 }
+
+    p {
+      margin-bottom: 0
+    }
 
     &__header {
       font-weight: 900;

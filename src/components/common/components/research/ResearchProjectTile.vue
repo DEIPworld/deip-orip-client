@@ -1,99 +1,107 @@
 <template>
-<v-layout row class="research-tile">
-  <v-layout column>
-    <router-link tag="div" class="research-title" 
-      :to="{
+  <v-layout row class="research-tile">
+    <v-layout column>
+      <router-link tag="div" class="research-title"
+                   :to="{
         name: isLoggedIn() ? 'ResearchDetails' : 'ResearchDetailsPublic',
         params: {
           research_group_permlink: encodeURIComponent(research.group_permlink),
           research_permlink: encodeURIComponent(research.permlink)
         }
       }"
-    >
-      <div style="position: relative">
-        <img class="ma-0" style="width: 100%; height: 150px" :src="$options.filters.researchBackgroundSrc(research.id, 430, 150)" />
-        <div v-if="research.isTop" class="top-research-label">
-          <top-research-label class="pa-2"></top-research-label>
+      >
+        <div style="position: relative">
+          <img class="ma-0" style="width: 100%; height: 150px"
+               :src="$options.filters.researchBackgroundSrc(research.id, 430, 150)" />
+          <div v-if="research.isTop" class="top-research-label">
+            <top-research-label class="pa-2"></top-research-label>
+          </div>
         </div>
-      </div>
-      <v-tooltip bottom>
-        <div slot="activator" class="subheading ellipsis half-bold py-1">{{ research.title }}</div>
-        <span>{{research.title}}</span>
-      </v-tooltip>
-    </router-link>
+        <v-tooltip bottom>
+          <div slot="activator" class="subheading ellipsis half-bold py-1">{{ research.title }}</div>
+          <span>{{research.title}}</span>
+        </v-tooltip>
+      </router-link>
 
-    <!-- <v-layout row wrap justify-start>
-      <platform-avatar v-for="(member, i) in membersToDisplay" :user="member" :size="15" :key="`member-${research.permlink}-`+ i" link-to-profile link-to-profile-class="px-2 grey--text lighten-2 research-tile-researcher"></platform-avatar>
-    </v-layout> -->
+      <!-- <v-layout row wrap justify-start>
+        <platform-avatar v-for="(member, i) in membersToDisplay" :user="member" :size="15" :key="`member-${research.permlink}-`+ i" link-to-profile link-to-profile-class="px-2 grey--text lighten-2 research-tile-researcher"></platform-avatar>
+      </v-layout> -->
 
-    <v-layout row class="token-sale-section" v-if="hasActiveTokenSale || hasInactiveTokenSale">
-      <v-layout v-if="hasActiveTokenSale" column>
-        <v-layout row align-center>
-          <v-flex grow>
-            <v-tooltip bottom>
-              <v-progress-linear slot="activator" class="progress-current my-0" :value="fundingProgressPercent"></v-progress-linear>
-              <span>Fundraising Progress</span>
+      <v-layout row class="token-sale-section" v-if="hasActiveTokenSale || hasInactiveTokenSale">
+        <v-layout v-if="hasActiveTokenSale" column>
+          <v-layout row align-center>
+            <v-flex grow>
+              <v-tooltip bottom>
+                <v-progress-linear slot="activator" class="progress-current my-0"
+                                   :value="fundingProgressPercent"></v-progress-linear>
+                <span>Fundraising Progress</span>
+              </v-tooltip>
+            </v-flex>
+            <!-- <v-flex shrink class="grey--text caption ml-2">Token Sale</v-flex> -->
+          </v-layout>
+          <!-- <v-layout row>
+            <span class="pr-3">
+              <span class="black--text half-bold pr-1">{{fundingProgressPercent.toFixed(2)}}%</span>
+              <span class="grey--text lighten-2">funded</span>
+            </span>
+            <span class="px-3" style="border-left: 1px solid #e0e0e0;">
+              <span class="black--text half-bold pr-1">${{fundingGoalAmount}}</span>
+              <span class="grey--text lighten-2">goal</span>
+            </span>
+            <span class="pl-3" style="border-left: 1px solid #e0e0e0;">
+              <span class="black--text half-bold pr-1">{{tokenSaleEndLeft}}</span>
+              <span class="grey--text lighten-2">left</span>
+            </span>
+          </v-layout> -->
+        </v-layout>
+        <v-layout v-else-if="hasInactiveTokenSale" row align-baseline justify-end>
+          <v-chip class="my-0 mx-0 px-0 caption" style="height: 1.4em" color="primary lighten-3">Fundraising starts in
+            {{tokenSaleStartLeft}}
+          </v-chip>
+        </v-layout>
+      </v-layout>
+      <v-layout row wrap justify-space-between align-center>
+        <v-flex xs12 class="caption grey--text lighten-1">
+          <technology-readiness-level :currentTrlStep="research.researchRef.trl" isReadOnly
+                                      isChip></technology-readiness-level>
+        </v-flex>
+        <v-flex xs5 class="caption grey--text lighten-1">
+          <v-icon small>event</v-icon>
+          <span class="pl-1">Updated on</span>
+          <span class="pl-1 half-bold">{{moment(research.last_update_time).format('D MMM YYYY')}}</span>
+        </v-flex>
+        <v-flex xs2>
+          <v-icon small color="grey lighten-1">chat_bubble</v-icon>
+          <span class="pl-1 caption half-bold grey--text lighten-1">{{ reviewsCount }}</span>
+        </v-flex>
+        <v-flex xs5>
+          <v-layout row align-center class="group-logo" v-if="!group.is_personal">
+            <v-avatar style="margin: 2px">
+              <img :src="$options.filters.researchGroupLogoSrc(group.id, 50, 50, true)">
+            </v-avatar>
+            <v-tooltip bottom class="group-logo__text">
+              <template v-slot:activator="{ on }">
+                <span v-on="on" class="mx-2 caption text-truncate">{{ group.name }}</span>
+              </template>
+              <span>{{group.name}}</span>
             </v-tooltip>
-          </v-flex>
-          <!-- <v-flex shrink class="grey--text caption ml-2">Token Sale</v-flex> -->
-        </v-layout>
-        <!-- <v-layout row>
-          <span class="pr-3">
-            <span class="black--text half-bold pr-1">{{fundingProgressPercent.toFixed(2)}}%</span>
-            <span class="grey--text lighten-2">funded</span>
-          </span>
-          <span class="px-3" style="border-left: 1px solid #e0e0e0;">
-            <span class="black--text half-bold pr-1">${{fundingGoalAmount}}</span>
-            <span class="grey--text lighten-2">goal</span>
-          </span>
-          <span class="pl-3" style="border-left: 1px solid #e0e0e0;">
-            <span class="black--text half-bold pr-1">{{tokenSaleEndLeft}}</span>
-            <span class="grey--text lighten-2">left</span>
-          </span>
-        </v-layout> -->
+          </v-layout>
+        </v-flex>
       </v-layout>
-      <v-layout v-else-if="hasInactiveTokenSale" row align-baseline justify-end>
-        <v-chip class="my-0 mx-0 px-0 caption" style="height: 1.4em" color="primary lighten-3">Fundraising starts in {{tokenSaleStartLeft}}</v-chip> 
-      </v-layout>
-    </v-layout>
-    <v-layout row wrap justify-space-between align-center>
-      <v-flex xs12 class="caption grey--text lighten-1">
-        <technology-readiness-level :currentTrlStep="research.researchRef.trl" isReadOnly isChip></technology-readiness-level>
-      </v-flex>
-      <v-flex xs5 class="caption grey--text lighten-1">
-        <v-icon small>event</v-icon>
-        <span class="pl-1">Updated on</span>
-        <span class="pl-1 half-bold">{{moment(research.last_update_time).format("D MMM YYYY")}}</span>
-      </v-flex>
-      <v-flex xs2>
-        <v-icon small color="grey lighten-1">chat_bubble</v-icon>
-        <span class="pl-1 caption half-bold grey--text lighten-1">{{ reviewsCount }}</span>
-      </v-flex>
-      <v-flex xs5>
-        <v-layout row align-center class="group-logo" v-if="!group.is_personal">
-          <v-avatar style="margin: 2px">
-            <img :src="$options.filters.researchGroupLogoSrc(group.id, 50, 50, true)">
-          </v-avatar>
-          <v-tooltip bottom class="group-logo__text">
-            <template v-slot:activator="{ on }">
-              <span v-on="on" class="mx-2 caption text-truncate">{{ group.name }}</span>
-            </template>
-            <span>{{group.name}}</span>
-          </v-tooltip>
-        </v-layout>
-      </v-flex>
     </v-layout>
   </v-layout>
-</v-layout>
 </template>
 
 <script>
   import { mapGetters } from 'vuex';
-  import { isLoggedIn } from '@/utils/auth';
   import moment from 'moment';
 
+  import { AccessService } from '@deip/access-service';
+
+  const accessService = AccessService.getInstance();
+
   export default {
-    name: "ResearchProjectTile",
+    name: 'ResearchProjectTile',
     props: {
       research: { required: true, default: undefined },
       members: { required: true, default: () => [] },
@@ -102,12 +110,10 @@
       group: { required: false, default: undefined }
     },
     data() {
-      return {
-      };
+      return {};
     },
     computed: {
-      ...mapGetters({
-      }),
+      ...mapGetters({}),
       membersToDisplay() {
         return this.members.slice(0, 3);
       },
@@ -183,7 +189,7 @@
 
     },
     methods: {
-      isLoggedIn,
+      isLoggedIn() { return accessService.isLoggedIn() }
     },
   };
 </script>
@@ -199,6 +205,7 @@
       height: 20px;
       flex: 0 0 auto;
     }
+
     .divider {
       flex: 0 0 auto;
     }
@@ -215,9 +222,9 @@
   }
 
   .top-research-label {
-    position: absolute; 
-    top: 0; 
-    left: 10; 
+    position: absolute;
+    top: 0;
+    left: 10;
     background: linear-gradient(0deg, rgba(0, 0, 0, 0.6) 100%, transparent);
   }
 
@@ -225,10 +232,12 @@
     height: 24px;
     background: #e0e0e0;
     border-radius: 28px;
+
     .v-avatar {
       height: 20px !important;
       width: 20px !important;
     }
+
     &__text {
       max-width: 100%;
     }

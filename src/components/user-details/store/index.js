@@ -1,10 +1,14 @@
 import _ from 'lodash';
 import deipRpc from '@deip/deip-oa-rpc-client';
 import Vue from 'vue';
-import usersHttp from './../../../services/http/users';
-import reviewRequestsService from './../../../services/http/reviewRequests';
-import { getEnrichedProfiles } from './../../../utils/user';
-import { getResearch } from '@/services/ResearchExtendedService';
+
+import { UsersService } from '@deip/users-service';
+import { ReviewService } from '@deip/review-service';
+import { ResearchService } from '@deip/research-service';
+
+const usersService = UsersService.getInstance();
+const reviewService = ReviewService.getInstance();
+const researchService = ResearchService.getInstance();
 
 const state = {
   account: undefined,
@@ -23,7 +27,7 @@ const state = {
   isLoadingUserExpertise: false,
   isLoadingUserInvites: false,
   isClaimExpertiseDialogShown: false,
-	isLoadingResearchesRefDetails: false
+  isLoadingResearchesRefDetails: false
 }
 
 // getters
@@ -34,8 +38,8 @@ const getters = {
   researchList: state => {
     return state.researchList.map(research => {
       let researchRef = state.researchesRef.find(({ researchId }) => researchId === research.id).researchRef
-			let group = state.groups.find(({ id }) => id === research.research_group_id)
-      return {research: {...research, researchRef}, group}
+      let group = state.groups.find(({ id }) => id === research.research_group_id)
+      return { research: { ...research, researchRef }, group }
     })
   },
   groups: state => state.groups,
@@ -69,9 +73,9 @@ const actions = {
       dispatch('loadExpertise', { username: username, notify: resolve });
     });
     const invitesLoad = isMyPage ? new Promise((resolve, reject) => {
-        dispatch('loadUserInvites', { username, notify: resolve }) 
+      dispatch('loadUserInvites', { username, notify: resolve })
     }) : Promise.resolve();
-    
+
     const reviewRequestsLoad = isMyPage ? new Promise((resolve, reject) => {
       dispatch('loadUserReviewRequests', { username: username, notify: resolve });
     }) : Promise.resolve();
@@ -80,21 +84,25 @@ const actions = {
       dispatch('loadGroups', { username: username, notify: resolve });
     });
 
-    return Promise.all([accountLoad, profileLoad, expertiseLoad, invitesLoad, reviewRequestsLoad, groupsLoad])
+    return Promise.all([ accountLoad, profileLoad, expertiseLoad, invitesLoad, reviewRequestsLoad, groupsLoad ])
       .then(() => {
         const researchLoad = new Promise((resolve, reject) => {
-          dispatch('loadResearchList', { username: username, groupIds: state.groups.map(group => group.id), notify: resolve });
+          dispatch('loadResearchList', {
+            username: username,
+            groupIds: state.groups.map(group => group.id),
+            notify: resolve
+          });
         });
-        return Promise.all([researchLoad])
+        return Promise.all([ researchLoad ])
           .then(() => {
-            const researchesRefLoad = new Promise((resolve, reject) => { 
-              dispatch('loadResearchesRef', {researchesId:state.researchList.map(({id}) => id), notify: resolve});
+            const researchesRefLoad = new Promise((resolve, reject) => {
+              dispatch('loadResearchesRef', { researchesId: state.researchList.map(({ id }) => id), notify: resolve });
             });
-            return Promise.all([researchesRefLoad])
-          })
+            return Promise.all([ researchesRefLoad ])
+          });
       });
   },
-  
+
   loadAccountExpertiseDetailsPage({ state, dispatch, commit, rootGetters }, { username }) {
     const accountLoad = new Promise((resolve, reject) => {
       dispatch('loadUserAccount', { username: username, notify: resolve });
@@ -106,14 +114,14 @@ const actions = {
       dispatch('loadExpertise', { username: username, notify: resolve });
     });
 
-    return Promise.all([accountLoad, profileLoad, expertiseLoad]);
+    return Promise.all([ accountLoad, profileLoad, expertiseLoad ]);
   },
 
   loadUserAccount({ commit }, { username, notify } = {}) {
     commit('SET_USER_ACCOUNT_LOADING_STATE', true);
 
-    return deipRpc.api.getAccountsAsync([username])
-      .then(([account]) => {
+    return deipRpc.api.getAccountsAsync([ username ])
+      .then(([ account ]) => {
         commit('SET_USER_ACCOUNT', account);
       })
       .finally(() => {
@@ -133,10 +141,12 @@ const actions = {
           data.map(groupToken => deipRpc.api.getResearchGroupTokensByResearchGroupAsync(groupToken.research_group_id))
         );
 
-        return Promise.all([groupsInfo, groupsShares]);
+        return Promise.all([ groupsInfo, groupsShares ]);
       })
-      .then(([groupsInfo, groupsShares]) => {
-        return _.each(groupsInfo, (item, i) => { item.shares = groupsShares[i] });
+      .then(([ groupsInfo, groupsShares ]) => {
+        return _.each(groupsInfo, (item, i) => {
+          item.shares = groupsShares[i]
+        });
       })
       .then((groups) => {
         commit('SET_RESEARCH_GROUPS', groups);
@@ -196,7 +206,7 @@ const actions = {
 
   loadUserProfile({ commit }, { username, notify } = {}) {
     commit('SET_USER_PROFILE_LOADING_STATE', true);
-    return usersHttp.getUserProfile(username)
+    return usersService.getUserProfile(username)
       .then(profile => {
         commit('SET_USER_PROFILE', profile || null);
       }, (err) => {
@@ -235,7 +245,7 @@ const actions = {
 
   loadUserReviewRequests({ commit }, { username, notify }) {
     const reviewRequests = [];
-    return reviewRequestsService.getReviewRequestsByExpert(username, "pending")
+    return reviewService.getReviewRequestsByExpert(username, 'pending')
       .then((results) => {
         const detailsPromises = [];
         reviewRequests.push(...results);
@@ -251,7 +261,7 @@ const actions = {
         return Promise.all(detailsPromises);
       })
       .then(() => {
-        return getEnrichedProfiles(reviewRequests.map(r => r.requestor));
+        return usersService.getEnrichedProfiles(reviewRequests.map(r => r.requestor));
       })
       .then((users) => {
         let requests = reviewRequests.map((r, i) => {
@@ -278,7 +288,7 @@ const actions = {
       },
       ...reviewRequests.slice(reviewRequestIndex + 1)
     ]);
-    return reviewRequestsService.denyReviewRequest(reviewRequestId)
+    return reviewService.denyReviewRequest(reviewRequestId)
       .then(() => {
         commit('SET_USER_REVIEW_REQUESTS', getters.reviewRequests.filter(r => r._id !== reviewRequestId));
       })
@@ -286,7 +296,7 @@ const actions = {
 
   loadResearchesRef({ state, dispatch, commit }, { researchesId, notify }) {
 		commit('SET_RESEARCHES_REFS_DETAILS_LOADING_STATE', true);
-    return Promise.all(researchesId.map(id => getResearch(id)))
+    return Promise.all(researchesId.map(id => researchService.getResearch(id)))
       .then(refs => {
         const researchesRef = refs.map((researchRef, i) => {return {researchId:researchesId[i],researchRef}})
 				commit('SET_RESEARCHES_REFS_DETAILS', researchesRef );
@@ -364,7 +374,7 @@ const mutations = {
   ['SET_EXPERTISE_TOKENS_CLAIM_DIALOG_VISIBILITY_STATE'](state, value) {
     state.isClaimExpertiseDialogShown = value;
   },
-  
+
   ['SET_RESEARCHES_REFS_DETAILS'](state, researchesRef) {
     Vue.set(state, 'researchesRef', researchesRef)
   },
@@ -376,7 +386,7 @@ const mutations = {
 
 const namespaced = true;
 
-export default {
+export const userDetailsStore = {
   namespaced,
   state,
   getters,

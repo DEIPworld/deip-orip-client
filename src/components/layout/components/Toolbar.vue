@@ -5,27 +5,38 @@
     </div>
 
     <v-toolbar :color="themeSettings['top-bar-color']" :class="themeSettings['top-bar-class']">
-      <v-toolbar-side-icon class="mx-2 my-0">
-        <router-link class="ma-0 pa-0" :to="{ name: 'Default' }">
-          <img height="40px" :src="tenant | tenantLogoSrc(80, 80, false)" />
-        </router-link>
-      </v-toolbar-side-icon>
+<!--      <v-toolbar-side-icon class="mx-2 my-0">-->
+<!--        <router-link class="ma-0 pa-0" :to="{ name: 'Default' }">-->
+<!--          <img height="40px" :src="tenant | tenantLogoSrc(80, 80, false)" />-->
+<!--        </router-link>-->
+<!--      </v-toolbar-side-icon>-->
 
-      <v-toolbar-title></v-toolbar-title>
+      <router-link class="ma-0 pa-0" :to="{ name: 'Default' }">
+        <img height="40px" class="logo-image" :src="tenant | tenantLogoSrc(80, 80, false)" />
+      </router-link>
+
+      <!--      <v-toolbar-title></v-toolbar-title>-->
 
       <v-spacer></v-spacer>
 
-      <v-toolbar-items v-if="isLoggedIn()">
-        <v-btn :to="{ name: 'ResearchFeed' }" :color="themeSettings['top-bar-link-color']" flat class="ma-0">Explore</v-btn>
-        <v-btn :to="{ name: 'Dashboard' }" :color="themeSettings['top-bar-link-color']" flat class="ma-0">Dashboard</v-btn>
-        <v-btn :to="{ name: 'InvestorDashboard' }" :color="themeSettings['top-bar-link-color']" flat class="ma-0">Portfolio</v-btn>
-        <v-btn :to="{ name: 'UserWallet', params: { account_name: user.username } }" :color="themeSettings['top-bar-link-color']" flat class="ma-0">Wallet</v-btn>
+      <v-toolbar-items v-if="isLoggedIn">
+        <v-btn :to="{ name: 'ResearchFeed' }" :color="themeSettings['top-bar-link-color']" flat class="ma-0">Explore
+        </v-btn>
+        <v-btn :to="{ name: 'Dashboard' }" :color="themeSettings['top-bar-link-color']" flat class="ma-0">Dashboard
+        </v-btn>
+        <v-btn :to="{ name: 'InvestorDashboard' }" :color="themeSettings['top-bar-link-color']" flat class="ma-0">
+          Portfolio
+        </v-btn>
+        <v-btn :to="{ name: 'UserWallet', params: { account_name: user.username } }"
+               :color="themeSettings['top-bar-link-color']" flat class="ma-0">Wallet
+        </v-btn>
         <user-notifications-list :notifications="user.notifications"></user-notifications-list>
         <v-menu bottom left offset-y>
           <v-btn fab flat icon class="ma-0" slot="activator">
             <v-avatar size="32px">
               <img v-if="user.profile" v-bind:src="user.profile | avatarSrc(2 * 32, 2 * 32, false)" />
-              <v-gravatar v-if="!user.profile && user.account" :title="user.username" :email="user.username + '@deip.world'" />
+              <v-gravatar v-if="!user.profile && user.account" :title="user.username"
+                          :email="user.username + '@deip.world'" />
             </v-avatar>
           </v-btn>
           <v-list class="dropdown-list" :dark="themeSettings['dark']" :light="themeSettings['light']" dense>
@@ -45,12 +56,13 @@
       </v-toolbar-items>
 
       <v-toolbar-items v-else>
-        <v-btn :to="{ name: 'ResearchFeed' }" :color="themeSettings['top-bar-link-color']" flat class="ma-0">Explore</v-btn>
+        <v-btn :to="{ name: 'ResearchFeed' }" :color="themeSettings['top-bar-link-color']" flat class="ma-0">Explore
+        </v-btn>
         <v-btn :color="themeSettings['top-bar-link-color']" flat :to="{ name: 'SignIn' }">Sign In</v-btn>
         <v-btn :color="themeSettings['top-bar-link-color']" flat :to="{ name: 'SignUp' }">Sign Up</v-btn>
       </v-toolbar-items>
     </v-toolbar>
-    
+
     <div v-if="themeSettings['top-bar-divider-color']">
       <v-divider style="padding: 0.5px 0px 0.5px 0px" :color="themeSettings['top-bar-divider-color']"></v-divider>
     </div>
@@ -58,38 +70,43 @@
 </template>
 
 <script>
-import { isLoggedIn, clearAccessToken } from './../../../utils/auth';
-import { mapGetters } from 'vuex';
+  import { mapGetters } from 'vuex';
+  import { AccessService } from '@deip/access-service';
 
-export default {
-  name: 'Toolbar',
-  data() {
-    return {
+  const accessService = AccessService.getInstance();
+
+  export default {
+    name: 'Toolbar',
+
+    data() {
+      return {}
+    },
+
+    computed: {
+      ...mapGetters({
+        user: 'auth/user',
+        tenant: 'auth/tenant',
+        isGrantor: 'auth/isGrantor',
+        isOfficer: 'auth/isOfficer',
+        themeSettings: 'layout/themeSettings'
+      }),
+      isLoggedIn() { return accessService.isLoggedIn(); }
+    },
+
+    methods: {
+      signOut() {
+        accessService.clearAccessToken();
+        this.$router.go('/sign-in');
+      }
     }
-  },
-
-  computed: {
-    ...mapGetters({
-      user: 'auth/user',
-      tenant: 'auth/tenant',
-      isGrantor: 'auth/isGrantor',
-      isOfficer: 'auth/isOfficer',
-      themeSettings: 'layout/themeSettings'
-    })
-  },
-
-  methods: {
-    isLoggedIn: isLoggedIn,
-
-    signOut: function() {
-      clearAccessToken()
-      this.$router.go('/sign-in')
-    }
-  }
-}
+  };
 </script>
 
 <style lang="less" scoped>
+
+  .logo-image {
+    display: block;
+  }
 
   .dropdown-list {
     min-width: 170px;
@@ -101,9 +118,9 @@ export default {
 
   .global-loader-container {
     position: fixed;
-    top: 0px;
-    right: 0px;
-    left: 0px;
+    top: 0;
+    right: 0;
+    left: 0;
     z-index: 201;
   }
 

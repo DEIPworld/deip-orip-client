@@ -12,25 +12,29 @@
 </template>
 
 <script>
-import { mapGetters } from "vuex";
+  import { mapGetters } from 'vuex';
 
-export default {
-  name: "ResearchDetailsMaterials",
+  export default {
+    name: 'ResearchDetailsMaterials',
 
-  props:{
-    isDetailsAvailable: {type: Boolean, required: false, default: false}
-  },
+    props: {
+      isDetailsAvailable: {
+        type: Boolean,
+        required: false,
+        default: false
+      }
+    },
 
-  data() {
-    return {};
-  },
-  computed: {
-    ...mapGetters({
-      contentList: "rd/contentList"
-    })
-  },
-  methods: {}
-};
+    data() {
+      return {};
+    },
+    computed: {
+      ...mapGetters({
+        contentList: 'rd/contentList'
+      })
+    },
+    methods: {}
+  };
 </script>
 
 <style scoped>

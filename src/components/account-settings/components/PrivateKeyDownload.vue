@@ -26,7 +26,8 @@
               color="primary"
               :disabled="!isConfirmPasswordFormValid"
               @click="downloadPrivateKey()"
-            >Download Private Key (PDF)</v-btn>
+            >Download Private Key (PDF)
+            </v-btn>
           </v-form>
         </v-flex>
       </v-layout>
@@ -35,68 +36,68 @@
 </template>
 
 <script>
-import deipRpc from '@deip/deip-oa-rpc-client';
-import { mapGetters } from "vuex";
-import { saveKeysPdf } from "@/services/PdfService";
+  import deipRpc from '@deip/deip-oa-rpc-client';
+  import { mapGetters } from 'vuex';
+  import { saveKeysPdf } from '@/utils/saveKeysPdf';
 
-export default {
-  name: "PrivateKeyDownload",
+  export default {
+    name: 'PrivateKeyDownload',
 
-  data() {
-    return {
-      isConfirmPasswordFormValid: false,
-      masterPassword: '',
-      isHiddenPassword: true,
+    data() {
+      return {
+        isConfirmPasswordFormValid: false,
+        masterPassword: '',
+        isHiddenPassword: true,
 
-      rules: {
-        required: value => !!value || "This field is required",
-        masterPassword: (value) => {
-          if (!value) return false;
+        rules: {
+          required: value => !!value || 'This field is required',
+          masterPassword: (value) => {
+            if (!value) return false;
 
-          if (value.length < this.MASTER_PASSWORD_MIN_LENGTH) {
-            return 'Master password is at least 10 symbols';
-          } else if (value.length > this.MASTER_PASSWORD_MAX_LENGTH) {
-            return 'Master password max length is 100 symbols';
-          }
+            if (value.length < this.MASTER_PASSWORD_MIN_LENGTH) {
+              return 'Master password is at least 10 symbols';
+            } else if (value.length > this.MASTER_PASSWORD_MAX_LENGTH) {
+              return 'Master password max length is 100 symbols';
+            }
 
-          return true;
+            return true;
+          },
         },
-      },
-    };
-  },
+      };
+    },
 
-  computed: {
-    ...mapGetters({
-      currentUser: 'auth/user',
-    }),
-  },
+    computed: {
+      ...mapGetters({
+        currentUser: 'auth/user',
+      }),
+    },
 
-  methods: {
-    downloadPrivateKey() {
-      const username = this.currentUser.username;
-      let ownerPrivateKey;
-      if (deipRpc.auth.isWif(this.masterPassword)) {
-        ownerPrivateKey = this.masterPassword;
-      } else {
-        ownerPrivateKey = deipRpc.auth.toWif(
-          username,
-          this.masterPassword,
-          'owner'
-        );
+    methods: {
+      downloadPrivateKey() {
+        const username = this.currentUser.username;
+        let ownerPrivateKey;
+        if (deipRpc.auth.isWif(this.masterPassword)) {
+          ownerPrivateKey = this.masterPassword;
+        } else {
+          ownerPrivateKey = deipRpc.auth.toWif(
+            username,
+            this.masterPassword,
+            'owner'
+          );
+        }
+
+        const ownerPublicKey = deipRpc.auth.wifToPublic(ownerPrivateKey);
+        if (this.currentUser.pubKey !== ownerPublicKey) {
+          this.$store.dispatch('layout/setError', {
+            message: `Password is invalid`
+          });
+          return;
+        }
+
+        saveKeysPdf(username, { ownerPrivateKey, ownerPublicKey });
       }
-
-      const ownerPublicKey = deipRpc.auth.wifToPublic(ownerPrivateKey);
-      if (this.currentUser.pubKey !== ownerPublicKey) {
-        this.$store.dispatch("layout/setError", {
-          message: `Password is invalid`
-        });
-        return;
-      }
-
-      saveKeysPdf(username, { ownerPrivateKey, ownerPublicKey });
     }
-  }
-};
+  };
 </script>
 
 <style lang="less" scoped>
@@ -104,7 +105,7 @@ export default {
     font-family: Muli;
     font-style: normal;
     color: #000000;
-    
+
     &__header {
       font-weight: 900;
       font-size: 36px;

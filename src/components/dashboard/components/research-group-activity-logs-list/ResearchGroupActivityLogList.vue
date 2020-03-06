@@ -11,19 +11,19 @@
         <v-card-text>
           <div class="py-2" v-for="(log, i) in researchGroupLogs" :key="`activity-log-${i}`">
             <research-proposal-activity-log-entry
-              v-if="(log.type === PROPOSAL || log.type === PROPOSAL_ACCEPTED) && log.metadata.proposal.action === START_RESEARCH"
+              v-if="(log.type === PROPOSAL || log.type === PROPOSAL_ACCEPTED) && log.metadata.proposal.action === TYPES.START_RESEARCH"
               :log="log">
             </research-proposal-activity-log-entry>
             <research-content-proposal-activity-log-entry
-              v-else-if="(log.type === PROPOSAL || log.type === PROPOSAL_ACCEPTED) && log.metadata.proposal.action === CREATE_RESEARCH_MATERIAL"
+              v-else-if="(log.type === PROPOSAL || log.type === PROPOSAL_ACCEPTED) && log.metadata.proposal.action === TYPES.CREATE_RESEARCH_MATERIAL"
               :log="log">
             </research-content-proposal-activity-log-entry>
             <invite-proposal-activity-log-entry
-              v-else-if="(log.type === PROPOSAL || log.type === PROPOSAL_ACCEPTED) && log.metadata.proposal.action === INVITE_MEMBER"
+              v-else-if="(log.type === PROPOSAL || log.type === PROPOSAL_ACCEPTED) && log.metadata.proposal.action === TYPES.INVITE_MEMBER"
               :log="log">
             </invite-proposal-activity-log-entry>
             <token-sale-proposal-activity-log-entry
-              v-else-if="(log.type === PROPOSAL || log.type === PROPOSAL_ACCEPTED) && log.metadata.proposal.action === START_RESEARCH_TOKEN_SALE"
+              v-else-if="(log.type === PROPOSAL || log.type === PROPOSAL_ACCEPTED) && log.metadata.proposal.action === TYPES.START_RESEARCH_TOKEN_SALE"
               :log="log">
             </token-sale-proposal-activity-log-entry>
             <proposal-vote-activity-log-entry
@@ -55,42 +55,36 @@
 
 <script>
 
-import deipRpc from '@deip/deip-oa-rpc-client';
-import { mapGetters } from 'vuex';
-import { types } from './../../../../services/ProposalService';
+  import deipRpc from '@deip/deip-oa-rpc-client';
+  import { mapGetters } from 'vuex';
+  import { PROPOSAL_TYPES } from '@/variables';
 
 
-export default {
-  name: 'ResearchGroupActivityLogList',
-  props: {
-    researchGroup: { type: Object, required: true, default: () => {} },
-    researchGroupLogs: { type: Array, required: true, default: () => [] }
-  },
-  data() {
-    return {
-      ...types, // proposal types
+  export default {
+    name: 'ResearchGroupActivityLogList',
+    props: {
+      researchGroup: { type: Object, required: true, default: () => {} },
+      researchGroupLogs: { type: Array, required: true, default: () => [] }
+    },
+    data() {
+      return {
+        TYPES: PROPOSAL_TYPES,
 
-      PROPOSAL: "proposal",
-      PROPOSAL_ACCEPTED: "proposal-accepted",
-      PROPOSAL_VOTE: "proposal-vote",
-      INVITATION_APPROVED: "invitation-approved",
-      INVITATION_REJECTED: "invitation-rejected",
-      RESEARCH_CONTENT_EXPERT_REVIEW: "research-content-expert-review",
-      RESEARCH_CONTENT_EXPERT_REVIEW_REQUEST: "research-content-expert-review-request"
-    }
-  },
-  computed: {
+        PROPOSAL: 'proposal',
+        PROPOSAL_ACCEPTED: 'proposal-accepted',
+        PROPOSAL_VOTE: 'proposal-vote',
+        INVITATION_APPROVED: 'invitation-approved',
+        INVITATION_REJECTED: 'invitation-rejected',
+        RESEARCH_CONTENT_EXPERT_REVIEW: 'research-content-expert-review',
+        RESEARCH_CONTENT_EXPERT_REVIEW_REQUEST: 'research-content-expert-review-request'
+      }
+    },
+    computed: {},
 
-  },
+    methods: {},
 
-  methods: {
-
-  },
-
-  watch: {
-
+    watch: {}
   }
-}
 
 </script>
 

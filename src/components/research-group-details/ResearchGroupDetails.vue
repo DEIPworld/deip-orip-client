@@ -6,21 +6,20 @@
 </template>
 
 <script>
-    import { mapGetters } from 'vuex';
+  import { mapGetters } from 'vuex';
 
-    export default {
-        name: "ResearchGroupDetails",
+  export default {
+    name: 'ResearchGroupDetails',
 
-        computed: {
-        },
+    computed: {},
 
-        data() { 
-            return {} 
-        },
+    data() {
+      return {};
+    },
 
-        created() {
-        }
-    };
+    created() {
+    }
+  };
 </script>
 
 <style lang="less" scoped>
