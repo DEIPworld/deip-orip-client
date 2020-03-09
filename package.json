@@ -14,7 +14,7 @@
     "@deip/app-config-service": "^1.0.0",
     "@deip/auth-service": "^1.0.0",
     "@deip/blockchain-service": "^1.0.0",
-    "@deip/deip-oa-rpc-client": "1.0.23",
+    "@deip/deip-oa-rpc-client": "1.0.24",
     "@deip/disciplines-service": "^1.0.0",
     "@deip/grants-service": "^1.0.0",
     "@deip/http-service": "^1.0.0",
