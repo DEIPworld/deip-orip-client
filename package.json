@@ -7,7 +7,7 @@
     "build": "npx vue-cli-service build",
     "lint": "npx vue-cli-service lint",
     "start": "npm run serve",
-    "link": "node ./linkDevModules.js"
+    "linkModules": "node ./linkDevModules.js"
   },
   "dependencies": {
     "@deip/access-service": "^1.0.0",
@@ -80,6 +80,7 @@
     "babel-eslint": "^10.0.3",
     "eslint": "^5.16.0",
     "eslint-plugin-vue": "^5.0.0",
+    "inquirer": "^7.0.6",
     "less": "^3.10.3",
     "less-loader": "^5.0.0",
     "postcss-import": "^12.0.1",
