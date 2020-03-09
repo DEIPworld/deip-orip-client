@@ -90,7 +90,7 @@
 </template>
 
 <script>
-  // import deipRpc from '@deip/deip-oa-rpc-client';
+  import deipRpc from '@deip/deip-oa-rpc-client';
   import { mapGetters } from 'vuex';
 
   import { ResearchGroupService } from '@deip/research-group-service';
@@ -159,29 +159,40 @@
           .map(m => {
             return {
               account: m.account.name,
-              research_group_tokens_in_percent: m.stake * this.DEIP_1_PERCENT,
-              cover_letter: ''
+              rgt: m.stake * this.DEIP_1_PERCENT,
+              notes: ""
             }
           });
 
-        for (let key in this.group.quorum) {
-          this.group.quorum[key] = 50;
-        }
-        const maxProposalPercent = _(this.group.quorum).values().maxBy(item => parseInt(item));
-        const proposalQuorums = _.keys(this.group.quorum).map((item, i) => {
-          // as a result we should get array of arrays [proposalType, percents], `i` almost matches proposalType
+        const default_quorum = 50 * this.DEIP_1_PERCENT;
+        const action_quorums = Object.keys(this.group.quorum).map((action, i) => {
           return [
             i + 1,
-            parseInt(this.group.quorum[item]) * this.DEIP_1_PERCENT
-          ]
+            default_quorum
+          ];
         });
+
+        const details = [
+          [
+            "dao_voting_research_group_management_model_v1_0_0",
+            {
+              "version": "1.0.0",
+              "default_quorum": default_quorum,
+              "action_quorums": action_quorums
+            }
+          ]
+        ];
+        
         researchGroupService.createResearchGroup(
-          this.group.name,
-          this.group.permlink,
-          this.group.description,
-          parseInt(maxProposalPercent) * this.DEIP_1_PERCENT,
-          proposalQuorums,
-          invitees
+          {
+            name: this.group.name,
+            permlink: this.group.permlink,
+            description: this.group.description,
+            type: 1,
+            details: details,
+            isCreatedByOrganization: false,
+            invitees: invitees
+          }
         ).then((response) => {
           this.isLoading = false;
           this.$store.dispatch('auth/loadGroups'); // reload user groups

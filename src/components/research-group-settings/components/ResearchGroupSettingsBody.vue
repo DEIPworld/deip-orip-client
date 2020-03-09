@@ -38,7 +38,7 @@
           </div>
           <!-- <v-layout row justify-center> -->
           <!-- <v-flex xs12 lg8> -->
-          <div>
+          <div v-if="!group.is_centralized">
             <div class="title font-weight-medium pb-3">Quorum threshold:</div>
             <div class="pt-3">
               <div>
@@ -69,30 +69,28 @@
                     </div>
                   </div>
 
-                  <div
-                    class="pt-2 caption line-height-1 text-align-right primary--text text--lighten-3"
-                  >The proposal will be sent to group members and after it's approved the threshold will be changed
+                  <div class="pt-2 caption line-height-1 text-align-right primary--text text--lighten-3">
+                    The proposal will be sent to group members and after it's approved the threshold will be changed
                   </div>
                 </div>
               </div>
             </div>
+            <div class="py-2 pt-3">
+              <v-layout justify-end>
+                <v-btn
+                  class="ma-0"
+                  large
+                  :loading="isLoading"
+                  :disabled="isDisabledBtnQuorum || isLoading"
+                  color="primary"
+                  @click="sendChangeQuorumProposal()"
+                >Update Quorum
+                </v-btn>
+              </v-layout>
+            </div>
           </div>
           <!-- </v-flex> -->
           <!-- </v-layout> -->
-
-          <div class="py-2 pt-3">
-            <v-layout justify-end>
-              <v-btn
-                class="ma-0"
-                large
-                :loading="isLoading"
-                :disabled="isDisabledBtnQuorum || isLoading"
-                color="primary"
-                @click="sendChangeQuorumProposal()"
-              >Update Quorum
-              </v-btn>
-            </v-layout>
-          </div>
 
           <div>
             <div class="py-4" v-if="isResearchGroupMember">
@@ -285,15 +283,16 @@
       fillValues() {
         this.groupName = this.group.name;
         this.groupDescription = this.group.description;
-        this.proposalOrderMap.forEach(proposalsBlock => {
-          proposalsBlock.forEach(proposalData => {
-            const intValue = this.convertToPercent(
-              this.group.proposal_quorums[proposalData.key - 1][1]
-            );
-            proposalData.value = intValue.toString(); // input works with string values
+        if (!this.group.is_centralized) {
+          this.proposalOrderMap.forEach(proposalsBlock => {
+            proposalsBlock.forEach(proposalData => {
+              const intValue = this.convertToPercent(
+                this.group.proposal_quorums[proposalData.key - 1][1]
+              );
+              proposalData.value = intValue.toString(); // input works with string values
+            });
           });
-        });
-
+        }
         this.shadowProposalOrderMap = _.cloneDeep(this.proposalOrderMap);
         this.newResearchGroupName = this.groupName;
         this.newResearchGroupDescription = this.groupDescription;
@@ -308,8 +307,8 @@
             if (proposalData.value !== this.shadowProposalOrderMap[i][j].value) {
               const promise = researchGroupService.createChangeQuorumProposal({
                 groupId: this.group.id,
-                proposalType: proposalData.key,
-                quorumPercent: this.toDeipPercent(proposalData.value),
+                action: proposalData.key,
+                quorum: this.toDeipPercent(proposalData.value)
               });
 
               promises.push(promise);

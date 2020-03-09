@@ -48,7 +48,7 @@
               @click="sendTokens()"
               :loading="isSending"
               :disabled="!form.amount || deipTokenBalance < form.amount || isSending">
-              {{ !group.is_personal ? 'Create proposal' : 'Send' }}
+              {{ !group.is_centralized ? 'Create proposal' : 'Send' }}
             </v-btn>
           </v-flex>
           <v-flex xs12 py-2>

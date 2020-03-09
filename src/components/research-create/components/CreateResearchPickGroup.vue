@@ -12,22 +12,18 @@
               class="group-line  pa-3 mt-1"
               :key="'pick-group '+ i"
             >
-              <div
-                v-if="group.is_personal"
-                class="group-nameplate pr-2"
-              >{{ user | fullname}} 's personal group</div>
-              <div v-if="!group.is_personal" class="group-nameplate pr-2">{{group.name}}</div>
-              <div class>{{ getGroupCoworkers(group).join(' · ') }}</div>
+              <div v-if="group.is_personal" class="group-nameplate pr-2">{{ user | fullname}} 's personal group</div>
+              <div v-else class="group-nameplate pr-2">{{group.name}}</div>
+              <div>{{ getGroupCoworkers(group).join(' · ') }}</div>
             </div>
 
             <div class="pt-4 pl-3">
               <router-link
                 class="app-title"
                 :to="{ name: 'CreateResearchGroup',
-                                  params: { 'account_name': user.username },
-                                  query: { 'back-token': getReturningToken }
-                              }"
-              >
+                  params: { 'account_name': user.username },
+                  query: { 'back-token': getReturningToken }
+                }">
                 <span class="discipline-picker-label">+ Add new group</span>
               </router-link>
             </div>

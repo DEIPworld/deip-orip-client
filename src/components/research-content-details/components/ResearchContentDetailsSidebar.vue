@@ -289,7 +289,7 @@
     <!-- ### END Research Content Blockchain Data Section ### -->
 
     <!-- ### START Quorum Info Section ### -->
-    <div v-if="!isPublished" class="py-4">
+    <div v-if="!isPublished && !isCentralizedGroup" class="py-4">
       <div class="sidebar-fullwidth">
         <v-divider></v-divider>
       </div>
@@ -373,6 +373,7 @@
         isInProgress: 'rcd/isInProgress',
         isProposed: 'rcd/isProposed',
         isPublished: 'rcd/isPublished',
+        isCentralizedGroup: 'rcd/isCentralizedGroup',
         userHasResearchExpertise: 'rcd/userHasResearchExpertise'
       }),
 

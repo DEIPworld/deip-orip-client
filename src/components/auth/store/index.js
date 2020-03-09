@@ -63,7 +63,8 @@ const getters = {
         weight: rgt.amount,
         rgtId: rgt.id,
         is_personal: group.is_personal,
-        is_dao: group.is_dao
+        is_dao: group.is_dao,
+        is_centralized: group.is_centralized
       });
     }
     return groups;

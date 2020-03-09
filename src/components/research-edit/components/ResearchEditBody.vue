@@ -307,20 +307,19 @@
           researchGroupId: this.research.research_group_id
         };
 
-        const promise = researchGroupService
-          .createChangeResearchNameAndDescriptionProposal({
-            researchIds,
-            newResearchTitle: this.title,
-            newResearchAbstract: this.description,
-            isPublic: !this.isPublic
-          });
+        const promise = researchGroupService.createChangeResearchNameAndDescriptionProposal({
+          researchIds,
+          newResearchTitle: this.title,
+          newResearchAbstract: this.description,
+          isPublic: !this.isPublic
+        });
 
         promise
           .then(() => {
             this.$store.dispatch('layout/setSuccess', {
               message: 'Proposal has been sent successfully!'
             });
-            if (this.researchGroup.is_personal || !this.researchGroup.is_dao) {
+            if (this.researchGroup.is_centralized) {
               this.$router.push({
                 name: 'ResearchDetails',
                 params: {

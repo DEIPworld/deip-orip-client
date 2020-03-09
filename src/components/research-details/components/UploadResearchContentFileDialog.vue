@@ -90,7 +90,7 @@
                 :disabled="isDisabled || isLoading"
                 :loading="isLoading"
                 @click="proposeContent()"
-              >{{!isPersonalGroup ? 'Create Proposal' : 'Upload Material'}}
+              >{{!isCentralizedGroup ? 'Create Proposal' : 'Upload Material'}}
               </v-btn>
             </v-flex>
             <v-flex xs12 py-2>
@@ -158,12 +158,11 @@
         user: 'auth/user',
         researchGroupMembersList: 'rd/researchGroupMembersList',
         research: 'rd/research',
+        researchGroup: 'rd/group',
         userPersonalGroup: 'auth/userPersonalGroup'
       }),
-      isPersonalGroup() {
-        return this.research
-          ? this.research.research_group_id == this.userPersonalGroup.id
-          : false;
+      isCentralizedGroup() {
+        return this.researchGroup.is_centralized;
       },
       isDisabled() {
         return !this.title ||
