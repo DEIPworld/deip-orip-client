@@ -1,6 +1,6 @@
 <template>
-    <page-container>
-        <contentbar>
+    <v-layout>
+        <v-flex class="fill-height pa-5 xs12">
             <div v-if="contentMetadata">
                 <div class="legacy-row legacy-justify-between legacy-align-items-end">
                     <div class="display-1 bold">
@@ -165,8 +165,8 @@
                 </div>
 
             </div>
-        </contentbar>
-    </page-container>
+        </v-flex>
+    </v-layout>
 </template>
 
 <script>

@@ -8,8 +8,8 @@
         <v-toolbar-title>Application</v-toolbar-title>
         <v-spacer></v-spacer>
       </v-toolbar>
-      <page-container>
-        <contentbar>
+      <v-layout row>
+        <v-flex class="fill-height pa-5 xs12">
           <div v-if="researchList">
             <div class="legacy-row c-mb-4">
               <div class="c-pr-6">Funding opportunity:</div>
@@ -198,8 +198,8 @@
           <div class="display-flex" v-else>
             <v-progress-circular class="c-m-auto" indeterminate color="primary"></v-progress-circular>
           </div>
-        </contentbar>
-      </page-container>
+        </v-flex>
+      </v-layout>
     </v-card>
   </v-dialog>
 </template>

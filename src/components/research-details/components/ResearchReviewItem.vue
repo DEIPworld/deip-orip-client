@@ -1,6 +1,6 @@
 <template>
   <v-layout>
-    <v-flex lg4 class="right-bordered">
+    <v-flex xs12 lg4 class="right-bordered">
       <v-layout column fill-height justify-space-between>
         <v-layout row wrap>
           <v-flex shrink>
@@ -23,7 +23,7 @@
         <v-btn small @click="goToReviewPage(review)" outline>See review</v-btn>
       </v-layout>
     </v-flex>
-    <v-flex lg4 class="px-4 right-bordered">
+    <v-flex xs12 lg4 class="px-4 right-bordered">
       <v-layout column fill-height>
         <div v-if="review.research_content" v-on:click.stop>
           <div>
@@ -50,7 +50,7 @@
         </div>
         <v-layout row wrap>
           <v-flex
-            lg12
+            xs12 lg12
             v-for="item of review.disciplines"
             :key="`${review.id}- ${item.disciplineName}`"
             class="rd-review-eci mt-1"
@@ -64,7 +64,7 @@
         </div>
       </v-layout>
     </v-flex>
-    <v-flex lg4>
+    <v-flex xs12 lg4>
       <v-layout column fill-height justify-space-between pl-4>
         <div>
           <div class="bold">Assessment</div>

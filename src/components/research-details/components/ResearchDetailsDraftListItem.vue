@@ -2,8 +2,8 @@
   <v-expansion-panel-content>
     <template slot="header">
       <v-layout align-center v-on:click.stop>
-        <v-flex lg2 class="text-capitalize bold">Draft {{index + 1}}</v-flex>
-        <v-flex lg10>
+        <v-flex xs2 class="text-capitalize bold">Draft {{index + 1}}</v-flex>
+        <v-flex xs10>
           <span class="bold">
             <a @click="openDarDraft(draft)" class="a">{{draft.title || draft._id}}</a>
           </span>

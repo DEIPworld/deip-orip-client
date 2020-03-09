@@ -1,9 +1,9 @@
 <template>
   <v-layout row>
-    <v-flex lg8 class="milestone-description pt-3">
+    <v-flex xs8 class="milestone-description pt-3">
       {{selectedTimelineItem.description}}
     </v-flex>
-    <v-flex lg4>
+    <v-flex xs4>
       <v-layout justify-center>
         <ul
           :class="{

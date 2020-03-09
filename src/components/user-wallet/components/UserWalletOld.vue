@@ -1,6 +1,6 @@
 <template>
-    <page-container>
-        <contentbar>
+    <v-layout>
+        <v-flex slot="content" class="fill-height pa-5 xs12">
             <div class="display-1 bold">Wallet</div>
 
             <div class="legacy-row-nowrap c-pt-8">
@@ -236,8 +236,8 @@
                 </div>
 
             </div>
-        </contentbar>
-    </page-container>
+        </v-flex>
+    </v-layout>
 </template>
 
 <script>

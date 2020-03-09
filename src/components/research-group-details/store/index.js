@@ -18,7 +18,6 @@ const state = {
   members: [],
   joinRequests: [],
   invites: [],
-  researchesRef: [],
 
   options: {
     isAddMemberDialogOpen: false,
@@ -48,15 +47,7 @@ const getters = {
   members: state => state.members,
   invites: state => state.invites,
   proposalListFilter: state => state.proposalListFilter,
-  researchList: state => {
-    return state.researchList.map(research => {
-      let researchRef = state.researchesRef.find(({ researchId }) => researchId === research.id).researchRef;
-      return {
-        ...research,
-        researchRef
-      };
-    });
-  },
+  researchList: state => state.researchList,
   options: state => state.options,
   joinRequests: state => state.joinRequests,
   pendingJoinRequests: state => state.joinRequests.filter(r => r.status == 'pending'),
@@ -115,15 +106,6 @@ const actions = {
           joinRequestsLoad,
           groupInvitesPromise
         ])
-          .then(() => {
-            const researchesRefLoad = new Promise((resolve, reject) => {
-              dispatch('loadResearchesRef', {
-                researchesId: state.researchList.map(({ id }) => id),
-                notify: resolve
-              });
-            });
-            return Promise.all([researchesRefLoad]);
-          });
       })
       .finally(() => {
         commit('SET_GROUP_DETAILS_LOADING_STATE', false);
@@ -183,7 +165,20 @@ const actions = {
         return researchResult;
       })
       .then(data => {
-        commit('SET_GROUP_RESEARCH_LIST', data);
+        commit('SET_RESEARCHES_REFS_DETAILS_LOADING_STATE', true);
+        Promise.all(data.map(({id}) => researchService.getResearch(id)))
+          .then(refs => {
+            const researchList = refs.map((researchRef, i) => {
+              return {
+                ...data[i],
+                researchRef
+              };
+            });
+            commit('SET_GROUP_RESEARCH_LIST', researchList);
+          }, (err) => {console.log(err);})
+          .finally(() => {
+            commit('SET_RESEARCHES_REFS_DETAILS_LOADING_STATE', false);
+          });
       })
       .finally(() => {
         commit('SET_GROUP_RESEARCH_LIST_LOADING_STATE', false);
@@ -277,24 +272,6 @@ const actions = {
         commit('SET_GROUP_JOIN_REQUESTS_LOADING_STATE', false);
         if (notify) notify();
       });
-  },
-
-  loadResearchesRef({ state, dispatch, commit }, { researchesId, notify }) {
-    commit('SET_RESEARCHES_REFS_DETAILS_LOADING_STATE', true);
-    return Promise.all(researchesId.map(id => researchService.getResearch(id)))
-      .then(refs => {
-        const researchesRef = refs.map((researchRef, i) => {
-          return {
-            researchId: researchesId[i],
-            researchRef
-          };
-        });
-        commit('SET_RESEARCHES_REFS_DETAILS', researchesRef);
-      }, (err) => {console.log(err);})
-      .finally(() => {
-        commit('SET_RESEARCHES_REFS_DETAILS_LOADING_STATE', false);
-        if (notify) notify();
-      });
   }
 };
 
@@ -362,10 +339,6 @@ const mutations = {
 
   ['SET_GROUP_JOIN_REQUESTS_LOADING_STATE'](state, value) {
     state.isLoadingResearchGroupJoinRequests = value;
-  },
-
-  ['SET_RESEARCHES_REFS_DETAILS'](state, researchesRef) {
-    Vue.set(state, 'researchesRef', researchesRef);
   },
 
   ['SET_RESEARCHES_REFS_DETAILS_LOADING_STATE'](state, value) {

@@ -1,6 +1,6 @@
 <template>
-    <page-container>
-        <contentbar>
+    <v-layout>
+        <v-flex class="fill-height pa-5 xs12">
             <div class="headline half-bold">
                 <router-link class="a"
                     :to="{
@@ -122,8 +122,8 @@
                 </div>
 
             </div>
-        </contentbar>
-    </page-container>
+        </v-flex>
+    </v-layout>
 </template>
 
 <script>
