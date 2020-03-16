@@ -37,7 +37,7 @@
                     <v-icon dark class="pr-1">keyboard_arrow_left</v-icon> Back
                 </v-btn>
                 <v-btn color="primary" :disabled="nextDisabled" :loading="isLoading" @click.native="finish()"> 
-                    {{!isPersonalGroup ? 'Create Proposal' : 'Create Project'}}
+                    {{!isCentralizedGroup ? 'Create Proposal' : 'Create Project'}}
                 </v-btn>
             </v-layout>
         </v-flex>
@@ -71,10 +71,8 @@
                     || !(this.research.review_share_in_percent >= 0 && this.research.review_share_in_percent <= 50)
                     || this.isLoading;
             },
-            isPersonalGroup() {
-                return this.research.group 
-                    ? this.research.group.id == this.userPersonalGroup.id 
-                    : false;
+            isCentralizedGroup() {
+                return this.research.group.is_centralized;
             }
         },
         

@@ -484,7 +484,10 @@
   import { mapActions, mapGetters } from 'vuex';
   import moment from 'moment';
   import deipRpc from '@deip/deip-oa-rpc-client';
+  import { AssetsService } from '@deip/assets-service';
   import * as bankCardsStorage from './../../../utils/bankCard';
+
+  const assetsService = AssetsService.getInstance();
 
   const currencyTypes = {
     eur: { id: "eur", title: "EUR", symbol: "€", mockExchange: 1.1 },
@@ -927,7 +930,16 @@
     },
 
     created() {
-    }
+      // example for Egor Anikey
+      return assetsService.getAccountBalancesByOwner(this.user.username)
+        .then((balances) => {
+          console.log(balances)
+          return assetsService.getAccountBalanceByOwnerAndAsset(this.user.username, "TUGR3");
+        })
+        .then((balance) => {
+          console.log(balance)
+        });
+      }
   };
 </script>
 

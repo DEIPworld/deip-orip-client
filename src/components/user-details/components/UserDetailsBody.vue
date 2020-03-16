@@ -103,28 +103,28 @@
               <div class="pa-4" :key="'group-' + i">
                 <div v-if="group.is_personal">
                   <router-link class="research-group-title" :to="{
-                                            name: 'ResearchGroupDetails',
-                                            params: {
-                                                research_group_permlink: encodeURIComponent(group.permlink) }
-                                            }">
+                    name: 'ResearchGroupDetails',
+                    params: {
+                      research_group_permlink: encodeURIComponent(group.permlink) }
+                    }">
                     {{userInfo | fullname}}
                   </router-link>
                   <span class="grey--text caption">(personal group)</span>
                 </div>
                 <div v-else>
                   <router-link class="research-group-title" :to="{
-                                        name: 'ResearchGroupDetails',
-                                        params: {
-                                            research_group_permlink: encodeURIComponent(group.permlink) }
-                                        }">
+                    name: 'ResearchGroupDetails',
+                    params: {
+                      research_group_permlink: encodeURIComponent(group.permlink) }
+                    }">
                     {{group.name}}
                   </router-link>
                   <div class="caption grey--text pt-2 hidden-last-child">
                     <template v-for="share in group.shares">
-                                            <span :key="'share-' + share.id">
-                                                <span>{{ share.owner }}</span>
-                                                <span> · </span>
-                                            </span>
+                      <span :key="'share-' + share.id">
+                          <span>{{ share.owner }}</span>
+                          <span> · </span>
+                      </span>
                     </template>
                   </div>
                 </div>

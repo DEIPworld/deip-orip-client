@@ -106,6 +106,10 @@ const getters = {
     return state.research.research_group_id == userPersonalGroup.id;
   },
 
+  isCentralizedGroup(state, getters, rootState, rootGetters) {
+    return getters.group.is_centralized;
+  },
+
   isResearchGroupMember(state, getters, rootState, rootGetters) {
     let isMember = rootGetters['auth/userIsResearchGroupMember'](state.research.research_group_id);
     return isMember;
@@ -589,7 +593,7 @@ const actions = {
         const witnessUser = await usersService.getEnrichedProfiles([block.witness])
         const votersMeta = [];
 
-        if (!group.is_personal && group.is_dao) {
+        if (!group.is_centralized) {
           const voters = await getProposalVotesMeta(contentProposal, endTime);
           votersMeta.push(...voters);
         }

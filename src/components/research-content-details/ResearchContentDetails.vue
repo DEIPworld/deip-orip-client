@@ -22,7 +22,7 @@
                            @click="openContentProposalDialog()">
                       <v-icon>send</v-icon>
                     </v-btn>
-                    <span>{{!isPersonalGroup ? 'Create Proposal' : 'Upload Material'}}</span>
+                    <span>{{!isCentralizedGroup ? 'Create Proposal' : 'Upload Material'}}</span>
                   </v-tooltip>
                 </div>
               </div>
@@ -175,7 +175,7 @@
                          :loading="proposeContent.isLoading"
                          block
                          @click="sendContentProposal()"
-                  >{{!isPersonalGroup ? 'Create Proposal' : 'Upload Material'}}
+                  >{{!isCentralizedGroup ? 'Create Proposal' : 'Upload Material'}}
                   </v-btn>
                 </v-flex>
                 <v-flex xs12 py-2>
@@ -246,7 +246,8 @@
         isFilePackageContent: 'rcd/isFilePackageContent',
         isDarContent: 'rcd/isDarContent',
         isPublished: 'rcd/isPublished',
-        isPersonalGroup: 'rcd/isPersonalGroup',
+        isCentralizedGroup: 'rcd/isCentralizedGroup',
+
         isResearchGroupMember: 'rcd/isResearchGroupMember',
         isCreatingReviewAvailable: 'rcd/isCreatingReviewAvailable',
         userHasResearchExpertise: 'rcd/userHasResearchExpertise',
