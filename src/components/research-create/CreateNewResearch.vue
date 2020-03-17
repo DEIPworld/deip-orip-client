@@ -266,7 +266,7 @@
           )
           .finally(() => {
             setTimeout(() => {
-              if (this.research.group.is_centralized) {
+              if (this.research.group.is_centralized || this.research.group.is_personal) {
                 this.$router.push({
                   name: 'ResearchDetails',
                   params: {

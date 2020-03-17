@@ -316,7 +316,7 @@
             this.$store.dispatch('layout/setSuccess', {
               message: 'Proposal has been sent successfully!'
             });
-            if (this.researchGroup.is_centralized) {
+            if (this.researchGroup.is_centralized || this.researchGroup.is_personal) {
               this.$router.push({
                 name: 'ResearchDetails',
                 params: {

@@ -38,7 +38,7 @@
           </div>
           <!-- <v-layout row justify-center> -->
           <!-- <v-flex xs12 lg8> -->
-          <div v-if="!group.is_centralized">
+          <div v-if="group.is_dao">
             <div class="title font-weight-medium pb-3">Quorum threshold:</div>
             <div class="pt-3">
               <div>
@@ -284,7 +284,7 @@
       fillValues() {
         this.groupName = this.group.name;
         this.groupDescription = this.group.description;
-        if (!this.group.is_centralized) {
+        if (this.group.is_dao) {
           this.proposalOrderMap.forEach(proposalsBlock => {
             proposalsBlock.forEach(proposalData => {
               const intValue = this.convertToPercent(

@@ -162,7 +162,7 @@
         userPersonalGroup: 'auth/userPersonalGroup'
       }),
       isCentralizedGroup() {
-        return this.researchGroup.is_centralized;
+        return this.researchGroup.is_centralized || this.researchGroup.is_personal;
       },
       isDisabled() {
         return !this.title ||
