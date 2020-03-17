@@ -91,7 +91,7 @@
         </div>
       </div>
 
-      <div v-if="!group.is_centralized" class="">
+      <div v-if="group.is_dao" class="">
         <div class="py-4">
           <quorum-size-sidebar-section></quorum-size-sidebar-section>
         </div>

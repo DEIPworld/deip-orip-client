@@ -72,7 +72,7 @@
                     || this.isLoading;
             },
             isCentralizedGroup() {
-                return this.research.group.is_centralized;
+                return this.research.group.is_centralized || this.research.group.is_personal;
             }
         },
         
