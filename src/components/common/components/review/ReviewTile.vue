@@ -8,9 +8,11 @@
                         <platform-avatar 
                             :user="review.author"
                             :size="90"
-                            link-to-profile
-                            link-to-profile-class="pa-1"
                         ></platform-avatar>
+                         <router-link
+                            :to="{ name: 'UserDetails', params: { account_name: review.author.account.name } }"
+                            class="a pa-1"
+                        >{{ review.author | fullname }}</router-link>
                     </div>
 
                     <v-btn small outline @click="goToReviewPage()">See Review</v-btn>
