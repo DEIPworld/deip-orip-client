@@ -1,6 +1,6 @@
 <template>
-  <page-container>
-    <contentbar>
+  <v-layout>
+    <v-flex class="fill-height pa-5 xs12">
       <div class="display-1 bold">Top witnesses</div>
 
       <div class="c-pt-4 half-bold">
@@ -63,8 +63,8 @@
           </template>
         </v-data-table>
       </div>
-    </contentbar>
-  </page-container>
+    </v-flex>
+  </v-layout>
 </template>
 
 <script>

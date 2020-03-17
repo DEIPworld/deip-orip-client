@@ -9,8 +9,8 @@
                 <v-spacer></v-spacer>
             </v-toolbar>
 
-            <page-container>
-                <contentbar>
+            <v-layout row>
+                <v-flex class="fill-height pa-5 xs12">
 
                     <div class="headline text-align-center">
                         You are suggesting to supply
@@ -55,8 +55,8 @@
                         >Create proposal</v-btn>
                     </div>
 
-                </contentbar>
-            </page-container>
+                </v-flex>
+            </v-layout>
 
         </v-card>
     </v-dialog>

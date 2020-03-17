@@ -9,8 +9,8 @@
         <v-spacer></v-spacer>
       </v-toolbar>
 
-      <page-container>
-        <contentbar>
+      <v-layout>
+        <v-flex class="fill-height pa-5 xs12">
 
           <div class="headline text-align-center font-weight-medium">Select your discipline</div>
 
@@ -85,8 +85,8 @@
             </v-layout>
           </v-form>
 
-        </contentbar>
-      </page-container>
+        </v-flex>
+      </v-layout>
 
     </v-card>
   </v-dialog>

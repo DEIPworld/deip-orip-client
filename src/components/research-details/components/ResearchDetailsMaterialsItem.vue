@@ -3,11 +3,11 @@
     <template slot="header">
       <v-layout align-center v-on:click.stop>
         <v-flex
-          lg2
+          xs2
           class="text-capitalize bold"
         >{{getResearchContentType(content.content_type).text}}
         </v-flex>
-        <v-flex lg8 class="bold">
+        <v-flex xs8 class="bold">
           <router-link
             v-if="isDetailsAvailable"
             class="a"
@@ -23,7 +23,7 @@
           </router-link>
           <span class="grey--text" v-else>{{content.title}}</span>
         </v-flex>
-        <v-flex v-if="isDetailsAvailable" lg1 text-lg-center class="text-xs-center">
+        <v-flex v-if="isDetailsAvailable" xs1 text-lg-center class="text-xs-center">
           <v-tooltip top>
             <template slot="activator">
               <router-link
@@ -44,7 +44,7 @@
             <span>Browse references</span>
           </v-tooltip>
         </v-flex>
-        <v-flex lg1 text-lg-center v-show="doesContentHaveReviews(content)">
+        <v-flex xs1 text-lg-center v-show="doesContentHaveReviews(content)">
           <v-icon size="14px">chat_bubble</v-icon>
           <span
             v-show="doesContentHavePositiveReviews(content)"

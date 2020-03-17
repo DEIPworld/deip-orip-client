@@ -6,8 +6,8 @@
         class="rd-header full-height pa-5 feed-header"
         :style="{ background: 'linear-gradient(0deg, rgba(0, 0, 0, 0.4) 70%, transparent), url('+ $options.filters.researchBackgroundSrc(research.id) +'), 100%, 100%, no-repeat'}"
       >
-        <v-flex lg8>
-          <div style="width: 95%">
+        <v-flex xs12 lg8>
+          <div>
             <div class="rd-header__title">{{research.title}}</div>
             <div class="rd-header__created pt-4">
               <v-layout row align-baseline>
@@ -25,8 +25,8 @@
             </div>
           </div>
         </v-flex>
-        <v-flex lg4 text-xs-right class="align-start">
-          <div v-if="researchRef.videoSrc">
+        <v-flex v-if="researchRef.videoSrc" xs12 lg4 text-xs-right class="align-start">
+          <div>
             <iframe
               class="presentation-video"
               :src="getEmbedVideoUrl(researchRef.videoSrc)"
@@ -37,9 +37,9 @@
         </v-flex>
       </v-layout>
       <v-layout row wrap>
-        <v-flex lg9 class="px-5">
+        <v-flex xs12 lg9 class="px-5">
           <v-layout row wrap v-if="timeline.length" class="my-5">
-            <v-flex lg8>
+            <v-flex xs12 lg8>
               <v-layout column>
                 <v-layout row>
                   <v-flex grow>
@@ -51,7 +51,7 @@
                 </v-layout>
               </v-layout>
             </v-flex>
-            <v-flex lg12>
+            <v-flex xs12>
               <research-timeline :timeline="timeline" />
             </v-flex>
           </v-layout>
@@ -62,7 +62,7 @@
         </v-flex>
 
         <!-- Right-Hand sidebar -->
-        <v-flex lg3>
+        <v-flex xs12 lg3>
           <v-layout column class="mt-5 mb-4 mx-4">
             <div class="rd-sidebar-block-title">
               You are not logged in
