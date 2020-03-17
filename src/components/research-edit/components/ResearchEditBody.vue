@@ -39,8 +39,8 @@
               <v-btn
                 class="my-0 ml-2"
                 large
-                :loading="isLoading"
-                :disabled="isSavingMetaDisabled || isLoading"
+                :loading="isMetaSaving"
+                :disabled="isSavingMetaDisabled || isMetaSaving"
                 color="primary"
                 @click="saveMeta()"
               >
@@ -103,8 +103,8 @@
               <v-btn
                 class="my-0 ml-2"
                 large
-                :loading="isLoading"
-                :disabled="isSavingRefDisabled || isLoading"
+                :loading="isRefSaving"
+                :disabled="isSavingRefDisabled || isRefSaving"
                 color="primary"
                 @click="saveRef()"
               >
@@ -190,7 +190,8 @@
         videoSrc: '',
         activeMilestone: undefined,
         isPublic: false,
-        isLoading: false,
+        isRefSaving: false,
+        isMetaSaving: false,
         isUploadingBackground: false,
         rules: {
           required: value => !!value || 'This field is required',
@@ -300,18 +301,14 @@
     },
     methods: {
       saveMeta() {
-        this.isLoading = true;
-
-        const researchIds = {
-          id: this.research.id,
-          researchGroupId: this.research.research_group_id
-        };
+        this.isMetaSaving = true;
 
         const promise = researchGroupService.createChangeResearchNameAndDescriptionProposal({
-          researchIds,
+          researchId: this.research.id,
+          researchGroupId: this.research.research_group_id,
           newResearchTitle: this.title,
           newResearchAbstract: this.description,
-          isPublic: !this.isPublic
+          isPrivate: !this.isPublic
         });
 
         promise
@@ -349,13 +346,13 @@
             });
           })
           .finally(() => {
-            this.isLoading = false;
+            this.isMetaSaving = false;
           });
       },
 
       saveRef() {
         if (this.validateMilestones()) {
-          this.isLoading = true;
+          this.isRefSaving = true;
 
           let milestones = this.milestones.map(m => {
             return {
@@ -400,7 +397,7 @@
               });
             })
             .finally(() => {
-              this.isLoading = false;
+              this.isRefSaving = false;
             });
         }
       },

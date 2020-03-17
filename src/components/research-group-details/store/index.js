@@ -47,7 +47,10 @@ const getters = {
   members: state => state.members,
   invites: state => state.invites,
   proposalListFilter: state => state.proposalListFilter,
-  researchList: state => state.researchList,
+  researchList: (state, getters, rootState, rootGetters) => {
+    const user = rootGetters['auth/user'];
+    return state.researchList.filter(item => !item.is_private || state.groupShares.some(share => share.owner == user.username));
+  },
   options: state => state.options,
   joinRequests: state => state.joinRequests,
   pendingJoinRequests: state => state.joinRequests.filter(r => r.status == 'pending'),

@@ -25,7 +25,7 @@
                 <v-tabs-slider :color="themeSettings['tabs-slider-color']"></v-tabs-slider>
 
                 <v-tab :class="themeSettings['tabs-text-class']" key="active" :disabled="activeResearchList.length === 0">
-                    Acitive research: {{ activeResearchList.length }}
+                    Active research: {{ activeResearchList.length }}
                 </v-tab>
 
                 <v-tab :class="themeSettings['tabs-text-class']" key="finished" :disabled="finishedResearchList.length === 0">

@@ -35,12 +35,16 @@ const getters = {
   userInfo: (state, getters) => {
     return { account: state.account, profile: state.profile }
   },
-  researchList: state => {
+  researchList: (state, getters, rootState, rootGetters) => {
+    const user = rootGetters['auth/user'];
     return state.researchList.map(research => {
       let researchRef = state.researchesRef.find(({ researchId }) => researchId === research.id).researchRef
       let group = state.groups.find(({ id }) => id === research.research_group_id)
       return { research: { ...research, researchRef }, group }
     })
+    .filter((item) => { 
+      return !item.research.is_private || item.group.shares.some(share => share.owner == user.username);
+    });
   },
   groups: state => state.groups,
   expertise: state => state.expertise,

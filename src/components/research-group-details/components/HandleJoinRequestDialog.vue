@@ -111,6 +111,7 @@
           invitee: this.joinRequest.username,
           rgtAmount: amount,
           coverLetter: this.coverLetter,
+          isHead: false
         }).then(() => {
           this.$store.dispatch('researchGroup/loadJoinRequests', { groupId: this.groupId });
           this.$store.dispatch('researchGroup/loadResearchGroupProposals', { groupId: this.groupId });

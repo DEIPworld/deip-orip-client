@@ -1,7 +1,7 @@
 <template>
   <v-layout row wrap full-width fill-height overflow-auto justify-center>
     <v-flex xs12 sm8 display-flex flex-column mb-3 px-5>
-      <div class="mb-5 font-weight-bold display-1 text-align-center">Project settings</div>
+      <div class="mb-4 step-title">Project settings</div>
       <div class="font-weight-bold title text-align-left mb-4">Visibility</div>
       <v-layout row shrink>
         <v-flex shrink :class="{'grey--text':isPublic}">Private project</v-flex>

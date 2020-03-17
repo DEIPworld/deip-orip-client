@@ -1,5 +1,5 @@
 <template>
-    <v-card class="review-container hidden-last-child">
+    <v-card class="review-container">
         <div class="legacy-row-nowrap c-p-6 clickable" @click="goToReviewPage()">
             <div style="width: 10%" class="legacy-column text-align-center" @click="goToReviewerProfilePage($event, review.author.account.name)">
                 <platform-avatar 

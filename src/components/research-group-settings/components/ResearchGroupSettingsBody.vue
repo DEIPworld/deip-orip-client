@@ -28,8 +28,8 @@
               <v-btn
                 class="ma-0"
                 large
-                :loading="isLoading"
-                :disabled="!isDisabledBtnNameDescription || isLoading"
+                :loading="isChangingMetaLoading"
+                :disabled="!isDisabledBtnNameDescription || isChangingMetaLoading"
                 color="primary"
                 @click="sendChangeNameAndDescProposal()"
               >Update Name and Description
@@ -80,8 +80,8 @@
                 <v-btn
                   class="ma-0"
                   large
-                  :loading="isLoading"
-                  :disabled="isDisabledBtnQuorum || isLoading"
+                  :loading="isChangingQuorumLoading"
+                  :disabled="isDisabledBtnQuorum || isChangingQuorumLoading"
                   color="primary"
                   @click="sendChangeQuorumProposal()"
                 >Update Quorum
@@ -158,7 +158,8 @@
     },
     data() {
       return {
-        isLoading: false,
+        isChangingMetaLoading: false,
+        isChangingQuorumLoading: false,
         groupName: '',
         groupDescription: '',
         proposalLabels: _.cloneDeep(proposalTypesLabels),
@@ -299,7 +300,7 @@
       },
 
       sendChangeQuorumProposal() {
-        this.isLoading = true;
+        this.isChangingQuorumLoading = true;
         const promises = [];
 
         this.proposalOrderMap.forEach((proposalBlock, i) => {
@@ -331,12 +332,12 @@
             });
           })
           .finally(() => {
-            this.isLoading = false;
+            this.isChangingQuorumLoading = false;
           });
       },
 
       sendChangeNameAndDescProposal() {
-        this.isLoading = true;
+        this.isChangingMetaLoading = true;
 
         const promise = researchGroupService.createChangeGroupNameAndDescriptionProposal({
           groupId: this.group.id,
@@ -358,7 +359,7 @@
             });
           })
           .finally(() => {
-            this.isLoading = false;
+            this.isChangingMetaLoading = false;
           });
       }
     },
