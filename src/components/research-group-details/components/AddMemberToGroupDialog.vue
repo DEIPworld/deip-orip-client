@@ -116,6 +116,7 @@
           invitee: this.selectedUser.name,
           rgtAmount: parseInt(this.tokensAmount) * this.DEIP_1_PERCENT,
           coverLetter: this.coverLetter,
+          isHead: false
         }).then(() => {
           this.$store.dispatch('layout/setSuccess', {
             message: 'Invitation Proposal has been created successfully!'

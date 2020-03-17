@@ -114,11 +114,9 @@ const actions = {
     let fullResearchListing = [];
     return deipRpc.api.getAllResearchesListingAsync(0, alldisciplinesId)
       .then(listing => {
-        fullResearchListing = listing.filter((item) => {
-          if (!item.is_private) return true;
-
-          return username ? item.group_members.includes(username) : false;
-        }).map(item => {return { ...item, isCollapsed: true }});
+        fullResearchListing = listing
+          .filter((item) => !item.is_private)
+          .map(item => {return { ...item, isCollapsed: true }});
 
         let researchRefsLoad = Promise.all(fullResearchListing
           .map((r) => researchService.getResearch(r.research_id)

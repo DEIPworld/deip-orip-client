@@ -119,7 +119,7 @@
                     }">
                     {{group.name}}
                   </router-link>
-                  <div class="caption grey--text pt-2 hidden-last-child">
+                  <div class="caption grey--text pt-2">
                     <template v-for="share in group.shares">
                       <span :key="'share-' + share.id">
                           <span>{{ share.owner }}</span>

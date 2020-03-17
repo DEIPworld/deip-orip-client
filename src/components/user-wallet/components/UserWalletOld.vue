@@ -123,7 +123,7 @@
 
                             <v-divider></v-divider>
 
-                            <div class="hidden-last-child" v-if="investments.length">
+                            <div  v-if="investments.length">
                                 <template v-for="(investment, i) in investments">
                                     <div class="list-line"
                                         :class="{ 'primary lighten-5': sendingType === sendingTypes.researchToken && selectedResearch && selectedResearch.id === investment.research.id }"
@@ -167,7 +167,7 @@
 
                             <v-divider></v-divider>
 
-                            <div class="hidden-last-child" v-if="transfers.length">
+                            <div  v-if="transfers.length">
                                 <template v-for="(transfer, i) in transfers">
                                     <div class="list-line" :key="'transfer-' + i">
                                         <div class="legacy-col-grow list-body-cell overflow-hidden">

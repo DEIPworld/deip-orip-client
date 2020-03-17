@@ -17,7 +17,7 @@
                             <div class="c-p-6">
                                 <div class="a">{{ grantInfo.research.title }}</div>
                         
-                                <div class="caption grey--text c-pt-2 hidden-last-child">
+                                <div class="caption grey--text c-pt-2">
                                     <template v-for="author in grantInfo.research.authors">
                                         <span>{{ author }}</span>
                                         <span> · </span>

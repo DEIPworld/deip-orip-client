@@ -193,12 +193,6 @@ const router = new Router({
         let loadPagePromise = store.dispatch('rd/loadResearchDetails', {
           group_permlink: decodeURIComponent(to.params.research_group_permlink),
           research_permlink: decodeURIComponent(to.params.research_permlink)
-        }).then(() => {
-          const username = store.getters['auth/user'].username;
-          const research = store.getters['rd/research'];
-          if (research.is_private && !research.members.includes(username)) {
-            return { name: 'Default' };
-          }
         });
         loadPage(loadPagePromise, next);
       }

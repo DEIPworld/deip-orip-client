@@ -72,7 +72,7 @@
 
                             <v-divider></v-divider>
 
-                            <div class="hidden-last-child" v-if="researches.length">
+                            <div v-if="researches.length">
                                 <template v-for="research in researches">
                                     <div class="list-line">
                                         <div class="legacy-col-grow list-body-cell">

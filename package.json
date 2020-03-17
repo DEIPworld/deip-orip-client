@@ -24,7 +24,7 @@
     "@deip/organizations-service": "^0.1.0",
     "@deip/research-content-reviews-service": "^1.0.0",
     "@deip/research-content-service": "^1.0.0",
-    "@deip/research-group-proposal-voting-service": "^1.0.5",
+    "@deip/research-group-proposal-voting-service": "^1.0.7",
     "@deip/research-group-service": "^1.0.4",
     "@deip/research-service": "^1.0.0",
     "@deip/review-service": "^1.0.0",

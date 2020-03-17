@@ -30,7 +30,7 @@
     <div class="c-pt-4">{{ claim.coverLetter }}</div>
     <div class="bold title c-pt-8">Publications</div>
 
-    <v-card class="c-mt-6 hidden-last-child">
+    <v-card class="c-mt-6">
       <template v-for="publicationUrl in claim.publications">
         <div class="c-p-6">
           <v-icon color="primary" class="c-mr-3">mdi-note-text</v-icon>
