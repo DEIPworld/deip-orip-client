@@ -21,8 +21,8 @@
 export default {
   name: "BasePageLayout",
   props: {
-    leftSidebarClass: { type: String, required: false, default: "xl3 lg3 md3 sm12 xs12" },
-    rightSidebarClass: { type: String, required: false, default: "xl3 lg3 md3 sm12 xs12" },
+    leftSidebarClass: { type: String, required: false, default: "lg3 xs12" },
+    rightSidebarClass: { type: String, required: false, default: "lg3 xs12" },
     headerClass: { type: String, required: false, default: "xs12" },
     contentClass: { type: String, required: false, default: undefined }
   },

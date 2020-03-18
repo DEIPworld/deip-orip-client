@@ -19,7 +19,7 @@
         <div class="subheading orange--text text-align-center">
           Draft is
           <router-link class="a orange--text"
-                       :to="{
+            :to="{
               name: 'ResearchGroupDetails',
               params: { research_group_permlink: encodeURIComponent(research.group_permlink) },
               hash: '#proposals'
@@ -86,32 +86,13 @@
         </v-card-title>
         <v-card-text>
           <v-layout column>
-            <v-autocomplete
+            <user-autocomplete-picker
               label="Find an expert to request a review"
-              hide-no-data
-              :append-icon="null"
-              :loading="requestExpertReviewDialog.isExpertsLoading"
-              :disabled="requestExpertReviewDialog.isRequestingReview"
-              :items="requestExpertReviewDialog.foundExperts"
-              item-text="name"
-              item-value="user"
-              :search-input.sync="requestExpertReviewDialog.expertsSearch"
-              v-on:keyup="queryExperts()"
-              v-model="requestExpertReviewDialog.selectedExpert"
+              :users="experts"
+              :isDisabled="requestExpertReviewDialog.isRequestingReview"
+              :displayLimit="8"
+              @onSelectUser="selectExpertForReview"
             />
-            <div v-if="!requestExpertReviewDialog.selectedExpert">
-              <v-layout row>
-                <platform-avatar :size="40" v-for="(expert, i) in experts.slice(0, 6)" :key="'expert-' + i"
-                                 :user="expert" class="expert-avatar mr-2"></platform-avatar>
-              </v-layout>
-            </div>
-            <template v-else>
-              <platform-avatar :user="requestExpertReviewDialog.selectedExpert" :size="40" link-to-profile
-                               link-to-profile-class="pl-3"></platform-avatar>
-              <div v-if="$options.filters.employmentOrEducation(requestExpertReviewDialog.selectedExpert)">
-                <div class="py-2 body-2">{{requestExpertReviewDialog.selectedExpert | employmentOrEducation}}</div>
-              </div>
-            </template>
           </v-layout>
         </v-card-text>
         <v-card-actions>
@@ -120,7 +101,7 @@
               <v-btn
                 @click="requestReview()"
                 :loading="requestExpertReviewDialog.isRequestingReview"
-                :disabled="!requestExpertReviewDialog.selectedExpert"
+                :disabled="isRequestingReviewDisabled"
                 block
                 color="primary"
               >Request
@@ -150,7 +131,7 @@
           <div class="body-2">{{index + 1 }}. {{item.type}}</div>
           <div class="pl-2">
             <router-link target="_blank" class="a body-1"
-                         :to="{
+              :to="{
                 name: 'ResearchContentDetails',
                 params: {
                   research_group_permlink: encodeURIComponent(research.group_permlink),
@@ -166,7 +147,7 @@
 
       <div class="pt-4" v-if="isPublished">
         <router-link class="a"
-                     :to="{
+          :to="{
             name: 'ResearchContentReferences',
             params: {
               research_group_permlink: encodeURIComponent(research.group_permlink),
@@ -274,7 +255,7 @@
 
       <div class="pt-3">
         <router-link class="a title"
-                     :to="{
+          :to="{
             name: 'ResearchContentMetadata',
             params: {
               research_group_permlink: encodeURIComponent(research.group_permlink),
@@ -343,13 +324,9 @@
       return {
         requestExpertReviewDialog: {
           isShown: false,
-
           selectedExpert: null,
-          isExpertsLoading: false,
-          expertsSearch: '',
-          foundExperts: [],
           isRequestingReview: false
-        },
+        }
       };
     },
 
@@ -455,9 +432,18 @@
         blackList.push(...existingReviewsForContent.map(r => r.author.account.name));
         return this.expertsList.filter(e => !blackList.includes(e.account.name));
       },
+
+      isRequestingReviewDisabled() {
+        return !this.requestExpertReviewDialog.selectedExpert;
+      }
     },
 
     methods: {
+
+      selectExpertForReview(expert) {
+        this.requestExpertReviewDialog.selectedExpert = expert;
+      },
+
       userHasExpertiseInDiscipline(discipline) {
         return this.userHasResearchExpertise.some(exp => exp.discipline_id === discipline.id);
       },
@@ -490,47 +476,27 @@
       },
 
       goAddReview() {
-        this.$router.push({name: 'ResearchContentAddReview', params: this.$route.params});
-      },
-
-      queryExperts() {
-        this.requestExpertReviewDialog.isExpertsLoading = true;
-        this.requestExpertReviewDialog.foundExperts = this.requestExpertReviewDialog.expertsSearch ? this.experts.filter(user => {
-          let name = this.$options.filters.fullname(user);
-          return name.toLowerCase().indexOf((this.requestExpertReviewDialog.expertsSearch || '').toLowerCase()) > -1
-            || user.account.name.toLowerCase().indexOf((this.requestExpertReviewDialog.expertsSearch || '').toLowerCase()) > -1;
-        })
-          .map((user => {
-            const name = this.$options.filters.fullname(user);
-            return {name, user};
-          })) : [];
-
-        if (!this.requestExpertReviewDialog.expertsSearch) {
-          this.requestExpertReviewDialog.selectedExpert = null;
-        }
-
-        this.requestExpertReviewDialog.isExpertsLoading = false;
+        this.$router.push({name: 'ResearchContentAddReview', params: this.$route.params });
       },
 
       requestReview() {
         this.requestExpertReviewDialog.isRequestingReview = true;
-
         return reviewService.createReviewRequest({
-          contentId: this.content.id,
-          expert: this.requestExpertReviewDialog.selectedExpert.account.name,
-        }).then(() => {
-          this.$store.dispatch('layout/setSuccess', {message: 'Request for the review has been sent successfully'});
-          this.requestExpertReviewDialog.selectedExpert = null;
-          this.requestExpertReviewDialog.expertsSearch = '';
-        }).catch((err) => {
-          let errMsg = 'An error occurred while requesting the review. Please try again later';
-          if (err.response && err.response.data) {
-            errMsg = err.response.data;
-          }
-          this.$store.dispatch('layout/setError', {
-            message: errMsg
-          });
-        })
+            contentId: this.content.id,
+            expert: this.requestExpertReviewDialog.selectedExpert.account.name
+          })
+          .then(() => {
+            this.$store.dispatch('layout/setSuccess', { message: 'Request for the review has been sent successfully'});
+          })
+          .catch((err) => {
+            let errMsg = 'An error occurred while requesting the review. Please try again later';
+            if (err.response && err.response.data) {
+              errMsg = err.response.data;
+            }
+            this.$store.dispatch('layout/setError', {
+              message: errMsg
+            });
+          })
           .finally(() => {
             this.requestExpertReviewDialog.isRequestingReview = false;
             this.requestExpertReviewDialog.isShown = false;
@@ -540,6 +506,7 @@
       getResearchContentEciPercentile() {
         return 10;
       }
+
     }
   };
 </script>

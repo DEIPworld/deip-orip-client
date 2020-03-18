@@ -1,7 +1,7 @@
 <template>
   <v-layout>
     <v-flex class="px-5">
-      <v-layout v-if="isTokenSaleSectionAvailable" class="my-5">
+      <v-layout row wrap v-if="isTokenSaleSectionAvailable" class="my-5">
         <v-flex xs12 lg7>
           <v-layout column>
             <v-layout row>
@@ -17,7 +17,7 @@
             </v-layout>
 
             <div v-if="isActiveTokenSale || isInactiveTokenSale">
-              <v-layout class="pt-3">
+              <v-layout row wrap class="pt-3">
                 <v-flex xs12 lg3 class="bold">Start:</v-flex>
                 <v-flex xs12 lg9 class="pl-2">
                   <span>{{tokenSale.start_time | dateFormat('MMM D, YYYY HH:mm', true)}}</span>
@@ -30,7 +30,7 @@
                   </v-chip>
                 </v-flex>
               </v-layout>
-              <v-layout class="pt-3">
+              <v-layout row wrap class="pt-3">
                 <v-flex xs12 lg3 class="bold">End:</v-flex>
                 <v-flex xs12 lg9 class="pl-2">
                   <span>{{tokenSale.end_time | dateFormat('MMM D, YYYY HH:mm', true)}}</span>
@@ -43,29 +43,21 @@
                   </v-chip>
                 </v-flex>
               </v-layout>
-              <v-layout class="pt-3">
+              <v-layout row wrap class="pt-3">
                 <v-flex xs12 lg3 class="bold">Tokens On sale:</v-flex>
-                <v-flex
-                  xs12
-                  lg9
-                  class="pl-2"
-                >{{tokenSale.balance_tokens}} ({{convertToPercent(tokenSale.balance_tokens)}}%)
+                <v-flex xs12 lg9 class="pl-2">{{tokenSale.balance_tokens}} ({{convertToPercent(tokenSale.balance_tokens)}}%)
                 </v-flex>
               </v-layout>
-              <v-layout class="pt-3">
+              <v-layout row wrap class="pt-3">
                 <v-flex xs12 lg3 class="bold">Remaining Tokens:</v-flex>
-                <v-flex
-                  xs12
-                  lg9
-                  class="pl-2"
-                >{{research.owned_tokens}} ({{convertToPercent(research.owned_tokens)}}%)
+                <v-flex xs12 lg9 class="pl-2">{{research.owned_tokens}} ({{convertToPercent(research.owned_tokens)}}%)
                 </v-flex>
               </v-layout>
-              <v-layout class="pt-3">
+              <v-layout row wrap class="pt-3">
                 <v-flex xs12 lg3 class="bold">Min:</v-flex>
                 <v-flex xs12 lg9 class="pl-2">${{fromAssetsToFloat(tokenSale.soft_cap)}}</v-flex>
               </v-layout>
-              <v-layout class="pt-3">
+              <v-layout row wrap class="pt-3">
                 <v-flex xs12 lg3 class="bold">Max:</v-flex>
                 <v-flex xs12 lg9 class="pl-2">${{fromAssetsToFloat(tokenSale.hard_cap)}}</v-flex>
               </v-layout>
@@ -78,9 +70,9 @@
                 color="primary"
                 class="ma-0"
                 :to="{
-                      name: 'CreateTokenSale',
-                      params: { research_group_permlink: research.group_permlink, research_permlink: research.permlink }
-                    }"
+                  name: 'CreateTokenSale',
+                  params: { research_group_permlink: research.group_permlink, research_permlink: research.permlink }
+                }"
               >Start fundraise
               </v-btn>
             </div>
@@ -166,8 +158,8 @@
         </v-flex>
       </v-layout>
 
-      <v-layout v-if="investors.length || isActiveTokenSale" class="my-5">
-        <v-flex xs12 lg7>
+      <v-layout row wrap v-if="investors.length || isActiveTokenSale" class="my-5">
+        <v-flex xs12>
           <research-details-investors
             :investors="investors"
             :isResearchGroupMember="isResearchGroupMember"
@@ -177,8 +169,8 @@
 
       <v-divider v-if="isTokenSaleSectionAvailable || investors.length"></v-divider>
 
-      <v-layout row v-if="timeline.length" class="my-5">
-        <v-flex xs12 lg8>
+      <v-layout row wrap v-if="timeline.length" class="my-5">
+        <v-flex xs12>
           <v-layout column>
             <v-layout row>
               <v-flex grow>
@@ -197,172 +189,186 @@
         </v-flex>
       </v-layout>
 
-      <v-layout column class="my-4" v-if="contentList.length">
-        <research-details-materials :isDetailsAvailable="true" />
+      <v-layout row wrap class="my-4" v-if="contentList.length">
+        <v-flex xs12>
+          <research-details-materials :isDetailsAvailable="true" />
+        </v-flex>
       </v-layout>
 
-      <v-layout column class="my-4" v-if="isResearchGroupMember && !research.is_finished">
-        <research-details-draft-list />
-
-        <v-layout column class="mt-4">
-          <div>
-            <upload-research-content-file-dialog @onFinish="newContentUploaded" />
-          </div>
-          <div class="full-width">
-            <v-btn
-              @click="createDarDraft()"
-              :loading="isCreatingDraft"
-              :disabled="isCreatingDraft"
-              block
-              outline
-              color="primary"
-              dark
-            >Use Editor
-            </v-btn>
-          </div>
-        </v-layout>
+      <v-layout row wrap class="my-4" v-if="isResearchGroupMember && !research.is_finished">
+        <v-flex xs12>
+          <research-details-draft-list />
+        </v-flex>
+        <v-flex xs12>
+          <v-layout column class="mt-4">
+            <div>
+              <upload-research-content-file-dialog @onFinish="newContentUploaded" />
+            </div>
+            <div class="full-width">
+              <v-btn
+                @click="createDarDraft()"
+                :loading="isCreatingDraft"
+                :disabled="isCreatingDraft"
+                block
+                outline
+                color="primary"
+                dark
+              >Use Editor
+              </v-btn>
+            </div>
+          </v-layout>
+        </v-flex>
       </v-layout>
 
       <v-divider v-if="contentList.length || (isResearchGroupMember && !research.is_finished)" />
 
-      <v-layout column class="my-5">
-        <v-layout row align-baseline>
-          <v-flex grow>
-            <v-layout>
-              <div class="pr-3">
-                <v-icon large color="grey lighten-2">mdi-poll-box</v-icon>
-              </div>
-              <div class="rd-block-header align-self-center">Expertise Contribution Index</div>
-            </v-layout>
-          </v-flex>
-          <v-flex shrink>
-            <v-select
-              class="my-0 py-0"
-              v-model="selectedEciDisciplineId"
-              :items="research.disciplines"
-              item-text="name"
-              item-value="id"
-              label="Discipline"
-              outline
-              dense
-              @change="selectEciDiscipline()"
-              :disabled="eciHistoryRecordsTable.loading"
-            ></v-select>
-          </v-flex>
-        </v-layout>
+      <v-layout row wrap class="my-5">
+        <v-flex xs12>
+          <v-layout row align-baseline>
+            <v-flex grow>
+              <v-layout>
+                <div class="pr-3">
+                  <v-icon large color="grey lighten-2">mdi-poll-box</v-icon>
+                </div>
+                <div class="rd-block-header align-self-center">Expertise Contribution Index</div>
+              </v-layout>
+            </v-flex>
+            <v-flex shrink>
+              <v-select
+                class="my-0 py-0"
+                v-model="selectedEciDisciplineId"
+                :items="research.disciplines"
+                item-text="name"
+                item-value="id"
+                label="Discipline"
+                outline
+                dense
+                @change="selectEciDiscipline()"
+                :disabled="eciHistoryRecordsTable.loading"
+              ></v-select>
+            </v-flex>
+          </v-layout>
+        </v-flex>
 
-        <v-layout row>
-          <div class="full-width" v-if="eciDisciplineHistoryRecordsChart">
-            <GChart
-              type="LineChart"
-              :settings="{ packages: ['corechart'] }"
-              :data="eciDisciplineHistoryRecordsChart.data"
-              :options="eciDisciplineHistoryRecordsChart.options"
-            />
-          </div>
-        </v-layout>
+        <v-flex xs12>
+          <v-layout row>
+            <div class="full-width" v-if="eciDisciplineHistoryRecordsChart">
+              <GChart
+                type="LineChart"
+                :settings="{ packages: ['corechart'] }"
+                :data="eciDisciplineHistoryRecordsChart.data"
+                :options="eciDisciplineHistoryRecordsChart.options"
+              />
+            </div>
+          </v-layout>
+        </v-flex>
 
-        <v-layout row v-if="hasEciDisciplineHistoryRecords">
-          <div class="full-width">
-            <v-data-table
-              :headers="eciHistoryRecordsTable.headers"
-              :items="eciHistoryRecordsTable.items"
-              class="elevation-0 mt-3"
-              disable-initial-sort
-              :loading="eciHistoryRecordsTable.loading"
-              :rows-per-page-items="[5, 10]"
-              :pagination.sync="eciHistoryRecordsTable.pagination"
-              :total-items="eciHistoryRecordsTable.totalItems"
-            >
-              <template v-slot:items="props">
-                <td>
-                  <v-chip
-                    :color="eciHistoryRecordsTable.actionsColorMap[props.item.action]"
-                    text-color="white"
-                  >
-                    <span class="bold">{{ props.item.actionText.toUpperCase() }}</span>
-                  </v-chip>
-                </td>
-                <td>
-                  <router-link
-                    v-if="props.item.meta.link"
-                    class="a"
-                    :to="props.item.meta.link"
-                  >{{props.item.meta.title}}
-                  </router-link>
-                  <span v-else class="body-2">{{props.item.meta.title}}</span>
-                </td>
-                <td class="text-xs-center">{{ moment(props.item.timestamp).format('D MMM YYYY') }}</td>
-                <td class="text-xs-center">
-                  <div
-                    class="half-bold"
-                    :class="{ 'eci-up': props.item.delta > 0, 'eci-down': props.item.delta < 0 }"
-                  >{{ props.item.delta }}
-                  </div>
-                </td>
-                <td class="text-xs-center">
-                  <div>{{ props.item.newAmount }}</div>
-                </td>
-              </template>
-            </v-data-table>
-          </div>
-        </v-layout>
+        <v-flex xs12>
+          <v-layout row v-if="hasEciDisciplineHistoryRecords">
+            <div class="full-width">
+              <v-data-table
+                :headers="eciHistoryRecordsTable.headers"
+                :items="eciHistoryRecordsTable.items"
+                class="elevation-0 mt-3"
+                disable-initial-sort
+                :loading="eciHistoryRecordsTable.loading"
+                :rows-per-page-items="[5, 10]"
+                :pagination.sync="eciHistoryRecordsTable.pagination"
+                :total-items="eciHistoryRecordsTable.totalItems"
+              >
+                <template v-slot:items="props">
+                  <td>
+                    <v-chip :color="eciHistoryRecordsTable.actionsColorMap[props.item.action]" text-color="white">
+                      <span class="bold">{{ props.item.actionText.toUpperCase() }}</span>
+                    </v-chip>
+                  </td>
+                  <td>
+                    <router-link
+                      v-if="props.item.meta.link"
+                      class="a"
+                      :to="props.item.meta.link"
+                    >{{props.item.meta.title}}
+                    </router-link>
+                    <span v-else class="body-2">{{props.item.meta.title}}</span>
+                  </td>
+                  <td class="text-xs-center">{{ moment(props.item.timestamp).format('D MMM YYYY') }}</td>
+                  <td class="text-xs-center">
+                    <div
+                      class="half-bold"
+                      :class="{ 'eci-up': props.item.delta > 0, 'eci-down': props.item.delta < 0 }"
+                    >{{ props.item.delta }}
+                    </div>
+                  </td>
+                  <td class="text-xs-center">
+                    <div>{{ props.item.newAmount }}</div>
+                  </td>
+                </template>
+              </v-data-table>
+            </div>
+          </v-layout>
+        </v-flex>
       </v-layout>
 
       <v-divider></v-divider>
 
-      <v-layout column class="my-5" v-if="reviews.length">
-        <v-layout row class="pb-4">
-          <v-flex grow>
-            <v-layout>
-              <div class="pr-3">
-                <v-icon large color="grey lighten-2">mdi-poll-box</v-icon>
-              </div>
-              <div class="rd-block-header align-self-center">Reviews</div>
-            </v-layout>
-          </v-flex>
-          <!-- <v-flex shrink>
-                <div class="half-bold subheading">
-                  Total reviews score:
-                  <span class="bold">{{totalReviewsScore}}</span>
-                  <v-tooltip bottom>
-                    <v-icon slot="activator" small>help</v-icon>
-                    <span>Total score is the result of these 3 scores which has been rounded to the nearest whole number.</span>
-                  </v-tooltip>
+      <v-layout wrap row class="my-5" v-if="reviews.length">
+        <v-flex xs12>
+          <v-layout row class="pb-4">
+            <v-flex grow>
+              <v-layout>
+                <div class="pr-3">
+                  <v-icon large color="grey lighten-2">mdi-poll-box</v-icon>
                 </div>
-          </v-flex>-->
-        </v-layout>
-
-        <div v-for="(review, index) of reviews" :key="`r_${review.id}`">
-          <research-review-item :review="review" :research="research"></research-review-item>
-          <v-divider v-if="index !== reviews.length - 1" :key="`d_${index}`" class="my-2"></v-divider>
-        </div>
+                <div class="rd-block-header align-self-center">Reviews</div>
+              </v-layout>
+            </v-flex>
+            <!-- <v-flex shrink>
+                  <div class="half-bold subheading">
+                    Total reviews score:
+                    <span class="bold">{{totalReviewsScore}}</span>
+                    <v-tooltip bottom>
+                      <v-icon slot="activator" small>help</v-icon>
+                      <span>Total score is the result of these 3 scores which has been rounded to the nearest whole number.</span>
+                    </v-tooltip>
+                  </div>
+            </v-flex>-->
+          </v-layout>
+        </v-flex>
+        <v-flex xs12>
+          <div v-for="(review, index) of reviews" :key="`r_${review.id}`">
+            <research-review-item :review="review" :research="research"></research-review-item>
+            <v-divider v-if="index !== reviews.length - 1" :key="`d_${index}`" class="my-2"></v-divider>
+          </div>
+        </v-flex>
       </v-layout>
 
-      <v-layout column class="my-5" v-if="researchReferencesList.length">
-        <v-layout row class="pb-4">
-          <v-flex grow>
-            <v-layout>
-              <div class="pr-3">
-                <v-icon large color="grey lighten-2">mdi-file-document</v-icon>
-              </div>
-              <div
-                class="rd-block-header align-self-center"
-              >References: {{ researchReferencesList.length }}
-              </div>
-            </v-layout>
-          </v-flex>
-          <v-flex shrink></v-flex>
-        </v-layout>
-        <div v-for="(ref, i) of researchReferencesList" :key="`ref_${i}`">
-          <v-layout class="py-1">
-            <v-flex shrink class="pr-3">{{i + 1}}.</v-flex>
+      <v-layout row wrap class="my-5" v-if="researchReferencesList.length">
+        <v-flex xs12>
+          <v-layout row class="pb-4">
             <v-flex grow>
-              <div>{{ref.title}}</div>
-              <div class="grey--text">{{ref.source}}</div>
+              <v-layout>
+                <div class="pr-3">
+                  <v-icon large color="grey lighten-2">mdi-file-document</v-icon>
+                </div>
+                <div class="rd-block-header align-self-center">
+                  References: {{ researchReferencesList.length }}
+                </div>
+              </v-layout>
             </v-flex>
+            <v-flex shrink></v-flex>
           </v-layout>
-        </div>
+        </v-flex>
+        <v-flex xs12>
+          <div v-for="(ref, i) of researchReferencesList" :key="`ref_${i}`">
+            <v-layout class="py-1">
+              <v-flex shrink class="pr-3">{{i + 1}}.</v-flex>
+              <v-flex grow>
+                <div>{{ref.title}}</div>
+                <div class="grey--text">{{ref.source}}</div>
+              </v-flex>
+            </v-layout>
+          </div>
+        </v-flex>
       </v-layout>
     </v-flex>
   </v-layout>
