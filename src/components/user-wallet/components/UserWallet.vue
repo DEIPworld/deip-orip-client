@@ -571,10 +571,10 @@
           currency: {},
         },
 
-        assetsIcons:{
-          [window.env.ASSET_UNIT]: '/assets/img/DEIP_token.png',
-          USD: '/assets/img/usd-green-round.svg', 
-          EUR: '/assets/img/eur-blue-round.svg'
+        assetsIcons: {
+          [window.env.ASSET_UNIT]: '/assets/img/currency/deip.png',
+          USD: '/assets/img/currency/usd.png',
+          EUR: '/assets/img/currency/eur.png'
         },
       }
     },

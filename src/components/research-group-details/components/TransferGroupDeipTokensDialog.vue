@@ -18,23 +18,23 @@
       <v-card-text>
         <v-form class="pb-4" ref="form" v-model="isFormValid" @submit.prevent>
           <v-text-field label="To"
-                        ref="toUsername"
-                        v-model="form.to"
-                        :rules="[
-                            rules.required,
-                            rules.isExist
-                        ]"
-                        @input="usernameChanged"
-                        :loading="isUsernameChecking"
+            ref="toUsername"
+            v-model="form.to"
+            :rules="[
+              rules.required,
+              rules.isExist
+            ]"
+            @input="usernameChanged"
+            :loading="isUsernameChecking"
           ></v-text-field>
 
           <v-text-field label="Amount"
-                        v-model="form.amount"
-                        :rules="[
-                            rules.required,
-                            rules.amount
-                        ]"
-                        :suffix="'$'"
+            v-model="form.amount"
+            :rules="[
+              rules.required,
+              rules.amount
+            ]"
+            :suffix="'$'"
           ></v-text-field>
         </v-form>
       </v-card-text>

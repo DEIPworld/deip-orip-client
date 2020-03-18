@@ -58,9 +58,9 @@
             <router-link
               class="a"
               :to="{
-                            name: 'ResearchGroupWallet',
-                            params: { research_group_permlink: this.group.permlink }
-                        }"
+                name: 'ResearchGroupWallet',
+                params: { research_group_permlink: group.permlink }
+              }"
             >Group Wallet
             </router-link>
           </div>
@@ -79,8 +79,9 @@
             </div> -->
 
             <v-btn class="ma-0"
-                   color="primary" block
-                   @click="$store.dispatch('researchGroup/changeOptions', { key: 'isTransferTokensDialogOpen', value: true })"
+              :disabled="!this.fromAssetsToFloat(group.balance)"
+              color="primary" block
+              @click="$store.dispatch('researchGroup/changeOptions', { key: 'isTransferTokensDialogOpen', value: true })"
             >Transfer
             </v-btn>
           </div>

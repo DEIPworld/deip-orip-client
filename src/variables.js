@@ -4,7 +4,7 @@ import { researchContentTypes } from '@deip/research-service';
 const proposalTypesLabels = {
   [PROPOSAL_TYPES.START_RESEARCH]: 'Start new research project',
   [PROPOSAL_TYPES.INVITE_MEMBER]: 'Invite new member to research group',
-  [PROPOSAL_TYPES.DROPOUT_MEMBER]: 'Exclude member from research group',
+  [PROPOSAL_TYPES.EXCLUDE_MEMBER]: 'Exclude member from research group',
   [PROPOSAL_TYPES.SEND_FUNDS]: 'Transfer research group funds',
   [PROPOSAL_TYPES.START_RESEARCH_TOKEN_SALE]: 'Schedule research fundraising campaign',
   [PROPOSAL_TYPES.REBALANCE_RESEARCH_GROUP_TOKENS]: 'Rebalance research group shares',

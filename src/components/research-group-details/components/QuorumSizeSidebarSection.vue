@@ -43,7 +43,7 @@ export default {
         ],
         [
           { key: PROPOSAL_TYPES.INVITE_MEMBER, value: undefined },
-          { key: PROPOSAL_TYPES.DROPOUT_MEMBER, value: undefined }
+          { key: PROPOSAL_TYPES.EXCLUDE_MEMBER, value: undefined }
         ],
         [
           { key: PROPOSAL_TYPES.START_RESEARCH_TOKEN_SALE, value: undefined },

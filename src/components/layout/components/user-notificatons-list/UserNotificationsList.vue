@@ -28,6 +28,11 @@
           :notification="notification"
           @markAsRead="markNotificationAsRead">
         </invite-proposal-user-notification>
+        <exclusion-proposal-user-notification 
+          v-else-if="(notification.type === PROPOSAL || notification.type === PROPOSAL_ACCEPTED)&& notification.metadata.proposal.action === TYPES.EXCLUDE_MEMBER"
+          :notification="notification"
+          @markAsRead="markNotificationAsRead">
+        </exclusion-proposal-user-notification>
         <invitation-user-notification
           v-else-if="notification.type === INVITATION"
           :notification="notification"
@@ -53,6 +58,11 @@
           :notification="notification"
           @markAsRead="markNotificationAsRead">
         </expert-review-request-user-notification>
+        <exclusion-user-notification
+          v-else-if="notification.type === EXCLUSION_APPROVED"
+          :notification="notification"
+          @markAsRead="markNotificationAsRead">
+        </exclusion-user-notification>
       </div>
     </div>
   </v-menu>
@@ -79,6 +89,7 @@
         INVITATION: 'invitation',
         INVITATION_APPROVED: 'invitation-approved',
         INVITATION_REJECTED: 'invitation-rejected',
+        EXCLUSION_APPROVED: 'exclusion-approved',
         RESEARCH_CONTENT_EXPERT_REVIEW: 'research-content-expert-review',
         RESEARCH_CONTENT_EXPERT_REVIEW_REQUEST: 'research-content-expert-review-request',
         EXPERTISE_ALLOCATED: 'expertise-allocated'
