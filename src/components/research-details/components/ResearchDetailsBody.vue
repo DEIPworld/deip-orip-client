@@ -667,13 +667,9 @@
       },
 
       investors() {
-        const investorsSet = {};
-
-        [...this.tokenHoldersList, ...this.contributionsList].forEach(e => {
-          investorsSet[e.user.account.name] = e.user;
-        });
-
-        return Object.values(investorsSet);
+        return [...this.tokenHoldersList, ...this.contributionsList].reduce((acc, share) => {
+          return share.is_compensation ? acc : [...acc, share.user];
+        }, []);
       },
 
       isActiveTokenSale() {
