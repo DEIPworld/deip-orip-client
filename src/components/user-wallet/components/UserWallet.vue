@@ -166,7 +166,7 @@
                 Deposit funds
               </v-flex>
               <v-flex shrink right-top-angle>
-                <v-btn icon class="pa-0 ma-0">
+                <v-btn @click="closeDepositDialog()" icon class="pa-0 ma-0">
                   <v-icon color="black">close</v-icon>
                 </v-btn>
               </v-flex>
