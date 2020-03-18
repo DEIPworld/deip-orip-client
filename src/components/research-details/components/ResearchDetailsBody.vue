@@ -451,6 +451,7 @@
         tokenSale: 'rd/tokenSale',
         tokenSalesList: 'rd/tokenSalesList',
         user: 'auth/user',
+        userBalances: 'auth/userBalances',
         userContributionsList: 'rd/userContributionsList',
         eciHistoryByDisciplineMap: 'rd/eciHistoryByDisciplineMap'
       }),
@@ -535,7 +536,7 @@
         return `${seconds} secs`;
       },
       isContributionToTokenSaleDisabled() {
-        let balance = this.fromAssetsToFloat(this.user.account.balance);
+        let balance = this.fromAssetsToFloat(this.userBalances[window.env.ASSET_UNIT]);
         let notEnoughFunds = (this.amountToContribute || 0) > balance;
         return notEnoughFunds || !this.amountToContribute || this.areTokensBuying;
       },
@@ -771,6 +772,7 @@
               researchId: this.research.id
             });
             this.$store.dispatch('auth/loadAccount');
+            this.$store.dispatch('auth/loadBalances');
 
             this.areTokensBuying = false;
             this.$refs.amountToContribute.reset();

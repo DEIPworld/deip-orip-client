@@ -7,12 +7,14 @@ import { UsersService } from '@deip/users-service';
 import { UserService } from '@deip/user-service';
 import { ResearchGroupService } from '@deip/research-group-service';
 import { TenantService } from '@deip/tenant-service';
+import { AssetsService } from '@deip/assets-service';
 
 const accessService = AccessService.getInstance();
 const usersService = UsersService.getInstance();
 const userService = UserService.getInstance();
 const researchGroupService = ResearchGroupService.getInstance();
 const tenantService = TenantService.getInstance();
+const assetsService = AssetsService.getInstance();
 
 const state = {
   user: {
@@ -25,6 +27,7 @@ const state = {
     joinRequests: [],
     notifications: [],
     researchBookmarks: [],
+    balances: []
   },
   tenant: null
 };
@@ -108,6 +111,14 @@ const getters = {
     return false;
   },
 
+  userBalances: (state) => {
+    let userBalances = {};
+    state.user.balances.forEach(({amount}) => {
+      userBalances[amount.split(' ')[1]] = amount
+    })
+    return userBalances
+  },
+
   isApplicant: (state, getters) => {
     return !getters.isGrantor && !getters.isOfficer;
   },
@@ -139,8 +150,11 @@ const actions = {
     const researchBookmarksLoad = new Promise((resolve, reject) => {
       dispatch('loadResearchBookmarks', { notify: resolve })
     });
+    const balancesLoad = new Promise((resolve, reject) => {
+      dispatch('loadBalances', {notify: resolve})
+    })
 
-    return Promise.all([ profileLoad, accountLoad, groupsLoad, expLoad, joinRequestLoad, researchBookmarksLoad ])
+    return Promise.all([ profileLoad, accountLoad, groupsLoad, expLoad, joinRequestLoad, researchBookmarksLoad, balancesLoad ])
   },
 
   loadResearchBookmarks({ commit, getters }, { notify } = {}) {
@@ -194,6 +208,19 @@ const actions = {
       .finally(() => {
         if (notify) notify();
       });
+  },
+
+  loadBalances({ state, commit, getters }, { notify } = {}){
+    const user = getters.user;
+    return assetsService.getAccountBalancesByOwner(user.username)
+    .then((balances) => {
+      commit('SET_BALANCES', balances);
+    }, (err) => {
+      console.log(err);
+    })
+    .finally(() => {
+      if (notify) notify();
+    })
   },
 
   loadAccount({ state, commit, getters }, { notify } = {}) {
@@ -345,6 +372,10 @@ const mutations = {
 
   ['SET_TENANT_PROFILE'](state, tenant) {
     Vue.set(state, 'tenant', tenant)
+  },
+
+  ['SET_BALANCES'](state, balances){
+    Vue.set(state.user, 'balances', balances);
   }
 }
 
