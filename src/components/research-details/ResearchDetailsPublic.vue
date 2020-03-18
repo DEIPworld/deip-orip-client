@@ -39,7 +39,7 @@
       <v-layout row wrap>
         <v-flex xs12 lg9 class="px-5">
           <v-layout row wrap v-if="timeline.length" class="my-5">
-            <v-flex xs12 lg8>
+            <v-flex xs12>
               <v-layout column>
                 <v-layout row>
                   <v-flex grow>
@@ -56,8 +56,10 @@
             </v-flex>
           </v-layout>
 
-          <v-layout column class="my-4" v-if="contentList.length">
-            <research-details-materials :isDetailsAvailable="false"/>
+          <v-layout row wrap class="my-4" v-if="contentList.length">
+            <v-flex xs12>
+              <research-details-materials :isDetailsAvailable="false"/>
+            </v-flex>
           </v-layout>
         </v-flex>
 
