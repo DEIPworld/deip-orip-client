@@ -1,4 +1,4 @@
-import deipRpc from '@deip/deip-oa-rpc-client';
+import deipRpc from '@deip/rpc-client';
 import { AppConfigService } from '@deip/app-config-service';
 
 const setDeipRpc = () => {

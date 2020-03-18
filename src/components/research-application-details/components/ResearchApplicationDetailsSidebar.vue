@@ -1,10 +1,10 @@
 <template>
   <div>
     <div class="ma-0">
-      <router-link class="a title" 
-        :to="{ 
-          name: 'ResearchDetails', 
-          params: { 
+      <router-link class="a title"
+        :to="{
+          name: 'ResearchDetails',
+          params: {
             research_group_permlink: encodeURIComponent(research.group_permlink),
             research_permlink: encodeURIComponent(research.permlink)
           }}">
@@ -19,7 +19,7 @@
 
       <div class="legacy-row-nowrap legacy-justify-between align-center c-pt-2 c-pb-2" v-for="(author, index) in membersList" :key="index">
         <div>
-          <platform-avatar 
+          <platform-avatar
               :user="author"
               :size="40"
               link-to-profile
@@ -34,9 +34,9 @@
     <div class="c-mt-4">
       <div class="sidebar-fullwidth"><v-divider></v-divider></div>
     <!--  <div class="subheading bold c-mt-4">
-        Reviews: 
-        <span class="green--text text--darken-2">{{positiveReviewsCount}}</span> / 
-        <span class="red--text text--darken-2">{{negativeReviewsCount}}</span> 
+        Reviews:
+        <span class="green--text text--darken-2">{{positiveReviewsCount}}</span> /
+        <span class="red--text text--darken-2">{{negativeReviewsCount}}</span>
       </div> -->
       <div class="subheading bold c-mt-4">
         <div class="c-pb-2">{{program.agency_name.toUpperCase()}} Reviews: <span>{{applicationReviewsList.length}}</span></div>
@@ -45,7 +45,7 @@
     <!--  <div class="c-pt-3">
         <div class="caption">
           <v-icon small class="c-pr-2">rate_review</v-icon>
-          Reward for review: 
+          Reward for review:
           <span class="bold">{{convertToPercent(research.review_share_in_percent)}}%</span>
         </div>
       </div> -->
@@ -68,7 +68,7 @@
 
 <script>
     import { mapGetters } from 'vuex';
-    import deipRpc from '@deip/deip-oa-rpc-client';
+    import deipRpc from '@deip/rpc-client';
 
     export default {
         name: "ResearchApplicationDetailsSidebar",
@@ -90,8 +90,8 @@
             applicationRef: 'rad/applicationRef',
           }),
           isReviewCommitteeMember() {
-            return this.program != null 
-              ? this.$store.getters['auth/userIsResearchGroupMember'](this.program.review_committee_id) 
+            return this.program != null
+              ? this.$store.getters['auth/userIsResearchGroupMember'](this.program.review_committee_id)
               : false
           },
           isCreatingReviewAvailable() {

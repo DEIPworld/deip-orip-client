@@ -35,8 +35,8 @@
                                     <v-tooltip bottom>
                                         <v-icon class="clickable c-pb-1" slot="activator" size="20">help</v-icon>
                                         <span>
-                                            The DEIP Token is the liquid currency of the platform. 
-                                            It is used to reward scientists for their contribution of expertise and to finance projects published on the platform. 
+                                            The DEIP Token is the liquid currency of the platform.
+                                            It is used to reward scientists for their contribution of expertise and to finance projects published on the platform.
                                             It is also distributed as a reward for maintenance of the platform infrastructure.
                                         </span>
                                     </v-tooltip>
@@ -47,8 +47,8 @@
                                 </div>
 
                                 <div class="list-body-cell token-actions">
-                                    <v-btn class="ma-0" 
-                                        flat 
+                                    <v-btn class="ma-0"
+                                        flat
                                         color="primary"
                                         @click="sendingType = sendingTypes.deipToken"
                                     >Send</v-btn>
@@ -88,7 +88,7 @@
                                 </div>
 
                                 <div class="list-body-cell token-actions">
-                                    <v-btn class="ma-0" flat 
+                                    <v-btn class="ma-0" flat
                                         color="primary"
                                         @click="sendingType = sendingTypes.deipCommon"
                                     >Convert</v-btn>
@@ -102,8 +102,8 @@
                         <v-tooltip bottom>
                             <v-icon class="clickable c-pb-1" slot="activator" size="20">help</v-icon>
                             <span>
-                                Research Tokens define the ownership rights for a research project on the DEIP platform. Every research project is allocated a number of unique tokens, all of which initially belong to the research group. 
-                                The research group may sell some of them to stakeholders to raise funds for its project. 
+                                Research Tokens define the ownership rights for a research project on the DEIP platform. Every research project is allocated a number of unique tokens, all of which initially belong to the research group.
+                                The research group may sell some of them to stakeholders to raise funds for its project.
                                 A research project conducted on the platform can be rewarded by the emission of DEIP Tokens which are then distributed among the Research Token holders.
                             </span>
                         </v-tooltip>
@@ -128,7 +128,7 @@
                                     <div class="list-line"
                                         :class="{ 'primary lighten-5': sendingType === sendingTypes.researchToken && selectedResearch && selectedResearch.id === investment.research.id }"
                                         :key="'research-'+ i">
-                                        
+
                                         <div class="legacy-col-grow list-body-cell">
                                             <div class="subheading">{{ investment.research.title }}</div>
                                         </div>
@@ -155,7 +155,7 @@
                     </v-card>
 
                     <div class="title c-pt-8">Account transfers</div>
-                    
+
                     <v-card class="c-mt-6">
                         <div class="info-card-list">
                             <div class="reserarch-table-header c-ph-3">
@@ -223,7 +223,7 @@
                             :common-tokens-balance="commonTokenBalance"
                             @convertingTransactionWasApplied="loadUserAccount"
                         ></common-token-convert-form>
-                        
+
                         <research-token-send-form
                             v-else-if="sendingType === sendingTypes.researchToken && selectedResearch"
                             :research-id="selectedResearch.id"
@@ -242,13 +242,13 @@
 
 <script>
     import _ from 'lodash';
-    import deipRpc from '@deip/deip-oa-rpc-client';
+    import deipRpc from '@deip/rpc-client';
     import { mapGetters } from 'vuex';
 
     export default {
         name: "UserWalletOld",
 
-        data() { 
+        data() {
             return {
                 sendingType: undefined,
 
@@ -299,9 +299,9 @@
                 this.selectedResearchId = id;
             }
         },
-        
+
         created() {
-            
+
         }
     };
 </script>

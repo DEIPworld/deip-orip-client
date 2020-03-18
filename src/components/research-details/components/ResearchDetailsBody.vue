@@ -376,7 +376,7 @@
 
 <script>
   import moment from 'moment';
-  import deipRpc from '@deip/deip-oa-rpc-client';
+  import deipRpc from '@deip/rpc-client';
   import { mapGetters } from 'vuex';
   import { ResearchContentService } from '@deip/research-content-service';
   import ResearchTimeline from './ResearchTimeline';

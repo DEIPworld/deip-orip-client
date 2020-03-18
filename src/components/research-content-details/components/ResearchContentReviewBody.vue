@@ -2,7 +2,7 @@
   <div class="review-content-container">
     <div class="legacy-row-nowrap c-pb-4">
       <div class="text-align-center">
-        <platform-avatar 
+        <platform-avatar
           :user="review.author"
           :size="120"
         ></platform-avatar>
@@ -28,7 +28,7 @@
 
 <script>
 import { mapGetters } from 'vuex';
-import deipRpc from '@deip/deip-oa-rpc-client';
+import deipRpc from '@deip/rpc-client';
 
 export default {
   name: "ResearchContentReviewBody",
@@ -51,8 +51,8 @@ export default {
     },
 
     hasLocation() {
-      return this.review && this.review.author.profile && 
-          this.review.author.profile.location && 
+      return this.review && this.review.author.profile &&
+          this.review.author.profile.location &&
           (this.review.author.profile.location.country || this.review.author.profile.location.city);
     }
   },
@@ -60,7 +60,7 @@ export default {
   methods: {
 
   },
-  
+
   created() {
     this.reviewContent = this.$options.filters.reviewContent(this.review.content);
   }

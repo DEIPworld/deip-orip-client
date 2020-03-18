@@ -46,7 +46,7 @@
                             ></v-textarea>
                         </div>
                     </v-form>
-                    
+
                     <div class="legacy-row legacy-justify-center c-p-6">
                         <v-btn color="primary"
                             :disabled="!isFormValid || isLoading"
@@ -64,9 +64,9 @@
 
 <script>
     import _ from 'lodash';
-    import deipRpc from '@deip/deip-oa-rpc-client';
+    import deipRpc from '@deip/rpc-client';
     import { mapGetters } from 'vuex';
-    import { getNodeById } from "./../../../common/disciplines/DisciplineTreeService"; 
+    import { getNodeById } from "./../../../common/disciplines/DisciplineTreeService";
 
     export default {
         name: "ClaimUserExpertiseDetailsAllocationDialog",

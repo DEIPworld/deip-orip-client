@@ -1,7 +1,7 @@
 <template>
 <div>
   <div class="pb-2">
-    <router-link class="a title" 
+    <router-link class="a title"
       :to="{
         name: 'ResearchContentDetails',
         params: {
@@ -12,7 +12,7 @@
       }"
     >{{ content.title }}</router-link>
   </div>
-  
+
   <div class="pb-2">
     <review-assessment v-model="reviewRatings" :researchContentType="content.content_type"></review-assessment>
   </div>
@@ -20,7 +20,7 @@
   <div v-if="review.author.account.name !== user.username && userHasExpertise">
     <div>
       <v-btn block color="primary"
-        :loading="isReviewVoting" 
+        :loading="isReviewVoting"
         :disabled="isReviewVoting || userHasVoted || votingDisabled || isGroupMember"
         @click="voteReview()">
         Support Review
@@ -42,7 +42,7 @@
     <div class="subheading bold py-4">Supporters: {{reviewSupporters.length}}</div>
     <v-layout row v-for="(vote, i) in reviewSupporters" :key="`curator-${i}`" :class="{ 'pb-1': i == 0, 'py-1': i != 0 }">
       <div>
-        <platform-avatar 
+        <platform-avatar
           :user="vote.voterProfile"
           :size="40"
           link-to-profile
@@ -66,8 +66,8 @@
 
 <script>
 import { mapGetters } from 'vuex';
-import deipRpc from '@deip/deip-oa-rpc-client';
-import * as disciplineTreeService from '../../common/disciplines/DisciplineTreeService'; 
+import deipRpc from '@deip/rpc-client';
+import * as disciplineTreeService from '../../common/disciplines/DisciplineTreeService';
 
 export default {
   name: "ResearchContentReviewSidebar",
@@ -108,7 +108,7 @@ export default {
       return this.review.votes.reduce((arr, vote) => arr.some(({voter}) => voter === vote.voter) ? arr : [...arr, vote], []);
     }
   },
-  
+
   methods: {
       voteReview() {
         const self = this;
@@ -119,8 +119,8 @@ export default {
         const disciplinesIds = this.userExperise
             .map(exp => exp.discipline_id)
             .filter(id => review.disciplines.find(d => d.id === id));
-    
-          // I have no idea why, but "deipRpc.broadcast.voteForReviewAsync" doesn't work here, 
+
+          // I have no idea why, but "deipRpc.broadcast.voteForReviewAsync" doesn't work here,
           // the promise just never gets resolved or rejected although operation is sent and applied in the blockchain.
           // Possibly there is a bug in 'deipRpc', needs to be reviewed later.
         deipRpc.api.getDynamicGlobalProperties(function(err, result) {
@@ -130,7 +130,7 @@ export default {
               const BlockPrefix = new Buffer(res.previous, 'hex').readUInt32LE(4);
               const now = new Date().getTime() + 3e6;
               const expire = new Date(now).toISOString().split('.')[0];
-      
+
               const operations = disciplinesIds.map(disciplinesId => {
                 return ["vote_for_review", {
                   voter: self.user.username,

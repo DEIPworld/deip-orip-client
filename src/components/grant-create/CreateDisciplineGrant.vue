@@ -12,7 +12,7 @@
                     <v-stepper-step step="2" :complete="currentStep > 2">
                         <div class="uppercase">Amount</div>
                     </v-stepper-step>
-                    
+
                     <v-divider></v-divider>
 
                     <v-stepper-step step="3" :complete="currentStep > 3">
@@ -62,7 +62,7 @@
 <script>
     import { mapGetters } from 'vuex';
     import moment from 'moment';
-    import deipRpc from '@deip/deip-oa-rpc-client';
+    import deipRpc from '@deip/rpc-client';
 
     export default {
         name: "CreateDisciplineGrant",
@@ -129,9 +129,9 @@
                             });
 
                             setTimeout(() => {
-                                self.$router.push({ 
+                                self.$router.push({
                                     name: 'ResearchFeed'
-                                }); 
+                                });
                             }, 1500);
                         }).catch(err => {
                             this.$store.dispatch('layout/setError', {

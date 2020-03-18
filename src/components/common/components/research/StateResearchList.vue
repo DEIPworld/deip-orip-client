@@ -2,7 +2,7 @@
     <div>
         <div class="legacy-row legacy-justify-between align-center">
             <div class="title">{{ !headerText ? 'Research projects' : headerText }}</div>
-            
+
             <v-menu offset-y>
                 <v-btn slot="activator" class="ma-0">
                     <div>Newest First <v-icon class="c-pl-4" small>keyboard_arrow_down</v-icon></div>
@@ -67,7 +67,7 @@
 </template>
 
 <script>
-    import deipRpc from '@deip/deip-oa-rpc-client';
+    import deipRpc from '@deip/rpc-client';
     import { mapGetters } from 'vuex';
 
     export default {

@@ -91,7 +91,7 @@
 </template>
 
 <script>
-  import deipRpc from '@deip/deip-oa-rpc-client';
+  import deipRpc from '@deip/rpc-client';
   import { ResearchService } from '@deip/research-service';
 
   const researchService = ResearchService.getInstance();

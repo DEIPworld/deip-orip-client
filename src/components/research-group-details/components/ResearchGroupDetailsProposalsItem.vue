@@ -254,7 +254,7 @@
 </template>
 
 <script>
-  // import deipRpc from '@deip/deip-oa-rpc-client';
+  // import deipRpc from '@deip/rpc-client';
 
   import { mapGetters, mapActions } from 'vuex';
   import * as disciplineTreeService from './../../common/disciplines/DisciplineTreeService';

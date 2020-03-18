@@ -116,7 +116,7 @@
 <script>
   import { mapGetters } from 'vuex';
   import _ from 'lodash';
-  import deipRpc from '@deip/deip-oa-rpc-client';
+  import deipRpc from '@deip/rpc-client';
 
   export default {
     name: 'ResearchGroupDetailsSidebar',

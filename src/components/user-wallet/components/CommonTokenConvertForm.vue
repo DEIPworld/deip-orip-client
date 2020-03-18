@@ -12,7 +12,7 @@
                 </div>
 
                 <v-text-field ref="amount"
-                    label="Amount" 
+                    label="Amount"
                     v-model="amount"
                     :rules="[
                         rules.required,
@@ -23,7 +23,7 @@
                     persistent-hint
                 ></v-text-field>
 
-                <div class="align-center justify-space-around c-pv-6" 
+                <div class="align-center justify-space-around c-pv-6"
                     :class="isDeipToCommonMode ? 'legacy-row' : 'legacy-row-reverse'"
                 >
                     <div class="legacy-column width-5">
@@ -55,7 +55,7 @@
                     </div>
                 </div>
 
-                <v-btn block color="primary" 
+                <v-btn block color="primary"
                     @click="convert()"
                     :loading="isConverting"
                     :disabled="isConverting"
@@ -68,7 +68,7 @@
 
 <script>
     import _ from 'lodash';
-    import deipRpc from '@deip/deip-oa-rpc-client';
+    import deipRpc from '@deip/rpc-client';
     import { mapGetters } from 'vuex';
 
     export default {
@@ -77,13 +77,13 @@
             deipTokenBalance: { required: true, type: Number },
             commonTokensBalance: { required: true, type: Number}
         },
-        data() { 
+        data() {
             return {
                 isDeipToCommonMode: true,
-                
+
                 amount: '',
                 isConverting: false,
-                
+
                 rules: {
                     required: value => !!value || 'This field is required',
                     deipTokenAmount: value => {
@@ -94,7 +94,7 @@
                         } else if (parseFloat(value) > this.deipTokenBalance) {
                             return 'Amount is greater than your DEIP Token balance';
                         }
-                        
+
                         return true;
                     },
                     deipCommonAmount: value => {
@@ -177,7 +177,7 @@
                 this.amount; // hack to trigger recounting of computed property when variable is wrapped by 'if'
 
                 if (!_.isEmpty(this.$refs) && this.$refs.amount.valid) {
-                    res = this.isDeipToCommonMode 
+                    res = this.isDeipToCommonMode
                         ? `${this.amount} Deip Tokens = ${this.amount} Deip Commons`
                         : `${this.amount} Deip Commons = ${this.amount} Deip Tokens`;
                 }

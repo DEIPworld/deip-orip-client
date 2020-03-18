@@ -53,7 +53,7 @@
 <script>
   import { mapGetters } from 'vuex';
   import crypto from '@deip/lib-crypto';
-  import deipRpc from '@deip/deip-oa-rpc-client';
+  import deipRpc from '@deip/rpc-client';
 
   import { AccessService } from '@deip/access-service';
   import { AuthService } from '@deip/auth-service';

@@ -1,13 +1,13 @@
 <template>
   <v-container fluid class="ma-0 pa-0 pb-5">
     <v-layout row wrap>
-    
+
       <v-flex xs12 class="pa-4">
         <h1 class="display-1">Dashboard</h1>
       </v-flex>
 
       <v-flex xs1 v-if="isFinancialOfficer || isTreasury" class="grey-background"></v-flex>
-      <v-flex xs2 v-if="isFinancialOfficer || isTreasury" class="pb-3 pt-4 grey-background" v-for="(item, i) in tokenStat" :key="i + '-stat'"> 
+      <v-flex xs2 v-if="isFinancialOfficer || isTreasury" class="pb-3 pt-4 grey-background" v-for="(item, i) in tokenStat" :key="i + '-stat'">
         <v-card elevation="0" height="200px" class="grey-background">
           <v-list dense class="pa-1 pb-2 grey-background" :class="[{ 'delimiter': (i + 1) != tokenStat.length }]">
             <v-list-tile>
@@ -18,7 +18,7 @@
             </v-list-tile>
             <v-list-tile>
               <v-list-tile-content class="grey--text">
-                <span class="body-2"> 
+                <span class="body-2">
                   <v-icon class="subheading">local_atm</v-icon>
                   NSF Grant Tokens
                 </span>
@@ -111,7 +111,7 @@
                               <span v-else></span>
                             </td>
                           </template>
-       
+
                         </v-data-table>
                       </template>
                     </v-flex>
@@ -140,7 +140,7 @@
                                 label="STATUS"
                                 return-object
                                 solo dense>
-                              </v-select>   
+                              </v-select>
                             </div>
                           </v-flex>
 
@@ -153,7 +153,7 @@
                                 return-object
                                 solo dense>
                               </v-select>
-                            </div>                       
+                            </div>
                           </v-flex>
 
                           <v-flex xs3 v-if="isProgramOfficer || isFinancialOfficer || isTreasury || isCertifier">
@@ -165,7 +165,7 @@
                                 return-object
                                 solo dense>
                               </v-select>
-                            </div>                       
+                            </div>
                           </v-flex>
 
                           <v-spacer></v-spacer>
@@ -176,10 +176,10 @@
                                 {{ selectedToApprove.length ? `Approve (${selectedToApprove.length})` : `Approve`}}
                               </v-btn>
                               <confirm-action-dialog
-                                :meta="confirmApproval" 
+                                :meta="confirmApproval"
                                 :title="``"
-                                :text="`Are you sure you want to approve selected payment requests?`" 
-                                @confirmed="approveSelectedPaymentRequests(); confirmApproval.isShown = false"  
+                                :text="`Are you sure you want to approve selected payment requests?`"
+                                @confirmed="approveSelectedPaymentRequests(); confirmApproval.isShown = false"
                                 @canceled="confirmApproval.isShown = false">
                               </confirm-action-dialog>
                             </div>
@@ -191,10 +191,10 @@
                                 {{ selectedToCertify.length ? `Certify (${selectedToCertify.length})` : `Certify`}}
                               </v-btn>
                               <confirm-action-dialog
-                                :meta="confirmCertifying" 
-                                :title="``" 
-                                :text="`Are you sure you want to certify selected payment requests?`" 
-                                @confirmed="certifySelectedPaymentRequests(); confirmCertifying.isShown = false"  
+                                :meta="confirmCertifying"
+                                :title="``"
+                                :text="`Are you sure you want to certify selected payment requests?`"
+                                @confirmed="certifySelectedPaymentRequests(); confirmCertifying.isShown = false"
                                 @canceled="confirmCertifying.isShown = false">
                               </confirm-action-dialog>
                             </div>
@@ -206,10 +206,10 @@
                                 {{ selectedToPay.length ? `Confirm Payment (${selectedToPay.length})` : `Confirm Payment`}}
                               </v-btn>
                               <confirm-action-dialog
-                                :meta="confirmPayment" 
-                                :title="``" 
-                                :text="`Are you sure you want to send payment to selected payment requests?`" 
-                                @confirmed="paySelectedPaymentRequests(); confirmPayment.isShown = false"  
+                                :meta="confirmPayment"
+                                :title="``"
+                                :text="`Are you sure you want to send payment to selected payment requests?`"
+                                @confirmed="paySelectedPaymentRequests(); confirmPayment.isShown = false"
                                 @canceled="confirmPayment.isShown = false">
                               </confirm-action-dialog>
                             </div>
@@ -229,7 +229,7 @@
                           <template slot="items" slot-scope="props">
                             <td v-if="isCertifier || isProgramOfficer || isTreasury">
                               <v-checkbox v-if="
-                              (props.item.status == WITHDRAWAL_PENDING && isCertifier) || 
+                              (props.item.status == WITHDRAWAL_PENDING && isCertifier) ||
                               (props.item.status == WITHDRAWAL_CERTIFIED && isProgramOfficer) ||
                               (props.item.status == WITHDRAWAL_APPROVED && isTreasury)"
                                 v-model="props.selected"
@@ -288,9 +288,9 @@
 <script>
     import { mapGetters } from 'vuex';
     import moment from 'moment';
-    import deipRpc from '@deip/deip-oa-rpc-client';
+    import deipRpc from '@deip/rpc-client';
     import {
-      withdrawalStatus, withdrawalStatusMap, WITHDRAWAL_PENDING, WITHDRAWAL_CERTIFIED, WITHDRAWAL_APPROVED, WITHDRAWAL_PAID, WITHDRAWAL_REJECTED, 
+      withdrawalStatus, withdrawalStatusMap, WITHDRAWAL_PENDING, WITHDRAWAL_CERTIFIED, WITHDRAWAL_APPROVED, WITHDRAWAL_PAID, WITHDRAWAL_REJECTED,
       fundingContractStatus, fundingContractStatusMap, FUNDING_CONTRACT_PENDING, FUNDING_CONTRACT_APPROVED, FUNDING_CONTRACT_REJECTED
     } from './../../services/FundingService';
 
@@ -347,7 +347,7 @@
           user: 'auth/user',
           isPrincipalInvestigator: 'auth/isPrincipalInvestigator',
           isCertifier: 'auth/isCertifier',
-          
+
           isProgramOfficer: 'auth/isProgramOfficer',
           isFinancialOfficer: 'auth/isFinancialOfficer',
           isTreasury: 'auth/isTreasury',
@@ -422,7 +422,7 @@
             .map(a => a.pendingAmount)
 			      .reduce((sum, amount) => sum + amount, 0);
         },
-        
+
         totalAdminExpensesAmount() {
           return this.filteredAwards
             .filter(a => a.contract.status != FUNDING_CONTRACT_PENDING)
@@ -493,7 +493,7 @@
         },
 
         paymentsFilterByStatus() {
-          return [ 
+          return [
             { text: 'ALL STATUSES', value: undefined },
             { text: 'PENDING CERTIFICATION', value: [ WITHDRAWAL_PENDING ] },
             { text: 'PENDING APPROVAL', value: [ WITHDRAWAL_CERTIFIED ] },
@@ -537,13 +537,13 @@
           } else if (this.isPrincipalInvestigator) {
             // display all payments for PI
             // filtered = this.payments.filter(p => p.award.organization.id == this.user.account.organisation_id && p.requester.account.name == this.user.account.name);
-            
+
             // display all payments related to PI
-            filtered = this.payments.filter(p => p.award.organization.id == this.user.account.organisation_id && p.award.isSubaward 
-              ? (p.award.parentAward.researcher == this.user.account.name || p.requester.account.name == this.user.account.name) 
+            filtered = this.payments.filter(p => p.award.organization.id == this.user.account.organisation_id && p.award.isSubaward
+              ? (p.award.parentAward.researcher == this.user.account.name || p.requester.account.name == this.user.account.name)
               : p.requester.account.name == this.user.account.name);
           };
-          
+
           return filtered
             .filter((p) => { return this.paymentsFilter.status != undefined && this.paymentsFilter.status.value != undefined ? this.paymentsFilter.status.value.some(s => s == p.status) : true; })
             .filter((p) => { return this.paymentsFilter.organization != undefined && this.paymentsFilter.organization.value != undefined ? this.paymentsFilter.organization.value == p.organization.id : true; })
@@ -653,7 +653,7 @@
               this.isApproving = false;
             });
         },
-        
+
         paySelectedPaymentRequests() {
           this.isPaying = true;
 
@@ -694,7 +694,7 @@
             });
         }
       },
-      
+
       watch: {
         'selectedPayments': function (newVal, oldVal) {
           this.selectedToCertify = newVal.filter(p => p.status == WITHDRAWAL_PENDING);
@@ -721,13 +721,13 @@
   }
 
   .award-status-chip .award-status-chip-label {
-    min-width: 120px; 
+    min-width: 120px;
     text-align: center;
     text-transform: uppercase;
   }
 
   .payment-status-chip .payment-status-chip-label {
-    min-width: 170px; 
+    min-width: 170px;
     text-align: center;
     text-transform: uppercase;
   }

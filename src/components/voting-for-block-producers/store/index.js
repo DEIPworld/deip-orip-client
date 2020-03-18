@@ -1,5 +1,5 @@
 import _ from 'lodash';
-import deipRpc from '@deip/deip-oa-rpc-client';
+import deipRpc from '@deip/rpc-client';
 import Vue from 'vue';
 
 const state = {
