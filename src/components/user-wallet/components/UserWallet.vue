@@ -3,60 +3,29 @@
     <v-card slot="content" class="full-height full-width pa-5">
       <v-layout column>
         <v-layout align-center>
-          <v-flex lg1>
+          <v-flex xs1>
             <v-layout justify-end class="pr-3">
               <v-icon large color="grey lighten-2">mdi-cash-usd-outline</v-icon>
             </v-layout>
           </v-flex>
-          <v-flex lg4 class="title bold">Balance</v-flex>
+          <v-flex xs4 class="title bold">Balance</v-flex>
         </v-layout>
         <v-layout class="mt-4">
-          <v-flex lg8 offset-lg1 class="balance-table">
+          <v-flex xs8 offset-xs1 class="balance-table">
             <v-layout class="balance-table__line balance-table__line--header">
-              <v-flex lg5 offset-lg1 class="grey--text">Currency</v-flex>
-              <v-flex lg5 class="grey--text">Amount</v-flex>
-              <v-flex lg1 class="grey--text">Actions</v-flex>
+              <v-flex xs5 offset-xs1 class="grey--text">Currency</v-flex>
+              <v-flex xs5 class="grey--text">Amount</v-flex>
+              <v-flex xs1 class="grey--text">Actions</v-flex>
             </v-layout>
-            <v-layout class="balance-table__line" align-center>
-              <v-flex lg1>
-                <v-layout justify-center align-center>
-                  <img src="/assets/img/eur-blue-round.svg" />
+            <v-layout class="balance-table__line" align-center v-for="balance in user.balances" :key="`balance-${balance.id}`">
+              <v-flex xs1>
+                <v-layout justify-center align-center v-if="assetsIcons[assetsInfo[balance.asset_id].string_symbol]">
+                  <img class="max-width-26" :src="assetsIcons[assetsInfo[balance.asset_id].string_symbol]" />
                 </v-layout>
               </v-flex>
-              <v-flex lg5 class="bold subheading">EUR</v-flex>
-              <v-flex lg5 class="bold subheading">{{(getAvailableCurrencyAmount('eur')) | currency({ symbol: '€' }) }}</v-flex>
-              <v-flex lg1 class="pl-3">
-                <!-- <v-menu bottom left offset-y>
-                  <template v-slot:activator="{ on }">
-                    <v-btn
-                      dark
-                      icon
-                      v-on="on"
-                    >
-                      <v-icon color="grey">more_vert</v-icon>
-                    </v-btn>
-                  </template>
-
-                  <v-list>
-                    <v-list-tile
-                      @click="openSendTokensDialog(currencyTypes.eur.id)"
-                    >
-                      <v-list-tile-title>Transfer</v-list-tile-title>
-                    </v-list-tile>
-                  </v-list>
-                </v-menu> -->
-                <!-- <v-icon color="grey" class="balance-table__action">more_vert</v-icon> -->
-              </v-flex>
-            </v-layout>
-            <v-layout class="balance-table__line" align-center>
-              <v-flex lg1>
-                <v-layout justify-center align-center>
-                  <img src="/assets/img/usd-green-round.svg" />
-                </v-layout>
-              </v-flex>
-              <v-flex lg5 class="bold subheading">USD</v-flex>
-              <v-flex lg5 class="bold subheading">{{getAvailableCurrencyAmount('usd') | currency}}</v-flex>
-              <v-flex lg1 class="pl-3">
+              <v-flex xs5 class="bold subheading">{{ assetsInfo[balance.asset_id].string_symbol }}</v-flex>
+              <v-flex xs5 class="bold subheading">{{getAvailableCurrencyAmount(balance.amount) | currency({symbol:'',fractionCount:assetsInfo[balance.asset_id].precision}) }}</v-flex>
+              <v-flex xs1 class="pl-3">
                 <v-menu bottom left offset-y>
                   <template v-slot:activator="{ on }">
                     <v-btn
@@ -69,18 +38,18 @@
                   </template>
 
                   <v-list>
-                    <v-list-tile
-                      @click="openSendTokensDialog(currencyTypes.usd.id)"
+                    <v-list-tile v-if="isShowTransfer(balance.asset_id)"
+                      @click="openSendTokensDialog(balance)"
                     >
                       <v-list-tile-title>Transfer</v-list-tile-title>
                     </v-list-tile>
                     <v-list-tile
-                      @click="openDepositDialog(currencyTypes.usd.id)"
+                      @click="openDepositDialog(balance.asset_id)"
                     >
                       <v-list-tile-title>Deposit</v-list-tile-title>
                     </v-list-tile>
                     <v-list-tile
-                      @click="openWithdrawDialog(currencyTypes.usd.id)"
+                      @click="openWithdrawDialog(balance.asset_id)"
                     >
                       <v-list-tile-title>Withdraw</v-list-tile-title>
                     </v-list-tile>
@@ -94,7 +63,7 @@
       </v-layout>
       <v-layout column class="my-5" v-if="investments.length">
         <v-layout align-center>
-          <v-flex lg1>
+          <v-flex xs1>
             <v-layout justify-end class="pr-3">
               <v-icon large color="grey lighten-2">mdi-account-box</v-icon>
             </v-layout>
@@ -102,7 +71,7 @@
           <v-flex grow class="title bold">Portfolio</v-flex>
         </v-layout>
         <v-layout>
-          <v-flex lg10 offset-lg1 class="portfolio">
+          <v-flex xs10 offset-xs1 class="portfolio">
             <div v-for="(investment, index) of investments" :key="'investment-' + index" class="my-4">
               <v-layout column class="portfolio__item-header py-4">
                 <router-link
@@ -158,7 +127,7 @@
               </v-layout>
               <v-layout v-if="expandedInvestmentIdx === index" column class="portfolio__item-stats py-4">
                 <v-layout row>
-                  <v-flex lg7>
+                  <v-flex xs7>
                     <div class="title">Share price</div>
                     <div class="mt-4">
                       <GChart
@@ -169,7 +138,7 @@
                       />
                     </div>
                   </v-flex>
-                  <v-flex lg5>
+                  <v-flex xs5>
                     <div class="title">Share holders</div>
                     <div class="mt-4">
                       <GChart
@@ -484,15 +453,12 @@
   import { mapActions, mapGetters } from 'vuex';
   import moment from 'moment';
   import deipRpc from '@deip/deip-oa-rpc-client';
-  import { AssetsService } from '@deip/assets-service';
   import * as bankCardsStorage from './../../../utils/bankCard';
 
-  const assetsService = AssetsService.getInstance();
-
-  const currencyTypes = {
-    eur: { id: "eur", title: "EUR", symbol: "€", mockExchange: 1.1 },
-    usd: { id: "usd", title: "USD", symbol: "$", mockExchange: 1.0 }
-  }
+  const toAssetUnits = (amount, precision, currency) => {
+    let value = parseFloat(amount).toFixed(precision);
+    return `${value} ${currency}`;
+  };
 
   export default {
     name: "UserWallet",
@@ -518,11 +484,12 @@
 
         withdrawDialog: {
           amount: 0,
+          precision: 0,
           name: '',
           iban: '',
           refNum: '',
           messageText: '',
-          selectedCurrency: currencyTypes.usd.id,
+          selectedCurrency: '',
           termsConfirmed: false,
           isOpened: false,
           isWithdrawing: false
@@ -536,7 +503,8 @@
             security: ''
           },
           amount: 0,
-          selectedCurrency: currencyTypes.usd.id,
+          precision: 0,
+          selectedCurrency: '',
           termsConfirmed: false,
           isOpened: false,
           isDepositing: false
@@ -600,20 +568,26 @@
             },
           },
           maxAmount: 0,
+          precision: 0,
           maxMemo: 2000,
           isOpened: false,
           isSending: false,
           currency: {},
         },
 
-        currencyTypes,
+        assetsIcons:{
+          [window.env.ASSET_UNIT]: '/assets/img/DEIP_token.png',
+          USD: '/assets/img/usd-green-round.svg', 
+          EUR: '/assets/img/eur-blue-round.svg'
+        },
       }
     },
 
     computed: {
       ...mapGetters({
         user: 'auth/user',
-        investments: 'userWallet/investments'
+        investments: 'userWallet/investments',
+        assetsInfo: 'userWallet/assetsInfo'
       }),
 
       isWithdrawDisabled() {
@@ -737,8 +711,13 @@
     methods: {
       ...mapActions({
         loadResearchTokens: 'userWallet/loadResearchTokens',
-        loadUserAccount: 'auth/loadAccount'
+        loadUserBalances: 'auth/loadBalances',
+        loadWallet:('userWallet/loadWallet')
       }),
+
+      isShowTransfer(assetId){
+        return this.assetsInfo[assetId].string_symbol === window.env.ASSET_UNIT
+      },
 
       toggleInvestmentDetails(index) {
         if (this.expandedInvestmentIdx === index) {
@@ -748,9 +727,10 @@
         }
       },
 
-      openDepositDialog(currencyId) {
+      openDepositDialog(assetId) {
         this.depositDialog.amount = 0;
-        this.depositDialog.selectedCurrency = currencyId;
+        this.depositDialog.precision = this.assetsInfo[assetId].precision;
+        this.depositDialog.selectedCurrency = this.assetsInfo[assetId].string_symbol;
         this.depositDialog.cardData.name = "";
         this.depositDialog.cardData.cardNumber = "";
         this.depositDialog.cardData.expiration = "";
@@ -763,9 +743,10 @@
         this.depositDialog.isOpened = false;
       },
 
-      openWithdrawDialog(currencyId) {
+      openWithdrawDialog(assetId) {
         this.withdrawDialog.amount = 0;
-        this.withdrawDialog.selectedCurrency = currencyId;
+        this.withdrawDialog.precision = this.assetsInfo[assetId].precision;
+        this.withdrawDialog.selectedCurrency = this.assetsInfo[assetId].string_symbol;
         this.withdrawDialog.name = "";
         this.withdrawDialog.iban = "";
         this.withdrawDialog.refNum = "";
@@ -797,12 +778,14 @@
         this.sendResearchTokensDialog.isOpened = false;
       },
 
-      openSendTokensDialog(currencyId) {
+      openSendTokensDialog(balance) {
+        const currencyName = this.assetsInfo[balance.asset_id].string_symbol;
         this.$refs.sendTokensForm.reset();
         this.sendTokensDialog.isOpened = true;
 
-        this.sendTokensDialog.maxAmount = this.getAvailableCurrencyAmount(currencyId);
-        this.sendTokensDialog.currency = currencyTypes[currencyId];
+        this.sendTokensDialog.maxAmount = this.getAvailableCurrencyAmount(balance.amount);
+        this.sendTokensDialog.precision =  this.assetsInfo[balance.asset_id].precision;
+        this.sendTokensDialog.currency = {title:currencyName, currencyName};
 
         this.sendTokensDialog.form.valid = false;
         this.sendTokensDialog.form.to = '';
@@ -821,7 +804,7 @@
           this.user.privKey,
           this.user.username,
           this.sendTokensDialog.form.to,
-          this.toAssetUnits(this.sendTokensDialog.form.amount * this.sendTokensDialog.currency.mockExchange),
+          toAssetUnits(this.sendTokensDialog.form.amount, this.sendTokensDialog.precision, this.sendTokensDialog.currency.currencyName),
           this.sendTokensDialog.form.memo
         ).then((data) => {
           this.$store.dispatch('layout/setSuccess', {
@@ -835,7 +818,7 @@
           });
         }).finally(() => {
           this.sendTokensDialog.isSending = false;
-          this.loadUserAccount();
+          return this.loadUserBalances();
         });
       },
 
@@ -870,7 +853,7 @@
           "5J7xMbqRbaP4wnP3NnzPERR8msN6yrcXrZBbKenFiQpDjNcdvfc",
           "hermes",
           this.user.username,
-          this.toAssetUnits(this.depositDialog.amount),
+          toAssetUnits(this.depositDialog.amount, this.depositDialog.precision, this.depositDialog.selectedCurrency),
           `deposit for ${this.user.username}`
         )
         .then(() => {
@@ -883,7 +866,7 @@
           });
         }).finally(() => {
           this.depositDialog.isDepositing = false;
-          return this.loadUserAccount();
+          return this.loadUserBalances();
         });
       },
 
@@ -893,7 +876,7 @@
           this.user.privKey,
           this.user.username,
           "hermes",
-          this.toAssetUnits(this.withdrawDialog.amount),
+          toAssetUnits(this.withdrawDialog.amount, this.withdrawDialog.precision, this.withdrawDialog.selectedCurrency),
           `withdraw for ${this.user.username}`
         )
         .then(() => {
@@ -906,7 +889,7 @@
           });
         }).finally(() => {
           this.withdrawDialog.isWithdrawing = false;
-          return this.loadUserAccount();
+          return this.loadUserBalances();
         });
       },
 
@@ -916,30 +899,14 @@
         }
       },
 
-      getAvailableCurrencyAmount(currencyId) {
-        if (currencyId === currencyTypes.eur.id) {
-          return 0;
-        } else {
-          return this.fromAssetsToFloat(this.user.account.balance) / currencyTypes[currencyId].mockExchange;
-        }
+      getAvailableCurrencyAmount(balance) {
+          return this.fromAssetsToFloat(balance);
       },
 
       mockPriceChange(rtId) {
         return rtId * 0.3;
       }
     },
-
-    created() {
-      // example for Egor Anikey
-      return assetsService.getAccountBalancesByOwner(this.user.username)
-        .then((balances) => {
-          console.log(balances)
-          return assetsService.getAccountBalanceByOwnerAndAsset(this.user.username, "TUGR3");
-        })
-        .then((balance) => {
-          console.log(balance)
-        });
-      }
   };
 </script>
 
@@ -1005,5 +972,8 @@
       border-radius: 3px;
       border: 1px solid #dcdcdc;
     }
+  }
+  .max-width-26{
+    max-width: 26px;
   }
 </style>

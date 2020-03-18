@@ -2,15 +2,18 @@ import Vue from 'vue';
 import deipRpc from '@deip/deip-oa-rpc-client';
 
 import { UsersService } from '@deip/users-service';
+import { AssetsService } from '@deip/assets-service';
 
 const usersService = UsersService.getInstance()
+const assetsService = AssetsService.getInstance();
 
 const state = {
   researches: [],
   transfers: [],
   researchTokens: [],
   researchTokensHolders: [],
-  researchGroups: []
+  researchGroups: [],
+  assetsInfo: []
 };
 
 // getters
@@ -32,7 +35,9 @@ const getters = {
     })
   },
 
-  transfers: state => state.transfers
+  transfers: state => state.transfers,
+
+  assetsInfo: state => state.assetsInfo
 };
 
 // actions
@@ -42,7 +47,8 @@ const actions = {
     let username = user.account.name;
     return Promise.all([
       dispatch('loadResearchTokens', username),
-      dispatch('loadTransfers', username)
+      dispatch('loadTransfers', username),
+      dispatch('loadAssetsInfo', user)
     ]);
   },
 
@@ -79,6 +85,15 @@ const actions = {
       .then(transfers => {
         commit('SET_TRANSFERS', transfers.reverse());
       });
+  },
+
+  loadAssetsInfo({commit}, user){
+    return Promise.all(user.balances.map(({asset_id}) => assetsService.getAssetById(asset_id)))
+      .then(data => {
+        const assetsInfo = data.reduce((result, item) => {result[item.id] = item; return result}, {})
+        commit('SET_ASSETS_INFO', assetsInfo)
+      })
+      .catch(err => console.error(err))
   }
 };
 
@@ -102,6 +117,10 @@ const mutations = {
 
   ['SET_RESEARCH_GROUPS'](state, list) {
     Vue.set(state, 'researchGroups', list);
+  },
+
+  ['SET_ASSETS_INFO'](state, list) {
+    Vue.set(state, 'assetsInfo', list);
   }
 };
 
