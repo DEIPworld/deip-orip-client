@@ -9,6 +9,8 @@ import InvitationApprovedUserNotification from './components/InvitationApprovedU
 import InvitationRejectedUserNotification from './components/InvitationRejectedUserNotification';
 import ExpertReviewUserNotification from './components/ExpertReviewUserNotification';
 import ExpertReviewRequestUserNotification from './components/ExpertReviewRequestUserNotification';
+import ExclusionProposalUserNotification from './components/ExclusionProposalUserNotification';
+import ExclusionUserNotification from './components/ExclusionUserNotification';
 
 
 Vue.component('user-notifications-list', UserNotificationsList);
@@ -19,5 +21,7 @@ Vue.component('invite-proposal-user-notification', InviteProposalUserNotificatio
 Vue.component('invitation-user-notification', InvitationUserNotification);
 Vue.component('invitation-approved-user-notification', InvitationApprovedUserNotification);
 Vue.component('invitation-rejected-user-notification', InvitationRejectedUserNotification);
+Vue.component('exclusion-proposal-user-notification', ExclusionProposalUserNotification);
+Vue.component('exclusion-user-notification', ExclusionUserNotification);
 Vue.component('expert-review-user-notification', ExpertReviewUserNotification);
 Vue.component('expert-review-request-user-notification', ExpertReviewRequestUserNotification);

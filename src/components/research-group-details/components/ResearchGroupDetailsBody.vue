@@ -24,7 +24,7 @@
     <!-- ### END Research Group Details Section ### -->
 
     <!-- ### START Research Group Proposals Section ### -->
-    <div id="proposals" v-if="isResearchGroupMember && !isPersonalGroup">
+    <div id="proposals" v-if="isResearchGroupMember && group.is_dao">
       <transition v-if="highlightProposalsSection" name="fade">
         <div v-if="proposalsSectionTransitionTrigger" class="pt-2 pb-4">
           <research-group-details-proposals :key="'group-proposals'" class="px-5"></research-group-details-proposals>
@@ -112,8 +112,7 @@
             <confirm-action-dialog
               :meta="dropoutMemberMeta"
               :title="`You’re about to exclude`"
-              :text="`${dropoutMemberMeta.item ?
-                          `${dropoutMemberMeta.item.firstName} ${dropoutMemberMeta.item.lastName}` : ''} from ${group.name} Research Group`"
+              :text="`${dropoutMemberMeta.item ? `${dropoutMemberMeta.item.firstName} ${dropoutMemberMeta.item.lastName}` : ''} from ${group.name} Research Group`"
               @confirmed="dropoutMember($event);"
               @canceled="dropoutMemberMeta.isShown = false">
             </confirm-action-dialog>
@@ -177,11 +176,11 @@
           </v-card>
 
           <add-member-to-group-dialog v-if="group"
-                                      :is-open="options.isAddMemberDialogOpen"
-                                      :group-id="group.id"
-                                      :users="usersToInvite"
-                                      @onClose="$store.dispatch('researchGroup/changeOptions', { key: 'isAddMemberDialogOpen', value: false })"
-                                      @onSuccess="$store.dispatch('researchGroup/loadResearchGroupProposals', { groupId: group.id })">
+            :is-open="options.isAddMemberDialogOpen"
+            :group-id="group.id"
+            :users="usersToInvite"
+            @onClose="$store.dispatch('researchGroup/changeOptions', { key: 'isAddMemberDialogOpen', value: false })"
+            @onSuccess="$store.dispatch('researchGroup/loadResearchGroupProposals', { groupId: group.id })">
           </add-member-to-group-dialog>
         </div>
       </div>
@@ -264,7 +263,7 @@
       dropoutMember(member) {
         this.dropoutMemberMeta.isConfirming = true;
 
-        researchGroupService.createDropoutProposal({
+        researchGroupService.createExcludeProposal({
           groupId: this.group.id,
           name: member.item.owner
         })
