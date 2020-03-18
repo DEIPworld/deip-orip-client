@@ -13,7 +13,7 @@
         <v-layout class="mt-4">
           <v-flex xs8 offset-xs1 class="balance-table">
             <v-layout class="balance-table__line balance-table__line--header">
-              <v-flex xs5 offset-xs1 class="grey--text">Currency</v-flex>
+              <v-flex xs5 offset-xs1 class="grey--text">Asset</v-flex>
               <v-flex xs5 class="grey--text">Amount</v-flex>
               <v-flex xs1 class="grey--text">Actions</v-flex>
             </v-layout>
@@ -38,19 +38,13 @@
                   </template>
 
                   <v-list>
-                    <v-list-tile v-if="isShowTransfer(balance.asset_id)"
-                      @click="openSendTokensDialog(balance)"
-                    >
+                    <v-list-tile v-if="isTransferAvailable(balance.asset_id)" @click="openSendTokensDialog(balance)">
                       <v-list-tile-title>Transfer</v-list-tile-title>
                     </v-list-tile>
-                    <v-list-tile
-                      @click="openDepositDialog(balance.asset_id)"
-                    >
+                    <v-list-tile v-if="isDepositAvailable(balance.asset_id)" @click="openDepositDialog(balance.asset_id)">
                       <v-list-tile-title>Deposit</v-list-tile-title>
                     </v-list-tile>
-                    <v-list-tile
-                      @click="openWithdrawDialog(balance.asset_id)"
-                    >
+                    <v-list-tile v-if="isWithdrawAvailable(balance.asset_id)" @click="openWithdrawDialog(balance.asset_id)">
                       <v-list-tile-title>Withdraw</v-list-tile-title>
                     </v-list-tile>
                   </v-list>
@@ -172,7 +166,7 @@
                 Deposit funds
               </v-flex>
               <v-flex shrink right-top-angle>
-                <v-btn @click="closeDepositDialog()" icon class="pa-0 ma-0">
+                <v-btn icon class="pa-0 ma-0">
                   <v-icon color="black">close</v-icon>
                 </v-btn>
               </v-flex>
@@ -181,7 +175,7 @@
           <v-card-text class="pa-0">
             <v-layout row wrap>
               <v-flex xs6 class="pr-5" style="border-right: 2px solid #E0E0E0">
-                <v-credit-card @change="creditInfoChanged"/>
+                <v-credit-card v-if="depositDialog.isOpened" @change="creditInfoChanged"/>
               </v-flex>
               <v-flex xs6>
                 <v-layout justify-end column fill-height class="pl-5 pr-3">
@@ -454,6 +448,8 @@
   import moment from 'moment';
   import deipRpc from '@deip/deip-oa-rpc-client';
   import * as bankCardsStorage from './../../../utils/bankCard';
+  
+  const fiatAssetBackedTokens = ["EUR", "USD"];
 
   const toAssetUnits = (amount, precision, currency) => {
     let value = parseFloat(amount).toFixed(precision);
@@ -714,11 +710,18 @@
         loadUserBalances: 'auth/loadBalances',
         loadWallet:('userWallet/loadWallet')
       }),
-
-      isShowTransfer(assetId){
-        return this.assetsInfo[assetId].string_symbol === window.env.ASSET_UNIT
+      isTransferAvailable(assetId){
+        let symbol = this.assetsInfo[assetId].string_symbol;
+        return !fiatAssetBackedTokens.some(s => s == symbol);
       },
-
+      isDepositAvailable(assetId){
+        let symbol = this.assetsInfo[assetId].string_symbol;
+        return fiatAssetBackedTokens.some(s => s == symbol);
+      },
+      isWithdrawAvailable(assetId){
+        let symbol = this.assetsInfo[assetId].string_symbol;
+        return fiatAssetBackedTokens.some(s => s == symbol);
+      },
       toggleInvestmentDetails(index) {
         if (this.expandedInvestmentIdx === index) {
           this.expandedInvestmentIdx = -1;
