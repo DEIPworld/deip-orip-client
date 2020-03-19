@@ -1,5 +1,5 @@
 import _ from 'lodash';
-import deipRpc from '@deip/deip-oa-rpc-client';
+import deipRpc from '@deip/rpc-client';
 import Vue from 'vue';
 
 import { UsersService } from '@deip/users-service';
@@ -42,7 +42,7 @@ const getters = {
       let group = state.groups.find(({ id }) => id === research.research_group_id)
       return { research: { ...research, researchRef }, group }
     })
-    .filter((item) => { 
+    .filter((item) => {
       return !item.research.is_private || item.group.shares.some(share => share.owner == user.username);
     });
   },

@@ -162,7 +162,7 @@
   import { mapGetters } from 'vuex';
   import Vue from 'vue';
   import _ from 'lodash';
-  import deipRpc from '@deip/deip-oa-rpc-client';
+  import deipRpc from '@deip/rpc-client';
   import moment from 'moment';
   import vueDropzone from 'vue2-dropzone';
 

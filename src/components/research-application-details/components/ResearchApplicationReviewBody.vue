@@ -3,12 +3,12 @@
 
         <div class="legacy-row-nowrap c-pb-4">
             <div class="text-align-center">
-                <platform-avatar 
+                <platform-avatar
                     :user="review.author"
                     :size="120"
                 ></platform-avatar>
             </div>
-            
+
             <div class="legacy-column c-ml-10">
                 <div class="c-pt-4">
                     <router-link class="a title" :to="{ name: 'UserDetails', params: { account_name: review.author.account.name }}">
@@ -37,7 +37,7 @@
             </div>
 
             <div class="c-pt-2 c-pb-2">
-                <router-link class="a title" 
+                <router-link class="a title"
                     :to="{
                         name: 'ResearchApplicationDetails',
                         params: {
@@ -56,7 +56,7 @@
 
 <script>
     import { mapGetters } from 'vuex';
-    import deipRpc from '@deip/deip-oa-rpc-client';
+    import deipRpc from '@deip/rpc-client';
 
     export default {
         name: "ResearchApplicationReviewBody",
@@ -79,8 +79,8 @@
             },
 
             hasLocation() {
-                return this.review && this.review.author.profile && 
-                    this.review.author.profile.location && 
+                return this.review && this.review.author.profile &&
+                    this.review.author.profile.location &&
                     (this.review.author.profile.location.country || this.review.author.profile.location.city);
             }
 
@@ -89,7 +89,7 @@
         methods: {
 
         },
-        
+
         mounted() {
 
         }
@@ -107,7 +107,7 @@
         margin-top: 1%;
         margin-bottom: 1%;
     }
-    
+
     .review-content-container h4, h5, h6 {
         margin-top: 1%;
         margin-bottom: 1%;

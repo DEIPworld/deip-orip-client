@@ -2,7 +2,7 @@
     <v-card class="review-container">
         <div class="legacy-row-nowrap c-p-6 clickable" @click="goToReviewPage()">
             <div style="width: 10%" class="legacy-column text-align-center" @click="goToReviewerProfilePage($event, review.author.account.name)">
-                <platform-avatar 
+                <platform-avatar
                     :user="review.author"
                     :size="40"
                     link-to-profile
@@ -48,7 +48,7 @@
 
 <script>
     import { mapGetters } from 'vuex'
-    import deipRpc from '@deip/deip-oa-rpc-client';
+    import deipRpc from '@deip/rpc-client';
 
     export default {
         name: "ApplicationReviewListItem",
@@ -88,11 +88,11 @@
                 if (temp.children.length) {
                     let headers = [...temp.children].filter((child) => isHeader(child) && child.innerText);
                     let headerText = headers[0]
-                        ? headers[0].innerText 
+                        ? headers[0].innerText
                         : `Reviewed by ${this.$options.filters.fullname(this.review.author)}`;
-                    
+
                     let paragraphs = [...temp.children].filter((child) => isParagraph(child) && child.innerText);
-                    let paragraphText = paragraphs[0] 
+                    let paragraphText = paragraphs[0]
                         ? paragraphs[0].innerText
                         : ``;
 

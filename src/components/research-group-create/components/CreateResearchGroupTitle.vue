@@ -8,11 +8,11 @@
                     <v-flex xs12>
                         <v-form ref="form">
                             <div>
-                                <v-text-field 
-                                    v-model="name" 
+                                <v-text-field
+                                    v-model="name"
                                     name="title"
-                                    label="Title" 
-                                    hint="Name of your group" 
+                                    label="Title"
+                                    hint="Name of your group"
                                     :rules="titleRules"
                                 ></v-text-field>
                             </div>
@@ -25,7 +25,7 @@
                             ></v-text-field> -->
 
                             <div>
-                                <v-text-field class="permlink-input" 
+                                <v-text-field class="permlink-input"
                                     prefix="deip.world/"
                                     name="permlink"
                                     label="Permlink"
@@ -44,8 +44,8 @@
         </v-flex>
         <v-flex flex-grow-0>
           <v-layout row justify-center align-center>
-              <v-btn color="primary" 
-                  @click.native="nextStep()" 
+              <v-btn color="primary"
+                  @click.native="nextStep()"
                   :disabled="nextDisabled"
               >Next</v-btn>
           </v-layout>
@@ -54,7 +54,7 @@
 </template>
 
 <script>
-    import deipRpc from '@deip/deip-oa-rpc-client';
+    import deipRpc from '@deip/rpc-client';
     import _ from 'lodash';
 
     export default {
@@ -62,7 +62,7 @@
         props: {
             group: { type: Object, required: true }
         },
-        data() { 
+        data() {
             return {
                 name: '',
                 permlink: '',

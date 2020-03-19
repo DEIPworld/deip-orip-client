@@ -15,7 +15,7 @@
 
 <script>
   import axios from 'axios'
-  import deipRpc from '@deip/deip-oa-rpc-client'
+  import deipRpc from '@deip/rpc-client';
   import { mapGetters } from 'vuex';
   import DeipTextureReaderApp from '@/editors/DeipTextureReaderApp'
   import DeipTextureEditorApp from '@/editors/DeipTextureEditorApp'

@@ -137,7 +137,7 @@
 
 <script>
   // import Vue from 'vue';
-  // import deipRpc from '@deip/deip-oa-rpc-client';
+  // import deipRpc from '@deip/rpc-client';
   import moment from 'moment';
   import * as disciplineTreeService from './../common/disciplines/DisciplineTreeService';
   import { mapGetters } from 'vuex';

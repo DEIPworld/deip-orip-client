@@ -267,7 +267,7 @@
 
 <script>
   // import moment from 'moment';
-  // import deipRpc from '@deip/deip-oa-rpc-client';
+  // import deipRpc from '@deip/rpc-client';
 
   import { mapGetters } from 'vuex';
   import * as bankCardsService from './../../../utils/bankCard'

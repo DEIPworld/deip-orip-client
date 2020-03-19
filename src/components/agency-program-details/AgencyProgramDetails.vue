@@ -17,7 +17,7 @@
               <div class="display-1 c-pb-10 c-pt-10">{{program.funding_opportunity_title}}</div>
               <v-divider></v-divider>
             </v-flex>
-            
+
             <v-flex xs12>
               <div class="legacy-row c-pt-10">
                 <span class="legacy-col-grow body-1">Agency Name</span>
@@ -39,7 +39,7 @@
 
                 <span class="legacy-col-grow body-1">Award ceiling:</span>
                 <span class="legacy-col-grow body-2">$ {{fromAssetsToFloat(program.award_ceiling)}}</span>
-              </div> 
+              </div>
               <div class="legacy-row c-pt-5">
                 <span class="legacy-col-grow body-1">Open date:</span>
                 <span class="legacy-col-grow body-2">{{new Date(`${program.posted_date}Z`).toDateString()}}</span>
@@ -53,7 +53,7 @@
 
                 <span class="legacy-col-grow body-1" v-if="isGrantor || isOfficer">Number of applications:</span>
                 <span class="legacy-col-grow body-2" v-if="isGrantor || isOfficer">{{applications.length}}</span>
-                
+
                 <span class="legacy-col-grow body-1" v-if="isApplicant"></span>
                 <span class="legacy-col-grow body-2" v-if="isApplicant"></span>
 
@@ -109,8 +109,8 @@
               <div class="title bold c-pt-10 c-pb-5">Applications: {{applications.length}}</div>
               <div>
                 <application-list-item v-for="(application, index) in applications"
-                  :key="'application-' + application.id" 
-                  :application="application" 
+                  :key="'application-' + application.id"
+                  :application="application"
                   :isFirst="index == 0"
                   :application-status-map="applicationStatusMap"
                 ></application-list-item>
@@ -138,7 +138,7 @@
                 <div class="title c-pb-2 bold">Program Officers</div>
                 <div v-for="(officer, n) in program.officers" :key="'officer-' + n">
                   <div class="legacy-row-nowrap text-align-center c-pt-2">
-                    <platform-avatar 
+                    <platform-avatar
                       :user="officer"
                       :size="40"
                       link-to-profile
@@ -164,19 +164,19 @@
           </v-flex>
         </v-layout>
       </v-flex>
-      
+
     </v-layout>
   </v-container>
 </template>
 
 <script>
     import { mapGetters } from 'vuex';
-    import deipRpc from '@deip/deip-oa-rpc-client';
+    import deipRpc from '@deip/rpc-client';
     import _ from 'lodash';
 
     export default {
         name: "AgencyProgramDetails",
-        
+
         data() {
             return {
               isSendingApplication: false,
@@ -204,9 +204,9 @@
 
             breadcrumbs() {
               return [
-                { text: this.agencyProfile.shortName, disabled: false, to: `${this.agencyProfile._id}/programs` }, 
+                { text: this.agencyProfile.shortName, disabled: false, to: `${this.agencyProfile._id}/programs` },
                 { text: "Programs", disabled: false, to: `${this.agencyProfile._id}/programs` },
-                { text: this.program.area.abbreviation, disabled: false, to: `/${this.agencyProfile._id}/programs?areaCode=${this.program.area.abbreviation}&subAreaCode=${this.program.subArea.abbreviation}` }, 
+                { text: this.program.area.abbreviation, disabled: false, to: `/${this.agencyProfile._id}/programs?areaCode=${this.program.area.abbreviation}&subAreaCode=${this.program.subArea.abbreviation}` },
                 { text: this.program.subArea.abbreviation, disabled: false, to:`/${this.agencyProfile._id}/programs?areaCode=${this.program.area.abbreviation}&subAreaCode=${this.program.subArea.abbreviation}` },
                 { text: this.program.title, disabled: true }
               ];
@@ -245,7 +245,7 @@
               let countAppAmount = apps => _(apps)
                 .map(app => this.fromAssetsToFloat(app.total_amount))
                 .reduce((sum, amount) => sum + amount, 0);
-                
+
               let approvedAmount = countAppAmount(this.approvedApps);
               let pendingAmount = countAppAmount(this.pendingApps);
               let remainingAmount = this.fromAssetsToFloat(this.program.amount) - approvedAmount - pendingAmount;
@@ -316,7 +316,7 @@
   }
 
   .sort-icon {
-    min-width: 24px; 
+    min-width: 24px;
     min-height: 24px;
   }
 

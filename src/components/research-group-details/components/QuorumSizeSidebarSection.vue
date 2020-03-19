@@ -23,7 +23,7 @@
 <script>
 import { mapGetters } from "vuex";
 import _ from "lodash";
-import deipRpc from "@deip/deip-oa-rpc-client";
+import deipRpc from "@deip/rpc-client";
 
 import {PROPOSAL_TYPES, proposalTypesLabels} from '@/variables';
 

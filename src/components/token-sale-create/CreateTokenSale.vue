@@ -67,7 +67,7 @@
 <script>
   import Vue from 'vue';
   import { mapGetters } from 'vuex';
-  import deipRpc from '@deip/deip-oa-rpc-client';
+  import deipRpc from '@deip/rpc-client';
   import { ResearchGroupService } from '@deip/research-group-service';
 
   const researchGroupService = ResearchGroupService.getInstance();

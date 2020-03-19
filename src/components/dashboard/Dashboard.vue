@@ -235,7 +235,7 @@
 </template>
 
 <script>
-  import deipRpc from '@deip/deip-oa-rpc-client';
+  import deipRpc from '@deip/rpc-client';
   import moment from 'moment';
   import { mapGetters } from 'vuex';
 

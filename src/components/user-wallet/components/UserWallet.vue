@@ -17,14 +17,17 @@
               <v-flex xs5 class="grey--text">Amount</v-flex>
               <v-flex xs1 class="grey--text">Actions</v-flex>
             </v-layout>
-            <v-layout class="balance-table__line" align-center v-for="balance in user.balances" :key="`balance-${balance.id}`">
+            <v-layout class="balance-table__line" align-center v-for="balance in user.balances"
+                      :key="`balance-${balance.id}`">
               <v-flex xs1>
                 <v-layout justify-center align-center v-if="assetsIcons[assetsInfo[balance.asset_id].string_symbol]">
                   <img class="max-width-26" :src="assetsIcons[assetsInfo[balance.asset_id].string_symbol]" />
                 </v-layout>
               </v-flex>
               <v-flex xs5 class="bold subheading">{{ assetsInfo[balance.asset_id].string_symbol }}</v-flex>
-              <v-flex xs5 class="bold subheading">{{getAvailableCurrencyAmount(balance.amount) | currency({symbol:'',fractionCount:assetsInfo[balance.asset_id].precision}) }}</v-flex>
+              <v-flex xs5 class="bold subheading">{{getAvailableCurrencyAmount(balance.amount) |
+                currency({symbol:'',fractionCount:assetsInfo[balance.asset_id].precision}) }}
+              </v-flex>
               <v-flex xs1 class="pl-3">
                 <v-menu bottom left offset-y>
                   <template v-slot:activator="{ on }">
@@ -41,10 +44,12 @@
                     <v-list-tile v-if="isTransferAvailable(balance.asset_id)" @click="openSendTokensDialog(balance)">
                       <v-list-tile-title>Transfer</v-list-tile-title>
                     </v-list-tile>
-                    <v-list-tile v-if="isDepositAvailable(balance.asset_id)" @click="openDepositDialog(balance.asset_id)">
+                    <v-list-tile v-if="isDepositAvailable(balance.asset_id)"
+                                 @click="openDepositDialog(balance.asset_id)">
                       <v-list-tile-title>Deposit</v-list-tile-title>
                     </v-list-tile>
-                    <v-list-tile v-if="isWithdrawAvailable(balance.asset_id)" @click="openWithdrawDialog(balance.asset_id)">
+                    <v-list-tile v-if="isWithdrawAvailable(balance.asset_id)"
+                                 @click="openWithdrawDialog(balance.asset_id)">
                       <v-list-tile-title>Withdraw</v-list-tile-title>
                     </v-list-tile>
                   </v-list>
@@ -77,7 +82,8 @@
                       research_permlink: encodeURIComponent(investment.research.permlink)
                     }
                   }"
-                >{{investment.research.title}}</router-link>
+                >{{investment.research.title}}
+                </router-link>
                 <v-layout row class="mt-2">
                   <v-flex>
                     <div class="body-2">{{investment.myShare.amount}}</div>
@@ -92,7 +98,9 @@
                     <div class="mt-1 caption text-uppercase grey--text">Your ownership share</div>
                   </v-flex>
                   <v-flex>
-                    <div class="body-2">{{mockTokenPrice(investment.research.id, investment.myShare.amount) | currency}}</div>
+                    <div class="body-2">{{mockTokenPrice(investment.research.id, investment.myShare.amount) |
+                      currency}}
+                    </div>
                     <div class="mt-1 caption text-uppercase grey--text">Your ownership value</div>
                   </v-flex>
                   <v-flex>
@@ -100,7 +108,9 @@
                     <div class="mt-1 caption text-uppercase grey--text">Total value</div>
                   </v-flex>
                   <v-flex>
-                    <div class="body-2 green--text text-accent-4">+{{mockPriceChange(investment.research.id).toFixed(2)}}%</div>
+                    <div class="body-2 green--text text-accent-4">
+                      +{{mockPriceChange(investment.research.id).toFixed(2)}}%
+                    </div>
                     <div class="mt-1 caption text-uppercase grey--text">Price change</div>
                   </v-flex>
                   <v-flex>
@@ -114,7 +124,8 @@
                         small
                         right
                         color="primary"
-                      >{{`keyboard_arrow_${expandedInvestmentIdx === index ? 'up' : 'down'}`}}</v-icon>
+                      >{{`keyboard_arrow_${expandedInvestmentIdx === index ? 'up' : 'down'}`}}
+                      </v-icon>
                     </v-btn>
                   </v-flex>
                 </v-layout>
@@ -150,7 +161,8 @@
                     outline
                     class="py-0 ma-0"
                     @click="openSendResearchTokensDialog()"
-                  >Send research tokens</v-btn>
+                  >Send research tokens
+                  </v-btn>
                 </v-layout>
               </v-layout>
             </div>
@@ -175,7 +187,7 @@
           <v-card-text class="pa-0">
             <v-layout row wrap>
               <v-flex xs6 class="pr-5" style="border-right: 2px solid #E0E0E0">
-                <v-credit-card v-if="depositDialog.isOpened" @change="creditInfoChanged"/>
+                <v-credit-card v-if="depositDialog.isOpened" @change="creditInfoChanged" />
               </v-flex>
               <v-flex xs6>
                 <v-layout justify-end column fill-height class="pl-5 pr-3">
@@ -196,7 +208,10 @@
                     ></v-checkbox>
                   </div>
                   <div class="my-3">
-                    <v-btn @click="deposit()" color="primary" block :disabled="isDepositingDisabled || depositDialog.isDepositing" :loading="depositDialog.isDepositing">Deposit funds</v-btn>
+                    <v-btn @click="deposit()" color="primary" block
+                           :disabled="isDepositingDisabled || depositDialog.isDepositing"
+                           :loading="depositDialog.isDepositing">Deposit funds
+                    </v-btn>
                   </div>
                   <div class="mb-4">
                     <v-btn
@@ -205,7 +220,8 @@
                       class="pa-0"
                       flat block
                       :disabled="depositDialog.isDepositing"
-                    >Cancel</v-btn>
+                    >Cancel
+                    </v-btn>
                   </div>
                 </v-layout>
               </v-flex>
@@ -297,7 +313,10 @@
                     ></v-checkbox>
                   </div>
                   <div class="my-3">
-                    <v-btn @click="withdraw()" color="primary" block :disabled="isWithdrawDisabled || withdrawDialog.isWithdrawing" :loading="withdrawDialog.isWithdrawing">Withdraw funds</v-btn>
+                    <v-btn @click="withdraw()" color="primary" block
+                           :disabled="isWithdrawDisabled || withdrawDialog.isWithdrawing"
+                           :loading="withdrawDialog.isWithdrawing">Withdraw funds
+                    </v-btn>
                   </div>
                   <div class="mb-4">
                     <v-btn
@@ -306,7 +325,8 @@
                       class="pa-0"
                       flat block
                       :disabled="withdrawDialog.isWithdrawing"
-                    >Cancel</v-btn>
+                    >Cancel
+                    </v-btn>
                   </div>
                 </v-layout>
               </v-flex>
@@ -359,7 +379,8 @@
                   block
                   :disabled="!sendResearchTokensDialog.form.valid"
                   :loading="sendResearchTokensDialog.isSending"
-                >Send</v-btn>
+                >Send
+                </v-btn>
               </v-flex>
               <v-flex xs12 class="py-2">
                 <v-btn
@@ -368,7 +389,8 @@
                   block
                   flat
                   :disabled="sendResearchTokensDialog.isSending"
-                >Cancel</v-btn>
+                >Cancel
+                </v-btn>
               </v-flex>
             </v-layout>
           </v-card-actions>
@@ -424,7 +446,8 @@
                   block
                   :disabled="!sendTokensDialog.form.valid"
                   :loading="sendTokensDialog.isSending"
-                >Send</v-btn>
+                >Send
+                </v-btn>
               </v-flex>
               <v-flex xs12 class="py-2">
                 <v-btn
@@ -433,7 +456,8 @@
                   block
                   flat
                   :disabled="sendTokensDialog.isSending"
-                >Cancel</v-btn>
+                >Cancel
+                </v-btn>
               </v-flex>
             </v-layout>
           </v-card-actions>
@@ -446,18 +470,19 @@
 <script>
   import { mapActions, mapGetters } from 'vuex';
   import moment from 'moment';
-  import deipRpc from '@deip/deip-oa-rpc-client';
+  import deipRpc from '@deip/rpc-client';
   import * as bankCardsStorage from './../../../utils/bankCard';
-  
-  const fiatAssetBackedTokens = ["EUR", "USD"];
+
+  const fiatAssetBackedTokens = ['EUR', 'USD'];
 
   const toAssetUnits = (amount, precision, currency) => {
-    let value = parseFloat(amount).toFixed(precision);
+    let value = parseFloat(amount)
+      .toFixed(precision);
     return `${value} ${currency}`;
   };
 
   export default {
-    name: "UserWallet",
+    name: 'UserWallet',
 
     data() {
       const rules = {
@@ -471,7 +496,7 @@
           }
 
           return true;
-        },
+        }
       };
 
       return {
@@ -509,7 +534,7 @@
         sendResearchTokensDialog: {
           research: {
             id: null,
-            title: null,
+            title: null
           },
           form: {
             valid: false,
@@ -529,8 +554,8 @@
 
                   return true;
                 }
-              ],
-            },
+              ]
+            }
           },
           maxAmount: 0,
           isOpened: false,
@@ -559,24 +584,24 @@
                 }
               ],
               memo: [
-                value => !value || !!value && value.length <= this.sendTokensDialog.maxMemo || 'String should be shorter',
-              ],
-            },
+                value => !value || !!value && value.length <= this.sendTokensDialog.maxMemo || 'String should be shorter'
+              ]
+            }
           },
           maxAmount: 0,
           precision: 0,
           maxMemo: 2000,
           isOpened: false,
           isSending: false,
-          currency: {},
+          currency: {}
         },
 
         assetsIcons: {
           [window.env.ASSET_UNIT]: '/assets/img/currency/deip.png',
           USD: '/assets/img/currency/usd.png',
           EUR: '/assets/img/currency/eur.png'
-        },
-      }
+        }
+      };
     },
 
     computed: {
@@ -645,20 +670,20 @@
               legend: {
                 position: 'left',
                 textStyle: {
-                  fontSize: 14,
-                },
+                  fontSize: 14
+                }
               },
               colors: ['#5BC9F5', '#A6DCFF', '#2CD9C5', '#2D99FF', '#2962FF'],
               chartArea: {
                 width: '100%',
-                height: '100%',
+                height: '100%'
               },
               pieSliceTextStyle: {
                 color: '#000000',
-                fontSize: 12,
+                fontSize: 12
               },
-              pieHole: 0.6,
-            },
+              pieHole: 0.6
+            }
           };
         }
       },
@@ -670,35 +695,89 @@
           return {
             data: [
               ['Date', 'Price', 'Average'],
-              [moment().day(-10).toDate(), ...this.mockSharePriceWithAvg({ ...investment, share: investment.myShare }, 10) ],
-              [moment().day(-9).toDate(),  ...this.mockSharePriceWithAvg({ ...investment, share: investment.myShare }, 9)  ],
-              [moment().day(-8).toDate(),  ...this.mockSharePriceWithAvg({ ...investment, share: investment.myShare }, 8)  ],
-              [moment().day(-7).toDate(),  ...this.mockSharePriceWithAvg({ ...investment, share: investment.myShare }, 7)  ],
-              [moment().day(-6).toDate(),  ...this.mockSharePriceWithAvg({ ...investment, share: investment.myShare }, 6)  ],
-              [moment().day(-5).toDate(),  ...this.mockSharePriceWithAvg({ ...investment, share: investment.myShare }, 5)  ],
-              [moment().day(-4).toDate(),  ...this.mockSharePriceWithAvg({ ...investment, share: investment.myShare }, 4)  ],
-              [moment().day(-3).toDate(),  ...this.mockSharePriceWithAvg({ ...investment, share: investment.myShare }, 3)  ],
-              [moment().day(-2).toDate(),  ...this.mockSharePriceWithAvg({ ...investment, share: investment.myShare }, 2)  ],
-              [moment().day(-1).toDate(),  ...this.mockSharePriceWithAvg({ ...investment, share: investment.myShare }, 1)  ],
-              [moment().toDate(),          ...this.mockSharePriceWithAvg({ ...investment, share: investment.myShare }, 0)  ],
+              [moment()
+                .day(-10)
+                .toDate(), ...this.mockSharePriceWithAvg({
+                ...investment,
+                share: investment.myShare
+              }, 10)],
+              [moment()
+                .day(-9)
+                .toDate(), ...this.mockSharePriceWithAvg({
+                ...investment,
+                share: investment.myShare
+              }, 9)],
+              [moment()
+                .day(-8)
+                .toDate(), ...this.mockSharePriceWithAvg({
+                ...investment,
+                share: investment.myShare
+              }, 8)],
+              [moment()
+                .day(-7)
+                .toDate(), ...this.mockSharePriceWithAvg({
+                ...investment,
+                share: investment.myShare
+              }, 7)],
+              [moment()
+                .day(-6)
+                .toDate(), ...this.mockSharePriceWithAvg({
+                ...investment,
+                share: investment.myShare
+              }, 6)],
+              [moment()
+                .day(-5)
+                .toDate(), ...this.mockSharePriceWithAvg({
+                ...investment,
+                share: investment.myShare
+              }, 5)],
+              [moment()
+                .day(-4)
+                .toDate(), ...this.mockSharePriceWithAvg({
+                ...investment,
+                share: investment.myShare
+              }, 4)],
+              [moment()
+                .day(-3)
+                .toDate(), ...this.mockSharePriceWithAvg({
+                ...investment,
+                share: investment.myShare
+              }, 3)],
+              [moment()
+                .day(-2)
+                .toDate(), ...this.mockSharePriceWithAvg({
+                ...investment,
+                share: investment.myShare
+              }, 2)],
+              [moment()
+                .day(-1)
+                .toDate(), ...this.mockSharePriceWithAvg({
+                ...investment,
+                share: investment.myShare
+              }, 1)],
+              [moment()
+                .toDate(), ...this.mockSharePriceWithAvg({
+                ...investment,
+                share: investment.myShare
+              }, 0)]
             ],
             options: {
               title: '',
               legend: {
-                position: 'none',
+                position: 'none'
               },
               series: {
                 0: {
                   type: 'line',
-                  color: '#2CD9C5',
+                  color: '#2CD9C5'
                 },
                 1: {
                   type: 'area',
                   areaOpacity: 1,
                   color: '#EDF0F4'
-                },
-              },
-            },
+                }
+              }
+            }
           };
         }
       }
@@ -708,17 +787,17 @@
       ...mapActions({
         loadResearchTokens: 'userWallet/loadResearchTokens',
         loadUserBalances: 'auth/loadBalances',
-        loadWallet:('userWallet/loadWallet')
+        loadWallet: ('userWallet/loadWallet')
       }),
-      isTransferAvailable(assetId){
+      isTransferAvailable(assetId) {
         let symbol = this.assetsInfo[assetId].string_symbol;
         return !fiatAssetBackedTokens.some(s => s == symbol);
       },
-      isDepositAvailable(assetId){
+      isDepositAvailable(assetId) {
         let symbol = this.assetsInfo[assetId].string_symbol;
         return fiatAssetBackedTokens.some(s => s == symbol);
       },
-      isWithdrawAvailable(assetId){
+      isWithdrawAvailable(assetId) {
         let symbol = this.assetsInfo[assetId].string_symbol;
         return fiatAssetBackedTokens.some(s => s == symbol);
       },
@@ -734,10 +813,10 @@
         this.depositDialog.amount = 0;
         this.depositDialog.precision = this.assetsInfo[assetId].precision;
         this.depositDialog.selectedCurrency = this.assetsInfo[assetId].string_symbol;
-        this.depositDialog.cardData.name = "";
-        this.depositDialog.cardData.cardNumber = "";
-        this.depositDialog.cardData.expiration = "";
-        this.depositDialog.cardData.security = "";
+        this.depositDialog.cardData.name = '';
+        this.depositDialog.cardData.cardNumber = '';
+        this.depositDialog.cardData.expiration = '';
+        this.depositDialog.cardData.security = '';
         this.depositDialog.termsConfirmed = false;
         this.depositDialog.isOpened = true;
       },
@@ -750,10 +829,10 @@
         this.withdrawDialog.amount = 0;
         this.withdrawDialog.precision = this.assetsInfo[assetId].precision;
         this.withdrawDialog.selectedCurrency = this.assetsInfo[assetId].string_symbol;
-        this.withdrawDialog.name = "";
-        this.withdrawDialog.iban = "";
-        this.withdrawDialog.refNum = "";
-        this.withdrawDialog.messageText = "";
+        this.withdrawDialog.name = '';
+        this.withdrawDialog.iban = '';
+        this.withdrawDialog.refNum = '';
+        this.withdrawDialog.messageText = '';
         this.withdrawDialog.termsConfirmed = false;
         this.withdrawDialog.isOpened = true;
       },
@@ -769,7 +848,7 @@
         const expandedInvestment = this.investments[this.expandedInvestmentIdx];
         this.sendResearchTokensDialog.research = {
           id: expandedInvestment.research.id,
-          title: expandedInvestment.research.title,
+          title: expandedInvestment.research.title
         };
         this.sendResearchTokensDialog.maxAmount = expandedInvestment.myShare.amount;
         this.sendResearchTokensDialog.form.valid = false;
@@ -787,8 +866,11 @@
         this.sendTokensDialog.isOpened = true;
 
         this.sendTokensDialog.maxAmount = this.getAvailableCurrencyAmount(balance.amount);
-        this.sendTokensDialog.precision =  this.assetsInfo[balance.asset_id].precision;
-        this.sendTokensDialog.currency = {title:currencyName, currencyName};
+        this.sendTokensDialog.precision = this.assetsInfo[balance.asset_id].precision;
+        this.sendTokensDialog.currency = {
+          title: currencyName,
+          currencyName
+        };
 
         this.sendTokensDialog.form.valid = false;
         this.sendTokensDialog.form.to = '';
@@ -809,20 +891,23 @@
           this.sendTokensDialog.form.to,
           toAssetUnits(this.sendTokensDialog.form.amount, this.sendTokensDialog.precision, this.sendTokensDialog.currency.currencyName),
           this.sendTokensDialog.form.memo
-        ).then((data) => {
-          this.$store.dispatch('layout/setSuccess', {
-            message: 'Transfer was successfull'
+        )
+          .then((data) => {
+            this.$store.dispatch('layout/setSuccess', {
+              message: 'Transfer was successfull'
+            });
+            this.closeSendTokensDialog();
+          })
+          .catch((err) => {
+            console.error(err);
+            this.$store.dispatch('layout/setError', {
+              message: 'Transaction was failed'
+            });
+          })
+          .finally(() => {
+            this.sendTokensDialog.isSending = false;
+            return this.loadUserBalances();
           });
-          this.closeSendTokensDialog();
-        }).catch((err) => {
-          console.error(err);
-          this.$store.dispatch('layout/setError', {
-            message: 'Transaction was failed'
-          });
-        }).finally(() => {
-          this.sendTokensDialog.isSending = false;
-          return this.loadUserBalances();
-        });
       },
 
       sendResearchTokens() {
@@ -833,44 +918,49 @@
           this.sendResearchTokensDialog.research.id,
           this.user.username,
           this.sendResearchTokensDialog.form.to,
-          +this.sendResearchTokensDialog.form.amount,
-        ).then(data => {
-          this.$store.dispatch('layout/setSuccess', {
-            message: 'Research tokens successfully sent'
+          +this.sendResearchTokensDialog.form.amount
+        )
+          .then(data => {
+            this.$store.dispatch('layout/setSuccess', {
+              message: 'Research tokens successfully sent'
+            });
+            this.closeSendResearchTokensDialog();
+          })
+          .catch(err => {
+            this.$store.dispatch('layout/setError', {
+              message: 'Transaction was failed'
+            });
+            console.error(err);
+          })
+          .finally(() => {
+            this.sendResearchTokensDialog.isSending = false;
+            return this.loadResearchTokens(this.user.username);
           });
-          this.closeSendResearchTokensDialog();
-        }).catch(err => {
-          this.$store.dispatch('layout/setError', {
-            message: 'Transaction was failed'
-          });
-          console.error(err);
-        }).finally(() => {
-          this.sendResearchTokensDialog.isSending = false;
-          return this.loadResearchTokens(this.user.username);
-        });
       },
 
       deposit() {
-        this.depositDialog.isDepositing = true;     
+        this.depositDialog.isDepositing = true;
         return deipRpc.broadcast.transferAsync(
-          "5J7xMbqRbaP4wnP3NnzPERR8msN6yrcXrZBbKenFiQpDjNcdvfc",
-          "hermes",
+          '5J7xMbqRbaP4wnP3NnzPERR8msN6yrcXrZBbKenFiQpDjNcdvfc',
+          'hermes',
           this.user.username,
           toAssetUnits(this.depositDialog.amount, this.depositDialog.precision, this.depositDialog.selectedCurrency),
           `deposit for ${this.user.username}`
         )
-        .then(() => {
-          this.$store.dispatch('layout/setSuccess', { message: "Funds have been deposited successfully!"});
-          this.closeDepositDialog();
-        }).catch((err) => {
-          console.error(err);
-          this.$store.dispatch('layout/setError', {
-            message: 'Transaction was failed'
+          .then(() => {
+            this.$store.dispatch('layout/setSuccess', { message: 'Funds have been deposited successfully!' });
+            this.closeDepositDialog();
+          })
+          .catch((err) => {
+            console.error(err);
+            this.$store.dispatch('layout/setError', {
+              message: 'Transaction was failed'
+            });
+          })
+          .finally(() => {
+            this.depositDialog.isDepositing = false;
+            return this.loadUserBalances();
           });
-        }).finally(() => {
-          this.depositDialog.isDepositing = false;
-          return this.loadUserBalances();
-        });
       },
 
       withdraw() {
@@ -878,22 +968,24 @@
         return deipRpc.broadcast.transferAsync(
           this.user.privKey,
           this.user.username,
-          "hermes",
+          'hermes',
           toAssetUnits(this.withdrawDialog.amount, this.withdrawDialog.precision, this.withdrawDialog.selectedCurrency),
           `withdraw for ${this.user.username}`
         )
-        .then(() => {
-          this.$store.dispatch('layout/setSuccess', { message: "Funds have been withdrawn successfully!"});
-          this.closeWithdrawDialog();
-        }).catch((err) => {
-          console.error(err);
-          this.$store.dispatch('layout/setError', {
-            message: 'Transaction was failed'
+          .then(() => {
+            this.$store.dispatch('layout/setSuccess', { message: 'Funds have been withdrawn successfully!' });
+            this.closeWithdrawDialog();
+          })
+          .catch((err) => {
+            console.error(err);
+            this.$store.dispatch('layout/setError', {
+              message: 'Transaction was failed'
+            });
+          })
+          .finally(() => {
+            this.withdrawDialog.isWithdrawing = false;
+            return this.loadUserBalances();
           });
-        }).finally(() => {
-          this.withdrawDialog.isWithdrawing = false;
-          return this.loadUserBalances();
-        });
       },
 
       creditInfoChanged(values) {
@@ -903,13 +995,13 @@
       },
 
       getAvailableCurrencyAmount(balance) {
-          return this.fromAssetsToFloat(balance);
+        return this.fromAssetsToFloat(balance);
       },
 
       mockPriceChange(rtId) {
         return rtId * 0.3;
       }
-    },
+    }
   };
 </script>
 
@@ -919,30 +1011,37 @@
     font-weight: 500;
     font-size: 12px;
     text-transform: uppercase;
+
     &__line {
       border-top: 1px solid #E5E5E5;
       padding: 16px 0;
+
       &:last-child {
         border-bottom: 1px solid #E5E5E5;
       }
+
       &:hover {
         background-color: rgba(187, 222, 251, 0.2);
       }
+
       &--header {
         &:hover {
           background-color: inherit;
         }
       }
     }
+
     &__action {
       &:hover {
         cursor: pointer;
       }
     }
   }
+
   .v-expansion-panel {
     box-shadow: none;
     background-color: #fafafa;
+
     &__container,
     &__header,
     &__body {
@@ -953,19 +1052,23 @@
   .portfolio {
     font-family: Roboto;
     font-style: normal;
+
     &__item-header {
       font-weight: 500;
     }
+
     &__item-stats {
     }
   }
 
   .balance-form-input { // same as vue-credit card inputs
     color: #707070;
+
     &__label {
       padding-bottom: 5px;
       font-size: 13px;
     }
+
     &__field {
       box-sizing: border-box;
       margin-top: 3px;
@@ -976,7 +1079,8 @@
       border: 1px solid #dcdcdc;
     }
   }
-  .max-width-26{
+
+  .max-width-26 {
     max-width: 26px;
   }
 </style>

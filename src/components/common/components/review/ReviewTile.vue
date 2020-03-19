@@ -5,7 +5,7 @@
             <v-flex xs2 text-xs-center>
                 <v-layout column fill-height justify-space-between>
                     <div @click="goToReviewerProfilePage($event, _review.author.account.name)">
-                        <platform-avatar 
+                        <platform-avatar
                             :user="review.author"
                             :size="90"
                         ></platform-avatar>
@@ -18,7 +18,7 @@
                     <v-btn small outline @click="goToReviewPage()">See Review</v-btn>
                 </v-layout>
             </v-flex>
-     
+
             <v-flex xs6>
                 <div class="pl-4">
                     <div>
@@ -38,7 +38,7 @@
                     </div>
                 </div>
             </v-flex>
-            
+
             <v-flex xs4 px-2>
                 <v-layout align-end column>
                     <review-assessment v-model="_review.ratings" :researchContentType="researchContentType"></review-assessment>
@@ -60,7 +60,7 @@
 
 <script>
     import { mapGetters } from 'vuex'
-    import deipRpc from '@deip/deip-oa-rpc-client';
+    import deipRpc from '@deip/rpc-client';
 
     export default {
         name: "ReviewTile",
@@ -110,11 +110,11 @@
                 if (temp.children.length) {
                     let headers = [...temp.children].filter((child) => isHeader(child) && child.innerText);
                     let headerText = headers[0]
-                        ? headers[0].innerText 
+                        ? headers[0].innerText
                         : `Reviewed by ${this.$options.filters.fullname(this._review.author)}`;
-                    
+
                     let paragraphs = [...temp.children].filter((child) => isParagraph(child) && child.innerText);
-                    let paragraphText = paragraphs[0] 
+                    let paragraphText = paragraphs[0]
                         ? paragraphs[0].innerText
                         : ``;
 
@@ -139,7 +139,7 @@
 
             goToReviewPage() {
                 const params = { review_id: this._review.id };
-                
+
                 deipRpc.api.getResearchContentByIdAsync(this._review.research_content_id)
                     .then((content) => {
                         params.content_permlink = encodeURIComponent(content.permlink);

@@ -60,7 +60,7 @@
 </template>
 
 <script>
-  import deipRpc from '@deip/deip-oa-rpc-client';
+  import deipRpc from '@deip/rpc-client';
   import { mapGetters } from 'vuex';
   import { AccessService } from '@deip/access-service';
 

@@ -15,7 +15,7 @@
                     @input="changeResearch"
                 ></v-select>
 
-                <v-text-field label="To" 
+                <v-text-field label="To"
                     ref="toUsername"
                     v-model="form.to"
                     :rules="[
@@ -26,7 +26,7 @@
                     :loading="isUsernameChecking"
                 ></v-text-field>
 
-                <v-text-field label="Amount" 
+                <v-text-field label="Amount"
                     suffix="%"
                     v-model="form.amount"
                     :rules="[
@@ -35,7 +35,7 @@
                     ]"
                 ></v-text-field>
 
-                <v-btn block color="primary" 
+                <v-btn block color="primary"
                     @click="sendTokens()"
                     :loading="isSending"
                     :disabled="isSending"
@@ -48,7 +48,7 @@
 
 <script>
     import _ from 'lodash';
-    import deipRpc from '@deip/deip-oa-rpc-client';
+    import deipRpc from '@deip/rpc-client';
     import { mapGetters } from 'vuex';
 
     export default {
@@ -58,7 +58,7 @@
             researchId: { required: true, type: Number},
             researchToken: { required: true, type: Object }
         },
-        data() { 
+        data() {
             return {
                 form: {
                     to: '',
@@ -66,7 +66,7 @@
                 },
 
                 isFormValid: false,
-                
+
                 rules: {
                     required: value => !!value || 'This field is required',
                     isExist: value => {
@@ -90,7 +90,7 @@
                         }
                     },
                 },
-                
+
                 isUsernameExist: undefined,
                 isUsernameChecking: false,
                 isSending: false
@@ -117,7 +117,7 @@
                                 this.$refs.toUsername.validate();
                             });
                     }
-                }, 
+                },
                 600
             ),
             clearForm() {
@@ -139,7 +139,7 @@
                     ).then(data => {
                         this.$emit('researchTokensTransfered')
                         this.clearForm();
-                        
+
                         this.$store.dispatch('layout/setSuccess', {
                             message: "Amount of research tokens was successfully sent"
                         });

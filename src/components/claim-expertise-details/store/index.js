@@ -1,6 +1,6 @@
 // import * as disciplineTreeService from '../../common/disciplines/DisciplineTreeService.js'
 import _ from 'lodash';
-import deipRpc from '@deip/deip-oa-rpc-client';
+import deipRpc from '@deip/rpc-client';
 import Vue from 'vue';
 
 import { DisciplinesService } from '@deip/disciplines-service';

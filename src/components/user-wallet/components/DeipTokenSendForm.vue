@@ -6,7 +6,7 @@
 
         <div class="c-p-4">
             <v-form ref="form" v-model="isFormValid" @submit.prevent>
-                <v-text-field label="To" 
+                <v-text-field label="To"
                     ref="toUsername"
                     v-model="form.to"
                     :rules="[
@@ -17,7 +17,7 @@
                     :loading="isUsernameChecking"
                 ></v-text-field>
 
-                <v-text-field label="Amount" 
+                <v-text-field label="Amount"
                     v-model="form.amount"
                     :rules="[
                         rules.required,
@@ -27,7 +27,7 @@
                 ></v-text-field>
 
                 <v-textarea
-                    label="Memo - optional" 
+                    label="Memo - optional"
                     rows="3"
                     counter="2000"
                     no-resize
@@ -37,7 +37,7 @@
                     ]"
                 ></v-textarea>
 
-                <v-btn block color="primary" 
+                <v-btn block color="primary"
                     @click="sendTokens()"
                     :loading="isSending"
                     :disabled="isSending"
@@ -50,7 +50,7 @@
 
 <script>
     import _ from 'lodash';
-    import deipRpc from '@deip/deip-oa-rpc-client';
+    import deipRpc from '@deip/rpc-client';
     import { mapGetters } from 'vuex';
 
     export default {
@@ -60,7 +60,7 @@
             deipTokenBalance: { required: true, type: Number }
         },
 
-        data() { 
+        data() {
             return {
                 form: {
                     to: '',
@@ -69,7 +69,7 @@
                 },
 
                 isFormValid: false,
-                
+
                 rules: {
                     required: value => !!value || 'This field is required',
                     isExist: value => {
@@ -86,11 +86,11 @@
                         } else if (parseFloat(value) > this.deipTokenBalance) {
                             return 'Amount is greater than your DEIP Token balance';
                         }
-                        
+
                         return true;
                     }
                 },
-                
+
                 isUsernameExist: undefined,
                 isUsernameChecking: false,
                 isSending: false
@@ -113,7 +113,7 @@
                                 this.$refs.toUsername.validate();
                             });
                     }
-                }, 
+                },
                 600
             ),
             clearForm() {
@@ -136,7 +136,7 @@
                     ).then(data => {
                         this.$emit('deipTokensTransfered')
                         this.clearForm();
-                        
+
                         this.$store.dispatch('layout/setSuccess', {
                             message: "Amount of DEIP tokens was sent"
                         });
@@ -152,7 +152,7 @@
                 }
             }
         },
-        
+
         computed: {
             ...mapGetters({
                 user: 'auth/user'
