@@ -57,7 +57,7 @@
   <div v-else>
     <v-layout row wrap mb-2 v-for="(item, i) in partnersСollectedData" :key="`${item.typeInfo.type}${i}`">
       <v-flex shrink font-weight-medium subheading mr-2>
-        <v-icon class="pb-1 mr-1" small color="black">{{ item.typeInfo.icon }}</v-icon>
+        <v-icon class="mr-2" small color="black">{{ item.typeInfo.icon }}</v-icon>
         <span>{{ item.typeInfo.title }}</span>
       </v-flex>
       <v-flex grow subheading>{{ item.title }}</v-flex>

@@ -36,7 +36,12 @@ export default {
     this.reviewEditor = reviewEditor;
     
     bus.$on('reviewEditor:exportHtml', this.exportHtml);
+  },
+
+  beforeDestroy() {
+    bus.$off('reviewEditor:exportHtml', this.exportHtml);
   }
+  
 };
 </script>
 

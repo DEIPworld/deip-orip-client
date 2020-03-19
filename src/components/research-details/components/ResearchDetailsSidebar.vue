@@ -1,7 +1,7 @@
 <template>
   <v-layout>
     <v-flex>
-      <v-layout column class="mt-5 mb-4 mx-4">
+      <v-layout column class="mt-4 pa-4">
         <div class="rd-sidebar-block-title">
           <router-link
             class="research-group-link"
@@ -110,27 +110,31 @@
           </div>
         </div>
       </v-layout>
-      <v-divider />
-      <v-layout column class="my-4 mx-4">
-        <div class="rd-sidebar-block-title pb-2">Expertise Contribution Index</div>
-        <v-layout
-          v-for="eci of eciList"
-          column
-          tag="div"
-          :key="eci.disciplineName"
-          justify-space-between
-          class="expertise px-1 my-1"
-        >
-          <v-layout justify-space-between>
-            <div class="blue--text text--accent-4 bold">
-              TOP
-              <span class="font-weight-bold">{{getResearchEciPercentile(eci)}}</span>%
-            </div>
-            <div class="grey--text">ECI {{ eci.value }}</div>
+      <v-layout column px-4>
+        <div class="sidebar-fullwidth">
+          <v-divider></v-divider>
+        </div>
+        <div class="py-4">
+          <div class="rd-sidebar-block-title pb-2">Expertise Contribution Index</div>
+          <v-layout
+            v-for="eci of eciList"
+            column
+            tag="div"
+            :key="eci.disciplineName"
+            justify-space-between
+            class="expertise px-1 my-1"
+          >
+            <v-layout justify-space-between>
+              <div class="blue--text text--accent-4 bold">
+                TOP
+                <span class="font-weight-bold">{{getResearchEciPercentile(eci)}}</span>%
+              </div>
+              <div class="grey--text">ECI {{ eci.value }}</div>
+            </v-layout>
+            <v-divider class="expertise__divider" />
+            <div class="expertise__disc-name pt-1">{{ eci.disciplineName }}</div>
           </v-layout>
-          <v-divider class="expertise__divider" />
-          <div class="expertise__disc-name pt-1">{{ eci.disciplineName }}</div>
-        </v-layout>
+        </div>
       </v-layout>
       <!-- <v-layout column class="my-4 mx-4">
             <div class="rd-sidebar-block-title pb-2">Score</div>
@@ -150,29 +154,37 @@
             />
       </v-layout>-->
 
-      <v-divider />
-      <v-layout column ma-4>
-        <technology-readiness-level isReadOnly :currentTrlStep="researchRef.trl"></technology-readiness-level>
+      <v-layout column px-4>
+        <div class="sidebar-fullwidth">
+          <v-divider></v-divider>
+        </div>
+        <div class="py-4">
+          <technology-readiness-level isReadOnly :currentTrlStep="researchRef.trl"></technology-readiness-level>
+        </div>
       </v-layout>
 
-      <v-divider v-if="isResearchGroupMember" />
-
-      <v-layout column ma-4 v-if="isResearchGroupMember">
-        <span class="font-weight-bold" v-if="research.is_private">
-          <v-icon class="mr-2" small color="black">lock</v-icon>Private project
-        </span>
-        <span class="font-weight-bold" v-else>
-          <v-icon class="mr-2" small color="black">mdi-earth</v-icon>Public project
-        </span>
+      <v-layout v-if="isResearchGroupMember" column px-4>
+        <div class="sidebar-fullwidth">
+          <v-divider></v-divider>
+        </div>
+        <div class="py-4">
+          <div class="subheading" v-if="research.is_private">
+            <v-icon class="mr-2" small color="black">lock</v-icon>Private project
+          </div>
+          <div class="subheading" v-else>
+            <v-icon class="mr-2" small color="black">mdi-earth</v-icon>Public project
+          </div>
+        </div>
       </v-layout>
 
-      <v-divider />
-
-      <v-layout column ma-4 v-if="researchRef.partners.length">
-        <research-partners isReadOnly :partners="researchRef.partners"></research-partners>
+      <v-layout column px-4 v-if="researchRef.partners.length">
+        <div class="sidebar-fullwidth">
+          <v-divider></v-divider>
+        </div>
+        <div class="py-4">
+          <research-partners isReadOnly :partners="researchRef.partners"></research-partners>
+        </div>
       </v-layout>
-
-      <v-divider />
 
       <v-dialog
         v-if="contentList.length"
@@ -181,7 +193,10 @@
         max-width="600px"
       >
         <template v-slot:activator="{ on }">
-          <div class="my-4 mx-4">
+          <div class="sidebar-fullwidth px-4">
+            <v-divider></v-divider>
+          </div>
+          <div class="pa-4">
             <div class="rd-sidebar-block-title">Expert Review</div>
             <v-btn large block color="primary" dark v-on="on" class="mt-3">Request Review</v-btn>
           </div>
@@ -242,7 +257,6 @@
           </v-card-actions>
         </v-card>
       </v-dialog>
-      <!-- <v-divider /> -->
 
       <!-- <v-layout column class="my-4 mx-4">
             <div class="rd-sidebar-block-title">Tokenization</div>
@@ -265,11 +279,6 @@
             ></confirm-action-dialog>
       </v-layout>-->
 
-      <!-- <v-divider /> -->
-      <div
-        class="rd-sidebar-block-title my-4 px-4"
-      >Citations: {{researchReferencesList.length + research.id}}
-      </div>
     </v-flex>
   </v-layout>
 </template>

@@ -112,10 +112,10 @@
               });
             })
             .catch((err) => {
+              console.log(err)
               this.$store.dispatch('layout/setError', {
                 message: 'An error occurred while adding review, please try again later'
               });
-              console.log(err)
             })
             .finally(() => {
               this.isLoading = false
