@@ -192,6 +192,11 @@
     },
 
     beforeDestroy() {
+      bus.$off('texture:getArticleTitle', this.getArticleTitle);
+      bus.$off('texture:setAuthors', this.setAuthors);
+      bus.$off('texture:addReference', this.addReference);
+      bus.$off('texture:removeReference', this.removeReference);
+      bus.$off('texture:saveDocument', this.saveDocument);
       this.texture.dispose();
     }
   };

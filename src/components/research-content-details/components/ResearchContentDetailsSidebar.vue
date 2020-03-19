@@ -2,7 +2,7 @@
   <v-card class="pa-4 full-height">
     <div>
       <router-link class="a title"
-                   :to="{ name: 'ResearchDetails', params: {
+        :to="{ name: 'ResearchDetails', params: {
           research_group_permlink: encodeURIComponent(research.group_permlink),
           research_permlink: encodeURIComponent(research.permlink)
         }}"
@@ -11,7 +11,7 @@
     </div>
 
     <!-- ### START Draft Actions Section ### -->
-    <div class="pt-4" v-if="!isPublished && isResearchGroupMember">
+    <div class="pt-2" v-if="!isPublished && isResearchGroupMember">
       <div v-if="isProposed || isUnlockActionAvailable" class="sidebar-fullwidth">
         <v-divider></v-divider>
       </div>
@@ -38,38 +38,46 @@
     <!-- ### END Draft Actions Section ### -->
 
     <!-- ### START Research Content ECI Section ### -->
-    <div v-if="isPublished" class="py-4">
+    <div v-if="isPublished" class="py-2">
       <div class="sidebar-fullwidth">
         <v-divider></v-divider>
       </div>
-      <div class="subheading bold py-2">Expertise Contribution Index</div>
-
-      <v-layout
-        v-for="eci of eciList"
-        column
-        tag="div"
-        :key="eci.disciplineName"
-        justify-space-between
-        class="expertise px-1 my-2"
-      >
-        <v-layout justify-space-between class="">
-          <div class="blue--text text--accent-4 bold">TOP <span class="font-weight-bold">{{getResearchContentEciPercentile(eci)}}</span>%
-          </div>
-          <div class="grey--text">ECI {{ eci.value }}</div>
+      <div class="py-2">
+        <div class="subheading bold">Expertise Contribution Index</div>
+        <v-layout
+          v-for="eci of eciList"
+          column
+          tag="div"
+          :key="eci.disciplineName"
+          justify-space-between
+          class="expertise px-1 my-2"
+        >
+          <v-layout justify-space-between class="">
+            <div class="blue--text text--accent-4 bold">TOP <span class="font-weight-bold">{{getResearchContentEciPercentile(eci)}}</span>%
+            </div>
+            <div class="grey--text">ECI {{ eci.value }}</div>
+          </v-layout>
+          <v-divider class="expertise__divider"/>
+          <div class="expertise__disc-name pt-1">{{ eci.disciplineName }}</div>
         </v-layout>
-        <v-divider class="expertise__divider"/>
-        <div class="expertise__disc-name pt-1">{{ eci.disciplineName }}</div>
-      </v-layout>
+      </div>
+      <div class="sidebar-fullwidth">
+        <v-divider></v-divider>
+      </div>
     </div>
     <!-- ### END Research Content ECI Section ### -->
-    <div class="sidebar-fullwidth">
-      <v-divider></v-divider>
-    </div>
 
-    <v-dialog v-model="requestExpertReviewDialog.isShown" persistent max-width="600px">
+    <v-dialog v-if="isPublished" v-model="requestExpertReviewDialog.isShown" persistent max-width="600px">
       <template v-slot:activator="{ on }">
         <div class="mx-0">
-          <div class="subheading bold py-3">Expert Review</div>
+          <v-layout row justify-space-between class="py-2">
+            <div class="subheading bold">Expert Review:</div>
+            <div class="subheading bold">
+              <span class="green--text text--darken-2">{{positiveReviewsCount}}</span>
+              <span> / </span>
+              <span class="red--text text--darken-2">{{negativeReviewsCount}}</span>
+            </div>
+          </v-layout>
           <v-btn large block color="primary" dark v-on="on">Request Review</v-btn>
         </div>
       </template>
@@ -120,13 +128,63 @@
       </v-card>
     </v-dialog>
 
-    <!-- ### START Research TOC Section ### -->
-    <div class="py-4" v-if="researchTableOfContent.length">
+    <!-- ### START Research Content Authors Section ### -->
+    <div class="py-2">
       <div class="sidebar-fullwidth">
         <v-divider></v-divider>
       </div>
-      <div class="subheading bold pt-2">Research table of content</div>
-      <div class="pt-1">
+      <div class="subheading bold py-2">Authors</div>
+      <div v-if="isPublished">
+        <v-layout row 
+          v-for="(author, index) in contentAuthorsList" 
+          :key="`author-${index}`" 
+          :class="{'pb-1' : index == 0, 'py-1': index != 0}">
+          <platform-avatar
+            :user="author"
+            :size="40"
+            link-to-profile
+            link-to-profile-class="pl-2"
+          ></platform-avatar>
+        </v-layout>
+      </div>
+
+      <div v-else>
+        <v-layout 
+          row 
+          justify-space-between 
+          align-baseline v-for="(member, index) in draftAuthorsList"
+          :key="`author-${index}`" 
+          :class="{'pb-1' : index == 0, 'py-1': index != 0}">
+          <div>
+            <platform-avatar
+              :user="member"
+              :size="40"
+              link-to-profile
+              link-to-profile-class="pl-2"
+            ></platform-avatar>
+          </div>
+
+          <div v-if="isInProgress" class="author-checkbox">
+            <!-- v-checkbox depends on v-model binding which doesn't play well with Vuex.
+                TODO: create a custom checkbox with the same styles as v-checkbox has -->
+            <input id="checkbox"
+              type="checkbox"
+              :disabled="draftAuthorGuard(member)"
+              :checked="isDraftAuthor(member)"
+              v-on:input="setDraftAuthor($event, member)"/>
+          </div>
+        </v-layout>
+      </div>
+    </div>
+    <!-- ### END Research Content Authors Section ### -->
+
+    <!-- ### START Research TOC Section ### -->
+    <div class="py-2" v-if="researchTableOfContent.length">
+      <div class="sidebar-fullwidth">
+        <v-divider></v-divider>
+      </div>
+      <div class="py-2">
+        <div class="subheading bold pb-2">Research table of content</div>
         <div v-for="(item, index) in researchTableOfContent" :key="index" :class="index === 0 ? '' : 'c-mt-1'">
           <div class="body-2">{{index + 1 }}. {{item.type}}</div>
           <div class="pl-2">
@@ -143,118 +201,30 @@
             </router-link>
           </div>
         </div>
+        <div class="pt-2" v-if="isPublished">
+          <router-link class="a"
+            :to="{
+              name: 'ResearchContentReferences',
+              params: {
+                research_group_permlink: encodeURIComponent(research.group_permlink),
+                research_permlink: encodeURIComponent(research.permlink),
+                content_permlink: encodeURIComponent(content.permlink)
+              }}">
+            <v-icon small>device_hub</v-icon>
+            References
+          </router-link>
+        </div>
       </div>
-
-      <div class="pt-4" v-if="isPublished">
-        <router-link class="a"
-          :to="{
-            name: 'ResearchContentReferences',
-            params: {
-              research_group_permlink: encodeURIComponent(research.group_permlink),
-              research_permlink: encodeURIComponent(research.permlink),
-              content_permlink: encodeURIComponent(content.permlink)
-            }}">
-          <v-icon small>device_hub</v-icon>
-          References
-        </router-link>
+      <div class="sidebar-fullwidth">
+        <v-divider></v-divider>
       </div>
     </div>
     <!-- ### END Research TOC Section ### -->
 
-    <!-- ### START Research Content Authors Section ### -->
-    <div class="py-4">
-      <div class="sidebar-fullwidth">
-        <v-divider></v-divider>
-      </div>
-      <div class="subheading bold py-3">Authors</div>
-
-      <div v-if="isPublished">
-        <v-layout row v-for="(author, index) in contentAuthorsList" :key="`author-${index}`"
-                  :class="{'pb-1' : index == 0, 'py-1': index != 0}">
-          <platform-avatar
-            :user="author"
-            :size="40"
-            link-to-profile
-            link-to-profile-class="pl-2"
-          ></platform-avatar>
-        </v-layout>
-      </div>
-
-      <div v-else>
-        <v-layout row justify-space-between align-baseline v-for="(member, index) in draftAuthorsList"
-                  :key="`author-${index}`" :class="{'pb-1' : index == 0, 'py-1': index != 0}">
-          <div>
-            <platform-avatar
-              :user="member"
-              :size="40"
-              link-to-profile
-              link-to-profile-class="pl-2"
-            ></platform-avatar>
-          </div>
-
-          <div v-if="isInProgress" class="author-checkbox">
-            <!-- v-checkbox depends on v-model binding which doesn't play well with Vuex.
-                TODO: create a custom checkbox with the same styles as v-checkbox has -->
-            <input id="checkbox"
-                   type="checkbox"
-                   :disabled="draftAuthorGuard(member)"
-                   :checked="isDraftAuthor(member)"
-                   v-on:input="setDraftAuthor($event, member)"/>
-          </div>
-        </v-layout>
-      </div>
-    </div>
-    <!-- ### END Research Content Authors Section ### -->
-
-    <!-- ### START Research Content Review Section ### -->
-    <div v-if="isPublished" class="py-4">
-      <div class="sidebar-fullwidth">
-        <v-divider></v-divider>
-      </div>
-
-      <div class="subheading bold c-mt-4">
-        Reviews: <span class="green--text text--darken-2">{{positiveReviewsCount}}</span> / <span
-        class="red--text text--darken-2">{{negativeReviewsCount}}</span>
-      </div>
-
-      <div class="c-pt-3">
-        <div class="caption">
-          <v-icon small class="c-pr-2">rate_review</v-icon>
-          Reward for review: <span class="bold">{{convertToPercent(research.review_share_in_percent)}}%</span></div>
-        <div class="caption" v-if="isContentRewardDistributionActive">
-          <div>
-            <v-icon small class="c-mr-2">av_timer</v-icon>
-            Reward period active till
-          </div>
-          <div class="bold">
-            <v-icon small class="c-mr-2">today</v-icon>
-            {{contentRewardDistributionState.end.toDateString()}}
-          </div>
-        </div>
-      </div>
-
-      <div v-if="isCreatingReviewAvailable" class="c-mt-4">
-        <v-btn @click="goAddReview()" dark round outline color="primary" class="full-width ma-0">
-          <v-icon small>add</v-icon>
-          <div class="legacy-col-grow add-review-label">
-            Add a review
-            <span class="caption grey--text">
-                reward {{convertToPercent(research.review_share_in_percent)}}%
-            </span>
-          </div>
-        </v-btn>
-      </div>
-    </div>
-    <!-- ### END Research Content Review Section ### -->
-
     <!-- ### START Research Content Blockchain Data Section ### -->
-    <div v-if="isPublished" class="py-4">
-      <div class="sidebar-fullwidth">
-        <v-divider></v-divider>
-      </div>
-
-      <div class="pt-3">
-        <router-link class="a title"
+    <div v-if="isPublished" class="py-2">
+      <div>
+        <v-btn large block color="primary" dark 
           :to="{
             name: 'ResearchContentMetadata',
             params: {
@@ -262,44 +232,33 @@
               research_permlink: encodeURIComponent(research.permlink),
               content_permlink: encodeURIComponent(content.permlink)
             }
-          }"
-        >Blockchain Metadata
-        </router-link>
+          }">Blockchain Metadata</v-btn>
       </div>
     </div>
     <!-- ### END Research Content Blockchain Data Section ### -->
 
     <!-- ### START Quorum Info Section ### -->
-    <div v-if="!isPublished && !isCentralizedGroup" class="py-4">
-      <div class="sidebar-fullwidth">
-        <v-divider></v-divider>
-      </div>
-      <div class="subheading bold pt-2">Quorum</div>
-
+    <div v-if="!isPublished && !isCentralizedGroup" class="py-2">
+      <div class="subheading bold">Quorum</div>
       <div class="body-2 pt-1">
-        <div class="legacy-row-nowrap align-center body-2 c-pt-1 c-pb-1">
-          <div class="legacy-col-10">{{createContentGroupQuorumValue.text}}:</div>
-          <div class="legacy-col-2">{{convertToPercent(createContentGroupQuorumValue.value)}}%</div>
-        </div>
+        <v-layout row justify-space-between class="body-2 py-1">
+          <div>{{createContentGroupQuorumValue.text}}:</div>
+          <div>{{convertToPercent(createContentGroupQuorumValue.value)}}%</div>
+        </v-layout>
       </div>
     </div>
     <!-- ### END Quorum Info Section ### -->
 
     <!-- ### START Reward Info Section ### -->
-    <div v-if="!isPublished" class="py-4">
-      <div class="sidebar-fullwidth">
-        <v-divider></v-divider>
-      </div>
-      <div class="subheading bold c-mt-4">Reviews</div>
-
+    <div v-if="!isPublished" class="py-2">
+      <div class="subheading bold">Reviews</div>
       <div class="body-2 c-mt-2">
-        <div class="legacy-row-nowrap align-center body-2 c-pt-1 c-pb-1">
-          <div class="legacy-col-10">
-            <v-icon small class="c-pr-2">rate_review</v-icon>
+        <v-layout row justify-space-between class="body-2 py-1">
+          <div><v-icon small class="c-pr-2">rate_review</v-icon>
             Reward for review:
           </div>
-          <div class="legacy-col-2">{{convertToPercent(research.review_share_in_percent)}}%</div>
-        </div>
+          <div>{{convertToPercent(research.review_share_in_percent)}}%</div>
+        </v-layout>
       </div>
     </div>
     <!-- ### END Reward Info Section ### -->
