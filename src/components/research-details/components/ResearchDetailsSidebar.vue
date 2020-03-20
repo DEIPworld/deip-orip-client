@@ -289,8 +289,9 @@
 
   import { ReviewService } from '@deip/review-service';
   import { ResearchGroupService } from '@deip/research-group-service';
+  import { ResearchContentReviewsService } from '@deip/research-content-reviews-service';
 
-  const reviewService = ReviewService.getInstance();
+  const researchContentReviewsService = ResearchContentReviewsService.getInstance();
   const researchGroupService = ResearchGroupService.getInstance();
 
 
@@ -457,8 +458,7 @@
       },
       requestReview() {
         this.isRequestingReview = true;
-        return reviewService
-          .createReviewRequest({
+        return researchContentReviewsService.createReviewRequest({
             contentId: this.selectedContentId,
             expert: this.selectedExpert.account.name
           })

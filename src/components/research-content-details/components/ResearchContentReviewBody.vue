@@ -22,7 +22,7 @@
       </div>
     </div>
     <v-divider></v-divider>
-    <div v-html="reviewContent"></div>
+    <div v-html="review.content"></div>
   </div>
 </template>
 
@@ -34,7 +34,6 @@ export default {
   name: "ResearchContentReviewBody",
   data() {
     return {
-      reviewContent: ""
     };
   },
 
@@ -60,9 +59,7 @@ export default {
   methods: {
 
   },
-
   created() {
-    this.reviewContent = this.$options.filters.reviewContent(this.review.content);
   }
 };
 </script>

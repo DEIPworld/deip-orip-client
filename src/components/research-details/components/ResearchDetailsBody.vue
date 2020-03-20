@@ -720,17 +720,17 @@
             });
           });
 
-          const _review = {
+          const model = {
             ...review,
-            content: this.$options.filters.reviewContent(review.content),
-            ratings: this.$options.filters.reviewRatings(review.content),
-            research_content: this.contentList.find(
-              c => c.id === review.research_content_id
-            ),
+            scores: review.scores.reduce((acc, score) => {
+              acc[score[0]] = score[1];
+              return acc;
+            }, {}),
+            researchContent: this.contentList.find(c => c.id === review.research_content_id),
             disciplines
           };
-          _review.preview_html = this.extractReviewPreview(_review);
-          return _review;
+          model.preview_html = this.extractReviewPreview(model);
+          return model;
         });
       },
       totalReviewsScore() {

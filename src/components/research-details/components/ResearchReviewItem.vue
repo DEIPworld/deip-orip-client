@@ -25,13 +25,13 @@
     </v-flex>
     <v-flex xs12 lg4 class="px-4 right-bordered">
       <v-layout column fill-height>
-        <div v-if="review.research_content" v-on:click.stop>
+        <div v-if="review.researchContent" v-on:click.stop>
           <div>
             <span>
               Review to
               <span
                 class="bold"
-              >{{ getResearchContentType(review.research_content.content_type).text }}</span>
+              >{{ getResearchContentType(review.researchContent.content_type).text }}</span>
             </span>
           </div>
           <router-link
@@ -42,10 +42,10 @@
               params: {
                 research_group_permlink: encodeURIComponent(research.group_permlink),
                 research_permlink: encodeURIComponent(research.permlink),
-                content_permlink: encodeURIComponent(review.research_content.permlink)
+                content_permlink: encodeURIComponent(review.researchContent.permlink)
               }
             }"
-          >{{review.research_content.title}}
+          >{{review.researchContent.title}}
           </router-link>
         </div>
         <v-layout row wrap>
@@ -69,7 +69,7 @@
         <div>
           <div class="bold">Assessment</div>
           <review-assessment
-            v-model="review.ratings"
+            v-model="review.scores"
             :researchContentType="review.researchContent.content_type"
           ></review-assessment>
         </div>

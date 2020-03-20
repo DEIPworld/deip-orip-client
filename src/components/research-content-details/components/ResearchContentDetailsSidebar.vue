@@ -269,12 +269,11 @@
   import deipRpc from '@deip/rpc-client';
   import { mapGetters } from 'vuex';
   import { proposalTypesLabels, PROPOSAL_TYPES, researchContentTypes } from '@/variables';
-
   import { ResearchContentService } from '@deip/research-content-service';
-  import { ReviewService } from '@deip/review-service';
+  import { ResearchContentReviewsService } from '@deip/research-content-reviews-service';
 
   const researchContentService = ResearchContentService.getInstance();
-  const reviewService = ReviewService.getInstance();
+  const researchContentReviewsService = ResearchContentReviewsService.getInstance();
 
   export default {
     name: 'ResearchContentDetailsSidebar',
@@ -440,7 +439,7 @@
 
       requestReview() {
         this.requestExpertReviewDialog.isRequestingReview = true;
-        return reviewService.createReviewRequest({
+        return researchContentReviewsService.createReviewRequest({
             contentId: this.content.id,
             expert: this.requestExpertReviewDialog.selectedExpert.account.name
           })
