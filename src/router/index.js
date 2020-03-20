@@ -4,7 +4,7 @@ import Router from 'vue-router';
 import SignIn from '@/components/auth/SignIn';
 import SignUp from '@/components/auth/SignUp';
 import TenantSignIn from '@/components/auth/TenantSignIn';
-import Dashboard from '@/components/dashboard/Dashboard';
+import Dashboard from '@/components/dashboard/DashboardNew';
 import EmailSendingRegistration from '@/components/auth/EmailSendingRegistration';
 import DataFillingRegistration from '@/components/auth/DataFillingRegistration';
 import ClaimExpertiseRegistration from '@/components/auth/ClaimExpertiseRegistration';

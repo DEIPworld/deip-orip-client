@@ -5,13 +5,13 @@ import { UsersService } from '@deip/users-service';
 import { ResearchService } from '@deip/research-service';
 import { ResearchGroupService } from '@deip/research-group-service';
 import { InvestmentsService } from '@deip/investments-service';
-import { ReviewService } from '@deip/review-service';
+import { ResearchContentReviewsService } from '@deip/research-content-reviews-service';
 
 const usersService = UsersService.getInstance();
 const researchService = ResearchService.getInstance();
 const researchGroupService = ResearchGroupService.getInstance();
 const investmentsService = InvestmentsService.getInstance();
-const reviewService = ReviewService.getInstance();
+const researchContentReviewsService = ResearchContentReviewsService.getInstance();
 
 
 const state = {
@@ -379,7 +379,7 @@ const actions = {
   },
 
   loadMyReviewRequests({ commit }, { username, notify } = {}) {
-    return reviewService.getReviewRequestsByRequestor(username)
+    return researchContentReviewsService.getReviewRequestsByRequestor(username)
       .then((reviews) => {
         commit('SET_MY_REVIEW_REQUESTS', reviews);
       })

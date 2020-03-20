@@ -14,7 +14,7 @@
   </div>
 
   <div class="pb-2">
-    <review-assessment v-model="reviewRatings" :researchContentType="content.content_type"></review-assessment>
+    <review-assessment v-model="review.scores" :researchContentType="content.content_type"></review-assessment>
   </div>
 
   <div v-if="review.author.account.name !== user.username && userHasExpertise">
@@ -75,7 +75,6 @@ export default {
     return {
       isReviewVoting: false,
       votingDisabled: false,
-      reviewRatings: {}
     };
   },
 
@@ -90,7 +89,14 @@ export default {
       groupMembers: 'rcd/membersList'
     }),
     review() {
-      return this.contentReviewsList.find(r => r.id == this.$route.params.review_id)
+      let review = this.contentReviewsList.find(r => r.id == this.$route.params.review_id);
+      return {
+        ...review,
+        scores: review.scores.reduce((acc, score) => {
+          acc[score[0]] = score[1];
+          return acc;
+        }, {})
+      }
     },
     userHasExpertise() {
       return this.userExperise.some(exp => this.research.disciplines.some(d => d.id == exp.discipline_id))
@@ -173,7 +179,6 @@ export default {
       }
   },
   created() {
-    this.reviewRatings = this.$options.filters.reviewRatings(this.review.content);
   }
 };
 </script>

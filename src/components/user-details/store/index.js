@@ -3,11 +3,11 @@ import deipRpc from '@deip/rpc-client';
 import Vue from 'vue';
 
 import { UsersService } from '@deip/users-service';
-import { ReviewService } from '@deip/review-service';
+import { ResearchContentReviewsService } from '@deip/research-content-reviews-service';
 import { ResearchService } from '@deip/research-service';
 
 const usersService = UsersService.getInstance();
-const reviewService = ReviewService.getInstance();
+const researchContentReviewsService = ResearchContentReviewsService.getInstance();
 const researchService = ResearchService.getInstance();
 
 const state = {
@@ -249,7 +249,7 @@ const actions = {
 
   loadUserReviewRequests({ commit }, { username, notify }) {
     const reviewRequests = [];
-    return reviewService.getReviewRequestsByExpert(username, 'pending')
+    return researchContentReviewsService.getReviewRequestsByExpert(username, 'pending')
       .then((results) => {
         const detailsPromises = [];
         reviewRequests.push(...results);
@@ -292,7 +292,7 @@ const actions = {
       },
       ...reviewRequests.slice(reviewRequestIndex + 1)
     ]);
-    return reviewService.denyReviewRequest(reviewRequestId)
+    return researchContentReviewsService.denyReviewRequest(reviewRequestId)
       .then(() => {
         commit('SET_USER_REVIEW_REQUESTS', getters.reviewRequests.filter(r => r._id !== reviewRequestId));
       })

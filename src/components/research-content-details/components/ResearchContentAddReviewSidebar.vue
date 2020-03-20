@@ -2,7 +2,7 @@
   <div>
     <div class="pb-4" v-if="research">
       <router-link class="a title"
-                   :to="{
+          :to="{
               name: 'ResearchContentDetails',
               params: {
                 research_group_permlink: encodeURIComponent(research.group_permlink),
@@ -53,10 +53,11 @@
 <script>
   import { mapGetters } from 'vuex';
   import { bus } from '@/main';
-
   import { ResearchContentReviewsService } from '@deip/research-content-reviews-service';
+  import { AccessService } from '@deip/access-service';
 
   const researchContentReviewsService = ResearchContentReviewsService.getInstance();
+  const accessService = AccessService.getInstance();
 
   export default {
     name: 'ResearchContentAddReviewSidebar',
@@ -79,9 +80,9 @@
       },
 
       isReviewPublishingDisabled() {
-        let criterias = researchContentReviewsService.getAssessmentCriteria(this.content.content_type);
+        let criterias = researchContentReviewsService.getAssessmentCriteriasForResearchContent(this.content.content_type);
         return criterias.some(criteria => {
-          return this.assessmentCriteria[criteria.name] === undefined || this.assessmentCriteria[criteria.name] == 0;
+          return this.assessmentCriteria[criteria.id] === undefined || this.assessmentCriteria[criteria.id] == 0;
         })
       }
     },
@@ -90,13 +91,32 @@
       publishReview() {
         bus.$emit('reviewEditor:exportHtml', (html) => {
           this.isLoading = true;
-          let reviewData = JSON.stringify({ html, ratings: { ...this.assessmentCriteria } });
-          let criterias = researchContentReviewsService.getAssessmentCriteria(this.content.content_type);
-          let maxValue = criterias.reduce((total, criteria) => total + criteria.max, 0);
-          let value = Object.values(this.assessmentCriteria).reduce((total, val) => total + val, 0);
-          let isPositive = value > (maxValue / 2);
+          let reviewData = html;
+          let researchContentCriterias = researchContentReviewsService.getAssessmentCriteriasForResearchContent(this.content.content_type);
+          let researchContentId = this.content.id;
+          let weight = this.DEIP_100_PERCENT;
+          let scores = Object.keys(this.assessmentCriteria).reduce((scores, key) => {
+            let val = this.assessmentCriteria[key];
+            return [...scores, [parseInt(key), parseInt(val)]];
+          }, []);
 
-          return researchContentReviewsService.makeReview(this.content.id, isPositive, reviewData)
+          let assessment = [
+            "multicriteria_scoring_assessment_model_v1_0_0",
+            {
+              "version": "1.0.0",
+              "scores": scores
+            }
+          ];
+          let extensions = [];
+
+          return researchContentReviewsService.makeReview(
+            this.user.username,
+            researchContentId,
+            reviewData,
+            weight,
+            assessment,
+            extensions
+          )
             .then((data) => {
               this.$store.dispatch('layout/setSuccess', {
                 message: 'Your review has been published successfully !'

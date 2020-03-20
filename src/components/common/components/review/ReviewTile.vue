@@ -4,7 +4,7 @@
 
             <v-flex xs2 text-xs-center>
                 <v-layout column fill-height justify-space-between>
-                    <div @click="goToReviewerProfilePage($event, _review.author.account.name)">
+                    <div @click="goToReviewerProfilePage($event, reviewModel.author.account.name)">
                         <platform-avatar
                             :user="review.author"
                             :size="90"
@@ -22,15 +22,15 @@
             <v-flex xs6>
                 <div class="pl-4">
                     <div>
-                        <span class="grey--text">{{ _review.created_at | dateFormat('D MMM YYYY', true) }}</span>
+                        <span class="grey--text">{{ reviewModel.created_at | dateFormat('D MMM YYYY', true) }}</span>
                         <span class="half-bold pl-2">
-                            <span class="green--text text--darken-2" v-if="_review.is_positive">Approving</span>
-                            <span class="red--text text--darken-2" v-if="!_review.is_positive">Rejecting</span>
+                            <span class="green--text text--darken-2" v-if="reviewModel.is_positive">Approving</span>
+                            <span class="red--text text--darken-2" v-if="!reviewModel.is_positive">Rejecting</span>
                         </span>
                     </div>
 
                     <div class="py-2">
-                        <span v-html="extractPreview(_review)"></span>
+                        <span v-html="extractPreview(reviewModel)"></span>
                     </div>
 
                     <div>
@@ -41,14 +41,14 @@
 
             <v-flex xs4 px-2>
                 <v-layout align-end column>
-                    <review-assessment v-model="_review.ratings" :researchContentType="researchContentType"></review-assessment>
-                    <div class="pt-2" v-if="_review.votes.length">
+                    <review-assessment v-model="reviewModel.scores" :researchContentType="researchContentType"></review-assessment>
+                    <div class="pt-2" v-if="reviewModel.votes.length">
                         <v-tooltip bottom>
                             <v-layout slot="activator" align-baseline>
-                                <span class="half-bold align-self-center pr-2">{{_review.votes.length}}</span>
+                                <span class="half-bold align-self-center pr-2">{{reviewModel.votes.length}}</span>
                                 <v-icon>group_add</v-icon>
                             </v-layout>
-                            <div>{{_review.votes.length}} experts supported this review</div>
+                            <div>{{reviewModel.votes.length}} experts supported this review</div>
                         </v-tooltip>
                     </div>
                 </v-layout>
@@ -61,57 +61,58 @@
 <script>
     import { mapGetters } from 'vuex'
     import deipRpc from '@deip/rpc-client';
+    import { ResearchContentReviewsService } from '@deip/research-content-reviews-service';
+
+    const researchContentReviewsService = ResearchContentReviewsService.getInstance();
 
     export default {
         name: "ReviewTile",
         props: {
-            review: { required: true },
-            researchContentType: { required: true }
+          review: { required: true },
+          researchContentType: { required: true }
         },
         computed: {
-            ...mapGetters({
-                user: 'auth/user',
-                userExperise: 'auth/userExperise'
-            }),
-            _review() {
-              const reviewContent = this.$options.filters.reviewContent(this.review.content);
-              const reviewRatings = this.$options.filters.reviewRatings(this.review.content);
+          ...mapGetters({
+              user: 'auth/user',
+              userExperise: 'auth/userExperise'
+          }),
+          reviewModel() {
+            return {
+              ...this.review,
+              scores: this.review.scores.reduce((acc, score) => {
+                acc[score[0]] = score[1];
+                return acc;
+              }, {})
+            };
+          },
+          disciplines() {
+            const out = [];
+            const review = this.reviewModel;
+            const tvoList = [];
 
-              return {
-                ...this.review,
-                content: reviewContent,
-                ratings: reviewRatings,
-              };
-            },
-            disciplines() {
-                const out = [];
-                const review = this._review;
-                const tvoList = [];
-
-                for (var i = 0; i < review.disciplines.length; i++) {
-                    const discipline = review.disciplines[i];
-                    const tvo = {
-                        disciplineName: discipline.name
-                    }
-                    out.push(tvo)
-                }
-                return out;
+            for (var i = 0; i < review.disciplines.length; i++) {
+              const discipline = review.disciplines[i];
+              const tvo = {
+                disciplineName: discipline.name
+              }
+              out.push(tvo)
             }
+            return out;
+          }
         },
         data() {
-            return {
-            };
+          return {};
         },
 
         methods: {
             extractPreview() {
                 let temp = document.createElement('span');
-                temp.innerHTML = this._review.content;
+                temp.innerHTML = this.reviewModel.content;
                 if (temp.children.length) {
                     let headers = [...temp.children].filter((child) => isHeader(child) && child.innerText);
                     let headerText = headers[0]
                         ? headers[0].innerText
-                        : `Reviewed by ${this.$options.filters.fullname(this._review.author)}`;
+                        : `Reviewed by ${this.$options.filters.fullname(this.reviewModel.author)}`;
 
                     let paragraphs = [...temp.children].filter((child) => isParagraph(child) && child.innerText);
                     let paragraphText = paragraphs[0]
@@ -138,9 +139,9 @@
             },
 
             goToReviewPage() {
-                const params = { review_id: this._review.id };
+                const params = { review_id: this.reviewModel.id };
 
-                deipRpc.api.getResearchContentByIdAsync(this._review.research_content_id)
+                deipRpc.api.getResearchContentByIdAsync(this.reviewModel.research_content_id)
                     .then((content) => {
                         params.content_permlink = encodeURIComponent(content.permlink);
                         return deipRpc.api.getResearchByIdAsync(content.research_id)
