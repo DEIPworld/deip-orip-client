@@ -475,12 +475,6 @@
 
   const fiatAssetBackedTokens = ['EUR', 'USD'];
 
-  const toAssetUnits = (amount, precision, currency) => {
-    let value = parseFloat(amount)
-      .toFixed(precision);
-    return `${value} ${currency}`;
-  };
-
   export default {
     name: 'UserWallet',
 
@@ -889,7 +883,7 @@
           this.user.privKey,
           this.user.username,
           this.sendTokensDialog.form.to,
-          toAssetUnits(this.sendTokensDialog.form.amount, this.sendTokensDialog.precision, this.sendTokensDialog.currency.currencyName),
+          this.toAssetUnits(this.sendTokensDialog.form.amount, this.sendTokensDialog.precision, this.sendTokensDialog.currency.currencyName),
           this.sendTokensDialog.form.memo
         )
           .then((data) => {
@@ -944,7 +938,7 @@
           '5J7xMbqRbaP4wnP3NnzPERR8msN6yrcXrZBbKenFiQpDjNcdvfc',
           'hermes',
           this.user.username,
-          toAssetUnits(this.depositDialog.amount, this.depositDialog.precision, this.depositDialog.selectedCurrency),
+          this.toAssetUnits(this.depositDialog.amount, this.depositDialog.precision, this.depositDialog.selectedCurrency),
           `deposit for ${this.user.username}`
         )
           .then(() => {
@@ -969,7 +963,7 @@
           this.user.privKey,
           this.user.username,
           'hermes',
-          toAssetUnits(this.withdrawDialog.amount, this.withdrawDialog.precision, this.withdrawDialog.selectedCurrency),
+          this.toAssetUnits(this.withdrawDialog.amount, this.withdrawDialog.precision, this.withdrawDialog.selectedCurrency),
           `withdraw for ${this.user.username}`
         )
           .then(() => {

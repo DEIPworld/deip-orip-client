@@ -12,9 +12,9 @@ Vue.prototype.toDeipPercent = amount => parseFloat(amount) * 100;
 
 // regarding with ASSETS
 Vue.prototype.ASSET_QUANTITY_REGEX = /^(?:0|(?:[1-9]\d*))(?:\.\d{1,3})?$/;
-Vue.prototype.toAssetUnits = amount => {
-    let value = parseFloat(amount).toFixed(3);
-    return `${value} ${window.env.ASSET_UNIT}`;
+Vue.prototype.toAssetUnits = (amount, precision = 3, asset = window.env.ASSET_UNIT) => {
+    let value = parseFloat(amount).toFixed(precision);
+    return `${value} ${asset}`;
 };
 Vue.prototype.fromAssetsToFloat = assets => parseFloat(assets.split(' ')[0]);
 Vue.prototype.deipTokenValidator = value => {
