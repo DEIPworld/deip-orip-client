@@ -1,33 +1,35 @@
 <template>
-    <div class="legacy-column full-height">
-        <div class="c-mb-4 legacy-col-grow legacy-column">
+    <v-layout column full-height>
+        <v-flex display-flex flex-column flex-grow-1 mb-3>
             <div class="step-title">Select discipline(s) your funding opportunity is related to</div>
 
-            <div class="subheading c-mb-2 text-align-center c-mh-auto discipline-max-width">
-                {{ opportunity.disciplines.map(discipline => discipline.label).join(' · ') }}
+            <div class="subheading mb-2 text-align-center mx-auto discipline-max-width">
+                {{ foa.disciplines.map(discipline => discipline.label).join(' · ') }}
             </div>
 
-            <div class="legacy-col-grow overflow-y-auto">
-                <div class="c-mh-auto discipline-max-width c-pt-2 full-height">
+            <v-flex flex-basis-0 overflow-y-auto>
+                <div class="mx-auto discipline-max-width pt-2 full-height">
                     <advanced-discipline-picker
-                        :preselected="opportunity.disciplines"
+                        :preselected="foa.disciplines"
                         :without-user-disciplines="true"
                         @select="selectDiscipline"
                     ></advanced-discipline-picker>
                 </div>
-            </div>
-        </div>
+            </v-flex>
+        </v-flex>
 
-        <div class="legacy-row legacy-justify-center align-center">
-            <v-btn flat small @click.native="prevStep()">
-                <v-icon dark class="pr-1">keyboard_arrow_left</v-icon> Back
-            </v-btn>
+        <v-flex flex-grow-0>
+            <v-layout row wrap justify-center align-center>
+                <v-btn flat small @click.native="prevStep()">
+                    <v-icon dark class="pr-1">keyboard_arrow_left</v-icon> Back
+                </v-btn>
 
-            <v-btn color="primary" @click.native="nextStep()"
-                :disabled="isDisabled()"
-            >Next</v-btn>
-        </div>
-    </div>
+                <v-btn color="primary" @click.native="nextStep()"
+                    :disabled="isDisabled()"
+                >Next</v-btn>
+            </v-layout>
+        </v-flex>
+    </v-layout>
 </template>
 
 <script>
@@ -37,7 +39,7 @@
         name: "FundingOpportunityDiscipline",
 
         props: {
-            opportunity: { type: Object, required: true }
+            foa: { type: Object, required: true }
         },
 
         data() { 
@@ -57,11 +59,11 @@
             },
 
             selectDiscipline(disciplines) {
-                this.opportunity.disciplines = disciplines;
+                this.foa.disciplines = disciplines;
             },
 
             isDisabled() {
-                return _.isEmpty(this.opportunity.disciplines);
+                return _.isEmpty(this.foa.disciplines);
             }
         }
     };

@@ -1,8 +1,8 @@
 <template>
   <v-container fluid fill-height class="pa-0">
     <v-layout>
-      <v-stepper v-model="currentStep" v-if="!isFinished && agency" alt-labels
-                 class="legacy-column stepper-page full-width full-height"
+      <v-stepper v-model="currentStep" v-if="!isFinished && organization" alt-labels
+                 class="display-flex flex-column stepper-page full-width full-height"
       >
         <v-stepper-header>
           <v-stepper-step step="1" :complete="currentStep > 1">
@@ -52,13 +52,13 @@
           </v-stepper-step>
         </v-stepper-header>
 
-        <v-stepper-items class="legacy-col-grow">
+        <v-stepper-items class="flex-grow-1">
           <v-stepper-content step="1">
             <div class="full-height">
               <funding-opportunity-title
                 @incStep="incStep"
-                :opportunity="opportunity"
-                :agency="agency"
+                :foa="foa"
+                :organization="organization"
               ></funding-opportunity-title>
             </div>
           </v-stepper-content>
@@ -67,7 +67,7 @@
             <div class="full-height">
               <funding-opportunity-discipline
                 @incStep="incStep" @decStep="decStep"
-                :opportunity="opportunity"
+                :foa="foa"
               ></funding-opportunity-discipline>
             </div>
           </v-stepper-content>
@@ -76,7 +76,7 @@
             <div class="full-height">
               <funding-opportunity-period
                 @incStep="incStep" @decStep="decStep"
-                :opportunity="opportunity"
+                :foa="foa"
               ></funding-opportunity-period>
             </div>
           </v-stepper-content>
@@ -85,7 +85,7 @@
             <div class="full-height">
               <funding-opportunity-awards
                 @incStep="incStep" @decStep="decStep"
-                :opportunity="opportunity"
+                :foa="foa"
               ></funding-opportunity-awards>
             </div>
           </v-stepper-content>
@@ -94,7 +94,7 @@
             <div class="full-height">
               <funding-opportunity-guidelines
                 @incStep="incStep" @decStep="decStep"
-                :opportunity="opportunity"
+                :foa="foa"
               ></funding-opportunity-guidelines>
             </div>
           </v-stepper-content>
@@ -103,7 +103,8 @@
             <div class="full-height">
               <funding-opportunity-program-officers
                 @incStep="incStep" @decStep="decStep"
-                :opportunity="opportunity"
+                :foa="foa"
+                :members="organization.members"
               ></funding-opportunity-program-officers>
             </div>
           </v-stepper-content>
@@ -112,7 +113,7 @@
             <div class="full-height">
               <funding-opportunity-review-committee
                 @incStep="incStep" @decStep="decStep"
-                :opportunity="opportunity"
+                :foa="foa"
               ></funding-opportunity-review-committee>
             </div>
           </v-stepper-content>
@@ -122,7 +123,7 @@
               <funding-opportunity-additional
                 @finish="finish" @decStep="decStep"
                 :is-sending="isSending"
-                :opportunity="opportunity"
+                :foa="foa"
               ></funding-opportunity-additional>
             </div>
           </v-stepper-content>
@@ -130,19 +131,19 @@
       </v-stepper>
 
       <div class="display-flex full-width full-height" v-if="isFinished">
-        <div class="c-m-auto text-align-center">
+        <div class="ma-auto text-align-center">
           <div class="display-1">New Funding Opportunity has been created <br /> successfully</div>
 
-          <div class="subheading c-mt-8">
-            <span class="bold">#</span>
-            <span class="a">{{opportunity.number}}</span>
+          <div class="subheading mt-4">
+            <!-- <span class="bold">#</span> -->
+            <span class="a">{{foa.number}}</span>
           </div>
 
-          <div class="a subheading c-mt-2">
-            {{opportunity.title}}
+          <div class="a subheading mt-2">
+            {{foa.title}}
           </div>
 
-          <div class="c-mt-12">
+          <div class="mt-5">
             <v-btn color="primary" class="ma-0" :to="{name: 'Default'}">OK</v-btn>
           </div>
         </div>
@@ -156,8 +157,13 @@
   import { mapGetters } from 'vuex';
   import deipRpc from '@deip/rpc-client';
   import { TenantService } from '@deip/tenant-service'
+  import { GrantsService } from '@deip/grants-service'
+   import { UsersService } from '@deip/users-service';
+
+  const usersService = UsersService.getInstance();
 
   const tenantService = TenantService.getInstance();
+  const grantsService = GrantsService.getInstance();
 
   export default {
     name: 'CreateFundingOpportunityAnnouncement',
@@ -171,8 +177,8 @@
       return {
         currentStep: 0,
 
-        agency: null,
-        opportunity: {
+        organization: null,
+        foa: {
           title: '',
           number: '',
           disciplines: [],
@@ -210,31 +216,45 @@
       },
 
       finish() {
-        console.log('finished', this.opportunity);
+        console.log('finished', this.foa);
         this.isSending = true;
-        deipRpc.broadcast.createFundingOpportunityAsync(
+
+        const details = [
+          [
+            "funding_opportunity_announcement_contract_v1_0_0",
+            {
+              "version": "1.0.0",
+              "organization_id": this.organization.id,
+              "review_committee_id": this.foa.reveiwCommittee.id,
+              "funding_opportunity_number": this.foa.number,
+              "award_ceiling": this.toAssetUnits(this.foa.awardCeiling),
+              "award_floor": this.toAssetUnits(this.foa.awardFloor),
+              "expected_number_of_awards": this.foa.numberOfAwards,
+              "open_date": this.foa.startDate,
+              "close_date": this.foa.endDate,
+              "additional_info": [
+                ["funding_opportunity_title", this.foa.title],
+                ["eligible_applicants", this.foa.eligibleApplicants],
+                ["description", this.foa.description], 
+                ["link_to_additional_info", this.foa.additionalInfoLink],
+                ["grantor_email", this.foa.grantorEmail]
+              ],
+              "officers": this.foa.officers
+            }
+          ]
+        ];
+
+        grantsService.createGrantContract(
           this.user.privKey,
-          this.opportunity.number,
-          this.opportunity.title,
-          this.opportunity.eligibleApplicants,
-          this.opportunity.eligibilityAdditionalInformation,
-          this.agency._id,
-          this.opportunity.description,
-          this.opportunity.additionalInfoLink,
-          this.opportunity.grantorEmail,
-          this.opportunity.disciplines[0].id,
-          this.toAssetUnits(this.opportunity.totalProgramFunding),
-          this.toAssetUnits(this.opportunity.awardCeiling),
-          this.toAssetUnits(this.opportunity.awardFloor),
-          this.user.username,
-          this.opportunity.officers.map(a => a),
-          100,
-          100,
-          parseInt(this.opportunity.numberOfAwards),
-          this.opportunity.startDate,
-          this.opportunity.endDate,
-          this.opportunity.reveiwCommittee.id
-        ).then((res) => {
+          {
+            grantor: this.user.username,
+            amount: this.toAssetUnits(this.foa.totalProgramFunding),
+            type: 2, // FOA
+            target_disciplines: this.foa.disciplines.map(({id}) => id),
+            details: details
+          }
+        )
+        .then(() => {
           this.isFinished = true;
           this.$store.dispatch('layout/setSuccess', {
             message: `Funding Opportunity has been created successfully!`
@@ -249,13 +269,33 @@
           .finally(() => {
             this.isSending = false;
           });
-      }
+      },
     },
+
     created() {
-      tenantService.getTenantProfile(window.env.TENANT)
-        .then((agency) => {
-          this.agency = agency;
-        })
+    // use research group with "national-science-foundation" permlink instead this call
+    // tenantService.getTenantProfile(window.env.TENANT)
+    //   .then((organization) => {
+    //     this.organization = organization;
+    //   })
+
+    const link = 'national-science-foundation'
+    deipRpc.api.getResearchGroupByPermlinkAsync(link)
+      .then(organization => {
+        const members = [];
+
+        deipRpc.api.getResearchGroupTokensByResearchGroupAsync(organization.id)
+          .then(rgtList => {
+            return usersService.getEnrichedProfiles(rgtList.map(({owner}) => owner));
+          })
+          .then((members) => {
+            this.organization = {
+              ...organization,
+              members
+            };
+            this.foa.officers.push(this.organization.members.find(({account: {name}}) => name == this.user.account.name).account.name)
+          })
+      })
     }
   };
 </script>

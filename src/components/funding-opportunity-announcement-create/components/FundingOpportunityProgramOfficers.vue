@@ -1,12 +1,12 @@
 <template>
-  <div class="legacy-column full-height">
-    <div class="c-mb-4 legacy-col-grow legacy-column">
+  <v-layout column full-height>
+    <v-flex display-flex flex-column flex-grow-1 mb-3>
       <div class="step-title">Select Program Officers</div>
 
-      <div class="legacy-col-grow overflow-y-auto">
+      <div class="flex-grow-1 overflow-y-auto flex-basis-0">
 
-        <div class="c-mh-auto program-officers-max-width">
-          <v-card class="c-ph-12 c-pv-6">
+        <div class="mx-auto program-officers-max-width">
+          <v-card class="px-5 py-4">
             <v-text-field
               label="Start typing for suggestion"
               append-icon="search"
@@ -31,7 +31,7 @@
                 </v-radio-group> -->
 
             <div>
-              <div class="legacy-row-nowrap legacy-align-items-center c-mt-2" v-for="(member, i) in members"
+              <v-layout row align-center mt-2 v-for="(member, i) in members"
                    :key="`${i}-member`">
                 <platform-avatar
                   :user="member"
@@ -42,26 +42,29 @@
                 <div>
                   <input id="checkbox"
                          type="checkbox"
+                         :disabled="isGrantor(member)"
                          :checked="isSelected(member)"
                          v-on:input="setOpportunityOfficer($event, member)"/>
                 </div>
-              </div>
+              </v-layout>
             </div>
           </v-card>
         </div>
 
       </div>
-    </div>
+    </v-flex>
 
-    <div class="legacy-row legacy-justify-center align-center">
-      <v-btn flat small @click.native="prevStep()">
-        <v-icon dark class="pr-1">keyboard_arrow_left</v-icon>
-        Back
-      </v-btn>
+    <v-flex flex-grow-0>
+      <v-layout row justify-center align-center>
+        <v-btn flat small @click.native="prevStep()">
+          <v-icon dark class="pr-1">keyboard_arrow_left</v-icon>
+          Back
+        </v-btn>
 
-      <v-btn color="primary" @click.native="nextStep()" :disabled="isNextDisabled()">Next</v-btn>
-    </div>
-  </div>
+        <v-btn color="primary" @click.native="nextStep()" :disabled="isNextDisabled()">Next</v-btn>
+      </v-layout>
+    </v-flex>
+  </v-layout>
 </template>
 
 <script>
@@ -77,13 +80,12 @@
     name: 'FundingOpportunityProgramOfficers',
 
     props: {
-      opportunity: {type: Object, required: true}
+      foa: {type: Object, required: true},
+      members: {type: Array}
     },
 
     data() {
-      return {
-        members: []
-      }
+      return {}
     },
     computed: {
       ...mapGetters({
@@ -99,33 +101,23 @@
       },
 
       isSelected(member) {
-        return this.opportunity.officers.some(a => a == member.account.name);
+        return this.foa.officers.some(a => a == member.account.name);
       },
       setOpportunityOfficer($event, member) {
         event.preventDefault();
         event.stopPropagation();
         const checked = event.target.checked;
-        this.opportunity.officers = checked
-          ? [...this.opportunity.officers, member.account.name]
-          : this.opportunity.officers.filter(a => a !== member.account.name);
+        this.foa.officers = checked
+          ? [...this.foa.officers, member.account.name]
+          : this.foa.officers.filter(a => a !== member.account.name);
       },
       isNextDisabled() {
         return false;
+      },
+      isGrantor(member){
+        return member.account.name == this.user.account.name
       }
-    },
-    created() {
-      deipRpc.api.getAllAccountsAsync()
-        .then(accounts => usersService.getEnrichedProfiles(accounts.map(account => account.name)))
-        .then(users => {
-          this.members = _.filter(users, user => {
-            if (_.isEmpty(user.profile)) {
-              return false;
-            }
-
-            return !!_.find(user.profile.agencies, agency => agency.name === window.env.TENANT && agency.role === 'officer');
-          });
-        });
-    },
+    }
   };
 </script>
 
