@@ -87,10 +87,9 @@
                         <v-layout row pb-3>
                             <v-checkbox class="ma-0 pa-0"
                                 label="In progress"
-                                :input-value="isActive"
+                                v-model="isActive"
                                 hide-details
                                 style="max-width: 140px"
-                                @click="changeIsActive()"
                             ></v-checkbox>
                         </v-layout>
 
@@ -196,15 +195,6 @@
             }
         },
         methods: {
-            changeIsActive() {
-                this.isActive = !this.isActive;
-
-                if (this.isActive) {
-                    this.dateTo = undefined;
-                }
-
-                this.$refs.dateToInput.validate();
-            },
             save() {
                 this.$emit('saveEducation', { 
                     item: {
@@ -243,6 +233,13 @@
                 this.area = education != null ? education.area : undefined;
                 this.description = education != null ? education.description : undefined;
                 this.isActive = education != null ? education.isActive : false;
+            },
+            isActive(){
+                 if (this.isActive) {
+                    this.dateTo = undefined;
+                }
+
+                this.$refs.dateToInput.validate();
             }
         }
     };

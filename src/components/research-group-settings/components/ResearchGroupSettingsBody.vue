@@ -232,8 +232,12 @@
         return (
           _.isEqual(this.proposalOrderMap, this.shadowProposalOrderMap) ||
           _.some(this.proposalOrderMap, proposalBlock =>
-            _.some(proposalBlock, proposalData =>
-              researchGroupService.validateQuorumValue(proposalData.value)
+            _.some(proposalBlock, proposalData =>{
+              const intValue = parseInt(proposalData.value);
+              const isNumber = _.isFinite(intValue);
+
+              return !isNumber || (isNumber && (intValue > 100 || intValue < 1));
+            }
             )
           )
         );
