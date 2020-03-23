@@ -102,10 +102,9 @@
                         <v-layout row pb-3>
                             <v-checkbox class="ma-0 pa-0"
                                 label="Is present"
-                                :input-value="isActive"
+                                v-model="isActive"
                                 hide-details
                                 style="max-width: 125px"
-                                @click="changeIsActive()"
                             ></v-checkbox>
                         </v-layout>
 
@@ -194,15 +193,6 @@
             }
         },
         methods: {
-            changeIsActive() {
-                this.isActive = !this.isActive;
-
-                if (this.isActive) {
-                    this.dateTo = undefined;
-                }
-
-                this.$refs.dateToInput.validate();
-            },
             save() {
                 this.$emit('saveEmployment', { 
                     item: {
@@ -252,6 +242,13 @@
                 this.position = employment != null ? employment.position : undefined;
                 this.description = employment != null ? employment.description : undefined;
                 this.isActive = employment != null ? employment.isActive : false;
+            },
+            isActive(){
+                if (this.isActive) {
+                    this.dateTo = undefined;
+                }
+
+                this.$refs.dateToInput.validate();
             }
         }
     };

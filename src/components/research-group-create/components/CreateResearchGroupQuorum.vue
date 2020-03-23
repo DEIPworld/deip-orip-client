@@ -193,7 +193,12 @@
       nextDisabled() {
         return _.some(
           this.group.quorum,
-          (value) => researchGroupService.validateQuorumValue(value)
+          (value) => {
+            const intValue = parseInt(value);
+            const isNumber = _.isFinite(intValue);
+
+            return !isNumber || (isNumber && (intValue > 100 || intValue < 5));
+          }
         );
       }
     },
