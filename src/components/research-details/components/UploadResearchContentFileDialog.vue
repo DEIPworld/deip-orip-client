@@ -213,7 +213,7 @@
         contentRef.title = this.title;
         contentRef.authors = this.authors.map(a => a.account.name);
         contentRef.references = this.references.map(ref => ref.id);
-        contentRef.externalReferences = [];
+        contentRef.external_references = [];
 
         researchGroupService.createContentProposal({
           contentRef,
