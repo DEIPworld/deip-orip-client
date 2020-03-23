@@ -450,12 +450,7 @@ const actions = {
             notify: resolve
           });
         });
-        const applicationsRefsLoad = new Promise((resolve, reject) => {
-          dispatch('loadResearchApplicationsRefs', {
-            researchId: state.research.id,
-            notify: resolve
-          });
-        });
+
         const userContributionsLoad = new Promise((resolve, reject) => {
           dispatch('loadUserContributions', {
             researchId: state.research.id,
@@ -466,7 +461,7 @@ const actions = {
         return Promise.all([
           researchRefLoad, contentLoad, membersLoad, reviewsLoad, disciplinesLoad, tokenHoldersLoad,
           tokenSaleLoad, tokenSalesLoad, invitesLoad, contentRefsLoad, groupLoad,
-          applicationsLoad, applicationsRefsLoad, userContributionsLoad
+          applicationsLoad, userContributionsLoad
         ]);
 
       }, (err => {console.log(err);}))
@@ -679,18 +674,6 @@ const actions = {
       }, (err) => { console.log(err);})
       .finally(() => {
         commit('SET_RESEARCH_CONTENT_REFS_LOADING_STATE', false);
-        if (notify) notify();
-      });
-  },
-
-  loadResearchApplicationsRefs({ state, dispatch, commit }, { researchId, notify }) {
-    commit('SET_RESEARCH_APPLICATIONS_REFS_LOADING_STATE', true);
-    grantsService.getApplicationsRefsByResearch(researchId)
-      .then((refs) => {
-        commit('SET_RESEARCH_APPLICATIONS_REFS', refs);
-      }, (err) => { console.log(err);})
-      .finally(() => {
-        commit('SET_RESEARCH_APPLICATIONS_REFS_LOADING_STATE', false);
         if (notify) notify();
       });
   },
