@@ -1,16 +1,16 @@
 <template>
-    <div class="legacy-column full-height">
-        <div class="c-mb-4 legacy-col-grow legacy-column">
+    <v-layout column full-height>
+        <v-flex display-flex flex-column flex-grow-1 mb-3>
             <div class="step-title">Describe program guidelines</div>
 
-            <div class="legacy-col-grow overflow-y-auto">
+            <div class="flex-grow-1 overflow-y-auto flex-basis-0">
 
-                <div class="c-mh-auto guidelines-max-width">
+                <div class="mx-auto guidelines-max-width">
                     <v-textarea
                         label="Eligible applicants"
                         auto-grow
                         rows="2"
-                        v-model="opportunity.eligibleApplicants"
+                        v-model="foa.eligibleApplicants"
                         :rules="[rules.required]"
                     ></v-textarea>
 
@@ -18,22 +18,24 @@
                         label="Additional information on eligibility"
                         auto-grow
                         rows="2"
-                        v-model="opportunity.eligibilityAdditionalInformation"
+                        v-model="foa.eligibilityAdditionalInformation"
                         :rules="[rules.required]"
                     ></v-textarea>
                 </div>
 
             </div>
-        </div>
+        </v-flex>
         
-        <div class="legacy-row legacy-justify-center align-center">
-            <v-btn flat small @click.native="prevStep()">
-                <v-icon dark class="pr-1">keyboard_arrow_left</v-icon> Back
-            </v-btn>
-            
-            <v-btn color="primary" @click.native="nextStep()" :disabled="isNextDisabled()">Next</v-btn>
-        </div>
-    </div>
+        <v-flex flex-grow-0>
+            <v-layout row justify-center align-center>
+                <v-btn flat small @click.native="prevStep()">
+                    <v-icon dark class="pr-1">keyboard_arrow_left</v-icon> Back
+                </v-btn>
+                
+                <v-btn color="primary" @click.native="nextStep()" :disabled="isNextDisabled()">Next</v-btn>
+            </v-layout>
+        </v-flex>
+    </v-layout>
 </template>
 
 <script>
@@ -41,7 +43,7 @@
         name: "FundingOpportunityGuidelines",
 
         props: {
-            opportunity: { type: Object, required: true }
+            foa: { type: Object, required: true }
         },
 
         data() { 
@@ -61,8 +63,8 @@
             },
 
             isNextDisabled() {
-                return !this.opportunity.eligibleApplicants
-                    || !this.opportunity.eligibilityAdditionalInformation;
+                return !this.foa.eligibleApplicants
+                    || !this.foa.eligibilityAdditionalInformation;
             }
         }
     };

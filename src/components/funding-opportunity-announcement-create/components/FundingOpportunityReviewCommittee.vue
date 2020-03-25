@@ -1,45 +1,48 @@
 <template>
-  <div class="legacy-column full-height">
-    <div class="c-mb-4 legacy-col-grow legacy-column">
+  <v-layout column full-height>
+    <v-flex display-flex flex-column flex-grow-1 mb-3>
       <div class="step-title">Select Review Committee</div>
-      <div class="legacy-col-grow overflow-y-auto">
-        <div class="c-mh-auto review-comitee-max-width">
-          <v-card class="c-ph-12 c-pv-6">
-            <div class="legacy-row-nowrap legacy-align-items-center">
-              <div class="legacy-col-12">
+      <div class="flex-grow-1 overflow-y-auto flex-basis-0">
+        <div class="mx-auto review-comitee-max-width">
+          <v-card class="px-5 py-4">
+            <v-layout row align-center>
+              <v-flex xs12>
                 <v-autocomplete
                   :items="allGroupList"
                   :filter="committeesFilter"
-                  v-model="opportunity.reveiwCommittee"
+                  v-model="foa.reveiwCommittee"
                   item-text="name"
                   label="Reveiw committee"
+                  return-object
                 ></v-autocomplete>
-              </div>
-            </div>
+              </v-flex>
+            </v-layout>
 
-            <div v-if="opportunity.reveiwCommittee">
-              <div class="legacy-row-nowrap legacy-align-items-center c-mt-2"
-                   v-for="(member, i) in opportunity.reveiwCommittee.enrichedMembers" :key="`${i}-member`">
+            <div v-if="foa.reveiwCommittee">
+              <v-layout row align-center mt-2
+                   v-for="(member, i) in foa.reveiwCommittee.enrichedMembers" :key="`${i}-member`">
                 <platform-avatar
                   :user="member"
                   :size="40"
                   link-to-profile
                   link-to-profile-class="px-1"
                 ></platform-avatar>
-              </div>
+              </v-layout >
             </div>
           </v-card>
         </div>
       </div>
-    </div>
-    <div class="legacy-row legacy-justify-center align-center">
-      <v-btn flat small @click.native="prevStep()">
-        <v-icon dark class="pr-1">keyboard_arrow_left</v-icon>
-        Back
-      </v-btn>
-      <v-btn color="primary" @click.native="nextStep()" :disabled="isNextDisabled()">Next</v-btn>
-    </div>
-  </div>
+    </v-flex>
+    <v-flex flex-grow-0>
+      <v-layout row justify-center align-center>
+        <v-btn flat small @click.native="prevStep()">
+          <v-icon dark class="pr-1">keyboard_arrow_left</v-icon>
+          Back
+        </v-btn>
+        <v-btn color="primary" @click.native="nextStep()" :disabled="isNextDisabled()">Next</v-btn>
+      </v-layout>
+    </v-flex>
+  </v-layout>
 </template>
 
 <script>
@@ -53,7 +56,7 @@
     name: 'FundingOpportunityReviewCommittee',
 
     props: {
-      opportunity: {type: Object, required: true}
+      foa: {type: Object, required: true}
     },
     data() {
       return {
@@ -86,25 +89,24 @@
           .indexOf(query.toString().toLowerCase()) > -1;
       },
       isNextDisabled() {
-        return this.opportunity.reveiwCommittee == null;
+        return this.foa.reveiwCommittee == null;
+      },
+      getReviewCommittes(idsArray){
+        Promise.all(idsArray.map(id => deipRpc.api.getResearchGroupByIdAsync(id)))
+        .then(researchGroups => {
+          this.allGroupList = researchGroups
+          Promise.all(researchGroups.map(({id}) => deipRpc.api.getResearchGroupTokensByResearchGroupAsync(id)))
+            .then(researchGroupTokens => {
+              Promise.all(researchGroupTokens.map(item => usersService.getEnrichedProfiles(item.map(({owner}) =>  owner))))
+              .then(membersLists => this.allGroupList.forEach((g, i) => {
+                  g.enrichedMembers = membersLists[i]
+              }))
+            })
+        })
       }
     },
     created() {
-      deipRpc.api.getAllResearchGroupsAsync(false)
-        .then((groups) => {
-          this.allGroupList = groups;
-          const membersLists = this.allGroupList.map(group =>
-            deipRpc.api.getResearchGroupTokensByResearchGroupAsync(group.id)
-              .then((researchGroupTokens) => usersService.getEnrichedProfiles(researchGroupTokens.map(t => t.owner)))
-          )
-          return Promise.all(membersLists);
-        })
-        .then((membersLists) => {
-          this.allGroupList.forEach((g, i) => {
-            g.enrichedMembers = membersLists[i]
-          })
-        })
-
+      this.getReviewCommittes([23])
     }
   };
 </script>

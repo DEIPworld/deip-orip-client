@@ -1,13 +1,13 @@
 <template>
-    <div class="legacy-column full-height">
-        <div class="c-mb-4 legacy-col-grow legacy-column">
+    <v-layout column full-height>
+        <v-flex display-flex flex-column flex-grow-1 mb-3>
             <div class="step-title">Specify due dates</div>
 
-            <div class="legacy-col-grow overflow-y-auto">
+            <div class="flex-grow-1 overflow-y-auto flex-basis-0">
 
-                <div class="c-mh-auto period-max-width c-pt-4">
-                    <v-form class="legacy-row" ref="form" v-model="isFormValid">
-                        <div class="legacy-col-12">
+                <div class="mx-auto period-max-width pt-3">
+                    <v-form class="layout row wrap" ref="form" v-model="isFormValid">
+                        <div class="flex xs12">
                             <datetime-picker
                                 ref="startDatePicker"
                                 label="Open date"
@@ -22,7 +22,7 @@
                             ></datetime-picker>
                         </div>
 
-                        <div class="legacy-col-12">
+                        <div class="flex xs12">
                             <datetime-picker
                                 label="Close date"
                                 :datetime="endDate"
@@ -38,19 +38,21 @@
                     </v-form>
                 </div>
             </div>
-        </div>
+        </v-flex>
 
-        <div class="legacy-row legacy-justify-center align-center">
-            <v-btn flat small @click.native="prevStep()">
-                <v-icon dark class="pr-1">keyboard_arrow_left</v-icon> Back
-            </v-btn>
-            
-            <v-btn color="primary" 
-                @click.native="nextStep()" 
-                :disabled="!isFormValid"
-            >Next</v-btn>
-        </div>
-    </div>
+        <v-flex flex-grow-0>
+            <v-layout row justify-center align-center>
+                <v-btn flat small @click.native="prevStep()">
+                    <v-icon dark class="pr-1">keyboard_arrow_left</v-icon> Back
+                </v-btn>
+                
+                <v-btn color="primary" 
+                    @click.native="nextStep()" 
+                    :disabled="!isFormValid"
+                >Next</v-btn>
+            </v-layout>
+        </v-flex>
+    </v-layout>
 </template>
 
 <script>
@@ -60,7 +62,7 @@
         name: "FundingOpportunityPeriod",
 
         props: {
-            opportunity: { type: Object, required: true }
+            foa: { type: Object, required: true }
         },
 
         data() { 
@@ -99,11 +101,11 @@
             
             setStartDate(value) {
                 this.startDate = value;
-                this.opportunity.startDate = new Date(value);
+                this.foa.startDate = new Date(value);
             },
             setEndDate(value) {
                 this.endDate = value;
-                this.opportunity.endDate = new Date(value);
+                this.foa.endDate = new Date(value);
             },
         },
 

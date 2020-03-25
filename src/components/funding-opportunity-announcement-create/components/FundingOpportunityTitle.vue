@@ -1,37 +1,39 @@
 <template>
-    <div class="legacy-column full-height">
-        <div class="c-mb-4 legacy-col-grow legacy-column">
+    <v-layout column full-height>
+        <v-flex display-flex flex-column flex-grow-1 mb-3>
             <div class="step-title">Add title and number</div>
 
-            <div class="legacy-col-grow overflow-y-auto">
+            <div class="flex-grow-1 overflow-y-auto flex-basis-0">
 
-                <div class="c-mh-auto meta-max-width">
+                <div class="mx-auto meta-max-width">
                     <v-text-field
                         label="Opportunity title"
-                        v-model="opportunity.title"
+                        v-model="foa.title"
                         :rules="[rules.required]"
                     ></v-text-field>
 
                     <v-text-field
                         label="Opportunity number"
-                        v-model="opportunity.number"
+                        v-model="foa.number"
                         :rules="[rules.required]"
                     ></v-text-field>
 
-                    <v-text-field v-if="agency"
-                        label="Agency name"
-                        v-model="agency.name"
+                    <v-text-field v-if="organization"
+                        label="Organization name"
+                        v-model="organization.name"
                         disabled
                     ></v-text-field>
                 </div>
 
             </div>
-        </div>
+        </v-flex>
         
-        <div class="legacy-row legacy-justify-center align-center">
-            <v-btn color="primary" @click.native="nextStep()" :disabled="isNextDisabled()">Next</v-btn>
-        </div>
-    </div>
+        <v-flex flex-grow-0>
+            <v-layout row justify-center align-center>
+                <v-btn color="primary" @click.native="nextStep()" :disabled="isNextDisabled()">Next</v-btn>
+            </v-layout>
+        </v-flex>
+    </v-layout>
 </template>
 
 <script>
@@ -39,8 +41,8 @@
         name: "FundingOpportunityTitle",
 
         props: {
-            opportunity: { type: Object, required: true },
-            agency: { type: Object },
+            foa: { type: Object, required: true },
+            organization: { type: Object },
         },
 
         data() { 
@@ -57,7 +59,7 @@
             },
 
             isNextDisabled() {
-                return !this.opportunity.title || !this.opportunity.number;
+                return !this.foa.title || !this.foa.number;
             }
         }
     };
