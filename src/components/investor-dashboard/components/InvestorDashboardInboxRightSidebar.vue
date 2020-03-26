@@ -193,8 +193,8 @@
 
       currentPhase() {
         if (this.selectedInvestment) {
-          let milestones = this.$options.filters.researchMilestones(this.selectedInvestment.research.abstract);
-          let activeMilestone = milestones.find(m => m.is_active);
+          let milestones = this.selectedInvestment.research.ref.milestones;
+          let activeMilestone = milestones.find(m => m.isActive);
           return activeMilestone || milestones[0] || null;
         }
         return null;

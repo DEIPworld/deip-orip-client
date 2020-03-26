@@ -32,15 +32,15 @@
             </v-layout>
           </div>
           <div class="rd-header__abstract">
-            <toggle-text class="py-3" :text="$options.filters.researchAbstract(research.abstract)"></toggle-text>
+            <toggle-text class="py-3" :text="research.abstract"></toggle-text>
           </div>
         </div>
       </v-flex>
-      <v-flex xs12 lg4 text-xs-right class="align-start" v-if="researchPresentationSrc">
+      <v-flex  v-if="researchRef.videoSrc" xs12 lg4 text-xs-right class="align-start">
         <div>
           <iframe
             class="presentation-video"
-            :src="getEmbedVideoUrl(researchPresentationSrc)"
+            :src="getEmbedVideoUrl(researchRef.videoSrc)"
             frameborder="0"
             allowfullscreen
           />
@@ -97,6 +97,7 @@ export default {
     ...mapGetters({
       group: "rd/group",
       research: "rd/research",
+      researchRef: "rd/researchRef",
       user: "auth/user"
     }),
 
@@ -106,10 +107,6 @@ export default {
             this.research.research_group_id
           )
         : false;
-    },
-
-    researchPresentationSrc() {
-      return this.$options.filters.researchVideoSrc(this.research.abstract);
     }
   },
 

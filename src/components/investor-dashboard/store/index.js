@@ -3,9 +3,11 @@ import deipRpc from '@deip/rpc-client';
 
 import { UsersService } from '@deip/users-service';
 import { InvestmentsService } from '@deip/investments-service';
+import { ResearchService } from '@deip/research-service';
 
 const usersService = UsersService.getInstance();
 const investmentsService = InvestmentsService.getInstance();
+const researchService = ResearchService.getInstance();
 
 const defaultListId = 'all';
 
@@ -17,6 +19,7 @@ const state = {
   isLoadingInvestmentPortfolioPage: undefined,
 
   researches: [],
+  researchesRefs: [],
   researchTokens: [],
   researchTokensHolders: [],
 
@@ -67,8 +70,10 @@ const getters = {
         return { ...comment, author };
       });
 
+      const ref = state.researchesRefs.find(ref => ref.permlink == research.permlink);
+
       return {
-        research: { ...research, comments, owner },
+        research: { ...research, comments, owner, ref },
         group,
         team,
         shareHolders,
@@ -126,8 +131,13 @@ const actions = {
   },
 
   loadInvestmentPortfolioResearches({ state, dispatch, commit }, { researchIds, notify }) {
-    return Promise.all(researchIds.map((rId) => deipRpc.api.getResearchByIdAsync(rId)))
-      .then((researches) => {
+    
+    return Promise.all([
+      Promise.all(researchIds.map((rId) => deipRpc.api.getResearchByIdAsync(rId))),
+      Promise.all(researchIds.map((rId) => researchService.getResearch(rId)))
+    ]) 
+      .then(([researches, refs]) => {
+        commit('SET_INVESTMENT_PORTFOLIO_RESEARCHES_REFS', refs);
         commit('SET_INVESTMENT_PORTFOLIO_RESEARCHES', researches);
         return Promise.all(researches
           .reduce((unique, research) => {
@@ -273,6 +283,10 @@ const mutations = {
 
   SET_INVESTMENT_PORTFOLIO_RESEARCHES(state, list) {
     Vue.set(state, 'researches', list);
+  },
+
+  SET_INVESTMENT_PORTFOLIO_RESEARCHES_REFS(state, list) {
+    Vue.set(state, 'researchesRefs', list);
   },
 
   SET_INVESTMENT_PORTFOLIO_RESEARCH_GROUPS(state, list) {

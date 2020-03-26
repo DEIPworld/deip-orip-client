@@ -258,27 +258,6 @@
         </v-card>
       </v-dialog>
 
-      <!-- <v-layout column class="my-4 mx-4">
-            <div class="rd-sidebar-block-title">Tokenization</div>
-            <div v-if="isResearchTokenized" class="py-2">10000 research tokens issued</div>
-            <v-btn
-              v-else-if="isResearchGroupMember"
-              class="mx-0 mt-3"
-              color="primary"
-              large
-              :loading="isResearchTokenization"
-              @click="onTokenizeResearchClick()"
-            >Tokenize research</v-btn>
-            <div v-else class="py-2">Research has not been tokenized yet</div>
-            <confirm-action-dialog
-              :meta="tokenizationConfirmDialog"
-              :title="``"
-              :text="`This project will be tokenized instantly. This action is irreversible. Continue?`"
-              @confirmed="tokenizeResearch($event); tokenizationConfirmDialog.isShown = false;"
-              @canceled="tokenizationConfirmDialog.isShown = false"
-            ></confirm-action-dialog>
-      </v-layout>-->
-
     </v-flex>
   </v-layout>
 </template>
@@ -482,49 +461,6 @@
           .finally(() => {
             this.isRequestingReview = false;
             this.requestExpertReviewDialog.isShown = false;
-          });
-      },
-      tokenizeResearch() {
-        const abstract = JSON.stringify({
-          description: this.$options.filters.researchAbstract(
-            this.research.abstract
-          ),
-          milestones: this.researchRef.milestones,
-          video_src: this.$options.filters.researchVideoSrc(
-            this.research.abstract
-          ),
-          is_tokenized: true
-        });
-
-        this.isResearchTokenization = true;
-        deipRpc.broadcast
-          .researchUpdateAsync(
-            this.user.privKey,
-            this.research.id,
-            this.research.title,
-            abstract,
-            this.research.permlink,
-            this.user.username
-          )
-          .then(() => {
-            this.$store.dispatch('layout/setSuccess', {
-              message: 'Research has been tokenized'
-            });
-          })
-          .catch(() => {
-            this.$store.dispatch('layout/setError', {
-              message:
-                'An error occurred while tokenizing research, please try again later'
-            });
-          })
-          .then(() => {
-            this.$store.dispatch('rd/loadResearchDetails', {
-              group_permlink: this.research.group_permlink,
-              research_permlink: this.research.permlink
-            });
-          })
-          .finally(() => {
-            this.isResearchTokenization = false;
           });
       },
       sendJoinGroupRequest() {

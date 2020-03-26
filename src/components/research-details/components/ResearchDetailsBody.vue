@@ -341,35 +341,6 @@
           </div>
         </v-flex>
       </v-layout>
-
-      <v-layout row wrap class="my-5" v-if="researchReferencesList.length">
-        <v-flex xs12>
-          <v-layout row class="pb-4">
-            <v-flex grow>
-              <v-layout>
-                <div class="pr-3">
-                  <v-icon large color="grey lighten-2">mdi-file-document</v-icon>
-                </div>
-                <div class="rd-block-header align-self-center">
-                  References: {{ researchReferencesList.length }}
-                </div>
-              </v-layout>
-            </v-flex>
-            <v-flex shrink></v-flex>
-          </v-layout>
-        </v-flex>
-        <v-flex xs12>
-          <div v-for="(ref, i) of researchReferencesList" :key="`ref_${i}`">
-            <v-layout class="py-1">
-              <v-flex shrink class="pr-3">{{i + 1}}.</v-flex>
-              <v-flex grow>
-                <div>{{ref.title}}</div>
-                <div class="grey--text">{{ref.source}}</div>
-              </v-flex>
-            </v-layout>
-          </div>
-        </v-flex>
-      </v-layout>
     </v-flex>
   </v-layout>
 </template>
@@ -693,15 +664,7 @@
           )
           : false;
       },
-      // isResearchTokenized() {
-      //   return (
-      //     this.$options.filters.researchTokenized(this.research.abstract) ||
-      //     this.tokenSalesList.length > 0
-      //   );
-      // },
       isTokenSaleSectionAvailable() {
-        // if (!this.isResearchTokenized) return false;
-
         return (
           (this.isMissingTokenSale &&
             this.isResearchGroupMember &&
@@ -740,10 +703,6 @@
             .forEach(rating => (totalScore += rating));
         });
         return (totalScore / ((this.reviews.length || 1) * 3)).toFixed(1);
-      },
-
-      researchPresentationSrc() {
-        return this.$options.filters.researchVideoSrc(this.research.abstract);
       }
     },
 
