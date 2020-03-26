@@ -18,10 +18,7 @@
               </v-layout>
             </div>
             <div class="rd-header__abstract">
-              <toggle-text
-                class="py-3"
-                :text="$options.filters.researchAbstract(research.abstract)"
-              ></toggle-text>
+              <toggle-text class="py-3" :text="research.abstract"></toggle-text>
             </div>
           </div>
         </v-flex>

@@ -256,9 +256,6 @@
         return JSON.stringify({
           milestones,
           video_src: this.videoSrc,
-          is_tokenized: this.$options.filters.researchTokenized(
-            this.research.abstract
-          ),
           currentTrlStep: this.currentTrlStep,
           partners: this.partners
         });
@@ -500,13 +497,9 @@
 
     created() {
       this.title = this.research.title;
-      this.description = this.$options.filters.researchAbstract(
-        this.research.abstract
-      );
+      this.description = this.research.abstract;
       this.milestones = _.cloneDeep(this.researchRef.milestones)
-      this.videoSrc = this.$options.filters.researchVideoSrc(
-        this.research.abstract
-      );
+      this.videoSrc = this.researchRef.videoSrc;
 
       this.activeMilestone = this.milestones.find(m => m.isActive);
       this.isPublic = !this.research.is_private;
@@ -534,9 +527,6 @@
       this.shadowRefData = JSON.stringify({
         milestones,
         video_src: this.videoSrc,
-        is_tokenized: this.$options.filters.researchTokenized(
-          this.research.abstract
-        ),
         currentTrlStep: this.currentTrlStep,
         partners: this.partners
       });
