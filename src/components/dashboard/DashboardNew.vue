@@ -57,7 +57,7 @@
                   <v-flex shrink>
                     <v-layout row wrap class="display-flex">
                       <v-flex mr-5>
-                        <img src="/assets/img/create-project.png" />
+                        <img width="64px" src="/assets/img/create-project.png" />
                       </v-flex>
                       <v-flex>
                         <div
@@ -110,7 +110,7 @@
                     <v-flex shrink>
                       <v-layout row wrap class="display-flex">
                         <v-flex mr-5>
-                          <img src="/assets/img/follow-project.png" />
+                          <img width="64px" src="/assets/img/follow-project.png" />
                         </v-flex>
                         <v-flex>
                           <div
