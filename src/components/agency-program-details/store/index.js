@@ -3,86 +3,145 @@ import deipRpc from '@deip/rpc-client';
 
 import { mapAreaToProgram } from '../../common/disciplines/DisciplineTreeService'
 
-import { TenantService } from '@deip/tenant-service';
 import { UsersService } from '@deip/users-service';
 import { ExpertiseContributionsService } from '@deip/expertise-contributions-service';
+import { GrantsService } from '@deip/grants-service/lib/GrantsService';
 
-const tenantService = TenantService.getInstance();
 const usersService = UsersService.getInstance();
 const expertiseContributionsService = ExpertiseContributionsService.getInstance();
+const grantsService = GrantsService.getInstance();
 
 const state = {
-  agency: undefined,
+  organization: undefined,
   program: undefined,
   applications: [],
 
   corePrograms: [],
   additionalPrograms: [],
 
-  isLoadingAgencyProgramDetailsPage: undefined,
-  isLoadingAgencyProgramDetails: undefined,
-  isLoadingAgencyProgramApplications: undefined
+  isLoadingOrganizationProgramDetailsPage: undefined,
+  isLoadingOrganizationProgramDetails: undefined,
+  isLoadingOrganizationProgramApplications: undefined
 }
 
 // getters
 const getters = {
-  agency: (state, getters) => state.agency,
+  organization: (state, getters) => state.organization,
   program: (state, getters) => state.program,
   applications: (state, getters) => state.applications,
 
   corePrograms: (state, getters) => state.corePrograms,
   additionalPrograms: (state, getters) => state.additionalPrograms,
 
-  isLoadingAgencyProgramDetailsPage: (state, getters) => state.isLoadingAgencyProgramDetailsPage !== false
+  isLoadingOrganizationProgramDetailsPage: (state, getters) => state.isLoadingOrganizationProgramDetailsPage !== false
 }
 
 // actions
 const actions = {
-  loadAgencyProgramDetailsPage({state, dispatch, commit}, {agency, foaId}) {
-    commit('SET_AGENCY_PROGRAM_DETAILS_PAGE_LOADING_STATE', true);
-    return tenantService.getTenantProfile(agency)
-      .then((agencyProfile) => {
-        commit('SET_AGENCY_PROFILE', agencyProfile);
-        const agencyProgramDetailsLoad = new Promise((resolve, reject) => {
-          dispatch('loadAgencyProgramDetails', {foaId})
+  loadOrganizationProgramDetailsPage({state, dispatch, commit}, {organization, foaId}) {
+    commit('SET_ORGANIZATION_PROGRAM_DETAILS_PAGE_LOADING_STATE', true);
+    return deipRpc.api.getResearchGroupByPermlinkAsync(organization)
+      .then((organizationProfile) => {
+        const researchAreas = [
+          {
+            "title" : "Biological Sciences (BIO)",
+            abbreviation: organization,
+            subAreaAbbreviation: organization,
+            "disciplines" : [ 
+                3, 
+                9
+            ],
+            "subAreas" : [ 
+                {
+                    "title" : "Molecular and Cellular Biosciences (MCB)",
+                    abbreviation: organization,
+                    subAreaAbbreviation: organization,
+                    "disciplines" : [ 
+                        3, 
+                        9
+                    ]
+                }, 
+                {
+                    "title" : "Integrative Organismal Systems (IOS)",
+                    abbreviation: organization,
+                    subAreaAbbreviation: organization,
+                    "disciplines" : [ 
+                        3, 
+                        9
+                    ]
+                }, 
+                {
+                    "title" : "Emerging Frontiers (EF)",
+                    abbreviation: organization,
+                    subAreaAbbreviation: organization,
+                    "disciplines" : [ 
+                        3, 
+                        9
+                    ]
+                }, 
+                {
+                    "title" : "Environmental Biology (DEB)",
+                    abbreviation: organization,
+                    subAreaAbbreviation: organization,
+                    "disciplines" : [ 
+                        3, 
+                        9
+                    ]
+                }, 
+                {
+                    "title" : "Biological Infrastructure (DBI)",
+                    abbreviation: organization,
+                    subAreaAbbreviation: organization,
+                    "disciplines" : [ 
+                        3, 
+                        9
+                    ]
+                }
+            ]
+        }
+        ]
+
+        commit('SET_ORGANIZATION_PROFILE', {...organizationProfile, researchAreas});
+        const organizationProgramDetailsLoad = new Promise((resolve, reject) => {
+          dispatch('loadOrganizationProgramDetails', {foaId})
             .then(() => {
-              dispatch('loadAgencyProgramApplications', {notify: resolve})
+              dispatch('loadOrganizationProgramApplications', {notify: resolve})
             });
         });
-        return Promise.all([agencyProgramDetailsLoad])
+        return Promise.all([organizationProgramDetailsLoad])
       })
       .catch(err => {
         console.log(err)
       })
       .finally(() => {
-        commit('SET_AGENCY_PROGRAM_DETAILS_PAGE_LOADING_STATE', false);
+        commit('SET_ORGANIZATION_PROGRAM_DETAILS_PAGE_LOADING_STATE', false);
       });
   },
 
-  loadAgencyProgramDetails({state, dispatch, commit}, {foaId, notify}) {
-    commit('SET_AGENCY_PROGRAM_LOADING_STATE', true);
+  loadOrganizationProgramDetails({state, dispatch, commit}, {foaId, notify}) {
+    commit('SET_ORGANIZATION_PROGRAM_LOADING_STATE', true);
 
-    var program;
-    return deipRpc.api.getFundingOpportunitiesByOpportunityNumberAsync(foaId)
-      .then((programs) => {
-        program = programs.find(p => p.agency_name == state.agency._id);
+    let program;
+    return grantsService.getFundingOpportunityAnnouncementByNumber(foaId)
+      .then((programInfo) => {
+        program = programInfo;
         return usersService.getEnrichedProfiles(program.officers);
       })
       .then((profiles) => {
         program.officers = profiles
-        commit('SET_AGENCY_PROGRAM', program);
+        commit('SET_ORGANIZATION_PROGRAM', program);
       })
       .catch(err => {
         console.log(err)
       })
       .finally(() => {
-        commit('SET_AGENCY_PROGRAM_LOADING_STATE', false);
+        commit('SET_ORGANIZATION_PROGRAM_LOADING_STATE', false);
         if (notify) notify();
       });
   },
 
-  loadAgencyProgramApplications({state, dispatch, commit}, {notify}) {
-    commit('SET_AGENCY_PROGRAM_APPLICATIONS_LOADING_STATE', true);
+  loadOrganizationProgramApplications({state, dispatch, commit}, {notify}) {
+    commit('SET_ORGANIZATION_PROGRAM_APPLICATIONS_LOADING_STATE', true);
 
     let applications = [];
 
@@ -134,7 +193,7 @@ const actions = {
           application.research = researches[index];
           application.reviews = reviews[index];
           application.similarResearchApplications = otherResearchApplications[index]
-            .filter(a => application.id != a.id && a.program.agency_name != state.program.agency_name &&
+            .filter(a => application.id != a.id && a.program.organization_name != state.program.organization_name &&
               a.application_hash.split(':')[0] == application.application_hash.split(':')[0]);
         });
         const groupPromises = researches.map(research =>
@@ -168,13 +227,13 @@ const actions = {
         return applications;
       })
       .then(applications => {
-        commit('SET_AGENCY_PROGRAM_APPLICATIONS', applications);
+        commit('SET_ORGANIZATION_PROGRAM_APPLICATIONS', applications);
       })
       .catch(err => {
         console.log(err)
       })
       .finally(() => {
-        commit('SET_AGENCY_PROGRAM_APPLICATIONS_LOADING_STATE', false);
+        commit('SET_ORGANIZATION_PROGRAM_APPLICATIONS_LOADING_STATE', false);
         if (notify) notify();
       });
   }
@@ -183,35 +242,35 @@ const actions = {
 // mutations
 const mutations = {
 
-  ['SET_AGENCY_PROFILE'](state, agency) {
-    Vue.set(state, 'agency', agency)
+  ['SET_ORGANIZATION_PROFILE'](state, organization) {
+    Vue.set(state, 'organization', organization)
   },
 
-  ['SET_AGENCY_PROGRAM'](state, program) {
-    mapAreaToProgram(program, state.agency.researchAreas);
+  ['SET_ORGANIZATION_PROGRAM'](state, program) {
+    mapAreaToProgram(program, state.organization.researchAreas);
     Vue.set(state, 'program', program)
   },
 
-  ['SET_AGENCY_PROGRAM_APPLICATIONS'](state, applications) {
+  ['SET_ORGANIZATION_PROGRAM_APPLICATIONS'](state, applications) {
     Vue.set(state, 'applications', applications)
   },
 
-  ['SET_AGENCY_PROGRAM_LOADING_STATE'](state, isLoading) {
-    Vue.set(state, 'isLoadingAgencyProgramDetails', isLoading)
+  ['SET_ORGANIZATION_PROGRAM_LOADING_STATE'](state, isLoading) {
+    Vue.set(state, 'isLoadingOrganizationProgramDetails', isLoading)
   },
 
-  ['SET_AGENCY_PROGRAM_APPLICATIONS_LOADING_STATE'](state, isLoading) {
-    Vue.set(state, 'isLoadingAgencyProgramApplications', isLoading)
+  ['SET_ORGANIZATION_PROGRAM_APPLICATIONS_LOADING_STATE'](state, isLoading) {
+    Vue.set(state, 'isLoadingOrganizationProgramApplications', isLoading)
   },
 
-  ['SET_AGENCY_PROGRAM_DETAILS_PAGE_LOADING_STATE'](state, isLoading) {
-    Vue.set(state, 'isLoadingAgencyProgramDetailsPage', isLoading)
+  ['SET_ORGANIZATION_PROGRAM_DETAILS_PAGE_LOADING_STATE'](state, isLoading) {
+    Vue.set(state, 'isLoadingOrganizationProgramDetailsPage', isLoading)
   }
 }
 
 const namespaced = true;
 
-export const agencyProgramDetailsStore = {
+export const organizationProgramDetailsStore = {
   namespaced,
   state,
   getters,

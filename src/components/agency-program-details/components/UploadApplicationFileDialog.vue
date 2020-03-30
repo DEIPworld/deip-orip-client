@@ -11,35 +11,35 @@
       <v-layout row>
         <v-flex class="fill-height pa-5 xs12">
           <div v-if="researchList">
-            <div class="legacy-row c-mb-4">
-              <div class="c-pr-6">Funding opportunity:</div>
-              <div class="legacy-col-grow a subheading">{{ program.funding_opportunity_title }}</div>
-            </div>
+            <v-layout row mb-3>
+              <div class="pr-3">Funding opportunity:</div>
+              <div class="a subheading">{{ program.additional_info.funding_opportunity_title }}</div>
+            </v-layout>
             <v-divider></v-divider>
             <v-autocomplete
-              class="c-mt-4"
+              class="mt-3"
               :items="researchList"
               :filter="researchFilter"
               v-model="research"
               label="Research"
             >
               <template slot="selection" slot-scope="data">
-                <div class="legacy-row-nowrap align-center">
+                <v-layout align-center>
                   <span>{{ data.item.title }}</span>
-                </div>
+                </v-layout>
               </template>
               <template slot="item" slot-scope="data">
                 <template>
-                  <div class="legacy-row-nowrap align-center author-item">
-                    <span class="c-pl-3">{{ data.item.title}}</span>
-                  </div>
+                  <v-layout align-center author-item>
+                    <span class="pl-3">{{ data.item.title}}</span>
+                  </v-layout>
                 </template>
               </template>
             </v-autocomplete>
             <div v-if="research">
-              <div class="c-pt-4 c-pb-8">
+              <div class="pt-3 pb-3">
                 <div class="title">
-                  <span class="half-bold">Research group:</span>
+                  <span class="font-weight-medium">Research group:</span>
                   <router-link class="a"
                                :to="{
                         name: 'ResearchDetails',
@@ -51,22 +51,23 @@
                   >{{ research.group.name }}
                   </router-link>
                 </div>
-                <div class="c-pt-4 legacy-row">
-                  <div v-for="(member, i) in research.group.enrichedMembers" :key="i"
-                       class="legacy-row-nowrap text-align-center c-pt-2 c-pr-8">
+                <v-layout row pt-3>
+                  
+                  <v-layout v-for="(member, i) in research.group.enrichedMembers" :key="i"
+                       text-align-center pt-2 pr-3>
                     <platform-avatar
                       :user="member"
                       :size="40"
                       link-to-profile
                       link-to-profile-class="px-1"
                     ></platform-avatar>
-                  </div>
-                </div>
+                  </v-layout>
+                </v-layout>
               </div>
               <v-divider></v-divider>
-              <div class="c-pv-4">
-                <div class="legacy-row legacy-justify-center">
-                  <div class="legacy-col-6 c-pr-4">
+              <div class="py-3">
+                <v-layout row justify-center>
+                  <v-flex xs6 pr-3>
                     <v-text-field class=""
                                   label="Title"
                                   v-model="title"
@@ -74,8 +75,8 @@
                         applicationTitleRule
                       ]">
                     </v-text-field>
-                  </div>
-                  <div class="legacy-col-6 c-pl-4">
+                  </v-flex>
+                  <v-flex xs6 pl-3>
                     <v-text-field class=""
                                   label="Total amount"
                                   suffix="$"
@@ -84,16 +85,16 @@
                         applicationTotalAmountRule
                       ]">
                     </v-text-field>
-                  </div>
-                </div>
-                <div class="legacy-row legacy-justify-center">
-                  <div class="legacy-col-12">
+                  </v-flex>
+                </v-layout>
+                <v-layout row justify-center>
+                  <v-flex xs12>
                     <v-text-field class=""
                                   label="Organization"
                                   v-model="organization"
                     ></v-text-field>
-                  </div>
-                </div>
+                  </v-flex>
+                </v-layout>
               </div>
               <div v-if="dropzoneOptions">
                 <div>
@@ -105,88 +106,88 @@
                                 @vdropzone-success-multiple="vsuccessMultiple"></vue-dropzone>
                 </div>
               </div>
-              <div class="legacy-row c-pt-8">
-                <div class="legacy-col-12">
-                  <div class="legacy-row legacy-align-items-center height-2 c-pt-4 c-pb-8">
-                    <div class="bold c-pr-4">Application</div>
-                    <div class="half-bold primary--text">Application content</div>
-                    <v-icon v-show="filesMap['Application Content.pdf']" color="green" class="c-pl-4">check_circle
+              <v-layout row wrap pt-3>
+                <v-flex xs12 mb-3>
+                  <v-layout row align-center height-2 pt-3 pb-3>
+                    <div class="font-weight-bold pr-3">Application</div>
+                    <div class="font-weight-medium primary--text">Application content</div>
+                    <v-icon v-show="filesMap['Application Content.pdf']" color="green" class="pl-3">check_circle
                     </v-icon>
-                  </div>
-                </div>
-                <div class="legacy-col-12">
-                  <div class="legacy-row">
-                    <div class="legacy-col-6">
-                      <div class="bold">Mandatory forms</div>
-                      <div class="legacy-row legacy-align-items-center height-2 c-pt-4">
-                        <div class="half-bold primary--text">SF424 (R &amp; R) [V2.0]</div>
-                        <v-icon v-show="filesMap['RR_SF424_2_0-V2.0.pdf']" color="green" class="c-pl-4">check_circle
+                  </v-layout>
+                </v-flex>
+                <v-flex xs12>
+                  <v-layout row>
+                    <v-flex xs6>
+                      <div class="font-weight-bold">Mandatory forms</div>
+                      <v-layout row align-center height-2 pt-3>
+                        <div class="font-weight-medium primary--text">SF424 (R &amp; R) [V2.0]</div>
+                        <v-icon v-show="filesMap['RR_SF424_2_0-V2.0.pdf']" color="green" class="pl-3">check_circle
                         </v-icon>
-                      </div>
-                      <div class="legacy-row legacy-align-items-center height-2 c-pt-4">
-                        <div class="half-bold primary--text">PHS 398 Cover Page Supplement [V4.0]</div>
+                      </v-layout>
+                      <v-layout row align-center height-2 pt-3>
+                        <div class="font-weight-medium primary--text">PHS 398 Cover Page Supplement [V4.0]</div>
                         <v-icon v-show="filesMap['PHS398_CoverPageSupplement_4_0-V4.0.pdf']" color="green"
-                                class="c-pl-4">check_circle
+                                class="pl-3">check_circle
                         </v-icon>
-                      </div>
-                      <div class="legacy-row legacy-align-items-center height-2 c-pt-4">
-                        <div class="half-bold primary--text">Research And Related Other Project Information [V1.4]</div>
-                        <v-icon v-show="filesMap['RR_OtherProjectInfo_1_4-V1.4.pdf']" color="green" class="c-pl-4">
+                      </v-layout>
+                      <v-layout row align-center height-2 pt-3>
+                        <div class="font-weight-medium primary--text">Research And Related Other Project Information [V1.4]</div>
+                        <v-icon v-show="filesMap['RR_OtherProjectInfo_1_4-V1.4.pdf']" color="green" class="pl-3">
                           check_circle
                         </v-icon>
-                      </div>
-                      <div class="legacy-row legacy-align-items-center height-2 c-pt-4">
-                        <div class="half-bold primary--text">Project/Performance Site Location(s) [V2.0]</div>
-                        <v-icon v-show="filesMap['PerformanceSite_2_0-V2.0.pdf']" color="green" class="c-pl-4">
+                      </v-layout>
+                      <v-layout row align-center height-2 pt-3>
+                        <div class="font-weight-medium primary--text">Project/Performance Site Location(s) [V2.0]</div>
+                        <v-icon v-show="filesMap['PerformanceSite_2_0-V2.0.pdf']" color="green" class="pl-3">
                           check_circle
                         </v-icon>
-                      </div>
-                      <div class="legacy-row legacy-align-items-center height-2 c-pt-4">
-                        <div class="half-bold primary--text">Research and Related Senior/Key Person Profile (Expanded)
+                      </v-layout>
+                      <v-layout row align-center height-2 pt-3>
+                        <div class="font-weight-medium primary--text">Research and Related Senior/Key Person Profile (Expanded)
                           [V2.0]
                         </div>
-                        <v-icon v-show="filesMap['RR_KeyPersonExpanded_2_0-V2.0.pdf']" color="green" class="c-pl-4">
+                        <v-icon v-show="filesMap['RR_KeyPersonExpanded_2_0-V2.0.pdf']" color="green" class="pl-3">
                           check_circle
                         </v-icon>
-                      </div>
-                      <div class="legacy-row legacy-align-items-center height-2 c-pt-4">
-                        <div class="half-bold primary--text">PHS 398 Research Plan [V4.0]</div>
-                        <v-icon v-show="filesMap['PHS398_ResearchPlan_4_0-V4.0.pdf']" color="green" class="c-pl-4">
+                      </v-layout>
+                      <v-layout row align-center height-2 pt-3>
+                        <div class="font-weight-medium primary--text">PHS 398 Research Plan [V4.0]</div>
+                        <v-icon v-show="filesMap['PHS398_ResearchPlan_4_0-V4.0.pdf']" color="green" class="pl-3">
                           check_circle
                         </v-icon>
-                      </div>
-                      <div class="legacy-row legacy-align-items-center height-2 c-pt-4">
-                        <div class="half-bold primary--text">PHS Human Subjects and Clinical Trials Information [V1.0]
+                      </v-layout>
+                      <v-layout row align-center height-2 pt-3>
+                        <div class="font-weight-medium primary--text">PHS Human Subjects and Clinical Trials Information [V1.0]
                         </div>
                         <v-icon v-show="filesMap['PHSHumanSubjectsAndClinicalTrialsInfo-V1.0.pdf']" color="green"
-                                class="c-pl-4">check_circle
+                                class="pl-3">check_circle
                         </v-icon>
-                      </div>
-                    </div>
-                    <div class="legacy-col-6">
-                      <div class="bold">Optional forms</div>
-                      <div class="legacy-row legacy-align-items-center height-2 c-pt-4">
-                        <div class="half-bold primary--text">Research &amp; Related Budget [V1.4]</div>
-                      </div>
-                      <div class="legacy-row legacy-align-items-center height-2 c-pt-4">
-                        <div class="half-bold primary--text">R &amp; R Subaward Budget Attachment(s) Form 5 YR 30 ATT
+                      </v-layout>
+                    </v-flex>
+                    <v-flex xs6>
+                      <div class="font-weight-bold">Optional forms</div>
+                      <v-layout row align-center height-2 pt-3>
+                        <div class="font-weight-medium primary--text">Research &amp; Related Budget [V1.4]</div>
+                      </v-layout>
+                      <v-layout row align-center height-2 pt-3>
+                        <div class="font-weight-medium primary--text">R &amp; R Subaward Budget Attachment(s) Form 5 YR 30 ATT
                           [V1.4]
                         </div>
-                      </div>
-                      <div class="legacy-row legacy-align-items-center height-2 c-pt-4">
-                        <div class="half-bold primary--text">PHS 398 Modular Budget [V1.2]</div>
-                      </div>
-                      <div class="legacy-row legacy-align-items-center height-2 c-pt-4">
-                        <div class="half-bold primary--text">PHS Assignment Request Form [V2.0]</div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
+                      </v-layout>
+                      <v-layout row align-center height-2 pt-3>
+                        <div class="font-weight-medium primary--text">PHS 398 Modular Budget [V1.2]</div>
+                      </v-layout>
+                      <v-layout row align-center height-2 pt-3>
+                        <div class="font-weight-medium primary--text">PHS Assignment Request Form [V2.0]</div>
+                      </v-layout>
+                    </v-flex>
+                  </v-layout>
+                </v-flex>
+              </v-layout>
             </div>
-            <div class="display-flex c-pt-8">
+            <div class="display-flex pt-3">
               <v-btn color="primary"
-                     class="c-m-auto"
+                     class="ma-auto"
                      :disabled="isDisabled || isLoading"
                      :loading="isLoading"
                      @click="sendApplication()"
@@ -196,7 +197,7 @@
             </div>
           </div>
           <div class="display-flex" v-else>
-            <v-progress-circular class="c-m-auto" indeterminate color="primary"></v-progress-circular>
+            <v-progress-circular class="ma-auto" indeterminate color="primary"></v-progress-circular>
           </div>
         </v-flex>
       </v-layout>
@@ -257,7 +258,7 @@
       ...mapGetters({
         user: 'auth/user',
         userGroups: 'auth/userGroups',
-        applications: 'agencyProgramDetails/applications',
+        applications: 'organizationProgramDetails/applications',
       }),
       isDisabled() {
         if (!this.totalAmount) return true;
@@ -274,7 +275,7 @@
           url: `${window.env.DEIP_SERVER_URL}/applications/upload-files`,
           paramName: 'application-content',
           headers: {
-            'Agency': window.env.TENANT,
+            'organization': window.env.TENANT,
             'Research-Id': this.research.id.toString(),
             'Foa-Id': this.program.id.toString(),
             'Authorization': 'Bearer ' + accessToken,
@@ -356,7 +357,7 @@
             });
 
             return new Promise((resolve, reject) => {
-              this.$store.dispatch('agencyProgramDetails/loadAgencyProgramApplications', { notify: resolve })
+              this.$store.dispatch('organizationProgramDetails/loadorganizationProgramApplications', { notify: resolve })
             });
           })
           .catch(err => {
