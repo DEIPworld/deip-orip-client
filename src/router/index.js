@@ -102,8 +102,8 @@ const router = new Router({
     name: 'AgencyPrograms',
     component: AgencyPrograms,
     beforeEnter: (to, from, next) => {
-      let loadPagePromise = store.dispatch('agencyPrograms/loadAgencyProgramsPage', {
-        agency: decodeURIComponent(to.params.agency),
+      let loadPagePromise = store.dispatch('organizationPrograms/loadOrganizationProgramsPage', {
+        organization: decodeURIComponent(to.params.agency),
         areaCode: to.query.areaCode,
         subAreaCode: to.query.subAreaCode
       });

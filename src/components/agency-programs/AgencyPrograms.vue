@@ -15,7 +15,7 @@
             <v-layout row wrap>
               <v-flex xs3 text-xs-center>
                 <v-avatar size="160px">
-                  <img :src="agencyProfile | tenantSymbolSrc(320, 320, false)" />
+                  <img :src="$options.filters.researchGroupLogoSrc(organizationProfile.id, 50, 50, true)">
                 </v-avatar>
               </v-flex>
               <v-flex xs9>
@@ -25,8 +25,7 @@
                   <div class="body-1 c-mt-2">{{selectedArea.subAreaTitle}}</div>
                 </div>
                 <div v-else>
-                  <div class="headline c-mt-2">{{agencyProfile.name}}</div>
-                  <!-- <div class="body-1 c-mt-2">{{agencyProfile.description}}</div> -->
+                  <div class="headline c-mt-2">{{organizationProfile.name}}</div>
                 </div>
               </v-flex>
             </v-layout>
@@ -39,13 +38,14 @@
         <v-card>
           <div class="subheading c-pl-6 c-pb-5 c-pt-5 bold">Research Areas</div>
           <v-expansion-panel :value="selectedAreas">
-            <v-expansion-panel-content v-for="(area,i) in agencyProfile.researchAreas" :key="i">
+            <v-expansion-panel-content v-for="(area,i) in organizationProfile.researchAreas" :key="i">
               <div slot="header"><b>{{area.title}}</b></div>
               <v-card>
                 <v-card-text class="pa-0">
                   <div class="sub-area-list-item"
                       :class="isSelectedSubArea(subArea) ? 'active' : ''"
                       v-for="(subArea, i) in area.subAreas" 
+                      :key="`${i}-subArea`"
                       @click="selectArea(area, subArea)">
                     <div class="sub-area-list-item-content">{{subArea.title}}</div>
                   </div>  
@@ -102,7 +102,7 @@
             <v-flex xs12 v-if="selectedArea">
               <div class="subheading bold c-pl-5 c-pb-5 c-pt-2">{{selectedArea.subAreaTitle}}: Core Programs</div>
               <template v-for="(program, i) in filteredCorePrograms">
-                <program-list-item :is-first="i == 0" :program="program"></program-list-item>
+                <program-list-item :is-first="i == 0" :program="program" :key="`${i}-core-program`"></program-list-item>
               </template>
               <div v-show="!filteredCorePrograms.length" class="caption c-pl-5">
                 No core programs found for specified criteria
@@ -111,7 +111,7 @@
             <v-flex xs12 v-if="selectedArea" class="c-pt-10">
               <div class="subheading bold c-pl-5 c-pb-5 c-pt-2">Additional Funding Opportunities for the {{selectedArea.abbreviation}}</div>
               <template v-for="(program, i) in filteredAdditionalPrograms">
-                <program-list-item :is-first="i == 0" :program="program"></program-list-item>
+                <program-list-item :is-first="i == 0" :program="program" :key="`${i}-additional-program`"></program-list-item>
               </template>
               <div v-show="!filteredAdditionalPrograms.length" class="caption c-pl-5">
                 No additional programs found for specified criteria
@@ -119,8 +119,6 @@
             </v-flex>
           </v-layout>
         </v-card>
-
-        <top-funding-opportunities-chart></top-funding-opportunities-chart>
       </v-flex>
     </v-layout>
   </v-container>
@@ -143,15 +141,15 @@
 
         computed: {
             ...mapGetters({
-                agencyProfile: 'agencyPrograms/agency',
-                selectedArea: 'agencyPrograms/selectedArea',
+                organizationProfile: 'organizationPrograms/organization',
+                selectedArea: 'organizationPrograms/selectedArea',
 
-                corePrograms: 'agencyPrograms/corePrograms',
-                additionalPrograms: 'agencyPrograms/additionalPrograms'
+                corePrograms: 'organizationPrograms/corePrograms',
+                additionalPrograms: 'organizationPrograms/additionalPrograms'
             }),
             breadcrumbs(){
               return [ 
-                { text: this.agencyProfile.shortName, disabled: false }, 
+                { text: this.organizationProfile.shortName, disabled: false }, 
                 { text: "Programs", disabled: false },
                 { text: this.selectedArea.abbreviation, disabled: false }, 
                 { text: this.selectedArea.subAreaAbbreviation, disabled: false }
@@ -165,7 +163,7 @@
               return this.filterPrograms(this.additionalPrograms);
             },
             selectedAreas() {
-              return this.agencyProfile.researchAreas.map(area => area.title == this.selectedArea.title ? 1 : 0);
+              return this.organizationProfile.researchAreas.map(area => area.title == this.selectedArea.title ? 1 : 0);
             }
         },
 
@@ -178,7 +176,7 @@
           },
 
           selectArea(area, subArea) {
-            this.$store.dispatch('agencyPrograms/setResearchArea', { area, subArea });
+            this.$store.dispatch('organizationPrograms/setResearchArea', { area, subArea });
           },
           
           setSortCriteria(key) {
@@ -203,11 +201,11 @@
               if (!this.filter.searchTerm) {
                 return true;
               }
-              return p.title.toLowerCase().includes(this.filter.searchTerm.toLowerCase());
+              return p.additional_info.funding_opportunity_title.toLowerCase().includes(this.filter.searchTerm.toLowerCase());
             });
 
             filtered = filtered.filter(p => {
-              return p.disciplines.some(d => this.selectedArea.disciplines.includes(d));
+              return p.target_disciplines.some(d => this.selectedArea.disciplines.includes(d));
             });
 
             let filter = this.filter;
