@@ -17,18 +17,20 @@
     <review-assessment v-model="review.scores" :researchContentType="content.content_type"></review-assessment>
   </div>
 
-  <div v-if="review.author.account.name !== user.username && userHasExpertise">
+  <div v-if="review.author.account.name !== user.username">
     <div>
       <v-btn block color="primary"
         :loading="isReviewVoting"
-        :disabled="isReviewVoting || userHasVoted || votingDisabled || isGroupMember"
+        :disabled="isReviewVoting || userHasVoted || votingDisabled || isGroupMember || !userHasExpertise"
         @click="voteReview()">
         Support Review
       </v-btn>
     </div>
-
     <div class="pt-2" v-if="isGroupMember">
       <div class="body-2">Review can be supported only by members of other groups</div>
+    </div>
+    <div v-else-if="!userHasExpertise">Users with expertise in <span class="body-2">{{review.disciplines.map(d => d.name).join(", ")}}</span>
+      can support this review only
     </div>
     <div class="pt-2" v-else-if="!userHasVoted">
       <div>You will get <span class="body-2">approximately 1000 ECI reward in {{userRelatedExpertise.map(exp => exp.discipline_name).join(", ")}}</span> for your contribution to this project</div>
@@ -99,13 +101,13 @@ export default {
       }
     },
     userHasExpertise() {
-      return this.userExperise.some(exp => this.research.disciplines.some(d => d.id == exp.discipline_id))
+      return this.userExperise.some(exp => this.review.disciplines.some(d => d.id == exp.discipline_id))
     },
     userHasVoted() {
       return this.review.votes.some(vote => vote.voter === this.user.username);
     },
     userRelatedExpertise() {
-      return this.userExperise.filter(exp => this.research.disciplines.some(d => d.id == exp.discipline_id))
+      return this.userExperise.filter(exp => this.review.disciplines.some(d => d.id == exp.discipline_id))
     },
     isGroupMember(){
       return !!this.groupMembers.find(item => item.rgt.owner === this.user.username)
