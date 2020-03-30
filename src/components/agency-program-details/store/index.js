@@ -5,9 +5,11 @@ import { mapAreaToProgram } from '../../common/disciplines/DisciplineTreeService
 
 import { TenantService } from '@deip/tenant-service';
 import { UsersService } from '@deip/users-service';
+import { ExpertiseContributionsService } from '@deip/expertise-contributions-service';
 
 const tenantService = TenantService.getInstance();
 const usersService = UsersService.getInstance();
+const expertiseContributionsService = ExpertiseContributionsService.getInstance();
 
 const state = {
   agency: undefined,
@@ -89,7 +91,7 @@ const actions = {
         applications = list;
 
         const totalVotesPromises = applications.map(application =>
-          deipRpc.api.getTotalVotesByResearchAsync(application.research_id)
+          expertiseContributionsService.getExpertiseContributionsByResearch(application.research_id)
         );
 
         const researchesPromises = applications.map(application =>

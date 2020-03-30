@@ -8,6 +8,8 @@ import { UsersService } from '@deip/users-service';
 import { InvestmentsService } from '@deip/investments-service';
 import { ResearchContentService } from '@deip/research-content-service';
 import { GrantsService } from '@deip/grants-service';
+import { ExpertiseContributionsService } from '@deip/expertise-contributions-service';
+import { EXPERTISE_CONTRIBUTION_TYPE } from '@/variables';
 
 const accessService = AccessService.getInstance();
 const researchService = ResearchService.getInstance();
@@ -15,6 +17,7 @@ const usersService = UsersService.getInstance();
 const investmentsService = InvestmentsService.getInstance();
 const researchContentService = ResearchContentService.getInstance();
 const grantsService = GrantsService.getInstance();
+const expertiseContributionsService = ExpertiseContributionsService.getInstance();
 
 const state = {
   research: null,
@@ -187,13 +190,13 @@ const getters = {
       const tvo = flattened[i];
       const discipline_id = tvo.discipline_id.toString();
       const research_content_id = tvo.research_content_id.toString();
-      const total_weight = tvo.total_weight;
+      const eci = tvo.eci;
 
       if (map[research_content_id] === undefined) {
         map[research_content_id] = {};
       }
 
-      map[research_content_id][discipline_id] = total_weight;
+      map[research_content_id][discipline_id] = eci;
     }
     return map;
   },
@@ -205,12 +208,12 @@ const getters = {
       for (var j = 0; j < tvoByContent.length; j++) {
         const tvo = tvoByContent[j];
         const discipline_id = tvo.discipline_id.toString();
-        const total_weight = tvo.total_weight;
+        const eci = tvo.eci;
 
         if (map[discipline_id] === undefined) {
-          map[discipline_id] = total_weight;
+          map[discipline_id] = eci;
         } else {
-          map[discipline_id] += total_weight;
+          map[discipline_id] += eci;
         }
       }
     }
@@ -269,18 +272,13 @@ const getters = {
         return null;
       }
 
-      let researchGroup = state.group;
-      let research = state.research;
-
       return records.map(record => {
 
-        if (record.action == 'review') {
-          let review = state.reviewsList.find(review => review.id == record.actionObjectId);
-          let researchContent = state.contentList.find(content => content.id == review.research_content_id);
-          let typeInfo = researchService.getResearchContentType(researchContent.content_type);
+        if (record.alteration_source_type == EXPERTISE_CONTRIBUTION_TYPE.REVIEW) {
+          let typeInfo = researchService.getResearchContentType(record.research_content.content_type);
 
           let parser = new DOMParser();
-          let html = parser.parseFromString(review.content, 'text/html');
+          let html = parser.parseFromString(record.review.content, 'text/html');
           let allElements = Array.from(html.all);
           let bodyIdx = allElements.findIndex(el => el.tagName == 'BODY');
           let headerEl = allElements[bodyIdx + 1];
@@ -289,30 +287,27 @@ const getters = {
           let link = {
             name: 'ResearchContentReview',
             params: {
-              research_group_permlink: decodeURIComponent(researchGroup.permlink),
-              research_permlink: decodeURIComponent(research.permlink),
-              content_permlink: decodeURIComponent(researchContent.permlink),
-              review_id: review.id
+              research_group_permlink: decodeURIComponent(record.research_group.permlink),
+              research_permlink: decodeURIComponent(record.research.permlink),
+              content_permlink: decodeURIComponent(record.research_content.permlink),
+              review_id: record.review.id
             }
           };
+
           return {
             ...record,
-            actionText: typeInfo && typeInfo.text ? `${typeInfo.text} Reviewed` : record.actionText,
+            actionText: `${typeInfo? typeInfo.text : 'Publication'} Reviewed`,
             meta: {
               title,
-              review,
+              review: record.review,
               link
             }
           };
 
-        } else if (record.action == 'vote_for_review') {
-          let reviewVotes = [].concat.apply([], state.reviewsList.map(review => review.votes));
-          let reviewVote = reviewVotes.find(vote => vote.id == record.actionObjectId);
-          let review = state.reviewsList.find(review => review.id == reviewVote.review_id);
-          let researchContent = state.contentList.find(content => content.id == review.research_content_id);
+        } else if (record.alteration_source_type == EXPERTISE_CONTRIBUTION_TYPE.REVIEW_SUPPORT) {
 
           let parser = new DOMParser();
-          let html = parser.parseFromString(review.content, 'text/html');
+          let html = parser.parseFromString(record.review.content, 'text/html');
           let allElements = Array.from(html.all);
           let bodyIdx = allElements.findIndex(el => el.tagName == 'BODY');
           let headerEl = allElements[bodyIdx + 1];
@@ -321,41 +316,52 @@ const getters = {
           let link = {
             name: 'ResearchContentReview',
             params: {
-              research_group_permlink: decodeURIComponent(researchGroup.permlink),
-              research_permlink: decodeURIComponent(research.permlink),
-              content_permlink: decodeURIComponent(researchContent.permlink),
-              review_id: review.id
+              research_group_permlink: decodeURIComponent(record.research_group.permlink),
+              research_permlink: decodeURIComponent(record.research.permlink),
+              content_permlink: decodeURIComponent(record.research_content.permlink),
+              review_id: record.review.id
             }
           };
+
           return {
             ...record,
+            actionText: "Review supported",
             meta: {
               title,
-              review,
-              reviewVote,
+              review: record.review,
+              reviewVote: record.review_vote,
               link
             }
           };
 
-        } else if (record.action == 'init') { // research content
-          let researchContent = state.contentList.find(content => content.id == record.actionObjectId);
-          let typeInfo = researchService.getResearchContentType(researchContent.content_type);
-
+        } else if (record.alteration_source_type == EXPERTISE_CONTRIBUTION_TYPE.PUBLICATION) {
+          
+          let typeInfo = researchService.getResearchContentType(record.research_content.content_type);
           let link = {
             name: 'ResearchContentDetails',
             params: {
-              research_group_permlink: decodeURIComponent(researchGroup.permlink),
-              research_permlink: decodeURIComponent(research.permlink),
-              content_permlink: decodeURIComponent(researchContent.permlink)
+              research_group_permlink: decodeURIComponent(record.research_group.permlink),
+              research_permlink: decodeURIComponent(record.research.permlink),
+              content_permlink: decodeURIComponent(record.research_content.permlink)
             }
           };
+
           return {
             ...record,
-            actionText: typeInfo && typeInfo.text ? `${typeInfo.text} Uploaded` : record.actionText,
+            actionText: `${typeInfo ? typeInfo.text : 'Publication'} uploaded`,
             meta: {
-              title: researchContent.title,
-              researchContent,
+              title: record.research_content.title,
+              researchContent: record.research_content,
               link
+            }
+          };
+        } else {
+
+          return {
+            ...record,
+            actionText: "Contribution",
+            meta: {
+              title: "Contribution"
             }
           };
         }
@@ -573,17 +579,13 @@ const actions = {
     deipRpc.api.getDisciplinesByResearchAsync(researchId)
       .then((data) => {
         const tvoPromises = [];
-        const statsPromises = [];
         const expertsPromises = [];
 
         for (var i = 0; i < data.length; i++) {
           var discipline = data[i];
           disciplinesList.push(discipline);
-          tvoPromises.push(deipRpc.api.getTotalVotesByResearchAndDisciplineAsync(researchId, discipline.id));
+          tvoPromises.push(expertiseContributionsService.getExpertiseContributionsByResearchAndDiscipline(researchId, discipline.id));
 
-          statsPromises.push(
-            deipRpc.api.getEciAndExpertiseStatsByDisciplineIdAsync(discipline.id)
-          );
           expertsPromises.push(
             deipRpc.api.getExpertTokensByDisciplineIdAsync(discipline.id)
           );
@@ -591,17 +593,13 @@ const actions = {
 
         return Promise.all([
           Promise.all(tvoPromises),
-          Promise.all(statsPromises),
           Promise.all(expertsPromises)
         ]);
       }, (err) => {console.log(err);})
-      .then(([tvoList, disciplinesStats, expertTokensPerDiscipline]) => {
+      .then(([tvoList, expertTokensPerDiscipline]) => {
         const expertsAccountNames = [];
         expertTokensPerDiscipline.forEach((e) => {
           expertsAccountNames.push(...e.map(et => et.account_name));
-        });
-        disciplinesList.forEach((discipline, i) => {
-          discipline.stats = disciplinesStats[i];
         });
         commit('SET_RESEARCH_DISCIPLINES_LIST', disciplinesList);
         commit('SET_RESEARCH_TOTAL_VOTES_LIST', tvoList);
@@ -750,12 +748,9 @@ const actions = {
   },
 
   loadResearchEciHistoryRecords({ state, dispatch, commit }, { researchId, disciplineId, notify }) {
-    return researchService.getResearchEciHistoryRecords(researchId, disciplineId)
+    return expertiseContributionsService.getEciHistoryByResearchAndDiscipline(researchId, disciplineId)
       .then((records) => {
-        commit('SET_RESEARCH_ECI_HISTORY_BY_DISCIPLINE', {
-          disciplineId,
-          records
-        });
+        commit('SET_RESEARCH_ECI_HISTORY_BY_DISCIPLINE', { disciplineId, records });
         return records;
       }, (err) => { console.log(err); })
       .finally(() => {

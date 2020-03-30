@@ -15,7 +15,7 @@
                         >{{ review.author | fullname }}</router-link>
                     </div>
 
-                    <v-btn small outline @click="goToReviewPage()">See Review</v-btn>
+                    <v-btn color="primary" small outline @click="goToReviewPage()">See Review</v-btn>
                 </v-layout>
             </v-flex>
 
@@ -23,10 +23,6 @@
                 <div class="pl-4">
                     <div>
                         <span class="grey--text">{{ reviewModel.created_at | dateFormat('D MMM YYYY', true) }}</span>
-                        <span class="half-bold pl-2">
-                            <span class="green--text text--darken-2" v-if="reviewModel.is_positive">Approving</span>
-                            <span class="red--text text--darken-2" v-if="!reviewModel.is_positive">Rejecting</span>
-                        </span>
                     </div>
 
                     <div class="py-2">

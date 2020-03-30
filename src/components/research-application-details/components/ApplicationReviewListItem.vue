@@ -12,10 +12,6 @@
             <div class="legacy-col-grow c-ml-6">
                 <div>
                     <span class="grey--text">{{ review.created_at | dateFormat('D MMM YYYY', true) }}</span>
-                    <span class="half-bold c-pl-2">
-                        <span class="green--text text--darken-2" v-if="review.is_positive">Approving</span>
-                        <span class="red--text text--darken-2" v-if="!review.is_positive">Rejecting</span>
-                    </span>
                 </div>
 
                 <div class="c-pt-2 review-preview">

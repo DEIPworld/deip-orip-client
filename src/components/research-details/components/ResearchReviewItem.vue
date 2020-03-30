@@ -20,7 +20,7 @@
             </div>
           </v-flex>
         </v-layout>
-        <v-btn small @click="goToReviewPage(review)" outline>See review</v-btn>
+        <v-btn small color="primary" @click="goToReviewPage(review)" outline>See review</v-btn>
       </v-layout>
     </v-flex>
     <v-flex xs12 lg4 class="px-4 right-bordered">

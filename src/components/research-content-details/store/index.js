@@ -6,13 +6,15 @@ import { ResearchService } from '@deip/research-service';
 import { UsersService } from '@deip/users-service';
 import { ResearchContentService } from '@deip/research-content-service';
 import { BlockchainService } from '@deip/blockchain-service';
+import { ExpertiseContributionsService } from '@deip/expertise-contributions-service';
 
-import { PROPOSAL_TYPES } from '@/variables';
+import { PROPOSAL_TYPES, EXPERTISE_CONTRIBUTION_TYPE } from '@/variables';
 
 const researchService = ResearchService.getInstance();
 const usersService = UsersService.getInstance();
 const researchContentService = ResearchContentService.getInstance();
 const blockchainService = BlockchainService.getInstance();
+const expertiseContributionsService = ExpertiseContributionsService.getInstance();
 
 const state = {
   content: null,
@@ -152,12 +154,12 @@ const getters = {
       const tvo = flattened[i];
       const discipline_id = tvo.discipline_id.toString();
       const research_content_id = tvo.research_content_id.toString();
-      const total_weight = tvo.total_weight;
+      const eci = tvo.eci;
 
       if (map[research_content_id] === undefined)
         map[research_content_id] = {};
 
-      map[research_content_id][discipline_id] = total_weight;
+      map[research_content_id][discipline_id] = eci;
     }
     return map;
   },
@@ -185,18 +187,13 @@ const getters = {
         return null;
       }
 
-      let researchGroup = state.group;
-      let research = state.research;
-      let researchContent = state.content;
-      let typeInfo = researchService.getResearchContentType(researchContent.content_type);
-
       return records.map(record => {
-
-        if (record.action == 'review') {
-          let review = state.contentReviewsList.find(review => review.id == record.actionObjectId);
+        if (record.alteration_source_type == EXPERTISE_CONTRIBUTION_TYPE.REVIEW) {
+          
+          let typeInfo = researchService.getResearchContentType(record.research_content.content_type);
 
           let parser = new DOMParser();
-          let html = parser.parseFromString(review.content, 'text/html');
+          let html = parser.parseFromString(record.review.content, 'text/html');
           let allElements = Array.from(html.all);
           let bodyIdx = allElements.findIndex(el => el.tagName == 'BODY');
           let headerEl = allElements[bodyIdx + 1];
@@ -205,25 +202,27 @@ const getters = {
           let link = {
             name: 'ResearchContentReview',
             params: {
-              research_group_permlink: decodeURIComponent(researchGroup.permlink),
-              research_permlink: decodeURIComponent(research.permlink),
-              content_permlink: decodeURIComponent(researchContent.permlink),
-              review_id: review.id
+              research_group_permlink: decodeURIComponent(record.research_group.permlink),
+              research_permlink: decodeURIComponent(record.research.permlink),
+              content_permlink: decodeURIComponent(record.research_content.permlink),
+              review_id: record.review.id
             }
           }
+          
           return {
             ...record,
-            actionText: typeInfo && typeInfo.text ? `${typeInfo.text} Reviewed` : record.actionText,
-            meta: {title, review, link}
+            actionText: `${typeInfo ? typeInfo.text : 'Publication'} reviewed`,
+            meta: { 
+              title, 
+              review: record.review, 
+              link 
+            }
           };
 
-        } else if (record.action == 'vote_for_review') {
-          let reviewVotes = [].concat.apply([], state.contentReviewsList.map(review => review.votes));
-          let reviewVote = reviewVotes.find(vote => vote.id == record.actionObjectId);
-          let review = state.contentReviewsList.find(review => review.id == reviewVote.review_id);
+        } else if (record.alteration_source_type == EXPERTISE_CONTRIBUTION_TYPE.REVIEW_SUPPORT) {
 
           let parser = new DOMParser();
-          let html = parser.parseFromString(review.content, 'text/html');
+          let html = parser.parseFromString(record.review.content, 'text/html');
           let allElements = Array.from(html.all);
           let bodyIdx = allElements.findIndex(el => el.tagName == 'BODY');
           let headerEl = allElements[bodyIdx + 1];
@@ -232,19 +231,43 @@ const getters = {
           let link = {
             name: 'ResearchContentReview',
             params: {
-              research_group_permlink: decodeURIComponent(researchGroup.permlink),
-              research_permlink: decodeURIComponent(research.permlink),
-              content_permlink: decodeURIComponent(researchContent.permlink),
-              review_id: review.id
+              research_group_permlink: decodeURIComponent(record.research_group.permlink),
+              research_permlink: decodeURIComponent(record.research.permlink),
+              content_permlink: decodeURIComponent(record.research_content.permlink),
+              review_id: record.review.id
             }
           }
-          return {...record, meta: {title, review, reviewVote, link}};
+          
+          return { 
+            ...record, 
+            actionText: `Review supported`,
+            meta: { 
+              title, 
+              review: record.review, 
+              reviewVote: record.review_vote, 
+              link 
+            }
+          };
 
-        } else if (record.action == 'init') {
+        } else if (record.alteration_source_type == EXPERTISE_CONTRIBUTION_TYPE.PUBLICATION) {
+          let typeInfo = researchService.getResearchContentType(record.research_content.content_type);
+          
           return {
             ...record,
-            actionText: typeInfo && typeInfo.text ? `${typeInfo.text} Uploaded` : record.actionText,
-            meta: {title: researchContent.title, researchContent, link: null}
+            actionText: `${typeInfo ? typeInfo.text : 'Publication'} uploaded`,
+            meta: { 
+              title: record.research_content.title, 
+              researchContent: record.research_content, 
+              link: null 
+            }
+          };
+        } else {
+          return {
+            ...record,
+            actionText: "Contribution",
+            meta: {
+              title: "Contribution"
+            }
           };
         }
       });
@@ -333,7 +356,7 @@ const actions = {
         for (var i = 0; i < data.length; i++) {
           var discipline = data[i];
           disciplinesList.push(discipline);
-          tvoPromises.push(deipRpc.api.getTotalVotesByResearchAndDisciplineAsync(researchId, discipline.id));
+          tvoPromises.push(expertiseContributionsService.getExpertiseContributionsByResearchAndDiscipline(researchId, discipline.id));
           expertsPromises.push(
             deipRpc.api.getExpertTokensByDisciplineIdAsync(discipline.id)
           );
@@ -498,9 +521,9 @@ const actions = {
   },
 
   loadResearchContentEciHistoryRecords({state, dispatch, commit}, {researchContentId, disciplineId, notify}) {
-    return researchService.getResearchContentEciHistoryRecords(researchContentId, disciplineId)
+    return expertiseContributionsService.getEciHistoryByResearchContentAndDiscipline(researchContentId, disciplineId)
       .then((records) => {
-        commit('SET_RESEARCH_CONTENT_ECI_HISTORY_BY_DISCIPLINE', {disciplineId, records});
+        commit('SET_RESEARCH_CONTENT_ECI_HISTORY_BY_DISCIPLINE', { disciplineId, records });
       }, (err) => {
         console.log(err)
       })

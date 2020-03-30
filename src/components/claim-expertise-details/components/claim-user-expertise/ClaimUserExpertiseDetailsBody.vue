@@ -50,12 +50,6 @@
                @click="approveProposal(proposal)"
         >{{ isApproveBtnVoted ? 'Approved' : 'Approve' }}
         </v-btn>
-
-        <div class="grey--text c-pl-6">
-          voted
-          {{ (proposal.total_voted_expertise / (proposal.discipline.total_expertise_amount || 1) * 100).toFixed(2) }}
-          %
-        </div>
       </div>
 
       <div class="legacy-row legacy-align-items-center legacy-justify-center" v-if="isClaimAccepted">
