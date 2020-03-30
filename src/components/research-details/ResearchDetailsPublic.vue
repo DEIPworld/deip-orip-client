@@ -97,7 +97,7 @@
                   no-follow
                   link-to-profile-class="pl-3 bold"
                   pick-disabled
-                ></platform-avatar>
+                ><span class="pl-2">{{member | fullname}}</span></platform-avatar>
               </div>
             </v-layout>
           </v-layout>

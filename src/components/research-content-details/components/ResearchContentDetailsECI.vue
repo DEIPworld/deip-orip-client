@@ -14,7 +14,7 @@
           label="Discipline"
           outline
           dense
-          @change="selectEciDiscipline()"
+          @change="loadDisciplineEciHistory()"
           :disabled="eciHistoryRecordsTable.loading"
         ></v-select>
       </v-flex>
@@ -45,11 +45,8 @@
         >
           <template v-slot:items="props">
             <td>
-              <v-chip
-                :color="eciHistoryRecordsTable.actionsColorMap[props.item.action]"
-                text-color="white"
-              >
-                <span class="bold">{{ props.item.actionText.toUpperCase() }}</span>
+              <v-chip :color="eciHistoryRecordsTable.contributionColor[props.item.alteration_source_type]" text-color="white">
+                <span class="bold uppercase">{{ props.item.actionText }}</span>
               </v-chip>
             </td>
             <td>
@@ -70,7 +67,7 @@
               </div>
             </td>
             <td class="text-xs-center">
-              <div>{{ props.item.newAmount }}</div>
+              <div>{{ props.item.eci }}</div>
             </td>
           </template>
         </v-data-table>
@@ -82,6 +79,7 @@
 <script>
   import { mapGetters } from 'vuex';
   import moment from 'moment';
+  import { EXPERTISE_CONTRIBUTION_TYPE } from '@/variables';
 
   export default {
     name: 'ResearchContentDetailsECI',
@@ -118,10 +116,10 @@
               sortable: false
             }
           ],
-          actionsColorMap: {
-            review: '#161F63',
-            vote_for_review: '#5ABAD1',
-            init: '#8DDAB3'
+          contributionColor: {
+            [EXPERTISE_CONTRIBUTION_TYPE.REVIEW]: '#161F63',
+            [EXPERTISE_CONTRIBUTION_TYPE.REVIEW_SUPPORT]: '#5ABAD1',
+            [EXPERTISE_CONTRIBUTION_TYPE.PUBLICATION]: '#8DDAB3'
           },
           pagination: {
             page: 1,
@@ -181,7 +179,7 @@
         const data = records.length
           ? records.map((record, i) => {
             let date = new Date(record.timestamp);
-            let value = record.newAmount;
+            let value = record.eci;
             let delta = record.delta;
             let actionText = record.actionText;
             let tooltip = getPointTooltipHtml(value, actionText, delta);
@@ -198,10 +196,9 @@
             ]
           ];
 
-        const now = moment()
-          .toDate();
+        const now = moment().toDate();
         const lastEciValue = records.length
-          ? records[records.length - 1].newAmount
+          ? records[records.length - 1].eci
           : 0;
 
         return {
@@ -249,7 +246,7 @@
       }
     },
     methods: {
-      selectEciDiscipline() {
+      loadDisciplineEciHistory() {
         let disciplineId = this.selectedEciDisciplineId;
         let researchContentId = this.content.id;
 
@@ -282,7 +279,7 @@
       if (this.isPublished) {
         let discipline = this.research.disciplines[0];
         this.selectedEciDisciplineId = discipline.id;
-        this.selectEciDiscipline(discipline.id);
+        this.loadDisciplineEciHistory(discipline.id);
       }
     }
   };

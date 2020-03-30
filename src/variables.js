@@ -1,4 +1,5 @@
 import { PROPOSAL_TYPES } from '@deip/research-group-service';
+import { EXPERTISE_CONTRIBUTION_TYPE } from '@deip/expertise-contributions-service';
 import { researchContentTypes } from '@deip/research-service';
 
 const proposalTypesLabels = {
@@ -20,4 +21,5 @@ export {
   PROPOSAL_TYPES,
   proposalTypesLabels,
   researchContentTypes,
+  EXPERTISE_CONTRIBUTION_TYPE
 };

@@ -136,22 +136,19 @@
       <div class="mt-4">
         <div class="title bold">Expertise Contribution Index</div>
         <div class="py-2">
-          <router-link :to="{ name: 'UserExpertiseDetails', account_name: userInfo.account.name }"
-                       style="text-decoration: none">
             <v-layout tag="div" column v-for="(item, i) in expertise" :key="`eci-${i}`" class="expertise px-1 my-2">
-              <v-layout justify-space-between>
-                <div class="blue--text text--accent-4 bold">TOP <span class="font-weight-bold">{{getEciPercentile(item.amount, userInfo.account.name, item.discipline_id)}}</span>%
-                </div>
-                <div class="grey--text">ECI {{ item.amount }}</div>
-              </v-layout>
-              <v-divider class="expertise__divider" />
-              <div class="expertise__disc-name pt-1">{{ item.discipline_name }}</div>
+              <router-link :to="{ name: 'UserExpertiseDetails', account_name: userInfo.account.name, query: { discipline_id: item.discipline_id }}" style="text-decoration: none">
+                <v-layout justify-space-between>
+                  <div class="blue--text text--accent-4 bold">TOP <span class="font-weight-bold">{{getEciPercentile(item.amount, userInfo.account.name, item.discipline_id)}}</span>%</div>
+                  <div class="grey--text">ECI {{ item.amount }}</div>
+                </v-layout>
+                <v-divider class="expertise__divider" />
+                <div class="expertise__disc-name pt-1">{{ item.discipline_name }}</div>
+              </router-link>
             </v-layout>
-          </router-link>
           <div v-if="!expertise.length" class="body-1">
-            <div v-if="isOwner">You have no Expertise Tokens yet. Use <span class="a"
-                                                                            @click="openClaimExpertiseDialog()">Claim</span>
-              process to apply for Expertise Tokens
+            <div v-if="isOwner">
+              You have no Expertise Tokens yet. Use <span class="a" @click="openClaimExpertiseDialog()">Claim</span> process to apply for Expertise Tokens
             </div>
             <div v-if="!isOwner"><span class="body-2">{{userInfo | fullname}}</span> has no Expertise Tokens yet</div>
           </div>
@@ -177,19 +174,14 @@
         <div class="pt-2 pb-4">
           <div v-if="userInfo.profile">
             <div>
-                        <span v-if="isOwner && !userInfo.profile.email" class="owner-hint">
-                            <v-icon size="18" class="mr-2">mail</v-icon>
-                            Add your email here
-                        </span>
+              <span v-if="isOwner && !userInfo.profile.email" class="owner-hint">
+                  <v-icon size="18" class="mr-2">mail</v-icon>
+                  Add your email here
+              </span>
               <span v-else>
-                            <v-icon v-if="userInfo.profile.email" size="18" class="mr-2">mail</v-icon>
-                            {{userInfo.profile.email || '-'}}
-                        </span>
-              <!-- Phone number is very private info, let's do not store it for now -->
-              <!--<div class="pt-1">
-                  <v-icon size="18" class="mr-2">phone</v-icon>
-                      +375 25 90 05 003
-                  </div> -->
+                <v-icon v-if="userInfo.profile.email" size="18" class="mr-2">mail</v-icon>
+                {{userInfo.profile.email || '-'}}
+              </span>
             </div>
           </div>
         </div>

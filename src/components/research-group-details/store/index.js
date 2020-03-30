@@ -5,10 +5,12 @@ import Vue from 'vue';
 import { ResearchGroupService } from '@deip/research-group-service';
 import { UsersService } from '@deip/users-service';
 import { ResearchService } from '@deip/research-service';
+import { ExpertiseContributionsService } from '@deip/expertise-contributions-service';
 
 const researchGroupService = ResearchGroupService.getInstance();
 const usersService = UsersService.getInstance();
 const researchService = ResearchService.getInstance();
+const expertiseContributionsService = ExpertiseContributionsService.getInstance();
 
 const state = {
   proposals: [],
@@ -152,7 +154,7 @@ const actions = {
       .then(list => {
         researchResult.push(...list);
         return Promise.all(
-          list.map(item => deipRpc.api.getTotalVotesByResearchAsync(item.id))
+          list.map(item => expertiseContributionsService.getExpertiseContributionsByResearch(item.id))
         );
       })
       .then(list => {

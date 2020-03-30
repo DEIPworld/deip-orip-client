@@ -70,7 +70,7 @@
                             disciplineName: discipline.name,
                             totalWeight: this.research.totalVotes.reduce(
                                 (accumulator, value) => value.discipline_id === discipline.id 
-                                    ? accumulator + value.total_weight 
+                                    ? accumulator + value.eci 
                                     : accumulator,
                                 0
                             )

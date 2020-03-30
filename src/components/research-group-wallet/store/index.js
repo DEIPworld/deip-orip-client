@@ -1,6 +1,9 @@
 import _ from 'lodash';
 import deipRpc from '@deip/rpc-client';
 import Vue from 'vue';
+import { ExpertiseContributionsService } from '@deip/expertise-contributions-service';
+
+const expertiseContributionsService = ExpertiseContributionsService.getInstance();
 
 const state = {
   group: null,
@@ -38,7 +41,7 @@ const actions = {
       .then(list => {
         researchResult.push(...list);
         return Promise.all(
-          list.map(item => deipRpc.api.getTotalVotesByResearchAsync(item.id))
+          list.map(item => expertiseContributionsService.getExpertiseContributionsByResearch(item.id))
         );
       })
       .then(list => {

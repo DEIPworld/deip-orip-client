@@ -1,14 +1,33 @@
 import _ from 'lodash';
 import deipRpc from '@deip/rpc-client';
 import Vue from 'vue';
+import moment from 'moment';
 
 import { UsersService } from '@deip/users-service';
 import { ResearchContentReviewsService } from '@deip/research-content-reviews-service';
 import { ResearchService } from '@deip/research-service';
+import { ExpertiseContributionsService } from '@deip/expertise-contributions-service';
+import { EXPERTISE_CONTRIBUTION_TYPE } from '@/variables'
 
 const usersService = UsersService.getInstance();
 const researchContentReviewsService = ResearchContentReviewsService.getInstance();
 const researchService = ResearchService.getInstance();
+const expertiseContributionsService = ExpertiseContributionsService.getInstance();
+
+const criteriaTypes = {
+  IMPACT: 'Impact',
+  NOVELTY: 'Novelty',
+  EXCELENCE: 'Excelence',
+  RATIONALITY: 'Rationality',
+  TECHNICAL_QUALITY: 'Technical Quality',
+  REPLICATION: 'Replication',
+};
+
+const contributionTypesNamesMap = {
+  [EXPERTISE_CONTRIBUTION_TYPE.PUBLICATION]: 'Research',
+  [EXPERTISE_CONTRIBUTION_TYPE.REVIEW]: 'Review',
+  [EXPERTISE_CONTRIBUTION_TYPE.REVIEW_SUPPORT]: 'Review support'
+};
 
 const state = {
   account: undefined,
@@ -19,6 +38,16 @@ const state = {
   invites: [],
   reviewRequests: [],
   researchesRef: [],
+  criteriaTypes: criteriaTypes,
+  contributionTypesNamesMap: contributionTypesNamesMap,
+  eciHistoryByDiscipline: {},
+
+  filter: {
+    criteria: null,
+    contributionType: null,
+    fromDate: null,
+    toDate: null
+  },
 
   isLoadingUserAccount: false,
   isLoadingUserProfile: false,
@@ -46,10 +75,160 @@ const getters = {
       return !item.research.is_private || item.group.shares.some(share => share.owner == user.username);
     });
   },
+  
   groups: state => state.groups,
   expertise: state => state.expertise,
   invites: state => state.invites,
   reviewRequests: state => state.reviewRequests,
+
+  // TODO: Get rid of this
+  criteriaTypes: state => state.criteriaTypes,
+  criteriaItems: state => Object.values(state.criteriaTypes),
+  contributionTypesNamesMap: state => state.contributionTypesNamesMap,
+  contributionTypeItems: state => Object.entries(state.contributionTypesNamesMap)
+    .map(([key, value]) => ({ text: value, value: key }))
+    .filter((e) => e.value != EXPERTISE_CONTRIBUTION_TYPE.PUBLICATION),
+
+  filter: state => state.filter,
+
+  eciHistoryByDisciplineMap: (state, getters) => {
+    return state.eciHistoryByDiscipline;
+  },
+
+  eciHistoryByDiscipline: (state, getters) => {
+    return (disciplineId) => {
+      let records = state.eciHistoryByDiscipline[disciplineId];
+      if (!records) {
+        return null;
+      }
+
+      return records
+        .filter(record => {
+          if (!getters.filter.contributionType) return true;
+          return record.alteration_source_type == getters.filter.contributionType;
+        })
+        .map(item => {
+          let criteriaModifier;
+          switch (getters.filter.criteria) {
+            case getters.criteriaTypes.IMPACT:
+              criteriaModifier = (y) => y * (0.5 + 0.3 * Math.cos(0.00008 * Math.PI * y));
+              break;
+            case getters.criteriaTypes.NOVELTY:
+              criteriaModifier = (y) => y * (0.3 + 0.2 * Math.sin(0.00008 * Math.PI * y));
+              break;
+            case getters.criteriaTypes.EXCELENCE:
+              criteriaModifier = (y) => y * (0.1 + 0.1 * Math.cos(0.00008 * Math.PI * y));
+              break;
+            case getters.criteriaTypes.RATIONALITY:
+              criteriaModifier = (y) => y * (0.4 + 0.4 * Math.cos(0.00008 * Math.PI * y));
+              break;
+            case getters.criteriaTypes.TECHNICAL_QUALITY:
+              criteriaModifier = (y) => y * (0.7 + 0.5 * Math.sin(0.00008 * Math.PI * y));
+              break;
+            case getters.criteriaTypes.REPLICATION:
+              criteriaModifier = (y) => y * (0.9 + 0.1 * Math.cos(0.00008 * Math.PI * y));
+              break;
+            default:
+              criteriaModifier = (y) => y;
+              break;
+          }
+
+          let record = { ...item, criteriaEci: criteriaModifier(item.eci) };
+
+          if (record.alteration_source_type == EXPERTISE_CONTRIBUTION_TYPE.REVIEW) {
+            let typeInfo = researchService.getResearchContentType(record.research_content.content_type);
+
+            let parser = new DOMParser();
+            let html = parser.parseFromString(record.review.content, 'text/html');
+            let allElements = Array.from(html.all);
+            let bodyIdx = allElements.findIndex(el => el.tagName == 'BODY');
+            let headerEl = allElements[bodyIdx + 1];
+            let title = headerEl.innerHTML;
+
+            let link = {
+              name: 'ResearchContentReview',
+              params: {
+                research_group_permlink: decodeURIComponent(record.research_group.permlink),
+                research_permlink: decodeURIComponent(record.research.permlink),
+                content_permlink: decodeURIComponent(record.research_content.permlink),
+                review_id: record.review.id
+              }
+            };
+
+            return {
+              ...record,
+              actionText: `${typeInfo ? typeInfo.text : 'Publication'} Reviewed`,
+              meta: {
+                title,
+                review: record.review,
+                link
+              }
+            };
+
+          } else if (record.alteration_source_type == EXPERTISE_CONTRIBUTION_TYPE.REVIEW_SUPPORT) {
+
+            let parser = new DOMParser();
+            let html = parser.parseFromString(record.review.content, 'text/html');
+            let allElements = Array.from(html.all);
+            let bodyIdx = allElements.findIndex(el => el.tagName == 'BODY');
+            let headerEl = allElements[bodyIdx + 1];
+            let title = headerEl.innerHTML;
+
+            let link = {
+              name: 'ResearchContentReview',
+              params: {
+                research_group_permlink: decodeURIComponent(record.research_group.permlink),
+                research_permlink: decodeURIComponent(record.research.permlink),
+                content_permlink: decodeURIComponent(record.research_content.permlink),
+                review_id: record.review.id
+              }
+            };
+
+            return {
+              ...record,
+              actionText: "Review supported",
+              meta: {
+                title,
+                review: record.review,
+                reviewVote: record.review_vote,
+                link
+              }
+            };
+
+          } else if (record.alteration_source_type == EXPERTISE_CONTRIBUTION_TYPE.PUBLICATION) {
+
+            let typeInfo = researchService.getResearchContentType(record.research_content.content_type);
+            let link = {
+              name: 'ResearchContentDetails',
+              params: {
+                research_group_permlink: decodeURIComponent(record.research_group.permlink),
+                research_permlink: decodeURIComponent(record.research.permlink),
+                content_permlink: decodeURIComponent(record.research_content.permlink)
+              }
+            };
+
+            return {
+              ...record,
+              actionText: `${typeInfo ? typeInfo.text : 'Publication'} uploaded`,
+              meta: {
+                title: record.research_content.title,
+                researchContent: record.research_content,
+                link
+              }
+            };
+          } else {
+
+            return {
+              ...record,
+              actionText: "Contribution",
+              meta: {
+                title: "Contribution"
+              }
+            };
+          }
+        });
+      };
+  },
 
   isLoadingUserAccount: state => state.isLoadingUserAccount,
   isLoadingUserProfile: state => state.isLoadingUserProfile,
@@ -64,6 +243,7 @@ const getters = {
 const actions = {
 
   loadUserDetailsPage({ state, dispatch, commit, rootGetters }, { username }) {
+    commit('RESET_STATE');
     const currentUser = rootGetters['auth/user'];
     const isMyPage = currentUser.username == username;
 
@@ -87,7 +267,7 @@ const actions = {
     const groupsLoad = new Promise((resolve, reject) => {
       dispatch('loadGroups', { username: username, notify: resolve });
     });
-
+    
     return Promise.all([ accountLoad, profileLoad, expertiseLoad, invitesLoad, reviewRequestsLoad, groupsLoad ])
       .then(() => {
         const researchLoad = new Promise((resolve, reject) => {
@@ -177,7 +357,7 @@ const actions = {
       })
       .then(researches => {
         researchList.push(...researches);
-        return Promise.all(researchList.map(item => deipRpc.api.getTotalVotesByResearchAsync(item.id)));
+        return Promise.all(researchList.map(item => expertiseContributionsService.getExpertiseContributionsByResearch(item.id)));
       })
       .then(list => {
         let tvoMap = _.chain(list)
@@ -317,7 +497,23 @@ const actions = {
 
   closeExpertiseTokensClaimDialog({ commit }) {
     commit('SET_EXPERTISE_TOKENS_CLAIM_DIALOG_VISIBILITY_STATE', false);
-  }
+  },
+
+  updateEciHistoryFilter({ commit, state, getters }, payload) {
+    commit('UPDATE_ECI_HISTORY_FILTER', { key: payload.key, value: payload.value })
+  },
+
+  loadAccountEciHistoryRecords({ state, dispatch, commit }, { account, disciplineId, notify }) {
+    return expertiseContributionsService.getEciHistoryByAccountAndDiscipline(account, disciplineId)
+      .then((records) => {
+        commit('SET_ACCOUNT_ECI_HISTORY_BY_DISCIPLINE', { disciplineId, records });
+      }, (err) => {
+        console.log(err)
+      })
+      .finally(() => {
+        if (notify) notify();
+      })
+  },
 }
 
 // mutations
@@ -385,7 +581,20 @@ const mutations = {
 
   ['SET_RESEARCHES_REFS_DETAILS_LOADING_STATE'](state, value) {
 		state.isLoadingResearchesRefDetails = value
-	},
+  },
+  
+  ['SET_ACCOUNT_ECI_HISTORY_BY_DISCIPLINE'](state, { disciplineId, records }) {
+    Vue.set(state.eciHistoryByDiscipline, disciplineId, records)
+  },
+
+  ['UPDATE_ECI_HISTORY_FILTER'](state, { key, value }) {
+    Vue.set(state.filter, key, value);
+  },
+
+  ['RESET_STATE'](state) {
+    Vue.set(state, 'eciHistoryByDiscipline', {});
+  }
+
 }
 
 const namespaced = true;
