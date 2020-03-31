@@ -94,7 +94,7 @@
                   </v-flex>
                   <v-flex shrink>
                     <v-layout row>
-                      <div style="min-width: 300px">
+                      <div style="min-width: 300px;" class="px-3">
                         <v-text-field 
                           append-icon="search"
                           class="pa-0 ma-0"
@@ -157,10 +157,10 @@
             }),
             breadcrumbs(){
               return [ 
-                { text: this.organizationProfile.shortName, disabled: false }, 
+                { text: this.organizationProfile.name, disabled: false, href: `/#/${this.organizationProfile.permlink}/group-details` }, 
                 { text: "Programs", disabled: false },
-                { text: this.selectedArea.abbreviation, disabled: false }, 
-                { text: this.selectedArea.subAreaAbbreviation, disabled: false }
+                // { text: this.selectedArea.abbreviation, disabled: true }, 
+                // { text: this.selectedArea.subAreaAbbreviation, disabled: true }
               ];
             },
             filteredCorePrograms() {
