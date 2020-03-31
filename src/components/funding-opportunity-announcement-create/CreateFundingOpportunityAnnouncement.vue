@@ -235,6 +235,7 @@
               "additional_info": [
                 ["funding_opportunity_title", this.foa.title],
                 ["eligible_applicants", this.foa.eligibleApplicants],
+                ['additional_info_of_eligibility', this.foa.eligibilityAdditionalInformation]
                 ["description", this.foa.description], 
                 ["link_to_additional_info", this.foa.additionalInfoLink],
                 ["grantor_email", this.foa.grantorEmail]
