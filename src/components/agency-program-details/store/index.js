@@ -5,7 +5,7 @@ import { mapAreaToProgram } from '../../common/disciplines/DisciplineTreeService
 
 import { UsersService } from '@deip/users-service';
 import { ExpertiseContributionsService } from '@deip/expertise-contributions-service';
-import { GrantsService } from '@deip/grants-service/lib/GrantsService';
+import { GrantsService } from '@deip/grants-service';
 
 const usersService = UsersService.getInstance();
 const expertiseContributionsService = ExpertiseContributionsService.getInstance();
