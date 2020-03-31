@@ -15,7 +15,7 @@ import { layoutStore } from '../components/layout/store'
 import { claimExpertiseDetailsStore } from '../components/claim-expertise-details/store'
 import { claimExpertiseListStore } from '../components/claim-expertise-list/store'
 import { votingForBlockProducersStore } from '../components/voting-for-block-producers/store'
-import { agencyProgramsStore } from '../components/agency-programs/store'
+import { organizationProgramsStore } from '../components/agency-programs/store'
 import { agencyProgramDetailsStore } from '../components/agency-program-details/store'
 import { dashboardStore } from '../components/dashboard/store'
 import { investorDashboardStore } from '../components/investor-dashboard/store'
@@ -41,7 +41,7 @@ export const store = new Vuex.Store({
     claimExpertiseDetails: claimExpertiseDetailsStore,
     claimExpertiseList: claimExpertiseListStore,
     votingForBlockProducers: votingForBlockProducersStore,
-    agencyPrograms: agencyProgramsStore,
+    organizationPrograms: organizationProgramsStore,
     agencyProgramDetails: agencyProgramDetailsStore,
     dashboard: dashboardStore,
     investorDashboard: investorDashboardStore,
