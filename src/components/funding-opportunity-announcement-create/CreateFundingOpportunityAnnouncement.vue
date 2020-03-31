@@ -1,9 +1,7 @@
 <template>
   <v-container fluid fill-height class="pa-0">
     <v-layout>
-      <v-stepper v-model="currentStep" v-if="!isFinished && organization" alt-labels
-                 class="display-flex flex-column stepper-page full-width full-height"
-      >
+      <v-stepper v-model="currentStep" v-if="!isFinished && organization" alt-labels class="display-flex flex-column stepper-page full-width full-height">
         <v-stepper-header>
           <v-stepper-step step="1" :complete="currentStep > 1">
             <div class="uppercase">Title</div>
@@ -219,30 +217,28 @@
         console.log('finished', this.foa);
         this.isSending = true;
 
-        const details = [
-          [
-            "funding_opportunity_announcement_contract_v1_0_0",
-            {
-              "version": "1.0.0",
-              "organization_id": this.organization.id,
-              "review_committee_id": this.foa.reveiwCommittee.id,
-              "funding_opportunity_number": this.foa.number,
-              "award_ceiling": this.toAssetUnits(this.foa.awardCeiling),
-              "award_floor": this.toAssetUnits(this.foa.awardFloor),
-              "expected_number_of_awards": this.foa.numberOfAwards,
-              "open_date": this.foa.startDate,
-              "close_date": this.foa.endDate,
-              "officers": this.foa.officers,
-              "additional_info": [
-                ["funding_opportunity_title", this.foa.title],
-                ["eligible_applicants", this.foa.eligibleApplicants],
-                ['additional_info_of_eligibility', this.foa.eligibilityAdditionalInformation],
-                ["description", this.foa.description], 
-                ["link_to_additional_info", this.foa.additionalInfoLink],
-                ["grantor_email", this.foa.grantorEmail]
-              ],
-            }
-          ]
+        const distributionModel = [
+          "funding_opportunity_announcement_contract_v1_0_0",
+          {
+            "version": "1.0.0",
+            "organization_id": this.organization.id,
+            "review_committee_id": this.foa.reveiwCommittee.id,
+            "funding_opportunity_number": this.foa.number,
+            "award_ceiling": this.toAssetUnits(this.foa.awardCeiling),
+            "award_floor": this.toAssetUnits(this.foa.awardFloor),
+            "expected_number_of_awards": this.foa.numberOfAwards,
+            "open_date": this.foa.startDate,
+            "close_date": this.foa.endDate,
+            "officers": this.foa.officers,
+            "additional_info": [
+              ["funding_opportunity_title", this.foa.title],
+              ["eligible_applicants", this.foa.eligibleApplicants],
+              ['additional_info_of_eligibility', this.foa.eligibilityAdditionalInformation],
+              ["description", this.foa.description], 
+              ["link_to_additional_info", this.foa.additionalInfoLink],
+              ["grantor_email", this.foa.grantorEmail]
+            ],
+          }
         ];
 
         grantsService.createGrantContract(
@@ -250,9 +246,9 @@
           {
             grantor: this.user.username,
             amount: this.toAssetUnits(this.foa.totalProgramFunding),
-            type: 2, // FOA
-            target_disciplines: this.foa.disciplines.map(({id}) => id),
-            details: details
+            targetDisciplines: this.foa.disciplines.map(({id}) => id),
+            distributionModel: distributionModel,
+            extensions: []
           }
         )
         .then(() => {
@@ -274,29 +270,23 @@
     },
 
     created() {
-    // use research group with "national-science-foundation" permlink instead this call
-    // tenantService.getTenantProfile(window.env.TENANT)
-    //   .then((organization) => {
-    //     this.organization = organization;
-    //   })
+      const link = 'national-science-foundation'
+      deipRpc.api.getResearchGroupByPermlinkAsync(link)
+        .then(organization => {
+          const members = [];
 
-    const link = 'national-science-foundation'
-    deipRpc.api.getResearchGroupByPermlinkAsync(link)
-      .then(organization => {
-        const members = [];
-
-        deipRpc.api.getResearchGroupTokensByResearchGroupAsync(organization.id)
-          .then(rgtList => {
-            return usersService.getEnrichedProfiles(rgtList.map(({owner}) => owner));
-          })
-          .then((members) => {
-            this.organization = {
-              ...organization,
-              members
-            };
-            this.foa.officers.push(this.organization.members.find(({account: {name}}) => name == this.user.account.name).account.name)
-          })
-      })
+          deipRpc.api.getResearchGroupTokensByResearchGroupAsync(organization.id)
+            .then(rgtList => {
+              return usersService.getEnrichedProfiles(rgtList.map(({owner}) => owner));
+            })
+            .then((members) => {
+              this.organization = {
+                ...organization,
+                members
+              };
+              this.foa.officers.push(this.organization.members.find(({account: {name}}) => name == this.user.account.name).account.name)
+            })
+        })
     }
   };
 </script>

@@ -24,9 +24,9 @@
                 <platform-avatar
                   :user="member"
                   :size="40"
-                  link-to-profile
-                  link-to-profile-class="px-1"
-                ></platform-avatar>
+                  :link-to-profile="false"
+                ><span class="pl-2">{{member | fullname}}</span>
+                </platform-avatar>
               </v-layout >
             </div>
           </v-card>

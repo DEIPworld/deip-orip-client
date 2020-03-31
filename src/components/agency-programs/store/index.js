@@ -1,7 +1,7 @@
 import Vue from 'vue';
 import deipRpc from '@deip/rpc-client';
 import { mapAreaToProgram } from '../../common/disciplines/DisciplineTreeService';
-import { GrantsService } from '@deip/grants-service/lib/GrantsService';
+import { GrantsService } from '@deip/grants-service';
 
 const grantsService = GrantsService.getInstance();
 
