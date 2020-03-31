@@ -4,7 +4,7 @@
       <div class="step-title">Select Review Committee</div>
       <div class="flex-grow-1 overflow-y-auto flex-basis-0">
         <div class="mx-auto review-comitee-max-width">
-          <v-card class="px-5 py-4">
+          <v-card class="px-5 py-4 elevation-0">
             <v-layout row align-center>
               <v-flex xs12>
                 <v-autocomplete

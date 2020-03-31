@@ -6,7 +6,7 @@
       <div class="flex-grow-1 overflow-y-auto flex-basis-0">
 
         <div class="mx-auto program-officers-max-width">
-          <v-card class="px-5 py-4">
+          <v-card class="px-5 py-4 elevation-0">
             <v-text-field
               label="Start typing for suggestion"
               append-icon="search"
@@ -31,15 +31,13 @@
                 </v-radio-group> -->
 
             <div>
-              <v-layout row align-center mt-2 v-for="(member, i) in members"
-                   :key="`${i}-member`">
+              <v-layout row align-center mt-2 v-for="(member, i) in members" :key="`${i}-member`">
                 <platform-avatar
                   :user="member"
                   :size="40"
-                  link-to-profile
-                  link-to-profile-class="px-1"
-                ></platform-avatar>
-                <div>
+                  :link-to-profile="false"
+                ><span class="pl-2">{{member | fullname}}</span></platform-avatar>
+                <div class="pl-4">
                   <input id="checkbox"
                          type="checkbox"
                          :disabled="isGrantor(member)"
