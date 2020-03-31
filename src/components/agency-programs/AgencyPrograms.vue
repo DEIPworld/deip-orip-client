@@ -1,126 +1,134 @@
 <template>
-  <v-container fluid class="ma-0 pa-0">
-    <v-layout row wrap>
-     <v-flex xs12>
-        <v-card>
-          <v-card-text class="px-0 pa-0">
-            <v-breadcrumbs divider="/" :items="breadcrumbs"></v-breadcrumbs>
-          </v-card-text>
-        </v-card>
-      </v-flex>
-      <v-flex xs12>
-        <v-divider></v-divider>
-        <v-card>
-          <v-card-text class="px-0">
-            <v-layout row wrap>
-              <v-flex xs3 text-xs-center>
-                <v-avatar size="160px">
-                  <img :src="$options.filters.researchGroupLogoSrc(organizationProfile.id, 50, 50, true)">
-                </v-avatar>
-              </v-flex>
-              <v-flex xs9>
-                <div v-if="selectedArea">
-                  <div class="primary--text body-2">PROGRAMS</div>
-                  <div class="headline c-mt-2">{{selectedArea.title}}</div>
-                  <div class="body-1 c-mt-2">{{selectedArea.subAreaTitle}}</div>
-                </div>
-                <div v-else>
-                  <div class="headline c-mt-2">{{organizationProfile.name}}</div>
-                </div>
-              </v-flex>
-            </v-layout>
-          </v-card-text>
-        </v-card>
-      </v-flex>
+  <v-container fluid fill-height class="ma-0 pa-0 full-height">
+    <v-card class="full-height elevation-0">
+      <v-layout row wrap>
+        <v-flex xs12>
+          <v-card class="elevation-0">
+            <v-card-text class="px-0 pa-0">
+              <v-breadcrumbs divider="/" :items="breadcrumbs"></v-breadcrumbs>
+            </v-card-text>
+          </v-card>
+        </v-flex>
+        <v-flex xs12>
+          <v-card class="elevation-0">
+            <v-divider></v-divider>
+            <v-card-text class="px-0">
+              <v-layout row wrap>
+                <v-flex xs3 text-xs-center>
+                  <v-avatar size="160px">
+                    <img :src="$options.filters.researchGroupLogoSrc(organizationProfile.id, 320, 320, true)">
+                  </v-avatar>
+                </v-flex>
+                <v-flex xs9>
+                  <div v-if="selectedArea">
+                    <div class="primary--text body-2">PROGRAMS</div>
+                    <div class="headline c-mt-2">{{selectedArea.title}}</div>
+                    <div class="body-1 c-mt-2">{{selectedArea.subAreaTitle}}</div>
+                  </div>
+                  <div v-else>
+                    <div class="headline c-mt-2">{{organizationProfile.name}}</div>
+                  </div>
+                </v-flex>
+              </v-layout>
+            </v-card-text>
+            <v-divider></v-divider>
+          </v-card>
+        </v-flex>
 
-      <v-flex xs3>
-        <v-divider></v-divider>
-        <v-card>
-          <div class="subheading c-pl-6 c-pb-5 c-pt-5 bold">Research Areas</div>
-          <v-expansion-panel :value="selectedAreas">
-            <v-expansion-panel-content v-for="(area,i) in organizationProfile.researchAreas" :key="i">
-              <div slot="header"><b>{{area.title}}</b></div>
-              <v-card>
-                <v-card-text class="pa-0">
-                  <div class="sub-area-list-item"
-                      :class="isSelectedSubArea(subArea) ? 'active' : ''"
-                      v-for="(subArea, i) in area.subAreas" 
-                      :key="`${i}-subArea`"
-                      @click="selectArea(area, subArea)">
-                    <div class="sub-area-list-item-content">{{subArea.title}}</div>
-                  </div>  
-                </v-card-text>
+        <v-flex xs12>
+          <v-layout row wrap class="pb-4">
+            <v-flex xs3>
+              <v-card class="full-height elevation-0">
+                <div class="subheading pa-4 bold">Research Areas</div>
+                <v-expansion-panel class="elevation-0" :value="selectedAreas">
+                  <v-expansion-panel-content v-for="(area,i) in organizationProfile.researchAreas" :key="i">
+                    <div slot="header"><b>{{area.title}}</b></div>
+                    <v-card>
+                      <v-card-text class="pa-0">
+                        <div class="sub-area-list-item"
+                            :class="isSelectedSubArea(subArea) ? 'active' : ''"
+                            v-for="(subArea, i) in area.subAreas" 
+                            :key="`${i}-subArea`"
+                            @click="selectArea(area, subArea)">
+                          <div class="sub-area-list-item-content">{{subArea.title}}</div>
+                        </div>  
+                      </v-card-text>
+                    </v-card>
+                  </v-expansion-panel-content>
+                </v-expansion-panel>
               </v-card>
-            </v-expansion-panel-content>
-          </v-expansion-panel>
-        </v-card>
-      </v-flex>
-      <v-flex xs9>
-        <v-divider></v-divider>
-        <v-card class="c-pb-6">
-          <v-layout row wrap>
-            <v-flex xs6 text-xs-center>
-              <div class="legacy-row c-pb-6 c-pt-6">
-                <div class="legacy-col-grow sort-option">
-                  <span class="body-1 grey--text">SORT BY</span>
-                </div>
-                <div class="legacy-col-grow sort-option" @click="setSortCriteria('postedDate')">
-                  <span class="body-2">New</span>
-                  <v-icon class="sort-icon">
-                    {{getSortIcon('postedDate')}}
-                  </v-icon>
-                </div>
-                <div class="legacy-col-grow sort-option" @click="setSortCriteria('closingDate')">
-                  <span class="body-2">End Date</span>
-                  <v-icon class="sort-icon">
-                    {{getSortIcon('closingDate')}}
-                  </v-icon>
-                </div>
-                <div class="legacy-col-grow sort-option" @click="setSortCriteria('title')">
-                  <span class="body-2">A-Z Title</span>
-                  <v-icon class="sort-icon">
-                    {{getSortIcon('title')}}
-                  </v-icon>
-                </div>
-                <div class="legacy-col-grow sort-option" @click="setSortCriteria('award')">
-                  <span class="body-2">Award</span>
-                  <v-icon class="sort-icon">
-                    {{getSortIcon('award')}}
-                  </v-icon>
-                </div>
-              </div>
             </v-flex>
-            <v-flex xs5 offset-xs1 text-xs-center>
-              <div class="c-pr-5">
-                <v-text-field 
-                  append-icon="search"
-                  name="search-term"
-                  v-model="filter.searchTerm">
-                </v-text-field> 
-              </div>
-            </v-flex>
-            <v-flex xs12 v-if="selectedArea">
-              <div class="subheading bold c-pl-5 c-pb-5 c-pt-2">{{selectedArea.subAreaTitle}}: Core Programs</div>
-              <template v-for="(program, i) in filteredCorePrograms">
-                <program-list-item :is-first="i == 0" :program="program" :key="`${i}-core-program`"></program-list-item>
-              </template>
-              <div v-show="!filteredCorePrograms.length" class="caption c-pl-5">
-                No core programs found for specified criteria
-              </div>
-            </v-flex>
-            <v-flex xs12 v-if="selectedArea" class="c-pt-10">
-              <div class="subheading bold c-pl-5 c-pb-5 c-pt-2">Additional Funding Opportunities for the {{selectedArea.abbreviation}}</div>
-              <template v-for="(program, i) in filteredAdditionalPrograms">
-                <program-list-item :is-first="i == 0" :program="program" :key="`${i}-additional-program`"></program-list-item>
-              </template>
-              <div v-show="!filteredAdditionalPrograms.length" class="caption c-pl-5">
-                No additional programs found for specified criteria
-              </div>
+            <v-flex xs9>
+              <v-card class="py-3 full-height elevation-0">
+                <v-layout row wrap class="px-2">
+                  <v-flex grow>
+                    <v-layout row justify-space-around align-center>
+                      <div class="sort-option">
+                        <span class="body-1 grey--text">SORT BY</span>
+                      </div>
+                      <div class="sort-option" @click="setSortCriteria('postedDate')">
+                        <span class="body-2">New</span>
+                        <v-icon class="sort-icon">
+                          {{getSortIcon('postedDate')}}
+                        </v-icon>
+                      </div>
+                      <div class="sort-option" @click="setSortCriteria('closingDate')">
+                        <span class="body-2">End Date</span>
+                        <v-icon class="sort-icon">
+                          {{getSortIcon('closingDate')}}
+                        </v-icon>
+                      </div>
+                      <div class="sort-option" @click="setSortCriteria('title')">
+                        <span class="body-2">A-Z Title</span>
+                        <v-icon class="sort-icon">
+                          {{getSortIcon('title')}}
+                        </v-icon>
+                      </div>
+                      <div class="sort-option" @click="setSortCriteria('award')">
+                        <span class="body-2">Award</span>
+                        <v-icon class="sort-icon">
+                          {{getSortIcon('award')}}
+                        </v-icon>
+                      </div>
+                    </v-layout>
+                  </v-flex>
+                  <v-flex shrink>
+                    <v-layout row>
+                      <div style="min-width: 300px">
+                        <v-text-field 
+                          append-icon="search"
+                          class="pa-0 ma-0"
+                          name="search-term"
+                          v-model="filter.searchTerm">
+                        </v-text-field> 
+                      </div>
+                    </v-layout>
+                  </v-flex>
+                  <v-flex xs12 v-if="selectedArea">
+                    <div class="subheading bold c-pl-5 c-pb-5 c-pt-2">{{selectedArea.subAreaTitle}}: Core Programs</div>
+                    <template v-for="(program, i) in filteredCorePrograms">
+                      <program-list-item :is-first="i == 0" :program="program" :key="`${i}-core-program`"></program-list-item>
+                    </template>
+                    <div v-show="!filteredCorePrograms.length" class="caption c-pl-5">
+                      No core programs found for specified criteria
+                    </div>
+                  </v-flex>
+                  <v-flex xs12 v-if="selectedArea" class="c-pt-10">
+                    <div class="subheading bold c-pl-5 c-pb-5 c-pt-2">Additional Funding Opportunities for the {{selectedArea.abbreviation}}</div>
+                    <template v-for="(program, i) in filteredAdditionalPrograms">
+                      <program-list-item :is-first="i == 0" :program="program" :key="`${i}-additional-program`"></program-list-item>
+                    </template>
+                    <div v-show="!filteredAdditionalPrograms.length" class="caption c-pl-5">
+                      No additional programs found for specified criteria
+                    </div>
+                  </v-flex>
+                </v-layout>
+              </v-card>
             </v-flex>
           </v-layout>
-        </v-card>
-      </v-flex>
-    </v-layout>
+        </v-flex>
+      </v-layout>
+    </v-card>
   </v-container>
 </template>
 

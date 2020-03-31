@@ -4,7 +4,7 @@
         <v-layout row wrap class="pl-4 pb-2">
             <v-flex xs9>
                 <div class="pl-4 pt-2">
-                    <router-link class="a subheading" :to="{ name: 'AgencyProgramDetails', params: { agency: program.agency_name, foa: program.funding_opportunity_number }}">
+                    <router-link class="a subheading" :to="{ name: 'AgencyProgramDetails', params: { agency: program.organization_name, foa: program.funding_opportunity_number }}">
                         {{program.additional_info.funding_opportunity_title}}
                     </router-link>
                 </div>

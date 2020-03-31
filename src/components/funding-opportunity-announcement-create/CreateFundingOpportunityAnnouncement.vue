@@ -232,15 +232,15 @@
               "expected_number_of_awards": this.foa.numberOfAwards,
               "open_date": this.foa.startDate,
               "close_date": this.foa.endDate,
+              "officers": this.foa.officers,
               "additional_info": [
                 ["funding_opportunity_title", this.foa.title],
                 ["eligible_applicants", this.foa.eligibleApplicants],
-                ['additional_info_of_eligibility', this.foa.eligibilityAdditionalInformation]
+                ['additional_info_of_eligibility', this.foa.eligibilityAdditionalInformation],
                 ["description", this.foa.description], 
                 ["link_to_additional_info", this.foa.additionalInfoLink],
                 ["grantor_email", this.foa.grantorEmail]
               ],
-              "officers": this.foa.officers
             }
           ]
         ];
