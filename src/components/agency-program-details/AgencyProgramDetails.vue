@@ -157,7 +157,6 @@
                       <span class="pl-1 font-weight-bold">{{program.additional_info.grantor_email || organizationProfile.email}}</span>
                     </div>
                     <v-divider></v-divider>
-
                     <div class="pa-4" v-if="isApplicant">
                       <v-btn block color="primary" @click="applyToProgram()">Apply</v-btn>
                       <send-application-dialog :meta="applicationDialogMeta" :program="program"></send-application-dialog>
@@ -208,11 +207,11 @@
 
             breadcrumbs() {
               return [
-                { text: this.organizationProfile.shortName, disabled: false, to: `${this.organizationProfile.permlink}/programs` },
-                { text: "Programs", disabled: false, to: `${this.organizationProfile._id}/programs` },
-                { text: this.program.area.abbreviation, disabled: false, to: `/${this.organizationProfile.permlink}/programs` },
-                { text: this.program.subArea.abbreviation, disabled: false, to:`/${this.organizationProfile.permlink}/programs` },
-                { text: this.program.title, disabled: true }
+                { text: this.organizationProfile.name, disabled: false, href: `/#/${this.organizationProfile.permlink}/group-details` },
+                { text: "Programs", disabled: false, href: `/#/${this.organizationProfile.permlink}/programs` },
+                // { text: this.program.area.abbreviation, disabled: true },
+                // { text: this.program.subArea.abbreviation, disabled: true },
+                { text: this.program.additional_info.funding_opportunity_title, disabled: true }
               ];
             },
 
