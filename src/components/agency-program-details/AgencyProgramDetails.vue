@@ -11,60 +11,60 @@
 
       <v-flex xs9>
         <v-divider></v-divider>
-        <v-card class="c-pl-5 c-pr-5 c-pb-10">
+        <v-card class="pl-4 pr-4 pb-5">
           <v-layout row wrap>
             <v-flex xs12>
-              <div class="display-1 c-pb-10 c-pt-10">{{program.funding_opportunity_title}}</div>
+              <div class="display-1 pb-5 pt-5">{{program.additional_info.funding_opportunity_title}}</div>
               <v-divider></v-divider>
             </v-flex>
 
             <v-flex xs12>
-              <div class="legacy-row c-pt-10">
-                <span class="legacy-col-grow body-1">Agency Name</span>
-                <span class="legacy-col-grow body-2">{{agencyProfile.name}}</span>
+              <v-layout row pt-4>
+                <v-flex flex-1 body-1>Organization Name</v-flex>
+                <v-flex flex-1 body-2>{{organizationProfile.name}}</v-flex>
 
-                <span class="legacy-col-grow body-1">Estimated total program funding:</span>
-                <span class="legacy-col-grow body-2">$ {{fromAssetsToFloat(program.amount)}}</span>
-              </div>
-              <div class="legacy-row c-pt-5">
-                <span class="legacy-col-grow body-1">Opportunity Number:</span>
-                <span class="legacy-col-grow body-2">{{program.funding_opportunity_number}}</span>
+                <v-flex flex-1 body-1>Estimated total program funding:</v-flex>
+                <v-flex flex-1 body-2>$ {{fromAssetsToFloat(program.amount)}}</v-flex>
+              </v-layout>
+              <v-layout pt-3>
+                <v-flex flex-1 body-1>Opportunity Number:</v-flex>
+                <v-flex flex-1 body-2>{{program.funding_opportunity_number}}</v-flex>
 
-                <span class="legacy-col-grow body-1">Expected number of awards:</span>
-                <span class="legacy-col-grow body-2">{{program.expected_number_of_awards}}</span>
-              </div>
-              <div class="legacy-row c-pt-5">
-                <span class="legacy-col-grow body-1">Area:</span>
-                <span class="legacy-col-grow body-2">{{program.area.title}}</span>
+                <v-flex flex-1 body-1>Expected number of awards:</v-flex>
+                <v-flex flex-1 body-2>{{program.expected_number_of_awards}}</v-flex>
+              </v-layout>
+              <v-layout pt-3>
+                <v-flex flex-1 body-1>Area:</v-flex>
+                <v-flex flex-1 body-2>{{program.area.title}}</v-flex>
 
-                <span class="legacy-col-grow body-1">Award ceiling:</span>
-                <span class="legacy-col-grow body-2">$ {{fromAssetsToFloat(program.award_ceiling)}}</span>
-              </div>
-              <div class="legacy-row c-pt-5">
-                <span class="legacy-col-grow body-1">Open date:</span>
-                <span class="legacy-col-grow body-2">{{new Date(`${program.posted_date}Z`).toDateString()}}</span>
+                <v-flex flex-1 body-1>Award ceiling:</v-flex>
+                <v-flex flex-1 body-2>$ {{fromAssetsToFloat(program.award_ceiling)}}</v-flex>
+              </v-layout>
+              <v-layout pt-3>
+                <v-flex flex-1 body-1>Open date:</v-flex>
+                <v-flex flex-1 body-2>{{new Date(`${program.posted_date}Z`).toDateString()}}</v-flex>
 
-                <span class="legacy-col-grow body-1">Award floor:</span>
-                <span class="legacy-col-grow body-2">$ {{fromAssetsToFloat(program.award_floor)}}</span>
-              </div>
-              <div class="legacy-row c-pt-5 c-pb-10">
-                <span class="legacy-col-grow body-1">Close date:</span>
-                <span class="legacy-col-grow body-2">{{new Date(`${program.close_date}Z`).toDateString()}}</span>
+                <v-flex flex-1 body-1>Award floor:</v-flex>
+                <v-flex flex-1 body-2>$ {{fromAssetsToFloat(program.award_floor)}}</v-flex>
+              </v-layout>
+              <v-layout pt-3 pb-4>
+                <v-flex flex-1 body-1>Close date:</v-flex>
+                <v-flex flex-1 body-2>{{new Date(`${program.close_date}Z`).toDateString()}}</v-flex>
 
-                <span class="legacy-col-grow body-1" v-if="isGrantor || isOfficer">Number of applications:</span>
-                <span class="legacy-col-grow body-2" v-if="isGrantor || isOfficer">{{applications.length}}</span>
+                <v-flex flex-1 body-1 v-if="isGrantor || isOfficer">Number of applications:</v-flex>
+                <v-flex flex-1 body-2 v-if="isGrantor || isOfficer">{{applications.length}}</v-flex>
 
-                <span class="legacy-col-grow body-1" v-if="isApplicant"></span>
-                <span class="legacy-col-grow body-2" v-if="isApplicant"></span>
+                <v-flex flex-1 body-1 v-if="isApplicant"></v-flex>
+                <v-flex flex-1 body-2 v-if="isApplicant"></v-flex>
 
-              </div>
+              </v-layout>
               <v-divider></v-divider>
             </v-flex>
 
             <v-flex xs12 v-if="isGrantor || isOfficer">
-              <div class="legacy-row">
-                <div class="legacy-col-6">
-                  <div class="title bold c-pv-10">Applications</div>
+              <v-layout row>
+                <v-flex xs6>
+                  <div class="title font-weight-bold py-4">Applications</div>
 
                   <GChart
                     type="BarChart"
@@ -72,10 +72,10 @@
                     :data="applicationsChart.data"
                     :options="applicationsChart.options"
                   />
-                </div>
+                </v-flex>
 
-                <div class="legacy-col-6">
-                  <div class="title bold c-pv-10">Financial</div>
+                <v-flex xs6>
+                  <div class="title font-weight-bold py-4">Financial</div>
 
                   <GChart
                     type="BarChart"
@@ -83,30 +83,30 @@
                     :data="financialChart.data"
                     :options="financialChart.options"
                   />
-                </div>
-              </div>
+                </v-flex>
+              </v-layout>
 
               <v-divider></v-divider>
             </v-flex>
 
             <v-flex xs12>
-              <div class="title bold c-pt-10">Program Guidlines</div>
+              <div class="title font-weight-bold pt-4">Program Guidlines</div>
 
-              <div class="subheading bold c-pt-10">Eligible Aplicants</div>
-              <div class="body-1 c-pt-5">{{program.eligible_applicants}}</div>
+              <div class="subheading font-weight-bold pt-4">Eligible Aplicants</div>
+              <div class="body-1 pt-3">{{program.additional_info.eligible_applicants}}</div>
 
-              <div class="subheading bold c-pt-5">Additional Information on Eligibility</div>
-              <div class="body-1 c-pt-5">{{program.additional_info_of_eligibility}}</div>
+              <div class="subheading font-weight-bold pt-3">Additional Information on Eligibility</div>
+              <div class="body-1 pt-3">{{program.additional_info.additional_info_of_eligibility}}</div>
 
-              <div class="subheading bold c-pt-5">Description</div>
-              <div class="body-1 c-pt-5 c-pb-5">{{program.description}}</div>
+              <div class="subheading font-weight-bold pt-3">Description</div>
+              <div class="body-1 pt-3 pb-3">{{program.additional_info.description}}</div>
 
               <v-divider></v-divider>
 
             </v-flex>
 
             <v-flex xs12 v-if="isGrantor || isOfficer">
-              <div class="title bold c-pt-10 c-pb-5">Applications: {{applications.length}}</div>
+              <div class="title font-weight-bold pt-4 pb-3">Applications: {{applications.length}}</div>
               <div>
                 <application-list-item v-for="(application, index) in applications"
                   :key="'application-' + application.id"
@@ -123,39 +123,39 @@
 
       <v-flex xs3>
         <v-divider></v-divider>
-        <v-layout row wrap>
+        <v-layout row wrap fill-height>
           <v-flex xs12>
-            <v-card style="height: 400%">
+            <v-card class="fill-height">
 
-              <div class="c-pt-5 c-pb-5 text-align-center">
+              <div class="pt-3 pb-3 text-align-center">
                 <v-avatar size="120px">
-                  <img :src="agencyProfile | tenantSymbolSrc(160, 160, false)" />
+                  <img :src="$options.filters.researchGroupLogoSrc(organizationProfile.id, 50, 50, true)">
                 </v-avatar>
               </div>
               <v-divider></v-divider>
 
-              <div class="c-pt-5 c-pl-5 c-pb-5">
-                <div class="title c-pb-2 bold">Program Officers</div>
+              <div class="pt-3 pl-3 pb-3">
+                <div class="title pb-2 font-weight-bold">Program Officers</div>
                 <div v-for="(officer, n) in program.officers" :key="'officer-' + n">
-                  <div class="legacy-row-nowrap text-align-center c-pt-2">
+                  <v-layout text-align-center pt-2>
                     <platform-avatar
                       :user="officer"
                       :size="40"
                       link-to-profile
                       link-to-profile-class="px-1"
                     ></platform-avatar>
-                  </div>
+                  </v-layout>
                 </div>
               </div>
               <v-divider></v-divider>
 
-              <div class="c-pt-5 c-pl-5 c-pb-5">
+              <div class="pt-3 pl-3 pb-3">
                 <v-icon color="#2962FF">email</v-icon>
-                <span class="c-pl-1 bold">{{program.grantor_contact_info || agencyProfile.email}}</span>
+                <span class="pl-1 font-weight-bold">{{program.additional_info.grantor_email || organizationProfile.email}}</span>
               </div>
               <v-divider></v-divider>
 
-              <div class="c-p-10" v-if="isApplicant">
+              <div class="pa-4" v-if="isApplicant">
                 <v-btn block color="primary" @click="applyToProgram()">Apply</v-btn>
                 <send-application-dialog :meta="applicationDialogMeta" :program="program"></send-application-dialog>
               </div>
@@ -193,9 +193,9 @@
 
         computed: {
             ...mapGetters({
-                agencyProfile: 'agencyProgramDetails/agency',
-                program: 'agencyProgramDetails/program',
-                applications: 'agencyProgramDetails/applications',
+                organizationProfile: 'organizationProgramDetails/organization',
+                program: 'organizationProgramDetails/program',
+                applications: 'organizationProgramDetails/applications',
                 user: 'auth/user',
                 isGrantor: 'auth/isGrantor',
                 isOfficer: 'auth/isOfficer',
@@ -204,10 +204,10 @@
 
             breadcrumbs() {
               return [
-                { text: this.agencyProfile.shortName, disabled: false, to: `${this.agencyProfile._id}/programs` },
-                { text: "Programs", disabled: false, to: `${this.agencyProfile._id}/programs` },
-                { text: this.program.area.abbreviation, disabled: false, to: `/${this.agencyProfile._id}/programs?areaCode=${this.program.area.abbreviation}&subAreaCode=${this.program.subArea.abbreviation}` },
-                { text: this.program.subArea.abbreviation, disabled: false, to:`/${this.agencyProfile._id}/programs?areaCode=${this.program.area.abbreviation}&subAreaCode=${this.program.subArea.abbreviation}` },
+                { text: this.organizationProfile.shortName, disabled: false, to: `${this.organizationProfile._id}/programs` },
+                { text: "Programs", disabled: false, to: `${this.organizationProfile._id}/programs` },
+                { text: this.program.area.abbreviation, disabled: false, to: `/${this.organizationProfile._id}/programs?areaCode=${this.program.area.abbreviation}&subAreaCode=${this.program.subArea.abbreviation}` },
+                { text: this.program.subArea.abbreviation, disabled: false, to:`/${this.organizationProfile._id}/programs?areaCode=${this.program.area.abbreviation}&subAreaCode=${this.program.subArea.abbreviation}` },
                 { text: this.program.title, disabled: true }
               ];
             },
@@ -318,6 +318,10 @@
   .sort-icon {
     min-width: 24px;
     min-height: 24px;
+  }
+
+  .flex-1{
+    flex: 1;
   }
 
 </style>

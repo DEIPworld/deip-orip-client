@@ -114,8 +114,8 @@ const router = new Router({
     name: 'AgencyProgramDetails',
     component: AgencyProgramDetails,
     beforeEnter: (to, from, next) => {
-      let loadPagePromise = store.dispatch('agencyProgramDetails/loadAgencyProgramDetailsPage', {
-        agency: decodeURIComponent(to.params.agency),
+      let loadPagePromise = store.dispatch('organizationProgramDetails/loadOrganizationProgramDetailsPage', {
+        organization: decodeURIComponent(to.params.agency),
         foaId: decodeURIComponent(to.params.foa)
       });
       loadPage(loadPagePromise, next);
