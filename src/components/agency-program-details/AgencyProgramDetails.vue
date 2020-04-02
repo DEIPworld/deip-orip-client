@@ -120,6 +120,21 @@
                     </div>
                   </v-flex>
 
+                  <v-flex xs12 pt-3 pb-5>
+                    <router-link :to="{
+                      name: 'FundingOpportunityAwardProposal', 
+                      params: { 
+                        agency: decodeURIComponent(organizationProfile.permlink), 
+                        foa: decodeURIComponent(program.funding_opportunity_number)
+                      }
+                    }">
+                      <v-btn class="ma-0" color="primary">
+                        Add Award Receivers
+                      </v-btn>
+                    </router-link>
+                  </v-flex>
+
+
                 </v-layout>
               </v-card>
             </v-flex>
