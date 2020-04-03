@@ -5,7 +5,7 @@
     </v-app>
 
     <v-app v-else>
-      <toolbar></toolbar>
+      <toolbar :isGrantsTransparencyDemo="isGrantsTransparencyDemo"></toolbar>
 
       <v-content>
         <router-view :key="$route.fullPath" />
@@ -29,8 +29,10 @@ w
   import { mapGetters } from 'vuex';
 
   import { AccessService } from '@deip/access-service';
+  import { AppConfigService } from '@deip/app-config-service';
 
   const accessService = AccessService.getInstance();
+  const appConfigService = AppConfigService.getInstance();
 
   export default {
 
@@ -38,6 +40,7 @@ w
 
     data() {
       return {
+        isGrantsTransparencyDemo: false,
         successSnack: { isVisible: false, message: '' },
         errorSnack: { isVisible: false, message: '' },
       };
@@ -59,6 +62,9 @@ w
       };
       pollNotifications();
       setInterval(pollNotifications, 10000);
+      const env = appConfigService.get('env');
+      console.log(env);
+      this.isGrantsTransparencyDemo = env.DEMO == "GRANT-DISTRIBUTION-TRANSPARENCY";
     },
 
     methods: {

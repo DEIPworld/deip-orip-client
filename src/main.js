@@ -41,7 +41,7 @@ import './styles/common.less';
 const currencyFilterOptions = {
   symbol: '$',
   thousandsSeparator: ',',
-  fractionCount: 3,
+  fractionCount: 2,
   fractionSeparator: '.',
   symbolPosition: 'front',
   symbolSpacing: true,

@@ -5,7 +5,7 @@
     "primary-color": "#1E88E5",
     "secondary-color": "#BBDEFB",
     "top-bar-color": "#529371",
-    "top-bar-link-color": "#1E88E5",
+    "top-bar-link-color": "white",
     "tabs-text-class": "green--text text--darken-1",
     "tabs-slider-color": "green"
   },
@@ -18,6 +18,16 @@
     "top-bar-link-color": "#a41f35",
     "tabs-text-class": "red--text text--darken-4",
     "tabs-slider-color": "#bb5b6b"
+  },
+  "us-treasury": {
+    "light": false,
+    "dark": true,
+    "primary-color": "#0053a2",
+    "secondary-color": "#FFF9C4",
+    "top-bar-color": "#0053a2",
+    "top-bar-link-color": "white",
+    "tabs-text-class": "blue--text text--darken-4",
+    "tabs-slider-color": "#00488e"
   },
   "strathclyde": {
     "light": false,
@@ -48,16 +58,6 @@
     "top-bar-link-color": "#ffffff",
     "tabs-text-class": "black--text",
     "tabs-slider-color": "#4d7f94"
-  },
-  "treasury": {
-    "light": false,
-    "dark": true,
-    "primary-color": "#0053a2",
-    "secondary-color": "#FFF9C4",
-    "top-bar-color": "#0053a2",
-    "top-bar-link-color": "#0053a2",
-    "tabs-text-class": "blue--text text--darken-4",
-    "tabs-slider-color": "#00488e"
   },
   "default": {
     "light": false,

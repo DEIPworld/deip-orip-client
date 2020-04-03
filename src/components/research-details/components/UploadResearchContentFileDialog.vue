@@ -5,10 +5,10 @@
       <div v-if="dropzoneOptions">
         <vue-dropzone ref="newContent" id="content-dropzone"
                       :options="dropzoneOptions"
-                      @vdropzone-sending="vdropzoneSending"
+                      @vdropzone-sending-multiple="vdropzoneSendingMultiple"
                       @vdropzone-file-added="vdropzoneFileAdded"
-                      @vdropzone-success-multiple="vdropzoneSuccess"
-                      @vdropzone-error="vdropzoneError">
+                      @vdropzone-success-multiple="vdropzoneSuccessMultiple"
+                      @vdropzone-error-multiple="vdropzoneErrorMultiple">
         </vue-dropzone>
       </div>
     </div>
@@ -144,7 +144,7 @@
           paramName: 'research-content',
           timeout: 0,
           maxFiles: 10,
-          parallelUploads: 10,
+          parallelUploads: 10, // important to keep the same as maxFiles due to server session
           uploadMultiple: true,
           thumbnailWidth: 150,
           autoProcessQueue: false,
@@ -186,7 +186,7 @@
         this.isLoading = true;
         this.$refs.newContent.processQueue();
       },
-      vdropzoneSending(file, xhr, formData) {
+      vdropzoneSendingMultiple(file, xhr, formData) {
         const accessToken = accessService.getAccessToken();
         xhr.setRequestHeader('Authorization', `Bearer ${accessToken}`);
         xhr.setRequestHeader('Upload-Session', `${(new Date()).getTime()}-${accessToken.split('.')[2]}`);
@@ -194,7 +194,7 @@
         xhr.setRequestHeader('Research-Id', this.research.id.toString());
         xhr.setRequestHeader('Internal-Refs', this.references.map(ref => ref.id));
       },
-      vdropzoneError(file, message, xhr) {
+      vdropzoneErrorMultiple(files, message, xhr) {
         this.$store.dispatch('layout/setError', {
           message: 'Sorry, the file storage server is temporarily unavailable, please try again later'
         });
@@ -203,7 +203,7 @@
       vdropzoneFileAdded(file) {
         this.isOpen = true;
       },
-      vdropzoneSuccess(file, res) {
+      vdropzoneSuccessMultiple(files, res) {
         const self = this;
         const contentRef = res;
         if (!contentRef.hash) {

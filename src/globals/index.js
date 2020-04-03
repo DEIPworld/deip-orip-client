@@ -2,7 +2,9 @@
 
 import Vue from 'vue'
 import moment from 'moment'
+import { BlockchainService } from '@deip/blockchain-service'
 
+const blockchainService = BlockchainService.getInstance();
 // regarding with DEIP PERCENTS
 Vue.prototype.PERCENT_QUANTITY_REGEX = /^(?:0|(?:[1-9]\d*))(?:\.\d{1,2})?$/;
 Vue.prototype.DEIP_100_PERCENT = 10000;
@@ -12,11 +14,9 @@ Vue.prototype.toDeipPercent = amount => parseFloat(amount) * 100;
 
 // regarding with ASSETS
 Vue.prototype.ASSET_QUANTITY_REGEX = /^(?:0|(?:[1-9]\d*))(?:\.\d{1,3})?$/;
-Vue.prototype.toAssetUnits = (amount, precision = 3, asset = window.env.ASSET_UNIT) => {
-    let value = parseFloat(amount).toFixed(precision);
-    return `${value} ${asset}`;
-};
-Vue.prototype.fromAssetsToFloat = assets => parseFloat(assets.split(' ')[0]);
+Vue.prototype.toAssetUnits = (amount, precision = 3, asset = window.env.ASSET_UNIT) => blockchainService.toAssetUnits(amount, precision, asset);
+Vue.prototype.fromAssetsToFloat = (assets) => blockchainService.fromAssetsToFloat(assets);
+
 Vue.prototype.deipTokenValidator = value => {
     if (!value || value.match(Vue.prototype.ASSET_QUANTITY_REGEX) === null) {
         return "Incorrect format";
@@ -35,22 +35,6 @@ Vue.prototype.deipTokenValidator = value => {
 Vue.prototype.COMMON_TOKEN_QUANTITY_REGEX = /^(?:0|(?:[1-9]\d*))(?:\.\d{1,3})?$/;
 Vue.prototype.toCommonTokens = amount => parseFloat(amount / 1000);
 Vue.prototype.fromCommonTokensToAmount = common => common * 1000;
-
-//
-Vue.prototype.countEciBarWidth = (eci, eciMax, eciAverage) => { // not used
-    if (eci < 0) {
-        return 0;
-    }
-
-    // shkor's formula :)
-    let countX = (eci, eciAverage) => eci / eciAverage * 1.175;
-    let fx = (eci, eciAverage) => Math.pow(-1 / (countX(eci, eciAverage) + 0.5) + 2, 2);
-
-    let fxEci = fx(eci, eciAverage);
-    let fxEciMax = fx(eciMax, eciAverage);
-
-    return fxEci !== 0 ? (fxEci / fxEciMax * 100) : 0;
-}
 
 Vue.prototype.round2DigitsAfterComma = (x) => {
   if (!x) {

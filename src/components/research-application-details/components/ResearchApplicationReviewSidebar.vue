@@ -24,9 +24,6 @@
 <script>
   import { mapGetters } from 'vuex';
   import deipRpc from '@deip/rpc-client';
-  import { TenantService } from '@deip/tenant-service';
-
-  const tenantService = TenantService.getInstance();
 
   export default {
     name: 'ResearchApplicationReviewSidebar',
@@ -128,10 +125,6 @@
       }
     },
     created() {
-      tenantService.getTenantsProfiles()
-        .then((agencies) => {
-          this.agencies = agencies;
-        })
     }
   };
 </script>
