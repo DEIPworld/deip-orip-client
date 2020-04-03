@@ -4,39 +4,30 @@
       <global-loader></global-loader>
     </div>
 
-    <v-toolbar :color="themeSettings['top-bar-color']" :class="themeSettings['top-bar-class']">
-<!--      <v-toolbar-side-icon class="mx-2 my-0">-->
-<!--        <router-link class="ma-0 pa-0" :to="{ name: 'Default' }">-->
-<!--          <img height="40px" :src="tenant | tenantLogoSrc(80, 80, false)" />-->
-<!--        </router-link>-->
-<!--      </v-toolbar-side-icon>-->
-
+    <v-toolbar v-if="isDefaultToolbar" :color="themeSettings['top-bar-color']" :class="themeSettings['top-bar-class']">
       <router-link class="ma-0 pa-0" :to="{ name: 'Default' }">
         <img height="40px" class="logo-image" :src="tenant | tenantLogoSrc(80, 80, false)" />
       </router-link>
-
-      <!--      <v-toolbar-title></v-toolbar-title>-->
-
       <v-spacer></v-spacer>
-
       <v-toolbar-items v-if="isLoggedIn">
-        <v-btn :to="{ name: 'ResearchFeed' }" :color="themeSettings['top-bar-link-color']" flat class="ma-0">Explore
+        <v-btn :to="{ name: 'ResearchFeed' }" :color="themeSettings['top-bar-link-color']" flat class="ma-0">
+          Explore
         </v-btn>
-        <v-btn :to="{ name: 'Dashboard' }" :color="themeSettings['top-bar-link-color']" flat class="ma-0">Dashboard
+        <v-btn :to="{ name: 'Dashboard' }" :color="themeSettings['top-bar-link-color']" flat class="ma-0">
+          Dashboard
         </v-btn>
-        <v-btn :to="{ name: 'InvestorDashboard' }" :color="themeSettings['top-bar-link-color']" flat class="ma-0">
+        <v-btn :to="{ name: 'InvestorPortfolio' }" :color="themeSettings['top-bar-link-color']" flat class="ma-0">
           Portfolio
         </v-btn>
-        <v-btn :to="{ name: 'UserWallet', params: { account_name: user.username } }"
-               :color="themeSettings['top-bar-link-color']" flat class="ma-0">Wallet
+        <v-btn :to="{ name: 'UserWallet', params: { account_name: user.username } }" :color="themeSettings['top-bar-link-color']" flat class="ma-0">
+          Wallet
         </v-btn>
         <user-notifications-list :notifications="user.notifications"></user-notifications-list>
         <v-menu bottom left offset-y>
           <v-btn fab flat icon class="ma-0" slot="activator">
             <v-avatar size="32px">
               <img v-if="user.profile" v-bind:src="user.profile | avatarSrc(2 * 32, 2 * 32, false)" />
-              <v-gravatar v-if="!user.profile && user.account" :title="user.username"
-                          :email="user.username + '@deip.world'" />
+              <v-gravatar v-if="!user.profile && user.account" :title="user.username" :email="user.username + '@deip.world'" />
             </v-avatar>
           </v-btn>
           <v-list class="dropdown-list" :dark="themeSettings['dark']" :light="themeSettings['light']" dense>
@@ -56,8 +47,55 @@
       </v-toolbar-items>
 
       <v-toolbar-items v-else>
-        <v-btn :to="{ name: 'ResearchFeed' }" :color="themeSettings['top-bar-link-color']" flat class="ma-0">Explore
+        <v-btn :to="{ name: 'ResearchFeed' }" :color="themeSettings['top-bar-link-color']" flat class="ma-0">Explore</v-btn>
+        <v-btn :color="themeSettings['top-bar-link-color']" flat :to="{ name: 'SignIn' }">Sign In</v-btn>
+        <v-btn :color="themeSettings['top-bar-link-color']" flat :to="{ name: 'SignUp' }">Sign Up</v-btn>
+      </v-toolbar-items>
+    </v-toolbar>
+
+    <v-toolbar v-if="isGrantsTransparencyDemo" :color="themeSettings['top-bar-color']" :class="themeSettings['top-bar-class']">
+      <router-link class="ma-0 pa-0" :to="{ name: 'Default' }">
+        <img height="40px" class="logo-image" :src="tenant | tenantLogoSrc(80, 80, false)" />
+      </router-link>
+      <v-spacer></v-spacer>
+      <v-toolbar-items v-if="isLoggedIn">
+        <v-btn :to="{ name: 'GrantProgramsAwardsDashboard', params: { agency: 'nsf' } }" :color="themeSettings['top-bar-link-color']" flat class="ma-0">
+          Dashboard
         </v-btn>
+        <v-btn :to="{ name: 'UserWallet', params: { account_name: user.username } }" :color="themeSettings['top-bar-link-color']" flat class="ma-0">
+          Wallet
+        </v-btn>
+        <user-notifications-list :notifications="user.notifications"></user-notifications-list>
+        <v-menu bottom left offset-y>
+          <v-btn fab flat icon class="ma-0" slot="activator">
+            <v-avatar size="32px">
+              <img v-if="user.profile" v-bind:src="user.profile | avatarSrc(2 * 32, 2 * 32, false)" />
+              <v-gravatar v-if="!user.profile && user.account" :title="user.username" :email="user.username + '@deip.world'" />
+            </v-avatar>
+          </v-btn>
+          <v-list class="dropdown-list" :dark="themeSettings['dark']" :light="themeSettings['light']" dense>
+            <v-list-tile :to="{ name: 'UserDetails', params: { account_name: user.username } }">
+              <v-list-tile-title>Profile</v-list-tile-title>
+            </v-list-tile>
+            <v-divider></v-divider>
+            <v-list-tile :to="{ name: 'AccountSettings' }">
+              <v-list-tile-title>Account Settings</v-list-tile-title>
+            </v-list-tile>
+            <v-list-tile :to="{ name: 'CreateGrantProgram' }">
+              <v-list-tile-title>Create Grant Program</v-list-tile-title>
+            </v-list-tile>
+            <v-list-tile :to="{ name: 'GrantPrograms', params: { agency: 'nsf' } }">
+              <v-list-tile-title>Grant Programs</v-list-tile-title>
+            </v-list-tile>
+            <v-divider></v-divider>
+            <v-list-tile @click="signOut()">
+              <v-list-tile-title>Sign Out</v-list-tile-title>
+            </v-list-tile>
+          </v-list>
+        </v-menu>
+      </v-toolbar-items>
+
+      <v-toolbar-items v-else>
         <v-btn :color="themeSettings['top-bar-link-color']" flat :to="{ name: 'SignIn' }">Sign In</v-btn>
         <v-btn :color="themeSettings['top-bar-link-color']" flat :to="{ name: 'SignUp' }">Sign Up</v-btn>
       </v-toolbar-items>
@@ -78,6 +116,10 @@
   export default {
     name: 'Toolbar',
 
+    props: {
+      isGrantsTransparencyDemo: { type: Boolean, required: false, default: false }
+    },
+
     data() {
       return {}
     },
@@ -86,11 +128,12 @@
       ...mapGetters({
         user: 'auth/user',
         tenant: 'auth/tenant',
-        isGrantor: 'auth/isGrantor',
-        isOfficer: 'auth/isOfficer',
         themeSettings: 'layout/themeSettings'
       }),
-      isLoggedIn() { return accessService.isLoggedIn(); }
+      isLoggedIn() { return accessService.isLoggedIn(); },
+      isDefaultToolbar() {
+        return !this.isGrantsTransparencyDemo;
+      }
     },
 
     methods: {

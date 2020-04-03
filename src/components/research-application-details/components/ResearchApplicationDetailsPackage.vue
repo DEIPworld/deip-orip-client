@@ -21,7 +21,7 @@
 			<v-flex xs8>
 				<div class="left">
 					<router-link class="subheading"  style="text-decoration: none"
-							:to="{ name: 'AgencyProgramDetails',
+							:to="{ name: 'GrantProgramDetails',
 									params: {
 										agency: program.agency_name,
 										foa: program.funding_opportunity_number }}">
@@ -117,8 +117,7 @@
         computed: {
           ...mapGetters({
             user: 'auth/user',
-            isGrantor: 'auth/isGrantor',
-            isOfficer: 'auth/isOfficer',
+            isGrantProgramOfficer: 'auth/isGrantProgramOfficer',
             userExperise: 'auth/userExperise',
             application: 'rad/application',
 						program: 'rad/program',
@@ -130,7 +129,7 @@
             applicationRef: 'rad/applicationRef',
           }),
 					isResolvingApplicationAvailable() {
-						return (this.isGrantor || this.program.officers.some(o => o == this.user.username)) && this.isApplicationPending;
+						return (this.isGrantProgramOfficer || this.program.officers.some(o => o == this.user.username)) && this.isApplicationPending;
 					},
           isApplicationApproved() {
             return this.application && this.application.status === 'application_approved';

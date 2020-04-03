@@ -171,7 +171,6 @@
     computed: {
       ...mapGetters({
         user: 'auth/user',
-        tenant: 'auth/tenant',
         userGroups: 'auth/userGroups',
         userCoworkers: 'auth/userCoworkers'
       })

@@ -78,9 +78,9 @@ const getters = {
   },
 
   userIsResearchGroupMember: (state, getters) => {
-    return groupId => getters.userGroups.find(group => {
+    return groupId => getters.userGroups.some(group => {
       return groupId === group.id
-    }) !== undefined;
+    });
   },
 
   userCoworkers: (state, getters) => {
@@ -91,41 +91,49 @@ const getters = {
     return state.user.joinRequests;
   },
 
-  isGrantor: (state, getters) => {
-    if (state.user.profile) {
-      const sub = window.env.TENANT;
-      return state.user.profile.agencies.some(
-        a => a.name.toLowerCase() === sub.toLowerCase() && a.role === 'grantor'
-      );
-    }
-    return false;
-  },
-
-  isOfficer: (state, getters) => {
-    if (state.user.profile) {
-      const sub = window.env.TENANT;
-      return state.user.profile.agencies.some(
-        a => a.name.toLowerCase() === sub.toLowerCase() && a.role === 'officer'
-      );
-    }
-    return false;
-  },
-
   userBalances: (state) => {
     let userBalances = {};
     state.user.balances.forEach(({amount}) => {
-      userBalances[amount.split(' ')[1]] = amount
+      userBalances[amount.split(' ')[1]] = amount;
     })
     return userBalances
   },
 
-  isApplicant: (state, getters) => {
-    return !getters.isGrantor && !getters.isOfficer;
-  },
-
   tenant: (state) => {
     return state.tenant;
-  }
+  },
+
+  isUniversityCertifier: (state, getters) => {
+    return state.user.profile.roles.some(r =>
+      r.role === "university-certifier" &&
+      getters.tenant &&
+      r.researchGroupId == getters.tenant.id
+    );
+  },
+
+  isGrantProgramOfficer: (state, getters) => {
+    return state.user.profile.roles.some(r =>
+      r.role === "grant-program-officer" &&
+      getters.tenant &&
+      r.researchGroupId == getters.tenant.id
+    );
+  },
+
+  isGrantFinanceOfficer: (state, getters) => {
+    return state.user.profile.roles.some(r =>
+      r.role === "grant-finance-officer" &&
+      getters.tenant &&
+      r.researchGroupId == getters.tenant.id
+    );
+  },
+
+  isTreasuryCertifier: (state, getters) => {
+    return state.user.profile.roles.some(r =>
+      r.role === "treasury-certifier" &&
+      getters.tenant &&
+      r.researchGroupId == getters.tenant.id
+    );
+  },
 }
 
 // actions
@@ -318,9 +326,9 @@ const actions = {
   },
 
   loadTenant({ state, commit, getters }, { tenant, notify } = {}) {
-    return tenantService.getTenantProfile(tenant)
-      .then((tenantProfile) => {
-        commit('SET_TENANT_PROFILE', tenantProfile);
+    return tenantService.getTenantByPermlink(tenant)
+      .then((tenant) => {
+        commit('SET_TENANT_PROFILE', tenant);
       })
       .catch(err => {
         console.log(err)
@@ -380,7 +388,6 @@ const mutations = {
 }
 
 const namespaced = true;
-
 
 export const authStore = {
   namespaced,

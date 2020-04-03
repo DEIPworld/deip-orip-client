@@ -5,7 +5,7 @@
     </v-app>
 
     <v-app v-else>
-      <toolbar></toolbar>
+      <toolbar :isGrantsTransparencyDemo="isGrantsTransparencyDemo"></toolbar>
 
       <v-content>
         <router-view :key="$route.fullPath" />
@@ -38,6 +38,7 @@ w
 
     data() {
       return {
+        isGrantsTransparencyDemo: false,
         successSnack: { isVisible: false, message: '' },
         errorSnack: { isVisible: false, message: '' },
       };
@@ -59,6 +60,7 @@ w
       };
       pollNotifications();
       setInterval(pollNotifications, 10000);
+      this.isGrantsTransparencyDemo = window.env.DEMO == "GRANT-DISTRIBUTION-TRANSPARENCY";
     },
 
     methods: {
