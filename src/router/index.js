@@ -14,6 +14,7 @@ import CreateDisciplineGrant from '@/components/grant-create/CreateDisciplineGra
 import CreateDirectGrant from '@/components/grant-create/CreateDirectGrant';
 import AgencyPrograms from '@/components/agency-programs/AgencyPrograms';
 import AgencyProgramDetails from '@/components/agency-program-details/AgencyProgramDetails';
+import FundingOpportunityAwardProposal from '@/components/funding-opportunity-award-proposal/FundingOpportunityAwardProposal';
 
 import CreateResearchGroup from '@/components/research-group-create/CreateResearchGroup';
 import ResearchGroupDetails from '@/components/research-group-details/ResearchGroupDetails';
@@ -117,6 +118,17 @@ const router = new Router({
       let loadPagePromise = store.dispatch('organizationProgramDetails/loadOrganizationProgramDetailsPage', {
         organization: decodeURIComponent(to.params.agency),
         foaId: decodeURIComponent(to.params.foa)
+      });
+      loadPage(loadPagePromise, next);
+    }
+  }, {
+    path: '/:agency/programs/:foa/award-proposal',
+    name: 'FundingOpportunityAwardProposal',
+    component: FundingOpportunityAwardProposal,
+    beforeEnter: (to, from, next) => {
+      let loadPagePromise = store.dispatch('foaAwardProposal/loadProgramAwardProposalPage', { 
+        organization: decodeURIComponent(to.params.agency), 
+        foaId: decodeURIComponent(to.params.foa) 
       });
       loadPage(loadPagePromise, next);
     }

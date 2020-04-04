@@ -25,6 +25,7 @@ import './dashboard/index';
 import './investor-dashboard/index';
 import './user-settings/index';
 import './research-group-settings/index';
+import './funding-opportunity-award-proposal/index';
 
 import Gravatar from 'vue-gravatar';
 Vue.component('v-gravatar', Gravatar);

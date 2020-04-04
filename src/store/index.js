@@ -17,6 +17,7 @@ import { claimExpertiseListStore } from '../components/claim-expertise-list/stor
 import { votingForBlockProducersStore } from '../components/voting-for-block-producers/store'
 import { organizationProgramsStore } from '../components/agency-programs/store'
 import { organizationProgramDetailsStore } from '../components/agency-program-details/store'
+import { foaAwardProposalStore } from './../components/funding-opportunity-award-proposal/store/index'
 import { dashboardStore } from '../components/dashboard/store'
 import { investorDashboardStore } from '../components/investor-dashboard/store'
 import { userSettingsStore } from '../components/user-settings/store'
@@ -43,6 +44,8 @@ export const store = new Vuex.Store({
     votingForBlockProducers: votingForBlockProducersStore,
     organizationPrograms: organizationProgramsStore,
     organizationProgramDetails: organizationProgramDetailsStore,
+    foaAwardProposal: foaAwardProposalStore,
+    
     dashboard: dashboardStore,
     investorDashboard: investorDashboardStore,
     userSettings: userSettingsStore,

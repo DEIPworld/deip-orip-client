@@ -15,7 +15,8 @@
                     <v-text-field
                         label="Opportunity number"
                         v-model="foa.number"
-                        :rules="[rules.required]"
+                        validate-on-blur
+                        :rules="[rules.required, rules.foaNumber]"
                     ></v-text-field>
 
                     <v-text-field v-if="organization"
@@ -47,8 +48,18 @@
 
         data() { 
             return {
+                MIN_FOA_NUMBER_LENGTH: 3,
+                MAX_FOA_NUMBER_LENGTH: 15,
                 rules: {
-                    required: v => !!v || 'This field is required'
+                    required: v => !!v || 'This field is required',
+                    foaNumber: (v) => {
+                        if (v.length < this.MIN_FOA_NUMBER_LENGTH){
+                            return `Award number length should be greater/equal than ${this.MIN_FOA_NUMBER_LENGTH}`
+                        } else if (v.length > this.MAX_FOA_NUMBER_LENGTH){
+                            return `Award number length should be less/equal than ${this.MAX_FOA_NUMBER_LENGTH}`
+                        }
+                        return true
+                    },
                 }
             } 
         },
@@ -59,7 +70,7 @@
             },
 
             isNextDisabled() {
-                return !this.foa.title || !this.foa.number;
+                return !this.foa.title || !this.foa.number || this.foa.number.length < this.MIN_FOA_NUMBER_LENGTH || this.foa.number.length > this.MAX_FOA_NUMBER_LENGTH;
             }
         }
     };
