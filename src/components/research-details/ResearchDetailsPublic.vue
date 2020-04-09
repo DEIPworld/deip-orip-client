@@ -35,19 +35,7 @@
       </v-layout>
       <v-layout row wrap>
         <v-flex xs12 lg9 class="px-5">
-          <v-layout row wrap v-if="timeline.length" class="my-5">
-            <v-flex xs12>
-              <v-layout column>
-                <v-layout row>
-                  <v-flex grow>
-                    <v-layout>
-                      <div class="pr-3"><v-icon large color="grey lighten-2">mdi-flag</v-icon></div>
-                      <div class="rd-block-header align-self-center">Project Timeline</div>
-                    </v-layout>
-                  </v-flex>
-                </v-layout>
-              </v-layout>
-            </v-flex>
+          <v-layout row wrap>
             <v-flex xs12>
               <research-timeline :timeline="timeline" />
             </v-flex>

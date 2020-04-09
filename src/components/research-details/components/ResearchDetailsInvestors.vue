@@ -1,5 +1,5 @@
 <template>
-  <v-layout column>
+  <v-layout column v-if="investors.length || isActiveTokenSale" class="my-4">
     <v-layout row class="pb-4">
       <v-flex grow>
         <v-layout>
@@ -12,7 +12,7 @@
       <v-flex shrink></v-flex>
     </v-layout>
 
-    <div>
+    <div class="mb-5">
       <v-layout justify-start class="mt-2">
         <div class="rd-investment-info">
           <span class="rd-investment-info__value">${{investmentsAmount}}</span>
@@ -40,6 +40,7 @@
         ></platform-avatar>
       </v-layout>
     </div>
+    <v-divider></v-divider>
   </v-layout>
 </template>
 
@@ -48,19 +49,35 @@ import { mapGetters } from "vuex";
 export default {
   name: "ResearchDetailsInvestors",
 
-  props: {
-    investors: { type: Array, required: true },
-    isResearchGroupMember: { type: Boolean, required: true }
-  },
-
   data() {
     return {};
   },
   computed: {
     ...mapGetters({
       tokenSalesList: "rd/tokenSalesList",
-      userContributionsList: "rd/userContributionsList"
+      userContributionsList: "rd/userContributionsList",
+      tokenHoldersList: "rd/tokenHoldersList",
+      contributionsList: "rd/contributionsList",
+      tokenSale: "rd/tokenSale"
     }),
+    isActiveTokenSale() {
+      return this.tokenSale && this.tokenSale.status === 1;
+    },
+    investors() {
+      return [...this.tokenHoldersList, ...this.contributionsList].reduce(
+        (acc, share) => {
+          return share.is_compensation ? acc : [...acc, share.user];
+        },
+        []
+      );
+    },
+    isResearchGroupMember() {
+      return this.research
+        ? this.$store.getters["auth/userIsResearchGroupMember"](
+            this.research.research_group_id
+          )
+        : false;
+    },
     investmentsAmount() {
       return this.tokenSalesList
         .filter(e => [1, 2].includes(e.status))

@@ -1,37 +1,59 @@
 <template>
-  <v-layout row class="full-width pt-3">
-    <v-flex xs8 class="milestone-description full-width">
-      {{selectedTimelineItem.description}}
+  <v-layout row wrap v-if="timeline.length" class="my-4">
+    <v-flex xs12>
+      <v-layout column>
+        <v-layout row>
+          <v-flex grow>
+            <v-layout>
+              <div class="pr-3">
+                <v-icon large color="grey lighten-2">mdi-flag</v-icon>
+              </div>
+              <div class="rd-block-header align-self-center">Project Timeline</div>
+            </v-layout>
+          </v-flex>
+        </v-layout>
+      </v-layout>
     </v-flex>
-    <v-flex xs4>
-      <v-layout class="full-width">
-        <ul class="rd-timeline" :class="{ 'rd-timeline--full': timelineItemsToShow === timeline.length }">
-          <li
-            v-for="(item, index) of timeline.slice(0, timelineItemsToShow)"
-            :key="`timeline_item_${item.id}`"
-            class="rd-timeline-item">
-            <div class="rd-timeline-item__marker rd-timeline-item__marker--clickable" 
-              :class="{ 'rd-timeline-item__marker--active': item === selectedTimelineItem }"
-              :style="{ backgroundColor: getTimelineItemColor(index) }"
-              @click="onTimelineMarkerClick(item)"
-            />
-            <div v-if="timelineItemsToShow !== timeline.length || index !== (timeline.length - 1)"
-              class="rd-timeline-item__line"
-              :style="{ background: `linear-gradient(${getTimelineItemColor(index)}, ${getTimelineItemColor(index + 1)})`}"
-            />
-            <div class="rd-timeline-item__date">{{item.date}}</div>
-            <div v-if="item.label" class="rd-timeline-item__label pt-1">{{item.label}}</div>
-            <div v-if="item.budget" class="rd-timeline-item__budget pt-1">
-              <div class="font-weight-bold">$ {{item.budget}}</div> 
-              <div>{{item.purpose}}</div>
-            </div>
-          </li>
-          <li v-if="timelineItemsToShow < timeline.length" class="rd-timeline-item">
-            <div class="rd-timeline-item__marker" :style="{ backgroundColor: '#E0E0E0' }"></div>
-            <div class="rd-timeline-item__line" :style="{ background: `#E0E0E0` }"></div>
-            <v-btn outline class="ma-0" @click="onShowMoreTimelineClick()">Show more events</v-btn>
-          </li>
-        </ul>
+    <v-flex xs12>
+      <v-layout row class="full-width pt-3">
+        <v-flex xs8 class="milestone-description full-width">{{selectedTimelineItem.description}}</v-flex>
+        <v-flex xs4>
+          <v-layout class="full-width">
+            <ul
+              class="rd-timeline"
+              :class="{ 'rd-timeline--full': timelineItemsToShow === timeline.length }"
+            >
+              <li
+                v-for="(item, index) of timeline.slice(0, timelineItemsToShow)"
+                :key="`timeline_item_${item.id}`"
+                class="rd-timeline-item"
+              >
+                <div
+                  class="rd-timeline-item__marker rd-timeline-item__marker--clickable"
+                  :class="{ 'rd-timeline-item__marker--active': item === selectedTimelineItem }"
+                  :style="{ backgroundColor: getTimelineItemColor(index) }"
+                  @click="onTimelineMarkerClick(item)"
+                />
+                <div
+                  v-if="timelineItemsToShow !== timeline.length || index !== (timeline.length - 1)"
+                  class="rd-timeline-item__line"
+                  :style="{ background: `linear-gradient(${getTimelineItemColor(index)}, ${getTimelineItemColor(index + 1)})`}"
+                />
+                <div class="rd-timeline-item__date">{{item.date}}</div>
+                <div v-if="item.label" class="rd-timeline-item__label pt-1">{{item.label}}</div>
+                <div v-if="item.budget" class="rd-timeline-item__budget pt-1">
+                  <div class="font-weight-bold">$ {{item.budget}}</div>
+                  <div>{{item.purpose}}</div>
+                </div>
+              </li>
+              <li v-if="timelineItemsToShow < timeline.length" class="rd-timeline-item">
+                <div class="rd-timeline-item__marker" :style="{ backgroundColor: '#E0E0E0' }"></div>
+                <div class="rd-timeline-item__line" :style="{ background: `#E0E0E0` }"></div>
+                <v-btn outline class="ma-0" @click="onShowMoreTimelineClick()">Show more events</v-btn>
+              </li>
+            </ul>
+          </v-layout>
+        </v-flex>
       </v-layout>
     </v-flex>
   </v-layout>
@@ -42,20 +64,20 @@ export default {
   name: "ResearchTimeline",
 
   props: {
-    timeline: { type: Array, required: true },
+    timeline: { type: Array, required: true }
   },
 
   data() {
     return {
       selectedTimelineItemId: 1,
-      timelineItemsToShow: 3,
+      timelineItemsToShow: 3
     };
   },
 
   computed: {
     selectedTimelineItem() {
       return this.timeline.find(m => m.id == this.selectedTimelineItemId);
-    },
+    }
   },
 
   methods: {
@@ -88,12 +110,20 @@ export default {
     },
     onTimelineMarkerClick(item) {
       this.selectedTimelineItemId = item.id;
-    },
+    }
   }
 };
 </script>
 
 <style lang="less" scoped>
+.rd-block-header {
+  font-family: Muli;
+  font-style: normal;
+  font-weight: 900;
+  font-size: 24px;
+  letter-spacing: 0.25px;
+  color: black;
+}
 .rd-timeline {
   list-style: none;
   &--full {
@@ -151,7 +181,8 @@ export default {
       line-height: 18px;
       color: #000000;
     }
-    &__budget, &__purpose {
+    &__budget,
+    &__purpose {
       font-family: Roboto;
       font-size: 12px;
       line-height: 18px;

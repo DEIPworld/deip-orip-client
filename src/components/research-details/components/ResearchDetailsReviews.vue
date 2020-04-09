@@ -1,5 +1,5 @@
 <template>
-  <v-layout wrap row class="my-5">
+  <v-layout wrap row class="my-5" v-if="reviews.length">
     <v-flex xs12>
       <v-layout row class="pb-4">
         <v-flex grow>

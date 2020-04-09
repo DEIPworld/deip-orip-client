@@ -156,11 +156,6 @@
             // sig-seed should be uint8 array with length = 32
             const secretSig = secretKey.sign(encodeUint8Arr(window.env.SIG_SEED).buffer);
 
-            console.log(privateKey)
-            console.log(secretKey)
-            console.log(secretSig)
-            console.log(crypto.hexify(secretSig))
-
             return authService.signIn({
               username: this.username,
               secretSigHex: crypto.hexify(secretSig)
