@@ -12,6 +12,7 @@ import ResearchDetailsSidebar from './components/ResearchDetailsSidebar'
 import ResearchDetailsHeader from './components/ResearchDetailsHeader'
 import ResearchDetailsInvestors from './components/ResearchDetailsInvestors'
 import ResearchDetailsECI from './components/ResearchDetailsECI'
+import ResearchDetailsReviews from './components/ResearchDetailsReviews'
 
 Vue.component('upload-research-content-file-dialog', UploadResearchContentFileDialog);
 Vue.component('research-review-item', ResearchReviewItem);
@@ -24,3 +25,4 @@ Vue.component('research-details-sidebar', ResearchDetailsSidebar);
 Vue.component('research-details-header', ResearchDetailsHeader);
 Vue.component('research-details-investors', ResearchDetailsInvestors);
 Vue.component('research-details-eci', ResearchDetailsECI)
+Vue.component('research-details-reviews', ResearchDetailsReviews)
