@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="my-4" v-if="contentList.length">
     <v-expansion-panel class="elevation-0">
       <research-details-materials-item
         v-for="content of contentList"
