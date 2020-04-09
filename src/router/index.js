@@ -58,6 +58,8 @@ import CreateFundingOpportunityAnnouncement
 import InvestorDashboard from '@/components/investor-dashboard/InvestorDashboard';
 import ReviewSetup from '@/components/review-setup/ReviewSetup'
 
+import FAQ from '@/components/faq/FAQ'
+
 import { store } from '@/store/index';
 import preliminaryDataLoader from './utils/preliminaryDataLoader';
 
@@ -517,6 +519,10 @@ const router = new Router({
     name: 'CreateFundingOpportunityAnnouncement',
     component: CreateFundingOpportunityAnnouncement
   }, {
+    path: '/faq',
+    name: 'FAQ',
+    component: FAQ
+  },{
     path: '/',
     name: 'Default',
     beforeEnter: (to, from, next) => {
