@@ -41,7 +41,7 @@
                   </template>
 
                   <v-list>
-                    <v-list-tile v-if="isTransferAvailable(balance.asset_id)" @click="openSendTokensDialog(balance)">
+                    <v-list-tile @click="openSendTokensDialog(balance)">
                       <v-list-tile-title>Transfer</v-list-tile-title>
                     </v-list-tile>
                     <v-list-tile v-if="isDepositAvailable(balance.asset_id)"
