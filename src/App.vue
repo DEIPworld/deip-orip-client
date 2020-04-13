@@ -29,8 +29,10 @@ w
   import { mapGetters } from 'vuex';
 
   import { AccessService } from '@deip/access-service';
+  import { AppConfigService } from '@deip/app-config-service';
 
   const accessService = AccessService.getInstance();
+  const appConfigService = AppConfigService.getInstance();
 
   export default {
 
@@ -60,7 +62,9 @@ w
       };
       pollNotifications();
       setInterval(pollNotifications, 10000);
-      this.isGrantsTransparencyDemo = window.env.DEMO == "GRANT-DISTRIBUTION-TRANSPARENCY";
+      const env = appConfigService.get('env');
+      console.log(env);
+      this.isGrantsTransparencyDemo = env.DEMO == "GRANT-DISTRIBUTION-TRANSPARENCY";
     },
 
     methods: {
