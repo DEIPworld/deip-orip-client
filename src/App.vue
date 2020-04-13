@@ -63,7 +63,6 @@ w
       pollNotifications();
       setInterval(pollNotifications, 10000);
       const env = appConfigService.get('env');
-      console.log(env);
       this.isGrantsTransparencyDemo = env.DEMO == "GRANT-DISTRIBUTION-TRANSPARENCY";
     },
 

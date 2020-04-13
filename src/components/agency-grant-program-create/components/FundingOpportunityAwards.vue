@@ -85,6 +85,10 @@ const GRANT_TOKEN_SYMBOL = "NGT";
                         if (!totalProgramFunding) {
                             return true;
                         }
+
+                        if (!this.userBalances[GRANT_TOKEN_SYMBOL]) {
+                          return `No ${GRANT_TOKEN_SYMBOL} balance found for the current user`;
+                        }
                         
                         if (totalProgramFunding > this.fromAssetsToFloat(this.userBalances[GRANT_TOKEN_SYMBOL])) {
                             return "Balance is insufficient";
