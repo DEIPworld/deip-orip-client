@@ -58,9 +58,11 @@ import preliminaryDataLoader from './utils/preliminaryDataLoader';
 
 import { AccessService } from '@deip/access-service';
 import { UsersService } from '@deip/users-service';
+import { AppConfigService } from '@deip/app-config-service';
 
 const accessService = AccessService.getInstance();
 const usersService = UsersService.getInstance();
+const appConfigService = AppConfigService.getInstance();
 
 Vue.use(Router);
 
@@ -74,7 +76,8 @@ const router = new Router({
     name: 'SignIn',
     component: SignIn,
     beforeEnter: (to, from, next) => {
-      if (window.env.DEMO == "GRANT-DISTRIBUTION-TRANSPARENCY") {
+      const env = appConfigService.get('env');
+      if (env.DEMO == "GRANT-DISTRIBUTION-TRANSPARENCY") {
         let agency = store.getters['auth/tenant'];
         if (!agency) {
           throw new Error("Granting agency must be specified for the Demo");
@@ -540,7 +543,8 @@ const router = new Router({
         : usersService.getUserProfile(user.username).then((p) => { return p.roles || [] });
 
       rolePromise.then((roles) => {
-        if (window.env.DEMO == "GRANT-DISTRIBUTION-TRANSPARENCY") {
+        const env = appConfigService.get('env');
+        if (env.DEMO == "GRANT-DISTRIBUTION-TRANSPARENCY") {
           let agency = store.getters['auth/tenant'];
           if (!agency) {
             throw new Error("Granting agency must be specified for the Demo");
