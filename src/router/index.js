@@ -5,16 +5,14 @@ import SignIn from '@/components/auth/SignIn';
 import SignUp from '@/components/auth/SignUp';
 import TenantSignIn from '@/components/auth/TenantSignIn';
 import Dashboard from '@/components/dashboard/DashboardNew';
-import EmailSendingRegistration from '@/components/auth/EmailSendingRegistration';
-import DataFillingRegistration from '@/components/auth/DataFillingRegistration';
-import ClaimExpertiseRegistration from '@/components/auth/ClaimExpertiseRegistration';
 
-import GrantStartCreating from '@/components/grant-create/GrantStartCreating';
-import CreateDisciplineGrant from '@/components/grant-create/CreateDisciplineGrant';
-import CreateDirectGrant from '@/components/grant-create/CreateDirectGrant';
-import AgencyPrograms from '@/components/agency-programs/AgencyPrograms';
-import AgencyProgramDetails from '@/components/agency-program-details/AgencyProgramDetails';
-import FundingOpportunityAwardProposal from '@/components/funding-opportunity-award-proposal/FundingOpportunityAwardProposal';
+import GrantPrograms from '@/components/agency-grant-programs/GrantPrograms';
+import GrantProgramDetails from '@/components/agency-grant-program-details/GrantProgramDetails';
+import CreateGrantProgramAward from '@/components/agency-grant-program-award-create/CreateGrantProgramAward';
+import CreateGrantProgram from '@/components/agency-grant-program-create/CreateGrantProgram';
+import GrantProgramsAwardsDashboard from '@/components/agency-grant-programs-awards-dashboard/GrantProgramsAwardsDashboard';
+import GrantProgramAwardDetails from '@/components/agency-grant-program-award-details/GrantProgramAwardDetails';
+import GrantProgramAwardWithdrawalDetails from '@/components/agency-grant-program-award-withdrawal-details/GrantProgramAwardWithdrawalDetails';
 
 import CreateResearchGroup from '@/components/research-group-create/CreateResearchGroup';
 import ResearchGroupDetails from '@/components/research-group-details/ResearchGroupDetails';
@@ -43,19 +41,14 @@ import PrivateKeyDownload from '@/components/account-settings/components/Private
 import UserDetails from '@/components/user-details/UserDetails';
 import UserExpertiseDetails from '@/components/user-details/UserExpertiseDetails';
 import UserWallet from '@/components/user-wallet/components/UserWallet';
-import UserWalletOld from '@/components/user-wallet/components/UserWalletOld';
 import UserSettings from '@/components/user-settings/UserSettings';
 
 import ClaimUserExpertiseDetails from '@/components/claim-expertise-details/ClaimUserExpertiseDetails';
 import ClaimUserExpertiseList from '@/components/claim-expertise-list/ClaimUserExpertiseList';
 
-import SetExpertisePage from '@/components/SetExpertisePage';
 import NoAccessPage from '@/components/NoAccessPage';
-import CreateAccountTestNet from '@/components/auth/CreateAccountTestNet';
 import VotingForBlockProducers from '@/components/voting-for-block-producers/VotingForBlockProducers';
-import CreateFundingOpportunityAnnouncement
-  from '@/components/funding-opportunity-announcement-create/CreateFundingOpportunityAnnouncement';
-import InvestorDashboard from '@/components/investor-dashboard/InvestorDashboard';
+import InvestorPortfolio from '@/components/investor-portfolio/InvestorPortfolio';
 import ReviewSetup from '@/components/review-setup/ReviewSetup'
 
 import FAQ from '@/components/faq/FAQ'
@@ -76,36 +69,69 @@ const RouterViewNestedWatcher = {
 };
 
 const router = new Router({
-  routes: [ {
+  routes: [{
     path: '/sign-in',
     name: 'SignIn',
-    component: SignIn
+    component: SignIn,
+    beforeEnter: (to, from, next) => {
+      if (window.env.DEMO == "GRANT-DISTRIBUTION-TRANSPARENCY") {
+        let agency = store.getters['auth/tenant'];
+        if (!agency) {
+          throw new Error("Granting agency must be specified for the Demo");
+        }
+        next({ name: 'TenantSignIn' });
+      } else {
+        next();
+      }
+    }
+  }, {
+    path: '/org-sign-in',
+    name: 'TenantSignIn',
+    component: TenantSignIn
   }, {
     path: '/sign-up',
     name: 'SignUp',
     component: SignUp
   }, {
-    path: '/claimExpertiseRegesitration',
-    name: 'ClaimExpertiseRegesitration',
-    component: ClaimExpertiseRegistration
-  }, {
-    path: '/create-grant',
-    name: 'CreateGrant',
-    component: GrantStartCreating
-  }, {
-    path: '/create-discipline-grant',
-    name: 'CreateDisciplineGrant',
-    component: CreateDisciplineGrant
-  }, {
-    path: '/create-direct-grant',
-    name: 'CreateDirectGrant',
-    component: CreateDirectGrant
-  }, {
-    path: '/:agency/programs',
-    name: 'AgencyPrograms',
-    component: AgencyPrograms,
+    path: '/:agency/grants/dashboard',
+    name: 'GrantProgramsAwardsDashboard',
+    component: GrantProgramsAwardsDashboard,
     beforeEnter: (to, from, next) => {
-      let loadPagePromise = store.dispatch('organizationPrograms/loadOrganizationProgramsPage', {
+      let loadPagePromise = store.dispatch('agencyGrantProgramAwardsDashboard/loadAgencyAwardsDashboardPage', {
+        permlink: decodeURIComponent(to.params.agency)
+      });
+      loadPage(loadPagePromise, next);
+    }
+  }, {
+    path: '/grants/award/:award_number/:subaward_number',
+    name: 'GrantProgramAwardDetails',
+    component: GrantProgramAwardDetails,
+    beforeEnter: (to, from, next) => {
+      let loadPagePromise = store.dispatch('agencyGrantProgramAwardDetails/loadAwardDetailsPage', {
+        awardNumber: decodeURIComponent(to.params.award_number),
+        subawardNumber: decodeURIComponent(to.params.subaward_number)
+      });
+      loadPage(loadPagePromise, next);
+    }
+  }, {
+    path: '/grants/award/:award_number/:subaward_number/withdrawal/:payment_number',
+    name: 'GrantProgramAwardWithdrawalDetails',
+    component: GrantProgramAwardWithdrawalDetails,
+    beforeEnter: (to, from, next) => {
+      let loadPagePromise = store.dispatch('agencyGrantProgramAwardWithdrawalDetails/loadWithdrawalDetailsPage', {
+        awardNumber: decodeURIComponent(to.params.award_number),
+        subawardNumber: decodeURIComponent(to.params.subaward_number),
+        paymentNumber: decodeURIComponent(to.params.payment_number)
+      });
+      loadPage(loadPagePromise, next);
+    }
+  },
+  {
+    path: '/:agency/programs',
+    name: 'GrantPrograms',
+    component: GrantPrograms,
+    beforeEnter: (to, from, next) => {
+      let loadPagePromise = store.dispatch('agencyGrantPrograms/loadGrantProgramsPage', {
         organization: decodeURIComponent(to.params.agency),
         areaCode: to.query.areaCode,
         subAreaCode: to.query.subAreaCode
@@ -114,10 +140,10 @@ const router = new Router({
     }
   }, {
     path: '/:agency/programs/:foa',
-    name: 'AgencyProgramDetails',
-    component: AgencyProgramDetails,
+    name: 'GrantProgramDetails',
+    component: GrantProgramDetails,
     beforeEnter: (to, from, next) => {
-      let loadPagePromise = store.dispatch('organizationProgramDetails/loadOrganizationProgramDetailsPage', {
+      let loadPagePromise = store.dispatch('agencyGrantProgramDetails/loadGrantProgramDetailsPage', {
         organization: decodeURIComponent(to.params.agency),
         foaId: decodeURIComponent(to.params.foa)
       });
@@ -125,10 +151,10 @@ const router = new Router({
     }
   }, {
     path: '/:agency/programs/:foa/award-proposal',
-    name: 'FundingOpportunityAwardProposal',
-    component: FundingOpportunityAwardProposal,
+    name: 'CreateGrantProgramAward',
+    component: CreateGrantProgramAward,
     beforeEnter: (to, from, next) => {
-      let loadPagePromise = store.dispatch('foaAwardProposal/loadProgramAwardProposalPage', { 
+      let loadPagePromise = store.dispatch('agencyGrantProgramAwardCreate/loadProgramAwardProposalPage', { 
         organization: decodeURIComponent(to.params.agency), 
         foaId: decodeURIComponent(to.params.foa) 
       });
@@ -449,15 +475,6 @@ const router = new Router({
       }
     })
   }, {
-    path: '/legacy-user-wallet',
-    name: 'UserWalletOld',
-    component: preliminaryDataLoader(UserWalletOld, {
-      beforeEnter: (to, from, next) => {
-        let loadPagePromise = store.dispatch('userWallet/loadWallet');
-        loadPage(loadPagePromise, next);
-      }
-    })
-  }, {
     path: '/claim-user-experience',
     name: 'ClaimUserExpertiseList',
     component: preliminaryDataLoader(ClaimUserExpertiseList, {
@@ -479,10 +496,6 @@ const router = new Router({
       }
     })
   }, {
-    path: '/set-expertise',
-    name: 'SetExpertisePage',
-    component: SetExpertisePage,
-  }, {
     // TODO: deprecated
     path: '/no-access-page',
     name: 'NoAccessPage',
@@ -490,12 +503,7 @@ const router = new Router({
     meta: {
       withoutHeader: true
     }
-  }, /* {
-			// page for test net only
-			path: '/create-testnet-account',
-			name: 'create-testnet-account',
-			component: CreateAccountTestNet
-	}, */ {
+  }, {
     path: '/voting-for-block-producers',
     name: 'VotingForBlockProducers',
     component: preliminaryDataLoader(VotingForBlockProducers, {
@@ -505,19 +513,19 @@ const router = new Router({
       }
     })
   }, {
-    path: '/investor-dashboard',
-    name: 'InvestorDashboard',
-    component: InvestorDashboard,
+    path: '/investor-portfolio',
+    name: 'InvestorPortfolio',
+    component: InvestorPortfolio,
     beforeEnter: (to, from, next) => {
-      let loadPagePromise = store.dispatch('investorDashboard/loadInvestmentPortfolioPage', {
+      let loadPagePromise = store.dispatch('investorPortfolio/loadInvestmentPortfolioPage', {
         username: decodeURIComponent(store.getters['auth/user'].username)
       });
       loadPage(loadPagePromise, next);
     }
   }, {
     path: '/create-funding-opportunity-announcement',
-    name: 'CreateFundingOpportunityAnnouncement',
-    component: CreateFundingOpportunityAnnouncement
+    name: 'CreateGrantProgram',
+    component: CreateGrantProgram
   }, {
     path: '/faq',
     name: 'FAQ',
@@ -526,25 +534,18 @@ const router = new Router({
     path: '/',
     name: 'Default',
     beforeEnter: (to, from, next) => {
-      const tenant = store.getters['auth/tenant'];
       const user = store.getters['auth/user'];
       const rolePromise = user.profile
-        ? Promise.resolve(user.profile.agencies || [])
-        : usersService.getUserProfile(user.username).then((p) => { return p.agencies });
+        ? Promise.resolve(user.profile.roles || [])
+        : usersService.getUserProfile(user.username).then((p) => { return p.roles || [] });
 
-      rolePromise.then((agencies) => {
-        return next({ name: 'ResearchFeed' });
-
-        if (!agencies || !agencies.length) {
-          next({ name: 'ResearchFeed' });
-          return;
-        }
-
-        const sub = window.env.TENANT || '';
-        const agency = agencies.find(a => a.name.toLowerCase() === sub.toLowerCase());
-
-        if (agency) {
-          next({ name: 'AgencyPrograms', params: { agency: agency.name } });
+      rolePromise.then((roles) => {
+        if (window.env.DEMO == "GRANT-DISTRIBUTION-TRANSPARENCY") {
+          let agency = store.getters['auth/tenant'];
+          if (!agency) {
+            throw new Error("Granting agency must be specified for the Demo");
+          }
+          next({ name: 'GrantProgramsAwardsDashboard', params: { agency: agency.permlink } });
         } else {
           next({ name: 'ResearchFeed' });
         }
@@ -583,7 +584,7 @@ router.beforeEach((to, from, next) => {
     'ResearchDetailsPublic',
     'NoAccessPage'
   ];
-  if (to.path === '/sign-in' || to.path === '/sign-up' || to.path === '/create-test-net-account') {
+  if (to.path === '/sign-in' || to.path === '/sign-up' || to.path === '/org-sign-in') {
     if (accessService.isLoggedIn()) {
       next('/') // if token is already presented redirect user to home page
     } else {

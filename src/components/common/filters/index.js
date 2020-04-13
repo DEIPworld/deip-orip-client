@@ -11,8 +11,8 @@ Vue.filter('fullname', function (enrichedProfile) {
 });
 
 Vue.filter('userLocation', function (enrichedProfile) {
-    const hasCity = enrichedProfile && enrichedProfile.profile && enrichedProfile.profile.location.city;
-    const hasCountry = enrichedProfile && enrichedProfile.profile && enrichedProfile.profile.location.country;
+  const hasCity = enrichedProfile && enrichedProfile.profile && enrichedProfile.profile.location && enrichedProfile.profile.location.city;
+  const hasCountry = enrichedProfile && enrichedProfile.profile && enrichedProfile.profile.location && enrichedProfile.profile.location.country;
     const city = hasCity
         ? enrichedProfile.profile.location.city
         : null;
@@ -67,17 +67,17 @@ Vue.filter('researchGroupLogoSrc', function (researchGroupId, width = 360, heigh
 
 Vue.filter('tenantLogoSrc', function (tenant, width, height, noCache, ext = 'png') {
     // return `${window.env.DEIP_SERVER_URL}/public/tenants/logo/${tenant._id}?width=${width}&height=${height}&noCache=${noCache}&ext=${ext}`
-    return tenant ? `/assets/img/tenants/${tenant._id}/logo.svg` : `/assets/img/toolbar-logo.svg`;
+    return tenant ? `/assets/img/tenants/${tenant.permlink}/logo.png` : `/assets/img/toolbar-logo.svg`;
 });
 
 Vue.filter('tenantSymbolSrc', function (tenant, width, height, noCache, ext = 'png') {
     // return `${window.env.DEIP_SERVER_URL}/public/tenants/symbol/${tenant._id}?width=${width}&height=${height}&noCache=${noCache}&ext=${ext}`
-    return tenant ? `/assets/img/tenants/${tenant._id}/symbol.svg` : `/assets/img/logo.svg`;
+    return tenant ? `/assets/img/tenants/${tenant.permlink}/symbol.png` : `/assets/img/logo.svg`;
 });
 
 Vue.filter('tenantBackgroundSrc', function (tenant, width, height, noCache, ext = 'png') {
     // return `${window.env.DEIP_SERVER_URL}/public/tenants/background-image/${tenant._id}?width=${width}&height=${height}&noCache=${noCache}&ext=${ext}`
-    return tenant ? `/assets/img/tenants/${tenant._id}/background.png` : `/assets/img/feed-background.svg`;
+    return tenant ? `/assets/img/tenants/${tenant.permlink}/background.png` : `/assets/img/feed-background.svg`;
 });
 
 Vue.filter('dateFormat', (value, format, fromUtcToLocal = false) => {

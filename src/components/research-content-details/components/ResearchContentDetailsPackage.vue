@@ -17,7 +17,7 @@
       <v-flex xs8>
         <div class="left">
           <!-- <router-link class="subheading"  style="text-decoration: none"
-              :to="{ name: 'AgencyProgramDetails',
+              :to="{ name: 'GrantProgramDetails',
                   params: {
                     agency: program.agency_name,
                     foa: program.funding_opportunity_number }}">

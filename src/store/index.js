@@ -15,16 +15,19 @@ import { layoutStore } from '../components/layout/store'
 import { claimExpertiseDetailsStore } from '../components/claim-expertise-details/store'
 import { claimExpertiseListStore } from '../components/claim-expertise-list/store'
 import { votingForBlockProducersStore } from '../components/voting-for-block-producers/store'
-import { organizationProgramsStore } from '../components/agency-programs/store'
-import { organizationProgramDetailsStore } from '../components/agency-program-details/store'
-import { foaAwardProposalStore } from './../components/funding-opportunity-award-proposal/store/index'
 import { dashboardStore } from '../components/dashboard/store'
-import { investorDashboardStore } from '../components/investor-dashboard/store'
+import { investorPortfolioStore } from '../components/investor-portfolio/store'
 import { userSettingsStore } from '../components/user-settings/store'
 import { researchGroupSettingsStore } from '../components/research-group-settings/store'
 
+import { agencyGrantProgramsStore } from '../components/agency-grant-programs/store'
+import { agencyGrantProgramDetailsStore } from '../components/agency-grant-program-details/store'
+import { agencyGrantProgramAwardsDashboardStore } from '../components/agency-grant-programs-awards-dashboard/store'
+import { agencyGrantProgramAwardDetailsStore } from '../components/agency-grant-program-award-details/store'
+import { agencyGrantProgramAwardWithdrawalDetailsStore } from '../components/agency-grant-program-award-withdrawal-details/store'
+import { agencyGrantProgramAwardCreateStore } from './../components/agency-grant-program-award-create/store/index'
 
-Vue.use(Vuex)
+Vue.use(Vuex);
 
 export const store = new Vuex.Store({
   modules: {
@@ -42,14 +45,17 @@ export const store = new Vuex.Store({
     claimExpertiseDetails: claimExpertiseDetailsStore,
     claimExpertiseList: claimExpertiseListStore,
     votingForBlockProducers: votingForBlockProducersStore,
-    organizationPrograms: organizationProgramsStore,
-    organizationProgramDetails: organizationProgramDetailsStore,
-    foaAwardProposal: foaAwardProposalStore,
-    
     dashboard: dashboardStore,
-    investorDashboard: investorDashboardStore,
+    investorPortfolio: investorPortfolioStore,
     userSettings: userSettingsStore,
-    researchGroupSettings: researchGroupSettingsStore
+    researchGroupSettings: researchGroupSettingsStore,
+
+    agencyGrantPrograms: agencyGrantProgramsStore,
+    agencyGrantProgramDetails: agencyGrantProgramDetailsStore,
+    agencyGrantProgramAwardCreate: agencyGrantProgramAwardCreateStore,
+    agencyGrantProgramAwardsDashboard: agencyGrantProgramAwardsDashboardStore,
+    agencyGrantProgramAwardDetails: agencyGrantProgramAwardDetailsStore,
+    agencyGrantProgramAwardWithdrawalDetails: agencyGrantProgramAwardWithdrawalDetailsStore
   },
   strict: process.env.NODE_ENV !== 'production',
 });
