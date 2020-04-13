@@ -127,7 +127,7 @@
                     <div class="subheading font-weight-bold">&nbsp;</div>
                     <v-text-field 
                       v-model.number="funding.purpose.awardAmount" 
-                      :rules="[ rules.required, rules.totalAwardValidator ]"
+                      :rules=" fundingIdx == 0 ? [rules.required, rules.totalAwardValidator, rules.balanceIsSufficient ] : [ rules.required, rules.totalAwardValidator ]"
                       class="right-input" :ref="'funding-awardAmount-' + fundingIdx" 
                       mask="##############" 
                       suffix="$">
@@ -331,6 +331,14 @@
 
               rules: {
                 required: (v) => !!v || 'This field is required',
+
+                balanceIsSufficient: (v) => {
+                  let amount = parseInt(v);
+                  if (!isNaN(amount) && amount > this.fromAssetsToFloat(this.program.current_supply)) {
+                    return "Funding opportunity current supply is insufficient";
+                  }
+                  return true;
+                },
 
                 allowedOverhead: (v) => {
                   if (!v) return "Unibersity overhead is required";

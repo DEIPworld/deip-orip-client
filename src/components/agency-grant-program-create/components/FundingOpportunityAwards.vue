@@ -61,6 +61,8 @@ import { AssetsService } from '@deip/assets-service';
 
 const assetsService = AssetsService.getInstance();
 
+const GRANT_TOKEN_SYMBOL = "NGT";
+
     export default {
         name: "FundingOpportunityAwards",
 
@@ -83,9 +85,9 @@ const assetsService = AssetsService.getInstance();
                         if (!totalProgramFunding) {
                             return true;
                         }
-
-                        if (totalProgramFunding > this.userBalances[window.env.ASSET_UNIT]){
-                            return "Total program funding can't be greater than your balance";
+                        
+                        if (totalProgramFunding > this.fromAssetsToFloat(this.userBalances[GRANT_TOKEN_SYMBOL])) {
+                            return "Balance is insufficient";
                         }
 
                         if (awardFloor && awardFloor > totalProgramFunding) {
