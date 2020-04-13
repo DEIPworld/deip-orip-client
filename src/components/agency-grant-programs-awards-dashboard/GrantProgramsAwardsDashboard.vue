@@ -161,7 +161,7 @@
                     </v-layout>
                   </v-flex>
 
-                  <v-flex xs3 v-if="isGrantProgramOfficer || isGrantFinanceOfficer || isTreasuryCertifier || isUniversityCertifier">
+                  <v-flex xs3 v-if="isGrantProgramOfficer || isGrantFinanceOfficer || isTreasuryCertifier">
                     <v-layout row>
                       <v-select
                         v-model="paymentsFilter.topPi"
