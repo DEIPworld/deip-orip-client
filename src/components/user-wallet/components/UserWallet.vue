@@ -82,7 +82,7 @@
                       research_permlink: encodeURIComponent(investment.research.permlink)
                     }
                   }"
-                >{{investment.research.title}}
+                ><span class="uppercase pr-2" style="color: black">Loyalty token</span><span class="body-2"> ({{investment.research.title}})</span> 
                 </router-link>
                 <v-layout row class="mt-2">
                   <v-flex>
@@ -133,7 +133,7 @@
               <v-layout v-if="expandedInvestmentIdx === index" column class="portfolio__item-stats py-4">
                 <v-layout row>
                   <v-flex xs7>
-                    <div class="title">Share price</div>
+                    <!-- <div class="title">Share price</div>
                     <div class="mt-4">
                       <GChart
                         type="ComboChart"
@@ -141,7 +141,16 @@
                         :data="sharePriceChart.data"
                         :options="sharePriceChart.options"
                       />
-                    </div>
+                    </div> -->
+                  <v-layout class="mt-4" justify-start>
+                    <v-btn
+                      color="primary"
+                      outline
+                      class="py-0 ma-0"
+                      @click="openSendResearchTokensDialog()"
+                    >Send research tokens
+                    </v-btn>
+                  </v-layout>
                   </v-flex>
                   <v-flex xs5>
                     <div class="title">Share holders</div>
@@ -155,7 +164,7 @@
                     </div>
                   </v-flex>
                 </v-layout>
-                <v-layout class="mt-4" justify-start>
+                <!-- <v-layout class="mt-4" justify-start>
                   <v-btn
                     color="primary"
                     outline
@@ -163,7 +172,7 @@
                     @click="openSendResearchTokensDialog()"
                   >Send research tokens
                   </v-btn>
-                </v-layout>
+                </v-layout> -->
               </v-layout>
             </div>
           </v-flex>

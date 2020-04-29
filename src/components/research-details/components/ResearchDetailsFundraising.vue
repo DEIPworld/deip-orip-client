@@ -99,22 +99,22 @@
       </v-layout>
 
       <v-layout column v-if="isActiveTokenSale && !isResearchGroupMember">
-        <v-layout justify-end class="pt-2">
+        <!-- <v-layout justify-end class="pt-2">
           <v-text-field
             ref="amountToContribute"
             v-model="amountToContribute"
             placeholder="Amount"
             suffix="USD"
             :rules="[deipTokenValidator]"
-            :disabled="areTokensBuying"
+            :disabled="investmentDialog.isInvesting"
           />
-        </v-layout>
+        </v-layout> -->
         <v-layout justify-end class="pt-2">
           <v-btn
+            :loading="investmentDialog.isInvesting"
             :disabled="isContributionToTokenSaleDisabled"
-            :loading="areTokensBuying"
             @click="onContributeToTokenSaleClick()"
-            class="btn--gradient-pb"
+            color="primary"
             block
           >Invest</v-btn>
         </v-layout>
@@ -149,6 +149,68 @@
             </v-card-actions>
           </v-card>
         </v-dialog>
+
+        <v-dialog v-model="investmentDialog.isOpened" persistent max-width="800px">
+          <v-card class="pa-4">
+            <v-card-title class="">
+              <v-layout align-center>
+                <v-flex subheading font-weight-bold grow>
+                  Invest
+                </v-flex>
+                <v-flex shrink right-top-angle>
+                  <v-btn @click="closeInvestmentDialog()" icon class="pa-0 ma-0">
+                    <v-icon color="black">close</v-icon>
+                  </v-btn>
+                </v-flex>
+              </v-layout>
+            </v-card-title>
+            <v-card-text class="pa-0">
+              <v-layout row wrap>
+                <v-flex xs6 class="pr-5" style="border-right: 2px solid #E0E0E0">
+                  <v-credit-card v-if="investmentDialog.isOpened" />
+                </v-flex>
+                <v-flex xs6>
+                  <v-layout justify-end column fill-height class="pl-5 pr-3">
+                    <div class="balance-form-input">
+                      <label class="balance-form-input__label">Amount</label>
+                      <input
+                        class="balance-form-input__field"
+                        type="text"
+                        placehoder="Amount"
+                        v-model="investmentDialog.amount"
+                      />
+                    </div>
+                    <div class="my-3">
+                      <v-checkbox
+                        label="I confirm that I am qualified investor"
+                        v-model="investmentDialog.termsConfirmed"
+                        hide-details
+                      ></v-checkbox>
+                    </div>
+                    <div class="my-3">
+                      <v-btn @click="invest()" color="primary" block
+                            :disabled="isInvestmentDisabled || investmentDialog.isInvesting"
+                            :loading="investmentDialog.isInvesting">
+                        Invest
+                      </v-btn>
+                    </div>
+                    <div class="mb-4">
+                      <v-btn
+                        @click="closeInvestmentDialog()"
+                        color="primary"
+                        class="pa-0"
+                        flat block
+                        :disabled="investmentDialog.isInvesting"
+                      >Cancel
+                      </v-btn>
+                    </div>
+                  </v-layout>
+                </v-flex>
+              </v-layout>
+            </v-card-text>
+          </v-card>
+        </v-dialog>
+
       </v-layout>
     </v-flex>
   </v-layout>
@@ -164,12 +226,27 @@ export default {
 
   data() {
     return {
-      amountToContribute: "",
-      areTokensBuying: false,
+      // amountToContribute: "",
       investmentConfirmDialog: {
         isShown: false,
         isConfirming: false
+      },
+
+      investmentDialog: {
+        cardData: {
+          name: '',
+          cardNumber: '',
+          expiration: '',
+          security: ''
+        },
+        amount: 0,
+        precision: 3,
+        selectedCurrency: window.env.ASSET_UNIT,
+        termsConfirmed: false,
+        isOpened: false,
+        isInvesting: false
       }
+
     };
   },
   computed: {
@@ -256,11 +333,8 @@ export default {
         : 0;
     },
     isContributionToTokenSaleDisabled() {
-      let balance = this.fromAssetsToFloat(
-        this.userBalances[window.env.ASSET_UNIT]
-      );
-      let notEnoughFunds = (this.amountToContribute || 0) > balance;
-      return notEnoughFunds || !this.amountToContribute || this.areTokensBuying;
+      let balance = this.fromAssetsToFloat(this.userBalances[this.investmentDialog.selectedCurrency]);
+      return !balance;
     },
     isFinishedResearch() {
       return this.research && this.research.is_finished;
@@ -273,20 +347,67 @@ export default {
         this.isActiveTokenSale ||
         this.isInactiveTokenSale
       );
-    }
+    },
+
+    isInvestmentDisabled() {
+      // const isInvalidBankCard = !this.investmentDialog.cardData.name
+      //   || !this.investmentDialog.cardData.cardNumber
+      //   || this.investmentDialog.cardData.cardNumber.length < 19
+      //   || !this.investmentDialog.cardData.expiration
+      //   || !this.investmentDialog.cardData.security
+      //   || this.investmentDialog.cardData.security < 3;
+
+      // if (isInvalidBankCard) {
+      //   return true;
+      // }
+
+
+      if (this.investmentDialog.amount && typeof this.investmentDialog.amount == "string" && this.investmentDialog.amount.indexOf("0") == 0) {
+        return true;
+      }
+
+      if (isNaN(this.investmentDialog.amount)) {
+        return true;
+      }
+
+      let balance = this.fromAssetsToFloat(this.userBalances[this.investmentDialog.selectedCurrency]);
+      let notEnoughFunds = this.investmentDialog.amount > balance;
+      if (notEnoughFunds) {
+        return true;
+      }
+      
+      if (!this.investmentDialog.termsConfirmed) {
+        return true;
+      }
+
+      return !this.investmentDialog.amount;
+    },
+
+    // creditInfoChanged(values) {
+
+    //   for (const key in values) {
+    //     console.log(key, values[key])
+    //     this.investmentDialog.cardData[key] = values[key];
+    //   }
+    // }
+
   },
   methods: {
     onContributeToTokenSaleClick() {
       this.investmentConfirmDialog.isShown = true;
     },
     contributeToTokenSale() {
-      this.areTokensBuying = true;
-      return deipRpc.broadcast
-        .contributeToTokenSaleAsync(
+      this.investmentDialog.isInvesting = true;
+      let investment = this.toAssetUnits(
+        parseInt(this.investmentDialog.amount), 
+        this.investmentDialog.precision, 
+        this.investmentDialog.selectedCurrency
+      );
+      return deipRpc.broadcast.contributeToTokenSaleAsync(
           this.user.privKey,
           this.tokenSale.id,
           this.user.username,
-          this.toAssetUnits(this.amountToContribute)
+          investment
         )
         .then(data => {
           this.$store.dispatch("rd/loadResearchTokenSale", {
@@ -304,9 +425,9 @@ export default {
           this.$store.dispatch("auth/loadAccount");
           this.$store.dispatch("auth/loadBalances");
 
-          this.areTokensBuying = false;
-          this.$refs.amountToContribute.reset();
-          this.amountToContribute = "";
+          this.investmentDialog.isInvesting = false;
+          // this.$refs.amountToContribute.reset();
+          // this.amountToContribute = "";
 
           this.$store.dispatch("layout/setSuccess", {
             message: `You have contributed to "${this.research.title}" fundraise successfully !`
@@ -314,23 +435,34 @@ export default {
         })
         .catch(err => {
           console.log(err);
-          this.areTokensBuying = false;
+          this.investmentDialog.isInvesting = false;
           this.$store.dispatch("layout/setError", {
             message:
               "An error occurred while contributing to fundraise, please try again later"
           });
         });
     },
+
     agreeSaft() {
       this.investmentConfirmDialog.isShown = false;
-      setTimeout(() => {
-        this.contributeToTokenSale();
-      }, 100);
+      this.investmentDialog.isOpened = true;
+      // setTimeout(() => {
+      //   this.investmentDialog.isOpened = true;
+      // }, 100);
     },
 
     disagreeSaft() {
       this.investmentConfirmDialog.isShown = false;
-    }
+    },
+
+    closeInvestmentDialog() {
+      this.investmentDialog.isOpened = false;
+    },
+
+    invest() {
+      this.contributeToTokenSale();
+      this.closeInvestmentDialog();
+    },
   }
 };
 </script>
@@ -434,6 +566,25 @@ export default {
     font-weight: 500;
     font-size: 14px;
     color: #ffffff;
+  }
+}
+
+.balance-form-input { // same as vue-credit card inputs
+  color: #707070;
+
+  &__label {
+    padding-bottom: 5px;
+    font-size: 13px;
+  }
+
+  &__field {
+    box-sizing: border-box;
+    margin-top: 3px;
+    padding: 15px;
+    font-size: 16px;
+    width: 100%;
+    border-radius: 3px;
+    border: 1px solid #dcdcdc;
   }
 }
 </style>
