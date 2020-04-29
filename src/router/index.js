@@ -8,11 +8,15 @@ import Dashboard from '@/components/dashboard/DashboardNew';
 
 import GrantPrograms from '@/components/agency-grant-programs/GrantPrograms';
 import GrantProgramDetails from '@/components/agency-grant-program-details/GrantProgramDetails';
-import CreateGrantProgramAward from '@/components/agency-grant-program-award-create/CreateGrantProgramAward';
+import CreateGrantProgramAward
+  from '@/components/agency-grant-program-award-create/CreateGrantProgramAward';
 import CreateGrantProgram from '@/components/agency-grant-program-create/CreateGrantProgram';
-import GrantProgramsAwardsDashboard from '@/components/agency-grant-programs-awards-dashboard/GrantProgramsAwardsDashboard';
-import GrantProgramAwardDetails from '@/components/agency-grant-program-award-details/GrantProgramAwardDetails';
-import GrantProgramAwardWithdrawalDetails from '@/components/agency-grant-program-award-withdrawal-details/GrantProgramAwardWithdrawalDetails';
+import GrantProgramsAwardsDashboard
+  from '@/components/agency-grant-programs-awards-dashboard/GrantProgramsAwardsDashboard';
+import GrantProgramAwardDetails
+  from '@/components/agency-grant-program-award-details/GrantProgramAwardDetails';
+import GrantProgramAwardWithdrawalDetails
+  from '@/components/agency-grant-program-award-withdrawal-details/GrantProgramAwardWithdrawalDetails';
 
 import CreateResearchGroup from '@/components/research-group-create/CreateResearchGroup';
 import ResearchGroupDetails from '@/components/research-group-details/ResearchGroupDetails';
@@ -24,16 +28,21 @@ import ResearchDetails from '@/components/research-details/ResearchDetails';
 import ResearchDetailsPublic from '@/components/research-details/ResearchDetailsPublic';
 import ResearchEdit from '@/components/research-edit/ResearchEdit';
 import ResearchContentDetails from '@/components/research-content-details/ResearchContentDetails';
-import ResearchApplicationDetails from '@/components/research-application-details/ResearchApplicationDetails';
-import ResearchApplicationReview from '@/components/research-application-details/ResearchApplicationReview';
-import ResearchApplicationAddReview from '@/components/research-application-details/ResearchApplicationAddReview';
+import ResearchApplicationDetails
+  from '@/components/research-application-details/ResearchApplicationDetails';
+import ResearchApplicationReview
+  from '@/components/research-application-details/ResearchApplicationReview';
+import ResearchApplicationAddReview
+  from '@/components/research-application-details/ResearchApplicationAddReview';
 import ResearchContentMetadata from '@/components/research-content-details/ResearchContentMetadata';
 import ResearchContentReview from '@/components/research-content-details/ResearchContentReview';
-import ResearchContentAddReview from '@/components/research-content-details/ResearchContentAddReview';
+import ResearchContentAddReview
+  from '@/components/research-content-details/ResearchContentAddReview';
 import ResearchStartCreating from '@/components/research-create/ResearchStartCreating';
 import CreateNewResearch from '@/components/research-create/CreateNewResearch';
 import CreateTokenSale from '@/components/token-sale-create/CreateTokenSale';
-import ResearchContentReferences from '@/components/research-content-details/ResearchContentReferences';
+import ResearchContentReferences
+  from '@/components/research-content-details/ResearchContentReferences';
 
 import AccountSettings from '@/components/account-settings/AccountSettings';
 import ChangePassword from '@/components/account-settings/components/ChangePassword';
@@ -43,22 +52,35 @@ import UserExpertiseDetails from '@/components/user-details/UserExpertiseDetails
 import UserWallet from '@/components/user-wallet/components/UserWallet';
 import UserSettings from '@/components/user-settings/UserSettings';
 
-import ClaimUserExpertiseDetails from '@/components/claim-expertise-details/ClaimUserExpertiseDetails';
+import ClaimUserExpertiseDetails
+  from '@/components/claim-expertise-details/ClaimUserExpertiseDetails';
 import ClaimUserExpertiseList from '@/components/claim-expertise-list/ClaimUserExpertiseList';
 
 import NoAccessPage from '@/components/NoAccessPage';
-import VotingForBlockProducers from '@/components/voting-for-block-producers/VotingForBlockProducers';
+import VotingForBlockProducers
+  from '@/components/voting-for-block-producers/VotingForBlockProducers';
 import InvestorPortfolio from '@/components/investor-portfolio/InvestorPortfolio';
 import ReviewSetup from '@/components/review-setup/ReviewSetup';
 
 import FAQ from '@/components/faq/FAQ';
+
+import AdminPanel from '@/components/AdminPanel/AdminPanel';
+import AdminMembers from '@/components/AdminPanel/AdminMembers';
+
 
 import { store } from '@/store/index';
 
 import { AccessService } from '@deip/access-service';
 import { UsersService } from '@deip/users-service';
 import { AppConfigService } from '@deip/app-config-service';
+import AdminProjects from '@/components/AdminPanel/AdminProjects';
+import AdminCriteria from '@/components/AdminPanel/AdminCriteria';
+import AdminFAQ from '@/components/AdminPanel/AdminFAQ';
+import AdminSettings from '@/components/AdminPanel/AdminSettings';
+import PseudoModal from '@/components/layout/PseudoModal';
 import preliminaryDataLoader from './utils/preliminaryDataLoader';
+import AdminMembersAdd from '@/components/AdminPanel/AdminMembersAdd';
+import DialogRouterView from '@/components/layout/DialogRouterView';
 
 const accessService = AccessService.getInstance();
 const usersService = UsersService.getInstance();
@@ -534,13 +556,78 @@ const router = new Router({
     name: 'FAQ',
     component: FAQ
   }, {
+    path: '/admin',
+    name: 'admin',
+    component: AdminPanel,
+    children: [
+
+      {
+        path: 'members',
+        name: 'admin.members',
+        component: AdminMembers,
+        children: [
+          {
+            path: 'add',
+            name: 'admin.members.add',
+            components: {
+              dialog: AdminMembersAdd
+            }
+          }
+        ]
+      },
+
+      {
+        path: 'members2',
+        component: DialogRouterView,
+        children: [
+          {
+            path: 'add',
+            name: 'admin.members',
+            components: {
+              default: AdminMembers
+            }
+          },
+          {
+            path: 'add',
+            name: 'admin.members.add',
+            components: {
+              default: AdminMembers,
+              dialog: AdminMembersAdd
+            }
+          }
+        ]
+      },
+      
+      {
+        path: '/projects',
+        name: 'admin.projects',
+        component: AdminProjects
+      },
+      {
+        path: '/criteria',
+        name: 'admin.criteria',
+        component: AdminCriteria
+      },
+      {
+        path: '/faq',
+        name: 'admin.faq',
+        component: AdminFAQ
+      },
+      {
+        path: '/settings',
+        name: 'admin.settings',
+        component: AdminSettings
+      }
+    ]
+  }, {
     path: '/',
     name: 'Default',
     beforeEnter: (to, from, next) => {
       const user = store.getters['auth/user'];
       const rolePromise = user.profile
         ? Promise.resolve(user.profile.roles || [])
-        : usersService.getUserProfile(user.username).then((p) => p.roles || []);
+        : usersService.getUserProfile(user.username)
+          .then((p) => p.roles || []);
 
       rolePromise.then((roles) => {
         const env = appConfigService.get('env');
@@ -549,7 +636,10 @@ const router = new Router({
           if (!agency) {
             throw new Error('Granting agency must be specified for the Demo');
           }
-          next({ name: 'GrantProgramsAwardsDashboard', params: { agency: agency.permlink } });
+          next({
+            name: 'GrantProgramsAwardsDashboard',
+            params: { agency: agency.permlink }
+          });
         } else {
           next({ name: 'ResearchFeed' });
         }
@@ -566,11 +656,17 @@ const router = new Router({
       setTimeout(() => {
         const anchor = document.querySelector(to.hash);
         if (anchor) {
-          return window.scrollTo({ top: anchor.offsetTop, behavior: 'smooth' });
+          return window.scrollTo({
+            top: anchor.offsetTop,
+            behavior: 'smooth'
+          });
         }
       }, 500);
     } else {
-      return { x: 0, y: 0 };
+      return {
+        x: 0,
+        y: 0
+      };
     }
   }
 });
