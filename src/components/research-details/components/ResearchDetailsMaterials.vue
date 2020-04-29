@@ -1,22 +1,23 @@
 <template>
-  <div class="my-4" v-if="contentList.length">
-    <v-expansion-panel class="elevation-0">
+  <v-card v-if="contentList.length" outlined class="my-6">
+    <v-expansion-panels flat>
       <research-details-materials-item
         v-for="content of contentList"
         :key="content.id"
         :content="content"
-        :isDetailsAvailable="isDetailsAvailable"
+        :is-details-available="isDetailsAvailable"
       />
-    </v-expansion-panel>
-  </div>
+    </v-expansion-panels>
+  </v-card>
 </template>
 
 <script>
   import { mapGetters } from 'vuex';
+  import ResearchDetailsMaterialsItem from '@/components/research-details/components/ResearchDetailsMaterialsItem';
 
   export default {
     name: 'ResearchDetailsMaterials',
-
+    components: { ResearchDetailsMaterialsItem },
     props: {
       isDetailsAvailable: {
         type: Boolean,

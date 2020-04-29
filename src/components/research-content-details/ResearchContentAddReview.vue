@@ -1,27 +1,28 @@
 <template>
-  <base-page-layout :rightSidebarClass="'xs12 md3'" :contentClass="'xs12 md9'">
-    <v-card slot="content" class="fill-height pa-5">
-      <research-content-add-review-body></research-content-add-review-body>
-    </v-card>
+  <base-page-layout>
+    <template #sidebar>
+      <layout-sidebar right simple>
+        <research-content-add-review-sidebar />
+      </layout-sidebar>
+    </template>
 
-    <v-card slot="right-sidebar" class="fill-height py-5 px-4">
-      <research-content-add-review-sidebar></research-content-add-review-sidebar>
-    </v-card>
+    <research-content-add-review-body />
   </base-page-layout>
 </template>
 
 <script>
-import { mapGetters } from "vuex";
+  import { mapGetters } from 'vuex';
+  import LayoutSidebar from '@/components/layout/components/LayoutSidebar';
 
-export default {
-  name: "ResearchContentAddReview",
+  export default {
+    name: 'ResearchContentAddReview',
+    components: { LayoutSidebar },
+    data() {
+      return {};
+    },
 
-  data() {
-    return {};
-  },
-
-  created() {}
-};
+    created() {}
+  };
 </script>
 
 <style lang="less" scoped>

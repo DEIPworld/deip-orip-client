@@ -29,44 +29,40 @@ const state = {
     organizations: [],
     q: '',
     orderBy: {
-      iteratee: [ 'title' ],
-      order: [ 'asc' ]
+      iteratee: ['title'],
+      order: ['asc']
     },
     topOnly: false,
     dateFrom: null,
     dateTo: null
   }
 
-}
+};
 
 // getters
 const getters = {
 
-  filter: (state, getters) => {
-    return state.filter;
-  },
+  filter: (state, getters) => state.filter,
 
   researchFeed: (state, getters) => {
-    let ordered = state.fullResearchListing
-      .map(item => {
-        let isTop = researchService.getTopResearchesIds().some(id => id == item.research_id);
+    const ordered = state.fullResearchListing
+      .map((item) => {
+        const isTop = researchService.getTopResearchesIds().some((id) => id == item.research_id);
         return { ...item, isTop };
       })
-      .filter(item => !state.filter.topOnly || item.isTop)
-      .filter(item => !state.filter.q || item.title.toLowerCase().indexOf(state.filter.q.toLowerCase()) != -1)
-      .filter(item => !state.filter.disciplines.length || item.disciplines.some(discipline => state.filter.disciplines.some(d => d.id == discipline.id)))
-      .filter(item => !state.filter.organizations.length || state.filter.organizations.some(org => item.group_id == org.id))
-      .filter(item => !state.filter.trl.length || state.filter.trl.some(t => t.id === item.researchRef.trl))
-      .map(item => {
-        let totalVotes = state.feedTotalVotes.filter(vote => vote.research_id == item.research_id);
-        let reviews = state.feedResearchReviews.filter(review => review.research_id == item.research_id);
-        let group = state.feedResearchGroups.find(group => group.id == item.group_id);
-        let researchMembers = state.feedResearchGroupsMembers.filter(user => item.members.some(a => a == user.account.name));
-        let tokenSale = state.feedResearchTokenSales.find(tokenSale => tokenSale.research_id == item.research_id);
-        let tokenSaleContributions = tokenSale ? state.feedResearchTokenSalesContributions.filter(c => c.research_token_sale_id == tokenSale.id) : [];
-        let disciplines = item.disciplines.map(discipline => {
-          return { ...discipline };
-        });
+      .filter((item) => !state.filter.topOnly || item.isTop)
+      .filter((item) => !state.filter.q || item.title.toLowerCase().indexOf(state.filter.q.toLowerCase()) != -1)
+      .filter((item) => !state.filter.disciplines.length || item.disciplines.some((discipline) => state.filter.disciplines.some((d) => d.id == discipline.id)))
+      .filter((item) => !state.filter.organizations.length || state.filter.organizations.some((org) => item.group_id == org.id))
+      .filter((item) => !state.filter.trl.length || state.filter.trl.some((t) => t.id === item.researchRef.trl))
+      .map((item) => {
+        const totalVotes = state.feedTotalVotes.filter((vote) => vote.research_id == item.research_id);
+        const reviews = state.feedResearchReviews.filter((review) => review.research_id == item.research_id);
+        const group = state.feedResearchGroups.find((group) => group.id == item.group_id);
+        const researchMembers = state.feedResearchGroupsMembers.filter((user) => item.members.some((a) => a == user.account.name));
+        const tokenSale = state.feedResearchTokenSales.find((tokenSale) => tokenSale.research_id == item.research_id);
+        const tokenSaleContributions = tokenSale ? state.feedResearchTokenSalesContributions.filter((c) => c.research_token_sale_id == tokenSale.id) : [];
+        const disciplines = item.disciplines.map((discipline) => ({ ...discipline }));
         return {
           ...item,
           totalVotes,
@@ -77,7 +73,7 @@ const getters = {
           tokenSaleContributions,
           disciplines
         };
-      })
+      });
     // .sort((a, b) => {
     //   if (b.created_at > a.created_at) {
     //     return 1
@@ -89,71 +85,59 @@ const getters = {
     return ordered;
   },
 
-  organizations: (state) => {
-    return state.feedResearchGroups.filter((g) => !g.is_personal);
-  },
+  organizations: (state) => state.feedResearchGroups.filter((g) => !g.is_personal),
 
-  allCollapsed: (state, getters) => {
-    return state.fullResearchListing.reduce((acc, item) => acc && item.isCollapsed, true);
-  },
+  allCollapsed: (state, getters) => state.fullResearchListing.reduce((acc, item) => acc && item.isCollapsed, true),
 
-  hasSelectedChildDiscipline: (state, getters) => {
-    return discipline => state.filter.disciplines.find(d => {
-      const parts = d.path.split('.')
-      return d.id != discipline.id && parts.some(p => p == discipline.path);
-    }) !== undefined;
-  }
-}
+  hasSelectedChildDiscipline: (state, getters) => (discipline) => state.filter.disciplines.find((d) => {
+    const parts = d.path.split('.');
+    return d.id != discipline.id && parts.some((p) => p == discipline.path);
+  }) !== undefined
+};
 
 // actions
 const actions = {
 
-  loadResearchFeed({ state, dispatch, commit, rootGetters }) {
-    const username = rootGetters['auth/user'].username;
+  loadResearchFeed({
+    state, dispatch, commit, rootGetters
+  }) {
+    const { username } = rootGetters['auth/user'];
     const alldisciplinesId = 0;
 
     let fullResearchListing = [];
     return deipRpc.api.getAllResearchesListingAsync(0, alldisciplinesId)
-      .then(listing => {
+      .then((listing) => {
         fullResearchListing = listing
           .filter((item) => !item.is_private)
-          .map(item => {return { ...item, isCollapsed: true }});
+          .map((item) => ({ ...item, isCollapsed: true }));
 
-        let researchRefsLoad = Promise.all(fullResearchListing
+        const researchRefsLoad = Promise.all(fullResearchListing
           .map((r) => researchService.getResearch(r.research_id)
             .then((researchRef) => {
               r.researchRef = researchRef;
-            })
-          ));
+            })));
 
-        let researchTotalVotesLoad = Promise.all(listing
-          .map(r => expertiseContributionsService.getExpertiseContributionsByResearch(r.research_id)));
+        const researchTotalVotesLoad = Promise.all(listing
+          .map((r) => expertiseContributionsService.getExpertiseContributionsByResearch(r.research_id)));
 
-        let researchReviewsLoad = Promise.all(listing
-          .map(r => deipRpc.api.getReviewsByResearchAsync(r.research_id)
-            .then((reviews) => {
-              return reviews.map(review => {
-                return { ...review, research_id: r.research_id }
-              })
-            })
-          ));
+        const researchReviewsLoad = Promise.all(listing
+          .map((r) => deipRpc.api.getReviewsByResearchAsync(r.research_id)
+            .then((reviews) => reviews.map((review) => ({ ...review, research_id: r.research_id })))));
 
-        let researchGroupsLoad = Promise.all(listing
-          .map(r => r.group_id)
-          .reduce((acc, groupId) => {
-            return acc.some(g => g == groupId) ? acc : [ groupId, ...acc ];
-          }, [])
-          .map(groupId => researchGroupService.getResearchGroupById(groupId)));
+        const researchGroupsLoad = Promise.all(listing
+          .map((r) => r.group_id)
+          .reduce((acc, groupId) => (acc.some((g) => g == groupId) ? acc : [groupId, ...acc]), [])
+          .map((groupId) => researchGroupService.getResearchGroupById(groupId)));
 
-        let groupsMembersLoad = usersService.getEnrichedProfiles(listing
-          .map(r => r.group_members)
+        const groupsMembersLoad = usersService.getEnrichedProfiles(listing
+          .map((r) => r.group_members)
           .reduce((acc, groupMembers) => {
-            let unique = groupMembers.filter(name => !acc.some(a => a == name));
-            return [ ...unique, ...acc ];
+            const unique = groupMembers.filter((name) => !acc.some((a) => a == name));
+            return [...unique, ...acc];
           }, []));
 
-        let tokenSalesLoad = Promise.all(listing
-          .map(r => investmentsService.getCurrentTokenSaleByResearchId(r.research_id)));
+        const tokenSalesLoad = Promise.all(listing
+          .map((r) => investmentsService.getCurrentTokenSaleByResearchId(r.research_id)));
 
         return Promise.all([
           researchRefsLoad,
@@ -164,16 +148,16 @@ const actions = {
           tokenSalesLoad
         ]);
       })
-      .then(([ , totalVotes, researchReviews, groups, /* disciplinesStats, */ groupsMembers, tokenSales ]) => {
+      .then(([, totalVotes, researchReviews, groups, /* disciplinesStats, */ groupsMembers, tokenSales]) => {
         commit('SET_FULL_RESEARCH_LISTING', fullResearchListing);
         commit('SET_RESEARCH_FEED_TOTAL_VOTES_LIST', [].concat.apply([], totalVotes));
         commit('SET_RESEARCH_FEED_REVIEWS_LIST', [].concat.apply([], researchReviews));
         commit('SET_RESEARCH_FEED_GROUPS_LIST', groups);
         commit('SET_RESEARCH_FEED_GROUPS_MEMBERS_LIST', groupsMembers);
-        commit('SET_RESEARCH_FEED_TOKEN_SALES_LIST', tokenSales.filter(ts => ts != undefined));
+        commit('SET_RESEARCH_FEED_TOKEN_SALES_LIST', tokenSales.filter((ts) => ts != undefined));
 
-        let tokenSalesContributionsLoad = Promise.all(state.feedResearchTokenSales
-          .map(tokenSale => deipRpc.api.getResearchTokenSaleContributionsByResearchTokenSaleIdAsync(tokenSale.id)));
+        const tokenSalesContributionsLoad = Promise.all(state.feedResearchTokenSales
+          .map((tokenSale) => deipRpc.api.getResearchTokenSaleContributionsByResearchTokenSaleIdAsync(tokenSale.id)));
 
         return Promise.all([
           tokenSalesContributionsLoad
@@ -185,64 +169,62 @@ const actions = {
   },
 
   toggleFeedItem({ commit, state, getters }, id) {
-    let item = state.fullResearchListing.find(item => {
-      return item.research_id == id
-    });
-    commit('SET_FEED_ITEM_COLLAPSE_STATE', { item: item, collapsed: !item.isCollapsed })
+    const item = state.fullResearchListing.find((item) => item.research_id == id);
+    commit('SET_FEED_ITEM_COLLAPSE_STATE', { item, collapsed: !item.isCollapsed });
   },
 
   toggleFeed({ commit, state, getters }) {
-    let collapsed = !getters.allCollapsed;
+    const collapsed = !getters.allCollapsed;
     commit('SET_FEED_ITEMS_COLLAPSE_STATE', collapsed);
   },
 
   updateFilter({ commit, state, getters }, payload) {
-    commit('UPDATE_FILTER', { key: payload.key, value: payload.value })
+    commit('UPDATE_FILTER', { key: payload.key, value: payload.value });
   }
-}
+};
 
 // mutations
 const mutations = {
 
-  ['SET_FULL_RESEARCH_LISTING'](state, list) {
+  SET_FULL_RESEARCH_LISTING(state, list) {
     Vue.set(state, 'fullResearchListing', list);
   },
 
-  ['SET_RESEARCH_FEED_TOTAL_VOTES_LIST'](state, list) {
+  SET_RESEARCH_FEED_TOTAL_VOTES_LIST(state, list) {
     Vue.set(state, 'feedTotalVotes', list);
   },
 
-  ['SET_RESEARCH_FEED_REVIEWS_LIST'](state, list) {
+  SET_RESEARCH_FEED_REVIEWS_LIST(state, list) {
     Vue.set(state, 'feedResearchReviews', list);
   },
 
-  ['SET_RESEARCH_FEED_GROUPS_LIST'](state, list) {
+  SET_RESEARCH_FEED_GROUPS_LIST(state, list) {
     Vue.set(state, 'feedResearchGroups', list);
   },
 
-  ['SET_RESEARCH_FEED_GROUPS_MEMBERS_LIST'](state, list) {
+  SET_RESEARCH_FEED_GROUPS_MEMBERS_LIST(state, list) {
     Vue.set(state, 'feedResearchGroupsMembers', list);
   },
 
-  ['SET_RESEARCH_FEED_TOKEN_SALES_LIST'](state, list) {
+  SET_RESEARCH_FEED_TOKEN_SALES_LIST(state, list) {
     Vue.set(state, 'feedResearchTokenSales', list);
   },
 
-  ['SET_RESEARCH_FEED_TOKEN_SALES_CONTRIBUTIONS_LIST'](state, list) {
+  SET_RESEARCH_FEED_TOKEN_SALES_CONTRIBUTIONS_LIST(state, list) {
     Vue.set(state, 'feedResearchTokenSalesContributions', list);
   },
 
-  ['SET_FEED_ITEM_COLLAPSE_STATE'](state, { item, collapsed }) {
+  SET_FEED_ITEM_COLLAPSE_STATE(state, { item, collapsed }) {
     item.isCollapsed = collapsed;
   },
 
-  ['SET_FEED_ITEMS_COLLAPSE_STATE'](state, collapsed) {
-    state.fullResearchListing.forEach(item => {
-      item.isCollapsed = collapsed
+  SET_FEED_ITEMS_COLLAPSE_STATE(state, collapsed) {
+    state.fullResearchListing.forEach((item) => {
+      item.isCollapsed = collapsed;
     });
   },
 
-  ['UPDATE_FILTER'](state, { key, value }) {
+  UPDATE_FILTER(state, { key, value }) {
     Vue.set(state.filter, key, value);
   }
 };

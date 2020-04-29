@@ -1,21 +1,21 @@
 <template>
   <base-page-layout>
-    <user-settings-body slot="content"></user-settings-body>
+    <user-settings-body />
   </base-page-layout>
 </template>
 
 <script>
-export default {
-  name: "UserSettings",
+  export default {
+    name: 'UserSettings',
 
-  data() {
-    return {};
-  },
+    data() {
+      return {};
+    },
 
-  methods: {},
+    created() {},
 
-  created() {}
-};
+    methods: {}
+  };
 </script>
 
 <style lang="less" scoped>

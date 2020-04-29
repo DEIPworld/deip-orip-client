@@ -4,24 +4,22 @@ module.exports = {
   css: {
     loaderOptions: {
       sass: {
-        prependData: (loaderContext) => {
-          const { resourcePath, rootContext } = loaderContext;
-          // console.log('#############', path.relative(rootContext,resourcePath));
-          const relativeArray = path.relative(rootContext, resourcePath).split('/');
-
-          if (relativeArray[0] === 'node_modules' && relativeArray[1] === 'vuetify') {
-            return '@import "~@/scss/_vuetifySettings.scss"';
-          }
-
-          // if(relativeArray[0] === 'src') {
-          //   return `@use "~@/styles/core";`
-          // }
-          return '';
-        }
+        // prependData(loaderContext) {
+        //   const { resourcePath, rootContext } = loaderContext;
+        //   const relativeArray = path.relative(rootContext, resourcePath).split('/');
+        //
+        //   if (relativeArray[0] === 'node_modules' && relativeArray[1] === 'vuetify') {
+        //     return '@import "~@/styles/next/core/_vuetify-settings.scss"';
+        //   }
+        //
+        //   return '';
+        // },
+        // sassOptions: {
+        //   fiber: true,
+        // },
       }
     }
   },
-
   devServer: {
     setup(app) {
       app.get('/env', (req, res) => {
@@ -29,15 +27,12 @@ module.exports = {
       });
     }
   },
-
   productionSourceMap: false,
-
-  // lintOnSave: process.env.NODE_ENV !== 'production'
   lintOnSave: false,
-
   assetsDir: 'assets',
-
-  transpileDependencies: ['@deip/*'],
-
+  transpileDependencies: [
+    '@deip/*',
+    'vuetify'
+  ],
   runtimeCompiler: true
 };

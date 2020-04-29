@@ -33,40 +33,34 @@ const state = {
   withdrawalSigners: []
 
   // witnesses: []
-}
+};
 
 // getters
 const getters = {
   isLoadingPaymentDetailsPage: (state) => state.isLoadingPaymentDetailsPage,
-  
-  foa: (state) => {
-    return {
-      ...state.foa,
-      organization: state.foaOrganization
-    }
-  },
 
-  awardee: (state) => {
-    return {
-      ...state.awardee,
-      isSubawardee: state.awardee.source != "",
-      organization: state.awardeeOrganization,
-      university: state.universityOrganization,
-      research: state.research
-    }
-  },
+  foa: (state) => ({
+    ...state.foa,
+    organization: state.foaOrganization
+  }),
 
-  treasury: (state) => {
-    return {
-      organization: state.treasuryOrganization
-    }
-  },
+  awardee: (state) => ({
+    ...state.awardee,
+    isSubawardee: state.awardee.source != '',
+    organization: state.awardeeOrganization,
+    university: state.universityOrganization,
+    research: state.research
+  }),
+
+  treasury: (state) => ({
+    organization: state.treasuryOrganization
+  }),
 
   withdrawal: (state, getters) => {
-    let withdrawal = state.withdrawal;
+    const { withdrawal } = state;
 
-    let pi = state.awardPI;
-    let requester = state.withdrawalSigners.find((user) => user.account.name == state.withdrawal.requester);
+    const pi = state.awardPI;
+    const requester = state.withdrawalSigners.find((user) => user.account.name == state.withdrawal.requester);
 
     return {
       id: withdrawal.id,
@@ -80,71 +74,68 @@ const getters = {
       requester,
       timestamp: withdrawal.time,
       attachment: withdrawal.withdrawalRef
-    }
+    };
   },
 
-  withdrawalHistoryRecords: (state, getters) => {
-
-    return state.withdrawalHistoryRecords.map((record) => {
-      let trxSigner = state.withdrawalSigners.find((user) => {
-        if (record.status == AWARD_WITHDRAWAL_REQUEST_STATUS.PENDING) {
-          return record.requester == user.account.name;
-        } else if (record.status == AWARD_WITHDRAWAL_REQUEST_STATUS.CERTIFIED) {
-          return record.certifier == user.account.name;
-        } else if (record.status == AWARD_WITHDRAWAL_REQUEST_STATUS.APPROVED) {
-          return record.approver == user.account.name;
-        } else if (record.status == AWARD_WITHDRAWAL_REQUEST_STATUS.PAID) {
-          return record.payer == user.account.name;
-        } else if (record.status == AWARD_WITHDRAWAL_REQUEST_STATUS.REJECTED) {
-          return record.rejector == user.account.name;
-        }
-      });
-
-      let trxOrg;
+  withdrawalHistoryRecords: (state, getters) => state.withdrawalHistoryRecords.map((record) => {
+    const trxSigner = state.withdrawalSigners.find((user) => {
       if (record.status == AWARD_WITHDRAWAL_REQUEST_STATUS.PENDING) {
-        trxOrg = getters.awardee.organization;
-      } else if (record.status == AWARD_WITHDRAWAL_REQUEST_STATUS.CERTIFIED) {
-        trxOrg = getters.awardee.university;
-      } else if (record.status == AWARD_WITHDRAWAL_REQUEST_STATUS.APPROVED) {
-        trxOrg = getters.foa.organization;
-      } else if (record.status == AWARD_WITHDRAWAL_REQUEST_STATUS.PAID) {
-        trxOrg = getters.treasury.organization;
-      } else if (record.status == AWARD_WITHDRAWAL_REQUEST_STATUS.REJECTED) {
-        trxOrg = record.certifier ? getters.foa.organization : getters.awardee.university;
-      }
-    
-      let trxInfo = state.withdrawalHistoryRecordsTransactions.find((tx) => {
-        return tx.block_num == record.block;
-      });
-
-      let blockInfo = state.withdrawalHistoryRecordsBlocks.find((block) => {
-        return block.block_num == record.block;
-      });
-
-      return {
-        ...record,
-        trxSigner,
-        trxInfo,
-        blockInfo,
-        trxOrg
+        return record.requester == user.account.name;
+      } if (record.status == AWARD_WITHDRAWAL_REQUEST_STATUS.CERTIFIED) {
+        return record.certifier == user.account.name;
+      } if (record.status == AWARD_WITHDRAWAL_REQUEST_STATUS.APPROVED) {
+        return record.approver == user.account.name;
+      } if (record.status == AWARD_WITHDRAWAL_REQUEST_STATUS.PAID) {
+        return record.payer == user.account.name;
+      } if (record.status == AWARD_WITHDRAWAL_REQUEST_STATUS.REJECTED) {
+        return record.rejector == user.account.name;
       }
     });
-  },
+
+    let trxOrg;
+    if (record.status == AWARD_WITHDRAWAL_REQUEST_STATUS.PENDING) {
+      trxOrg = getters.awardee.organization;
+    } else if (record.status == AWARD_WITHDRAWAL_REQUEST_STATUS.CERTIFIED) {
+      trxOrg = getters.awardee.university;
+    } else if (record.status == AWARD_WITHDRAWAL_REQUEST_STATUS.APPROVED) {
+      trxOrg = getters.foa.organization;
+    } else if (record.status == AWARD_WITHDRAWAL_REQUEST_STATUS.PAID) {
+      trxOrg = getters.treasury.organization;
+    } else if (record.status == AWARD_WITHDRAWAL_REQUEST_STATUS.REJECTED) {
+      trxOrg = record.certifier ? getters.foa.organization : getters.awardee.university;
+    }
+
+    const trxInfo = state.withdrawalHistoryRecordsTransactions.find((tx) => tx.block_num == record.block);
+
+    const blockInfo = state.withdrawalHistoryRecordsBlocks.find((block) => block.block_num == record.block);
+
+    return {
+      ...record,
+      trxSigner,
+      trxInfo,
+      blockInfo,
+      trxOrg
+    };
+  })
   // witnesses: (state) => state.witnesses
-}
+};
 
 // actions
 const actions = {
-  
+
   loadWithdrawalDetailsPage({ commit, dispatch, state }, { awardNumber, subawardNumber, paymentNumber }) {
     commit('SET_AWARD_WITHDRAWAL_DETAILS_LOADING_STATE', true);
-    
+
     const withdrawalLoad = new Promise((resolve, reject) => {
-      dispatch('loadWithdrawalDetails', { awardNumber, subawardNumber, paymentNumber, notify: resolve });
+      dispatch('loadWithdrawalDetails', {
+        awardNumber, subawardNumber, paymentNumber, notify: resolve
+      });
     });
 
     const withdrawalHistoryLoad = new Promise((resolve, reject) => {
-      dispatch('loadWithdrawalHistoryRecords', { awardNumber, subawardNumber, paymentNumber, notify: resolve });
+      dispatch('loadWithdrawalHistoryRecords', {
+        awardNumber, subawardNumber, paymentNumber, notify: resolve
+      });
     });
 
     // const witnessesLoad = new Promise((resolve, reject) => {
@@ -152,13 +143,15 @@ const actions = {
     // });
 
     return Promise.all([withdrawalLoad, withdrawalHistoryLoad])
-      .catch(err => { console.log(err) })
+      .catch((err) => { console.log(err); })
       .finally(() => {
         commit('SET_AWARD_WITHDRAWAL_DETAILS_LOADING_STATE', false);
       });
   },
 
-  loadWithdrawalDetails({ commit, dispatch, state }, { awardNumber, subawardNumber, paymentNumber, notify }) {
+  loadWithdrawalDetails({ commit, dispatch, state }, {
+    awardNumber, subawardNumber, paymentNumber, notify
+  }) {
     return grantsService.getAwardWithdrawalRequestWithOffchain(awardNumber, paymentNumber)
       .then((withdrawal) => {
         commit('SET_AWARD_WITHDRAWAL', withdrawal);
@@ -166,9 +159,9 @@ const actions = {
       })
       .then((award) => {
         commit('SET_AWARD', award);
-        let awardee = award.awardees.find(a => a.award_number == awardNumber && a.subaward_number == subawardNumber);
+        const awardee = award.awardees.find((a) => a.award_number == awardNumber && a.subaward_number == subawardNumber);
         commit('SET_AWARDEE', awardee);
-        return usersService.getEnrichedProfiles([awardee.source != "" ? awardee.source : awardee.awardee]);
+        return usersService.getEnrichedProfiles([awardee.source != '' ? awardee.source : awardee.awardee]);
       })
       .then(([pi]) => {
         commit('SET_AWARD_PI', pi);
@@ -194,38 +187,38 @@ const actions = {
         commit('SET_UNIVERSITY_ORGANIZATION', researchGroup);
         return researchGroupService.getResearchGroupById(state.foa.treasury_id);
       })
-      .then((researchGroup) => { 
+      .then((researchGroup) => {
         commit('SET_TREASURY_ORGANIZATION', researchGroup);
       })
-      .catch(err => { console.log(err) })
+      .catch((err) => { console.log(err); })
       .finally(() => {
         if (notify) notify();
       });
   },
 
-  loadWithdrawalHistoryRecords({ commit, dispatch, state }, { awardNumber, subawardNumber, paymentNumber, notify }) {
+  loadWithdrawalHistoryRecords({ commit, dispatch, state }, {
+    awardNumber, subawardNumber, paymentNumber, notify
+  }) {
     const transactions = [];
     return grantsService.getWithdrawalRequestHistoryByAwardAndPaymentNumber(awardNumber, paymentNumber)
       .then((withdrawalHistoryRecords) => {
         commit('SET_AWARD_WITHDRAWAL_HISTORY_RECORDS_LIST', withdrawalHistoryRecords);
-        return Promise.all(state.withdrawalHistoryRecords.map(r => blockchainService.getBlock(r.block)));
+        return Promise.all(state.withdrawalHistoryRecords.map((r) => blockchainService.getBlock(r.block)));
       })
       .then((blocks) => {
         commit('SET_AWARD_WITHDRAWAL_HISTORY_RECORDS_BLOCKS_LIST', blocks);
-        return Promise.all(state.withdrawalHistoryRecords.map(r => blockchainService.getTransaction(r.trx_id)));
+        return Promise.all(state.withdrawalHistoryRecords.map((r) => blockchainService.getTransaction(r.trx_id)));
       })
-      .then((items) => { 
+      .then((items) => {
         transactions.push(...items);
-        return Promise.all(transactions.map(tx => blockchainService.getTransactionHex(tx)));
+        return Promise.all(transactions.map((tx) => blockchainService.getTransactionHex(tx)));
       })
       .then((trxHashes) => {
-        commit('SET_AWARD_WITHDRAWAL_HISTORY_RECORDS_TRANSACTIONS_LIST', transactions.map((tx, i) => {
-          return { ...tx, trxHash: trxHashes[i] };
-        }));
+        commit('SET_AWARD_WITHDRAWAL_HISTORY_RECORDS_TRANSACTIONS_LIST', transactions.map((tx, i) => ({ ...tx, trxHash: trxHashes[i] })));
 
-        let trxSigners = [];
+        const trxSigners = [];
         for (let i = 0; i < state.withdrawalHistoryRecords.length; i++) {
-          let record = state.withdrawalHistoryRecords[i];
+          const record = state.withdrawalHistoryRecords[i];
           if (record.status == AWARD_WITHDRAWAL_REQUEST_STATUS.PENDING) {
             trxSigners.push(record.requester);
           } else if (record.status == AWARD_WITHDRAWAL_REQUEST_STATUS.CERTIFIED) {
@@ -243,11 +236,11 @@ const actions = {
       .then((users) => {
         commit('SET_AWARD_WITHDRAWAL_SIGNERS_LIST', users);
       })
-      .catch(err => { console.log(err) })
+      .catch((err) => { console.log(err); })
       .finally(() => {
         if (notify) notify();
       });
-    },
+  }
 
   // loadWitnesses({ commit, dispatch, state }, { notify }) {
   //   return deipRpc.api.getActiveWitnessesAsync()
@@ -263,77 +256,77 @@ const actions = {
   //       if (notify) notify();
   //     });
   // }
-  
-}
+
+};
 
 // mutations
 const mutations = {
 
-  ['SET_AWARD_WITHDRAWAL_DETAILS_LOADING_STATE'](state, value) {
-    state.isLoadingPaymentDetailsPage = value
+  SET_AWARD_WITHDRAWAL_DETAILS_LOADING_STATE(state, value) {
+    state.isLoadingPaymentDetailsPage = value;
   },
 
-  ['SET_AWARD_WITHDRAWAL'](state, payment) {
+  SET_AWARD_WITHDRAWAL(state, payment) {
     Vue.set(state, 'withdrawal', payment);
   },
 
-  ['SET_AWARD'](state, award) {
+  SET_AWARD(state, award) {
     Vue.set(state, 'award', award);
   },
 
-  ['SET_AWARDEE'](state, awardee) {
+  SET_AWARDEE(state, awardee) {
     Vue.set(state, 'awardee', awardee);
   },
 
-  ['SET_AWARDEE_RESEARCH'](state, research) {
+  SET_AWARDEE_RESEARCH(state, research) {
     Vue.set(state, 'research', research);
   },
 
-  ['SET_AWARDEE_ORGANIZATION'](state, organization) {
+  SET_AWARDEE_ORGANIZATION(state, organization) {
     Vue.set(state, 'awardeeOrganization', organization);
   },
 
-  ['SET_UNIVERSITY_ORGANIZATION'](state, organization) {
+  SET_UNIVERSITY_ORGANIZATION(state, organization) {
     Vue.set(state, 'universityOrganization', organization);
   },
 
-  ['SET_TREASURY_ORGANIZATION'](state, organization) {
+  SET_TREASURY_ORGANIZATION(state, organization) {
     Vue.set(state, 'treasuryOrganization', organization);
   },
 
-  ['SET_AWARD_WITHDRAWAL_HISTORY_RECORDS_LIST'](state, withdrawalHistoryRecords) {
+  SET_AWARD_WITHDRAWAL_HISTORY_RECORDS_LIST(state, withdrawalHistoryRecords) {
     Vue.set(state, 'withdrawalHistoryRecords', withdrawalHistoryRecords);
   },
 
-  ['SET_AWARD_WITHDRAWAL_HISTORY_RECORDS_BLOCKS_LIST'](state, withdrawalHistoryRecordsBlocks) {
+  SET_AWARD_WITHDRAWAL_HISTORY_RECORDS_BLOCKS_LIST(state, withdrawalHistoryRecordsBlocks) {
     Vue.set(state, 'withdrawalHistoryRecordsBlocks', withdrawalHistoryRecordsBlocks);
   },
 
-  ['SET_AWARD_WITHDRAWAL_HISTORY_RECORDS_TRANSACTIONS_LIST'](state, withdrawalHistoryRecordsTransactions) {
+  SET_AWARD_WITHDRAWAL_HISTORY_RECORDS_TRANSACTIONS_LIST(state, withdrawalHistoryRecordsTransactions) {
     Vue.set(state, 'withdrawalHistoryRecordsTransactions', withdrawalHistoryRecordsTransactions);
   },
 
-  ['SET_AWARD_WITHDRAWAL_SIGNERS_LIST'](state, users) {
+  SET_AWARD_WITHDRAWAL_SIGNERS_LIST(state, users) {
     Vue.set(state, 'withdrawalSigners', users);
   },
 
-  ['SET_AWARD_PI'](state, user) {
+  SET_AWARD_PI(state, user) {
     Vue.set(state, 'awardPI', user);
   },
-  
-  ['SET_FUNDING_OPPORTUNITY'](state, foa) {
+
+  SET_FUNDING_OPPORTUNITY(state, foa) {
     Vue.set(state, 'foa', foa);
   },
 
-  ['SET_FUNDING_OPPORTUNITY_ORGANIZATION'](state, foa) {
+  SET_FUNDING_OPPORTUNITY_ORGANIZATION(state, foa) {
     Vue.set(state, 'foaOrganization', foa);
   },
 
-  ['SET_WITNESSES_LIST'](state, witnesses) {
+  SET_WITNESSES_LIST(state, witnesses) {
     Vue.set(state, 'witnesses', witnesses);
   }
 
-}
+};
 
 const namespaced = true;
 
@@ -343,4 +336,4 @@ export const agencyGrantProgramAwardWithdrawalDetailsStore = {
   getters,
   actions,
   mutations
-}
+};

@@ -1,0 +1,43 @@
+<template>
+  <v-sheet tile>
+    <v-toolbar flat>
+      <v-toolbar-title class="headline">
+        {{ title }}
+      </v-toolbar-title>
+      <v-spacer />
+      <slot name="toolbarAction"/>
+
+      <template #extension v-if="hasSlot('toolbarExtension')">
+        <slot name="toolbarExtension"/>
+      </template>
+    </v-toolbar>
+
+    <v-divider />
+
+    <v-sheet class="pa-6">
+      <slot />
+    </v-sheet>
+  </v-sheet>
+</template>
+
+<script>
+  export default {
+    name: 'AdminView',
+    props: {
+      title: {
+        default: 'Admin',
+        type: String,
+        required: true
+      }
+    },
+    methods: {
+      hasSlot(name) {
+        return this.$slots[name] !== undefined;
+      }
+    }
+  };
+</script>
+
+<style scoped>
+
+</style>

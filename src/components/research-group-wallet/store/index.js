@@ -17,7 +17,7 @@ const getters = {
   group: state => {
     let researchGroup = state.group;
     let balances = researchGroup.account.balances.reduce((acc, b) => {
-      acc[b.split(' ')[1]] = blockchainService.fromAssetsToFloat(b.split(' ')[0]);
+      acc[b.split(' ')[1]] = blockchainService.fromAssetsToFloat(b);
       return acc;
     }, {});
 
@@ -31,56 +31,54 @@ const getters = {
 
 // actions
 const actions = {
-  loadGroupWallet({dispatch}, {permlink}) {
+  loadGroupWallet({ dispatch }, { permlink }) {
     return dispatch('loadGroup', permlink)
-      .then(group =>
-        dispatch('loadResearches', group.id)
-      );
+      .then((group) => dispatch('loadResearches', group.id));
   },
 
-  loadGroup({commit}, permlink) {
+  loadGroup({ commit }, permlink) {
     return deipRpc.api.getResearchGroupByPermlinkAsync(permlink)
-      .then(data => {
+      .then((data) => {
         commit('SET_GROUP', data);
 
         return data;
       });
   },
 
-  loadResearches({commit}, groupId) {
+  loadResearches({ commit }, groupId) {
     const researchResult = [];
 
     deipRpc.api.getResearchesByResearchGroupIdAsync(groupId)
-      .then(list => {
+      .then((list) => {
         researchResult.push(...list);
         return Promise.all(
-          list.map(item => expertiseContributionsService.getExpertiseContributionsByResearch(item.id))
+          list.map((item) => expertiseContributionsService.getExpertiseContributionsByResearch(item.id))
         );
       })
-      .then(list => {
+      .then((list) => {
         const tvoMap = _.chain(list)
           .flatten()
           .groupBy('research_id')
           .value();
 
-        researchResult.forEach(research => {
+        researchResult.forEach((research) => {
           research.totalVotes = tvoMap[research.id] ? tvoMap[research.id] : [];
         });
 
         return researchResult;
       })
-      .then(data => {
+      .then((data) => {
         commit('SET_RESEARCHES', data);
-      })
+      });
   }
 };
 
 // mutations
 const mutations = {
-  ['SET_GROUP'](state, group) {
+  SET_GROUP(state, group) {
     Vue.set(state, 'group', group);
   },
-  ['SET_RESEARCHES'](state, researches) {
+  SET_RESEARCHES(state, researches) {
     Vue.set(state, 'researches', researches);
   }
 };

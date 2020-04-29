@@ -8,36 +8,32 @@ const state = {
 
 // getters
 const getters = {
-  witnesses: state => state.witnesses
+  witnesses: (state) => state.witnesses
 };
 
 // actions
 const actions = {
-  loadProducers({commit}) {
+  loadProducers({ commit }) {
     return deipRpc.api.lookupWitnessAccountsAsync('', 100)
-      .then(witnessesNames => {
-        return Promise.all(
-          witnessesNames.map(accountName => deipRpc.api.getWitnessByAccountAsync(accountName))
-        );
-      })
-      .then(witnesses => {
-        return _.chain(witnesses).clone()
-          .orderBy(['votes'], ['desc'])
-          .each((item, i) => {
-            item.votingIndex = i;
-          })
-          .value();
-      })
-      .then(witnesses => {
+      .then((witnessesNames) => Promise.all(
+        witnessesNames.map((accountName) => deipRpc.api.getWitnessByAccountAsync(accountName))
+      ))
+      .then((witnesses) => _.chain(witnesses).clone()
+        .orderBy(['votes'], ['desc'])
+        .each((item, i) => {
+          item.votingIndex = i;
+        })
+        .value())
+      .then((witnesses) => {
         commit('SET_WITNESSES', witnesses);
       })
-      .catch(err => console.log(err));
+      .catch((err) => console.log(err));
   }
 };
 
 // mutations
 const mutations = {
-  ['SET_WITNESSES'](state, witnesses) {
+  SET_WITNESSES(state, witnesses) {
     Vue.set(state, 'witnesses', witnesses);
   }
 };
@@ -50,4 +46,4 @@ export const votingForBlockProducersStore = {
   getters,
   actions,
   mutations
-}
+};

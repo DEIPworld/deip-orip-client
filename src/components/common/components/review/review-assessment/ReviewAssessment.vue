@@ -1,15 +1,24 @@
 <template>
   <div>
-    <v-layout row justify-space-between align-center 
-      v-for="(criteria, i) in criterias" 
-      :key="`review-criteria-${i}`" 
-      class="py-2 full-width">
-      <div>{{criteria.title}}:</div>
-      <review-assessment-squared-rating class="pl-4" 
-        v-model="form[criteria.id]" 
-        :readonly="readonly"
-        :maxValue="criteria.max" />
-    </v-layout>
+    <v-row
+      v-for="(criteria, i) in criterias"
+      :key="`review-criteria-${i}`"
+      no-gutters
+      align="center"
+      class="full-width"
+    >
+      <v-col class="py-0">
+        {{ criteria.title }}:
+      </v-col>
+      <v-col class="py-0">
+        <review-assessment-squared-rating
+          v-model="form[criteria.id]"
+          class="pl-6"
+          :readonly="readonly"
+          :max-value="criteria.max"
+        />
+      </v-col>
+    </v-row>
   </div>
 </template>
 
@@ -22,17 +31,28 @@
     name: 'ReviewAssessment',
 
     props: {
-      value: { type: Object, required: true },
-      researchContentType: { type: String, required: true },
-      readonly: { type: Boolean, required: false, default: true }
+      value: {
+        type: Object,
+        required: true
+      },
+      researchContentType: {
+        type: String,
+        required: true
+      },
+      readonly: {
+        type: Boolean,
+        required: false,
+        default: true
+      }
     },
 
     data() {
       return {
-        form: Object.keys(this.value).reduce((form, field) => {
-          form[field] = this.value[field];
-          return form;
-        }, {}),
+        form: Object.keys(this.value)
+          .reduce((form, field) => {
+            form[field] = this.value[field];
+            return form;
+          }, {}),
         criterias: researchContentReviewsService.getAssessmentCriteriasForResearchContent(this.researchContentType)
       };
     },
@@ -47,10 +67,10 @@
 
       value: {
         handler(newVal, oldVal) {
-          let keys = Object.keys(newVal);
+          const keys = Object.keys(newVal);
           for (let i = 0; i < keys.length; i++) {
-            let id = keys[i];
-            if (this.criterias.some(criteria => criteria.id == id) && this.form[id] != newVal[id]) {
+            const id = keys[i];
+            if (this.criterias.some((criteria) => criteria.id == id) && this.form[id] != newVal[id]) {
               this.form[id] = newVal[id];
             }
           }

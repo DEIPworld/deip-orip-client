@@ -8,11 +8,15 @@ import Dashboard from '@/components/dashboard/DashboardNew';
 
 import GrantPrograms from '@/components/agency-grant-programs/GrantPrograms';
 import GrantProgramDetails from '@/components/agency-grant-program-details/GrantProgramDetails';
-import CreateGrantProgramAward from '@/components/agency-grant-program-award-create/CreateGrantProgramAward';
+import CreateGrantProgramAward
+  from '@/components/agency-grant-program-award-create/CreateGrantProgramAward';
 import CreateGrantProgram from '@/components/agency-grant-program-create/CreateGrantProgram';
-import GrantProgramsAwardsDashboard from '@/components/agency-grant-programs-awards-dashboard/GrantProgramsAwardsDashboard';
-import GrantProgramAwardDetails from '@/components/agency-grant-program-award-details/GrantProgramAwardDetails';
-import GrantProgramAwardWithdrawalDetails from '@/components/agency-grant-program-award-withdrawal-details/GrantProgramAwardWithdrawalDetails';
+import GrantProgramsAwardsDashboard
+  from '@/components/agency-grant-programs-awards-dashboard/GrantProgramsAwardsDashboard';
+import GrantProgramAwardDetails
+  from '@/components/agency-grant-program-award-details/GrantProgramAwardDetails';
+import GrantProgramAwardWithdrawalDetails
+  from '@/components/agency-grant-program-award-withdrawal-details/GrantProgramAwardWithdrawalDetails';
 
 import CreateResearchGroup from '@/components/research-group-create/CreateResearchGroup';
 import ResearchGroupDetails from '@/components/research-group-details/ResearchGroupDetails';
@@ -24,16 +28,21 @@ import ResearchDetails from '@/components/research-details/ResearchDetails';
 import ResearchDetailsPublic from '@/components/research-details/ResearchDetailsPublic';
 import ResearchEdit from '@/components/research-edit/ResearchEdit';
 import ResearchContentDetails from '@/components/research-content-details/ResearchContentDetails';
-import ResearchApplicationDetails from '@/components/research-application-details/ResearchApplicationDetails';
-import ResearchApplicationReview from '@/components/research-application-details/ResearchApplicationReview';
-import ResearchApplicationAddReview from '@/components/research-application-details/ResearchApplicationAddReview';
+import ResearchApplicationDetails
+  from '@/components/research-application-details/ResearchApplicationDetails';
+import ResearchApplicationReview
+  from '@/components/research-application-details/ResearchApplicationReview';
+import ResearchApplicationAddReview
+  from '@/components/research-application-details/ResearchApplicationAddReview';
 import ResearchContentMetadata from '@/components/research-content-details/ResearchContentMetadata';
 import ResearchContentReview from '@/components/research-content-details/ResearchContentReview';
-import ResearchContentAddReview from '@/components/research-content-details/ResearchContentAddReview';
+import ResearchContentAddReview
+  from '@/components/research-content-details/ResearchContentAddReview';
 import ResearchStartCreating from '@/components/research-create/ResearchStartCreating';
 import CreateNewResearch from '@/components/research-create/CreateNewResearch';
 import CreateTokenSale from '@/components/token-sale-create/CreateTokenSale';
-import ResearchContentReferences from '@/components/research-content-details/ResearchContentReferences';
+import ResearchContentReferences
+  from '@/components/research-content-details/ResearchContentReferences';
 
 import AccountSettings from '@/components/account-settings/AccountSettings';
 import ChangePassword from '@/components/account-settings/components/ChangePassword';
@@ -43,22 +52,33 @@ import UserExpertiseDetails from '@/components/user-details/UserExpertiseDetails
 import UserWallet from '@/components/user-wallet/components/UserWallet';
 import UserSettings from '@/components/user-settings/UserSettings';
 
-import ClaimUserExpertiseDetails from '@/components/claim-expertise-details/ClaimUserExpertiseDetails';
+import ClaimUserExpertiseDetails
+  from '@/components/claim-expertise-details/ClaimUserExpertiseDetails';
 import ClaimUserExpertiseList from '@/components/claim-expertise-list/ClaimUserExpertiseList';
 
 import NoAccessPage from '@/components/NoAccessPage';
-import VotingForBlockProducers from '@/components/voting-for-block-producers/VotingForBlockProducers';
+import VotingForBlockProducers
+  from '@/components/voting-for-block-producers/VotingForBlockProducers';
 import InvestorPortfolio from '@/components/investor-portfolio/InvestorPortfolio';
-import ReviewSetup from '@/components/review-setup/ReviewSetup'
+import ReviewSetup from '@/components/review-setup/ReviewSetup';
 
-import FAQ from '@/components/faq/FAQ'
+import FAQ from '@/components/faq/FAQ';
+
+import AdminPanel from '@/components/AdminPanel/AdminPanel';
+import AdminMembers from '@/components/AdminPanel/AdminMembers';
+
 
 import { store } from '@/store/index';
-import preliminaryDataLoader from './utils/preliminaryDataLoader';
 
 import { AccessService } from '@deip/access-service';
 import { UsersService } from '@deip/users-service';
 import { AppConfigService } from '@deip/app-config-service';
+import AdminProjects from '@/components/AdminPanel/AdminProjects';
+import AdminCriteria from '@/components/AdminPanel/AdminCriteria';
+import AdminFAQ from '@/components/AdminPanel/AdminFAQ';
+import AdminSettings from '@/components/AdminPanel/AdminSettings';
+import preliminaryDataLoader from './utils/preliminaryDataLoader';
+import UserRegistration from '@/components/auth/UserRegistration';
 
 const accessService = AccessService.getInstance();
 const usersService = UsersService.getInstance();
@@ -67,7 +87,7 @@ const appConfigService = AppConfigService.getInstance();
 Vue.use(Router);
 
 const RouterViewNestedWatcher = {
-  template: '<router-view></router-view>',
+  template: '<router-view></router-view>'
 };
 
 const router = new Router({
@@ -77,10 +97,10 @@ const router = new Router({
     component: SignIn,
     beforeEnter: (to, from, next) => {
       const env = appConfigService.get('env');
-      if (env.DEMO == "GRANT-DISTRIBUTION-TRANSPARENCY") {
-        let agency = store.getters['auth/tenant'];
+      if (env.DEMO == 'GRANT-DISTRIBUTION-TRANSPARENCY') {
+        const agency = store.getters['auth/tenant'];
         if (!agency) {
-          throw new Error("Granting agency must be specified for the Demo");
+          throw new Error('Granting agency must be specified for the Demo');
         }
         next({ name: 'TenantSignIn' });
       } else {
@@ -94,13 +114,16 @@ const router = new Router({
   }, {
     path: '/sign-up',
     name: 'SignUp',
-    component: SignUp
+    component: SignUp,
+    meta: {
+      viewTitle: 'Sign Up'
+    }
   }, {
     path: '/:agency/grants/dashboard',
     name: 'GrantProgramsAwardsDashboard',
     component: GrantProgramsAwardsDashboard,
     beforeEnter: (to, from, next) => {
-      let loadPagePromise = store.dispatch('agencyGrantProgramAwardsDashboard/loadAgencyAwardsDashboardPage', {
+      const loadPagePromise = store.dispatch('agencyGrantProgramAwardsDashboard/loadAgencyAwardsDashboardPage', {
         permlink: decodeURIComponent(to.params.agency)
       });
       loadPage(loadPagePromise, next);
@@ -110,7 +133,7 @@ const router = new Router({
     name: 'GrantProgramAwardDetails',
     component: GrantProgramAwardDetails,
     beforeEnter: (to, from, next) => {
-      let loadPagePromise = store.dispatch('agencyGrantProgramAwardDetails/loadAwardDetailsPage', {
+      const loadPagePromise = store.dispatch('agencyGrantProgramAwardDetails/loadAwardDetailsPage', {
         awardNumber: decodeURIComponent(to.params.award_number),
         subawardNumber: decodeURIComponent(to.params.subaward_number)
       });
@@ -121,7 +144,7 @@ const router = new Router({
     name: 'GrantProgramAwardWithdrawalDetails',
     component: GrantProgramAwardWithdrawalDetails,
     beforeEnter: (to, from, next) => {
-      let loadPagePromise = store.dispatch('agencyGrantProgramAwardWithdrawalDetails/loadWithdrawalDetailsPage', {
+      const loadPagePromise = store.dispatch('agencyGrantProgramAwardWithdrawalDetails/loadWithdrawalDetailsPage', {
         awardNumber: decodeURIComponent(to.params.award_number),
         subawardNumber: decodeURIComponent(to.params.subaward_number),
         paymentNumber: decodeURIComponent(to.params.payment_number)
@@ -134,7 +157,7 @@ const router = new Router({
     name: 'GrantPrograms',
     component: GrantPrograms,
     beforeEnter: (to, from, next) => {
-      let loadPagePromise = store.dispatch('agencyGrantPrograms/loadGrantProgramsPage', {
+      const loadPagePromise = store.dispatch('agencyGrantPrograms/loadGrantProgramsPage', {
         organization: decodeURIComponent(to.params.agency),
         areaCode: to.query.areaCode,
         subAreaCode: to.query.subAreaCode
@@ -146,7 +169,7 @@ const router = new Router({
     name: 'GrantProgramDetails',
     component: GrantProgramDetails,
     beforeEnter: (to, from, next) => {
-      let loadPagePromise = store.dispatch('agencyGrantProgramDetails/loadGrantProgramDetailsPage', {
+      const loadPagePromise = store.dispatch('agencyGrantProgramDetails/loadGrantProgramDetailsPage', {
         organization: decodeURIComponent(to.params.agency),
         foaId: decodeURIComponent(to.params.foa)
       });
@@ -157,9 +180,9 @@ const router = new Router({
     name: 'CreateGrantProgramAward',
     component: CreateGrantProgramAward,
     beforeEnter: (to, from, next) => {
-      let loadPagePromise = store.dispatch('agencyGrantProgramAwardCreate/loadProgramAwardProposalPage', { 
-        organization: decodeURIComponent(to.params.agency), 
-        foaId: decodeURIComponent(to.params.foa) 
+      const loadPagePromise = store.dispatch('agencyGrantProgramAwardCreate/loadProgramAwardProposalPage', {
+        organization: decodeURIComponent(to.params.agency),
+        foaId: decodeURIComponent(to.params.foa)
       });
       loadPage(loadPagePromise, next);
     }
@@ -168,7 +191,7 @@ const router = new Router({
     name: 'ResearchGroupDetails',
     component: preliminaryDataLoader(ResearchGroupDetails, {
       beforeEnter: (to, from, next) => {
-        let loadPagePromise = store.dispatch('researchGroup/loadResearchGroup', {
+        const loadPagePromise = store.dispatch('researchGroup/loadResearchGroup', {
           permlink: decodeURIComponent(to.params.research_group_permlink)
         });
         loadPage(loadPagePromise, next);
@@ -179,8 +202,8 @@ const router = new Router({
     name: 'ResearchGroupSettings',
     component: preliminaryDataLoader(ResearchGroupSettings, {
       beforeEnter: (to, from, next) => {
-        if (store.getters['auth/user'].groups.find(item => encodeURIComponent(item.permlink) == to.params.research_group_permlink)) {
-          let loadPagePromise = store.dispatch('researchGroupSettings/loadResearchGroup', {
+        if (store.getters['auth/user'].groups.find((item) => encodeURIComponent(item.permlink) == to.params.research_group_permlink)) {
+          const loadPagePromise = store.dispatch('researchGroupSettings/loadResearchGroup', {
             permlink: decodeURIComponent(to.params.research_group_permlink)
           });
           loadPage(loadPagePromise, next);
@@ -190,7 +213,7 @@ const router = new Router({
             params: {
               research_group_permlink: to.params.research_group_permlink
             }
-          })
+          });
         }
       }
     })
@@ -203,7 +226,7 @@ const router = new Router({
     name: 'ResearchGroupWallet',
     component: preliminaryDataLoader(ResearchGroupWallet, {
       beforeEnter: (to, from, next) => {
-        let loadPagePromise = store.dispatch('rgWallet/loadGroupWallet', {
+        const loadPagePromise = store.dispatch('rgWallet/loadGroupWallet', {
           permlink: decodeURIComponent(to.params.research_group_permlink)
         });
         loadPage(loadPagePromise, next);
@@ -214,7 +237,7 @@ const router = new Router({
     name: 'Dashboard',
     component: Dashboard,
     beforeEnter: (to, from, next) => {
-      let loadPagePromise = store.dispatch('dashboard/loadDashboardPage', {
+      const loadPagePromise = store.dispatch('dashboard/loadDashboardPage', {
         username: decodeURIComponent(store.getters['auth/user'].username)
       });
       loadPage(loadPagePromise, next);
@@ -224,7 +247,7 @@ const router = new Router({
     name: 'ResearchFeed',
     component: preliminaryDataLoader(ResearchFeed, {
       beforeEnter: (to, from, next) => {
-        let loadPagePromise = store.dispatch('feed/loadResearchFeed', {});
+        const loadPagePromise = store.dispatch('feed/loadResearchFeed', {});
         loadPage(loadPagePromise, next);
       }
     })
@@ -233,7 +256,7 @@ const router = new Router({
     name: 'ResearchDetails',
     component: preliminaryDataLoader(ResearchDetails, {
       beforeEnter: (to, from, next) => {
-        let loadPagePromise = store.dispatch('rd/loadResearchDetails', {
+        const loadPagePromise = store.dispatch('rd/loadResearchDetails', {
           group_permlink: decodeURIComponent(to.params.research_group_permlink),
           research_permlink: decodeURIComponent(to.params.research_permlink)
         });
@@ -245,20 +268,20 @@ const router = new Router({
     name: 'ResearchDetailsPublic',
     component: preliminaryDataLoader(ResearchDetailsPublic, {
       beforeEnter: (to, from, next) => {
-        let loadPagePromise = store.dispatch('rd/loadResearchDetails', {
+        const loadPagePromise = store.dispatch('rd/loadResearchDetails', {
           group_permlink: decodeURIComponent(to.params.research_group_permlink),
           research_permlink: decodeURIComponent(to.params.research_permlink)
         });
         loadPage(loadPagePromise, next);
       }
-    }),
+    })
   }, {
     path: '/:research_group_permlink/edit-research/:research_permlink',
     name: 'ResearchEdit',
     component: preliminaryDataLoader(ResearchEdit, {
       beforeEnter: (to, from, next) => {
-        if (store.getters['auth/user'].groups.find(item => encodeURIComponent(item.permlink) == to.params.research_group_permlink)) {
-          let loadPagePromise = store.dispatch('re/loadResearchEditPage', {
+        if (store.getters['auth/user'].groups.find((item) => encodeURIComponent(item.permlink) == to.params.research_group_permlink)) {
+          const loadPagePromise = store.dispatch('re/loadResearchEditPage', {
             group_permlink: decodeURIComponent(to.params.research_group_permlink),
             research_permlink: decodeURIComponent(to.params.research_permlink)
           });
@@ -270,7 +293,7 @@ const router = new Router({
               research_group_permlink: to.params.research_group_permlink,
               research_permlink: to.params.research_permlink
             }
-          })
+          });
         }
       }
     })
@@ -279,7 +302,7 @@ const router = new Router({
     name: 'ResearchContentDetails',
     component: preliminaryDataLoader(ResearchContentDetails, {
       beforeEnter: (to, from, next) => {
-        let loadPagePromise = store.dispatch('rcd/loadResearchContentDetails', {
+        const loadPagePromise = store.dispatch('rcd/loadResearchContentDetails', {
           group_permlink: decodeURIComponent(to.params.research_group_permlink),
           research_permlink: decodeURIComponent(to.params.research_permlink),
           content_permlink: decodeURIComponent(to.params.content_permlink),
@@ -293,7 +316,7 @@ const router = new Router({
     name: 'ResearchApplicationDetails',
     component: preliminaryDataLoader(ResearchApplicationDetails, {
       beforeEnter: (to, from, next) => {
-        let loadPagePromise = store.dispatch('rad/loadResearchApplicationDetails', {
+        const loadPagePromise = store.dispatch('rad/loadResearchApplicationDetails', {
           group_permlink: decodeURIComponent(to.params.research_group_permlink),
           research_permlink: decodeURIComponent(to.params.research_permlink),
           application_id: to.params.application_id
@@ -306,7 +329,7 @@ const router = new Router({
     name: 'ResearchContentMetadata',
     component: preliminaryDataLoader(ResearchContentMetadata, {
       beforeEnter: async (to, from, next) => {
-        let loadPagePromise = store.dispatch('rcd/loadResearchContentMetadata', {
+        const loadPagePromise = store.dispatch('rcd/loadResearchContentMetadata', {
           group_permlink: decodeURIComponent(to.params.research_group_permlink),
           research_permlink: decodeURIComponent(to.params.research_permlink),
           content_permlink: decodeURIComponent(to.params.content_permlink),
@@ -320,7 +343,7 @@ const router = new Router({
     name: 'ResearchContentReview',
     component: preliminaryDataLoader(ResearchContentReview, {
       beforeEnter: (to, from, next) => {
-        let loadPagePromise = store.dispatch('rcd/loadResearchContentDetails', {
+        const loadPagePromise = store.dispatch('rcd/loadResearchContentDetails', {
           group_permlink: decodeURIComponent(to.params.research_group_permlink),
           research_permlink: decodeURIComponent(to.params.research_permlink),
           content_permlink: decodeURIComponent(to.params.content_permlink),
@@ -334,7 +357,7 @@ const router = new Router({
     name: 'ResearchContentAddReview',
     component: preliminaryDataLoader(ResearchContentAddReview, {
       beforeEnter: (to, from, next) => {
-        let loadPagePromise = store.dispatch('rcd/loadResearchContentDetails', {
+        const loadPagePromise = store.dispatch('rcd/loadResearchContentDetails', {
           group_permlink: decodeURIComponent(to.params.research_group_permlink),
           research_permlink: decodeURIComponent(to.params.research_permlink),
           content_permlink: decodeURIComponent(to.params.content_permlink),
@@ -352,7 +375,7 @@ const router = new Router({
     name: 'ResearchContentReferences',
     component: preliminaryDataLoader(ResearchContentReferences, {
       beforeEnter: (to, from, next) => {
-        let loadPagePromise = store.dispatch('rcd/loadResearchContentDetails', {
+        const loadPagePromise = store.dispatch('rcd/loadResearchContentDetails', {
           group_permlink: decodeURIComponent(to.params.research_group_permlink),
           research_permlink: decodeURIComponent(to.params.research_permlink),
           content_permlink: decodeURIComponent(to.params.content_permlink),
@@ -366,7 +389,7 @@ const router = new Router({
     name: 'ResearchApplicationReview',
     component: preliminaryDataLoader(ResearchApplicationReview, {
       beforeEnter: (to, from, next) => {
-        let loadPagePromise = store.dispatch('rad/loadResearchApplicationDetails', {
+        const loadPagePromise = store.dispatch('rad/loadResearchApplicationDetails', {
           group_permlink: decodeURIComponent(to.params.research_group_permlink),
           research_permlink: decodeURIComponent(to.params.research_permlink),
           application_id: to.params.application_id,
@@ -380,7 +403,7 @@ const router = new Router({
     name: 'ResearchApplicationAddReview',
     component: preliminaryDataLoader(ResearchApplicationAddReview, {
       beforeEnter: (to, from, next) => {
-        let loadPagePromise = store.dispatch('rad/loadResearchApplicationDetails', {
+        const loadPagePromise = store.dispatch('rad/loadResearchApplicationDetails', {
           group_permlink: decodeURIComponent(to.params.research_group_permlink),
           research_permlink: decodeURIComponent(to.params.research_permlink),
           application_id: to.params.application_id
@@ -405,7 +428,7 @@ const router = new Router({
     name: 'UserDetails',
     component: preliminaryDataLoader(UserDetails, {
       beforeEnter: (to, from, next) => {
-        let loadPagePromise = store.dispatch('userDetails/loadUserDetailsPage', {
+        const loadPagePromise = store.dispatch('userDetails/loadUserDetailsPage', {
           username: decodeURIComponent(to.params.account_name)
         });
         loadPage(loadPagePromise, next);
@@ -416,7 +439,7 @@ const router = new Router({
     name: 'UserExpertiseDetails',
     component: preliminaryDataLoader(UserExpertiseDetails, {
       beforeEnter: (to, from, next) => {
-        let loadPagePromise = store.dispatch('userDetails/loadAccountExpertiseDetailsPage', {
+        const loadPagePromise = store.dispatch('userDetails/loadAccountExpertiseDetailsPage', {
           username: decodeURIComponent(to.params.account_name)
         });
         loadPage(loadPagePromise, next);
@@ -433,9 +456,9 @@ const router = new Router({
             params: {
               account_name: to.params.account_name
             }
-          })
+          });
         } else {
-          let loadPagePromise = store.dispatch('userSettings/loadUserSettingsPage', {
+          const loadPagePromise = store.dispatch('userSettings/loadUserSettingsPage', {
             username: decodeURIComponent(to.params.account_name)
           });
           loadPage(loadPagePromise, next);
@@ -445,10 +468,10 @@ const router = new Router({
   }, {
     path: '/account-settings',
     component: RouterViewNestedWatcher,
-    children: [ {
+    children: [{
       path: '/',
       name: 'AccountSettings',
-      component: AccountSettings,
+      component: AccountSettings
     }, {
       path: '/personal-info',
       name: 'ProfileSettings',
@@ -462,18 +485,18 @@ const router = new Router({
     }, {
       path: 'change-password',
       name: 'ChangePassword',
-      component: ChangePassword,
+      component: ChangePassword
     }, {
       path: 'private-key',
       name: 'PrivateKeyDownload',
-      component: PrivateKeyDownload,
-    } ]
+      component: PrivateKeyDownload
+    }]
   }, {
     path: '/user-wallet',
     name: 'UserWallet',
     component: preliminaryDataLoader(UserWallet, {
       beforeEnter: (to, from, next) => {
-        let loadPagePromise = store.dispatch('userWallet/loadWallet');
+        const loadPagePromise = store.dispatch('userWallet/loadWallet');
         loadPage(loadPagePromise, next);
       }
     })
@@ -482,7 +505,7 @@ const router = new Router({
     name: 'ClaimUserExpertiseList',
     component: preliminaryDataLoader(ClaimUserExpertiseList, {
       beforeEnter: (to, from, next) => {
-        let loadPagePromise = store.dispatch('claimExpertiseList/loadAllClaims', {});
+        const loadPagePromise = store.dispatch('claimExpertiseList/loadAllClaims', {});
         loadPage(loadPagePromise, next);
       }
     })
@@ -491,7 +514,7 @@ const router = new Router({
     name: 'ClaimUserExpertiseDetails',
     component: preliminaryDataLoader(ClaimUserExpertiseDetails, {
       beforeEnter: (to, from, next) => {
-        let loadPagePromise = store.dispatch('claimExpertiseDetails/loadClaimer', {
+        const loadPagePromise = store.dispatch('claimExpertiseDetails/loadClaimer', {
           username: to.params.account_name,
           claimId: to.params.claim_id
         });
@@ -511,7 +534,7 @@ const router = new Router({
     name: 'VotingForBlockProducers',
     component: preliminaryDataLoader(VotingForBlockProducers, {
       beforeEnter: (to, from, next) => {
-        let loadPagePromise = store.dispatch('votingForBlockProducers/loadProducers', {});
+        const loadPagePromise = store.dispatch('votingForBlockProducers/loadProducers', {});
         loadPage(loadPagePromise, next);
       }
     })
@@ -520,7 +543,7 @@ const router = new Router({
     name: 'InvestorPortfolio',
     component: InvestorPortfolio,
     beforeEnter: (to, from, next) => {
-      let loadPagePromise = store.dispatch('investorPortfolio/loadInvestmentPortfolioPage', {
+      const loadPagePromise = store.dispatch('investorPortfolio/loadInvestmentPortfolioPage', {
         username: decodeURIComponent(store.getters['auth/user'].username)
       });
       loadPage(loadPagePromise, next);
@@ -533,23 +556,72 @@ const router = new Router({
     path: '/faq',
     name: 'FAQ',
     component: FAQ
-  },{
+  }, {
+    path: '/admin',
+    name: 'admin',
+    component: AdminPanel,
+    children: [
+      {
+        path: 'members',
+        name: 'admin.members',
+        component: AdminMembers,
+        children: [
+          {
+            path: 'add',
+            name: 'admin.members.add',
+            components: {
+              dialog: UserRegistration
+            },
+            props: {
+              dialog: {
+                title: 'Add new member'
+              }
+            }
+          }
+        ]
+      },
+      {
+        path: '/projects',
+        name: 'admin.projects',
+        component: AdminProjects
+      },
+      {
+        path: '/criteria',
+        name: 'admin.criteria',
+        component: AdminCriteria
+      },
+      {
+        path: '/faq',
+        name: 'admin.faq',
+        component: AdminFAQ
+      },
+      {
+        path: '/settings',
+        name: 'admin.settings',
+        component: AdminSettings
+      }
+    ]
+  }, {
     path: '/',
     name: 'Default',
     beforeEnter: (to, from, next) => {
       const user = store.getters['auth/user'];
       const rolePromise = user.profile
         ? Promise.resolve(user.profile.roles || [])
-        : usersService.getUserProfile(user.username).then((p) => { return p.roles || [] });
+        : usersService.getUserProfile(user.username)
+          .then((p) => p.roles || []);
 
       rolePromise.then((roles) => {
         const env = appConfigService.get('env');
-        if (env.DEMO == "GRANT-DISTRIBUTION-TRANSPARENCY") {
-          let agency = store.getters['auth/tenant'];
+        if (env.DEMO == 'GRANT-DISTRIBUTION-TRANSPARENCY') {
+          const agency = store.getters['auth/tenant'];
           if (!agency) {
-            throw new Error("Granting agency must be specified for the Demo");
+            throw new Error('Granting agency must be specified for the Demo');
           }
-          next({ name: 'GrantProgramsAwardsDashboard', params: { agency: agency.permlink } });
+          next({
+            name: 'GrantProgramsAwardsDashboard',
+            params: { agency: agency.permlink }
+          });
         } else {
           next({ name: 'ResearchFeed' });
         }
@@ -558,7 +630,7 @@ const router = new Router({
   }, {
     path: '*',
     redirect: { name: 'Default' }
-  } ],
+  }],
 
   scrollBehavior(to, from, savedPosition) {
     if (to.hash) {
@@ -566,20 +638,26 @@ const router = new Router({
       setTimeout(() => {
         const anchor = document.querySelector(to.hash);
         if (anchor) {
-          return window.scrollTo({ top: anchor.offsetTop, behavior: 'smooth' });
+          return window.scrollTo({
+            top: anchor.offsetTop,
+            behavior: 'smooth'
+          });
         }
       }, 500);
     } else {
-      return { x: 0, y: 0 };
+      return {
+        x: 0,
+        y: 0
+      };
     }
   }
-})
+});
 
 function loadPage(loadPagePromise, next) {
   store.dispatch('layout/setGlobalLoader');
   loadPagePromise
     .then(next)
-    .finally(() => { store.dispatch('layout/hideGlobalLoader'); })
+    .finally(() => { store.dispatch('layout/hideGlobalLoader'); });
 }
 
 router.beforeEach((to, from, next) => {
@@ -590,20 +668,18 @@ router.beforeEach((to, from, next) => {
   ];
   if (to.path === '/sign-in' || to.path === '/sign-up' || to.path === '/org-sign-in') {
     if (accessService.isLoggedIn()) {
-      next('/') // if token is already presented redirect user to home page
+      next('/'); // if token is already presented redirect user to home page
     } else {
       next(); // otherwise redirect to sign-in page
     }
   } else if (PUBLIC_PAGES_NAMES.includes(to.name)) {
     next();
+  } else if (accessService.isLoggedIn()) {
+    next(); // if there is a token allow to visit requested route
   } else {
-    if (accessService.isLoggedIn()) {
-      next() // if there is a token allow to visit requested route
-    } else {
-      next({ name: 'ResearchFeed' }) // otherwise redirect to sign-in page
-    }
+    next({ name: 'ResearchFeed' }); // otherwise redirect to sign-in page
   }
-})
+});
 
 
 export {

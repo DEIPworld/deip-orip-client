@@ -1,33 +1,33 @@
 <template>
   <base-page-layout>
-    <research-edit-body slot="content"></research-edit-body>
+    <research-edit-body />
   </base-page-layout>
 </template>
 
 <script>
-import { mapGetters } from "vuex";
-import deipRpc from '@deip/rpc-client';
-import moment from 'moment';
+  import { mapGetters } from 'vuex';
+  import deipRpc from '@deip/rpc-client';
+  import moment from 'moment';
 
-export default {
-  name: "ResearchEdit",
+  export default {
+    name: 'ResearchEdit',
 
-  computed: {
-    ...mapGetters({
-      user: "auth/user"
-    }),
-  },
-  data() {
-    return {
-    };
-  },
+    computed: {
+      ...mapGetters({
+        user: 'auth/user'
+      })
+    },
+    data() {
+      return {
+      };
+    },
 
-  methods: {
-  },
+    created() {
+    },
 
-  created() {
-  }
-};
+    methods: {
+    }
+  };
 </script>
 
 <style lang="less" scoped>

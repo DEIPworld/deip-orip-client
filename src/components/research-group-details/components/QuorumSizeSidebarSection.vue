@@ -1,8 +1,10 @@
 <template>
   <div>
-    <div class="subheading bold">Quorum threshold</div>
+    <div class="subtitle-1 bold">
+      Quorum threshold
+    </div>
 
-    <div class="pt-3">
+    <div class="pt-4">
       <div v-if="!isResearchGroupMember || !isEditMode">
         <div
           v-for="(proposalBlock, i) in proposalOrderMap"
@@ -10,8 +12,12 @@
         >
           <div v-for="proposalData in proposalBlock" :key="proposalLabels[proposalData.key]">
             <div class="d-flex justify-space-between align-center">
-              <div class="font-weight-medium">{{ proposalLabels[proposalData.key] }}</div>
-              <div class="width-3 text-align-right">{{ proposalData.value }}%</div>
+              <div class="font-weight-medium">
+                {{ proposalLabels[proposalData.key] }}
+              </div>
+              <div class="width-3 text-align-right">
+                {{ proposalData.value }}%
+              </div>
             </div>
           </div>
         </div>
@@ -21,58 +27,52 @@
 </template>
 
 <script>
-import { mapGetters } from "vuex";
-import _ from "lodash";
-import deipRpc from "@deip/rpc-client";
+  import { mapGetters } from 'vuex';
+  import _ from 'lodash';
+  import deipRpc from '@deip/rpc-client';
 
-import {PROPOSAL_TYPES, proposalTypesLabels} from '@/variables';
+  import { PROPOSAL_TYPES, proposalTypesLabels } from '@/variables';
 
-export default {
-  name: "QuorumSizeSidebarSection",
+  export default {
+    name: 'QuorumSizeSidebarSection',
 
-  data() {
-    return {
-      isEditMode: false,
-      proposalLabels: _.cloneDeep(proposalTypesLabels),
+    data() {
+      return {
+        isEditMode: false,
+        proposalLabels: _.cloneDeep(proposalTypesLabels),
 
-      proposalOrderMap: [
-        [
-          { key: PROPOSAL_TYPES.START_RESEARCH, value: undefined },
-          { key: PROPOSAL_TYPES.CREATE_RESEARCH_MATERIAL, value: undefined },
-          { key: PROPOSAL_TYPES.CHANGE_RESEARCH_REVIEW_SHARE_PERCENT, value: undefined }
-        ],
-        [
-          { key: PROPOSAL_TYPES.INVITE_MEMBER, value: undefined },
-          { key: PROPOSAL_TYPES.EXCLUDE_MEMBER, value: undefined }
-        ],
-        [
-          { key: PROPOSAL_TYPES.START_RESEARCH_TOKEN_SALE, value: undefined },
-          { key: PROPOSAL_TYPES.OFFER_RESEARCH_TOKENS, value: undefined },
-          { key: PROPOSAL_TYPES.SEND_FUNDS, value: undefined }
-        ],
-        [
-          { key: PROPOSAL_TYPES.CHANGE_QUORUM, value: undefined },
-          { key: PROPOSAL_TYPES.REBALANCE_RESEARCH_GROUP_TOKENS, value: undefined }
-        ],
-        [
-          { key: PROPOSAL_TYPES.CHANGE_RESEARCH_GROUP_META_DATA_TYPE, value: undefined },
-          { key: PROPOSAL_TYPES.CHANGE_RESEARCH_META_DATA_TYPE, value: undefined }
+        proposalOrderMap: [
+          [
+            { key: PROPOSAL_TYPES.CREATE_RESEARCH, value: undefined },
+            { key: PROPOSAL_TYPES.CREATE_RESEARCH_MATERIAL, value: undefined },
+          ],
+          [
+            { key: PROPOSAL_TYPES.INVITE_MEMBER, value: undefined },
+            { key: PROPOSAL_TYPES.EXCLUDE_MEMBER, value: undefined }
+          ],
+          [
+            { key: PROPOSAL_TYPES.CREATE_RESEARCH_TOKEN_SALE, value: undefined },
+            { key: PROPOSAL_TYPES.TRANSFER, value: undefined }
+          ],
+          [
+            { key: PROPOSAL_TYPES.UPDATE_RESEARCH_GROUP, value: undefined },
+            { key: PROPOSAL_TYPES.UPDATE_RESEARCH, value: undefined }
+          ]
         ]
-      ],
-    };
-  },
+      };
+    },
 
-  computed: {
-    ...mapGetters({
-      group: "researchGroup/group"
-    }),
+    computed: {
+      ...mapGetters({
+        group: 'researchGroup/group'
+      }),
 
-    isResearchGroupMember() {
-      return this.group != null
-        ? this.$store.getters["auth/userIsResearchGroupMember"](this.group.id)
-        : false;
-    }
-  },
+      isResearchGroupMember() {
+        return this.group != null
+          ? this.$store.getters['auth/userIsResearchGroupMember'](this.group.id)
+          : false;
+      }
+    },
 
   methods: {
     fillValues() {
@@ -82,15 +82,16 @@ export default {
             this.DEIP_100_PERCENT
           );
           proposalData.value = intValue.toString(); // input works with string values
-        });
-      });
-    }
-  },
+        })
 
-  created() {
-    this.fillValues();
+        });
+      }
+    },
+
+    created() {
+      this.fillValues();
+    }
   }
-};
 </script>
 
 <style lang="less">

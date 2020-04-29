@@ -1,67 +1,80 @@
 <template>
-  <v-dialog v-model="isOpen" persistent transition="scale-transition" max-width="600px">
-    <v-card class="pa-4">
-
+  <v-dialog
+    v-model="isOpen"
+    persistent
+    transition="scale-transition"
+    max-width="600px"
+  >
+    <v-card class="pa-6">
       <v-card-title>
-        <v-layout row align-center align-baseline>
-          <v-flex grow class="headline">
-            Transfer from Group balance
-          </v-flex>
-          <v-flex shrink align-self-center right-top-angle>
-            <v-btn @click="close()" icon class="pa-0 ma-0">
-              <v-icon color="black">close</v-icon>
-            </v-btn>
-          </v-flex>
-        </v-layout>
+        <div class="headline">
+          Transfer from Group balance
+        </div>
+        <div class="right-top-angle">
+          <v-btn icon class="pa-0 ma-0" @click="close()">
+            <v-icon color="black">
+              close
+            </v-icon>
+          </v-btn>
+        </div>
       </v-card-title>
 
       <v-card-text>
-        <v-form class="pb-4" ref="form" v-model="isFormValid" @submit.prevent>
-          <v-text-field label="To"
+        <v-form
+          ref="form"
+          v-model="isFormValid"
+          class="pb-6"
+          @submit.prevent
+        >
+          <v-text-field
             ref="toUsername"
             v-model="form.to"
+            label="To"
             :rules="[
               rules.required,
               rules.isExist
             ]"
-            @input="usernameChanged"
             :loading="isUsernameChecking"
-          ></v-text-field>
+            @input="usernameChanged"
+          />
 
-          <v-text-field label="Amount"
+          <v-text-field
             v-model="form.amount"
+            label="Amount"
             :rules="[
               rules.required,
               rules.amount
             ]"
             :suffix="'$'"
-          ></v-text-field>
+          />
         </v-form>
       </v-card-text>
 
       <v-card-actions>
-        <v-layout row wrap>
-          <v-flex xs12 py-2>
+        <v-row>
+          <v-col class="py-2" cols="12">
             <v-btn
               color="primary"
               block
-              @click="sendTokens()"
               :loading="isSending"
-              :disabled="!form.amount || deipTokenBalance < form.amount || isSending">
+              :disabled="!form.amount || deipTokenBalance < form.amount || isSending"
+              @click="sendTokens()"
+            >
               {{ group.is_dao ? 'Create proposal' : 'Send' }}
             </v-btn>
-          </v-flex>
-          <v-flex xs12 py-2>
+          </v-col>
+          <v-col class="py-2" cols="12">
             <v-btn
               color="primary"
               block
-              flat
+              text
               :disabled="isSending"
               @click="close()"
-            >Cancel
+            >
+              Cancel
             </v-btn>
-          </v-flex>
-        </v-layout>
+          </v-col>
+        </v-row>
       </v-card-actions>
     </v-card>
   </v-dialog>
@@ -71,9 +84,10 @@
   import _ from 'lodash';
   import deipRpc from '@deip/rpc-client';
   import { mapGetters } from 'vuex';
-
   import { ResearchGroupService } from '@deip/research-group-service';
+  import { AppConfigService } from '@deip/app-config-service';
 
+  const appConfigService = AppConfigService.getInstance();
   const researchGroupService = ResearchGroupService.getInstance();
 
   export default {
@@ -86,10 +100,12 @@
     computed: {
       ...mapGetters({
         user: 'auth/user',
-        group: 'researchGroup/group',
+        group: 'researchGroup/group'
       }),
+
       deipTokenBalance() {
-        return this.fromAssetsToFloat(this.group.balance);
+        const env = appConfigService.get('env');
+        return this.fromAssetsToFloat(this.group.balances[env.ASSET_UNIT]);
       }
     },
 
@@ -103,16 +119,14 @@
         isFormValid: false,
 
         rules: {
-          required: value => !!value || 'This field is required',
-          isExist: value => {
-            return this.isUsernameExist !== false || 'No user with such name';
-          },
-          amount: value => {
-            let formatValidationResult = this.deipTokenValidator(value);
+          required: (value) => !!value || 'This field is required',
+          isExist: (value) => this.isUsernameExist !== false || 'No user with such name',
+          amount: (value) => {
+            const formatValidationResult = this.deipTokenValidator(value);
 
             if (formatValidationResult !== true) {
               return formatValidationResult;
-            } else if (parseFloat(value) > this.deipTokenBalance) {
+            } if (parseFloat(value) > this.deipTokenBalance) {
               return 'Amount is greater than group balance';
             }
 
@@ -123,7 +137,7 @@
         isUsernameExist: undefined,
         isUsernameChecking: false,
         isSending: false
-      }
+      };
     },
 
     methods: {
@@ -138,11 +152,11 @@
           if (this.form.to !== '' && this.form.to !== this.user.username) {
             this.isUsernameChecking = true;
 
-            deipRpc.api.getAccountsAsync([ this.form.to ])
-              .then(res => {
+            deipRpc.api.getAccountsAsync([this.form.to])
+              .then((res) => {
                 this.isUsernameExist = !_.isEmpty(res);
               })
-              .catch(error => {
+              .catch((error) => {
                 this.isUsernameExist = false;
               })
               .finally(() => {
@@ -161,9 +175,9 @@
           researchGroupService.createSendFundsProposal({
             groupId: this.group.id,
             recipient: this.form.to,
-            funds: this.toAssetUnits(this.form.amount),
+            funds: this.toAssetUnits(this.form.amount)
           })
-            .then(data => {
+            .then((data) => {
               this.$store.dispatch('layout/setSuccess', {
                 message: 'Proposal was successfully created'
               });
@@ -173,7 +187,7 @@
 
               setTimeout(() => this.close(), 1500);
             })
-            .catch(err => {
+            .catch((err) => {
               this.$store.dispatch('layout/setError', {
                 message: 'Proposal was failed'
               });

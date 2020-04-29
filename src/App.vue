@@ -1,30 +1,32 @@
 <template>
   <div id="deip-app">
-    <v-app v-if="$route.meta.withoutHeader">
-      <router-view :key="$route.fullPath" />
-    </v-app>
-
-    <v-app v-else>
-      <toolbar :isGrantsTransparencyDemo="isGrantsTransparencyDemo"></toolbar>
+    <v-app>
+      <toolbar
+        v-if="!$route.meta.withoutHeader"
+        :is-grants-transparency-demo="isGrantsTransparencyDemo"
+      />
 
       <v-content>
         <router-view :key="$route.fullPath" />
       </v-content>
     </v-app>
 
-    <v-snackbar :timeout="5000" color="error" v-model="errorSnack.isVisible">
+    <v-snackbar v-model="errorSnack.isVisible" :timeout="5000" color="error">
       {{ errorSnack.message }}
-      <v-btn dark flat @click.native="closeError()">Close</v-btn>
+      <v-btn dark text @click.native="closeError()">
+        Close
+      </v-btn>
     </v-snackbar>
 
-    <v-snackbar :timeout="5000" color="success" v-model="successSnack.isVisible">
+    <v-snackbar v-model="successSnack.isVisible" :timeout="5000" color="success">
       {{ successSnack.message }}
-      <v-btn dark flat @click.native="closeSuccess();">Close</v-btn>
+      <v-btn dark text @click.native="closeSuccess();">
+        Close
+      </v-btn>
     </v-snackbar>
-
   </div>
 </template>
-w
+
 <script>
   import { mapGetters } from 'vuex';
 
@@ -42,7 +44,7 @@ w
       return {
         isGrantsTransparencyDemo: false,
         successSnack: { isVisible: false, message: '' },
-        errorSnack: { isVisible: false, message: '' },
+        errorSnack: { isVisible: false, message: '' }
       };
     },
 
@@ -50,8 +52,20 @@ w
       ...mapGetters({
         user: 'auth/user',
         success: 'layout/success',
-        error: 'layout/error',
+        error: 'layout/error'
       })
+    },
+    // we have to keep these watchers as Vuex store state must not be altered outside of migrations,
+    // but v-snackbar alters 'isVisible' internally after timeout
+    watch: {
+      success(newVal, oldVal) {
+        this.successSnack.isVisible = newVal.isVisible;
+        this.successSnack.message = newVal.message;
+      },
+      error(newVal, oldVal) {
+        this.errorSnack.isVisible = newVal.isVisible;
+        this.errorSnack.message = newVal.message;
+      }
     },
 
     created() {
@@ -63,7 +77,7 @@ w
       pollNotifications();
       setInterval(pollNotifications, 10000);
       const env = appConfigService.get('env');
-      this.isGrantsTransparencyDemo = env.DEMO == "GRANT-DISTRIBUTION-TRANSPARENCY";
+      this.isGrantsTransparencyDemo = env.DEMO == 'GRANT-DISTRIBUTION-TRANSPARENCY';
     },
 
     methods: {
@@ -72,24 +86,14 @@ w
       },
       closeSuccess() {
         this.$store.dispatch('layout/setSuccess', { isVisible: false, message: '' });
-      },
-    },
-    // we have to keep these watchers as Vuex store state must not be altered outside of migrations,
-    // but v-snackbar alters 'isVisible' internally after timeout
-    watch: {
-      success: function (newVal, oldVal) {
-        this.successSnack.isVisible = newVal.isVisible;
-        this.successSnack.message = newVal.message;
-      },
-      error: function (newVal, oldVal) {
-        this.errorSnack.isVisible = newVal.isVisible;
-        this.errorSnack.message = newVal.message;
       }
     }
-  }
+  };
 </script>
 
-<style>
+<style lang="scss">
+  @import '~vuetify/src/styles/styles.sass';
+
   #deip-app {
     font-family: 'Roboto', 'Avenir', Helvetica, Arial, sans-serif;
     -webkit-font-smoothing: antialiased;

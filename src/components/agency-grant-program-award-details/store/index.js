@@ -23,101 +23,95 @@ const state = {
   foaOrganization: undefined,
   awardPaymentRequestsList: [],
   awardeeUsersList: []
-}
+};
 
 // getters
 const getters = {
   isLoadingAwardDetailsPage: (state) => state.isLoadingAwardDetailsPage,
   organization: (state) => state.organization,
-  foa: (state) => {
-    return {
-      ...state.foa,
-      organization: state.foaOrganization
-    }
-  },
+  foa: (state) => ({
+    ...state.foa,
+    organization: state.foaOrganization
+  }),
   award: (state) => state.award,
 
   awardee: (state) => {
-    let award = state.award;
-    let awardee = { ...state.awardee, isSubawardee: state.awardee.source != "" };
-    let parentAwardee = awardee.isSubawardee ? award.awardees.find(a => a.awardee == awardee.source) : null;
-    let foa = state.foa;
+    const { award } = state;
+    const awardee = { ...state.awardee, isSubawardee: state.awardee.source != '' };
+    const parentAwardee = awardee.isSubawardee ? award.awardees.find((a) => a.awardee == awardee.source) : null;
+    const { foa } = state;
 
-    let subawardees = grantsService.findAwardSubawardees(awardee, award.awardees);
+    const subawardees = grantsService.findAwardSubawardees(awardee, award.awardees);
 
-    let withdrawals = state.awardPaymentRequestsList.filter(w => w.award_number == awardee.award_number && w.subaward_number == awardee.subaward_number);
-    let subWithdrawals = subawardees.reduce((acc, sa) => {
-      let withdrawals = state.awardPaymentRequestsList.filter(w => w.award_number == sa.award_number && w.subaward_number == sa.subaward_number);
+    const withdrawals = state.awardPaymentRequestsList.filter((w) => w.award_number == awardee.award_number && w.subaward_number == awardee.subaward_number);
+    const subWithdrawals = subawardees.reduce((acc, sa) => {
+      const withdrawals = state.awardPaymentRequestsList.filter((w) => w.award_number == sa.award_number && w.subaward_number == sa.subaward_number);
       return [...acc, ...withdrawals];
     }, []);
-    
 
-    let piAmount = blockchainService.fromAssetsToFloat(awardee.total_amount);
 
-    let requestedPiAmount = withdrawals
-      .map(w => blockchainService.fromAssetsToFloat(w.amount))
+    const piAmount = blockchainService.fromAssetsToFloat(awardee.total_amount);
+
+    const requestedPiAmount = withdrawals
+      .map((w) => blockchainService.fromAssetsToFloat(w.amount))
       .reduce((sum, amount) => sum + amount, 0);
 
-    let pendingPiAmount = withdrawals
-      .filter(w =>
-        w.status == AWARD_WITHDRAWAL_REQUEST_STATUS.PENDING ||
-        w.status == AWARD_WITHDRAWAL_REQUEST_STATUS.CERTIFIED ||
-        w.status == AWARD_WITHDRAWAL_REQUEST_STATUS.APPROVED)
-      .map(w => blockchainService.fromAssetsToFloat(w.amount))
+    const pendingPiAmount = withdrawals
+      .filter((w) => w.status == AWARD_WITHDRAWAL_REQUEST_STATUS.PENDING
+        || w.status == AWARD_WITHDRAWAL_REQUEST_STATUS.CERTIFIED
+        || w.status == AWARD_WITHDRAWAL_REQUEST_STATUS.APPROVED)
+      .map((w) => blockchainService.fromAssetsToFloat(w.amount))
       .reduce((sum, amount) => sum + amount, 0);
 
-    let withdrawnPiAmount = withdrawals
-      .filter(w =>
-        w.status == AWARD_WITHDRAWAL_REQUEST_STATUS.PAID)
-      .map(w => blockchainService.fromAssetsToFloat(w.amount))
+    const withdrawnPiAmount = withdrawals
+      .filter((w) => w.status == AWARD_WITHDRAWAL_REQUEST_STATUS.PAID)
+      .map((w) => blockchainService.fromAssetsToFloat(w.amount))
       .reduce((sum, amount) => sum + amount, 0);
 
-    let remainingPiAmount = blockchainService.fromAssetsToFloat(awardee.total_amount) - blockchainService.fromAssetsToFloat(awardee.total_expenses);
+    const remainingPiAmount = blockchainService.fromAssetsToFloat(awardee.total_amount) - blockchainService.fromAssetsToFloat(awardee.total_expenses);
 
 
-    let subawardeesAmount = subawardees
-      .map(sa => blockchainService.fromAssetsToFloat(sa.total_amount))
+    const subawardeesAmount = subawardees
+      .map((sa) => blockchainService.fromAssetsToFloat(sa.total_amount))
       .reduce((sum, amount) => sum + amount, 0);
 
-    let requestedSubawardeesAmount = subWithdrawals
-      .map(w => blockchainService.fromAssetsToFloat(w.amount))
+    const requestedSubawardeesAmount = subWithdrawals
+      .map((w) => blockchainService.fromAssetsToFloat(w.amount))
       .reduce((sum, amount) => sum + amount, 0);
 
-    let pendingSubawardeesAmount = subWithdrawals
-      .filter(w =>
-        w.status == AWARD_WITHDRAWAL_REQUEST_STATUS.PENDING ||
-        w.status == AWARD_WITHDRAWAL_REQUEST_STATUS.CERTIFIED ||
-        w.status == AWARD_WITHDRAWAL_REQUEST_STATUS.APPROVED)
-      .map(w => blockchainService.fromAssetsToFloat(w.amount))
+    const pendingSubawardeesAmount = subWithdrawals
+      .filter((w) => w.status == AWARD_WITHDRAWAL_REQUEST_STATUS.PENDING
+        || w.status == AWARD_WITHDRAWAL_REQUEST_STATUS.CERTIFIED
+        || w.status == AWARD_WITHDRAWAL_REQUEST_STATUS.APPROVED)
+      .map((w) => blockchainService.fromAssetsToFloat(w.amount))
       .reduce((sum, amount) => sum + amount, 0);
 
-    let withdrawnSubawardeesAmount = subWithdrawals
-      .filter(w =>
-        w.status == AWARD_WITHDRAWAL_REQUEST_STATUS.PAID)
-      .map(w => blockchainService.fromAssetsToFloat(w.amount))
+    const withdrawnSubawardeesAmount = subWithdrawals
+      .filter((w) => w.status == AWARD_WITHDRAWAL_REQUEST_STATUS.PAID)
+      .map((w) => blockchainService.fromAssetsToFloat(w.amount))
       .reduce((sum, amount) => sum + amount, 0);
 
-    let remainingSubawardeesAmount = subawardees
-      .map(sa => { return blockchainService.fromAssetsToFloat(sa.total_amount) - blockchainService.fromAssetsToFloat(sa.total_expenses) })
+    const remainingSubawardeesAmount = subawardees
+      .map((sa) => blockchainService.fromAssetsToFloat(sa.total_amount) - blockchainService.fromAssetsToFloat(sa.total_expenses))
       .reduce((sum, amount) => sum + amount, 0);
 
 
-    let universityOverheadAmount = awardee.isSubawardee ? 0 : blockchainService.fromAssetsToFloat(award.university_fee);
+    const universityOverheadAmount = awardee.isSubawardee ? 0 : blockchainService.fromAssetsToFloat(award.university_fee);
 
-    let totalAmount = awardee.isSubawarde
+    const totalAmount = awardee.isSubawarde
       ? piAmount + subawardeesAmount
       : piAmount + subawardeesAmount + universityOverheadAmount;
 
-    let requestedAmount = requestedPiAmount + requestedSubawardeesAmount;
-    let pendingAmount = pendingPiAmount + pendingSubawardeesAmount;
-    let withdrawnAmount = withdrawnPiAmount + withdrawnSubawardeesAmount;
-    let remainingAmount = totalAmount - withdrawnPiAmount - withdrawnSubawardeesAmount - universityOverheadAmount;
+    const requestedAmount = requestedPiAmount + requestedSubawardeesAmount;
+    const pendingAmount = pendingPiAmount + pendingSubawardeesAmount;
+    const withdrawnAmount = withdrawnPiAmount + withdrawnSubawardeesAmount;
+    const remainingAmount = totalAmount - withdrawnPiAmount - withdrawnSubawardeesAmount - universityOverheadAmount;
 
-    let reciever = state.awardeeUsersList.find(user => user.account.name == awardee.awardee);
-    let pi = reciever; // PI is the user whose award we are browsing currently
+    const reciever = state.awardeeUsersList.find((user) => user.account.name == awardee.awardee);
+    const pi = reciever; // PI is the user whose award we are browsing currently
 
-    let research = state.awardeeResearchList.find(r => r.id == awardee.research_id);
-    let organization = state.awardeeResearchGroupsList.find(rg => rg.id == research.research_group_id);
+    const research = state.awardeeResearchList.find((r) => r.id == awardee.research_id);
+    const organization = state.awardeeResearchGroupsList.find((rg) => rg.id == research.research_group_id);
 
     return {
       ...awardee,
@@ -147,87 +141,82 @@ const getters = {
       to: foa.close_date,
       organization,
       pi
-    }
+    };
   },
 
   subawardees: (state, getters) => {
-    let award = state.award;
-    let awardee = state.awardee;
-    let subawards = award.awardees.filter(a => a.source == awardee.awardee);
-    let foa = state.foa;
+    const { award } = state;
+    const { awardee } = state;
+    const subawards = award.awardees.filter((a) => a.source == awardee.awardee);
+    const { foa } = state;
 
-    return subawards.map(subawardee => {
+    return subawards.map((subawardee) => {
+      const nextSubawardees = grantsService.findAwardSubawardees(subawardee, award.awardees);
 
-      let nextSubawardees = grantsService.findAwardSubawardees(subawardee, award.awardees);
-
-      let subawardeeWithdrawals = state.awardPaymentRequestsList.filter(w => w.award_number == subawardee.award_number && w.subaward_number == subawardee.subaward_number);
-      let nextSubawardeesWithdrawals = nextSubawardees.reduce((acc, sa) => {
-        let withdrawals = state.awardPaymentRequestsList.filter(w => w.award_number == sa.award_number && w.subaward_number == sa.subaward_number);
+      const subawardeeWithdrawals = state.awardPaymentRequestsList.filter((w) => w.award_number == subawardee.award_number && w.subaward_number == subawardee.subaward_number);
+      const nextSubawardeesWithdrawals = nextSubawardees.reduce((acc, sa) => {
+        const withdrawals = state.awardPaymentRequestsList.filter((w) => w.award_number == sa.award_number && w.subaward_number == sa.subaward_number);
         return [...acc, ...withdrawals];
       }, []);
 
 
-      let subawardeeAmount = blockchainService.fromAssetsToFloat(subawardee.total_amount);
+      const subawardeeAmount = blockchainService.fromAssetsToFloat(subawardee.total_amount);
 
-      let requestedSubawardeeAmount = subawardeeWithdrawals
-        .map(w => blockchainService.fromAssetsToFloat(w.amount))
+      const requestedSubawardeeAmount = subawardeeWithdrawals
+        .map((w) => blockchainService.fromAssetsToFloat(w.amount))
         .reduce((sum, amount) => sum + amount, 0);
 
-      let pendingSubawardeeAmount = subawardeeWithdrawals
-        .filter(w =>
-          w.status == AWARD_WITHDRAWAL_REQUEST_STATUS.PENDING ||
-          w.status == AWARD_WITHDRAWAL_REQUEST_STATUS.CERTIFIED ||
-          w.status == AWARD_WITHDRAWAL_REQUEST_STATUS.APPROVED)
-        .map(w => blockchainService.fromAssetsToFloat(w.amount))
-        .reduce((sum, amount) => sum + amount, 0);
-      
-      let withdrawnSubawardeeAmount = subawardeeWithdrawals
-        .filter(w =>
-          w.status == AWARD_WITHDRAWAL_REQUEST_STATUS.PAID)
-        .map(w => blockchainService.fromAssetsToFloat(w.amount))
+      const pendingSubawardeeAmount = subawardeeWithdrawals
+        .filter((w) => w.status == AWARD_WITHDRAWAL_REQUEST_STATUS.PENDING
+          || w.status == AWARD_WITHDRAWAL_REQUEST_STATUS.CERTIFIED
+          || w.status == AWARD_WITHDRAWAL_REQUEST_STATUS.APPROVED)
+        .map((w) => blockchainService.fromAssetsToFloat(w.amount))
         .reduce((sum, amount) => sum + amount, 0);
 
-      let remainingSubawardeeAmount = blockchainService.fromAssetsToFloat(subawardee.total_amount) - blockchainService.fromAssetsToFloat(subawardee.total_expenses);
-
-
-      let nextSubawardeesAmount = nextSubawardees
-        .map(sa => blockchainService.fromAssetsToFloat(sa.total_amount))
+      const withdrawnSubawardeeAmount = subawardeeWithdrawals
+        .filter((w) => w.status == AWARD_WITHDRAWAL_REQUEST_STATUS.PAID)
+        .map((w) => blockchainService.fromAssetsToFloat(w.amount))
         .reduce((sum, amount) => sum + amount, 0);
 
-      let requestedNextSubawardeesAmount = nextSubawardeesWithdrawals
-        .map(w => blockchainService.fromAssetsToFloat(w.amount))
+      const remainingSubawardeeAmount = blockchainService.fromAssetsToFloat(subawardee.total_amount) - blockchainService.fromAssetsToFloat(subawardee.total_expenses);
+
+
+      const nextSubawardeesAmount = nextSubawardees
+        .map((sa) => blockchainService.fromAssetsToFloat(sa.total_amount))
         .reduce((sum, amount) => sum + amount, 0);
 
-      let pendingNextSubawardeesAmount = nextSubawardeesWithdrawals
-        .filter(w =>
-          w.status == AWARD_WITHDRAWAL_REQUEST_STATUS.PENDING ||
-          w.status == AWARD_WITHDRAWAL_REQUEST_STATUS.CERTIFIED ||
-          w.status == AWARD_WITHDRAWAL_REQUEST_STATUS.APPROVED)
-        .map(w => blockchainService.fromAssetsToFloat(w.amount))
+      const requestedNextSubawardeesAmount = nextSubawardeesWithdrawals
+        .map((w) => blockchainService.fromAssetsToFloat(w.amount))
         .reduce((sum, amount) => sum + amount, 0);
 
-      let withdrawnNextSubawardeesAmount = nextSubawardeesWithdrawals
-        .filter(w =>
-          w.status == AWARD_WITHDRAWAL_REQUEST_STATUS.PAID)
-        .map(w => blockchainService.fromAssetsToFloat(w.amount))
+      const pendingNextSubawardeesAmount = nextSubawardeesWithdrawals
+        .filter((w) => w.status == AWARD_WITHDRAWAL_REQUEST_STATUS.PENDING
+          || w.status == AWARD_WITHDRAWAL_REQUEST_STATUS.CERTIFIED
+          || w.status == AWARD_WITHDRAWAL_REQUEST_STATUS.APPROVED)
+        .map((w) => blockchainService.fromAssetsToFloat(w.amount))
         .reduce((sum, amount) => sum + amount, 0);
 
-      let remainingNextSubawardeesAmount = nextSubawardees
-        .map(sa => { return blockchainService.fromAssetsToFloat(sa.total_amount) - blockchainService.fromAssetsToFloat(sa.total_expenses) })
+      const withdrawnNextSubawardeesAmount = nextSubawardeesWithdrawals
+        .filter((w) => w.status == AWARD_WITHDRAWAL_REQUEST_STATUS.PAID)
+        .map((w) => blockchainService.fromAssetsToFloat(w.amount))
+        .reduce((sum, amount) => sum + amount, 0);
+
+      const remainingNextSubawardeesAmount = nextSubawardees
+        .map((sa) => blockchainService.fromAssetsToFloat(sa.total_amount) - blockchainService.fromAssetsToFloat(sa.total_expenses))
         .reduce((sum, amount) => sum + amount, 0);
 
 
-      let totalSubawardeeAmount = subawardeeAmount + nextSubawardeesAmount
-      let totalSubawardeeRequestedAmount = requestedSubawardeeAmount + requestedNextSubawardeesAmount;
-      let totalSubawardeePendingAmount = pendingSubawardeeAmount + pendingNextSubawardeesAmount;
-      let totalSubawardeeWithdrawnAmount = withdrawnSubawardeeAmount + withdrawnNextSubawardeesAmount;
-      let totalSubawardeeRemainingAmount = remainingSubawardeeAmount + remainingNextSubawardeesAmount;
+      const totalSubawardeeAmount = subawardeeAmount + nextSubawardeesAmount;
+      const totalSubawardeeRequestedAmount = requestedSubawardeeAmount + requestedNextSubawardeesAmount;
+      const totalSubawardeePendingAmount = pendingSubawardeeAmount + pendingNextSubawardeesAmount;
+      const totalSubawardeeWithdrawnAmount = withdrawnSubawardeeAmount + withdrawnNextSubawardeesAmount;
+      const totalSubawardeeRemainingAmount = remainingSubawardeeAmount + remainingNextSubawardeesAmount;
 
 
-      let research = state.awardeeResearchList.find(r => r.id == subawardee.research_id);
-      let organization = state.awardeeResearchGroupsList.find(rg => rg.id == research.research_group_id);
+      const research = state.awardeeResearchList.find((r) => r.id == subawardee.research_id);
+      const organization = state.awardeeResearchGroupsList.find((rg) => rg.id == research.research_group_id);
 
-      let reciever = state.awardeeUsersList.find(user => user.account.name == subawardee.awardee);
+      const reciever = state.awardeeUsersList.find((user) => user.account.name == subawardee.awardee);
 
       return {
         award,
@@ -245,28 +234,26 @@ const getters = {
         organization,
         research,
         reciever
-      }
-
+      };
     });
   },
 
-  payments: state => {
-
-    let award = state.award;
-    let awardee = state.awardee;
-    let subawardees = grantsService.findAwardSubawardees(awardee, award.awardees);
+  payments: (state) => {
+    const { award } = state;
+    const { awardee } = state;
+    const subawardees = grantsService.findAwardSubawardees(awardee, award.awardees);
 
     return state.awardPaymentRequestsList
-      .filter(p => [awardee, ...subawardees].some(a => p.award_number == a.award_number && p.subaward_number == a.subaward_number))
+      .filter((p) => [awardee, ...subawardees].some((a) => p.award_number == a.award_number && p.subaward_number == a.subaward_number))
       .map((withdrawal, idx) => {
-        let withdrawalAwardee = [awardee, ...subawardees].find(a => a.award_number == withdrawal.award_number && a.subaward_number == withdrawal.subaward_number);
-        withdrawalAwardee.isSubawardee = withdrawalAwardee.source != "";
+        const withdrawalAwardee = [awardee, ...subawardees].find((a) => a.award_number == withdrawal.award_number && a.subaward_number == withdrawal.subaward_number);
+        withdrawalAwardee.isSubawardee = withdrawalAwardee.source != '';
 
-        let requester = state.awardeeUsersList.find(user => user.account.name == withdrawal.requester);
-        let pi = state.awardeeUsersList.find(user => user.account.name == awardee.awardee); // PI is the user whose award we are browsing currently
+        const requester = state.awardeeUsersList.find((user) => user.account.name == withdrawal.requester);
+        const pi = state.awardeeUsersList.find((user) => user.account.name == awardee.awardee); // PI is the user whose award we are browsing currently
 
-        let research = state.awardeeResearchList.find(r => r.id == withdrawalAwardee.research_id);
-        let organization = state.awardeeResearchGroupsList.find(rg => rg.id == research.research_group_id);
+        const research = state.awardeeResearchList.find((r) => r.id == withdrawalAwardee.research_id);
+        const organization = state.awardeeResearchGroupsList.find((rg) => rg.id == research.research_group_id);
 
         return {
           id: withdrawal.id,
@@ -281,8 +268,8 @@ const getters = {
           organization,
           pi,
           requester
-        }
-      })
+        };
+      });
   },
 
   isAwardPending: (state, getters) => state.award.status == AWARD_STATUS.PENDING,
@@ -290,11 +277,11 @@ const getters = {
   isAwardCanceled: (state, getters) => state.award.status == AWARD_STATUS.REJECTED,
 
   isAwardAvailableToApprove: (state, getters) => {
-    let foaSupplyAmount = blockchainService.fromAssetsToFloat(state.foa.current_supply);
-    let awardAmount = blockchainService.fromAssetsToFloat(state.award.amount);
+    const foaSupplyAmount = blockchainService.fromAssetsToFloat(state.foa.current_supply);
+    const awardAmount = blockchainService.fromAssetsToFloat(state.award.amount);
     return foaSupplyAmount >= awardAmount && getters.isAwardPending;
-  },
-}
+  }
+};
 
 // actions
 const actions = {
@@ -316,12 +303,12 @@ const actions = {
     return grantsService.getAwardByNumber(awardNumber)
       .then((award) => {
         commit('SET_AWARD', award);
-        let awardee = award.awardees.find(a => a.award_number == awardNumber && a.subaward_number == subawardNumber);
+        const awardee = award.awardees.find((a) => a.award_number == awardNumber && a.subaward_number == subawardNumber);
         commit('SET_AWARDEE', awardee);
 
         return grantsService.getFundingOpportunityAnnouncementByNumber(award.funding_opportunity_number);
       })
-      .then((foa) => { 
+      .then((foa) => {
         commit('SET_FUNDING_OPPORTUNITY', foa);
 
         return researchGroupService.getResearchGroupById(foa.organization_id);
@@ -331,82 +318,76 @@ const actions = {
 
         return grantsService.getAwardWithdrawalRequestsByAward(awardNumber);
       })
-      .then((paymentRequests) => { 
+      .then((paymentRequests) => {
         commit('SET_AWARD_PAYMENT_REQUESTS_LIST', paymentRequests);
 
         return usersService.getEnrichedProfiles(state.award.awardees
-          .map(r => r.awardee)
-          .reduce((acc, awardee) => {
-            return acc.some(a => a === awardee) ? acc : [awardee, ...acc];
-          }, []));
+          .map((r) => r.awardee)
+          .reduce((acc, awardee) => (acc.some((a) => a === awardee) ? acc : [awardee, ...acc]), []));
       })
       .then((awardeeUsers) => {
         commit('SET_AWARDEE_USERS_LIST', awardeeUsers);
-        return Promise.all(state.award.awardees.map(r => r.research_id)
-          .reduce((acc, researchId) => {
-            return acc.some(rId => rId === researchId) ? acc : [researchId, ...acc];
-          }, [])
-          .map(rId => researchService.getResearchWithOffchain(rId)));
+        return Promise.all(state.award.awardees.map((r) => r.research_id)
+          .reduce((acc, researchId) => (acc.some((rId) => rId === researchId) ? acc : [researchId, ...acc]), [])
+          .map((rId) => researchService.getResearchWithOffchain(rId)));
       })
       .then((researchList) => {
         commit('SET_AWARDEE_RESEARCH_LIST', researchList);
-        return Promise.all(researchList.map(r => r.research_group_id)
-          .reduce((acc, researchGroupId) => {
-            return acc.some(rgId => rgId === researchGroupId) ? acc : [researchGroupId, ...acc];
-          }, [])
-          .map(rgId => researchGroupService.getResearchGroupById(rgId)));
+        return Promise.all(researchList.map((r) => r.research_group_id)
+          .reduce((acc, researchGroupId) => (acc.some((rgId) => rgId === researchGroupId) ? acc : [researchGroupId, ...acc]), [])
+          .map((rgId) => researchGroupService.getResearchGroupById(rgId)));
       })
       .then((researchGroups) => {
         commit('SET_AWARDEE_RESEARCH_GROUPS_LIST', researchGroups);
       })
-      .catch(err => { console.log(err) })
+      .catch((err) => { console.log(err); })
       .finally(() => {
         if (notify) notify();
       });
-  },
+  }
 
 
-}
+};
 
 // mutations
 const mutations = {
 
-  ['SET_AWARD_DETAILS_LOADING_STATE'](state, value) {
-    state.isLoadingAwardDetailsPage = value
+  SET_AWARD_DETAILS_LOADING_STATE(state, value) {
+    state.isLoadingAwardDetailsPage = value;
   },
 
-  ['SET_FUNDING_OPPORTUNITY'](state, foa) {
+  SET_FUNDING_OPPORTUNITY(state, foa) {
     Vue.set(state, 'foa', foa);
   },
 
-  ['SET_FUNDING_OPPORTUNITY_ORGANIZATION'](state, foaOrganization) {
+  SET_FUNDING_OPPORTUNITY_ORGANIZATION(state, foaOrganization) {
     Vue.set(state, 'foaOrganization', foaOrganization);
   },
 
-  ['SET_AWARD'](state, award) {
+  SET_AWARD(state, award) {
     Vue.set(state, 'award', award);
   },
 
-  ['SET_AWARDEE'](state, awardee) {
+  SET_AWARDEE(state, awardee) {
     Vue.set(state, 'awardee', awardee);
   },
 
-  ['SET_AWARD_PAYMENT_REQUESTS_LIST'](state, paymentRequests) {
+  SET_AWARD_PAYMENT_REQUESTS_LIST(state, paymentRequests) {
     Vue.set(state, 'awardPaymentRequestsList', paymentRequests);
   },
 
-  ['SET_AWARDEE_USERS_LIST'](state, awardeeUsers) {
-    Vue.set(state, 'awardeeUsersList', awardeeUsers)
+  SET_AWARDEE_USERS_LIST(state, awardeeUsers) {
+    Vue.set(state, 'awardeeUsersList', awardeeUsers);
   },
 
-  ['SET_AWARDEE_RESEARCH_LIST'](state, researches) {
-    Vue.set(state, 'awardeeResearchList', researches)
+  SET_AWARDEE_RESEARCH_LIST(state, researches) {
+    Vue.set(state, 'awardeeResearchList', researches);
   },
 
-  ['SET_AWARDEE_RESEARCH_GROUPS_LIST'](state, researchGroups) {
-    Vue.set(state, 'awardeeResearchGroupsList', researchGroups)
+  SET_AWARDEE_RESEARCH_GROUPS_LIST(state, researchGroups) {
+    Vue.set(state, 'awardeeResearchGroupsList', researchGroups);
   }
-}
+};
 
 const namespaced = true;
 
@@ -416,4 +397,4 @@ export const agencyGrantProgramAwardDetailsStore = {
   getters,
   actions,
   mutations
-}
+};

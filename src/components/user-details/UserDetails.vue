@@ -1,24 +1,26 @@
 <template>
-    <base-page-layout>
-        <user-details-body slot="content"></user-details-body>
-        <user-details-sidebar slot="right-sidebar"></user-details-sidebar>
-    </base-page-layout>
+  <base-page-layout>
+    <template #sidebar>
+      <layout-sidebar right>
+        <user-details-sidebar />
+      </layout-sidebar>
+    </template>
+    <user-details-body />
+  </base-page-layout>
 </template>
 
 <script>
+  import LayoutSidebar from '@/components/layout/components/LayoutSidebar';
 
-    export default {
-        name: 'UserDetails',
-        data() {
-            return {
-            }
-        },
-        methods: {
-
-        },
-        created() {
-        }
-    }
+  export default {
+    name: 'UserDetails',
+    components: { LayoutSidebar },
+    data() {
+      return {};
+    },
+    created() {},
+    methods: {}
+  };
 </script>
 
 <style lang="less" scoped>

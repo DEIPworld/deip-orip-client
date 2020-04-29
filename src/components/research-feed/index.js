@@ -1,4 +1,4 @@
-import Vue from 'vue'
+import Vue from 'vue';
 
 import ResearchListItem from './components/ResearchListItem';
 import ResearchFeed from './ResearchFeed';

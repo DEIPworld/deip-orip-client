@@ -5,7 +5,7 @@
         <platform-avatar
           :user="review.author"
           :size="120"
-        ></platform-avatar>
+        />
       </div>
       <div class="legacy-column c-ml-10">
         <div class="c-pt-4">
@@ -14,54 +14,56 @@
           </router-link>
         </div>
         <div v-if="review.author.profile" class="c-pt-2 c-pb-1">
-          <span class="caption bold">{{review.author | employmentOrEducation}}</span>
+          <span class="caption bold">{{ review.author | employmentOrEducation }}</span>
         </div>
         <div v-if="hasLocation" class="c-pb-1">
-          <v-icon small>location_on</v-icon><span class="caption"> {{review.author | userLocation}}</span>
+          <v-icon small>
+            location_on
+          </v-icon><span class="caption"> {{ review.author | userLocation }}</span>
         </div>
       </div>
     </div>
-    <v-divider></v-divider>
-    <div v-html="review.content"></div>
+    <v-divider />
+    <div v-html="review.content" />
   </div>
 </template>
 
 <script>
-import { mapGetters } from 'vuex';
-import deipRpc from '@deip/rpc-client';
+  import { mapGetters } from 'vuex';
+  import deipRpc from '@deip/rpc-client';
 
-export default {
-  name: "ResearchContentReviewBody",
-  data() {
-    return {
-    };
-  },
-
-  computed: {
-    ...mapGetters({
-      user: 'auth/user',
-      userExperise: 'auth/userExperise',
-      content: 'rcd/content',
-      research: 'rcd/research',
-      contentReviewsList: 'rcd/contentReviewsList'
-    }),
-    review() {
-      return this.contentReviewsList.find(r => r.id == this.$route.params.review_id)
+  export default {
+    name: 'ResearchContentReviewBody',
+    data() {
+      return {
+      };
     },
 
-    hasLocation() {
-      return this.review && this.review.author.profile &&
-          this.review.author.profile.location &&
-          (this.review.author.profile.location.country || this.review.author.profile.location.city);
+    computed: {
+      ...mapGetters({
+        user: 'auth/user',
+        userExperise: 'auth/userExperise',
+        content: 'rcd/content',
+        research: 'rcd/research',
+        contentReviewsList: 'rcd/contentReviewsList'
+      }),
+      review() {
+        return this.contentReviewsList.find((r) => r.id == this.$route.params.review_id);
+      },
+
+      hasLocation() {
+        return this.review && this.review.author.profile
+          && this.review.author.profile.location
+          && (this.review.author.profile.location.country || this.review.author.profile.location.city);
+      }
+    },
+    created() {
+    },
+
+    methods: {
+
     }
-  },
-
-  methods: {
-
-  },
-  created() {
-  }
-};
+  };
 </script>
 
 <style lang="less">

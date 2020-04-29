@@ -1,26 +1,28 @@
 <template>
-  <div class="px-5 py-4">
-    <v-layout row align-baseline>
-      <v-flex grow>
-        <div class="half-bold title">Expertise Contribution Index</div>
-      </v-flex>
-      <v-flex shrink>
+  <div class="px-12 py-6">
+    <v-row align="center">
+      <v-col class="grow">
+        <div class="half-bold title">
+          Expertise Contribution Index
+        </div>
+      </v-col>
+      <v-col class="shrink">
         <v-select
-          class="my-0 py-0"
           v-model="selectedEciDisciplineId"
+          class="my-0 py-0"
           :items="research.disciplines"
           item-text="name"
           item-value="id"
           label="Discipline"
-          outline
+          outlined
           dense
-          @change="loadDisciplineEciHistory()"
           :disabled="eciHistoryRecordsTable.loading"
-        ></v-select>
-      </v-flex>
-    </v-layout>
+          @change="loadDisciplineEciHistory()"
+        />
+      </v-col>
+    </v-row>
 
-    <v-layout row v-if="eciDisciplineHistoryRecordsChart">
+    <v-row v-if="eciDisciplineHistoryRecordsChart">
       <div class="full-width">
         <GChart
           type="LineChart"
@@ -29,50 +31,55 @@
           :options="eciDisciplineHistoryRecordsChart.options"
         />
       </div>
-    </v-layout>
+    </v-row>
 
-    <v-layout row v-if="hasEciDisciplineHistoryRecords">
+    <v-row v-if="hasEciDisciplineHistoryRecords">
       <div class="full-width">
         <v-data-table
           :headers="eciHistoryRecordsTable.headers"
           :items="eciHistoryRecordsTable.items"
-          class="elevation-0 mt-3"
-          disable-initial-sort
+          class="elevation-0 mt-4"
           :loading="eciHistoryRecordsTable.loading"
-          :rows-per-page-items="[5, 10]"
-          :pagination.sync="eciHistoryRecordsTable.pagination"
-          :total-items="eciHistoryRecordsTable.totalItems"
+          :items-per-page-options="[5, 10]"
+          :options.sync="eciHistoryRecordsTable.pagination"
+          :server-items-length="eciHistoryRecordsTable.totalItems"
         >
-          <template v-slot:items="props">
-            <td>
-              <v-chip :color="eciHistoryRecordsTable.contributionColor[props.item.alteration_source_type]" text-color="white">
-                <span class="bold uppercase">{{ props.item.actionText }}</span>
-              </v-chip>
-            </td>
-            <td>
-              <router-link
-                v-if="props.item.meta.link"
-                class="a"
-                :to="props.item.meta.link"
-              >{{props.item.meta.title}}
-              </router-link>
-              <span v-else class="body-2">{{props.item.meta.title}}</span>
-            </td>
-            <td class="text-xs-center">{{ moment(props.item.timestamp).format('D MMM YYYY') }}</td>
-            <td class="text-xs-center">
-              <div
-                class="half-bold"
-                :class="{ 'eci-up': props.item.delta > 0, 'eci-down': props.item.delta < 0 }"
-              >{{ props.item.delta }}
-              </div>
-            </td>
-            <td class="text-xs-center">
-              <div>{{ props.item.eci }}</div>
-            </td>
+          <template v-slot:item="{item}">
+            <tr>
+              <td>
+                <v-chip :color="eciHistoryRecordsTable.contributionColor[item.alteration_source_type]" text-color="white">
+                  <span class="bold uppercase">{{ item.actionText }}</span>
+                </v-chip>
+              </td>
+              <td>
+                <router-link
+                  v-if="item.meta.link"
+                  class="a"
+                  :to="item.meta.link"
+                >
+                  {{ item.meta.title }}
+                </router-link>
+                <span v-else class="body-2">{{ item.meta.title }}</span>
+              </td>
+              <td class="text-center">
+                {{ moment(item.timestamp).format('D MMM YYYY') }}
+              </td>
+              <td class="text-center">
+                <div
+                  class="half-bold"
+                  :class="{ 'eci-up': item.delta > 0, 'eci-down': item.delta < 0 }"
+                >
+                  {{ item.delta }}
+                </div>
+              </td>
+              <td class="text-center">
+                <div>{{ item.eci }}</div>
+              </td>
+            </tr>
           </template>
         </v-data-table>
       </div>
-    </v-layout>
+    </v-row>
   </div>
 </template>
 
@@ -138,25 +145,24 @@
         content: 'rcd/content'
       }),
       hasEciDisciplineHistoryRecords() {
-        let records = this.$store.getters['rcd/eciHistoryByDiscipline'](
+        const records = this.$store.getters['rcd/eciHistoryByDiscipline'](
           this.selectedEciDisciplineId
         );
         return records != null && records.length != 0;
       },
       eciDisciplineHistoryRecordsChart() {
-        let disciplineId = this.selectedEciDisciplineId;
-        let researchContentId = this.content.id;
-        let records = this.$store.getters['rcd/eciHistoryByDiscipline'](
+        const disciplineId = this.selectedEciDisciplineId;
+        const researchContentId = this.content.id;
+        const records = this.$store.getters['rcd/eciHistoryByDiscipline'](
           disciplineId
         );
         if (!records) return null;
 
         const getPointTooltipHtml = (eci, action, delta) => {
-          let assessmentType = delta >= 0 ? 'Approved' : 'Rejected';
-          let assessmentClass =
-            delta >= 0
-              ? 'green--text text--lighten-4'
-              : 'red--text text--lighten-4';
+          const assessmentType = delta >= 0 ? 'Approved' : 'Rejected';
+          const assessmentClass = delta >= 0
+            ? 'green--text text--lighten-4'
+            : 'red--text text--lighten-4';
           return `
           <div style="width: 100px; padding: 5px; background: #828282; border-radius: 2px; opacity: 0.9">
               <div class="bold white--text text-capitalize">${action}</div>
@@ -178,11 +184,11 @@
 
         const data = records.length
           ? records.map((record, i) => {
-            let date = new Date(record.timestamp);
-            let value = record.eci;
-            let delta = record.delta;
-            let actionText = record.actionText;
-            let tooltip = getPointTooltipHtml(value, actionText, delta);
+            const date = new Date(record.timestamp);
+            const value = record.eci;
+            const { delta } = record;
+            const { actionText } = record;
+            const tooltip = getPointTooltipHtml(value, actionText, delta);
             return [date, value, tooltip];
           })
           : [
@@ -245,13 +251,20 @@
         };
       }
     },
+    created() {
+      if (this.isPublished) {
+        const discipline = this.research.disciplines[0];
+        this.selectedEciDisciplineId = discipline.id;
+        this.loadDisciplineEciHistory(discipline.id);
+      }
+    },
     methods: {
       loadDisciplineEciHistory() {
-        let disciplineId = this.selectedEciDisciplineId;
-        let researchContentId = this.content.id;
+        const disciplineId = this.selectedEciDisciplineId;
+        const researchContentId = this.content.id;
 
         this.eciHistoryRecordsTable.loading = true;
-        let cachedRecords = this.$store.getters['rcd/eciHistoryByDiscipline'](
+        const cachedRecords = this.$store.getters['rcd/eciHistoryByDiscipline'](
           disciplineId
         );
         if (cachedRecords == null) {
@@ -261,25 +274,20 @@
               disciplineId
             })
             .then(() => {
-              let records = this.$store.getters['rcd/eciHistoryByDiscipline'](
+              const records = this.$store.getters['rcd/eciHistoryByDiscipline'](
                 disciplineId
               );
               this.eciHistoryRecordsTable.items = records.reverse();
               this.eciHistoryRecordsTable.pagination.page = 1;
               this.eciHistoryRecordsTable.loading = false;
+              this.eciHistoryRecordsTable.totalItems = records.length;
             });
         } else {
           this.eciHistoryRecordsTable.items = cachedRecords.reverse();
           this.eciHistoryRecordsTable.pagination.page = 1;
           this.eciHistoryRecordsTable.loading = false;
+          this.eciHistoryRecordsTable.totalItems = cachedRecords.length;
         }
-      }
-    },
-    created() {
-      if (this.isPublished) {
-        let discipline = this.research.disciplines[0];
-        this.selectedEciDisciplineId = discipline.id;
-        this.loadDisciplineEciHistory(discipline.id);
       }
     }
   };

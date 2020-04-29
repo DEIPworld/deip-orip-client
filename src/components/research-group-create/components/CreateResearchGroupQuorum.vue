@@ -1,171 +1,184 @@
 <template>
-  <v-layout column fill-height>
-    <v-flex display-flex flex-column flex-grow-1 mb-3>
-      <div class="step-title">Quorum setup</div>
-      <div class="flex-grow-1 overflow-y-auto flex-basis-0">
-
-        <v-layout row mx-auto class="group-quorum-max-width">
-          <v-flex xs12>
-            <div>
-              Quorum shows how many votes it takes to approve a proposal (such as changing the research
-              content, adding the research group members, initiating research fundraise, etc.) You can setup Quorum for
-              each
-              proposal individually using
-              <span class="font-weight-medium clickable" @click="changeMode()">Advanced</span>
-              options.
-            </div>
-
-            <v-text-field
-              v-model="totalQuorum"
-              :disabled="isAdvanced"
-              suffix="%"
-              mask="###"
-              hide-details
-              @keyup="onChangeTotalQuorum()"
-            ></v-text-field>
-
-            <v-layout row v-show="isAdvanced">
-              <v-flex offset-xs2>
-                <div class="py-3 font-weight-bold">Advanced quorum setup</div>
-
-                <v-layout row align-end>
-                  <div>
-                    <v-text-field class="width-6 pa-0"
-                                  v-model="group.quorum.startResearch"
-                                  suffix="%"
-                                  mask="###"
-                                  hide-details
-                    ></v-text-field>
-                  </div>
-                  <div class="flex-grow-1 ml-4">Start new research project</div>
-                </v-layout>
-
-                <v-layout row align-end>
-                  <div>
-                    <v-text-field class="width-6 pa-0"
-                                  v-model="group.quorum.createMaterial"
-                                  suffix="%"
-                                  mask="###"
-                                  hide-details
-                    ></v-text-field>
-                  </div>
-                  <div class="flex-grow-1 ml-4">Publish research project results</div>
-                </v-layout>
-
-                <v-layout row align-end>
-                  <div>
-                    <v-text-field class="width-6 pa-0"
-                                  v-model="group.quorum.changeReviewSharePercent"
-                                  suffix="%"
-                                  mask="###"
-                                  hide-details
-                    ></v-text-field>
-                  </div>
-                  <div class="flex-grow-1 ml-4">Change research review award share</div>
-                </v-layout>
-
-                <v-layout row align-end>
-                  <div>
-                    <v-text-field class="width-6"
-                                  v-model="group.quorum.inviteMembers"
-                                  suffix="%"
-                                  mask="###"
-                                  hide-details
-                    ></v-text-field>
-                  </div>
-                  <div class="flex-grow-1 ml-4">Invite new member to research group</div>
-                </v-layout>
-
-                <v-layout row align-end>
-                  <div>
-                    <v-text-field class="width-6 pa-0"
-                                  v-model="group.quorum.dropoutMembers"
-                                  suffix="%"
-                                  mask="###"
-                                  hide-details
-                    ></v-text-field>
-                  </div>
-                  <div class="flex-grow-1 ml-4">Exclude member from research group</div>
-                </v-layout>
-
-                <v-layout row align-end>
-                  <div>
-                    <v-text-field class="width-6"
-                                  v-model="group.quorum.startResearchTokenSale"
-                                  suffix="%"
-                                  mask="###"
-                                  hide-details
-                    ></v-text-field>
-                  </div>
-                  <div class="flex-grow-1 ml-4">Schedule research fundraising campaign</div>
-                </v-layout>
-
-                <v-layout row align-end>
-                  <div>
-                    <v-text-field class="width-6 pa-0"
-                                  v-model="group.quorum.offerResearchTokens"
-                                  suffix="%"
-                                  mask="###"
-                                  hide-details
-                    ></v-text-field>
-                  </div>
-                  <div class="flex-grow-1 ml-4">Offer research shares</div>
-                </v-layout>
-
-                <v-layout row align-end>
-                  <div>
-                    <v-text-field class="width-6 pa-0"
-                                  v-model="group.quorum.sendFunds"
-                                  suffix="%"
-                                  mask="###"
-                                  hide-details
-                    ></v-text-field>
-                  </div>
-                  <div class="flex-grow-1 ml-4">Transfer research group funds</div>
-                </v-layout>
-
-                <v-layout row align-end>
-                  <div>
-                    <v-text-field class="width-6"
-                                  v-model="group.quorum.changeQuorum"
-                                  suffix="%"
-                                  mask="###"
-                                  hide-details
-                    ></v-text-field>
-                  </div>
-                  <div class="flex-grow-1 ml-4">Change research group quorum threshold</div>
-                </v-layout>
-
-                <v-layout row align-end>
-                  <div>
-                    <v-text-field class="width-6 pa-0"
-                                  v-model="group.quorum.rebalanceGroupTokens"
-                                  suffix="%"
-                                  mask="###"
-                                  hide-details
-                    ></v-text-field>
-                  </div>
-                  <div class="flex-grow-1 ml-4">Rebalance research group tokens</div>
-                </v-layout>
-
-              </v-flex>
-            </v-layout>
-          </v-flex>
-        </v-layout>
-
+  <div class="display-flex flex-column fill-height">
+    <div class="display-flex flex-column flex-grow-1 mb-4">
+      <div class="step-title">
+        Quorum setup
       </div>
-    </v-flex>
-    <v-flex flex-grow-0>
-      <v-layout row justify-center align-center>
-        <v-btn flat small @click.native="prevStep()">
-          <v-icon dark class="pr-1">keyboard_arrow_left</v-icon>
+      <div class="flex-grow-1 overflow-y-auto flex-basis-0">
+        <div class="group-quorum-max-width mx-auto">
+          <div>
+            Quorum shows how many votes it takes to approve a proposal (such as changing the research
+            content, adding the research group members, initiating research fundraise, etc.) You can setup Quorum for
+            each
+            proposal individually using
+            <span class="font-weight-medium clickable" @click="changeMode()">Advanced</span>
+            options.
+          </div>
+
+          <v-text-field
+            v-model="totalQuorum"
+            :disabled="isAdvanced"
+            suffix="%"
+            mask="###"
+            hide-details
+            @keyup="onChangeTotalQuorum()"
+          />
+
+          <v-row v-show="isAdvanced" no-gutters>
+            <v-col offset="2">
+              <div class="py-4 font-weight-bold">
+                Advanced quorum setup
+              </div>
+
+              <div>
+                <v-text-field
+                  v-model="group.quorum.startResearch"
+                  class="width-6 pa-0 display-inline-block"
+                  suffix="%"
+                  mask="###"
+                  hide-details
+                />
+                <div class="display-inline-block ml-6 vertical-bottom">
+                  Start new research project
+                </div>
+              </div>
+
+              <div>
+                <v-text-field
+                  v-model="group.quorum.createMaterial"
+                  class="width-6 pa-0 display-inline-block"
+                  suffix="%"
+                  mask="###"
+                  hide-details
+                />
+                <div class="display-inline-block ml-6 vertical-bottom">
+                  Publish research project results
+                </div>
+              </div>
+
+              <div>
+                <v-text-field
+                  v-model="group.quorum.changeReviewSharePercent"
+                  class="width-6 display-inline-block pa-0"
+                  suffix="%"
+                  mask="###"
+                  hide-details
+                />
+                <div class="display-inline-block ml-6 vertical-bottom">
+                  Change research review award share
+                </div>
+              </div>
+
+              <div>
+                <v-text-field
+                  v-model="group.quorum.inviteMembers"
+                  class="width-6 display-inline-block"
+                  suffix="%"
+                  mask="###"
+                  hide-details
+                />
+                <div class="display-inline-block ml-6 vertical-bottom">
+                  Invite new member to research group
+                </div>
+              </div>
+
+              <div>
+                <v-text-field
+                  v-model="group.quorum.dropoutMembers"
+                  class="width-6 display-inline-block pa-0"
+                  suffix="%"
+                  mask="###"
+                  hide-details
+                />
+                <div class="display-inline-block ml-6 vertical-bottom">
+                  Exclude member from research group
+                </div>
+              </div>
+
+              <div>
+                <v-text-field
+                  v-model="group.quorum.startResearchTokenSale"
+                  class="width-6 display-inline-block"
+                  suffix="%"
+                  mask="###"
+                  hide-details
+                />
+                <div class="display-inline-block ml-6 vertical-bottom">
+                  Schedule research fundraising campaign
+                </div>
+              </div>
+
+              <div>
+                <v-text-field
+                  v-model="group.quorum.offerResearchTokens"
+                  class="width-6 display-inline-block pa-0"
+                  suffix="%"
+                  mask="###"
+                  hide-details
+                />
+                <div class="display-inline-block ml-6 vertical-bottom">
+                  Offer research shares
+                </div>
+              </div>
+
+              <div>
+                <v-text-field
+                  v-model="group.quorum.sendFunds"
+                  class="width-6 display-inline-block pa-0"
+                  suffix="%"
+                  mask="###"
+                  hide-details
+                />
+                <div class="display-inline-block ml-6 vertical-bottom">
+                  Transfer research group funds
+                </div>
+              </div>
+
+              <div>
+                <v-text-field
+                  v-model="group.quorum.changeQuorum"
+                  class="width-6 display-inline-block"
+                  suffix="%"
+                  mask="###"
+                  hide-details
+                />
+                <div class="display-inline-block ml-6 vertical-bottom">
+                  Change research group quorum threshold
+                </div>
+              </div>
+
+              <div>
+                <v-text-field
+                  v-model="group.quorum.rebalanceGroupTokens"
+                  class="width-6 display-inline-block pa-0"
+                  suffix="%"
+                  mask="###"
+                  hide-details
+                />
+                <div class="display-inline-block ml-6 vertical-bottom">
+                  Rebalance research group tokens
+                </div>
+              </div>
+            </v-col>
+          </v-row>
+        </div>
+      </div>
+    </div>
+    <div class="flex-grow-0">
+      <div class="display-flex justify-center align-center">
+        <v-btn text small @click.native="prevStep()">
+          <v-icon dark class="pr-1">
+            keyboard_arrow_left
+          </v-icon>
           Back
         </v-btn>
 
-        <v-btn color="primary" @click.native="nextStep()" :disabled="nextDisabled">Next</v-btn>
-      </v-layout>
-    </v-flex>
-  </v-layout>
+        <v-btn color="primary" :disabled="nextDisabled" @click.native="nextStep()">
+          Next
+        </v-btn>
+      </div>
+    </div>
+  </div>
 </template>
 
 <script>
@@ -186,7 +199,7 @@
       return {
         isAdvanced: false,
         totalQuorum: 50
-      }
+      };
     },
 
     computed: {
@@ -203,6 +216,10 @@
       }
     },
 
+    created() {
+      this.onChangeTotalQuorum();
+    },
+
     methods: {
       nextStep() {
         this.$emit('incStep');
@@ -217,15 +234,11 @@
       },
       onChangeTotalQuorum() {
         if (!this.isAdvanced) {
-          _.keys(this.group.quorum).forEach(key => {
+          _.keys(this.group.quorum).forEach((key) => {
             this.group.quorum[key] = this.totalQuorum;
           });
         }
       }
-    },
-
-    created() {
-      this.onChangeTotalQuorum();
     }
   };
 </script>

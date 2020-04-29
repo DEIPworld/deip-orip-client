@@ -1,270 +1,310 @@
 <template>
-  <base-page-layout>
-    <div slot="content" class="full-width">
-      <v-layout column justify-center class="feed-header full-width px-5"
-                :style="{ background: 'url(' + $options.filters.tenantBackgroundSrc(tenant) + '), 100%, 100%, no-repeat'}">
-        <div class="display-2 uppercase half-bold">Projects</div>
-        <div class="py-4">
-          <v-btn v-if="isLoggedIn()" :to="{ name: 'CreateResearch' }" color="primary" class="ma-0">Start a project
+  <app-layout>
+    <layout-header :background="$options.filters.tenantBackgroundSrc(tenant)">
+      <div class="display-2 uppercase half-bold">
+        Projects
+      </div>
+
+      <div class="py-6">
+        <v-btn
+          v-if="isLoggedIn()"
+          :to="{ name: 'CreateResearch' }"
+          color="primary"
+          class="ma-0"
+        >
+          Start a project
+        </v-btn>
+
+        <template v-else>
+          <v-btn :to="{ name: 'SignIn' }" color="primary" class="ma-0 px-12">
+            Log In
           </v-btn>
-          <template v-else>
-            <v-btn :to="{ name: 'SignIn' }" color="primary" class="ma-0 px-5">Log In</v-btn>
-            <div class="white--text body-1 mt-2">After creating an account/log in you can add new projects or enjoy
-              shared materials
-            </div>
-          </template>
+          <div class="white--text body-1 mt-2">
+            After creating an account/log in you can add
+            new projects or enjoy shared materials
+          </div>
+        </template>
+      </div>
+    </layout-header>
+
+    <!-- TODO: refactoring -->
+    <div class="d-flex px-6 px-sm-12 py-4">
+      <v-sheet tile class="filter-chips">
+        <div v-if="selectedTopDisciplines.length" class="filter-chips__row">
+          <v-chip
+            v-for="discipline in selectedTopDisciplines"
+            :key="'filter-by-discipline-' + discipline.id"
+            class="ma-1"
+            small
+            close
+            outlined
+            @click:close="toggleDiscipline(discipline)"
+          >
+            {{ discipline.label }}
+          </v-chip>
         </div>
-      </v-layout>
 
-      <v-layout row wrap>
-        <v-flex xs12 sm12 md12 lg12 xl12 class="feed-filter" ref="projectsView">
-          <v-expansion-panel expand v-model="filtersTabExpansionModel" class="elevation-0">
-            <v-expansion-panel-content class="elevation-0">
-              <template slot="actions">
-                <v-icon color="primary">$vuetify.icons.expand</v-icon>
-              </template>
-              <template slot="header">
-                <v-layout row justify-space-between>
-                  <div class="px-4">
-                    <div class="discipline-criteria">
-                      <v-chip
-                        v-for="discipline in selectedTopDisciplines"
-                        :key="'filter-by-discipline-' + discipline.id"
-                        @input="toggleDiscipline(discipline)"
-                        small
-                        close
-                        outline>
-                        {{ discipline.label }}
-                      </v-chip>
-                    </div>
-                    <div class="trl-criteria">
-                      <v-chip
-                        v-for="trl in selectedTrls"
-                        :key="'filter-by-trl-' + trl.id"
-                        @input="toggleTrl(trl)"
-                        small
-                        close
-                        outline>
-                        {{ trl.label }}
-                      </v-chip>
-                    </div>
-                    <div class="organization-criteria">
-                      <v-chip
-                        v-for="organization in selectedOrganizations"
-                        :key="'filter-by-organization-' + organization.id"
-                        @input="toggleOrganization(organization)"
-                        small
-                        close
-                        outline>
-                        <v-avatar>
-                          <img :src="$options.filters.researchGroupLogoSrc(organization.id, 50, 50, true)">
-                        </v-avatar>
-                        {{ organization.name }}
-                      </v-chip>
-                    </div>
-                    <div v-if="filterByTopOnly">
-                      <v-chip
-                        @input="filterByTopOnly = false"
-                        small
-                        close
-                        outline>
-                        <v-avatar>
-                          <img src="/assets/img/top-100.svg">
-                        </v-avatar>
-                        Top 100
-                      </v-chip>
-                    </div>
-                  </div>
-                  <div class="align-self-center">
-                    <v-btn small flat color="primary" class="py-0 my-0 elevation-0">
-                      {{isFiltersTabExpanded ? 'Hide Filters' : 'Show Filters'}}
-                    </v-btn>
-                  </div>
-                </v-layout>
-              </template>
+        <div v-if="selectedTrls.length" class="filter-chips__row">
+          <v-chip
+            v-for="trl in selectedTrls"
+            :key="'filter-by-trl-' + trl.id"
+            class="ma-1"
+            small
+            close
+            outlined
+            @click:close="toggleTrl(trl)"
+          >
+            {{ trl.label }}
+          </v-chip>
+        </div>
 
-              <v-layout row wrap px-5 pt-4 pb-5 class="filters-background">
-                <v-flex xs12 sm12 md12 lg12 xl12 class="feed-disciplines-filter">
-                  <div class="pb-4">
-                    <v-layout row justify-space-between align-baseline>
-                      <span class="subheading half-bold">Browse by discipline</span>
-                      <v-btn
-                        @click="selectAllDisciplines()"
-                        class="text-capitalize"
-                        flat small color="primary"
-                        outline
-                        :disabled="isAllDisciplinesSelected">
-                        Reset
-                      </v-btn>
-                    </v-layout>
-                  </div>
-                  <v-layout row wrap justify-space-between>
-                    <v-flex xs6 sm6 md3 lg3 xl3 px-2 v-for="(discipline, i) in disciplines"
-                            :key="'discipline-filter-' + i">
-                      <v-btn
-                        @click="toggleDiscipline(discipline)"
-                        flat block small color="primary"
-                        class="text-capitalize filter-btn"
-                        :class="{'selected': isDisciplineSelected(discipline)}">
-                        <div class="full-width text-xs-center">{{discipline.label}}</div>
-                        <!-- {{discipline.label}} -->
-                      </v-btn>
-                    </v-flex>
-                    <v-spacer></v-spacer>
-                  </v-layout>
-                </v-flex>
-                <v-flex xs12 sm12 md12 lg12 xl12 py-4>
-                  <v-divider></v-divider>
-                </v-flex>
-                <v-flex xs12 sm12 md12 lg12 xl12 class="feed-trl-filter">
-                  <div class="pb-4">
-                    <v-layout row justify-space-between align-baseline>
-                      <span class="subheading half-bold">Browse by TRL</span>
-                      <v-btn
-                        @click="resetTrl()"
-                        class="text-capitalize"
-                        flat small color="primary"
-                        outline
-                        :disabled="isAllTrlSelected">
-                        Reset
-                      </v-btn>
-                    </v-layout>
-                  </div>
-                  <v-layout row wrap justify-space-between>
-                    <v-flex xs2 px-2 v-for="(trl, i) in trls" :key="'trl-filter-' + i">
-                      <v-tooltip bottom>
-                        <v-btn
-                          slot="activator"
-                          @click="toggleTrl(trl)"
-                          flat block small color="primary"
-                          class="text-capitalize filter-btn"
-                          :class="{'selected': isTrlSelected(trl)}"
-                        >
-                          <div class="full-width text-xs-center">{{trl.label}}</div>
-                        </v-btn>
-                        <span>{{trl.hint}}</span>
-                      </v-tooltip>
-                    </v-flex>
-                    <v-spacer></v-spacer>
-                  </v-layout>
-                </v-flex>
-                <v-flex xs12 sm12 md12 lg12 xl12 py-4>
-                  <v-divider></v-divider>
-                </v-flex>
-                <v-flex xs12 sm12 md12 lg12 xl12 class="feed-organizations-filter">
-                  <div class="pb-4">
-                    <v-layout row justify-space-between align-baseline>
-                      <span class="subheading half-bold">Browse by organizations</span>
-                      <v-btn
-                        @click="selectAllOrganizations()"
-                        class="text-capitalize"
-                        flat small color="primary"
-                        outline
-                        :disabled="isAllOrganizationsSelected">
-                        Reset
-                      </v-btn>
-                    </v-layout>
-                  </div>
-                  <v-layout row wrap>
-                    <div
-                      v-for="organization of organizations"
-                      :key="`organization-filter-${organization.id}`"
-                    >
-                      <v-tooltip bottom>
-                        <template v-slot:activator="{ on }">
-                          <div
-                            v-on="on"
-                            @click="toggleOrganization(organization)"
-                            :class="{
-                              'organization-item ma-2 pa-1': true,
-                              'organization-item--selected': isOrganizationSelected(organization)
-                            }"
-                          >
-                            <img
+        <div v-if="selectedOrganizations.length" class="filter-chips__row">
+          <v-chip
+            v-for="organization in selectedOrganizations"
+            :key="'filter-by-organization-' + organization.id"
+            class="ma-1"
+            small
+            close
+            outlined
+            @click:close="toggleOrganization(organization)"
+          >
+            <v-avatar left>
+              <img :src="$options.filters.researchGroupLogoSrc(organization.id, 50, 50, true)">
+            </v-avatar>
+            {{ organization.name }}
+          </v-chip>
+        </div>
 
-                              class="organization-item__img"
-                              :src="$options.filters.researchGroupLogoSrc(organization.id, 200, 200)"
-                            />
-                            <div class="organization-item__overlay"></div>
-                          </div>
-                        </template>
-                        <span>{{organization.name}}</span>
-                      </v-tooltip>
-                    </div>
-                  </v-layout>
-                </v-flex>
-                <v-flex xs12 sm12 md12 lg12 xl12 py-4>
-                  <v-divider></v-divider>
-                </v-flex>
-                <v-flex xs12 sm12 md12 lg12 xl12>
-                  <div class="pb-4">
-                    <v-layout row align-baseline>
-                      <v-flex shrink>
-                        <span class="subheading half-bold">Browse top projects only</span>
-                      </v-flex>
-                      <v-flex grow align-self-center pl-4>
-                        <v-checkbox
-                          v-model="filterByTopOnly"
-                          class="ma-0 pa-0"
-                          hide-details>
-                        </v-checkbox>
-                      </v-flex>
-                    </v-layout>
-                  </div>
-                </v-flex>
-              </v-layout>
-            </v-expansion-panel-content>
-          </v-expansion-panel>
-        </v-flex>
-      </v-layout>
-
-      <v-layout row wrap>
-        <v-card class="px-5 pb-4 elevation-0 full-width" :class="{'pt-4': isFiltersTabExpanded}">
-          <v-layout row wrap>
-            <v-flex xs12 sm12 md12 lg12 xl12>
-              <div class="subheading half-bold px-2">Projects | <span
-                class="primary--text">{{researchFeed.length}}</span></div>
-            </v-flex>
-            <v-flex xs12 sm12 md12 lg12 xl12>
-              <v-data-iterator
-                :items="researchFeed"
-                :rows-per-page-items="rowsPerPageItems"
-                :pagination.sync="pagination"
-                @update:pagination="onPaginationUpdated"
-                content-tag="v-layout"
-                no-data-text="No Projects found for specified criteria"
-                row
-                wrap
-              >
-                <template v-slot:item="props">
-                  <v-flex xs12 sm6 md4 lg4 xl3 px-2 py-4 my-1 :key="'feed-item-' + props.item.research_id">
-                    <research-project-tile
-                      :research="{
-                        id: props.item.research_id,
-                        title: props.item.title,
-                        permlink: props.item.permlink,
-                        group_permlink: props.item.group_permlink,
-                        last_update_time: props.item.last_update_time,
-                        number_of_negative_reviews: props.item.number_of_negative_reviews,
-                        number_of_positive_reviews: props.item.number_of_positive_reviews,
-                        isTop: props.item.isTop,
-                        researchRef: props.item.researchRef
-                      }"
-                      :members="props.item.authors"
-                      :tokenSale="props.item.tokenSale"
-                      :tokenSaleContributions="props.item.tokenSaleContributions"
-                      :group="props.item.group">
-                    </research-project-tile>
-                  </v-flex>
-                </template>
-              </v-data-iterator>
-            </v-flex>
-          </v-layout>
-        </v-card>
-      </v-layout>
-
+        <div v-if="filterByTopOnly" class="filter-chips__row">
+          <v-chip
+            class="ma-1"
+            small
+            close
+            outlined
+            @click:close="filterByTopOnly = false"
+          >
+            <v-avatar>
+              <img src="/assets/img/top-100.svg">
+            </v-avatar>
+            Top 100
+          </v-chip>
+        </div>
+      </v-sheet>
+      <v-spacer />
+      <v-sheet tile>
+        <v-btn small text @click="filtersIsOpen = !filtersIsOpen">
+          {{ filtersIsOpen ? 'Hide Filters' : 'Show Filters' }}
+          <v-icon right dense>
+            {{ filtersIsOpen ? 'expand_less' : 'expand_more' }}
+          </v-icon>
+        </v-btn>
+      </v-sheet>
     </div>
-  </base-page-layout>
+    <v-divider />
+    <v-expand-transition>
+      <div v-if="filtersIsOpen">
+        <v-sheet tile color="#fafafa" class="pa-12">
+          <v-row justify="space-between" align="center" class="mb-6">
+            <v-col>
+              <div class="subtitle-1">
+                Browse by discipline
+              </div>
+            </v-col>
+            <v-col cols="auto">
+              <v-btn
+                class="text-capitalize"
+                text
+                small
+                color="primary"
+                outlined
+                :disabled="isAllDisciplinesSelected"
+                @click="selectAllDisciplines()"
+              >
+                Reset
+              </v-btn>
+            </v-col>
+          </v-row>
+          <v-row>
+            <v-col
+              v-for="(discipline, i) in disciplines"
+              :key="'discipline-filter-' + i"
+              cols="6"
+              md="3"
+            >
+              <v-btn
+                text
+                block
+                small
+                color="primary"
+                :input-value="isDisciplineSelected(discipline)"
+                @click="toggleDiscipline(discipline)"
+              >
+                {{ discipline.label }}
+              </v-btn>
+            </v-col>
+            <v-spacer />
+          </v-row>
+
+          <v-divider class="my-6" />
+
+          <v-row justify="space-between" align="center" class="pb-6">
+            <v-col>
+              <div class="subtitle-1">
+                Browse by TRL
+              </div>
+            </v-col>
+            <v-col cols="auto">
+              <v-btn
+                text
+                small
+                color="primary"
+                outlined
+                :disabled="isAllTrlSelected"
+                @click="resetTrl()"
+              >
+                Reset
+              </v-btn>
+            </v-col>
+          </v-row>
+          <v-row>
+            <v-col v-for="(trl, i) in trls" :key="'trl-filter-' + i" cols="2">
+              <v-tooltip bottom>
+                <template #activator="{ on }">
+                  <v-btn
+                    text
+                    block
+                    small
+                    color="primary"
+                    :input-value="isTrlSelected(trl)"
+                    v-on="on"
+                    @click="toggleTrl(trl)"
+                  >
+                    <div class="full-width text--center">
+                      {{ trl.label }}
+                    </div>
+                  </v-btn>
+                </template>
+                <span>{{ trl.hint }}</span>
+              </v-tooltip>
+            </v-col>
+          </v-row>
+
+          <v-divider class="my-6" />
+
+          <v-row class="pb-6" justify="space-between">
+            <v-col>
+              <span class="subtitle-1">Browse by organizations</span>
+            </v-col>
+            <v-col cols="auto">
+              <v-btn
+                text
+                small
+                color="primary"
+                outlined
+                :disabled="isAllOrganizationsSelected"
+                @click="selectAllOrganizations()"
+              >
+                Reset
+              </v-btn>
+            </v-col>
+          </v-row>
+          <v-row>
+            <div
+              v-for="organization of organizations"
+              :key="`organization-filter-${organization.id}`"
+            >
+              <v-tooltip bottom>
+                <template #activator="{ on }">
+                  <div
+                    :input-value="isOrganizationSelected(organization)"
+                    :class="{
+                      'organization-item ma-2 pa-1': true,
+                      'organization-item--selected': isOrganizationSelected(organization)
+                    }"
+                    v-on="on"
+                    @click="toggleOrganization(organization)"
+                  >
+                    <img
+
+                      class="organization-item__img"
+                      :src="$options.filters.researchGroupLogoSrc(organization.id, 200, 200)"
+                    >
+                    <div class="organization-item__overlay" />
+                  </div>
+                </template>
+                <span>{{ organization.name }}</span>
+              </v-tooltip>
+            </div>
+          </v-row>
+
+          <v-divider class="my-6" />
+
+          <v-checkbox
+            v-model="filterByTopOnly"
+            class="ma-0 pa-0"
+            hide-details
+            label="Browse top projects only"
+          />
+        </v-sheet>
+        <v-divider />
+      </div>
+    </v-expand-transition>
+    <!-- END TODO: refactoring -->
+
+    <layout-section>
+      <content-block>
+        <template #title>
+          Projects
+          <v-badge offset-y="-8" offset-x="4" :content="researchFeed.length" />
+        </template>
+
+        <v-data-iterator
+          :items="researchFeed"
+          :items-per-page-options="rowsPerPageItems"
+          :options.sync="pagination"
+          no-data-text="No Projects found for specified criteria"
+          row
+          wrap
+          @update:pagination="onPaginationUpdated"
+        >
+          <template v-slot:default="{items}">
+            <v-row class="ma-n3">
+              <v-col
+                v-for="item in items"
+                :key="'feed-item-' + item.research_id"
+                cols="12"
+                sm="6"
+                md="4"
+                xl="3"
+              >
+                <v-sheet>
+                  <research-project-tile
+                    :research="{
+                      id: item.research_id,
+                      external_id: item.external_id,
+                      title: item.title,
+                      permlink: item.permlink,
+                      group_permlink: item.group_permlink,
+                      last_update_time: item.last_update_time,
+                      number_of_negative_reviews: item.number_of_negative_reviews,
+                      number_of_positive_reviews: item.number_of_positive_reviews,
+                      research_group: item.group,
+                      isTop: item.isTop,
+                      researchRef: item.researchRef
+                    }"
+                    :members="item.authors"
+                    :token-sale="item.tokenSale"
+                    :token-sale-contributions="item.tokenSaleContributions"
+                    :group="item.group"
+                  />
+                </v-sheet>
+              </v-col>
+            </v-row>
+          </template>
+        </v-data-iterator>
+      </content-block>
+    </layout-section>
+  </app-layout>
 </template>
 
 <script>
@@ -277,26 +317,38 @@
   import * as disciplinesService from '@/components/common/disciplines/DisciplineTreeService';
   import trlData from '@/components/common/trl.json';
 
+  import LayoutHeader from '@/components/layout/components/LayoutHeader';
+  import ContentBlock from '@/components/layout/components/ContentBlock';
+  import AppLayout from '@/components/layout/components/Layout';
+  import LayoutSection from '@/components/layout/components/LayoutSection';
+
   const accessService = AccessService.getInstance();
 
   export default {
     name: 'ResearchFeed',
-
+    components: {
+      LayoutSection,
+      AppLayout,
+      ContentBlock,
+      LayoutHeader
+    },
     data() {
       return {
-        rowsPerPageItems: [ 9, 30, 100 ],
+        filtersIsOpen: false,
+
+        rowsPerPageItems: [9, 30, 100],
         pagination: {
           rowsPerPage: 100
         },
-        disciplines: [ ...disciplinesService.getTopLevelNodes() ],
+        disciplines: [...disciplinesService.getTopLevelNodes()],
         filterByTopOnly: false,
-        filtersTabExpansionModel: [ false ],
+        filtersTabExpansionModel: false,
         trls: trlData.map((t, i) => ({
           id: t.id,
           label: `TRL ${i + 1}`,
-          hint: t.description,
-        })),
-      }
+          hint: t.description
+        }))
+      };
     },
 
     computed: {
@@ -307,13 +359,13 @@
         filter: 'feed/filter'
       }),
       isFiltersTabExpanded() {
-        return this.filtersTabExpansionModel[0];
+        return this.filtersTabExpansionModel;
       },
       selectedTrls() {
         return this.filter.trl;
       },
       selectedTopDisciplines() {
-        return this.filter.disciplines.filter(d => d.id != 0 && d.children !== undefined);
+        return this.filter.disciplines.filter((d) => d.id != 0 && d.children !== undefined);
       },
       selectedOrganizations() {
         return this.filter.organizations;
@@ -329,21 +381,33 @@
       }
     },
 
+    watch: {
+      filterByTopOnly(newVal) {
+        this.$store.dispatch('feed/updateFilter', {
+          key: 'topOnly',
+          value: newVal
+        });
+      }
+    },
+
     methods: {
       resetTrl() {
-        this.$store.dispatch('feed/updateFilter', { key: 'trl', value: [] });
+        this.$store.dispatch('feed/updateFilter', {
+          key: 'trl',
+          value: []
+        });
       },
 
       toggleTrl(trl) {
         if (!this.isTrlSelected(trl)) {
           this.$store.dispatch('feed/updateFilter', {
             key: 'trl',
-            value: [ trl, ...this.filter.trl ]
+            value: [trl, ...this.filter.trl]
           });
         } else {
           this.$store.dispatch('feed/updateFilter', {
             key: 'trl',
-            value: this.filter.trl.filter(t => t.id !== trl.id)
+            value: this.filter.trl.filter((t) => t.id !== trl.id)
           });
         }
       },
@@ -353,53 +417,65 @@
       },
 
       selectAllDisciplines() {
-        this.$store.dispatch('feed/updateFilter', { key: 'disciplines', value: [] });
+        this.$store.dispatch('feed/updateFilter', {
+          key: 'disciplines',
+          value: []
+        });
       },
 
       toggleDiscipline(discipline) {
-        let disciplinesGraph = [ discipline, ...Object.values(discipline.children) ];
+        const disciplinesGraph = [discipline, ...Object.values(discipline.children)];
         if (!this.isDisciplineSelected(discipline)) {
-          let value = [ ...disciplinesGraph, ...this.filter.disciplines ];
-          this.$store.dispatch('feed/updateFilter', { key: 'disciplines', value });
+          const value = [...disciplinesGraph, ...this.filter.disciplines];
+          this.$store.dispatch('feed/updateFilter', {
+            key: 'disciplines',
+            value
+          });
         } else {
-          let value = this.filter.disciplines.filter(d => !disciplinesGraph.some(item => item === d));
-          this.$store.dispatch('feed/updateFilter', { key: 'disciplines', value });
+          const value = this.filter.disciplines.filter((d) => !disciplinesGraph.some((item) => item === d));
+          this.$store.dispatch('feed/updateFilter', {
+            key: 'disciplines',
+            value
+          });
         }
       },
 
       isDisciplineSelected(discipline) {
-        return this.filter.disciplines.some(d => d === discipline);
+        return this.filter.disciplines.some((d) => d === discipline);
       },
 
       selectAllOrganizations() {
-        this.$store.dispatch('feed/updateFilter', { key: 'organizations', value: [] });
+        this.$store.dispatch('feed/updateFilter', {
+          key: 'organizations',
+          value: []
+        });
       },
 
       toggleOrganization(organization) {
         if (!this.isOrganizationSelected(organization)) {
-          let value = [ organization, ...this.filter.organizations ];
-          this.$store.dispatch('feed/updateFilter', { key: 'organizations', value });
+          const value = [organization, ...this.filter.organizations];
+          this.$store.dispatch('feed/updateFilter', {
+            key: 'organizations',
+            value
+          });
         } else {
-          let value = this.filter.organizations.filter(o => o.id != organization.id);
-          this.$store.dispatch('feed/updateFilter', { key: 'organizations', value });
+          const value = this.filter.organizations.filter((o) => o.id != organization.id);
+          this.$store.dispatch('feed/updateFilter', {
+            key: 'organizations',
+            value
+          });
         }
       },
 
       isOrganizationSelected(organization) {
-        return this.filter.organizations.some(o => o.id === organization.id);
+        return this.filter.organizations.some((o) => o.id === organization.id);
       },
 
       onPaginationUpdated(nextState) {
         this.$refs.projectsView.scrollIntoView();
       },
 
-      isLoggedIn() { return accessService.isLoggedIn() }
-    },
-
-    watch: {
-      filterByTopOnly(newVal) {
-        this.$store.dispatch('feed/updateFilter', { key: 'topOnly', value: newVal });
-      }
+      isLoggedIn() { return accessService.isLoggedIn(); }
     }
   };
 </script>
@@ -447,6 +523,18 @@
     &:hover &__overlay, &--selected &__overlay {
       display: block;
       background: rgba(219, 228, 251, .6);
+    }
+  }
+
+  .filter-chips {
+    margin: -.25rem;
+
+    &__row {
+      margin-bottom: .5rem;
+
+      &:last-child {
+        margin-bottom: 0;
+      }
     }
   }
 

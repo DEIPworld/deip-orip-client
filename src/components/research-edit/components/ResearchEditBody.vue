@@ -1,161 +1,181 @@
 <template>
-  <v-card height="100%">
-    <v-layout row wrap justify-center style="flex: 0 0 auto;" class="px-4 py-5 full-width">
-      <v-flex xs10>
-        <v-layout column>
-          <div>
-            <div class="title font-weight-medium pb-3">Tilte:</div>
-            <v-text-field
-              v-model="title"
-              :rules="[rules.required]"
-              name="title"
-              label="Title"
-              solo
+  <content-block :max-width="800">
+    <div>
+      <div class="title font-weight-medium pb-4">
+        Tilte:
+      </div>
+      <v-text-field
+        v-model="title"
+        :rules="[rules.required]"
+        name="title"
+        label="Title"
+        solo
+      />
+    </div>
+    <div>
+      <div class="title font-weight-medium pb-4">
+        Description:
+      </div>
+      <v-textarea
+        v-model="description"
+        :rules="[rules.required]"
+        name="Description"
+        label="Description"
+        solo
+        auto-grow
+      />
+    </div>
+    <div class="mb-4">
+      <div class="title font-weight-medium pb-4">
+        Visibility
+      </div>
+      <div>
+        <div class="display-inline-block" :class="{'grey--text':isPublic}">
+          Private project
+        </div>
+        <div class="display-inline-block">
+          <v-switch v-model="isPublic" class="my-0 ml-2 py-0" color="primary" />
+        </div>
+        <div class="display-inline-block" :class="{'grey--text':!isPublic}">
+          Public project
+        </div>
+      </div>
+    </div>
+    <div class="py-2 mb-4 text-end">
+      <v-btn
+        class="my-0 ml-2"
+        large
+        :loading="isMetaSaving"
+        :disabled="isSavingMetaDisabled || isMetaSaving"
+        color="primary"
+        @click="updateResearch()"
+      >
+        Update Research
+      </v-btn>
+    </div>
+    <v-divider />
+
+    <div class="my-6">
+      <div class="title font-weight-medium pb-4">
+        Video Presentation:
+      </div>
+      <v-text-field
+        v-model="videoSrc"
+        prepend-inner-icon="link"
+        label="Link to a video presentation"
+        single-line
+        solo
+        :rules="[rules.link]"
+      />
+    </div>
+
+    <v-divider />
+
+    <div class="my-6">
+      <div class="title font-weight-medium pb-4">
+        Technology Readiness Level
+      </div>
+      <technology-readiness-level
+        :current-trl-step="currentTrlStep"
+        @changeCurrentTrlStep="changeCurrentTrlStep"
+      />
+    </div>
+
+    <v-divider />
+
+    <div class="my-6">
+      <div class="title font-weight-medium pb-4">
+        Partners
+      </div>
+      <research-partners :partners="partners" />
+    </div>
+
+    <v-divider />
+
+    <div class="my-6">
+      <div class="title font-weight-medium pb-4">
+        Active Milestone:
+      </div>
+      <v-select
+        v-model="activeMilestone"
+        :items="milestones"
+        label="Milestone"
+        solo
+        item-text="goal"
+        return-object
+      />
+    </div>
+
+    <div v-if="milestones" class="py-6">
+      <div class="title font-weight-medium pb-4">
+        Roadmap:
+      </div>
+      <milestone-stepper :is-read-only="false" :steps="milestones" />
+    </div>
+
+    <div class="py-2 text-end">
+      <v-btn
+        class="my-0 ml-2"
+        large
+        :loading="isRefSaving"
+        :disabled="isSavingRefDisabled || isRefSaving"
+        color="primary"
+        @click="updateResearchMetadata()"
+      >
+        Update Info
+      </v-btn>
+    </div>
+
+    <div class="pb-4">
+      <div class="title font-weight-medium pb-4">
+        Background:
+      </div>
+      <v-row no-gutters>
+        <v-col cols="3">
+          <img
+            class="ma-0"
+            style="width: 150px; height: 150px"
+            :src="$options.filters.researchBackgroundSrc(research.external_id, 300, 300)"
+          >
+        </v-col>
+        <v-col cols="9">
+          <div v-if="backgroundDropzoneOptions">
+            <vue-dropzone
+              id="research-background-dropzone"
+              ref="researchBackground"
+              :options="backgroundDropzoneOptions"
+              @vdropzone-success="backgroundUploadSuccess"
+              @vdropzone-error="backgroundUploadError"
             />
-          </div>
-          <div>
-            <div class="title font-weight-medium pb-3">Description:</div>
-            <v-textarea
-              v-model="description"
-              :rules="[rules.required]"
-              name="Description"
-              label="Description"
-              solo
-              auto-grow
-            />
-          </div>
-          <div class="mb-3">
-            <div class="title font-weight-medium pb-3">Visibility</div>
-            <v-layout row shrink>
-              <v-flex shrink :class="{'grey--text':isPublic}">Private project</v-flex>
-              <v-flex shrink>
-                <v-switch class="my-0 ml-2 py-0" v-model="isPublic" color="primary" />
-              </v-flex>
-              <v-flex shrink :class="{'grey--text':!isPublic}">Public project</v-flex>
-            </v-layout>
-          </div>
-          <div class="py-2 mb-3">
-            <v-layout justify-end>
+            <div class="text-right py-4">
               <v-btn
-                class="my-0 ml-2"
                 large
-                :loading="isMetaSaving"
-                :disabled="isSavingMetaDisabled || isMetaSaving"
+                :disabled="isUploadingBackground"
+                :loading="isUploadingBackground"
+                class="ma-0"
                 color="primary"
-                @click="saveMeta()"
+                @click="updateBackgroundImage()"
               >
-                Update Info
+                Update image
               </v-btn>
-            </v-layout>
+            </div>
           </div>
-          <v-divider />
+        </v-col>
+      </v-row>
+    </div>
 
-          <div class="my-4">
-            <div class="title font-weight-medium pb-3">Video Presentation:</div>
-            <v-text-field
-              v-model="videoSrc"
-              prepend-inner-icon="link"
-              label="Link to a video presentation"
-              single-line
-              solo
-              :rules="[rules.link]"
-            />
-          </div>
-
-          <v-divider />
-
-          <div class="my-4">
-            <div class="title font-weight-medium pb-3">Technology Readiness Level</div>
-            <technology-readiness-level
-              :currentTrlStep="currentTrlStep"
-              @changeCurrentTrlStep="changeCurrentTrlStep"
-            />
-          </div>
-
-          <v-divider />
-
-          <div class="my-4">
-            <div class="title font-weight-medium pb-3">Partners</div>
-            <research-partners :partners="partners" />
-          </div>
-
-          <v-divider />
-
-          <div class="my-4">
-            <div class="title font-weight-medium pb-3">Active Milestone:</div>
-            <v-select
-              v-model="activeMilestone"
-              :items="milestones"
-              label="Milestone"
-              solo
-              item-text="goal"
-              return-object
-            />
-          </div>
-
-          <div v-if="milestones" class="py-4">
-            <div class="title font-weight-medium pb-3">Roadmap:</div>
-            <milestone-stepper :is-read-only="false" :steps="milestones" />
-          </div>
-
-          <div class="py-2">
-            <v-layout justify-end>
-              <v-btn
-                class="my-0 ml-2"
-                large
-                :loading="isRefSaving"
-                :disabled="isSavingRefDisabled || isRefSaving"
-                color="primary"
-                @click="saveRef()"
-              >
-                Update Info
-              </v-btn>
-            </v-layout>
-          </div>
-
-          <div class="pb-3">
-            <div class="title font-weight-medium pb-3">Background:</div>
-            <v-layout>
-              <v-flex xs3>
-                <img
-                  class="ma-0"
-                  style="width: 150px; height: 150px"
-                  :src="$options.filters.researchBackgroundSrc(research.id, 300, 300)"
-                />
-              </v-flex>
-              <v-flex xs9>
-                <div v-if="backgroundDropzoneOptions">
-                  <vue-dropzone
-                    ref="researchBackground"
-                    id="research-background-dropzone"
-                    :options="backgroundDropzoneOptions"
-                    @vdropzone-success="backgroundUploadSuccess"
-                    @vdropzone-error="backgroundUploadError"
-                  />
-                  <div class="text-xs-right py-3">
-                    <v-btn
-                      large
-                      :disabled="isUploadingBackground"
-                      :loading="isUploadingBackground"
-                      class="ma-0"
-                      color="primary"
-                      @click="updateBackgroundImage()"
-                    >
-                      Update image
-                    </v-btn>
-                  </div>
-                </div>
-              </v-flex>
-            </v-layout>
-          </div>
-
-          <div class="pb-3">
-            <v-btn class="ma-0" color="primary" outline large @click="cancel()">Back to research</v-btn>
-          </div>
-        </v-layout>
-      </v-flex>
-    </v-layout>
-  </v-card>
+    <div class="pb-4">
+      <v-btn
+        class="ma-0"
+        color="primary"
+        outlined
+        large
+        @click="cancel()"
+      >
+        Back to research
+      </v-btn>
+    </div>
+  </content-block>
 </template>
 
 <script>
@@ -169,6 +189,7 @@
   import { AccessService } from '@deip/access-service';
   import { ResearchService } from '@deip/research-service';
   import { ResearchGroupService } from '@deip/research-group-service';
+  import ContentBlock from '@/components/layout/components/ContentBlock';
 
   const accessService = AccessService.getInstance();
   const researchService = ResearchService.getInstance();
@@ -178,6 +199,7 @@
     name: 'ResearchEditBody',
 
     components: {
+      ContentBlock,
       vueDropzone
     },
     data() {
@@ -194,10 +216,8 @@
         isMetaSaving: false,
         isUploadingBackground: false,
         rules: {
-          required: value => !!value || 'This field is required',
-          link: value => {
-            return !value || this.isValidLink || 'Invalid http(s) link';
-          }
+          required: (value) => !!value || 'This field is required',
+          link: (value) => !value || this.isValidLink || 'Invalid http(s) link'
         },
         shadowMetaData: undefined,
         shadowRefData: undefined
@@ -217,8 +237,8 @@
             url: `${window.env.DEIP_SERVER_URL}/api/research/background`,
             paramName: 'research-background',
             headers: {
-              'Research-Id': this.research.id.toString(),
-              Authorization: 'Bearer ' + accessService.getAccessToken()
+              'Research-External-Id': this.research.external_id,
+              Authorization: `Bearer ${accessService.getAccessToken()}`
             },
             timeout: 0,
             uploadMultiple: false,
@@ -227,7 +247,7 @@
             dictDefaultMessage:
               '<i class=\'v-icon material-icons\' style=\'font-size:40px\'>backup</i><p>Background image should be at least 1440 x 430 px in dimension (.png)</p>',
             addRemoveLinks: true,
-            acceptedFiles: [ 'image/png' ].join(',')
+            acceptedFiles: ['image/png'].join(',')
           }
           : null;
       },
@@ -241,18 +261,17 @@
       },
 
       refData() {
-        let milestones = this.milestones.map(m => {
-          return {
-            goal: m.goal,
-            budget: m.budget,
-            purpose: m.purpose,
-            details: m.details,
-            eta: moment(m.eta).toDate(),
-            isActive: this.activeMilestone
-              ? m.goal === this.activeMilestone.goal
-              : false
-          };
-        });
+        const milestones = this.milestones.map((m) => ({
+          goal: m.goal,
+          budget: m.budget,
+          purpose: m.purpose,
+          details: m.details,
+          eta: moment(m.eta)
+            .toDate(),
+          isActive: this.activeMilestone
+            ? m.goal === this.activeMilestone.goal
+            : false
+        }));
         return JSON.stringify({
           milestones,
           video_src: this.videoSrc,
@@ -263,9 +282,9 @@
 
       isSavingMetaDisabled() {
         return (
-          !this.title ||
-          !this.description ||
-          _.isEqual(this.shadowMetaData, this.metaData)
+          !this.title
+          || !this.description
+          || _.isEqual(this.shadowMetaData, this.metaData)
         );
       },
 
@@ -282,7 +301,7 @@
       },
 
       isValidLink() {
-        let regexp = /^(http:\/\/www\.|https:\/\/www\.|http:\/\/|https:\/\/)?[a-z0-9]+([\-\.]{1}[a-z0-9]+)*\.[a-z]{2,5}(:[0-9]{1,5})?(\/.*)?$/g;
+        const regexp = /^(http:\/\/www\.|https:\/\/www\.|http:\/\/|https:\/\/)?[a-z0-9]+([\-\.]{1}[a-z0-9]+)*\.[a-z]{2,5}(:[0-9]{1,5})?(\/.*)?$/g;
         return regexp.test(this.videoSrc || '');
       },
 
@@ -292,23 +311,63 @@
 
       researchGroup() {
         return this.userGroups.find(
-          item => item.id === this.research.research_group_id
+          (item) => item.id === this.research.research_group_id
         );
       }
     },
+
+    created() {
+      this.title = this.research.title;
+      this.description = this.research.abstract;
+      this.milestones = _.cloneDeep(this.researchRef.milestones);
+      this.videoSrc = this.researchRef.videoSrc;
+
+      this.activeMilestone = this.milestones.find((m) => m.isActive);
+      this.isPublic = !this.research.is_private;
+      this.currentTrlStep = this.researchRef.trl;
+      this.partners = this.researchRef.partners.map((item) => _.cloneDeep(item));
+
+      const milestones = this.milestones.map((m) => ({
+        goal: m.goal,
+        budget: m.budget,
+        purpose: m.purpose,
+        details: m.details,
+        eta: moment(m.eta)
+          .toDate(),
+        isActive: this.activeMilestone
+          ? m.goal == this.activeMilestone.goal
+          : false
+      }));
+
+      this.shadowMetaData = JSON.stringify({
+        title: this.title,
+        description: this.description,
+        is_private: !this.isPublic
+      });
+      this.shadowRefData = JSON.stringify({
+        milestones,
+        video_src: this.videoSrc,
+        currentTrlStep: this.currentTrlStep,
+        partners: this.partners
+      });
+    },
     methods: {
-      saveMeta() {
+      updateResearch() {
         this.isMetaSaving = true;
 
-        const promise = researchGroupService.createChangeResearchNameAndDescriptionProposal({
-          researchId: this.research.id,
-          researchGroupId: this.research.research_group_id,
-          newResearchTitle: this.title,
-          newResearchAbstract: this.description,
-          isPrivate: !this.isPublic
-        });
-
-        promise
+        const isProposal = !this.research.research_group.is_personal;
+        researchService.updateResearchViaOffchain(this.user.privKey, isProposal, {
+          researchGroup: this.research.research_group.external_id,
+          externalId: this.research.external_id,
+          title: this.title,
+          abstract: this.description,
+          permlink: undefined,
+          isPrivate: !this.isPublic,
+          reviewShare: undefined,
+          compensationShare: undefined,
+          members: undefined,
+          extensions: []
+        })
           .then(() => {
             this.$store.dispatch('layout/setSuccess', {
               message: 'Proposal has been sent successfully!'
@@ -318,7 +377,7 @@
                 name: 'ResearchDetails',
                 params: {
                   research_group_permlink: encodeURIComponent(
-                    this.research.group_permlink
+                    this.research.research_group.permlink
                   ),
                   research_permlink: encodeURIComponent(this.research.permlink)
                 }
@@ -328,14 +387,14 @@
                 name: 'ResearchGroupDetails',
                 params: {
                   research_group_permlink: encodeURIComponent(
-                    this.research.group_permlink
+                    this.research.research_group.permlink
                   )
                 },
                 hash: '#proposals'
               });
             }
           })
-          .catch(err => {
+          .catch((err) => {
             console.log(err);
 
             this.$store.dispatch('layout/setError', {
@@ -347,31 +406,30 @@
           });
       },
 
-      saveRef() {
+      updateResearchMetadata() {
         if (this.validateMilestones()) {
           this.isRefSaving = true;
 
-          let milestones = this.milestones.map(m => {
-            return {
-              goal: m.goal,
-              budget: m.budget,
-              purpose: m.purpose,
-              details: m.details,
-              eta: moment(m.eta).toDate(),
-              isActive: this.activeMilestone
-                ? m.goal === this.activeMilestone.goal
-                : false
+          const milestones = this.milestones.map((m) => ({
+            goal: m.goal,
+            budget: m.budget,
+            purpose: m.purpose,
+            details: m.details,
+            eta: moment(m.eta)
+              .toDate(),
+            isActive: this.activeMilestone
+              ? m.goal === this.activeMilestone.goal
+              : false
 
-            };
-          });
+          }));
 
-          researchService.updateResearch(
-            this.research.id,
-            milestones,
-            this.videoSrc,
-            this.partners,
-            this.currentTrlStep
-          )
+          researchService.updateResearchOffchainMeta({ 
+            researchExternalId: this.research.external_id, 
+            milestones: milestones, 
+            videoSrc: this.videoSrc, 
+            partners: this.partners, 
+            trl: this.currentTrlStep
+          })
             .then(() => {
               this.$store.dispatch('layout/setSuccess', {
                 message: 'Info has been change successfully!'
@@ -380,13 +438,13 @@
                 name: 'ResearchDetails',
                 params: {
                   research_group_permlink: encodeURIComponent(
-                    this.research.group_permlink
+                    this.research.research_group.permlink
                   ),
                   research_permlink: encodeURIComponent(this.research.permlink)
                 }
               });
             })
-            .catch(err => {
+            .catch((err) => {
               console.log(err);
 
               this.$store.dispatch('layout/setError', {
@@ -412,7 +470,7 @@
           name: 'ResearchDetails',
           params: {
             research_group_permlink: encodeURIComponent(
-              this.research.group_permlink
+              this.research.research_group.permlink
             ),
             research_permlink: encodeURIComponent(this.research.permlink)
           }
@@ -420,10 +478,10 @@
       },
 
       validateMilestones() {
-        let milestones = this.milestones;
+        const { milestones } = this;
         for (let index = 0; index < milestones.length; index++) {
-          let isValid = undefined;
-          let step = milestones[index];
+          let isValid;
+          const step = milestones[index];
 
           if (step.goal == '') {
             isValid = false;
@@ -468,7 +526,7 @@
 
           Vue.set(step.validation, 'isValid', isValid !== false);
         }
-        return milestones.every(step => step.validation.isValid);
+        return milestones.every((step) => step.validation.isValid);
       },
 
       backgroundUploadSuccess(file, response) {
@@ -493,43 +551,6 @@
       changeCurrentTrlStep(step) {
         this.currentTrlStep = step;
       }
-    },
-
-    created() {
-      this.title = this.research.title;
-      this.description = this.research.abstract;
-      this.milestones = _.cloneDeep(this.researchRef.milestones)
-      this.videoSrc = this.researchRef.videoSrc;
-
-      this.activeMilestone = this.milestones.find(m => m.isActive);
-      this.isPublic = !this.research.is_private;
-      this.currentTrlStep = this.researchRef.trl;
-      this.partners = this.researchRef.partners.map(item => _.cloneDeep(item));
-
-      let milestones = this.milestones.map(m => {
-        return {
-          goal: m.goal,
-          budget: m.budget,
-          purpose: m.purpose,
-          details: m.details,
-          eta: moment(m.eta).toDate(),
-          isActive: this.activeMilestone
-            ? m.goal == this.activeMilestone.goal
-            : false
-        };
-      });
-
-      this.shadowMetaData = JSON.stringify({
-        title: this.title,
-        description: this.description,
-        is_private: !this.isPublic
-      });
-      this.shadowRefData = JSON.stringify({
-        milestones,
-        video_src: this.videoSrc,
-        currentTrlStep: this.currentTrlStep,
-        partners: this.partners
-      });
     }
   };
 </script>
