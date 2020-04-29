@@ -18,12 +18,12 @@
         <v-card-text class="pl-6 pa-0">
           <v-row align="center" justify="space-between">
             <div>
-              <span>
+              <span class="mr-2">
                 <v-icon size="18px">date_range</v-icon>
                 <span>{{ draft.updated_at | dateFormat('D MMM YYYY HH:mm', true) }}</span>
               </span>
-              <span class="ml-2">
-                <v-icon size="18px">note_add</v-icon>
+              <span>
+                <v-icon size="18px">post_add</v-icon>
                 <span>{{ draft.type }}</span>
               </span>
             </div>
@@ -35,6 +35,7 @@
                 outlined
                 small
                 depressed
+                class="mx-2"
                 color="red lighten-1"
                 @click="deleteDraft(draft)"
               >
@@ -44,6 +45,7 @@
                 outlined
                 small
                 depressed
+                class="mx-2"
                 color="primary lighten-1"
                 @click="openDarDraft(draft)"
               >
@@ -84,7 +86,7 @@
     methods: {
       openDarDraft(draft) {
         if (draft.type === 'dar' && draft.status === 'in-progress') {
-          // we have to do it this way as Texture InMemory buffer is getting flushed after the first saving
+          // we have to reload the window as Texture InMemory buffer is getting flushed after the first saving
           // and doesn't persist new changes for several instances during the current session
           window.location.replace(
             `${window.location.href}/!draft?ref=${draft._id}`
@@ -116,7 +118,7 @@
           .deleteContentDraft(draft._id)
           .then(() => {
             this.$store.dispatch('rd/loadResearchContentRefs', {
-              researchId: draft.researchId
+              researchExternalId: draft.researchExternalId
             });
           })
           .finally(() => {

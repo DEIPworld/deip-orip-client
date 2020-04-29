@@ -336,10 +336,10 @@
   import vueDropzone from 'vue2-dropzone';
 
   import { AccessService } from '@deip/access-service';
-  import { UsersService } from '@deip/users-service';
+  import { UserService } from '@deip/user-service';
 
   const accessService = AccessService.getInstance();
-  const usersService = UsersService.getInstance();
+  const userService = UserService.getInstance();
 
   export default {
     name: 'UserDetailsBody',
@@ -469,7 +469,7 @@
           );
           Object.assign(update, this.userInfo.profile, { education: educationList });
         }
-        usersService.updateUserProfile(this.currentUser.username, update)
+        userService.updateUserProfile(this.currentUser.username, update)
           .then((res) => {
             this.$store.dispatch('userDetails/loadUserProfile', { username: this.currentUser.username });
             this.$store.dispatch('layout/setSuccess', {
@@ -494,7 +494,7 @@
 
         const update = { ...this.userInfo.profile, education: educationList };
 
-        usersService.updateUserProfile(this.currentUser.username, update)
+        userService.updateUserProfile(this.currentUser.username, update)
           .then((res) => {
             this.$store.dispatch('userDetails/loadUserProfile', { username: this.currentUser.username });
             this.$store.dispatch('layout/setSuccess', {
@@ -536,7 +536,7 @@
           );
           Object.assign(update, this.userInfo.profile, { employment: employmentList });
         }
-        usersService.updateUserProfile(this.currentUser.username, update)
+        userService.updateUserProfile(this.currentUser.username, update)
           .then((res) => {
             this.$store.dispatch('userDetails/loadUserProfile', { username: this.currentUser.username });
             this.$store.dispatch('layout/setSuccess', {
@@ -562,7 +562,7 @@
 
         const update = { ...this.userInfo.profile, employment: employmentList };
 
-        usersService.updateUserProfile(this.currentUser.username, update)
+        userService.updateUserProfile(this.currentUser.username, update)
           .then((res) => {
             this.$store.dispatch('userDetails/loadUserProfile', { username: this.currentUser.username });
             this.$store.dispatch('layout/setSuccess', {

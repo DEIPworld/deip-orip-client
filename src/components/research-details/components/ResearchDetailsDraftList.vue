@@ -1,7 +1,7 @@
 <template>
   <v-expansion-panels class="elevation-0">
     <research-details-draft-list-item
-      v-for="(draft, index) of contentRefsList.filter(d => !isDraftApproved(d))"
+      v-for="(draft, index) in draftsList"
       :key="draft._id"
       :index="index"
       :draft="draft"
@@ -20,14 +20,15 @@
       ...mapGetters({
         contentList: 'rd/contentList',
         contentRefsList: 'rd/contentRefsList'
-      })
+      }),
+      draftsList() {
+        return this.contentRefsList.filter(ref => {
+          return !this.contentList.some((c) => c.content === ref.hash);
+        })
+      }
     },
     methods: {
-      isDraftApproved(draft) {
-        return this.contentList.some(
-          (c) => c.content === `${draft.type}:${draft.hash}`
-        );
-      }
+
     }
   };
 </script>

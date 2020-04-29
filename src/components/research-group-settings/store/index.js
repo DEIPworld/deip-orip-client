@@ -26,50 +26,19 @@ const actions = {
   loadResearchGroup({ commit, dispatch, state }, { permlink }) {
     commit('SET_GROUP_DETAILS_LOADING_STATE', true);
 
-    return deipRpc.api.getResearchGroupByPermlinkAsync(permlink).then((data) => {
-      commit('SET_RESEARCH_GROUP', data);
-
-      const proposalsLoad = new Promise((resolve, reject) => {
-        dispatch('loadResearchGroupProposals', {
-          groupId: state.group.id,
-          notify: resolve
-        });
-      });
-
-      return Promise.all([proposalsLoad]);
-    })
-      .finally(() => {
-        commit('SET_GROUP_DETAILS_LOADING_STATE', false);
-      });
-  },
-
-  loadResearchGroupProposals({ commit }, { groupId, notify }) {
-    commit('SET_GROUP_PROPOSALS_LOADING_STATE', true);
-
-    deipRpc.api.getProposalsByResearchGroupIdAsync(groupId)
-      .then((data) => Promise.all(
-        data.map(
-          (item) => researchGroupService.extendProposalByRelatedInfo({
-            ...item,
-            ...{ data: JSON.parse(item.data) }
-          })
-        )
-      ))
+    return deipRpc.api.getResearchGroupByPermlinkAsync(permlink)
       .then((data) => {
-        commit('SET_PROPOSALS', data);
+        commit('SET_RESEARCH_GROUP', data);
+        return Promise.all([]);
       })
       .finally(() => {
-        commit('SET_GROUP_PROPOSALS_LOADING_STATE', false);
-        if (notify) notify();
+        commit('SET_GROUP_DETAILS_LOADING_STATE', false);
       });
   }
 };
 
 // mutations
 const mutations = {
-  SET_PROPOSALS(state, proposals) {
-    Vue.set(state, 'proposals', proposals);
-  },
 
   SET_RESEARCH_GROUP(state, group) {
     Vue.set(state, 'group', group);

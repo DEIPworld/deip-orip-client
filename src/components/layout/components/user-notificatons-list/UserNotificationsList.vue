@@ -28,7 +28,7 @@
         <v-list-item :key="'user-notification-' + i" class="nlfx">
           <v-list-item-content>
             <research-proposal-user-notification
-              v-if="(notification.type === PROPOSAL || notification.type === PROPOSAL_ACCEPTED) && notification.metadata.proposal.action === TYPES.START_RESEARCH"
+              v-if="(notification.type === PROPOSAL || notification.type === PROPOSAL_ACCEPTED) && notification.metadata.proposal.action === TYPES.CREATE_RESEARCH"
               :notification="notification"
               @markAsRead="markNotificationAsRead"
             />
@@ -38,7 +38,7 @@
               @markAsRead="markNotificationAsRead"
             />
             <token-sale-proposal-user-notification
-              v-else-if="(notification.type === PROPOSAL || notification.type === PROPOSAL_ACCEPTED) && notification.metadata.proposal.action === TYPES.START_RESEARCH_TOKEN_SALE"
+              v-else-if="(notification.type === PROPOSAL || notification.type === PROPOSAL_ACCEPTED) && notification.metadata.proposal.action === TYPES.CREATE_RESEARCH_TOKEN_SALE"
               :notification="notification"
               @markAsRead="markNotificationAsRead"
             />
@@ -49,6 +49,16 @@
             />
             <exclusion-proposal-user-notification
               v-else-if="(notification.type === PROPOSAL || notification.type === PROPOSAL_ACCEPTED)&& notification.metadata.proposal.action === TYPES.EXCLUDE_MEMBER"
+              :notification="notification"
+              @markAsRead="markNotificationAsRead"
+            />
+            <research-update-proposal-user-notification
+              v-else-if="(notification.type === PROPOSAL || notification.type === PROPOSAL_ACCEPTED)&& notification.metadata.proposal.action === TYPES.UPDATE_RESEARCH"
+              :notification="notification"
+              @markAsRead="markNotificationAsRead"
+            />
+            <research-group-update-proposal-user-notification
+              v-else-if="(notification.type === PROPOSAL || notification.type === PROPOSAL_ACCEPTED)&& notification.metadata.proposal.action === TYPES.UPDATE_RESEARCH_GROUP"
               :notification="notification"
               @markAsRead="markNotificationAsRead"
             />
@@ -85,7 +95,7 @@
           </v-list-item-content>
         </v-list-item>
         <v-divider
-          v-if="i + 1 < notifications.length"
+          v-if="i + 1 < notifications.length" :key="`${i}-notification-divider`"
         />
       </template>
     </v-list>

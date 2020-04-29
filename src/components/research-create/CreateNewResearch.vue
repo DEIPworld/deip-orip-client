@@ -150,9 +150,12 @@
   import { mapGetters } from 'vuex';
 
   import { ResearchGroupService } from '@deip/research-group-service';
+  import { ResearchService } from '@deip/research-service';
+  
   import * as disciplineTreeService from '../common/disciplines/DisciplineTreeService';
 
   const researchGroupService = ResearchGroupService.getInstance();
+  const researchService = ResearchService.getInstance();
 
   export default {
     name: 'CreateNewResearch',
@@ -251,34 +254,36 @@
       finish() {
         this.isLoading = true;
 
-        const groupPermlink = this.research.group.permlink;
-        const permlink = this.research.title
-          .replace(/ /g, '-')
-          .replace(/_/g, '-')
-          .toLowerCase();
-
-        researchGroupService.createResearchProposal({
-          groupId: this.research.group.id,
-          title: this.research.title,
-          description: this.research.description,
-          permlink,
-          reviewShare: 500, // this.research.review_share_in_percent * this.DEIP_1_PERCENT,
-          disciplines: this.research.disciplines.map((d) => d.id),
-          milestones: this.research.milestones.map((m, i) => ({
-            goal: m.goal,
-            budget: m.budget,
-            purpose: m.purpose,
-            details: m.details,
-            eta: moment(m.eta).toDate(),
-            isActive: i === 0
-          })),
-          videoSrc: this.research.videoSrc,
-          isPrivate: this.research.isPrivate,
-          trl: this.research.trlStep,
-          partners: this.research.partners
-        })
-          .then(
-            () => {
+        const isProposal = !this.research.group.is_personal;
+        researchService.createResearchViaOffchain(
+          this.user.privKey,
+          isProposal,
+          {
+            researchGroup: this.research.group.account.name,
+            title: this.research.title,
+            abstract: this.research.description,
+            permlink: this.research.title.replace(/ /g, '-').replace(/_/g, '-').toLowerCase(),
+            disciplines: this.research.disciplines.map((d) => d.id),
+            isPrivate: this.research.isPrivate,
+            members: undefined,
+            reviewShare: "20.00 %",
+            compensationShare: undefined,
+            extensions: []
+          },
+          { 
+            videoSrc: this.research.videoSrc,
+            milestones: this.research.milestones.map((m, i) => ({
+              goal: m.goal,
+              budget: m.budget,
+              purpose: m.purpose,
+              details: m.details,
+              eta: moment(m.eta).toDate(),
+              isActive: i === 0
+            })),
+            partners: this.research.partners,
+            trl: this.research.trlStep
+          })
+          .then((result) => {
               this.isLoading = false;
               this.$store.dispatch('layout/setSuccess', {
                 message: `Project "${this.research.title}" has been created successfully`
@@ -291,8 +296,7 @@
                 message:
                   'An error occurred while creating project, please try again later'
               });
-            }
-          )
+          })
           .finally(() => {
             setTimeout(() => {
               if (this.research.group.is_centralized || this.research.group.is_personal) {

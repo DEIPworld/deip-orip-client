@@ -110,7 +110,7 @@
         </div>
         <!-- <router-link tag="div" class="a full-width break-word font-weight-medium caption"
             :to="{ name: 'ResearchContentDetails', params: {
-                research_group_permlink: encodeURIComponent(reviewRequest.research.group_permlink),
+                research_group_permlink: encodeURIComponent(reviewRequest.research.research_group.permlink),
                 research_permlink: encodeURIComponent(reviewRequest.research.permlink),
                 content_permlink: encodeURIComponent(reviewRequest.content.permlink)
             }}"
@@ -124,7 +124,7 @@
             small
             class="ma-0 py-0 px-2"
             :to="{ name: 'ResearchContentDetails', params: {
-              research_group_permlink: encodeURIComponent(reviewRequest.research.group_permlink),
+              research_group_permlink: encodeURIComponent(reviewRequest.research.research_group.permlink),
               research_permlink: encodeURIComponent(reviewRequest.research.permlink),
               content_permlink: encodeURIComponent(reviewRequest.content.permlink)
             }}"

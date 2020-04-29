@@ -102,7 +102,7 @@
       createDarDraft() {
         this.isCreatingDraft = true;
         researchContentService
-          .createDarContent(this.research.id)
+          .createDarContent(this.research.external_id)
           .then((res) => {
             // we have to load page this way as Texture InMemoryBuffer is getting flushed after the first saving
             // and doesn't persist new changes for several instances during the current session
@@ -124,7 +124,7 @@
             researchId: this.research.id
           }),
           this.$store.dispatch('rd/loadResearchContentRefs', {
-            researchId: this.research.id
+            researchExternalId: this.research.external_id
           })
         ])
           .then(() => {

@@ -1,6 +1,6 @@
 <template>
   <div class="c-p-6 pos-relative">
-    <router-link :to="`/${encodeURIComponent(research.group_permlink)}/research/${encodeURIComponent(research.permlink)}`" class="a subtitle-1">
+    <router-link :to="`/${encodeURIComponent(research.research_group.permlink)}/research/${encodeURIComponent(research.permlink)}`" class="a subtitle-1">
       {{ research.title }}
     </router-link>
 

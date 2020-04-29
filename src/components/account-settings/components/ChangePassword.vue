@@ -60,9 +60,12 @@
   import deipRpc from '@deip/rpc-client';
   import { mapGetters } from 'vuex';
   import { AccessService } from '@deip/access-service';
+  import { UserService } from '@deip/user-service';
+
   import ContentBlock from '@/components/layout/components/ContentBlock';
 
   const accessService = AccessService.getInstance();
+  const userService = UserService.getInstance();
 
   export default {
     name: 'ChangePassword',
@@ -112,7 +115,7 @@
           && deipRpc.auth.wifToPublic(this.oldPassword) === this.currentUser.pubKey
         ) { // if old private key is entered
           oldPrivateKey = this.oldPassword;
-        } else { // if old password is intered or old password is in private key format
+        } else { // if old password is entered or old password is in private key format
           oldPrivateKey = deipRpc.auth.toWif(
             username,
             this.oldPassword,
@@ -135,21 +138,22 @@
           this.newPassword,
           ['owner']
         );
-        const owner = {
+        const ownerAuth = {
           weight_threshold: 1,
           account_auths: [],
           key_auths: [[newPublicKey, 1]]
         };
 
         this.isPasswordChanging = true;
-        return deipRpc.broadcast.accountUpdateAsync(
-          oldPrivateKey,
-          username,
-          owner,
-          owner,
-          owner,
-          newPublicKey,
-          this.currentUser.account.json_metadata
+        userService.updateUserAccountViaOffchain(oldPrivateKey, {
+            account: username,
+            accountOwnerAuth: ownerAuth,
+            accountActiveAuth: ownerAuth,
+            accountPostingAuth: ownerAuth,
+            accountMemoPubKey: undefined,
+            accountJsonMetadata: undefined,
+            accountExtensions: []
+          }
         ).then(() => {
           this.$store.dispatch('layout/setSuccess', {
             message: 'Master Password successfully changed!'
@@ -160,7 +164,7 @@
           return this.$store.dispatch('auth/loadUser');
         }).catch((err) => {
           this.$store.dispatch('layout/setError', {
-            message: 'Oops! Something went wrong'
+            message: 'Oops! Something went wrong. Please try again later'
           });
           console.error(err.message);
         }).finally(() => {

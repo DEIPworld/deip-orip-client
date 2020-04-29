@@ -4,14 +4,14 @@
     :to="{
       name: isLoggedIn() ? 'ResearchDetails' : 'ResearchDetailsPublic',
       params: {
-        research_group_permlink: encodeURIComponent(research.group_permlink),
+        research_group_permlink: encodeURIComponent(research.research_group.permlink),
         research_permlink: encodeURIComponent(research.permlink)
       }
     }"
   >
     <v-img
       height="150"
-      :src="$options.filters.researchBackgroundSrc(research.id, 430, 150)"
+      :src="$options.filters.researchBackgroundSrc(research.external_id, 430, 150)"
     />
 
     <!-- TODO: check    -->
@@ -50,6 +50,7 @@
       </div>
 
       <technology-readiness-level
+        v-if="research.researchRef && research.researchRef.trl"
         :current-trl-step="research.researchRef.trl"
         is-read-only
         is-chip

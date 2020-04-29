@@ -43,26 +43,20 @@
 
         proposalOrderMap: [
           [
-            { key: PROPOSAL_TYPES.START_RESEARCH, value: undefined },
+            { key: PROPOSAL_TYPES.CREATE_RESEARCH, value: undefined },
             { key: PROPOSAL_TYPES.CREATE_RESEARCH_MATERIAL, value: undefined },
-            { key: PROPOSAL_TYPES.CHANGE_RESEARCH_REVIEW_SHARE_PERCENT, value: undefined }
           ],
           [
             { key: PROPOSAL_TYPES.INVITE_MEMBER, value: undefined },
             { key: PROPOSAL_TYPES.EXCLUDE_MEMBER, value: undefined }
           ],
           [
-            { key: PROPOSAL_TYPES.START_RESEARCH_TOKEN_SALE, value: undefined },
-            { key: PROPOSAL_TYPES.OFFER_RESEARCH_TOKENS, value: undefined },
-            { key: PROPOSAL_TYPES.SEND_FUNDS, value: undefined }
+            { key: PROPOSAL_TYPES.CREATE_RESEARCH_TOKEN_SALE, value: undefined },
+            { key: PROPOSAL_TYPES.TRANSFER, value: undefined }
           ],
           [
-            { key: PROPOSAL_TYPES.CHANGE_QUORUM, value: undefined },
-            { key: PROPOSAL_TYPES.REBALANCE_RESEARCH_GROUP_TOKENS, value: undefined }
-          ],
-          [
-            { key: PROPOSAL_TYPES.CHANGE_RESEARCH_GROUP_META_DATA_TYPE, value: undefined },
-            { key: PROPOSAL_TYPES.CHANGE_RESEARCH_META_DATA_TYPE, value: undefined }
+            { key: PROPOSAL_TYPES.UPDATE_RESEARCH_GROUP, value: undefined },
+            { key: PROPOSAL_TYPES.UPDATE_RESEARCH, value: undefined }
           ]
         ]
       };
@@ -80,23 +74,21 @@
       }
     },
 
-    created() {
-      this.fillValues();
-    },
-
     methods: {
       fillValues() {
         this.proposalOrderMap.forEach((proposalsBlock) => {
           proposalsBlock.forEach((proposalData) => {
-            const intValue = this.convertToPercent(
-              this.group.proposal_quorums[proposalData.key - 1][1]
-            );
+            const intValue = this.convertToPercent(this.DEIP_100_PERCENT);
             proposalData.value = intValue.toString(); // input works with string values
           });
         });
       }
+    },
+
+    created() {
+      this.fillValues();
     }
-  };
+  }
 </script>
 
 <style lang="less">

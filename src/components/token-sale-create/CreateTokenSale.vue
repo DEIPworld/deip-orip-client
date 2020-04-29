@@ -72,8 +72,10 @@
   import { mapGetters } from 'vuex';
   import deipRpc from '@deip/rpc-client';
   import { ResearchGroupService } from '@deip/research-group-service';
+  import { ResearchService } from '@deip/research-service';
 
   const researchGroupService = ResearchGroupService.getInstance();
+  const researchService = ResearchService.getInstance();
 
   export default {
     name: 'CreateTokenSale',
@@ -106,7 +108,7 @@
         decodeURIComponent(this.$route.params.research_permlink)
       )
         .then((research) => {
-          this.group_permlink = this.$route.params.research_group_permlink;
+          this.group_permlink = research.research_group.permlink
           this.research = research;
         });
     },
@@ -123,24 +125,20 @@
       },
       finish() {
         this.isLoading = true;
-        // there is no way to pick time in date picker currently,
-        // but Token Sale status is set to inactive initially until its start_time
-        // const nowPlus2Minutes = new Date(Date.now() + (2 * 60 * 1000));
-
-        researchGroupService.createTokenSaleProposal({
-          groupId: this.research.research_group_id,
-          researchId: this.research.id,
-          startDate: this.tokenSaleInfo.startDate.toISOString()
-            .split('.')[0],
-          endDate: this.tokenSaleInfo.endDate.toISOString()
-            .split('.')[0],
-          amount: parseInt(this.tokenSaleInfo.amountToSell),
+        
+        const isProposal = !this.research.research_group.is_personal;
+        researchService.createResearchTokenSaleViaOffchain(this.user.privKey, isProposal, {
+          researchGroup: this.research.research_group.external_id,
+          researchExternalId: this.research.external_id,
+          startTime: this.tokenSaleInfo.startDate.toISOString().split('.')[0],
+          endTime: this.tokenSaleInfo.endDate.toISOString().split('.')[0],
+          share: `${(this.tokenSaleInfo.amountToSell / this.DEIP_100_PERCENT) * 100}.00 %`,
           softCap: this.toAssetUnits(this.tokenSaleInfo.softCap),
-          hardCap: this.toAssetUnits(this.tokenSaleInfo.hardCap)
+          hardCap: this.toAssetUnits(this.tokenSaleInfo.hardCap),
+          extensions: []
         })
           .then(() => {
             this.isLoading = false;
-
             this.$store.dispatch('layout/setSuccess', {
               message: 'Fundraise Proposal has been created successfully! Approve it to start the fundraise!'
             });
@@ -157,7 +155,7 @@
               this.$router.push({
                 name: 'ResearchDetails',
                 params: {
-                  group_permlink: this.research.group_permlink,
+                  group_permlink: this.research.research_group.permlink,
                   research_permlink: this.research.permlink
                 }
               });

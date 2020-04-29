@@ -91,7 +91,7 @@
     props: {
       showSelected: { type: Boolean, default: false },
       preselected: { type: Array, default: () => [] },
-      currentResearchId: { type: Number, required: true }
+      currentResearch: { type: Object, required: true }
     },
     data() {
       return {
@@ -109,7 +109,7 @@
     },
     methods: {
       addReference(ref) {
-        if (!this.selected.some((r) => r.id === ref.id)) {
+        if (!this.selected.some((r) => r.external_id === ref.external_id)) {
           this.selected.push(ref);
           this.term = '';
           this.searchable = [];
@@ -118,8 +118,8 @@
         }
       },
       removeReference(ref) {
-        if (this.selected.some((r) => r.id === ref.id)) {
-          this.selected = this.selected.filter((r) => r.id !== ref.id);
+        if (this.selected.some((r) => r.external_id === ref.external_id)) {
+          this.selected = this.selected.filter((r) => r.external_id !== ref.external_id);
           this.$emit('referenceRemoved', ref);
         }
       },
@@ -132,21 +132,21 @@
 
         function filter() {
           return this.references.filter((content) => content.title.toLowerCase().startsWith(term)
-            && content.research_id !== this.currentResearchId);
+            && content.research_id !== this.currentResearch.id);
         }
 
         this.searchable = filter.call(this, term);
       }, 600),
 
       isReferenceSelected(ref) {
-        return this.selected.some((r) => r.id === ref.id);
+        return this.selected.some((r) => r.external_id === ref.external_id);
       }
     },
     created() {
       searchService.getAllResearchContents()
         .then((contents) => {
           this.references.push(...contents);
-          this.selected = this.references.filter((r) => this.preselected.some((id) => r.id === id));
+          this.selected = this.references.filter((r) => this.preselected.some((id) => r.external_id === id));
         });
     }
   };

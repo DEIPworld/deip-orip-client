@@ -11,7 +11,7 @@
             :to="{
               name: 'ResearchDetails',
               params: {
-                research_group_permlink: encodeURIComponent(application.research.group_permlink),
+                research_group_permlink: encodeURIComponent(application.research.research_group.permlink),
                 research_permlink: encodeURIComponent(application.research.permlink)
               }
             }"
@@ -24,7 +24,7 @@
             :to="{
               name: 'ResearchApplicationDetails',
               params: {
-                research_group_permlink: encodeURIComponent(application.research.group_permlink),
+                research_group_permlink: encodeURIComponent(application.research.research_group.permlink),
                 research_permlink: encodeURIComponent(application.research.permlink),
                 application_id: application.id
               }
@@ -41,7 +41,7 @@
             class="a pr-2 caption"
             :to="{
               name: 'ResearchGroupDetails',
-              params: { research_group_permlink: encodeURIComponent(application.research.group_permlink) }
+              params: { research_group_permlink: encodeURIComponent(application.research.research_group.permlink) }
             }"
           >
             {{ application.group.name }}:

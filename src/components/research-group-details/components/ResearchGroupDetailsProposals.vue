@@ -5,7 +5,7 @@
     </div>
 
     <div class="display-flex pt-2 justify-space-between align-center">
-      <div class="display-flex align-center">
+      <!-- <div class="display-flex align-center">
         <span class="uppercase font-weight-medium">Show approved proposals</span>
 
         <v-switch
@@ -18,7 +18,7 @@
             value: !filter.areShownPastProposals
           })"
         />
-      </div>
+      </div> -->
 
       <v-menu offset-y>
         <template v-slot:activator="{ on }">
@@ -66,8 +66,11 @@
               <div class="created-by">
                 Created by
               </div>
+              <div class="status">
+                Status
+              </div>
               <div class="voted">
-                Voted
+                Signatures
               </div>
               <div class="action-col">
                 Action
@@ -106,15 +109,9 @@
     },
     computed: {
       ...mapGetters({
-        allProposals: 'researchGroup/proposals',
+        proposals: 'researchGroup/proposals',
         filter: 'researchGroup/proposalListFilter'
       }),
-      proposals() {
-        return _(this.allProposals)
-          .filter((proposal) => proposal.is_completed === this.filter.areShownPastProposals)
-          .orderBy([this.filter.sortBy], [this.filter.order])
-          .value();
-      }
     },
     methods: {
       ...mapActions({
@@ -148,6 +145,12 @@
   .voted {
     width: 90px;
     text-align: center;
+    flex-shrink: 0;
+  }
+
+  .status {
+    width: 70px;
+    text-align: left;
     flex-shrink: 0;
   }
 

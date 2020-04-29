@@ -13,7 +13,7 @@
         <v-card-text>
           <div v-for="(log, i) in researchGroupLogs" :key="`activity-log-${i}`" class="py-2">
             <research-proposal-activity-log-entry
-              v-if="(log.type === PROPOSAL || log.type === PROPOSAL_ACCEPTED) && log.metadata.proposal.action === TYPES.START_RESEARCH"
+              v-if="(log.type === PROPOSAL || log.type === PROPOSAL_ACCEPTED) && log.metadata.proposal.action === TYPES.CREATE_RESEARCH"
               :log="log"
             />
             <research-content-proposal-activity-log-entry
@@ -25,7 +25,7 @@
               :log="log"
             />
             <token-sale-proposal-activity-log-entry
-              v-else-if="(log.type === PROPOSAL || log.type === PROPOSAL_ACCEPTED) && log.metadata.proposal.action === TYPES.START_RESEARCH_TOKEN_SALE"
+              v-else-if="(log.type === PROPOSAL || log.type === PROPOSAL_ACCEPTED) && log.metadata.proposal.action === TYPES.CREATE_RESEARCH_TOKEN_SALE"
               :log="log"
             />
             <proposal-vote-activity-log-entry

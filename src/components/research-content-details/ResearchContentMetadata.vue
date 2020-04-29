@@ -61,7 +61,7 @@
               SHA256
             </div>
             <div class="legacy-col-grow pill-value">
-              {{ getContentHash(contentMetadata.content.content) }}
+              {{ contentMetadata.content.content }}
             </div>
           </div>
         </div>
@@ -244,9 +244,7 @@
     },
 
     methods: {
-      getContentHash(content) {
-        return content.indexOf('file:') == 0 ? content.slice(5) : content.indexOf('dar:') == 0 ? content.slice(4) : content;
-      }
+
     }
   };
 </script>

@@ -308,7 +308,6 @@ const actions = {
 
     return deipRpc.api.getResearchByAbsolutePermlinkAsync(group_permlink, research_permlink)
       .then((research) => {
-        research.group_permlink = group_permlink;
         research.isTop = researchService.getTopResearchesIds()
           .some((id) => id == research.id);
         commit('SET_RESEARCH_DETAILS', research);
@@ -327,7 +326,7 @@ const actions = {
         });
         const contentRefsLoad = new Promise((resolve, reject) => {
           dispatch('loadResearchContentRefs', {
-            researchId: state.research.id,
+            researchExternalId: state.research.external_id,
             notify: resolve
           });
         });
@@ -591,9 +590,9 @@ const actions = {
       });
   },
 
-  loadResearchContentRefs({ state, dispatch, commit }, { researchId, notify }) {
+  loadResearchContentRefs({ state, dispatch, commit }, { researchExternalId, notify }) {
     commit('SET_RESEARCH_CONTENT_REFS_LOADING_STATE', true);
-    return researchContentService.getContentRefs({ researchId })
+    return researchContentService.getContentRefs(researchExternalId)
       .then((refs) => {
         commit('SET_RESEARCH_CONTENT_REFS', refs);
       }, (err) => { console.log(err); })

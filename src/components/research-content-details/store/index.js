@@ -5,6 +5,8 @@ import Vue from 'vue';
 import { ResearchService } from '@deip/research-service';
 import { UsersService } from '@deip/users-service';
 import { ResearchContentService } from '@deip/research-content-service';
+import { ProposalsService } from '@deip/proposals-service';
+
 import { BlockchainService } from '@deip/blockchain-service';
 import { ExpertiseContributionsService } from '@deip/expertise-contributions-service';
 
@@ -15,6 +17,7 @@ const usersService = UsersService.getInstance();
 const researchContentService = ResearchContentService.getInstance();
 const blockchainService = BlockchainService.getInstance();
 const expertiseContributionsService = ExpertiseContributionsService.getInstance();
+const proposalsService = ProposalsService.getInstance();
 
 const state = {
   content: null,
@@ -64,6 +67,7 @@ const getters = {
   contentRef: (state, getters) => state.contentRef,
 
   isFilePackageContent(state, getters, rootState, rootGetters) {
+    debugger
     return state.contentRef && (state.contentRef.type === 'package' || state.contentRef.type === 'file' /* legacy */);
   },
 
@@ -252,11 +256,11 @@ const actions = {
     commit('RESET_STATE');
     return dispatch('loadResearchDetails', { group_permlink, research_permlink })
       .then(() => {
-        if (!content_permlink || content_permlink === '!draft') {
-          // this is draft
+        if (!content_permlink || content_permlink === '!draft') { // this is a draft that is not published yet
+          commit('SET_RESEARCH_CONTENT_DETAILS_LOADING_STATE', true);
           const contentRefLoad = new Promise((resolve, reject) => {
             dispatch('loadResearchContentRef', {
-              researchId: state.research.id,
+              researchExternalId: state.research.external_id,
               refId: ref,
               hash: null,
               notify: resolve
@@ -266,51 +270,54 @@ const actions = {
             dispatch('loadResearchGroupDetails', { group_permlink, notify: resolve });
           });
 
-          return Promise.all([contentRefLoad, researchGroupDetailsLoad]);
-        }
-        commit('SET_RESEARCH_CONTENT_DETAILS_LOADING_STATE', true);
+          return Promise.all([contentRefLoad, researchGroupDetailsLoad])
+            .finally(() => {
+              commit('SET_RESEARCH_CONTENT_DETAILS_LOADING_STATE', false);
+            });
 
-        return deipRpc.api.getResearchContentByAbsolutePermlinkAsync(group_permlink, research_permlink, content_permlink)
-          .then((contentObj) => {
-            commit('SET_RESEARCH_CONTENT_DETAILS', contentObj);
-            const { content } = contentObj;
-            const ref = content.indexOf('file:') == 0
-              ? content.slice(5) : content.indexOf('dar:') == 0
-                ? content.slice(4) : content.indexOf('package:') == 0
-                  ? content.slice(8) : content;
+        } else {
 
-            const contentRefLoad = new Promise((resolve, reject) => {
-              dispatch('loadResearchContentRef', {
-                researchId: state.research.id,
-                refId: null,
-                hash: ref,
-                notify: resolve
+          commit('SET_RESEARCH_CONTENT_DETAILS_LOADING_STATE', true);
+          return deipRpc.api.getResearchContentByAbsolutePermlinkAsync(group_permlink, research_permlink, content_permlink)
+            .then((contentObj) => {
+              commit('SET_RESEARCH_CONTENT_DETAILS', contentObj);
+              const { content: hash } = contentObj;
+
+              debugger
+
+              const contentRefLoad = new Promise((resolve, reject) => {
+                dispatch('loadResearchContentRef', {
+                  researchExternalId: state.research.external_id,
+                  refId: null,
+                  hash: hash,
+                  notify: resolve
+                });
               });
-            });
 
-            const contentReviewsLoad = new Promise((resolve, reject) => {
-              dispatch('loadContentReviews', { researchContentId: contentObj.id, notify: resolve });
-            });
+              const contentReviewsLoad = new Promise((resolve, reject) => {
+                dispatch('loadContentReviews', { researchContentId: contentObj.id, notify: resolve });
+              });
 
-            const contentVotesLoad = new Promise((resolve, reject) => {
-              dispatch('loadResearchContentVotes', { researchId: contentObj.research_id, notify: resolve });
-            });
+              const contentVotesLoad = new Promise((resolve, reject) => {
+                dispatch('loadResearchContentVotes', { researchId: contentObj.research_id, notify: resolve });
+              });
 
-            const researchGroupDetailsLoad = new Promise((resolve, reject) => {
-              dispatch('loadResearchGroupDetails', { group_permlink, notify: resolve });
-            });
+              const researchGroupDetailsLoad = new Promise((resolve, reject) => {
+                dispatch('loadResearchGroupDetails', { group_permlink, notify: resolve });
+              });
 
-            const referencesLoad = new Promise((resolve, reject) => {
-              dispatch('loadResearchContentReferences', { researchContentId: contentObj.id, notify: resolve });
-            });
+              const referencesLoad = new Promise((resolve, reject) => {
+                dispatch('loadResearchContentReferences', { researchContentId: contentObj.id, notify: resolve });
+              });
 
-            return Promise.all([contentRefLoad, contentReviewsLoad, contentVotesLoad, researchGroupDetailsLoad, referencesLoad]);
-          }, (err) => {
-            console.log(err);
-          })
-          .finally(() => {
-            commit('SET_RESEARCH_CONTENT_DETAILS_LOADING_STATE', false);
-          });
+              return Promise.all([contentRefLoad, contentReviewsLoad, contentVotesLoad, researchGroupDetailsLoad, referencesLoad]);
+            }, (err) => {
+              console.log(err);
+            })
+            .finally(() => {
+              commit('SET_RESEARCH_CONTENT_DETAILS_LOADING_STATE', false);
+            });
+        }
       });
   },
 
@@ -405,27 +412,28 @@ const actions = {
   },
 
   loadResearchContentRef({ state, commit, dispatch }, {
-    refId, researchId, hash, notify
+    refId, researchExternalId, hash, notify
   }) {
+
+    debugger
     const refPromies = refId != null
       ? researchContentService.getContentRefById(refId)
-      : researchContentService.getContentRefByHash(researchId, hash);
+      : researchContentService.getContentRefByHash(researchExternalId, hash);
+
     refPromies
       .then((contentRef) => {
+        debugger
         commit('SET_RESEARCH_CONTENT_REF', contentRef);
-        return deipRpc.api.getProposalsByResearchGroupIdAsync(contentRef.researchGroupId);
-      }, (err) => {
-        console.log(err);
+        return proposalsService.getProposalsByCreator(contentRef.researchGroupExternalId);
       })
       .then((proposals) => {
         const { contentRef } = state;
         const contentProposal = proposals.filter((p) => p.action === PROPOSAL_TYPES.CREATE_RESEARCH_MATERIAL).find((p) => {
-          const data = JSON.parse(p.data);
-          const proposalContent = data.content;
-          return proposalContent === `${contentRef.type}:${contentRef.hash}`;
+          return p.payload.content == contentRef.hash && p.payload.research_external_id == researchExternalId;
         });
         commit('SET_CONTENT_PROPOSAL', contentProposal || null);
       })
+      .catch((err) => { console.log(err); })
       .finally(() => {
         commit('SET_RESEARCH_DETAILS_LOADING_STATE', false);
         if (notify) notify();
