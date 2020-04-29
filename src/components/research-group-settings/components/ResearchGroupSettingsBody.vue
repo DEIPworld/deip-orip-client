@@ -292,7 +292,7 @@
           this.proposalOrderMap.forEach(proposalsBlock => {
             proposalsBlock.forEach(proposalData => {
               const intValue = this.convertToPercent(
-                this.group.proposal_quorums[proposalData.key - 1][1]
+                this.DEIP_100_PERCENT
               );
               proposalData.value = intValue.toString(); // input works with string values
             });

@@ -44,12 +44,12 @@
                 </div>
 
                 <div class="width-10 list-body-cell text-align-center">
-                  <div class="half-bold headline">{{ deipTokenBalance }}</div>
+                  <div class="half-bold headline">{{ defaultAssetBalance }}</div>
                 </div>
 
                 <div class="list-body-cell token-actions">
                   <v-btn class="ma-0"
-                         :disabled="!deipTokenBalance"
+                         :disabled="!defaultAssetBalance"
                          flat
                          color="primary"
                          @click="sendingType = sendingTypes.deipToken"
@@ -119,7 +119,7 @@
           <transition mode="out-in">
             <rg-deip-token-send-form
               v-if="sendingType === sendingTypes.deipToken"
-              :deip-token-balance="deipTokenBalance"
+              :deip-token-balance="defaultAssetBalance"
             ></rg-deip-token-send-form>
           </transition>
         </div>
@@ -131,9 +131,12 @@
 
 <script>
   import _ from 'lodash';
-  import deipRpc from '@deip/rpc-client';
   import { mapGetters } from 'vuex';
   import RGDeipTokenSendForm from './components/RGDeipTokenSendForm.vue';
+  import deipRpc from '@deip/rpc-client';
+  import { AppConfigService } from '@deip/app-config-service';
+
+  const appConfigService = AppConfigService.getInstance();
 
   export default {
     name: 'ResearchGroupWallet',
@@ -157,8 +160,11 @@
         group: 'rgWallet/group',
         researches: 'rgWallet/researches'
       }),
-      deipTokenBalance() {
-        return this.group ? this.fromAssetsToFloat(this.group.balance) : 0;
+
+      defaultAssetBalance() {
+        const env = appConfigService.get('env');
+        let amount = this.group.balances[env.ASSET_UNIT];
+        return amount;;
       }
     },
 

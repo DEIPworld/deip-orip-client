@@ -8,6 +8,7 @@ import { UserService } from '@deip/user-service';
 import { ResearchGroupService } from '@deip/research-group-service';
 import { TenantService } from '@deip/tenant-service';
 import { AssetsService } from '@deip/assets-service';
+import { BlockchainService } from '@deip/blockchain-service';
 
 const accessService = AccessService.getInstance();
 const usersService = UsersService.getInstance();
@@ -15,6 +16,7 @@ const userService = UserService.getInstance();
 const researchGroupService = ResearchGroupService.getInstance();
 const tenantService = TenantService.getInstance();
 const assetsService = AssetsService.getInstance();
+const blockchainService = BlockchainService.getInstance();
 
 const state = {
   user: {
@@ -67,7 +69,12 @@ const getters = {
         rgtId: rgt.id,
         is_personal: group.is_personal,
         is_dao: group.is_dao,
-        is_centralized: group.is_centralized
+        is_centralized: group.is_centralized,
+        account: group.account,
+        balances: group.account.balances.reduce((acc, b) => {
+          acc[b.split(' ')[1]] = blockchainService.fromAssetsToFloat(b.split(' ')[0]);
+          return acc;
+        }, {})
       });
     }
     return groups;

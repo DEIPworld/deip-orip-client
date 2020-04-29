@@ -2,8 +2,10 @@ import _ from 'lodash';
 import deipRpc from '@deip/rpc-client';
 import Vue from 'vue';
 import { ExpertiseContributionsService } from '@deip/expertise-contributions-service';
+import { BlockchainService } from '@deip/blockchain-service';
 
 const expertiseContributionsService = ExpertiseContributionsService.getInstance();
+const blockchainService = BlockchainService.getInstance();
 
 const state = {
   group: null,
@@ -12,7 +14,18 @@ const state = {
 
 // getters
 const getters = {
-  group: state => state.group,
+  group: state => {
+    let researchGroup = state.group;
+    let balances = researchGroup.account.balances.reduce((acc, b) => {
+      acc[b.split(' ')[1]] = blockchainService.fromAssetsToFloat(b.split(' ')[0]);
+      return acc;
+    }, {});
+
+    return {
+      ...researchGroup,
+      balances
+    }
+  },
   researches: state => state.researches
 };
 

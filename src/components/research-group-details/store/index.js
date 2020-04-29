@@ -6,11 +6,13 @@ import { ResearchGroupService } from '@deip/research-group-service';
 import { UsersService } from '@deip/users-service';
 import { ResearchService } from '@deip/research-service';
 import { ExpertiseContributionsService } from '@deip/expertise-contributions-service';
+import { BlockchainService } from '@deip/blockchain-service';
 
 const researchGroupService = ResearchGroupService.getInstance();
 const usersService = UsersService.getInstance();
 const researchService = ResearchService.getInstance();
 const expertiseContributionsService = ExpertiseContributionsService.getInstance();
+const blockchainService = BlockchainService.getInstance();
 
 const state = {
   proposals: [],
@@ -44,7 +46,19 @@ const state = {
 // getters
 const getters = {
   proposals: state => state.proposals,
-  group: state => state.group,
+  group: state => {
+    let researchGroup = state.group;
+    let balances = researchGroup.account.balances.reduce((acc, b) => {
+      acc[b.split(' ')[1]] = blockchainService.fromAssetsToFloat(b.split(' ')[0]);
+      return acc;
+    }, {});
+    
+    return {
+      ...researchGroup,
+      balances
+    }
+  },
+
   groupShares: state => state.groupShares,
   members: state => state.members,
   invites: state => state.invites,

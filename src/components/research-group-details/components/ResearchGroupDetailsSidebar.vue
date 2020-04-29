@@ -75,11 +75,11 @@
                 </div>
 
                 <div class="c-pl-4 font-weight-medium">DEIP Tokens</div>
-                <div class="legacy-col-grow text-align-right">{{ deipTokenBalance }}</div>
+                <div class="legacy-col-grow text-align-right">{{ defaultAssetBalance }}</div>
             </div> -->
 
             <v-btn class="ma-0"
-              :disabled="!this.fromAssetsToFloat(group.balance)"
+              :disabled="!defaultAssetBalance"
               color="primary" block
               @click="$store.dispatch('researchGroup/changeOptions', { key: 'isTransferTokensDialogOpen', value: true })"
             >Transfer
@@ -117,6 +117,9 @@
   import { mapGetters } from 'vuex';
   import _ from 'lodash';
   import deipRpc from '@deip/rpc-client';
+  import { AppConfigService } from '@deip/app-config-service';
+
+  const appConfigService = AppConfigService.getInstance();
 
   export default {
     name: 'ResearchGroupDetailsSidebar',
@@ -141,8 +144,10 @@
         pendingJoinRequests: 'researchGroup/pendingJoinRequests'
       }),
 
-      deipTokenBalance() {
-        return this.fromAssetsToFloat(this.group.balance);
+      defaultAssetBalance() {
+        const env = appConfigService.get('env');
+        let amount = this.group.balances[env.ASSET_UNIT];
+        return amount;;
       },
 
       isResearchGroupMember() {

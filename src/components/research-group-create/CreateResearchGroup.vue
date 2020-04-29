@@ -164,36 +164,27 @@
             }
           });
 
-        const default_quorum = 50 * this.DEIP_1_PERCENT;
-        const action_quorums = Object.keys(this.group.quorum).map((action, i) => {
-          return [
-            i + 1,
-            default_quorum
-          ];
-        });
-
-        const details = [
-          [
-            "dao_voting_research_group_management_model_v1_0_0",
-            {
-              "version": "1.0.0",
-              "default_quorum": default_quorum,
-              "action_quorums": action_quorums
-            }
-          ]
-        ];
-
-        researchGroupService.createResearchGroup(
+        researchGroupService.createResearchGroupAccount(
+          this.user.privKey,
           {
-            name: this.group.name,
-            permlink: this.group.permlink,
-            description: this.group.description,
-            type: 1,
-            details: details,
-            isCreatedByOrganization: false,
-            invitees: invitees
+            fee: this.toAssetUnits(1),
+            accountCreator: this.user.username,
+            accountOwnerAuth: JSON.parse(JSON.stringify(this.user.account.owner)),
+            accountActiveAuth: JSON.parse(JSON.stringify(this.user.account.active)),
+            accountPostingAuth: JSON.parse(JSON.stringify(this.user.account.posting)),
+            accountMemoPubKey: this.user.account.memo_key,
+            accountJsonMetadata: this.user.account.json_metadata,
+            accountExtensions: []
+          },
+          {
+            researchGroupName: this.group.name,
+            researchGroupPermlink: this.group.permlink,
+            researchGroupDescription: this.group.description,
+            researchGroupInvitees: invitees,
+            researchGroupThresholdOverrides: []
           }
-        ).then((response) => {
+        )
+        .then((response) => {
           this.isLoading = false;
           this.$store.dispatch('auth/loadGroups'); // reload user groups
           this.$store.dispatch('layout/setSuccess', {
@@ -217,7 +208,7 @@
           this.$store.dispatch('layout/setError', {
             message: 'An error occurred while creating Research Group, please try again later'
           });
-          console.log(err)
+          console.log(err);
         });
       }
     },
