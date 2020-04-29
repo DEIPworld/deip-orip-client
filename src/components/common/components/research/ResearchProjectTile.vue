@@ -34,7 +34,7 @@
               <v-tooltip bottom>
                 <v-progress-linear slot="activator" class="progress-current my-0"
                                    :value="fundingProgressPercent"></v-progress-linear>
-                <span>Fundraising Progress</span>
+                <span>Funding</span>
               </v-tooltip>
             </v-flex>
             <!-- <v-flex shrink class="grey--text caption ml-2">Token Sale</v-flex> -->
@@ -55,7 +55,7 @@
           </v-layout> -->
         </v-layout>
         <v-layout v-else-if="hasInactiveTokenSale" row align-baseline justify-end>
-          <v-chip class="my-0 mx-0 px-0 caption" style="height: 1.4em" color="primary lighten-3">Fundraising starts in
+          <v-chip class="my-0 mx-0 px-0 caption" style="height: 1.4em" color="primary lighten-3">Funding starts in
             {{tokenSaleStartLeft}}
           </v-chip>
         </v-layout>

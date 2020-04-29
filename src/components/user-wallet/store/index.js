@@ -35,6 +35,13 @@ const getters = {
     })
   },
 
+
+  investmentsTotalAmount: (state, getters, rootState, rootGetters) => {
+    return getters.investments.reduce((acc, item) => {
+      return acc + item.myShare.amount;
+    }, 0)
+  },
+
   transfers: state => state.transfers,
 
   assetsInfo: state => state.assetsInfo

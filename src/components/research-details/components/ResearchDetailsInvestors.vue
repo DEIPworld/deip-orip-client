@@ -6,7 +6,7 @@
           <div class="pr-3">
             <v-icon large color="grey lighten-2">mdi-account-box</v-icon>
           </div>
-          <div class="rd-block-header align-self-center">Investors: {{investors.length}}</div>
+          <div class="rd-block-header align-self-center">Backers: {{investors.length}}</div>
         </v-layout>
       </v-flex>
       <v-flex shrink></v-flex>
@@ -17,17 +17,17 @@
         <div class="rd-investment-info">
           <span class="rd-investment-info__value">${{investmentsAmount}}</span>
           <br />
-          <span class="rd-investment-info__value-text">Total investments</span>
+          <span class="rd-investment-info__value-text">Total contribution</span>
         </div>
         <div class="rd-investment-info">
           <span class="rd-investment-info__value">${{averageInvestmentAmount}}</span>
           <br />
-          <span class="rd-investment-info__value-text">Average investment</span>
+          <span class="rd-investment-info__value-text">Average contribution</span>
         </div>
         <div class="rd-investment-info" v-if="!isResearchGroupMember">
           <span class="rd-investment-info__value">${{userInvestment}}</span>
           <br />
-          <span class="rd-investment-info__value-text">Your investment</span>
+          <span class="rd-investment-info__value-text">Your contribution</span>
         </div>
       </v-layout>
       <v-layout justify-start class="mt-2">

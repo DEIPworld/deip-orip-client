@@ -1,7 +1,7 @@
 <template>
     <div class="legacy-column full-height">
         <div class="c-mb-4 legacy-col-grow legacy-column">
-            <div class="step-title">Select min and max amounts</div>
+            <div class="step-title">Select min and max goals</div>
             <div class="legacy-col-grow overflow-y-auto">
 
                 <div class="c-mh-auto caps-max-width c-pt-4">

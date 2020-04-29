@@ -1,7 +1,7 @@
 <template>
     <div class="legacy-column full-height">
         <div class="c-mb-4 legacy-col-grow legacy-column">
-            <div class="step-title">Select start and end dates of research fundraise</div>
+            <div class="step-title">Select start and end dates</div>
 
             <div class="legacy-col-grow overflow-y-auto">
 
@@ -41,10 +41,17 @@
         </div>
 
         <div class="legacy-row legacy-justify-center align-center">
-            <v-btn flat small @click.native="prevStep()">
+            <!-- <v-btn flat small @click.native="prevStep()">
                 <v-icon dark class="pr-1">keyboard_arrow_left</v-icon> Back
-            </v-btn>
-            
+            </v-btn> -->
+            <v-btn small flat :to="{ 
+                name: 'ResearchDetails', 
+                params: { 
+                    group_permlink: encodeURIComponent(research.group_permlink),
+                    research_permlink: encodeURIComponent(research.permlink)
+                } 
+            }">Cancel</v-btn>
+
             <v-btn color="primary" 
                 @click.native="nextStep()" 
                 :disabled="!isFormValid"
@@ -60,6 +67,7 @@
         name: "TokenSalePeriod",
 
         props: {
+            research: { type: Object, required: true },
             tokenSaleInfo: { type: Object, required: true }
         },
 

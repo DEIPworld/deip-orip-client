@@ -40,9 +40,10 @@
           <div class="display-flex"
                v-else-if="proposal.action === proposalTypes.START_RESEARCH_TOKEN_SALE"
           >
-            <v-icon small color="primary" class="mr-2">attach_money</v-icon>
+            <!-- <v-icon small color="primary" class="mr-2">attach_money</v-icon> -->
             <div class="a">
-              {{ convertToPercent(proposal.data.amount_for_sale) }}% fundraise
+              Start funding
+              <!-- {{ convertToPercent(proposal.data.amount_for_sale) }} -->
             </div>
           </div>
 

@@ -10,7 +10,7 @@
     <v-flex xs8>
       <div class="align-baseline px-3">
         <span v-if="isAcceptedByQuorum">
-          Fundraising campaign for the "<router-link class="a"
+          Funding campaign for the "<router-link class="a"
             :to="{
               name: 'ResearchDetails',
               params: {

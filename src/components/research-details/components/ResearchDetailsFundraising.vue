@@ -8,7 +8,7 @@
               <div class="pr-3">
                 <v-icon large color="grey lighten-2">mdi-cash-usd-outline</v-icon>
               </div>
-              <div class="rd-block-header align-self-center">Fundraising</div>
+              <div class="rd-block-header align-self-center">Funding</div>
             </v-layout>
           </v-flex>
           <v-flex shrink></v-flex>
@@ -24,7 +24,7 @@
                 class="my-0 mx-2 caption"
                 style="height: 1.4em"
                 color="primary lighten-3"
-              >{{tokenSaleStartLeft}} left</v-chip>
+              >{{tokenSaleStartLeft}} to go</v-chip>
             </v-flex>
           </v-layout>
           <v-layout row wrap class="pt-3">
@@ -36,31 +36,31 @@
                 class="my-0 mx-2 caption"
                 style="height: 1.4em"
                 color="amber lighten-1"
-              >{{tokenSaleEndLeft}} left</v-chip>
+              >{{tokenSaleEndLeft}} to go</v-chip>
             </v-flex>
           </v-layout>
-          <v-layout row wrap class="pt-3">
+          <!-- <v-layout row wrap class="pt-3">
             <v-flex xs12 lg3 class="bold">Tokens On sale:</v-flex>
             <v-flex
               xs12
               lg9
               class="pl-2"
             >{{tokenSale.balance_tokens}} ({{convertToPercent(tokenSale.balance_tokens)}}%)</v-flex>
-          </v-layout>
-          <v-layout row wrap class="pt-3">
+          </v-layout> -->
+          <!-- <v-layout row wrap class="pt-3">
             <v-flex xs12 lg3 class="bold">Remaining Tokens:</v-flex>
             <v-flex
               xs12
               lg9
               class="pl-2"
             >{{research.owned_tokens}} ({{convertToPercent(research.owned_tokens)}}%)</v-flex>
-          </v-layout>
+          </v-layout> -->
           <v-layout row wrap class="pt-3">
-            <v-flex xs12 lg3 class="bold">Min:</v-flex>
+            <v-flex xs12 lg3 class="bold">Min goal:</v-flex>
             <v-flex xs12 lg9 class="pl-2">${{fromAssetsToFloat(tokenSale.soft_cap)}}</v-flex>
           </v-layout>
           <v-layout row wrap class="pt-3">
-            <v-flex xs12 lg3 class="bold">Max:</v-flex>
+            <v-flex xs12 lg3 class="bold">Max goal:</v-flex>
             <v-flex xs12 lg9 class="pl-2">${{fromAssetsToFloat(tokenSale.hard_cap)}}</v-flex>
           </v-layout>
         </div>
@@ -75,7 +75,7 @@
                   name: 'CreateTokenSale',
                   params: { research_group_permlink: research.group_permlink, research_permlink: research.permlink }
                 }"
-          >Start fundraise</v-btn>
+          >Start</v-btn>
         </div>
       </v-layout>
     </v-flex>
@@ -87,7 +87,7 @@
           class="rd-cap-chip"
           v-if="currentCap >= fromAssetsToFloat(tokenSale.soft_cap)"
         >Min goal reached!</div>
-        <div class="pl-4">Raised of ${{fromAssetsToFloat(tokenSale.hard_cap)}} Goal</div>
+        <div class="pl-4">Contribution of ${{fromAssetsToFloat(tokenSale.hard_cap)}} Goal</div>
       </v-layout>
       <v-layout align-center justify-end class="py-2">
         <v-flex shrink class="rd-cap-progress-bound mr-2">0</v-flex>
@@ -113,12 +113,12 @@
           <v-btn
             :loading="investmentDialog.isInvesting"
             :disabled="isContributionToTokenSaleDisabled"
-            @click="onContributeToTokenSaleClick()"
+            @click="openInvestmentDialog()"
             color="primary"
             block
-          >Invest</v-btn>
+          >Back it</v-btn>
         </v-layout>
-        <v-dialog v-model="investmentConfirmDialog.isShown" persistent max-width="800px">
+        <!-- <v-dialog v-model="investmentConfirmDialog.isShown" persistent max-width="800px">
           <v-card class="pa-4">
             <v-card-title>
               <v-layout align-center>
@@ -148,14 +148,14 @@
               </v-layout>
             </v-card-actions>
           </v-card>
-        </v-dialog>
+        </v-dialog> -->
 
         <v-dialog v-model="investmentDialog.isOpened" persistent max-width="800px">
           <v-card class="pa-4">
             <v-card-title class="">
               <v-layout align-center>
                 <v-flex subheading font-weight-bold grow>
-                  Invest
+                  Make a contribution
                 </v-flex>
                 <v-flex shrink right-top-angle>
                   <v-btn @click="closeInvestmentDialog()" icon class="pa-0 ma-0">
@@ -181,17 +181,28 @@
                       />
                     </div>
                     <div class="my-3">
-                      <v-checkbox
-                        label="I confirm that I am qualified investor"
+                      <v-layout row>
+                        <v-checkbox
+                          class="pa-0 ma-0 align-self-center"
+                          v-model="investmentDialog.termsConfirmed"
+                          hide-details
+                        ></v-checkbox>
+                        <span>I agree to the <a href="#">Terms of Use</a> and have read and understand the <a href="#">Privacy Policy</a></span>
+
+
+                      </v-layout>
+                      <!-- <v-checkbox
+                        label="I agree to the Terms of Use and have read and understand the Privacy Policy"
                         v-model="investmentDialog.termsConfirmed"
                         hide-details
-                      ></v-checkbox>
+                      ></v-checkbox> -->
+
                     </div>
                     <div class="my-3">
                       <v-btn @click="invest()" color="primary" block
                             :disabled="isInvestmentDisabled || investmentDialog.isInvesting"
                             :loading="investmentDialog.isInvesting">
-                        Invest
+                        Submit a payment
                       </v-btn>
                     </div>
                     <div class="mb-4">
@@ -227,10 +238,10 @@ export default {
   data() {
     return {
       // amountToContribute: "",
-      investmentConfirmDialog: {
-        isShown: false,
-        isConfirming: false
-      },
+      // investmentConfirmDialog: {
+      //   isShown: false,
+      //   isConfirming: false
+      // },
 
       investmentDialog: {
         cardData: {
@@ -393,8 +404,15 @@ export default {
 
   },
   methods: {
-    onContributeToTokenSaleClick() {
-      this.investmentConfirmDialog.isShown = true;
+    openInvestmentDialog() {
+      this.investmentDialog.isOpened = true;
+    },
+    closeInvestmentDialog() {
+      this.investmentDialog.isOpened = false;
+    },
+    invest() {
+      this.contributeToTokenSale();
+      this.closeInvestmentDialog();
     },
     contributeToTokenSale() {
       this.investmentDialog.isInvesting = true;
@@ -443,26 +461,17 @@ export default {
         });
     },
 
-    agreeSaft() {
-      this.investmentConfirmDialog.isShown = false;
-      this.investmentDialog.isOpened = true;
-      // setTimeout(() => {
-      //   this.investmentDialog.isOpened = true;
-      // }, 100);
-    },
+    // agreeSaft() {
+    //   this.investmentConfirmDialog.isShown = false;
+    //   this.investmentDialog.isOpened = true;
+    //   // setTimeout(() => {
+    //   //   this.investmentDialog.isOpened = true;
+    //   // }, 100);
+    // },
 
-    disagreeSaft() {
-      this.investmentConfirmDialog.isShown = false;
-    },
-
-    closeInvestmentDialog() {
-      this.investmentDialog.isOpened = false;
-    },
-
-    invest() {
-      this.contributeToTokenSale();
-      this.closeInvestmentDialog();
-    },
+    // disagreeSaft() {
+    //   this.investmentConfirmDialog.isShown = false;
+    // },
   }
 };
 </script>

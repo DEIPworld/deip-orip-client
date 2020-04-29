@@ -57,10 +57,40 @@
                 <!-- <v-icon class="balance-table__action" color="grey">more_vert</v-icon> -->
               </v-flex>
             </v-layout>
+
+            <v-layout class="balance-table__line" align-center>
+              <v-flex xs1>
+                <!-- <v-layout justify-center align-center v-if="assetsIcons[assetsInfo[balance.asset_id].string_symbol]">
+                  <img class="max-width-26" :src="assetsIcons[assetsInfo[balance.asset_id].string_symbol]" />
+                </v-layout> -->
+              </v-flex>
+              <v-flex xs5 class="bold subheading">TRIPLE Token</v-flex>
+              <v-flex xs5 class="bold subheading">
+                {{ investmentsTotalAmount | currency({symbol:'',fractionCount: 3}) }}
+              </v-flex>
+              <v-flex xs1 class="pl-3">
+                <v-menu bottom left offset-y>
+                  <template v-slot:activator="{ on }">
+                    <v-btn
+                      dark
+                      icon
+                      v-on="on"
+                    >
+                      <!-- <v-icon color="grey">more_vert</v-icon> -->
+                    </v-btn>
+                  </template>
+
+                  <v-list>
+
+                  </v-list>
+                </v-menu>
+              </v-flex>
+            </v-layout>
+
           </v-flex>
         </v-layout>
       </v-layout>
-      <v-layout column class="my-5" v-if="investments.length">
+      <!-- <v-layout column class="my-5" v-if="investments.length">
         <v-layout align-center>
           <v-flex xs1>
             <v-layout justify-end class="pr-3">
@@ -133,7 +163,7 @@
               <v-layout v-if="expandedInvestmentIdx === index" column class="portfolio__item-stats py-4">
                 <v-layout row>
                   <v-flex xs7>
-                    <!-- <div class="title">Share price</div>
+                    <div class="title">Share price</div>
                     <div class="mt-4">
                       <GChart
                         type="ComboChart"
@@ -141,7 +171,7 @@
                         :data="sharePriceChart.data"
                         :options="sharePriceChart.options"
                       />
-                    </div> -->
+                    </div>
                   <v-layout class="mt-4" justify-start>
                     <v-btn
                       color="primary"
@@ -164,7 +194,7 @@
                     </div>
                   </v-flex>
                 </v-layout>
-                <!-- <v-layout class="mt-4" justify-start>
+                <v-layout class="mt-4" justify-start>
                   <v-btn
                     color="primary"
                     outline
@@ -172,12 +202,12 @@
                     @click="openSendResearchTokensDialog()"
                   >Send research tokens
                   </v-btn>
-                </v-layout> -->
+                </v-layout>
               </v-layout>
             </div>
           </v-flex>
         </v-layout>
-      </v-layout>
+      </v-layout> -->
 
       <v-dialog v-model="depositDialog.isOpened" persistent max-width="800px">
         <v-card class="pa-4">
@@ -611,7 +641,8 @@
       ...mapGetters({
         user: 'auth/user',
         investments: 'userWallet/investments',
-        assetsInfo: 'userWallet/assetsInfo'
+        assetsInfo: 'userWallet/assetsInfo',
+        investmentsTotalAmount: 'userWallet/investmentsTotalAmount'
       }),
 
       isWithdrawDisabled() {

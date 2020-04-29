@@ -3,25 +3,25 @@
     <v-layout>
       <v-stepper v-model="currentStep" alt-labels class="legacy-column full-width full-height stepper-page">
         <v-stepper-header>
-          <v-stepper-step step="1" :complete="currentStep > 1">
+          <!-- <v-stepper-step step="1" :complete="currentStep > 1">
             <div class="uppercase">Amount</div>
           </v-stepper-step>
 
-          <v-divider></v-divider>
+          <v-divider></v-divider> -->
 
-          <v-stepper-step step="2" :complete="currentStep > 2">
+          <v-stepper-step step="1" :complete="currentStep > 1">
             <div class="uppercase white-space-nowrap">Start/End Date</div>
           </v-stepper-step>
 
           <v-divider></v-divider>
 
-          <v-stepper-step step="3" :complete="currentStep > 3">
-            <div class="uppercase">Min/Max Amount</div>
+          <v-stepper-step step="2" :complete="currentStep > 2">
+            <div class="uppercase">Min/Max Goals</div>
           </v-stepper-step>
         </v-stepper-header>
 
         <v-stepper-items class="legacy-col-grow">
-          <v-stepper-content step="1">
+          <!-- <v-stepper-content step="1">
             <div v-if="research" class="full-height">
               <token-sale-amount
                 @incStep="incStep"
@@ -36,18 +36,20 @@
                 color="primary"
               />
             </v-layout>
-          </v-stepper-content>
+          </v-stepper-content> -->
 
-          <v-stepper-content step="2">
+          <v-stepper-content step="1">
             <div class="full-height">
               <token-sale-period
-                @incStep="incStep" @decStep="decStep"
+                @incStep="incStep"
+                @decStep="decStep"
+                :research="research"
                 :token-sale-info="tokenSaleInfo"
               ></token-sale-period>
             </div>
           </v-stepper-content>
 
-          <v-stepper-content step="3">
+          <v-stepper-content step="2">
             <div v-if="research" class="full-height">
               <token-sale-caps
                 @finish="finish" @decStep="decStep"
@@ -81,12 +83,12 @@
     },
     data() {
       return {
-        research: null,
+        research: {},
         currentStep: 0,
         research_permlink: '',
         research_group_permlink: '',
         tokenSaleInfo: {
-          amountToSell: 1000,
+          amountToSell: 4000,
           startDate: undefined,
           endDate: undefined,
           softCap: '',
