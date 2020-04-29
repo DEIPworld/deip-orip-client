@@ -1,13 +1,12 @@
 // importing of all project components
 
-import Vue from 'vue'
+import Vue from 'vue';
 
 import './layout/index';
 import './common/index';
 import './user-details/index';
-import './research-feed/index'
+import './research-feed/index';
 import './research-create/index';
-import './research-details/index';
 import './research-edit/index';
 import './research-content-details/index';
 import './research-group-details/index';
@@ -28,7 +27,8 @@ import './agency-grant-program-award-create/index';
 import './agency-grant-program-award-details/index';
 
 import Gravatar from 'vue-gravatar';
-Vue.component('v-gravatar', Gravatar);
 
 import VueQrcode from '@xkeshi/vue-qrcode';
+
+Vue.component('v-gravatar', Gravatar);
 Vue.component(VueQrcode.name, VueQrcode);

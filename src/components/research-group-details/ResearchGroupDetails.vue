@@ -1,21 +1,26 @@
 <template>
   <base-page-layout>
-    <research-group-details-body slot="content"></research-group-details-body>
-    <research-group-details-sidebar slot="right-sidebar"></research-group-details-sidebar>
+    <template #sidebar>
+      <research-group-details-sidebar />
+    </template>
+
+    <research-group-details-body />
   </base-page-layout>
 </template>
 
 <script>
   import { mapGetters } from 'vuex';
+  import ResearchGroupDetailsSidebar from '@/components/research-group-details/components/ResearchGroupDetailsSidebar';
+  import ResearchGroupDetailsBody from '@/components/research-group-details/components/ResearchGroupDetailsBody';
 
   export default {
     name: 'ResearchGroupDetails',
-
-    computed: {},
+    components: { ResearchGroupDetailsBody, ResearchGroupDetailsSidebar },
 
     data() {
       return {};
     },
+    computed: {},
 
     created() {
     }

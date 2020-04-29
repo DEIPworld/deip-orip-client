@@ -1,469 +1,525 @@
 <template>
   <base-page-layout>
-    <v-card slot="content" class="full-height full-width pa-5">
-      <v-layout column>
-        <v-layout align-center>
-          <v-flex xs1>
-            <v-layout justify-end class="pr-3">
-              <v-icon large color="grey lighten-2">mdi-cash-usd-outline</v-icon>
-            </v-layout>
-          </v-flex>
-          <v-flex xs4 class="title bold">Balance</v-flex>
-        </v-layout>
-        <v-layout class="mt-4">
-          <v-flex xs8 offset-xs1 class="balance-table">
-            <v-layout class="balance-table__line balance-table__line--header">
-              <v-flex xs5 offset-xs1 class="grey--text">Asset</v-flex>
-              <v-flex xs5 class="grey--text">Amount</v-flex>
-              <v-flex xs1 class="grey--text">Actions</v-flex>
-            </v-layout>
-            <v-layout class="balance-table__line" align-center v-for="balance in user.balances"
-                      :key="`balance-${balance.id}`">
-              <v-flex xs1>
-                <v-layout justify-center align-center v-if="assetsIcons[assetsInfo[balance.asset_id].string_symbol]">
-                  <img class="max-width-26" :src="assetsIcons[assetsInfo[balance.asset_id].string_symbol]" />
-                </v-layout>
-              </v-flex>
-              <v-flex xs5 class="bold subheading">{{ assetsInfo[balance.asset_id].string_symbol }}</v-flex>
-              <v-flex xs5 class="bold subheading">{{getAvailableCurrencyAmount(balance.amount) |
-                currency({symbol:'',fractionCount:assetsInfo[balance.asset_id].precision}) }}
-              </v-flex>
-              <v-flex xs1 class="pl-3">
-                <v-menu bottom left offset-y>
-                  <template v-slot:activator="{ on }">
-                    <v-btn
-                      dark
-                      icon
-                      v-on="on"
-                    >
-                      <v-icon color="grey">more_vert</v-icon>
-                    </v-btn>
-                  </template>
+    <content-block
+      icon="mdi-cash-usd-outline"
+      title="Balance"
+    >
+      <v-data-table
+        :items="user.balances"
+        :headers="tableHeaders"
+        :hide-default-footer="true"
+      >
+        <template v-slot:item.icon="{ item }">
+          <img
+            v-if="assetsIcons[assetsInfo[item.asset_id].string_symbol]"
+            class="max-width-26"
+            :src="assetsIcons[assetsInfo[item.asset_id].string_symbol]"
+          >
+        </template>
 
-                  <v-list>
-                    <v-list-tile @click="openSendTokensDialog(balance)">
-                      <v-list-tile-title>Transfer</v-list-tile-title>
-                    </v-list-tile>
-                    <v-list-tile v-if="isDepositAvailable(balance.asset_id)"
-                                 @click="openDepositDialog(balance.asset_id)">
-                      <v-list-tile-title>Deposit</v-list-tile-title>
-                    </v-list-tile>
-                    <v-list-tile v-if="isWithdrawAvailable(balance.asset_id)"
-                                 @click="openWithdrawDialog(balance.asset_id)">
-                      <v-list-tile-title>Withdraw</v-list-tile-title>
-                    </v-list-tile>
-                  </v-list>
-                </v-menu>
-                <!-- <v-icon class="balance-table__action" color="grey">more_vert</v-icon> -->
-              </v-flex>
-            </v-layout>
-          </v-flex>
-        </v-layout>
-      </v-layout>
-      <v-layout column class="my-5" v-if="investments.length">
-        <v-layout align-center>
-          <v-flex xs1>
-            <v-layout justify-end class="pr-3">
-              <v-icon large color="grey lighten-2">mdi-account-box</v-icon>
-            </v-layout>
-          </v-flex>
-          <v-flex grow class="title bold">Portfolio</v-flex>
-        </v-layout>
-        <v-layout>
-          <v-flex xs10 offset-xs1 class="portfolio">
-            <div v-for="(investment, index) of investments" :key="'investment-' + index" class="my-4">
-              <v-layout column class="portfolio__item-header py-4">
-                <router-link
-                  class="a subheading ellipsis"
-                  :to="{
-                    name: 'ResearchDetails',
-                    params: {
-                      research_group_permlink: encodeURIComponent(investment.research.group_permlink),
-                      research_permlink: encodeURIComponent(investment.research.permlink)
-                    }
-                  }"
-                >{{investment.research.title}}
-                </router-link>
-                <v-layout row class="mt-2">
-                  <v-flex>
-                    <div class="body-2">{{investment.myShare.amount}}</div>
-                    <div class="mt-1 caption text-uppercase grey--text">Your number of tokens</div>
-                  </v-flex>
-                  <v-flex>
-                    <div class="body-2">{{mockTokenPrice(investment.research.id, 1) | currency }}</div>
-                    <div class="mt-1 caption text-uppercase grey--text">Price per token</div>
-                  </v-flex>
-                  <v-flex>
-                    <div class="body-2">{{convertToPercent(investment.myShare.amount)}}%</div>
-                    <div class="mt-1 caption text-uppercase grey--text">Your ownership share</div>
-                  </v-flex>
-                  <v-flex>
-                    <div class="body-2">{{mockTokenPrice(investment.research.id, investment.myShare.amount) |
-                      currency}}
-                    </div>
-                    <div class="mt-1 caption text-uppercase grey--text">Your ownership value</div>
-                  </v-flex>
-                  <v-flex>
-                    <div class="body-2">{{mockTokenPrice(investment.research.id, DEIP_100_PERCENT)| currency}}</div>
-                    <div class="mt-1 caption text-uppercase grey--text">Total value</div>
-                  </v-flex>
-                  <v-flex>
-                    <div class="body-2 green--text text-accent-4">
-                      +{{mockPriceChange(investment.research.id).toFixed(2)}}%
-                    </div>
-                    <div class="mt-1 caption text-uppercase grey--text">Price change</div>
-                  </v-flex>
-                  <v-flex>
-                    <div class="body-2">{{investment.shareHolders.length + 1}}</div>
-                    <div class="mt-1 caption text-uppercase grey--text"># of tokenholders</div>
-                  </v-flex>
-                  <v-flex>
-                    <v-btn flat color="primary" class="ma-0" @click="toggleInvestmentDetails(index)">
-                      {{expandedInvestmentIdx === index ? 'Less' : 'More'}}
-                      <v-icon
-                        small
-                        right
-                        color="primary"
-                      >{{`keyboard_arrow_${expandedInvestmentIdx === index ? 'up' : 'down'}`}}
-                      </v-icon>
-                    </v-btn>
-                  </v-flex>
-                </v-layout>
-              </v-layout>
-              <v-layout v-if="expandedInvestmentIdx === index" column class="portfolio__item-stats py-4">
-                <v-layout row>
-                  <v-flex xs7>
-                    <div class="title">Share price</div>
-                    <div class="mt-4">
-                      <GChart
-                        type="ComboChart"
-                        :settings="{ packages: ['corechart'] }"
-                        :data="sharePriceChart.data"
-                        :options="sharePriceChart.options"
-                      />
-                    </div>
-                  </v-flex>
-                  <v-flex xs5>
-                    <div class="title">Share holders</div>
-                    <div class="mt-4">
-                      <GChart
-                        type="PieChart"
-                        :settings="{ packages: ['corechart'] }"
-                        :data="shareHoldersChart.data"
-                        :options="shareHoldersChart.options"
-                      />
-                    </div>
-                  </v-flex>
-                </v-layout>
-                <v-layout class="mt-4" justify-start>
+        <template v-slot:item.amountAsset="{ item }">
+          {{ assetsInfo[item.asset_id].string_symbol }}
+        </template>
+
+        <template v-slot:item.amountValue="{ item }">
+          {{ getAvailableCurrencyAmount(item.amount) |
+            currency({symbol:'',fractionCount:assetsInfo[item.asset_id].precision}) }}
+        </template>
+
+        <template v-slot:item.actions="{ item }">
+          <v-menu bottom left offset-y>
+            <template v-slot:activator="{ on }">
+              <v-btn
+                dark
+                icon
+                v-on="on"
+              >
+                <v-icon color="grey">
+                  more_vert
+                </v-icon>
+              </v-btn>
+            </template>
+
+            <v-list nav dense>
+              <v-list-item @click="openSendTokensDialog(item)">
+                <v-list-item-title>Transfer</v-list-item-title>
+              </v-list-item>
+              <v-list-item
+                v-if="isDepositAvailable(item.asset_id)"
+                @click="openDepositDialog(item.asset_id)"
+              >
+                <v-list-item-title>Deposit</v-list-item-title>
+              </v-list-item>
+              <v-list-item
+                v-if="isWithdrawAvailable(item.asset_id)"
+                @click="openWithdrawDialog(item.asset_id)"
+              >
+                <v-list-item-title>Withdraw</v-list-item-title>
+              </v-list-item>
+            </v-list>
+          </v-menu>
+        </template>
+      </v-data-table>
+    </content-block>
+
+
+    <content-block
+      v-if="investments.length"
+      icon="mdi-account-box"
+      title="Portfolio"
+    >
+      <div v-for="(investment, index) of investments" :key="'investment-' + index" class="my-6">
+        <div class="display-1">
+          <router-link
+            class="a subtitle-1 text-truncate"
+            :to="{
+              name: 'ResearchDetails',
+              params: {
+                research_group_permlink: encodeURIComponent(investment.research.group_permlink),
+                research_permlink: encodeURIComponent(investment.research.permlink)
+              }
+            }"
+          >
+            {{ investment.research.title }}
+          </router-link>
+        </div>
+
+        <v-row class="mt-2">
+          <v-col>
+            <div class="body-2">
+              {{ investment.myShare.amount }}
+            </div>
+            <div class="mt-1 caption text-uppercase grey--text">
+              Your number of tokens
+            </div>
+          </v-col>
+          <v-col>
+            <div class="body-2">
+              {{ mockTokenPrice(investment.research.id, 1) | currency }}
+            </div>
+            <div class="mt-1 caption text-uppercase grey--text">
+              Price per token
+            </div>
+          </v-col>
+          <v-col>
+            <div class="body-2">
+              {{ convertToPercent(investment.myShare.amount) }}%
+            </div>
+            <div class="mt-1 caption text-uppercase grey--text">
+              Your ownership share
+            </div>
+          </v-col>
+          <v-col>
+            <div class="body-2">
+              {{ mockTokenPrice(investment.research.id, investment.myShare.amount) | currency }}
+            </div>
+            <div class="mt-1 caption text-uppercase grey--text">
+              Your ownership value
+            </div>
+          </v-col>
+          <v-col>
+            <div class="body-2">
+              {{ mockTokenPrice(investment.research.id, DEIP_100_PERCENT)| currency }}
+            </div>
+            <div class="mt-1 caption text-uppercase grey--text">
+              Total value
+            </div>
+          </v-col>
+          <v-col>
+            <div class="body-2 green--text text-accent-4">
+              +{{ mockPriceChange(investment.research.id).toFixed(2) }}%
+            </div>
+            <div class="mt-1 caption text-uppercase grey--text">
+              Price change
+            </div>
+          </v-col>
+          <v-col>
+            <div class="body-2">
+              {{ investment.shareHolders.length + 1 }}
+            </div>
+            <div class="mt-1 caption text-uppercase grey--text">
+              # of tokenholders
+            </div>
+          </v-col>
+          <v-col>
+            <v-btn
+              text
+              color="primary"
+              class="ma-0"
+              @click="toggleInvestmentDetails(index)"
+            >
+              {{ expandedInvestmentIdx === index ? 'Less' : 'More' }}
+              <v-icon
+                small
+                right
+                color="primary"
+              >
+                {{ `keyboard_arrow_${expandedInvestmentIdx === index ? 'up' : 'down'}` }}
+              </v-icon>
+            </v-btn>
+          </v-col>
+        </v-row>
+
+        <v-sheet v-if="expandedInvestmentIdx === index">
+          <v-row>
+            <v-col class="xs">
+              <div class="title">
+                Share price
+              </div>
+              <div class="mt-6">
+                <GChart
+                  type="ComboChart"
+                  :settings="{ packages: ['corechart'] }"
+                  :data="sharePriceChart.data"
+                  :options="sharePriceChart.options"
+                />
+              </div>
+            </v-col>
+            <v-col class="xs">
+              <div class="title">
+                Share holders
+              </div>
+              <div class="mt-6">
+                <GChart
+                  type="PieChart"
+                  :settings="{ packages: ['corechart'] }"
+                  :data="shareHoldersChart.data"
+                  :options="shareHoldersChart.options"
+                />
+              </div>
+            </v-col>
+          </v-row>
+
+          <v-btn
+            color="primary"
+            outlined
+            class="py-0 ma-0"
+            @click="openSendResearchTokensDialog()"
+          >
+            Send research tokens
+          </v-btn>
+        </v-sheet>
+      </div>
+    </content-block>
+
+    <v-dialog v-model="depositDialog.isOpened" persistent max-width="800px">
+      <v-card class="pa-6">
+        <v-card-title class="">
+          <div class="subtitle-1 font-weight-bold">
+            Deposit funds
+          </div>
+          <div class="right-top-angle">
+            <v-btn icon class="pa-0 ma-0" @click="closeDepositDialog()">
+              <v-icon color="black">
+                close
+              </v-icon>
+            </v-btn>
+          </div>
+        </v-card-title>
+        <v-card-text class="pa-0">
+          <v-row>
+            <v-col cols="6" class="pr-12" style="border-right: 2px solid #E0E0E0">
+              <v-credit-card v-if="depositDialog.isOpened" @change="creditInfoChanged" />
+            </v-col>
+            <v-col cols="6">
+              <div class="display-flex flex-column justify-end pl-12 pr-4 fill-height">
+                <div class="balance-form-input">
+                  <label class="balance-form-input__label">Amount</label>
+                  <input
+                    v-model="depositDialog.amount"
+                    class="balance-form-input__field"
+                    type="text"
+                    placehoder="Amount"
+                  >
+                </div>
+                <div class="my-4">
+                  <v-checkbox
+                    v-model="depositDialog.termsConfirmed"
+                    label="I confirm that I am qualified investor"
+                    hide-details
+                  />
+                </div>
+                <div class="my-4">
                   <v-btn
                     color="primary"
-                    outline
-                    class="py-0 ma-0"
-                    @click="openSendResearchTokensDialog()"
-                  >Send research tokens
+                    block
+                    :disabled="isDepositingDisabled || depositDialog.isDepositing"
+                    :loading="depositDialog.isDepositing"
+                    @click="deposit()"
+                  >
+                    Deposit funds
                   </v-btn>
-                </v-layout>
-              </v-layout>
-            </div>
-          </v-flex>
-        </v-layout>
-      </v-layout>
+                </div>
+                <div class="mb-6">
+                  <v-btn
+                    color="primary"
+                    class="pa-0"
+                    text
+                    block
+                    :disabled="depositDialog.isDepositing"
+                    @click="closeDepositDialog()"
+                  >
+                    Cancel
+                  </v-btn>
+                </div>
+              </div>
+            </v-col>
+          </v-row>
+        </v-card-text>
+      </v-card>
+    </v-dialog>
+    <v-dialog v-model="withdrawDialog.isOpened" persistent max-width="800px">
+      <v-card class="pa-6">
+        <v-card-title class="">
+          <div class="subtitle-1 font-weight-bold">
+            Withdraw funds
+          </div>
+          <div class="right-top-angle">
+            <v-btn icon class="pa-0 ma-0" @click="closeWithdrawDialog()">
+              <v-icon color="black">
+                close
+              </v-icon>
+            </v-btn>
+          </div>
+        </v-card-title>
+        <v-card-text class="pa-0">
+          <v-row>
+            <v-col cols="6" class="pr-12" style="border-right: 2px solid #E0E0E0">
+              <div class="balance-form-input mx-4 mt-2">
+                <label class="balance-form-input__label">Full name (Beneficiary)</label>
+                <input
+                  v-model="withdrawDialog.name"
+                  class="balance-form-input__field"
+                  type="text"
+                >
+              </div>
+              <div class="balance-form-input mx-4 mt-4">
+                <label class="balance-form-input__label">
+                  IBAN
+                  <v-tooltip right>
+                    <template v-slot:activator="{ on }">
+                      <v-icon small v-on="on">help</v-icon>
+                    </template>
 
-      <v-dialog v-model="depositDialog.isOpened" persistent max-width="800px">
-        <v-card class="pa-4">
-          <v-card-title class="">
-            <v-layout align-center>
-              <v-flex subheading font-weight-bold grow>
-                Deposit funds
-              </v-flex>
-              <v-flex shrink right-top-angle>
-                <v-btn @click="closeDepositDialog()" icon class="pa-0 ma-0">
-                  <v-icon color="black">close</v-icon>
-                </v-btn>
-              </v-flex>
-            </v-layout>
-          </v-card-title>
-          <v-card-text class="pa-0">
-            <v-layout row wrap>
-              <v-flex xs6 class="pr-5" style="border-right: 2px solid #E0E0E0">
-                <v-credit-card v-if="depositDialog.isOpened" @change="creditInfoChanged" />
-              </v-flex>
-              <v-flex xs6>
-                <v-layout justify-end column fill-height class="pl-5 pr-3">
-                  <div class="balance-form-input">
-                    <label class="balance-form-input__label">Amount</label>
-                    <input
-                      class="balance-form-input__field"
-                      type="text"
-                      placehoder="Amount"
-                      v-model="depositDialog.amount"
-                    />
-                  </div>
-                  <div class="my-3">
-                    <v-checkbox
-                      label="I confirm that I am qualified investor"
-                      v-model="depositDialog.termsConfirmed"
-                      hide-details
-                    ></v-checkbox>
-                  </div>
-                  <div class="my-3">
-                    <v-btn @click="deposit()" color="primary" block
-                           :disabled="isDepositingDisabled || depositDialog.isDepositing"
-                           :loading="depositDialog.isDepositing">Deposit funds
-                    </v-btn>
-                  </div>
-                  <div class="mb-4">
-                    <v-btn
-                      @click="closeDepositDialog()"
-                      color="primary"
-                      class="pa-0"
-                      flat block
-                      :disabled="depositDialog.isDepositing"
-                    >Cancel
-                    </v-btn>
-                  </div>
-                </v-layout>
-              </v-flex>
-            </v-layout>
-          </v-card-text>
-        </v-card>
-      </v-dialog>
+                    <span>International Bank Account Number. From 16 to 34 alphanumeric characters</span>
+                  </v-tooltip>
+                </label>
+                <input
+                  v-model="withdrawDialog.iban"
+                  class="balance-form-input__field"
+                  type="text"
+                  maxlength="34"
+                >
+              </div>
+              <div class="balance-form-input mx-4 mt-4">
+                <label class="balance-form-input__label">
+                  Reference number
+                  <v-tooltip right>
+                    <template v-slot:activator="{ on }">
+                      <v-icon small v-on="on">help</v-icon>
+                    </template>
 
-      <v-dialog v-model="withdrawDialog.isOpened" persistent max-width="800px">
-        <v-card class="pa-4">
-          <v-card-title class="">
-            <v-layout align-center>
-              <v-flex subheading font-weight-bold grow>
-                Withdraw funds
-              </v-flex>
-              <v-flex shrink right-top-angle>
-                <v-btn @click="closeWithdrawDialog()" icon class="pa-0 ma-0">
-                  <v-icon color="black">close</v-icon>
-                </v-btn>
-              </v-flex>
-            </v-layout>
-          </v-card-title>
-          <v-card-text class="pa-0">
-            <v-layout row wrap>
-              <v-flex xs6 class="pr-5" style="border-right: 2px solid #E0E0E0">
-                <div class="balance-form-input mx-3 mt-2">
-                  <label class="balance-form-input__label">Full name (Beneficiary)</label>
+                    <span>Most reference numbers will be found at the top of the application submission</span>
+                  </v-tooltip>
+                </label>
+                <input
+                  v-model="withdrawDialog.refNum"
+                  class="balance-form-input__field"
+                  type="text"
+                >
+              </div>
+              <div class="balance-form-input mx-4 mt-4">
+                <label class="balance-form-input__label">Message to Beneficiary</label>
+                <textarea
+                  v-model="withdrawDialog.messageText"
+                  class="balance-form-input__field"
+                  type="text"
+                  rows="9"
+                  style="resize: none"
+                />
+              </div>
+            </v-col>
+            <v-col cols="6" class="pl-4">
+              <div class="display-flex flex-column justify-end pl-12 pr-4 fill-height">
+                <div class="balance-form-input">
+                  <label class="balance-form-input__label">Amount</label>
                   <input
+                    v-model="withdrawDialog.amount"
                     class="balance-form-input__field"
                     type="text"
-                    v-model="withdrawDialog.name"
+                  >
+                </div>
+                <div class="my-4">
+                  <v-checkbox
+                    v-model="withdrawDialog.termsConfirmed"
+                    label="I confirm that I am qualified investor"
+                    hide-details
                   />
                 </div>
-                <div class="balance-form-input mx-3 mt-3">
-                  <label class="balance-form-input__label">
-                    IBAN
-                    <v-tooltip right>
-                      <v-icon slot="activator" small>help</v-icon>
-                      <span>International Bank Account Number. From 16 to 34 alphanumeric characters</span>
-                    </v-tooltip>
-                  </label>
-                  <input
-                    class="balance-form-input__field"
-                    type="text"
-                    v-model="withdrawDialog.iban"
-                    maxlength="34"
-                  />
+                <div class="my-4">
+                  <v-btn
+                    color="primary"
+                    block
+                    :disabled="isWithdrawDisabled || withdrawDialog.isWithdrawing"
+                    :loading="withdrawDialog.isWithdrawing"
+                    @click="withdraw()"
+                  >
+                    Withdraw funds
+                  </v-btn>
                 </div>
-                <div class="balance-form-input mx-3 mt-3">
-                  <label class="balance-form-input__label">
-                    Reference number
-                    <v-tooltip right>
-                      <v-icon slot="activator" small>help</v-icon>
-                      <span>Most reference numbers will be found at the top of the application submission</span>
-                    </v-tooltip>
-                  </label>
-                  <input
-                    class="balance-form-input__field"
-                    type="text"
-                    v-model="withdrawDialog.refNum"
-                  />
+                <div class="mb-6">
+                  <v-btn
+                    color="primary"
+                    class="pa-0"
+                    text
+                    block
+                    :disabled="withdrawDialog.isWithdrawing"
+                    @click="closeWithdrawDialog()"
+                  >
+                    Cancel
+                  </v-btn>
                 </div>
-                <div class="balance-form-input mx-3 mt-3">
-                  <label class="balance-form-input__label">Message to Beneficiary</label>
-                  <textarea
-                    class="balance-form-input__field"
-                    type="text"
-                    rows="9"
-                    style="resize: none"
-                    v-model="withdrawDialog.messageText"
-                  />
-                </div>
-              </v-flex>
-              <v-flex xs6 class="pl-3">
-                <v-layout justify-end column fill-height class="pl-5 pr-3">
-                  <div class="balance-form-input">
-                    <label class="balance-form-input__label">Amount</label>
-                    <input
-                      class="balance-form-input__field"
-                      type="text"
-                      v-model="withdrawDialog.amount"
-                    />
-                  </div>
-                  <div class="my-3">
-                    <v-checkbox
-                      label="I confirm that I am qualified investor"
-                      v-model="withdrawDialog.termsConfirmed"
-                      hide-details
-                    ></v-checkbox>
-                  </div>
-                  <div class="my-3">
-                    <v-btn @click="withdraw()" color="primary" block
-                           :disabled="isWithdrawDisabled || withdrawDialog.isWithdrawing"
-                           :loading="withdrawDialog.isWithdrawing">Withdraw funds
-                    </v-btn>
-                  </div>
-                  <div class="mb-4">
-                    <v-btn
-                      @click="closeWithdrawDialog()"
-                      color="primary"
-                      class="pa-0"
-                      flat block
-                      :disabled="withdrawDialog.isWithdrawing"
-                    >Cancel
-                    </v-btn>
-                  </div>
-                </v-layout>
-              </v-flex>
-            </v-layout>
-          </v-card-text>
-        </v-card>
-      </v-dialog>
+              </div>
+            </v-col>
+          </v-row>
+        </v-card-text>
+      </v-card>
+    </v-dialog>
+    <v-dialog v-model="sendResearchTokensDialog.isOpened" persistent max-width="600px">
+      <v-card class="pa-6">
+        <v-card-title>
+          <div class="title">
+            Send Research Tokens
+          </div>
+          <div class="right-top-angle">
+            <v-btn icon class="pa-0 ma-0" @click="closeSendResearchTokensDialog()">
+              <v-icon color="black">
+                close
+              </v-icon>
+            </v-btn>
+          </div>
+        </v-card-title>
 
-      <v-dialog v-model="sendResearchTokensDialog.isOpened" persistent max-width="600px">
-        <v-card class="pa-4">
-          <v-card-title>
-            <v-layout align-center>
-              <v-flex grow title>Send Research Tokens</v-flex>
-              <v-flex shrink right-top-angle>
-                <v-btn @click="closeSendResearchTokensDialog()" icon class="pa-0 ma-0">
-                  <v-icon color="black">close</v-icon>
-                </v-btn>
-              </v-flex>
-            </v-layout>
-          </v-card-title>
+        <v-card-text>
+          <v-form ref="sendResearchTokensForm" v-model="sendResearchTokensDialog.form.valid">
+            <v-text-field
+              :value="sendResearchTokensDialog.research.title"
+              label="Research"
+              disabled
+            />
+            <v-text-field
+              v-model="sendResearchTokensDialog.form.to"
+              label="To"
+              :rules="sendResearchTokensDialog.form.rules.username"
+              :disabled="sendResearchTokensDialog.isSending"
+            />
+            <v-text-field
+              v-model="sendResearchTokensDialog.form.amount"
+              label="Amount"
+              :rules="sendResearchTokensDialog.form.rules.amount"
+              :disabled="sendResearchTokensDialog.isSending"
+            />
+          </v-form>
+        </v-card-text>
 
-          <v-card-text>
-            <v-form v-model="sendResearchTokensDialog.form.valid" ref="sendResearchTokensForm">
-              <v-text-field
-                :value="sendResearchTokensDialog.research.title"
-                label="Research"
-                disabled
-              />
-              <v-text-field
-                label="To"
-                v-model="sendResearchTokensDialog.form.to"
-                :rules="sendResearchTokensDialog.form.rules.username"
+        <v-card-actions>
+          <v-row>
+            <v-col cols="12" class="py-2">
+              <v-btn
+                color="primary"
+                block
+                :disabled="!sendResearchTokensDialog.form.valid"
+                :loading="sendResearchTokensDialog.isSending"
+                @click="sendResearchTokens()"
+              >
+                Send
+              </v-btn>
+            </v-col>
+            <v-col cols="12" class="py-2">
+              <v-btn
+                color="primary"
+                block
+                text
                 :disabled="sendResearchTokensDialog.isSending"
-              />
-              <v-text-field
-                label="Amount"
-                v-model="sendResearchTokensDialog.form.amount"
-                :rules="sendResearchTokensDialog.form.rules.amount"
-                :disabled="sendResearchTokensDialog.isSending"
-              />
-            </v-form>
-          </v-card-text>
+                @click="closeSendResearchTokensDialog()"
+              >
+                Cancel
+              </v-btn>
+            </v-col>
+          </v-row>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
+    <v-dialog v-model="sendTokensDialog.isOpened" persistent max-width="600px">
+      <v-card class="pa-6">
+        <v-card-title>
+          <div class="title">
+            Transfer - {{ sendTokensDialog.currency.title }}
+          </div>
+          <div class="right-top-angle">
+            <v-btn icon class="pa-0 ma-0" @click="closeSendTokensDialog()">
+              <v-icon color="black">
+                close
+              </v-icon>
+            </v-btn>
+          </div>
+        </v-card-title>
 
-          <v-card-actions>
-            <v-layout row wrap>
-              <v-flex xs12 class="py-2">
-                <v-btn
-                  @click="sendResearchTokens()"
-                  color="primary"
-                  block
-                  :disabled="!sendResearchTokensDialog.form.valid"
-                  :loading="sendResearchTokensDialog.isSending"
-                >Send
-                </v-btn>
-              </v-flex>
-              <v-flex xs12 class="py-2">
-                <v-btn
-                  @click="closeSendResearchTokensDialog()"
-                  color="primary"
-                  block
-                  flat
-                  :disabled="sendResearchTokensDialog.isSending"
-                >Cancel
-                </v-btn>
-              </v-flex>
-            </v-layout>
-          </v-card-actions>
-        </v-card>
-      </v-dialog>
+        <v-card-text>
+          <v-form ref="sendTokensForm" v-model="sendTokensDialog.form.valid">
+            <v-text-field
+              v-model="sendTokensDialog.form.to"
+              label="To"
+              :rules="sendTokensDialog.form.rules.username"
+              :disabled="sendTokensDialog.isSending"
+            />
+            <v-text-field
+              v-model="sendTokensDialog.form.amount"
+              label="Amount"
+              :suffix="sendTokensDialog.currency.title"
+              :rules="sendTokensDialog.form.rules.amount"
+              :disabled="sendTokensDialog.isSending"
+            />
+            <v-textarea
+              v-model="sendTokensDialog.form.memo"
+              label="Memo - optional"
+              rows="3"
+              :counter="sendTokensDialog.maxMemo"
+              no-resize
+              :rules="sendTokensDialog.form.rules.memo"
+              :disabled="sendTokensDialog.isSending"
+            />
+          </v-form>
+        </v-card-text>
 
-      <v-dialog v-model="sendTokensDialog.isOpened" persistent max-width="600px">
-        <v-card class="pa-4">
-          <v-card-title>
-            <v-layout align-center>
-              <v-flex grow class="title">Transfer - {{sendTokensDialog.currency.title}}</v-flex>
-              <v-flex shrink right-top-angle>
-                <v-btn @click="closeSendTokensDialog()" icon class="pa-0 ma-0">
-                  <v-icon color="black">close</v-icon>
-                </v-btn>
-              </v-flex>
-            </v-layout>
-          </v-card-title>
-
-          <v-card-text>
-            <v-form v-model="sendTokensDialog.form.valid" ref="sendTokensForm">
-              <v-text-field
-                label="To"
-                v-model="sendTokensDialog.form.to"
-                :rules="sendTokensDialog.form.rules.username"
+        <v-card-actions>
+          <v-row>
+            <v-col cols="12" class="py-2">
+              <v-btn
+                color="primary"
+                block
+                :disabled="!sendTokensDialog.form.valid"
+                :loading="sendTokensDialog.isSending"
+                @click="sendTokens()"
+              >
+                Send
+              </v-btn>
+            </v-col>
+            <v-col cols="12" class="py-2">
+              <v-btn
+                color="primary"
+                block
+                text
                 :disabled="sendTokensDialog.isSending"
-              />
-              <v-text-field
-                label="Amount"
-                v-model="sendTokensDialog.form.amount"
-                :suffix="sendTokensDialog.currency.title"
-                :rules="sendTokensDialog.form.rules.amount"
-                :disabled="sendTokensDialog.isSending"
-              />
-              <v-textarea
-                label="Memo - optional"
-                rows="3"
-                :counter="sendTokensDialog.maxMemo"
-                no-resize
-                v-model="sendTokensDialog.form.memo"
-                :rules="sendTokensDialog.form.rules.memo"
-                :disabled="sendTokensDialog.isSending"
-              />
-            </v-form>
-          </v-card-text>
-
-          <v-card-actions>
-            <v-layout row wrap>
-              <v-flex xs12 class="py-2">
-                <v-btn
-                  @click="sendTokens()"
-                  color="primary"
-                  block
-                  :disabled="!sendTokensDialog.form.valid"
-                  :loading="sendTokensDialog.isSending"
-                >Send
-                </v-btn>
-              </v-flex>
-              <v-flex xs12 class="py-2">
-                <v-btn
-                  @click="closeSendTokensDialog()"
-                  color="primary"
-                  block
-                  flat
-                  :disabled="sendTokensDialog.isSending"
-                >Cancel
-                </v-btn>
-              </v-flex>
-            </v-layout>
-          </v-card-actions>
-        </v-card>
-      </v-dialog>
-    </v-card>
+                @click="closeSendTokensDialog()"
+              >
+                Cancel
+              </v-btn>
+            </v-col>
+          </v-row>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
   </base-page-layout>
 </template>
 
@@ -471,13 +527,14 @@
   import { mapActions, mapGetters } from 'vuex';
   import moment from 'moment';
   import deipRpc from '@deip/rpc-client';
-  import * as bankCardsStorage from './../../../utils/bankCard';
+  import ContentBlock from '@/components/layout/components/ContentBlock';
+  import * as bankCardsStorage from '../../../utils/bankCard';
 
   const fiatAssetBackedTokens = ['EUR', 'USD'];
 
   export default {
     name: 'UserWallet',
-
+    components: { ContentBlock },
     data() {
       const rules = {
         username: (value) => {
@@ -486,7 +543,7 @@
           }
 
           if (value === this.user.username) {
-            return `Username shouldn't be yours`;
+            return 'Username shouldn\'t be yours';
           }
 
           return true;
@@ -494,6 +551,27 @@
       };
 
       return {
+        tableHeaders: [
+          {
+            text: '',
+            value: 'icon',
+            width: 24
+          },
+          {
+            text: 'Asset',
+            value: 'amountAsset'
+          },
+          {
+            text: 'Amount',
+            value: 'amountValue'
+          },
+          {
+            text: '',
+            value: 'actions',
+            align: 'end'
+          }
+        ],
+
         dialog: false,
         expandedInvestmentIdx: -1,
 
@@ -540,7 +618,7 @@
                 (value) => {
                   const number = parseInt(value);
                   if (!number || number < 0) {
-                    return `Amount should be positive integer`;
+                    return 'Amount should be positive integer';
                   }
                   if (number > this.sendResearchTokensDialog.maxAmount) {
                     return 'Amount is greater than research token balance';
@@ -578,7 +656,7 @@
                 }
               ],
               memo: [
-                value => !value || !!value && value.length <= this.sendTokensDialog.maxMemo || 'String should be shorter'
+                (value) => !value || !!value && value.length <= this.sendTokensDialog.maxMemo || 'String should be shorter'
               ]
             }
           },
@@ -648,7 +726,7 @@
 
       shareHoldersChart() {
         if (this.expandedInvestmentIdx != -1) {
-          let investment = this.investments[this.expandedInvestmentIdx];
+          const investment = this.investments[this.expandedInvestmentIdx];
           return {
             data: [
               ['Share holders', ''],
@@ -682,10 +760,8 @@
         }
       },
       sharePriceChart() {
-
         if (this.expandedInvestmentIdx != -1) {
-
-          let investment = this.investments[this.expandedInvestmentIdx];
+          const investment = this.investments[this.expandedInvestmentIdx];
           return {
             data: [
               ['Date', 'Price', 'Average'],
@@ -784,16 +860,16 @@
         loadWallet: ('userWallet/loadWallet')
       }),
       isTransferAvailable(assetId) {
-        let symbol = this.assetsInfo[assetId].string_symbol;
-        return !fiatAssetBackedTokens.some(s => s == symbol);
+        const symbol = this.assetsInfo[assetId].string_symbol;
+        return !fiatAssetBackedTokens.some((s) => s == symbol);
       },
       isDepositAvailable(assetId) {
-        let symbol = this.assetsInfo[assetId].string_symbol;
-        return fiatAssetBackedTokens.some(s => s == symbol);
+        const symbol = this.assetsInfo[assetId].string_symbol;
+        return fiatAssetBackedTokens.some((s) => s == symbol);
       },
       isWithdrawAvailable(assetId) {
-        let symbol = this.assetsInfo[assetId].string_symbol;
-        return fiatAssetBackedTokens.some(s => s == symbol);
+        const symbol = this.assetsInfo[assetId].string_symbol;
+        return fiatAssetBackedTokens.some((s) => s == symbol);
       },
       toggleInvestmentDetails(index) {
         if (this.expandedInvestmentIdx === index) {
@@ -836,8 +912,10 @@
       },
 
       openSendResearchTokensDialog() {
-        this.$refs.sendResearchTokensForm.reset();
         this.sendResearchTokensDialog.isOpened = true;
+        setTimeout(() => {
+          this.$refs.sendResearchTokensForm.reset();
+        });
 
         const expandedInvestment = this.investments[this.expandedInvestmentIdx];
         this.sendResearchTokensDialog.research = {
@@ -856,7 +934,7 @@
 
       openSendTokensDialog(balance) {
         const currencyName = this.assetsInfo[balance.asset_id].string_symbol;
-        this.$refs.sendTokensForm.reset();
+        setTimeout(() => this.$refs.sendTokensForm.reset())
         this.sendTokensDialog.isOpened = true;
 
         this.sendTokensDialog.maxAmount = this.getAvailableCurrencyAmount(balance.amount);
@@ -914,13 +992,13 @@
           this.sendResearchTokensDialog.form.to,
           +this.sendResearchTokensDialog.form.amount
         )
-          .then(data => {
+          .then((data) => {
             this.$store.dispatch('layout/setSuccess', {
               message: 'Research tokens successfully sent'
             });
             this.closeSendResearchTokensDialog();
           })
-          .catch(err => {
+          .catch((err) => {
             this.$store.dispatch('layout/setError', {
               message: 'Transaction was failed'
             });

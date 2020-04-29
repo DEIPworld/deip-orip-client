@@ -1,21 +1,21 @@
 <template>
   <base-page-layout>
-    <research-group-settings-body slot="content"></research-group-settings-body>
+    <research-group-settings-body />
   </base-page-layout>
 </template>
 
 <script>
-export default {
-  name: "ResearchGroupSettings",
+  export default {
+    name: 'ResearchGroupSettings',
 
-  data() {
-    return {};
-  },
+    data() {
+      return {};
+    },
 
-  methods: {},
+    created() {},
 
-  created() {}
-};
+    methods: {}
+  };
 </script>
 
 <style lang="less" scoped>

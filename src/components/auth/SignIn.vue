@@ -1,10 +1,10 @@
 <template>
-  <v-container fluid fill-height class="pa-0 ma-0">
-    <v-layout row wrap>
-      <v-flex md6 lg6 xl6 hidden-sm-and-down>
-        <v-layout column wrap fill-height class="description">
+  <v-container fluid class="pa-0 ma-0 fill-height">
+    <v-row no-gutters class="fill-height">
+      <v-col cols="6" class="hidden-sm-and-down">
+        <div class="description fill-height">
           <div class="description__logo">
-            <img src="/assets/img/landing-logo.svg" />
+            <img src="/assets/img/landing-logo.svg">
           </div>
           <div class="description__info-text">
             Open Research and Innovation Platform
@@ -13,47 +13,59 @@
             Don't have an account?
             <router-link
               :to="{ name: 'SignUp' }"
-            >Sign Up</router-link>
+            >
+              Sign Up
+            </router-link>
           </div>
-          <v-layout class="description__info-list-item mt-5" align-center shrink>
-            <v-icon small color="white">mdi-message-reply-text</v-icon>
+          <div class="description__info-list-item mt-12" align-center shrink>
+            <v-icon small color="white">
+              mdi-message-reply-text
+            </v-icon>
             <span class="ml-2">Collaboration</span>
-          </v-layout>
-          <v-layout class="description__info-list-item mt-4" align-center shrink>
-            <v-icon small color="white" class="icon-upended">mdi-lightbulb-on</v-icon>
+          </div>
+          <div class="description__info-list-item mt-6" align-center shrink>
+            <v-icon small color="white" class="icon-upended">
+              mdi-lightbulb-on
+            </v-icon>
             <span class="ml-2">Project tokenization</span>
-          </v-layout>
-          <v-layout class="description__info-list-item mt-4" align-center shrink>
-            <v-icon small color="white">mdi-shield-check</v-icon>
+          </div>
+          <div class="description__info-list-item mt-6" align-center shrink>
+            <v-icon small color="white">
+              mdi-shield-check
+            </v-icon>
             <span class="ml-2">Licensing of intellectual property</span>
-          </v-layout>
-          <v-layout class="description__info-list-item mt-4" align-center shrink>
-            <v-icon small color="white">mdi-account-multiple-plus</v-icon>
+          </div>
+          <div class="description__info-list-item mt-6" align-center shrink>
+            <v-icon small color="white">
+              mdi-account-multiple-plus
+            </v-icon>
             <span class="ml-2">Crowd investing</span>
-          </v-layout>
-        </v-layout>
-      </v-flex>
-      <v-flex xs12 sm12 md6 lg6 xl6>
+          </div>
+        </div>
+      </v-col>
+      <v-col cols="12" md="6">
         <v-card class="full-height elevation-0" color="secondary">
-          <v-layout column wrap fill-height class="login">
-            <div class="login__title">Welcome back!</div>
+          <div class="login fill-height">
+            <div class="login__title">
+              Welcome back!
+            </div>
             <v-form
-              v-model="isFormValid"
               ref="form"
-              @submit.prevent
+              v-model="isFormValid"
               class="login__form full-width"
+              @submit.prevent
             >
               <v-text-field
+                v-model="username"
                 name="username"
                 label="Username"
-                v-model="username"
                 :disabled="isChecking"
                 :rules="[rules.required]"
               />
               <v-text-field
+                v-model="password"
                 name="password"
                 label="Password / Private Key"
-                v-model="password"
                 :rules="[rules.required]"
                 :append-icon="isHiddenPassword ? 'visibility_off' : 'visibility'"
                 :type="isHiddenPassword ? 'password' : 'text'"
@@ -68,18 +80,20 @@
                 :loading="isChecking"
                 :disabled="isChecking"
                 @click="login()"
-              >Log In</v-btn>
+              >
+                Log In
+              </v-btn>
             </v-form>
-          </v-layout>
+          </div>
         </v-card>
-      </v-flex>
-    </v-layout>
+      </v-col>
+    </v-row>
   </v-container>
 </template>
 
 <script>
   import deipRpc from '@deip/rpc-client';
-  import crypto from '@deip/lib-crypto'
+  import crypto from '@deip/lib-crypto';
 
   import { AccessService } from '@deip/access-service';
   import { AuthService } from '@deip/auth-service';
@@ -114,7 +128,11 @@
         rules: {
           required: (value) => !!value || 'This field is required'
         }
-      }
+      };
+    },
+
+    created() {
+      this.username = this.$route.query.username || '';
     },
 
     methods: {
@@ -146,7 +164,7 @@
             let secretKey;
             try {
               secretKey = crypto.PrivateKey.from(privateKey);
-            } catch(err) {
+            } catch (err) {
               accessService.clearAccessToken();
               this.isChecking = false;
               this.$store.dispatch('layout/setError', { message: 'Invalid private key format' });
@@ -159,7 +177,7 @@
             return authService.signIn({
               username: this.username,
               secretSigHex: crypto.hexify(secretSig)
-            })
+            });
           }).then((response) => {
             if (!response.success) {
               accessService.clearAccessToken();
@@ -173,7 +191,7 @@
             // TODO: We should make decision on how to store private keys at UI.
             // For now we can use local storage but it's not secure enough due to XSS attacks
             // and compromised thirdparty sources.
-            accessService.setAccessToken(response.jwtToken, privateKey)
+            accessService.setAccessToken(response.jwtToken, privateKey);
             this.isChecking = false;
             this.isServerValidated = true;
             this.$router.go('/');
@@ -183,12 +201,8 @@
             this.$store.dispatch('layout/setError', { message: err.message });
           });
       }
-    },
-
-    created() {
-      this.username = this.$route.query.username || '';
     }
-  }
+  };
 </script>
 
 <style lang="less" scoped>

@@ -1,48 +1,46 @@
 <template>
-  <v-container fluid fill-height pa-0 ma-0>
-    <v-card tile flat class="full-height full-width">
-      <v-layout row wrap class="pkd-page py-4">
-        <v-flex xs12 class="glass-container py-4">
-          <p class="pkd-page__header py-2">Download private key</p>
-        </v-flex>
-        <v-flex xs8 class="glass-container py-4">
-          <v-form
-            v-model="isConfirmPasswordFormValid"
-            ref="confirmPasswordForm"
-            @submit.prevent
-          >
-            <v-text-field
-              v-model="masterPassword"
-              :rules="[rules.required, rules.masterPassword]"
-              label="Password / Private Key"
-              solo
-              :append-icon="isHiddenPassword ? 'visibility_off' : 'visibility'"
-              :type="isHiddenPassword ? 'password' : 'text'"
-              @click:append="isHiddenPassword = !isHiddenPassword"
-            />
-            <v-btn
-              type="submit"
-              block
-              color="primary"
-              :disabled="!isConfirmPasswordFormValid"
-              @click="downloadPrivateKey()"
-            >Download Private Key (PDF)
-            </v-btn>
-          </v-form>
-        </v-flex>
-      </v-layout>
-    </v-card>
-  </v-container>
+  <base-page-layout>
+    <content-block
+      :max-width="800"
+      title="Download private key"
+    >
+      <v-form
+        ref="confirmPasswordForm"
+        v-model="isConfirmPasswordFormValid"
+        @submit.prevent
+      >
+        <v-text-field
+          v-model="masterPassword"
+          :rules="[rules.required, rules.masterPassword]"
+          label="Password / Private Key"
+          solo
+          :append-icon="isHiddenPassword ? 'visibility_off' : 'visibility'"
+          :type="isHiddenPassword ? 'password' : 'text'"
+          @click:append="isHiddenPassword = !isHiddenPassword"
+        />
+        <v-btn
+          type="submit"
+          block
+          color="primary"
+          :disabled="!isConfirmPasswordFormValid"
+          @click="downloadPrivateKey()"
+        >
+          Download Private Key (PDF)
+        </v-btn>
+      </v-form>
+    </content-block>
+  </base-page-layout>
 </template>
 
 <script>
   import deipRpc from '@deip/rpc-client';
   import { mapGetters } from 'vuex';
   import { saveKeysPdf } from '@/utils/saveKeysPdf';
+  import ContentBlock from '@/components/layout/components/ContentBlock';
 
   export default {
     name: 'PrivateKeyDownload',
-
+    components: { ContentBlock },
     data() {
       return {
         isConfirmPasswordFormValid: false,
@@ -50,31 +48,31 @@
         isHiddenPassword: true,
 
         rules: {
-          required: value => !!value || 'This field is required',
+          required: (value) => !!value || 'This field is required',
           masterPassword: (value) => {
             if (!value) return false;
 
             if (value.length < this.MASTER_PASSWORD_MIN_LENGTH) {
               return 'Master password is at least 10 symbols';
-            } else if (value.length > this.MASTER_PASSWORD_MAX_LENGTH) {
+            } if (value.length > this.MASTER_PASSWORD_MAX_LENGTH) {
               return 'Master password max length is 100 symbols';
             }
 
             return true;
-          },
-        },
+          }
+        }
       };
     },
 
     computed: {
       ...mapGetters({
-        currentUser: 'auth/user',
-      }),
+        currentUser: 'auth/user'
+      })
     },
 
     methods: {
       downloadPrivateKey() {
-        const username = this.currentUser.username;
+        const { username } = this.currentUser;
         let ownerPrivateKey;
         if (deipRpc.auth.isWif(this.masterPassword)) {
           ownerPrivateKey = this.masterPassword;
@@ -89,7 +87,7 @@
         const ownerPublicKey = deipRpc.auth.wifToPublic(ownerPrivateKey);
         if (this.currentUser.pubKey !== ownerPublicKey) {
           this.$store.dispatch('layout/setError', {
-            message: `Password is invalid`
+            message: 'Password is invalid'
           });
           return;
         }

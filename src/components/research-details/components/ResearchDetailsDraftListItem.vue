@@ -1,54 +1,62 @@
 <template>
-  <v-expansion-panel-content>
-    <template slot="header">
-      <v-layout align-center v-on:click.stop>
-        <v-flex xs2 class="text-capitalize bold">Draft {{index + 1}}</v-flex>
-        <v-flex xs10>
+<v-expansion-panel>
+  <v-expansion-panel-header>
+      <v-row align="center" @click.stop>
+        <v-col cols="2" class="text-capitalize bold">
+          Draft {{ index + 1 }}
+        </v-col>
+        <v-col cols="10">
           <span class="bold">
-            <a @click="openDarDraft(draft)" class="a">{{draft.title || draft._id}}</a>
+            <a class="a" @click="openDarDraft(draft)">{{ draft.title || draft._id }}</a>
           </span>
           <span v-if="isDraftProposed(draft)" class="ml-2 orange--text">(proposed)</span>
-        </v-flex>
-      </v-layout>
-    </template>
+        </v-col>
+      </v-row>
+  </v-expansion-panel-header>
+  <v-expansion-panel-content>
+
     <v-card class="elevation-0">
-      <v-card-text class="pl-4 pa-0">
-        <v-layout align-baseline justify-space-between>
+      <v-card-text class="pl-6 pa-0">
+        <v-row align="center" justify="space-between">
           <div>
             <span>
               <v-icon size="18px">date_range</v-icon>
-              <span>{{draft.updated_at | dateFormat('D MMM YYYY HH:mm', true)}}</span>
+              <span>{{ draft.updated_at | dateFormat('D MMM YYYY HH:mm', true) }}</span>
             </span>
             <span class="ml-2">
               <v-icon size="18px">note_add</v-icon>
-              <span>{{draft.type}}</span>
+              <span>{{ draft.type }}</span>
             </span>
           </div>
           <div>
             <v-btn
               v-if="isDraftInProgress(draft)"
-              @click="deleteDraft(draft)"
               :loading="isDeletingDraft"
               :disabled="isDeletingDraft"
-              outline
+              outlined
               small
               depressed
               color="red lighten-1"
-            >Delete
+              @click="deleteDraft(draft)"
+            >
+              Delete
             </v-btn>
             <v-btn
-              @click="openDarDraft(draft)"
-              outline
+              outlined
               small
               depressed
               color="primary lighten-1"
-            >View
+              @click="openDarDraft(draft)"
+            >
+              View
             </v-btn>
           </div>
-        </v-layout>
+        </v-row>
       </v-card-text>
     </v-card>
   </v-expansion-panel-content>
+
+  </v-expansion-panel>
 </template>
 
 <script>
@@ -88,7 +96,7 @@
           const params = {
             group_permlink: this.$route.params.research_group_permlink,
             research_permlink: this.$route.params.research_permlink,
-            content_permlink: `!draft`
+            content_permlink: '!draft'
           };
           const query = { ref: draft._id };
           this.$router.push({

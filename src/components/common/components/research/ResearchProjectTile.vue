@@ -1,95 +1,90 @@
 <template>
-  <v-layout row class="research-tile">
-    <v-layout column>
-      <router-link tag="div" class="research-title"
-                   :to="{
-        name: isLoggedIn() ? 'ResearchDetails' : 'ResearchDetailsPublic',
-        params: {
-          research_group_permlink: encodeURIComponent(research.group_permlink),
-          research_permlink: encodeURIComponent(research.permlink)
-        }
-      }"
-      >
-        <div style="position: relative">
-          <img class="ma-0" style="width: 100%; height: 150px"
-               :src="$options.filters.researchBackgroundSrc(research.id, 430, 150)" />
-          <div v-if="research.isTop" class="top-research-label">
-            <top-research-label class="pa-2"></top-research-label>
+  <v-card
+    outlined
+    :to="{
+      name: isLoggedIn() ? 'ResearchDetails' : 'ResearchDetailsPublic',
+      params: {
+        research_group_permlink: encodeURIComponent(research.group_permlink),
+        research_permlink: encodeURIComponent(research.permlink)
+      }
+    }"
+  >
+    <v-img
+      height="150"
+      :src="$options.filters.researchBackgroundSrc(research.id, 430, 150)"
+    />
+
+    <!-- TODO: check    -->
+    <div v-if="research.isTop" class="top-research-label">
+      <top-research-label class="pa-2" />
+    </div>
+
+    <v-sheet tile class="pa-6">
+      <v-tooltip bottom>
+        <template v-slot:activator="{ on }">
+          <div class="subtitle-1 text-truncate" v-on="on">
+            {{ research.title }}
           </div>
-        </div>
+        </template>
+        <span>{{ research.title }}</span>
+      </v-tooltip>
+
+      <div v-if="hasActiveTokenSale">
         <v-tooltip bottom>
-          <div slot="activator" class="subheading ellipsis half-bold py-1">{{ research.title }}</div>
-          <span>{{research.title}}</span>
+          <template v-slot:activator="{ on }">
+            <v-progress-linear
+              class="progress-current my-0"
+              :value="fundingProgressPercent"
+              v-on="on"
+            />
+          </template>
+          <span>Fundraising Progress</span>
         </v-tooltip>
-      </router-link>
+      </div>
 
-      <!-- <v-layout row wrap justify-start>
-        <platform-avatar v-for="(member, i) in membersToDisplay" :user="member" :size="15" :key="`member-${research.permlink}-`+ i" link-to-profile link-to-profile-class="px-2 grey--text lighten-2 research-tile-researcher"></platform-avatar>
-      </v-layout> -->
+      <div v-if="hasInactiveTokenSale">
+        <v-chip class="my-0 mx-0 px-0 caption" style="height: 1.4em" color="primary lighten-3">
+          Fundraising starts in
+          {{ tokenSaleStartLeft }}
+        </v-chip>
+      </div>
 
-      <v-layout row class="token-sale-section" v-if="hasActiveTokenSale || hasInactiveTokenSale">
-        <v-layout v-if="hasActiveTokenSale" column>
-          <v-layout row align-center>
-            <v-flex grow>
-              <v-tooltip bottom>
-                <v-progress-linear slot="activator" class="progress-current my-0"
-                                   :value="fundingProgressPercent"></v-progress-linear>
-                <span>Fundraising Progress</span>
-              </v-tooltip>
-            </v-flex>
-            <!-- <v-flex shrink class="grey--text caption ml-2">Token Sale</v-flex> -->
-          </v-layout>
-          <!-- <v-layout row>
-            <span class="pr-3">
-              <span class="black--text half-bold pr-1">{{fundingProgressPercent.toFixed(2)}}%</span>
-              <span class="grey--text lighten-2">funded</span>
-            </span>
-            <span class="px-3" style="border-left: 1px solid #e0e0e0;">
-              <span class="black--text half-bold pr-1">${{fundingGoalAmount}}</span>
-              <span class="grey--text lighten-2">goal</span>
-            </span>
-            <span class="pl-3" style="border-left: 1px solid #e0e0e0;">
-              <span class="black--text half-bold pr-1">{{tokenSaleEndLeft}}</span>
-              <span class="grey--text lighten-2">left</span>
-            </span>
-          </v-layout> -->
-        </v-layout>
-        <v-layout v-else-if="hasInactiveTokenSale" row align-baseline justify-end>
-          <v-chip class="my-0 mx-0 px-0 caption" style="height: 1.4em" color="primary lighten-3">Fundraising starts in
-            {{tokenSaleStartLeft}}
-          </v-chip>
-        </v-layout>
-      </v-layout>
-      <v-layout row wrap justify-space-between align-center>
-        <v-flex xs12 class="caption grey--text lighten-1">
-          <technology-readiness-level :currentTrlStep="research.researchRef.trl" isReadOnly
-                                      isChip></technology-readiness-level>
-        </v-flex>
-        <v-flex xs5 class="caption grey--text lighten-1">
-          <v-icon small>event</v-icon>
+      <technology-readiness-level
+        :current-trl-step="research.researchRef.trl"
+        is-read-only
+        is-chip
+      />
+
+      <v-row justify="space-between" class="mt-3 mb-n3">
+        <v-col cols="5" class="caption grey--text">
+          <v-icon small>
+            event
+          </v-icon>
           <span class="pl-1">Updated on</span>
-          <span class="pl-1 half-bold">{{moment(research.last_update_time).format('D MMM YYYY')}}</span>
-        </v-flex>
-        <v-flex xs2>
-          <v-icon small color="grey lighten-1">chat_bubble</v-icon>
+          <span class="pl-1 half-bold">{{ moment(research.last_update_time).format('D MMM YYYY') }}</span>
+        </v-col>
+        <v-col cols="2">
+          <v-icon small color="grey lighten-1">
+            chat_bubble
+          </v-icon>
           <span class="pl-1 caption half-bold grey--text lighten-1">{{ reviewsCount }}</span>
-        </v-flex>
-        <v-flex xs5>
-          <v-layout row align-center class="group-logo" v-if="!group.is_personal">
-            <v-avatar style="margin: 2px">
-              <img :src="$options.filters.researchGroupLogoSrc(group.id, 50, 50, true)">
-            </v-avatar>
-            <v-tooltip bottom class="group-logo__text">
-              <template v-slot:activator="{ on }">
-                <span v-on="on" class="mx-2 caption text-truncate">{{ group.name }}</span>
-              </template>
-              <span>{{group.name}}</span>
-            </v-tooltip>
-          </v-layout>
-        </v-flex>
-      </v-layout>
-    </v-layout>
-  </v-layout>
+        </v-col>
+        <v-col cols="5" class="text-right">
+          <v-tooltip bottom>
+            <template v-slot:activator="{ on }">
+              <v-chip small v-on="on">
+                <v-avatar left>
+                  <img :src="$options.filters.researchGroupLogoSrc(group.id, 50, 50, true)">
+                </v-avatar>
+                <span class="text-truncate">{{ group.name }}</span>
+              </v-chip>
+            </template>
+            <span>{{ group.name }}</span>
+          </v-tooltip>
+        </v-col>
+      </v-row>
+    </v-sheet>
+  </v-card>
 </template>
 
 <script>
@@ -119,10 +114,8 @@
       },
 
       fundingProgressPercent() {
-        let goal = this.fromAssetsToFloat(this.tokenSale.hard_cap);
-        let collected = this.tokenSaleContributions.reduce((acc, item) => {
-          return acc + this.fromAssetsToFloat(item.amount);
-        }, 0);
+        const goal = this.fromAssetsToFloat(this.tokenSale.hard_cap);
+        const collected = this.tokenSaleContributions.reduce((acc, item) => acc + this.fromAssetsToFloat(item.amount), 0);
         return (collected / goal) * 100;
       },
 
@@ -141,44 +134,44 @@
       tokenSaleEndLeft() {
         if (!this.tokenSale) return null;
 
-        let now = moment.utc().local();
-        let end = moment.utc(this.tokenSale.end_time).local();
+        const now = moment.utc().local();
+        const end = moment.utc(this.tokenSale.end_time).local();
 
-        let months = Math.floor(moment.duration(end.diff(now)).asMonths());
+        const months = Math.floor(moment.duration(end.diff(now)).asMonths());
         if (months > 1) return `${months} months`;
 
-        let days = Math.floor(moment.duration(end.diff(now)).asDays());
+        const days = Math.floor(moment.duration(end.diff(now)).asDays());
         if (days > 1) return `${days} days`;
 
-        let hours = Math.floor(moment.duration(end.diff(now)).asHours());
+        const hours = Math.floor(moment.duration(end.diff(now)).asHours());
         if (hours > 1) return `${hours} hours`;
 
-        let minutes = Math.floor(moment.duration(end.diff(now)).asMinutes());
+        const minutes = Math.floor(moment.duration(end.diff(now)).asMinutes());
         if (minutes > 1) return `${minutes} mins`;
 
-        let seconds = Math.floor(moment.duration(end.diff(now)).asSeconds());
+        const seconds = Math.floor(moment.duration(end.diff(now)).asSeconds());
         return `${seconds} secs`;
       },
 
       tokenSaleStartLeft() {
         if (!this.tokenSale) return null;
 
-        let now = moment.utc().local();
-        let start = moment.utc(this.tokenSale.start_time).local();
+        const now = moment.utc().local();
+        const start = moment.utc(this.tokenSale.start_time).local();
 
-        let months = Math.floor(moment.duration(start.diff(now)).asMonths());
+        const months = Math.floor(moment.duration(start.diff(now)).asMonths());
         if (months > 1) return `${months} months`;
 
-        let days = Math.floor(moment.duration(start.diff(now)).asDays());
+        const days = Math.floor(moment.duration(start.diff(now)).asDays());
         if (days > 1) return `${days} days`;
 
-        let hours = Math.floor(moment.duration(start.diff(now)).asHours());
+        const hours = Math.floor(moment.duration(start.diff(now)).asHours());
         if (hours > 1) return `${hours} hours`;
 
-        let minutes = Math.floor(moment.duration(start.diff(now)).asMinutes());
+        const minutes = Math.floor(moment.duration(start.diff(now)).asMinutes());
         if (minutes > 1) return `${minutes} mins`;
 
-        let seconds = Math.floor(moment.duration(start.diff(now)).asSeconds());
+        const seconds = Math.floor(moment.duration(start.diff(now)).asSeconds());
         return `${seconds} secs`;
       },
 
@@ -189,8 +182,8 @@
 
     },
     methods: {
-      isLoggedIn() { return accessService.isLoggedIn() }
-    },
+      isLoggedIn() { return accessService.isLoggedIn(); }
+    }
   };
 </script>
 

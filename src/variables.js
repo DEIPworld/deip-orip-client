@@ -15,7 +15,7 @@ const proposalTypesLabels = {
   [PROPOSAL_TYPES.OFFER_RESEARCH_TOKENS]: 'Offer research shares',
   [PROPOSAL_TYPES.CREATE_RESEARCH_MATERIAL]: 'Publish research project results',
   [PROPOSAL_TYPES.CHANGE_RESEARCH_GROUP_META_DATA_TYPE]: 'Change research group meta',
-  [PROPOSAL_TYPES.CHANGE_RESEARCH_META_DATA_TYPE]: 'Change research meta',
+  [PROPOSAL_TYPES.CHANGE_RESEARCH_META_DATA_TYPE]: 'Change research meta'
 };
 
 export {

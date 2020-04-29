@@ -1,4 +1,4 @@
-import * as jsPDF from 'jspdf-yworks'
+import * as jsPDF from 'jspdf-yworks';
 
 const renderText = (
   ctx,
@@ -9,7 +9,7 @@ const renderText = (
     color = '#00000',
     fontSize = 14,
     font = 'helvetica',
-    maxWidth = 0,
+    maxWidth = 0
   }
 ) => {
   const textLines = ctx.setFont(font)
@@ -54,14 +54,14 @@ const saveKeysPdf = (
     x: TITLE_MARGIN,
     y: offset,
     color: TITLE_COLOR,
-    maxWidth: TITLE_MAX_WIDTH,
+    maxWidth: TITLE_MAX_WIDTH
   });
 
   offset += renderText(doc, username, {
     x: TEXT_MARGIN,
     y: offset,
     color: TEXT_COLOR,
-    maxWidth: TEXT_MAX_WIDTH,
+    maxWidth: TEXT_MAX_WIDTH
   });
 
   offset += 20;
@@ -70,14 +70,14 @@ const saveKeysPdf = (
     x: TITLE_MARGIN,
     y: offset,
     color: TITLE_COLOR,
-    maxWidth: TITLE_MAX_WIDTH,
+    maxWidth: TITLE_MAX_WIDTH
   });
 
   offset += renderText(doc, ownerPrivateKey, {
     x: TEXT_MARGIN,
     y: offset,
     color: TEXT_COLOR,
-    maxWidth: TEXT_MAX_WIDTH,
+    maxWidth: TEXT_MAX_WIDTH
   });
 
   offset += 20;
@@ -86,14 +86,14 @@ const saveKeysPdf = (
     x: TITLE_MARGIN,
     y: offset,
     color: TITLE_COLOR,
-    maxWidth: TITLE_MAX_WIDTH,
+    maxWidth: TITLE_MAX_WIDTH
   });
 
   renderText(doc, ownerPublicKey, {
     x: TEXT_MARGIN,
     y: offset,
     color: TEXT_COLOR,
-    maxWidth: TEXT_MAX_WIDTH,
+    maxWidth: TEXT_MAX_WIDTH
   });
 
   doc.save(filename);
@@ -101,4 +101,4 @@ const saveKeysPdf = (
 
 export {
   saveKeysPdf
-}
+};

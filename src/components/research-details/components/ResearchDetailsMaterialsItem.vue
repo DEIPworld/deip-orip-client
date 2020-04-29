@@ -1,9 +1,16 @@
 <template>
-  <v-expansion-panel-content>
-    <template slot="header">
-      <v-layout row justify-space-between v-on:click.stop>
-        <v-flex xs2 class="text-capitalize bold">{{getResearchContentType(content.content_type).text}}</v-flex>
-        <v-flex xs8 class="bold">
+  <v-expansion-panel>
+    <v-expansion-panel-header>
+      <v-row
+        no-gutters
+        align="center"
+        justify="space-between"
+        @click.stop
+      >
+        <v-col cols="2" class="text-capitalize bold">
+          {{ getResearchContentType(content.content_type).text }}
+        </v-col>
+        <v-col cols="8" class="bold">
           <router-link
             v-if="isDetailsAvailable"
             class="a"
@@ -15,17 +22,20 @@
                 content_permlink: encodeURIComponent(content.permlink)
               }
             }"
-          >{{content.title}}
+          >
+            {{ content.title }}
           </router-link>
-          <span class="grey--text" v-else>{{content.title}}</span>
-        </v-flex>
-        <v-flex xs2 px-3>
-          <v-layout row justify-space-between>
+          <span v-else class="grey--text">{{ content.title }}</span>
+        </v-col>
+        <v-col cols="2">
+          <div class="d-flex">
             <div v-if="isDetailsAvailable">
               <v-tooltip top>
-                <template slot="activator">
-                  <router-link
+                <template v-slot:activator="{ on }">
+                  <v-btn
                     class="a"
+                    icon
+                    small
                     style="text-decoration: none;"
                     :to="{
                       name: 'ResearchContentReferences',
@@ -34,41 +44,54 @@
                         research_permlink: encodeURIComponent(research.permlink),
                         content_permlink: encodeURIComponent(content.permlink)
                       }
-                    }">
-                    <v-icon small>device_hub</v-icon>
-                  </router-link>
+                    }"
+                    v-on="on"
+                  >
+                    <v-icon small>
+                      device_hub
+                    </v-icon>
+                  </v-btn>
                 </template>
                 <span>Browse references</span>
               </v-tooltip>
             </div>
             <div v-if="hasReviews(content)">
-              <v-icon size="14px">chat_bubble</v-icon>
-              <span v-show="hasPositiveReviews(content)" class="green--text medium">{{countContentReviews(content, true)}}</span>
+              <v-icon size="14px">
+                chat_bubble
+              </v-icon>
+              <span v-show="hasPositiveReviews(content)" class="green--text medium">{{ countContentReviews(content, true) }}</span>
               <span v-show="hasPositiveReviews(content) && hasNegativeReviews(content)">/</span>
-              <span v-show="hasNegativeReviews(content)" class="red--text medium">{{countContentReviews(content, false)}}</span>
+              <span v-show="hasNegativeReviews(content)" class="red--text medium">{{ countContentReviews(content, false) }}</span>
             </div>
-          </v-layout>
-         </v-flex>
-      </v-layout>
-    </template>
-    <div class="ml-4 py-2">
-      <div class="grey--text">{{createContentAuthorsString(content.authors)}}</div>
-      <div>
-        <span
-          v-for="eci of getContentEciList(content)"
-          :key="eci.disciplineName"
-          class="grey--text"
-        >
-          <span class="mr-1">{{eci.disciplineName}}</span>
-          <span class="mr-4 bold">{{eci.value}}</span>
-        </span>
+          </div>
+        </v-col>
+      </v-row>
+    </v-expansion-panel-header>
+    <v-expansion-panel-content>
+      <div class="ml-6 py-2">
+        <div class="grey--text">
+          {{ createContentAuthorsString(content.authors) }}
+        </div>
+        <div>
+          <span
+            v-for="eci of getContentEciList(content)"
+            :key="eci.disciplineName"
+            class="grey--text"
+          >
+            <span class="mr-1">{{ eci.disciplineName }}</span>
+            <span class="mr-6 bold">{{ eci.value }}</span>
+          </span>
+        </div>
+        <div class="mt-2">
+          <v-icon size="18px">
+            event
+          </v-icon>
+          <span>{{ content.created_at | dateFormat('D MMM YYYY', true) }}</span>
+        </div>
       </div>
-      <div class="mt-2">
-        <v-icon size="18px">event</v-icon>
-        <span>{{content.created_at | dateFormat('D MMM YYYY', true)}}</span>
-      </div>
-    </div>
-  </v-expansion-panel-content>
+    </v-expansion-panel-content>
+    <v-divider />
+  </v-expansion-panel>
 </template>
 
 <script>
@@ -104,9 +127,9 @@
     },
     methods: {
       getContentEciList(content) {
-        return this.disciplinesList.map(discipline => {
+        return this.disciplinesList.map((discipline) => {
           const eciObj = content.eci_per_discipline.find(
-            item => item[0] === discipline.id
+            (item) => item[0] === discipline.id
           );
 
           return {
@@ -118,20 +141,19 @@
 
       createContentAuthorsString(authors) {
         return this.researchGroupMembersList
-          .filter(m => authors.some(a => a === m.account.name))
-          .map(m => this.$options.filters.fullname(m))
+          .filter((m) => authors.some((a) => a === m.account.name))
+          .map((m) => this.$options.filters.fullname(m))
           .join('  ·  ');
       },
       hasNegativeReviews(content) {
-        return content.reviews.some(r => !r.is_positive);
+        return content.reviews.some((r) => !r.is_positive);
       },
       countContentReviews(content, isPositive) {
         return content.reviews.reduce(
-          (acc, review) =>
-            (review.is_positive && isPositive) ||
-            (!review.is_positive && !isPositive)
-              ? acc + 1
-              : acc,
+          (acc, review) => ((review.is_positive && isPositive)
+            || (!review.is_positive && !isPositive)
+            ? acc + 1
+            : acc),
           0
         );
       },
@@ -139,7 +161,7 @@
         return content.reviews.length;
       },
       hasPositiveReviews(content) {
-        return content.reviews.some(r => r.is_positive);
+        return content.reviews.some((r) => r.is_positive);
       },
       getResearchContentType(type) {
         return researchService.getResearchContentType(type);

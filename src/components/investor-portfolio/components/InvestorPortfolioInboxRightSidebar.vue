@@ -1,200 +1,278 @@
 <template>
-  <v-card height="100%">
-    <v-layout v-if="selectedInvestment" row wrap style="flex: 0 0 auto;" class="py-4 full-width">
-
-      <v-layout column class="px-4 full-width">
-        <router-link class="subheading half-bold investment-title"
-          :to="{ name: 'ResearchDetails', params: {
-            research_group_permlink: encodeURIComponent(selectedInvestment.group.permlink),
-            research_permlink: encodeURIComponent(selectedInvestment.research.permlink)
-          }}">
-          {{ selectedInvestment.research.title }}
-        </router-link>
-      </v-layout>
-
-      <v-layout column class="py-2 full-width">
-        <v-divider></v-divider>
-        <v-layout row justify-space-between align-middle class="pa-2">
-          <span>
-            <v-icon small>event</v-icon>
-            <span class="caption grey--text px-1">Created {{moment(selectedInvestment.research.created_at).format("DD MMM YYYY")}} by {{selectedInvestment.research.owner | fullname}}</span>
-          </span>
-          <span>
-            <span @click="showUnderDevelopmentAlert()" class="icon-btn"><v-icon>attachment</v-icon></span>
-            <span @click="showUnderDevelopmentAlert()" class="icon-btn"><v-icon>compare</v-icon></span>
-            <span @click="showUnderDevelopmentAlert()" class="icon-btn"><v-icon>delete</v-icon></span>
-          </span>
-        </v-layout>
-        <v-divider></v-divider>
-      </v-layout>
-
-
-      <v-layout v-if="currentPhase" column class="px-4 py-2 full-width">
-        <div class="subheading half-bold">Current Phase</div>
-        <div class="body-2 py-1">{{currentPhase.goal}}</div>
-        <div class="py-2">
-          <v-chip class="ma-0 body-1" color="amber" text-color="white">Deadline on {{moment(currentPhase.eta).format("MMM D, YYYY")}}</v-chip>
-          <!-- <v-chip v-if="currentPhaseDeadlineLabel.isOverdue" class="ma-0 body-1" color="amber" text-color="white">{{currentPhaseDeadlineLabel.text}}</v-chip>
-          <v-chip v-else class="ma-0 body-1" color="#8BC34A" text-color="white">{{currentPhaseDeadlineLabel.text}}</v-chip> -->
+  <layout-sidebar right>
+    <v-card flat height="100%">
+      <v-row no-gutters v-if="selectedInvestment" style="flex: 0 0 auto;" class="py-6 full-width">
+        <div class="px-6 full-width">
+          <router-link
+            class="subtitle-1 half-bold investment-title"
+            :to="{ name: 'ResearchDetails', params: {
+              research_group_permlink: encodeURIComponent(selectedInvestment.group.permlink),
+              research_permlink: encodeURIComponent(selectedInvestment.research.permlink)
+            }}"
+          >
+            {{ selectedInvestment.research.title }}
+          </router-link>
         </div>
-        <div class="body-1 py-2">
-          <toggle-text :text="currentPhase.details"></toggle-text>
-        </div>
-      </v-layout>
 
-      <v-layout column class="full-width">
-        <v-divider class="mb-2"></v-divider>
-        <div>
-          <div class="subheading half-bold px-4">Team: {{selectedInvestment.group.name}}</div>
-          <v-layout row justify-start class="px-4 py-2">
-            <platform-avatar :size="40" v-for="(member, i) in selectedInvestment.team" :key="'member-' + i" :user="member" class="pr-1" ></platform-avatar>
-          </v-layout>
+        <div class="py-2 full-width">
+          <v-divider />
+          <div class="display-flex justify-space-between pa-2 align-middle">
+            <span>
+              <v-icon small>event</v-icon>
+              <span class="caption grey--text px-1">Created {{ moment(selectedInvestment.research.created_at).format("DD MMM YYYY") }} by {{ selectedInvestment.research.owner | fullname }}</span>
+            </span>
+            <span>
+              <span class="icon-btn" @click="showUnderDevelopmentAlert()"><v-icon>attachment</v-icon></span>
+              <span class="icon-btn" @click="showUnderDevelopmentAlert()"><v-icon>compare</v-icon></span>
+              <span class="icon-btn" @click="showUnderDevelopmentAlert()"><v-icon>delete</v-icon></span>
+            </span>
+          </div>
+          <v-divider />
         </div>
-        <v-divider class="mt-2"></v-divider>
-      </v-layout>
 
-      <v-layout column class="px-4 py-2 full-width">
-        <div class="subheading half-bold">Top investors</div>
-        <div class="py-2">
-          <GChart
-            type="PieChart"
-            :settings="{ packages: ['corechart'] }"
-            :data="investorsDistributionChart.data"
-            :options="investorsDistributionChart.options"
-          />
+
+        <div v-if="currentPhase" class="px-6 py-2 full-width">
+          <div class="subtitle-1 half-bold">
+            Current Phase
+          </div>
+          <div class="body-2 py-1">
+            {{ currentPhase.goal }}
+          </div>
+          <div class="py-2">
+            <v-chip class="ma-0 body-1" color="amber" text-color="white">
+              Deadline on {{ moment(currentPhase.eta).format("MMM D, YYYY") }}
+            </v-chip>
+            <!-- <v-chip v-if="currentPhaseDeadlineLabel.isOverdue" class="ma-0 body-1" color="amber" text-color="white">{{currentPhaseDeadlineLabel.text}}</v-chip>
+            <v-chip v-else class="ma-0 body-1" color="#8BC34A" text-color="white">{{currentPhaseDeadlineLabel.text}}</v-chip> -->
+          </div>
+          <div class="body-1 py-2">
+            <toggle-text :text="currentPhase.details" />
+          </div>
         </div>
-      </v-layout>
 
-      <v-layout column class="py-2 full-width">
-        <v-divider class="mb-2"></v-divider>
-        <v-layout row justify-space-between class="px-4">
-          <div class="subheading half-bold">My memo</div>
-          <!-- <div class="text-xs-right"><span class="icon-btn" @click="editMemo()"><v-icon small>edit</v-icon></span></div> -->
-          <v-btn v-if="!isEditingMemo" class="ma-0 pa-0 text-xs-right" flat icon @click="editMemo()">
-            <v-icon small>edit</v-icon>
-          </v-btn>
-          <v-btn v-else class="ma-0 pa-0 text-xs-right" flat icon @click="updateMemo()">
-            <v-icon small>reply</v-icon>
-          </v-btn>
-        </v-layout>
-        <div class="body-1 px-4 py-2">
-          <toggle-text v-if="!isEditingMemo" :text="selectedInvestment.portfolioRef.memo"></toggle-text>
-          <v-textarea 
-            v-else
-            v-model="memo"
-            auto-grow
-            :rows="4"
-          ></v-textarea>
+        <div class="full-width">
+          <v-divider class="mb-2" />
+          <div>
+            <div class="subtitle-1 half-bold px-6">
+              Team: {{ selectedInvestment.group.name }}
+            </div>
+            <div class="display-flex px-6 py-2">
+              <platform-avatar
+                v-for="(member, i) in selectedInvestment.team"
+                :key="'member-' + i"
+                :size="40"
+                :user="member"
+                class="pr-1"
+              />
+            </div>
+          </div>
+          <v-divider class="mt-2" />
         </div>
-        <v-divider class="mt-2"></v-divider>
-      </v-layout>
 
-      <v-layout column class="full-width">
-        <v-layout v-if="hasCustomLists">
-          <v-layout row justify-space-between class="px-4">
-            <div v-if="hasCustomLabels">
-              <div v-for="(tag, i) in selectedInvestment.portfolioRef.tags" :key="'investment-tag-'+ i">
-                <v-chip small class="mx-0 investment-tag caption" :color="tag.color" text-color="black">{{tag.name}}</v-chip>
+        <div class="px-6 py-2 full-width">
+          <div class="subtitle-1 half-bold">
+            Top investors
+          </div>
+          <div class="py-2">
+            <GChart
+              type="PieChart"
+              :settings="{ packages: ['corechart'] }"
+              :data="investorsDistributionChart.data"
+              :options="investorsDistributionChart.options"
+            />
+          </div>
+        </div>
+
+        <div class="py-2 full-width">
+          <v-divider class="mb-2" />
+          <div class="display-flex justify-space-between px-6">
+            <div class="subtitle-1 half-bold">
+              My memo
+            </div>
+            <!-- <div class="text--right"><span class="icon-btn" @click="editMemo()"><v-icon small>edit</v-icon></span></div> -->
+            <v-btn
+              v-if="!isEditingMemo"
+              class="ma-0 pa-0 text--right"
+              text
+              icon
+              @click="editMemo()"
+            >
+              <v-icon small>
+                edit
+              </v-icon>
+            </v-btn>
+            <v-btn
+              v-else
+              class="ma-0 pa-0 text--right"
+              text
+              icon
+              @click="updateMemo()"
+            >
+              <v-icon small>
+                reply
+              </v-icon>
+            </v-btn>
+          </div>
+          <div class="body-1 px-6 py-2">
+            <toggle-text v-if="!isEditingMemo" :text="selectedInvestment.portfolioRef.memo" />
+            <v-textarea
+              v-else
+              v-model="memo"
+              auto-grow
+              :rows="4"
+            />
+          </div>
+          <v-divider class="mt-2" />
+        </div>
+
+        <div class="full-width">
+          <div v-if="hasCustomLists">
+            <div class="display-flex justify-space-between px-6">
+              <div v-if="hasCustomLabels">
+                <div v-for="(tag, i) in selectedInvestment.portfolioRef.tags" :key="'investment-tag-'+ i">
+                  <v-chip
+                    small
+                    class="mx-0 investment-tag caption"
+                    :color="tag.color"
+                    text-color="black"
+                  >
+                    {{ tag.name }}
+                  </v-chip>
+                </div>
+              </div>
+              <div v-else class="subtitle-1 pa-6 grey--text">
+                No attached labels
+              </div>
+              <div>
+                <!-- <span class="icon-btn"><v-icon>playlist_add</v-icon></span>
+                <span class="icon-btn"><v-icon>delete</v-icon></span> -->
+                <v-btn
+                  class="ma-0 pa-0 text--right"
+                  text
+                  icon
+                  @click="openAddTagsDialog()"
+                >
+                  <v-icon small>
+                    playlist_add
+                  </v-icon>
+                </v-btn>
               </div>
             </div>
-            <div v-else class="subheading pa-4 grey--text">No attached labels</div>
-            <div>
-              <!-- <span class="icon-btn"><v-icon>playlist_add</v-icon></span>
-              <span class="icon-btn"><v-icon>delete</v-icon></span> -->
-              <v-btn class="ma-0 pa-0 text-xs-right" flat icon @click="openAddTagsDialog()">
-                <v-icon small>playlist_add</v-icon>
-              </v-btn>
-            </div>
-          </v-layout>
-          <v-dialog v-model="updateTagsDialog.isOpened" max-width="600px">
-            <v-card class="pa-4">
-              <v-card-title>
-                <v-layout align-center>
-                  <v-flex grow title>Attach to list</v-flex>
-                  <v-flex shrink right-top-angle>
-                    <v-btn @click="closeAddTagsDialog()" icon class="pa-0 ma-0">
-                      <v-icon color="black">close</v-icon>
+            <v-dialog v-model="updateTagsDialog.isOpened" max-width="600px">
+              <v-card class="pa-6">
+                <v-card-title>
+                  <div class="title">
+                    Attach to list
+                  </div>
+                  <div class="right-top-angle">
+                    <v-btn icon class="pa-0 ma-0" @click="closeAddTagsDialog()">
+                      <v-icon color="black">
+                        close
+                      </v-icon>
                     </v-btn>
-                  </v-flex>
-                </v-layout>
-              </v-card-title>
-              <v-card-text>
-                <v-layout column>
+                  </div>
+                </v-card-title>
+                <v-card-text>
                   <v-select
-                    v-model="updateTagsDialog.list" 
+                    v-model="updateTagsDialog.list"
                     :items="customLists"
                     solo
                     dense
                     item-text="name"
-                    return-object>
-                  </v-select>
-                  <v-combobox v-if="updateTagsDialog.list"
-                    v-model="updateTagsDialog.tagNames" 
+                    return-object
+                  />
+                  <v-combobox
+                    v-if="updateTagsDialog.list"
+                    v-model="updateTagsDialog.tagNames"
                     multiple
-                    label="Labels" 
+                    label="Labels"
                     append-icon
                     chips
-                    deletable-chips>
+                    deletable-chips
+                  >
                     <template v-slot:selection="data">
-                      <v-chip close @input="removeTagName(data.item)" :color="updateTagsDialog.list.color">
+                      <v-chip close :color="updateTagsDialog.list.color" @input="removeTagName(data.item)">
                         <strong>{{ data.item }}</strong>
                       </v-chip>
                     </template>
                   </v-combobox>
-                </v-layout>
-              </v-card-text>
-              <v-card-actions>
-                <v-layout row wrap>
-                  <v-flex xs12 py-2>
-                    <v-btn @click="updateTags()" :loading="updateTagsDialog.isSaving" :disabled="updateTagsDialog.isSaving" block color="primary">Save</v-btn>
-                  </v-flex>
-                  <v-flex xs12 py-2>
-                    <v-btn flat block color="primary" @click="closeAddTagsDialog()">Cancel</v-btn>
-                  </v-flex>
-                </v-layout>
-              </v-card-actions>
-            </v-card>
-          </v-dialog>
-        </v-layout>
-        <v-layout v-else><div class="subheading pa-4 grey--text">Please add a list to attach labels</div></v-layout>
-        <v-divider class="mt-2"></v-divider>
-      </v-layout>
+                </v-card-text>
+                <v-card-actions>
+                  <v-row>
+                    <v-col class="py-2" cols="12">
+                      <v-btn
+                        :loading="updateTagsDialog.isSaving"
+                        :disabled="updateTagsDialog.isSaving"
+                        block
+                        color="primary"
+                        @click="updateTags()"
+                      >
+                        Save
+                      </v-btn>
+                    </v-col>
+                    <v-col class="py-2" cols="12">
+                      <v-btn
+                        text
+                        block
+                        color="primary"
+                        @click="closeAddTagsDialog()"
+                      >
+                        Cancel
+                      </v-btn>
+                    </v-col>
+                  </v-row>
+                </v-card-actions>
+              </v-card>
+            </v-dialog>
+          </div>
+          <div v-else>
+            <div class="subtitle-1 pa-6 grey--text">
+              Please add a list to attach labels
+            </div>
+          </div>
+          <v-divider class="mt-2" />
+        </div>
 
-      <v-layout v-if="selectedInvestment.research.comments.length" column class="px-4 full-width">
-        <div class="subheading half-bold py-2">Comments</div>
-        <div v-for="(comment, i) in selectedInvestment.research.comments" :key="'investment-comment-'+ i" class="py-1">
-          <v-layout row wrap align-baseline>
-            <platform-avatar :size="40" :user="comment.author" class="pr-1" ></platform-avatar>
-            <span class="body-2 px-2">{{comment.author | fullname}}</span>
-            <span class="caption grey--text">{{moment(comment.timestamp).format("DD MMM YYYY")}}</span>
-          </v-layout>
-          <div class="body-1 py-2">
-            <toggle-text :text="comment.text"></toggle-text>
+        <div v-if="selectedInvestment.research.comments.length" class="px-6 full-width">
+          <div class="subtitle-1 half-bold py-2">
+            Comments
+          </div>
+          <div v-for="(comment, i) in selectedInvestment.research.comments" :key="'investment-comment-'+ i" class="py-1">
+            <div class="display-flex">
+              <platform-avatar :size="40" :user="comment.author" class="pr-1" />
+              <span class="body-2 px-2">{{ comment.author | fullname }}</span>
+              <span class="caption grey--text">{{ moment(comment.timestamp).format("DD MMM YYYY") }}</span>
+            </div>
+            <div class="body-1 py-2">
+              <toggle-text :text="comment.text" />
+            </div>
           </div>
         </div>
-      </v-layout>
-    </v-layout>
-  </v-card>
+      </v-row>
+    </v-card>
+  </layout-sidebar>
 </template>
 
 <script>
   import Vue from 'vue';
   import { mapGetters } from 'vuex';
   import moment from 'moment';
+  import LayoutSidebar from '@/components/layout/components/LayoutSidebar';
 
   export default {
     name: 'InvestorPortfolioInboxRightSidebar',
+    components: { LayoutSidebar },
     computed: {
       ...mapGetters({
-        user: "auth/user",
-        selectedInvestment: "investorPortfolio/selectedInvestment",
-        investmentPortfolio: "investorPortfolio/investmentPortfolio"
+        user: 'auth/user',
+        selectedInvestment: 'investorPortfolio/selectedInvestment',
+        investmentPortfolio: 'investorPortfolio/investmentPortfolio'
       }),
 
       currentPhase() {
         if (this.selectedInvestment) {
-          let milestones = this.selectedInvestment.research.ref.milestones;
-          let activeMilestone = milestones.find(m => m.isActive);
+          const { milestones } = this.selectedInvestment.research.ref;
+          const activeMilestone = milestones.find((m) => m.isActive);
           return activeMilestone || milestones[0] || null;
         }
         return null;
@@ -202,19 +280,19 @@
 
       currentPhaseDeadlineLabel() {
         if (this.currentPhase) {
-          let daysDiff = moment(this.currentPhase.eta).diff(moment(), 'days');
-          let isOverdue = daysDiff < 0;
+          const daysDiff = moment(this.currentPhase.eta).diff(moment(), 'days');
+          const isOverdue = daysDiff < 0;
 
-          let text = isOverdue 
-            ? `Deadline overdue ${daysDiff < 7 ? daysDiff + ' days' : Math.floor(daysDiff / 7) + ' weeks'}`
-            : `Deadline on ${moment(this.currentPhase.eta).local().format("MMM DD, YYYY")}`;
+          const text = isOverdue
+            ? `Deadline overdue ${daysDiff < 7 ? `${daysDiff} days` : `${Math.floor(daysDiff / 7)} weeks`}`
+            : `Deadline on ${moment(this.currentPhase.eta).local().format('MMM DD, YYYY')}`;
 
           return { daysDiff, isOverdue, text };
         }
         return null;
       },
       customLists() {
-        return this.investmentPortfolio.lists.filter(l => l.id != "all");
+        return this.investmentPortfolio.lists.filter((l) => l.id != 'all');
       },
       hasCustomLists() {
         return this.customLists.length != 0;
@@ -237,34 +315,34 @@
             ],
 
             options: {
-              title: "",
+              title: '',
               legend: { position: 'left' },
               colors: ['#c6bbff', '#f9c3d7', '#a6dcff', '#B9F6CA', '#2d99ff', '#f3f5f8'],
-              chartArea: { 
+              chartArea: {
                 right: 0,
-                width: "100%",
-                height: "100%"
+                width: '100%',
+                height: '100%'
               },
               // sliceVisibilityThreshold: .01,
 
-              width: "100%",
-              height: "100%",
+              width: '100%',
+              height: '100%',
               pieSliceTextStyle: {
-                // color: "#ffffff", 
-                color: "#000000",
+                // color: "#ffffff",
+                color: '#000000',
                 fontSize: 10
               },
               pieHole: 0.6
             }
-          }
+          };
         }
-      },
+      }
     },
 
     data() {
       return {
         isEditingMemo: false,
-        memo: "",
+        memo: '',
         updateTagsDialog: {
           list: null,
           tagNames: [],
@@ -272,6 +350,23 @@
           isOpened: false,
           isSaving: false
         }
+      };
+    },
+    watch: {
+      selectedInvestment(newVal, oldVal) {
+        if (this.selectedInvestment) {
+          this.memo = newVal.portfolioRef.memo;
+        }
+      },
+      'updateTagsDialog.list': function (newVal, oldVal) {
+        const currentTags = this.selectedInvestment.portfolioRef.tags;
+        const currentListTags = currentTags.filter((t) => t.list == this.updateTagsDialog.list.id);
+        this.updateTagsDialog.tagNames = [...currentListTags.map((tag) => tag.name)];
+      }
+    },
+    mounted() {
+      if (this.selectedInvestment) {
+        this.memo = this.selectedInvestment.portfolioRef.memo;
       }
     },
 
@@ -280,13 +375,13 @@
         this.isEditingMemo = true;
       },
       updateMemo() {
-        let investmentId = this.selectedInvestment.research.id;
-        let memo = this.memo;
+        const investmentId = this.selectedInvestment.research.id;
+        const { memo } = this;
         if (memo != this.selectedInvestment.portfolioRef.memo) {
           this.$store.dispatch('investorPortfolio/updateInvestmentMemo', { investmentId, memo })
             .finally(() => {
               this.isEditingMemo = false;
-            })
+            });
         } else {
           this.isEditingMemo = false;
         }
@@ -295,20 +390,20 @@
       openAddTagsDialog() {
         this.updateTagsDialog.isOpened = true;
         this.updateTagsDialog.list = this.customLists[0];
-        let currentTags = this.selectedInvestment.portfolioRef.tags;
-        let currentListTags = currentTags.filter(tag => tag.list == this.updateTagsDialog.list.id);
-        this.updateTagsDialog.tagNames = [...currentListTags.map(tag => tag.name)];
+        const currentTags = this.selectedInvestment.portfolioRef.tags;
+        const currentListTags = currentTags.filter((tag) => tag.list == this.updateTagsDialog.list.id);
+        this.updateTagsDialog.tagNames = [...currentListTags.map((tag) => tag.name)];
       },
 
       closeAddTagsDialog() {
-        this.updateTagsDialog.isOpened = false; 
+        this.updateTagsDialog.isOpened = false;
       },
 
       updateTags() {
         setTimeout(() => { // delay action to catch input text without pressing the 'enter'
-          let investmentId = this.selectedInvestment.research.id;
-          let listTags = this.updateTagsDialog.tagNames.map(t => t.toLowerCase());
-          let listId = this.updateTagsDialog.list.id;
+          const investmentId = this.selectedInvestment.research.id;
+          const listTags = this.updateTagsDialog.tagNames.map((t) => t.toLowerCase());
+          const listId = this.updateTagsDialog.list.id;
           this.updateTagsDialog.isSaving = true;
           this.$store.dispatch('investorPortfolio/updateInvestmentListTags', { investmentId, listId, listTags })
             .finally(() => {
@@ -321,29 +416,12 @@
       removeTagName(item) {
         this.updateTagsDialog.tagNames.splice(this.updateTagsDialog.tagNames.indexOf(item), 1);
       },
-      
+
       showUnderDevelopmentAlert() {
         alert('This feature is under development');
       }
-    },
-    watch: {
-      selectedInvestment(newVal, oldVal) {
-        if (this.selectedInvestment) {
-          this.memo = newVal.portfolioRef.memo;
-        }
-      },
-      'updateTagsDialog.list': function(newVal, oldVal) {
-        let currentTags = this.selectedInvestment.portfolioRef.tags;
-        let currentListTags = currentTags.filter(t => t.list == this.updateTagsDialog.list.id);
-        this.updateTagsDialog.tagNames = [...currentListTags.map(tag => tag.name)];
-      }
-    },
-    mounted() {
-      if (this.selectedInvestment) {
-        this.memo = this.selectedInvestment.portfolioRef.memo;
-      }
     }
-  }
+  };
 </script>
 
 <style lang="less" scoped>

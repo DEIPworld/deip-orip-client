@@ -1,17 +1,25 @@
 <template>
-  <v-layout align-baseline align-center>
-    <v-flex xs2>
+  <v-row align="center">
+    <v-col cols="2">
       <div>
-        <v-chip class="log-label-chip" small color="#3f51b5" text-color="white">
-          <div class="log-label-chip-text">New Research</div>
+        <v-chip
+          class="log-label-chip"
+          small
+          color="#3f51b5"
+          text-color="white"
+        >
+          <div class="log-label-chip-text">
+            New Research
+          </div>
         </v-chip>
       </div>
-    </v-flex>
-    <v-flex xs8>
-      <div class="align-baseline px-3">
+    </v-col>
+    <v-col cols="8">
+      <div class="align-baseline px-4">
         <span v-if="isAcceptedByQuorum">
           <span>
-            New "<router-link class="a"
+            New "<router-link
+              class="a"
               :to="{
                 name: 'ResearchDetails',
                 params: {
@@ -28,9 +36,10 @@
             :size="20"
             link-to-profile
             link-to-profile-class="px-1"
-          ></platform-avatar>
+          />
           <span v-if="isAutoAccepted">
-            started "<router-link class="a"
+            started "<router-link
+              class="a"
               :to="{
                 name: 'ResearchDetails',
                 params: {
@@ -41,44 +50,44 @@
             >{{ log.metadata.research.title }}</router-link>" research
           </span>
           <span v-else>
-            proposed to start "<span class="body-2">{{log.metadata.proposal.data.title}}</span>" research
+            proposed to start "<span class="body-2">{{ log.metadata.proposal.data.title }}</span>" research
           </span>
         </span>
       </div>
-    </v-flex>
-    <v-flex xs2>
-      <div class="grey--text text-xs-right">
+    </v-col>
+    <v-col cols="2">
+      <div class="grey--text text--right">
         {{ moment(log.created_at).format("DD MMM YYYY") }}
       </div>
-    </v-flex>
-  </v-layout>
+    </v-col>
+  </v-row>
 </template>
 
 <script>
-import { mapGetters } from 'vuex';
+  import { mapGetters } from 'vuex';
 
-export default {
-  name: "ResearchProposalActivityLogEntry",
-  props: {
-    log: { type: Object, required: true }
-  },
-  computed: {
-    isAcceptedByQuorum() {
-      return this.log.metadata.researchGroup.is_dao && this.log.metadata.proposal.is_completed;
+  export default {
+    name: 'ResearchProposalActivityLogEntry',
+    props: {
+      log: { type: Object, required: true }
     },
-    isAutoAccepted() {
-      return !this.log.metadata.researchGroup.is_dao && this.log.metadata.isProposalAutoAccepted;
-    }
-  },
-  data() {
-    return {
-    }
-  },
+    data() {
+      return {
+      };
+    },
+    computed: {
+      isAcceptedByQuorum() {
+        return this.log.metadata.researchGroup.is_dao && this.log.metadata.proposal.is_completed;
+      },
+      isAutoAccepted() {
+        return !this.log.metadata.researchGroup.is_dao && this.log.metadata.isProposalAutoAccepted;
+      }
+    },
 
-  methods: {
+    methods: {
 
-  }
-};
+    }
+  };
 </script>
 
 <style lang="less" scoped>

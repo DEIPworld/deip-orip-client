@@ -1,93 +1,111 @@
 <template>
-  <v-layout>
-    <v-flex xs12 lg4 class="right-bordered">
-      <v-layout column fill-height justify-space-between>
-        <v-layout row wrap>
-          <v-flex shrink>
-            <platform-avatar :user="review.author" :size="80"></platform-avatar>
-          </v-flex>
-          <v-flex class="px-4" xs12 md8 xl9>
-            <router-link
-              class="a"
-              :to="{ name: 'UserDetails', params: { account_name: review.author.account.name }}"
-            >{{ review.author | fullname }}
-            </router-link>
-            <div v-if="review.author.profile" class="rd-reviewer__subtitle pt-1">
-              <span>{{review.author | employmentOrEducation}}</span>
-              <span
-                v-if="doesUserHaveLocation(review.author.profile)"
-              >, {{review.author | userLocation}}</span>
-            </div>
-          </v-flex>
-        </v-layout>
-        <v-btn small color="primary" @click="goToReviewPage(review)" outline>See review</v-btn>
-      </v-layout>
-    </v-flex>
-    <v-flex xs12 lg4 class="px-4 right-bordered">
-      <v-layout column fill-height>
-        <div v-if="review.researchContent" v-on:click.stop>
-          <div>
-            <span>
-              Review to
-              <span
-                class="bold"
-              >{{ getResearchContentType(review.researchContent.content_type).text }}</span>
-            </span>
-          </div>
+  <v-row>
+    <v-col cols="12" lg="4" class="right-bordered">
+      <v-row>
+        <v-col cols="auto">
+          <platform-avatar :user="review.author" :size="80" />
+        </v-col>
+        <v-col
+          class="px-6"
+          cols="12"
+          md="8"
+          xl="9"
+        >
           <router-link
-            tag="div"
-            class="a py-2"
-            :to="{
-              name: 'ResearchContentDetails',
-              params: {
-                research_group_permlink: encodeURIComponent(research.group_permlink),
-                research_permlink: encodeURIComponent(research.permlink),
-                content_permlink: encodeURIComponent(review.researchContent.permlink)
-              }
-            }"
-          >{{review.researchContent.title}}
-          </router-link>
-        </div>
-        <v-layout row wrap>
-          <v-flex
-            xs12 lg12
-            v-for="item of review.disciplines"
-            :key="`${review.id}- ${item.disciplineName}`"
-            class="rd-review-eci mt-1"
+            class="a"
+            :to="{ name: 'UserDetails', params: { account_name: review.author.account.name }}"
           >
-            <span>{{item.disciplineName}}</span>
-          </v-flex>
-        </v-layout>
-        <div class="grey--text text-xs-right pt-2">
-          <v-icon small>event</v-icon>
-          {{moment(review.created_at).format('D, MMM YYYY')}}
-        </div>
-      </v-layout>
-    </v-flex>
-    <v-flex xs12 lg4>
-      <v-layout column fill-height justify-space-between pl-4>
+            {{ review.author | fullname }}
+          </router-link>
+          <div v-if="review.author.profile" class="rd-reviewer__subtitle pt-1">
+            <span>{{ review.author | employmentOrEducation }}</span>
+            <span
+              v-if="doesUserHaveLocation(review.author.profile)"
+            >, {{ review.author | userLocation }}</span>
+          </div>
+        </v-col>
+      </v-row>
+      <v-btn
+        small
+        color="primary"
+        outlined
+        @click="goToReviewPage(review)"
+      >
+        See review
+      </v-btn>
+    </v-col>
+
+    <v-col cols="12" lg="4" class="px-6 right-bordered">
+      <div v-if="review.researchContent" @click.stop>
         <div>
-          <div class="bold">Assessment</div>
-          <review-assessment
-            v-model="review.scores"
-            :researchContentType="review.researchContent.content_type"
-          ></review-assessment>
+          <span>
+            Review to
+            <span
+              class="bold"
+            >{{ getResearchContentType(review.researchContent.content_type).text }}</span>
+          </span>
         </div>
-        <div class="pt-2">
-          <v-tooltip tag="div" bottom v-if="review.supporters.length">
-            <v-layout slot="activator" row justify-end align-baseline>
-              <span class="half-bold align-self-center pr-2">{{review.supporters.length}}</span>
+        <router-link
+          tag="div"
+          class="a py-2"
+          :to="{
+            name: 'ResearchContentDetails',
+            params: {
+              research_group_permlink: encodeURIComponent(research.group_permlink),
+              research_permlink: encodeURIComponent(research.permlink),
+              content_permlink: encodeURIComponent(review.researchContent.permlink)
+            }
+          }"
+        >
+          {{ review.researchContent.title }}
+        </router-link>
+      </div>
+      <v-row>
+        <v-col
+          v-for="item of review.disciplines"
+          :key="`${review.id}- ${item.disciplineName}`"
+          cols="12"
+          lg="12"
+          class="rd-review-eci mt-1"
+        >
+          <span>{{ item.disciplineName }}</span>
+        </v-col>
+      </v-row>
+      <div class="grey--text text--right pt-2">
+        <v-icon small>
+          event
+        </v-icon>
+        {{ moment(review.created_at).format('D, MMM YYYY') }}
+      </div>
+    </v-col>
+    <v-col cols="12" lg="4">
+      <div>
+        <div class="bold">
+          Assessment
+        </div>
+        <review-assessment
+          v-model="review.scores"
+          :research-content-type="review.researchContent.content_type"
+        />
+      </div>
+      <div class="pt-2">
+        <v-tooltip v-if="review.supporters.length" tag="div" bottom>
+          <template v-slot:activator="{ on }">
+            <v-row justify="end" align="center" v-on="on">
+              <span class="half-bold align-self-center pr-2">{{ review.supporters.length }}</span>
               <v-icon>group_add</v-icon>
-            </v-layout>
-            <div
-              v-if="review.supporters.length"
-            >{{review.supporters.length}} experts supported this review
-            </div>
-          </v-tooltip>
-        </div>
-      </v-layout>
-    </v-flex>
-  </v-layout>
+            </v-row>
+          </template>
+
+          <div
+            v-if="review.supporters.length"
+          >
+            {{ review.supporters.length }} experts supported this review
+          </div>
+        </v-tooltip>
+      </div>
+    </v-col>
+  </v-row>
 </template>
 
 <script>
@@ -100,8 +118,14 @@
     name: 'ResearchReviewItem',
 
     props: {
-      review: { type: Object, required: true },
-      research: { type: Object, required: true }
+      review: {
+        type: Object,
+        required: true
+      },
+      research: {
+        type: Object,
+        required: true
+      }
     },
     data() {
       return {};
@@ -130,7 +154,10 @@
           })
           .then((group) => {
             params.research_group_permlink = encodeURIComponent(group.permlink);
-            this.$router.push({ name: 'ResearchContentReview', params });
+            this.$router.push({
+              name: 'ResearchContentReview',
+              params
+            });
           });
       },
       getResearchContentType(type) {

@@ -10,8 +10,6 @@ import HandleJoinRequestDialog from './components/HandleJoinRequestDialog';
 import TransferGroupDeipTokensDialog from './components/TransferGroupDeipTokensDialog';
 import QuorumSizeSidebarSection from './components/QuorumSizeSidebarSection';
 
-Vue.component('research-group-details-body', ResearchGroupDetailsBody);
-Vue.component('research-group-details-sidebar', ResearchGroupDetailsSidebar);
 Vue.component('research-group-details-proposals', ResearchGroupDetailsProposals);
 Vue.component('research-group-details-proposals-item', ResearchGroupDetailsProposalsItem);
 Vue.component('add-member-to-group-dialog', AddMemberToGroupDialog);

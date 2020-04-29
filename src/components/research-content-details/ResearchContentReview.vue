@@ -1,27 +1,31 @@
 <template>
-  <base-page-layout :rightSidebarClass="'xs12 md3'" :contentClass="'xs12 md9'">
-    <v-card slot="content" class="fill-height pa-5">
-      <research-content-review-body></research-content-review-body>
+  <base-page-layout>
+    <v-card flat>
+      <research-content-review-body />
     </v-card>
 
-    <v-card slot="right-sidebar" class="fill-height py-5 px-4">
-      <research-content-review-sidebar></research-content-review-sidebar>
-    </v-card>
+    <template #sidebar>
+      <layout-sidebar right>
+        <research-content-review-sidebar />
+      </layout-sidebar>
+    </template>
   </base-page-layout>
 </template>
 
 <script>
 import { mapGetters } from "vuex";
 import deipRpc from "@deip/rpc-client";
+import LayoutSidebar from "@/components/layout/components/LayoutSidebar";
 
 export default {
   name: "ResearchContentReview",
+  components: { LayoutSidebar },
   data() {
     return {};
   },
   computed: {},
-  methods: {},
-  created() {}
+  created() {},
+  methods: {}
 };
 </script>
 

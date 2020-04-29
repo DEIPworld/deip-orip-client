@@ -1,70 +1,94 @@
 <template>
-  <v-layout>
-    <v-flex class="fill-height pa-5 xs12">
-      <div class="display-1 bold">Top witnesses</div>
+  <div class="fill-height pa-12 xs12">
+    <div class="display-1 bold">
+      Top witnesses
+    </div>
 
-      <div class="c-pt-4 half-bold">
-        <div v-if="!isExpertiseEmpty">
-          {{ VOTES_MAX_COUNT - user.account.witnesses_voted_for }} votes left. You can vote for {{ VOTES_MAX_COUNT }}
-          delegates
-        </div>
-
-        <div v-else>You have no Expertise Tokens to vote for delegates</div>
+    <div class="c-pt-4 half-bold">
+      <div v-if="!isExpertiseEmpty">
+        {{ VOTES_MAX_COUNT - user.account.witnesses_voted_for }} votes left. You can vote for {{ VOTES_MAX_COUNT }}
+        delegates
       </div>
 
-      <div class="c-mt-6">
-        <v-data-table
-          class="elevation-1 witnesses-table"
-          :headers="[
-                        { text: '', sortable: false, width: '100px' },
-                        { text: 'Witness', value: 'owner' },
-                        { text: 'Info', sortable: false },
-                        { text: 'Votes', value: 'votes' },
-                        { text: 'Missed blocks', value: 'total_missed', align: 'center' },
-                        { text: 'Last block', value: 'last_confirmed_block_num', align: 'center', sortable: false }
-                    ]"
-          :items="witnesses"
-          :pagination.sync="pagination"
-          hide-actions
-          must-sort
-        >
-          <template slot="items" slot-scope="props">
-            <tr>
-              <td class="text-xs-right">
-                {{ props.item.votingIndex + 1 }}
-
-                <v-btn v-if="!user.account.witness_votes.includes(props.item.owner)"
-                       flat icon small
-                       class="ma-0" color="primary"
-                       :loading="isVoteBtnDisabled(props.item)"
-                       :disabled="isVoteBtnDisabled(props.item) || isExpertiseEmpty"
-                       @click="voteForWitness(props.item, true)"
-                >
-                  <v-icon size="18px">mdi-arrow-up-drop-circle-outline</v-icon>
-                </v-btn>
-
-                <v-btn v-else
-                       flat icon small
-                       class="ma-0" color="primary"
-                       :loading="isVoteBtnDisabled(props.item)"
-                       :disabled="isVoteBtnDisabled(props.item) || isExpertiseEmpty"
-                       @click="voteForWitness(props.item, false)"
-                >
-                  <v-icon size="18px">mdi-arrow-up-drop-circle</v-icon>
-                </v-btn>
-              </td>
-
-              <td class="">{{ props.item.owner }}</td>
-              <td class="">{{ props.item.url }}</td>
-              <td class="">{{ props.item.votes }}</td>
-              <td class="text-xs-center">{{ props.item.total_missed }}</td>
-              <td class="text-xs-center">{{ props.item.last_confirmed_block_num }}</td>
-            </tr>
-          </template>
-        </v-data-table>
+      <div v-else>
+        You have no Expertise Tokens to vote for delegates
       </div>
-    </v-flex>
-  </v-layout>
+    </div>
+
+    <div class="c-mt-6">
+      <v-data-table
+        class="elevation-1 witnesses-table"
+        :headers="[
+          { text: '', sortable: false, width: '100px' },
+          { text: 'Witness', value: 'owner' },
+          { text: 'Info', sortable: false },
+          { text: 'Votes', value: 'votes' },
+          { text: 'Missed blocks', value: 'total_missed', align: 'center' },
+          { text: 'Last block', value: 'last_confirmed_block_num', align: 'center', sortable: false }
+        ]"
+        :items="witnesses"
+        hide-default-footer
+        :options.sync="pagination"
+        must-sort
+      >
+        <template v-slot:item="{item}">
+          <tr>
+            <td class="text-right">
+              {{ item.votingIndex + 1 }}
+
+              <v-btn
+                v-if="!user.account.witness_votes.includes(item.owner)"
+                text
+                icon
+                small
+                class="ma-0"
+                color="primary"
+                :loading="isVoteBtnDisabled(item)"
+                :disabled="isVoteBtnDisabled(item) || isExpertiseEmpty"
+                @click="voteForWitness(item, true)"
+              >
+                <v-icon size="18px">
+                  mdi-arrow-up-drop-circle-outline
+                </v-icon>
+              </v-btn>
+
+              <v-btn
+                v-else
+                text
+                icon
+                small
+                class="ma-0"
+                color="primary"
+                :loading="isVoteBtnDisabled(item)"
+                :disabled="isVoteBtnDisabled(item) || isExpertiseEmpty"
+                @click="voteForWitness(item, false)"
+              >
+                <v-icon size="18px">
+                  mdi-arrow-up-drop-circle
+                </v-icon>
+              </v-btn>
+            </td>
+
+            <td class="">
+              {{ item.owner }}
+            </td>
+            <td class="">
+              {{ item.url }}
+            </td>
+            <td class="">
+              {{ item.votes }}
+            </td>
+            <td class="text-center">
+              {{ item.total_missed }}
+            </td>
+            <td class="text-center">
+              {{ item.last_confirmed_block_num }}
+            </td>
+          </tr>
+        </template>
+      </v-data-table>
+    </div>
+  </div>
 </template>
 
 <script>
@@ -79,8 +103,8 @@
       return {
         VOTES_MAX_COUNT: 30,
         loadingWitnessesIds: [],
-        pagination: { sortBy: 'votes', rowsPerPage: -1, descending: true }
-      }
+        pagination: { sortBy: ['votes'], rowsPerPage: -1, descending: true }
+      };
     },
 
     computed: {
@@ -92,6 +116,9 @@
       isExpertiseEmpty() {
         return this.user.account.expert_tokens_balance === 0;
       }
+    },
+
+    created() {
     },
 
     methods: {
@@ -112,7 +139,7 @@
             _.pull(this.loadingWitnessesIds, witness.id);
             this.$forceUpdate();
           })
-          .catch(err => {
+          .catch((err) => {
             console.log(err);
           });
       },
@@ -120,9 +147,6 @@
       isVoteBtnDisabled(witness) {
         return this.loadingWitnessesIds.includes(witness.id);
       }
-    },
-
-    created() {
     }
   };
 </script>

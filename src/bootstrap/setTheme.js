@@ -1,5 +1,3 @@
-import Vue from 'vue';
-import Vuetify from 'vuetify';
 import themes from '@/theme';
 import { store } from '@/store';
 
@@ -22,21 +20,24 @@ const setTheme = async () => {
       document.title = 'U.S. Treasury | DEIP';
     }
   }
+  await store.dispatch('layout/setGlobalThemeSettings', themeSettings);
 
-  // TODO: extract to plugin
-  Vue.use(Vuetify, {
+  return {
     theme: {
-      primary: themeSettings['primary-color'],
-      secondary: themeSettings['secondary-color']
+      dark: false,
+      themes: {
+        light: {
+          primary: themeSettings['primary-color'],
+          secondary: themeSettings['secondary-color']
+        }
+      }
     },
     options: {
       customProperties: true
     }
-  });
-
-  await store.dispatch('layout/setGlobalThemeSettings', themeSettings);
+  };
 };
 
 export {
   setTheme
-}
+};

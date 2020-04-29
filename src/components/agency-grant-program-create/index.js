@@ -1,4 +1,4 @@
-import Vue from 'vue'
+import Vue from 'vue';
 
 import FundingOpportunityTitle from './components/FundingOpportunityTitle';
 import FundingOpportunityDiscipline from './components/FundingOpportunityDiscipline';

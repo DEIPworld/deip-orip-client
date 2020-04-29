@@ -1,137 +1,145 @@
 <template>
-  <v-container fluid fill-height pa-0>
-    <v-layout>
-      <v-stepper
-        v-model="currentStep"
-        alt-labels
-        class="display-flex flex-column w-100 fill-height stepper-page"
-      >
-        <v-stepper-header class="flex-grow-0">
-          <v-stepper-step step="1" :complete="currentStep > 1">
-            <div class="text-uppercase">Discipline</div>
-          </v-stepper-step>
+  <v-container class="fill-height pa-0" fluid>
+    <v-stepper
+      v-model="currentStep"
+      alt-labels
+      class="display-flex flex-column w-100 fill-height stepper-page"
+    >
+      <v-stepper-header class="flex-grow-0">
+        <v-stepper-step step="1" :complete="currentStep > 1">
+          <div class="text-uppercase">
+            Discipline
+          </div>
+        </v-stepper-step>
 
-          <v-divider></v-divider>
+        <v-divider />
 
-          <v-stepper-step step="2" :complete="currentStep > 2">
-            <div class="text-uppercase">Research group</div>
-          </v-stepper-step>
+        <v-stepper-step step="2" :complete="currentStep > 2">
+          <div class="text-uppercase text-center">
+            Research group
+          </div>
+        </v-stepper-step>
 
-          <v-divider></v-divider>
+        <v-divider />
 
-          <v-stepper-step step="3" :complete="currentStep > 3">
-            <div class="text-uppercase">Title</div>
-          </v-stepper-step>
+        <v-stepper-step step="3" :complete="currentStep > 3">
+          <div class="text-uppercase">
+            Title
+          </div>
+        </v-stepper-step>
 
-          <v-divider></v-divider>
+        <v-divider />
 
-          <!-- <v-stepper-step step="4" :complete="currentStep > 4">
-                        <div class="text-uppercase">Video</div>
-                    </v-stepper-step>
+        <!-- <v-stepper-step step="4" :complete="currentStep > 4">
+                      <div class="text-uppercase">Video</div>
+                  </v-stepper-step>
 
-          <v-divider></v-divider>-->
+        <v-divider></v-divider>-->
 
-          <v-stepper-step step="4" :complete="currentStep > 4">
-            <div class="text-uppercase">Roadmap</div>
-          </v-stepper-step>
+        <v-stepper-step step="4" :complete="currentStep > 4">
+          <div class="text-uppercase">
+            Roadmap
+          </div>
+        </v-stepper-step>
 
-          <v-divider></v-divider>
+        <v-divider />
 
-          <v-stepper-step step="5" :complete="currentStep > 5">
-            <div class="text-uppercase">Settings</div>
-          </v-stepper-step>
+        <v-stepper-step step="5" :complete="currentStep > 5">
+          <div class="text-uppercase">
+            Settings
+          </div>
+        </v-stepper-step>
 
-          <!-- <v-divider></v-divider>
+        <!-- <v-divider></v-divider>
 
-                    <v-stepper-step step="5">
-                        <div class="text-uppercase">Reward shares</div>
-          </v-stepper-step>-->
-        </v-stepper-header>
+                  <v-stepper-step step="5">
+                      <div class="text-uppercase">Reward shares</div>
+        </v-stepper-step>-->
+      </v-stepper-header>
 
-        <v-stepper-items class="flex-grow-1">
-          <v-stepper-content step="1">
-            <div class="fill-height">
-              <create-research-pick-discipline
-                @incStep="incStep"
-                @setDisciplines="setDisciplines"
-                :research="research"
-              ></create-research-pick-discipline>
-            </div>
-          </v-stepper-content>
+      <v-stepper-items class="flex-grow-1">
+        <v-stepper-content step="1">
+          <div class="fill-height">
+            <create-research-pick-discipline
+              :research="research"
+              @incStep="incStep"
+              @setDisciplines="setDisciplines"
+            />
+          </div>
+        </v-stepper-content>
 
-          <v-stepper-content step="2">
-            <div class="fill-height">
-              <create-research-pick-group
-                @incStep="incStep"
-                @decStep="decStep"
-                @setGroup="setGroup"
-                :research="research"
-              ></create-research-pick-group>
-            </div>
-          </v-stepper-content>
+        <v-stepper-content step="2">
+          <div class="fill-height">
+            <create-research-pick-group
+              :research="research"
+              @incStep="incStep"
+              @decStep="decStep"
+              @setGroup="setGroup"
+            />
+          </div>
+        </v-stepper-content>
 
-          <v-stepper-content step="3">
-            <div class="fill-height">
-              <create-research-meta
-                @setTitle="setTitle"
-                @setDescription="setDescription"
-                @setVideo="setVideo"
-                @incStep="incStep"
-                @decStep="decStep"
-                :research="research"
-                :isLoading="isLoading"
-              ></create-research-meta>
-            </div>
-          </v-stepper-content>
+        <v-stepper-content step="3">
+          <div class="fill-height">
+            <create-research-meta
+              :research="research"
+              :is-loading="isLoading"
+              @setTitle="setTitle"
+              @setDescription="setDescription"
+              @setVideo="setVideo"
+              @incStep="incStep"
+              @decStep="decStep"
+            />
+          </div>
+        </v-stepper-content>
 
-          <!-- <v-stepper-content step="4">
-                        <div class="fill-height">
-                            <create-research-video
-                                @setVideo="setVideo"
-                                @incStep="incStep" @decStep="decStep"
-                                :research="research"
-                                :isLoading="isLoading"
-                            ></create-research-video>
-                        </div>
-          </v-stepper-content>-->
+        <!-- <v-stepper-content step="4">
+                      <div class="fill-height">
+                          <create-research-video
+                              @setVideo="setVideo"
+                              @incStep="incStep" @decStep="decStep"
+                              :research="research"
+                              :isLoading="isLoading"
+                          ></create-research-video>
+                      </div>
+        </v-stepper-content>-->
 
-          <v-stepper-content step="4">
-            <div class="fill-height">
-              <create-research-roadmap
-                @decStep="decStep"
-                :research="research"
-                :isLoading="isLoading"
-                @incStep="incStep"
-              ></create-research-roadmap>
-            </div>
-          </v-stepper-content>
+        <v-stepper-content step="4">
+          <div class="fill-height">
+            <create-research-roadmap
+              :research="research"
+              :is-loading="isLoading"
+              @decStep="decStep"
+              @incStep="incStep"
+            />
+          </div>
+        </v-stepper-content>
 
-          <v-stepper-content step="5">
-            <div class="fill-height">
-              <create-research-settings
-                @finish="finish"
-                @decStep="decStep"
-                @setPrivateFlag='setPrivateFlag'
-                @setTrlStep='setTrlStep'
-                :research="research"
-                :isLoading="isLoading"
-              ></create-research-settings>
-            </div>
-          </v-stepper-content>
+        <v-stepper-content step="5">
+          <div class="fill-height">
+            <create-research-settings
+              :research="research"
+              :is-loading="isLoading"
+              @finish="finish"
+              @decStep="decStep"
+              @setPrivateFlag="setPrivateFlag"
+              @setTrlStep="setTrlStep"
+            />
+          </div>
+        </v-stepper-content>
 
-          <!-- <v-stepper-content step="5">
-                        <div class="fill-height">
-                            <create-research-share
-                                @finish="finish" @decStep="decStep"
-                                @setReviewShare="setReviewShare"
-                                :research="research"
-                                :isLoading="isLoading"
-                            ></create-research-share>
-                        </div>
-          </v-stepper-content>-->
-        </v-stepper-items>
-      </v-stepper>
-    </v-layout>
+        <!-- <v-stepper-content step="5">
+                      <div class="fill-height">
+                          <create-research-share
+                              @finish="finish" @decStep="decStep"
+                              @setReviewShare="setReviewShare"
+                              :research="research"
+                              :isLoading="isLoading"
+                          ></create-research-share>
+                      </div>
+        </v-stepper-content>-->
+      </v-stepper-items>
+    </v-stepper>
   </v-container>
 </template>
 
@@ -139,10 +147,10 @@
   // import Vue from 'vue';
   // import deipRpc from '@deip/rpc-client';
   import moment from 'moment';
-  import * as disciplineTreeService from './../common/disciplines/DisciplineTreeService';
   import { mapGetters } from 'vuex';
 
   import { ResearchGroupService } from '@deip/research-group-service';
+  import * as disciplineTreeService from '../common/disciplines/DisciplineTreeService';
 
   const researchGroupService = ResearchGroupService.getInstance();
 
@@ -151,7 +159,7 @@
 
     data() {
       return {
-        currentStep: 0,
+        currentStep: 1,
         isLoading: false,
         research: {
           disciplines: [],
@@ -174,6 +182,30 @@
         userGroups: 'auth/userGroups',
         userCoworkers: 'auth/userCoworkers'
       })
+    },
+
+    created() {
+      if (
+        this.$route.query.disciplineIds
+        && _.isArray(this.$route.query.disciplineIds)
+      ) {
+        try {
+          this.research.disciplines = disciplineTreeService.getNodesByIdList(
+            this.$route.query.disciplineIds.map((disciplineId) => parseInt(disciplineId))
+          );
+          if (this.$route.query.groupPermlink) {
+            const newGroup = this.userGroups.find(
+              (item) => item.permlink === this.$route.query.groupPermlink
+            );
+            this.setGroup(newGroup);
+            this.currentStep = 3;
+          } else {
+            this.currentStep = 2;
+          }
+        } catch (e) {
+          console.error('Invalid url params');
+        }
+      }
     },
 
     methods: {
@@ -219,8 +251,8 @@
       finish() {
         this.isLoading = true;
 
-        let groupPermlink = this.research.group.permlink;
-        let permlink = this.research.title
+        const groupPermlink = this.research.group.permlink;
+        const permlink = this.research.title
           .replace(/ /g, '-')
           .replace(/_/g, '-')
           .toLowerCase();
@@ -231,21 +263,19 @@
           description: this.research.description,
           permlink,
           reviewShare: 500, // this.research.review_share_in_percent * this.DEIP_1_PERCENT,
-          disciplines: this.research.disciplines.map(d => d.id),
-          milestones: this.research.milestones.map((m, i) => {
-            return {
-              goal: m.goal,
-              budget: m.budget,
-              purpose: m.purpose,
-              details: m.details,
-              eta: moment(m.eta).toDate(),
-              isActive: i === 0,
-            };
-          }),
+          disciplines: this.research.disciplines.map((d) => d.id),
+          milestones: this.research.milestones.map((m, i) => ({
+            goal: m.goal,
+            budget: m.budget,
+            purpose: m.purpose,
+            details: m.details,
+            eta: moment(m.eta).toDate(),
+            isActive: i === 0
+          })),
           videoSrc: this.research.videoSrc,
           isPrivate: this.research.isPrivate,
           trl: this.research.trlStep,
-          partners: this.research.partners,
+          partners: this.research.partners
         })
           .then(
             () => {
@@ -254,7 +284,7 @@
                 message: `Project "${this.research.title}" has been created successfully`
               });
             },
-            err => {
+            (err) => {
               console.log(err);
               this.isLoading = false;
               this.$store.dispatch('layout/setError', {
@@ -285,32 +315,6 @@
               }
             }, 1500);
           });
-      }
-    },
-
-    created() {
-      if (
-        this.$route.query['disciplineIds'] &&
-        _.isArray(this.$route.query['disciplineIds'])
-      ) {
-        try {
-          this.research.disciplines = disciplineTreeService.getNodesByIdList(
-            this.$route.query['disciplineIds'].map(disciplineId =>
-              parseInt(disciplineId)
-            )
-          );
-          if (this.$route.query.groupPermlink) {
-            const newGroup = this.userGroups.find(
-              item => item.permlink === this.$route.query.groupPermlink
-            );
-            this.setGroup(newGroup);
-            this.currentStep = 3;
-          } else {
-            this.currentStep = 2;
-          }
-        } catch (e) {
-          console.error('Invalid url params');
-        }
       }
     }
   };

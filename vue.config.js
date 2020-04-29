@@ -6,16 +6,12 @@ module.exports = {
       sass: {
         prependData: (loaderContext) => {
           const { resourcePath, rootContext } = loaderContext;
-          // console.log('#############', path.relative(rootContext,resourcePath));
           const relativeArray = path.relative(rootContext, resourcePath).split('/');
 
           if (relativeArray[0] === 'node_modules' && relativeArray[1] === 'vuetify') {
-            return '@import "~@/scss/_vuetifySettings.scss"';
+            return '@import "~@/scss/next/core/_vuetify-settings.scss"';
           }
 
-          // if(relativeArray[0] === 'src') {
-          //   return `@use "~@/styles/core";`
-          // }
           return '';
         }
       }

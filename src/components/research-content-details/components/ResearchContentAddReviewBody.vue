@@ -1,48 +1,48 @@
 <template>
   <div style="position: relative">
-    <div id="review-editor" class="deip-base-editor" ref="review-editor"></div>
+    <div id="review-editor" ref="review-editor" class="deip-base-editor" />
   </div>
 </template>
 
 <script>
 
-import { mapGetters } from 'vuex';
-import DeipBaseEditor from './../../../editors/DeipBaseEditor'
-import { bus } from './../../../main';
+  import { mapGetters } from 'vuex';
+  import DeipBaseEditor from '../../../editors/DeipBaseEditor';
+  import { bus } from '../../../main';
 
-export default {
-  name: "ResearchContentAddReviewBody",
-  data() {
-    return {
-      reviewEditor: null
-    };
-  },
-  computed: {
+  export default {
+    name: 'ResearchContentAddReviewBody',
+    data() {
+      return {
+        reviewEditor: null
+      };
+    },
+    computed: {
 
-  },
+    },
 
-  methods: {
-    exportHtml(cb) {
-      this.reviewEditor.exportHtml()
-        .then((html) => {
-          if (typeof cb === "function") cb(html);
-        });
+    mounted() {
+      const container = this.$refs['review-editor'];
+      const reviewEditor = new DeipBaseEditor(container);
+      this.reviewEditor = reviewEditor;
+
+      bus.$on('reviewEditor:exportHtml', this.exportHtml);
+    },
+
+    beforeDestroy() {
+      bus.$off('reviewEditor:exportHtml', this.exportHtml);
+    },
+
+    methods: {
+      exportHtml(cb) {
+        this.reviewEditor.exportHtml()
+          .then((html) => {
+            if (typeof cb === 'function') cb(html);
+          });
+      }
     }
-  },
 
-  mounted() {
-    const container = this.$refs['review-editor'];
-    const reviewEditor = new DeipBaseEditor(container);
-    this.reviewEditor = reviewEditor;
-    
-    bus.$on('reviewEditor:exportHtml', this.exportHtml);
-  },
-
-  beforeDestroy() {
-    bus.$off('reviewEditor:exportHtml', this.exportHtml);
-  }
-  
-};
+  };
 </script>
 
 <style lang="scss">

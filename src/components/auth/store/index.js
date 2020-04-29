@@ -40,8 +40,8 @@ const getters = {
       ...state.user,
       username: accessService.isLoggedIn() ? accessService.getDecodedToken().username : null,
       privKey,
-      pubKey: accessService.isLoggedIn() ? deipRpc.auth.wifToPublic(privKey) : null,
-    }
+      pubKey: accessService.isLoggedIn() ? deipRpc.auth.wifToPublic(privKey) : null
+    };
   },
 
   userExperise: (state, getters) => {
@@ -57,7 +57,7 @@ const getters = {
     const groups = [];
     for (let i = 0; i < state.user.groupTokens.length; i++) {
       const rgt = state.user.groupTokens[i];
-      const group = state.user.groups.find(g => g.id === rgt.research_group_id)
+      const group = state.user.groups.find((g) => g.id === rgt.research_group_id);
       groups.push({
         id: group.id,
         permlink: group.permlink,
@@ -73,113 +73,85 @@ const getters = {
     return groups;
   },
 
-  userPersonalGroup: (state, getters) => {
-    return getters.userGroups.find(g => g.permlink === getters.user.username);
-  },
+  userPersonalGroup: (state, getters) => getters.userGroups.find((g) => g.permlink === getters.user.username),
 
-  userIsResearchGroupMember: (state, getters) => {
-    return groupId => getters.userGroups.some(group => {
-      return groupId === group.id
-    });
-  },
+  userIsResearchGroupMember: (state, getters) => (groupId) => getters.userGroups.some((group) => groupId === group.id),
 
-  userCoworkers: (state, getters) => {
-    return state.user.coworkers;
-  },
+  userCoworkers: (state, getters) => state.user.coworkers,
 
-  userJoinRequests: (state, getters) => {
-    return state.user.joinRequests;
-  },
+  userJoinRequests: (state, getters) => state.user.joinRequests,
 
   userBalances: (state) => {
-    let userBalances = {};
-    state.user.balances.forEach(({amount}) => {
+    const userBalances = {};
+    state.user.balances.forEach(({ amount }) => {
       userBalances[amount.split(' ')[1]] = amount;
-    })
-    return userBalances
+    });
+    return userBalances;
   },
 
-  tenant: (state) => {
-    return state.tenant;
-  },
+  tenant: (state) => state.tenant,
 
-  isUniversityCertifier: (state, getters) => {
-    return state.user.profile.roles.some(r =>
-      r.role === "university-certifier" &&
-      getters.tenant &&
-      r.researchGroupId == getters.tenant.id
-    );
-  },
+  isUniversityCertifier: (state, getters) => state.user.profile.roles.some((r) => r.role === 'university-certifier'
+      && getters.tenant
+      && r.researchGroupId == getters.tenant.id),
 
-  isGrantProgramOfficer: (state, getters) => {
-    return state.user.profile.roles.some(r =>
-      r.role === "grant-program-officer" &&
-      getters.tenant &&
-      r.researchGroupId == getters.tenant.id
-    );
-  },
+  isGrantProgramOfficer: (state, getters) => state.user.profile.roles.some((r) => r.role === 'grant-program-officer'
+      && getters.tenant
+      && r.researchGroupId == getters.tenant.id),
 
-  isGrantFinanceOfficer: (state, getters) => {
-    return state.user.profile.roles.some(r =>
-      r.role === "grant-finance-officer" &&
-      getters.tenant &&
-      r.researchGroupId == getters.tenant.id
-    );
-  },
+  isGrantFinanceOfficer: (state, getters) => state.user.profile.roles.some((r) => r.role === 'grant-finance-officer'
+      && getters.tenant
+      && r.researchGroupId == getters.tenant.id),
 
-  isTreasuryCertifier: (state, getters) => {
-    return state.user.profile.roles.some(r =>
-      r.role === "treasury-certifier" &&
-      getters.tenant &&
-      r.researchGroupId == getters.tenant.id
-    );
-  },
-}
+  isTreasuryCertifier: (state, getters) => state.user.profile.roles.some((r) => r.role === 'treasury-certifier'
+      && getters.tenant
+      && r.researchGroupId == getters.tenant.id)
+};
 
 // actions
 const actions = {
 
   loadUser({ state, dispatch }) {
     const profileLoad = new Promise((resolve, reject) => {
-      dispatch('loadProfile', { notify: resolve })
+      dispatch('loadProfile', { notify: resolve });
     });
     const accountLoad = new Promise((resolve, reject) => {
-      dispatch('loadAccount', { notify: resolve })
+      dispatch('loadAccount', { notify: resolve });
     });
     const groupsLoad = new Promise((resolve, reject) => {
-      dispatch('loadGroups', { notify: resolve })
+      dispatch('loadGroups', { notify: resolve });
     });
     const expLoad = new Promise((resolve, reject) => {
-      dispatch('loadExpertTokens', { notify: resolve })
+      dispatch('loadExpertTokens', { notify: resolve });
     });
     const joinRequestLoad = new Promise((resolve, reject) => {
-      dispatch('loadJoinRequests', { notify: resolve })
+      dispatch('loadJoinRequests', { notify: resolve });
     });
     const researchBookmarksLoad = new Promise((resolve, reject) => {
-      dispatch('loadResearchBookmarks', { notify: resolve })
+      dispatch('loadResearchBookmarks', { notify: resolve });
     });
     const balancesLoad = new Promise((resolve, reject) => {
-      dispatch('loadBalances', {notify: resolve})
-    })
+      dispatch('loadBalances', { notify: resolve });
+    });
 
-    return Promise.all([ profileLoad, accountLoad, groupsLoad, expLoad, joinRequestLoad, researchBookmarksLoad, balancesLoad ])
+    return Promise.all([profileLoad, accountLoad, groupsLoad, expLoad, joinRequestLoad, researchBookmarksLoad, balancesLoad]);
   },
 
   loadResearchBookmarks({ commit, getters }, { notify } = {}) {
-    const user = getters.user;
+    const { user } = getters;
     return userService.getResearchBookmarks(user.username)
       .then((researchBookmarks) => {
-        commit('SET_USER_RESEARCH_BOOKMARKS', researchBookmarks.map(b => ({
+        commit('SET_USER_RESEARCH_BOOKMARKS', researchBookmarks.map((b) => ({
           _id: b._id,
-          researchId: +b.ref,
+          researchId: +b.ref
         })));
       }).finally(() => {
         if (notify) notify();
-      })
+      });
   },
 
   loadNotifications({ state, commit, getters }, { notify } = {}) {
-    const user = getters.user;
+    const { user } = getters;
     if (user && user.username) {
       return userService.getNotificationsByUser(user.username)
         .then((notifications) => {
@@ -188,17 +160,16 @@ const actions = {
         .finally(() => {
           if (notify) notify();
         });
-    } else {
-      if (notify) notify();
     }
+    if (notify) notify();
   },
 
   loadExpertTokens({ state, commit, getters }, { notify } = {}) {
-    const user = getters.user;
+    const { user } = getters;
 
     deipRpc.api.getExpertTokensByAccountNameAsync(user.username)
       .then((expertTokens) => {
-        commit('SET_USER_EXPERT_TOKENS_LIST', expertTokens)
+        commit('SET_USER_EXPERT_TOKENS_LIST', expertTokens);
       })
       .finally(() => {
         if (notify) notify();
@@ -206,10 +177,10 @@ const actions = {
   },
 
   loadProfile({ state, commit, getters }, { notify } = {}) {
-    const user = getters.user;
+    const { user } = getters;
     return usersService.getUserProfile(user.username)
       .then((profile) => {
-        commit('SET_USER_PROFILE', profile)
+        commit('SET_USER_PROFILE', profile);
       }, (err) => {
         console.log(err);
       })
@@ -218,48 +189,50 @@ const actions = {
       });
   },
 
-  loadBalances({ state, commit, getters }, { notify } = {}){
-    const user = getters.user;
+  loadBalances({ state, commit, getters }, { notify } = {}) {
+    const { user } = getters;
     return assetsService.getAccountBalancesByOwner(user.username)
-    .then((balances) => {
-      commit('SET_BALANCES', balances);
-    }, (err) => {
-      console.log(err);
-    })
-    .finally(() => {
-      if (notify) notify();
-    })
-  },
-
-  loadAccount({ state, commit, getters }, { notify } = {}) {
-    const user = getters.user;
-    return deipRpc.api.getAccountsAsync([ user.username ])
-      .then((account) => {
-        commit('SET_USER_ACCOUNT', account[0])
+      .then((balances) => {
+        commit('SET_BALANCES', balances);
       }, (err) => {
-        console.log(err)
+        console.log(err);
       })
       .finally(() => {
         if (notify) notify();
       });
   },
 
-  loadGroups({ state, dispatch, commit, getters }, { notify } = {}) {
-    const user = getters.user;
+  loadAccount({ state, commit, getters }, { notify } = {}) {
+    const { user } = getters;
+    return deipRpc.api.getAccountsAsync([user.username])
+      .then((account) => {
+        commit('SET_USER_ACCOUNT', account[0]);
+      }, (err) => {
+        console.log(err);
+      })
+      .finally(() => {
+        if (notify) notify();
+      });
+  },
+
+  loadGroups({
+    state, dispatch, commit, getters
+  }, { notify } = {}) {
+    const { user } = getters;
     const groupTokens = [];
     return deipRpc.api.getResearchGroupTokensByAccountAsync(user.username)
       .then((tokensList) => {
         const promises = [];
-        for (var i = 0; i < tokensList.length; i++) {
+        for (let i = 0; i < tokensList.length; i++) {
           const rgt = tokensList[i];
           groupTokens.push(rgt);
-          promises.push(deipRpc.api.getResearchGroupByIdAsync(rgt.research_group_id))
+          promises.push(deipRpc.api.getResearchGroupByIdAsync(rgt.research_group_id));
         }
         return Promise.all(promises);
       })
       .then((groups) => {
-        commit('SET_USER_GROUPS_LIST', groups)
-        commit('SET_USER_RESEARCH_GROUP_TOKENS_LIST', groupTokens)
+        commit('SET_USER_GROUPS_LIST', groups);
+        commit('SET_USER_RESEARCH_GROUP_TOKENS_LIST', groupTokens);
       })
       .finally(() => {
         if (notify) notify();
@@ -271,54 +244,48 @@ const actions = {
     const coworkers = [];
 
     if (groups.length) {
-
-      var promises = [];
-      for (var i = 0; i < groups.length; i++) {
+      const promises = [];
+      for (let i = 0; i < groups.length; i++) {
         const group = groups[i];
-        promises.push(deipRpc.api.getResearchGroupTokensByResearchGroupAsync(group.id))
+        promises.push(deipRpc.api.getResearchGroupTokensByResearchGroupAsync(group.id));
       }
 
       Promise.all(promises)
         .then((tokensList) => {
-
           const flattened = tokensList.reduce(
-            function (accumulator, currentValue) {
-              return accumulator.concat(currentValue);
-            }, []);
+            (accumulator, currentValue) => accumulator.concat(currentValue), []
+          );
 
-          for (var i = 0; i < flattened.length; i++) {
-            const rgt = flattened[i]
-            if (rgt.owner !== state.user.username && coworkers.find(c => c.owner === rgt.owner) === undefined) {
-              coworkers.push({ rgt: rgt });
+          for (let i = 0; i < flattened.length; i++) {
+            const rgt = flattened[i];
+            if (rgt.owner !== state.user.username && coworkers.find((c) => c.owner === rgt.owner) === undefined) {
+              coworkers.push({ rgt });
             }
           }
 
-          return usersService.getEnrichedProfiles(coworkers.map(c => c.rgt.owner))
-
+          return usersService.getEnrichedProfiles(coworkers.map((c) => c.rgt.owner));
         })
         .then((users) => {
           coworkers.forEach((coworker, idx) => {
-            const user = users.find(u => u.account.name === coworker.rgt.owner);
+            const user = users.find((u) => u.account.name === coworker.rgt.owner);
             coworker.account = user.account;
             coworker.profile = user.profile;
-          })
-          commit('SET_USER_COWORKERS_LIST', coworkers)
+          });
+          commit('SET_USER_COWORKERS_LIST', coworkers);
         })
         .finally(() => {
           if (notify) notify();
         });
-    } else {
-      if (notify) notify();
-    }
+    } else if (notify) notify();
   },
 
   loadJoinRequests({ state, commit, getters }, { notify } = {}) {
-    const user = getters.user;
+    const { user } = getters;
     researchGroupService.getJoinRequestsByUser(user.username)
       .then((requests) => {
-        commit('SET_USER_JOIN_REQUESTS', requests)
+        commit('SET_USER_JOIN_REQUESTS', requests);
       }, (err) => {
-        console.log(err)
+        console.log(err);
       })
       .finally(() => {
         if (notify) notify();
@@ -330,62 +297,62 @@ const actions = {
       .then((tenant) => {
         commit('SET_TENANT_PROFILE', tenant);
       })
-      .catch(err => {
-        console.log(err)
+      .catch((err) => {
+        console.log(err);
       })
       .finally(() => {
         if (notify) notify();
       });
   }
-}
+};
 
 // mutations
 const mutations = {
 
-  ['SET_USER_EXPERT_TOKENS_LIST'](state, list) {
-    Vue.set(state.user, 'expertTokens', list)
+  SET_USER_EXPERT_TOKENS_LIST(state, list) {
+    Vue.set(state.user, 'expertTokens', list);
   },
 
-  ['SET_USER_GROUPS_LIST'](state, list) {
-    Vue.set(state.user, 'groups', list)
+  SET_USER_GROUPS_LIST(state, list) {
+    Vue.set(state.user, 'groups', list);
   },
 
-  ['SET_USER_RESEARCH_GROUP_TOKENS_LIST'](state, list) {
-    Vue.set(state.user, 'groupTokens', list)
+  SET_USER_RESEARCH_GROUP_TOKENS_LIST(state, list) {
+    Vue.set(state.user, 'groupTokens', list);
   },
 
-  ['SET_USER_RESEARCH_BOOKMARKS'](state, list) {
-    Vue.set(state.user, 'researchBookmarks', list)
+  SET_USER_RESEARCH_BOOKMARKS(state, list) {
+    Vue.set(state.user, 'researchBookmarks', list);
   },
 
-  ['SET_USER_NOTIFICATION_PROPOSALS'](state, list) {
-    Vue.set(state.user, 'notifications', list)
+  SET_USER_NOTIFICATION_PROPOSALS(state, list) {
+    Vue.set(state.user, 'notifications', list);
   },
 
-  ['SET_USER_COWORKERS_LIST'](state, list) {
-    Vue.set(state.user, 'coworkers', list)
+  SET_USER_COWORKERS_LIST(state, list) {
+    Vue.set(state.user, 'coworkers', list);
   },
 
-  ['SET_USER_PROFILE'](state, profile) {
-    Vue.set(state.user, 'profile', profile)
+  SET_USER_PROFILE(state, profile) {
+    Vue.set(state.user, 'profile', profile);
   },
 
-  ['SET_USER_JOIN_REQUESTS'](state, requests) {
-    Vue.set(state.user, 'joinRequests', requests)
+  SET_USER_JOIN_REQUESTS(state, requests) {
+    Vue.set(state.user, 'joinRequests', requests);
   },
 
-  ['SET_USER_ACCOUNT'](state, account) {
-    Vue.set(state.user, 'account', account)
+  SET_USER_ACCOUNT(state, account) {
+    Vue.set(state.user, 'account', account);
   },
 
-  ['SET_TENANT_PROFILE'](state, tenant) {
-    Vue.set(state, 'tenant', tenant)
+  SET_TENANT_PROFILE(state, tenant) {
+    Vue.set(state, 'tenant', tenant);
   },
 
-  ['SET_BALANCES'](state, balances){
+  SET_BALANCES(state, balances) {
     Vue.set(state.user, 'balances', balances);
   }
-}
+};
 
 const namespaced = true;
 

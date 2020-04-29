@@ -70,10 +70,12 @@ const getters = {
         return { ...comment, author };
       });
 
-      const ref = state.researchesRefs.find(ref => ref.permlink == research.permlink);
+      const ref = state.researchesRefs.find((ref) => ref.permlink == research.permlink);
 
       return {
-        research: { ...research, comments, owner, ref },
+        research: {
+          ...research, comments, owner, ref
+        },
         group,
         team,
         shareHolders,
@@ -131,11 +133,10 @@ const actions = {
   },
 
   loadInvestmentPortfolioResearches({ state, dispatch, commit }, { researchIds, notify }) {
-    
     return Promise.all([
       Promise.all(researchIds.map((rId) => deipRpc.api.getResearchByIdAsync(rId))),
       Promise.all(researchIds.map((rId) => researchService.getResearch(rId)))
-    ]) 
+    ])
       .then(([researches, refs]) => {
         commit('SET_INVESTMENT_PORTFOLIO_RESEARCHES_REFS', refs);
         commit('SET_INVESTMENT_PORTFOLIO_RESEARCHES', researches);

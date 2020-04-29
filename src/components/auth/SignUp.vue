@@ -1,72 +1,86 @@
 <template>
-  <v-container fluid fill-height class="pa-0 ma-0">
-    <v-layout row>
-      <v-flex md6 lg6 xl6 hidden-sm-and-down>
-        <v-layout column wrap fill-height class="description">
+  <v-container fluid class="pa-0 ma-0 fill-height">
+    <v-row no-gutters class="fill-height">
+      <v-col cols="6" class="hidden-sm-and-down">
+        <div class="description fill-height">
           <div class="description__logo">
-            <img src="/assets/img/landing-logo.svg"/>
+            <img src="/assets/img/landing-logo.svg">
           </div>
           <div class="description__info-text">
             Open Research and Innovation Platform
           </div>
-          <v-layout class="description__info-list-item mt-5" align-center shrink>
-            <v-icon small color="white">mdi-message-reply-text</v-icon>
+          <div class="description__info-list-item mt-12" align-center shrink>
+            <v-icon small color="white">
+              mdi-message-reply-text
+            </v-icon>
             <span class="ml-2">Collaboration</span>
-          </v-layout>
-          <v-layout class="description__info-list-item mt-4" align-center shrink>
-            <v-icon small color="white" class="icon-upended">mdi-lightbulb-on</v-icon>
+          </div>
+          <div class="description__info-list-item mt-6" align-center shrink>
+            <v-icon small color="white" class="icon-upended">
+              mdi-lightbulb-on
+            </v-icon>
             <span class="ml-2">Project tokenization</span>
-          </v-layout>
-          <v-layout class="description__info-list-item mt-4" align-center shrink>
-            <v-icon small color="white">mdi-shield-check</v-icon>
+          </div>
+          <div class="description__info-list-item mt-6" align-center shrink>
+            <v-icon small color="white">
+              mdi-shield-check
+            </v-icon>
             <span class="ml-2">Licensing of intellectual property</span>
-          </v-layout>
-          <v-layout class="description__info-list-item mt-4" align-center shrink>
-            <v-icon small color="white">mdi-account-multiple-plus</v-icon>
+          </div>
+          <div class="description__info-list-item mt-6" align-center shrink>
+            <v-icon small color="white">
+              mdi-account-multiple-plus
+            </v-icon>
             <span class="ml-2">Crowd investing</span>
-          </v-layout>
-        </v-layout>
-      </v-flex>
-      <v-flex xs12 sm12 md6 lg6 xl6>
+          </div>
+        </div>
+      </v-col>
+      <v-col cols="12" md="6">
         <v-card class="full-height elevation-0" color="secondary">
-          <v-layout column wrap fill-height class="signup">
-            <div class="signup__title">Registration</div>
-            <v-form v-model="isFormValid" ref="form" class="c-mt-10" v-show="!isServerValidated">
-
+          <div class="signup fill-height">
+            <div class="signup__title">
+              Registration
+            </div>
+            <v-form
+              v-show="!isServerValidated"
+              ref="form"
+              v-model="isFormValid"
+              class="c-mt-10"
+            >
               <v-text-field
-                label="Email"
                 v-model="formData.email"
+                label="Email"
                 :rules="[rules.required, rules.email]"
                 :disabled="isSaving"
               />
 
               <v-text-field
-                label="First name"
                 v-model="formData.firstName"
+                label="First name"
                 :rules="[rules.required, rules.nameChars]"
                 :disabled="isSaving"
               />
 
-            <v-text-field
-              label="Last name"
-              v-model="formData.lastName"
-              :rules="[rules.required, rules.nameChars]"
-              :disabled="isSaving"
-            />
+              <v-text-field
+                v-model="formData.lastName"
+                label="Last name"
+                :rules="[rules.required, rules.nameChars]"
+                :disabled="isSaving"
+              />
 
-            <v-text-field
-              name="username"
-              label="Username"
-              v-model="formData.username"
-              :rules="[
-                rules.required,
-                rules.unique,
-                rules.usernameFormat
-              ]"
-              @input="usernameChanged"
-              :loading="isUsernameChecking"
-              :disabled="isSaving"
-            />
+              <v-text-field
+                v-model="formData.username"
+                name="username"
+                label="Username"
+                :rules="[
+                  rules.required,
+                  rules.unique,
+                  rules.usernameFormat
+                ]"
+                :loading="isUsernameChecking"
+                :disabled="isSaving"
+                @input="usernameChanged"
+              />
 
               <v-text-field
                 v-model="formData.masterPassword"
@@ -81,8 +95,8 @@
               />
 
               <v-text-field
-                v-model="formData.reEnterMasterPassword"
                 ref="reEnterMasterPassword"
+                v-model="formData.reEnterMasterPassword"
                 class="c-mt-4"
                 label="Re-Enter Master Password"
                 :disabled="isSaving"
@@ -92,41 +106,47 @@
                 @click:append="formData.isHiddenReEnterMasterPassword = !formData.isHiddenReEnterMasterPassword"
               />
 
-              <div class="text-align-justify caption grey--text">
+              <div class="text-justify caption grey--text">
                 Please confirm you have saved the generated key and want to be added to the list of private beta
                 participants with the information specified above:
               </div>
 
               <v-checkbox
+                v-model="formData.isMasterPasswordSaved"
                 class="c-mv-4 pa-0"
                 label="I have saved the password and want to be added to the list"
-                v-model="formData.isMasterPasswordSaved"
                 :disabled="isSaving"
                 hide-details
               />
 
-              <div class="c-pb-4 text-align-justify caption grey--text">
+              <div class="c-pb-4 text-justify caption grey--text">
                 No data is stored until you press “Finish Registration” button.
                 For more information about our privacy terms please read <a class="a" target="_blank" href="https://deip.world/DEIP%20PRIVACY%20POLICY.pdf">Privacy Policy</a>.
                 By clicking below, you agree that we may process ypur information in accordance with these terms.
               </div>
 
-              <v-btn block color="primary"
+              <v-btn
+                block
+                color="primary"
                 :loading="isSaving"
-                @click="finishRegistration()"
                 :disabled="!formData.isMasterPasswordSaved || isSaving"
-              >Finish registration</v-btn>
-              <div class="primary--text text-xs-center mt-2">
+                @click="finishRegistration()"
+              >
+                Finish registration
+              </v-btn>
+              <div class="primary--text text-center mt-2">
                 Already have an account?
                 <router-link
                   :to="{ name: 'SignIn' }"
-                >Sign In</router-link>
+                >
+                  Sign In
+                </router-link>
               </div>
             </v-form>
-          </v-layout>
+          </div>
         </v-card>
-      </v-flex>
-    </v-layout>
+      </v-col>
+    </v-row>
   </v-container>
 </template>
 
@@ -158,36 +178,36 @@
           isHiddenMasterPassword: true,
           reEnterMasterPassword: '',
           isHiddenReEnterMasterPassword: true,
-          isMasterPasswordSaved: false,
+          isMasterPasswordSaved: false
         },
 
         rules: {
-          required: value => !!value || 'This field is required',
-          unique: value => !!value && this.isUsernameVerifyed !== false || 'Username should be unique in system',
-          nameChars: value => (
+          required: (value) => !!value || 'This field is required',
+          unique: (value) => !!value && this.isUsernameVerifyed !== false || 'Username should be unique in system',
+          nameChars: (value) => (
             value.match(/^[a-z][a-z ,.'-]*$/i) !== null
             || 'Incorrect value'
           ),
-          usernameFormat: value => {
-            var result = deipRpc.utils.validateAccountName(value);
+          usernameFormat: (value) => {
+            const result = deipRpc.utils.validateAccountName(value);
             return result === null || result;
           },
           email: (value) => {
-            const pattern = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
-            return pattern.test(value) || 'Invalid E-mail'
+            const pattern = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+            return pattern.test(value) || 'Invalid E-mail';
           },
           masterPassword: (value) => {
             if (value.length < this.MASTER_PASSWORD_MIN_LENGTH) {
               return 'Master password should be at least 10 symbols';
-            } else if (value.length > this.MASTER_PASSWORD_MAX_LENGTH) {
+            } if (value.length > this.MASTER_PASSWORD_MAX_LENGTH) {
               return 'Master password max length is 100 symbols';
             }
 
             return true;
           },
-          reEnterMasterPassword: (value) => value === this.formData.masterPassword || `Password doesn't match`,
-        },
-      }
+          reEnterMasterPassword: (value) => value === this.formData.masterPassword || 'Password doesn\'t match'
+        }
+      };
     },
 
     methods: {
@@ -198,10 +218,10 @@
 
         const {
           email, firstName, lastName, username,
-          masterPassword,
+          masterPassword
         } = this.formData;
 
-        const {ownerPubkey: pubKey} = deipRpc.auth.getPrivateKeys(
+        const { ownerPubkey: pubKey } = deipRpc.auth.getPrivateKeys(
           username,
           masterPassword,
           ['owner']
@@ -212,20 +232,20 @@
           firstName,
           lastName,
           username,
-          pubKey,
+          pubKey
         }).then(() => {
           this.isSaving = false;
           this.isServerValidated = true;
           this.$store.dispatch('layout/setSuccess', {
             message: `Account '${this.formData.username}' has been created successfully! Use the private key to sign in to the DEIP platform!`
           });
-          this.$router.push({name: 'SignIn', query: {username: this.formData.username}});
+          this.$router.push({ name: 'SignIn', query: { username: this.formData.username } });
         }).catch((err) => {
           this.isSaving = false;
           const message = err.response && err.response.data
             || 'Sorry, the service is temporarily unavailable, please try again later';
 
-          this.$store.dispatch('layout/setError', {message: message});
+          this.$store.dispatch('layout/setError', { message });
           console.log(err);
         });
       },
@@ -243,7 +263,7 @@
                 this.isUsernameVerifyed = false;
               }).finally(() => {
                 this.isUsernameChecking = false;
-                let usernameInput = _.find(this.$refs.form.inputs, input => input.$attrs.name === 'username');
+                const usernameInput = _.find(this.$refs.form.inputs, (input) => input.$attrs.name === 'username');
                 usernameInput.validate();
               });
           }
@@ -251,7 +271,7 @@
         600
       )
     }
-  }
+  };
 </script>
 
 <style lang="less" scoped>

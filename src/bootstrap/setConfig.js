@@ -10,7 +10,7 @@ const setConfig = async () => {
 
   window.env = env.data;
 
-  AppConfigService.getInstance().init({ env: env.data })
+  AppConfigService.getInstance().init({ env: env.data });
 
   ResearchGroupService.getInstance().setMethods({
     voting: ResearchGroupProposalVotingService.getInstance()
@@ -19,4 +19,4 @@ const setConfig = async () => {
 
 export {
   setConfig
-}
+};

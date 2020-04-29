@@ -4,7 +4,7 @@
       <platform-avatar
         :user="claimerInfo"
         :size="160"
-      ></platform-avatar>
+      />
 
       <div class="legacy-col-grow c-pl-12">
         <div class="display-1 half-bold c-pt-4">
@@ -13,48 +13,68 @@
           </router-link>
         </div>
 
-        <div class="c-pt-4" v-if="locationString !== ''">
+        <div v-if="locationString !== ''" class="c-pt-4">
           <div class="legacy-row half-bold">
-                        <span class="c-mt-1">
-                            <v-icon small>location_on</v-icon> {{ locationString }}
-                        </span>
+            <span class="c-mt-1">
+              <v-icon small>location_on</v-icon> {{ locationString }}
+            </span>
           </div>
         </div>
 
-        <div v-if="claimerInfo.profile" class="c-pt-2">{{ claimerInfo | employmentOrEducation}}</div>
+        <div v-if="claimerInfo.profile" class="c-pt-2">
+          {{ claimerInfo | employmentOrEducation }}
+        </div>
       </div>
     </div>
 
-    <div class="bold title c-pt-8">Discipline: {{ claim.discipline.name }}</div>
-    <div class="bold title c-pt-8">Cover letter</div>
-    <div class="c-pt-4">{{ claim.coverLetter }}</div>
-    <div class="bold title c-pt-8">Publications</div>
+    <div class="bold title c-pt-8">
+      Discipline: {{ claim.discipline.name }}
+    </div>
+    <div class="bold title c-pt-8">
+      Cover letter
+    </div>
+    <div class="c-pt-4">
+      {{ claim.coverLetter }}
+    </div>
+    <div class="bold title c-pt-8">
+      Publications
+    </div>
 
     <v-card class="c-mt-6">
       <template v-for="publicationUrl in claim.publications">
         <div class="c-p-6">
-          <v-icon color="primary" class="c-mr-3">mdi-note-text</v-icon>
+          <v-icon color="primary" class="c-mr-3">
+            mdi-note-text
+          </v-icon>
           <a class="a" :href="publicationUrl" target="_blank">{{ publicationUrl }}</a>
         </div>
 
-        <v-divider></v-divider>
+        <v-divider />
       </template>
     </v-card>
 
     <div class="c-mt-8">
-      <div class="legacy-row legacy-align-items-center legacy-justify-center"
-           v-if="claim.username !== user.username && !isClaimAccepted">
-        <v-btn color="primary" class="ma-0 width-9" large
-               :disabled="isApproveBtnDisabled"
-               :loading="isApproveBtnLoading"
-               @click="approveProposal(proposal)"
-        >{{ isApproveBtnVoted ? 'Approved' : 'Approve' }}
+      <div
+        v-if="claim.username !== user.username && !isClaimAccepted"
+        class="legacy-row legacy-align-items-center legacy-justify-center"
+      >
+        <v-btn
+          color="primary"
+          class="ma-0 width-9"
+          large
+          :disabled="isApproveBtnDisabled"
+          :loading="isApproveBtnLoading"
+          @click="approveProposal(proposal)"
+        >
+          {{ isApproveBtnVoted ? 'Approved' : 'Approve' }}
         </v-btn>
       </div>
 
-      <div class="legacy-row legacy-align-items-center legacy-justify-center" v-if="isClaimAccepted">
+      <div v-if="isClaimAccepted" class="legacy-row legacy-align-items-center legacy-justify-center">
         <span class="headline green--text text--darken-1 c-pr-3">Claimed</span>
-        <v-icon size="35" color="green darken-1">mdi-check</v-icon>
+        <v-icon size="35" color="green darken-1">
+          mdi-check
+        </v-icon>
       </div>
     </div>
 
@@ -82,7 +102,7 @@
         isAllocationDialogShown: false,
         isApproveBtnLoading: false,
         wasApproved: false
-      }
+      };
     },
 
     computed: {
@@ -90,7 +110,7 @@
         claimerInfo: 'claimExpertiseDetails/claimerInfo',
         claim: 'claimExpertiseDetails/claim',
         proposal: 'claimExpertiseDetails/proposal',
-        user: 'auth/user',
+        user: 'auth/user'
       }),
 
       locationString() {
@@ -118,13 +138,16 @@
       },
 
       isApproveBtnVoted() {
-        const isVoted = !!_.find(this.proposal.votes, vote => vote.voter === this.user.username);
+        const isVoted = !!_.find(this.proposal.votes, (vote) => vote.voter === this.user.username);
         return isVoted || this.wasApproved;
       },
 
       isClaimAccepted() {
-        return _.some(this.claimerInfo.expertise, item => item.discipline_id === this.claim.disciplineId);
+        return _.some(this.claimerInfo.expertise, (item) => item.discipline_id === this.claim.disciplineId);
       }
+    },
+
+    created() {
     },
 
     methods: {
@@ -138,15 +161,15 @@
 
             this.wasApproved = true;
             this.reloadProposal();
-          }).catch(e => {
-          this.$store.dispatch('layout/setError', {
-            message: 'Error occured'
-          });
+          }).catch((e) => {
+            this.$store.dispatch('layout/setError', {
+              message: 'Error occured'
+            });
 
-          console.log(e);
-        }).finally(() => {
-          this.isApproveBtnLoading = false;
-        });
+            console.log(e);
+          }).finally(() => {
+            this.isApproveBtnLoading = false;
+          });
       },
 
       reloadProposal() {
@@ -157,11 +180,8 @@
 
         this.$store.dispatch('claimExpertiseDetails/loadClaimerExpertise', { username: this.claim.username });
       }
-    },
-
-    created() {
     }
-  }
+  };
 </script>
 
 <style lang="less" scoped>

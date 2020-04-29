@@ -43,25 +43,25 @@ const state = {
 
 // getters
 const getters = {
-  proposals: state => state.proposals,
-  group: state => state.group,
-  groupShares: state => state.groupShares,
-  members: state => state.members,
-  invites: state => state.invites,
-  proposalListFilter: state => state.proposalListFilter,
+  proposals: (state) => state.proposals,
+  group: (state) => state.group,
+  groupShares: (state) => state.groupShares,
+  members: (state) => state.members,
+  invites: (state) => state.invites,
+  proposalListFilter: (state) => state.proposalListFilter,
   researchList: (state, getters, rootState, rootGetters) => {
     const user = rootGetters['auth/user'];
-    return state.researchList.filter(item => !item.is_private || state.groupShares.some(share => share.owner == user.username));
+    return state.researchList.filter((item) => !item.is_private || state.groupShares.some((share) => share.owner == user.username));
   },
-  options: state => state.options,
-  joinRequests: state => state.joinRequests,
-  pendingJoinRequests: state => state.joinRequests.filter(r => r.status == 'pending'),
+  options: (state) => state.options,
+  joinRequests: (state) => state.joinRequests,
+  pendingJoinRequests: (state) => state.joinRequests.filter((r) => r.status == 'pending'),
 
-  isLoadingResearchGroupDetails: state => state.isLoadingResearchGroupDetails,
-  isLoadingResearchGroupMembers: state => state.isLoadingResearchGroupMembers,
-  isLoadingResearchGroupResearchList: state => state.isLoadingResearchGroupResearchList,
-  isLoadingResearchGroupProposals: state => state.isLoadingResearchGroupProposals,
-  isLoadingResearchGroupJoinRequests: state => state.isLoadingResearchGroupJoinRequests
+  isLoadingResearchGroupDetails: (state) => state.isLoadingResearchGroupDetails,
+  isLoadingResearchGroupMembers: (state) => state.isLoadingResearchGroupMembers,
+  isLoadingResearchGroupResearchList: (state) => state.isLoadingResearchGroupResearchList,
+  isLoadingResearchGroupProposals: (state) => state.isLoadingResearchGroupProposals,
+  isLoadingResearchGroupJoinRequests: (state) => state.isLoadingResearchGroupJoinRequests
 };
 
 // actions
@@ -71,7 +71,7 @@ const actions = {
     commit('SET_GROUP_DETAILS_LOADING_STATE', true);
 
     return deipRpc.api.getResearchGroupByPermlinkAsync(permlink)
-      .then(data => {
+      .then((data) => {
         commit('SET_RESEARCH_GROUP', data);
 
         const proposalsLoad = new Promise((resolve, reject) => {
@@ -110,7 +110,7 @@ const actions = {
           membersLoad,
           joinRequestsLoad,
           groupInvitesPromise
-        ])
+        ]);
       })
       .finally(() => {
         commit('SET_GROUP_DETAILS_LOADING_STATE', false);
@@ -126,18 +126,15 @@ const actions = {
     // };
 
     deipRpc.api.getProposalsByResearchGroupIdAsync(groupId)
-      .then(data => {
-
-        return Promise.all(
-          data.map(
-            (item) => researchGroupService.extendProposalByRelatedInfo({
-              ...item,
-              ...{ data: JSON.parse(item.data) }
-            })
-          )
-        );
-      })
-      .then(data => {
+      .then((data) => Promise.all(
+        data.map(
+          (item) => researchGroupService.extendProposalByRelatedInfo({
+            ...item,
+            ...{ data: JSON.parse(item.data) }
+          })
+        )
+      ))
+      .then((data) => {
         commit('SET_PROPOSALS', data);
       })
       .finally(() => {
@@ -151,36 +148,34 @@ const actions = {
     commit('SET_GROUP_RESEARCH_LIST_LOADING_STATE', true);
 
     deipRpc.api.getResearchesByResearchGroupIdAsync(groupId)
-      .then(list => {
+      .then((list) => {
         researchResult.push(...list);
         return Promise.all(
-          list.map(item => expertiseContributionsService.getExpertiseContributionsByResearch(item.id))
+          list.map((item) => expertiseContributionsService.getExpertiseContributionsByResearch(item.id))
         );
       })
-      .then(list => {
+      .then((list) => {
         const tvoMap = _.chain(list)
           .flatten()
           .groupBy('research_id')
           .value();
 
-        researchResult.forEach(research => {
+        researchResult.forEach((research) => {
           research.totalVotes = tvoMap[research.id] ? tvoMap[research.id] : [];
         });
 
         return researchResult;
       })
-      .then(data => {
+      .then((data) => {
         commit('SET_RESEARCHES_REFS_DETAILS_LOADING_STATE', true);
-        Promise.all(data.map(({id}) => researchService.getResearch(id)))
-          .then(refs => {
-            const researchList = refs.map((researchRef, i) => {
-              return {
-                ...data[i],
-                researchRef
-              };
-            });
+        Promise.all(data.map(({ id }) => researchService.getResearch(id)))
+          .then((refs) => {
+            const researchList = refs.map((researchRef, i) => ({
+              ...data[i],
+              researchRef
+            }));
             commit('SET_GROUP_RESEARCH_LIST', researchList);
-          }, (err) => {console.log(err);})
+          }, (err) => { console.log(err); })
           .finally(() => {
             commit('SET_RESEARCHES_REFS_DETAILS_LOADING_STATE', false);
           });
@@ -196,17 +191,17 @@ const actions = {
     commit('SET_GROUP_MEMBERS_LOADING_STATE', true);
 
     deipRpc.api.getResearchGroupTokensByResearchGroupAsync(groupId)
-      .then(rgtList => {
+      .then((rgtList) => {
         commit('SET_GROUP_SHARES', rgtList);
-        rgtList.forEach(rgt => {
-          members.push({ rgt: rgt });
+        rgtList.forEach((rgt) => {
+          members.push({ rgt });
         });
-        return usersService.getEnrichedProfiles(members.map(member => member.rgt.owner));
+        return usersService.getEnrichedProfiles(members.map((member) => member.rgt.owner));
       })
       .then((users) => {
         const promises = [];
-        members.forEach(member => {
-          const user = users.find(user => user.account.name == member.rgt.owner);
+        members.forEach((member) => {
+          const user = users.find((user) => user.account.name == member.rgt.owner);
           member.account = user.account;
           member.profile = user.profile;
           promises.push(deipRpc.api.getExpertTokensByAccountNameAsync(member.account.name));
@@ -230,18 +225,18 @@ const actions = {
     let invites = [];
 
     return deipRpc.api.getResearchGroupInvitesByResearchGroupIdAsync(groupId)
-      .then(invitesList => {
+      .then((invitesList) => {
         invites = invitesList;
-        return usersService.getEnrichedProfiles(invites.map(invite => invite.account_name));
+        return usersService.getEnrichedProfiles(invites.map((invite) => invite.account_name));
       })
-      .then(users => {
+      .then((users) => {
         invites.forEach((invite, index) => {
           invite.user = users[index];
         });
 
         commit('SET_GROUP_INVITES', invites);
       })
-      .catch(e => {
+      .catch((e) => {
         console.log(e);
       });
   },
@@ -262,7 +257,7 @@ const actions = {
     researchGroupService.getJoinRequestsByGroup(groupId)
       .then((requests) => {
         joinRequests.push(...requests);
-        return usersService.getEnrichedProfiles(joinRequests.map(request => request.username));
+        return usersService.getEnrichedProfiles(joinRequests.map((request) => request.username));
       }, (err) => {
         console.log(err);
       })
@@ -282,71 +277,71 @@ const actions = {
 
 // mutations
 const mutations = {
-  ['SET_PROPOSALS'](state, proposals) {
+  SET_PROPOSALS(state, proposals) {
     Vue.set(state, 'proposals', proposals);
   },
 
-  ['SET_RESEARCH_GROUP'](state, group) {
+  SET_RESEARCH_GROUP(state, group) {
     Vue.set(state, 'group', group);
   },
 
-  ['SET_GROUP_SHARES'](state, shares) {
+  SET_GROUP_SHARES(state, shares) {
     Vue.set(state, 'groupShares', shares);
   },
 
-  ['SET_GROUP_MEMBERS'](state, members) {
+  SET_GROUP_MEMBERS(state, members) {
     Vue.set(state, 'members', members);
   },
 
-  ['SET_GROUP_RESEARCH_LIST'](state, researchList) {
+  SET_GROUP_RESEARCH_LIST(state, researchList) {
     Vue.set(state, 'researchList', researchList);
   },
 
-  ['CHANGE_PROPOSAL'](state, payload) {
-    let index = state.proposals.indexOf(payload.old);
+  CHANGE_PROPOSAL(state, payload) {
+    const index = state.proposals.indexOf(payload.old);
 
     if (index !== -1) {
       state.proposals.splice(index, 1, payload.new);
     }
   },
 
-  ['SET_GROUP_INVITES'](state, invites) {
+  SET_GROUP_INVITES(state, invites) {
     Vue.set(state, 'invites', invites);
   },
 
-  ['UPDATE_PROPOSAL_FILTER'](state, { key, value }) {
+  UPDATE_PROPOSAL_FILTER(state, { key, value }) {
     Vue.set(state.proposalListFilter, key, value);
   },
 
-  ['UPDATE_OPTIONS'](state, { key, value }) {
+  UPDATE_OPTIONS(state, { key, value }) {
     Vue.set(state.options, key, value);
   },
 
-  ['SET_JOIN_REQUESTS'](state, joinRequests) {
+  SET_JOIN_REQUESTS(state, joinRequests) {
     Vue.set(state, 'joinRequests', joinRequests);
   },
 
-  ['SET_GROUP_DETAILS_LOADING_STATE'](state, value) {
+  SET_GROUP_DETAILS_LOADING_STATE(state, value) {
     state.isLoadingResearchGroupDetails = value;
   },
 
-  ['SET_GROUP_MEMBERS_LOADING_STATE'](state, value) {
+  SET_GROUP_MEMBERS_LOADING_STATE(state, value) {
     state.isLoadingResearchGroupMembers = value;
   },
 
-  ['SET_GROUP_RESEARCH_LIST_LOADING_STATE'](state, value) {
+  SET_GROUP_RESEARCH_LIST_LOADING_STATE(state, value) {
     state.isLoadingResearchGroupResearchList = value;
   },
 
-  ['SET_GROUP_PROPOSALS_LOADING_STATE'](state, value) {
+  SET_GROUP_PROPOSALS_LOADING_STATE(state, value) {
     state.isLoadingResearchGroupProposals = value;
   },
 
-  ['SET_GROUP_JOIN_REQUESTS_LOADING_STATE'](state, value) {
+  SET_GROUP_JOIN_REQUESTS_LOADING_STATE(state, value) {
     state.isLoadingResearchGroupJoinRequests = value;
   },
 
-  ['SET_RESEARCHES_REFS_DETAILS_LOADING_STATE'](state, value) {
+  SET_RESEARCHES_REFS_DETAILS_LOADING_STATE(state, value) {
     state.isLoadingResearchesRefDetails = value;
   }
 };

@@ -1,58 +1,68 @@
 <template>
   <div>
-
     <div>
       <div v-if="dropzoneOptions">
-        <vue-dropzone ref="newContent" id="content-dropzone"
-                      :options="dropzoneOptions"
-                      @vdropzone-sending-multiple="vdropzoneSendingMultiple"
-                      @vdropzone-file-added="vdropzoneFileAdded"
-                      @vdropzone-success-multiple="vdropzoneSuccessMultiple"
-                      @vdropzone-error-multiple="vdropzoneErrorMultiple">
-        </vue-dropzone>
+        <vue-dropzone
+          id="content-dropzone"
+          ref="newContent"
+          :options="dropzoneOptions"
+          @vdropzone-sending-multiple="vdropzoneSendingMultiple"
+          @vdropzone-file-added="vdropzoneFileAdded"
+          @vdropzone-success-multiple="vdropzoneSuccessMultiple"
+          @vdropzone-error-multiple="vdropzoneErrorMultiple"
+        />
       </div>
     </div>
-    <v-dialog v-if="research" v-model="isOpen" persistent transition="scale-transition" max-width="600px">
-      <v-card class="pa-4">
+    <v-dialog
+      v-if="research"
+      v-model="isOpen"
+      persistent
+      transition="scale-transition"
+      max-width="600px"
+    >
+      <v-card class="pa-6">
         <v-card-title>
-          <v-layout align-center>
-            <v-flex grow headline>Upload material for research</v-flex>
-            <v-flex shrink right-top-angle>
-              <v-btn @click="close()" icon class="pa-0 ma-0">
-                <v-icon color="black">close</v-icon>
-              </v-btn>
-            </v-flex>
-          </v-layout>
+          <div class="headline">
+            Upload material for research
+          </div>
+          <div class="right-top-angle">
+            <v-btn icon class="pa-0 ma-0" @click="close()">
+              <v-icon color="black">
+                close
+              </v-icon>
+            </v-btn>
+          </div>
         </v-card-title>
         <v-card-text>
           <div v-if="researchGroupMembersList.length">
             <v-text-field
-              label="Title"
               v-model="title"
-              hide-details>
-            </v-text-field>
+              label="Title"
+              hide-details
+            />
 
-            <v-select v-model="type"
-                      :items="researchContentTypes"
-                      label="Content Type"
-                      class="c-mt-6"
-                      item-value="id">
-            </v-select>
+            <v-select
+              v-model="type"
+              :items="researchContentTypes"
+              label="Content Type"
+              class="c-mt-6"
+              item-value="id"
+            />
 
             <v-autocomplete
+              v-model="authors"
               :items="researchGroupMembersList"
               :menu-props="{ closeOnContentClick: true }"
-              v-model="authors"
               hint="You can select multiple authors"
               persistent-hint
               placeholder="Authors"
-              multiple>
-
+              multiple
+            >
               <template slot="selection" slot-scope="data">
                 <div class="legacy-row-nowrap align-center c-pl-4">
                   <v-avatar size="30px">
-                    <img v-if="data.item.profile" v-bind:src="data.item.profile | avatarSrc(60, 60, false)"/>
-                    <v-gravatar v-else :email="data.item.account.name + '@deip.world'"/>
+                    <img v-if="data.item.profile" :src="data.item.profile | avatarSrc(60, 60, false)">
+                    <v-gravatar v-else :email="data.item.account.name + '@deip.world'" />
                   </v-avatar>
                   <span class="c-pl-3">{{ data.item | fullname }}</span>
                 </div>
@@ -60,49 +70,54 @@
 
               <template slot="item" slot-scope="data">
                 <template>
-                  <div class="legacy-row-nowrap align-center author-item"
-                       :class="{ 'selected-author-item': isAuthorSelected(data.item) }">
+                  <div
+                    class="legacy-row-nowrap align-center author-item"
+                    :class="{ 'selected-author-item': isAuthorSelected(data.item) }"
+                  >
                     <v-avatar size="30px">
-                      <img v-if="data.item.profile" v-bind:src="data.item.profile | avatarSrc(60, 60, false)"/>
-                      <v-gravatar v-else :email="data.item.account.name + '@deip.world'"/>
+                      <img v-if="data.item.profile" :src="data.item.profile | avatarSrc(60, 60, false)">
+                      <v-gravatar v-else :email="data.item.account.name + '@deip.world'" />
                     </v-avatar>
-                    <span class="c-pl-3">{{ data.item | fullname  }}</span>
+                    <span class="c-pl-3">{{ data.item | fullname }}</span>
                   </div>
                 </template>
               </template>
             </v-autocomplete>
 
             <internal-references-picker
-              :showSelected="true"
-              :currentResearchId="research.id"
+              :show-selected="true"
+              :current-research-id="research.id"
               :preselected="[]"
               @referenceAdded="addReference"
-              @referenceRemoved="removeReference">
-            </internal-references-picker>
+              @referenceRemoved="removeReference"
+            />
           </div>
         </v-card-text>
         <v-card-actions>
-          <v-layout row wrap>
-            <v-flex xs12 py-2>
+          <v-row no-gutters>
+            <v-col class="py-2" cols="12">
               <v-btn
                 color="primary"
                 block
                 :disabled="isDisabled || isLoading"
                 :loading="isLoading"
                 @click="proposeContent()"
-              >{{!isCentralizedGroup ? 'Create Proposal' : 'Upload Material'}}
+              >
+                {{ !isCentralizedGroup ? 'Create Proposal' : 'Upload Material' }}
               </v-btn>
-            </v-flex>
-            <v-flex xs12 py-2>
+            </v-col>
+            <v-col class="py-2" cols="12">
               <v-btn
-                @click="close()"
                 :disabled="isLoading"
                 color="primary"
                 block
-                flat>Cancel
+                text
+                @click="close()"
+              >
+                Cancel
               </v-btn>
-            </v-flex>
-          </v-layout>
+            </v-col>
+          </v-row>
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -133,7 +148,7 @@
         title: '',
         type: null,
         authors: [],
-        researchContentTypes: researchContentTypes,
+        researchContentTypes,
         references: [],
 
         isOpen: false,
@@ -148,10 +163,10 @@
           uploadMultiple: true,
           thumbnailWidth: 150,
           autoProcessQueue: false,
-          addRemoveLinks: true,
+          addRemoveLinks: true
           // acceptedFiles: ['application/pdf', 'image/png', 'image/jpeg'].join(',')
         }
-      }
+      };
     },
     computed: {
       ...mapGetters({
@@ -165,17 +180,25 @@
         return this.researchGroup.is_centralized || this.researchGroup.is_personal;
       },
       isDisabled() {
-        return !this.title ||
-          !this.type ||
-          !this.authors.length
+        return !this.title
+          || !this.type
+          || !this.authors.length;
+      }
+    },
+    watch: {
+      isOpen(newVal, oldVal) {
+        if (newVal) {
+          this.title = '';
+          this.type = null;
+          this.timestamp = (new Date()).getTime();
+          this.authors = [];
+        }
       }
     },
 
     methods: {
       isAuthorSelected(item) {
-        return this.authors.find(author => {
-          return author.account.name == item.account.name
-        }) !== undefined;
+        return this.authors.find((author) => author.account.name == item.account.name) !== undefined;
       },
       close() {
         this.isLoading = false;
@@ -192,7 +215,7 @@
         xhr.setRequestHeader('Upload-Session', `${(new Date()).getTime()}-${accessToken.split('.')[2]}`);
         // TODO: add as formParam after upgrading back-end
         xhr.setRequestHeader('Research-Id', this.research.id.toString());
-        xhr.setRequestHeader('Internal-Refs', this.references.map(ref => ref.id));
+        xhr.setRequestHeader('Internal-Refs', this.references.map((ref) => ref.id));
       },
       vdropzoneErrorMultiple(files, message, xhr) {
         this.$store.dispatch('layout/setError', {
@@ -207,12 +230,12 @@
         const self = this;
         const contentRef = res;
         if (!contentRef.hash) {
-          throw new Error('File upload has failed')
+          throw new Error('File upload has failed');
         }
 
         contentRef.title = this.title;
-        contentRef.authors = this.authors.map(a => a.account.name);
-        contentRef.references = this.references.map(ref => ref.id);
+        contentRef.authors = this.authors.map((a) => a.account.name);
+        contentRef.references = this.references.map((ref) => ref.id);
         contentRef.external_references = [];
 
         researchGroupService.createContentProposal({
@@ -236,27 +259,17 @@
           .finally(() => {
             this.$emit('onFinish');
             this.close();
-          })
+          });
       },
 
       addReference(ref) {
-        if (!this.references.some(r => r.id == ref.id)) {
+        if (!this.references.some((r) => r.id == ref.id)) {
           this.references.push(ref);
         }
       },
       removeReference(ref) {
-        if (this.references.some(r => r.id == ref.id)) {
-          this.references = this.references.filter(r => r.id != ref.id);
-        }
-      }
-    },
-    watch: {
-      isOpen(newVal, oldVal) {
-        if (newVal) {
-          this.title = '';
-          this.type = null;
-          this.timestamp = (new Date()).getTime();
-          this.authors = [];
+        if (this.references.some((r) => r.id == ref.id)) {
+          this.references = this.references.filter((r) => r.id != ref.id);
         }
       }
     }
@@ -285,4 +298,3 @@
   }
 
 </style>
-
