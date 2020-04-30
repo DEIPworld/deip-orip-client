@@ -1,10 +1,12 @@
 <template>
-  <h1>criteria</h1>
+  <admin-view title="Criteria"></admin-view>
 </template>
 
 <script>
+  import AdminView from '@/components/AdminPanel/AdminView';
   export default {
-    name: 'AdminCriteria'
+    name: 'AdminCriteria',
+    components: { AdminView }
   };
 </script>
 

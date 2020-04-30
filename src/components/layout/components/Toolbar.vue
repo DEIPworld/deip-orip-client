@@ -11,7 +11,6 @@
       hide-on-scroll
       clipped-left
       :color="themeSettings.topbar.backgroundColor"
-      class="px-2"
     >
       <router-link :to="{ name: 'Default' }">
         <img height="40px" class="logo-image" :src="tenant | tenantLogoSrc(80, 80, false)">

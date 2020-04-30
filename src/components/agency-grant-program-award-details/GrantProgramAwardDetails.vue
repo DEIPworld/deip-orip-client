@@ -31,7 +31,7 @@
         </v-col>
 
         <v-col cols="3" class="pa-6">
-          <div class="display-flex justify-end" v-if="isAwardPending && isGrantProgramOfficer && !awardee.isSubawardee">
+          <div v-if="isAwardPending && isGrantProgramOfficer && !awardee.isSubawardee" class="display-flex justify-end">
             <div class="mr-4">
               <v-btn
                 class="award-action-btn"

@@ -1,17 +1,17 @@
 <template>
-  <pseudo-modal>
+  <modal-route-view>
     <div class="title">
       Personal Information
     </div>
-  </pseudo-modal>
+  </modal-route-view>
 </template>
 
 <script>
-  import PseudoModal from '@/components/layout/PseudoModal';
+  import ModalRouteView from '@/components/layout/ModalRouteView';
 
   export default {
     name: 'AdminMembersAdd',
-    components: { PseudoModal }
+    components: { ModalRouteView }
   };
 </script>
 

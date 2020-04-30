@@ -22,7 +22,7 @@
 
 <script>
   export default {
-    name: 'PseudoModal',
+    name: 'ModalRouteView',
     data() {
       return {
         dialog: true

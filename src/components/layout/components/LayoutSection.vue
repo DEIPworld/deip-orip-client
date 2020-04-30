@@ -11,14 +11,14 @@
 <script>
   export default {
     name: 'LayoutSection',
+    computed: {
+      layoutContentWidth() {
+        return this.hasSlot('sidebar') ? this.$slots.sidebar.length === 2 ? '50%' : '75%' : null;
+      }
+    },
     methods: {
       hasSlot(name) {
         return this.$slots[name] !== undefined;
-      }
-    },
-    computed:{
-      layoutContentWidth(){
-        return this.hasSlot('sidebar') ? this.$slots.sidebar.length === 2 ? '50%' : '75%' : null;
       }
     }
   };

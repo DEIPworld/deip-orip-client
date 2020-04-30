@@ -13,20 +13,20 @@
 </template>
 
 <script>
-import { mapGetters } from "vuex";
-import deipRpc from "@deip/rpc-client";
-import LayoutSidebar from "@/components/layout/components/LayoutSidebar";
+  import { mapGetters } from 'vuex';
+  import deipRpc from '@deip/rpc-client';
+  import LayoutSidebar from '@/components/layout/components/LayoutSidebar';
 
-export default {
-  name: "ResearchContentReview",
-  components: { LayoutSidebar },
-  data() {
-    return {};
-  },
-  computed: {},
-  created() {},
-  methods: {}
-};
+  export default {
+    name: 'ResearchContentReview',
+    components: { LayoutSidebar },
+    data() {
+      return {};
+    },
+    computed: {},
+    created() {},
+    methods: {}
+  };
 </script>
 
 <style lang="less" scoped>

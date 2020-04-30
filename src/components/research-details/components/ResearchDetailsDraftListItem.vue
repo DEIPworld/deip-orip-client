@@ -1,6 +1,6 @@
 <template>
-<v-expansion-panel>
-  <v-expansion-panel-header>
+  <v-expansion-panel>
+    <v-expansion-panel-header>
       <v-row align="center" @click.stop>
         <v-col cols="2" class="text-capitalize bold">
           Draft {{ index + 1 }}
@@ -12,50 +12,48 @@
           <span v-if="isDraftProposed(draft)" class="ml-2 orange--text">(proposed)</span>
         </v-col>
       </v-row>
-  </v-expansion-panel-header>
-  <v-expansion-panel-content>
-
-    <v-card class="elevation-0">
-      <v-card-text class="pl-6 pa-0">
-        <v-row align="center" justify="space-between">
-          <div>
-            <span>
-              <v-icon size="18px">date_range</v-icon>
-              <span>{{ draft.updated_at | dateFormat('D MMM YYYY HH:mm', true) }}</span>
-            </span>
-            <span class="ml-2">
-              <v-icon size="18px">note_add</v-icon>
-              <span>{{ draft.type }}</span>
-            </span>
-          </div>
-          <div>
-            <v-btn
-              v-if="isDraftInProgress(draft)"
-              :loading="isDeletingDraft"
-              :disabled="isDeletingDraft"
-              outlined
-              small
-              depressed
-              color="red lighten-1"
-              @click="deleteDraft(draft)"
-            >
-              Delete
-            </v-btn>
-            <v-btn
-              outlined
-              small
-              depressed
-              color="primary lighten-1"
-              @click="openDarDraft(draft)"
-            >
-              View
-            </v-btn>
-          </div>
-        </v-row>
-      </v-card-text>
-    </v-card>
-  </v-expansion-panel-content>
-
+    </v-expansion-panel-header>
+    <v-expansion-panel-content>
+      <v-card class="elevation-0">
+        <v-card-text class="pl-6 pa-0">
+          <v-row align="center" justify="space-between">
+            <div>
+              <span>
+                <v-icon size="18px">date_range</v-icon>
+                <span>{{ draft.updated_at | dateFormat('D MMM YYYY HH:mm', true) }}</span>
+              </span>
+              <span class="ml-2">
+                <v-icon size="18px">note_add</v-icon>
+                <span>{{ draft.type }}</span>
+              </span>
+            </div>
+            <div>
+              <v-btn
+                v-if="isDraftInProgress(draft)"
+                :loading="isDeletingDraft"
+                :disabled="isDeletingDraft"
+                outlined
+                small
+                depressed
+                color="red lighten-1"
+                @click="deleteDraft(draft)"
+              >
+                Delete
+              </v-btn>
+              <v-btn
+                outlined
+                small
+                depressed
+                color="primary lighten-1"
+                @click="openDarDraft(draft)"
+              >
+                View
+              </v-btn>
+            </div>
+          </v-row>
+        </v-card-text>
+      </v-card>
+    </v-expansion-panel-content>
   </v-expansion-panel>
 </template>
 

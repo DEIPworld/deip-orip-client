@@ -77,7 +77,7 @@ import AdminProjects from '@/components/AdminPanel/AdminProjects';
 import AdminCriteria from '@/components/AdminPanel/AdminCriteria';
 import AdminFAQ from '@/components/AdminPanel/AdminFAQ';
 import AdminSettings from '@/components/AdminPanel/AdminSettings';
-import PseudoModal from '@/components/layout/PseudoModal';
+import ModalRouteView from '@/components/layout/ModalRouteView';
 import AdminMembersAdd from '@/components/AdminPanel/AdminMembersAdd';
 import preliminaryDataLoader from './utils/preliminaryDataLoader';
 

@@ -1,5 +1,5 @@
 <template>
-  <v-row no-gutters v-if="isTokenSaleSectionAvailable" class="my-12">
+  <v-row v-if="isTokenSaleSectionAvailable" no-gutters class="my-12">
     <v-col cols="12" lg="7">
       <v-row no-gutters>
         <v-col cols="auto" class="pr-4">
@@ -109,7 +109,12 @@
       <v-row no-gutters justify="end" class="rd-cap-value">
         ${{ currentCap }}
       </v-row>
-      <v-row no-gutters justify="end" align="center" class="py-2">
+      <v-row
+        no-gutters
+        justify="end"
+        align="center"
+        class="py-2"
+      >
         <div
           v-if="currentCap >= fromAssetsToFloat(tokenSale.soft_cap)"
           class="rd-cap-chip"

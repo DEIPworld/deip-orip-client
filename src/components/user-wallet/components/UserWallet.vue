@@ -934,7 +934,7 @@
 
       openSendTokensDialog(balance) {
         const currencyName = this.assetsInfo[balance.asset_id].string_symbol;
-        setTimeout(() => this.$refs.sendTokensForm.reset())
+        setTimeout(() => this.$refs.sendTokensForm.reset());
         this.sendTokensDialog.isOpened = true;
 
         this.sendTokensDialog.maxAmount = this.getAvailableCurrencyAmount(balance.amount);

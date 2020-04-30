@@ -51,9 +51,9 @@
       </v-row>
       <div>
         <v-card
-          flat
           v-for="(investment, i) in recentNotifications"
           :key="'investment-' + i"
+          flat
           class="py-2 investment-item"
           :class="{'selected': investment === selectedInvestment}"
           @click="selectInvestment(investment)"
@@ -101,7 +101,12 @@
           Overdue notifications: {{ overdueNotifications.length }}
         </div>
       </div>
-      <v-card flat v-for="(investment, i) in overdueNotifications" :key="'overdue-investment-' + i" class="pa-2 investment-item">
+      <v-card
+        v-for="(investment, i) in overdueNotifications"
+        :key="'overdue-investment-' + i"
+        flat
+        class="pa-2 investment-item"
+      >
         <v-row no-gutters align="center">
           <v-col cols="1" align-self="center">
             <v-checkbox

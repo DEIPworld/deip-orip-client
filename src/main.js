@@ -3,7 +3,7 @@ import Vue from 'vue';
 import VueResize from 'vue-resize';
 import VueCurrencyFilter from 'vue-currency-filter';
 import VueGoogleCharts from 'vue-google-charts';
-import Vuetify from 'vuetify';
+import Vuetify from 'vuetify/lib';
 
 import {
   setConfig,
@@ -20,7 +20,6 @@ import { router } from './router';
 import './components/index'; // TODO: need refactoring and remove
 import './globals/index'; // TODO: need refactoring and remove
 
-import 'vuetify/dist/vuetify.css';
 import 'vue2-dropzone/dist/vue2Dropzone.min.css';
 import '@mdi/font/css/materialdesignicons.css';
 import 'vue-resize/dist/vue-resize.css';

@@ -1,10 +1,12 @@
 <template>
-  <h1>projects</h1>
+  <admin-view title="Projects"></admin-view>
 </template>
 
 <script>
+  import AdminView from '@/components/AdminPanel/AdminView';
   export default {
-    name: 'AdminProjects'
+    name: 'AdminProjects',
+    components: { AdminView }
   };
 </script>
 

@@ -1,6 +1,6 @@
 <template>
   <app-layout>
-    <v-navigation-drawer app clipped permanent>
+    <v-navigation-drawer app clipped permanent width="280">
       <v-list
         nav
         dense
@@ -10,9 +10,8 @@
           :key="index"
           color="primary"
           :to="item.to"
-          class="px-4"
         >
-          <v-list-item-icon class="mr-6">
+          <v-list-item-icon>
             <v-icon>{{ item.icon }}</v-icon>
           </v-list-item-icon>
           <v-list-item-content>

@@ -77,7 +77,7 @@
         </v-expansion-panel>
         <template v-if="proposals.length">
           <v-expansion-panel v-for="(proposal, i) in proposals" :key="i">
-            <research-group-details-proposals-item :proposal="proposal"/>
+            <research-group-details-proposals-item :proposal="proposal" />
           </v-expansion-panel>
         </template>
 

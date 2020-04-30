@@ -91,7 +91,9 @@
   };
 </script>
 
-<style>
+<style lang="scss">
+  @import '~vuetify/src/styles/styles.sass';
+
   #deip-app {
     font-family: 'Roboto', 'Avenir', Helvetica, Arial, sans-serif;
     -webkit-font-smoothing: antialiased;

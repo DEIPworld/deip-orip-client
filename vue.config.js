@@ -4,16 +4,19 @@ module.exports = {
   css: {
     loaderOptions: {
       sass: {
-        prependData: (loaderContext) => {
-          const { resourcePath, rootContext } = loaderContext;
-          const relativeArray = path.relative(rootContext, resourcePath).split('/');
-
-          if (relativeArray[0] === 'node_modules' && relativeArray[1] === 'vuetify') {
-            return '@import "~@/styles/next/core/_vuetify-settings.scss"';
-          }
-
-          return '';
-        }
+        // prependData(loaderContext) {
+        //   const { resourcePath, rootContext } = loaderContext;
+        //   const relativeArray = path.relative(rootContext, resourcePath).split('/');
+        //
+        //   if (relativeArray[0] === 'node_modules' && relativeArray[1] === 'vuetify') {
+        //     return '@import "~@/styles/next/core/_vuetify-settings.scss"';
+        //   }
+        //
+        //   return '';
+        // },
+        // sassOptions: {
+        //   fiber: true,
+        // },
       }
     }
   },

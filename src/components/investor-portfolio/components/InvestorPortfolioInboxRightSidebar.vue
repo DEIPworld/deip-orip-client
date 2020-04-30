@@ -1,7 +1,12 @@
 <template>
   <layout-sidebar right>
     <v-card flat height="100%">
-      <v-row no-gutters v-if="selectedInvestment" style="flex: 0 0 auto;" class="py-6 full-width">
+      <v-row
+        v-if="selectedInvestment"
+        no-gutters
+        style="flex: 0 0 auto;"
+        class="py-6 full-width"
+      >
         <div class="px-6 full-width">
           <router-link
             class="subtitle-1 half-bold investment-title"

@@ -13,7 +13,7 @@
       :search-input.sync="usersSearch"
       @keyup="queryUsers()"
     />
-    <div class="display-flex flex-wrap" v-if="!selectedUser">
+    <div v-if="!selectedUser" class="display-flex flex-wrap">
       <platform-avatar
         v-for="(user, i) in users.slice(0, displayLimit)"
         :key="'user-' + i"

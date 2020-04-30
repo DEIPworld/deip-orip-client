@@ -23,7 +23,7 @@
           <br>
           <span class="rd-investment-info__value-text">Average investment</span>
         </v-col>
-        <v-col cols="auto" v-if="!isResearchGroupMember" class="rd-investment-info">
+        <v-col v-if="!isResearchGroupMember" cols="auto" class="rd-investment-info">
           <span class="rd-investment-info__value">${{ userInvestment }}</span>
           <br>
           <span class="rd-investment-info__value-text">Your investment</span>
@@ -32,9 +32,9 @@
 
       <v-row no-gutters justify="start" class="mt-2">
         <v-col
-          cols="auto"
           v-for="(investor, i) in investors"
           :key="'investor-' + i"
+          cols="auto"
         >
           <platform-avatar
             :size="40"

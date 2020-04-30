@@ -1,9 +1,9 @@
 <template>
   <div>
     <v-row
-      no-gutters
       v-for="(criteria, i) in criterias"
       :key="`review-criteria-${i}`"
+      no-gutters
       align="center"
       class="full-width"
     >
