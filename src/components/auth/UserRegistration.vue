@@ -10,7 +10,7 @@
   import ModalRouteView from '@/components/layout/ModalRouteView';
 
   export default {
-    name: 'AdminMembersAdd',
+    name: 'UserRegistration',
     components: { ModalRouteView }
   };
 </script>

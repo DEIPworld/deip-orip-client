@@ -77,9 +77,8 @@ import AdminProjects from '@/components/AdminPanel/AdminProjects';
 import AdminCriteria from '@/components/AdminPanel/AdminCriteria';
 import AdminFAQ from '@/components/AdminPanel/AdminFAQ';
 import AdminSettings from '@/components/AdminPanel/AdminSettings';
-import ModalRouteView from '@/components/layout/ModalRouteView';
-import AdminMembersAdd from '@/components/AdminPanel/AdminMembersAdd';
 import preliminaryDataLoader from './utils/preliminaryDataLoader';
+import UserRegistration from '@/components/auth/UserRegistration';
 
 const accessService = AccessService.getInstance();
 const usersService = UsersService.getInstance();
@@ -115,7 +114,10 @@ const router = new Router({
   }, {
     path: '/sign-up',
     name: 'SignUp',
-    component: SignUp
+    component: SignUp,
+    meta: {
+      viewTitle: 'Sign Up'
+    }
   }, {
     path: '/:agency/grants/dashboard',
     name: 'GrantProgramsAwardsDashboard',
@@ -568,7 +570,10 @@ const router = new Router({
             path: 'add',
             name: 'admin.members.add',
             components: {
-              dialog: AdminMembersAdd
+              dialog: UserRegistration
+            },
+            meta: {
+              viewTitle: 'Add new member'
             }
           }
         ]

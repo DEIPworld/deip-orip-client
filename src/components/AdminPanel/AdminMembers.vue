@@ -10,7 +10,7 @@
     </template>
 
     <template #toolbarExtension>
-      <v-tabs v-model="tab" class="mx-n4">
+      <v-tabs v-model="tab">
         <v-tab>
           Registered
         </v-tab>

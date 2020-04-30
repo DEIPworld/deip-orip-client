@@ -8,12 +8,12 @@
     <v-card tile>
       <v-toolbar flat>
         <v-btn icon @click="goBack()">
-          <v-icon>arrow_back</v-icon>
+          <v-icon>{{ icon }}</v-icon>
         </v-btn>
-        <v-toolbar-title>Add new member</v-toolbar-title>
+        <v-toolbar-title>{{ dialogTitle }}</v-toolbar-title>
       </v-toolbar>
       <v-divider />
-      <v-sheet max-width="800" class="pa-12 mx-auto">
+      <v-sheet :max-width="maxWidth" class="pa-12 mx-auto">
         <slot />
       </v-sheet>
     </v-card>
@@ -23,10 +23,29 @@
 <script>
   export default {
     name: 'ModalRouteView',
+    props: {
+      title: {
+        type: String,
+        default: null
+      },
+      icon: {
+        type: String,
+        default: 'arrow_back'
+      },
+      maxWidth: {
+        type: Number,
+        default: 800
+      }
+    },
     data() {
       return {
         dialog: true
       };
+    },
+    computed: {
+      dialogTitle() {
+        return this.title || this.$route.meta.viewTitle || '';
+      }
     },
     methods: {
       goBack() {
