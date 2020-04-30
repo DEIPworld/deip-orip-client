@@ -572,8 +572,10 @@ const router = new Router({
             components: {
               dialog: UserRegistration
             },
-            meta: {
-              viewTitle: 'Add new member'
+            props: {
+              dialog: {
+                title: 'Add new member'
+              }
             }
           }
         ]

@@ -1,5 +1,5 @@
 <template>
-  <modal-route-view>
+  <modal-route-view :title="title">
     <div class="title">
       Personal Information
     </div>
@@ -11,7 +11,17 @@
 
   export default {
     name: 'UserRegistration',
-    components: { ModalRouteView }
+    components: { ModalRouteView },
+    props: {
+      title: {
+        type: String,
+        default: 'Sign Up'
+      },
+      hideAgree: {
+        type: Boolean,
+        default: false
+      }
+    }
   };
 </script>
 

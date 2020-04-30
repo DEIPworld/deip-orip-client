@@ -10,7 +10,7 @@
         <v-btn icon @click="goBack()">
           <v-icon>{{ icon }}</v-icon>
         </v-btn>
-        <v-toolbar-title>{{ dialogTitle }}</v-toolbar-title>
+        <v-toolbar-title>{{ title }}</v-toolbar-title>
       </v-toolbar>
       <v-divider />
       <v-sheet :max-width="maxWidth" class="pa-12 mx-auto">
@@ -41,11 +41,6 @@
       return {
         dialog: true
       };
-    },
-    computed: {
-      dialogTitle() {
-        return this.title || this.$route.meta.viewTitle || '';
-      }
     },
     methods: {
       goBack() {
