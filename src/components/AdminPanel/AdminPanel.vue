@@ -1,27 +1,28 @@
 <template>
   <app-layout>
-
-    <v-navigation-drawer app clipped permanent width="320">
+    <v-navigation-drawer app clipped permanent>
       <v-list
         nav
-        class="pa-6"
+        dense
       >
         <v-list-item
-          color="primary"
           v-for="(item, index) of menu"
           :key="index"
+          color="primary"
           :to="item.to"
+          class="px-4"
         >
-          <v-list-item-icon class="ml-2 mr-4">
+          <v-list-item-icon class="mr-6">
             <v-icon>{{ item.icon }}</v-icon>
           </v-list-item-icon>
-          {{ item.label }}
+          <v-list-item-content>
+            <v-list-item-title>{{ item.title }}</v-list-item-title>
+          </v-list-item-content>
         </v-list-item>
       </v-list>
     </v-navigation-drawer>
 
     <router-view />
-
   </app-layout>
 </template>
 
@@ -35,27 +36,27 @@
       return {
         menu: [
           {
-            label: 'Members',
+            title: 'Members',
             icon: 'group',
             to: { name: 'admin.members' }
           },
           {
-            label: 'Projects',
+            title: 'Projects',
             icon: 'file_copy',
             to: { name: 'admin.projects' }
           },
           {
-            label: 'Criteria',
+            title: 'Criteria',
             icon: 'extension',
             to: { name: 'admin.criteria' }
           },
           {
-            label: 'FAQ',
+            title: 'FAQ',
             icon: 'forum',
             to: { name: 'admin.faq' }
           },
           {
-            label: 'Settings',
+            title: 'Settings',
             icon: 'settings',
             to: { name: 'admin.settings' }
           }

@@ -1,6 +1,8 @@
 <template>
   <pseudo-modal>
-    <div class="title">Personal Information</div>
+    <div class="title">
+      Personal Information
+    </div>
   </pseudo-modal>
 </template>
 

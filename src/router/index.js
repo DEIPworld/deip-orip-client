@@ -78,9 +78,8 @@ import AdminCriteria from '@/components/AdminPanel/AdminCriteria';
 import AdminFAQ from '@/components/AdminPanel/AdminFAQ';
 import AdminSettings from '@/components/AdminPanel/AdminSettings';
 import PseudoModal from '@/components/layout/PseudoModal';
-import preliminaryDataLoader from './utils/preliminaryDataLoader';
 import AdminMembersAdd from '@/components/AdminPanel/AdminMembersAdd';
-import DialogRouterView from '@/components/layout/DialogRouterView';
+import preliminaryDataLoader from './utils/preliminaryDataLoader';
 
 const accessService = AccessService.getInstance();
 const usersService = UsersService.getInstance();
@@ -560,7 +559,6 @@ const router = new Router({
     name: 'admin',
     component: AdminPanel,
     children: [
-
       {
         path: 'members',
         name: 'admin.members',
@@ -575,29 +573,6 @@ const router = new Router({
           }
         ]
       },
-
-      {
-        path: 'members2',
-        component: DialogRouterView,
-        children: [
-          {
-            path: 'add',
-            name: 'admin.members',
-            components: {
-              default: AdminMembers
-            }
-          },
-          {
-            path: 'add',
-            name: 'admin.members.add',
-            components: {
-              default: AdminMembers,
-              dialog: AdminMembersAdd
-            }
-          }
-        ]
-      },
-      
       {
         path: '/projects',
         name: 'admin.projects',

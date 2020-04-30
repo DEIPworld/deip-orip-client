@@ -3,12 +3,11 @@
     :value="dialog"
     fullscreen
     hide-overlay
-    :transition="'dialog-bottom-transition'"
-    @input="methodToExecuteWhenClosed()"
+    :transition="false"
   >
     <v-card tile>
       <v-toolbar flat>
-        <v-btn icon @click="dialog = false">
+        <v-btn icon @click="goBack()">
           <v-icon>arrow_back</v-icon>
         </v-btn>
         <v-toolbar-title>Add new member</v-toolbar-title>
@@ -29,15 +28,24 @@
         dialog: true
       };
     },
-    watch: {
-      dialog(val) {
-        if (!val) {
-          setTimeout(() => {
-            this.$router.back();
-          }, 150);
-        }
+    methods: {
+      goBack() {
+        this.dialog = false;
+
+        setTimeout(() => {
+          this.$router.back();
+        }, 150);
       }
     }
+    // watch: {
+    //   dialog(val) {
+    //     if (!val) {
+    //       setTimeout(() => {
+    //         this.$router.back();
+    //       }, 150);
+    //     }
+    //   }
+    // }
   };
 </script>
 

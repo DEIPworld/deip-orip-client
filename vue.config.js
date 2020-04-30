@@ -9,7 +9,7 @@ module.exports = {
           const relativeArray = path.relative(rootContext, resourcePath).split('/');
 
           if (relativeArray[0] === 'node_modules' && relativeArray[1] === 'vuetify') {
-            return '@import "~@/scss/next/core/_vuetify-settings.scss"';
+            return '@import "~@/styles/next/core/_vuetify-settings.scss"';
           }
 
           return '';
@@ -17,7 +17,6 @@ module.exports = {
       }
     }
   },
-
   devServer: {
     setup(app) {
       app.get('/env', (req, res) => {
@@ -25,15 +24,12 @@ module.exports = {
       });
     }
   },
-
   productionSourceMap: false,
-
-  // lintOnSave: process.env.NODE_ENV !== 'production'
   lintOnSave: false,
-
   assetsDir: 'assets',
-
-  transpileDependencies: ['@deip/*'],
-
+  transpileDependencies: [
+    '@deip/*',
+    'vuetify'
+  ],
   runtimeCompiler: true
 };

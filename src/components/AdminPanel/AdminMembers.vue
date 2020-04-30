@@ -1,13 +1,14 @@
 <template>
   <v-sheet tile class="pt-2">
-
-    <router-view name="dialog"/>
-
-    <v-toolbar class="px-2" flat>
-      <v-toolbar-title class="headline">Members</v-toolbar-title>
-      <v-spacer/>
+    <v-toolbar flat>
+      <v-toolbar-title class="headline">
+        Members
+      </v-toolbar-title>
+      <v-spacer />
       <v-btn outlined color="primary" :to="{name: 'admin.members.add'}">
-        <v-icon left>person_add</v-icon>
+        <v-icon left>
+          person_add
+        </v-icon>
         Add member
       </v-btn>
       <template #extension>
@@ -17,11 +18,12 @@
           </v-tab>
           <v-tab>
             Waiting for approval
-            <v-badge content="7" color="green" inline/>
+            <v-badge content="7" color="green" inline />
           </v-tab>
         </v-tabs>
       </template>
     </v-toolbar>
+
     <v-divider />
 
     <v-tabs-items v-model="tab">
@@ -43,6 +45,8 @@
         </v-sheet>
       </v-tab-item>
     </v-tabs-items>
+
+    <router-view :key="$route.path" name="dialog" />
   </v-sheet>
 </template>
 
