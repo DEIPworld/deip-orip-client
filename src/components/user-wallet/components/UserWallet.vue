@@ -60,9 +60,9 @@
 
             <v-layout class="balance-table__line" align-center>
               <v-flex xs1>
-                <!-- <v-layout justify-center align-center v-if="assetsIcons[assetsInfo[balance.asset_id].string_symbol]">
-                  <img class="max-width-26" :src="assetsIcons[assetsInfo[balance.asset_id].string_symbol]" />
-                </v-layout> -->
+                <v-layout justify-center align-center>
+                  <img class="max-width-26" src="/assets/img/currency/tripple-token.png" />
+                </v-layout>
               </v-flex>
               <v-flex xs5 class="bold subheading">TRIPLE Token</v-flex>
               <v-flex xs5 class="bold subheading">
