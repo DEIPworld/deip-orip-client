@@ -112,7 +112,7 @@
                         :to="{
                           name: 'ResearchContentAddReview',
                           params: {
-                            group_permlink: decodeURIComponent(research.group_permlink),
+                            group_permlink: decodeURIComponent(research.research_group.permlink),
                             research_permlink: decodeURIComponent(research.permlink),
                             content_permlink: decodeURIComponent(content.permlink),
                           }}"
@@ -207,7 +207,7 @@
 
               <internal-references-picker
                 :show-selected="true"
-                :current-research-id="research.id"
+                :current-research="research"
                 :preselected="contentRef.references"
                 @referenceAdded="addReference"
                 @referenceRemoved="removeReference"
@@ -320,7 +320,7 @@
         };
         if (this.isDarContent) {
           bus.$emit('texture:getArticleTitle', openDialog);
-        } else if (this.isFileContent) {
+        } else {
           openDialog(this.contentRef.title);
         }
       },
@@ -344,15 +344,20 @@
 
         saveDocument()
           .then((contentRef) => {
-            contentRef.title = this.proposeContent.title || contentRef.title;
-            contentRef.authors = this.proposeContent.authors.map((a) => a.account.name);
-            contentRef.references = [...this.contentRef.references];
-            contentRef.external_references = [];
-
-            researchGroupService.createContentProposal({
-              contentRef,
-              contentType: this.proposeContent.type
-            })
+            
+              const isProposal = !this.research.research_group.is_personal;
+              researchContentService.createResearchContentViaOffchain(this.user.privKey, isProposal, {
+                researchExternalId: this.research.external_id,
+                researchGroup: this.research.research_group.external_id,
+                type: parseInt(this.proposeContent.type),
+                title: this.proposeContent.title || contentRef.title,
+                content: contentRef.hash,
+                permlink: contentRef.title.replace(/ /g, '-').replace(/_/g, '-').toLowerCase(),
+                authors: this.proposeContent.authors.map((a) => a.account.name),
+                references: [ ...this.contentRef.references ],
+                foreignReferences: [],
+                extensions: []
+              })
               .then(() => {
                 this.$store.dispatch('layout/setSuccess', {
                   message: 'New material has been uploaded successfully'
@@ -374,7 +379,7 @@
                   this.$router.push({
                     name: 'ResearchDetails',
                     params: {
-                      research_group_permlink: encodeURIComponent(this.research.group_permlink),
+                      research_group_permlink: encodeURIComponent(this.research.research_group.permlink),
                       research_permlink: encodeURIComponent(this.research.permlink)
                     }
                   });
@@ -415,14 +420,14 @@
       addReference(reference) {
         bus.$emit('texture:addReference', { reference });
         const refs = this.contentRef.references.slice();
-        refs.push(reference.id);
+        refs.push(reference.external_id);
         this.$store.dispatch('rcd/setDraftReferences', refs);
       },
 
       removeReference(reference) {
         bus.$emit('texture:removeReference', { reference });
         const refs = this.contentRef.references.slice()
-          .filter((r) => r != reference.id);
+          .filter((r) => r != reference.external_id);
         this.$store.dispatch('rcd/setDraftReferences', refs);
       },
       getResearchContentType(type) {

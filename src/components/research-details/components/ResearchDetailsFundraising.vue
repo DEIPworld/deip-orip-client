@@ -20,7 +20,7 @@
           :to="{
             name: 'CreateTokenSale',
             params: {
-              research_group_permlink: research.group_permlink,
+              research_group_permlink: research.research_group.permlink,
               research_permlink: research.permlink
             }
           }"
@@ -153,7 +153,7 @@
           <v-btn
             :disabled="isContributionToTokenSaleDisabled"
             :loading="areTokensBuying"
-            class="btn--gradient-pb"
+            color="primary"
             block
             @click="onContributeToTokenSaleClick()"
           >
@@ -211,6 +211,9 @@
   import { mapGetters } from 'vuex';
   import moment from 'moment';
   import deipRpc from '@deip/rpc-client';
+  import { ResearchService } from '@deip/research-service';
+
+  const researchService = ResearchService.getInstance();
 
   export default {
     name: 'ResearchDetailsFundraising',
@@ -334,13 +337,12 @@
       },
       contributeToTokenSale() {
         this.areTokensBuying = true;
-        return deipRpc.broadcast
-          .contributeToTokenSaleAsync(
-            this.user.privKey,
-            this.tokenSale.id,
-            this.user.username,
-            this.toAssetUnits(this.amountToContribute)
-          )
+
+        researchService.contributeToResearchTokenSaleViaOffchain(this.user.privKey, {
+          researchExternalId: this.research.external_id,
+          contributor: this.user.username,
+          amount: this.toAssetUnits(this.amountToContribute)
+        })
           .then((data) => {
             this.$store.dispatch('rd/loadResearchTokenSale', {
               researchId: this.research.id

@@ -18,13 +18,13 @@
           </div>
           <div class="text--right full-width">
             <v-btn
+              :disabled="!defaultAssetBalance"
               small
               class="mx-0 py-0 my-2"
               color="primary"
               dark
               outlined
-              @click="openJoinRequestDetails(join)"
-            >
+              @click="openJoinRequestDetails(join)">
               View
             </v-btn>
           </div>
@@ -73,7 +73,7 @@
         <div class="py-6">
           <v-btn
             class="ma-0"
-            :disabled="!this.fromAssetsToFloat(group.balance)"
+            :disabled="!defaultAssetBalance"
             color="primary"
             block
             @click="$store.dispatch('researchGroup/changeOptions', { key: 'isTransferTokensDialogOpen', value: true })"
@@ -98,6 +98,9 @@
   import _ from 'lodash';
   import deipRpc from '@deip/rpc-client';
   import LayoutSidebar from '@/components/layout/components/LayoutSidebar';
+  import { AppConfigService } from '@deip/app-config-service';
+
+  const appConfigService = AppConfigService.getInstance();
 
   export default {
     name: 'ResearchGroupDetailsSidebar',
@@ -122,8 +125,10 @@
         pendingJoinRequests: 'researchGroup/pendingJoinRequests'
       }),
 
-      deipTokenBalance() {
-        return this.fromAssetsToFloat(this.group.balance);
+      defaultAssetBalance() {
+        const env = appConfigService.get('env');
+        let amount = this.group.balances[env.ASSET_UNIT];
+        return amount;;
       },
 
       isResearchGroupMember() {

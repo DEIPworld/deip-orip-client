@@ -1,5 +1,5 @@
 <template>
-  <layout-header muted :background="$options.filters.researchBackgroundSrc(research.id)">
+  <layout-header muted :background="$options.filters.researchBackgroundSrc(research.external_id)">
     <div class="display-1">
       {{ research.title }}
     </div>
@@ -18,7 +18,7 @@
         :to="{
           name: 'ResearchEdit',
           params: {
-            research_group_permlink: encodeURIComponent(research.group_permlink),
+            research_group_permlink: encodeURIComponent(research.research_group.permlink),
             research_permlink: encodeURIComponent(research.permlink)
           }
         }"

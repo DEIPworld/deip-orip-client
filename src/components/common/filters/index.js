@@ -53,7 +53,7 @@ Vue.filter('avatarSrc', (profile, width, height, isRound = false, noCache = fals
   ? `${window.env.DEIP_SERVER_URL}/api/user/avatar/${profile._id}/?authorization=${accessService.getAccessToken()}&width=${width}&height=${height}&round=${isRound}&noCache=${noCache}`
   : `${window.env.DEIP_SERVER_URL}/api/user/avatar/initdelegate/?authorization=${accessService.getAccessToken()}&width=${width}&height=${height}&round=${isRound}&noCache=${noCache}`));
 
-Vue.filter('researchBackgroundSrc', (researchId, width = 1440, height = 430, isRound = false, noCache = true, ext = 'png') => `${window.env.DEIP_SERVER_URL}/api/research/background/${researchId}?authorization=${accessService.getAccessToken()}&width=${width}&height=${height}&round=${isRound}&noCache=${noCache}&ext=${ext}`);
+Vue.filter('researchBackgroundSrc', (researchExternalId, width = 1440, height = 430, isRound = false, noCache = true, ext = 'png') => `${window.env.DEIP_SERVER_URL}/api/research/background/${researchExternalId}?authorization=${accessService.getAccessToken()}&width=${width}&height=${height}&round=${isRound}&noCache=${noCache}&ext=${ext}`);
 
 Vue.filter('researchGroupLogoSrc', (researchGroupId, width = 360, height = 80, isRound = false, noCache = true, ext = 'png') => `${window.env.DEIP_SERVER_URL}/api/groups/logo/${researchGroupId}?authorization=${accessService.getAccessToken()}&width=${width}&height=${height}&round=${isRound}&noCache=${noCache}&ext=${ext}`);
 
@@ -72,3 +72,7 @@ Vue.filter('tenantBackgroundSrc', (tenant, width, height, noCache, ext = 'png') 
 Vue.filter('dateFormat', (value, format, fromUtcToLocal = false) => (!fromUtcToLocal
   ? moment(value).format(format)
   : moment.utc(value).local().format(format)));
+
+Vue.filter('shortHash', (value) => {
+  return value ? value.substring(0, 8) : "";
+})

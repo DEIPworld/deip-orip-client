@@ -110,9 +110,9 @@
   import { mapGetters } from 'vuex';
   import moment from 'moment';
 
-  import { UsersService } from '@deip/users-service';
+  import { UserService } from '@deip/user-service';
 
-  const usersService = UsersService.getInstance();
+  const userService = UserService.getInstance();
 
   export default {
     name: 'UserSettingsBody',
@@ -194,7 +194,7 @@
           }
         };
 
-        usersService
+        userService
           .updateUserProfile(this.currentUser.username, update)
           .then(
             (res) => {

@@ -184,8 +184,8 @@
 
       addReference({ reference }) {
         const uri = `${window.env.DEIP_CLIENT_URL}/#/${encodeURIComponent(reference.group_permlink)}/research/${encodeURIComponent(reference.research_permlink)}/${encodeURIComponent(reference.permlink)}`;
-        const title = `${reference.title} (${reference.research_title})`; const
-          containerTitle = title;
+        const title = `${reference.title} (${reference.research_title})`; 
+        const containerTitle = title;
         this.texture.api.addReference(uri, title, containerTitle);
       },
 

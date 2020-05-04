@@ -48,9 +48,9 @@
         :loading="isMetaSaving"
         :disabled="isSavingMetaDisabled || isMetaSaving"
         color="primary"
-        @click="saveMeta()"
+        @click="updateResearch()"
       >
-        Update Info
+        Update Research
       </v-btn>
     </div>
     <v-divider />
@@ -120,7 +120,7 @@
         :loading="isRefSaving"
         :disabled="isSavingRefDisabled || isRefSaving"
         color="primary"
-        @click="saveRef()"
+        @click="updateResearchMetadata()"
       >
         Update Info
       </v-btn>
@@ -135,7 +135,7 @@
           <img
             class="ma-0"
             style="width: 150px; height: 150px"
-            :src="$options.filters.researchBackgroundSrc(research.id, 300, 300)"
+            :src="$options.filters.researchBackgroundSrc(research.external_id, 300, 300)"
           >
         </v-col>
         <v-col cols="9">
@@ -237,7 +237,7 @@
             url: `${window.env.DEIP_SERVER_URL}/api/research/background`,
             paramName: 'research-background',
             headers: {
-              'Research-Id': this.research.id.toString(),
+              'Research-External-Id': this.research.external_id,
               Authorization: `Bearer ${accessService.getAccessToken()}`
             },
             timeout: 0,
@@ -352,18 +352,22 @@
       });
     },
     methods: {
-      saveMeta() {
+      updateResearch() {
         this.isMetaSaving = true;
 
-        const promise = researchGroupService.createChangeResearchNameAndDescriptionProposal({
-          researchId: this.research.id,
-          researchGroupId: this.research.research_group_id,
-          newResearchTitle: this.title,
-          newResearchAbstract: this.description,
-          isPrivate: !this.isPublic
-        });
-
-        promise
+        const isProposal = !this.research.research_group.is_personal;
+        researchService.updateResearchViaOffchain(this.user.privKey, isProposal, {
+          researchGroup: this.research.research_group.external_id,
+          externalId: this.research.external_id,
+          title: this.title,
+          abstract: this.description,
+          permlink: undefined,
+          isPrivate: !this.isPublic,
+          reviewShare: undefined,
+          compensationShare: undefined,
+          members: undefined,
+          extensions: []
+        })
           .then(() => {
             this.$store.dispatch('layout/setSuccess', {
               message: 'Proposal has been sent successfully!'
@@ -373,7 +377,7 @@
                 name: 'ResearchDetails',
                 params: {
                   research_group_permlink: encodeURIComponent(
-                    this.research.group_permlink
+                    this.research.research_group.permlink
                   ),
                   research_permlink: encodeURIComponent(this.research.permlink)
                 }
@@ -383,7 +387,7 @@
                 name: 'ResearchGroupDetails',
                 params: {
                   research_group_permlink: encodeURIComponent(
-                    this.research.group_permlink
+                    this.research.research_group.permlink
                   )
                 },
                 hash: '#proposals'
@@ -402,7 +406,7 @@
           });
       },
 
-      saveRef() {
+      updateResearchMetadata() {
         if (this.validateMilestones()) {
           this.isRefSaving = true;
 
@@ -419,13 +423,13 @@
 
           }));
 
-          researchService.updateResearch(
-            this.research.id,
-            milestones,
-            this.videoSrc,
-            this.partners,
-            this.currentTrlStep
-          )
+          researchService.updateResearchOffchainMeta({ 
+            researchExternalId: this.research.external_id, 
+            milestones: milestones, 
+            videoSrc: this.videoSrc, 
+            partners: this.partners, 
+            trl: this.currentTrlStep
+          })
             .then(() => {
               this.$store.dispatch('layout/setSuccess', {
                 message: 'Info has been change successfully!'
@@ -434,7 +438,7 @@
                 name: 'ResearchDetails',
                 params: {
                   research_group_permlink: encodeURIComponent(
-                    this.research.group_permlink
+                    this.research.research_group.permlink
                   ),
                   research_permlink: encodeURIComponent(this.research.permlink)
                 }
@@ -466,7 +470,7 @@
           name: 'ResearchDetails',
           params: {
             research_group_permlink: encodeURIComponent(
-              this.research.group_permlink
+              this.research.research_group.permlink
             ),
             research_permlink: encodeURIComponent(this.research.permlink)
           }

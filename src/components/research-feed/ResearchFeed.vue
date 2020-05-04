@@ -281,12 +281,14 @@
                   <research-project-tile
                     :research="{
                       id: item.research_id,
+                      external_id: item.external_id,
                       title: item.title,
                       permlink: item.permlink,
                       group_permlink: item.group_permlink,
                       last_update_time: item.last_update_time,
                       number_of_negative_reviews: item.number_of_negative_reviews,
                       number_of_positive_reviews: item.number_of_positive_reviews,
+                      research_group: item.group,
                       isTop: item.isTop,
                       researchRef: item.researchRef
                     }"

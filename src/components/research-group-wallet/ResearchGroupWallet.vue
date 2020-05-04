@@ -51,14 +51,14 @@
 
               <div class="width-10 list-body-cell text-align-center">
                 <div class="half-bold headline">
-                  {{ deipTokenBalance }}
+                  {{ defaultAssetBalance }}
                 </div>
               </div>
 
               <div class="list-body-cell token-actions">
                 <v-btn
                   class="ma-0"
-                  :disabled="!deipTokenBalance"
+                  :disabled="!defaultAssetBalance"
                   text
                   color="primary"
                   @click="sendingType = sendingTypes.deipToken"
@@ -92,8 +92,8 @@
             <v-divider />
 
             <div v-if="researches.length">
-              <template v-for="research in researches">
-                <div class="list-line">
+              <template v-for="(research, i) in researches">
+                <div class="list-line" :key="`${i}-research`">
                   <div class="legacy-col-grow list-body-cell">
                     <div class="subtitle-1">
                       {{ research.title }}
@@ -119,27 +119,13 @@
             </div>
           </div>
         </v-card>
-
-        <!-- <div class="title c-pt-8">Other assets</div>
-
-        <div class="legacy-row c-pt-6">
-            <v-card class="legacy-col-4 c-p-6 c-mr-6">
-                <div class="subtitle-1 bold">Research Group Tokens</div>
-                <div class="display-1">6566</div>
-            </v-card>
-
-            <v-card class="legacy-col-4 c-p-6">
-                <div class="subtitle-1 bold">Expertise Tokens</div>
-                <div class="display-1">85635</div>
-            </v-card>
-        </div> -->
       </div>
 
       <div class="tokens-send-panel">
         <transition mode="out-in">
           <rg-deip-token-send-form
             v-if="sendingType === sendingTypes.deipToken"
-            :deip-token-balance="deipTokenBalance"
+            :deip-token-balance="defaultAssetBalance"
           />
         </transition>
       </div>
@@ -149,9 +135,12 @@
 
 <script>
   import _ from 'lodash';
-  import deipRpc from '@deip/rpc-client';
   import { mapGetters } from 'vuex';
   import RGDeipTokenSendForm from './components/RGDeipTokenSendForm.vue';
+  import deipRpc from '@deip/rpc-client';
+  import { AppConfigService } from '@deip/app-config-service';
+
+  const appConfigService = AppConfigService.getInstance();
 
   export default {
     name: 'ResearchGroupWallet',
@@ -175,8 +164,11 @@
         group: 'rgWallet/group',
         researches: 'rgWallet/researches'
       }),
-      deipTokenBalance() {
-        return this.group ? this.fromAssetsToFloat(this.group.balance) : 0;
+
+      defaultAssetBalance() {
+        const env = appConfigService.get('env');
+        let amount = this.group.balances[env.ASSET_UNIT];
+        return amount;;
       }
     },
 

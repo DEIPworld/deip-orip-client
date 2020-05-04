@@ -3,21 +3,22 @@
     <v-expansion-panel-header>
       <div class="display-flex align-center" @click.stop>
         <div class="id-col">
-          <div class="font-weight-medium">
-            {{ proposal.id }}
+          <div class="caption">
+            {{ proposal.external_id | shortHash }}
           </div>
         </div>
+
         <div class="proposal-activity">
           <!-- proposal title depending on type -->
-          <div v-if="proposal.action === proposalTypes.START_RESEARCH" class="display-flex">
-            <v-icon small color="primary" class="mr-2">
-              add
+          <div v-if="proposal.action === PROPOSAL_TYPES.CREATE_RESEARCH" class="display-flex">
+            <v-icon small color="primary" class="mx-2">
+              note_add
             </v-icon>
             <div class="a">
-              {{ proposal.data.title }}
+              {{ proposal.payload.title }}
             </div>
           </div>
-          <div v-else-if="proposal.action === proposalTypes.INVITE_MEMBER" class="display-flex">
+          <div v-else-if="proposal.action === PROPOSAL_TYPES.INVITE_MEMBER" class="display-flex">
             <v-icon small color="primary" class="mr-2">
               person_add
             </v-icon>
@@ -25,7 +26,7 @@
               {{ proposal.data.name }}
             </div>
           </div>
-          <div v-else-if="proposal.action === proposalTypes.EXCLUDE_MEMBER" class="display-flex">
+          <div v-else-if="proposal.action === PROPOSAL_TYPES.EXCLUDE_MEMBER" class="display-flex">
             <v-icon small color="primary" class="mr-2">
               mdi-account-remove
             </v-icon>
@@ -33,7 +34,7 @@
               {{ proposal.data.name }}
             </div>
           </div>
-          <div v-else-if="proposal.action === proposalTypes.SEND_FUNDS" class="display-flex">
+          <div v-else-if="proposal.action === PROPOSAL_TYPES.TRANSFER" class="display-flex">
             <v-icon small color="primary" class="mr-2">
               money_off
             </v-icon>
@@ -42,64 +43,57 @@
             </div>
           </div>
           <div
-            v-else-if="proposal.action === proposalTypes.START_RESEARCH_TOKEN_SALE"
+            v-else-if="proposal.action === PROPOSAL_TYPES.CREATE_RESEARCH_TOKEN_SALE"
             class="display-flex"
           >
             <v-icon small color="primary" class="mr-2">
               attach_money
             </v-icon>
-            <div class="a">
-              {{ convertToPercent(proposal.data.amount_for_sale) }}% fundraise
+            <div class="body-2">
+              {{ proposal.payload.share }} fundraise
             </div>
           </div>
-          <div v-else-if="proposal.action === proposalTypes.CHANGE_QUORUM" class="display-flex">
-            <v-icon small color="primary" class="mr-2">
-              mdi-percent
-            </v-icon>
-            <div class="a">
-              Change of quorum
+
+          <div v-else-if="proposal.action === PROPOSAL_TYPES.UPDATE_RESEARCH_GROUP"
+            class="display-flex"
+          >
+            <v-icon small color="primary" class="mx-2">settings_applications</v-icon>
+            <div class="body-2">
+              Update group meta
             </div>
           </div>
           <div
-            v-else-if="proposal.action === proposalTypes.CHANGE_RESEARCH_GROUP_META_DATA_TYPE"
+            v-else-if="proposal.action === PROPOSAL_TYPES.UPDATE_RESEARCH"
             class="display-flex"
           >
-            <!-- <v-icon small color="primary" class="mr-2">mdi-percent</v-icon> -->
-            <div class="a">
-              Change Group meta
+            <v-icon small color="primary" class="mx-2">edit_attributes</v-icon>
+            <div class="body-2">
+              Update research meta
             </div>
           </div>
           <div
-            v-else-if="proposal.action === proposalTypes.CHANGE_RESEARCH_META_DATA_TYPE"
+            v-else-if="proposal.action === PROPOSAL_TYPES.CREATE_RESEARCH_MATERIAL"
             class="display-flex"
           >
-            <!-- <v-icon small color="primary" class="mr-2">mdi-percent</v-icon> -->
-            <div class="a">
-              Change Research meta
-            </div>
-          </div>
-          <div
-            v-else-if="proposal.action === proposalTypes.CREATE_RESEARCH_MATERIAL"
-            class="display-flex"
-          >
-            <v-icon small color="primary" class="mr-2">
-              note_add
+            <v-icon small color="primary" class="mx-2">
+              post_add
             </v-icon>
             <router-link
               class="a"
               :to="{
                 name: 'ResearchDetails',
                 params: {
-                  research_group_permlink: encodeURIComponent(proposal.extension.research.group_permlink),
+                  research_group_permlink: encodeURIComponent(proposal.extension.research.research_group.permlink),
                   research_permlink: encodeURIComponent(proposal.extension.research.permlink)
                 }
               }"
             >
-              {{ proposal.extension.research.title }}
+              {{ proposal.payload.title }}
             </router-link>
           </div>
           <!-- proposal title depending on type -->
         </div>
+
         <div class="date">
           <div class="caption">
             {{ proposal.creation_time | dateFormat('D MMM YYYY', true) }}
@@ -111,40 +105,47 @@
           </div>
         </div>
         <div class="created-by">
-          <router-link
-            :to="'/user-details/' + proposal.creator"
-            class="a overflow-ellipsis"
-          >
-            {{ proposal.creator }}
-          </router-link>
+          <a href="#" class="a overflow-ellipsis">
+            {{ proposal.creator | shortHash }}
+          </a>
+        </div>
+        <div class="status">
+          <v-tooltip bottom v-if="proposal.fail_reason">
+            <template v-slot:activator="{ on }">
+              <v-chip v-on="on" color="error">
+                <div class="caption">Failure</div>
+              </v-chip>
+            </template>
+            <div>
+              <div>Next attempt: {{ moment(proposal.expiration_time).format('MM/DD/YYYY HH:mm') }}</div>
+              <div>Reason: {{proposal.fail_reason}}</div>
+            </div>
+          </v-tooltip>
+
+          <v-tooltip bottom v-else>
+            <template v-slot:activator="{ on }">
+              <v-chip v-on="on">
+                <div class="caption">Pending</div>
+              </v-chip>
+            </template>
+            <div>
+              <div v-if="proposal.voted_accounts.length">Approved by: {{ proposal.voted_accounts.join(', ') }}</div>
+              <div v-else>No approvals yet</div>
+            </div>
+          </v-tooltip>
         </div>
         <div class="voted">
-          <v-tooltip right>
-            <template v-slot:activator="{ on }">
-              <div
-                v-on="on"
-              >
-                {{ approvedPercent }} of {{ convertToPercent(proposal.quorum_percent) }}%
-              </div>
-            </template>
-
-            <span>
-              Approved by
-              <br>
-              <b>{{ proposal.voted_accounts.join(', ') }}</b>
-            </span>
-          </v-tooltip>
+          <div>{{proposal.voted_accounts.length}}</div>
         </div>
         <div class="action-col">
           <v-btn
-            v-if="!proposal.is_completed"
             text
             small
             color="primary"
             class="ma-0"
             :disabled="isApprovingLoading || isApproved"
             :loading="isApprovingLoading"
-            @click="approve()"
+            @click="approve(proposal)"
           >
             {{ !isApproved ? 'Approve' : 'Approved' }}
           </v-btn>
@@ -157,28 +158,24 @@
         <v-card-text class="pa-0">
           <div class="description caption">
             <!-- proposal description depending on type -->
-            <v-row v-if="proposal.action === proposalTypes.START_RESEARCH" no-gutters>
+            <v-row v-if="proposal.action === PROPOSAL_TYPES.CREATE_RESEARCH" no-gutters>
               <v-col cols="6">
                 <div class="grey--text">
                   {{ proposal.creator }}
                 </div>
                 <div class="pt-2">
                   Reviewers' reward:
-                  <span
-                    class="font-weight-bold"
-                  >{{ convertToPercent(proposal.data.review_share_in_percent) }}%</span>
+                  <span class="font-weight-bold">{{ proposal.payload.review_share}}</span>
                 </div>
               </v-col>
               <v-col class="grey--text" cols="6" style="max-height: 70px">
-                <v-row column>
-                  <div v-for="(label, i) in getDisciplineNames()" :key="i">
-                    {{ label }}
-                  </div>
+                <v-row>
+                  <span class="pr-1" v-for="(label, i) in getDisciplineNames()" :key="i">{{ label }}</span>
                 </v-row>
               </v-col>
             </v-row>
 
-            <v-row v-else-if="proposal.action === proposalTypes.INVITE_MEMBER" no-gutters>
+            <v-row v-else-if="proposal.action === PROPOSAL_TYPES.INVITE_MEMBER" no-gutters>
               <v-col cols="6">
                 Research group tokens:
                 <span
@@ -193,7 +190,7 @@
               </v-col>
             </v-row>
 
-            <v-row v-else-if="proposal.action === proposalTypes.SEND_FUNDS" no-gutters>
+            <v-row v-else-if="proposal.action === PROPOSAL_TYPES.TRANSFER" no-gutters>
               <v-col cols="6">
                 <div>
                   User:
@@ -214,88 +211,106 @@
               </v-col>
             </v-row>
 
-            <v-row v-else-if="proposal.action === proposalTypes.START_RESEARCH_TOKEN_SALE" no-gutters>
-              <v-col class="display-flex justify" cols="6">
-                <div class="width-8">
+            <v-row v-else-if="proposal.action === PROPOSAL_TYPES.CREATE_RESEARCH_TOKEN_SALE" no-gutters>
+              <v-col class="display-flex justify" cols="4">
+                <span class="font-weight-bold">Research:</span>
+                <router-link
+                  :to="{ 
+                    name: 'ResearchDetails',
+                    params: {
+                      research_group_permlink: encodeURIComponent(proposal.extension.research.research_group.permlink),
+                      research_permlink: encodeURIComponent(proposal.extension.research.permlink)
+                    }
+                  }"
+                  class="a px-2"
+                  >{{ proposal.extension.research.title }}
+                </router-link>
+              </v-col>
+              <v-col class="display-flex justify" cols="8">
+                <div class="mr-4">
                   <div>
                     Min:
-                    <span
-                      class="font-weight-bold float-right"
-                    >{{ fromAssetsToFloat(proposal.data.soft_cap) }}</span>
+                    <span class="px-4 font-weight-bold float-right">{{ proposal.payload.soft_cap }}</span>
                   </div>
                   <div>
                     Max:
-                    <span
-                      class="font-weight-bold float-right"
-                    >{{ fromAssetsToFloat(proposal.data.hard_cap) }}</span>
+                    <span class="px-4 font-weight-bold float-right">{{ proposal.payload.hard_cap }}</span>
                   </div>
                 </div>
-                <div class="width-11 mr-12">
+                <div class="">
                   <div>
                     Start Date:
-                    <span
-                      class="font-weight-bold float-right"
-                    >{{ proposal.data.start_time | dateFormat('HH:mm DD MMM YYYY', true) }}</span>
+                    <span class="px-4 font-weight-bold float-right">{{ proposal.payload.start_time | dateFormat('HH:mm DD MMM YYYY', true) }}</span>
                   </div>
                   <div>
                     End Date:
-                    <span
-                      class="font-weight-bold float-right"
-                    >{{ proposal.data.end_time | dateFormat('HH:mm DD MMM YYYY', true) }}</span>
+                    <span class="px-4 font-weight-bold float-right">{{ proposal.payload.end_time | dateFormat('HH:mm DD MMM YYYY', true) }}</span>
                   </div>
-                </div>
-              </v-col>
-            </v-row>
-
-            <v-row v-else-if="proposal.action === proposalTypes.CHANGE_QUORUM" no-gutters>
-              <v-col cols="6">
-                <div>
-                  Type:
-                  <span
-                    class="font-weight-bold"
-                  >{{ proposalLabels[proposal.data.proposal_type] }}</span>
-                </div>
-                <div>
-                  Proposed percent:
-                  <span
-                    class="font-weight-bold"
-                  >{{ convertToPercent(proposal.data.quorum_percent) }}%</span>
                 </div>
               </v-col>
             </v-row>
 
             <v-row
-              v-else-if="proposal.action === proposalTypes.CHANGE_RESEARCH_GROUP_META_DATA_TYPE"
+              v-else-if="proposal.action === PROPOSAL_TYPES.UPDATE_RESEARCH_GROUP"
               no-gutters
             >
               <v-col cols="6">
                 <div>
                   Type:
-                  <span class="font-weight-bold">Change Group meta</span>
+                  <span class="font-weight-bold">Update group meta</span>
                 </div>
               </v-col>
             </v-row>
 
-            <v-row v-else-if="proposal.action === proposalTypes.CHANGE_RESEARCH_META_DATA_TYPE" no-gutters>
+            <v-row v-else-if="proposal.action === PROPOSAL_TYPES.UPDATE_RESEARCH" no-gutters>
               <v-col cols="6">
                 <div>
                   Type:
-                  <span class="font-weight-bold">Change Research meta</span>
+                  <span class="font-weight-bold">Update research meta</span>
                 </div>
               </v-col>
             </v-row>
 
-            <v-row v-else-if="proposal.action === proposalTypes.CREATE_RESEARCH_MATERIAL" no-gutters>
-              <v-col cols="6">
-                <div class="grey--text">
-                  {{ proposal.data.authors.join(' · ') }}
+            <v-row v-else-if="proposal.action === PROPOSAL_TYPES.CREATE_RESEARCH_MATERIAL" no-gutters>
+              <v-col cols="8">
+                <div>
+                  <span class="font-weight-bold">Authors:</span>
+                  <span class="grey--text">
+                    {{ proposal.payload.authors.join(' · ') }}
+                  </span>
                 </div>
-                <span class="font-weight-bold">{{ getContentTypeStrById(proposal.data.type) }}:</span>
-                <a
-                  :href="getContentUrl(proposal)"
-                  class="a"
-                  target="_blank"
-                >{{ proposal.data.title }}</a>
+                <div>
+                  <span class="font-weight-bold">{{ getContentTypeStrById(proposal.payload.type) }}:</span>
+                  <router-link
+                    :to="{ 
+                      name: 'ResearchContentDetails', 
+                      params: {
+                        research_group_permlink: encodeURIComponent(proposal.extension.research.research_group.permlink),
+                        research_permlink: encodeURIComponent(proposal.extension.research.permlink),
+                        content_permlink: encodeURIComponent('!draft')
+                      },
+                      query: {
+                        ref: proposal.payload.external_id
+                      }
+                    }"
+                    class="a px-2"
+                    target="_blank"
+                    >{{ proposal.payload.title }}
+                  </router-link>
+
+                  <span class="font-weight-bold">Research:</span>
+                  <router-link
+                    :to="{ 
+                      name: 'ResearchDetails', 
+                      params: {
+                        research_group_permlink: encodeURIComponent(proposal.extension.research.research_group.permlink),
+                        research_permlink: encodeURIComponent(proposal.extension.research.permlink)
+                      }
+                    }"
+                    class="a px-2"
+                    >{{ proposal.extension.research.title }}
+                  </router-link>
+                </div>
               </v-col>
             </v-row>
             <!-- proposal description depending on type -->
@@ -307,20 +322,15 @@
 </template>
 
 <script>
-// import deipRpc from '@deip/rpc-client';
-
   import { mapGetters, mapActions } from 'vuex';
   import _ from 'lodash';
-
   import { ResearchGroupService } from '@deip/research-group-service';
-  import {
-    proposalTypesLabels,
-    PROPOSAL_TYPES,
-    researchContentTypes
-  } from '@/variables';
+  import { ProposalsService } from '@deip/proposals-service';
+  import { PROPOSAL_TYPES, researchContentTypes } from '@/variables';
   import * as disciplineTreeService from '../../common/disciplines/DisciplineTreeService';
 
   const researchGroupService = ResearchGroupService.getInstance();
+  const proposalsService = ProposalsService.getInstance();
 
   export default {
     name: 'ResearchGroupDetailsProposalsItem',
@@ -331,8 +341,7 @@
 
     data() {
       return {
-        proposalTypes: _.cloneDeep(PROPOSAL_TYPES),
-        proposalLabels: _.cloneDeep(proposalTypesLabels),
+        PROPOSAL_TYPES,
         isApprovingLoading: false
       };
     },
@@ -341,12 +350,19 @@
       ...mapActions({
         changeProposal: 'researchGroup/changeProposal'
       }),
-      approve() {
+      approve(proposal) {
         this.isApprovingLoading = true;
-        researchGroupService
-          .approveProposal({
-            groupId: this.group.id,
-            requestId: this.proposal.id
+        proposalsService.updateProposal(this.currentUser.privKey, {
+            externalId: proposal.external_id,
+            postingApprovalsToAdd: [],
+            postingApprovalsToRemove: [],
+            activeApprovalsToAdd: [this.currentUser.username],
+            activeApprovalsToRemove: [],
+            ownerApprovalsToAdd: [],
+            ownerApprovalsToRemove: [],
+            keyApprovalsToAdd: [],
+            keyApprovalsToRemove: [],
+            extensions: []
           })
           .then(() => {
             this.isApprovingLoading = false;
@@ -362,25 +378,16 @@
           });
       },
 
-      // for START_RESEARCH
+      // for CREATE_RESEARCH
       getDisciplineNames() {
-        const nodes = disciplineTreeService.getNodesByIdList(
-          this.proposal.data.disciplines
-        );
+        const nodes = disciplineTreeService.getNodesByIdList(this.proposal.payload.disciplines);
         return nodes.map((node) => node.label);
       },
 
       // for CREATE_RESEARCH_MATERIAL
       getContentTypeStrById(id) {
-        const contentType = _.find(researchContentTypes, (item) => item.id === id);
-        return contentType.text;
-      },
-      getContentUrl(proposal) {
-        return `/#/${encodeURIComponent(
-          proposal.extension.research.group_permlink
-        )}/research/${encodeURIComponent(
-          proposal.extension.research.permlink
-        )}/!draft?ref=${proposal.extension.draftContent._id}`;
+        const type = researchContentTypes.find((type) => type.id == id);
+        return type.text;
       }
     },
 
@@ -394,14 +401,6 @@
         return _.includes(
           this.proposal.voted_accounts,
           this.currentUser.username
-        );
-      },
-      approvedPercent() {
-        return this.convertToPercent(
-          this.proposal.voted_accounts.reduce((acc, accountName) => {
-            const shares = _.find(this.groupShares, { owner: accountName });
-            return shares ? acc + shares.amount : acc;
-          }, 0)
         );
       }
     }

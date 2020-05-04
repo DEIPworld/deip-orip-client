@@ -86,7 +86,7 @@
 
             <internal-references-picker
               :show-selected="true"
-              :current-research-id="research.id"
+              :current-research="research"
               :preselected="[]"
               @referenceAdded="addReference"
               @referenceRemoved="removeReference"
@@ -132,9 +132,11 @@
 
   import { AccessService } from '@deip/access-service';
   import { ResearchGroupService } from '@deip/research-group-service';
+  import { ResearchContentService } from '@deip/research-content-service';
 
   const accessService = AccessService.getInstance();
   const researchGroupService = ResearchGroupService.getInstance();
+  const researchContentService = ResearchContentService.getInstance();
 
   export default {
     name: 'UploadResearchContentFileDialog',
@@ -214,8 +216,8 @@
         xhr.setRequestHeader('Authorization', `Bearer ${accessToken}`);
         xhr.setRequestHeader('Upload-Session', `${(new Date()).getTime()}-${accessToken.split('.')[2]}`);
         // TODO: add as formParam after upgrading back-end
-        xhr.setRequestHeader('Research-Id', this.research.id.toString());
-        xhr.setRequestHeader('Internal-Refs', this.references.map((ref) => ref.id));
+        xhr.setRequestHeader('Research-External-Id', this.research.external_id);
+        xhr.setRequestHeader('Research-Content-References', this.references.map((ref) => ref.external_id));
       },
       vdropzoneErrorMultiple(files, message, xhr) {
         this.$store.dispatch('layout/setError', {
@@ -227,21 +229,27 @@
         this.isOpen = true;
       },
       vdropzoneSuccessMultiple(files, res) {
-        const self = this;
-        const contentRef = res;
-        if (!contentRef.hash) {
-          throw new Error('File upload has failed');
-        }
+          const self = this;
+          const { rm : { hash } } = res;
+          if (!hash) {
+            throw new Error('File upload has failed');
+          }
 
-        contentRef.title = this.title;
-        contentRef.authors = this.authors.map((a) => a.account.name);
-        contentRef.references = this.references.map((ref) => ref.id);
-        contentRef.external_references = [];
-
-        researchGroupService.createContentProposal({
-          contentRef,
-          contentType: this.type
-        })
+          const isProposal = !this.research.research_group.is_personal;
+          researchContentService.createResearchContentViaOffchain(this.user.privKey, isProposal, {
+            researchExternalId: this.research.external_id,
+            researchGroup: this.research.research_group.external_id,
+            type: parseInt(this.type),
+            title: this.title,
+            content: hash,
+            permlink: this.title.replace(/ /g, '-').replace(/_/g, '-').toLowerCase(),
+            authors: this.authors.map((a) => a.account.name),
+            references: this.references.map((ref) => {
+              return ref.external_id;
+            }),
+            foreignReferences: [],
+            extensions: []
+          })
           .then(() => {
             this.$store.dispatch('layout/setSuccess', {
               message: 'New material has been uploaded successfully'
@@ -263,13 +271,13 @@
       },
 
       addReference(ref) {
-        if (!this.references.some((r) => r.id == ref.id)) {
+        if (!this.references.some((r) => r.external_id == ref.external_id)) {
           this.references.push(ref);
         }
       },
       removeReference(ref) {
-        if (this.references.some((r) => r.id == ref.id)) {
-          this.references = this.references.filter((r) => r.id != ref.id);
+        if (this.references.some((r) => r.external_id == ref.external_id)) {
+          this.references = this.references.filter((r) => r.external_id != ref.external_id);
         }
       }
     }

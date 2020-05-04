@@ -177,34 +177,35 @@
             notes: ''
           }));
 
-        const default_quorum = 50 * this.DEIP_1_PERCENT;
-        const action_quorums = Object.keys(this.group.quorum).map((action, i) => [
-          i + 1,
-          default_quorum
-        ]);
+        const creator = this.user.username;
+        const memo = this.user.account.memo_key;
+        const auth = {
+          account_auths: [[creator, 1]],
+          key_auths: [],
+          weight_threshold: 1
+        }
 
-        const details = [
-          [
-            'dao_voting_research_group_management_model_v1_0_0',
-            {
-              version: '1.0.0',
-              default_quorum,
-              action_quorums
-            }
-          ]
-        ];
-
-        researchGroupService.createResearchGroup(
+        researchGroupService.createResearchGroupViaOffchain(
+          this.user.privKey,
           {
-            name: this.group.name,
-            permlink: this.group.permlink,
-            description: this.group.description,
-            type: 1,
-            details,
-            isCreatedByOrganization: false,
-            invitees
+            fee: this.toAssetUnits(100),
+            creator: creator,
+            accountOwnerAuth: auth,
+            accountActiveAuth: auth,
+            accountPostingAuth: auth,
+            accountMemoPubKey: memo,
+            accountJsonMetadata: "",
+            accountExtensions: []
+          },
+          {
+            researchGroupName: this.group.name,
+            researchGroupPermlink: this.group.permlink,
+            researchGroupDescription: this.group.description,
+            // researchGroupInvitees: invitees,
+            researchGroupThresholdOverrides: []
           }
-        ).then((response) => {
+        )
+        .then((response) => {
           this.isLoading = false;
           this.$store.dispatch('auth/loadGroups'); // reload user groups
           this.$store.dispatch('layout/setSuccess', {

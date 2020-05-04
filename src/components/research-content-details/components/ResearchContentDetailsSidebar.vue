@@ -3,7 +3,7 @@
     <router-link
       class="a title"
       :to="{ name: 'ResearchDetails', params: {
-        research_group_permlink: encodeURIComponent(research.group_permlink),
+        research_group_permlink: encodeURIComponent(research.research_group.permlink),
         research_permlink: encodeURIComponent(research.permlink)
       }}"
     >
@@ -15,13 +15,13 @@
       <div v-if="isProposed || isUnlockActionAvailable" class="sidebar-fullwidth">
         <v-divider class="my-6" />
       </div>
-      <div class="body-1">
+      <div v-if="isProposed" class="body-1">
         Draft is
         <router-link
           class="a orange--text"
           :to="{
             name: 'ResearchGroupDetails',
-            params: { research_group_permlink: encodeURIComponent(research.group_permlink) },
+            params: { research_group_permlink: encodeURIComponent(research.research_group.permlink) },
             hash: '#proposals'
           }"
         >
@@ -30,7 +30,8 @@
         as research content and locked for editing
       </div>
       <div v-if="isUnlockActionAvailable" class="mt-6">
-        <v-btn color="orange" @click="unlockDraft()">
+        <div class="body-1 pb-4">The proposal is expired. Unlock the material for a new proposal or removal</div>
+        <v-btn color="orange" block @click="unlockDraft()">
           Unlock Draft
         </v-btn>
       </div>
@@ -213,7 +214,7 @@
             :to="{
               name: 'ResearchContentDetails',
               params: {
-                research_group_permlink: encodeURIComponent(research.group_permlink),
+                research_group_permlink: encodeURIComponent(research.research_group.permlink),
                 research_permlink: encodeURIComponent(research.permlink),
                 content_permlink: encodeURIComponent(item.permlink)
               }
@@ -230,7 +231,7 @@
           :to="{
             name: 'ResearchContentReferences',
             params: {
-              research_group_permlink: encodeURIComponent(research.group_permlink),
+              research_group_permlink: encodeURIComponent(research.research_group.permlink),
               research_permlink: encodeURIComponent(research.permlink),
               content_permlink: encodeURIComponent(content.permlink)
             }}"
@@ -254,7 +255,7 @@
         :to="{
           name: 'ResearchContentMetadata',
           params: {
-            research_group_permlink: encodeURIComponent(research.group_permlink),
+            research_group_permlink: encodeURIComponent(research.research_group.permlink),
             research_permlink: encodeURIComponent(research.permlink),
             content_permlink: encodeURIComponent(content.permlink)
           }
@@ -265,20 +266,6 @@
     </div>
     <!-- ### END Research Content Blockchain Data Section ### -->
 
-    <!-- ### START Quorum Info Section ### -->
-    <div v-if="!isPublished && !isCentralizedGroup" class="py-2">
-      <v-divider class="my-6" />
-      <div class="subtitle-1 bold">
-        Quorum
-      </div>
-      <div class="body-2 pt-1">
-        <v-row justify="space-between" class="body-2 py-1">
-          <div>{{ createContentGroupQuorumValue.text }}:</div>
-          <div>{{ convertToPercent(createContentGroupQuorumValue.value) }}%</div>
-        </v-row>
-      </div>
-    </div>
-    <!-- ### END Quorum Info Section ### -->
 
     <!-- ### START Reward Info Section ### -->
     <div v-if="!isPublished" class="py-2">
@@ -293,7 +280,7 @@
             </v-icon>
             Reward for review:
           </div>
-          <div>{{ convertToPercent(research.review_share_in_percent) }}%</div>
+          <div>{{ research.review_share }}</div>
         </v-row>
       </div>
     </div>
@@ -398,13 +385,6 @@
             permlink: content.permlink
           };
         });
-      },
-
-      createContentGroupQuorumValue() {
-        return this.group ? {
-          text: proposalTypesLabels[PROPOSAL_TYPES.CREATE_RESEARCH_MATERIAL],
-          value: this.group.proposal_quorums[PROPOSAL_TYPES.CREATE_RESEARCH_MATERIAL - 1][1]
-        } : undefined;
       },
 
       eciList() {

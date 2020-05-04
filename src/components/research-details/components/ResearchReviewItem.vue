@@ -51,7 +51,7 @@
           :to="{
             name: 'ResearchContentDetails',
             params: {
-              research_group_permlink: encodeURIComponent(research.group_permlink),
+              research_group_permlink: encodeURIComponent(research.research_group.permlink),
               research_permlink: encodeURIComponent(research.permlink),
               content_permlink: encodeURIComponent(review.researchContent.permlink)
             }

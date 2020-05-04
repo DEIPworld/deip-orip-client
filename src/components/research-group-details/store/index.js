@@ -3,14 +3,18 @@ import deipRpc from '@deip/rpc-client';
 import Vue from 'vue';
 
 import { ResearchGroupService } from '@deip/research-group-service';
+import { ProposalsService } from '@deip/proposals-service';
 import { UsersService } from '@deip/users-service';
 import { ResearchService } from '@deip/research-service';
 import { ExpertiseContributionsService } from '@deip/expertise-contributions-service';
+import { BlockchainService } from '@deip/blockchain-service';
 
 const researchGroupService = ResearchGroupService.getInstance();
 const usersService = UsersService.getInstance();
 const researchService = ResearchService.getInstance();
 const expertiseContributionsService = ExpertiseContributionsService.getInstance();
+const blockchainService = BlockchainService.getInstance();
+const proposalsService = ProposalsService.getInstance();
 
 const state = {
   proposals: [],
@@ -43,12 +47,24 @@ const state = {
 
 // getters
 const getters = {
-  proposals: (state) => state.proposals,
-  group: (state) => state.group,
-  groupShares: (state) => state.groupShares,
-  members: (state) => state.members,
-  invites: (state) => state.invites,
-  proposalListFilter: (state) => state.proposalListFilter,
+
+  proposals: state => state.proposals,
+  group: state => {
+    let researchGroup = state.group;
+    let balances = researchGroup.account.balances.reduce((acc, b) => {
+      acc[b.split(' ')[1]] = blockchainService.fromAssetsToFloat(b);
+      return acc;
+    }, {});
+    
+    return {
+      ...researchGroup,
+      balances
+    }
+  },
+  groupShares: state => state.groupShares,
+  members: state => state.members,
+  invites: state => state.invites,
+  proposalListFilter: state => state.proposalListFilter,
   researchList: (state, getters, rootState, rootGetters) => {
     const user = rootGetters['auth/user'];
     return state.researchList.filter((item) => !item.is_private || state.groupShares.some((share) => share.owner == user.username));
@@ -76,7 +92,7 @@ const actions = {
 
         const proposalsLoad = new Promise((resolve, reject) => {
           dispatch('loadResearchGroupProposals', {
-            groupId: state.group.id,
+            account: state.group.account.name,
             notify: resolve
           });
         });
@@ -117,23 +133,9 @@ const actions = {
       });
   },
 
-  loadResearchGroupProposals({ commit }, { groupId, notify }) {
+  loadResearchGroupProposals({ commit }, { account, notify }) {
     commit('SET_GROUP_PROPOSALS_LOADING_STATE', true);
-
-    // const getParsedProposal = proposal => {
-    //   proposal.data = JSON.parse(proposal.data);
-    //   return proposal;
-    // };
-
-    deipRpc.api.getProposalsByResearchGroupIdAsync(groupId)
-      .then((data) => Promise.all(
-        data.map(
-          (item) => researchGroupService.extendProposalByRelatedInfo({
-            ...item,
-            ...{ data: JSON.parse(item.data) }
-          })
-        )
-      ))
+    proposalsService.getProposalsByCreator(account)
       .then((data) => {
         commit('SET_PROPOSALS', data);
       })

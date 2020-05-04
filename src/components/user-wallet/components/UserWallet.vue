@@ -75,7 +75,7 @@
             :to="{
               name: 'ResearchDetails',
               params: {
-                research_group_permlink: encodeURIComponent(investment.research.group_permlink),
+                research_group_permlink: encodeURIComponent(investment.research.research_group.permlink),
                 research_permlink: encodeURIComponent(investment.research.permlink)
               }
             }"
@@ -962,7 +962,7 @@
           this.user.username,
           this.sendTokensDialog.form.to,
           this.toAssetUnits(this.sendTokensDialog.form.amount, this.sendTokensDialog.precision, this.sendTokensDialog.currency.currencyName),
-          this.sendTokensDialog.form.memo
+          this.sendTokensDialog.form.memo ? this.sendTokensDialog.form.memo : ""
         )
           .then((data) => {
             this.$store.dispatch('layout/setSuccess', {

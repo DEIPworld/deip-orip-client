@@ -53,7 +53,7 @@
                   :to="{
                     name: 'ResearchDetails',
                     params: {
-                      research_group_permlink: encodeURIComponent(research.group_permlink),
+                      research_group_permlink: encodeURIComponent(research.research_group.permlink),
                       research_permlink: encodeURIComponent(research.permlink)
                     }
                   }"
@@ -374,7 +374,7 @@
 
           // todo: make workable receiving of all groups in system
           this.researchList.forEach((research) => {
-            research.group = groups.find((group) => group.permlink === research.group_permlink);
+            research.group = groups.find((group) => group.permlink === research.research_group.permlink);
           });
 
           groups.map((group) => deipRpc.api.getResearchGroupTokensByResearchGroupAsync(group.id)

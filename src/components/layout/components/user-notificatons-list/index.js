@@ -11,6 +11,8 @@ import ExpertReviewUserNotification from './components/ExpertReviewUserNotificat
 import ExpertReviewRequestUserNotification from './components/ExpertReviewRequestUserNotification';
 import ExclusionProposalUserNotification from './components/ExclusionProposalUserNotification';
 import ExclusionUserNotification from './components/ExclusionUserNotification';
+import ResearchUpdateProposalUserNotification from './components/ResearchUpdateProposalUserNotification';
+import ResearchGroupUpdateProposalUserNotification from './components/ResearchGroupUpdateProposalUserNotification';
 
 
 Vue.component('user-notifications-list', UserNotificationsList);
@@ -25,3 +27,5 @@ Vue.component('exclusion-proposal-user-notification', ExclusionProposalUserNotif
 Vue.component('exclusion-user-notification', ExclusionUserNotification);
 Vue.component('expert-review-user-notification', ExpertReviewUserNotification);
 Vue.component('expert-review-request-user-notification', ExpertReviewRequestUserNotification);
+Vue.component('research-update-proposal-user-notification', ResearchUpdateProposalUserNotification);
+Vue.component('research-group-update-proposal-user-notification', ResearchGroupUpdateProposalUserNotification);

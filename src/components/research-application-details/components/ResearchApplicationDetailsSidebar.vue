@@ -6,7 +6,7 @@
         :to="{
           name: 'ResearchDetails',
           params: {
-            research_group_permlink: encodeURIComponent(research.group_permlink),
+            research_group_permlink: encodeURIComponent(research.research_group.permlink),
             research_permlink: encodeURIComponent(research.permlink)
           }}"
       >
@@ -54,13 +54,6 @@
           Other Reviews: <span>{{ thirdpartyApplicationsReviewsList.length }}</span>
         </div>
       </div>
-      <!--  <div class="c-pt-3">
-        <div class="caption">
-          <v-icon small class="c-pr-2">rate_review</v-icon>
-          Reward for review:
-          <span class="bold">{{convertToPercent(research.review_share_in_percent)}}%</span>
-        </div>
-      </div> -->
       <div v-if="isCreatingReviewAvailable" class="c-mt-4">
         <v-btn
           dark

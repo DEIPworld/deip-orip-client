@@ -33,13 +33,13 @@
             :loading="isChangingMetaLoading"
             :disabled="!isDisabledBtnNameDescription || isChangingMetaLoading"
             color="primary"
-            @click="sendChangeNameAndDescProposal()"
+            @click="updateResearchGroup()"
           >
             Update Name and Description
           </v-btn>
         </div>
 
-        <div v-if="group.is_dao">
+        <!-- <div v-if="group.is_dao">
           <div class="title font-weight-medium pb-4">
             Quorum threshold:
           </div>
@@ -85,12 +85,12 @@
               :loading="isChangingQuorumLoading"
               :disabled="isDisabledBtnQuorum || isChangingQuorumLoading"
               color="primary"
-              @click="sendChangeQuorumProposal()"
+              @click=""
             >
               Update Quorum
             </v-btn>
           </div>
-        </div>
+        </div> -->
 
         <div>
           <div v-if="isResearchGroupMember" class="py-6">
@@ -176,36 +176,24 @@
 
         proposalOrderMap: [
           [
-            { key: PROPOSAL_TYPES.START_RESEARCH, value: undefined },
+            { key: PROPOSAL_TYPES.CREATE_RESEARCH, value: undefined },
             { key: PROPOSAL_TYPES.CREATE_RESEARCH_MATERIAL, value: undefined },
-            {
-              key: PROPOSAL_TYPES.CHANGE_RESEARCH_REVIEW_SHARE_PERCENT,
-              value: undefined
-            }
           ],
           [
             { key: PROPOSAL_TYPES.INVITE_MEMBER, value: undefined },
             { key: PROPOSAL_TYPES.EXCLUDE_MEMBER, value: undefined }
           ],
           [
-            { key: PROPOSAL_TYPES.START_RESEARCH_TOKEN_SALE, value: undefined },
-            { key: PROPOSAL_TYPES.OFFER_RESEARCH_TOKENS, value: undefined },
-            { key: PROPOSAL_TYPES.SEND_FUNDS, value: undefined }
-          ],
-          [
-            { key: PROPOSAL_TYPES.CHANGE_QUORUM, value: undefined },
-            {
-              key: PROPOSAL_TYPES.REBALANCE_RESEARCH_GROUP_TOKENS,
-              value: undefined
-            }
+            { key: PROPOSAL_TYPES.CREATE_RESEARCH_TOKEN_SALE, value: undefined },
+            { key: PROPOSAL_TYPES.TRANSFER, value: undefined }
           ],
           [
             {
-              key: PROPOSAL_TYPES.CHANGE_RESEARCH_GROUP_META_DATA_TYPE,
+              key: PROPOSAL_TYPES.UPDATE_RESEARCH_GROUP,
               value: undefined
             },
             {
-              key: PROPOSAL_TYPES.CHANGE_RESEARCH_META_DATA_TYPE,
+              key: PROPOSAL_TYPES.UPDATE_RESEARCH,
               value: undefined
             }
           ]
@@ -222,7 +210,8 @@
     },
     computed: {
       ...mapGetters({
-        group: 'researchGroupSettings/group'
+        group: 'researchGroupSettings/group',
+        user: 'auth/user'
       }),
       logoDropzoneOptions() {
         return this.group != null
@@ -314,7 +303,7 @@
           this.proposalOrderMap.forEach((proposalsBlock) => {
             proposalsBlock.forEach((proposalData) => {
               const intValue = this.convertToPercent(
-                this.group.proposal_quorums[proposalData.key - 1][1]
+                this.DEIP_100_PERCENT
               );
               proposalData.value = intValue.toString(); // input works with string values
             });
@@ -325,54 +314,62 @@
         this.newResearchGroupDescription = this.groupDescription;
       },
 
-      sendChangeQuorumProposal() {
-        this.isChangingQuorumLoading = true;
-        const promises = [];
+      // sendChangeQuorumProposal() {
+      //   this.isChangingQuorumLoading = true;
+      //   const promises = [];
 
-        this.proposalOrderMap.forEach((proposalBlock, i) => {
-          proposalBlock.forEach((proposalData, j) => {
-            if (proposalData.value !== this.shadowProposalOrderMap[i][j].value) {
-              const promise = researchGroupService.createChangeQuorumProposal({
-                groupId: this.group.id,
-                action: proposalData.key,
-                quorum: this.toDeipPercent(proposalData.value)
-              });
+      //   this.proposalOrderMap.forEach((proposalBlock, i) => {
+      //     proposalBlock.forEach((proposalData, j) => {
+      //       if (proposalData.value !== this.shadowProposalOrderMap[i][j].value) {
+      //         const promise = researchGroupService.createChangeQuorumProposal({
+      //           groupId: this.group.id,
+      //           action: proposalData.key,
+      //           quorum: this.toDeipPercent(proposalData.value)
+      //         });
 
-              promises.push(promise);
-            }
-          });
-        });
+      //         promises.push(promise);
+      //       }
+      //     });
+      //   });
 
-        Promise.all(promises)
-          .then(() => {
-            this.$store.dispatch('layout/setSuccess', {
-              message: 'Proposal has been sent successfully!'
-            });
-            this.cancel(true);
-          })
-          .catch((err) => {
-            console.log(err);
+      //   Promise.all(promises)
+      //     .then(() => {
+      //       this.$store.dispatch('layout/setSuccess', {
+      //         message: 'Proposal has been sent successfully!'
+      //       });
+      //       this.cancel(true);
+      //     })
+      //     .catch((err) => {
+      //       console.log(err);
 
-            this.$store.dispatch('layout/setError', {
-              message: 'An error occurred during proposal sending'
-            });
-          })
-          .finally(() => {
-            this.isChangingQuorumLoading = false;
-          });
-      },
+      //       this.$store.dispatch('layout/setError', {
+      //         message: 'An error occurred during proposal sending'
+      //       });
+      //     })
+      //     .finally(() => {
+      //       this.isChangingQuorumLoading = false;
+      //     });
+      // },
 
-      sendChangeNameAndDescProposal() {
+
+      updateResearchGroup() {
         this.isChangingMetaLoading = true;
 
-        const promise = researchGroupService.createChangeGroupNameAndDescriptionProposal(
-          {
-            groupId: this.group.id,
-            newResearchGroupName: this.newResearchGroupName,
-            newResearchGroupDescription: this.newResearchGroupDescription
-          }
-        );
-        promise
+        const isProposal = !this.group.is_personal;
+        researchGroupService.updateResearchGroupAccountViaOffchain(this.user.privKey, isProposal, {
+          researchGroup: this.group.external_id,
+          accountOwnerAuth: undefined,
+          accountActiveAuth: undefined,
+          accountPostingAuth: undefined,
+          accountMemoPubKey: undefined,
+          accountJsonMetadata: undefined,
+          accountExtensions: []
+        }, {
+          researchGroupName: this.newResearchGroupName,
+          researchGroupPermlink: this.group.permlink,
+          researchGroupDescription: this.newResearchGroupDescription,
+          researchGroupThresholdOverrides: []
+        })
           .then(() => {
             this.$store.dispatch('layout/setSuccess', {
               message: 'Proposal has been sent successfully!'

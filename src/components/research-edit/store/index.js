@@ -27,7 +27,6 @@ const actions = {
 
     return deipRpc.api.getResearchByAbsolutePermlinkAsync(group_permlink, research_permlink)
       .then((research) => {
-        research.group_permlink = group_permlink;
         commit('SET_RESEARCH_DETAILS', research);
 
         const researchRefLoad = new Promise((resolve, reject) => {
