@@ -105,7 +105,8 @@
 
       deipTokenBalance() {
         const env = appConfigService.get('env');
-        return this.fromAssetsToFloat(this.group.balances[env.ASSET_UNIT]);
+        let amount = this.group.balances[env.ASSET_UNIT];
+        return amount;
       }
     },
 
