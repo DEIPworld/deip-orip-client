@@ -581,22 +581,22 @@ const router = new Router({
         ]
       },
       {
-        path: '/projects',
+        path: 'projects',
         name: 'admin.projects',
         component: AdminProjects
       },
       {
-        path: '/criteria',
+        path: 'criteria',
         name: 'admin.criteria',
         component: AdminCriteria
       },
       {
-        path: '/faq',
+        path: 'faq',
         name: 'admin.faq',
         component: AdminFAQ
       },
       {
-        path: '/settings',
+        path: 'settings',
         name: 'admin.settings',
         component: AdminSettings
       }

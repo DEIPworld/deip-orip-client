@@ -1,5 +1,5 @@
 <template>
-  <v-sheet :dark="isDark">
+  <v-sheet>
     <div class="global-loader-container">
       <global-loader />
     </div>
@@ -10,7 +10,7 @@
       flat
       hide-on-scroll
       clipped-left
-      :color="themeSettings.topbar.backgroundColor"
+      color="#fff"
     >
       <router-link :to="{ name: 'Default' }">
         <img height="40px" class="logo-image" :src="tenant | tenantLogoSrc(80, 80, false)">
@@ -18,60 +18,6 @@
 
       <v-spacer />
 
-      <v-tabs
-        v-if="!isLoggedIn"
-        class="main-nav"
-        :color="themeSettings['top-bar-link-color']"
-        right
-      >
-        <v-tab v-if="isDefaultToolbar" exact :to="{ name: 'ResearchFeed' }">
-          Explore
-        </v-tab>
-        <!-- TODO: need refactoring -->
-        <v-tab exact :to="{ name: env.DEMO === 'GRANT-DISTRIBUTION-TRANSPARENCY' ? 'TenantSignIn' : 'SignIn' }">
-          Sign In
-        </v-tab>
-        <v-tab exact :to="{ name: 'SignUp' }">
-          Sign Up
-        </v-tab>
-      </v-tabs>
-
-      <v-tabs
-        v-if="isLoggedIn && isDefaultToolbar"
-        class="main-nav ml-a"
-        :color="themeSettings['top-bar-link-color']"
-        right
-      >
-        <v-tab exact :to="{ name: 'ResearchFeed' }">
-          Explore
-        </v-tab>
-        <v-tab exact :to="{ name: 'Dashboard' }">
-          Dashboard
-        </v-tab>
-        <v-tab exact :to="{ name: 'InvestorPortfolio' }">
-          Portfolio
-        </v-tab>
-        <v-tab exact :to="{ name: 'UserWallet', params: { account_name: user.username } }">
-          Wallet
-        </v-tab>
-      </v-tabs>
-
-      <v-tabs
-        v-if="isLoggedIn && isGrantsTransparencyDemo"
-        class="main-nav"
-        :color="themeSettings['top-bar-link-color']"
-        right
-      >
-        <v-tab exact :to="{ name: 'GrantProgramsAwardsDashboard', params: { agency: 'nsf' } }">
-          Dashboard
-        </v-tab>
-        <v-tab exact :to="{ name: 'UserWallet', params: { account_name: user.username } }">
-          Wallet
-        </v-tab>
-      </v-tabs>
-
-
-      <user-notifications-list v-if="isLoggedIn" :notifications="user.notifications" />
       <v-sheet v-if="isLoggedIn" color="transparent">
         <v-menu bottom left offset-y>
           <template v-slot:activator="{ on }">
@@ -96,14 +42,6 @@
             :light="themeSettings['light']"
             dense
           >
-            <v-list-item :to="{ name: 'UserDetails', params: { account_name: user.username } }">
-              Profile
-            </v-list-item>
-            <v-divider />
-            <v-list-item :to="{ name: 'AccountSettings' }">
-              Account Settings
-            </v-list-item>
-            <v-divider />
             <v-list-item @click="signOut()">
               Sign Out
             </v-list-item>
@@ -148,7 +86,7 @@
   const appConfigService = AppConfigService.getInstance();
 
   export default {
-    name: 'Toolbar',
+    name: 'ToolbarAdmin',
 
     props: {
       isGrantsTransparencyDemo: {
@@ -187,32 +125,3 @@
     }
   };
 </script>
-
-<style lang="less" scoped>
-
-  .main-nav {
-    width: auto;
-    flex: 0 0 auto;
-  }
-
-  .logo-image {
-    display: block;
-  }
-
-  .dropdown-list {
-    min-width: 170px;
-  }
-
-  .toolbar-container {
-    position: relative;
-  }
-
-  .global-loader-container {
-    position: fixed;
-    top: 0;
-    right: 0;
-    left: 0;
-    z-index: 201;
-  }
-
-</style>

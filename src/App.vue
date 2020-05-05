@@ -2,9 +2,10 @@
   <div id="deip-app">
     <v-app>
       <toolbar
-        v-if="!$route.meta.withoutHeader"
+        v-if="!$route.meta.withoutHeader && !$route.path.includes('/admin')"
         :is-grants-transparency-demo="isGrantsTransparencyDemo"
       />
+      <toolbar-admin v-if="$route.path.includes('/admin')" />
 
       <v-content>
         <router-view :key="$route.fullPath" />
@@ -32,6 +33,7 @@
 
   import { AccessService } from '@deip/access-service';
   import { AppConfigService } from '@deip/app-config-service';
+  import ToolbarAdmin from '@/components/layout/components/ToolbarAdmin';
 
   const accessService = AccessService.getInstance();
   const appConfigService = AppConfigService.getInstance();
@@ -39,7 +41,7 @@
   export default {
 
     name: 'App',
-
+    components: { ToolbarAdmin },
     data() {
       return {
         isGrantsTransparencyDemo: false,
