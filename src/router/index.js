@@ -76,6 +76,7 @@ import { AppConfigService } from '@deip/app-config-service';
 import AdminProjects from '@/components/AdminPanel/AdminProjects';
 import AdminCriteria from '@/components/AdminPanel/AdminCriteria';
 import AdminFAQ from '@/components/AdminPanel/AdminFAQ';
+import AdminQuestionEdit from '@/components/AdminPanel/AdminQuestionEdit';
 import AdminSettings from '@/components/AdminPanel/AdminSettings';
 import preliminaryDataLoader from './utils/preliminaryDataLoader';
 import UserRegistration from '@/components/auth/UserRegistration';
@@ -593,7 +594,21 @@ const router = new Router({
       {
         path: 'faq',
         name: 'admin.faq',
-        component: AdminFAQ
+        component: AdminFAQ,
+        children: [
+          {
+            path: 'add',
+            name: 'admin.faq.add',
+            components: {
+              dialog: AdminQuestionEdit
+            },
+            props: {
+              dialog: {
+                title: 'Add new question'
+              }
+            }
+          },
+        ]
       },
       {
         path: 'settings',

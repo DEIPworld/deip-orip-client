@@ -69,7 +69,7 @@
       </v-tab-item>
     </v-tabs-items>
 
-    <v-dialog v-model="memberInfoDialog" max-width="500px">
+    <v-dialog v-model="memberInfoDialog" max-width="420px">
       <v-card>
         <v-card-title>
           <span class="headline">{{ `${memberInfo.firstName} ${memberInfo.lastName}` }}</span>
