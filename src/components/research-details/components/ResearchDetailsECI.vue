@@ -41,12 +41,25 @@
     <v-data-table
       :headers="eciHistoryRecordsTable.headers"
       :items="eciHistoryRecordsTable.items"
-      class="elevation-0 mt-4"
+      hide-default-header
+      class="mt-4"
       :loading="eciHistoryRecordsTable.loading"
       :items-per-page-options="[5, 10]"
       :options.sync="eciHistoryRecordsTable.pagination"
       :server-items-length="eciHistoryRecordsTable.totalItems"
     >
+      <template v-slot:header="{props:{headers}}">
+        <thead>
+          <tr>
+            <th v-for="item in headers" 
+            :key="`${item.text}`" 
+            :class="`${item.whiteSpace ? `white-space-${item.whiteSpace}` : ''} ${item.align ? `text-${item.align}` : ''}`"
+            >
+            {{item.text}}
+            </th>
+          </tr>
+        </thead>
+      </template>
       <template v-slot:item="{item}">
         <tr>
           <td>
@@ -103,7 +116,7 @@
             {
               text: 'Type',
               align: 'left',
-              sortable: false
+              sortable: false,
             },
             {
               text: 'Title',
@@ -113,17 +126,19 @@
             {
               text: 'Date',
               align: 'center',
-              sortable: false
+              sortable: false,
             },
             {
               text: 'Reward ECI',
               align: 'center',
-              sortable: false
+              sortable: false,
+              whiteSpace: 'nowrap'
             },
             {
               text: 'Total ECI',
               align: 'center',
-              sortable: false
+              sortable: false,
+              whiteSpace: 'nowrap'
             }
           ],
           contributionColor: {

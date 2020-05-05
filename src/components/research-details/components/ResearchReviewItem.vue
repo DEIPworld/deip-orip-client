@@ -25,14 +25,6 @@
           </div>
         </v-col>
       </v-row>
-      <v-btn
-        small
-        color="primary"
-        outlined
-        @click="goToReviewPage(review)"
-      >
-        See review
-      </v-btn>
     </v-col>
 
     <v-col cols="12" lg="4" class="px-6 right-bordered">
@@ -46,7 +38,6 @@
           </span>
         </div>
         <router-link
-          tag="div"
           class="a py-2"
           :to="{
             name: 'ResearchContentDetails',
@@ -62,13 +53,14 @@
       </div>
       <v-row>
         <v-col
-          v-for="item of review.disciplines"
-          :key="`${review.id}- ${item.disciplineName}`"
           cols="12"
           lg="12"
           class="rd-review-eci mt-1"
         >
-          <span>{{ item.disciplineName }}</span>
+          <span v-for="item of review.disciplines"
+          :key="`${review.id}- ${item.disciplineName}`">
+            {{ item.disciplineName }}
+          </span>
         </v-col>
       </v-row>
       <div class="grey--text text--right pt-2">
@@ -104,6 +96,18 @@
           </div>
         </v-tooltip>
       </div>
+      <v-row>
+        <v-col offset="5" class="py-0">
+          <v-btn
+            small
+            color="primary"
+            outlined
+            @click="goToReviewPage(review)"
+          >
+            See review
+          </v-btn>
+        </v-col>
+      </v-row>
     </v-col>
   </v-row>
 </template>

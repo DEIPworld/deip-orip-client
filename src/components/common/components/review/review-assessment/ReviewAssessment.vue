@@ -5,12 +5,12 @@
       :key="`review-criteria-${i}`"
       no-gutters
       align="center"
-      class="full-width"
+      class="full-width py-2"
     >
-      <v-col class="py-0">
+      <v-col>
         {{ criteria.title }}:
       </v-col>
-      <v-col class="py-0">
+      <v-col>
         <review-assessment-squared-rating
           v-model="form[criteria.id]"
           class="pl-6"

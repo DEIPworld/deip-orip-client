@@ -237,14 +237,14 @@
             </div>
           </v-row>
 
-          <v-divider class="my-6" />
+          <!-- <v-divider class="my-6" /> -->
 
-          <v-checkbox
+          <!-- <v-checkbox
             v-model="filterByTopOnly"
             class="ma-0 pa-0"
             hide-details
             label="Browse top projects only"
-          />
+          /> -->
         </v-sheet>
         <v-divider />
       </div>

@@ -240,6 +240,7 @@
             <v-select
               v-model="selectedContentId"
               class="mt-4"
+              :menu-props="{maxWidth:500}"
               label="Select a content to request review"
               item-text="title"
               item-value="id"

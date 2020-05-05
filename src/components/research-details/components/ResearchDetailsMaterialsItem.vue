@@ -28,7 +28,7 @@
           <span v-else class="grey--text">{{ content.title }}</span>
         </v-col>
         <v-col cols="2">
-          <div class="d-flex">
+          <div class="d-flex justify-space-between px-2">
             <div v-if="isDetailsAvailable">
               <v-tooltip top>
                 <template v-slot:activator="{ on }">
@@ -55,7 +55,7 @@
                 <span>Browse references</span>
               </v-tooltip>
             </div>
-            <div v-if="hasReviews(content)">
+            <div v-if="hasReviews(content)" class="align-self-center">
               <v-icon size="14px">
                 chat_bubble
               </v-icon>
