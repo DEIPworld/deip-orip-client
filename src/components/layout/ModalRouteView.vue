@@ -51,15 +51,6 @@
         }, 150);
       }
     }
-    // watch: {
-    //   dialog(val) {
-    //     if (!val) {
-    //       setTimeout(() => {
-    //         this.$router.back();
-    //       }, 150);
-    //     }
-    //   }
-    // }
   };
 </script>
 

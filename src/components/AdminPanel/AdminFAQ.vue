@@ -3,7 +3,7 @@
     <template #toolbarAction>
       <v-btn outlined color="primary" :to="{name: 'admin.faq.add'}">
         <v-icon left>
-          mdi-message-plus
+          add_comment
         </v-icon>
         Add question
       </v-btn>
