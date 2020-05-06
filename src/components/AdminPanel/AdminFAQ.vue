@@ -15,7 +15,7 @@
 
         <v-divider vertical></v-divider>
 
-        <v-col cols="auto" class="pa-6">
+        <v-col cols="auto" class="pa-3">
           <v-row no-gutters class="flex-column fill-height" justify="center">
             <v-col cols="auto" class="py-2">
               <v-btn icon @click="openDialog('publish')">
