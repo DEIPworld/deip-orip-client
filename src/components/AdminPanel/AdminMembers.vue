@@ -4,8 +4,7 @@
       <v-btn outlined color="primary" :to="{name: 'admin.members.add'}">
         <v-icon left>
           person_add
-        </v-icon>
-        Add member
+        </v-icon>Add member
       </v-btn>
     </template>
 
@@ -22,12 +21,15 @@
     <v-tabs-items v-model="tab">
       <v-tab-item :transition="false" :reverse-transition="false">
         <v-data-table
-          :headers="registerMembersTableHeaders"
-          :items="registerMembers"
+          :headers="registeredMembersTableHeaders"
+          :items="registeredMembers"
           @click:row="openMemberInfoDialog"
         >
           <template v-slot:item.name="{ item }">
-            {{ item.firstName }} {{ item.lastName }}
+            {{ item | fullname }}
+          </template>
+          <template v-slot:item.created_at="{ item }">
+            {{ item.profile.created_at | dateFormat('MMMM DD YYYY', true) }}
           </template>
         </v-data-table>
       </v-tab-item>
@@ -41,13 +43,16 @@
           <template v-slot:item.name="{ item }">
             {{ item.firstName }} {{ item.lastName }}
           </template>
+          <template v-slot:item.created_at="{ item }">
+            {{ item.created_at | dateFormat('MMMM DD YYYY', true) }}
+          </template>
 
           <template v-slot:item.actions="{ item }">
             <crud-actions row>
-              <v-btn icon small @click.stop="openDialog('approve', item)">
-                <v-icon>mdi-check</v-icon>
+              <v-btn icon small @click.stop="openActionDialog('approve', item._id)">
+                <v-icon>done</v-icon>
               </v-btn>
-              <v-btn icon small @click.stop="openDialog('reject', item)">
+              <v-btn icon small @click.stop="openActionDialog('decline', item._id)">
                 <v-icon>close</v-icon>
               </v-btn>
             </crud-actions>
@@ -56,45 +61,32 @@
       </v-tab-item>
     </v-tabs-items>
 
-    <v-dialog v-model="dialogInfo.isOpen" max-width="420px">
-      <v-card>
-        <v-card-title>
-          <span class="headline">{{ dialogInfo.data.title }}</span>
-          <v-spacer />
-          <v-btn
-            small
-            icon
-            class="mr-n2"
-            @click="closeDialog"
-          >
-            <v-icon>close</v-icon>
-          </v-btn>
-        </v-card-title>
-
-        <v-divider />
-
-        <v-card-text class="pt-5">
-          <div>{{ dialogInfo.data.description }}</div>
-        </v-card-text>
-
-        <v-divider />
-
-        <v-card-actions>
-          <v-spacer />
-          <v-btn color="primary" text @click="dialogReject">
-            Reject
-          </v-btn>
-          <v-btn color="primary" text @click="dialogApprove">
-            Approve
-          </v-btn>
-        </v-card-actions>
-      </v-card>
-    </v-dialog>
+    <action-dialog
+      :open="actionDialog.isOpen"
+      :title="actionDialog.data.title"
+      @close="closeActionDialog"
+    >
+      {{ actionDialog.data.description }}
+      <template #actions>
+        <v-btn color="primary" :loading="isLoading" text @click="closeActionDialog">
+          cancel
+        </v-btn>
+        <v-btn
+          v-if="actionDialog.data.action"
+          color="primary"
+          :loading="isLoading"
+          text
+          @click="actionDialog.data.action.method(actionDialog.data.name)"
+        >
+          {{ actionDialog.data.action.title }}
+        </v-btn>
+      </template>
+    </action-dialog>
 
     <v-dialog v-model="memberInfoDialog" max-width="420px" scrollable>
       <v-card>
         <v-card-title>
-          <span class="headline">{{ `${memberInfo.firstName} ${memberInfo.lastName}` }}</span>
+          <span class="headline">{{ memberInfo | fullname }}</span>
           <v-spacer />
           <v-btn
             small
@@ -108,43 +100,54 @@
 
         <v-divider />
 
-
         <v-card-text class="px-6 py-3 text--primary">
           <div class="mb-6">
             <div class="subtitle-1 font-weight-medium mb-2">
               Personal information
             </div>
-            <div>Name: {{ memberInfo.firstName }}</div>
-            <div>Last name: {{ memberInfo.lastName }}</div>
-            <div>Date of birth: {{ memberInfo.editedBirthdayDate }}</div>
-            <div>ID: {{ memberInfo.id }}</div>
+            <div>Name: {{ memberInfo.profile.firstName }}</div>
+            <div>Last name: {{ memberInfo.profile.lastName }}</div>
+            <div>Date of birth: {{ memberInfo.profile.created_at | dateFormat('MMMM DD YYYY', true) }}</div>
+            <div>ID: {{ memberInfo.profile.foreignIds }}</div>
           </div>
 
           <div class="mb-6">
             <div class="subtitle-1 font-weight-medium mb-2">
               Account information
             </div>
-            <div>Email: {{ memberInfo.email }}</div>
-            <div>Category: {{ memberInfo.category }}</div>
+            <div>Email: {{ memberInfo.profile.email }}</div>
+            <div>Category: {{ memberInfo.profile.category }}</div>
           </div>
 
           <div class="mb-6">
             <div class="subtitle-1 font-weight-medium mb-2">
               Contact information
             </div>
-            <div>Address: {{ memberInfo.address }}</div>
-            <div>City: {{ memberInfo.city }}</div>
-            <div>Country: {{ memberInfo.country }}</div>
-            <div>Phone number: {{ memberInfo.phoneNumber }}</div>
+            <div>Address: {{ memberInfo.profile.location.address }}</div>
+            <div>City: {{ memberInfo.profile.location.city }}</div>
+            <div>Country: {{ memberInfo.profile.location.country }}</div>
+            <div>Phone number: {{ memberInfo.profile.phoneNumbers }}</div>
           </div>
 
           <div class="mb-6">
             <div class="subtitle-1 font-weight-medium mb-2">
               Occupation information
             </div>
-            <div>Occupation: {{ memberInfo.occupation }}</div>
+            <div>Occupation: {{ memberInfo.profile.occupation }}</div>
           </div>
         </v-card-text>
+
+        <v-divider />
+
+        <v-card-actions v-if="memberInfo.profile.status === 'pending'">
+          <v-spacer />
+          <v-btn color="blue darken-1" text @click="rejectMemberInfoDialog">
+            Reject
+          </v-btn>
+          <v-btn color="blue darken-1" text @click="approveMemberInfoDialog">
+            Approve
+          </v-btn>
+        </v-card-actions>
       </v-card>
     </v-dialog>
 
@@ -155,17 +158,23 @@
 <script>
   import AdminView from '@/components/AdminPanel/AdminView';
   import CrudActions from '@/components/layout/CrudActions';
+  import ActionDialog from '@/components/layout/ActionDialog';
+  import { TenantService } from '@deip/tenant-service';
+  import { mapGetters } from 'vuex';
+
+  const tenantService = TenantService.getInstance();
 
   export default {
     name: 'AdminMembers',
-    components: { CrudActions, AdminView },
+    components: { CrudActions, AdminView, ActionDialog },
     data() {
       return {
         tab: null,
         memberInfoDialog: false,
+        isLoading: false,
         deleteDialog: false,
         approveDialog: false,
-        registerMembersTableHeaders: [
+        registeredMembersTableHeaders: [
           {
             text: 'Name',
             value: 'name',
@@ -173,17 +182,17 @@
           },
           {
             text: 'Member since',
-            value: 'memberSince',
+            value: 'created_at',
             sortable: false
           },
           {
             text: 'Category',
-            value: 'category',
+            value: 'profile.category',
             sortable: false
           },
           {
             text: 'Country',
-            value: 'country',
+            value: 'profile.location.country',
             sortable: false
           }
         ],
@@ -195,7 +204,7 @@
           },
           {
             text: 'Request date',
-            value: 'editedBirthdayDate',
+            value: 'created_at',
             sortable: false
           },
           {
@@ -205,130 +214,72 @@
             sortable: false
           }
         ],
-        registerMembers: [
-          {
-            memberSince: 159,
-            email: 'qwe@qwe.qwe',
-            firstName: 'first',
-            lastName: 'last',
-            editedBirthdayDate: '18.02.1824',
-            username: 'firstlast',
-            id: '1232',
-            category: 'qwe',
-            occupation: 'asd',
-            website: 'zxc',
-            address: 'fdh',
-            city: 'tjh',
-            country: 'vbm',
-            phoneNumber: 'rty'
+        memberInfo: {
+          account:{ 
+            name: ''
           },
-          {
-            memberSince: 159,
-            email: 'qwe@qwe.qwe',
-            firstName: 'first',
-            lastName: 'last',
-            editedBirthdayDate: '18.02.1824',
-            username: 'firstlast',
-            id: '123',
-            category: 'qwe',
-            occupation: 'asd',
-            website: 'zxc',
-            address: 'fdh',
-            city: 'tjh',
-            country: 'vbm',
-            phoneNumber: 'rty'
-          },
-          {
-            memberSince: 159,
-            email: 'qwe@qwe.qwe',
-            firstName: 'first',
-            lastName: 'last',
-            editedBirthdayDate: '18.02.1824',
-            username: 'firstlast',
-            id: '1235',
-            category: 'qwe',
-            occupation: 'asd',
-            website: 'zxc',
-            address: 'fdh',
-            city: 'tjh',
-            country: 'vbm',
-            phoneNumber: 'rty'
-          }
-        ],
-        waitingMembers: [
-          {
-            memberSince: 159,
-            email: 'qwe@qwe.qwe',
-            firstName: 'first',
-            lastName: 'last',
-            editedBirthdayDate: '18.02.1824',
-            username: 'firstlast',
-            id: '1232',
-            category: 'qwe',
-            occupation: 'asd',
-            website: 'zxc',
-            address: 'fdh',
-            city: 'tjh',
-            country: 'vbm',
-            phoneNumber: 'rty'
-          },
-          {
-            memberSince: 159,
-            email: 'qwe@qwe.qwe',
-            firstName: 'first',
-            lastName: 'last',
-            editedBirthdayDate: '18.02.1824',
-            username: 'firstlast',
-            id: '123',
-            category: 'qwe',
-            occupation: 'asd',
-            website: 'zxc',
-            address: 'fdh',
-            city: 'tjh',
-            country: 'vbm',
-            phoneNumber: 'rty'
-          },
-          {
-            memberSince: 159,
-            email: 'qwe@qwe.qwe',
-            firstName: 'first',
-            lastName: 'last',
-            editedBirthdayDate: '18.02.1824',
-            username: 'firstlast',
-            id: '1235',
-            category: 'qwe',
-            occupation: 'asd',
-            website: 'zxc',
-            address: 'fdh',
-            city: 'tjh',
-            country: 'vbm',
-            phoneNumber: 'rty'
-          }
-        ],
-        memberInfo: {},
-        dialogTypeInfo: {
-          approve: {
-            title: 'Approve request?',
-            description:
-              'Request will be approved and person will become a member'
-          },
-          reject: {
-            title: 'Decline request?',
-            description:
-              'Request will be declined and person will not become a member'
+          profile: {
+            firstName: '',
+            lastName: '',
+            created_at: '',
+            foreignIds: '',
+            email: '',
+            category: '',
+            location: {
+              address: '',
+              city: '',
+              country: ''
+            },
+            phoneNumbers: '',
+            occupation: '',
+            status: ''
           }
         },
-        dialogInfo: {
+        actionDialog: {
           isOpen: false,
           data: {},
-          type: ''
+          types: {
+            approve: {
+              title: 'Approve request?',
+              description:
+                'Request will be approved and person will become a member',
+              action: {
+                title: 'approve',
+                method: this.approveRequest
+              }
+            },
+            decline: {
+              title: 'Decline request?',
+              description:
+                'Request will be declined and person will not become a member',
+              action: {
+                title: 'reject',
+                method: this.declineRequest
+              }
+            }
+          }
         }
       };
     },
 
+    computed: {
+      ...mapGetters({
+        registeredMembers: 'adminPanel/registeredMembers',
+        waitingMembers: 'adminPanel/waitingMembers'
+      })
+    },
+
     methods: {
       openMemberInfoDialog(item) {
-        this.memberInfo = item;
+        if (item.account) {
+          this.memberInfo.account.name = item.account.name;
+          this.memberInfo.profile = { ...item.profile };
+        } else {
+          this.memberInfo.account.name = item._id;
+          this.memberInfo.profile = { ...item };
+        }
+        this.memberInfo.profile.phoneNumbers = this.memberInfo.profile.phoneNumbers.map(({ number }) => number).join(', ');
+        this.memberInfo.profile.foreignIds = this.memberInfo.profile.foreignIds.map(({ id }) => id).join(', ');
         this.memberInfoDialog = true;
       },
       closeMemberInfoDialog() {
@@ -336,31 +287,58 @@
       },
       rejectMemberInfoDialog() {
         this.closeMemberInfoDialog();
-        this.openDialog('reject');
+        this.openActionDialog('decline', this.memberInfo.account.name);
       },
       approveMemberInfoDialog() {
         this.closeMemberInfoDialog();
-        this.openDialog('approve');
+        this.openActionDialog('approve', this.memberInfo.account.name);
       },
-      dialogApprove() {
-        if (this.dialogInfo.type === 'approve') {
-          console.log('approve approve');
-        } else if (this.dialogInfo.type === 'reject') {
-          console.log('reject approve');
-        }
-        this.closeDialog();
+      openActionDialog(type, item) {
+        this.actionDialog.isOpen = true;
+        this.actionDialog.data = this.actionDialog.types[type];
+        this.actionDialog.data.name = item;
       },
-      dialogReject() {
-        console.log('Reject');
-        this.closeDialog();
+      closeActionDialog() {
+        this.actionDialog.isOpen = false;
+        setTimeout(() => {
+          this.actionDialog.data = {};
+        }, 300);
       },
-      closeDialog() {
-        this.dialogInfo.isOpen = false;
+      approveRequest(name) {
+        this.isLoading = true;
+        return tenantService.approveSignUpRequest(name)
+          .then(() => {
+            this.$store.dispatch('layout/setSuccess', { message: 'Account successfully created' });
+            this.$store.dispatch('adminPanel/loadAdminPanel', {});
+          })
+          .catch((err) => {
+            console.error(err);
+            this.$store.dispatch('layout/setError', {
+              message: 'An error occurred while sending the request, please try again later.'
+            });
+          })
+          .finally(() => {
+            this.isLoading = false;
+            this.closeActionDialog();
+          });
       },
-      openDialog(dialogType) {
-        this.dialogInfo.isOpen = true;
-        this.dialogInfo.data = this.dialogTypeInfo[dialogType];
-        this.dialogInfo.type = dialogType;
+      declineRequest(name) {
+        this.isLoading = true;
+        return tenantService.rejectSignUpRequest(name)
+          .then(() => {
+            this.$store.dispatch('layout/setSuccess', { message: 'Successfully' });
+            this.$store.dispatch('adminPanel/loadAdminPanel', {});
+          })
+          .catch((err) => {
+            console.error(err);
+            this.$store.dispatch('layout/setError', {
+              message: 'An error occurred while sending the request, please try again later.'
+            });
+          })
+          .finally(() => {
+            this.isLoading = true;
+            this.closeActionDialog();
+          });
       }
     }
   };

@@ -27,6 +27,8 @@ import { agencyGrantProgramAwardDetailsStore } from '../components/agency-grant-
 import { agencyGrantProgramAwardWithdrawalDetailsStore } from '../components/agency-grant-program-award-withdrawal-details/store';
 import { agencyGrantProgramAwardCreateStore } from '../components/agency-grant-program-award-create/store/index';
 
+import { adminPanelStore } from '../components/AdminPanel/store';
+
 Vue.use(Vuex);
 
 export const store = new Vuex.Store({
@@ -55,7 +57,9 @@ export const store = new Vuex.Store({
     agencyGrantProgramAwardCreate: agencyGrantProgramAwardCreateStore,
     agencyGrantProgramAwardsDashboard: agencyGrantProgramAwardsDashboardStore,
     agencyGrantProgramAwardDetails: agencyGrantProgramAwardDetailsStore,
-    agencyGrantProgramAwardWithdrawalDetails: agencyGrantProgramAwardWithdrawalDetailsStore
+    agencyGrantProgramAwardWithdrawalDetails: agencyGrantProgramAwardWithdrawalDetailsStore,
+
+    adminPanel: adminPanelStore
   },
   strict: process.env.NODE_ENV !== 'production'
 });

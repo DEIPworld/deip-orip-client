@@ -2,10 +2,7 @@
   <admin-view title="FAQ">
     <template #toolbarAction>
       <v-btn outlined color="primary" :to="{name: 'admin.faq.add'}">
-        <v-icon left>
-          add_comment
-        </v-icon>
-        Add question
+        <v-icon left>add_comment</v-icon>Add question
       </v-btn>
     </template>
 
@@ -14,58 +11,38 @@
       :key="`${i}-questions`"
       :class="{'mb-6': (i + 1) < questions.length}"
     >
-      <div class="subtitle-1 font-weight-medium">
-        {{ item.title }}
-      </div>
-      {{ item.description }}
+      <div class="subtitle-1 font-weight-medium">{{ item.question }}</div>
 
+      {{ item.answer }}
       <template #actions>
-        <v-btn icon @click="openDialog('publish')">
-          <v-icon>mdi-flag-outline</v-icon>
+        <v-btn :color="item.isVisible ? 'success' : null" icon @click="openActionDialog('publish')">
+          <v-icon>{{ item.isVisible ? 'flag' : 'outlined_flag' }}</v-icon>
         </v-btn>
         <v-btn icon :to="{name: 'admin.faq.add', query:{id:item.id}}">
           <v-icon>edit</v-icon>
         </v-btn>
-        <v-btn icon @click="openDialog('delete')">
-          <v-icon>mdi-delete</v-icon>
+        <v-btn icon @click="openActionDialog('delete')">
+          <v-icon>delete</v-icon>
         </v-btn>
       </template>
     </side-actions-card>
 
-    <v-dialog v-model="dialogInfo.isOpen" max-width="420px">
-      <v-card>
-        <v-card-title>
-          <span class="headline">{{ dialogInfo.data.title }}</span>
-          <v-spacer />
-          <v-btn
-            small
-            icon
-            class="mr-n2"
-            @click="closeDialog"
-          >
-            <v-icon>close</v-icon>
-          </v-btn>
-        </v-card-title>
-
-        <v-divider />
-
-        <v-card-text class="pt-5">
-          <div>{{ dialogInfo.data.description }}</div>
-        </v-card-text>
-
-        <v-divider />
-
-        <v-card-actions>
-          <v-spacer />
-          <v-btn color="blue darken-1" text @click="dialogReject">
-            Reject
-          </v-btn>
-          <v-btn color="blue darken-1" text @click="dialogApprove">
-            Approve
-          </v-btn>
-        </v-card-actions>
-      </v-card>
-    </v-dialog>
+    <action-dialog
+      :open="actionDialog.isOpen"
+      :title="actionDialog.data.title"
+      @close="closeActionDialog"
+    >
+      {{ actionDialog.data.description }}
+      <template #actions>
+        <v-btn color="primary" text @click="closeActionDialog">cancel</v-btn>
+        <v-btn
+          v-if="actionDialog.data.action"
+          color="primary"
+          text
+          @click="actionDialog.data.action.method(actionDialog.data.title)"
+        >{{ actionDialog.data.action.title }}</v-btn>
+      </template>
+    </action-dialog>
 
     <router-view name="dialog" />
   </admin-view>
@@ -74,74 +51,100 @@
 <script>
   import AdminView from '@/components/AdminPanel/AdminView';
   import SideActionsCard from '@/components/layout/SideActionsCard';
+  import ActionDialog from '@/components/layout/ActionDialog';
 
   export default {
     name: 'AdminFAQ',
-    components: { SideActionsCard, AdminView },
+    components: { SideActionsCard, AdminView, ActionDialog },
 
     data() {
       return {
         questions: [
           {
-            title: 'How can I become a contractor?',
-            description: 'You can sign up with us at ar3c.com/signup. Once we receive your application, we will review it and add you to our contractor list. You or your company will be invited on an as-needed basis by our project participants to complete their projects.',
-            id: 1
+            question: 'How can I become a contractor?',
+            answer:
+              'You can sign up with us at ar3c.com/signup. Once we receive your application, we will review it and add you to our contractor list. You or your company will be invited on an as-needed basis by our project participants to complete their projects.',
+            id: 1,
+            isVisible: false
           },
           {
-            title: 'How can I become a contractor?',
-            description: 'You can sign up with us at ar3c.com/signup. Once we receive your application, we will review it and add you to our contractor list. You or your company will be invited on an as-needed basis by our project participants to complete their projects.',
-            id: 2
+            question: 'How can I become a contractor?',
+            answer:
+              'You can sign up with us at ar3c.com/signup. Once we receive your application, we will review it and add you to our contractor list. You or your company will be invited on an as-needed basis by our project participants to complete their projects.',
+            id: 2,
+            isVisible: true
           },
           {
-            title: 'How can I become a contractor?',
-            description: 'You can sign up with us at ar3c.com/signup. Once we receive your application, we will review it and add you to our contractor list. You or your company will be invited on an as-needed basis by our project participants to complete their projects.',
-            id: 3
+            question: 'How can I become a contractor?',
+            answer:
+              'You can sign up with us at ar3c.com/signup. Once we receive your application, we will review it and add you to our contractor list. You or your company will be invited on an as-needed basis by our project participants to complete their projects.',
+            id: 3,
+            isVisible: false
           },
           {
-            title: 'How can I become a contractor?',
-            description: 'You can sign up with us at ar3c.com/signup. Once we receive your application, we will review it and add you to our contractor list. You or your company will be invited on an as-needed basis by our project participants to complete their projects.',
-            id: 4
+            question: 'How can I become a contractor?',
+            answer:
+              'You can sign up with us at ar3c.com/signup. Once we receive your application, we will review it and add you to our contractor list. You or your company will be invited on an as-needed basis by our project participants to complete their projects.',
+            id: 4,
+            isVisible: true
           }
         ],
-        dialogTypeInfo: {
-          publish: {
-            title: 'Approve request?',
-            description:
-              'Request will be approved and person will become a member'
-          },
-          delete: {
-            title: 'Decline request?',
-            description:
-              'Request will be declined and person will not become a member'
-          }
-        },
-        dialogInfo: {
+        actionDialog: {
           isOpen: false,
           data: {},
-          type: ''
+          types: {
+            publish: {
+              title: 'Publish  Q&A',
+              description:
+                'Request will be approved and person will become a member',
+              action: {
+                title: 'approve',
+                method: this.publishFAQ
+              }
+            },
+            unpublish: {
+              title: 'Unpublish Q&A',
+              description:
+                'Request will be approved and person will become a member',
+              action: {
+                title: 'approve',
+                method: this.unpublishFAQ
+              }
+            },
+            delete: {
+              title: 'Delete Q&A',
+              description: 'Request will be approved and person will become a member',
+              action: {
+                title: 'approve',
+                method: this.deleteFAQ
+              }
+            }
+          }
         }
       };
     },
     methods: {
-      dialogApprove() {
-        if (this.dialogInfo.type === 'publish') {
-          console.log('publish approve');
-        } else if (this.dialogInfo.type === 'delete') {
-          console.log('delete approve');
-        }
-        this.closeDialog();
+      openActionDialog(type, item) {
+        this.actionDialog.isOpen = true;
+        this.actionDialog.data = this.actionDialog.types[type];
       },
-      dialogReject() {
-        console.log('Reject');
-        this.closeDialog();
+      closeActionDialog() {
+        this.actionDialog.isOpen = false;
+        setTimeout(() => {
+          this.actionDialog.data = {};
+        }, 300);
       },
-      closeDialog() {
-        this.dialogInfo.isOpen = false;
+      publishFAQ(item) {
+        console.log(item);
+        this.closeActionDialog();
       },
-      openDialog(dialogType) {
-        this.dialogInfo.isOpen = true;
-        this.dialogInfo.data = this.dialogTypeInfo[dialogType];
-        this.dialogInfo.type = dialogType;
+      unpublishFAQ(item) {
+        console.log(item);
+        this.closeActionDialog();
+      },
+      deleteFAQ(item) {
+        console.log(item);
+        this.closeActionDialog();
       }
     }
   };

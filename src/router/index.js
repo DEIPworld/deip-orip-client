@@ -76,7 +76,7 @@ import { AppConfigService } from '@deip/app-config-service';
 import AdminProjects from '@/components/AdminPanel/AdminProjects';
 import AdminCriteria from '@/components/AdminPanel/AdminCriteria';
 import AdminFAQ from '@/components/AdminPanel/AdminFAQ';
-import AdminQuestionEdit from '@/components/AdminPanel/AdminQuestionEdit';
+import AdminFAQEdit from '@/components/AdminPanel/AdminFAQEdit';
 import AdminSettings from '@/components/AdminPanel/AdminSettings';
 import UserRegistration from '@/components/auth/UserRegistration';
 import preliminaryDataLoader from './utils/preliminaryDataLoader';
@@ -561,6 +561,10 @@ const router = new Router({
     path: '/admin',
     name: 'admin',
     component: AdminPanel,
+    beforeEnter: (to, from, next) => {
+      const loadPagePromise = store.dispatch('adminPanel/loadAdminPanel', {});
+      loadPage(loadPagePromise, next);
+    },
     children: [
       {
         path: 'members',
@@ -600,7 +604,7 @@ const router = new Router({
             path: 'add',
             name: 'admin.faq.add',
             components: {
-              dialog: AdminQuestionEdit
+              dialog: AdminFAQEdit
             },
             props: {
               dialog: {
