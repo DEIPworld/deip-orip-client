@@ -100,19 +100,19 @@ const getters = {
 
   isUniversityCertifier: (state, getters) => state.user.profile.roles.some((r) => r.role === 'university-certifier'
       && getters.tenant
-      && r.researchGroupId == getters.tenant.id),
+      && r.researchGroupExteralId == getters.tenant.external_id),
 
   isGrantProgramOfficer: (state, getters) => state.user.profile.roles.some((r) => r.role === 'grant-program-officer'
       && getters.tenant
-      && r.researchGroupId == getters.tenant.id),
+      && r.researchGroupExteralId == getters.tenant.external_id),
 
   isGrantFinanceOfficer: (state, getters) => state.user.profile.roles.some((r) => r.role === 'grant-finance-officer'
       && getters.tenant
-      && r.researchGroupId == getters.tenant.id),
+      && r.researchGroupExteralId == getters.tenant.external_id),
 
   isTreasuryCertifier: (state, getters) => state.user.profile.roles.some((r) => r.role === 'treasury-certifier'
       && getters.tenant
-      && r.researchGroupId == getters.tenant.id)
+      && r.researchGroupExteralId == getters.tenant.external_id)
 };
 
 // actions

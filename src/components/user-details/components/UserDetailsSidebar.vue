@@ -270,21 +270,21 @@
               </v-col>
             </v-row>
 
-            <v-row v-if="isOwner && !userInfo.profile.birthday" no-gutters>
+            <v-row v-if="isOwner && !userInfo.profile.birthdate" no-gutters>
               <v-col cols="4" class="font-weight-medium">
-                Birthday
+                Birthdate
               </v-col>
               <v-col cols="7" offset="1" class="text-align-left owner-hint">
-                add birthday
+                add birthdate
               </v-col>
             </v-row>
             <v-row v-else no-gutters>
               <v-col cols="4" class="font-weight-medium">
-                Birthday
+                Birthdate
               </v-col>
               <v-col cols="7" offset="1" class="text-align-left">
-                {{ userInfo.profile.birthday ? new
-                  Date(userInfo.profile.birthday).toDateString() : '-' }}
+                {{ userInfo.profile.birthdate ? new
+                  Date(userInfo.profile.birthdate).toDateString() : '-' }}
               </v-col>
             </v-row>
 
@@ -350,7 +350,7 @@
       },
       isPersonalInfoSpecified() {
         return this.userInfo && this.userInfo.profile
-          && (this.userInfo.profile.firstName || this.userInfo.profile.lastName || this.userInfo.profile.birthday);
+          && (this.userInfo.profile.firstName || this.userInfo.profile.lastName || this.userInfo.profile.birthdate);
       },
       isProfileAvailable() {
         return this.userInfo.profile != null;

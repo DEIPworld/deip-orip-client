@@ -156,8 +156,8 @@
       this.email = this.userInfo.profile.email || ' ';
       this.firstName = this.userInfo.profile.firstName || ' ';
       this.lastName = this.userInfo.profile.lastName || ' ';
-      this.editedBirthdayDate = this.userInfo.profile.birthday
-        ? moment(this.userInfo.profile.birthday)
+      this.editedBirthdayDate = this.userInfo.profile.birthdate
+        ? moment(this.userInfo.profile.birthdate)
           .format('YYYY-MM-DD')
         : null;
     },
@@ -180,7 +180,7 @@
         const { email } = this;
         const { firstName } = this;
         const { lastName } = this;
-        const birthday = this.editedBirthdayDate;
+        const birthdate = this.editedBirthdayDate;
 
         const update = {
           ...this.userInfo.profile,
@@ -190,7 +190,7 @@
             email,
             firstName,
             lastName,
-            birthday
+            birthdate
           }
         };
 
