@@ -6,45 +6,37 @@
         Add question
       </v-btn>
     </template>
-    <v-card outlined class="mb-6" v-for="(item, i) in questions" :key="`${i}-questions`">
-      <v-row no-gutters>
-        <v-col class="pa-6">
-          <div class="subtitle-1 font-weight-medium">{{item.title}}</div>
-          <div class="mt-2 body-2">{{item.description}}</div>
-        </v-col>
 
-        <v-divider vertical></v-divider>
+    <side-actions-card
+      v-for="(item, i) in questions"
+      :key="`${i}-questions`"
+      :class="{'mb-6': (i + 1) < questions.length}"
+    >
+      <div class="subtitle-1 font-weight-medium">
+        {{ item.title }}
+      </div>
+      {{ item.description }}
 
-        <v-col cols="auto" class="pa-3">
-          <v-row no-gutters class="flex-column fill-height" justify="center">
-            <v-col cols="auto" class="py-2">
-              <v-btn icon @click="openDialog('publish')">
-                <v-icon>mdi-flag-outline</v-icon>
-              </v-btn>
-            </v-col>
+      <template #actions>
+        <v-btn icon @click="openDialog('publish')">
+          <v-icon>mdi-flag-outline</v-icon>
+        </v-btn>
+        <v-btn icon :to="{name: 'admin.faq.add', query:{id:item.id}}">
+          <v-icon>edit</v-icon>
+        </v-btn>
+        <v-btn icon @click="openDialog('delete')">
+          <v-icon>mdi-delete</v-icon>
+        </v-btn>
+      </template>
+    </side-actions-card>
 
-            <v-col cols="auto" class="py-2">
-              <v-btn icon :to="{name: 'admin.faq.add', query:{id:item.id}}">
-                <v-icon>edit</v-icon>
-              </v-btn>
-            </v-col>
-
-            <v-col cols="auto" class="py-2">
-              <v-btn icon @click="openDialog('delete')">
-                <v-icon>mdi-delete</v-icon>
-              </v-btn>
-            </v-col>
-          </v-row>
-        </v-col>
-      </v-row>
-    </v-card>
     <v-dialog v-model="dialogInfo.isOpen" max-width="420px">
       <v-card>
         <v-card-title>
           <span class="headline">{{dialogInfo.data.title}}</span>
           <v-spacer></v-spacer>
-          <v-btn color="blue darken-1" icon @click="closeDialog">
-            <v-icon color="black">close</v-icon>
+          <v-btn small icon @click="closeDialog" class="mr-n2">
+            <v-icon>close</v-icon>
           </v-btn>
         </v-card-title>
 
@@ -63,16 +55,18 @@
         </v-card-actions>
       </v-card>
     </v-dialog>
+
     <router-view name="dialog" />
   </admin-view>
 </template>
 
 <script>
   import AdminView from '@/components/AdminPanel/AdminView';
+  import SideActionsCard from '@/components/layout/SideActionsCard';
 
   export default {
     name: 'AdminFAQ',
-    components: { AdminView },
+    components: { SideActionsCard, AdminView },
 
     data() {
       return {

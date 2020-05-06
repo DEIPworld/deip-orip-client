@@ -37,14 +37,14 @@
           <template v-slot:item.name="{ item }">{{item.firstName}} {{item.lastName}}</template>
 
           <template v-slot:item.actions="{ item }">
-            <div class="crud-actions">
+            <crud-actions row>
               <v-btn icon small @click.stop="openDialog('approve', item)">
                 <v-icon>mdi-check</v-icon>
               </v-btn>
               <v-btn icon small @click.stop="openDialog('reject', item)">
                 <v-icon>close</v-icon>
               </v-btn>
-            </div>
+            </crud-actions>
           </template>
 
         </v-data-table>
@@ -131,10 +131,11 @@
 
 <script>
   import AdminView from '@/components/AdminPanel/AdminView';
+  import CrudActions from '@/components/layout/CrudActions';
 
   export default {
     name: 'AdminMembers',
-    components: { AdminView },
+    components: { CrudActions, AdminView },
     data() {
       return {
         tab: null,
