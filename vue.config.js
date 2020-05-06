@@ -3,22 +3,32 @@ const path = require('path');
 module.exports = {
   css: {
     loaderOptions: {
-      sass: {
-        // prependData(loaderContext) {
-        //   const { resourcePath, rootContext } = loaderContext;
-        //   const relativeArray = path.relative(rootContext, resourcePath).split('/');
-        //
-        //   if (relativeArray[0] === 'node_modules' && relativeArray[1] === 'vuetify') {
-        //     return '@import "~@/styles/next/core/_vuetify-settings.scss"';
-        //   }
-        //
-        //   return '';
-        // },
-        // sassOptions: {
-        //   fiber: true,
-        // },
-      }
+      // sass: {
+      //   prependData: () => {
+      //     return ''
+      //   }
+      // }
     }
+  },
+  chainWebpack: config => {
+    ['vue-modules', 'vue', 'normal-modules', 'normal'].forEach(match => {
+      config.module
+        .rule('sass')
+        .oneOf(match)
+        .use('sass-loader')
+        .tap(opt => {
+          return {
+            ...opt,
+            ...{
+              prependData: ({ resourcePath }) => (
+                resourcePath.includes('vuetify') && resourcePath.includes('node_modules')
+                  ? '@import "~@/styles/next/core/_vuetify-settings.scss"'
+                  : ''
+              )
+            }
+          };
+        });
+    });
   },
   devServer: {
     setup(app) {

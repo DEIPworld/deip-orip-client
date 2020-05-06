@@ -146,15 +146,14 @@
 
         this.isPasswordChanging = true;
         userService.updateUserAccountViaOffchain(oldPrivateKey, {
-            account: username,
-            accountOwnerAuth: ownerAuth,
-            accountActiveAuth: ownerAuth,
-            accountPostingAuth: ownerAuth,
-            accountMemoPubKey: undefined,
-            accountJsonMetadata: undefined,
-            accountExtensions: []
-          }
-        ).then(() => {
+          account: username,
+          accountOwnerAuth: ownerAuth,
+          accountActiveAuth: ownerAuth,
+          accountPostingAuth: ownerAuth,
+          accountMemoPubKey: undefined,
+          accountJsonMetadata: undefined,
+          accountExtensions: []
+        }).then(() => {
           this.$store.dispatch('layout/setSuccess', {
             message: 'Master Password successfully changed!'
           });

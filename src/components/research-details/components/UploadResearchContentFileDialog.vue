@@ -229,27 +229,25 @@
         this.isOpen = true;
       },
       vdropzoneSuccessMultiple(files, res) {
-          const self = this;
-          const { rm : { hash } } = res;
-          if (!hash) {
-            throw new Error('File upload has failed');
-          }
+        const self = this;
+        const { rm: { hash } } = res;
+        if (!hash) {
+          throw new Error('File upload has failed');
+        }
 
-          const isProposal = !this.research.research_group.is_personal;
-          researchContentService.createResearchContentViaOffchain(this.user.privKey, isProposal, {
-            researchExternalId: this.research.external_id,
-            researchGroup: this.research.research_group.external_id,
-            type: parseInt(this.type),
-            title: this.title,
-            content: hash,
-            permlink: this.title.replace(/ /g, '-').replace(/_/g, '-').toLowerCase(),
-            authors: this.authors.map((a) => a.account.name),
-            references: this.references.map((ref) => {
-              return ref.external_id;
-            }),
-            foreignReferences: [],
-            extensions: []
-          })
+        const isProposal = !this.research.research_group.is_personal;
+        researchContentService.createResearchContentViaOffchain(this.user.privKey, isProposal, {
+          researchExternalId: this.research.external_id,
+          researchGroup: this.research.research_group.external_id,
+          type: parseInt(this.type),
+          title: this.title,
+          content: hash,
+          permlink: this.title.replace(/ /g, '-').replace(/_/g, '-').toLowerCase(),
+          authors: this.authors.map((a) => a.account.name),
+          references: this.references.map((ref) => ref.external_id),
+          foreignReferences: [],
+          extensions: []
+        })
           .then(() => {
             this.$store.dispatch('layout/setSuccess', {
               message: 'New material has been uploaded successfully'

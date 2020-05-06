@@ -423,11 +423,11 @@
 
           }));
 
-          researchService.updateResearchOffchainMeta({ 
-            researchExternalId: this.research.external_id, 
-            milestones: milestones, 
-            videoSrc: this.videoSrc, 
-            partners: this.partners, 
+          researchService.updateResearchOffchainMeta({
+            researchExternalId: this.research.external_id,
+            milestones,
+            videoSrc: this.videoSrc,
+            partners: this.partners,
             trl: this.currentTrlStep
           })
             .then(() => {

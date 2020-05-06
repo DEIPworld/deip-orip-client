@@ -2,7 +2,9 @@
   <admin-view title="FAQ">
     <template #toolbarAction>
       <v-btn outlined color="primary" :to="{name: 'admin.faq.add'}">
-        <v-icon left>mdi-message-plus</v-icon>
+        <v-icon left>
+          mdi-message-plus
+        </v-icon>
         Add question
       </v-btn>
     </template>
@@ -33,25 +35,34 @@
     <v-dialog v-model="dialogInfo.isOpen" max-width="420px">
       <v-card>
         <v-card-title>
-          <span class="headline">{{dialogInfo.data.title}}</span>
-          <v-spacer></v-spacer>
-          <v-btn small icon @click="closeDialog" class="mr-n2">
+          <span class="headline">{{ dialogInfo.data.title }}</span>
+          <v-spacer />
+          <v-btn
+            small
+            icon
+            class="mr-n2"
+            @click="closeDialog"
+          >
             <v-icon>close</v-icon>
           </v-btn>
         </v-card-title>
 
-        <v-divider></v-divider>
+        <v-divider />
 
         <v-card-text class="pt-5">
-          <div>{{dialogInfo.data.description}}</div>
+          <div>{{ dialogInfo.data.description }}</div>
         </v-card-text>
 
-        <v-divider></v-divider>
+        <v-divider />
 
         <v-card-actions>
-          <v-spacer></v-spacer>
-          <v-btn color="blue darken-1" text @click="dialogReject">Reject</v-btn>
-          <v-btn color="blue darken-1" text @click="dialogApprove">Approve</v-btn>
+          <v-spacer />
+          <v-btn color="blue darken-1" text @click="dialogReject">
+            Reject
+          </v-btn>
+          <v-btn color="blue darken-1" text @click="dialogApprove">
+            Approve
+          </v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>

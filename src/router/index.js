@@ -78,8 +78,8 @@ import AdminCriteria from '@/components/AdminPanel/AdminCriteria';
 import AdminFAQ from '@/components/AdminPanel/AdminFAQ';
 import AdminQuestionEdit from '@/components/AdminPanel/AdminQuestionEdit';
 import AdminSettings from '@/components/AdminPanel/AdminSettings';
-import preliminaryDataLoader from './utils/preliminaryDataLoader';
 import UserRegistration from '@/components/auth/UserRegistration';
+import preliminaryDataLoader from './utils/preliminaryDataLoader';
 
 const accessService = AccessService.getInstance();
 const usersService = UsersService.getInstance();
@@ -607,7 +607,7 @@ const router = new Router({
                 title: 'Add new question'
               }
             }
-          },
+          }
         ]
       },
       {

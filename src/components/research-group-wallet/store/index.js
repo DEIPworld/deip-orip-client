@@ -14,9 +14,9 @@ const state = {
 
 // getters
 const getters = {
-  group: state => {
-    let researchGroup = state.group;
-    let balances = researchGroup.account.balances.reduce((acc, b) => {
+  group: (state) => {
+    const researchGroup = state.group;
+    const balances = researchGroup.account.balances.reduce((acc, b) => {
       acc[b.split(' ')[1]] = blockchainService.fromAssetsToFloat(b);
       return acc;
     }, {});
@@ -24,9 +24,9 @@ const getters = {
     return {
       ...researchGroup,
       balances
-    }
+    };
   },
-  researches: state => state.researches
+  researches: (state) => state.researches
 };
 
 // actions

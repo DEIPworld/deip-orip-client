@@ -177,7 +177,7 @@
         proposalOrderMap: [
           [
             { key: PROPOSAL_TYPES.CREATE_RESEARCH, value: undefined },
-            { key: PROPOSAL_TYPES.CREATE_RESEARCH_MATERIAL, value: undefined },
+            { key: PROPOSAL_TYPES.CREATE_RESEARCH_MATERIAL, value: undefined }
           ],
           [
             { key: PROPOSAL_TYPES.INVITE_MEMBER, value: undefined },

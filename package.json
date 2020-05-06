@@ -24,9 +24,9 @@
     "@deip/investments-service": "1.7.0",
     "@deip/lib-crypto": "1.1.0",
     "@deip/organizations-service": "1.1.0",
+    "@deip/proposals-service": "1.7.0",
     "@deip/research-content-reviews-service": "1.7.0",
     "@deip/research-content-service": "1.7.0",
-    "@deip/proposals-service": "1.7.0",
     "@deip/research-group-service": "1.7.0",
     "@deip/research-service": "1.7.0",
     "@deip/review-service": "1.1.0",
@@ -100,7 +100,7 @@
     "symlink-dir": "^3.1.2",
     "vue-cli-plugin-vuetify": "^2.0.5",
     "vue-template-compiler": "^2.6.10",
-    "vuetify-loader": "^1.3.0",
+    "vuetify-loader": "^1.4.3",
     "yargs": "^15.1.0"
   },
   "eslintConfig": {

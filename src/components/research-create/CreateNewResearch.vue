@@ -151,7 +151,7 @@
 
   import { ResearchGroupService } from '@deip/research-group-service';
   import { ResearchService } from '@deip/research-service';
-  
+
   import * as disciplineTreeService from '../common/disciplines/DisciplineTreeService';
 
   const researchGroupService = ResearchGroupService.getInstance();
@@ -266,11 +266,11 @@
             disciplines: this.research.disciplines.map((d) => d.id),
             isPrivate: this.research.isPrivate,
             members: undefined,
-            reviewShare: "20.00 %",
+            reviewShare: '20.00 %',
             compensationShare: undefined,
             extensions: []
           },
-          { 
+          {
             videoSrc: this.research.videoSrc,
             milestones: this.research.milestones.map((m, i) => ({
               goal: m.goal,
@@ -282,21 +282,22 @@
             })),
             partners: this.research.partners,
             trl: this.research.trlStep
-          })
+          }
+        )
           .then((result) => {
-              this.isLoading = false;
-              this.$store.dispatch('layout/setSuccess', {
-                message: `Project "${this.research.title}" has been created successfully`
-              });
-            },
-            (err) => {
-              console.log(err);
-              this.isLoading = false;
-              this.$store.dispatch('layout/setError', {
-                message:
-                  'An error occurred while creating project, please try again later'
-              });
-          })
+                  this.isLoading = false;
+                  this.$store.dispatch('layout/setSuccess', {
+                    message: `Project "${this.research.title}" has been created successfully`
+                  });
+                },
+                (err) => {
+                  console.log(err);
+                  this.isLoading = false;
+                  this.$store.dispatch('layout/setError', {
+                    message:
+                      'An error occurred while creating project, please try again later'
+                  });
+                })
           .finally(() => {
             setTimeout(() => {
               if (this.research.group.is_centralized || this.research.group.is_personal) {

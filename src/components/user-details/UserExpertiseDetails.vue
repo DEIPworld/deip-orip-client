@@ -280,18 +280,19 @@
           :options.sync="eciHistoryRecordsTable.pagination"
           :server-items-length="eciHistoryRecordsTable.totalItems"
         >
-        <template v-slot:header="{props:{headers}}">
-          <thead>
-            <tr>
-              <th v-for="item in headers" 
-              :key="`${item.text}`" 
-              :class="`${item.whiteSpace ? `white-space-${item.whiteSpace}` : ''} ${item.align ? `text-${item.align}` : ''}`"
-              >
-              {{item.text}}
-              </th>
-            </tr>
-          </thead>
-        </template>
+          <template v-slot:header="{props:{headers}}">
+            <thead>
+              <tr>
+                <th
+                  v-for="item in headers"
+                  :key="`${item.text}`"
+                  :class="`${item.whiteSpace ? `white-space-${item.whiteSpace}` : ''} ${item.align ? `text-${item.align}` : ''}`"
+                >
+                  {{ item.text }}
+                </th>
+              </tr>
+            </thead>
+          </template>
           <template v-slot:item="{item}">
             <td>
               <v-chip :color="eciHistoryRecordsTable.contributionColor[item.alteration_source_type]" text-color="white">

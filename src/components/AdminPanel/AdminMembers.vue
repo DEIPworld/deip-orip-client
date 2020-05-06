@@ -2,7 +2,9 @@
   <admin-view title="Members">
     <template #toolbarAction>
       <v-btn outlined color="primary" :to="{name: 'admin.members.add'}">
-        <v-icon left>person_add</v-icon>
+        <v-icon left>
+          person_add
+        </v-icon>
         Add member
       </v-btn>
     </template>
@@ -24,7 +26,9 @@
           :items="registerMembers"
           @click:row="openMemberInfoDialog"
         >
-          <template v-slot:item.name="{ item }">{{item.firstName}} {{item.lastName}}</template>
+          <template v-slot:item.name="{ item }">
+            {{ item.firstName }} {{ item.lastName }}
+          </template>
         </v-data-table>
       </v-tab-item>
 
@@ -34,7 +38,9 @@
           :items="waitingMembers"
           @click:row="openMemberInfoDialog"
         >
-          <template v-slot:item.name="{ item }">{{item.firstName}} {{item.lastName}}</template>
+          <template v-slot:item.name="{ item }">
+            {{ item.firstName }} {{ item.lastName }}
+          </template>
 
           <template v-slot:item.actions="{ item }">
             <crud-actions row>
@@ -46,7 +52,6 @@
               </v-btn>
             </crud-actions>
           </template>
-
         </v-data-table>
       </v-tab-item>
     </v-tabs-items>
@@ -55,24 +60,33 @@
       <v-card>
         <v-card-title>
           <span class="headline">{{ dialogInfo.data.title }}</span>
-          <v-spacer></v-spacer>
-          <v-btn small icon @click="closeDialog" class="mr-n2">
+          <v-spacer />
+          <v-btn
+            small
+            icon
+            class="mr-n2"
+            @click="closeDialog"
+          >
             <v-icon>close</v-icon>
           </v-btn>
         </v-card-title>
 
-        <v-divider></v-divider>
+        <v-divider />
 
         <v-card-text class="pt-5">
           <div>{{ dialogInfo.data.description }}</div>
         </v-card-text>
 
-        <v-divider></v-divider>
+        <v-divider />
 
         <v-card-actions>
-          <v-spacer></v-spacer>
-          <v-btn color="primary" text @click="dialogReject">Reject</v-btn>
-          <v-btn color="primary" text @click="dialogApprove">Approve</v-btn>
+          <v-spacer />
+          <v-btn color="primary" text @click="dialogReject">
+            Reject
+          </v-btn>
+          <v-btn color="primary" text @click="dialogApprove">
+            Approve
+          </v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -81,47 +95,56 @@
       <v-card>
         <v-card-title>
           <span class="headline">{{ `${memberInfo.firstName} ${memberInfo.lastName}` }}</span>
-          <v-spacer></v-spacer>
-          <v-btn small icon @click="closeMemberInfoDialog" class="mr-n2">
+          <v-spacer />
+          <v-btn
+            small
+            icon
+            class="mr-n2"
+            @click="closeMemberInfoDialog"
+          >
             <v-icon>close</v-icon>
           </v-btn>
         </v-card-title>
 
-        <v-divider></v-divider>
+        <v-divider />
 
 
         <v-card-text class="px-6 py-3 text--primary">
           <div class="mb-6">
-            <div class="subtitle-1 font-weight-medium mb-2">Personal information</div>
-            <div>Name: {{memberInfo.firstName}}</div>
-            <div>Last name: {{memberInfo.lastName}}</div>
-            <div>Date of birth: {{memberInfo.editedBirthdayDate}}</div>
-            <div>ID: {{memberInfo.id}}</div>
+            <div class="subtitle-1 font-weight-medium mb-2">
+              Personal information
+            </div>
+            <div>Name: {{ memberInfo.firstName }}</div>
+            <div>Last name: {{ memberInfo.lastName }}</div>
+            <div>Date of birth: {{ memberInfo.editedBirthdayDate }}</div>
+            <div>ID: {{ memberInfo.id }}</div>
           </div>
 
           <div class="mb-6">
-            <div class="subtitle-1 font-weight-medium mb-2">Account information</div>
-            <div>Email: {{memberInfo.email}}</div>
-            <div>Category: {{memberInfo.category}}</div>
+            <div class="subtitle-1 font-weight-medium mb-2">
+              Account information
+            </div>
+            <div>Email: {{ memberInfo.email }}</div>
+            <div>Category: {{ memberInfo.category }}</div>
           </div>
 
           <div class="mb-6">
-            <div class="subtitle-1 font-weight-medium mb-2">Contact information</div>
-            <div>Address: {{memberInfo.address}}</div>
-            <div>City: {{memberInfo.city}}</div>
-            <div>Country: {{memberInfo.country}}</div>
-            <div>Phone number: {{memberInfo.phoneNumber}}</div>
+            <div class="subtitle-1 font-weight-medium mb-2">
+              Contact information
+            </div>
+            <div>Address: {{ memberInfo.address }}</div>
+            <div>City: {{ memberInfo.city }}</div>
+            <div>Country: {{ memberInfo.country }}</div>
+            <div>Phone number: {{ memberInfo.phoneNumber }}</div>
           </div>
 
           <div class="mb-6">
-            <div class="subtitle-1 font-weight-medium mb-2">Occupation information</div>
-            <div>Occupation: {{memberInfo.occupation}}</div>
+            <div class="subtitle-1 font-weight-medium mb-2">
+              Occupation information
+            </div>
+            <div>Occupation: {{ memberInfo.occupation }}</div>
           </div>
-
-
         </v-card-text>
-
-
       </v-card>
     </v-dialog>
 

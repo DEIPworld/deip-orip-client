@@ -344,20 +344,19 @@
 
         saveDocument()
           .then((contentRef) => {
-            
-              const isProposal = !this.research.research_group.is_personal;
-              researchContentService.createResearchContentViaOffchain(this.user.privKey, isProposal, {
-                researchExternalId: this.research.external_id,
-                researchGroup: this.research.research_group.external_id,
-                type: parseInt(this.proposeContent.type),
-                title: this.proposeContent.title || contentRef.title,
-                content: contentRef.hash,
-                permlink: contentRef.title.replace(/ /g, '-').replace(/_/g, '-').toLowerCase(),
-                authors: this.proposeContent.authors.map((a) => a.account.name),
-                references: [ ...this.contentRef.references ],
-                foreignReferences: [],
-                extensions: []
-              })
+            const isProposal = !this.research.research_group.is_personal;
+            researchContentService.createResearchContentViaOffchain(this.user.privKey, isProposal, {
+              researchExternalId: this.research.external_id,
+              researchGroup: this.research.research_group.external_id,
+              type: parseInt(this.proposeContent.type),
+              title: this.proposeContent.title || contentRef.title,
+              content: contentRef.hash,
+              permlink: contentRef.title.replace(/ /g, '-').replace(/_/g, '-').toLowerCase(),
+              authors: this.proposeContent.authors.map((a) => a.account.name),
+              references: [...this.contentRef.references],
+              foreignReferences: [],
+              extensions: []
+            })
               .then(() => {
                 this.$store.dispatch('layout/setSuccess', {
                   message: 'New material has been uploaded successfully'

@@ -57,8 +57,10 @@
           lg="12"
           class="rd-review-eci mt-1"
         >
-          <span v-for="item of review.disciplines"
-          :key="`${review.id}- ${item.disciplineName}`">
+          <span
+            v-for="item of review.disciplines"
+            :key="`${review.id}- ${item.disciplineName}`"
+          >
             {{ item.disciplineName }}
           </span>
         </v-col>

@@ -1,7 +1,9 @@
 <template>
   <modal-route-view :title="title">
     <v-form v-show="!isServerValidated" ref="form" v-model="isFormValid">
-      <div class="title mb-6">Personal information</div>
+      <div class="title mb-6">
+        Personal information
+      </div>
 
       <v-row>
         <v-col cols="6" class="py-0">
@@ -59,7 +61,9 @@
         </v-col>
       </v-row>
 
-      <div class="title mb-6">Account information</div>
+      <div class="title mb-6">
+        Account information
+      </div>
 
       <v-row>
         <v-col cols="6" class="py-0">
@@ -69,10 +73,10 @@
             name="username"
             label="Username"
             :rules="[
-                      rules.required,
-                      rules.unique,
-                      rules.usernameFormat
-                    ]"
+              rules.required,
+              rules.unique,
+              rules.usernameFormat
+            ]"
             :loading="isUsernameChecking"
             :disabled="isSaving"
             @input="usernameChanged"
@@ -115,7 +119,9 @@
         </v-col>
       </v-row>
 
-      <div class="title mb-6">Occupation information</div>
+      <div class="title mb-6">
+        Occupation information
+      </div>
 
       <v-row>
         <v-col cols="6" class="py-0">
@@ -129,11 +135,18 @@
           />
         </v-col>
         <v-col cols="6" class="py-0">
-          <v-text-field v-model="formData.website" outlined label="Web site" :disabled="isSaving" />
+          <v-text-field
+            v-model="formData.website"
+            outlined
+            label="Web site"
+            :disabled="isSaving"
+          />
         </v-col>
       </v-row>
 
-      <div class="title mb-6">Contact information</div>
+      <div class="title mb-6">
+        Contact information
+      </div>
 
       <v-row>
         <v-col cols="12" class="py-0">
@@ -162,7 +175,7 @@
             :disabled="isSaving"
             label="Country"
             :rules="[rules.required]"
-          ></v-autocomplete>
+          />
         </v-col>
         <v-col cols="12" class="py-0">
           <v-text-field
@@ -180,7 +193,8 @@
           :loading="isSaving"
           :disabled="isSaving"
           @click="finishRegistration()"
-        >Create account
+        >
+          Create account
         </v-btn>
       </div>
     </v-form>
@@ -194,9 +208,9 @@
   import { AuthService } from '@deip/auth-service';
   import _ from 'lodash';
 
-  const authService = AuthService.getInstance();
-
   import { mapGetters } from 'vuex';
+
+  const authService = AuthService.getInstance();
 
   export default {
     name: 'UserRegistration',
@@ -214,21 +228,19 @@
     data() {
       return {
         rules: {
-          required: value => !!value || 'This field is required',
-          unique: value =>
-            (!!value && this.isUsernameVerifyed !== false) ||
-            'Username should be unique in system',
-          nameChars: value =>
-            value.match(/^[a-z][a-z ,.'-]*$/i) !== null || 'Incorrect value',
-          usernameFormat: value => {
+          required: (value) => !!value || 'This field is required',
+          unique: (value) => (!!value && this.isUsernameVerifyed !== false)
+            || 'Username should be unique in system',
+          nameChars: (value) => value.match(/^[a-z][a-z ,.'-]*$/i) !== null || 'Incorrect value',
+          usernameFormat: (value) => {
             const result = deipRpc.utils.validateAccountName(value);
             return result === null || result;
           },
-          email: value => {
+          email: (value) => {
             const pattern = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
             return pattern.test(value) || 'Invalid E-mail';
           },
-          masterPassword: value => {
+          masterPassword: (value) => {
             if (value.length < this.MASTER_PASSWORD_MIN_LENGTH) {
               return 'Master password should be at least 10 symbols';
             }
@@ -554,19 +566,19 @@
         );
 
         console.log(email,
-          firstName,
-          lastName,
-          editedBirthdayDate,
-          username,
-          masterPassword,
-          id,
-          category,
-          occupation,
-          website,
-          address,
-          city,
-          country,
-          phoneNumber);
+                    firstName,
+                    lastName,
+                    editedBirthdayDate,
+                    username,
+                    masterPassword,
+                    id,
+                    category,
+                    occupation,
+                    website,
+                    address,
+                    city,
+                    country,
+                    phoneNumber);
 
         // return authService.signUp({
         //   email,
@@ -598,17 +610,17 @@
 
           return deipRpc.api
             .getAccountsAsync([this.formData.username])
-            .then(res => {
+            .then((res) => {
               this.isUsernameVerifyed = _.isEmpty(res);
             })
-            .catch(error => {
+            .catch((error) => {
               this.isUsernameVerifyed = false;
             })
             .finally(() => {
               this.isUsernameChecking = false;
               const usernameInput = _.find(
                 this.$refs.form.inputs,
-                input => input.$attrs.name === 'username'
+                (input) => input.$attrs.name === 'username'
               );
               usernameInput.validate();
             });

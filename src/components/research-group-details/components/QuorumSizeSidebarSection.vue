@@ -44,7 +44,7 @@
         proposalOrderMap: [
           [
             { key: PROPOSAL_TYPES.CREATE_RESEARCH, value: undefined },
-            { key: PROPOSAL_TYPES.CREATE_RESEARCH_MATERIAL, value: undefined },
+            { key: PROPOSAL_TYPES.CREATE_RESEARCH_MATERIAL, value: undefined }
           ],
           [
             { key: PROPOSAL_TYPES.INVITE_MEMBER, value: undefined },
@@ -74,6 +74,10 @@
       }
     },
 
+    created() {
+      this.fillValues();
+    },
+
     methods: {
       fillValues() {
         this.proposalOrderMap.forEach((proposalsBlock) => {
@@ -83,12 +87,8 @@
           });
         });
       }
-    },
-
-    created() {
-      this.fillValues();
     }
-  }
+  };
 </script>
 
 <style lang="less">

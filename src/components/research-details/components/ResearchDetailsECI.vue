@@ -51,11 +51,12 @@
       <template v-slot:header="{props:{headers}}">
         <thead>
           <tr>
-            <th v-for="item in headers" 
-            :key="`${item.text}`" 
-            :class="`${item.whiteSpace ? `white-space-${item.whiteSpace}` : ''} ${item.align ? `text-${item.align}` : ''}`"
+            <th
+              v-for="item in headers"
+              :key="`${item.text}`"
+              :class="`${item.whiteSpace ? `white-space-${item.whiteSpace}` : ''} ${item.align ? `text-${item.align}` : ''}`"
             >
-            {{item.text}}
+              {{ item.text }}
             </th>
           </tr>
         </thead>
@@ -116,7 +117,7 @@
             {
               text: 'Type',
               align: 'left',
-              sortable: false,
+              sortable: false
             },
             {
               text: 'Title',
@@ -126,7 +127,7 @@
             {
               text: 'Date',
               align: 'center',
-              sortable: false,
+              sortable: false
             },
             {
               text: 'Reward ECI',

@@ -1,6 +1,11 @@
 <template>
   <app-layout>
-    <v-navigation-drawer app clipped permanent width="280">
+    <v-navigation-drawer
+      app
+      clipped
+      permanent
+      width="280"
+    >
       <v-list
         nav
         dense

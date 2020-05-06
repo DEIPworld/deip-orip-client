@@ -4,7 +4,7 @@
       <v-card-text>
         <slot />
       </v-card-text>
-      <v-divider vertical></v-divider>
+      <v-divider vertical />
       <crud-actions class="pa-4">
         <slot name="actions" />
       </crud-actions>
@@ -14,6 +14,7 @@
 
 <script>
   import CrudActions from '@/components/layout/CrudActions';
+
   export default {
     name: 'SideActionsCard',
     components: { CrudActions }

@@ -108,7 +108,7 @@
         decodeURIComponent(this.$route.params.research_permlink)
       )
         .then((research) => {
-          this.group_permlink = research.research_group.permlink
+          this.group_permlink = research.research_group.permlink;
           this.research = research;
         });
     },
@@ -125,7 +125,7 @@
       },
       finish() {
         this.isLoading = true;
-        
+
         const isProposal = !this.research.research_group.is_personal;
         researchService.createResearchTokenSaleViaOffchain(this.user.privKey, isProposal, {
           researchGroup: this.research.research_group.external_id,

@@ -95,7 +95,8 @@
           </v-list-item-content>
         </v-list-item>
         <v-divider
-          v-if="i + 1 < notifications.length" :key="`${i}-notification-divider`"
+          v-if="i + 1 < notifications.length"
+          :key="`${i}-notification-divider`"
         />
       </template>
     </v-list>

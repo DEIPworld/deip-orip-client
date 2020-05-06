@@ -30,7 +30,9 @@
         as research content and locked for editing
       </div>
       <div v-if="isUnlockActionAvailable" class="mt-6">
-        <div class="body-1 pb-4">The proposal is expired. Unlock the material for a new proposal or removal</div>
+        <div class="body-1 pb-4">
+          The proposal is expired. Unlock the material for a new proposal or removal
+        </div>
         <v-btn color="orange" block @click="unlockDraft()">
           Unlock Draft
         </v-btn>

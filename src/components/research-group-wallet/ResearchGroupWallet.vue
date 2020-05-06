@@ -93,7 +93,7 @@
 
             <div v-if="researches.length">
               <template v-for="(research, i) in researches">
-                <div class="list-line" :key="`${i}-research`">
+                <div :key="`${i}-research`" class="list-line">
                   <div class="legacy-col-grow list-body-cell">
                     <div class="subtitle-1">
                       {{ research.title }}
@@ -136,9 +136,9 @@
 <script>
   import _ from 'lodash';
   import { mapGetters } from 'vuex';
-  import RGDeipTokenSendForm from './components/RGDeipTokenSendForm.vue';
   import deipRpc from '@deip/rpc-client';
   import { AppConfigService } from '@deip/app-config-service';
+  import RGDeipTokenSendForm from './components/RGDeipTokenSendForm.vue';
 
   const appConfigService = AppConfigService.getInstance();
 
@@ -167,8 +167,8 @@
 
       defaultAssetBalance() {
         const env = appConfigService.get('env');
-        let amount = this.group.balances[env.ASSET_UNIT];
-        return amount;;
+        const amount = this.group.balances[env.ASSET_UNIT];
+        return amount;
       }
     },
 

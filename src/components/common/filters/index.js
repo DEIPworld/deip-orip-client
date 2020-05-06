@@ -73,6 +73,4 @@ Vue.filter('dateFormat', (value, format, fromUtcToLocal = false) => (!fromUtcToL
   ? moment(value).format(format)
   : moment.utc(value).local().format(format)));
 
-Vue.filter('shortHash', (value) => {
-  return value ? value.substring(0, 8) : "";
-})
+Vue.filter('shortHash', (value) => (value ? value.substring(0, 8) : ''));

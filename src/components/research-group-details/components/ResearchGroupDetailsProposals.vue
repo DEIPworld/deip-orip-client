@@ -111,7 +111,7 @@
       ...mapGetters({
         proposals: 'researchGroup/proposals',
         filter: 'researchGroup/proposalListFilter'
-      }),
+      })
     },
     methods: {
       ...mapActions({

@@ -962,7 +962,7 @@
           this.user.username,
           this.sendTokensDialog.form.to,
           this.toAssetUnits(this.sendTokensDialog.form.amount, this.sendTokensDialog.precision, this.sendTokensDialog.currency.currencyName),
-          this.sendTokensDialog.form.memo ? this.sendTokensDialog.form.memo : ""
+          this.sendTokensDialog.form.memo ? this.sendTokensDialog.form.memo : ''
         )
           .then((data) => {
             this.$store.dispatch('layout/setSuccess', {

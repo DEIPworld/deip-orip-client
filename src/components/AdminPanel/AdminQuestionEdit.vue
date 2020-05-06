@@ -11,9 +11,9 @@
   import { AuthService } from '@deip/auth-service';
   import _ from 'lodash';
 
-  const authService = AuthService.getInstance();
-
   import { mapGetters } from 'vuex';
+
+  const authService = AuthService.getInstance();
 
   export default {
     name: 'AdminQuestionEdit',

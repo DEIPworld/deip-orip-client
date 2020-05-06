@@ -54,10 +54,13 @@
             </div>
           </div>
 
-          <div v-else-if="proposal.action === PROPOSAL_TYPES.UPDATE_RESEARCH_GROUP"
+          <div
+            v-else-if="proposal.action === PROPOSAL_TYPES.UPDATE_RESEARCH_GROUP"
             class="display-flex"
           >
-            <v-icon small color="primary" class="mx-2">settings_applications</v-icon>
+            <v-icon small color="primary" class="mx-2">
+              settings_applications
+            </v-icon>
             <div class="body-2">
               Update group meta
             </div>
@@ -66,7 +69,9 @@
             v-else-if="proposal.action === PROPOSAL_TYPES.UPDATE_RESEARCH"
             class="display-flex"
           >
-            <v-icon small color="primary" class="mx-2">edit_attributes</v-icon>
+            <v-icon small color="primary" class="mx-2">
+              edit_attributes
+            </v-icon>
             <div class="body-2">
               Update research meta
             </div>
@@ -110,32 +115,40 @@
           </a>
         </div>
         <div class="status">
-          <v-tooltip bottom v-if="proposal.fail_reason">
+          <v-tooltip v-if="proposal.fail_reason" bottom>
             <template v-slot:activator="{ on }">
-              <v-chip v-on="on" color="error">
-                <div class="caption">Failure</div>
+              <v-chip color="error" v-on="on">
+                <div class="caption">
+                  Failure
+                </div>
               </v-chip>
             </template>
             <div>
               <div>Next attempt: {{ moment(proposal.expiration_time).format('MM/DD/YYYY HH:mm') }}</div>
-              <div>Reason: {{proposal.fail_reason}}</div>
+              <div>Reason: {{ proposal.fail_reason }}</div>
             </div>
           </v-tooltip>
 
-          <v-tooltip bottom v-else>
+          <v-tooltip v-else bottom>
             <template v-slot:activator="{ on }">
               <v-chip v-on="on">
-                <div class="caption">Pending</div>
+                <div class="caption">
+                  Pending
+                </div>
               </v-chip>
             </template>
             <div>
-              <div v-if="proposal.voted_accounts.length">Approved by: {{ proposal.voted_accounts.join(', ') }}</div>
-              <div v-else>No approvals yet</div>
+              <div v-if="proposal.voted_accounts.length">
+                Approved by: {{ proposal.voted_accounts.join(', ') }}
+              </div>
+              <div v-else>
+                No approvals yet
+              </div>
             </div>
           </v-tooltip>
         </div>
         <div class="voted">
-          <div>{{proposal.voted_accounts.length}}</div>
+          <div>{{ proposal.voted_accounts.length }}</div>
         </div>
         <div class="action-col">
           <v-btn
@@ -165,12 +178,12 @@
                 </div>
                 <div class="pt-2">
                   Reviewers' reward:
-                  <span class="font-weight-bold">{{ proposal.payload.review_share}}</span>
+                  <span class="font-weight-bold">{{ proposal.payload.review_share }}</span>
                 </div>
               </v-col>
               <v-col class="grey--text" cols="6" style="max-height: 70px">
                 <v-row>
-                  <span class="pr-1" v-for="(label, i) in getDisciplineNames()" :key="i">{{ label }}</span>
+                  <span v-for="(label, i) in getDisciplineNames()" :key="i" class="pr-1">{{ label }}</span>
                 </v-row>
               </v-col>
             </v-row>
@@ -215,7 +228,7 @@
               <v-col class="display-flex justify" cols="4">
                 <span class="font-weight-bold">Research:</span>
                 <router-link
-                  :to="{ 
+                  :to="{
                     name: 'ResearchDetails',
                     params: {
                       research_group_permlink: encodeURIComponent(proposal.extension.research.research_group.permlink),
@@ -223,7 +236,8 @@
                     }
                   }"
                   class="a px-2"
-                  >{{ proposal.extension.research.title }}
+                >
+                  {{ proposal.extension.research.title }}
                 </router-link>
               </v-col>
               <v-col class="display-flex justify" cols="8">
@@ -282,8 +296,8 @@
                 <div>
                   <span class="font-weight-bold">{{ getContentTypeStrById(proposal.payload.type) }}:</span>
                   <router-link
-                    :to="{ 
-                      name: 'ResearchContentDetails', 
+                    :to="{
+                      name: 'ResearchContentDetails',
                       params: {
                         research_group_permlink: encodeURIComponent(proposal.extension.research.research_group.permlink),
                         research_permlink: encodeURIComponent(proposal.extension.research.permlink),
@@ -295,20 +309,22 @@
                     }"
                     class="a px-2"
                     target="_blank"
-                    >{{ proposal.payload.title }}
+                  >
+                    {{ proposal.payload.title }}
                   </router-link>
 
                   <span class="font-weight-bold">Research:</span>
                   <router-link
-                    :to="{ 
-                      name: 'ResearchDetails', 
+                    :to="{
+                      name: 'ResearchDetails',
                       params: {
                         research_group_permlink: encodeURIComponent(proposal.extension.research.research_group.permlink),
                         research_permlink: encodeURIComponent(proposal.extension.research.permlink)
                       }
                     }"
                     class="a px-2"
-                    >{{ proposal.extension.research.title }}
+                  >
+                    {{ proposal.extension.research.title }}
                   </router-link>
                 </div>
               </v-col>
@@ -353,17 +369,17 @@
       approve(proposal) {
         this.isApprovingLoading = true;
         proposalsService.updateProposal(this.currentUser.privKey, {
-            externalId: proposal.external_id,
-            postingApprovalsToAdd: [],
-            postingApprovalsToRemove: [],
-            activeApprovalsToAdd: [this.currentUser.username],
-            activeApprovalsToRemove: [],
-            ownerApprovalsToAdd: [],
-            ownerApprovalsToRemove: [],
-            keyApprovalsToAdd: [],
-            keyApprovalsToRemove: [],
-            extensions: []
-          })
+          externalId: proposal.external_id,
+          postingApprovalsToAdd: [],
+          postingApprovalsToRemove: [],
+          activeApprovalsToAdd: [this.currentUser.username],
+          activeApprovalsToRemove: [],
+          ownerApprovalsToAdd: [],
+          ownerApprovalsToRemove: [],
+          keyApprovalsToAdd: [],
+          keyApprovalsToRemove: [],
+          extensions: []
+        })
           .then(() => {
             this.isApprovingLoading = false;
             const copy = _.cloneDeep(this.proposal);

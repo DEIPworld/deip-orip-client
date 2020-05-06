@@ -24,7 +24,8 @@
               color="primary"
               dark
               outlined
-              @click="openJoinRequestDetails(join)">
+              @click="openJoinRequestDetails(join)"
+            >
               View
             </v-btn>
           </div>
@@ -127,8 +128,8 @@
 
       defaultAssetBalance() {
         const env = appConfigService.get('env');
-        let amount = this.group.balances[env.ASSET_UNIT];
-        return amount;;
+        const amount = this.group.balances[env.ASSET_UNIT];
+        return amount;
       },
 
       isResearchGroupMember() {

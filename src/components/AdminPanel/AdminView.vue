@@ -5,10 +5,10 @@
         {{ title }}
       </v-toolbar-title>
       <v-spacer />
-      <slot name="toolbarAction"/>
+      <slot name="toolbarAction" />
 
-      <template #extension v-if="hasSlot('toolbarExtension')">
-        <slot name="toolbarExtension"/>
+      <template v-if="hasSlot('toolbarExtension')" #extension>
+        <slot name="toolbarExtension" />
       </template>
     </v-toolbar>
 

@@ -48,23 +48,23 @@ const state = {
 // getters
 const getters = {
 
-  proposals: state => state.proposals,
-  group: state => {
-    let researchGroup = state.group;
-    let balances = researchGroup.account.balances.reduce((acc, b) => {
+  proposals: (state) => state.proposals,
+  group: (state) => {
+    const researchGroup = state.group;
+    const balances = researchGroup.account.balances.reduce((acc, b) => {
       acc[b.split(' ')[1]] = blockchainService.fromAssetsToFloat(b);
       return acc;
     }, {});
-    
+
     return {
       ...researchGroup,
       balances
-    }
+    };
   },
-  groupShares: state => state.groupShares,
-  members: state => state.members,
-  invites: state => state.invites,
-  proposalListFilter: state => state.proposalListFilter,
+  groupShares: (state) => state.groupShares,
+  members: (state) => state.members,
+  invites: (state) => state.invites,
+  proposalListFilter: (state) => state.proposalListFilter,
   researchList: (state, getters, rootState, rootGetters) => {
     const user = rootGetters['auth/user'];
     return state.researchList.filter((item) => !item.is_private || state.groupShares.some((share) => share.owner == user.username));

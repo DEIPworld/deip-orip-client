@@ -22,9 +22,7 @@
         contentRefsList: 'rd/contentRefsList'
       }),
       draftsList() {
-        return this.contentRefsList.filter(ref => {
-          return !this.contentList.some((c) => c.content === ref.hash);
-        })
+        return this.contentRefsList.filter((ref) => !this.contentList.some((c) => c.content === ref.hash));
       }
     },
     methods: {
