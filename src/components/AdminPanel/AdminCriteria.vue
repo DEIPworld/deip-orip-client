@@ -26,43 +26,32 @@
       </template>
     </side-actions-card>
 
-    <v-dialog v-model="actionDialog.isOpen" max-width="420px" scrollable>
-      <v-card>
-        <v-card-title>
-          <span class="headline">{{ actionDialog.data.title }}</span>
-          <v-spacer />
-          <v-btn
-            small
-            icon
-            class="mr-n2"
-            @click="closeActionDialog"
-          >
-            <v-icon>close</v-icon>
-          </v-btn>
-        </v-card-title>
+    <action-dialog
+      :open="actionDialog.isOpen"
+      :title="actionDialog.data.title"
+      @close="closeActionDialog"
+    >
+      {{ actionDialog.data.description }}
 
-        <v-divider />
+      <template #actions>
+        <v-btn
+          color="primary"
+          text
+          @click="closeActionDialog"
+        >
+          cancel
+        </v-btn>
+        <v-btn
+          v-if="actionDialog.data.action"
+          color="primary"
+          text
+          @click="actionDialog.data.action.method(actionDialog.data.title)"
+        >
+          {{ actionDialog.data.action.title }}
+        </v-btn>
+      </template>
 
-        <v-card-text class="text--primary pt-5">
-          {{ actionDialog.data.description }}
-        </v-card-text>
-
-        <v-divider />
-
-        <v-card-actions>
-          <v-spacer />
-          <v-btn
-            v-for="(action, index) of actionDialog.data.actions"
-            :key="index"
-            color="primary"
-            text
-            @click="action.method ? action.method(actionDialog.data.title) : closeActionDialog()"
-          >
-            {{ action.title }}
-          </v-btn>
-        </v-card-actions>
-      </v-card>
-    </v-dialog>
+    </action-dialog>
 
     <router-view name="dialog" />
   </admin-view>
@@ -71,69 +60,44 @@
 <script>
   import AdminView from '@/components/AdminPanel/AdminView';
   import SideActionsCard from '@/components/layout/SideActionsCard';
+  import ActionDialog from '@/components/layout/ActionDialog';
 
   export default {
     name: 'AdminCriteria',
     components: {
+      ActionDialog,
       SideActionsCard,
       AdminView
     },
     data() {
-
-      const actionDialogDefaults = {
-        title: ' ',
-        description: ' ',
-        actions: [
-          {
-            title: 'close'
-          }
-        ]
-      };
-
       return {
-        actionDialogDefaults,
         actionDialog: {
           isOpen: false,
-          data: actionDialogDefaults,
+          data: {},
           types: {
             publish: {
-              title: 'publish',
+              title: 'Publish criterion?',
               description: 'Criterion will be set for each project and will appear on: project page, project request form.',
-              actions: [
-                {
-                  title: 'close'
-                },
-                {
-                  title: 'publish',
-                  method: this.publishCriteria
-                }
-              ]
+              action: {
+                title: 'publish',
+                method: this.publishCriteria
+              }
             },
             unpublish: {
-              title: 'unpublish',
+              title: 'Unpublish criterion?',
               description: 'Criterion will be removed from: project page, project request form.',
-              actions: [
-                {
-                  title: 'close'
-                },
-                {
-                  title: 'publish',
-                  method: this.unpublishCriteria
-                }
-              ]
+              action: {
+                title: 'unpublish',
+                method: this.unpublishCriteria
+              }
             },
             delete: {
-              title: 'delete',
+              title: 'Delete criterion?',
               description: 'Criterion will be deleted permanently.',
-              actions: [
-                {
-                  title: 'close'
-                },
-                {
-                  title: 'publish',
-                  method: this.deleteCriteria
-                }
-              ]
+              action: {
+                title: 'delete',
+                method: this.deleteCriteria
+              }
             }
           }
         }
@@ -147,7 +111,7 @@
       closeActionDialog() {
         this.actionDialog.isOpen = false;
         setTimeout(() => {
-          this.actionDialog.data = this.actionDialogDefaults;
+          this.actionDialog.data = {};
         }, 300);
       },
       publishCriteria(item) {
