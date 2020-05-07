@@ -300,9 +300,9 @@ const actions = {
   },
 
   loadTenant({ state, commit, getters }, { tenant, notify } = {}) {
-    return tenantService.getTenantByPermlink(tenant)
-      .then((tenant) => {
-        commit('SET_TENANT_PROFILE', tenant);
+    return researchGroupService.getResearchGroup(tenant)
+      .then((account) => {
+        commit('SET_TENANT_ACCOUNT', account);
       })
       .catch((err) => {
         console.log(err);
@@ -352,7 +352,7 @@ const mutations = {
     Vue.set(state.user, 'account', account);
   },
 
-  SET_TENANT_PROFILE(state, tenant) {
+  SET_TENANT_ACCOUNT(state, tenant) {
     Vue.set(state, 'tenant', tenant);
   },
 
