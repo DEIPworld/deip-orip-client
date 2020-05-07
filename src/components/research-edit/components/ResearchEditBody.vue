@@ -240,6 +240,7 @@
               'Research-External-Id': this.research.external_id,
               Authorization: `Bearer ${accessService.getAccessToken()}`
             },
+            maxFiles: 1,
             timeout: 0,
             uploadMultiple: false,
             createImageThumbnails: true,

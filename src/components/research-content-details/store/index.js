@@ -67,7 +67,6 @@ const getters = {
   contentRef: (state, getters) => state.contentRef,
 
   isFilePackageContent(state, getters, rootState, rootGetters) {
-    debugger;
     return state.contentRef && (state.contentRef.type === 'package' || state.contentRef.type === 'file' /* legacy */);
   },
 
@@ -282,8 +281,6 @@ const actions = {
             commit('SET_RESEARCH_CONTENT_DETAILS', contentObj);
             const { content: hash } = contentObj;
 
-            debugger;
-
             const contentRefLoad = new Promise((resolve, reject) => {
               dispatch('loadResearchContentRef', {
                 researchExternalId: state.research.external_id,
@@ -412,14 +409,12 @@ const actions = {
   loadResearchContentRef({ state, commit, dispatch }, {
     refId, researchExternalId, hash, notify
   }) {
-    debugger;
     const refPromies = refId != null
       ? researchContentService.getContentRefById(refId)
       : researchContentService.getContentRefByHash(researchExternalId, hash);
 
     refPromies
       .then((contentRef) => {
-        debugger;
         commit('SET_RESEARCH_CONTENT_REF', contentRef);
         return proposalsService.getProposalsByCreator(contentRef.researchGroupExternalId);
       })

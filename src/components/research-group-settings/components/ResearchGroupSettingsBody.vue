@@ -223,6 +223,7 @@
               Authorization: `Bearer ${accessService.getAccessToken()}`
             },
             timeout: 0,
+            maxFiles: 1,
             uploadMultiple: false,
             createImageThumbnails: true,
             autoProcessQueue: false,
