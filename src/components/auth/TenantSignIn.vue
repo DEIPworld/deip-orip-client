@@ -4,7 +4,7 @@
       <v-col cols="5">
         <div class="text-center">
           <div v-if="tenant">
-            <img width="200px" height="200px" :src="tenant | tenantSymbolSrc(160, 160, false)">
+            <img width="200px" height="200px" :src="tenant.account | tenantSymbolSrc(160, 160, false)">
           </div>
           <!-- <div class="title c-pb-4 bold">Welcome to</div>
           <div class="deip-emblem">

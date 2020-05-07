@@ -52,13 +52,21 @@
   import AdminView from '@/components/AdminPanel/AdminView';
   import SideActionsCard from '@/components/layout/SideActionsCard';
   import ActionDialog from '@/components/layout/ActionDialog';
+  import { mapGetters } from 'vuex';
 
   export default {
     name: 'AdminFAQ',
     components: { SideActionsCard, AdminView, ActionDialog },
 
+    computed: {
+      ...mapGetters({
+        tenant: 'auth/tenant'
+      })
+    },
+
     data() {
       return {
+        // use tenant.profile.settings.faq array
         questions: [
           {
             question: 'How can I become a contractor?',

@@ -13,7 +13,7 @@
       color="#fff"
     >
       <router-link :to="{ name: 'Default' }">
-        <img height="40px" class="logo-image" :src="tenant | tenantLogoSrc(80, 80, false)">
+        <img height="40px" class="logo-image" :src="tenant.account | tenantLogoSrc(80, 80, false)">
       </router-link>
 
       <v-spacer />

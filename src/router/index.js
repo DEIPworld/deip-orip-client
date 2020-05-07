@@ -99,8 +99,8 @@ const router = new Router({
     beforeEnter: (to, from, next) => {
       const env = appConfigService.get('env');
       if (env.DEMO == 'GRANT-DISTRIBUTION-TRANSPARENCY') {
-        const agency = store.getters['auth/tenant'];
-        if (!agency) {
+        const tenant = store.getters['auth/tenant'];
+        if (!tenant) {
           throw new Error('Granting agency must be specified for the Demo');
         }
         next({ name: 'TenantSignIn' });
@@ -633,13 +633,13 @@ const router = new Router({
       rolePromise.then((roles) => {
         const env = appConfigService.get('env');
         if (env.DEMO == 'GRANT-DISTRIBUTION-TRANSPARENCY') {
-          const agency = store.getters['auth/tenant'];
-          if (!agency) {
+          const tenant = store.getters['auth/tenant'];
+          if (!tenant) {
             throw new Error('Granting agency must be specified for the Demo');
           }
           next({
             name: 'GrantProgramsAwardsDashboard',
-            params: { agency: agency.permlink }
+            params: { agency: tenant.account.permlink }
           });
         } else {
           next({ name: 'ResearchFeed' });
