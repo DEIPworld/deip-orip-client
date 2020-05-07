@@ -1,24 +1,39 @@
 <template>
   <admin-view title="Settings">
-    <div>
-      <vue-dropzone
-        id="tenant-banner-dropzone"
-        ref="tenantBanner"
-        :options="bannerDropzoneOptions"
-        @vdropzone-success="bannerUploadSuccess"
-        @vdropzone-error="bannerUploadError"
-        @vdropzone-sending="bannerUploadSending"
-      />
-      <div class="py-4 text-right">
-        <v-btn
-          large
-          :disabled="isUploadingTenantBanner"
-          :loading="isUploadingTenantBanner"
-          class="ma-0"
-          color="primary"
-          @click="updateBanner()">
-          Update banner
-        </v-btn>
+    <div class="title mb-6">
+      Change banner on Explore page
+    </div>
+    <div class="display-flex flex-wrap">
+      <div class="mr-6 mb-2">
+        <v-img
+          class="grey lighten-4"
+          contain
+          height="252"
+          max-width="252"
+          :src="$options.filters.tenantBackgroundSrc(tenant.account)"
+        />
+      </div>
+      <div class="flex-grow-1">
+        <vue-dropzone
+          id="tenant-banner-dropzone"
+          ref="tenantBanner"
+          :options="bannerDropzoneOptions"
+          @vdropzone-success="bannerUploadSuccess"
+          @vdropzone-error="bannerUploadError"
+          @vdropzone-sending="bannerUploadSending"
+        />
+        <div class="py-4 text-right">
+          <v-btn
+            large
+            :disabled="isUploadingTenantBanner"
+            :loading="isUploadingTenantBanner"
+            class="ma-0"
+            color="primary"
+            @click="updateBanner()"
+          >
+            Update banner
+          </v-btn>
+        </div>
       </div>
     </div>
   </admin-view>
@@ -29,6 +44,7 @@
   import VueDropzone from 'vue2-dropzone';
   import { AccessService } from '@deip/access-service';
   import { AppConfigService } from '@deip/app-config-service';
+  import { mapGetters } from 'vuex';
 
   const accessService = AccessService.getInstance();
   const appConfigService = AppConfigService.getInstance();
@@ -50,15 +66,21 @@
           createImageThumbnails: true,
           autoProcessQueue: false,
           dictDefaultMessage:
-            '<i class=\'v-icon material-icons\' style=\'font-size:40px\'>backup</i><p>Banner image should be at least 1440 x 430 px in dimension</p>',
+            '<i class=\'v-icon material-icons mb-2\' style=\'font-size:40px\'>backup</i><div class=\'mb-2\'>Drop files here to upload</div><div class=\'mb-2\'>or</div><button class=\'primary v-btn v-size--small\'>BROWSE</button>',
           addRemoveLinks: true,
           acceptedFiles: ['image/png', 'image/jpeg', 'image/jpg'].join(',')
         }
       }
     },
 
-    methods: {
 
+    computed: {
+      ...mapGetters({
+        tenant: 'auth/tenant'
+      })
+    },
+
+    methods: {
       bannerUploadSuccess(file, response) {
         this.$refs.tenantBanner.removeAllFiles();
         this.isUploadingTenantBanner = false;
@@ -90,12 +112,10 @@
 
       cancel() {
         this.$refs.tenantBanner.removeAllFiles();
-      },
+      }
     }
-
   };
 </script>
 
 <style scoped>
-
 </style>
