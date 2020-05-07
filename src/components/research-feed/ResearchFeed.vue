@@ -1,6 +1,6 @@
 <template>
   <app-layout>
-    <layout-header :background="$options.filters.tenantBackgroundSrc(tenant)">
+    <layout-header :background="$options.filters.tenantBackgroundSrc(tenant.account)">
       <div class="display-2 uppercase half-bold">
         Projects
       </div>

@@ -31,7 +31,7 @@ const state = {
     researchBookmarks: [],
     balances: []
   },
-  tenant: null
+  tenant: null,
 };
 
 // getters
@@ -100,19 +100,19 @@ const getters = {
 
   isUniversityCertifier: (state, getters) => state.user.profile.roles.some((r) => r.role === 'university-certifier'
       && getters.tenant
-      && r.researchGroupExteralId == getters.tenant.external_id),
+      && r.researchGroupExteralId == getters.tenant.account.external_id),
 
   isGrantProgramOfficer: (state, getters) => state.user.profile.roles.some((r) => r.role === 'grant-program-officer'
       && getters.tenant
-      && r.researchGroupExteralId == getters.tenant.external_id),
+      && r.researchGroupExteralId == getters.tenant.account.external_id),
 
   isGrantFinanceOfficer: (state, getters) => state.user.profile.roles.some((r) => r.role === 'grant-finance-officer'
       && getters.tenant
-      && r.researchGroupExteralId == getters.tenant.external_id),
+      && r.researchGroupExteralId == getters.tenant.account.external_id),
 
   isTreasuryCertifier: (state, getters) => state.user.profile.roles.some((r) => r.role === 'treasury-certifier'
       && getters.tenant
-      && r.researchGroupExteralId == getters.tenant.external_id)
+      && r.researchGroupExteralId == getters.tenant.account.external_id)
 };
 
 // actions
@@ -300,9 +300,12 @@ const actions = {
   },
 
   loadTenant({ state, commit, getters }, { tenant, notify } = {}) {
-    return researchGroupService.getResearchGroup(tenant)
-      .then((account) => {
-        commit('SET_TENANT_ACCOUNT', account);
+    return Promise.all([
+      tenantService.getTenantProfile(tenant),
+      researchGroupService.getResearchGroup(tenant)
+    ])
+      .then(([ profile, account ]) => {
+        commit('SET_TENANT', { profile, account });
       })
       .catch((err) => {
         console.log(err);
@@ -352,10 +355,10 @@ const mutations = {
     Vue.set(state.user, 'account', account);
   },
 
-  SET_TENANT_ACCOUNT(state, tenant) {
+  SET_TENANT(state, tenant) {
     Vue.set(state, 'tenant', tenant);
   },
-
+  
   SET_BALANCES(state, balances) {
     Vue.set(state.user, 'balances', balances);
   }
