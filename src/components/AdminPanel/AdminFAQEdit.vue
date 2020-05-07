@@ -28,8 +28,17 @@
           :loading="isSaving"
           :disabled="isSaving"
           @click="$router.back()"
-        >Cancel</v-btn>
-        <v-btn color="primary" :loading="isSaving" :disabled="isSaving" @click="save()">Save</v-btn>
+        >
+          Cancel
+        </v-btn>
+        <v-btn
+          color="primary"
+          :loading="isSaving"
+          :disabled="isSaving"
+          @click="save()"
+        >
+          Save
+        </v-btn>
       </div>
     </v-form>
   </modal-route-view>
@@ -37,14 +46,11 @@
 
 <script>
   import ModalRouteView from '@/components/layout/ModalRouteView';
-  import moment from 'moment';
-  import deipRpc from '@deip/rpc-client';
-  import { AuthService } from '@deip/auth-service';
-  import _ from 'lodash';
+  import { TenantService } from '@deip/tenant-service';
 
   import { mapGetters } from 'vuex';
 
-  const authService = AuthService.getInstance();
+  const tenantService = TenantService.getInstance();
 
   export default {
     name: 'AdminFAQEdit',
@@ -62,52 +68,29 @@
     data() {
       return {
         rules: { required: (value) => !!value || 'This field is required' },
-
         isFormValid: false,
-        questions: [
-          {
-            question: 'How can I become a contractor?',
-            answer:
-              'You can sign up with us at ar3c.com/signup. Once we receive your application, we will review it and add you to our contractor list. You or your company will be invited on an as-needed basis by our project participants to complete their projects.',
-            id: 1,
-            isVisible: false
-          },
-          {
-            question: 'How can I become a contractor?',
-            answer:
-              'You can sign up with us at ar3c.com/signup. Once we receive your application, we will review it and add you to our contractor list. You or your company will be invited on an as-needed basis by our project participants to complete their projects.',
-            id: 2,
-            isVisible: true
-          },
-          {
-            question: 'How can I become a contractor?',
-            answer:
-              'You can sign up with us at ar3c.com/signup. Once we receive your application, we will review it and add you to our contractor list. You or your company will be invited on an as-needed basis by our project participants to complete their projects.',
-            id: 3,
-            isVisible: false
-          },
-          {
-            question: 'How can I become a contractor?',
-            answer:
-              'You can sign up with us at ar3c.com/signup. Once we receive your application, we will review it and add you to our contractor list. You or your company will be invited on an as-needed basis by our project participants to complete their projects.',
-            id: 4,
-            isVisible: true
-          }
-        ],
         isSaving: false,
         formData: {
           question: '',
           answer: '',
-          isVisiible: false
+          isVisible: true
         }
       };
     },
+    computed: {
+      ...mapGetters({
+        tenant: 'auth/tenant',
+        faqs: 'adminPanel/faqs'
+      })
+    },
     created() {
       if (this.$route.query.id) {
-        const editFAQ = this.questions.find(
-          ({ id }) => id === this.$route.query.id
+        const editFAQ = this.faqs.find(
+          ({ _id }) => _id === this.$route.query.id
         );
-        this.formData = { ...editFAQ };
+        if (editFAQ) {
+          this.formData = { ...editFAQ };
+        }
       }
     },
     methods: {
@@ -116,11 +99,30 @@
 
         this.isSaving = true;
 
-        const { question, answer, isVisiible } = this.formData;
+        const { _id } = this.formData;
 
-        console.log(question, answer, isVisiible);
-
-        setTimeout(() => this.$router.push({ name: 'admin.faq' }), 1000);
+        const updatedProfile = _.cloneDeep(this.tenant.profile);
+        if (_id) {
+          updatedProfile.settings.faq = updatedProfile.settings.faq.map((item) => (item._id === _id ? this.formData : item));
+        } else {
+          updatedProfile.settings.faq.push(this.formData);
+        }
+        tenantService.updateTenantProfile(updatedProfile)
+          .then(() => {
+            this.$store.dispatch('layout/setSuccess', { message: 'Successfully' });
+            const tenant = window.env.TENANT;
+            this.$store.dispatch('auth/loadTenant', { tenant });
+          })
+          .catch((err) => {
+            console.error(err);
+            this.$store.dispatch('layout/setError', {
+              message: 'An error occurred while sending the request, please try again later.'
+            });
+          })
+          .finally(() => {
+            this.isSaving = true;
+            setTimeout(() => this.$router.push({ name: 'admin.faq' }), 500);
+          });
       }
     }
   };

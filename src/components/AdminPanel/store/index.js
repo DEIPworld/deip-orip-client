@@ -14,8 +14,9 @@ const state = {
 
 // getters
 const getters = {
-  registeredMembers: (store) => store.registeredMembers,
-  waitingMembers: (store) => store.waitingMembers
+  registeredMembers: (state) => state.registeredMembers,
+  waitingMembers: (state) => state.waitingMembers,
+  faqs: (state, getters, rootState, rootGetters) => rootGetters['auth/tenant'].profile.settings.faq
 };
 
 // actions

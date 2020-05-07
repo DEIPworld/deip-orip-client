@@ -68,13 +68,13 @@
     >
       {{ actionDialog.data.description }}
       <template #actions>
-        <v-btn color="primary" :loading="isLoading" text @click="closeActionDialog">
+        <v-btn color="primary" :disabled="isDisabled" text @click="closeActionDialog">
           cancel
         </v-btn>
         <v-btn
           v-if="actionDialog.data.action"
           color="primary"
-          :loading="isLoading"
+          :disabled="isDisabled"
           text
           @click="actionDialog.data.action.method(actionDialog.data.name)"
         >
@@ -107,7 +107,7 @@
             </div>
             <div>Name: {{ memberInfo.profile.firstName }}</div>
             <div>Last name: {{ memberInfo.profile.lastName }}</div>
-            <div>Date of birth: {{ memberInfo.profile.created_at | dateFormat('MMMM DD YYYY', true) }}</div>
+            <div>Date of birth: {{ memberInfo.profile.birthdate | dateFormat('MMMM DD YYYY', true) }}</div>
             <div>ID: {{ memberInfo.profile.foreignIds }}</div>
           </div>
 
@@ -171,7 +171,7 @@
       return {
         tab: null,
         memberInfoDialog: false,
-        isLoading: false,
+        isDisabled: false,
         deleteDialog: false,
         approveDialog: false,
         registeredMembersTableHeaders: [
@@ -305,7 +305,7 @@
         }, 300);
       },
       approveRequest(name) {
-        this.isLoading = true;
+        this.isDisabled = true;
         return tenantService.approveSignUpRequest(name)
           .then(() => {
             this.$store.dispatch('layout/setSuccess', { message: 'Account successfully created' });
@@ -318,12 +318,12 @@
             });
           })
           .finally(() => {
-            this.isLoading = false;
+            this.isDisabled = false;
             this.closeActionDialog();
           });
       },
       declineRequest(name) {
-        this.isLoading = true;
+        this.isDisabled = true;
         return tenantService.rejectSignUpRequest(name)
           .then(() => {
             this.$store.dispatch('layout/setSuccess', { message: 'Successfully' });
@@ -336,7 +336,7 @@
             });
           })
           .finally(() => {
-            this.isLoading = true;
+            this.isDisabled = true;
             this.closeActionDialog();
           });
       }
