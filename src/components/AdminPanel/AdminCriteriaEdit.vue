@@ -106,7 +106,7 @@
         this.formData.readinessLevels.push(null);
       },
       removeField(index) {
-        this.$delete(this.readinessLevels, index);
+        this.$delete(this.formData.readinessLevels, index);
       },
       save() {}
     }
