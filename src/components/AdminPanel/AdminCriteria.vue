@@ -1,7 +1,7 @@
 <template>
   <admin-view title="Criteria">
     <template #toolbarAction>
-      <v-btn outlined color="primary" :to="{name: 'admin.faq.add'}">
+      <v-btn outlined color="primary" :to="{name: 'admin.criteria.add'}">
         <v-icon left>
           extension
         </v-icon>
@@ -10,6 +10,19 @@
     </template>
 
     <side-actions-card>
+
+      <div class="subtitle-1 font-weight-medium mb-4">
+        Technology Readiness Level
+      </div>
+
+      <readiness-level-list-expander :data="trlData" />
+      <br>
+      <br>
+      <br>
+      <br>
+      <readiness-level-selector v-model="xxx" :items="trlSelector"/>
+
+
       <template #actions>
         <v-btn icon @click="openActionDialog('unpublish')">
           <v-icon>flag</v-icon>
@@ -24,6 +37,7 @@
           <v-icon>delete</v-icon>
         </v-btn>
       </template>
+
     </side-actions-card>
 
     <action-dialog
@@ -58,13 +72,19 @@
 </template>
 
 <script>
+  import trlData from '@/components/common/trl.json';
+
   import AdminView from '@/components/AdminPanel/AdminView';
   import SideActionsCard from '@/components/layout/SideActionsCard';
   import ActionDialog from '@/components/layout/ActionDialog';
+  import ReadinessLevelListExpander from '@/components/ReadinessLevel/ReadinessLevelListExpander';
+  import ReadinessLevelSelector from '@/components/ReadinessLevel/ReadinessLevelSelector';
 
   export default {
     name: 'AdminCriteria',
     components: {
+      ReadinessLevelSelector,
+      ReadinessLevelListExpander,
       ActionDialog,
       SideActionsCard,
       AdminView
@@ -100,8 +120,21 @@
               }
             }
           }
-        }
+        },
+
+        trlData,
+
+        xxx: 'component_and_or_validation_in_a_laboratory_environment'
       };
+    },
+    computed: {
+      trlSelector() {
+        return this.trlData.map((item, index) => ({
+          text: item.shortTitle,
+          value: item.id,
+          num: index + 1
+        }));
+      }
     },
     methods: {
       openActionDialog(type, item) {

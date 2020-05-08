@@ -80,6 +80,7 @@ import AdminFAQEdit from '@/components/AdminPanel/AdminFAQEdit';
 import AdminSettings from '@/components/AdminPanel/AdminSettings';
 import UserRegistration from '@/components/auth/UserRegistration';
 import preliminaryDataLoader from './utils/preliminaryDataLoader';
+import AdminCriteriaEdit from '@/components/AdminPanel/AdminCriteriaEdit';
 
 const accessService = AccessService.getInstance();
 const usersService = UsersService.getInstance();
@@ -593,7 +594,21 @@ const router = new Router({
       {
         path: 'criteria',
         name: 'admin.criteria',
-        component: AdminCriteria
+        component: AdminCriteria,
+        children: [
+          {
+            path: 'add',
+            name: 'admin.criteria.add',
+            components: {
+              dialog: AdminCriteriaEdit
+            },
+            props: {
+              dialog: {
+                title: 'Add new criteria'
+              }
+            }
+          }
+        ]
       },
       {
         path: 'faq',

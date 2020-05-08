@@ -13,7 +13,7 @@
         <v-tab>Registered</v-tab>
         <v-tab>
           Waiting for approval
-          <v-badge :content="waitingMembers.length" color="green" inline />
+          <v-badge :content="waitingMembers.length || '0'" :color="waitingMembers.length ? 'green' : 'grey lighten-1'" inline />
         </v-tab>
       </v-tabs>
     </template>
@@ -215,7 +215,7 @@
           }
         ],
         memberInfo: {
-          account:{ 
+          account:{
             name: ''
           },
           profile: {

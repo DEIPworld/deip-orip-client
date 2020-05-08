@@ -5,7 +5,7 @@
         <slot />
       </v-card-text>
       <v-divider vertical />
-      <crud-actions class="pa-4">
+      <crud-actions class="pa-4 align-self-start">
         <slot name="actions" />
       </crud-actions>
     </div>

@@ -8,7 +8,6 @@
       app
       fixed
       flat
-      hide-on-scroll
       clipped-left
       color="#fff"
     >
