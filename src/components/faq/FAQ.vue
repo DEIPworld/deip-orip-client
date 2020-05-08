@@ -10,92 +10,34 @@
           Get in touch.
         </router-link>
       </div>
-      <div class="mb-2">
-        <router-link to="#what-is" class="a">
-          What is TRL, MaRL, SRL?
+      <div
+        v-for="(item, i) in faqs"
+        :key="`${i}-faq`"
+        class="mb-2"
+      >
+        <router-link :to="`#question${i+1}`" class="a">
+          {{ item.question }}
         </router-link>
       </div>
-      <div class="mb-2">
-        <router-link to="#how-contractor" class="a">
-          How can I become a contractor?
-        </router-link>
-      </div>
-      <div class="mb-2">
-        <router-link to="#how-investor" class="a">
-          How can I become an investor?
-        </router-link>
-      </div>
-      <div class="mb-2">
-        <router-link
-          to="#how-rewarded"
-          class="a"
-        >
-          How is an investor/project funder getting rewarded?
-        </router-link>
-      </div>
+
       <v-divider class="my-6" />
-      <div id="what-is" class="mb-12">
-        <div class="headline font-weight-bold mb-4">
-          What is TRL, MaRL, SRL?
-        </div>
-        <v-row class="body-2" column>
-          <v-col cols="12">
-            TRL: Technology Readiness Levels,
-          </v-col>
-          <v-col class="ml-6">
-            <!-- <img src="/assets/img/trl.jpg" /> -->
-          </v-col>
-        </v-row>
-        <v-row class="body-2" column>
-          <v-col>MaRL: Marketing Readiness Levels,</v-col>
-          <v-col class="ml-6">
-            <!-- <img src="/assets/img/mrl.jpg" /> -->
-          </v-col>
-        </v-row>
-        <v-row class="body-2" column>
-          <v-col>SRL: Sales Readiness Levels.</v-col>
-          <v-col class="ml-6">
-            <!-- <img src="/assets/img/srl.jpg" /> -->
-          </v-col>
-        </v-row>
-      </div>
-      <v-row id="how-contractor" class="mb-12">
+
+      <v-row
+        v-for="(item, i) in faqs"
+        :id="`question${i+1}`"
+        :key="`${i}-allfaq`"
+        no-gutters
+        class="mb-12"
+      >
         <v-col class="headline font-weight-bold mb-4" cols="12">
-          How can I become a contractor?
+          {{ item.question }}
         </v-col>
         <v-col
-          class="body-2"
+          class="body-2 white-space-pre-line"
           cols="12"
           sm="8"
         >
-          You can sign up with us at ar3c.com/signup. Once we receive your application, we will review it and add you to our contractor list. You or your company will be invited on an as-needed basis by our project participants to complete their projects.
-        </v-col>
-      </v-row>
-      <v-row id="how-investor" class="mb-12">
-        <v-col class="headline font-weight-bold mb-4" cols="12">
-          How can I become an investor?
-        </v-col>
-        <v-col
-          class="body-2"
-          cols="12"
-          sm="8"
-        >
-          You can sign up with us at ar3c.com/signup and select your category as “Investor”. Your application will be reviewed by our team and you will be added to our investor list. You can select the projects you want to invest in (using tokens) from your profile dashboard.
-        </v-col>
-      </v-row>
-      <v-row id="how-rewarded">
-        <v-col
-          class="headline font-weight-bold mb-4"
-          cols="12"
-        >
-          How is an investor/project funder getting rewarded?
-        </v-col>
-        <v-col
-          class="body-2"
-          cols="12"
-          sm="8"
-        >
-          An investor/ project funder gets rewarded once the project goes into production. For every sale or the product or service or SaaS, you will receive tokens. Being an investor in the ACRDF, ARCF, AESIF and WECO2 Fund, you will receive dividends as well.
+          {{ item.answer }}
         </v-col>
       </v-row>
     </v-card>
@@ -103,11 +45,20 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex';
   export default {
     name: 'FAQ',
 
     data() {
       return {};
+    },
+    computed: {
+      ...mapGetters({
+        tenant: 'auth/tenant'
+      }),
+      faqs() {
+        return this.tenant.profile.settings.faq.filter(({ isVisible }) => isVisible);
+      }
     }
   };
 </script>
