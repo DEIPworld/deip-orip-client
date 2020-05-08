@@ -15,7 +15,7 @@
 
 <script>
   export default {
-    name: 'ReadinessLevelListButton',
+    name: 'LevellerListButton',
     props: {
       icon: {
         type: String,

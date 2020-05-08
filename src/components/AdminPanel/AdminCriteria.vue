@@ -15,12 +15,12 @@
         Technology Readiness Level
       </div>
 
-      <readiness-level-list-expander :data="trlData" />
+      <leveller-list-expander :data="trlData" />
       <br>
       <br>
       <br>
       <br>
-      <readiness-level-selector v-model="xxx" :items="trlSelector"/>
+      <leveller-selector v-model="xxx" :items="trlSelector"/>
 
 
       <template #actions>
@@ -77,14 +77,14 @@
   import AdminView from '@/components/AdminPanel/AdminView';
   import SideActionsCard from '@/components/layout/SideActionsCard';
   import ActionDialog from '@/components/layout/ActionDialog';
-  import ReadinessLevelListExpander from '@/components/ReadinessLevel/ReadinessLevelListExpander';
-  import ReadinessLevelSelector from '@/components/ReadinessLevel/ReadinessLevelSelector';
+  import LevellerListExpander from '@/components/Leveller/LevellerListExpander';
+  import LevellerSelector from '@/components/Leveller/LevellerSelector';
 
   export default {
     name: 'AdminCriteria',
     components: {
-      ReadinessLevelSelector,
-      ReadinessLevelListExpander,
+      LevellerSelector,
+      LevellerListExpander,
       ActionDialog,
       SideActionsCard,
       AdminView

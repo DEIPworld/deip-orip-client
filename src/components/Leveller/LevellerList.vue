@@ -6,6 +6,6 @@
 
 <script>
   export default {
-    name: 'ReadinessLevelList'
+    name: 'LevellerList'
   };
 </script>

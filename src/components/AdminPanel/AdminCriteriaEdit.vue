@@ -11,8 +11,8 @@
         Steps
       </div>
 
-      <readiness-level-list class="py-0">
-        <readiness-level-item
+      <leveller-list class="py-0">
+        <leveller-item
           v-for="(field,index) of formData.readinessLevels"
           :key="'level-' + index"
           :dot-num="index + 1"
@@ -34,14 +34,14 @@
               <v-icon>delete</v-icon>
             </v-btn>
           </template>
-        </readiness-level-item>
+        </leveller-item>
 
-        <readiness-level-list-button
+        <leveller-list-button
           class="px-0"
           icon="add"
           @click="addField"
         />
-      </readiness-level-list>
+      </leveller-list>
 
       <div class="mt-6 text-right">
         <v-btn
@@ -69,16 +69,16 @@
 
 <script>
   import ModalRouteView from '@/components/layout/ModalRouteView';
-  import ReadinessLevelItem from '@/components/ReadinessLevel/ReadinessLevelItem';
-  import ReadinessLevelList from '@/components/ReadinessLevel/ReadinessLevelList';
-  import ReadinessLevelListButton from '@/components/ReadinessLevel/ReadinessLevelListButton';
+  import LevellerItem from '@/components/Leveller/LevellerItem';
+  import LevellerList from '@/components/Leveller/LevellerList';
+  import LevellerListButton from '@/components/Leveller/LevellerListButton';
 
   export default {
     name: 'AdminCriteriaEdit',
     components: {
-      ReadinessLevelListButton,
-      ReadinessLevelList,
-      ReadinessLevelItem,
+      LevellerListButton,
+      LevellerList,
+      LevellerItem,
       ModalRouteView
     },
     props: {

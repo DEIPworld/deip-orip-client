@@ -18,7 +18,7 @@
 
 <script>
   export default {
-    name: 'ReadinessLevelItem',
+    name: 'LevellerItem',
     props: {
       dotNum: {
         type: Number,

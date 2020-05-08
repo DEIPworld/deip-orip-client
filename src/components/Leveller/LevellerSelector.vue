@@ -8,33 +8,33 @@
     @change="handleChange"
   >
     <template #item="{ item, on, attrs }">
-      <readiness-level-item
+      <leveller-item
         :dot-num="item.num"
         v-bind="attrs"
         v-on="on"
       >
         {{ item.text }}
-      </readiness-level-item>
+      </leveller-item>
     </template>
 
     <template #selection="{item}">
-      <readiness-level-item
+      <leveller-item
         :dot-num="item.num"
         class="px-0"
         clean
       >
         {{ item.text }}
-      </readiness-level-item>
+      </leveller-item>
     </template>
   </v-select>
 </template>
 
 <script>
-  import ReadinessLevelItem from '@/components/ReadinessLevel/ReadinessLevelItem';
+  import LevellerItem from '@/components/Leveller/LevellerItem';
 
   export default {
-    name: 'ReadinessLevelSelector',
-    components: { ReadinessLevelItem },
+    name: 'LevellerSelector',
+    components: { LevellerItem },
     props: {
       items: {
         type: Array,

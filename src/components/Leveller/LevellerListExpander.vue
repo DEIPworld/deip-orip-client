@@ -1,8 +1,8 @@
 <template>
-  <readiness-level-list dense class="pt-0 rl">
+  <leveller-list dense class="pt-0 rl">
 
     <template v-for="(item, index) of rlData">
-      <readiness-level-item
+      <leveller-item
         v-if="index < 3 || isExpanded"
         :key="'rl-'+index"
         :dot-num="index + 1"
@@ -11,25 +11,25 @@
         <div class="subtitle-1">
           {{ item.shortTitle }}
         </div>
-      </readiness-level-item>
+      </leveller-item>
     </template>
 
-    <readiness-level-list-button
+    <leveller-list-button
       :icon="isExpanded ? 'expand_less' : 'expand_more'"
       @click="isExpanded = !isExpanded"
     />
 
-  </readiness-level-list>
+  </leveller-list>
 </template>
 
 <script>
-  import ReadinessLevelItem from '@/components/ReadinessLevel/ReadinessLevelItem';
-  import ReadinessLevelList from '@/components/ReadinessLevel/ReadinessLevelList';
-  import ReadinessLevelListButton from '@/components/ReadinessLevel/ReadinessLevelListButton';
+  import LevellerItem from '@/components/Leveller/LevellerItem';
+  import LevellerList from '@/components/Leveller/LevellerList';
+  import LevellerListButton from '@/components/Leveller/LevellerListButton';
 
   export default {
-    name: 'ReadinessLevelListExpander',
-    components: { ReadinessLevelListButton, ReadinessLevelList, ReadinessLevelItem },
+    name: 'LevellerListExpander',
+    components: { LevellerListButton, LevellerList, LevellerItem },
     props: {
       data: {
         type: Array,
