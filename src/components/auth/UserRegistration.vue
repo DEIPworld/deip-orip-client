@@ -175,6 +175,9 @@
             v-model="formData.country"
             :items="countryList"
             outlined
+            :menu-props="{
+              maxHeight: 220
+            }"
             :disabled="isSaving"
             label="Country"
             :rules="[rules.required]"
@@ -259,12 +262,12 @@
         isSaving: false,
         isUsernameChecking: false,
         category: [
-          'Investor',
-          'Project innovator',
+          'Consultant',
           'Contractor',
           'Current WECO2 Partner',
-          'Team member',
-          'Consultant'
+          'Investor',
+          'Project innovator',
+          'Team member'
         ],
         occupation: ['Company', 'Independent', 'Small team/group', 'Other'],
         countryList,

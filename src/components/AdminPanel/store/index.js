@@ -33,13 +33,16 @@ const actions = {
   },
 
   loadRegisteredMembers({ commit }, { notify } = {}) {
-    return deipRpc.api.getAllAccountsAsync()
-      .then((accounts) => usersService.getEnrichedProfiles(accounts.map((a) => a.name)), (err) => { console.error(err); })
+    return usersService.getActiveUsers()
       .then((users) => {
-        const approvedUsers = users.filter(u => u.profile && u.profile.status == "approved");
+        const approvedUsers = users.sort((a, b) => {
+          const dateA = new Date(a.profile.created_at);
+          const dateB = new Date(b.profile.created_at);
+          return dateB - dateA;
+        });
         commit('SET_REGISTERED_MEMBERS', approvedUsers);
       })
-      .catch((err) => { console.log(err); })
+      .catch((err) => { console.error(err); })
       .finally(() => {
         if (notify) notify();
       });

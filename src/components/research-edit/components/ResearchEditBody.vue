@@ -246,7 +246,7 @@
             createImageThumbnails: true,
             autoProcessQueue: false,
             dictDefaultMessage:
-              '<i class=\'v-icon material-icons\' style=\'font-size:40px\'>backup</i><p>Background image should be at least 1440 x 430 px in dimension (.png)</p>',
+              '<i class=\'v-icon material-icons mb-2\' style=\'font-size:40px\'>backup</i><div class=\'mb-2\'>Drop files here to upload</div><div class=\'mb-2\'>or</div><button class=\'primary v-btn v-size--small mb-2\'>BROWSE</button><div>Background image should be at least 1440 x 430 px in dimension (.png)</div>',
             addRemoveLinks: true,
             acceptedFiles: ['image/png'].join(',')
           }
