@@ -288,12 +288,12 @@
               </v-col>
             </v-row>
 
-            <v-row v-if="userInfo.profile.created" class="mt-4" no-gutters>
+            <v-row v-if="userInfo.profile.created_at" class="mt-4" no-gutters>
               <v-col cols="4" class="font-weight-medium">
                 Registered
               </v-col>
               <v-col cols="7" offset="1" class="text-align-left">
-                {{ new Date(userInfo.profile.created).toDateString() }}
+                {{ new Date(userInfo.profile.created_at).toDateString() }}
               </v-col>
             </v-row>
           </div>
@@ -301,6 +301,78 @@
       </div>
     </div>
     <!-- ### END User Profile Info Section ### -->
+
+    <!-- ### START User Profile Additional Info Section ### -->
+    <div v-if="isProfileAvailable && (isAdditionalInfoSpecified || isOwner)" class="mt-4">
+      <div class="sidebar-fullwidth">
+        <v-divider />
+      </div>
+      <div class="subtitle-1 font-weight-bold mt-4">
+        <div class="mt-1">
+          Additional information
+        </div>
+      </div>
+
+      <div class="pt-4 pb-6">
+        <div v-if="userInfo.profile">
+          <div>
+            <v-row v-if="isOwner && !userInfo.profile.category" no-gutters>
+              <v-col cols="4" class="font-weight-medium">
+                Category
+              </v-col>
+              <v-col cols="7" offset="1" class="text-align-left owner-hint">
+                add category
+              </v-col>
+            </v-row>
+            <v-row v-else no-gutters>
+              <v-col cols="4" class="font-weight-medium">
+                Category
+              </v-col>
+              <v-col cols="7" offset="1" class="text-align-left">
+                {{ userInfo.profile.category || '-' }}
+              </v-col>
+            </v-row>
+
+            <v-row v-if="isOwner && !userInfo.profile.occupation" no-gutters>
+              <v-col cols="4" class="font-weight-medium">
+                Occupation
+              </v-col>
+              <v-col cols="7" offset="1" class="text-align-left owner-hint">
+                add occupation
+              </v-col>
+            </v-row>
+            <v-row v-else no-gutters>
+              <v-col cols="4" class="font-weight-medium">
+                Occupation
+              </v-col>
+              <v-col cols="7" offset="1" class="text-align-left">
+                {{ userInfo.profile.occupation || '-' }}
+              </v-col>
+            </v-row>
+
+            <v-row v-if="isOwner && !userInfo.profile.webPages.length" no-gutters>
+              <v-col cols="4" class="font-weight-medium">
+                Web site
+              </v-col>
+              <v-col cols="7" offset="1" class="text-align-left owner-hint">
+                add web site
+              </v-col>
+            </v-row>
+            <v-row v-else no-gutters>
+              <v-col cols="4" class="font-weight-medium">
+                Web site
+              </v-col>
+              <v-col cols="7" offset="1" class="text-align-left">
+                <div v-for="(item, i) in userInfo.profile.webPages" :key="`${i}-webPage`">
+                  {{ item.link || '-' }}
+                </div>
+              </v-col>
+            </v-row>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- ### END User Profile Additional Info Section ### -->
 
     <user-claim-expertise-dialog
       :is-shown="isClaimExpertiseDialogShown"
@@ -351,6 +423,10 @@
       isPersonalInfoSpecified() {
         return this.userInfo && this.userInfo.profile
           && (this.userInfo.profile.firstName || this.userInfo.profile.lastName || this.userInfo.profile.birthdate);
+      },
+      isAdditionalInfoSpecified() {
+        return this.userInfo && this.userInfo.profile
+          && (this.userInfo.profile.category || this.userInfo.profile.occupation || this.userInfo.profile.webPages.length);
       },
       isProfileAvailable() {
         return this.userInfo.profile != null;

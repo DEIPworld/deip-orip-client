@@ -75,10 +75,11 @@
       <div class="title font-weight-medium pb-4">
         Technology Readiness Level
       </div>
-      <technology-readiness-level
+      <!-- <technology-readiness-level
         :current-trl-step="currentTrlStep"
         @changeCurrentTrlStep="changeCurrentTrlStep"
-      />
+      /> -->
+      <leveller-selector v-model="currentTrlStep" :items="trlSelector" />
     </div>
 
     <v-divider />
@@ -180,6 +181,7 @@
 
 <script>
   import { mapGetters } from 'vuex';
+  import trlData from '@/components/common/trl.json';
   import Vue from 'vue';
   import _ from 'lodash';
   import deipRpc from '@deip/rpc-client';
@@ -190,6 +192,7 @@
   import { ResearchService } from '@deip/research-service';
   import { ResearchGroupService } from '@deip/research-group-service';
   import ContentBlock from '@/components/layout/components/ContentBlock';
+  import LevellerSelector from '@/components/Leveller/LevellerSelector';
 
   const accessService = AccessService.getInstance();
   const researchService = ResearchService.getInstance();
@@ -200,7 +203,8 @@
 
     components: {
       ContentBlock,
-      vueDropzone
+      vueDropzone,
+      LevellerSelector
     },
     data() {
       return {
@@ -220,7 +224,8 @@
           link: (value) => !value || this.isValidLink || 'Invalid http(s) link'
         },
         shadowMetaData: undefined,
-        shadowRefData: undefined
+        shadowRefData: undefined,
+        trlData
       };
     },
     computed: {
@@ -230,7 +235,13 @@
         researchRef: 're/researchRef',
         userGroups: 'auth/userGroups'
       }),
-
+      trlSelector() {
+        return this.trlData.map((item, index) => ({
+          text: item.shortTitle,
+          value: item.id,
+          num: index + 1
+        }));
+      },
       backgroundDropzoneOptions() {
         return this.research != null
           ? {

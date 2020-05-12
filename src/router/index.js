@@ -562,6 +562,7 @@ const router = new Router({
     path: '/admin',
     name: 'admin',
     component: AdminPanel,
+    redirect: { name: 'admin.members' },
     beforeEnter: (to, from, next) => {
       const loadPagePromise = store.dispatch('adminPanel/loadAdminPanel', {});
       loadPage(loadPagePromise, next);

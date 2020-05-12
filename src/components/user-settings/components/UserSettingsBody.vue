@@ -79,6 +79,32 @@
       </v-menu>
     </div>
 
+    <div>
+      <div class="title font-weight-medium pb-4">
+        Additional information:
+      </div>
+      <v-select
+        v-model="category"
+        :items="categoryList"
+        solo
+        label="Category"
+        :rules="[rules.required]"
+      />
+      <v-select
+        v-model="occupation"
+        :items="occupationList"
+        solo
+        label="Occupation"
+        :rules="[rules.required]"
+      />
+      <v-text-field
+        v-model="webPage"
+        :rules="[rules.required]"
+        label="Web site"
+        solo
+      />
+    </div>
+
     <div class="py-2 text-end">
       <v-btn
         class="my-0 ml-2"
@@ -118,6 +144,15 @@
     name: 'UserSettingsBody',
     data() {
       return {
+        occupationList: ['Company', 'Independent', 'Small team/group', 'Other'],
+        categoryList: [
+          'Consultant',
+          'Contractor',
+          'Current WECO2 Partner',
+          'Investor',
+          'Project innovator',
+          'Team member'
+        ],
         editedBirthdayMenu: false,
         editedBirthdayDate: null,
         city: '',
@@ -126,6 +161,9 @@
         email: '',
         firstName: '',
         lastName: '',
+        category: '',
+        occupation: '',
+        webPage: '',
         isLoading: false,
         rules: {
           required: (value) => !!value || 'This field is required'
@@ -145,6 +183,9 @@
           || !this.email
           || !this.firstName
           || !this.lastName
+          || !this.category
+          || !this.occupation
+          || !this.webPage
         );
       }
     },
@@ -160,6 +201,9 @@
         ? moment(this.userInfo.profile.birthdate)
           .format('YYYY-MM-DD')
         : null;
+      this.category = this.userInfo.profile.category;
+      this.occupation = this.userInfo.profile.occupation;
+      this.webPage = this.userInfo.profile.webPages[0].link;
     },
 
     methods: {
@@ -180,6 +224,9 @@
         const { email } = this;
         const { firstName } = this;
         const { lastName } = this;
+        const { category } = this;
+        const { occupation } = this;
+        const { webPage } = this;
         const birthdate = this.editedBirthdayDate;
 
         const update = {
@@ -190,7 +237,10 @@
             email,
             firstName,
             lastName,
-            birthdate
+            birthdate,
+            category,
+            occupation,
+            webPages: [{ type: 'webpage', label: 'default', link: webPage }]
           }
         };
 
