@@ -16,7 +16,8 @@ const state = {
 const getters = {
   registeredMembers: (state) => state.registeredMembers,
   waitingMembers: (state) => state.waitingMembers,
-  faqs: (state, getters, rootState, rootGetters) => rootGetters['auth/tenant'].profile.settings.faq
+  faqs: (state, getters, rootState, rootGetters) => rootGetters['auth/tenant'].profile.settings.faq,
+  researchComponents: (state, getters, rootState, rootGetters) => rootGetters['auth/tenant'].profile.settings.researchComponents
 };
 
 // actions

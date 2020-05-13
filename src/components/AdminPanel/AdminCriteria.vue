@@ -9,35 +9,28 @@
       </v-btn>
     </template>
 
-    <side-actions-card>
-
+    <side-actions-card v-for="(item, i) in researchComponents" :key="`${i}-stepper`" class="mb-6">
       <div class="subtitle-1 font-weight-medium mb-4">
-        Technology Readiness Level
+        {{ item.component.readinessLevelTitle }}
       </div>
 
-      <leveller-list-expander :data="trlData" />
-      <br>
-      <br>
-      <br>
-      <br>
-      <leveller-selector v-model="xxx" :items="trlSelector"/>
-
+      <leveller-list-expander :data="item.component.readinessLevels" />
 
       <template #actions>
-        <v-btn icon @click="openActionDialog('unpublish')">
-          <v-icon>flag</v-icon>
+        <v-btn
+          :color="item.isVisible ? 'success' : null"
+          icon
+          @click="openActionDialog(item.isVisible ? 'unpublish' : 'publish', item._id)"
+        >
+          <v-icon>{{ item.isVisible ? 'flag' : 'outlined_flag' }}</v-icon>
         </v-btn>
-        <v-btn icon @click="openActionDialog('publish')">
-          <v-icon>outlined_flag</v-icon>
-        </v-btn>
-        <v-btn icon @click="">
+        <v-btn icon :to="{name: 'admin.criteria.add', query:{id:item._id}}">
           <v-icon>edit</v-icon>
         </v-btn>
-        <v-btn icon @click="openActionDialog('delete')">
+        <v-btn icon @click="openActionDialog('delete', item._id)">
           <v-icon>delete</v-icon>
         </v-btn>
       </template>
-
     </side-actions-card>
 
     <action-dialog
@@ -59,12 +52,11 @@
           v-if="actionDialog.data.action"
           color="primary"
           text
-          @click="actionDialog.data.action.method(actionDialog.data.title)"
+          @click="actionDialog.data.action.method(actionDialog.data.researchComponentsId)"
         >
           {{ actionDialog.data.action.title }}
         </v-btn>
       </template>
-
     </action-dialog>
 
     <router-view name="dialog" />
@@ -72,13 +64,15 @@
 </template>
 
 <script>
-  import trlData from '@/components/common/trl.json';
-
   import AdminView from '@/components/AdminPanel/AdminView';
   import SideActionsCard from '@/components/layout/SideActionsCard';
   import ActionDialog from '@/components/layout/ActionDialog';
   import LevellerListExpander from '@/components/Leveller/LevellerListExpander';
   import LevellerSelector from '@/components/Leveller/LevellerSelector';
+  import { mapGetters } from 'vuex';
+  import { TenantService } from '@deip/tenant-service';
+
+  const tenantService = TenantService.getInstance();
 
   export default {
     name: 'AdminCriteria',
@@ -120,26 +114,37 @@
               }
             }
           }
-        },
-
-        trlData,
-
-        xxx: 'component_and_or_validation_in_a_laboratory_environment'
+        }
       };
     },
     computed: {
-      trlSelector() {
-        return this.trlData.map((item, index) => ({
-          text: item.shortTitle,
-          value: item.id,
-          num: index + 1
-        }));
-      }
+      ...mapGetters({
+        tenant: 'auth/tenant',
+        researchComponents: 'adminPanel/researchComponents'
+      })
     },
     methods: {
-      openActionDialog(type, item) {
+      updateResearchComponents(updatedResearchComponents) {
+        const updatedProfile = _.cloneDeep(this.tenant.profile);
+        updatedProfile.settings.researchComponents = updatedResearchComponents;
+        tenantService.updateTenantProfile(updatedProfile)
+          .then(() => {
+            this.$store.dispatch('layout/setSuccess', { message: 'Successfully' });
+            const tenant = window.env.TENANT;
+            this.$store.dispatch('auth/loadTenant', { tenant });
+          })
+          .catch((err) => {
+            console.error(err);
+            this.$store.dispatch('layout/setError', {
+              message: 'An error occurred while sending the request, please try again later.'
+            });
+          })
+          .finally(() => this.closeActionDialog());
+      },
+      openActionDialog(type, researchComponentsId) {
         this.actionDialog.isOpen = true;
         this.actionDialog.data = this.actionDialog.types[type];
+        this.actionDialog.data.researchComponentsId = researchComponentsId;
       },
       closeActionDialog() {
         this.actionDialog.isOpen = false;
@@ -147,17 +152,29 @@
           this.actionDialog.data = {};
         }, 300);
       },
-      publishCriteria(item) {
-        console.log(item);
-        this.closeActionDialog();
+      publishCriteria(id) {
+        const updateResearchComponents = this.researchComponents.map((step) => {
+          if (step._id === id) {
+            return { ...step, isVisible: true };
+          } else {
+            return step;
+          }
+        });
+        this.updateResearchComponents(updateResearchComponents);
       },
-      unpublishCriteria(item) {
-        console.log(item);
-        this.closeActionDialog();
+      unpublishCriteria(id) {
+        const updateResearchComponents = this.researchComponents.map((step) => {
+          if (step._id === id) {
+            return { ...step, isVisible: false };
+          } else {
+            return step;
+          }
+        });
+        this.updateResearchComponents(updateResearchComponents);
       },
-      deleteCriteria(item) {
-        console.log(item);
-        this.closeActionDialog();
+      deleteCriteria(id) {
+        const updateResearchComponents = this.researchComponents.filter(({ _id }) => _id !== id);
+        this.updateResearchComponents(updateResearchComponents);
       }
     }
   };

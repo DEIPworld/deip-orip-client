@@ -17,7 +17,11 @@
       {{ item.answer }}
       <template #actions>
         <div class="display-flex flex-column">
-          <v-btn :color="item.isVisible ? 'success' : null" icon @click="openActionDialog(item.isVisible ? 'unpublish' : 'publish', item._id)">
+          <v-btn
+            :color="item.isVisible ? 'success' : null"
+            icon
+            @click="openActionDialog(item.isVisible ? 'unpublish' : 'publish', item._id)"
+          >
             <v-icon>{{ item.isVisible ? 'flag' : 'outlined_flag' }}</v-icon>
           </v-btn>
           <v-btn icon :to="{name: 'admin.faq.add', query:{id:item._id}}">

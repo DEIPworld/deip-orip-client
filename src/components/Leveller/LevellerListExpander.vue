@@ -9,7 +9,7 @@
         dense
       >
         <div class="subtitle-1">
-          {{ item.shortTitle }}
+          {{ item.title }}
         </div>
       </leveller-item>
     </template>
