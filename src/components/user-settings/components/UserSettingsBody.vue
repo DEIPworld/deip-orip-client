@@ -203,7 +203,7 @@
         : null;
       this.category = this.userInfo.profile.category;
       this.occupation = this.userInfo.profile.occupation;
-      this.webPage = this.userInfo.profile.webPages[0].link;
+      this.webPage = this.userInfo.profile.webPages.length ? this.userInfo.profile.webPages.length[0].link : '';
     },
 
     methods: {
