@@ -229,7 +229,7 @@
       </div>
       <div class="subtitle-1 font-weight-bold mt-4">
         <div class="mt-1">
-          Personal info
+          Personal information
         </div>
       </div>
 
@@ -270,7 +270,7 @@
               </v-col>
             </v-row>
 
-            <v-row v-if="isOwner && !userInfo.profile.birthdate" no-gutters>
+            <!-- <v-row v-if="isOwner && !userInfo.profile.birthdate" no-gutters>
               <v-col cols="4" class="font-weight-medium">
                 Birthdate
               </v-col>
@@ -286,7 +286,7 @@
                 {{ userInfo.profile.birthdate ? new
                   Date(userInfo.profile.birthdate).toDateString() : '-' }}
               </v-col>
-            </v-row>
+            </v-row> -->
 
             <v-row v-if="userInfo.profile.created_at" class="mt-4" no-gutters>
               <v-col cols="4" class="font-weight-medium">

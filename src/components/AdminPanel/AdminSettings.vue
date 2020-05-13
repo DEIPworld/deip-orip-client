@@ -17,6 +17,7 @@
         <vue-dropzone
           id="tenant-banner-dropzone"
           ref="tenantBanner"
+          class="py-1"
           :options="bannerDropzoneOptions"
           @vdropzone-success="bannerUploadSuccess"
           @vdropzone-error="bannerUploadError"

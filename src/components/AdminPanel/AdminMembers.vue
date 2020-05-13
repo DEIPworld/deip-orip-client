@@ -13,7 +13,7 @@
         <v-tab>Registered</v-tab>
         <v-tab>
           Waiting for approval
-          <v-badge :content="waitingMembers.length || '0'" :color="waitingMembers.length ? 'green' : 'grey lighten-1'" inline />
+          <v-badge v-if="waitingMembers.length" :content="waitingMembers.length" color="green" inline />
         </v-tab>
       </v-tabs>
     </template>
@@ -241,16 +241,16 @@
             approve: {
               title: 'Approve request?',
               description:
-                'Request will be approved and person will become a member',
+                'Request will be approved and person will become a member.',
               action: {
                 title: 'approve',
                 method: this.approveRequest
               }
             },
             decline: {
-              title: 'Decline request?',
+              title: 'Reject request?',
               description:
-                'Request will be declined and person will not become a member',
+                'Request will be declined and person will not become a member.',
               action: {
                 title: 'reject',
                 method: this.declineRequest
@@ -335,7 +335,7 @@
             });
           })
           .finally(() => {
-            this.isDisabled = true;
+            this.isDisabled = false;
             this.closeActionDialog();
           });
       }

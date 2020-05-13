@@ -16,7 +16,7 @@
 
     <div class="">
       <div class="title bold c-pt-6">
-        <span class="">Personal Info</span>
+        <span class="">Personal information</span>
       </div>
 
       <div class="c-pt-4 c-pb-6">

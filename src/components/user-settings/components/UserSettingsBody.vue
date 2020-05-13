@@ -8,13 +8,13 @@
         v-model="city"
         :rules="[rules.required]"
         label="City"
-        solo
+        outlined
       />
       <v-text-field
         v-model="country"
         :rules="[rules.required]"
         label="Country"
-        solo
+        outlined
       />
     </div>
 
@@ -22,11 +22,13 @@
       <div class="title font-weight-medium pb-4">
         Bio:
       </div>
-      <v-text-field
+      <v-textarea
         v-model="bio"
         :rules="[rules.required]"
-        label="Bio"
-        solo
+        label="Tell about yourself"
+        outlined
+        auto-grow
+        rows="1"
       />
     </div>
 
@@ -38,25 +40,25 @@
         v-model="email"
         :rules="[rules.required]"
         label="Email"
-        solo
+        outlined
       />
     </div>
 
     <div>
       <div class="title font-weight-medium pb-4">
-        Pesonal info:
+        Personal information:
       </div>
       <v-text-field
         v-model="firstName"
         :rules="[rules.required]"
         label="First name"
-        solo
+        outlined
       />
       <v-text-field
         v-model="lastName"
         :rules="[rules.required]"
         label="Last name"
-        solo
+        outlined
       />
       <v-menu
         v-model="editedBirthdayMenu"
@@ -69,7 +71,7 @@
           <v-text-field
             v-model="editedBirthdayDate"
             label="Birthday"
-            solo
+            outlined
             append-icon="event"
             readonly
             v-on="on"
@@ -86,22 +88,21 @@
       <v-select
         v-model="category"
         :items="categoryList"
-        solo
+        outlined
         label="Category"
         :rules="[rules.required]"
       />
       <v-select
         v-model="occupation"
         :items="occupationList"
-        solo
+        outlined
         label="Occupation"
         :rules="[rules.required]"
       />
       <v-text-field
         v-model="webPage"
-        :rules="[rules.required]"
         label="Web site"
-        solo
+        outlined
       />
     </div>
 
@@ -185,7 +186,6 @@
           || !this.lastName
           || !this.category
           || !this.occupation
-          || !this.webPage
         );
       }
     },
