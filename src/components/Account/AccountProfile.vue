@@ -1,5 +1,5 @@
 <template>
-  <v-sheet max-width="800" class="mx-auto">
+  <modal-route-view title="Edit personal info">
     <div>
       <div class="title font-weight-medium pb-4">
         Location:
@@ -118,19 +118,7 @@
         Update Info
       </v-btn>
     </div>
-
-    <div class="pb-4">
-      <v-btn
-        class="ma-0"
-        color="primary"
-        outlined
-        large
-        @click="cancel"
-      >
-        Back to profile
-      </v-btn>
-    </div>
-  </v-sheet>
+  </modal-route-view>
 </template>
 
 <script>
@@ -138,11 +126,13 @@
   import moment from 'moment';
 
   import { UserService } from '@deip/user-service';
+  import ModalRouteView from '@/components/layout/ModalRouteView';
 
   const userService = UserService.getInstance();
 
   export default {
-    name: 'UserSettingsBody',
+    name: 'AccountProfile',
+    components: { ModalRouteView },
     data() {
       return {
         occupationList: ['Company', 'Independent', 'Small team/group', 'Other'],
@@ -174,7 +164,7 @@
     computed: {
       ...mapGetters({
         currentUser: 'auth/user',
-        userInfo: 'userSettings/userInfo'
+        userInfo: 'account/userInfo'
       }),
       isSavingDisabled() {
         return (
@@ -248,7 +238,7 @@
           .updateUserProfile(this.currentUser.username, update)
           .then(
             (res) => {
-              this.$store.dispatch('userSettings/loadUserProfile', {
+              this.$store.dispatch('account/loadUserProfile', {
                 username: this.currentUser.username
               });
               this.$store.dispatch('auth/loadUser');

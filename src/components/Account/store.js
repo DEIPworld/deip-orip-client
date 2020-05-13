@@ -8,9 +8,6 @@ const usersService = UsersService.getInstance();
 const state = {
   account: undefined,
   profile: undefined,
-
-  isLoadingUserAccount: false,
-  isLoadingUserProfile: false
 };
 
 // getters
@@ -18,56 +15,48 @@ const getters = {
   userInfo: (state, getters) => ({
     account: state.account,
     profile: state.profile
-  }),
-
-  isLoadingUserAccount: (state) => state.isLoadingUserAccount,
-  isLoadingUserProfile: (state) => state.isLoadingUserProfile
+  })
 };
 
 // actions
 const actions = {
 
-  loadUserSettingsPage({
+  loadUserAccount({
     state, dispatch, commit, rootGetters
   }, { username }) {
-    const currentUser = rootGetters['auth/user'];
-    const isMyPage = currentUser.username == username;
-
     const accountLoad = new Promise((resolve, reject) => {
-      dispatch('loadUserAccount', {
+      dispatch('loadAccountData', {
         username,
         notify: resolve
       });
     });
+
     const profileLoad = new Promise((resolve, reject) => {
-      dispatch('loadUserProfile', {
+      dispatch('loadProfileData', {
         username,
         notify: resolve
       });
     });
     return Promise.all([accountLoad, profileLoad]);
   },
-  loadUserAccount({ commit }, { username, notify } = {}) {
-    commit('SET_USER_ACCOUNT_LOADING_STATE', true);
 
+  loadAccountData({ commit }, { username, notify } = {}) {
     return deipRpc.api.getAccountsAsync([username])
       .then(([account]) => {
         commit('SET_USER_ACCOUNT', account);
       })
       .finally(() => {
-        commit('SET_USER_ACCOUNT_LOADING_STATE', false);
         if (notify) notify();
       });
   },
-  loadUserProfile({ commit }, { username, notify } = {}) {
-    commit('SET_USER_PROFILE_LOADING_STATE', true);
+
+  loadProfileData({ commit }, { username, notify } = {}) {
     return usersService.getUserProfile(username)
       .then((profile) => {
         commit('SET_USER_PROFILE', profile || null);
       }, (err) => {
         console.log(err);
       }).finally(() => {
-        commit('SET_USER_PROFILE_LOADING_STATE', false);
         if (notify) notify();
       });
   }
@@ -82,19 +71,11 @@ const mutations = {
   SET_USER_PROFILE(state, profile) {
     Vue.set(state, 'profile', profile);
   },
-
-  SET_USER_ACCOUNT_LOADING_STATE(state, value) {
-    state.isLoadingUserAccount = value;
-  },
-
-  SET_USER_PROFILE_LOADING_STATE(state, value) {
-    state.isLoadingUserProfile = value;
-  }
 };
 
 const namespaced = true;
 
-export const userSettingsStore = {
+export const accountStore = {
   namespaced,
   state,
   getters,

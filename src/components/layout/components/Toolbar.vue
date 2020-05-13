@@ -72,7 +72,7 @@
 
       <user-notifications-list v-if="isLoggedIn" :notifications="user.notifications" />
       <v-sheet v-if="isLoggedIn" color="transparent">
-        <v-menu bottom left offset-y>
+        <v-menu bottom left offset-y min-width="220">
           <template v-slot:activator="{ on }">
             <v-btn icon v-on="on">
               <v-avatar size="32px" v-on="on">
@@ -95,16 +95,25 @@
             :light="themeSettings['light']"
             dense
           >
-            <v-list-item :to="{ name: 'UserDetails', params: { account_name: user.username } }">
-              Profile
+<!--            <v-list-item :to="{ name: 'UserDetails', params: { account_name: user.username } }">-->
+<!--              Profile-->
+<!--            </v-list-item>-->
+<!--            <v-divider />-->
+
+            <v-list-item :to="{ name: 'account.summary' }">
+              <v-list-item-icon>
+                <v-icon>person</v-icon>
+              </v-list-item-icon>
+              <v-list-item-title>Account</v-list-item-title>
             </v-list-item>
+
             <v-divider />
-            <v-list-item :to="{ name: 'AccountSettings' }">
-              Account Settings
-            </v-list-item>
-            <v-divider />
+
             <v-list-item @click="signOut()">
-              Sign Out
+              <v-list-item-icon>
+                <v-icon>exit_to_app</v-icon>
+              </v-list-item-icon>
+              <v-list-item-title>Sign Out</v-list-item-title>
             </v-list-item>
           </v-list>
 

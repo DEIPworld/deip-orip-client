@@ -4,7 +4,6 @@ import Vue from 'vue';
 
 import './layout/index';
 import './common/index';
-import './user-details/index';
 import './research-feed/index';
 import './research-create/index';
 import './research-edit/index';
@@ -18,7 +17,6 @@ import './claim-expertise-list/index';
 import './research-application-details/index';
 import './dashboard/index';
 import './investor-portfolio/index';
-import './user-settings/index';
 import './research-group-settings/index';
 import './agency-grant-program-create/index';
 import './agency-grant-programs/index';

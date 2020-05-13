@@ -51,8 +51,6 @@ const state = {
     toDate: null
   },
 
-  isLoadingUserAccount: false,
-  isLoadingUserProfile: false,
   isLoadingUserGroups: false,
   isLoadingUserResearch: false,
   isLoadingUserExpertise: false,
@@ -218,8 +216,6 @@ const getters = {
       });
   },
 
-  isLoadingUserAccount: (state) => state.isLoadingUserAccount,
-  isLoadingUserProfile: (state) => state.isLoadingUserProfile,
   isLoadingUserGroups: (state) => state.isLoadingUserGroups,
   isLoadingUserResearch: (state) => state.isLoadingUserResearch,
   isLoadingUserExpertise: (state) => state.isLoadingUserExpertise,
@@ -294,14 +290,11 @@ const actions = {
   },
 
   loadUserAccount({ commit }, { username, notify } = {}) {
-    commit('SET_USER_ACCOUNT_LOADING_STATE', true);
-
     return deipRpc.api.getAccountsAsync([username])
       .then(([account]) => {
         commit('SET_USER_ACCOUNT', account);
       })
       .finally(() => {
-        commit('SET_USER_ACCOUNT_LOADING_STATE', false);
         if (notify) notify();
       });
   },
@@ -379,14 +372,12 @@ const actions = {
   },
 
   loadUserProfile({ commit }, { username, notify } = {}) {
-    commit('SET_USER_PROFILE_LOADING_STATE', true);
     return usersService.getUserProfile(username)
       .then((profile) => {
         commit('SET_USER_PROFILE', profile || null);
       }, (err) => {
         console.log(err);
       }).finally(() => {
-        commit('SET_USER_PROFILE_LOADING_STATE', false);
         if (notify) notify();
       });
   },
@@ -531,14 +522,6 @@ const mutations = {
 
   SET_USER_REVIEW_REQUESTS(state, list) {
     Vue.set(state, 'reviewRequests', list);
-  },
-
-  SET_USER_ACCOUNT_LOADING_STATE(state, value) {
-    state.isLoadingUserAccount = value;
-  },
-
-  SET_USER_PROFILE_LOADING_STATE(state, value) {
-    state.isLoadingUserProfile = value;
   },
 
   SET_USER_GROUPS_LOADING_STATE(state, value) {

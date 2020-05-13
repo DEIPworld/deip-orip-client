@@ -4,6 +4,7 @@
     fullscreen
     hide-overlay
     :transition="false"
+    scrollable
   >
     <v-card tile>
       <v-toolbar flat>
@@ -13,9 +14,12 @@
         <v-toolbar-title>{{ title }}</v-toolbar-title>
       </v-toolbar>
       <v-divider />
-      <v-sheet :max-width="maxWidth" class="pa-12 mx-auto">
-        <slot />
-      </v-sheet>
+      <v-card-text>
+        <v-sheet :max-width="maxWidth" class="pa-12 mx-auto">
+          <slot />
+        </v-sheet>
+      </v-card-text>
+
     </v-card>
   </v-dialog>
 </template>

@@ -149,7 +149,7 @@
       </div>
       <div class="py-2">
         <div v-for="(item, i) in expertise" :key="`eci-${i}`" class="expertise px-1 my-2">
-          <router-link :to="{ name: 'UserExpertiseDetails', account_name: userInfo.account.name, query: { discipline_id: item.discipline_id }}" style="text-decoration: none">
+          <router-link :to="goToExpertiseDetails(item.discipline_id)" style="text-decoration: none">
             <div class="display-flex justify-space-between">
               <div class="blue--text text--accent-4 bold">
                 TOP <span class="font-weight-bold">{{ getEciPercentile(item.amount, userInfo.account.name, item.discipline_id) }}</span>%
@@ -166,7 +166,8 @@
         </div>
         <div v-if="!expertise.length" class="body-1">
           <div v-if="isOwner">
-            You have no Expertise Tokens yet. Use <span class="a" @click="openClaimExpertiseDialog()">Claim</span> process to apply for Expertise Tokens
+            You have no Expertise Tokens yet. Use <span class="a" @click="openClaimExpertiseDialog()">Claim</span>
+            process to apply for Expertise Tokens
           </div>
           <div v-if="!isOwner">
             <span class="body-2">{{ userInfo | fullname }}</span> has no Expertise Tokens yet
@@ -277,7 +278,7 @@
               </v-col>
               <v-col cols="7" offset="1" class="text-align-left">
                 {{ userInfo.profile.birthdate ? new
-                  Date(userInfo.profile.birthdate).toDateString() : '-' }}
+                Date(userInfo.profile.birthdate).toDateString() : '-' }}
               </v-col>
             </v-row> -->
 
@@ -384,6 +385,7 @@
   import { ResearchGroupService } from '@deip/research-group-service';
 
   import * as bankCardsService from '../../../utils/bankCard';
+  import UserClaimExpertiseDialog from '@/components/UserDetails/components/UserClaimExpertiseDialog';
 
   const userService = UserService.getInstance();
   const proposalsService = ProposalsService.getInstance();
@@ -391,6 +393,9 @@
 
   export default {
     name: 'UserDetailsSidebar',
+
+    components: { UserClaimExpertiseDialog },
+
     data() {
       return {
         inviteDetailsDialog: {
@@ -402,6 +407,7 @@
         }
       };
     },
+
     computed: {
       ...mapGetters({
         currentUser: 'auth/user',
@@ -435,9 +441,29 @@
         return this.reviewRequests.length;
       }
     },
-    created() {
-    },
+
+    created() {},
+
     methods: {
+
+      goToExpertiseDetails(id) {
+        return this.$route.path.includes('/account')
+          ? {
+            name: 'account.expertiseDetails',
+            query: {
+              discipline_id: id
+            }
+          }
+          : {
+            name: 'UserExpertiseDetails',
+            params: {
+              account_name: this.userInfo.account.name
+            },
+            query: {
+              discipline_id: id
+            }
+          };
+      },
 
       openInviteDetailsDialog(invite, index) {
         this.inviteDetailsDialog.isShown = true;
@@ -513,6 +539,7 @@
       clearLocalStorageItems() {
         bankCardsService.removeInvestorBankCard(this.currentUser.username);
       },
+
       denyReviewRequest(reviewRequestId) {
         return this.$store.dispatch('userDetails/denyReviewRequest', { reviewRequestId });
       },

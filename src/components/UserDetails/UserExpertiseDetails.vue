@@ -1,5 +1,5 @@
 <template>
-  <v-card class="pa-12 full-height full-width">
+  <v-card class="pa-12 full-height full-width" v-if="dataLoaded">
     <div class="pb-4 display-flex">
       <div>
         <platform-avatar :user="userInfo" :size="80" />
@@ -342,6 +342,13 @@
 
   export default {
     name: 'UserExpertiseDetails',
+    props: {
+      username: {
+        type: String,
+        default: undefined
+      }
+    },
+
     data() {
       return {
         selectedEciDisciplineId: null,
@@ -527,6 +534,12 @@
             this.loadDisciplineEciHistory();
           });
       }
+    },
+
+    $dataPreload() {
+      return this.$store.dispatch('userDetails/loadAccountExpertiseDetailsPage', {
+        username: decodeURIComponent(this.username)
+      });
     }
   };
 </script>
