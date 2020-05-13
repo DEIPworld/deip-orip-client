@@ -4,11 +4,13 @@ import Vue from 'vue';
 import moment from 'moment';
 
 import { UsersService } from '@deip/users-service';
+import { UserService } from '@deip/user-service';
 import { ResearchContentReviewsService } from '@deip/research-content-reviews-service';
 import { ResearchService } from '@deip/research-service';
 import { ExpertiseContributionsService } from '@deip/expertise-contributions-service';
 import { EXPERTISE_CONTRIBUTION_TYPE } from '@/variables';
 
+const userService = UserService.getInstance();
 const usersService = UsersService.getInstance();
 const researchContentReviewsService = ResearchContentReviewsService.getInstance();
 const researchService = ResearchService.getInstance();
@@ -391,21 +393,21 @@ const actions = {
 
   loadUserInvites({ commit }, { username, notify } = {}) {
     commit('SET_USER_INVITES_LOADING_STATE', true);
-    const invites = [];
-    return deipRpc.api.getResearchGroupInvitesByAccountNameAsync(username)
+    const invites = [];   
+    return userService.getUserInvites(username)
       .then((list) => {
         const promises = [];
         for (let i = 0; i < list.length; i++) {
           const invite = list[i];
           invites.push(invite);
-          promises.push(deipRpc.api.getResearchGroupByIdAsync(invite.research_group_id));
+          promises.push(deipRpc.api.getResearchGroupAsync(invite.researchGroupExternalId));
         }
         return Promise.all(promises);
       })
       .then((groups) => {
         for (let i = 0; i < invites.length; i++) {
           const invite = invites[i];
-          invite.group = groups.find((g) => g.id === invite.research_group_id);
+          invite.group = groups[i];
         }
         commit('SET_USER_INVITES', invites);
       })

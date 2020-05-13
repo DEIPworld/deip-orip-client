@@ -55,11 +55,8 @@
               <v-col class="list-header-cell" :class="isGroupMembersActionsColumnAvailable ? 'xs3': 'xs4'">
                 Researcher
               </v-col>
-              <v-col class="list-header-cell" cols="3">
+              <v-col class="list-header-cell" cols="4">
                 Expertise
-              </v-col>
-              <v-col class="list-header-cell text-align-center" cols="1">
-                Group weight
               </v-col>
               <v-col class="list-header-cell text-align-center" cols="2">
                 Member since
@@ -101,10 +98,6 @@
                   </div>
                 </v-col>
 
-                <v-col class="text-align-center list-body-cell" cols="1">
-                  {{ convertToPercent(member.rgt.amount) }}%
-                </v-col>
-
                 <v-col class="text-align-center list-body-cell" cols="2">
                   {{ member.created | dateFormat('D MMM YYYY') }}
                 </v-col>
@@ -113,20 +106,18 @@
                   {{ member | userLocation }}
                 </v-col>
 
-                <v-col
-                  v-if="isExcludingMemberAvailable(member.rgt.owner)"
-                  class="text-align-center list-body-cell"
-                  cols="1"
-                >
-                  <v-btn
-                    text
-                    icon
-                    color="grey"
-                    class="ma-0"
-                    @click="showConfirmAction(member, i)"
-                  >
-                    <v-icon>mdi-close-circle-outline</v-icon>
-                  </v-btn>
+                <v-col class="text-align-center list-body-cell" cols="1">
+                  <div v-if="isExcludingMemberAvailable(member.rgt.owner)">
+                    <v-btn
+                      text
+                      icon
+                      color="grey"
+                      class="ma-0"
+                      @click="showConfirmAction(member, i)"
+                    >
+                      <v-icon>mdi-close-circle-outline</v-icon>
+                    </v-btn>
+                  </div>
                 </v-col>
               </v-row>
 
@@ -200,14 +191,10 @@
                           </div>
                         </v-col>
 
-                        <v-col class="grow text-align-center">
+                        <v-col class="grow text-right">
                           {{ invite.user | userLocation }}
                         </v-col>
 
-                        <v-col class="text-align-center" cols="2">
-                          <span class="grey--text">Amount:</span>
-                          {{ convertToPercent(invite.research_group_token_amount) }}%
-                        </v-col>
                       </v-row>
                     </template>
                   </div>
@@ -219,11 +206,11 @@
 
         <add-member-to-group-dialog
           v-if="group"
-          :is-open="options.isAddMemberDialogOpen"
-          :group-id="group.id"
+          :isOpen="options.isAddMemberDialogOpen"
+          :groupExternalId="group.external_id"
           :users="usersToInvite"
           @onClose="$store.dispatch('researchGroup/changeOptions', { key: 'isAddMemberDialogOpen', value: false })"
-          @onSuccess="$store.dispatch('researchGroup/loadResearchGroupProposals', { groupId: group.id })"
+          @onSuccess="$store.dispatch('researchGroup/loadResearchGroupProposals', { account: group.external_id })"
         />
       </div>
     </div>
@@ -325,16 +312,20 @@
     methods: {
       dropoutMember(member) {
         this.dropoutMemberMeta.isConfirming = true;
-
-        researchGroupService.createExcludeProposal({
-          groupId: this.group.id,
-          name: member.item.owner
+        researchGroupService.leftResearchGroupViaOffchain(this.user.privKey, {
+          member: member.item.owner,
+          researchGroup: this.group.external_id,
+          isExclusion: true,
+          extensions: []
+        }, {
+          notes: "",
+          approver: null
         })
           .then(() => {
             this.$store.dispatch('layout/setSuccess', {
               message: 'Dropout Proposal has been created successfully!'
             });
-            this.$store.dispatch('researchGroup/loadResearchGroupProposals', { groupId: this.group.id });
+            this.$store.dispatch('researchGroup/loadResearchGroupProposals', { account: this.group.external_id });
           })
           .catch((err) => {
             this.$store.dispatch('layout/setError', {

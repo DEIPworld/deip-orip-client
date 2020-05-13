@@ -19,23 +19,23 @@
             </div>
           </div>
           <div v-else-if="proposal.action === PROPOSAL_TYPES.INVITE_MEMBER" class="display-flex">
-            <v-icon small color="primary" class="mr-2">
+            <v-icon small color="primary" class="mx-2">
               person_add
             </v-icon>
-            <div class="a">
-              {{ proposal.data.name }}
+            <div class="body-2">
+              {{ proposal.extension.invitee | fullname }}
             </div>
           </div>
           <div v-else-if="proposal.action === PROPOSAL_TYPES.EXCLUDE_MEMBER" class="display-flex">
-            <v-icon small color="primary" class="mr-2">
+            <v-icon small color="primary" class="mx-2">
               mdi-account-remove
             </v-icon>
-            <div class="a">
-              {{ proposal.data.name }}
+            <div class="body-2">
+              {{ proposal.extension.member | fullname  }}
             </div>
           </div>
           <div v-else-if="proposal.action === PROPOSAL_TYPES.TRANSFER" class="display-flex">
-            <v-icon small color="primary" class="mr-2">
+            <v-icon small color="primary" class="mx-2">
               money_off
             </v-icon>
             <div class="a">
@@ -46,7 +46,7 @@
             v-else-if="proposal.action === PROPOSAL_TYPES.CREATE_RESEARCH_TOKEN_SALE"
             class="display-flex"
           >
-            <v-icon small color="primary" class="mr-2">
+            <v-icon small color="primary" class="mx-2">
               attach_money
             </v-icon>
             <div class="body-2">
@@ -189,19 +189,38 @@
             </v-row>
 
             <v-row v-else-if="proposal.action === PROPOSAL_TYPES.INVITE_MEMBER" no-gutters>
-              <v-col cols="6">
-                Research group tokens:
-                <span
-                  class="font-weight-bold"
-                >{{ convertToPercent(proposal.data.research_group_token_amount_in_percent) }}%</span>
+              <v-col cols="2">
+                <platform-avatar
+                  :user="proposal.extension.invitee"
+                  :size="20"
+                  link-to-profile
+                  link-to-profile-class="px-1"
+                />
               </v-col>
               <v-col
-                class="grey--text break-word white-space-pre-line"
-                cols="6"
+                class="text-left grey--text break-word white-space-pre-line"
+                cols="10"
               >
-                {{ proposal.data.cover_letter }}
+                is being invited to the group
               </v-col>
             </v-row>
+
+            <v-row v-else-if="proposal.action === PROPOSAL_TYPES.EXCLUDE_MEMBER" no-gutters>
+              <v-col cols="2">
+                <platform-avatar
+                  :user="proposal.extension.member"
+                  :size="20"
+                  link-to-profile
+                  link-to-profile-class="px-1"
+                />
+              </v-col>
+              <v-col
+                class="text-left grey--text break-word white-space-pre-line"
+                cols="10"
+              >
+                to left the group
+              </v-col>
+            </v-row>            
 
             <v-row v-else-if="proposal.action === PROPOSAL_TYPES.TRANSFER" no-gutters>
               <v-col cols="6">
@@ -364,30 +383,46 @@
 
     methods: {
       ...mapActions({
-        changeProposal: 'researchGroup/changeProposal'
+        changeProposal: 'researchGroup/changeProposal',
       }),
+
       approve(proposal) {
+        let promise;
         this.isApprovingLoading = true;
-        proposalsService.updateProposal(this.currentUser.privKey, {
-          externalId: proposal.external_id,
-          postingApprovalsToAdd: [],
-          postingApprovalsToRemove: [],
-          activeApprovalsToAdd: [this.currentUser.username],
-          activeApprovalsToRemove: [],
-          ownerApprovalsToAdd: [],
-          ownerApprovalsToRemove: [],
-          keyApprovalsToAdd: [],
-          keyApprovalsToRemove: [],
-          extensions: []
-        })
+        
+        if (proposal.action === PROPOSAL_TYPES.INVITE_MEMBER) {
+          promise = researchGroupService.approveResearchGroupInviteViaOffChain(this.currentUser.privKey, {
+            inviteId: proposal.external_id,
+            account: this.currentUser.username
+          })
           .then(() => {
+            this.$store.dispatch('researchGroup/loadGroupInvites', {
+              researchGroupExternalId: this.group.external_id
+            });
+          });
+
+        } else {
+          promise = proposalsService.updateProposal(this.currentUser.privKey, {
+            externalId: proposal.external_id,
+            postingApprovalsToAdd: [],
+            postingApprovalsToRemove: [],
+            activeApprovalsToAdd: [this.currentUser.username],
+            activeApprovalsToRemove: [],
+            ownerApprovalsToAdd: [],
+            ownerApprovalsToRemove: [],
+            keyApprovalsToAdd: [],
+            keyApprovalsToRemove: [],
+            extensions: []
+          });
+        }
+        
+          promise.then(() => {
             this.isApprovingLoading = false;
             const copy = _.cloneDeep(this.proposal);
             copy.voted_accounts.push(this.currentUser.username);
             this.changeProposal({ old: this.proposal, new: copy });
-            this.$store.dispatch('researchGroup/loadResearchGroup', {
-              permlink: decodeURIComponent(this.group.permlink)
-            });
+            this.$store.dispatch('researchGroup/loadResearchGroup', { permlink: this.group.permlink });
+            this.$store.dispatch('layout/setSuccess', { message: 'You have voted for the proposal successfully!' });
           })
           .catch((err) => {
             alert(err.message);
