@@ -67,7 +67,7 @@ const getters = {
   researchList: (state, getters, rootState, rootGetters) => {
     const user = rootGetters['auth/user'];
     return state.researchList.map((research) => {
-      const { researchRef } = state.researchesRef.find(({ researchId }) => researchId === research.id);
+      const { researchRef } = state.researchesRef.find(({ researchExternalId }) => researchExternalId === research.external_id);
       const group = state.groups.find(({ id }) => id === research.research_group_id);
       return { research: { ...research, researchRef }, group };
     })
@@ -270,7 +270,7 @@ const actions = {
         return Promise.all([researchLoad])
           .then(() => {
             const researchesRefLoad = new Promise((resolve, reject) => {
-              dispatch('loadResearchesRef', { researchesId: state.researchList.map(({ id }) => id), notify: resolve });
+              dispatch('loadResearchesRef', { researchesExternalIds: state.researchList.map((research) => research.external_id), notify: resolve });
             });
             return Promise.all([researchesRefLoad]);
           });
@@ -464,11 +464,11 @@ const actions = {
       });
   },
 
-  loadResearchesRef({ state, dispatch, commit }, { researchesId, notify }) {
+  loadResearchesRef({ state, dispatch, commit }, { researchesExternalIds, notify }) {
     commit('SET_RESEARCHES_REFS_DETAILS_LOADING_STATE', true);
-    return Promise.all(researchesId.map((id) => researchService.getResearch(id)))
+    return Promise.all(researchesExternalIds.map((researchExternalId) => researchService.getResearchProfile(researchExternalId)))
       .then((refs) => {
-        const researchesRef = refs.map((researchRef, i) => ({ researchId: researchesId[i], researchRef }));
+        const researchesRef = refs.map((researchRef, i) => ({ researchExternalId: researchesExternalIds[i], researchRef }));
         commit('SET_RESEARCHES_REFS_DETAILS', researchesRef);
       }, (err) => { console.log(err); })
       .finally(() => {

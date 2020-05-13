@@ -170,7 +170,7 @@ const actions = {
       })
       .then((data) => {
         commit('SET_RESEARCHES_REFS_DETAILS_LOADING_STATE', true);
-        Promise.all(data.map(({ id }) => researchService.getResearch(id)))
+        Promise.all(data.map((research) => researchService.getResearchProfile(research.external_id)))
           .then((refs) => {
             const researchList = refs.map((researchRef, i) => ({
               ...data[i],

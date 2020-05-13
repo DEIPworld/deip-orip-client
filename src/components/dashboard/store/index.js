@@ -71,7 +71,7 @@ const getters = {
         ]
           .find((s) => s.research_id == research.id);
 
-        const { researchRef } = state.researchesRefs.find(({ researchId }) => researchId === research.id);
+        const { researchRef } = state.researchesRefs.find(({ researchExternalId }) => researchExternalId === research.external_id);
         const group = state.researchGroups.find((rg) => rg.id === research.research_group_id);
         const isTop = researchService.getTopResearchesIds().some((id) => id === research.id);
 
@@ -113,7 +113,7 @@ const getters = {
         const researchMembers = state.researchGroupsMembers
           .filter((member) => research.members.some((name) => name == member.account.name));
 
-        const { researchRef } = state.researchesRefs.find(({ researchId }) => researchId === research.id);
+        const { researchRef } = state.researchesRefs.find(({ researchExternalId }) => researchExternalId === research.external_id);
         const group = state.researchGroups.find((rg) => rg.id === research.research_group_id);
         const isTop = researchService.getTopResearchesIds().some((id) => id == research.id);
 
@@ -209,11 +209,11 @@ const actions = {
           ...state.myMembershipResearches,
           ...state.bookmarkedResearches
         ].reduce((unique, research) => {
-          if (unique.some((rId) => rId == research.id)) return unique;
-          return [research.id, ...unique];
-        }, []).forEach((rId) => {
+          if (unique.some((researchExternalId) => researchExternalId == research.external_id)) return unique;
+          return [research.external_id, ...unique];
+        }, []).forEach((researchExternalId) => {
           researchRefPromises.push(new Promise((resolve, reject) => {
-            dispatch('loadResearchRef', { researchId: rId, notify: resolve });
+            dispatch('loadResearchRef', { researchExternalId: researchExternalId, notify: resolve });
           }));
         });
 
@@ -379,12 +379,12 @@ const actions = {
       });
   },
 
-  loadResearchRef({ state, dispatch, commit }, { researchId, notify }) {
+  loadResearchRef({ state, dispatch, commit }, { researchExternalId, notify }) {
     commit('SET_RESEARCHES_REFS_DETAILS_LOADING_STATE', true);
 
-    return researchService.getResearch(researchId)
+    return researchService.getResearchProfile(researchExternalId)
       .then((researchRef) => {
-        commit('SET_RESEARCHES_REFS_DETAILS', { researchId, researchRef });
+        commit('SET_RESEARCHES_REFS_DETAILS', { researchExternalId: researchExternalId, researchRef });
       }, (err) => { console.log(err); })
       .finally(() => {
         commit('SET_RESEARCHES_REFS_DETAILS_LOADING_STATE', false);
