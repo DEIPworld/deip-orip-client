@@ -102,7 +102,7 @@
                 <img
                   width="150px"
                   height="150px"
-                  :src="$options.filters.researchGroupLogoSrc(group.id, 300, 300, true)"
+                  :src="$options.filters.researchGroupLogoSrc(group.external_id, 300, 300, true)"
                 >
               </v-col>
               <v-col cols="9">

@@ -75,7 +75,7 @@
             <template v-slot:activator="{ on }">
               <v-chip small v-on="on">
                 <v-avatar left>
-                  <img :src="$options.filters.researchGroupLogoSrc(group.id, 50, 50, true)">
+                  <img :src="$options.filters.researchGroupLogoSrc(group.external_id, 50, 50, true)">
                 </v-avatar>
                 <span class="text-truncate">{{ group.name }}</span>
               </v-chip>

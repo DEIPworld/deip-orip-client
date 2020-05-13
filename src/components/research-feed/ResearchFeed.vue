@@ -69,7 +69,7 @@
             @click:close="toggleOrganization(organization)"
           >
             <v-avatar left>
-              <img :src="$options.filters.researchGroupLogoSrc(organization.id, 50, 50, true)">
+              <img :src="$options.filters.researchGroupLogoSrc(organization.external_id, 50, 50, true)">
             </v-avatar>
             {{ organization.name }}
           </v-chip>
@@ -227,7 +227,7 @@
                     <img
 
                       class="organization-item__img"
-                      :src="$options.filters.researchGroupLogoSrc(organization.id, 200, 200)"
+                      :src="$options.filters.researchGroupLogoSrc(organization.external_id, 200, 200)"
                     >
                     <div class="organization-item__overlay" />
                   </div>

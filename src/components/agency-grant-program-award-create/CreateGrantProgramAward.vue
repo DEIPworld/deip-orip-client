@@ -307,7 +307,7 @@
         <v-card class="full-height">
           <div class="py-4 text-center">
             <v-avatar size="120px">
-              <img :src="$options.filters.researchGroupLogoSrc(organizationProfile.id, 120, 120, true)">
+              <img :src="$options.filters.researchGroupLogoSrc(organizationProfile.external_id, 120, 120, true)">
             </v-avatar>
           </div>
           <v-divider />
