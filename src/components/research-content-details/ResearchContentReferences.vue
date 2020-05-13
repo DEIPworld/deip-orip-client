@@ -116,7 +116,7 @@
                             width="20px"
                             height="20px"
                             class="align-self-center"
-                            :src="$options.filters.researchGroupLogoSrc(researchGroup.id, 50, 50, true)"
+                            :src="$options.filters.researchGroupLogoSrc(researchGroup.external_id, 50, 50, true)"
                           >
                           <span class="pl-2">{{ researchGroup.name }}</span>
                         </v-row>

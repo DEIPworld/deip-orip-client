@@ -10,7 +10,7 @@
         class="py-2"
       >
         <router-link
-          class="a full-width break-word font-weight-medium caption"
+          class="a full-width break-word font-weight-medium"
           :to="{ name: 'ResearchGroupDetails', params: {
             research_group_permlink: encodeURIComponent(invite.group.permlink),
           }}"
@@ -18,9 +18,7 @@
           {{ invite.group.name }}
         </router-link>
         <div class="py-2 caption font-weight-medium">
-          invites you to join them with
-          <span class="grey--text font-weight-bold">{{ convertToPercent(invite.research_group_token_amount) }}%</span>
-          of group weight
+          invited you to join them with
         </div>
         <div class="text-right full-width">
           <v-btn
@@ -58,10 +56,7 @@
             </div>
           </v-card-title>
           <v-card-text>
-            <div>{{ inviteDetailsDialog.item.cover_letter }}</div>
-            <div class="subtitle-1 pt-6 font-weight-medium black--text">
-              Group weight: <span class="grey--text">{{ convertToPercent(inviteDetailsDialog.item.research_group_token_amount) }}%</span>
-            </div>
+            <div class="subtitle-1 pt-6 font-weight-medium black--text">{{ inviteDetailsDialog.item.notes }}</div>
           </v-card-text>
           <v-card-actions class="flex-wrap">
             <div class="w-100 py-2">
@@ -385,10 +380,14 @@
 
   import { mapGetters } from 'vuex';
   import { UserService } from '@deip/user-service';
+  import { ProposalsService } from '@deip/proposals-service';
+  import { ResearchGroupService } from '@deip/research-group-service';
+
   import * as bankCardsService from '../../../utils/bankCard';
 
-
   const userService = UserService.getInstance();
+  const proposalsService = ProposalsService.getInstance();
+  const researchGroupService = ResearchGroupService.getInstance();
 
   export default {
     name: 'UserDetailsSidebar',
@@ -455,11 +454,14 @@
 
       approveInvite() {
         const invite = this.inviteDetailsDialog.item;
+        const proposalId = invite._id;
         this.inviteDetailsDialog.isApprovingInvite = true;
-        userService.approveInvite(
-          invite.id,
-          this.currentUser.username
-        ).then(() => {
+
+        researchGroupService.approveResearchGroupInviteViaOffChain(this.currentUser.privKey, {
+          inviteId: proposalId,
+          account: this.currentUser.username
+        })
+        .then(() => {
           this.$store.dispatch('userDetails/loadUserInvites', { username: this.currentUser.username });
           this.$store.dispatch('auth/loadGroups');
           this.$store.dispatch('userDetails/loadGroups', { username: this.currentUser.username });
@@ -478,11 +480,14 @@
 
       rejectInvite() {
         const invite = this.inviteDetailsDialog.item;
+        const proposalId = invite._id;
         this.inviteDetailsDialog.isRejectingInvite = true;
-        userService.rejectInvite(
-          invite.id,
-          this.currentUser.username
-        ).then(() => {
+
+        researchGroupService.rejectResearchGroupInviteViaOffChain(this.currentUser.privKey, {
+          inviteId: proposalId,
+          account: this.currentUser.username
+        })
+        .then(() => {
           this.$store.dispatch('userDetails/loadUserInvites', { username: this.currentUser.username });
           this.$store.dispatch('layout/setSuccess', {
             message: '"Invite has been rejected successfully !"'

@@ -102,7 +102,7 @@
                 <img
                   width="150px"
                   height="150px"
-                  :src="$options.filters.researchGroupLogoSrc(group.id, 300, 300, true)"
+                  :src="$options.filters.researchGroupLogoSrc(group.external_id, 300, 300, true)"
                 >
               </v-col>
               <v-col cols="9">
@@ -219,8 +219,8 @@
             url: `${window.env.DEIP_SERVER_URL}/api/groups/logo`,
             paramName: 'research-background',
             headers: {
-              'Research-Group-Id': this.group.id.toString(),
-              Authorization: `Bearer ${accessService.getAccessToken()}`
+              'Research-Group-External-Id': this.group.external_id,
+              'Authorization': `Bearer ${accessService.getAccessToken()}`
             },
             timeout: 0,
             maxFiles: 1,

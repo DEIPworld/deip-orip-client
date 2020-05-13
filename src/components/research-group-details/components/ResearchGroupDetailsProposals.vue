@@ -78,13 +78,13 @@
             </div>
           </v-expansion-panel-header>
         </v-expansion-panel>
-        <template v-if="proposals.length">
-          <v-expansion-panel v-for="(proposal, i) in proposals" :key="i">
+        <template v-if="filteredProposals.length">
+          <v-expansion-panel v-for="(proposal, i) in filteredProposals" :key="i">
             <research-group-details-proposals-item :proposal="proposal" />
           </v-expansion-panel>
         </template>
 
-        <v-expansion-panel v-if="!proposals.length" readonly>
+        <v-expansion-panel v-if="!filteredProposals.length" readonly>
           <v-expansion-panel-header hide-actions>
             <div class="grey--text display-flex height-4">
               <div class="ma-auto">
@@ -100,6 +100,7 @@
 
 <script>
   import { mapGetters, mapActions } from 'vuex';
+  import { PROPOSAL_TYPES } from '@/variables';
 
   export default {
     name: 'ResearchGroupDetailsProposals',
@@ -110,8 +111,18 @@
     computed: {
       ...mapGetters({
         proposals: 'researchGroup/proposals',
-        filter: 'researchGroup/proposalListFilter'
-      })
+        filter: 'researchGroup/proposalListFilter',
+        pendingInvites: 'researchGroup/invites'
+      }),
+      filteredProposals() {
+        return this.proposals.filter(proposal => {
+          if (proposal.action === PROPOSAL_TYPES.INVITE_MEMBER) {
+            return !this.pendingInvites.some(invite => invite._id === proposal.external_id);
+          } else {
+            return true;
+          }
+        })
+      }
     },
     methods: {
       ...mapActions({

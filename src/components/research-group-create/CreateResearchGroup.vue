@@ -201,36 +201,49 @@
             researchGroupName: this.group.name,
             researchGroupPermlink: this.group.permlink,
             researchGroupDescription: this.group.description,
-            // researchGroupInvitees: invitees,
             researchGroupThresholdOverrides: []
           }
         )
-          .then((response) => {
+          .then((res) => {
             this.isLoading = false;
             this.$store.dispatch('auth/loadGroups'); // reload user groups
             this.$store.dispatch('layout/setSuccess', {
               message: `"${this.group.name}" research group has been created successfully !`
             });
-            setTimeout(() => {
-              if (!this.backRouterToken) {
-                this.$router.push({
-                  name: 'ResearchGroupDetails',
-                  params: { research_group_permlink: encodeURIComponent(this.group.permlink) }
-                });
-              } else {
-                if (this.backRouterToken.name === 'CreateResearch') {
-                  this.backRouterToken.query.groupPermlink = this.group.permlink;
-                }
-                this.$router.push(this.backRouterToken);
+
+            const invitesPromises = invitees.map(invitee => researchGroupService.createResearchGroupInviteViaOffchain(this.user.privKey, {
+              researchGroup: res.rm._id,
+              member: invitee.account,
+              rewardShare: `0.00 %`,
+              researches: undefined, // all researches
+              extensions: []
+            }, {
+              notes: `${this.group.name} invites you to join them`,
+              approver: this.user.username
+            }));
+
+            return Promise.all(invitesPromises);
+          })
+          .then(() => {
+            if (!this.backRouterToken) {
+              this.$router.push({
+                name: 'ResearchGroupDetails',
+                params: { research_group_permlink: encodeURIComponent(this.group.permlink) }
+              });
+            } else {
+              if (this.backRouterToken.name === 'CreateResearch') {
+                this.backRouterToken.query.groupPermlink = this.group.permlink;
               }
-            }, 1500);
-          }, (err) => {
+              this.$router.push(this.backRouterToken);
+            }
+          })
+          .catch((err) => {
+            console.log(err);
             this.isLoading = false;
             this.$store.dispatch('layout/setError', {
               message: 'An error occurred while creating Research Group, please try again later'
             });
-            console.log(err);
-          });
+          })
       }
     }
   };

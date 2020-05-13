@@ -188,7 +188,7 @@
           <v-card class="fill-height">
             <div class="pt-4 pb-4 text-center">
               <v-avatar size="120px">
-                <img :src="$options.filters.researchGroupLogoSrc(organizationProfile.id, 240, 240, true)">
+                <img :src="$options.filters.researchGroupLogoSrc(organizationProfile.external_id, 240, 240, true)">
               </v-avatar>
             </div>
             <v-divider />

@@ -12,7 +12,7 @@
         <v-row no-gutters>
           <v-col cols="3" class="text-center">
             <v-avatar size="160px">
-              <img :src="$options.filters.researchGroupLogoSrc(organizationProfile.id, 320, 320, true)">
+              <img :src="$options.filters.researchGroupLogoSrc(organizationProfile.external_id, 320, 320, true)">
             </v-avatar>
           </v-col>
           <v-col cols="9">

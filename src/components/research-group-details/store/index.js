@@ -118,7 +118,7 @@ const actions = {
           });
         });
 
-        const groupInvitesPromise = dispatch('loadGroupInvites', { groupId: state.group.id });
+        const groupInvitesPromise = dispatch('loadGroupInvites', { researchGroupExternalId: state.group.external_id });
 
         return Promise.all([
           proposalsLoad,
@@ -170,7 +170,7 @@ const actions = {
       })
       .then((data) => {
         commit('SET_RESEARCHES_REFS_DETAILS_LOADING_STATE', true);
-        Promise.all(data.map(({ id }) => researchService.getResearch(id)))
+        Promise.all(data.map((research) => researchService.getResearchProfile(research.external_id)))
           .then((refs) => {
             const researchList = refs.map((researchRef, i) => ({
               ...data[i],
@@ -223,26 +223,24 @@ const actions = {
       });
   },
 
-  loadGroupInvites({ commit, state }, { groupId }) {
-    let invites = [];
+  loadGroupInvites({ commit, state }, { researchGroupExternalId }) {
+    const pendingInvites = [];
 
-    return deipRpc.api.getResearchGroupInvitesByResearchGroupIdAsync(groupId)
-      .then((invitesList) => {
-        invites = invitesList;
-        return usersService.getEnrichedProfiles(invites.map((invite) => invite.account_name));
+    return researchGroupService.getResearchGroupPendingInvites(researchGroupExternalId)
+      .then((invites) => {
+        pendingInvites.push(...invites);
+        return usersService.getEnrichedProfiles(pendingInvites.map((invite) => invite.invitee));
       })
       .then((users) => {
-        invites.forEach((invite, index) => {
-          invite.user = users[index];
-        });
-
-        commit('SET_GROUP_INVITES', invites);
+        for (let i = 0; i < pendingInvites.length; i++) {
+          pendingInvites[i].user = users[i];
+        }
+        commit('SET_GROUP_INVITES', pendingInvites);
       })
       .catch((e) => {
         console.log(e);
       });
   },
-
   changeProposal({ commit }, payload) {
     commit('CHANGE_PROPOSAL', payload);
   },

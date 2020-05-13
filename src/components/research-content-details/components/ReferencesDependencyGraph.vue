@@ -368,7 +368,7 @@
           .attr('class', 'ref-org-logo')
           .attr('x', -15)
           .attr('y', -25)
-          .attr('xlink:href', (d) => filters.researchGroupLogoSrc(d.researchGroup.id, 50, 50, true))
+          .attr('xlink:href', (d) => filters.researchGroupLogoSrc(d.researchGroup.external_id, 50, 50, true))
           .attr('height', 30)
           .attr('width', 30)
           .call(d3.drag()
@@ -452,7 +452,7 @@
           .text((d) => d.researchGroup.name);
 
         const organizationLogo = organizationItem.append('xhtml:img')
-          .attr('src', (d) => filters.researchGroupLogoSrc(d.researchGroup.id, 50, 50, true))
+          .attr('src', (d) => filters.researchGroupLogoSrc(d.researchGroup.external_id, 50, 50, true))
           .attr('target', '_blank')
           .attr('class', 'ref-info-org-logo');
 

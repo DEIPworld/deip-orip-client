@@ -3,7 +3,7 @@
     <v-expansion-panel-content>
       <template slot="header">
         <v-row align="center">
-          <div><img width="30px" height="30px" :src="$options.filters.researchGroupLogoSrc(researchGroup.id)"></div>
+          <div><img width="30px" height="30px" :src="$options.filters.researchGroupLogoSrc(researchGroup.external_id)"></div>
           <div class="primary--text body-2 align-self-center px-2">
             {{ researchGroup.name }}
           </div>

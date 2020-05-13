@@ -30,7 +30,7 @@ const actions = {
         commit('SET_RESEARCH_DETAILS', research);
 
         const researchRefLoad = new Promise((resolve, reject) => {
-          dispatch('loadResearchRef', { researchId: state.research.id, notify: resolve });
+          dispatch('loadResearchRef', { researchExternalId: state.research.external_id, notify: resolve });
         });
 
         return researchRefLoad;
@@ -39,9 +39,9 @@ const actions = {
         commit('SET_RESEARCH_EDIT_LOADING_STATE', false);
       });
   },
-  loadResearchRef({ state, dispatch, commit }, { researchId, notify }) {
+  loadResearchRef({ state, dispatch, commit }, { researchExternalId, notify }) {
     commit('SET_RESEARCH_REF_DETAILS_LOADING_STATE', true);
-    return researchService.getResearch(researchId)
+    return researchService.getResearchProfile(researchExternalId)
       .then((researchRef) => {
         commit('SET_RESEARCH_REF_DETAILS', researchRef);
       }, (err) => { console.log(err); })

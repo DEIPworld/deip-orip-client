@@ -112,7 +112,7 @@ const actions = {
           .map((item) => ({ ...item, isCollapsed: true }));
 
         const researchRefsLoad = Promise.all(fullResearchListing
-          .map((r) => researchService.getResearch(r.research_id)
+          .map((r) => researchService.getResearchProfile(r.external_id)
             .then((researchRef) => {
               r.researchRef = researchRef;
             })));

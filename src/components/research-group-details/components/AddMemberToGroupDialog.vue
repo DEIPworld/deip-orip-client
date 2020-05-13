@@ -51,12 +51,12 @@
           </template>
         </v-autocomplete>
 
-        <v-text-field
+        <!-- <v-text-field
           v-model="tokensAmount"
           label="Research Group Tokens"
           suffix="%"
           mask="###"
-        />
+        /> -->
 
         <v-textarea
           v-model="coverLetter"
@@ -110,7 +110,7 @@
 
     props: {
       isOpen: { required: true, type: Boolean },
-      groupId: { required: true, type: Number },
+      groupExternalId: { required: true, type: String },
       users: { required: true, type: Array, default: () => [] }
     },
     data() {
@@ -122,9 +122,12 @@
       };
     },
     computed: {
+      ...mapGetters({
+        user: 'auth/user'
+      }),
       isDisabled() {
         return _.isEmpty(this.selectedUser)
-          || _.isEmpty(this.tokensAmount)
+          // || _.isEmpty(this.tokensAmount)
           || !_.isNumber(parseInt(this.tokensAmount));
       }
     },
@@ -143,13 +146,17 @@
       sendProposal() {
         this.isLoading = true;
 
-        researchGroupService.createInviteProposal({
-          groupId: this.groupId,
-          invitee: this.selectedUser.name,
-          rgtAmount: parseInt(this.tokensAmount) * this.DEIP_1_PERCENT,
-          coverLetter: this.coverLetter,
-          isHead: false
-        }).then(() => {
+        researchGroupService.createResearchGroupInviteViaOffchain(this.user.privKey, {
+          researchGroup: this.groupExternalId,
+          member: this.selectedUser.name,
+          rewardShare: `0.00 %`,
+          researches: undefined, // all researches
+          extensions: [],
+        }, {
+          notes: this.coverLetter,
+          approver: null
+        })
+        .then(() => {
           this.$store.dispatch('layout/setSuccess', {
             message: 'Invitation Proposal has been created successfully!'
           });
