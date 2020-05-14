@@ -254,6 +254,11 @@
       finish() {
         this.isLoading = true;
 
+        // Example for Egor
+        const trlValue = { component: "5ebd469a2cea71001f84345a", type: "stepper", value: { index: 2 } };
+        const mrlValue = { component: "5ebd47762cea71001f843460", type: "stepper", value: { index: 1 } };
+        const tenantCriterias = [trlValue, mrlValue];
+
         const isProposal = !this.research.group.is_personal;
         researchService.createResearchViaOffchain(
           this.user.privKey,
@@ -266,7 +271,7 @@
             disciplines: this.research.disciplines.map((d) => d.id),
             isPrivate: this.research.isPrivate,
             members: undefined,
-            reviewShare: '20.00 %',
+            reviewShare: '0.00 %',
             compensationShare: undefined,
             extensions: []
           },
@@ -281,23 +286,23 @@
               isActive: i === 0
             })),
             partners: this.research.partners,
-            trl: this.research.trlStep
+            tenantCriterias: tenantCriterias
           }
         )
           .then((result) => {
-                  this.isLoading = false;
-                  this.$store.dispatch('layout/setSuccess', {
-                    message: `Project "${this.research.title}" has been created successfully`
-                  });
-                },
-                (err) => {
-                  console.log(err);
-                  this.isLoading = false;
-                  this.$store.dispatch('layout/setError', {
-                    message:
-                      'An error occurred while creating project, please try again later'
-                  });
-                })
+            this.isLoading = false;
+            this.$store.dispatch('layout/setSuccess', {
+              message: `Project "${this.research.title}" has been created successfully`
+            });
+          },
+          (err) => {
+            console.log(err);
+            this.isLoading = false;
+            this.$store.dispatch('layout/setError', {
+              message:
+                'An error occurred while creating project, please try again later'
+            });
+          })
           .finally(() => {
             setTimeout(() => {
               if (this.research.group.is_centralized || this.research.group.is_personal) {
