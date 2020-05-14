@@ -314,7 +314,7 @@ const actions = {
 
         const researchRefLoad = new Promise((resolve, reject) => {
           dispatch('loadResearchRef', {
-            researchId: state.research.id,
+            researchExternalId: state.research.external_id,
             notify: resolve
           });
         });
@@ -659,9 +659,9 @@ const actions = {
     });
   },
 
-  loadResearchRef({ state, dispatch, commit }, { researchId, notify }) {
+  loadResearchRef({ state, dispatch, commit }, { researchExternalId, notify }) {
     commit('SET_RESEARCH_REF_DETAILS_LOADING_STATE', true);
-    return researchService.getResearch(researchId)
+    return researchService.getResearchProfile(researchExternalId)
       .then((researchRef) => {
         commit('SET_RESEARCH_REF_DETAILS', researchRef);
       }, (err) => { console.log(err); })

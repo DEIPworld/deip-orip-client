@@ -133,14 +133,14 @@ const actions = {
   },
 
   loadInvestmentPortfolioResearches({ state, dispatch, commit }, { researchIds, notify }) {
-    return Promise.all([
-      Promise.all(researchIds.map((rId) => deipRpc.api.getResearchByIdAsync(rId))),
-      Promise.all(researchIds.map((rId) => researchService.getResearch(rId)))
-    ])
-      .then(([researches, refs]) => {
-        commit('SET_INVESTMENT_PORTFOLIO_RESEARCHES_REFS', refs);
+    return Promise.all(researchIds.map((rId) => deipRpc.api.getResearchByIdAsync(rId)))
+      .then((researches) => {
         commit('SET_INVESTMENT_PORTFOLIO_RESEARCHES', researches);
-        return Promise.all(researches
+        return Promise.all(state.researches.map((r) => researchService.getResearchProfile(r.external_id)))
+      })
+      .then((refs) => {
+        commit('SET_INVESTMENT_PORTFOLIO_RESEARCHES_REFS', refs);
+        return Promise.all(state.researches
           .reduce((unique, research) => {
             if (unique.some((rgId) => rgId == research.research_group_id)) return unique;
             return [research.research_group_id, ...unique];

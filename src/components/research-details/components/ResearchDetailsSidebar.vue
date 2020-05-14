@@ -416,13 +416,14 @@
         );
       },
       isJoinRequestSectionAvailable() {
-        return (
-          this.isProfileAvailable
-          && (this.canJoinResearchGroup
-          || this.isActiveJoinRequest
-          || this.isActiveInvite)
-          && !this.group.is_personal
-        );
+        return false;
+        // return (
+        //   this.isProfileAvailable
+        //   && (this.canJoinResearchGroup
+        //   || this.isActiveJoinRequest
+        //   || this.isActiveInvite)
+        //   && !this.group.is_personal
+        // );
       },
       isProfileAvailable() {
         return !!this.user.profile;

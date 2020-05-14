@@ -45,7 +45,7 @@
     <!-- ### START Research Group Details Section ### -->
     <div class="py-6">
       <div class="title font-weight-bold">
-        Group expertise tokensddd
+        Group expertise tokens
       </div>
 
       <div class="pt-4">

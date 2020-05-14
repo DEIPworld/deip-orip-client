@@ -4,11 +4,13 @@ import Vue from 'vue';
 import moment from 'moment';
 
 import { UsersService } from '@deip/users-service';
+import { UserService } from '@deip/user-service';
 import { ResearchContentReviewsService } from '@deip/research-content-reviews-service';
 import { ResearchService } from '@deip/research-service';
 import { ExpertiseContributionsService } from '@deip/expertise-contributions-service';
 import { EXPERTISE_CONTRIBUTION_TYPE } from '@/variables';
 
+const userService = UserService.getInstance();
 const usersService = UsersService.getInstance();
 const researchContentReviewsService = ResearchContentReviewsService.getInstance();
 const researchService = ResearchService.getInstance();
@@ -65,7 +67,7 @@ const getters = {
   researchList: (state, getters, rootState, rootGetters) => {
     const user = rootGetters['auth/user'];
     return state.researchList.map((research) => {
-      const { researchRef } = state.researchesRef.find(({ researchId }) => researchId === research.id);
+      const { researchRef } = state.researchesRef.find(({ researchExternalId }) => researchExternalId === research.external_id);
       const group = state.groups.find(({ id }) => id === research.research_group_id);
       return { research: { ...research, researchRef }, group };
     })
@@ -268,7 +270,7 @@ const actions = {
         return Promise.all([researchLoad])
           .then(() => {
             const researchesRefLoad = new Promise((resolve, reject) => {
-              dispatch('loadResearchesRef', { researchesId: state.researchList.map(({ id }) => id), notify: resolve });
+              dispatch('loadResearchesRef', { researchesExternalIds: state.researchList.map((research) => research.external_id), notify: resolve });
             });
             return Promise.all([researchesRefLoad]);
           });
@@ -391,21 +393,21 @@ const actions = {
 
   loadUserInvites({ commit }, { username, notify } = {}) {
     commit('SET_USER_INVITES_LOADING_STATE', true);
-    const invites = [];
-    return deipRpc.api.getResearchGroupInvitesByAccountNameAsync(username)
+    const invites = [];   
+    return userService.getUserInvites(username)
       .then((list) => {
         const promises = [];
         for (let i = 0; i < list.length; i++) {
           const invite = list[i];
           invites.push(invite);
-          promises.push(deipRpc.api.getResearchGroupByIdAsync(invite.research_group_id));
+          promises.push(deipRpc.api.getResearchGroupAsync(invite.researchGroupExternalId));
         }
         return Promise.all(promises);
       })
       .then((groups) => {
         for (let i = 0; i < invites.length; i++) {
           const invite = invites[i];
-          invite.group = groups.find((g) => g.id === invite.research_group_id);
+          invite.group = groups[i];
         }
         commit('SET_USER_INVITES', invites);
       })
@@ -462,11 +464,11 @@ const actions = {
       });
   },
 
-  loadResearchesRef({ state, dispatch, commit }, { researchesId, notify }) {
+  loadResearchesRef({ state, dispatch, commit }, { researchesExternalIds, notify }) {
     commit('SET_RESEARCHES_REFS_DETAILS_LOADING_STATE', true);
-    return Promise.all(researchesId.map((id) => researchService.getResearch(id)))
+    return Promise.all(researchesExternalIds.map((researchExternalId) => researchService.getResearchProfile(researchExternalId)))
       .then((refs) => {
-        const researchesRef = refs.map((researchRef, i) => ({ researchId: researchesId[i], researchRef }));
+        const researchesRef = refs.map((researchRef, i) => ({ researchExternalId: researchesExternalIds[i], researchRef }));
         commit('SET_RESEARCHES_REFS_DETAILS', researchesRef);
       }, (err) => { console.log(err); })
       .finally(() => {
