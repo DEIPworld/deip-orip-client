@@ -219,8 +219,8 @@
             url: `${window.env.DEIP_SERVER_URL}/api/groups/logo`,
             paramName: 'research-background',
             headers: {
-              'Research-Group-Id': this.group.id.toString(),
-              Authorization: `Bearer ${accessService.getAccessToken()}`
+              'Research-Group-External-Id': this.group.external_id,
+              'Authorization': `Bearer ${accessService.getAccessToken()}`
             },
             timeout: 0,
             maxFiles: 1,
