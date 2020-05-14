@@ -33,7 +33,8 @@
         <!-- <v-text-field
             label="Memo - optional"
             multi-line
-            rows="3"
+            rows="1"
+            auto-grow
             counter="2000"
             no-resize
             v-model="form.memo"

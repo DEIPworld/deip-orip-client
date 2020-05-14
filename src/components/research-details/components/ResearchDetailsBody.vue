@@ -15,6 +15,7 @@
         outlined
         color="primary"
         dark
+        class="mt-2"
         @click="createDarDraft()"
       >
         Use Editor

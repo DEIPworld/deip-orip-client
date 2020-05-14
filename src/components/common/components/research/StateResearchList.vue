@@ -9,7 +9,7 @@
         <template v-slot:activator="{on}">
           <v-btn class="ma-0" v-on="on">
             <div>
-              Newest First
+              {{ sort[sort.type] }}
               <v-icon class="c-pl-4" small>
                 keyboard_arrow_down
               </v-icon>
@@ -18,11 +18,11 @@
         </template>
 
         <v-list>
-          <v-list-item>
+          <v-list-item @click="sort.type = 'newest'">
             <v-list-item-title>Newest First</v-list-item-title>
           </v-list-item>
 
-          <v-list-item>
+          <v-list-item @click="sort.type = 'oldest'">
             <v-list-item-title>Oldest First</v-list-item-title>
           </v-list-item>
         </v-list>
@@ -75,7 +75,6 @@
                 cols="12"
                 sm="6"
                 xl="4"
-                class="px-2 py-6 my-1"
               >
                 <research-project-tile
                   :research="research"
@@ -113,7 +112,12 @@
     },
     data() {
       return {
-        tab: 'active'
+        tab: 'active',
+        sort: {
+          type: 'newest',
+          newest: 'Newest First',
+          oldest: 'Oldest First'
+        }
       };
     },
     computed: {
@@ -121,13 +125,43 @@
         themeSettings: 'layout/themeSettings'
       }),
       finishedResearchList() {
-        return this.researchList.filter(({ research }) => research.is_finished);
+        if (this.sort.type === 'newest') {
+          return this.researchList.filter(({ research }) => research.is_finished).sort((a, b) => {
+            const dateA = new Date(a.research.created_at);
+            const dateB = new Date(b.research.created_at);
+            return dateB - dateA;
+          });
+        } else if (this.sort.type === 'oldest') {
+           return this.researchList.filter(({ research }) => research.is_finished).sort((a, b) => {
+            const dateA = new Date(a.research.created_at);
+            const dateB = new Date(b.research.created_at);
+            return dateA - dateB;
+          });
+        } else {
+          return this.researchList.filter(({ research }) => research.is_finished).sort((a, b) => {
+            const dateA = new Date(a.research.created_at);
+            const dateB = new Date(b.research.created_at);
+            return dateA - dateB;
+          });
+        }
       },
       activeResearchList() {
-        return this.researchList.filter(({ research }) => !research.is_finished);
+        if (this.sort.type === 'newest') {
+          return this.researchList.filter(({ research }) => !research.is_finished).sort((a, b) => {
+            const dateA = new Date(a.research.created_at);
+            const dateB = new Date(b.research.created_at);
+            return dateB - dateA;
+          });
+        } else if (this.sort.type === 'oldest') {
+          return this.researchList.filter(({ research }) => !research.is_finished).sort((a, b) => {
+            const dateA = new Date(a.research.created_at);
+            const dateB = new Date(b.research.created_at);
+            return dateA - dateB;
+          });
+        } else {
+          return this.researchList.filter(({ research }) => !research.is_finished);
+        }
       }
-    },
-    created() {
     }
   };
 </script>

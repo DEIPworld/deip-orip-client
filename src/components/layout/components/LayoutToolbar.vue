@@ -3,7 +3,6 @@
     <v-toolbar flat class="px-8">
       <slot name="default" />
     </v-toolbar>
-    <v-divider />
   </div>
 </template>
 

@@ -15,7 +15,7 @@
     </v-expansion-panel-header>
     <v-expansion-panel-content>
       <v-card class="elevation-0">
-        <v-card-text class="pl-6 pa-0">
+        <v-card-text class="pl-3 pa-0">
           <v-row align="center" justify="space-between">
             <div>
               <span class="mr-2">
@@ -56,6 +56,7 @@
         </v-card-text>
       </v-card>
     </v-expansion-panel-content>
+    <v-divider />
   </v-expansion-panel>
 </template>
 

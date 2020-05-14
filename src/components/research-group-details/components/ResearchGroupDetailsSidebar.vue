@@ -1,5 +1,5 @@
 <template>
-  <layout-sidebar simple right>
+  <layout-sidebar right>
     <div v-if="isJoinRequestsSectionAvailable" class="">
       <div id="invites" class="title font-weight-bold pb-2">
         Join requests: {{ pendingJoinRequests.length }}

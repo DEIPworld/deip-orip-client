@@ -50,7 +50,12 @@
           <li v-if="timelineItemsToShow < timeline.length" class="rd-timeline-item">
             <div class="rd-timeline-item__marker" :style="{ backgroundColor: '#E0E0E0' }" />
             <div class="rd-timeline-item__line" :style="{ background: `#E0E0E0` }" />
-            <v-btn outlined class="ma-0" @click="onShowMoreTimelineClick()">
+            <v-btn
+              outlined
+              color="primary"
+              class="ma-0"
+              @click="onShowMoreTimelineClick()"
+            >
               Show more events
             </v-btn>
           </li>

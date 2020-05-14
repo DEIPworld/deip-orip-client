@@ -35,7 +35,7 @@
       </v-btn>
       <div class="pt-2">
         <div>
-          You will get <span class="body-2">approximately 3000 ECI reward in {{ relatedExpertise.map(exp => exp.discipline_name).join(', ') }}</span>
+          You will get <span class="body-2 font-weight-bold">approximately 3000 ECI reward in {{ relatedExpertise.map(exp => exp.discipline_name).join(', ') }}</span>
           for your contribution to this project
         </div>
       </div>

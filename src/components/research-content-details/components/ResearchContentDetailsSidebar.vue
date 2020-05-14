@@ -49,19 +49,19 @@
       <div
         v-for="eci of eciList"
         :key="eci.disciplineName"
-        justify="space-between"
-        class="expertise px-1 my-2"
+        class="expertise px-1 my-1"
       >
         <v-row no-gutters justify="space-between">
-          <v-col class="pa-2 blue--text caption bold">
-            TOP <span class="font-weight-bold">{{ getResearchContentEciPercentile(eci) }}</span>%
+          <v-col cols="auto" class="pa-2 blue--text text--accent-4">
+            TOP
+            <span>{{ getResearchContentEciPercentile(eci) }}</span>%
           </v-col>
-          <v-col cols="auto" class="pa-2 caption grey--text">
+          <v-col cols="auto" class="pa-2 grey--text">
             ECI {{ eci.value }}
           </v-col>
         </v-row>
         <v-divider class="expertise__divider" />
-        <div class="pa-2 caption expertise__disc-name pt-1">
+        <div class="pa-2">
           {{ eci.disciplineName }}
         </div>
       </div>
@@ -69,15 +69,15 @@
     <!-- ### END Research Content ECI Section ### -->
 
 
-    <v-divider class="my-6" />
-    <div class="title">
+    <!-- <v-divider class="my-6" />
+    <div class="title display-inline-block">
       Expert Review:
     </div>
-    <div class="subtitle-1 bold mb-6">
+    <div class="subtitle-1 bold mb-6 display-inline-block ml-2">
       <span class="green--text text--darken-2">{{ positiveReviewsCount }}</span>
       <span> / </span>
       <span class="red--text text--darken-2">{{ negativeReviewsCount }}</span>
-    </div>
+    </div> -->
 
     <v-dialog
       v-if="isPublished"
@@ -118,7 +118,7 @@
             @onSelectUser="selectExpertForReview"
           />
         </v-card-text>
-        <v-card-actions>
+        <v-card-actions class="px-6">
           <v-row>
             <v-col cols="12" class="py-2">
               <v-btn
@@ -180,9 +180,10 @@
           :size="40"
           link-to-profile
           link-to-profile-class="pl-2"
+          class="display-inline-block mr-2"
         />
 
-        <div v-if="isInProgress" class="author-checkbox">
+        <div v-if="isInProgress" class="author-checkbox display-inline-block">
           <!-- v-checkbox depends on v-model binding which doesn't play well with Vuex.
               TODO: create a custom checkbox with the same styles as v-checkbox has -->
           <input
@@ -206,7 +207,7 @@
       </div>
 
       <div v-for="(item, index) in researchTableOfContent" :key="index" :class="index === 0 ? '' : 'c-mt-1'">
-        <div class="body-2">
+        <div class="body-2 font-weight-bold">
           {{ index + 1 }}. {{ item.type }}
         </div>
         <div class="pl-2">
@@ -229,7 +230,7 @@
 
       <div v-if="isPublished" class="pt-2">
         <router-link
-          class="a"
+          class="a font-weight-regular display-flex"
           :to="{
             name: 'ResearchContentReferences',
             params: {
@@ -238,7 +239,7 @@
               content_permlink: encodeURIComponent(content.permlink)
             }}"
         >
-          <v-icon small>
+          <v-icon small class="mr-1">
             device_hub
           </v-icon>
           References
@@ -271,11 +272,11 @@
 
     <!-- ### START Reward Info Section ### -->
     <div v-if="!isPublished" class="py-2">
-      <div class="subtitle-1 bold">
+      <div class="subtitle-1 font-weight-bold">
         Reviews
       </div>
       <div class="body-2 c-mt-2">
-        <v-row justify="space-between" class="body-2 py-1">
+        <v-row no-gutters justify="space-between" class="body-2 py-1">
           <div>
             <v-icon small class="c-pr-2">
               rate_review

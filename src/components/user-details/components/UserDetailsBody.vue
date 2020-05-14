@@ -42,7 +42,7 @@
               class="my-0 mr-0 ml-2"
               small
               outlined
-              color="grey"
+              color="primary"
               :to="{
                 name: 'UserSettings',
                 params: {
@@ -645,7 +645,7 @@
 
   .research-group-title {
     font-size: 16px;
-    color: var(--v-primary-base);
+    // color: var(--v-primary-base);
     font-weight: 500;
     text-decoration: none;
 

@@ -47,8 +47,8 @@
       <v-tooltip bottom>
         <template v-slot:activator="{ on }">
           <div class="display-flex" v-on="on">
-            <v-avatar size="30px" color="align-self-center ">
-              <v-icon color="#0386b0">
+            <v-avatar size="24px" class="align-self-center">
+              <v-icon size="24px" color="#0386b0">
                 mdi-numeric-{{ currentTrlData.step }}-circle
               </v-icon>
             </v-avatar>

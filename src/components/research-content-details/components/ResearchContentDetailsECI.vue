@@ -1,12 +1,13 @@
 <template>
-  <div class="px-12 py-6">
-    <v-row align="center">
-      <v-col class="grow">
+  <div class="py-6">
+    <v-row no-gutters align="center">
+      <v-col>
         <div class="half-bold title">
           Expertise Contribution Index
         </div>
       </v-col>
-      <v-col class="shrink">
+      <v-spacer />
+      <v-col cols="auto">
         <v-select
           v-model="selectedEciDisciplineId"
           class="my-0 py-0"

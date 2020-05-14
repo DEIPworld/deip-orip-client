@@ -1,6 +1,6 @@
 <template>
   <div>
-    <v-row>
+    <v-row no-gutters>
       <v-col cols="8">
         <div class="title c-pb-10">
           {{ contentRef.title }}

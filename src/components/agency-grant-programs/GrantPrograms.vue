@@ -1,7 +1,10 @@
 <template>
   <base-page-layout>
     <template #toolbar>
-      <v-breadcrumbs class="px-0 body-2" divider="/" :items="breadcrumbs" />
+      <div class="w-100">
+        <v-breadcrumbs class="px-0 body-2" divider="/" :items="breadcrumbs" />
+        <v-divider />
+      </div>
     </template>
 
     <v-card class="elevation-0">

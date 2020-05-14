@@ -483,7 +483,8 @@
             <v-textarea
               v-model="sendTokensDialog.form.memo"
               label="Memo - optional"
-              rows="3"
+              rows="1"
+              auto-grow
               :counter="sendTokensDialog.maxMemo"
               no-resize
               :rules="sendTokensDialog.form.rules.memo"
@@ -492,7 +493,7 @@
           </v-form>
         </v-card-text>
 
-        <v-card-actions>
+        <v-card-actions class="px-6">
           <v-row>
             <v-col cols="12" class="py-2">
               <v-btn

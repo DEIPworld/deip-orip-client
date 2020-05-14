@@ -1,7 +1,7 @@
 <template>
   <base-page-layout>
     <template #sidebar>
-      <layout-sidebar right simple>
+      <layout-sidebar right>
         <research-content-add-review-sidebar />
       </layout-sidebar>
     </template>

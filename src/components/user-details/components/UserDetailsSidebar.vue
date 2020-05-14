@@ -10,7 +10,6 @@
         class="py-2"
       >
         <router-link
-          tag="div"
           class="a full-width break-word font-weight-medium caption"
           :to="{ name: 'ResearchGroupDetails', params: {
             research_group_permlink: encodeURIComponent(invite.group.permlink),
@@ -60,7 +59,7 @@
           </v-card-title>
           <v-card-text>
             <div>{{ inviteDetailsDialog.item.cover_letter }}</div>
-            <div class="subtitle-1 pt-6 font-weight-medium">
+            <div class="subtitle-1 pt-6 font-weight-medium black--text">
               Group weight: <span class="grey--text">{{ convertToPercent(inviteDetailsDialog.item.research_group_token_amount) }}%</span>
             </div>
           </v-card-text>
@@ -182,7 +181,6 @@
           <v-btn
             block
             outlined
-            small
             color="primary"
             class="ma-0"
             @click="openClaimExpertiseDialog()"

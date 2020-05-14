@@ -189,7 +189,7 @@
             </v-row>
 
             <v-row v-else-if="proposal.action === PROPOSAL_TYPES.INVITE_MEMBER" no-gutters>
-              <v-col cols="6">
+              <v-col cols="6" class="black--text">
                 Research group tokens:
                 <span
                   class="font-weight-bold"

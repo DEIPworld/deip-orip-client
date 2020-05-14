@@ -1,5 +1,5 @@
 <template>
-  <v-expansion-panels class="elevation-0">
+  <v-expansion-panels flat>
     <research-details-draft-list-item
       v-for="(draft, index) in draftsList"
       :key="draft._id"

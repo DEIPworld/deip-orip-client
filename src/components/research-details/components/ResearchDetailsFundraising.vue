@@ -1,5 +1,5 @@
 <template>
-  <v-row v-if="isTokenSaleSectionAvailable" no-gutters class="my-12">
+  <v-row v-if="isTokenSaleSectionAvailable" no-gutters class="mb-12">
     <v-col cols="12" lg="7">
       <v-row no-gutters>
         <v-col cols="auto" class="pr-4">

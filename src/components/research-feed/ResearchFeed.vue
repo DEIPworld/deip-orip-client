@@ -35,7 +35,6 @@
             v-for="discipline in selectedTopDisciplines"
             :key="'filter-by-discipline-' + discipline.id"
             class="ma-1"
-            small
             close
             outlined
             @click:close="toggleDiscipline(discipline)"
@@ -49,7 +48,6 @@
             v-for="trl in selectedTrls"
             :key="'filter-by-trl-' + trl.id"
             class="ma-1"
-            small
             close
             outlined
             @click:close="toggleTrl(trl)"
@@ -63,7 +61,6 @@
             v-for="organization in selectedOrganizations"
             :key="'filter-by-organization-' + organization.id"
             class="ma-1"
-            small
             close
             outlined
             @click:close="toggleOrganization(organization)"
@@ -112,8 +109,6 @@
             </v-col>
             <v-col cols="auto">
               <v-btn
-                class="text-capitalize"
-                text
                 small
                 color="primary"
                 outlined
@@ -155,7 +150,6 @@
             </v-col>
             <v-col cols="auto">
               <v-btn
-                text
                 small
                 color="primary"
                 outlined
@@ -197,7 +191,6 @@
             </v-col>
             <v-col cols="auto">
               <v-btn
-                text
                 small
                 color="primary"
                 outlined
@@ -255,7 +248,7 @@
       <content-block>
         <template #title>
           Projects
-          <v-badge offset-y="-8" offset-x="4" :content="researchFeed.length" />
+          <v-badge offset-y="-8" offset-x="4" :content="researchFeed.length || '0'" />
         </template>
 
         <v-data-iterator

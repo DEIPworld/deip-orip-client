@@ -3,7 +3,7 @@
     <v-row no-gutters>
       <v-col class="text--center" cols="2">
         <div class="fill-height">
-          <div @click="goToReviewerProfilePage($event, reviewModel.author.account.name)">
+          <div class="text-center" @click="goToReviewerProfilePage($event, reviewModel.author.account.name)">
             <platform-avatar
               :user="review.author"
               :size="90"
@@ -15,15 +15,6 @@
               {{ review.author | fullname }}
             </router-link>
           </div>
-
-          <v-btn
-            color="primary"
-            small
-            outlined
-            @click="goToReviewPage()"
-          >
-            See Review
-          </v-btn>
         </div>
       </v-col>
 
@@ -57,6 +48,18 @@
               <div>{{ reviewModel.votes.length }} experts supported this review</div>
             </v-tooltip>
           </div>
+          <v-row>
+            <v-col offset="5" class="py-0">
+              <v-btn
+                color="primary"
+                small
+                outlined
+                @click="goToReviewPage()"
+              >
+                See Review
+              </v-btn>
+            </v-col>
+          </v-row>
         </div>
       </v-col>
     </v-row>

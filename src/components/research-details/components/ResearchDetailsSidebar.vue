@@ -69,7 +69,7 @@
                 label="Cover letter"
               />
             </v-card-text>
-            <v-card-actions>
+            <v-card-actions class="px-6">
               <v-row>
                 <v-col class="py-2" cols="12">
                   <v-btn
@@ -129,8 +129,6 @@
       <div
         v-for="eci of eciList"
         :key="eci.disciplineName"
-        column
-        tag="div"
         class="expertise px-1 my-1"
       >
         <v-row no-gutters justify="space-between">
@@ -255,7 +253,7 @@
               @onSelectUser="selectExpert"
             />
           </v-card-text>
-          <v-card-actions>
+          <v-card-actions class="px-6">
             <v-row>
               <v-col class="py-2" cols="12">
                 <v-btn

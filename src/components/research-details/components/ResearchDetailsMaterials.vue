@@ -1,5 +1,5 @@
 <template>
-  <v-card v-if="contentList.length" outlined class="my-6">
+  <v-card v-if="contentList.length" flat class="my-6">
     <v-expansion-panels flat>
       <research-details-materials-item
         v-for="content of contentList"

@@ -33,7 +33,8 @@
         <v-textarea
           v-model="form.memo"
           label="Memo - optional"
-          rows="3"
+          rows="1"
+          auto-grow
           counter="2000"
           no-resize
           :rules="[

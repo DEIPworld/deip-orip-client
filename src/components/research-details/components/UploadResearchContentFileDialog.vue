@@ -93,7 +93,7 @@
             />
           </div>
         </v-card-text>
-        <v-card-actions>
+        <v-card-actions class="px-6">
           <v-row no-gutters>
             <v-col class="py-2" cols="12">
               <v-btn
