@@ -7,3 +7,34 @@
     font-size: 20px;
   }
 }
+
+.v-text-field {
+  //.v-input__control::before{
+  //  content: '';
+  //  height: 42px;
+  //  width: 100px;
+  //  position: absolute;
+  //  top: 0;
+  //  left: 0;
+  //  background: #000;
+  //}
+  &--outlined {
+    legend {
+      display: none !important;
+    }
+
+    &:not(.v-text-field--single-line):not(.v-select) input,
+    &:not(.v-text-field--single-line) .v-select__selection {
+      margin-top: 16px !important;
+      margin-bottom: 0 !important;
+    }
+
+    &:not(.v-input--dense) textarea {
+      margin-top: 24px !important;
+      padding-bottom: 8px;
+    }
+  }
+}
+//
+//v-input v-input--hide-details theme--light v-text-field v-text-field--is-booted v-text-field--enclosed v-text-field--outlined v-select
+//v-input v-input--hide-details v-input--is-label-active v-input--is-dirty v-input--is-focused theme--light v-text-field v-text-field--is-booted v-text-field--enclosed v-text-field--outlined v-select primary--text

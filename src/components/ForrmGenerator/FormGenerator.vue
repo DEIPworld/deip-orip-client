@@ -3,15 +3,16 @@
     <v-sheet
       v-for="(section, index) in schema"
       :key="`section-${index}`"
-      :class="{'mb-2': index + 1 < schema.length}"
+      class="mb-12"
       tile
       :max-width="maxWidth"
     >
-      <div v-if="section.title" class="title mb-6">
+      <!--:class="{'mb-2': index + 1 < schema.length}"-->
+      <div v-if="section.title" class="title mb-4">
         {{ section.title }}
       </div>
 
-      <v-row v-if="section.fields && section.fields.length">
+      <v-row v-if="section.fields && section.fields.length" class="ma-n3">
         <form-generator-field
           v-for="field in section.fields"
           :key="field.name"
@@ -71,7 +72,8 @@
           {
             props: {
               outlined: true,
-              // hideDetails: 'auto'
+              // filled: true,
+              hideDetails: 'auto'
             }
           },
           { props: this.comonProps || {} },
