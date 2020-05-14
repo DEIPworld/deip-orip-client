@@ -3,13 +3,13 @@
     <v-form ref="form">
       <v-text-field
         v-model="formData.component.readinessLevelTitle"
-        label="Criteria name"
+        label="Criterion name"
         outlined
         :rules="[rules.required]"
       />
       <v-text-field
         v-model="formData.component.readinessLevelShortTitle"
-        label="Criteria short name"
+        label="Criterion short name"
         outlined
         :rules="[rules.required]"
       />
@@ -27,7 +27,7 @@
         >
           <v-text-field
             v-model="formData.component.readinessLevels[index].title"
-            label="Criteria name"
+            label="Step name"
             outlined
             hide-details
             solo
@@ -37,7 +37,7 @@
           />
           <v-text-field
             v-model="formData.component.readinessLevels[index].description"
-            label="Criteria description"
+            label="Step description"
             outlined
             hide-details
             solo
@@ -59,7 +59,12 @@
         />
       </leveller-list>
       
-      <v-checkbox class="mt-6" v-model="formData.isVisible" label="Publish Stepper" />
+      <v-row no-gutters>
+        <v-spacer />
+        <v-col cols="auto">
+          <v-checkbox class="mt-6" v-model="formData.isVisible" label="Publish Stepper" />
+        </v-col>
+      </v-row>
 
       <div class="mt-6 text-right">
         <v-btn

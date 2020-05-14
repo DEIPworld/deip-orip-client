@@ -9,8 +9,7 @@
         <v-card-actions class="mt-2">
           <v-spacer />
           <v-btn
-            color="green lighten-1"
-            text
+            color="primary"
             :disabled="meta.isConfirming"
             :loading="meta.isConfirming"
             @click.native="confirm"
@@ -18,8 +17,8 @@
             {{ confirmText }}
           </v-btn>
           <v-btn
-            color="black"
-            text
+            color="primary"
+            outlined
             :disabled="meta.isConfirming"
             @click.native="cancel"
           >

@@ -5,40 +5,41 @@
         Selected References:
       </div>
       <v-row
-
         v-for="(ref, i) in selected"
         :key="i + '-picked'"
+        no-gutters
         justify="space-between"
         align="center"
         :class="{'py-2': i > 0}"
       >
-        <div class="body-1 pr-6">
+        <v-col class="body-1 pr-6">
           <span>{{ ref.title }} ({{ ref.research_title }})</span>
-        </div>
-        <div class="text--right">
+        </v-col>
+        <v-col cols="auto" class="text--right">
           <v-btn
             small
+            color="primary"
             outlined
             class="ma-0"
             @click="removeReference(ref)"
           >
             Remove
           </v-btn>
-        </div>
+        </v-col>
       </v-row>
     </div>
 
     <v-divider v-if="showSelected && selected.length" class="my-2" />
 
     <v-row
-
       v-for="(ref, i) in list"
       :key="i + '-selectable'"
+      no-gutters
       justify="space-between"
       align="center"
       :class="{'py-2': i > 0, 'pt-4': i == 0}"
     >
-      <div class="pr-6">
+      <v-col class="pr-6">
         <router-link
           target="_blank"
           class="a body-1"
@@ -53,8 +54,8 @@
         >
           {{ ref.title }} ({{ ref.research_title }})
         </router-link>
-      </div>
-      <div class="text--right">
+      </v-col>
+      <v-col cols="auto" class="text--right">
         <v-btn
           outlined
           small
@@ -64,7 +65,7 @@
         >
           + Add
         </v-btn>
-      </div>
+      </v-col>
     </v-row>
 
     <v-text-field

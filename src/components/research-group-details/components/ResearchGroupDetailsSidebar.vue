@@ -8,21 +8,20 @@
       <v-row
         v-for="(join, index) in pendingJoinRequests"
         :key="'join-request-' + index"
-        column
-        class="py-2"
+        class="py-2 flex-column"
+        no-gutters
       >
-        <v-row column align="center">
+        <v-row no-gutters class="flex-column">
           <platform-avatar :user="join.user" link-to-profile :size="40" />
           <div class="py-2 caption font-weight-medium">
             wants to join your group
           </div>
-          <div class="text--right full-width">
+          <div class="text-right full-width">
             <v-btn
               :disabled="!defaultAssetBalance"
               small
               class="mx-0 py-0 my-2"
               color="primary"
-              dark
               outlined
               @click="openJoinRequestDetails(join)"
             >

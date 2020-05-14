@@ -114,7 +114,7 @@
             <div class="subtitle-1 font-weight-medium mb-2">
               Account information
             </div>
-            <div>Email: {{ memberInfo.profile.email }}</div>
+            <div>Email: <a :href="`mailto:${memberInfo.profile.email}`">{{ memberInfo.profile.email }}</a></div>
             <div>Category: {{ memberInfo.profile.category }}</div>
           </div>
 
@@ -133,6 +133,17 @@
               Occupation information
             </div>
             <div>Occupation: {{ memberInfo.profile.occupation }}</div>
+            <div>
+              Web site:
+              <a
+                v-for="(item, i) in memberInfo.profile.webPages"
+                :key="`${i}-webPage`"
+                :href="`${item.link}`"
+                target="_blank"
+              >
+                {{ item.link }}
+              </a>
+            </div>
           </div>
         </v-card-text>
 
@@ -231,7 +242,8 @@
             },
             phoneNumbers: '',
             occupation: '',
-            status: ''
+            status: '',
+            webPages: ''
           }
         },
         actionDialog: {

@@ -19,7 +19,7 @@
         </div>
       </v-card-title>
 
-      <v-card-text>
+      <v-card-text class="pt-2">
         <div>
           <platform-avatar
             :user="joinRequest.user"
@@ -28,7 +28,7 @@
             link-to-profile-class="pl-6 title"
           />
         </div>
-        <div class="py-6">
+        <div class="py-6 subtitle-1 black--text">
           {{ joinRequest.coverLetter }}
         </div>
 
@@ -40,8 +40,8 @@
         />
       </v-card-text>
 
-      <v-card-actions>
-        <v-row>
+      <v-card-actions class="px-6">
+        <v-row no-gutters>
           <v-col class="py-2" cols="12">
             <v-btn
               color="primary"

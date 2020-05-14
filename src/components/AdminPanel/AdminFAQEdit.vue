@@ -19,7 +19,12 @@
         :rules="[rules.required]"
         :disabled="isSaving"
       />
-      <v-checkbox v-model="formData.isVisible" label="Publish FAQ" />
+      <v-row no-gutters>
+        <v-spacer />
+        <v-col cols="auto">
+          <v-checkbox v-model="formData.isVisible" label="Publish FAQ" />
+        </v-col>
+      </v-row>
 
       <div class="text-right mt-5">
         <v-btn

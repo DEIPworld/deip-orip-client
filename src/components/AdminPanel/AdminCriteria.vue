@@ -99,7 +99,7 @@
             },
             unpublish: {
               title: 'Unpublish criterion?',
-              description: 'Criterion will be removed from: project page, project request form.',
+              description: 'Criterion will be removed from: project page, project application form.',
               action: {
                 title: 'unpublish',
                 method: this.unpublishCriteria

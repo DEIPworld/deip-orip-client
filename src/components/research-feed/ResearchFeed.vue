@@ -245,7 +245,7 @@
     <!-- END TODO: refactoring -->
 
     <layout-section>
-      <content-block>
+      <content-block id="projectsView">
         <template #title>
           Projects
           <v-badge offset-y="-8" offset-x="4" :content="researchFeed.length || '0'" />
@@ -258,7 +258,7 @@
           no-data-text="No Projects found for specified criteria"
           row
           wrap
-          @update:pagination="onPaginationUpdated"
+          @update:page="onPaginationUpdated"
         >
           <template v-slot:default="{items}">
             <v-row class="ma-n3">
@@ -343,7 +343,7 @@
         }))
       };
     },
-
+    
     computed: {
       ...mapGetters({
         tenant: 'auth/tenant',
@@ -465,7 +465,7 @@
       },
 
       onPaginationUpdated(nextState) {
-        this.$refs.projectsView.scrollIntoView();
+        this.$vuetify.goTo('#projectsView');
       },
 
       isLoggedIn() { return accessService.isLoggedIn(); }

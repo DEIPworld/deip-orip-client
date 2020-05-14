@@ -58,7 +58,7 @@
           <v-card-text>
             <div class="subtitle-1 pt-6 font-weight-medium black--text">{{ inviteDetailsDialog.item.notes }}</div>
           </v-card-text>
-          <v-card-actions class="flex-wrap">
+          <v-card-actions class="flex-wrap px-6">
             <div class="w-100 py-2">
               <v-btn
                 color="primary"
