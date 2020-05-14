@@ -1,16 +1,16 @@
 <template>
-  <v-form v-if="schema.length">
+  <div>
     <v-sheet
       v-for="(section, index) in schema"
       :key="`section-${index}`"
-      class="mb-6"
+      :class="{'mb-6': index + 1 < schema.length}"
       tile
     >
       <div class="title mb-2" v-if="section.title">
         {{ section.title }}
       </div>
 
-      <v-row v-if="section.fields && section.fields.length">
+      <v-row class="ma-n3" v-if="section.fields && section.fields.length">
         <form-generator-field
           v-for="field in section.fields"
           :key="field.name"
@@ -20,11 +20,10 @@
         />
       </v-row>
     </v-sheet>
-    <div class="mt-12 text-right">
+    <div class="mt-12 text-right" v-if="hasSlot('actions')">
       <slot name="actions" />
     </div>
-
-  </v-form>
+  </div>
 </template>
 
 <script>
@@ -53,8 +52,10 @@
         default: null
       }
     },
-
     methods: {
+      hasSlot(name) {
+        return this.$slots[name] !== undefined;
+      },
       setCommonProps(field) {
         return merge.all([
           {

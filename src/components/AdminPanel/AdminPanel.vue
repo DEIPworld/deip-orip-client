@@ -66,6 +66,9 @@
           }
         ]
       };
+    },
+    $dataPreload() {
+      return this.$store.dispatch('adminPanel/loadAdminPanel', {})
     }
   };
 </script>

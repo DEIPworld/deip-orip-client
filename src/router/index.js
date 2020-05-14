@@ -72,16 +72,10 @@ import AdminMembers from '@/components/AdminPanel/AdminMembers';
 import { AccessService } from '@deip/access-service';
 import { UsersService } from '@deip/users-service';
 import { AppConfigService } from '@deip/app-config-service';
-import AdminProjects from '@/components/AdminPanel/AdminProjects';
-import AdminCriteria from '@/components/AdminPanel/AdminCriteria';
-import AdminFAQ from '@/components/AdminPanel/AdminFAQ';
-import AdminFAQEdit from '@/components/AdminPanel/AdminFAQEdit';
-import AdminSettings from '@/components/AdminPanel/AdminSettings';
-import UserRegistration from '@/components/auth/UserRegistration';
-import AdminCriteriaEdit from '@/components/AdminPanel/AdminCriteriaEdit';
 
 import { accountRouting } from '@/components/Account/router';
 import { userDetailRouting } from '@/components/UserDetails/router';
+import { adminRouting } from '@/components/AdminPanel/router';
 
 const accessService = AccessService.getInstance();
 const usersService = UsersService.getInstance();
@@ -431,6 +425,7 @@ const router = new Router({
 
     ...userDetailRouting,
     ...accountRouting,
+    ...adminRouting,
 
     {
       path: '/user-wallet',
@@ -497,85 +492,8 @@ const router = new Router({
       path: '/faq',
       name: 'FAQ',
       component: FAQ
-    }, {
-      path: '/admin',
-      name: 'admin',
-      component: AdminPanel,
-      redirect: { name: 'admin.members' },
-      beforeEnter: (to, from, next) => {
-        const loadPagePromise = store.dispatch('adminPanel/loadAdminPanel', {});
-        loadPage(loadPagePromise, next);
-      },
-      children: [
-        {
-          path: 'members',
-          name: 'admin.members',
-          component: AdminMembers,
-          children: [
-            {
-              path: 'add',
-              name: 'admin.members.add',
-              components: {
-                dialog: UserRegistration
-              },
-              props: {
-                dialog: {
-                  title: 'Add new member'
-                }
-              }
-            }
-          ]
-        },
-        {
-          path: 'projects',
-          name: 'admin.projects',
-          component: AdminProjects
-        },
-        {
-          path: 'criteria',
-          name: 'admin.criteria',
-          component: AdminCriteria,
-          children: [
-            {
-              path: 'add',
-              name: 'admin.criteria.add',
-              components: {
-                dialog: AdminCriteriaEdit
-              },
-              props: {
-                dialog: {
-                  title: 'Add new criteria'
-                }
-              }
-            }
-          ]
-        },
-        {
-          path: 'faq',
-          name: 'admin.faq',
-          component: AdminFAQ,
-          children: [
-            {
-              path: 'add',
-              name: 'admin.faq.add',
-              components: {
-                dialog: AdminFAQEdit
-              },
-              props: {
-                dialog: {
-                  title: 'Add new question'
-                }
-              }
-            }
-          ]
-        },
-        {
-          path: 'settings',
-          name: 'admin.settings',
-          component: AdminSettings
-        }
-      ]
-    }, {
+    },
+    {
       path: '/',
       name: 'Default',
       beforeEnter: (to, from, next) => {
@@ -634,9 +552,17 @@ router.beforeEach((to, from, next) => {
     'NoAccessPage',
     'FAQ'
   ];
-  if (to.path === '/sign-in' || to.path === '/sign-up' || to.path === '/org-sign-in') {
+
+  const loginPages = [
+    '/sign-in',
+    '/sign-up',
+    '/org-sign-in',
+    '/admin/login'
+  ];
+
+  if (loginPages.includes(to.path)) {
     if (accessService.isLoggedIn()) {
-      next('/'); // if token is already presented redirect user to home page
+      next(to.path === '/admin/login' ? '/admin' : '/'); // if token is already presented redirect user to home page
     } else {
       next(); // otherwise redirect to sign-in page
     }
