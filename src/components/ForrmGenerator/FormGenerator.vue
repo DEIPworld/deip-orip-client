@@ -80,6 +80,9 @@
       onInput(value, fieldName) {
         this.$set(this.model, fieldName, value);
         this.$emit('update:model', this.model);
+      },
+      onSubmit(e) {
+        this.$emit('submit', e);
       }
     }
   };

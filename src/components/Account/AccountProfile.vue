@@ -7,11 +7,12 @@
           class="my-0 ml-2"
           large
           :loading="isLoading"
-          :disabled="isSavingDisabled || isLoading"
           color="primary"
           @click="save()"
         >
           Update Info
+<!--                    :disabled="isSavingDisabled || isLoading"
+-->
         </v-btn>
       </template>
     </form-generator>
@@ -160,7 +161,10 @@
               {
                 type: 'text',
                 name: 'webPage',
-                label: 'Web site'
+                label: 'Web site',
+                props: {
+                  rules: [validation.required]
+                }
               }
             ]
           }
@@ -177,7 +181,7 @@
         category: '',
         occupation: '',
         webPage: '',
-        isLoading: false,
+        isLoading: false
       };
     },
     computed: {
@@ -212,6 +216,10 @@
     },
 
     methods: {
+      testSubmit(e) {
+        console.log('submit', e);
+      },
+
       cancel() {
         this.$router.push({
           name: 'UserDetails',
@@ -255,29 +263,28 @@
 
         userService
           .updateUserProfile(this.currentUser.username, update)
-          .then(
-            (res) => {
-              this.$store.dispatch('account/loadUserProfile', {
-                username: this.currentUser.username
-              });
-              this.$store.dispatch('auth/loadUser');
-              this.$store.dispatch('layout/setSuccess', {
-                message: '"Personal info has been saved successfully!"'
-              });
-            },
-            (err) => {
-              this.$store.dispatch('layout/setError', {
-                message: 'An error occurred while saving, please try again later'
-              });
-              console.error(err);
-            }
-          )
+          .then((res) => {
+
+            this.$store.dispatch('account/loadUserProfile', {
+              username: this.currentUser.username
+            });
+
+            this.$store.dispatch('auth/loadUser');
+
+            this.$store.dispatch('layout/setSuccess', {
+              message: '"Personal info has been saved successfully!"'
+            });
+
+            this.$router.back();
+          })
+          .catch((err) => {
+            this.$store.dispatch('layout/setError', {
+              message: 'An error occurred while saving, please try again later'
+            });
+            console.error(err);
+          })
           .finally(() => {
             this.isLoading = false;
-            this.$router.push({
-              name: 'UserDetails',
-              params: { account_name: this.currentUser.username }
-            });
           });
       }
     }
