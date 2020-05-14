@@ -432,15 +432,24 @@
             isActive: this.activeMilestone
               ? m.goal === this.activeMilestone.goal
               : false
-
           }));
+
+          // Example for Egor
+          const editedTrlValues = [{ component: "5ebd469a2cea71001f84345a", type: "stepper", value: { index: 3 } }];
+          const editedTenantCriterias = this.researchRef.tenantCriterias.reduce((acc, criteria) => {
+            let editedCriteria = editedTrlValues.find(editedCriteria => editedCriteria.component == criteria.component);
+            if (editedCriteria) {
+              return [...acc, { ...editedCriteria }];
+            }
+            return [...acc, { ...criteria }];
+          }, [])
 
           researchService.updateResearchOffchainMeta({
             researchExternalId: this.research.external_id,
             milestones,
             videoSrc: this.videoSrc,
             partners: this.partners,
-            trl: this.currentTrlStep
+            tenantCriterias: editedTenantCriterias
           })
             .then(() => {
               this.$store.dispatch('layout/setSuccess', {
