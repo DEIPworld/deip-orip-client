@@ -65,11 +65,14 @@ const actions = {
   },
 
   loadUsers({ state, dispatch, commit }) {
+    const blackList = ['regacc', 'hermes', 'initdelegate'];
+    // TODO: request server for tenant users
     return deipRpc.api.getAllAccountsAsync()
-      .then((accounts) => usersService.getEnrichedProfiles(accounts.map((a) => a.name)), (err) => { console.log(err); })
+      .then((accounts) => usersService.getEnrichedProfiles(accounts.filter(a => !a.is_research_group && !blackList.some(username => username == a.name)).map((a) => a.name)))
       .then((users) => {
         commit('SET_ALL_USERS', users);
-      }, (err) => { console.log(err); });
+      })
+      .catch((err) => { console.log(err); })
   },
 
   loadUniversity({ state, dispatch, commit }, { universityPermlink }) {

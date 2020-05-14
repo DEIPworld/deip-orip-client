@@ -88,6 +88,7 @@
 <script>
   import deipRpc from '@deip/rpc-client';
   import _ from 'lodash';
+  import { mapGetters } from 'vuex';
 
   import { UsersService } from '@deip/users-service';
 
@@ -132,12 +133,17 @@
     },
     data() {
       return {
-        creatorUsername: this.$route.params.account_name,
+        creatorUsername: "",
         allUsers: [],
         selectableUsers: [],
         q: '',
         selectedUsers: this.group.members
       };
+    },
+    computed: {
+      ...mapGetters({
+        user: 'auth/user'
+      })
     },
     methods: {
       nextStep() {
@@ -182,14 +188,16 @@
       }
     },
     mounted() {
-      deipRpc.api
-        .getAllAccountsAsync()
+      this.creatorUsername = this.user.username;
+      // TODO: request server for tenant users
+      deipRpc.api.getAllAccountsAsync()
         .then((accounts) => {
+          const blackList = [this.creatorUsername, 'regacc', 'hermes', 'initdelegate'];
           const usernames = [];
           usernames.push(this.creatorUsername);
           usernames.push(
             ...accounts
-              .filter((a) => a.name != this.creatorUsername)
+              .filter((a) => !a.is_research_group && !blackList.some(username => username == a.name))
               .map((a) => a.name)
           );
           return usersService.getEnrichedProfiles(usernames);
