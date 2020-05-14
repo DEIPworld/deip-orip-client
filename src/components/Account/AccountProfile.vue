@@ -1,123 +1,21 @@
 <template>
   <modal-route-view title="Edit personal info">
-    <div>
-      <div class="title font-weight-medium pb-4">
-        Location:
-      </div>
-      <v-text-field
-        v-model="city"
-        :rules="[rules.required]"
-        label="City"
-        outlined
-      />
-      <v-text-field
-        v-model="country"
-        :rules="[rules.required]"
-        label="Country"
-        outlined
-      />
-    </div>
 
-    <div>
-      <div class="title font-weight-medium pb-4">
-        Bio:
-      </div>
-      <v-textarea
-        v-model="bio"
-        :rules="[rules.required]"
-        label="Tell about yourself"
-        outlined
-        auto-grow
-        rows="1"
-      />
-    </div>
+    <form-generator :model="formModel" :schema="schema">
+      <template #actions>
+        <v-btn
+          class="my-0 ml-2"
+          large
+          :loading="isLoading"
+          :disabled="isSavingDisabled || isLoading"
+          color="primary"
+          @click="save()"
+        >
+          Update Info
+        </v-btn>
+      </template>
+    </form-generator>
 
-    <div>
-      <div class="title font-weight-medium pb-4">
-        Contacts:
-      </div>
-      <v-text-field
-        v-model="email"
-        :rules="[rules.required]"
-        label="Email"
-        outlined
-      />
-    </div>
-
-    <div>
-      <div class="title font-weight-medium pb-4">
-        Personal information:
-      </div>
-      <v-text-field
-        v-model="firstName"
-        :rules="[rules.required]"
-        label="First name"
-        outlined
-      />
-      <v-text-field
-        v-model="lastName"
-        :rules="[rules.required]"
-        label="Last name"
-        outlined
-      />
-      <v-menu
-        v-model="editedBirthdayMenu"
-        :close-on-content-click="false"
-        transition="scale-transition"
-        offset-y
-        min-width="290px"
-      >
-        <template v-slot:activator="{ on }">
-          <v-text-field
-            v-model="editedBirthdayDate"
-            label="Birthday"
-            outlined
-            append-icon="event"
-            readonly
-            v-on="on"
-          />
-        </template>
-        <v-date-picker v-model="editedBirthdayDate" @input="editedBirthdayMenu = false" />
-      </v-menu>
-    </div>
-
-    <div>
-      <div class="title font-weight-medium pb-4">
-        Additional information:
-      </div>
-      <v-select
-        v-model="category"
-        :items="categoryList"
-        outlined
-        label="Category"
-        :rules="[rules.required]"
-      />
-      <v-select
-        v-model="occupation"
-        :items="occupationList"
-        outlined
-        label="Occupation"
-        :rules="[rules.required]"
-      />
-      <v-text-field
-        v-model="webPage"
-        label="Web site"
-        outlined
-      />
-    </div>
-
-    <div class="py-2 text-end">
-      <v-btn
-        class="my-0 ml-2"
-        large
-        :loading="isLoading"
-        :disabled="isSavingDisabled || isLoading"
-        color="primary"
-        @click="save()"
-      >
-        Update Info
-      </v-btn>
-    </div>
   </modal-route-view>
 </template>
 
@@ -127,23 +25,147 @@
 
   import { UserService } from '@deip/user-service';
   import ModalRouteView from '@/components/layout/ModalRouteView';
+  import FormGenerator from '@/components/ForrmGenerator/FormGenerator';
 
   const userService = UserService.getInstance();
 
   export default {
     name: 'AccountProfile',
-    components: { ModalRouteView },
+    components: {
+      FormGenerator,
+      ModalRouteView
+    },
     data() {
+      const validation = {
+        required: (value) => !!value || 'This field is required'
+      };
+
       return {
-        occupationList: ['Company', 'Independent', 'Small team/group', 'Other'],
-        categoryList: [
-          'Consultant',
-          'Contractor',
-          'Current WECO2 Partner',
-          'Investor',
-          'Project innovator',
-          'Team member'
+        formModel: null,
+        formModelCache: null,
+
+        schema: [
+          {
+            title: 'Location:',
+            fields: [
+              {
+                type: 'text',
+                name: 'city',
+                label: 'City',
+                cols: { md: 6 },
+                props: {
+                  rules: [validation.required]
+                }
+              },
+              {
+                type: 'text',
+                name: 'country',
+                label: 'Country',
+                cols: { md: 6 },
+                props: {
+                  rules: [validation.required]
+                }
+              }
+            ]
+          },
+          {
+            title: 'Bio:',
+            fields: [
+              {
+                type: 'textarea',
+                name: 'bio',
+                label: 'Tell about yourself',
+                props: {
+                  autoGrow: true,
+                  rows: 1,
+                  rules: [validation.required]
+                }
+              }
+            ]
+          },
+          {
+            title: 'Contacts:',
+            fields: [
+              {
+                type: 'email',
+                name: 'email',
+                label: 'Email',
+                props: {
+                  rules: [validation.required]
+                }
+              }
+            ]
+          },
+          {
+            title: 'Personal information:',
+            fields: [
+              {
+                type: 'text',
+                name: 'firstName',
+                label: 'First Name',
+                props: {
+                  rules: [validation.required]
+                }
+              },
+              {
+                type: 'text',
+                name: 'lastName',
+                label: 'Last Name',
+                props: {
+                  rules: [validation.required]
+                }
+              },
+              {
+                type: 'date',
+                name: 'editedBirthdayDate',
+                label: 'Birthday'
+              }
+            ]
+          },
+          {
+            title: 'Additional information:',
+            fields: [
+              {
+                type: 'select',
+                name: 'category',
+                label: 'Category',
+                cols: { md: 6 },
+                props: {
+                  items: [
+                    'Consultant',
+                    'Contractor',
+                    'Current WECO2 Partner',
+                    'Investor',
+                    'Project innovator',
+                    'Team member'
+                  ],
+                  rules: [validation.required]
+                }
+              },
+              {
+                type: 'select',
+                name: 'occupation',
+                label: 'Occupation',
+                cols: { md: 6 },
+                props: {
+                  items: [
+                    'Company',
+                    'Independent',
+                    'Small team/group',
+                    'Other'
+                  ],
+                  rules: [validation.required]
+                }
+              },
+              {
+                type: 'text',
+                name: 'webPage',
+                label: 'Web site'
+              }
+            ]
+          }
         ],
+
         editedBirthdayMenu: false,
         editedBirthdayDate: null,
         city: '',
@@ -156,9 +178,6 @@
         occupation: '',
         webPage: '',
         isLoading: false,
-        rules: {
-          required: (value) => !!value || 'This field is required'
-        }
       };
     },
     computed: {
@@ -166,34 +185,30 @@
         currentUser: 'auth/user',
         userInfo: 'account/userInfo'
       }),
+
       isSavingDisabled() {
-        return (
-          !this.city
-          || !this.country
-          || !this.bio
-          || !this.email
-          || !this.firstName
-          || !this.lastName
-          || !this.category
-          || !this.occupation
-        );
+        return JSON.stringify(this.formModel) === this.formModelCache;
       }
     },
 
     created() {
-      this.city = this.userInfo.profile.location.city || ' ';
-      this.country = this.userInfo.profile.location.country || ' ';
-      this.bio = this.userInfo.profile.bio || ' ';
-      this.email = this.userInfo.profile.email || ' ';
-      this.firstName = this.userInfo.profile.firstName || ' ';
-      this.lastName = this.userInfo.profile.lastName || ' ';
-      this.editedBirthdayDate = this.userInfo.profile.birthdate
-        ? moment(this.userInfo.profile.birthdate)
-          .format('YYYY-MM-DD')
-        : null;
-      this.category = this.userInfo.profile.category;
-      this.occupation = this.userInfo.profile.occupation;
-      this.webPage = this.userInfo.profile.webPages.length ? this.userInfo.profile.webPages.length[0].link : '';
+      this.formModel = {
+        city: this.userInfo.profile.location.city || ' ',
+        country: this.userInfo.profile.location.country || ' ',
+        bio: this.userInfo.profile.bio || ' ',
+        email: this.userInfo.profile.email || ' ',
+        firstName: this.userInfo.profile.firstName || ' ',
+        lastName: this.userInfo.profile.lastName || ' ',
+        editedBirthdayDate: this.userInfo.profile.birthdate
+          ? moment(this.userInfo.profile.birthdate)
+            .format('YYYY-MM-DD')
+          : null,
+        category: this.userInfo.profile.category,
+        occupation: this.userInfo.profile.occupation,
+        webPage: this.userInfo.profile.webPages.length ? this.userInfo.profile.webPages.length[0].link : ''
+      };
+
+      this.formModelCache = JSON.stringify(this.formModel);
     },
 
     methods: {
@@ -207,17 +222,17 @@
         this.isLoading = true;
 
         const location = {
-          city: this.city,
-          country: this.country
+          city: this.formModel.city,
+          country: this.formModel.country
         };
-        const { bio } = this;
-        const { email } = this;
-        const { firstName } = this;
-        const { lastName } = this;
-        const { category } = this;
-        const { occupation } = this;
-        const { webPage } = this;
-        const birthdate = this.editedBirthdayDate;
+        const { bio } = this.formModel;
+        const { email } = this.formModel;
+        const { firstName } = this.formModel;
+        const { lastName } = this.formModel;
+        const { category } = this.formModel;
+        const { occupation } = this.formModel;
+        const { webPage } = this.formModel;
+        const birthdate = this.formModel.editedBirthdayDate;
 
         const update = {
           ...this.userInfo.profile,
@@ -230,7 +245,11 @@
             birthdate,
             category,
             occupation,
-            webPages: [{ type: 'webpage', label: 'default', link: webPage }]
+            webPages: [{
+              type: 'webpage',
+              label: 'default',
+              link: webPage
+            }]
           }
         };
 
@@ -250,7 +269,7 @@
               this.$store.dispatch('layout/setError', {
                 message: 'An error occurred while saving, please try again later'
               });
-              console.log(err);
+              console.error(err);
             }
           )
           .finally(() => {
@@ -264,6 +283,3 @@
     }
   };
 </script>
-
-<style lang="less">
-</style>
