@@ -71,15 +71,17 @@
 
     <v-divider />
 
-    <div class="my-6">
-      <div class="title font-weight-medium pb-4">
-        Technology Readiness Level
+    <div class="my-6" v-for="(item, i) in tenant.profile.settings.researchComponents" :key="`${i}-stepper`">
+      <div v-if="item.isVisible">
+        <div class="title font-weight-medium pb-4">
+          {{ item.component.readinessLevelTitle }}
+        </div>
+        <leveller-selector
+          v-model.number="tenantCriterias[i].value.index"
+          :items="stepperSelector(item.component.readinessLevels)"
+          :label="item.component.readinessLevelTitle"
+        />
       </div>
-      <!-- <technology-readiness-level
-        :current-trl-step="currentTrlStep"
-        @changeCurrentTrlStep="changeCurrentTrlStep"
-      /> -->
-      <leveller-selector v-model="currentTrlStep" :items="trlSelector" />
     </div>
 
     <v-divider />
@@ -181,7 +183,6 @@
 
 <script>
   import { mapGetters } from 'vuex';
-  import trlData from '@/components/common/trl.json';
   import Vue from 'vue';
   import _ from 'lodash';
   import deipRpc from '@deip/rpc-client';
@@ -211,7 +212,6 @@
         title: '',
         description: '',
         milestones: undefined,
-        currentTrlStep: undefined,
         partners: [],
         videoSrc: '',
         activeMilestone: undefined,
@@ -225,7 +225,7 @@
         },
         shadowMetaData: undefined,
         shadowRefData: undefined,
-        trlData
+        tenantCriterias:[]
       };
     },
     computed: {
@@ -233,15 +233,9 @@
         user: 'auth/user',
         research: 're/research',
         researchRef: 're/researchRef',
-        userGroups: 'auth/userGroups'
+        userGroups: 'auth/userGroups',
+        tenant: 'auth/tenant'
       }),
-      trlSelector() {
-        return this.trlData.map((item, index) => ({
-          text: item.shortTitle,
-          value: item.id,
-          num: index + 1
-        }));
-      },
       backgroundDropzoneOptions() {
         return this.research != null
           ? {
@@ -287,8 +281,8 @@
         return JSON.stringify({
           milestones,
           video_src: this.videoSrc,
-          currentTrlStep: this.currentTrlStep,
-          partners: this.partners
+          partners: this.partners,
+          tenantCriterias: this.tenantCriterias
         });
       },
 
@@ -308,8 +302,9 @@
           || !this.videoSrcIsValidOrAbsent
           || _.isEqual(this.shadowRefData, this.refData)
           || (this.partners.length
-            ? !!this.partners.find((item) => item.title === '' || item.type === '')
-            : false);
+            ? this.partners.some((item) => item.title === '' || item.type === '')
+            : false)
+          || this.tenantCriterias.some(({ value: { index } }) => index === null);
       },
 
       isValidLink() {
@@ -336,9 +331,8 @@
 
       this.activeMilestone = this.milestones.find((m) => m.isActive);
       this.isPublic = !this.research.is_private;
-      this.currentTrlStep = this.researchRef.trl;
       this.partners = this.researchRef.partners.map((item) => _.cloneDeep(item));
-
+      this.tenantCriterias = this.tenant.profile.settings.researchComponents.map(({ _id, type }) => (_.cloneDeep(this.researchRef.tenantCriterias.find(({ component }) => component === _id)) || { component: _id, type, value:{ index: null } }));
       const milestones = this.milestones.map((m) => ({
         goal: m.goal,
         budget: m.budget,
@@ -359,11 +353,18 @@
       this.shadowRefData = JSON.stringify({
         milestones,
         video_src: this.videoSrc,
-        currentTrlStep: this.currentTrlStep,
-        partners: this.partners
+        partners: this.partners,
+        tenantCriterias: this.tenantCriterias
       });
     },
     methods: {
+      stepperSelector(readinessLevels) {
+        return readinessLevels.map((item, index) => ({
+          text: item.title,
+          value: index,
+          num: index + 1
+        }));
+      },
       updateResearch() {
         this.isMetaSaving = true;
 
@@ -434,22 +435,12 @@
               : false
           }));
 
-          // Example for Egor
-          const editedTrlValues = [{ component: "5ebd469a2cea71001f84345a", type: "stepper", value: { index: 3 } }];
-          const editedTenantCriterias = this.researchRef.tenantCriterias.reduce((acc, criteria) => {
-            let editedCriteria = editedTrlValues.find(editedCriteria => editedCriteria.component == criteria.component);
-            if (editedCriteria) {
-              return [...acc, { ...editedCriteria }];
-            }
-            return [...acc, { ...criteria }];
-          }, [])
-
           researchService.updateResearchOffchainMeta({
             researchExternalId: this.research.external_id,
             milestones,
             videoSrc: this.videoSrc,
             partners: this.partners,
-            tenantCriterias: editedTenantCriterias
+            tenantCriterias: this.tenantCriterias
           })
             .then(() => {
               this.$store.dispatch('layout/setSuccess', {
@@ -567,10 +558,6 @@
           message:
             'Sorry, an error occurred while uploading background image, please try again later'
         });
-      },
-
-      changeCurrentTrlStep(step) {
-        this.currentTrlStep = step;
       }
     }
   };

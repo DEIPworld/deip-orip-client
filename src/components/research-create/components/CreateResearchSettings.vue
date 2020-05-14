@@ -27,14 +27,21 @@
     </v-col>
 
     <v-col cols="12" sm="8" class="px-12">
-      <div class="my-6">
-        <div class="title font-weight-medium mb-6">
-          Technology Readiness Level
+      <div
+        v-for="(item, i) in tenant.profile.settings.researchComponents"
+        :key="`${i}-stepper`"
+        class="my-6"
+      >
+        <div v-if="item.isVisible">
+          <div class="title font-weight-medium mb-6">
+            {{ item.component.readinessLevelTitle }}
+          </div>
+          <leveller-selector
+            v-model.number="research.tenantCriterias[i].value.index"
+            :items="stepperSelector(item.component.readinessLevels)"
+            :label="item.component.readinessLevelTitle"
+          />
         </div>
-        <technology-readiness-level
-          :current-trl-step="research.trlStep"
-          @changeCurrentTrlStep="changeCurrentTrlStep"
-        />
       </div>
     </v-col>
 
@@ -69,9 +76,15 @@
 
 <script>
   import Vue from 'vue';
+  import { mapGetters } from 'vuex';
+  import LevellerSelector from '@/components/Leveller/LevellerSelector';
+
 
   export default {
     name: 'CreateResearchSettings',
+    components: {
+      LevellerSelector
+    },
     props: {
       research: { type: Object, required: true },
       isLoading: { type: Boolean, required: false }
@@ -79,15 +92,46 @@
     data() {
       return {
         isPublic: !this.research.isPrivate,
-        currentTrlStep: undefined
+        tenantCriterias: []
       };
     },
     computed: {
+      ...mapGetters({
+        tenant: 'auth/tenant'
+      }),
       isEmptyFields() {
         return this.research.partners.length ? !!this.research.partners.find((item) => item.title == '' || item.type == '') : false;
       }
     },
+    created() {
+      this.tenant.profile.settings.researchComponents.forEach((item) => {
+        if (item.isVisible) {
+          this.research.tenantCriterias.push({
+            component: item._id,
+            type: 'stepper',
+            value: {
+              index: 0
+            }
+          });
+        } else {
+          this.research.tenantCriterias.push({
+            component: item._id,
+            type: 'stepper',
+            value: {
+              index: null
+            }
+          });
+        }
+      });
+    },
     methods: {
+      stepperSelector(readinessLevels) {
+        return readinessLevels.map((item, index) => ({
+          text: item.title,
+          value: index,
+          num: index + 1
+        }));
+      },
       nextStep() {
         this.$emit('finish');
       },
@@ -96,10 +140,6 @@
       },
       setPrivateFlag() {
         this.$emit('setPrivateFlag', this.isPublic);
-      },
-      changeCurrentTrlStep(step) {
-        this.currentTrlStep = step;
-        this.$emit('setTrlStep', this.currentTrlStep);
       }
     }
   };

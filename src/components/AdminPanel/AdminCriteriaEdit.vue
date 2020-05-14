@@ -24,6 +24,7 @@
           :key="'level-' + index"
           :dot-num="index + 1"
           class="px-0"
+          double-field
         >
           <v-text-field
             v-model="formData.component.readinessLevels[index].title"

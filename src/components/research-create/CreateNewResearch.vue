@@ -123,7 +123,6 @@
               @finish="finish"
               @decStep="decStep"
               @setPrivateFlag="setPrivateFlag"
-              @setTrlStep="setTrlStep"
             />
           </div>
         </v-stepper-content>
@@ -173,8 +172,8 @@
           review_share_in_percent: 5,
           milestones: [],
           isPrivate: false,
-          trlStep: 'basic_principles_of_concept_are_observed_and_reported',
-          partners: []
+          partners: [],
+          tenantCriterias: []
         }
       };
     },
@@ -247,17 +246,8 @@
         this.research.isPrivate = !isPublic;
       },
 
-      setTrlStep(step) {
-        this.research.trlStep = step;
-      },
-
       finish() {
         this.isLoading = true;
-
-        // Example for Egor
-        const trlValue = { component: "5ebd469a2cea71001f84345a", type: "stepper", value: { index: 2 } };
-        const mrlValue = { component: "5ebd47762cea71001f843460", type: "stepper", value: { index: 1 } };
-        const tenantCriterias = [trlValue, mrlValue];
 
         const isProposal = !this.research.group.is_personal;
         researchService.createResearchViaOffchain(
@@ -286,23 +276,23 @@
               isActive: i === 0
             })),
             partners: this.research.partners,
-            tenantCriterias: tenantCriterias
+            tenantCriterias: this.research.tenantCriterias
           }
         )
           .then((result) => {
-            this.isLoading = false;
-            this.$store.dispatch('layout/setSuccess', {
-              message: `Project "${this.research.title}" has been created successfully`
-            });
-          },
-          (err) => {
-            console.log(err);
-            this.isLoading = false;
-            this.$store.dispatch('layout/setError', {
-              message:
-                'An error occurred while creating project, please try again later'
-            });
-          })
+                  this.isLoading = false;
+                  this.$store.dispatch('layout/setSuccess', {
+                    message: `Project "${this.research.title}" has been created successfully`
+                  });
+                },
+                (err) => {
+                  console.log(err);
+                  this.isLoading = false;
+                  this.$store.dispatch('layout/setError', {
+                    message:
+                      'An error occurred while creating project, please try again later'
+                  });
+                })
           .finally(() => {
             setTimeout(() => {
               if (this.research.group.is_centralized || this.research.group.is_personal) {

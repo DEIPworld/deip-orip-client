@@ -7,7 +7,7 @@
     scrollable
   >
     <v-card tile>
-      <v-toolbar flat v-if="!hideToolbar">
+      <v-toolbar flat v-if="!hideToolbar" class="flex-grow-0">
         <v-btn icon @click="goBack()">
           <v-icon>{{ icon }}</v-icon>
         </v-btn>

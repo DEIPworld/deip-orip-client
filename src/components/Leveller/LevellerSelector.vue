@@ -1,7 +1,7 @@
 <template>
   <v-select
     :items="items"
-    label="Technology Readiness Level"
+    :label="label"
     outlined
     hide-details
     :value="value"
@@ -41,8 +41,12 @@
         default: null
       },
       value: {
-        type: String || Number,
+        type: [String, Number],
         default: null
+      },
+      label: {
+        type: String,
+        default: ''
       }
     },
     methods: {
