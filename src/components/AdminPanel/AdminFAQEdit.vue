@@ -22,7 +22,7 @@
       <v-row no-gutters>
         <v-spacer />
         <v-col cols="auto">
-          <v-checkbox v-model="formData.isVisible" label="Publish FAQ" />
+          <v-checkbox v-model="formData.isVisible" label="Publish on FAQ page" />
         </v-col>
       </v-row>
 

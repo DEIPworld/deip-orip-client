@@ -64,10 +64,10 @@
   }
   .doubleField{
     &::before {
-      height: calc(50% - 56px);
+      height: calc(50% - 76px);
     }
     &::after {
-      height: calc(50% + 24px);
+      height: calc(50% + 38px);
     }
   }
 </style>

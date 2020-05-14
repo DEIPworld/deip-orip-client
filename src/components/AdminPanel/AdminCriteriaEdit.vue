@@ -31,18 +31,16 @@
             label="Step name"
             outlined
             hide-details
-            solo
             flat
             class="py-2"
             :rules="[rules.required]"
           />
-          <v-text-field
+          <v-textarea
             v-model="formData.component.readinessLevels[index].description"
             label="Step description"
             outlined
-            hide-details
-            solo
-            flat
+            auto-grow
+            rows="1"
             class="py-2"
           />
 

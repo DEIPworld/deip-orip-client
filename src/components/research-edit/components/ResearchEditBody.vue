@@ -304,7 +304,7 @@
           || (this.partners.length
             ? this.partners.some((item) => item.title === '' || item.type === '')
             : false)
-          || this.tenantCriterias.some(({ value: { index } }) => index === null);
+          || this.tenantCriterias.some(({ isVisible, value: { index } }) => (isVisible ? index === null : false));
       },
 
       isValidLink() {
@@ -332,7 +332,16 @@
       this.activeMilestone = this.milestones.find((m) => m.isActive);
       this.isPublic = !this.research.is_private;
       this.partners = this.researchRef.partners.map((item) => _.cloneDeep(item));
-      this.tenantCriterias = this.tenant.profile.settings.researchComponents.map(({ _id, type }) => (_.cloneDeep(this.researchRef.tenantCriterias.find(({ component }) => component === _id)) || { component: _id, type, value:{ index: null } }));
+      this.tenantCriterias = this.tenant.profile.settings.researchComponents.map(({ _id, type }) => {
+        const tenantCriteria = _.cloneDeep(this.researchRef.tenantCriterias.find(({ component }) => component === _id))
+          || { component: _id, type, value: { index: null } };
+        if (tenantCriteria.value) {
+          return tenantCriteria;
+        } else {
+          tenantCriteria.value = { index: null }
+          return tenantCriteria;
+        }
+      });
       const milestones = this.milestones.map((m) => ({
         goal: m.goal,
         budget: m.budget,
