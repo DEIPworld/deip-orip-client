@@ -1,6 +1,5 @@
 <template>
   <modal-route-view title="Edit personal info">
-
     <form-generator :model="formModel" :schema="schema">
       <template #actions>
         <v-btn
@@ -8,15 +7,13 @@
           large
           :loading="isLoading"
           color="primary"
+          :disabled="isSavingDisabled || isLoading"
           @click="save()"
         >
           Update Info
-<!--                    :disabled="isSavingDisabled || isLoading"
--->
         </v-btn>
       </template>
     </form-generator>
-
   </modal-route-view>
 </template>
 
@@ -264,7 +261,6 @@
         userService
           .updateUserProfile(this.currentUser.username, update)
           .then((res) => {
-
             this.$store.dispatch('account/loadUserProfile', {
               username: this.currentUser.username
             });

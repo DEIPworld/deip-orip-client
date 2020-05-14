@@ -7,15 +7,15 @@
       {{ title }}
     </div>
 
-<!--    <v-form-->
-<!--      ref="form"-->
-<!--      v-model="isFormValid"-->
-<!--      class="login__form full-width"-->
-<!--      @submit.prevent="true"-->
-<!--    >-->
-<!--      <form-generator :model="formModel" :schema="schema" class="mb-6" />-->
-<!--    </v-form>-->
-    <form-generator :model="formModel" :schema="schema" class="mb-6" />
+    <v-form
+      ref="form"
+      v-model="isFormValid"
+      @submit.prevent="true"
+      class="mb-6"
+    >
+      <form-generator :model="formModel" :schema="schema" />
+    </v-form>
+
     <v-btn
       type="submit"
       block
@@ -121,7 +121,7 @@
     },
     methods: {
       login() {
-        // if (!this.$refs.form.validate()) return;
+        if (!this.$refs.form.validate()) return;
 
         this.disable = true;
 

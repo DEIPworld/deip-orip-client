@@ -571,7 +571,7 @@ router.beforeEach((to, from, next) => {
   } else if (accessService.isLoggedIn()) {
     next(); // if there is a token allow to visit requested route
   } else {
-    next({ name: 'ResearchFeed' }); // otherwise redirect to sign-in page
+    next(!to.path.includes('admin') ? { name: 'ResearchFeed' } : { name: 'admin.login' }); // otherwise redirect to sign-in page
   }
 });
 
