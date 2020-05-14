@@ -292,7 +292,7 @@
 
     created() {
       this.highlightProposalsSection = this.$route.hash === '#proposals';
-
+      // TODO: request server for tenant users
       deipRpc.api.getAllAccountsAsync()
         .then((accounts) => {
           const blackList = [
@@ -300,7 +300,8 @@
             ...this.members.map((member) => member.account.name),
             ...this.invites.map((invite) => invite.user.account.name)
           ];
-          const usersToInvite = accounts.filter((a) => !blackList.some((username) => username === a.name))
+          const usersToInvite = accounts
+            .filter((a) => !a.is_research_group && !blackList.some((username) => username === a.name))
             .map((a) => a.name);
           return usersService.getEnrichedProfiles(usersToInvite);
         })

@@ -10,23 +10,26 @@
 <!--    <v-form-->
 <!--      ref="form"-->
 <!--      v-model="isFormValid"-->
-<!--      class="login__form full-width"-->
 <!--      @submit.prevent="true"-->
+<!--      class="mb-6"-->
 <!--    >-->
-<!--      <form-generator :model="formModel" :schema="schema" class="mb-6" />-->
+    <form-generator :model="formModel" :schema="schema" @submit="login" max-width="360">
+      <template #actions>
+        <v-btn
+          type="submit"
+          block
+          large
+          color="primary"
+          :loading="disable"
+          :disabled="disable"
+        >
+          Log In
+        </v-btn>
+      </template>
+    </form-generator>
 <!--    </v-form>-->
-    <form-generator :model="formModel" :schema="schema" class="mb-6" />
-    <v-btn
-      type="submit"
-      block
-      color="primary"
-      dark
-      :loading="disable"
-      :disabled="disable"
-      @click="login()"
-    >
-      Log In
-    </v-btn>
+
+
   </v-sheet>
 </template>
 
@@ -120,8 +123,8 @@
       this.formModel.username = this.$route.query.username || '';
     },
     methods: {
-      login() {
-        // if (!this.$refs.form.validate()) return;
+      login(formValid) {
+        if (!formValid) return;
 
         this.disable = true;
 
