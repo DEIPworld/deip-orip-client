@@ -1,16 +1,17 @@
 <template>
-  <div>
+  <v-form ref="form" v-model="isValid" @submit="onSubmit">
     <v-sheet
       v-for="(section, index) in schema"
       :key="`section-${index}`"
-      :class="{'mb-6': index + 1 < schema.length}"
+      :class="{'mb-2': index + 1 < schema.length}"
       tile
+      :max-width="maxWidth"
     >
-      <div class="title mb-2" v-if="section.title">
+      <div v-if="section.title" class="title mb-6">
         {{ section.title }}
       </div>
 
-      <v-row class="ma-n3" v-if="section.fields && section.fields.length">
+      <v-row v-if="section.fields && section.fields.length">
         <form-generator-field
           v-for="field in section.fields"
           :key="field.name"
@@ -20,10 +21,10 @@
         />
       </v-row>
     </v-sheet>
-    <div class="mt-12 text-right" v-if="hasSlot('actions')">
+    <div v-if="hasSlot('actions')" class="text-right">
       <slot name="actions" />
     </div>
-  </div>
+  </v-form>
 </template>
 
 <script>
@@ -50,7 +51,16 @@
       comonProps: {
         type: Object,
         default: null
+      },
+      maxWidth: {
+        type: [String, Number],
+        default: null
       }
+    },
+    data() {
+      return {
+        isValid: false
+      };
     },
     methods: {
       hasSlot(name) {
@@ -61,7 +71,7 @@
           {
             props: {
               outlined: true,
-              hideDetails: 'auto'
+              // hideDetails: 'auto'
             }
           },
           { props: this.comonProps || {} },
@@ -83,7 +93,9 @@
         this.$emit('update:model', this.model);
       },
       onSubmit(e) {
-        this.$emit('submit', e);
+        e.preventDefault();
+
+        this.$emit('submit', this.$refs.form.validate());
       }
     }
   };

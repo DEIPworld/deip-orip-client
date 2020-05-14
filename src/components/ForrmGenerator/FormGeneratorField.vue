@@ -1,5 +1,5 @@
 <template>
-  <v-col v-bind="cols">
+  <v-col v-bind="cols" class="py-0">
     <component
       :is="'field-' + field.type"
       :field="field"
