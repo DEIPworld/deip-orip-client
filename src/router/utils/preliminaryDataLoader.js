@@ -1,4 +1,4 @@
-export default function preliminaryDataLoader(component, { beforeEnter }) {
+export function preliminaryDataLoader(component, { beforeEnter }) {
   return {
     name: 'PreliminaryDataLoaderComponent',
 

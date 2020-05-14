@@ -68,7 +68,7 @@
   const userService = UserService.getInstance();
 
   export default {
-    name: 'ChangePassword',
+    name: 'AccountPassword',
     components: { ContentBlock },
     data() {
       return {

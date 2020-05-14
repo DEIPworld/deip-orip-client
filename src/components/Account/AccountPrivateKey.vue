@@ -39,7 +39,7 @@
   import ContentBlock from '@/components/layout/components/ContentBlock';
 
   export default {
-    name: 'PrivateKeyDownload',
+    name: 'AccountPrivateKey',
     components: { ContentBlock },
     data() {
       return {

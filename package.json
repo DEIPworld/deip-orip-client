@@ -65,7 +65,8 @@
     "vue2-dropzone": "^3.6.0",
     "vuetify": "^2.2.26",
     "vuetify-upload-button": "^0.1.2",
-    "vuex": "^3.1.2"
+    "vuex": "^3.1.2",
+    "deepmerge": "^4.2.2"
   },
   "devDependencies": {
     "@babel/plugin-proposal-class-properties": "^7.8.3",
@@ -82,7 +83,6 @@
     "@vue/eslint-config-standard": "^5.1.2",
     "autoprefixer": "^9.7.4",
     "babel-eslint": "^10.0.3",
-    "deepmerge": "^4.2.2",
     "eslint": "^5.16.0",
     "eslint-plugin-vue": "^5.0.0",
     "eslint-plugin-vuetify": "^1.0.0-beta.6",

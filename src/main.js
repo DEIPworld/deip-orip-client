@@ -27,6 +27,9 @@ import './styles/common.less';
 
 import './styles/app.scss';
 
+
+import { DataPreloadMixin } from '@/utils/DataPreloadMixin';
+
 // ////////////////////////
 
 const currencyFilterOptions = {
@@ -43,6 +46,8 @@ Vue.use(VueGoogleCharts);
 Vue.use(VueResize);
 Vue.use(Vuetify);
 Vue.use(VueCurrencyFilter, currencyFilterOptions);
+
+Vue.mixin(DataPreloadMixin);
 
 (async () => {
   try {
