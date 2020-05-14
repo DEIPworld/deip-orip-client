@@ -331,10 +331,11 @@ const actions = {
   },
 
   loadExperts({ commit }, { username, notify } = {}) {
-    const blackList = ['regacc', 'hermes', 'initdelegate', username];
+    // TODO: request server for tenant users
     deipRpc.api.getAllAccountsAsync()
       .then((accounts) => {
-        const experts = accounts.filter((a) => !blackList.some((username) => username === a.name)).map((a) => a.name);
+        const blackList = ['regacc', 'hermes', 'initdelegate', username];
+        const experts = accounts.filter((a) => !a.is_research_group && !blackList.some((username) => username === a.name)).map((a) => a.name);
         return usersService.getEnrichedProfiles(experts);
       })
       .then((users) => {
