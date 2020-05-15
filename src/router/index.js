@@ -76,6 +76,7 @@ import { AppConfigService } from '@deip/app-config-service';
 import { accountRouting } from '@/components/Account/router';
 import { userDetailRouting } from '@/components/UserDetails/router';
 import { adminRouting } from '@/components/AdminPanel/router';
+import UserRegistration from '@/components/auth/UserRegistration';
 
 const accessService = AccessService.getInstance();
 const usersService = UsersService.getInstance();
@@ -111,7 +112,8 @@ const router = new Router({
   }, {
     path: '/sign-up',
     name: 'SignUp',
-    component: SignUp,
+    // component: SignUp,
+    component: UserRegistration,
     meta: {
       viewTitle: 'Sign Up'
     }
