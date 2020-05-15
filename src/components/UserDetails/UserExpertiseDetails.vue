@@ -34,7 +34,7 @@
           item-text="discipline_name"
           item-value="discipline_id"
           dense
-          outlined
+          filled
           label="Discipline"
           :disabled="eciHistoryRecordsTable.loading"
           @change="loadDisciplineEciHistory()"
@@ -183,7 +183,7 @@
                   :disabled="eciHistoryRecordsTable.loading"
                   label="From"
                   readonly
-                  outlined
+                  filled
                   v-on="on"
                 />
               </template>
@@ -210,7 +210,7 @@
                   :disabled="eciHistoryRecordsTable.loading"
                   label="To"
                   readonly
-                  outlined
+                  filled
                   v-on="on"
                 />
               </template>
@@ -228,7 +228,7 @@
               class="my-0 py-0"
               :items="contributionTypeItems"
               label="Contribution Type"
-              outlined
+              filled
               dense
               clearable
               :disabled="eciHistoryRecordsTable.loading"
@@ -241,7 +241,7 @@
               class="my-0 py-0"
               :items="criteriaItems"
               label="Criteria"
-              outlined
+              filled
               dense
               clearable
               :disabled="eciHistoryRecordsTable.loading"

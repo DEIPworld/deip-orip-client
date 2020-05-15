@@ -9,7 +9,7 @@
       fixed
       flat
       clipped-left
-      color="#fff"
+      v-bind="themeSettings.appBar.bar"
     >
       <router-link :to="{ name: 'Default' }">
         <img height="40px" class="logo-image" :src="tenant.account | tenantLogoSrc(80, 80, false)">
