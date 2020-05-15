@@ -5,7 +5,7 @@
         <v-icon left>
           extension
         </v-icon>
-        Add criteria
+        Add criterion
       </v-btn>
     </template>
 
