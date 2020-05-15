@@ -49,12 +49,29 @@
         </v-chip>
       </div>
 
-      <technology-readiness-level
-        v-if="research.researchRef && research.researchRef.trl"
-        :current-trl-step="research.researchRef.trl"
-        is-read-only
-        is-chip
-      />
+      <div v-for="(item, i) in research.researchRef.tenantCriterias" :key="`${i}-tenantCriteria`" class="display-inline-block mr-4">
+        <div v-if="steppersInfo[i].isVisible && item.value && item.value.index !== null" class="mb-2">
+          <v-tooltip v-if="steppersInfo[i].component.readinessLevels[item.value.index].description" bottom>
+            <template v-slot:activator="{ on }">
+              <div class="display-flex" v-on="on">
+                <v-avatar size="24px" class="align-self-center">
+                  <v-icon size="24px" color="#0386b0">
+                    mdi-numeric-{{ item.value.index + 1 }}-circle
+                  </v-icon>
+                </v-avatar>
+                <span class="subtitle-1 align-self-center font-weight-medium black--text">{{ steppersInfo[i].component.readinessLevelShortTitle }}</span>
+              </div>
+            </template>
+            <span>{{ steppersInfo[i].component.readinessLevels[item.value.index].description }}</span>
+          </v-tooltip>
+          <div v-else class="display-flex">
+            <v-avatar size="20" color="#0386b0" class="align-self-center mr-1">
+              <span class="white--text caption font-weight-medium">{{ item.value.index + 1 }}</span>
+            </v-avatar>
+            <span class="subtitle-1 align-self-center font-weight-medium black--text">{{ steppersInfo[i].component.readinessLevelShortTitle }}</span>
+          </div>
+        </div>
+      </div>
 
       <v-row no-gutters justify="space-between" class="mt-3 mb-n3">
         <v-col cols="6" class="caption grey--text">
@@ -105,7 +122,12 @@
       return {};
     },
     computed: {
-      ...mapGetters({}),
+      ...mapGetters({
+        tenant: 'auth/tenant'
+      }),
+      steppersInfo() {
+        return this.research.researchRef.tenantCriterias.map(({ component }) => this.tenant.profile.settings.researchComponents.find(({ _id }) => _id === component))
+      },
       membersToDisplay() {
         return this.members.slice(0, 3);
       },

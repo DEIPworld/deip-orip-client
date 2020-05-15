@@ -170,7 +170,21 @@
     <v-divider class="my-6" />
 
     <v-sheet>
-      <technology-readiness-level is-read-only :current-trl-step="researchRef.trl" />
+      <div v-for="(item, i) in researchRef.tenantCriterias" :key="`${i}-tenantCriteria`">
+        <div v-if="steppersInfo[i].isVisible && item.value && item.value.index !== null" class="mb-2">
+          <div class="display-flex">
+            <v-avatar size="30" color="#0386b0" class="align-self-start mr-2">
+              <span class="white--text font-weight-medium">{{ item.value.index + 1 }}</span>
+            </v-avatar>
+            <div class="title align-self-start font-weight-medium">
+              {{ steppersInfo[i].component.readinessLevelShortTitle }}
+              <div class="caption font-weight-bold">
+                {{ steppersInfo[i].component.readinessLevels[item.value.index].description }}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
     </v-sheet>
 
     <v-sheet v-if="isResearchGroupMember">
@@ -330,8 +344,12 @@
         researchRef: 'rd/researchRef',
         reviewsList: 'rd/reviewsList',
         user: 'auth/user',
-        userJoinRequests: 'auth/userJoinRequests'
+        userJoinRequests: 'auth/userJoinRequests',
+        tenant: 'auth/tenant'
       }),
+      steppersInfo() {
+        return this.researchRef.tenantCriterias.map(({ component }) => this.tenant.profile.settings.researchComponents.find(({ _id }) => _id === component))
+      },
       isSelectedContentId() {
         return this.selectedContentId !== null;
       },
