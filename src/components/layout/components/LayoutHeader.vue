@@ -3,7 +3,7 @@
     tile
     :dark="isDark"
     :light="!isDark"
-    class="app-layout__header"
+    class="app-layout__header d-flex align-end"
     :class="classList"
     :style="{ backgroundImage: 'url(' + background + ')'}"
   >
@@ -23,34 +23,34 @@
     props: {
       background: {
         type: String,
-        required: false,
         default: null
       },
       muted: {
         type: Boolean,
-        required: false,
         default: true
       },
       dark: {
         type: Boolean,
-        required: false,
         default: true
       },
       light: {
         type: Boolean,
-        required: false,
         default: false
       },
       fullWidth: {
         type: Boolean,
-        required: false,
+        default: false
+      },
+      centered: {
+        type: Boolean,
         default: false
       }
     },
     computed: {
       classList() {
         return {
-          'app-layout__header--muted': this.muted === true
+          'app-layout__header--muted': this.muted === true,
+          'justify-center': this.centered
         };
       },
       isDark() {
