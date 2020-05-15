@@ -386,7 +386,7 @@
             this.$store.dispatch('layout/setSuccess', {
               message: `Account '${this.formData.username}' successfully created`
             });
-            this.$router.push({ name: this.$route.name === 'admin.members.add' ? 'admin.members' : 'Default' });
+            this.$router.push({ name: this.$route.name === 'admin.members.add' ? 'admin.members' : 'UserApplicationAccepted' });
           })
           .catch((err) => {
             this.isSaving = false;

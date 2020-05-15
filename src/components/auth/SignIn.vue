@@ -2,14 +2,14 @@
   <v-container fluid class="pa-0 ma-0 fill-height">
     <v-row no-gutters class="fill-height">
       <v-col cols="6" class="hidden-sm-and-down pb-6">
-        <div class="description fill-height">
+        <div class="description fill-height pb-6">
           <div class="description__logo">
             <img src="/assets/img/landing-logo.png">
           </div>
           <div class="description__info-text">
             Open Research and Innovation Platform
           </div>
-          <div class="description__signup-text">
+          <div class="description__signup-text py-3">
             Don't have an account?
             <router-link
               :to="{ name: 'SignUp' }"
@@ -17,7 +17,7 @@
               Sign Up
             </router-link>
           </div>
-          <div class="description__info-list-item mt-12" align-center shrink>
+          <div class="description__info-list-item mt-8" align-center shrink>
             <v-icon small color="white">
               mdi-message-reply-text
             </v-icon>
