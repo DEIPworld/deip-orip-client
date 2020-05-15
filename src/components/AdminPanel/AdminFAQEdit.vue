@@ -19,33 +19,32 @@
         :rules="[rules.required]"
         :disabled="isSaving"
       />
-      <v-row no-gutters>
+      <v-row no-gutters class="align-center">
+        <v-col cols="auto">
+          <v-checkbox class="ma-0 pa-0" hide-details v-model="formData.isVisible" label="Publish Criterion" />
+        </v-col>
         <v-spacer />
         <v-col cols="auto">
-          <v-checkbox v-model="formData.isVisible" label="Publish on FAQ page" />
+          <v-btn
+            color="primary"
+            class="mr-4"
+            text
+            :loading="isSaving"
+            :disabled="isSaving"
+            @click="$router.back()"
+          >
+            Cancel
+          </v-btn>
+          <v-btn
+            color="primary"
+            :loading="isSaving"
+            :disabled="isSaving"
+            @click="save()"
+          >
+            Save
+          </v-btn>
         </v-col>
       </v-row>
-
-      <div class="text-right mt-5">
-        <v-btn
-          color="primary"
-          class="mr-4"
-          text
-          :loading="isSaving"
-          :disabled="isSaving"
-          @click="$router.back()"
-        >
-          Cancel
-        </v-btn>
-        <v-btn
-          color="primary"
-          :loading="isSaving"
-          :disabled="isSaving"
-          @click="save()"
-        >
-          Save
-        </v-btn>
-      </div>
     </v-form>
   </modal-route-view>
 </template>
