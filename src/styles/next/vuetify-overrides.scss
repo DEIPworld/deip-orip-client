@@ -32,6 +32,7 @@
     }
 
     > .v-input__control > .v-input__slot:after {
+      pointer-events: none;
       border-color: rgba(#000, .38) !important;
       transform: none !important;
       height: 100%;
