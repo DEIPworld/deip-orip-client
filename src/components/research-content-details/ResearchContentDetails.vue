@@ -1,11 +1,5 @@
 <template>
-  <base-page-layout>
-    <template #sidebar>
-      <layout-sidebar right>
-        <research-content-details-sidebar @setDraftAuthors="setDraftAuthors" />
-      </layout-sidebar>
-    </template>
-
+  <layout-section>
     <v-row>
       <v-col cols="auto" v-if="isInProgress">
         <v-card class="full-height">
@@ -125,6 +119,11 @@
         </div>
       </v-col>
     </v-row>
+
+    <template #sidebar>
+      <research-content-details-sidebar @setDraftAuthors="setDraftAuthors" />
+    </template>
+
     <!-- START Proposal dialog section -->
     <v-dialog
       v-if="research"
@@ -237,7 +236,7 @@
       </v-card>
     </v-dialog>
     <!-- END Proposal dialog section -->
-  </base-page-layout>
+  </layout-section>
 </template>
 
 <script>
@@ -249,7 +248,7 @@
   import { ResearchService } from '@deip/research-service';
 
   import { researchContentTypes } from '@/variables';
-  import LayoutSidebar from '@/components/layout/components/LayoutSidebar';
+  import LayoutSection from '@/components/layout/components/LayoutSection';
 
   const researchContentService = ResearchContentService.getInstance();
   const researchGroupService = ResearchGroupService.getInstance();
@@ -257,7 +256,7 @@
 
   export default {
     name: 'ResearchContentDetails',
-    components: { LayoutSidebar },
+    components: { LayoutSection },
     data() {
       return {
         isSavingDraft: false,

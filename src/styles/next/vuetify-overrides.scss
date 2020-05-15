@@ -1,3 +1,7 @@
+.v-content {
+  transition: none !important;
+}
+
 .v-app-bar {
   border-bottom: 1px solid rgba(#000, .12) !important;
 }
@@ -18,23 +22,36 @@
   //  left: 0;
   //  background: #000;
   //}
-  &--outlined {
-    legend {
-      display: none !important;
+  &--filled {
+    > .v-input__control > .v-input__slot {
+      background-color: transparent !important;
     }
 
-    &:not(.v-text-field--single-line):not(.v-select) input,
-    &:not(.v-text-field--single-line) .v-select__selection {
-      margin-top: 16px !important;
-      margin-bottom: 0 !important;
+    > .v-input__control > .v-input__slot:before {
+      display: none;
     }
 
-    &:not(.v-input--dense) textarea {
-      margin-top: 24px !important;
-      padding-bottom: 8px;
+    > .v-input__control > .v-input__slot:after {
+      border-color: rgba(#000, .38) !important;
+      transform: none !important;
+      height: 100%;
+      border-width: thin !important;
+      bottom: 0 !important;
+      border-radius: inherit;
+    }
+
+    > .v-input__control > .v-input__slot:hover:after {
+      border-color: rgba(#000, .86) !important;
+    }
+
+    &.v-input--is-focused {
+      > .v-input__control > .v-input__slot:after {
+        border: 2px solid currentColor !important;
+      }
     }
   }
 }
-//
-//v-input v-input--hide-details theme--light v-text-field v-text-field--is-booted v-text-field--enclosed v-text-field--outlined v-select
-//v-input v-input--hide-details v-input--is-label-active v-input--is-dirty v-input--is-focused theme--light v-text-field v-text-field--is-booted v-text-field--enclosed v-text-field--outlined v-select primary--text
+
+.col {
+  min-width: 0;
+}

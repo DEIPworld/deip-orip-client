@@ -1,19 +1,21 @@
 <template>
-  <base-page-layout>
-    <template #header>
-      <research-details-header />
-    </template>
+  <div>
+    <research-details-header />
 
-    <template #toolbar>
+    <layout-toolbar>
       <research-details-actions v-if="!isResearchGroupMember" />
-    </template>
+    </layout-toolbar>
 
-    <template #sidebar>
-      <research-details-sidebar />
-    </template>
+    <layout-section>
+      <research-details-body />
 
-    <research-details-body />
-  </base-page-layout>
+      <template #sidebar>
+        <research-details-sidebar />
+      </template>
+    </layout-section>
+
+
+  </div>
 </template>
 
 <script>
@@ -23,10 +25,14 @@
   import ResearchDetailsBody from '@/components/research-details/components/ResearchDetailsBody';
   import ResearchDetailsHeader from '@/components/research-details/components/ResearchDetailsHeader';
   import ResearchDetailsSidebar from '@/components/research-details/components/ResearchDetailsSidebar';
+  import LayoutToolbar from '@/components/layout/components/LayoutToolbar';
+  import LayoutSection from '@/components/layout/components/LayoutSection';
 
   export default {
     name: 'ResearchDetails',
     components: {
+      LayoutSection,
+      LayoutToolbar,
       ResearchDetailsSidebar,
       ResearchDetailsHeader,
       ResearchDetailsBody,

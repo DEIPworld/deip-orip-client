@@ -30,10 +30,10 @@ const setTheme = async () => {
           primary: themeSettings['primary-color'],
           secondary: themeSettings['secondary-color']
         }
+      },
+      options: {
+        customProperties: true
       }
-    },
-    options: {
-      customProperties: true
     }
   };
 };

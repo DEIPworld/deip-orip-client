@@ -1,5 +1,5 @@
 <template>
-  <base-page-layout>
+  <layout-section>
     <v-stepper v-model="currentStep" alt-labels>
       <v-stepper-header>
         <v-stepper-step step="1" :complete="currentStep > 1">
@@ -63,22 +63,23 @@
         </v-stepper-content>
       </v-stepper-items>
     </v-stepper>
-  </base-page-layout>
+  </layout-section>
 </template>
 
 
 <script>
-  import Vue from 'vue';
   import { mapGetters } from 'vuex';
   import deipRpc from '@deip/rpc-client';
-  import { ResearchGroupService } from '@deip/research-group-service';
+  // import { ResearchGroupService } from '@deip/research-group-service';
   import { ResearchService } from '@deip/research-service';
+  import LayoutSection from '@/components/layout/components/LayoutSection';
 
-  const researchGroupService = ResearchGroupService.getInstance();
+  // const researchGroupService = ResearchGroupService.getInstance();
   const researchService = ResearchService.getInstance();
 
   export default {
     name: 'CreateTokenSale',
+    components: { LayoutSection },
     computed: {
       ...mapGetters({
         user: 'auth/user'

@@ -157,7 +157,7 @@
               outlined
               icon
               color="primary"
-              :to="{ name: 'CreateResearchGroup' }"
+              :to="{ name: 'CreateResearchGroup', params: {account_name: currentUser.username} }"
             >
               <v-icon small>
                 add
@@ -379,7 +379,7 @@
       }),
 
       isOwner() {
-        return this.currentUser.account.name === this.userInfo.account.name;
+        return this.currentUser && this.currentUser.account.name === this.userInfo.account.name;
       },
       isLocationSpecified() {
         return this.userInfo && this.userInfo.profile

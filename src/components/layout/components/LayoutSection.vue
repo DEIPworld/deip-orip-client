@@ -1,25 +1,31 @@
 <template>
-  <div class="app-layout__section">
-    <slot name="sidebar" />
-
-    <div :style="`maxWidth:${layoutContentWidth}`" class="app-layout__content pa-6 pa-sm-12">
-      <slot name="default" />
-    </div>
-  </div>
+  <v-container fluid class="pa-3 pa-md-6">
+    <v-row no-gutters class="ma-0">
+      <v-col class="pa-3 pa-md-6">
+        <slot name="default" />
+      </v-col>
+      <v-col
+        v-if="$hasSlot('sidebar')"
+        class="pa-3 pa-md-6"
+        v-bind="_sidebarCols"
+      >
+        <slot name="sidebar" />
+      </v-col>
+    </v-row>
+  </v-container>
 </template>
 
 <script>
   export default {
     name: 'LayoutSection',
-    computed: {
-      layoutContentWidth() {
-        return this.hasSlot('sidebar') ? this.$slots.sidebar.length === 2 ? '50%' : '75%' : null;
+    props: {
+      sidebarCols: {
+        type: Object,
+        default: () => ({})
       }
     },
-    methods: {
-      hasSlot(name) {
-        return this.$slots[name] !== undefined;
-      }
+    computed: {
+      _sidebarCols() {return { ...{ cols: 12, md: 3 }, ...this.sidebarCols }; }
     }
   };
 </script>

@@ -1,5 +1,5 @@
 <template>
-  <base-page-layout>
+  <layout-section>
     <v-card flat class="full-height full-width pa-12">
       <v-row no-gutters>
         <v-col cols="12" class="headline font-weight-bold">
@@ -132,13 +132,15 @@
         </v-col>
       </v-row>
     </v-card>
-  </base-page-layout>
+  </layout-section>
 </template>
 
 <script>
+  import LayoutSection from '@/components/layout/components/LayoutSection';
+
   export default {
     name: 'ReviewSetup',
-
+    components: { LayoutSection },
     data() {
       return {
         content: [

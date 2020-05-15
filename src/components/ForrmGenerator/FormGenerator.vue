@@ -22,7 +22,7 @@
         />
       </v-row>
     </v-sheet>
-    <div v-if="hasSlot('actions')" class="text-right">
+    <div v-if="$hasSlot('actions')" class="text-right">
       <slot name="actions" />
     </div>
   </v-form>
@@ -64,15 +64,11 @@
       };
     },
     methods: {
-      hasSlot(name) {
-        return this.$slots[name] !== undefined;
-      },
       setCommonProps(field) {
         return merge.all([
           {
             props: {
-              outlined: true,
-              // filled: true,
+              filled: true,
               hideDetails: 'auto'
             }
           },

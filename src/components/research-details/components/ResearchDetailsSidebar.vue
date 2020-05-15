@@ -1,5 +1,5 @@
 <template>
-  <layout-sidebar simple right>
+  <div>
     <v-sheet class="mb-6">
       <div class="title">
         <router-link
@@ -210,7 +210,6 @@
       >
         <template v-slot:activator="{ on }">
           <v-btn
-            large
             block
             color="primary"
             dark
@@ -281,7 +280,7 @@
         </v-card>
       </v-dialog>
     </v-sheet>
-  </layout-sidebar>
+  </div>
 </template>
 
 <script>

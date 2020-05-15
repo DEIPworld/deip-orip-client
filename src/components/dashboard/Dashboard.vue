@@ -1,17 +1,12 @@
 <!-- TODO: need full rework -->
 <template>
-  <base-page-layout>
+  <div>
     <v-tabs v-model="activeTab">
       <v-tab href="#tab-summary">
         Summary
       </v-tab>
-      <!-- <v-tab :class="themeSettings['tabs-text-class']" href="#tab-projects">Projects</v-tab>
-      <v-tab :class="themeSettings['tabs-text-class']" href="#tab-investments">Investments</v-tab>
-      <v-tab :class="themeSettings['tabs-text-class']" href="#tab-reviews">Reviews</v-tab>
-      <v-tab :class="themeSettings['tabs-text-class']" href="#tab-experts">Experts</v-tab>
-      <v-tab :class="themeSettings['tabs-text-class']" href="#tab-ip-protection">IP protection</v-tab> -->
     </v-tabs>
-
+    <v-divider />
     <v-tabs-items v-model="activeTab">
       <v-tab-item value="tab-summary">
         <v-row>
@@ -294,7 +289,7 @@
         </v-row>
       </v-tab-item> -->
     </v-tabs-items>
-  </base-page-layout>
+  </div>
 </template>
 
 <script>

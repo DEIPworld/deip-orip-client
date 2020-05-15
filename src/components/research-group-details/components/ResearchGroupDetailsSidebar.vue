@@ -1,5 +1,5 @@
 <template>
-  <layout-sidebar right>
+  <div>
     <div v-if="isJoinRequestsSectionAvailable" class="">
       <div id="invites" class="title font-weight-bold pb-2">
         Join requests: {{ pendingJoinRequests.length }}
@@ -90,7 +90,7 @@
       :is-open="options.isTransferTokensDialogOpen"
       @onClose="$store.dispatch('researchGroup/changeOptions', { key: 'isTransferTokensDialogOpen', value: false })"
     />
-  </layout-sidebar>
+  </div>
 </template>
 
 <script>

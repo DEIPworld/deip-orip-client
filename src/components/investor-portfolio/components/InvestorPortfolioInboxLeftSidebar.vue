@@ -1,5 +1,5 @@
 <template>
-  <layout-sidebar>
+  <div class="pa-6">
     <div class="title">
       My Lists
     </div>
@@ -171,7 +171,7 @@
         <v-list-item-title v-text="item.name" />
       </v-list-item>
     </v-list>
-  </layout-sidebar>
+  </div>
 </template>
 
 <script>

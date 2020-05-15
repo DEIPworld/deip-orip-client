@@ -2,7 +2,7 @@
   <v-card
     outlined
     :to="{
-      name: isLoggedIn() ? 'ResearchDetails' : 'ResearchDetailsPublic',
+      name: $isUser ? 'ResearchDetails' : 'ResearchDetailsPublic',
       params: {
         research_group_permlink: encodeURIComponent(research.research_group.permlink),
         research_permlink: encodeURIComponent(research.permlink)
@@ -92,10 +92,6 @@
   import { mapGetters } from 'vuex';
   import moment from 'moment';
 
-  import { AccessService } from '@deip/access-service';
-
-  const accessService = AccessService.getInstance();
-
   export default {
     name: 'ResearchProjectTile',
     props: {
@@ -181,9 +177,6 @@
         return this.research.number_of_negative_reviews + this.research.number_of_positive_reviews;
       }
 
-    },
-    methods: {
-      isLoggedIn() { return accessService.isLoggedIn(); }
     }
   };
 </script>

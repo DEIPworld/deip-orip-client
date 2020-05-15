@@ -5,7 +5,6 @@ import GlobalLoader from './components/GlobalLoader';
 import SidebarSplittedBtn from './components/SidebarSplittedBtn';
 import BasePageLayout from './components/BasePageLayout';
 
-import './components/user-notificatons-list/index';
 
 Vue.component('toolbar', Toolbar);
 Vue.component('global-loader', GlobalLoader);

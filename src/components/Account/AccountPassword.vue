@@ -1,8 +1,9 @@
 <template>
-  <base-page-layout>
+  <layout-section>
     <content-block
       :max-width="800"
       title="Change password"
+      centered
     >
       <v-form
         ref="changePasswordForm"
@@ -13,7 +14,7 @@
           v-model="oldPassword"
           :rules="[rules.required]"
           label="Old password / Private Key"
-          solo
+          outlined
           :disabled="isPasswordChanging"
           :append-icon="isHiddenOldPassword ? 'visibility_off' : 'visibility'"
           :type="isHiddenOldPassword ? 'password' : 'text'"
@@ -23,7 +24,7 @@
           v-model="newPassword"
           :rules="[rules.required, rules.masterPassword]"
           label="New password"
-          solo
+          outlined
           :disabled="isPasswordChanging"
           :append-icon="isHiddenNewPassword ? 'visibility_off' : 'visibility'"
           :type="isHiddenNewPassword ? 'password' : 'text'"
@@ -35,7 +36,7 @@
           v-model="reEnterNewPassword"
           :rules="[rules.required, rules.reEnterMasterPassword]"
           label="Re-Enter New password"
-          solo
+          outlined
           :disabled="isPasswordChanging"
           :append-icon="isHiddenReEnterNewPassword ? 'visibility_off' : 'visibility'"
           :type="isHiddenReEnterNewPassword ? 'password' : 'text'"
@@ -53,7 +54,7 @@
         </v-btn>
       </v-form>
     </content-block>
-  </base-page-layout>
+  </layout-section>
 </template>
 
 <script>
@@ -63,13 +64,14 @@
   import { UserService } from '@deip/user-service';
 
   import ContentBlock from '@/components/layout/components/ContentBlock';
+  import LayoutSection from '@/components/layout/components/LayoutSection';
 
   const accessService = AccessService.getInstance();
   const userService = UserService.getInstance();
 
   export default {
     name: 'AccountPassword',
-    components: { ContentBlock },
+    components: { LayoutSection, ContentBlock },
     data() {
       return {
         oldPassword: '',

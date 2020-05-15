@@ -1,22 +1,22 @@
 <template>
-  <base-page-layout v-if="dataLoaded">
+  <layout-section v-if="dataLoaded" :sidebar-cols="$route.fullPath.includes('account') ? {md: 4} : {}">
     <template #sidebar>
-      <layout-sidebar right>
-        <user-details-sidebar />
-      </layout-sidebar>
+      <user-details-sidebar />
     </template>
     <user-details-body />
-  </base-page-layout>
+  </layout-section>
 </template>
 
 <script>
   import LayoutSidebar from '@/components/layout/components/LayoutSidebar';
   import UserDetailsSidebar from '@/components/UserDetails/components/UserDetailsSidebar';
   import UserDetailsBody from '@/components/UserDetails/components/UserDetailsBody';
+  import LayoutSection from '@/components/layout/components/LayoutSection';
 
   export default {
     name: 'UserDetails',
     components: {
+      LayoutSection,
       UserDetailsBody,
       UserDetailsSidebar,
       LayoutSidebar

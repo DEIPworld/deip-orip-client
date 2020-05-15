@@ -13,7 +13,6 @@
         </v-tab>
       </v-tabs>
     </layout-toolbar>
-
     <layout-section>
       <v-tabs-items v-model="activeTab">
         <v-tab-item key="my-projects">

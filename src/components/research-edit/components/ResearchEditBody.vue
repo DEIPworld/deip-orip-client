@@ -1,5 +1,5 @@
 <template>
-  <content-block :max-width="800">
+  <content-block :max-width="800" centered>
     <div>
       <div class="title font-weight-medium pb-4">
         Tilte:

@@ -1,17 +1,19 @@
 <template>
-  <base-page-layout>
+  <layout-section>
     <research-edit-body />
-  </base-page-layout>
+  </layout-section>
 </template>
 
 <script>
   import { mapGetters } from 'vuex';
   import deipRpc from '@deip/rpc-client';
   import moment from 'moment';
+  import ResearchEditBody from '@/components/research-edit/components/ResearchEditBody';
+  import LayoutSection from '@/components/layout/components/LayoutSection';
 
   export default {
     name: 'ResearchEdit',
-
+    components: { LayoutSection, ResearchEditBody },
     computed: {
       ...mapGetters({
         user: 'auth/user'

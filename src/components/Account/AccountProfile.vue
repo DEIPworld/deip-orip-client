@@ -206,7 +206,7 @@
           : null,
         category: this.userInfo.profile.category,
         occupation: this.userInfo.profile.occupation,
-        webPage: this.userInfo.profile.webPages.length ? this.userInfo.profile.webPages.length[0].link : ''
+        webPage: this.userInfo.profile.webPages.length ? this.userInfo.profile.webPages[0].link : ''
       };
 
       this.formModelCache = JSON.stringify(this.formModel);

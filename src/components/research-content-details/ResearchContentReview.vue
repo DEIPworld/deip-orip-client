@@ -1,25 +1,21 @@
 <template>
-  <base-page-layout>
-    <v-card flat>
-      <research-content-review-body />
-    </v-card>
+  <layout-section>
+    <research-content-review-body />
 
     <template #sidebar>
-      <layout-sidebar right>
-        <research-content-review-sidebar />
-      </layout-sidebar>
+      <research-content-review-sidebar />
     </template>
-  </base-page-layout>
+  </layout-section>
 </template>
 
 <script>
   import { mapGetters } from 'vuex';
   import deipRpc from '@deip/rpc-client';
-  import LayoutSidebar from '@/components/layout/components/LayoutSidebar';
+  import LayoutSection from '@/components/layout/components/LayoutSection';
 
   export default {
     name: 'ResearchContentReview',
-    components: { LayoutSidebar },
+    components: { LayoutSection },
     data() {
       return {};
     },

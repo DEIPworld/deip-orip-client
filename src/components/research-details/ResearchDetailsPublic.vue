@@ -1,76 +1,75 @@
 <template>
-  <base-page-layout>
-    <template #header>
-      <research-details-header />
-    </template>
+  <div>
+    <research-details-header />
+    <layout-section>
+      <research-timeline :timeline="timeline" />
+      <research-details-materials :is-details-available="false" />
 
-    <template #sidebar>
-      <layout-sidebar simple right>
-        <v-sheet>
-          <div class="title">
-            You are not logged in
-          </div>
-          <div class="my-2">
-            After creating an account/log in you can add new projects or enjoy shared materials
-          </div>
-          <v-btn
-            :to="{
+      <template #sidebar>
+        <layout-sidebar simple right>
+          <v-sheet>
+            <div class="title">
+              You are not logged in
+            </div>
+            <div class="my-2">
+              After creating an account/log in you can add new projects or enjoy shared materials
+            </div>
+            <v-btn
+              :to="{
               name: 'SignIn'
             }"
-            block
-            color="primary"
-            class="pa-2"
-          >
-            Log In
-          </v-btn>
-        </v-sheet>
+              block
+              color="primary"
+              class="pa-2"
+            >
+              Log In
+            </v-btn>
+          </v-sheet>
 
-        <v-divider class="my-6" />
-
-        <v-sheet>
-          <div class="title">
-            {{ group.name }}
-          </div>
-          <div
-            v-for="(member, i) in researchMembersList"
-            :key="member.account.id"
-            class="mt-4"
-            justify="space-between"
-            align-center
-          >
-            <div>
-              <platform-avatar
-                :key="'member-' + i"
-                :size="40"
-                :user="member"
-                :link-to-profile="false"
-                no-follow
-                link-to-profile-class="pl-4 bold"
-                pick-disabled
-              >
-                <span class="pl-2">{{ member | fullname }}</span>
-              </platform-avatar>
-            </div>
-          </div>
-        </v-sheet>
-
-        <v-divider class="my-6" />
-
-        <technology-readiness-level is-read-only :current-trl-step="researchRef.trl" />
-
-        <div v-if="researchRef.partners.length">
           <v-divider class="my-6" />
-          <div class="title">
-            Partners
-          </div>
-          <research-partners class="mt-4" is-read-only :partners="researchRef.partners" />
-        </div>
-      </layout-sidebar>
-    </template>
 
-    <research-timeline :timeline="timeline" />
-    <research-details-materials :is-details-available="false" />
-  </base-page-layout>
+          <v-sheet>
+            <div class="title">
+              {{ group.name }}
+            </div>
+            <div
+              v-for="(member, i) in researchMembersList"
+              :key="member.account.id"
+              class="mt-4"
+              justify="space-between"
+              align-center
+            >
+              <div>
+                <platform-avatar
+                  :key="'member-' + i"
+                  :size="40"
+                  :user="member"
+                  :link-to-profile="false"
+                  no-follow
+                  link-to-profile-class="pl-4 bold"
+                  pick-disabled
+                >
+                  <span class="pl-2">{{ member | fullname }}</span>
+                </platform-avatar>
+              </div>
+            </div>
+          </v-sheet>
+
+          <v-divider class="my-6" />
+
+          <technology-readiness-level is-read-only :current-trl-step="researchRef.trl" />
+
+          <div v-if="researchRef.partners.length">
+            <v-divider class="my-6" />
+            <div class="title">
+              Partners
+            </div>
+            <research-partners class="mt-4" is-read-only :partners="researchRef.partners" />
+          </div>
+        </layout-sidebar>
+      </template>
+    </layout-section>
+  </div>
 </template>
 
 <script>
@@ -83,6 +82,7 @@
   import ResearchDetailsHeader from '@/components/research-details/components/ResearchDetailsHeader';
   import ResearchDetailsMaterials from '@/components/research-details/components/ResearchDetailsMaterials';
   import ResearchTimeline from './components/ResearchTimeline';
+  import LayoutSection from '@/components/layout/components/LayoutSection';
 
   const researchService = ResearchService.getInstance();
 
@@ -90,6 +90,7 @@
     name: 'ResearchDetailsPublic',
 
     components: {
+      LayoutSection,
       ResearchDetailsMaterials,
       ResearchDetailsHeader,
       LayoutSidebar,

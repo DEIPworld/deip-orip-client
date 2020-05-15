@@ -7,7 +7,7 @@
       <v-spacer />
       <slot name="toolbarAction" />
 
-      <template v-if="hasSlot('toolbarExtension')" #extension>
+      <template v-if="$hasSlot('toolbarExtension')" #extension>
         <slot name="toolbarExtension" />
       </template>
     </v-toolbar>
@@ -28,11 +28,6 @@
         default: 'Admin',
         type: String,
         required: true
-      }
-    },
-    methods: {
-      hasSlot(name) {
-        return this.$slots[name] !== undefined;
       }
     }
   };

@@ -29,6 +29,7 @@ import './styles/app.scss';
 
 
 import { DataPreloadMixin } from '@/utils/DataPreloadMixin';
+import { CommonMixin } from '@/utils/CommonMixin';
 
 // ////////////////////////
 
@@ -48,6 +49,7 @@ Vue.use(Vuetify);
 Vue.use(VueCurrencyFilter, currencyFilterOptions);
 
 Vue.mixin(DataPreloadMixin);
+Vue.mixin(CommonMixin);
 
 (async () => {
   try {
@@ -58,6 +60,7 @@ Vue.mixin(DataPreloadMixin);
     await setTenant();
 
     const themeSettings = await setTheme();
+    console.log(themeSettings)
 
     new Vue({
       store,

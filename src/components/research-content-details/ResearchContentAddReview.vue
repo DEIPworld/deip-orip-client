@@ -1,22 +1,20 @@
 <template>
-  <base-page-layout>
+  <layout-section>
+    <research-content-add-review-body />
+
     <template #sidebar>
-      <layout-sidebar right>
-        <research-content-add-review-sidebar />
-      </layout-sidebar>
+      <research-content-add-review-sidebar />
     </template>
 
-    <research-content-add-review-body />
-  </base-page-layout>
+  </layout-section>
 </template>
 
 <script>
-  import { mapGetters } from 'vuex';
-  import LayoutSidebar from '@/components/layout/components/LayoutSidebar';
+  import LayoutSection from '@/components/layout/components/LayoutSection';
 
   export default {
     name: 'ResearchContentAddReview',
-    components: { LayoutSidebar },
+    components: { LayoutSection },
     data() {
       return {};
     },

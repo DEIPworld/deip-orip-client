@@ -25,7 +25,7 @@
         <slot />
       </v-card-text>
 
-      <div v-if="hasSlot('actions')">
+      <div v-if="$hasSlot('actions')">
         <v-divider />
 
         <v-card-actions>
@@ -63,9 +63,6 @@
     methods: {
       close() {
         this.$emit('close', true);
-      },
-      hasSlot(name) {
-        return this.$slots[name] !== undefined;
       }
     }
   };

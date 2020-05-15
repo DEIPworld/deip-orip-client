@@ -1,6 +1,7 @@
 <template>
-  <base-page-layout>
-    <v-card flat class="fill-height pa-12">
+
+  <div>
+    <layout-section>
       <div class="display-1 font-weight-bold mb-4">
         Frequently Asked Questions
       </div>
@@ -19,36 +20,38 @@
           {{ item.question }}
         </router-link>
       </div>
-
-      <v-divider class="my-6" />
-
-      <v-row
+    </layout-section>
+    <v-divider />
+    <layout-section>
+      <content-block
+        :max-width="800"
         v-for="(item, i) in faqs"
         :id="`question${i+1}`"
         :key="`${i}-allfaq`"
         no-gutters
         class="mb-12"
       >
-        <v-col class="headline font-weight-bold mb-4" cols="12">
+        <h3 class="headline font-weight-bold mb-4">
           {{ item.question }}
-        </v-col>
-        <v-col
+        </h3>
+        <div
           class="body-2 white-space-pre-line"
-          cols="12"
-          sm="8"
         >
           {{ item.answer }}
-        </v-col>
-      </v-row>
-    </v-card>
-  </base-page-layout>
+        </div>
+      </content-block>
+    </layout-section>
+  </div>
 </template>
 
 <script>
-import { mapGetters } from 'vuex';
+  import { mapGetters } from 'vuex';
+  import LayoutSection from '@/components/layout/components/LayoutSection';
+  import ContentBlock from '@/components/layout/components/ContentBlock';
+
   export default {
     name: 'FAQ',
-
+    components: { ContentBlock, LayoutSection },
     data() {
       return {};
     },

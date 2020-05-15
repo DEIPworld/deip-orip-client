@@ -106,12 +106,52 @@
 
   import { PROPOSAL_TYPES } from '@/variables';
   import { UserService } from '@deip/user-service';
+  import ResearchProposalUserNotification
+    from '@/components/layout/components/user-notificatons-list/components/ResearchProposalUserNotification';
+  import TokenSaleProposalUserNotification
+    from '@/components/layout/components/user-notificatons-list/components/TokenSaleProposalUserNotification';
+  import InviteProposalUserNotification
+    from '@/components/layout/components/user-notificatons-list/components/InviteProposalUserNotification';
+  import ResearchUpdateProposalUserNotification
+    from '@/components/layout/components/user-notificatons-list/components/ResearchUpdateProposalUserNotification';
+  import ResearchGroupUpdateProposalUserNotification
+    from '@/components/layout/components/user-notificatons-list/components/ResearchGroupUpdateProposalUserNotification';
+  import InvitationUserNotification
+    from '@/components/layout/components/user-notificatons-list/components/ExclusionUserNotification';
+  import InvitationApprovedUserNotification
+    from '@/components/layout/components/user-notificatons-list/components/InvitationApprovedUserNotification';
+  import InvitationRejectedUserNotification
+    from '@/components/layout/components/user-notificatons-list/components/InvitationRejectedUserNotification';
+  import ExpertReviewUserNotification
+    from '@/components/layout/components/user-notificatons-list/components/ExpertReviewUserNotification';
+  import ExpertReviewRequestUserNotification
+    from '@/components/layout/components/user-notificatons-list/components/ExpertReviewRequestUserNotification';
+  import ResearchContentProposalUserNotification
+    from '@/components/layout/components/user-notificatons-list/components/ResearchContentProposalUserNotification';
+  import ExclusionUserNotification
+    from '@/components/layout/components/user-notificatons-list/components/ExclusionUserNotification';
+  import ExclusionProposalUserNotification
+    from '@/components/layout/components/user-notificatons-list/components/ExclusionProposalUserNotification';
 
   const userService = UserService.getInstance();
 
   export default {
     name: 'UserNotificationsList',
-
+    components: {
+      ExpertReviewRequestUserNotification,
+      ExpertReviewUserNotification,
+      InvitationRejectedUserNotification,
+      InvitationApprovedUserNotification,
+      InvitationUserNotification,
+      ResearchGroupUpdateProposalUserNotification,
+      ResearchUpdateProposalUserNotification,
+      InviteProposalUserNotification,
+      TokenSaleProposalUserNotification,
+      ResearchProposalUserNotification,
+      ResearchContentProposalUserNotification,
+      ExclusionUserNotification,
+      ExclusionProposalUserNotification
+    },
     props: {
       notifications: { type: Array, required: true, default: () => [] }
     },

@@ -10,7 +10,7 @@
         <slot />
       </v-list-item-title>
     </v-list-item-content>
-    <v-list-item-action v-if="hasSlot('action')" :class="{'align-self-start': doubleField}">
+    <v-list-item-action v-if="$hasSlot('action')" :class="{'align-self-start': doubleField}">
       <slot name="action" />
     </v-list-item-action>
   </v-list-item>
@@ -32,11 +32,6 @@
       doubleField: {
         type: Boolean,
         default: false
-      }
-    },
-    methods: {
-      hasSlot(name) {
-        return this.$slots[name] !== undefined;
       }
     }
   };

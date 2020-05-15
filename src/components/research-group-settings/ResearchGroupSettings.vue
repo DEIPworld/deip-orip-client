@@ -1,13 +1,16 @@
 <template>
-  <base-page-layout>
+  <layout-section>
     <research-group-settings-body />
-  </base-page-layout>
+  </layout-section>
 </template>
 
 <script>
+  import LayoutSection from '@/components/layout/components/LayoutSection';
+  import ResearchGroupSettingsBody from '@/components/research-group-settings/components/ResearchGroupSettingsBody';
+
   export default {
     name: 'ResearchGroupSettings',
-
+    components: { ResearchGroupSettingsBody, LayoutSection },
     data() {
       return {};
     },

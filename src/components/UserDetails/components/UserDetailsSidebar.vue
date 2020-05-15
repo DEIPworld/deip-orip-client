@@ -418,7 +418,7 @@
         isClaimExpertiseDialogShown: 'userDetails/isClaimExpertiseDialogShown'
       }),
       isOwner() {
-        return this.currentUser && this.currentUser.username === this.$route.params.account_name;
+        return this.currentUser && this.currentUser.account.name === this.userInfo.account.name;
       },
       isContactsInfoSpecified() {
         return this.userInfo && this.userInfo.profile && this.userInfo.profile.email;

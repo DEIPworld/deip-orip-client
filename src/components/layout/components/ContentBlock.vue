@@ -1,10 +1,10 @@
 <template>
-  <v-sheet tile class="section mx-auto" :max-width="maxWidth">
+  <v-sheet tile :class="classList" :max-width="maxWidth">
     <div
       v-if="hasTitle"
       class="section__header mb-4"
     >
-      <v-row>
+      <v-row no-gutters>
         <v-col
           v-if="hasTitleIcon"
           cols="auto"
@@ -15,16 +15,16 @@
           <slot name="titleIcon" />
         </v-col>
 
-        <v-col v-if="hasTitleText">
+        <v-col v-if="hasTitleText" :class="{'ml-4': hasTitleIcon}">
           <div v-if="title" class="headline">
             {{ title }}
           </div>
-          <div v-if="hasSlot('title')" class="headline">
+          <div v-if="$hasSlot('title')" class="headline">
             <slot name="title" />
           </div>
         </v-col>
 
-        <v-col v-if="hasSlot('titleActions')" cols="auto">
+        <v-col v-if="$hasSlot('titleActions')" cols="auto">
           <slot name="titleActions" />
         </v-col>
       </v-row>
@@ -40,34 +40,36 @@
     props: {
       title: {
         type: String,
-        required: false,
         default: null
       },
       icon: {
         type: String,
-        required: false,
         default: null
       },
       maxWidth: {
         type: Number || String,
-        required: false,
         default: null
+      },
+      centered: {
+        type: Boolean,
+        default: false
       }
     },
     computed: {
       hasTitle() {
-        return this.hasTitleIcon || this.hasTitleText || this.hasSlot('titleActions');
+        return this.hasTitleIcon || this.hasTitleText || this.$hasSlot('titleActions');
       },
       hasTitleIcon() {
-        return this.icon || this.hasSlot('titleIcon');
+        return this.icon || this.$hasSlot('titleIcon');
       },
       hasTitleText() {
-        return this.title || this.hasSlot('title');
-      }
-    },
-    methods: {
-      hasSlot(name) {
-        return this.$slots[name] !== undefined;
+        return this.title || this.$hasSlot('title');
+      },
+      classList() {
+        return {
+          section: true,
+          'mx-auto': this.centered
+        };
       }
     }
   };

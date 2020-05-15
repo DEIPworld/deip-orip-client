@@ -1,7 +1,7 @@
 <template>
-  <div class="app-layout__sidebar pa-6 pa-sm-12" :class="classList">
+  <v-col cols="12" md="3">
     <slot name="default" />
-  </div>
+  </v-col>
 </template>
 
 <script>

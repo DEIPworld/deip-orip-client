@@ -1,8 +1,9 @@
 <template>
-  <base-page-layout>
+  <layout-section>
     <content-block
       :max-width="800"
       title="Download private key"
+      centered
     >
       <v-form
         ref="confirmPasswordForm"
@@ -13,7 +14,7 @@
           v-model="masterPassword"
           :rules="[rules.required, rules.masterPassword]"
           label="Password / Private Key"
-          solo
+          outlined
           :append-icon="isHiddenPassword ? 'visibility_off' : 'visibility'"
           :type="isHiddenPassword ? 'password' : 'text'"
           @click:append="isHiddenPassword = !isHiddenPassword"
@@ -29,7 +30,7 @@
         </v-btn>
       </v-form>
     </content-block>
-  </base-page-layout>
+  </layout-section>
 </template>
 
 <script>
@@ -37,10 +38,11 @@
   import { mapGetters } from 'vuex';
   import { saveKeysPdf } from '@/utils/saveKeysPdf';
   import ContentBlock from '@/components/layout/components/ContentBlock';
+  import LayoutSection from '@/components/layout/components/LayoutSection';
 
   export default {
     name: 'AccountPrivateKey',
-    components: { ContentBlock },
+    components: { LayoutSection, ContentBlock },
     data() {
       return {
         isConfirmPasswordFormValid: false,

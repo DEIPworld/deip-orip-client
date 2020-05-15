@@ -7,6 +7,8 @@
       />
       <toolbar-admin v-if="$route.path.includes('/admin')" />
 
+      <router-view :key="$route.fullPath" name="navigator" />
+
       <v-content>
         <router-view :key="$route.fullPath" />
       </v-content>

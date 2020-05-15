@@ -1,5 +1,5 @@
 <template>
-  <base-page-layout>
+  <layout-section>
     <content-block
       icon="mdi-cash-usd-outline"
       title="Balance"
@@ -61,7 +61,6 @@
         </template>
       </v-data-table>
     </content-block>
-
 
     <content-block
       v-if="investments.length"
@@ -521,7 +520,7 @@
         </v-card-actions>
       </v-card>
     </v-dialog>
-  </base-page-layout>
+  </layout-section>
 </template>
 
 <script>
@@ -530,12 +529,13 @@
   import deipRpc from '@deip/rpc-client';
   import ContentBlock from '@/components/layout/components/ContentBlock';
   import * as bankCardsStorage from '../../../utils/bankCard';
+  import LayoutSection from '@/components/layout/components/LayoutSection';
 
   const fiatAssetBackedTokens = ['EUR', 'USD'];
 
   export default {
     name: 'UserWallet',
-    components: { ContentBlock },
+    components: { LayoutSection, ContentBlock },
     data() {
       const rules = {
         username: (value) => {

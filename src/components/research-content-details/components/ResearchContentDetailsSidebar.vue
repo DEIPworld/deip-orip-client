@@ -87,7 +87,6 @@
     >
       <template v-slot:activator="{ on }">
         <v-btn
-          large
           block
           color="primary"
           dark
@@ -252,7 +251,6 @@
     <div v-if="isPublished" class="py-2">
       <v-divider class="my-6" />
       <v-btn
-        large
         block
         color="primary"
         :to="{

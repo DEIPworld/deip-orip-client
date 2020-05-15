@@ -1,21 +1,22 @@
 <template>
-  <base-page-layout v-if="isPageLoaded" :right-sidebar-class="'xs12 md3'" :content-class="'xs12 md9'">
-    <v-card slot="content" class="fill-height pa-12">
-      <research-application-details-package />
-    </v-card>
+  <layout-section v-if="isPageLoaded">
 
-    <v-card slot="right-sidebar" class="fill-height py-12 px-6">
+    <research-application-details-package />
+
+    <template #sidebar>
       <research-application-details-sidebar />
-    </v-card>
-  </base-page-layout>
+    </template>
+  </layout-section>
 </template>
 
 <script>
   import { mapGetters } from 'vuex';
   import deipRpc from '@deip/rpc-client';
+  import LayoutSection from '@/components/layout/components/LayoutSection';
 
   export default {
     name: 'ResearchApplicationDetails',
+    components: { LayoutSection },
     data() {
       return {};
     },

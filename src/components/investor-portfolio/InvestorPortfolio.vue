@@ -1,13 +1,15 @@
 <template>
-  <app-layout>
-    <layout-section>
-      <template #sidebar>
-        <investor-portfolio-inbox-left-sidebar />
-        <investor-portfolio-inbox-right-sidebar v-if="!noResult" />
-      </template>
-      <investor-portfolio-inbox />
-    </layout-section>
-  </app-layout>
+  <layout-section>
+    <v-navigation-drawer app clipped width="280">
+      <investor-portfolio-inbox-left-sidebar />
+    </v-navigation-drawer>
+
+    <investor-portfolio-inbox />
+
+    <template #sidebar>
+      <investor-portfolio-inbox-right-sidebar />
+    </template>
+  </layout-section>
 </template>
 
 <script>
@@ -17,10 +19,20 @@
   import LayoutSidebar from '@/components/layout/components/LayoutSidebar';
   import AppLayout from '@/components/layout/components/Layout';
   import LayoutSection from '@/components/layout/components/LayoutSection';
+  import InvestorPortfolioInboxLeftSidebar
+    from '@/components/investor-portfolio/components/InvestorPortfolioInboxLeftSidebar';
+  import InvestorPortfolioInboxRightSidebar
+    from '@/components/investor-portfolio/components/InvestorPortfolioInboxRightSidebar';
+  import InvestorPortfolioInbox from '@/components/investor-portfolio/components/InvestorPortfolioInbox';
 
   export default {
     name: 'InvestorPortfolio',
-    components: { LayoutSection, AppLayout, LayoutSidebar },
+    components: {
+      InvestorPortfolioInbox,
+      InvestorPortfolioInboxRightSidebar,
+      InvestorPortfolioInboxLeftSidebar,
+      LayoutSection
+    },
     computed: {
       ...mapGetters({
         user: 'auth/user',

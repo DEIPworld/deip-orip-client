@@ -2,7 +2,7 @@
   <div class="app-layout">
     <slot name="header" />
 
-    <layout-toolbar v-if="hasSlot('toolbar')">
+    <layout-toolbar v-if="$hasSlot('toolbar')">
       <slot name="toolbar" />
     </layout-toolbar>
 
@@ -51,11 +51,6 @@
       },
       hasRightSidebar() {
         return this.$slots['right-sidebar'] !== undefined;
-      }
-    },
-    methods: {
-      hasSlot(name) {
-        return this.$slots[name] !== undefined;
       }
     }
   };
