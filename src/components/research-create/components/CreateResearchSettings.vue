@@ -1,6 +1,6 @@
 <template>
   <v-row class="full-width fill-height overflow-auto justify-center">
-    <v-col cols="12" sm="8" class="flex-column mb-4 px-12">
+    <v-col cols="12" sm="8" class="mb-4 px-12">
       <div class="mb-6 step-title">
         Project settings
       </div>
@@ -27,12 +27,13 @@
     </v-col>
 
     <v-col cols="12" sm="8" class="px-12">
-      <div
+      <v-row
         v-for="(item, i) in tenant.profile.settings.researchComponents"
         :key="`${i}-stepper`"
+        no-gutters
         class="my-6"
       >
-        <div v-if="item.isVisible">
+        <v-col v-if="item.isVisible" cols="12" md="8">
           <div class="title font-weight-medium mb-6">
             {{ item.component.readinessLevelTitle }}
           </div>
@@ -41,8 +42,8 @@
             :items="stepperSelector(item.component.readinessLevels)"
             :label="item.component.readinessLevelTitle"
           />
-        </div>
-      </div>
+        </v-col>
+      </v-row>
     </v-col>
 
     <v-col cols="12" sm="8" class="px-12">

@@ -12,7 +12,7 @@
           class="ma-0 align-self-center"
           small
           outlined
-          color="grey"
+          color="primary"
           :to="{
             name: 'ResearchGroupSettings',
             params: {

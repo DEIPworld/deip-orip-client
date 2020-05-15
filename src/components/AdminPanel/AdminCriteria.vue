@@ -5,7 +5,7 @@
         <v-icon left>
           extension
         </v-icon>
-        Add criteria
+        Add criterion
       </v-btn>
     </template>
 
@@ -91,7 +91,11 @@
           types: {
             publish: {
               title: 'Publish criterion?',
-              description: 'Criterion will be set for each project and will appear on: project page, project request form.',
+              description: `Criterion will be set for each project and will appear on:
+              - project page, 
+              - project application form,
+              - explore page.
+              `,
               action: {
                 title: 'publish',
                 method: this.publishCriteria
@@ -99,7 +103,11 @@
             },
             unpublish: {
               title: 'Unpublish criterion?',
-              description: 'Criterion will be removed from: project page, project application form.',
+              description: `Criterion will be removed from:
+              - project page, 
+              - project application form,
+              - explore page.
+              `,
               action: {
                 title: 'unpublish',
                 method: this.unpublishCriteria
@@ -107,7 +115,11 @@
             },
             delete: {
               title: 'Delete criterion?',
-              description: 'Criterion will be deleted permanently.',
+              description: `Criterion will be deleted permanently and will be removed from:
+              - project page, 
+              - project application form,
+              - explore page.
+              `,
               action: {
                 title: 'delete',
                 method: this.deleteCriteria
