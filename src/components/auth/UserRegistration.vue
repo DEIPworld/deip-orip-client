@@ -191,6 +191,18 @@
             :disabled="isSaving"
           />
         </v-col>
+        <v-col v-if="$route.name === 'SignUp'">
+          <v-checkbox class="mt-0 pt-0" hide-details v-model="formData.agree" :rules="[rules.required]">
+            <template #label>
+              Agree to Terms and Conditions
+            </template>
+          </v-checkbox>
+          <div class="caption ml-8 mt-1">
+            No data is stored until you press “Create account” button.
+            By clicking below, you agree that we may process
+            your information in accordance with these terms.
+          </div>
+        </v-col>
       </v-row>
 
       <div class="text-right mt-5">
@@ -378,8 +390,7 @@
           })
           .catch((err) => {
             this.isSaving = false;
-            const message =
-              (err.response && err.response.data)
+            const message = (err.response && err.response.data)
               || 'Sorry, the service is temporarily unavailable, please try again later';
 
             this.$store.dispatch('layout/setError', { message });
