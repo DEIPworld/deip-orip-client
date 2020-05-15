@@ -1,28 +1,12 @@
 <template>
   <app-layout>
-    <layout-header :background="$options.filters.tenantBackgroundSrc(tenant.account)">
-      <div class="display-2 uppercase half-bold">
-        Projects
-      </div>
-
-      <div class="py-6">
-        <v-btn
-          v-if="isLoggedIn()"
-          :to="{ name: 'CreateResearch' }"
-          color="primary"
-          class="ma-0"
-        >
-          Start a project
+    <layout-header full-width :background="$options.filters.tenantBackgroundSrc(tenant.account)">
+      <div class="pt-6 display-flex flex-wrap justify-center">
+        <v-btn v-if="isLoggedIn()" :to="{ name: 'CreateResearch' }" color="primary" class="width-225 ma-0 px-5">Start a project
         </v-btn>
-
         <template v-else>
-          <v-btn :to="{ name: 'SignIn' }" color="primary" class="ma-0 px-12">
-            Log In
-          </v-btn>
-          <div class="white--text body-1 mt-2">
-            After creating an account/log in you can add
-            new projects or enjoy shared materials
-          </div>
+          <v-btn :to="{ name: 'SignUp' }" color="primary" class="width-225 px-5 ma-2">Become a member</v-btn>
+          <v-btn :to="{ name: 'SignIn' }" light class="width-225 px-5 blue--text ma-2">Start a project</v-btn>
         </template>
       </div>
     </layout-header>
@@ -531,5 +515,10 @@
       }
     }
   }
+
+  .width-225{
+    width: 225px;
+  }
+
 
 </style>
