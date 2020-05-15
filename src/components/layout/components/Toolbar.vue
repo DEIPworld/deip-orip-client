@@ -48,12 +48,12 @@
         <v-tab exact :to="{ name: 'Dashboard' }">
           Dashboard
         </v-tab>
-        <v-tab exact :to="{ name: 'InvestorPortfolio' }">
+        <!-- <v-tab exact :to="{ name: 'InvestorPortfolio' }">
           Portfolio
-        </v-tab>
-        <v-tab exact :to="{ name: 'UserWallet', params: { account_name: user.username } }">
+        </v-tab> -->
+        <!-- <v-tab exact :to="{ name: 'UserWallet', params: { account_name: user.username } }">
           Wallet
-        </v-tab>
+        </v-tab> -->
       </v-tabs>
 
       <v-tabs
