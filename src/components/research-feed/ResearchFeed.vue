@@ -1,6 +1,6 @@
 <template>
   <app-layout>
-    <layout-header full-width muted="false" :background="$options.filters.tenantBackgroundSrc(tenant.account)">
+    <layout-header centered full-width muted="false" :background="$options.filters.tenantBackgroundSrc(tenant.account)">
       <div class="pt-6 display-flex flex-wrap justify-center">
         <v-btn v-if="isLoggedIn()" :to="{ name: 'CreateResearch' }" color="primary" class="width-225 ma-0 px-5">Start a project
         </v-btn>
@@ -10,6 +10,7 @@
         </template>
       </div>
     </layout-header>
+    <v-divider />
 
     <!-- TODO: refactoring -->
     <div class="d-flex px-6 px-sm-12 py-4">
