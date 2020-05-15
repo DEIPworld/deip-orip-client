@@ -1,6 +1,6 @@
 <template>
   <app-layout>
-    <layout-header full-width :background="$options.filters.tenantBackgroundSrc(tenant.account)">
+    <layout-header full-width muted="false" :background="$options.filters.tenantBackgroundSrc(tenant.account)">
       <div class="pt-6 display-flex flex-wrap justify-center">
         <v-btn v-if="isLoggedIn()" :to="{ name: 'CreateResearch' }" color="primary" class="width-225 ma-0 px-5">Start a project
         </v-btn>
@@ -330,7 +330,7 @@
         }))
       };
     },
-    
+
     computed: {
       ...mapGetters({
         tenant: 'auth/tenant',

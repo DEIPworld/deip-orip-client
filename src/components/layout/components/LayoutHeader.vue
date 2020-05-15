@@ -3,7 +3,7 @@
     tile
     :dark="isDark"
     :light="!isDark"
-    class="app-layout__header"
+    class="app-layout__header d-flex align-end justify-center"
     :class="classList"
     :style="{ backgroundImage: 'url(' + background + ')'}"
   >
