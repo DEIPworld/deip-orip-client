@@ -1,5 +1,5 @@
 <template>
-  <div v-if="timeline.length" class="my-6">
+  <div v-if="timeline.length" class="mb-6">
     <v-row>
       <v-col cols="auto" class="pr-4">
         <v-icon large color="grey lighten-2">

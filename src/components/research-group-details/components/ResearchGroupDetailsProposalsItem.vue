@@ -23,7 +23,12 @@
               person_add
             </v-icon>
             <div class="body-2">
-              {{ proposal.extension.invitee | fullname }}
+              <router-link
+                class="a"
+                :to="{ name: 'UserDetails', params: { account_name: proposal.extension.invitee.account.name } }"
+              >
+                {{ proposal.extension.invitee | fullname }}
+              </router-link>
             </div>
           </div>
           <div v-else-if="proposal.action === PROPOSAL_TYPES.EXCLUDE_MEMBER" class="display-flex">
@@ -31,7 +36,12 @@
               mdi-account-remove
             </v-icon>
             <div class="body-2">
-              {{ proposal.extension.member | fullname  }}
+              <router-link
+                class="a"
+                :to="{ name: 'UserDetails', params: { account_name: proposal.extension.member.account.name } }"
+              >
+                {{ proposal.extension.member | fullname }}
+              </router-link>
             </div>
           </div>
           <div v-else-if="proposal.action === PROPOSAL_TYPES.TRANSFER" class="display-flex">

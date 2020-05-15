@@ -245,10 +245,12 @@
     <!-- END TODO: refactoring -->
 
     <layout-section>
-      <content-block id="projectsView">
+      <content-block>
         <template #title>
-          Projects
-          <v-badge offset-y="-8" offset-x="4" :content="researchFeed.length || '0'" />
+          <div ref="projectsView">
+            Projects
+            <v-badge offset-y="-8" offset-x="4" :content="researchFeed.length || '0'" />
+          </div>
         </template>
 
         <v-data-iterator
@@ -465,7 +467,7 @@
       },
 
       onPaginationUpdated(nextState) {
-        this.$vuetify.goTo('#projectsView');
+        this.$refs.projectsView.scrollIntoView();
       },
 
       isLoggedIn() { return accessService.isLoggedIn(); }
