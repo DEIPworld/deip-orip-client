@@ -559,13 +559,13 @@ router.beforeEach((to, from, next) => {
     '/sign-in',
     '/sign-up',
     '/org-sign-in',
-    '/admin/login'
+    '/admin/sign-in'
   ];
 
   if (loginPages.includes(to.path)) {
 
     if (accessService.isLoggedIn()) {
-      next(to.path === '/admin/login' ? '/admin' : '/'); // if token is already presented redirect user to home page
+      next(to.path === '/admin/sign-in' ? '/admin' : '/'); // if token is already presented redirect user to home page
     } else {
       next(); // otherwise redirect to sign-in page
     }
