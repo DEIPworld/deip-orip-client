@@ -1,7 +1,7 @@
 <template>
   <v-container fluid class="pa-0 ma-0 fill-height">
     <v-row no-gutters class="fill-height">
-      <v-col cols="6" class="hidden-sm-and-down">
+      <v-col cols="6" class="hidden-sm-and-down pb-6">
         <div class="description fill-height">
           <div class="description__logo">
             <img src="/assets/img/landing-logo.png">

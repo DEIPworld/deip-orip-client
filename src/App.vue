@@ -13,7 +13,7 @@
         <router-view :key="$route.fullPath" />
       </v-content>
 
-      <footer-bar></footer-bar>
+      <footer-bar v-if="!$route.path.includes('/admin')" />
     </v-app>
 
     <v-snackbar v-model="errorSnack.isVisible" :timeout="5000" color="error">
