@@ -21,7 +21,7 @@
       />
       <v-row no-gutters class="align-center">
         <v-col cols="auto">
-          <v-checkbox class="ma-0 pa-0" hide-details v-model="formData.isVisible" label="Publish Criterion" />
+          <v-checkbox class="ma-0 pa-0" hide-details v-model="formData.isVisible" label="Publish on FAQ page" />
         </v-col>
         <v-spacer />
         <v-col cols="auto">
