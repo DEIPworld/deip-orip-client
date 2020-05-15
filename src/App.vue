@@ -13,7 +13,7 @@
         <router-view :key="$route.fullPath" />
       </v-content>
 
-      <footer-bar v-if="!$route.path.includes('/admin')" />
+      <footer-bar v-if="!$route.path.includes('/admin') && !$route.path.includes('/account')" />
     </v-app>
 
     <v-snackbar v-model="errorSnack.isVisible" :timeout="5000" color="error">
