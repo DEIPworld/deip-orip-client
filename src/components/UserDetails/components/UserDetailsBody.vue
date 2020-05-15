@@ -182,7 +182,6 @@
             <div v-if="isOwner" class="float-right mt-6 mr-4">
               <v-btn
                 class="mr-2 ml-2"
-                outlined
                 small
                 depressed
                 color="primary lighten-1"
@@ -195,7 +194,7 @@
                 outlined
                 small
                 depressed
-                color="red lighten-1"
+                color="primary lighten-1"
                 @click="showDeleteEducationDialog(item, index)"
               >
                 Delete
@@ -252,7 +251,6 @@
             <div v-if="isOwner" class="float-right mt-6 mr-4">
               <v-btn
                 class="mr-2 ml-2"
-                outlined
                 small
                 depressed
                 color="primary lighten-1"
@@ -265,7 +263,7 @@
                 outlined
                 small
                 depressed
-                color="red lighten-1"
+                color="primary lighten-1"
                 @click="showDeleteEmploymentDialog(item, index)"
               >
                 Delete

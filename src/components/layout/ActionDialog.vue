@@ -21,7 +21,7 @@
 
       <v-divider />
 
-      <v-card-text class="text--primary pt-5">
+      <v-card-text class="text--primary pt-5 white-space-pre-line">
         <slot />
       </v-card-text>
 

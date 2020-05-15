@@ -74,20 +74,20 @@
       </div>
 
       <v-row no-gutters justify="space-between" class="mt-3 mb-n3">
-        <v-col cols="6" class="caption grey--text">
+        <v-col cols="6" class="caption grey--text align-self-center">
           <v-icon small>
             event
           </v-icon>
           <span class="pl-1">Updated on</span>
           <span class="pl-1 half-bold">{{ moment(research.last_update_time).format('D MMM YYYY') }}</span>
         </v-col>
-        <v-col>
+        <v-col class="align-self-center">
           <v-icon small color="grey lighten-1">
             chat_bubble
           </v-icon>
           <span class="pl-1 caption half-bold grey--text lighten-1">{{ reviewsCount }}</span>
         </v-col>
-        <v-col cols="5" class="text-right">
+        <v-col cols="5" class="text-right align-self-center">
           <v-tooltip bottom>
             <template v-slot:activator="{ on }">
               <v-chip small v-on="on">

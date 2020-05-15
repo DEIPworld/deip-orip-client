@@ -36,13 +36,12 @@
                 small
                 depressed
                 class="mx-2"
-                color="red lighten-1"
+                color="primary"
                 @click="deleteDraft(draft)"
               >
                 Delete
               </v-btn>
               <v-btn
-                outlined
                 small
                 depressed
                 class="mx-2"
