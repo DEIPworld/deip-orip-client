@@ -160,15 +160,15 @@
 
             // sig-seed should be uint8 array with length = 32
             const secretSig = secretKey.sign(encodeUint8Arr(window.env.SIG_SEED).buffer);
-
-            return authService.signIn({
+    
+            return authService.adminSignIn({
               username: this.formModel.username,
               secretSigHex: crypto.hexify(secretSig)
             });
           }).then(async (response) => {
             if (!response.success) {
               accessService.clearAccessToken();
-              this.disabled = false;
+              this.disable = false;
               this.$store.dispatch('layout/setError', { message: response.error });
               return;
             }
@@ -180,11 +180,11 @@
             // and compromised thirdparty sources.
             accessService.setAccessToken(response.jwtToken, privateKey);
 
-            this.disabled = false;
+            this.disable = false;
             this.$router.go(0);
           }).catch((err) => {
             accessService.clearAccessToken();
-            this.disabled = false;
+            this.disable = false;
             this.$store.dispatch('layout/setError', { message: err.message });
           });
       }
