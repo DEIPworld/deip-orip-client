@@ -333,18 +333,26 @@
           lastName,
           pubKey,
           phoneNumbers: [
-            {
-              label: 'default',
-              ext: '', // optional
-              number: phoneNumber
-            }
+            ...(
+              phoneNumber
+                ? [{
+                  label: 'default',
+                  ext: '', // optional
+                  number: phoneNumber
+                }]
+                : []
+            )
           ],
           webPages: [
-            {
-              type: 'webpage',
-              label: 'default',
-              link: website
-            }
+            ...(
+              website
+                ? [{
+                  type: 'webpage',
+                  label: 'default',
+                  link: website
+                }]
+                : []
+            )
           ],
           location: {
             city,
@@ -366,7 +374,7 @@
             this.$store.dispatch('layout/setSuccess', {
               message: `Account '${this.formData.username}' successfully created`
             });
-            this.$router.push({ name: 'admin.members' });
+            this.$router.push({ name: this.$route.name === 'admin.members.add' ? 'admin.members' : 'Default' });
           })
           .catch((err) => {
             this.isSaving = false;
