@@ -4,13 +4,13 @@
       <v-text-field
         v-model="formData.component.readinessLevelTitle"
         label="Criterion name"
-        outlined
+        filled
         :rules="[rules.required]"
       />
       <v-text-field
         v-model="formData.component.readinessLevelShortTitle"
         label="Criterion short name"
-        outlined
+        filled
         :rules="[rules.required]"
       />
 
@@ -24,24 +24,24 @@
           :key="'level-' + index"
           :dot-num="index + 1"
           class="px-0"
-          double-field
+          :ctrl-height="72"
         >
           <v-text-field
             v-model="formData.component.readinessLevels[index].title"
             label="Step name"
-            outlined
+            filled
             hide-details
-            flat
-            class="py-2"
+            class="mt-2"
             :rules="[rules.required]"
           />
           <v-textarea
             v-model="formData.component.readinessLevels[index].description"
             label="Step description"
-            outlined
+            filled
+            hide-details
             auto-grow
             rows="1"
-            class="py-2"
+            class="mt-2 mb-4"
           />
 
           <template #action>
@@ -49,6 +49,8 @@
               <v-icon>delete</v-icon>
             </v-btn>
           </template>
+
+
         </leveller-item>
 
         <leveller-list-button
@@ -57,34 +59,33 @@
           @click="addField"
         />
       </leveller-list>
-      
-      <v-row no-gutters>
+      <v-divider class="my-6" />
+      <v-row no-gutters class="align-center">
+        <v-col cols="auto">
+          <v-checkbox class="ma-0 pa-0" hide-details v-model="formData.isVisible" label="Publish Stepper" />
+        </v-col>
         <v-spacer />
         <v-col cols="auto">
-          <v-checkbox class="mt-6" v-model="formData.isVisible" label="Publish Stepper" />
+          <v-btn
+            color="primary"
+            class="mr-4"
+            text
+            :loading="isSaving"
+            :disabled="isSaving"
+            @click="$router.back()"
+          >
+            Cancel
+          </v-btn>
+          <v-btn
+            color="primary"
+            :loading="isSaving"
+            :disabled="isSaving"
+            @click="save()"
+          >
+            Save
+          </v-btn>
         </v-col>
       </v-row>
-
-      <div class="mt-6 text-right">
-        <v-btn
-          color="primary"
-          class="mr-4"
-          text
-          :loading="isSaving"
-          :disabled="isSaving"
-          @click="$router.back()"
-        >
-          Cancel
-        </v-btn>
-        <v-btn
-          color="primary"
-          :loading="isSaving"
-          :disabled="isSaving"
-          @click="save()"
-        >
-          Save
-        </v-btn>
-      </div>
     </v-form>
   </modal-route-view>
 </template>

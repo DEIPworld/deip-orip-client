@@ -33,10 +33,7 @@
     methods: {
       clickNotification() {
         this.$router.push({
-          name: 'UserDetails',
-          params: {
-            account_name: encodeURIComponent(this.notification.metadata.inviteeProfile._id)
-          },
+          name: 'account.cummary',
           hash: '#invites'
         });
 

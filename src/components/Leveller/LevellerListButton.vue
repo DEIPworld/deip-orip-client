@@ -1,6 +1,6 @@
 <template>
   <v-list-item :dense="dense">
-    <v-list-item-action class="my-0 pt-2 rl-list-action">
+    <v-list-item-action class="my-0 pt-2 d-stepper-list-list-action">
       <v-btn
         icon
         color="primary"
@@ -35,7 +35,7 @@
 </script>
 
 <style lang="scss">
-  .rl-list-action {
+  .d-stepper-list-list-action {
     position: relative;
 
     &::before {
