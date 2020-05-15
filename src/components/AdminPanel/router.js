@@ -88,7 +88,7 @@ export const adminRouting = [
     ]
   },
   {
-    path: '/admin/login',
+    path: '/admin/sign-in',
     name: 'admin.login',
     component: AdminLogin
   }
