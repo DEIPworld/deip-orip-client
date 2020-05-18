@@ -86,10 +86,10 @@
         <v-row class="mt-2">
           <v-col>
             <div class="body-2">
-              {{ investment.myShare.amount }}
+              {{ convertToPercent(investment.myShare.amount) }} %
             </div>
             <div class="mt-1 caption text-uppercase grey--text">
-              Your number of tokens
+              Your ownership share
             </div>
           </v-col>
           <v-col>
@@ -98,14 +98,6 @@
             </div>
             <div class="mt-1 caption text-uppercase grey--text">
               Price per token
-            </div>
-          </v-col>
-          <v-col>
-            <div class="body-2">
-              {{ convertToPercent(investment.myShare.amount) }}%
-            </div>
-            <div class="mt-1 caption text-uppercase grey--text">
-              Your ownership share
             </div>
           </v-col>
           <v-col>
@@ -137,7 +129,7 @@
               {{ investment.shareHolders.length + 1 }}
             </div>
             <div class="mt-1 caption text-uppercase grey--text">
-              # of tokenholders
+              # of token holders
             </div>
           </v-col>
           <v-col>
@@ -195,7 +187,7 @@
             class="py-0 ma-0"
             @click="openSendResearchTokensDialog()"
           >
-            Send research tokens
+            Transfer share
           </v-btn>
         </v-sheet>
       </div>
@@ -388,7 +380,7 @@
       <v-card class="pa-6">
         <v-card-title>
           <div class="title">
-            Send Research Tokens
+            Transfer Research Share
           </div>
           <div class="right-top-angle">
             <v-btn icon class="pa-0 ma-0" @click="closeSendResearchTokensDialog()">
@@ -399,24 +391,25 @@
           </div>
         </v-card-title>
 
-        <v-card-text>
+        <v-card-text v-if="sendResearchTokensDialog.research">
           <v-form ref="sendResearchTokensForm" v-model="sendResearchTokensDialog.form.valid">
             <v-text-field
-              :value="sendResearchTokensDialog.research.title"
-              label="Research"
+              :label="sendResearchTokensDialog.research.title"
               disabled
             />
             <v-text-field
               v-model="sendResearchTokensDialog.form.to"
-              label="To"
+              label="Receiver"
               :rules="sendResearchTokensDialog.form.rules.username"
               :disabled="sendResearchTokensDialog.isSending"
             />
             <v-text-field
               v-model="sendResearchTokensDialog.form.amount"
-              label="Amount"
+              label="Share"
               :rules="sendResearchTokensDialog.form.rules.amount"
               :disabled="sendResearchTokensDialog.isSending"
+              suffix="%"
+              mask="##"
             />
           </v-form>
         </v-card-text>
@@ -605,10 +598,7 @@
         },
 
         sendResearchTokensDialog: {
-          research: {
-            id: null,
-            title: null
-          },
+          research: null,
           form: {
             valid: false,
             to: '',
@@ -617,12 +607,13 @@
               username: [rules.username],
               amount: [
                 (value) => {
-                  const number = parseInt(value);
-                  if (!number || number < 0) {
-                    return 'Amount should be positive integer';
-                  }
-                  if (number > this.sendResearchTokensDialog.maxAmount) {
-                    return 'Amount is greater than research token balance';
+                  const number = parseFloat(value);
+                  if (isNaN(number)) return "Should be valid float number";
+                  if (!number || number < 0) return "Should be valid positive float number";
+                  
+                  const ownShare = this.convertToPercent(this.sendResearchTokensDialog.maxAmount)
+                  if (number > ownShare) {
+                    return `Your share owned share (${ownShare}%) is not enough for transfer`;
                   }
 
                   return true;
@@ -919,10 +910,7 @@
         });
 
         const expandedInvestment = this.investments[this.expandedInvestmentIdx];
-        this.sendResearchTokensDialog.research = {
-          id: expandedInvestment.research.id,
-          title: expandedInvestment.research.title
-        };
+        this.sendResearchTokensDialog.research = expandedInvestment.research;
         this.sendResearchTokensDialog.maxAmount = expandedInvestment.myShare.amount;
         this.sendResearchTokensDialog.form.valid = false;
         this.sendResearchTokensDialog.form.to = '';
@@ -986,12 +974,16 @@
       sendResearchTokens() {
         this.sendResearchTokensDialog.isSending = true;
 
-        return deipRpc.broadcast.transferResearchTokensAsync(
+        const shareToTransfer = `${parseFloat(this.sendResearchTokensDialog.form.amount).toFixed(2)} %`;
+        const extensions = [];
+
+        return deipRpc.broadcast.transferResearchShareAsync(
           this.user.privKey,
-          this.sendResearchTokensDialog.research.id,
+          this.sendResearchTokensDialog.research.external_id,
           this.user.username,
           this.sendResearchTokensDialog.form.to,
-          +this.sendResearchTokensDialog.form.amount
+          shareToTransfer,
+          extensions
         )
           .then((data) => {
             this.$store.dispatch('layout/setSuccess', {
