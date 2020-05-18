@@ -1,28 +1,40 @@
 <template>
-  <v-dialog v-model="isOpen" persistent transition="scale-transition" max-width="600px">
-    <v-card class="pa-4">
+  <v-dialog
+    v-model="isOpen"
+    persistent
+    transition="scale-transition"
+    max-width="600px"
+  >
+    <v-card class="pa-6">
       <v-card-title>
-        <v-layout align-center>
-          <v-flex grow headline>Invite user to Research Group</v-flex>
-          <v-flex shrink right-top-angle>
-            <v-btn @click="close()" icon class="pa-0 ma-0">
-              <v-icon color="black">close</v-icon>
-            </v-btn>
-          </v-flex>
-        </v-layout>
+        <div class="headline">
+          Invite user to Research Group
+        </div>
+        <div class="right-top-angle">
+          <v-btn icon class="pa-0 ma-0" @click="close()">
+            <v-icon color="black">
+              close
+            </v-icon>
+          </v-btn>
+        </div>
       </v-card-title>
       <v-card-text>
-        <v-autocomplete :items="users" item-text="profile.firstName" item-value="account" v-model="selectedUser"
-                        placeholder="Researcher">
+        <v-autocomplete
+          v-model="selectedUser"
+          :items="users"
+          item-text="profile.firstName"
+          item-value="account"
+          placeholder="Researcher"
+        >
           <template slot="selection" slot-scope="data">
             <div class="pl-2">
               <platform-avatar
                 :user="data.item"
                 :size="30"
-                noFollow
-                noFollowName
+                no-follow
+                no-follow-name
                 link-to-profile-class="pl-2"
-              ></platform-avatar>
+              />
             </div>
           </template>
 
@@ -31,41 +43,54 @@
               <platform-avatar
                 :user="data.item"
                 :size="30"
-                noFollow
-                noFollowName
+                no-follow
+                no-follow-name
                 link-to-profile-class="pl-2"
-              ></platform-avatar>
+              />
             </div>
           </template>
         </v-autocomplete>
 
-        <v-text-field label="Research Group Tokens" v-model="tokensAmount" suffix="%" mask="###"></v-text-field>
+        <!-- <v-text-field
+          v-model="tokensAmount"
+          label="Research Group Tokens"
+          suffix="%"
+          mask="###"
+        /> -->
 
-        <v-textarea label="Invitation letter" auto-grow rows="2" v-model="coverLetter"></v-textarea>
+        <v-textarea
+          v-model="coverLetter"
+          label="Invitation letter"
+          auto-grow
+          rows="2"
+        />
       </v-card-text>
 
       <v-card-actions>
-        <v-layout row wrap>
-          <v-flex xs12 py-2>
+        <v-row>
+          <v-col class="py-2" cols="12">
             <v-btn
               color="primary"
               :disabled="isDisabled || isLoading"
               :loading="isLoading"
-              @click="sendProposal()"
               block
-            >Create proposal
+              @click="sendProposal()"
+            >
+              Create proposal
             </v-btn>
-          </v-flex>
-          <v-flex xs12 py-2>
+          </v-col>
+          <v-col class="py-2" cols="12">
             <v-btn
-              @click="close()"
               :disabled="isLoading"
               color="primary"
-              flat
-              block>Cancel
+              text
+              block
+              @click="close()"
+            >
+              Cancel
             </v-btn>
-          </v-flex>
-        </v-layout>
+          </v-col>
+        </v-row>
       </v-card-actions>
     </v-card>
   </v-dialog>
@@ -85,15 +110,8 @@
 
     props: {
       isOpen: { required: true, type: Boolean },
-      groupId: { required: true, type: Number },
-      users: { required: true, type: Array, default: () => [] },
-    },
-    computed: {
-      isDisabled() {
-        return _.isEmpty(this.selectedUser)
-          || _.isEmpty(this.tokensAmount)
-          || !_.isNumber(parseInt(this.tokensAmount));
-      }
+      groupExternalId: { required: true, type: String },
+      users: { required: true, type: Array, default: () => [] }
     },
     data() {
       return {
@@ -101,6 +119,23 @@
         tokensAmount: '',
         coverLetter: '',
         isLoading: false
+      };
+    },
+    computed: {
+      ...mapGetters({
+        user: 'auth/user'
+      }),
+      isDisabled() {
+        return _.isEmpty(this.selectedUser)
+          // || _.isEmpty(this.tokensAmount)
+          || !_.isNumber(parseInt(this.tokensAmount));
+      }
+    },
+    watch: {
+      isOpen(newVal, oldVal) {
+        this.selectedUser = undefined;
+        this.tokensAmount = '';
+        this.coverLetter = '';
       }
     },
     methods: {
@@ -111,33 +146,30 @@
       sendProposal() {
         this.isLoading = true;
 
-        researchGroupService.createInviteProposal({
-          groupId: this.groupId,
-          invitee: this.selectedUser.name,
-          rgtAmount: parseInt(this.tokensAmount) * this.DEIP_1_PERCENT,
-          coverLetter: this.coverLetter,
-          isHead: false
-        }).then(() => {
+        researchGroupService.createResearchGroupInviteViaOffchain(this.user.privKey, {
+          researchGroup: this.groupExternalId,
+          member: this.selectedUser.name,
+          rewardShare: `0.00 %`,
+          researches: undefined, // all researches
+          extensions: [],
+        }, {
+          notes: this.coverLetter,
+          approver: null
+        })
+        .then(() => {
           this.$store.dispatch('layout/setSuccess', {
             message: 'Invitation Proposal has been created successfully!'
           });
           this.$emit('onSuccess');
-        }).catch(err => {
+        }).catch((err) => {
           this.$store.dispatch('layout/setError', {
             message: 'An error occurred while creating proposal, please try again later'
           });
-          console.log(err)
+          console.log(err);
         }).finally(() => {
           this.isLoading = false;
           this.close();
         });
-      }
-    },
-    watch: {
-      isOpen(newVal, oldVal) {
-        this.selectedUser = undefined;
-        this.tokensAmount = '';
-        this.coverLetter = '';
       }
     }
   };

@@ -1,105 +1,145 @@
 <template>
-  <v-layout row wrap v-if="isTokenSaleSectionAvailable" class="my-5">
-    <v-flex xs12 lg7>
-      <v-layout column>
-        <v-layout row>
-          <v-flex grow>
-            <v-layout>
-              <div class="pr-3">
-                <v-icon large color="grey lighten-2">mdi-cash-usd-outline</v-icon>
-              </div>
-              <div class="rd-block-header align-self-center">Fundraising</div>
-            </v-layout>
-          </v-flex>
-          <v-flex shrink></v-flex>
-        </v-layout>
+  <v-row v-if="isTokenSaleSectionAvailable" no-gutters class="mb-12">
+    <v-col cols="12" lg="7">
+      <v-row no-gutters>
+        <v-col cols="auto" class="pr-4">
+          <v-icon large color="grey lighten-2">
+            mdi-cash-usd-outline
+          </v-icon>
+        </v-col>
+        <v-col class="rd-block-header align-self-center">
+          Fundraising
+        </v-col>
+      </v-row>
 
-        <div v-if="isActiveTokenSale || isInactiveTokenSale">
-          <v-layout row wrap class="pt-3">
-            <v-flex xs12 lg3 class="bold">Start:</v-flex>
-            <v-flex xs12 lg9 class="pl-2">
-              <span>{{tokenSale.start_time | dateFormat('MMM D, YYYY HH:mm', true)}}</span>
-              <v-chip
-                v-if="hasInactiveTokenSale"
-                class="my-0 mx-2 caption"
-                style="height: 1.4em"
-                color="primary lighten-3"
-              >{{tokenSaleStartLeft}} left</v-chip>
-            </v-flex>
-          </v-layout>
-          <v-layout row wrap class="pt-3">
-            <v-flex xs12 lg3 class="bold">End:</v-flex>
-            <v-flex xs12 lg9 class="pl-2">
-              <span>{{tokenSale.end_time | dateFormat('MMM D, YYYY HH:mm', true)}}</span>
-              <v-chip
-                v-if="hasActiveTokenSale"
-                class="my-0 mx-2 caption"
-                style="height: 1.4em"
-                color="amber lighten-1"
-              >{{tokenSaleEndLeft}} left</v-chip>
-            </v-flex>
-          </v-layout>
-          <v-layout row wrap class="pt-3">
-            <v-flex xs12 lg3 class="bold">Tokens On sale:</v-flex>
-            <v-flex
-              xs12
-              lg9
-              class="pl-2"
-            >{{tokenSale.balance_tokens}} ({{convertToPercent(tokenSale.balance_tokens)}}%)</v-flex>
-          </v-layout>
-          <v-layout row wrap class="pt-3">
-            <v-flex xs12 lg3 class="bold">Remaining Tokens:</v-flex>
-            <v-flex
-              xs12
-              lg9
-              class="pl-2"
-            >{{research.owned_tokens}} ({{convertToPercent(research.owned_tokens)}}%)</v-flex>
-          </v-layout>
-          <v-layout row wrap class="pt-3">
-            <v-flex xs12 lg3 class="bold">Min:</v-flex>
-            <v-flex xs12 lg9 class="pl-2">${{fromAssetsToFloat(tokenSale.soft_cap)}}</v-flex>
-          </v-layout>
-          <v-layout row wrap class="pt-3">
-            <v-flex xs12 lg3 class="bold">Max:</v-flex>
-            <v-flex xs12 lg9 class="pl-2">${{fromAssetsToFloat(tokenSale.hard_cap)}}</v-flex>
-          </v-layout>
-        </div>
+      <div v-if="isMissingTokenSale && isResearchGroupMember && research" class="pt-4">
+        <v-btn
+          outlined
+          color="primary"
+          class="ma-0"
+          :to="{
+            name: 'CreateTokenSale',
+            params: {
+              research_group_permlink: research.research_group.permlink,
+              research_permlink: research.permlink
+            }
+          }"
+        >
+          Start fundraise
+        </v-btn>
+      </div>
 
-        <div v-if="isMissingTokenSale && isResearchGroupMember && research" class="pt-3">
-          <v-btn
-            round
-            outline
-            color="primary"
-            class="ma-0"
-            :to="{
-                  name: 'CreateTokenSale',
-                  params: { research_group_permlink: research.group_permlink, research_permlink: research.permlink }
-                }"
-          >Start fundraise</v-btn>
-        </div>
-      </v-layout>
-    </v-flex>
+      <div v-if="isActiveTokenSale || isInactiveTokenSale">
+        <v-row no-gutters class="pt-4">
+          <v-col cols="12" lg="3" class="bold">
+            Start:
+          </v-col>
+          <v-col cols="12" lg="9" class="pl-2">
+            <span>{{ tokenSale.start_time | dateFormat('MMM D, YYYY HH:mm', true) }}</span>
+            <v-chip
+              v-if="hasInactiveTokenSale"
+              class="my-0 mx-2 caption"
+              style="height: 1.4em"
+              color="primary lighten-3"
+            >
+              {{ tokenSaleStartLeft }} left
+            </v-chip>
+          </v-col>
+        </v-row>
+        <v-row no-gutters class="pt-4">
+          <v-col cols="12" lg="3" class="bold">
+            End:
+          </v-col>
+          <v-col cols="12" lg="9" class="pl-2">
+            <span>{{ tokenSale.end_time | dateFormat('MMM D, YYYY HH:mm', true) }}</span>
+            <v-chip
+              v-if="hasActiveTokenSale"
+              class="my-0 mx-2 caption"
+              style="height: 1.4em"
+              color="amber lighten-1"
+            >
+              {{ tokenSaleEndLeft }} left
+            </v-chip>
+          </v-col>
+        </v-row>
+        <v-row no-gutters class="pt-4">
+          <v-col cols="12" lg="3" class="bold">
+            Tokens On sale:
+          </v-col>
+          <v-col
+            cols="12"
+            lg="9"
+            class="pl-2"
+          >
+            {{ tokenSale.balance_tokens }} ({{ convertToPercent(tokenSale.balance_tokens) }}%)
+          </v-col>
+        </v-row>
+        <v-row no-gutters class="pt-4">
+          <v-col cols="12" lg="3" class="bold">
+            Remaining Tokens:
+          </v-col>
+          <v-col
+            cols="12"
+            lg="9"
+            class="pl-2"
+          >
+            {{ research.owned_tokens }} ({{ convertToPercent(research.owned_tokens) }}%)
+          </v-col>
+        </v-row>
+        <v-row no-gutters class="pt-4">
+          <v-col cols="12" lg="3" class="bold">
+            Min:
+          </v-col>
+          <v-col cols="12" lg="9" class="pl-2">
+            ${{ fromAssetsToFloat(tokenSale.soft_cap) }}
+          </v-col>
+        </v-row>
+        <v-row no-gutters class="pt-4">
+          <v-col cols="12" lg="3" class="bold">
+            Max:
+          </v-col>
+          <v-col cols="12" lg="9" class="pl-2">
+            ${{ fromAssetsToFloat(tokenSale.hard_cap) }}
+          </v-col>
+        </v-row>
+      </div>
+    </v-col>
 
-    <v-flex xs12 lg5 v-if="isActiveTokenSale">
-      <v-layout justify-end class="rd-cap-value">${{currentCap}}</v-layout>
-      <v-layout justify-end align-center class="py-2">
+    <v-col v-if="isActiveTokenSale" cols="12" lg="5">
+      <v-row no-gutters justify="end" class="rd-cap-value">
+        ${{ currentCap }}
+      </v-row>
+      <v-row
+        no-gutters
+        justify="end"
+        align="center"
+        class="py-2"
+      >
         <div
-          class="rd-cap-chip"
           v-if="currentCap >= fromAssetsToFloat(tokenSale.soft_cap)"
-        >Min goal reached!</div>
-        <div class="pl-4">Raised of ${{fromAssetsToFloat(tokenSale.hard_cap)}} Goal</div>
-      </v-layout>
-      <v-layout align-center justify-end class="py-2">
-        <v-flex shrink class="rd-cap-progress-bound mr-2">0</v-flex>
-        <v-flex grow class="rd-cap-progress-bar">
+          class="rd-cap-chip"
+        >
+          Min goal reached!
+        </div>
+        <div class="pl-6">
+          Raised of ${{ fromAssetsToFloat(tokenSale.hard_cap) }} Goal
+        </div>
+      </v-row>
+      <v-row no-gutters align="center" class="py-2">
+        <v-col cols="auto" class="rd-cap-progress-bound mr-2">
+          0
+        </v-col>
+        <v-col cols="auto" class="rd-cap-progress-bar grow">
           <div class="progress-line" />
           <div class="progress-current" :style="{ width: `${currentCapPercent}%` }" />
-        </v-flex>
-        <v-flex shrink class="rd-cap-progress-bound ml-2">{{fromAssetsToFloat(tokenSale.hard_cap)}}</v-flex>
-      </v-layout>
+        </v-col>
+        <v-col cols="auto" class="rd-cap-progress-bound ml-2">
+          {{ fromAssetsToFloat(tokenSale.hard_cap) }}
+        </v-col>
+      </v-row>
 
-      <v-layout column v-if="isActiveTokenSale && !isResearchGroupMember">
-        <v-layout justify-end class="pt-2">
+      <div v-if="isActiveTokenSale && !isResearchGroupMember">
+        <v-row no-gutters justify="end" class="pt-2">
           <v-text-field
             ref="amountToContribute"
             v-model="amountToContribute"
@@ -108,231 +148,246 @@
             :rules="[deipTokenValidator]"
             :disabled="areTokensBuying"
           />
-        </v-layout>
-        <v-layout justify-end class="pt-2">
+        </v-row>
+        <v-row no-gutters justify="end" class="pt-2">
           <v-btn
             :disabled="isContributionToTokenSaleDisabled"
             :loading="areTokensBuying"
-            @click="onContributeToTokenSaleClick()"
-            class="btn--gradient-pb"
+            color="primary"
             block
-          >Invest</v-btn>
-        </v-layout>
+            @click="onContributeToTokenSaleClick()"
+          >
+            Invest
+          </v-btn>
+        </v-row>
         <v-dialog v-model="investmentConfirmDialog.isShown" persistent max-width="800px">
-          <v-card class="pa-4">
+          <v-card class="pa-6">
             <v-card-title>
-              <v-layout align-center>
-                <v-flex grow headline font-weight-bold>SAFT (Simple Agreement for Future Tokens)</v-flex>
-                <v-flex shrink right-top-angle>
-                  <v-btn @click="disagreeSaft()" icon class="pa-0 ma-0">
-                    <v-icon color="black">close</v-icon>
-                  </v-btn>
-                </v-flex>
-              </v-layout>
+              <div class="headline font-weight-bold">
+                SAFT (Simple Agreement for Future Tokens)
+              </div>
+              <div class="right-top-angle">
+                <v-btn icon class="pa-0 ma-0" @click="disagreeSaft()">
+                  <v-icon color="black">
+                    close
+                  </v-icon>
+                </v-btn>
+              </div>
             </v-card-title>
             <v-card-text style="height: 50vh">
               <iframe
                 height="100%"
                 width="100%"
                 src="/assets/img/form-of-SAFT-for-token-pre-sale.pdf"
-              ></iframe>
+              />
             </v-card-text>
             <v-card-actions class="pa-0">
-              <v-layout row wrap>
-                <v-flex xs12 py-2>
-                  <v-btn block color="primary" @click="agreeSaft()">Agree</v-btn>
-                </v-flex>
-                <v-flex xs12 py-2>
-                  <v-btn color="primary" block flat @click="disagreeSaft()">Disagree</v-btn>
-                </v-flex>
-              </v-layout>
+              <v-row no-gutters>
+                <v-col class="py-2" cols="12">
+                  <v-btn block color="primary" @click="agreeSaft()">
+                    Agree
+                  </v-btn>
+                </v-col>
+                <v-col class="py-2" cols="12">
+                  <v-btn
+                    color="primary"
+                    block
+                    text
+                    @click="disagreeSaft()"
+                  >
+                    Disagree
+                  </v-btn>
+                </v-col>
+              </v-row>
             </v-card-actions>
           </v-card>
         </v-dialog>
-      </v-layout>
-    </v-flex>
-  </v-layout>
+      </div>
+    </v-col>
+  </v-row>
 </template>
 
 <script>
-import { mapGetters } from "vuex";
-import moment from "moment";
-import deipRpc from "@deip/rpc-client";
+  import { mapGetters } from 'vuex';
+  import moment from 'moment';
+  import deipRpc from '@deip/rpc-client';
+  import { ResearchService } from '@deip/research-service';
 
-export default {
-  name: "ResearchDetailsFundraising",
+  const researchService = ResearchService.getInstance();
 
-  data() {
-    return {
-      amountToContribute: "",
-      areTokensBuying: false,
-      investmentConfirmDialog: {
-        isShown: false,
-        isConfirming: false
-      }
-    };
-  },
-  computed: {
-    ...mapGetters({
-      tokenSale: "rd/tokenSale",
-      research: "rd/research",
-      userBalances: "auth/userBalances",
-      user: "auth/user",
-      contributionsList: "rd/contributionsList"
-    }),
-    isActiveTokenSale() {
-      return this.tokenSale && this.tokenSale.status === 1;
+  export default {
+    name: 'ResearchDetailsFundraising',
+
+    data() {
+      return {
+        amountToContribute: '',
+        areTokensBuying: false,
+        investmentConfirmDialog: {
+          isShown: false,
+          isConfirming: false
+        }
+      };
     },
-    hasInactiveTokenSale() {
-      return this.tokenSale && this.tokenSale.status == 4;
-    },
-    tokenSaleStartLeft() {
-      if (!this.tokenSale) return null;
+    computed: {
+      ...mapGetters({
+        tokenSale: 'rd/tokenSale',
+        research: 'rd/research',
+        userBalances: 'auth/userBalances',
+        user: 'auth/user',
+        contributionsList: 'rd/contributionsList'
+      }),
+      isActiveTokenSale() {
+        return this.tokenSale && this.tokenSale.status === 1;
+      },
+      hasInactiveTokenSale() {
+        return this.tokenSale && this.tokenSale.status == 4;
+      },
+      tokenSaleStartLeft() {
+        if (!this.tokenSale) return null;
 
-      let now = moment.utc().local();
-      let start = moment.utc(this.tokenSale.start_time).local();
+        const now = moment.utc().local();
+        const start = moment.utc(this.tokenSale.start_time).local();
 
-      let months = Math.floor(moment.duration(start.diff(now)).asMonths());
-      if (months > 1) return `${months} months`;
+        const months = Math.floor(moment.duration(start.diff(now)).asMonths());
+        if (months > 1) return `${months} months`;
 
-      let days = Math.floor(moment.duration(start.diff(now)).asDays());
-      if (days > 1) return `${days} days`;
+        const days = Math.floor(moment.duration(start.diff(now)).asDays());
+        if (days > 1) return `${days} days`;
 
-      let hours = Math.floor(moment.duration(start.diff(now)).asHours());
-      if (hours > 1) return `${hours} hours`;
+        const hours = Math.floor(moment.duration(start.diff(now)).asHours());
+        if (hours > 1) return `${hours} hours`;
 
-      let minutes = Math.floor(moment.duration(start.diff(now)).asMinutes());
-      if (minutes > 1) return `${minutes} mins`;
+        const minutes = Math.floor(moment.duration(start.diff(now)).asMinutes());
+        if (minutes > 1) return `${minutes} mins`;
 
-      let seconds = Math.floor(moment.duration(start.diff(now)).asSeconds());
-      return `${seconds} secs`;
-    },
-    tokenSaleEndLeft() {
-      if (!this.tokenSale) return null;
+        const seconds = Math.floor(moment.duration(start.diff(now)).asSeconds());
+        return `${seconds} secs`;
+      },
+      tokenSaleEndLeft() {
+        if (!this.tokenSale) return null;
 
-      let now = moment.utc().local();
-      let end = moment.utc(this.tokenSale.end_time).local();
+        const now = moment.utc().local();
+        const end = moment.utc(this.tokenSale.end_time).local();
 
-      let months = Math.floor(moment.duration(end.diff(now)).asMonths());
-      if (months > 1) return `${months} months`;
+        const months = Math.floor(moment.duration(end.diff(now)).asMonths());
+        if (months > 1) return `${months} months`;
 
-      let days = Math.floor(moment.duration(end.diff(now)).asDays());
-      if (days > 1) return `${days} days`;
+        const days = Math.floor(moment.duration(end.diff(now)).asDays());
+        if (days > 1) return `${days} days`;
 
-      let hours = Math.floor(moment.duration(end.diff(now)).asHours());
-      if (hours > 1) return `${hours} hours`;
+        const hours = Math.floor(moment.duration(end.diff(now)).asHours());
+        if (hours > 1) return `${hours} hours`;
 
-      let minutes = Math.floor(moment.duration(end.diff(now)).asMinutes());
-      if (minutes > 1) return `${minutes} mins`;
+        const minutes = Math.floor(moment.duration(end.diff(now)).asMinutes());
+        if (minutes > 1) return `${minutes} mins`;
 
-      let seconds = Math.floor(moment.duration(end.diff(now)).asSeconds());
-      return `${seconds} secs`;
-    },
-    hasActiveTokenSale() {
-      return this.tokenSale && this.tokenSale.status == 1;
-    },
-    isInactiveTokenSale() {
-      return this.tokenSale && this.tokenSale.status === 4;
-    },
-    isMissingTokenSale() {
-      return this.tokenSale === undefined;
-    },
-    isResearchGroupMember() {
-      return this.research
-        ? this.$store.getters["auth/userIsResearchGroupMember"](
+        const seconds = Math.floor(moment.duration(end.diff(now)).asSeconds());
+        return `${seconds} secs`;
+      },
+      hasActiveTokenSale() {
+        return this.tokenSale && this.tokenSale.status == 1;
+      },
+      isInactiveTokenSale() {
+        return this.tokenSale && this.tokenSale.status === 4;
+      },
+      isMissingTokenSale() {
+        return this.tokenSale === undefined;
+      },
+      isResearchGroupMember() {
+        return this.research
+          ? this.$store.getters['auth/userIsResearchGroupMember'](
             this.research.research_group_id
           )
-        : false;
+          : false;
+      },
+      currentCap() {
+        return this.contributionsList
+          .map((c) => this.fromAssetsToFloat(c.amount))
+          .reduce((acc, val) => acc + val, 0);
+      },
+      currentCapPercent() {
+        return this.tokenSale
+          ? (this.currentCap * 100)
+            / this.fromAssetsToFloat(this.tokenSale.hard_cap)
+          : 0;
+      },
+      isContributionToTokenSaleDisabled() {
+        const balance = this.fromAssetsToFloat(
+          this.userBalances[window.env.ASSET_UNIT]
+        );
+        const notEnoughFunds = (this.amountToContribute || 0) > balance;
+        return notEnoughFunds || !this.amountToContribute || this.areTokensBuying;
+      },
+      isFinishedResearch() {
+        return this.research && this.research.is_finished;
+      },
+      isTokenSaleSectionAvailable() {
+        return (
+          (this.isMissingTokenSale
+          && this.isResearchGroupMember
+          && !this.isFinishedResearch)
+          || this.isActiveTokenSale
+          || this.isInactiveTokenSale
+        );
+      }
     },
-    currentCap() {
-      return this.contributionsList
-        .map(c => this.fromAssetsToFloat(c.amount))
-        .reduce((acc, val) => acc + val, 0);
-    },
-    currentCapPercent() {
-      return this.tokenSale
-        ? (this.currentCap * 100) /
-            this.fromAssetsToFloat(this.tokenSale.hard_cap)
-        : 0;
-    },
-    isContributionToTokenSaleDisabled() {
-      let balance = this.fromAssetsToFloat(
-        this.userBalances[window.env.ASSET_UNIT]
-      );
-      let notEnoughFunds = (this.amountToContribute || 0) > balance;
-      return notEnoughFunds || !this.amountToContribute || this.areTokensBuying;
-    },
-    isFinishedResearch() {
-      return this.research && this.research.is_finished;
-    },
-    isTokenSaleSectionAvailable() {
-      return (
-        (this.isMissingTokenSale &&
-          this.isResearchGroupMember &&
-          !this.isFinishedResearch) ||
-        this.isActiveTokenSale ||
-        this.isInactiveTokenSale
-      );
-    }
-  },
-  methods: {
-    onContributeToTokenSaleClick() {
-      this.investmentConfirmDialog.isShown = true;
-    },
-    contributeToTokenSale() {
-      this.areTokensBuying = true;
-      return deipRpc.broadcast
-        .contributeToTokenSaleAsync(
-          this.user.privKey,
-          this.tokenSale.id,
-          this.user.username,
-          this.toAssetUnits(this.amountToContribute)
-        )
-        .then(data => {
-          this.$store.dispatch("rd/loadResearchTokenSale", {
-            researchId: this.research.id
-          });
-          this.$store.dispatch("rd/loadResearchTokenSales", {
-            researchId: this.research.id
-          });
-          this.$store.dispatch("rd/loadResearchTokenHolders", {
-            researchId: this.research.id
-          });
-          this.$store.dispatch("rd/loadUserContributions", {
-            researchId: this.research.id
-          });
-          this.$store.dispatch("auth/loadAccount");
-          this.$store.dispatch("auth/loadBalances");
+    methods: {
+      onContributeToTokenSaleClick() {
+        this.investmentConfirmDialog.isShown = true;
+      },
+      contributeToTokenSale() {
+        this.areTokensBuying = true;
 
-          this.areTokensBuying = false;
-          this.$refs.amountToContribute.reset();
-          this.amountToContribute = "";
-
-          this.$store.dispatch("layout/setSuccess", {
-            message: `You have contributed to "${this.research.title}" fundraise successfully !`
-          });
+        researchService.contributeToResearchTokenSaleViaOffchain(this.user.privKey, {
+          researchExternalId: this.research.external_id,
+          contributor: this.user.username,
+          amount: this.toAssetUnits(this.amountToContribute)
         })
-        .catch(err => {
-          console.log(err);
-          this.areTokensBuying = false;
-          this.$store.dispatch("layout/setError", {
-            message:
-              "An error occurred while contributing to fundraise, please try again later"
-          });
-        });
-    },
-    agreeSaft() {
-      this.investmentConfirmDialog.isShown = false;
-      setTimeout(() => {
-        this.contributeToTokenSale();
-      }, 100);
-    },
+          .then((data) => {
+            this.$store.dispatch('rd/loadResearchTokenSale', {
+              researchId: this.research.id
+            });
+            this.$store.dispatch('rd/loadResearchTokenSales', {
+              researchId: this.research.id
+            });
+            this.$store.dispatch('rd/loadResearchTokenHolders', {
+              researchId: this.research.id
+            });
+            this.$store.dispatch('rd/loadUserContributions', {
+              researchId: this.research.id
+            });
+            this.$store.dispatch('auth/loadAccount');
+            this.$store.dispatch('auth/loadBalances');
 
-    disagreeSaft() {
-      this.investmentConfirmDialog.isShown = false;
+            this.areTokensBuying = false;
+            this.$refs.amountToContribute.reset();
+            this.amountToContribute = '';
+
+            this.$store.dispatch('layout/setSuccess', {
+              message: `You have contributed to "${this.research.title}" fundraise successfully !`
+            });
+          })
+          .catch((err) => {
+            console.log(err);
+            this.areTokensBuying = false;
+            this.$store.dispatch('layout/setError', {
+              message:
+                'An error occurred while contributing to fundraise, please try again later'
+            });
+          });
+      },
+      agreeSaft() {
+        this.investmentConfirmDialog.isShown = false;
+        setTimeout(() => {
+          this.contributeToTokenSale();
+        }, 100);
+      },
+
+      disagreeSaft() {
+        this.investmentConfirmDialog.isShown = false;
+      }
     }
-  }
-};
+  };
 </script>
 
 <style lang="less" scoped>

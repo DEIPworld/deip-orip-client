@@ -1,92 +1,149 @@
 <template>
-  <v-layout row wrap full-width fill-height overflow-auto justify-center>
-    <v-flex xs12 sm8 display-flex flex-column mb-3 px-5>
-      <div class="mb-4 step-title">Project settings</div>
-      <div class="font-weight-bold title text-align-left mb-4">Visibility</div>
-      <v-layout row shrink>
-        <v-flex shrink :class="{'grey--text':isPublic}">Private project</v-flex>
-        <v-flex shrink>
+  <v-row class="full-width fill-height overflow-auto justify-center">
+    <v-col cols="12" sm="8" class="mb-4 px-12">
+      <div class="mb-6 step-title">
+        Project settings
+      </div>
+      <div class="font-weight-bold title text-align-left mb-6">
+        Visibility
+      </div>
+      <div>
+        <div class="display-inline-block" :class="{'grey--text':isPublic}">
+          Private project
+        </div>
+        <div class="display-inline-block">
           <v-switch
-            class="my-0 ml-2 py-0"
             v-model="isPublic"
-            @change="setPrivateFlag"
+            class="my-0 ml-2 py-0"
             color="primary"
-          ></v-switch>
-        </v-flex>
-        <v-flex shrink :class="{'grey--text':!isPublic}">Public project</v-flex>
-      </v-layout>
-      <v-divider></v-divider>
-    </v-flex>
-
-    <v-flex xs12 sm8 px-5>
-      <div class="my-4">
-        <div class="title font-weight-medium mb-4">Technology Readiness Level</div>
-        <technology-readiness-level
-          :currentTrlStep="research.trlStep"
-          @changeCurrentTrlStep="changeCurrentTrlStep"
-        ></technology-readiness-level>
+            @change="setPrivateFlag"
+          />
+        </div>
+        <div class="display-inline-block" :class="{'grey--text':!isPublic}">
+          Public project
+        </div>
       </div>
-    </v-flex>
+      <v-divider />
+    </v-col>
 
-    <v-flex xs12 sm8 px-5>
-      <div class="my-4">
-        <div class="title font-weight-medium mb-4">Partners</div>
-        <research-partners :partners="research.partners"></research-partners>
+    <v-col cols="12" sm="8" class="px-12">
+      <v-row
+        v-for="(item, i) in tenant.profile.settings.researchComponents"
+        :key="`${i}-stepper`"
+        no-gutters
+        class="my-6"
+      >
+        <v-col v-if="item.isVisible" cols="12" md="8">
+          <div class="title font-weight-medium mb-6">
+            {{ item.component.readinessLevelTitle }}
+          </div>
+          <leveller-selector
+            v-model.number="research.tenantCriterias[i].value.index"
+            :items="stepperSelector(item.component.readinessLevels)"
+            :label="item.component.readinessLevelTitle"
+          />
+        </v-col>
+      </v-row>
+    </v-col>
+
+    <v-col cols="12" sm="8" class="px-12">
+      <div class="my-6">
+        <div class="title font-weight-medium mb-6">
+          Partners
+        </div>
+        <research-partners :partners="research.partners" />
       </div>
-    </v-flex>
+    </v-col>
 
-    <v-flex xs12 flex-grow-0 align-self-end>
-      <v-layout row justify-center align-center>
-        <v-btn flat small @click.native="prevStep()">
-          <v-icon dark class="pr-1">keyboard_arrow_left</v-icon>Back
+    <v-col cols="12" class="flex-grow-0 align-self-end">
+      <div class="display-flex justify-center align-center">
+        <v-btn text small @click.native="prevStep()">
+          <v-icon dark class="pr-1">
+            keyboard_arrow_left
+          </v-icon>Back
         </v-btn>
         <v-btn
           :loading="isLoading"
           :disabled="isLoading || isEmptyFields"
           color="primary"
           @click.native="nextStep()"
-        >Create project</v-btn>
-      </v-layout>
-    </v-flex>
-  </v-layout>
+        >
+          Create project
+        </v-btn>
+      </div>
+    </v-col>
+  </v-row>
 </template>
 
 <script>
-import Vue from "vue";
+  import Vue from 'vue';
+  import { mapGetters } from 'vuex';
+  import LevellerSelector from '@/components/Leveller/LevellerSelector';
 
-export default {
-  name: "CreateResearchSettings",
-  props: {
-    research: { type: Object, required: true },
-    isLoading: { type: Boolean, required: false }
-  },
-  data() {
-    return {
-      isPublic: !this.research.isPrivate,
-      currentTrlStep: undefined,
-    };
-  },
-  computed: {
-    isEmptyFields(){
-      return this.research.partners.length ? !!this.research.partners.find(item => item.title == '' || item.type == '') : false
+
+  export default {
+    name: 'CreateResearchSettings',
+    components: {
+      LevellerSelector
+    },
+    props: {
+      research: { type: Object, required: true },
+      isLoading: { type: Boolean, required: false }
+    },
+    data() {
+      return {
+        isPublic: !this.research.isPrivate,
+        tenantCriterias: []
+      };
+    },
+    computed: {
+      ...mapGetters({
+        tenant: 'auth/tenant'
+      }),
+      isEmptyFields() {
+        return this.research.partners.length ? !!this.research.partners.find((item) => item.title == '' || item.type == '') : false;
+      }
+    },
+    created() {
+      this.tenant.profile.settings.researchComponents.forEach((item) => {
+        if (item.isVisible) {
+          this.research.tenantCriterias.push({
+            component: item._id,
+            type: 'stepper',
+            value: {
+              index: 0
+            }
+          });
+        } else {
+          this.research.tenantCriterias.push({
+            component: item._id,
+            type: 'stepper',
+            value: {
+              index: null
+            }
+          });
+        }
+      });
+    },
+    methods: {
+      stepperSelector(readinessLevels) {
+        return readinessLevels.map((item, index) => ({
+          text: item.title,
+          value: index,
+          num: index + 1
+        }));
+      },
+      nextStep() {
+        this.$emit('finish');
+      },
+      prevStep() {
+        this.$emit('decStep');
+      },
+      setPrivateFlag() {
+        this.$emit('setPrivateFlag', this.isPublic);
+      }
     }
-  },
-  methods: {
-    nextStep() {
-      this.$emit("finish");
-    },
-    prevStep() {
-      this.$emit("decStep");
-    },
-    setPrivateFlag() {
-      this.$emit("setPrivateFlag", this.isPublic);
-    },
-    changeCurrentTrlStep(step) {
-      this.currentTrlStep = step;
-      this.$emit("setTrlStep", this.currentTrlStep);
-    }
-  }
-};
+  };
 </script>
 
 <style lang="less" scoped>

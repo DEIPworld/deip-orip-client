@@ -1,89 +1,85 @@
 <template>
-    <!-- <div :class="[!discipline.isTop ? 'pt-1 pl-3' : '']">
-        <span class="discipline-picker-label" 
-            v-if="!discipline.isTop" 
-            @click="select(discipline)"
-            :class="[{ 'selected': isSelected || isHighlighted }]"
-        >{{ discipline.label }}</span>
-        
-        <div v-if="discipline.children" v-show="isExpanded">
-            <div v-for="(val, key) in discipline.children" :key="key">
-                <discipline-tree-item
-                    :discipline="val"
-                    :selected="selected"
-                    :is-multiple-select="isMultipleSelect"
-                    :is-highlighted-parent="isHighlightedParent"
-                    @update="select"
-                ></discipline-tree-item>
-            </div>
-        </div>
-    </div> -->
-    <v-flex :class="[!discipline.isTop ? 'pt-1 pl-3' : '']">
-        <span class="discipline-picker-label" 
-            v-if="!discipline.isTop" 
-            @click="select(discipline)"
-            :class="[{ 'selected': isSelected || isHighlighted }]"
-        >{{ discipline.label }}</span>
-        
-        <v-flex v-if="discipline.children" v-show="isExpanded">
-            <v-flex v-for="(val, key) in discipline.children" :key="key">
-                <discipline-tree-item
-                    :discipline="val"
-                    :selected="selected"
-                    :is-multiple-select="isMultipleSelect"
-                    :is-highlighted-parent="isHighlightedParent"
-                    @update="select"
-                ></discipline-tree-item>
-            </v-flex>
-        </v-flex>
-    </v-flex>
+  <div
+    :class="[!discipline.isTop ? 'mb-1' : '', discipline.isTop ? 'ml-n6' : '']"
+  >
+    <v-list-item
+      v-if="!discipline.isTop"
+      :input-value="isSelected || isHighlighted"
+      @click="select(discipline)"
+    >
+      {{ discipline.label }}
+    </v-list-item>
+
+    <div v-if="discipline.children" v-show="isExpanded" class="pl-6">
+      <discipline-tree-item
+        v-for="(val, key) in discipline.children"
+        :key="key"
+        :discipline="val"
+        :selected="selected"
+        :is-multiple-select="isMultipleSelect"
+        :is-highlighted-parent="isHighlightedParent"
+        @update="select"
+      />
+    </div>
+  </div>
 </template>
 
 <script>
-    import _ from 'lodash';
+  import _ from 'lodash';
 
-    // todo: make single and multiselect handled by arrays bc it will be easier and more readable
-    export default {
-        name: "DisciplineTreeItem",
-        
-        props: {
-            discipline: { type: Object, required: true },
-            isMultipleSelect: { type: Boolean, required: false, default: true },
-            isHighlightedParent: { type: Boolean, required: false, default: false },
+  // todo: make single and multiselect handled by arrays bc it will be easier and more readable
+  export default {
+    name: 'DisciplineTreeItem',
 
-            selected: { 
-                validator(value) {
-                    return value === undefined || typeof value === 'array' || typeof value === 'object';
-                }, 
-                required: true 
-            },
+    props: {
+      discipline: {
+        type: Object,
+        required: true
+      },
+      isMultipleSelect: {
+        type: Boolean,
+        required: false,
+        default: true
+      },
+      isHighlightedParent: {
+        type: Boolean,
+        required: false,
+        default: false
+      },
+
+      selected: {
+        validator(value) {
+          return value === undefined || typeof value === 'array' || typeof value === 'object';
         },
+        required: true
+      }
+    },
 
-        methods: {
-            select(discipline) {
-                this.$emit('update', discipline);
-            }
-        },
+    computed: {
+      isSelected() {
+        return this.isMultipleSelect
+          ? this.selected.some((d) => d.id == this.discipline.id)
+          : this.selected && this.selected.id === this.discipline.id;
+      },
+      isExpanded() {
+        return this.isSelected
+          || this.discipline.isTop
+          || !this.isMultipleSelect && this.selected && _.startsWith(this.selected.path, this.discipline.path);
+      },
+      isHighlighted() {
+        return !this.isMultipleSelect
+          && this.isHighlightedParent
+          && this.selected
+          && _.startsWith(this.selected.path, this.discipline.path);
+      }
+    },
 
-        computed: {
-            isSelected() {
-                return this.isMultipleSelect 
-                    ? this.selected.some(d => d.id == this.discipline.id) 
-                    : this.selected && this.selected.id === this.discipline.id;
-            },
-            isExpanded() {
-                return this.isSelected 
-                    || this.discipline.isTop 
-                    || !this.isMultipleSelect && this.selected && _.startsWith(this.selected.path, this.discipline.path);
-            },
-            isHighlighted() {
-                return !this.isMultipleSelect
-                    && this.isHighlightedParent
-                    && this.selected
-                    && _.startsWith(this.selected.path, this.discipline.path);
-            }
-        }
-    };
+    methods: {
+      select(discipline) {
+        this.$emit('update', discipline);
+      }
+    }
+  };
 </script>
 
 <style lang="less" scoped>

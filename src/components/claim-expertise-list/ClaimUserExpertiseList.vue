@@ -1,25 +1,25 @@
 <template>
-  <base-page-layout :leftSidebarClass="'xs12 md3'" :contentClass="'xs12 md9'">
-    <v-card slot="left-sidebar" class="fill-height py-5 px-4">
-      <claim-user-expertise-list-sidebar></claim-user-expertise-list-sidebar>
-    </v-card>
-    <v-card slot="content" class="fill-height pa-5">
-      <claim-user-expertise-list-body></claim-user-expertise-list-body>
-    </v-card>
-  </base-page-layout>
+  <layout-section>
+    <claim-user-expertise-list-body />
+
+    <template #sidebar>
+      <claim-user-expertise-list-sidebar />
+    </template>
+  </layout-section>
 </template>
 
 <script>
-import { mapGetters } from "vuex";
-import _ from "lodash";
+  import { mapGetters } from 'vuex';
+  import _ from 'lodash';
+  import LayoutSection from '@/components/layout/components/LayoutSection';
 
-export default {
-  name: "ClaimUserExpertiseList",
+  export default {
+    name: 'ClaimUserExpertiseList',
+    components: { LayoutSection },
+    created() {},
 
-  methods: {},
-
-  created() {}
-};
+    methods: {}
+  };
 </script>
 
 <style lang="less" scoped>

@@ -1,29 +1,27 @@
 <template>
-  <base-page-layout :rightSidebarClass="'xs12 md3'" :contentClass="'xs12 md9'">
-    <v-card slot="content" class="fill-height pa-5">
-      <claim-user-expertise-details-body></claim-user-expertise-details-body>
-    </v-card>
-
-    <v-card slot="right-sidebar" class="fill-height py-5 px-4">
-      <claim-user-expertise-details-sidebar></claim-user-expertise-details-sidebar>
-    </v-card>
-  </base-page-layout>
+  <layout-section>
+    <claim-user-expertise-details-body />
+    <template #sidebar>
+      <claim-user-expertise-details-sidebar />
+    </template>
+  </layout-section>
 </template>
 
 <script>
-import deipRpc from "@deip/rpc-client";
+  import deipRpc from '@deip/rpc-client';
+  import LayoutSection from '@/components/layout/components/LayoutSection';
 
-export default {
-  name: "ClaimUserExpertiseDetails",
+  export default {
+    name: 'ClaimUserExpertiseDetails',
+    components: { LayoutSection },
+    data() {
+      return {};
+    },
 
-  data() {
-    return {};
-  },
+    created() {},
 
-  methods: {},
-
-  created() {}
-};
+    methods: {}
+  };
 </script>
 
 <style lang="less" scoped>

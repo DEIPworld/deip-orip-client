@@ -1,16 +1,24 @@
 <template>
-  <v-layout align-baseline align-center>
-    <v-flex xs2>
+  <v-row align="center">
+    <v-col cols="2">
       <div>
-        <v-chip class="log-label-chip" small color="#76de96" text-color="white">
-          <div class="log-label-chip-text">Fundraising</div>
+        <v-chip
+          class="log-label-chip"
+          small
+          color="#76de96"
+          text-color="white"
+        >
+          <div class="log-label-chip-text">
+            Fundraising
+          </div>
         </v-chip>
       </div>
-    </v-flex>
-    <v-flex xs8>
-      <div class="align-baseline px-3">
+    </v-col>
+    <v-col cols="8">
+      <div class="align-baseline px-4">
         <span v-if="isAcceptedByQuorum">
-          Fundraising campaign for the "<router-link class="a"
+          Fundraising campaign for the "<router-link
+            class="a"
             :to="{
               name: 'ResearchDetails',
               params: {
@@ -21,14 +29,15 @@
           >{{ log.metadata.research.title }}</router-link>" research was accepted by quorum
         </span>
         <span v-else>
-          <platform-avatar 
+          <platform-avatar
             :user="{ profile: log.metadata.creatorProfile, account: { name: log.metadata.creatorProfile._id} }"
             :size="20"
             link-to-profile
             link-to-profile-class="px-1"
-          ></platform-avatar>
+          />
           <span v-if="isAutoAccepted">
-            scheduled fundraising campaign for the "<router-link class="a"
+            scheduled fundraising campaign for the "<router-link
+              class="a"
               :to="{
                 name: 'ResearchDetails',
                 params: {
@@ -39,7 +48,8 @@
             >{{ log.metadata.research.title }}</router-link>" research
           </span>
           <span v-else>
-            proposed to schedule fundraising campaign for the "<router-link class="a"
+            proposed to schedule fundraising campaign for the "<router-link
+              class="a"
               :to="{
                 name: 'ResearchDetails',
                 params: {
@@ -51,40 +61,40 @@
           </span>
         </span>
       </div>
-    </v-flex>
-    <v-flex xs2>
-      <div class="grey--text text-xs-right">
+    </v-col>
+    <v-col cols="2">
+      <div class="grey--text text--right">
         {{ moment(log.created_at).format("DD MMM YYYY") }}
       </div>
-    </v-flex>
-  </v-layout>
+    </v-col>
+  </v-row>
 </template>
 
 <script>
-import { mapGetters } from 'vuex';
+  import { mapGetters } from 'vuex';
 
-export default {
-  name: "TokenSaleProposalActivityLogEntry",
-  props: {
-    log: { type: Object, required: true }
-  },
-  computed: {
-    isAcceptedByQuorum() {
-      return this.log.metadata.researchGroup.is_dao && this.log.metadata.proposal.is_completed;
+  export default {
+    name: 'TokenSaleProposalActivityLogEntry',
+    props: {
+      log: { type: Object, required: true }
     },
-    isAutoAccepted() {
-      return !this.log.metadata.researchGroup.is_dao && this.log.metadata.isProposalAutoAccepted;
-    }
-  },
-  data() {
-    return {
-    }
-  },
+    data() {
+      return {
+      };
+    },
+    computed: {
+      isAcceptedByQuorum() {
+        return this.log.metadata.researchGroup.is_dao && this.log.metadata.proposal.is_completed;
+      },
+      isAutoAccepted() {
+        return !this.log.metadata.researchGroup.is_dao && this.log.metadata.isProposalAutoAccepted;
+      }
+    },
 
-  methods: {
+    methods: {
 
-  }
-};
+    }
+  };
 </script>
 
 <style lang="less" scoped>

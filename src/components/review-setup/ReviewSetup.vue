@@ -1,219 +1,249 @@
 <template>
-  <base-page-layout>
-    <v-card slot="content" class="full-height full-width pa-5">
-      <v-layout row wrap>
-        <v-flex align-center xs12 headline bold>Expertise Contribution Model Setup</v-flex>
-        <v-flex
-          xs12
-          mt-5
-          subheading
-        >In order to make your work efficient and help you receive most accurate feedback Open Research and Innovation Platform gives you the opportunity to change review criteria for different content types. Your reviewers will see the criteria on the review page. By default criteria for every type are: Novelty, Tecechnical quality, Methodology. Allso you can change reward coefficient (which is by default 10%) in order to motivate peer-review process</v-flex>
-        <v-flex xs12 sm12 md10 lg7 my-5>
-          <v-layout row mb-3>
-            <v-flex xs2 text-uppercase grey--text>Contribution type</v-flex>
-            <v-flex xs6 text-uppercase grey--text>Review criteria</v-flex>
-            <v-flex xs3 text-align-center>
+  <layout-section>
+    <v-card flat class="full-height full-width pa-12">
+      <v-row no-gutters>
+        <v-col cols="12" class="headline font-weight-bold">
+          Expertise Contribution Model Setup
+        </v-col>
+        <v-col
+          cols="12"
+          class="mt-12 subtitle-1"
+        >
+          In order to make your work efficient and help you receive most accurate feedback Open Research and Innovation Platform gives you the opportunity to change review criteria for different content types. Your reviewers will see the criteria on the review page. By default criteria for every type are: Novelty, Tecechnical quality, Methodology. Allso you can change reward coefficient (which is by default 10%) in order to motivate peer-review process
+        </v-col>
+        <v-col
+          cols="12"
+          md="10"
+          lg="7"
+          class="my-12"
+        >
+          <v-row no-gutters class="mb-4">
+            <v-col cols="2" class="text-uppercase grey--text">
+              Contribution type
+            </v-col>
+            <v-col cols="6" class="text-uppercase grey--text">
+              Review criteria
+            </v-col>
+            <v-col cols="3" class="text-center">
               <span class="max-width-150 text-uppercase grey--text">Reward coefficient</span>
-            </v-flex>
-          </v-layout>
-          <v-layout
-            row
-            font-weight-bold
-            bg-hover-lightblue
-            py-2
+            </v-col>
+          </v-row>
+          <v-row
             v-for="(item, i) in content"
             :key="`${item.contentType}${i}`"
+            class="font-weight-bold bg-hover-lightblue py-2"
           >
-            <v-flex xs2 align-self-center>{{ item.contentType }}</v-flex>
-            <v-flex xs6 align-self-center>
-              <v-layout row wrap>
-                <!-- <span
-                  class="mr-3 mb-1 criteriaLabel"
-                  :class="`criteriaLabel-${getClassName(criteria)}`"
-                  v-for="(criteria, j) in item.reviewCriteria"
-                  :key="`${criteria}${j}${i}`"
-                >{{ criteria }}</span>
-                <v-icon light>mode_edit</v-icon>-->
-                <v-select
-                  v-model="item.reviewCriteria"
-                  :items="criteria"
-                  item-text="name"
-                  item-value="name"
-                  chips
-                  append-icon="mode_edit"
-                  multiple
-                  class="pa-0 no-underline"
-                  hide-details
-                >
-                  <template v-slot:selection="{item}">
-                    <v-chip :class="`criteriaLabel-${getClassName(item.name)}`">
-                      <span class="white--text">{{ item.name }}</span>
-                    </v-chip>
-                  </template>
-                </v-select>
-              </v-layout>
-            </v-flex>
-            <v-flex xs3 align-self-center>
+            <v-col cols="2" class="align-self-center">
+              {{ item.contentType }}
+            </v-col>
+            <v-col cols="6" class="align-self-center">
+              <!-- <span
+                class="mr-4 mb-1 criteriaLabel"
+                :class="`criteriaLabel-${getClassName(criteria)}`"
+                v-for="(criteria, j) in item.reviewCriteria"
+                :key="`${criteria}${j}${i}`"
+              >{{ criteria }}</span>
+              <v-icon light>mode_edit</v-icon>-->
+              <v-select
+                v-model="item.reviewCriteria"
+                :items="criteria"
+                item-text="name"
+                item-value="name"
+                chips
+                append-icon="mode_edit"
+                multiple
+                class="pa-0 no-underline"
+                hide-details
+              >
+                <template v-slot:selection="{item}">
+                  <v-chip :class="`criteriaLabel-${getClassName(item.name)}`">
+                    <span class="white--text">{{ item.name }}</span>
+                  </v-chip>
+                </template>
+              </v-select>
+            </v-col>
+            <v-col cols="3" class="align-self-center">
               <v-text-field
+                v-model="item.rewardCoefficient"
                 class="pa-0 my-0 mx-auto max-width-150 centered-input font-weight-regular"
                 hide-details
-                v-model="item.rewardCoefficient"
               />
-            </v-flex>
-          </v-layout>
-        </v-flex>
-        <v-flex xs12>
-          <v-divider></v-divider>
-        </v-flex>
-        <v-flex xs12 sm10 md7 lg5 mt-5>
-          <div class="title mb-4">Review criteria setup</div>
-          <v-layout row mb-3>
-            <v-flex xs5 text-uppercase grey--text>Criteria</v-flex>
-            <v-flex xs4 text-uppercase grey--text>Valid values 2-5</v-flex>
-            <v-flex xs3 text-align-center>
-              <span class="max-width-100 text-align-center text-uppercase grey--text">Weight 0.1-1</span>
-            </v-flex>
-          </v-layout>
-          <v-layout row mb-2 py-1 bg-hover-lightblue v-for="(item, i) in criteria" :key="`${i}0`">
-            <v-flex xs5 align-self-center>
+            </v-col>
+          </v-row>
+        </v-col>
+        <v-col cols="12">
+          <v-divider />
+        </v-col>
+        <v-col
+          cols="12"
+          sm="10"
+          md="7"
+          lg="5"
+          class="mt-12"
+        >
+          <div class="title mb-6">
+            Review criteria setup
+          </div>
+          <v-row no-gutters class="mb-4">
+            <v-col cols="5" class="text-uppercase grey--text">
+              Criteria
+            </v-col>
+            <v-col cols="4" class="text-uppercase grey--text">
+              Valid values 2-5
+            </v-col>
+            <v-col cols="3" class="text-center">
+              <span class="max-width-100 text-center text-uppercase grey--text">Weight 0.1-1</span>
+            </v-col>
+          </v-row>
+          <v-row
+            v-for="(item, i) in criteria"
+            :key="`${i}0`"
+            no-gutters
+            class="mb-2 py-1 bg-hover-lightblue"
+          >
+            <v-col cols="5" class="align-self-center">
               <span
                 class="criteriaLabel white--text py-1 px-2"
                 :class="`criteriaLabel-${getClassName(item.name)}`"
               >{{ item.name }}</span>
-            </v-flex>
-            <v-flex xs4 align-self-center>
-              <v-layout row>
-                <v-flex xs1>{{ item.value }}</v-flex>
-                <v-flex xs11 align-self-center>
+            </v-col>
+            <v-col cols="4" class="align-self-center">
+              <v-row no-gutters>
+                <v-col cols="1">
+                  {{ item.value }}
+                </v-col>
+                <v-col cols="11" class="align-self-center">
                   <review-assessment-squared-rating
                     v-model="item.value"
                     :readonly="false"
                     :value="item.value"
-                  ></review-assessment-squared-rating>
-                </v-flex>
-              </v-layout>
-            </v-flex>
-            <v-flex xs3>
+                  />
+                </v-col>
+              </v-row>
+            </v-col>
+            <v-col cols="3">
               <v-text-field
+                v-model="item.weight"
                 class="pa-0 my-0 mx-auto max-width-100 centered-input"
                 hide-details
-                v-model="item.weight"
               />
-            </v-flex>
-          </v-layout>
-        </v-flex>
-      </v-layout>
+            </v-col>
+          </v-row>
+        </v-col>
+      </v-row>
     </v-card>
-  </base-page-layout>
+  </layout-section>
 </template>
 
 <script>
-export default {
-  name: "ReviewSetup",
+  import LayoutSection from '@/components/layout/components/LayoutSection';
 
-  data() {
-    return {
-      content: [
-        {
-          contentType: "Announcement",
-          reviewCriteria: ["Technical quality", "Methodology", "Novelty"],
-          rewardCoefficient: 10
-        },
-        {
-          contentType: "Article",
-          reviewCriteria: ["Impact", "Excellence", "Novelty"],
-          rewardCoefficient: 5
-        },
-        {
-          contentType: "Data",
-          reviewCriteria: ["Technical quality", "Replication", "Rationality"],
-          rewardCoefficient: 3
-        },
-        {
-          contentType: "Experiment findings",
-          reviewCriteria: ["Technical quality", "Methodology", "Novelty"],
-          rewardCoefficient: 10
-        },
-        {
-          contentType: "Method",
-          reviewCriteria: ["Technical quality", "Methodology", "Novelty"],
-          rewardCoefficient: 7
-        },
-        {
-          contentType: "Patent",
-          reviewCriteria: [
-            "Methodology",
-            "Originality",
-            "Scientific relevance"
-          ],
-          rewardCoefficient: 1
-        },
-        {
-          contentType: "Raw data",
-          reviewCriteria: ["Technical quality", "Methodology", "Novelty"],
-          rewardCoefficient: 4
-        },
-        {
-          contentType: "Research proposal",
-          reviewCriteria: ["Technical quality", "Methodology", "Novelty"],
-          rewardCoefficient: 7
-        }
-      ],
-      criteria: [
-        {
-          name: "Technical quality",
-          value: 3,
-          weight: 1
-        },
-        {
-          name: "Replication",
-          value: 3,
-          weight: 0.1
-        },
-        {
-          name: "Impact",
-          value: 4,
-          weight: 0.3
-        },
-        {
-          name: "Excellence",
-          value: 4,
-          weight: 0.5
-        },
-        {
-          name: "Methodology",
-          value: 5,
-          weight: 1
-        },
-        {
-          name: "Rationality",
-          value: 2,
-          weight: 0.2
-        },
-        {
-          name: "Novelty",
-          value: 4,
-          weight: 0.7
-        },
-        {
-          name: "Originality",
-          value: 4,
-          weight: 0.6
-        },
-        {
-          name: "Scientific relevance",
-          value: 5,
-          weight: 0.5
-        }
-      ]
-    };
-  },
-  methods: {
-    getClassName(name) {
-      return name.replace(" ", "").toLowerCase();
+  export default {
+    name: 'ReviewSetup',
+    components: { LayoutSection },
+    data() {
+      return {
+        content: [
+          {
+            contentType: 'Announcement',
+            reviewCriteria: ['Technical quality', 'Methodology', 'Novelty'],
+            rewardCoefficient: 10
+          },
+          {
+            contentType: 'Article',
+            reviewCriteria: ['Impact', 'Excellence', 'Novelty'],
+            rewardCoefficient: 5
+          },
+          {
+            contentType: 'Data',
+            reviewCriteria: ['Technical quality', 'Replication', 'Rationality'],
+            rewardCoefficient: 3
+          },
+          {
+            contentType: 'Experiment findings',
+            reviewCriteria: ['Technical quality', 'Methodology', 'Novelty'],
+            rewardCoefficient: 10
+          },
+          {
+            contentType: 'Method',
+            reviewCriteria: ['Technical quality', 'Methodology', 'Novelty'],
+            rewardCoefficient: 7
+          },
+          {
+            contentType: 'Patent',
+            reviewCriteria: [
+              'Methodology',
+              'Originality',
+              'Scientific relevance'
+            ],
+            rewardCoefficient: 1
+          },
+          {
+            contentType: 'Raw data',
+            reviewCriteria: ['Technical quality', 'Methodology', 'Novelty'],
+            rewardCoefficient: 4
+          },
+          {
+            contentType: 'Research proposal',
+            reviewCriteria: ['Technical quality', 'Methodology', 'Novelty'],
+            rewardCoefficient: 7
+          }
+        ],
+        criteria: [
+          {
+            name: 'Technical quality',
+            value: 3,
+            weight: 1
+          },
+          {
+            name: 'Replication',
+            value: 3,
+            weight: 0.1
+          },
+          {
+            name: 'Impact',
+            value: 4,
+            weight: 0.3
+          },
+          {
+            name: 'Excellence',
+            value: 4,
+            weight: 0.5
+          },
+          {
+            name: 'Methodology',
+            value: 5,
+            weight: 1
+          },
+          {
+            name: 'Rationality',
+            value: 2,
+            weight: 0.2
+          },
+          {
+            name: 'Novelty',
+            value: 4,
+            weight: 0.7
+          },
+          {
+            name: 'Originality',
+            value: 4,
+            weight: 0.6
+          },
+          {
+            name: 'Scientific relevance',
+            value: 5,
+            weight: 0.5
+          }
+        ]
+      };
+    },
+    methods: {
+      getClassName(name) {
+        return name.replace(' ', '').toLowerCase();
+      }
     }
-  }
-};
+  };
 </script>
 
 <style scoped lang="less">

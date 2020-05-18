@@ -1,57 +1,14 @@
 <template>
-  <base-page-layout>
-    <v-card slot="content" class="full-width full-height">
-      <v-layout
-        row
-        class="rd-header full-height pa-5 feed-header"
-        :style="{ background: 'linear-gradient(0deg, rgba(0, 0, 0, 0.4) 70%, transparent), url('+ $options.filters.researchBackgroundSrc(research.id) +'), 100%, 100%, no-repeat'}"
-      >
-        <v-flex xs12 lg8>
-          <div>
-            <div class="rd-header__title">{{research.title}}</div>
-            <div class="rd-header__created pt-4">
-              <v-layout row align-baseline>
-                <span>
-                  <v-icon small color="white">today</v-icon>
-                  &nbsp;Created {{research.created_at | dateFormat('D MMM YYYY', true)}}
-                </span>
-              </v-layout>
-            </div>
-            <div class="rd-header__abstract">
-              <toggle-text class="py-3" :text="research.abstract"></toggle-text>
-            </div>
-          </div>
-        </v-flex>
-        <v-flex v-if="researchRef.videoSrc" xs12 lg4 text-xs-right class="align-start">
-          <div>
-            <iframe
-              class="presentation-video"
-              :src="getEmbedVideoUrl(researchRef.videoSrc)"
-              frameborder="0"
-              allowfullscreen
-            />
-          </div>
-        </v-flex>
-      </v-layout>
-      <v-layout row wrap>
-        <v-flex xs12 lg9 class="px-5">
-          <v-layout row wrap>
-            <v-flex xs12>
-              <research-timeline :timeline="timeline" />
-            </v-flex>
-          </v-layout>
+  <div>
+    <research-details-header />
+    <layout-section>
+      <research-timeline :timeline="timeline" />
+      <research-details-materials :is-details-available="false" />
 
-          <v-layout row wrap class="my-4" v-if="contentList.length">
-            <v-flex xs12>
-              <research-details-materials :isDetailsAvailable="false"/>
-            </v-flex>
-          </v-layout>
-        </v-flex>
-
-        <!-- Right-Hand sidebar -->
-        <v-flex xs12 lg3>
-          <v-layout column class="mt-5 mb-4 mx-4">
-            <div class="rd-sidebar-block-title">
+      <template #sidebar>
+        <div>
+          <v-sheet>
+            <div class="title">
               You are not logged in
             </div>
             <div class="my-2">
@@ -64,198 +21,235 @@
               block
               color="primary"
               class="pa-2"
-            >Log In</v-btn>
-          </v-layout>
-          <v-divider />
-          <v-layout column ma-4>
-            <div class="rd-sidebar-block-title">{{group.name}}</div>
-            <v-layout
+            >
+              Log In
+            </v-btn>
+          </v-sheet>
+
+          <v-divider class="my-6" />
+
+          <v-sheet>
+            <div class="title">
+              {{ group.name }}
+            </div>
+            <div
               v-for="(member, i) in researchMembersList"
               :key="member.account.id"
-              class="mt-3"
-              justify-space-between
+              class="mt-4"
+              justify="space-between"
               align-center
             >
               <div>
                 <platform-avatar
-                  :size="40"
                   :key="'member-' + i"
+                  :size="40"
                   :user="member"
                   :link-to-profile="false"
                   no-follow
-                  link-to-profile-class="pl-3 bold"
+                  link-to-profile-class="pl-4 bold"
                   pick-disabled
-                ><span class="pl-2">{{member | fullname}}</span></platform-avatar>
+                >
+                  <span class="pl-2">{{ member | fullname }}</span>
+                </platform-avatar>
               </div>
-            </v-layout>
-          </v-layout>
-          <v-divider />
+            </div>
+          </v-sheet>
 
-          <v-layout column ma-4>
-            <technology-readiness-level isReadOnly :currentTrlStep="researchRef.trl"></technology-readiness-level>
-          </v-layout>
+          <v-divider class="my-6" />
 
-          <v-divider />
+          <div v-for="(item, i) in researchRef.tenantCriterias" :key="`${i}-tenantCriteria`">
+            <div v-if="steppersInfo[i].isVisible && item.value && item.value.index !== null" class="mb-2">
+              <div class="display-flex">
+                <v-avatar size="30" color="#0386b0" class="align-self-start mr-2">
+                  <span class="white--text font-weight-medium">{{ item.value.index + 1 }}</span>
+                </v-avatar>
+                <div class="title align-self-start font-weight-medium">
+                  {{ steppersInfo[i].component.readinessLevelShortTitle }}
+                  <div class="caption font-weight-bold">
+                    {{ steppersInfo[i].component.readinessLevels[item.value.index].description }}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
 
-          <v-layout column ma-4 v-if="researchRef.partners.length">
-            <div class="rd-sidebar-block-title">Partners</div>
-            <research-partners class="mt-3" isReadOnly :partners="researchRef.partners"></research-partners>
-          </v-layout>
-        </v-flex>
-      </v-layout>
-    </v-card>
-  </base-page-layout>
+          <div v-if="researchRef.partners.length">
+            <v-divider class="my-6" />
+            <div class="title">
+              Partners
+            </div>
+            <research-partners class="mt-4" is-read-only :partners="researchRef.partners" />
+          </div>
+        </div>
+      </template>
+    </layout-section>
+  </div>
 </template>
 
 <script>
-import moment from "moment";
-import { mapGetters } from "vuex";
+  import moment from 'moment';
+  import { mapGetters } from 'vuex';
 
-import { ResearchService } from '@deip/research-service'
+  import { ResearchService } from '@deip/research-service';
 
-import ResearchTimeline from './components/ResearchTimeline';
+  import LayoutSidebar from '@/components/layout/components/LayoutSidebar';
+  import ResearchDetailsHeader from '@/components/research-details/components/ResearchDetailsHeader';
+  import ResearchDetailsMaterials from '@/components/research-details/components/ResearchDetailsMaterials';
+  import ResearchTimeline from './components/ResearchTimeline';
+  import LayoutSection from '@/components/layout/components/LayoutSection';
 
-const researchService = ResearchService.getInstance();
+  const researchService = ResearchService.getInstance();
 
-export default {
-  name: "ResearchDetailsPublic",
+  export default {
+    name: 'ResearchDetailsPublic',
 
-  components: {
-    ResearchTimeline,
-  },
+    components: {
+      LayoutSection,
+      ResearchDetailsMaterials,
+      ResearchDetailsHeader,
+      LayoutSidebar,
+      ResearchTimeline
+    },
 
-  data() {
-    return {
-      groupLink: this.$route.params.research_group_permlink,
-    };
-  },
+    data() {
+      return {
+        groupLink: this.$route.params.research_group_permlink
+      };
+    },
 
-  computed: {
-    ...mapGetters({
-      contentList: "rd/contentList",
-      contentRefsList: "rd/contentRefsList",
-      group: "rd/group",
-      disciplinesList: "rd/disciplinesList",
-      researchReferencesList: "rd/researchReferencesList",
-      researchMembersList: "rd/researchMembersList",
-      researchGroupMembersList: "rd/researchGroupMembersList",
-      research: "rd/research",
-      researchRef: "rd/researchRef",
-    }),
-    timeline() {
-      let milestones = this.researchRef.milestones
-      let timeline = milestones.map((milestone, i) => {
-        return {
+    computed: {
+      ...mapGetters({
+        contentList: 'rd/contentList',
+        contentRefsList: 'rd/contentRefsList',
+        group: 'rd/group',
+        disciplinesList: 'rd/disciplinesList',
+        researchReferencesList: 'rd/researchReferencesList',
+        researchMembersList: 'rd/researchMembersList',
+        researchGroupMembersList: 'rd/researchGroupMembersList',
+        research: 'rd/research',
+        researchRef: 'rd/researchRef',
+        tenant: 'auth/tenant'
+      }),
+      steppersInfo() {
+        return this.researchRef.tenantCriterias.map(({ component }) => this.tenant.profile.settings.researchComponents.find(({ _id }) => _id === component))
+      },
+      timeline() {
+        const { milestones } = this.researchRef;
+        const timeline = milestones.map((milestone, i) => ({
           id: i + 1,
           date: moment
             .utc(milestone.eta)
             .local()
-            .format("MMM DD, YYYY"),
+            .format('MMM DD, YYYY'),
           label: milestone.goal,
           description: milestone.details,
           budget: milestone.budget,
           purpose: milestone.purpose
-        };
-      });
-      return timeline;
+        }));
+        return timeline;
+      }
     },
-  },
 
-  methods: {
-    countContentReviews(content, isPositive) {
-      return content.reviews.reduce(
-        (acc, review) =>
-          (review.is_positive && isPositive) ||
-          (!review.is_positive && !isPositive)
+    created() {
+    },
+
+    methods: {
+      countContentReviews(content, isPositive) {
+        return content.reviews.reduce(
+          (acc, review) => ((review.is_positive && isPositive)
+            || (!review.is_positive && !isPositive)
             ? acc + 1
-            : acc,
-        0
-      );
-    },
-    createContentAuthorsString(authors) {
-      return this.researchGroupMembersList
-        .filter(m => authors.some(a => a === m.account.name))
-        .map(m => this.$options.filters.fullname(m))
-        .join("  ·  ");
-    },
-    doesContentHaveReviews(content) {
-      return content.reviews.length;
-    },
-    doesContentHavePositiveReviews(content) {
-      return content.reviews.some(r => r.is_positive);
-    },
-    doesContentHaveNegativeReviews(content) {
-      return content.reviews.some(r => !r.is_positive);
-    },
-    getContentEciList(content) {
-      return this.disciplinesList.map(discipline => {
-        const eciObj = content.eci_per_discipline.find(
-          item => item[0] === discipline.id
+            : acc),
+          0
         );
+      },
+      createContentAuthorsString(authors) {
+        return this.researchGroupMembersList
+          .filter((m) => authors.some((a) => a === m.account.name))
+          .map((m) => this.$options.filters.fullname(m))
+          .join('  ·  ');
+      },
+      doesContentHaveReviews(content) {
+        return content.reviews.length;
+      },
+      doesContentHavePositiveReviews(content) {
+        return content.reviews.some((r) => r.is_positive);
+      },
+      doesContentHaveNegativeReviews(content) {
+        return content.reviews.some((r) => !r.is_positive);
+      },
+      getContentEciList(content) {
+        return this.disciplinesList.map((discipline) => {
+          const eciObj = content.eci_per_discipline.find(
+            (item) => item[0] === discipline.id
+          );
 
-        return {
-          disciplineName: discipline.name,
-          value: eciObj ? eciObj[1] : 0
-        };
-      });
-    },
-    getResearchContentType(type) { return researchService.getResearchContentType(type)}
-  },
-
-  created() {
-  }
-};
+          return {
+            disciplineName: discipline.name,
+            value: eciObj ? eciObj[1] : 0
+          };
+        });
+      },
+      getResearchContentType(type) { return researchService.getResearchContentType(type); }
+    }
+  };
 </script>
 
 <style lang="less" scoped>
-.rd-header {
-  height: 300px;
-  overflow: auto;
+  .rd-header {
+    height: 300px;
+    overflow: auto;
 
-  font-style: normal;
-  color: white;
+    font-style: normal;
+    color: white;
 
-  &__title {
+    &__title {
+      font-family: Muli;
+      font-weight: 900;
+      font-size: 36px;
+      line-height: 40px;
+      letter-spacing: 0.25px;
+    }
+
+    &__created {
+    }
+
+    &__abstract {
+      font-family: Roboto;
+      font-size: 14px;
+      line-height: 16px;
+    }
+  }
+
+  .rd-block-header {
     font-family: Muli;
+    font-style: normal;
     font-weight: 900;
-    font-size: 36px;
-    line-height: 40px;
+    font-size: 24px;
     letter-spacing: 0.25px;
+    color: black;
   }
-  &__created {
+
+  .feed-header {
+    background-size: cover !important;
+    background-repeat: no-repeat !important;
+    height: 300px;
+    width: 100%;
+    font-style: normal;
+    color: white;
   }
-  &__abstract {
+
+  .presentation-video {
+    width: 390px;
+    height: 220px;
+    border: 2px solid #fafafa;
+  }
+
+  .rd-sidebar-block-title {
     font-family: Roboto;
-    font-size: 14px;
-    line-height: 16px;
+    font-weight: bold;
+    font-size: 18px;
+    line-height: 21px;
+    color: #000000;
   }
-}
-.rd-block-header {
-  font-family: Muli;
-  font-style: normal;
-  font-weight: 900;
-  font-size: 24px;
-  letter-spacing: 0.25px;
-  color: black;
-}
-.feed-header {
-  background-size: cover !important;
-  background-repeat: no-repeat !important;
-  height: 300px;
-  width: 100%;
-  font-style: normal;
-  color: white;
-}
-.presentation-video {
-  width: 390px;
-  height: 220px;
-  border: 2px solid #fafafa;
-}
-.rd-sidebar-block-title {
-  font-family: Roboto;
-  font-weight: bold;
-  font-size: 18px;
-  line-height: 21px;
-  color: #000000;
-}
 </style>

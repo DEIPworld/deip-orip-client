@@ -10,7 +10,7 @@ const state = {
   researchRef: null,
 
   isLoadingResearchEditPage: undefined
-}
+};
 
 // getters
 const getters = {
@@ -18,7 +18,7 @@ const getters = {
   researchRef: (state) => state.researchRef,
   isLoadingResearchRef: (state) => state.isLoadingResearchRef,
   isLoadingResearchEditPage: (state) => state.isLoadingResearchEditPage
-}
+};
 
 // actions
 const actions = {
@@ -27,52 +27,50 @@ const actions = {
 
     return deipRpc.api.getResearchByAbsolutePermlinkAsync(group_permlink, research_permlink)
       .then((research) => {
-        research.group_permlink = group_permlink;
         commit('SET_RESEARCH_DETAILS', research);
 
         const researchRefLoad = new Promise((resolve, reject) => {
-          dispatch('loadResearchRef', { researchId: state.research.id, notify: resolve })
+          dispatch('loadResearchRef', { researchExternalId: state.research.external_id, notify: resolve });
         });
 
-        return researchRefLoad
-
-      }, (err => { console.log(err) }))
+        return researchRefLoad;
+      }, ((err) => { console.log(err); }))
       .finally(() => {
-        commit('SET_RESEARCH_EDIT_LOADING_STATE', false)
-      })
+        commit('SET_RESEARCH_EDIT_LOADING_STATE', false);
+      });
   },
-  loadResearchRef({ state, dispatch, commit }, { researchId, notify }) {
+  loadResearchRef({ state, dispatch, commit }, { researchExternalId, notify }) {
     commit('SET_RESEARCH_REF_DETAILS_LOADING_STATE', true);
-    return researchService.getResearch(researchId)
-      .then(researchRef => {
+    return researchService.getResearchProfile(researchExternalId)
+      .then((researchRef) => {
         commit('SET_RESEARCH_REF_DETAILS', researchRef);
-      }, (err) => {console.log(err)})
+      }, (err) => { console.log(err); })
       .finally(() => {
         commit('SET_RESEARCH_REF_DETAILS_LOADING_STATE', false);
         if (notify) notify();
-      })
+      });
   }
-}
+};
 
 // mutations
 const mutations = {
 
-  ['SET_RESEARCH_DETAILS'](state, research) {
-    Vue.set(state, 'research', research)
+  SET_RESEARCH_DETAILS(state, research) {
+    Vue.set(state, 'research', research);
   },
 
-  ['SET_RESEARCH_REF_DETAILS'](state, researchRef) {
-    Vue.set(state, 'researchRef', researchRef)
+  SET_RESEARCH_REF_DETAILS(state, researchRef) {
+    Vue.set(state, 'researchRef', researchRef);
   },
 
-  ['SET_RESEARCH_REF_DETAILS_LOADING_STATE'](state, isLoading) {
-    Vue.set(state, 'isLoadingResearchRef', isLoading)
+  SET_RESEARCH_REF_DETAILS_LOADING_STATE(state, isLoading) {
+    Vue.set(state, 'isLoadingResearchRef', isLoading);
   },
 
-  ['SET_RESEARCH_EDIT_LOADING_STATE'](state, isLoading) {
-    Vue.set(state, 'isLoadingResearchEditPage', isLoading)
+  SET_RESEARCH_EDIT_LOADING_STATE(state, isLoading) {
+    Vue.set(state, 'isLoadingResearchEditPage', isLoading);
   }
-}
+};
 
 const namespaced = true;
 
@@ -82,4 +80,4 @@ export const reStore = {
   getters,
   actions,
   mutations
-}
+};

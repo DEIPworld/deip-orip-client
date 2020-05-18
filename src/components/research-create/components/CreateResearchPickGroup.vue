@@ -1,123 +1,140 @@
 <template>
-    <v-layout column fill-height>
-      <v-flex display-flex flex-column flex-grow-1 mb-3>
-        <div class="step-title">Select research group</div>
-        
-        <div class="flex-grow-1">
-          <div class="overflow-y-auto mx-auto pt-3 research-pick-group">
-            <div
-              v-for="(group, i) in groups"
-              :class="{'selected-group': research.group && group.id == research.group.id, 'personal-group': group.is_personal }"
-              @click="setGroup(group)"
-              class="group-line  pa-3 mt-1"
-              :key="'pick-group '+ i"
+  <v-row justify="center">
+    <v-col cols="6">
+      <div class="headline text-center mb-3">
+        Select research group
+      </div>
+
+      <v-card outlined class="mb-3">
+        <v-list nav>
+          <v-list-item
+            v-for="(group, i) in groups"
+            :key="'pick-group '+ i"
+            :input-value="research.group && group.id == research.group.id"
+            @click="setGroup(group)"
+          >
+            <div v-if="group.is_personal" class="group-nameplate pr-2">
+              {{ user | fullname }} 's personal group
+            </div>
+            <div v-else class="group-nameplate pr-2">
+              {{ group.name }}
+            </div>
+            <div>{{ getGroupCoworkers(group).join(' · ') }}</div>
+          </v-list-item>
+          <v-list-item class="mt-6">
+            <v-btn
+              outlined
+              color="primary"
+              :to="{ name: 'CreateResearchGroup',
+                     params: { 'account_name': user.username },
+                     query: { 'back-token': getReturningToken }
+              }"
             >
-              <div v-if="group.is_personal" class="group-nameplate pr-2">{{ user | fullname}} 's personal group</div>
-              <div v-else class="group-nameplate pr-2">{{group.name}}</div>
-              <div>{{ getGroupCoworkers(group).join(' · ') }}</div>
-            </div>
+              + Add new group
+            </v-btn>
+          </v-list-item>
+        </v-list>
+      </v-card>
 
-            <div class="pt-4 pl-3">
-              <router-link
-                class="app-title"
-                :to="{ name: 'CreateResearchGroup',
-                  params: { 'account_name': user.username },
-                  query: { 'back-token': getReturningToken }
-                }">
-                <span class="discipline-picker-label">+ Add new group</span>
-              </router-link>
-            </div>
-          </div>
-        </div>
-      </v-flex>
 
-      <v-flex flex-grow-0>
-        <v-layout row wrap justify-center align-center>
-          <v-btn flat small @click.native="prevStep()">
-            <v-icon dark class="pr-1">keyboard_arrow_left</v-icon>Back
-          </v-btn>
+      <div class="text-center">
+        <v-btn text @click.native="prevStep()">
+          <v-icon dark class="pr-1">
+            keyboard_arrow_left
+          </v-icon>
+          Back
+        </v-btn>
 
-          <v-btn color="primary" :disabled="nextDisabled" @click.native="nextStep()">Next</v-btn>
-        </v-layout>
-      </v-flex>
-  </v-layout>
+        <v-btn color="primary" :disabled="nextDisabled" @click.native="nextStep()">
+          Next
+        </v-btn>
+      </div>
+    </v-col>
+  </v-row>
 </template>
 
 <script>
-import { mapGetters } from "vuex";
+  import { mapGetters } from 'vuex';
 
-export default {
-  name: "CreateResearchPickGroup",
-  props: {
-    research: { type: Object, required: true }
-  },
-  computed: {
-    ...mapGetters({
-      user: "auth/user",
-      userGroups: "auth/userGroups",
-      userCoworkers: "auth/userCoworkers"
-    }),
-
-    groups() {
-      return this.userGroups.slice().sort(g => (g.is_personal ? -1 : 1));
+  export default {
+    name: 'CreateResearchPickGroup',
+    props: {
+      research: {
+        type: Object,
+        required: true
+      }
     },
+    computed: {
+      ...mapGetters({
+        user: 'auth/user',
+        userGroups: 'auth/userGroups',
+        userCoworkers: 'auth/userCoworkers'
+      }),
 
-    nextDisabled() {
-      return !this.research.group;
+      groups() {
+        return this.userGroups.slice()
+          .sort((g) => (g.is_personal ? -1 : 1));
+      },
+
+      nextDisabled() {
+        return !this.research.group;
+      },
+
+      getReturningToken() {
+        const token = {
+          name: 'CreateResearch',
+          query: { disciplineIds: this.research.disciplines.map((item) => item.id) }
+        };
+
+        return JSON.stringify(token);
+      }
     },
-
-    getReturningToken() {
-      const token = {
-        name: "CreateResearch",
-        query: { disciplineIds: this.research.disciplines.map(item => item.id) }
-      };
-
-      return JSON.stringify(token);
+    methods: {
+      nextStep() {
+        this.$emit('incStep');
+      },
+      prevStep() {
+        this.$emit('decStep');
+      },
+      setGroup(group) {
+        this.$emit('setGroup', group);
+      },
+      getGroupCoworkers(group) {
+        return this.userCoworkers
+          .filter((c) => c.rgt.research_group_id == group.id)
+          .map((c) => this.$options.filters.fullname(c));
+      }
     }
-  },
-  methods: {
-    nextStep() {
-      this.$emit("incStep");
-    },
-    prevStep() {
-      this.$emit("decStep");
-    },
-    setGroup(group) {
-      this.$emit("setGroup", group);
-    },
-    getGroupCoworkers(group) {
-      return this.userCoworkers
-        .filter(c => c.rgt.research_group_id == group.id)
-        .map(c => this.$options.filters.fullname(c));
-    }
-  },
-};
+  };
 </script>
 
 <style lang="less" scoped>
-.group-line {
-  border: 1px solid #e0e0e0;
-  border-radius: 2px;
-  cursor: pointer;
-  &:hover {
-    border-color: var(--v-primary-base);
+  .group-line {
+    border: 1px solid #e0e0e0;
+    border-radius: 2px;
+    cursor: pointer;
+
+    &:hover {
+      border-color: var(--v-primary-base);
+    }
   }
-}
-.group-nameplate {
-  font-weight: bold;
-  font-size: 16px;
-  flex: 0 0 250px;
-}
 
-.selected-group {
-  background-color: #eaeaea;
-}
+  .group-nameplate {
+    font-weight: bold;
+    font-size: 16px;
+    flex: 0 0 250px;
+  }
 
-.personal-group {
-  margin-bottom: 20px;
-}
-.research-pick-group{
-max-width: 800px;
-max-height: 600px;
-}
+  .selected-group {
+    background-color: #eaeaea;
+  }
+
+  .personal-group {
+    margin-bottom: 20px;
+  }
+
+  .research-pick-group {
+    max-width: 800px;
+    max-height: 600px;
+  }
 </style>

@@ -1,58 +1,71 @@
 <template>
-  <v-dialog v-model="isOpen" persistent transition="scale-transition" max-width="600px">
-    <v-card class="pa-4">
+  <v-dialog
+    v-model="isOpen"
+    persistent
+    transition="scale-transition"
+    max-width="600px"
+  >
+    <v-card class="pa-6">
       <v-card-title>
-        <v-layout row align-center align-baseline>
-          <v-flex grow class="headline">
-            Join Request
-          </v-flex>
-          <v-flex shrink align-self-center right-top-angle>
-            <v-btn @click="close()" icon class="pa-0 ma-0">
-              <v-icon color="black">close</v-icon>
-            </v-btn>
-          </v-flex>
-        </v-layout>
+        <div class="headline">
+          Join Request
+        </div>
+        <div class="right-top-angle">
+          <v-btn icon class="pa-0 ma-0" @click="close()">
+            <v-icon color="black">
+              close
+            </v-icon>
+          </v-btn>
+        </div>
       </v-card-title>
 
-      <v-card-text>
+      <v-card-text class="pt-2">
         <div>
-          <platform-avatar :user="joinRequest.user" :size="80" link-to-profile
-                           link-to-profile-class="pl-4 title"></platform-avatar>
+          <platform-avatar
+            :user="joinRequest.user"
+            :size="80"
+            link-to-profile
+            link-to-profile-class="pl-6 title"
+          />
         </div>
-        <div class="py-4">{{joinRequest.coverLetter}}</div>
+        <div class="py-6 subtitle-1 black--text">
+          {{ joinRequest.coverLetter }}
+        </div>
 
         <v-text-field
-          label="Research Group Tokens"
           v-model="tokensAmount"
+          label="Research Group Tokens"
           suffix="%"
           mask="##"
-        ></v-text-field>
+        />
       </v-card-text>
 
-      <v-card-actions>
-        <v-layout row wrap>
-          <v-flex xs12 py-2>
+      <v-card-actions class="px-6">
+        <v-row no-gutters>
+          <v-col class="py-2" cols="12">
             <v-btn
               color="primary"
               block
               :disabled="isApprovingDisabled || isApprovingLoading"
               :loading="isApprovingLoading"
               @click="sendProposal()"
-            >Approve and create proposal
+            >
+              Approve and create proposal
             </v-btn>
-          </v-flex>
-          <v-flex xs12 py-2>
+          </v-col>
+          <v-col class="py-2" cols="12">
             <v-btn
               color="primary"
-              flat
+              text
               block
-              @click="denyJoinRequest()"
               :loading="isDenyingLoading"
               :disabled="isDenyingLoading || isApprovingLoading"
-            >Reject
+              @click="denyJoinRequest()"
+            >
+              Reject
             </v-btn>
-          </v-flex>
-        </v-layout>
+          </v-col>
+        </v-row>
       </v-card-actions>
     </v-card>
   </v-dialog>
@@ -96,6 +109,14 @@
 
         isApprovingLoading: false,
         isDenyingLoading: false
+      };
+    },
+    watch: {
+      isOpen(newVal, oldVal) {
+        if (newVal) {
+          this.tokensAmount = undefined;
+          this.coverLetter = this.joinRequest.coverLetter;
+        }
       }
     },
     methods: {
@@ -104,7 +125,7 @@
       },
 
       sendProposal() {
-        const amount = parseInt(this.tokensAmount) * this.DEIP_1_PERCENT
+        const amount = parseInt(this.tokensAmount) * this.DEIP_1_PERCENT;
         this.isApprovingLoading = true;
         researchGroupService.createInviteProposal({
           groupId: this.groupId,
@@ -118,42 +139,33 @@
           this.$store.dispatch('layout/setSuccess', { message: `Invite proposal for "${this.joinRequest.username}" has been created successfully !` });
         }, (err) => {
           this.$store.dispatch('layout/setError', { message: 'An error occurred while approving join request, please try again later' });
-          console.log(err)
+          console.log(err);
         })
           .finally(() => {
             this.isApprovingLoading = false;
             this.close();
-          })
+          });
       },
 
       denyJoinRequest() {
         const self = this;
-        const update = Object.assign({}, self.joinRequest, { status: 'denied' });
+        const update = { ...self.joinRequest, status: 'denied' };
         self.isDenyingLoading = true;
 
         researchGroupService.updateJoinRequest({ request: update })
           .then((updatedRequest) => {
-              self.$store.dispatch('researchGroup/loadJoinRequests', { groupId: self.groupId });
-              self.$store.dispatch('layout/setSuccess', { message: `You have denied join request from  "${self.joinRequest.username}" successfully !` });
+                  self.$store.dispatch('researchGroup/loadJoinRequests', { groupId: self.groupId });
+                  self.$store.dispatch('layout/setSuccess', { message: `You have denied join request from  "${self.joinRequest.username}" successfully !` });
 
-              setTimeout(() => self.close(), 500);
-            },
-            (err) => {
-              self.$store.dispatch('layout/setError', { message: 'An error occurred while denying join request, please try again later' });
-              console.log(err)
-            }
-          )
+                  setTimeout(() => self.close(), 500);
+                },
+                (err) => {
+                  self.$store.dispatch('layout/setError', { message: 'An error occurred while denying join request, please try again later' });
+                  console.log(err);
+                })
           .finally(() => {
             self.isDenyingLoading = false;
-          })
-      }
-    },
-    watch: {
-      isOpen(newVal, oldVal) {
-        if (newVal) {
-          this.tokensAmount = undefined;
-          this.coverLetter = this.joinRequest.coverLetter;
-        }
+          });
       }
     }
   };

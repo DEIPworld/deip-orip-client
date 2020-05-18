@@ -1,268 +1,292 @@
 <template>
-  <v-card class="pa-4 full-height">
-    <div>
-      <router-link class="a title"
-        :to="{ name: 'ResearchDetails', params: {
-          research_group_permlink: encodeURIComponent(research.group_permlink),
-          research_permlink: encodeURIComponent(research.permlink)
-        }}"
-      >{{ research.title }}
-      </router-link>
-    </div>
+  <div>
+    <router-link
+      class="a title"
+      :to="{ name: 'ResearchDetails', params: {
+        research_group_permlink: encodeURIComponent(research.research_group.permlink),
+        research_permlink: encodeURIComponent(research.permlink)
+      }}"
+    >
+      {{ research.title }}
+    </router-link>
 
     <!-- ### START Draft Actions Section ### -->
-    <div class="pt-2" v-if="!isPublished && isResearchGroupMember">
+    <v-sheet v-if="!isPublished && isResearchGroupMember">
       <div v-if="isProposed || isUnlockActionAvailable" class="sidebar-fullwidth">
-        <v-divider></v-divider>
+        <v-divider class="my-6" />
       </div>
-      <div v-if="isProposed" class="c-mt-3 c-mb-3">
-        <div class="subheading orange--text text-align-center">
-          Draft is
-          <router-link class="a orange--text"
-            :to="{
-              name: 'ResearchGroupDetails',
-              params: { research_group_permlink: encodeURIComponent(research.group_permlink) },
-              hash: '#proposals'
-            }"
-          >proposed
-          </router-link>
-          as research content and locked for editing
+      <div v-if="isProposed" class="body-1">
+        Draft is
+        <router-link
+          class="a orange--text"
+          :to="{
+            name: 'ResearchGroupDetails',
+            params: { research_group_permlink: encodeURIComponent(research.research_group.permlink) },
+            hash: '#proposals'
+          }"
+        >
+          proposed
+        </router-link>
+        as research content and locked for editing
+      </div>
+      <div v-if="isUnlockActionAvailable" class="mt-6">
+        <div class="body-1 pb-4">
+          The proposal is expired. Unlock the material for a new proposal or removal
         </div>
+        <v-btn color="orange" block @click="unlockDraft()">
+          Unlock Draft
+        </v-btn>
       </div>
-      <div v-if="isUnlockActionAvailable" class="c-mt-3 c-mb-3">
-        <div class="text-align-center">
-          <v-btn color="orange" @click="unlockDraft()">Unlock Draft</v-btn>
-        </div>
-      </div>
-    </div>
+    </v-sheet>
     <!-- ### END Draft Actions Section ### -->
 
     <!-- ### START Research Content ECI Section ### -->
-    <div v-if="isPublished" class="py-2">
-      <div class="sidebar-fullwidth">
-        <v-divider></v-divider>
+    <v-sheet v-if="isPublished">
+      <v-divider class="my-6" />
+      <div class="title">
+        Expertise Contribution Index
       </div>
-      <div class="py-2">
-        <div class="subheading bold">Expertise Contribution Index</div>
-        <v-layout
-          v-for="eci of eciList"
-          column
-          tag="div"
-          :key="eci.disciplineName"
-          justify-space-between
-          class="expertise px-1 my-2"
-        >
-          <v-layout justify-space-between class="">
-            <div class="blue--text text--accent-4 bold">TOP <span class="font-weight-bold">{{getResearchContentEciPercentile(eci)}}</span>%
-            </div>
-            <div class="grey--text">ECI {{ eci.value }}</div>
-          </v-layout>
-          <v-divider class="expertise__divider"/>
-          <div class="expertise__disc-name pt-1">{{ eci.disciplineName }}</div>
-        </v-layout>
+      <div
+        v-for="eci of eciList"
+        :key="eci.disciplineName"
+        class="expertise px-1 my-1"
+      >
+        <v-row no-gutters justify="space-between">
+          <v-col cols="auto" class="pa-2 blue--text text--accent-4">
+            TOP
+            <span>{{ getResearchContentEciPercentile(eci) }}</span>%
+          </v-col>
+          <v-col cols="auto" class="pa-2 grey--text">
+            ECI {{ eci.value }}
+          </v-col>
+        </v-row>
+        <v-divider class="expertise__divider" />
+        <div class="pa-2">
+          {{ eci.disciplineName }}
+        </div>
       </div>
-      <div class="sidebar-fullwidth">
-        <v-divider></v-divider>
-      </div>
-    </div>
+    </v-sheet>
     <!-- ### END Research Content ECI Section ### -->
 
-    <v-dialog v-if="isPublished" v-model="requestExpertReviewDialog.isShown" persistent max-width="600px">
+
+    <!-- <v-divider class="my-6" />
+    <div class="title display-inline-block">
+      Expert Review:
+    </div>
+    <div class="subtitle-1 bold mb-6 display-inline-block ml-2">
+      <span class="green--text text--darken-2">{{ positiveReviewsCount }}</span>
+      <span> / </span>
+      <span class="red--text text--darken-2">{{ negativeReviewsCount }}</span>
+    </div> -->
+
+    <v-dialog
+      v-if="isPublished"
+      v-model="requestExpertReviewDialog.isShown"
+      persistent
+      max-width="600px"
+    >
       <template v-slot:activator="{ on }">
-        <div class="mx-0">
-          <v-layout row justify-space-between class="py-2">
-            <div class="subheading bold">Expert Review:</div>
-            <div class="subheading bold">
-              <span class="green--text text--darken-2">{{positiveReviewsCount}}</span>
-              <span> / </span>
-              <span class="red--text text--darken-2">{{negativeReviewsCount}}</span>
-            </div>
-          </v-layout>
-          <v-btn large block color="primary" dark v-on="on">Request Review</v-btn>
-        </div>
+        <v-btn
+          block
+          color="primary"
+          dark
+          v-on="on"
+        >
+          Request Review
+        </v-btn>
       </template>
-      <v-card class="pa-4">
+      <v-card class="pa-6">
         <v-card-title>
-          <v-layout align-center>
-            <v-flex grow class="headline">Request review from an Expert</v-flex>
-            <v-flex shrink right-top-angle>
-              <v-btn @click="requestExpertReviewDialog.isShown = false" icon class="pa-0 ma-0">
-                <v-icon color="black">close</v-icon>
-              </v-btn>
-            </v-flex>
-          </v-layout>
+          <div class="headline">
+            Request review from an Expert
+          </div>
+          <div class="right-top-angle">
+            <v-btn icon class="pa-0 ma-0" @click="requestExpertReviewDialog.isShown = false">
+              <v-icon color="black">
+                close
+              </v-icon>
+            </v-btn>
+          </div>
         </v-card-title>
         <v-card-text>
-          <v-layout column>
-            <user-autocomplete-picker
-              label="Find an expert to request a review"
-              :users="experts"
-              :isDisabled="requestExpertReviewDialog.isRequestingReview"
-              :displayLimit="8"
-              @onSelectUser="selectExpertForReview"
-            />
-          </v-layout>
+          <user-autocomplete-picker
+            label="Find an expert to request a review"
+            :users="experts"
+            :is-disabled="requestExpertReviewDialog.isRequestingReview"
+            :display-limit="8"
+            @onSelectUser="selectExpertForReview"
+          />
         </v-card-text>
-        <v-card-actions>
-          <v-layout row wrap>
-            <v-flex xs12 py-2>
+        <v-card-actions class="px-6">
+          <v-row>
+            <v-col cols="12" class="py-2">
               <v-btn
-                @click="requestReview()"
                 :loading="requestExpertReviewDialog.isRequestingReview"
                 :disabled="isRequestingReviewDisabled"
                 block
                 color="primary"
-              >Request
+                @click="requestReview()"
+              >
+                Request
               </v-btn>
-            </v-flex>
-            <v-flex xs12 py-2>
+            </v-col>
+            <v-col cols="12" class="py-2">
               <v-btn
-                @click="requestExpertReviewDialog.isShown = false"
                 color="primary"
-                flat
-                block>Cancel
+                text
+                block
+                @click="requestExpertReviewDialog.isShown = false"
+              >
+                Cancel
               </v-btn>
-            </v-flex>
-          </v-layout>
+            </v-col>
+          </v-row>
         </v-card-actions>
       </v-card>
     </v-dialog>
 
     <!-- ### START Research Content Authors Section ### -->
-    <div class="py-2">
-      <div class="sidebar-fullwidth">
-        <v-divider></v-divider>
-      </div>
-      <div class="subheading bold py-2">Authors</div>
-      <div v-if="isPublished">
-        <v-layout row 
-          v-for="(author, index) in contentAuthorsList" 
-          :key="`author-${index}`" 
-          :class="{'pb-1' : index == 0, 'py-1': index != 0}">
-          <platform-avatar
-            :user="author"
-            :size="40"
-            link-to-profile
-            link-to-profile-class="pl-2"
-          ></platform-avatar>
-        </v-layout>
-      </div>
+    <v-divider class="my-6" />
 
-      <div v-else>
-        <v-layout 
-          row 
-          justify-space-between 
-          align-baseline v-for="(member, index) in draftAuthorsList"
-          :key="`author-${index}`" 
-          :class="{'pb-1' : index == 0, 'py-1': index != 0}">
-          <div>
-            <platform-avatar
-              :user="member"
-              :size="40"
-              link-to-profile
-              link-to-profile-class="pl-2"
-            ></platform-avatar>
-          </div>
+    <div class="title mb-6">
+      Authors
+    </div>
 
-          <div v-if="isInProgress" class="author-checkbox">
-            <!-- v-checkbox depends on v-model binding which doesn't play well with Vuex.
-                TODO: create a custom checkbox with the same styles as v-checkbox has -->
-            <input id="checkbox"
-              type="checkbox"
-              :disabled="draftAuthorGuard(member)"
-              :checked="isDraftAuthor(member)"
-              v-on:input="setDraftAuthor($event, member)"/>
-          </div>
-        </v-layout>
+    <div v-if="isPublished">
+      <div
+        v-for="(author, index) in contentAuthorsList"
+        :key="`author-${index}`"
+        :class="{'pb-1' : index == 0, 'py-1': index != 0}"
+      >
+        <platform-avatar
+          :user="author"
+          :size="40"
+          link-to-profile
+          link-to-profile-class="pl-2"
+        />
+      </div>
+    </div>
+
+    <div v-else>
+      <div
+        v-for="(member, index) in draftAuthorsList"
+        :key="`author-${index}`"
+        align-baseline
+        :class="{'pb-1' : index == 0, 'py-1': index != 0}"
+      >
+        <platform-avatar
+          :user="member"
+          :size="40"
+          link-to-profile
+          link-to-profile-class="pl-2"
+          class="display-inline-block mr-2"
+        />
+
+        <div v-if="isInProgress" class="author-checkbox display-inline-block">
+          <!-- v-checkbox depends on v-model binding which doesn't play well with Vuex.
+              TODO: create a custom checkbox with the same styles as v-checkbox has -->
+          <input
+            id="checkbox"
+            type="checkbox"
+            :disabled="draftAuthorGuard(member)"
+            :checked="isDraftAuthor(member)"
+            @input="setDraftAuthor($event, member)"
+          >
+        </div>
       </div>
     </div>
     <!-- ### END Research Content Authors Section ### -->
 
     <!-- ### START Research TOC Section ### -->
-    <div class="py-2" v-if="researchTableOfContent.length">
-      <div class="sidebar-fullwidth">
-        <v-divider></v-divider>
+    <div v-if="researchTableOfContent.length">
+      <v-divider class="my-6" />
+
+      <div class="title mb-6">
+        Research table of content
       </div>
-      <div class="py-2">
-        <div class="subheading bold pb-2">Research table of content</div>
-        <div v-for="(item, index) in researchTableOfContent" :key="index" :class="index === 0 ? '' : 'c-mt-1'">
-          <div class="body-2">{{index + 1 }}. {{item.type}}</div>
-          <div class="pl-2">
-            <router-link target="_blank" class="a body-1"
-              :to="{
-                name: 'ResearchContentDetails',
-                params: {
-                  research_group_permlink: encodeURIComponent(research.group_permlink),
-                  research_permlink: encodeURIComponent(research.permlink),
-                  content_permlink: encodeURIComponent(item.permlink)
-                }
-              }"
-            >{{ item.title }}
-            </router-link>
-          </div>
+
+      <div v-for="(item, index) in researchTableOfContent" :key="index" :class="index === 0 ? '' : 'c-mt-1'">
+        <div class="body-2 font-weight-bold">
+          {{ index + 1 }}. {{ item.type }}
         </div>
-        <div class="pt-2" v-if="isPublished">
-          <router-link class="a"
+        <div class="pl-2">
+          <router-link
+            target="_blank"
+            class="a body-1"
             :to="{
-              name: 'ResearchContentReferences',
+              name: 'ResearchContentDetails',
               params: {
-                research_group_permlink: encodeURIComponent(research.group_permlink),
+                research_group_permlink: encodeURIComponent(research.research_group.permlink),
                 research_permlink: encodeURIComponent(research.permlink),
-                content_permlink: encodeURIComponent(content.permlink)
-              }}">
-            <v-icon small>device_hub</v-icon>
-            References
+                content_permlink: encodeURIComponent(item.permlink)
+              }
+            }"
+          >
+            {{ item.title }}
           </router-link>
         </div>
       </div>
-      <div class="sidebar-fullwidth">
-        <v-divider></v-divider>
+
+      <div v-if="isPublished" class="pt-2">
+        <router-link
+          class="a font-weight-regular display-flex"
+          :to="{
+            name: 'ResearchContentReferences',
+            params: {
+              research_group_permlink: encodeURIComponent(research.research_group.permlink),
+              research_permlink: encodeURIComponent(research.permlink),
+              content_permlink: encodeURIComponent(content.permlink)
+            }}"
+        >
+          <v-icon small class="mr-1">
+            device_hub
+          </v-icon>
+          References
+        </router-link>
       </div>
     </div>
     <!-- ### END Research TOC Section ### -->
 
     <!-- ### START Research Content Blockchain Data Section ### -->
     <div v-if="isPublished" class="py-2">
-      <div>
-        <v-btn large block color="primary" dark 
-          :to="{
-            name: 'ResearchContentMetadata',
-            params: {
-              research_group_permlink: encodeURIComponent(research.group_permlink),
-              research_permlink: encodeURIComponent(research.permlink),
-              content_permlink: encodeURIComponent(content.permlink)
-            }
-          }">Blockchain Metadata</v-btn>
-      </div>
+      <v-divider class="my-6" />
+      <v-btn
+        block
+        color="primary"
+        :to="{
+          name: 'ResearchContentMetadata',
+          params: {
+            research_group_permlink: encodeURIComponent(research.research_group.permlink),
+            research_permlink: encodeURIComponent(research.permlink),
+            content_permlink: encodeURIComponent(content.permlink)
+          }
+        }"
+      >
+        Blockchain Metadata
+      </v-btn>
     </div>
     <!-- ### END Research Content Blockchain Data Section ### -->
 
-    <!-- ### START Quorum Info Section ### -->
-    <div v-if="!isPublished && !isCentralizedGroup" class="py-2">
-      <div class="subheading bold">Quorum</div>
-      <div class="body-2 pt-1">
-        <v-layout row justify-space-between class="body-2 py-1">
-          <div>{{createContentGroupQuorumValue.text}}:</div>
-          <div>{{convertToPercent(createContentGroupQuorumValue.value)}}%</div>
-        </v-layout>
-      </div>
-    </div>
-    <!-- ### END Quorum Info Section ### -->
 
     <!-- ### START Reward Info Section ### -->
     <div v-if="!isPublished" class="py-2">
-      <div class="subheading bold">Reviews</div>
+      <div class="subtitle-1 font-weight-bold">
+        Reviews
+      </div>
       <div class="body-2 c-mt-2">
-        <v-layout row justify-space-between class="body-2 py-1">
-          <div><v-icon small class="c-pr-2">rate_review</v-icon>
+        <v-row no-gutters justify="space-between" class="body-2 py-1">
+          <div>
+            <v-icon small class="c-pr-2">
+              rate_review
+            </v-icon>
             Reward for review:
           </div>
-          <div>{{convertToPercent(research.review_share_in_percent)}}%</div>
-        </v-layout>
+          <div>{{ research.review_share }}</div>
+        </v-row>
       </div>
     </div>
     <!-- ### END Reward Info Section ### -->
-  </v-card>
+  </div>
 </template>
 
 <script>
@@ -326,11 +350,11 @@
       },
 
       positiveReviewsCount() {
-        return this.contentReviewsList.filter(r => r.is_positive).length;
+        return this.contentReviewsList.filter((r) => r.is_positive).length;
       },
 
       negativeReviewsCount() {
-        return this.contentReviewsList.filter(r => !r.is_positive).length;
+        return this.contentReviewsList.filter((r) => !r.is_positive).length;
       },
 
       contentRewardDistributionState() {
@@ -346,49 +370,42 @@
       },
 
       contentAuthorsList() {
-        return this.content ? this.membersList.filter(m => this.content.authors.some(a => a === m.account.name)) : [];
+        return this.content ? this.membersList.filter((m) => this.content.authors.some((a) => a === m.account.name)) : [];
       },
 
       draftAuthorsList() {
-        return this.isInProgress ? this.membersList : this.membersList.filter(m => this.contentRef.authors.some(a => a === m.account.name))
+        return this.isInProgress ? this.membersList : this.membersList.filter((m) => this.contentRef.authors.some((a) => a === m.account.name));
       },
 
       researchTableOfContent() {
-        return this.contentList.map(content => {
-          let typeObj = researchContentTypes.find(c => c.type === content.content_type);
+        return this.contentList.map((content) => {
+          const typeObj = researchContentTypes.find((c) => c.type === content.content_type);
           return {
             type: typeObj ? typeObj.text : 'Milestone',
             title: content.title,
             permlink: content.permlink
-          }
-        })
-      },
-
-      createContentGroupQuorumValue() {
-        return this.group ? {
-          text: proposalTypesLabels[PROPOSAL_TYPES.CREATE_RESEARCH_MATERIAL],
-          value: this.group.proposal_quorums[PROPOSAL_TYPES.CREATE_RESEARCH_MATERIAL - 1][1]
-        } : undefined;
+          };
+        });
       },
 
       eciList() {
-        return this.disciplinesList.map(discipline => {
-          const eciObj = this.content.eci_per_discipline.find(item => item[0] === discipline.id);
+        return this.disciplinesList.map((discipline) => {
+          const eciObj = this.content.eci_per_discipline.find((item) => item[0] === discipline.id);
           return {
             disciplineName: discipline.name,
             value: eciObj ? eciObj[1] : 0
-          }
+          };
         });
       },
 
       experts() {
         const blackList = [
           'regacc', 'hermes', 'initdelegate', this.user.username,
-          ...this.membersList.map(m => m.account.name)
+          ...this.membersList.map((m) => m.account.name)
         ];
-        const existingReviewsForContent = this.contentReviewsList.filter(r => r.research_content_id === this.content.id);
-        blackList.push(...existingReviewsForContent.map(r => r.author.account.name));
-        return this.expertsList.filter(e => !blackList.includes(e.account.name));
+        const existingReviewsForContent = this.contentReviewsList.filter((r) => r.research_content_id === this.content.id);
+        blackList.push(...existingReviewsForContent.map((r) => r.author.account.name));
+        return this.expertsList.filter((e) => !blackList.includes(e.account.name));
       },
 
       isRequestingReviewDisabled() {
@@ -403,48 +420,51 @@
       },
 
       userHasExpertiseInDiscipline(discipline) {
-        return this.userHasResearchExpertise.some(exp => exp.discipline_id === discipline.id);
+        return this.userHasResearchExpertise.some((exp) => exp.discipline_id === discipline.id);
       },
 
       unlockDraft() {
         researchContentService.unlockContentDraft(this.contentRef._id)
           .then(() => {
-            location.reload()
+            location.reload();
           }, (err) => {
-            console.log(err)
+            console.log(err);
           });
       },
 
       isDraftAuthor(member) {
-        return this.contentRef.authors.some(a => a === member.account.name);
+        return this.contentRef.authors.some((a) => a === member.account.name);
       },
 
       draftAuthorGuard(member) {
-        return this.contentRef.authors.length == 1 && this.isDraftAuthor(member)
+        return this.contentRef.authors.length == 1 && this.isDraftAuthor(member);
       },
 
       setDraftAuthor(event, member) {
         event.preventDefault();
         event.stopPropagation();
-        const checked = event.target.checked;
+        const { checked } = event.target;
         const authors = checked
           ? [...this.contentRef.authors, member.account.name]
-          : this.contentRef.authors.filter(a => a !== member.account.name);
-        this.$emit('setDraftAuthors', this.membersList.filter(m => authors.some(a => a === m.account.name)));
+          : this.contentRef.authors.filter((a) => a !== member.account.name);
+        this.$emit('setDraftAuthors', this.membersList.filter((m) => authors.some((a) => a === m.account.name)));
       },
 
       goAddReview() {
-        this.$router.push({name: 'ResearchContentAddReview', params: this.$route.params });
+        this.$router.push({
+          name: 'ResearchContentAddReview',
+          params: this.$route.params
+        });
       },
 
       requestReview() {
         this.requestExpertReviewDialog.isRequestingReview = true;
         return researchContentReviewsService.createReviewRequest({
-            contentId: this.content.id,
-            expert: this.requestExpertReviewDialog.selectedExpert.account.name
-          })
+          contentId: this.content.id,
+          expert: this.requestExpertReviewDialog.selectedExpert.account.name
+        })
           .then(() => {
-            this.$store.dispatch('layout/setSuccess', { message: 'Request for the review has been sent successfully'});
+            this.$store.dispatch('layout/setSuccess', { message: 'Request for the review has been sent successfully' });
           })
           .catch((err) => {
             let errMsg = 'An error occurred while requesting the review. Please try again later';

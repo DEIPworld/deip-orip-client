@@ -13,4 +13,4 @@ const setDeipRpc = () => {
 
 export {
   setDeipRpc
-}
+};

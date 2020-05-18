@@ -57,140 +57,83 @@ const state = {
 // getters
 const getters = {
 
-  research: (state, getters) => {
-    return state.research;
-  },
+  research: (state, getters) => state.research,
 
-  researchRef: (state, getters) => {
-    return state.researchRef;
-  },
+  researchRef: (state, getters) => state.researchRef,
 
-  group: () => {
-    return state.group;
-  },
+  group: () => state.group,
 
-  contentList: (state, getters) => {
-    return state.contentList;
-  },
+  contentList: (state, getters) => state.contentList,
 
-  applicationsList: (state, getters) => {
-    return state.applicationsList;
-  },
+  applicationsList: (state, getters) => state.applicationsList,
 
-  contentRefsList: (state, getters) => {
-    return state.contentRefsList;
-  },
+  contentRefsList: (state, getters) => state.contentRefsList,
 
-  researchReferencesList: (state, getters) => {
-    return [].concat.apply([], state.contentRefsList.map(ref => ref.externalReferences || []))
-      .map(ref => {
-        return {
-          title: ref,
-          source: ''
-        };
-      });
-  },
+  researchReferencesList: (state, getters) => [].concat.apply([], state.contentRefsList.map((ref) => ref.externalReferences || []))
+    .map((ref) => ({
+      title: ref,
+      source: ''
+    })),
 
-  researchGroupMembersList: (state, getters) => {
-    return state.researchGroupMembersList;
-  },
+  researchGroupMembersList: (state, getters) => state.researchGroupMembersList,
 
-  researchMembersList: (state, getters) => {
-    return state.researchGroupMembersList
-      .filter(member => state.research.members.some(m => m == member.account.name));
-  },
+  researchMembersList: (state, getters) => state.researchGroupMembersList
+    .filter((member) => state.research.members.some((m) => m == member.account.name)),
 
-  reviewsList: (state, getters) => {
-    return state.reviewsList.map((review, i) => {
-      let researchContent = state.contentList.find(content => content.id == review.research_content_id);
-      return {
-        ...review,
-        researchContent
-      };
-    })
-      .sort((a, b) => b.id - a.id);
-  },
+  reviewsList: (state, getters) => state.reviewsList.map((review, i) => {
+    const researchContent = state.contentList.find((content) => content.id == review.research_content_id);
+    return {
+      ...review,
+      researchContent
+    };
+  })
+    .sort((a, b) => b.id - a.id),
 
-  disciplinesList: (state, getters) => {
-    return state.disciplinesList;
-  },
+  disciplinesList: (state, getters) => state.disciplinesList,
 
-  totalVotesList: (state, getters) => {
-    return state.totalVotesList;
-  },
+  totalVotesList: (state, getters) => state.totalVotesList,
 
-  tokenSale: (state, getters) => {
-    return state.tokenSale;
-  },
+  tokenSale: (state, getters) => state.tokenSale,
 
-  tokenSalesList: (state, getters) => {
-    return state.tokenSalesList;
-  },
+  tokenSalesList: (state, getters) => state.tokenSalesList,
 
-  tokenHoldersList: (state, getters) => {
-    return state.tokenHoldersList;
-  },
+  tokenHoldersList: (state, getters) => state.tokenHoldersList,
 
-  contributionsList: (state, getters) => {
-    return state.contributionsList;
-  },
+  contributionsList: (state, getters) => state.contributionsList,
 
-  groupInvitesList: (state, getters) => {
-    return state.groupInvitesList;
-  },
+  groupInvitesList: (state, getters) => state.groupInvitesList,
 
-  expertsList: (state, getters) => {
-    return state.expertsList;
-  },
+  expertsList: (state, getters) => state.expertsList,
 
-  isLoadingResearchContent: (state, getters) => {
-    return state.isLoadingResearchContent;
-  },
+  isLoadingResearchContent: (state, getters) => state.isLoadingResearchContent,
 
-  isLoadingResearchMembers: (state, getters) => {
-    return state.isLoadingResearchMembers;
-  },
+  isLoadingResearchMembers: (state, getters) => state.isLoadingResearchMembers,
 
-  isLoadingResearchDetails: (state, getters) => {
-    return state.isLoadingResearchDetails;
-  },
+  isLoadingResearchDetails: (state, getters) => state.isLoadingResearchDetails,
 
-  isLoadingResearchRefDetails: (state, getters) => {
-    return state.isLoadingResearchRefDetails;
-  },
+  isLoadingResearchRefDetails: (state, getters) => state.isLoadingResearchRefDetails,
 
-  isLoadingResearchReviews: (state, getters) => {
-    return state.isLoadingResearchReviews;
-  },
+  isLoadingResearchReviews: (state, getters) => state.isLoadingResearchReviews,
 
-  isLoadingResearchDisciplines: (state, getters) => {
-    return state.isLoadingResearchDisciplines;
-  },
+  isLoadingResearchDisciplines: (state, getters) => state.isLoadingResearchDisciplines,
 
-  isLoadingResearchTokenHolders: (state, getters) => {
-    return state.isLoadingResearchTokenHolders;
-  },
+  isLoadingResearchTokenHolders: (state, getters) => state.isLoadingResearchTokenHolders,
 
-  isLoadingResearchTokenSale: (state, getters) => {
-    return state.isLoadingResearchTokenSale;
-  },
+  isLoadingResearchTokenSale: (state, getters) => state.isLoadingResearchTokenSale,
 
-  isLoadingResearchContentRefs: (state, getters) => {
-    return state.isLoadingResearchContentRefs;
-  },
+  isLoadingResearchContentRefs: (state, getters) => state.isLoadingResearchContentRefs,
 
   contentWeightByDiscipline: (state, getters) => {
     const map = {};
     const flattened = state.totalVotesList.reduce(
-      function (accumulator, currentValue) {
-        return accumulator.concat(currentValue);
-      }, []);
+      (accumulator, currentValue) => accumulator.concat(currentValue), []
+    );
 
-    for (var i = 0; i < flattened.length; i++) {
+    for (let i = 0; i < flattened.length; i++) {
       const tvo = flattened[i];
       const discipline_id = tvo.discipline_id.toString();
       const research_content_id = tvo.research_content_id.toString();
-      const eci = tvo.eci;
+      const { eci } = tvo;
 
       if (map[research_content_id] === undefined) {
         map[research_content_id] = {};
@@ -203,12 +146,12 @@ const getters = {
 
   researchWeightByDiscipline: (state, getters) => {
     const map = {};
-    for (var i = 0; i < state.totalVotesList.length; i++) {
+    for (let i = 0; i < state.totalVotesList.length; i++) {
       const tvoByContent = state.totalVotesList[i];
-      for (var j = 0; j < tvoByContent.length; j++) {
+      for (let j = 0; j < tvoByContent.length; j++) {
         const tvo = tvoByContent[j];
         const discipline_id = tvo.discipline_id.toString();
-        const eci = tvo.eci;
+        const { eci } = tvo;
 
         if (map[discipline_id] === undefined) {
           map[discipline_id] = eci;
@@ -220,10 +163,9 @@ const getters = {
     return map;
   },
 
-  timelineOffsets: function () {
-    if (state.research !== null && state.contentList !== null &&
-      state.contentList.length !== 0) {
-
+  timelineOffsets() {
+    if (state.research !== null && state.contentList !== null
+      && state.contentList.length !== 0) {
       const startTimestamp = Date.parse(state.research.created_at);
       const endTimestamp = Date.parse(state.contentList[state.contentList.length - 1].created_at);
       const allTime = endTimestamp - startTimestamp;
@@ -235,7 +177,7 @@ const getters = {
         const contentTimestamp = Date.parse(state.contentList[i].created_at);
 
         // calculate item ratio by its index
-        var indexFactor = (i + 1) / state.contentList.length * maxRatio;
+        const indexFactor = (i + 1) / state.contentList.length * maxRatio;
 
         // calculate item ratio by its timestamp
         var timestampFactor;
@@ -243,12 +185,12 @@ const getters = {
           // all research content have been posted at the same time (genesis)
           timestampFactor = i == state.contentList.length - 1 ? maxRatio : 50;
         } else {
-          var timeAfter = endTimestamp - contentTimestamp;
+          const timeAfter = endTimestamp - contentTimestamp;
           timestampFactor = 100 - (timeAfter / allTime * 100) || 1;
         }
 
         // adjust position relative to entire timeline period
-        var ratio = (indexFactor * timestampFactor) / 100;
+        const ratio = (indexFactor * timestampFactor) / 100;
         offsets.push({ value: ratio.toFixed(2) });
       }
 
@@ -257,116 +199,103 @@ const getters = {
     return [];
   },
 
-  userContributionsList: (state, getters) => {
-    return state.userContributionsList;
-  },
+  userContributionsList: (state, getters) => state.userContributionsList,
 
-  eciHistoryByDisciplineMap: (state, getters) => {
-    return state.eciHistoryByDiscipline;
-  },
+  eciHistoryByDisciplineMap: (state, getters) => state.eciHistoryByDiscipline,
 
-  eciHistoryByDiscipline: (state, getters) => {
-    return (disciplineId) => {
-      let records = state.eciHistoryByDiscipline[disciplineId];
-      if (!records) {
-        return null;
+  eciHistoryByDiscipline: (state, getters) => (disciplineId) => {
+    const records = state.eciHistoryByDiscipline[disciplineId];
+    if (!records) {
+      return null;
+    }
+
+    return records.map((record) => {
+      if (record.alteration_source_type == EXPERTISE_CONTRIBUTION_TYPE.REVIEW) {
+        const typeInfo = researchService.getResearchContentType(record.research_content.content_type);
+
+        const parser = new DOMParser();
+        const html = parser.parseFromString(record.review.content, 'text/html');
+        const allElements = Array.from(html.all);
+        const bodyIdx = allElements.findIndex((el) => el.tagName == 'BODY');
+        const headerEl = allElements[bodyIdx + 1];
+        const title = headerEl.innerHTML;
+
+        const link = {
+          name: 'ResearchContentReview',
+          params: {
+            research_group_permlink: decodeURIComponent(record.research_group.permlink),
+            research_permlink: decodeURIComponent(record.research.permlink),
+            content_permlink: decodeURIComponent(record.research_content.permlink),
+            review_id: record.review.id
+          }
+        };
+
+        return {
+          ...record,
+          actionText: `${typeInfo ? typeInfo.text : 'Publication'} Reviewed`,
+          meta: {
+            title,
+            review: record.review,
+            link
+          }
+        };
+      } if (record.alteration_source_type == EXPERTISE_CONTRIBUTION_TYPE.REVIEW_SUPPORT) {
+        const parser = new DOMParser();
+        const html = parser.parseFromString(record.review.content, 'text/html');
+        const allElements = Array.from(html.all);
+        const bodyIdx = allElements.findIndex((el) => el.tagName == 'BODY');
+        const headerEl = allElements[bodyIdx + 1];
+        const title = headerEl.innerHTML;
+
+        const link = {
+          name: 'ResearchContentReview',
+          params: {
+            research_group_permlink: decodeURIComponent(record.research_group.permlink),
+            research_permlink: decodeURIComponent(record.research.permlink),
+            content_permlink: decodeURIComponent(record.research_content.permlink),
+            review_id: record.review.id
+          }
+        };
+
+        return {
+          ...record,
+          actionText: 'Review supported',
+          meta: {
+            title,
+            review: record.review,
+            reviewVote: record.review_vote,
+            link
+          }
+        };
+      } if (record.alteration_source_type == EXPERTISE_CONTRIBUTION_TYPE.PUBLICATION) {
+        const typeInfo = researchService.getResearchContentType(record.research_content.content_type);
+        const link = {
+          name: 'ResearchContentDetails',
+          params: {
+            research_group_permlink: decodeURIComponent(record.research_group.permlink),
+            research_permlink: decodeURIComponent(record.research.permlink),
+            content_permlink: decodeURIComponent(record.research_content.permlink)
+          }
+        };
+
+        return {
+          ...record,
+          actionText: `${typeInfo ? typeInfo.text : 'Publication'} uploaded`,
+          meta: {
+            title: record.research_content.title,
+            researchContent: record.research_content,
+            link
+          }
+        };
       }
-
-      return records.map(record => {
-
-        if (record.alteration_source_type == EXPERTISE_CONTRIBUTION_TYPE.REVIEW) {
-          let typeInfo = researchService.getResearchContentType(record.research_content.content_type);
-
-          let parser = new DOMParser();
-          let html = parser.parseFromString(record.review.content, 'text/html');
-          let allElements = Array.from(html.all);
-          let bodyIdx = allElements.findIndex(el => el.tagName == 'BODY');
-          let headerEl = allElements[bodyIdx + 1];
-          let title = headerEl.innerHTML;
-
-          let link = {
-            name: 'ResearchContentReview',
-            params: {
-              research_group_permlink: decodeURIComponent(record.research_group.permlink),
-              research_permlink: decodeURIComponent(record.research.permlink),
-              content_permlink: decodeURIComponent(record.research_content.permlink),
-              review_id: record.review.id
-            }
-          };
-
-          return {
-            ...record,
-            actionText: `${typeInfo? typeInfo.text : 'Publication'} Reviewed`,
-            meta: {
-              title,
-              review: record.review,
-              link
-            }
-          };
-
-        } else if (record.alteration_source_type == EXPERTISE_CONTRIBUTION_TYPE.REVIEW_SUPPORT) {
-
-          let parser = new DOMParser();
-          let html = parser.parseFromString(record.review.content, 'text/html');
-          let allElements = Array.from(html.all);
-          let bodyIdx = allElements.findIndex(el => el.tagName == 'BODY');
-          let headerEl = allElements[bodyIdx + 1];
-          let title = headerEl.innerHTML;
-
-          let link = {
-            name: 'ResearchContentReview',
-            params: {
-              research_group_permlink: decodeURIComponent(record.research_group.permlink),
-              research_permlink: decodeURIComponent(record.research.permlink),
-              content_permlink: decodeURIComponent(record.research_content.permlink),
-              review_id: record.review.id
-            }
-          };
-
-          return {
-            ...record,
-            actionText: "Review supported",
-            meta: {
-              title,
-              review: record.review,
-              reviewVote: record.review_vote,
-              link
-            }
-          };
-
-        } else if (record.alteration_source_type == EXPERTISE_CONTRIBUTION_TYPE.PUBLICATION) {
-          
-          let typeInfo = researchService.getResearchContentType(record.research_content.content_type);
-          let link = {
-            name: 'ResearchContentDetails',
-            params: {
-              research_group_permlink: decodeURIComponent(record.research_group.permlink),
-              research_permlink: decodeURIComponent(record.research.permlink),
-              content_permlink: decodeURIComponent(record.research_content.permlink)
-            }
-          };
-
-          return {
-            ...record,
-            actionText: `${typeInfo ? typeInfo.text : 'Publication'} uploaded`,
-            meta: {
-              title: record.research_content.title,
-              researchContent: record.research_content,
-              link
-            }
-          };
-        } else {
-
-          return {
-            ...record,
-            actionText: "Contribution",
-            meta: {
-              title: "Contribution"
-            }
-          };
+      return {
+        ...record,
+        actionText: 'Contribution',
+        meta: {
+          title: 'Contribution'
         }
-      });
-    };
+      };
+    });
   }
 };
 
@@ -379,14 +308,13 @@ const actions = {
 
     return deipRpc.api.getResearchByAbsolutePermlinkAsync(group_permlink, research_permlink)
       .then((research) => {
-        research.group_permlink = group_permlink;
         research.isTop = researchService.getTopResearchesIds()
-          .some(id => id == research.id);
+          .some((id) => id == research.id);
         commit('SET_RESEARCH_DETAILS', research);
 
         const researchRefLoad = new Promise((resolve, reject) => {
           dispatch('loadResearchRef', {
-            researchId: state.research.id,
+            researchExternalId: state.research.external_id,
             notify: resolve
           });
         });
@@ -398,7 +326,7 @@ const actions = {
         });
         const contentRefsLoad = new Promise((resolve, reject) => {
           dispatch('loadResearchContentRefs', {
-            researchId: state.research.id,
+            researchExternalId: state.research.external_id,
             notify: resolve
           });
         });
@@ -469,8 +397,7 @@ const actions = {
           tokenSaleLoad, tokenSalesLoad, invitesLoad, contentRefsLoad, groupLoad,
           applicationsLoad, userContributionsLoad
         ]);
-
-      }, (err => {console.log(err);}))
+      }, ((err) => { console.log(err); }))
       .finally(() => {
         commit('SET_RESEARCH_DETAILS_LOADING_STATE', false);
       });
@@ -481,18 +408,18 @@ const actions = {
     commit('SET_RESEARCH_CONTENT_LOADING_STATE', true);
 
     return deipRpc.api.getAllResearchContentAsync(researchId)
-      .then(list => {
+      .then((list) => {
         contents = list;
-        return Promise.all(contents.map(content => deipRpc.api.getReviewsByContentAsync(content.id)));
+        return Promise.all(contents.map((content) => deipRpc.api.getReviewsByContentAsync(content.id)));
       })
-      .then(reviews => {
+      .then((reviews) => {
         contents.forEach((content, index) => {
           content.reviews = reviews[index];
         });
 
         commit('SET_RESEARCH_CONTENT_LIST', contents);
       })
-      .catch(err => { console.log(err); })
+      .catch((err) => { console.log(err); })
       .finally(() => {
         commit('SET_RESEARCH_CONTENT_LOADING_STATE', false);
         if (notify) notify();
@@ -500,13 +427,13 @@ const actions = {
   },
 
   loadResearchApplications({ state, dispatch, commit }, { researchId, notify }) {
-    var applications = [];
+    let applications = [];
     commit('SET_RESEARCH_APPLICATONS_LOADING_STATE', true);
 
     deipRpc.api.getGrantApplicationsByResearchIdAsync(researchId)
-      .then(list => {
+      .then((list) => {
         applications = list;
-        return Promise.all(applications.map(a => deipRpc.api.getFundingOpportunityAsync(a.grant_id)));
+        return Promise.all(applications.map((a) => deipRpc.api.getFundingOpportunityAsync(a.grant_id)));
       })
       .then((foaList) => {
         for (let i = 0; i < applications.length; i++) {
@@ -518,7 +445,7 @@ const actions = {
         }
         commit('SET_RESEARCH_APPLICATIONS_LIST', applications);
       })
-      .catch(err => { console.log(err); })
+      .catch((err) => { console.log(err); })
       .finally(() => {
         commit('SET_RESEARCH_APPLICATONS_LOADING_STATE', false);
         if (notify) notify();
@@ -531,15 +458,15 @@ const actions = {
     deipRpc.api.getResearchGroupTokensByResearchGroupAsync(groupId)
       .then((members) => {
         rgtList.push(...members);
-        return usersService.getEnrichedProfiles(members.map(m => m.owner));
-      }, (err) => {console.log(err);})
+        return usersService.getEnrichedProfiles(members.map((m) => m.owner));
+      }, (err) => { console.log(err); })
       .then((users) => {
         for (let i = 0; i < users.length; i++) {
           const user = users[i];
-          user.rgt = rgtList.find(rgt => rgt.owner == user.account.name);
+          user.rgt = rgtList.find((rgt) => rgt.owner == user.account.name);
         }
         commit('SET_RESEARCH_MEMBERS_LIST', users);
-      }, (err) => {console.log(err);})
+      }, (err) => { console.log(err); })
       .finally(() => {
         commit('SET_RESEARCH_MEMBERS_LOADING_STATE', false);
         if (notify) notify();
@@ -551,21 +478,21 @@ const actions = {
     commit('SET_RESEARCH_REVIEWS_LOADING_STATE', true);
 
     deipRpc.api.getReviewsByResearchAsync(researchId)
-      .then(items => {
+      .then((items) => {
         reviews.push(...items);
         return Promise.all([
-          Promise.all(reviews.map(item => deipRpc.api.getReviewVotesByReviewIdAsync(item.id))),
-          usersService.getEnrichedProfiles(reviews.map(r => r.author))
+          Promise.all(reviews.map((item) => deipRpc.api.getReviewVotesByReviewIdAsync(item.id))),
+          usersService.getEnrichedProfiles(reviews.map((r) => r.author))
         ]);
-      }, (err) => {console.log(err);})
+      }, (err) => { console.log(err); })
       .then(([reviewVotes, users]) => {
         reviews.forEach((review, i) => {
-          review.author = users.find(u => u.account.name == review.author);
+          review.author = users.find((u) => u.account.name == review.author);
           review.votes = reviewVotes[i];
-          review.supporters = reviewVotes[i].reduce((arr, vote) => arr.some(({ voter }) => voter === vote.voter) ? arr : [...arr, vote], []);
+          review.supporters = reviewVotes[i].reduce((arr, vote) => (arr.some(({ voter }) => voter === vote.voter) ? arr : [...arr, vote]), []);
         });
         commit('SET_RESEARCH_REVIEWS_LIST', reviews);
-      }, (err) => {console.log(err);})
+      }, (err) => { console.log(err); })
       .finally(() => {
         commit('SET_RESEARCH_REVIEWS_LOADING_STATE', false);
         if (notify) notify();
@@ -581,8 +508,8 @@ const actions = {
         const tvoPromises = [];
         const expertsPromises = [];
 
-        for (var i = 0; i < data.length; i++) {
-          var discipline = data[i];
+        for (let i = 0; i < data.length; i++) {
+          const discipline = data[i];
           disciplinesList.push(discipline);
           tvoPromises.push(expertiseContributionsService.getExpertiseContributionsByResearchAndDiscipline(researchId, discipline.id));
 
@@ -595,16 +522,16 @@ const actions = {
           Promise.all(tvoPromises),
           Promise.all(expertsPromises)
         ]);
-      }, (err) => {console.log(err);})
+      }, (err) => { console.log(err); })
       .then(([tvoList, expertTokensPerDiscipline]) => {
         const expertsAccountNames = [];
         expertTokensPerDiscipline.forEach((e) => {
-          expertsAccountNames.push(...e.map(et => et.account_name));
+          expertsAccountNames.push(...e.map((et) => et.account_name));
         });
         commit('SET_RESEARCH_DISCIPLINES_LIST', disciplinesList);
         commit('SET_RESEARCH_TOTAL_VOTES_LIST', tvoList);
         return usersService.getEnrichedProfiles(_.uniq(expertsAccountNames));
-      }, (err) => {console.log(err);})
+      }, (err) => { console.log(err); })
       .then((expertsList) => {
         commit('SET_EXPERTS_LIST', expertsList);
       })
@@ -620,12 +547,12 @@ const actions = {
     deipRpc.api.getResearchTokensByResearchIdAsync(researchId)
       .then((rtList) => {
         tokenHolders.push(...rtList);
-        return usersService.getEnrichedProfiles(tokenHolders.map(m => m.account_name));
-      }, (err) => {console.log(err);})
+        return usersService.getEnrichedProfiles(tokenHolders.map((m) => m.account_name));
+      }, (err) => { console.log(err); })
       .then((users) => {
         for (let i = 0; i < tokenHolders.length; i++) {
           const holder = tokenHolders[i];
-          holder.user = users.find(user => holder.account_name == user.account.name);
+          holder.user = users.find((user) => holder.account_name == user.account.name);
         }
         commit('SET_RESEARCH_TOKEN_HOLDERS_LIST', tokenHolders);
       })
@@ -639,15 +566,14 @@ const actions = {
     commit('SET_RESEARCH_TOKEN_SALE_LOADING_STATE', true);
 
     return investmentsService.getCurrentTokenSaleByResearchId(researchId)
-      .then(tokenSale => {
+      .then((tokenSale) => {
         commit('SET_RESEARCH_TOKEN_SALE', tokenSale);
 
         if (tokenSale) {
           return dispatch('loadTokenSaleContributors');
-        } else {
-          commit('SET_RESEARCH_TOKEN_SALE_CONTRIBUTIONS_LIST', []);
         }
-      }, (err) => {console.log(err);})
+        commit('SET_RESEARCH_TOKEN_SALE_CONTRIBUTIONS_LIST', []);
+      }, (err) => { console.log(err); })
       .finally(() => {
         commit('SET_RESEARCH_TOKEN_SALE_LOADING_STATE', false);
         if (notify) notify();
@@ -656,20 +582,20 @@ const actions = {
 
   loadResearchTokenSales({ state, dispatch, commit }, { researchId, notify }) {
     return deipRpc.api.getResearchTokenSalesByResearchIdAsync(researchId)
-      .then(tokenSales => {
+      .then((tokenSales) => {
         commit('SET_RESEARCH_TOKEN_SALES', tokenSales);
-      }, (err) => {console.log(err);})
+      }, (err) => { console.log(err); })
       .finally(() => {
         if (notify) notify();
       });
   },
 
-  loadResearchContentRefs({ state, dispatch, commit }, { researchId, notify }) {
+  loadResearchContentRefs({ state, dispatch, commit }, { researchExternalId, notify }) {
     commit('SET_RESEARCH_CONTENT_REFS_LOADING_STATE', true);
-    return researchContentService.getContentRefs({ researchId })
+    return researchContentService.getContentRefs(researchExternalId)
       .then((refs) => {
         commit('SET_RESEARCH_CONTENT_REFS', refs);
-      }, (err) => { console.log(err);})
+      }, (err) => { console.log(err); })
       .finally(() => {
         commit('SET_RESEARCH_CONTENT_REFS_LOADING_STATE', false);
         if (notify) notify();
@@ -681,12 +607,12 @@ const actions = {
     return deipRpc.api.getResearchTokenSaleContributionsByResearchTokenSaleIdAsync(state.tokenSale.id)
       .then((contributions) => {
         contributors.push(...contributions);
-        return usersService.getEnrichedProfiles(contributions.map(m => m.owner));
+        return usersService.getEnrichedProfiles(contributions.map((m) => m.owner));
       })
       .then((users) => {
         for (let i = 0; i < contributors.length; i++) {
           const contributor = contributors[i];
-          contributor.user = users.find(user => contributor.owner == user.account.name);
+          contributor.user = users.find((user) => contributor.owner == user.account.name);
         }
         commit('SET_RESEARCH_TOKEN_SALE_CONTRIBUTIONS_LIST', contributors);
       });
@@ -709,7 +635,7 @@ const actions = {
     deipRpc.api.getResearchGroupByPermlinkAsync(group_permlink)
       .then((group) => {
         commit('SET_RESEARCH_GROUP_DETAILS', group);
-      }, (err) => {console.log(err);})
+      }, (err) => { console.log(err); })
       .finally(() => {
         commit('SET_RESEARCH_GROUP_DETAILS_LOADING_STATE', false);
         if (notify) notify();
@@ -722,12 +648,10 @@ const actions = {
       ? Promise.resolve()
       : deipRpc.api.getContributionsHistoryByContributorAndResearchAsync(user.account.name, researchId)
         .then((hist) => {
-          const contributions = hist.map((h) => {
-            return {
-              tokenSaleId: h.op[1].research_token_sale_id,
-              amount: h.op[1].amount
-            };
-          });
+          const contributions = hist.map((h) => ({
+            tokenSaleId: h.op[1].research_token_sale_id,
+            amount: h.op[1].amount
+          }));
           commit('SET_USER_CONTRIBUTIONS_LIST', contributions);
         });
     return loadPromise.finally(() => {
@@ -735,12 +659,12 @@ const actions = {
     });
   },
 
-  loadResearchRef({ state, dispatch, commit }, { researchId, notify }) {
+  loadResearchRef({ state, dispatch, commit }, { researchExternalId, notify }) {
     commit('SET_RESEARCH_REF_DETAILS_LOADING_STATE', true);
-    return researchService.getResearch(researchId)
-      .then(researchRef => {
+    return researchService.getResearchProfile(researchExternalId)
+      .then((researchRef) => {
         commit('SET_RESEARCH_REF_DETAILS', researchRef);
-      }, (err) => {console.log(err);})
+      }, (err) => { console.log(err); })
       .finally(() => {
         commit('SET_RESEARCH_REF_DETAILS_LOADING_STATE', false);
         if (notify) notify();
@@ -762,135 +686,135 @@ const actions = {
 // mutations
 const mutations = {
 
-  ['SET_RESEARCH_DETAILS'](state, research) {
+  SET_RESEARCH_DETAILS(state, research) {
     Vue.set(state, 'research', research);
   },
 
-  ['SET_RESEARCH_REF_DETAILS'](state, researchRef) {
+  SET_RESEARCH_REF_DETAILS(state, researchRef) {
     Vue.set(state, 'researchRef', researchRef);
   },
 
-  ['SET_RESEARCH_MEMBERS_LIST'](state, list) {
+  SET_RESEARCH_MEMBERS_LIST(state, list) {
     Vue.set(state, 'researchGroupMembersList', list);
   },
 
-  ['SET_RESEARCH_CONTENT_LIST'](state, list) {
+  SET_RESEARCH_CONTENT_LIST(state, list) {
     Vue.set(state, 'contentList', list);
   },
 
-  ['SET_RESEARCH_APPLICATIONS_LIST'](state, applications) {
+  SET_RESEARCH_APPLICATIONS_LIST(state, applications) {
     Vue.set(state, 'applicationsList', applications);
   },
 
-  ['SET_RESEARCH_REVIEWS_LIST'](state, list) {
+  SET_RESEARCH_REVIEWS_LIST(state, list) {
     Vue.set(state, 'reviewsList', list);
   },
 
-  ['SET_RESEARCH_DISCIPLINES_LIST'](state, list) {
+  SET_RESEARCH_DISCIPLINES_LIST(state, list) {
     Vue.set(state, 'disciplinesList', list);
   },
 
-  ['SET_RESEARCH_TOTAL_VOTES_LIST'](state, list) {
+  SET_RESEARCH_TOTAL_VOTES_LIST(state, list) {
     Vue.set(state, 'totalVotesList', list);
   },
 
-  ['SET_RESEARCH_TOKEN_SALE'](state, tokenSale) {
+  SET_RESEARCH_TOKEN_SALE(state, tokenSale) {
     Vue.set(state, 'tokenSale', tokenSale);
   },
 
-  ['SET_RESEARCH_TOKEN_SALES'](state, list) {
+  SET_RESEARCH_TOKEN_SALES(state, list) {
     Vue.set(state, 'tokenSalesList', list);
   },
 
-  ['SET_RESEARCH_TOKEN_HOLDERS_LIST'](state, tokenHolders) {
+  SET_RESEARCH_TOKEN_HOLDERS_LIST(state, tokenHolders) {
     Vue.set(state, 'tokenHoldersList', tokenHolders);
   },
 
-  ['SET_RESEARCH_TOKEN_SALE_CONTRIBUTIONS_LIST'](state, contributions) {
+  SET_RESEARCH_TOKEN_SALE_CONTRIBUTIONS_LIST(state, contributions) {
     Vue.set(state, 'contributionsList', contributions);
   },
 
-  ['SET_RESEARCH_GROUP_INVITES'](state, invites) {
+  SET_RESEARCH_GROUP_INVITES(state, invites) {
     Vue.set(state, 'groupInvitesList', invites);
   },
 
-  ['SET_RESEARCH_CONTENT_REFS'](state, refs) {
+  SET_RESEARCH_CONTENT_REFS(state, refs) {
     Vue.set(state, 'contentRefsList', refs);
   },
 
-  ['SET_RESEARCH_APPLICATIONS_REFS'](state, refs) {
+  SET_RESEARCH_APPLICATIONS_REFS(state, refs) {
     Vue.set(state, 'applicationsRefsList', refs);
   },
 
-  ['SET_USER_CONTRIBUTIONS_LIST'](state, list) {
+  SET_USER_CONTRIBUTIONS_LIST(state, list) {
     Vue.set(state, 'userContributionsList', list);
   },
 
-  ['SET_EXPERTS_LIST'](state, list) {
+  SET_EXPERTS_LIST(state, list) {
     Vue.set(state, 'expertsList', list);
   },
 
-  ['SET_RESEARCH_DETAILS_LOADING_STATE'](state, value) {
+  SET_RESEARCH_DETAILS_LOADING_STATE(state, value) {
     state.isLoadingResearchDetails = value;
   },
 
-  ['SET_RESEARCH_REF_DETAILS_LOADING_STATE'](state, value) {
+  SET_RESEARCH_REF_DETAILS_LOADING_STATE(state, value) {
     state.isLoadingResearchRefDetails = value;
   },
 
-  ['SET_RESEARCH_MEMBERS_LOADING_STATE'](state, value) {
+  SET_RESEARCH_MEMBERS_LOADING_STATE(state, value) {
     state.isLoadingResearchMembers = value;
   },
 
-  ['SET_RESEARCH_CONTENT_LOADING_STATE'](state, value) {
+  SET_RESEARCH_CONTENT_LOADING_STATE(state, value) {
     state.isLoadingResearchContent = value;
   },
 
-  ['SET_RESEARCH_APPLICATONS_LOADING_STATE'](state, value) {
+  SET_RESEARCH_APPLICATONS_LOADING_STATE(state, value) {
     state.isLoadingResearchApplications = value;
   },
 
-  ['SET_RESEARCH_MEMBERS_LOADING_STATE'](state, value) {
+  SET_RESEARCH_MEMBERS_LOADING_STATE(state, value) {
     state.isLoadingResearchMembers = value;
   },
 
-  ['SET_RESEARCH_REVIEWS_LOADING_STATE'](state, value) {
+  SET_RESEARCH_REVIEWS_LOADING_STATE(state, value) {
     state.isLoadingResearchReviews = value;
   },
 
-  ['SET_RESEARCH_DISCIPLINES_LOADING_STATE'](state, value) {
+  SET_RESEARCH_DISCIPLINES_LOADING_STATE(state, value) {
     state.isLoadingResearchDisciplines = value;
   },
 
-  ['SET_RESEARCH_TOKEN_HOLDERS_LOADING_STATE'](state, value) {
+  SET_RESEARCH_TOKEN_HOLDERS_LOADING_STATE(state, value) {
     state.isLoadingResearchTokenHolders = value;
   },
 
-  ['SET_RESEARCH_TOKEN_SALE_LOADING_STATE'](state, value) {
+  SET_RESEARCH_TOKEN_SALE_LOADING_STATE(state, value) {
     state.isLoadingResearchTokenSale = value;
   },
 
-  ['SET_RESEARCH_CONTENT_REFS_LOADING_STATE'](state, value) {
+  SET_RESEARCH_CONTENT_REFS_LOADING_STATE(state, value) {
     state.isLoadingResearchContentRefs = value;
   },
 
-  ['SET_RESEARCH_APPLICATIONS_REFS_LOADING_STATE'](state, value) {
+  SET_RESEARCH_APPLICATIONS_REFS_LOADING_STATE(state, value) {
     state.isLoadingResearchApplicationsRefs = value;
   },
 
-  ['SET_RESEARCH_GROUP_DETAILS_LOADING_STATE'](state, value) {
+  SET_RESEARCH_GROUP_DETAILS_LOADING_STATE(state, value) {
     state.isLoadingResearchGroupDetails = value;
   },
 
-  ['SET_RESEARCH_GROUP_DETAILS'](state, value) {
+  SET_RESEARCH_GROUP_DETAILS(state, value) {
     Vue.set(state, 'group', value);
   },
 
-  ['SET_RESEARCH_ECI_HISTORY_BY_DISCIPLINE'](state, { disciplineId, records }) {
+  SET_RESEARCH_ECI_HISTORY_BY_DISCIPLINE(state, { disciplineId, records }) {
     Vue.set(state.eciHistoryByDiscipline, disciplineId, records);
   },
 
-  ['RESET_STATE'](state) {
+  RESET_STATE(state) {
     Vue.set(state, 'eciHistoryByDiscipline', {});
   }
 };
@@ -904,4 +828,4 @@ export const rdStore = {
   getters,
   actions,
   mutations
-}
+};

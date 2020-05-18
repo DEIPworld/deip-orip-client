@@ -1,11 +1,11 @@
 import _ from 'lodash';
 import deipRpc from '@deip/rpc-client';
 import Vue from 'vue';
-import { getNodeById } from './../../common/disciplines/DisciplineTreeService';
-import SortFieldsSvc from './../services/SortFieldsSvc';
-
 import { DisciplinesService } from '@deip/disciplines-service';
 import { UsersService } from '@deip/users-service';
+import { getNodeById } from '../../common/disciplines/DisciplineTreeService';
+import SortFieldsSvc from '../services/SortFieldsSvc';
+
 
 const disciplinesService = DisciplinesService.getInstance();
 const usersService = UsersService.getInstance();
@@ -18,7 +18,7 @@ const state = {
     sortBy: SortFieldsSvc.types.USERNAME_SORT_BY,
     descending: false
   }
-}
+};
 
 // getters
 const getters = {
@@ -29,11 +29,7 @@ const getters = {
     let handler = _.chain(state.claims);
 
     if (!_.isEmpty(state.selectedDisciplines)) {
-      handler = handler.filter(claim =>
-        _.some(state.selectedDisciplines, discipline =>
-          discipline.id === claim.disciplineId
-        )
-      );
+      handler = handler.filter((claim) => _.some(state.selectedDisciplines, (discipline) => discipline.id === claim.disciplineId));
     }
 
     handler = handler.orderBy(
@@ -43,54 +39,54 @@ const getters = {
 
     return handler.value();
   }
-}
+};
 
 // actions
 const actions = {
-  loadAllClaims({state, dispatch, commit}) {
+  loadAllClaims({ state, dispatch, commit }) {
     let claimList = [];
 
     return disciplinesService.getExpertiseClaims()
-      .then(claims => {
+      .then((claims) => {
         claimList = claims;
 
         return usersService.getEnrichedProfiles(
           _(claimList).map('username').uniq().value()
         );
       })
-      .then(users => {
-        claimList.forEach(claim => {
+      .then((users) => {
+        claimList.forEach((claim) => {
           claim.discipline = getNodeById(claim.disciplineId);
-          claim.user = _.find(users, user => user.account.name === claim.username);
+          claim.user = _.find(users, (user) => user.account.name === claim.username);
         });
 
         commit('SET_CLAIMS', claimList);
       })
-      .catch(e => {
+      .catch((e) => {
         console.log(e);
       });
   },
 
-  setSelectedDisciplines({state, commit}, disciplines) {
+  setSelectedDisciplines({ state, commit }, disciplines) {
     commit('SET_SELECTED_DISCIPLINES', disciplines);
   },
-  setSorting({state, commit}, sorting) {
+  setSorting({ state, commit }, sorting) {
     commit('SET_SORTING', sorting);
   }
-}
+};
 
 // mutations
 const mutations = {
-  ['SET_SELECTED_DISCIPLINES'](state, disciplines) {
+  SET_SELECTED_DISCIPLINES(state, disciplines) {
     Vue.set(state, 'selectedDisciplines', disciplines);
   },
-  ['SET_SORTING'](state, sorting) {
+  SET_SORTING(state, sorting) {
     Vue.set(state, 'sorting', Object.assign(state.sorting, sorting));
   },
-  ['SET_CLAIMS'](state, claims) {
+  SET_CLAIMS(state, claims) {
     Vue.set(state, 'claims', claims);
-  },
-}
+  }
+};
 
 const namespaced = true;
 
@@ -100,4 +96,4 @@ export const claimExpertiseListStore = {
   getters,
   actions,
   mutations
-}
+};

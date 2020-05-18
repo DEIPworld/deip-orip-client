@@ -1,21 +1,24 @@
 <template>
-  <base-page-layout>
-    <research-group-settings-body slot="content"></research-group-settings-body>
-  </base-page-layout>
+  <layout-section>
+    <research-group-settings-body />
+  </layout-section>
 </template>
 
 <script>
-export default {
-  name: "ResearchGroupSettings",
+  import LayoutSection from '@/components/layout/components/LayoutSection';
+  import ResearchGroupSettingsBody from '@/components/research-group-settings/components/ResearchGroupSettingsBody';
 
-  data() {
-    return {};
-  },
+  export default {
+    name: 'ResearchGroupSettings',
+    components: { ResearchGroupSettingsBody, LayoutSection },
+    data() {
+      return {};
+    },
 
-  methods: {},
+    created() {},
 
-  created() {}
-};
+    methods: {}
+  };
 </script>
 
 <style lang="less" scoped>

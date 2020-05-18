@@ -1,4 +1,4 @@
-import Vue from 'vue'
+import Vue from 'vue';
 
 import TokenSaleAmount from './components/TokenSaleAmount';
 import TokenSalePeriod from './components/TokenSalePeriod';

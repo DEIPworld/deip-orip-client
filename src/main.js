@@ -1,40 +1,35 @@
 import Vue from 'vue';
 
-/**
- * BOOTSTRAP
- */
-
 import VueResize from 'vue-resize';
 import VueCurrencyFilter from 'vue-currency-filter';
 import VueGoogleCharts from 'vue-google-charts';
-import { setConfig, setDeipRpc, setTheme, setUser, setTenant } from './bootstrap';
+import Vuetify from 'vuetify/lib';
 
-/**
- * APP
- */
+import {
+  setConfig,
+  setDeipRpc,
+  setTheme,
+  setUser,
+  setTenant
+} from './bootstrap';
 
-import App from './App';
+import App from './App.vue';
 import { store } from './store';
 import { router } from './router';
 
 import './components/index'; // TODO: need refactoring and remove
 import './globals/index'; // TODO: need refactoring and remove
 
-
-/**
- * PLUGINS
- */
-
-
-/**
- * STYLES
- */
-
-import 'vuetify/dist/vuetify.css';
 import 'vue2-dropzone/dist/vue2Dropzone.min.css';
 import '@mdi/font/css/materialdesignicons.css';
 import 'vue-resize/dist/vue-resize.css';
 import './styles/common.less';
+
+import './styles/app.scss';
+
+
+import { DataPreloadMixin } from '@/utils/DataPreloadMixin';
+import { CommonMixin } from '@/utils/CommonMixin';
 
 // ////////////////////////
 
@@ -44,27 +39,34 @@ const currencyFilterOptions = {
   fractionCount: 2,
   fractionSeparator: '.',
   symbolPosition: 'front',
-  symbolSpacing: true,
+  symbolSpacing: true
 };
 
 Vue.config.productionTip = false;
 Vue.use(VueGoogleCharts);
 Vue.use(VueResize);
+Vue.use(Vuetify);
 Vue.use(VueCurrencyFilter, currencyFilterOptions);
+
+Vue.mixin(DataPreloadMixin);
+Vue.mixin(CommonMixin);
 
 (async () => {
   try {
     await setConfig(); // Set global application config config
 
     await setDeipRpc();
-    await setTheme();
     await setUser();
     await setTenant();
+
+    const themeSettings = await setTheme();
+    console.log(themeSettings)
 
     new Vue({
       store,
       router,
-      render: (h) => h(App),
+      vuetify: new Vuetify({ ...themeSettings }),
+      render: (h) => h(App)
     }).$mount('#app');
   } catch (err) {
     console.error(err);

@@ -1,50 +1,58 @@
 <template>
-  <v-layout column full-height>
-    <v-flex display-flex flex-column flex-grow-1 mb-3>
-      <div class="step-title">Select Program Officers</div>
+  <div class="display-flex flex-column full-height">
+    <div class="display-flex flex-column flex-grow-1 mb-4">
+      <div class="step-title">
+        Select Program Officers
+      </div>
 
       <div class="flex-grow-1 overflow-y-auto flex-basis-0">
-
         <div class="mx-auto program-officers-max-width">
-          <v-card class="px-5 py-4 elevation-0">
+          <v-card class="px-12 py-6 elevation-0">
             <v-text-field
               label="Start typing for suggestion"
               append-icon="search"
-            ></v-text-field>
+            />
 
             <div>
-              <v-layout row align-center mt-2 v-for="(member, i) in members" :key="`${i}-member`">
+              <div v-for="(member, i) in members" :key="`${i}-member`" class="display-flex align-center mt-2">
                 <platform-avatar
                   :user="member"
                   :size="40"
                   :link-to-profile="false"
-                ><span class="pl-2">{{member | fullname}}</span></platform-avatar>
-                <div class="pl-4">
-                  <input id="checkbox"
-                         type="checkbox"
-                         :disabled="isGrantProgramOfficer(member)"
-                         :checked="isSelected(member)"
-                         v-on:input="setOpportunityOfficer($event, member)"/>
+                >
+                  <span class="pl-2">{{ member | fullname }}</span>
+                </platform-avatar>
+                <div class="pl-6">
+                  <input
+                    id="checkbox"
+                    type="checkbox"
+                    :disabled="isGrantProgramOfficer(member)"
+                    :checked="isSelected(member)"
+                    @input="setOpportunityOfficer($event, member)"
+                  >
                 </div>
-              </v-layout>
+              </div>
             </div>
           </v-card>
         </div>
-
       </div>
-    </v-flex>
+    </div>
 
-    <v-flex flex-grow-0>
-      <v-layout row justify-center align-center>
-        <v-btn flat small @click.native="prevStep()">
-          <v-icon dark class="pr-1">keyboard_arrow_left</v-icon>
+    <div class="flex-grow-0">
+      <div class="display-flex justify-center align-center">
+        <v-btn text small @click.native="prevStep()">
+          <v-icon dark class="pr-1">
+            keyboard_arrow_left
+          </v-icon>
           Back
         </v-btn>
 
-        <v-btn color="primary" @click.native="nextStep()" :disabled="isNextDisabled()">Next</v-btn>
-      </v-layout>
-    </v-flex>
-  </v-layout>
+        <v-btn color="primary" :disabled="isNextDisabled()" @click.native="nextStep()">
+          Next
+        </v-btn>
+      </div>
+    </div>
+  </div>
 </template>
 
 <script>
@@ -60,12 +68,12 @@
     name: 'FundingOpportunityProgramOfficers',
 
     props: {
-      foa: {type: Object, required: true},
-      members: {type: Array}
+      foa: { type: Object, required: true },
+      members: { type: Array }
     },
 
     data() {
-      return {}
+      return {};
     },
     computed: {
       ...mapGetters({
@@ -81,21 +89,21 @@
       },
 
       isSelected(member) {
-        return this.foa.officers.some(a => a == member.account.name);
+        return this.foa.officers.some((a) => a == member.account.name);
       },
       setOpportunityOfficer($event, member) {
         event.preventDefault();
         event.stopPropagation();
-        const checked = event.target.checked;
+        const { checked } = event.target;
         this.foa.officers = checked
           ? [...this.foa.officers, member.account.name]
-          : this.foa.officers.filter(a => a !== member.account.name);
+          : this.foa.officers.filter((a) => a !== member.account.name);
       },
       isNextDisabled() {
         return false;
       },
-      isGrantProgramOfficer(member){
-        return member.account.name == this.user.account.name
+      isGrantProgramOfficer(member) {
+        return member.account.name == this.user.account.name;
       }
     }
   };

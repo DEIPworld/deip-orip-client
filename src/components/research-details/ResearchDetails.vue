@@ -1,17 +1,57 @@
 <template>
-  <v-card>
-    <base-page-layout>
-      <research-details-header slot="header"></research-details-header>
-      <research-details-body slot="content"></research-details-body>
-      <research-details-sidebar slot="right-sidebar"></research-details-sidebar>
-    </base-page-layout>
-  </v-card>
+  <div>
+    <research-details-header />
+
+    <layout-toolbar>
+      <research-details-actions v-if="!isResearchGroupMember" />
+    </layout-toolbar>
+
+    <layout-section>
+      <research-details-body />
+
+      <template #sidebar>
+        <research-details-sidebar />
+      </template>
+    </layout-section>
+
+
+  </div>
 </template>
 
 <script>
-export default {
-  name: "ResearchDetails"
-};
+  import { mapGetters } from 'vuex';
+
+  import ResearchDetailsActions from '@/components/research-details/components/ResearchDetailsActions';
+  import ResearchDetailsBody from '@/components/research-details/components/ResearchDetailsBody';
+  import ResearchDetailsHeader from '@/components/research-details/components/ResearchDetailsHeader';
+  import ResearchDetailsSidebar from '@/components/research-details/components/ResearchDetailsSidebar';
+  import LayoutToolbar from '@/components/layout/components/LayoutToolbar';
+  import LayoutSection from '@/components/layout/components/LayoutSection';
+
+  export default {
+    name: 'ResearchDetails',
+    components: {
+      LayoutSection,
+      LayoutToolbar,
+      ResearchDetailsSidebar,
+      ResearchDetailsHeader,
+      ResearchDetailsBody,
+      ResearchDetailsActions
+    },
+    computed: {
+      ...mapGetters({
+        research: 'rd/research'
+      }),
+
+      isResearchGroupMember() {
+        return this.research
+          ? this.$store.getters['auth/userIsResearchGroupMember'](
+            this.research.research_group_id
+          )
+          : false;
+      }
+    }
+  };
 </script>
 
 <style scoped>
