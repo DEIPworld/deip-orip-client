@@ -55,9 +55,9 @@
               <v-col class="list-header-cell" :class="isGroupMembersActionsColumnAvailable ? 'xs3': 'xs4'">
                 Researcher
               </v-col>
-              <v-col class="list-header-cell" cols="4">
+              <!-- <v-col class="list-header-cell" cols="4">
                 Expertise
-              </v-col>
+              </v-col> -->
               <v-col class="list-header-cell text-align-center" cols="2">
                 Member since
               </v-col>
@@ -106,7 +106,7 @@
                   {{ member | userLocation }}
                 </v-col>
 
-                <v-col class="text-align-center list-body-cell" cols="1">
+                <v-col v-if="isGroupMembersActionsColumnAvailable" class="text-align-center list-body-cell" cols="1">
                   <div v-if="isExcludingMemberAvailable(member.rgt.owner)">
                     <v-btn
                       text
