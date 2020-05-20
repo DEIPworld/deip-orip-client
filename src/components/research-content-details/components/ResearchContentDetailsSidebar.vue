@@ -27,7 +27,7 @@
         >
           proposed
         </router-link>
-        as research content and locked for editing
+        as project content and locked for editing
       </div>
       <div v-if="isUnlockActionAvailable" class="mt-6">
         <div class="body-1 pb-4">

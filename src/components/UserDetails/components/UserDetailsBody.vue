@@ -101,7 +101,7 @@
         <div class="pt-6">
           <state-research-list
             :research-list="researchList"
-            :header-text="'Research projects'"
+            :header-text="'Projects'"
           />
         </div>
 

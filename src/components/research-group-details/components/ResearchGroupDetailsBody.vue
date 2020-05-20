@@ -20,7 +20,7 @@
             }
           }"
         >
-          Edit group
+          Edit team
         </v-btn>
       </v-col>
     </v-row>
@@ -146,7 +146,7 @@
               </v-icon>
             </v-btn>
 
-            <span class="pl-2">Invite researchers</span>
+            <span class="pl-2">Invite team members</span>
           </div>
 
           <div v-if="isResearchGroupMember && invites.length">

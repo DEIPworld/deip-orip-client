@@ -4,7 +4,7 @@
       <v-col cols="10">
         <div>
           <div class="title font-weight-medium pb-4">
-            Group name:
+            Team name:
           </div>
           <v-text-field
             v-model="newResearchGroupName"
@@ -15,7 +15,7 @@
         </div>
         <div>
           <div class="title font-weight-medium pb-4">
-            Group description:
+            Team description:
           </div>
           <v-textarea
             v-model="newResearchGroupDescription"
@@ -140,7 +140,7 @@
             large
             @click="cancel()"
           >
-            Back to group
+            Back to team
           </v-btn>
         </div>
       </v-col>

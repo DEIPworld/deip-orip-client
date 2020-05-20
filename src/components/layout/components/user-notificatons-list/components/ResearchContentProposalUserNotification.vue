@@ -23,7 +23,7 @@
         "<span class="primary--text half-bold">{{ notification.metadata.proposal.data.title }}</span>"
         material for
         "<span class="primary--text half-bold">{{ notification.metadata.research.title }}</span>"
-        research in
+        project in
         "<span class="primary--text half-bold">{{ notification.metadata.researchGroup.name }}</span>"
       </span>
     </div>

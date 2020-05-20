@@ -24,7 +24,7 @@
               </span>
               <span>
                 <v-icon size="18px">post_add</v-icon>
-                <span>{{ draft.type }}</span>
+                <span>{{ draftTypeText }}</span>
               </span>
             </div>
             <div>
@@ -82,6 +82,11 @@
       return {
         isDeletingDraft: false
       };
+    },
+    computed: {
+      draftTypeText() {
+        return this.draft.type === 'dar' ? 'Created on platform content' : this.draft.type === 'package' ? 'upload content' : this.draft.type;
+      }
     },
     methods: {
       openDarDraft(draft) {
