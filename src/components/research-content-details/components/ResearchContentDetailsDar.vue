@@ -1,11 +1,10 @@
 <template>
-  <div>
-    <div>
+  <div class="full-height">
+    <div class="full-height">
       <div
         ref="deip-texture-container"
-        class="deip-texture"
+        class="deip-texture full-height"
         :class="[{ 'read-only-texture': isReadOnly }]"
-        :style="{ height: 100 + 'vh' }"
       />
     </div>
 
