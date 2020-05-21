@@ -13,7 +13,7 @@
 <!--      @submit.prevent="true"-->
 <!--      class="mb-6"-->
 <!--    >-->
-    <form-generator :model="formModel" :schema="schema" @submit="login" max-width="360">
+    <form-generator :model="formModel" :schema="schema" max-width="360" @submit="login">
       <template #actions>
         <v-btn
           type="submit"

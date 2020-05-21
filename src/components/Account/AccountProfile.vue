@@ -44,25 +44,28 @@
 
         schema: [
           {
-            title: 'Location:',
+            title: 'Personal information:',
             fields: [
               {
                 type: 'text',
-                name: 'city',
-                label: 'City',
-                cols: { md: 6 },
+                name: 'firstName',
+                label: 'First Name',
                 props: {
                   rules: [validation.required]
                 }
               },
               {
                 type: 'text',
-                name: 'country',
-                label: 'Country',
-                cols: { md: 6 },
+                name: 'lastName',
+                label: 'Last Name',
                 props: {
                   rules: [validation.required]
                 }
+              },
+              {
+                type: 'date',
+                name: 'editedBirthdayDate',
+                label: 'Birthday'
               }
             ]
           },
@@ -95,28 +98,25 @@
             ]
           },
           {
-            title: 'Personal information:',
+            title: 'Location:',
             fields: [
               {
                 type: 'text',
-                name: 'firstName',
-                label: 'First Name',
+                name: 'city',
+                label: 'City',
+                cols: { md: 6 },
                 props: {
                   rules: [validation.required]
                 }
               },
               {
                 type: 'text',
-                name: 'lastName',
-                label: 'Last Name',
+                name: 'country',
+                label: 'Country',
+                cols: { md: 6 },
                 props: {
                   rules: [validation.required]
                 }
-              },
-              {
-                type: 'date',
-                name: 'editedBirthdayDate',
-                label: 'Birthday'
               }
             ]
           },

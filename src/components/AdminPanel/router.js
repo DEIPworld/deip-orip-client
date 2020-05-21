@@ -9,7 +9,7 @@ import AdminCriteriaEdit from '@/components/AdminPanel/AdminCriteriaEdit';
 import AdminFAQ from '@/components/AdminPanel/AdminFAQ';
 import AdminFAQEdit from '@/components/AdminPanel/AdminFAQEdit';
 import AdminSettings from '@/components/AdminPanel/AdminSettings';
-import AdminLogin from '@/components/AdminPanel/AdminLogin';
+import SignIn from '@/components/auth/SignIn';
 
 export const adminRouting = [
   {
@@ -90,6 +90,9 @@ export const adminRouting = [
   {
     path: '/admin/sign-in',
     name: 'admin.login',
-    component: AdminLogin
+    component: SignIn,
+    props: {
+      adminLogin: true
+    }
   }
 ];
