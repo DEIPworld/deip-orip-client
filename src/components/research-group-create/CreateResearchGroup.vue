@@ -44,7 +44,6 @@
               :group="group"
               @incStep="incStep"
               @setName="setName"
-              @setPermlink="setPermlink"
             />
           </div>
         </v-stepper-content>
@@ -156,9 +155,6 @@
       setName(name) {
         this.group.name = name;
       },
-      setPermlink(permlink) {
-        this.group.permlink = permlink;
-      },
       setDescription(description) {
         this.group.description = description;
       },
@@ -194,12 +190,11 @@
             accountActiveAuth: auth,
             accountPostingAuth: auth,
             accountMemoPubKey: memo,
-            accountJsonMetadata: '',
+            accountJsonMetadata: undefined,
             accountExtensions: []
           },
           {
             researchGroupName: this.group.name,
-            researchGroupPermlink: this.group.permlink,
             researchGroupDescription: this.group.description,
             researchGroupThresholdOverrides: []
           }
@@ -222,17 +217,21 @@
               approver: this.user.username
             }));
 
-            return Promise.all(invitesPromises);
+            return Promise.all([
+              Promise.all(invitesPromises),
+              deipRpc.api.getResearchGroupAsync(res.rm._id)
+            ])
           })
-          .then(() => {
+          .then(([invites, researchGroup]) => {
+            debugger
             if (!this.backRouterToken) {
               this.$router.push({
                 name: 'ResearchGroupDetails',
-                params: { research_group_permlink: encodeURIComponent(this.group.permlink) }
+                params: { research_group_permlink: encodeURIComponent(researchGroup.permlink) }
               });
             } else {
               if (this.backRouterToken.name === 'CreateResearch') {
-                this.backRouterToken.query.groupPermlink = this.group.permlink;
+                this.backRouterToken.query.groupPermlink = researchGroup.permlink;
               }
               this.$router.push(this.backRouterToken);
             }

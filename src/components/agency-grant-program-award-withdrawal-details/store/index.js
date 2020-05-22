@@ -173,7 +173,7 @@ const actions = {
       })
       .then((foaOrganization) => {
         commit('SET_FUNDING_OPPORTUNITY_ORGANIZATION', foaOrganization);
-        return researchService.getResearchWithOffchain(state.awardee.research_id);
+        return researchService.getResearchById(state.awardee.research_id);
       })
       .then((research) => {
         commit('SET_AWARDEE_RESEARCH', research);

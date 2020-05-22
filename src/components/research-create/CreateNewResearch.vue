@@ -144,7 +144,7 @@
 
 <script>
   // import Vue from 'vue';
-  // import deipRpc from '@deip/rpc-client';
+  import deipRpc from '@deip/rpc-client';
   import moment from 'moment';
   import { mapGetters } from 'vuex';
 
@@ -250,14 +250,13 @@
         this.isLoading = true;
 
         const isProposal = !this.research.group.is_personal;
-        researchService.createResearchViaOffchain(
+        return researchService.createResearchViaOffchain(
           this.user.privKey,
           isProposal,
           {
             researchGroup: this.research.group.account.name,
             title: this.research.title,
             abstract: this.research.description,
-            permlink: this.research.title.replace(/ /g, '-').replace(/_/g, '-').toLowerCase(),
             disciplines: this.research.disciplines.map((d) => d.id),
             isPrivate: this.research.isPrivate,
             members: undefined,
@@ -279,42 +278,34 @@
             tenantCriterias: this.research.tenantCriterias
           }
         )
-          .then((result) => {
-                  this.isLoading = false;
-                  this.$store.dispatch('layout/setSuccess', {
-                    message: `Project "${this.research.title}" has been created successfully`
-                  });
-                },
-                (err) => {
-                  console.log(err);
-                  this.isLoading = false;
-                  this.$store.dispatch('layout/setError', {
-                    message:
-                      'An error occurred while creating project, please try again later'
-                  });
-                })
-          .finally(() => {
-            setTimeout(() => {
-              if (this.research.group.is_centralized || this.research.group.is_personal) {
-                this.$router.push({
-                  name: 'ResearchDetails',
-                  params: {
-                    research_group_permlink: encodeURIComponent(
-                      this.research.group.permlink
-                    ),
-                    research_permlink: encodeURIComponent(
-                      this.research.title
-                        .replace(/ /g, '-')
-                        .replace(/_/g, '-')
-                        .toLowerCase()
-                    )
-                  }
-                });
-              } else {
-                this.$router.push({ name: 'ResearchFeed' });
-              }
-            }, 1500);
-          });
+          .then(({ rm }) => {
+            this.isLoading = false;
+            this.$store.dispatch('layout/setSuccess', {
+              message: `Project "${this.research.title}" has been created successfully`
+            });
+            return deipRpc.api.getResearchAsync(rm._id);
+          })
+          .then((research) => {
+            debugger
+            if (research) { // if proposal
+              this.$router.push({
+                name: 'ResearchDetails',
+                params: {
+                  research_group_permlink: encodeURIComponent(research.research_group.permlink),
+                  research_permlink: encodeURIComponent(research.permlink)
+                }
+              });
+            } else {
+              this.$router.push({ name: 'ResearchFeed' });
+            }
+          })
+          .catch((err) => {
+            console.log(err);
+            this.isLoading = false;
+            this.$store.dispatch('layout/setError', {
+              message: 'An error occurred while creating project, please try again later'
+            });
+          })
       }
     }
   };
