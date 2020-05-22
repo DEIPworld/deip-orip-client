@@ -342,7 +342,6 @@
               type: parseInt(this.proposeContent.type),
               title: this.proposeContent.title || contentRef.title,
               content: contentRef.hash,
-              permlink: contentRef.title.replace(/ /g, '-').replace(/_/g, '-').toLowerCase(),
               authors: this.proposeContent.authors.map((a) => a.account.name),
               references: [...this.contentRef.references],
               foreignReferences: [],

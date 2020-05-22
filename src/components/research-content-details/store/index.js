@@ -525,7 +525,7 @@ const actions = {
       const research = await deipRpc.api.getResearchByAbsolutePermlinkAsync(group_permlink, research_permlink);
       const group = await deipRpc.api.getResearchGroupByPermlinkAsync(group_permlink);
 
-      if (!isGenesisContent) {
+      if ( false /*!isGenesisContent */) { // TODO: recover this
         const proposals = await deipRpc.api.getProposalsByResearchGroupIdAsync(research.research_group_id);
 
         const contentProposal = proposals.filter((p) => p.action === PROPOSAL_TYPES.CREATE_RESEARCH_MATERIAL && p.is_completed).find((p) => {
