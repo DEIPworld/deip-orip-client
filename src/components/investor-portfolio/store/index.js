@@ -70,7 +70,7 @@ const getters = {
         return { ...comment, author };
       });
 
-      const ref = state.researchesRefs.find((ref) => ref.permlink == research.permlink);
+      const ref = state.researchesRefs.find((ref) => ref._id == research.external_id);
 
       return {
         research: {

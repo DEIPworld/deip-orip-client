@@ -230,7 +230,7 @@ const actions = {
 
         return Promise.all(state.awardeesList.map((r) => r.research_id)
           .reduce((acc, researchId) => (acc.some((rId) => rId === researchId) ? acc : [researchId, ...acc]), [])
-          .map((rId) => researchService.getResearchWithOffchain(rId)));
+          .map((rId) => researchService.getResearchById(rId)));
       })
       .then((researchList) => {
         commit('SET_AWARDEE_RESEARCH_LIST', researchList);

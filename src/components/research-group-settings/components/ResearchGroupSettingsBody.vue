@@ -367,7 +367,6 @@
           accountExtensions: []
         }, {
           researchGroupName: this.newResearchGroupName,
-          researchGroupPermlink: this.group.permlink,
           researchGroupDescription: this.newResearchGroupDescription,
           researchGroupThresholdOverrides: []
         })

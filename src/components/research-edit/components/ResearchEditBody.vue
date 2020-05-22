@@ -383,7 +383,6 @@
           externalId: this.research.external_id,
           title: this.title,
           abstract: this.description,
-          permlink: undefined,
           isPrivate: !this.isPublic,
           reviewShare: undefined,
           compensationShare: undefined,
@@ -398,9 +397,7 @@
               this.$router.push({
                 name: 'ResearchDetails',
                 params: {
-                  research_group_permlink: encodeURIComponent(
-                    this.research.research_group.permlink
-                  ),
+                  research_group_permlink: encodeURIComponent(this.research.research_group.permlink),
                   research_permlink: encodeURIComponent(this.research.permlink)
                 }
               });
@@ -408,9 +405,7 @@
               this.$router.push({
                 name: 'ResearchGroupDetails',
                 params: {
-                  research_group_permlink: encodeURIComponent(
-                    this.research.research_group.permlink
-                  )
+                  research_group_permlink: encodeURIComponent(this.research.research_group.permlink)
                 },
                 hash: '#proposals'
               });
@@ -458,9 +453,7 @@
               this.$router.push({
                 name: 'ResearchDetails',
                 params: {
-                  research_group_permlink: encodeURIComponent(
-                    this.research.research_group.permlink
-                  ),
+                  research_group_permlink: encodeURIComponent(this.research.research_group.permlink),
                   research_permlink: encodeURIComponent(this.research.permlink)
                 }
               });
@@ -490,9 +483,7 @@
         this.$router.push({
           name: 'ResearchDetails',
           params: {
-            research_group_permlink: encodeURIComponent(
-              this.research.research_group.permlink
-            ),
+            research_group_permlink: encodeURIComponent(this.research.research_group.permlink),
             research_permlink: encodeURIComponent(this.research.permlink)
           }
         });

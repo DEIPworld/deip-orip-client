@@ -242,7 +242,6 @@
           type: parseInt(this.type),
           title: this.title,
           content: hash,
-          permlink: this.title.replace(/ /g, '-').replace(/_/g, '-').toLowerCase(),
           authors: this.authors.map((a) => a.account.name),
           references: this.references.map((ref) => ref.external_id),
           foreignReferences: [],
