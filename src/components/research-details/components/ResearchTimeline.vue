@@ -1,6 +1,6 @@
 <template>
   <div v-if="timeline.length" class="mb-6">
-    <v-row>
+    <v-row no-gutters>
       <v-col cols="auto" class="pr-4">
         <v-icon large color="grey lighten-2">
           mdi-flag

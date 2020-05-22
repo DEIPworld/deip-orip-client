@@ -92,7 +92,7 @@ export const adminRouting = [
     name: 'admin.login',
     component: SignIn,
     props: {
-      adminLogin: true
+      isAdmin: true
     }
   }
 ];

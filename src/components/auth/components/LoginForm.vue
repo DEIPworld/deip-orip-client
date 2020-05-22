@@ -80,6 +80,10 @@
       redirect: {
         type: String,
         default: '/'
+      },
+      isAdmin: {
+        type: Boolean,
+        default: false
       }
     },
     data() {
@@ -160,8 +164,7 @@
 
             // sig-seed should be uint8 array with length = 32
             const secretSig = secretKey.sign(encodeUint8Arr(window.env.SIG_SEED).buffer);
-    
-            return authService.adminSignIn({
+            return authService[`${this.isAdmin ? 'adminSignIn' : 'signIn'}`]({
               username: this.formModel.username,
               secretSigHex: crypto.hexify(secretSig)
             });

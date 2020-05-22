@@ -467,7 +467,10 @@
       },
 
       onPaginationUpdated(nextState) {
-        this.$refs.projectsView.scrollIntoView();
+        setTimeout(() => window.scrollTo({
+          top: this.$refs.projectsView.offsetTop - 10,
+          behavior: 'smooth'
+        }), 0);
       },
 
       isLoggedIn() { return accessService.isLoggedIn(); }

@@ -84,7 +84,7 @@
       </div>
     </div>
 
-    <v-divider />
+    <v-divider class="mt-9" />
 
     <div class="my-6">
       <div class="title font-weight-medium pb-4">

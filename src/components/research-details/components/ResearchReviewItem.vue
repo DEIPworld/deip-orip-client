@@ -1,6 +1,6 @@
 <template>
   <v-row>
-    <v-col cols="12" lg="4" class="right-bordered">
+    <v-col cols="12" sm="4" class="right-bordered">
       <v-row>
         <v-col cols="auto">
           <platform-avatar :user="review.author" :size="80" />
@@ -27,7 +27,7 @@
       </v-row>
     </v-col>
 
-    <v-col cols="12" lg="4" class="px-6 right-bordered">
+    <v-col cols="12" sm="4" class="px-6 right-bordered">
       <div v-if="review.researchContent" @click.stop>
         <div>
           <span>
@@ -39,6 +39,7 @@
         </div>
         <router-link
           class="a py-2"
+          tag="div"
           :to="{
             name: 'ResearchContentDetails',
             params: {
@@ -58,10 +59,10 @@
           class="rd-review-eci mt-1"
         >
           <span
-            v-for="item of review.disciplines"
+            v-for="(item, i) of review.disciplines"
             :key="`${review.id}- ${item.disciplineName}`"
           >
-            {{ item.disciplineName }}
+            {{ `${item.disciplineName}${review.disciplines.length - 1 !== i ? ', ' : ''}` }}
           </span>
         </v-col>
       </v-row>
@@ -72,7 +73,7 @@
         {{ moment(review.created_at).format('D, MMM YYYY') }}
       </div>
     </v-col>
-    <v-col cols="12" lg="4">
+    <v-col cols="12" sm="4">
       <div>
         <div class="bold">
           Assessment
@@ -98,18 +99,16 @@
           </div>
         </v-tooltip>
       </div>
-      <v-row>
-        <v-col offset="5" class="py-0">
-          <v-btn
-            small
-            color="primary"
-            outlined
-            @click="goToReviewPage(review)"
-          >
-            See review
-          </v-btn>
-        </v-col>
-      </v-row>
+      <div class="text-right">
+        <v-btn
+          small
+          color="primary"
+          outlined
+          @click="goToReviewPage(review)"
+        >
+          See review
+        </v-btn>
+      </div>
     </v-col>
   </v-row>
 </template>

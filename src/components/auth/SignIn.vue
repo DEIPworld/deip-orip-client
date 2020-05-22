@@ -1,10 +1,10 @@
 <template>
-  <modal-route-view :hide-toolbar="adminLogin ? true : false" max-width="100%" go-back-to="/research-feed" title="Explorer">
+  <modal-route-view :hide-toolbar="isAdmin ? true : false" max-width="100%" go-back-to="/research-feed" title="Explorer">
     <v-row no-gutters class="full-height">
       <v-col cols="12" md="6" class="d-flex justify-center">
         <v-sheet class="align-self-center">
-          <login-form logo="AR3C" title="Login to your account" />
-          <div v-if="!adminLogin" class="mt-4 subtitle-2">
+          <login-form :logo="'DEIP'" :title="isAdmin ? 'Login to your admin account' : 'Login to your account'" :is-admin="isAdmin" />
+          <div v-if="!isAdmin" class="mt-4 subtitle-2">
             New on DEIP? <router-link class="a" :to="{name: 'SignUp'}">Sign Up now</router-link>
           </div>
         </v-sheet>
@@ -55,7 +55,7 @@
     name: 'SignIn',
     components: { LoginForm, ModalRouteView },
     props: {
-      adminLogin: {
+      isAdmin: {
         type: Boolean,
         default: false
       }

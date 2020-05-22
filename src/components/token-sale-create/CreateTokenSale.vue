@@ -1,6 +1,7 @@
 <template>
-  <layout-section>
-    <v-stepper v-model="currentStep" alt-labels>
+  <!-- <layout-section> -->
+  <v-container fluid class="pa-0 full-height">
+    <v-stepper v-model="currentStep" alt-labels class="full-height">
       <v-stepper-header>
         <v-stepper-step step="1" :complete="currentStep > 1">
           <div class="uppercase">
@@ -25,7 +26,7 @@
         </v-stepper-step>
       </v-stepper-header>
 
-      <v-stepper-items>
+      <v-stepper-items class="mx-auto" style="max-width:500px">
         <v-stepper-content step="1">
           <div v-if="research">
             <token-sale-amount
@@ -63,7 +64,8 @@
         </v-stepper-content>
       </v-stepper-items>
     </v-stepper>
-  </layout-section>
+  </v-container>
+  <!-- </layout-section> -->
 </template>
 
 

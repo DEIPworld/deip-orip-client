@@ -18,7 +18,7 @@
         </div>
       </v-col>
 
-      <v-col cols="6">
+      <v-col cols="6" lg="7" xl="8">
         <div class="pl-6">
           <div>
             <span class="grey--text">{{ reviewModel.created_at | dateFormat('D MMM YYYY', true) }}</span>
@@ -34,7 +34,7 @@
         </div>
       </v-col>
 
-      <v-col class="px-2" cols="4">
+      <v-col class="px-2" cols="4" lg="3" xl="2">
         <div>
           <review-assessment v-model="reviewModel.scores" :research-content-type="researchContentType" />
           <div v-if="reviewModel.votes.length" class="pt-2">
@@ -48,18 +48,16 @@
               <div>{{ reviewModel.votes.length }} experts supported this review</div>
             </v-tooltip>
           </div>
-          <v-row>
-            <v-col offset="5" class="py-0">
-              <v-btn
-                color="primary"
-                small
-                outlined
-                @click="goToReviewPage()"
-              >
-                See Review
-              </v-btn>
-            </v-col>
-          </v-row>
+          <div class="text-right">
+            <v-btn
+              color="primary"
+              small
+              outlined
+              @click="goToReviewPage()"
+            >
+              See Review
+            </v-btn>
+          </div>
         </div>
       </v-col>
     </v-row>
