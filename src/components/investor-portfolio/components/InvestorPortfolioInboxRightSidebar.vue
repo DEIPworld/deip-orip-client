@@ -385,7 +385,7 @@
         this.isEditingMemo = true;
       },
       updateMemo() {
-        const investmentId = this.selectedInvestment.research.id;
+        const investmentId = this.selectedInvestment.research.external_id;
         const { memo } = this;
         if (memo != this.selectedInvestment.portfolioRef.memo) {
           this.$store.dispatch('investorPortfolio/updateInvestmentMemo', {
@@ -414,7 +414,7 @@
 
       updateTags() {
         setTimeout(() => { // delay action to catch input text without pressing the 'enter'
-          const investmentId = this.selectedInvestment.research.id;
+          const investmentId = this.selectedInvestment.research.external_id;
           const listTags = this.updateTagsDialog.tagNames.map((t) => t.toLowerCase());
           const listId = this.updateTagsDialog.list.id;
           this.updateTagsDialog.isSaving = true;

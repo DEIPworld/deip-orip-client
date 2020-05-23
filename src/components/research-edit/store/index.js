@@ -15,8 +15,7 @@ const state = {
 // getters
 const getters = {
   research: (state) => state.research,
-  researchRef: (state) => state.researchRef,
-  isLoadingResearchRef: (state) => state.isLoadingResearchRef,
+  researchRef: (state) => state.research.researchRef,
   isLoadingResearchEditPage: (state) => state.isLoadingResearchEditPage
 };
 
@@ -25,29 +24,14 @@ const actions = {
   loadResearchEditPage({ state, commit, dispatch }, { group_permlink, research_permlink }) {
     commit('SET_RESEARCH_EDIT_LOADING_STATE', true);
 
+    // TODO: replace permliks with external_id in routes
     return deipRpc.api.getResearchByAbsolutePermlinkAsync(group_permlink, research_permlink)
+      .then((research) => researchService.getResearch(research.external_id))
       .then((research) => {
         commit('SET_RESEARCH_DETAILS', research);
-
-        const researchRefLoad = new Promise((resolve, reject) => {
-          dispatch('loadResearchRef', { researchExternalId: state.research.external_id, notify: resolve });
-        });
-
-        return researchRefLoad;
       }, ((err) => { console.log(err); }))
       .finally(() => {
         commit('SET_RESEARCH_EDIT_LOADING_STATE', false);
-      });
-  },
-  loadResearchRef({ state, dispatch, commit }, { researchExternalId, notify }) {
-    commit('SET_RESEARCH_REF_DETAILS_LOADING_STATE', true);
-    return researchService.getResearchProfile(researchExternalId)
-      .then((researchRef) => {
-        commit('SET_RESEARCH_REF_DETAILS', researchRef);
-      }, (err) => { console.log(err); })
-      .finally(() => {
-        commit('SET_RESEARCH_REF_DETAILS_LOADING_STATE', false);
-        if (notify) notify();
       });
   }
 };
@@ -57,14 +41,6 @@ const mutations = {
 
   SET_RESEARCH_DETAILS(state, research) {
     Vue.set(state, 'research', research);
-  },
-
-  SET_RESEARCH_REF_DETAILS(state, researchRef) {
-    Vue.set(state, 'researchRef', researchRef);
-  },
-
-  SET_RESEARCH_REF_DETAILS_LOADING_STATE(state, isLoading) {
-    Vue.set(state, 'isLoadingResearchRef', isLoading);
   },
 
   SET_RESEARCH_EDIT_LOADING_STATE(state, isLoading) {

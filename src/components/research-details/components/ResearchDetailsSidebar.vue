@@ -337,7 +337,6 @@
         disciplinesList: 'rd/disciplinesList',
         expertsList: 'rd/expertsList',
         groupInvitesList: 'rd/groupInvitesList',
-        researchReferencesList: 'rd/researchReferencesList',
         researchMembersList: 'rd/researchMembersList',
         researchGroupMembersList: 'rd/researchGroupMembersList',
         research: 'rd/research',

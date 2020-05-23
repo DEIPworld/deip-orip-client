@@ -65,9 +65,8 @@
     },
 
     created() {
-      deipRpc.api.getAllResearchesListingAsync(0, 0)
+      deipRpc.api.lookupResearchesAsync(0, 1000)
         .then((researches) => {
-          // researches.forEach((item, index) => item.index = index);
           this.researches = researches;
         });
     },

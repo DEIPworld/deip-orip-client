@@ -41,10 +41,8 @@ const state = {
 
   myInvitesList: [],
   myReviewRequests: [],
-  myReviews: [],
+  myReviews: []
 
-  researchesRefs: [],
-  isLoadingResearchesRefDetails: undefined
 };
 
 // getters
@@ -71,7 +69,6 @@ const getters = {
         ]
           .find((s) => s.research_id == research.id);
 
-        const { researchRef } = state.researchesRefs.find(({ researchExternalId }) => researchExternalId === research.external_id);
         const group = state.researchGroups.find((rg) => rg.id === research.research_group_id);
         const isTop = researchService.getTopResearchesIds().some((id) => id === research.id);
 
@@ -88,14 +85,14 @@ const getters = {
             .filter((c) => c.research_token_sale_id == tokenSale.id);
 
           return [...acc, {
-            research: { ...research, isTop, researchRef },
+            research: { ...research, isTop },
             authors: researchMembers,
             group,
             tokenSale,
             tokenSaleContributions
           }];
         }
-        return [...acc, { research: { ...research, isTop, researchRef }, authors: researchMembers, group }];
+        return [...acc, { research: { ...research, isTop }, authors: researchMembers, group }];
       }, []);
 
     unique.sort((a, b) => ((a.research.title > b.research.title) ? 1 : ((b.research.title > a.research.title) ? -1 : 0)));
@@ -113,11 +110,10 @@ const getters = {
         const researchMembers = state.researchGroupsMembers
           .filter((member) => research.members.some((name) => name == member.account.name));
 
-        const { researchRef } = state.researchesRefs.find(({ researchExternalId }) => researchExternalId === research.external_id);
         const group = state.researchGroups.find((rg) => rg.id === research.research_group_id);
         const isTop = researchService.getTopResearchesIds().some((id) => id == research.id);
 
-        return [...acc, { research: { ...research, isTop, researchRef }, authors: researchMembers, group }];
+        return [...acc, { research: { ...research, isTop }, authors: researchMembers, group }];
       }, []);
 
     unique.sort((a, b) => ((a.research.title > b.research.title) ? 1 : ((b.research.title > a.research.title) ? -1 : 0)));
@@ -137,10 +133,12 @@ const getters = {
 
   myReviewsCount: (state) => state.myReviews.length,
 
-  currentShares: (state) => state.investedResearchShares.map((share) => {
-    const research = state.investedResearches.find((r) => r.id == share.research_id);
-    return { share, research };
-  }),
+  currentShares: (state) => state.investedResearchShares
+    .map((share) => {
+      const research = state.investedResearches.find((r) => r.id == share.research_id);
+      return { share, research };
+    })
+    .filter((share) => !!share.research),
 
   experts: (state) => state.expertsList.map((expert) => {
     const expertiseTokens = state.expertsExpertiseTokensList.filter((exp) => exp.account_name == expert.account.name);
@@ -165,9 +163,6 @@ const actions = {
     const expertsLoad = new Promise((resolve, reject) => {
       dispatch('loadExperts', { username, notify: resolve });
     });
-    const myInvitesLoad = new Promise((resolve, reject) => {
-      dispatch('loadMyInvites', { username, notify: resolve });
-    });
     const myReviewRequestsLoad = new Promise((resolve, reject) => {
       dispatch('loadMyReviewRequests', { username, notify: resolve });
     });
@@ -180,7 +175,6 @@ const actions = {
       investingResearchesLoad,
       membershipResearchesLoad,
       expertsLoad,
-      myInvitesLoad,
       myReviewRequestsLoad,
       myReviewsLoad
     ])
@@ -189,7 +183,7 @@ const actions = {
           ...state.investedResearches,
           ...state.investingResearches,
           ...state.myMembershipResearches
-        ].map((research) => research.id);
+        ].map((research) => research.external_id);
 
         const bookmarkedResearchesLoad = new Promise((resolve, reject) => {
           dispatch('loadBookmarkedResearches', { username, excludeIds: pulled, notify: resolve });
@@ -201,7 +195,6 @@ const actions = {
       .then(() => {
         const rgtPromises = [];
         const rgPromises = [];
-        const researchRefPromises = [];
 
         [
           ...state.investedResearches,
@@ -211,11 +204,7 @@ const actions = {
         ].reduce((unique, research) => {
           if (unique.some((researchExternalId) => researchExternalId == research.external_id)) return unique;
           return [research.external_id, ...unique];
-        }, []).forEach((researchExternalId) => {
-          researchRefPromises.push(new Promise((resolve, reject) => {
-            dispatch('loadResearchRef', { researchExternalId: researchExternalId, notify: resolve });
-          }));
-        });
+        }, []);
 
 
         [
@@ -233,8 +222,7 @@ const actions = {
 
         return Promise.all([
           Promise.all(rgtPromises),
-          Promise.all(rgPromises),
-          Promise.all(researchRefPromises)
+          Promise.all(rgPromises)
         ]);
       })
       .then(([researchGroupsTokens, researchGroups]) => {
@@ -258,9 +246,10 @@ const actions = {
     return deipRpc.api.getResearchTokensByAccountNameAsync(username)
       .then((shares) => {
         commit('SET_INVESTED_RESEARCH_SHARES', shares);
-        return Promise.all(shares.map((s) => deipRpc.api.getResearchByIdAsync(s.research_id)));
+        return Promise.all(shares.map((s) => researchService.getResearch(s.research_external_id)));
       })
-      .then((researches) => {
+      .then((items) => {
+        const researches = items.filter(r => !!r);
         commit('SET_INVESTED_RESEARCHES', researches);
       })
       .finally(() => {
@@ -276,9 +265,10 @@ const actions = {
       })
       .then((sales) => {
         commit('SET_INVESTING_RESEARCHES_ONGOING_TOKEN_SALES', sales);
-        return Promise.all(sales.map((s) => deipRpc.api.getResearchByIdAsync(s.research_id)));
+        return Promise.all(sales.map((s) => researchService.getResearch(s.research_external_id)));
       })
-      .then((researches) => {
+      .then((items) => {
+        const researches = items.filter(r => !!r);
         commit('SET_INVESTING_RESEARCHES_TOKEN_SALES', researches);
       })
       .finally(() => {
@@ -287,8 +277,7 @@ const actions = {
   },
 
   loadMembershipResearches({ commit }, { username, notify } = {}) {
-    return deipRpc.api.getResearchGroupTokensByAccountAsync(username)
-      .then((list) => Promise.all(list.map((rgt) => deipRpc.api.getResearchesByResearchGroupIdAsync(rgt.research_group_id))))
+    return researchService.getUserResearchListing(username)
       .then((items) => {
         const researches = [].concat.apply([], items);
         commit('SET_MY_MEMBERSHIP_RESEARCHES', researches);
@@ -310,9 +299,11 @@ const actions = {
 
   loadBookmarkedResearches({ commit, rootGetters }, { excludeIds, notify } = { excludeIds: [] }) {
     const user = rootGetters['auth/user'];
-    const ids = user.researchBookmarks.map((b) => b.researchId).filter((id) => !excludeIds.some((rId) => rId == id));
-    return Promise.all(ids.map((id) => deipRpc.api.getResearchByIdAsync(id)))
-      .then((researches) => {
+    
+    const externalIds = user.researchBookmarks.map((b) => b.researchId).filter((id) => !excludeIds.some((rId) => rId == id));
+    return Promise.all(externalIds.map((externalId) => researchService.getResearch(externalId)))
+      .then((items) => {
+        const researches = items.filter(r => !!r);
         commit('SET_BOOKMARKED_RESEARCHES', researches);
         return Promise.all(researches.map((research) => investmentsService.getCurrentTokenSaleByResearchId(research.id)));
       })
@@ -351,16 +342,6 @@ const actions = {
       });
   },
 
-  loadMyInvites({ commit }, { username, notify } = {}) {
-    return deipRpc.api.getResearchGroupInvitesByAccountNameAsync(username)
-      .then((invites) => {
-        commit('SET_MY_INVITES', invites);
-      })
-      .finally(() => {
-        if (notify) notify();
-      });
-  },
-
   loadMyReviewRequests({ commit }, { username, notify } = {}) {
     return researchContentReviewsService.getReviewRequestsByRequestor(username)
       .then((reviews) => {
@@ -378,20 +359,8 @@ const actions = {
       }).finally(() => {
         if (notify) notify();
       });
-  },
-
-  loadResearchRef({ state, dispatch, commit }, { researchExternalId, notify }) {
-    commit('SET_RESEARCHES_REFS_DETAILS_LOADING_STATE', true);
-
-    return researchService.getResearchProfile(researchExternalId)
-      .then((researchRef) => {
-        commit('SET_RESEARCHES_REFS_DETAILS', { researchExternalId: researchExternalId, researchRef });
-      }, (err) => { console.log(err); })
-      .finally(() => {
-        commit('SET_RESEARCHES_REFS_DETAILS_LOADING_STATE', false);
-        if (notify) notify();
-      });
   }
+
 };
 
 // mutations
@@ -474,16 +443,6 @@ const mutations = {
 
   SET_MY_REVIEWS(state, list) {
     Vue.set(state, 'myReviews', list);
-  },
-
-  SET_RESEARCHES_REFS_DETAILS(state, researchRef) {
-    const researchesRefs = [...state.researchesRefs];
-    researchesRefs.push(researchRef);
-    Vue.set(state, 'researchesRefs', researchesRefs);
-  },
-
-  SET_RESEARCHES_REFS_DETAILS_LOADING_STATE(state, value) {
-    state.isLoadingResearchesRefDetails = value;
   }
 };
 

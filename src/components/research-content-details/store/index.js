@@ -359,11 +359,11 @@ const actions = {
     commit('SET_RESEARCH_DETAILS_LOADING_STATE', true);
 
     const rgtList = [];
-    let researchId;
+    let researchExternalId;
     return deipRpc.api.getResearchByAbsolutePermlinkAsync(group_permlink, research_permlink)
       .then((research) => {
         commit('SET_RESEARCH_DETAILS', research);
-        researchId = research.id;
+        researchExternalId = research.external_id;
         return deipRpc.api.getResearchGroupTokensByResearchGroupAsync(research.research_group_id);
       }).then((members) => {
         rgtList.push(...members);
@@ -377,7 +377,7 @@ const actions = {
           user.rgt = rgtList.find((rgt) => rgt.owner === user.account.name);
         }
         commit('SET_RESEARCH_GROUP_MEMBERS_LIST', users);
-        return deipRpc.api.getAllResearchContentAsync(researchId);
+        return researchContentService.getResearchContentByResearch(researchExternalId);
       }, (err) => {
         console.log(err);
       })
