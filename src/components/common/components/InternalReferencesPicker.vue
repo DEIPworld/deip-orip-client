@@ -132,8 +132,9 @@
         const term = this.term.toLowerCase();
 
         function filter() {
-          return this.references.filter((content) => content.title.toLowerCase().startsWith(term)
-            && content.research_id !== this.currentResearch.id);
+          return this.references
+          .filter((content) => content.title != null)
+          .filter((content) => content.title.toLowerCase().startsWith(term) && content.research_id != this.currentResearch.id)
         }
 
         this.searchable = filter.call(this, term);

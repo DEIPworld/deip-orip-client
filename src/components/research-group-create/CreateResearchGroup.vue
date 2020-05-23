@@ -223,7 +223,6 @@
             ])
           })
           .then(([invites, researchGroup]) => {
-            debugger
             if (!this.backRouterToken) {
               this.$router.push({
                 name: 'ResearchGroupDetails',

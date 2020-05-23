@@ -120,10 +120,8 @@
     computed: {
       ...mapGetters({
         contentList: 'rd/contentList',
-        contentRefsList: 'rd/contentRefsList',
         group: 'rd/group',
         disciplinesList: 'rd/disciplinesList',
-        researchReferencesList: 'rd/researchReferencesList',
         researchMembersList: 'rd/researchMembersList',
         researchGroupMembersList: 'rd/researchGroupMembersList',
         research: 'rd/research',

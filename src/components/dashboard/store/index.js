@@ -288,7 +288,7 @@ const actions = {
 
   loadMembershipResearches({ commit }, { username, notify } = {}) {
     return deipRpc.api.getResearchGroupTokensByAccountAsync(username)
-      .then((list) => Promise.all(list.map((rgt) => deipRpc.api.getResearchesByResearchGroupIdAsync(rgt.research_group_id))))
+      .then((list) => Promise.all(list.map((rgt) => deipRpc.api.getResearchesByResearchGroupAsync(rgt.research_group.external_id))))
       .then((items) => {
         const researches = [].concat.apply([], items);
         commit('SET_MY_MEMBERSHIP_RESEARCHES', researches);

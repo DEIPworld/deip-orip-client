@@ -23,7 +23,7 @@ const state = {
   research: null,
   researchRef: null,
   group: null,
-  contentList: [],
+  allContentsList: [],
   applicationsList: [],
   researchGroupMembersList: [],
   reviewsList: [],
@@ -34,7 +34,6 @@ const state = {
   tokenHoldersList: [],
   contributionsList: [],
   groupInvitesList: [],
-  contentRefsList: [],
   applicationsRefsList: [],
   userContributionsList: [],
   expertsList: [],
@@ -63,17 +62,18 @@ const getters = {
 
   group: () => state.group,
 
-  contentList: (state, getters) => state.contentList,
+  contentList: (state, getters) => {
+    return state.allContentsList
+      .filter((researchContent) => !researchContent.isDraft)
+  },
+
+  draftsList: (state, getters) => {
+    return state.allContentsList
+      .filter((researchContent) => researchContent.isDraft)
+      .map((researchContent) => { return { ...researchContent.ref } });
+  },
 
   applicationsList: (state, getters) => state.applicationsList,
-
-  contentRefsList: (state, getters) => state.contentRefsList,
-
-  researchReferencesList: (state, getters) => [].concat.apply([], state.contentRefsList.map((ref) => ref.externalReferences || []))
-    .map((ref) => ({
-      title: ref,
-      source: ''
-    })),
 
   researchGroupMembersList: (state, getters) => state.researchGroupMembersList,
 
@@ -81,7 +81,7 @@ const getters = {
     .filter((member) => state.research.members.some((m) => m == member.account.name)),
 
   reviewsList: (state, getters) => state.reviewsList.map((review, i) => {
-    const researchContent = state.contentList.find((content) => content.id == review.research_content_id);
+    const researchContent = getters.contentList.find((content) => content.id == review.research_content_id);
     return {
       ...review,
       researchContent
@@ -163,27 +163,27 @@ const getters = {
     return map;
   },
 
-  timelineOffsets() {
-    if (state.research !== null && state.contentList !== null
-      && state.contentList.length !== 0) {
+  timelineOffsets(state, getters) {
+    if (state.research !== null && getters.contentList !== null
+      && getters.contentList.length !== 0) {
       const startTimestamp = Date.parse(state.research.created_at);
-      const endTimestamp = Date.parse(state.contentList[state.contentList.length - 1].created_at);
+      const endTimestamp = Date.parse(getters.contentList[getters.contentList.length - 1].created_at);
       const allTime = endTimestamp - startTimestamp;
 
       const offsets = [];
       // the end of timeline can be reached for finished research only
       const maxRatio = state.research.is_finished ? 100 : 70;
-      for (let i = 0; i < state.contentList.length; i++) {
-        const contentTimestamp = Date.parse(state.contentList[i].created_at);
+      for (let i = 0; i < getters.contentList.length; i++) {
+        const contentTimestamp = Date.parse(getters.contentList[i].created_at);
 
         // calculate item ratio by its index
-        const indexFactor = (i + 1) / state.contentList.length * maxRatio;
+        const indexFactor = (i + 1) / getters.contentList.length * maxRatio;
 
         // calculate item ratio by its timestamp
         var timestampFactor;
         if (allTime === 0) {
           // all research content have been posted at the same time (genesis)
-          timestampFactor = i == state.contentList.length - 1 ? maxRatio : 50;
+          timestampFactor = i == getters.contentList.length - 1 ? maxRatio : 50;
         } else {
           const timeAfter = endTimestamp - contentTimestamp;
           timestampFactor = 100 - (timeAfter / allTime * 100) || 1;
@@ -318,14 +318,8 @@ const actions = {
             notify: resolve
           });
         });
-        const contentLoad = new Promise((resolve, reject) => {
+        const researchContentLoad = new Promise((resolve, reject) => {
           dispatch('loadResearchContent', {
-            researchId: state.research.id,
-            notify: resolve
-          });
-        });
-        const contentRefsLoad = new Promise((resolve, reject) => {
-          dispatch('loadResearchContentRefs', {
             researchExternalId: state.research.external_id,
             notify: resolve
           });
@@ -393,8 +387,8 @@ const actions = {
         });
 
         return Promise.all([
-          researchRefLoad, contentLoad, membersLoad, reviewsLoad, disciplinesLoad, tokenHoldersLoad,
-          tokenSaleLoad, tokenSalesLoad, invitesLoad, contentRefsLoad, groupLoad,
+          researchRefLoad, researchContentLoad, membersLoad, reviewsLoad, disciplinesLoad, tokenHoldersLoad,
+          tokenSaleLoad, tokenSalesLoad, invitesLoad, groupLoad,
           applicationsLoad, userContributionsLoad
         ]);
       }, ((err) => { console.log(err); }))
@@ -403,21 +397,21 @@ const actions = {
       });
   },
 
-  loadResearchContent({ state, dispatch, commit }, { researchId, notify }) {
-    let contents = [];
+  loadResearchContent({ state, dispatch, commit }, { researchExternalId, notify }) {
+    const researchContents = [];
     commit('SET_RESEARCH_CONTENT_LOADING_STATE', true);
 
-    return deipRpc.api.getAllResearchContentAsync(researchId)
+    return researchContentService.getResearchContentByResearch(researchExternalId)
       .then((list) => {
-        contents = list;
-        return Promise.all(contents.map((content) => deipRpc.api.getReviewsByContentAsync(content.id)));
+        researchContents.push(...list);
+        return Promise.all(researchContents.map((content) => deipRpc.api.getReviewsByContentAsync(content.id)));
       })
       .then((reviews) => {
-        contents.forEach((content, index) => {
+        researchContents.forEach((content, index) => {
           content.reviews = reviews[index];
         });
 
-        commit('SET_RESEARCH_CONTENT_LIST', contents);
+        commit('SET_RESEARCH_CONTENT_LIST', researchContents);
       })
       .catch((err) => { console.log(err); })
       .finally(() => {
@@ -590,18 +584,6 @@ const actions = {
       });
   },
 
-  loadResearchContentRefs({ state, dispatch, commit }, { researchExternalId, notify }) {
-    commit('SET_RESEARCH_CONTENT_REFS_LOADING_STATE', true);
-    return researchContentService.getContentRefs(researchExternalId)
-      .then((refs) => {
-        commit('SET_RESEARCH_CONTENT_REFS', refs);
-      }, (err) => { console.log(err); })
-      .finally(() => {
-        commit('SET_RESEARCH_CONTENT_REFS_LOADING_STATE', false);
-        if (notify) notify();
-      });
-  },
-
   loadTokenSaleContributors({ state, commit }) {
     const contributors = [];
     return deipRpc.api.getResearchTokenSaleContributionsByResearchTokenSaleIdAsync(state.tokenSale.id)
@@ -699,7 +681,7 @@ const mutations = {
   },
 
   SET_RESEARCH_CONTENT_LIST(state, list) {
-    Vue.set(state, 'contentList', list);
+    Vue.set(state, 'allContentsList', list);
   },
 
   SET_RESEARCH_APPLICATIONS_LIST(state, applications) {
@@ -736,10 +718,6 @@ const mutations = {
 
   SET_RESEARCH_GROUP_INVITES(state, invites) {
     Vue.set(state, 'groupInvitesList', invites);
-  },
-
-  SET_RESEARCH_CONTENT_REFS(state, refs) {
-    Vue.set(state, 'contentRefsList', refs);
   },
 
   SET_RESEARCH_APPLICATIONS_REFS(state, refs) {

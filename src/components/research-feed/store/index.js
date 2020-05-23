@@ -98,24 +98,14 @@ const getters = {
 // actions
 const actions = {
 
-  loadResearchFeed({
-    state, dispatch, commit, rootGetters
-  }) {
+  loadResearchFeed({state, dispatch, commit, rootGetters}) {
     const { username } = rootGetters['auth/user'];
-    const alldisciplinesId = 0;
 
     let fullResearchListing = [];
-    return deipRpc.api.getAllResearchesListingAsync(0, alldisciplinesId)
+    return researchService.getPublicResearchListing()
       .then((listing) => {
         fullResearchListing = listing
-          .filter((item) => !item.is_private)
           .map((item) => ({ ...item, isCollapsed: true }));
-
-        const researchRefsLoad = Promise.all(fullResearchListing
-          .map((r) => researchService.getResearchProfile(r.external_id)
-            .then((researchRef) => {
-              r.researchRef = researchRef;
-            })));
 
         const researchTotalVotesLoad = Promise.all(listing
           .map((r) => expertiseContributionsService.getExpertiseContributionsByResearch(r.research_id)));
@@ -130,9 +120,9 @@ const actions = {
           .map((groupId) => researchGroupService.getResearchGroupById(groupId)));
 
         const groupsMembersLoad = usersService.getEnrichedProfiles(listing
-          .map((r) => r.group_members)
-          .reduce((acc, groupMembers) => {
-            const unique = groupMembers.filter((name) => !acc.some((a) => a == name));
+          .map((r) => r.members)
+          .reduce((acc, members) => {
+            const unique = members.filter((name) => !acc.some((a) => a == name));
             return [...unique, ...acc];
           }, []));
 
@@ -140,7 +130,6 @@ const actions = {
           .map((r) => investmentsService.getCurrentTokenSaleByResearchId(r.research_id)));
 
         return Promise.all([
-          researchRefsLoad,
           researchTotalVotesLoad,
           researchReviewsLoad,
           researchGroupsLoad,
@@ -148,7 +137,7 @@ const actions = {
           tokenSalesLoad
         ]);
       })
-      .then(([, totalVotes, researchReviews, groups, /* disciplinesStats, */ groupsMembers, tokenSales]) => {
+      .then(([totalVotes, researchReviews, groups, /* disciplinesStats, */ groupsMembers, tokenSales]) => {
         commit('SET_FULL_RESEARCH_LISTING', fullResearchListing);
         commit('SET_RESEARCH_FEED_TOTAL_VOTES_LIST', [].concat.apply([], totalVotes));
         commit('SET_RESEARCH_FEED_REVIEWS_LIST', [].concat.apply([], researchReviews));

@@ -259,7 +259,7 @@ const actions = {
         const researchLoad = new Promise((resolve, reject) => {
           dispatch('loadResearchList', {
             username,
-            groupIds: state.groups.map((group) => group.id),
+            externalIds: state.groups.map((group) => group.external_id),
             notify: resolve
           });
         });
@@ -324,10 +324,10 @@ const actions = {
       });
   },
 
-  loadResearchList({ commit, state }, { username, groupIds, notify } = {}) {
+  loadResearchList({ commit, state }, { username, externalIds, notify } = {}) {
     commit('SET_USER_RESEARCH_LOADING_STATE', true);
     const researchList = [];
-    return Promise.all(groupIds.map((groupId) => deipRpc.api.getResearchesByResearchGroupIdAsync(groupId)))
+    return Promise.all(externalIds.map((externalId) => deipRpc.api.getResearchesByResearchGroupAsync(externalId)))
       .then((data) => {
         const researchPromises = _(data)
           .flatten()

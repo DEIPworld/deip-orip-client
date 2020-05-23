@@ -266,7 +266,7 @@
             <v-row class="ma-n3">
               <v-col
                 v-for="item in items"
-                :key="'feed-item-' + item.research_id"
+                :key="'feed-item-' + item.external_id"
                 cols="12"
                 sm="6"
                 md="4"
@@ -274,23 +274,11 @@
               >
                 <v-sheet>
                   <research-project-tile
-                    :research="{
-                      id: item.research_id,
-                      external_id: item.external_id,
-                      title: item.title,
-                      permlink: item.permlink,
-                      group_permlink: item.group_permlink,
-                      last_update_time: item.last_update_time,
-                      number_of_negative_reviews: item.number_of_negative_reviews,
-                      number_of_positive_reviews: item.number_of_positive_reviews,
-                      research_group: item.group,
-                      isTop: item.isTop,
-                      researchRef: item.researchRef
-                    }"
+                    :research="item"
                     :members="item.authors"
                     :token-sale="item.tokenSale"
                     :token-sale-contributions="item.tokenSaleContributions"
-                    :group="item.group"
+                    :group="item.research_group"
                   />
                 </v-sheet>
               </v-col>
