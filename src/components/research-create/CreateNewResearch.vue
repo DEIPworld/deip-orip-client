@@ -286,8 +286,7 @@
             return deipRpc.api.getResearchAsync(rm._id);
           })
           .then((research) => {
-            debugger
-            if (research) { // if proposal
+            if (research) { // if not proposal
               this.$router.push({
                 name: 'ResearchDetails',
                 params: {

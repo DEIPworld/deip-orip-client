@@ -263,7 +263,6 @@
         invites: 'researchGroup/invites',
         isLoadingResearchGroupDetails: 'researchGroup/isLoadingResearchGroupDetails',
         isLoadingResearchGroupMembers: 'researchGroup/isLoadingResearchGroupMembers',
-        isLoadingResearchGroupResearchList: 'researchGroup/isLoadingResearchGroupResearchList',
         isLoadingResearchGroupProposals: 'researchGroup/isLoadingResearchGroupProposals',
         userPersonalGroup: 'auth/userPersonalGroup'
       }),

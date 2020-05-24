@@ -68,7 +68,7 @@
         <v-tab-item key="following-projects">
           <v-row v-if="followingResearches.length" class="ma-n3">
             <v-col
-              v-for="({research, authors, tokenSale, tokenSaleContributions, group }, i) in followingResearches"
+              v-for="({research, authors, tokenSale, tokenSaleContributions, group }) in followingResearches"
               :key="'research-tile-' + research.id"
               cols="12"
               sm="6"

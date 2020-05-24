@@ -1,6 +1,6 @@
 <!-- TODO: need full rework -->
 <template>
-  <div>
+  <div class="pa-5">
     <v-tabs v-model="activeTab">
       <v-tab href="#tab-summary">
         Summary

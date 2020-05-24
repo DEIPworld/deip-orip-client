@@ -361,7 +361,7 @@
     },
 
     created() {
-      const researchPromises = this.userGroups.map((g) => deipRpc.api.getResearchesByResearchGroupIdAsync(g.id));
+      const researchPromises = this.userGroups.map((g) => deipRpc.api.getResearchesByResearchGroupAsync(g.external_id));
       const researchGroupPromises = this.userGroups.map((g) => deipRpc.api.getResearchGroupByIdAsync(g.id));
 
       Promise.all([
