@@ -142,7 +142,7 @@
 
           <v-divider class="my-6" />
 
-          <v-row justify="space-between" align="center" class="pb-6">
+          <v-row v-if="isTrlFilterAvailable" justify="space-between" align="center" class="pb-6">
             <v-col>
               <div class="subtitle-1">
                 Browse by TRL
@@ -160,7 +160,7 @@
               </v-btn>
             </v-col>
           </v-row>
-          <v-row>
+          <v-row v-if="isTrlFilterAvailable">
             <v-col v-for="(trl, i) in trls" :key="'trl-filter-' + i" cols="2">
               <v-tooltip bottom>
                 <template #activator="{ on }">
@@ -183,7 +183,7 @@
             </v-col>
           </v-row>
 
-          <v-divider class="my-6" />
+          <v-divider v-if="isTrlFilterAvailable" class="my-6" />
 
           <v-row class="pb-6" justify="space-between">
             <v-col>
@@ -326,6 +326,7 @@
         disciplines: [...disciplinesService.getTopLevelNodes()],
         filterByTopOnly: false,
         filtersTabExpansionModel: false,
+        isTrlFilterAvailable: false, // TODO: fix the filter
         trls: trlData.map((t, i) => ({
           id: t.id,
           label: `TRL ${i + 1}`,

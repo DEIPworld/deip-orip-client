@@ -52,7 +52,6 @@ const state = {
   },
 
   isLoadingUserGroups: false,
-  isLoadingUserResearch: false,
   isLoadingUserExpertise: false,
   isLoadingUserInvites: false,
   isClaimExpertiseDialogShown: false,
@@ -63,13 +62,10 @@ const state = {
 const getters = {
   userInfo: (state, getters) => ({ account: state.account, profile: state.profile }),
   researchList: (state, getters, rootState, rootGetters) => {
-    const user = rootGetters['auth/user'];
     return state.researchList.map((research) => {
-      const { researchRef } = state.researchesRef.find(({ researchExternalId }) => researchExternalId === research.external_id);
       const group = state.groups.find(({ id }) => id === research.research_group_id);
-      return { research: { ...research, researchRef }, group };
-    })
-      .filter((item) => !item.research.is_private || item.group.shares.some((share) => share.owner == user.username));
+      return { research: { ...research }, group };
+    });
   },
 
   groups: (state) => state.groups,
@@ -217,7 +213,6 @@ const getters = {
   },
 
   isLoadingUserGroups: (state) => state.isLoadingUserGroups,
-  isLoadingUserResearch: (state) => state.isLoadingUserResearch,
   isLoadingUserExpertise: (state) => state.isLoadingUserExpertise,
   isLoadingUserInvites: (state) => state.isLoadingUserInvites,
   isClaimExpertiseDialogShown: (state) => state.isClaimExpertiseDialogShown
@@ -254,23 +249,19 @@ const actions = {
       dispatch('loadGroups', { username, notify: resolve });
     });
 
-    return Promise.all([accountLoad, profileLoad, expertiseLoad, invitesLoad, reviewRequestsLoad, groupsLoad])
-      .then(() => {
-        const researchLoad = new Promise((resolve, reject) => {
-          dispatch('loadResearchList', {
-            username,
-            externalIds: state.groups.map((group) => group.external_id),
-            notify: resolve
-          });
-        });
-        return Promise.all([researchLoad])
-          .then(() => {
-            const researchesRefLoad = new Promise((resolve, reject) => {
-              dispatch('loadResearchesRef', { researchesExternalIds: state.researchList.map((research) => research.external_id), notify: resolve });
-            });
-            return Promise.all([researchesRefLoad]);
-          });
-      });
+    const researchesLoad = new Promise((resolve, reject) => {
+      dispatch('loadResearchList', { username, notify: resolve });
+    });
+
+    return Promise.all([
+      accountLoad, 
+      profileLoad, 
+      expertiseLoad, 
+      invitesLoad, 
+      reviewRequestsLoad, 
+      groupsLoad, 
+      researchesLoad
+    ]);
   },
 
   loadAccountExpertiseDetailsPage({
@@ -324,38 +315,13 @@ const actions = {
       });
   },
 
-  loadResearchList({ commit, state }, { username, externalIds, notify } = {}) {
-    commit('SET_USER_RESEARCH_LOADING_STATE', true);
-    const researchList = [];
-    return Promise.all(externalIds.map((externalId) => deipRpc.api.getResearchesByResearchGroupAsync(externalId)))
-      .then((data) => {
-        const researchPromises = _(data)
-          .flatten()
-          .map('id')
-          .uniq()
-          .map((researchId) => deipRpc.api.getResearchByIdAsync(researchId))
-          .value();
 
-        return Promise.all(researchPromises);
-      })
+  loadResearchList({ commit, state }, { username, notify } = {}) {    
+    return researchService.getUserResearchListing(username)
       .then((researches) => {
-        researchList.push(...researches);
-        return Promise.all(researchList.map((item) => expertiseContributionsService.getExpertiseContributionsByResearch(item.id)));
-      })
-      .then((list) => {
-        const tvoMap = _.chain(list)
-          .flatten()
-          .groupBy('research_id')
-          .value();
-
-        researchList.forEach((research) => {
-          research.totalVotes = tvoMap[research.id] ? tvoMap[research.id] : [];
-        });
-
-        commit('SET_RESEARCH_LIST', researchList);
+        commit('SET_RESEARCH_LIST', researches);
       })
       .finally(() => {
-        commit('SET_USER_RESEARCH_LOADING_STATE', false);
         if (notify) notify();
       });
   },
@@ -455,19 +421,6 @@ const actions = {
       });
   },
 
-  loadResearchesRef({ state, dispatch, commit }, { researchesExternalIds, notify }) {
-    commit('SET_RESEARCHES_REFS_DETAILS_LOADING_STATE', true);
-    return Promise.all(researchesExternalIds.map((researchExternalId) => researchService.getResearchProfile(researchExternalId)))
-      .then((refs) => {
-        const researchesRef = refs.map((researchRef, i) => ({ researchExternalId: researchesExternalIds[i], researchRef }));
-        commit('SET_RESEARCHES_REFS_DETAILS', researchesRef);
-      }, (err) => { console.log(err); })
-      .finally(() => {
-        commit('SET_RESEARCHES_REFS_DETAILS_LOADING_STATE', false);
-        if (notify) notify();
-      });
-  },
-
   openExpertiseTokensClaimDialog({ commit }) {
     commit('SET_EXPERTISE_TOKENS_CLAIM_DIALOG_VISIBILITY_STATE', true);
   },
@@ -526,10 +479,6 @@ const mutations = {
 
   SET_USER_GROUPS_LOADING_STATE(state, value) {
     state.isLoadingUserGroups = value;
-  },
-
-  SET_USER_RESEARCH_LOADING_STATE(state, value) {
-    state.isLoadingUserResearch = value;
   },
 
   SET_USER_EXPERTISE_LOADING_STATE(state, value) {

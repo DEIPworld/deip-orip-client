@@ -50,7 +50,7 @@
 
     created() {
       const bookmark = this.user.researchBookmarks.find(
-        (b) => b.researchId === this.research.id
+        (b) => b.researchId === this.research.external_id
       );
       if (bookmark) {
         this.bookmarkId = bookmark._id;
@@ -61,7 +61,7 @@
       addToBookmarks() {
         this.isBookmarkActionInProgress = true;
         return userService
-          .createResearchBookmark(this.user.username, this.research.id)
+          .createResearchBookmark(this.user.username, this.research.external_id)
           .then((bookmark) => {
             this.$store.dispatch('auth/loadResearchBookmarks');
             this.bookmarkId = bookmark._id;

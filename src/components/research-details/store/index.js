@@ -40,7 +40,6 @@ const state = {
   eciHistoryByDiscipline: {},
 
   isLoadingResearchDetails: undefined,
-  isLoadingResearchRefDetails: undefined,
   isLoadingResearchContent: undefined,
   isLoadingResearchMembers: undefined,
   isLoadingResearchReviews: undefined,
@@ -58,7 +57,7 @@ const getters = {
 
   research: (state, getters) => state.research,
 
-  researchRef: (state, getters) => state.researchRef,
+  researchRef: (state, getters) => state.research.researchRef,
 
   group: () => state.group,
 
@@ -110,8 +109,6 @@ const getters = {
   isLoadingResearchMembers: (state, getters) => state.isLoadingResearchMembers,
 
   isLoadingResearchDetails: (state, getters) => state.isLoadingResearchDetails,
-
-  isLoadingResearchRefDetails: (state, getters) => state.isLoadingResearchRefDetails,
 
   isLoadingResearchReviews: (state, getters) => state.isLoadingResearchReviews,
 
@@ -306,18 +303,13 @@ const actions = {
     commit('RESET_STATE');
     commit('SET_RESEARCH_DETAILS_LOADING_STATE', true);
 
+    // TODO: replace permliks with external_id in routes
     return deipRpc.api.getResearchByAbsolutePermlinkAsync(group_permlink, research_permlink)
+      .then((research) => researchService.getResearch(research.external_id))
       .then((research) => {
-        research.isTop = researchService.getTopResearchesIds()
-          .some((id) => id == research.id);
+        research.isTop = researchService.getTopResearchesIds().some((id) => id == research.id);
         commit('SET_RESEARCH_DETAILS', research);
 
-        const researchRefLoad = new Promise((resolve, reject) => {
-          dispatch('loadResearchRef', {
-            researchExternalId: state.research.external_id,
-            notify: resolve
-          });
-        });
         const researchContentLoad = new Promise((resolve, reject) => {
           dispatch('loadResearchContent', {
             researchExternalId: state.research.external_id,
@@ -360,12 +352,6 @@ const actions = {
             notify: resolve
           });
         });
-        const invitesLoad = new Promise((resolve, reject) => {
-          dispatch('loadResearchGroupInvites', {
-            researchGroupId: state.research.research_group_id,
-            notify: resolve
-          });
-        });
         const groupLoad = new Promise((resolve, reject) => {
           dispatch('loadResearchGroupDetails', {
             group_permlink,
@@ -387,8 +373,8 @@ const actions = {
         });
 
         return Promise.all([
-          researchRefLoad, researchContentLoad, membersLoad, reviewsLoad, disciplinesLoad, tokenHoldersLoad,
-          tokenSaleLoad, tokenSalesLoad, invitesLoad, groupLoad,
+          researchContentLoad, membersLoad, reviewsLoad, disciplinesLoad, tokenHoldersLoad,
+          tokenSaleLoad, tokenSalesLoad, groupLoad,
           applicationsLoad, userContributionsLoad
         ]);
       }, ((err) => { console.log(err); }))
@@ -600,18 +586,6 @@ const actions = {
       });
   },
 
-  loadResearchGroupInvites({ commit }, { researchGroupId, notify }) {
-    deipRpc.api.getResearchGroupInvitesByResearchGroupIdAsync(researchGroupId)
-      .then((invites) => {
-        commit('SET_RESEARCH_GROUP_INVITES', invites);
-      }, (err) => {
-        console.log(err);
-      })
-      .finally(() => {
-        if (notify) notify();
-      });
-  },
-
   loadResearchGroupDetails({ state, commit, dispatch }, { group_permlink, notify }) {
     commit('SET_RESEARCH_GROUP_DETAILS_LOADING_STATE', true);
     deipRpc.api.getResearchGroupByPermlinkAsync(group_permlink)
@@ -641,18 +615,6 @@ const actions = {
     });
   },
 
-  loadResearchRef({ state, dispatch, commit }, { researchExternalId, notify }) {
-    commit('SET_RESEARCH_REF_DETAILS_LOADING_STATE', true);
-    return researchService.getResearchProfile(researchExternalId)
-      .then((researchRef) => {
-        commit('SET_RESEARCH_REF_DETAILS', researchRef);
-      }, (err) => { console.log(err); })
-      .finally(() => {
-        commit('SET_RESEARCH_REF_DETAILS_LOADING_STATE', false);
-        if (notify) notify();
-      });
-  },
-
   loadResearchEciHistoryRecords({ state, dispatch, commit }, { researchId, disciplineId, notify }) {
     return expertiseContributionsService.getEciHistoryByResearchAndDiscipline(researchId, disciplineId)
       .then((records) => {
@@ -670,10 +632,6 @@ const mutations = {
 
   SET_RESEARCH_DETAILS(state, research) {
     Vue.set(state, 'research', research);
-  },
-
-  SET_RESEARCH_REF_DETAILS(state, researchRef) {
-    Vue.set(state, 'researchRef', researchRef);
   },
 
   SET_RESEARCH_MEMBERS_LIST(state, list) {
@@ -734,10 +692,6 @@ const mutations = {
 
   SET_RESEARCH_DETAILS_LOADING_STATE(state, value) {
     state.isLoadingResearchDetails = value;
-  },
-
-  SET_RESEARCH_REF_DETAILS_LOADING_STATE(state, value) {
-    state.isLoadingResearchRefDetails = value;
   },
 
   SET_RESEARCH_MEMBERS_LOADING_STATE(state, value) {

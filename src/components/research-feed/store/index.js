@@ -47,20 +47,20 @@ const getters = {
   researchFeed: (state, getters) => {
     const ordered = state.fullResearchListing
       .map((item) => {
-        const isTop = researchService.getTopResearchesIds().some((id) => id == item.research_id);
+        const isTop = researchService.getTopResearchesIds().some((id) => id == item.id);
         return { ...item, isTop };
       })
       .filter((item) => !state.filter.topOnly || item.isTop)
       .filter((item) => !state.filter.q || item.title.toLowerCase().indexOf(state.filter.q.toLowerCase()) != -1)
       .filter((item) => !state.filter.disciplines.length || item.disciplines.some((discipline) => state.filter.disciplines.some((d) => d.id == discipline.id)))
-      .filter((item) => !state.filter.organizations.length || state.filter.organizations.some((org) => item.group_id == org.id))
+      .filter((item) => !state.filter.organizations.length || state.filter.organizations.some((org) => item.research_group.external_id == org.external_id))
       .filter((item) => !state.filter.trl.length || state.filter.trl.some((t) => t.id === item.researchRef.trl))
       .map((item) => {
-        const totalVotes = state.feedTotalVotes.filter((vote) => vote.research_id == item.research_id);
-        const reviews = state.feedResearchReviews.filter((review) => review.research_id == item.research_id);
-        const group = state.feedResearchGroups.find((group) => group.id == item.group_id);
+        const totalVotes = state.feedTotalVotes.filter((vote) => vote.research_id == item.id);
+        const reviews = state.feedResearchReviews.filter((review) => review.research_id == item.id);
+        const group = state.feedResearchGroups.find((group) => group.external_id == item.research_group.external_id);
         const researchMembers = state.feedResearchGroupsMembers.filter((user) => item.members.some((a) => a == user.account.name));
-        const tokenSale = state.feedResearchTokenSales.find((tokenSale) => tokenSale.research_id == item.research_id);
+        const tokenSale = state.feedResearchTokenSales.find((tokenSale) => tokenSale.research_id == item.id);
         const tokenSaleContributions = tokenSale ? state.feedResearchTokenSalesContributions.filter((c) => c.research_token_sale_id == tokenSale.id) : [];
         const disciplines = item.disciplines.map((discipline) => ({ ...discipline }));
         return {
@@ -108,16 +108,16 @@ const actions = {
           .map((item) => ({ ...item, isCollapsed: true }));
 
         const researchTotalVotesLoad = Promise.all(listing
-          .map((r) => expertiseContributionsService.getExpertiseContributionsByResearch(r.research_id)));
+          .map((r) => expertiseContributionsService.getExpertiseContributionsByResearch(r.id)));
 
         const researchReviewsLoad = Promise.all(listing
-          .map((r) => deipRpc.api.getReviewsByResearchAsync(r.research_id)
-            .then((reviews) => reviews.map((review) => ({ ...review, research_id: r.research_id })))));
+          .map((r) => deipRpc.api.getReviewsByResearchAsync(r.id)
+            .then((reviews) => reviews.map((review) => ({ ...review, research_id: r.id })))));
 
         const researchGroupsLoad = Promise.all(listing
-          .map((r) => r.group_id)
-          .reduce((acc, groupId) => (acc.some((g) => g == groupId) ? acc : [groupId, ...acc]), [])
-          .map((groupId) => researchGroupService.getResearchGroupById(groupId)));
+          .map((r) => r.research_group.external_id)
+          .reduce((acc, externalId) => (acc.some((g) => g == externalId) ? acc : [externalId, ...acc]), [])
+          .map((externalId) => researchGroupService.getResearchGroup(externalId)));
 
         const groupsMembersLoad = usersService.getEnrichedProfiles(listing
           .map((r) => r.members)
@@ -127,7 +127,7 @@ const actions = {
           }, []));
 
         const tokenSalesLoad = Promise.all(listing
-          .map((r) => investmentsService.getCurrentTokenSaleByResearchId(r.research_id)));
+          .map((r) => investmentsService.getCurrentTokenSaleByResearchId(r.id)));
 
         return Promise.all([
           researchTotalVotesLoad,
@@ -158,7 +158,7 @@ const actions = {
   },
 
   toggleFeedItem({ commit, state, getters }, id) {
-    const item = state.fullResearchListing.find((item) => item.research_id == id);
+    const item = state.fullResearchListing.find((item) => item.id == id);
     commit('SET_FEED_ITEM_COLLAPSE_STATE', { item, collapsed: !item.isCollapsed });
   },
 

@@ -90,14 +90,7 @@
 
     <!-- ### START User Profile Research Section ### -->
     <div class="user-research-groups-container spinner-container">
-      <v-progress-circular
-        v-if="isLoadingUserGroups || isLoadingUserResearch"
-        class="section-spinner"
-        indeterminate
-        color="primary"
-      />
-
-      <div v-if="isLoadingUserGroups === false && isLoadingUserResearch === false">
+      <div>
         <div class="pt-6">
           <state-research-list
             :research-list="researchList"
@@ -372,8 +365,7 @@
         groups: 'userDetails/groups',
         researchList: 'userDetails/researchList',
 
-        isLoadingUserGroups: 'userDetails/isLoadingUserGroups',
-        isLoadingUserResearch: 'userDetails/isLoadingUserResearch'
+        isLoadingUserGroups: 'userDetails/isLoadingUserGroups'
       }),
 
       isOwner() {
