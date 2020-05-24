@@ -69,9 +69,9 @@ const getters = {
   draftsList: (state, getters) => {
     return state.allContentsList
       .filter((researchContent) => researchContent.isDraft)
-      .map((researchContent) => { return { ...researchContent.ref } });
+      .map((researchContent) => { return { ...researchContent.researchContentRef } });
   },
-
+  // researchContentRef
   applicationsList: (state, getters) => state.applicationsList,
 
   researchGroupMembersList: (state, getters) => state.researchGroupMembersList,
