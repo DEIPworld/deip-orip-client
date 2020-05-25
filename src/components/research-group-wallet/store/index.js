@@ -33,22 +33,21 @@ const getters = {
 const actions = {
   loadGroupWallet({ dispatch }, { permlink }) {
     return dispatch('loadGroup', permlink)
-      .then((group) => dispatch('loadResearches', group.id));
+      .then((group) => dispatch('loadResearches', group.external_id));
   },
 
   loadGroup({ commit }, permlink) {
     return deipRpc.api.getResearchGroupByPermlinkAsync(permlink)
       .then((data) => {
         commit('SET_GROUP', data);
-
         return data;
       });
   },
 
-  loadResearches({ commit }, groupId) {
+  loadResearches({ commit }, externalId) {
     const researchResult = [];
 
-    deipRpc.api.getResearchesByResearchGroupIdAsync(groupId)
+    deipRpc.api.getResearchesByResearchGroupAsync(externalId)
       .then((list) => {
         researchResult.push(...list);
         return Promise.all(

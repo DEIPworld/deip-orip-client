@@ -177,7 +177,7 @@
 
     methods: {
       selectInvestment(investment) {
-        this.$store.dispatch('investorPortfolio/selectInvestment', investment.research.id);
+        this.$store.dispatch('investorPortfolio/selectInvestment', investment.research.external_id);
       }
     }
   };

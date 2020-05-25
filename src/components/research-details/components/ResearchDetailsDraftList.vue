@@ -19,11 +19,8 @@
     computed: {
       ...mapGetters({
         contentList: 'rd/contentList',
-        contentRefsList: 'rd/contentRefsList'
-      }),
-      draftsList() {
-        return this.contentRefsList.filter((ref) => !this.contentList.some((c) => c.content === ref.hash));
-      }
+        draftsList: 'rd/draftsList'
+      })
     },
     methods: {
 

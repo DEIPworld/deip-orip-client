@@ -19,7 +19,6 @@ const state = {
   isLoadingInvestmentPortfolioPage: undefined,
 
   researches: [],
-  researchesRefs: [],
   researchTokens: [],
   researchTokensHolders: [],
 
@@ -34,10 +33,10 @@ const getters = {
   investmentPortfolio: (state, getters) => state.investmentPortfolio,
 
   investments: (state, getters) => state.researches
-    .filter((r) => state.selectedListId == defaultListId || getters.selectedList.listResearchesIds.some((id) => id == r.id))
+    .filter((r) => state.selectedListId == defaultListId || getters.selectedList.listResearchesIds.some((id) => id == r.external_id))
     .map((research) => {
       const group = state.researchGroups.find((group) => group.id == research.research_group_id);
-      const researchShares = state.researchTokens.filter((rt) => rt.research_id == research.id);
+      const researchShares = state.researchTokens.filter((rt) => rt.research_external_id == research.external_id);
       const researchGroupsTokens = state.researchGroupsTokens.filter((rgt) => rgt.research_group_id == research.research_group_id);
 
       const researchSharesHolders = state.researchTokensHolders.filter((user) => researchShares.some((rt) => rt.account_name == user.account.name));
@@ -58,7 +57,7 @@ const getters = {
         return { ...shareHolder, share };
       });
 
-      const portfolioRef = state.investmentPortfolio.researches.find((r) => r.id == research.id);
+      const portfolioRef = state.investmentPortfolio.researches.find((r) => r.id == research.external_id);
       const tags = portfolioRef.tags.map((tag) => {
         const list = state.investmentPortfolio.lists.find((l) => l.id == tag.list);
         const color = list ? list.color : '';
@@ -70,11 +69,9 @@ const getters = {
         return { ...comment, author };
       });
 
-      const ref = state.researchesRefs.find((ref) => ref._id == research.external_id);
-
       return {
         research: {
-          ...research, comments, owner, ref
+          ...research, comments, owner, ref: research.researchRef
         },
         group,
         team,
@@ -83,7 +80,7 @@ const getters = {
       };
     }),
 
-  selectedInvestment: (state, getters) => getters.investments.find((inv) => inv.research.id == state.selectedInvestmentId),
+  selectedInvestment: (state, getters) => getters.investments.find((inv) => inv.research.external_id == state.selectedInvestmentId),
 
   lists: (state, getters) => state.investmentPortfolio.lists.map((list) => {
     const listResearchesIds = state.investmentPortfolio.researches.reduce((acc, research) => (research.tags.some((tag) => tag.list == list.id) || list.id == defaultListId ? [research.id, ...acc] : acc), []);
@@ -110,7 +107,7 @@ const actions = {
         commit('SET_INVESTMENT_PORTFOLIO', investmentPortfolio);
         const researchesLoad = new Promise((resolve, reject) => {
           dispatch('loadInvestmentPortfolioResearches', {
-            researchIds: state.investmentPortfolio.researches.map((r) => r.id),
+            researchExternalIds: state.investmentPortfolio.researches.map((r) => r.id),
             notify: resolve
           });
         });
@@ -122,7 +119,7 @@ const actions = {
           .then(() => {
             commit('SET_SELECTED_LIST_ID', defaultListId);
             const selected = state.researches[0];
-            if (selected) commit('SET_SELECTED_INVESTMENT_ID', selected.id);
+            if (selected) commit('SET_SELECTED_INVESTMENT_ID', selected.external_id);
           });
       }, ((err) => {
         console.log(err);
@@ -132,14 +129,12 @@ const actions = {
       });
   },
 
-  loadInvestmentPortfolioResearches({ state, dispatch, commit }, { researchIds, notify }) {
-    return Promise.all(researchIds.map((rId) => deipRpc.api.getResearchByIdAsync(rId)))
-      .then((researches) => {
+  loadInvestmentPortfolioResearches({ state, dispatch, commit }, { researchExternalIds, notify }) {
+
+    return Promise.all(researchExternalIds.map((externalId) => researchService.getResearch(externalId)))
+      .then((items) => {
+        const researches = items.filter(r => !!r);
         commit('SET_INVESTMENT_PORTFOLIO_RESEARCHES', researches);
-        return Promise.all(state.researches.map((r) => researchService.getResearchProfile(r.external_id)))
-      })
-      .then((refs) => {
-        commit('SET_INVESTMENT_PORTFOLIO_RESEARCHES_REFS', refs);
         return Promise.all(state.researches
           .reduce((unique, research) => {
             if (unique.some((rgId) => rgId == research.research_group_id)) return unique;
@@ -161,7 +156,7 @@ const actions = {
       })
       .then((members) => {
         commit('SET_INVESTMENT_PORTFOLIO_RESEARCH_GROUPS_MEMBERS', members);
-        return Promise.all(researchIds.map((rId) => deipRpc.api.getResearchTokensByResearchIdAsync(rId)));
+        return Promise.all(state.researches.map((research) => deipRpc.api.getResearchTokensByResearchIdAsync(research.id)));
       })
       .then((researchTokens) => {
         const tokens = [].concat.apply([], researchTokens);
@@ -209,7 +204,7 @@ const actions = {
   selectList({ state, getters, commit }, listId) {
     commit('SET_SELECTED_LIST_ID', listId);
     if (getters.investments.length) {
-      const investmentId = getters.investments[0].research.id;
+      const investmentId = getters.investments[0].research.external_id;
       if (state.selectedInvestmentId != investmentId) commit('SET_SELECTED_INVESTMENT_ID', investmentId);
     }
   },
@@ -286,10 +281,6 @@ const mutations = {
     Vue.set(state, 'researches', list);
   },
 
-  SET_INVESTMENT_PORTFOLIO_RESEARCHES_REFS(state, list) {
-    Vue.set(state, 'researchesRefs', list);
-  },
-
   SET_INVESTMENT_PORTFOLIO_RESEARCH_GROUPS(state, list) {
     Vue.set(state, 'researchGroups', list);
   },
@@ -314,8 +305,8 @@ const mutations = {
     Vue.set(state, 'commentAuthors', list);
   },
 
-  SET_SELECTED_INVESTMENT_ID(state, id) {
-    Vue.set(state, 'selectedInvestmentId', id);
+  SET_SELECTED_INVESTMENT_ID(state, externalId) {
+    Vue.set(state, 'selectedInvestmentId', externalId);
   },
 
   SET_SELECTED_LIST_ID(state, id) {

@@ -570,7 +570,7 @@
           .then((tokens) => Promise.all(tokens.map((token) => deipRpc.api.getResearchGroupByIdAsync(token.research_group_id))))
           .then((groups) => {
             funding.foundResearchGroups.push(...groups);
-            return Promise.all(groups.map((group) => deipRpc.api.getResearchesByResearchGroupIdAsync(group.id)));
+            return Promise.all(groups.map((group) => deipRpc.api.getResearchesByResearchGroupAsync(group.external_id)));
           })
           .finally(() => {
             funding.isResearchGroupsLoading = false;
@@ -581,7 +581,7 @@
         funding.foundResearch = [];
         funding.isResearchLoading = true;
 
-        deipRpc.api.getResearchesByResearchGroupIdAsync(funding.researchGroup.id)
+        deipRpc.api.getResearchesByResearchGroupAsync(funding.researchGroup.external_id)
           .then((groupsResearchList) => {
             const researches = [].concat.apply([], groupsResearchList);
             funding.foundResearch.push(...researches);

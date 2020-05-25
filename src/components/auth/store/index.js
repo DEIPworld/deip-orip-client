@@ -150,7 +150,7 @@ const actions = {
       .then((researchBookmarks) => {
         commit('SET_USER_RESEARCH_BOOKMARKS', researchBookmarks.map((b) => ({
           _id: b._id,
-          researchId: +b.ref
+          researchId: b.ref
         })));
       }).finally(() => {
         if (notify) notify();

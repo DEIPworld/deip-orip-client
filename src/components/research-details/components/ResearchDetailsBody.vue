@@ -121,12 +121,7 @@
       },
       newContentUploaded() {
         Promise.all([
-          this.$store.dispatch('rd/loadResearchContent', {
-            researchId: this.research.id
-          }),
-          this.$store.dispatch('rd/loadResearchContentRefs', {
-            researchExternalId: this.research.external_id
-          })
+          this.$store.dispatch('rd/loadResearchContent', { researchExternalId: this.research.external_id })
         ])
           .then(() => {
             this.$refs.eci.reloadDisciplineEciHistory();
