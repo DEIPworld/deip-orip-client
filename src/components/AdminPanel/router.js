@@ -10,6 +10,7 @@ import AdminFAQ from '@/components/AdminPanel/AdminFAQ';
 import AdminFAQEdit from '@/components/AdminPanel/AdminFAQEdit';
 import AdminSettings from '@/components/AdminPanel/AdminSettings';
 import SignIn from '@/components/auth/SignIn';
+import ResearchRequestFormCreate from '@/components/ResearchRequestForm/ResearchRequestFormCreate';
 
 export const adminRouting = [
   {
@@ -92,7 +93,7 @@ export const adminRouting = [
     name: 'admin.login',
     component: SignIn,
     props: {
-      isAdmin: true
+      adminLogin: true
     }
   }
 ];

@@ -42,8 +42,8 @@ import ResearchContentMetadata from '@/components/research-content-details/Resea
 import ResearchContentReview from '@/components/research-content-details/ResearchContentReview';
 import ResearchContentAddReview
   from '@/components/research-content-details/ResearchContentAddReview';
-import ResearchStartCreating from '@/components/research-create/ResearchStartCreating';
-import CreateNewResearch from '@/components/research-create/CreateNewResearch';
+import ResearchStartCreating from '@/components/ResearchCreate/ResearchStartCreating';
+import CreateNewResearch from '@/components/ResearchCreate/CreateNewResearch';
 import CreateTokenSale from '@/components/token-sale-create/CreateTokenSale';
 import ResearchContentReferences
   from '@/components/research-content-details/ResearchContentReferences';
@@ -76,6 +76,7 @@ import { AppConfigService } from '@deip/app-config-service';
 import { accountRouting } from '@/components/Account/router';
 import { userDetailRouting } from '@/components/UserDetails/router';
 import { adminRouting } from '@/components/AdminPanel/router';
+import ResearchRequestFormCreate from '@/components/ResearchRequestForm/ResearchRequestFormCreate';
 
 const accessService = AccessService.getInstance();
 const usersService = UsersService.getInstance();
@@ -103,6 +104,9 @@ const router = new Router({
       } else {
         next();
       }
+    },
+    meta: {
+      withoutHeader: true
     }
   }, {
     path: '/org-sign-in',
@@ -415,7 +419,11 @@ const router = new Router({
     }, {
       path: '/create-new-research',
       name: 'CreateResearch',
-      component: CreateNewResearch
+      // component: CreateNewResearch
+      component: ResearchRequestFormCreate,
+      meta: {
+        withoutHeader: true
+      }
     }, {
       path: '/:research_group_permlink/create-fundraise/:research_permlink',
       name: 'CreateTokenSale',

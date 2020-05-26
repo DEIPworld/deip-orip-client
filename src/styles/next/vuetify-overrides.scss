@@ -2,7 +2,8 @@
   transition: none !important;
 }
 
-.v-app-bar {
+.v-app-bar.v-app-bar,
+.v-toolbar--custom {
   border-bottom: 1px solid rgba(#000, .12) !important;
 }
 

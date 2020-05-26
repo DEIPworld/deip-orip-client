@@ -1,64 +1,105 @@
 <template>
-  <modal-route-view :hide-toolbar="isAdmin ? true : false" max-width="100%" go-back-to="/research-feed" title="Explorer">
+  <full-screen-view
+    :hide-toolbar="adminLogin"
+    max-width="100%"
+    height="100%"
+    toolbar-overlap
+    no-gutters
+    toolbar-color="transparent"
+  >
+
+    <template #toolbarButton>
+      <v-btn :to="{ name: 'ResearchFeed' }" color="primary" text>
+        <v-icon left>arrow_back</v-icon>
+        Explorer
+      </v-btn>
+    </template>
+
     <v-row no-gutters class="full-height">
-      <v-col cols="12" md="6" class="d-flex justify-center">
-        <v-sheet class="align-self-center">
-          <login-form :logo="'DEIP'" :title="isAdmin ? 'Login to your admin account' : 'Login to your account'" :is-admin="isAdmin" />
-          <div v-if="!isAdmin" class="mt-4 subtitle-2">
-            New on DEIP? <router-link class="a" :to="{name: 'SignUp'}">Sign Up now</router-link>
-          </div>
+
+      <v-col class="d-flex align-center justify-center">
+        <v-sheet max-width="800" class="pa-12 mx-auto">
+          <login-form
+            :show-sign-up="!adminLogin"
+            logo="AR3C"
+            title="Login to your account"
+          />
         </v-sheet>
       </v-col>
-      <v-col cols="6" class="d-none d-md-flex mt-n12 mr-n12 ml-12 mb-n12" style="background: linear-gradient(138.37deg, rgba(40, 56, 139, 0.5) 0%, rgba(10, 29, 43, 0.5) 100%), url(/assets/img/signin.png) center center / cover no-repeat;">
-        <div class="white--text d-flex flex-column justify-center pa-12">
-          <!-- <div class="description__logo">
-            <img src="/assets/img/landing-logo.svg">
-          </div> -->
+
+      <v-col>
+        <v-sheet
+          tile
+          min-height="100%"
+          color="primary"
+          dark
+          class="d-flex flex-column justify-center pa-12"
+          style="background: linear-gradient(138.37deg, rgba(40, 56, 139, 0.5) 0%, rgba(10, 29, 43, 0.5) 100%), url(/assets/img/signin.png) center center / cover no-repeat;"
+        >
           <div class="display-3 font-weight-bold">
             Open Research and Innovation Platform
           </div>
           <div class="subtitle-1 mt-12">
-            <v-icon small color="white">
+            <v-icon small>
               mdi-message-reply-text
             </v-icon>
-            <span class="ml-2">Collaboration</span>
+            <span class="ml-4">Collaboration</span>
           </div>
           <div class="subtitle-1 mt-2">
-            <v-icon small color="white">
+            <v-icon small>
               mdi-lightbulb-on
             </v-icon>
-            <span class="ml-2">Project tokenization</span>
+            <span class="ml-4">Project tokenization</span>
           </div>
           <div class="subtitle-1 mt-2">
-            <v-icon small color="white">
+            <v-icon small>
               mdi-shield-check
             </v-icon>
-            <span class="ml-2">Licensing of intellectual property</span>
+            <span class="ml-4">Licensing of intellectual property</span>
           </div>
           <div class="subtitle-1 mt-2">
-            <v-icon small color="white">
+            <v-icon small>
               mdi-account-multiple-plus
             </v-icon>
-            <span class="ml-2">Crowd investing</span>
+            <span class="ml-4">Crowd investing</span>
           </div>
-        </div>
+        </v-sheet>
       </v-col>
+
     </v-row>
-  </modal-route-view>
+
+  </full-screen-view>
 </template>
 
 <script>
-  import ModalRouteView from '@/components/layout/ModalRouteView';
   import LoginForm from '@/components/auth/components/LoginForm';
+  import FullScreenView from '@/components/layout/FullScreen/FullScreenView';
 
   export default {
     name: 'SignIn',
-    components: { LoginForm, ModalRouteView },
+    components: {
+      FullScreenView,
+      LoginForm
+    },
     props: {
-      isAdmin: {
+      adminLogin: {
         type: Boolean,
         default: false
       }
+    },
+    data() {
+      return {
+        toolbarButton: {
+          title: 'Explorer',
+          onClick: () => { this.$router.push({ name: 'ResearchFeed' }); },
+          props: {
+            icon: false,
+            text: true,
+            color: 'primary',
+            class: 'ml-n3'
+          }
+        }
+      };
     }
   };
 </script>

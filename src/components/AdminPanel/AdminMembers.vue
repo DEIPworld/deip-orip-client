@@ -1,5 +1,5 @@
 <template>
-  <admin-view title="Members">
+  <admin-view title="Members" v-if="dataLoaded">
     <template #toolbarAction>
       <v-btn outlined color="primary" :to="{name: 'admin.members.add'}">
         <v-icon left>
@@ -161,7 +161,6 @@
       </v-card>
     </v-dialog>
 
-    <router-view name="dialog" />
   </admin-view>
 </template>
 
@@ -320,7 +319,7 @@
         return tenantService.approveSignUpRequest(name)
           .then(() => {
             this.$store.dispatch('layout/setSuccess', { message: 'Account successfully created' });
-            this.$store.dispatch('adminPanel/loadAdminPanel', {});
+            this.$store.dispatch('adminPanel/loadAllMembers', {});
           })
           .catch((err) => {
             console.error(err);
@@ -338,7 +337,7 @@
         return tenantService.rejectSignUpRequest(name)
           .then(() => {
             this.$store.dispatch('layout/setSuccess', { message: 'Successfully' });
-            this.$store.dispatch('adminPanel/loadAdminPanel', {});
+            this.$store.dispatch('adminPanel/loadAllMembers', {});
           })
           .catch((err) => {
             console.error(err);
@@ -351,6 +350,12 @@
             this.closeActionDialog();
           });
       }
+    },
+
+    $dataPreload() {
+      return Promise.all([
+        this.$store.dispatch('adminPanel/loadAllMembers')
+      ]);
     }
   };
 </script>

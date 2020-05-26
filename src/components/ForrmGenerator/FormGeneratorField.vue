@@ -10,34 +10,38 @@
   </v-col>
 </template>
 
-
 <script>
   import merge from 'deepmerge';
 
-  const componentsContext = require.context(
-    './fields',
-    false,
-    /Field[\w-]+\.vue$/
-  );
-
-  const fieldComponents = componentsContext.keys().reduce((obj, component) => {
-    const c = componentsContext(component).default;
-    obj[c.name] = c;
-    return obj;
-  }, {});
+  import FieldDate from './fields/FieldDate';
+  import FieldEmail from './fields/FieldEmail';
+  import FieldFile from './fields/FieldFile';
+  import FieldLevel from './fields/FieldLevel';
+  import FieldPassword from './fields/FieldPassword';
+  import FieldSelect from './fields/FieldSelect';
+  import FieldText from './fields/FieldText';
+  import FieldTextarea from './fields/FieldTextarea';
 
   export default {
     name: 'FormGeneratorField',
-    components: fieldComponents,
+    components: {
+      FieldDate,
+      FieldEmail,
+      FieldFile,
+      FieldLevel,
+      FieldPassword,
+      FieldSelect,
+      FieldText,
+      FieldTextarea
+    },
     props: {
       field: {
         type: Object,
         required: true
       },
       value: {
-        type: [String, Number],
-        required: false,
-        default: ''
+        type: [String, Number, File, Object],
+        default: undefined
       },
       scope: {
         type: String,

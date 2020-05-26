@@ -1,18 +1,18 @@
 <template>
-  <div id="deip-app">
-    <v-app>
-      <toolbar
-        v-if="!$route.meta.withoutHeader && !$route.path.includes('/admin')"
-        :is-grants-transparency-demo="isGrantsTransparencyDemo"
-      />
-      <toolbar-admin v-if="$route.path.includes('/admin')" />
+  <v-app id="deip-app">
+    <toolbar
+      v-if="!$route.meta.withoutHeader && !$route.path.includes('/admin')"
+      :is-grants-transparency-demo="isGrantsTransparencyDemo"
+    />
+    <toolbar-admin v-if="$route.path.includes('/admin')" />
+    <portal-target name="toolbar" />
 
-      <router-view :key="$route.fullPath" name="navigator" />
+    <router-view :key="$route.fullPath" name="navigator" />
 
-      <v-content>
-        <router-view :key="$route.fullPath" />
-      </v-content>
-    </v-app>
+    <v-content>
+      <router-view :key="$route.fullPath" />
+    </v-content>
+
 
     <v-snackbar v-model="errorSnack.isVisible" :timeout="5000" color="error">
       {{ errorSnack.message }}
@@ -27,7 +27,7 @@
         Close
       </v-btn>
     </v-snackbar>
-  </div>
+  </v-app>
 </template>
 
 <script>
@@ -47,8 +47,14 @@
     data() {
       return {
         isGrantsTransparencyDemo: false,
-        successSnack: { isVisible: false, message: '' },
-        errorSnack: { isVisible: false, message: '' }
+        successSnack: {
+          isVisible: false,
+          message: ''
+        },
+        errorSnack: {
+          isVisible: false,
+          message: ''
+        }
       };
     },
 
@@ -86,10 +92,16 @@
 
     methods: {
       closeError() {
-        this.$store.dispatch('layout/setError', { isVisible: false, message: '' });
+        this.$store.dispatch('layout/setError', {
+          isVisible: false,
+          message: ''
+        });
       },
       closeSuccess() {
-        this.$store.dispatch('layout/setSuccess', { isVisible: false, message: '' });
+        this.$store.dispatch('layout/setSuccess', {
+          isVisible: false,
+          message: ''
+        });
       }
     }
   };

@@ -79,7 +79,7 @@
               {
                 icon: 'mdi-file-replace',
                 title: 'Project requests',
-                route: ''
+                route: { name: 'account.projectRequests' }
               }
             ]
           },

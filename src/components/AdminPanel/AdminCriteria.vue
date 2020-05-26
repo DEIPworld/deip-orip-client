@@ -59,7 +59,6 @@
       </template>
     </action-dialog>
 
-    <router-view name="dialog" />
   </admin-view>
 </template>
 
@@ -92,7 +91,7 @@
             publish: {
               title: 'Publish criterion?',
               description: `Criterion will be set for each project and will appear on:
-              - project page, 
+              - project page,
               - project application form,
               - explore page.
               `,
@@ -104,7 +103,7 @@
             unpublish: {
               title: 'Unpublish criterion?',
               description: `Criterion will be removed from:
-              - project page, 
+              - project page,
               - project application form,
               - explore page.
               `,
@@ -116,7 +115,7 @@
             delete: {
               title: 'Delete criterion?',
               description: `Criterion will be deleted permanently and will be removed from:
-              - project page, 
+              - project page,
               - project application form,
               - explore page.
               `,

@@ -1,8 +1,7 @@
 <template>
   <div>
-    <account-sidebar />
+    <account-sidebar v-if="!$route.meta.hideSidebar" />
     <router-view v-if="dataLoaded" />
-    <router-view name="fullscreen" />
   </div>
 </template>
 

@@ -41,18 +41,25 @@
     "@vue/web-component-wrapper": "^1.2.0",
     "@xkeshi/vue-qrcode": "^1.0.0",
     "axios": "^0.18.0",
+    "change-case": "^4.1.1",
     "core-js": "^3.4.4",
     "d3": "5.15.0",
+    "deepmerge": "^4.2.2",
+    "dot-prop": "^5.2.0",
+    "dot-wild": "^3.0.1",
     "dotenv": "^6.2.0",
     "font-awesome": "^4.5.0",
     "jspdf-yworks": "^2.1.1",
     "jwt-decode": "^2.2.0",
     "katex": "^0.10.0-rc.1",
+    "kind-of": "^6.0.3",
     "koa": "^2.6.2",
     "koa-router": "^7.4.0",
     "koa-static": "^5.0.0",
     "lodash": "^4.17.5",
     "moment": "^2.22.1",
+    "object-rename-keys": "^1.2.1",
+    "portal-vue": "^2.1.7",
     "substance": "1.0.0-beta.6.2",
     "v-credit-card": "^1.2.0",
     "vue": "^2.6.11",
@@ -65,8 +72,7 @@
     "vue2-dropzone": "^3.6.0",
     "vuetify": "^2.2.26",
     "vuetify-upload-button": "^0.1.2",
-    "vuex": "^3.1.2",
-    "deepmerge": "^4.2.2"
+    "vuex": "^3.1.2"
   },
   "devDependencies": {
     "@babel/plugin-proposal-class-properties": "^7.8.3",
@@ -124,6 +130,15 @@
       "vuetify/grid-unknown-attributes": "error",
       "vuetify/no-legacy-grid": "error",
       "import/prefer-default-export": "off",
+      "import/extensions": [
+        "error",
+        "always",
+        {
+          "js": "never",
+          "vue": "never"
+        }
+      ],
+      "no-restricted-syntax": "off",
       "no-underscore-dangle": [
         "error",
         {

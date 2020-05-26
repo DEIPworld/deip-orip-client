@@ -5,14 +5,12 @@ export default {
       required: true
     },
     value: {
-      type: String,
-      default: '',
-      required: false
+      // type: String,
+      default: false,
     },
     scope: {
       type: String,
       default: null,
-      required: false
     }
   },
   data() {

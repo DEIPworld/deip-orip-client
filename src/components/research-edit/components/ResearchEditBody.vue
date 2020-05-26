@@ -8,8 +8,7 @@
         v-model="title"
         :rules="[rules.required]"
         name="title"
-        label="Title"
-        solo
+        filled
       />
     </div>
     <div>
@@ -20,8 +19,7 @@
         v-model="description"
         :rules="[rules.required]"
         name="Description"
-        label="Description"
-        solo
+        filled
         auto-grow
       />
     </div>
@@ -64,7 +62,7 @@
         prepend-inner-icon="link"
         label="Link to a video presentation"
         single-line
-        solo
+        filled
         :rules="[rules.link]"
       />
     </div>
@@ -103,7 +101,7 @@
         v-model="activeMilestone"
         :items="milestones"
         label="Milestone"
-        solo
+        filled
         item-text="goal"
         return-object
       />

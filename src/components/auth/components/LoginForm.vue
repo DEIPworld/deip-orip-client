@@ -7,12 +7,6 @@
       {{ title }}
     </div>
 
-<!--    <v-form-->
-<!--      ref="form"-->
-<!--      v-model="isFormValid"-->
-<!--      @submit.prevent="true"-->
-<!--      class="mb-6"-->
-<!--    >-->
     <form-generator :model="formModel" :schema="schema" max-width="360" @submit="login">
       <template #actions>
         <v-btn
@@ -27,8 +21,10 @@
         </v-btn>
       </template>
     </form-generator>
-<!--    </v-form>-->
-
+    <div v-if="showSignUp" class="mt-4 subtitle-2">
+      New on DEIP?
+      <router-link class="a" :to="{name: 'SignUp'}">Sign Up now</router-link>
+    </div>
 
   </v-sheet>
 </template>
@@ -81,9 +77,9 @@
         type: String,
         default: '/'
       },
-      isAdmin: {
+      showSignUp: {
         type: Boolean,
-        default: false
+        default: true
       }
     },
     data() {

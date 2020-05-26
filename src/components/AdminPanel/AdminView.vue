@@ -17,6 +17,8 @@
     <v-sheet class="pa-6">
       <slot />
     </v-sheet>
+
+    <router-view name="dialog" />
   </v-sheet>
 </template>
 

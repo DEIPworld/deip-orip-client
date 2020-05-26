@@ -305,6 +305,7 @@ const actions = {
       researchGroupService.getResearchGroup(tenant)
     ])
       .then(([ profile, account ]) => {
+        console.log(profile)
         commit('SET_TENANT', { profile, account });
       })
       .catch((err) => {
@@ -358,7 +359,7 @@ const mutations = {
   SET_TENANT(state, tenant) {
     Vue.set(state, 'tenant', tenant);
   },
-  
+
   SET_BALANCES(state, balances) {
     Vue.set(state.user, 'balances', balances);
   }
