@@ -305,7 +305,6 @@ const actions = {
       researchGroupService.getResearchGroup(tenant)
     ])
       .then(([ profile, account ]) => {
-        console.log(profile)
         commit('SET_TENANT', { profile, account });
       })
       .catch((err) => {

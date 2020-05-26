@@ -9,6 +9,8 @@ import AdminCriteriaEdit from '@/components/AdminPanel/AdminCriteriaEdit';
 import AdminFAQ from '@/components/AdminPanel/AdminFAQ';
 import AdminFAQEdit from '@/components/AdminPanel/AdminFAQEdit';
 import AdminSettings from '@/components/AdminPanel/AdminSettings';
+import AdminCategories from '@/components/AdminPanel/AdminCategories';
+import AdminCategoryEdit from '@/components/AdminPanel/AdminCategoryEdit';
 import SignIn from '@/components/auth/SignIn';
 import ResearchRequestFormCreate from '@/components/ResearchRequestForm/ResearchRequestFormCreate';
 
@@ -57,6 +59,25 @@ export const adminRouting = [
             props: {
               dialog: {
                 title: 'Add new criteria'
+              }
+            }
+          }
+        ]
+      },
+      {
+        path: 'categories',
+        name: 'admin.categories',
+        component: AdminCategories,
+        children: [
+          {
+            path: 'add',
+            name: 'admin.categories.add',
+            components: {
+              dialog: AdminCategoryEdit
+            },
+            props: {
+              dialog: {
+                title: 'Add new category'
               }
             }
           }

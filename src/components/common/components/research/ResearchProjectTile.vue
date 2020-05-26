@@ -19,6 +19,15 @@
       <top-research-label class="pa-2" />
     </div>
 
+    <v-sheet
+      v-if="research.researchRef.tenantCategory && research.researchRef.tenantCategory.text"
+      tile
+      color="#0386b0"
+      class="project-category-label white--text py-1 pl-1 pr-2 body-2"
+    >
+      {{ research.researchRef.tenantCategory.text }}
+    </v-sheet>
+
     <v-sheet tile class="pa-6">
       <v-tooltip bottom>
         <template v-slot:activator="{ on }">
@@ -230,8 +239,14 @@
   .top-research-label {
     position: absolute;
     top: 0;
-    left: 10;
+    right: 0;
     background: linear-gradient(0deg, rgba(0, 0, 0, 0.6) 100%, transparent);
+  }
+
+  .project-category-label{
+    position: absolute;
+    top: 10px;
+    left: 0;
   }
 
   .group-logo {

@@ -53,6 +53,20 @@
     </div>
     <v-divider />
 
+    <div v-if="tenant.profile.settings.researchCategories.length" class="my-6">
+      <div class="title font-weight-medium pb-4">
+        Category:
+      </div>
+      <v-select
+        v-model="tenantCategory"
+        :items="tenant.profile.settings.researchCategories"
+        label="Category"
+        filled
+        item-text="text"
+        return-object
+      />
+    </div>
+
     <div class="my-6">
       <div class="title font-weight-medium pb-4">
         Video Presentation:
@@ -211,6 +225,7 @@
         description: '',
         milestones: undefined,
         partners: [],
+        tenantCategory: null,
         videoSrc: '',
         activeMilestone: undefined,
         isPublic: false,
@@ -285,6 +300,7 @@
       this.description = this.research.abstract;
       this.milestones = _.cloneDeep(this.researchRef.milestones);
       this.videoSrc = this.researchRef.videoSrc;
+      this.tenantCategory = this.researchRef.tenantCategory || null;
 
       this.activeMilestone = this.milestones.find((m) => m.isActive);
       this.isPublic = !this.research.is_private;
@@ -388,13 +404,13 @@
           const tenantCriterias = this.tenantCriterias.map(criteria => {
             return criteria.value.index != null ? { ...criteria } : { ...criteria, value: null };
           });
-
           researchService.updateResearchOffchainMeta({
             researchExternalId: this.research.external_id,
             milestones,
             videoSrc: this.videoSrc,
             partners: this.partners,
-            tenantCriterias
+            tenantCriterias,
+            tenantCategory: this.tenantCategory
           })
             .then(() => {
               this.$store.dispatch('layout/setSuccess', {

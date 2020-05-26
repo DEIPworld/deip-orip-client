@@ -1,5 +1,5 @@
 <template>
-  <v-row align="center">
+  <v-row no-gutters align="center">
     <div :style="{'width': width + 'px', 'height': height + 'px'}">
       <img width="100%" height="100%" src="/assets/img/top-100.svg">
     </div>

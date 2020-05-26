@@ -55,6 +55,11 @@
             to: { name: 'admin.criteria' }
           },
           {
+            title: 'Project categories',
+            icon: 'category',
+            to: { name: 'admin.categories' }
+          },
+          {
             title: 'FAQ',
             icon: 'forum',
             to: { name: 'admin.faq' }
