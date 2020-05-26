@@ -79,7 +79,7 @@
         <leveller-selector
           v-model.number="tenantCriterias[i].value.index"
           :items="stepperSelector(item.component.readinessLevels)"
-          :label="item.component.readinessLevelTitle"
+          :label="tenantCriterias[i].value.index != null ? item.component.readinessLevelTitle : 'Unselected'"
         />
       </div>
     </div>
@@ -223,9 +223,7 @@
           required: (value) => !!value || 'This field is required',
           link: (value) => !value || this.isValidLink || 'Invalid http(s) link'
         },
-        shadowMetaData: undefined,
-        shadowRefData: undefined,
-        tenantCriterias:[]
+        tenantCriterias: []
       };
     },
     computed: {
@@ -258,52 +256,15 @@
           : null;
       },
 
-      metaData() {
-        return JSON.stringify({
-          title: this.title,
-          description: this.description,
-          is_private: !this.isPublic
-        });
-      },
-
-      refData() {
-        const milestones = this.milestones.map((m) => ({
-          goal: m.goal,
-          budget: m.budget,
-          purpose: m.purpose,
-          details: m.details,
-          eta: moment(m.eta)
-            .toDate(),
-          isActive: this.activeMilestone
-            ? m.goal === this.activeMilestone.goal
-            : false
-        }));
-        return JSON.stringify({
-          milestones,
-          video_src: this.videoSrc,
-          partners: this.partners,
-          tenantCriterias: this.tenantCriterias
-        });
-      },
-
       isSavingMetaDisabled() {
-        return (
-          !this.title
-          || !this.description
-          || _.isEqual(this.shadowMetaData, this.metaData)
-        );
+        return !this.title || !this.description;
       },
 
       isSavingRefDisabled() {
         return !this.milestones
-          || this.milestones.some(
-            (step) => !step.validation || step.validation.isValid === false
-          )
+          || this.milestones.some((step) => !step.validation || step.validation.isValid === false)
           || !this.videoSrcIsValidOrAbsent
-          || _.isEqual(this.shadowRefData, this.refData)
-          || (this.partners.length
-            ? this.partners.some((item) => item.title === '' || item.type === '')
-            : false)
+          || (this.partners.length ? this.partners.some((item) => item.title === '' || item.type === '') : false)
           || this.tenantCriterias.some(({ isVisible, value: { index } }) => (isVisible ? index === null : false));
       },
 
@@ -317,9 +278,7 @@
       },
 
       researchGroup() {
-        return this.userGroups.find(
-          (item) => item.id === this.research.research_group_id
-        );
+        return this.userGroups.find((item) => item.id === this.research.research_group_id);
       }
     },
 
@@ -332,39 +291,29 @@
       this.activeMilestone = this.milestones.find((m) => m.isActive);
       this.isPublic = !this.research.is_private;
       this.partners = this.researchRef.partners.map((item) => _.cloneDeep(item));
-      this.tenantCriterias = this.tenant.profile.settings.researchComponents.map(({ _id, type }) => {
-        const tenantCriteria = _.cloneDeep(this.researchRef.tenantCriterias.find(({ component }) => component === _id))
-          || { component: _id, type, value: { index: null } };
-        if (tenantCriteria.value) {
-          return tenantCriteria;
-        } else {
-          tenantCriteria.value = { index: null }
-          return tenantCriteria;
-        }
-      });
+
+      this.tenantCriterias = this.tenant.profile.settings.researchComponents
+        .map(({ _id, isVisible, component: componentSchema }) => {
+          const tenantCriteria = this.researchRef.tenantCriterias.find((criteria) => criteria.component === _id);
+          const enabledCriteria = { component: _id, isVisible, value: { index: tenantCriteria && tenantCriteria.value ? tenantCriteria.value.index : null } };
+
+          if (componentSchema.readinessLevels[enabledCriteria.value.index]) { // check if a step is removed from the component after editing
+            return enabledCriteria;
+          } else {
+            return { ...enabledCriteria, value: { index: null } };
+          }
+        });
+
       const milestones = this.milestones.map((m) => ({
         goal: m.goal,
         budget: m.budget,
         purpose: m.purpose,
         details: m.details,
-        eta: moment(m.eta)
-          .toDate(),
+        eta: moment(m.eta).toDate(),
         isActive: this.activeMilestone
           ? m.goal == this.activeMilestone.goal
           : false
       }));
-
-      this.shadowMetaData = JSON.stringify({
-        title: this.title,
-        description: this.description,
-        is_private: !this.isPublic
-      });
-      this.shadowRefData = JSON.stringify({
-        milestones,
-        video_src: this.videoSrc,
-        partners: this.partners,
-        tenantCriterias: this.tenantCriterias
-      });
     },
     methods: {
       stepperSelector(readinessLevels) {
@@ -432,19 +381,22 @@
             budget: m.budget,
             purpose: m.purpose,
             details: m.details,
-            eta: moment(m.eta)
-              .toDate(),
+            eta: moment(m.eta).toDate(),
             isActive: this.activeMilestone
               ? m.goal === this.activeMilestone.goal
               : false
           }));
+
+          const tenantCriterias = this.tenantCriterias.map(criteria => {
+            return criteria.value.index != null ? { ...criteria } : { ...criteria, value: null };
+          });
 
           researchService.updateResearchOffchainMeta({
             researchExternalId: this.research.external_id,
             milestones,
             videoSrc: this.videoSrc,
             partners: this.partners,
-            tenantCriterias: this.tenantCriterias
+            tenantCriterias
           })
             .then(() => {
               this.$store.dispatch('layout/setSuccess', {
