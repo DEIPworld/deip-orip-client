@@ -9,10 +9,10 @@
   >
 
     <template #prepend-inner>
-      <leveller-num
+      <leveller-num v-if="currentStep"
         style="margin-top: -17px; margin-right: -4px; margin-left: -12px;"
         :height="56"
-        :num="currentItem.num" />
+        :num="currentStep.num" />
     </template>
 
     <template #item="{ item, on, attrs }">
@@ -53,8 +53,8 @@
       }
     },
     computed: {
-      currentItem() {
-        return this.items.filter(x => x.value === this.value)[0];
+      currentStep() {
+        return this.items.find(x => x.value === this.value);
       }
     },
     methods: {

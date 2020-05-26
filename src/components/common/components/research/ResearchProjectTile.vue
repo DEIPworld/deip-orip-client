@@ -49,9 +49,9 @@
         </v-chip>
       </div>
 
-      <div v-for="(item, i) in research.researchRef.tenantCriterias" :key="`${i}-tenantCriteria`" class="display-inline-block mr-4">
-        <div v-if="steppersInfo[i].isVisible && item.value && item.value.index !== null" class="mb-2">
-          <v-tooltip v-if="steppersInfo[i].component.readinessLevels[item.value.index].description" bottom>
+      <div v-for="(item, i) in research.researchRef.tenantCriteriasReadingList" :key="`${i}-tenantCriteria`" class="display-inline-block mr-4">
+        <div v-if="item.type == 'stepper'" class="mb-2">
+          <v-tooltip v-if="item.step.description" bottom>
             <template v-slot:activator="{ on }">
               <div class="display-flex" v-on="on">
                 <v-avatar size="24px" class="align-self-center">
@@ -59,16 +59,16 @@
                     mdi-numeric-{{ item.value.index + 1 }}-circle
                   </v-icon>
                 </v-avatar>
-                <span class="subtitle-1 align-self-center font-weight-medium black--text">{{ steppersInfo[i].component.readinessLevelShortTitle }}</span>
+                <span class="subtitle-1 align-self-center font-weight-medium black--text">{{ item.readinessLevelShortTitle }}</span>
               </div>
             </template>
-            <span>{{ steppersInfo[i].component.readinessLevels[item.value.index].description }}</span>
+            <span>{{ item.step.description }}</span>
           </v-tooltip>
           <div v-else class="display-flex">
             <v-avatar size="20" color="#0386b0" class="align-self-center mr-1">
               <span class="white--text caption font-weight-medium">{{ item.value.index + 1 }}</span>
             </v-avatar>
-            <span class="subtitle-1 align-self-center font-weight-medium black--text">{{ steppersInfo[i].component.readinessLevelShortTitle }}</span>
+            <span class="subtitle-1 align-self-center font-weight-medium black--text">{{ item.readinessLevelShortTitle }}</span>
           </div>
         </div>
       </div>
@@ -125,9 +125,6 @@
       ...mapGetters({
         tenant: 'auth/tenant'
       }),
-      steppersInfo() {
-        return this.research.researchRef.tenantCriterias.map(({ component }) => this.tenant.profile.settings.researchComponents.find(({ _id }) => _id === component))
-      },
       membersToDisplay() {
         return this.members.slice(0, 3);
       },

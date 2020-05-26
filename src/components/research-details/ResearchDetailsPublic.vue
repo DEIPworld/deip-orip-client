@@ -57,16 +57,16 @@
 
           <v-divider class="my-6" />
 
-          <div v-for="(item, i) in researchRef.tenantCriterias" :key="`${i}-tenantCriteria`">
-            <div v-if="steppersInfo[i].isVisible && item.value && item.value.index !== null" class="mb-2">
+          <div v-for="(item, i) in researchRef.tenantCriteriasReadingList" :key="`${i}-tenantCriteria`">
+            <div v-if="item.type == 'stepper'" class="mb-2">
               <div class="display-flex">
                 <v-avatar size="30" color="#0386b0" class="align-self-start mr-2">
                   <span class="white--text font-weight-medium">{{ item.value.index + 1 }}</span>
                 </v-avatar>
                 <div class="title align-self-start font-weight-medium">
-                  {{ steppersInfo[i].component.readinessLevelShortTitle }}
+                  {{ item.readinessLevelShortTitle }}
                   <div class="caption font-weight-bold">
-                    {{ steppersInfo[i].component.readinessLevels[item.value.index].description }}
+                    {{ item.step.description }}
                   </div>
                 </div>
               </div>
@@ -128,9 +128,6 @@
         researchRef: 'rd/researchRef',
         tenant: 'auth/tenant'
       }),
-      steppersInfo() {
-        return this.researchRef.tenantCriterias.map(({ component }) => this.tenant.profile.settings.researchComponents.find(({ _id }) => _id === component))
-      },
       timeline() {
         const { milestones } = this.researchRef;
         const timeline = milestones.map((milestone, i) => ({

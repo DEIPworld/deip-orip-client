@@ -275,7 +275,9 @@
               isActive: i === 0
             })),
             partners: this.research.partners,
-            tenantCriterias: this.research.tenantCriterias
+            tenantCriterias: this.research.tenantCriterias.map(criteria => {
+              return criteria.value.index != null ? { ...criteria } : { ...criteria, value: null };
+            })
           }
         )
           .then(({ rm }) => {
