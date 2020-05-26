@@ -167,9 +167,9 @@
           />
     </div>-->
 
-    <v-divider class="my-6" />
+    <v-divider v-if="researchRef.tenantCategory && researchRef.tenantCategory.text" class="my-6" />
 
-    <v-sheet>
+    <v-sheet v-if="researchRef.tenantCategory && researchRef.tenantCategory.text">
       <div class="display-flex">
         <v-avatar size="30" color="#0386b0" class="align-self-start mr-2">
           <span class="white--text font-weight-medium">C</span>
