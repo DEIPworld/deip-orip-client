@@ -105,25 +105,14 @@
       }
     },
     created() {
-      this.tenant.profile.settings.researchComponents.forEach((item) => {
-        if (item.isVisible) {
-          this.research.tenantCriterias.push({
-            component: item._id,
-            type: 'stepper',
-            value: {
-              index: 0
-            }
-          });
-        } else {
-          this.research.tenantCriterias.push({
-            component: item._id,
-            type: 'stepper',
-            value: {
-              index: null
-            }
-          });
-        }
-      });
+      const enabledCriterias = this.tenant.profile.settings.researchComponents.reduce((acc, item) => {
+         if (item.isVisible) {
+           return [...acc, { component: item._id, value: { index: 0 } }]; // set the first entry
+         }
+         return [...acc, { component: item._id, value: { index: null } }]; // set empty entry
+      }, []);
+
+      this.research.tenantCriterias.push(...enabledCriterias);
     },
     methods: {
       stepperSelector(readinessLevels) {
