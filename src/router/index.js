@@ -76,7 +76,7 @@ import { AppConfigService } from '@deip/app-config-service';
 import { accountRouting } from '@/components/Account/router';
 import { userDetailRouting } from '@/components/UserDetails/router';
 import { adminRouting } from '@/components/AdminPanel/router';
-import ResearchRequestFormCreate from '@/components/ResearchRequestForm/ResearchRequestFormCreate';
+import ResearchRequestFormCreate from '@/components/ResearchRequest/ResearchRequestFormCreate';
 
 const accessService = AccessService.getInstance();
 const usersService = UsersService.getInstance();

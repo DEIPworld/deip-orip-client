@@ -3,17 +3,17 @@
     v-model="formData"
     :disabled="formProcessing"
     :partial-disabled="{
-        researchTitle: true,
-        description: true
-      }"
+      researchTitle: true,
+      description: true
+    }"
     :loading="formProcessing"
     @submit="editResearch"
   />
 </template>
 
 <script>
-  import ResearchRequestFormView from '@/components/ResearchRequestForm/ResearchRequestFormView';
-  import { ResearchRequestModelMixin } from '@/components/ResearchRequestForm/ResearchRequestModelMixin';
+  import ResearchRequestFormView from '@/components/ResearchRequest/ResearchRequestFormView';
+  import { ResearchRequestModelMixin } from '@/components/ResearchRequest/ResearchRequestModelMixin';
   import { ResearchService } from '@deip/research-service';
   import objectRenameKeys from 'object-rename-keys';
 

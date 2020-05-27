@@ -18,12 +18,12 @@
     <v-tabs-items v-model="tab">
       <v-tab-item :transition="false" :reverse-transition="false">
         <v-data-table
+          v-custom="'hover-row'"
           :headers="publicProjectsHeaders"
           :items="publicProjects"
           :items-per-page="50"
           sort-by="created_at"
           sort-desc
-          class="table-row-cursor-pointer"
           @click:row="goToResearch"
         >
           <template #item.created_at="{item}">
@@ -36,12 +36,12 @@
 
       <v-tab-item :transition="false" :reverse-transition="false">
         <v-data-table
+          v-custom="'hover-row'"
           :headers="pendingProjectsHeaders"
           :items="pendingProjects"
           :items-per-page="50"
           sort-by="created_at"
           sort-desc
-          class="table-row-cursor-pointer"
           @click:row="showResearch"
         >
           <template #item.created_at="{item}">
@@ -63,33 +63,58 @@
       </v-tab-item>
     </v-tabs-items>
 
-    <full-screen-modal
+    <v-dialog
       v-model="researchDialog.isOpen"
-      title="Approve"
+      max-width="800"
+      scrollable
     >
-      <research-request-form-read
-        :key="researchDialog.id"
-        get-from="adminPanel/pendingProjects"
-        :research-id="researchDialog.id"
-      >
-        <template #buttons>
+      <v-card>
+        <v-card-title>
+          <span class="headline">{{ researchDialog.data.title }}</span>
+          <v-spacer />
+          <v-btn
+            small
+            icon
+            class="mr-n2"
+            @click="hideResearch"
+          >
+            <v-icon>close</v-icon>
+          </v-btn>
+        </v-card-title>
+
+        <v-divider />
+
+        <v-card-text class="px-6 py-3 text--primary">
+          <research-request-form-read
+            :key="researchDialog.data._id"
+            get-from="adminPanel/pendingProjects"
+            :research-id="researchDialog.data._id"
+          />
+        </v-card-text>
+
+        <v-divider />
+
+        <v-card-actions>
+          <v-spacer />
           <v-btn
             color="primary"
             class="ml-2"
-            @click="openActionDialog('reject', researchDialog.id)"
+            text
+            @click="openActionDialog('reject', researchDialog.data._id)"
           >
             Reject research
           </v-btn>
           <v-btn
             color="primary"
             class="ml-2"
-            @click="openActionDialog('approve', researchDialog.id)"
+            text
+            @click="openActionDialog('approve', researchDialog.data._id)"
           >
             Approve research
           </v-btn>
-        </template>
-      </research-request-form-read>
-    </full-screen-modal>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
 
     <action-dialog
       :open="actionDialog.isOpen"
@@ -126,8 +151,7 @@
   import AdminView from '@/components/AdminPanel/AdminView';
   import { mapGetters } from 'vuex';
   import CrudActions from '@/components/layout/CrudActions';
-  import ResearchRequestFormRead from '@/components/ResearchRequestForm/ResearchRequestFormRead';
-  import FullScreenModal from '@/components/layout/FullScreen/FullScreenModal';
+  import ResearchRequestFormRead from '@/components/ResearchRequest/ResearchRequestRead/ResearchRequestRead';
   import ActionDialog from '@/components/layout/ActionDialog';
 
   import { ResearchService } from '@deip/research-service';
@@ -138,7 +162,6 @@
     name: 'AdminProjects',
     components: {
       ActionDialog,
-      FullScreenModal,
       ResearchRequestFormRead,
       CrudActions,
       AdminView
@@ -150,7 +173,7 @@
 
         researchDialog: {
           isOpen: false,
-          id: null
+          data: {}
         },
 
         actionDialog: {
@@ -248,7 +271,7 @@
           tenant: this.tenant.account.external_id
         })
           .then(() => {
-            this.finishAction()
+            this.finishAction();
           })
           .catch((err) => {
             console.log(err);
@@ -273,7 +296,8 @@
       },
 
       showResearch(item) {
-        this.researchDialog.id = item._id;
+        console.log(item);
+        this.researchDialog.data = item;
         this.researchDialog.isOpen = true;
       },
 

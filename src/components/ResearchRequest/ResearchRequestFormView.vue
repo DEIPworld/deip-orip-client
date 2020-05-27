@@ -93,10 +93,10 @@
       </v-col>
 
       <v-col cols="12" md="6">
-        <d-input-date
+        <v-text-field
           v-model="formData.eta"
-          :x-props="fieldState"
           label="What is your project estimate?"
+          v-bind="fieldState"
         />
       </v-col>
     </d-form-block>
@@ -105,7 +105,7 @@
       <v-col cols="12" md="6">
         <d-input-file
           v-model="formData.budgetAttachment"
-          :x-props="{disabled: fieldState.disabled}"
+          :x-props="{ disabled: fieldState.disabled || fieldState.readonly }"
           label="Budget information"
           :exist="getAttachmentUrl(formData.budgetAttachment, false)"
         />
@@ -114,7 +114,7 @@
       <v-col cols="12" md="6">
         <d-input-file
           v-model="formData.businessPlanAttachment"
-          :x-props="{disabled: fieldState.disabled}"
+          :x-props="{ disabled: fieldState.disabled || fieldState.readonly }"
           label="Business plan"
           :exist="getAttachmentUrl(formData.businessPlanAttachment, false)"
         />
@@ -123,7 +123,7 @@
       <v-col cols="12" md="6">
         <d-input-file
           v-model="formData.cvAttachment"
-          :x-props="{disabled: fieldState.disabled}"
+          :x-props="{ disabled: fieldState.disabled || fieldState.readonly }"
           label="Resume/CV"
           :exist="getAttachmentUrl(formData.cvAttachment, false)"
         />
@@ -132,7 +132,7 @@
       <v-col cols="12" md="6">
         <d-input-file
           v-model="formData.marketResearchAttachment"
-          :x-props="{disabled: fieldState.disabled}"
+          :x-props="{ disabled: fieldState.disabled || fieldState.readonly }"
           label="Market research document"
           :exist="getAttachmentUrl(formData.marketResearchAttachment, false)"
         />
@@ -169,7 +169,6 @@
   import DFormBlock from '@/components/Deipify/DFormBlock/DFormBlock';
   import LevellerSelector from '@/components/Leveller/LevellerSelector';
   import DInputFile from '@/components/Deipify/DInputFile/DInputFile';
-  import DInputDate from '@/components/Deipify/DInputDate/DInputDate';
   import { mapGetters } from 'vuex';
   import { FormMixin } from '@/utils/FomMixin';
   import { AccessService } from '@deip/access-service';
@@ -179,7 +178,6 @@
   export default {
     name: 'ResearchRequestFormView',
     components: {
-      DInputDate,
       DInputFile,
       LevellerSelector,
       DFormBlock

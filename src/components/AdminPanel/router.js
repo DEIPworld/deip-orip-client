@@ -12,7 +12,7 @@ import AdminSettings from '@/components/AdminPanel/AdminSettings';
 import AdminCategories from '@/components/AdminPanel/AdminCategories';
 import AdminCategoryEdit from '@/components/AdminPanel/AdminCategoryEdit';
 import SignIn from '@/components/auth/SignIn';
-import ResearchRequestFormCreate from '@/components/ResearchRequestForm/ResearchRequestFormCreate';
+import ResearchRequestFormCreate from '@/components/ResearchRequest/ResearchRequestFormCreate';
 
 export const adminRouting = [
   {

@@ -57,3 +57,13 @@
 .col {
   min-width: 0;
 }
+
+// new way customise
+
+.v-data-table {
+  &--hover-row {
+    tbody tr:hover {
+      cursor: pointer;
+    }
+  }
+}

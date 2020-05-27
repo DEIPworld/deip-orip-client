@@ -40,7 +40,7 @@
   import CrudActions from '@/components/layout/CrudActions';
   import LayoutSection from '@/components/layout/components/LayoutSection';
   import FullScreenModal from '@/components/layout/FullScreen/FullScreenModal';
-  import ResearchRequestFormEdit from '@/components/ResearchRequestForm/ResearchRequestFormEdit';
+  import ResearchRequestFormEdit from '@/components/ResearchRequest/ResearchRequestFormEdit';
 
   export default {
     name: 'AccountProjectRequests',

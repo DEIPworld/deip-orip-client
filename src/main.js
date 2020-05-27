@@ -31,6 +31,7 @@ import './styles/app.scss';
 
 import { DataPreloadMixin } from '@/utils/DataPreloadMixin';
 import { CommonMixin } from '@/utils/CommonMixin';
+import { CustomDirective } from '@/utils/CustomDirective';
 
 // ////////////////////////
 
@@ -53,16 +54,17 @@ Vue.use(VueCurrencyFilter, currencyFilterOptions);
 Vue.mixin(DataPreloadMixin);
 Vue.mixin(CommonMixin);
 
+// Vue.directive('Custom', {
+//   bind(el, binding, vnode) {
+//     const map = {
+//       input: 'text-field'
+//     };
+//     console.log(binding)
+//     if (binding.arg) el.classList.add(`${map[binding.arg] || vnode.componentOptions.tag}--custom`);
+//   }
+// });
 
-Vue.directive('Custom', {
-  bind(el, binding, vnode) {
-    const map = {
-      app: 'app',
-      input: 'text-field'
-    };
-    if (binding.arg) el.classList.add(`${map[binding.arg] || vnode.componentOptions.tag}--custom`);
-  }
-});
+Vue.directive('Custom', CustomDirective);
 
 (async () => {
   try {
