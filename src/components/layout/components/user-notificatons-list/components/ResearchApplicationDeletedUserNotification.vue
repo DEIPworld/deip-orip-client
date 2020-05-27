@@ -3,7 +3,7 @@
     <div>
       <span>
         <span class="primary--text half-bold">{{ notification.metadata.requester | fullname }}</span>
-        requests approval for
+        deleted application for
         "<span class="primary--text half-bold">{{ notification.metadata.research.title }}</span>"
         research
       </span>
@@ -25,7 +25,7 @@
 <script>
 
   export default {
-    name: 'ResearchApplicationUserNotification',
+    name: 'ResearchApplicationDeletedUserNotification',
     props: {
       notification: {
         type: Object,
