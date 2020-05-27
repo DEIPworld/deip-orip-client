@@ -100,7 +100,7 @@
 
             if (key.includes('Attachment')) {
               const link = `${window.env.DEIP_SERVER_URL}/api/research/application/${research._id}/attachment?filename=${research[key]}&download=false&authorization=${accessService.getAccessToken()}`
-              data = `<a href="${link}">${research[key]}</a>`;
+              data = `${research[key] ? `<a href="${link}" target="_blank">${research[key]}</a>` : '-'}`;
             }
 
             return {

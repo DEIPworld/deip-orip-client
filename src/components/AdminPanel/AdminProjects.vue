@@ -209,9 +209,9 @@
               }
             },
             delete: {
-              title: 'Delete request?',
+              title: 'Delete project?',
               description:
-                'Project will be Deleted.',
+                'Project will be hidden from platform permanently.',
               action: {
                 title: 'delete',
                 method: this.deleteResearchApplication

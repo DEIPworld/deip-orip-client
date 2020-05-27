@@ -2,7 +2,7 @@
   <v-list>
     <v-list-item v-for="(item, index) of research" :key="index">
       <v-list-item-content>
-        <div class="overline">{{ item.name }}</div>
+        <div class="subtitle-1 font-weight-medium">{{ item.name }}</div>
         <v-list v-if="item.name === 'Project readines level'" class="ma-0 pa-0">
           <v-list-item class="px-0" v-for="(level, index) of item.data" :key="index">
             <leveller-num class="align-self-center" style="height: auto" :height="24" :num="level.value.index"></leveller-num>

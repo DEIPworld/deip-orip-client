@@ -292,7 +292,7 @@
                 md="4"
                 xl="3"
               >
-                <v-sheet>
+                <v-sheet class="full-height">
                   <research-project-tile
                     :research="item"
                     :members="item.authors"

@@ -121,9 +121,9 @@
           data: {},
           types: {
             delete: {
-              title: 'Delete request?',
+              title: 'Delete project?',
               description:
-                'Project request will will be Deleted.',
+                'Project will be hidden from platform permanently.',
               action: {
                 title: 'delete',
                 method: this.deleteRequest

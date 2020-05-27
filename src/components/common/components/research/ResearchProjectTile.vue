@@ -8,6 +8,7 @@
         research_permlink: encodeURIComponent(research.permlink)
       }
     }"
+    class="full-height"
   >
     <v-img
       height="150"
