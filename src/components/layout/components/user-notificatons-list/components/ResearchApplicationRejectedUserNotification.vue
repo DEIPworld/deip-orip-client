@@ -25,7 +25,7 @@
 <script>
 
   export default {
-    name: 'ResearchContentProposalUserNotification',
+    name: 'ResearchApplicationRejectedUserNotification',
     props: {
       notification: {
         type: Object,

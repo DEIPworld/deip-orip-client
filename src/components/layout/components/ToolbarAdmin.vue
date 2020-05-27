@@ -17,6 +17,8 @@
 
       <v-spacer />
 
+      <user-notifications-list v-if="isLoggedIn" :notifications="user.notifications" />
+
       <v-sheet v-if="isLoggedIn" color="transparent">
         <v-menu bottom left offset-y>
           <template v-slot:activator="{ on }">
@@ -80,13 +82,14 @@
   import { mapGetters } from 'vuex';
   import { AccessService } from '@deip/access-service';
   import { AppConfigService } from '@deip/app-config-service';
+  import UserNotificationsList from '@/components/layout/components/user-notificatons-list/UserNotificationsList';
 
   const accessService = AccessService.getInstance();
   const appConfigService = AppConfigService.getInstance();
 
   export default {
     name: 'ToolbarAdmin',
-
+    components: { UserNotificationsList },
     props: {
       isGrantsTransparencyDemo: {
         type: Boolean,

@@ -107,6 +107,16 @@
               :notification="notification"
               @markAsRead="markNotificationAsRead"
             />
+           <research-application-edited-user-notification
+              v-else-if="notification.type === RESEARCH_APPLICATION_EDITED"
+              :notification="notification"
+              @markAsRead="markNotificationAsRead"
+            />
+           <research-application-deleted-user-notification
+              v-else-if="notification.type === RESEARCH_APPLICATION_DELETED"
+              :notification="notification"
+              @markAsRead="markNotificationAsRead"
+            />
           </v-list-item-content>
         </v-list-item>
         <v-divider
@@ -153,6 +163,10 @@
     from '@/components/layout/components/user-notificatons-list/components/ResearchApplicationApprovedUserNotification';
   import ResearchApplicationRejectedUserNotification
     from '@/components/layout/components/user-notificatons-list/components/ResearchApplicationRejectedUserNotification';
+  import ResearchApplicationEditedUserNotification
+    from '@/components/layout/components/user-notificatons-list/components/ResearchApplicationEditedUserNotification';
+  import ResearchApplicationDeletedUserNotification
+    from '@/components/layout/components/user-notificatons-list/components/ResearchApplicationDeletedUserNotification';
 
 
   const userService = UserService.getInstance();
@@ -175,7 +189,9 @@
       ExclusionProposalUserNotification,
       ResearchApplicationUserNotification,
       ResearchApplicationApprovedUserNotification,
-      ResearchApplicationRejectedUserNotification
+      ResearchApplicationRejectedUserNotification,
+      ResearchApplicationEditedUserNotification,
+      ResearchApplicationDeletedUserNotification
     },
     props: {
       notifications: { type: Array, required: true, default: () => [] }
@@ -195,7 +211,9 @@
         EXPERTISE_ALLOCATED: 'expertise-allocated',
         RESEARCH_APPLICATION_CREATED: 'research-application-created',
         RESEARCH_APPLICATION_APPROVED: 'research-application-approved',
-        RESEARCH_APPLICATION_REJECTED: 'research-application-rejected'
+        RESEARCH_APPLICATION_REJECTED: 'research-application-rejected',
+        RESEARCH_APPLICATION_EDITED: 'research-application-edited',
+        RESEARCH_APPLICATION_DELETED: 'research-application-deleted'
       };
     },
     computed: {},
