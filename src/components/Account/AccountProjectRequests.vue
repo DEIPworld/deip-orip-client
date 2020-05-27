@@ -33,9 +33,11 @@
 
       <v-tab-item :transition="false" :reverse-transition="false">
         <v-data-table
+          v-custom="'hover-row'"
           :headers="rejectedProjectsHeaders"
           :items="rejectedProjects"
           :items-per-page="50"
+          @click:row="showDeclinedResearch"
         >
           <template #item.created_at="{item}">
             <div class="text-no-wrap">
@@ -58,6 +60,37 @@
         @done="hideResearch"
       />
     </full-screen-modal>
+
+    <v-dialog
+      v-model="declinedResearchDialog.isOpen"
+      max-width="800"
+      scrollable
+    >
+      <v-card>
+        <v-card-title>
+          <span class="headline">{{ declinedResearchDialog.data.title }}</span>
+          <v-spacer />
+          <v-btn
+            small
+            icon
+            class="mr-n2"
+            @click="hideDeclinedResearch"
+          >
+            <v-icon>close</v-icon>
+          </v-btn>
+        </v-card-title>
+
+        <v-divider />
+
+        <v-card-text class="px-6 py-3 text--primary">
+          <research-request-form-read
+            :key="declinedResearchDialog.data._id"
+            get-from="account/rejectedProjects"
+            :research-id="declinedResearchDialog.data._id"
+          />
+        </v-card-text>
+      </v-card>
+    </v-dialog>
 
     <action-dialog
       :open="confirmDialog.isOpen"
@@ -96,6 +129,7 @@
   import LayoutSection from '@/components/layout/components/LayoutSection';
   import FullScreenModal from '@/components/layout/FullScreen/FullScreenModal';
   import ResearchRequestFormEdit from '@/components/ResearchRequest/ResearchRequestFormEdit';
+  import ResearchRequestFormRead from '@/components/ResearchRequest/ResearchRequestRead/ResearchRequestRead';
   import ActionDialog from '@/components/layout/ActionDialog';
   import { ResearchService } from '@deip/research-service';
 
@@ -108,7 +142,8 @@
       ResearchRequestFormEdit,
       FullScreenModal,
       LayoutSection,
-      CrudActions
+      CrudActions,
+      ResearchRequestFormRead
     },
 
     data() {
@@ -135,6 +170,11 @@
         researchDialog: {
           isOpen: false,
           id: null
+        },
+
+        declinedResearchDialog: {
+          isOpen: false,
+          data: {}
         },
 
         pendingProjectsHeaders: [
@@ -175,6 +215,15 @@
     },
 
     methods: {
+      showDeclinedResearch(item) {
+        this.declinedResearchDialog.data = item;
+        this.declinedResearchDialog.isOpen = true;
+      },
+
+      hideDeclinedResearch() {
+        this.declinedResearchDialog.isOpen = false;
+      },
+
       showResearch(item) {
         this.researchDialog.id = item._id;
         this.researchDialog.isOpen = true;

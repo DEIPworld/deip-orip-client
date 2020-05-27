@@ -27,7 +27,9 @@
     mixins: [ResearchRequestModelMixin],
 
     methods: {
-      createResearchApplication() {
+      createResearchApplication(success) {
+        if (!success) return;
+
         this.formProcessing = true;
 
         const formData = this.createFormData(this.formData);

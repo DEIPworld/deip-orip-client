@@ -80,7 +80,11 @@
                   />
                   <div class="pl-4">
                     <router-link
-                      :to="{ name: 'UserDetails', params: { account_name: member.account.name } }"
+                      :to="
+                        user.account.name === member.account.name
+                          ? {name: 'account.summary'}
+                          : { name: 'UserDetails', params: { account_name: member.account.name } }
+                      "
                       class="a subtitle-1"
                     >
                       {{ member | fullname }}
@@ -194,7 +198,6 @@
                         <v-col class="grow text-right">
                           {{ invite.user | userLocation }}
                         </v-col>
-
                       </v-row>
                     </template>
                   </div>
@@ -206,8 +209,8 @@
 
         <add-member-to-group-dialog
           v-if="group"
-          :isOpen="options.isAddMemberDialogOpen"
-          :groupExternalId="group.external_id"
+          :is-open="options.isAddMemberDialogOpen"
+          :group-external-id="group.external_id"
           :users="usersToInvite"
           @onClose="$store.dispatch('researchGroup/changeOptions', { key: 'isAddMemberDialogOpen', value: false })"
           @onSuccess="$store.dispatch('researchGroup/loadResearchGroupProposals', { account: group.external_id })"
@@ -319,7 +322,7 @@
           isExclusion: true,
           extensions: []
         }, {
-          notes: "",
+          notes: '',
           approver: null
         })
           .then(() => {
