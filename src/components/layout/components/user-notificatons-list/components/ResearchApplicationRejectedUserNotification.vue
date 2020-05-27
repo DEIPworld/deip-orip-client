@@ -5,7 +5,7 @@
         <span class="primary--text half-bold">{{ notification.metadata.rejecter | fullname }}</span>
         rejected application for
         "<span class="primary--text half-bold">{{ notification.metadata.research.title }}</span>"
-        research
+        project
       </span>
     </div>
     <v-row justify="space-between" align="end">

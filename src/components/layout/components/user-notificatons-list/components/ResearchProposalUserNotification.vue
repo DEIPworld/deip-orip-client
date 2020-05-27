@@ -2,10 +2,10 @@
   <v-sheet @click="clickNotification(notification)">
     <div>
       <span v-if="isAutoAccepted">
-        <span class="primary--text half-bold">{{ proposalCreator | fullname }}</span> started new "<span class="primary--text half-bold">{{ notification.metadata.research.title }}</span>" research
+        <span class="primary--text half-bold">{{ proposalCreator | fullname }}</span> started new "<span class="primary--text half-bold">{{ notification.metadata.research.title }}</span>" project
       </span>
       <span v-else-if="isAcceptedByQuorum">
-        "<span class="primary--text half-bold">{{ notification.metadata.researchGroup.name }}</span>" started new "<span class="primary--text half-bold">{{ notification.metadata.research.title }}</span>" research
+        "<span class="primary--text half-bold">{{ notification.metadata.researchGroup.name }}</span>" started new "<span class="primary--text half-bold">{{ notification.metadata.research.title }}</span>" project
       </span>
       <span v-else>
         <span class="primary--text half-bold">{{ proposalCreator | fullname }}</span> proposed to start new "<span class="primary--text half-bold">{{ notification.metadata.proposal.data.title }}</span>" project in "<span class="primary--text half-bold">{{ notification.metadata.researchGroup.name }}</span>"

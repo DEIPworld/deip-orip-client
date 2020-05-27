@@ -4,12 +4,12 @@
       <span v-if="isAutoAccepted">
         <span class="primary--text half-bold">{{ proposalCreator | fullname }}</span> scheduled fundraising campaign for "<span
           class="primary--text half-bold"
-        >{{ notification.metadata.research.title }}</span>" research
+        >{{ notification.metadata.research.title }}</span>" project
       </span>
       <span v-else-if="isAcceptedByQuorum">
         "<span class="primary--text half-bold">{{ notification.metadata.researchGroup.name }}</span>" scheduled fundraising campaign for "<span
           class="primary--text half-bold"
-        >{{ notification.metadata.research.title }}</span>" research
+        >{{ notification.metadata.research.title }}</span>" project
       </span>
       <span v-else>
         <span class="primary--text half-bold">{{ proposalCreator | fullname }}</span> proposed to schedule fundraising campaign for "<span
