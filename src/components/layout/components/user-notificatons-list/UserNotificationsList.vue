@@ -142,7 +142,7 @@
   import ResearchGroupUpdateProposalUserNotification
     from '@/components/layout/components/user-notificatons-list/components/ResearchGroupUpdateProposalUserNotification';
   import InvitationUserNotification
-    from '@/components/layout/components/user-notificatons-list/components/ExclusionUserNotification';
+    from '@/components/layout/components/user-notificatons-list/components/InvitationUserNotification';
   import InvitationApprovedUserNotification
     from '@/components/layout/components/user-notificatons-list/components/InvitationApprovedUserNotification';
   import InvitationRejectedUserNotification

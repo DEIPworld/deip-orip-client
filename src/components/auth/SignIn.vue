@@ -23,6 +23,7 @@
             :show-sign-up="!adminLogin"
             logo="AR3C"
             :title="adminLogin ? 'Sign in to your admin account' : 'Sign in to your account'"
+            :is-admin="adminLogin"
           />
         </v-sheet>
       </v-col>

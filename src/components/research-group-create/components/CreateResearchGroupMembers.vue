@@ -192,9 +192,8 @@
       // TODO: request server for tenant users
       deipRpc.api.getAllAccountsAsync()
         .then((accounts) => {
-          const blackList = [this.creatorUsername, 'regacc', 'hermes', 'initdelegate'];
+          const blackList = ['regacc', 'hermes', 'initdelegate'];
           const usernames = [];
-          usernames.push(this.creatorUsername);
           usernames.push(
             ...accounts
               .filter((a) => !a.is_research_group && !blackList.some(username => username == a.name))
@@ -206,8 +205,8 @@
           users.forEach((u) => {
             u.stake = u.account.name == this.creatorUsername ? 100 : 0;
           });
-          this.selectedUsers.push(users[0]); // creator
-          this.allUsers = users.slice(1);
+          this.selectedUsers.push(users.find(u => u.account.name == this.creatorUsername)); // creator
+          this.allUsers = users.filter(u => u.account.name != this.creatorUsername);
           this.selectableUsers = prepareSelectableUsers(
             this.allUsers,
             this.selectedUsers,
