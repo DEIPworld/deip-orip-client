@@ -298,7 +298,10 @@ const router = new Router({
             });
           }
         }
-      })
+      }),
+      meta: {
+        withoutHeader: true
+      }
     }, {
       path: '/:research_group_permlink/research/:research_permlink/:content_permlink',
       name: 'ResearchContentDetails',

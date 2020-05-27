@@ -7,6 +7,7 @@
           label="Project name"
           v-bind="fieldState"
           :disabled="partialDisabled.researchTitle"
+          :rules="[rules.required]"
         />
       </v-col>
 
@@ -18,6 +19,7 @@
           rows="3"
           v-bind="fieldState"
           :disabled="partialDisabled.description"
+          :rules="[rules.required]"
         />
       </v-col>
 
@@ -26,6 +28,7 @@
           v-model="formData.researchDisciplines[0]"
           label="Domain"
           v-bind="fieldState"
+          :rules="[rules.required]"
           :items="[
             {text: 'Bio Products', value: 1},
             {text: 'Bio Energy', value: 2},
@@ -42,6 +45,7 @@
           v-model="formData.location.country"
           label="Project location"
           v-bind="fieldState"
+          :rules="[rules.required]"
         />
       </v-col>
 
@@ -52,6 +56,7 @@
           auto-grow
           rows="3"
           v-bind="fieldState"
+          :rules="[rules.required]"
         />
       </v-col>
 
@@ -62,6 +67,7 @@
           auto-grow
           rows="3"
           v-bind="fieldState"
+          :rules="[rules.required]"
         />
       </v-col>
     </d-form-block>
@@ -89,6 +95,7 @@
           v-model="formData.funding"
           label="How much funding are you expecting?"
           v-bind="fieldState"
+          :rules="[rules.required]"
         />
       </v-col>
 
@@ -97,6 +104,7 @@
           v-model="formData.eta"
           label="What is your project estimate?"
           v-bind="fieldState"
+          :rules="[rules.required]"
         />
       </v-col>
     </d-form-block>
@@ -213,6 +221,11 @@
       loading: {
         type: Boolean,
         default: false
+      }
+    },
+    data() {
+      return {
+        rules: { required: (value) => !!value || 'This field is required' },
       }
     },
     computed: {

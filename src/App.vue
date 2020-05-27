@@ -4,12 +4,12 @@
       v-if="!$route.meta.withoutHeader && !$route.path.includes('/admin')"
       :is-grants-transparency-demo="isGrantsTransparencyDemo"
     />
-    <toolbar-admin v-if="$route.path.includes('/admin')" />
+    <toolbar-admin v-if="$route.path.includes('/admin') && !$route.meta.withoutHeader" />
     <portal-target name="toolbar" />
 
     <router-view :key="$route.fullPath" name="navigator" />
 
-    <v-content>
+    <v-content :key="$route.fullPath">
       <router-view :key="$route.fullPath" />
     </v-content>
 

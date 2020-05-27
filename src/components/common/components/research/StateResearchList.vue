@@ -50,7 +50,7 @@
                 class="ckass"
                 cols="12"
                 sm="6"
-                xl="4"
+                lg="4"
               >
                 <research-project-tile
                   :research="research"

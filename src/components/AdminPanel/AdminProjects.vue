@@ -31,6 +31,15 @@
               {{ item.created_at | dateFormat('MMMM DD YYYY', true) }}
             </div>
           </template>
+
+          <template #item.actions="{item}">
+            <crud-actions row>
+              <v-btn icon small @click.stop="openActionDialog('delete', item.external_id)">
+                <v-icon>delete</v-icon>
+              </v-btn>
+            </crud-actions>
+          </template>
+
         </v-data-table>
       </v-tab-item>
 
@@ -102,7 +111,7 @@
             text
             @click="openActionDialog('reject', researchDialog.data._id)"
           >
-            Reject research
+            Reject
           </v-btn>
           <v-btn
             color="primary"
@@ -110,12 +119,11 @@
             text
             @click="openActionDialog('approve', researchDialog.data._id)"
           >
-            Approve research
+            Approve
           </v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
-
     <action-dialog
       :open="actionDialog.isOpen"
       :title="actionDialog.data.title"
@@ -140,7 +148,7 @@
           text
           @click="actionDialog.data.action.method(actionDialog.data.id)"
         >
-          {{ actionDialog.data.action.title }}
+          {{ actionDialog.data.action.title || 'delete' }}
         </v-btn>
       </template>
     </action-dialog>
@@ -155,8 +163,10 @@
   import ActionDialog from '@/components/layout/ActionDialog';
 
   import { ResearchService } from '@deip/research-service';
+  import { TenantService } from '@deip/tenant-service';
 
   const researchService = ResearchService.getInstance();
+  const tenantService = TenantService.getInstance();
 
   export default {
     name: 'AdminProjects',
@@ -197,6 +207,15 @@
                 title: 'reject',
                 method: this.rejectResearchApplication
               }
+            },
+            delete: {
+              title: 'Delete request?',
+              description:
+                'Project will be Deleted.',
+              action: {
+                title: 'delete',
+                method: this.deleteResearchApplication
+              }
             }
           }
         },
@@ -209,6 +228,10 @@
           {
             text: 'Created',
             value: 'created_at'
+          },
+          {
+            value: 'actions',
+            align: 'end'
           }
         ],
 
@@ -220,6 +243,10 @@
           {
             text: 'Created',
             value: 'created_at'
+          },
+          {
+            text: 'Project innovator',
+            value: 'researcher'
           },
           {
             value: 'actions',
@@ -278,6 +305,28 @@
           });
       },
 
+      deleteResearchApplication(id) {
+        const updatedProfile = _.cloneDeep(this.tenant.profile);
+
+        if (id) {
+          updatedProfile.settings.researchBlacklist.push(id);
+        }
+
+        tenantService.updateTenantProfile(updatedProfile)
+          .then(() => {
+            this.finishAction();
+
+            this.$store.dispatch('layout/setSuccess', { message: 'Successfully' });
+            this.$store.dispatch('adminPanel/getAllProjects');
+          })
+          .catch((err) => {
+            console.error(err);
+            this.$store.dispatch('layout/setError', {
+              message: 'An error occurred while sending the request, please try again later.'
+            });
+          });
+      },
+
       openActionDialog(type, id) {
         if (this.researchDialog.isOpen) {
           this.hideResearch();
@@ -314,6 +363,7 @@
     },
 
     $dataPreload() {
+      console.log(this.$store.getters['auth/tenant'].profile.settings)
       return this.$store.dispatch('adminPanel/getAllProjects');
     }
   };

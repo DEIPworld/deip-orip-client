@@ -113,6 +113,9 @@ export const adminRouting = [
     path: '/admin/sign-in',
     name: 'admin.login',
     component: SignIn,
+    meta: {
+      withoutHeader: true
+    },
     props: {
       adminLogin: true
     }
