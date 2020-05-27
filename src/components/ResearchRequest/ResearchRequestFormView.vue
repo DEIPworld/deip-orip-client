@@ -30,12 +30,12 @@
           v-bind="fieldState"
           :rules="[rules.required]"
           :items="[
-            {text: 'Bio Products', value: 1},
-            {text: 'Bio Energy', value: 2},
-            {text: 'Bio Food', value: 3},
-            {text: 'Bio Chemical', value: 4},
-            {text: 'Bio Fiber', value: 5},
-            {text: 'Bio Mechanical', value: 6}
+            {text: 'Bio Products', value: '1'},
+            {text: 'Bio Energy', value: '2'},
+            {text: 'Bio Food', value: '3'},
+            {text: 'Bio Chemical', value: '4'},
+            {text: 'Bio Fiber', value: '5'},
+            {text: 'Bio Mechanical', value: '6'}
           ]"
         />
       </v-col>
