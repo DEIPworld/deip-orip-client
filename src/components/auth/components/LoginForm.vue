@@ -17,12 +17,12 @@
           :loading="disable"
           :disabled="disable"
         >
-          Log In
+          Sign in
         </v-btn>
       </template>
     </form-generator>
     <div v-if="showSignUp" class="mt-4 subtitle-2">
-      New on DEIP?
+      Want become a member?
       <router-link class="a" :to="{name: 'SignUp'}">Sign Up now</router-link>
     </div>
 
