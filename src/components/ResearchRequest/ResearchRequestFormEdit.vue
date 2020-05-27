@@ -51,7 +51,9 @@
         }
       },
 
-      editResearch() {
+      editResearch(success) {
+        if (!success) return;
+
         this.formProcessing = true;
 
         const formData = this.createFormData(this.formData);

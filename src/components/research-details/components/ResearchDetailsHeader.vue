@@ -30,14 +30,14 @@
         </div>
         <toggle-text class="py-4" :text="research.abstract" />
       </v-col>
-      <v-col v-if="researchRef.videoSrc" cols="auto">
-        <iframe
-          class="presentation-video"
-          :src="getEmbedVideoUrl(researchRef.videoSrc)"
-          frameborder="0"
-          allowfullscreen
-        />
-      </v-col>
+<!--      <v-col v-if="researchRef.videoSrc" cols="auto">-->
+<!--        <iframe-->
+<!--          class="presentation-video"-->
+<!--          :src="getEmbedVideoUrl(researchRef.videoSrc)"-->
+<!--          frameborder="0"-->
+<!--          allowfullscreen-->
+<!--        />-->
+<!--      </v-col>-->
     </v-row>
   </layout-header>
 </template>
