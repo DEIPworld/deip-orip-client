@@ -165,8 +165,8 @@
                 </v-col>
               </v-row>
               <v-row>
-                <v-col v-for="(step, j) in item.component.readinessLevels" :key="`${item.component.readinessLevelShortTitle}-${j}`" cols="2">
-                  <v-tooltip v-if="step.title || step.description" bottom>
+                <v-col v-for="(step, j) in item.component.readinessLevels" :key="`${item.component.readinessLevelShortTitle}-${j}`" cols="2" class="overflow-hidden">
+                  <v-tooltip v-if="step.description || step.title" bottom>
                     <template #activator="{ on }">
                       <v-btn
                         text
