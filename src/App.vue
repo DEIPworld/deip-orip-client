@@ -9,7 +9,7 @@
 
     <router-view :key="$route.fullPath" name="navigator" />
 
-    <v-content :key="$route.fullPath">
+    <v-content style="min-height: 100vh" :key="$route.fullPath">
       <router-view :key="$route.fullPath" />
     </v-content>
 
