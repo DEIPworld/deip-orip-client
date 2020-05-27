@@ -24,6 +24,7 @@
             :show-sign-up="!adminLogin"
             :logo="['/assets/img/ar3c-logo.png', '/assets/img/wechain-logo.png']"
             :title="adminLogin ? 'Sign in to your admin account' : 'Sign in to your account'"
+            :is-admin="adminLogin"
           />
         </v-sheet>
       </v-col>
