@@ -18,6 +18,10 @@
       ...mapGetters({
         researchList: 'userDetails/researchList'
       })
+    },
+    $dataPreload() {
+      const username = decodeURIComponent(this.$store.getters['auth/user'].account.name);
+      return this.$store.dispatch('userDetails/loadUserDetailsPage', { username });
     }
   };
 </script>

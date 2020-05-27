@@ -345,7 +345,6 @@
       },
 
       showResearch(item) {
-        console.log(item);
         this.researchDialog.data = item;
         this.researchDialog.isOpen = true;
       },
@@ -363,7 +362,6 @@
     },
 
     $dataPreload() {
-      console.log(this.$store.getters['auth/tenant'].profile.settings)
       return this.$store.dispatch('adminPanel/getAllProjects');
     }
   };
