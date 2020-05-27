@@ -1,5 +1,5 @@
 <template>
-  <modal-route-view title="Edit personal info">
+  <full-screen-view title="Edit personal info">
     <form-generator :model="formModel" :schema="schema">
       <template #actions>
         <v-btn
@@ -14,7 +14,7 @@
         </v-btn>
       </template>
     </form-generator>
-  </modal-route-view>
+  </full-screen-view>
 </template>
 
 <script>
@@ -22,16 +22,16 @@
   import moment from 'moment';
 
   import { UserService } from '@deip/user-service';
-  import ModalRouteView from '@/components/layout/ModalRouteView';
   import FormGenerator from '@/components/ForrmGenerator/FormGenerator';
+  import FullScreenView from '@/components/layout/FullScreen/FullScreenView';
 
   const userService = UserService.getInstance();
 
   export default {
     name: 'AccountProfile',
     components: {
-      FormGenerator,
-      ModalRouteView
+      FullScreenView,
+      FormGenerator
     },
     data() {
       const validation = {
@@ -44,25 +44,28 @@
 
         schema: [
           {
-            title: 'Location:',
+            title: 'Personal information:',
             fields: [
               {
                 type: 'text',
-                name: 'city',
-                label: 'City',
-                cols: { md: 6 },
+                name: 'firstName',
+                label: 'First Name',
                 props: {
                   rules: [validation.required]
                 }
               },
               {
                 type: 'text',
-                name: 'country',
-                label: 'Country',
-                cols: { md: 6 },
+                name: 'lastName',
+                label: 'Last Name',
                 props: {
                   rules: [validation.required]
                 }
+              },
+              {
+                type: 'date',
+                name: 'editedBirthdayDate',
+                label: 'Birthday'
               }
             ]
           },
@@ -95,28 +98,25 @@
             ]
           },
           {
-            title: 'Personal information:',
+            title: 'Location:',
             fields: [
               {
                 type: 'text',
-                name: 'firstName',
-                label: 'First Name',
+                name: 'city',
+                label: 'City',
+                cols: { md: 6 },
                 props: {
                   rules: [validation.required]
                 }
               },
               {
                 type: 'text',
-                name: 'lastName',
-                label: 'Last Name',
+                name: 'country',
+                label: 'Country',
+                cols: { md: 6 },
                 props: {
                   rules: [validation.required]
                 }
-              },
-              {
-                type: 'date',
-                name: 'editedBirthdayDate',
-                label: 'Birthday'
               }
             ]
           },

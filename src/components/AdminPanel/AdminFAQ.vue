@@ -51,7 +51,6 @@
       </template>
     </action-dialog>
 
-    <router-view name="dialog" />
   </admin-view>
 </template>
 
@@ -61,7 +60,7 @@
   import ActionDialog from '@/components/layout/ActionDialog';
   import { mapGetters } from 'vuex';
   import { TenantService } from '@deip/tenant-service';
-  
+
   const tenantService = TenantService.getInstance();
 
   export default {

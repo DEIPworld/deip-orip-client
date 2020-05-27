@@ -15,12 +15,12 @@
       </v-toolbar>
       <v-divider v-if="!hideToolbar" />
       <v-card-text
+        class="pb-0 px-0 full-height"
         :class="{
-          'pt-6': hideToolbar,
           'd-flex align-center justify-center': centerContent
         }"
       >
-        <v-sheet :max-width="maxWidth" class="pa-12 mx-auto">
+        <v-sheet :max-width="maxWidth" class="pa-12 mx-auto full-height">
           <slot />
         </v-sheet>
       </v-card-text>
@@ -50,8 +50,12 @@
         default: 'arrow_back'
       },
       maxWidth: {
-        type: Number,
+        type: [Number, String],
         default: 800
+      },
+      goBackTo: {
+        type: String,
+        default: undefined
       }
     },
     data() {
@@ -64,7 +68,11 @@
         this.dialog = false;
 
         setTimeout(() => {
-          this.$router.back();
+          if (this.goBackTo) {
+            this.$router.push(this.goBackTo);
+          } else {
+            this.$router.back();
+          }
         }, 150);
       }
     }

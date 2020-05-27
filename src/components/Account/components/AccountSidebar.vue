@@ -74,12 +74,12 @@
               {
                 icon: 'mdi-file-document',
                 title: 'Projects',
-                route: ''
+                route: { name: 'account.projects' }
               },
               {
                 icon: 'mdi-file-replace',
                 title: 'Project requests',
-                route: ''
+                route: { name: 'account.projectRequests' }
               }
             ]
           },

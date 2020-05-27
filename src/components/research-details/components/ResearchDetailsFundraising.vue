@@ -139,27 +139,28 @@
       </v-row>
 
       <div v-if="isActiveTokenSale && !isResearchGroupMember">
-        <v-row no-gutters justify="end" class="pt-2">
-          <v-text-field
-            ref="amountToContribute"
-            v-model="amountToContribute"
-            placeholder="Amount"
-            suffix="USD"
-            :rules="[deipTokenValidator]"
-            :disabled="areTokensBuying"
-          />
-        </v-row>
-        <v-row no-gutters justify="end" class="pt-2">
-          <v-btn
-            :disabled="isContributionToTokenSaleDisabled"
-            :loading="areTokensBuying"
-            color="primary"
-            block
-            @click="onContributeToTokenSaleClick()"
-          >
-            Invest
-          </v-btn>
-        </v-row>
+        <v-form ref="amountToContributeForm">
+          <v-row no-gutters justify="end" class="pt-2">
+            <v-text-field
+              ref="amountToContribute"
+              v-model="amountToContribute"
+              placeholder="Amount"
+              suffix="USD"
+              :rules="[rules.required, deipTokenValidator]"
+              :disabled="areTokensBuying"
+            />
+          </v-row>
+          <v-row no-gutters justify="end" class="pt-2">
+            <v-btn
+              :loading="areTokensBuying"
+              color="primary"
+              block
+              @click="onContributeToTokenSaleClick()"
+            >
+              Invest
+            </v-btn>
+          </v-row>
+        </v-form>
         <v-dialog v-model="investmentConfirmDialog.isShown" persistent max-width="800px">
           <v-card class="pa-6">
             <v-card-title>
@@ -220,6 +221,9 @@
 
     data() {
       return {
+        rules: {
+          required: (value) => !!value || 'This field is required'
+        },
         amountToContribute: '',
         areTokensBuying: false,
         investmentConfirmDialog: {
@@ -333,6 +337,7 @@
     },
     methods: {
       onContributeToTokenSaleClick() {
+        if (!this.$refs.amountToContributeForm.validate()) return;
         this.investmentConfirmDialog.isShown = true;
       },
       contributeToTokenSale() {

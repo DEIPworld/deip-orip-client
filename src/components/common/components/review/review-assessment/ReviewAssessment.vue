@@ -10,7 +10,7 @@
       <v-col>
         {{ criteria.title }}:
       </v-col>
-      <v-col>
+      <v-col class="d-flex justify-end">
         <review-assessment-squared-rating
           v-model="form[criteria.id]"
           class="pl-6"

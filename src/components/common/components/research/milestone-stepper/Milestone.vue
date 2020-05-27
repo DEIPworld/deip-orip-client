@@ -28,7 +28,7 @@
                 v-model="step.goal"
                 :error-messages="step.validation.goalError"
                 class="my-0 pa-0 mx-2"
-                solo
+                filled
                 label="Milestone Goal"
                 prepend-inner-icon="adjust"
                 @click.native="clearValidation()"
@@ -53,7 +53,7 @@
                     v-model="step.eta"
                     :error-messages="step.validation.etaError"
                     class="my-0 pa-0 mx-2"
-                    solo
+                    filled
                     label="Deadline"
                     prepend-inner-icon="event"
                     readonly
@@ -98,7 +98,7 @@
                 v-model="step.budget"
                 :error-messages="step.validation.budgetError"
                 class="my-0 pa-0 mx-2"
-                solo
+                filled
                 label="Estimated budget"
                 prepend-inner-icon="mdi-currency-usd"
                 @click.native="clearValidation()"
@@ -117,7 +117,7 @@
                 v-model="step.purpose"
                 :error-messages="step.validation.purposeError"
                 class="my-0 pa-0 mx-2"
-                solo
+                filled
                 label="Budget purpose"
                 @click.native="clearValidation()"
               />
@@ -134,7 +134,7 @@
               <v-textarea
                 v-model="step.details"
                 class="my-0 pa-0 mx-2"
-                solo
+                filled
                 auto-grow
                 label="Milestone Description"
                 prepend-inner-icon="subject"

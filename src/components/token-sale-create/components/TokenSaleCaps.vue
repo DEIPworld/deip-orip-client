@@ -19,7 +19,7 @@
       />
     </v-form>
 
-    <v-btn text small @click.native="prevStep()">
+    <v-btn text small class="mr-2" @click.native="prevStep()">
       <v-icon dark class="pr-1">
         keyboard_arrow_left
       </v-icon> Back

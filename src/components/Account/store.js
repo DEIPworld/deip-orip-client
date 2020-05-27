@@ -2,12 +2,17 @@ import deipRpc from '@deip/rpc-client';
 import Vue from 'vue';
 
 import { UsersService } from '@deip/users-service';
+import { ResearchService } from '@deip/research-service';
 
 const usersService = UsersService.getInstance();
+const researchService = ResearchService.getInstance();
 
 const state = {
   account: undefined,
   profile: undefined,
+  pendingProjects: [],
+  rejectedProjects: [],
+  publicProjects: [],
 };
 
 // getters
@@ -15,7 +20,11 @@ const getters = {
   userInfo: (state, getters) => ({
     account: state.account,
     profile: state.profile
-  })
+  }),
+
+  pendingProjects: (state) => state.pendingProjects,
+  rejectedProjects: (state) => state.rejectedProjects,
+  publicProjects: (state) => state.publicProjects
 };
 
 // actions
@@ -59,6 +68,27 @@ const actions = {
       }).finally(() => {
         if (notify) notify();
       });
+  },
+
+  getPendingProjects(context, { username }) {
+    return researchService.getPendingResearchApplicationsByResearcher(username)
+      .then((result) => {
+        console.log(username,result)
+        context.commit('getPendingProjects', result);
+      });
+  },
+  getRejectedProjects(context, { username }) {
+    return researchService.getRejectedResearchApplicationsByResearcher(username)
+      .then((result) => {
+        console.log(username,result)
+        context.commit('getRejectedProjects', result);
+      });
+  },
+  getAllProjects(context, { username }) {
+    return Promise.all([
+      context.dispatch('getPendingProjects', { username }),
+      context.dispatch('getRejectedProjects', { username })
+    ]);
   }
 };
 
@@ -71,6 +101,13 @@ const mutations = {
   SET_USER_PROFILE(state, profile) {
     Vue.set(state, 'profile', profile);
   },
+
+  getPendingProjects(state, payload) {
+    state.pendingProjects = payload;
+  },
+  getRejectedProjects(state, payload) {
+    state.rejectedProjects = payload;
+  }
 };
 
 const namespaced = true;

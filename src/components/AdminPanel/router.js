@@ -9,7 +9,10 @@ import AdminCriteriaEdit from '@/components/AdminPanel/AdminCriteriaEdit';
 import AdminFAQ from '@/components/AdminPanel/AdminFAQ';
 import AdminFAQEdit from '@/components/AdminPanel/AdminFAQEdit';
 import AdminSettings from '@/components/AdminPanel/AdminSettings';
-import AdminLogin from '@/components/AdminPanel/AdminLogin';
+import AdminCategories from '@/components/AdminPanel/AdminCategories';
+import AdminCategoryEdit from '@/components/AdminPanel/AdminCategoryEdit';
+import SignIn from '@/components/auth/SignIn';
+import ResearchRequestFormCreate from '@/components/ResearchRequest/ResearchRequestFormCreate';
 
 export const adminRouting = [
   {
@@ -62,6 +65,25 @@ export const adminRouting = [
         ]
       },
       {
+        path: 'categories',
+        name: 'admin.categories',
+        component: AdminCategories,
+        children: [
+          {
+            path: 'add',
+            name: 'admin.categories.add',
+            components: {
+              dialog: AdminCategoryEdit
+            },
+            props: {
+              dialog: {
+                title: 'Add new category'
+              }
+            }
+          }
+        ]
+      },
+      {
         path: 'faq',
         name: 'admin.faq',
         component: AdminFAQ,
@@ -90,6 +112,12 @@ export const adminRouting = [
   {
     path: '/admin/sign-in',
     name: 'admin.login',
-    component: AdminLogin
+    component: SignIn,
+    meta: {
+      withoutHeader: true
+    },
+    props: {
+      adminLogin: true
+    }
   }
 ];

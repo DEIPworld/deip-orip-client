@@ -1,6 +1,6 @@
 <template>
   <layout-section>
-    <v-row>
+    <v-row class="full-height">
       <v-col cols="auto" v-if="isInProgress">
         <v-card class="full-height">
           <div>

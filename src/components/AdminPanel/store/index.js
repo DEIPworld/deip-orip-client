@@ -3,36 +3,36 @@ import deipRpc from '@deip/rpc-client';
 
 import { UsersService } from '@deip/users-service';
 import { TenantService } from '@deip/tenant-service';
+import { ResearchService } from '@deip/research-service';
 
 const usersService = UsersService.getInstance();
 const tenantService = TenantService.getInstance();
+const researchService = ResearchService.getInstance();
 
 const state = {
   registeredMembers: [],
-  waitingMembers: []
+  waitingMembers: [],
+  pendingProjects: [],
+  publicProjects: []
 };
 
 // getters
 const getters = {
   registeredMembers: (state) => state.registeredMembers,
   waitingMembers: (state) => state.waitingMembers,
+
   faqs: (state, getters, rootState, rootGetters) => rootGetters['auth/tenant'].profile.settings.faq,
-  researchComponents: (state, getters, rootState, rootGetters) => rootGetters['auth/tenant'].profile.settings.researchComponents
+
+  categories: (state, getters, rootState, rootGetters) => rootGetters['auth/tenant'].profile.settings.researchCategories,
+
+  researchComponents: (state, getters, rootState, rootGetters) => rootGetters['auth/tenant'].profile.settings.researchComponents,
+
+  pendingProjects: (state) => state.pendingProjects,
+  publicProjects: (state) => state.publicProjects
 };
 
 // actions
 const actions = {
-  loadAdminPanel({ state, dispatch }) {
-    const registeredMembersLoad = new Promise((resolve, reject) => {
-      dispatch('loadRegisteredMembers', { notify: resolve });
-    });
-    const waitingMembersLoad = new Promise((resolve, reject) => {
-      dispatch('loadWaitingMembers', { notify: resolve });
-    });
-
-    return Promise.all([registeredMembersLoad, waitingMembersLoad]);
-  },
-
   loadRegisteredMembers({ commit }, { notify } = {}) {
     return usersService.getActiveUsers()
       .then((users) => {
@@ -56,8 +56,42 @@ const actions = {
       })
       .catch((err) => console.error(err))
       .finally(() => {
-        if (notify) notify()
+        if (notify) notify();
       });
+  },
+
+  loadAllMembers({ state, dispatch }) {
+    const registeredMembersLoad = new Promise((resolve, reject) => {
+      dispatch('loadRegisteredMembers', { notify: resolve });
+    });
+    const waitingMembersLoad = new Promise((resolve, reject) => {
+      dispatch('loadWaitingMembers', { notify: resolve });
+    });
+
+    return Promise.all([registeredMembersLoad, waitingMembersLoad]);
+  },
+
+  // =====================
+
+  getPendingProjects(context) {
+    return researchService.getPendingResearchApplications()
+      .then((result) => {
+        context.commit('getPendingProjects', result);
+      });
+  },
+
+  getPublicProjects(context) {
+    return researchService.getPublicResearchListing()
+      .then((result) => {
+        context.commit('getPublicProjects', result);
+      });
+  },
+
+  getAllProjects(context) {
+    return Promise.all([
+      context.dispatch('getPendingProjects'),
+      context.dispatch('getPublicProjects'),
+    ]);
   }
 };
 
@@ -69,6 +103,16 @@ const mutations = {
   SET_WAITING_MEMBERS(state, list) {
     Vue.set(state, 'waitingMembers', list);
   },
+
+  //= ==============
+
+  getPendingProjects(state, payload) {
+    state.pendingProjects = payload;
+  },
+
+  getPublicProjects(state, payload) {
+    state.publicProjects = payload;
+  }
 };
 
 const namespaced = true;

@@ -4,6 +4,7 @@ import VueResize from 'vue-resize';
 import VueCurrencyFilter from 'vue-currency-filter';
 import VueGoogleCharts from 'vue-google-charts';
 import Vuetify from 'vuetify/lib';
+import PortalVue from 'portal-vue';
 
 import {
   setConfig,
@@ -13,7 +14,7 @@ import {
   setTenant
 } from './bootstrap';
 
-import App from './App.vue';
+import App from './App';
 import { store } from './store';
 import { router } from './router';
 
@@ -30,6 +31,7 @@ import './styles/app.scss';
 
 import { DataPreloadMixin } from '@/utils/DataPreloadMixin';
 import { CommonMixin } from '@/utils/CommonMixin';
+import { CustomDirective } from '@/utils/CustomDirective';
 
 // ////////////////////////
 
@@ -46,10 +48,23 @@ Vue.config.productionTip = false;
 Vue.use(VueGoogleCharts);
 Vue.use(VueResize);
 Vue.use(Vuetify);
+Vue.use(PortalVue);
 Vue.use(VueCurrencyFilter, currencyFilterOptions);
 
 Vue.mixin(DataPreloadMixin);
 Vue.mixin(CommonMixin);
+
+// Vue.directive('Custom', {
+//   bind(el, binding, vnode) {
+//     const map = {
+//       input: 'text-field'
+//     };
+//     console.log(binding)
+//     if (binding.arg) el.classList.add(`${map[binding.arg] || vnode.componentOptions.tag}--custom`);
+//   }
+// });
+
+Vue.directive('Custom', CustomDirective);
 
 (async () => {
   try {

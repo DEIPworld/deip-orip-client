@@ -42,8 +42,8 @@ import ResearchContentMetadata from '@/components/research-content-details/Resea
 import ResearchContentReview from '@/components/research-content-details/ResearchContentReview';
 import ResearchContentAddReview
   from '@/components/research-content-details/ResearchContentAddReview';
-import ResearchStartCreating from '@/components/research-create/ResearchStartCreating';
-import CreateNewResearch from '@/components/research-create/CreateNewResearch';
+import ResearchStartCreating from '@/components/ResearchCreate/ResearchStartCreating';
+import CreateNewResearch from '@/components/ResearchCreate/CreateNewResearch';
 import CreateTokenSale from '@/components/token-sale-create/CreateTokenSale';
 import ResearchContentReferences
   from '@/components/research-content-details/ResearchContentReferences';
@@ -64,6 +64,7 @@ import InvestorPortfolio from '@/components/investor-portfolio/InvestorPortfolio
 import ReviewSetup from '@/components/review-setup/ReviewSetup';
 
 import FAQ from '@/components/faq/FAQ';
+import UserApplicationAccepted from '@/components/user-application-accepted/UserApplicationAccepted';
 
 import AdminPanel from '@/components/AdminPanel/AdminPanel';
 import AdminMembers from '@/components/AdminPanel/AdminMembers';
@@ -76,6 +77,7 @@ import { AppConfigService } from '@deip/app-config-service';
 import { accountRouting } from '@/components/Account/router';
 import { userDetailRouting } from '@/components/UserDetails/router';
 import { adminRouting } from '@/components/AdminPanel/router';
+import ResearchRequestFormCreate from '@/components/ResearchRequest/ResearchRequestFormCreate';
 
 const accessService = AccessService.getInstance();
 const usersService = UsersService.getInstance();
@@ -103,6 +105,9 @@ const router = new Router({
       } else {
         next();
       }
+    },
+    meta: {
+      withoutHeader: true
     }
   }, {
     path: '/org-sign-in',
@@ -293,7 +298,10 @@ const router = new Router({
             });
           }
         }
-      })
+      }),
+      meta: {
+        withoutHeader: true
+      }
     }, {
       path: '/:research_group_permlink/research/:research_permlink/:content_permlink',
       name: 'ResearchContentDetails',
@@ -415,7 +423,11 @@ const router = new Router({
     }, {
       path: '/create-new-research',
       name: 'CreateResearch',
-      component: CreateNewResearch
+      // component: CreateNewResearch
+      component: ResearchRequestFormCreate,
+      meta: {
+        withoutHeader: true
+      }
     }, {
       path: '/:research_group_permlink/create-fundraise/:research_permlink',
       name: 'CreateTokenSale',
@@ -494,6 +506,11 @@ const router = new Router({
       component: FAQ
     },
     {
+      path: '/user-application-accepted',
+      name: 'UserApplicationAccepted',
+      component: UserApplicationAccepted
+    },
+    {
       path: '/',
       name: 'Default',
       beforeEnter: (to, from, next) => {
@@ -550,7 +567,8 @@ router.beforeEach((to, from, next) => {
     'ResearchFeed',
     'ResearchDetailsPublic',
     'NoAccessPage',
-    'FAQ'
+    'FAQ',
+    'UserApplicationAccepted'
   ];
 
   const loginPages = [

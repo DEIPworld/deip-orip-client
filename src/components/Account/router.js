@@ -1,11 +1,12 @@
 import AccountView from '@/components/Account/AccountView';
-import AccountSummary from '@/components/Account/AccountSummary';
 import AccountProfile from '@/components/Account/AccountProfile';
 import AccountPassword from '@/components/Account/AccountPassword';
 import AccountPrivateKey from '@/components/Account/AccountPrivateKey';
 import UserDetails from '@/components/UserDetails/UserDetails';
 import UserExpertiseDetails from '@/components/UserDetails/UserExpertiseDetails';
 import { store } from '@/store';
+import AccountProjectRequests from '@/components/Account/AccountProjectRequests';
+import AccountProjects from '@/components/Account/AccountProjects';
 
 export const accountRouting = [{
   path: '/account',
@@ -13,7 +14,9 @@ export const accountRouting = [{
   children: [
     {
       path: '',
-      component: AccountSummary,
+      component: {
+        template: '<router-view />'
+      },
       children: [
         {
           path: '',
@@ -32,13 +35,28 @@ export const accountRouting = [{
     {
       path: 'profile',
       name: 'account.profile',
-      component: AccountProfile
+      component: AccountProfile,
+      meta: {
+        withoutHeader: true,
+        hideSidebar: true
+      }
+    },
+    {
+      path: 'project',
+      name: 'account.projects',
+      component: AccountProjects
+    },
+    {
+      path: 'project-requests',
+      name: 'account.projectRequests',
+      component: AccountProjectRequests
     },
     {
       path: 'change-password',
       name: 'account.password',
       component: AccountPassword
-    }, {
+    },
+    {
       path: 'private-key',
       name: 'account.privateKey',
       component: AccountPrivateKey

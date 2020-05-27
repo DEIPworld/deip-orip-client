@@ -1,40 +1,44 @@
 <template>
-  <layout-header muted :background="$options.filters.researchBackgroundSrc(research.external_id)">
-    <div class="display-1">
-      {{ research.title }}
-    </div>
-    <div class="pt-2">
-      <v-icon small color="white">
-        today
-      </v-icon>
-      Created {{ research.created_at | dateFormat('D MMM YYYY', true) }}
-    </div>
-    <div v-if="isResearchGroupMember" class="pt-4">
-      <v-btn
-        class="ma-0 pa-0"
-        small
-        outlined
-        color="white"
-        :to="{
-          name: 'ResearchEdit',
-          params: {
-            research_group_permlink: encodeURIComponent(research.research_group.permlink),
-            research_permlink: encodeURIComponent(research.permlink)
-          }
-        }"
-      >
-        Edit
-      </v-btn>
-    </div>
-    <toggle-text class="py-4" :text="research.abstract" />
-    <div v-if="researchRef.videoSrc">
-      <iframe
-        class="presentation-video"
-        :src="getEmbedVideoUrl(researchRef.videoSrc)"
-        frameborder="0"
-        allowfullscreen
-      />
-    </div>
+  <layout-header muted :background="$options.filters.researchBackgroundSrc(research.external_id)" :max-width="researchRef.videoSrc ? 1200 : 800">
+    <v-row no-gutters>
+      <v-col cols="12" md="">
+        <div class="display-1">
+          {{ research.title }}
+        </div>
+        <div class="pt-2">
+          <v-icon small color="white">
+            today
+          </v-icon>
+          Created {{ research.created_at | dateFormat('D MMM YYYY', true) }}
+        </div>
+        <div v-if="isResearchGroupMember" class="pt-4">
+          <v-btn
+            class="ma-0 pa-0"
+            small
+            outlined
+            color="white"
+            :to="{
+              name: 'ResearchEdit',
+              params: {
+                research_group_permlink: encodeURIComponent(research.research_group.permlink),
+                research_permlink: encodeURIComponent(research.permlink)
+              }
+            }"
+          >
+            Edit
+          </v-btn>
+        </div>
+        <toggle-text class="py-4" :text="research.abstract" />
+      </v-col>
+      <v-col v-if="researchRef.videoSrc" cols="auto">
+        <iframe
+          class="presentation-video"
+          :src="getEmbedVideoUrl(researchRef.videoSrc)"
+          frameborder="0"
+          allowfullscreen
+        />
+      </v-col>
+    </v-row>
   </layout-header>
 </template>
 

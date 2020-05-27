@@ -2,7 +2,8 @@
   transition: none !important;
 }
 
-.v-app-bar {
+.v-app-bar.v-app-bar,
+.v-toolbar--custom {
   border-bottom: 1px solid rgba(#000, .12) !important;
 }
 
@@ -55,4 +56,14 @@
 
 .col {
   min-width: 0;
+}
+
+// new way customise
+
+.v-data-table {
+  &--hover-row {
+    tbody tr:hover {
+      cursor: pointer;
+    }
+  }
 }

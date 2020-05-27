@@ -358,7 +358,7 @@ const mutations = {
   SET_TENANT(state, tenant) {
     Vue.set(state, 'tenant', tenant);
   },
-  
+
   SET_BALANCES(state, balances) {
     Vue.set(state.user, 'balances', balances);
   }

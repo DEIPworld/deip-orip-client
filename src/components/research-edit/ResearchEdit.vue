@@ -1,33 +1,21 @@
 <template>
-  <layout-section>
+  <full-screen-view title="Edit research">
     <research-edit-body />
-  </layout-section>
+  </full-screen-view>
 </template>
 
 <script>
   import { mapGetters } from 'vuex';
-  import deipRpc from '@deip/rpc-client';
-  import moment from 'moment';
   import ResearchEditBody from '@/components/research-edit/components/ResearchEditBody';
-  import LayoutSection from '@/components/layout/components/LayoutSection';
+  import FullScreenView from '@/components/layout/FullScreen/FullScreenView';
 
   export default {
     name: 'ResearchEdit',
-    components: { LayoutSection, ResearchEditBody },
+    components: { FullScreenView, ResearchEditBody },
     computed: {
       ...mapGetters({
         user: 'auth/user'
       })
-    },
-    data() {
-      return {
-      };
-    },
-
-    created() {
-    },
-
-    methods: {
     }
   };
 </script>

@@ -44,7 +44,7 @@
 <script>
 
   export default {
-    name: 'ResearchProposalUserNotification',
+    name: 'ResearchContentProposalUserNotification',
     props: {
       notification: {
         type: Object,

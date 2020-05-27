@@ -7,13 +7,7 @@
       {{ title }}
     </div>
 
-<!--    <v-form-->
-<!--      ref="form"-->
-<!--      v-model="isFormValid"-->
-<!--      @submit.prevent="true"-->
-<!--      class="mb-6"-->
-<!--    >-->
-    <form-generator :model="formModel" :schema="schema" @submit="login" max-width="360">
+    <form-generator :model="formModel" :schema="schema" max-width="360" @submit="login">
       <template #actions>
         <v-btn
           type="submit"
@@ -23,12 +17,14 @@
           :loading="disable"
           :disabled="disable"
         >
-          Log In
+          Sign in
         </v-btn>
       </template>
     </form-generator>
-<!--    </v-form>-->
-
+    <div v-if="showSignUp" class="mt-4 subtitle-2">
+      Want become a member?
+      <router-link class="a" :to="{name: 'SignUp'}">Sign Up now</router-link>
+    </div>
 
   </v-sheet>
 </template>
@@ -80,6 +76,10 @@
       redirect: {
         type: String,
         default: '/'
+      },
+      showSignUp: {
+        type: Boolean,
+        default: true
       }
     },
     data() {
@@ -160,8 +160,7 @@
 
             // sig-seed should be uint8 array with length = 32
             const secretSig = secretKey.sign(encodeUint8Arr(window.env.SIG_SEED).buffer);
-    
-            return authService.adminSignIn({
+            return authService[`${this.isAdmin ? 'adminSignIn' : 'signIn'}`]({
               username: this.formModel.username,
               secretSigHex: crypto.hexify(secretSig)
             });

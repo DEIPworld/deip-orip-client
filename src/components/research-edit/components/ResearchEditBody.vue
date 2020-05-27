@@ -8,8 +8,7 @@
         v-model="title"
         :rules="[rules.required]"
         name="title"
-        label="Title"
-        solo
+        filled
       />
     </div>
     <div>
@@ -20,8 +19,7 @@
         v-model="description"
         :rules="[rules.required]"
         name="Description"
-        label="Description"
-        solo
+        filled
         auto-grow
       />
     </div>
@@ -55,6 +53,20 @@
     </div>
     <v-divider />
 
+    <div v-if="tenant.profile.settings.researchCategories.length" class="my-6">
+      <div class="title font-weight-medium pb-4">
+        Category:
+      </div>
+      <v-select
+        v-model="tenantCategory"
+        :items="tenant.profile.settings.researchCategories"
+        label="Category"
+        filled
+        item-text="text"
+        return-object
+      />
+    </div>
+
     <div class="my-6">
       <div class="title font-weight-medium pb-4">
         Video Presentation:
@@ -64,7 +76,7 @@
         prepend-inner-icon="link"
         label="Link to a video presentation"
         single-line
-        solo
+        filled
         :rules="[rules.link]"
       />
     </div>
@@ -84,7 +96,7 @@
       </div>
     </div>
 
-    <v-divider />
+    <v-divider class="mt-9" />
 
     <div class="my-6">
       <div class="title font-weight-medium pb-4">
@@ -103,7 +115,7 @@
         v-model="activeMilestone"
         :items="milestones"
         label="Milestone"
-        solo
+        filled
         item-text="goal"
         return-object
       />
@@ -213,6 +225,7 @@
         description: '',
         milestones: undefined,
         partners: [],
+        tenantCategory: null,
         videoSrc: '',
         activeMilestone: undefined,
         isPublic: false,
@@ -287,15 +300,16 @@
       this.description = this.research.abstract;
       this.milestones = _.cloneDeep(this.researchRef.milestones);
       this.videoSrc = this.researchRef.videoSrc;
+      this.tenantCategory = this.researchRef.tenantCategory || null;
 
       this.activeMilestone = this.milestones.find((m) => m.isActive);
       this.isPublic = !this.research.is_private;
       this.partners = this.researchRef.partners.map((item) => _.cloneDeep(item));
 
-      this.tenantCriterias = this.tenant.profile.settings.researchComponents
+      this.tenantCriterias = this.$store.getters['auth/tenant'].profile.settings.researchComponents
         .map(({ _id, isVisible, component: componentSchema }) => {
           const tenantCriteria = this.researchRef.tenantCriterias.find((criteria) => criteria.component === _id);
-          const enabledCriteria = { component: _id, isVisible, value: { index: tenantCriteria && tenantCriteria.value ? tenantCriteria.value.index : null } };
+          const enabledCriteria = { component: _id, isVisible, value: { index: tenantCriteria && tenantCriteria.value != null ? tenantCriteria.value.index : null } };
 
           if (componentSchema.readinessLevels[enabledCriteria.value.index]) { // check if a step is removed from the component after editing
             return enabledCriteria;
@@ -390,13 +404,13 @@
           const tenantCriterias = this.tenantCriterias.map(criteria => {
             return criteria.value.index != null ? { ...criteria } : { ...criteria, value: null };
           });
-
           researchService.updateResearchOffchainMeta({
             researchExternalId: this.research.external_id,
             milestones,
             videoSrc: this.videoSrc,
             partners: this.partners,
-            tenantCriterias
+            tenantCriterias,
+            tenantCategory: this.tenantCategory
           })
             .then(() => {
               this.$store.dispatch('layout/setSuccess', {

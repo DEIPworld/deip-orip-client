@@ -26,6 +26,7 @@ const state = {
   filter: {
     disciplines: [],
     trl: [],
+    steppers: [],
     organizations: [],
     q: '',
     orderBy: {
@@ -54,7 +55,20 @@ const getters = {
       .filter((item) => !state.filter.q || item.title.toLowerCase().indexOf(state.filter.q.toLowerCase()) != -1)
       .filter((item) => !state.filter.disciplines.length || item.disciplines.some((discipline) => state.filter.disciplines.some((d) => d.id == discipline.id)))
       .filter((item) => !state.filter.organizations.length || state.filter.organizations.some((org) => item.research_group.external_id == org.external_id))
-      .filter((item) => !state.filter.trl.length || state.filter.trl.some((t) => t.id === item.researchRef.trl))
+      .filter((item) => 
+        !state.filter.steppers.length || state.filter.steppers.every(({ steps }) => steps.length === 0) || state.filter.steppers.some((t) => {
+          if (item.researchRef){
+            const tenantCriteria = item.researchRef.tenantCriteriasReadingList.find(({ component }) => component === t._id);
+            if (tenantCriteria && tenantCriteria.value && tenantCriteria.value.index !== null) {
+              return t.steps.some((item) => item === tenantCriteria.value.index)
+            } else {
+              return false;
+            }
+          } else {
+            return false
+          }
+        })
+      )
       .map((item) => {
         const totalVotes = state.feedTotalVotes.filter((vote) => vote.research_id == item.id);
         const reviews = state.feedResearchReviews.filter((review) => review.research_id == item.id);

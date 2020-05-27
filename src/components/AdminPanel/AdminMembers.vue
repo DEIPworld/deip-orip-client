@@ -1,5 +1,5 @@
 <template>
-  <admin-view title="Members">
+  <admin-view title="Members" v-if="dataLoaded">
     <template #toolbarAction>
       <v-btn outlined color="primary" :to="{name: 'admin.members.add'}">
         <v-icon left>
@@ -21,40 +21,42 @@
     <v-tabs-items v-model="tab">
       <v-tab-item :transition="false" :reverse-transition="false">
         <v-data-table
+          v-custom="'hover-row'"
           :headers="registeredMembersTableHeaders"
           :items="registeredMembers"
+          @click:row="openMemberInfoDialog"
         >
-          <template v-slot:item="{ item }">
-            <tr class="cursor-pointer" @click="openMemberInfoDialog(item)">
-              <td>{{ item | fullname }}</td>
-              <td>{{ item.profile.created_at | dateFormat('MMMM DD YYYY', true) }}</td>
-              <td>{{ item.profile.category }}</td>
-              <td>{{ item.profile.location ? item.profile.location.country : '' }}</td>
-            </tr>
+          <template v-slot:item.name="{ item }">
+            {{ item | fullname }}
+          </template>
+          <template v-slot:item.created_at="{ item }">
+            {{ item.profile.created_at | dateFormat('MMMM DD YYYY', true) }}
           </template>
         </v-data-table>
       </v-tab-item>
 
       <v-tab-item :transition="false" :reverse-transition="false">
         <v-data-table
+          v-custom="'hover-row'"
           :headers="waitingMembersTableHeaders"
           :items="waitingMembers"
+          @click:row="openMemberInfoDialog"
         >
-          <template v-slot:item="{ item }">
-            <tr class="cursor-pointer" @click="openMemberInfoDialog(item)">
-              <td>{{ item.firstName }} {{ item.lastName }}</td>
-              <td>{{ item.created_at | dateFormat('MMMM DD YYYY', true) }}</td>
-              <td class="text-right">
-                <crud-actions row>
-                  <v-btn icon small @click.stop="openActionDialog('approve', item._id)">
-                    <v-icon>done</v-icon>
-                  </v-btn>
-                  <v-btn icon small @click.stop="openActionDialog('decline', item._id)">
-                    <v-icon>close</v-icon>
-                  </v-btn>
-                </crud-actions>
-              </td>
-            </tr>
+          <template v-slot:item.name="{ item }">
+            {{ item.firstName }} {{ item.lastName }}
+          </template>
+          <template v-slot:item.created_at="{ item }">
+            {{ item.created_at | dateFormat('MMMM DD YYYY', true) }}
+          </template>
+          <template v-slot:item.actions="{ item }">
+            <crud-actions row>
+              <v-btn icon small @click.stop="openActionDialog('approve', item._id)">
+                <v-icon>done</v-icon>
+              </v-btn>
+              <v-btn icon small @click.stop="openActionDialog('decline', item._id)">
+                <v-icon>close</v-icon>
+              </v-btn>
+            </crud-actions>
           </template>
         </v-data-table>
       </v-tab-item>
@@ -161,7 +163,6 @@
       </v-card>
     </v-dialog>
 
-    <router-view name="dialog" />
   </admin-view>
 </template>
 
@@ -262,7 +263,7 @@
             decline: {
               title: 'Reject request?',
               description:
-                'Request will be declined and person will not become a member.',
+                'Request will be declined and person will not published.',
               action: {
                 title: 'reject',
                 method: this.declineRequest
@@ -320,7 +321,7 @@
         return tenantService.approveSignUpRequest(name)
           .then(() => {
             this.$store.dispatch('layout/setSuccess', { message: 'Account successfully created' });
-            this.$store.dispatch('adminPanel/loadAdminPanel', {});
+            this.$store.dispatch('adminPanel/loadAllMembers', {});
           })
           .catch((err) => {
             console.error(err);
@@ -338,7 +339,7 @@
         return tenantService.rejectSignUpRequest(name)
           .then(() => {
             this.$store.dispatch('layout/setSuccess', { message: 'Successfully' });
-            this.$store.dispatch('adminPanel/loadAdminPanel', {});
+            this.$store.dispatch('adminPanel/loadAllMembers', {});
           })
           .catch((err) => {
             console.error(err);
@@ -351,6 +352,12 @@
             this.closeActionDialog();
           });
       }
+    },
+
+    $dataPreload() {
+      return Promise.all([
+        this.$store.dispatch('adminPanel/loadAllMembers')
+      ]);
     }
   };
 </script>

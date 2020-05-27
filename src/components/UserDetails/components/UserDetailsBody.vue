@@ -91,7 +91,8 @@
     <!-- ### START User Profile Research Section ### -->
     <div class="user-research-groups-container spinner-container">
       <div>
-        <div class="pt-6">
+        <!-- TODO: hotfix -->
+        <div class="pt-6" v-if="!$route.name.includes('account')">
           <state-research-list
             :research-list="researchList"
             :header-text="'Research projects'"

@@ -43,17 +43,19 @@
           </v-chip>
         </div>
 
-        <div v-if="selectedTrls.length" class="filter-chips__row">
-          <v-chip
-            v-for="trl in selectedTrls"
-            :key="'filter-by-trl-' + trl.id"
-            class="ma-1"
-            close
-            outlined
-            @click:close="toggleTrl(trl)"
-          >
-            {{ trl.label }}
-          </v-chip>
+        <div v-if="selectedSteppers.length" class="filter-chips__row">
+          <template v-for="(item, i) in selectedSteppers">
+            <v-chip
+              v-for="step in item.steps"
+              :key="`filter-${i}-${step}`"
+              class="ma-1"
+              close
+              outlined
+              @click:close="toggleStep(item, step)"
+            >
+              {{ item.shortTitle }} {{ step + 1 }}
+            </v-chip>
+          </template>
         </div>
 
         <div v-if="selectedOrganizations.length" class="filter-chips__row">
@@ -142,48 +144,66 @@
 
           <v-divider class="my-6" />
 
-          <v-row v-if="isTrlFilterAvailable" justify="space-between" align="center" class="pb-6">
-            <v-col>
-              <div class="subtitle-1">
-                Browse by TRL
-              </div>
-            </v-col>
-            <v-col cols="auto">
-              <v-btn
-                small
-                color="primary"
-                outlined
-                :disabled="isAllTrlSelected"
-                @click="resetTrl()"
-              >
-                Reset
-              </v-btn>
-            </v-col>
-          </v-row>
-          <v-row v-if="isTrlFilterAvailable">
-            <v-col v-for="(trl, i) in trls" :key="'trl-filter-' + i" cols="2">
-              <v-tooltip bottom>
-                <template #activator="{ on }">
+          <div v-for="(item, i) in tenant.profile.settings.researchComponents" :key="'research-component-' + i">
+            <template v-if="item.isVisible && item.type === 'stepper'">
+              <v-row justify="space-between" align="center" class="pb-6">
+                <v-col>
+                  <div class="subtitle-1">
+                    Browse by {{ item.component.readinessLevelShortTitle }}
+                  </div>
+                </v-col>
+                <v-col cols="auto">
                   <v-btn
+                    small
+                    color="primary"
+                    outlined
+                    :disabled="isAllStepsSelected[i]"
+                    @click="resetStepper(item)"
+                  >
+                    Reset
+                  </v-btn>
+                </v-col>
+              </v-row>
+              <v-row>
+                <v-col v-for="(step, j) in item.component.readinessLevels" :key="`${item.component.readinessLevelShortTitle}-${j}`" cols="2" class="overflow-hidden">
+                  <v-tooltip v-if="step.description || step.title" bottom>
+                    <template #activator="{ on }">
+                      <v-btn
+                        text
+                        block
+                        small
+                        color="primary"
+                        :input-value="isStepSelected(item, j)"
+                        v-on="on"
+                        @click="toggleStep(item, j)"
+                      >
+                        <div class="full-width text--center">
+                          {{ item.component.readinessLevelShortTitle }} {{ j + 1 }}
+                        </div>
+                      </v-btn>
+                    </template>
+                    <span>{{ step.description || step.title }}</span>
+                  </v-tooltip>
+                  <v-btn
+                    v-else
                     text
                     block
                     small
                     color="primary"
-                    :input-value="isTrlSelected(trl)"
+                    :input-value="isStepSelected(item, j)"
                     v-on="on"
-                    @click="toggleTrl(trl)"
+                    @click="toggleStep(item, j)"
                   >
                     <div class="full-width text--center">
-                      {{ trl.label }}
+                      {{ item.component.readinessLevelShortTitle }} {{ i + 1 }}
                     </div>
                   </v-btn>
-                </template>
-                <span>{{ trl.hint }}</span>
-              </v-tooltip>
-            </v-col>
-          </v-row>
+                </v-col>
+              </v-row>
+            </template>
+          </div>
 
-          <v-divider v-if="isTrlFilterAvailable" class="my-6" />
+          <v-divider v-if="tenant.profile.settings.researchComponents.length" class="my-6" />
 
           <v-row class="pb-6" justify="space-between">
             <v-col>
@@ -272,7 +292,7 @@
                 md="4"
                 xl="3"
               >
-                <v-sheet>
+                <v-sheet class="full-height">
                   <research-project-tile
                     :research="item"
                     :members="item.authors"
@@ -326,7 +346,6 @@
         disciplines: [...disciplinesService.getTopLevelNodes()],
         filterByTopOnly: false,
         filtersTabExpansionModel: false,
-        isTrlFilterAvailable: false, // TODO: fix the filter
         trls: trlData.map((t, i) => ({
           id: t.id,
           label: `TRL ${i + 1}`,
@@ -345,8 +364,8 @@
       isFiltersTabExpanded() {
         return this.filtersTabExpansionModel;
       },
-      selectedTrls() {
-        return this.filter.trl;
+      selectedSteppers() {
+        return this.filter.steppers;
       },
       selectedTopDisciplines() {
         return this.filter.disciplines.filter((d) => d.id != 0 && d.children !== undefined);
@@ -360,8 +379,11 @@
       isAllOrganizationsSelected() {
         return this.filter.organizations.length === 0;
       },
-      isAllTrlSelected() {
-        return this.filter.trl.length === 0;
+      isAllStepsSelected() {
+        return this.tenant.profile.settings.researchComponents.map(({ _id }) => {
+          const step = this.filter.steppers.find((item) => _id === item._id)
+          return step ? !step.steps.length : true;
+        })
       }
     },
 
@@ -375,29 +397,42 @@
     },
 
     methods: {
-      resetTrl() {
+      resetStepper(stepper) {
         this.$store.dispatch('feed/updateFilter', {
-          key: 'trl',
-          value: []
+          key: 'steppers',
+          value: this.filter.steppers.map((item) => item._id === stepper._id ? {_id: item._id, steps: [] } : item)
         });
       },
 
-      toggleTrl(trl) {
-        if (!this.isTrlSelected(trl)) {
-          this.$store.dispatch('feed/updateFilter', {
-            key: 'trl',
-            value: [trl, ...this.filter.trl]
+      toggleStep(stepper, step) {
+        let updatedFilter = [];
+        if (this.isStepSelected(stepper, step)) {
+          updatedFilter = this.filter.steppers.map((item) => {
+            if (item._id === stepper._id){
+                return { _id: item._id, shortTitle: item.shortTitle, steps: [...item.steps.filter(s => s !== step)] }
+            } else {
+              return item
+            }
+          });
+        } else if (this.filter.steppers.find(({_id}) => _id === stepper._id)) {
+          updatedFilter = this.filter.steppers.map((item) => {
+            if (item._id === stepper._id) {
+                return { _id: item._id, shortTitle: item.shortTitle, steps: [...item.steps, step] }
+            } else {
+              return item
+            }
           });
         } else {
-          this.$store.dispatch('feed/updateFilter', {
-            key: 'trl',
-            value: this.filter.trl.filter((t) => t.id !== trl.id)
-          });
+          updatedFilter = [...this.filter.steppers, { _id: stepper._id, shortTitle: stepper.component.readinessLevelShortTitle, steps: [step] }];
         }
+        this.$store.dispatch('feed/updateFilter', {
+          key: 'steppers',
+          value: updatedFilter
+        });
       },
 
-      isTrlSelected(trl) {
-        return !!this.filter.trl.some((t) => t.id === trl.id);
+      isStepSelected(stepper, step) {
+        return !!this.filter.steppers.some((t) => t._id === stepper._id ? t.steps.some(s => s === step ) : false);
       },
 
       selectAllDisciplines() {
@@ -456,7 +491,10 @@
       },
 
       onPaginationUpdated(nextState) {
-        this.$refs.projectsView.scrollIntoView();
+        setTimeout(() => window.scrollTo({
+          top: this.$refs.projectsView.offsetTop - 10,
+          behavior: 'smooth'
+        }), 0);
       },
 
       isLoggedIn() { return accessService.isLoggedIn(); }

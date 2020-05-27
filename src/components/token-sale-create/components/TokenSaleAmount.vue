@@ -13,6 +13,7 @@
     <v-btn
       small
       text
+      class="mr-2"
       :to="{
         name: 'ResearchDetails',
         params: {

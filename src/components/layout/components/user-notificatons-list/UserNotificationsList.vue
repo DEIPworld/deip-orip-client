@@ -25,7 +25,7 @@
 
     <v-list v-show="notifications.length" class="user-notifications-list">
       <template v-for="(notification, i) in notifications">
-        <v-list-item :key="'user-notification-' + i" class="nlfx">
+        <v-list-item link :key="'user-notification-' + i" class="nlfx">
           <v-list-item-content>
             <research-proposal-user-notification
               v-if="(notification.type === PROPOSAL || notification.type === PROPOSAL_ACCEPTED) && notification.metadata.proposal.action === TYPES.CREATE_RESEARCH"
@@ -92,6 +92,21 @@
               :notification="notification"
               @markAsRead="markNotificationAsRead"
             />
+            <research-application-user-notification
+              v-else-if="notification.type === RESEARCH_APPLICATION_CREATED"
+              :notification="notification"
+              @markAsRead="markNotificationAsRead"
+            />
+            <research-application-approved-user-notification
+              v-else-if="notification.type === RESEARCH_APPLICATION_APPROVED"
+              :notification="notification"
+              @markAsRead="markNotificationAsRead"
+            />
+            <research-application-rejected-user-notification
+              v-else-if="notification.type === RESEARCH_APPLICATION_REJECTED"
+              :notification="notification"
+              @markAsRead="markNotificationAsRead"
+            />
           </v-list-item-content>
         </v-list-item>
         <v-divider
@@ -132,6 +147,13 @@
     from '@/components/layout/components/user-notificatons-list/components/ExclusionUserNotification';
   import ExclusionProposalUserNotification
     from '@/components/layout/components/user-notificatons-list/components/ExclusionProposalUserNotification';
+  import ResearchApplicationUserNotification
+    from '@/components/layout/components/user-notificatons-list/components/ResearchApplicationUserNotification';
+  import ResearchApplicationApprovedUserNotification
+    from '@/components/layout/components/user-notificatons-list/components/ResearchApplicationApprovedUserNotification';
+  import ResearchApplicationRejectedUserNotification
+    from '@/components/layout/components/user-notificatons-list/components/ResearchApplicationRejectedUserNotification';
+
 
   const userService = UserService.getInstance();
 
@@ -150,7 +172,10 @@
       ResearchProposalUserNotification,
       ResearchContentProposalUserNotification,
       ExclusionUserNotification,
-      ExclusionProposalUserNotification
+      ExclusionProposalUserNotification,
+      ResearchApplicationUserNotification,
+      ResearchApplicationApprovedUserNotification,
+      ResearchApplicationRejectedUserNotification
     },
     props: {
       notifications: { type: Array, required: true, default: () => [] }
@@ -167,7 +192,10 @@
         EXCLUSION_APPROVED: 'exclusion-approved',
         RESEARCH_CONTENT_EXPERT_REVIEW: 'research-content-expert-review',
         RESEARCH_CONTENT_EXPERT_REVIEW_REQUEST: 'research-content-expert-review-request',
-        EXPERTISE_ALLOCATED: 'expertise-allocated'
+        EXPERTISE_ALLOCATED: 'expertise-allocated',
+        RESEARCH_APPLICATION_CREATED: 'research-application-created',
+        RESEARCH_APPLICATION_APPROVED: 'research-application-approved',
+        RESEARCH_APPLICATION_REJECTED: 'research-application-rejected'
       };
     },
     computed: {},

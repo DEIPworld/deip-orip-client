@@ -1,6 +1,6 @@
 <template>
-  <v-container fluid class="pa-3 pa-md-6">
-    <v-row no-gutters class="ma-0">
+  <v-container fluid class="pa-3 pa-md-6 full-height">
+    <v-row no-gutters class="ma-0 full-height">
       <v-col class="pa-3 pa-md-6">
         <slot name="default" />
       </v-col>
