@@ -64,6 +64,7 @@ import InvestorPortfolio from '@/components/investor-portfolio/InvestorPortfolio
 import ReviewSetup from '@/components/review-setup/ReviewSetup';
 
 import FAQ from '@/components/faq/FAQ';
+import UserApplicationAccepted from '@/components/user-application-accepted/UserApplicationAccepted';
 
 import AdminPanel from '@/components/AdminPanel/AdminPanel';
 import AdminMembers from '@/components/AdminPanel/AdminMembers';
@@ -502,6 +503,11 @@ const router = new Router({
       component: FAQ
     },
     {
+      path: '/user-application-accepted',
+      name: 'UserApplicationAccepted',
+      component: UserApplicationAccepted
+    },
+    {
       path: '/',
       name: 'Default',
       beforeEnter: (to, from, next) => {
@@ -558,7 +564,8 @@ router.beforeEach((to, from, next) => {
     'ResearchFeed',
     'ResearchDetailsPublic',
     'NoAccessPage',
-    'FAQ'
+    'FAQ',
+    'UserApplicationAccepted'
   ];
 
   const loginPages = [
