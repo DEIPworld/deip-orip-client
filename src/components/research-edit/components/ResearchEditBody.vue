@@ -309,7 +309,7 @@
       this.tenantCriterias = this.$store.getters['auth/tenant'].profile.settings.researchComponents
         .map(({ _id, isVisible, component: componentSchema }) => {
           const tenantCriteria = this.researchRef.tenantCriterias.find((criteria) => criteria.component === _id);
-          const enabledCriteria = { component: _id, isVisible, value: { index: tenantCriteria && tenantCriteria.value ? tenantCriteria.value.index : null } };
+          const enabledCriteria = { component: _id, isVisible, value: { index: tenantCriteria && tenantCriteria.value != null ? tenantCriteria.value.index : null } };
 
           if (componentSchema.readinessLevels[enabledCriteria.value.index]) { // check if a step is removed from the component after editing
             return enabledCriteria;

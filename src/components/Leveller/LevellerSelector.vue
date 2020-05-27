@@ -8,7 +8,7 @@
     @change="onInput"
   >
 
-    <template v-if="typeof value !== 'undefined'" #prepend-inner>
+    <template v-if="typeof value !== 'undefined' && currentStep" #prepend-inner>
       <leveller-num
         style="margin-top: -17px; margin-right: -4px; margin-left: -12px;"
         :height="56"
