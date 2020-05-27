@@ -89,7 +89,7 @@
       </template>
     </d-form-block>
 
-    <d-form-block title="Funfing">
+    <d-form-block title="Funding">
       <v-col cols="12" md="6">
         <v-text-field
           v-model="formData.funding"
