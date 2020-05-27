@@ -181,7 +181,14 @@
       },
 
       deleteRequest(proposalId) {
-        this.finishAction();
+        researchService.deleteResearchApplicationViaOffchain(this.user.privKey, {
+          researcher: this.user.username,
+          proposalId: proposalId
+        })
+        .catch(err => console.error(err))
+        .finally(() => {
+          this.finishAction();
+        })
       },
 
       finishAction() {
