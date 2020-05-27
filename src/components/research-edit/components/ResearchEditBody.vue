@@ -306,7 +306,7 @@
       this.isPublic = !this.research.is_private;
       this.partners = this.researchRef.partners.map((item) => _.cloneDeep(item));
 
-      this.tenantCriterias = this.tenant.profile.settings.researchComponents
+      this.tenantCriterias = this.$store.getters['auth/tenant'].profile.settings.researchComponents
         .map(({ _id, isVisible, component: componentSchema }) => {
           const tenantCriteria = this.researchRef.tenantCriterias.find((criteria) => criteria.component === _id);
           const enabledCriteria = { component: _id, isVisible, value: { index: tenantCriteria && tenantCriteria.value ? tenantCriteria.value.index : null } };

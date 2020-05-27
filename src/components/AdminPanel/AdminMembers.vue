@@ -23,14 +23,14 @@
         <v-data-table
           :headers="registeredMembersTableHeaders"
           :items="registeredMembers"
+          class="table-row-cursor-pointer"
+          @click:row="openMemberInfoDialog"
         >
-          <template v-slot:item="{ item }">
-            <tr class="cursor-pointer" @click="openMemberInfoDialog(item)">
-              <td>{{ item | fullname }}</td>
-              <td>{{ item.profile.created_at | dateFormat('MMMM DD YYYY', true) }}</td>
-              <td>{{ item.profile.category }}</td>
-              <td>{{ item.profile.location ? item.profile.location.country : '' }}</td>
-            </tr>
+          <template v-slot:item.name="{ item }">
+            {{ item | fullname }}
+          </template>
+          <template v-slot:item.created_at="{ item }">
+            {{ item.profile.created_at | dateFormat('MMMM DD YYYY', true) }}
           </template>
         </v-data-table>
       </v-tab-item>
@@ -39,22 +39,24 @@
         <v-data-table
           :headers="waitingMembersTableHeaders"
           :items="waitingMembers"
+          class="table-row-cursor-pointer"
+          @click:row="openMemberInfoDialog"
         >
-          <template v-slot:item="{ item }">
-            <tr class="cursor-pointer" @click="openMemberInfoDialog(item)">
-              <td>{{ item.firstName }} {{ item.lastName }}</td>
-              <td>{{ item.created_at | dateFormat('MMMM DD YYYY', true) }}</td>
-              <td class="text-right">
-                <crud-actions row>
-                  <v-btn icon small @click.stop="openActionDialog('approve', item._id)">
-                    <v-icon>done</v-icon>
-                  </v-btn>
-                  <v-btn icon small @click.stop="openActionDialog('decline', item._id)">
-                    <v-icon>close</v-icon>
-                  </v-btn>
-                </crud-actions>
-              </td>
-            </tr>
+          <template v-slot:item.name="{ item }">
+            {{ item.firstName }} {{ item.lastName }}
+          </template>
+          <template v-slot:item.created_at="{ item }">
+            {{ item.created_at | dateFormat('MMMM DD YYYY', true) }}
+          </template>
+          <template v-slot:item.actions="{ item }">
+            <crud-actions row>
+              <v-btn icon small @click.stop="openActionDialog('approve', item._id)">
+                <v-icon>done</v-icon>
+              </v-btn>
+              <v-btn icon small @click.stop="openActionDialog('decline', item._id)">
+                <v-icon>close</v-icon>
+              </v-btn>
+            </crud-actions>
           </template>
         </v-data-table>
       </v-tab-item>
@@ -261,7 +263,7 @@
             decline: {
               title: 'Reject request?',
               description:
-                'Request will be declined and person will not become a member.',
+                'Request will be declined and person will not published.',
               action: {
                 title: 'reject',
                 method: this.declineRequest

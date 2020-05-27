@@ -59,7 +59,7 @@
         researchService.createResearchApplicationViaOffchain(researcherPrivKey, formData)
           .then(({ rm }) => {
             this.$store.dispatch('layout/setSuccess', {
-              message: `Project "${this.formData.researchTitle}" has been created successfully`
+              message: 'Project request has been applied successfully. We will notify you as soon as your project form will be approved.'
             });
             return deipRpc.api.getResearchAsync(rm._id);
           })

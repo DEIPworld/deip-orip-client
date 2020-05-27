@@ -158,7 +158,7 @@
           class="ml-2"
           :loading="loading"
         >
-          Save research
+          Apply request
         </v-btn>
       </slot>
     </div>

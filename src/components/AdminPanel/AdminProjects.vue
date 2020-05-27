@@ -21,6 +21,9 @@
           :headers="publicProjectsHeaders"
           :items="publicProjects"
           :items-per-page="50"
+          sort-by="created_at"
+          sort-desc
+          class="table-row-cursor-pointer"
           @click:row="goToResearch"
         >
           <template #item.created_at="{item}">
@@ -36,6 +39,9 @@
           :headers="pendingProjectsHeaders"
           :items="pendingProjects"
           :items-per-page="50"
+          sort-by="created_at"
+          sort-desc
+          class="table-row-cursor-pointer"
           @click:row="showResearch"
         >
           <template #item.created_at="{item}">
@@ -48,7 +54,7 @@
               <v-btn icon small @click.stop="openActionDialog('approve', item._id)">
                 <v-icon>done</v-icon>
               </v-btn>
-              <v-btn icon small @click.stop="openActionDialog('decline', item._id)">
+              <v-btn icon small @click.stop="openActionDialog('reject', item._id)">
                 <v-icon>close</v-icon>
               </v-btn>
             </crud-actions>
@@ -154,7 +160,7 @@
             approve: {
               title: 'Approve request?',
               description:
-                'Request will be approved and person will become a member.',
+                'Project request will be approved and project will be published.',
               action: {
                 title: 'approve',
                 method: this.approveResearchApplication
@@ -163,7 +169,7 @@
             reject: {
               title: 'Reject request?',
               description:
-                'Request will be declined and person will not become a member.',
+                'Project request will not be approved and project will not be published.',
               action: {
                 title: 'reject',
                 method: this.rejectResearchApplication
