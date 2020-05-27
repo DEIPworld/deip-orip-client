@@ -20,7 +20,7 @@
     </div>
 
     <v-sheet
-      v-if="research.researchRef.tenantCategory && research.researchRef.tenantCategory.text"
+      v-if="research.researchRef && research.researchRef.tenantCategory && research.researchRef.tenantCategory.text"
       tile
       color="#0386b0"
       class="project-category-label white--text py-1 pl-1 pr-2 body-2"
@@ -58,26 +58,28 @@
         </v-chip>
       </div>
 
-      <div v-for="(item, i) in research.researchRef.tenantCriteriasReadingList" :key="`${i}-tenantCriteria`" class="display-inline-block mr-4">
-        <div v-if="item.type == 'stepper'" class="mb-2">
-          <v-tooltip v-if="item.step.description" bottom>
-            <template v-slot:activator="{ on }">
-              <div class="display-flex" v-on="on">
-                <v-avatar size="24px" class="align-self-center">
-                  <v-icon size="24px" color="#0386b0">
-                    mdi-numeric-{{ item.value.index + 1 }}-circle
-                  </v-icon>
-                </v-avatar>
-                <span class="subtitle-1 align-self-center font-weight-medium black--text">{{ item.readinessLevelShortTitle }}</span>
-              </div>
-            </template>
-            <span>{{ item.step.description }}</span>
-          </v-tooltip>
-          <div v-else class="display-flex">
-            <v-avatar size="20" color="#0386b0" class="align-self-center mr-1">
-              <span class="white--text caption font-weight-medium">{{ item.value.index + 1 }}</span>
-            </v-avatar>
-            <span class="subtitle-1 align-self-center font-weight-medium black--text">{{ item.readinessLevelShortTitle }}</span>
+      <div v-if="research.researchRef && research.researchRef.tenantCriteriasReadingList">
+        <div v-for="(item, i) in research.researchRef.tenantCriteriasReadingList" :key="`${i}-tenantCriteria`" class="display-inline-block mr-4">
+          <div v-if="item.type == 'stepper'" class="mb-2">
+            <v-tooltip v-if="item.step.description" bottom>
+              <template v-slot:activator="{ on }">
+                <div class="display-flex" v-on="on">
+                  <v-avatar size="24px" class="align-self-center">
+                    <v-icon size="24px" color="#0386b0">
+                      mdi-numeric-{{ item.value.index + 1 }}-circle
+                    </v-icon>
+                  </v-avatar>
+                  <span class="subtitle-1 align-self-center font-weight-medium black--text">{{ item.readinessLevelShortTitle }}</span>
+                </div>
+              </template>
+              <span>{{ item.step.description }}</span>
+            </v-tooltip>
+            <div v-else class="display-flex">
+              <v-avatar size="20" color="#0386b0" class="align-self-center mr-1">
+                <span class="white--text caption font-weight-medium">{{ item.value.index + 1 }}</span>
+              </v-avatar>
+              <span class="subtitle-1 align-self-center font-weight-medium black--text">{{ item.readinessLevelShortTitle }}</span>
+            </div>
           </div>
         </div>
       </div>

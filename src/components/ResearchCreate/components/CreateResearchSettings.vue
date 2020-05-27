@@ -105,7 +105,7 @@
       }
     },
     created() {
-      const enabledCriterias = this.tenant.profile.settings.researchComponents.reduce((acc, item) => {
+      const enabledCriterias = this.$store.getters['auth/tenant'].profile.settings.researchComponents.reduce((acc, item) => {
          if (item.isVisible) {
            return [...acc, { component: item._id, value: { index: 0 } }]; // set the first entry
          }
