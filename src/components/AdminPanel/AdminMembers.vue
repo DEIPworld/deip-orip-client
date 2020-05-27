@@ -21,9 +21,9 @@
     <v-tabs-items v-model="tab">
       <v-tab-item :transition="false" :reverse-transition="false">
         <v-data-table
+          v-custom="'hover-row'"
           :headers="registeredMembersTableHeaders"
           :items="registeredMembers"
-          class="table-row-cursor-pointer"
           @click:row="openMemberInfoDialog"
         >
           <template v-slot:item.name="{ item }">
@@ -37,9 +37,9 @@
 
       <v-tab-item :transition="false" :reverse-transition="false">
         <v-data-table
+          v-custom="'hover-row'"
           :headers="waitingMembersTableHeaders"
           :items="waitingMembers"
-          class="table-row-cursor-pointer"
           @click:row="openMemberInfoDialog"
         >
           <template v-slot:item.name="{ item }">

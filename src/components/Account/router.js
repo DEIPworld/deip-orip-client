@@ -6,6 +6,7 @@ import UserDetails from '@/components/UserDetails/UserDetails';
 import UserExpertiseDetails from '@/components/UserDetails/UserExpertiseDetails';
 import { store } from '@/store';
 import AccountProjectRequests from '@/components/Account/AccountProjectRequests';
+import AccountProjects from '@/components/Account/AccountProjects';
 
 export const accountRouting = [{
   path: '/account',
@@ -39,6 +40,11 @@ export const accountRouting = [{
         withoutHeader: true,
         hideSidebar: true
       }
+    },
+    {
+      path: 'project',
+      name: 'account.projects',
+      component: AccountProjects
     },
     {
       path: 'project-requests',

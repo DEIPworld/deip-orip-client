@@ -1,18 +1,17 @@
 <template>
-  <full-screen-view title="Create research">
+  <full-screen-view title="Start a project">
     <research-request-form-view
       v-model="formData"
       :disabled="formProcessing"
       :loading="formProcessing"
-      :view-props="viewProps"
       @submit="createResearchApplication"
     />
   </full-screen-view>
 </template>
 
 <script>
-  import ResearchRequestFormView from '@/components/ResearchRequestForm/ResearchRequestFormView';
-  import { ResearchRequestModelMixin } from '@/components/ResearchRequestForm/ResearchRequestModelMixin';
+  import ResearchRequestFormView from '@/components/ResearchRequest/ResearchRequestFormView';
+  import { ResearchRequestModelMixin } from '@/components/ResearchRequest/ResearchRequestModelMixin';
   import { ResearchService } from '@deip/research-service';
   import deipRpc from '@deip/rpc-client';
   import FullScreenView from '@/components/layout/FullScreen/FullScreenView';

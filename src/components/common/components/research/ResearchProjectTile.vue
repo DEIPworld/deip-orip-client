@@ -64,10 +64,8 @@
             <v-tooltip v-if="item.step.description" bottom>
               <template v-slot:activator="{ on }">
                 <div class="display-flex" v-on="on">
-                  <v-avatar size="24px" class="align-self-center">
-                    <v-icon size="24px" color="#0386b0">
-                      mdi-numeric-{{ item.value.index + 1 }}-circle
-                    </v-icon>
+                  <v-avatar size="20" color="#0386b0" class="align-self-center mr-1">
+                    <span class="white--text caption font-weight-medium">{{ item.value.index + 1 }}</span>
                   </v-avatar>
                   <span class="subtitle-1 align-self-center font-weight-medium black--text">{{ item.readinessLevelShortTitle }}</span>
                 </div>

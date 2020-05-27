@@ -11,6 +11,7 @@ const state = {
   account: undefined,
   profile: undefined,
   pendingProjects: [],
+  rejectedProjects: [],
   publicProjects: [],
 };
 
@@ -22,6 +23,7 @@ const getters = {
   }),
 
   pendingProjects: (state) => state.pendingProjects,
+  rejectedProjects: (state) => state.rejectedProjects,
   publicProjects: (state) => state.publicProjects
 };
 
@@ -74,6 +76,19 @@ const actions = {
         console.log(username,result)
         context.commit('getPendingProjects', result);
       });
+  },
+  getRejectedProjects(context, { username }) {
+    return researchService.getRejectedResearchApplicationsByResearcher(username)
+      .then((result) => {
+        console.log(username,result)
+        context.commit('getRejectedProjects', result);
+      });
+  },
+  getAllProjects(context, { username }) {
+    return Promise.all([
+      context.dispatch('getPendingProjects', { username }),
+      context.dispatch('getRejectedProjects', { username })
+    ]);
   }
 };
 
@@ -89,6 +104,9 @@ const mutations = {
 
   getPendingProjects(state, payload) {
     state.pendingProjects = payload;
+  },
+  getRejectedProjects(state, payload) {
+    state.rejectedProjects = payload;
   }
 };
 

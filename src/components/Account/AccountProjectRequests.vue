@@ -1,23 +1,51 @@
 <template>
   <layout-section>
-    <v-data-table
-      :headers="pendingProjectsHeaders"
-      :items="pendingProjects"
-      :items-per-page="50"
-    >
-      <template #item.created_at="{item}">
-        <div class="text-no-wrap">
-          {{ item.created_at | dateFormat('MMMM DD YYYY', true) }}
-        </div>
-      </template>
-      <template #item.actions="{item}">
-        <crud-actions row>
-          <v-btn icon small @click.stop="showResearch(item)">
-            <v-icon>edit</v-icon>
-          </v-btn>
-        </crud-actions>
-      </template>
-    </v-data-table>
+    <v-tabs v-model="tab">
+      <v-tab>Waiting for approval</v-tab>
+      <v-tab>Declined</v-tab>
+    </v-tabs>
+    <v-divider />
+    <v-tabs-items v-model="tab">
+
+      <v-tab-item :transition="false" :reverse-transition="false">
+        <v-data-table
+          :headers="pendingProjectsHeaders"
+          :items="pendingProjects"
+          :items-per-page="50"
+        >
+          <template #item.created_at="{item}">
+            <div class="text-no-wrap">
+              {{ item.created_at | dateFormat('MMMM DD YYYY', true) }}
+            </div>
+          </template>
+          <template #item.actions="{item}">
+            <crud-actions row>
+              <v-btn icon small @click.stop="openConfirmDialog('delete', item._id)">
+                <v-icon>delete</v-icon>
+              </v-btn>
+              <v-btn icon small @click.stop="showResearch(item)">
+                <v-icon>edit</v-icon>
+              </v-btn>
+            </crud-actions>
+          </template>
+        </v-data-table>
+      </v-tab-item>
+
+      <v-tab-item :transition="false" :reverse-transition="false">
+        <v-data-table
+          :headers="rejectedProjectsHeaders"
+          :items="rejectedProjects"
+          :items-per-page="50"
+        >
+          <template #item.created_at="{item}">
+            <div class="text-no-wrap">
+              {{ item.created_at | dateFormat('MMMM DD YYYY', true) }}
+            </div>
+          </template>
+        </v-data-table>
+      </v-tab-item>
+
+    </v-tabs-items>
 
     <full-screen-modal
       v-model="researchDialog.isOpen"
@@ -31,8 +59,35 @@
       />
     </full-screen-modal>
 
-  </layout-section>
+    <action-dialog
+      :open="confirmDialog.isOpen"
+      :title="confirmDialog.data.title"
+      @close="closeConfirmDialog"
+    >
+      {{ confirmDialog.data.description }}
+      <template #actions>
+        <v-btn
+          color="primary"
+          text
+          :disabled="isDisabled"
+          @click="closeConfirmDialog"
+        >
+          cancel
+        </v-btn>
+        <v-btn
+          color="primary"
+          :disabled="isDisabled"
+          :loading="isDisabled"
+          text
+          v-if="confirmDialog.data.action"
+          @click="confirmDialog.data.action.method(confirmDialog.data.id)"
+        >
+          {{ confirmDialog.data.action.title }}
+        </v-btn>
+      </template>
+    </action-dialog>
 
+  </layout-section>
 </template>
 
 <script>
@@ -40,11 +95,16 @@
   import CrudActions from '@/components/layout/CrudActions';
   import LayoutSection from '@/components/layout/components/LayoutSection';
   import FullScreenModal from '@/components/layout/FullScreen/FullScreenModal';
-  import ResearchRequestFormEdit from '@/components/ResearchRequestForm/ResearchRequestFormEdit';
+  import ResearchRequestFormEdit from '@/components/ResearchRequest/ResearchRequestFormEdit';
+  import ActionDialog from '@/components/layout/ActionDialog';
+  import { ResearchService } from '@deip/research-service';
+
+  const researchService = ResearchService.getInstance();
 
   export default {
     name: 'AccountProjectRequests',
     components: {
+      ActionDialog,
       ResearchRequestFormEdit,
       FullScreenModal,
       LayoutSection,
@@ -53,6 +113,25 @@
 
     data() {
       return {
+        tab: null,
+        isDisabled: false,
+
+        confirmDialog: {
+          isOpen: false,
+          data: {},
+          types: {
+            delete: {
+              title: 'Delete request?',
+              description:
+                'Project request will will be Deleted.',
+              action: {
+                title: 'delete',
+                method: this.deleteRequest
+              }
+            }
+          }
+        },
+
         researchDialog: {
           isOpen: false,
           id: null
@@ -71,13 +150,27 @@
             value: 'actions',
             align: 'end'
           }
+        ],
+
+        rejectedProjectsHeaders: [
+          {
+            text: 'Title',
+            value: 'title'
+          },
+          {
+            text: 'Created',
+            value: 'created_at'
+          }
         ]
       };
     },
 
     computed: {
       ...mapGetters({
-        pendingProjects: 'account/pendingProjects'
+        pendingProjects: 'account/pendingProjects',
+        rejectedProjects: 'account/rejectedProjects',
+        user: 'auth/user',
+        tenant: 'auth/tenant'
       })
     },
 
@@ -87,15 +180,42 @@
         this.researchDialog.isOpen = true;
       },
 
+      deleteRequest(proposalId) {
+        this.finishAction();
+      },
+
+      finishAction() {
+        const username = decodeURIComponent(this.$store.getters['auth/user'].account.name);
+        this.$store.dispatch('account/getAllProjects', { username }).then(() => {
+          this.isDisabled = false;
+          this.closeConfirmDialog();
+        });
+      },
+
       hideResearch() {
         this.researchDialog.isOpen = false;
+      },
+
+      closeConfirmDialog() {
+        this.confirmDialog.isOpen = false;
+        setTimeout(() => {
+          this.confirmDialog.data = {};
+        }, 300);
+      },
+      openConfirmDialog(type, id) {
+        if (this.researchDialog.isOpen) {
+          this.hideResearch();
+        }
+
+        this.confirmDialog.isOpen = true;
+        this.confirmDialog.data = this.confirmDialog.types[type];
+        this.confirmDialog.data.id = id;
       },
     },
 
     $dataPreload() {
-      return this.$store.dispatch('account/getPendingProjects', {
-        username: decodeURIComponent(this.$store.getters['auth/user'].account.name)
-      });
+      const username = decodeURIComponent(this.$store.getters['auth/user'].account.name);
+      return this.$store.dispatch('account/getAllProjects', { username });
     }
   };
 </script>

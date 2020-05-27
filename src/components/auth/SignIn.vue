@@ -22,7 +22,7 @@
           <login-form
             :show-sign-up="!adminLogin"
             logo="AR3C"
-            title="Login to your account"
+            :title="adminLogin ? 'Sign in to your admin account' : 'Sign in to your account'"
           />
         </v-sheet>
       </v-col>

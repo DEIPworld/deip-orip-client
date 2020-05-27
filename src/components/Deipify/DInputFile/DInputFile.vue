@@ -15,8 +15,8 @@
       @input="onInput"
     >
     </v-file-input>
-    <div v-if="!!exist">
-      <a class="a" :href="exist" target="_blank">View file</a>
+    <div v-if="!!exist" class="pl-4 pt-2">
+      <a class="link" :href="exist" target="_blank">View file</a>
     </div>
   </div>
 

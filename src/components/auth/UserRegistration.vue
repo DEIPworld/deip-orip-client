@@ -213,8 +213,10 @@
   import { TenantService } from '@deip/tenant-service';
   import _ from 'lodash';
   import countryList from '@/components/common/country.json';
+  import { AuthService } from '@deip/auth-service';
 
   const tenantService = TenantService.getInstance();
+  const authService = AuthService.getInstance();
 
   export default {
     name: 'UserRegistration',
@@ -291,6 +293,11 @@
       };
     },
     methods: {
+      create(data) {
+        return this.$route.name === 'admin.members.add'
+          ? tenantService.postSignUp(data)
+          : authService.signUp(data);
+      },
       finishCreateAccount() {
         if (!this.$refs.form.validate()) return;
 
@@ -318,49 +325,48 @@
           ['owner']
         );
 
-        tenantService
-          .postSignUp({
-            username,
-            email,
-            firstName,
-            birthdate,
-            lastName,
-            pubKey,
-            phoneNumbers: [
-              {
-                label: 'default',
-                ext: '', // optional
-                number: phoneNumber
-              }
-            ],
-            webPages: [
-              {
-                type: 'webpage',
-                label: 'default',
-                link: website
-              }
-            ],
-            location: {
-              city,
-              country,
-              address
-            },
-            category,
-            occupation,
-            foreignIds: [
-              {
-                label: 'ar3c_member',
-                id
-              }
-            ]
-          })
+        this.create({
+          username,
+          email,
+          firstName,
+          birthdate,
+          lastName,
+          pubKey,
+          phoneNumbers: [
+            {
+              label: 'default',
+              ext: '', // optional
+              number: phoneNumber
+            }
+          ],
+          webPages: [
+            {
+              type: 'webpage',
+              label: 'default',
+              link: website
+            }
+          ],
+          location: {
+            city,
+            country,
+            address
+          },
+          category,
+          occupation,
+          foreignIds: [
+            {
+              label: 'ar3c_member',
+              id
+            }
+          ]
+        })
           .then(() => {
             this.isSaving = false;
             this.isServerValidated = true;
             this.$store.dispatch('layout/setSuccess', {
               message: `Account '${this.formData.username}' successfully created`
             });
-            this.$router.push({ name: 'admin.members' });
+            this.$router.push({ name: this.$route.name === 'admin.members.add' ? 'admin.members' : 'UserApplicationAccepted' });
           })
           .catch((err) => {
             this.isSaving = false;

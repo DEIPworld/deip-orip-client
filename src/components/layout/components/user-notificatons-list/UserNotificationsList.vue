@@ -25,7 +25,7 @@
 
     <v-list v-show="notifications.length" class="user-notifications-list">
       <template v-for="(notification, i) in notifications">
-        <v-list-item :key="'user-notification-' + i" class="nlfx">
+        <v-list-item link :key="'user-notification-' + i" class="nlfx">
           <v-list-item-content>
             <research-proposal-user-notification
               v-if="(notification.type === PROPOSAL || notification.type === PROPOSAL_ACCEPTED) && notification.metadata.proposal.action === TYPES.CREATE_RESEARCH"
@@ -95,17 +95,17 @@
             <research-application-user-notification
               v-else-if="notification.type === RESEARCH_APPLICATION_CREATED"
               :notification="notification"
-              @markAsRead="markNotificationAsRead" 
+              @markAsRead="markNotificationAsRead"
             />
             <research-application-approved-user-notification
               v-else-if="notification.type === RESEARCH_APPLICATION_APPROVED"
               :notification="notification"
-              @markAsRead="markNotificationAsRead" 
+              @markAsRead="markNotificationAsRead"
             />
             <research-application-rejected-user-notification
               v-else-if="notification.type === RESEARCH_APPLICATION_REJECTED"
               :notification="notification"
-              @markAsRead="markNotificationAsRead" 
+              @markAsRead="markNotificationAsRead"
             />
           </v-list-item-content>
         </v-list-item>
@@ -153,7 +153,7 @@
     from '@/components/layout/components/user-notificatons-list/components/ResearchApplicationApprovedUserNotification';
   import ResearchApplicationRejectedUserNotification
     from '@/components/layout/components/user-notificatons-list/components/ResearchApplicationRejectedUserNotification';
-    
+
 
   const userService = UserService.getInstance();
 

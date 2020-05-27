@@ -64,6 +64,7 @@ import InvestorPortfolio from '@/components/investor-portfolio/InvestorPortfolio
 import ReviewSetup from '@/components/review-setup/ReviewSetup';
 
 import FAQ from '@/components/faq/FAQ';
+import UserApplicationAccepted from '@/components/user-application-accepted/UserApplicationAccepted';
 
 import AdminPanel from '@/components/AdminPanel/AdminPanel';
 import AdminMembers from '@/components/AdminPanel/AdminMembers';
@@ -76,7 +77,7 @@ import { AppConfigService } from '@deip/app-config-service';
 import { accountRouting } from '@/components/Account/router';
 import { userDetailRouting } from '@/components/UserDetails/router';
 import { adminRouting } from '@/components/AdminPanel/router';
-import ResearchRequestFormCreate from '@/components/ResearchRequestForm/ResearchRequestFormCreate';
+import ResearchRequestFormCreate from '@/components/ResearchRequest/ResearchRequestFormCreate';
 
 const accessService = AccessService.getInstance();
 const usersService = UsersService.getInstance();
@@ -297,7 +298,10 @@ const router = new Router({
             });
           }
         }
-      })
+      }),
+      meta: {
+        withoutHeader: true
+      }
     }, {
       path: '/:research_group_permlink/research/:research_permlink/:content_permlink',
       name: 'ResearchContentDetails',
@@ -502,6 +506,11 @@ const router = new Router({
       component: FAQ
     },
     {
+      path: '/user-application-accepted',
+      name: 'UserApplicationAccepted',
+      component: UserApplicationAccepted
+    },
+    {
       path: '/',
       name: 'Default',
       beforeEnter: (to, from, next) => {
@@ -558,7 +567,8 @@ router.beforeEach((to, from, next) => {
     'ResearchFeed',
     'ResearchDetailsPublic',
     'NoAccessPage',
-    'FAQ'
+    'FAQ',
+    'UserApplicationAccepted'
   ];
 
   const loginPages = [
