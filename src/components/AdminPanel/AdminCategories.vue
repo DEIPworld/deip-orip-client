@@ -61,7 +61,7 @@
           },
           {
             text: 'Assigned projects',
-            value: 'assignedProjects',
+            value: 'researchCount',
             align: 'center',
             sortable: false
           },
