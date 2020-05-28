@@ -91,7 +91,7 @@
           <v-row justify="space-between" align="center" class="mb-6">
             <v-col>
               <div class="subtitle-1">
-                Browse by discipline
+                Browse by domain
               </div>
             </v-col>
             <v-col cols="auto">
