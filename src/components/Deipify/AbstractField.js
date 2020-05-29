@@ -17,6 +17,7 @@ export const AbstractField = {
     _xProps() {
       return {
         filled: true,
+        hideDetails: 'auto',
         ...this.xProps
       };
     }

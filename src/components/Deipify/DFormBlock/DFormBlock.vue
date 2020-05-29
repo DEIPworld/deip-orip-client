@@ -7,7 +7,7 @@
     <div v-if="title" class="title mb-4">
       {{ title }}
     </div>
-    <v-row>
+    <v-row class="ma-n3">
       <slot />
     </v-row>
   </v-sheet>

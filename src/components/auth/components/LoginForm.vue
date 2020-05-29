@@ -1,5 +1,5 @@
 <template>
-  <v-sheet :class="{'text-center': centered}">
+  <v-sheet max-width="420" :class="{'text-center': centered}">
     <div v-if="logo" class="display-2 mb-6">
       {{ logo }}
     </div>
@@ -7,25 +7,54 @@
       {{ title }}
     </div>
 
-    <form-generator :model="formModel" :schema="schema" max-width="360" @submit="login">
-      <template #actions>
-        <v-btn
-          type="submit"
-          block
-          large
-          color="primary"
-          :loading="disable"
-          :disabled="disable"
-        >
-          Sign in
-        </v-btn>
-      </template>
-    </form-generator>
+    <d-form @submit="login">
+      <d-form-block>
+        <v-col cols="12">
+          <v-text-field
+            v-model="formData.username"
+            filled
+            label="Username"
+            :rules="[validation.required]"
+            :disable="disable"
+            prepend-inner-icon="person"
+            hide-details="auto"
+          />
+        </v-col>
+
+        <v-col cols="12">
+          <d-input-password
+            v-model="formData.password"
+            label="Username"
+            :disable="disable"
+            :x-props="{
+              rules: [validation.required],
+              disable: disable,
+              prependInnerIcon: 'lock'
+            }"
+          />
+        </v-col>
+
+        <v-col cols="12">
+          <v-btn
+            type="submit"
+            block
+            large
+            color="primary"
+            :loading="disable"
+            :disabled="disable"
+          >
+            Sign in
+          </v-btn>
+        </v-col>
+      </d-form-block>
+    </d-form>
+
     <div v-if="showSignUp" class="mt-4 subtitle-2">
       Want become a member?
-      <router-link class="a" :to="{name: 'SignUp'}">Sign Up now</router-link>
+      <router-link class="a" :to="{name: 'SignUp'}">
+        Sign Up now
+      </router-link>
     </div>
-
   </v-sheet>
 </template>
 
@@ -37,6 +66,10 @@
   import { AccessService } from '@deip/access-service';
   import { AuthService } from '@deip/auth-service';
   import { setUser } from '@/bootstrap';
+  import DForm from '@/components/Deipify/DForm/DForm';
+  import DFormBlock from '@/components/Deipify/DFormBlock/DFormBlock';
+  import DInputPassword from '@/components/Deipify/DInputPassword/DInputPassword';
+  import TestField from '@/components/Deipify/TestField';
 
   const accessService = AccessService.getInstance();
   const authService = AuthService.getInstance();
@@ -58,6 +91,10 @@
   export default {
     name: 'LoginForm',
     components: {
+      TestField,
+      DInputPassword,
+      DFormBlock,
+      DForm,
       FormGenerator
     },
     props: {
@@ -92,63 +129,45 @@
       };
 
       return {
-        formModel: {},
+        formData: {
+          username: null,
+          password: null
+        },
 
-        schema: [{
-          fields: [
-            {
-              type: 'text',
-              label: 'Username',
-              name: 'username',
-              props: {
-                rules: [validation.required],
-                disable: this.disable,
-                prependInnerIcon: 'person'
-              }
-            },
-            {
-              type: 'password',
-              label: 'Password / Private Key',
-              name: 'password',
-              props: {
-                rules: [validation.required],
-                disable: this.disable,
-                prependInnerIcon: 'lock'
-              }
-            }
-          ]
-        }],
+        validation: {
+          required: (value) => !!value || 'This field is required'
+        },
 
-        disable: false,
-        isFormValid: false
+        disable: false
       };
     },
+
     created() {
-      this.formModel.username = this.$route.query.username || '';
+      this.formData.username = this.$route.query.username || '';
     },
+
     methods: {
       login(formValid) {
-
         if (!formValid) return;
 
         this.disable = true;
 
         let privateKey;
-        return deipRpc.api.getAccountsAsync([this.formModel.username])
+        deipRpc.api.getAccountsAsync([this.formData.username])
           .then(([account]) => {
             if (!account) {
               throw new Error('Invalid account name');
             }
 
             if (
-              deipRpc.auth.isWif(this.formModel.password)
-              && getPrivateKeyRole(this.formModel.password, account)
+              deipRpc.auth.isWif(this.formData.password)
+              && getPrivateKeyRole(this.formData.password, account)
             ) {
-              privateKey = this.formModel.password;
+              privateKey = this.formData.password;
             } else {
               privateKey = deipRpc.auth.toWif(
-                this.formModel.username,
-                this.formModel.password,
+                this.formData.username,
+                this.formData.password,
                 'owner'
               );
             }
@@ -166,7 +185,7 @@
             // sig-seed should be uint8 array with length = 32
             const secretSig = secretKey.sign(encodeUint8Arr(window.env.SIG_SEED).buffer);
             return authService[`${this.isAdmin ? 'adminSignIn' : 'signIn'}`]({
-              username: this.formModel.username,
+              username: this.formData.username,
               secretSigHex: crypto.hexify(secretSig)
             });
           }).then(async (response) => {
