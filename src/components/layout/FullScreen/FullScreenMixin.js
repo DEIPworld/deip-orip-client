@@ -12,6 +12,10 @@ export const FullScreenMixin = {
       type: Boolean,
       default: false
     },
+    hideToolbar: {
+      type: Boolean,
+      default: false
+    },
     noGutters: {
       type: Boolean,
       default: false

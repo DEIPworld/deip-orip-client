@@ -1,6 +1,6 @@
 <template>
   <div class="full-height">
-    <portal to="toolbar">
+    <portal v-if="!hideToolbar" to="toolbar">
       <v-app-bar
         flat
         :app="!toolbarOverlap"

@@ -8,6 +8,7 @@
   >
     <v-card tile>
       <v-app-bar
+        v-if="!hideToolbar"
         flat
         absolute
         color="#fff"
