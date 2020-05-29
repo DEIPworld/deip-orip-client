@@ -33,7 +33,6 @@
     },
 
     created() {
-      console.log('create');
       this.getResearch();
     },
 
@@ -57,8 +56,6 @@
         this.formProcessing = true;
 
         const formData = this.createFormData(this.formData);
-
-        console.log(this.formData);
 
         researchService.editResearchApplicationViaOffchain(this.formData._id, formData)
           .then((result) => {

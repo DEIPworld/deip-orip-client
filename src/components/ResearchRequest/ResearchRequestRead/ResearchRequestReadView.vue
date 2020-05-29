@@ -1,22 +1,22 @@
 <template>
-  <v-list>
-    <v-list-item v-for="(item, index) of research" :key="index">
-      <v-list-item-content>
-        <div class="subtitle-1 font-weight-medium">{{ item.name }}</div>
-        <v-list v-if="item.name === 'Project readines level'" class="ma-0 pa-0">
-          <v-list-item class="px-0" v-for="(level, index) of item.data" :key="index">
-            <leveller-num class="align-self-center" style="height: auto" :height="24" :num="level.value.index"></leveller-num>
-            <div class="ml-2">
-              <div class="caption">{{ level.name }}</div>
-              {{ level.value.title }}
-            </div>
-          </v-list-item>
-        </v-list>
-        <div v-else class="body-2" v-html="item.data">
-        </div>
-      </v-list-item-content>
-    </v-list-item>
-  </v-list>
+  <div>
+    <div v-for="(item, index) of research" :key="index" :class="{'mb-6': index+1 < research.length}">
+      <div class="subtitle-1 font-weight-medium">{{ item.name }}</div>
+
+      <v-list v-if="item.name === 'Project readines level'" class="ma-0 pa-0">
+        <v-list-item class="px-0" v-for="(level, index) of item.data" :key="index">
+          <leveller-num class="align-self-center" style="height: auto" :height="24"
+                        :num="level.value.index"></leveller-num>
+          <div class="ml-2">
+            <div class="caption">{{ level.name }}</div>
+            {{ level.value.title }}
+          </div>
+        </v-list-item>
+      </v-list>
+
+      <div v-else class="body-2" v-html="item.data"/>
+    </div>
+  </div>
 </template>
 
 <script>

@@ -54,16 +54,6 @@ Vue.use(VueCurrencyFilter, currencyFilterOptions);
 Vue.mixin(DataPreloadMixin);
 Vue.mixin(CommonMixin);
 
-// Vue.directive('Custom', {
-//   bind(el, binding, vnode) {
-//     const map = {
-//       input: 'text-field'
-//     };
-//     console.log(binding)
-//     if (binding.arg) el.classList.add(`${map[binding.arg] || vnode.componentOptions.tag}--custom`);
-//   }
-// });
-
 Vue.directive('Custom', CustomDirective);
 
 (async () => {
@@ -75,7 +65,6 @@ Vue.directive('Custom', CustomDirective);
     await setTenant();
 
     const themeSettings = await setTheme();
-    console.log(themeSettings)
 
     new Vue({
       store,

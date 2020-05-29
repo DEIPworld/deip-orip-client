@@ -6,7 +6,6 @@
     </v-tabs>
     <v-divider />
     <v-tabs-items v-model="tab">
-
       <v-tab-item :transition="false" :reverse-transition="false">
         <v-data-table
           :headers="pendingProjectsHeaders"
@@ -23,7 +22,7 @@
               <v-btn icon small @click.stop="openConfirmDialog('delete', item._id)">
                 <v-icon>delete</v-icon>
               </v-btn>
-              <v-btn icon small @click.stop="showResearch(item)">
+              <v-btn icon small @click.stop="openResearchEditModal(item)">
                 <v-icon>edit</v-icon>
               </v-btn>
             </crud-actions>
@@ -37,7 +36,7 @@
           :headers="rejectedProjectsHeaders"
           :items="rejectedProjects"
           :items-per-page="50"
-          @click:row="showDeclinedResearch"
+          @click:row="openResearchViewDialog"
         >
           <template #item.created_at="{item}">
             <div class="text-no-wrap">
@@ -46,79 +45,40 @@
           </template>
         </v-data-table>
       </v-tab-item>
-
     </v-tabs-items>
 
     <full-screen-modal
-      v-model="researchDialog.isOpen"
+      v-model="researchEditModal.isOpen"
       title="Edit research"
     >
       <research-request-form-edit
-        :key="researchDialog.id"
+        :key="researchEditModal.data._id"
         get-from="account/pendingProjects"
-        :research-id="researchDialog.id"
-        @done="hideResearch"
+        :research-id="researchEditModal.data._id"
+        @done="closeResearchEditModal"
       />
     </full-screen-modal>
 
-    <v-dialog
-      v-model="declinedResearchDialog.isOpen"
+    <d-dialog
+      v-model="researchViewDialog.isOpen"
       max-width="800"
-      scrollable
+      hide-buttons
     >
-      <v-card>
-        <v-card-title>
-          <span class="headline">{{ declinedResearchDialog.data.title }}</span>
-          <v-spacer />
-          <v-btn
-            small
-            icon
-            class="mr-n2"
-            @click="hideDeclinedResearch"
-          >
-            <v-icon>close</v-icon>
-          </v-btn>
-        </v-card-title>
+      <research-request-form-read
+        :key="researchViewDialog.data._id"
+        get-from="account/rejectedProjects"
+        :research-id="researchViewDialog.data._id"
+      />
+    </d-dialog>
 
-        <v-divider />
-
-        <v-card-text class="px-6 py-3 text--primary">
-          <research-request-form-read
-            :key="declinedResearchDialog.data._id"
-            get-from="account/rejectedProjects"
-            :research-id="declinedResearchDialog.data._id"
-          />
-        </v-card-text>
-      </v-card>
-    </v-dialog>
-
-    <action-dialog
-      :open="confirmDialog.isOpen"
-      :title="confirmDialog.data.title"
-      @close="closeConfirmDialog"
+    <d-dialog
+      v-model="actionDialog.isOpen"
+      :title="actionDialog.title"
+      :confirm-button-title="actionDialog.actionLabel"
+      @click:confirm="actionDialog.action()"
     >
-      {{ confirmDialog.data.description }}
-      <template #actions>
-        <v-btn
-          color="primary"
-          text
-          :disabled="isDisabled"
-          @click="closeConfirmDialog"
-        >
-          cancel
-        </v-btn>
-        <v-btn
-          color="primary"
-          :disabled="isDisabled"
-          :loading="isDisabled"
-          text
-          v-if="confirmDialog.data.action"
-          @click="confirmDialog.data.action.method(confirmDialog.data.id)"
-        >
-          {{ confirmDialog.data.action.title }}
-        </v-btn>
-      </template>
-    </action-dialog>
+      {{ actionDialog.description }}
+    </d-dialog>
 
   </layout-section>
 </template>
@@ -130,15 +90,15 @@
   import FullScreenModal from '@/components/layout/FullScreen/FullScreenModal';
   import ResearchRequestFormEdit from '@/components/ResearchRequest/ResearchRequestFormEdit';
   import ResearchRequestFormRead from '@/components/ResearchRequest/ResearchRequestRead/ResearchRequestRead';
-  import ActionDialog from '@/components/layout/ActionDialog';
   import { ResearchService } from '@deip/research-service';
+  import DDialog from '@/components/Deipify/DDialog/DDialog';
 
   const researchService = ResearchService.getInstance();
 
   export default {
     name: 'AccountProjectRequests',
     components: {
-      ActionDialog,
+      DDialog,
       ResearchRequestFormEdit,
       FullScreenModal,
       LayoutSection,
@@ -151,28 +111,20 @@
         tab: null,
         isDisabled: false,
 
-        confirmDialog: {
+        actionDialog: {
           isOpen: false,
-          data: {},
-          types: {
-            delete: {
-              title: 'Delete project?',
-              description:
-                'Project will be hidden from platform permanently.',
-              action: {
-                title: 'delete',
-                method: this.deleteRequest
-              }
-            }
-          }
+          title: null,
+          description: null,
+          actionLabel: null,
+          action: () => false
         },
 
-        researchDialog: {
+        researchEditModal: {
           isOpen: false,
-          id: null
+          data: {}
         },
 
-        declinedResearchDialog: {
+        researchViewDialog: {
           isOpen: false,
           data: {}
         },
@@ -215,57 +167,53 @@
     },
 
     methods: {
-      showDeclinedResearch(item) {
-        this.declinedResearchDialog.data = item;
-        this.declinedResearchDialog.isOpen = true;
+
+      openResearchEditModal(item) {
+        this.researchEditModal.data = item;
+        this.researchEditModal.isOpen = true;
+      },
+      closeResearchEditModal() {
+        this.researchDialog.isOpen = false;
       },
 
-      hideDeclinedResearch() {
-        this.declinedResearchDialog.isOpen = false;
+      openResearchViewDialog(item) {
+        this.researchViewDialog.data = item;
+        this.researchViewDialog.isOpen = true;
       },
 
-      showResearch(item) {
-        this.researchDialog.id = item._id;
-        this.researchDialog.isOpen = true;
+      openConfirmDialog(type, id) {
+        const types = {
+          delete: {
+            title: 'Delete request?',
+            description: 'Project will be hidden from platform permanently.',
+            actionLabel: 'Delete',
+            action: () => { this.deleteRequest(id); }
+          }
+        };
+
+        this.actionDialog = {
+          ...types[type],
+          isOpen: true
+        };
       },
 
       deleteRequest(proposalId) {
         researchService.deleteResearchApplicationViaOffchain(this.user.privKey, {
           researcher: this.user.username,
-          proposalId: proposalId
+          proposalId
         })
-        .catch(err => console.error(err))
-        .finally(() => {
-          this.finishAction();
-        })
+          .catch((err) => console.error(err))
+          .finally(() => {
+            this.finishAction();
+          });
       },
 
       finishAction() {
         const username = decodeURIComponent(this.$store.getters['auth/user'].account.name);
         this.$store.dispatch('account/getAllProjects', { username }).then(() => {
           this.isDisabled = false;
-          this.closeConfirmDialog();
+          this.actionDialog.isOpen = false;
         });
-      },
-
-      hideResearch() {
-        this.researchDialog.isOpen = false;
-      },
-
-      closeConfirmDialog() {
-        this.confirmDialog.isOpen = false;
-        setTimeout(() => {
-          this.confirmDialog.data = {};
-        }, 300);
-      },
-      openConfirmDialog(type, id) {
-        if (this.researchDialog.isOpen) {
-          this.hideResearch();
-        }
-
-        this.confirmDialog.isOpen = true;
-        this.confirmDialog.data = this.confirmDialog.types[type];
-        this.confirmDialog.data.id = id;
       },
     },
 

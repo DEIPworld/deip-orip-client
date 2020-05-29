@@ -213,10 +213,6 @@
     },
 
     methods: {
-      testSubmit(e) {
-        console.log('submit', e);
-      },
-
       cancel() {
         this.$router.push({
           name: 'UserDetails',

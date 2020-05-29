@@ -81,7 +81,7 @@
         type: Boolean,
         default: true
       },
-      isAdmin: { 
+      isAdmin: {
         type: Boolean,
         default: false
       }
@@ -128,6 +128,7 @@
     },
     methods: {
       login(formValid) {
+
         if (!formValid) return;
 
         this.disable = true;

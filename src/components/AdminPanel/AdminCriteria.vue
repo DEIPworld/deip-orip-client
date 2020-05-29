@@ -33,31 +33,15 @@
       </template>
     </side-actions-card>
 
-    <action-dialog
-      :open="actionDialog.isOpen"
-      :title="actionDialog.data.title"
-      @close="closeActionDialog"
+    <d-dialog
+      v-model="actionDialog.isOpen"
+      :title="actionDialog.title"
+      :confirm-button-title="actionDialog.actionLabel"
+      :loading="isDisabled"
+      @click:confirm="actionDialog.action()"
     >
-      {{ actionDialog.data.description }}
-
-      <template #actions>
-        <v-btn
-          color="primary"
-          text
-          @click="closeActionDialog"
-        >
-          cancel
-        </v-btn>
-        <v-btn
-          v-if="actionDialog.data.action"
-          color="primary"
-          text
-          @click="actionDialog.data.action.method(actionDialog.data.researchComponentsId)"
-        >
-          {{ actionDialog.data.action.title }}
-        </v-btn>
-      </template>
-    </action-dialog>
+      {{ actionDialog.description }}
+    </d-dialog>
 
   </admin-view>
 </template>
@@ -65,66 +49,30 @@
 <script>
   import AdminView from '@/components/AdminPanel/AdminView';
   import SideActionsCard from '@/components/layout/SideActionsCard';
-  import ActionDialog from '@/components/layout/ActionDialog';
   import LevellerListExpander from '@/components/Leveller/LevellerListExpander';
-  import LevellerSelector from '@/components/Leveller/LevellerSelector';
   import { mapGetters } from 'vuex';
   import { TenantService } from '@deip/tenant-service';
+  import DDialog from '@/components/Deipify/DDialog/DDialog';
 
   const tenantService = TenantService.getInstance();
 
   export default {
     name: 'AdminCriteria',
     components: {
-      LevellerSelector,
+      DDialog,
       LevellerListExpander,
-      ActionDialog,
       SideActionsCard,
       AdminView
     },
     data() {
       return {
+        isDisabled: false,
+
         actionDialog: {
           isOpen: false,
-          data: {},
-          types: {
-            publish: {
-              title: 'Publish criterion?',
-              description: `Criterion will be set for each project and will appear on:
-              - project page,
-              - project application form,
-              - explore page.
-              `,
-              action: {
-                title: 'publish',
-                method: this.publishCriteria
-              }
-            },
-            unpublish: {
-              title: 'Unpublish criterion?',
-              description: `Criterion will be removed from:
-              - project page,
-              - project application form,
-              - explore page.
-              `,
-              action: {
-                title: 'unpublish',
-                method: this.unpublishCriteria
-              }
-            },
-            delete: {
-              title: 'Delete criterion?',
-              description: `Criterion will be deleted permanently and will be removed from:
-              - project page,
-              - project application form,
-              - explore page.
-              `,
-              action: {
-                title: 'delete',
-                method: this.deleteCriteria
-              }
-            }
-          }
+          description: null,
+          actionLabel: null,
+          action: () => false
         }
       };
     },
@@ -152,10 +100,49 @@
           })
           .finally(() => this.closeActionDialog());
       },
+
       openActionDialog(type, researchComponentsId) {
-        this.actionDialog.isOpen = true;
-        this.actionDialog.data = this.actionDialog.types[type];
-        this.actionDialog.data.researchComponentsId = researchComponentsId;
+        const types = {
+          publish: {
+            title: 'Publish criterion?',
+            description: `Criterion will be set for each project and will appear on:
+              - project page,
+              - project application form,
+              - explore page.
+              `,
+            actionLabel: 'publish',
+            action: () => { this.publishCriteria(researchComponentsId) }
+
+          },
+          unpublish: {
+            title: 'Unpublish criterion?',
+            description: `Criterion will be removed from:
+              - project page,
+              - project application form,
+              - explore page.
+              `,
+            actionLabel: 'unpublish',
+            action: () => { this.unpublishCriteria(researchComponentsId) }
+
+          },
+          delete: {
+            title: 'Delete criterion?',
+            description: `Criterion will be deleted permanently and will be removed from:
+              - project page,
+              - project application form,
+              - explore page.
+              `,
+            actionLabel: 'delete',
+            action: () => { this.deleteCriteria(researchComponentsId) }
+
+          }
+        };
+
+        this.actionDialog = {
+          ...types[type],
+          isOpen: true
+        };
+
       },
       closeActionDialog() {
         this.actionDialog.isOpen = false;
@@ -166,7 +153,10 @@
       publishCriteria(id) {
         const updateResearchComponents = this.researchComponents.map((step) => {
           if (step._id === id) {
-            return { ...step, isVisible: true };
+            return {
+              ...step,
+              isVisible: true
+            };
           } else {
             return step;
           }
@@ -176,7 +166,10 @@
       unpublishCriteria(id) {
         const updateResearchComponents = this.researchComponents.map((step) => {
           if (step._id === id) {
-            return { ...step, isVisible: false };
+            return {
+              ...step,
+              isVisible: false
+            };
           } else {
             return step;
           }

@@ -2,7 +2,9 @@
   <admin-view title="Project categories">
     <template #toolbarAction>
       <v-btn outlined color="primary" :to="{name: 'admin.categories.add'}">
-        <v-icon left>category</v-icon>Create catergory
+        <v-icon left>
+          category
+        </v-icon>Create catergory
       </v-btn>
     </template>
 
@@ -19,40 +21,33 @@
       </template>
     </v-data-table>
 
-    <action-dialog
-      :open="actionDialog.isOpen"
-      :title="actionDialog.data.title"
-      @close="closeActionDialog"
+    <d-dialog
+      v-model="actionDialog.isOpen"
+      :title="actionDialog.title"
+      :confirm-button-title="actionDialog.actionLabel"
+      @click:confirm="actionDialog.action()"
     >
-      {{ actionDialog.data.description }}
-      <template #actions>
-        <v-btn color="primary" text @click="closeActionDialog">cancel</v-btn>
-        <v-btn
-          v-if="actionDialog.data.action"
-          color="primary"
-          text
-          @click="actionDialog.data.action.method(actionDialog.data.categoryId)"
-        >{{ actionDialog.data.action.title }}</v-btn>
-      </template>
-    </action-dialog>
-
+      {{ actionDialog.description }}
+    </d-dialog>
   </admin-view>
 </template>
 
 <script>
   import AdminView from '@/components/AdminPanel/AdminView';
   import CrudActions from '@/components/layout/CrudActions';
-  import ActionDialog from '@/components/layout/ActionDialog';
   import { mapGetters } from 'vuex';
   import { TenantService } from '@deip/tenant-service';
+  import DDialog from '@/components/Deipify/DDialog/DDialog';
 
   const tenantService = TenantService.getInstance();
 
   export default {
     name: 'AdminCategories',
-    components: { CrudActions, AdminView, ActionDialog },
+    components: { DDialog, CrudActions, AdminView },
     data() {
       return {
+        xxx: true,
+
         categoriesTableHeader: [
           {
             text: 'Name',
@@ -72,21 +67,13 @@
             sortable: false
           }
         ],
+
         actionDialog: {
           isOpen: false,
-          data: {},
-          types: {
-            delete: {
-              title: 'Delete category?',
-              description:
-                `Category  will be deleted permanently.
-                Assigned projects will stay without category`,
-              action: {
-                title: 'Delete category',
-                method: this.deleteCategory
-              }
-            }
-          }
+          title: null,
+          description: null,
+          actionLabel: null,
+          action: () => false
         }
       };
     },
@@ -100,15 +87,24 @@
 
     methods: {
       openActionDialog(type, item) {
-        this.actionDialog.isOpen = true;
-        this.actionDialog.data = this.actionDialog.types[type];
-        this.actionDialog.data.categoryId = item;
+        const types = {
+          delete: {
+            title: 'Delete category?',
+            description: `Category  will be deleted permanently.
+              Assigned projects will stay without category
+            `,
+            actionLabel: 'Delete',
+            action: () => { this.deleteCategory(item); }
+          }
+        };
+
+        this.actionDialog = {
+          ...types[type],
+          isOpen: true
+        };
       },
       closeActionDialog() {
         this.actionDialog.isOpen = false;
-        setTimeout(() => {
-          this.actionDialog.data = {};
-        }, 300);
       },
       deleteCategory(categoryId) {
         const updatedCategories = this.categories.filter(({ _id }) => _id !== categoryId);

@@ -73,14 +73,12 @@ const actions = {
   getPendingProjects(context, { username }) {
     return researchService.getPendingResearchApplicationsByResearcher(username)
       .then((result) => {
-        console.log(username,result)
         context.commit('getPendingProjects', result);
       });
   },
   getRejectedProjects(context, { username }) {
     return researchService.getRejectedResearchApplicationsByResearcher(username)
       .then((result) => {
-        console.log(username,result)
         context.commit('getRejectedProjects', result);
       });
   },

@@ -1,5 +1,5 @@
 <template>
-  <admin-view title="Members" v-if="dataLoaded">
+  <admin-view v-if="dataLoaded" title="Members">
     <template #toolbarAction>
       <v-btn outlined color="primary" :to="{name: 'admin.members.add'}">
         <v-icon left>
@@ -13,7 +13,12 @@
         <v-tab>Registered</v-tab>
         <v-tab>
           Waiting for approval
-          <v-badge v-if="waitingMembers.length" :content="waitingMembers.length" color="green" inline />
+          <v-badge
+            v-if="waitingMembers.length"
+            :content="waitingMembers.length"
+            color="green"
+            inline
+          />
         </v-tab>
       </v-tabs>
     </template>
@@ -53,7 +58,7 @@
               <v-btn icon small @click.stop="openActionDialog('approve', item._id)">
                 <v-icon>done</v-icon>
               </v-btn>
-              <v-btn icon small @click.stop="openActionDialog('decline', item._id)">
+              <v-btn icon small @click.stop="openActionDialog('reject', item._id)">
                 <v-icon>close</v-icon>
               </v-btn>
             </crud-actions>
@@ -62,129 +67,90 @@
       </v-tab-item>
     </v-tabs-items>
 
-    <action-dialog
-      :open="actionDialog.isOpen"
-      :title="actionDialog.data.title"
-      @close="closeActionDialog"
+    <d-dialog
+      v-model="actionDialog.isOpen"
+      :title="actionDialog.title"
+      :confirm-button-title="actionDialog.confirmLabel"
+      @click:confirm="actionDialog.action"
     >
-      {{ actionDialog.data.description }}
-      <template #actions>
-        <v-btn color="primary" :disabled="isDisabled" text @click="closeActionDialog">
-          cancel
-        </v-btn>
-        <v-btn
-          v-if="actionDialog.data.action"
-          color="primary"
-          :disabled="isDisabled"
-          text
-          @click="actionDialog.data.action.method(actionDialog.data.name)"
-        >
-          {{ actionDialog.data.action.title }}
-        </v-btn>
+      {{ actionDialog.description }}
+    </d-dialog>
+
+    <d-dialog
+      v-model="memberInfoDialog.isOpen"
+      :hide-buttons="memberInfoDialog.hideButtons"
+      :title="memberInfoDialog.title"
+      confirm-button-title="Approve"
+      cancel-button-title="Reject"
+      @click:confirm="approveMemberInfoDialog(memberInfoDialog.data)"
+      @click:cancel="rejectMemberInfoDialog(memberInfoDialog.data)"
+    >
+      <template v-if="memberInfoDialog.data">
+        <d-info-block title="Personal information">
+          <div>Name: {{ memberInfoDialog.data.firstName }}</div>
+          <div>Last name: {{ memberInfoDialog.data.lastName }}</div>
+          <div>Date of birth: {{ memberInfoDialog.data.birthdate | dateFormat('MMMM DD YYYY', true) }}</div>
+          <div>ID: {{ memberInfoDialog.data.foreignIds | joinByKey('id') }}</div>
+        </d-info-block>
+
+        <d-info-block title="Account information">
+          <div>Email: <a :href="`mailto:${memberInfoDialog.data.email}`">{{ memberInfoDialog.data.email }}</a></div>
+          <div>Category: {{ memberInfoDialog.data.category }}</div>
+        </d-info-block>
+
+        <d-info-block title="Contact information">
+          <div>Address: {{ memberInfoDialog.data.location ? memberInfoDialog.data.location.address : '' }}</div>
+          <div>City: {{ memberInfoDialog.data.location ? memberInfoDialog.data.location.city : '' }}</div>
+          <div>Country: {{ memberInfoDialog.data.location ? memberInfoDialog.data.location.country : '' }}</div>
+          <div>Phone number: {{ memberInfoDialog.data.phoneNumbers | joinByKey('number') }}</div>
+        </d-info-block>
+
+        <d-info-block title="Occupation information" is-last>
+          <div>Occupation: {{ memberInfoDialog.data.occupation }}</div>
+          <div>
+            Web site:
+            <a
+              v-for="(item, i) in memberInfoDialog.data.webPages"
+              :key="`${i}-webPage`"
+              :href="`${item.link}`"
+              target="_blank"
+            >
+              {{ item.link }}
+            </a>
+          </div>
+        </d-info-block>
       </template>
-    </action-dialog>
-
-    <v-dialog v-model="memberInfoDialog" max-width="420px" scrollable>
-      <v-card>
-        <v-card-title>
-          <span class="headline">{{ memberInfo | fullname }}</span>
-          <v-spacer />
-          <v-btn
-            small
-            icon
-            class="mr-n2"
-            @click="closeMemberInfoDialog"
-          >
-            <v-icon>close</v-icon>
-          </v-btn>
-        </v-card-title>
-
-        <v-divider />
-
-        <v-card-text class="px-6 py-3 text--primary">
-          <div class="mb-6">
-            <div class="subtitle-1 font-weight-medium mb-2">
-              Personal information
-            </div>
-            <div>Name: {{ memberInfo.profile.firstName }}</div>
-            <div>Last name: {{ memberInfo.profile.lastName }}</div>
-            <div>Date of birth: {{ memberInfo.profile.birthdate | dateFormat('MMMM DD YYYY', true) }}</div>
-            <div>ID: {{ memberInfo.profile.foreignIds }}</div>
-          </div>
-
-          <div class="mb-6">
-            <div class="subtitle-1 font-weight-medium mb-2">
-              Account information
-            </div>
-            <div>Email: <a :href="`mailto:${memberInfo.profile.email}`">{{ memberInfo.profile.email }}</a></div>
-            <div>Category: {{ memberInfo.profile.category }}</div>
-          </div>
-
-          <div class="mb-6">
-            <div class="subtitle-1 font-weight-medium mb-2">
-              Contact information
-            </div>
-            <div>Address: {{ memberInfo.profile.location ? memberInfo.profile.location.address : '' }}</div>
-            <div>City: {{ memberInfo.profile.location ? memberInfo.profile.location.city : '' }}</div>
-            <div>Country: {{ memberInfo.profile.location ? memberInfo.profile.location.country : '' }}</div>
-            <div>Phone number: {{ memberInfo.profile.phoneNumbers }}</div>
-          </div>
-
-          <div class="mb-6">
-            <div class="subtitle-1 font-weight-medium mb-2">
-              Occupation information
-            </div>
-            <div>Occupation: {{ memberInfo.profile.occupation }}</div>
-            <div>
-              Web site:
-              <a
-                v-for="(item, i) in memberInfo.profile.webPages"
-                :key="`${i}-webPage`"
-                :href="`${item.link}`"
-                target="_blank"
-              >
-                {{ item.link }}
-              </a>
-            </div>
-          </div>
-        </v-card-text>
-
-        <v-divider />
-
-        <v-card-actions v-if="memberInfo.profile.status === 'pending'">
-          <v-spacer />
-          <v-btn color="blue darken-1" text @click="rejectMemberInfoDialog">
-            Reject
-          </v-btn>
-          <v-btn color="blue darken-1" text @click="approveMemberInfoDialog">
-            Approve
-          </v-btn>
-        </v-card-actions>
-      </v-card>
-    </v-dialog>
-
+    </d-dialog>
   </admin-view>
 </template>
 
 <script>
   import AdminView from '@/components/AdminPanel/AdminView';
   import CrudActions from '@/components/layout/CrudActions';
-  import ActionDialog from '@/components/layout/ActionDialog';
   import { TenantService } from '@deip/tenant-service';
   import { mapGetters } from 'vuex';
+  import DDialog from '@/components/Deipify/DDialog/DDialog';
+  import DInfoBlock from '@/components/Deipify/DInfoBlock/DInfoBlock';
 
   const tenantService = TenantService.getInstance();
 
   export default {
     name: 'AdminMembers',
-    components: { CrudActions, AdminView, ActionDialog },
+    components: {
+      DInfoBlock,
+      DDialog,
+      CrudActions,
+      AdminView
+    },
     data() {
       return {
         tab: null,
-        memberInfoDialog: false,
+        modals: {},
+
         isDisabled: false,
         deleteDialog: false,
         approveDialog: false,
+
         registeredMembersTableHeaders: [
           {
             text: 'Name',
@@ -225,51 +191,21 @@
             sortable: false
           }
         ],
-        memberInfo: {
-          account: {
-            name: ''
-          },
-          profile: {
-            firstName: '',
-            lastName: '',
-            created_at: '',
-            foreignIds: '',
-            email: '',
-            category: '',
-            location: {
-              address: '',
-              city: '',
-              country: ''
-            },
-            phoneNumbers: '',
-            occupation: '',
-            status: '',
-            webPages: ''
-          }
-        },
+
         actionDialog: {
           isOpen: false,
-          data: {},
-          types: {
-            approve: {
-              title: 'Approve request?',
-              description:
-                'Request will be approved and person will become a member.',
-              action: {
-                title: 'approve',
-                method: this.approveRequest
-              }
-            },
-            decline: {
-              title: 'Reject request?',
-              description:
-                'Request will be declined and person will not published.',
-              action: {
-                title: 'reject',
-                method: this.declineRequest
-              }
-            }
-          }
+          title: null,
+          description: null,
+          confirmLabel: null,
+          username: null,
+          action: () => false
+        },
+
+        memberInfoDialog: {
+          isOpen: false,
+          hideButtons: true,
+          title: null,
+          data: null
         }
       };
     },
@@ -282,40 +218,52 @@
     },
 
     methods: {
+
       openMemberInfoDialog(item) {
-        if (item.account) {
-          this.memberInfo.account.name = item.account.name;
-          this.memberInfo.profile = { ...item.profile };
-        } else {
-          this.memberInfo.account.name = item._id;
-          this.memberInfo.profile = { ...item };
-        }
-        this.memberInfo.profile.phoneNumbers = this.memberInfo.profile.phoneNumbers.map(({ number }) => number).join(', ');
-        this.memberInfo.profile.foreignIds = this.memberInfo.profile.foreignIds.map(({ id }) => id).join(', ');
-        this.memberInfoDialog = true;
+        const person = item.profile ? item.profile : item;
+        this.memberInfoDialog.title = this.$options.filters.fullname({ profile: person });
+        this.memberInfoDialog.data = person;
+        this.memberInfoDialog.isOpen = true;
+        this.memberInfoDialog.hideButtons = !(item.status && item.status === 'pending');
       },
       closeMemberInfoDialog() {
-        this.memberInfoDialog = false;
+        this.memberInfoDialog.isOpen = false;
       },
-      rejectMemberInfoDialog() {
+
+      rejectMemberInfoDialog(user) {
+        this.openActionDialog('reject', user._id);
         this.closeMemberInfoDialog();
-        this.openActionDialog('decline', this.memberInfo.account.name);
       },
-      approveMemberInfoDialog() {
+      approveMemberInfoDialog(user) {
+        this.openActionDialog('approve', user._id);
         this.closeMemberInfoDialog();
-        this.openActionDialog('approve', this.memberInfo.account.name);
       },
-      openActionDialog(type, item) {
-        this.actionDialog.isOpen = true;
-        this.actionDialog.data = this.actionDialog.types[type];
-        this.actionDialog.data.name = item;
+
+      openActionDialog(type, username) {
+        const types = {
+          approve: {
+            title: 'Approve request?',
+            description: 'Request will be approved and person will become a member.',
+            confirmLabel: 'approve',
+            action: () => { this.approveRequest(username); }
+          },
+          reject: {
+            title: 'Reject request?',
+            description: 'Request will be rejected and person will not published.',
+            confirmLabel: 'reject',
+            action: () => { this.rejectRequest(username); }
+          }
+        };
+
+        this.actionDialog = {
+          ...types[type],
+          isOpen: true
+        };
       },
       closeActionDialog() {
         this.actionDialog.isOpen = false;
-        setTimeout(() => {
-          this.actionDialog.data = {};
-        }, 300);
       },
+
       approveRequest(name) {
         this.isDisabled = true;
         return tenantService.approveSignUpRequest(name)
@@ -334,7 +282,7 @@
             this.closeActionDialog();
           });
       },
-      declineRequest(name) {
+      rejectRequest(name) {
         this.isDisabled = true;
         return tenantService.rejectSignUpRequest(name)
           .then(() => {

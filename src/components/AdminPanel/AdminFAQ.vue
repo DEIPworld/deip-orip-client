@@ -2,7 +2,8 @@
   <admin-view title="FAQ">
     <template #toolbarAction>
       <v-btn outlined color="primary" :to="{name: 'admin.faq.add'}">
-        <v-icon left>add_comment</v-icon>Add question
+        <v-icon left>add_comment</v-icon>
+        Add question
       </v-btn>
     </template>
 
@@ -34,22 +35,15 @@
       </template>
     </side-actions-card>
 
-    <action-dialog
-      :open="actionDialog.isOpen"
-      :title="actionDialog.data.title"
-      @close="closeActionDialog"
+
+    <d-dialog
+      v-model="actionDialog.isOpen"
+      :title="actionDialog.title"
+      :confirm-button-title="actionDialog.actionLabel"
+      @click:confirm="actionDialog.action()"
     >
-      {{ actionDialog.data.description }}
-      <template #actions>
-        <v-btn color="primary" text @click="closeActionDialog">cancel</v-btn>
-        <v-btn
-          v-if="actionDialog.data.action"
-          color="primary"
-          text
-          @click="actionDialog.data.action.method(actionDialog.data.faqId)"
-        >{{ actionDialog.data.action.title }}</v-btn>
-      </template>
-    </action-dialog>
+      {{ actionDialog.description }}
+    </d-dialog>
 
   </admin-view>
 </template>
@@ -57,15 +51,30 @@
 <script>
   import AdminView from '@/components/AdminPanel/AdminView';
   import SideActionsCard from '@/components/layout/SideActionsCard';
-  import ActionDialog from '@/components/layout/ActionDialog';
   import { mapGetters } from 'vuex';
   import { TenantService } from '@deip/tenant-service';
+  import DDialog from '@/components/Deipify/DDialog/DDialog';
 
   const tenantService = TenantService.getInstance();
 
   export default {
     name: 'AdminFAQ',
-    components: { SideActionsCard, AdminView, ActionDialog },
+    components: {
+      DDialog,
+      SideActionsCard,
+      AdminView
+    },
+
+    data() {
+      return {
+        actionDialog: {
+          isOpen: false,
+          description: null,
+          actionLabel: null,
+          action: () => false
+        }
+      };
+    },
 
     computed: {
       ...mapGetters({
@@ -74,42 +83,6 @@
       })
     },
 
-    data() {
-      return {
-        actionDialog: {
-          isOpen: false,
-          data: {},
-          types: {
-            publish: {
-              title: 'Publish Q&A?',
-              description:
-                'Selected question and answer will be published on FAQ page.',
-              action: {
-                title: 'Publish',
-                method: this.publishFAQ
-              }
-            },
-            unpublish: {
-              title: 'Unpublish Q&A?',
-              description:
-                'Selected question and answer will be removed from FAQ page.',
-              action: {
-                title: 'Unpublish',
-                method: this.unpublishFAQ
-              }
-            },
-            delete: {
-              title: 'Delete Q&A?',
-              description: 'Question and answer will be deleted permanently.',
-              action: {
-                title: 'Delete Q&A ',
-                method: this.deleteFAQ
-              }
-            }
-          }
-        }
-      };
-    },
     methods: {
       updateFAQ(FAQsArr) {
         const updatedProfile = _.cloneDeep(this.tenant.profile);
@@ -129,9 +102,31 @@
           .finally(() => this.closeActionDialog());
       },
       openActionDialog(type, faqId) {
-        this.actionDialog.isOpen = true;
-        this.actionDialog.data = this.actionDialog.types[type];
-        this.actionDialog.data.faqId = faqId;
+        const types = {
+          publish: {
+            title: 'Publish Q&A?',
+            description: 'Selected question and answer will be published on FAQ page.',
+            actionLabel: 'Publish',
+            action: () => { this.publishFAQ(faqId); }
+          },
+          unpublish: {
+            title: 'Unpublish Q&A?',
+            description: 'Selected question and answer will be removed from FAQ page.',
+            actionLabel: 'Unpublish',
+            action: () => { this.unpublishFAQ(faqId); }
+          },
+          delete: {
+            title: 'Delete Q&A?',
+            description: 'Question and answer will be deleted permanently.',
+            actionLabel: 'Delete Q&A ',
+            action: () => { this.deleteFAQ(faqId); }
+          }
+        };
+
+        this.actionDialog = {
+          ...types[type],
+          isOpen: true
+        };
       },
       closeActionDialog() {
         this.actionDialog.isOpen = false;
@@ -142,7 +137,10 @@
       publishFAQ(id) {
         const updatedFAQ = this.faqs.map((q) => {
           if (q._id === id) {
-            return { ...q, isVisible: true };
+            return {
+              ...q,
+              isVisible: true
+            };
           } else {
             return q;
           }
@@ -152,7 +150,10 @@
       unpublishFAQ(id) {
         const updatedFAQ = this.faqs.map((q) => {
           if (q._id === id) {
-            return { ...q, isVisible: false };
+            return {
+              ...q,
+              isVisible: false
+            };
           } else {
             return q;
           }

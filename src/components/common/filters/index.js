@@ -71,3 +71,8 @@ Vue.filter('dateFormat', (value, format, fromUtcToLocal = false) => (!fromUtcToL
   : moment.utc(value).local().format(format)));
 
 Vue.filter('shortHash', (value) => (value ? value.substring(0, 8) : ''));
+
+Vue.filter('joinByKey', (value, key, separator = ', ') => {
+  if (!value) return '';
+  return value.map((el) => el[key]).join(separator);
+});
