@@ -118,6 +118,7 @@ const router = new Router({
     name: 'SignUp',
     component: SignUp,
     meta: {
+      withoutHeader: true,
       viewTitle: 'Sign Up'
     }
   }, {
