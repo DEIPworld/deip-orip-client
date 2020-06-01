@@ -59,17 +59,14 @@
 </template>
 
 <script>
-  import FormGenerator from '@/components/ForrmGenerator/FormGenerator';
   import deipRpc from '@deip/rpc-client';
   import crypto from '@deip/lib-crypto';
 
   import { AccessService } from '@deip/access-service';
   import { AuthService } from '@deip/auth-service';
-  import { setUser } from '@/bootstrap';
   import DForm from '@/components/Deipify/DForm/DForm';
   import DFormBlock from '@/components/Deipify/DFormBlock/DFormBlock';
   import DInputPassword from '@/components/Deipify/DInputPassword/DInputPassword';
-  import TestField from '@/components/Deipify/TestField';
 
   const accessService = AccessService.getInstance();
   const authService = AuthService.getInstance();
@@ -91,11 +88,9 @@
   export default {
     name: 'LoginForm',
     components: {
-      TestField,
       DInputPassword,
       DFormBlock,
       DForm,
-      FormGenerator
     },
     props: {
       logo: {
