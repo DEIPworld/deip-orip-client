@@ -1,171 +1,35 @@
 <template>
-  <v-container class="fill-height pa-0" fluid>
-    <v-stepper v-model="currentStep" alt-labels class="display-flex flex-column w-100 fill-height stepper-page">
-      <v-stepper-header class="flex-grow-0">
-        <v-stepper-step step="1" :complete="currentStep > 1">
-          <div class="text-uppercase">
-            Title
-          </div>
-        </v-stepper-step>
-
-        <v-divider />
-
-        <v-stepper-step step="2" :complete="currentStep > 2">
-          <div class="text-uppercase">
-            Description
-          </div>
-        </v-stepper-step>
-
-        <v-divider />
-
-        <v-stepper-step step="3" :complete="currentStep > 3">
-          <div class="text-uppercase">
-            Members
-          </div>
-        </v-stepper-step>
-
-        <!-- <v-divider></v-divider>
-
-        <v-stepper-step step="4" :complete="currentStep > 3">
-            <div class="text-uppercase">Quorum</div>
-        </v-stepper-step>
-
-        <v-divider></v-divider>
-
-        <v-stepper-step step="5" :complete="currentStep > 4">
-            <div class="text-uppercase">Tokens</div>
-        </v-stepper-step> -->
-      </v-stepper-header>
-
-      <v-stepper-items class="flex-grow-1">
-        <v-stepper-content step="1">
-          <div class="fill-height">
-            <create-research-group-title
-              :group="group"
-              @incStep="incStep"
-              @setName="setName"
-            />
-          </div>
-        </v-stepper-content>
-
-        <v-stepper-content step="2">
-          <div class="fill-height">
-            <create-research-group-description
-              :group="group"
-              @incStep="incStep"
-              @decStep="decStep"
-              @setDescription="setDescription"
-            />
-          </div>
-        </v-stepper-content>
-
-        <v-stepper-content step="3">
-          <div class="fill-height">
-            <create-research-group-members
-              :group="group"
-              :is-loading="isLoading"
-              @setGroupMembers="setGroupMembers"
-              @finish="finish"
-              @decStep="decStep"
-            />
-          </div>
-        </v-stepper-content>
-
-        <!-- <v-stepper-content step="4">
-            <div class="fill-height">
-                <create-research-group-quorum
-                    @incStep="incStep" @decStep="decStep"
-                    :group="group"
-                ></create-research-group-quorum>
-            </div>
-        </v-stepper-content>
-
-        <v-stepper-content step="5">
-            <div class="fill-height">
-                <create-research-group-share
-                    @finish="finish" @decStep="decStep"
-                    :group="group"
-                    :isLoading="isLoading"
-                ></create-research-group-share>
-            </div>
-        </v-stepper-content> -->
-      </v-stepper-items>
-    </v-stepper>
-  </v-container>
+  <full-screen-view title="Create research group">
+    <create-research-group-form
+      v-model="formData"
+      :disabled="formProcessing"
+      :loading="formProcessing"
+      @submit="finish"
+    />
+  </full-screen-view>
 </template>
 
 <script>
   import deipRpc from '@deip/rpc-client';
-  import { mapGetters } from 'vuex';
-
   import { ResearchGroupService } from '@deip/research-group-service';
+
+  import { CreateResearchGroupMixin } from '@/components/research-group-create/CreateResearchGroupMixin';
+  import FullScreenView from '@/components/layout/FullScreen/FullScreenView';
+  import CreateResearchGroupForm from './components/CreateResearchGroupForm';
 
   const researchGroupService = ResearchGroupService.getInstance();
 
   export default {
     name: 'CreateResearchGroup',
+    components: { FullScreenView, CreateResearchGroupForm },
+    mixins: [CreateResearchGroupMixin],
 
-    data() {
-      return {
-        currentStep: 1,
-        isLoading: false,
-        backRouterToken: undefined,
-
-        group: {
-          name: '',
-          permlink: '',
-          description: '',
-          members: [],
-
-          quorum: {
-            startResearch: 0,
-            inviteMembers: 0,
-            dropoutMembers: 0,
-            sendFunds: 0,
-            startResearchTokenSale: 0,
-            rebalanceGroupTokens: 0,
-            changeQuorum: 0,
-            changeReviewSharePercent: 0,
-            offerResearchTokens: 0,
-            createMaterial: 0,
-            researchGroupMeta: 0,
-            researchMeta: 0
-          }
-        }
-      };
-    },
-    computed: {
-      ...mapGetters({
-        user: 'auth/user'
-      })
-    },
-    created() {
-      if (this.$route.query['back-token']) {
-        try {
-          this.backRouterToken = JSON.parse(this.$route.query['back-token']);
-        } catch (e) {
-          console.error('Invalid back router token');
-        }
-      }
-    },
     methods: {
-      incStep() { this.currentStep++; },
-      decStep() { this.currentStep--; },
+      finish(success) {
+        if (!success) return;
+        this.formProcessing = true;
 
-      setName(name) {
-        this.group.name = name;
-      },
-      setDescription(description) {
-        this.group.description = description;
-      },
-      setGroupMembers(members) {
-        this.group.members = members;
-      },
-
-      finish() {
-        this.isLoading = true;
-
-        const invitees = this.group.members
+        const invitees = this.formData.members
           .filter((m) => m.account.name != this.user.username)
           .map((m) => ({
             account: m.account.name,
@@ -181,50 +45,61 @@
           weight_threshold: 1
         };
 
-        researchGroupService.createResearchGroupViaOffchain(
-          this.user.privKey,
-          {
-            fee: this.toAssetUnits(100),
-            creator,
-            accountOwnerAuth: auth,
-            accountActiveAuth: auth,
-            accountPostingAuth: auth,
-            accountMemoPubKey: memo,
-            accountJsonMetadata: undefined,
-            accountExtensions: []
-          },
-          {
-            researchGroupName: this.group.name,
-            researchGroupDescription: this.group.description,
-            researchGroupThresholdOverrides: []
-          }
-        )
+        researchGroupService
+          .createResearchGroupViaOffchain(
+            this.user.privKey,
+            {
+              fee: this.toAssetUnits(100),
+              creator,
+              accountOwnerAuth: auth,
+              accountActiveAuth: auth,
+              accountPostingAuth: auth,
+              accountMemoPubKey: memo,
+              accountJsonMetadata: undefined,
+              accountExtensions: []
+            },
+            {
+              researchGroupName: this.formData.name,
+              researchGroupDescription: this.formData.description,
+              researchGroupThresholdOverrides: []
+            }
+          )
           .then((res) => {
-            this.isLoading = false;
+            this.formProcessing = false;
             this.$store.dispatch('auth/loadGroups'); // reload user groups
-            this.$notifier.show(`"${this.group.name}" research group has been created successfully !`, 'success')
+            this.$notifier.show(`"${this.formData.name}" research group has been created successfully !`, 'success')
 
-            const invitesPromises = invitees.map(invitee => researchGroupService.createResearchGroupInviteViaOffchain(this.user.privKey, {
-              researchGroup: res.rm._id,
-              member: invitee.account,
-              rewardShare: `0.00 %`,
-              researches: undefined, // all researches
-              extensions: []
-            }, {
-              notes: `${this.group.name} invites you to join them`,
-              approver: this.user.username
-            }));
+            const invitesPromises = invitees.map((invitee) =>
+              researchGroupService.createResearchGroupInviteViaOffchain(
+                this.user.privKey,
+                {
+                  researchGroup: res.rm._id,
+                  member: invitee.account,
+                  rewardShare: `0.00 %`,
+                  researches: undefined, // all researches
+                  extensions: []
+                },
+                {
+                  notes: `${this.formData.name} invites you to join them`,
+                  approver: this.user.username
+                }
+              )
+            );
 
             return Promise.all([
               Promise.all(invitesPromises),
               deipRpc.api.getResearchGroupAsync(res.rm._id)
-            ])
+            ]);
           })
           .then(([invites, researchGroup]) => {
             if (!this.backRouterToken) {
               this.$router.push({
                 name: 'ResearchGroupDetails',
-                params: { research_group_permlink: encodeURIComponent(researchGroup.permlink) }
+                params: {
+                  research_group_permlink: encodeURIComponent(
+                    researchGroup.permlink
+                  )
+                }
               });
             } else {
               if (this.backRouterToken.name === 'CreateResearch') {
@@ -244,23 +119,23 @@
 </script>
 
 <style lang="less">
-  .flex-column {
-    flex-direction: column;
-  }
+.flex-column {
+  flex-direction: column;
+}
 
-  .flex-grow-0 {
-    flex-grow: 0 !important;
-  }
+.flex-grow-0 {
+  flex-grow: 0 !important;
+}
 
-  .flex-grow-1 {
-    flex-grow: 1 !important;
-  }
+.flex-grow-1 {
+  flex-grow: 1 !important;
+}
 
-  .w-100 {
-    width: 100%;
-  }
+.w-100 {
+  width: 100%;
+}
 
-  .flex-basis-0 {
-    flex-basis: 0 !important;
-  }
+.flex-basis-0 {
+  flex-basis: 0 !important;
+}
 </style>

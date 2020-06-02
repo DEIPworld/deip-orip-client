@@ -1,68 +1,72 @@
 <template>
-  <div class="pos-relative">
-    <div class="legacy-row">
-      <v-menu
-        v-model="dateMenu"
-        class="width-6"
-        :close-on-content-click="false"
-        transition="scale-transition"
-        offset-y
-        :nudge-top="20"
-        min-width="0px"
-      >
-        <template v-slot:activator="{on}">
-          <v-text-field
-            ref="datePicker"
+  <div class="">
+    <v-row no-gutters>
+      <v-col>
+        <v-menu
+          v-model="dateMenu"
+          class="width-6"
+          :close-on-content-click="false"
+          transition="scale-transition"
+          offset-y
+          :nudge-top="20"
+          min-width="0px"
+        >
+          <template v-slot:activator="{on}">
+            <v-text-field
+              ref="datePicker"
+              v-model="date"
+              filled
+              :label="label"
+              :rules="[() => !time || !datetime || $refs.errorMsg.valid || '']"
+              readonly
+              v-on="on"
+            />
+          </template>
+
+          <v-date-picker
             v-model="date"
-            :label="label"
-            :rules="[() => !time || !datetime || $refs.errorMsg.valid || '']"
-            placeholder="Date"
-            readonly
-            v-on="on"
+            no-title
+            :allowed-dates="checkAllowedDate"
+            @input="dateMenu = false; apply();"
           />
-        </template>
+        </v-menu>
 
-        <v-date-picker
-          v-model="date"
-          no-title
-          :allowed-dates="checkAllowedDate"
-          @input="dateMenu = false; apply();"
-        />
-      </v-menu>
+      </v-col>
+      <v-col offset="1">
+        <v-menu
+          bottom
+          left
+          offset-y
+          :nudge-top="20"
+        >
+          <template v-slot:activator="{on}">
+            <v-text-field
+              ref="timePicker"
+              v-model="time"
+              filled
+              :rules="[() => !date || !datetime || $refs.errorMsg.valid || '']"
+              label="Time"
+              append-icon="event"
+              readonly
+              v-on="on"
+            />
+          </template>
 
-      <v-menu
-        class="legacy-col-grow"
-        bottom
-        left
-        offset-y
-        :nudge-top="20"
-      >
-        <template v-slot:activator="{on}">
-          <v-text-field
-            ref="timePicker"
-            v-model="time"
-            :rules="[() => !date || !datetime || $refs.errorMsg.valid || '']"
-            placeholder="Time"
-            append-icon="event"
-            readonly
-            v-on="on"
-          />
-        </template>
-
-        <div class="time-points-list">
-          <v-list>
-            <v-list-item
-              v-for="(timePoint, i) in timePoints5minStep"
-              v-show="checkAllowedTime(date, timePoint)"
-              :key="i"
-              @click="time = timePoint; apply();"
-            >
-              <v-list-item-title>{{ timePoint }}</v-list-item-title>
-            </v-list-item>
-          </v-list>
-        </div>
-      </v-menu>
-    </div>
+          <div class="time-points-list">
+            <v-list>
+              <v-list-item
+                v-for="(timePoint, i) in timePoints5minStep"
+                v-show="checkAllowedTime(date, timePoint)"
+                :key="i"
+                @click="time = timePoint; apply();"
+              >
+                <v-list-item-title>{{ timePoint }}</v-list-item-title>
+              </v-list-item>
+            </v-list>
+          </div>
+        </v-menu>
+      </v-col>
+    </v-row>
 
     <v-text-field
       ref="errorMsg"
@@ -198,12 +202,12 @@
 
     .datetime-picker-error-hack.v-text-field {
         padding: 0px;
-        position: absolute;
+        // position: absolute;
         top: 48px;
         width: 100%;
         margin-top: 0px;
 
-        & > .v-input__control > .v-input__slot > .v-text-field__slot {
+        & > .v-input__control > .v-input__slot {
             display: none;
         }
     }

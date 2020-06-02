@@ -9,7 +9,6 @@ import './ResearchCreate/index';
 import './research-content-details/index';
 import './research-group-details/index';
 import './research-group-create/index';
-import './token-sale-create/index';
 import './user-wallet/index';
 import './claim-expertise-details/index';
 import './claim-expertise-list/index';
