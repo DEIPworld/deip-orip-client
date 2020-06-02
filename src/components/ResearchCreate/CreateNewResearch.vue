@@ -282,7 +282,7 @@
         )
           .then(({ rm }) => {
             this.isLoading = false;
-            this.$notifier.show(`Project "${this.research.title}" has been created successfully`, 'success')
+            this.$notifier.showSuccess(`Project "${this.research.title}" has been created successfully`)
             return deipRpc.api.getResearchAsync(rm._id);
           })
           .then((research) => {
@@ -301,7 +301,7 @@
           .catch((err) => {
             console.log(err);
             this.isLoading = false;
-            this.$notifier.show('An error occurred while creating project, please try again later', 'error')
+            this.$notifier.showError('An error occurred while creating project, please try again later')
           })
       }
     }

@@ -237,12 +237,12 @@
           .then(() => {
             this.finishAction();
 
-            this.$notifier.show('success')
+            this.$notifier.showSuccess()
             this.$store.dispatch('adminPanel/getAllProjects');
           })
           .catch((err) => {
             console.error(err);
-            this.$notifier.show('error')
+            this.$notifier.showError()
           });
       },
 

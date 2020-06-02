@@ -67,7 +67,7 @@
           .then((res) => {
             this.formProcessing = false;
             this.$store.dispatch('auth/loadGroups'); // reload user groups
-            this.$notifier.show(`"${this.formData.name}" research group has been created successfully !`, 'success')
+            this.$notifier.showSuccess(`"${this.formData.name}" research group has been created successfully !`)
 
             const invitesPromises = invitees.map((invitee) =>
               researchGroupService.createResearchGroupInviteViaOffchain(
@@ -111,7 +111,7 @@
           .catch((err) => {
             console.log(err);
             this.isLoading = false;
-            this.$notifier.show('An error occurred while creating Research Group, please try again later', 'error')
+            this.$notifier.showError('An error occurred while creating Research Group, please try again later')
           })
       }
     }

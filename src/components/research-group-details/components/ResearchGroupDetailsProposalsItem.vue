@@ -432,7 +432,7 @@
             copy.voted_accounts.push(this.currentUser.username);
             this.changeProposal({ old: this.proposal, new: copy });
             this.$store.dispatch('researchGroup/loadResearchGroup', { permlink: this.group.permlink });
-            this.$notifier.show('You have voted for the proposal successfully!', 'error')
+            this.$notifier.showError('You have voted for the proposal successfully!')
           })
           .catch((err) => {
             alert(err.message);

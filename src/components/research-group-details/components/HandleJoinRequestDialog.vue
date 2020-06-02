@@ -143,9 +143,9 @@
           .then(() => {
             this.$store.dispatch('researchGroup/loadJoinRequests', { groupId: this.groupId });
             this.$store.dispatch('researchGroup/loadResearchGroupProposals', { groupId: this.groupId });
-            this.$notifier.show(`Invite proposal for "${this.joinRequest.username}" has been created successfully !`, 'error');
+            this.$notifier.showError(`Invite proposal for "${this.joinRequest.username}" has been created successfully !`);
           }, (err) => {
-            this.$notifier.show('An error occurred while approving join request, please try again later', 'error');
+            this.$notifier.showError('An error occurred while approving join request, please try again later');
             console.log(err);
           })
           .finally(() => {
@@ -165,12 +165,12 @@
         researchGroupService.updateJoinRequest({ request: update })
           .then((updatedRequest) => {
               self.$store.dispatch('researchGroup/loadJoinRequests', { groupId: self.groupId });
-              this.$notifier.show(`You have denied join request from  "${self.joinRequest.username}" successfully !`, 'success');
+              this.$notifier.showSuccess(`You have denied join request from  "${self.joinRequest.username}" successfully !`);
 
               setTimeout(() => self.close(), 500);
             },
             (err) => {
-              this.$notifier.show('error');
+              this.$notifier.showError();
               console.log(err);
             })
           .finally(() => {

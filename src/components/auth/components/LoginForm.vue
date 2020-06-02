@@ -173,7 +173,7 @@
             } catch (err) {
               accessService.clearAccessToken();
               this.disable = false;
-              this.$notifier.show('Invalid private key format', 'error')
+              this.$notifier.showError('Invalid private key format')
               return;
             }
 
@@ -187,7 +187,7 @@
             if (!response.success) {
               accessService.clearAccessToken();
               this.disable = false;
-              this.$notifier.show(response.error, 'error')
+              this.$notifier.showError(response.error)
               return;
             }
 
@@ -203,7 +203,7 @@
           }).catch((err) => {
             accessService.clearAccessToken();
             this.disable = false;
-          this.$notifier.show(err.message, 'error')
+          this.$notifier.showError(err.message)
           });
       }
     }

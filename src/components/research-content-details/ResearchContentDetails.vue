@@ -348,13 +348,13 @@
               extensions: []
             })
               .then(() => {
-                this.$notifier.show('New material has been uploaded successfully', 'success')
+                this.$notifier.showSuccess('New material has been uploaded successfully')
               }, (err) => {
                 console.log(err);
                 if (err.response && err.response.status === 409) {
                   alert('This file was already uploaded. Please vote for existing proposal or propose file again if its existing proposal has expired.');
                 } else {
-                  this.$notifier.show('An error occurred while creating proposal, please try again later', 'error')
+                  this.$notifier.showError('An error occurred while creating proposal, please try again later')
                 }
               })
               .finally(() => {
@@ -380,11 +380,11 @@
             if (draft.status == 'in-progress') {
               bus.$emit('texture:saveDocument', () => {
                 this.isSavingDraft = false;
-                this.$notifier.show('Document draft has been saved !', 'error')
+                this.$notifier.showError('Document draft has been saved !')
               });
             } else {
               this.isSavingDraft = false;
-              this.$notifier.show('Document draft is locked for editing !', 'error')
+              this.$notifier.showError('Document draft is locked for editing !')
             }
           });
       },

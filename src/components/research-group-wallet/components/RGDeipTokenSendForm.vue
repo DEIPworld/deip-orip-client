@@ -146,12 +146,12 @@
             .then((data) => {
               this.clearForm();
 
-              this.$notifier.show('Proposal was successfully created', 'success')
+              this.$notifier.showSuccess('Proposal was successfully created')
 
               return data;
             })
             .catch((err) => {
-              this.$notifier.show('Proposal was failed', 'error')
+              this.$notifier.showError('Proposal was failed')
             })
             .finally(() => {
               this.isSending = false;

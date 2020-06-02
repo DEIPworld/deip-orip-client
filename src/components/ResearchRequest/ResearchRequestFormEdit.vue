@@ -59,7 +59,7 @@
 
         researchService.editResearchApplicationViaOffchain(this.formData._id, formData)
           .then((result) => {
-            this.$notifier.show(`Project "${this.formData.researchTitle}" has been updated successfully`, 'success')
+            this.$notifier.showSuccess(`Project "${this.formData.researchTitle}" has been updated successfully`)
             this.$emit('done');
             this.formProcessing = false;
           })

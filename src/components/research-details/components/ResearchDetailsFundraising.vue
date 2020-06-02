@@ -368,12 +368,12 @@
             this.$refs.amountToContribute.reset();
             this.amountToContribute = '';
 
-            this.$notifier.show(`You have contributed to "${this.research.title}" fundraise successfully !`, 'success')
+            this.$notifier.showSuccess(`You have contributed to "${this.research.title}" fundraise successfully !`)
           })
           .catch((err) => {
             console.log(err);
             this.areTokensBuying = false;
-            this.$notifier.show(`An error occurred while contributing to fundraise, please try again later`, 'error')
+            this.$notifier.showError(`An error occurred while contributing to fundraise, please try again later`)
           });
       },
       agreeSaft() {

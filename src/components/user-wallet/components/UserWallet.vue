@@ -954,12 +954,12 @@
           this.sendTokensDialog.form.memo ? this.sendTokensDialog.form.memo : ''
         )
           .then((data) => {
-            this.$notifier.show('Transfer was successfull', 'success')
+            this.$notifier.showSuccess('Transfer was successfull')
             this.closeSendTokensDialog();
           })
           .catch((err) => {
             console.error(err);
-            this.$notifier.show('Transaction was failed', 'error')
+            this.$notifier.showError('Transaction was failed')
           })
           .finally(() => {
             this.sendTokensDialog.isSending = false;
@@ -982,11 +982,11 @@
           extensions
         )
           .then((data) => {
-            this.$notifier.show('Research tokens successfully sent', 'success')
+            this.$notifier.showSuccess('Research tokens successfully sent')
             this.closeSendResearchTokensDialog();
           })
           .catch((err) => {
-            this.$notifier.show('Transaction was failed', 'error')
+            this.$notifier.showError('Transaction was failed')
             console.error(err);
           })
           .finally(() => {
@@ -1005,12 +1005,12 @@
           `deposit for ${this.user.username}`
         )
           .then(() => {
-            this.$notifier.show('Funds have been deposited successfully!', 'error')
+            this.$notifier.showError('Funds have been deposited successfully!')
             this.closeDepositDialog();
           })
           .catch((err) => {
             console.error(err);
-            this.$notifier.show('Transaction was failed', 'error')
+            this.$notifier.showError('Transaction was failed')
           })
           .finally(() => {
             this.depositDialog.isDepositing = false;
@@ -1028,12 +1028,12 @@
           `withdraw for ${this.user.username}`
         )
           .then(() => {
-            this.$notifier.show('Funds have been withdrawn successfully!', 'error')
+            this.$notifier.showError('Funds have been withdrawn successfully!')
             this.closeWithdrawDialog();
           })
           .catch((err) => {
             console.error(err);
-            this.$notifier.show('Transaction was failed', 'error')
+            this.$notifier.showError('Transaction was failed')
           })
           .finally(() => {
             this.withdrawDialog.isWithdrawing = false;

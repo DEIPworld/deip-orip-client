@@ -325,11 +325,11 @@
           approver: null
         })
           .then(() => {
-            this.$notifier.show('Dropout Proposal has been created successfully!', 'success')
+            this.$notifier.showSuccess('Dropout Proposal has been created successfully!')
             this.$store.dispatch('researchGroup/loadResearchGroupProposals', { account: this.group.external_id });
           })
           .catch((err) => {
-            this.$notifier.show('An error occurred while creating proposal, please try again later', 'error')
+            this.$notifier.showError('An error occurred while creating proposal, please try again later')
             console.log(err);
           })
           .finally(() => {

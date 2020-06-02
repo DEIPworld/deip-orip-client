@@ -157,10 +157,10 @@
           approver: null
         })
         .then(() => {
-          this.$notifier.show(`Invitation Proposal has been created successfully!`, 'success')
+          this.$notifier.showSuccess(`Invitation Proposal has been created successfully!`)
           this.$emit('onSuccess');
         }).catch((err) => {
-          this.$notifier.show(`An error occurred while creating proposal, please try again later`, 'error')
+          this.$notifier.showError(`An error occurred while creating proposal, please try again later`)
           console.log(err);
         }).finally(() => {
           this.isLoading = false;

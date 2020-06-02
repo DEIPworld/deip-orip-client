@@ -122,13 +122,13 @@
           parseInt(this.amount),
           this.description
         ).then(() => {
-          this.$notifier.show(`Proposal was successfully created`, 'success')
+          this.$notifier.showSuccess(`Proposal was successfully created`)
 
           this.$emit('onCreate');
 
           setTimeout(() => this.$emit('close'), 1000);
         }).catch((e) => {
-          this.$notifier.show(`Error occured`, 'error')
+          this.$notifier.showError(`Error occured`)
 
           console.log(e);
         }).finally(() => {

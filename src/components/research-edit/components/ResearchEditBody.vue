@@ -353,7 +353,7 @@
           extensions: []
         })
           .then(() => {
-            this.$notifier.show('Proposal has been sent successfully!', 'success')
+            this.$notifier.showSuccess('Proposal has been sent successfully!')
             if (this.researchGroup.is_centralized || this.researchGroup.is_personal) {
               this.$router.push({
                 name: 'ResearchDetails',
@@ -375,7 +375,7 @@
           .catch((err) => {
             console.log(err);
 
-            this.$notifier.show('An error occurred during proposal sending', 'error')
+            this.$notifier.showError('An error occurred during proposal sending')
           })
           .finally(() => {
             this.isMetaSaving = false;
@@ -409,7 +409,7 @@
             tenantCategory: this.tenantCategory
           })
             .then(() => {
-              this.$notifier.show('Info has been change successfully!', 'success')
+              this.$notifier.showSuccess('Info has been change successfully!')
               this.$router.push({
                 name: 'ResearchDetails',
                 params: {
@@ -421,7 +421,7 @@
             .catch((err) => {
               console.log(err);
 
-              this.$notifier.show('An error occurred during change info', 'error')
+              this.$notifier.showError('An error occurred during change info')
             })
             .finally(() => {
               this.isRefSaving = false;
@@ -502,14 +502,14 @@
       backgroundUploadSuccess(file, response) {
         this.$refs.researchBackground.removeAllFiles();
         this.isUploadingBackground = false;
-        this.$notifier.show(`Background image has been updated successfully ! Refresh the page please`, 'success')
+        this.$notifier.showSuccess(`Background image has been updated successfully ! Refresh the page please`)
       },
 
       backgroundUploadError(file, message, xhr) {
         console.log(message);
         this.$refs.researchBackground.removeAllFiles();
         this.isUploadingBackground = false;
-        this.$notifier.show(`Sorry, an error occurred while uploading background image, please try again later`, 'error')
+        this.$notifier.showError(`Sorry, an error occurred while uploading background image, please try again later`)
       }
     }
   };

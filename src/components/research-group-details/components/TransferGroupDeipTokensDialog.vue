@@ -177,7 +177,7 @@
             funds: this.toAssetUnits(this.form.amount)
           })
             .then((data) => {
-              this.$notifier.show('Proposal was successfully created', 'success')
+              this.$notifier.showSuccess('Proposal was successfully created')
 
               this.clearForm();
               this.$store.dispatch('researchGroup/loadResearchGroupProposals', { groupId: this.group.id });
@@ -185,7 +185,7 @@
               setTimeout(() => this.close(), 1500);
             })
             .catch((err) => {
-              this.$notifier.show('Proposal was failed', 'error')
+              this.$notifier.showError('Proposal was failed')
             })
             .finally(() => {
               this.isSending = false;

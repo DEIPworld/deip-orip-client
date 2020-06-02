@@ -779,11 +779,11 @@
             return Promise.all([reload]);
           })
           .then(() => {
-            this.$notifier.show('Payment requests have been certified successfully!', 'success')
+            this.$notifier.showSuccess('Payment requests have been certified successfully!')
           })
           .catch((err) => {
             console.log(err);
-            this.$notifier.show('error')
+            this.$notifier.showError()
           })
           .finally(() => {
             this.selectedPayments = [];
@@ -815,11 +815,11 @@
             return Promise.all([reload]);
           })
           .then(() => {
-            this.$notifier.show('Payment requests have been approved successfully!', 'success')
+            this.$notifier.showSuccess('Payment requests have been approved successfully!')
           })
           .catch((err) => {
             console.log(err);
-            this.$notifier.show('error')
+            this.$notifier.showError()
           })
           .finally(() => {
             this.selectedPayments = [];
@@ -851,11 +851,11 @@
             return Promise.all([reload]);
           })
           .then(() => {
-            this.$notifier.show('Payment requests have been rejected successfully!', 'success')
+            this.$notifier.showSuccess('Payment requests have been rejected successfully!')
           })
           .catch((err) => {
             console.log(err);
-            this.$notifier.show('error')
+            this.$notifier.showError()
           })
           .finally(() => {
             this.selectedPayments = [];
@@ -895,11 +895,11 @@
             return Promise.all([reloadAwards, reloadTokenStats]);
           })
           .then(() => {
-            this.$notifier.show('Payments have been sent successfully!', 'success')
+            this.$notifier.showSuccess('Payments have been sent successfully!')
           })
           .catch((err) => {
             console.log(err);
-            this.$notifier.show('error')
+            this.$notifier.showError()
           })
           .finally(() => {
             this.selectedPayments = [];

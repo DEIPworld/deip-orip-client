@@ -312,10 +312,10 @@
         )
           .then(() => {
             this.isFinished = true;
-            this.$notifier.show('Funding Opportunity has been created successfully!', 'success');
+            this.$notifier.showSuccess('Funding Opportunity has been created successfully!');
           })
           .catch((err) => {
-            this.$notifier.show('An error occurred while creating Funding Opportunity, please try again later', 'success');
+            this.$notifier.showSuccess('An error occurred while creating Funding Opportunity, please try again later');
             console.log(err);
           })
           .finally(() => {

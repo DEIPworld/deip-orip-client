@@ -57,7 +57,7 @@
 
         researchService.createResearchApplicationViaOffchain(researcherPrivKey, formData)
           .then(({ rm }) => {
-            this.$notifier.show('Project request has been applied successfully. We will notify you as soon as your project form will be approved.', 'success')
+            this.$notifier.showSuccess('Project request has been applied successfully. We will notify you as soon as your project form will be approved.')
             return deipRpc.api.getResearchAsync(rm._id);
           })
           .then((research) => {
@@ -76,7 +76,7 @@
           .catch((err) => {
             this.formProcessing = false;
             console.error(err);
-            this.$notifier.show('An error occurred while creating project, please try again later', 'error')
+            this.$notifier.showError('An error occurred while creating project, please try again later')
           });
       }
     }

@@ -110,7 +110,7 @@
             extensions
           )
             .then((data) => {
-              this.$notifier.show('Your review has been published successfully !', 'success')
+              this.$notifier.showSuccess('Your review has been published successfully !')
               this.$router.push({
                 name: 'ResearchContentDetails',
                 params: {
@@ -123,7 +123,7 @@
             })
             .catch((err) => {
               console.log(err);
-              this.$notifier.show('An error occurred while adding review, please try again later', 'error')
+              this.$notifier.showError('An error occurred while adding review, please try again later')
             })
             .finally(() => {
               this.isLoading = false;

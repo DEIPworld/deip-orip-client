@@ -464,14 +464,14 @@
           expert: this.requestExpertReviewDialog.selectedExpert.account.name
         })
           .then(() => {
-            this.$notifier.show('Request for the review has been sent successfully', 'error')
+            this.$notifier.showError('Request for the review has been sent successfully')
           })
           .catch((err) => {
             let errMsg = 'An error occurred while requesting the review. Please try again later';
             if (err.response && err.response.data) {
               errMsg = err.response.data;
             }
-            this.$notifier.show(errMsg, 'error')
+            this.$notifier.showError(errMsg)
           })
           .finally(() => {
             this.requestExpertReviewDialog.isRequestingReview = false;

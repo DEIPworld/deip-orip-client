@@ -662,7 +662,7 @@
           }
         )
           .then(() => {
-            this.$notifier.show('Funding proposal has been created succesfully!', 'success');
+            this.$notifier.showSuccess('Funding proposal has been created succesfully!');
             this.$router.push({
               name: 'GrantProgramsAwardsDashboard',
               params: { agency: this.organizationProfile.permlink }
@@ -670,7 +670,7 @@
           })
           .catch((err) => {
             console.log(err);
-            this.$notifier.show('An error occurred while contributing to fundraise, please try again later', 'error');
+            this.$notifier.showError('An error occurred while contributing to fundraise, please try again later');
           })
           .finally(() => {
             this.isSaving = false;

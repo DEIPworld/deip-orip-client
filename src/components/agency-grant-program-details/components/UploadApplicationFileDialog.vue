@@ -409,7 +409,7 @@
         this.$refs.newApplication.processQueue();
       },
       vdropzoneError(file, message, xhr) {
-        this.$notifier.show('Sorry, the file storage server is temporarily unavailable, please try again later', 'error');
+        this.$notifier.showError('Sorry, the file storage server is temporarily unavailable, please try again later');
         this.close();
       },
       vdropzoneFileAdded(file) {
@@ -440,14 +440,14 @@
         )
           .then((res) => {
             // todo: Reload applications section
-            this.$notifier.show('Application has been sent successfully!', 'success');
+            this.$notifier.showSuccess('Application has been sent successfully!');
 
             return new Promise((resolve, reject) => {
               this.$store.dispatch('agencyGrantProgramDetails/loadorganizationProgramApplications', { notify: resolve });
             });
           })
           .catch((err) => {
-            this.$notifier.show('An error occurred while sending Application, please try again later', 'error');
+            this.$notifier.showError('An error occurred while sending Application, please try again later');
             console.log(err);
           })
           .finally(() => {

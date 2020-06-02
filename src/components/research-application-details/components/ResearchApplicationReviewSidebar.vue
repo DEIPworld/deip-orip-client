@@ -109,15 +109,15 @@
                 deipRpc.api.broadcastTransactionSynchronous(signedTX, (err, result) => {
                   self.isReviewVoting = false;
                   if (err) {
-                    this.$notifier.show('error');
+                    this.$notifier.showError();
                     console.log(err);
                   } else {
                     self.votingDisabled = true;
-                    this.$notifier.show('You\'ve voted for review successfully!', 'success');
+                    this.$notifier.showSuccess('You\'ve voted for review successfully!');
                   }
                 });
               } catch (err) {
-                this.$notifier.show('error');
+                this.$notifier.showError();
                 console.log(err);
               }
             });

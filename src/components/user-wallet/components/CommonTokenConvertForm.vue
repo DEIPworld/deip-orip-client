@@ -197,11 +197,11 @@
             this.$refs.form.reset();
             this.amount = '';
 
-            this.$notifier.show('Converting transaction was applied', 'success')
+            this.$notifier.showSuccess('Converting transaction was applied')
 
             return data;
           }).catch(() => {
-            this.$notifier.show('Transaction was failed', 'error')
+            this.$notifier.showError('Transaction was failed')
           }).finally(() => {
             this.isConverting = false;
           });

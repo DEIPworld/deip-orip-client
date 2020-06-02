@@ -383,7 +383,7 @@
           .then(() => {
             this.isSaving = false;
             this.isServerValidated = true;
-            this.$notifier.show(`Account '${this.formData.username}' successfully created`, 'success')
+            this.$notifier.showSuccess(`Account '${this.formData.username}' successfully created`)
             this.$router.push({ name: this.$route.name === 'admin.members.add' ? 'admin.members' : 'UserApplicationAccepted' });
           })
           .catch((err) => {
@@ -391,7 +391,7 @@
             const message = (err.response && err.response.data)
               || 'Sorry, the service is temporarily unavailable, please try again later';
 
-            this.$notifier.show(message, 'error')
+            this.$notifier.showError(message)
             console.error(err);
           });
       },

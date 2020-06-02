@@ -449,9 +449,9 @@
         userService.updateUserProfile(this.currentUser.username, update)
           .then((res) => {
             this.$store.dispatch('userDetails/loadUserProfile', { username: this.currentUser.username });
-            this.$notifier.show(`"${item.educationalInstitution}" Institute has been saved successfully!"`, 'success')
+            this.$notifier.showSuccess(`"${item.educationalInstitution}" Institute has been saved successfully!"`)
           }, (err) => {
-            this.$notifier.show(`An error occurred while saving "${item.educationalInstitution}" details, please try again later`, 'error')
+            this.$notifier.showError(`An error occurred while saving "${item.educationalInstitution}" details, please try again later`)
             console.log(err);
           });
       },
@@ -470,9 +470,9 @@
         userService.updateUserProfile(this.currentUser.username, update)
           .then((res) => {
             this.$store.dispatch('userDetails/loadUserProfile', { username: this.currentUser.username });
-            this.$notifier.show(`"${item.educationalInstitution}" Institute has been deleted successfully!"`, 'success')
+            this.$notifier.showSuccess(`"${item.educationalInstitution}" Institute has been deleted successfully!"`)
           }, (err) => {
-            this.$notifier.show(`An error occurred while deleting "${item.educationalInstitution}" details, please try again later`, 'error')
+            this.$notifier.showError(`An error occurred while deleting "${item.educationalInstitution}" details, please try again later`)
             console.log(err);
           });
       },
@@ -508,9 +508,9 @@
         userService.updateUserProfile(this.currentUser.username, update)
           .then((res) => {
             this.$store.dispatch('userDetails/loadUserProfile', { username: this.currentUser.username });
-            this.$notifier.show(`"${item.company}" employment has been saved successfully!"`, 'success')
+            this.$notifier.showSuccess(`"${item.company}" employment has been saved successfully!"`)
           }, (err) => {
-            this.$notifier.show(`An error occurred while saving "${item.company}" details, please try again later`, 'error')
+            this.$notifier.showError(`An error occurred while saving "${item.company}" details, please try again later`)
             console.log(err);
           });
       },
@@ -530,9 +530,9 @@
         userService.updateUserProfile(this.currentUser.username, update)
           .then((res) => {
             this.$store.dispatch('userDetails/loadUserProfile', { username: this.currentUser.username });
-            this.$notifier.show(`"${item.company}" employment has been deleted successfully!"`, 'success')
+            this.$notifier.showSuccess(`"${item.company}" employment has been deleted successfully!"`)
           }, (err) => {
-            this.$notifier.show(`An error occurred while deleting "${item.company}" employment details, please try again later`, 'error')
+            this.$notifier.showError(`An error occurred while deleting "${item.company}" employment details, please try again later`)
             console.log(err);
           });
       },
@@ -548,11 +548,11 @@
 
       avatarUploadSuccess(file, response) {
         this.$store.dispatch('userDetails/loadUserProfile', { username: this.currentUser.username });
-        this.$notifier.show(`Avatar has been changed successfully !`, 'success')
+        this.$notifier.showSuccess(`Avatar has been changed successfully !`)
       },
 
       avatarUploadError(file, message, xhr) {
-        this.$notifier.show(`Sorry, an error occurred while uploading avatar, please try again later`, 'error')
+        this.$notifier.showError(`Sorry, an error occurred while uploading avatar, please try again later`)
         console.log(message);
       },
 

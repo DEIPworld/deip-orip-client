@@ -278,13 +278,13 @@
       logoUploadSuccess(file, response) {
         this.$refs.researchGroupLogo.removeAllFiles();
         this.isUploadingLogo = false;
-        this.$notifier.show(`Logo has been updated successfully ! Refresh the page please`, 'success')
+        this.$notifier.showSuccess(`Logo has been updated successfully ! Refresh the page please`)
       },
       logoUploadError(file, message, xhr) {
         // console.log(message);
         this.$refs.researchGroupLogo.removeAllFiles();
         this.isUploadingLogo = false;
-        this.$notifier.show(`Sorry, an error occurred while uploading logo image, please try again later`, 'error')
+        this.$notifier.showError(`Sorry, an error occurred while uploading logo image, please try again later`)
       },
       updateLogoImage() {
         if (this.$refs.researchGroupLogo.getQueuedFiles().length) {
@@ -366,13 +366,13 @@
           researchGroupThresholdOverrides: []
         })
           .then(() => {
-            this.$notifier.show('Proposal has been sent successfully!', 'success')
+            this.$notifier.showSuccess('Proposal has been sent successfully!')
             this.cancel(true);
           })
           .catch((err) => {
             console.log(err);
 
-            this.$notifier.show('An error occurred during proposal sending', 'error')
+            this.$notifier.showError('An error occurred during proposal sending')
           })
           .finally(() => {
             this.isChangingMetaLoading = false;

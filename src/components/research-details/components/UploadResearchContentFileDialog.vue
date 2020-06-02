@@ -220,7 +220,7 @@
         xhr.setRequestHeader('Research-Content-References', this.references.map((ref) => ref.external_id));
       },
       vdropzoneErrorMultiple(files, message, xhr) {
-        this.$notifier.show(`Sorry, the file storage server is temporarily unavailable, please try again later`, 'error')
+        this.$notifier.showError(`Sorry, the file storage server is temporarily unavailable, please try again later`)
         this.close();
       },
       vdropzoneFileAdded(file) {
@@ -246,13 +246,13 @@
           extensions: []
         })
           .then(() => {
-            this.$notifier.show('New material has been uploaded successfully', 'success')
+            this.$notifier.showSuccess('New material has been uploaded successfully')
           }, (err) => {
             console.log(err);
             if (err.response && err.response.status == 409) {
               alert('This file was already uploaded. Please vote for existing proposal or propose file again if its existing proposal has expired.');
             } else {
-              this.$notifier.show('An error occurred while uploading content, please try again later', 'error')
+              this.$notifier.showError('An error occurred while uploading content, please try again later')
             }
           })
           .finally(() => {

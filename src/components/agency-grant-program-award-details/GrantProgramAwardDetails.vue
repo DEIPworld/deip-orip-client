@@ -743,11 +743,11 @@
             return Promise.all([reload]);
           })
           .then(() => {
-            this.$notifier.show('Payment requests have been certified successfully!', 'success');
+            this.$notifier.showSuccess('Payment requests have been certified successfully!');
           })
           .catch((err) => {
             console.log(err);
-            this.$notifier.show('error')
+            this.$notifier.showError()
           })
           .finally(() => {
             this.selectedPayments = [];
@@ -780,11 +780,11 @@
             return Promise.all([reload]);
           })
           .then(() => {
-            this.$notifier.show('Payment requests have been approved successfully!', 'success');
+            this.$notifier.showSuccess('Payment requests have been approved successfully!');
           })
           .catch((err) => {
             console.log(err);
-            this.$notifier.show('error')
+            this.$notifier.showError()
           })
           .finally(() => {
             this.selectedPayments = [];
@@ -817,11 +817,11 @@
             return Promise.all([reload]);
           })
           .then(() => {
-            this.$notifier.show('Payment requests have been rejected successfully!', 'success');
+            this.$notifier.showSuccess('Payment requests have been rejected successfully!');
           })
           .catch((err) => {
             console.log(err);
-            this.$notifier.show('error')
+            this.$notifier.showError()
           })
           .finally(() => {
             this.selectedPayments = [];
@@ -854,11 +854,11 @@
             return Promise.all([reload]);
           })
           .then(() => {
-            this.$notifier.show('Money transfer has been sent successfully!', 'success');
+            this.$notifier.showSuccess('Money transfer has been sent successfully!');
           })
           .catch((err) => {
             console.log(err);
-            this.$notifier.show('error')
+            this.$notifier.showError()
           })
           .finally(() => {
             this.selectedPayments = [];
@@ -884,11 +884,11 @@
             return Promise.all([reload]);
           })
           .then(() => {
-            this.$notifier.show('Grant Tokens have been distributed successfully!', 'success');
+            this.$notifier.showSuccess('Grant Tokens have been distributed successfully!');
           })
           .catch((err) => {
             console.log(err);
-            this.$notifier.show('error')
+            this.$notifier.showError()
           })
           .finally(() => {
             this.isAwardApproving = false;
@@ -912,11 +912,11 @@
             return Promise.all([reload]);
           })
           .then(() => {
-            this.$notifier.show('The award has been rejected successfully!', 'success');
+            this.$notifier.showSuccess('The award has been rejected successfully!');
           })
           .catch((err) => {
             console.log(err);
-            this.$notifier.show('error')
+            this.$notifier.showError()
           })
           .finally(() => {
             this.isAwardRejecting = false;

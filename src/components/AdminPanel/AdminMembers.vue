@@ -268,12 +268,12 @@
         this.isDisabled = true;
         return tenantService.approveSignUpRequest(name)
           .then(() => {
-            this.$notifier.show('Account successfully created', 'success');
+            this.$notifier.showSuccess('Account successfully created');
             this.$store.dispatch('adminPanel/loadAllMembers', {});
           })
           .catch((err) => {
             console.error(err);
-            this.$notifier.show('error');
+            this.$notifier.showError();
           })
           .finally(() => {
             this.isDisabled = false;
@@ -284,12 +284,12 @@
         this.isDisabled = true;
         return tenantService.rejectSignUpRequest(name)
           .then(() => {
-            this.$notifier.show('success')
+            this.$notifier.showSuccess()
             this.$store.dispatch('adminPanel/loadAllMembers', {});
           })
           .catch((err) => {
             console.error(err);
-            this.$notifier.show('error')
+            this.$notifier.showError()
           })
           .finally(() => {
             this.isDisabled = false;

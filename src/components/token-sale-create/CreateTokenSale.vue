@@ -43,11 +43,11 @@
         })
           .then(() => {
             this.isLoading = false;
-            this.$notifier.show('Fundraise Proposal has been created successfully! Approve it to start the fundraise!', 'success')
+            this.$notifier.showSuccess('Fundraise Proposal has been created successfully! Approve it to start the fundraise!')
           })
           .catch((err) => {
             this.isLoading = false;
-            this.$notifier.show('An error occurred while creating proposal, please try again later', 'error')
+            this.$notifier.showError('An error occurred while creating proposal, please try again later')
             console.log(err);
           })
           .finally(() => {
