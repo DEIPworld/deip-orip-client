@@ -59,9 +59,7 @@
 
         researchService.editResearchApplicationViaOffchain(this.formData._id, formData)
           .then((result) => {
-            this.$store.dispatch('layout/setSuccess', {
-              message: `Project "${this.formData.researchTitle}" has been updated successfully`
-            });
+            this.$notifier.showSuccess(`Project "${this.formData.researchTitle}" has been updated successfully`)
             this.$emit('done');
             this.formProcessing = false;
           })

@@ -449,13 +449,9 @@
         userService.updateUserProfile(this.currentUser.username, update)
           .then((res) => {
             this.$store.dispatch('userDetails/loadUserProfile', { username: this.currentUser.username });
-            this.$store.dispatch('layout/setSuccess', {
-              message: `"${item.educationalInstitution}" Institute has been saved successfully!"`
-            });
+            this.$notifier.showSuccess(`"${item.educationalInstitution}" Institute has been saved successfully!"`)
           }, (err) => {
-            this.$store.dispatch('layout/setError', {
-              message: `An error occurred while saving "${item.educationalInstitution}" details, please try again later`
-            });
+            this.$notifier.showError(`An error occurred while saving "${item.educationalInstitution}" details, please try again later`)
             console.log(err);
           });
       },
@@ -474,13 +470,9 @@
         userService.updateUserProfile(this.currentUser.username, update)
           .then((res) => {
             this.$store.dispatch('userDetails/loadUserProfile', { username: this.currentUser.username });
-            this.$store.dispatch('layout/setSuccess', {
-              message: `"${item.educationalInstitution}" Institute has been deleted successfully!"`
-            });
+            this.$notifier.showSuccess(`"${item.educationalInstitution}" Institute has been deleted successfully!"`)
           }, (err) => {
-            this.$store.dispatch('layout/setError', {
-              message: `An error occurred while deleting "${item.educationalInstitution}" details, please try again later`
-            });
+            this.$notifier.showError(`An error occurred while deleting "${item.educationalInstitution}" details, please try again later`)
             console.log(err);
           });
       },
@@ -516,13 +508,9 @@
         userService.updateUserProfile(this.currentUser.username, update)
           .then((res) => {
             this.$store.dispatch('userDetails/loadUserProfile', { username: this.currentUser.username });
-            this.$store.dispatch('layout/setSuccess', {
-              message: `"${item.company}" employment has been saved successfully!"`
-            });
+            this.$notifier.showSuccess(`"${item.company}" employment has been saved successfully!"`)
           }, (err) => {
-            this.$store.dispatch('layout/setError', {
-              message: `An error occurred while saving "${item.company}" details, please try again later`
-            });
+            this.$notifier.showError(`An error occurred while saving "${item.company}" details, please try again later`)
             console.log(err);
           });
       },
@@ -542,13 +530,9 @@
         userService.updateUserProfile(this.currentUser.username, update)
           .then((res) => {
             this.$store.dispatch('userDetails/loadUserProfile', { username: this.currentUser.username });
-            this.$store.dispatch('layout/setSuccess', {
-              message: `"${item.company}" employment has been deleted successfully!"`
-            });
+            this.$notifier.showSuccess(`"${item.company}" employment has been deleted successfully!"`)
           }, (err) => {
-            this.$store.dispatch('layout/setError', {
-              message: `An error occurred while deleting "${item.company}" employment details, please try again later`
-            });
+            this.$notifier.showError(`An error occurred while deleting "${item.company}" employment details, please try again later`)
             console.log(err);
           });
       },
@@ -564,15 +548,11 @@
 
       avatarUploadSuccess(file, response) {
         this.$store.dispatch('userDetails/loadUserProfile', { username: this.currentUser.username });
-        this.$store.dispatch('layout/setSuccess', {
-          message: 'Avatar has been changed successfully !'
-        });
+        this.$notifier.showSuccess(`Avatar has been changed successfully !`)
       },
 
       avatarUploadError(file, message, xhr) {
-        this.$store.dispatch('layout/setError', {
-          message: 'Sorry, an error occurred while uploading avatar, please try again later'
-        });
+        this.$notifier.showError(`Sorry, an error occurred while uploading avatar, please try again later`)
         console.log(message);
       },
 

@@ -281,9 +281,7 @@
       },
 
       vdropzoneErrorMultiple(files, message, xhr) {
-        this.$store.dispatch('layout/setError', {
-          message: 'Sorry, the file storage server is temporarily unavailable, please try again later'
-        });
+        this.$notifier.showError('Sorry, the file storage server is temporarily unavailable, please try again later');
         this.close();
       },
 
@@ -311,15 +309,11 @@
             return Promise.all([reload]);
           })
           .then(() => {
-            this.$store.dispatch('layout/setSuccess', {
-              message: 'Payment request has been created successfully!'
-            });
+            this.$notifier.showSuccess('Payment request has been created successfully!');
           })
           .catch((err) => {
             console.log(err);
-            this.$store.dispatch('layout/setError', {
-              message: 'An error occurred while sending the payment request, please try again later.'
-            });
+            this.$notifier.showSuccess('An error occurred while sending the payment request, please try again later.');
           })
           .finally(() => {
             this.isLoading = false;

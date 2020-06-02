@@ -353,9 +353,7 @@
           extensions: []
         })
           .then(() => {
-            this.$store.dispatch('layout/setSuccess', {
-              message: 'Proposal has been sent successfully!'
-            });
+            this.$notifier.showSuccess('Proposal has been sent successfully!')
             if (this.researchGroup.is_centralized || this.researchGroup.is_personal) {
               this.$router.push({
                 name: 'ResearchDetails',
@@ -377,9 +375,7 @@
           .catch((err) => {
             console.log(err);
 
-            this.$store.dispatch('layout/setError', {
-              message: 'An error occurred during proposal sending'
-            });
+            this.$notifier.showError('An error occurred during proposal sending')
           })
           .finally(() => {
             this.isMetaSaving = false;
@@ -413,9 +409,7 @@
             tenantCategory: this.tenantCategory
           })
             .then(() => {
-              this.$store.dispatch('layout/setSuccess', {
-                message: 'Info has been change successfully!'
-              });
+              this.$notifier.showSuccess('Info has been change successfully!')
               this.$router.push({
                 name: 'ResearchDetails',
                 params: {
@@ -427,9 +421,7 @@
             .catch((err) => {
               console.log(err);
 
-              this.$store.dispatch('layout/setError', {
-                message: 'An error occurred during change info'
-              });
+              this.$notifier.showError('An error occurred during change info')
             })
             .finally(() => {
               this.isRefSaving = false;
@@ -510,20 +502,14 @@
       backgroundUploadSuccess(file, response) {
         this.$refs.researchBackground.removeAllFiles();
         this.isUploadingBackground = false;
-        this.$store.dispatch('layout/setSuccess', {
-          message:
-            'Background image has been updated successfully ! Refresh the page please'
-        });
+        this.$notifier.showSuccess(`Background image has been updated successfully ! Refresh the page please`)
       },
 
       backgroundUploadError(file, message, xhr) {
         console.log(message);
         this.$refs.researchBackground.removeAllFiles();
         this.isUploadingBackground = false;
-        this.$store.dispatch('layout/setError', {
-          message:
-            'Sorry, an error occurred while uploading background image, please try again later'
-        });
+        this.$notifier.showError(`Sorry, an error occurred while uploading background image, please try again later`)
       }
     }
   };

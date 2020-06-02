@@ -491,13 +491,9 @@
           this.$store.dispatch('userDetails/loadUserInvites', { username: this.currentUser.username });
           this.$store.dispatch('auth/loadGroups');
           this.$store.dispatch('userDetails/loadGroups', { username: this.currentUser.username });
-          this.$store.dispatch('layout/setSuccess', {
-            message: '"Invite has been approved successfully !"'
-          });
+          this.$notifier.showSuccess(`"Invite has been approved successfully !"`)
         }, (err) => {
-          this.$store.dispatch('layout/setError', {
-            message: 'An error occurred while accepting invite, please try again later'
-          });
+          this.$notifier.showError(`An error occurred while accepting invite, please try again later`)
           console.log(err);
         }).finally(() => {
           this.closeInviteDetailsDialog();
@@ -515,13 +511,9 @@
         })
         .then(() => {
           this.$store.dispatch('userDetails/loadUserInvites', { username: this.currentUser.username });
-          this.$store.dispatch('layout/setSuccess', {
-            message: '"Invite has been rejected successfully !"'
-          });
+          this.$notifier.showSuccess(`"Invite has been rejected successfully !"`)
         }, (err) => {
-          this.$store.dispatch('layout/setError', {
-            message: 'An error occurred while rejecting invite, please try again later'
-          });
+          this.$notifier.showError(`An error occurred while rejecting invite, please try again later`)
           console.log(err);
         }).finally(() => {
           this.closeInviteDetailsDialog();

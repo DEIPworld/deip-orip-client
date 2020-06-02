@@ -312,14 +312,10 @@
         )
           .then(() => {
             this.isFinished = true;
-            this.$store.dispatch('layout/setSuccess', {
-              message: 'Funding Opportunity has been created successfully!'
-            });
+            this.$notifier.showSuccess('Funding Opportunity has been created successfully!');
           })
           .catch((err) => {
-            this.$store.dispatch('layout/setError', {
-              message: 'An error occurred while creating Funding Opportunity, please try again later'
-            });
+            this.$notifier.showSuccess('An error occurred while creating Funding Opportunity, please try again later');
             console.log(err);
           })
           .finally(() => {

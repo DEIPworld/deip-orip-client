@@ -185,9 +185,7 @@
           this.coverLetter,
           this.publications.map((item) => item.value)
         ).then((claim) => {
-          this.$store.dispatch('layout/setSuccess', {
-            message: 'You have posted the claim successfully! Please wait for community approval before you obtain the expertise tokens'
-          });
+          this.$notifier.showSuccess(`You have posted the claim successfully! Please wait for community approval before you obtain the expertise tokens`)
 
           setTimeout(() => {
             this.$emit('close');

@@ -383,9 +383,7 @@
           .then(() => {
             this.isSaving = false;
             this.isServerValidated = true;
-            this.$store.dispatch('layout/setSuccess', {
-              message: `Account '${this.formData.username}' successfully created`
-            });
+            this.$notifier.showSuccess(`Account '${this.formData.username}' successfully created`)
             this.$router.push({ name: this.$route.name === 'admin.members.add' ? 'admin.members' : 'UserApplicationAccepted' });
           })
           .catch((err) => {
@@ -393,7 +391,7 @@
             const message = (err.response && err.response.data)
               || 'Sorry, the service is temporarily unavailable, please try again later';
 
-            this.$store.dispatch('layout/setError', { message });
+            this.$notifier.showError(message)
             console.error(err);
           });
       },

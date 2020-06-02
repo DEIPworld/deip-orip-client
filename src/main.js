@@ -32,6 +32,7 @@ import './styles/app.scss';
 import { DataPreloadMixin } from '@/utils/DataPreloadMixin';
 import { CommonMixin } from '@/utils/CommonMixin';
 import { CustomDirective } from '@/utils/CustomDirective';
+import { DSnackbarPlugin } from '@/components/Deipify/DSnackbar/DSnackbarPlugin';
 
 // ////////////////////////
 
@@ -50,6 +51,8 @@ Vue.use(VueResize);
 Vue.use(Vuetify);
 Vue.use(PortalVue);
 Vue.use(VueCurrencyFilter, currencyFilterOptions);
+
+Vue.use(DSnackbarPlugin);
 
 Vue.mixin(DataPreloadMixin);
 Vue.mixin(CommonMixin);

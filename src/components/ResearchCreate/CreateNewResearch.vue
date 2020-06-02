@@ -282,9 +282,7 @@
         )
           .then(({ rm }) => {
             this.isLoading = false;
-            this.$store.dispatch('layout/setSuccess', {
-              message: `Project "${this.research.title}" has been created successfully`
-            });
+            this.$notifier.showSuccess(`Project "${this.research.title}" has been created successfully`)
             return deipRpc.api.getResearchAsync(rm._id);
           })
           .then((research) => {
@@ -303,9 +301,7 @@
           .catch((err) => {
             console.log(err);
             this.isLoading = false;
-            this.$store.dispatch('layout/setError', {
-              message: 'An error occurred while creating project, please try again later'
-            });
+            this.$notifier.showError('An error occurred while creating project, please try again later')
           })
       }
     }

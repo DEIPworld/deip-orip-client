@@ -779,15 +779,11 @@
             return Promise.all([reload]);
           })
           .then(() => {
-            this.$store.dispatch('layout/setSuccess', {
-              message: 'Payment requests have been certified successfully!'
-            });
+            this.$notifier.showSuccess('Payment requests have been certified successfully!')
           })
           .catch((err) => {
             console.log(err);
-            this.$store.dispatch('layout/setError', {
-              message: 'An error occurred while sending the request, please try again later.'
-            });
+            this.$notifier.showError()
           })
           .finally(() => {
             this.selectedPayments = [];
@@ -819,15 +815,11 @@
             return Promise.all([reload]);
           })
           .then(() => {
-            this.$store.dispatch('layout/setSuccess', {
-              message: 'Payment requests have been approved successfully!'
-            });
+            this.$notifier.showSuccess('Payment requests have been approved successfully!')
           })
           .catch((err) => {
             console.log(err);
-            this.$store.dispatch('layout/setError', {
-              message: 'An error occurred while sending the request, please try again later.'
-            });
+            this.$notifier.showError()
           })
           .finally(() => {
             this.selectedPayments = [];
@@ -859,15 +851,11 @@
             return Promise.all([reload]);
           })
           .then(() => {
-            this.$store.dispatch('layout/setSuccess', {
-              message: 'Payment requests have been rejected successfully!'
-            });
+            this.$notifier.showSuccess('Payment requests have been rejected successfully!')
           })
           .catch((err) => {
             console.log(err);
-            this.$store.dispatch('layout/setError', {
-              message: 'An error occurred while sending the request, please try again later.'
-            });
+            this.$notifier.showError()
           })
           .finally(() => {
             this.selectedPayments = [];
@@ -907,15 +895,11 @@
             return Promise.all([reloadAwards, reloadTokenStats]);
           })
           .then(() => {
-            this.$store.dispatch('layout/setSuccess', {
-              message: 'Payments have been sent successfully!'
-            });
+            this.$notifier.showSuccess('Payments have been sent successfully!')
           })
           .catch((err) => {
             console.log(err);
-            this.$store.dispatch('layout/setError', {
-              message: 'An error occurred while sending the request, please try again later.'
-            });
+            this.$notifier.showError()
           })
           .finally(() => {
             this.selectedPayments = [];

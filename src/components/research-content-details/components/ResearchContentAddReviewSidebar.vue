@@ -110,9 +110,7 @@
             extensions
           )
             .then((data) => {
-              this.$store.dispatch('layout/setSuccess', {
-                message: 'Your review has been published successfully !'
-              });
+              this.$notifier.showSuccess('Your review has been published successfully !')
               this.$router.push({
                 name: 'ResearchContentDetails',
                 params: {
@@ -125,9 +123,7 @@
             })
             .catch((err) => {
               console.log(err);
-              this.$store.dispatch('layout/setError', {
-                message: 'An error occurred while adding review, please try again later'
-              });
+              this.$notifier.showError('An error occurred while adding review, please try again later')
             })
             .finally(() => {
               this.isLoading = false;

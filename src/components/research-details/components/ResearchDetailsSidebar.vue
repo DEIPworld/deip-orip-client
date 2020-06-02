@@ -492,9 +492,7 @@
           expert: this.selectedExpert.account.name
         })
           .then(() => {
-            this.$store.dispatch('layout/setSuccess', {
-              message: 'Request for the review has been sent successfully'
-            });
+            this.$notifier.showSuccess('Request for the review has been sent successfully')
             this.selectedExpert = null;
             this.selectedContentId = null;
           })
@@ -503,9 +501,7 @@
             if (err.response && err.response.data) {
               errMsg = err.response.data;
             }
-            this.$store.dispatch('layout/setError', {
-              message: errMsg
-            });
+            this.$notifier.showError(errMsg)
           })
           .finally(() => {
             this.isRequestingReview = false;
@@ -523,15 +519,10 @@
           })
           .then(() => {
             this.$store.dispatch('auth/loadJoinRequests');
-            this.$store.dispatch('layout/setSuccess', {
-              message: 'Join request has been sent successfully!'
-            });
+            this.$notifier.showSuccess('Join request has been sent successfully!')
           })
           .catch((err) => {
-            this.$store.dispatch('layout/setError', {
-              message:
-                'An error occurred while sending join request, please try again later!'
-            });
+            this.$notifier.showError(`An error occurred while sending join request, please try again later!`)
             console.log(err);
           })
           .finally(() => {

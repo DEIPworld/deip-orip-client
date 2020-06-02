@@ -268,14 +268,12 @@
         this.isDisabled = true;
         return tenantService.approveSignUpRequest(name)
           .then(() => {
-            this.$store.dispatch('layout/setSuccess', { message: 'Account successfully created' });
+            this.$notifier.showSuccess('Account successfully created');
             this.$store.dispatch('adminPanel/loadAllMembers', {});
           })
           .catch((err) => {
             console.error(err);
-            this.$store.dispatch('layout/setError', {
-              message: 'An error occurred while sending the request, please try again later.'
-            });
+            this.$notifier.showError();
           })
           .finally(() => {
             this.isDisabled = false;
@@ -286,14 +284,12 @@
         this.isDisabled = true;
         return tenantService.rejectSignUpRequest(name)
           .then(() => {
-            this.$store.dispatch('layout/setSuccess', { message: 'Successfully' });
+            this.$notifier.showSuccess()
             this.$store.dispatch('adminPanel/loadAllMembers', {});
           })
           .catch((err) => {
             console.error(err);
-            this.$store.dispatch('layout/setError', {
-              message: 'An error occurred while sending the request, please try again later.'
-            });
+            this.$notifier.showError()
           })
           .finally(() => {
             this.isDisabled = false;

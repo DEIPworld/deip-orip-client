@@ -42,17 +42,13 @@
           extensions: []
         })
           .then(() => {
-            this.formProcessing = false;
-            this.$store.dispatch('layout/setSuccess', {
-              message: 'Fundraise Proposal has been created successfully! Approve it to start the fundraise!'
-            });
+            this.isLoading = false;
+            this.$notifier.showSuccess('Fundraise Proposal has been created successfully! Approve it to start the fundraise!')
           })
           .catch((err) => {
-            this.formProcessing = false;
-            this.$store.dispatch('layout/setError', {
-              message: 'An error occurred while creating proposal, please try again later'
-            });
-            console.error(err);
+            this.isLoading = false;
+            this.$notifier.showError('An error occurred while creating proposal, please try again later')
+            console.log(err);
           })
           .finally(() => {
             setTimeout(() => {

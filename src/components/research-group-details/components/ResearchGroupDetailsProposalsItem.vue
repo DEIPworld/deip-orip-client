@@ -230,7 +230,7 @@
               >
                 to left the group
               </v-col>
-            </v-row>            
+            </v-row>
 
             <v-row v-else-if="proposal.action === PROPOSAL_TYPES.TRANSFER" no-gutters>
               <v-col cols="6">
@@ -399,7 +399,7 @@
       approve(proposal) {
         let promise;
         this.isApprovingLoading = true;
-        
+
         if (proposal.action === PROPOSAL_TYPES.INVITE_MEMBER) {
           promise = researchGroupService.approveResearchGroupInviteViaOffChain(this.currentUser.privKey, {
             inviteId: proposal.external_id,
@@ -425,14 +425,14 @@
             extensions: []
           });
         }
-        
+
           promise.then(() => {
             this.isApprovingLoading = false;
             const copy = _.cloneDeep(this.proposal);
             copy.voted_accounts.push(this.currentUser.username);
             this.changeProposal({ old: this.proposal, new: copy });
             this.$store.dispatch('researchGroup/loadResearchGroup', { permlink: this.group.permlink });
-            this.$store.dispatch('layout/setSuccess', { message: 'You have voted for the proposal successfully!' });
+            this.$notifier.showError('You have voted for the proposal successfully!')
           })
           .catch((err) => {
             alert(err.message);

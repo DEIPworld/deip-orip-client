@@ -146,16 +146,12 @@
             .then((data) => {
               this.clearForm();
 
-              this.$store.dispatch('layout/setSuccess', {
-                message: 'Proposal was successfully created'
-              });
+              this.$notifier.showSuccess('Proposal was successfully created')
 
               return data;
             })
             .catch((err) => {
-              this.$store.dispatch('layout/setError', {
-                message: 'Proposal was failed'
-              });
+              this.$notifier.showError('Proposal was failed')
             })
             .finally(() => {
               this.isSending = false;

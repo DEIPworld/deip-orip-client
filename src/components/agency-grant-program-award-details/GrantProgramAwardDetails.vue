@@ -743,15 +743,11 @@
             return Promise.all([reload]);
           })
           .then(() => {
-            this.$store.dispatch('layout/setSuccess', {
-              message: 'Payment requests have been certified successfully!'
-            });
+            this.$notifier.showSuccess('Payment requests have been certified successfully!');
           })
           .catch((err) => {
             console.log(err);
-            this.$store.dispatch('layout/setError', {
-              message: 'An error occurred while sending the request, please try again later.'
-            });
+            this.$notifier.showError()
           })
           .finally(() => {
             this.selectedPayments = [];
@@ -784,15 +780,11 @@
             return Promise.all([reload]);
           })
           .then(() => {
-            this.$store.dispatch('layout/setSuccess', {
-              message: 'Payment requests have been approved successfully!'
-            });
+            this.$notifier.showSuccess('Payment requests have been approved successfully!');
           })
           .catch((err) => {
             console.log(err);
-            this.$store.dispatch('layout/setError', {
-              message: 'An error occurred while sending the request, please try again later.'
-            });
+            this.$notifier.showError()
           })
           .finally(() => {
             this.selectedPayments = [];
@@ -825,15 +817,11 @@
             return Promise.all([reload]);
           })
           .then(() => {
-            this.$store.dispatch('layout/setSuccess', {
-              message: 'Payment requests have been rejected successfully!'
-            });
+            this.$notifier.showSuccess('Payment requests have been rejected successfully!');
           })
           .catch((err) => {
             console.log(err);
-            this.$store.dispatch('layout/setError', {
-              message: 'An error occurred while sending the request, please try again later.'
-            });
+            this.$notifier.showError()
           })
           .finally(() => {
             this.selectedPayments = [];
@@ -866,15 +854,11 @@
             return Promise.all([reload]);
           })
           .then(() => {
-            this.$store.dispatch('layout/setSuccess', {
-              message: 'Money transfer has been sent successfully!'
-            });
+            this.$notifier.showSuccess('Money transfer has been sent successfully!');
           })
           .catch((err) => {
             console.log(err);
-            this.$store.dispatch('layout/setError', {
-              message: 'An error occurred while sending the request, please try again later.'
-            });
+            this.$notifier.showError()
           })
           .finally(() => {
             this.selectedPayments = [];
@@ -900,15 +884,11 @@
             return Promise.all([reload]);
           })
           .then(() => {
-            this.$store.dispatch('layout/setSuccess', {
-              message: 'Grant Tokens have been distributed successfully!'
-            });
+            this.$notifier.showSuccess('Grant Tokens have been distributed successfully!');
           })
           .catch((err) => {
             console.log(err);
-            this.$store.dispatch('layout/setError', {
-              message: 'An error occurred while sending the request, please try again later.'
-            });
+            this.$notifier.showError()
           })
           .finally(() => {
             this.isAwardApproving = false;
@@ -932,15 +912,11 @@
             return Promise.all([reload]);
           })
           .then(() => {
-            this.$store.dispatch('layout/setSuccess', {
-              message: 'The award has been rejected successfully!'
-            });
+            this.$notifier.showSuccess('The award has been rejected successfully!');
           })
           .catch((err) => {
             console.log(err);
-            this.$store.dispatch('layout/setError', {
-              message: 'An error occurred while sending the request, please try again later.'
-            });
+            this.$notifier.showError()
           })
           .finally(() => {
             this.isAwardRejecting = false;

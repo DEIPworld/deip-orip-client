@@ -610,7 +610,7 @@
                   const number = parseFloat(value);
                   if (isNaN(number)) return "Should be valid float number";
                   if (!number || number < 0) return "Should be valid positive float number";
-                  
+
                   const ownShare = this.convertToPercent(this.sendResearchTokensDialog.maxAmount)
                   if (number > ownShare) {
                     return `Your share owned share (${ownShare}%) is not enough for transfer`;
@@ -954,16 +954,12 @@
           this.sendTokensDialog.form.memo ? this.sendTokensDialog.form.memo : ''
         )
           .then((data) => {
-            this.$store.dispatch('layout/setSuccess', {
-              message: 'Transfer was successfull'
-            });
+            this.$notifier.showSuccess('Transfer was successfull')
             this.closeSendTokensDialog();
           })
           .catch((err) => {
             console.error(err);
-            this.$store.dispatch('layout/setError', {
-              message: 'Transaction was failed'
-            });
+            this.$notifier.showError('Transaction was failed')
           })
           .finally(() => {
             this.sendTokensDialog.isSending = false;
@@ -986,15 +982,11 @@
           extensions
         )
           .then((data) => {
-            this.$store.dispatch('layout/setSuccess', {
-              message: 'Research tokens successfully sent'
-            });
+            this.$notifier.showSuccess('Research tokens successfully sent')
             this.closeSendResearchTokensDialog();
           })
           .catch((err) => {
-            this.$store.dispatch('layout/setError', {
-              message: 'Transaction was failed'
-            });
+            this.$notifier.showError('Transaction was failed')
             console.error(err);
           })
           .finally(() => {
@@ -1013,14 +1005,12 @@
           `deposit for ${this.user.username}`
         )
           .then(() => {
-            this.$store.dispatch('layout/setSuccess', { message: 'Funds have been deposited successfully!' });
+            this.$notifier.showError('Funds have been deposited successfully!')
             this.closeDepositDialog();
           })
           .catch((err) => {
             console.error(err);
-            this.$store.dispatch('layout/setError', {
-              message: 'Transaction was failed'
-            });
+            this.$notifier.showError('Transaction was failed')
           })
           .finally(() => {
             this.depositDialog.isDepositing = false;
@@ -1038,14 +1028,12 @@
           `withdraw for ${this.user.username}`
         )
           .then(() => {
-            this.$store.dispatch('layout/setSuccess', { message: 'Funds have been withdrawn successfully!' });
+            this.$notifier.showError('Funds have been withdrawn successfully!')
             this.closeWithdrawDialog();
           })
           .catch((err) => {
             console.error(err);
-            this.$store.dispatch('layout/setError', {
-              message: 'Transaction was failed'
-            });
+            this.$notifier.showError('Transaction was failed')
           })
           .finally(() => {
             this.withdrawDialog.isWithdrawing = false;
