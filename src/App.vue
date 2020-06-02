@@ -13,20 +13,7 @@
       <router-view :key="$route.fullPath" />
     </v-content>
 
-
-    <v-snackbar v-model="errorSnack.isVisible" :timeout="5000" color="error">
-      {{ errorSnack.message }}
-      <v-btn dark text @click.native="closeError()">
-        Close
-      </v-btn>
-    </v-snackbar>
-
-    <v-snackbar v-model="successSnack.isVisible" :timeout="5000" color="success">
-      {{ successSnack.message }}
-      <v-btn dark text @click.native="closeSuccess();">
-        Close
-      </v-btn>
-    </v-snackbar>
+    <d-snackbar />
   </v-app>
 </template>
 
@@ -36,6 +23,7 @@
   import { AccessService } from '@deip/access-service';
   import { AppConfigService } from '@deip/app-config-service';
   import ToolbarAdmin from '@/components/layout/components/ToolbarAdmin';
+  import DSnackbar from '@/components/Deipify/DSnackbar/DSnackbar';
 
   const accessService = AccessService.getInstance();
   const appConfigService = AppConfigService.getInstance();
@@ -43,39 +31,17 @@
   export default {
 
     name: 'App',
-    components: { ToolbarAdmin },
+    components: { DSnackbar, ToolbarAdmin },
     data() {
       return {
-        isGrantsTransparencyDemo: false,
-        successSnack: {
-          isVisible: false,
-          message: ''
-        },
-        errorSnack: {
-          isVisible: false,
-          message: ''
-        }
+        isGrantsTransparencyDemo: false
       };
     },
 
     computed: {
       ...mapGetters({
-        user: 'auth/user',
-        success: 'layout/success',
-        error: 'layout/error'
+        user: 'auth/user'
       })
-    },
-    // we have to keep these watchers as Vuex store state must not be altered outside of migrations,
-    // but v-snackbar alters 'isVisible' internally after timeout
-    watch: {
-      success(newVal, oldVal) {
-        this.successSnack.isVisible = newVal.isVisible;
-        this.successSnack.message = newVal.message;
-      },
-      error(newVal, oldVal) {
-        this.errorSnack.isVisible = newVal.isVisible;
-        this.errorSnack.message = newVal.message;
-      }
     },
 
     created() {
@@ -88,21 +54,6 @@
       setInterval(pollNotifications, 10000);
       const env = appConfigService.get('env');
       this.isGrantsTransparencyDemo = env.DEMO == 'GRANT-DISTRIBUTION-TRANSPARENCY';
-    },
-
-    methods: {
-      closeError() {
-        this.$store.dispatch('layout/setError', {
-          isVisible: false,
-          message: ''
-        });
-      },
-      closeSuccess() {
-        this.$store.dispatch('layout/setSuccess', {
-          isVisible: false,
-          message: ''
-        });
-      }
     }
   };
 </script>

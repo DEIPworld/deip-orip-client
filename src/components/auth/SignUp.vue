@@ -236,16 +236,14 @@
         }).then(() => {
           this.isSaving = false;
           this.isServerValidated = true;
-          this.$store.dispatch('layout/setSuccess', {
-            message: `Account '${this.formData.username}' has been created successfully! Use the private key to sign in to the DEIP platform!`
-          });
+          this.$notifier.show(`Account '${this.formData.username}' has been created successfully! Use the private key to sign in to the DEIP platform!`, 'success')
           this.$router.push({ name: 'SignIn', query: { username: this.formData.username } });
         }).catch((err) => {
           this.isSaving = false;
           const message = err.response && err.response.data
             || 'Sorry, the service is temporarily unavailable, please try again later';
 
-          this.$store.dispatch('layout/setError', { message });
+          this.$notifier.show(message, 'error')
           console.log(err);
         });
       },

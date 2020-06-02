@@ -29,11 +29,14 @@ import { agencyGrantProgramAwardWithdrawalDetailsStore } from '../components/age
 import { agencyGrantProgramAwardCreateStore } from '../components/agency-grant-program-award-create/store/index';
 
 import { adminPanelStore } from '../components/AdminPanel/store';
+import { dSnackbarStore } from '@/components/Deipify/DSnackbar/DSnackbarStore';
 
 Vue.use(Vuex);
 
 export const store = new Vuex.Store({
   modules: {
+    snackbar: dSnackbarStore,
+
     auth: authStore,
     account: accountStore,
 

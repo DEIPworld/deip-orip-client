@@ -467,7 +467,7 @@
           this.user.username
         )
           .then(() => {
-            this.$store.dispatch('layout/setSuccess', { message: 'Proposal was successfully created' });
+            this.$notifier.show('Proposal was successfully created', 'error')
             this.selectedExpert = null;
             this.selectedResearchToReview = null;
           }, (err) => {

@@ -20,22 +20,6 @@ const getters = {
 // actions
 const actions = {
 
-  setError({ state, commit }, error) {
-    if (error.isVisible === undefined) {
-      error.isVisible = true;
-    }
-
-    commit('SET_ERROR_SNACK', error);
-  },
-
-  setSuccess({ state, commit }, success) {
-    if (success.isVisible === undefined) {
-      success.isVisible = true;
-    }
-
-    commit('SET_SUCCESS_SNACK', success);
-  },
-
   setGlobalLoader({ state, commit }) {
     commit('CHANGE_GLOBAL_LOADER_FIELD', { field: 'isLoading', value: true });
   },
@@ -51,14 +35,6 @@ const actions = {
 
 // mutations
 const mutations = {
-
-  SET_SUCCESS_SNACK(state, success) {
-    Vue.set(state, 'success', success);
-  },
-
-  SET_ERROR_SNACK(state, error) {
-    Vue.set(state, 'error', error);
-  },
 
   CHANGE_GLOBAL_LOADER_FIELD(state, payload) {
     Vue.set(state.globalLoader, payload.field, payload.value);

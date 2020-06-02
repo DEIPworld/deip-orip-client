@@ -85,9 +85,7 @@
       bannerUploadSuccess(file, response) {
         this.$refs.tenantBanner.removeAllFiles();
         this.isUploadingTenantBanner = false;
-        this.$store.dispatch('layout/setSuccess', {
-          message: 'Banner image has been updated successfully ! Refresh the page to see thr changes'
-        });
+        this.$notifier.show('Banner image has been updated successfully ! Refresh the page to see thr changes', 'success');
       },
 
       bannerUploadSending(file, xhr, formData) {
@@ -101,7 +99,7 @@
         console.log(message);
         this.$refs.tenantBanner.removeAllFiles();
         this.isUploadingTenantBanner = false;
-        this.$store.dispatch('layout/setError', { message: 'Sorry, an error occurred while uploading banner image, please try again later' });
+        this.$notifier.show('Sorry, an error occurred while uploading banner image, please try again later', 'error');
       },
 
       updateBanner() {

@@ -196,15 +196,11 @@
           this.user.username
         )
           .then(() => {
-            this.$store.dispatch('layout/setSuccess', {
-              message: 'Application has been approved successfully'
-            });
+            this.$notifier.show('Application has been approved successfully', 'success')
             this.$store.dispatch('rad/setApplicationStatus', { status: 'application_approved' });
           })
           .catch((e) => {
-            this.$store.dispatch('layout/setError', {
-              message: 'An error occured while approving application, please try again later'
-            });
+            this.$notifier.show('An error occured while approving application, please try again later', 'error')
             console.log(e);
           }).finally(() => {
             this.isApproveBtnLoading = false;
@@ -219,15 +215,11 @@
           this.user.username
         )
           .then(() => {
-            this.$store.dispatch('layout/setSuccess', {
-              message: 'Application has been rejected successfully'
-            });
+            this.$notifier.show('Application has been rejected successfully', 'success')
             this.$store.dispatch('rad/setApplicationStatus', { status: 'application_rejected' });
           })
           .catch((e) => {
-            this.$store.dispatch('layout/setError', {
-              message: 'An error occured while rejecting application, please try again later'
-            });
+            this.$notifier.show('An error occured while rejecting application, please try again later', 'error')
             console.log(e);
           }).finally(() => {
             this.isRejectBtnLoading = false;

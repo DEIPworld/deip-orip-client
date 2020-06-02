@@ -96,9 +96,7 @@
             html
           ))
           .then((data) => {
-            this.$store.dispatch('layout/setSuccess', {
-              message: 'Your review has been published successfully !'
-            });
+            this.$notifier.show('Your review has been published successfully !', 'success')
             this.$router.push({
               name: 'ResearchApplicationDetails',
               params: {
@@ -110,9 +108,7 @@
             });
           })
           .catch((err) => {
-            this.$store.dispatch('layout/setError', {
-              message: 'An error occurred while adding review, please try again later'
-            });
+            this.$notifier.show('An error occurred while adding review, please try again later', 'error')
             console.log(err);
           })
           .finally(() => {

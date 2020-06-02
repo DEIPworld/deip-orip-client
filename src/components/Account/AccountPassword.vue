@@ -125,9 +125,7 @@
           );
           const oldPublicKey = deipRpc.auth.wifToPublic(oldPrivateKey);
           if (this.currentUser.pubKey !== oldPublicKey) {
-            this.$store.dispatch('layout/setError', {
-              message: 'Old password is invalid'
-            });
+            this.$notifier.show('Old password is invalid', 'error')
             return;
           }
         }
@@ -156,17 +154,13 @@
           accountJsonMetadata: undefined,
           accountExtensions: []
         }).then(() => {
-          this.$store.dispatch('layout/setSuccess', {
-            message: 'Master Password successfully changed!'
-          });
+          this.$notifier.show('Master Password successfully changed!', 'success')
           this.$refs.changePasswordForm.reset();
 
           accessService.setOwnerWif(newPrivateKey);
           return this.$store.dispatch('auth/loadUser');
         }).catch((err) => {
-          this.$store.dispatch('layout/setError', {
-            message: 'Oops! Something went wrong. Please try again later'
-          });
+          this.$notifier.show('Oops! Something went wrong. Please try again later', 'error')
           console.error(err.message);
         }).finally(() => {
           this.isPasswordChanging = false;

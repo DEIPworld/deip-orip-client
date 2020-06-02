@@ -142,15 +142,11 @@
         })
           .then(() => {
             this.isLoading = false;
-            this.$store.dispatch('layout/setSuccess', {
-              message: 'Fundraise Proposal has been created successfully! Approve it to start the fundraise!'
-            });
+            this.$notifier.show('Fundraise Proposal has been created successfully! Approve it to start the fundraise!', 'success')
           })
           .catch((err) => {
             this.isLoading = false;
-            this.$store.dispatch('layout/setError', {
-              message: 'An error occurred while creating proposal, please try again later'
-            });
+            this.$notifier.show('An error occurred while creating proposal, please try again later', 'error')
             console.log(err);
           })
           .finally(() => {

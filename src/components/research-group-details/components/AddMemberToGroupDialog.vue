@@ -157,14 +157,10 @@
           approver: null
         })
         .then(() => {
-          this.$store.dispatch('layout/setSuccess', {
-            message: 'Invitation Proposal has been created successfully!'
-          });
+          this.$notifier.show(`Invitation Proposal has been created successfully!`, 'success')
           this.$emit('onSuccess');
         }).catch((err) => {
-          this.$store.dispatch('layout/setError', {
-            message: 'An error occurred while creating proposal, please try again later'
-          });
+          this.$notifier.show(`An error occurred while creating proposal, please try again later`, 'error')
           console.log(err);
         }).finally(() => {
           this.isLoading = false;

@@ -134,9 +134,7 @@
               isExtendable,
               contentHash
             ).then(() => {
-              this.$store.dispatch('layout/setSuccess', {
-                message: 'Grant has been created successfully!'
-              });
+              this.$notifier.show('Grant has been created successfully!', 'success')
 
               setTimeout(() => {
                 self.$router.push({
@@ -144,9 +142,7 @@
                 });
               }, 1500);
             }).catch((err) => {
-              this.$store.dispatch('layout/setError', {
-                message: 'An error occurred while creating grant, please try again later'
-              });
+              this.$notifier.show('An error occurred while creating grant, please try again later', 'error')
             }).finally(() => {
               this.isLoading = false;
             });

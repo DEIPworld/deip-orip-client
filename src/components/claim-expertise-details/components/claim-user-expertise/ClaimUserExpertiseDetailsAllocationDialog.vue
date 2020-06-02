@@ -122,17 +122,13 @@
           parseInt(this.amount),
           this.description
         ).then(() => {
-          this.$store.dispatch('layout/setSuccess', {
-            message: 'Proposal was successfully created'
-          });
+          this.$notifier.show(`Proposal was successfully created`, 'success')
 
           this.$emit('onCreate');
 
           setTimeout(() => this.$emit('close'), 1000);
         }).catch((e) => {
-          this.$store.dispatch('layout/setError', {
-            message: 'Error occured'
-          });
+          this.$notifier.show(`Error occured`, 'error')
 
           console.log(e);
         }).finally(() => {

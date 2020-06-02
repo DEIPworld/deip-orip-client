@@ -263,16 +263,12 @@
 
             this.$store.dispatch('auth/loadUser');
 
-            this.$store.dispatch('layout/setSuccess', {
-              message: '"Personal info has been saved successfully!"'
-            });
+            this.$notifier.show('Personal info has been saved successfully!', 'success')
 
             this.$router.back();
           })
           .catch((err) => {
-            this.$store.dispatch('layout/setError', {
-              message: 'An error occurred while saving, please try again later'
-            });
+            this.$notifier.show('An error occurred while saving, please try again later', 'error')
             console.error(err);
           })
           .finally(() => {

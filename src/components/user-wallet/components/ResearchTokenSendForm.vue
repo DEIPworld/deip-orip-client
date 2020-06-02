@@ -145,15 +145,11 @@
             this.$emit('researchTokensTransfered');
             this.clearForm();
 
-            this.$store.dispatch('layout/setSuccess', {
-              message: 'Amount of research tokens was successfully sent'
-            });
+            this.$notifier.show('Amount of research tokens was successfully sent', 'success')
 
             return data;
           }).catch((err) => {
-            this.$store.dispatch('layout/setError', {
-              message: 'Transaction was failed'
-            });
+            this.$notifier.show('Transaction was failed', 'error')
             console.error(err);
           }).finally(() => {
             this.isSending = false;

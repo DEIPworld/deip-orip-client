@@ -88,15 +88,13 @@
         updatedProfile.settings.researchComponents = updatedResearchComponents;
         tenantService.updateTenantProfile(updatedProfile)
           .then(() => {
-            this.$store.dispatch('layout/setSuccess', { message: 'Successfully' });
+            this.$notifier.show('success');
             const tenant = window.env.TENANT;
             this.$store.dispatch('auth/loadTenant', { tenant });
           })
           .catch((err) => {
             console.error(err);
-            this.$store.dispatch('layout/setError', {
-              message: 'An error occurred while sending the request, please try again later.'
-            });
+            this.$notifier.show('error');
           })
           .finally(() => this.closeActionDialog());
       },

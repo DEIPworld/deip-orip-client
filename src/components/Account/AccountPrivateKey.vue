@@ -88,9 +88,7 @@
 
         const ownerPublicKey = deipRpc.auth.wifToPublic(ownerPrivateKey);
         if (this.currentUser.pubKey !== ownerPublicKey) {
-          this.$store.dispatch('layout/setError', {
-            message: 'Password is invalid'
-          });
+          this.$notifier.show('Password is invalid', 'error')
           return;
         }
 

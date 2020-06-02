@@ -85,8 +85,14 @@
     name: 'HandleJoinRequestDialog',
 
     props: {
-      isOpen: { required: true, type: Boolean },
-      groupId: { required: true, type: Number },
+      isOpen: {
+        required: true,
+        type: Boolean
+      },
+      groupId: {
+        required: true,
+        type: Number
+      },
       joinRequest: {
         required: true,
         validator(value) {
@@ -133,14 +139,15 @@
           rgtAmount: amount,
           coverLetter: this.coverLetter,
           isHead: false
-        }).then(() => {
-          this.$store.dispatch('researchGroup/loadJoinRequests', { groupId: this.groupId });
-          this.$store.dispatch('researchGroup/loadResearchGroupProposals', { groupId: this.groupId });
-          this.$store.dispatch('layout/setSuccess', { message: `Invite proposal for "${this.joinRequest.username}" has been created successfully !` });
-        }, (err) => {
-          this.$store.dispatch('layout/setError', { message: 'An error occurred while approving join request, please try again later' });
-          console.log(err);
         })
+          .then(() => {
+            this.$store.dispatch('researchGroup/loadJoinRequests', { groupId: this.groupId });
+            this.$store.dispatch('researchGroup/loadResearchGroupProposals', { groupId: this.groupId });
+            this.$notifier.show(`Invite proposal for "${this.joinRequest.username}" has been created successfully !`, 'error');
+          }, (err) => {
+            this.$notifier.show('An error occurred while approving join request, please try again later', 'error');
+            console.log(err);
+          })
           .finally(() => {
             this.isApprovingLoading = false;
             this.close();
@@ -149,20 +156,23 @@
 
       denyJoinRequest() {
         const self = this;
-        const update = { ...self.joinRequest, status: 'denied' };
+        const update = {
+          ...self.joinRequest,
+          status: 'denied'
+        };
         self.isDenyingLoading = true;
 
         researchGroupService.updateJoinRequest({ request: update })
           .then((updatedRequest) => {
-                  self.$store.dispatch('researchGroup/loadJoinRequests', { groupId: self.groupId });
-                  self.$store.dispatch('layout/setSuccess', { message: `You have denied join request from  "${self.joinRequest.username}" successfully !` });
+              self.$store.dispatch('researchGroup/loadJoinRequests', { groupId: self.groupId });
+              this.$notifier.show(`You have denied join request from  "${self.joinRequest.username}" successfully !`, 'success');
 
-                  setTimeout(() => self.close(), 500);
-                },
-                (err) => {
-                  self.$store.dispatch('layout/setError', { message: 'An error occurred while denying join request, please try again later' });
-                  console.log(err);
-                })
+              setTimeout(() => self.close(), 500);
+            },
+            (err) => {
+              this.$notifier.show('error');
+              console.log(err);
+            })
           .finally(() => {
             self.isDenyingLoading = false;
           });

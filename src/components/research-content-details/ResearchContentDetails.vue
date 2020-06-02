@@ -348,17 +348,13 @@
               extensions: []
             })
               .then(() => {
-                this.$store.dispatch('layout/setSuccess', {
-                  message: 'New material has been uploaded successfully'
-                });
+                this.$notifier.show('New material has been uploaded successfully', 'success')
               }, (err) => {
                 console.log(err);
                 if (err.response && err.response.status === 409) {
                   alert('This file was already uploaded. Please vote for existing proposal or propose file again if its existing proposal has expired.');
                 } else {
-                  this.$store.dispatch('layout/setError', {
-                    message: 'An error occurred while creating proposal, please try again later'
-                  });
+                  this.$notifier.show('An error occurred while creating proposal, please try again later', 'error')
                 }
               })
               .finally(() => {
@@ -384,11 +380,11 @@
             if (draft.status == 'in-progress') {
               bus.$emit('texture:saveDocument', () => {
                 this.isSavingDraft = false;
-                this.$store.dispatch('layout/setSuccess', { message: 'Document draft has been saved !' });
+                this.$notifier.show('Document draft has been saved !', 'error')
               });
             } else {
               this.isSavingDraft = false;
-              this.$store.dispatch('layout/setError', { message: 'Document draft is locked for editing !' });
+              this.$notifier.show('Document draft is locked for editing !', 'error')
             }
           });
       },

@@ -144,15 +144,11 @@
             this.$emit('deipTokensTransfered');
             this.clearForm();
 
-            this.$store.dispatch('layout/setSuccess', {
-              message: 'Amount of DEIP tokens was sent'
-            });
+            this.$notifier.show('Amount of DEIP tokens was sent', 'success')
 
             return data;
           }).catch((err) => {
-            this.$store.dispatch('layout/setError', {
-              message: 'Transaction was failed'
-            });
+            this.$notifier.show('Transaction was failed', 'error')
           }).finally(() => {
             this.isSending = false;
           });
