@@ -1,165 +1,197 @@
 <template>
-  <v-container fluid class="pa-0 ma-0 fill-height">
-    <v-row no-gutters class="fill-height">
-      <v-col cols="6" class="hidden-sm-and-down">
-        <div class="description fill-height">
-          <div class="description__logo">
-            <img src="/assets/img/landing-logo.svg">
+  <full-screen-view
+    v-if="tenant.profile.settings.signUpPolicy === 'free'"
+    :hide-toolbar="false"
+    max-width="100%"
+    height="100%"
+    toolbar-overlap
+    no-gutters
+    toolbar-color="transparent"
+  >
+    <template #toolbarButton>
+      <v-btn :to="{ name: 'ResearchFeed' }" color="primary" text>
+        <v-icon left>arrow_back</v-icon>
+        Explorer
+      </v-btn>
+    </template>
+
+    <v-row no-gutters class="full-height">
+      <v-col class="d-flex align-center justify-center">
+        <v-sheet max-width="800" class="pa-12 mx-auto">
+          <div class="headline font-weight-bold mb-10">
+            Registration
           </div>
-          <div class="description__info-text">
+          <v-form
+            v-show="!isServerValidated"
+            ref="form"
+            v-model="isFormValid"
+          >
+            <v-text-field
+              v-model="formData.email"
+              filled
+              label="Email"
+              :rules="[rules.required, rules.email]"
+              :disabled="isSaving"
+            />
+
+            <v-text-field
+              v-model="formData.firstName"
+              filled
+              label="First name"
+              :rules="[rules.required, rules.nameChars]"
+              :disabled="isSaving"
+            />
+
+            <v-text-field
+              v-model="formData.lastName"
+              filled
+              label="Last name"
+              :rules="[rules.required, rules.nameChars]"
+              :disabled="isSaving"
+            />
+
+            <v-text-field
+              v-model="formData.username"
+              filled
+              name="username"
+              label="Username"
+              :rules="[
+                rules.required,
+                rules.unique,
+                rules.usernameFormat
+              ]"
+              :loading="isUsernameChecking"
+              :disabled="isSaving"
+              @input="usernameChanged"
+            />
+
+            <v-text-field
+              v-model="formData.masterPassword"
+              filled
+              class="mt-4"
+              label="Master Password"
+              :disabled="isSaving"
+              :rules="[rules.required, rules.masterPassword]"
+              :append-icon="formData.isHiddenMasterPassword ? 'visibility_off' : 'visibility'"
+              :type="formData.isHiddenMasterPassword ? 'password' : 'text'"
+              @click:append="formData.isHiddenMasterPassword = !formData.isHiddenMasterPassword"
+              @input="$refs.reEnterMasterPassword.validate()"
+            />
+
+            <v-text-field
+              ref="reEnterMasterPassword"
+              v-model="formData.reEnterMasterPassword"
+              filled
+              class="mt-2"
+              label="Re-Enter Master Password"
+              :disabled="isSaving"
+              :rules="[rules.required, rules.reEnterMasterPassword]"
+              :append-icon="formData.isHiddenReEnterMasterPassword ? 'visibility_off' : 'visibility'"
+              :type="formData.isHiddenReEnterMasterPassword ? 'password' : 'text'"
+              @click:append="formData.isHiddenReEnterMasterPassword = !formData.isHiddenReEnterMasterPassword"
+            />
+
+            <div class="text-justify caption grey--text">
+              Please confirm you have saved the generated key and want to be added to the list of private beta
+              participants with the information specified above:
+            </div>
+
+            <v-checkbox
+              v-model="formData.isMasterPasswordSaved"
+              class="my-2 pa-0"
+              label="I have saved the password and want to be added to the list"
+              :disabled="isSaving"
+              hide-details
+            />
+
+            <div class="pb-4 text-justify caption grey--text">
+              No data is stored until you press “Finish Registration” button.
+              For more information about our privacy terms please read <a class="a" target="_blank" href="https://deip.world/DEIP%20PRIVACY%20POLICY.pdf">Privacy Policy</a>.
+              By clicking below, you agree that we may process ypur information in accordance with these terms.
+            </div>
+
+            <v-btn
+              block
+              color="primary"
+              :loading="isSaving"
+              :disabled="!formData.isMasterPasswordSaved || isSaving"
+              @click="finishRegistration()"
+            >
+              Finish registration
+            </v-btn>
+            <div class="primary--text text-center mt-2">
+              Already have an account?
+              <router-link
+                :to="{ name: 'SignIn' }"
+              >
+                Sign In
+              </router-link>
+            </div>
+          </v-form>
+        </v-sheet>
+      </v-col>
+
+      <v-col class="d-none d-md-flex">
+        <v-sheet
+          tile
+          min-height="100%"
+          color="primary"
+          dark
+          class="d-flex flex-column justify-center pa-12"
+          style="background: linear-gradient(138.37deg, rgba(40, 56, 139, 0.5) 0%, rgba(10, 29, 43, 0.5) 100%), url(/assets/img/signin.png) center center / cover no-repeat;"
+        >
+          <div class="display-3 font-weight-bold">
             Open Research and Innovation Platform
           </div>
-          <div class="description__info-list-item mt-12" align-center shrink>
-            <v-icon small color="white">
+          <div class="subtitle-1 mt-12">
+            <v-icon small>
               mdi-message-reply-text
             </v-icon>
-            <span class="ml-2">Collaboration</span>
+            <span class="ml-4">Collaboration</span>
           </div>
-          <div class="description__info-list-item mt-6" align-center shrink>
-            <v-icon small color="white" class="icon-upended">
+          <div class="subtitle-1 mt-2">
+            <v-icon small>
               mdi-lightbulb-on
             </v-icon>
-            <span class="ml-2">Project tokenization</span>
+            <span class="ml-4">Project tokenization</span>
           </div>
-          <div class="description__info-list-item mt-6" align-center shrink>
-            <v-icon small color="white">
+          <div class="subtitle-1 mt-2">
+            <v-icon small>
               mdi-shield-check
             </v-icon>
-            <span class="ml-2">Licensing of intellectual property</span>
+            <span class="ml-4">Licensing of intellectual property</span>
           </div>
-          <div class="description__info-list-item mt-6" align-center shrink>
-            <v-icon small color="white">
+          <div class="subtitle-1 mt-2">
+            <v-icon small>
               mdi-account-multiple-plus
             </v-icon>
-            <span class="ml-2">Crowd investing</span>
+            <span class="ml-4">Crowd investing</span>
           </div>
-        </div>
-      </v-col>
-      <v-col cols="12" md="6">
-        <v-card class="full-height elevation-0" color="secondary">
-          <div class="signup fill-height">
-            <div class="signup__title">
-              Registration
-            </div>
-            <v-form
-              v-show="!isServerValidated"
-              ref="form"
-              v-model="isFormValid"
-              class="c-mt-10"
-            >
-              <v-text-field
-                v-model="formData.email"
-                label="Email"
-                :rules="[rules.required, rules.email]"
-                :disabled="isSaving"
-              />
-
-              <v-text-field
-                v-model="formData.firstName"
-                label="First name"
-                :rules="[rules.required, rules.nameChars]"
-                :disabled="isSaving"
-              />
-
-              <v-text-field
-                v-model="formData.lastName"
-                label="Last name"
-                :rules="[rules.required, rules.nameChars]"
-                :disabled="isSaving"
-              />
-
-              <v-text-field
-                v-model="formData.username"
-                name="username"
-                label="Username"
-                :rules="[
-                  rules.required,
-                  rules.unique,
-                  rules.usernameFormat
-                ]"
-                :loading="isUsernameChecking"
-                :disabled="isSaving"
-                @input="usernameChanged"
-              />
-
-              <v-text-field
-                v-model="formData.masterPassword"
-                class="c-mt-4"
-                label="Master Password"
-                :disabled="isSaving"
-                :rules="[rules.required, rules.masterPassword]"
-                :append-icon="formData.isHiddenMasterPassword ? 'visibility_off' : 'visibility'"
-                :type="formData.isHiddenMasterPassword ? 'password' : 'text'"
-                @click:append="formData.isHiddenMasterPassword = !formData.isHiddenMasterPassword"
-                @input="$refs.reEnterMasterPassword.validate()"
-              />
-
-              <v-text-field
-                ref="reEnterMasterPassword"
-                v-model="formData.reEnterMasterPassword"
-                class="c-mt-4"
-                label="Re-Enter Master Password"
-                :disabled="isSaving"
-                :rules="[rules.required, rules.reEnterMasterPassword]"
-                :append-icon="formData.isHiddenReEnterMasterPassword ? 'visibility_off' : 'visibility'"
-                :type="formData.isHiddenReEnterMasterPassword ? 'password' : 'text'"
-                @click:append="formData.isHiddenReEnterMasterPassword = !formData.isHiddenReEnterMasterPassword"
-              />
-
-              <div class="text-justify caption grey--text">
-                Please confirm you have saved the generated key and want to be added to the list of private beta
-                participants with the information specified above:
-              </div>
-
-              <v-checkbox
-                v-model="formData.isMasterPasswordSaved"
-                class="c-mv-4 pa-0"
-                label="I have saved the password and want to be added to the list"
-                :disabled="isSaving"
-                hide-details
-              />
-
-              <div class="c-pb-4 text-justify caption grey--text">
-                No data is stored until you press “Finish Registration” button.
-                For more information about our privacy terms please read <a class="a" target="_blank" href="https://deip.world/DEIP%20PRIVACY%20POLICY.pdf">Privacy Policy</a>.
-                By clicking below, you agree that we may process ypur information in accordance with these terms.
-              </div>
-
-              <v-btn
-                block
-                color="primary"
-                :loading="isSaving"
-                :disabled="!formData.isMasterPasswordSaved || isSaving"
-                @click="finishRegistration()"
-              >
-                Finish registration
-              </v-btn>
-              <div class="primary--text text-center mt-2">
-                Already have an account?
-                <router-link
-                  :to="{ name: 'SignIn' }"
-                >
-                  Sign In
-                </router-link>
-              </div>
-            </v-form>
-          </div>
-        </v-card>
+        </v-sheet>
       </v-col>
     </v-row>
-  </v-container>
+  </full-screen-view>
+  <userRegistration v-else-if="tenant.profile.settings.signUpPolicy === 'admin-approval'" />
 </template>
 
 <script>
   import deipRpc from '@deip/rpc-client';
+  import UserRegistration from '@/components/auth/UserRegistration';
+  import FullScreenView from '@/components/layout/FullScreen/FullScreenView';
+
   import _ from 'lodash';
 
   import { AuthService } from '@deip/auth-service';
+  import { mapGetters } from 'vuex';
 
   const authService = AuthService.getInstance();
 
   export default {
     name: 'SignUp',
+    components: {
+      UserRegistration,
+      FullScreenView
+    },
 
     data() {
       return {
@@ -208,6 +240,12 @@
           reEnterMasterPassword: (value) => value === this.formData.masterPassword || 'Password doesn\'t match'
         }
       };
+    },
+
+    computed: {
+      ...mapGetters({
+        tenant: 'auth/tenant'
+      })
     },
 
     methods: {

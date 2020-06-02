@@ -9,7 +9,7 @@
         <v-col cols="6" class="py-0">
           <v-text-field
             v-model="formData.firstName"
-            outlined
+            filled
             label="First name"
             :rules="[rules.required, rules.nameChars]"
             :disabled="isSaving"
@@ -19,7 +19,7 @@
         <v-col cols="6" class="py-0">
           <v-text-field
             v-model="formData.lastName"
-            outlined
+            filled
             label="Last name"
             :rules="[rules.required, rules.nameChars]"
             :disabled="isSaving"
@@ -37,7 +37,7 @@
             <template v-slot:activator="{ on }">
               <v-text-field
                 v-model="formData.birthdate"
-                outlined
+                filled
                 label="Birthday"
                 append-icon="event"
                 readonly
@@ -56,7 +56,7 @@
         <v-col cols="6" class="py-0">
           <v-text-field
             v-model="formData.id"
-            outlined
+            filled
             label="ID"
             :rules="[rules.required]"
             :disabled="isSaving"
@@ -72,7 +72,7 @@
         <v-col cols="6" class="py-0">
           <v-text-field
             v-model="formData.username"
-            outlined
+            filled
             name="username"
             label="Username"
             :rules="[
@@ -89,7 +89,7 @@
         <v-col cols="6" class="py-0">
           <v-text-field
             v-model="formData.masterPassword"
-            outlined
+            filled
             class="c-mt-4"
             label="Master Password"
             :disabled="isSaving"
@@ -103,7 +103,7 @@
         <v-col cols="6" class="py-0">
           <v-text-field
             v-model="formData.email"
-            outlined
+            filled
             label="Email"
             :rules="[rules.required, rules.email]"
             :disabled="isSaving"
@@ -115,7 +115,7 @@
             v-model="formData.category"
             :items="category"
             :disabled="isSaving"
-            outlined
+            filled
             label="Category"
             :rules="[rules.required]"
           />
@@ -131,7 +131,7 @@
           <v-select
             v-model="formData.occupation"
             :items="occupation"
-            outlined
+            filled
             :disabled="isSaving"
             label="Occupation"
             :rules="[rules.required]"
@@ -140,7 +140,7 @@
         <v-col cols="6" class="py-0">
           <v-text-field
             v-model="formData.website"
-            outlined
+            filled
             label="Web site"
             :disabled="isSaving"
           />
@@ -155,7 +155,7 @@
         <v-col cols="12" class="py-0">
           <v-text-field
             v-model="formData.address"
-            outlined
+            filled
             label="Address"
             :rules="[rules.required]"
             :disabled="isSaving"
@@ -164,7 +164,7 @@
         <v-col cols="6" class="py-0">
           <v-text-field
             v-model="formData.city"
-            outlined
+            filled
             label="City"
             :rules="[rules.required]"
             :disabled="isSaving"
@@ -174,7 +174,7 @@
           <v-autocomplete
             v-model="formData.country"
             :items="countryList"
-            outlined
+            filled
             :menu-props="{
               maxHeight: 220
             }"
@@ -186,10 +186,22 @@
         <v-col cols="12" class="py-0">
           <v-text-field
             v-model="formData.phoneNumber"
-            outlined
+            filled
             label="Phone Number"
             :disabled="isSaving"
           />
+        </v-col>
+        <v-col v-if="$route.name === 'SignUp'">
+          <v-checkbox class="mt-0 pt-0" hide-details v-model="formData.agree" :rules="[rules.required]">
+            <template #label>
+              Agree to Terms and Conditions
+            </template>
+          </v-checkbox>
+          <div class="caption ml-8 mt-1">
+            No data is stored until you press “Create account” button.
+            By clicking below, you agree that we may process
+            your information in accordance with these terms.
+          </div>
         </v-col>
       </v-row>
 
@@ -333,18 +345,26 @@
           lastName,
           pubKey,
           phoneNumbers: [
-            {
-              label: 'default',
-              ext: '', // optional
-              number: phoneNumber
-            }
+            ...(
+              phoneNumber
+                ? [{
+                  label: 'default',
+                  ext: '', // optional
+                  number: phoneNumber
+                }]
+                : []
+            )
           ],
           webPages: [
-            {
-              type: 'webpage',
-              label: 'default',
-              link: website
-            }
+            ...(
+              website
+                ? [{
+                  type: 'webpage',
+                  label: 'default',
+                  link: website
+                }]
+                : []
+            )
           ],
           location: {
             city,
@@ -370,8 +390,7 @@
           })
           .catch((err) => {
             this.isSaving = false;
-            const message =
-              (err.response && err.response.data)
+            const message = (err.response && err.response.data)
               || 'Sorry, the service is temporarily unavailable, please try again later';
 
             this.$store.dispatch('layout/setError', { message });
