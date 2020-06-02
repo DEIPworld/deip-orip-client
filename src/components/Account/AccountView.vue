@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div v-if="$ready">
     <account-sidebar v-if="!$route.meta.hideSidebar" />
     <router-view v-if="dataLoaded" />
   </div>
@@ -12,9 +12,11 @@
     name: 'AccountView',
     components: { AccountSidebar },
 
-    $dataPreload() {
-      return this.$store.dispatch('account/loadUserAccount', {
+    created() {
+      this.$store.dispatch('account/loadUserAccount', {
         username: decodeURIComponent(this.$store.getters['auth/user'].account.name)
+      }).then(() => {
+        this.$setReady();
       });
     }
   };

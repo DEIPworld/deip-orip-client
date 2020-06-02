@@ -47,7 +47,7 @@
 
     <v-tabs
       v-model="tab"
-      :color="themeSettings['top-bar-link-color']"
+      v-bind="themeSettings.tabs"
     >
       <v-tab key="awards">
         Awards

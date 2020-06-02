@@ -1,5 +1,5 @@
 <template>
-  <layout-section>
+  <layout-section v-if="$ready">
     <v-tabs v-model="tab">
       <v-tab>Waiting for approval</v-tab>
       <v-tab>Declined</v-tab>
@@ -79,7 +79,6 @@
     >
       {{ actionDialog.description }}
     </d-dialog>
-
   </layout-section>
 </template>
 
@@ -166,12 +165,20 @@
       })
     },
 
-    methods: {
+    created() {
+      const username = decodeURIComponent(this.$store.getters['auth/user'].account.name);
+      this.$store.dispatch('account/getAllProjects', { username })
+        .then(() => {
+          this.$setReady();
+        });
+    },
 
+    methods: {
       openResearchEditModal(item) {
         this.researchEditModal.data = item;
         this.researchEditModal.isOpen = true;
       },
+
       closeResearchEditModal() {
         this.researchDialog.isOpen = false;
       },
@@ -214,12 +221,7 @@
           this.isDisabled = false;
           this.actionDialog.isOpen = false;
         });
-      },
-    },
-
-    $dataPreload() {
-      const username = decodeURIComponent(this.$store.getters['auth/user'].account.name);
-      return this.$store.dispatch('account/getAllProjects', { username });
+      }
     }
   };
 </script>

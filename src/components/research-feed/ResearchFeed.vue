@@ -353,7 +353,7 @@
         }))
       };
     },
-    
+
     computed: {
       ...mapGetters({
         tenant: 'auth/tenant',

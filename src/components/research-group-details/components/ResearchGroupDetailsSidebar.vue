@@ -96,15 +96,9 @@
 <script>
   import { mapGetters } from 'vuex';
   import _ from 'lodash';
-  import deipRpc from '@deip/rpc-client';
-  import LayoutSidebar from '@/components/layout/components/LayoutSidebar';
-  import { AppConfigService } from '@deip/app-config-service';
-
-  const appConfigService = AppConfigService.getInstance();
 
   export default {
     name: 'ResearchGroupDetailsSidebar',
-    components: { LayoutSidebar },
     data() {
       return {
         isApprovingJoinRequest: false,
@@ -126,8 +120,7 @@
       }),
 
       defaultAssetBalance() {
-        const env = appConfigService.get('env');
-        const amount = this.group.balances[env.ASSET_UNIT];
+        const amount = this.group.balances[this.$env.ASSET_UNIT];
         return amount;
       },
 

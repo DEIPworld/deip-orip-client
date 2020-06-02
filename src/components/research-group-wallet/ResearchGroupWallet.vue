@@ -134,13 +134,9 @@
 </template>
 
 <script>
-  import _ from 'lodash';
   import { mapGetters } from 'vuex';
-  import deipRpc from '@deip/rpc-client';
-  import { AppConfigService } from '@deip/app-config-service';
   import RGDeipTokenSendForm from './components/RGDeipTokenSendForm.vue';
 
-  const appConfigService = AppConfigService.getInstance();
 
   export default {
     name: 'ResearchGroupWallet',
@@ -166,8 +162,7 @@
       }),
 
       defaultAssetBalance() {
-        const env = appConfigService.get('env');
-        const amount = this.group.balances[env.ASSET_UNIT];
+        const amount = this.group.balances[this.$env.ASSET_UNIT];
         return amount;
       }
     },

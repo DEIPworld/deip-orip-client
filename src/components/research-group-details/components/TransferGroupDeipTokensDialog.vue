@@ -85,9 +85,7 @@
   import deipRpc from '@deip/rpc-client';
   import { mapGetters } from 'vuex';
   import { ResearchGroupService } from '@deip/research-group-service';
-  import { AppConfigService } from '@deip/app-config-service';
 
-  const appConfigService = AppConfigService.getInstance();
   const researchGroupService = ResearchGroupService.getInstance();
 
   export default {
@@ -103,8 +101,7 @@
         group: 'researchGroup/group'
       }),
       deipTokenBalance() {
-        const env = appConfigService.get('env');
-        return this.fromAssetsToFloat(this.group.balances[env.ASSET_UNIT]);
+        return this.fromAssetsToFloat(this.group.balances[this.$env.ASSET_UNIT]);
       }
     },
 

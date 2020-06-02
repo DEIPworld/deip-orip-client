@@ -1,5 +1,5 @@
 <template>
-  <admin-view v-if="dataLoaded" title="Members">
+  <admin-view v-if="$ready" title="Members">
     <template #toolbarAction>
       <v-btn outlined color="primary" :to="{name: 'admin.members.add'}">
         <v-icon left>
@@ -217,6 +217,13 @@
       })
     },
 
+    created() {
+      this.$store.dispatch('adminPanel/loadAllMembers')
+      .then(() => {
+        this.$setReady()
+      })
+    },
+
     methods: {
 
       openMemberInfoDialog(item) {
@@ -296,12 +303,6 @@
             this.closeActionDialog();
           });
       }
-    },
-
-    $dataPreload() {
-      return Promise.all([
-        this.$store.dispatch('adminPanel/loadAllMembers')
-      ]);
     }
   };
 </script>

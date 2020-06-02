@@ -156,7 +156,7 @@
       </v-col>
 
       <v-col cols="12">
-        <v-card class="elevation-0 pa-6" :style="{'background-color': themeSettings['secondary-color']}">
+        <v-card class="elevation-0 pa-6 grey" color="grey lighten-2">
           <div class="headline">
             Blockchain Transactions/Actions:
           </div>
@@ -412,7 +412,6 @@
     computed: {
       ...mapGetters({
         user: 'auth/user',
-        themeSettings: 'layout/themeSettings',
 
         withdrawal: 'agencyGrantProgramAwardWithdrawalDetails/withdrawal',
         awardee: 'agencyGrantProgramAwardWithdrawalDetails/awardee',

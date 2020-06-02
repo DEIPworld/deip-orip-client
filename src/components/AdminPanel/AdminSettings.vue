@@ -44,11 +44,9 @@
   import AdminView from '@/components/AdminPanel/AdminView';
   import VueDropzone from 'vue2-dropzone';
   import { AccessService } from '@deip/access-service';
-  import { AppConfigService } from '@deip/app-config-service';
   import { mapGetters } from 'vuex';
 
   const accessService = AccessService.getInstance();
-  const appConfigService = AppConfigService.getInstance();
 
 
   export default {
@@ -90,9 +88,8 @@
 
       bannerUploadSending(file, xhr, formData) {
         const accessToken = accessService.getAccessToken();
-        const env = appConfigService.get('env');
         xhr.setRequestHeader('Authorization', `Bearer ${accessToken}`);
-        xhr.setRequestHeader('Tenant-Id', env.TENANT);
+        xhr.setRequestHeader('Tenant-Id', this.$env.TENANT);
       },
 
       bannerUploadError(file, message, xhr) {
