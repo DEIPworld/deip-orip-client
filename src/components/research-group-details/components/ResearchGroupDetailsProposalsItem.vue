@@ -414,8 +414,6 @@
         } else {
           promise = proposalsService.updateProposal(this.currentUser.privKey, {
             externalId: proposal.external_id,
-            postingApprovalsToAdd: [],
-            postingApprovalsToRemove: [],
             activeApprovalsToAdd: [this.currentUser.username],
             activeApprovalsToRemove: [],
             ownerApprovalsToAdd: [],
@@ -432,7 +430,7 @@
             copy.voted_accounts.push(this.currentUser.username);
             this.changeProposal({ old: this.proposal, new: copy });
             this.$store.dispatch('researchGroup/loadResearchGroup', { permlink: this.group.permlink });
-            this.$notifier.showError('You have voted for the proposal successfully!')
+            this.$notifier.showSuccess('You have voted for the proposal successfully!')
           })
           .catch((err) => {
             alert(err.message);

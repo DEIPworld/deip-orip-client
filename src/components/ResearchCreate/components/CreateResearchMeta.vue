@@ -44,19 +44,6 @@
               />
             </v-col>
           </v-row>
-
-          <!-- <v-row no-gutters>
-                        <v-col cols="6" offset="3">
-                            <v-checkbox v-model="tmpIsPrivate" label="Choose if group should be private"></v-checkbox>
-                        </v-col>
-          </v-row>-->
-
-          <!-- <v-row no-gutters>
-                        <v-col cols="3" class="pr-4 font-weight-bold subtitle-1">Main goals of your research</v-col>
-                        <v-col cols="6">
-                            <v-text-field filled name="goals" label="Goals" solo textarea hide-details></v-text-field>
-                        </v-col>
-          </v-row>-->
         </div>
       </div>
     </div>
@@ -105,8 +92,7 @@
         videoSrc: '',
         rules: {
           link: (value) => !value || this.isValidLink || 'Invalid http(s) link'
-        },
-        tmpIsPrivate: false
+        }
       };
     },
     computed: {

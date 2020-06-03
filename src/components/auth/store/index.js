@@ -62,6 +62,7 @@ const getters = {
       const group = state.user.groups.find((g) => g.id === rgt.research_group_id);
       groups.push({
         id: group.id,
+        external_id: group.external_id,
         permlink: group.permlink,
         name: group.name,
         quorum_percent: group.quorum_percent,

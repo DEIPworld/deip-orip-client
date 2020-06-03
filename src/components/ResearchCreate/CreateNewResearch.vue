@@ -195,10 +195,8 @@
           this.research.disciplines = disciplineTreeService.getNodesByIdList(
             this.$route.query.disciplineIds.map((disciplineId) => parseInt(disciplineId))
           );
-          if (this.$route.query.groupPermlink) {
-            const newGroup = this.userGroups.find(
-              (item) => item.permlink === this.$route.query.groupPermlink
-            );
+          if (this.$route.query.externalId) {
+            const newGroup = this.userGroups.find((item) => item.external_id === this.$route.query.externalId);
             this.setGroup(newGroup);
             this.currentStep = 3;
           } else {

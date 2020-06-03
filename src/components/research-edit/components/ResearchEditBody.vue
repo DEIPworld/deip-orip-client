@@ -400,8 +400,7 @@
           const tenantCriterias = this.tenantCriterias.map(criteria => {
             return criteria.value.index != null ? { ...criteria } : { ...criteria, value: null };
           });
-          researchService.updateResearchOffchainMeta({
-            researchExternalId: this.research.external_id,
+          researchService.updateResearchOffchainMeta(this.research.external_id, {
             milestones,
             videoSrc: this.videoSrc,
             partners: this.partners,
