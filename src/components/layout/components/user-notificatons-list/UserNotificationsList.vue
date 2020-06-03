@@ -25,7 +25,7 @@
 
     <v-list v-show="notifications.length" class="user-notifications-list">
       <template v-for="(notification, i) in notifications">
-        <v-list-item link :key="'user-notification-' + i" class="nlfx">
+        <v-list-item :key="'user-notification-' + i" link class="nlfx">
           <v-list-item-content>
             <research-proposal-user-notification
               v-if="(notification.type === PROPOSAL || notification.type === PROPOSAL_ACCEPTED) && notification.metadata.proposal.action === TYPES.CREATE_RESEARCH"
@@ -107,12 +107,12 @@
               :notification="notification"
               @markAsRead="markNotificationAsRead"
             />
-           <research-application-edited-user-notification
+            <research-application-edited-user-notification
               v-else-if="notification.type === RESEARCH_APPLICATION_EDITED"
               :notification="notification"
               @markAsRead="markNotificationAsRead"
             />
-           <research-application-deleted-user-notification
+            <research-application-deleted-user-notification
               v-else-if="notification.type === RESEARCH_APPLICATION_DELETED"
               :notification="notification"
               @markAsRead="markNotificationAsRead"
@@ -167,8 +167,10 @@
     from '@/components/layout/components/user-notificatons-list/components/ResearchApplicationEditedUserNotification';
   import ResearchApplicationDeletedUserNotification
     from '@/components/layout/components/user-notificatons-list/components/ResearchApplicationDeletedUserNotification';
+  import { mapGetters } from 'vuex';
+  import { AccessService } from '@deip/access-service';
 
-
+  const accessService = AccessService.getInstance();
   const userService = UserService.getInstance();
 
   export default {
@@ -193,9 +195,9 @@
       ResearchApplicationEditedUserNotification,
       ResearchApplicationDeletedUserNotification
     },
-    props: {
-      notifications: { type: Array, required: true, default: () => [] }
-    },
+    // props: {
+    //   notifications: { type: Array, required: true, default: () => [] }
+    // },
     data() {
       return {
         TYPES: PROPOSAL_TYPES,
@@ -216,9 +218,16 @@
         RESEARCH_APPLICATION_DELETED: 'research-application-deleted'
       };
     },
-    computed: {},
+    computed: {
+      notifications() { return this.$store.getters['auth/user'].notifications; }
+    },
 
     watch: {},
+
+    created() {
+      this.pollNotifications();
+      setInterval(this.pollNotifications, 10000);
+    },
 
     methods: {
       markNotificationAsRead(notification) {
@@ -226,6 +235,12 @@
           .then(() => {
             this.$store.dispatch('auth/loadNotifications');
           });
+      },
+
+      pollNotifications() {
+        if (accessService.isLoggedIn()) {
+          this.$store.dispatch('auth/loadNotifications');
+        }
       }
     }
   };

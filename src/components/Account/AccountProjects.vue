@@ -1,5 +1,5 @@
 <template>
-  <layout-section>
+  <layout-section v-if="$ready">
     <state-research-list
       :research-list="researchList"
       :header-text="'Research projects'"
@@ -19,9 +19,12 @@
         researchList: 'userDetails/researchList'
       })
     },
-    $dataPreload() {
+    created() {
       const username = decodeURIComponent(this.$store.getters['auth/user'].account.name);
-      return this.$store.dispatch('userDetails/loadUserDetailsPage', { username });
+      this.$store.dispatch('userDetails/loadUserDetailsPage', { username })
+        .then(() => {
+          this.$setReady();
+        });
     }
   };
 </script>

@@ -1,5 +1,5 @@
 <template>
-  <v-sheet :dark="isDark">
+  <v-sheet>
     <div class="global-loader-container">
       <global-loader />
     </div>
@@ -9,7 +9,7 @@
       fixed
       flat
       clipped-left
-      :color="themeSettings.topbar.backgroundColor"
+      v-bind="themeSettings.appBar.bar"
     >
       <router-link :to="{ name: 'Default' }">
         <img height="40px" class="logo-image" :src="tenant.account | tenantLogoSrc(80, 80, false)">
@@ -20,14 +20,14 @@
       <v-tabs
         v-if="!isLoggedIn"
         class="main-nav"
-        :color="themeSettings['top-bar-link-color']"
+        v-bind="themeSettings.appBar.tabs"
         right
       >
         <v-tab v-if="isDefaultToolbar" exact :to="{ name: 'ResearchFeed' }">
           Explore
         </v-tab>
         <!-- TODO: need refactoring -->
-        <v-tab exact :to="{ name: env.DEMO === 'GRANT-DISTRIBUTION-TRANSPARENCY' ? 'TenantSignIn' : 'SignIn' }">
+        <v-tab exact :to="{ name: $env.DEMO === 'GRANT-DISTRIBUTION-TRANSPARENCY' ? 'TenantSignIn' : 'SignIn' }">
           Sign In
         </v-tab>
         <v-tab exact :to="{ name: 'SignUp' }">
@@ -38,7 +38,7 @@
       <v-tabs
         v-if="isLoggedIn && isDefaultToolbar"
         class="main-nav ml-a"
-        :color="themeSettings['top-bar-link-color']"
+        v-bind="themeSettings.appBar.tabs"
         right
       >
         <v-tab exact :to="{ name: 'ResearchFeed' }">
@@ -58,7 +58,7 @@
       <v-tabs
         v-if="isLoggedIn && isGrantsTransparencyDemo"
         class="main-nav"
-        :color="themeSettings['top-bar-link-color']"
+        v-bind="themeSettings.appBar.tabs"
         right
       >
         <v-tab exact :to="{ name: 'GrantProgramsAwardsDashboard', params: { agency: 'nsf' } }">
@@ -70,7 +70,7 @@
       </v-tabs>
 
 
-      <user-notifications-list v-if="isLoggedIn" :notifications="user.notifications" />
+      <user-notifications-list v-if="isLoggedIn" />
 
       <v-sheet v-if="isLoggedIn" color="transparent">
         <v-menu bottom left offset-y min-width="220">
@@ -92,8 +92,7 @@
 
           <v-list
             v-if="isDefaultToolbar"
-            :dark="themeSettings['dark']"
-            :light="themeSettings['light']"
+            :dark="themeSettings.appBar.bar.dark"
             dense
           >
 <!--            <v-list-item :to="{ name: 'UserDetails', params: { account_name: user.username } }">-->
@@ -120,8 +119,7 @@
 
           <v-list
             v-if="isGrantsTransparencyDemo"
-            :dark="themeSettings['dark']"
-            :light="themeSettings['light']"
+            :dark="themeSettings.appBar.bar.dark"
             dense
           >
             <v-list-item :to="{ name: 'UserDetails', params: { account_name: user.username } }">
@@ -151,11 +149,9 @@
 <script>
   import { mapGetters } from 'vuex';
   import { AccessService } from '@deip/access-service';
-  import { AppConfigService } from '@deip/app-config-service';
   import UserNotificationsList from '@/components/layout/components/user-notificatons-list/UserNotificationsList';
 
   const accessService = AccessService.getInstance();
-  const appConfigService = AppConfigService.getInstance();
 
   export default {
     name: 'Toolbar',
@@ -168,21 +164,12 @@
       }
     },
 
-    data() {
-      return {
-        env: appConfigService.get('env')
-      };
-    },
-
     computed: {
       ...mapGetters({
         user: 'auth/user',
         tenant: 'auth/tenant',
         themeSettings: 'layout/themeSettings'
       }),
-      isDark() {
-        return !this.themeSettings.topbar.light;
-      },
       isLoggedIn() { return accessService.isLoggedIn(); },
       isDefaultToolbar() {
         return !this.isGrantsTransparencyDemo;

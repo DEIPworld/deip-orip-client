@@ -1,12 +1,12 @@
-import _ from 'lodash';
 import Vue from 'vue';
-
+import deepmerge from 'deepmerge';
+import defaultTheme from '../defaultTheme.json';
 
 const state = {
   success: { isVisible: false, message: '' },
   error: { isVisible: false, message: '' },
   globalLoader: { isLoading: false },
-  themeSettings: null
+  themeSettings: defaultTheme
 };
 
 // getters
@@ -28,8 +28,8 @@ const actions = {
     commit('CHANGE_GLOBAL_LOADER_FIELD', { field: 'isLoading', value: false });
   },
 
-  setGlobalThemeSettings({ state, commit }, themeSettings) {
-    commit('SET_GLOBAL_THEME_SETTINGS', themeSettings);
+  setGlobalThemeSettings(context, themeSettings) {
+    context.commit('SET_GLOBAL_THEME_SETTINGS', themeSettings);
   }
 };
 
@@ -41,14 +41,12 @@ const mutations = {
   },
 
   SET_GLOBAL_THEME_SETTINGS(state, themeSettings) {
-    Vue.set(state, 'themeSettings', themeSettings);
+    state.themeSettings = deepmerge(state.themeSettings, themeSettings || {});
   }
 };
 
-const namespaced = true;
-
 export const layoutStore = {
-  namespaced,
+  namespaced: true,
   state,
   getters,
   actions,

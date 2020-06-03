@@ -30,12 +30,12 @@
     </div>
 
     <div class="c-pt-5">
-      <v-tabs v-model="tab">
-        <v-tab href="#active" :class="themeSettings['tabs-text-class']" :disabled="activeResearchList.length === 0">
+      <v-tabs v-model="tab" v-bind="themeSettings.tabs">
+        <v-tab href="#active" :disabled="activeResearchList.length === 0">
           Active research: {{ activeResearchList.length }}
         </v-tab>
 
-        <v-tab href="#finished" :class="themeSettings['tabs-text-class']" :disabled="finishedResearchList.length === 0">
+        <v-tab href="#finished" :disabled="finishedResearchList.length === 0">
           Finished research: {{ finishedResearchList.length }}
         </v-tab>
       </v-tabs>

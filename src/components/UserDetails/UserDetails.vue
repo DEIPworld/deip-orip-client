@@ -1,5 +1,5 @@
 <template>
-  <layout-section v-if="dataLoaded" :sidebar-cols="$route.fullPath.includes('account') ? {md: 4} : {}">
+  <layout-section v-if="$ready" :sidebar-cols="$route.fullPath.includes('account') ? {md: 4} : {}">
     <template #sidebar>
       <user-details-sidebar />
     </template>
@@ -28,10 +28,10 @@
       }
     },
 
-    $dataPreload() {
-      return this.$store.dispatch('userDetails/loadUserDetailsPage', {
+    created() {
+      this.$store.dispatch('userDetails/loadUserDetailsPage', {
         username: decodeURIComponent(this.username)
-      });
+      }).then(() => { this.$setReady(); });
     }
   };
 </script>

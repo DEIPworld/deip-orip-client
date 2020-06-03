@@ -66,13 +66,8 @@ import ReviewSetup from '@/components/review-setup/ReviewSetup';
 import FAQ from '@/components/faq/FAQ';
 import UserApplicationAccepted from '@/components/user-application-accepted/UserApplicationAccepted';
 
-import AdminPanel from '@/components/AdminPanel/AdminPanel';
-import AdminMembers from '@/components/AdminPanel/AdminMembers';
-
-
 import { AccessService } from '@deip/access-service';
 import { UsersService } from '@deip/users-service';
-import { AppConfigService } from '@deip/app-config-service';
 
 import { accountRouting } from '@/components/Account/router';
 import { userDetailRouting } from '@/components/UserDetails/router';
@@ -81,13 +76,8 @@ import ResearchRequestFormCreate from '@/components/ResearchRequest/ResearchRequ
 
 const accessService = AccessService.getInstance();
 const usersService = UsersService.getInstance();
-const appConfigService = AppConfigService.getInstance();
 
 Vue.use(Router);
-
-const RouterViewNestedWatcher = {
-  template: '<router-view></router-view>'
-};
 
 const router = new Router({
   routes: [{
@@ -95,8 +85,7 @@ const router = new Router({
     name: 'SignIn',
     component: SignIn,
     beforeEnter: (to, from, next) => {
-      const env = appConfigService.get('env');
-      if (env.DEMO == 'GRANT-DISTRIBUTION-TRANSPARENCY') {
+      if (Vue.$env.DEMO === 'GRANT-DISTRIBUTION-TRANSPARENCY') {
         const tenant = store.getters['auth/tenant'];
         if (!tenant) {
           throw new Error('Granting agency must be specified for the Demo');
@@ -522,8 +511,7 @@ const router = new Router({
             .then((p) => p.roles || []);
 
         rolePromise.then((roles) => {
-          const env = appConfigService.get('env');
-          if (env.DEMO == 'GRANT-DISTRIBUTION-TRANSPARENCY') {
+          if (Vue.$env.DEMO == 'GRANT-DISTRIBUTION-TRANSPARENCY') {
             const tenant = store.getters['auth/tenant'];
             if (!tenant) {
               throw new Error('Granting agency must be specified for the Demo');

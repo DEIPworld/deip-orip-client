@@ -1,5 +1,5 @@
 <template>
-  <admin-view v-if="dataLoaded" title="Projects">
+  <admin-view v-if="$ready" title="Projects">
     <template #toolbarExtension>
       <v-tabs v-model="tab">
         <v-tab>All projects</v-tab>
@@ -96,7 +96,6 @@
     >
       {{ actionDialog.description }}
     </d-dialog>
-
   </admin-view>
 </template>
 
@@ -183,6 +182,14 @@
         tenant: 'auth/tenant'
       })
     },
+
+    created() {
+      this.$store.dispatch('adminPanel/getAllProjects')
+        .then(() => {
+          this.$setReady();
+        });
+    },
+
     methods: {
       goToResearch(e) {
         const routeData = this.$router.resolve({
@@ -221,7 +228,7 @@
             this.finishAction();
           })
           .catch((err) => {
-            console.log(err);
+            console.error(err);
           });
       },
 
@@ -237,12 +244,12 @@
           .then(() => {
             this.finishAction();
 
-            this.$notifier.showSuccess()
+            this.$notifier.showSuccess();
             this.$store.dispatch('adminPanel/getAllProjects');
           })
           .catch((err) => {
             console.error(err);
-            this.$notifier.showError()
+            this.$notifier.showError();
           });
       },
 
@@ -289,10 +296,6 @@
           this.actionDialog.isOpen = false;
         });
       }
-    },
-
-    $dataPreload() {
-      return this.$store.dispatch('adminPanel/getAllProjects');
     }
   };
 </script>

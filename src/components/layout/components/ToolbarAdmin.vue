@@ -39,8 +39,6 @@
 
           <v-list
             v-if="isDefaultToolbar"
-            :dark="themeSettings['dark']"
-            :light="themeSettings['light']"
             dense
           >
             <v-list-item @click="signOut()">
@@ -50,8 +48,6 @@
 
           <v-list
             v-if="isGrantsTransparencyDemo"
-            :dark="themeSettings['dark']"
-            :light="themeSettings['light']"
             dense
           >
             <v-list-item :to="{ name: 'UserDetails', params: { account_name: user.username } }">
@@ -81,11 +77,9 @@
 <script>
   import { mapGetters } from 'vuex';
   import { AccessService } from '@deip/access-service';
-  import { AppConfigService } from '@deip/app-config-service';
   import UserNotificationsList from '@/components/layout/components/user-notificatons-list/UserNotificationsList';
 
   const accessService = AccessService.getInstance();
-  const appConfigService = AppConfigService.getInstance();
 
   export default {
     name: 'ToolbarAdmin',
@@ -98,21 +92,12 @@
       }
     },
 
-    data() {
-      return {
-        env: appConfigService.get('env')
-      };
-    },
-
     computed: {
       ...mapGetters({
         user: 'auth/user',
         tenant: 'auth/tenant',
         themeSettings: 'layout/themeSettings'
       }),
-      isDark() {
-        return !this.themeSettings.topbar.light;
-      },
       isLoggedIn() { return accessService.isLoggedIn(); },
       isDefaultToolbar() {
         return !this.isGrantsTransparencyDemo;

@@ -1,5 +1,5 @@
 <template>
-  <v-card class="pa-12 full-height full-width" v-if="dataLoaded">
+  <v-card v-if="$ready" class="pa-12 full-height full-width">
     <div class="pb-4 display-flex">
       <div>
         <platform-avatar :user="userInfo" :size="80" />
@@ -453,7 +453,7 @@
         contributionTypeItems: 'userDetails/contributionTypeItems'
       }),
       selectedExpertise() {
-        return this.expertise.find((e) => e.discipline_id == this.selectedEciDisciplineId);
+        return this.expertise.find((e) => e.discipline_id === this.selectedEciDisciplineId);
       },
       overview() {
         if (!this.selectedExpertise) {
@@ -490,8 +490,9 @@
 
     created() {
       const disciplineId = this.$route.query.discipline_id;
-      const idx = this.expertise.findIndex((e) => e.discipline_id == disciplineId);
-      if (idx != -1) {
+      const idx = this.expertise.findIndex((e) => e.discipline_id === disciplineId);
+
+      if (idx !== -1) {
         this.selectedEciDisciplineId = this.expertise[idx].discipline_id;
       } else if (this.expertise.length) {
         this.selectedEciDisciplineId = this.expertise[0].discipline_id;
@@ -500,6 +501,11 @@
       if (this.selectedEciDisciplineId) {
         this.loadDisciplineEciHistory();
       }
+
+      this.$store.dispatch('userDetails/loadAccountExpertiseDetailsPage', {
+        username: decodeURIComponent(this.username)
+      })
+        .then(() => { this.$setReady(); });
     },
 
     methods: {
@@ -534,12 +540,6 @@
             this.loadDisciplineEciHistory();
           });
       }
-    },
-
-    $dataPreload() {
-      return this.$store.dispatch('userDetails/loadAccountExpertiseDetailsPage', {
-        username: decodeURIComponent(this.username)
-      });
     }
   };
 </script>
