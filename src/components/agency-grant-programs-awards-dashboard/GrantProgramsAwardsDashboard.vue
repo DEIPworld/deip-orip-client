@@ -764,7 +764,8 @@
             paymentNumber: p.paymentNumber,
             awardNumber: p.awardNumber,
             subawardNumber: p.subawardNumber,
-            certifier: this.user.username
+            certifier: this.user.username,
+            extensions: []
           })
         );
 
@@ -800,7 +801,8 @@
             paymentNumber: p.paymentNumber,
             awardNumber: p.awardNumber,
             subawardNumber: p.subawardNumber,
-            approver: this.user.username
+            approver: this.user.username,
+            extensions: []
           })
         );
 
@@ -836,7 +838,8 @@
             paymentNumber: p.paymentNumber,
             awardNumber: p.awardNumber,
             subawardNumber: p.subawardNumber,
-            rejector: this.user.username
+            rejector: this.user.username,
+            extensions: []
           })
         );
 
@@ -872,7 +875,8 @@
             paymentNumber: p.paymentNumber,
             awardNumber: p.awardNumber,
             subawardNumber: p.subawardNumber,
-            payer: this.user.username
+            payer: this.user.username,
+            extensions: []
           })
         );
 

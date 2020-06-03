@@ -129,7 +129,8 @@
           this.user.privKey,
           this.user.username,
           witness.owner,
-          isApproving
+          isApproving,
+          []
         )
           .then(() => this.$store.dispatch('auth/loadAccount'))
           .then(() => {

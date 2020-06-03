@@ -300,7 +300,8 @@
           requester: this.user.username,
           amount: this.toAssetUnits(this.paymentAmount, grantAssetPrecision, granAssetSymbol),
           description: this.description,
-          attachment: hash
+          attachment: hash,
+          extensions: []
         })
           .then(() => {
             const reload = new Promise((resolve, reject) => {

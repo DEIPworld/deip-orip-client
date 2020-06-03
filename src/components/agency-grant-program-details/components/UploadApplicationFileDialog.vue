@@ -440,7 +440,8 @@
           this.user.username,
           this.toAssetUnits(this.totalAmount),
           `${applicationRef.letterHash}:${applicationRef.hash}`,
-          this.organization
+          this.organization,
+          []
         )
           .then((res) => {
             // todo: Reload applications section

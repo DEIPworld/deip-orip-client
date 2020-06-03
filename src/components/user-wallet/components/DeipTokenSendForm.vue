@@ -142,7 +142,8 @@
             this.user.username,
             this.form.to,
             this.toAssetUnits(this.form.amount),
-            this.form.memo
+            this.form.memo,
+            []
           ).then((data) => {
             this.$emit('deipTokensTransfered');
             this.clearForm();

@@ -93,7 +93,8 @@
             this.user.username,
             this.application.id,
             this.isPositive,
-            html
+            html, 
+            []
           ))
           .then((data) => {
             this.$notifier.showSuccess('Your review has been published successfully !')

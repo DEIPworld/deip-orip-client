@@ -957,7 +957,8 @@
           this.user.username,
           this.sendTokensDialog.form.to,
           this.toAssetUnits(this.sendTokensDialog.form.amount, this.sendTokensDialog.precision, this.sendTokensDialog.currency.currencyName),
-          this.sendTokensDialog.form.memo ? this.sendTokensDialog.form.memo : ''
+          this.sendTokensDialog.form.memo ? this.sendTokensDialog.form.memo : '',
+          []
         )
           .then((data) => {
             this.$notifier.showSuccess('Transfer was successfull')
@@ -1008,7 +1009,8 @@
           'hermes',
           this.user.username,
           this.toAssetUnits(this.depositDialog.amount, this.depositDialog.precision, this.depositDialog.selectedCurrency),
-          `deposit for ${this.user.username}`
+          `deposit for ${this.user.username}`,
+          []
         )
           .then(() => {
             this.$notifier.showError('Funds have been deposited successfully!')
@@ -1031,7 +1033,8 @@
           this.user.username,
           'hermes',
           this.toAssetUnits(this.withdrawDialog.amount, this.withdrawDialog.precision, this.withdrawDialog.selectedCurrency),
-          `withdraw for ${this.user.username}`
+          `withdraw for ${this.user.username}`,
+          []
         )
           .then(() => {
             this.$notifier.showError('Funds have been withdrawn successfully!')

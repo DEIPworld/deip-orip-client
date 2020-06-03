@@ -727,7 +727,8 @@
             paymentNumber: p.paymentNumber,
             awardNumber: p.awardNumber,
             subawardNumber: p.subawardNumber,
-            certifier: this.user.username
+            certifier: this.user.username,
+            extensions: []
           })
         );
 
@@ -764,7 +765,8 @@
             paymentNumber: p.paymentNumber,
             awardNumber: p.awardNumber,
             subawardNumber: p.subawardNumber,
-            approver: this.user.username
+            approver: this.user.username,
+            extensions: []
           })
         );
 
@@ -801,7 +803,8 @@
             paymentNumber: p.paymentNumber,
             awardNumber: p.awardNumber,
             subawardNumber: p.subawardNumber,
-            rejector: this.user.username
+            rejector: this.user.username,
+            extensions: []
           })
         );
 
@@ -838,7 +841,8 @@
             paymentNumber: p.paymentNumber,
             awardNumber: p.awardNumber,
             subawardNumber: p.subawardNumber,
-            payer: this.user.username
+            payer: this.user.username,
+            extensions: []
           })
         );
 
@@ -871,7 +875,8 @@
         this.isAwardApproving = true;
         grantsService.approveFundingOpportunityAward(this.user.privKey, {
           awardNumber: this.awardee.award_number,
-          approver: this.user.username
+          approver: this.user.username,
+          extensions: []
         })
           .then(() => {
             const reload = new Promise((resolve, reject) => {
@@ -899,7 +904,8 @@
         this.isAwardRejecting = true;
         grantsService.rejectFundingOpportunityAward(this.user.privKey, {
           awardNumber: this.awardee.award_number,
-          rejector: this.user.username
+          rejector: this.user.username,
+          extensions: []
         })
           .then(() => {
             const reload = new Promise((resolve, reject) => {

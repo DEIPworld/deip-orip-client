@@ -150,9 +150,6 @@
           .map((exp) => exp.discipline_id)
           .filter((id) => review.disciplines.find((d) => d.id === id));
 
-        // I have no idea why, but "deipRpc.broadcast.voteForReviewAsync" doesn't work here,
-        // the promise just never gets resolved or rejected although operation is sent and applied in the blockchain.
-        // Possibly there is a bug in 'deipRpc', needs to be reviewed later.
         deipRpc.api.getDynamicGlobalProperties((err, result) => {
           if (!err) {
             const BlockNum = (result.last_irreversible_block_num - 1) & 0xFFFF;
@@ -165,7 +162,8 @@
                 voter: self.user.username,
                 review_id: review.id,
                 discipline_id: disciplinesId,
-                weight: self.DEIP_100_PERCENT
+                weight: self.DEIP_100_PERCENT,
+                extensions: []
               }]);
               const unsignedTX = {
                 expiration: expire,
