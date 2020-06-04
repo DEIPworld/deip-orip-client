@@ -1,7 +1,7 @@
 <template>
   <div v-if="$ready">
     <account-sidebar v-if="!$route.meta.hideSidebar" />
-    <router-view v-if="dataLoaded" />
+    <router-view />
   </div>
 </template>
 

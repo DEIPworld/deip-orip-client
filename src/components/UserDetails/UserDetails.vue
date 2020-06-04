@@ -8,7 +8,6 @@
 </template>
 
 <script>
-  import LayoutSidebar from '@/components/layout/components/LayoutSidebar';
   import UserDetailsSidebar from '@/components/UserDetails/components/UserDetailsSidebar';
   import UserDetailsBody from '@/components/UserDetails/components/UserDetailsBody';
   import LayoutSection from '@/components/layout/components/LayoutSection';
@@ -18,8 +17,7 @@
     components: {
       LayoutSection,
       UserDetailsBody,
-      UserDetailsSidebar,
-      LayoutSidebar
+      UserDetailsSidebar
     },
     props: {
       username: {

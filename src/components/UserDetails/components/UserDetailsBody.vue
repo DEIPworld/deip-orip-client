@@ -179,7 +179,12 @@
                 small
                 depressed
                 color="primary lighten-1"
-                @click="showSaveEducationDialog(item, index)"
+                :to="{
+                  name: 'account.education',
+                  query: {
+                    index: `${index}`
+                  }
+                }"
               >
                 Edit
               </v-btn>
@@ -210,7 +215,9 @@
               outlined
               icon
               color="primary"
-              @click="showSaveEducationDialog(null, -1)"
+              :to="{
+                name: 'account.education'
+              }"
             >
               <v-icon small>
                 add
@@ -219,10 +226,6 @@
             <span class="pl-2">Add education institutions</span>
           </div>
           <div v-if="isOwner">
-            <user-edit-education-dialog
-              :meta="saveEducationMeta"
-              @saveEducation="saveEducation($event); saveEducationMeta.isShown = false"
-            />
             <confirm-action-dialog
               :meta="deleteEducationMeta"
               :title="``"
@@ -248,7 +251,12 @@
                 small
                 depressed
                 color="primary lighten-1"
-                @click="showSaveEmploymentDialog(item, index)"
+                :to="{
+                  name: 'account.employment',
+                  query: {
+                    index: `${index}`
+                  }
+                }"
               >
                 Edit
               </v-btn>
@@ -279,7 +287,9 @@
               outlined
               icon
               color="primary"
-              @click="showSaveEmploymentDialog(null, -1)"
+              :to="{
+                name: 'account.employment'
+              }"
             >
               <v-icon small>
                 add
@@ -288,10 +298,6 @@
             <span class="pl-2">Add employment</span>
           </div>
           <div v-if="isOwner">
-            <user-edit-employment-dialog
-              :meta="saveEmploymentMeta"
-              @saveEmployment="saveEmployment($event); saveEmploymentMeta.isShown = false"
-            />
             <confirm-action-dialog
               :meta="deleteEmploymentMeta"
               :title="``"
@@ -313,8 +319,6 @@
 
   import { AccessService } from '@deip/access-service';
   import { UserService } from '@deip/user-service';
-  import UserEditEducationDialog from '@/components/UserDetails/components/UserEditEducationDialog';
-  import UserEditEmploymentDialog from '@/components/UserDetails/components/UserEditEmploymentDialog';
 
   const accessService = AccessService.getInstance();
   const userService = UserService.getInstance();
@@ -323,28 +327,16 @@
     name: 'UserDetailsBody',
 
     components: {
-      UserEditEmploymentDialog,
-      UserEditEducationDialog,
       vueDropzone
     },
     data() {
       return {
-        saveEducationMeta: {
-          isShown: false,
-          item: null,
-          index: null
-        },
         deleteEducationMeta: {
           isShown: false,
           item: null,
           index: null
         },
 
-        saveEmploymentMeta: {
-          isShown: false,
-          item: null,
-          index: null
-        },
         deleteEmploymentMeta: {
           isShown: false,
           item: null,
@@ -419,41 +411,10 @@
 
     },
     methods: {
-      showSaveEducationDialog(item, index) {
-        this.saveEducationMeta.item = item;
-        this.saveEducationMeta.index = index;
-        this.saveEducationMeta.isShown = true;
-      },
       showDeleteEducationDialog(item, index) {
         this.deleteEducationMeta.item = item;
         this.deleteEducationMeta.index = index;
         this.deleteEducationMeta.isShown = true;
-      },
-      saveEducation({ item, index }) {
-        const update = {};
-        if (index === -1) { // new education
-          const educationList = this.userInfo.profile.education.map((e) => e)
-            .concat([item]);
-          Object.assign(update, this.userInfo.profile, { education: educationList });
-        } else { // edited education
-          const educationList = this.userInfo.profile.education.reduce(
-            (accum, current, i) => {
-              if (i == index) {
-                return accum.concat(item);
-              }
-              return accum.concat(current);
-            }, []
-          );
-          Object.assign(update, this.userInfo.profile, { education: educationList });
-        }
-        userService.updateUserProfile(this.currentUser.username, update)
-          .then((res) => {
-            this.$store.dispatch('userDetails/loadUserProfile', { username: this.currentUser.username });
-            this.$notifier.showSuccess(`"${item.educationalInstitution}" Institute has been saved successfully!"`)
-          }, (err) => {
-            this.$notifier.showError(`An error occurred while saving "${item.educationalInstitution}" details, please try again later`)
-            console.log(err);
-          });
       },
       deleteEducation({ item, index }) {
         const educationList = this.userInfo.profile.education.reduce(
@@ -473,46 +434,14 @@
             this.$notifier.showSuccess(`"${item.educationalInstitution}" Institute has been deleted successfully!"`)
           }, (err) => {
             this.$notifier.showError(`An error occurred while deleting "${item.educationalInstitution}" details, please try again later`)
-            console.log(err);
+            console.error(err);
           });
       },
 
-      showSaveEmploymentDialog(item, index) {
-        this.saveEmploymentMeta.item = item;
-        this.saveEmploymentMeta.index = index;
-        this.saveEmploymentMeta.isShown = true;
-      },
       showDeleteEmploymentDialog(item, index) {
         this.deleteEmploymentMeta.item = item;
         this.deleteEmploymentMeta.index = index;
         this.deleteEmploymentMeta.isShown = true;
-      },
-
-      saveEmployment({ item, index }) {
-        const update = {};
-        if (index === -1) { // new education
-          const employmentList = this.userInfo.profile.employment.map((e) => e)
-            .concat([item]);
-          Object.assign(update, this.userInfo.profile, { employment: employmentList });
-        } else { // edited education
-          const employmentList = this.userInfo.profile.employment.reduce(
-            (accum, current, i) => {
-              if (i == index) {
-                return accum.concat(item);
-              }
-              return accum.concat(current);
-            }, []
-          );
-          Object.assign(update, this.userInfo.profile, { employment: employmentList });
-        }
-        userService.updateUserProfile(this.currentUser.username, update)
-          .then((res) => {
-            this.$store.dispatch('userDetails/loadUserProfile', { username: this.currentUser.username });
-            this.$notifier.showSuccess(`"${item.company}" employment has been saved successfully!"`)
-          }, (err) => {
-            this.$notifier.showError(`An error occurred while saving "${item.company}" details, please try again later`)
-            console.log(err);
-          });
       },
 
       deleteEmployment({ item, index }) {
@@ -533,7 +462,7 @@
             this.$notifier.showSuccess(`"${item.company}" employment has been deleted successfully!"`)
           }, (err) => {
             this.$notifier.showError(`An error occurred while deleting "${item.company}" employment details, please try again later`)
-            console.log(err);
+            console.error(err);
           });
       },
 
@@ -553,7 +482,7 @@
 
       avatarUploadError(file, message, xhr) {
         this.$notifier.showError(`Sorry, an error occurred while uploading avatar, please try again later`)
-        console.log(message);
+        console.error(message);
       },
 
       getEmploymentOrEducation(user) {

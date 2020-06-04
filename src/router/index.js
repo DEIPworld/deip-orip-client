@@ -192,23 +192,21 @@ const router = new Router({
     }, {
       path: '/:research_group_permlink/group-details/group-settings',
       name: 'ResearchGroupSettings',
-      component: preliminaryDataLoader(ResearchGroupSettings, {
-        beforeEnter: (to, from, next) => {
-          if (store.getters['auth/user'].groups.find((item) => encodeURIComponent(item.permlink) == to.params.research_group_permlink)) {
-            const loadPagePromise = store.dispatch('researchGroupSettings/loadResearchGroup', {
-              permlink: decodeURIComponent(to.params.research_group_permlink)
-            });
-            loadPage(loadPagePromise, next);
-          } else {
-            next({
-              name: 'ResearchGroupDetails',
-              params: {
-                research_group_permlink: to.params.research_group_permlink
-              }
-            });
-          }
-        }
-      })
+      component: ResearchGroupSettings
+      // component: preliminaryDataLoader(ResearchGroupSettings, {
+      //   beforeEnter: (to, from, next) => {
+      //     if (store.getters['auth/user'].groups.some((item) => encodeURIComponent(item.permlink) === to.params.research_group_permlink)) {
+      //       next({
+      //         name: 'ResearchGroupDetails',
+      //         params: {
+      //           research_group_permlink: to.params.research_group_permlink
+      //         }
+      //       });
+      //     } else {
+      //       next()
+      //     }
+      //   }
+      // })
     }, {
       path: '/:account_name/create-research-group',
       name: 'CreateResearchGroup',
