@@ -1,44 +1,11 @@
-import { AccessService } from '@deip/access-service';
-
-const accessService = AccessService.getInstance();
+import { IfEnabledComponent } from '@/plugins/deipAddons/IfEnabled';
+import { CustomDirective } from '@/plugins/deipAddons/CustomDirective';
+import { CommonMixin } from '@/plugins/deipAddons/CommonMixin';
 
 export const deipAddons = {
   install(_Vue) {
-    _Vue.mixin({
-      data() {
-        return {
-          $_dataReady: false
-        };
-      },
-      computed: {
-        $isUser() { return accessService.isLoggedIn(); },
-        $ready() { return this.$data.$_dataReady; }
-      },
-      methods: {
-        $hasSlot(name) {
-          return this.$slots[name] !== undefined;
-        },
-        $setReady(state = true) {
-          this.$data.$_dataReady = state;
-        }
-      }
-    });
-
-    _Vue.directive('custom', {
-      bind(el, binding, vnode) {
-        const map = {
-          input: 'text-field'
-        };
-
-        // eslint-disable-next-line no-nested-ternary
-        const prefix = binding.arg
-          ? map[binding.arg]
-            ? map[binding.arg]
-            : binding.arg
-          : vnode.componentOptions.tag;
-
-        el.classList.add(`${prefix}--${binding.value || 'custom'}`);
-      }
-    });
+    _Vue.mixin(CommonMixin);
+    _Vue.component('IfEnabled', IfEnabledComponent);
+    _Vue.directive('custom', CustomDirective);
   }
 };

@@ -29,9 +29,7 @@
 
       <d-snackbar />
     </div>
-
   </v-app>
-
 </template>
 
 <script>
@@ -67,8 +65,6 @@
     created() {
       const preload = [];
 
-      this.setRpc();
-
       if (accessService.isLoggedIn()) {
         preload.push(this.$store.dispatch('auth/loadUser'));
       }
@@ -93,15 +89,6 @@
     },
 
     methods: {
-      setRpc() {
-        deipRpc.api.setOptions({
-          url: this.$env.DEIP_FULL_NODE_URL,
-          reconnectTimeout: 3000
-        });
-
-        deipRpc.config.set('chain_id', this.$env.CHAIN_ID);
-      },
-
       setTheme() {
         // TODO: add setTheme from tenant
 
