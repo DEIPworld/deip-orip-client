@@ -10,6 +10,7 @@
           <v-card class="px-12 py-6 elevation-0">
             <v-text-field
               label="Start typing for suggestion"
+              filled
               append-icon="search"
             />
 

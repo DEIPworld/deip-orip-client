@@ -10,17 +10,20 @@
           <v-textarea
             v-model="foa.description"
             label="Opportunity description"
+            filled
             auto-grow
             rows="2"
           />
 
           <v-text-field
             v-model="foa.additionalInfoLink"
+            filled
             label="Link to additional information"
           />
 
           <v-text-field
             v-model="foa.grantorEmail"
+            filled
             label="Grantor contact e-mail address"
           />
         </div>

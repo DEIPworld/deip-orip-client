@@ -11,6 +11,7 @@
               v-model="foa.reveiwCommittee"
               :items="allGroupList"
               :filter="committeesFilter"
+              filled
               item-text="name"
               label="Reveiw committee"
               return-object

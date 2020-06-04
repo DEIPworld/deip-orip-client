@@ -14,7 +14,7 @@
           v-model="masterPassword"
           :rules="[rules.required, rules.masterPassword]"
           label="Password / Private Key"
-          outlined
+          filled
           :append-icon="isHiddenPassword ? 'visibility_off' : 'visibility'"
           :type="isHiddenPassword ? 'password' : 'text'"
           @click:append="isHiddenPassword = !isHiddenPassword"

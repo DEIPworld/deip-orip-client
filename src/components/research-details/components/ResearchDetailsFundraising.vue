@@ -145,6 +145,7 @@
               ref="amountToContribute"
               v-model="amountToContribute"
               placeholder="Amount"
+              filled
               suffix="USD"
               :rules="[rules.required, deipTokenValidator]"
               :disabled="areTokensBuying"

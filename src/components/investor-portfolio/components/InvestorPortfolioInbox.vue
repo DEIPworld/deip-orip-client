@@ -40,7 +40,7 @@
           <!-- <v-select
             v-model="sort"
             :items="sortingOptions"
-            solo
+            filled
             dense
             hide-details
             class="ma-0 pa-0"

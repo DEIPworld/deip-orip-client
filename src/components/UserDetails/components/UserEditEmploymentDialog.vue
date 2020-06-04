@@ -134,6 +134,7 @@
           <v-textarea
             v-model="description"
             :rows="2"
+            filled
             auto-grow
             label="Description"
           />

@@ -13,7 +13,7 @@
                 v-model="title"
                 name="title"
                 label="Title"
-                solo
+                filled
                 @keyup="setTitle"
               />
             </v-col>
@@ -26,7 +26,7 @@
                 name="Description"
                 label="Description"
                 placeholder="What problem it solves, how it helps to others, why it is special ?"
-                solo
+                filled
                 @keyup="setDescription"
               />
             </v-col>
@@ -38,7 +38,7 @@
                 v-model="videoSrc"
                 prepend-inner-icon="link"
                 label="Link to a video presentation"
-                solo
+                filled
                 :rules="[rules.link]"
                 @keyup="setVideo"
               />
@@ -54,7 +54,7 @@
           <!-- <v-row no-gutters>
                         <v-col cols="3" class="pr-4 font-weight-bold subtitle-1">Main goals of your research</v-col>
                         <v-col cols="6">
-                            <v-text-field name="goals" label="Goals" solo textarea hide-details></v-text-field>
+                            <v-text-field filled name="goals" label="Goals" solo textarea hide-details></v-text-field>
                         </v-col>
           </v-row>-->
         </div>

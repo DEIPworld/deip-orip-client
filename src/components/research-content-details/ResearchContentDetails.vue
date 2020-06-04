@@ -149,14 +149,15 @@
         <v-card-text>
           <v-text-field
             v-model="proposeContent.title"
+            filled
             label="Title"
-            hide-details
           />
 
           <v-select
             v-model="proposeContent.type"
             :items="proposeContent.researchContentTypes"
             label="Content Type"
+            filled
             class="c-mt-6"
             item-value="id"
           />
@@ -167,6 +168,7 @@
             :menu-props="{ closeOnContentClick: true }"
             hint="You can select multiple authors"
             persistent-hint
+            filled
             placeholder="Authors"
             multiple
             @change="setDraftAuthors"

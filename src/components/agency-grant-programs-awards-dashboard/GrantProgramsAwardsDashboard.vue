@@ -70,7 +70,7 @@
                     :items="awardsFilterByStatus"
                     label="STATUS"
                     return-object
-                    solo
+                    filled
                     dense
                   />
                 </v-row>
@@ -168,7 +168,7 @@
                     :items="paymentsFilterByStatus"
                     label="STATUS"
                     return-object
-                    solo
+                    filled
                     dense
                   />
                 </v-row>
@@ -181,7 +181,7 @@
                     :items="paymentsFilterByOrganization"
                     label="ORGANIZATION"
                     return-object
-                    solo
+                    filled
                     dense
                   />
                 </v-row>
@@ -194,7 +194,7 @@
                     :items="paymentsFilterByPI"
                     label="PI"
                     return-object
-                    solo
+                    filled
                     dense
                   />
                 </v-row>

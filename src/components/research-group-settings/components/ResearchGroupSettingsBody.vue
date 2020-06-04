@@ -22,7 +22,7 @@
             :rules="[rules.required]"
             name="Description"
             label="Description"
-            solo
+            filled
             auto-grow
           />
         </div>

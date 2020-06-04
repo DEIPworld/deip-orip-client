@@ -35,6 +35,7 @@
         <v-text-field
           v-model="tokensAmount"
           label="Research Group Tokens"
+          filled
           suffix="%"
           mask="##"
         />

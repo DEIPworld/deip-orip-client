@@ -12,6 +12,7 @@
           ref="toUsername"
           v-model="form.to"
           label="To"
+          filled
           :rules="[
             rules.required,
             rules.isExist
@@ -23,6 +24,7 @@
         <v-text-field
           v-model="form.amount"
           label="Amount"
+          filled
           :rules="[
             rules.required,
             rules.amount
@@ -34,6 +36,7 @@
             label="Memo - optional"
             multi-line
             rows="1"
+            filled
             auto-grow
             counter="2000"
             no-resize
