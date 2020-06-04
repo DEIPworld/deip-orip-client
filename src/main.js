@@ -21,9 +21,10 @@ import './styles/app.scss';
 
 import { DSnackbarPlugin } from '@/components/Deipify/DSnackbar/DSnackbarPlugin';
 
-import { vuetify } from '@/plugins/vuetify';
-import { deipAddons } from '@/plugins/deipAddons';
 import { getEnvConfig } from '@/plugins/getEnvConfig';
+import { vuetify } from '@/plugins/vuetify';
+import { ifEnabled } from '@/plugins/ifEnabled';
+import { deipAddons } from '@/plugins/deipAddons';
 
 // ////////////////////////
 
@@ -44,6 +45,7 @@ Vue.use(VueCurrencyFilter, currencyFilterOptions);
 
 Vue.use(DSnackbarPlugin);
 Vue.use(deipAddons);
+Vue.use(ifEnabled);
 
 getEnvConfig().then((plugin) => {
   Vue.use(plugin);

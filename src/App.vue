@@ -11,7 +11,6 @@
       </v-sheet>
     </v-overlay>
 
-
     <div v-if="$ready">
       <toolbar
         v-if="!$route.meta.withoutHeader && !$route.path.includes('/admin')"
