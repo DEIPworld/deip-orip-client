@@ -73,6 +73,7 @@ import { accountRouting } from '@/components/Account/router';
 import { userDetailRouting } from '@/components/UserDetails/router';
 import { adminRouting } from '@/components/AdminPanel/router';
 import ResearchRequestFormCreate from '@/components/ResearchRequest/ResearchRequestFormCreate';
+import { awaitStore } from '@/router/utils/awaitStore';
 
 const accessService = AccessService.getInstance();
 const usersService = UsersService.getInstance();
@@ -551,6 +552,11 @@ const router = new Router({
   }
 });
 
+const authDataLoad = () => Promise.all([
+  awaitStore('auth/user', 'profile'),
+  awaitStore('auth/tenant')
+])
+
 router.beforeEach((to, from, next) => {
   const PUBLIC_PAGES_NAMES = [
     'ResearchFeed',
@@ -567,16 +573,21 @@ router.beforeEach((to, from, next) => {
     '/admin/sign-in'
   ];
 
+  // TODO: sheetcode with multiple entries
+  // need router rebuild
+
   if (loginPages.includes(to.path)) {
     if (accessService.isLoggedIn()) {
-      next(to.path === '/admin/sign-in' ? '/admin' : '/'); // if token is already presented redirect user to home page
+      authDataLoad().then(() => { next(to.path === '/admin/sign-in' ? '/admin' : '/'); }); // if token is already presented redirect user to home page
+
     } else {
       next(); // otherwise redirect to sign-in page
     }
   } else if (PUBLIC_PAGES_NAMES.includes(to.name)) {
     next();
   } else if (accessService.isLoggedIn()) {
-    next(); // if there is a token allow to visit requested route
+    authDataLoad().then(() => { next(); }) // if there is a token allow to visit requested route
+
   } else {
     next(!to.path.includes('admin') ? { name: 'ResearchFeed' } : { name: 'admin.login' }); // otherwise redirect to sign-in page
   }
