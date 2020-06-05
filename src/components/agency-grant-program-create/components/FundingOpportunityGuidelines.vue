@@ -11,6 +11,7 @@
             v-model="foa.eligibleApplicants"
             label="Eligible applicants"
             auto-grow
+            filled
             rows="2"
             :rules="[rules.required]"
           />
@@ -19,6 +20,7 @@
             v-model="foa.eligibilityAdditionalInformation"
             label="Additional information on eligibility"
             auto-grow
+            filled
             rows="2"
             :rules="[rules.required]"
           />

@@ -73,7 +73,7 @@
       v-model="term"
       label="Add references to material posted at DEIP"
       hint="Search by material title"
-      single-line
+      filled
       append-icon="device_hub"
       @input="searchReferences()"
     />

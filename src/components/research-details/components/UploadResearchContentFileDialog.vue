@@ -37,13 +37,14 @@
           <div v-if="researchGroupMembersList.length">
             <v-text-field
               v-model="title"
+              filled
               label="Title"
-              hide-details
             />
 
             <v-select
               v-model="type"
               :items="researchContentTypes"
+              filled
               label="Content Type"
               class="c-mt-6"
               item-value="id"
@@ -55,6 +56,7 @@
               :menu-props="{ closeOnContentClick: true }"
               hint="You can select multiple authors"
               persistent-hint
+              filled
               placeholder="Authors"
               multiple
             >

@@ -34,6 +34,7 @@
             <v-text-field
               ref="amount"
               v-model="grantInfo.amount"
+              filled
               label="Amount"
               :rules="[
                 rules.required,

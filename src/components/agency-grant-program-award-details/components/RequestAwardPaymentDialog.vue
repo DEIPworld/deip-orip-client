@@ -17,6 +17,7 @@
         </v-toolbar>
         <v-card-text class="c-pt-5 c-pr-10 c-pl-10">
           <!--  <v-select
+            filled
             ref="paymentAward"
             v-model="awardee"
             :items="awards"
@@ -41,6 +42,7 @@
           <v-text-field
             ref="paymentNumber"
             v-model="paymentNumber"
+            filled
             label="Payment Number"
             :rules="[
               rules.required,
@@ -53,6 +55,7 @@
             ref="paymentAmount"
             v-model="paymentAmount"
             label="Amount"
+            filled
             :rules="[
               rules.required,
               rules.isDigit,
@@ -85,6 +88,7 @@
             class="c-mt-2"
             label="Payment purpose"
             rows="2"
+            filled
             auto-grow
             append-icon="notes"
             :disabled="!awardee"

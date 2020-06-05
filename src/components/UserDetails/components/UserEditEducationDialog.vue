@@ -104,6 +104,7 @@
             filled
             :rows="2"
             auto-grow
+            filled
             label="Description"
           />
         </v-col>

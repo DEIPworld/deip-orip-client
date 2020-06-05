@@ -13,6 +13,7 @@
           :value="researchId"
           item-text="title"
           item-value="id"
+          filled
           label="Research"
           @input="changeResearch"
         />
@@ -21,6 +22,7 @@
           ref="toUsername"
           v-model="form.to"
           label="To"
+          filled
           :rules="[
             rules.required,
             rules.isExist
@@ -32,6 +34,7 @@
         <v-text-field
           v-model="form.amount"
           label="Amount"
+          filled
           suffix="%"
           :rules="[
             rules.required,

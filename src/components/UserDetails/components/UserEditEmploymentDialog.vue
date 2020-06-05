@@ -115,6 +115,7 @@
             v-model="formData.description"
             filled
             :rows="2"
+            filled
             auto-grow
             label="Description"
           />

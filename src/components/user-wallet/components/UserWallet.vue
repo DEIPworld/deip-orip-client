@@ -395,17 +395,20 @@
           <v-form ref="sendResearchTokensForm" v-model="sendResearchTokensDialog.form.valid">
             <v-text-field
               :label="sendResearchTokensDialog.research.title"
+              filled
               disabled
             />
             <v-text-field
               v-model="sendResearchTokensDialog.form.to"
               label="Receiver"
+              filled
               :rules="sendResearchTokensDialog.form.rules.username"
               :disabled="sendResearchTokensDialog.isSending"
             />
             <v-text-field
               v-model="sendResearchTokensDialog.form.amount"
               label="Share"
+              filled
               :rules="sendResearchTokensDialog.form.rules.amount"
               :disabled="sendResearchTokensDialog.isSending"
               suffix="%"
@@ -462,12 +465,14 @@
             <v-text-field
               v-model="sendTokensDialog.form.to"
               label="To"
+              filled
               :rules="sendTokensDialog.form.rules.username"
               :disabled="sendTokensDialog.isSending"
             />
             <v-text-field
               v-model="sendTokensDialog.form.amount"
               label="Amount"
+              filled
               :suffix="sendTokensDialog.currency.title"
               :rules="sendTokensDialog.form.rules.amount"
               :disabled="sendTokensDialog.isSending"
@@ -477,6 +482,7 @@
               label="Memo - optional"
               rows="1"
               auto-grow
+              filled
               :counter="sendTokensDialog.maxMemo"
               no-resize
               :rules="sendTokensDialog.form.rules.memo"

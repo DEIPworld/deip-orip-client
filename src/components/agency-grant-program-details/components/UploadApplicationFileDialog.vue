@@ -27,6 +27,7 @@
           <v-autocomplete
             v-model="research"
             class="mt-4"
+            filled
             :items="researchList"
             :filter="researchFilter"
             label="Research"
@@ -83,6 +84,7 @@
                   <v-text-field
                     v-model="title"
                     class=""
+                    filled
                     label="Title"
                     :rules="[
                       applicationTitleRule
@@ -93,6 +95,7 @@
                   <v-text-field
                     v-model="totalAmount"
                     class=""
+                    filled
                     label="Total amount"
                     suffix="$"
                     :rules="[
@@ -105,6 +108,7 @@
                 <v-text-field
                   v-model="organization"
                   class=""
+                  filled
                   label="Organization"
                 />
               </div>

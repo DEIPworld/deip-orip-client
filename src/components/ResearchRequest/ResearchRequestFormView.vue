@@ -16,6 +16,7 @@
           v-model="formData.description"
           label="What is your idea?"
           auto-grow
+          filled
           rows="3"
           v-bind="fieldState"
           :disabled="partialDisabled.description"
@@ -54,6 +55,7 @@
           v-model="formData.problem"
           label="What area are you trying to impact?"
           auto-grow
+          filled
           rows="3"
           v-bind="fieldState"
           :rules="[rules.required]"
@@ -65,6 +67,7 @@
           v-model="formData.solution"
           label="How will this solve a current problem?"
           auto-grow
+          filled
           rows="3"
           v-bind="fieldState"
           :rules="[rules.required]"

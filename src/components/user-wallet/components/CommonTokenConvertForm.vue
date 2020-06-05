@@ -21,6 +21,7 @@
           ref="amount"
           v-model="amount"
           label="Amount"
+          filled
           :rules="[
             rules.required,
             isDeipToCommonMode ? rules.deipTokenAmount : rules.deipCommonAmount

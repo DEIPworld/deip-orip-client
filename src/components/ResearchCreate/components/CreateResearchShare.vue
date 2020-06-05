@@ -14,6 +14,7 @@
           <v-text-field
             v-model="reviewShare"
             suffix="%"
+            filled
             mask="##"
             hide-details
             @keyup="setReviewShare"

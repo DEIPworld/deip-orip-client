@@ -13,7 +13,7 @@
             :value="item.type"
             item-value="type"
             item-text="title"
-            solo
+            filled
             :rules="[rules.partner]"
             label="Partner"
             :items="partnersInfo"
@@ -39,7 +39,7 @@
             :rules="[rules.required]"
             name="partnersList"
             label="Partner's name"
-            solo
+            filled
           />
         </v-col>
         <v-col cols="1" class="text-align-right">

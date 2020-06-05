@@ -9,6 +9,7 @@
         <div class="mx-auto meta-max-width">
           <v-text-field
             v-model="foa.title"
+            filled
             label="Opportunity title"
             :rules="[rules.required]"
           />
@@ -16,6 +17,7 @@
           <v-text-field
             v-model="foa.number"
             label="Opportunity number"
+            filled
             validate-on-blur
             :rules="[rules.required, rules.foaNumber]"
           />
@@ -23,6 +25,7 @@
           <v-text-field
             v-if="organization"
             v-model="organization.name"
+            filled
             label="Organization name"
             disabled
           />
