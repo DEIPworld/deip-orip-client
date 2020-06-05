@@ -17,7 +17,7 @@
               v-model="date"
               filled
               :label="label"
-              :rules="[() => !time || !datetime || $refs.errorMsg.valid || '']"
+              :rules="[() => !time || !datetime || ($refs.errorMsg && $refs.errorMsg.valid) || '']"
               readonly
               v-on="on"
             />
@@ -44,7 +44,7 @@
               ref="timePicker"
               v-model="time"
               filled
-              :rules="[() => !date || !datetime || $refs.errorMsg.valid || '']"
+              :rules="[() => !date || !datetime || ($refs.errorMsg && $refs.errorMsg.valid) || '']"
               label="Time"
               append-icon="event"
               readonly

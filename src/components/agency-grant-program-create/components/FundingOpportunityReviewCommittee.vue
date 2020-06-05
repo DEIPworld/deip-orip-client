@@ -77,7 +77,7 @@
       })
     },
     created() {
-      this.getReviewCommittes([23]);
+      this.getReviewCommittes(["c8657fa6cbaee3917ac4e2ed6ada9d0a55a15ac5"]);
     },
     methods: {
       nextStep() {
@@ -101,8 +101,8 @@
       isNextDisabled() {
         return this.foa.reveiwCommittee == null;
       },
-      getReviewCommittes(idsArray) {
-        Promise.all(idsArray.map((id) => deipRpc.api.getResearchGroupByIdAsync(id)))
+      getReviewCommittes(ids) {
+        deipRpc.api.getResearchGroupsAsync(ids)
           .then((researchGroups) => {
             this.allGroupList = researchGroups;
             Promise.all(researchGroups.map(({ id }) => deipRpc.api.getResearchGroupTokensByResearchGroupAsync(id)))

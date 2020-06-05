@@ -1,15 +1,15 @@
 import Vue from 'vue';
 import deipRpc from '@deip/rpc-client';
-
-
 import { UsersService } from '@deip/users-service';
 import { ExpertiseContributionsService } from '@deip/expertise-contributions-service';
 import { GrantsService } from '@deip/grants-service';
+import { ResearchGroupService } from '@deip/research-group-service';
 import { mapAreaToProgram } from '../../common/disciplines/DisciplineTreeService';
 
 const usersService = UsersService.getInstance();
 const expertiseContributionsService = ExpertiseContributionsService.getInstance();
 const grantsService = GrantsService.getInstance();
+const researchGroupService = ResearchGroupService.getInstance();
 
 const state = {
   organization: undefined,
@@ -40,68 +40,10 @@ const getters = {
 const actions = {
   loadGrantProgramDetailsPage({ state, dispatch, commit }, { organization, foaId }) {
     commit('SET_ORGANIZATION_PROGRAM_DETAILS_PAGE_LOADING_STATE', true);
-    return deipRpc.api.getResearchGroupByPermlinkAsync(organization)
+    return researchGroupService.getResearchGroupByPermlink(organization)
+      .then((org) => researchGroupService.getResearchGroup(org.external_id))
       .then((organizationProfile) => {
-        const researchAreas = [
-          {
-            title: 'Biological Sciences (BIO)',
-            abbreviation: organization,
-            subAreaAbbreviation: organization,
-            disciplines: [
-              3,
-              9
-            ],
-            subAreas: [
-              {
-                title: 'Molecular and Cellular Biosciences (MCB)',
-                abbreviation: organization,
-                subAreaAbbreviation: organization,
-                disciplines: [
-                  3,
-                  9
-                ]
-              },
-              {
-                title: 'Integrative Organismal Systems (IOS)',
-                abbreviation: organization,
-                subAreaAbbreviation: organization,
-                disciplines: [
-                  3,
-                  9
-                ]
-              },
-              {
-                title: 'Emerging Frontiers (EF)',
-                abbreviation: organization,
-                subAreaAbbreviation: organization,
-                disciplines: [
-                  3,
-                  9
-                ]
-              },
-              {
-                title: 'Environmental Biology (DEB)',
-                abbreviation: organization,
-                subAreaAbbreviation: organization,
-                disciplines: [
-                  3,
-                  9
-                ]
-              },
-              {
-                title: 'Biological Infrastructure (DBI)',
-                abbreviation: organization,
-                subAreaAbbreviation: organization,
-                disciplines: [
-                  3,
-                  9
-                ]
-              }
-            ]
-          }
-        ];
-
-        commit('SET_ORGANIZATION_PROFILE', { ...organizationProfile, researchAreas });
+        commit('SET_ORGANIZATION_PROFILE', organizationProfile);
         const organizationProgramDetailsLoad = new Promise((resolve, reject) => {
           dispatch('loadOrganizationProgramDetails', { foaId })
             .then(() => {
@@ -129,6 +71,8 @@ const actions = {
       })
       .then((profiles) => {
         program.officers = profiles;
+        mapAreaToProgram(program, state.organization.researchGroupRef.researchAreas);
+
         commit('SET_ORGANIZATION_PROGRAM', program);
       })
       .catch((err) => {
@@ -233,7 +177,6 @@ const mutations = {
   },
 
   SET_ORGANIZATION_PROGRAM(state, program) {
-    mapAreaToProgram(program, state.organization.researchAreas);
     Vue.set(state, 'program', program);
   },
 

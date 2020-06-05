@@ -233,31 +233,6 @@
       };
     },
 
-    created() {
-      const grantingAgencyOrg = 'nsf';
-      const treasuryOrg = 'us-treasury';
-
-      deipRpc.api.getResearchGroupByPermlinkAsync(grantingAgencyOrg)
-        .then((organization) => {
-          const members = [];
-
-          deipRpc.api.getResearchGroupTokensByResearchGroupAsync(organization.id)
-            .then((rgtList) => usersService.getEnrichedProfiles(rgtList.map(({ owner }) => owner)))
-            .then((members) => {
-              this.organization = {
-                ...organization,
-                members
-              };
-              this.foa.officers.push(this.organization.members.find(({ account: { name } }) => name == this.user.account.name).account.name);
-            });
-        });
-
-      deipRpc.api.getResearchGroupByPermlinkAsync(treasuryOrg)
-        .then((organization) => {
-          this.treasury = organization;
-        });
-    },
-
     methods: {
       incStep() {
         if (this.currentStep < 8) {
@@ -276,13 +251,11 @@
         this.isSending = true;
 
         const distributionModel = [
-          'funding_opportunity_announcement_contract_v1_0_0',
+          'funding_opportunity_announcement_contract',
           {
-            version: '1.0.0',
-            organization_id: this.organization.id,
-            review_committee_id: this.foa.reveiwCommittee.id,
-            treasury_id: this.treasury.id,
-            funding_opportunity_number: this.foa.number,
+            organization_id: this.organization.external_id,
+            review_committee_id: this.foa.reveiwCommittee.external_id,
+            treasury_id: this.treasury.external_id,
             award_ceiling: this.toAssetUnits(this.foa.awardCeiling, GRANT_TOKEN_PRECISION, GRANT_TOKEN_SYMBOL),
             award_floor: this.toAssetUnits(this.foa.awardFloor, GRANT_TOKEN_PRECISION, GRANT_TOKEN_SYMBOL),
             expected_number_of_awards: this.foa.numberOfAwards,
@@ -303,6 +276,7 @@
         grantsService.createGrantContract(
           this.user.privKey,
           {
+            foaNumber: this.foa.number.toLowerCase(),
             grantor: this.user.username,
             amount: this.toAssetUnits(this.foa.totalProgramFunding, GRANT_TOKEN_PRECISION, GRANT_TOKEN_SYMBOL),
             targetDisciplines: this.foa.disciplines.map(({ id }) => id),
@@ -315,14 +289,39 @@
             this.$notifier.showSuccess('Funding Opportunity has been created successfully!');
           })
           .catch((err) => {
-            this.$notifier.showSuccess('An error occurred while creating Funding Opportunity, please try again later');
+            this.$notifier.showError('An error occurred while creating Funding Opportunity, please try again later');
             console.log(err);
           })
           .finally(() => {
             this.isSending = false;
           });
       }
-    }
+    },
+
+    created() {
+      const grantingAgencyOrg = '58e3bfd753fcb860a66b82635e43524b285ab708';
+      const treasuryOrg = '1169d704f8a908016033efe8cce6df93f618a265';
+
+      deipRpc.api.getResearchGroupAsync(grantingAgencyOrg)
+        .then((organization) => {
+          const members = [];
+
+          deipRpc.api.getResearchGroupTokensByResearchGroupAsync(organization.id)
+            .then((rgtList) => usersService.getEnrichedProfiles(rgtList.map(({ owner }) => owner)))
+            .then((members) => {
+              this.organization = {
+                ...organization,
+                members
+              };
+              this.foa.officers.push(this.organization.members.find(({ account: { name } }) => name == this.user.account.name).account.name);
+            });
+        });
+
+      deipRpc.api.getResearchGroupAsync(treasuryOrg)
+        .then((organization) => {
+          this.treasury = organization;
+        });
+    },
   };
 </script>
 

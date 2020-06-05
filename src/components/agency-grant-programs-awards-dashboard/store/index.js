@@ -38,7 +38,6 @@ const getters = {
     const award = state.awardsList.find((award) => award.award_number == a.award_number);
     const awardee = { ...a, isSubawardee: a.source != '' };
     const subawardees = grantsService.findAwardSubawardees(awardee, state.awardeesList);
-
     const withdrawals = state.awardsPaymentRequestsList.filter((w) => w.award_number == awardee.award_number && w.subaward_number == awardee.subaward_number);
     const subWithdrawals = subawardees.reduce((acc, sa) => {
       const withdrawals = state.awardsPaymentRequestsList.filter((w) => w.award_number == sa.award_number && w.subaward_number == sa.subaward_number);
@@ -183,7 +182,6 @@ const actions = {
 
   loadAgencyAwardsDashboardPage({ commit, dispatch, state }, { permlink }) {
     commit('SET_ORGANIZATION_DASHBOARD_LOADING_STATE', true);
-
     return researchGroupService.getResearchGroupByPermlink(permlink)
       .then((currentOrganization) => {
         commit('SET_CURRENT_ORGANIZATION', currentOrganization);

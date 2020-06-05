@@ -407,7 +407,7 @@
             } if (v.length > this.MAX_FOA_NUMBER_LENGTH) {
               return `Award number length should be less/equal than ${this.MAX_FOA_NUMBER_LENGTH}`;
             }
-            return true;
+            return /^[0-9]*$/.test(v) || 'Numbers are only allowed';;
           },
 
           totalAwardValidator: () => {
@@ -639,7 +639,7 @@
             subaward: this.toAssetUnits(funding.purpose.awardAmount, grantAssetPrecision, granAssetSymbol),
             subawardee: funding.researcher.user.account.name,
             source,
-            research_id: funding.research.id
+            research_external_id: funding.research.external_id
 
             // milestones: funding.milestones
             //   .map((milestone) => {
@@ -656,13 +656,13 @@
 
         return grantsService.createFundingOpportunityAward(
           this.user.privKey, {
-            fundingOpportunityNumber: this.program.funding_opportunity_number,
             awardNumber: this.fundings[0].awardNumber,
+            fundingOpportunityNumber: this.program.funding_opportunity_number,
             award: this.toAssetUnits(this.fundings[0].purpose.awardAmount, grantAssetPrecision, granAssetSymbol),
             awardee: this.fundings[0].researcher.user.account.name,
-            researchId: this.fundings[0].research.id,
-            universityId: this.universityProfile.id,
-            universityOverhead: (parseInt(this.fundings[0].overhead) || 0) * this.DEIP_1_PERCENT,
+            researchExternalId: this.fundings[0].research.external_id,
+            universityExternalId: this.universityProfile.external_id,
+            universityOverhead: `${this.fundings[0].overhead}.00 %`,
             subawardees,
             creator: this.user.username,
             extensions: []

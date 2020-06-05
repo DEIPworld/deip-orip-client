@@ -38,7 +38,7 @@ const actions = {
         commit('SET_ORGANIZATION_PROFILE', organizationProfile);
         const organizationProgramDetailsLoad = dispatch('loadProgramDetails', { foaId });
         const usersLoad = dispatch('loadUsers');
-        const universityLoad = dispatch('loadUniversity', { universityPermlink: 'mit' });
+        const universityLoad = dispatch('loadUniversity', { universityExternalId: "c8a87b12c23f53866acd397f43b591fd4e631419" });
         return Promise.all([organizationProgramDetailsLoad, usersLoad, universityLoad]);
       })
       .catch((err) => { console.log(err); })
@@ -75,8 +75,8 @@ const actions = {
       .catch((err) => { console.log(err); })
   },
 
-  loadUniversity({ state, dispatch, commit }, { universityPermlink }) {
-    return researchGroupService.getResearchGroupByPermlink(universityPermlink)
+  loadUniversity({ state, dispatch, commit }, { universityExternalId }) {
+    return researchGroupService.getResearchGroup(universityExternalId)
       .then((university) => {
         commit('SET_UNIVERSITY', university);
       }, (err) => { console.log(err); });

@@ -60,7 +60,7 @@
             <v-list-item :to="{ name: 'CreateGrantProgram' }">
               Create Grant Program
             </v-list-item>
-            <v-list-item :to="{ name: 'GrantPrograms', params: { agency: 'nsf' } }">
+            <v-list-item :to="{ name: 'GrantPrograms', params: { agency: 'the-national-science-foundation' } }">
               Grant Programs
             </v-list-item>
             <v-divider />

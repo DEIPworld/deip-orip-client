@@ -64,7 +64,7 @@
             } if (v.length > this.MAX_FOA_NUMBER_LENGTH) {
               return `Award number length should be less/equal than ${this.MAX_FOA_NUMBER_LENGTH}`;
             }
-            return true;
+            return /^[0-9]*$/.test(v) || 'Numbers are only allowed';
           }
         }
       };

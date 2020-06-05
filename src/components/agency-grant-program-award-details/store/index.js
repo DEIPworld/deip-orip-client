@@ -95,7 +95,6 @@ const getters = {
       .map((sa) => blockchainService.fromAssetsToFloat(sa.total_amount) - blockchainService.fromAssetsToFloat(sa.total_expenses))
       .reduce((sum, amount) => sum + amount, 0);
 
-
     const universityOverheadAmount = awardee.isSubawardee ? 0 : blockchainService.fromAssetsToFloat(award.university_fee);
 
     const totalAmount = awardee.isSubawarde
