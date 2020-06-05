@@ -1,32 +1,30 @@
 <template>
-  <v-card flat height="100%">
-    <v-row justify="center" class="py-12 full-width">
-      <v-col cols="10">
-        <div>
-          <div class="title font-weight-medium pb-4">
-            Group name:
-          </div>
+  <div>
+    <v-form ref="form-data" class="mb-4">
+      <d-form-block title="Group name">
+        <v-col cols="12">
           <v-text-field
             v-model="newResearchGroupName"
             :rules="[rules.required]"
             label="Name"
-            solo
+            filled
           />
-        </div>
-        <div>
-          <div class="title font-weight-medium pb-4">
-            Group description:
-          </div>
+        </v-col>
+      </d-form-block>
+      <d-form-block title="Group description:">
+        <v-col cols="12">
           <v-textarea
             v-model="newResearchGroupDescription"
             :rules="[rules.required]"
             name="Description"
             label="Description"
-            solo
+            filled
             auto-grow
           />
-        </div>
-        <div class="py-2 pt-4 text-end">
+        </v-col>
+      </d-form-block>
+      <div class="text-right">
+        <slot name="buttons">
           <v-btn
             class="ma-0"
             large
@@ -37,120 +35,115 @@
           >
             Update Name and Description
           </v-btn>
-        </div>
-
-        <!-- <div v-if="group.is_dao">
-          <div class="title font-weight-medium pb-4">
-            Quorum threshold:
-          </div>
+        </slot>
+      </div>
+    </v-form>
+    <!-- <v-form v-if="group.is_dao" ref="form-quorum" class="mb-4">
+      <d-form-block title="Quorum threshold:">
+        <v-col cols="12">
           <div class="pt-4">
-            <div>
-              <div class="pt-4">
-                <div v-for="(proposalBlock, i) in proposalOrderMap" :key="`proposalBlock-${i}`">
+            <div v-for="(proposalBlock, i) in proposalOrderMap" :key="`proposalBlock-${i}`">
+              <div
+                v-for="proposalData in proposalBlock"
+                :key="proposalLabels[proposalData.key]"
+              >
+                <div class="display-flex">
                   <div
-                    v-for="proposalData in proposalBlock"
-                    :key="proposalLabels[proposalData.key]"
+                    class="grow font-weight-medium align-self-center"
                   >
-                    <div class="display-flex">
-                      <div
-                        class="grow font-weight-medium align-self-center"
-                      >
-                        {{ proposalLabels[proposalData.key] }}
-                      </div>
-                      <div class="shrink align-self-center">
-                        <v-text-field
-                          v-model="proposalData.value"
-                          class="percent-input"
-                          mask="###"
-                          suffix="%"
-                          hide-details
-                        />
-                      </div>
-                    </div>
+                    {{ proposalLabels[proposalData.key] }}
                   </div>
-                </div>
-
-                <div
-                  class="pt-2 caption line-height-1 text-align-right primary--text text--lighten-3"
-                >
-                  The proposal will be sent to group members and after it's approved the threshold will be changed
+                  <div class="shrink align-self-center">
+                    <v-text-field
+                      v-model="proposalData.value"
+                      class="percent-input"
+                      mask="###"
+                      suffix="%"
+                      hide-details
+                    />
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
-          <div class="py-2 pt-4 text-end">
-            <v-btn
-              class="ma-0"
-              large
-              :loading="isChangingQuorumLoading"
-              :disabled="isDisabledBtnQuorum || isChangingQuorumLoading"
-              color="primary"
-              @click=""
+
+            <div
+              class="pt-2 caption line-height-1 text-align-right primary--text text--lighten-3"
             >
-              Update Quorum
-            </v-btn>
-          </div>
-        </div> -->
-
-        <div>
-          <div v-if="isResearchGroupMember" class="py-6">
-            <div class="title font-weight-medium pb-6">
-              Update group logo:
+              The proposal will be sent to group members and after it's approved the threshold will be changed
             </div>
-            <v-row>
-              <v-col cols="3">
-                <img
-                  width="150px"
-                  height="150px"
-                  :src="$options.filters.researchGroupLogoSrc(group.external_id, 300, 300, true)"
-                >
-              </v-col>
-              <v-col cols="9">
-                <div v-if="logoDropzoneOptions">
-                  <vue-dropzone
-                    id="research-group-logo"
-                    ref="researchGroupLogo"
-                    :options="logoDropzoneOptions"
-                    @vdropzone-success="logoUploadSuccess"
-                    @vdropzone-error="logoUploadError"
-                  />
-                  <div class="text-right py-4">
-                    <v-btn
-                      :disabled="isUploadingLogo"
-                      :loading="isUploadingLogo"
-                      large
-                      class="ma-0"
-                      color="primary"
-                      @click="updateLogoImage()"
-                    >
-                      Update logo
-                    </v-btn>
-                  </div>
-                </div>
-              </v-col>
-            </v-row>
           </div>
-        </div>
-
-        <div class="pb-4">
+        </v-col>
+      </d-form-block>
+      <div class="text-right">
+        <slot name="buttons">
           <v-btn
             class="ma-0"
-            color="primary"
-            outlined
             large
-            @click="cancel()"
+            :loading="isChangingQuorumLoading"
+            :disabled="isDisabledBtnQuorum || isChangingQuorumLoading"
+            color="primary"
+            @click=""
           >
-            Back to group
+            Update Quorum
           </v-btn>
-        </div>
-      </v-col>
-    </v-row>
-  </v-card>
+        </slot>
+      </div>
+    </v-form> -->
+    <v-form v-if="isResearchGroupMember" ref="form-image">
+      <d-form-block title="Update group logo:">
+        <v-col cols="3">
+          <img
+            width="150px"
+            height="150px"
+            :src="$options.filters.researchGroupLogoSrc(group.external_id, 300, 300, true)"
+          >
+        </v-col>
+        <v-col cols="9">
+          <div v-if="logoDropzoneOptions">
+            <vue-dropzone
+              id="research-group-logo"
+              ref="researchGroupLogo"
+              :options="logoDropzoneOptions"
+              @vdropzone-success="logoUploadSuccess"
+              @vdropzone-error="logoUploadError"
+            />
+          </div>
+        </v-col>
+      </d-form-block>
+      <div class="text-right">
+        <slot name="buttons">
+          <v-btn
+            :disabled="isUploadingLogo"
+            :loading="isUploadingLogo"
+            large
+            class="ma-0"
+            color="primary"
+            @click="updateLogoImage()"
+          >
+            Update logo
+          </v-btn>
+        </slot>
+      </div>
+    </v-form>
+
+    <div>
+      <v-btn
+        class="ma-0"
+        color="primary"
+        outlined
+        large
+        @click="cancel()"
+      >
+        Back to group
+      </v-btn>
+    </div>
+  </div>
 </template>
 
 <script>
   import { mapGetters } from 'vuex';
   import vueDropzone from 'vue2-dropzone';
+  import DFormBlock from '@/components/Deipify/DFormBlock/DFormBlock';
 
   import { AccessService } from '@deip/access-service';
   import { ResearchGroupService } from '@deip/research-group-service';
@@ -164,7 +157,8 @@
     name: 'ResearchGroupSettingsBody',
 
     components: {
-      vueDropzone
+      vueDropzone,
+      DFormBlock
     },
     data() {
       return {
