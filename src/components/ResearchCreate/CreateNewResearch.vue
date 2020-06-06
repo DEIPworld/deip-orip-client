@@ -1,11 +1,11 @@
 <template>
-  <v-container class="fill-height pa-0" fluid>
+  <v-container class="fill-height pa-0 full-height" fluid>
     <v-stepper
       v-model="currentStep"
       alt-labels
-      class="display-flex flex-column w-100 fill-height stepper-page"
+      class="display-flex flex-column full-width fill-height full-height elevation-0"
     >
-      <v-stepper-header class="flex-grow-0">
+      <v-stepper-header>
         <v-stepper-step step="1" :complete="currentStep > 1">
           <div class="text-uppercase">
             Discipline
@@ -30,12 +30,6 @@
 
         <v-divider />
 
-        <!-- <v-stepper-step step="4" :complete="currentStep > 4">
-                      <div class="text-uppercase">Video</div>
-                  </v-stepper-step>
-
-        <v-divider></v-divider>-->
-
         <v-stepper-step step="4" :complete="currentStep > 4">
           <div class="text-uppercase">
             Roadmap
@@ -52,35 +46,37 @@
 
         <!-- <v-divider></v-divider>
 
-                  <v-stepper-step step="5">
-                      <div class="text-uppercase">Reward shares</div>
+        <v-stepper-step step="5">
+          <div class="text-uppercase">
+            Reward shares
+          </div>
         </v-stepper-step>-->
       </v-stepper-header>
 
-      <v-stepper-items class="flex-grow-1">
-        <v-stepper-content step="1">
-          <div class="fill-height">
+      <v-stepper-items class="full-height">
+        <v-stepper-content step="1" class="full-height">
+          <v-card>
             <create-research-pick-discipline
               :research="research"
               @incStep="incStep"
               @setDisciplines="setDisciplines"
             />
-          </div>
+          </v-card>
         </v-stepper-content>
 
         <v-stepper-content step="2">
-          <div class="fill-height">
+          <v-card>
             <create-research-pick-group
               :research="research"
               @incStep="incStep"
               @decStep="decStep"
               @setGroup="setGroup"
             />
-          </div>
+         </v-card>
         </v-stepper-content>
 
         <v-stepper-content step="3">
-          <div class="fill-height">
+          <v-card>
             <create-research-meta
               :research="research"
               :is-loading="isLoading"
@@ -90,33 +86,22 @@
               @incStep="incStep"
               @decStep="decStep"
             />
-          </div>
+          </v-card>
         </v-stepper-content>
 
-        <!-- <v-stepper-content step="4">
-                      <div class="fill-height">
-                          <create-research-video
-                              @setVideo="setVideo"
-                              @incStep="incStep" @decStep="decStep"
-                              :research="research"
-                              :isLoading="isLoading"
-                          ></create-research-video>
-                      </div>
-        </v-stepper-content>-->
-
         <v-stepper-content step="4">
-          <div class="fill-height">
+          <v-card>
             <create-research-roadmap
               :research="research"
               :is-loading="isLoading"
               @decStep="decStep"
               @incStep="incStep"
             />
-          </div>
+          </v-card>
         </v-stepper-content>
 
         <v-stepper-content step="5">
-          <div class="fill-height">
+          <v-card>
             <create-research-settings
               :research="research"
               :is-loading="isLoading"
@@ -124,18 +109,18 @@
               @decStep="decStep"
               @setPrivateFlag="setPrivateFlag"
             />
-          </div>
+          </v-card>
         </v-stepper-content>
 
         <!-- <v-stepper-content step="5">
-                      <div class="fill-height">
-                          <create-research-share
-                              @finish="finish" @decStep="decStep"
-                              @setReviewShare="setReviewShare"
-                              :research="research"
-                              :isLoading="isLoading"
-                          ></create-research-share>
-                      </div>
+          <v-card>
+            <create-research-share
+              @finish="finish" @decStep="decStep"
+              @setReviewShare="setReviewShare"
+              :research="research"
+              :isLoading="isLoading"
+            />
+          </v-card>
         </v-stepper-content>-->
       </v-stepper-items>
     </v-stepper>
@@ -307,23 +292,5 @@
 </script>
 
 <style lang="less">
-  .flex-column {
-    flex-direction: column;
-  }
 
-  .flex-grow-0 {
-    flex-grow: 0 !important;
-  }
-
-  .flex-grow-1 {
-    flex-grow: 1 !important;
-  }
-
-  .w-100 {
-    width: 100%;
-  }
-
-  .flex-basis-0 {
-    flex-basis: 0 !important;
-  }
 </style>

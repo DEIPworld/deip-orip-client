@@ -1,48 +1,43 @@
 <template>
-  <div class="display-flex flex-column full-height">
-    <div class="display-flex flex-column flex-grow-1 mb-4">
-      <div class="step-title">
+  <v-row no-gutters justify="center">
+    <v-col cols="6">
+
+      <div class="headline text-center mb-3">
         Specify due dates
       </div>
 
-      <div class="flex-grow-1 overflow-y-auto flex-basis-0">
-        <div class="mx-auto period-max-width pt-4">
-          <v-form ref="form" v-model="isFormValid" class="layout row wrap">
-            <div class="flex xs12">
-              <datetime-picker
-                ref="startDatePicker"
-                label="Open date"
-                :datetime="startDate"
-                :available-from-now="true"
-                :rules="[
-                  rules.required,
-                  rules.greaterThanNow,
-                  rules.startDateShouldBeSmaller
-                ]"
-                @input="setStartDate"
-              />
-            </div>
-
-            <div class="flex xs12">
-              <datetime-picker
-                label="Close date"
-                :datetime="endDate"
-                :available-from-now="true"
-                :rules="[
-                  rules.required,
-                  rules.greaterThanNow,
-                  rules.endDateShouldBeGreater
-                ]"
-                @input="setEndDate"
-              />
-            </div>
-          </v-form>
+      <v-form ref="form" v-model="isFormValid">
+        <div>
+          <datetime-picker
+            ref="startDatePicker"
+            label="Open date"
+            :datetime="startDate"
+            :available-from-now="true"
+            :rules="[
+              rules.required,
+              rules.greaterThanNow,
+              rules.startDateShouldBeSmaller
+            ]"
+            @input="setStartDate"
+          />
         </div>
-      </div>
-    </div>
 
-    <div class="flex-grow-0">
-      <div class="display-flex justify-center align-center">
+        <div>
+          <datetime-picker
+            label="Close date"
+            :datetime="endDate"
+            :available-from-now="true"
+            :rules="[
+              rules.required,
+              rules.greaterThanNow,
+              rules.endDateShouldBeGreater
+            ]"
+            @input="setEndDate"
+          />
+        </div>
+      </v-form>
+
+      <div class="text-center py-4">
         <v-btn text small @click.native="prevStep()">
           <v-icon dark class="pr-1">
             keyboard_arrow_left
@@ -57,8 +52,8 @@
           Next
         </v-btn>
       </div>
-    </div>
-  </div>
+    </v-col>
+  </v-row>
 </template>
 
 <script>

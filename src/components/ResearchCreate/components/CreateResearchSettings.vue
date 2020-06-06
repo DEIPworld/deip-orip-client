@@ -1,12 +1,14 @@
 <template>
-  <v-row class="full-width fill-height overflow-auto justify-center">
-    <v-col cols="12" sm="8" class="mb-4 px-12">
-      <div class="mb-6 step-title">
+  <v-row no-gutters justify="center">
+    <v-col cols="7">
+      <div class="headline text-center mb-3">
         Project settings
       </div>
-      <div class="font-weight-bold title text-align-left mb-6">
+
+      <div class="title text-align-left mb-3">
         Visibility
       </div>
+
       <div>
         <div class="display-inline-block" :class="{'grey--text':isPublic}">
           Private project
@@ -23,17 +25,16 @@
           Public project
         </div>
       </div>
-      <v-divider />
-    </v-col>
 
-    <v-col cols="12" sm="8" class="px-12">
+      <v-divider />
+
       <v-row
         v-for="(item, i) in tenant.profile.settings.researchComponents"
         :key="`${i}-stepper`"
         no-gutters
         class="my-6"
       >
-        <v-col v-if="item.isVisible" cols="12" md="8">
+        <v-col v-if="item.isVisible" cols="12">
           <div class="title font-weight-medium mb-6">
             {{ item.component.readinessLevelTitle }}
           </div>
@@ -44,19 +45,16 @@
           />
         </v-col>
       </v-row>
-    </v-col>
 
-    <v-col cols="12" sm="8" class="px-12">
-      <div class="my-6">
-        <div class="title font-weight-medium mb-6">
+      <div>
+        <div class="title mb-3">
           Partners
         </div>
         <research-partners :partners="research.partners" />
       </div>
-    </v-col>
 
-    <v-col cols="12" class="flex-grow-0 align-self-end">
-      <div class="display-flex justify-center align-center">
+    
+      <div class="py-4 text-center">
         <v-btn text small @click.native="prevStep()">
           <v-icon dark class="pr-1">
             keyboard_arrow_left

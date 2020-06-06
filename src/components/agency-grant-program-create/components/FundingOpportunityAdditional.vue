@@ -1,37 +1,34 @@
 <template>
-  <div class="display-flex flex-column full-height">
-    <div class="display-flex flex-column flex-grow-1 mb-4">
-      <div class="step-title">
+  <v-row no-gutters justify="center">
+    <v-col cols="6">
+
+      <div class="headline text-center mb-3">
         Provide additional information
       </div>
 
-      <div class="flex-grow-1 overflow-y-auto flex-basis-0">
-        <div class="mx-auto guidelines-max-width">
-          <v-textarea
-            v-model="foa.description"
-            label="Opportunity description"
-            filled
-            auto-grow
-            rows="2"
-          />
+      <div>
+        <v-textarea
+          v-model="foa.description"
+          label="Opportunity description"
+          filled
+          auto-grow
+          rows="4"
+        />
 
-          <v-text-field
-            v-model="foa.additionalInfoLink"
-            filled
-            label="Link to additional information"
-          />
+        <v-text-field
+          v-model="foa.additionalInfoLink"
+          filled
+          label="Link to additional information"
+        />
 
-          <v-text-field
-            v-model="foa.grantorEmail"
-            filled
-            label="Grantor contact e-mail address"
-          />
-        </div>
+        <v-text-field
+          v-model="foa.grantorEmail"
+          filled
+          label="Grantor contact e-mail address"
+        />
       </div>
-    </div>
 
-    <div class="flex-grow-0">
-      <div class="display-flex justify-center align-center">
+      <div class="text-center py-4">
         <v-btn text small @click.native="prevStep()">
           <v-icon dark class="pr-1">
             keyboard_arrow_left
@@ -47,8 +44,9 @@
           Finish
         </v-btn>
       </div>
-    </div>
-  </div>
+
+    </v-col>
+  </v-row>
 </template>
 
 <script>

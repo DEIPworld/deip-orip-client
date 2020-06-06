@@ -1,11 +1,12 @@
 <template>
-  <v-row justify="center">
+  <v-row no-gutters justify="center">
     <v-col cols="6">
+
       <div class="headline text-center mb-3">
         Select research group
       </div>
 
-      <v-card outlined class="mb-3">
+      <v-card outlined class="py-2">
         <v-list nav>
           <v-list-item
             v-for="(group, i) in groups"
@@ -36,15 +37,13 @@
         </v-list>
       </v-card>
 
-
-      <div class="text-center">
+      <div class="text-center py-4">
         <v-btn text @click.native="prevStep()">
           <v-icon dark class="pr-1">
             keyboard_arrow_left
           </v-icon>
           Back
         </v-btn>
-
         <v-btn color="primary" :disabled="nextDisabled" @click.native="nextStep()">
           Next
         </v-btn>

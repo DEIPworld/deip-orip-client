@@ -1,46 +1,44 @@
 <template>
-  <div class="display-flex flex-column full-height">
-    <div class="display-flex flex-column flex-grow-1 mb-4">
-      <div class="step-title">
+  <v-row no-gutters justify="center">
+    <v-col cols="6">
+
+      <div class="text-center headline mb-3">
         Add title and number
       </div>
 
-      <div class="flex-grow-1 overflow-y-auto flex-basis-0">
-        <div class="mx-auto meta-max-width">
-          <v-text-field
-            v-model="foa.title"
-            filled
-            label="Opportunity title"
-            :rules="[rules.required]"
-          />
+      <div>
+        <v-text-field
+          v-model="foa.title"
+          filled
+          label="Opportunity title"
+          :rules="[rules.required]"
+        />
 
-          <v-text-field
-            v-model="foa.number"
-            label="Opportunity number"
-            filled
-            validate-on-blur
-            :rules="[rules.required, rules.foaNumber]"
-          />
+        <v-text-field
+          v-model="foa.number"
+          label="Opportunity number"
+          filled
+          validate-on-blur
+          :rules="[rules.required, rules.foaNumber]"
+        />
 
-          <v-text-field
-            v-if="organization"
-            v-model="organization.name"
-            filled
-            label="Organization name"
-            disabled
-          />
-        </div>
+        <v-text-field
+          v-if="organization"
+          v-model="organization.name"
+          filled
+          label="Organization name"
+          disabled
+        />
       </div>
-    </div>
 
-    <div class="flex-grow-0">
-      <div class="display-flex justify-center align-center">
+      <div class="text-center py-4">
         <v-btn color="primary" :disabled="isNextDisabled()" @click.native="nextStep()">
           Next
         </v-btn>
       </div>
-    </div>
-  </div>
+
+    </v-col>
+  </v-row>
 </template>
 
 <script>

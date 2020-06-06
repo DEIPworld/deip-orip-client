@@ -15,7 +15,7 @@
           <v-toolbar-title>Request a Payment</v-toolbar-title>
           <v-spacer />
         </v-toolbar>
-        <v-card-text class="c-pt-5 c-pr-10 c-pl-10">
+        <v-card-text class="pa-5">
           <!--  <v-select
             filled
             ref="paymentAward"
@@ -231,7 +231,6 @@
     watch: {
       'meta.isOpen': function (newVal, oldVal) {
         if (newVal) {
-          debugger
           if (this.$refs.paymentNumber) {
             this.$refs.paymentNumber.reset();
           }

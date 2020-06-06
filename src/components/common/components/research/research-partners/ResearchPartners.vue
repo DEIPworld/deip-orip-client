@@ -4,11 +4,10 @@
       <v-row
         v-for="(item, i) in partners"
         :key="`${item.type}${i}`"
-
         no-gutters
-        class="justify-space-between mx-0"
+        class="mx-0"
       >
-        <v-col cols="4">
+        <v-col cols="4" class="pr-2">
           <v-select
             :value="item.type"
             item-value="type"
@@ -33,7 +32,7 @@
             </template>
           </v-select>
         </v-col>
-        <v-col cols="6" offset="1">
+        <v-col cols="7" class="pr-2">
           <v-text-field
             v-model="item.title"
             :rules="[rules.required]"
@@ -42,7 +41,7 @@
             filled
           />
         </v-col>
-        <v-col cols="1" class="text-align-right">
+        <v-col cols="1" class="text-right">
           <v-btn
             fab
             outlined
@@ -61,18 +60,20 @@
         Add partners
       </div>
     </div>
-    <div class="text-align-right">
-      <v-btn
-        outlined
-        icon
-        fab
-        color="primary"
-        class="ma-0"
-        @click="addPartner"
-      >
-        <v-icon>add</v-icon>
-      </v-btn>
-    </div>
+    <v-row no-gutters justify="end">
+      <v-col cols="1" class="text-right">
+        <v-btn
+          outlined
+          icon
+          fab
+          color="primary"
+          class="ma-0"
+          @click="addPartner"
+        >
+          <v-icon>add</v-icon>
+        </v-btn>
+      </v-col>
+    </v-row>
   </div>
   <div v-else>
     <div v-for="(item, i) in partnersСollectedData" :key="`${item.typeInfo.type}${i}`" class="mb-2">

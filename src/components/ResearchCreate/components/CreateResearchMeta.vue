@@ -1,55 +1,45 @@
 <template>
-  <div class="display-flex flex-column fill-height">
-    <div class="display-flex flex-column flex-grow-1 mb-4">
-      <div class="text-center headline">
+  <v-row no-gutters justify="center">
+    <v-col cols="6">
+
+      <div class="headline text-center mb-3">
         Add title and description
       </div>
 
-      <div class="flex-grow-1 overflow-y-auto flex-basis-0">
-        <div class="mx-auto pt-4" style="max-width: 1000px;">
-          <v-row no-gutters>
-            <v-col cols="6" offset="3">
-              <v-textarea
-                v-model="title"
-                name="title"
-                label="Title"
-                filled
-                @keyup="setTitle"
-              />
-            </v-col>
-          </v-row>
+      <div>
+        <div>
+          <v-text-field
+            v-model="title"
+            name="title"
+            label="Title"
+            filled
+            @keyup="setTitle"
+          />
+        </div>
 
-          <v-row no-gutters>
-            <v-col cols="6" offset="3">
-              <v-textarea
-                v-model="description"
-                name="Description"
-                label="Description"
-                placeholder="What problem it solves, how it helps to others, why it is special ?"
-                filled
-                @keyup="setDescription"
-              />
-            </v-col>
-          </v-row>
+        <div>
+          <v-textarea
+            v-model="description"
+            name="Description"
+            label="Description"
+            filled
+            @keyup="setDescription"
+          />
+        </div>
 
-          <v-row no-gutters>
-            <v-col cols="6" offset="3">
-              <v-text-field
-                v-model="videoSrc"
-                prepend-inner-icon="link"
-                label="Link to a video presentation"
-                filled
-                :rules="[rules.link]"
-                @keyup="setVideo"
-              />
-            </v-col>
-          </v-row>
+        <div>
+          <v-text-field
+            v-model="videoSrc"
+            prepend-inner-icon="link"
+            label="Link to a video presentation"
+            filled
+            :rules="[rules.link]"
+            @keyup="setVideo"
+          />
         </div>
       </div>
-    </div>
 
-    <div class="flex-grow-0">
-      <div class="display-flex justify-center align-center">
+      <div class="text-center py-4">
         <v-btn text @click.native="prevStep()">
           <v-icon dark class="pr-1">
             keyboard_arrow_left
@@ -66,8 +56,8 @@
           Next
         </v-btn>
       </div>
-    </div>
-  </div>
+    </v-col>
+  </v-row>
 </template>
 
 <script>
