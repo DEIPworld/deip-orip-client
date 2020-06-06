@@ -4,7 +4,8 @@
       <v-col cols="5">
         <div class="text-center">
           <div v-if="tenant">
-            <img width="200px" height="200px" :src="tenant.account | tenantSymbolSrc(160, 160, false)">
+            <span class="headline">{{tenant.account.name}}</span>
+            <!-- <img width="100px" height="100px" :src="tenant.account | tenantLogoSrc(160, 160, false)"> -->
           </div>
           <!-- <div class="title c-pb-4 bold">Welcome to</div>
           <div class="deip-emblem">
