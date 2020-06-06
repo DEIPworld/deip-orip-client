@@ -1,14 +1,14 @@
 <template>
-  <v-container fluid class="pa-0 fill-height">
-    <v-stepper
+   <v-container class="fill-height pa-0 full-height" fluid>
+   <v-stepper
       v-if="!isFinished && organization"
       v-model="currentStep"
       alt-labels
-      class="display-flex flex-column stepper-page full-width full-height"
+      class="display-flex flex-column full-width fill-height full-height elevation-0"
     >
-      <v-stepper-header>
+      <v-stepper-header class="flex-grow-0">
         <v-stepper-step step="1" :complete="currentStep > 1">
-          <div class="uppercase">
+          <div class="text-uppercase white-space-nowrap">
             Title
           </div>
         </v-stepper-step>
@@ -16,7 +16,7 @@
         <v-divider />
 
         <v-stepper-step step="2" :complete="currentStep > 2">
-          <div class="uppercase">
+          <div class="text-uppercase white-space-nowrap">
             Discipline
           </div>
         </v-stepper-step>
@@ -24,7 +24,7 @@
         <v-divider />
 
         <v-stepper-step step="3" :complete="currentStep > 3">
-          <div class="uppercase white-space-nowrap">
+          <div class="text-uppercase white-space-nowrap">
             Due dates
           </div>
         </v-stepper-step>
@@ -32,7 +32,7 @@
         <v-divider />
 
         <v-stepper-step step="4" :complete="currentStep > 4">
-          <div class="uppercase text-center">
+          <div class="text-uppercase white-space-nowrap">
             Funding amount
           </div>
         </v-stepper-step>
@@ -40,7 +40,7 @@
         <v-divider />
 
         <v-stepper-step step="5" :complete="currentStep > 5">
-          <div class="uppercase">
+          <div class="text-uppercase white-space-nowrap">
             Eligibility
           </div>
         </v-stepper-step>
@@ -48,7 +48,7 @@
         <v-divider />
 
         <v-stepper-step step="6" :complete="currentStep > 6">
-          <div class="uppercase white-space-nowrap">
+          <div class="text-uppercase white-space-nowrap">
             Program officers
           </div>
         </v-stepper-step>
@@ -56,7 +56,7 @@
         <v-divider />
 
         <v-stepper-step step="7" :complete="currentStep > 7">
-          <div class="uppercase white-space-nowrap">
+          <div class="text-uppercase white-space-nowrap">
             Reviewers
           </div>
         </v-stepper-step>
@@ -64,99 +64,99 @@
         <v-divider />
 
         <v-stepper-step step="8" :complete="currentStep > 8">
-          <div class="uppercase white-space-nowrap">
+          <div class="text-uppercase white-space-nowrap">
             Additional
           </div>
         </v-stepper-step>
       </v-stepper-header>
 
-      <v-stepper-items class="flex-grow-1">
+      <v-stepper-items>
         <v-stepper-content step="1">
-          <div class="full-height">
+          <v-card>
             <funding-opportunity-title
               :foa="foa"
               :organization="organization"
               @incStep="incStep"
             />
-          </div>
+          </v-card>
         </v-stepper-content>
 
         <v-stepper-content step="2">
-          <div class="full-height">
+          <v-card>
             <funding-opportunity-discipline
               :foa="foa"
               @incStep="incStep"
               @decStep="decStep"
             />
-          </div>
+          </v-card>
         </v-stepper-content>
 
         <v-stepper-content step="3">
-          <div class="full-height">
+          <v-card>
             <funding-opportunity-period
               :foa="foa"
               @incStep="incStep"
               @decStep="decStep"
             />
-          </div>
+          </v-card>
         </v-stepper-content>
 
         <v-stepper-content step="4">
-          <div class="full-height">
+          <v-card>
             <funding-opportunity-awards
               :foa="foa"
               @incStep="incStep"
               @decStep="decStep"
             />
-          </div>
+          </v-card>
         </v-stepper-content>
 
         <v-stepper-content step="5">
-          <div class="full-height">
+          <v-card>
             <funding-opportunity-guidelines
               :foa="foa"
               @incStep="incStep"
               @decStep="decStep"
             />
-          </div>
+          </v-card>
         </v-stepper-content>
 
         <v-stepper-content step="6">
-          <div class="full-height">
+          <v-card>
             <funding-opportunity-program-officers
               :foa="foa"
               :members="organization.members"
               @incStep="incStep"
               @decStep="decStep"
             />
-          </div>
+          </v-card>
         </v-stepper-content>
 
         <v-stepper-content step="7">
-          <div class="full-height">
+          <v-card>
             <funding-opportunity-review-committee
               :foa="foa"
               @incStep="incStep"
               @decStep="decStep"
             />
-          </div>
+          </v-card>
         </v-stepper-content>
 
         <v-stepper-content step="8">
-          <div class="full-height">
+          <v-card>
             <funding-opportunity-additional
               :is-sending="isSending"
               :foa="foa"
               @finish="finish"
               @decStep="decStep"
             />
-          </div>
+          </v-card>
         </v-stepper-content>
       </v-stepper-items>
     </v-stepper>
 
-    <div v-if="isFinished" class="display-flex full-width full-height">
-      <div class="ma-auto text-align-center">
+    <v-row v-if="isFinished" justify="center" align="center" class="fill-height">
+      <v-col class="fill-height text-center py-5">
         <div class="display-1">
           New Funding Opportunity has been created <br> successfully
         </div>
@@ -170,13 +170,13 @@
           {{ foa.title }}
         </div>
 
-        <div class="mt-12">
+        <div class="py-4">
           <v-btn color="primary" class="ma-0" :to="{name: 'Default'}">
             OK
           </v-btn>
         </div>
-      </div>
-    </div>
+      </v-col>
+    </v-row>
   </v-container>
 </template>
 
@@ -233,31 +233,6 @@
       };
     },
 
-    created() {
-      const grantingAgencyOrg = 'nsf';
-      const treasuryOrg = 'us-treasury';
-
-      deipRpc.api.getResearchGroupByPermlinkAsync(grantingAgencyOrg)
-        .then((organization) => {
-          const members = [];
-
-          deipRpc.api.getResearchGroupTokensByResearchGroupAsync(organization.id)
-            .then((rgtList) => usersService.getEnrichedProfiles(rgtList.map(({ owner }) => owner)))
-            .then((members) => {
-              this.organization = {
-                ...organization,
-                members
-              };
-              this.foa.officers.push(this.organization.members.find(({ account: { name } }) => name == this.user.account.name).account.name);
-            });
-        });
-
-      deipRpc.api.getResearchGroupByPermlinkAsync(treasuryOrg)
-        .then((organization) => {
-          this.treasury = organization;
-        });
-    },
-
     methods: {
       incStep() {
         if (this.currentStep < 8) {
@@ -276,13 +251,11 @@
         this.isSending = true;
 
         const distributionModel = [
-          'funding_opportunity_announcement_contract_v1_0_0',
+          'funding_opportunity_announcement_contract',
           {
-            version: '1.0.0',
-            organization_id: this.organization.id,
-            review_committee_id: this.foa.reveiwCommittee.id,
-            treasury_id: this.treasury.id,
-            funding_opportunity_number: this.foa.number,
+            organization_id: this.organization.external_id,
+            review_committee_id: this.foa.reveiwCommittee.external_id,
+            treasury_id: this.treasury.external_id,
             award_ceiling: this.toAssetUnits(this.foa.awardCeiling, GRANT_TOKEN_PRECISION, GRANT_TOKEN_SYMBOL),
             award_floor: this.toAssetUnits(this.foa.awardFloor, GRANT_TOKEN_PRECISION, GRANT_TOKEN_SYMBOL),
             expected_number_of_awards: this.foa.numberOfAwards,
@@ -303,6 +276,7 @@
         grantsService.createGrantContract(
           this.user.privKey,
           {
+            foaNumber: this.foa.number.toLowerCase(),
             grantor: this.user.username,
             amount: this.toAssetUnits(this.foa.totalProgramFunding, GRANT_TOKEN_PRECISION, GRANT_TOKEN_SYMBOL),
             targetDisciplines: this.foa.disciplines.map(({ id }) => id),
@@ -315,14 +289,39 @@
             this.$notifier.showSuccess('Funding Opportunity has been created successfully!');
           })
           .catch((err) => {
-            this.$notifier.showSuccess('An error occurred while creating Funding Opportunity, please try again later');
+            this.$notifier.showError('An error occurred while creating Funding Opportunity, please try again later');
             console.log(err);
           })
           .finally(() => {
             this.isSending = false;
           });
       }
-    }
+    },
+
+    created() {
+      const grantingAgencyOrg = '58e3bfd753fcb860a66b82635e43524b285ab708';
+      const treasuryOrg = '1169d704f8a908016033efe8cce6df93f618a265';
+
+      deipRpc.api.getResearchGroupAsync(grantingAgencyOrg)
+        .then((organization) => {
+          const members = [];
+
+          deipRpc.api.getResearchGroupTokensByResearchGroupAsync(organization.id)
+            .then((rgtList) => usersService.getEnrichedProfiles(rgtList.map(({ owner }) => owner)))
+            .then((members) => {
+              this.organization = {
+                ...organization,
+                members
+              };
+              this.foa.officers.push(this.organization.members.find(({ account: { name } }) => name == this.user.account.name).account.name);
+            });
+        });
+
+      deipRpc.api.getResearchGroupAsync(treasuryOrg)
+        .then((organization) => {
+          this.treasury = organization;
+        });
+    },
   };
 </script>
 

@@ -24,7 +24,7 @@
         <v-col cols="12">
           <d-input-password
             v-model="formData.password"
-            label="Username"
+            label="Password/Private Key"
             :disable="disable"
             :x-props="{
               rules: [validation.required],

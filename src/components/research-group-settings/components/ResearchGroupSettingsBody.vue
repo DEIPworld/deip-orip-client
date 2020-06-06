@@ -350,14 +350,13 @@
           researchGroup: this.group.external_id,
           accountOwnerAuth: undefined,
           accountActiveAuth: undefined,
-          accountPostingAuth: undefined,
+          accountActiveAuthOverrides: [],
           accountMemoPubKey: undefined,
           accountJsonMetadata: undefined,
           accountExtensions: []
         }, {
           researchGroupName: this.newResearchGroupName,
-          researchGroupDescription: this.newResearchGroupDescription,
-          researchGroupThresholdOverrides: []
+          researchGroupDescription: this.newResearchGroupDescription
         })
           .then(() => {
             this.$notifier.showSuccess('Proposal has been sent successfully!')

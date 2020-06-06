@@ -193,7 +193,8 @@
         deipRpc.broadcast.approveGrantApplicationAsync(
           this.user.privKey,
           this.application.id,
-          this.user.username
+          this.user.username,
+          []
         )
           .then(() => {
             this.$notifier.showSuccess('Application has been approved successfully')
@@ -212,7 +213,8 @@
         deipRpc.broadcast.rejectGrantApplicationAsync(
           this.user.privKey,
           this.application.id,
-          this.user.username
+          this.user.username,
+          []
         )
           .then(() => {
             this.$notifier.showSuccess('Application has been rejected successfully')

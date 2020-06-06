@@ -347,7 +347,8 @@
         researchService.contributeToResearchTokenSaleViaOffchain(this.user.privKey, {
           researchExternalId: this.research.external_id,
           contributor: this.user.username,
-          amount: this.toAssetUnits(this.amountToContribute)
+          amount: this.toAssetUnits(this.amountToContribute),
+          extensions: []
         })
           .then((data) => {
             this.$store.dispatch('rd/loadResearchTokenSale', {

@@ -1,18 +1,20 @@
 <template>
-  <div class="display-flex flex-column full-width fill-height overflow-auto align-center">
-    <div style="width: 70%" class="display-flex flex-column flex-grow-1 mb-4 align-center">
-      <div class="headline text-center">
+  <v-row no-gutters justify="center">
+    <v-col cols="7">
+      <div class="headline text-center mb-3">
         Roadmap
       </div>
-      <div class="subtitle-1 pb-12 pt-2 text-center">
+
+      <div class="subtitle-1 text-center">
         Let’s create a roadmap for your research. Well-presented and
         detailed roadmap attracts more investors to help you to get the funding
       </div>
-      <milestone-stepper style="width: 100%" :is-read-only="false" :steps="research.milestones" />
-    </div>
 
-    <div class="flex-grow-0">
-      <div class="display-flex justify-center align-center">
+      <div class="pt-4">
+        <milestone-stepper style="width: 100%" :is-read-only="false" :steps="research.milestones" />
+      </div>
+
+      <div class="text-center py-4">
         <v-btn text @click.native="prevStep()">
           <v-icon dark class="pr-1">
             keyboard_arrow_left
@@ -28,8 +30,8 @@
           Next step
         </v-btn>
       </div>
-    </div>
-  </div>
+    </v-col>
+  </v-row>
 </template>
 
 <script>

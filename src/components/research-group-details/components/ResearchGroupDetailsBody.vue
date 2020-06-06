@@ -29,7 +29,7 @@
     </div>
 
     <!-- ### START Research Group Proposals Section ### -->
-    <div v-if="isResearchGroupMember && group.is_dao" class="mt-12">
+    <div v-if="isResearchGroupMember && group.is_dao" id="proposals" class="mt-12">
       <transition v-if="highlightProposalsSection" name="fade">
         <div v-if="proposalsSectionTransitionTrigger" class="pt-2 pb-6">
           <research-group-details-proposals :key="'group-proposals'" />

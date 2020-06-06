@@ -1,43 +1,39 @@
 <template>
-  <div class="display-flex flex-column full-height">
-    <div class="display-flex flex-column flex-grow-1 mb-4">
-      <div class="step-title">
+  <v-row no-gutters justify="center">
+    <v-col cols="6">
+      <div class="headline text-center mb-3">
         Select Review Committee
       </div>
-      <div class="flex-grow-1 overflow-y-auto flex-basis-0">
-        <div class="mx-auto review-comitee-max-width">
-          <v-card class="px-12 py-6 elevation-0">
-            <v-autocomplete
-              v-model="foa.reveiwCommittee"
-              :items="allGroupList"
-              :filter="committeesFilter"
-              filled
-              item-text="name"
-              label="Reveiw committee"
-              return-object
-            />
 
-            <div v-if="foa.reveiwCommittee">
-              <div
-                v-for="(member, i) in foa.reveiwCommittee.enrichedMembers"
-                :key="`${i}-member`"
-                class="mt-2"
-              >
-                <platform-avatar
-                  :user="member"
-                  :size="40"
-                  :link-to-profile="false"
-                >
-                  <span class="pl-2">{{ member | fullname }}</span>
-                </platform-avatar>
-              </div>
-            </div>
-          </v-card>
+      <v-card class="py-4 elevation-0">
+        <v-autocomplete
+          v-model="foa.reveiwCommittee"
+          :items="allGroupList"
+          :filter="committeesFilter"
+          filled
+          item-text="name"
+          label="Reveiw committee"
+          return-object
+        />
+
+        <div v-if="foa.reveiwCommittee">
+          <div
+            v-for="(member, i) in foa.reveiwCommittee.enrichedMembers"
+            :key="`${i}-member`"
+            class="mt-2"
+          >
+            <platform-avatar
+              :user="member"
+              :size="40"
+              :link-to-profile="false"
+            >
+              <span class="pl-2">{{ member | fullname }}</span>
+            </platform-avatar>
+          </div>
         </div>
-      </div>
-    </div>
-    <div class="flex-grow-0">
-      <div class="display-flex justify-center align-center">
+      </v-card>
+
+      <div class="text-center py-4">
         <v-btn text small @click.native="prevStep()">
           <v-icon dark class="pr-1">
             keyboard_arrow_left
@@ -48,8 +44,9 @@
           Next
         </v-btn>
       </div>
-    </div>
-  </div>
+      
+    </v-col>
+  </v-row>
 </template>
 
 <script>
@@ -77,7 +74,7 @@
       })
     },
     created() {
-      this.getReviewCommittes([23]);
+      this.getReviewCommittes(["c8657fa6cbaee3917ac4e2ed6ada9d0a55a15ac5"]);
     },
     methods: {
       nextStep() {
@@ -101,8 +98,8 @@
       isNextDisabled() {
         return this.foa.reveiwCommittee == null;
       },
-      getReviewCommittes(idsArray) {
-        Promise.all(idsArray.map((id) => deipRpc.api.getResearchGroupByIdAsync(id)))
+      getReviewCommittes(ids) {
+        deipRpc.api.getResearchGroupsAsync(ids)
           .then((researchGroups) => {
             this.allGroupList = researchGroups;
             Promise.all(researchGroups.map(({ id }) => deipRpc.api.getResearchGroupTokensByResearchGroupAsync(id)))

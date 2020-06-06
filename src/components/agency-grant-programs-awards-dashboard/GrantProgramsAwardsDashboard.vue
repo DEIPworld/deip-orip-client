@@ -318,18 +318,17 @@
               :no-data-text="`No payments found`"
               hide-default-footer
             >
-              <template v-slot:item="{item}">
+              <template v-slot:item="{item, isSelected, select}">
                 <tr>
                   <td v-if="isUniversityCertifier || isGrantProgramOfficer || isTreasuryCertifier">
-                    <v-checkbox
-                      v-if="
-                        (item.status == AWARD_WITHDRAWAL_REQUEST_STATUS.PENDING && isUniversityCertifier) ||
-                          (item.status == AWARD_WITHDRAWAL_REQUEST_STATUS.CERTIFIED && isGrantProgramOfficer) ||
-                          (item.status == AWARD_WITHDRAWAL_REQUEST_STATUS.APPROVED && isTreasuryCertifier)"
-                      v-model="selected"
+                    <v-simple-checkbox 
+                      v-if="(item.status == AWARD_WITHDRAWAL_REQUEST_STATUS.PENDING && isUniversityCertifier) ||
+                            (item.status == AWARD_WITHDRAWAL_REQUEST_STATUS.CERTIFIED && isGrantProgramOfficer) ||
+                            (item.status == AWARD_WITHDRAWAL_REQUEST_STATUS.APPROVED && isTreasuryCertifier)"
                       primary
-                      hide-details
-                    />
+                      :value="isSelected" 
+                      @input="select($event)">
+                    </v-simple-checkbox>
                   </td>
                   <td>
                     <router-link class="a body-2" :to="{ name: 'GrantProgramAwardWithdrawalDetails', params: { award_number: item.awardee.award_number, subaward_number: item.awardee.subaward_number, payment_number: item.paymentNumber }}">
@@ -400,6 +399,7 @@
   import { AWARD_STATUS, AWARD_WITHDRAWAL_REQUEST_STATUS } from '@/variables';
   import { GrantsService } from '@deip/grants-service';
   import LayoutHeader from '@/components/layout/components/LayoutHeader';
+  import { Ripple } from 'vuetify/lib/directives';
 
   const grantsService = GrantsService.getInstance();
 
@@ -419,6 +419,9 @@
   export default {
     name: 'GrantProgramAwardsDashboard',
     components: { LayoutHeader },
+    directives: {
+      Ripple
+    },
     data() {
       return {
         tab: 0,
@@ -764,7 +767,8 @@
             paymentNumber: p.paymentNumber,
             awardNumber: p.awardNumber,
             subawardNumber: p.subawardNumber,
-            certifier: this.user.username
+            certifier: this.user.username,
+            extensions: []
           })
         );
 
@@ -800,7 +804,8 @@
             paymentNumber: p.paymentNumber,
             awardNumber: p.awardNumber,
             subawardNumber: p.subawardNumber,
-            approver: this.user.username
+            approver: this.user.username,
+            extensions: []
           })
         );
 
@@ -836,7 +841,8 @@
             paymentNumber: p.paymentNumber,
             awardNumber: p.awardNumber,
             subawardNumber: p.subawardNumber,
-            rejector: this.user.username
+            rejector: this.user.username,
+            extensions: []
           })
         );
 
@@ -872,7 +878,8 @@
             paymentNumber: p.paymentNumber,
             awardNumber: p.awardNumber,
             subawardNumber: p.subawardNumber,
-            payer: this.user.username
+            payer: this.user.username,
+            extensions: []
           })
         );
 

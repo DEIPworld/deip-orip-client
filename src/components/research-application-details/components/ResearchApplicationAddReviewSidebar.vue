@@ -88,12 +88,13 @@
         const applicationReviewEditor = this.$store.getters['rad/applicationReviewEditor'];
         this.isLoading = true;
         applicationReviewEditor.save()
-          .then((html) => deipRpc.broadcast.makeReviewForApplicationAsync(
+          .then((html) => deipRpc.broadcast.createReviewForApplicationAsync(
             this.user.privKey,
             this.user.username,
             this.application.id,
             this.isPositive,
-            html
+            html, 
+            []
           ))
           .then((data) => {
             this.$notifier.showSuccess('Your review has been published successfully !')

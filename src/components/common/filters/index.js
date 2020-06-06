@@ -57,11 +57,9 @@ Vue.filter('researchBackgroundSrc', (researchExternalId, width = 1440, height = 
 
 Vue.filter('researchGroupLogoSrc', (researchGroupExternalId, width = 360, height = 80, isRound = false, noCache = true, ext = 'png') => `${window.env.DEIP_SERVER_URL}/api/groups/logo/${researchGroupExternalId}?authorization=${accessService.getAccessToken()}&width=${width}&height=${height}&round=${isRound}&noCache=${noCache}&ext=${ext}`);
 
-Vue.filter('tenantLogoSrc', (tenant, width = 120, height = 40, isRound = false, noCache = true) => `${window.env.DEIP_SERVER_URL}/tenant/logo/${tenant.external_id}?width=${width}&height=${height}&noCache=${noCache}`);
-
-Vue.filter('tenantSymbolSrc', (tenant, width, height, noCache, ext = 'png') =>
-// return `${window.env.DEIP_SERVER_URL}/public/tenants/symbol/${tenant._id}?width=${width}&height=${height}&noCache=${noCache}&ext=${ext}`
-  (tenant ? `/assets/img/tenants/${tenant.permlink}/symbol.png` : '/assets/img/logo.svg'));
+Vue.filter('tenantLogoSrc', (tenant, width = 120, height = 40, isRound = false, noCache = true) => {
+  return `${window.env.DEIP_SERVER_URL}/tenant/logo/${tenant.external_id}?width=${width}&height=${height}&noCache=${noCache}`;
+})
 
 Vue.filter('tenantBackgroundSrc', (tenant, width = 1440, height = 430, isRound = false, noCache = true) => `${window.env.DEIP_SERVER_URL}/tenant/banner/${tenant.external_id}?width=${width}&height=${height}&noCache=${noCache}`);
 

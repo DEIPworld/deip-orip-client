@@ -45,15 +45,13 @@
           weight_threshold: 1
         };
 
-        researchGroupService
-          .createResearchGroupViaOffchain(
+        researchGroupService.createResearchGroupViaOffchain(
             this.user.privKey,
             {
               fee: this.toAssetUnits(100),
               creator,
               accountOwnerAuth: auth,
               accountActiveAuth: auth,
-              accountPostingAuth: auth,
               accountMemoPubKey: memo,
               accountJsonMetadata: undefined,
               accountExtensions: []
@@ -88,7 +86,8 @@
 
             return Promise.all([
               Promise.all(invitesPromises),
-              deipRpc.api.getResearchGroupAsync(res.rm._id)
+              deipRpc.api.getResearchGroupAsync(res.rm._id),
+              this.$store.dispatch('auth/loadGroups')
             ]);
           })
           .then(([invites, researchGroup]) => {
@@ -103,7 +102,7 @@
               });
             } else {
               if (this.backRouterToken.name === 'CreateResearch') {
-                this.backRouterToken.query.groupPermlink = researchGroup.permlink;
+                this.backRouterToken.query.externalId = researchGroup.external_id;
               }
               this.$router.push(this.backRouterToken);
             }

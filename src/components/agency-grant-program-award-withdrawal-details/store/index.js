@@ -152,7 +152,7 @@ const actions = {
   loadWithdrawalDetails({ commit, dispatch, state }, {
     awardNumber, subawardNumber, paymentNumber, notify
   }) {
-    return grantsService.getAwardWithdrawalRequestWithOffchain(awardNumber, paymentNumber)
+    return grantsService.getAwardWithdrawalRequest(awardNumber, paymentNumber)
       .then((withdrawal) => {
         commit('SET_AWARD_WITHDRAWAL', withdrawal);
         return grantsService.getAwardByNumber(awardNumber);

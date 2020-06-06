@@ -45,7 +45,7 @@
             Research Areas
           </div>
           <v-expansion-panels flat class="elevation-0" :value="selectedAreas">
-            <v-expansion-panel v-for="(area,i) in organizationProfile.researchAreas" :key="i">
+            <v-expansion-panel v-for="(area,i) in organizationProfile.researchGroupRef.researchAreas" :key="i">
               <v-expansion-panel-header>
                 <b>{{ area.title }}</b>
               </v-expansion-panel-header>
@@ -72,48 +72,52 @@
       </v-col>
       <v-col cols="9">
         <v-card class="py-4 full-height elevation-0">
-          <v-row no-gutters class="px-2">
-            <v-col class="grow">
-              <div class="display-flex justify-space-around align-center">
-                <div class="sort-option">
-                  <span class="body-1 grey--text">SORT BY</span>
-                </div>
-                <div class="sort-option" @click="setSortCriteria('postedDate')">
-                  <span class="body-2">New</span>
-                  <v-icon class="sort-icon">
-                    {{ getSortIcon('postedDate') }}
-                  </v-icon>
-                </div>
-                <div class="sort-option" @click="setSortCriteria('closingDate')">
-                  <span class="body-2">End Date</span>
-                  <v-icon class="sort-icon">
-                    {{ getSortIcon('closingDate') }}
-                  </v-icon>
-                </div>
-                <div class="sort-option" @click="setSortCriteria('title')">
-                  <span class="body-2">A-Z Title</span>
-                  <v-icon class="sort-icon">
-                    {{ getSortIcon('title') }}
-                  </v-icon>
-                </div>
-                <div class="sort-option" @click="setSortCriteria('award')">
-                  <span class="body-2">Award</span>
-                  <v-icon class="sort-icon">
-                    {{ getSortIcon('award') }}
-                  </v-icon>
-                </div>
-              </div>
-            </v-col>
-            <v-col class="shrink">
-              <div style="min-width: 300px;" class="px-4">
-                <v-text-field
-                  v-model="filter.searchTerm"
-                  append-icon="search"
-                  filled
-                  class="pa-0 ma-0"
-                  name="search-term"
-                />
-              </div>
+          <v-row class="px-2">
+            <v-col cols="12">
+              <v-row>
+                <v-col cols="8">
+                  <div class="display-flex justify-space-between">
+                    <div class="sort-option">
+                      <span class="body-1 grey--text">SORT BY</span>
+                    </div>
+                    <div class="sort-option" @click="setSortCriteria('postedDate')">
+                      <span class="body-2">New</span>
+                      <v-icon class="sort-icon">
+                        {{ getSortIcon('postedDate') }}
+                      </v-icon>
+                    </div>
+                    <div class="sort-option" @click="setSortCriteria('closingDate')">
+                      <span class="body-2">End Date</span>
+                      <v-icon class="sort-icon">
+                        {{ getSortIcon('closingDate') }}
+                      </v-icon>
+                    </div>
+                    <div class="sort-option" @click="setSortCriteria('title')">
+                      <span class="body-2">A-Z Title</span>
+                      <v-icon class="sort-icon">
+                        {{ getSortIcon('title') }}
+                      </v-icon>
+                    </div>
+                    <div class="sort-option" @click="setSortCriteria('award')">
+                      <span class="body-2">Award</span>
+                      <v-icon class="sort-icon">
+                        {{ getSortIcon('award') }}
+                      </v-icon>
+                    </div>
+                  </div>
+                </v-col>
+                <v-col cols="4">
+                  <div style="min-width: 300px;" class="px-4">
+                    <v-text-field
+                      v-model="filter.searchTerm"
+                      append-icon="search"
+                      filled
+                      class="pa-0 ma-0"
+                      name="search-term"
+                    />
+                  </div>
+                </v-col>
+              </v-row>
             </v-col>
             <v-col v-if="selectedArea" cols="12">
               <div class="subtitle-1 bold c-pl-5 c-pb-5 c-pt-2">
@@ -201,7 +205,7 @@
         return this.filterPrograms(this.additionalPrograms);
       },
       selectedAreas() {
-        return this.organizationProfile.researchAreas.map((area) => (area.title == this.selectedArea.title ? 1 : 0));
+        return this.organizationProfile.researchGroupRef.researchAreas.map((area) => (area.title == this.selectedArea.title ? 1 : 0));
       }
     },
 

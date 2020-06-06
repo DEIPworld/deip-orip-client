@@ -61,7 +61,7 @@
         v-bind="themeSettings.appBar.tabs"
         right
       >
-        <v-tab exact :to="{ name: 'GrantProgramsAwardsDashboard', params: { agency: 'nsf' } }">
+        <v-tab exact :to="{ name: 'GrantProgramsAwardsDashboard', params: { agency: 'the-national-science-foundation' } }">
           Dashboard
         </v-tab>
         <v-tab exact :to="{ name: 'UserWallet', params: { account_name: user.username } }">
@@ -132,7 +132,7 @@
             <v-list-item :to="{ name: 'CreateGrantProgram' }">
               Create Grant Program
             </v-list-item>
-            <v-list-item :to="{ name: 'GrantPrograms', params: { agency: 'nsf' } }">
+            <v-list-item :to="{ name: 'GrantPrograms', params: { agency: 'the-national-science-foundation' } }">
               Grant Programs
             </v-list-item>
             <v-divider />

@@ -1,66 +1,61 @@
 <template>
-  <div class="display-flex flex-column full-height">
-    <div class="display-flex flex-column flex-grow-1 mb-4">
-      <div class="step-title">
-        Enter funding amount
+  <v-row no-gutters justify="center">
+    <v-col cols="6">
+
+      <div class="headline text-center mb-3">
+        Funding amount
       </div>
 
-      <div class="flex-grow-1 overflow-y-auto flex-basis-0">
-        <div class="mx-auto meta-max-width">
-          <v-form v-model="isFormValid">
-            <v-text-field
-              v-model="foa.totalProgramFunding"
-              label="Estimated total program funding"
-              filled
-              mask="##############"
-              suffix="NGT"
-              :rules="[ rules.required, rules.totalProgrammingFundingValidator ]"
-            />
+      <v-form v-model="isFormValid">
+        <v-text-field
+          v-model="foa.totalProgramFunding"
+          label="Estimated total program funding"
+          filled
+          mask="##############"
+          suffix="NGT"
+          :rules="[ rules.required, rules.totalProgrammingFundingValidator ]"
+        />
 
-            <v-text-field
-              v-model.number="foa.numberOfAwards"
-              label="Expected number of awards"
-              filled
-              mask="##############"
-              :rules="[ rules.required ]"
-            />
+        <v-text-field
+          v-model.number="foa.numberOfAwards"
+          label="Expected number of awards"
+          filled
+          mask="##############"
+          :rules="[ rules.required ]"
+        />
 
-            <v-text-field
-              v-model="foa.awardCeiling"
-              label="Award ceiling"
-              filled
-              mask="##############"
-              suffix="NGT"
-              :rules="[ rules.required, rules.awardCeilingValidator ]"
-            />
+        <v-text-field
+          v-model="foa.awardCeiling"
+          label="Award ceiling"
+          filled
+          mask="##############"
+          suffix="NGT"
+          :rules="[ rules.required, rules.awardCeilingValidator ]"
+        />
 
-            <v-text-field
-              v-model="foa.awardFloor"
-              label="Award floor"
-              mask="##############"
-              filled
-              suffix="NGT"
-              :rules="[ rules.required, rules.awardFloorValidator ]"
-            />
-          </v-form>
-        </div>
-      </div>
-    </div>
+        <v-text-field
+          v-model="foa.awardFloor"
+          label="Award floor"
+          mask="##############"
+          filled
+          suffix="NGT"
+          :rules="[ rules.required, rules.awardFloorValidator ]"
+        />
+      </v-form>
 
-    <div class="flex-grow-0">
-      <div class="display-flex justify-center align-center">
+      <div class="text-center py-4">
         <v-btn text small @click.native="prevStep()">
           <v-icon dark class="pr-1">
             keyboard_arrow_left
           </v-icon> Back
         </v-btn>
-
         <v-btn color="primary" :disabled="isNextDisabled()" @click.native="nextStep()">
           Next
         </v-btn>
       </div>
-    </div>
-  </div>
+      
+    </v-col>
+  </v-row>
 </template>
 
 <script>

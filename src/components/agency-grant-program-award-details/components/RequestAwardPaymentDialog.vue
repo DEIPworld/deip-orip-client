@@ -15,7 +15,7 @@
           <v-toolbar-title>Request a Payment</v-toolbar-title>
           <v-spacer />
         </v-toolbar>
-        <v-card-text class="c-pt-5 c-pr-10 c-pl-10">
+        <v-card-text class="pa-5">
           <!--  <v-select
             filled
             ref="paymentAward"
@@ -46,7 +46,7 @@
             label="Payment Number"
             :rules="[
               rules.required,
-              rules.requiredLength
+              rules.payentNumber
             ]"
             :disabled="!awardee"
           />
@@ -184,7 +184,15 @@
           },
           isDigit: (val) => (val && val.match(/^\d+$/) === null ? 'Incorrect amount format' : !!val),
           required: (val) => !!val || 'This field is required',
-          requiredLength: (val) => val && val.length >= PAYMENT_NUMBER_MIN_LENGTH && val.length <= PAYMENT_NUMBER_MAX_LENGTH || `Length should be in range of ${PAYMENT_NUMBER_MIN_LENGTH} - ${PAYMENT_NUMBER_MAX_LENGTH}`
+          payentNumber: (v) => {
+            if (!v) return "Required";
+            if (v.length < PAYMENT_NUMBER_MIN_LENGTH) {
+              return `Payment number length should be greater/equal than ${PAYMENT_NUMBER_MIN_LENGTH}`;
+            } if (v.length > PAYMENT_NUMBER_MAX_LENGTH) {
+              return `Payment number length should be less/equal than ${PAYMENT_NUMBER_MAX_LENGTH}`;
+            }
+            return /^[0-9]*$/.test(v) || 'Numbers are only allowed';;
+          },
         },
 
         dropzoneOptions: {
@@ -223,9 +231,15 @@
     watch: {
       'meta.isOpen': function (newVal, oldVal) {
         if (newVal) {
-          this.$refs.paymentNumber.reset();
-          this.$refs.paymentAmount.reset();
-          this.$refs.description.reset();
+          if (this.$refs.paymentNumber) {
+            this.$refs.paymentNumber.reset();
+          }
+          if (this.$refs.paymentAmount) {
+            this.$refs.paymentAmount.reset();
+          }
+          if (this.$refs.description) {
+            this.$refs.description.reset();
+          }
           this.paymentDate = moment().add(10, 'minutes').format('YYYY-MM-DD HH:mm');
         }
       }
@@ -300,7 +314,8 @@
           requester: this.user.username,
           amount: this.toAssetUnits(this.paymentAmount, grantAssetPrecision, granAssetSymbol),
           description: this.description,
-          attachment: hash
+          attachment: hash,
+          extensions: []
         })
           .then(() => {
             const reload = new Promise((resolve, reject) => {

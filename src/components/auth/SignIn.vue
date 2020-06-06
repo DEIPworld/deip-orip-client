@@ -21,7 +21,7 @@
         <v-sheet max-width="800" class="pa-12 mx-auto">
           <login-form
             :show-sign-up="!adminLogin"
-            logo="AR3C"
+            logo="DEIP"
             :title="adminLogin ? 'Sign in to your admin account' : 'Sign in to your account'"
             :is-admin="adminLogin"
           />

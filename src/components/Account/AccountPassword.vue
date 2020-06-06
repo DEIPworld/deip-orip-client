@@ -149,7 +149,6 @@
           account: username,
           accountOwnerAuth: ownerAuth,
           accountActiveAuth: ownerAuth,
-          accountPostingAuth: ownerAuth,
           accountMemoPubKey: undefined,
           accountJsonMetadata: undefined,
           accountExtensions: []

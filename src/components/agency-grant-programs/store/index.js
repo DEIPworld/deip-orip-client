@@ -1,9 +1,12 @@
 import Vue from 'vue';
 import deipRpc from '@deip/rpc-client';
 import { GrantsService } from '@deip/grants-service';
+import { ResearchGroupService } from '@deip/research-group-service';
+
 import { mapAreaToProgram } from '../../common/disciplines/DisciplineTreeService';
 
 const grantsService = GrantsService.getInstance();
+const researchGroupService = ResearchGroupService.getInstance();
 
 const state = {
   organization: undefined,
@@ -34,67 +37,11 @@ const actions = {
   // pages
   loadGrantProgramsPage({ state, dispatch, commit }, { organization, areaCode, subAreaCode }) {
     commit('SET_ORGANIZATION_PROGRAMS_LISTING_PAGE_LOADING_STATE', true);
-    return deipRpc.api.getResearchGroupByPermlinkAsync(organization)
-      .then((organizationProfile) => {
-        const researchAreas = [
-          {
-            title: 'Biological Sciences (BIO)',
-            abbreviation: organization,
-            subAreaAbbreviation: organization,
-            disciplines: [
-              3,
-              9
-            ],
-            subAreas: [
-              {
-                title: 'Molecular and Cellular Biosciences (MCB)',
-                abbreviation: organization,
-                subAreaAbbreviation: organization,
-                disciplines: [
-                  3,
-                  9
-                ]
-              },
-              {
-                title: 'Integrative Organismal Systems (IOS)',
-                abbreviation: organization,
-                subAreaAbbreviation: organization,
-                disciplines: [
-                  3,
-                  9
-                ]
-              },
-              {
-                title: 'Emerging Frontiers (EF)',
-                abbreviation: organization,
-                subAreaAbbreviation: organization,
-                disciplines: [
-                  3,
-                  9
-                ]
-              },
-              {
-                title: 'Environmental Biology (DEB)',
-                abbreviation: organization,
-                subAreaAbbreviation: organization,
-                disciplines: [
-                  3,
-                  9
-                ]
-              },
-              {
-                title: 'Biological Infrastructure (DBI)',
-                abbreviation: organization,
-                subAreaAbbreviation: organization,
-                disciplines: [
-                  3,
-                  9
-                ]
-              }
-            ]
-          }
-        ];
-        commit('SET_ORGANIZATION_PROFILE', { ...organizationProfile, researchAreas });
+
+    return researchGroupService.getResearchGroupByPermlink(organization)
+      .then((org) => researchGroupService.getResearchGroup(org.external_id))
+      .then((researchGroup) => {
+        commit('SET_ORGANIZATION_PROFILE', researchGroup);
         const organizationProgramsLoad = new Promise((resolve, reject) => {
           dispatch('loadOrganizationPrograms', { organization: state.organization, notify: resolve });
         });
@@ -102,11 +49,11 @@ const actions = {
       })
       .then(() => {
         if (areaCode && subAreaCode) {
-          const area = state.organization.researchAreas.find((a) => a.abbreviation == areaCode);
+          const area = state.organization.researchGroupRef.researchAreas.find((a) => a.abbreviation == areaCode);
           const subArea = area.subAreas.find((a) => a.abbreviation == subAreaCode);
           commit('SET_RESEARCH_AREA', { area, subArea });
         } else {
-          const area = state.organization.researchAreas[0];
+          const area = state.organization.researchGroupRef.researchAreas[0];
           const subArea = area.subAreas[0];
           commit('SET_RESEARCH_AREA', { area, subArea });
         }
@@ -130,6 +77,10 @@ const actions = {
           abbreviation: organization.permlink,
           subAreaAbbreviation: organization.permlink
         }));
+
+        corePrograms.forEach((p) => {
+          mapAreaToProgram(p, state.organization.researchGroupRef.researchAreas);
+        });
 
         commit('SET_ORGANIZATION_PROGRAMS', { corePrograms, additionalPrograms: [] });
       })
@@ -165,13 +116,6 @@ const mutations = {
   },
 
   SET_ORGANIZATION_PROGRAMS(state, { corePrograms, additionalPrograms }) {
-    corePrograms.forEach((p) => {
-      mapAreaToProgram(p, state.organization.researchAreas);
-    });
-    additionalPrograms.forEach((p) => {
-      mapAreaToProgram(p, state.organization.researchAreas);
-    });
-
     Vue.set(state, 'corePrograms', corePrograms);
     Vue.set(state, 'additionalPrograms', additionalPrograms);
   },

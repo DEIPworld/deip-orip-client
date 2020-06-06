@@ -1,27 +1,26 @@
 <template>
-  <div class="display-flex flex-column fill-height">
-    <div class="display-flex flex-column flex-grow-1 mb-4">
-      <div class="step-title">
+  <v-row no-gutters justify="center">
+    <v-col cols="6">
+      
+      <div class="headline text-center mb-3">
         Select discipline(s) your funding opportunity is related to
       </div>
 
-      <div class="subtitle-1 mb-2 text-align-center mx-auto discipline-max-width">
+      <div class="subtitle-1 mb-2 text-center">
         {{ foa.disciplines.map(discipline => discipline.label).join(' · ') }}
       </div>
 
-      <div class="flex-basis-0 flex overflow-y-auto">
-        <div class="mx-auto discipline-max-width pt-2 full-height">
-          <advanced-discipline-picker
+      <div class="pt-2">
+        <div class="overflow-y-auto discipline-picker">
+          <advanced-discipline-picker style="max-height: 400px"
             :preselected="foa.disciplines"
             :without-user-disciplines="true"
             @select="selectDiscipline"
           />
         </div>
       </div>
-    </div>
 
-    <div class="flex-grow-0">
-      <div class="display-flex justify-center align-center">
+      <div class="py-4 text-center">
         <v-btn text small @click.native="prevStep()">
           <v-icon dark class="pr-1">
             keyboard_arrow_left
@@ -36,8 +35,8 @@
           Next
         </v-btn>
       </div>
-    </div>
-  </div>
+    </v-col>
+  </v-row>
 </template>
 
 <script>

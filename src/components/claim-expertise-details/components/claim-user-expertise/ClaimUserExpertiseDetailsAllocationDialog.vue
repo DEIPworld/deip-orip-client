@@ -122,7 +122,8 @@
           this.claimer.account.name,
           this.disciplineId,
           parseInt(this.amount),
-          this.description
+          this.description,
+          []
         ).then(() => {
           this.$notifier.showSuccess(`Proposal was successfully created`)
 

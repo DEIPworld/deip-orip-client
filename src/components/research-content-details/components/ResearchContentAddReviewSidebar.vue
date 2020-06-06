@@ -101,7 +101,7 @@
           ];
           const extensions = [];
 
-          return researchContentReviewsService.makeReview(
+          return researchContentReviewsService.createReviewViaOffchain(
             this.user.username,
             researchContentId,
             reviewData,

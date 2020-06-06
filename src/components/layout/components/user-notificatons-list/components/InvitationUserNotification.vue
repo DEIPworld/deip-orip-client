@@ -33,7 +33,7 @@
     methods: {
       clickNotification() {
         this.$router.push({
-          name: 'account.cummary',
+          name: 'account.summary',
           hash: '#invites'
         });
 

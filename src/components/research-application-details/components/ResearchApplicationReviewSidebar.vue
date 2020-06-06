@@ -3,7 +3,7 @@
     <div v-if="agency" class="text-align-center">
       <div>
         <v-avatar size="120px">
-          <img :src="agency | tenantSymbolSrc(160, 160, false)">
+          <img :src="agency | tenantLogoSrc(160, 160, false)">
         </v-avatar>
       </div>
       <div class="c-pt-5 title">

@@ -313,9 +313,9 @@
 
             <v-spacer />
 
-            <v-col v-if="isUniversityCertifier" cols="2">
+            <v-col v-if="isUniversityCertifier" cols="3">
               <v-row justify="end">
-                <div>
+                <div class="pr-4">
                   <v-btn
                     class="payment-action-btn"
                     color="warning"
@@ -354,9 +354,9 @@
               </v-row>
             </v-col>
 
-            <v-col v-if="isGrantProgramOfficer" cols="2">
+            <v-col v-if="isGrantProgramOfficer" cols="3">
               <v-row justify="end">
-                <div>
+                <div class="pr-4">
                   <v-btn
                     class="payment-action-btn"
                     color="success"
@@ -395,7 +395,7 @@
               </v-row>
             </v-col>
 
-            <v-col v-if="isTreasuryCertifier" cols="2">
+            <v-col v-if="isTreasuryCertifier" cols="3">
               <v-row justify="end">
                 <div>
                   <v-btn
@@ -428,18 +428,17 @@
             :no-data-text="isAwardPending ? `Award is not distributed yet` : `No payments found`"
             hide-default-footer
           >
-            <template v-slot:item="{item}">
+            <template v-slot:item="{item, select, isSelected}">
               <tr>
                 <td v-if="isUniversityCertifier || isGrantProgramOfficer || isTreasuryCertifier">
-                  <v-checkbox
-                    v-if="
-                      (item.status == AWARD_WITHDRAWAL_REQUEST_STATUS.PENDING && isUniversityCertifier) ||
-                        (item.status == AWARD_WITHDRAWAL_REQUEST_STATUS.CERTIFIED && isGrantProgramOfficer) ||
-                        (item.status == AWARD_WITHDRAWAL_REQUEST_STATUS.APPROVED && isTreasuryCertifier)"
-                    v-model="selected"
-                    primary
-                    hide-details
-                  />
+                  <v-simple-checkbox 
+                    v-if="(item.status == AWARD_WITHDRAWAL_REQUEST_STATUS.PENDING && isUniversityCertifier) ||
+                          (item.status == AWARD_WITHDRAWAL_REQUEST_STATUS.CERTIFIED && isGrantProgramOfficer) ||
+                          (item.status == AWARD_WITHDRAWAL_REQUEST_STATUS.APPROVED && isTreasuryCertifier)" 
+                          primary
+                          :value="isSelected" 
+                          @input="select($event)">
+                  </v-simple-checkbox>
                 </td>
                 <td>
                   <router-link class="a body-2" :to="{ name: 'GrantProgramAwardWithdrawalDetails', params: { award_number: item.awardee.award_number, subaward_number: item.awardee.subaward_number, payment_number: item.paymentNumber } }">
@@ -494,12 +493,15 @@
   import { mapGetters } from 'vuex';
   import { AWARD_STATUS, AWARD_WITHDRAWAL_REQUEST_STATUS } from '@/variables';
   import { GrantsService } from '@deip/grants-service';
+  import { Ripple } from 'vuetify/lib/directives'
 
   const grantsService = GrantsService.getInstance();
 
   export default {
     name: 'GrantProgramAwardDetails',
-
+    directives: {
+      Ripple
+    },
     data() {
       return {
 
@@ -727,7 +729,8 @@
             paymentNumber: p.paymentNumber,
             awardNumber: p.awardNumber,
             subawardNumber: p.subawardNumber,
-            certifier: this.user.username
+            certifier: this.user.username,
+            extensions: []
           })
         );
 
@@ -764,7 +767,8 @@
             paymentNumber: p.paymentNumber,
             awardNumber: p.awardNumber,
             subawardNumber: p.subawardNumber,
-            approver: this.user.username
+            approver: this.user.username,
+            extensions: []
           })
         );
 
@@ -801,7 +805,8 @@
             paymentNumber: p.paymentNumber,
             awardNumber: p.awardNumber,
             subawardNumber: p.subawardNumber,
-            rejector: this.user.username
+            rejector: this.user.username,
+            extensions: []
           })
         );
 
@@ -838,7 +843,8 @@
             paymentNumber: p.paymentNumber,
             awardNumber: p.awardNumber,
             subawardNumber: p.subawardNumber,
-            payer: this.user.username
+            payer: this.user.username,
+            extensions: []
           })
         );
 
@@ -871,7 +877,8 @@
         this.isAwardApproving = true;
         grantsService.approveFundingOpportunityAward(this.user.privKey, {
           awardNumber: this.awardee.award_number,
-          approver: this.user.username
+          approver: this.user.username,
+          extensions: []
         })
           .then(() => {
             const reload = new Promise((resolve, reject) => {
@@ -899,7 +906,8 @@
         this.isAwardRejecting = true;
         grantsService.rejectFundingOpportunityAward(this.user.privKey, {
           awardNumber: this.awardee.award_number,
-          rejector: this.user.username
+          rejector: this.user.username,
+          extensions: []
         })
           .then(() => {
             const reload = new Promise((resolve, reject) => {

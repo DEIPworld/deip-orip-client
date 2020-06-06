@@ -180,7 +180,8 @@
               this.user.privKey,
               this.user.username,
               this.user.username, // send myself (convert)
-              this.toAssetUnits(this.amount)
+              this.toAssetUnits(this.amount),
+              []
             );
           } else {
             // commons to deip tokens
@@ -189,7 +190,8 @@
               this.user.username,
               this.fromCommonTokensToAmount(
                 parseFloat(this.amount)
-              )
+              ),
+              []
             );
           }
 

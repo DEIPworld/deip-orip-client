@@ -1,46 +1,38 @@
 <template>
-  <div class="display-flex flex-column full-height">
-    <div class="display-flex flex-column flex-grow-1 mb-4">
-      <div class="step-title">
+  <v-row no-gutters justify="center">
+    <v-col cols="6">
+      <div class="headline text-center mb-3">
         Select Program Officers
       </div>
 
-      <div class="flex-grow-1 overflow-y-auto flex-basis-0">
-        <div class="mx-auto program-officers-max-width">
-          <v-card class="px-12 py-6 elevation-0">
-            <v-text-field
-              label="Start typing for suggestion"
-              filled
-              append-icon="search"
-            />
+      <v-card class="py-4 elevation-0">
+        <v-text-field
+          label="Start typing for suggestion"
+          filled
+          append-icon="search"
+        />
 
-            <div>
-              <div v-for="(member, i) in members" :key="`${i}-member`" class="display-flex align-center mt-2">
-                <platform-avatar
-                  :user="member"
-                  :size="40"
-                  :link-to-profile="false"
-                >
-                  <span class="pl-2">{{ member | fullname }}</span>
-                </platform-avatar>
-                <div class="pl-6">
-                  <input
-                    id="checkbox"
-                    type="checkbox"
-                    :disabled="isGrantProgramOfficer(member)"
-                    :checked="isSelected(member)"
-                    @input="setOpportunityOfficer($event, member)"
-                  >
-                </div>
-              </div>
-            </div>
-          </v-card>
+        <div v-for="(member, i) in members" :key="`${i}-member`" class="display-flex align-center mt-2">
+          <platform-avatar
+            :user="member"
+            :size="40"
+            :link-to-profile="false"
+          >
+            <span class="pl-2">{{ member | fullname }}</span>
+          </platform-avatar>
+          <div class="pl-6">
+            <input
+              id="checkbox"
+              type="checkbox"
+              :disabled="isGrantProgramOfficer(member)"
+              :checked="isSelected(member)"
+              @input="setOpportunityOfficer($event, member)"
+            >
+          </div>
         </div>
-      </div>
-    </div>
+      </v-card>
 
-    <div class="flex-grow-0">
-      <div class="display-flex justify-center align-center">
+      <div class="text-center py-4">
         <v-btn text small @click.native="prevStep()">
           <v-icon dark class="pr-1">
             keyboard_arrow_left
@@ -52,8 +44,8 @@
           Next
         </v-btn>
       </div>
-    </div>
-  </div>
+    </v-col>
+  </v-row>
 </template>
 
 <script>
