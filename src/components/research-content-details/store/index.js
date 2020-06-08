@@ -291,7 +291,7 @@ const actions = {
             });
 
             const contentReviewsLoad = new Promise((resolve, reject) => {
-              dispatch('loadContentReviews', { researchContentId: contentObj.id, notify: resolve });
+              dispatch('loadContentReviews', { researchContentExternalId: contentObj.external_id, notify: resolve });
             });
 
             const contentVotesLoad = new Promise((resolve, reject) => {
@@ -323,14 +323,14 @@ const actions = {
       .then((data) => {
         const tvoPromises = [];
         const expertsPromises = [];
+
         for (let i = 0; i < data.length; i++) {
           const discipline = data[i];
           disciplinesList.push(discipline);
           tvoPromises.push(expertiseContributionsService.getExpertiseContributionsByResearchAndDiscipline(researchId, discipline.id));
-          expertsPromises.push(
-            deipRpc.api.getExpertTokensByDisciplineIdAsync(discipline.id)
-          );
+          expertsPromises.push(deipRpc.api.getExpertTokensByDisciplineAsync(discipline.external_id));
         }
+
         return Promise.all([
           Promise.all(tvoPromises),
           Promise.all(expertsPromises)
@@ -431,11 +431,11 @@ const actions = {
     return refPromies;
   },
 
-  loadContentReviews({ state, dispatch, commit }, { researchContentId, notify }) {
+  loadContentReviews({ state, dispatch, commit }, { researchContentExternalId, notify }) {
     const reviews = [];
     commit('SET_RESEARCH_CONTENT_REVIEWS_LOADING_STATE', true);
     // todo: fix the method in database_api to return reviews for content only
-    deipRpc.api.getReviewsByContentAsync(researchContentId)
+    deipRpc.api.getReviewsByResearchContentAsync(researchContentExternalId)
       .then((items) => {
         reviews.push(...items);
         return Promise.all([

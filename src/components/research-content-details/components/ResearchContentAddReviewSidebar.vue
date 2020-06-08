@@ -84,31 +84,34 @@
           this.isLoading = true;
           const reviewData = html;
           const researchContentCriterias = researchContentReviewsService.getAssessmentCriteriasForResearchContent(this.content.content_type);
-          const researchContentId = this.content.id;
-          const weight = this.DEIP_100_PERCENT;
-          const scores = Object.keys(this.assessmentCriteria)
-            .reduce((scores, key) => {
-              const val = this.assessmentCriteria[key];
-              return [...scores, [parseInt(key), parseInt(val)]];
-            }, []);
+          const researchContentExternalId = this.content.external_id;
+          const weight = `100.00 %`;
+          const scores = Object.keys(this.assessmentCriteria).reduce((scores, key) => {
+            const val = this.assessmentCriteria[key];
+            return [...scores, [parseInt(key), parseInt(val)]];
+          }, []);
+
+          const disciplines = this.relatedExpertise.map(exp => exp.discipline_external_id);
 
           const assessment = [
-            'multicriteria_scoring_assessment_model_v1_0_0',
+            'multicriteria_scoring_assessment_model',
             {
-              version: '1.0.0',
-              scores
+              scores,
+              extensions: []
             }
           ];
+
           const extensions = [];
 
-          return researchContentReviewsService.createReviewViaOffchain(
-            this.user.username,
-            researchContentId,
-            reviewData,
+          return researchContentReviewsService.createReviewViaOffchain(this.user.privKey,{
+            author: this.user.username,
+            researchContentExternalId,
+            content: reviewData,
             weight,
             assessment,
+            disciplines,
             extensions
-          )
+          })
             .then((data) => {
               this.$notifier.showSuccess('Your review has been published successfully !')
               this.$router.push({
