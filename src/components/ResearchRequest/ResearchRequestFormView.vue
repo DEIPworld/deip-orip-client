@@ -30,6 +30,7 @@
           label="Domain"
           v-bind="fieldState"
           :rules="[rules.required]"
+          :disabled="partialDisabled.researchDisciplines"
           :items="[
             {text: 'Bio Products', value: '56dba1440c40847fb1fedbee3cfef524081ee313'},
             {text: 'Bio Energy', value: '1f5dc208490c6f4a8ec86b9dc12c4c1a9a8c420a'},
