@@ -4,7 +4,7 @@
     :disabled="formProcessing"
     :partial-disabled="{
       researchTitle: true,
-      description: true
+      researchDisciplines: true
     }"
     :loading="formProcessing"
     @submit="editResearch"

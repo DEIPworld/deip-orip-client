@@ -13,6 +13,7 @@
   import { NAMING_MAP } from '@/components/ResearchRequest/maps';
   import { mapGetters } from 'vuex';
   import { AccessService } from '@deip/access-service';
+  import * as disciplinesService from '@/components/common/disciplines/DisciplineTreeService';
 
   const accessService = AccessService.getInstance();
 
@@ -42,7 +43,10 @@
       return {
         oldResearchId: null,
         research: null,
-        fieldKeys: Object.keys(NAMING_MAP)
+        fieldKeys: Object.keys(NAMING_MAP),
+        domains: [...disciplinesService.getTopLevelNodes().map((d => {
+          return { text: d.label, value: d.id }
+        }))],
       };
     },
 
@@ -88,14 +92,7 @@
             }
 
             if (key === 'researchDisciplines') {
-              data = [
-                { text: 'Bio Products', value: '1' },
-                { text: 'Bio Energy', value: '2' },
-                { text: 'Bio Food', value: '3' },
-                { text: 'Bio Chemical', value: '4' },
-                { text: 'Bio Fiber', value: '5' },
-                { text: 'Bio Mechanical', value: '6' }
-              ].find((k) => k.value === research[key][0]).text;
+              data = this.domains.find((k) => k.value === research[key][0]).text;
             }
 
             if (key.includes('Attachment')) {

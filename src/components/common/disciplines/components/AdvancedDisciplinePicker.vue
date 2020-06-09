@@ -79,7 +79,7 @@
 
       userDisciplines() {
         return disciplineTreeService.getNodesByIdList(
-          this.user.expertTokens.map((token) => token.discipline_id)
+          this.user.expertTokens.map((token) => token.discipline_external_id)
         );
       },
 

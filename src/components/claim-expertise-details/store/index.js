@@ -71,7 +71,7 @@ const actions = {
         const claim = _.find(claims, { _id: claimId });
 
         if (claim) {
-          return deipRpc.api.getDisciplineAsync(claim.disciplineId)
+          return deipRpc.api.getDisciplineAsync(claim.disciplineExternalId)
             .then((discipline) => {
               claim.discipline = discipline;
               commit('SET_CLAIM', claim);
@@ -90,7 +90,7 @@ const actions = {
         resProposal = proposal;
 
         return Promise.all([
-          deipRpc.api.getDisciplineAsync(resProposal.discipline_id),
+          deipRpc.api.getDisciplineAsync(resProposal.disciplineExternalId),
           deipRpc.api.getExpertiseAllocationProposalVotesByExpertiseAllocationProposalIdAsync(resProposal.id)
         ]);
       })

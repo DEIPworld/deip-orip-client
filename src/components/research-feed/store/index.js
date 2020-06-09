@@ -125,7 +125,7 @@ const actions = {
           .map((r) => expertiseContributionsService.getExpertiseContributionsByResearch(r.id)));
 
         const researchReviewsLoad = Promise.all(listing
-          .map((r) => deipRpc.api.getReviewsByResearchAsync(r.id)
+          .map((r) => deipRpc.api.getReviewsByResearchAsync(r.external_id)
             .then((reviews) => reviews.map((review) => ({ ...review, research_id: r.id })))));
 
         const researchGroupsLoad = Promise.all(listing

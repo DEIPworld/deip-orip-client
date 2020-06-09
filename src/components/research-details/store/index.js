@@ -324,7 +324,7 @@ const actions = {
         });
         const reviewsLoad = new Promise((resolve, reject) => {
           dispatch('loadResearchReviews', {
-            researchId: state.research.id,
+            researchExternalId: state.research.external_id,
             notify: resolve
           });
         });
@@ -390,7 +390,7 @@ const actions = {
     return researchContentService.getResearchContentByResearch(researchExternalId)
       .then((list) => {
         researchContents.push(...list);
-        return Promise.all(researchContents.map((content) => deipRpc.api.getReviewsByContentAsync(content.id)));
+        return Promise.all(researchContents.map((content) => deipRpc.api.getReviewsByResearchContentAsync(content.external_id)));
       })
       .then((reviews) => {
         researchContents.forEach((content, index) => {
@@ -453,11 +453,11 @@ const actions = {
       });
   },
 
-  loadResearchReviews({ state, dispatch, commit }, { researchId, notify }) {
+  loadResearchReviews({ state, dispatch, commit }, { researchExternalId, notify }) {
     const reviews = [];
     commit('SET_RESEARCH_REVIEWS_LOADING_STATE', true);
 
-    deipRpc.api.getReviewsByResearchAsync(researchId)
+    deipRpc.api.getReviewsByResearchAsync(researchExternalId)
       .then((items) => {
         reviews.push(...items);
         return Promise.all([
@@ -492,10 +492,7 @@ const actions = {
           const discipline = data[i];
           disciplinesList.push(discipline);
           tvoPromises.push(expertiseContributionsService.getExpertiseContributionsByResearchAndDiscipline(researchId, discipline.id));
-
-          expertsPromises.push(
-            deipRpc.api.getExpertTokensByDisciplineIdAsync(discipline.id)
-          );
+          expertsPromises.push(deipRpc.api.getExpertTokensByDisciplineAsync(discipline.external_id));
         }
 
         return Promise.all([

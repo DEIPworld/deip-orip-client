@@ -90,6 +90,9 @@
   import { mapGetters } from 'vuex';
   import deipRpc from '@deip/rpc-client';
   import * as disciplineTreeService from '../../common/disciplines/DisciplineTreeService';
+  import { ResearchContentReviewsService } from '@deip/research-content-reviews-service';
+
+  const researchContentReviewsService = ResearchContentReviewsService.getInstance();
 
   export default {
     name: 'ResearchContentReviewSidebar',
@@ -130,7 +133,7 @@
         return this.userExperise.filter((exp) => this.review.disciplines.some((d) => d.id == exp.discipline_id));
       },
       isGroupMember() {
-        return !!this.groupMembers.find((item) => item.rgt.owner === this.user.username);
+        return this.groupMembers.some((item) => item.rgt.owner === this.user.username);
       },
       reviewSupporters() {
         return this.review.votes.reduce((arr, vote) => (arr.some(({ voter }) => voter === vote.voter) ? arr : [...arr, vote]), []);
@@ -144,58 +147,34 @@
         const self = this;
         const { review } = this;
         this.isReviewVoting = true;
+
         // vote for all disciplines for now
-        // todo: add a control to select specific discipline
-        const disciplinesIds = this.userExperise
-          .map((exp) => exp.discipline_id)
-          .filter((id) => review.disciplines.find((d) => d.id === id));
+        const disciplinesExternalIds = this.userRelatedExpertise
+          .map((exp) => exp.discipline_external_id);
 
-        deipRpc.api.getDynamicGlobalProperties((err, result) => {
-          if (!err) {
-            const BlockNum = (result.last_irreversible_block_num - 1) & 0xFFFF;
-            deipRpc.api.getBlockHeader(result.last_irreversible_block_num, (e, res) => {
-              const BlockPrefix = new Buffer(res.previous, 'hex').readUInt32LE(4);
-              const now = new Date().getTime() + 3e6;
-              const expire = new Date(now).toISOString().split('.')[0];
-
-              const operations = disciplinesIds.map((disciplinesId) => ['vote_for_review', {
-                voter: self.user.username,
-                review_id: review.id,
-                discipline_id: disciplinesId,
-                weight: self.DEIP_100_PERCENT,
-                extensions: []
-              }]);
-              const unsignedTX = {
-                expiration: expire,
-                extensions: [],
-                operations,
-                ref_block_num: BlockNum,
-                ref_block_prefix: BlockPrefix
-              };
-
-              try {
-                const signedTX = deipRpc.auth.signTransaction(unsignedTX, {
-                  owner: self.user.privKey
-                });
-
-                deipRpc.api.broadcastTransactionSynchronous(signedTX, (err, result) => {
-                  self.isReviewVoting = false;
-                  if (err) {
-                    this.$notifier.showError();
-                    console.log(err);
-                  } else {
-                    self.votingDisabled = true;
-                    self.$store.dispatch('rcd/loadContentReviews', { researchContentId: self.content.id });
-                    this.$notifier.showSuccess('You\'ve voted for review successfully!');
-                  }
-                });
-              } catch (err) {
-                this.$notifier.showError();
-                console.log(err);
-              }
-            });
-          }
+        const votesPromises = disciplinesExternalIds.map(disciplineExternalId => {
+          return researchContentReviewsService.voteForReview(this.user.privKey, {
+            voter: this.user.username,
+            reviewExternalId: review.external_id,
+            disciplineExternalId: disciplineExternalId,
+            weight: `100.00 %`,
+            extensions: []
+          });
         });
+
+        Promise.all(votesPromises)
+          .then(() => {
+            this.$notifier.showSuccess("Review supported");
+          })
+          .catch((err) => {
+            console.log(err);
+            this.$notifier.showError("An error occured, please try again later");
+          })
+          .finally(() => {
+            self.$store.dispatch('rcd/loadContentReviews', { researchContentExternalId: this.content.external_id });
+            this.isReviewVoting = false;
+            this.votingDisabled = true;
+          })
       }
     }
   };
