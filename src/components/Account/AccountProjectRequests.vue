@@ -180,7 +180,7 @@
       },
 
       closeResearchEditModal() {
-        this.researchDialog.isOpen = false;
+        this.researchEditModal.isOpen = false;
       },
 
       openResearchViewDialog(item) {

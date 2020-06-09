@@ -13,6 +13,7 @@
   import { NAMING_MAP } from '@/components/ResearchRequest/maps';
   import { mapGetters } from 'vuex';
   import { AccessService } from '@deip/access-service';
+  import * as disciplinesService from '@/components/common/disciplines/DisciplineTreeService';
 
   const accessService = AccessService.getInstance();
 
@@ -42,7 +43,10 @@
       return {
         oldResearchId: null,
         research: null,
-        fieldKeys: Object.keys(NAMING_MAP)
+        fieldKeys: Object.keys(NAMING_MAP),
+        domains: [...disciplinesService.getTopLevelNodes().map((d => {
+          return { text: d.label, value: d.id }
+        }))],
       };
     },
 
@@ -88,14 +92,7 @@
             }
 
             if (key === 'researchDisciplines') {
-              data = [
-                { text: 'Bio Products', value: '56dba1440c40847fb1fedbee3cfef524081ee313' },
-                { text: 'Bio Energy', value: '1f5dc208490c6f4a8ec86b9dc12c4c1a9a8c420a' },
-                { text: 'Bio Food', value: 'f3d0968f8d47ffbca23352abcb90aadb345a55d1' },
-                { text: 'Bio Chemical', value: 'b8ea1adb762f41fe10f193c58bca836b94fb0021' },
-                { text: 'Bio Fiber', value: 'c4545e9398409ec03c6c2eae25c685ad323f2e60' },
-                { text: 'Bio Mechanical', value: '369a26e132a69db02a613a59fc33127f6652dd1d' }
-              ].find((k) => k.value === research[key][0]).text;
+              data = this.domains.find((k) => k.value === research[key][0]).text;
             }
 
             if (key.includes('Attachment')) {
