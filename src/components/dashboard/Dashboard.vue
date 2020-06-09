@@ -23,7 +23,7 @@
               </v-col>
               <v-col>
                 <v-btn
-                  :to="{ name: 'CreateResearch' }"
+                  :to="tenant.profile.settings.newResearchPolicy === 'free' ? { name: 'CreateResearch' } : { name: 'CreateResearchProposal' }"
                   color="primary"
                   small
                   class="ma-0"
@@ -318,6 +318,7 @@
     computed: {
       ...mapGetters({
         user: 'auth/user',
+        tenant: 'auth/tenant',
         themeSettings: 'layout/themeSettings',
         researches: 'dashboard/researches',
         experts: 'dashboard/experts',

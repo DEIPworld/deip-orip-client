@@ -410,9 +410,15 @@ const router = new Router({
       name: 'StartCreateResearch',
       component: ResearchStartCreating
     }, {
-      path: '/create-new-research',
+      path: '/new-research',
       name: 'CreateResearch',
-      // component: CreateNewResearch
+      component: CreateNewResearch,
+      meta: {
+        withoutHeader: true
+      }
+    }, {
+      path: '/propose-research',
+      name: 'CreateResearchProposal',
       component: ResearchRequestFormCreate,
       meta: {
         withoutHeader: true

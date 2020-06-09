@@ -18,7 +18,7 @@
         <v-tab-item key="my-projects">
           <div v-if="myResearches.length" class="mb-12">
             <v-btn
-              :to="{ name: 'CreateResearch' }"
+              :to="tenant.profile.settings.newResearchPolicy === 'free' ? { name: 'CreateResearch' } : { name: 'CreateResearchProposal' }"
               color="primary"
             >
               Start a project
@@ -55,7 +55,7 @@
               </div>
               <div>
                 <v-btn
-                  :to="{ name: 'CreateResearch' }"
+                  :to="tenant.profile.settings.newResearchPolicy === 'free' ? { name: 'CreateResearch' } : { name: 'CreateResearchProposal' }"
                   color="primary"
                 >
                   Create your first project
@@ -130,6 +130,7 @@
     computed: {
       ...mapGetters({
         user: 'auth/user',
+        tenant: 'auth/tenant',
         themeSettings: 'layout/themeSettings',
         researches: 'dashboard/myMembershipAndBookmarkedResearches'
       }),

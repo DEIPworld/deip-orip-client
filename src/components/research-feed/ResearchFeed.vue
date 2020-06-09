@@ -8,7 +8,7 @@
       <div class="py-6">
         <v-btn
           v-if="isLoggedIn()"
-          :to="{ name: 'CreateResearch' }"
+          :to="tenant.profile.settings.newResearchPolicy === 'free' ? { name: 'CreateResearch' } : { name: 'CreateResearchProposal' }"
           color="primary"
           class="ma-0"
         >
