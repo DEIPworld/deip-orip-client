@@ -2,11 +2,11 @@
   <app-layout>
     <layout-header centered full-width :muted="false" :background="$options.filters.tenantBackgroundSrc(tenant.account)">
       <div class="pt-6 display-flex flex-wrap justify-center">
-        <v-btn v-if="isLoggedIn()" :to="{ name: 'CreateResearch' }" color="primary" class="width-225 ma-0 px-5">Start a project
+        <v-btn v-if="isLoggedIn()" :to="{ name: 'CreateResearch' }" color="primary" class="width-225 ma-0 px-5">Participate with us
         </v-btn>
         <template v-else>
           <v-btn :to="{ name: 'SignUp' }" color="primary" class="width-225 px-5 ma-2">Become a member</v-btn>
-          <v-btn :to="{ name: 'SignIn' }" light class="width-225 px-5 blue--text ma-2">Start a project</v-btn>
+          <v-btn :to="{ name: 'SignIn' }" light class="width-225 px-5 blue--text ma-2">Participate with us</v-btn>
         </template>
       </div>
     </layout-header>
@@ -43,7 +43,20 @@
           </template>
         </div>
 
-        <div v-if="selectedOrganizations.length" class="filter-chips__row">
+        <div v-if="selectedCategories.length" class="filter-chips__row">
+          <v-chip
+            v-for="category in selectedCategories"
+            :key="'filter-by-category-' + category._id"
+            class="ma-1"
+            close
+            outlined
+            @click:close="toggleCategory(category)"
+          >
+            {{ category.text }}
+          </v-chip>
+        </div>
+
+        <!-- <div v-if="selectedOrganizations.length" class="filter-chips__row">
           <v-chip
             v-for="organization in selectedOrganizations"
             :key="'filter-by-organization-' + organization.id"
@@ -57,7 +70,7 @@
             </v-avatar>
             {{ organization.name }}
           </v-chip>
-        </div>
+        </div> -->
 
         <div v-if="filterByTopOnly" class="filter-chips__row">
           <v-chip
@@ -176,7 +189,6 @@
                     small
                     color="primary"
                     :input-value="isStepSelected(item, j)"
-                    v-on="on"
                     @click="toggleStep(item, j)"
                   >
                     <div class="full-width text--center">
@@ -190,7 +202,51 @@
 
           <v-divider v-if="tenant.profile.settings.researchComponents.length" class="my-6" />
 
-          <v-row class="pb-6" justify="space-between">
+          <div key="research-category">
+            <v-row justify="space-between" align="center" class="pb-6">
+              <v-col>
+                <div class="subtitle-1">
+                  Browse by category
+                </div>
+              </v-col>
+              <v-col cols="auto">
+                <v-btn
+                  small
+                  color="primary"
+                  outlined
+                  :disabled="isAllCategoriesSelected"
+                  @click="selectAllCategories()"
+                >
+                  Reset
+                </v-btn>
+              </v-col>
+            </v-row>
+
+            <v-row>
+              <v-col v-for="(category) in tenant.profile.settings.researchCategories" :key="`${category._id}-category`" cols="2">
+                <v-tooltip bottom>
+                  <template #activator="{ on }">
+                    <v-btn
+                      text
+                      block
+                      small
+                      color="primary"
+                      :input-value="isCategorySelected(category)"
+                      v-on="on"
+                      @click="toggleCategory(category)"
+                    >
+                      <div class="full-width text--left category-filter-btn">
+                        {{ category.text }}
+                      </div>
+                    </v-btn>
+                  </template>
+                  <span>{{ category.text }}</span>
+                </v-tooltip>
+              </v-col>
+            </v-row>
+          </div>
+
+          <!-- <v-row class="pb-6" justify="space-between">
             <v-col>
               <span class="subtitle-1">Browse by organizations</span>
             </v-col>
@@ -234,7 +290,7 @@
                 <span>{{ organization.name }}</span>
               </v-tooltip>
             </div>
-          </v-row>
+          </v-row> -->
 
           <!-- <v-divider class="my-6" /> -->
 
@@ -359,6 +415,9 @@
       selectedOrganizations() {
         return this.filter.organizations;
       },
+      selectedCategories() {
+        return this.filter.categories;
+      },
       isAllDisciplinesSelected() {
         return this.filter.disciplines.length === 0;
       },
@@ -370,6 +429,9 @@
           const step = this.filter.steppers.find((item) => _id === item._id)
           return step ? !step.steps.length : true;
         })
+      },
+      isAllCategoriesSelected() {
+        return this.filter.categories.length === 0;
       }
     },
 
@@ -476,6 +538,33 @@
         return this.filter.organizations.some((o) => o.id === organization.id);
       },
 
+      selectAllCategories() {
+        this.$store.dispatch('feed/updateFilter', {
+          key: 'categories',
+          value: []
+        });
+      },
+
+      toggleCategory(category) {
+        if (!this.isCategorySelected(category)) {
+          const value = [ category, ...this.filter.categories ];
+          this.$store.dispatch('feed/updateFilter', {
+            key: 'categories',
+            value
+          });
+        } else {
+          const value = this.filter.categories.filter((cat) => cat._id != category._id);
+          this.$store.dispatch('feed/updateFilter', {
+            key: 'categories',
+            value
+          });
+        }
+      },
+
+      isCategorySelected(category) {
+        return this.filter.categories.some((cat) => cat._id === category._id);
+      },
+
       onPaginationUpdated(nextState) {
         setTimeout(() => window.scrollTo({
           top: this.$refs.projectsView.offsetTop - 10,
@@ -550,5 +639,13 @@
     width: 225px;
   }
 
+
+.category-filter-btn {
+    display: block;
+    width: 150px;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
 
 </style>

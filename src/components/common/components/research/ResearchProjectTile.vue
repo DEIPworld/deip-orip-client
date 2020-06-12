@@ -20,14 +20,14 @@
       <top-research-label class="pa-2" />
     </div>
 
-    <v-sheet
+    <!-- <v-sheet
       v-if="research.researchRef && research.researchRef.tenantCategory && research.researchRef.tenantCategory.text"
       tile
       color="#0386b0"
       class="project-category-label white--text py-1 pl-1 pr-2 body-2"
     >
       {{ research.researchRef.tenantCategory.text }}
-    </v-sheet>
+    </v-sheet> -->
 
     <v-sheet tile class="pa-6">
       <v-tooltip bottom>
