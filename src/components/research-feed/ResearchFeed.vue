@@ -317,7 +317,7 @@
 
         <v-data-iterator
           :items="researchFeed"
-          :items-per-page-options="rowsPerPageItems"
+          :footer-props="footerProps"
           :options.sync="pagination"
           no-data-text="No Projects found for specified criteria"
           row
@@ -381,9 +381,11 @@
       return {
         filtersIsOpen: false,
 
-        rowsPerPageItems: [9, 30, 100],
         pagination: {
-          rowsPerPage: 100
+          itemsPerPage: 12
+        },
+        footerProps: {
+          'items-per-page-options': [12, 24, 48, -1]
         },
         disciplines: [...disciplinesService.getTopLevelNodes()],
         filterByTopOnly: false,
