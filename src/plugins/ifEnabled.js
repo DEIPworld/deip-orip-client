@@ -18,9 +18,7 @@ export const ifEnabled = {
       return checkingResult.every((x) => x === true);
     };
 
-    // eslint-disable-next-line no-param-reassign
     _Vue.prototype.$ifEnable = ifEnableFn;
-    // eslint-disable-next-line no-param-reassign
     _Vue.$ifEnable = ifEnableFn;
 
     _Vue.component('IfEnabled', {

@@ -130,6 +130,17 @@
       "vuetify/grid-unknown-attributes": "error",
       "vuetify/no-legacy-grid": "error",
       "import/prefer-default-export": "off",
+      "no-param-reassign": [
+        "error",
+        {
+          "props": true,
+          "ignorePropertyModificationsFor": [
+            "state",
+            "Vue",
+            "_Vue"
+          ]
+        }
+      ],
       "import/extensions": [
         "error",
         "always",
