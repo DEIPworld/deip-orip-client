@@ -5,9 +5,6 @@
         <v-col cols="auto">
           <div class="text-uppercase grey--text font-weight-bold mb-4">Contact info</div>
           <div class="body-2">
-            <div>329 East County Road 34,</div>
-            <div>Ruthven, Ontario,</div>
-            <div>N0P 2G0, Canada</div>
             <div>Phone: +1 647 417 0823</div>
             <div>Email: info@ar3c.com</div>
             <div>Web: www.ar3c.com</div>

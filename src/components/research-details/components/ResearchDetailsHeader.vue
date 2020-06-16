@@ -1,6 +1,7 @@
 <template>
   <layout-header
-    muted
+    :muted="false"
+    :light="true"
     :background="$options.filters.researchBackgroundSrc(research.external_id)"
     :max-width="researchRef.videoSrc ? '100%' : 800"
     full-width
@@ -11,7 +12,7 @@
           {{ research.title }}
         </div>
         <div class="pt-2">
-          <v-icon small color="white">
+          <v-icon small color="text-primary">
             today
           </v-icon>
           Created {{ research.created_at | dateFormat('D MMM YYYY', true) }}
@@ -21,7 +22,7 @@
             class="ma-0 pa-0"
             small
             outlined
-            color="white"
+            color="text-primary"
             :to="{
               name: 'ResearchEdit',
               params: {
