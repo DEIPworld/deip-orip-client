@@ -48,7 +48,7 @@
         researchGroupService.createResearchGroupViaOffchain(
             this.user.privKey,
             {
-              fee: this.toAssetUnits(100),
+              fee: this.toAssetUnits(0),
               creator,
               accountOwnerAuth: auth,
               accountActiveAuth: auth,
