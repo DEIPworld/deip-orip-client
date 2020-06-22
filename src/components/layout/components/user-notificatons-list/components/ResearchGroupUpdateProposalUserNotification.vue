@@ -56,10 +56,9 @@
       clickNotification() {
         if (this.isAcceptedByQuorum || this.isAutoAccepted) {
           this.$router.push({
-            name: 'ResearchDetails',
+            name: 'ResearchGroupDetails',
             params: {
-              research_group_permlink: encodeURIComponent(this.notification.metadata.researchGroup.permlink),
-              research_permlink: encodeURIComponent(this.notification.metadata.research.permlink)
+              research_group_permlink: encodeURIComponent(this.notification.metadata.researchGroup.permlink)
             }
           });
         } else {
