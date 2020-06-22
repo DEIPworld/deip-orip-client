@@ -47,9 +47,8 @@
         formData.append('proposalExpirationTime', applicationLifetime);
 
         formData.append('researchAbstract', '');
-        formData.append('researchReviewShare', '0.00 %');
         formData.append('researchIsPrivate', false);
-        //
+        
         formData.append('researchGroupFee', this.toAssetUnits(0));
         formData.append('researchGroupName', `${this.formData.researchTitle} team`);
         formData.append('researchGroupDescription', '');

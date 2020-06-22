@@ -244,7 +244,6 @@
           content: hash,
           authors: this.authors.map((a) => a.account.name),
           references: this.references.map((ref) => ref.external_id),
-          foreignReferences: [],
           extensions: []
         })
           .then(() => {

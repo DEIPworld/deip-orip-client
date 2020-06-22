@@ -243,7 +243,7 @@
             disciplines: this.research.disciplines.map((d) => d.id),
             isPrivate: this.research.isPrivate,
             members: undefined,
-            reviewShare: '0.00 %',
+            reviewShare: undefined,
             compensationShare: undefined,
             extensions: []
           },

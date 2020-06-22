@@ -2,7 +2,7 @@
   <layout-section>
     <v-row class="full-height">
       <v-col cols="auto" v-if="isInProgress">
-        <v-card class="full-height">
+        <v-card class="full-height elevation-0">
           <div>
             <v-tooltip right>
               <template v-slot:activator="{ on }">
@@ -346,7 +346,6 @@
               content: contentRef.hash,
               authors: this.proposeContent.authors.map((a) => a.account.name),
               references: [...this.contentRef.references],
-              foreignReferences: [],
               extensions: []
             })
               .then(() => {
