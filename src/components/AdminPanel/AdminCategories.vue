@@ -11,7 +11,7 @@
     <v-data-table
       v-custom="'hover-row'"
 
-      :hide-default-header="categories.length > 50"
+      :hide-default-footer="categories.length < 50"
       :footer-props="{itemsPerPageOptions: [5, 10, 20, -1]}"
       :items-per-page="50"
 

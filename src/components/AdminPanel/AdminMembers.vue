@@ -28,7 +28,7 @@
         <v-data-table
           v-custom="'hover-row'"
 
-          :hide-default-header="registeredMembers.length > 50"
+          :hide-default-footer="registeredMembers.length < 50"
           :footer-props="{itemsPerPageOptions: [5, 10, 20, -1]}"
           :items-per-page="50"
 
@@ -49,7 +49,7 @@
         <v-data-table
           v-custom="'hover-row'"
 
-          :hide-default-header="waitingMembers.length > 50"
+          :hide-default-footer="waitingMembers.length < 50"
           :footer-props="{itemsPerPageOptions: [5, 10, 20, -1]}"
           :items-per-page="50"
 
