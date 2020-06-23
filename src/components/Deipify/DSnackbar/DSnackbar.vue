@@ -1,14 +1,21 @@
 <template>
   <v-snackbar
-    v-model="isActive"
+    :value="isActive"
     :color="type"
     :timeout="5000"
     @input="hideSnackbar"
   >
     {{ message }}
-    <v-btn text @click="hideSnackbar">
-      Close
-    </v-btn>
+
+    <template v-slot:action="{ attrs }">
+      <v-btn
+        text
+        v-bind="attrs"
+        @click="hideSnackbar"
+      >
+        Close
+      </v-btn>
+    </template>
   </v-snackbar>
 </template>
 
@@ -27,12 +34,18 @@
       ...mapGetters({
         message: 'snackbar/message',
         type: 'snackbar/type'
-      }),
+      })
     },
 
     created() {
       this.$store.subscribe((mutation) => {
-        this.isActive = mutation.type === 'snackbar/showMessage';
+        if (mutation.type === 'snackbar/showMessage') {
+          this.isActive = true;
+        }
+        if (mutation.type === 'snackbar/hideMessage') {
+          this.isActive = false;
+        }
+
       });
     },
 

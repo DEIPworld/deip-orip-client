@@ -21,7 +21,7 @@
           v-custom="'hover-row'"
 
           :hide-default-footer="publicProjects.length < 50"
-          :footer-props="{itemsPerPageOptions: [5, 10, 20, -1]}"
+          :footer-props="{itemsPerPageOptions: [5, 10, 20, 50, -1]}"
           :items-per-page="50"
 
           :headers="publicProjectsHeaders"
@@ -51,7 +51,7 @@
           v-custom="'hover-row'"
 
           :hide-default-footer="pendingProjects.length < 50"
-          :footer-props="{itemsPerPageOptions: [5, 10, 20, -1]}"
+          :footer-props="{itemsPerPageOptions: [5, 10, 20, 50, -1]}"
           :items-per-page="50"
 
           :headers="pendingProjectsHeaders"
