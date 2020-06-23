@@ -44,7 +44,7 @@
 
             <div class="c-pt-4 text-subtitle-1 bold">
               Description
-              <span class="caption">(optional)</span>
+              <span class="text-caption">(optional)</span>
             </div>
 
             <v-textarea filled v-model="grantInfo.description" rows="2" auto-grow />

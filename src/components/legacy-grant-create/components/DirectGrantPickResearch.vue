@@ -6,7 +6,7 @@
         <div class="c-mb-4 legacy-col-grow legacy-column">
             <div class="step-title">Direct grants distribution</div>
             <div class="text-h6 bold c-mb-2 text-align-center">Please select research</div>
-            <div class="caption c-mb-4 text-align-center grey--text">Your tokens will be granted to the researchers</div>
+            <div class="text-caption c-mb-4 text-align-center grey--text">Your tokens will be granted to the researchers</div>
 
             <div class="legacy-col-grow overflow-y-auto">
 

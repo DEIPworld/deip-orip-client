@@ -1,5 +1,13 @@
 <template>
   <app-layout>
+
+    <portal to="toolbar">
+      <toolbar-admin
+        v-if="!$route.meta.withoutHeader"
+        :key="$route.fullPath + '-toolbar'"
+      />
+    </portal>
+
     <v-navigation-drawer
       app
       clipped
@@ -32,10 +40,11 @@
 
 <script>
   import AppLayout from '@/components/layout/components/Layout';
+  import ToolbarAdmin from '@/components/layout/components/ToolbarAdmin';
 
   export default {
     name: 'AdminPanel',
-    components: { AppLayout },
+    components: { ToolbarAdmin, AppLayout },
     data() {
       return {
         menu: [

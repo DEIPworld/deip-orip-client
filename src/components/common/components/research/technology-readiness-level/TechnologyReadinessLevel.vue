@@ -28,7 +28,7 @@
           <v-tooltip bottom>
             <template v-slot:activator="{ on }">
               <div
-                class="caption"
+                class="text-caption"
                 :class="{['font-weight-bold']: item.id == currentTrlStep,['grey--text']: item.id != currentTrlStep}"
                 v-on="on"
               >
@@ -69,7 +69,7 @@
       </v-avatar>
       <span class="text-h6 align-self-center font-weight-medium">TRL</span>
     </v-col>
-    <v-col cols="12" class="caption font-weight-bold">
+    <v-col cols="12" class="text-caption font-weight-bold">
       {{ currentTrlData.description }}
     </v-col>
   </v-row>

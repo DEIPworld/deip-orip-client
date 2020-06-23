@@ -11,21 +11,21 @@
           </router-link>
         </div>
         <v-row no-gutters class="pl-6 pt-2 pb-2">
-          <v-col class="caption grey--text">
+          <v-col class="text-caption grey--text">
             <span class="pr-2">Posted Date:</span>
             <v-icon color="grey" small>
               event
             </v-icon>
             <span>{{ new Date(`${program.posted_date}Z`).toDateString() }}</span>
           </v-col>
-          <v-col class="caption grey--text">
+          <v-col class="text-caption grey--text">
             <span class="pr-2">Closing Date:</span>
             <v-icon color="grey" small>
               event
             </v-icon>
             <span>{{ new Date(`${program.close_date}Z`).toDateString() }}</span>
           </v-col>
-          <v-col class="caption grey--text">
+          <v-col class="text-caption grey--text">
             <span>#{{ program.funding_opportunity_number }}</span>
           </v-col>
         </v-row>

@@ -29,7 +29,7 @@
       <v-col cols="12">
         <div>
           <div class="text-subtitle-1 c-pt-5 c-pb-3 text-truncate">
-            <span class="caption grey--text">{{ contentRef.hash }}</span>
+            <span class="text-caption grey--text">{{ contentRef.hash }}</span>
           </div>
           <v-card v-for="file in contentRef.packageFiles" :key="file.hash">
             <v-card-text>

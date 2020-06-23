@@ -84,7 +84,7 @@
       </div>
 
       <v-row no-gutters justify="space-between" class="mt-3 mb-n3">
-        <v-col cols="6" class="caption grey--text align-self-center">
+        <v-col cols="6" class="text-caption grey--text align-self-center">
           <v-icon small>
             event
           </v-icon>

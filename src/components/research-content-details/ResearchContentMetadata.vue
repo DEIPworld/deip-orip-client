@@ -5,7 +5,7 @@
         <div class="legacy-row legacy-justify-between legacy-align-items-end">
           <div class="text-h4 bold">
             Block #{{ contentMetadata.blockNum }}
-            <span v-if="isGenesisBlock" class="caption grey--text">GENESIS</span>
+            <span v-if="isGenesisBlock" class="text-caption grey--text">GENESIS</span>
           </div>
 
           <!-- <qrcode value="Hello, World!" :options="{ size: 120 }"></qrcode> -->

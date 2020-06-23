@@ -55,7 +55,7 @@
     <v-col cols="12">
       <div>
         <div class="text-subtitle-1 c-pt-5 c-pb-5">
-          Application: <span class="caption grey--text">({{ application.letterHash }})</span>
+          Application: <span class="text-caption grey--text">({{ application.letterHash }})</span>
         </div>
         <v-card>
           <v-card-text>
@@ -70,7 +70,7 @@
     <v-col cols="12">
       <div>
         <div class="text-subtitle-1 c-pt-5 c-pb-5">
-          Package: <!-- <span class="caption grey--text">({{application.packageHash}})</span> -->
+          Package: <!-- <span class="text-caption grey--text">({{application.packageHash}})</span> -->
         </div>
         <v-card v-for="form in formsContent" :key="form.hash">
           <v-card-text>

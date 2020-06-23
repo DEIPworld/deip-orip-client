@@ -8,7 +8,7 @@
           <leveller-num class="align-self-center" style="height: auto" :height="24"
                         :num="level.value.index"></leveller-num>
           <div class="ml-2">
-            <div class="caption">{{ level.name }}</div>
+            <div class="text-caption">{{ level.name }}</div>
             {{ level.value.title }}
           </div>
         </v-list-item>

@@ -30,7 +30,7 @@
         <div class="text-h4 font-weight-medium pt-4">
           {{ userInfo | fullname }} <span
             v-if="(userInfo.profile && userInfo.profile.firstName)"
-            class="caption username-caption grey--text"
+            class="text-caption username-caption grey--text"
           >({{ userInfo.account.name }})</span>
           <v-btn
             v-if="isOwner"
@@ -132,7 +132,7 @@
                 >
                   {{ group.name }}
                 </router-link>
-                <div class="caption grey--text pt-2">
+                <div class="text-caption grey--text pt-2">
                   <template v-for="share in group.shares">
                     <span :key="'share-' + share.id">
                       <span>{{ share.owner }}</span>

@@ -193,7 +193,7 @@
             </v-avatar>
             <div class="text-h6 align-self-start font-weight-medium">
               {{ item.readinessLevelShortTitle }}
-              <div class="caption font-weight-bold">
+              <div class="text-caption font-weight-bold">
                 {{ item.step.description }}
               </div>
             </div>

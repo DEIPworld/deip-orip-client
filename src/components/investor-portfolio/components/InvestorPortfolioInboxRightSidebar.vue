@@ -23,7 +23,7 @@
         <div class="display-flex justify-space-between pa-2 align-middle">
             <span>
               <v-icon small>event</v-icon>
-              <span class="caption grey--text px-1">Created {{ moment(selectedInvestment.research.created_at).format('DD MMM YYYY') }} by {{ selectedInvestment.research.owner | fullname }}</span>
+              <span class="text-caption grey--text px-1">Created {{ moment(selectedInvestment.research.created_at).format('DD MMM YYYY') }} by {{ selectedInvestment.research.owner | fullname }}</span>
             </span>
           <span>
               <span class="icon-btn" @click="showUnderDevelopmentAlert()"><v-icon>attachment</v-icon></span>
@@ -246,7 +246,7 @@
           <div class="display-flex">
             <platform-avatar :size="40" :user="comment.author" class="pr-1" />
             <span class="text-body-2 px-2">{{ comment.author | fullname }}</span>
-            <span class="caption grey--text">{{ moment(comment.timestamp).format('DD MMM YYYY') }}</span>
+            <span class="text-caption grey--text">{{ moment(comment.timestamp).format('DD MMM YYYY') }}</span>
           </div>
           <div class="text-body-1 py-2">
             <toggle-text :text="comment.text" />

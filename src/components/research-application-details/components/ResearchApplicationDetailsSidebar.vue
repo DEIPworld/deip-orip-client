@@ -67,7 +67,7 @@
           </v-icon>
           <div class="legacy-col-grow add-review-label">
             Add a review
-          <!--  <span class="caption grey--text">
+          <!--  <span class="text-caption grey--text">
                 reward {{convertToPercent(research.review_share_in_percent)}}%
             </span> -->
           </div>

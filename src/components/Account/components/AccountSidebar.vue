@@ -27,7 +27,7 @@
               {{ user.profile.firstName }}
               {{ user.profile.lastName }}
             </v-list-item-title>
-            <v-list-item-subtitle class="caption">
+            <v-list-item-subtitle class="text-caption">
               {{ user.profile.email }}
             </v-list-item-subtitle>
           </v-list-item-content>

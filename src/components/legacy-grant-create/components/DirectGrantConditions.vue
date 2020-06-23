@@ -8,7 +8,7 @@
         Please type special conditions
       </div>
 
-      <div class="caption c-mb-4 text-align-center grey--text">
+      <div class="text-caption c-mb-4 text-align-center grey--text">
         You can grant your expertise tokens that match researcher's disciplines
       </div>
 
@@ -37,7 +37,7 @@
               <div class="legacy-col-12">
                 <div class="c-pt-4 text-subtitle-1 bold">
                   Description
-                  <span class="caption">(optional)</span>
+                  <span class="text-caption">(optional)</span>
                 </div>
 
                 <v-textarea

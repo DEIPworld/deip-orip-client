@@ -12,7 +12,7 @@
       <div class="legacy-col-grow overflow-y-auto">
         <div class="c-mh-auto full-height discipline-amount display-flex">
           <div class="c-mt-12 full-width">
-            <div class="caption grey--text">
+            <div class="text-caption grey--text">
               You are going to support the following research:
             </div>
 
@@ -22,7 +22,7 @@
                   {{ grantInfo.research.title }}
                 </div>
 
-                <div class="caption grey--text c-pt-2">
+                <div class="text-caption grey--text c-pt-2">
                   <template v-for="author in grantInfo.research.authors">
                     <span>{{ author }}</span>
                     <span> · </span>

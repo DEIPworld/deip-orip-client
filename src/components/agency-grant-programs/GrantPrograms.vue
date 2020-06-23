@@ -130,7 +130,7 @@
                   :program="program"
                 />
               </template>
-              <div v-show="!filteredCorePrograms.length" class="caption c-pl-5">
+              <div v-show="!filteredCorePrograms.length" class="text-caption c-pl-5">
                 No core programs found for specified criteria
               </div>
             </v-col>
@@ -146,7 +146,7 @@
                   :program="program"
                 />
               </template>
-              <div v-show="!filteredAdditionalPrograms.length" class="caption c-pl-5">
+              <div v-show="!filteredAdditionalPrograms.length" class="text-caption c-pl-5">
                 No additional programs found for specified criteria
               </div>
             </v-col>

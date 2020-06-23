@@ -3,7 +3,7 @@
     <v-expansion-panel-header>
       <div class="display-flex align-center" @click.stop>
         <div class="id-col">
-          <div class="caption">
+          <div class="text-caption">
             {{ proposal.external_id | shortHash }}
           </div>
         </div>
@@ -110,12 +110,12 @@
         </div>
 
         <div class="date">
-          <div class="caption">
+          <div class="text-caption">
             {{ proposal.creation_time | dateFormat('D MMM YYYY', true) }}
           </div>
         </div>
         <div class="date">
-          <div class="caption">
+          <div class="text-caption">
             {{ proposal.expiration_time | dateFormat('D MMM YYYY', true) }}
           </div>
         </div>
@@ -128,7 +128,7 @@
           <v-tooltip v-if="proposal.fail_reason" bottom>
             <template v-slot:activator="{ on }">
               <v-chip color="error" v-on="on">
-                <div class="caption">
+                <div class="text-caption">
                   Failure
                 </div>
               </v-chip>
@@ -142,7 +142,7 @@
           <v-tooltip v-else bottom>
             <template v-slot:activator="{ on }">
               <v-chip v-on="on">
-                <div class="caption">
+                <div class="text-caption">
                   Pending
                 </div>
               </v-chip>

@@ -36,7 +36,7 @@
           </div>
 
           <div class="text-align-right pt-4">
-            <div class="caption grey--text">
+            <div class="text-caption grey--text">
               <div>
                 Total:
                 <span>{{ sum }} %</span>

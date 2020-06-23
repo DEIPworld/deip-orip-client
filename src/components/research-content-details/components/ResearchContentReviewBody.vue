@@ -14,12 +14,12 @@
           </router-link>
         </div>
         <div v-if="review.author.profile" class="c-pt-2 c-pb-1">
-          <span class="caption bold">{{ review.author | employmentOrEducation }}</span>
+          <span class="text-caption bold">{{ review.author | employmentOrEducation }}</span>
         </div>
         <div v-if="hasLocation" class="c-pb-1">
           <v-icon small>
             location_on
-          </v-icon><span class="caption"> {{ review.author | userLocation }}</span>
+          </v-icon><span class="text-caption"> {{ review.author | userLocation }}</span>
         </div>
       </div>
     </div>

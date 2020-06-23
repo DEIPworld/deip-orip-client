@@ -197,7 +197,7 @@
               Agree to Terms and Conditions
             </template>
           </v-checkbox>
-          <div class="caption ml-8 mt-1">
+          <div class="text-caption ml-8 mt-1">
             No data is stored until you press “Create account” button.
             By clicking below, you agree that we may process
             your information in accordance with these terms.

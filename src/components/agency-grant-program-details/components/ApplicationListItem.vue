@@ -47,7 +47,7 @@
             {{ application.group.name }}:
           </router-link>
 
-          <span class="caption grey--text">
+          <span class="text-caption grey--text">
             <div v-for="(author, i) in application.authors" :key="`${i}-author`">
               <span>{{ author | fullname }}</span>
               <span> · </span>
@@ -112,7 +112,7 @@
                 <img :src="{ _id: duplicate.program.organization_name } | tenantLogoSrc(60, 60, false)">
               </v-avatar>
             </span>
-            <span class="caption grey--text">($ {{ fromAssetsToFloat(duplicate.total_amount) }} requested)</span>
+            <span class="text-caption grey--text">($ {{ fromAssetsToFloat(duplicate.total_amount) }} requested)</span>
           </div>
         </div>
       </v-col>

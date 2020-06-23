@@ -90,7 +90,7 @@
                       {{ member | fullname }}
                     </router-link>
 
-                    <div class="caption c-pt-1">
+                    <div class="text-caption c-pt-1">
                       {{ member | employmentOrEducation }}
                     </div>
                   </div>
@@ -189,7 +189,7 @@
                               {{ invite.user | fullname }}
                             </router-link>
 
-                            <div class="caption pt-1">
+                            <div class="text-caption pt-1">
                               {{ invite.user | employmentOrEducation }}
                             </div>
                           </div>

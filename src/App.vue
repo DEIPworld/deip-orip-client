@@ -11,14 +11,16 @@
 <!--      </v-sheet>-->
 <!--    </v-overlay>-->
 
-    <v-sheet tile min-height="100%" v-if="$ready">
-      <toolbar
-        v-if="!$route.meta.withoutHeader && !$route.path.includes('/admin')"
-        :is-grants-transparency-demo="isGrantsTransparencyDemo"
-      />
-      <toolbar-admin v-if="$route.path.includes('/admin') && !$route.meta.withoutHeader" />
+    <v-sheet v-if="$ready" min-height="100%">
 
-      <portal-target name="toolbar" />
+      <portal-target :key="$route.fullPath + '-toolbar'" name="toolbar">
+        <toolbar
+          v-if="!$route.meta.withoutHeader && !$route.path.includes('/admin')"
+          :is-grants-transparency-demo="isGrantsTransparencyDemo"
+        />
+      </portal-target>
+
+      <portal-target :key="$route.fullPath + '-navigator'" name="navigator" />
 
       <router-view :key="$route.fullPath" name="navigator" />
 
