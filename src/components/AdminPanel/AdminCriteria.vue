@@ -10,7 +10,7 @@
     </template>
 
     <side-actions-card v-for="(item, i) in researchComponents" :key="`${i}-stepper`" class="mb-6">
-      <div class="subtitle-1 font-weight-medium mb-4">
+      <div class="text-subtitle-1 font-weight-medium mb-4">
         {{ item.component.readinessLevelTitle }}
       </div>
 

@@ -34,7 +34,7 @@
         link-to-profile-class="pl-4"
       />
       <div v-if="$options.filters.employmentOrEducation(selectedUser)">
-        <div class="py-2 body-2">
+        <div class="py-2 text-body-2">
           {{ selectedUser | employmentOrEducation }}
         </div>
       </div>

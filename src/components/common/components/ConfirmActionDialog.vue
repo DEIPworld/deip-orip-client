@@ -2,7 +2,7 @@
   <v-row justify="start">
     <v-dialog v-model="meta.isShown" persistent :max-width="width">
       <v-card class="pa-6">
-        <v-card-title v-if="title" class="headline">
+        <v-card-title v-if="title" class="text-h5">
           {{ title }}
         </v-card-title>
         <v-card-text>{{ text }}</v-card-text>

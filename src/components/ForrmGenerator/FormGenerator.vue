@@ -8,7 +8,7 @@
       :max-width="maxWidth"
     >
       <!--:class="{'mb-2': index + 1 < schema.length}"-->
-      <div v-if="section.title" class="title mb-4">
+      <div v-if="section.title" class="text-h6 mb-4">
         {{ section.title }}
       </div>
 

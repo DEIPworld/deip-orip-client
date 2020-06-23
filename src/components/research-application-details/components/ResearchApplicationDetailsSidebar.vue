@@ -19,7 +19,7 @@
       <div class="sidebar-fullwidth">
         <v-divider />
       </div>
-      <div class="subtitle-1 bold c-mt-4">
+      <div class="text-subtitle-1 bold c-mt-4">
         Applicants
       </div>
 
@@ -41,12 +41,12 @@
       <div class="sidebar-fullwidth">
         <v-divider />
       </div>
-      <!--  <div class="subtitle-1 bold c-mt-4">
+      <!--  <div class="text-subtitle-1 bold c-mt-4">
         Reviews:
         <span class="green--text text--darken-2">{{positiveReviewsCount}}</span> /
         <span class="red--text text--darken-2">{{negativeReviewsCount}}</span>
       </div> -->
-      <div class="subtitle-1 bold c-mt-4">
+      <div class="text-subtitle-1 bold c-mt-4">
         <div class="c-pb-2">
           {{ program.agency_name.toUpperCase() }} Reviews: <span>{{ applicationReviewsList.length }}</span>
         </div>

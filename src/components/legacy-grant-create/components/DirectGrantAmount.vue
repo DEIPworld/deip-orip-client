@@ -5,7 +5,7 @@
         Direct grants distribution
       </div>
 
-      <div class="title bold c-mb-4 text-align-center">
+      <div class="text-h6 bold c-mb-4 text-align-center">
         Please type amount
       </div>
 

@@ -12,7 +12,7 @@
       :key="`${i}-faq`"
       :class="{'mb-6': (i + 1) < faqs.length}"
     >
-      <div class="subtitle-1 font-weight-medium">
+      <div class="text-subtitle-1 font-weight-medium">
         {{ item.question }}
       </div>
       {{ item.answer }}

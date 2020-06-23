@@ -1,7 +1,7 @@
 <template>
   <modal-route-view :title="title">
     <v-form v-show="!isServerValidated" ref="form" v-model="isFormValid">
-      <div class="title mb-6">
+      <div class="text-h6 mb-6">
         Personal information
       </div>
 
@@ -64,7 +64,7 @@
         </v-col>
       </v-row>
 
-      <div class="title mb-6">
+      <div class="text-h6 mb-6">
         Account information
       </div>
 
@@ -122,7 +122,7 @@
         </v-col>
       </v-row>
 
-      <div class="title mb-6">
+      <div class="text-h6 mb-6">
         Occupation information
       </div>
 
@@ -147,7 +147,7 @@
         </v-col>
       </v-row>
 
-      <div class="title mb-6">
+      <div class="text-h6 mb-6">
         Contact information
       </div>
 

@@ -1,7 +1,7 @@
 <template>
   <div>
     <v-sheet class="mb-6">
-      <div class="title">
+      <div class="text-h6">
         <router-link
           class="research-group-link"
           :to="{ name: 'ResearchGroupDetails', params: { research_group_permlink: encodeURIComponent(groupLink) } }"
@@ -48,7 +48,7 @@
         >
           <v-card class="pa-6">
             <v-card-title>
-              <div class="headline">
+              <div class="text-h5">
                 Provide a cover letter to your Join Request
               </div>
               <div class="right-top-angle">
@@ -123,7 +123,7 @@
     <v-divider class="my-6" />
 
     <v-sheet>
-      <div class="title">
+      <div class="text-h6">
         Expertise Contribution Index
       </div>
 
@@ -191,7 +191,7 @@
             <v-avatar size="30" color="#0386b0" class="align-self-start mr-2">
               <span class="white--text font-weight-medium">{{ item.value.index + 1 }}</span>
             </v-avatar>
-            <div class="title align-self-start font-weight-medium">
+            <div class="text-h6 align-self-start font-weight-medium">
               {{ item.readinessLevelShortTitle }}
               <div class="caption font-weight-bold">
                 {{ item.step.description }}
@@ -205,13 +205,13 @@
     <v-sheet v-if="isResearchGroupMember">
       <v-divider class="my-6" />
 
-      <div v-if="research.is_private" class="subtitle-1">
+      <div v-if="research.is_private" class="text-subtitle-1">
         <v-icon class="mr-2" small color="black">
           lock
         </v-icon>
         Private project
       </div>
-      <div v-else class="subtitle-1">
+      <div v-else class="text-subtitle-1">
         <v-icon class="mr-2" small color="black">
           mdi-earth
         </v-icon>
@@ -228,7 +228,7 @@
     <v-divider class="my-6" />
 
     <v-sheet v-if="contentList.length">
-      <div class="title">
+      <div class="text-h6">
         Expert Review
       </div>
 
@@ -251,7 +251,7 @@
 
         <v-card class="pa-6">
           <v-card-title>
-            <div class="headline">
+            <div class="text-h5">
               Request review from an Expert
             </div>
             <div class="right-top-angle">

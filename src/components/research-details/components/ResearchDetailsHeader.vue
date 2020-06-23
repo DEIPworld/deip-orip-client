@@ -2,7 +2,7 @@
   <layout-header muted :background="$options.filters.researchBackgroundSrc(research.external_id)" :max-width="researchRef.videoSrc ? '100%' : 800">
     <v-row no-gutters>
       <v-col cols="12" md="" style="max-width: 800px">
-        <div class="display-1">
+        <div class="text-h4">
           {{ research.title }}
         </div>
         <div class="pt-2">

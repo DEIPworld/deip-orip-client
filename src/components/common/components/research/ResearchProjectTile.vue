@@ -24,7 +24,7 @@
       v-if="research.researchRef && research.researchRef.tenantCategory && research.researchRef.tenantCategory.text"
       tile
       color="#0386b0"
-      class="project-category-label white--text py-1 pl-1 pr-2 body-2"
+      class="project-category-label white--text py-1 pl-1 pr-2 text-body-2"
     >
       {{ research.researchRef.tenantCategory.text }}
     </v-sheet>
@@ -32,7 +32,7 @@
     <v-sheet tile class="pa-6">
       <v-tooltip bottom>
         <template v-slot:activator="{ on }">
-          <div class="subtitle-1 text-truncate" v-on="on">
+          <div class="text-subtitle-1 text-truncate" v-on="on">
             {{ research.title }}
           </div>
         </template>
@@ -68,7 +68,7 @@
                   <v-avatar size="20" color="#0386b0" class="align-self-center mr-1">
                     <span class="white--text caption font-weight-medium">{{ item.value.index + 1 }}</span>
                   </v-avatar>
-                  <span class="subtitle-1 align-self-center font-weight-medium black--text">{{ item.readinessLevelShortTitle }}</span>
+                  <span class="text-subtitle-1 align-self-center font-weight-medium black--text">{{ item.readinessLevelShortTitle }}</span>
                 </div>
               </template>
               <span>{{ item.step.description }}</span>
@@ -77,7 +77,7 @@
               <v-avatar size="20" color="#0386b0" class="align-self-center mr-1">
                 <span class="white--text caption font-weight-medium">{{ item.value.index + 1 }}</span>
               </v-avatar>
-              <span class="subtitle-1 align-self-center font-weight-medium black--text">{{ item.readinessLevelShortTitle }}</span>
+              <span class="text-subtitle-1 align-self-center font-weight-medium black--text">{{ item.readinessLevelShortTitle }}</span>
             </div>
           </div>
         </div>

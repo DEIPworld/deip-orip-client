@@ -15,7 +15,7 @@
     </div>
 
     <div class="">
-      <div class="title bold c-pt-6">
+      <div class="text-h6 bold c-pt-6">
         <span class="">Personal information</span>
       </div>
 

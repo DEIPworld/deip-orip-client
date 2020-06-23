@@ -13,7 +13,7 @@
         <v-divider />
         <v-card class="pa-6 full-height">
           <div>
-            <div class="display-1 py-6">
+            <div class="text-h4 py-6">
               {{ program.additional_info.funding_opportunity_title }}
               ({{ program.funding_opportunity_number }})
             </div>
@@ -21,7 +21,7 @@
           </div>
 
           <div>
-            <div class="headline pt-6">
+            <div class="text-h5 pt-6">
               Award Receivers
             </div>
             <div v-for="(funding, fundingIdx) in fundings" :key="`${fundingIdx}-funding`">
@@ -41,7 +41,7 @@
 
               <v-row no-gutters class="pt-12">
                 <v-col cols="8">
-                  <div class="subtitle-1 font-weight-bold">
+                  <div class="text-subtitle-1 font-weight-bold">
                     Award number
                   </div>
                   <v-text-field
@@ -56,7 +56,7 @@
 
               <v-row no-gutters>
                 <v-col cols="8">
-                  <div class="subtitle-1 font-weight-bold">
+                  <div class="text-subtitle-1 font-weight-bold">
                     Researcher Name
                   </div>
                   <v-autocomplete
@@ -74,13 +74,13 @@
                   />
                 </v-col>
                 <v-col v-if="fundingIdx != 0" cols="3" offset="1">
-                  <!-- <div class="subtitle-1 font-weight-bold">Organization</div>
+                  <!-- <div class="text-subtitle-1 font-weight-bold">Organization</div>
                   <div class="v-input v-text-field theme--light">
                     <div class="v-input__control">
                       <div><label>{{funding.researchGroup ? funding.researchGroup.name : ""}}</label></div>
                     </div>
                   </div> -->
-                  <div class="subtitle-1 font-weight-bold">
+                  <div class="text-subtitle-1 font-weight-bold">
                     PI
                   </div>
                   <v-select
@@ -98,7 +98,7 @@
 
               <v-row no-gutters class="pt-2">
                 <v-col cols="12">
-                  <div class="subtitle-1 font-weight-bold">
+                  <div class="text-subtitle-1 font-weight-bold">
                     Research Group
                   </div>
                   <v-select
@@ -117,7 +117,7 @@
 
               <v-row no-gutters class="pt-2">
                 <v-col cols="12">
-                  <div class="subtitle-1 font-weight-bold">
+                  <div class="text-subtitle-1 font-weight-bold">
                     Research
                   </div>
                   <v-select
@@ -135,7 +135,7 @@
 
               <v-row no-gutters class="pt-4">
                 <v-col cols="8">
-                  <div class="subtitle-1 font-weight-bold">
+                  <div class="text-subtitle-1 font-weight-bold">
                     Purpose
                   </div>
                   <div
@@ -151,7 +151,7 @@
                   </div>
                 </v-col>
                 <v-col cols="3" offset="1" class="pt-4">
-                  <div class="subtitle-1 font-weight-bold">
+                  <div class="text-subtitle-1 font-weight-bold">
 &nbsp;
                   </div>
                   <v-text-field
@@ -197,7 +197,7 @@
               <v-row no-gutters>
                 <v-col cols="8">
                   <div v-if="fundingIdx == 0">
-                    <div class="subtitle-1 font-weight-bold">
+                    <div class="text-subtitle-1 font-weight-bold">
                       University overhead cap
                     </div>
                     <v-text-field
@@ -210,14 +210,14 @@
                   </div>
                 </v-col>
                 <v-col cols="3" offset="1">
-                  <div class="subtitle-1 font-weight-bold">
+                  <div class="text-subtitle-1 font-weight-bold">
 &nbsp;
                   </div>
                   <div class="total-row">
-                    <div class="subtitle-1 font-weight-bold">
+                    <div class="text-subtitle-1 font-weight-bold">
                       Total amount
                     </div>
-                    <div class="headline">
+                    <div class="text-h5">
                       $ {{ calculateTotalExpenses(funding) }}
                     </div>
                   </div>
@@ -227,18 +227,18 @@
               <!-- <div>
                 <v-row no-gutters class="py-4">
                   <v-col cols="12">
-                    <div class="subtitle-1 font-weight-bold">Milestones</div>
+                    <div class="text-subtitle-1 font-weight-bold">Milestones</div>
                   </v-col>
                 </v-row>
                 <div v-for="(milestone, milestoneIdx) in funding.milestones" :key="`${milestoneIdx}-milestone`">
                   <div>
                     <v-row no-gutters>
                       <v-col cols="5">
-                        <div class="subtitle-1 font-weight-bold">Description</div>
+                        <div class="text-subtitle-1 font-weight-bold">Description</div>
                         <v-text-field filled v-model="milestone.description" :prefix="milestoneIdx + 1 + '.'"></v-text-field>
                       </v-col>
                       <v-col cols="2" offset="1">
-                        <div class="subtitle-1 font-weight-bold">Deadline</div>
+                        <div class="text-subtitle-1 font-weight-bold">Deadline</div>
                           <datetime-picker
                               :datetime="milestone.deadline"
                               :available-from-now="true"
@@ -250,7 +250,7 @@
                           ></datetime-picker>
                       </v-col>
                       <v-col cols="3" offset="1">
-                        <div class="subtitle-1 font-weight-bold">Amount</div>
+                        <div class="text-subtitle-1 font-weight-bold">Amount</div>
                         <div class="right-input">
                           <v-text-field filled v-model="milestone.amount" suffix="%" mask="###"></v-text-field>
                         </div>
@@ -330,7 +330,7 @@
                   <v-gravatar v-else :email="officer.account.name + '@deip.world'" />
                 </v-avatar>
                 <router-link
-                  class="a body-1 pl-2 pt-2"
+                  class="a text-body-1 pl-2 pt-2"
                   :to="{ name: 'UserDetails', params: { account_name: officer.account.name } }"
                 >
                   {{ officer | fullname }}

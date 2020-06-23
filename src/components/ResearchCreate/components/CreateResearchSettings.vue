@@ -1,11 +1,11 @@
 <template>
   <v-row no-gutters justify="center">
     <v-col cols="7">
-      <div class="headline text-center mb-3">
+      <div class="text-h5 text-center mb-3">
         Project settings
       </div>
 
-      <div class="title text-align-left mb-3">
+      <div class="text-h6 text-align-left mb-3">
         Visibility
       </div>
 
@@ -35,7 +35,7 @@
         class="my-6"
       >
         <v-col v-if="item.isVisible" cols="12">
-          <div class="title font-weight-medium mb-6">
+          <div class="text-h6 font-weight-medium mb-6">
             {{ item.component.readinessLevelTitle }}
           </div>
           <leveller-selector
@@ -47,13 +47,13 @@
       </v-row>
 
       <div>
-        <div class="title mb-3">
+        <div class="text-h6 mb-3">
           Partners
         </div>
         <research-partners :partners="research.partners" />
       </div>
 
-    
+
       <div class="py-4 text-center">
         <v-btn text small @click.native="prevStep()">
           <v-icon dark class="pr-1">

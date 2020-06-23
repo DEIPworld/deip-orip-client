@@ -2,11 +2,11 @@
   <v-container fluid class="ma-0 pa-0">
     <v-row>
       <v-col cols="12" class="pb-6 pt-6 pl-6">
-        <div class="display-1">
+        <div class="text-h4">
           Payment # {{ withdrawal.paymentNumber }}
           <span class="ml-2 paymnet-current-status-box">
             <span
-              class="body-1 paymnet-current-status-label"
+              class="text-body-1 paymnet-current-status-label"
               :style="{
                 'background-color': withdrawalStatusMap[withdrawal.status].color,
                 'border-color': withdrawalStatusMap[withdrawal.status].color,
@@ -26,36 +26,36 @@
       <v-col cols="6" class="pa-6 grey-background">
         <v-row>
           <v-col cols="3" class="pa-1">
-            <span class="body-2 grey--text">Amount</span>
+            <span class="text-body-2 grey--text">Amount</span>
           </v-col>
           <v-col cols="9" class="pa-1">
-            <span class="body-2">{{ withdrawal.amount | currency }}</span>
+            <span class="text-body-2">{{ withdrawal.amount | currency }}</span>
           </v-col>
 
           <v-col cols="3" class="pa-1">
-            <span class="body-2 grey--text">PI</span>
+            <span class="text-body-2 grey--text">PI</span>
           </v-col>
           <v-col cols="9" class="pa-1">
-            <router-link class="a body-2" :to="{ name: 'UserDetails', params: { account_name: withdrawal.pi.account.name } }">
+            <router-link class="a text-body-2" :to="{ name: 'UserDetails', params: { account_name: withdrawal.pi.account.name } }">
               {{ withdrawal.pi | fullname }}
             </router-link>
           </v-col>
 
           <v-col cols="3" class="pa-1">
-            <span class="body-2 grey--text">Requester</span>
+            <span class="text-body-2 grey--text">Requester</span>
           </v-col>
           <v-col cols="9" class="pa-1">
-            <router-link class="a body-2" :to="{ name: 'UserDetails', params: { account_name: withdrawal.requester.account.name } }">
+            <router-link class="a text-body-2" :to="{ name: 'UserDetails', params: { account_name: withdrawal.requester.account.name } }">
               {{ withdrawal.requester | fullname }}
             </router-link>
           </v-col>
 
           <v-col cols="3" class="pa-1">
-            <span class="body-2 grey--text">Organization</span>
+            <span class="text-body-2 grey--text">Organization</span>
           </v-col>
           <v-col cols="9" class="pa-1">
             <router-link
-              class="a body-2"
+              class="a text-body-2"
               :to="{
                 name: 'ResearchGroupDetails',
                 params: {
@@ -68,11 +68,11 @@
           </v-col>
 
           <v-col cols="3" class="pa-1">
-            <span class="body-2 grey--text">Award #</span>
+            <span class="text-body-2 grey--text">Award #</span>
           </v-col>
           <v-col cols="9" class="pa-1">
             <router-link
-              class="a body-2"
+              class="a text-body-2"
               :to="{
                 name: 'GrantProgramAwardDetails',
                 params: {
@@ -85,11 +85,11 @@
           </v-col>
 
           <v-col cols="3" class="pa-1">
-            <span class="body-2 grey--text">Funding Agency</span>
+            <span class="text-body-2 grey--text">Funding Agency</span>
           </v-col>
           <v-col cols="9" class="pa-1">
             <router-link
-              class="a body-2"
+              class="a text-body-2"
               :to="{
                 name: 'ResearchGroupDetails',
                 params: {
@@ -102,10 +102,10 @@
           </v-col>
 
           <v-col cols="3" class="pa-1">
-            <span class="body-2 grey--text">Timestamp</span>
+            <span class="text-body-2 grey--text">Timestamp</span>
           </v-col>
           <v-col cols="9" class="pa-1">
-            <span class="body-2 grey--text">{{ moment(withdrawal.timestamp).format('MM/DD/YYYY HH:mm:ss') }}</span>
+            <span class="text-body-2 grey--text">{{ moment(withdrawal.timestamp).format('MM/DD/YYYY HH:mm:ss') }}</span>
           </v-col>
         </v-row>
       </v-col>
@@ -114,7 +114,7 @@
       <v-col cols="6" class="pa-6 grey-background">
         <v-row>
           <v-col cols="12">
-            <span class="subtitle-1 bold">Attachments</span>
+            <span class="text-subtitle-1 bold">Attachments</span>
           </v-col>
 
           <v-col v-if="withdrawal.attachment" cols="12">
@@ -141,14 +141,14 @@
             </div>
           </v-col>
           <v-col v-else cols="12">
-            <span class="body-1">No attachments</span>
+            <span class="text-body-1">No attachments</span>
           </v-col>
 
           <v-col cols="12" class="mt-4">
-            <div class="subtitle-1 bold">
+            <div class="text-subtitle-1 bold">
               Purpose
             </div>
-            <div class="body-1">
+            <div class="text-body-1">
               {{ withdrawal.description || 'Not specified' }}
             </div>
           </v-col>
@@ -157,7 +157,7 @@
 
       <v-col cols="12">
         <v-card class="elevation-0 pa-6 grey" color="grey lighten-2">
-          <div class="headline">
+          <div class="text-h5">
             Blockchain Transactions/Actions:
           </div>
         </v-card>
@@ -177,7 +177,7 @@
                 <v-col cols="12" class="pa-6">
                   <v-chip class="withdrawal-chip" :color="withdrawalStatusMap[record.status].color" :text-color="withdrawalStatusMap[record.status].textColor">
                     <div class="withdrawal-chip-label">
-                      <div class="subtitle-1">
+                      <div class="text-subtitle-1">
                         {{ withdrawalStatusMap[record.status].statusText }}
                       </div>
                     </div>
@@ -186,15 +186,15 @@
                 <v-col cols="12" class="pl-6 pr-2">
                   <v-row class="pt-2 pb-2">
                     <v-col cols="3">
-                      <span class="body-1 grey--text">Timestamp</span>
+                      <span class="text-body-1 grey--text">Timestamp</span>
                     </v-col>
                     <v-col cols="9">
-                      <span class="body-2 grey--text">{{ moment(record.timestamp).format('MM/DD/YYYY HH:mm:ss') }}</span>
+                      <span class="text-body-2 grey--text">{{ moment(record.timestamp).format('MM/DD/YYYY HH:mm:ss') }}</span>
                     </v-col>
                   </v-row>
                   <v-row class="pt-2 pb-2">
                     <v-col cols="3">
-                      <span class="body-1 grey--text">Transaction ID</span>
+                      <span class="text-body-1 grey--text">Transaction ID</span>
                     </v-col>
                     <v-col cols="9">
                       <a class="a" href="#">{{ record.trx_id }}</a>
@@ -202,30 +202,30 @@
                   </v-row>
                   <v-row class="pt-2 pb-2">
                     <v-col cols="3">
-                      <span class="body-1 grey--text">Signed By</span>
+                      <span class="text-body-1 grey--text">Signed By</span>
                     </v-col>
                     <v-col cols="9">
-                      <router-link class="a body-2" :to="{ name: 'UserDetails', params: { account_name: record.trxSigner.account.name } }">
+                      <router-link class="a text-body-2" :to="{ name: 'UserDetails', params: { account_name: record.trxSigner.account.name } }">
                         {{ record.trxSigner | fullname }}
                       </router-link>
-                      <span class="body-2 grey--text pl-2">({{ record.trxOrg.name }})</span>
+                      <span class="text-body-2 grey--text pl-2">({{ record.trxOrg.name }})</span>
                     </v-col>
                   </v-row>
 
                   <v-row class="pt-2 pb-2">
                     <v-col cols="2" class="tx-algo pa-1">
-                      <div class="body-2 white--text text--darken-4 pt-1 pl-1">
+                      <div class="text-body-2 white--text text--darken-4 pt-1 pl-1">
                         SHA256
                       </div>
-                      <div class="body-2 grey--text text--darken-1 pt-1 pl-1">
+                      <div class="text-body-2 grey--text text--darken-1 pt-1 pl-1">
                         Signature
                       </div>
                     </v-col>
                     <v-col cols="10" class="tx-data pa-1">
-                      <div class="break-letter body-1 grey--text text--darken-1 pt-1 pl-2 pr-2 break-all">
+                      <div class="break-letter text-body-1 grey--text text--darken-1 pt-1 pl-2 pr-2 break-all">
                         {{ record.trxSigner.account.owner.key_auths[0][0] }}
                       </div>
-                      <div class="break-letter body-1 grey--text text--darken-1 pt-1 pl-2 pr-2 break-all">
+                      <div class="break-letter text-body-1 grey--text text--darken-1 pt-1 pl-2 pr-2 break-all">
                         {{ record.trxInfo.signatures[0] }}
                       </div>
                     </v-col>
@@ -237,12 +237,12 @@
             <v-col cols="6" class="pa-6">
               <v-row class="pt-2 pb-2">
                 <v-col cols="2">
-                  <div class="body-1 grey--text">
+                  <div class="text-body-1 grey--text">
                     Block
                   </div>
                 </v-col>
                 <v-col cols="10">
-                  <div class="body-2 grey--text">
+                  <div class="text-body-2 grey--text">
                     # {{ record.block }}
                   </div>
                 </v-col>
@@ -250,19 +250,19 @@
 
               <v-row class="pt-2 pb-2">
                 <v-col cols="12">
-                  <div class="body-1 grey--text">
+                  <div class="text-body-1 grey--text">
                     Block ID
                   </div>
                 </v-col>
                 <v-col cols="12" class="pt-2">
                   <v-row>
                     <v-col cols="2" class="tx-algo pa-1">
-                      <div class="body-2 white--text text--darken-4 pt-1 pl-1">
+                      <div class="text-body-2 white--text text--darken-4 pt-1 pl-1">
                         RIPEMD-160
                       </div>
                     </v-col>
                     <v-col cols="10" class="tx-data pa-1">
-                      <div class="break-letter body-1 grey--text text--darken-1 pt-1 pl-2 pr-2">
+                      <div class="break-letter text-body-1 grey--text text--darken-1 pt-1 pl-2 pr-2">
                         {{ record.blockInfo.block_id }}
                       </div>
                     </v-col>
@@ -272,19 +272,19 @@
 
               <v-row class="pt-2 pb-2">
                 <v-col cols="12">
-                  <div class="body-1 grey--text">
+                  <div class="text-body-1 grey--text">
                     Merkle Root
                   </div>
                 </v-col>
                 <v-col cols="12" class="pt-2">
                   <v-row>
                     <v-col cols="2" class="tx-algo pa-1">
-                      <div class="body-2 white--text text--darken-4 pt-1 pl-1">
+                      <div class="text-body-2 white--text text--darken-4 pt-1 pl-1">
                         RIPEMD-160
                       </div>
                     </v-col>
                     <v-col cols="10" class="tx-data pa-1">
-                      <div class="break-letter body-1 grey--text text--darken-1 pt-1 pl-2 pr-2 break-all">
+                      <div class="break-letter text-body-1 grey--text text--darken-1 pt-1 pl-2 pr-2 break-all">
                         {{ record.blockInfo.transaction_merkle_root }}
                       </div>
                     </v-col>
@@ -294,7 +294,7 @@
 
               <v-row class="pt-2 pb-2">
                 <v-col cols="12">
-                  <div class="body-1 grey--text">
+                  <div class="text-body-1 grey--text">
                     Block Signatures
                   </div>
                 </v-col>
@@ -302,24 +302,24 @@
                 <v-col cols="12" class="pt-2">
                   <v-row>
                     <v-col cols="2" class="tx-algo pa-1">
-                      <div class="body-2 bold white--text text--darken-4 pt-1 pl-1 mb-1 signer">
+                      <div class="text-body-2 bold white--text text--darken-4 pt-1 pl-1 mb-1 signer">
                         {{ getWitnessOrg(record.blockInfo.witness) }}
                       </div>
-                      <div class="body-2 white--text text--darken-4 pl-1">
+                      <div class="text-body-2 white--text text--darken-4 pl-1">
                         SHA256
                       </div>
-                      <div class="body-2 grey--text text--darken-1 pt-1 pl-1">
+                      <div class="text-body-2 grey--text text--darken-1 pt-1 pl-1">
                         Signature
                       </div>
                     </v-col>
                     <v-col cols="10" class="tx-data pa-1">
-                      <div class="body-2 pt-1 pl-1">
+                      <div class="text-body-2 pt-1 pl-1">
 &nbsp;
                       </div>
-                      <div class="break-letter body-1 grey--text text--darken-1 pt-1 pl-2 pr-2 break-all">
+                      <div class="break-letter text-body-1 grey--text text--darken-1 pt-1 pl-2 pr-2 break-all">
                         {{ record.blockInfo.signing_key }}
                       </div>
-                      <div class="break-letter body-1 grey--text text--darken-1 pt-1 pl-2 pr-2 break-all">
+                      <div class="break-letter text-body-1 grey--text text--darken-1 pt-1 pl-2 pr-2 break-all">
                         {{ record.blockInfo.witness_signature }}
                       </div>
                     </v-col>
@@ -334,24 +334,24 @@
                 >
                   <v-row>
                     <v-col cols="2" class="tx-algo pa-1">
-                      <div class="body-2 bold white--text text--darken-4 pt-1 pl-1 mb-1 signer">
+                      <div class="text-body-2 bold white--text text--darken-4 pt-1 pl-1 mb-1 signer">
                         {{ getWitnessOrg(witness.owner) }}
                       </div>
-                      <div class="body-2 white--text text--darken-4 pl-1">
+                      <div class="text-body-2 white--text text--darken-4 pl-1">
                         SHA256
                       </div>
-                      <div class="body-2 grey--text text--darken-1 pt-1 pl-1">
+                      <div class="text-body-2 grey--text text--darken-1 pt-1 pl-1">
                         Signature
                       </div>
                     </v-col>
                     <v-col cols="10" class="tx-data pa-1">
-                      <div class="body-2 pt-1 pl-1">
+                      <div class="text-body-2 pt-1 pl-1">
 &nbsp;
                       </div>
-                      <div class="break-letter body-1 grey--text text--darken-1 pt-1 pl-2 pr-2 break-all">
+                      <div class="break-letter text-body-1 grey--text text--darken-1 pt-1 pl-2 pr-2 break-all">
                         {{ witness.signing_key }}
                       </div>
-                      <div class="break-letter body-1 grey--text text--darken-1 pt-1 pl-2 pr-2 break-all">
+                      <div class="break-letter text-body-1 grey--text text--darken-1 pt-1 pl-2 pr-2 break-all">
                         {{ witness.witness_signature }}
                       </div>
                     </v-col>

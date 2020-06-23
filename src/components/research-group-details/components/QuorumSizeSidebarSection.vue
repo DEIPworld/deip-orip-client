@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="subtitle-1 bold">
+    <div class="text-subtitle-1 bold">
       Quorum threshold
     </div>
 

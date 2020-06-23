@@ -2,7 +2,7 @@
   <v-row no-gutters justify="center">
     <v-col cols="6">
 
-      <div class="text-center headline mb-3">
+      <div class="text-center text-h5 mb-3">
         Add title and number
       </div>
 

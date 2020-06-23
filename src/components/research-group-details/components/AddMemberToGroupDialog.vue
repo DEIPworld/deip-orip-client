@@ -7,7 +7,7 @@
   >
     <v-card class="pa-6">
       <v-card-title>
-        <div class="headline">
+        <div class="text-h5">
           Invite user to Research Group
         </div>
         <div class="right-top-angle">

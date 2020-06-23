@@ -1,11 +1,11 @@
 <template>
   <v-row no-gutters justify="center">
     <v-col cols="7">
-      <div class="headline text-center mb-3">
+      <div class="text-h5 text-center mb-3">
         Roadmap
       </div>
 
-      <div class="subtitle-1 text-center">
+      <div class="text-subtitle-1 text-center">
         Let’s create a roadmap for your research. Well-presented and
         detailed roadmap attracts more investors to help you to get the funding
       </div>

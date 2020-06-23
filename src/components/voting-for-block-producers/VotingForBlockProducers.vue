@@ -1,6 +1,6 @@
 <template>
   <div class="fill-height pa-12 xs12">
-    <div class="display-1 bold">
+    <div class="text-h4 bold">
       Top witnesses
     </div>
 

@@ -4,14 +4,14 @@
       <v-col cols="5">
         <div class="text-center">
           <div v-if="tenant">
-            <span class="headline">{{tenant.account.name}}</span>
+            <span class="text-h5">{{tenant.account.name}}</span>
             <!-- <img width="100px" height="100px" :src="tenant.account | tenantLogoSrc(160, 160, false)"> -->
           </div>
-          <!-- <div class="title c-pb-4 bold">Welcome to</div>
+          <!-- <div class="text-h6 c-pb-4 bold">Welcome to</div>
           <div class="deip-emblem">
             <div class="emblem-logo">Deip.world</div>
               <div class="emblem-caption">Decentralized research platform</div>
-              <div v-if="tenant" class="c-pt-5 subtitle-1" style="text-decoration: underline">Use credentials from Grants Community Blockchain</div>
+              <div v-if="tenant" class="c-pt-5 text-subtitle-1" style="text-decoration: underline">Use credentials from Grants Community Blockchain</div>
           </div> -->
           <div>
             <v-form

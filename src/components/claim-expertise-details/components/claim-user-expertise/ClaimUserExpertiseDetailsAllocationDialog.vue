@@ -16,7 +16,7 @@
 
       <v-row>
         <v-col class="fill-height pa-12 xs12">
-          <div class="headline text-align-center">
+          <div class="text-h5 text-align-center">
             You are suggesting to supply
 
             <router-link class="a" :to="{ name: 'UserDetails', params: { account_name: claimer.account.name }}">

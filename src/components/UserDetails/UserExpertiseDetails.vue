@@ -5,7 +5,7 @@
         <platform-avatar :user="userInfo" :size="80" />
       </div>
       <div class="ml-6">
-        <div class="headline">
+        <div class="text-h5">
           {{ userInfo | fullname }}
         </div>
         <div v-if="$options.filters.userLocation(userInfo)">
@@ -75,10 +75,10 @@
               />
               <v-col cols="2" class="px-2">
                 <div class="display-flex justify-center align-center flex-column full-height">
-                  <div class="title grey--text text-center">
+                  <div class="text-h6 grey--text text-center">
                     Expertise Contribution Index
                   </div>
-                  <div class="subtitle-1 mt-2">
+                  <div class="text-subtitle-1 mt-2">
                     {{ selectedExpertise.amount }}
                   </div>
                 </div>
@@ -91,10 +91,10 @@
               />
               <v-col cols="2" class="px-2">
                 <div class="display-flex justify-center align-center flex-column full-height">
-                  <div class="title grey--text text-center">
+                  <div class="text-h6 grey--text text-center">
                     Contributions
                   </div>
-                  <div class="subtitle-1 mt-2">
+                  <div class="text-subtitle-1 mt-2">
                     <!-- {{ overview.contributions }} -->
                     <!-- Alice will have 3 contributions during the demo -->
                     3
@@ -107,7 +107,7 @@
                 class="ma-0"
                 style="max-height: 100%"
               />
-              <v-col cols="2" class="px-2 headline primary--text">
+              <v-col cols="2" class="px-2 text-h5 primary--text">
                 <div class="display-flex justify-center align-center flex-column full-height">
                   <div>TOP <b>{{ overview.percentile }}</b>%</div>
                   <div>in {{ selectedExpertise.discipline_name }}</div>
@@ -121,10 +121,10 @@
               />
               <v-col cols="2" class="px-2">
                 <div class="display-flex justify-center align-center flex-column full-height">
-                  <div class="title grey--text text-center">
+                  <div class="text-h6 grey--text text-center">
                     Citations
                   </div>
-                  <div class="subtitle-1 mt-2">
+                  <div class="text-subtitle-1 mt-2">
                     <!-- {{ overview.contributions }} -->
                     <!-- Alice will have 30 citations during the demo -->
                     30
@@ -139,10 +139,10 @@
               />
               <v-col cols="2" class="px-2">
                 <div class="display-flex justify-center align-center flex-column full-height">
-                  <div class="title grey--text text-center">
+                  <div class="text-h6 grey--text text-center">
                     H-index
                   </div>
-                  <div class="subtitle-1 mt-2">
+                  <div class="text-subtitle-1 mt-2">
                     <!-- {{ overview.contributions }} -->
                     <!-- Alice will have 27 h-index during the demo -->
                     7
@@ -323,7 +323,7 @@
       </div>
     </div>
 
-    <div v-if="!eciHistoryRecordsTable.items.length" class="headline py-4">
+    <div v-if="!eciHistoryRecordsTable.items.length" class="text-h5 py-4">
       There are no history records for selected Discipline
     </div>
   </v-card>

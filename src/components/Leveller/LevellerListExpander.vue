@@ -8,7 +8,7 @@
         :dot-num="index + 1"
         dense
       >
-        <div class="subtitle-1">
+        <div class="text-subtitle-1">
           {{ item.title }}
         </div>
       </leveller-item>

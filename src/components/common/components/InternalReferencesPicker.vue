@@ -1,7 +1,7 @@
 <template>
   <div class="full-width">
     <div v-if="showSelected">
-      <div v-show="selected.length" class="subtitle-1 py-2">
+      <div v-show="selected.length" class="text-subtitle-1 py-2">
         Selected References:
       </div>
       <v-row
@@ -12,7 +12,7 @@
         align="center"
         :class="{'py-2': i > 0}"
       >
-        <v-col class="body-1 pr-6">
+        <v-col class="text-body-1 pr-6">
           <span>{{ ref.title }} ({{ ref.research_title }})</span>
         </v-col>
         <v-col cols="auto" class="text--right">
@@ -42,7 +42,7 @@
       <v-col class="pr-6">
         <router-link
           target="_blank"
-          class="a body-1"
+          class="a text-body-1"
           :to="{
             name: 'ResearchContentDetails',
             params: {

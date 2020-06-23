@@ -50,7 +50,7 @@
             >{{ log.metadata.research.title }}</router-link>" research
           </span>
           <span v-else>
-            proposed to start "<span class="body-2">{{ log.metadata.proposal.data.title }}</span>" research
+            proposed to start "<span class="text-body-2">{{ log.metadata.proposal.data.title }}</span>" research
           </span>
         </span>
       </div>

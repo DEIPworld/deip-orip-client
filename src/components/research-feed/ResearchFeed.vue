@@ -1,7 +1,7 @@
 <template>
   <app-layout>
     <layout-header :background="$options.filters.tenantBackgroundSrc(tenant.account)">
-      <div class="display-2 uppercase half-bold">
+      <div class="text-h3 uppercase half-bold">
         Projects
       </div>
 
@@ -19,7 +19,7 @@
           <v-btn :to="{ name: 'SignIn' }" color="primary" class="ma-0 px-12">
             Log In
           </v-btn>
-          <div class="white--text body-1 mt-2">
+          <div class="white--text text-body-1 mt-2">
             After creating an account/log in you can add
             new projects or enjoy shared materials
           </div>
@@ -118,7 +118,7 @@
         <v-sheet tile color="#fafafa" class="pa-12">
           <v-row justify="space-between" align="center" class="mb-6">
             <v-col>
-              <div class="subtitle-1">
+              <div class="text-subtitle-1">
                 Browse by discipline
               </div>
             </v-col>
@@ -161,7 +161,7 @@
             <template v-if="item.isVisible && item.type === 'stepper'">
               <v-row justify="space-between" align="center" class="pb-6">
                 <v-col>
-                  <div class="subtitle-1">
+                  <div class="text-subtitle-1">
                     Browse by {{ item.component.readinessLevelShortTitle }}
                   </div>
                 </v-col>
@@ -220,7 +220,7 @@
 
           <v-row class="pb-6" justify="space-between">
             <v-col>
-              <span class="subtitle-1">Browse by organizations</span>
+              <span class="text-subtitle-1">Browse by organizations</span>
             </v-col>
             <v-col cols="auto">
               <v-btn
@@ -265,7 +265,7 @@
 
           <v-row justify="space-between" align="center" class="pb-6">
             <v-col>
-              <div class="subtitle-1">
+              <div class="text-subtitle-1">
                 Browse by category
               </div>
             </v-col>

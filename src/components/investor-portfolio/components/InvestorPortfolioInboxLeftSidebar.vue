@@ -1,6 +1,6 @@
 <template>
   <div class="pa-6">
-    <div class="title">
+    <div class="text-h6">
       My Lists
     </div>
     <v-list
@@ -53,7 +53,7 @@
     <v-dialog v-model="newListDialog.isOpened" max-width="600px">
       <v-card class="pa-6">
         <v-card-title>
-          <div class="title">
+          <div class="text-h6">
             Add new list
           </div>
           <div class="right-top-angle">
@@ -103,7 +103,7 @@
     <v-dialog v-model="editListDialog.isOpened" max-width="600px">
       <v-card class="pa-6">
         <v-card-title>
-          <div class="title">
+          <div class="text-h6">
             Add new list
           </div>
           <div class="right-top-angle">

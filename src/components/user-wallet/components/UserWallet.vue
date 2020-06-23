@@ -68,9 +68,9 @@
       title="Portfolio"
     >
       <div v-for="(investment, index) of investments" :key="'investment-' + index" class="my-6">
-        <div class="display-1">
+        <div class="text-h4">
           <router-link
-            class="a subtitle-1 text-truncate"
+            class="a text-subtitle-1 text-truncate"
             :to="{
               name: 'ResearchDetails',
               params: {
@@ -85,7 +85,7 @@
 
         <v-row class="mt-2">
           <v-col>
-            <div class="body-2">
+            <div class="text-body-2">
               {{ convertToPercent(investment.myShare.amount) }} %
             </div>
             <div class="mt-1 caption text-uppercase grey--text">
@@ -93,7 +93,7 @@
             </div>
           </v-col>
           <v-col>
-            <div class="body-2">
+            <div class="text-body-2">
               {{ mockTokenPrice(investment.research.id, 1) | currency }}
             </div>
             <div class="mt-1 caption text-uppercase grey--text">
@@ -101,7 +101,7 @@
             </div>
           </v-col>
           <v-col>
-            <div class="body-2">
+            <div class="text-body-2">
               {{ mockTokenPrice(investment.research.id, investment.myShare.amount) | currency }}
             </div>
             <div class="mt-1 caption text-uppercase grey--text">
@@ -109,7 +109,7 @@
             </div>
           </v-col>
           <v-col>
-            <div class="body-2">
+            <div class="text-body-2">
               {{ mockTokenPrice(investment.research.id, DEIP_100_PERCENT)| currency }}
             </div>
             <div class="mt-1 caption text-uppercase grey--text">
@@ -117,7 +117,7 @@
             </div>
           </v-col>
           <v-col>
-            <div class="body-2 green--text text-accent-4">
+            <div class="text-body-2 green--text text-accent-4">
               +{{ mockPriceChange(investment.research.id).toFixed(2) }}%
             </div>
             <div class="mt-1 caption text-uppercase grey--text">
@@ -125,7 +125,7 @@
             </div>
           </v-col>
           <v-col>
-            <div class="body-2">
+            <div class="text-body-2">
               {{ investment.shareHolders.length + 1 }}
             </div>
             <div class="mt-1 caption text-uppercase grey--text">
@@ -154,7 +154,7 @@
         <v-sheet v-if="expandedInvestmentIdx === index">
           <v-row>
             <v-col class="xs">
-              <div class="title">
+              <div class="text-h6">
                 Share price
               </div>
               <div class="mt-6">
@@ -167,7 +167,7 @@
               </div>
             </v-col>
             <v-col class="xs">
-              <div class="title">
+              <div class="text-h6">
                 Share holders
               </div>
               <div class="mt-6">
@@ -196,7 +196,7 @@
     <v-dialog v-model="depositDialog.isOpened" persistent max-width="800px">
       <v-card class="pa-6">
         <v-card-title class="">
-          <div class="subtitle-1 font-weight-bold">
+          <div class="text-subtitle-1 font-weight-bold">
             Deposit funds
           </div>
           <div class="right-top-angle">
@@ -262,7 +262,7 @@
     <v-dialog v-model="withdrawDialog.isOpened" persistent max-width="800px">
       <v-card class="pa-6">
         <v-card-title class="">
-          <div class="subtitle-1 font-weight-bold">
+          <div class="text-subtitle-1 font-weight-bold">
             Withdraw funds
           </div>
           <div class="right-top-angle">
@@ -379,7 +379,7 @@
     <v-dialog v-model="sendResearchTokensDialog.isOpened" persistent max-width="600px">
       <v-card class="pa-6">
         <v-card-title>
-          <div class="title">
+          <div class="text-h6">
             Transfer Research Share
           </div>
           <div class="right-top-angle">
@@ -448,7 +448,7 @@
     <v-dialog v-model="sendTokensDialog.isOpened" persistent max-width="600px">
       <v-card class="pa-6">
         <v-card-title>
-          <div class="title">
+          <div class="text-h6">
             Transfer - {{ sendTokensDialog.currency.title }}
           </div>
           <div class="right-top-angle">

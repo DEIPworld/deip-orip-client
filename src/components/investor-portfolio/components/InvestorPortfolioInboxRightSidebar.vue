@@ -8,7 +8,7 @@
     >
       <div class="px-6 full-width">
         <router-link
-          class="subtitle-1 half-bold investment-title"
+          class="text-subtitle-1 half-bold investment-title"
           :to="{ name: 'ResearchDetails', params: {
               research_group_permlink: encodeURIComponent(selectedInvestment.group.permlink),
               research_permlink: encodeURIComponent(selectedInvestment.research.permlink)
@@ -36,20 +36,20 @@
 
 
       <div v-if="currentPhase" class="px-6 py-2 full-width">
-        <div class="subtitle-1 half-bold">
+        <div class="text-subtitle-1 half-bold">
           Current Phase
         </div>
-        <div class="body-2 py-1">
+        <div class="text-body-2 py-1">
           {{ currentPhase.goal }}
         </div>
         <div class="py-2">
-          <v-chip class="ma-0 body-1" color="amber" text-color="white">
+          <v-chip class="ma-0 text-body-1" color="amber" text-color="white">
             Deadline on {{ moment(currentPhase.eta).format('MMM D, YYYY') }}
           </v-chip>
-          <!-- <v-chip v-if="currentPhaseDeadlineLabel.isOverdue" class="ma-0 body-1" color="amber" text-color="white">{{currentPhaseDeadlineLabel.text}}</v-chip>
-          <v-chip v-else class="ma-0 body-1" color="#8BC34A" text-color="white">{{currentPhaseDeadlineLabel.text}}</v-chip> -->
+          <!-- <v-chip v-if="currentPhaseDeadlineLabel.isOverdue" class="ma-0 text-body-1" color="amber" text-color="white">{{currentPhaseDeadlineLabel.text}}</v-chip>
+          <v-chip v-else class="ma-0 text-body-1" color="#8BC34A" text-color="white">{{currentPhaseDeadlineLabel.text}}</v-chip> -->
         </div>
-        <div class="body-1 py-2">
+        <div class="text-body-1 py-2">
           <toggle-text :text="currentPhase.details" />
         </div>
       </div>
@@ -57,7 +57,7 @@
       <div class="full-width">
         <v-divider class="mb-2" />
         <div>
-          <div class="subtitle-1 half-bold px-6">
+          <div class="text-subtitle-1 half-bold px-6">
             Team: {{ selectedInvestment.group.name }}
           </div>
           <div class="display-flex px-6 py-2">
@@ -74,7 +74,7 @@
       </div>
 
       <div class="px-6 py-2 full-width">
-        <div class="subtitle-1 half-bold">
+        <div class="text-subtitle-1 half-bold">
           Top investors
         </div>
         <div class="py-2">
@@ -90,7 +90,7 @@
       <div class="py-2 full-width">
         <v-divider class="mb-2" />
         <div class="display-flex justify-space-between px-6">
-          <div class="subtitle-1 half-bold">
+          <div class="text-subtitle-1 half-bold">
             My memo
           </div>
           <!-- <div class="text--right"><span class="icon-btn" @click="editMemo()"><v-icon small>edit</v-icon></span></div> -->
@@ -117,7 +117,7 @@
             </v-icon>
           </v-btn>
         </div>
-        <div class="body-1 px-6 py-2">
+        <div class="text-body-1 px-6 py-2">
           <toggle-text v-if="!isEditingMemo" :text="selectedInvestment.portfolioRef.memo" />
           <v-textarea
             v-else
@@ -145,7 +145,7 @@
                 </v-chip>
               </div>
             </div>
-            <div v-else class="subtitle-1 pa-6 grey--text">
+            <div v-else class="text-subtitle-1 pa-6 grey--text">
               No attached labels
             </div>
             <div>
@@ -166,7 +166,7 @@
           <v-dialog v-model="updateTagsDialog.isOpened" max-width="600px">
             <v-card class="pa-6">
               <v-card-title>
-                <div class="title">
+                <div class="text-h6">
                   Attach to list
                 </div>
                 <div class="right-top-angle">
@@ -231,7 +231,7 @@
           </v-dialog>
         </div>
         <div v-else>
-          <div class="subtitle-1 pa-6 grey--text">
+          <div class="text-subtitle-1 pa-6 grey--text">
             Please add a list to attach labels
           </div>
         </div>
@@ -239,16 +239,16 @@
       </div>
 
       <div v-if="selectedInvestment.research.comments.length" class="px-6 full-width">
-        <div class="subtitle-1 half-bold py-2">
+        <div class="text-subtitle-1 half-bold py-2">
           Comments
         </div>
         <div v-for="(comment, i) in selectedInvestment.research.comments" :key="'investment-comment-'+ i" class="py-1">
           <div class="display-flex">
             <platform-avatar :size="40" :user="comment.author" class="pr-1" />
-            <span class="body-2 px-2">{{ comment.author | fullname }}</span>
+            <span class="text-body-2 px-2">{{ comment.author | fullname }}</span>
             <span class="caption grey--text">{{ moment(comment.timestamp).format('DD MMM YYYY') }}</span>
           </div>
-          <div class="body-1 py-2">
+          <div class="text-body-1 py-2">
             <toggle-text :text="comment.text" />
           </div>
         </div>

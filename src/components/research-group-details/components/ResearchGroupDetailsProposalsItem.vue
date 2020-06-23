@@ -22,7 +22,7 @@
             <v-icon small color="primary" class="mx-2">
               person_add
             </v-icon>
-            <div class="body-2">
+            <div class="text-body-2">
               <router-link
                 class="a"
                 :to="{ name: 'UserDetails', params: { account_name: proposal.extension.invitee.account.name } }"
@@ -35,7 +35,7 @@
             <v-icon small color="primary" class="mx-2">
               mdi-account-remove
             </v-icon>
-            <div class="body-2">
+            <div class="text-body-2">
               <router-link
                 class="a"
                 :to="{ name: 'UserDetails', params: { account_name: proposal.extension.member.account.name } }"
@@ -59,7 +59,7 @@
             <v-icon small color="primary" class="mx-2">
               attach_money
             </v-icon>
-            <div class="body-2">
+            <div class="text-body-2">
               {{ proposal.payload.share }} fundraise
             </div>
           </div>
@@ -71,7 +71,7 @@
             <v-icon small color="primary" class="mx-2">
               settings_applications
             </v-icon>
-            <div class="body-2">
+            <div class="text-body-2">
               Update group meta
             </div>
           </div>
@@ -82,7 +82,7 @@
             <v-icon small color="primary" class="mx-2">
               edit_attributes
             </v-icon>
-            <div class="body-2">
+            <div class="text-body-2">
               Update research meta
             </div>
           </div>

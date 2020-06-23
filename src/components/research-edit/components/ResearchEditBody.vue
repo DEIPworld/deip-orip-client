@@ -1,7 +1,7 @@
 <template>
   <content-block :max-width="800" centered>
     <div>
-      <div class="title font-weight-medium pb-4">
+      <div class="text-h6 font-weight-medium pb-4">
         Tilte:
       </div>
       <v-text-field
@@ -12,7 +12,7 @@
       />
     </div>
     <div>
-      <div class="title font-weight-medium pb-4">
+      <div class="text-h6 font-weight-medium pb-4">
         Description:
       </div>
       <v-textarea
@@ -24,7 +24,7 @@
       />
     </div>
     <div class="mb-4">
-      <div class="title font-weight-medium pb-4">
+      <div class="text-h6 font-weight-medium pb-4">
         Visibility
       </div>
       <div>
@@ -54,7 +54,7 @@
     <v-divider />
 
     <div v-if="tenant.profile.settings.researchCategories.length" class="my-6">
-      <div class="title font-weight-medium pb-4">
+      <div class="text-h6 font-weight-medium pb-4">
         Category:
       </div>
       <v-select
@@ -68,7 +68,7 @@
     </div>
 
     <div class="my-6">
-      <div class="title font-weight-medium pb-4">
+      <div class="text-h6 font-weight-medium pb-4">
         Video Presentation:
       </div>
       <v-text-field
@@ -85,7 +85,7 @@
 
     <div class="my-6" v-for="(item, i) in tenant.profile.settings.researchComponents" :key="`${i}-stepper`">
       <div v-if="item.isVisible">
-        <div class="title font-weight-medium pb-4">
+        <div class="text-h6 font-weight-medium pb-4">
           {{ item.component.readinessLevelTitle }}
         </div>
         <leveller-selector
@@ -99,7 +99,7 @@
     <v-divider class="mt-9" />
 
     <div class="my-6">
-      <div class="title font-weight-medium pb-4">
+      <div class="text-h6 font-weight-medium pb-4">
         Partners
       </div>
       <research-partners :partners="partners" />
@@ -108,7 +108,7 @@
     <v-divider />
 
     <div class="my-6">
-      <div class="title font-weight-medium pb-4">
+      <div class="text-h6 font-weight-medium pb-4">
         Active Milestone:
       </div>
       <v-select
@@ -122,7 +122,7 @@
     </div>
 
     <div v-if="milestones" class="py-6">
-      <div class="title font-weight-medium pb-4">
+      <div class="text-h6 font-weight-medium pb-4">
         Roadmap:
       </div>
       <milestone-stepper :is-read-only="false" :steps="milestones" />
@@ -142,7 +142,7 @@
     </div>
 
     <div class="pb-4">
-      <div class="title font-weight-medium pb-4">
+      <div class="text-h6 font-weight-medium pb-4">
         Background:
       </div>
       <v-row no-gutters>

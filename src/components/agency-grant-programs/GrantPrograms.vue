@@ -2,7 +2,7 @@
   <base-page-layout>
     <template #toolbar>
       <div class="w-100">
-        <v-breadcrumbs class="px-0 body-2" divider="/" :items="breadcrumbs" />
+        <v-breadcrumbs class="px-0 text-body-2" divider="/" :items="breadcrumbs" />
         <v-divider />
       </div>
     </template>
@@ -17,18 +17,18 @@
           </v-col>
           <v-col cols="9">
             <div v-if="selectedArea">
-              <div class="primary--text body-2">
+              <div class="primary--text text-body-2">
                 PROGRAMS
               </div>
-              <div class="headline c-mt-2">
+              <div class="text-h5 c-mt-2">
                 {{ selectedArea.title }}
               </div>
-              <div class="body-1 c-mt-2">
+              <div class="text-body-1 c-mt-2">
                 {{ selectedArea.subAreaTitle }}
               </div>
             </div>
             <div v-else>
-              <div class="headline c-mt-2">
+              <div class="text-h5 c-mt-2">
                 {{ organizationProfile.name }}
               </div>
             </div>
@@ -41,7 +41,7 @@
     <v-row no-gutters class="pb-6">
       <v-col cols="3">
         <v-card class="full-height elevation-0">
-          <div class="subtitle-1 pa-6 bold">
+          <div class="text-subtitle-1 pa-6 bold">
             Research Areas
           </div>
           <v-expansion-panels flat class="elevation-0" :value="selectedAreas">
@@ -78,28 +78,28 @@
                 <v-col cols="8">
                   <div class="display-flex justify-space-between">
                     <div class="sort-option">
-                      <span class="body-1 grey--text">SORT BY</span>
+                      <span class="text-body-1 grey--text">SORT BY</span>
                     </div>
                     <div class="sort-option" @click="setSortCriteria('postedDate')">
-                      <span class="body-2">New</span>
+                      <span class="text-body-2">New</span>
                       <v-icon class="sort-icon">
                         {{ getSortIcon('postedDate') }}
                       </v-icon>
                     </div>
                     <div class="sort-option" @click="setSortCriteria('closingDate')">
-                      <span class="body-2">End Date</span>
+                      <span class="text-body-2">End Date</span>
                       <v-icon class="sort-icon">
                         {{ getSortIcon('closingDate') }}
                       </v-icon>
                     </div>
                     <div class="sort-option" @click="setSortCriteria('title')">
-                      <span class="body-2">A-Z Title</span>
+                      <span class="text-body-2">A-Z Title</span>
                       <v-icon class="sort-icon">
                         {{ getSortIcon('title') }}
                       </v-icon>
                     </div>
                     <div class="sort-option" @click="setSortCriteria('award')">
-                      <span class="body-2">Award</span>
+                      <span class="text-body-2">Award</span>
                       <v-icon class="sort-icon">
                         {{ getSortIcon('award') }}
                       </v-icon>
@@ -120,7 +120,7 @@
               </v-row>
             </v-col>
             <v-col v-if="selectedArea" cols="12">
-              <div class="subtitle-1 bold c-pl-5 c-pb-5 c-pt-2">
+              <div class="text-subtitle-1 bold c-pl-5 c-pb-5 c-pt-2">
                 {{ selectedArea.subAreaTitle }}: Core Programs
               </div>
               <template v-for="(program, i) in filteredCorePrograms">
@@ -135,7 +135,7 @@
               </div>
             </v-col>
             <v-col v-if="selectedArea" cols="12" class="c-pt-10">
-              <div class="subtitle-1 bold c-pl-5 c-pb-5 c-pt-2">
+              <div class="text-subtitle-1 bold c-pl-5 c-pb-5 c-pt-2">
                 Additional Funding Opportunities for the
                 {{ selectedArea.abbreviation }}
               </div>

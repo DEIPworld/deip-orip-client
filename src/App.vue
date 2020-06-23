@@ -22,9 +22,9 @@
 
       <router-view :key="$route.fullPath" name="navigator" />
 
-      <v-content :key="$route.fullPath" style="min-height: 100%">
+      <v-main :key="$route.fullPath + '-main'" style="min-height: 100%">
         <router-view :key="$route.fullPath" />
-      </v-content>
+      </v-main>
 
       <d-snackbar />
     </v-sheet>

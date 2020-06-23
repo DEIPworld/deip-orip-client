@@ -17,7 +17,7 @@
             order="2"
           >
             <v-row justify="space-between" class="column-header">
-              <v-col class="title bold">
+              <v-col class="text-h6 bold">
                 Projects
                 <span class="primary--text pl-2">{{ researches.length }}</span>
               </v-col>
@@ -64,7 +64,7 @@
                 class="investments-column xs"
               >
                 <v-row justify="space-between" class="column-header">
-                  <div class="title bold">
+                  <div class="text-h6 bold">
                     Investments
                   </div>
                   <div />
@@ -106,7 +106,7 @@
                 </div>
 
                 <v-row v-if="hasResearchShares" column>
-                  <v-col class="title bold">
+                  <v-col class="text-h6 bold">
                     Distribution
                   </v-col>
                   <v-col class="py-6">
@@ -128,7 +128,7 @@
                 class="reviews-column xs"
               >
                 <v-row justify="space-between" class="column-header">
-                  <v-col class="title bold">
+                  <v-col class="text-h6 bold">
                     Reviews
                   </v-col>
                   <!-- <div>
@@ -141,32 +141,32 @@
                 <v-row column class="pb-12">
                   <v-row justify="space-between" class="column-text-item py-1">
                     <v-col>My reviews</v-col>
-                    <v-col class="primary--text body-2">
+                    <v-col class="primary--text text-body-2">
                       {{ myReviewsCount }}
                     </v-col>
                   </v-row>
                   <v-row justify="space-between" class="column-text-item py-1">
                     <v-col>Invites</v-col>
-                    <v-col class="primary--text body-2">
+                    <v-col class="primary--text text-body-2">
                       {{ myInvitesCount }}
                     </v-col>
                   </v-row>
                   <v-row justify="space-between" class="column-text-item py-1">
                     <v-col>Reviews on my research</v-col>
-                    <v-col class="primary--text body-2">
+                    <v-col class="primary--text text-body-2">
                       {{ reviewsOnMyResearchCount }}
                     </v-col>
                   </v-row>
                   <v-row justify="space-between" class="column-text-item py-1">
                     <v-col>Reviews on my request</v-col>
-                    <v-col class="primary--text body-2">
+                    <v-col class="primary--text text-body-2">
                       {{ reviewsOnMyRequestsCount }}
                     </v-col>
                   </v-row>
                 </v-row>
 
                 <v-row column class="pb-12">
-                  <div class="title bold">
+                  <div class="text-h6 bold">
                     Experts <span class="primary--text pl-2">{{ experts.length }}</span>
                   </div>
                   <div class="pt-2">
@@ -181,14 +181,14 @@
 
                 <v-row column class="pb-12">
                   <v-row justify="space-between" class="column-header">
-                    <div class="title bold">
+                    <div class="text-h6 bold">
                       Protect IP
                     </div>
                     <div />
                   </v-row>
 
                   <v-row justify="space-between" class="column-text-item py-1">
-                    <span class="body-2">
+                    <span class="text-body-2">
                       <v-row>
                         <v-icon color="#2962FF" class="pr-2">visibility</v-icon>
                         <a
@@ -199,10 +199,10 @@
                         >NDA contracts</a>
                       </v-row>
                     </span>
-                    <span class="primary--text body-2">0</span>
+                    <span class="primary--text text-body-2">0</span>
                   </v-row>
                   <v-row justify="space-between" class="column-text-item py-1">
-                    <span class="body-2">
+                    <span class="text-body-2">
                       <v-row>
                         <v-icon color="#2962FF" class="pr-2">lock</v-icon>
                         <a
@@ -213,7 +213,7 @@
                         >IP certificates</a>
                       </v-row>
                     </span>
-                    <span class="primary--text body-2">0</span>
+                    <span class="primary--text text-body-2">0</span>
                   </v-row>
                 </v-row>
               </v-col>
@@ -227,7 +227,7 @@
                 sm="12"
                 class="total-assets-row xs"
               >
-                <div class="title bold">
+                <div class="text-h6 bold">
                   Total assets value
                 </div>
                 <div class="pt-6">

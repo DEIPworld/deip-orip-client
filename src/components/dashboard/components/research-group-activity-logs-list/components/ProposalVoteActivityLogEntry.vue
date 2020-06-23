@@ -24,10 +24,10 @@
         />
         <span>
           <span v-if="log.metadata.proposal.action == 1">
-            approved "<span class="body-2">{{ log.metadata.proposal.data.title }}</span>" research start
+            approved "<span class="text-body-2">{{ log.metadata.proposal.data.title }}</span>" research start
           </span>
           <span v-else-if="log.metadata.proposal.action == 10">
-            approved "<span class="body-2">{{ log.metadata.proposal.data.title }}</span>" material for "<router-link
+            approved "<span class="text-body-2">{{ log.metadata.proposal.data.title }}</span>" material for "<router-link
               class="a"
               :to="{
                 name: 'ResearchDetails',

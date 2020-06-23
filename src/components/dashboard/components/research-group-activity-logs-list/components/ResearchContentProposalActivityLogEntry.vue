@@ -73,7 +73,7 @@
             >{{ log.metadata.research.title }}</router-link>" research
           </span>
           <span v-else>
-            proposed a new "<span class="body-2">{{ log.metadata.proposal.data.title }}</span>" material for the "<router-link
+            proposed a new "<span class="text-body-2">{{ log.metadata.proposal.data.title }}</span>" material for the "<router-link
               class="a"
               :to="{
                 name: 'ResearchDetails',

@@ -2,7 +2,7 @@
   <div>
     <v-row>
       <v-col cols="auto">
-        <div class="title">
+        <div class="text-h6">
           {{ group ? group.name : '' }}
         </div>
       </v-col>
@@ -24,7 +24,7 @@
         </v-btn>
       </v-col>
     </v-row>
-    <div class="body-1 pt-6">
+    <div class="text-body-1 pt-6">
       {{ group ? group.description : '' }}
     </div>
 
@@ -45,7 +45,7 @@
 
     <!-- ### START Research Group members Section ### -->
     <div class="mt-12">
-      <div class="title">
+      <div class="text-h6">
         Group members: {{ members.length }}
       </div>
       <div class="pt-6">
@@ -85,7 +85,7 @@
                           ? {name: 'account.summary'}
                           : { name: 'UserDetails', params: { account_name: member.account.name } }
                       "
-                      class="a subtitle-1"
+                      class="a text-subtitle-1"
                     >
                       {{ member | fullname }}
                     </router-link>
@@ -184,7 +184,7 @@
                                 name: 'UserDetails',
                                 params: { account_name: invite.user.account.name }
                               }"
-                              class="a subtitle-1"
+                              class="a text-subtitle-1"
                             >
                               {{ invite.user | fullname }}
                             </router-link>

@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="display-flex justify-space-between align-center">
-      <div class="title">
+      <div class="text-h6">
         {{ !headerText ? 'Research projects' : headerText }}
       </div>
 

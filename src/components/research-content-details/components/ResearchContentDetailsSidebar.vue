@@ -15,7 +15,7 @@
       <div v-if="isProposed || isUnlockActionAvailable" class="sidebar-fullwidth">
         <v-divider class="my-6" />
       </div>
-      <div v-if="isProposed" class="body-1">
+      <div v-if="isProposed" class="text-body-1">
         Draft is
         <router-link
           class="a orange--text"
@@ -30,7 +30,7 @@
         as research content and locked for editing
       </div>
       <div v-if="isUnlockActionAvailable" class="mt-6">
-        <div class="body-1 pb-4">
+        <div class="text-body-1 pb-4">
           The proposal is expired. Unlock the material for a new proposal or removal
         </div>
         <v-btn color="orange" block @click="unlockDraft()">
@@ -43,7 +43,7 @@
     <!-- ### START Research Content ECI Section ### -->
     <v-sheet v-if="isPublished">
       <v-divider class="my-6" />
-      <div class="title">
+      <div class="text-h6">
         Expertise Contribution Index
       </div>
       <div
@@ -70,10 +70,10 @@
 
 
     <!-- <v-divider class="my-6" />
-    <div class="title display-inline-block">
+    <div class="text-h6 display-inline-block">
       Expert Review:
     </div>
-    <div class="subtitle-1 bold mb-6 display-inline-block ml-2">
+    <div class="text-subtitle-1 bold mb-6 display-inline-block ml-2">
       <span class="green--text text--darken-2">{{ positiveReviewsCount }}</span>
       <span> / </span>
       <span class="red--text text--darken-2">{{ negativeReviewsCount }}</span>
@@ -97,7 +97,7 @@
       </template>
       <v-card class="pa-6">
         <v-card-title>
-          <div class="headline">
+          <div class="text-h5">
             Request review from an Expert
           </div>
           <div class="right-top-angle">
@@ -148,7 +148,7 @@
     <!-- ### START Research Content Authors Section ### -->
     <v-divider class="my-6" />
 
-    <div class="title mb-6">
+    <div class="text-h6 mb-6">
       Authors
     </div>
 
@@ -201,18 +201,18 @@
     <div v-if="researchTableOfContent.length">
       <v-divider class="my-6" />
 
-      <div class="title mb-6">
+      <div class="text-h6 mb-6">
         Research table of content
       </div>
 
       <div v-for="(item, index) in researchTableOfContent" :key="index" :class="index === 0 ? '' : 'c-mt-1'">
-        <div class="body-2 font-weight-bold">
+        <div class="text-body-2 font-weight-bold">
           {{ index + 1 }}. {{ item.type }}
         </div>
         <div class="pl-2">
           <router-link
             target="_blank"
-            class="a body-1"
+            class="a text-body-1"
             :to="{
               name: 'ResearchContentDetails',
               params: {
@@ -270,11 +270,11 @@
 
     <!-- ### START Reward Info Section ### -->
     <div v-if="!isPublished" class="py-2">
-      <div class="subtitle-1 font-weight-bold">
+      <div class="text-subtitle-1 font-weight-bold">
         Reviews
       </div>
-      <div class="body-2 c-mt-2">
-        <v-row no-gutters justify="space-between" class="body-2 py-1">
+      <div class="text-body-2 c-mt-2">
+        <v-row no-gutters justify="space-between" class="text-body-2 py-1">
           <div>
             <v-icon small class="c-pr-2">
               rate_review

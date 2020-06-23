@@ -33,26 +33,26 @@
         </v-btn>
       </div>
       <div v-if="isGroupMember" class="pt-2">
-        <div class="body-2">
+        <div class="text-body-2">
           Review can be supported only by members of other groups
         </div>
       </div>
       <div v-else-if="!userHasExpertise">
-        Users with expertise in <span class="body-2">{{ review.disciplines.map(d => d.name).join(", ") }}</span>
+        Users with expertise in <span class="text-body-2">{{ review.disciplines.map(d => d.name).join(", ") }}</span>
         can support this review only
       </div>
       <div v-else-if="!userHasVoted" class="pt-2">
-        <div>You will get <span class="body-2">approximately 1000 ECI reward in {{ userRelatedExpertise.map(exp => exp.discipline_name).join(", ") }}</span> for your contribution to this project</div>
+        <div>You will get <span class="text-body-2">approximately 1000 ECI reward in {{ userRelatedExpertise.map(exp => exp.discipline_name).join(", ") }}</span> for your contribution to this project</div>
       </div>
       <div v-else-if="userHasVoted" class="pt-2">
-        <div class="body-2">
+        <div class="text-body-2">
           Review can be supported once
         </div>
       </div>
     </div>
 
     <div v-if="reviewSupporters.length">
-      <div class="subtitle-1 bold py-6">
+      <div class="text-subtitle-1 bold py-6">
         Supporters: {{ reviewSupporters.length }}
       </div>
       <div

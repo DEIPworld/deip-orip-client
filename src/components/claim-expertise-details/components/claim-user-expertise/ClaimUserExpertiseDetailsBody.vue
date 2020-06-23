@@ -7,7 +7,7 @@
       />
 
       <div class="legacy-col-grow c-pl-12">
-        <div class="display-1 half-bold c-pt-4">
+        <div class="text-h4 half-bold c-pt-4">
           <router-link class="a" :to="{ name: 'UserDetails', params: { account_name: claimerInfo.account.name }}">
             {{ claimerInfo | fullname }}
           </router-link>
@@ -71,7 +71,7 @@
       </div>
 
       <div v-if="isClaimAccepted" class="legacy-row legacy-align-items-center legacy-justify-center">
-        <span class="headline green--text text--darken-1 c-pr-3">Claimed</span>
+        <span class="text-h5 green--text text--darken-1 c-pr-3">Claimed</span>
         <v-icon size="35" color="green darken-1">
           mdi-check
         </v-icon>

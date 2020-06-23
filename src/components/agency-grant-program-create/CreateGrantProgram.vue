@@ -157,16 +157,16 @@
 
     <v-row v-if="isFinished" justify="center" align="center" class="fill-height">
       <v-col class="fill-height text-center py-5">
-        <div class="display-1">
+        <div class="text-h4">
           New Funding Opportunity has been created <br> successfully
         </div>
 
-        <div class="subtitle-1 mt-6">
+        <div class="text-subtitle-1 mt-6">
           <!-- <span class="bold">#</span> -->
           <span class="a">{{ foa.number }}</span>
         </div>
 
-        <div class="a subtitle-1 mt-2">
+        <div class="a text-subtitle-1 mt-2">
           {{ foa.title }}
         </div>
 

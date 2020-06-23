@@ -1,7 +1,7 @@
 <template>
   <div>
     <div v-if="isJoinRequestsSectionAvailable" class="">
-      <div id="invites" class="title font-weight-bold pb-2">
+      <div id="invites" class="text-h6 font-weight-bold pb-2">
         Join requests: {{ pendingJoinRequests.length }}
       </div>
 
@@ -43,7 +43,7 @@
 
     <!-- ### START Research Group Details Section ### -->
     <div class="py-6">
-      <div class="title font-weight-bold">
+      <div class="text-h6 font-weight-bold">
         Group expertise tokens
       </div>
 
@@ -58,7 +58,7 @@
 
     <div v-if="isResearchGroupMember">
       <div class="py-6">
-        <div class="title font-weight-bold">
+        <div class="text-h6 font-weight-bold">
           <router-link
             class="a"
             :to="{

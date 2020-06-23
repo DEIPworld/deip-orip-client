@@ -47,10 +47,10 @@
           <v-row v-else justify="center">
             <v-col cols="auto" class="text-center">
               <img width="64px" class="mb-3" src="/assets/img/create-project.png">
-              <div class="headline mb-3">
+              <div class="text-h5 mb-3">
                 You haven’t created any project yet
               </div>
-              <div class="body-1 mb-12">
+              <div class="text-body-1 mb-12">
                 Upload a project and collaborate for future success
               </div>
               <div>
@@ -88,10 +88,10 @@
           <v-row v-else justify="center">
             <v-col cols="auto" class="text-center">
               <img width="64px" class="mb-3" src="/assets/img/follow-project.png">
-              <div class="headline mb-3">
+              <div class="text-h5 mb-3">
                 You’re not following any project yet
               </div>
-              <div class="body-1 mb-12">
+              <div class="text-body-1 mb-12">
                 We have a lot of incredible projects on our platform. Take a look
               </div>
               <div>

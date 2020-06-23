@@ -12,84 +12,84 @@
           <v-divider />
           <v-card class="pa-6 elevation-0">
             <div>
-              <div class="display-1 py-6">
+              <div class="text-h4 py-6">
                 {{ program.additional_info.funding_opportunity_title }}
               </div>
             </div>
             <div>
               <v-divider />
               <div class="py-4 display-flex">
-                <div class="flex-1 body-1">
+                <div class="flex-1 text-body-1">
                   Organization Name:
                 </div>
-                <div class="flex-1 body-2">
+                <div class="flex-1 text-body-2">
                   {{ organizationProfile.name }}
                 </div>
 
-                <div class="flex-1 body-1">
+                <div class="flex-1 text-body-1">
                   Estimated total program funding:
                 </div>
-                <div class="flex-1 body-2">
+                <div class="flex-1 text-body-2">
                   $ {{ fromAssetsToFloat(program.amount) }}
                 </div>
               </div>
               <div class="pt-4 display-flex">
-                <div class="flex-1 body-1">
+                <div class="flex-1 text-body-1">
                   Opportunity Number:
                 </div>
-                <div class="flex-1 body-2">
+                <div class="flex-1 text-body-2">
                   {{ program.funding_opportunity_number }}
                 </div>
 
-                <div class="flex-1 body-1">
+                <div class="flex-1 text-body-1">
                   Current funding:
                 </div>
-                <div class="flex-1 body-2">
+                <div class="flex-1 text-body-2">
                   $ {{ fromAssetsToFloat(program.current_supply) }}
                 </div>
               </div>
               <div class="pt-4 display-flex">
-                <div class="flex-1 body-1">
+                <div class="flex-1 text-body-1">
                   Area:
                 </div>
-                <div class="flex-1 body-2">
+                <div class="flex-1 text-body-2">
                   {{ program.area.title }}
                 </div>
 
-                <div class="flex-1 body-1">
+                <div class="flex-1 text-body-1">
                   Expected number of awards:
                 </div>
-                <div class="flex-1 body-2">
+                <div class="flex-1 text-body-2">
                   {{ program.expected_number_of_awards }}
                 </div>
               </div>
               <div class="pt-4 display-flex">
-                <div class="flex-1 body-1">
+                <div class="flex-1 text-body-1">
                   Open date:
                 </div>
-                <div class="flex-1 body-2">
+                <div class="flex-1 text-body-2">
                   {{ new Date(`${program.posted_date}Z`).toDateString() }}
                 </div>
 
-                <div class="flex-1 body-1">
+                <div class="flex-1 text-body-1">
                   Award ceiling:
                 </div>
-                <div class="flex-1 body-2">
+                <div class="flex-1 text-body-2">
                   $ {{ fromAssetsToFloat(program.award_ceiling) }}
                 </div>
               </div>
               <div class="py-4 display-flex">
-                <div class="flex-1 body-1">
+                <div class="flex-1 text-body-1">
                   Close date:
                 </div>
-                <div class="flex-1 body-2">
+                <div class="flex-1 text-body-2">
                   {{ new Date(`${program.close_date}Z`).toDateString() }}
                 </div>
 
-                <div class="flex-1 body-1">
+                <div class="flex-1 text-body-1">
                   Award floor:
                 </div>
-                <div class="flex-1 body-2">
+                <div class="flex-1 text-body-2">
                   $ {{ fromAssetsToFloat(program.award_floor) }}
                 </div>
               </div>
@@ -99,7 +99,7 @@
             <!-- <div>
                 <v-row no-gutters>
                   <v-col cols="6">
-                    <div class="title font-weight-bold py-6">Applications</div>
+                    <div class="text-h6 font-weight-bold py-6">Applications</div>
 
                     <GChart
                       type="BarChart"
@@ -110,7 +110,7 @@
                   </v-col>
 
                   <v-col cols="6">
-                    <div class="title font-weight-bold py-6">Financial</div>
+                    <div class="text-h6 font-weight-bold py-6">Financial</div>
 
                     <GChart
                       type="BarChart"
@@ -125,28 +125,28 @@
               </div> -->
 
             <div>
-              <div class="title font-weight-bold pt-6">
+              <div class="text-h6 font-weight-bold pt-6">
                 Program Guidlines
               </div>
 
-              <div class="subtitle-1 font-weight-bold pt-6">
+              <div class="text-subtitle-1 font-weight-bold pt-6">
                 Eligible Aplicants
               </div>
-              <div class="body-1 pt-4">
+              <div class="text-body-1 pt-4">
                 {{ program.additional_info.eligible_applicants }}
               </div>
 
-              <div class="subtitle-1 font-weight-bold pt-4">
+              <div class="text-subtitle-1 font-weight-bold pt-4">
                 Additional Information on Eligibility
               </div>
-              <div class="body-1 pt-4">
+              <div class="text-body-1 pt-4">
                 {{ program.additional_info.additional_info_of_eligibility }}
               </div>
 
-              <div class="subtitle-1 font-weight-bold pt-4">
+              <div class="text-subtitle-1 font-weight-bold pt-4">
                 Description
               </div>
-              <div class="body-1 pt-4 pb-4">
+              <div class="text-body-1 pt-4 pb-4">
                 {{ program.additional_info.description }}
               </div>
 
@@ -154,7 +154,7 @@
             </div>
 
             <!-- <div>
-                <div class="title font-weight-bold pt-6 pb-4">Applications: {{applications.length}}</div>
+                <div class="text-h6 font-weight-bold pt-6 pb-4">Applications: {{applications.length}}</div>
                 <div>
                   <application-list-item v-for="(application, index) in applications"
                     :key="'application-' + application.id"
@@ -194,7 +194,7 @@
             <v-divider />
 
             <div class="pt-4 pl-4 pb-4">
-              <div class="title pb-2 font-weight-bold">
+              <div class="text-h6 pb-2 font-weight-bold">
                 Program Officers
               </div>
               <div v-for="(officer, n) in program.officers" :key="'officer-' + n">

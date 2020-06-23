@@ -52,7 +52,7 @@
                 mdi-numeric-{{ currentTrlData.step }}-circle
               </v-icon>
             </v-avatar>
-            <span class="subtitle-1 align-self-center font-weight-medium black--text">TRL</span>
+            <span class="text-subtitle-1 align-self-center font-weight-medium black--text">TRL</span>
           </div>
         </template>
         <span>{{ currentTrlData.description }}</span>
@@ -67,7 +67,7 @@
           mdi-numeric-{{ currentTrlData.step }}-circle
         </v-icon>
       </v-avatar>
-      <span class="title align-self-center font-weight-medium">TRL</span>
+      <span class="text-h6 align-self-center font-weight-medium">TRL</span>
     </v-col>
     <v-col cols="12" class="caption font-weight-bold">
       {{ currentTrlData.description }}

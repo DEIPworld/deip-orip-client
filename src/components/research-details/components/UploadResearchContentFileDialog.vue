@@ -22,7 +22,7 @@
     >
       <v-card class="pa-6">
         <v-card-title>
-          <div class="headline">
+          <div class="text-h5">
             Upload material for research
           </div>
           <div class="right-top-angle">

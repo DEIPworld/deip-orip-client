@@ -3,14 +3,14 @@
     <v-card class="elevation-0">
       <v-row>
         <v-col cols="9" class="pa-6">
-          <h1 class="display-1">
+          <h1 class="text-h4">
             Award # {{ awardee.subaward_number }}
-            <span v-if="awardee.isSubawardee" class="subtitle-1 grey--text">
+            <span v-if="awardee.isSubawardee" class="text-subtitle-1 grey--text">
               ( subaward of
-              <span v-if="isParentPrincipalInvestigator" class="body-2"># {{ awardee.parentAwardee.subaward_number }}</span>
+              <span v-if="isParentPrincipalInvestigator" class="text-body-2"># {{ awardee.parentAwardee.subaward_number }}</span>
               <router-link
                 v-else
-                class="a body-2"
+                class="a text-body-2"
                 :to="{
                   name: 'GrantProgramAwardDetails',
                   params: {
@@ -87,20 +87,20 @@
         <v-col cols="6" class="pa-6 grey-background">
           <v-row>
             <v-col cols="3" class="pa-1">
-              <span class="body-2 grey--text">PI</span>
+              <span class="text-body-2 grey--text">PI</span>
             </v-col>
             <v-col cols="9" class="pa-1">
-              <router-link class="a body-2" :to="{ name: 'UserDetails', params: { account_name: awardee.pi.account.name } }">
+              <router-link class="a text-body-2" :to="{ name: 'UserDetails', params: { account_name: awardee.pi.account.name } }">
                 {{ awardee.pi | fullname }}
               </router-link>
             </v-col>
 
             <v-col cols="3" class="pa-1">
-              <span class="body-2 grey--text">Organization</span>
+              <span class="text-body-2 grey--text">Organization</span>
             </v-col>
             <v-col cols="9" class="pa-1">
               <router-link
-                class="a body-2"
+                class="a text-body-2"
                 :to="{ name: 'ResearchGroupDetails', params: {
                   research_group_permlink: encodeURIComponent(awardee.organization.permlink)
                 }}"
@@ -110,11 +110,11 @@
             </v-col>
 
             <v-col cols="3" class="pa-1">
-              <span class="body-2 grey--text">Award title</span>
+              <span class="text-body-2 grey--text">Award title</span>
             </v-col>
             <v-col cols="9" class="pa-1">
               <router-link
-                class="a body-2"
+                class="a text-body-2"
                 :to="{
                   name: 'GrantProgramDetails',
                   params: {
@@ -128,11 +128,11 @@
             </v-col>
 
             <v-col cols="3" class="pa-1">
-              <span class="body-2 grey--text">Agency</span>
+              <span class="text-body-2 grey--text">Agency</span>
             </v-col>
             <v-col cols="9" class="pa-1">
               <router-link
-                class="a body-2"
+                class="a text-body-2"
                 :to="{ name: 'ResearchGroupDetails', params: {
                   research_group_permlink: encodeURIComponent(foa.organization.permlink),
                 }}"
@@ -142,10 +142,10 @@
             </v-col>
 
             <v-col cols="3" class="pa-1">
-              <span class="body-2 grey--text">Duration</span>
+              <span class="text-body-2 grey--text">Duration</span>
             </v-col>
             <v-col cols="9" class="pa-1">
-              <span class="body-2">{{ moment(new Date(awardee.from)).format("MM/YY") }} - {{ moment(new Date(awardee.to)).format("MM/YY") }}</span>
+              <span class="text-body-2">{{ moment(new Date(awardee.from)).format("MM/YY") }} - {{ moment(new Date(awardee.to)).format("MM/YY") }}</span>
             </v-col>
           </v-row>
         </v-col>
@@ -157,7 +157,7 @@
         <v-col v-if="isAwardPending || isAwardCanceled" cols="5" class="pa-6 grey-background">
           <v-row>
             <v-col cols="5" class="pa-1">
-              <span class="body-2 grey--text">Award amount</span>
+              <span class="text-body-2 grey--text">Award amount</span>
             </v-col>
             <v-col cols="7" class="pa-1">
               <span class="bold">{{ awardee.totalAmount | currency }}</span>
@@ -168,7 +168,7 @@
         <v-col v-else cols="5" class="pa-6 grey-background">
           <v-row>
             <v-col cols="5" class="pa-1">
-              <span class="body-2 grey--text">Award amount</span>
+              <span class="text-body-2 grey--text">Award amount</span>
             </v-col>
             <v-col cols="7" class="pa-1">
               <span class="bold">{{ awardee.totalAmount | currency }}</span>
@@ -179,24 +179,24 @@
             </v-col><v-col cols="4" />
 
             <v-col cols="5" class="pa-1">
-              <span class="body-2 grey--text">Administrative expenses</span>
+              <span class="text-body-2 grey--text">Administrative expenses</span>
             </v-col>
             <v-col cols="7" class="pa-1">
-              <span class="body-2">{{ awardee.universityOverheadAmount | currency }}</span>
+              <span class="text-body-2">{{ awardee.universityOverheadAmount | currency }}</span>
             </v-col>
 
             <v-col cols="5" class="pa-1">
-              <span class="body-2 grey--text">Withdrawn by PI</span>
+              <span class="text-body-2 grey--text">Withdrawn by PI</span>
             </v-col>
             <v-col cols="7" class="pa-1">
-              <span class="body-2">{{ awardee.withdrawnPiAmount | currency }}</span><span class="body-2 grey--text"> of {{ awardee.piAmount | currency }}</span>
+              <span class="text-body-2">{{ awardee.withdrawnPiAmount | currency }}</span><span class="text-body-2 grey--text"> of {{ awardee.piAmount | currency }}</span>
             </v-col>
 
             <v-col cols="5" class="pa-1">
-              <span class="body-2 grey--text">Withdrawn by Subawardees</span>
+              <span class="text-body-2 grey--text">Withdrawn by Subawardees</span>
             </v-col>
             <v-col cols="7" class="pa-1">
-              <span class="body-2">{{ awardee.withdrawnSubawardeesAmount | currency }}</span><span class="body-2 grey--text"> of {{ awardee.subawardeesAmount | currency }}</span>
+              <span class="text-body-2">{{ awardee.withdrawnSubawardeesAmount | currency }}</span><span class="text-body-2 grey--text"> of {{ awardee.subawardeesAmount | currency }}</span>
             </v-col>
 
             <v-col cols="8" class="pa-1">
@@ -204,7 +204,7 @@
             </v-col><v-col cols="4" />
 
             <v-col cols="5" class="pa-1">
-              <span class="body-2 grey--text">Available amount</span>
+              <span class="text-body-2 grey--text">Available amount</span>
             </v-col>
             <v-col cols="7" class="pa-1">
               <span class="bold">{{ awardee.remainingAmount | currency }}</span>
@@ -214,7 +214,7 @@
       </v-row>
 
       <v-row v-if="subawardees.length" class="px-6 py-4">
-        <v-col cols="12" class="py-4 headline">
+        <v-col cols="12" class="py-4 text-h5">
           Subawards
         </v-col>
         <v-col cols="12">
@@ -227,35 +227,35 @@
             <template v-slot:item="{item}">
               <tr>
                 <td>
-                  <router-link class="a body-2" :to="{ name: 'GrantProgramAwardDetails', params: { award_number: item.subawardee.award_number, subaward_number: item.subawardee.subaward_number } }">
+                  <router-link class="a text-body-2" :to="{ name: 'GrantProgramAwardDetails', params: { award_number: item.subawardee.award_number, subaward_number: item.subawardee.subaward_number } }">
                     {{ item.subawardee.subaward_number }}
                   </router-link>
                 </td>
                 <td>
-                  <router-link class="a body-2" :to="{ name: 'UserDetails', params: { account_name: item.reciever.account.name } }">
+                  <router-link class="a text-body-2" :to="{ name: 'UserDetails', params: { account_name: item.reciever.account.name } }">
                     {{ item.reciever | fullname }}
                   </router-link>
                 </td>
                 <td>
-                  <router-link class="a body-2" :to="{ name: 'ResearchGroupDetails', params: { research_group_permlink: item.organization.permlink } }">
+                  <router-link class="a text-body-2" :to="{ name: 'ResearchGroupDetails', params: { research_group_permlink: item.organization.permlink } }">
                     {{ item.organization.name }}
                   </router-link>
                 </td>
-                <td><span class="body-1">{{ item.totalSubawardeeAmount | currency }}</span></td>
+                <td><span class="text-body-1">{{ item.totalSubawardeeAmount | currency }}</span></td>
                 <td>
-                  <span class="body-1">
+                  <span class="text-body-1">
                     <span v-if="isAwardPending">N/A</span>
                     <span v-else>{{ item.totalSubawardeePendingAmount | currency }}</span>
                   </span>
                 </td>
                 <td>
-                  <span class="body-1">
+                  <span class="text-body-1">
                     <span v-if="isAwardPending">N/A</span>
                     <span v-else>{{ item.totalSubawardeeWithdrawnAmount | currency }}</span>
                   </span>
                 </td>
                 <td>
-                  <span class="body-1">
+                  <span class="text-body-1">
                     <span v-if="isAwardPending">N/A</span>
                     <span v-else>{{ item.totalSubawardeeRemainingAmount | currency }}</span>
                   </span>
@@ -265,7 +265,7 @@
 
             <template v-slot:body.append>
               <tr>
-                <td v-for="(header, i) in subawardsHeaders" :key="`${i}-subaward`" class="body-2 bold total-row">
+                <td v-for="(header, i) in subawardsHeaders" :key="`${i}-subaward`" class="text-body-2 bold total-row">
                   <span v-if="i == 0">Total</span>
                   <span v-if="header.value == 'totalSubawardeeAmount'">{{ totalSubawardsAmount | currency }}</span>
                   <span v-else-if="header.value == 'totalSubawardeePendingAmount'">{{ totalSubawardsPendingRequestedAmount | currency }}</span>
@@ -280,7 +280,7 @@
       </v-row>
 
       <v-row v-if="!isAwardPending" class="px-6 py-4">
-        <v-col cols="12" class="py-4 headline">
+        <v-col cols="12" class="py-4 text-h5">
           Payments
         </v-col>
         <v-col cols="12">
@@ -431,17 +431,17 @@
             <template v-slot:item="{item, select, isSelected}">
               <tr>
                 <td v-if="isUniversityCertifier || isGrantProgramOfficer || isTreasuryCertifier">
-                  <v-simple-checkbox 
+                  <v-simple-checkbox
                     v-if="(item.status == AWARD_WITHDRAWAL_REQUEST_STATUS.PENDING && isUniversityCertifier) ||
                           (item.status == AWARD_WITHDRAWAL_REQUEST_STATUS.CERTIFIED && isGrantProgramOfficer) ||
-                          (item.status == AWARD_WITHDRAWAL_REQUEST_STATUS.APPROVED && isTreasuryCertifier)" 
+                          (item.status == AWARD_WITHDRAWAL_REQUEST_STATUS.APPROVED && isTreasuryCertifier)"
                           primary
-                          :value="isSelected" 
+                          :value="isSelected"
                           @input="select($event)">
                   </v-simple-checkbox>
                 </td>
                 <td>
-                  <router-link class="a body-2" :to="{ name: 'GrantProgramAwardWithdrawalDetails', params: { award_number: item.awardee.award_number, subaward_number: item.awardee.subaward_number, payment_number: item.paymentNumber } }">
+                  <router-link class="a text-body-2" :to="{ name: 'GrantProgramAwardWithdrawalDetails', params: { award_number: item.awardee.award_number, subaward_number: item.awardee.subaward_number, payment_number: item.paymentNumber } }">
                     {{ item.paymentNumber }}
                   </router-link>
                 </td>
@@ -453,16 +453,16 @@
                   </v-chip>
                 </td>
                 <td>
-                  <router-link class="a body-1" :to="{ name: 'UserDetails', params: { account_name: item.requester.account.name } }">
+                  <router-link class="a text-body-1" :to="{ name: 'UserDetails', params: { account_name: item.requester.account.name } }">
                     {{ item.requester | fullname }}
                   </router-link>
                   <div v-if="item.awardee.isNextSubawardee" class="grey--text caption">
                     (subawardee)
                   </div>
                 </td>
-                <td><span class="body-1 grey--text">{{ moment(item.timestamp).format('MM/DD/YYYY HH:mm:ss') }}</span></td>
+                <td><span class="text-body-1 grey--text">{{ moment(item.timestamp).format('MM/DD/YYYY HH:mm:ss') }}</span></td>
                 <td>
-                  <div class="body-2 text-align-right">
+                  <div class="text-body-2 text-align-right">
                     {{ item.amount | currency }}
                   </div>
                 </td>
@@ -471,9 +471,9 @@
 
             <template v-slot:body.append>
               <tr>
-                <td v-for="(header, i) in paymentHeaders" :key="`${i}-payment-header`" class="body-2 bold total-row">
+                <td v-for="(header, i) in paymentHeaders" :key="`${i}-payment-header`" class="text-body-2 bold total-row">
                   <span v-if="i == 0">Total</span>
-                  <div v-if="header.value == 'amount'" class="body-2 bold text-align-right">
+                  <div v-if="header.value == 'amount'" class="text-body-2 bold text-align-right">
                     {{ totalPaymentsAmount | currency }}
                   </div>
                   <span v-else />

@@ -27,7 +27,7 @@
       </v-avatar>
 
       <div>
-        <div class="display-1 font-weight-medium pt-4">
+        <div class="text-h4 font-weight-medium pt-4">
           {{ userInfo | fullname }} <span
             v-if="(userInfo.profile && userInfo.profile.firstName)"
             class="caption username-caption grey--text"
@@ -100,7 +100,7 @@
         </div>
 
         <div v-if="commonGroups.length" class="pt-6">
-          <div class="title">
+          <div class="text-h6">
             Research groups: {{ commonGroups.length }}
           </div>
         </div>
@@ -168,7 +168,7 @@
     <!-- ### START User Profile Education\Employment Section ### -->
     <div>
       <div v-if="isProfileAvailable && (isEducationSpecified || isOwner)" class="pt-6">
-        <div class="title">
+        <div class="text-h6">
           Education
         </div>
         <v-card v-if="userInfo && userInfo.profile" class="mt-6">
@@ -200,7 +200,7 @@
               </v-btn>
             </div>
             <div class="pa-6">
-              <div class="subtitle-1 font-weight-medium">
+              <div class="text-subtitle-1 font-weight-medium">
                 {{ item.educationalInstitution }}
               </div>
               <div class="">
@@ -239,7 +239,7 @@
 
       <div v-if="isProfileAvailable && (isEmploymentSpecified || isOwner)">
         <div class="pt-6">
-          <div class="title">
+          <div class="text-h6">
             Employment
           </div>
         </div>
@@ -272,7 +272,7 @@
               </v-btn>
             </div>
             <div class="pa-6">
-              <div class="subtitle-1 font-weight-medium">
+              <div class="text-subtitle-1 font-weight-medium">
                 {{ item.company }}
               </div>
               <div class="">

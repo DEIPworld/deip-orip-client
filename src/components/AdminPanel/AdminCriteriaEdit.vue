@@ -14,7 +14,7 @@
         :rules="[rules.required]"
       />
 
-      <div class="subtitle-1 font-weight-medium mb-2">
+      <div class="text-subtitle-1 font-weight-medium mb-2">
         Steps
       </div>
 

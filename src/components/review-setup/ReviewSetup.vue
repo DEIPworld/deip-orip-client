@@ -2,12 +2,12 @@
   <layout-section>
     <v-card flat class="full-height full-width pa-12">
       <v-row no-gutters>
-        <v-col cols="12" class="headline font-weight-bold">
+        <v-col cols="12" class="text-h5 font-weight-bold">
           Expertise Contribution Model Setup
         </v-col>
         <v-col
           cols="12"
-          class="mt-12 subtitle-1"
+          class="mt-12 text-subtitle-1"
         >
           In order to make your work efficient and help you receive most accurate feedback Open Research and Innovation Platform gives you the opportunity to change review criteria for different content types. Your reviewers will see the criteria on the review page. By default criteria for every type are: Novelty, Tecechnical quality, Methodology. Allso you can change reward coefficient (which is by default 10%) in order to motivate peer-review process
         </v-col>
@@ -83,7 +83,7 @@
           lg="5"
           class="mt-12"
         >
-          <div class="title mb-6">
+          <div class="text-h6 mb-6">
             Review criteria setup
           </div>
           <v-row no-gutters class="mb-4">

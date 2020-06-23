@@ -165,7 +165,7 @@
         <v-dialog v-model="investmentConfirmDialog.isShown" persistent max-width="800px">
           <v-card class="pa-6">
             <v-card-title>
-              <div class="headline font-weight-bold">
+              <div class="text-h5 font-weight-bold">
                 SAFT (Simple Agreement for Future Tokens)
               </div>
               <div class="right-top-angle">

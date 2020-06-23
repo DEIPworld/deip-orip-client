@@ -1,7 +1,7 @@
 <template>
   <v-row no-gutters>
     <v-col cols="8">
-      <div class="title c-pb-10">
+      <div class="text-h6 c-pb-10">
         {{ application.title }}
       </div>
     </v-col>
@@ -28,15 +28,15 @@
     <v-col v-if="!isApplicationPending" offset="2">
       <div>
         <div class="float-right">
-          <span v-if="isApplicationApproved" class="title green--text text--darken-2">Approved</span>
-          <span v-if="isApplicationRejected" class="title red--text text--darken-2">Rejected</span>
+          <span v-if="isApplicationApproved" class="text-h6 green--text text--darken-2">Approved</span>
+          <span v-if="isApplicationRejected" class="text-h6 red--text text--darken-2">Rejected</span>
         </div>
       </div>
     </v-col>
     <v-col cols="8">
       <div class="float-left">
         <router-link
-          class="subtitle-1"
+          class="text-subtitle-1"
           style="text-decoration: none"
           :to="{ name: 'GrantProgramDetails',
                  params: {
@@ -48,13 +48,13 @@
       </div>
     </v-col>
     <v-col cols="4">
-      <div class="subtitle-1 c-pb-5 float-right">
+      <div class="text-subtitle-1 c-pb-5 float-right">
         Total amount: $ {{ fromAssetsToFloat(application.total_amount) }}
       </div>
     </v-col>
     <v-col cols="12">
       <div>
-        <div class="subtitle-1 c-pt-5 c-pb-5">
+        <div class="text-subtitle-1 c-pt-5 c-pb-5">
           Application: <span class="caption grey--text">({{ application.letterHash }})</span>
         </div>
         <v-card>
@@ -62,14 +62,14 @@
             <a target="_blank" class="a" :href="`${fileStorageBaseUrl}/applications/files/${applicationRef.agency}/${applicationRef.foaId}/${applicationRef.hash}/${applicationContent.hash}`">
               {{ applicationContent.filename }}
             </a>
-            <span class="float-right body-2 grey--text">{{ applicationContent.hash.slice(0, 8) }}</span>
+            <span class="float-right text-body-2 grey--text">{{ applicationContent.hash.slice(0, 8) }}</span>
           </v-card-text>
         </v-card>
       </div>
     </v-col>
     <v-col cols="12">
       <div>
-        <div class="subtitle-1 c-pt-5 c-pb-5">
+        <div class="text-subtitle-1 c-pt-5 c-pb-5">
           Package: <!-- <span class="caption grey--text">({{application.packageHash}})</span> -->
         </div>
         <v-card v-for="form in formsContent" :key="form.hash">
@@ -77,7 +77,7 @@
             <a target="_blank" class="a" :href="`${fileStorageBaseUrl}/applications/files/${applicationRef.agency}/${applicationRef.foaId}/${applicationRef.hash}/${form.hash}`">
               {{ form.filename }}
             </a>
-            <span class="float-right body-2 grey--text">{{ form.hash.slice(0, 8) }}</span>
+            <span class="float-right text-body-2 grey--text">{{ form.hash.slice(0, 8) }}</span>
           </v-card-text>
         </v-card>
       </div>
@@ -101,12 +101,12 @@
         </div>
       </div>
       <div v-else class="c-pt-5 c-pb-5">
-        <div class="subtitle-1 text-center">
+        <div class="text-subtitle-1 text-center">
           There are no reviews from {{ program.agency_name.toUpperCase() }}
         </div>
       </div>
 
-      <div v-if="thirdpartyApplicationsReviewsList.length" class="subtitle-1 text-center" @click="isThirdpartyReviewsVisible = !isThirdpartyReviewsVisible">
+      <div v-if="thirdpartyApplicationsReviewsList.length" class="text-subtitle-1 text-center" @click="isThirdpartyReviewsVisible = !isThirdpartyReviewsVisible">
         <a>{{ !isThirdpartyReviewsVisible ? `Show other reviews (${thirdpartyApplicationsReviewsList.length})` : `Hide other reviews` }}</a>
       </div>
 

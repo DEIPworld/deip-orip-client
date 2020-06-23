@@ -2,7 +2,7 @@
   <v-row no-gutters justify="center">
     <v-col cols="6">
 
-      <div class="headline text-center mb-3">
+      <div class="text-h5 text-center mb-3">
         Funding amount
       </div>
 
@@ -53,7 +53,7 @@
           Next
         </v-btn>
       </div>
-      
+
     </v-col>
   </v-row>
 </template>

@@ -7,7 +7,7 @@
       <div class="flex-grow-1 overflow-y-auto flex-basis-0">
         <div class="group-share-max-width mx-auto">
           <div>Each research group is assigned its own Research Group Tokens which are distributed among its members and can be used to manage the group and its research activity.</div>
-          <div class="body-2 py-4">
+          <div class="text-body-2 py-4">
             Distribute tokens of this group as follows:
           </div>
           <div

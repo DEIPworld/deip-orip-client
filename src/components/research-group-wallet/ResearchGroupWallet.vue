@@ -1,6 +1,6 @@
 <template>
   <div class="fill-height pa-12 xs12">
-    <div class="headline half-bold">
+    <div class="text-h5 half-bold">
       <router-link
         class="a"
         :to="{
@@ -46,11 +46,11 @@
                   </svg> -->
                 </div>
 
-                <span class="subtitle-1 c-pl-4 c-pr-2" />
+                <span class="text-subtitle-1 c-pl-4 c-pr-2" />
               </div>
 
               <div class="width-10 list-body-cell text-align-center">
-                <div class="half-bold headline">
+                <div class="half-bold text-h5">
                   {{ defaultAssetBalance }}
                 </div>
               </div>
@@ -70,7 +70,7 @@
           </div>
         </v-card>
 
-        <div class="title c-pt-8">
+        <div class="text-h6 c-pt-8">
           Research Tokens
         </div>
 
@@ -95,7 +95,7 @@
               <template v-for="(research, i) in researches">
                 <div :key="`${i}-research`" class="list-line">
                   <div class="legacy-col-grow list-body-cell">
-                    <div class="subtitle-1">
+                    <div class="text-subtitle-1">
                       {{ research.title }}
                     </div>
                     <!-- <div class="grey--text caption">alice · bob</div> -->

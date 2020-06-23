@@ -2,10 +2,10 @@
 
   <div>
     <layout-section>
-      <div class="display-1 font-weight-bold mb-4">
+      <div class="text-h4 font-weight-bold mb-4">
         Frequently Asked Questions
       </div>
-      <div class="mb-6 body-2">
+      <div class="mb-6 text-body-2">
         Didn’t find what you were looking for?
         <router-link :to="'#'" class="a ml-1">
           Get in touch.
@@ -31,11 +31,11 @@
         no-gutters
         class="mb-12"
       >
-        <h3 class="headline font-weight-bold mb-4">
+        <h3 class="text-h5 font-weight-bold mb-4">
           {{ item.question }}
         </h3>
         <div
-          class="body-2 white-space-pre-line"
+          class="text-body-2 white-space-pre-line"
         >
           {{ item.answer }}
         </div>

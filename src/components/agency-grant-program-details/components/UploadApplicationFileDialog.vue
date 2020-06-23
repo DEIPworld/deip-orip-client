@@ -19,7 +19,7 @@
             <div class="pr-4">
               Funding opportunity:
             </div>
-            <div class="a subtitle-1">
+            <div class="a text-subtitle-1">
               {{ program.additional_info.funding_opportunity_title }}
             </div>
           </div>
@@ -47,7 +47,7 @@
           </v-autocomplete>
           <div v-if="research">
             <div class="pt-4 pb-4">
-              <div class="title">
+              <div class="text-h6">
                 <span class="font-weight-medium">Research group:</span>
                 <router-link
                   class="a"

@@ -15,7 +15,7 @@
       </v-toolbar>
 
       <div class="fill-height pa-12 xs12">
-        <div class="headline text-align-center font-weight-medium">
+        <div class="text-h5 text-align-center font-weight-medium">
           Select your discipline
         </div>
 
@@ -47,7 +47,7 @@
             />
           </div>
 
-          <div class="title font-weight-bold pt-6">
+          <div class="text-h6 font-weight-bold pt-6">
             Add links to your relevant publications in this discipline
           </div>
 

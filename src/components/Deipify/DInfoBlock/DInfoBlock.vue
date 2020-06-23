@@ -2,7 +2,7 @@
   <div :class="componentClassList">
     <h4
       v-if="title"
-      class="subtitle-1 font-weight-medium mb-2"
+      class="text-subtitle-1 font-weight-medium mb-2"
     >
       {{ title }}
     </h4>

@@ -6,7 +6,7 @@
       <v-col cols="12">
         <div class="pl-4 pt-4">
           <router-link
-            class="subtitle-1"
+            class="text-subtitle-1"
             style="text-decoration: none"
             :to="{
               name: 'ResearchDetails',
@@ -18,9 +18,9 @@
           >
             {{ application.research.title }}
           </router-link>
-          <span class="subtitle-1 pl-2 pr-2 grey--text">|</span>
+          <span class="text-subtitle-1 pl-2 pr-2 grey--text">|</span>
           <router-link
-            class="a subtitle-1"
+            class="a text-subtitle-1"
             :to="{
               name: 'ResearchApplicationDetails',
               params: {
@@ -58,7 +58,7 @@
 
       <v-col cols="2">
         <div class="pl-4 pt-2 pb-2">
-          <span class="title">$ {{ fromAssetsToFloat(application.total_amount) }}</span>
+          <span class="text-h6">$ {{ fromAssetsToFloat(application.total_amount) }}</span>
         </div>
       </v-col>
 
@@ -96,7 +96,7 @@
               <span v-if="application.status === applicationStatusMap.PENDING" class="grey--text">Pending</span>
             </span>
           </div>
-          <div v-if="isDuplicated" class="pr-6 body-2">
+          <div v-if="isDuplicated" class="pr-6 text-body-2">
             <span v-if="duplicate.status === applicationStatusMap.APPROVED">
               Similar application has been <span class="green--text text--darken-2">approved</span> by
             </span>

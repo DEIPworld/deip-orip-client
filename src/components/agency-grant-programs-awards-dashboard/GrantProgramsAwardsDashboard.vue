@@ -2,7 +2,7 @@
   <base-page-layout>
     <template #header>
       <layout-header light :muted="false">
-        <div class="display-1">
+        <div class="text-h4">
           Dashboard
         </div>
       </layout-header>
@@ -20,19 +20,19 @@
             <v-card flat class="px-2 grey-background">
               <v-list dense class="grey-background">
                 <v-list-item>
-                  <v-list-item-content class="subtitle-1 grey--text bold">
+                  <v-list-item-content class="text-subtitle-1 grey--text bold">
                     {{ item.text }}
                   </v-list-item-content>
                 </v-list-item>
                 <v-list-item>
-                  <v-list-item-content class="headline bold" :class="item.isGreen ? 'green--text text--darken-1': 'blue--text text--darken-1'">
+                  <v-list-item-content class="text-h5 bold" :class="item.isGreen ? 'green--text text--darken-1': 'blue--text text--darken-1'">
                     {{ item.amount | currency }}
                   </v-list-item-content>
                 </v-list-item>
                 <v-list-item>
                   <v-list-item-content class="grey--text">
-                    <span class="body-2">
-                      <v-icon class="subtitle-1">local_atm</v-icon>
+                    <span class="text-body-2">
+                      <v-icon class="text-subtitle-1">local_atm</v-icon>
                       NSF Grant Tokens
                     </span>
                   </v-list-item-content>
@@ -90,7 +90,7 @@
                 <template v-slot:item="{item}">
                   <tr>
                     <td>
-                      <router-link class="a body-2" :to="{ name: 'GrantProgramAwardDetails', params: { award_number: item.awardee.award_number, subaward_number: item.awardee.subaward_number } }">
+                      <router-link class="a text-body-2" :to="{ name: 'GrantProgramAwardDetails', params: { award_number: item.awardee.award_number, subaward_number: item.awardee.subaward_number } }">
                         {{ item.awardee.subaward_number }}
                       </router-link>
                     </td>
@@ -102,35 +102,35 @@
                       </v-chip>
                     </td>
                     <td v-if="isGrantProgramOfficer || isGrantFinanceOfficer">
-                      <router-link class="a body-1" :to="{ name: 'UserDetails', params: { account_name: item.topPi.account.name } }">
+                      <router-link class="a text-body-1" :to="{ name: 'UserDetails', params: { account_name: item.topPi.account.name } }">
                         {{ item.topPi | fullname }}
                       </router-link>
                     </td>
                     <td v-if="isGrantProgramOfficer || isGrantFinanceOfficer">
-                      <div><a href="#" class="a body-1">{{ item.organization.name }}</a></div>
+                      <div><a href="#" class="a text-body-1">{{ item.organization.name }}</a></div>
                     </td>
-                    <td><span class="body-1">{{ moment(new Date(item.foa.open_date)).format("MM/YY") }} - {{ moment(new Date(item.foa.close_date)).format("MM/YY") }}</span></td>
-                    <td><span class="body-1">{{ item.totalAmount | currency }}</span></td>
+                    <td><span class="text-body-1">{{ moment(new Date(item.foa.open_date)).format("MM/YY") }} - {{ moment(new Date(item.foa.close_date)).format("MM/YY") }}</span></td>
+                    <td><span class="text-body-1">{{ item.totalAmount | currency }}</span></td>
                     <td>
-                      <span class="body-1">
+                      <span class="text-body-1">
                         <span v-if="item.award.status == AWARD_STATUS.PENDING || item.award.status == AWARD_STATUS.REJECTED">N/A</span>
                         <span v-else>{{ item.universityOverheadAmount | currency }}</span>
                       </span>
                     </td>
                     <td>
-                      <span class="body-1">
+                      <span class="text-body-1">
                         <span v-if="item.award.status == AWARD_STATUS.PENDING || item.award.status == AWARD_STATUS.REJECTED">N/A</span>
                         <span v-else>{{ item.pendingAmount | currency }}</span>
                       </span>
                     </td>
                     <td>
-                      <span class="body-1">
+                      <span class="text-body-1">
                         <span v-if="item.award.status == AWARD_STATUS.PENDING || item.award.status == AWARD_STATUS.REJECTED">N/A</span>
                         <span v-else>{{ item.withdrawnAmount | currency }}</span>
                       </span>
                     </td>
                     <td>
-                      <span class="body-1">
+                      <span class="text-body-1">
                         <span v-if="item.award.status == AWARD_STATUS.PENDING || item.award.status == AWARD_STATUS.REJECTED">N/A</span>
                         <span v-else>{{ item.remainingAmount | currency }}</span>
                       </span>
@@ -140,7 +140,7 @@
 
                 <template v-slot:body.append>
                   <tr>
-                    <td v-for="(header, i) in awardHeaders" :key="`${i}-award-header`" class="body-2 bold total-row">
+                    <td v-for="(header, i) in awardHeaders" :key="`${i}-award-header`" class="text-body-2 bold total-row">
                       <span v-if="i == 0">Total</span>
                       <span v-if="header.value == 'totalAmount'">{{ totalAwardsAmount | currency }}</span>
                       <span v-else-if="header.value == 'universityOverheadAmount'">{{ totalAdminExpensesAmount | currency }}</span>
@@ -321,17 +321,17 @@
               <template v-slot:item="{item, isSelected, select}">
                 <tr>
                   <td v-if="isUniversityCertifier || isGrantProgramOfficer || isTreasuryCertifier">
-                    <v-simple-checkbox 
+                    <v-simple-checkbox
                       v-if="(item.status == AWARD_WITHDRAWAL_REQUEST_STATUS.PENDING && isUniversityCertifier) ||
                             (item.status == AWARD_WITHDRAWAL_REQUEST_STATUS.CERTIFIED && isGrantProgramOfficer) ||
                             (item.status == AWARD_WITHDRAWAL_REQUEST_STATUS.APPROVED && isTreasuryCertifier)"
                       primary
-                      :value="isSelected" 
+                      :value="isSelected"
                       @input="select($event)">
                     </v-simple-checkbox>
                   </td>
                   <td>
-                    <router-link class="a body-2" :to="{ name: 'GrantProgramAwardWithdrawalDetails', params: { award_number: item.awardee.award_number, subaward_number: item.awardee.subaward_number, payment_number: item.paymentNumber }}">
+                    <router-link class="a text-body-2" :to="{ name: 'GrantProgramAwardWithdrawalDetails', params: { award_number: item.awardee.award_number, subaward_number: item.awardee.subaward_number, payment_number: item.paymentNumber }}">
                       {{ item.paymentNumber }}
                     </router-link>
                   </td>
@@ -343,20 +343,20 @@
                     </v-chip>
                   </td>
                   <td>
-                    <span><router-link class="a body-2" :to="{ name: 'GrantProgramAwardDetails', params: { award_number: item.awardee.award_number, subaward_number: item.awardee.subaward_number } }">{{ item.awardee.subaward_number }}</router-link></span>
+                    <span><router-link class="a text-body-2" :to="{ name: 'GrantProgramAwardDetails', params: { award_number: item.awardee.award_number, subaward_number: item.awardee.subaward_number } }">{{ item.awardee.subaward_number }}</router-link></span>
                   </td>
                   <td v-if="isGrantProgramOfficer || isGrantFinanceOfficer || isTreasuryCertifier">
-                    <router-link class="a body-1" :to="{ name: 'UserDetails', params: { account_name: item.topPi.account.name } }">
+                    <router-link class="a text-body-1" :to="{ name: 'UserDetails', params: { account_name: item.topPi.account.name } }">
                       {{ item.topPi | fullname }}
                     </router-link>
                   </td>
                   <td v-if="isGrantProgramOfficer || isGrantFinanceOfficer || isTreasuryCertifier">
-                    <router-link class="a body-2" :to="{ name: 'ResearchGroupDetails', params: { research_group_permlink: item.organization.permlink }}">
+                    <router-link class="a text-body-2" :to="{ name: 'ResearchGroupDetails', params: { research_group_permlink: item.organization.permlink }}">
                       {{ item.organization.name }}
                     </router-link>
                   </td>
                   <td>
-                    <router-link class="a body-1" :to="{ name: 'UserDetails', params: { account_name: item.requester.account.name } }">
+                    <router-link class="a text-body-1" :to="{ name: 'UserDetails', params: { account_name: item.requester.account.name } }">
                       {{ item.requester | fullname }}
                     </router-link>
                     <!-- <div v-if="item.awardee.isSubawardee && item.requester.account.name != user.account.name" class="grey--text caption">(subawardee)</div> -->
@@ -364,9 +364,9 @@
                       (subawardee)
                     </div>
                   </td>
-                  <td><span class="body-1 grey--text">{{ moment(item.timestamp).format('MM/DD/YYYY HH:mm:ss') }}</span></td>
+                  <td><span class="text-body-1 grey--text">{{ moment(item.timestamp).format('MM/DD/YYYY HH:mm:ss') }}</span></td>
                   <td>
-                    <div class="body-2 text-align-right">
+                    <div class="text-body-2 text-align-right">
                       {{ item.amount | currency }}
                     </div>
                   </td>
@@ -375,7 +375,7 @@
 
               <template v-slot:body.append>
                 <tr>
-                  <td v-for="(header, i) in paymentHeaders" :key="`${i}-payment-header`" class="body-2 bold total-row">
+                  <td v-for="(header, i) in paymentHeaders" :key="`${i}-payment-header`" class="text-body-2 bold total-row">
                     <span v-if="i == 0">Total</span>
                     <div v-if="header.value == 'amount'" class="text-align-right">
                       {{ totalPaymentsAmount | currency }}

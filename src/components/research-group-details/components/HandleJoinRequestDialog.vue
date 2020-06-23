@@ -7,7 +7,7 @@
   >
     <v-card class="pa-6">
       <v-card-title>
-        <div class="headline">
+        <div class="text-h5">
           Join Request
         </div>
         <div class="right-top-angle">
@@ -28,7 +28,7 @@
             link-to-profile-class="pl-6 title"
           />
         </div>
-        <div class="py-6 subtitle-1 black--text">
+        <div class="py-6 text-subtitle-1 black--text">
           {{ joinRequest.coverLetter }}
         </div>
 

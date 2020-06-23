@@ -74,7 +74,7 @@
                 >
                   {{ item.meta.title }}
                 </router-link>
-                <span v-else class="body-2">{{ item.meta.title }}</span>
+                <span v-else class="text-body-2">{{ item.meta.title }}</span>
               </td>
               <td class="text-center">
                 {{ moment(item.timestamp).format('D MMM YYYY') }}

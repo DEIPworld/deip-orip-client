@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="title bold">
+    <div class="text-h6 bold">
       My Inbox
     </div>
 
@@ -26,7 +26,7 @@
           sm="8"
           cols="8"
         >
-          <div class="subtitle-1 half-bold">
+          <div class="text-subtitle-1 half-bold">
             Recent updates: {{ recentNotifications.length }}
           </div>
         </v-col>
@@ -97,7 +97,7 @@
 
     <div v-if="overdueNotifications.length" class="pt-12">
       <div class="py-4 fill-height">
-        <div class="subtitle-1 half-bold">
+        <div class="text-subtitle-1 half-bold">
           Overdue notifications: {{ overdueNotifications.length }}
         </div>
       </div>
@@ -143,7 +143,7 @@
       </v-card>
     </div>
 
-    <div v-if="noResult" class="pt-12 subtitle-1">
+    <div v-if="noResult" class="pt-12 text-subtitle-1">
       There are no investments in selected list
     </div>
   </div>

@@ -9,7 +9,7 @@
     @input="closeDialog"
   >
     <v-card>
-      <v-card-title v-if="title" class="headline pr-12">
+      <v-card-title v-if="title" class="text-h5 pr-12">
         {{ title }}
       </v-card-title>
       <v-divider v-if="title" />

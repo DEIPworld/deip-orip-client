@@ -1,7 +1,7 @@
 <template>
   <v-card flat class=" full-height">
     <div v-if="isOwner && hasInvites">
-      <div id="invites" class="title font-weight-bold pb-2">
+      <div id="invites" class="text-h6 font-weight-bold pb-2">
         Invites: {{ invites.length }}
       </div>
       <div
@@ -44,7 +44,7 @@
       >
         <v-card class="pa-6">
           <v-card-title>
-            <div class="headline">
+            <div class="text-h5">
               {{ inviteDetailsDialog.item.group.name }}
             </div>
             <div class="right-top-angle">
@@ -56,7 +56,7 @@
             </div>
           </v-card-title>
           <v-card-text>
-            <div class="subtitle-1 pt-6 font-weight-medium black--text">{{ inviteDetailsDialog.item.notes }}</div>
+            <div class="text-subtitle-1 pt-6 font-weight-medium black--text">{{ inviteDetailsDialog.item.notes }}</div>
           </v-card-text>
           <v-card-actions class="flex-wrap px-6">
             <div class="w-100 py-2">
@@ -89,7 +89,7 @@
     <!-- ### END User Profile Invites Section ### -->
 
     <div v-if="isOwner && hasReviewRequests">
-      <div id="review-requests" class="title font-weight-bold pb-2">
+      <div id="review-requests" class="text-h6 font-weight-bold pb-2">
         Review Requests: {{ reviewRequests.length }}
       </div>
       <div
@@ -144,7 +144,7 @@
 
     <!-- ### START User Profile Expertise Section ### -->
     <div class="mt-6">
-      <div class="title bold">
+      <div class="text-h6 bold">
         Expertise Contribution Index
       </div>
       <div class="py-2">
@@ -164,16 +164,16 @@
             </div>
           </router-link>
         </div>
-        <div v-if="!expertise.length" class="body-1">
+        <div v-if="!expertise.length" class="text-body-1">
           <div v-if="isOwner">
             You have no Expertise Tokens yet. Use <span class="a" @click="openClaimExpertiseDialog()">Claim</span>
             process to apply for Expertise Tokens
           </div>
           <div v-if="!isOwner">
-            <span class="body-2">{{ userInfo | fullname }}</span> has no Expertise Tokens yet
+            <span class="text-body-2">{{ userInfo | fullname }}</span> has no Expertise Tokens yet
           </div>
         </div>
-        <div v-if="expertise.length && isOwner" class="body-1 full-width c-mt-4">
+        <div v-if="expertise.length && isOwner" class="text-body-1 full-width c-mt-4">
           <v-btn
             block
             outlined
@@ -193,7 +193,7 @@
       <div class="sidebar-fullwidth">
         <v-divider />
       </div>
-      <div class="subtitle-1 font-weight-bold mt-4">
+      <div class="text-subtitle-1 font-weight-bold mt-4">
         <div class="mt-1">
           Contacts info
         </div>
@@ -221,7 +221,7 @@
       <div class="sidebar-fullwidth">
         <v-divider />
       </div>
-      <div class="subtitle-1 font-weight-bold mt-4">
+      <div class="text-subtitle-1 font-weight-bold mt-4">
         <div class="mt-1">
           Personal information
         </div>
@@ -301,7 +301,7 @@
       <div class="sidebar-fullwidth">
         <v-divider />
       </div>
-      <div class="subtitle-1 font-weight-bold mt-4">
+      <div class="text-subtitle-1 font-weight-bold mt-4">
         <div class="mt-1">
           Additional information
         </div>

@@ -1,7 +1,7 @@
 <template>
   <v-sheet tile>
     <v-toolbar flat>
-      <v-toolbar-title class="headline">
+      <v-toolbar-title class="text-h5">
         {{ title }}
       </v-toolbar-title>
       <v-spacer />

@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="subtitle-1 c-pb-4 bold">
+    <div class="text-subtitle-1 c-pb-4 bold">
       Disciplines
     </div>
 

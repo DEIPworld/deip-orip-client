@@ -4,7 +4,7 @@
     tile
     :max-width="maxWidth"
   >
-    <div v-if="title" class="title mb-4">
+    <div v-if="title" class="text-h6 mb-4">
       {{ title }}
     </div>
     <v-row class="ma-n3">

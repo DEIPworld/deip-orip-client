@@ -152,7 +152,7 @@
               md="12"
               cols="12"
             >
-              <p class="subtitle-1">
+              <p class="text-subtitle-1">
                 {{ step.goal }}
               </p>
             </v-col>

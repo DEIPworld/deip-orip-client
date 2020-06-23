@@ -7,7 +7,7 @@
   >
     <v-card class="pa-6">
       <v-card-title>
-        <div class="headline">
+        <div class="text-h5">
           Transfer from Group balance
         </div>
         <div class="right-top-angle">

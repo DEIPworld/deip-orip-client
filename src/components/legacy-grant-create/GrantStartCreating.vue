@@ -2,7 +2,7 @@
   <v-container fluid class="pa-0 fill-height">
     <v-row>
       <div class="c-m-auto page-container">
-        <div class="text-align-center display-1 bold">
+        <div class="text-align-center text-h4 bold">
           Grants distribution
         </div>
 

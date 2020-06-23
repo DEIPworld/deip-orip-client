@@ -79,20 +79,20 @@
               </v-col>
               <v-col class="grow pl-12" align-self="center">
                 <div class="pb-4">
-                  <div v-if="!contentReviewsList.length" class="pb-1 subtitle-1 font-weight-bold">
+                  <div v-if="!contentReviewsList.length" class="pb-1 text-subtitle-1 font-weight-bold">
                     There are no reviews for
                     this material yet
                   </div>
                   <div v-if="userHasResearchExpertise && !userHasReview">
-                    You will get <span class="body-2 font-weight-bold">approximately 3000 ECI reward in {{ userRelatedExpertise.map(exp => exp.discipline_name).join(', ') }}</span>
+                    You will get <span class="text-body-2 font-weight-bold">approximately 3000 ECI reward in {{ userRelatedExpertise.map(exp => exp.discipline_name).join(', ') }}</span>
                     for your contribution to this project
                   </div>
-                  <div v-else-if="userHasResearchExpertise && userHasReview" class="pb-1 subtitle-1 half-bold">
+                  <div v-else-if="userHasResearchExpertise && userHasReview" class="pb-1 text-subtitle-1 half-bold">
                     You
                     have reviewed this material already
                   </div>
                   <div v-else-if="!userHasResearchExpertise">
-                    Users with expertise in <span class="body-2">{{ research.disciplines.map(d => d.name).join(', ') }}</span>
+                    Users with expertise in <span class="text-body-2">{{ research.disciplines.map(d => d.name).join(', ') }}</span>
                     can review this project only
                   </div>
                 </div>
@@ -134,7 +134,7 @@
     >
       <v-card class="pa-6">
         <v-card-title>
-          <div class="headline">
+          <div class="text-h5">
             Upload material for research
           </div>
           <div class="right-top-angle">

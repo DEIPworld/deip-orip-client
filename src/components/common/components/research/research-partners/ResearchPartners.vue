@@ -56,7 +56,7 @@
       </v-row>
     </div>
     <div v-else>
-      <div class="subtitle-1">
+      <div class="text-subtitle-1">
         Add partners
       </div>
     </div>
@@ -77,13 +77,13 @@
   </div>
   <div v-else>
     <div v-for="(item, i) in partnersСollectedData" :key="`${item.typeInfo.type}${i}`" class="mb-2">
-      <div class="font-weight-medium subtitle-1 mr-2 display-inline-block">
+      <div class="font-weight-medium text-subtitle-1 mr-2 display-inline-block">
         <v-icon class="mr-2" small color="black">
           {{ item.typeInfo.icon }}
         </v-icon>
         <span>{{ item.typeInfo.title }}</span>
       </div>
-      <div class="display-inline-block subtitle-1">
+      <div class="display-inline-block text-subtitle-1">
         {{ item.title }}
       </div>
     </div>

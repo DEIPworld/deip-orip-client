@@ -8,7 +8,7 @@
       <div class="legacy-col-grow overflow-y-auto">
         <div class="c-mh-auto full-height discipline-conditions">
           <v-form ref="form" v-model="isFormValid" class="">
-            <div class="subtitle-1 bold">
+            <div class="text-subtitle-1 bold">
               Dates attended
             </div>
 
@@ -42,7 +42,7 @@
               </div>
             </div>
 
-            <div class="c-pt-4 subtitle-1 bold">
+            <div class="c-pt-4 text-subtitle-1 bold">
               Description
               <span class="caption">(optional)</span>
             </div>

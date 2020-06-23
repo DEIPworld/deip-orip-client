@@ -8,7 +8,7 @@
       <template #sidebar>
         <div>
           <v-sheet>
-            <div class="title">
+            <div class="text-h6">
               You are not logged in
             </div>
             <div class="my-2">
@@ -29,7 +29,7 @@
           <v-divider class="my-6" />
 
           <v-sheet>
-            <div class="title">
+            <div class="text-h6">
               {{ group.name }}
             </div>
             <div
@@ -63,7 +63,7 @@
                 <v-avatar size="30" color="#0386b0" class="align-self-start mr-2">
                   <span class="white--text font-weight-medium">{{ item.value.index + 1 }}</span>
                 </v-avatar>
-                <div class="title align-self-start font-weight-medium">
+                <div class="text-h6 align-self-start font-weight-medium">
                   {{ item.readinessLevelShortTitle }}
                   <div class="caption font-weight-bold">
                     {{ item.step.description }}
@@ -75,7 +75,7 @@
 
           <div v-if="researchRef.partners.length">
             <v-divider class="my-6" />
-            <div class="title">
+            <div class="text-h6">
               Partners
             </div>
             <research-partners class="mt-4" is-read-only :partners="researchRef.partners" />

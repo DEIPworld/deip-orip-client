@@ -8,10 +8,10 @@
         lg="8"
         xl="8"
       >
-        <div class="title">
+        <div class="text-h6">
           Data usage overview
         </div>
-        <div class="py-6 subtitle-1 font-weight-medium">
+        <div class="py-6 text-subtitle-1 font-weight-medium">
           Number of reference nodes: {{ referencesCount }}
         </div>
         <div ref="graphContainer" style="height: 400px">
@@ -35,10 +35,10 @@
           <v-tabs v-model="activeTab">
             <v-tabs-slider />
             <v-tab href="#tab-file">
-              <span class="subtitle-1 capitalize">File Info</span>
+              <span class="text-subtitle-1 capitalize">File Info</span>
             </v-tab>
             <v-tab href="#tab-references">
-              <span class="subtitle-1 capitalize">References <span v-if="outerReferences.length">({{ outerReferences.length }})</span></span>
+              <span class="text-subtitle-1 capitalize">References <span v-if="outerReferences.length">({{ outerReferences.length }})</span></span>
             </v-tab>
 
             <v-tabs-items v-model="activeTab" class="tab-content overflow-x-hidden">
@@ -47,7 +47,7 @@
                 <div>
                   <v-row justify="space-between" align="center">
                     <v-col cols="4">
-                      <span class="body-2">Title:</span>
+                      <span class="text-body-2">Title:</span>
                     </v-col>
                     <v-col cols="8">
                       <router-link
@@ -72,7 +72,7 @@
                     align="center"
                   >
                     <v-col cols="4">
-                      <span class="body-2">Data Type:</span>
+                      <span class="text-body-2">Data Type:</span>
                     </v-col>
                     <v-col cols="8">
                       <span>{{ getResearchContentType(researchContent.content_type).text }}</span>
@@ -85,7 +85,7 @@
                     align="center"
                   >
                     <v-col cols="4">
-                      <span class="body-2">Authors:</span>
+                      <span class="text-body-2">Authors:</span>
                     </v-col>
                     <v-col cols="8">
                       <v-row align="center">
@@ -107,7 +107,7 @@
                     align="center"
                   >
                     <v-col cols="4">
-                      <span class="body-2">Organization:</span>
+                      <span class="text-body-2">Organization:</span>
                     </v-col>
                     <v-col cols="8">
                       <v-row align="center">
@@ -128,7 +128,7 @@
                     align="center"
                   >
                     <v-col cols="4">
-                      <span class="body-2">Release date:</span>
+                      <span class="text-body-2">Release date:</span>
                     </v-col>
                     <v-col cols="8">
                       <v-row align="center">
@@ -147,7 +147,7 @@
                     align="center"
                   >
                     <v-col cols="4">
-                      <span class="body-2">Verified by:</span>
+                      <span class="text-body-2">Verified by:</span>
                     </v-col>
                     <v-col cols="8">
                       <v-row
@@ -189,7 +189,7 @@
                 >
                   <v-col cols="12">
                     <div v-for="(ref, i) in outerReferences" :key="`out-ref-${i}`" class="py-1">
-                      <span class="body-2 pr-2">{{ i + 1 }}. </span>
+                      <span class="text-body-2 pr-2">{{ i + 1 }}. </span>
                       <router-link
                         class="a"
                         :to="{
@@ -233,7 +233,7 @@
         xl="4"
       >
         <v-row column class="outer-references-by-org px-4">
-          <div class="title">
+          <div class="text-h6">
             Usage by organization
           </div>
           <div class="py-12">
@@ -256,7 +256,7 @@
         xl="4"
       >
         <v-row column class="outer-references-by-content-type px-4">
-          <div class="title">
+          <div class="text-h6">
             Usage by data type
           </div>
           <div class="py-12">
@@ -278,7 +278,7 @@
         xl="4"
       >
         <v-row column class="outer-references-by-discipline px-4">
-          <div class="title">
+          <div class="text-h6">
             Usage by discipline
           </div>
           <div class="py-12">

@@ -3,7 +3,7 @@
     <v-col class="fill-height pa-12 xs12">
       <div v-if="contentMetadata">
         <div class="legacy-row legacy-justify-between legacy-align-items-end">
-          <div class="display-1 bold">
+          <div class="text-h4 bold">
             Block #{{ contentMetadata.blockNum }}
             <span v-if="isGenesisBlock" class="caption grey--text">GENESIS</span>
           </div>

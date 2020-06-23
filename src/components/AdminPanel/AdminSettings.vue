@@ -1,6 +1,6 @@
 <template>
   <admin-view title="Settings">
-    <div class="title mb-6">
+    <div class="text-h6 mb-6">
       Change banner on Explore page
     </div>
     <div class="display-flex flex-wrap">

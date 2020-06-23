@@ -2,7 +2,7 @@
   <div>
     <v-row no-gutters>
       <v-col cols="8">
-        <div class="title c-pb-10">
+        <div class="text-h6 c-pb-10">
           {{ contentRef.title }}
         </div>
       </v-col>
@@ -16,7 +16,7 @@
       </v-col>
       <v-col cols="8">
         <div class="float-left">
-          <!-- <router-link class="subtitle-1"  style="text-decoration: none"
+          <!-- <router-link class="text-subtitle-1"  style="text-decoration: none"
               :to="{ name: 'GrantProgramDetails',
                   params: {
                     agency: program.agency_name,
@@ -28,7 +28,7 @@
       <v-col cols="4" />
       <v-col cols="12">
         <div>
-          <div class="subtitle-1 c-pt-5 c-pb-3 text-truncate">
+          <div class="text-subtitle-1 c-pt-5 c-pb-3 text-truncate">
             <span class="caption grey--text">{{ contentRef.hash }}</span>
           </div>
           <v-card v-for="file in contentRef.packageFiles" :key="file.hash">
@@ -43,7 +43,7 @@
                   >
                     {{ file.filename }}
                   </a>
-                  <span v-else class="body-2">
+                  <span v-else class="text-body-2">
                     {{ file.filename }}
                   </span>
                 </span>
@@ -55,7 +55,7 @@
                   </span>
                 </span>
                 <span class="legacy-col-1 text-align-right">
-                  <span class="body-2 grey--text">{{ file.hash.slice(0, 8) }}</span>
+                  <span class="text-body-2 grey--text">{{ file.hash.slice(0, 8) }}</span>
                 </span>
               </div>
             </v-card-text>

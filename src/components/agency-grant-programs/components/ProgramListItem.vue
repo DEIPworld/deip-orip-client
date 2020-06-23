@@ -6,7 +6,7 @@
     <v-row no-gutters class="pl-6 pb-2">
       <v-col cols="9">
         <div class="pl-6 pt-2">
-          <router-link class="a subtitle-1" :to="{ name: 'GrantProgramDetails', params: { agency: program.organization_name, foa: program.funding_opportunity_number }}">
+          <router-link class="a text-subtitle-1" :to="{ name: 'GrantProgramDetails', params: { agency: program.organization_name, foa: program.funding_opportunity_number }}">
             {{ program.additional_info.funding_opportunity_title }}
           </router-link>
         </div>
@@ -31,10 +31,10 @@
         </v-row>
       </v-col>
       <v-col cols="2" offset="1" class="text--center">
-        <div class="grey--text pt-4 body-2">
+        <div class="grey--text pt-4 text-body-2">
           FUNDING
         </div>
-        <div class="title pt-2 font-weight-bold">
+        <div class="text-h6 pt-2 font-weight-bold">
           $ {{ fromAssetsToFloat(program.amount) }}
         </div>
       </v-col>

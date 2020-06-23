@@ -1,12 +1,12 @@
 <template>
   <v-row no-gutters justify="center">
     <v-col cols="6">
-      
-      <div class="headline text-center mb-3">
+
+      <div class="text-h5 text-center mb-3">
         Select discipline(s) your funding opportunity is related to
       </div>
 
-      <div class="subtitle-1 mb-2 text-center">
+      <div class="text-subtitle-1 mb-2 text-center">
         {{ foa.disciplines.map(discipline => discipline.label).join(' · ') }}
       </div>
 

@@ -1,9 +1,9 @@
 <template>
   <v-sheet max-width="420" :class="{'text-center': centered}">
-    <div v-if="logo" class="display-2 mb-6">
+    <div v-if="logo" class="text-h3 mb-6">
       {{ logo }}
     </div>
-    <div v-if="title" class="title mb-6">
+    <div v-if="title" class="text-h6 mb-6">
       {{ title }}
     </div>
 
@@ -49,7 +49,7 @@
       </d-form-block>
     </d-form>
 
-    <div v-if="showSignUp" class="mt-4 subtitle-2">
+    <div v-if="showSignUp" class="mt-4 text-subtitle-2">
       Want become a member?
       <router-link class="a" :to="{name: 'SignUp'}">
         Sign Up now

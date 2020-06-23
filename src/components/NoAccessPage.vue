@@ -1,12 +1,12 @@
 <template>
   <v-app>
-    <v-content>
+    <v-main>
       <div class="display-flex full-height pos-relative overflow-hidden">
         <div class="c-m-auto text-align-center">
-          <div class="display-3 bold">
+          <div class="text-h2 bold">
             Sorry
           </div>
-          <div class="headline">
+          <div class="text-h5">
             You have no access to this page
           </div>
         </div>
@@ -14,7 +14,7 @@
         <img class="left-polygon" src="/assets/img/polygon.svg">
         <img class="right-polygon" src="/assets/img/polygon.svg">
       </div>
-    </v-content>
+    </v-main>
   </v-app>
 </template>
 

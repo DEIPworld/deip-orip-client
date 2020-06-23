@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="title">
+    <div class="text-h6">
       Proposals
     </div>
 

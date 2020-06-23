@@ -6,7 +6,7 @@
           mdi-poll-box
         </v-icon>
       </v-col>
-      <v-col class="title">
+      <v-col class="text-h6">
         Expertise Contribution Index
       </v-col>
       <v-spacer />
@@ -79,7 +79,7 @@
             >
               {{ item.meta.title }}
             </router-link>
-            <span v-else class="body-2">{{ item.meta.title }}</span>
+            <span v-else class="text-body-2">{{ item.meta.title }}</span>
           </td>
           <td class="text-center">
             {{ moment(item.timestamp).format('D MMM YYYY') }}
