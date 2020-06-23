@@ -19,9 +19,13 @@
       <v-tab-item :transition="false" :reverse-transition="false">
         <v-data-table
           v-custom="'hover-row'"
+
+          :hide-default-header="publicProjects.length > 50"
+          :footer-props="{itemsPerPageOptions: [5, 10, 20, -1]}"
+          :items-per-page="50"
+
           :headers="publicProjectsHeaders"
           :items="publicProjects"
-          :items-per-page="50"
           sort-by="created_at"
           sort-desc
           @click:row="goToResearch"
@@ -45,9 +49,13 @@
       <v-tab-item :transition="false" :reverse-transition="false">
         <v-data-table
           v-custom="'hover-row'"
+
+          :hide-default-header="pendingProjects.length > 50"
+          :footer-props="{itemsPerPageOptions: [5, 10, 20, -1]}"
+          :items-per-page="50"
+
           :headers="pendingProjectsHeaders"
           :items="pendingProjects"
-          :items-per-page="50"
           sort-by="created_at"
           sort-desc
           @click:row="openResearchDialog"

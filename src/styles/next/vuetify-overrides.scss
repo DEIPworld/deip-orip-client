@@ -14,15 +14,6 @@
 }
 
 .v-text-field {
-  //.v-input__control::before{
-  //  content: '';
-  //  height: 42px;
-  //  width: 100px;
-  //  position: absolute;
-  //  top: 0;
-  //  left: 0;
-  //  background: #000;
-  //}
   &--filled {
     > .v-input__control > .v-input__slot {
       background-color: transparent !important;

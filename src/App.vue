@@ -1,17 +1,17 @@
 <template>
   <v-app>
-    <v-overlay v-if="!$ready" color="#fff">
-      <v-sheet min-width="320px">
-        <v-progress-linear
-          indeterminate
-          rounded
-          absolute
-          color="primary"
-        />
-      </v-sheet>
-    </v-overlay>
+<!--    <v-overlay v-if="!$ready" color="#fff">-->
+<!--      <v-sheet min-width="320px">-->
+<!--        <v-progress-linear-->
+<!--          indeterminate-->
+<!--          rounded-->
+<!--          absolute-->
+<!--          color="primary"-->
+<!--        />-->
+<!--      </v-sheet>-->
+<!--    </v-overlay>-->
 
-    <div v-if="$ready">
+    <v-sheet tile min-height="100%" v-if="$ready">
       <toolbar
         v-if="!$route.meta.withoutHeader && !$route.path.includes('/admin')"
         :is-grants-transparency-demo="isGrantsTransparencyDemo"
@@ -22,12 +22,12 @@
 
       <router-view :key="$route.fullPath" name="navigator" />
 
-      <v-content :key="$route.fullPath">
+      <v-content :key="$route.fullPath" style="min-height: 100%">
         <router-view :key="$route.fullPath" />
       </v-content>
 
       <d-snackbar />
-    </div>
+    </v-sheet>
   </v-app>
 </template>
 

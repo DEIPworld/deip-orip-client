@@ -27,6 +27,11 @@
       <v-tab-item :transition="false" :reverse-transition="false">
         <v-data-table
           v-custom="'hover-row'"
+
+          :hide-default-header="registeredMembers.length > 50"
+          :footer-props="{itemsPerPageOptions: [5, 10, 20, -1]}"
+          :items-per-page="50"
+
           :headers="registeredMembersTableHeaders"
           :items="registeredMembers"
           @click:row="openMemberInfoDialog"
@@ -43,6 +48,11 @@
       <v-tab-item :transition="false" :reverse-transition="false">
         <v-data-table
           v-custom="'hover-row'"
+
+          :hide-default-header="waitingMembers.length > 50"
+          :footer-props="{itemsPerPageOptions: [5, 10, 20, -1]}"
+          :items-per-page="50"
+
           :headers="waitingMembersTableHeaders"
           :items="waitingMembers"
           @click:row="openMemberInfoDialog"

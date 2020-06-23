@@ -9,6 +9,12 @@
     </template>
 
     <v-data-table
+      v-custom="'hover-row'"
+
+      :hide-default-header="categories.length > 50"
+      :footer-props="{itemsPerPageOptions: [5, 10, 20, -1]}"
+      :items-per-page="50"
+
       :headers="categoriesTableHeader"
       :items="categories"
     >

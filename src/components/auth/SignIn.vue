@@ -16,7 +16,6 @@
     </template>
 
     <v-row no-gutters class="full-height">
-
       <v-col class="d-flex align-center justify-center">
         <v-sheet max-width="800" class="pa-12 mx-auto">
           <login-form
