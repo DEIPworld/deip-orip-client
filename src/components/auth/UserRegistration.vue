@@ -1,5 +1,6 @@
 <template>
-  <modal-route-view :title="title">
+  <component :is="modal ? 'full-screen-modal' : 'full-screen-view'" :title="title">
+
     <v-form v-show="!isServerValidated" ref="form" v-model="isFormValid">
       <div class="text-h6 mb-6">
         Personal information
@@ -216,29 +217,35 @@
         </v-btn>
       </div>
     </v-form>
-  </modal-route-view>
+  </component>
 </template>
 
 <script>
-  import ModalRouteView from '@/components/layout/ModalRouteView';
   import deipRpc from '@deip/rpc-client';
   import { TenantService } from '@deip/tenant-service';
   import _ from 'lodash';
   import countryList from '@/components/common/country.json';
   import { AuthService } from '@deip/auth-service';
 
+  import FullScreenView from '@/components/layout/FullScreen/FullScreenView';
+  import FullScreenModal from '@/components/layout/FullScreen/FullScreenModal';
+
   const tenantService = TenantService.getInstance();
   const authService = AuthService.getInstance();
 
   export default {
     name: 'UserRegistration',
-    components: { ModalRouteView },
+    components: { FullScreenView, FullScreenModal },
     props: {
       title: {
         type: String,
         default: 'Sign Up'
       },
       hideAgree: {
+        type: Boolean,
+        default: false
+      },
+      modal: {
         type: Boolean,
         default: false
       }

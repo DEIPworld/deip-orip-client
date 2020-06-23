@@ -1,7 +1,6 @@
 <template>
   <full-screen-view
     v-if="tenant.profile.settings.signUpPolicy === 'free'"
-    :hide-toolbar="false"
     max-width="100%"
     height="100%"
     toolbar-overlap

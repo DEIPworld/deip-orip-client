@@ -13,9 +13,10 @@
 
     <v-sheet v-if="$ready" min-height="100%">
 
-      <portal-target :key="$route.fullPath + '-toolbar'" name="toolbar">
+      <portal-target name="toolbar">
         <toolbar
-          v-if="!$route.meta.withoutHeader && !$route.path.includes('/admin')"
+          v-if="!$route.meta.withoutHeader"
+          :key="$route.fullPath + '-toolbar'"
           :is-grants-transparency-demo="isGrantsTransparencyDemo"
         />
       </portal-target>

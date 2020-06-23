@@ -1,4 +1,4 @@
-export const FullScreenMixin = {
+export const FullScreenBarMixin = {
   props: {
     title: {
       type: String,
@@ -6,12 +6,19 @@ export const FullScreenMixin = {
     },
     toolbarColor: {
       type: String,
-      default: '#fff'
+      default: null
     },
     toolbarOverlap: {
       type: Boolean,
       default: false
-    },
+    }
+  }
+};
+
+export const FullScreenMixin = {
+  mixins: [FullScreenBarMixin],
+
+  props: {
     hideToolbar: {
       type: Boolean,
       default: false
@@ -28,4 +35,4 @@ export const FullScreenMixin = {
     minWidth: [Number, String],
     width: [Number, String],
   }
-}
+};

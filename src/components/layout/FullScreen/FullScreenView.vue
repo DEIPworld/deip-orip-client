@@ -1,23 +1,20 @@
 <template>
   <div class="full-height">
     <portal v-if="!hideToolbar" to="toolbar">
-      <v-app-bar
-        flat
-        :app="!toolbarOverlap"
-        :absolute="toolbarOverlap"
-        :color="toolbarColor"
-        :style="{borderBottom: toolbarColor === 'transparent' ? '0 !important' : false}"
+      <full-screen-bar
+        :toolbar-overlap="toolbarOverlap"
+        :toolbar-color="toolbarColor"
+        :title="title"
       >
-        <slot name="toolbarButton">
-          <v-btn icon @click="$router.back()">
-            <v-icon>arrow_back</v-icon>
-          </v-btn>
-        </slot>
+        <template #toolbarButton>
+          <slot name="toolbarButton">
+            <v-btn icon @click="$router.back()">
+              <v-icon>arrow_back</v-icon>
+            </v-btn>
+          </slot>
+        </template>
 
-        <v-toolbar-title v-if="title">
-          {{ title }}
-        </v-toolbar-title>
-      </v-app-bar>
+      </full-screen-bar>
     </portal>
 
     <v-sheet
@@ -33,9 +30,11 @@
 
 <script>
   import { FullScreenMixin } from '@/components/layout/FullScreen/FullScreenMixin';
+  import FullScreenBar from '@/components/layout/FullScreen/FullScreenBar';
 
   export default {
     name: 'FullScreenView',
+    components: { FullScreenBar },
     mixins: [FullScreenMixin]
   };
 </script>

@@ -34,7 +34,8 @@ export const adminRouting = [
             },
             props: {
               dialog: {
-                title: 'Add new member'
+                title: 'Add new member',
+                modal: true
               }
             }
           }

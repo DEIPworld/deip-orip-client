@@ -2,9 +2,12 @@
   transition: none !important;
 }
 
-.v-app-bar.v-app-bar,
-.v-toolbar--custom {
-  border-bottom: 1px solid rgba(#000, .12) !important;
+.v-app-bar {
+  &--light.theme--light.v-toolbar.v-sheet {
+    background-color: white;
+
+    border-bottom: 1px solid rgba(#000, .12);
+  }
 }
 
 .v-icon {

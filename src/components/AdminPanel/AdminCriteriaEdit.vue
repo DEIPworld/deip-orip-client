@@ -1,5 +1,5 @@
 <template>
-  <modal-route-view :title="title">
+  <full-screen-modal :title="title">
     <v-form ref="form">
       <v-text-field
         v-model="formData.component.readinessLevelTitle"
@@ -87,26 +87,26 @@
         </v-col>
       </v-row>
     </v-form>
-  </modal-route-view>
+  </full-screen-modal>
 </template>
 
 <script>
-  import ModalRouteView from '@/components/layout/ModalRouteView';
   import LevellerItem from '@/components/Leveller/LevellerItem';
   import LevellerList from '@/components/Leveller/LevellerList';
   import LevellerListButton from '@/components/Leveller/LevellerListButton';
   import { mapGetters } from 'vuex';
   import { TenantService } from '@deip/tenant-service';
+  import FullScreenModal from '@/components/layout/FullScreen/FullScreenModal';
 
   const tenantService = TenantService.getInstance();
 
   export default {
     name: 'AdminCriteriaEdit',
     components: {
+      FullScreenModal,
       LevellerListButton,
       LevellerList,
-      LevellerItem,
-      ModalRouteView
+      LevellerItem
     },
     props: {
       title: {

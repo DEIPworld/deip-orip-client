@@ -1,5 +1,5 @@
 <template>
-  <modal-route-view :title="title">
+  <full-screen-modal :title="title">
     <v-form ref="form" v-model="isFormValid">
       <v-textarea
         v-model="formData.question"
@@ -46,20 +46,20 @@
         </v-col>
       </v-row>
     </v-form>
-  </modal-route-view>
+  </full-screen-modal>
 </template>
 
 <script>
-  import ModalRouteView from '@/components/layout/ModalRouteView';
   import { TenantService } from '@deip/tenant-service';
 
   import { mapGetters } from 'vuex';
+  import FullScreenModal from '@/components/layout/FullScreen/FullScreenModal';
 
   const tenantService = TenantService.getInstance();
 
   export default {
     name: 'AdminFAQEdit',
-    components: { ModalRouteView },
+    components: { FullScreenModal },
     props: {
       title: {
         type: String,

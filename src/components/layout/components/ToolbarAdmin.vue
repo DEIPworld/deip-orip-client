@@ -5,11 +5,12 @@
     </div>
 
     <v-app-bar
+      :key="$route.fullPath + '-toolbar'"
+      v-custom="'light'"
       app
       fixed
       flat
       clipped-left
-      color="#fff"
     >
       <router-link :to="{ name: 'Default' }">
         <img height="40px" class="logo-image" :src="tenant.account | tenantLogoSrc(80, 80, false)">
@@ -70,6 +71,8 @@
           </v-list>
         </v-menu>
       </v-sheet>
+
+
     </v-app-bar>
   </v-sheet>
 </template>

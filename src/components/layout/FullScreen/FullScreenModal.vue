@@ -7,18 +7,34 @@
     scrollable
   >
     <v-card tile>
-      <v-app-bar
+      <full-screen-bar
         v-if="!hideToolbar"
-        flat
-        absolute
-        color="#fff"
+        :toolbar-overlap="toolbarOverlap"
+        :toolbar-color="toolbarColor"
+        :title="title"
       >
-        <v-btn @click="open = false" icon>
-          <v-icon>arrow_back</v-icon>
-        </v-btn>
+        <template #toolbarButton>
+          <slot name="toolbarButton">
+            <v-btn icon @click="$router.back()">
+              <v-icon>arrow_back</v-icon>
+            </v-btn>
+          </slot>
+        </template>
 
-        <v-toolbar-title v-if="title">{{ title }}</v-toolbar-title>
-      </v-app-bar>
+      </full-screen-bar>
+
+<!--      <v-app-bar-->
+<!--        v-if="!hideToolbar"-->
+<!--        flat-->
+<!--        absolute-->
+<!--        color="#fff"-->
+<!--      >-->
+<!--        <v-btn @click="open = false" icon>-->
+<!--          <v-icon>arrow_back</v-icon>-->
+<!--        </v-btn>-->
+
+<!--        <v-toolbar-title v-if="title">{{ title }}</v-toolbar-title>-->
+<!--      </v-app-bar>-->
 
       <v-card-text
         class="pb-0 px-0 full-height"
@@ -39,9 +55,11 @@
 
 <script>
   import { FullScreenMixin } from '@/components/layout/FullScreen/FullScreenMixin';
+  import FullScreenBar from '@/components/layout/FullScreen/FullScreenBar';
 
   export default {
     name: 'FullScreenModal',
+    components: { FullScreenBar },
     mixins: [FullScreenMixin],
 
     props: {
