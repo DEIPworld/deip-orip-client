@@ -257,7 +257,7 @@
         userService
           .updateUserProfile(this.currentUser.username, update)
           .then((res) => {
-            this.$store.dispatch('account/loadUserProfile', {
+            this.$store.dispatch('account/loadUserAccount', {
               username: this.currentUser.username
             });
 
@@ -265,7 +265,7 @@
 
             this.$notifier.showSuccess('Personal info has been saved successfully!')
 
-            this.$router.back();
+            this.$router.push({name: 'account.summary'});
           })
           .catch((err) => {
             this.$notifier.showError('An error occurred while saving, please try again later')
