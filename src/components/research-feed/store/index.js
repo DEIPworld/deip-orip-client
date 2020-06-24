@@ -54,7 +54,7 @@ const getters = {
       })
       .filter((item) => !state.filter.topOnly || item.isTop)
       .filter((item) => !state.filter.q || item.title.toLowerCase().indexOf(state.filter.q.toLowerCase()) != -1)
-      .filter((item) => !state.filter.disciplines.length || item.disciplines.some((discipline) => state.filter.disciplines.some((d) => d.id == discipline.id)))
+      .filter((item) => !state.filter.disciplines.length || item.disciplines.some((discipline) => state.filter.disciplines.some((d) => d.id == discipline.external_id)))
       .filter((item) => !state.filter.organizations.length || state.filter.organizations.some((org) => item.research_group.external_id == org.external_id))
       .filter((item) => 
         !state.filter.steppers.length || state.filter.steppers.every(({ steps }) => steps.length === 0) || state.filter.steppers.some((t) => {
