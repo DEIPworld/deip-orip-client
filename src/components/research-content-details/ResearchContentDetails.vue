@@ -381,7 +381,7 @@
             if (draft.status == 'in-progress') {
               bus.$emit('texture:saveDocument', () => {
                 this.isSavingDraft = false;
-                this.$notifier.showError('Document draft has been saved !')
+                this.$notifier.showSuccess('Document draft has been saved !')
               });
             } else {
               this.isSavingDraft = false;
