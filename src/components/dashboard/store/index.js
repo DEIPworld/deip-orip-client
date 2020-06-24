@@ -323,7 +323,7 @@ const actions = {
 
   loadExperts({ commit }, { username, notify } = {}) {
     // TODO: request server for tenant users
-    deipRpc.api.getAllAccountsAsync()
+    deipRpc.api.lookupAccountsAsync("0", 10000)
       .then((accounts) => {
         const blackList = ['regacc', 'hermes', 'initdelegate', username];
         const experts = accounts.filter((a) => !a.is_research_group && !blackList.some((username) => username === a.name)).map((a) => a.name);

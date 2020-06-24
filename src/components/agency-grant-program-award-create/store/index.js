@@ -67,7 +67,7 @@ const actions = {
   loadUsers({ state, dispatch, commit }) {
     const blackList = ['regacc', 'hermes', 'initdelegate'];
     // TODO: request server for tenant users
-    return deipRpc.api.getAllAccountsAsync()
+    return deipRpc.api.lookupAccountsAsync("0", 10000)
       .then((accounts) => usersService.getEnrichedProfiles(accounts.filter(a => !a.is_research_group && !blackList.some(username => username == a.name)).map((a) => a.name)))
       .then((users) => {
         commit('SET_ALL_USERS', users);
