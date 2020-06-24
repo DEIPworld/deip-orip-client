@@ -196,7 +196,7 @@
       this.creatorUsername = this.$store.getters['auth/user'].username;
       // TODO: request server for tenant users
       deipRpc.api
-        .getAllAccountsAsync()
+        .lookupAccountsAsync("0", 10000)
         .then((accounts) => {
           const blackList = ['regacc', 'hermes', 'initdelegate'];
           const usernames = [];

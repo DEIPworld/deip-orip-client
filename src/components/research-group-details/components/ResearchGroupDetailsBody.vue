@@ -295,7 +295,7 @@
     created() {
       this.highlightProposalsSection = this.$route.hash === '#proposals';
       // TODO: request server for tenant users
-      deipRpc.api.getAllAccountsAsync()
+      deipRpc.api.lookupAccountsAsync("0", 10000)
         .then((accounts) => {
           const blackList = [
             'regacc', 'hermes', 'initdelegate',
