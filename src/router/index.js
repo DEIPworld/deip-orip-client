@@ -437,12 +437,7 @@ const router = new Router({
     {
       path: '/user-wallet',
       name: 'UserWallet',
-      component: preliminaryDataLoader(UserWallet, {
-        beforeEnter: (to, from, next) => {
-          const loadPagePromise = store.dispatch('userWallet/loadWallet');
-          loadPage(loadPagePromise, next);
-        }
-      })
+      component: UserWallet
     }, {
       path: '/claim-user-experience',
       name: 'ClaimUserExpertiseList',

@@ -1,5 +1,5 @@
 <template>
-  <layout-section>
+  <layout-section v-if="$ready">
     <content-block
       icon="mdi-cash-usd-outline"
       title="Balance"
@@ -849,6 +849,12 @@
           };
         }
       }
+    },
+
+    created() {
+      this.$store.dispatch('userWallet/loadWallet', {
+        username: decodeURIComponent(this.username)
+      }).then(() => { this.$setReady(); });
     },
 
     methods: {
