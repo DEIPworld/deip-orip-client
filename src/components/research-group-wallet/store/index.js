@@ -45,27 +45,7 @@ const actions = {
   },
 
   loadResearches({ commit }, externalId) {
-    const researchResult = [];
-
     deipRpc.api.getResearchesByResearchGroupAsync(externalId)
-      .then((list) => {
-        researchResult.push(...list);
-        return Promise.all(
-          list.map((item) => expertiseContributionsService.getExpertiseContributionsByResearch(item.id))
-        );
-      })
-      .then((list) => {
-        const tvoMap = _.chain(list)
-          .flatten()
-          .groupBy('research_id')
-          .value();
-
-        researchResult.forEach((research) => {
-          research.totalVotes = tvoMap[research.id] ? tvoMap[research.id] : [];
-        });
-
-        return researchResult;
-      })
       .then((data) => {
         commit('SET_RESEARCHES', data);
       });

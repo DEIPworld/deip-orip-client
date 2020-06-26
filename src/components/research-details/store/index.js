@@ -28,7 +28,6 @@ const state = {
   researchGroupMembersList: [],
   reviewsList: [],
   disciplinesList: [],
-  totalVotesList: [],
   tokenSale: undefined,
   tokenSalesList: [],
   tokenHoldersList: [],
@@ -90,8 +89,6 @@ const getters = {
 
   disciplinesList: (state, getters) => state.disciplinesList,
 
-  totalVotesList: (state, getters) => state.totalVotesList,
-
   tokenSale: (state, getters) => state.tokenSale,
 
   tokenSalesList: (state, getters) => state.tokenSalesList,
@@ -119,46 +116,6 @@ const getters = {
   isLoadingResearchTokenSale: (state, getters) => state.isLoadingResearchTokenSale,
 
   isLoadingResearchContentRefs: (state, getters) => state.isLoadingResearchContentRefs,
-
-  contentWeightByDiscipline: (state, getters) => {
-    const map = {};
-    const flattened = state.totalVotesList.reduce(
-      (accumulator, currentValue) => accumulator.concat(currentValue), []
-    );
-
-    for (let i = 0; i < flattened.length; i++) {
-      const tvo = flattened[i];
-      const discipline_id = tvo.discipline_id.toString();
-      const research_content_id = tvo.research_content_id.toString();
-      const { eci } = tvo;
-
-      if (map[research_content_id] === undefined) {
-        map[research_content_id] = {};
-      }
-
-      map[research_content_id][discipline_id] = eci;
-    }
-    return map;
-  },
-
-  researchWeightByDiscipline: (state, getters) => {
-    const map = {};
-    for (let i = 0; i < state.totalVotesList.length; i++) {
-      const tvoByContent = state.totalVotesList[i];
-      for (let j = 0; j < tvoByContent.length; j++) {
-        const tvo = tvoByContent[j];
-        const discipline_id = tvo.discipline_id.toString();
-        const { eci } = tvo;
-
-        if (map[discipline_id] === undefined) {
-          map[discipline_id] = eci;
-        } else {
-          map[discipline_id] += eci;
-        }
-      }
-    }
-    return map;
-  },
 
   timelineOffsets(state, getters) {
     if (state.research !== null && getters.contentList !== null
@@ -485,28 +442,24 @@ const actions = {
 
     deipRpc.api.getDisciplinesByResearchAsync(researchId)
       .then((data) => {
-        const tvoPromises = [];
         const expertsPromises = [];
 
         for (let i = 0; i < data.length; i++) {
           const discipline = data[i];
           disciplinesList.push(discipline);
-          tvoPromises.push(expertiseContributionsService.getExpertiseContributionsByResearchAndDiscipline(researchId, discipline.id));
           expertsPromises.push(deipRpc.api.getExpertTokensByDisciplineAsync(discipline.external_id));
         }
 
         return Promise.all([
-          Promise.all(tvoPromises),
           Promise.all(expertsPromises)
         ]);
       }, (err) => { console.log(err); })
-      .then(([tvoList, expertTokensPerDiscipline]) => {
+      .then(([expertTokensPerDiscipline]) => {
         const expertsAccountNames = [];
         expertTokensPerDiscipline.forEach((e) => {
           expertsAccountNames.push(...e.map((et) => et.account_name));
         });
         commit('SET_RESEARCH_DISCIPLINES_LIST', disciplinesList);
-        commit('SET_RESEARCH_TOTAL_VOTES_LIST', tvoList);
         return usersService.getEnrichedProfiles(_.uniq(expertsAccountNames));
       }, (err) => { console.log(err); })
       .then((expertsList) => {
@@ -649,10 +602,6 @@ const mutations = {
 
   SET_RESEARCH_DISCIPLINES_LIST(state, list) {
     Vue.set(state, 'disciplinesList', list);
-  },
-
-  SET_RESEARCH_TOTAL_VOTES_LIST(state, list) {
-    Vue.set(state, 'totalVotesList', list);
   },
 
   SET_RESEARCH_TOKEN_SALE(state, tokenSale) {

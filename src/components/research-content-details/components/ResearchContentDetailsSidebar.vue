@@ -324,7 +324,6 @@
         disciplinesList: 'rcd/disciplinesList',
         contentList: 'rcd/contentList',
         contentReviewsList: 'rcd/contentReviewsList',
-        contentWeightByDiscipline: 'rcd/contentWeightByDiscipline',
         contentProposal: 'rcd/contentProposal',
         contentRef: 'rcd/contentRef',
         isResearchGroupMember: 'rcd/isResearchGroupMember',

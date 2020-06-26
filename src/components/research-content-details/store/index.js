@@ -24,7 +24,6 @@ const state = {
   research: null,
   group: null,
   disciplinesList: [],
-  totalVotesList: [],
   membersList: [],
   contentList: [],
   contentReviewsList: [],
@@ -55,8 +54,6 @@ const getters = {
   contentProposal: (state) => state.contentProposal,
 
   disciplinesList: (state, getters) => state.disciplinesList,
-
-  totalVotesList: (state, getters) => state.totalVotesList,
 
   contentList: (state, getters) => state.contentList,
 
@@ -123,23 +120,7 @@ const getters = {
 
   contentMetadata: (state, getters) => state.contentMetadata,
 
-  contentWeightByDiscipline() {
-    const map = {};
-    const flattened = state.totalVotesList.reduce(
-      (accumulator, currentValue) => accumulator.concat(currentValue), []
-    );
-    for (let i = 0; i < flattened.length; i++) {
-      const tvo = flattened[i];
-      const discipline_id = tvo.discipline_id.toString();
-      const research_content_id = tvo.research_content_id.toString();
-      const { eci } = tvo;
 
-      if (map[research_content_id] === undefined) map[research_content_id] = {};
-
-      map[research_content_id][discipline_id] = eci;
-    }
-    return map;
-  },
 
   researchContentReferencesGraph: (state, getters) => {
     const nodes = [];
@@ -321,30 +302,26 @@ const actions = {
     const disciplinesList = [];
     deipRpc.api.getDisciplinesByResearchAsync(researchId)
       .then((data) => {
-        const tvoPromises = [];
         const expertsPromises = [];
 
         for (let i = 0; i < data.length; i++) {
           const discipline = data[i];
           disciplinesList.push(discipline);
-          tvoPromises.push(expertiseContributionsService.getExpertiseContributionsByResearchAndDiscipline(researchId, discipline.id));
           expertsPromises.push(deipRpc.api.getExpertTokensByDisciplineAsync(discipline.external_id));
         }
 
         return Promise.all([
-          Promise.all(tvoPromises),
           Promise.all(expertsPromises)
         ]);
       }, (err) => {
         console.log(err);
       })
-      .then(([tvoList, expertTokensPerDiscipline]) => {
+      .then(([expertTokensPerDiscipline]) => {
         const expertsAccountNames = [];
         expertTokensPerDiscipline.forEach((e) => {
           expertsAccountNames.push(...e.map((et) => et.account_name));
         });
         commit('SET_RESEARCH_CONTENT_DISCIPLINES_LIST', disciplinesList);
-        commit('SET_RESEARCH_CONTENT_TOTAL_VOTES_LIST', tvoList);
         return usersService.getEnrichedProfiles(_.uniq(expertsAccountNames));
       }).then((expertsList) => {
         commit('SET_EXPERTS_LIST', expertsList);
@@ -694,10 +671,6 @@ const mutations = {
 
   SET_RESEARCH_CONTENT_DISCIPLINES_LIST(state, list) {
     Vue.set(state, 'disciplinesList', list);
-  },
-
-  SET_RESEARCH_CONTENT_TOTAL_VOTES_LIST(state, list) {
-    Vue.set(state, 'totalVotesList', list);
   },
 
   SET_RESEARCH_CONTENT_REVIEWS_LIST(state, list) {

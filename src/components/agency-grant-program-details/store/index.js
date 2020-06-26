@@ -93,8 +93,6 @@ const actions = {
       .then((list) => {
         applications = list;
 
-        const totalVotesPromises = applications.map((application) => expertiseContributionsService.getExpertiseContributionsByResearch(application.research_id));
-
         const researchesPromises = applications.map((application) => deipRpc.api.getResearchByIdAsync(application.research_id));
 
         const reviewsPromises = applications.map((application) => deipRpc.api.getGrantApplicationReviewsByGrantApplicationAsync(application.id));
@@ -112,20 +110,14 @@ const actions = {
           }));
 
         return Promise.all([
-          Promise.all(totalVotesPromises),
           Promise.all(researchesPromises),
           Promise.all(reviewsPromises),
           Promise.all(otherResearchApplicationsPromises)
         ]);
       })
-      .then(([totalVotes, researches, reviews, otherResearchApplications]) => {
-        const totalVotesMap = _.chain(totalVotes)
-          .flatten()
-          .groupBy('research_id')
-          .value();
+      .then(([researches, reviews, otherResearchApplications]) => {
 
         applications.forEach((application, index) => {
-          application.totalVotes = totalVotesMap[application.research_id] ? totalVotesMap[application.research_id] : [];
           application.research = researches[index];
           application.reviews = reviews[index];
           application.similarResearchApplications = otherResearchApplications[index]
