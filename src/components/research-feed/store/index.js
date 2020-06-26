@@ -15,7 +15,6 @@ const expertiseContributionsService = ExpertiseContributionsService.getInstance(
 
 const state = {
   fullResearchListing: [],
-  feedTotalVotes: [],
   feedResearchReviews: [],
   feedResearchGroups: [],
   feedResearchGroupsMembers: [],
@@ -72,7 +71,6 @@ const getters = {
       )
       .filter((item) => !state.filter.categories.length || state.filter.categories.some((cat) => item.researchRef.tenantCategory && item.researchRef.tenantCategory._id == cat._id))
       .map((item) => {
-        const totalVotes = state.feedTotalVotes.filter((vote) => vote.research_id == item.id);
         const reviews = state.feedResearchReviews.filter((review) => review.research_id == item.id);
         const group = state.feedResearchGroups.find((group) => group.external_id == item.research_group.external_id);
         const researchMembers = state.feedResearchGroupsMembers.filter((user) => item.members.some((a) => a == user.account.name));
@@ -81,7 +79,6 @@ const getters = {
         const disciplines = item.disciplines.map((discipline) => ({ ...discipline }));
         return {
           ...item,
-          totalVotes,
           reviews,
           group,
           authors: researchMembers,
@@ -123,9 +120,6 @@ const actions = {
         fullResearchListing = listing
           .map((item) => ({ ...item, isCollapsed: true }));
 
-        const researchTotalVotesLoad = Promise.all(listing
-          .map((r) => expertiseContributionsService.getExpertiseContributionsByResearch(r.id)));
-
         const researchReviewsLoad = Promise.all(listing
           .map((r) => deipRpc.api.getReviewsByResearchAsync(r.external_id)
             .then((reviews) => reviews.map((review) => ({ ...review, research_id: r.id })))));
@@ -146,16 +140,14 @@ const actions = {
           .map((r) => investmentsService.getCurrentTokenSaleByResearchId(r.id)));
 
         return Promise.all([
-          researchTotalVotesLoad,
           researchReviewsLoad,
           researchGroupsLoad,
           groupsMembersLoad,
           tokenSalesLoad
         ]);
       })
-      .then(([totalVotes, researchReviews, groups, /* disciplinesStats, */ groupsMembers, tokenSales]) => {
+      .then(([researchReviews, groups, /* disciplinesStats, */ groupsMembers, tokenSales]) => {
         commit('SET_FULL_RESEARCH_LISTING', fullResearchListing);
-        commit('SET_RESEARCH_FEED_TOTAL_VOTES_LIST', [].concat.apply([], totalVotes));
         commit('SET_RESEARCH_FEED_REVIEWS_LIST', [].concat.apply([], researchReviews));
         commit('SET_RESEARCH_FEED_GROUPS_LIST', groups);
         commit('SET_RESEARCH_FEED_GROUPS_MEMBERS_LIST', groupsMembers);
@@ -193,10 +185,6 @@ const mutations = {
 
   SET_FULL_RESEARCH_LISTING(state, list) {
     Vue.set(state, 'fullResearchListing', list);
-  },
-
-  SET_RESEARCH_FEED_TOTAL_VOTES_LIST(state, list) {
-    Vue.set(state, 'feedTotalVotes', list);
   },
 
   SET_RESEARCH_FEED_REVIEWS_LIST(state, list) {

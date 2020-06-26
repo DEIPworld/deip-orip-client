@@ -140,17 +140,7 @@
 
     computed: {
       disciplines() {
-        return this.application.research.disciplines && this.application.research.totalVotes
-          ? this.application.research.disciplines.map((discipline) => ({
-            disciplineName: discipline.name,
-            totalWeight: this.application.research.totalVotes.reduce(
-              (accumulator, value) => (value.discipline_id === discipline.id
-                ? accumulator + value.eci
-                : accumulator),
-              0
-            )
-          }))
-          : [];
+        return [];
       },
       eciList() {
         return this.application.research.disciplines.map((discipline) => {
