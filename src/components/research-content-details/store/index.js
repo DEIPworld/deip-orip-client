@@ -145,7 +145,7 @@ const getters = {
     }
 
     return records.map((record) => {
-      if (record.alteration_source_type == EXPERTISE_CONTRIBUTION_TYPE.REVIEW) {
+      if (record.contribution_type == EXPERTISE_CONTRIBUTION_TYPE.REVIEW) {
         const typeInfo = researchService.getResearchContentType(record.research_content.content_type);
 
         const parser = new DOMParser();
@@ -174,7 +174,7 @@ const getters = {
             link
           }
         };
-      } if (record.alteration_source_type == EXPERTISE_CONTRIBUTION_TYPE.REVIEW_SUPPORT) {
+      } else if (record.contribution_type == EXPERTISE_CONTRIBUTION_TYPE.REVIEW_SUPPORT) {
         const parser = new DOMParser();
         const html = parser.parseFromString(record.review.content, 'text/html');
         const allElements = Array.from(html.all);
@@ -202,7 +202,7 @@ const getters = {
             link
           }
         };
-      } if (record.alteration_source_type == EXPERTISE_CONTRIBUTION_TYPE.PUBLICATION) {
+      } else if (record.contribution_type == EXPERTISE_CONTRIBUTION_TYPE.PUBLICATION) {
         const typeInfo = researchService.getResearchContentType(record.research_content.content_type);
 
         return {
@@ -214,14 +214,15 @@ const getters = {
             link: null
           }
         };
+      } else {
+        return {
+          ...record,
+          actionText: 'Contribution',
+          meta: {
+            title: 'Contribution'
+          }
+        };
       }
-      return {
-        ...record,
-        actionText: 'Contribution',
-        meta: {
-          title: 'Contribution'
-        }
-      };
     });
   }
 };

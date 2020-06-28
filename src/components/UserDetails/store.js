@@ -28,7 +28,8 @@ const criteriaTypes = {
 const contributionTypesNamesMap = {
   [EXPERTISE_CONTRIBUTION_TYPE.PUBLICATION]: 'Research',
   [EXPERTISE_CONTRIBUTION_TYPE.REVIEW]: 'Review',
-  [EXPERTISE_CONTRIBUTION_TYPE.REVIEW_SUPPORT]: 'Review support'
+  [EXPERTISE_CONTRIBUTION_TYPE.REVIEW_SUPPORT]: 'Review support',
+  [EXPERTISE_CONTRIBUTION_TYPE.UNKNOWN]: 'Graduation'
 };
 
 const state = {
@@ -79,7 +80,7 @@ const getters = {
   contributionTypesNamesMap: (state) => state.contributionTypesNamesMap,
   contributionTypeItems: (state) => Object.entries(state.contributionTypesNamesMap)
     .map(([key, value]) => ({ text: value, value: key }))
-    .filter((e) => e.value != EXPERTISE_CONTRIBUTION_TYPE.PUBLICATION),
+    .filter((e) => e.value != EXPERTISE_CONTRIBUTION_TYPE.UNKNOWN),
 
   filter: (state) => state.filter,
 
@@ -94,7 +95,7 @@ const getters = {
     return records
       .filter((record) => {
         if (!getters.filter.contributionType) return true;
-        return record.alteration_source_type == getters.filter.contributionType;
+        return record.contribution_type == getters.filter.contributionType;
       })
       .map((item) => {
         let criteriaModifier;
@@ -124,7 +125,7 @@ const getters = {
 
         const record = { ...item, criteriaEci: criteriaModifier(item.eci) };
 
-        if (record.alteration_source_type == EXPERTISE_CONTRIBUTION_TYPE.REVIEW) {
+        if (record.contribution_type == EXPERTISE_CONTRIBUTION_TYPE.REVIEW) {
           const typeInfo = researchService.getResearchContentType(record.research_content.content_type);
 
           const parser = new DOMParser();
@@ -153,7 +154,7 @@ const getters = {
               link
             }
           };
-        } if (record.alteration_source_type == EXPERTISE_CONTRIBUTION_TYPE.REVIEW_SUPPORT) {
+        } else if (record.contribution_type == EXPERTISE_CONTRIBUTION_TYPE.REVIEW_SUPPORT) {
           const parser = new DOMParser();
           const html = parser.parseFromString(record.review.content, 'text/html');
           const allElements = Array.from(html.all);
@@ -181,7 +182,7 @@ const getters = {
               link
             }
           };
-        } if (record.alteration_source_type == EXPERTISE_CONTRIBUTION_TYPE.PUBLICATION) {
+        } else if (record.contribution_type == EXPERTISE_CONTRIBUTION_TYPE.PUBLICATION) {
           const typeInfo = researchService.getResearchContentType(record.research_content.content_type);
           const link = {
             name: 'ResearchContentDetails',
@@ -201,14 +202,15 @@ const getters = {
               link
             }
           };
+        } else {
+          return {
+            ...record,
+            actionText: 'Graduation',
+            meta: {
+              title: 'Certified expert'
+            }
+          };
         }
-        return {
-          ...record,
-          actionText: 'Contribution',
-          meta: {
-            title: 'Contribution'
-          }
-        };
       });
   },
 

@@ -2,6 +2,7 @@ import { PROPOSAL_TYPES } from '@deip/proposals-service';
 import { EXPERTISE_CONTRIBUTION_TYPE } from '@deip/expertise-contributions-service';
 import { researchContentTypes } from '@deip/research-service';
 import { AWARD_STATUS, AWARD_RECIPIENT_STATUS, AWARD_WITHDRAWAL_REQUEST_STATUS } from '@deip/grants-service';
+import { ASSESSMENT_CRITERIA_TYPE } from '@deip/research-content-reviews-service';
 
 const proposalTypesLabels = {
   [PROPOSAL_TYPES.CREATE_RESEARCH]: 'Start new research project',
@@ -21,5 +22,6 @@ export {
   EXPERTISE_CONTRIBUTION_TYPE,
   AWARD_STATUS,
   AWARD_RECIPIENT_STATUS,
-  AWARD_WITHDRAWAL_REQUEST_STATUS
+  AWARD_WITHDRAWAL_REQUEST_STATUS,
+  ASSESSMENT_CRITERIA_TYPE
 };
