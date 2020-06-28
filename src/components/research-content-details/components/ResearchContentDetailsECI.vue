@@ -62,7 +62,7 @@
           <template v-slot:item="{item}">
             <tr>
               <td>
-                <v-chip :color="eciHistoryRecordsTable.contributionColor[item.alteration_source_type]" text-color="white">
+                <v-chip :color="eciHistoryRecordsTable.contributionColor[item.contribution_type]" text-color="white">
                   <span class="bold uppercase">{{ item.actionText }}</span>
                 </v-chip>
               </td>

@@ -294,30 +294,32 @@
             </thead>
           </template>
           <template v-slot:item="{item}">
-            <td>
-              <v-chip :color="eciHistoryRecordsTable.contributionColor[item.alteration_source_type]" text-color="white">
-                <span class="font-weight-bold uppercase">{{ item.actionText }}</span>
-              </v-chip>
-            </td>
-            <td>
-              <router-link v-if="item.link" class="a" :to="item.link">
-                {{ item.meta.title }}
-              </router-link>
-              <template v-else>
-                {{ item.meta.title }}
-              </template>
-            </td>
-            <td class="text-center">
-              {{ moment(item.timestamp).format('D MMM YYYY') }}
-            </td>
-            <td class="text-center">
-              <div class="half-font-weight-bold" :class="{ 'eci-up': item.delta > 0, 'eci-down': item.delta < 0 }">
-                {{ item.delta }}
-              </div>
-            </td>
-            <td class="text-center">
-              <div>{{ item.eci }}</div>
-            </td>
+            <tr>
+              <td>
+                <v-chip :color="eciHistoryRecordsTable.contributionColor[item.contribution_type]" text-color="white">
+                  <span class="font-weight-bold uppercase">{{ item.actionText }}</span>
+                </v-chip>
+              </td>
+              <td>
+                <router-link v-if="item.link" class="a" :to="item.link">
+                  {{ item.meta.title }}
+                </router-link>
+                <template v-else>
+                  {{ item.meta.title }}
+                </template>
+              </td>
+              <td class="text-center">
+                {{ moment(item.timestamp).format('D MMM YYYY') }}
+              </td>
+              <td class="text-center">
+                <div class="half-font-weight-bold" :class="{ 'eci-up': item.delta > 0, 'eci-down': item.delta < 0 }">
+                  {{ item.delta }}
+                </div>
+              </td>
+              <td class="text-center">
+                <div>{{ item.eci }}</div>
+              </td>
+            </tr>
           </template>
         </v-data-table>
       </div>
@@ -333,7 +335,7 @@
   import deipRpc from '@deip/rpc-client';
   import { mapGetters } from 'vuex';
 
-  import { EXPERTISE_CONTRIBUTION_TYPE } from '@/variables';
+  import { EXPERTISE_CONTRIBUTION_TYPE, ASSESSMENT_CRITERIA_TYPE } from '@/variables';
   import { UsersService } from '@deip/users-service';
   import { ExpertiseContributionsService } from '@deip/expertise-contributions-service';
 
@@ -394,6 +396,7 @@
             }
           ],
           contributionColor: {
+            [EXPERTISE_CONTRIBUTION_TYPE.UNKNOWN]: '#A9A9A9',
             [EXPERTISE_CONTRIBUTION_TYPE.REVIEW]: '#161F63',
             [EXPERTISE_CONTRIBUTION_TYPE.REVIEW_SUPPORT]: '#5ABAD1',
             [EXPERTISE_CONTRIBUTION_TYPE.PUBLICATION]: '#8DDAB3'
@@ -460,16 +463,17 @@
           return null;
         }
 
-        const allocations = this.eciHistoryRecordsTable.items.reduce((acc, item) => {
-          if (acc[item.alteration_source_type] === undefined) {
-            acc[item.alteration_source_type] = 0;
+        const contributions = this.eciHistoryRecordsTable.items.filter((item) => item.contribution_type != EXPERTISE_CONTRIBUTION_TYPE.UNKNOWN);
+        const allocations = contributions.reduce((acc, item) => {
+          if (acc[item.contribution_type] === undefined) {
+            acc[item.contribution_type] = 0;
           }
-          acc[item.alteration_source_type] += 1;
+          acc[item.contribution_type] += 1;
           return acc;
         }, {});
 
         return {
-          contributions: this.eciHistoryRecordsTable.items.length,
+          contributions: contributions.length,
           percentile: 10,
           contributionsAllocation: [
             ['Contribution Type', ''],
@@ -486,26 +490,6 @@
           ...this.eciHistoryRecordsTable.items.map((e) => [new Date(e.timestamp), e.criteriaEci])
         ];
       }
-    },
-
-    created() {
-      const disciplineId = this.$route.query.discipline_id;
-      const idx = this.expertise.findIndex((e) => e.discipline_id === disciplineId);
-
-      if (idx !== -1) {
-        this.selectedEciDisciplineId = this.expertise[idx].discipline_id;
-      } else if (this.expertise.length) {
-        this.selectedEciDisciplineId = this.expertise[0].discipline_id;
-      }
-
-      if (this.selectedEciDisciplineId) {
-        this.loadDisciplineEciHistory();
-      }
-
-      this.$store.dispatch('userDetails/loadAccountExpertiseDetailsPage', {
-        username: decodeURIComponent(this.username)
-      })
-        .then(() => { this.$setReady(); });
     },
 
     methods: {
@@ -540,7 +524,29 @@
             this.loadDisciplineEciHistory();
           });
       }
+    },
+
+    created() {
+
+      const disciplineId = this.$route.query.discipline_id;
+      const idx = this.expertise.findIndex((e) => e.discipline_id === disciplineId);
+
+      if (idx !== -1) {
+        this.selectedEciDisciplineId = this.expertise[idx].discipline_id;
+      } else if (this.expertise.length) {
+        this.selectedEciDisciplineId = this.expertise[0].discipline_id;
+      }
+
+      if (this.selectedEciDisciplineId) {
+        this.loadDisciplineEciHistory();
+      }
+
+      this.$store.dispatch('userDetails/loadAccountExpertiseDetailsPage', {
+        username: decodeURIComponent(this.username)
+      })
+        .then(() => { this.$setReady(); });
     }
+    
   };
 </script>
 
