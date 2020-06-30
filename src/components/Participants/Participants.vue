@@ -69,6 +69,7 @@
             small
             text
             color="primary"
+            @click="clearFilter"
           >
             Clear
           </v-btn>
@@ -92,6 +93,7 @@
         <v-spacer />
         <v-btn outlined color="primary" @click="isShowFilter = !isShowFilter">
           <v-badge
+            v-if="isShowBadge"
             color="amber lighten-1"
             overlap
             dot
@@ -101,7 +103,11 @@
             <v-icon left>
               filter_list
             </v-icon>
-          </v-badge>Filter
+          </v-badge>
+          <v-icon v-else left>
+            filter_list
+          </v-icon>
+          Filter
         </v-btn>
       </v-toolbar>
       <v-divider class="my-4" />
@@ -191,10 +197,15 @@
         ],
         contributions: getValues(EXPERTISE_CONTRIBUTION_TYPE),
         criterias: getValues(ASSESSMENT_CRITERIA_TYPE),
-        test: ASSESSMENT_CRITERIA_TYPE,
+        defaultFilter: {
+          name: '',
+          discipline: disciplinesService.disciplineTree.id,
+          contribution: 0,
+          criteria: 0
+        },
         filter: {
-          name: 'alice',
-          discipline: '6c4bb3bcf1a88e3b51de88576d592f1f980c5bbb',
+          name: '',
+          discipline: disciplinesService.disciplineTree.id,
           contribution: 0,
           criteria: 0
         },
@@ -239,7 +250,10 @@
     computed: {
       ...mapGetters({
         participantsList: 'participants/participants'
-      })
+      }),
+      isShowBadge() {
+        return !_.isEqual(this.filter, this.defaultFilter);
+      }
     },
     created() {
       if (this.$route.query.discipline) {
@@ -266,6 +280,9 @@
         this.$store.dispatch('participants/loadFilterParticipants', {
           filter: this.filter
         });
+      },
+      clearFilter() {
+        this.filter = _.cloneDeep(this.defaultFilter);
       },
       growthRateIsUp(rate) {
         return rate.slice(0, -2) >= 0;
