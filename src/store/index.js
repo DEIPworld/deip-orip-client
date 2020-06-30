@@ -20,6 +20,7 @@ import { votingForBlockProducersStore } from '../components/voting-for-block-pro
 import { dashboardStore } from '../components/dashboard/store';
 import { investorPortfolioStore } from '../components/investor-portfolio/store';
 import { researchGroupSettingsStore } from '../components/research-group-settings/store';
+import { participantsStore } from '../components/Participants/store';
 
 import { agencyGrantProgramsStore } from '../components/agency-grant-programs/store';
 import { agencyGrantProgramDetailsStore } from '../components/agency-grant-program-details/store';
@@ -56,6 +57,7 @@ export const store = new Vuex.Store({
     dashboard: dashboardStore,
     investorPortfolio: investorPortfolioStore,
     researchGroupSettings: researchGroupSettingsStore,
+    participants: participantsStore,
 
     agencyGrantPrograms: agencyGrantProgramsStore,
     agencyGrantProgramDetails: agencyGrantProgramDetailsStore,

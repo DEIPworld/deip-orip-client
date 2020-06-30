@@ -9,6 +9,7 @@
       fixed
       flat
       clipped-left
+      clipped-right
       v-bind="themeSettings.appBar.bar"
     >
       <router-link :to="{ name: 'Default' }">
@@ -46,6 +47,9 @@
         </v-tab>
         <v-tab exact :to="{ name: 'Dashboard' }">
           Dashboard
+        </v-tab>
+        <v-tab exact :to="{ name: 'Participants' }">
+          Participants
         </v-tab>
         <v-tab exact :to="{ name: 'InvestorPortfolio' }">
           Portfolio
