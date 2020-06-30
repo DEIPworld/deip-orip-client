@@ -276,9 +276,8 @@
           hide-default-header
           class="elevation-0 mt-4"
           :loading="eciHistoryRecordsTable.loading"
-          :items-per-page-options="[5, 10]"
+          :footer-props="eciHistoryRecordsTable.footerProps"
           :options.sync="eciHistoryRecordsTable.pagination"
-          :server-items-length="eciHistoryRecordsTable.totalItems"
         >
           <template v-slot:header="{props:{headers}}">
             <thead>
@@ -403,7 +402,10 @@
           },
           pagination: {
             page: 1,
-            rowsPerPage: 5
+            itemsPerPage: 10
+          },
+          footerProps: {
+            'items-per-page-options': [5, 10, 15]
           },
           items: [],
           totalItems: 0,
@@ -528,23 +530,25 @@
 
     created() {
 
-      const disciplineId = this.$route.query.discipline_id;
-      const idx = this.expertise.findIndex((e) => e.discipline_id === disciplineId);
-
-      if (idx !== -1) {
-        this.selectedEciDisciplineId = this.expertise[idx].discipline_id;
-      } else if (this.expertise.length) {
-        this.selectedEciDisciplineId = this.expertise[0].discipline_id;
-      }
-
-      if (this.selectedEciDisciplineId) {
-        this.loadDisciplineEciHistory();
-      }
-
       this.$store.dispatch('userDetails/loadAccountExpertiseDetailsPage', {
         username: decodeURIComponent(this.username)
       })
-        .then(() => { this.$setReady(); });
+        .then(() => { 
+          const disciplineId = this.$route.query.discipline_id;
+          const idx = this.expertise.findIndex((e) => e.discipline_id === disciplineId);
+
+          if (idx !== -1) {
+            this.selectedEciDisciplineId = this.expertise[idx].discipline_id;
+          } else if (this.expertise.length) {
+            this.selectedEciDisciplineId = this.expertise[0].discipline_id;
+          }
+
+          if (this.selectedEciDisciplineId) {
+            this.loadDisciplineEciHistory();
+          }
+          
+          this.$setReady(); 
+        });
     }
     
   };

@@ -123,11 +123,46 @@ const getters = {
             break;
         }
 
+        const getEciRecordLabel = (record) => {
+          let actionText = "";
+          const isSideEvent = !(record.contribution_type == record.event_contribution_type && record.contribution_id == record.event_contribution_id);
+
+          switch (record.contribution_type) {
+            case EXPERTISE_CONTRIBUTION_TYPE.PUBLICATION:
+              let materialTypeInfo = researchService.getResearchContentType(record.research_content.content_type);
+              if (isSideEvent) {
+                actionText = `${materialTypeInfo ? materialTypeInfo.text : 'Material'} rewarded`;
+              } else {
+                actionText = `${materialTypeInfo ? materialTypeInfo.text : 'Material'} uploaded`;
+              }
+              break;
+            case EXPERTISE_CONTRIBUTION_TYPE.REVIEW:
+              let reviewedMaterialTypeInfo = researchService.getResearchContentType(record.research_content.content_type);
+              if (isSideEvent) {
+                actionText = `Review rewarded`;
+              } else {
+                actionText = `${reviewedMaterialTypeInfo ? reviewedMaterialTypeInfo.text : 'Material'} reviewed`;
+              }
+              break;
+            case EXPERTISE_CONTRIBUTION_TYPE.REVIEW_SUPPORT:
+              if (isSideEvent) {
+                actionText = `Support rewarded`;
+              } else {
+                actionText = `Review supported`;
+              }
+              break;
+            default:
+              actionText = `Reward`;
+              break;
+          }
+
+          return actionText;
+        };
+
+
         const record = { ...item, criteriaEci: criteriaModifier(item.eci) };
 
         if (record.contribution_type == EXPERTISE_CONTRIBUTION_TYPE.REVIEW) {
-          const typeInfo = researchService.getResearchContentType(record.research_content.content_type);
-
           const parser = new DOMParser();
           const html = parser.parseFromString(record.review.content, 'text/html');
           const allElements = Array.from(html.all);
@@ -147,7 +182,7 @@ const getters = {
 
           return {
             ...record,
-            actionText: `${typeInfo ? typeInfo.text : 'Publication'} Reviewed`,
+            actionText: getEciRecordLabel(record),
             meta: {
               title,
               review: record.review,
@@ -174,7 +209,7 @@ const getters = {
 
           return {
             ...record,
-            actionText: 'Review supported',
+            actionText: getEciRecordLabel(record),
             meta: {
               title,
               review: record.review,
@@ -183,7 +218,6 @@ const getters = {
             }
           };
         } else if (record.contribution_type == EXPERTISE_CONTRIBUTION_TYPE.PUBLICATION) {
-          const typeInfo = researchService.getResearchContentType(record.research_content.content_type);
           const link = {
             name: 'ResearchContentDetails',
             params: {
@@ -195,7 +229,7 @@ const getters = {
 
           return {
             ...record,
-            actionText: `${typeInfo ? typeInfo.text : 'Publication'} uploaded`,
+            actionText: getEciRecordLabel(record),
             meta: {
               title: record.research_content.title,
               researchContent: record.research_content,
