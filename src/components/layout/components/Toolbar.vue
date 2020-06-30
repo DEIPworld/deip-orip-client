@@ -13,139 +13,84 @@
       v-bind="themeSettings.appBar.bar"
     >
       <router-link :to="{ name: 'Default' }">
-        <img height="40px" class="logo-image" :src="tenant.account | tenantLogoSrc(80, 80, false)">
+        <img height="40px" class="d-block" :src="tenant.account | tenantLogoSrc(80, 80, false)">
       </router-link>
 
       <v-spacer />
 
       <v-tabs
-        v-if="!isLoggedIn"
         class="main-nav"
         v-bind="themeSettings.appBar.tabs"
         right
       >
-        <v-tab v-if="isDefaultToolbar" exact :to="{ name: 'ResearchFeed' }">
-          Explore
-        </v-tab>
-        <!-- TODO: need refactoring -->
-        <v-tab exact :to="{ name: $env.DEMO === 'GRANT-DISTRIBUTION-TRANSPARENCY' ? 'TenantSignIn' : 'SignIn' }">
-          Sign In
-        </v-tab>
-        <v-tab exact :to="{ name: 'SignUp' }">
-          Sign Up
+        <v-tab
+          v-for="(item, index) of mainMenu"
+          :to="item.to"
+          :key="'nav-tab-' + index"
+        >
+          {{ item.label }}
         </v-tab>
       </v-tabs>
 
-      <v-tabs
-        v-if="isLoggedIn && isDefaultToolbar"
-        class="main-nav ml-a"
-        v-bind="themeSettings.appBar.tabs"
-        right
+
+      <user-notifications-list v-if="$isUser" />
+
+      <v-menu
+        v-if="$isUser"
+        bottom
+        left
+        offset-y
+        min-width="220"
       >
-        <v-tab exact :to="{ name: 'ResearchFeed' }">
-          Explore
-        </v-tab>
-        <v-tab exact :to="{ name: 'Dashboard' }">
-          Dashboard
-        </v-tab>
-        <v-tab exact :to="{ name: 'Participants' }">
-          Participants
-        </v-tab>
-        <v-tab exact :to="{ name: 'InvestorPortfolio' }">
-          Portfolio
-        </v-tab>
-        <v-tab exact :to="{ name: 'UserWallet', params: { account_name: user.username } }">
-          Wallet
-        </v-tab>
-      </v-tabs>
+        <template v-slot:activator="{ on }">
+          <v-btn icon v-on="on">
+            <v-avatar size="32px" v-on="on">
+              <img
+                v-if="user.profile"
+                :src="user.profile | avatarSrc(2 * 32, 2 * 32, false)"
+              >
+              <v-gravatar
+                v-if="!user.profile && user.account"
+                :title="user.username"
+                :email="user.username + '@deip.world'"
+              />
+            </v-avatar>
+          </v-btn>
+        </template>
 
-      <v-tabs
-        v-if="isLoggedIn && isGrantsTransparencyDemo"
-        class="main-nav"
-        v-bind="themeSettings.appBar.tabs"
-        right
-      >
-        <v-tab exact :to="{ name: 'GrantProgramsAwardsDashboard', params: { agency: 'the-national-science-foundation' } }">
-          Dashboard
-        </v-tab>
-        <v-tab exact :to="{ name: 'UserWallet', params: { account_name: user.username } }">
-          Wallet
-        </v-tab>
-      </v-tabs>
+        <v-list
+          v-if="isDefaultToolbar"
+          :dark="themeSettings.appBar.bar.dark"
+          dense
+        >
 
-
-      <user-notifications-list v-if="isLoggedIn" />
-
-      <v-sheet v-if="isLoggedIn" color="transparent">
-        <v-menu bottom left offset-y min-width="220">
-          <template v-slot:activator="{ on }">
-            <v-btn icon v-on="on">
-              <v-avatar size="32px" v-on="on">
-                <img
-                  v-if="user.profile"
-                  :src="user.profile | avatarSrc(2 * 32, 2 * 32, false)"
-                >
-                <v-gravatar
-                  v-if="!user.profile && user.account"
-                  :title="user.username"
-                  :email="user.username + '@deip.world'"
-                />
-              </v-avatar>
-            </v-btn>
-          </template>
-
-          <v-list
-            v-if="isDefaultToolbar"
-            :dark="themeSettings.appBar.bar.dark"
-            dense
+          <v-list-item
+            v-for="(item, index) of userMenu"
+            :to="item.to"
+            :key="'nav-tab-' + index"
           >
-<!--            <v-list-item :to="{ name: 'UserDetails', params: { account_name: user.username } }">-->
-<!--              Profile-->
-<!--            </v-list-item>-->
-<!--            <v-divider />-->
+            <v-list-item-icon>
+              <v-icon v-if="item.icon">
+                {{item.icon}}
+              </v-icon>
+            </v-list-item-icon>
+            <v-list-item-title>
+              {{ item.label }}
+            </v-list-item-title>
+          </v-list-item>
 
-            <v-list-item :to="{ name: 'account.summary' }">
-              <v-list-item-icon>
-                <v-icon>person</v-icon>
-              </v-list-item-icon>
-              <v-list-item-title>Account</v-list-item-title>
-            </v-list-item>
+          <v-divider />
 
-            <v-divider />
+          <v-list-item @click="signOut()">
+            <v-list-item-icon>
+              <v-icon>exit_to_app</v-icon>
+            </v-list-item-icon>
+            <v-list-item-title>Sign Out</v-list-item-title>
+          </v-list-item>
+        </v-list>
 
-            <v-list-item @click="signOut()">
-              <v-list-item-icon>
-                <v-icon>exit_to_app</v-icon>
-              </v-list-item-icon>
-              <v-list-item-title>Sign Out</v-list-item-title>
-            </v-list-item>
-          </v-list>
+      </v-menu>
 
-          <v-list
-            v-if="isGrantsTransparencyDemo"
-            :dark="themeSettings.appBar.bar.dark"
-            dense
-          >
-            <v-list-item :to="{ name: 'UserDetails', params: { account_name: user.username } }">
-              Profile
-            </v-list-item>
-            <v-divider />
-            <v-list-item :to="{ name: 'AccountSettings' }">
-              Account Settings
-            </v-list-item>
-            <v-list-item :to="{ name: 'CreateGrantProgram' }">
-              Create Grant Program
-            </v-list-item>
-            <v-list-item :to="{ name: 'GrantPrograms', params: { agency: 'the-national-science-foundation' } }">
-              Grant Programs
-            </v-list-item>
-            <v-divider />
-            <v-list-item @click="signOut()">
-              Sign Out
-            </v-list-item>
-          </v-list>
-        </v-menu>
-      </v-sheet>
     </v-app-bar>
   </v-sheet>
 </template>
@@ -174,9 +119,100 @@
         tenant: 'auth/tenant',
         themeSettings: 'layout/themeSettings'
       }),
-      isLoggedIn() { return accessService.isLoggedIn(); },
+      isLoggedIn() { return accessService.isLoggedIn(); }, //$isUser
       isDefaultToolbar() {
         return !this.isGrantsTransparencyDemo;
+      },
+
+      mainMenu() {
+        if (this.$isUser && !this.isGrantsTransparencyDemo) {
+          return [
+            {
+              label: 'Explore',
+              to: { name: 'ResearchFeed' }
+            },
+            {
+              label: 'Dashboard',
+              to: { name: 'Dashboard' }
+            },
+            {
+              label: 'Portfolio',
+              to: { name: 'InvestorPortfolio' }
+            },
+            {
+              label: 'Wallet',
+              to: {
+                name: 'UserWallet',
+                params: { account_name: this.user.username }
+              }
+            }
+          ];
+        }
+
+        if (this.$isUser && this.isGrantsTransparencyDemo) {
+          return [
+            {
+              label: 'Dashboard',
+              to: {
+                name: 'GrantProgramsAwardsDashboard',
+                params: { agency: 'the-national-science-foundation' }
+              }
+            },
+            {
+              label: 'Wallet',
+              to: {
+                name: 'UserWallet',
+                params: { account_name: this.user.username }
+              }
+            }
+          ];
+        }
+
+        return [
+          {
+            label: 'Explore',
+            to: { name: 'ResearchFeed' }
+          },
+          {
+            label: 'Sign In',
+            to: { name: this.$env.DEMO === 'GRANT-DISTRIBUTION-TRANSPARENCY' ? 'TenantSignIn' : 'SignIn' }
+          },
+          {
+            label: 'Sign Up',
+            to: { name: 'SignUp' }
+          }
+        ];
+      },
+
+      userMenu() {
+        if (this.isGrantsTransparencyDemo) {
+          return [
+            {
+              label: 'Profile',
+              to: { name: 'UserDetails', params: { account_name: user.username } }
+            },
+            {
+              label: 'Account Settings',
+              to: { name: 'AccountSettings' }
+            },
+            {
+              label: 'Create Grant Program',
+              to: { name: 'CreateGrantProgram' }
+            },
+            {
+              label: 'Grant Programs',
+              to: { name: 'GrantPrograms', params: { agency: 'the-national-science-foundation' } }
+            }
+          ];
+        }
+
+        return [
+          {
+            label: 'Account',
+            icon: 'person',
+            to: { name: 'account.summary' }
+          }
+        ];
       }
     },
 
@@ -189,23 +225,11 @@
   };
 </script>
 
-<style lang="less" scoped>
+<style lang="scss" scoped>
 
   .main-nav {
     width: auto;
     flex: 0 0 auto;
-  }
-
-  .logo-image {
-    display: block;
-  }
-
-  .dropdown-list {
-    min-width: 170px;
-  }
-
-  .toolbar-container {
-    position: relative;
   }
 
   .global-loader-container {

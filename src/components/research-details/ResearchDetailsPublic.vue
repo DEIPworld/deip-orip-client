@@ -92,7 +92,6 @@
 
   import { ResearchService } from '@deip/research-service';
 
-  import LayoutSidebar from '@/components/layout/components/LayoutSidebar';
   import ResearchDetailsHeader from '@/components/research-details/components/ResearchDetailsHeader';
   import ResearchDetailsMaterials from '@/components/research-details/components/ResearchDetailsMaterials';
   import ResearchTimeline from './components/ResearchTimeline';
@@ -107,7 +106,6 @@
       LayoutSection,
       ResearchDetailsMaterials,
       ResearchDetailsHeader,
-      LayoutSidebar,
       ResearchTimeline
     },
 

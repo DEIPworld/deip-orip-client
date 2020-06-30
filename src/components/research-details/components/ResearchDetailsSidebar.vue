@@ -320,7 +320,6 @@
   import { ReviewService } from '@deip/review-service';
   import { ResearchGroupService } from '@deip/research-group-service';
   import { ResearchContentReviewsService } from '@deip/research-content-reviews-service';
-  import LayoutSidebar from '@/components/layout/components/LayoutSidebar';
 
   const researchContentReviewsService = ResearchContentReviewsService.getInstance();
   const researchGroupService = ResearchGroupService.getInstance();
@@ -328,7 +327,6 @@
 
   export default {
     name: 'ResearchDetailsSidebar',
-    components: { LayoutSidebar },
     data() {
       return {
         tokenizationConfirmDialog: {

@@ -1,5 +1,8 @@
 <template>
-  <layout-header muted :background="$options.filters.researchBackgroundSrc(research.external_id)" :max-width="researchRef.videoSrc ? '100%' : 800">
+  <layout-header
+    :background="$options.filters.researchBackgroundSrc(research.external_id)"
+    :max-width="researchRef.videoSrc ? '100%' : 800"
+  >
     <v-row no-gutters>
       <v-col cols="12" md="" style="max-width: 800px">
         <div class="text-h4">

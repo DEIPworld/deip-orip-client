@@ -1,191 +1,191 @@
 <template>
-  <div class="pa-6">
-    <div class="text-h6">
-      My Lists
+  <v-navigation-drawer app clipped :key="$route.fullPath + '-sidebar'">
+    <div class="pa-6">
+      <div class="text-h6">
+        My Lists
+      </div>
+      <v-list
+        dense
+        nav
+        class="mx-n2 mb-6"
+      >
+        <v-list-item
+          v-for="(list, i) in lists"
+          :key="'list-' + i"
+          :input-value="list === selectedList"
+          @click="selectList(list)"
+        >
+          <span class="dot mx-2" :style="{ 'background-color': list.color }" />
+          <v-list-item-content>
+            <v-list-item-title v-text="list.name" />
+          </v-list-item-content>
+          <v-chip small outlined>
+            {{ list.listResearchesIds.length }}
+          </v-chip>
+        </v-list-item>
+      </v-list>
+
+      <v-btn
+        outlined
+        small
+        color="primary"
+        class="mr-2"
+        @click="openNewListDialog()"
+      >
+        <v-icon left small>
+          add
+        </v-icon>
+        {{ isCustomListSelected ? 'Add' : 'Add new list' }}
+      </v-btn>
+
+      <v-btn
+        v-if="isCustomListSelected"
+        outlined
+        small
+        color="primary"
+        @click="openEditListDialog()"
+      >
+        <v-icon left small>
+          edit
+        </v-icon>
+        Edit
+      </v-btn>
+
+      <v-dialog v-model="newListDialog.isOpened" max-width="600px">
+        <v-card class="pa-6">
+          <v-card-title>
+            <div class="text-h6">
+              Add new list
+            </div>
+            <div class="right-top-angle">
+              <v-btn icon class="pa-0 ma-0" @click="closeNewListDialog()">
+                <v-icon color="black">
+                  close
+                </v-icon>
+              </v-btn>
+            </div>
+          </v-card-title>
+          <v-card-text>
+            <swatches v-model="newListDialog.color" inline colors="material-light" />
+            <v-text-field
+              v-model="newListDialog.name"
+              filled
+              label="List name"
+              :rules="[rules.required]"
+            />
+          </v-card-text>
+          <v-card-actions>
+            <v-row>
+              <v-col class="py-2" cols="12">
+                <v-btn
+                  color="primary"
+                  block
+                  :disabled="isSavingNewListDisabled || newListDialog.isSaving"
+                  @click="addNewList()"
+                >
+                  Save
+                </v-btn>
+              </v-col>
+              <v-col class="py-2" cols="12">
+                <v-btn
+                  color="primary"
+                  text
+                  block
+                  @click="closeNewListDialog()"
+                >
+                  Cancel
+                </v-btn>
+              </v-col>
+            </v-row>
+          </v-card-actions>
+        </v-card>
+      </v-dialog>
+
+      <v-dialog v-model="editListDialog.isOpened" max-width="600px">
+        <v-card class="pa-6">
+          <v-card-title>
+            <div class="text-h6">
+              Add new list
+            </div>
+            <div class="right-top-angle">
+              <v-btn icon class="pa-0 ma-0" @click="closeEditListDialog()">
+                <v-icon color="black">
+                  close
+                </v-icon>
+              </v-btn>
+            </div>
+          </v-card-title>
+          <v-card-text>
+            <swatches v-model="editListDialog.color" inline colors="material-light" />
+            <v-text-field
+              v-model="editListDialog.name"
+              filled
+              label="List name"
+              :rules="[rules.required]"
+            />
+          </v-card-text>
+          <v-card-actions>
+            <v-row>
+              <v-col class="py-2" cols="12">
+                <v-btn
+                  color="primary"
+                  block
+                  :disabled="isSavingEditedListDisabled || editListDialog.isSaving"
+                  @click="editCustomList()"
+                >
+                  Save
+                </v-btn>
+              </v-col>
+              <v-col class="py-2" cols="12">
+                <v-btn
+                  color="primary"
+                  text
+                  block
+                  @click="closeEditListDialog()"
+                >
+                  Cancel
+                </v-btn>
+              </v-col>
+            </v-row>
+          </v-card-actions>
+        </v-card>
+      </v-dialog>
+
+      <v-divider class="my-6" />
+
+      <v-list dense>
+        <v-subheader>Saved Search</v-subheader>
+        <v-list-item
+          v-for="(item, i) in savedSearchList"
+          :key="'search-' + i"
+          @click="showUnderDevelopmentAlert()"
+        >
+          <v-list-item-title v-text="item.name" />
+        </v-list-item>
+      </v-list>
+
+      <v-list dense>
+        <v-subheader>Saved Comparison</v-subheader>
+        <v-list-item
+          v-for="(item, i) in savedComparisonList"
+          :key="'comparison-' + i"
+          @click="showUnderDevelopmentAlert()"
+        >
+          <v-list-item-title v-text="item.name" />
+        </v-list-item>
+      </v-list>
     </div>
-    <v-list
-      dense
-      nav
-      class="mx-n2 mb-6"
-    >
-      <v-list-item
-        v-for="(list, i) in lists"
-        :key="'list-' + i"
-        :input-value="list === selectedList"
-        @click="selectList(list)"
-      >
-        <span class="dot mx-2" :style="{ 'background-color': list.color }" />
-        <v-list-item-content>
-          <v-list-item-title v-text="list.name" />
-        </v-list-item-content>
-        <v-chip small outlined>
-          {{ list.listResearchesIds.length }}
-        </v-chip>
-      </v-list-item>
-    </v-list>
-
-    <v-btn
-      outlined
-      small
-      color="primary"
-      class="mr-2"
-      @click="openNewListDialog()"
-    >
-      <v-icon left small>
-        add
-      </v-icon>
-      {{ isCustomListSelected ? 'Add' : 'Add new list' }}
-    </v-btn>
-
-    <v-btn
-      v-if="isCustomListSelected"
-      outlined
-      small
-      color="primary"
-      @click="openEditListDialog()"
-    >
-      <v-icon left small>
-        edit
-      </v-icon>
-      Edit
-    </v-btn>
-
-    <v-dialog v-model="newListDialog.isOpened" max-width="600px">
-      <v-card class="pa-6">
-        <v-card-title>
-          <div class="text-h6">
-            Add new list
-          </div>
-          <div class="right-top-angle">
-            <v-btn icon class="pa-0 ma-0" @click="closeNewListDialog()">
-              <v-icon color="black">
-                close
-              </v-icon>
-            </v-btn>
-          </div>
-        </v-card-title>
-        <v-card-text>
-          <swatches v-model="newListDialog.color" inline colors="material-light" />
-          <v-text-field
-            v-model="newListDialog.name"
-            filled
-            label="List name"
-            :rules="[rules.required]"
-          />
-        </v-card-text>
-        <v-card-actions>
-          <v-row>
-            <v-col class="py-2" cols="12">
-              <v-btn
-                color="primary"
-                block
-                :disabled="isSavingNewListDisabled || newListDialog.isSaving"
-                @click="addNewList()"
-              >
-                Save
-              </v-btn>
-            </v-col>
-            <v-col class="py-2" cols="12">
-              <v-btn
-                color="primary"
-                text
-                block
-                @click="closeNewListDialog()"
-              >
-                Cancel
-              </v-btn>
-            </v-col>
-          </v-row>
-        </v-card-actions>
-      </v-card>
-    </v-dialog>
-
-    <v-dialog v-model="editListDialog.isOpened" max-width="600px">
-      <v-card class="pa-6">
-        <v-card-title>
-          <div class="text-h6">
-            Add new list
-          </div>
-          <div class="right-top-angle">
-            <v-btn icon class="pa-0 ma-0" @click="closeEditListDialog()">
-              <v-icon color="black">
-                close
-              </v-icon>
-            </v-btn>
-          </div>
-        </v-card-title>
-        <v-card-text>
-          <swatches v-model="editListDialog.color" inline colors="material-light" />
-          <v-text-field
-            v-model="editListDialog.name"
-            filled
-            label="List name"
-            :rules="[rules.required]"
-          />
-        </v-card-text>
-        <v-card-actions>
-          <v-row>
-            <v-col class="py-2" cols="12">
-              <v-btn
-                color="primary"
-                block
-                :disabled="isSavingEditedListDisabled || editListDialog.isSaving"
-                @click="editCustomList()"
-              >
-                Save
-              </v-btn>
-            </v-col>
-            <v-col class="py-2" cols="12">
-              <v-btn
-                color="primary"
-                text
-                block
-                @click="closeEditListDialog()"
-              >
-                Cancel
-              </v-btn>
-            </v-col>
-          </v-row>
-        </v-card-actions>
-      </v-card>
-    </v-dialog>
-
-    <v-divider class="my-6" />
-
-    <v-list dense>
-      <v-subheader>Saved Search</v-subheader>
-      <v-list-item
-        v-for="(item, i) in savedSearchList"
-        :key="'search-' + i"
-        @click="showUnderDevelopmentAlert()"
-      >
-        <v-list-item-title v-text="item.name" />
-      </v-list-item>
-    </v-list>
-
-    <v-list dense>
-      <v-subheader>Saved Comparison</v-subheader>
-      <v-list-item
-        v-for="(item, i) in savedComparisonList"
-        :key="'comparison-' + i"
-        @click="showUnderDevelopmentAlert()"
-      >
-        <v-list-item-title v-text="item.name" />
-      </v-list-item>
-    </v-list>
-  </div>
+  </v-navigation-drawer>
 </template>
 
 <script>
   import { mapGetters } from 'vuex';
   import Swatches from 'vue-swatches';
   import 'vue-swatches/dist/vue-swatches.min.css';
-  import LayoutSidebar from '@/components/layout/components/LayoutSidebar';
 
   export default {
     name: 'InvestorPortfolioInboxLeftSidebar',
     components: {
-      LayoutSidebar,
       swatches: Swatches
     },
     computed: {

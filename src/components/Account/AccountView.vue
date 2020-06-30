@@ -1,6 +1,8 @@
 <template>
   <div v-if="$ready">
-    <account-sidebar v-if="!$route.meta.hideSidebar" />
+    <portal to="sidebar">
+      <account-sidebar v-if="!$route.meta.hideSidebar" />
+    </portal>
     <router-view />
   </div>
 </template>

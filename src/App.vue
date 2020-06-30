@@ -11,26 +11,31 @@
 <!--      </v-sheet>-->
 <!--    </v-overlay>-->
 
-    <v-sheet v-if="$ready" min-height="100%">
+    <portal-target
+      v-if="$ready"
+      name="toolbar"
+      slim
+    >
+      <toolbar
+        v-if="!$route.meta.withoutHeader"
+        :key="$route.fullPath + '-toolbar'"
+        :is-grants-transparency-demo="isGrantsTransparencyDemo"
+      />
+    </portal-target>
 
-      <portal-target name="toolbar">
-        <toolbar
-          v-if="!$route.meta.withoutHeader"
-          :key="$route.fullPath + '-toolbar'"
-          :is-grants-transparency-demo="isGrantsTransparencyDemo"
-        />
-      </portal-target>
+    <portal-target
+      v-if="$ready"
+      name="sidebar"
+      slim
+    />
 
-      <portal-target :key="$route.fullPath + '-navigator'" name="navigator" />
-
-      <router-view :key="$route.fullPath" name="navigator" />
-
-      <v-main :key="$route.fullPath + '-main'" style="min-height: 100%">
+    <v-sheet min-height="100vh" class="d-flex flex-column">
+      <v-main :key="$route.fullPath + '-main'" class="flex-grow-1 flex-shrink-1">
         <router-view :key="$route.fullPath" />
       </v-main>
-
-      <d-snackbar />
     </v-sheet>
+
+    <d-snackbar />
   </v-app>
 </template>
 

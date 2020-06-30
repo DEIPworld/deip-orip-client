@@ -5,7 +5,7 @@
         Projects
       </div>
 
-      <div class="py-6">
+      <div class="pt-6">
         <v-btn
           v-if="isLoggedIn()"
           :to="tenant.profile.settings.newResearchPolicy === 'free' ? { name: 'CreateResearch' } : { name: 'CreateResearchProposal' }"
