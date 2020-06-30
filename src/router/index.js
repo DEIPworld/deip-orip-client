@@ -72,6 +72,7 @@ import { UsersService } from '@deip/users-service';
 import { accountRouting } from '@/components/Account/router';
 import { userDetailRouting } from '@/components/UserDetails/router';
 import { adminRouting } from '@/components/AdminPanel/router';
+import { ParticipantstRouting } from '@/components/Participants/router';
 import ResearchRequestFormCreate from '@/components/ResearchRequest/ResearchRequestFormCreate';
 import { awaitStore } from '@/router/utils/awaitStore';
 
@@ -433,6 +434,7 @@ const router = new Router({
     ...userDetailRouting,
     ...accountRouting,
     ...adminRouting,
+    ...ParticipantstRouting,
 
     {
       path: '/user-wallet',
