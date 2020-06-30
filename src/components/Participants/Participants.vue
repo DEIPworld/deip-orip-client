@@ -221,7 +221,7 @@
             width: '15%'
           },
           {
-            text: 'Percentile',
+            text: 'Percentile rank',
             value: 'percentile_rank',
             align: 'center',
             width: '15%'
