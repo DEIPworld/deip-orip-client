@@ -195,8 +195,8 @@
         filter: {
           name: 'alice',
           discipline: '6c4bb3bcf1a88e3b51de88576d592f1f980c5bbb',
-          contribution: EXPERTISE_CONTRIBUTION_TYPE.PUBLICATION,
-          criteria: ASSESSMENT_CRITERIA_TYPE.METHODOLOGY
+          contribution: 0,
+          criteria: 0
         },
         participantsHeader: [
           {
