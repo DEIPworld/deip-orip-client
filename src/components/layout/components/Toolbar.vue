@@ -25,8 +25,8 @@
       >
         <v-tab
           v-for="(item, index) of mainMenu"
-          :to="item.to"
           :key="'nav-tab-' + index"
+          :to="item.to"
         >
           {{ item.label }}
         </v-tab>
@@ -63,15 +63,14 @@
           :dark="themeSettings.appBar.bar.dark"
           dense
         >
-
           <v-list-item
             v-for="(item, index) of userMenu"
-            :to="item.to"
             :key="'nav-tab-' + index"
+            :to="item.to"
           >
             <v-list-item-icon>
               <v-icon v-if="item.icon">
-                {{item.icon}}
+                {{ item.icon }}
               </v-icon>
             </v-list-item-icon>
             <v-list-item-title>
@@ -88,9 +87,7 @@
             <v-list-item-title>Sign Out</v-list-item-title>
           </v-list-item>
         </v-list>
-
       </v-menu>
-
     </v-app-bar>
   </v-sheet>
 </template>
@@ -119,7 +116,7 @@
         tenant: 'auth/tenant',
         themeSettings: 'layout/themeSettings'
       }),
-      isLoggedIn() { return accessService.isLoggedIn(); }, //$isUser
+      isLoggedIn() { return accessService.isLoggedIn(); }, // $isUser
       isDefaultToolbar() {
         return !this.isGrantsTransparencyDemo;
       },

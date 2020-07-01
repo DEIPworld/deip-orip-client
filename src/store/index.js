@@ -31,6 +31,7 @@ import { agencyGrantProgramAwardCreateStore } from '../components/agency-grant-p
 
 import { adminPanelStore } from '../components/AdminPanel/store';
 import { dSnackbarStore } from '@/components/Deipify/DSnackbar/DSnackbarStore';
+import { overviewStore } from '@/components/Overview/store';
 
 Vue.use(Vuex);
 
@@ -66,7 +67,8 @@ export const store = new Vuex.Store({
     agencyGrantProgramAwardDetails: agencyGrantProgramAwardDetailsStore,
     agencyGrantProgramAwardWithdrawalDetails: agencyGrantProgramAwardWithdrawalDetailsStore,
 
-    adminPanel: adminPanelStore
+    adminPanel: adminPanelStore,
+    overview: overviewStore
   },
   strict: process.env.NODE_ENV !== 'production'
 });

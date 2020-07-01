@@ -42,12 +42,15 @@
     "@xkeshi/vue-qrcode": "^1.0.0",
     "axios": "^0.18.0",
     "change-case": "^4.1.1",
+    "chroma-js": "^2.1.0",
+    "chunk": "0.0.2",
     "core-js": "^3.4.4",
     "d3": "5.15.0",
     "deepmerge": "^4.2.2",
     "dot-prop": "^5.2.0",
     "dot-wild": "^3.0.1",
     "dotenv": "^6.2.0",
+    "filter-where": "^2.0.0",
     "font-awesome": "^4.5.0",
     "jspdf-yworks": "^2.1.1",
     "jwt-decode": "^2.2.0",
@@ -72,7 +75,8 @@
     "vue2-dropzone": "^3.6.0",
     "vuetify": "^2.3.1",
     "vuetify-upload-button": "^0.1.2",
-    "vuex": "^3.1.2"
+    "vuex": "^3.1.2",
+    "wcag-contrast": "^3.0.0"
   },
   "devDependencies": {
     "@babel/plugin-proposal-class-properties": "^7.8.3",

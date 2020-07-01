@@ -75,6 +75,7 @@ import { adminRouting } from '@/components/AdminPanel/router';
 import { ParticipantstRouting } from '@/components/Participants/router';
 import ResearchRequestFormCreate from '@/components/ResearchRequest/ResearchRequestFormCreate';
 import { awaitStore } from '@/router/utils/awaitStore';
+import { overviewRouting } from '@/components/Overview/router';
 
 const accessService = AccessService.getInstance();
 const usersService = UsersService.getInstance();
@@ -435,6 +436,7 @@ const router = new Router({
     ...accountRouting,
     ...adminRouting,
     ...ParticipantstRouting,
+    ...overviewRouting,
 
     {
       path: '/user-wallet',
