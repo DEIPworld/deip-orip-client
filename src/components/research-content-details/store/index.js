@@ -118,6 +118,9 @@ const getters = {
 
   membersList: (state, getters) => state.membersList,
 
+  researchMembersList: (state, getters) => state.membersList
+    .filter((member) => state.research.members.some((m) => m == member.account.name)),
+
   contentMetadata: (state, getters) => state.contentMetadata,
 
 
