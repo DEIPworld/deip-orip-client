@@ -67,7 +67,7 @@
     "v-credit-card": "^1.2.0",
     "vue": "^2.6.11",
     "vue-currency-filter": "^3.4.3",
-    "vue-google-charts": "^0.3.2",
+    "vue-google-charts": "^0.3.3",
     "vue-gravatar": "^1.2.1",
     "vue-resize": "^0.4.5",
     "vue-router": "^3.1.3",

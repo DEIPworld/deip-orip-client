@@ -133,16 +133,24 @@
               to: { name: 'Dashboard' }
             },
             {
-              label: 'Portfolio',
-              to: { name: 'InvestorPortfolio' }
+              label: 'Overview',
+              to: { name: 'overview' }
             },
             {
-              label: 'Wallet',
-              to: {
-                name: 'UserWallet',
-                params: { account_name: this.user.username }
-              }
-            }
+              label: 'Participiants',
+              to: { name: 'participants' }
+            },
+            // {
+            //   label: 'Portfolio',
+            //   to: { name: 'InvestorPortfolio' }
+            // },
+            // {
+            //   label: 'Wallet',
+            //   to: {
+            //     name: 'UserWallet',
+            //     params: { account_name: this.user.username }
+            //   }
+            // }
           ];
         }
 

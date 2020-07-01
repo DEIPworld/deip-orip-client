@@ -3,6 +3,6 @@ import { store } from '@/store';
 
 export const ParticipantstRouting = [{
   path: '/participants',
-  name: 'Participants',
+  name: 'participants',
   component: Participants
 }];
