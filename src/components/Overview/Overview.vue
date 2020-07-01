@@ -114,16 +114,10 @@
 
       eciOverviewData() {
         const stamps = {};
-        var monthNames = ["January", "February", "March", "April", "May","June","July", "August", "September", "October", "November","December"];
-
-
         for (const discipline of this.disciplinesExpertiseStatsHistory) {
 
           for (const change of discipline.history) {
-            // const date = monthNames[new Date(change.timestamp).getMonth()];
-            const date = change.timestamp;
-            // console.log(date)
-            // const data = parseFloat(change.share)
+            const date = new Date(change.timestamp);
             const data = parseFloat(change.share) / 100;
             if (!stamps[date]) {
               stamps[date] = [data];
@@ -151,16 +145,23 @@
           vAxis: {
             format: 'percent'
           },
+          hAxis: {
+            format: 'MMM d, y',
+            gridlines: {
+
+            }
+          },
           // chartArea: {
           //   left: 50,
           //   top: 16,
           //   height: 200,
           // },
-          // explorer: {
-          //   actions: ['dragToZoom', 'rightClickToReset'],
-          //   axis: 'horizontal',
-          //
-          // },
+          explorer: {
+            actions: ['dragToZoom', 'rightClickToReset'],
+            axis: 'horizontal',
+            keepInBounds: true,
+            maxZoomIn: 4.0
+          },
           series: chartGradient(this.eciOverviewData[0].length - 1)
             .map((color) => ({
               color
