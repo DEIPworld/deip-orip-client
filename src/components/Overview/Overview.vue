@@ -44,6 +44,86 @@
         </v-col>
       </v-row>
 
+      <v-row class="pt-4">
+        <v-col cols="10">
+          <div class="text-h5">Growth rate overview</div>
+          <v-row>
+            <v-col>
+              <v-menu
+                v-model="growthRateFromDateMenu"
+                :close-on-content-click="false"
+                :nudge-right="40"
+                transition="scale-transition"
+                offset-y
+                min-width="290px"
+              >
+                <template v-slot:activator="{ on }">
+                  <v-text-field
+                    v-model="growthRateFromDate"
+                    label="From"
+                    readonly
+                    filled
+                    v-on="on"
+                  />
+                </template>
+                <v-date-picker
+                  v-model="growthRateFromDate"
+                  type="month"
+                  :max="moment(growthRateToDate).subtract(1, 'days').format('YYYY-MM-DD')"
+                  :min="moment('2018-01-01').format('YYYY-MM-DD')"
+                  @input="changegrowthRateData"
+                />
+              </v-menu>
+            </v-col>
+            <v-col>
+              <v-menu
+                v-model="growthRateToDateMenu"
+                :close-on-content-click="false"
+                :nudge-right="40"
+                transition="scale-transition"
+                offset-y
+                min-width="290px"
+              >
+                <template v-slot:activator="{ on }">
+                  <v-text-field
+                    v-model="growthRateToDate"
+                    label="To"
+                    readonly
+                    filled
+                    v-on="on"
+                  />
+                </template>
+                <v-date-picker
+                  v-model="growthRateToDate"
+                  type="month"
+                  :max="moment().format('YYYY-MM')"
+                  :min="moment(growthRateFromDate).add(1, 'days').format('YYYY-MM')"
+                  @input="changegrowthRateData"
+                />
+              </v-menu>
+            </v-col>
+            <v-col>
+              <v-select
+                v-model="growthRateDiscipline"
+                filled
+                :items="[ ,disciplines]"
+                label="Disciplines"
+                @input=""
+              />
+            </v-col>
+          </v-row>
+          <GChart
+            ref="donutChart"
+            class="chart mt-6"
+            type="ColumnChart"
+            :data="chartData"
+            :options="chartOptions"
+            :settings="{ packages: ['corechart'] }"
+            style="width: 100%; height: 232px;"
+          />
+        </v-col>
+      </v-row>
+
     </layout-section>
   </app-layout>
 </template>
@@ -61,12 +141,76 @@
       LayoutSection,
       AppLayout
     },
+    data() {
+      return {
+        growthRateFromDateMenu: false,
+        growthRateToDateMenu: false,
+        growthRateFromDate: this.moment().subtract(7, 'days').format('YYYY-MM'),
+        growthRateToDate: this.moment().format('YYYY-MM'),
+        growthRateDiscipline: '',
+        disciplines: ['Geomchemisty', 'Biology', 'Chemistry', 'Physics', 'Genetics', 'Bioinformatics', 'Genomics', 'Bioacoustics']
+      };
+    },
+    methods: {
+      changegrowthRateData() {
+        
+      }
+    },
     computed: {
       ...mapGetters({
         disciplinesExpertiseStats: 'overview/disciplinesExpertiseStats',
         disciplinesExpertiseStatsHistory: 'overview/disciplinesExpertiseStatsHistory',
         researchContentsExpertiseHistory: 'overview/researchContentsExpertiseHistory',
       }),
+
+      chartData() {
+        return [
+          ['Month', ...this.disciplines],
+          [{ v: '2020-01', f: 'Jun' }, { v: 0.018, f: '1.8%' }, {v:0.005, f: `${this.toDeipPercent(0.005)}%`}, {v:0.021, f:`${this.toDeipPercent(0.021)}%`}, {v:0.016, f: `${this.toDeipPercent(0.016)}%`}, {v:0.015, f: `${this.toDeipPercent(0.015)}%`}, {v:0.015, f: `${this.toDeipPercent(0.015)}%`}, {v: 0.005, f:`${this.toDeipPercent(0.005)}%`}, {v:0.01, f: `${this.toDeipPercent(0.01)}%`}],
+          [{ v: '2020-02', f: 'Feb' }, { v: 0.018, f: '1.8%' }, {v:0.005, f: `${this.toDeipPercent(0.005)}%`}, {v:0.021, f:`${this.toDeipPercent(0.021)}%`}, {v:0.016, f: `${this.toDeipPercent(0.016)}%`}, {v:0.015, f: `${this.toDeipPercent(0.015)}%`}, {v:0.015, f: `${this.toDeipPercent(0.015)}%`}, {v: 0.005, f:`${this.toDeipPercent(0.005)}%`}, {v:0.01, f: `${this.toDeipPercent(0.01)}%`}],
+          [{ v: '2020-03', f: 'Mar' }, { v: 0.018, f: '1.8%' }, {v:0.005, f: `${this.toDeipPercent(0.005)}%`}, {v:0.021, f:`${this.toDeipPercent(0.021)}%`}, {v:0.016, f: `${this.toDeipPercent(0.016)}%`}, {v:0.015, f: `${this.toDeipPercent(0.015)}%`}, {v:0.015, f: `${this.toDeipPercent(0.015)}%`}, {v: 0.005, f:`${this.toDeipPercent(0.005)}%`}, {v:0.01, f: `${this.toDeipPercent(0.01)}%`}],
+          [{ v: '2020-04', f: 'Apr' }, { v: 0.018, f: '1.8%' }, {v:0.005, f: `${this.toDeipPercent(0.005)}%`}, {v:0.021, f:`${this.toDeipPercent(0.021)}%`}, {v:0.016, f: `${this.toDeipPercent(0.016)}%`}, {v:0.015, f: `${this.toDeipPercent(0.015)}%`}, {v:0.015, f: `${this.toDeipPercent(0.015)}%`}, {v: 0.005, f:`${this.toDeipPercent(0.005)}%`}, {v:0.01, f: `${this.toDeipPercent(0.01)}%`}],
+          [{ v: '2020-05', f: 'May' }, { v: 0.018, f: '1.8%' }, {v:0.005, f: `${this.toDeipPercent(0.005)}%`}, {v:0.021, f:`${this.toDeipPercent(0.021)}%`}, {v:0.016, f: `${this.toDeipPercent(0.016)}%`}, {v:0.015, f: `${this.toDeipPercent(0.015)}%`}, {v:0.015, f: `${this.toDeipPercent(0.015)}%`}, {v: 0.005, f:`${this.toDeipPercent(0.005)}%`}, {v:0.01, f: `${this.toDeipPercent(0.01)}%`}],
+          [{ v: '2020-06', f: 'June' }, { v: 0.018, f: '1.8%' }, {v:0.005, f: `${this.toDeipPercent(0.005)}%`}, {v:0.021, f:`${this.toDeipPercent(0.021)}%`}, {v:0.016, f: `${this.toDeipPercent(0.016)}%`}, {v:0.015, f: `${this.toDeipPercent(0.015)}%`}, {v:0.015, f: `${this.toDeipPercent(0.015)}%`}, {v: 0.005, f:`${this.toDeipPercent(0.005)}%`}, {v:0.01, f: `${this.toDeipPercent(0.01)}%`}],
+          [{ v: '2020-07', f: 'July' }, { v: 0.018, f: '1.8%' }, {v:0.005, f: `${this.toDeipPercent(0.005)}%`}, {v:0.021, f:`${this.toDeipPercent(0.021)}%`}, {v:0.016, f: `${this.toDeipPercent(0.016)}%`}, {v:0.015, f: `${this.toDeipPercent(0.015)}%`}, {v:0.015, f: `${this.toDeipPercent(0.015)}%`}, {v: 0.005, f:`${this.toDeipPercent(0.005)}%`}, {v:0.01, f: `${this.toDeipPercent(0.01)}%`}],
+          [{ v: '2020-08', f: 'Aug' }, { v: 0.018, f: '1.8%' }, {v:0.005, f: `${this.toDeipPercent(0.005)}%`}, {v:0.021, f:`${this.toDeipPercent(0.021)}%`}, {v:0.016, f: `${this.toDeipPercent(0.016)}%`}, {v:0.015, f: `${this.toDeipPercent(0.015)}%`}, {v:0.015, f: `${this.toDeipPercent(0.015)}%`}, {v: 0.005, f:`${this.toDeipPercent(0.005)}%`}, {v:0.01, f: `${this.toDeipPercent(0.01)}%`}],
+          [{ v: '2020-09', f: 'Sep' }, { v: 0.018, f: '1.8%' }, {v:0.005, f: `${this.toDeipPercent(0.005)}%`}, {v:0.021, f:`${this.toDeipPercent(0.021)}%`}, {v:0.016, f: `${this.toDeipPercent(0.016)}%`}, {v:0.015, f: `${this.toDeipPercent(0.015)}%`}, {v:0.015, f: `${this.toDeipPercent(0.015)}%`}, {v: 0.005, f:`${this.toDeipPercent(0.005)}%`}, {v:0.01, f: `${this.toDeipPercent(0.01)}%`}],
+          [{ v: '2020-10', f: 'Oct' }, { v: 0.018, f: '1.8%' }, {v:0.005, f: `${this.toDeipPercent(0.005)}%`}, {v:0.021, f:`${this.toDeipPercent(0.021)}%`}, {v:0.016, f: `${this.toDeipPercent(0.016)}%`}, {v:0.015, f: `${this.toDeipPercent(0.015)}%`}, {v:0.015, f: `${this.toDeipPercent(0.015)}%`}, {v: 0.005, f:`${this.toDeipPercent(0.005)}%`}, {v:0.01, f: `${this.toDeipPercent(0.01)}%`}],
+          [{ v: '2020-11', f: 'Nov' }, { v: 0.018, f: '1.8%' }, {v:0.005, f: `${this.toDeipPercent(0.005)}%`}, {v:0.021, f:`${this.toDeipPercent(0.021)}%`}, {v:0.016, f: `${this.toDeipPercent(0.016)}%`}, {v:0.015, f: `${this.toDeipPercent(0.015)}%`}, {v:0.015, f: `${this.toDeipPercent(0.015)}%`}, {v: 0.005, f:`${this.toDeipPercent(0.005)}%`}, {v:0.01, f: `${this.toDeipPercent(0.01)}%`}],
+          [{ v: '2020-12', f: 'Dec' }, { v: 0.018, f: '1.8%' }, {v:0.005, f: `${this.toDeipPercent(0.005)}%`}, {v:0.021, f:`${this.toDeipPercent(0.021)}%`}, {v:0.016, f: `${this.toDeipPercent(0.016)}%`}, {v:0.015, f: `${this.toDeipPercent(0.015)}%`}, {v:0.015, f: `${this.toDeipPercent(0.015)}%`}, {v: 0.005, f:`${this.toDeipPercent(0.005)}%`}, {v:0.01, f: `${this.toDeipPercent(0.01)}%`}],
+          // ['Feb', 1.8, 0.5, 2.1, 1.7, 1.5, 1.5, 0.5, 1.0],
+          // ['Mar', 1.8, 0.5, 2.1, 1.7, 1.5, 1.5, 0.5, 1.0],
+          // ['Apr', 1.8, 0.5, 2.1, 1.7, 1.5, 1.5, 0.5, 1.0],
+          // ['May', 1.8, 0.5, 2.1, 1.7, 1.5, 1.5, 0.5, 1.0],
+          // ['June', 1.8, 0.5, 2.1, 1.7, 1.5, 1.5, 0.5, 1.0],
+          // ['July', 1.8, 0.5, 2.1, 1.7, 1.5, 1.5, 0.5, 1.0],
+          // ['Aug', 1.8, 0.5, 2.1, 1.7, 1.5, 1.5, 0.5, 1.0],
+          // ['Sep', 1.8, 0.5, 2.1, 1.7, 1.5, 1.5, 0.5, 1.0],
+          // ['Oct', 1.8, 0.5, 2.1, 1.7, 1.5, 1.5, 0.5, 1.0],
+          // ['Nov', 1.8, 0.5, 2.1, 1.7, 1.5, 1.5, 0.5, 1.0],
+          // ['Dec', 1.8, 0.5, 2.1, 1.7, 1.5, 1.5, 0.5, 1.0],
+        ].filter((item, i) => {
+          if(i != 0){
+          console.log(item[0].v)
+            return this.moment(item[0].v).isSameOrBefore(this.growthRateToDate) && this.moment(item[0].v).isSameOrAfter(this.growthRateFromDate)
+          }
+          });
+      },
+      chartOptions() {
+        return {
+          chart: {
+            title: 'Company Performance',
+            subtitle: 'Sales, Expenses, and Profit: 2014-2017',
+          },
+          vAxis: {
+            format: 'percent'
+          },
+          series: chartGradient(this.chartData[0].length - 1)
+            .map((color) => ({
+              color
+            }))
+        }
+      },
 
       eciValueData() {
         return this.disciplinesExpertiseStats.map((item) => [
