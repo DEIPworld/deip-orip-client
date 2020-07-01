@@ -140,8 +140,10 @@
           </template>
           <template #item.growth_rate="{ item: { growth_rate } }">
             <span
+              v-if="growth_rate"
               :class="growthRateIsUp(growth_rate) ? 'green--text' : 'red--text'"
             >{{ growth_rate }}</span>
+            <span v-else>N/A</span>
           </template>
         </v-data-table>
       </content-block>
