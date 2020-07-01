@@ -114,15 +114,24 @@
 
       eciOverviewData() {
         const stamps = {};
+        var monthNames = ["January", "February", "March", "April", "May","June","July", "August", "September", "October", "November","December"];
+
 
         for (const discipline of this.disciplinesExpertiseStatsHistory) {
+
           for (const change of discipline.history) {
-            if (!stamps[change.timestamp]) {
-              stamps[change.timestamp] = [change.eci];
+            // const date = monthNames[new Date(change.timestamp).getMonth()];
+            const date = change.timestamp;
+            // console.log(date)
+            // const data = parseFloat(change.share)
+            const data = parseFloat(change.share) / 100;
+            if (!stamps[date]) {
+              stamps[date] = [data];
             } else {
-              stamps[change.timestamp].push(change.eci);
+              stamps[date].push(data);
             }
           }
+          // console.log('----------')
         }
         return Object.keys(stamps).map((key) => [key, ...stamps[key]]);
       },
@@ -139,6 +148,9 @@
           fontSize: 12,
           fontName: 'Roboto',
           lineWidth: 0,
+          vAxis: {
+            format: 'percent'
+          },
           // chartArea: {
           //   left: 50,
           //   top: 16,
