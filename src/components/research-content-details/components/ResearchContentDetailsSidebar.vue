@@ -323,6 +323,7 @@
         research: 'rcd/research',
         group: 'rcd/group',
         membersList: 'rcd/membersList',
+        researchMembersList: 'rcd/researchMembersList',
         disciplinesList: 'rcd/disciplinesList',
         contentList: 'rcd/contentList',
         contentReviewsList: 'rcd/contentReviewsList',
@@ -372,11 +373,11 @@
       },
 
       contentAuthorsList() {
-        return this.content ? this.membersList.filter((m) => this.content.authors.some((a) => a === m.account.name)) : [];
+        return this.content ? this.researchMembersList.filter((m) => this.content.authors.some((a) => a === m.account.name)) : [];
       },
 
       draftAuthorsList() {
-        return this.isInProgress ? this.membersList : this.membersList.filter((m) => this.contentRef.authors.some((a) => a === m.account.name));
+        return this.isInProgress ? this.researchMembersList : this.researchMembersList.filter((m) => this.contentRef.authors.some((a) => a === m.account.name));
       },
 
       researchTableOfContent() {
@@ -449,7 +450,7 @@
         const authors = checked
           ? [...this.contentRef.authors, member.account.name]
           : this.contentRef.authors.filter((a) => a !== member.account.name);
-        this.$emit('setDraftAuthors', this.membersList.filter((m) => authors.some((a) => a === m.account.name)));
+        this.$emit('setDraftAuthors', this.researchMembersList.filter((m) => authors.some((a) => a === m.account.name)));
       },
 
       goAddReview() {

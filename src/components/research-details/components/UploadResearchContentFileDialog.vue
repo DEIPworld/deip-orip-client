@@ -34,7 +34,7 @@
           </div>
         </v-card-title>
         <v-card-text>
-          <div v-if="researchGroupMembersList.length">
+          <div v-if="researchMembersList.length">
             <v-text-field
               v-model="title"
               filled
@@ -52,7 +52,7 @@
 
             <v-autocomplete
               v-model="authors"
-              :items="researchGroupMembersList"
+              :items="researchMembersList"
               :menu-props="{ closeOnContentClick: true }"
               hint="You can select multiple authors"
               persistent-hint
@@ -177,6 +177,7 @@
         user: 'auth/user',
         researchGroupMembersList: 'rd/researchGroupMembersList',
         research: 'rd/research',
+        researchMembersList: 'rd/researchMembersList',
         researchGroup: 'rd/group',
         userPersonalGroup: 'auth/userPersonalGroup'
       }),
