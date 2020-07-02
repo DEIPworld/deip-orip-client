@@ -3,8 +3,12 @@
     <layout-section>
       <v-row>
         <v-col cols="4">
-          <div class="text-h5">Expertise contribution index value</div>
-          <div class="text-body-2 text--secondary">Last update 05 May 2020</div>
+          <div class="text-h5">
+            Expertise contribution index value
+          </div>
+          <div class="text-body-2 text--secondary">
+            Last update 05 May 2020
+          </div>
           <d-chart-pie
             donut
             :data="eciValueDataTable"
@@ -14,8 +18,12 @@
         </v-col>
 
         <v-col cols="8">
-          <div class="text-h5">Expertise contribution index overview</div>
-          <div class="text-body-2 text--secondary">Last update 05 May 2020</div>
+          <div class="text-h5">
+            Expertise contribution index overview
+          </div>
+          <div class="text-body-2 text--secondary">
+            Last update 05 May 2020
+          </div>
           <d-chart-area
             :data="eciOverviewDataTable"
             :options="{legend: 'none', vAxis: { format: '##%' } }"
@@ -37,7 +45,9 @@
 
       <v-row class="pt-4">
         <v-col cols="10">
-          <div class="text-h5">Growth rate overview</div>
+          <div class="text-h5">
+            Growth rate overview
+          </div>
           <v-row>
             <v-col>
               <v-menu
@@ -116,7 +126,9 @@
       </v-row>
 
       <v-sheet>
-        <div class="text-h5">Expertise Contribution Index detailed overview</div>
+        <div class="text-h5">
+          Expertise Contribution Index detailed overview
+        </div>
 
         <v-row>
           <v-col cols="3">
@@ -133,14 +145,12 @@
           </v-col>
         </v-row>
 
-<!--        <GChart-->
-<!--          type="LineChart"-->
-<!--          :data="eciDisciplineHistoryRecordsChart.data"-->
-<!--          :options="eciDisciplineHistoryRecordsChart.options"-->
-<!--        />-->
-
+        <!--        <GChart-->
+        <!--          type="LineChart"-->
+        <!--          :data="eciDisciplineHistoryRecordsChart.data"-->
+        <!--          :options="eciDisciplineHistoryRecordsChart.options"-->
+        <!--        />-->
       </v-sheet>
-
     </layout-section>
   </app-layout>
 </template>
@@ -178,31 +188,31 @@
 
       },
       goToParticipants(e) {
-        console.log(e)
+        console.log(e);
       }
     },
     computed: {
       ...mapGetters({
         disciplinesExpertiseStats: 'overview/disciplinesExpertiseStats',
         disciplinesExpertiseStatsHistory: 'overview/disciplinesExpertiseStatsHistory',
-        researchContentsExpertiseHistory: 'overview/researchContentsExpertiseHistory',
+        researchContentsExpertiseHistory: 'overview/researchContentsExpertiseHistory'
       }),
 
       chartData() {
         return [
           ['Month', ...this.disciplines],
-          [{ v: '2020-01', f: 'Jun' }, { v: 0.018, f: '1.8%' }, {v:0.005, f: `${this.toDeipPercent(0.005)}%`}, {v:0.021, f:`${this.toDeipPercent(0.021)}%`}, {v:0.016, f: `${this.toDeipPercent(0.016)}%`}, {v:0.015, f: `${this.toDeipPercent(0.015)}%`}, {v:0.015, f: `${this.toDeipPercent(0.015)}%`}, {v: 0.005, f:`${this.toDeipPercent(0.005)}%`}, {v:0.01, f: `${this.toDeipPercent(0.01)}%`}],
-          [{ v: '2020-02', f: 'Feb' }, { v: 0.018, f: '1.8%' }, {v:0.005, f: `${this.toDeipPercent(0.005)}%`}, {v:0.021, f:`${this.toDeipPercent(0.021)}%`}, {v:0.016, f: `${this.toDeipPercent(0.016)}%`}, {v:0.015, f: `${this.toDeipPercent(0.015)}%`}, {v:0.015, f: `${this.toDeipPercent(0.015)}%`}, {v: 0.005, f:`${this.toDeipPercent(0.005)}%`}, {v:0.01, f: `${this.toDeipPercent(0.01)}%`}],
-          [{ v: '2020-03', f: 'Mar' }, { v: 0.018, f: '1.8%' }, {v:0.005, f: `${this.toDeipPercent(0.005)}%`}, {v:0.021, f:`${this.toDeipPercent(0.021)}%`}, {v:0.016, f: `${this.toDeipPercent(0.016)}%`}, {v:0.015, f: `${this.toDeipPercent(0.015)}%`}, {v:0.015, f: `${this.toDeipPercent(0.015)}%`}, {v: 0.005, f:`${this.toDeipPercent(0.005)}%`}, {v:0.01, f: `${this.toDeipPercent(0.01)}%`}],
-          [{ v: '2020-04', f: 'Apr' }, { v: 0.018, f: '1.8%' }, {v:0.005, f: `${this.toDeipPercent(0.005)}%`}, {v:0.021, f:`${this.toDeipPercent(0.021)}%`}, {v:0.016, f: `${this.toDeipPercent(0.016)}%`}, {v:0.015, f: `${this.toDeipPercent(0.015)}%`}, {v:0.015, f: `${this.toDeipPercent(0.015)}%`}, {v: 0.005, f:`${this.toDeipPercent(0.005)}%`}, {v:0.01, f: `${this.toDeipPercent(0.01)}%`}],
-          [{ v: '2020-05', f: 'May' }, { v: 0.018, f: '1.8%' }, {v:0.005, f: `${this.toDeipPercent(0.005)}%`}, {v:0.021, f:`${this.toDeipPercent(0.021)}%`}, {v:0.016, f: `${this.toDeipPercent(0.016)}%`}, {v:0.015, f: `${this.toDeipPercent(0.015)}%`}, {v:0.015, f: `${this.toDeipPercent(0.015)}%`}, {v: 0.005, f:`${this.toDeipPercent(0.005)}%`}, {v:0.01, f: `${this.toDeipPercent(0.01)}%`}],
-          [{ v: '2020-06', f: 'June' }, { v: 0.018, f: '1.8%' }, {v:0.005, f: `${this.toDeipPercent(0.005)}%`}, {v:0.021, f:`${this.toDeipPercent(0.021)}%`}, {v:0.016, f: `${this.toDeipPercent(0.016)}%`}, {v:0.015, f: `${this.toDeipPercent(0.015)}%`}, {v:0.015, f: `${this.toDeipPercent(0.015)}%`}, {v: 0.005, f:`${this.toDeipPercent(0.005)}%`}, {v:0.01, f: `${this.toDeipPercent(0.01)}%`}],
-          [{ v: '2020-07', f: 'July' }, { v: 0.018, f: '1.8%' }, {v:0.005, f: `${this.toDeipPercent(0.005)}%`}, {v:0.021, f:`${this.toDeipPercent(0.021)}%`}, {v:0.016, f: `${this.toDeipPercent(0.016)}%`}, {v:0.015, f: `${this.toDeipPercent(0.015)}%`}, {v:0.015, f: `${this.toDeipPercent(0.015)}%`}, {v: 0.005, f:`${this.toDeipPercent(0.005)}%`}, {v:0.01, f: `${this.toDeipPercent(0.01)}%`}],
-          [{ v: '2020-08', f: 'Aug' }, { v: 0.018, f: '1.8%' }, {v:0.005, f: `${this.toDeipPercent(0.005)}%`}, {v:0.021, f:`${this.toDeipPercent(0.021)}%`}, {v:0.016, f: `${this.toDeipPercent(0.016)}%`}, {v:0.015, f: `${this.toDeipPercent(0.015)}%`}, {v:0.015, f: `${this.toDeipPercent(0.015)}%`}, {v: 0.005, f:`${this.toDeipPercent(0.005)}%`}, {v:0.01, f: `${this.toDeipPercent(0.01)}%`}],
-          [{ v: '2020-09', f: 'Sep' }, { v: 0.018, f: '1.8%' }, {v:0.005, f: `${this.toDeipPercent(0.005)}%`}, {v:0.021, f:`${this.toDeipPercent(0.021)}%`}, {v:0.016, f: `${this.toDeipPercent(0.016)}%`}, {v:0.015, f: `${this.toDeipPercent(0.015)}%`}, {v:0.015, f: `${this.toDeipPercent(0.015)}%`}, {v: 0.005, f:`${this.toDeipPercent(0.005)}%`}, {v:0.01, f: `${this.toDeipPercent(0.01)}%`}],
-          [{ v: '2020-10', f: 'Oct' }, { v: 0.018, f: '1.8%' }, {v:0.005, f: `${this.toDeipPercent(0.005)}%`}, {v:0.021, f:`${this.toDeipPercent(0.021)}%`}, {v:0.016, f: `${this.toDeipPercent(0.016)}%`}, {v:0.015, f: `${this.toDeipPercent(0.015)}%`}, {v:0.015, f: `${this.toDeipPercent(0.015)}%`}, {v: 0.005, f:`${this.toDeipPercent(0.005)}%`}, {v:0.01, f: `${this.toDeipPercent(0.01)}%`}],
-          [{ v: '2020-11', f: 'Nov' }, { v: 0.018, f: '1.8%' }, {v:0.005, f: `${this.toDeipPercent(0.005)}%`}, {v:0.021, f:`${this.toDeipPercent(0.021)}%`}, {v:0.016, f: `${this.toDeipPercent(0.016)}%`}, {v:0.015, f: `${this.toDeipPercent(0.015)}%`}, {v:0.015, f: `${this.toDeipPercent(0.015)}%`}, {v: 0.005, f:`${this.toDeipPercent(0.005)}%`}, {v:0.01, f: `${this.toDeipPercent(0.01)}%`}],
-          [{ v: '2020-12', f: 'Dec' }, { v: 0.018, f: '1.8%' }, {v:0.005, f: `${this.toDeipPercent(0.005)}%`}, {v:0.021, f:`${this.toDeipPercent(0.021)}%`}, {v:0.016, f: `${this.toDeipPercent(0.016)}%`}, {v:0.015, f: `${this.toDeipPercent(0.015)}%`}, {v:0.015, f: `${this.toDeipPercent(0.015)}%`}, {v: 0.005, f:`${this.toDeipPercent(0.005)}%`}, {v:0.01, f: `${this.toDeipPercent(0.01)}%`}],
+          [{ v: '2020-01', f: 'Jun' }, { v: 0.018, f: '1.8%' }, { v: 0.005, f: `${this.toDeipPercent(0.005)}%` }, { v: 0.021, f: `${this.toDeipPercent(0.021)}%` }, { v: 0.016, f: `${this.toDeipPercent(0.016)}%` }, { v: 0.015, f: `${this.toDeipPercent(0.015)}%` }, { v: 0.015, f: `${this.toDeipPercent(0.015)}%` }, { v: 0.005, f: `${this.toDeipPercent(0.005)}%` }, { v: 0.01, f: `${this.toDeipPercent(0.01)}%` }],
+          [{ v: '2020-02', f: 'Feb' }, { v: 0.018, f: '1.8%' }, { v: 0.005, f: `${this.toDeipPercent(0.005)}%` }, { v: 0.021, f: `${this.toDeipPercent(0.021)}%` }, { v: 0.016, f: `${this.toDeipPercent(0.016)}%` }, { v: 0.015, f: `${this.toDeipPercent(0.015)}%` }, { v: 0.015, f: `${this.toDeipPercent(0.015)}%` }, { v: 0.005, f: `${this.toDeipPercent(0.005)}%` }, { v: 0.01, f: `${this.toDeipPercent(0.01)}%` }],
+          [{ v: '2020-03', f: 'Mar' }, { v: 0.018, f: '1.8%' }, { v: 0.005, f: `${this.toDeipPercent(0.005)}%` }, { v: 0.021, f: `${this.toDeipPercent(0.021)}%` }, { v: 0.016, f: `${this.toDeipPercent(0.016)}%` }, { v: 0.015, f: `${this.toDeipPercent(0.015)}%` }, { v: 0.015, f: `${this.toDeipPercent(0.015)}%` }, { v: 0.005, f: `${this.toDeipPercent(0.005)}%` }, { v: 0.01, f: `${this.toDeipPercent(0.01)}%` }],
+          [{ v: '2020-04', f: 'Apr' }, { v: 0.018, f: '1.8%' }, { v: 0.005, f: `${this.toDeipPercent(0.005)}%` }, { v: 0.021, f: `${this.toDeipPercent(0.021)}%` }, { v: 0.016, f: `${this.toDeipPercent(0.016)}%` }, { v: 0.015, f: `${this.toDeipPercent(0.015)}%` }, { v: 0.015, f: `${this.toDeipPercent(0.015)}%` }, { v: 0.005, f: `${this.toDeipPercent(0.005)}%` }, { v: 0.01, f: `${this.toDeipPercent(0.01)}%` }],
+          [{ v: '2020-05', f: 'May' }, { v: 0.018, f: '1.8%' }, { v: 0.005, f: `${this.toDeipPercent(0.005)}%` }, { v: 0.021, f: `${this.toDeipPercent(0.021)}%` }, { v: 0.016, f: `${this.toDeipPercent(0.016)}%` }, { v: 0.015, f: `${this.toDeipPercent(0.015)}%` }, { v: 0.015, f: `${this.toDeipPercent(0.015)}%` }, { v: 0.005, f: `${this.toDeipPercent(0.005)}%` }, { v: 0.01, f: `${this.toDeipPercent(0.01)}%` }],
+          [{ v: '2020-06', f: 'June' }, { v: 0.018, f: '1.8%' }, { v: 0.005, f: `${this.toDeipPercent(0.005)}%` }, { v: 0.021, f: `${this.toDeipPercent(0.021)}%` }, { v: 0.016, f: `${this.toDeipPercent(0.016)}%` }, { v: 0.015, f: `${this.toDeipPercent(0.015)}%` }, { v: 0.015, f: `${this.toDeipPercent(0.015)}%` }, { v: 0.005, f: `${this.toDeipPercent(0.005)}%` }, { v: 0.01, f: `${this.toDeipPercent(0.01)}%` }],
+          [{ v: '2020-07', f: 'July' }, { v: 0.018, f: '1.8%' }, { v: 0.005, f: `${this.toDeipPercent(0.005)}%` }, { v: 0.021, f: `${this.toDeipPercent(0.021)}%` }, { v: 0.016, f: `${this.toDeipPercent(0.016)}%` }, { v: 0.015, f: `${this.toDeipPercent(0.015)}%` }, { v: 0.015, f: `${this.toDeipPercent(0.015)}%` }, { v: 0.005, f: `${this.toDeipPercent(0.005)}%` }, { v: 0.01, f: `${this.toDeipPercent(0.01)}%` }],
+          [{ v: '2020-08', f: 'Aug' }, { v: 0.018, f: '1.8%' }, { v: 0.005, f: `${this.toDeipPercent(0.005)}%` }, { v: 0.021, f: `${this.toDeipPercent(0.021)}%` }, { v: 0.016, f: `${this.toDeipPercent(0.016)}%` }, { v: 0.015, f: `${this.toDeipPercent(0.015)}%` }, { v: 0.015, f: `${this.toDeipPercent(0.015)}%` }, { v: 0.005, f: `${this.toDeipPercent(0.005)}%` }, { v: 0.01, f: `${this.toDeipPercent(0.01)}%` }],
+          [{ v: '2020-09', f: 'Sep' }, { v: 0.018, f: '1.8%' }, { v: 0.005, f: `${this.toDeipPercent(0.005)}%` }, { v: 0.021, f: `${this.toDeipPercent(0.021)}%` }, { v: 0.016, f: `${this.toDeipPercent(0.016)}%` }, { v: 0.015, f: `${this.toDeipPercent(0.015)}%` }, { v: 0.015, f: `${this.toDeipPercent(0.015)}%` }, { v: 0.005, f: `${this.toDeipPercent(0.005)}%` }, { v: 0.01, f: `${this.toDeipPercent(0.01)}%` }],
+          [{ v: '2020-10', f: 'Oct' }, { v: 0.018, f: '1.8%' }, { v: 0.005, f: `${this.toDeipPercent(0.005)}%` }, { v: 0.021, f: `${this.toDeipPercent(0.021)}%` }, { v: 0.016, f: `${this.toDeipPercent(0.016)}%` }, { v: 0.015, f: `${this.toDeipPercent(0.015)}%` }, { v: 0.015, f: `${this.toDeipPercent(0.015)}%` }, { v: 0.005, f: `${this.toDeipPercent(0.005)}%` }, { v: 0.01, f: `${this.toDeipPercent(0.01)}%` }],
+          [{ v: '2020-11', f: 'Nov' }, { v: 0.018, f: '1.8%' }, { v: 0.005, f: `${this.toDeipPercent(0.005)}%` }, { v: 0.021, f: `${this.toDeipPercent(0.021)}%` }, { v: 0.016, f: `${this.toDeipPercent(0.016)}%` }, { v: 0.015, f: `${this.toDeipPercent(0.015)}%` }, { v: 0.015, f: `${this.toDeipPercent(0.015)}%` }, { v: 0.005, f: `${this.toDeipPercent(0.005)}%` }, { v: 0.01, f: `${this.toDeipPercent(0.01)}%` }],
+          [{ v: '2020-12', f: 'Dec' }, { v: 0.018, f: '1.8%' }, { v: 0.005, f: `${this.toDeipPercent(0.005)}%` }, { v: 0.021, f: `${this.toDeipPercent(0.021)}%` }, { v: 0.016, f: `${this.toDeipPercent(0.016)}%` }, { v: 0.015, f: `${this.toDeipPercent(0.015)}%` }, { v: 0.015, f: `${this.toDeipPercent(0.015)}%` }, { v: 0.005, f: `${this.toDeipPercent(0.005)}%` }, { v: 0.01, f: `${this.toDeipPercent(0.01)}%` }]
           // ['Feb', 1.8, 0.5, 2.1, 1.7, 1.5, 1.5, 0.5, 1.0],
           // ['Mar', 1.8, 0.5, 2.1, 1.7, 1.5, 1.5, 0.5, 1.0],
           // ['Apr', 1.8, 0.5, 2.1, 1.7, 1.5, 1.5, 0.5, 1.0],
@@ -215,17 +225,17 @@
           // ['Nov', 1.8, 0.5, 2.1, 1.7, 1.5, 1.5, 0.5, 1.0],
           // ['Dec', 1.8, 0.5, 2.1, 1.7, 1.5, 1.5, 0.5, 1.0],
         ].filter((item, i) => {
-          if(i != 0){
-          console.log(item[0].v)
-            return this.moment(item[0].v).isSameOrBefore(this.growthRateToDate) && this.moment(item[0].v).isSameOrAfter(this.growthRateFromDate)
+          if (i != 0) {
+            console.log(item[0].v);
+            return this.moment(item[0].v).isSameOrBefore(this.growthRateToDate) && this.moment(item[0].v).isSameOrAfter(this.growthRateFromDate);
           }
-          });
+        });
       },
       chartOptions() {
         return {
           chart: {
             title: 'Company Performance',
-            subtitle: 'Sales, Expenses, and Profit: 2014-2017',
+            subtitle: 'Sales, Expenses, and Profit: 2014-2017'
           },
           vAxis: {
             format: 'percent'
@@ -234,10 +244,10 @@
             .map((color) => ({
               color
             }))
-        }
+        };
       },
 
-      //=====================
+      //= ====================
 
       eciValueData() {
         return this.disciplinesExpertiseStats.map((item) => [
@@ -252,7 +262,7 @@
         ];
       },
 
-      //=====================
+      //= ====================
 
       eciOverviewData() {
         const stamps = {};
