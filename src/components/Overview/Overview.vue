@@ -1,6 +1,5 @@
 <template>
   <app-layout v-if="$ready">
-    {{disciplines}}
     <layout-section>
       <v-row>
         <v-col cols="4">
@@ -133,16 +132,29 @@
 
         <v-row>
           <v-col cols="3">
-            <d-input-date />
+            <d-input-date
+              v-model="eciOverviewFilter.dateFrom"
+              label="From"
+            />
           </v-col>
           <v-col cols="3">
-            <d-input-date />
+            <d-input-date
+              v-model="eciOverviewFilter.dateTo"
+              label="To"
+            />
           </v-col>
           <v-col cols="3">
-            <v-select filled />
+            <v-select filled label="Assessment criteria" />
           </v-col>
           <v-col cols="3">
-            <v-select filled />
+            <v-select
+              v-model="eciOverviewFilter.discipline"
+              label="Disciplines"
+              filled
+              :items="disciplines"
+              item-text="label"
+              item-value="external_id"
+            />
           </v-col>
         </v-row>
 
@@ -179,6 +191,12 @@
     },
     data() {
       return {
+        eciOverviewFilter: {
+          discipline: null,
+          dateFrom: '2020-06-11',
+          dateTo: '2020-07-02'
+        },
+
         growthRateFromDateMenu: false,
         growthRateToDateMenu: false,
         growthRateFromDate: this.moment()
@@ -684,6 +702,8 @@
     created() {
       this.$store.dispatch('overview/getAll')
         .then(() => {
+          this.eciOverviewFilter.discipline = this.disciplines[0].external_id
+
           this.$setReady();
         });
     }
