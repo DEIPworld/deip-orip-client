@@ -557,6 +557,7 @@ const router = new Router({
 
 const authDataLoad = () => Promise.all([
   awaitStore('auth/user', 'profile'),
+  awaitStore('auth/user', 'account  '),
   awaitStore('auth/tenant')
 ])
 

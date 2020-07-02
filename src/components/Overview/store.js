@@ -33,6 +33,7 @@ const actions = {
   getResearchContentsExpertiseHistory(context) {
     return expertiseContributionsService.getResearchContentsExpertiseHistory()
       .then((res) => {
+        console.log(res)
         context.commit('getResearchContentsExpertiseHistory', res);
       });
   },
