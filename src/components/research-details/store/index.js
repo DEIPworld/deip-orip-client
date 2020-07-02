@@ -164,7 +164,7 @@ const getters = {
     }
 
     return records.map((record) => {
-      if (record.contribution_type == EXPERTISE_CONTRIBUTION_TYPE.REVIEW) {
+      if (record.contribution_type === EXPERTISE_CONTRIBUTION_TYPE.REVIEW) {
         const typeInfo = researchService.getResearchContentType(record.research_content.content_type);
 
         const parser = new DOMParser();
