@@ -65,7 +65,7 @@
         </v-list-item>
         <v-list-item class="justify-space-between mt-2">
           <v-btn
-            height="40"
+            height="32"
             small
             text
             color="primary"
@@ -75,7 +75,7 @@
           </v-btn>
           <v-spacer />
           <v-btn
-            height="40"
+            height="32"
             small
             color="primary"
             @click="filterData"
@@ -86,30 +86,32 @@
       </v-list>
     </v-navigation-drawer>
     <layout-section>
-      <v-toolbar dense>
-        <v-toolbar-title class="text-h6">
+      <v-row no-gutters class="py-2">
+        <v-col cols="auto" class="text-h6">
           Participants
-        </v-toolbar-title>
+        </v-col>
         <v-spacer />
-        <v-btn outlined color="primary" @click="isShowFilter = !isShowFilter">
-          <v-badge
-            v-if="isShowBadge"
-            color="amber lighten-1"
-            overlap
-            dot
-            offset-y="5"
-            offset-x="10"
-          >
-            <v-icon left>
+        <v-col cols="auto">
+          <v-btn height="32" outlined color="primary" @click="isShowFilter = !isShowFilter">
+            <v-badge
+              v-if="isShowBadge"
+              color="amber lighten-1"
+              overlap
+              dot
+              offset-y="5"
+              offset-x="10"
+            >
+              <v-icon left>
+                filter_list
+              </v-icon>
+            </v-badge>
+            <v-icon v-else left>
               filter_list
             </v-icon>
-          </v-badge>
-          <v-icon v-else left>
-            filter_list
-          </v-icon>
-          Filter
-        </v-btn>
-      </v-toolbar>
+            Filter
+          </v-btn>
+        </v-col>
+      </v-row>
       <v-divider class="my-4" />
       <content-block>
         <v-data-table
@@ -123,20 +125,31 @@
           sort-desc
         >
           <template #item.user.profile.firstName="{ item: { user } }">
-            <v-row no-gutters>
-              <v-col cols="auto" align-self="center">
-                <v-avatar size="24">
-                  <img v-if="user.profile" :src="user.profile | avatarSrc(2 * 20, 2 * 20, false)">
-                </v-avatar>
-              </v-col>
-              <v-col class="text-caption font-weight-medium ml-2">
-                <div>{{ user | fullname }}</div>
-                <div>{{ user.profile.employment[0] ? user.profile.employment[0].position : '' }}</div>
-              </v-col>
-            </v-row>
+            <router-link
+              :to="$store.getters['auth/user'].account.name === user.account.name ?
+                {
+                  name: 'account.expertiseDetails'
+                }:{
+                  name: 'UserExpertiseDetails',
+                  params: {account_name: user.account.name}
+                }"
+              class="a"
+            >
+              <v-row no-gutters class="py-2">
+                <v-col cols="auto" align-self="center">
+                  <v-avatar size="24">
+                    <img v-if="user.profile" :src="user.profile | avatarSrc(2 * 20, 2 * 20, false)">
+                  </v-avatar>
+                </v-col>
+                <v-col class="text-caption font-weight-medium ml-2">
+                  <div>{{ user | fullname }}</div>
+                  <div>{{ user.profile.employment[0] ? user.profile.employment[0].position : '' }}</div>
+                </v-col>
+              </v-row>
+            </router-link>
           </template>
           <template #item.eci="{ item: { eci } }">
-            {{ eci }} ECI
+            <span class="font-weight-bold">{{ eci }}</span> ECI
           </template>
           <template #item.growth_rate="{ item: { growth_rate } }">
             <span
@@ -191,6 +204,7 @@
     data() {
       return {
         isShowFilter: true,
+        isShowBadge: false,
         disciplines: [
           { text: 'All', value: disciplinesService.disciplineTree.id },
           ...disciplinesService
@@ -252,10 +266,7 @@
     computed: {
       ...mapGetters({
         participantsList: 'participants/participants'
-      }),
-      isShowBadge() {
-        return !_.isEqual(this.filter, this.defaultFilter);
-      }
+      })
     },
     created() {
       if (this.$route.query.discipline) {
@@ -271,6 +282,8 @@
         this.filter.name = this.$route.query.name;
       }
 
+      this.isShowBadge = !_.isEqual(this.filter, this.defaultFilter);
+
       this.$store
         .dispatch('participants/loadAllParticipants', { filter: this.filter })
         .then(() => {
@@ -281,10 +294,15 @@
       filterData() {
         this.$store.dispatch('participants/loadFilterParticipants', {
           filter: this.filter
-        });
+        })
+          .then(() => { this.isShowBadge = !_.isEqual(this.filter, this.defaultFilter); });
       },
       clearFilter() {
         this.filter = _.cloneDeep(this.defaultFilter);
+        this.$store.dispatch('participants/loadFilterParticipants', {
+          filter: this.filter
+        })
+          .then(() => { this.isShowBadge = !_.isEqual(this.filter, this.defaultFilter); });
       },
       growthRateIsUp(rate) {
         return rate.slice(0, -2) >= 0;
