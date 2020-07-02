@@ -58,7 +58,7 @@
             {{ eci.disciplineName }}
           </v-col>
           <v-col cols="auto" class="pa-1 grey--text">
-            ECI {{ eci.value }}
+            ECI {{ eci.value | commaNumber }}
           </v-col>
         </v-row>
 

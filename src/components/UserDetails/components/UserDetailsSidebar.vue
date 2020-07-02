@@ -162,7 +162,7 @@
               {{ item.discipline_name }}
             </v-col>
             <v-col cols="auto" class="pa-1 grey--text">
-              ECI {{ item.amount }}
+              ECI {{ item.amount | commaNumber }}
             </v-col>
           </v-row>
 
