@@ -1,5 +1,6 @@
 <template>
   <app-layout v-if="$ready">
+    {{disciplines}}
     <layout-section>
       <v-row>
         <v-col cols="4">
@@ -158,8 +159,11 @@
 <script>
   import AppLayout from '@/components/layout/components/Layout';
   import LayoutSection from '@/components/layout/components/LayoutSection';
-  import { chartGradient, switchColor } from '@/plugins/charts';
+  import { chartGradient } from '@/plugins/charts';
   import { mapGetters } from 'vuex';
+
+  import { getTopLevelNodes } from '@/components/common/disciplines/DisciplineTreeService';
+
   import DInputDate from '@/components/Deipify/DInputDate/DInputDate';
   import DChartPie from '@/components/Deipify/DCharts/DChartPie';
   import DChartArea from '@/components/Deipify/DCharts/DChartArea';
@@ -177,10 +181,13 @@
       return {
         growthRateFromDateMenu: false,
         growthRateToDateMenu: false,
-        growthRateFromDate: this.moment().subtract(7, 'days').format('YYYY-MM'),
-        growthRateToDate: this.moment().format('YYYY-MM'),
+        growthRateFromDate: this.moment()
+          .subtract(7, 'days')
+          .format('YYYY-MM'),
+        growthRateToDate: this.moment()
+          .format('YYYY-MM'),
         growthRateDiscipline: '',
-        disciplines: ['Geomchemisty', 'Biology', 'Chemistry', 'Physics', 'Genetics', 'Bioinformatics', 'Genomics', 'Bioacoustics']
+        // disciplines: ['Geomchemisty', 'Biology', 'Chemistry', 'Physics', 'Genetics', 'Bioinformatics', 'Genomics', 'Bioacoustics']
       };
     },
     methods: {
@@ -189,8 +196,41 @@
       },
       goToParticipants(e) {
         console.log(e);
+      },
+
+
+      loadDisciplineEciHistory() { // temp
+        const disciplineId = this.selectedEciDisciplineId;
+        const researchContentId = this.content.id;
+
+        this.eciHistoryRecordsTable.loading = true;
+        const cachedRecords = this.$store.getters['rcd/eciHistoryByDiscipline'](
+          disciplineId
+        );
+        if (cachedRecords == null) {
+          this.$store
+            .dispatch('rcd/loadResearchContentEciHistoryRecords', {
+              researchContentId,
+              disciplineId
+            })
+            .then(() => {
+              const records = this.$store.getters['rcd/eciHistoryByDiscipline'](
+                disciplineId
+              );
+              this.eciHistoryRecordsTable.items = records.reverse();
+              this.eciHistoryRecordsTable.pagination.page = 1;
+              this.eciHistoryRecordsTable.loading = false;
+              this.eciHistoryRecordsTable.totalItems = records.length;
+            });
+        } else {
+          this.eciHistoryRecordsTable.items = cachedRecords.reverse();
+          this.eciHistoryRecordsTable.pagination.page = 1;
+          this.eciHistoryRecordsTable.loading = false;
+          this.eciHistoryRecordsTable.totalItems = cachedRecords.length;
+        }
       }
     },
+
     computed: {
       ...mapGetters({
         disciplinesExpertiseStats: 'overview/disciplinesExpertiseStats',
@@ -198,21 +238,349 @@
         researchContentsExpertiseHistory: 'overview/researchContentsExpertiseHistory'
       }),
 
+      disciplines() {
+        return getTopLevelNodes().map((d) => ({ external_id: d.id, label: d.label }));
+      },
+
       chartData() {
         return [
           ['Month', ...this.disciplines],
-          [{ v: '2020-01', f: 'Jun' }, { v: 0.018, f: '1.8%' }, { v: 0.005, f: `${this.toDeipPercent(0.005)}%` }, { v: 0.021, f: `${this.toDeipPercent(0.021)}%` }, { v: 0.016, f: `${this.toDeipPercent(0.016)}%` }, { v: 0.015, f: `${this.toDeipPercent(0.015)}%` }, { v: 0.015, f: `${this.toDeipPercent(0.015)}%` }, { v: 0.005, f: `${this.toDeipPercent(0.005)}%` }, { v: 0.01, f: `${this.toDeipPercent(0.01)}%` }],
-          [{ v: '2020-02', f: 'Feb' }, { v: 0.018, f: '1.8%' }, { v: 0.005, f: `${this.toDeipPercent(0.005)}%` }, { v: 0.021, f: `${this.toDeipPercent(0.021)}%` }, { v: 0.016, f: `${this.toDeipPercent(0.016)}%` }, { v: 0.015, f: `${this.toDeipPercent(0.015)}%` }, { v: 0.015, f: `${this.toDeipPercent(0.015)}%` }, { v: 0.005, f: `${this.toDeipPercent(0.005)}%` }, { v: 0.01, f: `${this.toDeipPercent(0.01)}%` }],
-          [{ v: '2020-03', f: 'Mar' }, { v: 0.018, f: '1.8%' }, { v: 0.005, f: `${this.toDeipPercent(0.005)}%` }, { v: 0.021, f: `${this.toDeipPercent(0.021)}%` }, { v: 0.016, f: `${this.toDeipPercent(0.016)}%` }, { v: 0.015, f: `${this.toDeipPercent(0.015)}%` }, { v: 0.015, f: `${this.toDeipPercent(0.015)}%` }, { v: 0.005, f: `${this.toDeipPercent(0.005)}%` }, { v: 0.01, f: `${this.toDeipPercent(0.01)}%` }],
-          [{ v: '2020-04', f: 'Apr' }, { v: 0.018, f: '1.8%' }, { v: 0.005, f: `${this.toDeipPercent(0.005)}%` }, { v: 0.021, f: `${this.toDeipPercent(0.021)}%` }, { v: 0.016, f: `${this.toDeipPercent(0.016)}%` }, { v: 0.015, f: `${this.toDeipPercent(0.015)}%` }, { v: 0.015, f: `${this.toDeipPercent(0.015)}%` }, { v: 0.005, f: `${this.toDeipPercent(0.005)}%` }, { v: 0.01, f: `${this.toDeipPercent(0.01)}%` }],
-          [{ v: '2020-05', f: 'May' }, { v: 0.018, f: '1.8%' }, { v: 0.005, f: `${this.toDeipPercent(0.005)}%` }, { v: 0.021, f: `${this.toDeipPercent(0.021)}%` }, { v: 0.016, f: `${this.toDeipPercent(0.016)}%` }, { v: 0.015, f: `${this.toDeipPercent(0.015)}%` }, { v: 0.015, f: `${this.toDeipPercent(0.015)}%` }, { v: 0.005, f: `${this.toDeipPercent(0.005)}%` }, { v: 0.01, f: `${this.toDeipPercent(0.01)}%` }],
-          [{ v: '2020-06', f: 'June' }, { v: 0.018, f: '1.8%' }, { v: 0.005, f: `${this.toDeipPercent(0.005)}%` }, { v: 0.021, f: `${this.toDeipPercent(0.021)}%` }, { v: 0.016, f: `${this.toDeipPercent(0.016)}%` }, { v: 0.015, f: `${this.toDeipPercent(0.015)}%` }, { v: 0.015, f: `${this.toDeipPercent(0.015)}%` }, { v: 0.005, f: `${this.toDeipPercent(0.005)}%` }, { v: 0.01, f: `${this.toDeipPercent(0.01)}%` }],
-          [{ v: '2020-07', f: 'July' }, { v: 0.018, f: '1.8%' }, { v: 0.005, f: `${this.toDeipPercent(0.005)}%` }, { v: 0.021, f: `${this.toDeipPercent(0.021)}%` }, { v: 0.016, f: `${this.toDeipPercent(0.016)}%` }, { v: 0.015, f: `${this.toDeipPercent(0.015)}%` }, { v: 0.015, f: `${this.toDeipPercent(0.015)}%` }, { v: 0.005, f: `${this.toDeipPercent(0.005)}%` }, { v: 0.01, f: `${this.toDeipPercent(0.01)}%` }],
-          [{ v: '2020-08', f: 'Aug' }, { v: 0.018, f: '1.8%' }, { v: 0.005, f: `${this.toDeipPercent(0.005)}%` }, { v: 0.021, f: `${this.toDeipPercent(0.021)}%` }, { v: 0.016, f: `${this.toDeipPercent(0.016)}%` }, { v: 0.015, f: `${this.toDeipPercent(0.015)}%` }, { v: 0.015, f: `${this.toDeipPercent(0.015)}%` }, { v: 0.005, f: `${this.toDeipPercent(0.005)}%` }, { v: 0.01, f: `${this.toDeipPercent(0.01)}%` }],
-          [{ v: '2020-09', f: 'Sep' }, { v: 0.018, f: '1.8%' }, { v: 0.005, f: `${this.toDeipPercent(0.005)}%` }, { v: 0.021, f: `${this.toDeipPercent(0.021)}%` }, { v: 0.016, f: `${this.toDeipPercent(0.016)}%` }, { v: 0.015, f: `${this.toDeipPercent(0.015)}%` }, { v: 0.015, f: `${this.toDeipPercent(0.015)}%` }, { v: 0.005, f: `${this.toDeipPercent(0.005)}%` }, { v: 0.01, f: `${this.toDeipPercent(0.01)}%` }],
-          [{ v: '2020-10', f: 'Oct' }, { v: 0.018, f: '1.8%' }, { v: 0.005, f: `${this.toDeipPercent(0.005)}%` }, { v: 0.021, f: `${this.toDeipPercent(0.021)}%` }, { v: 0.016, f: `${this.toDeipPercent(0.016)}%` }, { v: 0.015, f: `${this.toDeipPercent(0.015)}%` }, { v: 0.015, f: `${this.toDeipPercent(0.015)}%` }, { v: 0.005, f: `${this.toDeipPercent(0.005)}%` }, { v: 0.01, f: `${this.toDeipPercent(0.01)}%` }],
-          [{ v: '2020-11', f: 'Nov' }, { v: 0.018, f: '1.8%' }, { v: 0.005, f: `${this.toDeipPercent(0.005)}%` }, { v: 0.021, f: `${this.toDeipPercent(0.021)}%` }, { v: 0.016, f: `${this.toDeipPercent(0.016)}%` }, { v: 0.015, f: `${this.toDeipPercent(0.015)}%` }, { v: 0.015, f: `${this.toDeipPercent(0.015)}%` }, { v: 0.005, f: `${this.toDeipPercent(0.005)}%` }, { v: 0.01, f: `${this.toDeipPercent(0.01)}%` }],
-          [{ v: '2020-12', f: 'Dec' }, { v: 0.018, f: '1.8%' }, { v: 0.005, f: `${this.toDeipPercent(0.005)}%` }, { v: 0.021, f: `${this.toDeipPercent(0.021)}%` }, { v: 0.016, f: `${this.toDeipPercent(0.016)}%` }, { v: 0.015, f: `${this.toDeipPercent(0.015)}%` }, { v: 0.015, f: `${this.toDeipPercent(0.015)}%` }, { v: 0.005, f: `${this.toDeipPercent(0.005)}%` }, { v: 0.01, f: `${this.toDeipPercent(0.01)}%` }]
+          [{
+            v: '2020-01',
+            f: 'Jun'
+          }, {
+            v: 0.018,
+            f: '1.8%'
+          }, {
+            v: 0.005,
+            f: `${this.toDeipPercent(0.005)}%`
+          }, {
+            v: 0.021,
+            f: `${this.toDeipPercent(0.021)}%`
+          }, {
+            v: 0.016,
+            f: `${this.toDeipPercent(0.016)}%`
+          }, {
+            v: 0.015,
+            f: `${this.toDeipPercent(0.015)}%`
+          }, {
+            v: 0.015,
+            f: `${this.toDeipPercent(0.015)}%`
+          }, {
+            v: 0.005,
+            f: `${this.toDeipPercent(0.005)}%`
+          }, {
+            v: 0.01,
+            f: `${this.toDeipPercent(0.01)}%`
+          }],
+          [{
+            v: '2020-02',
+            f: 'Feb'
+          }, {
+            v: 0.018,
+            f: '1.8%'
+          }, {
+            v: 0.005,
+            f: `${this.toDeipPercent(0.005)}%`
+          }, {
+            v: 0.021,
+            f: `${this.toDeipPercent(0.021)}%`
+          }, {
+            v: 0.016,
+            f: `${this.toDeipPercent(0.016)}%`
+          }, {
+            v: 0.015,
+            f: `${this.toDeipPercent(0.015)}%`
+          }, {
+            v: 0.015,
+            f: `${this.toDeipPercent(0.015)}%`
+          }, {
+            v: 0.005,
+            f: `${this.toDeipPercent(0.005)}%`
+          }, {
+            v: 0.01,
+            f: `${this.toDeipPercent(0.01)}%`
+          }],
+          [{
+            v: '2020-03',
+            f: 'Mar'
+          }, {
+            v: 0.018,
+            f: '1.8%'
+          }, {
+            v: 0.005,
+            f: `${this.toDeipPercent(0.005)}%`
+          }, {
+            v: 0.021,
+            f: `${this.toDeipPercent(0.021)}%`
+          }, {
+            v: 0.016,
+            f: `${this.toDeipPercent(0.016)}%`
+          }, {
+            v: 0.015,
+            f: `${this.toDeipPercent(0.015)}%`
+          }, {
+            v: 0.015,
+            f: `${this.toDeipPercent(0.015)}%`
+          }, {
+            v: 0.005,
+            f: `${this.toDeipPercent(0.005)}%`
+          }, {
+            v: 0.01,
+            f: `${this.toDeipPercent(0.01)}%`
+          }],
+          [{
+            v: '2020-04',
+            f: 'Apr'
+          }, {
+            v: 0.018,
+            f: '1.8%'
+          }, {
+            v: 0.005,
+            f: `${this.toDeipPercent(0.005)}%`
+          }, {
+            v: 0.021,
+            f: `${this.toDeipPercent(0.021)}%`
+          }, {
+            v: 0.016,
+            f: `${this.toDeipPercent(0.016)}%`
+          }, {
+            v: 0.015,
+            f: `${this.toDeipPercent(0.015)}%`
+          }, {
+            v: 0.015,
+            f: `${this.toDeipPercent(0.015)}%`
+          }, {
+            v: 0.005,
+            f: `${this.toDeipPercent(0.005)}%`
+          }, {
+            v: 0.01,
+            f: `${this.toDeipPercent(0.01)}%`
+          }],
+          [{
+            v: '2020-05',
+            f: 'May'
+          }, {
+            v: 0.018,
+            f: '1.8%'
+          }, {
+            v: 0.005,
+            f: `${this.toDeipPercent(0.005)}%`
+          }, {
+            v: 0.021,
+            f: `${this.toDeipPercent(0.021)}%`
+          }, {
+            v: 0.016,
+            f: `${this.toDeipPercent(0.016)}%`
+          }, {
+            v: 0.015,
+            f: `${this.toDeipPercent(0.015)}%`
+          }, {
+            v: 0.015,
+            f: `${this.toDeipPercent(0.015)}%`
+          }, {
+            v: 0.005,
+            f: `${this.toDeipPercent(0.005)}%`
+          }, {
+            v: 0.01,
+            f: `${this.toDeipPercent(0.01)}%`
+          }],
+          [{
+            v: '2020-06',
+            f: 'June'
+          }, {
+            v: 0.018,
+            f: '1.8%'
+          }, {
+            v: 0.005,
+            f: `${this.toDeipPercent(0.005)}%`
+          }, {
+            v: 0.021,
+            f: `${this.toDeipPercent(0.021)}%`
+          }, {
+            v: 0.016,
+            f: `${this.toDeipPercent(0.016)}%`
+          }, {
+            v: 0.015,
+            f: `${this.toDeipPercent(0.015)}%`
+          }, {
+            v: 0.015,
+            f: `${this.toDeipPercent(0.015)}%`
+          }, {
+            v: 0.005,
+            f: `${this.toDeipPercent(0.005)}%`
+          }, {
+            v: 0.01,
+            f: `${this.toDeipPercent(0.01)}%`
+          }],
+          [{
+            v: '2020-07',
+            f: 'July'
+          }, {
+            v: 0.018,
+            f: '1.8%'
+          }, {
+            v: 0.005,
+            f: `${this.toDeipPercent(0.005)}%`
+          }, {
+            v: 0.021,
+            f: `${this.toDeipPercent(0.021)}%`
+          }, {
+            v: 0.016,
+            f: `${this.toDeipPercent(0.016)}%`
+          }, {
+            v: 0.015,
+            f: `${this.toDeipPercent(0.015)}%`
+          }, {
+            v: 0.015,
+            f: `${this.toDeipPercent(0.015)}%`
+          }, {
+            v: 0.005,
+            f: `${this.toDeipPercent(0.005)}%`
+          }, {
+            v: 0.01,
+            f: `${this.toDeipPercent(0.01)}%`
+          }],
+          [{
+            v: '2020-08',
+            f: 'Aug'
+          }, {
+            v: 0.018,
+            f: '1.8%'
+          }, {
+            v: 0.005,
+            f: `${this.toDeipPercent(0.005)}%`
+          }, {
+            v: 0.021,
+            f: `${this.toDeipPercent(0.021)}%`
+          }, {
+            v: 0.016,
+            f: `${this.toDeipPercent(0.016)}%`
+          }, {
+            v: 0.015,
+            f: `${this.toDeipPercent(0.015)}%`
+          }, {
+            v: 0.015,
+            f: `${this.toDeipPercent(0.015)}%`
+          }, {
+            v: 0.005,
+            f: `${this.toDeipPercent(0.005)}%`
+          }, {
+            v: 0.01,
+            f: `${this.toDeipPercent(0.01)}%`
+          }],
+          [{
+            v: '2020-09',
+            f: 'Sep'
+          }, {
+            v: 0.018,
+            f: '1.8%'
+          }, {
+            v: 0.005,
+            f: `${this.toDeipPercent(0.005)}%`
+          }, {
+            v: 0.021,
+            f: `${this.toDeipPercent(0.021)}%`
+          }, {
+            v: 0.016,
+            f: `${this.toDeipPercent(0.016)}%`
+          }, {
+            v: 0.015,
+            f: `${this.toDeipPercent(0.015)}%`
+          }, {
+            v: 0.015,
+            f: `${this.toDeipPercent(0.015)}%`
+          }, {
+            v: 0.005,
+            f: `${this.toDeipPercent(0.005)}%`
+          }, {
+            v: 0.01,
+            f: `${this.toDeipPercent(0.01)}%`
+          }],
+          [{
+            v: '2020-10',
+            f: 'Oct'
+          }, {
+            v: 0.018,
+            f: '1.8%'
+          }, {
+            v: 0.005,
+            f: `${this.toDeipPercent(0.005)}%`
+          }, {
+            v: 0.021,
+            f: `${this.toDeipPercent(0.021)}%`
+          }, {
+            v: 0.016,
+            f: `${this.toDeipPercent(0.016)}%`
+          }, {
+            v: 0.015,
+            f: `${this.toDeipPercent(0.015)}%`
+          }, {
+            v: 0.015,
+            f: `${this.toDeipPercent(0.015)}%`
+          }, {
+            v: 0.005,
+            f: `${this.toDeipPercent(0.005)}%`
+          }, {
+            v: 0.01,
+            f: `${this.toDeipPercent(0.01)}%`
+          }],
+          [{
+            v: '2020-11',
+            f: 'Nov'
+          }, {
+            v: 0.018,
+            f: '1.8%'
+          }, {
+            v: 0.005,
+            f: `${this.toDeipPercent(0.005)}%`
+          }, {
+            v: 0.021,
+            f: `${this.toDeipPercent(0.021)}%`
+          }, {
+            v: 0.016,
+            f: `${this.toDeipPercent(0.016)}%`
+          }, {
+            v: 0.015,
+            f: `${this.toDeipPercent(0.015)}%`
+          }, {
+            v: 0.015,
+            f: `${this.toDeipPercent(0.015)}%`
+          }, {
+            v: 0.005,
+            f: `${this.toDeipPercent(0.005)}%`
+          }, {
+            v: 0.01,
+            f: `${this.toDeipPercent(0.01)}%`
+          }],
+          [{
+            v: '2020-12',
+            f: 'Dec'
+          }, {
+            v: 0.018,
+            f: '1.8%'
+          }, {
+            v: 0.005,
+            f: `${this.toDeipPercent(0.005)}%`
+          }, {
+            v: 0.021,
+            f: `${this.toDeipPercent(0.021)}%`
+          }, {
+            v: 0.016,
+            f: `${this.toDeipPercent(0.016)}%`
+          }, {
+            v: 0.015,
+            f: `${this.toDeipPercent(0.015)}%`
+          }, {
+            v: 0.015,
+            f: `${this.toDeipPercent(0.015)}%`
+          }, {
+            v: 0.005,
+            f: `${this.toDeipPercent(0.005)}%`
+          }, {
+            v: 0.01,
+            f: `${this.toDeipPercent(0.01)}%`
+          }]
           // ['Feb', 1.8, 0.5, 2.1, 1.7, 1.5, 1.5, 0.5, 1.0],
           // ['Mar', 1.8, 0.5, 2.1, 1.7, 1.5, 1.5, 0.5, 1.0],
           // ['Apr', 1.8, 0.5, 2.1, 1.7, 1.5, 1.5, 0.5, 1.0],
@@ -227,7 +595,9 @@
         ].filter((item, i) => {
           if (i != 0) {
             console.log(item[0].v);
-            return this.moment(item[0].v).isSameOrBefore(this.growthRateToDate) && this.moment(item[0].v).isSameOrAfter(this.growthRateFromDate);
+            return this.moment(item[0].v)
+              .isSameOrBefore(this.growthRateToDate) && this.moment(item[0].v)
+              .isSameOrAfter(this.growthRateFromDate);
           }
         });
       },
@@ -249,16 +619,13 @@
 
       //= ====================
 
-      eciValueData() {
-        return this.disciplinesExpertiseStats.map((item) => [
-          item.discipline_name,
-          item.eci
-        ]);
-      },
       eciValueDataTable() {
         return [
           ...[['Discipline', 'Value']],
-          ...this.eciValueData
+          ...this.disciplinesExpertiseStats.map((item) => [
+            item.discipline_name,
+            item.eci
+          ])
         ];
       },
 
@@ -278,7 +645,8 @@
             }
           }
         }
-        return Object.keys(stamps).map((key) => [key, ...stamps[key]]);
+        return Object.keys(stamps)
+          .map((key) => [key, ...stamps[key]]);
       },
       eciOverviewDataTable() {
         return [
@@ -306,7 +674,7 @@
             width: '100%',
             height: 0
           },
-          slices: chartGradient(this.eciValueData.length)
+          slices: chartGradient(this.eciValueDataTable.length - 1)
             .map((color) => ({
               color
             }))
@@ -314,9 +682,10 @@
       }
     },
     created() {
-      this.$store.dispatch('overview/getAll').then(() => {
-        this.$setReady();
-      });
+      this.$store.dispatch('overview/getAll')
+        .then(() => {
+          this.$setReady();
+        });
     }
   };
 </script>
