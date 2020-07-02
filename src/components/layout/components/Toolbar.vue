@@ -144,13 +144,13 @@
             //   label: 'Portfolio',
             //   to: { name: 'InvestorPortfolio' }
             // },
-            // {
-            //   label: 'Wallet',
-            //   to: {
-            //     name: 'UserWallet',
-            //     params: { account_name: this.user.username }
-            //   }
-            // }
+            {
+              label: 'Wallet',
+              to: {
+                name: 'UserWallet',
+                params: { account_name: this.user.username }
+              }
+            }
           ];
         }
 
