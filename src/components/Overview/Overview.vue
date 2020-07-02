@@ -128,13 +128,13 @@
         <v-row>
           <v-col cols="3">
             <d-input-date
-              v-model="eciOverviewFilter.dateFrom"
+              v-model="eciDetailedOverviewFilter.dateFrom"
               label="From"
             />
           </v-col>
           <v-col cols="3">
             <d-input-date
-              v-model="eciOverviewFilter.dateTo"
+              v-model="eciDetailedOverviewFilter.dateTo"
               label="To"
             />
           </v-col>
@@ -143,28 +143,69 @@
           </v-col>
           <v-col cols="3">
             <v-select
-              v-model="eciOverviewFilter.discipline"
+              v-model="eciDetailedOverviewFilter.discipline"
               label="Disciplines"
               filled
               :items="disciplines"
               item-text="label"
               item-value="external_id"
+              @change="updateDetailedChart"
             />
           </v-col>
         </v-row>
+
+        <d-chart-line
+          :data="eciHistoryByDisciplineChartData"
+          :options="{legend: 'none'}"
+        />
+
+        <v-data-table
+          v-custom="'hover-row'"
+
+          :hide-default-footer="eciHistoryByDiscipline.length < 50"
+          :footer-props="{itemsPerPageOptions: [5, 10, 20, 50, -1]}"
+          :items-per-page="50"
+
+          :headers="eciDetailedOverviewTableHeaders"
+          :items="eciHistoryByDiscipline"
+        >
+          <template v-slot:item.type="{ item }">
+            <v-chip :color="contributionColor[item.contribution_type]" text-color="white">
+              {{ item.actionText }}
+            </v-chip>
+          </template>
+
+          <template v-slot:item.title="{ item }">
+            <router-link
+              v-if="item.meta.link"
+              class="a"
+              :to="item.meta.link"
+            >
+              {{ item.meta.title }}
+            </router-link>
+            <span v-else class="text-body-2">{{ item.meta.title }}</span>
+          </template>
+
+          <template v-slot:item.date="{ item }">
+            <div class="text-no-wrap">{{ moment(item.timestamp).format('D MMM YYYY') }}</div>
+
+          </template>
+
+          <template v-slot:item.delta="{ item }">
+            <div
+              class="text-no-wrap rounded-sm"
+              :class="{ 'success lighten-4': item.delta > 0, 'error lighten-4': item.delta < 0 }"
+            >
+              {{ item.delta }}
+            </div>
+          </template>
+
+          <template v-slot:item.eci="{ item }">
+            {{ item.eci }}
+          </template>
+
+        </v-data-table>
       </content-block>
-
-      <v-sheet>
-
-
-
-
-        <!--        <GChart-->
-        <!--          type="LineChart"-->
-        <!--          :data="eciDisciplineHistoryRecordsChart.data"-->
-        <!--          :options="eciDisciplineHistoryRecordsChart.options"-->
-        <!--        />-->
-      </v-sheet>
     </layout-section>
   </app-layout>
 </template>
@@ -181,12 +222,15 @@
   import DChartPie from '@/components/Deipify/DCharts/DChartPie';
   import DChartArea from '@/components/Deipify/DCharts/DChartArea';
   import ContentBlock from '@/components/layout/components/ContentBlock';
+  import DChartLine from '@/components/Deipify/DCharts/DChartLine';
+  import { EXPERTISE_CONTRIBUTION_TYPE } from '@/variables';
 
   import fakeData from './fakeGrowthRateData.json';
 
   export default {
     name: 'Overview',
     components: {
+      DChartLine,
       ContentBlock,
       DChartArea,
       DChartPie,
@@ -196,10 +240,50 @@
     },
     data() {
       return {
-        eciOverviewFilter: {
+        eciDetailedOverviewFilter: {
           discipline: null,
           dateFrom: '2020-06-11',
           dateTo: '2020-07-02'
+        },
+        eciDetailedOverviewTableHeaders: [
+          {
+            text: 'Type',
+            align: 'left',
+            value: 'type',
+            sortable: false
+          },
+          {
+            text: 'Title',
+            align: 'left',
+            value: 'title',
+            sortable: false
+          },
+          {
+            text: 'Date',
+            align: 'center',
+            value: 'date',
+            sortable: false,
+            class: 'white-space-nowrap'
+          },
+          {
+            text: 'Reward ECI',
+            align: 'center',
+            sortable: false,
+            value: 'delta',
+            class: 'white-space-nowrap'
+          },
+          {
+            text: 'Total ECI',
+            align: 'center',
+            sortable: false,
+            value: 'eci',
+            class: 'white-space-nowrap'
+          }
+        ],
+        contributionColor: {
+          [EXPERTISE_CONTRIBUTION_TYPE.REVIEW]: '#161F63',
+          [EXPERTISE_CONTRIBUTION_TYPE.REVIEW_SUPPORT]: '#5ABAD1',
+          [EXPERTISE_CONTRIBUTION_TYPE.PUBLICATION]: '#8DDAB3'
         },
 
         growthRateFromDate: this.moment().subtract(7, 'days').format('YYYY-MM'),
@@ -213,36 +297,8 @@
         console.log(e);
       },
 
-
-      loadDisciplineEciHistory() { // temp
-        const disciplineId = this.selectedEciDisciplineId;
-        const researchContentId = this.content.id;
-
-        this.eciHistoryRecordsTable.loading = true;
-        const cachedRecords = this.$store.getters['rcd/eciHistoryByDiscipline'](
-          disciplineId
-        );
-        if (cachedRecords == null) {
-          this.$store
-            .dispatch('rcd/loadResearchContentEciHistoryRecords', {
-              researchContentId,
-              disciplineId
-            })
-            .then(() => {
-              const records = this.$store.getters['rcd/eciHistoryByDiscipline'](
-                disciplineId
-              );
-              this.eciHistoryRecordsTable.items = records.reverse();
-              this.eciHistoryRecordsTable.pagination.page = 1;
-              this.eciHistoryRecordsTable.loading = false;
-              this.eciHistoryRecordsTable.totalItems = records.length;
-            });
-        } else {
-          this.eciHistoryRecordsTable.items = cachedRecords.reverse();
-          this.eciHistoryRecordsTable.pagination.page = 1;
-          this.eciHistoryRecordsTable.loading = false;
-          this.eciHistoryRecordsTable.totalItems = cachedRecords.length;
-        }
+      updateDetailedChart() {
+        this.$store.dispatch('overview/getEciHistoryByDiscipline', this.eciDetailedOverviewFilter.discipline)
       }
     },
 
@@ -250,7 +306,7 @@
       ...mapGetters({
         disciplinesExpertiseStats: 'overview/disciplinesExpertiseStats',
         disciplinesExpertiseStatsHistory: 'overview/disciplinesExpertiseStatsHistory',
-        researchContentsExpertiseHistory: 'overview/researchContentsExpertiseHistory',
+        eciHistoryByDiscipline: 'overview/eciHistoryByDiscipline'
         criteriaTypes: 'overview/criteriaTypes'
       }),
 
@@ -333,8 +389,10 @@
             .map((color) => ({
               color
             }))
-        }
+        };
       },
+
+      //= ====================
 
       eciValueDataTable() {
         return [
@@ -372,6 +430,17 @@
         ];
       },
 
+      //= ====================
+
+      eciHistoryByDisciplineChartData() {
+        return [
+          ['Date', 'Value'],
+          ...this.eciHistoryByDiscipline.map(
+            (item) => ([new Date(item.timestamp), item.eci])
+          )
+        ];
+      },
+
       // LEGEND
 
       uniLegendOptions() {
@@ -398,13 +467,17 @@
         };
       }
     },
-    created() {
-      this.$store.dispatch('overview/getAll')
-        .then(() => {
-          this.eciOverviewFilter.discipline = this.disciplines[0].external_id
 
-          this.$setReady();
-        });
+    created() {
+      this.eciDetailedOverviewFilter.discipline = this.disciplines[0].external_id;
+
+      Promise.all([
+        this.$store.dispatch('overview/getDisciplinesExpertiseStats'),
+        this.$store.dispatch('overview/getDisciplinesExpertiseStatsHistory'),
+        this.$store.dispatch('overview/getEciHistoryByDiscipline', this.eciDetailedOverviewFilter.discipline),
+      ]).then(() => {
+        this.$setReady();
+      });
     }
   };
 </script>
