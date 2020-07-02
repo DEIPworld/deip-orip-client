@@ -57,7 +57,7 @@
           Overview
         </div>
         <v-row no-gutters class="mt-4">
-          <v-col cols="4" class="px-2">
+          <v-col cols="3" class="px-2">
             <GChart
               type="PieChart"
               :settings="{ packages: ['corechart'] }"
@@ -65,17 +65,17 @@
               :options="contributionsAllocationChartOptions"
             />
           </v-col>
-          <v-col cols="8">
+          <v-col cols="9">
             <v-row no-gutters class="full-height">
-              <v-divider
+              <!-- <v-divider
                 vertical
                 inset
                 class="ma-0"
                 style="max-height: 100%"
-              />
-              <v-col cols="2" class="px-2">
+              /> -->
+              <v-col cols="3" class="divider-border-left">
                 <div class="display-flex justify-center align-center flex-column full-height">
-                  <div class="text-h6 grey--text text-center">
+                  <div class="text-subtitle-1 grey--text text-center">
                     Expertise Contribution Index
                   </div>
                   <div class="text-subtitle-1 mt-2">
@@ -83,15 +83,15 @@
                   </div>
                 </div>
               </v-col>
-              <v-divider
+              <!-- <v-divider
                 vertical
                 inset
                 class="ma-0"
                 style="max-height: 100%"
-              />
-              <v-col cols="2" class="px-2">
+              /> -->
+              <v-col cols="3" class="divider-border-left">
                 <div class="display-flex justify-center align-center flex-column full-height">
-                  <div class="text-h6 grey--text text-center">
+                  <div class="text-subtitle-1 grey--text text-center">
                     Contributions
                   </div>
                   <div class="text-subtitle-1 mt-2">
@@ -99,15 +99,15 @@
                   </div>
                 </div>
               </v-col>
-              <v-divider
+              <!-- <v-divider
                 vertical
                 inset
                 class="ma-0"
                 style="max-height: 100%"
-              />
-              <v-col cols="2" class="px-2 text-h5 primary--text">
+              /> -->
+              <v-col cols="2" class="divider-border-left text-h5 primary--text">
                 <div class="display-flex justify-center align-center flex-column full-height">
-                  <div class="text-h6 grey--text text-center">
+                  <div class="text-subtitle-1 grey--text text-center">
                     Percentile rank
                   </div>
                   <div class="text-subtitle-1 mt-2">
@@ -115,15 +115,15 @@
                   </div>
                 </div>
               </v-col>
-              <v-divider
+              <!-- <v-divider
                 vertical
                 inset
                 class="ma-0"
                 style="max-height: 100%"
-              />
-              <v-col cols="2" class="px-2">
+              /> -->
+              <v-col cols="2" class="divider-border-left">
                 <div class="display-flex justify-center align-center flex-column full-height">
-                  <div class="text-h6 grey--text text-center">
+                  <div class="text-subtitle-1 grey--text text-center">
                     Citations
                   </div>
                   <div class="text-subtitle-1 mt-2">
@@ -131,15 +131,15 @@
                   </div>
                 </div>
               </v-col>
-              <v-divider
+              <!-- <v-divider
                 vertical
                 inset
                 class="ma-0"
                 style="max-height: 100%"
-              />
-              <v-col cols="2" class="px-2">
+              /> -->
+              <v-col cols="2" class="divider-border-left">
                 <div class="display-flex justify-center align-center flex-column full-height">
-                  <div class="text-h6 grey--text text-center">
+                  <div class="text-subtitle-1 grey--text text-center">
                     H-index
                   </div>
                   <div class="text-subtitle-1 mt-2">
@@ -412,12 +412,13 @@
 
         contributionsAllocationChartOptions: {
           title: '',
-          legend: { position: 'right', alignment: 'center' },
+          legend: { position: 'bottom', alignment: 'center' },
           colors: ['#3984B6', '#5ABAD1', '#161F63', '#B7DFCB'],
           chartArea: {
             right: 0,
+            top: 0,
             width: '100%',
-            height: '100%'
+            height: '90%'
           },
 
           width: '100%',
@@ -574,5 +575,9 @@
   }
   .eci-down {
     background-color: #ffbdbd;
+  }
+  .divider-border-left{
+    border-left: 1px solid;
+    border-color: rgba(0, 0, 0, 0.12);
   }
 </style>

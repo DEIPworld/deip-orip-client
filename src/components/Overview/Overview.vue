@@ -54,6 +54,7 @@
                 v-model="growthRateFromDate"
                 label="To"
                 :x-props="{
+                  'hide-details': true,
                   type: 'month',
                   max:moment(growthRateToDate).subtract(1, 'days').format('YYYY-MM-DD'),
                   min:moment('2018-01-01').format('YYYY-MM-DD'),
@@ -65,6 +66,7 @@
                 v-model="growthRateToDate"
                 label="To"
                 :x-props="{
+                  'hide-details': true,
                   type: 'month',
                   max:moment().format('YYYY-MM'),
                   min:moment(growthRateFromDate).add(1, 'days').format('YYYY-MM'),
@@ -75,6 +77,7 @@
               <v-select
                 v-model="growthRateDiscipline"
                 filled
+                hide-details
                 :items="[{label: 'All', external_id: 'all'}, ...disciplines]"
                 item-text="label"
                 item-value="external_id"
@@ -84,7 +87,7 @@
           </v-row>
           <GChart
             ref="growthRateChart"
-            class="chart mt-6"
+            class="chart"
             type="ColumnChart"
             :data="growthRateChartData"
             :options="growthRateChartOptions"
@@ -96,7 +99,7 @@
       <v-row>
         <v-col cols="10">
           <div class="text-h5">Distribution impact</div>
-          <div class="text-body-2 text--secondary">Last update 05 May 2020</div>
+          <div class="text-body-2 text--secondary">Updated today</div>
           <v-row>
             <v-col cols="4">
               <v-select
@@ -111,7 +114,7 @@
           </v-row>
           <GChart
             ref="distributionChart"
-            class="chart mt-6"
+            class="chart"
             type="PieChart"
             :data="distributionChartData"
             :options="distributionChartOptions"
@@ -276,6 +279,7 @@
           },
           chartArea: {
             width: '85%',
+            height: '80%',
             left: 24
           },
           vAxis: {
