@@ -43,6 +43,7 @@ const state = {
   researchesRef: [],
   criteriaTypes,
   contributionTypesNamesMap,
+  eciStats: undefined,
   eciHistoryByDiscipline: {},
 
   filter: {
@@ -84,6 +85,7 @@ const getters = {
 
   filter: (state) => state.filter,
 
+  eciStats: (state, getters) => state.eciStats,
   eciHistoryByDisciplineMap: (state, getters) => state.eciHistoryByDiscipline,
 
   eciHistoryByDiscipline: (state, getters) => (disciplineId) => {
@@ -479,6 +481,16 @@ const actions = {
       .finally(() => {
         if (notify) notify();
       });
+  },
+
+  loadAccountEciStats({ commit }, { account, discipline, notify }) {
+    return expertiseContributionsService.getAccountExpertiseStats(account, { discipline })
+      .then((stats) => {
+        commit('SET_ACCOUNT_ECI_STATS', stats);
+      })
+      .finally(() => {
+        if (notify) notify();
+      });
   }
 };
 
@@ -543,6 +555,10 @@ const mutations = {
 
   UPDATE_ECI_HISTORY_FILTER(state, { key, value }) {
     Vue.set(state.filter, key, value);
+  },
+
+  SET_ACCOUNT_ECI_STATS(state, stats) {
+    Vue.set(state, 'eciStats', stats);
   },
 
   RESET_STATE(state) {

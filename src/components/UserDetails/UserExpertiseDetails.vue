@@ -79,7 +79,7 @@
                     Expertise Contribution Index
                   </div>
                   <div class="text-subtitle-1 mt-2">
-                    {{ selectedExpertise.amount }}
+                    {{ eciStats.eci }}
                   </div>
                 </div>
               </v-col>
@@ -95,9 +95,7 @@
                     Contributions
                   </div>
                   <div class="text-subtitle-1 mt-2">
-                    <!-- {{ overview.contributions }} -->
-                    <!-- Alice will have 3 contributions during the demo -->
-                    3
+                    {{ eciStats.contributions.length }}
                   </div>
                 </div>
               </v-col>
@@ -109,8 +107,12 @@
               />
               <v-col cols="2" class="px-2 text-h5 primary--text">
                 <div class="display-flex justify-center align-center flex-column full-height">
-                  <div>TOP <b>{{ overview.percentile }}</b>%</div>
-                  <div>in {{ selectedExpertise.discipline_name }}</div>
+                  <div class="text-h6 grey--text text-center">
+                    Percentile rank
+                  </div>
+                  <div class="text-subtitle-1 mt-2">
+                  <div>{{eciStats.percentile_rank}}</div>
+                  </div>
                 </div>
               </v-col>
               <v-divider
@@ -125,9 +127,7 @@
                     Citations
                   </div>
                   <div class="text-subtitle-1 mt-2">
-                    <!-- {{ overview.contributions }} -->
-                    <!-- Alice will have 30 citations during the demo -->
-                    30
+                    {{ eciStats.researches.length }}
                   </div>
                 </div>
               </v-col>
@@ -143,9 +143,7 @@
                     H-index
                   </div>
                   <div class="text-subtitle-1 mt-2">
-                    <!-- {{ overview.contributions }} -->
-                    <!-- Alice will have 27 h-index during the demo -->
-                    7
+                    {{eciStats.assessment_criteria_sum_weight - eciStats.past_assessment_criteria_sum_weight}}
                   </div>
                 </div>
               </v-col>
@@ -452,6 +450,7 @@
       ...mapGetters({
         userInfo: 'userDetails/userInfo',
         expertise: 'userDetails/expertise',
+        eciStats: 'userDetails/eciStats',
         criteriaTypes: 'userDetails/criteriaTypes',
         criteriaItems: 'userDetails/criteriaItems',
         contributionTypesNamesMap: 'userDetails/contributionTypesNamesMap',
@@ -498,11 +497,13 @@
 
       loadDisciplineEciHistory() {
         const disciplineId = this.selectedEciDisciplineId;
+        const exp = this.expertise.find((e) => e.discipline_id === disciplineId);
         const account = this.userInfo.account.name;
         this.eciHistoryRecordsTable.loading = true;
         const cachedRecords = this.$store.getters['userDetails/eciHistoryByDiscipline'](disciplineId);
+        let promise;
         if (cachedRecords == null) {
-          this.$store.dispatch('userDetails/loadAccountEciHistoryRecords', { account, disciplineId })
+          promise = this.$store.dispatch('userDetails/loadAccountEciHistoryRecords', { account, disciplineId })
             .then(() => {
               const records = this.$store.getters['userDetails/eciHistoryByDiscipline'](disciplineId);
               this.eciHistoryRecordsTable.items = records.reverse();
@@ -511,11 +512,19 @@
               this.eciHistoryRecordsTable.totalItems = records.length;
             });
         } else {
-          this.eciHistoryRecordsTable.items = cachedRecords.reverse();
-          this.eciHistoryRecordsTable.pagination.page = 1;
-          this.eciHistoryRecordsTable.loading = false;
-          this.eciHistoryRecordsTable.totalItems = cachedRecords.length;
+          promise = Promise.resolve()
+            .then(() => {
+              this.eciHistoryRecordsTable.items = cachedRecords.reverse();
+              this.eciHistoryRecordsTable.pagination.page = 1;
+              this.eciHistoryRecordsTable.loading = false;
+              this.eciHistoryRecordsTable.totalItems = cachedRecords.length;
+            })
         }
+
+        return promise
+          .then(() => {
+            return this.$store.dispatch('userDetails/loadAccountEciStats', { account, discipline: exp.discipline_external_id });
+          })
       },
 
       updateEciHistoryFilter({ key, value }) {
@@ -544,10 +553,14 @@
           }
 
           if (this.selectedEciDisciplineId) {
-            this.loadDisciplineEciHistory();
+            this.loadDisciplineEciHistory()
+              .then(() => {
+                this.$setReady(); 
+              })
+          } else {
+            this.$setReady(); 
           }
           
-          this.$setReady(); 
         });
     }
     

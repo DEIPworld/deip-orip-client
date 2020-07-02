@@ -18,7 +18,7 @@
     "@deip/auth-service": "1.12.0",
     "@deip/blockchain-service": "1.28.0",
     "@deip/disciplines-service": "1.28.0",
-    "@deip/expertise-contributions-service": "1.28.0",
+    "@deip/expertise-contributions-service": "1.29.0",
     "@deip/grants-service": "1.21.0",
     "@deip/http-service": "1.1.0",
     "@deip/investments-service": "1.28.0",
