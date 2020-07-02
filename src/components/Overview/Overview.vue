@@ -306,7 +306,7 @@
       ...mapGetters({
         disciplinesExpertiseStats: 'overview/disciplinesExpertiseStats',
         disciplinesExpertiseStatsHistory: 'overview/disciplinesExpertiseStatsHistory',
-        eciHistoryByDiscipline: 'overview/eciHistoryByDiscipline'
+        eciHistoryByDiscipline: 'overview/eciHistoryByDiscipline',
         criteriaTypes: 'overview/criteriaTypes'
       }),
 
