@@ -261,6 +261,7 @@
         for (const discipline of this.disciplinesExpertiseStatsHistory) {
 
           for (const change of discipline.history) {
+            // const date = `Date(${moment(change.timestamp).valueOf()})`;
             const date = new Date(change.timestamp);
             const data = parseFloat(change.share) / 100;
             if (!stamps[date]) {
@@ -290,10 +291,7 @@
             format: 'percent'
           },
           hAxis: {
-            format: 'MMM d, y',
-            gridlines: {
-
-            }
+            format: 'MMM, DD',
           },
           // chartArea: {
           //   left: 50,
