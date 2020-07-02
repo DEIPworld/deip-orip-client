@@ -97,6 +97,16 @@
                 route: { name: 'account.privateKey' }
               }
             ]
+          },
+          {
+            subheader: 'Expertise contribution index',
+            items: [
+              {
+                icon: 'bar_chart',
+                title: 'Overview',
+                route: { name: 'account.expertiseDetails' }
+              }
+            ]
           }
         ]
       };
