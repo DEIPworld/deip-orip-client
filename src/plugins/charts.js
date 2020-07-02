@@ -28,7 +28,7 @@ export const chartPalette = {
   ]
 };
 
-export const chartGradient = (num = 24) => {
+export const chartGradient = (num = 24, debug = false) => {
   const palette = chroma.scale(
     ['#feff9a', '#7eccbb', '#4cb1d0', '#5569ed', '#6846c0']
     // ['#feff9a', '#7eccbb', '#4cb1d0', '#5569ed']
@@ -40,6 +40,11 @@ export const chartGradient = (num = 24) => {
   const result = [];
   for (const c of chunks) {
     result.push(c[51]);
+  }
+
+  if(debug) {
+    console.log(num)
+    console.log(result)
   }
 
   return result;

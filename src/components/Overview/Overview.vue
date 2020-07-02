@@ -5,29 +5,20 @@
         <v-col cols="4">
           <div class="text-h5">Expertise contribution index value</div>
           <div class="text-body-2 text--secondary">Last update 05 May 2020</div>
-          <GChart
-            ref="donutChart"
-            class="chart mt-6"
-            type="PieChart"
+          <d-chart-pie
+            donut
             :data="eciValueDataTable"
-            :options="eciValueOptions"
-            :settings="{ packages: ['corechart'] }"
-            :events="eciValueEvents"
-            style="width: 100%; height: 232px;"
+            :options="{legend: 'none'}"
+            @select="goToParticipants"
           />
         </v-col>
 
         <v-col cols="8">
           <div class="text-h5">Expertise contribution index overview</div>
           <div class="text-body-2 text--secondary">Last update 05 May 2020</div>
-          <GChart
-            class="chart mt-6"
-            ref="eciOverviewChart"
-            type="AreaChart"
+          <d-chart-area
             :data="eciOverviewDataTable"
-            :options="eciOverviewOptions"
-            :settings="{ packages: ['corechart'] }"
-            style="width: 100%; height: 232px;"
+            :options="{legend: 'none', vAxis: { format: '##%' } }"
           />
         </v-col>
 
@@ -124,6 +115,32 @@
         </v-col>
       </v-row>
 
+      <v-sheet>
+        <div class="text-h5">Expertise Contribution Index detailed overview</div>
+
+        <v-row>
+          <v-col cols="3">
+            <d-input-date />
+          </v-col>
+          <v-col cols="3">
+            <d-input-date />
+          </v-col>
+          <v-col cols="3">
+            <v-select filled />
+          </v-col>
+          <v-col cols="3">
+            <v-select filled />
+          </v-col>
+        </v-row>
+
+<!--        <GChart-->
+<!--          type="LineChart"-->
+<!--          :data="eciDisciplineHistoryRecordsChart.data"-->
+<!--          :options="eciDisciplineHistoryRecordsChart.options"-->
+<!--        />-->
+
+      </v-sheet>
+
     </layout-section>
   </app-layout>
 </template>
@@ -131,13 +148,18 @@
 <script>
   import AppLayout from '@/components/layout/components/Layout';
   import LayoutSection from '@/components/layout/components/LayoutSection';
-  import { chartGradient, chartPalette, switchColor } from '@/plugins/charts';
+  import { chartGradient, switchColor } from '@/plugins/charts';
   import { mapGetters } from 'vuex';
-  import { hex } from 'wcag-contrast';
+  import DInputDate from '@/components/Deipify/DInputDate/DInputDate';
+  import DChartPie from '@/components/Deipify/DCharts/DChartPie';
+  import DChartArea from '@/components/Deipify/DCharts/DChartArea';
 
   export default {
     name: 'Overview',
     components: {
+      DChartArea,
+      DChartPie,
+      DInputDate,
       LayoutSection,
       AppLayout
     },
@@ -153,7 +175,10 @@
     },
     methods: {
       changegrowthRateData() {
-        
+
+      },
+      goToParticipants(e) {
+        console.log(e)
       }
     },
     computed: {
@@ -212,6 +237,8 @@
         }
       },
 
+      //=====================
+
       eciValueData() {
         return this.disciplinesExpertiseStats.map((item) => [
           item.discipline_name,
@@ -224,53 +251,22 @@
           ...this.eciValueData
         ];
       },
-      eciValueOptions() {
-        return {
-          pieHole: 0.5,
-          fontSize: 12,
-          fontName: 'Roboto',
-          legend: 'none',
-          chartArea: {
-            left: 16,
-            top: 16,
-            width: 200,
-            height: 200
-          },
-          slices: chartGradient(this.eciValueData.length)
-            .map((color) => ({
-              color,
-              textStyle: {
-                color: switchColor(color)
-              }
-            }))
-        };
-      },
-      eciValueEvents() {
-        return {
-          select: () => {
-            const table = this.$refs.eciValueChart.chartObject;
-            const selection = table.getSelection();
-          }
-        };
-      },
 
       //=====================
 
       eciOverviewData() {
         const stamps = {};
         for (const discipline of this.disciplinesExpertiseStatsHistory) {
-
           for (const change of discipline.history) {
-            // const date = `Date(${moment(change.timestamp).valueOf()})`;
             const date = new Date(change.timestamp);
             const data = parseFloat(change.share) / 100;
+
             if (!stamps[date]) {
               stamps[date] = [data];
             } else {
               stamps[date].push(data);
             }
           }
-          // console.log('----------')
         }
         return Object.keys(stamps).map((key) => [key, ...stamps[key]]);
       },
@@ -279,36 +275,6 @@
           ...[['Date', ...this.disciplinesExpertiseStats.map((item) => item.discipline_name)]],
           ...this.eciOverviewData
         ];
-      },
-      eciOverviewOptions() {
-        return {
-          legend: 'none',
-          areaOpacity: 1,
-          fontSize: 12,
-          fontName: 'Roboto',
-          lineWidth: 0,
-          vAxis: {
-            format: 'percent'
-          },
-          hAxis: {
-            format: 'MMM, DD',
-          },
-          // chartArea: {
-          //   left: 50,
-          //   top: 16,
-          //   height: 200,
-          // },
-          explorer: {
-            actions: ['dragToZoom', 'rightClickToReset'],
-            axis: 'horizontal',
-            keepInBounds: true,
-            maxZoomIn: 4.0
-          },
-          series: chartGradient(this.eciOverviewData[0].length - 1)
-            .map((color) => ({
-              color
-            }))
-        };
       },
 
       // LEGEND
@@ -335,7 +301,7 @@
               color
             }))
         };
-      },
+      }
     },
     created() {
       this.$store.dispatch('overview/getAll').then(() => {
@@ -350,8 +316,5 @@
     path[stroke-width="1"][stroke="#ffffff"] {
       stroke: transparent;
     }
-    /*text[font-family="Roboto"] {*/
-    /*  font-weight: 500;*/
-    /*}*/
   }
 </style>

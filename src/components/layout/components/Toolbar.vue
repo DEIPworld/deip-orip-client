@@ -137,7 +137,7 @@
               to: { name: 'overview' }
             },
             {
-              label: 'Participiants',
+              label: 'Participants',
               to: { name: 'participants' }
             },
             // {
