@@ -149,7 +149,7 @@
             </router-link>
           </template>
           <template #item.eci="{ item: { eci } }">
-            <span class="font-weight-bold">{{ eci }}</span> ECI
+            <span class="font-weight-bold">{{ eci | commaNumber }}</span> ECI
           </template>
           <template #item.growth_rate="{ item: { growth_rate } }">
             <span
