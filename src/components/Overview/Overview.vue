@@ -5,7 +5,7 @@
         <v-col cols="4">
           <content-block
             title="Expertise contribution index value"
-            description="Last update 05 May 2020"
+            description="Updated today"
           >
             <d-chart-pie
               donut
@@ -20,7 +20,7 @@
         <v-col cols="8">
           <content-block
             title="Expertise contribution index overview"
-            description="Last update 05 May 2020"
+            description="Updated today"
           >
             <d-chart-area
               :data="eciOverviewDataTable"
@@ -294,7 +294,12 @@
     },
     methods: {
       goToParticipants(e) {
-        console.log(e);
+        this.$router.push({
+          name: 'participants',
+          query: {
+            discipline: this.disciplinesExpertiseStats[e[0].row].discipline_external_id
+          }
+        });
       },
 
       updateDetailedChart() {

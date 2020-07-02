@@ -41,30 +41,34 @@
     <!-- ### END Draft Actions Section ### -->
 
     <!-- ### START Research Content ECI Section ### -->
-    <v-sheet v-if="isPublished">
+    <v-sheet v-if="isPublished" class="my-4">
       <v-divider class="my-6" />
       <div class="text-h6">
         Expertise Contribution Index
       </div>
+
       <div
         v-for="eci of eciList"
         :key="eci.disciplineName"
-        class="expertise px-1 my-1"
+        class="expertise px-1 my-1 text-caption"
       >
         <v-row no-gutters justify="space-between">
-          <v-col cols="auto" class="pa-2 blue--text text--accent-4">
+          <v-col cols="auto" class="pa-1 primary--text font-weight-bold">
             TOP
-            <span>{{ getResearchContentEciPercentile(eci) }}</span>%
+            {{ getResearchContentEciPercentile(eci) }}%
           </v-col>
-          <v-col cols="auto" class="pa-2 grey--text">
+          <v-col cols="auto" class="pa-1 grey--text">
             ECI {{ eci.value }}
           </v-col>
         </v-row>
-        <v-divider class="expertise__divider" />
-        <div class="pa-2">
+
+        <v-divider />
+
+        <div class="pa-1">
           {{ eci.disciplineName }}
         </div>
       </div>
+
     </v-sheet>
     <!-- ### END Research Content ECI Section ### -->
 

@@ -130,21 +130,21 @@
       <div
         v-for="eci of eciList"
         :key="eci.disciplineName"
-        class="expertise px-1 my-1"
+        class="expertise px-1 my-1 text-caption"
       >
         <v-row no-gutters justify="space-between">
-          <v-col cols="auto" class="pa-2 blue--text text--accent-4 bold">
+          <v-col cols="auto" class="pa-1 primary--text font-weight-bold">
             TOP
-            <span class="font-weight-bold">{{ getResearchEciPercentile(eci) }}</span>%
+            {{ getResearchEciPercentile(eci) }}%
           </v-col>
-          <v-col cols="auto" class="pa-2 grey--text">
+          <v-col cols="auto" class="pa-1 grey--text">
             ECI {{ eci.value }}
           </v-col>
         </v-row>
 
         <v-divider />
 
-        <div class="pa-2 ">
+        <div class="pa-1">
           {{ eci.disciplineName }}
         </div>
       </div>
