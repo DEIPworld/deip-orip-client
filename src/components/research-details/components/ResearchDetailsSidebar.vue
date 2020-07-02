@@ -134,19 +134,19 @@
       >
         <v-row no-gutters justify="space-between">
           <v-col cols="auto" class="pa-1 primary--text font-weight-bold">
-            TOP
-            {{ getResearchEciPercentile(eci) }}%
+<!--            TOP {{ getResearchEciPercentile(eci) }}%-->
+            {{ eci.disciplineName }}
           </v-col>
           <v-col cols="auto" class="pa-1 grey--text">
             ECI {{ eci.value }}
           </v-col>
         </v-row>
 
-        <v-divider />
+<!--        <v-divider />-->
 
-        <div class="pa-1">
-          {{ eci.disciplineName }}
-        </div>
+<!--        <div class="pa-1">-->
+<!--          {{ eci.disciplineName }}-->
+<!--        </div>-->
       </div>
     </v-sheet>
 

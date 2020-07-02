@@ -158,18 +158,19 @@
 
           <v-row no-gutters justify="space-between">
             <v-col cols="auto" class="pa-1 primary--text font-weight-bold">
-              TOP {{ getEciPercentile(item.amount, userInfo.account.name, item.discipline_id) }}%
+<!--              TOP {{ getEciPercentile(item.amount, userInfo.account.name, item.discipline_id) }}%-->
+              {{ item.discipline_name }}
             </v-col>
             <v-col cols="auto" class="pa-1 grey--text">
               ECI {{ item.amount }}
             </v-col>
           </v-row>
 
-          <v-divider />
+<!--          <v-divider />-->
 
-          <div class="pa-1 black--text">
-            {{ item.discipline_name }}
-          </div>
+<!--          <div class="pa-1 black&#45;&#45;text">-->
+<!--            {{ item.discipline_name }}-->
+<!--          </div>-->
 
         </router-link>
       </div>

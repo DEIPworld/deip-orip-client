@@ -12,7 +12,7 @@
     </v-row>
 
     <v-row class="full-width pt-4">
-      <v-col cols="8" class="milestone-description full-width">
+      <v-col cols="8" class="milestone-description full-width text-body-2">
         {{ selectedTimelineItem.description }}
       </v-col>
       <v-col cols="4">

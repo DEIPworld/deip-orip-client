@@ -11,7 +11,7 @@
       </v-col>
     </v-row>
 
-    <div v-for="(review, index) of reviews" :key="`r_${review.id}`">
+    <div v-for="(review, index) of reviews" :key="`r_${review.id}`" class="text-body-2">
       <research-review-item :review="review" :research="research" />
       <v-divider v-if="index !== reviews.length - 1" :key="`d_${index}`" class="my-2" />
     </div>
