@@ -3,31 +3,31 @@
     <layout-section>
       <v-row>
         <v-col cols="4">
-          <div class="text-h5">
-            Expertise contribution index value
-          </div>
-          <div class="text-body-2 text--secondary">
-            Last update 05 May 2020
-          </div>
-          <d-chart-pie
-            donut
-            :data="eciValueDataTable"
-            :options="{legend: 'none'}"
-            @select="goToParticipants"
-          />
+          <content-block
+            title="Expertise contribution index value"
+            description="Last update 05 May 2020"
+          >
+            <d-chart-pie
+              donut
+              :data="eciValueDataTable"
+              :options="{legend: 'none'}"
+              @select="goToParticipants"
+            />
+          </content-block>
+
         </v-col>
 
         <v-col cols="8">
-          <div class="text-h5">
-            Expertise contribution index overview
-          </div>
-          <div class="text-body-2 text--secondary">
-            Last update 05 May 2020
-          </div>
-          <d-chart-area
-            :data="eciOverviewDataTable"
-            :options="{legend: 'none', vAxis: { format: '##%' } }"
-          />
+          <content-block
+            title="Expertise contribution index overview"
+            description="Last update 05 May 2020"
+          >
+            <d-chart-area
+              :data="eciOverviewDataTable"
+              :options="{legend: 'none', vAxis: { format: '##%' } }"
+            />
+          </content-block>
+
         </v-col>
 
         <v-col cols="12">
@@ -123,12 +123,8 @@
           />
         </v-col>
       </v-row>
-      
-      <v-sheet>
-        <div class="text-h5">
-          Expertise Contribution Index detailed overview
-        </div>
 
+      <content-block title="Expertise Contribution Index detailed overview">
         <v-row>
           <v-col cols="3">
             <d-input-date
@@ -156,6 +152,12 @@
             />
           </v-col>
         </v-row>
+      </content-block>
+
+      <v-sheet>
+
+
+
 
         <!--        <GChart-->
         <!--          type="LineChart"-->
@@ -178,12 +180,14 @@
   import DInputDate from '@/components/Deipify/DInputDate/DInputDate';
   import DChartPie from '@/components/Deipify/DCharts/DChartPie';
   import DChartArea from '@/components/Deipify/DCharts/DChartArea';
+  import ContentBlock from '@/components/layout/components/ContentBlock';
 
   import fakeData from './fakeGrowthRateData.json';
 
   export default {
     name: 'Overview',
     components: {
+      ContentBlock,
       DChartArea,
       DChartPie,
       DInputDate,
@@ -357,7 +361,6 @@
               stamps[date].push(data);
             }
           }
-          // console.log('----------')
         }
         return Object.keys(stamps)
           .map((key) => [key, ...stamps[key]]);

@@ -16,12 +16,17 @@
         </v-col>
 
         <v-col v-if="hasTitleText" :class="{'ml-4': hasTitleIcon}">
-          <div v-if="title" class="text-h5">
+
+          <div v-if="title || $hasSlot('title')" class="text-h5">
             {{ title }}
-          </div>
-          <div v-if="$hasSlot('title')" class="text-h5">
             <slot name="title" />
           </div>
+
+          <div v-if="description || $hasSlot('description')" class="text-body-2 text--secondary">
+            {{ description }}
+            <slot name="description" />
+          </div>
+
         </v-col>
 
         <v-col v-if="$hasSlot('titleActions')" cols="auto">
@@ -39,6 +44,10 @@
     name: 'ContentBlock',
     props: {
       title: {
+        type: String,
+        default: null
+      },
+      description: {
         type: String,
         default: null
       },
