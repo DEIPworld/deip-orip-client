@@ -3,13 +3,24 @@ import { ExpertiseContributionsService } from '@deip/expertise-contributions-ser
 
 const expertiseContributionsService = ExpertiseContributionsService.getInstance();
 
+const criteriaTypes = {
+  1: 'Impact',
+  2: 'Novelty',
+  3: 'Excelence',
+  4: 'Rationality',
+  5: 'Technical Quality',
+  6: 'Replication'
+};
+
 const state = {
+  criteriaTypes,
   disciplinesExpertiseStats: [],
   disciplinesExpertiseStatsHistory: [],
   researchContentsExpertiseHistory: []
 };
 
 const getters = {
+  criteriaTypes: () => state.criteriaTypes,
   disciplinesExpertiseStats: () => state.disciplinesExpertiseStats,
   disciplinesExpertiseStatsHistory: () => state.disciplinesExpertiseStatsHistory,
   researchContentsExpertiseHistory: () => state.researchContentsExpertiseHistory

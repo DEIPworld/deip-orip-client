@@ -20,7 +20,7 @@
         v-on="on"
       />
     </template>
-    <v-date-picker @change="onInput" @input="open = false" />
+    <v-date-picker v-bind="_xProps" @change="onInput" @input="open = false" />
   </v-menu>
 </template>
 
