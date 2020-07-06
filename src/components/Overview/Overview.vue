@@ -3,10 +3,7 @@
     <layout-section>
       <v-row>
         <v-col cols="4">
-          <content-block
-            title="Expertise contribution index value"
-            description="Updated today"
-          >
+          <content-block title="Expertise contribution index value" description="Updated today">
             <d-chart-pie
               donut
               :data="eciValueDataTable"
@@ -14,20 +11,15 @@
               @select="goToParticipants"
             />
           </content-block>
-
         </v-col>
 
         <v-col cols="8">
-          <content-block
-            title="Expertise contribution index overview"
-            description="Updated today"
-          >
+          <content-block title="Expertise contribution index overview" description="Updated today">
             <d-chart-area
               :data="eciOverviewDataTable"
               :options="{legend: 'none', vAxis: { format: '##%' } }"
             />
           </content-block>
-
         </v-col>
 
         <v-col cols="12">
@@ -43,48 +35,45 @@
         </v-col>
       </v-row>
 
-      <v-row class="pt-4">
+      <content-block title="Growth rate overview">
+        <v-row>
+          <v-col cols="3">
+            <d-input-date
+              v-model="growthRateFromDate"
+              label="To"
+              :x-props="{
+                'hide-details': true,
+                type: 'month',
+                max:moment(growthRateToDate).subtract(1, 'days').format('YYYY-MM-DD'),
+                min:moment('2018-01-01').format('YYYY-MM-DD'),
+              }"
+            />
+          </v-col>
+          <v-col cols="3">
+            <d-input-date
+              v-model="growthRateToDate"
+              label="To"
+              :x-props="{
+                'hide-details': true,
+                type: 'month',
+                max:moment().format('YYYY-MM'),
+                min:moment(growthRateFromDate).add(1, 'days').format('YYYY-MM'),
+              }"
+            />
+          </v-col>
+          <v-col cols="3">
+            <v-select
+              v-model="growthRateDiscipline"
+              filled
+              hide-details
+              :items="[{label: 'All', external_id: 'all'}, ...disciplines]"
+              item-text="label"
+              item-value="external_id"
+              label="Disciplines"
+            />
+          </v-col>
+        </v-row>
         <v-col cols="10">
-          <div class="text-h5">
-            Growth rate overview
-          </div>
-          <v-row>
-            <v-col>
-              <d-input-date
-                v-model="growthRateFromDate"
-                label="To"
-                :x-props="{
-                  'hide-details': true,
-                  type: 'month',
-                  max:moment(growthRateToDate).subtract(1, 'days').format('YYYY-MM-DD'),
-                  min:moment('2018-01-01').format('YYYY-MM-DD'),
-                }"
-              />
-            </v-col>
-            <v-col>
-              <d-input-date
-                v-model="growthRateToDate"
-                label="To"
-                :x-props="{
-                  'hide-details': true,
-                  type: 'month',
-                  max:moment().format('YYYY-MM'),
-                  min:moment(growthRateFromDate).add(1, 'days').format('YYYY-MM'),
-                }"
-              />
-            </v-col>
-            <v-col>
-              <v-select
-                v-model="growthRateDiscipline"
-                filled
-                hide-details
-                :items="[{label: 'All', external_id: 'all'}, ...disciplines]"
-                item-text="label"
-                item-value="external_id"
-                label="Disciplines"
-              />
-            </v-col>
-          </v-row>
           <GChart
             ref="growthRateChart"
             class="chart"
@@ -95,48 +84,42 @@
             style="width: 100%; height: 232px;"
           />
         </v-col>
-      </v-row>
-      <v-row>
-        <v-col cols="10">
-          <div class="text-h5">Distribution impact</div>
-          <div class="text-body-2 text--secondary">Updated today</div>
-          <v-row>
-            <v-col cols="4">
-              <v-select
-                v-model="distributionDiscipline"
-                filled
-                :items="[{label: 'All', external_id: 'all'}, ...disciplines]"
-                item-text="label"
-                item-value="external_id"
-                label="Disciplines"
-              />
-            </v-col>
-          </v-row>
-          <GChart
-            ref="distributionChart"
-            class="chart"
-            type="PieChart"
-            :data="distributionChartData"
-            :options="distributionChartOptions"
-            :settings="{ packages: ['corechart'] }"
-            style="width: 100%; height: 300px; max-width: 760px;"
-          />
-        </v-col>
-      </v-row>
+      </content-block>
+
+      <content-block title="Distribution impact" description="Updated today">
+        <v-row>
+          <v-col cols="3">
+            <v-select
+              v-model="distributionDiscipline"
+              filled
+              :items="[{label: 'All', external_id: 'all'}, ...disciplines]"
+              item-text="label"
+              item-value="external_id"
+              label="Disciplines"
+            />
+          </v-col>
+          <v-col cols="10">
+            <d-chart-pie
+              :data="distributionChartData"
+              :options="{
+                legend: {position: 'bottom'},
+                chartArea: {
+                  top: 0
+                }
+              }"
+              style="max-width: 600px;"
+            />
+          </v-col>
+        </v-row>
+      </content-block>
 
       <content-block title="Expertise Contribution Index detailed overview">
         <v-row>
           <v-col cols="3">
-            <d-input-date
-              v-model="eciDetailedOverviewFilter.dateFrom"
-              label="From"
-            />
+            <d-input-date v-model="eciDetailedOverviewFilter.dateFrom" label="From" />
           </v-col>
           <v-col cols="3">
-            <d-input-date
-              v-model="eciDetailedOverviewFilter.dateTo"
-              label="To"
-            />
+            <d-input-date v-model="eciDetailedOverviewFilter.dateTo" label="To" />
           </v-col>
           <v-col cols="3">
             <v-select filled label="Assessment criteria" />
@@ -154,56 +137,40 @@
           </v-col>
         </v-row>
 
-        <d-chart-line
-          :data="eciHistoryByDisciplineChartData"
-          :options="{legend: 'none'}"
-        />
+        <d-chart-line :data="eciHistoryByDisciplineChartData" :options="{legend: 'none'}" />
 
         <v-data-table
           v-custom="'hover-row'"
-
           :hide-default-footer="eciHistoryByDiscipline.length < 50"
           :footer-props="{itemsPerPageOptions: [5, 10, 20, 50, -1]}"
           :items-per-page="50"
-
           :headers="eciDetailedOverviewTableHeaders"
           :items="eciHistoryByDiscipline"
         >
           <template v-slot:item.type="{ item }">
-            <v-chip :color="contributionColor[item.contribution_type]" text-color="white">
-              {{ item.actionText }}
-            </v-chip>
+            <v-chip
+              :color="contributionColor[item.contribution_type]"
+              text-color="white"
+            >{{ item.actionText }}</v-chip>
           </template>
 
           <template v-slot:item.title="{ item }">
-            <router-link
-              v-if="item.meta.link"
-              class="a"
-              :to="item.meta.link"
-            >
-              {{ item.meta.title }}
-            </router-link>
+            <router-link v-if="item.meta.link" class="a" :to="item.meta.link">{{ item.meta.title }}</router-link>
             <span v-else class="text-body-2">{{ item.meta.title }}</span>
           </template>
 
           <template v-slot:item.date="{ item }">
             <div class="text-no-wrap">{{ moment(item.timestamp).format('D MMM YYYY') }}</div>
-
           </template>
 
           <template v-slot:item.delta="{ item }">
             <div
               class="text-no-wrap rounded-sm"
               :class="{ 'success lighten-4': item.delta > 0, 'error lighten-4': item.delta < 0 }"
-            >
-              {{ item.delta }}
-            </div>
+            >{{ item.delta }}</div>
           </template>
 
-          <template v-slot:item.eci="{ item }">
-            {{ item.eci }}
-          </template>
-
+          <template v-slot:item.eci="{ item }">{{ item.eci }}</template>
         </v-data-table>
       </content-block>
     </layout-section>
@@ -286,7 +253,9 @@
           [EXPERTISE_CONTRIBUTION_TYPE.PUBLICATION]: '#8DDAB3'
         },
 
-        growthRateFromDate: this.moment().subtract(7, 'days').format('YYYY-MM'),
+        growthRateFromDate: this.moment()
+          .subtract(7, 'days')
+          .format('YYYY-MM'),
         growthRateToDate: this.moment().format('YYYY-MM'),
         growthRateDiscipline: 'all',
         distributionDiscipline: 'all'
@@ -297,27 +266,34 @@
         this.$router.push({
           name: 'participants',
           query: {
-            discipline: this.disciplinesExpertiseStats[e[0].row].discipline_external_id
+            discipline: this.disciplinesExpertiseStats[e[0].row]
+              .discipline_external_id
           }
         });
       },
 
       updateDetailedChart() {
-        this.$store.dispatch('overview/getEciHistoryByDiscipline', this.eciDetailedOverviewFilter.discipline)
+        this.$store.dispatch(
+          'overview/getEciHistoryByDiscipline',
+          this.eciDetailedOverviewFilter.discipline
+        );
       }
     },
 
     computed: {
       ...mapGetters({
         disciplinesExpertiseStats: 'overview/disciplinesExpertiseStats',
-        disciplinesExpertiseStatsHistory: 'overview/disciplinesExpertiseStatsHistory',
+        disciplinesExpertiseStatsHistory:
+          'overview/disciplinesExpertiseStatsHistory',
         eciHistoryByDiscipline: 'overview/eciHistoryByDiscipline',
         criteriaTypes: 'overview/criteriaTypes'
       }),
 
       disciplines() {
-        // return this.disciplinesExpertiseStats.map((item) => ({ id: item.discipline_external_id, name: item.discipline_name }));
-        return getTopLevelNodes().map((d) => ({ external_id: d.id, label: d.label }));
+        return getTopLevelNodes().map((d) => ({
+          external_id: d.id,
+          label: d.label
+        }));
       },
 
       growthRateChartData() {
@@ -325,14 +301,31 @@
         if (this.growthRateDiscipline === 'all') {
           dataTable = fakeData;
         } else {
-          fakeData.forEach((item) => dataTable.push([item[0], item.find((val) => val.discipline === this.growthRateDiscipline)]))
+          fakeData.forEach((item) =>
+            dataTable.push([
+              item[0],
+              item.find((val) => val.discipline === this.growthRateDiscipline)
+            ])
+          );
         }
         return [
-          ['Month', ...this.disciplines.filter((item) => this.growthRateDiscipline === 'all' ? true : item.external_id === this.growthRateDiscipline).map((item) => item.label)],
+          [
+            'Month',
+            ...this.disciplines
+              .filter((item) =>
+                this.growthRateDiscipline === 'all'
+                  ? true
+                  : item.external_id === this.growthRateDiscipline
+              )
+              .map((item) => item.label)
+          ],
           ...dataTable.filter((item, i) => {
-            return this.moment(item[0].v).isSameOrBefore(this.growthRateToDate) && this.moment(item[0].v).isSameOrAfter(this.growthRateFromDate);
+            return (
+              this.moment(item[0].v).isSameOrBefore(this.growthRateToDate) &&
+              this.moment(item[0].v).isSameOrAfter(this.growthRateFromDate)
+            );
           })
-        ]
+        ];
       },
       growthRateChartOptions() {
         return {
@@ -340,7 +333,7 @@
           fontName: 'Roboto',
           chart: {
             title: 'Company Performance',
-            subtitle: 'Sales, Expenses, and Profit: 2014-2017',
+            subtitle: 'Sales, Expenses, and Profit: 2014-2017'
           },
           chartArea: {
             width: '85%',
@@ -350,11 +343,12 @@
           vAxis: {
             format: 'percent'
           },
-          series: chartGradient(this.growthRateChartData[0].length - 1)
-            .map((color) => ({
+          series: chartGradient(this.growthRateChartData[0].length - 1).map(
+            (color) => ({
               color
-            }))
-        }
+            })
+          )
+        };
       },
 
       distributionChartData() {
@@ -362,17 +356,25 @@
         if (this.distributionDiscipline === 'all') {
           this.disciplinesExpertiseStats.forEach((item) => {
             item.assessment_criterias.forEach((val, i) => {
-              dataTable[i] = [this.criteriaTypes[val[0]], dataTable[i] ? dataTable[i][1] + val[1] : val[1]];
+              dataTable[i] = [
+                this.criteriaTypes[val[0]],
+                dataTable[i] ? dataTable[i][1] + val[1] : val[1]
+              ];
             });
           });
         } else {
-          dataTable = this.disciplinesExpertiseStats.find((item) => item.discipline_external_id === this.distributionDiscipline)
-            .assessment_criterias.map((item) => [this.criteriaTypes[item[0]], item[1]]);
+          dataTable = this.disciplinesExpertiseStats
+            .find(
+              (item) =>
+                item.discipline_external_id === this.distributionDiscipline
+            )
+            .assessment_criterias.map((item) => [
+              this.criteriaTypes[item[0]],
+              item[1]
+            ]);
         }
 
-        return [['Criteria', 'Value'],
-                ...dataTable
-        ];
+        return [['Criteria', 'Value'], ...dataTable];
       },
 
       distributionChartOptions() {
@@ -390,10 +392,11 @@
           legend: {
             position: 'bottom'
           },
-          slices: chartGradient(this.distributionChartData.length)
-            .map((color) => ({
+          slices: chartGradient(this.distributionChartData.length).map(
+            (color) => ({
               color
-            }))
+            })
+          )
         };
       },
 
@@ -425,12 +428,18 @@
             }
           }
         }
-        return Object.keys(stamps)
-          .map((key) => [key, ...stamps[key]]);
+        return Object.keys(stamps).map((key) => [key, ...stamps[key]]);
       },
       eciOverviewDataTable() {
         return [
-          ...[['Date', ...this.disciplinesExpertiseStats.map((item) => item.discipline_name)]],
+          ...[
+            [
+              'Date',
+              ...this.disciplinesExpertiseStats.map(
+                (item) => item.discipline_name
+              )
+            ]
+          ],
           ...this.eciOverviewData
         ];
       },
@@ -440,9 +449,10 @@
       eciHistoryByDisciplineChartData() {
         return [
           ['Date', 'Value'],
-          ...this.eciHistoryByDiscipline.map(
-            (item) => ([new Date(item.timestamp), item.eci])
-          )
+          ...this.eciHistoryByDiscipline.map((item) => [
+            new Date(item.timestamp),
+            item.eci
+          ])
         ];
       },
 
@@ -465,10 +475,11 @@
             width: '100%',
             height: 0
           },
-          slices: chartGradient(this.eciValueDataTable.length - 1)
-            .map((color) => ({
+          slices: chartGradient(this.eciValueDataTable.length - 1).map(
+            (color) => ({
               color
-            }))
+            })
+          )
         };
       }
     },
@@ -479,7 +490,10 @@
       Promise.all([
         this.$store.dispatch('overview/getDisciplinesExpertiseStats'),
         this.$store.dispatch('overview/getDisciplinesExpertiseStatsHistory'),
-        this.$store.dispatch('overview/getEciHistoryByDiscipline', this.eciDetailedOverviewFilter.discipline),
+        this.$store.dispatch(
+          'overview/getEciHistoryByDiscipline',
+          this.eciDetailedOverviewFilter.discipline
+        )
       ]).then(() => {
         this.$setReady();
       });
@@ -488,9 +502,9 @@
 </script>
 
 <style lang="scss">
-  .chart {
-    path[stroke-width="1"][stroke="#ffffff"] {
-      stroke: transparent;
-    }
+.chart {
+  path[stroke-width='1'][stroke='#ffffff'] {
+    stroke: transparent;
   }
+}
 </style>
