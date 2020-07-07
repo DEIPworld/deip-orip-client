@@ -582,59 +582,59 @@ const actions = {
 const mutations = {
 
   SET_RESEARCH_DETAILS(state, research) {
-    Vue.set(state, 'research', research);
+    state.research = research;
   },
 
   SET_RESEARCH_MEMBERS_LIST(state, list) {
-    Vue.set(state, 'researchGroupMembersList', list);
+    state.researchGroupMembersList = list;
   },
 
   SET_RESEARCH_CONTENT_LIST(state, list) {
-    Vue.set(state, 'allContentsList', list);
+    state.allContentsList = list;
   },
 
   SET_RESEARCH_APPLICATIONS_LIST(state, applications) {
-    Vue.set(state, 'applicationsList', applications);
+    state.applicationsList = applications;
   },
 
   SET_RESEARCH_REVIEWS_LIST(state, list) {
-    Vue.set(state, 'reviewsList', list);
+    state.reviewsList = list;
   },
 
   SET_RESEARCH_DISCIPLINES_LIST(state, list) {
-    Vue.set(state, 'disciplinesList', list);
+    state.disciplinesList = list;
   },
 
   SET_RESEARCH_TOKEN_SALE(state, tokenSale) {
-    Vue.set(state, 'tokenSale', tokenSale);
+    state.tokenSale = tokenSale;
   },
 
   SET_RESEARCH_TOKEN_SALES(state, list) {
-    Vue.set(state, 'tokenSalesList', list);
+    state.tokenSalesList = list;
   },
 
   SET_RESEARCH_TOKEN_HOLDERS_LIST(state, tokenHolders) {
-    Vue.set(state, 'tokenHoldersList', tokenHolders);
+    state.tokenHoldersList = tokenHolders;
   },
 
   SET_RESEARCH_TOKEN_SALE_CONTRIBUTIONS_LIST(state, contributions) {
-    Vue.set(state, 'contributionsList', contributions);
+    state.contributionsList = contributions;
   },
 
   SET_RESEARCH_GROUP_INVITES(state, invites) {
-    Vue.set(state, 'groupInvitesList', invites);
+    state.groupInvitesList = invites;
   },
 
   SET_RESEARCH_APPLICATIONS_REFS(state, refs) {
-    Vue.set(state, 'applicationsRefsList', refs);
+    state.applicationsRefsList = refs;
   },
 
   SET_USER_CONTRIBUTIONS_LIST(state, list) {
-    Vue.set(state, 'userContributionsList', list);
+    state.userContributionsList = list;
   },
 
   SET_EXPERTS_LIST(state, list) {
-    Vue.set(state, 'expertsList', list);
+    state.expertsList = list;
   },
 
   SET_RESEARCH_DETAILS_LOADING_STATE(state, value) {
@@ -651,10 +651,6 @@ const mutations = {
 
   SET_RESEARCH_APPLICATONS_LOADING_STATE(state, value) {
     state.isLoadingResearchApplications = value;
-  },
-
-  SET_RESEARCH_MEMBERS_LOADING_STATE(state, value) {
-    state.isLoadingResearchMembers = value;
   },
 
   SET_RESEARCH_REVIEWS_LOADING_STATE(state, value) {
@@ -686,15 +682,15 @@ const mutations = {
   },
 
   SET_RESEARCH_GROUP_DETAILS(state, value) {
-    Vue.set(state, 'group', value);
+    state.group = value;
   },
 
   SET_RESEARCH_ECI_HISTORY_BY_DISCIPLINE(state, { disciplineId, records }) {
-    Vue.set(state.eciHistoryByDiscipline, disciplineId, records);
+    state.eciHistoryByDiscipline[disciplineId] = records;
   },
 
   RESET_STATE(state) {
-    Vue.set(state, 'eciHistoryByDiscipline', {});
+    state.eciHistoryByDiscipline = {};
   }
 };
 

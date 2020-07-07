@@ -498,31 +498,31 @@ const actions = {
 const mutations = {
 
   SET_USER_ACCOUNT(state, account) {
-    Vue.set(state, 'account', account);
+    state.account = account;
   },
 
   SET_RESEARCH_LIST(state, researchList) {
-    Vue.set(state, 'researchList', researchList);
+    state.researchList = researchList;
   },
 
   SET_RESEARCH_GROUPS(state, groups) {
-    Vue.set(state, 'groups', groups);
+    state.groups = groups;
   },
 
   SET_EXPERTISE(state, expertise) {
-    Vue.set(state, 'expertise', expertise);
+    state.expertise = expertise;
   },
 
   SET_USER_PROFILE(state, profile) {
-    Vue.set(state, 'profile', profile);
+    state.profile = profile;
   },
 
   SET_USER_INVITES(state, invites) {
-    Vue.set(state, 'invites', invites);
+    state.invites = invites;
   },
 
   SET_USER_REVIEW_REQUESTS(state, list) {
-    Vue.set(state, 'reviewRequests', list);
+    state.reviewRequests = list;
   },
 
   SET_USER_GROUPS_LOADING_STATE(state, value) {
@@ -542,7 +542,7 @@ const mutations = {
   },
 
   SET_RESEARCHES_REFS_DETAILS(state, researchesRef) {
-    Vue.set(state, 'researchesRef', researchesRef);
+    state.researchesRef = researchesRef;
   },
 
   SET_RESEARCHES_REFS_DETAILS_LOADING_STATE(state, value) {
@@ -555,15 +555,15 @@ const mutations = {
   },
 
   UPDATE_ECI_HISTORY_FILTER(state, { key, value }) {
-    Vue.set(state.filter, key, value);
+    state.filter[key] = value;
   },
 
   SET_ACCOUNT_ECI_STATS(state, stats) {
-    Vue.set(state, 'eciStats', stats);
+    state.eciStats = stats;
   },
 
   RESET_STATE(state) {
-    Vue.set(state, 'eciHistoryByDiscipline', {});
+    state.eciHistoryByDiscipline = {};
   }
 
 };

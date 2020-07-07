@@ -98,27 +98,27 @@ const actions = {
 // mutations
 const mutations = {
   SET_RESEARCHES(state, list) {
-    Vue.set(state, 'researches', list);
+    state.researches = list;
   },
 
   SET_RESEARCH_TOKENS(state, list) {
-    Vue.set(state, 'researchTokens', list);
+    state.researchTokens = list;
   },
 
   SET_RESEARCH_TOKENS_HOLDERS(state, list) {
-    Vue.set(state, 'researchTokensHolders', list);
+    state.researchTokensHolders = list;
   },
 
   SET_TRANSFERS(state, list) {
-    Vue.set(state, 'transfers', list);
+    state.transfers = list;
   },
 
   SET_RESEARCH_GROUPS(state, list) {
-    Vue.set(state, 'researchGroups', list);
+    state.researchGroups = list;
   },
 
   SET_ASSETS_INFO(state, list) {
-    Vue.set(state, 'assetsInfo', list);
+    state.assetsInfo = list;
   }
 };
 

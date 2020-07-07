@@ -86,23 +86,23 @@ const actions = {
 // mutations
 const mutations = {
   SET_ORGANIZATION_PROFILE(state, organization) {
-    Vue.set(state, 'organization', organization);
+    state.organization = organization;
   },
 
   SET_UNIVERSITY(state, university) {
-    Vue.set(state, 'university', university);
+    state.university = university;
   },
 
   SET_ALL_USERS(state, users) {
-    Vue.set(state, 'allUsers', users);
+    state.allUsers = users;
   },
 
   SET_ORGANIZATION_PROGRAM(state, program) {
-    Vue.set(state, 'program', program);
+    state.program = program;
   },
 
   SET_FUNDING_CONTACT_PROPOSAL_PAGE_LOADING_STATE(state, isLoading) {
-    Vue.set(state, 'isLoadingContractProposalPage', isLoading);
+    state.isLoadingContractProposalPage = isLoading;
   }
 };
 

@@ -321,47 +321,47 @@ const actions = {
 const mutations = {
 
   SET_USER_EXPERT_TOKENS_LIST(state, list) {
-    Vue.set(state.user, 'expertTokens', list);
+    state.user.expertTokens = list;
   },
 
   SET_USER_GROUPS_LIST(state, list) {
-    Vue.set(state.user, 'groups', list);
+    state.user.groups = list;
   },
 
   SET_USER_RESEARCH_GROUP_TOKENS_LIST(state, list) {
-    Vue.set(state.user, 'groupTokens', list);
+    state.user.groupTokens = list;
   },
 
   SET_USER_RESEARCH_BOOKMARKS(state, list) {
-    Vue.set(state.user, 'researchBookmarks', list);
+    state.user.researchBookmarks = list;
   },
 
   SET_USER_NOTIFICATION_PROPOSALS(state, list) {
-    Vue.set(state.user, 'notifications', list);
+    state.user.notifications = list;
   },
 
   SET_USER_COWORKERS_LIST(state, list) {
-    Vue.set(state.user, 'coworkers', list);
+    state.user.coworkers = list;
   },
 
   SET_USER_PROFILE(state, profile) {
-    Vue.set(state.user, 'profile', profile);
+    state.user.profile = profile;
   },
 
   SET_USER_JOIN_REQUESTS(state, requests) {
-    Vue.set(state.user, 'joinRequests', requests);
+    state.user.joinRequests = requests;
   },
 
   SET_USER_ACCOUNT(state, account) {
-    Vue.set(state.user, 'account', account);
+    state.user.account = account;
   },
 
   SET_TENANT(state, tenant) {
-    Vue.set(state, 'tenant', tenant);
+    state.tenant = tenant;
   },
 
   SET_BALANCES(state, balances) {
-    Vue.set(state.user, 'balances', balances);
+    state.user.balances = balances;
   }
 };
 

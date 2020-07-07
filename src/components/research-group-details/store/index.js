@@ -239,23 +239,23 @@ const actions = {
 // mutations
 const mutations = {
   SET_PROPOSALS(state, proposals) {
-    Vue.set(state, 'proposals', proposals);
+    state.proposals = proposals;
   },
 
   SET_RESEARCH_GROUP(state, group) {
-    Vue.set(state, 'group', group);
+    state.group = group;
   },
 
   SET_GROUP_SHARES(state, shares) {
-    Vue.set(state, 'groupShares', shares);
+    state.groupShares = shares;
   },
 
   SET_GROUP_MEMBERS(state, members) {
-    Vue.set(state, 'members', members);
+    state.members = members;
   },
 
   SET_GROUP_RESEARCH_LIST(state, researchList) {
-    Vue.set(state, 'researchList', researchList);
+    state.researchList = researchList;
   },
 
   CHANGE_PROPOSAL(state, payload) {
@@ -267,19 +267,19 @@ const mutations = {
   },
 
   SET_GROUP_INVITES(state, invites) {
-    Vue.set(state, 'invites', invites);
+    state.invites = invites;
   },
 
   UPDATE_PROPOSAL_FILTER(state, { key, value }) {
-    Vue.set(state.proposalListFilter, key, value);
+    state.proposalListFilter[key] = value;
   },
 
   UPDATE_OPTIONS(state, { key, value }) {
-    Vue.set(state.options, key, value);
+    state.options[key] = value;
   },
 
   SET_JOIN_REQUESTS(state, joinRequests) {
-    Vue.set(state, 'joinRequests', joinRequests);
+    state.joinRequests = joinRequests;
   },
 
   SET_GROUP_DETAILS_LOADING_STATE(state, value) {

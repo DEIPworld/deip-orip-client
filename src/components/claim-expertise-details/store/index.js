@@ -109,19 +109,19 @@ const actions = {
 // mutations
 const mutations = {
   SET_CLAIMER_ACCOUNT(state, account) {
-    Vue.set(state, 'claimerAccount', account);
+    state.claimerAccount = account;
   },
   SET_CLAIMER_PROFILE(state, profile) {
-    Vue.set(state, 'claimerProfile', profile);
+    state.claimerProfile = profile;
   },
   SET_CLAIM(state, claim) {
-    Vue.set(state, 'claim', claim);
+    state.claim = claim;
   },
   SET_PROPOSAL(state, proposal) {
-    Vue.set(state, 'proposal', proposal);
+    state.proposal = proposal;
   },
   SET_CLAIMER_EXPERTISE(state, expertise) {
-    Vue.set(state, 'claimerExpertise', expertise);
+    state.claimerExpertise = expertise;
   }
 };
 

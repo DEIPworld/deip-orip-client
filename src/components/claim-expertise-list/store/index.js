@@ -78,13 +78,13 @@ const actions = {
 // mutations
 const mutations = {
   SET_SELECTED_DISCIPLINES(state, disciplines) {
-    Vue.set(state, 'selectedDisciplines', disciplines);
+    state.selectedDisciplines = disciplines;
   },
   SET_SORTING(state, sorting) {
-    Vue.set(state, 'sorting', Object.assign(state.sorting, sorting));
+    state.sorting = Object.assign(state.sorting, sorting);
   },
   SET_CLAIMS(state, claims) {
-    Vue.set(state, 'claims', claims);
+    state.claims = claims;
   }
 };
 

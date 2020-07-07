@@ -165,27 +165,27 @@ const actions = {
 const mutations = {
 
   SET_ORGANIZATION_PROFILE(state, organization) {
-    Vue.set(state, 'organization', organization);
+    state.organization = organization;
   },
 
   SET_ORGANIZATION_PROGRAM(state, program) {
-    Vue.set(state, 'program', program);
+    state.program = program;
   },
 
   SET_ORGANIZATION_PROGRAM_APPLICATIONS(state, applications) {
-    Vue.set(state, 'applications', applications);
+    state.applications = applications;
   },
 
   SET_ORGANIZATION_PROGRAM_LOADING_STATE(state, isLoading) {
-    Vue.set(state, 'isLoadingOrganizationProgramDetails', isLoading);
+    state.isLoadingOrganizationProgramDetails = isLoading;
   },
 
   SET_ORGANIZATION_PROGRAM_APPLICATIONS_LOADING_STATE(state, isLoading) {
-    Vue.set(state, 'isLoadingOrganizationProgramApplications', isLoading);
+    state.isLoadingOrganizationProgramApplications = isLoading;
   },
 
   SET_ORGANIZATION_PROGRAM_DETAILS_PAGE_LOADING_STATE(state, isLoading) {
-    Vue.set(state, 'isLoadingOrganizationProgramDetailsPage', isLoading);
+    state.isLoadingOrganizationProgramDetailsPage = isLoading;
   }
 };
 

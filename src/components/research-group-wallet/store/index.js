@@ -55,10 +55,10 @@ const actions = {
 // mutations
 const mutations = {
   SET_GROUP(state, group) {
-    Vue.set(state, 'group', group);
+    state.group = group;
   },
   SET_RESEARCHES(state, researches) {
-    Vue.set(state, 'researches', researches);
+    state.researches = researches;
   }
 };
 
