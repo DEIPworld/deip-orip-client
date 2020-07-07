@@ -377,29 +377,6 @@
         return [['Criteria', 'Value'], ...dataTable];
       },
 
-      distributionChartOptions() {
-        return {
-          fontSize: 12,
-          fontName: 'Roboto',
-          chart: {
-            title: 'Company Performance',
-            subtitle: 'Sales, Expenses, and Profit: 2014-2017'
-          },
-          chartArea: {
-            top: 0,
-            height: 200
-          },
-          legend: {
-            position: 'bottom'
-          },
-          slices: chartGradient(this.distributionChartData.length).map(
-            (color) => ({
-              color
-            })
-          )
-        };
-      },
-
       //= ====================
 
       eciValueDataTable() {
