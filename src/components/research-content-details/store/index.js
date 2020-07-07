@@ -432,7 +432,7 @@ const actions = {
           const review = reviews[i];
           review.author = users.find((u) => u.account.name == review.author);
 
-          const reviewVotes = votes[i];
+          const reviewVotes = votes[i].reduce((arr, vote) => (arr.some(({ voter }) => voter === vote.voter) ? arr : [...arr, vote]), []);
           review.votes = reviewVotes;
 
           for (let j = 0; j < reviewVotes.length; j++) {

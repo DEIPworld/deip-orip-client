@@ -18,47 +18,49 @@
         </div>
       </v-col>
 
-      <v-col cols="6" lg="7" xl="8">
-        <div class="pl-6">
-          <div>
-            <span class="grey--text">{{ reviewModel.created_at | dateFormat('D MMM YYYY', true) }}</span>
-          </div>
+      <v-col cols="10">
+        <v-row no-gutters>
+          <v-col cols="12">
+            <span class="grey--text pl-6">{{ reviewModel.created_at | dateFormat('D MMM YYYY', true) }}</span>
+          </v-col>
+          <v-col cols="7" lg="8" xl="9">
+            <div class="pl-6">
+              <div class="pb-2">
+                <span v-html="extractPreview(reviewModel)" />
+              </div>
 
-          <div class="py-2">
-            <span v-html="extractPreview(reviewModel)" />
-          </div>
-
-          <div>
-            <span class="grey--text half-bold pr-2">{{ disciplines.map(d => d.disciplineName).join(", ") }}</span>
-          </div>
-        </div>
-      </v-col>
-
-      <v-col class="px-2" cols="4" lg="3" xl="2">
-        <div>
-          <review-assessment v-model="reviewModel.scores" :research-content-type="researchContentType" />
-          <div v-if="reviewModel.votes.length" class="pt-2">
-            <v-tooltip bottom>
-              <template v-slot:activator="{ on }">
-                <div class="display-flex" v-on="on">
-                  <span class="half-bold align-self-center pr-2">{{ reviewModel.votes.length }}</span>
-                  <v-icon>group_add</v-icon>
-                </div>
-              </template>
-              <div>{{ reviewModel.votes.length }} experts supported this review</div>
-            </v-tooltip>
-          </div>
-          <div class="text-right">
-            <v-btn
-              color="primary"
-              small
-              outlined
-              @click="goToReviewPage()"
-            >
-              See Review
-            </v-btn>
-          </div>
-        </div>
+              <div>
+                <span class="grey--text half-bold pr-2">{{ disciplines.map(d => d.disciplineName).join(", ") }}</span>
+              </div>
+            </div>
+          </v-col>
+          <v-col cols="5" lg="4" xl="3">
+            <div>
+              <review-assessment v-model="reviewModel.scores" :research-content-type="researchContentType" />
+              <div v-if="reviewModel.votes.length" class="pt-2">
+                <v-tooltip bottom>
+                  <template v-slot:activator="{ on }">
+                    <div class="display-flex" v-on="on">
+                      <span class="half-bold align-self-center pr-2">{{ reviewModel.votes.length }}</span>
+                      <v-icon>group_add</v-icon>
+                    </div>
+                  </template>
+                  <div>{{ reviewModel.votes.length }} experts supported this review</div>
+                </v-tooltip>
+              </div>
+              <div class="text-right">
+                <v-btn
+                  color="primary"
+                  small
+                  outlined
+                  @click="goToReviewPage()"
+                >
+                  See Review
+                </v-btn>
+              </div>
+            </div>
+          </v-col>
+        </v-row>
       </v-col>
     </v-row>
   </v-card>
