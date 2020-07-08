@@ -16,22 +16,6 @@ const researchContentReviewsService = ResearchContentReviewsService.getInstance(
 const researchService = ResearchService.getInstance();
 const expertiseContributionsService = ExpertiseContributionsService.getInstance();
 
-const criteriaTypes = {
-  IMPACT: 'Impact',
-  NOVELTY: 'Novelty',
-  EXCELENCE: 'Excelence',
-  RATIONALITY: 'Rationality',
-  TECHNICAL_QUALITY: 'Technical Quality',
-  REPLICATION: 'Replication'
-};
-
-const contributionTypesNamesMap = {
-  [EXPERTISE_CONTRIBUTION_TYPE.PUBLICATION]: 'Research',
-  [EXPERTISE_CONTRIBUTION_TYPE.REVIEW]: 'Review',
-  [EXPERTISE_CONTRIBUTION_TYPE.REVIEW_SUPPORT]: 'Review support',
-  [EXPERTISE_CONTRIBUTION_TYPE.UNKNOWN]: 'Graduation'
-};
-
 const state = {
   account: undefined,
   profile: undefined,
@@ -41,8 +25,6 @@ const state = {
   invites: [],
   reviewRequests: [],
   researchesRef: [],
-  criteriaTypes,
-  contributionTypesNamesMap,
   eciStats: undefined,
   eciHistoryByDiscipline: {},
 
@@ -75,14 +57,6 @@ const getters = {
   invites: (state) => state.invites,
   reviewRequests: (state) => state.reviewRequests,
 
-  // TODO: Get rid of this
-  criteriaTypes: (state) => state.criteriaTypes,
-  criteriaItems: (state) => Object.values(state.criteriaTypes),
-  contributionTypesNamesMap: (state) => state.contributionTypesNamesMap,
-  contributionTypeItems: (state) => Object.entries(state.contributionTypesNamesMap)
-    .map(([key, value]) => ({ text: value, value: key }))
-    .filter((e) => e.value != EXPERTISE_CONTRIBUTION_TYPE.UNKNOWN),
-
   filter: (state) => state.filter,
 
   eciStats: (state, getters) => state.eciStats,
@@ -95,35 +69,7 @@ const getters = {
     }
 
     return records
-      .filter((record) => {
-        if (!getters.filter.contributionType) return true;
-        return record.contribution_type == getters.filter.contributionType;
-      })
       .map((item) => {
-        let criteriaModifier;
-        switch (getters.filter.criteria) {
-          case getters.criteriaTypes.IMPACT:
-            criteriaModifier = (y) => y * (0.5 + 0.3 * Math.cos(0.00008 * Math.PI * y));
-            break;
-          case getters.criteriaTypes.NOVELTY:
-            criteriaModifier = (y) => y * (0.3 + 0.2 * Math.sin(0.00008 * Math.PI * y));
-            break;
-          case getters.criteriaTypes.EXCELENCE:
-            criteriaModifier = (y) => y * (0.1 + 0.1 * Math.cos(0.00008 * Math.PI * y));
-            break;
-          case getters.criteriaTypes.RATIONALITY:
-            criteriaModifier = (y) => y * (0.4 + 0.4 * Math.cos(0.00008 * Math.PI * y));
-            break;
-          case getters.criteriaTypes.TECHNICAL_QUALITY:
-            criteriaModifier = (y) => y * (0.7 + 0.5 * Math.sin(0.00008 * Math.PI * y));
-            break;
-          case getters.criteriaTypes.REPLICATION:
-            criteriaModifier = (y) => y * (0.9 + 0.1 * Math.cos(0.00008 * Math.PI * y));
-            break;
-          default:
-            criteriaModifier = (y) => y;
-            break;
-        }
 
         const getEciRecordLabel = (record) => {
           let actionText = "";
@@ -161,8 +107,7 @@ const getters = {
           return actionText;
         };
 
-
-        const record = { ...item, criteriaEci: criteriaModifier(item.eci) };
+        const record = { ...item };
 
         if (record.contribution_type == EXPERTISE_CONTRIBUTION_TYPE.REVIEW) {
           const parser = new DOMParser();
@@ -471,10 +416,24 @@ const actions = {
     commit('UPDATE_ECI_HISTORY_FILTER', { key: payload.key, value: payload.value });
   },
 
-  loadAccountEciHistoryRecords({ state, dispatch, commit }, { account, disciplineId, notify }) {
-    return expertiseContributionsService.getEciHistoryByAccountAndDiscipline(account, disciplineId)
+  loadAccountEciHistoryRecords({ state, dispatch, commit }, { 
+    account,
+    discipline,
+    from,
+    to,
+    contribution,
+    criteria, 
+    notify 
+  }) {
+    return expertiseContributionsService.getAccountExpertiseHistory(account, {
+      discipline: discipline,
+      from: from,
+      to: to,
+      contribution: contribution,
+      criteria: criteria
+    })
       .then((records) => {
-        commit('SET_ACCOUNT_ECI_HISTORY_BY_DISCIPLINE', { disciplineId, records });
+        commit('SET_ACCOUNT_ECI_HISTORY_BY_DISCIPLINE', { disciplineId: discipline, records });
       }, (err) => {
         console.log(err);
       })
@@ -482,6 +441,7 @@ const actions = {
         if (notify) notify();
       });
   },
+
 
   loadAccountEciStats({ commit }, { account, discipline, notify }) {
     return expertiseContributionsService.getAccountExpertiseStats(account, { discipline })

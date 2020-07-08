@@ -175,7 +175,7 @@
   import LevellerSelector from '@/components/Leveller/LevellerSelector';
   import DInputFile from '@/components/Deipify/DInputFile/DInputFile';
   import { mapGetters } from 'vuex';
-  import { FormMixin } from '@/utils/FomMixin';
+  import { FormMixin } from '@/utils/FormMixin';
   import { AccessService } from '@deip/access-service';
   import * as disciplinesService from '@/components/common/disciplines/DisciplineTreeService';
 

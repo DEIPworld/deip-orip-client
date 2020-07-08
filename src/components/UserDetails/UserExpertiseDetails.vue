@@ -28,11 +28,11 @@
     <div v-if="expertise.length" class="pt-4 display-flex">
       <div class="shrink">
         <v-select
-          v-model="selectedEciDisciplineId"
+          v-model="selectedDisciplineExternalId"
           class="my-0 py-0"
           :items="expertise"
           item-text="discipline_name"
-          item-value="discipline_id"
+          item-value="discipline_external_id"
           dense
           filled
           label="Discipline"
@@ -169,7 +169,8 @@
           <div class="shrink">
             <v-menu
               v-model="filter.fromDateMenu"
-              :close-on-content-click="false"
+              :close-on-click="true"
+              :close-on-content-click="true"
               :nudge-right="40"
               transition="scale-transition"
               offset-y
@@ -187,16 +188,18 @@
               </template>
               <v-date-picker
                 v-model="filter.fromDate"
+                no-title
                 :max="moment(filter.toDate).subtract(1, 'days').format('YYYY-MM-DD')"
-                :min="moment('2018-01-01').format('YYYY-MM-DD')"
-                @input="updateEciHistoryFilter({ key: 'fromDate', value: moment(filter.fromDate).toDate() })"
+                :min="moment('2020-01-01').format('YYYY-MM-DD')"
+                @change="loadDisciplineEciHistory()"
               />
             </v-menu>
           </div>
           <div class="pl-4 shrink">
             <v-menu
               v-model="filter.toDateMenu"
-              :close-on-content-click="false"
+              :close-on-click="true"
+              :close-on-content-click="true"
               :nudge-right="40"
               transition="scale-transition"
               offset-y
@@ -214,36 +217,35 @@
               </template>
               <v-date-picker
                 v-model="filter.toDate"
+                no-title
                 :max="moment().format('YYYY-MM-DD')"
                 :min="moment(filter.fromDate).add(1, 'days').format('YYYY-MM-DD')"
-                @input="updateEciHistoryFilter({ key: 'toDate', value: moment(filter.toDate).toDate() })"
+                @change="loadDisciplineEciHistory()"
               />
             </v-menu>
           </div>
           <div class="pl-4 shrink">
             <v-select
-              v-model="filter.contributionType"
+              v-model="filter.contribution"
               class="my-0 py-0"
-              :items="contributionTypeItems"
+              :items="contributions"
               label="Contribution Type"
               filled
               dense
-              clearable
               :disabled="eciHistoryRecordsTable.loading"
-              @change="updateEciHistoryFilter({ key: 'contributionType', value: filter.contributionType })"
+              @change="loadDisciplineEciHistory()"
             />
           </div>
           <div class="pl-4 shrink">
             <v-select
               v-model="filter.criteria"
               class="my-0 py-0"
-              :items="criteriaItems"
+              :items="criterias"
               label="Criteria"
               filled
               dense
-              clearable
               :disabled="eciHistoryRecordsTable.loading"
-              @change="updateEciHistoryFilter({ key: 'criteria', value: filter.criteria })"
+              @change="loadDisciplineEciHistory()"
             />
           </div>
         </div>
@@ -335,6 +337,7 @@
   import { EXPERTISE_CONTRIBUTION_TYPE, ASSESSMENT_CRITERIA_TYPE } from '@/variables';
   import { UsersService } from '@deip/users-service';
   import { ExpertiseContributionsService } from '@deip/expertise-contributions-service';
+  import { mapSelectListFromEnum } from '@/utils/mapSelectListFromEnum';
 
   const usersService = UsersService.getInstance();
   const expertiseContributionsService = ExpertiseContributionsService.getInstance();
@@ -350,16 +353,19 @@
 
     data() {
       return {
-        selectedEciDisciplineId: null,
+        selectedDisciplineExternalId: null,
 
         filter: {
           fromDate: this.moment().subtract(7, 'days').format('YYYY-MM-DD'),
           fromDateMenu: false,
           toDate: this.moment().format('YYYY-MM-DD'),
           toDateMenu: false,
-          criteria: null,
-          contributionType: null
+          criteria: "",
+          contribution: ""
         },
+
+        criterias: mapSelectListFromEnum(ASSESSMENT_CRITERIA_TYPE, { blackList: [ASSESSMENT_CRITERIA_TYPE.UNKNOWN], allowBlank: true, blankLabel: "All" }),
+        contributions: mapSelectListFromEnum(EXPERTISE_CONTRIBUTION_TYPE, { blackList: [ASSESSMENT_CRITERIA_TYPE.UNKNOWN], allowBlank: true, blankLabel: "All" }),
 
         eciHistoryRecordsTable: {
           headers: [
@@ -443,6 +449,13 @@
             width: '90%'
           },
           tooltip: { isHtml: true }
+        },
+
+        contributionTypeNameMap: {
+          [EXPERTISE_CONTRIBUTION_TYPE.UNKNOWN]: 'Graduation',
+          [EXPERTISE_CONTRIBUTION_TYPE.PUBLICATION]: 'Research',
+          [EXPERTISE_CONTRIBUTION_TYPE.REVIEW]: 'Review',
+          [EXPERTISE_CONTRIBUTION_TYPE.REVIEW_SUPPORT]: 'Review support'
         }
       };
     },
@@ -451,14 +464,10 @@
       ...mapGetters({
         userInfo: 'userDetails/userInfo',
         expertise: 'userDetails/expertise',
-        eciStats: 'userDetails/eciStats',
-        criteriaTypes: 'userDetails/criteriaTypes',
-        criteriaItems: 'userDetails/criteriaItems',
-        contributionTypesNamesMap: 'userDetails/contributionTypesNamesMap',
-        contributionTypeItems: 'userDetails/contributionTypeItems'
+        eciStats: 'userDetails/eciStats'
       }),
       selectedExpertise() {
-        return this.expertise.find((e) => e.discipline_id === this.selectedEciDisciplineId);
+        return this.expertise.find((e) => e.discipline_external_id === this.selectedDisciplineExternalId);
       },
       overview() {
         if (!this.selectedExpertise) {
@@ -480,8 +489,8 @@
           contributionsAllocation: [
             ['Contribution Type', ''],
             ...Object.entries(allocations).map((e) => {
-              const contributionType = e[0];
-              return [this.contributionTypesNamesMap[contributionType], e[1]];
+              const contribution = e[0];
+              return [this.contributionTypeNameMap[contribution], e[1]];
             })
           ]
         };
@@ -489,7 +498,7 @@
       eciChartData() {
         return [
           ['Date', 'Value'],
-          ...this.eciHistoryRecordsTable.items.map((e) => [new Date(e.timestamp), e.criteriaEci])
+          ...this.eciHistoryRecordsTable.items.map((e) => [new Date(e.timestamp), e.eci])
         ];
       }
     },
@@ -497,43 +506,33 @@
     methods: {
 
       loadDisciplineEciHistory() {
-        const disciplineId = this.selectedEciDisciplineId;
-        const exp = this.expertise.find((e) => e.discipline_id === disciplineId);
+        const disciplineExternalId = this.selectedDisciplineExternalId;
         const account = this.userInfo.account.name;
+
+        const fromDate = this.moment(this.filter.fromDate).toDate();
+        const toDate = this.moment(this.filter.toDate).toDate();
+        const contribution = this.filter.contribution;
+        const criteria = this.filter.criteria;
+
         this.eciHistoryRecordsTable.loading = true;
-        const cachedRecords = this.$store.getters['userDetails/eciHistoryByDiscipline'](disciplineId);
-        let promise;
-        if (cachedRecords == null) {
-          promise = this.$store.dispatch('userDetails/loadAccountEciHistoryRecords', { account, disciplineId })
-            .then(() => {
-              const records = this.$store.getters['userDetails/eciHistoryByDiscipline'](disciplineId);
-              this.eciHistoryRecordsTable.items = records.reverse();
-              this.eciHistoryRecordsTable.pagination.page = 1;
-              this.eciHistoryRecordsTable.loading = false;
-              this.eciHistoryRecordsTable.totalItems = records.length;
-            });
-        } else {
-          promise = Promise.resolve()
-            .then(() => {
-              this.eciHistoryRecordsTable.items = cachedRecords.reverse();
-              this.eciHistoryRecordsTable.pagination.page = 1;
-              this.eciHistoryRecordsTable.loading = false;
-              this.eciHistoryRecordsTable.totalItems = cachedRecords.length;
-            })
-        }
 
-        return promise
-          .then(() => {
-            return this.$store.dispatch('userDetails/loadAccountEciStats', { account, discipline: exp.discipline_external_id });
+         return this.$store.dispatch('userDetails/loadAccountEciHistoryRecords', { 
+            account: account,
+            discipline: disciplineExternalId,
+            from: fromDate,
+            to: toDate,
+            contribution: contribution,
+            criteria: criteria 
           })
-      },
-
-      updateEciHistoryFilter({ key, value }) {
-        this.filter.fromDateMenu = false;
-        this.filter.toDateMenu = false;
-        this.$store.dispatch('userDetails/updateEciHistoryFilter', { key, value })
           .then(() => {
-            this.loadDisciplineEciHistory();
+            const records = this.$store.getters['userDetails/eciHistoryByDiscipline'](disciplineExternalId);
+            this.eciHistoryRecordsTable.items = records.reverse();
+            this.eciHistoryRecordsTable.pagination.page = 1;
+            this.eciHistoryRecordsTable.loading = false;
+            this.eciHistoryRecordsTable.totalItems = records.length;
+          })
+          .then(() => {
+            return this.$store.dispatch('userDetails/loadAccountEciStats', { account, discipline: disciplineExternalId });
           });
       }
     },
@@ -548,16 +547,16 @@
           const idx = this.expertise.findIndex((e) => e.discipline_id === disciplineId);
 
           if (idx !== -1) {
-            this.selectedEciDisciplineId = this.expertise[idx].discipline_id;
+            this.selectedDisciplineExternalId = this.expertise[idx].discipline_external_id;
           } else if (this.expertise.length) {
-            this.selectedEciDisciplineId = this.expertise[0].discipline_id;
+            this.selectedDisciplineExternalId = this.expertise[0].discipline_external_id;
           }
 
-          if (this.selectedEciDisciplineId) {
+          if (this.selectedDisciplineExternalId) {
             this.loadDisciplineEciHistory()
-              .then(() => {
+              .then(() => { 
                 this.$setReady(); 
-              })
+              });
           } else {
             this.$setReady(); 
           }
