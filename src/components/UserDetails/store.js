@@ -16,22 +16,6 @@ const researchContentReviewsService = ResearchContentReviewsService.getInstance(
 const researchService = ResearchService.getInstance();
 const expertiseContributionsService = ExpertiseContributionsService.getInstance();
 
-const criteriaTypes = {
-  IMPACT: 'Impact',
-  NOVELTY: 'Novelty',
-  EXCELENCE: 'Excelence',
-  RATIONALITY: 'Rationality',
-  TECHNICAL_QUALITY: 'Technical Quality',
-  REPLICATION: 'Replication'
-};
-
-const contributionTypesNamesMap = {
-  [EXPERTISE_CONTRIBUTION_TYPE.PUBLICATION]: 'Research',
-  [EXPERTISE_CONTRIBUTION_TYPE.REVIEW]: 'Review',
-  [EXPERTISE_CONTRIBUTION_TYPE.REVIEW_SUPPORT]: 'Review support',
-  [EXPERTISE_CONTRIBUTION_TYPE.UNKNOWN]: 'Graduation'
-};
-
 const state = {
   account: undefined,
   profile: undefined,
@@ -41,10 +25,8 @@ const state = {
   invites: [],
   reviewRequests: [],
   researchesRef: [],
-  criteriaTypes,
-  contributionTypesNamesMap,
-  eciStats: undefined,
-  eciHistoryByDiscipline: {},
+  eciStatsByDiscipline: undefined,
+  eciHistoryByDiscipline: [],
 
   filter: {
     criteria: null,
@@ -74,56 +56,13 @@ const getters = {
   expertise: (state) => state.expertise,
   invites: (state) => state.invites,
   reviewRequests: (state) => state.reviewRequests,
-
-  // TODO: Get rid of this
-  criteriaTypes: (state) => state.criteriaTypes,
-  criteriaItems: (state) => Object.values(state.criteriaTypes),
-  contributionTypesNamesMap: (state) => state.contributionTypesNamesMap,
-  contributionTypeItems: (state) => Object.entries(state.contributionTypesNamesMap)
-    .map(([key, value]) => ({ text: value, value: key }))
-    .filter((e) => e.value != EXPERTISE_CONTRIBUTION_TYPE.UNKNOWN),
-
+  
   filter: (state) => state.filter,
+  eciStatsByDiscipline: (state, getters) => state.eciStatsByDiscipline,
+  eciHistoryByDiscipline: (state, getters) => {
 
-  eciStats: (state, getters) => state.eciStats,
-  eciHistoryByDisciplineMap: (state, getters) => state.eciHistoryByDiscipline,
-
-  eciHistoryByDiscipline: (state, getters) => (disciplineId) => {
-    const records = state.eciHistoryByDiscipline[disciplineId];
-    if (!records || state.eciHistoryByDiscipline.account !== state.account.name) {
-      return null;
-    }
-
-    return records
-      .filter((record) => {
-        if (!getters.filter.contributionType) return true;
-        return record.contribution_type == getters.filter.contributionType;
-      })
+    return state.eciHistoryByDiscipline
       .map((item) => {
-        let criteriaModifier;
-        switch (getters.filter.criteria) {
-          case getters.criteriaTypes.IMPACT:
-            criteriaModifier = (y) => y * (0.5 + 0.3 * Math.cos(0.00008 * Math.PI * y));
-            break;
-          case getters.criteriaTypes.NOVELTY:
-            criteriaModifier = (y) => y * (0.3 + 0.2 * Math.sin(0.00008 * Math.PI * y));
-            break;
-          case getters.criteriaTypes.EXCELENCE:
-            criteriaModifier = (y) => y * (0.1 + 0.1 * Math.cos(0.00008 * Math.PI * y));
-            break;
-          case getters.criteriaTypes.RATIONALITY:
-            criteriaModifier = (y) => y * (0.4 + 0.4 * Math.cos(0.00008 * Math.PI * y));
-            break;
-          case getters.criteriaTypes.TECHNICAL_QUALITY:
-            criteriaModifier = (y) => y * (0.7 + 0.5 * Math.sin(0.00008 * Math.PI * y));
-            break;
-          case getters.criteriaTypes.REPLICATION:
-            criteriaModifier = (y) => y * (0.9 + 0.1 * Math.cos(0.00008 * Math.PI * y));
-            break;
-          default:
-            criteriaModifier = (y) => y;
-            break;
-        }
 
         const getEciRecordLabel = (record) => {
           let actionText = "";
@@ -161,8 +100,7 @@ const getters = {
           return actionText;
         };
 
-
-        const record = { ...item, criteriaEci: criteriaModifier(item.eci) };
+        const record = { ...item };
 
         if (record.contribution_type == EXPERTISE_CONTRIBUTION_TYPE.REVIEW) {
           const parser = new DOMParser();
@@ -471,25 +409,17 @@ const actions = {
     commit('UPDATE_ECI_HISTORY_FILTER', { key: payload.key, value: payload.value });
   },
 
-  loadAccountEciHistoryRecords({ state, dispatch, commit }, { account, disciplineId, notify }) {
-    return expertiseContributionsService.getEciHistoryByAccountAndDiscipline(account, disciplineId)
-      .then((records) => {
-        commit('SET_ACCOUNT_ECI_HISTORY_BY_DISCIPLINE', { disciplineId, records, account });
-      }, (err) => {
-        console.log(err);
-      })
-      .finally(() => {
-        if (notify) notify();
-      });
+  loadAccountEciHistoryRecords({ commit }, filter) {
+    return expertiseContributionsService.getAccountExpertiseHistory(filter.account, filter)
+      .then((history) => {
+        commit('SET_ACCOUNT_ECI_HISTORY_BY_DISCIPLINE', history);
+      }, (err) => { console.log(err); });
   },
 
-  loadAccountEciStats({ commit }, { account, discipline, notify }) {
-    return expertiseContributionsService.getAccountExpertiseStats(account, { discipline })
+  loadAccountEciStatsRecords({ commit }, filter) {
+    return expertiseContributionsService.getAccountExpertiseStats(filter.account, filter)
       .then((stats) => {
         commit('SET_ACCOUNT_ECI_STATS', stats);
-      })
-      .finally(() => {
-        if (notify) notify();
       });
   }
 };
@@ -549,9 +479,8 @@ const mutations = {
     state.isLoadingResearchesRefDetails = value;
   },
 
-  SET_ACCOUNT_ECI_HISTORY_BY_DISCIPLINE(state, { disciplineId, records, account }) {
-    state.eciHistoryByDiscipline[disciplineId] = records;
-    state.eciHistoryByDiscipline.account = account;
+  SET_ACCOUNT_ECI_HISTORY_BY_DISCIPLINE(state, history) {
+    Vue.set(state, 'eciHistoryByDiscipline', history);
   },
 
   UPDATE_ECI_HISTORY_FILTER(state, { key, value }) {
@@ -559,11 +488,11 @@ const mutations = {
   },
 
   SET_ACCOUNT_ECI_STATS(state, stats) {
-    state.eciStats = stats;
+    Vue.set(state, 'eciStatsByDiscipline', stats);
   },
 
   RESET_STATE(state) {
-    state.eciHistoryByDiscipline = {};
+    Vue.set(state, 'eciHistoryByDiscipline', []);
   }
 
 };

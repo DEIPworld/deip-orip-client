@@ -22,7 +22,7 @@
         <v-list-item>
           <v-list-item-content>
             <v-text-field
-              v-model="filter.name"
+              v-model="filter.searchTerm"
               filled
               prepend-inner-icon="search"
               hide-details
@@ -44,7 +44,7 @@
         <v-list-item>
           <v-list-item-content>
             <v-select
-              v-model.number="filter.contribution"
+              v-model="filter.contribution"
               :items="contributions"
               filled
               hide-details
@@ -55,7 +55,7 @@
         <v-list-item>
           <v-list-item-content>
             <v-select
-              v-model.number="filter.criteria"
+              v-model="filter.criteria"
               :items="criterias"
               filled
               hide-details
@@ -166,37 +166,12 @@
 
 <script>
   import * as disciplinesService from '@/components/common/disciplines/DisciplineTreeService';
-
-  import {
-    EXPERTISE_CONTRIBUTION_TYPE,
-    ASSESSMENT_CRITERIA_TYPE
-  } from '@/variables';
-
+  import { EXPERTISE_CONTRIBUTION_TYPE, ASSESSMENT_CRITERIA_TYPE } from '@/variables';
   import { mapGetters } from 'vuex';
-
   import ContentBlock from '@/components/layout/components/ContentBlock';
   import LayoutSection from '@/components/layout/components/LayoutSection';
   import AppLayout from '@/components/layout/components/Layout';
-
-  const getValues = (obj) => Object.keys(obj).reduce((arr, it) => {
-    if (typeof obj[it] === 'string') {
-      let itName = (obj[it][0] + obj[it].slice(1).toLowerCase()).replace(
-        '_',
-        ' '
-      );
-      if (itName === 'Unknown') {
-        itName = 'All';
-      }
-      return [
-        ...arr,
-        {
-          text: itName,
-          value: +it
-        }
-      ];
-    }
-    return arr;
-  }, []);
+  import { mapSelectListFromEnum } from '@/utils/mapSelectListFromEnum';
 
   export default {
     name: 'Participants',
@@ -206,24 +181,24 @@
         isShowFilter: true,
         isShowBadge: false,
         disciplines: [
-          { text: 'All', value: disciplinesService.disciplineTree.id },
+          { text: 'All', value: ""},
           ...disciplinesService
             .getTopLevelNodes()
             .map((d) => ({ text: d.label, value: d.id }))
         ],
-        contributions: getValues(EXPERTISE_CONTRIBUTION_TYPE),
-        criterias: getValues(ASSESSMENT_CRITERIA_TYPE),
+        contributions: mapSelectListFromEnum(EXPERTISE_CONTRIBUTION_TYPE, { blackList: [EXPERTISE_CONTRIBUTION_TYPE.UNKNOWN], allowBlank: true, blankLabel: "All" }),
+        criterias: mapSelectListFromEnum(ASSESSMENT_CRITERIA_TYPE, { blackList: [ASSESSMENT_CRITERIA_TYPE.UNKNOWN], allowBlank: true, blankLabel: "All" }),
         defaultFilter: {
-          name: '',
-          discipline: disciplinesService.disciplineTree.id,
-          contribution: 0,
-          criteria: 0
+          searchTerm: "",
+          discipline: "",
+          contribution: "",
+          criteria: ""
         },
         filter: {
-          name: '',
-          discipline: disciplinesService.disciplineTree.id,
-          contribution: 0,
-          criteria: 0
+          searchTerm: "",
+          discipline: "",
+          contribution: "",
+          criteria: ""
         },
         participantsHeader: [
           {
@@ -279,7 +254,7 @@
         this.filter.criteria = +this.$route.query.criteria;
       }
       if (this.$route.query.name) {
-        this.filter.name = this.$route.query.name;
+        this.filter.searchTerm = this.$route.query.name;
       }
 
       this.isShowBadge = !_.isEqual(this.filter, this.defaultFilter);

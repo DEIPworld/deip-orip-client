@@ -25,32 +25,119 @@
 
     <v-divider class="my-4" />
 
-    <div v-if="expertise.length" class="pt-4 display-flex">
-      <div class="shrink">
-        <v-select
-          v-model="selectedEciDisciplineId"
-          class="my-0 py-0"
-          :items="expertise"
-          item-text="discipline_name"
-          item-value="discipline_id"
-          dense
-          filled
-          label="Discipline"
-          :disabled="eciHistoryRecordsTable.loading"
-          @change="loadDisciplineEciHistory()"
-        />
+    <div v-if="expertise.length">
+      <div class="pt-4 display-flex">
+        <div class="shrink">
+          <v-select
+            v-model="filter.disciplineExternalId"
+            class="my-0 py-0"
+            :items="disciplines"
+            dense
+            filled
+            label="Discipline"
+            :disabled="eciHistoryRecordsTable.loading"
+          />
+        </div>
+        <div class="pl-4 shrink">
+          <v-select
+            v-model="filter.contribution"
+            class="my-0 py-0"
+            :items="contributions"
+            label="Contribution Type"
+            filled
+            dense
+            :disabled="eciHistoryRecordsTable.loading"
+          />
+        </div>
+        <div class="pl-4 shrink">
+          <v-select
+            v-model="filter.criteria"
+            class="my-0 py-0"
+            :items="criterias"
+            label="Criteria"
+            filled
+            dense
+            :disabled="eciHistoryRecordsTable.loading"
+          />
+        </div>
+        <div class="pl-4 shrink">
+          <v-menu
+            v-model="filter.fromDateMenu"
+            :close-on-click="true"
+            :close-on-content-click="true"
+            :nudge-right="40"
+            transition="scale-transition"
+            offset-y
+            min-width="290px"
+          >
+            <template v-slot:activator="{ on }">
+              <v-text-field
+                v-model="filter.fromDate"
+                :disabled="eciHistoryRecordsTable.loading"
+                label="From"
+                dense
+                readonly
+                clearable
+                filled
+                v-on="on"
+              />
+            </template>
+            <v-date-picker
+              v-model="filter.fromDate"
+              no-title
+              :max="moment(filter.toDate).subtract(1, 'days').format('YYYY-MM-DD')"
+              :min="moment('2020-01-01').format('YYYY-MM-DD')"
+            />
+          </v-menu>
+        </div>
+        <div class="pl-4 shrink">
+          <v-menu
+            v-model="filter.toDateMenu"
+            :close-on-click="true"
+            :close-on-content-click="true"
+            :nudge-right="40"
+            transition="scale-transition"
+            offset-y
+            min-width="290px"
+          >
+            <template v-slot:activator="{ on }">
+              <v-text-field
+                v-model="filter.toDate"
+                :disabled="eciHistoryRecordsTable.loading"
+                label="To"
+                dense
+                readonly
+                clearable
+                filled
+                v-on="on"
+              />
+            </template>
+            <v-date-picker
+              v-model="filter.toDate"
+              no-title
+              :max="moment().format('YYYY-MM-DD')"
+              :min="moment(filter.fromDate).add(1, 'days').format('YYYY-MM-DD')"
+            />
+          </v-menu>
+        </div>
+        <div class="pl-4 shrink">
+          <v-btn 
+            color="primary" 
+            small
+            @click="loadDisciplineEciHistory()">
+            Apply
+          </v-btn>
+        </div>
       </div>
     </div>
     <div v-else class="py-4">
       User does not have Expertise Tokens
     </div>
 
-
-    <div v-if="eciHistoryRecordsTable.loading">
+    <div v-if="eciHistoryRecordsTable.loading" class="text-center ma-4">
       <v-progress-circular indeterminate :width="3" :size="40" />
     </div>
 
-    <!-- <div v-else-if="eciHistoryRecordsTable.items.length"> -->
     <div v-else>
       <div v-if="overview" class="pb-4">
         <div class="font-weight-bold title">
@@ -66,87 +153,60 @@
             />
           </v-col>
           <v-col cols="9">
-            <v-row no-gutters class="full-height">
-              <!-- <v-divider
-                vertical
-                inset
-                class="ma-0"
-                style="max-height: 100%"
-              /> -->
+            <v-row v-if="eciStatsByDiscipline" no-gutters class="full-height">
               <v-col cols="3" class="divider-border-left">
                 <div class="display-flex justify-center align-center flex-column full-height">
                   <div class="text-subtitle-1 grey--text text-center">
                     Expertise Contribution Index
                   </div>
                   <div class="text-subtitle-1 mt-2">
-                    {{ eciStats.eci }}
+                    {{ eciStatsByDiscipline.eci }}
                   </div>
                 </div>
               </v-col>
-              <!-- <v-divider
-                vertical
-                inset
-                class="ma-0"
-                style="max-height: 100%"
-              /> -->
               <v-col cols="3" class="divider-border-left">
                 <div class="display-flex justify-center align-center flex-column full-height">
                   <div class="text-subtitle-1 grey--text text-center">
                     Contributions
                   </div>
                   <div class="text-subtitle-1 mt-2">
-                    {{ eciStats.contributions.length }}
+                    {{ eciStatsByDiscipline.contributions.length }}
                   </div>
                 </div>
               </v-col>
-              <!-- <v-divider
-                vertical
-                inset
-                class="ma-0"
-                style="max-height: 100%"
-              /> -->
               <v-col cols="2" class="divider-border-left text-h5 primary--text">
                 <div class="display-flex justify-center align-center flex-column full-height">
                   <div class="text-subtitle-1 grey--text text-center">
                     Percentile rank
                   </div>
                   <div class="text-subtitle-1 mt-2">
-                  <div>{{eciStats.percentile_rank}}</div>
+                  <div>{{eciStatsByDiscipline.percentile_rank}}</div>
                   </div>
                 </div>
               </v-col>
-              <!-- <v-divider
-                vertical
-                inset
-                class="ma-0"
-                style="max-height: 100%"
-              /> -->
               <v-col cols="2" class="divider-border-left">
                 <div class="display-flex justify-center align-center flex-column full-height">
                   <div class="text-subtitle-1 grey--text text-center">
                     Citations
                   </div>
                   <div class="text-subtitle-1 mt-2">
-                    {{ eciStats.researches.length }}
+                    {{ eciStatsByDiscipline.researches.length }}
                   </div>
                 </div>
               </v-col>
-              <!-- <v-divider
-                vertical
-                inset
-                class="ma-0"
-                style="max-height: 100%"
-              /> -->
               <v-col cols="2" class="divider-border-left">
                 <div class="display-flex justify-center align-center flex-column full-height">
                   <div class="text-subtitle-1 grey--text text-center">
                     H-index
                   </div>
                   <div class="text-subtitle-1 mt-2">
-                    {{eciStats.assessment_criteria_sum_weight - eciStats.past_assessment_criteria_sum_weight}}
+                    {{eciStatsByDiscipline.researches.length}}
                   </div>
                 </div>
               </v-col>
+            </v-row>
+            <v-row v-else no-gutters class="full-height">
+              <v-col cols="12">No records found for specified filter</v-col>
             </v-row>
           </v-col>
         </v-row>
@@ -165,88 +225,6 @@
         </router-link>
       </div>
       <div class="py-4">
-        <div class="display-flex">
-          <div class="shrink">
-            <v-menu
-              v-model="filter.fromDateMenu"
-              :close-on-content-click="false"
-              :nudge-right="40"
-              transition="scale-transition"
-              offset-y
-              min-width="290px"
-            >
-              <template v-slot:activator="{ on }">
-                <v-text-field
-                  v-model="filter.fromDate"
-                  :disabled="eciHistoryRecordsTable.loading"
-                  label="From"
-                  readonly
-                  filled
-                  v-on="on"
-                />
-              </template>
-              <v-date-picker
-                v-model="filter.fromDate"
-                :max="moment(filter.toDate).subtract(1, 'days').format('YYYY-MM-DD')"
-                :min="moment('2018-01-01').format('YYYY-MM-DD')"
-                @input="updateEciHistoryFilter({ key: 'fromDate', value: moment(filter.fromDate).toDate() })"
-              />
-            </v-menu>
-          </div>
-          <div class="pl-4 shrink">
-            <v-menu
-              v-model="filter.toDateMenu"
-              :close-on-content-click="false"
-              :nudge-right="40"
-              transition="scale-transition"
-              offset-y
-              min-width="290px"
-            >
-              <template v-slot:activator="{ on }">
-                <v-text-field
-                  v-model="filter.toDate"
-                  :disabled="eciHistoryRecordsTable.loading"
-                  label="To"
-                  readonly
-                  filled
-                  v-on="on"
-                />
-              </template>
-              <v-date-picker
-                v-model="filter.toDate"
-                :max="moment().format('YYYY-MM-DD')"
-                :min="moment(filter.fromDate).add(1, 'days').format('YYYY-MM-DD')"
-                @input="updateEciHistoryFilter({ key: 'toDate', value: moment(filter.toDate).toDate() })"
-              />
-            </v-menu>
-          </div>
-          <div class="pl-4 shrink">
-            <v-select
-              v-model="filter.contributionType"
-              class="my-0 py-0"
-              :items="contributionTypeItems"
-              label="Contribution Type"
-              filled
-              dense
-              clearable
-              :disabled="eciHistoryRecordsTable.loading"
-              @change="updateEciHistoryFilter({ key: 'contributionType', value: filter.contributionType })"
-            />
-          </div>
-          <div class="pl-4 shrink">
-            <v-select
-              v-model="filter.criteria"
-              class="my-0 py-0"
-              :items="criteriaItems"
-              label="Criteria"
-              filled
-              dense
-              clearable
-              :disabled="eciHistoryRecordsTable.loading"
-              @change="updateEciHistoryFilter({ key: 'criteria', value: filter.criteria })"
-            />
-          </div>
-        </div>
         <div v-if="eciHistoryRecordsTable.loading">
           <v-progress-circular
             indeterminate
@@ -335,6 +313,7 @@
   import { EXPERTISE_CONTRIBUTION_TYPE, ASSESSMENT_CRITERIA_TYPE } from '@/variables';
   import { UsersService } from '@deip/users-service';
   import { ExpertiseContributionsService } from '@deip/expertise-contributions-service';
+  import { mapSelectListFromEnum } from '@/utils/mapSelectListFromEnum';
 
   const usersService = UsersService.getInstance();
   const expertiseContributionsService = ExpertiseContributionsService.getInstance();
@@ -350,16 +329,20 @@
 
     data() {
       return {
-        selectedEciDisciplineId: null,
 
         filter: {
-          fromDate: this.moment().subtract(7, 'days').format('YYYY-MM-DD'),
+          disciplineExternalId: "",
+          fromDate: undefined,
           fromDateMenu: false,
-          toDate: this.moment().format('YYYY-MM-DD'),
+          toDate: undefined,
           toDateMenu: false,
-          criteria: null,
-          contributionType: null
+          criteria: "",
+          contribution: ""
         },
+
+        disciplines: [{ text: "All", value: "" }],
+        criterias: mapSelectListFromEnum(ASSESSMENT_CRITERIA_TYPE, { blackList: [ASSESSMENT_CRITERIA_TYPE.UNKNOWN], allowBlank: true, blankLabel: "All" }),
+        contributions: mapSelectListFromEnum(EXPERTISE_CONTRIBUTION_TYPE, { blackList: [ASSESSMENT_CRITERIA_TYPE.UNKNOWN], allowBlank: true, blankLabel: "All" }),
 
         eciHistoryRecordsTable: {
           headers: [
@@ -443,6 +426,13 @@
             width: '90%'
           },
           tooltip: { isHtml: true }
+        },
+
+        contributionTypeNameMap: {
+          [EXPERTISE_CONTRIBUTION_TYPE.UNKNOWN]: 'Graduation',
+          [EXPERTISE_CONTRIBUTION_TYPE.PUBLICATION]: 'Research',
+          [EXPERTISE_CONTRIBUTION_TYPE.REVIEW]: 'Review',
+          [EXPERTISE_CONTRIBUTION_TYPE.REVIEW_SUPPORT]: 'Review support'
         }
       };
     },
@@ -451,20 +441,9 @@
       ...mapGetters({
         userInfo: 'userDetails/userInfo',
         expertise: 'userDetails/expertise',
-        eciStats: 'userDetails/eciStats',
-        criteriaTypes: 'userDetails/criteriaTypes',
-        criteriaItems: 'userDetails/criteriaItems',
-        contributionTypesNamesMap: 'userDetails/contributionTypesNamesMap',
-        contributionTypeItems: 'userDetails/contributionTypeItems'
+        eciStatsByDiscipline: 'userDetails/eciStatsByDiscipline'
       }),
-      selectedExpertise() {
-        return this.expertise.find((e) => e.discipline_id === this.selectedEciDisciplineId);
-      },
       overview() {
-        if (!this.selectedExpertise) {
-          return null;
-        }
-
         const contributions = this.eciHistoryRecordsTable.items.filter((item) => item.contribution_type != EXPERTISE_CONTRIBUTION_TYPE.UNKNOWN);
         const allocations = contributions.reduce((acc, item) => {
           if (acc[item.contribution_type] === undefined) {
@@ -480,8 +459,8 @@
           contributionsAllocation: [
             ['Contribution Type', ''],
             ...Object.entries(allocations).map((e) => {
-              const contributionType = e[0];
-              return [this.contributionTypesNamesMap[contributionType], e[1]];
+              const contribution = e[0];
+              return [this.contributionTypeNameMap[contribution], e[1]];
             })
           ]
         };
@@ -489,7 +468,7 @@
       eciChartData() {
         return [
           ['Date', 'Value'],
-          ...this.eciHistoryRecordsTable.items.map((e) => [new Date(e.timestamp), e.criteriaEci])
+          ...this.eciHistoryRecordsTable.items.map((e) => [new Date(e.timestamp), e.eci])
         ];
       }
     },
@@ -497,43 +476,35 @@
     methods: {
 
       loadDisciplineEciHistory() {
-        const disciplineId = this.selectedEciDisciplineId;
-        const exp = this.expertise.find((e) => e.discipline_id === disciplineId);
         const account = this.userInfo.account.name;
+
+        const disciplineExternalId = this.filter.disciplineExternalId;
+        const fromDate = this.filter.fromDate ? this.moment(this.filter.fromDate).endOf('day').toISOString().split('.')[0] : "";
+        const toDate = this.filter.toDate ? this.moment(this.filter.toDate).endOf('day').toISOString().split('.')[0] : "";
+        const contribution = this.filter.contribution;
+        const criteria = this.filter.criteria;
+
         this.eciHistoryRecordsTable.loading = true;
-        const cachedRecords = this.$store.getters['userDetails/eciHistoryByDiscipline'](disciplineId);
-        let promise;
-        if (cachedRecords == null) {
-          promise = this.$store.dispatch('userDetails/loadAccountEciHistoryRecords', { account, disciplineId })
-            .then(() => {
-              const records = this.$store.getters['userDetails/eciHistoryByDiscipline'](disciplineId);
-              this.eciHistoryRecordsTable.items = records.reverse();
-              this.eciHistoryRecordsTable.pagination.page = 1;
-              this.eciHistoryRecordsTable.loading = false;
-              this.eciHistoryRecordsTable.totalItems = records.length;
-            });
-        } else {
-          promise = Promise.resolve()
-            .then(() => {
-              this.eciHistoryRecordsTable.items = cachedRecords.reverse();
-              this.eciHistoryRecordsTable.pagination.page = 1;
-              this.eciHistoryRecordsTable.loading = false;
-              this.eciHistoryRecordsTable.totalItems = cachedRecords.length;
-            })
-        }
 
-        return promise
-          .then(() => {
-            return this.$store.dispatch('userDetails/loadAccountEciStats', { account, discipline: exp.discipline_external_id });
-          })
-      },
+        let filter = { 
+          account: account,
+          discipline: disciplineExternalId,
+          from: fromDate,
+          to: toDate,
+          contribution: contribution,
+          criteria: criteria 
+        };
 
-      updateEciHistoryFilter({ key, value }) {
-        this.filter.fromDateMenu = false;
-        this.filter.toDateMenu = false;
-        this.$store.dispatch('userDetails/updateEciHistoryFilter', { key, value })
+        return Promise.all([
+          this.$store.dispatch('userDetails/loadAccountEciHistoryRecords', filter),
+          this.$store.dispatch('userDetails/loadAccountEciStatsRecords', filter)
+        ]) 
           .then(() => {
-            this.loadDisciplineEciHistory();
+            const records = this.$store.getters['userDetails/eciHistoryByDiscipline'];
+            this.eciHistoryRecordsTable.items = records.reverse();
+            this.eciHistoryRecordsTable.pagination.page = 1;
+            this.eciHistoryRecordsTable.totalItems = records.length;
+            this.eciHistoryRecordsTable.loading = false;
           });
       }
     },
@@ -541,27 +512,26 @@
     created() {
 
       this.$store.dispatch('userDetails/loadAccountExpertiseDetailsPage', {
-        username: decodeURIComponent(this.username)
+        username: this.username
       })
-        .then(() => { 
-          const disciplineId = this.$route.query.discipline_id;
-          const idx = this.expertise.findIndex((e) => e.discipline_id === disciplineId);
+        .then(() => {
+          const disciplineExternalId = this.$route.query.discipline || "";
 
-          if (idx !== -1) {
-            this.selectedEciDisciplineId = this.expertise[idx].discipline_id;
-          } else if (this.expertise.length) {
-            this.selectedEciDisciplineId = this.expertise[0].discipline_id;
+          this.disciplines.push(...this.expertise.map((exp) => {
+            return {
+              text: exp.discipline_name,
+              value: exp.discipline_external_id
+            };
+          }));
+
+          if (this.expertise.some((exp) => exp.discipline_external_id === disciplineExternalId)) {
+            this.filter.disciplineExternalId = disciplineExternalId;
           }
 
-          if (this.selectedEciDisciplineId) {
-            this.loadDisciplineEciHistory()
-              .then(() => {
-                this.$setReady(); 
-              })
-          } else {
-            this.$setReady(); 
-          }
-          
+          this.loadDisciplineEciHistory()
+            .then(() => { 
+              this.$setReady(); 
+            });
         });
     }
     

@@ -154,7 +154,7 @@
         :key="`eci-${i}`"
         class="expertise px-1 my-1 text-caption"
       >
-        <router-link :to="goToExpertiseDetails(item.discipline_id)" style="text-decoration: none">
+        <router-link :to="goToExpertiseDetails(item.discipline_external_id)" style="text-decoration: none">
 
           <v-row no-gutters justify="space-between">
             <v-col cols="auto" class="pa-1 primary--text font-weight-bold">
@@ -458,12 +458,12 @@
 
     methods: {
 
-      goToExpertiseDetails(id) {
+      goToExpertiseDetails(disciplineExternalId) {
         return this.$route.path.includes('/account')
           ? {
             name: 'account.expertiseDetails',
             query: {
-              discipline_id: id
+              discipline: disciplineExternalId
             }
           }
           : {
@@ -472,7 +472,7 @@
               account_name: this.userInfo.account.name
             },
             query: {
-              discipline_id: id
+              discipline: disciplineExternalId
             }
           };
       },
