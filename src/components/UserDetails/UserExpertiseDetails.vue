@@ -25,30 +25,119 @@
 
     <v-divider class="my-4" />
 
-    <div v-if="expertise.length" class="pt-4 display-flex">
-      <div class="shrink">
-        <v-select
-          v-model="filter.selectedDisciplineExternalId"
-          class="my-0 py-0"
-          :items="disciplines"
-          dense
-          filled
-          label="Discipline"
-          :disabled="eciHistoryRecordsTable.loading"
-          @change="loadDisciplineEciHistory()"
-        />
+    <div v-if="expertise.length">
+      <div class="pt-4 display-flex">
+        <div class="shrink">
+          <v-select
+            v-model="filter.disciplineExternalId"
+            class="my-0 py-0"
+            :items="disciplines"
+            dense
+            filled
+            label="Discipline"
+            :disabled="eciHistoryRecordsTable.loading"
+          />
+        </div>
+        <div class="pl-4 shrink">
+          <v-select
+            v-model="filter.contribution"
+            class="my-0 py-0"
+            :items="contributions"
+            label="Contribution Type"
+            filled
+            dense
+            :disabled="eciHistoryRecordsTable.loading"
+          />
+        </div>
+        <div class="pl-4 shrink">
+          <v-select
+            v-model="filter.criteria"
+            class="my-0 py-0"
+            :items="criterias"
+            label="Criteria"
+            filled
+            dense
+            :disabled="eciHistoryRecordsTable.loading"
+          />
+        </div>
+        <div class="pl-4 shrink">
+          <v-menu
+            v-model="filter.fromDateMenu"
+            :close-on-click="true"
+            :close-on-content-click="true"
+            :nudge-right="40"
+            transition="scale-transition"
+            offset-y
+            min-width="290px"
+          >
+            <template v-slot:activator="{ on }">
+              <v-text-field
+                v-model="filter.fromDate"
+                :disabled="eciHistoryRecordsTable.loading"
+                label="From"
+                dense
+                readonly
+                clearable
+                filled
+                v-on="on"
+              />
+            </template>
+            <v-date-picker
+              v-model="filter.fromDate"
+              no-title
+              :max="moment(filter.toDate).subtract(1, 'days').format('YYYY-MM-DD')"
+              :min="moment('2020-01-01').format('YYYY-MM-DD')"
+            />
+          </v-menu>
+        </div>
+        <div class="pl-4 shrink">
+          <v-menu
+            v-model="filter.toDateMenu"
+            :close-on-click="true"
+            :close-on-content-click="true"
+            :nudge-right="40"
+            transition="scale-transition"
+            offset-y
+            min-width="290px"
+          >
+            <template v-slot:activator="{ on }">
+              <v-text-field
+                v-model="filter.toDate"
+                :disabled="eciHistoryRecordsTable.loading"
+                label="To"
+                dense
+                readonly
+                clearable
+                filled
+                v-on="on"
+              />
+            </template>
+            <v-date-picker
+              v-model="filter.toDate"
+              no-title
+              :max="moment().format('YYYY-MM-DD')"
+              :min="moment(filter.fromDate).add(1, 'days').format('YYYY-MM-DD')"
+            />
+          </v-menu>
+        </div>
+        <div class="pl-4 shrink">
+          <v-btn 
+            color="primary" 
+            small
+            @click="loadDisciplineEciHistory()">
+            Apply
+          </v-btn>
+        </div>
       </div>
     </div>
     <div v-else class="py-4">
       User does not have Expertise Tokens
     </div>
 
-
-    <div v-if="eciHistoryRecordsTable.loading">
+    <div v-if="eciHistoryRecordsTable.loading" class="text-center ma-4">
       <v-progress-circular indeterminate :width="3" :size="40" />
     </div>
 
-    <!-- <div v-else-if="eciHistoryRecordsTable.items.length"> -->
     <div v-else>
       <div v-if="overview" class="pb-4">
         <div class="font-weight-bold title">
@@ -65,12 +154,6 @@
           </v-col>
           <v-col cols="9">
             <v-row v-if="eciStatsByDiscipline" no-gutters class="full-height">
-              <!-- <v-divider
-                vertical
-                inset
-                class="ma-0"
-                style="max-height: 100%"
-              /> -->
               <v-col cols="3" class="divider-border-left">
                 <div class="display-flex justify-center align-center flex-column full-height">
                   <div class="text-subtitle-1 grey--text text-center">
@@ -81,12 +164,6 @@
                   </div>
                 </div>
               </v-col>
-              <!-- <v-divider
-                vertical
-                inset
-                class="ma-0"
-                style="max-height: 100%"
-              /> -->
               <v-col cols="3" class="divider-border-left">
                 <div class="display-flex justify-center align-center flex-column full-height">
                   <div class="text-subtitle-1 grey--text text-center">
@@ -97,12 +174,6 @@
                   </div>
                 </div>
               </v-col>
-              <!-- <v-divider
-                vertical
-                inset
-                class="ma-0"
-                style="max-height: 100%"
-              /> -->
               <v-col cols="2" class="divider-border-left text-h5 primary--text">
                 <div class="display-flex justify-center align-center flex-column full-height">
                   <div class="text-subtitle-1 grey--text text-center">
@@ -113,12 +184,6 @@
                   </div>
                 </div>
               </v-col>
-              <!-- <v-divider
-                vertical
-                inset
-                class="ma-0"
-                style="max-height: 100%"
-              /> -->
               <v-col cols="2" class="divider-border-left">
                 <div class="display-flex justify-center align-center flex-column full-height">
                   <div class="text-subtitle-1 grey--text text-center">
@@ -129,12 +194,6 @@
                   </div>
                 </div>
               </v-col>
-              <!-- <v-divider
-                vertical
-                inset
-                class="ma-0"
-                style="max-height: 100%"
-              /> -->
               <v-col cols="2" class="divider-border-left">
                 <div class="display-flex justify-center align-center flex-column full-height">
                   <div class="text-subtitle-1 grey--text text-center">
@@ -166,90 +225,6 @@
         </router-link>
       </div>
       <div class="py-4">
-        <div class="display-flex">
-          <div class="shrink">
-            <v-menu
-              v-model="filter.fromDateMenu"
-              :close-on-click="true"
-              :close-on-content-click="true"
-              :nudge-right="40"
-              transition="scale-transition"
-              offset-y
-              min-width="290px"
-            >
-              <template v-slot:activator="{ on }">
-                <v-text-field
-                  v-model="filter.fromDate"
-                  :disabled="eciHistoryRecordsTable.loading"
-                  label="From"
-                  readonly
-                  filled
-                  v-on="on"
-                />
-              </template>
-              <v-date-picker
-                v-model="filter.fromDate"
-                no-title
-                :max="moment(filter.toDate).subtract(1, 'days').format('YYYY-MM-DD')"
-                :min="moment('2020-01-01').format('YYYY-MM-DD')"
-                @change="loadDisciplineEciHistory()"
-              />
-            </v-menu>
-          </div>
-          <div class="pl-4 shrink">
-            <v-menu
-              v-model="filter.toDateMenu"
-              :close-on-click="true"
-              :close-on-content-click="true"
-              :nudge-right="40"
-              transition="scale-transition"
-              offset-y
-              min-width="290px"
-            >
-              <template v-slot:activator="{ on }">
-                <v-text-field
-                  v-model="filter.toDate"
-                  :disabled="eciHistoryRecordsTable.loading"
-                  label="To"
-                  readonly
-                  filled
-                  v-on="on"
-                />
-              </template>
-              <v-date-picker
-                v-model="filter.toDate"
-                no-title
-                :max="moment().format('YYYY-MM-DD')"
-                :min="moment(filter.fromDate).add(1, 'days').format('YYYY-MM-DD')"
-                @change="loadDisciplineEciHistory()"
-              />
-            </v-menu>
-          </div>
-          <div class="pl-4 shrink">
-            <v-select
-              v-model="filter.contribution"
-              class="my-0 py-0"
-              :items="contributions"
-              label="Contribution Type"
-              filled
-              dense
-              :disabled="eciHistoryRecordsTable.loading"
-              @change="loadDisciplineEciHistory()"
-            />
-          </div>
-          <div class="pl-4 shrink">
-            <v-select
-              v-model="filter.criteria"
-              class="my-0 py-0"
-              :items="criterias"
-              label="Criteria"
-              filled
-              dense
-              :disabled="eciHistoryRecordsTable.loading"
-              @change="loadDisciplineEciHistory()"
-            />
-          </div>
-        </div>
         <div v-if="eciHistoryRecordsTable.loading">
           <v-progress-circular
             indeterminate
@@ -356,7 +331,7 @@
       return {
 
         filter: {
-          selectedDisciplineExternalId: "",
+          disciplineExternalId: "",
           fromDate: undefined,
           fromDateMenu: false,
           toDate: undefined,
@@ -503,7 +478,7 @@
       loadDisciplineEciHistory() {
         const account = this.userInfo.account.name;
 
-        const disciplineExternalId = this.filter.selectedDisciplineExternalId;
+        const disciplineExternalId = this.filter.disciplineExternalId;
         const fromDate = this.filter.fromDate ? this.moment(this.filter.fromDate).endOf('day').toISOString().split('.')[0] : "";
         const toDate = this.filter.toDate ? this.moment(this.filter.toDate).endOf('day').toISOString().split('.')[0] : "";
         const contribution = this.filter.contribution;
@@ -540,7 +515,7 @@
         username: this.username
       })
         .then(() => {
-          const disciplineExternalId = this.$route.query.discipline;
+          const disciplineExternalId = this.$route.query.discipline || "";
 
           this.disciplines.push(...this.expertise.map((exp) => {
             return {
@@ -550,7 +525,7 @@
           }));
 
           if (this.expertise.some((exp) => exp.discipline_external_id === disciplineExternalId)) {
-            this.filter.selectedDisciplineExternalId = disciplineExternalId;
+            this.filter.disciplineExternalId = disciplineExternalId;
           }
 
           this.loadDisciplineEciHistory()
