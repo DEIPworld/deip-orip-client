@@ -28,11 +28,9 @@
     <div v-if="expertise.length" class="pt-4 display-flex">
       <div class="shrink">
         <v-select
-          v-model="selectedDisciplineExternalId"
+          v-model="filter.selectedDisciplineExternalId"
           class="my-0 py-0"
-          :items="expertise"
-          item-text="discipline_name"
-          item-value="discipline_external_id"
+          :items="disciplines"
           dense
           filled
           label="Discipline"
@@ -353,9 +351,9 @@
 
     data() {
       return {
-        selectedDisciplineExternalId: null,
 
         filter: {
+          selectedDisciplineExternalId: "",
           fromDate: this.moment().subtract(7, 'days').format('YYYY-MM-DD'),
           fromDateMenu: false,
           toDate: this.moment().format('YYYY-MM-DD'),
@@ -364,6 +362,7 @@
           contribution: ""
         },
 
+        disciplines: [{ text: "All", value: "" }],
         criterias: mapSelectListFromEnum(ASSESSMENT_CRITERIA_TYPE, { blackList: [ASSESSMENT_CRITERIA_TYPE.UNKNOWN], allowBlank: true, blankLabel: "All" }),
         contributions: mapSelectListFromEnum(EXPERTISE_CONTRIBUTION_TYPE, { blackList: [ASSESSMENT_CRITERIA_TYPE.UNKNOWN], allowBlank: true, blankLabel: "All" }),
 
@@ -466,14 +465,7 @@
         expertise: 'userDetails/expertise',
         eciStats: 'userDetails/eciStats'
       }),
-      selectedExpertise() {
-        return this.expertise.find((e) => e.discipline_external_id === this.selectedDisciplineExternalId);
-      },
       overview() {
-        if (!this.selectedExpertise) {
-          return null;
-        }
-
         const contributions = this.eciHistoryRecordsTable.items.filter((item) => item.contribution_type != EXPERTISE_CONTRIBUTION_TYPE.UNKNOWN);
         const allocations = contributions.reduce((acc, item) => {
           if (acc[item.contribution_type] === undefined) {
@@ -506,7 +498,7 @@
     methods: {
 
       loadDisciplineEciHistory() {
-        const disciplineExternalId = this.selectedDisciplineExternalId;
+        const disciplineExternalId = this.filter.selectedDisciplineExternalId;
         const account = this.userInfo.account.name;
 
         const fromDate = this.moment(this.filter.fromDate).toDate();
@@ -525,7 +517,7 @@
             criteria: criteria 
           })
           .then(() => {
-            const records = this.$store.getters['userDetails/eciHistoryByDiscipline'](disciplineExternalId);
+            const records = this.$store.getters['userDetails/eciHistoryByDiscipline'];
             this.eciHistoryRecordsTable.items = records.reverse();
             this.eciHistoryRecordsTable.pagination.page = 1;
             this.eciHistoryRecordsTable.loading = false;
@@ -540,27 +532,26 @@
     created() {
 
       this.$store.dispatch('userDetails/loadAccountExpertiseDetailsPage', {
-        username: decodeURIComponent(this.username)
+        username: this.username
       })
-        .then(() => { 
-          const disciplineId = this.$route.query.discipline_id;
-          const idx = this.expertise.findIndex((e) => e.discipline_id === disciplineId);
+        .then(() => {
+          const disciplineExternalId = this.$route.query.discipline;
 
-          if (idx !== -1) {
-            this.selectedDisciplineExternalId = this.expertise[idx].discipline_external_id;
-          } else if (this.expertise.length) {
-            this.selectedDisciplineExternalId = this.expertise[0].discipline_external_id;
+          this.disciplines.push(...this.expertise.map((exp) => {
+            return {
+              text: exp.discipline_name,
+              value: exp.discipline_external_id
+            };
+          }));
+
+          if (this.expertise.some((exp) => exp.discipline_external_id === disciplineExternalId)) {
+            this.filter.selectedDisciplineExternalId = disciplineExternalId;
           }
 
-          if (this.selectedDisciplineExternalId) {
-            this.loadDisciplineEciHistory()
-              .then(() => { 
-                this.$setReady(); 
-              });
-          } else {
-            this.$setReady(); 
-          }
-          
+          this.loadDisciplineEciHistory()
+            .then(() => { 
+              this.$setReady(); 
+            });
         });
     }
     

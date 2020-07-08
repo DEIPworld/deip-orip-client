@@ -26,7 +26,7 @@ const state = {
   reviewRequests: [],
   researchesRef: [],
   eciStats: undefined,
-  eciHistoryByDiscipline: {},
+  eciHistoryByDiscipline: [],
 
   filter: {
     criteria: null,
@@ -56,19 +56,12 @@ const getters = {
   expertise: (state) => state.expertise,
   invites: (state) => state.invites,
   reviewRequests: (state) => state.reviewRequests,
-
   filter: (state) => state.filter,
-
   eciStats: (state, getters) => state.eciStats,
-  eciHistoryByDisciplineMap: (state, getters) => state.eciHistoryByDiscipline,
 
-  eciHistoryByDiscipline: (state, getters) => (disciplineId) => {
-    const records = state.eciHistoryByDiscipline[disciplineId];
-    if (!records) {
-      return null;
-    }
+  eciHistoryByDiscipline: (state, getters) => {
 
-    return records
+    return state.eciHistoryByDiscipline
       .map((item) => {
 
         const getEciRecordLabel = (record) => {
@@ -433,7 +426,7 @@ const actions = {
       criteria: criteria
     })
       .then((records) => {
-        commit('SET_ACCOUNT_ECI_HISTORY_BY_DISCIPLINE', { disciplineId: discipline, records });
+        commit('SET_ACCOUNT_ECI_HISTORY_BY_DISCIPLINE', { records });
       }, (err) => {
         console.log(err);
       })
@@ -509,8 +502,8 @@ const mutations = {
     state.isLoadingResearchesRefDetails = value;
   },
 
-  SET_ACCOUNT_ECI_HISTORY_BY_DISCIPLINE(state, { disciplineId, records }) {
-    Vue.set(state.eciHistoryByDiscipline, disciplineId, records);
+  SET_ACCOUNT_ECI_HISTORY_BY_DISCIPLINE(state, { records }) {
+    Vue.set(state, 'eciHistoryByDiscipline', records);
   },
 
   UPDATE_ECI_HISTORY_FILTER(state, { key, value }) {
@@ -522,7 +515,7 @@ const mutations = {
   },
 
   RESET_STATE(state) {
-    Vue.set(state, 'eciHistoryByDiscipline', {});
+    Vue.set(state, 'eciHistoryByDiscipline', []);
   }
 
 };
