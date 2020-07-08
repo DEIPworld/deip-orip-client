@@ -22,7 +22,7 @@
         <v-list-item>
           <v-list-item-content>
             <v-text-field
-              v-model="filter.name"
+              v-model="filter.searchTerm"
               filled
               prepend-inner-icon="search"
               hide-details
@@ -189,13 +189,13 @@
         contributions: mapSelectListFromEnum(EXPERTISE_CONTRIBUTION_TYPE, { blackList: [EXPERTISE_CONTRIBUTION_TYPE.UNKNOWN], allowBlank: true, blankLabel: "All" }),
         criterias: mapSelectListFromEnum(ASSESSMENT_CRITERIA_TYPE, { blackList: [ASSESSMENT_CRITERIA_TYPE.UNKNOWN], allowBlank: true, blankLabel: "All" }),
         defaultFilter: {
-          name: "",
+          searchTerm: "",
           discipline: "",
           contribution: "",
           criteria: ""
         },
         filter: {
-          name: "",
+          searchTerm: "",
           discipline: "",
           contribution: "",
           criteria: ""
@@ -254,7 +254,7 @@
         this.filter.criteria = +this.$route.query.criteria;
       }
       if (this.$route.query.name) {
-        this.filter.name = this.$route.query.name;
+        this.filter.searchTerm = this.$route.query.name;
       }
 
       this.isShowBadge = !_.isEqual(this.filter, this.defaultFilter);

@@ -25,7 +25,7 @@ const state = {
   invites: [],
   reviewRequests: [],
   researchesRef: [],
-  eciStats: undefined,
+  eciStatsByDiscipline: undefined,
   eciHistoryByDiscipline: [],
 
   filter: {
@@ -56,9 +56,9 @@ const getters = {
   expertise: (state) => state.expertise,
   invites: (state) => state.invites,
   reviewRequests: (state) => state.reviewRequests,
-  filter: (state) => state.filter,
-  eciStats: (state, getters) => state.eciStats,
 
+  filter: (state) => state.filter,
+  eciStatsByDiscipline: (state, getters) => state.eciStatsByDiscipline,
   eciHistoryByDiscipline: (state, getters) => {
 
     return state.eciHistoryByDiscipline
@@ -409,40 +409,17 @@ const actions = {
     commit('UPDATE_ECI_HISTORY_FILTER', { key: payload.key, value: payload.value });
   },
 
-  loadAccountEciHistoryRecords({ state, dispatch, commit }, { 
-    account,
-    discipline,
-    from,
-    to,
-    contribution,
-    criteria, 
-    notify 
-  }) {
-    return expertiseContributionsService.getAccountExpertiseHistory(account, {
-      discipline: discipline,
-      from: from,
-      to: to,
-      contribution: contribution,
-      criteria: criteria
-    })
-      .then((records) => {
-        commit('SET_ACCOUNT_ECI_HISTORY_BY_DISCIPLINE', { records });
-      }, (err) => {
-        console.log(err);
-      })
-      .finally(() => {
-        if (notify) notify();
-      });
+  loadAccountEciHistoryRecords({ commit }, filter) {
+    return expertiseContributionsService.getAccountExpertiseHistory(filter.account, filter)
+      .then((history) => {
+        commit('SET_ACCOUNT_ECI_HISTORY_BY_DISCIPLINE', history);
+      }, (err) => { console.log(err); });
   },
 
-
-  loadAccountEciStats({ commit }, { account, discipline, notify }) {
-    return expertiseContributionsService.getAccountExpertiseStats(account, { discipline })
+  loadAccountEciStatsRecords({ commit }, filter) {
+    return expertiseContributionsService.getAccountExpertiseStats(filter.account, filter)
       .then((stats) => {
         commit('SET_ACCOUNT_ECI_STATS', stats);
-      })
-      .finally(() => {
-        if (notify) notify();
       });
   }
 };
@@ -502,8 +479,8 @@ const mutations = {
     state.isLoadingResearchesRefDetails = value;
   },
 
-  SET_ACCOUNT_ECI_HISTORY_BY_DISCIPLINE(state, { records }) {
-    Vue.set(state, 'eciHistoryByDiscipline', records);
+  SET_ACCOUNT_ECI_HISTORY_BY_DISCIPLINE(state, history) {
+    Vue.set(state, 'eciHistoryByDiscipline', history);
   },
 
   UPDATE_ECI_HISTORY_FILTER(state, { key, value }) {
@@ -511,7 +488,7 @@ const mutations = {
   },
 
   SET_ACCOUNT_ECI_STATS(state, stats) {
-    Vue.set(state, 'eciStats', stats);
+    Vue.set(state, 'eciStatsByDiscipline', stats);
   },
 
   RESET_STATE(state) {

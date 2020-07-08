@@ -64,7 +64,7 @@
             />
           </v-col>
           <v-col cols="9">
-            <v-row no-gutters class="full-height">
+            <v-row v-if="eciStatsByDiscipline" no-gutters class="full-height">
               <!-- <v-divider
                 vertical
                 inset
@@ -77,7 +77,7 @@
                     Expertise Contribution Index
                   </div>
                   <div class="text-subtitle-1 mt-2">
-                    {{ eciStats.eci }}
+                    {{ eciStatsByDiscipline.eci }}
                   </div>
                 </div>
               </v-col>
@@ -93,7 +93,7 @@
                     Contributions
                   </div>
                   <div class="text-subtitle-1 mt-2">
-                    {{ eciStats.contributions.length }}
+                    {{ eciStatsByDiscipline.contributions.length }}
                   </div>
                 </div>
               </v-col>
@@ -109,7 +109,7 @@
                     Percentile rank
                   </div>
                   <div class="text-subtitle-1 mt-2">
-                  <div>{{eciStats.percentile_rank}}</div>
+                  <div>{{eciStatsByDiscipline.percentile_rank}}</div>
                   </div>
                 </div>
               </v-col>
@@ -125,7 +125,7 @@
                     Citations
                   </div>
                   <div class="text-subtitle-1 mt-2">
-                    {{ eciStats.researches.length }}
+                    {{ eciStatsByDiscipline.researches.length }}
                   </div>
                 </div>
               </v-col>
@@ -141,10 +141,13 @@
                     H-index
                   </div>
                   <div class="text-subtitle-1 mt-2">
-                    {{eciStats.assessment_criteria_sum_weight - eciStats.past_assessment_criteria_sum_weight}}
+                    {{eciStatsByDiscipline.researches.length}}
                   </div>
                 </div>
               </v-col>
+            </v-row>
+            <v-row v-else no-gutters class="full-height">
+              <v-col cols="12">No records found for specified filter</v-col>
             </v-row>
           </v-col>
         </v-row>
@@ -354,9 +357,9 @@
 
         filter: {
           selectedDisciplineExternalId: "",
-          fromDate: this.moment().subtract(7, 'days').format('YYYY-MM-DD'),
+          fromDate: undefined,
           fromDateMenu: false,
-          toDate: this.moment().format('YYYY-MM-DD'),
+          toDate: undefined,
           toDateMenu: false,
           criteria: "",
           contribution: ""
@@ -463,7 +466,7 @@
       ...mapGetters({
         userInfo: 'userDetails/userInfo',
         expertise: 'userDetails/expertise',
-        eciStats: 'userDetails/eciStats'
+        eciStatsByDiscipline: 'userDetails/eciStatsByDiscipline'
       }),
       overview() {
         const contributions = this.eciHistoryRecordsTable.items.filter((item) => item.contribution_type != EXPERTISE_CONTRIBUTION_TYPE.UNKNOWN);
@@ -498,33 +501,35 @@
     methods: {
 
       loadDisciplineEciHistory() {
-        const disciplineExternalId = this.filter.selectedDisciplineExternalId;
         const account = this.userInfo.account.name;
 
-        const fromDate = this.moment(this.filter.fromDate).toDate();
-        const toDate = this.moment(this.filter.toDate).toDate();
+        const disciplineExternalId = this.filter.selectedDisciplineExternalId;
+        const fromDate = this.filter.fromDate ? this.moment(this.filter.fromDate).endOf('day').toISOString().split('.')[0] : "";
+        const toDate = this.filter.toDate ? this.moment(this.filter.toDate).endOf('day').toISOString().split('.')[0] : "";
         const contribution = this.filter.contribution;
         const criteria = this.filter.criteria;
 
         this.eciHistoryRecordsTable.loading = true;
 
-         return this.$store.dispatch('userDetails/loadAccountEciHistoryRecords', { 
-            account: account,
-            discipline: disciplineExternalId,
-            from: fromDate,
-            to: toDate,
-            contribution: contribution,
-            criteria: criteria 
-          })
+        let filter = { 
+          account: account,
+          discipline: disciplineExternalId,
+          from: fromDate,
+          to: toDate,
+          contribution: contribution,
+          criteria: criteria 
+        };
+
+        return Promise.all([
+          this.$store.dispatch('userDetails/loadAccountEciHistoryRecords', filter),
+          this.$store.dispatch('userDetails/loadAccountEciStatsRecords', filter)
+        ]) 
           .then(() => {
             const records = this.$store.getters['userDetails/eciHistoryByDiscipline'];
             this.eciHistoryRecordsTable.items = records.reverse();
             this.eciHistoryRecordsTable.pagination.page = 1;
-            this.eciHistoryRecordsTable.loading = false;
             this.eciHistoryRecordsTable.totalItems = records.length;
-          })
-          .then(() => {
-            return this.$store.dispatch('userDetails/loadAccountEciStats', { account, discipline: disciplineExternalId });
+            this.eciHistoryRecordsTable.loading = false;
           });
       }
     },
