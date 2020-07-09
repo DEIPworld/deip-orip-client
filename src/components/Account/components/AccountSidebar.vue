@@ -76,11 +76,11 @@
                 title: 'Projects',
                 route: { name: 'account.projects' }
               },
-              {
-                icon: 'mdi-file-replace',
-                title: 'Project requests',
-                route: { name: 'account.projectRequests' }
-              }
+              // {
+              //   icon: 'mdi-file-replace',
+              //   title: 'Project requests',
+              //   route: { name: 'account.projectRequests' }
+              // }
             ]
           },
           {
@@ -95,6 +95,16 @@
                 icon: 'vpn_key',
                 title: 'Private key',
                 route: { name: 'account.privateKey' }
+              }
+            ]
+          },
+          {
+            subheader: 'Expertise contribution index',
+            items: [
+              {
+                icon: 'bar_chart',
+                title: 'Overview',
+                route: { name: 'account.expertiseDetails' }
               }
             ]
           }

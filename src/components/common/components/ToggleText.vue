@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="text-body-2">
     <span>{{ hasMoreText ? `${text.slice(0, size)}${!isExpanded ? '...' : ''}` : text }}</span>
     <span v-if="hasMoreText">
       <span v-show="isExpanded">{{ text.slice(size + 1, text.length) }}</span>

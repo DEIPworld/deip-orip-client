@@ -72,8 +72,10 @@ import { UsersService } from '@deip/users-service';
 import { accountRouting } from '@/components/Account/router';
 import { userDetailRouting } from '@/components/UserDetails/router';
 import { adminRouting } from '@/components/AdminPanel/router';
+import { ParticipantstRouting } from '@/components/Participants/router';
 import ResearchRequestFormCreate from '@/components/ResearchRequest/ResearchRequestFormCreate';
 import { awaitStore } from '@/router/utils/awaitStore';
+import { overviewRouting } from '@/components/Overview/router';
 
 const accessService = AccessService.getInstance();
 const usersService = UsersService.getInstance();
@@ -433,6 +435,8 @@ const router = new Router({
     ...userDetailRouting,
     ...accountRouting,
     ...adminRouting,
+    ...ParticipantstRouting,
+    ...overviewRouting,
 
     {
       path: '/user-wallet',
@@ -553,6 +557,7 @@ const router = new Router({
 
 const authDataLoad = () => Promise.all([
   awaitStore('auth/user', 'profile'),
+  awaitStore('auth/user', 'account  '),
   awaitStore('auth/tenant')
 ])
 

@@ -42,9 +42,8 @@
           hide-default-header
           class="elevation-0 mt-4"
           :loading="eciHistoryRecordsTable.loading"
-          :items-per-page-options="[5, 10]"
+          :footer-props="eciHistoryRecordsTable.footerProps"
           :options.sync="eciHistoryRecordsTable.pagination"
-          :server-items-length="eciHistoryRecordsTable.totalItems"
         >
           <template v-slot:header="{props:{headers}}">
             <thead>
@@ -148,7 +147,10 @@
           },
           pagination: {
             page: 1,
-            rowsPerPage: 5
+            itemsPerPage: 5
+          },
+          footerProps: {
+            'items-per-page-options': [5, 10, 15]
           },
           items: [],
           totalItems: 0,

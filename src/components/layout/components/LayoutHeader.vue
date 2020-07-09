@@ -1,17 +1,24 @@
 <template>
-  <v-sheet
-    tile
-    :dark="isDark"
-    :light="!isDark"
-    class="app-layout__header"
-    :class="classList"
-    :style="{ backgroundImage: 'url(' + background + ')'}"
-  >
-    <div class="app-layout__header-inner pa-6 pa-sm-12">
-      <v-sheet :max-width="maxWidth" color="transparent">
-        <slot />
-      </v-sheet>
-    </div>
+  <v-sheet :dark="dark">
+    <v-img
+      :src="background"
+      :gradient="gradient"
+      width="100%"
+      height="100%"
+      min-height="320px"
+      aspect-ratio="0"
+    >
+      <div class="fill-height d-flex align-end">
+        <v-sheet
+          width="100%"
+          :max-width="maxWidth"
+          :class="contentClassList"
+          color="transparent"
+        >
+          <slot />
+        </v-sheet>
+      </div>
+    </v-img>
   </v-sheet>
 </template>
 
@@ -23,41 +30,36 @@
     props: {
       background: {
         type: String,
-        required: false,
         default: null
       },
-      muted: {
-        type: Boolean,
-        required: false,
-        default: true
+      gradient: {
+        type: String,
+        default: 'to top, rgba(0,0,0,.7), rgba(0,0,0,.3)'
       },
       dark: {
         type: Boolean,
-        required: false,
         default: true
-      },
-      light: {
-        type: Boolean,
-        required: false,
-        default: false
       },
       maxWidth: {
         type: [String, Number],
         default: 800
-      }
+      },
+      contentCenter: {
+        type: Boolean,
+        default: false
+      },
     },
     computed: {
-      classList() {
-        return {
-          'app-layout__header--muted': this.muted === true
-        };
-      },
-      isDark() {
-        return this.light !== true;
-      },
       ...mapGetters({
         themeSettings: 'layout/themeSettings'
-      })
+      }),
+      contentClassList() {
+        return {
+          'pa-6': true,
+          'pa-sm-12': true,
+          'my-auto': this.contentCenter
+        };
+      }
     }
   };
 </script>

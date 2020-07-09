@@ -118,6 +118,9 @@ const getters = {
 
   membersList: (state, getters) => state.membersList,
 
+  researchMembersList: (state, getters) => state.membersList
+    .filter((member) => state.research.members.some((m) => m == member.account.name)),
+
   contentMetadata: (state, getters) => state.contentMetadata,
 
 
@@ -429,7 +432,7 @@ const actions = {
           const review = reviews[i];
           review.author = users.find((u) => u.account.name == review.author);
 
-          const reviewVotes = votes[i];
+          const reviewVotes = votes[i].reduce((arr, vote) => (arr.some(({ voter }) => voter === vote.voter) ? arr : [...arr, vote]), []);
           review.votes = reviewVotes;
 
           for (let j = 0; j < reviewVotes.length; j++) {
@@ -667,31 +670,31 @@ const actions = {
 const mutations = {
 
   SET_RESEARCH_CONTENT_DETAILS(state, content) {
-    Vue.set(state, 'content', content);
+    state.content = content;
   },
 
   SET_RESEARCH_CONTENT_DISCIPLINES_LIST(state, list) {
-    Vue.set(state, 'disciplinesList', list);
+    state.disciplinesList = list;
   },
 
   SET_RESEARCH_CONTENT_REVIEWS_LIST(state, list) {
-    Vue.set(state, 'contentReviewsList', list);
+    state.contentReviewsList = list;
   },
 
   SET_RESEARCH_CONTENT_LIST(state, list) {
-    Vue.set(state, 'contentList', list);
+    state.contentList = list;
   },
 
   SET_EXPERTS_LIST(state, list) {
-    Vue.set(state, 'expertsList', list);
+    state.expertsList = list;
   },
 
   SET_RESEARCH_DETAILS(state, research) {
-    Vue.set(state, 'research', research);
+    state.research = research;
   },
 
   SET_CONTENT_PROPOSAL(state, contentProposal) {
-    Vue.set(state, 'contentProposal', contentProposal);
+    state.contentProposal = contentProposal;
   },
 
   SET_RESEARCH_CONTENT_REF(state, contentRef) {
@@ -719,36 +722,36 @@ const mutations = {
   },
 
   SET_RESEARCH_GROUP_MEMBERS_LIST(state, list) {
-    Vue.set(state, 'membersList', list);
+    state.membersList = list;
   },
 
   SET_DRAFT_AUTHORS_LIST(state, list) {
-    Vue.set(state.contentRef, 'authors', list);
+    state.contentRef.authors = list;
   },
 
   SET_DRAFT_REFERENCES_LIST(state, list) {
-    Vue.set(state.contentRef, 'references', list);
+    state.contentRef.references = list;
   },
 
   SET_RESEARCH_CONTENT_METADATA(state, value) {
-    Vue.set(state, 'contentMetadata', value);
+    state.contentMetadata = value;
   },
 
   SET_RESEARCH_GROUP_DETAILS(state, value) {
-    Vue.set(state, 'group', value);
+    state.group = value;
   },
 
   SET_RESEARCH_CONTENT_REFERENCES_GRAPH_DATA(state, graph) {
-    Vue.set(state, 'researchContentReferencesGraph', graph);
+    state.researchContentReferencesGraph = graph;
   },
 
   SET_RESEARCH_CONTENT_ECI_HISTORY_BY_DISCIPLINE(state, { disciplineId, records }) {
-    Vue.set(state.eciHistoryByDiscipline, disciplineId, records);
+    state.eciHistoryByDiscipline[disciplineId] = records;
   },
 
   RESET_STATE(state) {
-    Vue.set(state, 'eciHistoryByDiscipline', {});
-    Vue.set(state, 'contentMetadata', null);
+    state.eciHistoryByDiscipline = {};
+    state.contentMetadata = null;
   }
 };
 

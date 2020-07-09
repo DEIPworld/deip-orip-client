@@ -261,11 +261,9 @@
   import Vue from 'vue';
   import { mapGetters } from 'vuex';
   import moment from 'moment';
-  import LayoutSidebar from '@/components/layout/components/LayoutSidebar';
 
   export default {
     name: 'InvestorPortfolioInboxRightSidebar',
-    components: { LayoutSidebar },
     computed: {
       ...mapGetters({
         user: 'auth/user',

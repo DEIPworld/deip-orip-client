@@ -98,10 +98,10 @@ const actions = {
 // mutations
 const mutations = {
   SET_REGISTERED_MEMBERS(state, list) {
-    Vue.set(state, 'registeredMembers', list);
+    state.registeredMembers = list;
   },
   SET_WAITING_MEMBERS(state, list) {
-    Vue.set(state, 'waitingMembers', list);
+    state.waitingMembers = list
   },
 
   //= ==============

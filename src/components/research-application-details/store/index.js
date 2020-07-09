@@ -246,37 +246,37 @@ const actions = {
 const mutations = {
 
   SET_RESEARCH_APPLICATION_DETAILS(state, application) {
-    Vue.set(state, 'application', application);
+    state.application = application;
   },
 
   SET_APPLICATION_STATUS(state, { status }) {
-    Vue.set(state.application, 'status', status);
+    state.application.status = status;
   },
 
   SET_RESEARCH_APPLICATION_REF(state, ref) {
-    Vue.set(state, 'applicationRef', ref);
+    state.applicationRef = ref;
   },
 
   SET_RESEARCH_APPLICATION_PROGRAM(state, program) {
-    Vue.set(state, 'program', program);
+    state.program = program;
   },
 
   SET_RESEARCH_DETAILS(state, research) {
-    Vue.set(state, 'research', research);
+    state.research = research;
   },
 
   SET_RESEARCH_MEMBERS_LIST(state, users) {
-    Vue.set(state, 'membersList', users);
+    state.membersList = users;
   },
 
   SET_RESEARCH_APPLICATION_REVIEWS_LIST(state, reviews) {
     reviews.sort((a, b) => a.id - b.id);
-    Vue.set(state, 'applicationReviewsList', reviews);
+    state.applicationReviewsList = reviews;
   },
 
   SET_THIRDPARTY_RESEARCH_APPLICATIONS_REVIEWS_LIST(state, reviews) {
     reviews.sort((a, b) => a.id - b.id);
-    Vue.set(state, 'thirdpartyApplicationsReviewsList', reviews);
+    state.thirdpartyApplicationsReviewsList = reviews;
   },
 
   SET_RESEARCH_APPLICATIONS_DETAILS_LOADING_STATE(state, value) {

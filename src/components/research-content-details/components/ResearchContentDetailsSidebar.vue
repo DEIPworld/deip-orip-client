@@ -41,30 +41,34 @@
     <!-- ### END Draft Actions Section ### -->
 
     <!-- ### START Research Content ECI Section ### -->
-    <v-sheet v-if="isPublished">
+    <v-sheet v-if="isPublished" class="my-4">
       <v-divider class="my-6" />
       <div class="text-h6">
         Expertise Contribution Index
       </div>
+
       <div
         v-for="eci of eciList"
         :key="eci.disciplineName"
-        class="expertise px-1 my-1"
+        class="expertise px-1 my-1 text-caption"
       >
         <v-row no-gutters justify="space-between">
-          <v-col cols="auto" class="pa-2 blue--text text--accent-4">
-            TOP
-            <span>{{ getResearchContentEciPercentile(eci) }}</span>%
+          <v-col cols="auto" class="pa-1 primary--text font-weight-bold">
+<!--            TOP {{ getResearchContentEciPercentile(eci) }}%-->
+            {{ eci.disciplineName }}
           </v-col>
-          <v-col cols="auto" class="pa-2 grey--text">
-            ECI {{ eci.value }}
+          <v-col cols="auto" class="pa-1 grey--text">
+            ECI {{ eci.value | commaNumber }}
           </v-col>
         </v-row>
-        <v-divider class="expertise__divider" />
-        <div class="pa-2">
-          {{ eci.disciplineName }}
-        </div>
+
+<!--        <v-divider />-->
+
+<!--        <div class="pa-1">-->
+<!--          {{ eci.disciplineName }}-->
+<!--        </div>-->
       </div>
+
     </v-sheet>
     <!-- ### END Research Content ECI Section ### -->
 
@@ -321,6 +325,7 @@
         research: 'rcd/research',
         group: 'rcd/group',
         membersList: 'rcd/membersList',
+        researchMembersList: 'rcd/researchMembersList',
         disciplinesList: 'rcd/disciplinesList',
         contentList: 'rcd/contentList',
         contentReviewsList: 'rcd/contentReviewsList',
@@ -369,11 +374,11 @@
       },
 
       contentAuthorsList() {
-        return this.content ? this.membersList.filter((m) => this.content.authors.some((a) => a === m.account.name)) : [];
+        return this.content ? this.researchMembersList.filter((m) => this.content.authors.some((a) => a === m.account.name)) : [];
       },
 
       draftAuthorsList() {
-        return this.isInProgress ? this.membersList : this.membersList.filter((m) => this.contentRef.authors.some((a) => a === m.account.name));
+        return this.isInProgress ? this.researchMembersList : this.researchMembersList.filter((m) => this.contentRef.authors.some((a) => a === m.account.name));
       },
 
       researchTableOfContent() {
@@ -446,7 +451,7 @@
         const authors = checked
           ? [...this.contentRef.authors, member.account.name]
           : this.contentRef.authors.filter((a) => a !== member.account.name);
-        this.$emit('setDraftAuthors', this.membersList.filter((m) => authors.some((a) => a === m.account.name)));
+        this.$emit('setDraftAuthors', this.researchMembersList.filter((m) => authors.some((a) => a === m.account.name)));
       },
 
       goAddReview() {

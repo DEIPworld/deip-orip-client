@@ -1,12 +1,12 @@
 <template>
   <v-app-bar
     :key="$route.fullPath + '-toolbar'"
-    v-custom="'light'"
     flat
     clipped-left
     :app="!toolbarOverlap"
     :absolute="toolbarOverlap"
     :color="toolbarColor"
+    class="v-app-bar--light"
   >
     <slot name="toolbarButton">
       <v-btn icon @click="$router.back()">

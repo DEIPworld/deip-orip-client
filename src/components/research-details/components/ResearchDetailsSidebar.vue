@@ -130,23 +130,23 @@
       <div
         v-for="eci of eciList"
         :key="eci.disciplineName"
-        class="expertise px-1 my-1"
+        class="expertise px-1 my-1 text-caption"
       >
         <v-row no-gutters justify="space-between">
-          <v-col cols="auto" class="pa-2 blue--text text--accent-4 bold">
-            TOP
-            <span class="font-weight-bold">{{ getResearchEciPercentile(eci) }}</span>%
+          <v-col cols="auto" class="pa-1 primary--text font-weight-bold">
+<!--            TOP {{ getResearchEciPercentile(eci) }}%-->
+            {{ eci.disciplineName }}
           </v-col>
-          <v-col cols="auto" class="pa-2 grey--text">
-            ECI {{ eci.value }}
+          <v-col cols="auto" class="pa-1 grey--text">
+            ECI {{ eci.value | commaNumber }}
           </v-col>
         </v-row>
 
-        <v-divider />
+<!--        <v-divider />-->
 
-        <div class="pa-2 ">
-          {{ eci.disciplineName }}
-        </div>
+<!--        <div class="pa-1">-->
+<!--          {{ eci.disciplineName }}-->
+<!--        </div>-->
       </div>
     </v-sheet>
 
@@ -320,7 +320,6 @@
   import { ReviewService } from '@deip/review-service';
   import { ResearchGroupService } from '@deip/research-group-service';
   import { ResearchContentReviewsService } from '@deip/research-content-reviews-service';
-  import LayoutSidebar from '@/components/layout/components/LayoutSidebar';
 
   const researchContentReviewsService = ResearchContentReviewsService.getInstance();
   const researchGroupService = ResearchGroupService.getInstance();
@@ -328,7 +327,6 @@
 
   export default {
     name: 'ResearchDetailsSidebar',
-    components: { LayoutSidebar },
     data() {
       return {
         tokenizationConfirmDialog: {

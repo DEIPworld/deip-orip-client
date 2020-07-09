@@ -1,0 +1,194 @@
+[
+  [
+    { "v": "2020-01", "f": "Jun"
+    },
+    { "v": 0.018, "f": "1.8%", "discipline": "6a8b20f002a7dedf7b873dbc86e0b0051d4fa898"
+    },
+    { "v": 0.05, "f": "0.5%", "discipline": "721e75eb0535e152669b0c3fbbb9e21675483553"
+    },
+    { "v": 0.02, "f": "2.1%", "discipline": "7c3d37cbfea2513a7e03e674448bbeee8ae3d862"
+    },
+    { "v": 0.026, "f": "1.6%", "discipline": "8e2a3711649993a87848337b9b401dcf64425e2d"
+    },
+    { "v": 0.015, "f": "0.5%", "discipline": "9f0224709d86e02b9625b5ebf2786b80ba6bed17"
+    },
+    { "v": 0.018, "f": "1.0%", "discipline": "a47bf84ac30d0843accb737d5924434ef3ed0517"
+    }
+  ],
+  [
+    { "v": "2020-02", "f": "Feb"
+    },
+    { "v": 0.028, "f": "1.8%", "discipline": "6a8b20f002a7dedf7b873dbc86e0b0051d4fa898"
+    },
+    { "v": 0.015, "f": "0.5%", "discipline": "721e75eb0535e152669b0c3fbbb9e21675483553"
+    },
+    { "v": 0.021, "f": "2.1%", "discipline": "7c3d37cbfea2513a7e03e674448bbeee8ae3d862"
+    },
+    { "v": 0.036, "f": "1.6%", "discipline": "8e2a3711649993a87848337b9b401dcf64425e2d"
+    },
+    { "v": 0.02, "f": "0.5%", "discipline": "9f0224709d86e02b9625b5ebf2786b80ba6bed17"
+    },
+    { "v": 0.01, "f": "1.0%", "discipline": "a47bf84ac30d0843accb737d5924434ef3ed0517"
+    }
+  ],
+  [
+    { "v": "2020-03", "f": "Mar"
+    },
+    { "v": 0.038, "f": "1.8%", "discipline": "6a8b20f002a7dedf7b873dbc86e0b0051d4fa898"
+    },
+    { "v": 0.025, "f": "0.5%", "discipline": "721e75eb0535e152669b0c3fbbb9e21675483553"
+    },
+    { "v": 0.025, "f": "2.1%", "discipline": "7c3d37cbfea2513a7e03e674448bbeee8ae3d862"
+    },
+    { "v": 0.046, "f": "1.6%", "discipline": "8e2a3711649993a87848337b9b401dcf64425e2d"
+    },
+    { "v": 0.075, "f": "0.5%", "discipline": "9f0224709d86e02b9625b5ebf2786b80ba6bed17"
+    },
+    { "v": 0.01, "f": "1.0%", "discipline": "a47bf84ac30d0843accb737d5924434ef3ed0517"
+    }
+  ],
+  [
+    { "v": "2020-04", "f": "Apr"
+    },
+    { "v": 0.048, "f": "1.8%", "discipline": "6a8b20f002a7dedf7b873dbc86e0b0051d4fa898"
+    },
+    { "v": 0.005, "f": "0.5%", "discipline": "721e75eb0535e152669b0c3fbbb9e21675483553"
+    },
+    { "v": 0.021, "f": "2.1%", "discipline": "7c3d37cbfea2513a7e03e674448bbeee8ae3d862"
+    },
+    { "v": 0.056, "f": "1.6%", "discipline": "8e2a3711649993a87848337b9b401dcf64425e2d"
+    },
+    { "v": 0.005, "f": "0.5%", "discipline": "9f0224709d86e02b9625b5ebf2786b80ba6bed17"
+    },
+    { "v": 0.01, "f": "1.0%", "discipline": "a47bf84ac30d0843accb737d5924434ef3ed0517"
+    }
+  ],
+  [
+    { "v": "2020-05", "f": "May"
+    },
+    { "v": 0.058, "f": "1.8%", "discipline": "6a8b20f002a7dedf7b873dbc86e0b0051d4fa898"
+    },
+    { "v": 0.065, "f": "0.5%", "discipline": "721e75eb0535e152669b0c3fbbb9e21675483553"
+    },
+    { "v": 0.021, "f": "2.1%", "discipline": "7c3d37cbfea2513a7e03e674448bbeee8ae3d862"
+    },
+    { "v": 0.015, "f": "1.6%", "discipline": "8e2a3711649993a87848337b9b401dcf64425e2d"
+    },
+    { "v": 0.005, "f": "0.5%", "discipline": "9f0224709d86e02b9625b5ebf2786b80ba6bed17"
+    },
+    { "v": 0.01, "f": "1.0%", "discipline": "a47bf84ac30d0843accb737d5924434ef3ed0517"
+    }
+  ],
+  [
+    { "v": "2020-06", "f": "June"
+    },
+    { "v": 0.028, "f": "1.8%", "discipline": "6a8b20f002a7dedf7b873dbc86e0b0051d4fa898"
+    },
+    { "v": 0.005, "f": "0.5%", "discipline": "721e75eb0535e152669b0c3fbbb9e21675483553"
+    },
+    { "v": 0.021, "f": "2.1%", "discipline": "7c3d37cbfea2513a7e03e674448bbeee8ae3d862"
+    },
+    { "v": 0.018, "f": "1.6%", "discipline": "8e2a3711649993a87848337b9b401dcf64425e2d"
+    },
+    { "v": 0.005, "f": "0.5%", "discipline": "9f0224709d86e02b9625b5ebf2786b80ba6bed17"
+    },
+    { "v": 0.01, "f": "1.0%", "discipline": "a47bf84ac30d0843accb737d5924434ef3ed0517"
+    }
+  ],
+  [
+    { "v": "2020-07", "f": "July"
+    },
+    { "v": 0.048, "f": "1.8%", "discipline": "6a8b20f002a7dedf7b873dbc86e0b0051d4fa898"
+    },
+    { "v": 0.005, "f": "0.5%", "discipline": "721e75eb0535e152669b0c3fbbb9e21675483553"
+    },
+    { "v": 0.021, "f": "2.1%", "discipline": "7c3d37cbfea2513a7e03e674448bbeee8ae3d862"
+    },
+    { "v": 0.019, "f": "1.6%", "discipline": "8e2a3711649993a87848337b9b401dcf64425e2d"
+    },
+    { "v": 0.005, "f": "0.5%", "discipline": "9f0224709d86e02b9625b5ebf2786b80ba6bed17"
+    },
+    { "v": 0.01, "f": "1.0%", "discipline": "a47bf84ac30d0843accb737d5924434ef3ed0517"
+    }
+  ],
+  [
+    { "v": "2019-08", "f": "Aug"
+    },
+    { "v": 0.098, "f": "1.8%", "discipline": "6a8b20f002a7dedf7b873dbc86e0b0051d4fa898"
+    },
+    { "v": 0.005, "f": "0.5%", "discipline": "721e75eb0535e152669b0c3fbbb9e21675483553"
+    },
+    { "v": 0.021, "f": "2.1%", "discipline": "7c3d37cbfea2513a7e03e674448bbeee8ae3d862"
+    },
+    { "v": 0.011, "f": "1.6%", "discipline": "8e2a3711649993a87848337b9b401dcf64425e2d"
+    },
+    { "v": 0.005, "f": "0.5%", "discipline": "9f0224709d86e02b9625b5ebf2786b80ba6bed17"
+    },
+    { "v": 0.01, "f": "1.0%", "discipline": "a47bf84ac30d0843accb737d5924434ef3ed0517"
+    }
+  ],
+  [
+    { "v": "2019-09", "f": "Sep"
+    },
+    { "v": 0.01, "f": "1.8%", "discipline": "6a8b20f002a7dedf7b873dbc86e0b0051d4fa898"
+    },
+    { "v": 0.005, "f": "0.5%", "discipline": "721e75eb0535e152669b0c3fbbb9e21675483553"
+    },
+    { "v": 0.021, "f": "2.1%", "discipline": "7c3d37cbfea2513a7e03e674448bbeee8ae3d862"
+    },
+    { "v": 0.01, "f": "1.6%", "discipline": "8e2a3711649993a87848337b9b401dcf64425e2d"
+    },
+    { "v": 0.005, "f": "0.5%", "discipline": "9f0224709d86e02b9625b5ebf2786b80ba6bed17"
+    },
+    { "v": 0.01, "f": "1.0%", "discipline": "a47bf84ac30d0843accb737d5924434ef3ed0517"
+    }
+  ],
+  [
+    { "v": "2019-10", "f": "Oct"
+    },
+    { "v": 0.099, "f": "1.8%", "discipline": "6a8b20f002a7dedf7b873dbc86e0b0051d4fa898"
+    },
+    { "v": 0.005, "f": "0.5%", "discipline": "721e75eb0535e152669b0c3fbbb9e21675483553"
+    },
+    { "v": 0.021, "f": "2.1%", "discipline": "7c3d37cbfea2513a7e03e674448bbeee8ae3d862"
+    },
+    { "v": 0.066, "f": "1.6%", "discipline": "8e2a3711649993a87848337b9b401dcf64425e2d"
+    },
+    { "v": 0.005, "f": "0.5%", "discipline": "9f0224709d86e02b9625b5ebf2786b80ba6bed17"
+    },
+    { "v": 0.01, "f": "1.0%", "discipline": "a47bf84ac30d0843accb737d5924434ef3ed0517"
+    }
+  ],
+  [
+    { "v": "2019-11", "f": "Nov"
+    },
+    { "v": 0.011, "f": "1.8%", "discipline": "6a8b20f002a7dedf7b873dbc86e0b0051d4fa898"
+    },
+    { "v": 0.005, "f": "0.5%", "discipline": "721e75eb0535e152669b0c3fbbb9e21675483553"
+    },
+    { "v": 0.021, "f": "2.1%", "discipline": "7c3d37cbfea2513a7e03e674448bbeee8ae3d862"
+    },
+    { "v": 0.016, "f": "1.6%", "discipline": "8e2a3711649993a87848337b9b401dcf64425e2d"
+    },
+    { "v": 0.005, "f": "0.5%", "discipline": "9f0224709d86e02b9625b5ebf2786b80ba6bed17"
+    },
+    { "v": 0.01, "f": "1.0%", "discipline": "a47bf84ac30d0843accb737d5924434ef3ed0517"
+    }
+  ],
+  [
+    { "v": "2019-12", "f": "Dec"
+    },
+    { "v": 0.038, "f": "1.8%", "discipline": "6a8b20f002a7dedf7b873dbc86e0b0051d4fa898"
+    },
+    { "v": 0.005, "f": "0.5%", "discipline": "721e75eb0535e152669b0c3fbbb9e21675483553"
+    },
+    { "v": 0.021, "f": "2.1%", "discipline": "7c3d37cbfea2513a7e03e674448bbeee8ae3d862"
+    },
+    { "v": 0.016, "f": "1.6%", "discipline": "8e2a3711649993a87848337b9b401dcf64425e2d"
+    },
+    { "v": 0.005, "f": "0.5%", "discipline": "9f0224709d86e02b9625b5ebf2786b80ba6bed17"
+    },
+    { "v": 0.01, "f": "1.0%", "discipline": "a47bf84ac30d0843accb737d5924434ef3ed0517"
+    }
+  ]
+]

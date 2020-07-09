@@ -184,27 +184,27 @@ const actions = {
 const mutations = {
 
   SET_FULL_RESEARCH_LISTING(state, list) {
-    Vue.set(state, 'fullResearchListing', list);
+    state.fullResearchListing = list;
   },
 
   SET_RESEARCH_FEED_REVIEWS_LIST(state, list) {
-    Vue.set(state, 'feedResearchReviews', list);
+    state.feedResearchReviews = list;
   },
 
   SET_RESEARCH_FEED_GROUPS_LIST(state, list) {
-    Vue.set(state, 'feedResearchGroups', list);
+    state.feedResearchGroups = list;
   },
 
   SET_RESEARCH_FEED_GROUPS_MEMBERS_LIST(state, list) {
-    Vue.set(state, 'feedResearchGroupsMembers', list);
+    state.feedResearchGroupsMembers = list;
   },
 
   SET_RESEARCH_FEED_TOKEN_SALES_LIST(state, list) {
-    Vue.set(state, 'feedResearchTokenSales', list);
+    state.feedResearchTokenSales = list;
   },
 
   SET_RESEARCH_FEED_TOKEN_SALES_CONTRIBUTIONS_LIST(state, list) {
-    Vue.set(state, 'feedResearchTokenSalesContributions', list);
+    state.feedResearchTokenSalesContributions = list;
   },
 
   SET_FEED_ITEM_COLLAPSE_STATE(state, { item, collapsed }) {
@@ -218,7 +218,7 @@ const mutations = {
   },
 
   UPDATE_FILTER(state, { key, value }) {
-    Vue.set(state.filter, key, value);
+    state.filter[key] = value;
   }
 };
 

@@ -37,7 +37,7 @@ const actions = {
 const mutations = {
 
   CHANGE_GLOBAL_LOADER_FIELD(state, payload) {
-    Vue.set(state.globalLoader, payload.field, payload.value);
+    state.globalLoader[payload.field] = payload.value;
   },
 
   SET_GLOBAL_THEME_SETTINGS(state, themeSettings) {

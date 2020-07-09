@@ -34,7 +34,7 @@ const actions = {
 // mutations
 const mutations = {
   SET_WITNESSES(state, witnesses) {
-    Vue.set(state, 'witnesses', witnesses);
+    state.witnesses = witnesses;
   }
 };
 

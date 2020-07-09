@@ -1,6 +1,6 @@
 <template>
   <layout-section>
-    <v-card flat class="full-height full-width pa-12">
+    <v-card flat class="full-height full-width">
       <v-row no-gutters>
         <v-col cols="12" class="text-h5 font-weight-bold">
           Expertise Contribution Model Setup
@@ -14,14 +14,14 @@
         <v-col
           cols="12"
           md="10"
-          lg="7"
+          lg="8"
           class="my-12"
         >
           <v-row no-gutters class="mb-4">
-            <v-col cols="2" class="text-uppercase grey--text">
+            <v-col cols="3" class="text-uppercase grey--text">
               Contribution type
             </v-col>
-            <v-col cols="6" class="text-uppercase grey--text">
+            <v-col cols="6" class="text-uppercase grey--text pl-4">
               Review criteria
             </v-col>
             <v-col cols="3" class="text-center">
@@ -31,9 +31,10 @@
           <v-row
             v-for="(item, i) in content"
             :key="`${item.contentType}${i}`"
+            no-gutters
             class="font-weight-bold bg-hover-lightblue py-2"
           >
-            <v-col cols="2" class="align-self-center">
+            <v-col cols="3" class="align-self-center">
               {{ item.contentType }}
             </v-col>
             <v-col cols="6" class="align-self-center">
@@ -67,6 +68,7 @@
               <v-text-field
                 v-model="item.rewardCoefficient"
                 filled
+                dense
                 class="pa-0 my-0 mx-auto max-width-150 centered-input font-weight-regular"
                 hide-details
               />
@@ -127,6 +129,7 @@
               <v-text-field
                 v-model="item.weight"
                 filled
+                dense
                 class="pa-0 my-0 mx-auto max-width-100 centered-input"
                 hide-details
               />

@@ -734,7 +734,7 @@
   };
 </script>
 
-<style lang="less">
+<style lang="less" scoped>
   .faded {
     opacity: 0.1;
     transition: 0.3s opacity;

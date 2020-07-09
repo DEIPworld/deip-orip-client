@@ -356,35 +356,35 @@ const mutations = {
   },
 
   SET_FUNDING_OPPORTUNITY(state, foa) {
-    Vue.set(state, 'foa', foa);
+    state.foa = foa;
   },
 
   SET_FUNDING_OPPORTUNITY_ORGANIZATION(state, foaOrganization) {
-    Vue.set(state, 'foaOrganization', foaOrganization);
+    state.foaOrganization = foaOrganization;
   },
 
   SET_AWARD(state, award) {
-    Vue.set(state, 'award', award);
+    state.award = award;
   },
 
   SET_AWARDEE(state, awardee) {
-    Vue.set(state, 'awardee', awardee);
+    state.awardee = awardee;
   },
 
   SET_AWARD_PAYMENT_REQUESTS_LIST(state, paymentRequests) {
-    Vue.set(state, 'awardPaymentRequestsList', paymentRequests);
+    state.awardPaymentRequestsList = paymentRequests;
   },
 
   SET_AWARDEE_USERS_LIST(state, awardeeUsers) {
-    Vue.set(state, 'awardeeUsersList', awardeeUsers);
+    state.awardeeUsersList = awardeeUsers;
   },
 
   SET_AWARDEE_RESEARCH_LIST(state, researches) {
-    Vue.set(state, 'awardeeResearchList', researches);
+    state.awardeeResearchList = researches;
   },
 
   SET_AWARDEE_RESEARCH_GROUPS_LIST(state, researchGroups) {
-    Vue.set(state, 'awardeeResearchGroupsList', researchGroups);
+    state.awardeeResearchGroupsList = researchGroups;
   }
 };
 

@@ -288,40 +288,40 @@ const actions = {
 const mutations = {
 
   SET_ORGANIZATION_DASHBOARD_LOADING_STATE(state, isLoading) {
-    Vue.set(state, 'isLoadingOrganizationDashboardPage', isLoading);
+    state.isLoadingOrganizationDashboardPage = isLoading;
   },
 
   SET_CURRENT_ORGANIZATION(state, currentOrganization) {
-    Vue.set(state, 'currentOrganization', currentOrganization);
+    state.currentOrganization = currentOrganization;
   },
 
   SET_AWARDS_FUNDING_OPPORTUNITIES_LIST(state, awardsFoaList) {
-    Vue.set(state, 'awardsFoaList', awardsFoaList);
+    state.awardsFoaList = awardsFoaList;
   },
 
   SET_AWARDS_LIST(state, awardsList) {
-    Vue.set(state, 'awardsList', awardsList);
-    Vue.set(state, 'awardeesList', [].concat.apply([], awardsList.map((a) => a.awardees)));
+    state.awardsList = awardsList;
+    state.awardeesList = [].concat.apply([], awardsList.map((a) => a.awardees));
   },
 
   SET_PAYMENT_REQUESTS_LIST(state, paymentRequestsList) {
-    Vue.set(state, 'awardsPaymentRequestsList', paymentRequestsList);
+    state.awardsPaymentRequestsList = paymentRequestsList;
   },
 
   SET_AWARDEE_USERS_LIST(state, awardeeUsers) {
-    Vue.set(state, 'awardeeUsersList', awardeeUsers);
+    state.awardeeUsersList = awardeeUsers;
   },
 
   SET_AWARDEE_RESEARCH_LIST(state, researches) {
-    Vue.set(state, 'awardeeResearchList', researches);
+    state.awardeeResearchList = researches;
   },
 
   SET_AWARDEE_RESEARCH_GROUPS_LIST(state, researchGroups) {
-    Vue.set(state, 'awardeeResearchGroupsList', researchGroups);
+    state.awardeeResearchGroupsList = researchGroups;
   },
 
   SET_AWARDS_TOKEN_STATISTIC(state, stats) {
-    Vue.set(state, 'tokenInfo', stats);
+    state.tokenInfo = stats;
   }
 
 };

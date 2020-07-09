@@ -31,7 +31,7 @@
 
     props: {
       contentRef: { type: Object },
-      researchGroupMembers: { type: Array }
+      researchMembers: { type: Array }
     },
     data() {
       return {
@@ -163,7 +163,7 @@
         const deletedAuthors = persons
           .filter((p) => !authors.some((a) => a.account.name == p.alias))
           // filter out authors without DEIP account
-          .filter((p) => this.researchGroupMembers.some((m) => m.account.name === p.alias));
+          .filter((p) => this.researchMembers.some((m) => m.account.name === p.alias));
 
         const addedAuthors = authors.filter((a) => !persons.some((p) => a.account.name == p.alias));
 

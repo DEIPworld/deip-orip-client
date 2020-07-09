@@ -40,11 +40,11 @@ const actions = {
 const mutations = {
 
   SET_RESEARCH_DETAILS(state, research) {
-    Vue.set(state, 'research', research);
+    state.research = research;
   },
 
   SET_RESEARCH_EDIT_LOADING_STATE(state, isLoading) {
-    Vue.set(state, 'isLoadingResearchEditPage', isLoading);
+    state.isLoadingResearchEditPage = isLoading;
   }
 };
 

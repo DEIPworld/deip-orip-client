@@ -31,42 +31,27 @@ const getters = {
 const actions = {
 
   loadUserAccount({
-    state, dispatch, commit, rootGetters
+    state, dispatch
   }, { username }) {
-    const accountLoad = new Promise((resolve, reject) => {
-      dispatch('loadAccountData', {
-        username,
-        notify: resolve
-      });
-    });
-
-    const profileLoad = new Promise((resolve, reject) => {
-      dispatch('loadProfileData', {
-        username,
-        notify: resolve
-      });
-    });
-    return Promise.all([accountLoad, profileLoad]);
+    return Promise.all([
+      dispatch('loadAccountData', { username }),
+      dispatch('loadProfileData', { username })
+    ]);
   },
 
-  loadAccountData({ commit }, { username, notify } = {}) {
+  loadAccountData({ commit }, { username } = {}) {
     return deipRpc.api.getAccountsAsync([username])
       .then(([account]) => {
         commit('SET_USER_ACCOUNT', account);
-      })
-      .finally(() => {
-        if (notify) notify();
       });
   },
 
-  loadProfileData({ commit }, { username, notify } = {}) {
+  loadProfileData({ commit }, { username } = {}) {
     return usersService.getUserProfile(username)
       .then((profile) => {
         commit('SET_USER_PROFILE', profile || null);
       }, (err) => {
-        console.log(err);
-      }).finally(() => {
-        if (notify) notify();
+        console.error(err);
       });
   },
 
@@ -93,11 +78,11 @@ const actions = {
 // mutations
 const mutations = {
   SET_USER_ACCOUNT(state, account) {
-    Vue.set(state, 'account', account);
+    state.account = account;
   },
 
   SET_USER_PROFILE(state, profile) {
-    Vue.set(state, 'profile', profile);
+    state.profile = profile;
   },
 
   getPendingProjects(state, payload) {

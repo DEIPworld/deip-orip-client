@@ -102,30 +102,30 @@ const actions = {
 const mutations = {
 
   SET_ORGANIZATION_PROFILE(state, organization) {
-    Vue.set(state, 'organization', organization);
+    state.organization = organization;
   },
 
   SET_RESEARCH_AREA(state, { area, subArea }) {
-    Vue.set(state, 'selectedArea', {
+    state.selectedArea = {
       title: area.title,
       abbreviation: area.abbreviation,
       subAreaTitle: subArea.title,
       subAreaAbbreviation: subArea.abbreviation,
       disciplines: subArea.disciplines
-    });
+    };
   },
 
   SET_ORGANIZATION_PROGRAMS(state, { corePrograms, additionalPrograms }) {
-    Vue.set(state, 'corePrograms', corePrograms);
-    Vue.set(state, 'additionalPrograms', additionalPrograms);
+    state.corePrograms = corePrograms;
+    state.additionalPrograms = additionalPrograms;
   },
 
   SET_ORGANIZATION_PROGRAMS_LOADING_STATE(state, isLoading) {
-    Vue.set(state, 'isLoadingOrganizationPrograms', isLoading);
+    state.isLoadingOrganizationPrograms = isLoading;
   },
 
   SET_ORGANIZATION_PROGRAMS_LISTING_PAGE_LOADING_STATE(state, isLoading) {
-    Vue.set(state, 'isLoadingOrganizationProgramsPage', isLoading);
+    state.isLoadingOrganizationProgramsPage = isLoading;
   }
 };
 

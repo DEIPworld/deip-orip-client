@@ -41,7 +41,7 @@ const actions = {
 const mutations = {
 
   SET_RESEARCH_GROUP(state, group) {
-    Vue.set(state, 'group', group);
+    state.group = group;
   },
 
   SET_GROUP_DETAILS_LOADING_STATE(state, value) {

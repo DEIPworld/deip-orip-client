@@ -147,44 +147,56 @@
       <div class="text-h6 bold">
         Expertise Contribution Index
       </div>
-      <div class="py-2">
-        <div v-for="(item, i) in expertise" :key="`eci-${i}`" class="expertise px-1 my-2">
-          <router-link :to="goToExpertiseDetails(item.discipline_id)" style="text-decoration: none">
-            <div class="display-flex justify-space-between">
-              <div class="blue--text text--accent-4 bold">
-                TOP <span class="font-weight-bold">{{ getEciPercentile(item.amount, userInfo.account.name, item.discipline_id) }}</span>%
-              </div>
-              <div class="grey--text">
-                ECI {{ item.amount }}
-              </div>
-            </div>
-            <v-divider class="expertise__divider" />
-            <div class="expertise__disc-name pt-1">
+
+
+      <div
+        v-for="(item, i) in expertise"
+        :key="`eci-${i}`"
+        class="expertise px-1 my-1 text-caption"
+      >
+        <router-link :to="goToExpertiseDetails(item.discipline_external_id)" style="text-decoration: none">
+
+          <v-row no-gutters justify="space-between">
+            <v-col cols="auto" class="pa-1 primary--text font-weight-bold">
+<!--              TOP {{ getEciPercentile(item.amount, userInfo.account.name, item.discipline_id) }}%-->
               {{ item.discipline_name }}
-            </div>
-          </router-link>
+            </v-col>
+            <v-col cols="auto" class="pa-1 grey--text">
+              ECI {{ item.amount | commaNumber }}
+            </v-col>
+          </v-row>
+
+<!--          <v-divider />-->
+
+<!--          <div class="pa-1 black&#45;&#45;text">-->
+<!--            {{ item.discipline_name }}-->
+<!--          </div>-->
+
+        </router-link>
+      </div>
+
+      <div v-if="!expertise.length" class="text-body-1">
+        <div v-if="isOwner">
+          You have no Expertise Tokens yet. Use <span class="a" @click="openClaimExpertiseDialog()">Claim</span>
+          process to apply for Expertise Tokens
         </div>
-        <div v-if="!expertise.length" class="text-body-1">
-          <div v-if="isOwner">
-            You have no Expertise Tokens yet. Use <span class="a" @click="openClaimExpertiseDialog()">Claim</span>
-            process to apply for Expertise Tokens
-          </div>
-          <div v-if="!isOwner">
-            <span class="text-body-2">{{ userInfo | fullname }}</span> has no Expertise Tokens yet
-          </div>
-        </div>
-        <div v-if="expertise.length && isOwner" class="text-body-1 full-width c-mt-4">
-          <v-btn
-            block
-            outlined
-            color="primary"
-            class="ma-0"
-            @click="openClaimExpertiseDialog()"
-          >
-            Claim new Discipline
-          </v-btn>
+        <div v-if="!isOwner">
+          <span class="text-body-2">{{ userInfo | fullname }}</span> has no Expertise Tokens yet
         </div>
       </div>
+
+      <div v-if="expertise.length && isOwner" class="text-body-1 full-width c-mt-4">
+        <v-btn
+          block
+          outlined
+          color="primary"
+          class="ma-0"
+          @click="openClaimExpertiseDialog()"
+        >
+          Claim new Discipline
+        </v-btn>
+      </div>
+
     </div>
     <!-- ### END User Profile Expertise Section ### -->
 
@@ -446,12 +458,12 @@
 
     methods: {
 
-      goToExpertiseDetails(id) {
+      goToExpertiseDetails(disciplineExternalId) {
         return this.$route.path.includes('/account')
           ? {
             name: 'account.expertiseDetails',
             query: {
-              discipline_id: id
+              discipline: disciplineExternalId
             }
           }
           : {
@@ -460,7 +472,7 @@
               account_name: this.userInfo.account.name
             },
             query: {
-              discipline_id: id
+              discipline: disciplineExternalId
             }
           };
       },
@@ -487,17 +499,18 @@
           inviteId: proposalId,
           account: this.currentUser.username
         })
-        .then(() => {
-          this.$store.dispatch('userDetails/loadUserInvites', { username: this.currentUser.username });
-          this.$store.dispatch('auth/loadGroups');
-          this.$store.dispatch('userDetails/loadGroups', { username: this.currentUser.username });
-          this.$notifier.showSuccess(`"Invite has been approved successfully !"`)
-        }, (err) => {
-          this.$notifier.showError(`An error occurred while accepting invite, please try again later`)
-          console.log(err);
-        }).finally(() => {
-          this.closeInviteDetailsDialog();
-        });
+          .then(() => {
+            this.$store.dispatch('userDetails/loadUserInvites', { username: this.currentUser.username });
+            this.$store.dispatch('auth/loadGroups');
+            this.$store.dispatch('userDetails/loadGroups', { username: this.currentUser.username });
+            this.$notifier.showSuccess(`"Invite has been approved successfully !"`);
+          }, (err) => {
+            this.$notifier.showError(`An error occurred while accepting invite, please try again later`);
+            console.log(err);
+          })
+          .finally(() => {
+            this.closeInviteDetailsDialog();
+          });
       },
 
       rejectInvite() {
@@ -509,15 +522,16 @@
           inviteId: proposalId,
           account: this.currentUser.username
         })
-        .then(() => {
-          this.$store.dispatch('userDetails/loadUserInvites', { username: this.currentUser.username });
-          this.$notifier.showSuccess(`"Invite has been rejected successfully !"`)
-        }, (err) => {
-          this.$notifier.showError(`An error occurred while rejecting invite, please try again later`)
-          console.log(err);
-        }).finally(() => {
-          this.closeInviteDetailsDialog();
-        });
+          .then(() => {
+            this.$store.dispatch('userDetails/loadUserInvites', { username: this.currentUser.username });
+            this.$notifier.showSuccess(`"Invite has been rejected successfully !"`);
+          }, (err) => {
+            this.$notifier.showError(`An error occurred while rejecting invite, please try again later`);
+            console.log(err);
+          })
+          .finally(() => {
+            this.closeInviteDetailsDialog();
+          });
       },
 
       openClaimExpertiseDialog() {

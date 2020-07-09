@@ -370,79 +370,79 @@ const mutations = {
   },
 
   SET_INVESTED_RESEARCH_SHARES(state, list) {
-    Vue.set(state, 'investedResearchShares', list);
+    state.investedResearchShares = list;
   },
 
   SET_INVESTED_RESEARCHES(state, list) {
-    Vue.set(state, 'investedResearches', list);
+    state.investedResearches = list;
   },
 
   SET_INVESTING_RESEARCHES_ONGOING_TOKEN_SALES_CONTRIBUTIONS(state, list) {
-    Vue.set(state, 'investingResearchesOngoingTokenSalesContributions', list);
+    state.investingResearchesOngoingTokenSalesContributions = list;
   },
 
   SET_INVESTING_RESEARCHES_ONGOING_TOKEN_SALES(state, list) {
-    Vue.set(state, 'investingResearchesOngoingTokenSales', list);
+    state.investingResearchesOngoingTokenSales = list;
   },
 
   SET_INVESTING_RESEARCHES_TOKEN_SALES(state, list) {
-    Vue.set(state, 'investingResearches', list);
+    state.investingResearches = list;
   },
 
   SET_MY_MEMBERSHIP_RESEARCHES(state, list) {
-    Vue.set(state, 'myMembershipResearches', list);
+    state.myMembershipResearches = list;
   },
 
   SET_MY_MEMBERSHIP_RESEARCHES_ONGOING_TOKEN_SALES(state, list) {
-    Vue.set(state, 'myMembershipResearchesOngoingTokenSales', list);
+    state.myMembershipResearchesOngoingTokenSales = list;
   },
 
   SET_MY_MEMBERSHIP_RESEARCHES_ONGOING_TOKEN_SALES_CONTRIBUTIONS(state, list) {
-    Vue.set(state, 'myMembershipResearchesOngoingTokenSalesContributions', list);
+    state.myMembershipResearchesOngoingTokenSalesContributions = list;
   },
 
   SET_RESEARCH_GROUPS_TOKENS(state, list) {
-    Vue.set(state, 'researchGroupsTokens', list);
+    state.researchGroupsTokens = list;
   },
 
   SET_RESEARCH_GROUPS(state, list) {
-    Vue.set(state, 'researchGroups', list);
+    state.researchGroups = list;
   },
 
   SET_RESEARCH_GROUPS_MEMBERS(state, list) {
-    Vue.set(state, 'researchGroupsMembers', list);
+    state.researchGroupsMembers = list;
   },
 
   SET_EXPERTS(state, list) {
-    Vue.set(state, 'expertsList', list);
+    state.expertsList = list;
   },
 
   SET_EXPERTS_EXPERTISE_TOKENS(state, list) {
-    Vue.set(state, 'expertsExpertiseTokensList', list);
+    state.expertsExpertiseTokensList = list;
   },
 
   SET_BOOKMARKED_RESEARCHES(state, list) {
-    Vue.set(state, 'bookmarkedResearches', list);
+    state.bookmarkedResearches = list;
   },
 
   SET_BOOKMARKED_RESEARCHES_ONGOING_TOKEN_SALES(state, list) {
-    Vue.set(state, 'bookmarkedResearchesOngoingTokenSales', list);
+    state.bookmarkedResearchesOngoingTokenSales = list;
   },
 
   SET_BOOKMARKED_RESEARCHES_ONGOING_TOKEN_SALES_CONTRIBUTIONS(state, list) {
-    Vue.set(state, 'bookmarkedResearchesOngoingTokenSalesContributions', list);
+    state.bookmarkedResearchesOngoingTokenSalesContributions = list;
   },
 
   SET_MY_INVITES(state, list) {
-    Vue.set(state, 'myInvitesList', list);
+    state.myInvitesList = list;
   },
 
   SET_MY_REVIEW_REQUESTS(state, list) {
-    Vue.set(state, 'myReviewRequests', list);
+    state.myReviewRequests = list;
   },
 
   SET_MY_REVIEWS(state, list) {
-    Vue.set(state, 'myReviews', list);
+    state.myReviews = list;
   }
 };
 

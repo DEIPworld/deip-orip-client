@@ -74,3 +74,8 @@ Vue.filter('joinByKey', (value, key, separator = ', ') => {
   if (!value) return '';
   return value.map((el) => el[key]).join(separator);
 });
+
+Vue.filter('commaNumber', (value, separator = ',') => {
+  if (!value) return '';
+  return value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, separator);
+});

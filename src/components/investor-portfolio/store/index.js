@@ -270,58 +270,58 @@ const actions = {
 const mutations = {
 
   SET_INVESTMENT_PORTFOLIO_PAGE_LOADING_STATE(state, isLoading) {
-    Vue.set(state, 'isLoadingInvestmentPortfolioPage', isLoading);
+    state.isLoadingInvestmentPortfolioPage = isLoading;
   },
 
   SET_INVESTMENT_PORTFOLIO(state, investmentPortfolio) {
-    Vue.set(state, 'investmentPortfolio', investmentPortfolio);
+    state.investmentPortfolio = investmentPortfolio;
   },
 
   SET_INVESTMENT_PORTFOLIO_RESEARCHES(state, list) {
-    Vue.set(state, 'researches', list);
+    state.researches = list;
   },
 
   SET_INVESTMENT_PORTFOLIO_RESEARCH_GROUPS(state, list) {
-    Vue.set(state, 'researchGroups', list);
+    state.researchGroups = list;
   },
 
   SET_INVESTMENT_PORTFOLIO_RESEARCH_TOKENS(state, list) {
-    Vue.set(state, 'researchTokens', list);
+    state.researchTokens = list;
   },
 
   SET_INVESTMENT_PORTFOLIO_RESEARCH_TOKENS_HOLDERS(state, list) {
-    Vue.set(state, 'researchTokensHolders', list);
+    state.researchTokensHolders = list;
   },
 
   SET_INVESTMENT_PORTFOLIO_RESEARCH_GROUPS_TOKENS(state, list) {
-    Vue.set(state, 'researchGroupsTokens', list);
+    state.researchGroupsTokens = list;
   },
 
   SET_INVESTMENT_PORTFOLIO_RESEARCH_GROUPS_MEMBERS(state, list) {
-    Vue.set(state, 'researchGroupsMembers', list);
+    state.researchGroupsMembers = list;
   },
 
   SET_INVESTMENT_PORTFOLIO_COMMENT_AUTHORS(state, list) {
-    Vue.set(state, 'commentAuthors', list);
+    state.commentAuthors = list;
   },
 
   SET_SELECTED_INVESTMENT_ID(state, externalId) {
-    Vue.set(state, 'selectedInvestmentId', externalId);
+    state.selectedInvestmentId = externalId;
   },
 
   SET_SELECTED_LIST_ID(state, id) {
-    Vue.set(state, 'selectedListId', id);
+    state.selectedListId = id;
   },
 
   UPDATE_INVESTMENT_MEMO(state, { investmentId, memo }) {
     const investment = state.investmentPortfolio.researches.find((r) => r.id == investmentId);
-    Vue.set(investment, 'memo', memo);
+    investment.memo = memo;
   },
 
   UPDATE_INVESTMENT_LIST_TAGS(state, { investmentId, listId, listTags }) {
     const investment = state.investmentPortfolio.researches.find((r) => r.id == investmentId);
     const otherListsTags = investment.tags.filter(((tag) => tag.list != listId));
-    Vue.set(investment, 'tags', [...otherListsTags, ...listTags.map(((tagName) => ({ name: tagName, list: listId })))]);
+    investment.tags = [...otherListsTags, ...listTags.map(((tagName) => ({ name: tagName, list: listId })))];
   },
 
   ADD_NEW_INVESTMENT_LIST(state, { listId, listName, color }) {
@@ -332,8 +332,8 @@ const mutations = {
 
   EDIT_NEW_INVESTMENT_LIST(state, { listId, listName, color }) {
     const editedList = state.investmentPortfolio.lists.find((list) => list.id == listId);
-    Vue.set(editedList, 'name', listName);
-    Vue.set(editedList, 'color', color);
+    editedList.name = listName;
+    editedList.color = color;
   }
 };
 

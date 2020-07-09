@@ -267,63 +267,63 @@ const mutations = {
   },
 
   SET_AWARD_WITHDRAWAL(state, payment) {
-    Vue.set(state, 'withdrawal', payment);
+    state.withdrawal = payment;
   },
 
   SET_AWARD(state, award) {
-    Vue.set(state, 'award', award);
+    state.award = award;
   },
 
   SET_AWARDEE(state, awardee) {
-    Vue.set(state, 'awardee', awardee);
+    state.awardee = awardee;
   },
 
   SET_AWARDEE_RESEARCH(state, research) {
-    Vue.set(state, 'research', research);
+    state.research = research;
   },
 
   SET_AWARDEE_ORGANIZATION(state, organization) {
-    Vue.set(state, 'awardeeOrganization', organization);
+    state.awardeeOrganization = organization;
   },
 
   SET_UNIVERSITY_ORGANIZATION(state, organization) {
-    Vue.set(state, 'universityOrganization', organization);
+    state.universityOrganization = organization;
   },
 
   SET_TREASURY_ORGANIZATION(state, organization) {
-    Vue.set(state, 'treasuryOrganization', organization);
+    state.treasuryOrganization = organization;
   },
 
   SET_AWARD_WITHDRAWAL_HISTORY_RECORDS_LIST(state, withdrawalHistoryRecords) {
-    Vue.set(state, 'withdrawalHistoryRecords', withdrawalHistoryRecords);
+    state.withdrawalHistoryRecords = withdrawalHistoryRecords;
   },
 
   SET_AWARD_WITHDRAWAL_HISTORY_RECORDS_BLOCKS_LIST(state, withdrawalHistoryRecordsBlocks) {
-    Vue.set(state, 'withdrawalHistoryRecordsBlocks', withdrawalHistoryRecordsBlocks);
+    state.withdrawalHistoryRecordsBlocks = withdrawalHistoryRecordsBlocks;
   },
 
   SET_AWARD_WITHDRAWAL_HISTORY_RECORDS_TRANSACTIONS_LIST(state, withdrawalHistoryRecordsTransactions) {
-    Vue.set(state, 'withdrawalHistoryRecordsTransactions', withdrawalHistoryRecordsTransactions);
+    state.withdrawalHistoryRecordsTransactions = withdrawalHistoryRecordsTransactions;
   },
 
   SET_AWARD_WITHDRAWAL_SIGNERS_LIST(state, users) {
-    Vue.set(state, 'withdrawalSigners', users);
+    state.withdrawalSigners = users;
   },
 
   SET_AWARD_PI(state, user) {
-    Vue.set(state, 'awardPI', user);
+    state.awardPI = user;
   },
 
   SET_FUNDING_OPPORTUNITY(state, foa) {
-    Vue.set(state, 'foa', foa);
+    state.foa = foa;
   },
 
   SET_FUNDING_OPPORTUNITY_ORGANIZATION(state, foa) {
-    Vue.set(state, 'foaOrganization', foa);
+    state.foaOrganization = foa;
   },
 
   SET_WITNESSES_LIST(state, witnesses) {
-    Vue.set(state, 'witnesses', witnesses);
+    state.witnesses = witnesses;
   }
 
 };

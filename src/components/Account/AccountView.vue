@@ -1,6 +1,8 @@
 <template>
   <div v-if="$ready">
-    <account-sidebar v-if="!$route.meta.hideSidebar" />
+    <portal to="sidebar">
+      <account-sidebar v-if="!$route.meta.hideSidebar" />
+    </portal>
     <router-view />
   </div>
 </template>
@@ -13,6 +15,7 @@
     components: { AccountSidebar },
 
     created() {
+      console.log(this.$store.getters['auth/user'])
       this.$store.dispatch('account/loadUserAccount', {
         username: decodeURIComponent(this.$store.getters['auth/user'].account.name)
       }).then(() => {

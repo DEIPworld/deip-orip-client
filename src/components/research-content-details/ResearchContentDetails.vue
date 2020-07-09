@@ -47,7 +47,7 @@
         <research-content-details-dar
           v-if="isDarContent"
           :content-ref="contentRef"
-          :research-group-members="membersList"
+          :research-members="researchMembersList"
         />
         <research-content-details-eci v-if="isPublished" />
         <v-divider />
@@ -164,7 +164,7 @@
 
           <v-autocomplete
             v-model="proposeContent.authors"
-            :items="membersList"
+            :items="researchMembersList"
             :menu-props="{ closeOnContentClick: true }"
             hint="You can select multiple authors"
             persistent-hint
@@ -280,6 +280,7 @@
         content: 'rcd/content',
         research: 'rcd/research',
         membersList: 'rcd/membersList',
+        researchMembersList: 'rcd/researchMembersList',
         contentReviewsList: 'rcd/contentReviewsList',
         contentRef: 'rcd/contentRef',
         isInProgress: 'rcd/isInProgress',
@@ -308,7 +309,7 @@
       openContentProposalDialog() {
         const openDialog = (title) => {
           this.proposeContent.title = title;
-          this.proposeContent.authors = this.membersList.filter((m) => this.contentRef.authors.some((a) => a === m.account.name));
+          this.proposeContent.authors = this.researchMembersList.filter((m) => this.contentRef.authors.some((a) => a === m.account.name));
           this.proposeContent.isOpen = true;
         };
         if (this.isDarContent) {
@@ -394,7 +395,7 @@
         if (!authors.length) return;
         bus.$emit('texture:setAuthors', {
           authors,
-          members: this.membersList
+          members: this.researchMembersList
         });
         this.$store.dispatch('rcd/setDraftAuthors', authors.map((a) => a.account.name));
       },

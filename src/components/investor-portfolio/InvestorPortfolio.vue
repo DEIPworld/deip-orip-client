@@ -1,14 +1,15 @@
 <template>
   <layout-section>
-    <v-navigation-drawer app clipped width="280">
+    <portal to="sidebar">
       <investor-portfolio-inbox-left-sidebar />
-    </v-navigation-drawer>
+    </portal>
 
     <investor-portfolio-inbox />
 
     <template #sidebar>
       <investor-portfolio-inbox-right-sidebar />
     </template>
+
   </layout-section>
 </template>
 
@@ -16,7 +17,6 @@
   import { mapGetters } from 'vuex';
   import deipRpc from '@deip/rpc-client';
   import moment from 'moment';
-  import LayoutSidebar from '@/components/layout/components/LayoutSidebar';
   import AppLayout from '@/components/layout/components/Layout';
   import LayoutSection from '@/components/layout/components/LayoutSection';
   import InvestorPortfolioInboxLeftSidebar
