@@ -89,7 +89,7 @@
 <script>
   import { mapGetters } from 'vuex';
   import DFormBlock from '@/components/Deipify/DFormBlock/DFormBlock';
-  import { FormMixin } from '@/utils/FomMixin';
+  import { FormMixin } from '@/utils/FormMixin';
   import moment from 'moment';
 
   export default {

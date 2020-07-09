@@ -101,7 +101,7 @@
   import { mapGetters } from 'vuex';
   import deipRpc from '@deip/rpc-client';
   import DFormBlock from '@/components/Deipify/DFormBlock/DFormBlock';
-  import { FormMixin } from '@/utils/FomMixin';
+  import { FormMixin } from '@/utils/FormMixin';
   import { UsersService } from '@deip/users-service';
   import moment from 'moment';
 
