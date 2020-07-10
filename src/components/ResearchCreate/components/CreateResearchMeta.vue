@@ -13,6 +13,8 @@
             name="title"
             label="Title"
             filled
+            :rules="[rules.titleLength]"
+            :error-messages="isPermlinkVerifyed === false ? 'Research with the same name already exists' : ''"
             @keyup="setTitle"
           />
         </div>
@@ -23,6 +25,7 @@
             name="Description"
             label="Description"
             filled
+            :rules="[rules.descriptionLength]"
             @keyup="setDescription"
           />
         </div>
@@ -62,6 +65,10 @@
 
 <script>
   import { mapGetters } from 'vuex';
+  import { ResearchService } from '@deip/research-service';
+  import { maxTitleLength, maxDescriptionLength } from '@/variables';
+
+  const researchService = ResearchService.getInstance();
 
   export default {
     name: 'CreateResearchMeta',
@@ -80,8 +87,11 @@
         title: '',
         description: '',
         videoSrc: '',
+        isPermlinkVerifyed: true,
         rules: {
-          link: (value) => !value || this.isValidLink || 'Invalid http(s) link'
+          link: (value) => !value || this.isValidLink || 'Invalid http(s) link',
+          titleLength: (value) => value.length <= maxTitleLength || `Title max length is ${maxTitleLength} symbols`,
+          descriptionLength: (value) => value.length <= maxDescriptionLength || `Description max length is ${maxDescriptionLength} symbols`
         }
       };
     },
@@ -96,7 +106,9 @@
       nextDisabled() {
         return (
           !this.research.title
+          || this.research.title.length > maxTitleLength
           || !this.research.description
+          || this.research.description.length > maxDescriptionLength
           || !this.videoSrcIsValidOrAbsent
           || this.isLoading
         );
@@ -106,7 +118,16 @@
       nextStep() {
         // temporary it is the last step
         // this.$emit('finish');
-        this.$emit('incStep');
+        researchService.checkResearchExistenceByPermlink(this.research.group.external_id, this.research.title)
+          .then((exists) => {
+            this.isPermlinkVerifyed = !exists;
+            if (this.isPermlinkVerifyed) {
+              this.$emit('incStep');
+            }
+          })
+          .catch((error) => {
+            this.isPermlinkVerifyed = false;
+          });
       },
       prevStep() {
         this.$emit('decStep');

@@ -5,9 +5,10 @@
         <v-col cols="12">
           <v-text-field
             v-model="newResearchGroupName"
-            :rules="[rules.required]"
+            :rules="[rules.required, rules.titleLength]"
             label="Name"
             filled
+            :error-messages="isPermlinkVerifyed === false ? 'Group with the same name already exists' : ''"
           />
         </v-col>
       </d-form-block>
@@ -15,7 +16,7 @@
         <v-col cols="12">
           <v-textarea
             v-model="newResearchGroupDescription"
-            :rules="[rules.required]"
+            :rules="[rules.required, rules.descriptionLength]"
             name="Description"
             label="Description"
             filled
@@ -144,6 +145,8 @@
   import { mapGetters } from 'vuex';
   import vueDropzone from 'vue2-dropzone';
   import DFormBlock from '@/components/Deipify/DFormBlock/DFormBlock';
+  import deipRpc from '@deip/rpc-client';
+  import { maxTitleLength, maxDescriptionLength } from '@/variables';
 
   import { AccessService } from '@deip/access-service';
   import { ResearchGroupService } from '@deip/research-group-service';
@@ -162,6 +165,7 @@
     },
     data() {
       return {
+        isPermlinkVerifyed: true,
         isChangingMetaLoading: false,
         isChangingQuorumLoading: false,
         groupName: '',
@@ -198,7 +202,9 @@
         shadowProposalOrderMap: undefined,
         isUploadingLogo: false,
         rules: {
-          required: (value) => !!value || 'This field is required'
+          required: (value) => !!value || 'This field is required',
+          titleLength: (value) => value.length <= maxTitleLength || `Title max length is ${maxTitleLength} symbols`,
+          descriptionLength: (value) => value.length <= maxDescriptionLength || `Description max length is ${maxDescriptionLength} symbols`
         }
       };
     },
@@ -252,6 +258,8 @@
           || this.newResearchGroupDescription !== this.groupDescription)
           && this.newResearchGroupName !== ''
           && this.newResearchGroupDescription !== ''
+          && this.newResearchGroupName.length < maxTitleLength
+          && this.newResearchGroupDescription.length < maxDescriptionLength
         );
       }
     },
@@ -343,32 +351,46 @@
 
 
       updateResearchGroup() {
-        this.isChangingMetaLoading = true;
+        researchGroupService
+          .checkResearchGroupExistenceByPermlink(this.newResearchGroupName)
+          .then((exists) => {
+            if (this.newResearchGroupName !== this.groupName) {
+              this.isPermlinkVerifyed = !exists;
+            } else {
+              this.isPermlinkVerifyed = true;
+            }
+            if (this.isPermlinkVerifyed) {
+              this.isChangingMetaLoading = true;
 
-        const isProposal = !this.group.is_personal;
-        researchGroupService.updateResearchGroupAccountViaOffchain(this.user.privKey, isProposal, {
-          researchGroup: this.group.external_id,
-          accountOwnerAuth: undefined,
-          accountActiveAuth: undefined,
-          accountActiveAuthOverrides: [],
-          accountMemoPubKey: undefined,
-          accountJsonMetadata: undefined,
-          accountExtensions: []
-        }, {
-          researchGroupName: this.newResearchGroupName,
-          researchGroupDescription: this.newResearchGroupDescription
-        })
-          .then(() => {
-            this.$notifier.showSuccess('Proposal has been sent successfully!')
-            this.cancel(true);
-          })
-          .catch((err) => {
-            console.error(err);
+              const isProposal = !this.group.is_personal;
+              researchGroupService.updateResearchGroupAccountViaOffchain(this.user.privKey, isProposal, {
+                researchGroup: this.group.external_id,
+                accountOwnerAuth: undefined,
+                accountActiveAuth: undefined,
+                accountActiveAuthOverrides: [],
+                accountMemoPubKey: undefined,
+                accountJsonMetadata: undefined,
+                accountExtensions: []
+              }, {
+                researchGroupName: this.newResearchGroupName,
+                researchGroupDescription: this.newResearchGroupDescription
+              })
+                .then(() => {
+                  this.$notifier.showSuccess('Proposal has been sent successfully!')
+                  this.cancel(true);
+                })
+                .catch((err) => {
+                  console.log(err);
 
-            this.$notifier.showError('An error occurred during proposal sending')
+                  this.$notifier.showError('An error occurred during proposal sending')
+                })
+                .finally(() => {
+                  this.isChangingMetaLoading = false;
+                });
+            }
           })
-          .finally(() => {
-            this.isChangingMetaLoading = false;
+          .catch((error) => {
+            this.isPermlinkVerifyed = false;
           });
       }
     }

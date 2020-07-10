@@ -4,6 +4,7 @@
       v-model="formData"
       :disabled="formProcessing"
       :loading="formProcessing"
+      :is-permlink-verifyed="isPermlinkVerifyed"
       @submit="finish"
     />
   </full-screen-view>
@@ -27,91 +28,102 @@
     methods: {
       finish(success) {
         if (!success) return;
-        this.formProcessing = true;
 
-        const invitees = this.formData.members
-          .filter((m) => m.account.name != this.user.username)
-          .map((m) => ({
-            account: m.account.name,
-            rgt: m.stake * this.DEIP_1_PERCENT,
-            notes: ''
-          }));
+        researchGroupService
+          .checkResearchGroupExistenceByPermlink(this.formData.name)
+          .then((exists) => {
+            this.isPermlinkVerifyed = !exists;
+            if (this.isPermlinkVerifyed) {
+              this.formProcessing = true;
 
-        const creator = this.user.username;
-        const memo = this.user.account.memo_key;
-        const auth = {
-          account_auths: [[creator, 1]],
-          key_auths: [],
-          weight_threshold: 1
-        };
+              const invitees = this.formData.members
+                .filter((m) => m.account.name != this.user.username)
+                .map((m) => ({
+                  account: m.account.name,
+                  rgt: m.stake * this.DEIP_1_PERCENT,
+                  notes: ''
+                }));
 
-        researchGroupService.createResearchGroupViaOffchain(
-            this.user.privKey,
-            {
-              fee: this.toAssetUnits(0),
-              creator,
-              accountOwnerAuth: auth,
-              accountActiveAuth: auth,
-              accountMemoPubKey: memo,
-              accountJsonMetadata: undefined,
-              accountExtensions: []
-            },
-            {
-              researchGroupName: this.formData.name,
-              researchGroupDescription: this.formData.description,
-              researchGroupThresholdOverrides: []
-            }
-          )
-          .then((res) => {
-            this.formProcessing = false;
-            this.$store.dispatch('auth/loadGroups'); // reload user groups
-            this.$notifier.showSuccess(`"${this.formData.name}" research group has been created successfully !`)
+              const creator = this.user.username;
+              const memo = this.user.account.memo_key;
+              const auth = {
+                account_auths: [[creator, 1]],
+                key_auths: [],
+                weight_threshold: 1
+              };
 
-            const invitesPromises = invitees.map((invitee) =>
-              researchGroupService.createResearchGroupInviteViaOffchain(
+              researchGroupService.createResearchGroupViaOffchain(
                 this.user.privKey,
                 {
-                  researchGroup: res.rm._id,
-                  member: invitee.account,
-                  rewardShare: `0.00 %`,
-                  researches: undefined, // all researches
-                  extensions: []
+                  fee: this.toAssetUnits(0),
+                  creator,
+                  accountOwnerAuth: auth,
+                  accountActiveAuth: auth,
+                  accountMemoPubKey: memo,
+                  accountJsonMetadata: undefined,
+                  accountExtensions: []
                 },
                 {
-                  notes: `${this.formData.name} invites you to join them`,
-                  approver: this.user.username
+                  researchGroupName: this.formData.name,
+                  researchGroupDescription: this.formData.description,
+                  researchGroupThresholdOverrides: []
                 }
               )
-            );
+                .then((res) => {
+                  this.formProcessing = false;
+                  this.$store.dispatch('auth/loadGroups'); // reload user groups
+                  this.$notifier.showSuccess(`"${this.formData.name}" research group has been created successfully !`)
 
-            return Promise.all([
-              Promise.all(invitesPromises),
-              deipRpc.api.getResearchGroupAsync(res.rm._id),
-              this.$store.dispatch('auth/loadGroups')
-            ]);
-          })
-          .then(([invites, researchGroup]) => {
-            if (!this.backRouterToken) {
-              this.$router.push({
-                name: 'ResearchGroupDetails',
-                params: {
-                  research_group_permlink: encodeURIComponent(
-                    researchGroup.permlink
-                  )
-                }
-              });
-            } else {
-              if (this.backRouterToken.name === 'CreateResearch') {
-                this.backRouterToken.query.externalId = researchGroup.external_id;
-              }
-              this.$router.push(this.backRouterToken);
+                  const invitesPromises = invitees.map((invitee) =>
+                    researchGroupService.createResearchGroupInviteViaOffchain(
+                      this.user.privKey,
+                      {
+                        researchGroup: res.rm._id,
+                        member: invitee.account,
+                        rewardShare: `0.00 %`,
+                        researches: undefined, // all researches
+                        extensions: []
+                      },
+                      {
+                        notes: `${this.formData.name} invites you to join them`,
+                        approver: this.user.username
+                      }
+                    )
+                  );
+
+                  return Promise.all([
+                    Promise.all(invitesPromises),
+                    deipRpc.api.getResearchGroupAsync(res.rm._id),
+                    this.$store.dispatch('auth/loadGroups')
+                  ]);
+                })
+                .then(([invites, researchGroup]) => {
+                  if (!this.backRouterToken) {
+                    this.$router.push({
+                      name: 'ResearchGroupDetails',
+                      params: {
+                        research_group_permlink: encodeURIComponent(
+                          researchGroup.permlink
+                        )
+                      }
+                    });
+                  } else {
+                    if (this.backRouterToken.name === 'CreateResearch') {
+                      this.backRouterToken.query.externalId = researchGroup.external_id;
+                    }
+                    this.$router.push(this.backRouterToken);
+                  }
+                })
+                .catch((err) => {
+                  console.log(err);
+                  this.isLoading = false;
+                  this.$notifier.showError('An error occurred while creating Research Group, please try again later')
+                })
             }
           })
-          .catch((err) => {
-            console.error(err);
-            this.isLoading = false;
-            this.$notifier.showError('An error occurred while creating Research Group, please try again later')
-          })
+          .catch((error) => {
+            this.isPermlinkVerifyed = false;
+          });
       }
     }
   };

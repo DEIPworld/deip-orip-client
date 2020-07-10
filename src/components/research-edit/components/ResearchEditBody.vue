@@ -6,9 +6,10 @@
       </div>
       <v-text-field
         v-model="title"
-        :rules="[rules.required]"
+        :rules="[rules.required, rules.titleLength]"
         name="title"
         filled
+        :error-messages="isPermlinkVerifyed === false ? 'Research with the same name already exists' : ''"
       />
     </div>
     <div>
@@ -17,7 +18,7 @@
       </div>
       <v-textarea
         v-model="description"
-        :rules="[rules.required]"
+        :rules="[rules.required, rules.descriptionLength]"
         name="Description"
         filled
         auto-grow
@@ -200,6 +201,7 @@
   import deipRpc from '@deip/rpc-client';
   import moment from 'moment';
   import vueDropzone from 'vue2-dropzone';
+  import { maxTitleLength, maxDescriptionLength } from '@/variables';
 
   import { AccessService } from '@deip/access-service';
   import { ResearchService } from '@deip/research-service';
@@ -222,19 +224,24 @@
     data() {
       return {
         title: '',
+        oldTitle: '',
         description: '',
         milestones: undefined,
         partners: [],
         tenantCategory: null,
+        isPermlinkVerifyed: true,
         videoSrc: '',
         activeMilestone: undefined,
         isPublic: false,
         isRefSaving: false,
         isMetaSaving: false,
         isUploadingBackground: false,
+        descriptionLength: 2048,
         rules: {
           required: (value) => !!value || 'This field is required',
-          link: (value) => !value || this.isValidLink || 'Invalid http(s) link'
+          link: (value) => !value || this.isValidLink || 'Invalid http(s) link',
+          titleLength: (value) => (!!value && value.length <= maxTitleLength) || `Title max length is ${maxTitleLength} symbols`,
+          descriptionLength: (value) => (!!value && value.length <= maxDescriptionLength) || `Description max length is ${maxDescriptionLength} symbols`
         },
         tenantCriterias: []
       };
@@ -270,7 +277,7 @@
       },
 
       isSavingMetaDisabled() {
-        return !this.title || !this.description;
+        return !this.title || !this.description || this.title.length > maxTitleLength || this.description.length > maxDescriptionLength;
       },
 
       isSavingRefDisabled() {
@@ -297,6 +304,7 @@
 
     created() {
       this.title = this.research.title;
+      this.oldTitle = this.research.title;
       this.description = this.research.abstract;
       this.milestones = _.cloneDeep(this.researchRef.milestones);
       this.videoSrc = this.researchRef.videoSrc;
@@ -338,47 +346,60 @@
         }));
       },
       updateResearch() {
-        this.isMetaSaving = true;
-
-        const isProposal = !this.research.research_group.is_personal;
-        researchService.updateResearchViaOffchain(this.user.privKey, isProposal, {
-          researchGroup: this.research.research_group.external_id,
-          externalId: this.research.external_id,
-          title: this.title,
-          abstract: this.description,
-          isPrivate: !this.isPublic,
-          reviewShare: undefined,
-          compensationShare: undefined,
-          members: undefined,
-          extensions: []
-        })
-          .then(() => {
-            this.$notifier.showSuccess('Proposal has been sent successfully!')
-            if (this.researchGroup.is_centralized || this.researchGroup.is_personal) {
-              this.$router.push({
-                name: 'ResearchDetails',
-                params: {
-                  research_group_permlink: encodeURIComponent(this.research.research_group.permlink),
-                  research_permlink: encodeURIComponent(this.research.permlink)
-                }
-              });
+        researchService.checkResearchExistenceByPermlink(this.research.research_group.external_id, this.title)
+          .then((exists) => {
+            if (this.oldTitle !== this.title) {
+              this.isPermlinkVerifyed = !exists;
             } else {
-              this.$router.push({
-                name: 'ResearchGroupDetails',
-                params: {
-                  research_group_permlink: encodeURIComponent(this.research.research_group.permlink)
-                },
-                hash: '#proposals'
-              });
+              this.isPermlinkVerifyed = true;
+            }
+            if (this.isPermlinkVerifyed) {
+              this.isMetaSaving = true;
+
+              const isProposal = !this.research.research_group.is_personal;
+              researchService.updateResearchViaOffchain(this.user.privKey, isProposal, {
+                researchGroup: this.research.research_group.external_id,
+                externalId: this.research.external_id,
+                title: this.title,
+                abstract: this.description,
+                isPrivate: !this.isPublic,
+                reviewShare: undefined,
+                compensationShare: undefined,
+                members: undefined,
+                extensions: []
+              })
+                .then(() => {
+                  this.$notifier.showSuccess('Proposal has been sent successfully!')
+                  if (this.researchGroup.is_centralized || this.researchGroup.is_personal) {
+                    this.$router.push({
+                      name: 'ResearchDetails',
+                      params: {
+                        research_group_permlink: encodeURIComponent(this.research.research_group.permlink),
+                        research_permlink: encodeURIComponent(this.research.permlink)
+                      }
+                    });
+                  } else {
+                    this.$router.push({
+                      name: 'ResearchGroupDetails',
+                      params: {
+                        research_group_permlink: encodeURIComponent(this.research.research_group.permlink)
+                      },
+                      hash: '#proposals'
+                    });
+                  }
+                })
+                .catch((err) => {
+                  console.log(err);
+
+                  this.$notifier.showError('An error occurred during proposal sending')
+                })
+                .finally(() => {
+                  this.isMetaSaving = false;
+                });
             }
           })
-          .catch((err) => {
-            console.error(err);
-
-            this.$notifier.showError('An error occurred during proposal sending')
-          })
-          .finally(() => {
-            this.isMetaSaving = false;
+          .catch((error) => {
+            this.isPermlinkVerifyed = false;
           });
       },
 

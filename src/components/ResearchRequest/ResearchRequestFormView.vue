@@ -7,7 +7,7 @@
           label="Project name"
           v-bind="fieldState"
           :disabled="partialDisabled.researchTitle"
-          :rules="[rules.required]"
+          :rules="[rules.required, rules.titleLength]"
         />
       </v-col>
 
@@ -20,7 +20,7 @@
           rows="3"
           v-bind="fieldState"
           :disabled="partialDisabled.description"
-          :rules="[rules.required]"
+          :rules="[rules.required, rules.descriptionLength]"
         />
       </v-col>
 
@@ -178,6 +178,7 @@
   import { FormMixin } from '@/utils/FormMixin';
   import { AccessService } from '@deip/access-service';
   import * as disciplinesService from '@/components/common/disciplines/DisciplineTreeService';
+  import { maxTitleLength, maxDescriptionLength } from '@/variables';
 
   const accessService = AccessService.getInstance();
 
@@ -223,7 +224,11 @@
     },
     data() {
       return {
-        rules: { required: (value) => !!value || 'This field is required' },
+        rules: {
+          required: (value) => !!value || 'This field is required',
+          titleLength: (value) => (!!value && value.length <= maxTitleLength) || `Title max length is ${maxTitleLength} symbols`,
+          descriptionLength: (value) => (!!value && value.length <= maxDescriptionLength) || `Description max length is ${maxDescriptionLength} symbols`
+        },
         domains: [...disciplinesService.getTopLevelNodes().map((d => {
           return { text: d.label, value: d.id }
         }))],
