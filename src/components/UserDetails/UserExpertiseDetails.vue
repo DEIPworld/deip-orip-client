@@ -360,12 +360,12 @@
 
         const disciplineExternalId = this.filter.disciplineExternalId;
         const fromDate = this.filter.fromDate ? this.moment(this.filter.fromDate)
-          .endOf('day')
-          .toISOString()
+          .startOf('day')
+          .toISOString(true)
           .split('.')[0] : '';
         const toDate = this.filter.toDate ? this.moment(this.filter.toDate)
           .endOf('day')
-          .toISOString()
+          .toISOString(true)
           .split('.')[0] : '';
         const contribution = this.filter.contribution;
         const criteria = this.filter.criteria;

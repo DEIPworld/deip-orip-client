@@ -124,25 +124,58 @@
 
       <d-block title="Expertise Contribution Index detailed overview">
         <v-row>
-          <v-col cols="3">
-            <d-input-date v-model="eciDetailedOverviewFilter.dateFrom" label="From" />
+          <v-col cols="2">
+            <d-input-date 
+              v-model="eciDetailedOverviewFilter.fromDate"
+              label="From"
+              :x-props="{
+                max:moment(eciDetailedOverviewFilter.toDate).subtract(1, 'days').format('YYYY-MM-DD'),
+                min:moment('2020-01-01').format('YYYY-MM-DD'),
+                clearable:true
+              }"
+            />
           </v-col>
-          <v-col cols="3">
-            <d-input-date v-model="eciDetailedOverviewFilter.dateTo" label="To" />
+          <v-col cols="2">
+            <d-input-date 
+              v-model="eciDetailedOverviewFilter.toDate" 
+              label="To" 
+              :x-props="{
+                max:moment().format('YYYY-MM-DD'),
+                min:moment(eciDetailedOverviewFilter.fromDate).add(1, 'days').format('YYYY-MM-DD'),
+                clearable:true
+              }"
+            />
           </v-col>
-          <v-col cols="3">
-            <v-select filled label="Assessment criteria" />
+          <v-col cols="2">
+            <v-select
+              v-model="eciDetailedOverviewFilter.contribution"
+              class="my-0 py-0"
+              :items="contributions"
+              label="Contribution Type"
+              filled
+            />
+          </v-col>
+          <v-col cols="2">
+            <v-select
+              v-model="eciDetailedOverviewFilter.criteria"
+              class="my-0 py-0"
+              :items="criterias"
+              label="Assessment criteria"
+              filled
+            />
           </v-col>
           <v-col cols="3">
             <v-select
               v-model="eciDetailedOverviewFilter.discipline"
               label="Disciplines"
               filled
-              :items="disciplines"
+              :items="[{label: 'All', external_id: ''}, ...disciplines]"
               item-text="label"
               item-value="external_id"
-              @change="updateDetailedChart"
             />
+          </v-col>
+          <v-col cols="1"> 
+            <v-btn @click="updateDetailedChart()" color="primary">Apply</v-btn>
           </v-col>
         </v-row>
 
@@ -162,6 +195,7 @@
   import { mapGetters } from 'vuex';
 
   import { getTopLevelNodes } from '@/components/common/disciplines/DisciplineTreeService';
+  import { EXPERTISE_CONTRIBUTION_TYPE, ASSESSMENT_CRITERIA_TYPE } from '@/variables';
 
   import DBlock from '@/components/Deipify/DBlock/DBlock';
   import DInputDate from '@/components/Deipify/DInput/DInputDate';
@@ -170,6 +204,7 @@
 
   import fakeData from './fakeGrowthRateData.json';
   import EciHistory from '@/components/EciHistory/EciHistory';
+  import { mapSelectListFromEnum } from '@/utils/mapSelectListFromEnum';
 
   import moment from 'moment';
 
@@ -187,9 +222,11 @@
     data() {
       return {
         eciDetailedOverviewFilter: {
-          discipline: null,
-          dateFrom: '2020-06-11',
-          dateTo: '2020-07-02'
+          discipline: '',
+          fromDate: undefined,
+          toDate: undefined,
+          contribution: '',
+          criteria: ''
         },
 
         growthRateFromDate: this.moment()
@@ -197,7 +234,19 @@
           .format('YYYY-MM'),
         growthRateToDate: this.moment().format('YYYY-MM'),
         growthRateDiscipline: 'all',
-        distributionDiscipline: 'all'
+        distributionDiscipline: 'all',
+
+        criterias: mapSelectListFromEnum(ASSESSMENT_CRITERIA_TYPE, {
+          blackList: [ASSESSMENT_CRITERIA_TYPE.UNKNOWN],
+          allowBlank: true,
+          blankLabel: 'All'
+        }),
+
+        contributions: mapSelectListFromEnum(EXPERTISE_CONTRIBUTION_TYPE, {
+          blackList: [ASSESSMENT_CRITERIA_TYPE.UNKNOWN],
+          allowBlank: true,
+          blankLabel: 'All'
+        }),
       };
     },
     methods: {
@@ -212,28 +261,43 @@
       },
 
       updateDetailedChart() {
-        this.$store.dispatch(
-          'overview/getEciHistoryByDiscipline',
-          this.eciDetailedOverviewFilter.discipline
-        );
+        const discipline = this.eciDetailedOverviewFilter.discipline;
+        const fromDate = this.eciDetailedOverviewFilter.fromDate ? this.moment(this.eciDetailedOverviewFilter.fromDate)
+          .startOf('day')
+          .toISOString(true)
+          .split('.')[0] : '';
+        const toDate = this.eciDetailedOverviewFilter.toDate ? this.moment(this.eciDetailedOverviewFilter.toDate)
+          .endOf('day')
+          .toISOString(true)
+          .split('.')[0] : '';
+        const contribution = this.eciDetailedOverviewFilter.contribution;
+        const criteria = this.eciDetailedOverviewFilter.criteria;
+   
+        const filter = {
+          discipline: discipline,
+          from: fromDate,
+          to: toDate,
+          contribution: contribution,
+          criteria: criteria
+        };
+
+        this.$store.dispatch('overview/getEciHistoryByDiscipline', filter);
       }
     },
 
     computed: {
       ...mapGetters({
         disciplinesExpertiseStats: 'overview/disciplinesExpertiseStats',
-        disciplinesExpertiseStatsHistory:
-          'overview/disciplinesExpertiseStatsHistory',
+        disciplinesExpertiseStatsHistory: 'overview/disciplinesExpertiseStatsHistory',
         eciHistoryByDiscipline: 'overview/eciHistoryByDiscipline',
         criteriaTypes: 'overview/criteriaTypes'
       }),
 
       disciplines() {
-        return getTopLevelNodes()
-          .map((d) => ({
-            external_id: d.id,
-            label: d.label
-          }));
+        return getTopLevelNodes().map((d) => ({
+          external_id: d.id,
+          label: d.label
+        }));
       },
 
       growthRateChartData() {
@@ -407,15 +471,11 @@
     },
 
     created() {
-      this.eciDetailedOverviewFilter.discipline = this.disciplines[0].external_id;
 
       Promise.all([
         this.$store.dispatch('overview/getDisciplinesExpertiseLastStats'),
         this.$store.dispatch('overview/getDisciplinesExpertiseStatsHistory'),
-        this.$store.dispatch(
-          'overview/getEciHistoryByDiscipline',
-          this.eciDetailedOverviewFilter.discipline
-        )
+        this.$store.dispatch('overview/getEciHistoryByDiscipline', this.eciDetailedOverviewFilter)
       ])
         .then(() => {
           this.$setReady();

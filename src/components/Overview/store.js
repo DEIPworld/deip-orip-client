@@ -29,11 +29,8 @@ const getters = {
 
   eciHistoryByDiscipline: (state, getters) => { // temp
     const records = state.eciHistoryByDiscipline;
-    if (!records) {
-      return null;
-    }
 
-    return [...records].reverse().map((record) => {
+    return [...records].map((record) => {
       if (record.contribution_type === EXPERTISE_CONTRIBUTION_TYPE.REVIEW) {
         const typeInfo = researchService.getResearchContentType(record.research_content.content_type);
 
@@ -132,7 +129,7 @@ const actions = {
   },
 
   getEciHistoryByDiscipline(context, payload) {
-    return expertiseContributionsService.getResearchContentsExpertiseHistory({ discipline: payload })
+    return expertiseContributionsService.getDisciplineExpertiseHistory(payload)
       .then((res) => {
         context.commit('getEciHistoryByDiscipline', res);
       });
