@@ -405,11 +405,11 @@
             inviteId: proposal.external_id,
             account: this.currentUser.username
           })
-          .then(() => {
-            this.$store.dispatch('researchGroup/loadGroupInvites', {
-              researchGroupExternalId: this.group.external_id
+            .then(() => {
+              this.$store.dispatch('researchGroup/loadGroupInvites', {
+                researchGroupExternalId: this.group.external_id
+              });
             });
-          });
 
         } else {
           promise = proposalsService.updateProposal(this.currentUser.privKey, {
@@ -424,14 +424,27 @@
           });
         }
 
-          promise.then(() => {
-            this.isApprovingLoading = false;
-            const copy = _.cloneDeep(this.proposal);
-            copy.voted_accounts.push(this.currentUser.username);
-            this.changeProposal({ old: this.proposal, new: copy });
+        promise.then(() => {
+          this.isApprovingLoading = false;
+          const copy = _.cloneDeep(this.proposal);
+          copy.voted_accounts.push(this.currentUser.username);
+          this.changeProposal({ old: this.proposal, new: copy });
+          if (proposal.action === PROPOSAL_TYPES.UPDATE_RESEARCH_GROUP) {
+            Promise.all([this.$store.dispatch('auth/loadGroups')])
+              .then(() => {
+                const { permlink } = this.$store.getters['auth/userGroups'].find((item) => item.external_id === this.group.external_id);
+                this.$router.push({
+                  name: 'ResearchGroupDetails',
+                  params: {
+                    research_group_permlink: encodeURIComponent(permlink)
+                  }
+                });
+              });
+          } else {
             this.$store.dispatch('researchGroup/loadResearchGroup', { permlink: this.group.permlink });
-            this.$notifier.showSuccess('You have voted for the proposal successfully!')
-          })
+          }
+          this.$notifier.showSuccess('You have voted for the proposal successfully!')
+        })
           .catch((err) => {
             alert(err.message);
           });

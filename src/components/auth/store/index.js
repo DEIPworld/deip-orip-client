@@ -126,9 +126,7 @@ const actions = {
     const accountLoad = new Promise((resolve, reject) => {
       dispatch('loadAccount', { notify: resolve });
     });
-    const groupsLoad = new Promise((resolve, reject) => {
-      dispatch('loadGroups', { notify: resolve });
-    });
+    const groupsLoad = dispatch('loadGroups');
     const expLoad = new Promise((resolve, reject) => {
       dispatch('loadExpertTokens', { notify: resolve });
     });
@@ -225,7 +223,7 @@ const actions = {
 
   loadGroups({
     state, dispatch, commit, getters
-  }, { notify } = {}) {
+  }) {
     const { user } = getters;
     const groupTokens = [];
     return deipRpc.api.getResearchGroupTokensByAccountAsync(user.username)
@@ -241,9 +239,6 @@ const actions = {
       .then((groups) => {
         commit('SET_USER_GROUPS_LIST', groups);
         commit('SET_USER_RESEARCH_GROUP_TOKENS_LIST', groupTokens);
-      })
-      .finally(() => {
-        if (notify) notify();
       });
   },
 

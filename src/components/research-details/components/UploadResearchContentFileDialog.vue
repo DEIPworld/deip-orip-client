@@ -38,7 +38,9 @@
             <v-text-field
               v-model="title"
               filled
+              :rules="[rules.titleLength]"
               label="Title"
+              :error-messages="isPermlinkVerifyed === false ? 'Content with the same name already exists' : ''"
             />
 
             <v-select
@@ -130,7 +132,7 @@
 <script>
   import { mapGetters } from 'vuex';
   import vueDropzone from 'vue2-dropzone';
-  import { researchContentTypes } from '@/variables';
+  import { researchContentTypes, maxTitleLength } from '@/variables';
 
   import { AccessService } from '@deip/access-service';
   import { ResearchGroupService } from '@deip/research-group-service';
@@ -154,9 +156,14 @@
         authors: [],
         researchContentTypes,
         references: [],
+        isPermlinkVerifyed: true,
 
         isOpen: false,
         isLoading: false,
+
+        rules: {
+          titleLength: (value) => value.length <= maxTitleLength || `Title max length is ${maxTitleLength} symbols`
+        },
 
         dropzoneOptions: {
           url: `${window.env.DEIP_SERVER_URL}/content/upload-files`,
@@ -186,6 +193,7 @@
       },
       isDisabled() {
         return !this.title
+          || this.title.length > maxTitleLength
           || !this.type
           || !this.authors.length;
       }
@@ -211,8 +219,17 @@
         this.isOpen = false;
       },
       proposeContent() {
-        this.isLoading = true;
-        this.$refs.newContent.processQueue();
+        researchContentService.checkResearchContentExistenceByPermlink(this.research.external_id, this.title)
+          .then((exists) => {
+            this.isPermlinkVerifyed = !exists;
+            if (this.isPermlinkVerifyed) {
+              this.isLoading = true;
+              this.$refs.newContent.processQueue();
+            }
+          })
+          .catch((error) => {
+            this.isPermlinkVerifyed = false;
+          });
       },
       vdropzoneSendingMultiple(file, xhr, formData) {
         const accessToken = accessService.getAccessToken();

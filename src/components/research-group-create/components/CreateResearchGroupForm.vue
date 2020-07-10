@@ -7,10 +7,9 @@
           filled
           name="title"
           label="Title"
-          @change="permlinkVerifyed($event)"
+          :rules="[rules.required, rules.titleLength]"
           hint="Name of your group"
           :error-messages="isPermlinkVerifyed === false ? 'Group with the same name already exists' : ''"
-          :rules="[rules.required]"
         />
       </v-col>
     </d-form-block>
@@ -23,7 +22,7 @@
           label="Description"
           filled
           auto-grow
-          :rules="[rules.required]"
+          :rules="[rules.required, rules.descriptionLength]"
         />
       </v-col>
     </d-form-block>
@@ -101,6 +100,7 @@
   import { mapGetters } from 'vuex';
   import deipRpc from '@deip/rpc-client';
   import DFormBlock from '@/components/Deipify/DFormBlock/DFormBlock';
+  import { maxTitleLength, maxDescriptionLength } from '@/variables';
   import { FormMixin } from '@/utils/FormMixin';
   import { UsersService } from '@deip/users-service';
   import moment from 'moment';
@@ -178,17 +178,22 @@
       loading: {
         type: Boolean,
         default: false
+      },
+      isPermlinkVerifyed: {
+        type: Boolean,
+        default: true
       }
     },
     data() {
       return {
-        isPermlinkVerifyed: undefined,
         creatorUsername: '',
         allUsers: [],
         selectableUsers: [],
         q: '',
         rules: {
-          required: (value) => !!value || 'This field is required'
+          required: (value) => !!value || 'This field is required',
+          titleLength: (value) => value.length <= maxTitleLength || `Title max length is ${maxTitleLength} symbols`,
+          descriptionLength: (value) => value.length <= maxDescriptionLength || `Description max length is ${maxDescriptionLength} symbols`
         }
       };
     },
@@ -254,16 +259,6 @@
           this.formData.members,
           this.q
         );
-      },
-      permlinkVerifyed($event) {
-        deipRpc.api
-          .checkResearchGroupExistenceByPermlinkAsync($event)
-          .then((exists) => {
-            this.isPermlinkVerifyed = !exists;
-          })
-          .catch((error) => {
-            this.isPermlinkVerifyed = false;
-          });
       }
     }
   };

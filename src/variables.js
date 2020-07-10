@@ -15,6 +15,9 @@ const proposalTypesLabels = {
   [PROPOSAL_TYPES.UPDATE_RESEARCH]: 'Update research meta'
 };
 
+const maxTitleLength = 255;
+const maxDescriptionLength = 2048;
+
 export {
   PROPOSAL_TYPES,
   proposalTypesLabels,
@@ -24,5 +27,6 @@ export {
   AWARD_RECIPIENT_STATUS,
   AWARD_WITHDRAWAL_REQUEST_STATUS,
   ASSESSMENT_CRITERIA_TYPE,
-  ECI_STAT_PERIOD_STEP_TYPE
+  maxTitleLength,
+  maxDescriptionLength
 };

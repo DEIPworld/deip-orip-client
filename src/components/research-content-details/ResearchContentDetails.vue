@@ -150,7 +150,9 @@
           <v-text-field
             v-model="proposeContent.title"
             filled
+            :rules="[rules.titleLength]"
             label="Title"
+            :error-messages="isPermlinkVerifyed === false ? 'Content with the same name already exists' : ''"
           />
 
           <v-select
@@ -249,7 +251,7 @@
   import { ResearchGroupService } from '@deip/research-group-service';
   import { ResearchService } from '@deip/research-service';
 
-  import { researchContentTypes } from '@/variables';
+  import { researchContentTypes, maxTitleLength } from '@/variables';
   import LayoutSection from '@/components/layout/components/LayoutSection';
 
   const researchContentService = ResearchContentService.getInstance();
@@ -262,6 +264,10 @@
     data() {
       return {
         isSavingDraft: false,
+        isPermlinkVerifyed: true,
+        rules: {
+          titleLength: (value) => value.length <= maxTitleLength || `Title max length is ${maxTitleLength} symbols`
+        },
         proposeContent: {
           title: '',
           type: null,
@@ -297,7 +303,7 @@
       }),
 
       isCreatingProposalAvailable(state, getters, rootState, rootGetters) {
-        return this.proposeContent.title && this.proposeContent.type && this.proposeContent.authors.length;
+        return this.proposeContent.title && this.proposeContent.title.length <= maxTitleLength && this.proposeContent.type && this.proposeContent.authors.length;
       },
 
       userRelatedExpertise() {
@@ -324,54 +330,63 @@
       },
 
       sendContentProposal() {
-        this.proposeContent.isLoading = true;
+        researchContentService.checkResearchContentExistenceByPermlink(this.research.external_id, this.proposeContent.title)
+          .then((exists) => {
+            this.isPermlinkVerifyed = !exists;
+            if (this.isPermlinkVerifyed) {
+              this.proposeContent.isLoading = true;
 
-        const saveDocument = () => {
-          if (this.isDarContent) {
-            return new Promise((resolve, reject) => {
-              bus.$emit('texture:saveDocument', resolve);
-            })
-              .then(() => researchContentService.getContentRefById(this.contentRef._id));
-          }
-          return researchContentService.getContentRefById(this.contentRef._id);
-        };
-
-        saveDocument()
-          .then((contentRef) => {
-            const isProposal = !this.research.research_group.is_personal;
-            researchContentService.createResearchContentViaOffchain(this.user.privKey, isProposal, {
-              researchExternalId: this.research.external_id,
-              researchGroup: this.research.research_group.external_id,
-              type: parseInt(this.proposeContent.type),
-              title: this.proposeContent.title || contentRef.title,
-              content: contentRef.hash,
-              authors: this.proposeContent.authors.map((a) => a.account.name),
-              references: [...this.contentRef.references],
-              extensions: []
-            })
-              .then(() => {
-                this.$notifier.showSuccess('New material has been uploaded successfully')
-              }, (err) => {
-                console.error(err);
-                if (err.response && err.response.status === 409) {
-                  alert('This file was already uploaded. Please vote for existing proposal or propose file again if its existing proposal has expired.');
-                } else {
-                  this.$notifier.showError('An error occurred while creating proposal, please try again later')
+              const saveDocument = () => {
+                if (this.isDarContent) {
+                  return new Promise((resolve, reject) => {
+                    bus.$emit('texture:saveDocument', resolve);
+                  })
+                    .then(() => researchContentService.getContentRefById(this.contentRef._id));
                 }
-              })
-              .finally(() => {
-                this.proposeContent.isOpen = false;
-                this.proposeContent.isLoading = false;
-                setTimeout(() => {
-                  this.$router.push({
-                    name: 'ResearchDetails',
-                    params: {
-                      research_group_permlink: encodeURIComponent(this.research.research_group.permlink),
-                      research_permlink: encodeURIComponent(this.research.permlink)
-                    }
-                  });
-                }, 1500);
-              });
+                return researchContentService.getContentRefById(this.contentRef._id);
+              };
+
+              saveDocument()
+                .then((contentRef) => {
+                  const isProposal = !this.research.research_group.is_personal;
+                  researchContentService.createResearchContentViaOffchain(this.user.privKey, isProposal, {
+                    researchExternalId: this.research.external_id,
+                    researchGroup: this.research.research_group.external_id,
+                    type: parseInt(this.proposeContent.type),
+                    title: this.proposeContent.title || contentRef.title,
+                    content: contentRef.hash,
+                    authors: this.proposeContent.authors.map((a) => a.account.name),
+                    references: [...this.contentRef.references],
+                    extensions: []
+                  })
+                    .then(() => {
+                      this.$notifier.showSuccess('New material has been uploaded successfully')
+                    }, (err) => {
+                      console.log(err);
+                      if (err.response && err.response.status === 409) {
+                        alert('This file was already uploaded. Please vote for existing proposal or propose file again if its existing proposal has expired.');
+                      } else {
+                        this.$notifier.showError('An error occurred while creating proposal, please try again later')
+                      }
+                    })
+                    .finally(() => {
+                      this.proposeContent.isOpen = false;
+                      this.proposeContent.isLoading = false;
+                      setTimeout(() => {
+                        this.$router.push({
+                          name: 'ResearchDetails',
+                          params: {
+                            research_group_permlink: encodeURIComponent(this.research.research_group.permlink),
+                            research_permlink: encodeURIComponent(this.research.permlink)
+                          }
+                        });
+                      }, 1500);
+                    });
+                });
+            }
+          })
+          .catch((error) => {
+            this.isPermlinkVerifyed = false;
           });
       },
 
