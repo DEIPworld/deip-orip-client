@@ -34,8 +34,9 @@
           },
           chartArea: {
             right: '5%',
-            top: '10%',
-            width: '90%'
+            top: '5%',
+            width: '90%',
+            height: '80%'
           },
           hAxis: {
             gridlines: {

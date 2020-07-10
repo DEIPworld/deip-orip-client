@@ -23,7 +23,7 @@
           >
             <d-chart-area
               :data="eciOverviewDataTable"
-              :options="{legend: 'none', vAxis: { format: '##%' } }"
+              :options="{legend: 'none', vAxis: { format: '##%' }, hAxis: { showTextEvery: 2} }"
             />
           </d-block>
         </v-col>
@@ -167,10 +167,11 @@
   import DInputDate from '@/components/Deipify/DInput/DInputDate';
   import DChartPie from '@/components/Deipify/DChart/DChartPie';
   import DChartArea from '@/components/Deipify/DChart/DChartArea';
-  import DChartLine from '@/components/Deipify/DChart/DChartLine';
 
   import fakeData from './fakeGrowthRateData.json';
   import EciHistory from '@/components/EciHistory/EciHistory';
+
+  import moment from 'moment';
 
   export default {
     name: 'Overview',
@@ -333,6 +334,7 @@
         const stamps = {};
         for (const discipline of this.disciplinesExpertiseStatsHistory) {
           for (const change of discipline.history) {
+
             const date = new Date(change.timestamp);
             const data = parseFloat(change.share) / 100;
 
@@ -343,13 +345,24 @@
             }
           }
         }
-        return Object.keys(stamps).map((key) => [key, ...stamps[key]]);
+        return Object.keys(stamps).map((stamp) => [
+          // `Date(${moment(stamp).format('YYYY, MM, DD, hh, mm, ss')})`,
+          {
+            v: stamp,
+            f: moment(stamp).format('DD MMM YY, hh:mm:ss')
+          },
+          ...stamps[stamp]
+        ]);
       },
       eciOverviewDataTable() {
         return [
           ...[
             [
               'Date',
+              // {
+              //   label: 'Date',
+              //   type: 'datetime'
+              // },
               ...this.disciplinesExpertiseStats.map(
                 (item) => item.discipline_name
               )

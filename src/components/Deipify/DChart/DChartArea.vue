@@ -26,6 +26,12 @@
           fontSize: 12,
           fontName: 'Roboto',
           lineWidth: 1,
+          chartArea: {
+            right: '5%',
+            top: '5%',
+            width: '90%',
+            height: '80%'
+          },
           explorer: {
             actions: ['dragToZoom', 'rightClickToReset'],
             axis: 'horizontal',
