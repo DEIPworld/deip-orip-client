@@ -331,7 +331,7 @@
             this.$notifier.showSuccess('Payment request has been created successfully!');
           })
           .catch((err) => {
-            console.log(err);
+            console.error(err);
             this.$notifier.showSuccess('An error occurred while sending the payment request, please try again later.');
           })
           .finally(() => {

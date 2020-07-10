@@ -240,7 +240,7 @@ const actions = {
       .then((researchGroups) => {
         commit('SET_AWARDEE_RESEARCH_GROUPS_LIST', researchGroups);
       })
-      .catch((err) => { console.log(err); })
+      .catch((err) => { console.error(err); })
       .finally(() => {
         if (notify) notify();
       });
@@ -277,7 +277,7 @@ const actions = {
           totalWithdrawnTokensAmount
         });
       })
-      .catch((err) => { console.log(err); })
+      .catch((err) => { console.error(err); })
       .finally(() => {
         if (notify) notify();
       });

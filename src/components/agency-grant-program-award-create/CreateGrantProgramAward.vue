@@ -676,7 +676,7 @@
             });
           })
           .catch((err) => {
-            console.log(err);
+            console.error(err);
             this.$notifier.showError('An error occurred while contributing to fundraise, please try again later');
           })
           .finally(() => {

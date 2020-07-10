@@ -56,7 +56,7 @@ const getters = {
   expertise: (state) => state.expertise,
   invites: (state) => state.invites,
   reviewRequests: (state) => state.reviewRequests,
-  
+
   filter: (state) => state.filter,
   eciStatsByDiscipline: (state, getters) => state.eciStatsByDiscipline,
   eciHistoryByDiscipline: (state, getters) => {
@@ -230,12 +230,12 @@ const actions = {
     });
 
     return Promise.all([
-      accountLoad, 
-      profileLoad, 
-      expertiseLoad, 
-      invitesLoad, 
-      reviewRequestsLoad, 
-      groupsLoad, 
+      accountLoad,
+      profileLoad,
+      expertiseLoad,
+      invitesLoad,
+      reviewRequestsLoad,
+      groupsLoad,
       researchesLoad
     ]);
   },
@@ -292,7 +292,7 @@ const actions = {
   },
 
 
-  loadResearchList({ commit, state }, { username, notify } = {}) {    
+  loadResearchList({ commit, state }, { username, notify } = {}) {
     return researchService.getUserResearchListing(username)
       .then((researches) => {
         commit('SET_RESEARCH_LIST', researches);
@@ -318,7 +318,7 @@ const actions = {
       .then((profile) => {
         commit('SET_USER_PROFILE', profile || null);
       }, (err) => {
-        console.log(err);
+        console.error(err);
       }).finally(() => {
         if (notify) notify();
       });
@@ -326,7 +326,7 @@ const actions = {
 
   loadUserInvites({ commit }, { username, notify } = {}) {
     commit('SET_USER_INVITES_LOADING_STATE', true);
-    const invites = [];   
+    const invites = [];
     return userService.getUserInvites(username)
       .then((list) => {
         const promises = [];
@@ -413,7 +413,7 @@ const actions = {
     return expertiseContributionsService.getAccountExpertiseHistory(filter.account, filter)
       .then((history) => {
         commit('SET_ACCOUNT_ECI_HISTORY_BY_DISCIPLINE', history);
-      }, (err) => { console.log(err); });
+      }, (err) => { console.error(err); });
   },
 
   loadAccountEciStatsRecords({ commit }, filter) {

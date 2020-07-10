@@ -786,7 +786,7 @@
             this.$notifier.showSuccess('Payment requests have been certified successfully!')
           })
           .catch((err) => {
-            console.log(err);
+            console.error(err);
             this.$notifier.showError()
           })
           .finally(() => {
@@ -823,7 +823,7 @@
             this.$notifier.showSuccess('Payment requests have been approved successfully!')
           })
           .catch((err) => {
-            console.log(err);
+            console.error(err);
             this.$notifier.showError()
           })
           .finally(() => {
@@ -860,7 +860,7 @@
             this.$notifier.showSuccess('Payment requests have been rejected successfully!')
           })
           .catch((err) => {
-            console.log(err);
+            console.error(err);
             this.$notifier.showError()
           })
           .finally(() => {
@@ -905,7 +905,7 @@
             this.$notifier.showSuccess('Payments have been sent successfully!')
           })
           .catch((err) => {
-            console.log(err);
+            console.error(err);
             this.$notifier.showError()
           })
           .finally(() => {

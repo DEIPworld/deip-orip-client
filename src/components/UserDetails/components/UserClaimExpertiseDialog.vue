@@ -196,7 +196,7 @@
               params: { account_name: this.user.username, claim_id: claim._id }
             });
           }, 1000);
-        }).catch((err) => console.log(err)).finally(() => {
+        }).catch((err) => console.error(err)).finally(() => {
           this.isLoading = false;
         });
       }

@@ -506,7 +506,7 @@
             this.$notifier.showSuccess(`"Invite has been approved successfully !"`);
           }, (err) => {
             this.$notifier.showError(`An error occurred while accepting invite, please try again later`);
-            console.log(err);
+            console.error(err);
           })
           .finally(() => {
             this.closeInviteDetailsDialog();
@@ -527,7 +527,7 @@
             this.$notifier.showSuccess(`"Invite has been rejected successfully !"`);
           }, (err) => {
             this.$notifier.showError(`An error occurred while rejecting invite, please try again later`);
-            console.log(err);
+            console.error(err);
           })
           .finally(() => {
             this.closeInviteDetailsDialog();

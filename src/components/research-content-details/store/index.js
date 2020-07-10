@@ -293,7 +293,7 @@ const actions = {
 
             return Promise.all([contentRefLoad, contentReviewsLoad, contentVotesLoad, researchGroupDetailsLoad, referencesLoad]);
           }, (err) => {
-            console.log(err);
+            console.error(err);
           })
           .finally(() => {
             commit('SET_RESEARCH_CONTENT_DETAILS_LOADING_STATE', false);
@@ -318,7 +318,7 @@ const actions = {
           Promise.all(expertsPromises)
         ]);
       }, (err) => {
-        console.log(err);
+        console.error(err);
       })
       .then(([expertTokensPerDiscipline]) => {
         const expertsAccountNames = [];
@@ -350,7 +350,7 @@ const actions = {
         rgtList.push(...members);
         return usersService.getEnrichedProfiles(members.map((m) => m.owner));
       }, (err) => {
-        console.log(err);
+        console.error(err);
       })
       .then((users) => {
         for (let i = 0; i < users.length; i++) {
@@ -360,12 +360,12 @@ const actions = {
         commit('SET_RESEARCH_GROUP_MEMBERS_LIST', users);
         return researchContentService.getResearchContentByResearch(researchExternalId);
       }, (err) => {
-        console.log(err);
+        console.error(err);
       })
       .then((list) => {
         commit('SET_RESEARCH_CONTENT_LIST', list);
       }, (err) => {
-        console.log(err);
+        console.error(err);
       })
       .finally(() => {
         commit('SET_RESEARCH_DETAILS_LOADING_STATE', false);
@@ -379,7 +379,7 @@ const actions = {
       .then((group) => {
         commit('SET_RESEARCH_GROUP_DETAILS', group);
       }, (err) => {
-        console.log(err);
+        console.error(err);
       })
       .finally(() => {
         commit('SET_RESEARCH_GROUP_DETAILS_LOADING_STATE', false);
@@ -404,7 +404,7 @@ const actions = {
         const contentProposal = proposals.filter((p) => p.action === PROPOSAL_TYPES.CREATE_RESEARCH_MATERIAL).find((p) => p.payload.content == contentRef.hash && p.payload.research_external_id == researchExternalId);
         commit('SET_CONTENT_PROPOSAL', contentProposal || null);
       })
-      .catch((err) => { console.log(err); })
+      .catch((err) => { console.error(err); })
       .finally(() => {
         commit('SET_RESEARCH_DETAILS_LOADING_STATE', false);
         if (notify) notify();
@@ -424,7 +424,7 @@ const actions = {
           usersService.getEnrichedProfiles(reviews.map((r) => r.author))
         ]);
       }, (err) => {
-        console.log(err);
+        console.error(err);
       })
       .then(([votes, users]) => {
         const voters = [];
@@ -445,7 +445,7 @@ const actions = {
 
         return usersService.getEnrichedProfiles(voters);
       }, (err) => {
-        console.log(err);
+        console.error(err);
       })
       .then((users) => {
         for (let i = 0; i < reviews.length; i++) {
@@ -474,7 +474,7 @@ const actions = {
       .then((records) => {
         commit('SET_RESEARCH_CONTENT_ECI_HISTORY_BY_DISCIPLINE', { disciplineId, records });
       }, (err) => {
-        console.log(err);
+        console.error(err);
       })
       .finally(() => {
         if (notify) notify();

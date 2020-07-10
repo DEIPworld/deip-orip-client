@@ -190,7 +190,7 @@ const actions = {
       .then((profile) => {
         commit('SET_USER_PROFILE', profile);
       }, (err) => {
-        console.log(err);
+        console.error(err);
       })
       .finally(() => {
         if (notify) notify();
@@ -203,7 +203,7 @@ const actions = {
       .then((balances) => {
         commit('SET_BALANCES', balances);
       }, (err) => {
-        console.log(err);
+        console.error(err);
       })
       .finally(() => {
         if (notify) notify();
@@ -216,7 +216,7 @@ const actions = {
       .then((account) => {
         commit('SET_USER_ACCOUNT', account[0]);
       }, (err) => {
-        console.log(err);
+        console.error(err);
       })
       .finally(() => {
         if (notify) notify();
@@ -293,7 +293,7 @@ const actions = {
       .then((requests) => {
         commit('SET_USER_JOIN_REQUESTS', requests);
       }, (err) => {
-        console.log(err);
+        console.error(err);
       })
       .finally(() => {
         if (notify) notify();
@@ -309,7 +309,7 @@ const actions = {
         commit('SET_TENANT', { profile, account });
       })
       .catch((err) => {
-        console.log(err);
+        console.error(err);
       })
       .finally(() => {
         if (notify) notify();

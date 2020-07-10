@@ -330,7 +330,7 @@
       //       this.cancel(true);
       //     })
       //     .catch((err) => {
-      //       console.log(err);
+      //       console.error(err);
 
       //       this.$store.dispatch('layout/setError', {
       //         message: 'An error occurred during proposal sending'
@@ -363,7 +363,7 @@
             this.cancel(true);
           })
           .catch((err) => {
-            console.log(err);
+            console.error(err);
 
             this.$notifier.showError('An error occurred during proposal sending')
           })

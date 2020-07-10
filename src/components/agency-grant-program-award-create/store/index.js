@@ -41,7 +41,7 @@ const actions = {
         const universityLoad = dispatch('loadUniversity', { universityExternalId: "c8a87b12c23f53866acd397f43b591fd4e631419" });
         return Promise.all([organizationProgramDetailsLoad, usersLoad, universityLoad]);
       })
-      .catch((err) => { console.log(err); })
+      .catch((err) => { console.error(err); })
       .finally(() => {
         commit('SET_FUNDING_CONTACT_PROPOSAL_PAGE_LOADING_STATE', false);
       });
@@ -58,7 +58,7 @@ const actions = {
         program.officers = profiles;
         commit('SET_ORGANIZATION_PROGRAM', program);
       })
-      .catch((err) => { console.log(err); })
+      .catch((err) => { console.error(err); })
       .finally(() => {
         if (notify) notify();
       });
@@ -72,14 +72,14 @@ const actions = {
       .then((users) => {
         commit('SET_ALL_USERS', users);
       })
-      .catch((err) => { console.log(err); })
+      .catch((err) => { console.error(err); })
   },
 
   loadUniversity({ state, dispatch, commit }, { universityExternalId }) {
     return researchGroupService.getResearchGroup(universityExternalId)
       .then((university) => {
         commit('SET_UNIVERSITY', university);
-      }, (err) => { console.log(err); });
+      }, (err) => { console.error(err); });
   }
 };
 

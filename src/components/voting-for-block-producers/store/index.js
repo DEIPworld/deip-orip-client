@@ -27,7 +27,7 @@ const actions = {
       .then((witnesses) => {
         commit('SET_WITNESSES', witnesses);
       })
-      .catch((err) => console.log(err));
+      .catch((err) => console.error(err));
   }
 };
 

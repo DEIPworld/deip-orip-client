@@ -122,7 +122,7 @@ const actions = {
             if (selected) commit('SET_SELECTED_INVESTMENT_ID', selected.external_id);
           });
       }, ((err) => {
-        console.log(err);
+        console.error(err);
       }))
       .finally(() => {
         commit('SET_INVESTMENT_PORTFOLIO_PAGE_LOADING_STATE', false);
@@ -170,7 +170,7 @@ const actions = {
         commit('SET_INVESTMENT_PORTFOLIO_RESEARCH_TOKENS_HOLDERS', researchTokensHolders);
       })
       .catch((err) => {
-        console.log(err);
+        console.error(err);
       })
       .finally(() => {
         if (notify) notify();
@@ -190,7 +190,7 @@ const actions = {
         commit('SET_INVESTMENT_PORTFOLIO_COMMENT_AUTHORS', authors);
       })
       .catch((err) => {
-        console.log(err);
+        console.error(err);
       })
       .finally(() => {
         if (notify) notify();

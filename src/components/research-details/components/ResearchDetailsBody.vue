@@ -113,7 +113,7 @@
             location.reload();
           })
           .catch((err) => {
-            console.log(err);
+            console.error(err);
           })
           .finally(() => {
             this.isCreatingDraft = false;

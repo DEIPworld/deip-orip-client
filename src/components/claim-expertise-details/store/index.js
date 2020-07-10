@@ -54,7 +54,7 @@ const actions = {
       .then((profile) => {
         commit('SET_CLAIMER_PROFILE', profile !== '' ? profile : null);
       })
-      .catch((err) => console.log(err));
+      .catch((err) => console.error(err));
   },
 
   loadClaimerExpertise({ commit }, { username }) {
@@ -62,7 +62,7 @@ const actions = {
       .then((expertise) => {
         commit('SET_CLAIMER_EXPERTISE', expertise);
       })
-      .catch((err) => console.log(err));
+      .catch((err) => console.error(err));
   },
 
   loadClaim({ commit }, { username, claimId }) {
@@ -79,7 +79,7 @@ const actions = {
         }
         commit('SET_CLAIM', claim);
       })
-      .catch((err) => console.log(err));
+      .catch((err) => console.error(err));
   },
 
   loadClaimProposal({ commit }, { username, disciplineId }) {
@@ -102,7 +102,7 @@ const actions = {
 
         return resProposal;
       })
-      .catch((err) => console.log(err));
+      .catch((err) => console.error(err));
   }
 };
 

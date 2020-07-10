@@ -352,7 +352,7 @@
               .then(() => {
                 this.$notifier.showSuccess('New material has been uploaded successfully')
               }, (err) => {
-                console.log(err);
+                console.error(err);
                 if (err.response && err.response.status === 409) {
                   alert('This file was already uploaded. Please vote for existing proposal or propose file again if its existing proposal has expired.');
                 } else {

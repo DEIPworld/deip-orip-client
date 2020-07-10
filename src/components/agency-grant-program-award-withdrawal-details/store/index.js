@@ -143,7 +143,7 @@ const actions = {
     // });
 
     return Promise.all([withdrawalLoad, withdrawalHistoryLoad])
-      .catch((err) => { console.log(err); })
+      .catch((err) => { console.error(err); })
       .finally(() => {
         commit('SET_AWARD_WITHDRAWAL_DETAILS_LOADING_STATE', false);
       });
@@ -190,7 +190,7 @@ const actions = {
       .then((researchGroup) => {
         commit('SET_TREASURY_ORGANIZATION', researchGroup);
       })
-      .catch((err) => { console.log(err); })
+      .catch((err) => { console.error(err); })
       .finally(() => {
         if (notify) notify();
       });
@@ -236,7 +236,7 @@ const actions = {
       .then((users) => {
         commit('SET_AWARD_WITHDRAWAL_SIGNERS_LIST', users);
       })
-      .catch((err) => { console.log(err); })
+      .catch((err) => { console.error(err); })
       .finally(() => {
         if (notify) notify();
       });
@@ -251,7 +251,7 @@ const actions = {
   //     .then(witnesses => {
   //       commit('SET_WITNESSES_LIST', witnesses);
   //     })
-  //     .catch(err => { console.log(err) })
+  //     .catch(err => { console.error(err) })
   //     .finally(() => {
   //       if (notify) notify();
   //     });

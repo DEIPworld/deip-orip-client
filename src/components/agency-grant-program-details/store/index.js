@@ -53,7 +53,7 @@ const actions = {
         return Promise.all([organizationProgramDetailsLoad]);
       })
       .catch((err) => {
-        console.log(err);
+        console.error(err);
       })
       .finally(() => {
         commit('SET_ORGANIZATION_PROGRAM_DETAILS_PAGE_LOADING_STATE', false);
@@ -76,7 +76,7 @@ const actions = {
         commit('SET_ORGANIZATION_PROGRAM', program);
       })
       .catch((err) => {
-        console.log(err);
+        console.error(err);
       })
       .finally(() => {
         commit('SET_ORGANIZATION_PROGRAM_LOADING_STATE', false);
@@ -152,7 +152,7 @@ const actions = {
         commit('SET_ORGANIZATION_PROGRAM_APPLICATIONS', applications);
       })
       .catch((err) => {
-        console.log(err);
+        console.error(err);
       })
       .finally(() => {
         commit('SET_ORGANIZATION_PROGRAM_APPLICATIONS_LOADING_STATE', false);

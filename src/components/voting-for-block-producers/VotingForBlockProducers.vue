@@ -141,7 +141,7 @@
             this.$forceUpdate();
           })
           .catch((err) => {
-            console.log(err);
+            console.error(err);
           });
       },
 

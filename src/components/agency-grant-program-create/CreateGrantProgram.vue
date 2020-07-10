@@ -247,7 +247,6 @@
       },
 
       finish() {
-        console.log('finished', this.foa);
         this.isSending = true;
 
         const distributionModel = [
@@ -290,7 +289,7 @@
           })
           .catch((err) => {
             this.$notifier.showError('An error occurred while creating Funding Opportunity, please try again later');
-            console.log(err);
+            console.error(err);
           })
           .finally(() => {
             this.isSending = false;

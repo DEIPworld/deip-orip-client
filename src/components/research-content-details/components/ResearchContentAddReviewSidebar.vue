@@ -125,7 +125,7 @@
               });
             })
             .catch((err) => {
-              console.log(err);
+              console.error(err);
               this.$notifier.showError('An error occurred while adding review, please try again later')
             })
             .finally(() => {

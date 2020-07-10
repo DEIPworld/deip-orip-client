@@ -200,9 +200,9 @@
             this.$notifier.showSuccess('Application has been approved successfully')
             this.$store.dispatch('rad/setApplicationStatus', { status: 'application_approved' });
           })
-          .catch((e) => {
+          .catch((err) => {
             this.$notifier.showError('An error occured while approving application, please try again later')
-            console.log(e);
+            console.error(err);
           }).finally(() => {
             this.isApproveBtnLoading = false;
           });
@@ -220,9 +220,9 @@
             this.$notifier.showSuccess('Application has been rejected successfully')
             this.$store.dispatch('rad/setApplicationStatus', { status: 'application_rejected' });
           })
-          .catch((e) => {
+          .catch((err) => {
             this.$notifier.showError('An error occured while rejecting application, please try again later')
-            console.log(e);
+            console.error(err);
           }).finally(() => {
             this.isRejectBtnLoading = false;
           });

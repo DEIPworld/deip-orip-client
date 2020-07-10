@@ -67,7 +67,7 @@
             this.bookmarkId = bookmark._id;
           })
           .catch((err) => {
-            console.log(err);
+            console.error(err);
           })
           .finally(() => {
             this.isBookmarkActionInProgress = false;
@@ -83,7 +83,7 @@
             this.bookmarkId = null;
           })
           .catch((err) => {
-            console.log(err);
+            console.error(err);
           })
           .finally(() => {
             this.isBookmarkActionInProgress = false;

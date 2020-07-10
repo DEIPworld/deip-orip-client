@@ -62,8 +62,8 @@ const actions = {
 
         commit('SET_CLAIMS', claimList);
       })
-      .catch((e) => {
-        console.log(e);
+      .catch((err) => {
+        console.error(err);
       });
   },
 

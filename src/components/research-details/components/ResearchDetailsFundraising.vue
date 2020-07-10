@@ -373,7 +373,7 @@
             this.$notifier.showSuccess(`You have contributed to "${this.research.title}" fundraise successfully !`)
           })
           .catch((err) => {
-            console.log(err);
+            console.error(err);
             this.areTokensBuying = false;
             this.$notifier.showError(`An error occurred while contributing to fundraise, please try again later`)
           });

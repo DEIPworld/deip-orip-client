@@ -339,7 +339,6 @@
           for (const change of discipline.history) {
 
             const date = change.timestamp;
-            console.log(change)
             const data = {
               v: parseFloat(change.percentage) / 100,
               f: parseFloat(change.percentage) + '%'

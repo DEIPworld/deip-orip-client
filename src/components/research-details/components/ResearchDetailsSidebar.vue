@@ -523,7 +523,7 @@
           })
           .catch((err) => {
             this.$notifier.showError(`An error occurred while sending join request, please try again later!`)
-            console.log(err);
+            console.error(err);
           })
           .finally(() => {
             this.isSendingJoinGroupRequest = false;

@@ -147,7 +147,7 @@
             this.$notifier.showError(`Invite proposal for "${this.joinRequest.username}" has been created successfully !`);
           }, (err) => {
             this.$notifier.showError('An error occurred while approving join request, please try again later');
-            console.log(err);
+            console.error(err);
           })
           .finally(() => {
             this.isApprovingLoading = false;
@@ -172,7 +172,7 @@
             },
             (err) => {
               this.$notifier.showError();
-              console.log(err);
+              console.error(err);
             })
           .finally(() => {
             self.isDenyingLoading = false;

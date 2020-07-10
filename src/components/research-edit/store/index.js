@@ -29,7 +29,7 @@ const actions = {
       .then((research) => researchService.getResearch(research.external_id))
       .then((research) => {
         commit('SET_RESEARCH_DETAILS', research);
-      }, ((err) => { console.log(err); }))
+      }, ((err) => { console.error(err); }))
       .finally(() => {
         commit('SET_RESEARCH_EDIT_LOADING_STATE', false);
       });

@@ -93,7 +93,8 @@
       },
 
       bannerUploadError(file, message, xhr) {
-        console.log(message);
+        console.error(message);
+
         this.$refs.tenantBanner.removeAllFiles();
         this.isUploadingTenantBanner = false;
         this.$notifier.showError('Sorry, an error occurred while uploading banner image, please try again later');

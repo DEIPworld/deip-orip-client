@@ -373,7 +373,7 @@
             }
           })
           .catch((err) => {
-            console.log(err);
+            console.error(err);
 
             this.$notifier.showError('An error occurred during proposal sending')
           })
@@ -418,7 +418,7 @@
               });
             })
             .catch((err) => {
-              console.log(err);
+              console.error(err);
 
               this.$notifier.showError('An error occurred during change info')
             })
@@ -505,7 +505,8 @@
       },
 
       backgroundUploadError(file, message, xhr) {
-        console.log(message);
+        console.error(message);
+        
         this.$refs.researchBackground.removeAllFiles();
         this.isUploadingBackground = false;
         this.$notifier.showError(`Sorry, an error occurred while uploading background image, please try again later`)

@@ -432,7 +432,7 @@
           .then(() => {
             location.reload();
           }, (err) => {
-            console.log(err);
+            console.error(err);
           });
       },
 

@@ -453,7 +453,7 @@
           })
           .catch((err) => {
             this.$notifier.showError('An error occurred while sending Application, please try again later');
-            console.log(err);
+            console.error(err);
           })
           .finally(() => {
             this.isLoading = false;

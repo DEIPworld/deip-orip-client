@@ -130,10 +130,10 @@
           this.$emit('onCreate');
 
           setTimeout(() => this.$emit('close'), 1000);
-        }).catch((e) => {
+        }).catch((err) => {
           this.$notifier.showError(`Error occured`)
 
-          console.log(e);
+          console.error(err);
         }).finally(() => {
           this.isLoading = false;
         });

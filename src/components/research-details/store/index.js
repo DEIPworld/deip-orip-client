@@ -335,7 +335,7 @@ const actions = {
           tokenSaleLoad, tokenSalesLoad, groupLoad,
           applicationsLoad, userContributionsLoad
         ]);
-      }, ((err) => { console.log(err); }))
+      }, ((err) => { console.error(err); }))
       .finally(() => {
         commit('SET_RESEARCH_DETAILS_LOADING_STATE', false);
       });
@@ -357,7 +357,7 @@ const actions = {
 
         commit('SET_RESEARCH_CONTENT_LIST', researchContents);
       })
-      .catch((err) => { console.log(err); })
+      .catch((err) => { console.error(err); })
       .finally(() => {
         commit('SET_RESEARCH_CONTENT_LOADING_STATE', false);
         if (notify) notify();
@@ -383,7 +383,7 @@ const actions = {
         }
         commit('SET_RESEARCH_APPLICATIONS_LIST', applications);
       })
-      .catch((err) => { console.log(err); })
+      .catch((err) => { console.error(err); })
       .finally(() => {
         commit('SET_RESEARCH_APPLICATONS_LOADING_STATE', false);
         if (notify) notify();
@@ -397,14 +397,14 @@ const actions = {
       .then((members) => {
         rgtList.push(...members);
         return usersService.getEnrichedProfiles(members.map((m) => m.owner));
-      }, (err) => { console.log(err); })
+      }, (err) => { console.error(err); })
       .then((users) => {
         for (let i = 0; i < users.length; i++) {
           const user = users[i];
           user.rgt = rgtList.find((rgt) => rgt.owner == user.account.name);
         }
         commit('SET_RESEARCH_MEMBERS_LIST', users);
-      }, (err) => { console.log(err); })
+      }, (err) => { console.error(err); })
       .finally(() => {
         commit('SET_RESEARCH_MEMBERS_LOADING_STATE', false);
         if (notify) notify();
@@ -422,7 +422,7 @@ const actions = {
           Promise.all(reviews.map((item) => deipRpc.api.getReviewVotesByReviewIdAsync(item.id))),
           usersService.getEnrichedProfiles(reviews.map((r) => r.author))
         ]);
-      }, (err) => { console.log(err); })
+      }, (err) => { console.error(err); })
       .then(([reviewVotes, users]) => {
         reviews.forEach((review, i) => {
           review.author = users.find((u) => u.account.name == review.author);
@@ -430,7 +430,7 @@ const actions = {
           review.supporters = reviewVotes[i].reduce((arr, vote) => (arr.some(({ voter }) => voter === vote.voter) ? arr : [...arr, vote]), []);
         });
         commit('SET_RESEARCH_REVIEWS_LIST', reviews);
-      }, (err) => { console.log(err); })
+      }, (err) => { console.error(err); })
       .finally(() => {
         commit('SET_RESEARCH_REVIEWS_LOADING_STATE', false);
         if (notify) notify();
@@ -454,7 +454,7 @@ const actions = {
         return Promise.all([
           Promise.all(expertsPromises)
         ]);
-      }, (err) => { console.log(err); })
+      }, (err) => { console.error(err); })
       .then(([expertTokensPerDiscipline]) => {
         const expertsAccountNames = [];
         expertTokensPerDiscipline.forEach((e) => {
@@ -462,7 +462,7 @@ const actions = {
         });
         commit('SET_RESEARCH_DISCIPLINES_LIST', disciplinesList);
         return usersService.getEnrichedProfiles(_.uniq(expertsAccountNames));
-      }, (err) => { console.log(err); })
+      }, (err) => { console.error(err); })
       .then((expertsList) => {
         commit('SET_EXPERTS_LIST', expertsList);
       })
@@ -479,7 +479,7 @@ const actions = {
       .then((rtList) => {
         tokenHolders.push(...rtList);
         return usersService.getEnrichedProfiles(tokenHolders.map((m) => m.account_name));
-      }, (err) => { console.log(err); })
+      }, (err) => { console.error(err); })
       .then((users) => {
         for (let i = 0; i < tokenHolders.length; i++) {
           const holder = tokenHolders[i];
@@ -504,7 +504,7 @@ const actions = {
           return dispatch('loadTokenSaleContributors');
         }
         commit('SET_RESEARCH_TOKEN_SALE_CONTRIBUTIONS_LIST', []);
-      }, (err) => { console.log(err); })
+      }, (err) => { console.error(err); })
       .finally(() => {
         commit('SET_RESEARCH_TOKEN_SALE_LOADING_STATE', false);
         if (notify) notify();
@@ -515,7 +515,7 @@ const actions = {
     return deipRpc.api.getResearchTokenSalesByResearchIdAsync(researchId)
       .then((tokenSales) => {
         commit('SET_RESEARCH_TOKEN_SALES', tokenSales);
-      }, (err) => { console.log(err); })
+      }, (err) => { console.error(err); })
       .finally(() => {
         if (notify) notify();
       });
@@ -542,7 +542,7 @@ const actions = {
     deipRpc.api.getResearchGroupByPermlinkAsync(group_permlink)
       .then((group) => {
         commit('SET_RESEARCH_GROUP_DETAILS', group);
-      }, (err) => { console.log(err); })
+      }, (err) => { console.error(err); })
       .finally(() => {
         commit('SET_RESEARCH_GROUP_DETAILS_LOADING_STATE', false);
         if (notify) notify();
@@ -571,7 +571,7 @@ const actions = {
       .then((records) => {
         commit('SET_RESEARCH_ECI_HISTORY_BY_DISCIPLINE', { disciplineId, records });
         return records;
-      }, (err) => { console.log(err); })
+      }, (err) => { console.error(err); })
       .finally(() => {
         if (notify) notify();
       });

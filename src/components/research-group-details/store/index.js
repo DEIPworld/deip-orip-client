@@ -198,8 +198,8 @@ const actions = {
         }
         commit('SET_GROUP_INVITES', pendingInvites);
       })
-      .catch((e) => {
-        console.log(e);
+      .catch((err) => {
+        console.error(err);
       });
   },
   changeProposal({ commit }, payload) {
@@ -220,7 +220,7 @@ const actions = {
         joinRequests.push(...requests);
         return usersService.getEnrichedProfiles(joinRequests.map((request) => request.username));
       }, (err) => {
-        console.log(err);
+        console.error(err);
       })
       .then((users) => {
         joinRequests.forEach((request, idx) => {

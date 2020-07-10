@@ -159,10 +159,10 @@
 
             this.wasApproved = true;
             this.reloadProposal();
-          }).catch((e) => {
+          }).catch((err) => {
             this.$notifier.showError('Error occured')
 
-            console.log(e);
+            console.error(err);
           }).finally(() => {
             this.isApproveBtnLoading = false;
           });

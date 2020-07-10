@@ -93,7 +93,7 @@
             this.user.username,
             this.application.id,
             this.isPositive,
-            html, 
+            html,
             []
           ))
           .then((data) => {
@@ -110,7 +110,7 @@
           })
           .catch((err) => {
             this.$notifier.showError('An error occurred while adding review, please try again later')
-            console.log(err);
+            console.error(err);
           })
           .finally(() => {
             this.isLoading = false;

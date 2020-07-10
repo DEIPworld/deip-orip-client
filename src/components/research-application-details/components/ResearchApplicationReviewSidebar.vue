@@ -110,7 +110,7 @@
                   self.isReviewVoting = false;
                   if (err) {
                     this.$notifier.showError();
-                    console.log(err);
+                    console.error(err);
                   } else {
                     self.votingDisabled = true;
                     this.$notifier.showSuccess('You\'ve voted for review successfully!');
@@ -118,7 +118,7 @@
                 });
               } catch (err) {
                 this.$notifier.showError();
-                console.log(err);
+                console.error(err);
               }
             });
           }

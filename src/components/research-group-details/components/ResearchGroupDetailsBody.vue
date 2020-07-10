@@ -330,7 +330,7 @@
           })
           .catch((err) => {
             this.$notifier.showError('An error occurred while creating proposal, please try again later')
-            console.log(err);
+            console.error(err);
           })
           .finally(() => {
             this.dropoutMemberMeta.isConfirming = false;

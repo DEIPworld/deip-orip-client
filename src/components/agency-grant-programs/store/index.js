@@ -59,7 +59,7 @@ const actions = {
         }
       })
       .catch((err) => {
-        console.log(err);
+        console.error(err);
       })
       .finally(() => {
         commit('SET_ORGANIZATION_PROGRAMS_LISTING_PAGE_LOADING_STATE', false);
@@ -85,7 +85,7 @@ const actions = {
         commit('SET_ORGANIZATION_PROGRAMS', { corePrograms, additionalPrograms: [] });
       })
       .catch((err) => {
-        console.log(err);
+        console.error(err);
       })
       .finally(() => {
         commit('SET_ORGANIZATION_PROGRAMS_LOADING_STATE', false);

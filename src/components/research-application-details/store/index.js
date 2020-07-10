@@ -75,7 +75,7 @@ const actions = {
 
         return Promise.all([programLoad, researchDetailsLoad, applicationReviewsLoad, thirdpatyReviewsLoad]);
       }, (err) => {
-        console.log(err);
+        console.error(err);
       })
       .then(() => {
         const applicationRefLoad = new Promise((resolve, reject) => {
@@ -89,7 +89,7 @@ const actions = {
         });
         return Promise.all([applicationRefLoad]);
       }, (err) => {
-        console.log(err);
+        console.error(err);
       })
       .finally(() => {
         commit('SET_RESEARCH_APPLICATIONS_DETAILS_LOADING_STATE', false);
@@ -103,7 +103,7 @@ const actions = {
       .then((applicationRef) => {
         commit('SET_RESEARCH_APPLICATION_REF', applicationRef);
       }, (err) => {
-        console.log(err);
+        console.error(err);
       })
       .finally(() => {
         if (notify) notify();
@@ -115,7 +115,7 @@ const actions = {
       .then((foa) => {
         commit('SET_RESEARCH_APPLICATION_PROGRAM', foa);
       }, (err) => {
-        console.log(err);
+        console.error(err);
       })
       .finally(() => {
         if (notify) notify();
@@ -136,7 +136,7 @@ const actions = {
             .then((application) => deipRpc.api.getFundingOpportunityAsync(application.grant_id))))
         ]);
       }, (err) => {
-        console.log(err);
+        console.error(err);
       })
       .then(([reviewVotes, users, programs]) => {
         reviews.forEach((review, i) => {
@@ -147,7 +147,7 @@ const actions = {
 
         commit('SET_RESEARCH_APPLICATION_REVIEWS_LIST', reviews);
       }, (err) => {
-        console.log(err);
+        console.error(err);
       })
       .finally(() => {
         commit('SET_RESEARCH_APPLICATION_REVIEWS_LOADING_STATE', false);
@@ -172,7 +172,7 @@ const actions = {
         });
         return Promise.all(related.map((a) => deipRpc.api.getGrantApplicationReviewsByGrantApplicationAsync(a.id)));
       }, (err) => {
-        console.log(err);
+        console.error(err);
       })
       .then((items) => {
         const flatten = [].concat.apply([], items);
@@ -184,7 +184,7 @@ const actions = {
             .then((application) => deipRpc.api.getFundingOpportunityAsync(application.grant_id))))
         ]);
       }, (err) => {
-        console.log(err);
+        console.error(err);
       })
       .then(([reviewVotes, users, programs]) => {
         reviews.forEach((review, i) => {
@@ -194,7 +194,7 @@ const actions = {
         });
         commit('SET_THIRDPARTY_RESEARCH_APPLICATIONS_REVIEWS_LIST', reviews);
       }, (err) => {
-        console.log(err);
+        console.error(err);
       })
       .finally(() => {
         commit('SET_THIRDPARTY_RESEARCH_APPLICATIONS_REVIEWS_LOADING_STATE', false);
@@ -214,7 +214,7 @@ const actions = {
         rgtList.push(...members);
         return usersService.getEnrichedProfiles(members.map((m) => m.owner));
       }, (err) => {
-        console.log(err);
+        console.error(err);
       })
       .then((users) => {
         for (let i = 0; i < users.length; i++) {
@@ -223,7 +223,7 @@ const actions = {
         }
         commit('SET_RESEARCH_MEMBERS_LIST', users);
       }, (err) => {
-        console.log(err);
+        console.error(err);
       })
       .finally(() => {
         commit('SET_RESEARCH_DETAILS_LOADING_STATE', false);

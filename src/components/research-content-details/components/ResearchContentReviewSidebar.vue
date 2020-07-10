@@ -167,7 +167,7 @@
             this.$notifier.showSuccess("Review supported");
           })
           .catch((err) => {
-            console.log(err);
+            console.error(err);
             this.$notifier.showError("An error occured, please try again later");
           })
           .finally(() => {

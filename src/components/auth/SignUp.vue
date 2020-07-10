@@ -281,7 +281,7 @@
             || 'Sorry, the service is temporarily unavailable, please try again later';
 
           this.$notifier.showError(message)
-          console.log(err);
+          console.error(err);
         });
       },
       usernameChanged: _.debounce(
