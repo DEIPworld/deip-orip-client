@@ -338,10 +338,11 @@
         for (const discipline of this.disciplinesExpertiseStatsHistory) {
           for (const change of discipline.history) {
 
-            const date = new Date(change.timestamp);
+            const date = change.timestamp;
+            console.log(change)
             const data = {
-              v: parseFloat(change.share) / 100,
-              f: parseFloat(change.share) + '%'
+              v: parseFloat(change.percentage) / 100,
+              f: parseFloat(change.percentage) + '%'
             };
 
             if (!stamps[date]) {
