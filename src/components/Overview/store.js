@@ -33,7 +33,7 @@ const getters = {
       return null;
     }
 
-    return records.reverse().map((record) => {
+    return [...records].reverse().map((record) => {
       if (record.contribution_type === EXPERTISE_CONTRIBUTION_TYPE.REVIEW) {
         const typeInfo = researchService.getResearchContentType(record.research_content.content_type);
 
