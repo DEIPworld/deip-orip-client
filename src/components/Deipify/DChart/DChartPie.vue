@@ -11,9 +11,8 @@
 </template>
 
 <script>
-  import deepmerge from 'deepmerge';
-  import { chartGradient, switchColor } from '@/plugins/charts';
   import { AbstractChart } from '@/components/Deipify/DChart/abstractChart';
+  import { chartGradient, switchColor } from '@/plugins/charts';
 
   export default {
     name: 'DChartPie',
@@ -28,11 +27,9 @@
     },
 
     computed: {
-      _options() {
-        const defaultOptions = {
+      defaultOptions() {
+        return {
           ...(this.donut ? { pieHole: 0.5 } : {}),
-          fontSize: 12,
-          fontName: 'Roboto',
           chartArea: {
             left: 16,
             top: 16,
@@ -47,7 +44,6 @@
               }
             }))
         };
-        return deepmerge(defaultOptions, this.options);
       },
 
       events() {

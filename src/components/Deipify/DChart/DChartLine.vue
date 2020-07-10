@@ -12,7 +12,6 @@
 <script>
   import { AbstractChart } from '@/components/Deipify/DChart/abstractChart';
   import { chartGradient } from '@/plugins/charts';
-  import deepmerge from 'deepmerge';
 
   export default {
     name: 'DChartLine',
@@ -20,11 +19,9 @@
     mixins: [AbstractChart],
 
     computed: {
-      _options() {
-        const defaultOptions = {
+      defaultOptions() {
+        return {
           areaOpacity: 0.5,
-          fontSize: 12,
-          fontName: 'Roboto',
           lineWidth: 2,
           explorer: {
             actions: ['dragToZoom', 'rightClickToReset'],
@@ -48,12 +45,7 @@
               color
             }))
         };
-        return deepmerge(defaultOptions, this.options);
       }
     }
   };
 </script>
-
-<style scoped>
-
-</style>

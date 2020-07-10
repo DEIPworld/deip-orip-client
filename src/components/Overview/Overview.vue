@@ -229,10 +229,11 @@
       }),
 
       disciplines() {
-        return getTopLevelNodes().map((d) => ({
-          external_id: d.id,
-          label: d.label
-        }));
+        return getTopLevelNodes()
+          .map((d) => ({
+            external_id: d.id,
+            label: d.label
+          }));
       },
 
       growthRateChartData() {
@@ -260,8 +261,10 @@
           ],
           ...dataTable.filter((item, i) => {
             return (
-              this.moment(item[0].v).isSameOrBefore(this.growthRateToDate) &&
-              this.moment(item[0].v).isSameOrAfter(this.growthRateFromDate)
+              this.moment(item[0].v)
+                .isSameOrBefore(this.growthRateToDate) &&
+              this.moment(item[0].v)
+                .isSameOrAfter(this.growthRateFromDate)
             );
           })
         ];
@@ -336,7 +339,10 @@
           for (const change of discipline.history) {
 
             const date = new Date(change.timestamp);
-            const data = parseFloat(change.percentage) / 100;
+            const data = {
+              v: parseFloat(change.share) / 100,
+              f: parseFloat(change.share) + '%'
+            };
 
             if (!stamps[date]) {
               stamps[date] = [data];
@@ -345,24 +351,21 @@
             }
           }
         }
-        return Object.keys(stamps).map((stamp) => [
-          // `Date(${moment(stamp).format('YYYY, MM, DD, hh, mm, ss')})`,
-          {
-            v: stamp,
-            f: moment(stamp).format('DD MMM YY, hh:mm:ss')
-          },
-          ...stamps[stamp]
-        ]);
+        return Object.keys(stamps)
+          .map((stamp) => [
+            {
+              v: stamp,
+              f: moment(stamp)
+                .format('DD MMM YY, hh:mm:ss')
+            },
+            ...stamps[stamp]
+          ]);
       },
       eciOverviewDataTable() {
         return [
           ...[
             [
               'Date',
-              // {
-              //   label: 'Date',
-              //   type: 'datetime'
-              // },
               ...this.disciplinesExpertiseStats.map(
                 (item) => item.discipline_name
               )
@@ -393,11 +396,12 @@
             width: '100%',
             height: 0
           },
-          slices: chartGradient(this.eciValueDataTable.length - 1).map(
-            (color) => ({
-              color
-            })
-          )
+          slices: chartGradient(this.eciValueDataTable.length - 1)
+            .map(
+              (color) => ({
+                color
+              })
+            )
         };
       }
     },
@@ -412,17 +416,18 @@
           'overview/getEciHistoryByDiscipline',
           this.eciDetailedOverviewFilter.discipline
         )
-      ]).then(() => {
-        this.$setReady();
-      });
+      ])
+        .then(() => {
+          this.$setReady();
+        });
     }
   };
 </script>
 
 <style lang="scss">
-.chart {
-  path[stroke-width='1'][stroke='#ffffff'] {
-    stroke: transparent;
+  .chart {
+    path[stroke-width='1'][stroke='#ffffff'] {
+      stroke: transparent;
+    }
   }
-}
 </style>

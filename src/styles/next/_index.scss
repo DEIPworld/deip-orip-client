@@ -1,3 +1,31 @@
 @use 'vuetify-overrides';
 @use 'helpers';
 @use 'typography';
+
+
+
+.v-application {
+
+  .google-visualization-tooltip {
+    background: rgba(26, 27, 34, 0.6);
+    box-shadow: none;
+    color: #fff ;
+    border: 0;
+    padding: 8px;
+    pointer-events: none;
+  }
+
+  .google-visualization-tooltip-item-list {
+    padding: 0;
+    margin: 0;
+  }
+
+  .google-visualization-tooltip-item {
+    padding: 0;
+    margin: 0 !important;
+
+    span {
+      color: #fff !important;
+    }
+  }
+}
