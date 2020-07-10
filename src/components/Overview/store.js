@@ -1,6 +1,6 @@
 import where from 'filter-where';
 import { ExpertiseContributionsService } from '@deip/expertise-contributions-service';
-import { EXPERTISE_CONTRIBUTION_TYPE } from '@/variables';
+import { EXPERTISE_CONTRIBUTION_TYPE, ECI_STAT_PERIOD_STEP_TYPE } from '@/variables';
 import { ResearchService } from '@deip/research-service';
 
 const expertiseContributionsService = ExpertiseContributionsService.getInstance();
@@ -117,15 +117,15 @@ const getters = {
 };
 
 const actions = {
-  getDisciplinesExpertiseStats(context) {
-    return expertiseContributionsService.getDisciplinesExpertiseStats()
+  getDisciplinesExpertiseLastStats(context) {
+    return expertiseContributionsService.getDisciplinesExpertiseLastStats()
       .then((res) => {
-        context.commit('getDisciplinesExpertiseStats', res);
+        context.commit('getDisciplinesExpertiseLastStats', res);
       });
   },
 
   getDisciplinesExpertiseStatsHistory(context) {
-    return expertiseContributionsService.getDisciplinesExpertiseStatsHistory()
+    return expertiseContributionsService.getDisciplinesExpertiseStatsHistory({})
       .then((res) => {
         context.commit('getDisciplinesExpertiseStatsHistory', res);
       });
@@ -141,7 +141,7 @@ const actions = {
 };
 
 const mutations = {
-  getDisciplinesExpertiseStats(state, payload) {
+  getDisciplinesExpertiseLastStats(state, payload) {
     state.disciplinesExpertiseStats = payload.map((a) => a[1]);
   },
   getDisciplinesExpertiseStatsHistory(state, payload) {

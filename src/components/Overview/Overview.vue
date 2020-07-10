@@ -396,7 +396,7 @@
         for (const discipline of this.disciplinesExpertiseStatsHistory) {
           for (const change of discipline.history) {
             const date = new Date(change.timestamp);
-            const data = parseFloat(change.share) / 100;
+            const data = parseFloat(change.percentage) / 100;
 
             if (!stamps[date]) {
               stamps[date] = [data];
@@ -465,7 +465,7 @@
       this.eciDetailedOverviewFilter.discipline = this.disciplines[0].external_id;
 
       Promise.all([
-        this.$store.dispatch('overview/getDisciplinesExpertiseStats'),
+        this.$store.dispatch('overview/getDisciplinesExpertiseLastStats'),
         this.$store.dispatch('overview/getDisciplinesExpertiseStatsHistory'),
         this.$store.dispatch(
           'overview/getEciHistoryByDiscipline',

@@ -1,5 +1,5 @@
 import { PROPOSAL_TYPES } from '@deip/proposals-service';
-import { EXPERTISE_CONTRIBUTION_TYPE } from '@deip/expertise-contributions-service';
+import { EXPERTISE_CONTRIBUTION_TYPE, ECI_STAT_PERIOD_STEP_TYPE } from '@deip/expertise-contributions-service';
 import { researchContentTypes } from '@deip/research-service';
 import { AWARD_STATUS, AWARD_RECIPIENT_STATUS, AWARD_WITHDRAWAL_REQUEST_STATUS } from '@deip/grants-service';
 import { ASSESSMENT_CRITERIA_TYPE } from '@deip/research-content-reviews-service';
@@ -23,5 +23,6 @@ export {
   AWARD_STATUS,
   AWARD_RECIPIENT_STATUS,
   AWARD_WITHDRAWAL_REQUEST_STATUS,
-  ASSESSMENT_CRITERIA_TYPE
+  ASSESSMENT_CRITERIA_TYPE,
+  ECI_STAT_PERIOD_STEP_TYPE
 };
