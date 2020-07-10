@@ -1,37 +1,9 @@
 import chroma from 'chroma-js';
 import chunk from 'chunk';
 
-export const chartPalette = {
-  core: [
-    '#BBF3A7',
-    '#9BE7BA',
-    '#72DBCC',
-    '#23CFDE',
-    '#3BB9DD',
-    '#46A4DC',
-    '#4C8EDA',
-    '#4D79D9',
-    '#5569ED',
-    '#4845AD',
-    '#412885',
-    '#37055F'
-  ],
-  info: [
-    '#CCEEFF',
-    '#9ADDFF',
-    '#67CCFF',
-    '#35BBFF',
-    '#02AAFF',
-    '#0288CC',
-    '#016699',
-    '#014466'
-  ]
-};
-
 export const chartGradient = (num = 24, debug = false) => {
   const palette = chroma.scale(
     ['#feff9a', '#7eccbb', '#4cb1d0', '#5569ed', '#6846c0']
-    // ['#feff9a', '#7eccbb', '#4cb1d0', '#5569ed']
   )
     .mode('rgb')
     .correctLightness()
@@ -42,16 +14,17 @@ export const chartGradient = (num = 24, debug = false) => {
     result.push(c[51]);
   }
 
-  if(debug) {
-    console.log(num)
-    console.log(result)
+  if (debug) {
+    console.info(num);
+    console.info(result);
   }
 
   return result;
 };
 
 export const switchColor = (bg = '#000') => {
-  return chroma(bg).luminance() > 0.5
-    ? chroma(bg).darken(3 - 0.5 * chroma(bg).luminance()).hex()
-    : chroma(bg).brighten(3 - 0.5 * chroma(bg).luminance()).hex();
+  const dark = chroma(bg).darken(3 - 0.1 * chroma(bg).luminance()).hex();
+  const light = chroma(bg).brighten(3 - 0.1 * chroma(bg).luminance()).hex();
+
+  return chroma(bg).luminance() > 0.5 ? dark : light;
 };

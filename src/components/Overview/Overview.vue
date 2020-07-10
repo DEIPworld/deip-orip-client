@@ -146,41 +146,10 @@
           </v-col>
         </v-row>
 
-        <d-chart-line :data="eciHistoryByDisciplineChartData" :options="{legend: 'none'}" />
+        <eci-history
+          :data="eciHistoryByDiscipline"
+        />
 
-        <v-data-table
-          v-custom="'hover-row'"
-          :hide-default-footer="eciHistoryByDiscipline.length < 50"
-          :footer-props="{itemsPerPageOptions: [5, 10, 20, 50, -1]}"
-          :items-per-page="50"
-          :headers="eciDetailedOverviewTableHeaders"
-          :items="eciHistoryByDiscipline"
-        >
-          <template v-slot:item.type="{ item }">
-            <v-chip
-              :color="contributionColor[item.contribution_type]"
-              text-color="white"
-            >{{ item.actionText }}</v-chip>
-          </template>
-
-          <template v-slot:item.title="{ item }">
-            <router-link v-if="item.meta.link" class="a" :to="item.meta.link">{{ item.meta.title }}</router-link>
-            <span v-else class="text-body-2">{{ item.meta.title }}</span>
-          </template>
-
-          <template v-slot:item.date="{ item }">
-            <div class="text-no-wrap">{{ moment(item.timestamp).format('D MMM YYYY') }}</div>
-          </template>
-
-          <template v-slot:item.delta="{ item }">
-            <div
-              class="text-no-wrap rounded-sm"
-              :class="{ 'success lighten-4': item.delta > 0, 'error lighten-4': item.delta < 0 }"
-            >{{ item.delta }}</div>
-          </template>
-
-          <template v-slot:item.eci="{ item }">{{ item.eci }}</template>
-        </v-data-table>
       </d-block>
     </layout-section>
   </app-layout>
@@ -199,15 +168,15 @@
   import DChartPie from '@/components/Deipify/DChart/DChartPie';
   import DChartArea from '@/components/Deipify/DChart/DChartArea';
   import DChartLine from '@/components/Deipify/DChart/DChartLine';
-  import { EXPERTISE_CONTRIBUTION_TYPE } from '@/variables';
 
   import fakeData from './fakeGrowthRateData.json';
+  import EciHistory from '@/components/EciHistory/EciHistory';
 
   export default {
     name: 'Overview',
     components: {
+      EciHistory,
       DBlock,
-      DChartLine,
       DChartArea,
       DChartPie,
       DInputDate,
@@ -220,46 +189,6 @@
           discipline: null,
           dateFrom: '2020-06-11',
           dateTo: '2020-07-02'
-        },
-        eciDetailedOverviewTableHeaders: [
-          {
-            text: 'Type',
-            align: 'left',
-            value: 'type',
-            sortable: false
-          },
-          {
-            text: 'Title',
-            align: 'left',
-            value: 'title',
-            sortable: false
-          },
-          {
-            text: 'Date',
-            align: 'center',
-            value: 'date',
-            sortable: false,
-            class: 'white-space-nowrap'
-          },
-          {
-            text: 'Reward ECI',
-            align: 'center',
-            sortable: false,
-            value: 'delta',
-            class: 'white-space-nowrap'
-          },
-          {
-            text: 'Total ECI',
-            align: 'center',
-            sortable: false,
-            value: 'eci',
-            class: 'white-space-nowrap'
-          }
-        ],
-        contributionColor: {
-          [EXPERTISE_CONTRIBUTION_TYPE.REVIEW]: '#161F63',
-          [EXPERTISE_CONTRIBUTION_TYPE.REVIEW_SUPPORT]: '#5ABAD1',
-          [EXPERTISE_CONTRIBUTION_TYPE.PUBLICATION]: '#8DDAB3'
         },
 
         growthRateFromDate: this.moment()
@@ -431,16 +360,6 @@
       },
 
       //= ====================
-
-      eciHistoryByDisciplineChartData() {
-        return [
-          ['Date', 'Value'],
-          ...this.eciHistoryByDiscipline.map((item) => [
-            new Date(item.timestamp),
-            item.eci
-          ])
-        ];
-      },
 
       // LEGEND
 

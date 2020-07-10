@@ -2,8 +2,70 @@
   "dark": false,
   "themes": {
     "light": {
-      "primary": "#485fda",
-      "secondary": "#f5f5f5"
+      "primary": {
+        "lighten4": "#DDE1FB",
+        "lighten3": "#BBC3F8",
+        "lighten2": "#99A5F4",
+        "lighten1": "#7787F1",
+        "base": "#5569ED",
+        "darken1": "#4454BE",
+        "darken2": "#333F8E",
+        "darken3": "#222A5F",
+        "darken4": "#11152F"
+      },
+
+      "secondary": "#f5f5f5",
+
+      "accent" : "#485fda",
+
+      "error": {
+        "lighten4": "#FFDCD7",
+        "lighten3": "#FFBAAF",
+        "lighten2": "#FF9788",
+        "lighten1": "#FF7560",
+        "base": "#FF5238",
+        "darken1": "#CC422D",
+        "darken2": "#993122",
+        "darken3": "#662116",
+        "darken4": "#33100B"
+      },
+
+      "info": {
+        "lighten4": "#CCEEFF",
+        "lighten3": "#9ADDFF",
+        "lighten2": "#67CCFF",
+        "lighten1": "#35BBFF",
+        "base": "#02AAFF",
+        "darken1": "#0288CC",
+        "darken2": "#016699",
+        "darken3": "#014466",
+        "darken4": "#002233"
+      },
+
+      "success": {
+        "lighten4": "#E6F2CE",
+        "lighten3": "#CDE49D",
+        "lighten2": "#B5D76B",
+        "lighten1": "#9CC93A",
+        "base": "#83BC09",
+        "darken1": "#699607",
+        "darken2": "#4F7105",
+        "darken3": "#344B04",
+        "darken4": "#1A2602"
+      },
+
+      "warning": {
+        "lighten4": "#FFF3CC",
+        "lighten3": "#FFE799",
+        "lighten2": "#FFDB66",
+        "lighten1": "#FFCF33",
+        "base": "#FFC300",
+        "darken1": "#CC9C00",
+        "darken2": "#997500",
+        "darken3": "#664E00",
+        "darken4": "#332700"
+      }
+
     },
     "dark": {
       "primary": "#485fda",
