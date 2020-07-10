@@ -10,7 +10,7 @@
 </template>
 
 <script>
-  import { AbstractChart } from '@/components/Deipify/DCharts/abstractChart';
+  import { AbstractChart } from '@/components/Deipify/DChart/abstractChart';
   import { chartGradient, switchColor } from '@/plugins/charts';
   import deepmerge from 'deepmerge';
 

@@ -66,7 +66,7 @@
   import { AuthService } from '@deip/auth-service';
   import DForm from '@/components/Deipify/DForm/DForm';
   import DFormBlock from '@/components/Deipify/DFormBlock/DFormBlock';
-  import DInputPassword from '@/components/Deipify/DInputPassword/DInputPassword';
+  import DInputPassword from '@/components/Deipify/DInput/DInputPassword';
 
   const accessService = AccessService.getInstance();
   const authService = AuthService.getInstance();

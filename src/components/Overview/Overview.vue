@@ -3,23 +3,29 @@
     <layout-section>
       <v-row>
         <v-col cols="4">
-          <content-block title="Expertise contribution index value" description="Updated today">
+          <d-block
+            title="Expertise contribution index value"
+            subtitle="Updated today"
+          >
             <d-chart-pie
               donut
               :data="eciValueDataTable"
               :options="{legend: 'none'}"
               @select="goToParticipants"
             />
-          </content-block>
+          </d-block>
         </v-col>
 
         <v-col cols="8">
-          <content-block title="Expertise contribution index overview" description="Updated today">
+          <d-block
+            title="Expertise contribution index overview"
+            subtitle="Updated today"
+          >
             <d-chart-area
               :data="eciOverviewDataTable"
               :options="{legend: 'none', vAxis: { format: '##%' } }"
             />
-          </content-block>
+          </d-block>
         </v-col>
 
         <v-col cols="12">
@@ -35,7 +41,7 @@
         </v-col>
       </v-row>
 
-      <content-block title="Growth rate overview">
+      <d-block title="Growth rate overview" class="mt-12">
         <v-row>
           <v-col cols="3">
             <d-input-date
@@ -84,9 +90,12 @@
             style="width: 100%; height: 232px;"
           />
         </v-col>
-      </content-block>
+      </d-block>
 
-      <content-block title="Distribution impact" description="Updated today">
+      <d-block
+        title="Distribution impact"
+        subtitle="Updated today"
+      >
         <v-row>
           <v-col cols="3">
             <v-select
@@ -111,9 +120,9 @@
             />
           </v-col>
         </v-row>
-      </content-block>
+      </d-block>
 
-      <content-block title="Expertise Contribution Index detailed overview">
+      <d-block title="Expertise Contribution Index detailed overview">
         <v-row>
           <v-col cols="3">
             <d-input-date v-model="eciDetailedOverviewFilter.dateFrom" label="From" />
@@ -172,7 +181,7 @@
 
           <template v-slot:item.eci="{ item }">{{ item.eci }}</template>
         </v-data-table>
-      </content-block>
+      </d-block>
     </layout-section>
   </app-layout>
 </template>
@@ -185,11 +194,11 @@
 
   import { getTopLevelNodes } from '@/components/common/disciplines/DisciplineTreeService';
 
-  import DInputDate from '@/components/Deipify/DInputDate/DInputDate';
-  import DChartPie from '@/components/Deipify/DCharts/DChartPie';
-  import DChartArea from '@/components/Deipify/DCharts/DChartArea';
-  import ContentBlock from '@/components/layout/components/ContentBlock';
-  import DChartLine from '@/components/Deipify/DCharts/DChartLine';
+  import DBlock from '@/components/Deipify/DBlock/DBlock';
+  import DInputDate from '@/components/Deipify/DInput/DInputDate';
+  import DChartPie from '@/components/Deipify/DChart/DChartPie';
+  import DChartArea from '@/components/Deipify/DChart/DChartArea';
+  import DChartLine from '@/components/Deipify/DChart/DChartLine';
   import { EXPERTISE_CONTRIBUTION_TYPE } from '@/variables';
 
   import fakeData from './fakeGrowthRateData.json';
@@ -197,8 +206,8 @@
   export default {
     name: 'Overview',
     components: {
+      DBlock,
       DChartLine,
-      ContentBlock,
       DChartArea,
       DChartPie,
       DInputDate,

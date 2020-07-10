@@ -32,7 +32,7 @@
 <script>
   import LevellerItem from '@/components/Leveller/LevellerItem';
   import LevellerNum from '@/components/Leveller/LevellerNum';
-  import { AbstractField } from '@/components/Deipify/AbstractField';
+  import { AbstractField } from '@/components/Deipify/DInput/AbstractField';
 
   export default {
     name: 'LevellerSelector',

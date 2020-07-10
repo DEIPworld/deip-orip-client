@@ -16,7 +16,7 @@
 </template>
 
 <script>
-  import { AbstractField } from '@/components/Deipify/AbstractField';
+  import { AbstractField } from '@/components/Deipify/DInput/AbstractField';
 
   export default {
     name: 'DInputPassword',

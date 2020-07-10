@@ -13,7 +13,7 @@
 <script>
   import deepmerge from 'deepmerge';
   import { chartGradient, switchColor } from '@/plugins/charts';
-  import { AbstractChart } from '@/components/Deipify/DCharts/abstractChart';
+  import { AbstractChart } from '@/components/Deipify/DChart/abstractChart';
 
   export default {
     name: 'DChartPie',

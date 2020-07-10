@@ -10,7 +10,7 @@
 </template>
 
 <script>
-  import { AbstractChart } from '@/components/Deipify/DCharts/abstractChart';
+  import { AbstractChart } from '@/components/Deipify/DChart/abstractChart';
   import { chartGradient } from '@/plugins/charts';
   import deepmerge from 'deepmerge';
 
@@ -25,7 +25,7 @@
           areaOpacity: 0.5,
           fontSize: 12,
           fontName: 'Roboto',
-          lineWidth: 1,
+          lineWidth: 2,
           explorer: {
             actions: ['dragToZoom', 'rightClickToReset'],
             axis: 'horizontal',
