@@ -155,7 +155,7 @@
             <span
               v-if="growth_rate"
               :class="growthRateIsUp(growth_rate) ? 'green--text' : 'red--text'"
-            >{{ growth_rate }}</span>
+            >{{ growthRateIsUp(growth_rate) ? `+${growth_rate}` : growth_rate }}</span>
             <span v-else>N/A</span>
           </template>
         </v-data-table>
@@ -215,13 +215,15 @@
             text: 'Percentile rank',
             value: 'percentile_rank',
             align: 'center',
-            width: '15%'
+            width: '15%',
+            sort: (a, b) => parseFloat(a) - parseFloat(b)
           },
           {
             text: 'Growth rate',
             value: 'growth_rate',
             align: 'center',
-            width: '15%'
+            width: '15%',
+            sort: (a, b) => parseFloat(a) - parseFloat(b)
           },
           {
             text: 'Сontributions number',
@@ -280,7 +282,7 @@
           .then(() => { this.isShowBadge = !_.isEqual(this.filter, this.defaultFilter); });
       },
       growthRateIsUp(rate) {
-        return rate.slice(0, -2) >= 0;
+        return parseFloat(rate) >= 0;
       }
     }
   };
