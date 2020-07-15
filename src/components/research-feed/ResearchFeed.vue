@@ -28,7 +28,7 @@
     </layout-header>
 
     <!-- TODO: refactoring -->
-    <div class="d-flex px-6 px-sm-12 py-4">
+    <div v-if="fullResearchListing.length" class="d-flex px-6 px-sm-12 py-4">
       <v-sheet tile class="filter-chips">
         <div v-if="selectedTopDisciplines.length" class="filter-chips__row">
           <v-chip
@@ -113,7 +113,7 @@
       </v-sheet>
     </div>
     <v-divider />
-    <v-expand-transition>
+    <v-expand-transition v-if="fullResearchListing.length">
       <div v-if="filtersIsOpen">
         <v-sheet tile color="#fafafa" class="pa-12">
           <v-row justify="space-between" align="center" class="mb-6">
@@ -334,7 +334,8 @@
           :items="researchFeed"
           :footer-props="footerProps"
           :options.sync="pagination"
-          no-data-text="No Projects found for specified criteria"
+          :hide-default-footer="!fullResearchListing.length"
+          :no-data-text="!fullResearchListing.length ? 'There are no projects created yet' : 'No Projects found for specified criteria'"
           row
           wrap
           @update:page="onPaginationUpdated"
@@ -418,6 +419,7 @@
         tenant: 'auth/tenant',
         researchFeed: 'feed/researchFeed',
         organizations: 'feed/organizations',
+        fullResearchListing: 'feed/fullResearchListing',
         filter: 'feed/filter'
       }),
       isFiltersTabExpanded() {
