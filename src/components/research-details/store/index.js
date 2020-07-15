@@ -36,7 +36,7 @@ const state = {
   applicationsRefsList: [],
   userContributionsList: [],
   expertsList: [],
-  eciHistoryByDiscipline: {},
+  eciHistoryByDiscipline: [],
 
   isLoadingResearchDetails: undefined,
   isLoadingResearchContent: undefined,
@@ -70,7 +70,7 @@ const getters = {
       .filter((researchContent) => researchContent.isDraft)
       .map((researchContent) => { return { ...researchContent.researchContentRef } });
   },
-  // researchContentRef
+
   applicationsList: (state, getters) => state.applicationsList,
 
   researchGroupMembersList: (state, getters) => state.researchGroupMembersList,
@@ -155,13 +155,8 @@ const getters = {
 
   userContributionsList: (state, getters) => state.userContributionsList,
 
-  eciHistoryByDisciplineMap: (state, getters) => state.eciHistoryByDiscipline,
-
-  eciHistoryByDiscipline: (state, getters) => (disciplineId) => {
-    const records = state.eciHistoryByDiscipline[disciplineId];
-    if (!records) {
-      return null;
-    }
+  eciHistoryByDiscipline: (state, getters) => {
+    const records = state.eciHistoryByDiscipline;
 
     return records.map((record) => {
       if (record.contribution_type === EXPERTISE_CONTRIBUTION_TYPE.REVIEW) {
@@ -566,15 +561,12 @@ const actions = {
     });
   },
 
-  loadResearchEciHistoryRecords({ state, dispatch, commit }, { researchId, disciplineId, notify }) {
-    return expertiseContributionsService.getEciHistoryByResearchAndDiscipline(researchId, disciplineId)
+  loadResearchEciHistoryRecords({ state, dispatch, commit }, payload) {
+    return expertiseContributionsService.getResearchExpertiseHistory(payload.researchExternalId, payload)
       .then((records) => {
-        commit('SET_RESEARCH_ECI_HISTORY_BY_DISCIPLINE', { disciplineId, records });
+        commit('SET_RESEARCH_ECI_HISTORY_BY_DISCIPLINE', records);
         return records;
-      }, (err) => { console.error(err); })
-      .finally(() => {
-        if (notify) notify();
-      });
+      }, (err) => { console.error(err); });
   }
 };
 
@@ -685,12 +677,12 @@ const mutations = {
     state.group = value;
   },
 
-  SET_RESEARCH_ECI_HISTORY_BY_DISCIPLINE(state, { disciplineId, records }) {
-    state.eciHistoryByDiscipline[disciplineId] = records;
+  SET_RESEARCH_ECI_HISTORY_BY_DISCIPLINE(state, records) {
+    Vue.set(state, 'eciHistoryByDiscipline', records);
   },
 
   RESET_STATE(state) {
-    state.eciHistoryByDiscipline = {};
+    Vue.set(state, 'eciHistoryByDiscipline', []);
   }
 };
 

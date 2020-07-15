@@ -12,11 +12,11 @@
       <v-spacer />
       <v-col cols="auto">
         <v-select
-          v-model="selectedEciDisciplineId"
+          v-model="filter.disciplineExternalId"
           class="my-0 py-0"
           :items="research.disciplines"
           item-text="name"
-          item-value="id"
+          item-value="external_id"
           label="Discipline"
           filled
           dense
@@ -43,64 +43,64 @@
     components: { EciHistory },
     data() {
       return {
-        selectedEciDisciplineId: null,
+        filter:{
+          disciplineExternalId: '',
+          fromDate: '',
+          toDate: '',
+          contribution: '',
+          criteria: ''
+        },
 
         eciHistoryRecords: [],
         eciHistoryLoading: false
-
       };
     },
     computed: {
       ...mapGetters({
-        research: 'rd/research',
-        eciHistoryByDisciplineMap: 'rd/eciHistoryByDisciplineMap'
+        research: 'rd/research'
       })
     },
     created() {
       const discipline = this.research.disciplines[0];
-      this.selectedEciDisciplineId = discipline.id;
+      this.filter.disciplineExternalId = discipline.external_id;
       this.loadDisciplineEciHistory();
     },
     methods: {
       loadDisciplineEciHistory() {
-        const disciplineId = this.selectedEciDisciplineId;
-        const researchId = this.research.id;
         this.eciHistoryLoading = true;
-        const cachedRecords = this.$store.getters['rd/eciHistoryByDiscipline'](
-          disciplineId
-        );
-        if (cachedRecords == null) {
-          this.$store
-            .dispatch('rd/loadResearchEciHistoryRecords', {
-              researchId,
-              disciplineId
-            })
-            .then(() => {
-              const records = this.$store.getters['rd/eciHistoryByDiscipline'](
-                disciplineId
-              );
-              this.eciHistoryRecords = records;
-              this.eciHistoryLoading = false;
-            });
-        } else {
-          this.eciHistoryRecords = cachedRecords;
-          this.eciHistoryLoading = false;
-        }
+
+        const disciplineExternalId = this.filter.disciplineExternalId;
+        const fromDate = this.filter.fromDate ? this.moment(this.filter.fromDate)
+          .startOf('day')
+          .toISOString(true)
+          .split('.')[0] : '';
+        const toDate = this.filter.toDate ? this.moment(this.filter.toDate)
+          .endOf('day')
+          .toISOString(true)
+          .split('.')[0] : '';
+        const contribution = this.filter.contribution;
+        const criteria = this.filter.criteria;
+
+        const filter = {
+          discipline: disciplineExternalId,
+          from: fromDate,
+          to: toDate,
+          contribution: contribution,
+          criteria: criteria
+        };
+
+        return this.$store.dispatch('rd/loadResearchEciHistoryRecords', {
+            researchExternalId: this.research.external_id,
+            ...filter
+          })
+          .then(() => {
+            const records = this.$store.getters['rd/eciHistoryByDiscipline'];
+            this.eciHistoryRecords = records;
+            this.eciHistoryLoading = false;
+          });
       },
       reloadDisciplineEciHistory() {
-        const disciplineIds = Object.keys(this.eciHistoryByDisciplineMap);
-        const promises = [];
-        for (let i = 0; i < disciplineIds.length; i++) {
-          const disciplineId = disciplineIds[i];
-          promises.push(
-            this.$store.dispatch('rd/loadResearchEciHistoryRecords', {
-              researchId: this.research.id,
-              disciplineId
-            })
-          );
-        }
-        return Promise.all(promises)
-          .then(() => this.loadDisciplineEciHistory());
+        return this.loadDisciplineEciHistory();
       }
     }
   };

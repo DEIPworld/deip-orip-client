@@ -30,7 +30,7 @@ const state = {
   expertsList: [],
   researchContentReferencesGraph: [],
   contentProposal: undefined,
-  eciHistoryByDiscipline: {},
+  eciHistoryByDiscipline: [],
   contentRef: null,
 
   isLoadingResearchContentVotes: undefined,
@@ -141,11 +141,8 @@ const getters = {
     return { nodes, links };
   },
 
-  eciHistoryByDiscipline: (state, getters) => (disciplineId) => {
-    const records = state.eciHistoryByDiscipline[disciplineId];
-    if (!records) {
-      return null;
-    }
+  eciHistoryByDiscipline: (state, getters) => {
+    const records = state.eciHistoryByDiscipline;
 
     return records.map((record) => {
       if (record.contribution_type == EXPERTISE_CONTRIBUTION_TYPE.REVIEW) {
@@ -469,15 +466,12 @@ const actions = {
     if (notify) notify();
   },
 
-  loadResearchContentEciHistoryRecords({ state, dispatch, commit }, { researchContentId, disciplineId, notify }) {
-    return expertiseContributionsService.getEciHistoryByResearchContentAndDiscipline(researchContentId, disciplineId)
+  loadResearchContentEciHistoryRecords({ state, dispatch, commit }, payload) {
+    return expertiseContributionsService.getResearchContentExpertiseHistory(payload.researchContentExternalId, payload)
       .then((records) => {
-        commit('SET_RESEARCH_CONTENT_ECI_HISTORY_BY_DISCIPLINE', { disciplineId, records });
+        commit('SET_RESEARCH_CONTENT_ECI_HISTORY_BY_DISCIPLINE', records);
       }, (err) => {
         console.error(err);
-      })
-      .finally(() => {
-        if (notify) notify();
       });
   },
 
@@ -745,12 +739,12 @@ const mutations = {
     state.researchContentReferencesGraph = graph;
   },
 
-  SET_RESEARCH_CONTENT_ECI_HISTORY_BY_DISCIPLINE(state, { disciplineId, records }) {
-    state.eciHistoryByDiscipline[disciplineId] = records;
+  SET_RESEARCH_CONTENT_ECI_HISTORY_BY_DISCIPLINE(state, records) {
+    Vue.set(state, 'eciHistoryByDiscipline', records);
   },
 
   RESET_STATE(state) {
-    state.eciHistoryByDiscipline = {};
+    state.eciHistoryByDiscipline = [];
     state.contentMetadata = null;
   }
 };

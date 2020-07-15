@@ -356,8 +356,9 @@
     methods: {
 
       loadDisciplineEciHistory() {
+        this.eciHistoryLoading = true;
+        
         const account = this.userInfo.account.name;
-
         const disciplineExternalId = this.filter.disciplineExternalId;
         const fromDate = this.filter.fromDate ? this.moment(this.filter.fromDate)
           .startOf('day')
@@ -369,8 +370,6 @@
           .split('.')[0] : '';
         const contribution = this.filter.contribution;
         const criteria = this.filter.criteria;
-
-        this.eciHistoryLoading = true;
 
         let filter = {
           account: account,

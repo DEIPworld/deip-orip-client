@@ -9,11 +9,11 @@
       <v-spacer />
       <v-col cols="auto">
         <v-select
-          v-model="selectedEciDisciplineId"
+          v-model="filter.disciplineExternalId"
           class="my-0 py-0"
           :items="research.disciplines"
           item-text="name"
-          item-value="id"
+          item-value="external_id"
           label="Discipline"
           filled
           dense
@@ -41,7 +41,13 @@
     components: { EciHistory },
     data() {
       return {
-        selectedEciDisciplineId: null,
+        filter: {
+          disciplineExternalId: '',
+          fromDate: '',
+          toDate: '',
+          contribution: '',
+          criteria: ''
+        },
 
         eciHistoryRecords: [],
         eciHistoryLoading: false
@@ -57,36 +63,43 @@
     created() {
       if (this.isPublished) {
         const discipline = this.research.disciplines[0];
-        this.selectedEciDisciplineId = discipline.id;
+        this.filter.disciplineExternalId = discipline.external_id;
         this.loadDisciplineEciHistory();
       }
     },
     methods: {
       loadDisciplineEciHistory() {
-        const disciplineId = this.selectedEciDisciplineId;
-        const researchContentId = this.content.id;
-
         this.eciHistoryLoading = true;
-        const cachedRecords = this.$store.getters['rcd/eciHistoryByDiscipline'](
-          disciplineId
-        );
-        if (cachedRecords == null) {
-          this.$store
-            .dispatch('rcd/loadResearchContentEciHistoryRecords', {
-              researchContentId,
-              disciplineId
-            })
-            .then(() => {
-              const records = this.$store.getters['rcd/eciHistoryByDiscipline'](
-                disciplineId
-              );
-              this.eciHistoryRecords = records;
-              this.eciHistoryLoading = false;
-            });
-        } else {
-          this.eciHistoryRecords = cachedRecords;
-          this.eciHistoryLoading = false;
-        }
+
+        const disciplineExternalId = this.filter.disciplineExternalId;
+        const fromDate = this.filter.fromDate ? this.moment(this.filter.fromDate)
+          .startOf('day')
+          .toISOString(true)
+          .split('.')[0] : '';
+        const toDate = this.filter.toDate ? this.moment(this.filter.toDate)
+          .endOf('day')
+          .toISOString(true)
+          .split('.')[0] : '';
+        const contribution = this.filter.contribution;
+        const criteria = this.filter.criteria;
+
+        const filter = {
+          discipline: disciplineExternalId,
+          from: fromDate,
+          to: toDate,
+          contribution: contribution,
+          criteria: criteria
+        };
+
+        return this.$store.dispatch('rcd/loadResearchContentEciHistoryRecords', {
+            researchContentExternalId: this.content.external_id,
+            ...filter
+          })
+          .then(() => {
+            const records = this.$store.getters['rcd/eciHistoryByDiscipline'];
+            this.eciHistoryRecords = records;
+            this.eciHistoryLoading = false;
+          });
       }
     }
   };
