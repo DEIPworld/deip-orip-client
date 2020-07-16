@@ -81,10 +81,7 @@
 </template>
 
 <script>
-  import { SearchService } from '@deip/search-service';
   import _ from 'lodash';
-
-  const searchService = SearchService.getInstance();
 
   export default {
     name: 'InternalReferencesPicker',
@@ -92,20 +89,23 @@
     props: {
       showSelected: { type: Boolean, default: false },
       preselected: { type: Array, default: () => [] },
-      currentResearch: { type: Object, required: true }
+      currentResearch: { type: Object, required: true },
+      allReferencesList: { type: Array, required: true }
     },
+    
     data() {
       return {
         term: '',
-        selected: [],
-        searchable: [],
-        references: []
+        searchable: []
       };
     },
 
     computed: {
       list() {
         return this.searchable.filter((ref) => !this.isReferenceSelected(ref));
+      },
+      selected() {
+        return this.allReferencesList.filter((r) => this.preselected.some((id) => r.external_id === id));
       }
     },
     methods: {
@@ -132,9 +132,9 @@
         const term = this.term.toLowerCase();
 
         function filter() {
-          return this.references
-          .filter((content) => content.title != null)
-          .filter((content) => content.title.toLowerCase().startsWith(term) && content.research_id != this.currentResearch.id)
+          return this.allReferencesList
+            .filter((content) => content.title != null)
+            .filter((content) => content.title.toLowerCase().startsWith(term) && content.research_id != this.currentResearch.id)
         }
 
         this.searchable = filter.call(this, term);
@@ -143,13 +143,6 @@
       isReferenceSelected(ref) {
         return this.selected.some((r) => r.external_id === ref.external_id);
       }
-    },
-    created() {
-      searchService.getAllResearchContents()
-        .then((contents) => {
-          this.references.push(...contents);
-          this.selected = this.references.filter((r) => this.preselected.some((id) => r.external_id === id));
-        });
     }
   };
 </script>

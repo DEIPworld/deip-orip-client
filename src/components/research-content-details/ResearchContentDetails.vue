@@ -160,7 +160,6 @@
             :items="proposeContent.researchContentTypes"
             label="Content Type"
             filled
-            class="c-mt-6"
             item-value="id"
           />
 
@@ -172,6 +171,7 @@
             persistent-hint
             filled
             placeholder="Authors"
+            class="mb-3"
             multiple
             @change="setDraftAuthors"
           >
@@ -206,6 +206,7 @@
             :show-selected="true"
             :current-research="research"
             :preselected="contentRef.references"
+            :all-references-list="allReferencesList"
             @referenceAdded="addReference"
             @referenceRemoved="removeReference"
           />
@@ -250,10 +251,12 @@
   import { ResearchContentService } from '@deip/research-content-service';
   import { ResearchGroupService } from '@deip/research-group-service';
   import { ResearchService } from '@deip/research-service';
+  import { SearchService } from '@deip/search-service';
 
   import { researchContentTypes, maxTitleLength } from '@/variables';
   import LayoutSection from '@/components/layout/components/LayoutSection';
 
+  const searchService = SearchService.getInstance();
   const researchContentService = ResearchContentService.getInstance();
   const researchGroupService = ResearchGroupService.getInstance();
   const researchService = ResearchService.getInstance();
@@ -268,6 +271,7 @@
         rules: {
           titleLength: (value) => value.length <= maxTitleLength || `Title max length is ${maxTitleLength} symbols`
         },
+        allReferencesList: [],
         proposeContent: {
           title: '',
           type: null,
@@ -309,6 +313,13 @@
       userRelatedExpertise() {
         return this.userExperise.filter((exp) => this.research.disciplines.some((d) => d.id == exp.discipline_id));
       }
+    },
+
+    created() {
+      searchService.getAllResearchContents()
+        .then((contents) => {
+          this.allReferencesList.push(...contents);
+        });
     },
 
     methods: {

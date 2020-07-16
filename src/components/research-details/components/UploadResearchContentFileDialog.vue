@@ -48,7 +48,6 @@
               :items="researchContentTypes"
               filled
               label="Content Type"
-              class="c-mt-6"
               item-value="id"
             />
 
@@ -60,6 +59,7 @@
               persistent-hint
               filled
               placeholder="Authors"
+              class="mb-3"
               multiple
             >
               <template slot="selection" slot-scope="data">
@@ -92,6 +92,7 @@
               :show-selected="true"
               :current-research="research"
               :preselected="[]"
+              :all-references-list="allReferencesList"
               @referenceAdded="addReference"
               @referenceRemoved="removeReference"
             />
@@ -137,7 +138,9 @@
   import { AccessService } from '@deip/access-service';
   import { ResearchGroupService } from '@deip/research-group-service';
   import { ResearchContentService } from '@deip/research-content-service';
+  import { SearchService } from '@deip/search-service';
 
+  const searchService = SearchService.getInstance();
   const accessService = AccessService.getInstance();
   const researchGroupService = ResearchGroupService.getInstance();
   const researchContentService = ResearchContentService.getInstance();
@@ -156,6 +159,7 @@
         authors: [],
         researchContentTypes,
         references: [],
+        allReferencesList: [],
         isPermlinkVerifyed: true,
 
         isOpen: false,
@@ -207,6 +211,13 @@
           this.authors = [];
         }
       }
+    },
+
+    created() {
+      searchService.getAllResearchContents()
+        .then((contents) => {
+          this.allReferencesList.push(...contents);
+        });
     },
 
     methods: {
