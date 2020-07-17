@@ -27,306 +27,8 @@
       </div>
     </layout-header>
 
-    <!-- TODO: refactoring -->
-    <div class="d-flex px-6 px-sm-12 py-4">
-      <v-sheet tile class="filter-chips">
-        <div v-if="selectedTopDisciplines.length" class="filter-chips__row">
-          <v-chip
-            v-for="discipline in selectedTopDisciplines"
-            :key="'filter-by-discipline-' + discipline.id"
-            class="ma-1"
-            close
-            outlined
-            @click:close="toggleDiscipline(discipline)"
-          >
-            {{ discipline.label }}
-          </v-chip>
-        </div>
-
-        <div v-if="selectedSteppers.length" class="filter-chips__row">
-          <template v-for="(item, i) in selectedSteppers">
-            <v-chip
-              v-for="step in item.steps"
-              :key="`filter-${i}-${step}`"
-              class="ma-1"
-              close
-              outlined
-              @click:close="toggleStep(item, step)"
-            >
-              {{ item.shortTitle }} {{ step + 1 }}
-            </v-chip>
-          </template>
-        </div>
-
-        <div v-if="selectedOrganizations.length" class="filter-chips__row">
-          <v-chip
-            v-for="organization in selectedOrganizations"
-            :key="'filter-by-organization-' + organization.id"
-            class="ma-1"
-            close
-            outlined
-            @click:close="toggleOrganization(organization)"
-          >
-            <v-avatar left>
-              <img :src="$options.filters.researchGroupLogoSrc(organization.external_id, 50, 50, true)">
-            </v-avatar>
-            {{ organization.name }}
-          </v-chip>
-        </div>
-
-        <div v-if="selectedCategories.length" class="filter-chips__row">
-          <v-chip
-            v-for="category in selectedCategories"
-            :key="'filter-by-category-' + category._id"
-            class="ma-1"
-            close
-            outlined
-            @click:close="toggleCategory(category)"
-          >
-            {{ category.text }}
-          </v-chip>
-        </div>
-
-        <!-- <div v-if="filterByTopOnly" class="filter-chips__row">
-          <v-chip
-            class="ma-1"
-            small
-            close
-            outlined
-            @click:close="filterByTopOnly = false"
-          >
-            <v-avatar>
-              <img src="/assets/img/top-100.svg">
-            </v-avatar>
-            Top 100
-          </v-chip>
-        </div> -->
-      </v-sheet>
-      <v-spacer />
-      <v-sheet tile>
-        <v-btn small text @click="filtersIsOpen = !filtersIsOpen">
-          {{ filtersIsOpen ? 'Hide Filters' : 'Show Filters' }}
-          <v-icon right dense>
-            {{ filtersIsOpen ? 'expand_less' : 'expand_more' }}
-          </v-icon>
-        </v-btn>
-      </v-sheet>
-    </div>
-    <v-divider />
-    <v-expand-transition>
-      <div v-if="filtersIsOpen">
-        <v-sheet tile color="#fafafa" class="pa-12">
-
-<!--          <v-row justify="space-between" align="center" class="mb-6">-->
-<!--            <v-col>-->
-<!--              <div class="text-subtitle-1">-->
-<!--                Browse by discipline-->
-<!--              </div>-->
-<!--            </v-col>-->
-<!--            <v-col cols="auto">-->
-<!--              <v-btn-->
-<!--                small-->
-<!--                color="primary"-->
-<!--                outlined-->
-<!--                :disabled="isAllDisciplinesSelected"-->
-<!--                @click="selectAllDisciplines()"-->
-<!--              >-->
-<!--                Reset-->
-<!--              </v-btn>-->
-<!--            </v-col>-->
-<!--          </v-row>-->
-<!--          <v-row>-->
-<!--            <v-col-->
-<!--              v-for="(discipline, i) in disciplines"-->
-<!--              :key="'discipline-filter-' + i"-->
-<!--              cols="6"-->
-<!--              md="3"-->
-<!--            >-->
-<!--              <v-btn-->
-<!--                text-->
-<!--                block-->
-<!--                small-->
-<!--                color="primary"-->
-<!--                :input-value="isDisciplineSelected(discipline)"-->
-<!--                @click="toggleDiscipline(discipline)"-->
-<!--              >-->
-<!--                {{ discipline.label }}-->
-<!--              </v-btn>-->
-<!--            </v-col>-->
-<!--            <v-spacer />-->
-<!--          </v-row>-->
-
-<!--          <v-divider class="my-6" />-->
-
-<!--          <div v-for="(item, i) in tenant.profile.settings.researchComponents" :key="'research-component-' + i">-->
-<!--            <template v-if="item.isVisible && item.type === 'stepper'">-->
-<!--              <v-row justify="space-between" align="center" class="pb-6">-->
-<!--                <v-col>-->
-<!--                  <div class="text-subtitle-1">-->
-<!--                    Browse by {{ item.component.readinessLevelShortTitle }}-->
-<!--                  </div>-->
-<!--                </v-col>-->
-<!--                <v-col cols="auto">-->
-<!--                  <v-btn-->
-<!--                    small-->
-<!--                    color="primary"-->
-<!--                    outlined-->
-<!--                    :disabled="isAllStepsSelected[i]"-->
-<!--                    @click="resetStepper(item)"-->
-<!--                  >-->
-<!--                    Reset-->
-<!--                  </v-btn>-->
-<!--                </v-col>-->
-<!--              </v-row>-->
-<!--              <v-row>-->
-
-<!--                <v-col v-for="(step, j) in item.component.readinessLevels" :key="`${item.component.readinessLevelShortTitle}-${j}`" cols="2" class="overflow-hidden">-->
-<!--                  <v-tooltip v-if="step.description || step.title" bottom>-->
-<!--                    <template #activator="{ on }">-->
-<!--                      <v-btn-->
-<!--                        text-->
-<!--                        block-->
-<!--                        small-->
-<!--                        color="primary"-->
-<!--                        :input-value="isStepSelected(item, j)"-->
-<!--                        v-on="on"-->
-<!--                        @click="toggleStep(item, j)"-->
-<!--                      >-->
-<!--                        <div class="full-width text&#45;&#45;center">-->
-<!--                          {{ item.component.readinessLevelShortTitle }} {{ j + 1 }}-->
-<!--                        </div>-->
-<!--                      </v-btn>-->
-<!--                    </template>-->
-<!--                    <span>{{ step.description || step.title }}</span>-->
-<!--                  </v-tooltip>-->
-<!--                  <v-btn-->
-<!--                    v-else-->
-<!--                    text-->
-<!--                    block-->
-<!--                    small-->
-<!--                    color="primary"-->
-<!--                    :input-value="isStepSelected(item, j)"-->
-<!--                    v-on="on"-->
-<!--                    @click="toggleStep(item, j)"-->
-<!--                  >-->
-<!--                    <div class="full-width text&#45;&#45;center">-->
-<!--                      {{ item.component.readinessLevelShortTitle }} {{ i + 1 }}-->
-<!--                    </div>-->
-<!--                  </v-btn>-->
-<!--                </v-col>-->
-<!--              </v-row>-->
-<!--            </template>-->
-<!--          </div>-->
-
-<!--          <v-divider v-if="tenant.profile.settings.researchComponents.length" class="my-6" />-->
-
-<!--          <v-row class="pb-6" justify="space-between">-->
-<!--            <v-col>-->
-<!--              <span class="text-subtitle-1">Browse by organizations</span>-->
-<!--            </v-col>-->
-<!--            <v-col cols="auto">-->
-<!--              <v-btn-->
-<!--                small-->
-<!--                color="primary"-->
-<!--                outlined-->
-<!--                :disabled="isAllOrganizationsSelected"-->
-<!--                @click="selectAllOrganizations()"-->
-<!--              >-->
-<!--                Reset-->
-<!--              </v-btn>-->
-<!--            </v-col>-->
-<!--          </v-row>-->
-<!--          <v-row>-->
-<!--            <div-->
-<!--              v-for="organization of organizations"-->
-<!--              :key="`organization-filter-${organization.id}`"-->
-<!--            >-->
-<!--              <v-tooltip bottom>-->
-<!--                <template #activator="{ on }">-->
-<!--                  <div-->
-<!--                    :input-value="isOrganizationSelected(organization)"-->
-<!--                    :class="{-->
-<!--                      'organization-item ma-2 pa-1': true,-->
-<!--                      'organization-item&#45;&#45;selected': isOrganizationSelected(organization)-->
-<!--                    }"-->
-<!--                    v-on="on"-->
-<!--                    @click="toggleOrganization(organization)"-->
-<!--                  >-->
-<!--                    <img-->
-
-<!--                      class="organization-item__img"-->
-<!--                      :src="$options.filters.researchGroupLogoSrc(organization.external_id, 200, 200)"-->
-<!--                    >-->
-<!--                    <div class="organization-item__overlay" />-->
-<!--                  </div>-->
-<!--                </template>-->
-<!--                <span>{{ organization.name }}</span>-->
-<!--              </v-tooltip>-->
-<!--            </div>-->
-<!--          </v-row>-->
-
-<!--          <v-row justify="space-between" align="center" class="pb-6">-->
-<!--            <v-col>-->
-<!--              <div class="text-subtitle-1">-->
-<!--                Browse by category-->
-<!--              </div>-->
-<!--            </v-col>-->
-<!--            <v-col cols="auto">-->
-<!--              <v-btn-->
-<!--                small-->
-<!--                color="primary"-->
-<!--                outlined-->
-<!--                :disabled="isAllCategoriesSelected"-->
-<!--                @click="selectAllCategories()"-->
-<!--              >-->
-<!--                Reset-->
-<!--              </v-btn>-->
-<!--            </v-col>-->
-<!--          </v-row>-->
-
-<!--          <v-divider class="my-6" />-->
-
-<!--          <v-row>-->
-<!--            <v-col v-for="(category) in tenant.profile.settings.researchCategories" :key="`${category._id}-category`" cols="2">-->
-<!--              <v-tooltip bottom>-->
-<!--                <template #activator="{ on }">-->
-<!--                  <v-btn-->
-<!--                    text-->
-<!--                    block-->
-<!--                    small-->
-<!--                    color="primary"-->
-<!--                    :input-value="isCategorySelected(category)"-->
-<!--                    v-on="on"-->
-<!--                    @click="toggleCategory(category)"-->
-<!--                  >-->
-<!--                    <div class="full-width text&#45;&#45;left category-filter-btn">-->
-<!--                      {{ category.text }}-->
-<!--                    </div>-->
-<!--                  </v-btn>-->
-<!--                </template>-->
-<!--                <span>{{ category.text }}</span>-->
-<!--              </v-tooltip>-->
-<!--            </v-col>-->
-<!--          </v-row>-->
-
-          <!-- <v-divider class="my-6" /> -->
-
-          <!-- <v-checkbox
-            v-model="filterByTopOnly"
-            class="ma-0 pa-0"
-            hide-details
-            label="Browse top projects only"
-          /> -->
-        </v-sheet>
-        <v-divider />
-      </div>
-    </v-expand-transition>
-    <!-- END TODO: refactoring -->
-
     <layout-section>
-
       <research-list :items="researchFeed" namespace="feed" />
-
     </layout-section>
   </app-layout>
 </template>
@@ -405,9 +107,9 @@
       },
       isAllStepsSelected() {
         return this.tenant.profile.settings.researchComponents.map(({ _id }) => {
-          const step = this.filter.steppers.find((item) => _id === item._id)
+          const step = this.filter.steppers.find((item) => _id === item._id);
           return step ? !step.steps.length : true;
-        })
+        });
       },
       isAllCategoriesSelected() {
         return this.filter.categories.length === 0;
@@ -427,7 +129,7 @@
       resetStepper(stepper) {
         this.$store.dispatch('feed/updateFilter', {
           key: 'steppers',
-          value: this.filter.steppers.map((item) => item._id === stepper._id ? {_id: item._id, steps: [] } : item)
+          value: this.filter.steppers.map((item) => (item._id === stepper._id ? { _id: item._id, steps: [] } : item))
         });
       },
 
@@ -435,19 +137,17 @@
         let updatedFilter = [];
         if (this.isStepSelected(stepper, step)) {
           updatedFilter = this.filter.steppers.map((item) => {
-            if (item._id === stepper._id){
-                return { _id: item._id, shortTitle: item.shortTitle, steps: [...item.steps.filter(s => s !== step)] }
-            } else {
-              return item
+            if (item._id === stepper._id) {
+              return { _id: item._id, shortTitle: item.shortTitle, steps: [...item.steps.filter((s) => s !== step)] };
             }
+            return item;
           });
-        } else if (this.filter.steppers.find(({_id}) => _id === stepper._id)) {
+        } else if (this.filter.steppers.find(({ _id }) => _id === stepper._id)) {
           updatedFilter = this.filter.steppers.map((item) => {
             if (item._id === stepper._id) {
-                return { _id: item._id, shortTitle: item.shortTitle, steps: [...item.steps, step] }
-            } else {
-              return item
+              return { _id: item._id, shortTitle: item.shortTitle, steps: [...item.steps, step] };
             }
+            return item;
           });
         } else {
           updatedFilter = [...this.filter.steppers, { _id: stepper._id, shortTitle: stepper.component.readinessLevelShortTitle, steps: [step] }];
@@ -459,7 +159,7 @@
       },
 
       isStepSelected(stepper, step) {
-        return !!this.filter.steppers.some((t) => t._id === stepper._id ? t.steps.some(s => s === step ) : false);
+        return !!this.filter.steppers.some((t) => (t._id === stepper._id ? t.steps.some((s) => s === step) : false));
       },
 
       selectAllDisciplines() {
@@ -526,7 +226,7 @@
 
       toggleCategory(category) {
         if (!this.isCategorySelected(category)) {
-          const value = [ category, ...this.filter.categories ];
+          const value = [category, ...this.filter.categories];
           this.$store.dispatch('feed/updateFilter', {
             key: 'categories',
             value
