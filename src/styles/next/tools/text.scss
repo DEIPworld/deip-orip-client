@@ -1,0 +1,25 @@
+@use 'sass:map';
+
+$font-size-ratio: (
+  xs: 1.2,
+  md: 1.25,
+  lg: 1.333,
+);
+
+@function round-to($num, $to) {
+  @return round($num / $to) * $to;
+}
+
+@function round-lh($fz, $lh) {
+  @return round-to($fz * $lh, .25);
+}
+
+@function round-fz($bp: xs, $level: 1, $fz: 1rem) {
+  $multiplier: map-get($font-size-ratio, $bp);
+
+  @for $n from 1 through $level {
+    $fz: $fz * $multiplier;
+  }
+
+  @return round-to($fz, .0625);
+}

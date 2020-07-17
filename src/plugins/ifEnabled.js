@@ -18,8 +18,8 @@ export const ifEnabled = {
       return checkingResult.every((x) => x === true);
     };
 
-    _Vue.prototype.$ifEnable = ifEnableFn;
-    _Vue.$ifEnable = ifEnableFn;
+    _Vue.prototype.$ifEnabled = ifEnableFn;
+    _Vue.$ifEnabled = ifEnableFn;
 
     _Vue.component('IfEnabled', {
       props: {
@@ -30,7 +30,7 @@ export const ifEnabled = {
       },
       computed: {
         allowRender() {
-          return this.$ifEnable({
+          return this.$ifEnabled({
             ...(this.module ? { module: this.module } : {})
           });
         }

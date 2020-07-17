@@ -51,31 +51,31 @@ const getters = {
         const isTop = researchService.getTopResearchesIds().some((id) => id == item.id);
         return { ...item, isTop };
       })
-      .filter((item) => !state.filter.topOnly || item.isTop)
-      .filter((item) => !state.filter.q || item.title.toLowerCase().indexOf(state.filter.q.toLowerCase()) != -1)
-      .filter((item) => !state.filter.disciplines.length || item.disciplines.some((discipline) => state.filter.disciplines.some((d) => d.id == discipline.external_id)))
-      .filter((item) => !state.filter.organizations.length || state.filter.organizations.some((org) => item.research_group.external_id == org.external_id))
-      .filter((item) => 
-        !state.filter.steppers.length || state.filter.steppers.every(({ steps }) => steps.length === 0) || state.filter.steppers.some((t) => {
-          if (item.researchRef){
-            const tenantCriteria = item.researchRef.tenantCriteriasReadingList.find(({ component }) => component === t._id);
-            if (tenantCriteria && tenantCriteria.value && tenantCriteria.value.index !== null) {
-              return t.steps.some((item) => item === tenantCriteria.value.index)
-            } else {
-              return false;
-            }
-          } else {
-            return false
-          }
-        })
-      )
-      .filter((item) => !state.filter.categories.length || state.filter.categories.some((cat) => item.researchRef.tenantCategory && item.researchRef.tenantCategory._id == cat._id))
+      // .filter((item) => !state.filter.topOnly || item.isTop)
+      // .filter((item) => !state.filter.q || item.title.toLowerCase().indexOf(state.filter.q.toLowerCase()) != -1)
+      // .filter((item) => !state.filter.disciplines.length || item.disciplines.some((discipline) => state.filter.disciplines.some((d) => d.id == discipline.external_id)))
+      // .filter((item) => !state.filter.organizations.length || state.filter.organizations.some((org) => item.research_group.external_id == org.external_id))
+      // .filter((item) =>
+      //   !state.filter.steppers.length || state.filter.steppers.every(({ steps }) => steps.length === 0) || state.filter.steppers.some((t) => {
+      //     if (item.researchRef){
+      //       const tenantCriteria = item.researchRef.tenantCriteriasReadingList.find(({ component }) => component === t._id);
+      //       if (tenantCriteria && tenantCriteria.value && tenantCriteria.value.index !== null) {
+      //         return t.steps.some((item) => item === tenantCriteria.value.index)
+      //       } else {
+      //         return false;
+      //       }
+      //     } else {
+      //       return false
+      //     }
+      //   })
+      // )
+      // .filter((item) => !state.filter.categories.length || state.filter.categories.some((cat) => item.researchRef.tenantCategory && item.researchRef.tenantCategory._id == cat._id))
       .map((item) => {
-        const reviews = state.feedResearchReviews.filter((review) => review.research_id == item.id);
-        const group = state.feedResearchGroups.find((group) => group.external_id == item.research_group.external_id);
-        const researchMembers = state.feedResearchGroupsMembers.filter((user) => item.members.some((a) => a == user.account.name));
-        const tokenSale = state.feedResearchTokenSales.find((tokenSale) => tokenSale.research_id == item.id);
-        const tokenSaleContributions = tokenSale ? state.feedResearchTokenSalesContributions.filter((c) => c.research_token_sale_id == tokenSale.id) : [];
+        const reviews = state.feedResearchReviews.filter((review) => review.research_id === item.id);
+        const group = state.feedResearchGroups.find((group) => group.external_id === item.research_group.external_id);
+        const researchMembers = state.feedResearchGroupsMembers.filter((user) => item.members.some((a) => a === user.account.name));
+        const tokenSale = state.feedResearchTokenSales.find((tokenSale) => tokenSale.research_id === item.id);
+        const tokenSaleContributions = tokenSale ? state.feedResearchTokenSalesContributions.filter((c) => c.research_token_sale_id === tokenSale.id) : [];
         const disciplines = item.disciplines.map((discipline) => ({ ...discipline }));
         return {
           ...item,

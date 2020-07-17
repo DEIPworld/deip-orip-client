@@ -116,196 +116,198 @@
     <v-expand-transition>
       <div v-if="filtersIsOpen">
         <v-sheet tile color="#fafafa" class="pa-12">
-          <v-row justify="space-between" align="center" class="mb-6">
-            <v-col>
-              <div class="text-subtitle-1">
-                Browse by discipline
-              </div>
-            </v-col>
-            <v-col cols="auto">
-              <v-btn
-                small
-                color="primary"
-                outlined
-                :disabled="isAllDisciplinesSelected"
-                @click="selectAllDisciplines()"
-              >
-                Reset
-              </v-btn>
-            </v-col>
-          </v-row>
-          <v-row>
-            <v-col
-              v-for="(discipline, i) in disciplines"
-              :key="'discipline-filter-' + i"
-              cols="6"
-              md="3"
-            >
-              <v-btn
-                text
-                block
-                small
-                color="primary"
-                :input-value="isDisciplineSelected(discipline)"
-                @click="toggleDiscipline(discipline)"
-              >
-                {{ discipline.label }}
-              </v-btn>
-            </v-col>
-            <v-spacer />
-          </v-row>
 
-          <v-divider class="my-6" />
+<!--          <v-row justify="space-between" align="center" class="mb-6">-->
+<!--            <v-col>-->
+<!--              <div class="text-subtitle-1">-->
+<!--                Browse by discipline-->
+<!--              </div>-->
+<!--            </v-col>-->
+<!--            <v-col cols="auto">-->
+<!--              <v-btn-->
+<!--                small-->
+<!--                color="primary"-->
+<!--                outlined-->
+<!--                :disabled="isAllDisciplinesSelected"-->
+<!--                @click="selectAllDisciplines()"-->
+<!--              >-->
+<!--                Reset-->
+<!--              </v-btn>-->
+<!--            </v-col>-->
+<!--          </v-row>-->
+<!--          <v-row>-->
+<!--            <v-col-->
+<!--              v-for="(discipline, i) in disciplines"-->
+<!--              :key="'discipline-filter-' + i"-->
+<!--              cols="6"-->
+<!--              md="3"-->
+<!--            >-->
+<!--              <v-btn-->
+<!--                text-->
+<!--                block-->
+<!--                small-->
+<!--                color="primary"-->
+<!--                :input-value="isDisciplineSelected(discipline)"-->
+<!--                @click="toggleDiscipline(discipline)"-->
+<!--              >-->
+<!--                {{ discipline.label }}-->
+<!--              </v-btn>-->
+<!--            </v-col>-->
+<!--            <v-spacer />-->
+<!--          </v-row>-->
 
-          <div v-for="(item, i) in tenant.profile.settings.researchComponents" :key="'research-component-' + i">
-            <template v-if="item.isVisible && item.type === 'stepper'">
-              <v-row justify="space-between" align="center" class="pb-6">
-                <v-col>
-                  <div class="text-subtitle-1">
-                    Browse by {{ item.component.readinessLevelShortTitle }}
-                  </div>
-                </v-col>
-                <v-col cols="auto">
-                  <v-btn
-                    small
-                    color="primary"
-                    outlined
-                    :disabled="isAllStepsSelected[i]"
-                    @click="resetStepper(item)"
-                  >
-                    Reset
-                  </v-btn>
-                </v-col>
-              </v-row>
-              <v-row>
-                <v-col v-for="(step, j) in item.component.readinessLevels" :key="`${item.component.readinessLevelShortTitle}-${j}`" cols="2" class="overflow-hidden">
-                  <v-tooltip v-if="step.description || step.title" bottom>
-                    <template #activator="{ on }">
-                      <v-btn
-                        text
-                        block
-                        small
-                        color="primary"
-                        :input-value="isStepSelected(item, j)"
-                        v-on="on"
-                        @click="toggleStep(item, j)"
-                      >
-                        <div class="full-width text--center">
-                          {{ item.component.readinessLevelShortTitle }} {{ j + 1 }}
-                        </div>
-                      </v-btn>
-                    </template>
-                    <span>{{ step.description || step.title }}</span>
-                  </v-tooltip>
-                  <v-btn
-                    v-else
-                    text
-                    block
-                    small
-                    color="primary"
-                    :input-value="isStepSelected(item, j)"
-                    v-on="on"
-                    @click="toggleStep(item, j)"
-                  >
-                    <div class="full-width text--center">
-                      {{ item.component.readinessLevelShortTitle }} {{ i + 1 }}
-                    </div>
-                  </v-btn>
-                </v-col>
-              </v-row>
-            </template>
-          </div>
+<!--          <v-divider class="my-6" />-->
 
-          <v-divider v-if="tenant.profile.settings.researchComponents.length" class="my-6" />
+<!--          <div v-for="(item, i) in tenant.profile.settings.researchComponents" :key="'research-component-' + i">-->
+<!--            <template v-if="item.isVisible && item.type === 'stepper'">-->
+<!--              <v-row justify="space-between" align="center" class="pb-6">-->
+<!--                <v-col>-->
+<!--                  <div class="text-subtitle-1">-->
+<!--                    Browse by {{ item.component.readinessLevelShortTitle }}-->
+<!--                  </div>-->
+<!--                </v-col>-->
+<!--                <v-col cols="auto">-->
+<!--                  <v-btn-->
+<!--                    small-->
+<!--                    color="primary"-->
+<!--                    outlined-->
+<!--                    :disabled="isAllStepsSelected[i]"-->
+<!--                    @click="resetStepper(item)"-->
+<!--                  >-->
+<!--                    Reset-->
+<!--                  </v-btn>-->
+<!--                </v-col>-->
+<!--              </v-row>-->
+<!--              <v-row>-->
 
-          <v-row class="pb-6" justify="space-between">
-            <v-col>
-              <span class="text-subtitle-1">Browse by organizations</span>
-            </v-col>
-            <v-col cols="auto">
-              <v-btn
-                small
-                color="primary"
-                outlined
-                :disabled="isAllOrganizationsSelected"
-                @click="selectAllOrganizations()"
-              >
-                Reset
-              </v-btn>
-            </v-col>
-          </v-row>
-          <v-row>
-            <div
-              v-for="organization of organizations"
-              :key="`organization-filter-${organization.id}`"
-            >
-              <v-tooltip bottom>
-                <template #activator="{ on }">
-                  <div
-                    :input-value="isOrganizationSelected(organization)"
-                    :class="{
-                      'organization-item ma-2 pa-1': true,
-                      'organization-item--selected': isOrganizationSelected(organization)
-                    }"
-                    v-on="on"
-                    @click="toggleOrganization(organization)"
-                  >
-                    <img
+<!--                <v-col v-for="(step, j) in item.component.readinessLevels" :key="`${item.component.readinessLevelShortTitle}-${j}`" cols="2" class="overflow-hidden">-->
+<!--                  <v-tooltip v-if="step.description || step.title" bottom>-->
+<!--                    <template #activator="{ on }">-->
+<!--                      <v-btn-->
+<!--                        text-->
+<!--                        block-->
+<!--                        small-->
+<!--                        color="primary"-->
+<!--                        :input-value="isStepSelected(item, j)"-->
+<!--                        v-on="on"-->
+<!--                        @click="toggleStep(item, j)"-->
+<!--                      >-->
+<!--                        <div class="full-width text&#45;&#45;center">-->
+<!--                          {{ item.component.readinessLevelShortTitle }} {{ j + 1 }}-->
+<!--                        </div>-->
+<!--                      </v-btn>-->
+<!--                    </template>-->
+<!--                    <span>{{ step.description || step.title }}</span>-->
+<!--                  </v-tooltip>-->
+<!--                  <v-btn-->
+<!--                    v-else-->
+<!--                    text-->
+<!--                    block-->
+<!--                    small-->
+<!--                    color="primary"-->
+<!--                    :input-value="isStepSelected(item, j)"-->
+<!--                    v-on="on"-->
+<!--                    @click="toggleStep(item, j)"-->
+<!--                  >-->
+<!--                    <div class="full-width text&#45;&#45;center">-->
+<!--                      {{ item.component.readinessLevelShortTitle }} {{ i + 1 }}-->
+<!--                    </div>-->
+<!--                  </v-btn>-->
+<!--                </v-col>-->
+<!--              </v-row>-->
+<!--            </template>-->
+<!--          </div>-->
 
-                      class="organization-item__img"
-                      :src="$options.filters.researchGroupLogoSrc(organization.external_id, 200, 200)"
-                    >
-                    <div class="organization-item__overlay" />
-                  </div>
-                </template>
-                <span>{{ organization.name }}</span>
-              </v-tooltip>
-            </div>
-          </v-row>
+<!--          <v-divider v-if="tenant.profile.settings.researchComponents.length" class="my-6" />-->
 
-          <v-row justify="space-between" align="center" class="pb-6">
-            <v-col>
-              <div class="text-subtitle-1">
-                Browse by category
-              </div>
-            </v-col>
-            <v-col cols="auto">
-              <v-btn
-                small
-                color="primary"
-                outlined
-                :disabled="isAllCategoriesSelected"
-                @click="selectAllCategories()"
-              >
-                Reset
-              </v-btn>
-            </v-col>
-          </v-row>
+<!--          <v-row class="pb-6" justify="space-between">-->
+<!--            <v-col>-->
+<!--              <span class="text-subtitle-1">Browse by organizations</span>-->
+<!--            </v-col>-->
+<!--            <v-col cols="auto">-->
+<!--              <v-btn-->
+<!--                small-->
+<!--                color="primary"-->
+<!--                outlined-->
+<!--                :disabled="isAllOrganizationsSelected"-->
+<!--                @click="selectAllOrganizations()"-->
+<!--              >-->
+<!--                Reset-->
+<!--              </v-btn>-->
+<!--            </v-col>-->
+<!--          </v-row>-->
+<!--          <v-row>-->
+<!--            <div-->
+<!--              v-for="organization of organizations"-->
+<!--              :key="`organization-filter-${organization.id}`"-->
+<!--            >-->
+<!--              <v-tooltip bottom>-->
+<!--                <template #activator="{ on }">-->
+<!--                  <div-->
+<!--                    :input-value="isOrganizationSelected(organization)"-->
+<!--                    :class="{-->
+<!--                      'organization-item ma-2 pa-1': true,-->
+<!--                      'organization-item&#45;&#45;selected': isOrganizationSelected(organization)-->
+<!--                    }"-->
+<!--                    v-on="on"-->
+<!--                    @click="toggleOrganization(organization)"-->
+<!--                  >-->
+<!--                    <img-->
 
-          <v-divider class="my-6" />
+<!--                      class="organization-item__img"-->
+<!--                      :src="$options.filters.researchGroupLogoSrc(organization.external_id, 200, 200)"-->
+<!--                    >-->
+<!--                    <div class="organization-item__overlay" />-->
+<!--                  </div>-->
+<!--                </template>-->
+<!--                <span>{{ organization.name }}</span>-->
+<!--              </v-tooltip>-->
+<!--            </div>-->
+<!--          </v-row>-->
 
-          <v-row>
-            <v-col v-for="(category) in tenant.profile.settings.researchCategories" :key="`${category._id}-category`" cols="2">
-              <v-tooltip bottom>
-                <template #activator="{ on }">
-                  <v-btn
-                    text
-                    block
-                    small
-                    color="primary"
-                    :input-value="isCategorySelected(category)"
-                    v-on="on"
-                    @click="toggleCategory(category)"
-                  >
-                    <div class="full-width text--left category-filter-btn">
-                      {{ category.text }}
-                    </div>
-                  </v-btn>
-                </template>
-                <span>{{ category.text }}</span>
-              </v-tooltip>
-            </v-col>
-          </v-row>
+<!--          <v-row justify="space-between" align="center" class="pb-6">-->
+<!--            <v-col>-->
+<!--              <div class="text-subtitle-1">-->
+<!--                Browse by category-->
+<!--              </div>-->
+<!--            </v-col>-->
+<!--            <v-col cols="auto">-->
+<!--              <v-btn-->
+<!--                small-->
+<!--                color="primary"-->
+<!--                outlined-->
+<!--                :disabled="isAllCategoriesSelected"-->
+<!--                @click="selectAllCategories()"-->
+<!--              >-->
+<!--                Reset-->
+<!--              </v-btn>-->
+<!--            </v-col>-->
+<!--          </v-row>-->
+
+<!--          <v-divider class="my-6" />-->
+
+<!--          <v-row>-->
+<!--            <v-col v-for="(category) in tenant.profile.settings.researchCategories" :key="`${category._id}-category`" cols="2">-->
+<!--              <v-tooltip bottom>-->
+<!--                <template #activator="{ on }">-->
+<!--                  <v-btn-->
+<!--                    text-->
+<!--                    block-->
+<!--                    small-->
+<!--                    color="primary"-->
+<!--                    :input-value="isCategorySelected(category)"-->
+<!--                    v-on="on"-->
+<!--                    @click="toggleCategory(category)"-->
+<!--                  >-->
+<!--                    <div class="full-width text&#45;&#45;left category-filter-btn">-->
+<!--                      {{ category.text }}-->
+<!--                    </div>-->
+<!--                  </v-btn>-->
+<!--                </template>-->
+<!--                <span>{{ category.text }}</span>-->
+<!--              </v-tooltip>-->
+<!--            </v-col>-->
+<!--          </v-row>-->
 
           <!-- <v-divider class="my-6" /> -->
 
@@ -322,55 +324,15 @@
     <!-- END TODO: refactoring -->
 
     <layout-section>
-      <content-block>
-        <template #title>
-          <div ref="projectsView">
-            Projects
-            <v-badge offset-y="-8" offset-x="4" :content="researchFeed.length || '0'" />
-          </div>
-        </template>
 
-        <v-data-iterator
-          :items="researchFeed"
-          :footer-props="footerProps"
-          :options.sync="pagination"
-          no-data-text="No Projects found for specified criteria"
-          row
-          wrap
-          @update:page="onPaginationUpdated"
-        >
-          <template v-slot:default="{items}">
-            <v-row class="ma-n3">
-              <v-col
-                v-for="item in items"
-                :key="'feed-item-' + item.external_id"
-                cols="12"
-                sm="6"
-                md="4"
-                xl="3"
-              >
-                <v-sheet class="full-height">
-                  <research-project-tile
-                    :research="item"
-                    :members="item.authors"
-                    :token-sale="item.tokenSale"
-                    :token-sale-contributions="item.tokenSaleContributions"
-                    :group="item.research_group"
-                  />
-                </v-sheet>
-              </v-col>
-            </v-row>
-          </template>
-        </v-data-iterator>
-      </content-block>
+      <research-list :items="researchFeed" namespace="feed" />
+
     </layout-section>
   </app-layout>
 </template>
 
 <script>
-  import deipRpc from '@deip/rpc-client';
   import { mapGetters } from 'vuex';
-  import moment from 'moment';
 
   import { AccessService } from '@deip/access-service';
 
@@ -378,18 +340,18 @@
   import trlData from '@/components/common/trl.json';
 
   import LayoutHeader from '@/components/layout/components/LayoutHeader';
-  import ContentBlock from '@/components/layout/components/ContentBlock';
   import AppLayout from '@/components/layout/components/Layout';
   import LayoutSection from '@/components/layout/components/LayoutSection';
+  import ResearchList from '@/components/ResearchList/ResearchList';
 
   const accessService = AccessService.getInstance();
 
   export default {
     name: 'ResearchFeed',
     components: {
+      ResearchList,
       LayoutSection,
       AppLayout,
-      ContentBlock,
       LayoutHeader
     },
     data() {

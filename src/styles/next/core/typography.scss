@@ -1,0 +1,120 @@
+@use 'sass:map';
+@use '../tools/text';
+
+$styles: (
+  h1: (
+    xs: (
+      font-size: text.round-fz(xs, 5),
+      font-weight: 900,
+      line-height: text.round-lh(text.round-fz(xs, 5), 1.1),
+    ),
+    md: (
+      font-size: text.round-fz(md, 5),
+      line-height: text.round-lh(text.round-fz(md, 5), 1.1),
+    ),
+    lg: (
+      font-size: text.round-fz(lg, 5),
+      line-height: text.round-lh(text.round-fz(lg, 5), 1.1),
+    )
+  ),
+  h2: (
+    xs: (
+      font-size: text.round-fz(xs, 4),
+      font-weight: 700,
+      line-height: text.round-lh(text.round-fz(xs, 4), 1.2),
+    ),
+    md: (
+      font-size: text.round-fz(md, 4),
+      line-height: text.round-lh(text.round-fz(md, 4), 1.2),
+    ),
+    lg: (
+      font-size: text.round-fz(lg, 4),
+      line-height: text.round-lh(text.round-fz(lg, 4), 1.2),
+    )
+  ),
+  h3: (
+    xs: (
+      font-size: text.round-fz(xs, 3),
+      font-weight: 700,
+      line-height: text.round-lh(text.round-fz(xs, 3), 1.2),
+    ),
+    md: (
+      font-size: text.round-fz(md, 3),
+      line-height: text.round-lh(text.round-fz(md, 3), 1.2),
+    ),
+    lg: (
+      font-size: text.round-fz(lg, 3),
+      line-height: text.round-lh(text.round-fz(lg, 3), 1.2),
+    )
+  ),
+  h4: (
+    xs: (
+      font-size: text.round-fz(xs, 2),
+      font-weight: 500,
+      line-height: text.round-lh(text.round-fz(xs, 2), 1.2),
+    ),
+    md: (
+      font-size: text.round-fz(md, 2),
+      line-height: text.round-lh(text.round-fz(md, 2), 1.2),
+    ),
+    lg: (
+      font-size: text.round-fz(lg, 2),
+      line-height: text.round-lh(text.round-fz(lg, 2), 1.2),
+    )
+  ),
+  h5: (
+    xs: (
+      font-size: text.round-fz(xs, 1),
+      font-weight: 500,
+      line-height: text.round-lh(text.round-fz(xs, 1), 1.2),
+    ),
+    md: (
+      font-size: text.round-fz(md, 1),
+      line-height: text.round-lh(text.round-fz(md, 1), 1.2),
+    ),
+    lg: (
+      font-size: text.round-fz(lg, 1),
+      line-height: text.round-lh(text.round-fz(lg, 1), 1.2),
+    )
+  ),
+  h6: (
+    xs: (
+      font-size: 1rem,
+      font-weight: 500,
+      line-height: 1.5rem,
+    ),
+  ),
+  body-1: (
+    xs: (
+      font-size: 1rem,
+      line-height: 1.5rem,
+    )
+  ),
+  body-2: (
+    xs: (
+      font-size: .875rem,
+      line-height: 1.25rem,
+    )
+  ),
+  button: (
+    xs: (
+      font-size: 1rem,
+      font-weight: 500,
+      line-height: 1.5rem,
+    )
+  ),
+  caption: (
+    xs: (
+      font-size: .75rem,
+      font-weight: 400,
+      line-height: 1rem,
+    )
+  ),
+  overline: (
+    xs: (
+      font-size: .625rem,
+      font-weight: 500,
+      line-height: 1rem,
+    )
+  ),
+);

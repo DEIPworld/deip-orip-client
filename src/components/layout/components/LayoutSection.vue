@@ -25,7 +25,7 @@
       }
     },
     computed: {
-      _sidebarCols() {return { ...{ cols: 12, md: 3 }, ...this.sidebarCols }; }
+      _sidebarCols() { return { ...{ cols: 12, md: 3 }, ...this.sidebarCols }; }
     }
   };
 </script>

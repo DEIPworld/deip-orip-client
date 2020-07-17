@@ -1,4 +1,3 @@
-import where from 'filter-where';
 import { ExpertiseContributionsService } from '@deip/expertise-contributions-service';
 import { EXPERTISE_CONTRIBUTION_TYPE, ECI_STAT_PERIOD_STEP_TYPE } from '@/variables';
 import { ResearchService } from '@deip/research-service';

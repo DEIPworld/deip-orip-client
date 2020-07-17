@@ -56,12 +56,35 @@
   min-width: 0;
 }
 
+.row {
+  margin-top: -12px;
+  margin-bottom: -12px;
+
+  &.no-gutters {
+    margin-top: 0;
+    margin-bottom: 0;
+  }
+}
+
 // new way customise
 
 .v-data-table {
   &--hover-row {
     tbody tr:hover {
       cursor: pointer;
+    }
+  }
+}
+
+.v-btn.v-btn--icon.v-size--default {
+  width: 40px;
+  height: 40px;
+}
+
+.v-input--checkbox {
+  .v-label {
+    &.theme--light {
+      color: rgba(#000, .87); // temp
     }
   }
 }

@@ -1,0 +1,18 @@
+@use '~@sfem/breakpoint/lib/breakpoint' as * with (
+  $breakpoints: (
+    'sm': 600px,
+    'md': 960px,
+    'lg': 1280px - 16px,
+    'xl': 1920px - 16px
+  )
+);
+
+@mixin bp-map($key) {
+  @if $key == xs {
+    @content;
+  } @else {
+    @include bp($key) {
+      @content;
+    }
+  }
+}

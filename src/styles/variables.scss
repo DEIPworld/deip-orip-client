@@ -1,0 +1,86 @@
+@use 'sass:map';
+@use '~vuetify/src/styles/tools/functions' as *;
+@use 'next/core/typography';
+
+// button
+$btn-sizes: (
+  x-small: 24,
+  small: 36,
+  default: 48,
+  large: 56,
+  x-large: 64
+);
+$btn-text-transform: none;
+
+// fields
+
+$label-font-size: 14px;
+$label-line-height: 1.25rem;
+
+$toolbar-content-padding-x: 24px;
+$toolbar-title-padding: 12px;
+
+$list-item-dense-title-font-size: 0.875rem;
+$tabs-item-padding: 0 24px;
+
+$card-subtitle-padding: 1.5rem;
+
+$text-field-details-margin-bottom: 0;
+$input-slot-margin-bottom: 4px;
+//$text-field-details-min-height: 14px
+$messages-line-height: 14px;
+$textarea-line-height: 1.5rem;
+
+$text-field-filled-border-radius: 4px;
+
+$app-bar-elevation: 0;
+$toolbar-elevation: 0;
+
+
+// typography
+
+$headings: (
+  h1: (
+    size: map-deep-get(typography.$styles, h1, xs, font-size),
+    weight: map-deep-get(typography.$styles, h1, xs, font-weight),
+    line-height: map-deep-get(typography.$styles, h1, xs, line-height),
+  ),
+  h2: (
+    size: map-deep-get(typography.$styles, h2, xs, font-size),
+    weight: map-deep-get(typography.$styles, h2, xs, font-weight),
+    line-height: map-deep-get(typography.$styles, h2, xs, line-height),
+  ),
+  h3: (
+    size: map-deep-get(typography.$styles, h3, xs, font-size),
+    weight: map-deep-get(typography.$styles, h3, xs, font-weight),
+    line-height: map-deep-get(typography.$styles, h3, xs, line-height),
+  ),
+  h4: (
+    size: map-deep-get(typography.$styles, h4, xs, font-size),
+    weight: map-deep-get(typography.$styles, h4, xs, font-weight),
+    line-height: map-deep-get(typography.$styles, h4, xs, line-height),
+  ),
+  h5: (
+    size: map-deep-get(typography.$styles, h5, xs, font-size),
+    weight: map-deep-get(typography.$styles, h5, xs, font-weight),
+    line-height: map-deep-get(typography.$styles, h5, xs, line-height),
+  ),
+  h6: (
+    size: map-deep-get(typography.$styles, h6, xs, font-size),
+    weight: map-deep-get(typography.$styles, h6, xs, font-weight),
+    line-height: map-deep-get(typography.$styles, h6, xs, line-height),
+  ),
+  button: (
+    text-transform: false
+  ),
+  caption: (
+    size: map-deep-get(typography.$styles, caption, xs, font-size),
+    weight: map-deep-get(typography.$styles, caption, xs, font-weight),
+    line-height: map-deep-get(typography.$styles, caption, xs, line-height),
+  ),
+  overline: (
+    size: map-deep-get(typography.$styles, overline, xs, font-size),
+    weight: map-deep-get(typography.$styles, overline, xs, font-weight),
+    line-height: map-deep-get(typography.$styles, overline, xs, line-height),
+  )
+);
