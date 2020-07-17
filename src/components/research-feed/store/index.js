@@ -45,6 +45,8 @@ const getters = {
 
   filter: (state, getters) => state.filter,
 
+  fullResearchListing: (state) => state.fullResearchListing,
+
   researchFeed: (state, getters) => {
     const ordered = state.fullResearchListing
       .map((item) => {

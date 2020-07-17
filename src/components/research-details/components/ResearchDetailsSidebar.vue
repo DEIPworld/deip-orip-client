@@ -4,7 +4,7 @@
       <div class="text-h6">
         <router-link
           class="research-group-link"
-          :to="{ name: 'ResearchGroupDetails', params: { research_group_permlink: encodeURIComponent(groupLink) } }"
+          :to="routerLink"
         >
           {{ group.name }}
         </router-link>
@@ -468,6 +468,23 @@
         const eciRatio = eciSign * Math.min(+`${eciSum * eciSign}`.substring(0, 2), 50);
         const contentRatio = Math.min(this.contentList.length + 1, 50);
         return Math.max(eciRatio + contentRatio, 0);
+      },
+      routerLink() {
+        const route = {};
+
+        if (this.group.is_personal) {
+          if (this.user.username === this.research.members[0]) {
+            route.path = '/account';
+          } else {
+            route.name = 'UserDetails';
+            route.params = { account_name: this.research.members[0] };
+          }
+        } else {
+          route.name = 'ResearchGroupDetails';
+          route.params = { research_group_permlink: encodeURIComponent(this.groupLink) };
+        }
+        
+        return route;
       }
     },
     methods: {
