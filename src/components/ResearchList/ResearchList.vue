@@ -1,5 +1,6 @@
 <template>
   <d-block ref="projectsView">
+
     <template #title>
       Projects
       <v-badge offset-y="-8" offset-x="4" :content="items.length || '0'" />
@@ -7,7 +8,6 @@
 
     <template #titleRight>
       <d-toggle-view :storage-key="storageViewModelKey" />
-
       <d-filter v-model="filterModel" :storage-key="storagefilterModelKey">
         <template #default="{reset}">
           <research-list-filter-disciplines v-model="filterModel.disciplines" />
@@ -40,6 +40,7 @@
         </component>
       </template>
     </v-data-iterator>
+
   </d-block>
 </template>
 
@@ -48,14 +49,13 @@
 
   import DBlock from '@/components/Deipify/DBlock/DBlock';
   import DToggleView from '@/components/Deipify/DToggleView/DToggleView';
+  import DFilter from '@/components/Deipify/DFilter/DFilter';
 
   import ResearchListCard from '@/components/ResearchList/ResearchListItem/ResearchListCard';
   import ResearchListRow from '@/components/ResearchList/ResearchListItem/ResearchListRow';
   import ResearchListGrid from '@/components/ResearchList/ResearchListWrapper/ResearchListGrid';
   import ResearchListTable from '@/components/ResearchList/ResearchListWrapper/ResearchListTable';
-  import DFilter from '@/components/Deipify/DFilter/DFilter';
 
-  import DListExpand from '@/components/Deipify/DListExpand/DListExpand';
   import ResearchListFilterDisciplines
     from '@/components/ResearchList/ResearchListFilter/ResearchListFilterDisciplines';
   import ResearchListFilterCategories from '@/components/ResearchList/ResearchListFilter/ResearchListFilterCategories';
@@ -71,14 +71,15 @@
       ResearchListFilterComponents,
       ResearchListFilterCategories,
       ResearchListFilterDisciplines,
-      DListExpand,
-      DFilter,
+
       ResearchListTable,
       ResearchListGrid,
       ResearchListRow,
+      ResearchListCard,
+
       DToggleView,
       DBlock,
-      ResearchListCard
+      DFilter
     },
 
     props: {
