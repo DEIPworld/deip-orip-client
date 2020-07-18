@@ -19,13 +19,15 @@ const state = {
   criteriaTypes,
   disciplinesExpertiseStats: [],
   disciplinesExpertiseStatsHistory: [],
-  eciHistoryByDiscipline: []
+  eciHistoryByDiscipline: [],
+  disciplinesGrowthRate: []
 };
 
 const getters = {
   criteriaTypes: () => state.criteriaTypes,
   disciplinesExpertiseStats: () => state.disciplinesExpertiseStats,
   disciplinesExpertiseStatsHistory: () => state.disciplinesExpertiseStatsHistory,
+  disciplinesGrowthRate: () => state.disciplinesGrowthRate,
 
   eciHistoryByDiscipline: (state, getters) => { // temp
     const records = state.eciHistoryByDiscipline;
@@ -128,6 +130,13 @@ const actions = {
       });
   },
 
+  getDisciplinesGrowthRate(context, payload = {}) {
+    return expertiseContributionsService.getDisciplinesExpertiseStatsHistory(payload)
+      .then((res) => {
+        context.commit('getDisciplinesGrowthRate', res);
+      });
+  },
+
   getEciHistoryByDiscipline(context, payload) {
     return expertiseContributionsService.getDisciplineExpertiseHistory(payload)
       .then((res) => {
@@ -146,6 +155,9 @@ const mutations = {
   },
   getEciHistoryByDiscipline(state, payload) {
     state.eciHistoryByDiscipline = payload;
+  },
+  getDisciplinesGrowthRate(state, payload) {
+    state.disciplinesGrowthRate = payload.map((a) => ({ external_id: a[0], history: a[1] }));
   }
 };
 

@@ -28,5 +28,6 @@ export {
   AWARD_WITHDRAWAL_REQUEST_STATUS,
   ASSESSMENT_CRITERIA_TYPE,
   maxTitleLength,
-  maxDescriptionLength
+  maxDescriptionLength,
+  ECI_STAT_PERIOD_STEP_TYPE
 };
