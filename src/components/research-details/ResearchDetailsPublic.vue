@@ -22,7 +22,7 @@
               color="primary"
               class="pa-2"
             >
-              Log In
+              Sign in
             </v-btn>
           </v-sheet>
 

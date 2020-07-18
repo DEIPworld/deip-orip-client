@@ -45,49 +45,49 @@
         <v-row>
           <v-col cols="3">
             <d-input-date
-              v-model="growthRateFromDate"
-              label="To"
+              v-model="growthRateDisciplinesFilter.from"
+              label="From"
               :x-props="{
-                'hide-details': true,
-                type: 'month',
-                max:moment(growthRateToDate).subtract(1, 'days').format('YYYY-MM-DD'),
+                max:moment(growthRateDisciplinesFilter.to).subtract(1, 'days').format('YYYY-MM-DD'),
                 min:moment('2018-01-01').format('YYYY-MM-DD'),
+                clearable:true
               }"
+              @input="updateGrowthRateChart"
             />
           </v-col>
           <v-col cols="3">
             <d-input-date
-              v-model="growthRateToDate"
+              v-model="growthRateDisciplinesFilter.to"
               label="To"
               :x-props="{
-                'hide-details': true,
-                type: 'month',
-                max:moment().format('YYYY-MM'),
-                min:moment(growthRateFromDate).add(1, 'days').format('YYYY-MM'),
+                max:moment().format('YYYY-MM-DD'),
+                min:moment(growthRateDisciplinesFilter.from).add(1, 'days').format('YYYY-MM-DD'),
+                clearable:true
               }"
+              @input="updateGrowthRateChart"
             />
           </v-col>
           <v-col cols="3">
             <v-select
-              v-model="growthRateDiscipline"
+              v-model="growthRateDisciplinesFilter.growthRateDiscipline"
               filled
               hide-details
               :items="[{label: 'All', external_id: 'all'}, ...disciplines]"
               item-text="label"
               item-value="external_id"
               label="Disciplines"
+              @input="updateGrowthRateChart"
             />
           </v-col>
         </v-row>
-        <v-col cols="10">
-          <GChart
-            ref="growthRateChart"
-            class="chart"
-            type="ColumnChart"
+        <v-col cols="12">
+          <d-chart-column
             :data="growthRateChartData"
-            :options="growthRateChartOptions"
-            :settings="{ packages: ['corechart'] }"
-            style="width: 100%; height: 232px;"
+            :options="{
+              vAxis: {format: '##%'},
+              hAxis: {showTextEvery: 2},
+              legend: {position: growthRateChartData[0][1] ? 'right' : 'none'}
+            }"
           />
         </v-col>
       </d-block>
@@ -125,7 +125,7 @@
       <d-block title="Expertise Contribution Index detailed overview">
         <v-row>
           <v-col cols="2">
-            <d-input-date 
+            <d-input-date
               v-model="eciDetailedOverviewFilter.fromDate"
               label="From"
               :x-props="{
@@ -136,9 +136,9 @@
             />
           </v-col>
           <v-col cols="2">
-            <d-input-date 
-              v-model="eciDetailedOverviewFilter.toDate" 
-              label="To" 
+            <d-input-date
+              v-model="eciDetailedOverviewFilter.toDate"
+              label="To"
               :x-props="{
                 max:moment().format('YYYY-MM-DD'),
                 min:moment(eciDetailedOverviewFilter.fromDate).add(1, 'days').format('YYYY-MM-DD'),
@@ -174,15 +174,16 @@
               item-value="external_id"
             />
           </v-col>
-          <v-col cols="1"> 
-            <v-btn @click="updateDetailedChart()" color="primary">Apply</v-btn>
+          <v-col cols="1">
+            <v-btn color="primary" @click="updateDetailedChart()">
+              Apply
+            </v-btn>
           </v-col>
         </v-row>
 
         <eci-history
           :data="eciHistoryByDiscipline"
         />
-
       </d-block>
     </layout-section>
   </app-layout>
@@ -195,14 +196,14 @@
   import { mapGetters } from 'vuex';
 
   import { getTopLevelNodes } from '@/components/common/disciplines/DisciplineTreeService';
-  import { EXPERTISE_CONTRIBUTION_TYPE, ASSESSMENT_CRITERIA_TYPE } from '@/variables';
+  import { EXPERTISE_CONTRIBUTION_TYPE, ASSESSMENT_CRITERIA_TYPE, ECI_STAT_PERIOD_STEP_TYPE } from '@/variables';
 
   import DBlock from '@/components/Deipify/DBlock/DBlock';
   import DInputDate from '@/components/Deipify/DInput/DInputDate';
   import DChartPie from '@/components/Deipify/DChart/DChartPie';
   import DChartArea from '@/components/Deipify/DChart/DChartArea';
+  import DChartColumn from '@/components/Deipify/DChart/DChartColumn';
 
-  import fakeData from './fakeGrowthRateData.json';
   import EciHistory from '@/components/EciHistory/EciHistory';
   import { mapSelectListFromEnum } from '@/utils/mapSelectListFromEnum';
 
@@ -215,6 +216,7 @@
       DBlock,
       DChartArea,
       DChartPie,
+      DChartColumn,
       DInputDate,
       LayoutSection,
       AppLayout
@@ -229,11 +231,12 @@
           criteria: ''
         },
 
-        growthRateFromDate: this.moment()
-          .subtract(7, 'days')
-          .format('YYYY-MM'),
-        growthRateToDate: this.moment().format('YYYY-MM'),
-        growthRateDiscipline: 'all',
+        growthRateDisciplinesFilter: {
+          from: undefined,
+          to: undefined,
+          step: ECI_STAT_PERIOD_STEP_TYPE.UNKNOWN,
+          growthRateDiscipline: 'all'
+        },
         distributionDiscipline: 'all',
 
         criterias: mapSelectListFromEnum(ASSESSMENT_CRITERIA_TYPE, {
@@ -246,43 +249,8 @@
           blackList: [ASSESSMENT_CRITERIA_TYPE.UNKNOWN],
           allowBlank: true,
           blankLabel: 'All'
-        }),
+        })
       };
-    },
-    methods: {
-      goToParticipants(e) {
-        this.$router.push({
-          name: 'participants',
-          query: {
-            discipline: this.disciplinesExpertiseStats[e[0].row]
-              .discipline_external_id
-          }
-        });
-      },
-
-      updateDetailedChart() {
-        const discipline = this.eciDetailedOverviewFilter.discipline;
-        const fromDate = this.eciDetailedOverviewFilter.fromDate ? this.moment(this.eciDetailedOverviewFilter.fromDate)
-          .startOf('day')
-          .toISOString(true)
-          .split('.')[0] : '';
-        const toDate = this.eciDetailedOverviewFilter.toDate ? this.moment(this.eciDetailedOverviewFilter.toDate)
-          .endOf('day')
-          .toISOString(true)
-          .split('.')[0] : '';
-        const contribution = this.eciDetailedOverviewFilter.contribution;
-        const criteria = this.eciDetailedOverviewFilter.criteria;
-   
-        const filter = {
-          discipline: discipline,
-          from: fromDate,
-          to: toDate,
-          contribution: contribution,
-          criteria: criteria
-        };
-
-        this.$store.dispatch('overview/getEciHistoryByDiscipline', filter);
-      }
     },
 
     computed: {
@@ -290,6 +258,7 @@
         disciplinesExpertiseStats: 'overview/disciplinesExpertiseStats',
         disciplinesExpertiseStatsHistory: 'overview/disciplinesExpertiseStatsHistory',
         eciHistoryByDiscipline: 'overview/eciHistoryByDiscipline',
+        disciplinesGrowthRate: 'overview/disciplinesGrowthRate',
         criteriaTypes: 'overview/criteriaTypes'
       }),
 
@@ -301,60 +270,47 @@
       },
 
       growthRateChartData() {
-        let dataTable = [];
-        if (this.growthRateDiscipline === 'all') {
-          dataTable = fakeData;
+        const dataTable = [];
+        if (this.growthRateDisciplinesFilter.growthRateDiscipline === 'all') {
+          this.disciplinesGrowthRate.forEach((item, i) => {
+            item.history.forEach((h, j) => {
+              if (i === 0) {
+                dataTable[j] = [this.moment(h.timestamp).format('DD MMM YY')];
+              }
+              dataTable[j].push({
+                v: h.growth_rate ? parseFloat(h.growth_rate) / 100 : 0.00, f: h.growth_rate ? h.growth_rate : '0.00 %'
+              });
+            });
+          });
         } else {
-          fakeData.forEach((item) =>
-            dataTable.push([
-              item[0],
-              item.find((val) => val.discipline === this.growthRateDiscipline)
-            ])
-          );
+          this.disciplinesGrowthRate.forEach((item) => {
+            if (item.external_id === this.growthRateDisciplinesFilter.growthRateDiscipline) {
+              item.history.forEach((h) => {
+                if (h.growth_rate) {
+                  dataTable.push([
+                    this.moment(h.timestamp).format('DD MMM YY'),
+                    { v: h.growth_rate ? parseFloat(h.growth_rate) / 100 : 0.00, f: h.growth_rate ? h.growth_rate : '0.00 %' }
+                  ]);
+                }
+              });
+            }
+          });
         }
+        if (!dataTable.length) {
+          return [['Date', ''], ['', 0]];
+        }
+
         return [
           [
-            'Month',
+            'Date',
             ...this.disciplines
-              .filter((item) =>
-                this.growthRateDiscipline === 'all'
-                  ? true
-                  : item.external_id === this.growthRateDiscipline
-              )
+              .filter((item) => (this.growthRateDisciplinesFilter.growthRateDiscipline === 'all'
+                ? true
+                : item.external_id === this.growthRateDisciplinesFilter.growthRateDiscipline))
               .map((item) => item.label)
           ],
-          ...dataTable.filter((item, i) => {
-            return (
-              this.moment(item[0].v)
-                .isSameOrBefore(this.growthRateToDate) &&
-              this.moment(item[0].v)
-                .isSameOrAfter(this.growthRateFromDate)
-            );
-          })
+          ...dataTable
         ];
-      },
-      growthRateChartOptions() {
-        return {
-          fontSize: 12,
-          fontName: 'Roboto',
-          chart: {
-            title: 'Company Performance',
-            subtitle: 'Sales, Expenses, and Profit: 2014-2017'
-          },
-          chartArea: {
-            width: '85%',
-            height: '80%',
-            left: 24
-          },
-          vAxis: {
-            format: 'percent'
-          },
-          series: chartGradient(this.growthRateChartData[0].length - 1).map(
-            (color) => ({
-              color
-            })
-          )
-        };
       },
 
       distributionChartData() {
@@ -371,8 +327,7 @@
         } else {
           dataTable = this.disciplinesExpertiseStats
             .find(
-              (item) =>
-                item.discipline_external_id === this.distributionDiscipline
+              (item) => item.discipline_external_id === this.distributionDiscipline
             )
             .assessment_criterias.map((item) => [
               this.criteriaTypes[item[0]],
@@ -401,11 +356,10 @@
         const stamps = {};
         for (const discipline of this.disciplinesExpertiseStatsHistory) {
           for (const change of discipline.history) {
-
             const date = change.timestamp;
             const data = {
               v: parseFloat(change.percentage) / 100,
-              f: parseFloat(change.percentage) + '%'
+              f: `${parseFloat(change.percentage)}%`
             };
 
             if (!stamps[date]) {
@@ -471,15 +425,65 @@
     },
 
     created() {
-
       Promise.all([
         this.$store.dispatch('overview/getDisciplinesExpertiseLastStats'),
         this.$store.dispatch('overview/getDisciplinesExpertiseStatsHistory'),
+        this.updateGrowthRateChart(),
         this.$store.dispatch('overview/getEciHistoryByDiscipline', this.eciDetailedOverviewFilter)
       ])
         .then(() => {
           this.$setReady();
         });
+    },
+
+    methods: {
+      goToParticipants(e) {
+        this.$router.push({
+          name: 'participants',
+          query: {
+            discipline: this.disciplinesExpertiseStats[e[0].row]
+              .discipline_external_id
+          }
+        });
+      },
+
+      updateGrowthRateChart() {
+        const from = this.growthRateDisciplinesFilter.from ? this.moment(this.growthRateDisciplinesFilter.from)
+          .startOf('day')
+          .toISOString(true)
+          .split('.')[0] : '';
+        const to = this.growthRateDisciplinesFilter.to ? this.moment(this.growthRateDisciplinesFilter.to)
+          .startOf('day')
+          .toISOString(true)
+          .split('.')[0] : '';
+        const { step } = this.growthRateDisciplinesFilter;
+
+        return this.$store.dispatch('overview/getDisciplinesGrowthRate', { from, to, step });
+      },
+
+      updateDetailedChart() {
+        const { discipline } = this.eciDetailedOverviewFilter;
+        const fromDate = this.eciDetailedOverviewFilter.fromDate ? this.moment(this.eciDetailedOverviewFilter.fromDate)
+          .startOf('day')
+          .toISOString(true)
+          .split('.')[0] : '';
+        const toDate = this.eciDetailedOverviewFilter.toDate ? this.moment(this.eciDetailedOverviewFilter.toDate)
+          .endOf('day')
+          .toISOString(true)
+          .split('.')[0] : '';
+        const { contribution } = this.eciDetailedOverviewFilter;
+        const { criteria } = this.eciDetailedOverviewFilter;
+
+        const filter = {
+          discipline,
+          from: fromDate,
+          to: toDate,
+          contribution,
+          criteria
+        };
+
+        this.$store.dispatch('overview/getEciHistoryByDiscipline', filter);
+      }
     }
   };
 </script>

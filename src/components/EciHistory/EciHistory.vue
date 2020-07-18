@@ -154,7 +154,9 @@
       },
 
       tableData() {
-        return [...this.data].reverse();
+        return [...this.data.map((r, i) => {
+          return { ...r, id: `${i}-${r.discipline_external_id}` };
+        })].reverse();
       }
     }
   };

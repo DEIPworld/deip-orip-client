@@ -36,5 +36,6 @@ export {
   ASSESSMENT_CRITERIA_TYPE,
   maxTitleLength,
   maxDescriptionLength,
-  VIEW_TYPES
+  VIEW_TYPES,
+  ECI_STAT_PERIOD_STEP_TYPE
 };

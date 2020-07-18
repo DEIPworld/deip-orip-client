@@ -17,7 +17,7 @@
 
         <template v-else>
           <v-btn :to="{ name: 'SignIn' }" color="primary" class="ma-0 px-12">
-            Log In
+            Sign in
           </v-btn>
           <div class="white--text text-body-1 mt-2">
             After creating an account/log in you can add
