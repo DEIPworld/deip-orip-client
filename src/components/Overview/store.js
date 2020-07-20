@@ -2,6 +2,7 @@ import where from 'filter-where';
 import { ExpertiseContributionsService } from '@deip/expertise-contributions-service';
 import { EXPERTISE_CONTRIBUTION_TYPE, ECI_STAT_PERIOD_STEP_TYPE } from '@/variables';
 import { ResearchService } from '@deip/research-service';
+import { getTopLevelNodes } from '@/components/common/disciplines/DisciplineTreeService';
 
 const expertiseContributionsService = ExpertiseContributionsService.getInstance();
 const researchService = ResearchService.getInstance();
@@ -27,7 +28,7 @@ const getters = {
   criteriaTypes: () => state.criteriaTypes,
   disciplinesExpertiseStats: () => state.disciplinesExpertiseStats,
   disciplinesExpertiseStatsHistory: () => state.disciplinesExpertiseStatsHistory,
-  disciplinesGrowthRate: () => state.disciplinesGrowthRate,
+  disciplinesGrowthRate: () => getTopLevelNodes().map(({ id }) => state.disciplinesGrowthRate.find(({ external_id }) => id === external_id)),
 
   eciHistoryByDiscipline: (state, getters) => { // temp
     const records = state.eciHistoryByDiscipline;
