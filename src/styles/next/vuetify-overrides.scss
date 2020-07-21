@@ -88,3 +88,19 @@
     }
   }
 }
+
+.v-toolbar {
+  &--header {
+    .v-toolbar__content {
+      min-height: 300px;
+      padding: 48px;
+      flex-direction: column;
+      justify-content: flex-end;
+      align-items: flex-start;
+    };
+
+    .v-toolbar__extension {
+      padding: 0 48px;
+    }
+  }
+}

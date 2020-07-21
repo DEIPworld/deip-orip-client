@@ -1,7 +1,7 @@
 <template>
   <div>
     <div v-if="!noFollow" class="d-inline-block">
-      <router-link :to="{ name: 'UserDetails', params: { account_name: user.account.name } }">
+      <router-link :to="userDetailsRoute">
         <v-tooltip bottom>
           <template v-slot:activator="{ on }">
             <v-avatar :size="size + 'px'" v-on="on">
@@ -34,7 +34,7 @@
     </div>
     <div v-if="linkToProfile" class="d-inline-block">
       <router-link
-        :to="{ name: 'UserDetails', params: { account_name: user.account.name } }"
+        :to="userDetailsRoute"
         class="a"
         :class="linkToProfileClass"
       >
@@ -50,6 +50,7 @@
 
 <script>
   import moment from 'moment';
+  import { mapGetters } from 'vuex';
 
   export default {
     name: 'PlatformAvatar',
@@ -71,7 +72,19 @@
       return {};
     },
 
-    watch: {},
+    computed: {
+      ...mapGetters({
+        currentUser: 'auth/user'
+      }),
+
+      userDetailsRoute() {
+        console.log(this.currentUser.account.name === this.user.account.name)
+        return this.currentUser.account.name === this.user.account.name
+          ? { name: 'account.summary' }
+          : { name: 'UserDetails', params: { account_name: this.user.account.name } };
+      }
+    },
+
     methods: {
       selectUser(user) {
         if (!this.pickDisabled) {

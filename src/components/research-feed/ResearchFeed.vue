@@ -1,7 +1,8 @@
 <template>
   <app-layout>
+
     <layout-header :background="$options.filters.tenantBackgroundSrc(tenant.account)">
-      <div class="text-h3 uppercase half-bold">
+      <div class="text-h3 uppercase">
         Projects
       </div>
 
