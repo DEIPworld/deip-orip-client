@@ -25,24 +25,12 @@
             </v-btn>
           </div>
 
-          <v-row v-if="myResearches.length" class="ma-n3">
-            <v-col
-              v-for="({research, authors, tokenSale, tokenSaleContributions, group }, i) in myResearches"
-              :key="'research-tile-' + research.id"
-              cols="12"
-              sm="6"
-              md="4"
-            >
-              <research-project-tile
-                row
-                :research="research"
-                :members="authors"
-                :token-sale="tokenSale"
-                :token-sale-contributions="tokenSaleContributions"
-                :group="group"
-              />
-            </v-col>
-          </v-row>
+          <research-list
+            v-if="myResearches.length"
+            namespace="dashboard"
+            :items="myResearches"
+            no-filter
+          />
 
           <v-row v-else justify="center">
             <v-col cols="auto" class="text-center">
@@ -66,24 +54,12 @@
         </v-tab-item>
 
         <v-tab-item key="following-projects">
-          <v-row v-if="followingResearches.length" class="ma-n3">
-            <v-col
-              v-for="({research, authors, tokenSale, tokenSaleContributions, group }) in followingResearches"
-              :key="'research-tile-' + research.id"
-              cols="12"
-              sm="6"
-              md="4"
-            >
-              <research-project-tile
-                row
-                :research="research"
-                :members="authors"
-                :token-sale="tokenSale"
-                :token-sale-contributions="tokenSaleContributions"
-                :group="group"
-              />
-            </v-col>
-          </v-row>
+          <research-list
+            v-if="followingResearches.length"
+            namespace="dashboard"
+            :items="followingResearches"
+            no-filter
+          />
 
           <v-row v-else justify="center">
             <v-col cols="auto" class="text-center">
@@ -117,10 +93,11 @@
   import AppLayout from '@/components/layout/components/Layout';
   import LayoutToolbar from '@/components/layout/components/LayoutToolbar';
   import LayoutSection from '@/components/layout/components/LayoutSection';
+  import ResearchList from '@/components/ResearchList/ResearchList';
 
   export default {
     name: 'Dashboard',
-    components: { LayoutSection, LayoutToolbar, AppLayout },
+    components: { ResearchList, LayoutSection, LayoutToolbar, AppLayout },
     data() {
       return {
         activeTab: null
@@ -137,14 +114,14 @@
 
       myResearches() {
         return this.researches.reduce(
-          (arr, research) => (research.research.is_following === false ? [...arr, research] : arr),
+          (arr, research) => (research.research.is_following === false ? [...arr, research.research] : arr),
           []
         );
       },
 
       followingResearches() {
         return this.researches.reduce(
-          (arr, research) => (research.research.is_following === true ? [...arr, research] : arr),
+          (arr, research) => (research.research.is_following === true ? [...arr, research.research] : arr),
           []
         );
       }

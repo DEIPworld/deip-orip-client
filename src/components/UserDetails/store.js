@@ -48,7 +48,8 @@ const getters = {
   researchList: (state, getters, rootState, rootGetters) => {
     return state.researchList.map((research) => {
       const group = state.groups.find(({ id }) => id === research.research_group_id);
-      return { research: { ...research }, group };
+      // return { research: { ...research }, group };
+      return { ...research };
     });
   },
 

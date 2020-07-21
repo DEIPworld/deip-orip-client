@@ -7,7 +7,9 @@
 
     <template #titleRight>
       <d-toggle-view :storage-key="storageViewModelKey" />
+
       <d-filter
+        v-if="!noFilter"
         v-model="filterModel"
         :storage-key="storagefilterModelKey"
         @applyFilter="applyFilter"
@@ -97,6 +99,10 @@
       namespace: {
         type: String,
         default: undefined
+      },
+      noFilter: {
+        type: Boolean,
+        default: false
       }
     },
 
@@ -141,6 +147,7 @@
       this.storagefilterModelKey = `${this.namespace}__filter`;
 
       this.$ls.on(this.storageViewModelKey, this.changeView, true);
+      this.itemsList = [...this.items];
     },
     destroyed() {
       this.$ls.off(this.storageViewModelKey, this.changeView);

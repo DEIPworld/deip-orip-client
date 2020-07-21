@@ -1,19 +1,17 @@
 <template>
   <layout-section v-if="$ready">
-    <state-research-list
-      :research-list="researchList"
-      :header-text="'Research projects'"
-    />
+    <research-list no-filter :items="researchList" namespace="account" />
   </layout-section>
 </template>
 
 <script>
   import { mapGetters } from 'vuex';
   import LayoutSection from '@/components/layout/components/LayoutSection';
+  import ResearchList from '@/components/ResearchList/ResearchList';
 
   export default {
     name: 'AccountProjects',
-    components: { LayoutSection },
+    components: { ResearchList, LayoutSection },
     computed: {
       ...mapGetters({
         researchList: 'userDetails/researchList'

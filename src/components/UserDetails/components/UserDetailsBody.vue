@@ -92,11 +92,8 @@
     <div class="user-research-groups-container spinner-container">
       <div>
         <!-- TODO: hotfix -->
-        <div class="pt-6" v-if="!$route.name.includes('account')">
-          <state-research-list
-            :research-list="researchList"
-            :header-text="'Research projects'"
-          />
+        <div v-if="!$route.name.includes('account')" class="pt-12">
+          <research-list :items="researchList" namespace="userDetails" no-filter />
         </div>
 
         <div v-if="commonGroups.length" class="pt-6">
@@ -319,6 +316,7 @@
 
   import { AccessService } from '@deip/access-service';
   import { UserService } from '@deip/user-service';
+  import ResearchList from '@/components/ResearchList/ResearchList';
 
   const accessService = AccessService.getInstance();
   const userService = UserService.getInstance();
@@ -327,6 +325,7 @@
     name: 'UserDetailsBody',
 
     components: {
+      ResearchList,
       vueDropzone
     },
     data() {

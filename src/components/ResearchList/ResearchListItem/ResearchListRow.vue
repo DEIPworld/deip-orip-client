@@ -11,7 +11,7 @@
       </v-avatar>
     </td>
 
-    <td width="40%" class="pl-3">
+    <td width="33%" class="pl-3">
       <research-list-title :title="research.title" compact />
     </td>
 
@@ -43,6 +43,10 @@
         v-if="research.tokenSale"
         :token-sale="research.tokenSale"
       />
+    </td>
+
+    <td width="0">
+      <research-list-status :status="research.is_finished ? 'finished' : null" />
     </td>
   </tr>
 </template>

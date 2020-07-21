@@ -44,183 +44,179 @@
     <!-- ### END Research Group Proposals Section ### -->
 
     <!-- ### START Research Group members Section ### -->
-    <div class="mt-12">
-      <div class="text-h6">
-        Group members: {{ members.length }}
-      </div>
-      <div class="pt-6">
-        <v-card>
-          <div class="info-card-list">
-            <v-row class="list-line align-center">
-              <v-col class="list-header-cell" :class="isGroupMembersActionsColumnAvailable ? 'xs3': 'xs4'">
-                Researcher
-              </v-col>
-              <v-col class="list-header-cell" cols="4">
-                Expertise
-              </v-col>
-              <v-col class="list-header-cell text-align-center" cols="2">
-                Member since
-              </v-col>
-              <v-col class="list-header-cell text-align-center" cols="2">
-                Location
-              </v-col>
-              <v-col v-if="isGroupMembersActionsColumnAvailable" class="list-header-cell text-align-center" cols="1">
-                Action
-              </v-col>
-            </v-row>
 
-            <v-divider />
+    <d-block :title="`Group members: ${members.length}`" class="mt-12">
+      <v-card>
+        <div class="info-card-list">
+          <v-row class="list-line align-center">
+            <v-col class="list-header-cell" :class="isGroupMembersActionsColumnAvailable ? 'xs3': 'xs4'">
+              Researcher
+            </v-col>
+            <v-col class="list-header-cell" cols="4">
+              Expertise
+            </v-col>
+            <v-col class="list-header-cell text-align-center" cols="2">
+              Member since
+            </v-col>
+            <v-col class="list-header-cell text-align-center" cols="2">
+              Location
+            </v-col>
+            <v-col v-if="isGroupMembersActionsColumnAvailable" class="list-header-cell text-align-center" cols="1">
+              Action
+            </v-col>
+          </v-row>
 
-            <template v-for="(member, i) in members">
-              <v-row :key="'member-' + i" class="list-line">
-                <v-col class="list-body-cell display-flex" :class="isGroupMembersActionsColumnAvailable ? 'xs3' : 'xs4'">
-                  <platform-avatar
-                    :user="member"
-                    :size="40"
-                  />
-                  <div class="pl-4">
-                    <router-link
-                      :to="
+          <v-divider />
+
+          <template v-for="(member, i) in members">
+            <v-row :key="'member-' + i" class="list-line">
+              <v-col class="list-body-cell display-flex" :class="isGroupMembersActionsColumnAvailable ? 'xs3' : 'xs4'">
+                <platform-avatar
+                  :user="member"
+                  :size="40"
+                />
+                <div class="pl-4">
+                  <router-link
+                    :to="
                         user.account.name === member.account.name
                           ? {name: 'account.summary'}
                           : { name: 'UserDetails', params: { account_name: member.account.name } }
                       "
-                      class="a text-subtitle-1"
-                    >
-                      {{ member | fullname }}
-                    </router-link>
+                    class="a text-subtitle-1"
+                  >
+                    {{ member | fullname }}
+                  </router-link>
 
-                    <div class="text-caption c-pt-1">
-                      {{ member | employmentOrEducation }}
-                    </div>
+                  <div class="text-caption c-pt-1">
+                    {{ member | employmentOrEducation }}
                   </div>
-                </v-col>
+                </div>
+              </v-col>
 
-                <v-col class="list-body-cell" cols="3">
-                  <div v-for="(item, i) in member.expertise" :key="i">
-                    <span class="uppercase bold">{{ item.discipline_name }}:</span> {{ item.amount }}
-                  </div>
-                </v-col>
+              <v-col class="list-body-cell" cols="3">
+                <div v-for="(item, i) in member.expertise" :key="i">
+                  <span class="uppercase bold">{{ item.discipline_name }}:</span> {{ item.amount }}
+                </div>
+              </v-col>
 
-                <v-col class="text-align-center list-body-cell" cols="2">
-                  {{ member.created | dateFormat('D MMM YYYY') }}
-                </v-col>
+              <v-col class="text-align-center list-body-cell" cols="2">
+                {{ member.created | dateFormat('D MMM YYYY') }}
+              </v-col>
 
-                <v-col class="text-align-center list-body-cell" cols="2">
-                  {{ member | userLocation }}
-                </v-col>
+              <v-col class="text-align-center list-body-cell" cols="2">
+                {{ member | userLocation }}
+              </v-col>
 
-                <v-col class="text-align-center list-body-cell" cols="1">
-                  <div v-if="isExcludingMemberAvailable(member.rgt.owner)">
-                    <v-btn
-                      text
-                      icon
-                      color="grey"
-                      class="ma-0"
-                      @click="showConfirmAction(member, i)"
-                    >
-                      <v-icon>mdi-close-circle-outline</v-icon>
-                    </v-btn>
-                  </div>
-                </v-col>
-              </v-row>
+              <v-col class="text-align-center list-body-cell" cols="1">
+                <div v-if="isExcludingMemberAvailable(member.rgt.owner)">
+                  <v-btn
+                    text
+                    icon
+                    color="grey"
+                    class="ma-0"
+                    @click="showConfirmAction(member, i)"
+                  >
+                    <v-icon>mdi-close-circle-outline</v-icon>
+                  </v-btn>
+                </div>
+              </v-col>
+            </v-row>
 
-              <v-divider :key="'member-divider-' + i" />
-            </template>
-          </div>
+            <v-divider :key="'member-divider-' + i" v-if="i + 1 < members.length" />
+          </template>
+        </div>
 
-          <confirm-action-dialog
-            :meta="dropoutMemberMeta"
-            :title="`You’re about to exclude`"
-            :text="`${dropoutMemberMeta.item ? `${dropoutMemberMeta.item.firstName} ${dropoutMemberMeta.item.lastName}` : ''} from ${group.name} Research Group`"
-            @confirmed="dropoutMember($event);"
-            @canceled="dropoutMemberMeta.isShown = false"
-          />
-
-          <div v-if="isResearchGroupMember && !group.is_personal" class="px-6 py-4">
-            <v-btn
-              outlined
-              icon
-              color="primary"
-              class="ma-0"
-              @click="$store.dispatch('researchGroup/changeOptions', { key: 'isAddMemberDialogOpen', value: true })"
-            >
-              <v-icon small>
-                add
-              </v-icon>
-            </v-btn>
-
-            <span class="pl-2">Invite researchers</span>
-          </div>
-
-          <div v-if="isResearchGroupMember && invites.length">
-            <v-divider />
-
-            <v-expansion-panels class="group-invites">
-              <v-expansion-panel>
-                <v-expansion-panel-header>
-                  <!-- <v-icon small color="primary">access_time</v-icon> -->
-                  <span class="">Pending invites ({{ invites.length }})</span>
-                </v-expansion-panel-header>
-                <v-expansion-panel-content>
-                  <div class="">
-                    <template v-for="(invite, i) in invites">
-                      <v-divider :key="'invite-divider-' + i" />
-
-                      <v-row
-                        :key="'invite-' + i"
-                        class="py-4 px-6"
-                        align="center"
-                      >
-                        <v-col class="display-flex" cols="4">
-                          <platform-avatar
-                            :user="invite.user"
-                            :size="40"
-                          />
-
-                          <div class="grow pl-4">
-                            <router-link
-                              :to="{
-                                name: 'UserDetails',
-                                params: { account_name: invite.user.account.name }
-                              }"
-                              class="a text-subtitle-1"
-                            >
-                              {{ invite.user | fullname }}
-                            </router-link>
-
-                            <div class="text-caption pt-1">
-                              {{ invite.user | employmentOrEducation }}
-                            </div>
-                          </div>
-                        </v-col>
-
-                        <v-col class="grow text-right">
-                          {{ invite.user | userLocation }}
-                        </v-col>
-                      </v-row>
-                    </template>
-                  </div>
-                </v-expansion-panel-content>
-              </v-expansion-panel>
-            </v-expansion-panels>
-          </div>
-        </v-card>
-
-        <add-member-to-group-dialog
-          v-if="group"
-          :is-open="options.isAddMemberDialogOpen"
-          :group-external-id="group.external_id"
-          :users="usersToInvite"
-          @onClose="$store.dispatch('researchGroup/changeOptions', { key: 'isAddMemberDialogOpen', value: false })"
-          @onSuccess="$store.dispatch('researchGroup/loadResearchGroupProposals', { account: group.external_id })"
+        <confirm-action-dialog
+          :meta="dropoutMemberMeta"
+          :title="`You’re about to exclude`"
+          :text="`${dropoutMemberMeta.item ? `${dropoutMemberMeta.item.firstName} ${dropoutMemberMeta.item.lastName}` : ''} from ${group.name} Research Group`"
+          @confirmed="dropoutMember($event);"
+          @canceled="dropoutMemberMeta.isShown = false"
         />
-      </div>
-    </div>
+
+        <div v-if="isResearchGroupMember && !group.is_personal" class="px-6 py-4">
+          <v-btn
+            outlined
+            icon
+            color="primary"
+            class="ma-0"
+            @click="$store.dispatch('researchGroup/changeOptions', { key: 'isAddMemberDialogOpen', value: true })"
+          >
+            <v-icon small>
+              add
+            </v-icon>
+          </v-btn>
+
+          <span class="pl-2">Invite researchers</span>
+        </div>
+
+        <div v-if="isResearchGroupMember && invites.length">
+          <v-divider />
+
+          <v-expansion-panels class="group-invites">
+            <v-expansion-panel>
+              <v-expansion-panel-header>
+                <!-- <v-icon small color="primary">access_time</v-icon> -->
+                <span class="">Pending invites ({{ invites.length }})</span>
+              </v-expansion-panel-header>
+              <v-expansion-panel-content>
+                <div class="">
+                  <template v-for="(invite, i) in invites">
+                    <v-divider :key="'invite-divider-' + i" />
+
+                    <v-row
+                      :key="'invite-' + i"
+                      class="py-4 px-6"
+                      align="center"
+                    >
+                      <v-col class="display-flex" cols="4">
+                        <platform-avatar
+                          :user="invite.user"
+                          :size="40"
+                        />
+
+                        <div class="grow pl-4">
+                          <router-link
+                            :to="{
+                              name: 'UserDetails',
+                              params: { account_name: invite.user.account.name }
+                            }"
+                            class="a text-subtitle-1"
+                          >
+                            {{ invite.user | fullname }}
+                          </router-link>
+
+                          <div class="text-caption pt-1">
+                            {{ invite.user | employmentOrEducation }}
+                          </div>
+                        </div>
+                      </v-col>
+
+                      <v-col class="grow text-right">
+                        {{ invite.user | userLocation }}
+                      </v-col>
+                    </v-row>
+                  </template>
+                </div>
+              </v-expansion-panel-content>
+            </v-expansion-panel>
+          </v-expansion-panels>
+        </div>
+      </v-card>
+
+      <add-member-to-group-dialog
+        v-if="group"
+        :is-open="options.isAddMemberDialogOpen"
+        :group-external-id="group.external_id"
+        :users="usersToInvite"
+        @onClose="$store.dispatch('researchGroup/changeOptions', { key: 'isAddMemberDialogOpen', value: false })"
+        @onSuccess="$store.dispatch('researchGroup/loadResearchGroupProposals', { account: group.external_id })"
+      />
+    </d-block>
     <!-- ### END Research Group members Section ### -->
 
     <!-- ### START Research Group Research List Section ### -->
-    <state-research-list class="mt-12" :research-list="researchWithGroupInfoList" />
+    <research-list no-filter namespace="groupDetails" :items="researchWithGroupInfoList" />
     <!-- ### END Research Group Research List Section ### -->
   </div>
 </template>
@@ -231,13 +227,18 @@
 
   import { ResearchGroupService } from '@deip/research-group-service';
   import { UsersService } from '@deip/users-service';
+  import ResearchList from '@/components/ResearchList/ResearchList';
+  import DBlock from '@/components/Deipify/DBlock/DBlock';
 
   const researchGroupService = ResearchGroupService.getInstance();
   const usersService = UsersService.getInstance();
 
   export default {
     name: 'ResearchGroupDetailsBody',
-
+    components: {
+      DBlock,
+      ResearchList
+    },
     props: {},
     data() {
       return {
@@ -279,10 +280,7 @@
         return !this.isPersonalGroup && this.isResearchGroupMember && (this.group.is_dao || (!this.group.is_dao && this.user.username == this.group.creator));
       },
       researchWithGroupInfoList() {
-        return this.researchList.map((research) => ({
-          research,
-          group: this.group
-        }));
+        return this.researchList.map((research) => research);
       }
     },
 
@@ -295,7 +293,7 @@
     created() {
       this.highlightProposalsSection = this.$route.hash === '#proposals';
       // TODO: request server for tenant users
-      deipRpc.api.lookupAccountsAsync("0", 10000)
+      deipRpc.api.lookupAccountsAsync('0', 10000)
         .then((accounts) => {
           const blackList = [
             'regacc', 'hermes', 'initdelegate',
@@ -325,11 +323,11 @@
           approver: null
         })
           .then(() => {
-            this.$notifier.showSuccess('Dropout Proposal has been created successfully!')
+            this.$notifier.showSuccess('Dropout Proposal has been created successfully!');
             this.$store.dispatch('researchGroup/loadResearchGroupProposals', { account: this.group.external_id });
           })
           .catch((err) => {
-            this.$notifier.showError('An error occurred while creating proposal, please try again later')
+            this.$notifier.showError('An error occurred while creating proposal, please try again later');
             console.error(err);
           })
           .finally(() => {

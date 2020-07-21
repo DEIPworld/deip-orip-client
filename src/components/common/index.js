@@ -2,7 +2,6 @@ import Vue from 'vue';
 
 // components
 
-import StateResearchList from './components/research/StateResearchList';
 
 import ConfirmActionDialog from './components/ConfirmActionDialog';
 
@@ -28,7 +27,6 @@ import ToggleText from './components/ToggleText';
 import MilestoneStepper from './components/research/milestone-stepper/MilestoneStepper';
 import Milestone from './components/research/milestone-stepper/Milestone';
 
-import ResearchProjectTile from './components/research/ResearchProjectTile';
 
 import TopResearchLabel from './components/research/TopResearchLabel';
 
@@ -43,7 +41,6 @@ import ResearchPartners from './components/research/research-partners/ResearchPa
 
 import './filters/index';
 
-Vue.component('state-research-list', StateResearchList);
 Vue.component('confirm-action-dialog', ConfirmActionDialog);
 Vue.component('datetime-picker', DatetimePicker);
 Vue.component('sidebar-loader', SidebarLoader);
@@ -56,7 +53,6 @@ Vue.component('user-autocomplete-picker', UserAutocompletePicker);
 Vue.component('toggle-text', ToggleText);
 Vue.component('milestone-stepper', MilestoneStepper);
 Vue.component('milestone', Milestone);
-Vue.component('research-project-tile', ResearchProjectTile);
 Vue.component('top-research-label', TopResearchLabel);
 Vue.component('review-tile', ReviewTile);
 Vue.component('review-assessment', ReviewAssessment);
