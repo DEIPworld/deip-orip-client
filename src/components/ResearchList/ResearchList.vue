@@ -146,9 +146,12 @@
       this.storageViewModelKey = `${this.namespace}__pl-type`;
       this.storagefilterModelKey = `${this.namespace}__filter`;
 
-      this.$ls.on(this.storageViewModelKey, this.changeView, true);
       this.itemsList = [...this.items];
+
+      this.$ls.on(this.storageViewModelKey, this.changeView, true);
+      // this.$ls.on(this.storagefilterModelKey, this.x, true);
     },
+
     destroyed() {
       this.$ls.off(this.storageViewModelKey, this.changeView);
     },
@@ -160,6 +163,10 @@
           behavior: 'smooth'
         }), 0);
       },
+
+      // x(val) {
+      //   console.log(val)
+      // },
 
       changeView(val) {
         this.viewModel = val;

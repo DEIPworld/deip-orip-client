@@ -78,7 +78,6 @@
       }),
 
       userDetailsRoute() {
-        console.log(this.currentUser.account.name === this.user.account.name)
         return this.currentUser.account.name === this.user.account.name
           ? { name: 'account.summary' }
           : { name: 'UserDetails', params: { account_name: this.user.account.name } };

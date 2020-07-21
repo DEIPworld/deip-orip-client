@@ -28,7 +28,7 @@ export const abstractResearchItem = {
     },
     itemRoute() {
       return {
-        name: this.$isUser ? 'ResearchDetails' : 'ResearchDetailsPublic',
+        name: this.$isLoggedIn ? 'ResearchDetails' : 'ResearchDetailsPublic',
         params: {
           research_group_permlink: encodeURIComponent(this.research.research_group.permlink),
           research_permlink: encodeURIComponent(this.research.permlink)

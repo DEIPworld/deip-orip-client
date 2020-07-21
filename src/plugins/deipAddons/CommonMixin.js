@@ -9,7 +9,7 @@ export const CommonMixin = {
     };
   },
   computed: {
-    $isUser() { return accessService.isLoggedIn(); },
+    $isLoggedIn() { return accessService.isLoggedIn(); },
     $ready() { return this.$data.$_dataReady; },
     $tenantSettings() { return this.$store.getters['auth/tenant'].profile.settings; }
   },

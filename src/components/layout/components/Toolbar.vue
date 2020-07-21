@@ -33,10 +33,10 @@
       </v-tabs>
 
 
-      <user-notifications-list v-if="$isUser" />
+      <user-notifications-list v-if="$isLoggedIn" />
 
       <v-menu
-        v-if="$isUser"
+        v-if="$isLoggedIn"
         bottom
         left
         offset-y
@@ -116,13 +116,13 @@
         tenant: 'auth/tenant',
         themeSettings: 'layout/themeSettings'
       }),
-      isLoggedIn() { return accessService.isLoggedIn(); }, // $isUser
+      isLoggedIn() { return accessService.isLoggedIn(); }, // $isLoggedIn
       isDefaultToolbar() {
         return !this.isGrantsTransparencyDemo;
       },
 
       mainMenu() {
-        if (this.$isUser && !this.isGrantsTransparencyDemo) {
+        if (this.$isLoggedIn && !this.isGrantsTransparencyDemo) {
           return [
             {
               label: 'Explore',
@@ -154,7 +154,7 @@
           ];
         }
 
-        if (this.$isUser && this.isGrantsTransparencyDemo) {
+        if (this.$isLoggedIn && this.isGrantsTransparencyDemo) {
           return [
             {
               label: 'Dashboard',

@@ -22,29 +22,10 @@ const state = {
   feedResearchTokenSales: [],
   feedResearchTokenSalesContributions: [],
 
-  filter: {
-    disciplines: [],
-    trl: [],
-    steppers: [],
-    organizations: [],
-    categories: [],
-    q: '',
-    orderBy: {
-      iteratee: ['title'],
-      order: ['asc']
-    },
-    topOnly: false,
-    dateFrom: null,
-    dateTo: null
-  }
-
 };
 
 // getters
 const getters = {
-
-  filter: (state, getters) => state.filter,
-
   fullResearchListing: (state) => state.fullResearchListing,
 
   researchFeed: (state, getters) => {
@@ -53,25 +34,6 @@ const getters = {
         const isTop = researchService.getTopResearchesIds().some((id) => id == item.id);
         return { ...item, isTop };
       })
-      // .filter((item) => !state.filter.topOnly || item.isTop)
-      // .filter((item) => !state.filter.q || item.title.toLowerCase().indexOf(state.filter.q.toLowerCase()) != -1)
-      // .filter((item) => !state.filter.disciplines.length || item.disciplines.some((discipline) => state.filter.disciplines.some((d) => d.id == discipline.external_id)))
-      // .filter((item) => !state.filter.organizations.length || state.filter.organizations.some((org) => item.research_group.external_id == org.external_id))
-      // .filter((item) =>
-      //   !state.filter.steppers.length || state.filter.steppers.every(({ steps }) => steps.length === 0) || state.filter.steppers.some((t) => {
-      //     if (item.researchRef){
-      //       const tenantCriteria = item.researchRef.tenantCriteriasReadingList.find(({ component }) => component === t._id);
-      //       if (tenantCriteria && tenantCriteria.value && tenantCriteria.value.index !== null) {
-      //         return t.steps.some((item) => item === tenantCriteria.value.index)
-      //       } else {
-      //         return false;
-      //       }
-      //     } else {
-      //       return false
-      //     }
-      //   })
-      // )
-      // .filter((item) => !state.filter.categories.length || state.filter.categories.some((cat) => item.researchRef.tenantCategory && item.researchRef.tenantCategory._id == cat._id))
       .map((item) => {
         const reviews = state.feedResearchReviews.filter((review) => review.research_id === item.id);
         const group = state.feedResearchGroups.find((group) => group.external_id === item.research_group.external_id);
@@ -101,13 +63,6 @@ const getters = {
   },
 
   organizations: (state) => state.feedResearchGroups.filter((g) => !g.is_personal),
-
-  allCollapsed: (state, getters) => state.fullResearchListing.reduce((acc, item) => acc && item.isCollapsed, true),
-
-  hasSelectedChildDiscipline: (state, getters) => (discipline) => state.filter.disciplines.find((d) => {
-    const parts = d.path.split('.');
-    return d.id != discipline.id && parts.some((p) => p == discipline.path);
-  }) !== undefined
 };
 
 // actions
@@ -166,20 +121,6 @@ const actions = {
         commit('SET_RESEARCH_FEED_TOKEN_SALES_CONTRIBUTIONS_LIST', [].concat.apply([], [].concat.apply([], tokenSalesContributions)));
       });
   },
-
-  toggleFeedItem({ commit, state, getters }, id) {
-    const item = state.fullResearchListing.find((item) => item.id == id);
-    commit('SET_FEED_ITEM_COLLAPSE_STATE', { item, collapsed: !item.isCollapsed });
-  },
-
-  toggleFeed({ commit, state, getters }) {
-    const collapsed = !getters.allCollapsed;
-    commit('SET_FEED_ITEMS_COLLAPSE_STATE', collapsed);
-  },
-
-  updateFilter({ commit, state, getters }, payload) {
-    commit('UPDATE_FILTER', { key: payload.key, value: payload.value });
-  }
 };
 
 // mutations
@@ -208,20 +149,6 @@ const mutations = {
   SET_RESEARCH_FEED_TOKEN_SALES_CONTRIBUTIONS_LIST(state, list) {
     state.feedResearchTokenSalesContributions = list;
   },
-
-  SET_FEED_ITEM_COLLAPSE_STATE(state, { item, collapsed }) {
-    item.isCollapsed = collapsed;
-  },
-
-  SET_FEED_ITEMS_COLLAPSE_STATE(state, collapsed) {
-    state.fullResearchListing.forEach((item) => {
-      item.isCollapsed = collapsed;
-    });
-  },
-
-  UPDATE_FILTER(state, { key, value }) {
-    state.filter[key] = value;
-  }
 };
 
 const namespaced = true;

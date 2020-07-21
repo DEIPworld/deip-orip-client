@@ -37,7 +37,6 @@
               </v-btn>
             </v-row>
           </v-sheet>
-<!--          <v-divider />-->
         </template>
 
         <v-sheet max-height="100%" class="d-flex flex-column">
@@ -65,8 +64,6 @@
             </slot>
           </div>
         </v-sheet>
-
-
       </v-navigation-drawer>
     </portal>
   </div>

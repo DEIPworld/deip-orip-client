@@ -3,7 +3,7 @@
     class="d-flex flex-column"
     outlined
     :to="{
-      name: $isUser ? 'ResearchDetails' : 'ResearchDetailsPublic',
+      name: $isLoggedIn ? 'ResearchDetails' : 'ResearchDetailsPublic',
       params: {
         research_group_permlink: encodeURIComponent(research.research_group.permlink),
         research_permlink: encodeURIComponent(research.permlink)
