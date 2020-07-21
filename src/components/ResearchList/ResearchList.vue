@@ -1,28 +1,28 @@
 <template>
   <d-block ref="projectsView">
-
     <template #title>
       Projects
-      <v-badge offset-y="-8" offset-x="4" :content="items.length || '0'" />
+      <v-badge offset-y="-8" offset-x="4" :content="itemsList.length || '0'" />
     </template>
 
     <template #titleRight>
       <d-toggle-view :storage-key="storageViewModelKey" />
-      <d-filter v-model="filterModel" :storage-key="storagefilterModelKey">
-        <template #default="{reset}">
+      <d-filter
+        v-model="filterModel"
+        :storage-key="storagefilterModelKey"
+        @applyFilter="applyFilter"
+        @resetFilter="resetFilter"
+      >
+        <template>
           <research-list-filter-disciplines v-model="filterModel.disciplines" />
-          <v-divider class="my-6" />
           <research-list-filter-categories v-model="filterModel.categories" />
-          <v-divider class="my-6" />
           <research-list-filter-components v-model="filterModel.researchComponents" />
-          <v-divider class="my-6" />
           <research-list-filter-organizations v-model="filterModel.organizations" />
         </template>
       </d-filter>
     </template>
-
     <v-data-iterator
-      :items="_items"
+      :items="itemsList"
       no-data-text="No Projects found for specified criteria"
       :hide-default-footer="iteratorProps.hideDefaultFooter"
       :footer-props="iteratorProps.footerProps"
@@ -63,6 +63,13 @@
   import ResearchListFilterOrganizations
     from '@/components/ResearchList/ResearchListFilter/ResearchListFilterOrganizations';
 
+  const defaultFilterModel = () => ({
+    disciplines: [],
+    organizations: [],
+    researchComponents: [],
+    categories: []
+  });
+
   export default {
     name: 'ResearchList',
 
@@ -99,51 +106,14 @@
         storagefilterModelKey: undefined,
 
         viewModel: undefined,
-        filterModel: {
-          disciplines: [],
-          organizations: [],
-          researchComponents: [],
-          categories: []
-        }
+        filterModel: defaultFilterModel(),
+
+        itemsList: []
 
       };
     },
 
     computed: {
-
-      _items() {
-        const filter = {
-          ...(this.filterModel.disciplines.length ? {
-            disciplines: [{
-              external_id: this.filterModel.disciplines
-            }]
-          } : {}),
-
-          ...(this.filterModel.organizations.length ? {
-            research_group: {
-              external_id: this.filterModel.organizations
-            }
-          } : {}),
-
-          ...(this.filterModel.researchComponents.length ? {
-            researchRef: {
-              tenantCriteriasReadingList: (criteria) => this.filterModel.researchComponents.some((i) => criteria.map((c) => `${c.component}:${c.value.index}`).includes(i))
-            }
-          } : {}),
-
-          ...(this.filterModel.categories.length ? {
-            researchRef: {
-              tenantCategory: {
-                external_id: this.filterModel.categories
-              }
-            }
-          } : {})
-
-        };
-
-        return this.$options.filters.where(this.items, filter);
-      },
-
       isGrid() {
         return this.viewModel === VIEW_TYPES.GRID;
       },
@@ -186,6 +156,44 @@
 
       changeView(val) {
         this.viewModel = val;
+      },
+
+      applyFilter() {
+        const filter = {
+          ...(this.filterModel.disciplines.length ? {
+            disciplines: [{
+              external_id: this.filterModel.disciplines
+            }]
+          } : {}),
+
+          ...(this.filterModel.organizations.length ? {
+            research_group: {
+              external_id: this.filterModel.organizations
+            }
+          } : {}),
+
+          ...(this.filterModel.researchComponents.length ? {
+            researchRef: {
+              tenantCriteriasReadingList: (criteria) => this.filterModel.researchComponents.some((i) => criteria.map((c) => `${c.component}:${c.value.index}`).includes(i))
+            }
+          } : {}),
+
+          ...(this.filterModel.categories.length ? {
+            researchRef: {
+              tenantCategory: {
+                external_id: this.filterModel.categories
+              }
+            }
+          } : {})
+
+        };
+
+        this.itemsList = [...this.$options.filters.where(this.items, filter)];
+      },
+
+      resetFilter() {
+        this.filterModel = { ...defaultFilterModel() };
+        this.applyFilter();
       }
     }
   };

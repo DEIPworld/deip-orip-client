@@ -1,5 +1,6 @@
 <template>
   <d-block
+    v-if="disciplines.length"
     title="Disciplines"
     sm
   >

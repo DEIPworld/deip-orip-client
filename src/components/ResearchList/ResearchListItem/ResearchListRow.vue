@@ -6,7 +6,7 @@
     <td class="pr-0">
       <v-avatar :size="40">
         <v-img
-          :src="$options.filters.researchBackgroundSrc(research.external_id, 400, 200)"
+          :src="$options.filters.researchBackgroundSrc(research.external_id, 40, 40)"
         />
       </v-avatar>
     </td>
@@ -26,13 +26,6 @@
       />
     </td>
 
-    <td width="260px">
-      <research-list-token-sale
-        v-if="research.tokenSale"
-        :token-sale="research.tokenSale"
-      />
-    </td>
-
     <td class="text-no-wrap">
       <d-meta-item
         :meta="{icon: 'event', label: moment(research.last_update_time).format('D MMM YYYY')}"
@@ -42,6 +35,13 @@
     <td width="0">
       <d-meta-item
         :meta="{icon: 'chat_bubble_outline', label: reviewsCount}"
+      />
+    </td>
+
+    <td width="260px">
+      <research-list-token-sale
+        v-if="research.tokenSale"
+        :token-sale="research.tokenSale"
       />
     </td>
   </tr>

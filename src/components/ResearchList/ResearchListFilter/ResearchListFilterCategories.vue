@@ -1,5 +1,6 @@
 <template>
   <d-block
+    v-if="categories.length"
     title="Categories"
     sm
   >

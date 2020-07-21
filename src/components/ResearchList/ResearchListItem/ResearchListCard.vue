@@ -13,7 +13,7 @@
     <v-card-text class="py-4 text--primary">
       <div class="d-flex align-center">
         <research-list-author :author="research.research_group" />
-        <research-list-status :status="research.is_finished ? 'success' : null" />
+        <research-list-status :status="research.is_finished ? 'finished' : null" />
       </div>
     </v-card-text>
 

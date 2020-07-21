@@ -13,8 +13,7 @@
       :value="50"
     />
     <div v-if="hasActiveTokenSale" class="text-caption mt-1">
-      Until completion
-      {{ tokenSaleLeft(tokenSale.end_time) }}
+      {{ tokenSaleLeft(tokenSale.end_time) }} left
     </div>
     <div v-if="hasInactiveTokenSale" class="text-caption mt-1">
       Fundraising starts in

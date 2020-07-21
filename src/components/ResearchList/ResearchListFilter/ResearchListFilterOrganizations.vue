@@ -1,5 +1,6 @@
 <template>
   <d-block
+    v-if="organizations.length"
     title="Organizations"
     sm
   >

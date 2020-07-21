@@ -3,7 +3,7 @@
     <template v-slot:activator="{ on }">
       <div class="spacer d-flex align-center" v-on="on">
         <v-avatar size="32" class="mr-3">
-          <img :src="$options.filters.researchGroupLogoSrc(author.external_id, 50, 50, true)">
+          <img :src="$options.filters.researchGroupLogoSrc(author.external_id, 32, 32, true)">
         </v-avatar>
         <div class="spacer">
           <div class="text-caption">

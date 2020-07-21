@@ -13,6 +13,7 @@
       Filter
     </v-btn>
     <v-badge
+      v-if="filtersCount"
       color="warning"
       :content="filtersCount"
       offset-y="-12px"
@@ -31,17 +32,41 @@
               <div class="text-h6">
                 Filter
               </div>
-              <v-btn icon @click="toggleDrawer" class="ma-n2">
+              <v-btn icon class="ma-n2" @click="toggleDrawer">
                 <v-icon>clear</v-icon>
               </v-btn>
             </v-row>
           </v-sheet>
-          <v-divider />
+<!--          <v-divider />-->
         </template>
 
-        <div class="pa-4">
-          <slot :reset="reset"/>
-        </div>
+        <v-sheet max-height="100%" class="d-flex flex-column">
+          <div class="pa-4 spacer" style="overflow: auto">
+            <slot />
+          </div>
+          <v-divider />
+          <div class="pa-4 text-right">
+            <slot name="actions">
+              <v-btn
+                text
+                color="primary"
+                small
+                @click="resetFilter()"
+              >
+                Clear
+              </v-btn>
+              <v-btn
+                color="primary"
+                small
+                @click="applyFilter"
+              >
+                Show result
+              </v-btn>
+            </slot>
+          </div>
+        </v-sheet>
+
+
       </v-navigation-drawer>
     </portal>
   </div>
@@ -65,7 +90,7 @@
     data() {
       return {
         isOpen: false,
-        defaultModel: {}
+        filtersCount: 0
       };
     },
 
@@ -78,38 +103,38 @@
           this.$emit('input', value);
         }
       },
-      filtersCount() {
-        return Object.values(this.filterModel).filter((a) => a.length > 0).length;
-      }
-    },
-
-    watch: {
-      filterModel: {
-        handler(newVal) {
-          this.$ls.set(this.storageKey, newVal);
-        },
-        deep: true
-      }
     },
 
     created() {
-      this.defaultModel = {...this.defaultModel, ...this.filterModel}
-
       if (this.$ls.get(this.storageKey)) {
         this.filterModel = this.$ls.get(this.storageKey);
       }
-    },
 
+      this.setFilterCount();
+
+      this.$emit('applyFilter');
+    },
     methods: {
       toggleDrawer() {
         this.isOpen = !this.isOpen;
       },
-      reset(key) {
-        if (key) {
-          this.filterModel[key] = this.defaultModel[key];
-        } else {
-          this.filterModel = this.defaultModel;
-        }
+
+      setFilterCount() {
+        setTimeout(() => {
+          this.filtersCount = Object.values(this.filterModel).filter((a) => a.length > 0).length;
+        });
+      },
+
+      resetFilter() {
+        this.$emit('resetFilter');
+        this.$ls.set(this.storageKey, this.filterModel);
+        this.setFilterCount();
+      },
+
+      applyFilter() {
+        this.$emit('applyFilter');
+        this.$ls.set(this.storageKey, this.filterModel);
+        this.setFilterCount();
       }
     }
   };

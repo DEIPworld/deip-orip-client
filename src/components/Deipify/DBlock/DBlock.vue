@@ -30,6 +30,8 @@
       <slot />
     </div>
 
+    <v-divider v-if="divided" />
+
   </v-sheet>
 </template>
 
@@ -57,8 +59,11 @@
       subtitle: {
         type: String,
         default: null
+      },
+      divided: {
+        type: Boolean,
+        default: false,
       }
-
     },
     computed: {
       hasTitle() { return !!this.title || this.$hasSlot('title'); },
@@ -108,6 +113,10 @@
 
     &-sm {
       --vb-gap: 24px;
+    }
+
+    & > [role="separator"] {
+      margin-top: var(--vb-gap);
     }
   }
 
