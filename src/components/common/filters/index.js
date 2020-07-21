@@ -1,5 +1,6 @@
 import Vue from 'vue';
 import moment from 'moment';
+import where from 'filter-where';
 import { AccessService } from '@deip/access-service';
 
 const accessService = AccessService.getInstance();
@@ -78,4 +79,9 @@ Vue.filter('joinByKey', (value, key, separator = ', ') => {
 Vue.filter('commaNumber', (value, separator = ',') => {
   if (!value) return '';
   return value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, separator);
+});
+
+Vue.filter('where', (value, f = {}) => {
+  if (!value) return '';
+  return value.filter(where(f));
 });

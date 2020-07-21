@@ -4,6 +4,7 @@ import VueResize from 'vue-resize';
 import VueCurrencyFilter from 'vue-currency-filter';
 import VueGoogleCharts from 'vue-google-charts';
 import PortalVue from 'portal-vue';
+import lsWatcher from 'vue-storage-watcher';
 
 import App from './App';
 import { store } from './store';
@@ -28,20 +29,23 @@ import { deipAddons } from '@/plugins/deipAddons';
 
 // ////////////////////////
 
-const currencyFilterOptions = {
+Vue.config.productionTip = false;
+Vue.use(VueGoogleCharts);
+Vue.use(VueResize);
+Vue.use(PortalVue);
+
+Vue.use(VueCurrencyFilter, {
   symbol: '$',
   thousandsSeparator: ',',
   fractionCount: 2,
   fractionSeparator: '.',
   symbolPosition: 'front',
   symbolSpacing: true
-};
+});
 
-Vue.config.productionTip = false;
-Vue.use(VueGoogleCharts);
-Vue.use(VueResize);
-Vue.use(PortalVue);
-Vue.use(VueCurrencyFilter, currencyFilterOptions);
+Vue.use(lsWatcher, {
+  prefix: 'orip__'
+});
 
 Vue.use(DSnackbarPlugin);
 Vue.use(deipAddons);

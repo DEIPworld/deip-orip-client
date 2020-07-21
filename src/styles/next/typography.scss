@@ -1,3 +1,22 @@
+@use 'core/typography';
+@use 'tools/get-text-style' as *;
+
 .link {
   text-decoration: none;
+}
+
+.text-decoration-underline-dotted {
+  border-bottom: 1px dotted currentColor;
+}
+
+.v-application {
+  .text {
+    @each $type, $styles in typography.$styles {
+      &-#{$type} {
+        margin: 0;
+
+        @include get-text-style($type);
+      }
+    }
+  }
 }

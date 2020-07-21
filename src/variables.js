@@ -1,3 +1,5 @@
+import { createEnum } from '@deip/toolbox';
+
 import { PROPOSAL_TYPES } from '@deip/proposals-service';
 import { EXPERTISE_CONTRIBUTION_TYPE, ECI_STAT_PERIOD_STEP_TYPE } from '@deip/expertise-contributions-service';
 import { researchContentTypes } from '@deip/research-service';
@@ -18,6 +20,11 @@ const proposalTypesLabels = {
 const maxTitleLength = 255;
 const maxDescriptionLength = 2048;
 
+const VIEW_TYPES = createEnum({
+  GRID: 1,
+  LIST: 2
+});
+
 export {
   PROPOSAL_TYPES,
   proposalTypesLabels,
@@ -29,5 +36,6 @@ export {
   ASSESSMENT_CRITERIA_TYPE,
   maxTitleLength,
   maxDescriptionLength,
+  VIEW_TYPES,
   ECI_STAT_PERIOD_STEP_TYPE
 };

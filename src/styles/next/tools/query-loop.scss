@@ -1,0 +1,5 @@
+@mixin query-loop($query) {
+  @each $key, $val in $query {
+    #{$key}: $val !important;
+  }
+}

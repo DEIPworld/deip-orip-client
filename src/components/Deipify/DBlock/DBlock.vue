@@ -1,40 +1,36 @@
 <template>
   <v-sheet :class="wrapperClassList">
 
-    <div v-if="hasHeader" class="mb-6">
+    <div v-if="hasHeader" :class="headerClassList">
 
-      <div
-        v-if="hasTitle"
-        :class="titleClassList"
-      >
-        {{ title }}
-        <slot name="title" />
+      <slot name="titleLeft" />
+
+      <div class="spacer">
+        <div
+          v-if="hasTitle"
+          :class="titleClassList"
+        >
+          {{ title }}
+          <slot name="title" />
+        </div>
+
+        <div
+          v-if="hasSubtitle"
+          :class="subtitleClassList"
+        >
+          {{ subtitle }}
+          <slot name="subtitle" />
+        </div>
       </div>
 
-      <div
-        v-if="hasSubtitle"
-        :class="subtitleClassList"
-      >
-        {{ subtitle }}
-        <slot name="subtitle" />
-      </div>
-
+      <slot name="titleRight" />
     </div>
-
-<!--    <div-->
-<!--      v-if="hasTitle"-->
-<!--      :class="titleClassList"-->
-<!--    >-->
-<!--      <v-icon v-if="icon">-->
-<!--        {{ icon }}-->
-<!--      </v-icon>-->
-<!--      {{ title }}-->
-<!--      <slot name="title" />-->
-<!--    </div>-->
 
     <div :class="contentClassList">
       <slot />
     </div>
+
+    <v-divider v-if="divided" />
 
   </v-sheet>
 </template>
@@ -63,8 +59,11 @@
       subtitle: {
         type: String,
         default: null
+      },
+      divided: {
+        type: Boolean,
+        default: false,
       }
-
     },
     computed: {
       hasTitle() { return !!this.title || this.$hasSlot('title'); },
@@ -81,6 +80,14 @@
         return {
           'text-h6': this.sm,
           'text-h5': !this.sm
+        };
+      },
+      headerClassList() {
+        return {
+          'd-flex': true,
+          'mb-6': true,
+          // 'mb-4': this.sm,
+          // 'mb-6': !this.sm
         };
       },
       subtitleClassList() {
@@ -106,6 +113,10 @@
 
     &-sm {
       --vb-gap: 24px;
+    }
+
+    & > [role="separator"] {
+      margin-top: var(--vb-gap);
     }
   }
 

@@ -1,0 +1,16 @@
+@use 'sass:map';
+@use 'bp-map' as *;
+@use 'query-loop' as *;
+@use '../core/typography';
+
+@mixin get-text-style($key) {
+  $target: map.get(typography.$styles, $key);
+
+  @each $bp, $style in $target {
+    @if $bp != xs {
+      @include bp-map($bp) {
+        @include query-loop($style);
+      }
+    }
+  }
+}
