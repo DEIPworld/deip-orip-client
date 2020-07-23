@@ -25,7 +25,10 @@ import { DSnackbarPlugin } from '@/components/Deipify/DSnackbar/DSnackbarPlugin'
 import { getEnvConfig } from '@/plugins/getEnvConfig';
 import { vuetify } from '@/plugins/vuetify';
 import { ifEnabled } from '@/plugins/ifEnabled';
-import { deipAddons } from '@/plugins/deipAddons';
+
+import { dataReadyMixin } from '@/mixins/dataReadyMixin';
+import { contextHelpersMixin } from '@/mixins/contextHelpersMixin';
+import { CustomDirective } from '@/derectives/CustomDirective';
 
 // ////////////////////////
 
@@ -48,8 +51,11 @@ Vue.use(lsWatcher, {
 });
 
 Vue.use(DSnackbarPlugin);
-Vue.use(deipAddons);
 Vue.use(ifEnabled);
+
+Vue.mixin(dataReadyMixin);
+Vue.mixin(contextHelpersMixin);
+Vue.directive('custom', CustomDirective);
 
 getEnvConfig().then((plugin) => {
   Vue.use(plugin);

@@ -7,21 +7,7 @@
 
     <template #titleRight>
       <d-toggle-view :storage-key="storageViewModelKey" />
-
-      <d-filter
-        v-if="!noFilter"
-        v-model="filterModel"
-        :storage-key="storagefilterModelKey"
-        @applyFilter="applyFilter"
-        @resetFilter="resetFilter"
-      >
-        <template>
-          <research-list-filter-disciplines v-model="filterModel.disciplines" />
-          <research-list-filter-categories v-model="filterModel.categories" />
-          <research-list-filter-components v-model="filterModel.researchComponents" />
-          <research-list-filter-organizations v-model="filterModel.organizations" />
-        </template>
-      </d-filter>
+      <research-list-filter v-if="!noFilter" :storage-key="storageFilterModelKey" />
     </template>
     <v-data-iterator
       :items="itemsList"
@@ -58,28 +44,13 @@
   import ResearchListGrid from '@/components/ResearchList/ResearchListWrapper/ResearchListGrid';
   import ResearchListTable from '@/components/ResearchList/ResearchListWrapper/ResearchListTable';
 
-  import ResearchListFilterDisciplines
-    from '@/components/ResearchList/ResearchListFilter/ResearchListFilterDisciplines';
-  import ResearchListFilterCategories from '@/components/ResearchList/ResearchListFilter/ResearchListFilterCategories';
-  import ResearchListFilterComponents from '@/components/ResearchList/ResearchListFilter/ResearchListFilterComponents';
-  import ResearchListFilterOrganizations
-    from '@/components/ResearchList/ResearchListFilter/ResearchListFilterOrganizations';
-
-  const defaultFilterModel = () => ({
-    disciplines: [],
-    organizations: [],
-    researchComponents: [],
-    categories: []
-  });
+  import ResearchListFilter from '@/components/ResearchList/ResearchListFilter/ResearchListFilter';
 
   export default {
     name: 'ResearchList',
 
     components: {
-      ResearchListFilterOrganizations,
-      ResearchListFilterComponents,
-      ResearchListFilterCategories,
-      ResearchListFilterDisciplines,
+      ResearchListFilter,
 
       ResearchListTable,
       ResearchListGrid,
@@ -109,10 +80,9 @@
     data() {
       return {
         storageViewModelKey: undefined,
-        storagefilterModelKey: undefined,
+        storageFilterModelKey: undefined,
 
         viewModel: undefined,
-        filterModel: defaultFilterModel(),
 
         itemsList: []
 
@@ -134,7 +104,7 @@
       iteratorProps() {
         return {
           itemsPerPage: 12,
-          hideDefaultFooter: this.items.length < 12,
+          hideDefaultFooter: this.itemsList.length < 12,
           footerProps: {
             'items-per-page-options': [12, 24, 48, -1]
           }
@@ -144,16 +114,17 @@
 
     created() {
       this.storageViewModelKey = `${this.namespace}__pl-type`;
-      this.storagefilterModelKey = `${this.namespace}__filter`;
+      this.storageFilterModelKey = `${this.namespace}__filter`;
 
       this.itemsList = [...this.items];
 
       this.$ls.on(this.storageViewModelKey, this.changeView, true);
-      // this.$ls.on(this.storagefilterModelKey, this.x, true);
+      this.$ls.on(this.storageFilterModelKey, this.applyFilter, true);
     },
 
     destroyed() {
       this.$ls.off(this.storageViewModelKey, this.changeView);
+      this.$ls.off(this.storageFilterModelKey, this.applyFilter);
     },
 
     methods: {
@@ -164,50 +135,43 @@
         }), 0);
       },
 
-      // x(val) {
-      //   console.log(val)
-      // },
-
       changeView(val) {
         this.viewModel = val;
       },
 
       applyFilter() {
-        const filter = {
-          ...(this.filterModel.disciplines.length ? {
+        const filter = this.$ls.get(this.storageFilterModelKey);
+
+        const filtered = {
+          ...(filter.disciplines.length ? {
             disciplines: [{
-              external_id: this.filterModel.disciplines
+              external_id: filter.disciplines
             }]
           } : {}),
 
-          ...(this.filterModel.organizations.length ? {
+          ...(filter.organizations.length ? {
             research_group: {
-              external_id: this.filterModel.organizations
+              external_id: filter.organizations
             }
           } : {}),
 
-          ...(this.filterModel.researchComponents.length ? {
+          ...(filter.researchComponents.length ? {
             researchRef: {
-              tenantCriteriasReadingList: (criteria) => this.filterModel.researchComponents.some((i) => criteria.map((c) => `${c.component}:${c.value.index}`).includes(i))
+              tenantCriteriasReadingList: (criteria) => filter.researchComponents.some((i) => criteria.map((c) => `${c.component}:${c.value.index}`).includes(i))
             }
           } : {}),
 
-          ...(this.filterModel.categories.length ? {
+          ...(filter.categories.length ? {
             researchRef: {
               tenantCategory: {
-                external_id: this.filterModel.categories
+                external_id: filter.categories
               }
             }
           } : {})
 
         };
 
-        this.itemsList = [...this.$options.filters.where(this.items, filter)];
-      },
-
-      resetFilter() {
-        this.filterModel = { ...defaultFilterModel() };
-        this.applyFilter();
+        this.itemsList = [...this.$options.filters.where(this.items, filtered)];
       }
     }
   };

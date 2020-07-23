@@ -13,21 +13,24 @@
       Filter
     </v-btn>
     <v-badge
-      v-if="filtersCount"
+      v-if="filterCount"
       color="warning"
-      :content="filtersCount"
+      :content="filterCount"
       offset-y="-12px"
       offset-x="12px"
     />
+
     <portal to="sidebar">
       <v-navigation-drawer
+        ref="sidebar"
+        v-mutate="onMutate"
         right
         app
         clipped
         :value="isOpen"
       >
         <template #prepend>
-          <v-sheet class="pa-4" color="grey lighten-4">
+          <v-sheet ref="header" class="pa-4" color="grey lighten-4">
             <v-row class="justify-space-between" no-gutters>
               <div class="text-h6">
                 Filter
@@ -40,11 +43,13 @@
         </template>
 
         <v-sheet max-height="100%" class="d-flex flex-column">
-          <div class="pa-4 spacer" style="overflow: auto">
+          <div data-x ref="content" class="pa-4 spacer" style="overflow: auto">
             <slot />
           </div>
-          <v-divider />
-          <div class="pa-4 text-right">
+
+          <v-divider v-if="bottomDivider" />
+
+          <div ref="actions" class="pa-4 text-right">
             <slot name="actions">
               <v-btn
                 text
@@ -70,16 +75,16 @@
 </template>
 
 <script>
+  import Proxyable from 'vuetify/lib/mixins/proxyable';
+
   export default {
     name: 'DFilter',
 
+    mixins: [Proxyable],
+
     props: {
-      value: {
-        type: Object,
-        default: () => ({})
-      },
-      storageKey: {
-        type: String,
+      filterCount: {
+        type: [String, Number],
         default: undefined
       }
     },
@@ -87,51 +92,36 @@
     data() {
       return {
         isOpen: false,
-        filtersCount: 0
+        bottomDivider: false
       };
     },
 
-    computed: {
-      filterModel: {
-        get() {
-          return this.value;
-        },
-        set(value) {
-          this.$emit('input', value);
-        }
-      },
-    },
+    computed: {},
 
     created() {
-      if (this.$ls.get(this.storageKey)) {
-        this.filterModel = this.$ls.get(this.storageKey);
-      }
-
-      this.setFilterCount();
-
-      this.$emit('applyFilter');
+      this.$emit('apply');
     },
+
     methods: {
       toggleDrawer() {
         this.isOpen = !this.isOpen;
       },
 
-      setFilterCount() {
-        setTimeout(() => {
-          this.filtersCount = Object.values(this.filterModel).filter((a) => a.length > 0).length;
-        });
-      },
-
       resetFilter() {
-        this.$emit('resetFilter');
-        this.$ls.set(this.storageKey, this.filterModel);
-        this.setFilterCount();
+        this.$emit('reset');
       },
 
       applyFilter() {
-        this.$emit('applyFilter');
-        this.$ls.set(this.storageKey, this.filterModel);
-        this.setFilterCount();
+        this.$emit('apply');
+      },
+
+      onMutate() {
+        const sidebarHeight = this.$refs.sidebar.$el.clientHeight;
+        const headerHeight = this.$refs.header.$el.clientHeight;
+        const contentHeight = this.$refs.content.scrollHeight;
+        const actionsHeight = this.$refs.actions.clientHeight;
+
+        this.bottomDivider = contentHeight > sidebarHeight - headerHeight - actionsHeight;
       }
     }
   };

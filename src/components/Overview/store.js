@@ -90,8 +90,16 @@ const getters = {
             link
           }
         };
-      } else if (record.contribution_type == EXPERTISE_CONTRIBUTION_TYPE.PUBLICATION) {
+      } else if (record.contribution_type === EXPERTISE_CONTRIBUTION_TYPE.PUBLICATION) {
         const typeInfo = researchService.getResearchContentType(record.research_content.content_type);
+        const link = {
+          name: 'ResearchContentDetails',
+          params: {
+            research_group_permlink: decodeURIComponent(record.research_group.permlink),
+            research_permlink: decodeURIComponent(record.research.permlink),
+            content_permlink: decodeURIComponent(record.research_content.permlink),
+          }
+        };
 
         return {
           ...record,
@@ -99,7 +107,7 @@ const getters = {
           meta: {
             title: record.research_content.title,
             researchContent: record.research_content,
-            link: null
+            link
           }
         };
       } else {
