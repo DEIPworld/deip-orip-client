@@ -16,42 +16,6 @@
   }
 }
 
-.v-text-field {
-  &--filled {
-    > .v-input__control > .v-input__slot {
-      background-color: transparent !important;
-    }
-
-    > .v-input__control > .v-input__slot:before {
-      display: none;
-    }
-
-    > .v-input__control > .v-input__slot:after {
-      pointer-events: none;
-      border-color: rgba(#000, .38) !important;
-      transform: none !important;
-      height: 100%;
-      border-width: thin !important;
-      bottom: 0 !important;
-      border-radius: inherit;
-    }
-
-    > .v-input__control > .v-input__slot:hover:after {
-      border-color: rgba(#000, .86) !important;
-    }
-
-    > .v-input__control > .v-input__slot > .v-text-field__slot > .v-text-field__suffix{
-      margin-top: 0;
-    }
-
-    &.v-input--is-focused {
-      > .v-input__control > .v-input__slot:after {
-        border: 2px solid currentColor !important;
-      }
-    }
-  }
-}
-
 .col {
   min-width: 0;
 }

@@ -5,7 +5,7 @@
         <v-col cols="12">
           <v-text-field
             v-model="formData.company"
-            filled
+            outlined dense
             label="Company"
             :rules="[rules.required]"
           />
@@ -16,7 +16,7 @@
         <v-col>
           <v-text-field
             v-model="formData.location.city"
-            filled
+            outlined dense
             label="City"
             :rules="[rules.required]"
           />
@@ -24,7 +24,7 @@
         <v-col offset="1">
           <v-text-field
             v-model="formData.location.country"
-            filled
+            outlined dense
             label="Country"
             :rules="[rules.required]"
           />
@@ -44,7 +44,7 @@
               <v-text-field
                 ref="dateFromInput"
                 v-model="formData.period.from"
-                filled
+                outlined dense
                 label="From"
                 append-icon="event"
                 :rules="[
@@ -71,7 +71,7 @@
               <v-text-field
                 ref="dateToInput"
                 v-model="formData.period.to"
-                filled
+                outlined dense
                 label="To"
                 append-icon="event"
                 :disabled="formData.isActive"
@@ -102,7 +102,7 @@
         <v-col cols="12">
           <v-text-field
             v-model="formData.position"
-            filled
+            outlined dense
             label="Position"
             :rules="[rules.required]"
           />
@@ -113,9 +113,8 @@
         <v-col cols="12">
           <v-textarea
             v-model="formData.description"
-            filled
+            outlined dense
             :rows="2"
-            filled
             auto-grow
             label="Description"
           />

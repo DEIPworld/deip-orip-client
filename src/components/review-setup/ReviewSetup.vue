@@ -51,7 +51,7 @@
                 item-text="name"
                 item-value="name"
                 chips
-                filled
+                outlined dense
                 append-icon="mode_edit"
                 multiple
                 class="pa-0 no-underline"
@@ -67,8 +67,7 @@
             <v-col cols="3" class="align-self-center">
               <v-text-field
                 v-model="item.rewardCoefficient"
-                filled
-                dense
+                outlined dense
                 class="pa-0 my-0 mx-auto max-width-150 centered-input font-weight-regular"
                 hide-details
               />
@@ -128,8 +127,7 @@
             <v-col cols="3">
               <v-text-field
                 v-model="item.weight"
-                filled
-                dense
+                outlined dense
                 class="pa-0 my-0 mx-auto max-width-100 centered-input"
                 hide-details
               />

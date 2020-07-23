@@ -4,13 +4,13 @@
       <v-text-field
         v-model="formData.component.readinessLevelTitle"
         label="Criterion name"
-        filled
+        outlined dense
         :rules="[rules.required]"
       />
       <v-text-field
         v-model="formData.component.readinessLevelShortTitle"
         label="Criterion short name"
-        filled
+        outlined dense
         :rules="[rules.required]"
       />
 
@@ -29,7 +29,7 @@
           <v-text-field
             v-model="formData.component.readinessLevels[index].title"
             label="Step name"
-            filled
+            outlined dense
             hide-details
             class="mt-2"
             :rules="[rules.required]"
@@ -37,7 +37,7 @@
           <v-textarea
             v-model="formData.component.readinessLevels[index].description"
             label="Step description"
-            filled
+            outlined dense
             hide-details
             auto-grow
             rows="1"

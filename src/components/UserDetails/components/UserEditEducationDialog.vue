@@ -5,7 +5,7 @@
         <v-col cols="12">
           <v-text-field
             v-model="formData.educationalInstitution"
-            filled
+            outlined dense
             label="Educational institution"
             :rules="[ rules.required ]"
           />
@@ -24,7 +24,7 @@
               <v-text-field
                 ref="dateFromInput"
                 v-model="formData.period.from"
-                filled
+                outlined dense
                 label="From"
                 append-icon="event"
                 readonly
@@ -51,7 +51,7 @@
               <v-text-field
                 ref="dateToInput"
                 v-model="formData.period.to"
-                filled
+                outlined dense
                 label="To"
                 append-icon="event"
                 :disabled="formData.isActive"
@@ -81,7 +81,7 @@
         <v-col cols="12">
           <v-text-field
             v-model="formData.degree"
-            filled
+            outlined dense
             label="Degree obtained"
             :rules="[ rules.required ]"
           />
@@ -91,7 +91,7 @@
         <v-col cols="12">
           <v-text-field
             v-model="formData.area"
-            filled
+            outlined dense
             label="Area of study"
             :rules="[ rules.required ]"
           />
@@ -101,10 +101,9 @@
         <v-col cols="12">
           <v-textarea
             v-model="formData.description"
-            filled
+            outlined dense
             :rows="2"
             auto-grow
-            filled
             label="Description"
           />
         </v-col>
@@ -227,7 +226,7 @@
     methods: {
       save() {
         if (!this.$refs.form.validate()) return;
-        
+
         this.isProcessing = true;
         const update = {};
         if (!this.$route.query.index) { // new education

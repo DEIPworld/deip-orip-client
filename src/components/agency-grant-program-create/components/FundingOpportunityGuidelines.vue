@@ -11,7 +11,7 @@
           v-model="foa.eligibleApplicants"
           label="Eligible applicants"
           auto-grow
-          filled
+          outlined dense
           rows="4"
           :rules="[rules.required]"
         />
@@ -20,7 +20,7 @@
           v-model="foa.eligibilityAdditionalInformation"
           label="Additional information on eligibility"
           auto-grow
-          filled
+          outlined dense
           rows="4"
           :rules="[rules.required]"
         />

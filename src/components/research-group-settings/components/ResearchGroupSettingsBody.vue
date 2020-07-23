@@ -7,7 +7,7 @@
             v-model="newResearchGroupName"
             :rules="[rules.required, rules.titleLength]"
             label="Name"
-            filled
+            outlined dense
             :error-messages="isPermlinkVerifyed === false ? 'Group with the same name already exists' : ''"
           />
         </v-col>
@@ -19,7 +19,7 @@
             :rules="[rules.required, rules.descriptionLength]"
             name="Description"
             label="Description"
-            filled
+            outlined dense
             auto-grow
           />
         </v-col>

@@ -10,7 +10,7 @@
           v-model="foa.reveiwCommittee"
           :items="allGroupList"
           :filter="committeesFilter"
-          filled
+          outlined dense
           item-text="name"
           label="Reveiw committee"
           return-object

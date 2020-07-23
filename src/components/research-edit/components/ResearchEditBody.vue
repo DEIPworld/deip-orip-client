@@ -8,7 +8,7 @@
         v-model="title"
         :rules="[rules.required, rules.titleLength]"
         name="title"
-        filled
+        outlined dense
         :error-messages="isPermlinkVerifyed === false ? 'Research with the same name already exists' : ''"
       />
     </div>
@@ -20,7 +20,7 @@
         v-model="description"
         :rules="[rules.required, rules.descriptionLength]"
         name="Description"
-        filled
+        outlined dense
         auto-grow
       />
     </div>
@@ -62,7 +62,7 @@
         v-model="tenantCategory"
         :items="tenant.profile.settings.researchCategories"
         label="Category"
-        filled
+        outlined dense
         item-text="text"
         return-object
       />
@@ -77,7 +77,7 @@
         prepend-inner-icon="link"
         label="Link to a video presentation"
         single-line
-        filled
+        outlined dense
         :rules="[rules.link]"
       />
     </div>
@@ -116,7 +116,7 @@
         v-model="activeMilestone"
         :items="milestones"
         label="Milestone"
-        filled
+        outlined dense
         item-text="goal"
         return-object
       />
@@ -527,7 +527,7 @@
 
       backgroundUploadError(file, message, xhr) {
         console.error(message);
-        
+
         this.$refs.researchBackground.removeAllFiles();
         this.isUploadingBackground = false;
         this.$notifier.showError(`Sorry, an error occurred while uploading background image, please try again later`)

@@ -64,7 +64,7 @@
               <v-textarea
                 v-model="coverLetter"
                 :rows="2"
-                filled
+                outlined dense
                 auto-grow
                 name="Cover letter"
                 label="Cover letter"
@@ -269,7 +269,7 @@
               :menu-props="{maxWidth:500}"
               label="Select a content to request review"
               item-text="title"
-              filled
+              outlined dense
               item-value="id"
               :disabled="isRequestingReview"
               :items="contentListToReview"
@@ -483,7 +483,7 @@
           route.name = 'ResearchGroupDetails';
           route.params = { research_group_permlink: encodeURIComponent(this.groupLink) };
         }
-        
+
         return route;
       }
     },

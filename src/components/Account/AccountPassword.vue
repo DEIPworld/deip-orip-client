@@ -14,7 +14,7 @@
           v-model="oldPassword"
           :rules="[rules.required]"
           label="Old password / Private Key"
-          filled
+          outlined dense
           :disabled="isPasswordChanging"
           :append-icon="isHiddenOldPassword ? 'visibility_off' : 'visibility'"
           :type="isHiddenOldPassword ? 'password' : 'text'"
@@ -24,7 +24,7 @@
           v-model="newPassword"
           :rules="[rules.required, rules.masterPassword]"
           label="New password"
-          filled
+          outlined dense
           :disabled="isPasswordChanging"
           :append-icon="isHiddenNewPassword ? 'visibility_off' : 'visibility'"
           :type="isHiddenNewPassword ? 'password' : 'text'"
@@ -36,7 +36,7 @@
           v-model="reEnterNewPassword"
           :rules="[rules.required, rules.reEnterMasterPassword]"
           label="Re-Enter New password"
-          filled
+          outlined dense
           :disabled="isPasswordChanging"
           :append-icon="isHiddenReEnterNewPassword ? 'visibility_off' : 'visibility'"
           :type="isHiddenReEnterNewPassword ? 'password' : 'text'"

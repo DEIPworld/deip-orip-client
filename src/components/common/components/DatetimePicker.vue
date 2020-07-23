@@ -15,7 +15,7 @@
             <v-text-field
               ref="datePicker"
               v-model="date"
-              filled
+              outlined dense
               :label="label"
               :rules="[() => !time || !datetime || ($refs.errorMsg && $refs.errorMsg.valid) || '']"
               readonly
@@ -43,7 +43,7 @@
             <v-text-field
               ref="timePicker"
               v-model="time"
-              filled
+              outlined dense
               :rules="[() => !date || !datetime || ($refs.errorMsg && $refs.errorMsg.valid) || '']"
               label="Time"
               append-icon="event"

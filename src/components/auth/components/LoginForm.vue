@@ -12,7 +12,7 @@
         <v-col cols="12">
           <v-text-field
             v-model="formData.username"
-            filled
+            outlined
             label="Username"
             :rules="[validation.required]"
             :disable="disable"
@@ -38,7 +38,7 @@
           <v-btn
             type="submit"
             block
-            large
+            x-large
             color="primary"
             :loading="disable"
             :disabled="disable"

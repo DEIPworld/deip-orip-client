@@ -1,5 +1,5 @@
 <template>
-  <v-sheet :height="36" class="align-center d-flex">
+  <v-sheet :height="32" class="align-center d-flex">
     <v-item-group
       v-model="viewModel"
       color="white"

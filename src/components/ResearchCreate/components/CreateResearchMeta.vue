@@ -12,7 +12,7 @@
             v-model="title"
             name="title"
             label="Title"
-            filled
+            outlined dense
             :rules="[rules.titleLength]"
             :error-messages="isPermlinkVerifyed === false ? 'Research with the same name already exists' : ''"
             @keyup="setTitle"
@@ -24,7 +24,7 @@
             v-model="description"
             name="Description"
             label="Description"
-            filled
+            outlined dense
             :rules="[rules.descriptionLength]"
             @keyup="setDescription"
           />
@@ -35,7 +35,7 @@
             v-model="videoSrc"
             prepend-inner-icon="link"
             label="Link to a video presentation"
-            filled
+            outlined dense
             :rules="[rules.link]"
             @keyup="setVideo"
           />

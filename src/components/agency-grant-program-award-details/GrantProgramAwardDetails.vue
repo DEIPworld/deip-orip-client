@@ -292,8 +292,7 @@
                   :items="paymentsFilterByStatus"
                   label="STATUS"
                   return-object
-                  filled
-                  dense
+                  outlined dense
                 />
               </v-row>
             </v-col>
@@ -305,8 +304,7 @@
                   :items="paymentsFilterByRequester"
                   label="REQUESTER"
                   return-object
-                  filled
-                  dense
+                  outlined dense
                 />
               </v-row>
             </v-col>

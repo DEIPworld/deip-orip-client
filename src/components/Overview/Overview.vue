@@ -70,7 +70,7 @@
           <v-col cols="3">
             <v-select
               v-model="growthRateDisciplinesFilter.growthRateDiscipline"
-              filled
+              outlined dense
               hide-details
               :items="[{label: 'All', external_id: 'all'}, ...disciplines]"
               item-text="label"
@@ -100,7 +100,7 @@
           <v-col cols="3">
             <v-select
               v-model="distributionDiscipline"
-              filled
+              outlined dense
               :items="[{label: 'All', external_id: 'all'}, ...disciplines]"
               item-text="label"
               item-value="external_id"
@@ -152,7 +152,7 @@
               class="my-0 py-0"
               :items="contributions"
               label="Contribution Type"
-              filled
+              outlined dense
             />
           </v-col>
           <v-col cols="2">
@@ -161,14 +161,14 @@
               class="my-0 py-0"
               :items="criterias"
               label="Assessment criteria"
-              filled
+              outlined dense
             />
           </v-col>
           <v-col cols="3">
             <v-select
               v-model="eciDetailedOverviewFilter.discipline"
               label="Disciplines"
-              filled
+              outlined dense
               :items="[{label: 'All', external_id: ''}, ...disciplines]"
               item-text="label"
               item-value="external_id"

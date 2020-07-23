@@ -73,7 +73,7 @@
       v-model="term"
       label="Add references to material posted at DEIP"
       hint="Search by material title"
-      filled
+      outlined dense
       append-icon="device_hub"
       @input="searchReferences()"
     />
@@ -92,7 +92,7 @@
       currentResearch: { type: Object, required: true },
       allReferencesList: { type: Array, required: true }
     },
-    
+
     data() {
       return {
         term: '',

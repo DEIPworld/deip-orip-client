@@ -10,20 +10,20 @@
         <v-textarea
           v-model="foa.description"
           label="Opportunity description"
-          filled
+          outlined dense
           auto-grow
           rows="4"
         />
 
         <v-text-field
           v-model="foa.additionalInfoLink"
-          filled
+          outlined dense
           label="Link to additional information"
         />
 
         <v-text-field
           v-model="foa.grantorEmail"
-          filled
+          outlined dense
           label="Grantor contact e-mail address"
         />
       </div>

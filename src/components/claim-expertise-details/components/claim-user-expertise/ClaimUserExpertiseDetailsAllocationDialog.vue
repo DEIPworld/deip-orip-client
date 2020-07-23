@@ -30,7 +30,7 @@
             <div class="discipline-picker c-mt-8">
               <v-text-field
                 v-model="amount"
-                filled
+                outlined dense
                 label="Amount of Expertise Tokens"
                 :rules="[required, digitRule]"
               />
@@ -47,7 +47,7 @@
               <v-textarea
                 v-model="description"
                 label="Provide a cover letter"
-                filled
+                outlined dense
                 auto-grow
                 :rows="6"
                 :rules="[required]"

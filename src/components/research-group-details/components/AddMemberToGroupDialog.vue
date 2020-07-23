@@ -22,7 +22,7 @@
         <v-autocomplete
           v-model="selectedUser"
           :items="users"
-          filled
+          outlined dense
           item-text="profile.firstName"
           item-value="account"
           placeholder="Researcher"
@@ -54,7 +54,7 @@
 
         <!-- <v-text-field
           v-model="tokensAmount"
-          filled
+          outlined dense
           label="Research Group Tokens"
           suffix="%"
           mask="###"
@@ -64,7 +64,7 @@
           v-model="coverLetter"
           label="Invitation letter"
           auto-grow
-          filled
+          outlined dense
           rows="2"
         />
       </v-card-text>

@@ -12,7 +12,7 @@
             :value="item.type"
             item-value="type"
             item-text="title"
-            filled
+            outlined dense
             :rules="[rules.partner]"
             label="Partner"
             :items="partnersInfo"
@@ -38,7 +38,7 @@
             :rules="[rules.required]"
             name="partnersList"
             label="Partner's name"
-            filled
+            outlined dense
           />
         </v-col>
         <v-col cols="1" class="text-right">

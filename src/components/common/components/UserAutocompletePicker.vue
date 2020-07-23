@@ -5,7 +5,7 @@
       :label="label"
       hide-no-data
       :append-icon="null"
-      filled
+      outlined dense
       :loading="isUsersLoading"
       :disabled="isDisabled"
       :items="foundUsers"

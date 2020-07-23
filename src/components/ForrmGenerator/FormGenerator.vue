@@ -72,7 +72,8 @@
         return merge.all([
           {
             props: {
-              filled: true,
+              outlined: true,
+              dense: true,
               hideDetails: 'auto'
             }
           },

@@ -13,7 +13,7 @@
           :value="researchId"
           item-text="title"
           item-value="id"
-          filled
+          outlined dense
           label="Research"
           @input="changeResearch"
         />
@@ -22,7 +22,7 @@
           ref="toUsername"
           v-model="form.to"
           label="To"
-          filled
+          outlined dense
           :rules="[
             rules.required,
             rules.isExist
@@ -34,7 +34,7 @@
         <v-text-field
           v-model="form.amount"
           label="Amount"
-          filled
+          outlined dense
           suffix="%"
           :rules="[
             rules.required,

@@ -9,7 +9,7 @@
       <div>
         <v-text-field
           v-model="foa.title"
-          filled
+          outlined dense
           label="Opportunity title"
           :rules="[rules.required]"
         />
@@ -17,7 +17,7 @@
         <v-text-field
           v-model="foa.number"
           label="Opportunity number"
-          filled
+          outlined dense
           validate-on-blur
           :rules="[rules.required, rules.foaNumber]"
         />
@@ -25,7 +25,7 @@
         <v-text-field
           v-if="organization"
           v-model="organization.name"
-          filled
+          outlined dense
           label="Organization name"
           disabled
         />

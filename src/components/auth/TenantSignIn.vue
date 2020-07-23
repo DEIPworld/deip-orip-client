@@ -23,7 +23,7 @@
               <v-text-field
                 v-model="username"
                 name="username"
-                filled
+                outlined dense
                 label="Username"
                 :disabled="isChecking"
                 :rules="[rules.required]"
@@ -32,7 +32,7 @@
               <v-text-field
                 v-model="password"
                 name="password"
-                filled
+                outlined dense
                 label="Password / Private Key"
                 :rules="[rules.required]"
                 :append-icon="isHiddenPassword ? 'visibility_off' : 'visibility'"

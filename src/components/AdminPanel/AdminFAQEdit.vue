@@ -3,7 +3,7 @@
     <v-form ref="form" v-model="isFormValid">
       <v-textarea
         v-model="formData.question"
-        filled
+        outlined dense
         auto-grow
         rows="1"
         label="Question"
@@ -12,7 +12,7 @@
       />
       <v-textarea
         v-model="formData.answer"
-        filled
+        outlined dense
         auto-grow
         rows="8"
         label="Answer"

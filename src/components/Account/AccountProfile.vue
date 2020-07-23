@@ -78,7 +78,7 @@
                 label: 'Tell about yourself',
                 props: {
                   autoGrow: true,
-                  rows: 1,
+                  rows: 3,
                   rules: [validation.required]
                 }
               }

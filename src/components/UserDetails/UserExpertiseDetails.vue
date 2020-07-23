@@ -32,8 +32,7 @@
             v-model="filter.disciplineExternalId"
             class="my-0 py-0"
             :items="disciplines"
-            dense
-            filled
+            outlined dense
             label="Discipline"
             :disabled="eciHistoryLoading"
           />
@@ -44,8 +43,7 @@
             class="my-0 py-0"
             :items="contributions"
             label="Contribution Type"
-            filled
-            dense
+            outlined dense
             :disabled="eciHistoryLoading"
           />
         </div>
@@ -55,8 +53,7 @@
             class="my-0 py-0"
             :items="criterias"
             label="Criteria"
-            filled
-            dense
+            outlined dense
             :disabled="eciHistoryLoading"
           />
         </div>
@@ -75,10 +72,9 @@
                 v-model="filter.fromDate"
                 :disabled="eciHistoryLoading"
                 label="From"
-                dense
                 readonly
                 clearable
-                filled
+                outlined dense
                 v-on="on"
               />
             </template>
@@ -105,10 +101,9 @@
                 v-model="filter.toDate"
                 :disabled="eciHistoryLoading"
                 label="To"
-                dense
                 readonly
                 clearable
-                filled
+                outlined dense
                 v-on="on"
               />
             </template>
@@ -357,7 +352,7 @@
 
       loadDisciplineEciHistory() {
         this.eciHistoryLoading = true;
-        
+
         const account = this.userInfo.account.name;
         const disciplineExternalId = this.filter.disciplineExternalId;
         const fromDate = this.filter.fromDate ? this.moment(this.filter.fromDate)

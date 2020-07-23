@@ -47,7 +47,7 @@
                   <v-text-field
                     v-model="funding.awardNumber"
                     placeholder="Award number"
-                    filled
+                    outlined dense
                     :rules="[rules.required, rules.awardNumber]"
                     validate-on-blur
                   />
@@ -65,7 +65,7 @@
                     :loading="funding.isResearchersLoading"
                     :items="funding.foundResearchers"
                     item-text="name"
-                    filled
+                    outlined dense
                     return-object
                     :rules="[() => funding.researcher && funding.researcher.name.length > 0 || 'Researcher name is required']"
                     :search-input.sync="funding.researcherSearch"
@@ -86,7 +86,7 @@
                   <v-select
                     v-model="funding.awardSource"
                     class="pa-0 ma-0"
-                    filled
+                    outlined dense
                     :items="funding.foundAwardSources"
                     item-text="name"
                     return-object
@@ -103,7 +103,7 @@
                   </div>
                   <v-select
                     v-model="funding.researchGroup"
-                    filled
+                    outlined dense
                     :items="funding.foundResearchGroups"
                     :disabled="!funding.researcher"
                     item-text="name"
@@ -123,7 +123,7 @@
                   <v-select
                     v-model="funding.research"
                     :items="funding.foundResearch"
-                    filled
+                    outlined dense
                     :disabled="!funding.researchGroup"
                     item-text="title"
                     return-object
@@ -159,7 +159,7 @@
                     v-model.number="funding.purpose.awardAmount"
                     :rules=" fundingIdx == 0 ? [rules.required, rules.totalAwardValidator, rules.balanceIsSufficient ] : [ rules.required, rules.totalAwardValidator ]"
                     class="right-input"
-                    filled
+                    outlined dense
                     mask="##############"
                     suffix="$"
                   />
@@ -176,7 +176,7 @@
                   </div>
                 </v-col>
                 <v-col cols="3" offset="1" class="pt-4">
-                    <v-text-field filled v-model.number="funding.purpose.equipment" class="right-input" :ref="'funding-equipment-' + fundingIdx" mask="##############" suffix="$"></v-text-field>
+                    <v-text-field outlined dense v-model.number="funding.purpose.equipment" class="right-input" :ref="'funding-equipment-' + fundingIdx" mask="##############" suffix="$"></v-text-field>
                 </v-col>
               </v-row> -->
 
@@ -190,7 +190,7 @@
                   </div>
                 </v-col>
                 <v-col cols="3" offset="1" class="pt-4">
-                    <v-text-field filled v-model.number="funding.purpose.businessTravel" class="right-input" :ref="'funding-businessTravel-' + fundingIdx" mask="##############" suffix="$"></v-text-field>
+                    <v-text-field outlined dense v-model.number="funding.purpose.businessTravel" class="right-input" :ref="'funding-businessTravel-' + fundingIdx" mask="##############" suffix="$"></v-text-field>
                 </v-col>
               </v-row> -->
 
@@ -203,7 +203,7 @@
                     <v-text-field
                       v-model="funding.overhead"
                       :rules="[rules.allowedOverhead]"
-                      filled
+                      outlined dense
                       suffix="%"
                       mask="##"
                     />
@@ -235,7 +235,7 @@
                     <v-row no-gutters>
                       <v-col cols="5">
                         <div class="text-subtitle-1 font-weight-bold">Description</div>
-                        <v-text-field filled v-model="milestone.description" :prefix="milestoneIdx + 1 + '.'"></v-text-field>
+                        <v-text-field outlined dense v-model="milestone.description" :prefix="milestoneIdx + 1 + '.'"></v-text-field>
                       </v-col>
                       <v-col cols="2" offset="1">
                         <div class="text-subtitle-1 font-weight-bold">Deadline</div>
@@ -252,7 +252,7 @@
                       <v-col cols="3" offset="1">
                         <div class="text-subtitle-1 font-weight-bold">Amount</div>
                         <div class="right-input">
-                          <v-text-field filled v-model="milestone.amount" suffix="%" mask="###"></v-text-field>
+                          <v-text-field outlined dense v-model="milestone.amount" suffix="%" mask="###"></v-text-field>
                         </div>
                       </v-col>
                     </v-row>
