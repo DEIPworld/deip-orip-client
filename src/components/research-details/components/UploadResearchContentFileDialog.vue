@@ -37,7 +37,7 @@
           <div v-if="researchMembersList.length">
             <v-text-field
               v-model="title"
-              outlined dense
+              outlined
               :rules="[rules.titleLength]"
               label="Title"
               :error-messages="isPermlinkVerifyed === false ? 'Content with the same name already exists' : ''"
@@ -46,7 +46,7 @@
             <v-select
               v-model="type"
               :items="researchContentTypes"
-              outlined dense
+              outlined
               label="Content Type"
               item-value="id"
             />
@@ -57,7 +57,7 @@
               :menu-props="{ closeOnContentClick: true }"
               hint="You can select multiple authors"
               persistent-hint
-              outlined dense
+              outlined
               placeholder="Authors"
               class="mb-3"
               multiple

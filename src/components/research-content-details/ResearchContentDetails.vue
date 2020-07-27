@@ -149,7 +149,7 @@
         <v-card-text>
           <v-text-field
             v-model="proposeContent.title"
-            outlined dense
+            outlined
             :rules="[rules.titleLength]"
             label="Title"
             :error-messages="isPermlinkVerifyed === false ? 'Content with the same name already exists' : ''"
@@ -159,7 +159,7 @@
             v-model="proposeContent.type"
             :items="proposeContent.researchContentTypes"
             label="Content Type"
-            outlined dense
+            outlined
             item-value="id"
           />
 
@@ -169,7 +169,7 @@
             :menu-props="{ closeOnContentClick: true }"
             hint="You can select multiple authors"
             persistent-hint
-            outlined dense
+            outlined
             placeholder="Authors"
             class="mb-3"
             multiple

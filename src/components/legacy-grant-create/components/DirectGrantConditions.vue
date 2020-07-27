@@ -43,7 +43,7 @@
                 <v-textarea
                   v-model="grantInfo.description"
                   rows="3"
-                  outlined dense
+                  outlined
                   auto-grow
                   label="You can mention some important features"
                 />

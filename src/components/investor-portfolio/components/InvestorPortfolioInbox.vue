@@ -40,7 +40,7 @@
           <!-- <v-select
             v-model="sort"
             :items="sortingOptions"
-            outlined dense
+            outlined
             dense
             hide-details
             class="ma-0 pa-0"

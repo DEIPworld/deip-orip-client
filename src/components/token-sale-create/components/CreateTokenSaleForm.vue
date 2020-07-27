@@ -4,7 +4,7 @@
       <v-col cols="12">
         <v-text-field
           v-model="formData.amountToSell"
-          outlined dense
+          outlined
           :hint="ownedAmount - getAmountNumber(formData.amountToSell) + ' left'"
           mask="#####"
           :rules="[rules.amountToSellRules]"
@@ -49,7 +49,7 @@
       <v-col cols="12">
         <v-text-field
           v-model="formData.softCap"
-          outlined dense
+          outlined
           label="Min"
           :rules="[rules.required, deipTokenValidator, rules.softCapSmaller]"
           suffix="USD"
@@ -57,7 +57,7 @@
 
         <v-text-field
           v-model="formData.hardCap"
-          outlined dense
+          outlined
           label="Max"
           :rules="[rules.required, deipTokenValidator, rules.hardCapGreater]"
           suffix="USD"

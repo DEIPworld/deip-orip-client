@@ -8,7 +8,7 @@
         v-model="title"
         :rules="[rules.required, rules.titleLength]"
         name="title"
-        outlined dense
+        outlined
         :error-messages="isPermlinkVerifyed === false ? 'Research with the same name already exists' : ''"
       />
     </div>
@@ -20,7 +20,7 @@
         v-model="description"
         :rules="[rules.required, rules.descriptionLength]"
         name="Description"
-        outlined dense
+        outlined
         auto-grow
       />
     </div>
@@ -62,7 +62,7 @@
         v-model="tenantCategory"
         :items="tenant.profile.settings.researchCategories"
         label="Category"
-        outlined dense
+        outlined
         item-text="text"
         return-object
       />
@@ -77,7 +77,7 @@
         prepend-inner-icon="link"
         label="Link to a video presentation"
         single-line
-        outlined dense
+        outlined
         :rules="[rules.link]"
       />
     </div>
@@ -116,7 +116,7 @@
         v-model="activeMilestone"
         :items="milestones"
         label="Milestone"
-        outlined dense
+        outlined
         item-text="goal"
         return-object
       />

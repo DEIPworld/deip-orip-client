@@ -10,7 +10,7 @@
         <v-text-field
           v-model="foa.totalProgramFunding"
           label="Estimated total program funding"
-          outlined dense
+          outlined
           mask="##############"
           suffix="NGT"
           :rules="[ rules.required, rules.totalProgrammingFundingValidator ]"
@@ -19,7 +19,7 @@
         <v-text-field
           v-model.number="foa.numberOfAwards"
           label="Expected number of awards"
-          outlined dense
+          outlined
           mask="##############"
           :rules="[ rules.required ]"
         />
@@ -27,7 +27,7 @@
         <v-text-field
           v-model="foa.awardCeiling"
           label="Award ceiling"
-          outlined dense
+          outlined
           mask="##############"
           suffix="NGT"
           :rules="[ rules.required, rules.awardCeilingValidator ]"
@@ -37,7 +37,7 @@
           v-model="foa.awardFloor"
           label="Award floor"
           mask="##############"
-          outlined dense
+          outlined
           suffix="NGT"
           :rules="[ rules.required, rules.awardFloorValidator ]"
         />

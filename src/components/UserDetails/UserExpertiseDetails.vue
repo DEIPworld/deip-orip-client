@@ -32,7 +32,7 @@
             v-model="filter.disciplineExternalId"
             class="my-0 py-0"
             :items="disciplines"
-            outlined dense
+            outlined
             label="Discipline"
             :disabled="eciHistoryLoading"
           />
@@ -43,7 +43,7 @@
             class="my-0 py-0"
             :items="contributions"
             label="Contribution Type"
-            outlined dense
+            outlined
             :disabled="eciHistoryLoading"
           />
         </div>
@@ -53,7 +53,7 @@
             class="my-0 py-0"
             :items="criterias"
             label="Criteria"
-            outlined dense
+            outlined
             :disabled="eciHistoryLoading"
           />
         </div>
@@ -74,7 +74,7 @@
                 label="From"
                 readonly
                 clearable
-                outlined dense
+                outlined
                 v-on="on"
               />
             </template>
@@ -103,7 +103,7 @@
                 label="To"
                 readonly
                 clearable
-                outlined dense
+                outlined
                 v-on="on"
               />
             </template>

@@ -14,7 +14,7 @@
                     <div class="c-ph-8 c-pt-12">
                         <v-autocomplete
                             :items="researches"
-                            outlined dense
+                            outlined
                             :filter="customFilter"
                             v-model="grantInfo.research"
                             item-text="title"

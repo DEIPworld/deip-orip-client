@@ -55,7 +55,22 @@ Vue.use(ifEnabled);
 
 Vue.mixin(dataReadyMixin);
 Vue.mixin(contextHelpersMixin);
+
 Vue.directive('custom', CustomDirective);
+
+Vue.config.optionMergeStrategies.props = (parentVal, childVal) => {
+  if (childVal) {
+    for (const k of Object.keys(childVal)) {
+      if (childVal[k].delete) {
+        // eslint-disable-next-line no-param-reassign
+        delete childVal[k];
+        // eslint-disable-next-line no-param-reassign
+        delete parentVal[k];
+      }
+    }
+  }
+  return { ...(parentVal || {}), ...(childVal || {}) };
+}
 
 getEnvConfig().then((plugin) => {
   Vue.use(plugin);

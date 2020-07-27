@@ -3,7 +3,7 @@
     <v-form ref="form" v-model="isFormValid">
       <v-text-field
         v-model="categoryTitle"
-        outlined dense
+        outlined
         hide-details
         label="Category name"
         :rules="[rules.required]"

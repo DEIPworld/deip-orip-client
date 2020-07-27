@@ -21,7 +21,7 @@
           ref="amount"
           v-model="amount"
           label="Amount"
-          outlined dense
+          outlined
           :rules="[
             rules.required,
             isDeipToCommonMode ? rules.deipTokenAmount : rules.deipCommonAmount

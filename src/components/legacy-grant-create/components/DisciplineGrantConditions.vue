@@ -47,7 +47,7 @@
               <span class="text-caption">(optional)</span>
             </div>
 
-            <v-textarea outlined dense v-model="grantInfo.description" rows="2" auto-grow />
+            <v-textarea outlined v-model="grantInfo.description" rows="2" auto-grow />
           </v-form>
         </div>
       </div>

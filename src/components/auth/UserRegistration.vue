@@ -10,7 +10,7 @@
         <v-col cols="6" class="py-0">
           <v-text-field
             v-model="formData.firstName"
-            outlined dense
+            outlined
             label="First name"
             :rules="[rules.required, rules.nameChars]"
             :disabled="isSaving"
@@ -20,7 +20,7 @@
         <v-col cols="6" class="py-0">
           <v-text-field
             v-model="formData.lastName"
-            outlined dense
+            outlined
             label="Last name"
             :rules="[rules.required, rules.nameChars]"
             :disabled="isSaving"
@@ -38,7 +38,7 @@
             <template v-slot:activator="{ on }">
               <v-text-field
                 v-model="formData.birthdate"
-                outlined dense
+                outlined
                 label="Birthday"
                 append-icon="event"
                 readonly
@@ -57,7 +57,7 @@
         <v-col cols="6" class="py-0">
           <v-text-field
             v-model="formData.id"
-            outlined dense
+            outlined
             label="ID"
             :rules="[rules.required]"
             :disabled="isSaving"
@@ -73,7 +73,7 @@
         <v-col cols="6" class="py-0">
           <v-text-field
             v-model="formData.username"
-            outlined dense
+            outlined
             name="username"
             label="Username"
             :rules="[
@@ -90,7 +90,7 @@
         <v-col cols="6" class="py-0">
           <v-text-field
             v-model="formData.masterPassword"
-            outlined dense
+            outlined
             class="c-mt-4"
             label="Master Password"
             :disabled="isSaving"
@@ -104,7 +104,7 @@
         <v-col cols="6" class="py-0">
           <v-text-field
             v-model="formData.email"
-            outlined dense
+            outlined
             label="Email"
             :rules="[rules.required, rules.email]"
             :disabled="isSaving"
@@ -116,7 +116,7 @@
             v-model="formData.category"
             :items="category"
             :disabled="isSaving"
-            outlined dense
+            outlined
             label="Category"
             :rules="[rules.required]"
           />
@@ -132,7 +132,7 @@
           <v-select
             v-model="formData.occupation"
             :items="occupation"
-            outlined dense
+            outlined
             :disabled="isSaving"
             label="Occupation"
             :rules="[rules.required]"
@@ -141,7 +141,7 @@
         <v-col cols="6" class="py-0">
           <v-text-field
             v-model="formData.website"
-            outlined dense
+            outlined
             label="Web site"
             :disabled="isSaving"
           />
@@ -156,7 +156,7 @@
         <v-col cols="12" class="py-0">
           <v-text-field
             v-model="formData.address"
-            outlined dense
+            outlined
             label="Address"
             :rules="[rules.required]"
             :disabled="isSaving"
@@ -165,7 +165,7 @@
         <v-col cols="6" class="py-0">
           <v-text-field
             v-model="formData.city"
-            outlined dense
+            outlined
             label="City"
             :rules="[rules.required]"
             :disabled="isSaving"
@@ -175,7 +175,7 @@
           <v-autocomplete
             v-model="formData.country"
             :items="countryList"
-            outlined dense
+            outlined
             :menu-props="{
               maxHeight: 220
             }"
@@ -187,7 +187,7 @@
         <v-col cols="12" class="py-0">
           <v-text-field
             v-model="formData.phoneNumber"
-            outlined dense
+            outlined
             label="Phone Number"
             :disabled="isSaving"
           />

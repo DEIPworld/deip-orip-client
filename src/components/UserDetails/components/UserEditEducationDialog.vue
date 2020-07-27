@@ -5,7 +5,7 @@
         <v-col cols="12">
           <v-text-field
             v-model="formData.educationalInstitution"
-            outlined dense
+            outlined
             label="Educational institution"
             :rules="[ rules.required ]"
           />
@@ -24,7 +24,7 @@
               <v-text-field
                 ref="dateFromInput"
                 v-model="formData.period.from"
-                outlined dense
+                outlined
                 label="From"
                 append-icon="event"
                 readonly
@@ -51,7 +51,7 @@
               <v-text-field
                 ref="dateToInput"
                 v-model="formData.period.to"
-                outlined dense
+                outlined
                 label="To"
                 append-icon="event"
                 :disabled="formData.isActive"
@@ -81,7 +81,7 @@
         <v-col cols="12">
           <v-text-field
             v-model="formData.degree"
-            outlined dense
+            outlined
             label="Degree obtained"
             :rules="[ rules.required ]"
           />
@@ -91,7 +91,7 @@
         <v-col cols="12">
           <v-text-field
             v-model="formData.area"
-            outlined dense
+            outlined
             label="Area of study"
             :rules="[ rules.required ]"
           />
@@ -101,7 +101,7 @@
         <v-col cols="12">
           <v-textarea
             v-model="formData.description"
-            outlined dense
+            outlined
             :rows="2"
             auto-grow
             label="Description"

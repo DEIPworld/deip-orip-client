@@ -27,7 +27,7 @@
           >
             <v-text-field
               v-model="formData.email"
-              outlined dense
+              outlined
               label="Email"
               :rules="[rules.required, rules.email]"
               :disabled="isSaving"
@@ -35,7 +35,7 @@
 
             <v-text-field
               v-model="formData.firstName"
-              outlined dense
+              outlined
               label="First name"
               :rules="[rules.required, rules.nameChars]"
               :disabled="isSaving"
@@ -43,7 +43,7 @@
 
             <v-text-field
               v-model="formData.lastName"
-              outlined dense
+              outlined
               label="Last name"
               :rules="[rules.required, rules.nameChars]"
               :disabled="isSaving"
@@ -51,7 +51,7 @@
 
             <v-text-field
               v-model="formData.username"
-              outlined dense
+              outlined
               name="username"
               label="Username"
               :rules="[
@@ -66,7 +66,7 @@
 
             <v-text-field
               v-model="formData.masterPassword"
-              outlined dense
+              outlined
               class="mt-4"
               label="Master Password"
               :disabled="isSaving"
@@ -80,7 +80,7 @@
             <v-text-field
               ref="reEnterMasterPassword"
               v-model="formData.reEnterMasterPassword"
-              outlined dense
+              outlined
               class="mt-2"
               label="Re-Enter Master Password"
               :disabled="isSaving"

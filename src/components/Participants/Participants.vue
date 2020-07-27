@@ -23,7 +23,7 @@
           <v-list-item-content>
             <v-text-field
               v-model="filter.searchTerm"
-              outlined dense
+              outlined
               prepend-inner-icon="search"
               hide-details
               label="Search by names"
@@ -35,7 +35,7 @@
             <v-select
               v-model="filter.discipline"
               :items="disciplines"
-              outlined dense
+              outlined
               hide-details
               label="Disciplines"
             />
@@ -46,7 +46,7 @@
             <v-select
               v-model="filter.contribution"
               :items="contributions"
-              outlined dense
+              outlined
               hide-details
               label="Contribution type"
             />
@@ -57,7 +57,7 @@
             <v-select
               v-model="filter.criteria"
               :items="criterias"
-              outlined dense
+              outlined
               hide-details
               label="Assessment criteria"
             />

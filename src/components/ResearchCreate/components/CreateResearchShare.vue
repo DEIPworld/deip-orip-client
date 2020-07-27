@@ -13,7 +13,7 @@
         <v-text-field
           v-model="reviewShare"
           suffix="%"
-          outlined dense
+          outlined
           mask="##"
           hide-details
           @keyup="setReviewShare"

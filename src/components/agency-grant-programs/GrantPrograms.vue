@@ -111,7 +111,7 @@
                     <v-text-field
                       v-model="filter.searchTerm"
                       append-icon="search"
-                      outlined dense
+                      outlined
                       class="pa-0 ma-0"
                       name="search-term"
                     />

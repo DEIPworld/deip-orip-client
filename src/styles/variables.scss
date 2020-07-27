@@ -2,21 +2,25 @@
 @use '~vuetify/src/styles/tools/functions' as *;
 @use 'next/core/typography';
 
+$shades: (
+  'black': #1A1B22,
+);
+
 // button
 $btn-sizes: (
   x-small: 24,
-  small: 32,
-  default: 40,
-  large: 48,
-  x-large: 56
+  small: 36,
+  default: 48,
+  large: 56,
+  x-large: 64
 );
 
 $btn-font-sizes: (
   //x-small: 0.75rem,
-  //small: 0.875rem,
-  //default: 1rem,
-  //large: 1rem,
-  //x-large: 1.125rem
+  small: 0.875rem,
+  default: 1rem,
+  large: 1rem,
+  x-large: 1.125rem
 );
 
 $btn-text-transform: none;
@@ -27,8 +31,12 @@ $label-font-size: 0.875rem;
 $input-font-size: 0.875rem;
 $label-line-height: 1.25rem;
 
-//$text-field-outlined dense-full-width-outlined-slot-min-height: 3rem;
-//$text-field-outlined dense-margin-top: 16px;
+$text-field-filled-full-width-outlined-slot-min-height: 48px;
+$text-field-enclosed-prepend-append-margin-top: 12px;
+$text-field-outlined-label-position-x: 14px;
+$text-field-outlined-label-position-y: -22px;
+//$text-field-outlined-full-width-outlined-slot-min-height: 3rem;
+//$text-field-outlined-margin-top: 16px;
 //$text-field-outlined-label-position-x: 14px;
 //$text-field-enclosed-prepend-append-margin-top: 13px;
 

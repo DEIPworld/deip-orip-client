@@ -115,5 +115,5 @@
 
 <style lang="scss">
   /*@import '~vuetify/src/styles/styles.sass';*/
-  @import '~vuetify/src/styles/styles.sass';
+  /*@import '~vuetify/src/styles/styles.sass';*/
 </style>

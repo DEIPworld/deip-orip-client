@@ -17,7 +17,7 @@
         </v-toolbar>
         <v-card-text class="pa-5">
           <!--  <v-select
-            outlined dense
+            outlined
             ref="paymentAward"
             v-model="awardee"
             :items="awards"
@@ -42,7 +42,7 @@
           <v-text-field
             ref="paymentNumber"
             v-model="paymentNumber"
-            outlined dense
+            outlined
             label="Payment Number"
             :rules="[
               rules.required,
@@ -55,7 +55,7 @@
             ref="paymentAmount"
             v-model="paymentAmount"
             label="Amount"
-            outlined dense
+            outlined
             :rules="[
               rules.required,
               rules.isDigit,
@@ -88,7 +88,7 @@
             class="c-mt-2"
             label="Payment purpose"
             rows="2"
-            outlined dense
+            outlined
             auto-grow
             append-icon="notes"
             :disabled="!awardee"

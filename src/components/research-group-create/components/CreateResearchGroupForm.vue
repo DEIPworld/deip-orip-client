@@ -4,7 +4,7 @@
       <v-col cols="12">
         <v-text-field
           v-model="formData.name"
-          outlined dense
+          outlined
           name="title"
           label="Title"
           :rules="[rules.required, rules.titleLength]"
@@ -20,7 +20,7 @@
           v-model="formData.description"
           name="Description"
           label="Description"
-          outlined dense
+          outlined
           auto-grow
           :rules="[rules.required, rules.descriptionLength]"
         />
@@ -32,7 +32,7 @@
         <v-text-field
           v-model="q"
           label="Search..."
-          outlined dense
+          outlined
           append-icon="search"
           @input="debounceSearchUsers()"
         />

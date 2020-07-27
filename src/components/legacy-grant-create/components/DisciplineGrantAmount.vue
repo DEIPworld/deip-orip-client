@@ -11,7 +11,7 @@
             <v-text-field
               ref="amount"
               v-model="grantInfo.amount"
-              outlined dense
+              outlined
               label="Amount, DEIP Tokens"
               :rules="[
                 rules.required,

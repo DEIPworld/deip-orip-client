@@ -64,7 +64,7 @@
               <v-textarea
                 v-model="coverLetter"
                 :rows="2"
-                outlined dense
+                outlined
                 auto-grow
                 name="Cover letter"
                 label="Cover letter"
@@ -269,7 +269,7 @@
               :menu-props="{maxWidth:500}"
               label="Select a content to request review"
               item-text="title"
-              outlined dense
+              outlined
               item-value="id"
               :disabled="isRequestingReview"
               :items="contentListToReview"

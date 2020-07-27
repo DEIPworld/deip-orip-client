@@ -70,7 +70,7 @@
                     :items="awardsFilterByStatus"
                     label="STATUS"
                     return-object
-                    outlined dense
+                    outlined
                   />
                 </v-row>
               </v-col>
@@ -167,7 +167,7 @@
                     :items="paymentsFilterByStatus"
                     label="STATUS"
                     return-object
-                    outlined dense
+                    outlined
                   />
                 </v-row>
               </v-col>
@@ -179,7 +179,7 @@
                     :items="paymentsFilterByOrganization"
                     label="ORGANIZATION"
                     return-object
-                    outlined dense
+                    outlined
                   />
                 </v-row>
               </v-col>
@@ -191,7 +191,7 @@
                     :items="paymentsFilterByPI"
                     label="PI"
                     return-object
-                    outlined dense
+                    outlined
                   />
                 </v-row>
               </v-col>

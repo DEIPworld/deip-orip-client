@@ -69,7 +69,7 @@
             <swatches v-model="newListDialog.color" inline colors="material-light" />
             <v-text-field
               v-model="newListDialog.name"
-              outlined dense
+              outlined
               label="List name"
               :rules="[rules.required]"
             />
@@ -119,7 +119,7 @@
             <swatches v-model="editListDialog.color" inline colors="material-light" />
             <v-text-field
               v-model="editListDialog.name"
-              outlined dense
+              outlined
               label="List name"
               :rules="[rules.required]"
             />

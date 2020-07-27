@@ -41,7 +41,7 @@
               v-model="coverLetter"
               label="Provide a cover letter"
               auto-grow
-              outlined dense
+              outlined
               rows="2"
               :rules="[required]"
             />
@@ -63,7 +63,7 @@
                 <v-text-field
                   v-model="publication.value"
                   label="Link to publication"
-                  outlined dense
+                  outlined
                   :rules="[required, urlRule]"
                 />
 

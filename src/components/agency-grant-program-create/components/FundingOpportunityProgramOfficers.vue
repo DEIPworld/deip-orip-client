@@ -8,7 +8,7 @@
       <v-card class="py-4 elevation-0">
         <v-text-field
           label="Start typing for suggestion"
-          outlined dense
+          outlined
           append-icon="search"
         />
 

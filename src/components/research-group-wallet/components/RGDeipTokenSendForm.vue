@@ -12,7 +12,7 @@
           ref="toUsername"
           v-model="form.to"
           label="To"
-          outlined dense
+          outlined
           :rules="[
             rules.required,
             rules.isExist
@@ -24,7 +24,7 @@
         <v-text-field
           v-model="form.amount"
           label="Amount"
-          outlined dense
+          outlined
           :rules="[
             rules.required,
             rules.amount
@@ -36,7 +36,7 @@
             label="Memo - optional"
             multi-line
             rows="1"
-            outlined dense
+            outlined
             auto-grow
             counter="2000"
             no-resize

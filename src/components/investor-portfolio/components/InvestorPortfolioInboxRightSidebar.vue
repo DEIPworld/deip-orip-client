@@ -122,7 +122,7 @@
           <v-textarea
             v-else
             v-model="memo"
-            outlined dense
+            outlined
             auto-grow
             :rows="4"
           />
@@ -181,7 +181,7 @@
                 <v-select
                   v-model="updateTagsDialog.list"
                   :items="customLists"
-                  outlined dense
+                  outlined
                   item-text="name"
                   return-object
                 />

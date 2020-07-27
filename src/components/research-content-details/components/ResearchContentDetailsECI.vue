@@ -15,7 +15,7 @@
           item-text="name"
           item-value="external_id"
           label="Discipline"
-          outlined dense
+          outlined
           :disabled="eciHistoryLoading"
           @change="loadDisciplineEciHistory()"
         />
