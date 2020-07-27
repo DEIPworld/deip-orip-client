@@ -1,6 +1,6 @@
 <template>
   <div>
-    <d-chart-scatter :data="chartData" :options="_chartOptions" />
+    <d-chart-line :data="chartData" :options="_chartOptions" />
 
     <v-data-table
       :hide-default-footer="data.length < 50"
@@ -46,11 +46,10 @@
   import { chartGradient, switchColor } from '@/plugins/charts';
   import { EXPERTISE_CONTRIBUTION_TYPE } from '@/variables';
   import moment from 'moment';
-  import DChartScatter from '@/components/Deipify/DChart/DChartScatter';
 
   export default {
     name: 'EciHistory',
-    components: { DChartScatter, DChartLine },
+    components: { DChartLine },
     props: {
       chartOptions: {
         type: Object,

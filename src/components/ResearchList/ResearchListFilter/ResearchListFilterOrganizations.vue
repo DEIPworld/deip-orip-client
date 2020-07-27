@@ -46,9 +46,12 @@
     name: 'ResearchListFilterOrganizations',
     mixins: [ResearchListAbstractFilter],
     computed: {
-      ...mapGetters({
-        organizations: 'feed/organizations'
-      })
+      // ...mapGetters({
+      //   organizations: 'feed/organizations'
+      // }),
+      organizations() {
+        return [...this.$store.getters['feed/organizations']].sort((a, b) => a.name.localeCompare(b.name));
+      }
     }
   };
 </script>

@@ -258,10 +258,11 @@
       }),
 
       disciplines() {
-        return getTopLevelNodes().map((d) => ({
-          external_id: d.id,
-          label: d.label
-        }));
+        return getTopLevelNodes()
+          .map((d) => ({
+            external_id: d.id,
+            label: d.label
+          }));
       },
 
       growthRateChartData() {
@@ -270,10 +271,12 @@
           this.disciplinesGrowthRate.forEach((item, i) => {
             item.history.forEach((h, j) => {
               if (i === 0) {
-                dataTable[j] = [this.moment(h.timestamp).format('DD MMM YY')];
+                dataTable[j] = [this.moment(h.timestamp)
+                  .format('DD MMM YY')];
               }
               dataTable[j].push({
-                v: h.growth_rate ? parseFloat(h.growth_rate) / 100 : 0.00, f: h.growth_rate ? h.growth_rate : '0.00 %'
+                v: h.growth_rate ? parseFloat(h.growth_rate) / 100 : 0.00,
+                f: h.growth_rate ? h.growth_rate : '0.00 %'
               });
             });
           });
@@ -283,8 +286,12 @@
               item.history.forEach((h) => {
                 if (h.growth_rate) {
                   dataTable.push([
-                    this.moment(h.timestamp).format('DD MMM YY'),
-                    { v: h.growth_rate ? parseFloat(h.growth_rate) / 100 : 0.00, f: h.growth_rate ? h.growth_rate : '0.00 %' }
+                    this.moment(h.timestamp)
+                      .format('DD MMM YY'),
+                    {
+                      v: h.growth_rate ? parseFloat(h.growth_rate) / 100 : 0.00,
+                      f: h.growth_rate ? h.growth_rate : '0.00 %'
+                    }
                   ]);
                 }
               });
@@ -324,7 +331,8 @@
             .find(
               (item) => item.discipline_external_id === this.distributionDiscipline
             )
-            .assessment_criterias.map((item) => [
+            .assessment_criterias
+            .map((item) => [
               this.criteriaTypes[item[0]],
               item[1]
             ]);
@@ -443,29 +451,41 @@
       },
 
       updateGrowthRateChart() {
-        const from = this.growthRateDisciplinesFilter.from ? this.moment(this.growthRateDisciplinesFilter.from)
-          .startOf('day')
-          .toISOString(true)
-          .split('.')[0] : '';
-        const to = this.growthRateDisciplinesFilter.to ? this.moment(this.growthRateDisciplinesFilter.to)
-          .startOf('day')
-          .toISOString(true)
-          .split('.')[0] : '';
+        const from = this.growthRateDisciplinesFilter.from
+          ? this.moment(this.growthRateDisciplinesFilter.from)
+            .startOf('day')
+            .toISOString(true)
+            .split('.')[0]
+          : '';
+        const to = this.growthRateDisciplinesFilter.to
+          ? this.moment(this.growthRateDisciplinesFilter.to)
+            .startOf('day')
+            .toISOString(true)
+            .split('.')[0]
+          : '';
         const { step } = this.growthRateDisciplinesFilter;
 
-        return this.$store.dispatch('overview/getDisciplinesGrowthRate', { from, to, step });
+        return this.$store.dispatch('overview/getDisciplinesGrowthRate', {
+          from,
+          to,
+          step
+        });
       },
 
       updateDetailedChart() {
         const { discipline } = this.eciDetailedOverviewFilter;
-        const fromDate = this.eciDetailedOverviewFilter.date[0] ? this.moment(this.eciDetailedOverviewFilter.date[0])
-          .startOf('day')
-          .toISOString(true)
-          .split('.')[0] : '';
-        const toDate = this.eciDetailedOverviewFilter.date[1] ? this.moment(this.eciDetailedOverviewFilter.date[1])
-          .endOf('day')
-          .toISOString(true)
-          .split('.')[0] : '';
+        const fromDate = this.eciDetailedOverviewFilter.date[0]
+          ? this.moment(this.eciDetailedOverviewFilter.date[0])
+            .startOf('day')
+            .toISOString(true)
+            .split('.')[0]
+          : '';
+        const toDate = this.eciDetailedOverviewFilter.date[1]
+          ? this.moment(this.eciDetailedOverviewFilter.date[1])
+            .endOf('day')
+            .toISOString(true)
+            .split('.')[0]
+          : '';
         const { contribution } = this.eciDetailedOverviewFilter;
         const { criteria } = this.eciDetailedOverviewFilter;
 
