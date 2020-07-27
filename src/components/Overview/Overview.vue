@@ -47,10 +47,12 @@
             <d-input-date
               v-model="growthRateDisciplinesFilter.from"
               label="From"
-              :x-props="{
+              :picker-props="{
                 max:moment(growthRateDisciplinesFilter.to).subtract(1, 'days').format('YYYY-MM-DD'),
                 min:moment('2018-01-01').format('YYYY-MM-DD'),
-                clearable:true
+              }"
+              :field-props="{
+                clearable: true
               }"
               @input="updateGrowthRateChart"
             />
@@ -59,10 +61,12 @@
             <d-input-date
               v-model="growthRateDisciplinesFilter.to"
               label="To"
-              :x-props="{
+              :picker-props="{
                 max:moment().format('YYYY-MM-DD'),
                 min:moment(growthRateDisciplinesFilter.from).add(1, 'days').format('YYYY-MM-DD'),
-                clearable:true
+              }"
+              :field-props="{
+                clearable: true
               }"
               @input="updateGrowthRateChart"
             />
@@ -125,25 +129,13 @@
       <d-block title="Expertise Contribution Index detailed overview">
         <v-row>
           <v-col cols="2">
-            <d-input-date
-              v-model="eciDetailedOverviewFilter.fromDate"
-              label="From"
-              :x-props="{
-                max:moment(eciDetailedOverviewFilter.toDate).subtract(1, 'days').format('YYYY-MM-DD'),
-                min:moment('2020-01-01').format('YYYY-MM-DD'),
-                clearable:true
-              }"
-            />
-          </v-col>
-          <v-col cols="2">
-            <d-input-date
-              v-model="eciDetailedOverviewFilter.toDate"
-              label="To"
-              :x-props="{
-                max:moment().format('YYYY-MM-DD'),
-                min:moment(eciDetailedOverviewFilter.fromDate).add(1, 'days').format('YYYY-MM-DD'),
-                clearable:true
-              }"
+            <v-select
+              v-model="eciDetailedOverviewFilter.discipline"
+              label="Disciplines"
+              outlined
+              :items="[{label: 'All', external_id: ''}, ...disciplines]"
+              item-text="label"
+              item-value="external_id"
             />
           </v-col>
           <v-col cols="2">
@@ -164,14 +156,18 @@
               outlined
             />
           </v-col>
-          <v-col cols="3">
-            <v-select
-              v-model="eciDetailedOverviewFilter.discipline"
-              label="Disciplines"
-              outlined
-              :items="[{label: 'All', external_id: ''}, ...disciplines]"
-              item-text="label"
-              item-value="external_id"
+
+          <v-col cols="2">
+            <d-input-date
+              v-model="eciDetailedOverviewFilter.date"
+              label="Period"
+              :picker-props="{
+                min: moment('2020-01-01').format('YYYY-MM-DD'),
+                range: true
+              }"
+              :field-props="{
+                clearable: true,
+              }"
             />
           </v-col>
           <v-col cols="1">
@@ -225,8 +221,7 @@
       return {
         eciDetailedOverviewFilter: {
           discipline: '',
-          fromDate: undefined,
-          toDate: undefined,
+          date: [],
           contribution: '',
           criteria: ''
         },
@@ -463,11 +458,11 @@
 
       updateDetailedChart() {
         const { discipline } = this.eciDetailedOverviewFilter;
-        const fromDate = this.eciDetailedOverviewFilter.fromDate ? this.moment(this.eciDetailedOverviewFilter.fromDate)
+        const fromDate = this.eciDetailedOverviewFilter.date[0] ? this.moment(this.eciDetailedOverviewFilter.date[0])
           .startOf('day')
           .toISOString(true)
           .split('.')[0] : '';
-        const toDate = this.eciDetailedOverviewFilter.toDate ? this.moment(this.eciDetailedOverviewFilter.toDate)
+        const toDate = this.eciDetailedOverviewFilter.date[1] ? this.moment(this.eciDetailedOverviewFilter.date[1])
           .endOf('day')
           .toISOString(true)
           .split('.')[0] : '';

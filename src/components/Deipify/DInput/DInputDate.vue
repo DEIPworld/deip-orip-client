@@ -8,32 +8,74 @@
   >
     <template v-slot:activator="{ on }">
       <v-text-field
-        :value="value"
+        v-model="dateText"
         :label="label"
-        v-bind="_xProps"
+        outlined
+        hide-details="auto"
         append-icon="event"
-        :readonly="!_xProps.disabled"
-        @blur="onBlur"
-        @change="onChange"
-        @focus="onFocus"
-        @input="onInput"
+        v-bind="fieldProps"
+        :readonly="!fieldProps.disabled"
         v-on="on"
       />
     </template>
-    <v-date-picker v-bind="_xProps" @change="onInput" @input="open = false" />
+    <v-date-picker v-model="internalValue" v-bind="pickerProps" @change="onChange" />
   </v-menu>
 </template>
 
 <script>
-  import { AbstractField } from '@/components/Deipify/DInput/AbstractField';
+  import Proxyable from 'vuetify/lib/mixins/proxyable';
 
   export default {
     name: 'DInputDate',
-    mixins: [AbstractField],
+    mixins: [Proxyable],
+    props: {
+      label: {
+        type: String,
+        default: null
+      },
+      pickerProps: {
+        type: Object,
+        default: () => ({})
+      },
+      fieldProps: {
+        type: Object,
+        default: () => ({})
+      }
+    },
     data() {
       return {
         open: false
       };
     },
+    computed: {
+      dateText: {
+        get() {
+          if (this.pickerProps.range && Array.isArray(this.internalValue)) {
+            return this.internalValue.join(' ~ ');
+          }
+          if (!this.pickerProps.range && Array.isArray(this.internalValue)) {
+            return this.internalValue.join(', ');
+          }
+          return this.internalValue;
+        },
+        set(val) {
+          if (Array.isArray(this.internalValue)) {
+            if (val === null) {
+              this.internalValue = [];
+            } else {
+              this.internalValue = val;
+            }
+          } else {
+            this.internalValue = '';
+          }
+        }
+      }
+    },
+    methods: {
+      onChange(e) {
+        this.$emit('change', e);
+        this.open = false;
+      }
+    }
   };
 </script>
