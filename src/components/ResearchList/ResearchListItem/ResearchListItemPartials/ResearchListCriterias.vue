@@ -19,13 +19,14 @@
           </template>
           <span>{{ item.step.description }}</span>
         </v-tooltip>
-        <div class="d-flex align-center">
+        <div v-else class="d-flex align-center">
           <span class="text-overline mr-1">{{ item.readinessLevelShortTitle }}</span>
           <v-avatar size="20" class="mr-1" color="grey">
             <span class="white--text text-h6">{{ item.value.index + 1 }}</span>
           </v-avatar>
         </div>
       </div>
+
     </div>
   </div>
 </template>
