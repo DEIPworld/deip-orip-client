@@ -1,7 +1,6 @@
 import { ExpertiseContributionsService } from '@deip/expertise-contributions-service';
 import { EXPERTISE_CONTRIBUTION_TYPE, ECI_STAT_PERIOD_STEP_TYPE } from '@/variables';
 import { ResearchService } from '@deip/research-service';
-import { getTopLevelNodes } from '@/components/common/disciplines/DisciplineTreeService';
 
 const expertiseContributionsService = ExpertiseContributionsService.getInstance();
 const researchService = ResearchService.getInstance();
@@ -27,7 +26,6 @@ const getters = {
   criteriaTypes: () => state.criteriaTypes,
   disciplinesExpertiseStats: () => state.disciplinesExpertiseStats,
   disciplinesExpertiseStatsHistory: () => state.disciplinesExpertiseStatsHistory,
-  disciplinesGrowthRate: () => getTopLevelNodes().map(({ id }) => state.disciplinesGrowthRate.find(({ external_id }) => id === external_id)),
 
   eciHistoryByDiscipline: (state, getters) => { // temp
     const records = state.eciHistoryByDiscipline;
@@ -97,7 +95,7 @@ const getters = {
           params: {
             research_group_permlink: decodeURIComponent(record.research_group.permlink),
             research_permlink: decodeURIComponent(record.research.permlink),
-            content_permlink: decodeURIComponent(record.research_content.permlink),
+            content_permlink: decodeURIComponent(record.research_content.permlink)
           }
         };
 
@@ -138,19 +136,12 @@ const actions = {
       });
   },
 
-  getDisciplinesGrowthRate(context, payload = {}) {
-    return expertiseContributionsService.getDisciplinesExpertiseStatsHistory(payload)
-      .then((res) => {
-        context.commit('getDisciplinesGrowthRate', res);
-      });
-  },
-
   getEciHistoryByDiscipline(context, payload) {
     return expertiseContributionsService.getDisciplineExpertiseHistory(payload)
       .then((res) => {
         context.commit('getEciHistoryByDiscipline', res);
       });
-  },
+  }
 
 };
 
@@ -159,13 +150,13 @@ const mutations = {
     state.disciplinesExpertiseStats = payload.map((a) => a[1]);
   },
   getDisciplinesExpertiseStatsHistory(state, payload) {
-    state.disciplinesExpertiseStatsHistory = payload.map((a) => ({ external_id: a[0], history: a[1] }));
+    state.disciplinesExpertiseStatsHistory = payload.map((a) => ({
+      external_id: a[0],
+      history: a[1]
+    }));
   },
   getEciHistoryByDiscipline(state, payload) {
     state.eciHistoryByDiscipline = payload;
-  },
-  getDisciplinesGrowthRate(state, payload) {
-    state.disciplinesGrowthRate = payload.map((a) => ({ external_id: a[0], history: a[1] }));
   }
 };
 

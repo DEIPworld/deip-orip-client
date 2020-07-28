@@ -8,6 +8,7 @@
   >
     <template v-slot:activator="{ on }">
       <v-text-field
+        ref="field"
         v-model="dateText"
         :label="label"
         outlined
@@ -15,6 +16,7 @@
         append-icon="event"
         v-bind="fieldProps"
         :readonly="!fieldProps.disabled"
+        @click:clear="$refs.field.blur()"
         v-on="on"
       />
     </template>
