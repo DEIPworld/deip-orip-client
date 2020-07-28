@@ -2,7 +2,7 @@
   <full-screen-view title="Employment">
     <v-form ref="form" v-model="isFormValid">
       <d-form-block title="Company">
-        <v-col cols="12">
+        <v-col cols="5">
           <v-text-field
             v-model="formData.company"
             outlined
@@ -13,7 +13,7 @@
       </d-form-block>
 
       <d-form-block title="Location">
-        <v-col>
+        <v-col cols="5">
           <v-text-field
             v-model="formData.location.city"
             outlined
@@ -21,7 +21,7 @@
             :rules="[rules.required]"
           />
         </v-col>
-        <v-col offset="1">
+        <v-col cols="5">
           <v-text-field
             v-model="formData.location.country"
             outlined
@@ -32,7 +32,7 @@
       </d-form-block>
 
       <d-form-block title="Period">
-        <v-col>
+        <v-col cols="5">
           <v-menu
             v-model="dateFromMenu"
             :close-on-content-click="false"
@@ -58,7 +58,7 @@
             <v-date-picker v-model="formData.period.from" type="month" @input="dateFromMenu = false" />
           </v-menu>
         </v-col>
-        <v-col offset="1">
+        <v-col cols="5">
           <v-menu
             v-model="dateToMenu"
             :close-on-content-click="false"
@@ -99,7 +99,7 @@
       </d-form-block>
 
       <d-form-block title="Position">
-        <v-col cols="12">
+        <v-col cols="5">
           <v-text-field
             v-model="formData.position"
             outlined
@@ -114,7 +114,7 @@
           <v-textarea
             v-model="formData.description"
             outlined
-            :rows="2"
+            :rows="6"
             auto-grow
             label="Description"
           />

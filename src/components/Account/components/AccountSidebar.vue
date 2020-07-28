@@ -5,7 +5,7 @@
     permanent
     width="280"
   >
-    <template>
+    <!-- <template>
       <v-list nav dense>
         <v-subheader>Account</v-subheader>
         <v-list-item :to="{ name: 'account.summary' }" exact>
@@ -39,7 +39,7 @@
         </v-list-item>
       </v-list>
       <v-divider />
-    </template>
+    </template> -->
 
     <template v-for="(menuBlock, menuIndex) of menu">
       <v-list nav dense :key="'menu-item-' + menuIndex">
@@ -72,15 +72,30 @@
             subheader: 'Projects',
             items: [
               {
-                icon: 'mdi-file-document',
-                title: 'Projects',
+                icon: 'business_center',
+                title: 'My projects',
                 route: { name: 'account.projects' }
               },
+              {
+                icon: 'bookmarks',
+                title: 'Following projects',
+                route: { name: 'account.followingProjects' }
+              }
               // {
               //   icon: 'mdi-file-replace',
               //   title: 'Project requests',
               //   route: { name: 'account.projectRequests' }
               // }
+            ]
+          },
+          {
+            subheader: 'Groups',
+            items: [
+              {
+                icon: 'reduce_capacity',
+                title: 'Teams',
+                route: { name: 'account.groups' }
+              },
             ]
           },
           {
@@ -95,16 +110,6 @@
                 icon: 'vpn_key',
                 title: 'Private key',
                 route: { name: 'account.privateKey' }
-              }
-            ]
-          },
-          {
-            subheader: 'Expertise contribution index',
-            items: [
-              {
-                icon: 'bar_chart',
-                title: 'Overview',
-                route: { name: 'account.expertiseDetails' }
               }
             ]
           }

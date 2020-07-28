@@ -128,10 +128,10 @@
               label: 'Explore',
               to: { name: 'ResearchFeed' }
             },
-            {
-              label: 'Dashboard',
-              to: { name: 'Dashboard' }
-            },
+            // {
+            //   label: 'Dashboard',
+            //   to: { name: 'Dashboard' }
+            // },
             {
               label: 'Overview',
               to: { name: 'overview' }

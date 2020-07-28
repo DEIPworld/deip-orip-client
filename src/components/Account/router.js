@@ -9,6 +9,8 @@ import UserEditEmploymentDialog from '@/components/UserDetails/components/UserEd
 import { store } from '@/store';
 import AccountProjectRequests from '@/components/Account/AccountProjectRequests';
 import AccountProjects from '@/components/Account/AccountProjects';
+import AccountFollowingProjects from '@/components/Account/AccountFollowingProjects';
+import AccountGroups from '@/components/Account/AccountGroups';
 
 export const accountRouting = [{
   path: '/account',
@@ -65,6 +67,16 @@ export const accountRouting = [{
       path: 'project',
       name: 'account.projects',
       component: AccountProjects
+    },
+    {
+      path: 'following-projects',
+      name: 'account.followingProjects',
+      component: AccountFollowingProjects
+    },
+    {
+      path: 'groups',
+      name: 'account.groups',
+      component: AccountGroups
     },
     {
       path: 'project-requests',

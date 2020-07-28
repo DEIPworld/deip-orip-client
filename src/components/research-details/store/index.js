@@ -36,6 +36,7 @@ const state = {
   applicationsRefsList: [],
   userContributionsList: [],
   expertsList: [],
+  researchEciStatsRecords: null,
 
   isLoadingResearchDetails: undefined,
   isLoadingResearchContent: undefined,
@@ -97,6 +98,8 @@ const getters = {
   contributionsList: (state, getters) => state.contributionsList,
 
   groupInvitesList: (state, getters) => state.groupInvitesList,
+
+  researchEciStatsRecords: (state) => state.researchEciStatsRecords,
 
   expertsList: (state, getters) => state.expertsList,
 
@@ -235,7 +238,8 @@ const actions = {
         return Promise.all([
           researchContentLoad, membersLoad, reviewsLoad, disciplinesLoad, tokenHoldersLoad,
           tokenSaleLoad, tokenSalesLoad, groupLoad,
-          applicationsLoad, userContributionsLoad
+          applicationsLoad, userContributionsLoad,
+          dispatch('loadResearchEciStatsRecords', { research_external_id: state.research.external_id })
         ]);
       }, ((err) => { console.error(err); }))
       .finally(() => {
@@ -467,6 +471,13 @@ const actions = {
       if (notify) notify();
     });
   },
+
+  loadResearchEciStatsRecords({ commit }, filter) {
+    return expertiseContributionsService.getResearchExpertiseStats(filter.research_external_id, filter)
+      .then((stats) => {
+        commit('SET_RESEARCH_ECI_STATS', stats);
+      });
+  }
 };
 
 // mutations
@@ -576,8 +587,8 @@ const mutations = {
     state.group = value;
   },
 
-  RESET_STATE(state) {
-
+  SET_RESEARCH_ECI_STATS(state, value) {
+    state.researchEciStatsRecords = value;
   }
 };
 

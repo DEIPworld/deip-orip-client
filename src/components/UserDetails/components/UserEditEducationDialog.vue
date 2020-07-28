@@ -2,7 +2,7 @@
   <full-screen-view title="Education">
     <v-form ref="form" v-model="isFormValid">
       <d-form-block title="Educational institution">
-        <v-col cols="12">
+        <v-col cols="5">
           <v-text-field
             v-model="formData.educationalInstitution"
             outlined
@@ -12,7 +12,7 @@
         </v-col>
       </d-form-block>
       <d-form-block title="Dates attended">
-        <v-col>
+        <v-col cols="5">
           <v-menu
             v-model="dateFromMenu"
             :close-on-content-click="false"
@@ -38,7 +38,7 @@
             <v-date-picker v-model="formData.period.from" type="month" @input="dateFromMenu = false" />
           </v-menu>
         </v-col>
-        <v-col offset="1">
+        <v-col cols="5">
           <v-menu
             v-model="dateToMenu"
             :close-on-content-click="false"
@@ -78,7 +78,7 @@
         </v-col>
       </d-form-block>
       <d-form-block title="Degree obtained">
-        <v-col cols="12">
+        <v-col cols="5">
           <v-text-field
             v-model="formData.degree"
             outlined
@@ -88,7 +88,7 @@
         </v-col>
       </d-form-block>
       <d-form-block title="Area of study">
-        <v-col cols="12">
+        <v-col cols="5">
           <v-text-field
             v-model="formData.area"
             outlined
@@ -102,7 +102,7 @@
           <v-textarea
             v-model="formData.description"
             outlined
-            :rows="2"
+            :rows="6"
             auto-grow
             label="Description"
           />

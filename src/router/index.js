@@ -184,14 +184,7 @@ const router = new Router({
     }, {
       path: '/:research_group_permlink/group-details',
       name: 'ResearchGroupDetails',
-      component: preliminaryDataLoader(ResearchGroupDetails, {
-        beforeEnter: (to, from, next) => {
-          const loadPagePromise = store.dispatch('researchGroup/loadResearchGroup', {
-            permlink: decodeURIComponent(to.params.research_group_permlink)
-          });
-          loadPage(loadPagePromise, next);
-        }
-      })
+      component: ResearchGroupDetails
     }, {
       path: '/:research_group_permlink/group-details/group-settings',
       name: 'ResearchGroupSettings',

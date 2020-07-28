@@ -1,13 +1,20 @@
 <template>
-  <v-card flat class=" full-height">
+  <v-navigation-drawer
+    app
+    clipped
+    permanent
+    right
+  >
+    <!-- <v-card> -->
     <div v-if="isOwner && hasInvites">
-      <div id="invites" class="text-h6 font-weight-bold pb-2">
+      <div id="invites" class="text-h6 font-weight-bold pa-4">
         Invites: {{ invites.length }}
       </div>
+      <v-divider />
       <div
         v-for="(invite, index) of invites"
         :key="'invite-' + index"
-        class="py-2"
+        class="pa-4"
       >
         <router-link
           class="a full-width break-word font-weight-medium"
@@ -26,14 +33,12 @@
             class="mx-0 py-0 my-2"
             color="primary"
             dark
-            outlined
+            text
             @click="openInviteDetailsDialog(invite, index)"
           >
             View
           </v-btn>
         </div>
-
-        <v-divider v-if="index !== reviewRequests.length - 1" class="ma-2" />
       </div>
 
       <v-dialog
@@ -85,17 +90,19 @@
           </v-card-actions>
         </v-card>
       </v-dialog>
+      <v-divider />
     </div>
     <!-- ### END User Profile Invites Section ### -->
 
     <div v-if="isOwner && hasReviewRequests">
-      <div id="review-requests" class="text-h6 font-weight-bold pb-2">
+      <div id="review-requests" class="text-h6 font-weight-bold pa-4">
         Review Requests: {{ reviewRequests.length }}
       </div>
+      <v-divider />
       <div
         v-for="(reviewRequest, index) of reviewRequests"
         :key="reviewRequest._id"
-        class="py-2"
+        class="pa-4"
       >
         <platform-avatar link-to-profile :user="reviewRequest.requestorProfile" />
         <div class="py-2 caption font-weight-medium">
@@ -142,66 +149,36 @@
       <v-divider />
     </div>
 
+
     <!-- ### START User Profile Expertise Section ### -->
-    <div class="mt-6">
-      <div class="text-h6 bold">
-        Expertise Contribution Index
+
+    <eci-stats-info :expertise="expertise" :eciStatsByDiscipline="eciStatsByDiscipline" :accountName="userInfo.account.name" />
+
+    <!-- <div v-if="!expertise.length" class="text-body-1">
+      <div v-if="isOwner">
+        You have no Expertise Tokens yet. Use <span class="a" @click="openClaimExpertiseDialog()">Claim</span>
+        process to apply for Expertise Tokens
       </div>
-
-
-      <div
-        v-for="(item, i) in expertise"
-        :key="`eci-${i}`"
-        class="expertise px-1 my-1 text-caption"
-      >
-        <router-link :to="goToExpertiseDetails(item.discipline_external_id)" style="text-decoration: none">
-
-          <v-row no-gutters justify="space-between">
-            <v-col cols="auto" class="pa-1 primary--text font-weight-bold">
-<!--              TOP {{ getEciPercentile(item.amount, userInfo.account.name, item.discipline_id) }}%-->
-              {{ item.discipline_name }}
-            </v-col>
-            <v-col cols="auto" class="pa-1 grey--text">
-              ECI {{ item.amount | commaNumber }}
-            </v-col>
-          </v-row>
-
-<!--          <v-divider />-->
-
-<!--          <div class="pa-1 black&#45;&#45;text">-->
-<!--            {{ item.discipline_name }}-->
-<!--          </div>-->
-
-        </router-link>
+      <div v-if="!isOwner">
+        <span class="text-body-2">{{ userInfo | fullname }}</span> has no Expertise Tokens yet
       </div>
+    </div> -->
 
-      <div v-if="!expertise.length" class="text-body-1">
-        <div v-if="isOwner">
-          You have no Expertise Tokens yet. Use <span class="a" @click="openClaimExpertiseDialog()">Claim</span>
-          process to apply for Expertise Tokens
-        </div>
-        <div v-if="!isOwner">
-          <span class="text-body-2">{{ userInfo | fullname }}</span> has no Expertise Tokens yet
-        </div>
-      </div>
-
-<!--      <div v-if="expertise.length && isOwner" class="text-body-1 full-width c-mt-4">-->
-<!--        <v-btn-->
-<!--          block-->
-<!--          outlined-->
-<!--          color="primary"-->
-<!--          class="ma-0"-->
-<!--          @click="openClaimExpertiseDialog()"-->
-<!--        >-->
-<!--          Claim new Discipline-->
-<!--        </v-btn>-->
-<!--      </div>-->
-
-    </div>
+    <!-- <div v-if="expertise.length && isOwner" class="text-body-1 full-width c-mt-4">
+        <v-btn
+          block
+          outlined
+          color="primary"
+          class="ma-0"
+          @click="openClaimExpertiseDialog()"
+        >
+          Claim new Discipline
+        </v-btn>
+      </div> -->
     <!-- ### END User Profile Expertise Section ### -->
 
     <!-- ### START User Profile Contacts Section ### -->
-    <div v-if="isProfileAvailable && (isContactsInfoSpecified || isOwner)" class="mt-4">
+    <!-- <div v-if="isProfileAvailable && (isContactsInfoSpecified || isOwner)" class="mt-4">
       <div class="sidebar-fullwidth">
         <v-divider />
       </div>
@@ -224,12 +201,12 @@
           </div>
         </div>
       </div>
-    </div>
+    </div> -->
     <!-- ### END User Profile Contacts Section ### -->
 
 
     <!-- ### START User Profile Info Section ### -->
-    <div v-if="isProfileAvailable && (isPersonalInfoSpecified || isOwner)" class="mt-4">
+    <!-- <div v-if="isProfileAvailable && (isPersonalInfoSpecified || isOwner)" class="mt-4">
       <div class="sidebar-fullwidth">
         <v-divider />
       </div>
@@ -274,9 +251,9 @@
               <v-col cols="7" offset="1" class="text-align-left">
                 {{ userInfo.profile.lastName || '-' }}
               </v-col>
-            </v-row>
+            </v-row> -->
 
-            <!-- <v-row v-if="isOwner && !userInfo.profile.birthdate" no-gutters>
+    <!-- <v-row v-if="isOwner && !userInfo.profile.birthdate" no-gutters>
               <v-col cols="4" class="font-weight-medium">
                 Birthdate
               </v-col>
@@ -294,7 +271,7 @@
               </v-col>
             </v-row> -->
 
-            <v-row v-if="userInfo.profile.created_at" class="mt-4" no-gutters>
+    <!-- <v-row v-if="userInfo.profile.created_at" class="mt-4" no-gutters>
               <v-col cols="4" class="font-weight-medium">
                 Registered
               </v-col>
@@ -305,11 +282,11 @@
           </div>
         </div>
       </div>
-    </div>
+    </div> -->
     <!-- ### END User Profile Info Section ### -->
 
     <!-- ### START User Profile Additional Info Section ### -->
-    <div v-if="isProfileAvailable && (isAdditionalInfoSpecified || isOwner)" class="mt-4">
+    <!-- <div v-if="isProfileAvailable && (isAdditionalInfoSpecified || isOwner)" class="mt-4">
       <div class="sidebar-fullwidth">
         <v-divider />
       </div>
@@ -377,14 +354,15 @@
           </div>
         </div>
       </div>
-    </div>
+    </div> -->
     <!-- ### END User Profile Additional Info Section ### -->
 
     <user-claim-expertise-dialog
       :is-shown="isClaimExpertiseDialogShown"
       @close="closeClaimExpertiseDialog"
     />
-  </v-card>
+    <!-- </v-card> -->
+  </v-navigation-drawer>
 </template>
 
 <script>
@@ -395,10 +373,13 @@
   import { UserService } from '@deip/user-service';
   import { ProposalsService } from '@deip/proposals-service';
   import { ResearchGroupService } from '@deip/research-group-service';
+  import { ExpertiseContributionsService } from '@deip/expertise-contributions-service';
+  import EciStatsInfo from '@/components/common/components/EciStatsInfo';
 
   import * as bankCardsService from '../../../utils/bankCard';
   import UserClaimExpertiseDialog from '@/components/UserDetails/components/UserClaimExpertiseDialog';
 
+  const expertiseContributionsService = ExpertiseContributionsService.getInstance();
   const userService = UserService.getInstance();
   const proposalsService = ProposalsService.getInstance();
   const researchGroupService = ResearchGroupService.getInstance();
@@ -406,7 +387,7 @@
   export default {
     name: 'UserDetailsSidebar',
 
-    components: { UserClaimExpertiseDialog },
+    components: { UserClaimExpertiseDialog, EciStatsInfo },
 
     data() {
       return {
@@ -425,6 +406,7 @@
         currentUser: 'auth/user',
         userInfo: 'userDetails/userInfo',
         expertise: 'userDetails/expertise',
+        eciStatsByDiscipline: 'userDetails/eciStatsByDiscipline',
         invites: 'userDetails/invites',
         reviewRequests: 'userDetails/reviewRequests',
         isClaimExpertiseDialogShown: 'userDetails/isClaimExpertiseDialogShown'
@@ -454,29 +436,7 @@
       }
     },
 
-    created() {},
-
     methods: {
-
-      goToExpertiseDetails(disciplineExternalId) {
-        return this.$route.path.includes('/account')
-          ? {
-            name: 'account.expertiseDetails',
-            query: {
-              discipline: disciplineExternalId
-            }
-          }
-          : {
-            name: 'UserExpertiseDetails',
-            params: {
-              account_name: this.userInfo.account.name
-            },
-            query: {
-              discipline: disciplineExternalId
-            }
-          };
-      },
-
       openInviteDetailsDialog(invite, index) {
         this.inviteDetailsDialog.isShown = true;
         this.inviteDetailsDialog.item = invite;

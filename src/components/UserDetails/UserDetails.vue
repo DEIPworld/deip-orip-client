@@ -1,9 +1,7 @@
 <template>
   <layout-section v-if="$ready" :sidebar-cols="$route.fullPath.includes('account') ? {md: 4} : {}">
-    <template #sidebar>
-      <user-details-sidebar />
-    </template>
     <user-details-body />
+    <user-details-sidebar />
   </layout-section>
 </template>
 
@@ -29,7 +27,9 @@
     created() {
       this.$store.dispatch('userDetails/loadUserDetailsPage', {
         username: decodeURIComponent(this.username)
-      }).then(() => { this.$setReady(); });
+      })
+        .then(() => this.$store.dispatch('userDetails/loadAccountEciStatsRecords', { account: decodeURIComponent(this.username) }))
+        .then(() => { this.$setReady(); });
     }
   };
 </script>

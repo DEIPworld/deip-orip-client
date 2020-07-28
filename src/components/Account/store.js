@@ -13,6 +13,7 @@ const state = {
   pendingProjects: [],
   rejectedProjects: [],
   publicProjects: [],
+  followingProjects: []
 };
 
 // getters
@@ -24,7 +25,8 @@ const getters = {
 
   pendingProjects: (state) => state.pendingProjects,
   rejectedProjects: (state) => state.rejectedProjects,
-  publicProjects: (state) => state.publicProjects
+  publicProjects: (state) => state.publicProjects,
+  followingProjects: (state) => state.followingProjects
 };
 
 // actions
@@ -67,6 +69,15 @@ const actions = {
         context.commit('getRejectedProjects', result);
       });
   },
+  getFollowingProjects(context) {
+    const user = context.rootGetters['auth/user'];
+    
+    const researchIds = user.researchBookmarks.map(({ researchId }) => researchId);
+    return Promise.all(researchIds.map((externalId) => researchService.getResearch(externalId)))
+      .then((followingProjects) => {
+        context.commit('SET_USER_FOLLOWING_PROJECTS', followingProjects);
+      });
+  },
   getAllProjects(context, { username }) {
     return Promise.all([
       context.dispatch('getPendingProjects', { username }),
@@ -83,6 +94,10 @@ const mutations = {
 
   SET_USER_PROFILE(state, profile) {
     state.profile = profile;
+  },
+
+  SET_USER_FOLLOWING_PROJECTS(state, followingProjects) {
+    state.followingProjects = followingProjects;
   },
 
   getPendingProjects(state, payload) {
