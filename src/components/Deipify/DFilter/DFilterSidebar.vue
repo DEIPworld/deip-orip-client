@@ -78,7 +78,7 @@
   import Proxyable from 'vuetify/lib/mixins/proxyable';
 
   export default {
-    name: 'DFilter',
+    name: 'DFilterSidebar',
 
     mixins: [Proxyable],
 

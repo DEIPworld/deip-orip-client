@@ -1,6 +1,10 @@
 <template>
   <d-block v-if="$ready" title="Growth rate overview">
-    <v-row>
+    <d-filter-block
+      v-model="filter"
+      :loading="loading"
+      @apply="updateChartData()"
+    >
       <v-col cols="2">
         <v-select
           v-model="filter.discipline"
@@ -17,25 +21,16 @@
           v-model="filter.date"
           label="Period"
           :picker-props="{
-            min: moment('2020-01-01').format('YYYY-MM-DD'),
-            range: true
-          }"
+              min: moment('2020-01-01').format('YYYY-MM-DD'),
+              range: true
+            }"
           :field-props="{
-            clearable: true,
-          }"
+              clearable: true,
+            }"
         />
       </v-col>
-      <v-col>
-        <v-btn
-          color="primary"
-          :disabled="loading || !filterChanged"
-          :loading="loading"
-          @click="updateChartData"
-        >
-          Apply
-        </v-btn>
-      </v-col>
-    </v-row>
+    </d-filter-block>
+
 
     <v-skeleton-loader
       class="mt-6"
@@ -65,16 +60,12 @@
   import DBlock from '@/components/Deipify/DBlock/DBlock';
   import DInputDate from '@/components/Deipify/DInput/DInputDate';
   import DChartColumn from '@/components/Deipify/DChart/DChartColumn';
-
-  const filterModel = {
-    date: [],
-    step: ECI_STAT_PERIOD_STEP_TYPE.UNKNOWN,
-    discipline: ''
-  };
+  import DFilterBlock from '@/components/Deipify/DFilter/DFilterBlock';
 
   export default {
     name: 'DisciplinesGrowthRate',
     components: {
+      DFilterBlock,
       DChartColumn,
       DInputDate,
       DBlock
@@ -83,8 +74,11 @@
       return {
         chartData: [],
 
-        filter: { ...filterModel },
-        updatedFilter: { ...filterModel },
+        filter: {
+          date: [],
+          step: ECI_STAT_PERIOD_STEP_TYPE.UNKNOWN,
+          discipline: ''
+        },
 
         loading: true
       };
@@ -97,10 +91,6 @@
             external_id: d.id,
             label: d.label
           }));
-      },
-
-      filterChanged() {
-        return JSON.stringify(this.filter) !== JSON.stringify(this.updatedFilter);
       }
     },
 
@@ -171,7 +161,6 @@
               ];
             }
             this.loading = false;
-            this.updatedFilter = { ...this.filter };
           });
       }
     }
@@ -199,7 +188,7 @@
         grid-area: l;
       }
 
-      #{$host}__table-cell{
+      #{$host}__table-cell {
         width: 100px;
         height: 24px;
       }

@@ -76,7 +76,11 @@
       </d-block>
 
       <d-block title="Expertise Contribution Index detailed overview">
-        <v-row>
+        <d-filter-block
+          v-model="eciDetailedOverviewFilter"
+          :loading="eciDetailedOverviewLoading"
+          @apply="updateDetailedChart()"
+        >
           <v-col cols="2">
             <v-select
               v-model="eciDetailedOverviewFilter.discipline"
@@ -119,12 +123,7 @@
               }"
             />
           </v-col>
-          <v-col cols="1">
-            <v-btn color="primary" @click="updateDetailedChart()">
-              Apply
-            </v-btn>
-          </v-col>
-        </v-row>
+        </d-filter-block>
 
         <eci-history
           :data="eciHistoryByDiscipline"
@@ -153,10 +152,12 @@
   import moment from 'moment';
   import DisciplinesGrowthRate from '@/components/DisciplinesGrowthRate/DisciplinesGrowthRate';
   import { getTopLevelNodes } from '@/components/common/disciplines/DisciplineTreeService';
+  import DFilterBlock from '@/components/Deipify/DFilter/DFilterBlock';
 
   export default {
     name: 'Overview',
     components: {
+      DFilterBlock,
       DisciplinesGrowthRate,
       EciHistory,
       DBlock,
@@ -174,6 +175,7 @@
           contribution: '',
           criteria: ''
         },
+        eciDetailedOverviewLoading: true,
 
         distributionDiscipline: 'all',
 
@@ -326,6 +328,7 @@
         this.$store.dispatch('overview/getEciHistoryByDiscipline', this.eciDetailedOverviewFilter)
       ])
         .then(() => {
+          this.eciDetailedOverviewLoading = false;
           this.$setReady();
         });
     },
@@ -342,6 +345,8 @@
       },
 
       updateDetailedChart() {
+        this.eciDetailedOverviewLoading = true;
+
         const { discipline } = this.eciDetailedOverviewFilter;
         const fromDate = this.eciDetailedOverviewFilter.date[0]
           ? this.moment(this.eciDetailedOverviewFilter.date[0])
@@ -366,7 +371,10 @@
           criteria
         };
 
-        this.$store.dispatch('overview/getEciHistoryByDiscipline', filter);
+        this.$store.dispatch('overview/getEciHistoryByDiscipline', filter)
+          .then(() => {
+            this.eciDetailedOverviewLoading = false;
+          });
       }
     }
   };

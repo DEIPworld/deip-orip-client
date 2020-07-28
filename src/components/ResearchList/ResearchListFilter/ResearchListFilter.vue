@@ -1,5 +1,5 @@
 <template>
-  <d-filter
+  <d-filter-sidebar
     :filter-count="filterCount"
     @apply="applyFilter"
     @reset="resetFilter"
@@ -10,11 +10,11 @@
       <research-list-filter-components v-model="filterModel.researchComponents" />
       <research-list-filter-organizations v-model="filterModel.organizations" />
     </template>
-  </d-filter>
+  </d-filter-sidebar>
 </template>
 
 <script>
-  import DFilter from '@/components/Deipify/DFilter/DFilter';
+  import DFilterSidebar from '@/components/Deipify/DFilter/DFilterSidebar';
   import ResearchListFilterDisciplines
     from '@/components/ResearchList/ResearchListFilter/ResearchListFilterDisciplines';
   import ResearchListFilterCategories from '@/components/ResearchList/ResearchListFilter/ResearchListFilterCategories';
@@ -37,7 +37,7 @@
       ResearchListFilterComponents,
       ResearchListFilterCategories,
       ResearchListFilterDisciplines,
-      DFilter
+      DFilterSidebar
     },
 
     props: {

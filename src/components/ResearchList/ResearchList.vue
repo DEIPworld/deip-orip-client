@@ -37,7 +37,7 @@
 
   import DBlock from '@/components/Deipify/DBlock/DBlock';
   import DToggleView from '@/components/Deipify/DToggleView/DToggleView';
-  import DFilter from '@/components/Deipify/DFilter/DFilter';
+  import DFilterSidebar from '@/components/Deipify/DFilter/DFilterSidebar';
 
   import ResearchListCard from '@/components/ResearchList/ResearchListItem/ResearchListCard';
   import ResearchListRow from '@/components/ResearchList/ResearchListItem/ResearchListRow';
@@ -59,7 +59,7 @@
 
       DToggleView,
       DBlock,
-      DFilter
+      DFilterSidebar
     },
 
     props: {
