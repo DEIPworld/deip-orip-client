@@ -293,7 +293,7 @@
 
             return deipRpc.api.getAccountsAsync([this.formData.username])
               .then((res) => {
-                this.isUsernameVerifyed = _.isEmpty(res);
+                this.isUsernameVerifyed = _.isEmpty(res[0]);
               }).catch((error) => {
                 this.isUsernameVerifyed = false;
               }).finally(() => {
