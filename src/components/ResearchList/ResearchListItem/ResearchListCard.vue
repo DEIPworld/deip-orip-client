@@ -33,7 +33,7 @@
 
       <div
         v-if="research.researchRef && research.researchRef.tenantCategory && research.researchRef.tenantCategory.text"
-        class="text-caption"
+        class="text-caption mt-4"
       >
         {{ research.researchRef.tenantCategory.text }}
       </div>

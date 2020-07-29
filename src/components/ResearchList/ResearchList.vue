@@ -128,7 +128,6 @@
 
       applyFilter() {
         const filter = this.$ls.get(this.storageFilterModelKey);
-        console.log(filter.categories)
 
         const filtered = {
           ...(filter.disciplines.length ? {

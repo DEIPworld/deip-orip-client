@@ -12,8 +12,8 @@
           <template v-slot:activator="{ on }">
             <div class="d-flex align-center" v-on="on">
               <span class="text-overline mr-1">{{ item.readinessLevelShortTitle }}</span>
-              <v-avatar size="20" class="mr-1" color="grey">
-                <span class="white--text text-h6">{{ item.value.index + 1 }}</span>
+              <v-avatar :size="18" class="mr-1" color="grey">
+                <span class="white--text text-body-2 font-weight-medium">{{ item.value.index + 1 }}</span>
               </v-avatar>
             </div>
           </template>
@@ -21,8 +21,8 @@
         </v-tooltip>
         <div v-else class="d-flex align-center">
           <span class="text-overline mr-1">{{ item.readinessLevelShortTitle }}</span>
-          <v-avatar size="20" class="mr-1" color="grey">
-            <span class="white--text text-h6">{{ item.value.index + 1 }}</span>
+          <v-avatar :size="18" class="mr-1" color="grey">
+            <span class="white--text text-body-2 font-weight-medium">{{ item.value.index + 1 }}</span>
           </v-avatar>
         </div>
       </div>
