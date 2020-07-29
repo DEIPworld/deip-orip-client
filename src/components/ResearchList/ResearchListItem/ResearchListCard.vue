@@ -2,23 +2,16 @@
   <v-card
     class="d-flex flex-column"
     outlined
-    :to="{
-      name: $isLoggedIn ? 'ResearchDetails' : 'ResearchDetailsPublic',
-      params: {
-        research_group_permlink: encodeURIComponent(research.research_group.permlink),
-        research_permlink: encodeURIComponent(research.permlink)
-      }
-    }"
+    :to="itemRoute"
   >
     <v-card-text class="py-4 text--primary">
       <div class="d-flex align-center">
-        <research-list-author :author="research.research_group" />
+        <research-list-group :group="research.research_group" />
         <research-list-status :status="research.is_finished ? 'finished' : null" />
       </div>
     </v-card-text>
-
     <v-img
-      :src="$options.filters.researchBackgroundSrc(research.external_id, 400, 200)"
+      :src="research.external_id | researchBackgroundSrc(400, 200)"
       :aspect-ratio="2"
       class="flex-grow-0"
     />
@@ -61,10 +54,12 @@
 </template>
 
 <script>
-  import { abstractResearchItem } from '@/components/ResearchList/abstractResearchItem';
+  import { abstractResearchItem } from '@/components/ResearchList/ResearchListItem/abstractResearchItem';
+  import DAvatared from '@/components/Deipify/DAvatared/DAvatared';
 
   export default {
     name: 'ResearchListCard',
+    components: { DAvatared },
     mixins: [abstractResearchItem]
   };
 </script>

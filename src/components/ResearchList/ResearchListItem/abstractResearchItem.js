@@ -1,6 +1,6 @@
 import ResearchListCriterias from '@/components/ResearchList/ResearchListItem/ResearchListItemPartials/ResearchListCriterias';
 import ResearchListTokenSale from '@/components/ResearchList/ResearchListItem/ResearchListItemPartials/ResearchListTokenSale';
-import ResearchListAuthor from '@/components/ResearchList/ResearchListItem/ResearchListItemPartials/ResearchListAuthor';
+import ResearchListGroup from '@/components/ResearchList/ResearchListItem/ResearchListItemPartials/ResearchListGroup';
 import ResearchListStatus from '@/components/ResearchList/ResearchListItem/ResearchListItemPartials/ResearchListStatus';
 import ResearchListTitle from '@/components/ResearchList/ResearchListItem/ResearchListItemPartials/ResearchListTitle';
 
@@ -12,7 +12,7 @@ export const abstractResearchItem = {
     ResearchListTokenSale,
     ResearchListTitle,
     ResearchListStatus,
-    ResearchListAuthor,
+    ResearchListGroup,
     DMetaList
   },
   props: {

@@ -7,7 +7,7 @@
     <d-list-expand :active="organizations.length > 4">
       <template #default="{expanded}">
         <v-chip-group
-          v-model="localModel"
+          v-model="internalValue"
           column
           multiple
           active-class="primary--text"
@@ -19,12 +19,12 @@
               :key="`organization-filter-${organization.external_id}`"
               :value="organization.external_id"
               class="d-block mt-2 mx-0 mb-0"
-              :class="localModel.includes(organization.external_id) ? 'transparent' : 'grey lighten-4'"
+              :class="internalValue.includes(organization.external_id) ? 'transparent' : 'grey lighten-4'"
               style="width:100%"
             >
               <v-avatar left>
                 <img
-                  :src="$options.filters.researchGroupLogoSrc(organization.external_id, 200, 200)"
+                  :src="organization.external_id | researchGroupLogoSrc(24, 24)"
                 >
               </v-avatar>
               <div class="text-truncate">
@@ -39,16 +39,18 @@
 </template>
 
 <script>
-  import { ResearchListAbstractFilter } from '@/components/ResearchList/ResearchListFilter/ResearchListAbstractFilter';
-  import { mapGetters } from 'vuex';
+  import Proxyable from 'vuetify/lib/mixins/proxyable';
+  import DBlock from '@/components/Deipify/DBlock/DBlock';
+  import DListExpand from '@/components/Deipify/DListExpand/DListExpand';
 
   export default {
     name: 'ResearchListFilterOrganizations',
-    mixins: [ResearchListAbstractFilter],
+    components: {
+      DBlock,
+      DListExpand
+    },
+    mixins: [Proxyable],
     computed: {
-      // ...mapGetters({
-      //   organizations: 'feed/organizations'
-      // }),
       organizations() {
         return [...this.$store.getters['feed/organizations']].sort((a, b) => a.name.localeCompare(b.name));
       }

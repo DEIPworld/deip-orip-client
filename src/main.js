@@ -12,6 +12,7 @@ import { router } from './router';
 
 import './components/index'; // TODO: need refactoring and remove
 import './globals/index'; // TODO: need refactoring and remove
+import VClamp from 'vue-clamp';
 
 import 'vue2-dropzone/dist/vue2Dropzone.min.css';
 import '@mdi/font/css/materialdesignicons.css';
@@ -29,6 +30,7 @@ import { ifEnabled } from '@/plugins/ifEnabled';
 import { dataReadyMixin } from '@/mixins/dataReadyMixin';
 import { contextHelpersMixin } from '@/mixins/contextHelpersMixin';
 import { CustomDirective } from '@/derectives/CustomDirective';
+import Gravatar from 'vue-gravatar';
 
 // ////////////////////////
 
@@ -57,6 +59,8 @@ Vue.mixin(dataReadyMixin);
 Vue.mixin(contextHelpersMixin);
 
 Vue.directive('custom', CustomDirective);
+
+Vue.component('v-clamp', VClamp);
 
 Vue.config.optionMergeStrategies.props = (parentVal, childVal) => {
   if (childVal) {

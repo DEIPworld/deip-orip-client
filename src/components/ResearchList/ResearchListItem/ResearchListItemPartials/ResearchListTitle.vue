@@ -1,5 +1,5 @@
 <template>
-  <v-tooltip bottom>
+  <v-tooltip bottom :max-width="260" :open-delay="500">
     <template v-slot:activator="{ on }">
       <div :class="titleClass" v-on="on">
         <v-clamp autoresize :max-lines="2">
@@ -12,14 +12,9 @@
 </template>
 
 <script>
-  import VClamp from 'vue-clamp';
 
   export default {
     name: 'ResearchListTitle',
-
-    components: {
-      VClamp
-    },
 
     props: {
       title: {

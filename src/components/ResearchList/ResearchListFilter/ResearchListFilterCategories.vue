@@ -11,7 +11,7 @@
             <v-checkbox
               v-if="expanded || i < 4"
               :key="'category-filter-' + category._id"
-              v-model="localModel"
+              v-model="internalValue"
               :label="category.text"
               :value="category._id"
               hide-details
@@ -25,11 +25,18 @@
 </template>
 
 <script>
-  import { ResearchListAbstractFilter } from '@/components/ResearchList/ResearchListFilter/ResearchListAbstractFilter';
+
+  import Proxyable from 'vuetify/lib/mixins/proxyable';
+  import DBlock from '@/components/Deipify/DBlock/DBlock';
+  import DListExpand from '@/components/Deipify/DListExpand/DListExpand';
 
   export default {
     name: 'ResearchListFilterCategories',
-    mixins: [ResearchListAbstractFilter],
+    components: {
+      DBlock,
+      DListExpand
+    },
+    mixins: [Proxyable],
     computed: {
       categories() {
         return this.$store.getters['auth/tenant'].profile.settings.researchCategories;

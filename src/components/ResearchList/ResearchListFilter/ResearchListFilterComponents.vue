@@ -7,7 +7,7 @@
       sm
     >
       <v-chip-group
-        v-model="localModel"
+        v-model="internalValue"
         column
         multiple
         active-class="primary--text"
@@ -21,7 +21,7 @@
                 :key="`readinessLevels-filter-${i}`"
                 :value="`${item._id}:${i}`"
                 class="d-block mt-2 mx-0 mb-0"
-                :class="localModel.includes(`${item._id}:${i}`) ? 'transparent' : 'grey lighten-4'"
+                :class="internalValue.includes(`${item._id}:${i}`) ? 'transparent' : 'grey lighten-4'"
                 style="width:100%"
               >
                 <v-avatar left color="primary" class="white--text">
@@ -40,13 +40,20 @@
 </template>
 
 <script>
-  import { ResearchListAbstractFilter } from '@/components/ResearchList/ResearchListFilter/ResearchListAbstractFilter';
   import { mapGetters } from 'vuex';
+  import Proxyable from 'vuetify/lib/mixins/proxyable';
+  import DBlock from '@/components/Deipify/DBlock/DBlock';
+  import DListExpand from '@/components/Deipify/DListExpand/DListExpand';
 
   export default {
     name: 'ResearchListFilterComponents',
 
-    mixins: [ResearchListAbstractFilter],
+    components: {
+      DBlock,
+      DListExpand
+    },
+
+    mixins: [Proxyable],
 
     data() {
       return {

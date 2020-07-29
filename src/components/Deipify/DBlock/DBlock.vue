@@ -23,7 +23,7 @@
         </div>
       </div>
 
-      <slot name="titleRight" />
+      <slot name="titleAddon" />
     </div>
 
     <div :class="contentClassList">

@@ -5,7 +5,7 @@
       small
       color="primary"
       class="ml-3"
-      @click="toggleDrawer"
+      @click="toggle"
     >
       <v-icon left>
         filter_alt
@@ -27,7 +27,7 @@
         right
         app
         clipped
-        :value="isOpen"
+        :value="isActive"
       >
         <template #prepend>
           <v-sheet ref="header" class="pa-4" color="grey lighten-4">
@@ -35,7 +35,7 @@
               <div class="text-h6">
                 Filter
               </div>
-              <v-btn icon class="ma-n2" @click="toggleDrawer">
+              <v-btn icon class="ma-n2" @click="toggle">
                 <v-icon>clear</v-icon>
               </v-btn>
             </v-row>
@@ -75,12 +75,12 @@
 </template>
 
 <script>
-  import Proxyable from 'vuetify/lib/mixins/proxyable';
+  import Toggleable from 'vuetify/lib/mixins/toggleable';
 
   export default {
     name: 'DFilterSidebar',
 
-    mixins: [Proxyable],
+    mixins: [Toggleable],
 
     props: {
       filterCount: {
@@ -91,7 +91,6 @@
 
     data() {
       return {
-        isOpen: false,
         bottomDivider: false
       };
     },
@@ -103,8 +102,8 @@
     },
 
     methods: {
-      toggleDrawer() {
-        this.isOpen = !this.isOpen;
+      toggle() {
+        this.isActive = !this.isActive;
       },
 
       resetFilter() {

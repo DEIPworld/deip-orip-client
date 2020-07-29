@@ -3,20 +3,19 @@
     :class="$style.host"
     @click="$router.push(itemRoute)"
   >
-    <td class="pr-0">
-      <v-avatar :size="40">
-        <v-img
-          :src="$options.filters.researchBackgroundSrc(research.external_id, 40, 40)"
-        />
-      </v-avatar>
-    </td>
 
-    <td width="33%" class="pl-3">
-      <research-list-title :title="research.title" compact />
+    <td width="33%">
+      <d-avatared
+        :src="research.external_id | researchBackgroundSrc(40,40)"
+        :size="40"
+        :tooltip="research.title"
+      >
+        <div class="text-body-2 font-weight-medium">{{ research.title }}</div>
+      </d-avatared>
     </td>
 
     <td>
-      <research-list-author :author="research.research_group" />
+      <research-list-group :group="research.research_group" />
     </td>
 
     <td>
@@ -52,12 +51,13 @@
 </template>
 
 <script>
-  import { abstractResearchItem } from '@/components/ResearchList/abstractResearchItem';
+  import { abstractResearchItem } from '@/components/ResearchList/ResearchListItem/abstractResearchItem';
   import DMetaItem from '@/components/Deipify/DMeta/DMetaItem';
+  import DAvatared from '@/components/Deipify/DAvatared/DAvatared';
 
   export default {
     name: 'ResearchListRow',
-    components: { DMetaItem },
+    components: { DAvatared, DMetaItem },
     mixins: [abstractResearchItem]
   };
 </script>
@@ -65,6 +65,7 @@
 <style module lang="scss">
   .host {
     cursor: pointer;
+
     td {
       height: auto !important;
       padding: 8px 16px !important;

@@ -11,7 +11,7 @@
             <v-checkbox
               v-if="expanded || i < 4"
               :key="'discipline-filter-' + i"
-              v-model="localModel"
+              v-model="internalValue"
               :label="discipline.label"
               :value="discipline.id"
               hide-details
@@ -26,11 +26,18 @@
 
 <script>
   import * as disciplinesService from '@/components/common/disciplines/DisciplineTreeService';
-  import { ResearchListAbstractFilter } from '@/components/ResearchList/ResearchListFilter/ResearchListAbstractFilter';
+
+  import Proxyable from 'vuetify/lib/mixins/proxyable';
+  import DBlock from '@/components/Deipify/DBlock/DBlock';
+  import DListExpand from '@/components/Deipify/DListExpand/DListExpand';
 
   export default {
     name: 'ResearchListFilterDisciplines',
-    mixins: [ResearchListAbstractFilter],
+    components: {
+      DBlock,
+      DListExpand
+    },
+    mixins: [Proxyable],
 
     data() {
       return {

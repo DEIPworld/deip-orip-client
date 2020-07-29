@@ -2,15 +2,17 @@
   <div class="text--secondary">
     <div class="d-flex justify-space-between">
       <div class="text-overline">
-        {{ tokenSale.soft_cap }}
+        ${{ fromAssetsToFloat(tokenSale.soft_cap) }}
       </div>
       <div class="text-overline">
-        {{ tokenSale.hard_cap }}
+        ${{ fromAssetsToFloat(tokenSale.hard_cap) }}
       </div>
     </div>
+    {{tokenSale}}
+    {{fromAssetsToFloat(tokenSale.total_amount) / fromAssetsToFloat(tokenSale.hard_cap) * 100}}
     <v-progress-linear
       class="rounded"
-      :value="50"
+      :value="fromAssetsToFloat(tokenSale.total_amount) / fromAssetsToFloat(tokenSale.hard_cap)"
     />
     <div v-if="hasActiveTokenSale" class="text-caption mt-1">
       {{ tokenSaleLeft(tokenSale.end_time) }} left

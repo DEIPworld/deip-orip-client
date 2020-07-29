@@ -5,10 +5,11 @@
       <v-badge offset-y="-8" offset-x="4" :content="itemsList.length || '0'" />
     </template>
 
-    <template #titleRight>
+    <template #titleAddon>
       <d-toggle-view :storage-key="storageViewModelKey" />
       <research-list-filter v-if="!noFilter" :storage-key="storageFilterModelKey" />
     </template>
+
     <v-data-iterator
       :items="itemsList"
       no-data-text="No Projects found for specified criteria"
@@ -18,14 +19,7 @@
       @update:page="onPaginationUpdated"
     >
       <template #default="{items}">
-        <component :is="hostComponent">
-          <component
-            :is="itemComponent"
-            v-for="item in items"
-            :key="'list-item-' + item.external_id"
-            :research="item"
-          />
-        </component>
+        <component :is="listComponent" :items="items" />
       </template>
     </v-data-iterator>
 
@@ -39,10 +33,8 @@
   import DToggleView from '@/components/Deipify/DToggleView/DToggleView';
   import DFilterSidebar from '@/components/Deipify/DFilter/DFilterSidebar';
 
-  import ResearchListCard from '@/components/ResearchList/ResearchListItem/ResearchListCard';
-  import ResearchListRow from '@/components/ResearchList/ResearchListItem/ResearchListRow';
-  import ResearchListGrid from '@/components/ResearchList/ResearchListWrapper/ResearchListGrid';
-  import ResearchListTable from '@/components/ResearchList/ResearchListWrapper/ResearchListTable';
+  import ResearchListGrid from '@/components/ResearchList/ResearchListGrid';
+  import ResearchListTable from '@/components/ResearchList/ResearchListTable';
 
   import ResearchListFilter from '@/components/ResearchList/ResearchListFilter/ResearchListFilter';
 
@@ -54,8 +46,6 @@
 
       ResearchListTable,
       ResearchListGrid,
-      ResearchListRow,
-      ResearchListCard,
 
       DToggleView,
       DBlock,
@@ -85,20 +75,12 @@
         viewModel: undefined,
 
         itemsList: []
-
       };
     },
 
     computed: {
-      isGrid() {
-        return this.viewModel === VIEW_TYPES.GRID;
-      },
-
-      hostComponent() {
-        return this.isGrid ? 'research-list-grid' : 'research-list-table';
-      },
-      itemComponent() {
-        return this.isGrid ? 'research-list-card' : 'research-list-row';
+      listComponent() {
+        return this.viewModel === VIEW_TYPES.GRID ? 'research-list-grid' : 'research-list-table';
       },
 
       iteratorProps() {
