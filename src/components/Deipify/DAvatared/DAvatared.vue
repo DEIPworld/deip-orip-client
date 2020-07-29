@@ -11,7 +11,7 @@
           <slot />
         </d-avatared-view>
       </template>
-      <span v-if="tooltip">{{ tooltipText }}</span>
+      <span v-if="tooltip">{{ tooltip }}</span>
       <slot name="tooltip" />
     </v-tooltip>
 
@@ -37,20 +37,6 @@
       tooltip: {
         type: [Boolean, String],
         default: false
-      }
-    },
-
-    computed: {
-      tooltipText() {
-        if (kindOf(this.tooltip) === 'boolean') {
-          return this.$slots.default[0].text;
-        }
-
-        if (kindOf(this.tooltip) === 'string') {
-          return this.tooltip;
-        }
-
-        return '';
       }
     }
   };
