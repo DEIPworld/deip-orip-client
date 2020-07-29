@@ -93,7 +93,7 @@
       <div>
         <!-- TODO: hotfix -->
         <div v-if="!$route.name.includes('account')" class="pt-12">
-          <research-list :items="researchList" namespace="userDetails" no-filter />
+          <research-list :items="researchList" namespace="userDetails" />
         </div>
 
         <div v-if="commonGroups.length" class="pt-6">

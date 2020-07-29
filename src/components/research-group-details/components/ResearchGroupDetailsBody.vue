@@ -216,7 +216,7 @@
     <!-- ### END Research Group members Section ### -->
 
     <!-- ### START Research Group Research List Section ### -->
-    <research-list no-filter namespace="groupDetails" :items="researchWithGroupInfoList" />
+    <research-list namespace="groupDetails" :items="researchWithGroupInfoList" />
     <!-- ### END Research Group Research List Section ### -->
   </div>
 </template>

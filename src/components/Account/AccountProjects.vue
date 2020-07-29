@@ -1,6 +1,6 @@
 <template>
   <layout-section v-if="$ready">
-    <research-list no-filter :items="researchList" namespace="account" />
+    <research-list :items="researchList" namespace="account" />
   </layout-section>
 </template>
 

@@ -8,8 +8,8 @@
         ${{ fromAssetsToFloat(tokenSale.hard_cap) }}
       </div>
     </div>
-    {{tokenSale}}
-    {{fromAssetsToFloat(tokenSale.total_amount) / fromAssetsToFloat(tokenSale.hard_cap) * 100}}
+<!--    {{tokenSale}}-->
+<!--    {{fromAssetsToFloat(tokenSale.total_amount) / fromAssetsToFloat(tokenSale.hard_cap) * 100}}-->
     <v-progress-linear
       class="rounded"
       :value="fromAssetsToFloat(tokenSale.total_amount) / fromAssetsToFloat(tokenSale.hard_cap)"

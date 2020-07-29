@@ -23,8 +23,8 @@
 
 <script>
   import DAvataredView from '@/components/Deipify/DAvatared/DAvataredView';
-  import kindOf from 'kind-of';
   import { DAvataredAbstract } from '@/components/Deipify/DAvatared/DAvataredAbstract';
+  // import Routable from 'vuetify/lib/mixins/routable';
 
   export default {
     name: 'DAvatared',

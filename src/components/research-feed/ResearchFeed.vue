@@ -29,7 +29,7 @@
     </layout-header>
 
     <layout-section>
-      <research-list :items="researchFeed" namespace="feed" />
+      <research-list :items="researchFeed" namespace="feed" with-filter />
     </layout-section>
 
   </app-layout>

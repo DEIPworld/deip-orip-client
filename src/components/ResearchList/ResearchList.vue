@@ -7,7 +7,7 @@
 
     <template #titleAddon>
       <d-toggle-view :storage-key="storageViewModelKey" />
-      <research-list-filter v-if="!noFilter" :storage-key="storageFilterModelKey" />
+      <research-list-filter v-if="withFilter" :storage-key="storageFilterModelKey" />
     </template>
 
     <v-data-iterator
@@ -61,7 +61,7 @@
         type: String,
         default: undefined
       },
-      noFilter: {
+      withFilter: {
         type: Boolean,
         default: false
       }
@@ -96,17 +96,22 @@
 
     created() {
       this.storageViewModelKey = `${this.namespace}__pl-type`;
-      this.storageFilterModelKey = `${this.namespace}__filter`;
+      this.$ls.on(this.storageViewModelKey, this.changeView, true);
+
+      if (this.withFilter) {
+        this.storageFilterModelKey = `${this.namespace}__filter`;
+        this.$ls.on(this.storageFilterModelKey, this.applyFilter, true);
+      }
 
       this.itemsList = [...this.items];
-
-      this.$ls.on(this.storageViewModelKey, this.changeView, true);
-      this.$ls.on(this.storageFilterModelKey, this.applyFilter, true);
     },
 
-    destroyed() {
+    beforeDestroy() {
       this.$ls.off(this.storageViewModelKey, this.changeView);
-      this.$ls.off(this.storageFilterModelKey, this.applyFilter);
+
+      if (this.withFilter) {
+        this.$ls.off(this.storageFilterModelKey, this.applyFilter);
+      }
     },
 
     methods: {
@@ -123,6 +128,7 @@
 
       applyFilter() {
         const filter = this.$ls.get(this.storageFilterModelKey);
+        console.log(filter.categories)
 
         const filtered = {
           ...(filter.disciplines.length ? {
@@ -146,7 +152,7 @@
           ...(filter.categories.length ? {
             researchRef: {
               tenantCategory: {
-                external_id: filter.categories
+                _id: filter.categories
               }
             }
           } : {})
